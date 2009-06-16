@@ -1544,6 +1544,8 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
  * in no particular order.  The list must be freed with g_list_free().
  * 
  * Return value: A list of #GtkCellRenderers
+ *
+ * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
  **/
 GList *
 gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)

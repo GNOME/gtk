@@ -172,7 +172,7 @@ to regular Pango markup. The markup for links is borrowed from HTML, using the
 way they appear in web browsers, with colored, underlined text. The title
 attribute is displayed as a tooltip on the link. An example looks like this:
 <informalexample><programlisting>
-gtk_label_set_markup (label, "Go to the &lt;a href=\"http://www.gtk.org\" title=\"&amp;lt;i&amp;gt;Our&amp;/i&amp;gt; website\"&gt;GTK+ website</a> for more...");
+gtk_label_set_markup (label, "Go to the &lt;a href=\"http://www.gtk.org\" title=\"&amp;lt;i&amp;gt;Our&amp;/i&amp;gt; website\"&gt;GTK+ website&lt;/a&gt; for more...");
 </programlisting></informalexample>
 It is possible to implement custom handling for links and their tooltips with
 the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
@@ -194,6 +194,22 @@ This should not be accessed directly.  Use the accessor functions as
 described below.
 </para>
 
+
+<!-- ##### SIGNAL GtkLabel::activate-current-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::activate-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
 <para>
@@ -719,5 +735,14 @@ Sets the text within the GtkLabel widget.
 
 @label: 
 @angle: 
+
+
+<!-- ##### FUNCTION gtk_label_get_current_uri ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
 
 

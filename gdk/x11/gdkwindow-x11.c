@@ -57,9 +57,7 @@
 #include <string.h>
 
 
-#ifdef HAVE_SHAPE_EXT
 #include <X11/extensions/shape.h>
-#endif
 
 #ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>
@@ -2285,7 +2283,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_MODAL"), 
-			     NULL);
+			     GDK_NONE);
 }
 
 /**
@@ -2319,8 +2317,8 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"), 
-			     NULL);
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"),
+			     GDK_NONE);
 }
 
 /**
@@ -2357,7 +2355,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
-			     NULL);
+			     GDK_NONE);
 }
 
 /**
@@ -3641,8 +3639,7 @@ do_shape_combine_mask (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   Pixmap pixmap;
   gint xoffset, yoffset;
-  
-#ifdef HAVE_SHAPE_EXT
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -3680,7 +3677,6 @@ do_shape_combine_mask (GdkWindow *window,
 			 pixmap,
 			 ShapeSet);
     }
-#endif /* HAVE_SHAPE_EXT */
 }
 
 static void
@@ -3739,8 +3735,7 @@ do_shape_combine_region (GdkWindow       *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   gint xoffset, yoffset;
-  
-#ifdef HAVE_SHAPE_EXT
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -3782,7 +3777,6 @@ do_shape_combine_region (GdkWindow       *window,
 
       g_free (xrects);
     }
-#endif /* HAVE_SHAPE_EXT */
 }
 
 static void
@@ -4353,7 +4347,7 @@ gdk_window_stick (GdkWindow *window)
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       NULL);
+			       GDK_NONE);
 
       /* Request desktop 0xFFFFFFFF */
       memset (&xclient, 0, sizeof (xclient));
@@ -4404,7 +4398,7 @@ gdk_window_unstick (GdkWindow *window)
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       NULL);
+			       GDK_NONE);
 
       move_to_current_desktop (window);
     }
@@ -4904,8 +4898,6 @@ gdk_window_set_functions (GdkWindow    *window,
   gdk_window_set_mwm_hints (window, &hints);
 }
 
-#ifdef HAVE_SHAPE_EXT
-
 /* 
  * propagate the shapes from all child windows of a GDK window to the parent 
  * window. Shamelessly ripped from Enlightenment's code
@@ -5219,13 +5211,10 @@ gdk_propagate_shapes (Display *disp,
   g_free (spans);
 }
 
-#endif /* HAVE_SHAPE_EXT */
-
 static inline void
 do_child_shapes (GdkWindow *window,
                  gboolean   merge)
 {
-#ifdef HAVE_SHAPE_EXT
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     {
@@ -5234,7 +5223,6 @@ do_child_shapes (GdkWindow *window,
                             merge,
                             ShapeBounding);
     }
-#endif
 }
 
 static void
@@ -5253,7 +5241,7 @@ static inline void
 do_child_input_shapes (GdkWindow *window,
                        gboolean   merge)
 {
-#if defined(HAVE_SHAPE_EXT) && defined(ShapeInput)
+#if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     {

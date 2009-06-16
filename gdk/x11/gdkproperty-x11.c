@@ -173,37 +173,40 @@ lookup_cached_xatom (GdkDisplay *display,
 /**
  * gdk_x11_atom_to_xatom_for_display:
  * @display: A #GdkDisplay
- * @atom: A #GdkAtom 
- * 
+ * @atom: A #GdkAtom, or %GDK_NONE
+ *
  * Converts from a #GdkAtom to the X atom for a #GdkDisplay
- * with the same string value.
- * 
- * Return value: the X atom corresponding to @atom.
+ * with the same string value. The special value %GDK_NONE
+ * is converted to %None.
+ *
+ * Return value: the X atom corresponding to @atom, or %None
  *
  * Since: 2.2
  **/
 Atom
-gdk_x11_atom_to_xatom_for_display (GdkDisplay *display, 
-				   GdkAtom atom)
+gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
+				   GdkAtom     atom)
 {
   Atom xatom = None;
-  
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
-  g_return_val_if_fail (atom != GDK_NONE, None);
+
+  if (atom == GDK_NONE)
+    return None;
 
   if (display->closed)
     return None;
-  
+
   xatom = lookup_cached_xatom (display, atom);
-  
+
   if (!xatom)
     {
       char *name;
-      
+
       g_return_val_if_fail (ATOM_TO_INDEX (atom) < virtual_atom_array->len, None);
 
       name = g_ptr_array_index (virtual_atom_array, ATOM_TO_INDEX (atom));
-      
+
       xatom = XInternAtom (GDK_DISPLAY_XDISPLAY (display), name, FALSE);
       insert_atom_pair (display, atom, xatom);
     }

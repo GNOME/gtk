@@ -697,7 +697,9 @@ gtk_cell_renderer_toggle_set_radio
 
 #if IN_HEADER(__GTK_CELL_VIEW_H__)
 #if IN_FILE(__GTK_CELL_VIEW_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_cell_view_get_cell_renderers
+#endif
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
 gtk_cell_view_get_size_of_row
@@ -3006,6 +3008,10 @@ gtk_print_operation_is_finished
 gtk_print_operation_cancel
 gtk_print_operation_draw_page_finish
 gtk_print_operation_set_defer_drawing
+gtk_print_operation_set_support_selection
+gtk_print_operation_get_support_selection
+gtk_print_operation_set_has_selection
+gtk_print_operation_get_has_selection
 #endif
 #endif
 
@@ -3130,6 +3136,11 @@ gtk_print_unix_dialog_get_settings
 gtk_print_unix_dialog_get_selected_printer
 gtk_print_unix_dialog_add_custom_tab
 gtk_print_unix_dialog_set_manual_capabilities
+gtk_print_unix_dialog_get_manual_capabilities
+gtk_print_unix_dialog_set_support_selection
+gtk_print_unix_dialog_get_support_selection
+gtk_print_unix_dialog_set_has_selection
+gtk_print_unix_dialog_get_has_selection
 #endif
 #endif
 #endif
@@ -4623,7 +4634,9 @@ gtk_tree_view_column_clear_attributes
 gtk_tree_view_column_clicked
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_get_alignment
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_tree_view_column_get_cell_renderers
+#endif
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_get_expand
 gtk_tree_view_column_get_fixed_width
@@ -5222,6 +5235,24 @@ gtk_param_spec_usize
 gtk_value_set_usize
 gtk_value_get_usize
 gtk_value_usize_skip_conversion
+#endif
+#endif
+
+#if IN_HEADER(__GTK_INFO_BAR_H__)
+#if IN_FILE(__GTK_INFO_BAR_C__)
+gtk_info_bar_get_type G_GNUC_CONST
+gtk_info_bar_new
+gtk_info_bar_new_with_buttons
+gtk_info_bar_get_action_area
+gtk_info_bar_get_content_area
+gtk_info_bar_add_action_widget
+gtk_info_bar_add_button
+gtk_info_bar_add_buttons
+gtk_info_bar_set_response_sensitive
+gtk_info_bar_set_default_response
+gtk_info_bar_response
+gtk_info_bar_set_message_type
+gtk_info_bar_get_message_type
 #endif
 #endif
 

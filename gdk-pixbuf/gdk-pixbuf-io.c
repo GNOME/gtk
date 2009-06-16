@@ -2459,7 +2459,7 @@ gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
 		domain = format->domain;
 	else 
 		domain = GETTEXT_PACKAGE;
-	description = dgettext (domain, format->description);
+	description = g_dgettext (domain, format->description);
 
 	return g_strdup (description);
 }

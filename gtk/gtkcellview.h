@@ -72,7 +72,9 @@ gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_v
 
 void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
                                                          const GdkColor  *color);
+#ifndef GTK_DISABLE_DEPRECATED
 GList            *gtk_cell_view_get_cell_renderers      (GtkCellView     *cell_view);
+#endif
 
 G_END_DECLS
 

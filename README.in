@@ -27,6 +27,14 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 2.18
+======================
+
+* gtk_tooltip_set_custom now accept a NULL custom_widget to unset the
+  old custom_widget. Custom_widget does not get destroyed when the
+  tooltip goes away.
+
+
 Release notes for 2.16
 ======================
 

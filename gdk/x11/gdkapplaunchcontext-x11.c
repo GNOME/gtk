@@ -312,10 +312,10 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   else if (files_count == 1)
     description = g_strdup_printf (_("Opening %s"), get_display_name (files->data));
   else
-    description = g_strdup_printf (dngettext (GETTEXT_PACKAGE,
-					      "Opening %d Item",
-					      "Opening %d Items",
-					      files_count), files_count);
+    description = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
+						"Opening %d Item",
+						"Opening %d Items",
+						files_count), files_count);
 
   icon_name = NULL;
   if (priv->icon_name)

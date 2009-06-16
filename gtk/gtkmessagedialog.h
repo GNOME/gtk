@@ -32,17 +32,9 @@
 #define __GTK_MESSAGE_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
-
-typedef enum
-{
-  GTK_MESSAGE_INFO,
-  GTK_MESSAGE_WARNING,
-  GTK_MESSAGE_QUESTION,
-  GTK_MESSAGE_ERROR,
-  GTK_MESSAGE_OTHER
-} GtkMessageType;
 
 typedef enum
 {

@@ -1567,7 +1567,7 @@ gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
 
           error_code = errno;
 
-          if (code == 0)
+          if (code == 0 || error_code == EISCONN)
             {
               close (test->socket);
               test->socket = -1;

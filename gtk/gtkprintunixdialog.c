@@ -115,7 +115,10 @@ enum {
   PROP_PAGE_SETUP,
   PROP_CURRENT_PAGE,
   PROP_PRINT_SETTINGS,
-  PROP_SELECTED_PRINTER
+  PROP_SELECTED_PRINTER,
+  PROP_MANUAL_CAPABILITIES,
+  PROP_SUPPORT_SELECTION,
+  PROP_HAS_SELECTION
 };
 
 enum {
@@ -143,8 +146,13 @@ struct GtkPrintUnixDialogPrivate
   GtkPageSetup *page_setup;
   gboolean page_setup_set;
 
+  gboolean support_selection;
+  gboolean has_selection;
+
   GtkWidget *all_pages_radio;
   GtkWidget *current_page_radio;
+  GtkWidget *selection_radio;
+  GtkWidget *range_table;
   GtkWidget *page_range_radio;
   GtkWidget *page_range_entry;
   
@@ -285,6 +293,31 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
 							P_("The GtkPrinter which is selected"),
 							GTK_TYPE_PRINTER,
 							GTK_PARAM_READABLE));
+  
+  g_object_class_install_property (object_class,
+				   PROP_MANUAL_CAPABILITIES,
+				   g_param_spec_flags ("manual-capabilities",
+						       P_("Manual Capabilites"),
+						       P_("Capabilities the application can handle"),
+						       GTK_TYPE_PRINT_CAPABILITIES,
+						       0,
+						       GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+				   PROP_SUPPORT_SELECTION,
+				   g_param_spec_boolean ("support-selection",
+							 P_("Support Selection"),
+							 P_("Whether the dialog supports selection"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+				   PROP_HAS_SELECTION,
+				   g_param_spec_boolean ("has-selection",
+							 P_("Has Selection"),
+							 P_("Whether the application has a selection"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
   
   
   g_type_class_add_private (class, sizeof (GtkPrintUnixDialogPrivate));  
@@ -427,6 +460,9 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   priv->page_setup = gtk_page_setup_new ();
   priv->page_setup_set = FALSE;
+
+  priv->support_selection = FALSE;
+  priv->has_selection = FALSE;
 
   g_signal_connect (dialog, 
                     "destroy", 
@@ -783,6 +819,15 @@ gtk_print_unix_dialog_set_property (GObject      *object,
     case PROP_PRINT_SETTINGS:
       gtk_print_unix_dialog_set_settings (dialog, g_value_get_object (value));
       break;
+    case PROP_MANUAL_CAPABILITIES:
+      gtk_print_unix_dialog_set_manual_capabilities (dialog, g_value_get_flags (value));
+      break;
+    case PROP_SUPPORT_SELECTION:
+      gtk_print_unix_dialog_set_support_selection (dialog, g_value_get_boolean (value));
+      break;
+    case PROP_HAS_SELECTION:
+      gtk_print_unix_dialog_set_has_selection (dialog, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -811,6 +856,15 @@ gtk_print_unix_dialog_get_property (GObject    *object,
       break;
     case PROP_SELECTED_PRINTER:
       g_value_set_object (value, priv->current_printer);
+      break;
+    case PROP_MANUAL_CAPABILITIES:
+      g_value_set_flags (value, priv->manual_capabilities);
+      break;
+    case PROP_SUPPORT_SELECTION:
+      g_value_set_boolean (value, priv->support_selection);
+      break;
+    case PROP_HAS_SELECTION:
+      g_value_set_boolean (value, priv->has_selection);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1805,7 +1859,8 @@ create_main_page (GtkPrintUnixDialog *dialog)
   gtk_widget_show (hbox);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
 
-  table = gtk_table_new (3, 2, FALSE);
+  table = gtk_table_new (4, 2, FALSE);
+  priv->range_table = table;
   gtk_table_set_row_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (6));
   gtk_table_set_col_spacings (GTK_TABLE (table), GTK_SIZE_ONE_TWELFTH_EM (12));
   frame = wrap_in_frame (_("Range"), table);
@@ -1828,6 +1883,17 @@ create_main_page (GtkPrintUnixDialog *dialog)
 		    0, 2, 1, 2,  GTK_FILL, 0,
 		    0, 0);
  
+
+  radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)),
+					      _("Se_lection"));
+
+  gtk_widget_set_sensitive (radio, priv->has_selection);
+  priv->selection_radio = radio;
+  gtk_table_attach (GTK_TABLE (table), radio,
+		    0, 2, 2, 3,  GTK_FILL, 0,
+		    0, 0);
+  gtk_table_set_row_spacing (GTK_TABLE (table), 2, 0);
+ 
   radio = gtk_radio_button_new_with_mnemonic (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio)), _("Pag_es:"));
   range_tooltip = _("Specify one or more page ranges,\n e.g. 1-3,7,11");
   gtk_widget_set_tooltip_text (radio, range_tooltip);
@@ -1835,7 +1901,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   priv->page_range_radio = radio;
   gtk_widget_show (radio);
   gtk_table_attach (GTK_TABLE (table), radio,
-		    0, 1, 2, 3,  GTK_FILL, 0,
+		    0, 1, 3, 4,  GTK_FILL, 0,
 		    0, 0);
   entry = gtk_entry_new ();
   gtk_widget_set_tooltip_text (entry, range_tooltip);
@@ -1844,7 +1910,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
   priv->page_range_entry = entry;
   gtk_widget_show (entry);
   gtk_table_attach (GTK_TABLE (table), entry,
-		    1, 2, 2, 3,  GTK_FILL, 0,
+		    1, 2, 3, 4,  GTK_FILL, 0,
 		    0, 0);
   g_signal_connect (radio, "toggled", G_CALLBACK (update_entry_sensitivity), entry);
   update_entry_sensitivity (radio, entry);
@@ -2032,6 +2098,8 @@ dialog_get_print_pages (GtkPrintUnixDialog *dialog)
     return GTK_PRINT_PAGES_ALL;
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->current_page_radio)))
     return GTK_PRINT_PAGES_CURRENT;
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->selection_radio)))
+    return GTK_PRINT_PAGES_SELECTION;
   else
     return GTK_PRINT_PAGES_RANGES;
 }
@@ -2046,6 +2114,8 @@ dialog_set_print_pages (GtkPrintUnixDialog *dialog,
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
   else if (pages == GTK_PRINT_PAGES_CURRENT)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->current_page_radio), TRUE);
+  else if (pages == GTK_PRINT_PAGES_SELECTION)
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->selection_radio), TRUE);
   else
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->all_pages_radio), TRUE);
 }
@@ -3412,21 +3482,162 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  priv->manual_capabilities = capabilities;
-  update_dialog_from_capabilities (dialog);
-
-  if (priv->current_printer)
+  if (priv->manual_capabilities != capabilities)
     {
-      GtkTreeSelection *selection;
+      priv->manual_capabilities = capabilities;
+      update_dialog_from_capabilities (dialog);
 
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+      if (priv->current_printer)
+        {
+          GtkTreeSelection *selection;
 
-      g_object_unref (priv->current_printer);
-      priv->current_printer = NULL;
-      priv->internal_printer_change = TRUE;
-      selected_printer_changed (selection, dialog);
-      priv->internal_printer_change = FALSE;
-   }
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+
+          g_object_unref (priv->current_printer);
+          priv->current_printer = NULL;
+          priv->internal_printer_change = TRUE;
+          selected_printer_changed (selection, dialog);
+          priv->internal_printer_change = FALSE;
+       }
+
+      g_object_notify (G_OBJECT (dialog), "manual-capabilities");
+    }
+}
+
+/**
+ * gtk_print_unix_dialog_get_manual_capabilities:
+ * @dialog: a #GtkPrintUnixDialog
+ *
+ * Gets the value of #GtkPrintUnixDialog::manual-capabilities property.
+ *
+ * Returns: the printing capabilities
+ *
+ * Since: 2.18
+ */
+GtkPrintCapabilities
+gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
+
+  return dialog->priv->manual_capabilities;
+}
+
+/**
+ * gtk_print_unix_dialog_set_support_selection:
+ * @dialog: a #GtkPrintUnixDialog
+ * @support_selection: %TRUE to allow print selection
+ *
+ * Sets whether the print dialog allows user to print a selection.
+ *
+ * Since: 2.18
+ */
+void
+gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
+                                             gboolean            support_selection)
+{
+  GtkPrintUnixDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
+
+  priv = dialog->priv;
+
+  support_selection = support_selection != FALSE;
+  if (priv->support_selection != support_selection)
+    {
+      priv->support_selection = support_selection;
+
+      if (priv->selection_radio)
+        {
+          if (support_selection)
+            {
+              gtk_widget_set_sensitive (priv->selection_radio, priv->has_selection);
+              gtk_table_set_row_spacing (GTK_TABLE (priv->range_table),
+                                         2,
+                                         gtk_table_get_default_row_spacing (GTK_TABLE (priv->range_table)));
+              gtk_widget_show (priv->selection_radio);
+            }
+          else
+            {
+              gtk_widget_set_sensitive (priv->selection_radio, FALSE);
+              gtk_table_set_row_spacing (GTK_TABLE (priv->range_table), 2, 0);
+              gtk_widget_hide (priv->selection_radio);
+            }
+        }
+
+      g_object_notify (G_OBJECT (dialog), "support-selection");
+    }
+}
+
+/**
+ * gtk_print_unix_dialog_get_support_selection:
+ * @dialog: a #GtkPrintUnixDialog
+ *
+ * Gets the value of #GtkPrintUnixDialog::support-selection property.
+ *
+ * Returns: whether the application supports print of selection
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
+
+  return dialog->priv->support_selection;
+}
+
+/**
+ * gtk_print_unix_dialog_set_has_selection:
+ * @dialog: a #GtkPrintUnixDialog
+ * @has_selection: %TRUE indicates that a selection exists
+ *
+ * Sets whether a selection exists.
+ *
+ * Since: 2.18
+ */
+void
+gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
+                                         gboolean            has_selection)
+{
+  GtkPrintUnixDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
+
+  priv = dialog->priv;
+
+  has_selection = has_selection != FALSE;
+  if (priv->has_selection != has_selection)
+    {
+      priv->has_selection = has_selection;
+
+      if (priv->selection_radio)
+        {
+          if (priv->support_selection)
+            gtk_widget_set_sensitive (priv->selection_radio, has_selection);
+          else
+            gtk_widget_set_sensitive (priv->selection_radio, FALSE);
+        }
+
+      g_object_notify (G_OBJECT (dialog), "has-selection");
+    }
+}
+
+/**
+ * gtk_print_unix_dialog_get_has_selection:
+ * @dialog: a #GtkPrintUnixDialog
+ *
+ * Gets the value of #GtkPrintUnixDialog::has-selection property.
+ * 
+ * Returns: whether there is a selection
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
+
+  return dialog->priv->has_selection;
 }
 
 #define __GTK_PRINT_UNIX_DIALOG_C__

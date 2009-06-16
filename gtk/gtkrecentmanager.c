@@ -1735,15 +1735,16 @@ recent_app_info_free (RecentAppInfo *app_info)
  * storage specification, they will be expanded.
  *
  * Return value: %TRUE if an application with @app_name has registered this
- *   resource inside the recently used list, or %FALSE otherwise.  You should
- *   free the returned command line using g_free().
+ *   resource inside the recently used list, or %FALSE otherwise. The
+ *   @app_exec string is owned by the #GtkRecentInfo and should not be
+ *   modified or freed
  *
  * Since: 2.10
  */
 gboolean
 gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 				      const gchar    *app_name,
-				      gchar         **app_exec,
+				      const gchar   **app_exec,
 				      guint          *count,
 				      time_t         *time_)
 {

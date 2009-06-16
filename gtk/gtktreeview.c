@@ -5379,6 +5379,12 @@ gtk_tree_view_key_press (GtkWidget   *widget,
   if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event (widget, event))
     return TRUE;
 
+  if (tree_view->priv->search_entry_avoid_unhandled_binding)
+    {
+      tree_view->priv->search_entry_avoid_unhandled_binding = FALSE;
+      return FALSE;
+    }
+
   /* We pass the event to the search_entry.  If its text changes, then we start
    * the typeahead find capabilities. */
   if (GTK_WIDGET_HAS_FOCUS (tree_view)
@@ -10237,27 +10243,21 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   GdkModifierType state;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
-    return FALSE;
+    goto out;
 
   cursor_path = NULL;
   if (tree_view->priv->cursor)
     cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
   if (cursor_path == NULL)
-    return FALSE;
+    goto out;
 
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
   if (cursor_tree == NULL)
     {
       gtk_tree_path_free (cursor_path);
-      return FALSE;
-    }
-
-  if (gtk_get_current_event_state (&state))
-    {
-      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-        tree_view->priv->ctrl_pressed = TRUE;
+      goto out;
     }
 
   if (cursor_tree->parent_node)
@@ -10268,19 +10268,30 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
       gtk_tree_path_up (cursor_path);
 
+      if (gtk_get_current_event_state (&state))
+	{
+	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+	    tree_view->priv->ctrl_pressed = TRUE;
+	}
+
       gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+      gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+      gtk_tree_path_free (cursor_path);
+
+      tree_view->priv->ctrl_pressed = FALSE;
+
+      return TRUE;
     }
 
-  gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+ out:
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-  gtk_tree_path_free (cursor_path);
-
-  tree_view->priv->ctrl_pressed = FALSE;
-
-  return TRUE;
+  tree_view->priv->search_entry_avoid_unhandled_binding = TRUE;
+  return FALSE;
 }
+
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {

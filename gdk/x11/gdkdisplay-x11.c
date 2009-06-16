@@ -50,9 +50,7 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
-#ifdef HAVE_SHAPE_EXT
 #include <X11/extensions/shape.h>
-#endif
 
 #ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>
@@ -161,10 +159,8 @@ gdk_display_open (const gchar *display_name)
   XClassHint *class_hint;
   gulong pid;
   gint i;
-#if defined(HAVE_XFIXES) || defined(HAVE_SHAPE_EXT)
   gint ignore;
   gint maj, min;
-#endif
 
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)
@@ -282,7 +278,7 @@ gdk_display_open (const gchar *display_name)
 
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
-#ifdef HAVE_SHAPE_EXT
+
   if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &ignore, &ignore))
     {
       display_x11->have_shapes = TRUE;
@@ -291,7 +287,6 @@ gdk_display_open (const gchar *display_name)
 	display_x11->have_input_shapes = (maj == 1 && min >= 1);
 #endif
     }
-#endif
 
   display_x11->trusted_client = TRUE;
   {

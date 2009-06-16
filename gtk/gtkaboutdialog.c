@@ -2303,7 +2303,7 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
  * Installs a global function to be called whenever the user activates a
  * URL link in an about dialog.
  * 
- * Since 2.18 here exists a default function which uses gtk_show_uri(). To
+ * Since 2.18 there exists a default function which uses gtk_show_uri(). To
  * deactivate it, you can pass %NULL for @func.
  * 
  * Return value: the previous URL hook.

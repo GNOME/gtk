@@ -46,6 +46,14 @@
 #define GEOMETRY_Y_KEY		"GeometryY"
 #define GEOMETRY_WIDTH_KEY	"GeometryWidth"
 #define GEOMETRY_HEIGHT_KEY	"GeometryHeight"
+#define SORT_COLUMN_KEY         "SortColumn"
+#define SORT_ORDER_KEY          "SortOrder"
+
+#define COLUMN_NAME_STRING      "name"
+#define COLUMN_MTIME_STRING     "modified"
+#define COLUMN_SIZE_STRING      "size"
+#define SORT_ASCENDING_STRING   "ascending"
+#define SORT_DESCENDING_STRING  "descending"
 
 #define MODE_PATH_BAR          "path-bar"
 #define MODE_FILENAME_ENTRY    "filename-entry"
@@ -104,6 +112,7 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   GError *error;
   GKeyFile *key_file;
   gchar *location_mode_str, *filename;
+  gchar *sort_column, *sort_order;
   gboolean value;
 
   if (settings->settings_read)
@@ -129,6 +138,8 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   if (!g_key_file_has_group (key_file, SETTINGS_GROUP))
     goto out;
 
+  /* Location mode */
+
   location_mode_str = g_key_file_get_string (key_file, SETTINGS_GROUP,
 					     LOCATION_MODE_KEY, NULL);
   if (location_mode_str)
@@ -144,12 +155,16 @@ ensure_settings_read (GtkFileChooserSettings *settings)
       g_free (location_mode_str);
     }
 
+  /* Show hidden */
+
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
 				  SHOW_HIDDEN_KEY, &error);
   if (error)
     warn_if_invalid_key_and_clear_error (SHOW_HIDDEN_KEY, &error);
   else
     settings->show_hidden = value != FALSE;
+
+  /* Expand folders */
 
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
 				  EXPAND_FOLDERS_KEY, &error);
@@ -158,6 +173,8 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   else
     settings->expand_folders = value != FALSE;
 
+  /* Show size column */
+
   value = g_key_file_get_boolean (key_file, SETTINGS_GROUP,
 				  SHOW_SIZE_COLUMN_KEY, &error);
   if (error)
@@ -165,10 +182,48 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   else
     settings->show_size_column = value != FALSE;
 
+  /* Geometry */
+
   get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_X_KEY, &settings->geometry_x);
   get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_Y_KEY, &settings->geometry_y);
   get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_WIDTH_KEY, &settings->geometry_width);
   get_int_key (key_file, SETTINGS_GROUP, GEOMETRY_HEIGHT_KEY, &settings->geometry_height);
+
+  /* Sort column */
+
+  sort_column = g_key_file_get_string (key_file, SETTINGS_GROUP,
+				       SORT_COLUMN_KEY, NULL);
+  if (sort_column)
+    {
+      if (EQ (COLUMN_NAME_STRING, sort_column))
+	settings->sort_column = FILE_LIST_COL_NAME;
+      else if (EQ (COLUMN_MTIME_STRING, sort_column))
+	settings->sort_column = FILE_LIST_COL_MTIME;
+      else if (EQ (COLUMN_SIZE_STRING, sort_column))
+	settings->sort_column = FILE_LIST_COL_SIZE;
+      else
+	g_warning ("Unknown sort column name '%s' encountered in filechooser settings",
+		   sort_column);
+
+      g_free (sort_column);
+    }
+
+  /* Sort order */
+
+  sort_order = g_key_file_get_string (key_file, SETTINGS_GROUP,
+				      SORT_ORDER_KEY, NULL);
+  if (sort_order)
+    {
+      if (EQ (SORT_ASCENDING_STRING, sort_order))
+	settings->sort_order = GTK_SORT_ASCENDING;
+      else if (EQ (SORT_DESCENDING_STRING, sort_order))
+	settings->sort_order = GTK_SORT_DESCENDING;
+      else
+	g_warning ("Unknown sort column order '%s' encountered in filechooser settings",
+		   sort_order);
+
+      g_free (sort_order);
+    }
 
  out:
 
@@ -189,6 +244,8 @@ static void
 _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
 {
   settings->location_mode = LOCATION_MODE_PATH_BAR;
+  settings->sort_order = GTK_SORT_ASCENDING;
+  settings->sort_column = FILE_LIST_COL_NAME;
   settings->show_hidden = FALSE;
   settings->expand_folders = FALSE;
   settings->show_size_column = FALSE;
@@ -288,6 +345,34 @@ _gtk_file_chooser_settings_set_geometry (GtkFileChooserSettings *settings,
   settings->geometry_height = height;
 }
 
+gint
+_gtk_file_chooser_settings_get_sort_column (GtkFileChooserSettings *settings)
+{
+  ensure_settings_read (settings);
+  return settings->sort_column;
+}
+
+void
+_gtk_file_chooser_settings_set_sort_column (GtkFileChooserSettings *settings,
+					    gint sort_column)
+{
+  settings->sort_column = sort_column;
+}
+
+GtkSortType
+_gtk_file_chooser_settings_get_sort_order (GtkFileChooserSettings *settings)
+{
+  ensure_settings_read (settings);
+  return settings->sort_order;
+}
+
+void
+_gtk_file_chooser_settings_set_sort_order (GtkFileChooserSettings *settings,
+					   GtkSortType sort_order)
+{
+  settings->sort_order = sort_order;
+}
+
 gboolean
 _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 				 GError                **error)
@@ -296,6 +381,8 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
   gchar *filename;
   gchar *dirname;
   gchar *contents;
+  gchar *sort_column;
+  gchar *sort_order;
   gsize len;
   gboolean retval;
   GKeyFile *key_file;
@@ -315,6 +402,40 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
     {
       g_assert_not_reached ();
       return FALSE;
+    }
+
+  switch (settings->sort_column)
+    {
+    case FILE_LIST_COL_NAME:
+      sort_column = COLUMN_NAME_STRING;
+      break;
+
+    case FILE_LIST_COL_MTIME:
+      sort_column = COLUMN_MTIME_STRING;
+      break;
+
+    case FILE_LIST_COL_SIZE:
+      sort_column = COLUMN_SIZE_STRING;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      sort_column = NULL;
+    }
+
+  switch (settings->sort_order)
+    {
+    case GTK_SORT_ASCENDING:
+      sort_order = SORT_ASCENDING_STRING;
+      break;
+
+    case GTK_SORT_DESCENDING:
+      sort_order = SORT_DESCENDING_STRING;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      sort_order = NULL;
     }
 
   key_file = g_key_file_new ();
@@ -338,6 +459,10 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 			  GEOMETRY_WIDTH_KEY, settings->geometry_width);
   g_key_file_set_integer (key_file, SETTINGS_GROUP,
 			  GEOMETRY_HEIGHT_KEY, settings->geometry_height);
+  g_key_file_set_string (key_file, SETTINGS_GROUP,
+			 SORT_COLUMN_KEY, sort_column);
+  g_key_file_set_string (key_file, SETTINGS_GROUP,
+			 SORT_ORDER_KEY, sort_order);
 
   contents = g_key_file_to_data (key_file, &len, error);
   g_key_file_free (key_file);

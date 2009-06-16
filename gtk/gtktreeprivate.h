@@ -238,6 +238,8 @@ struct _GtkTreeViewPrivate
 
   guint post_validation_flag : 1;
 
+  /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
+  guint search_entry_avoid_unhandled_binding : 1;
 
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;

@@ -163,6 +163,8 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->export_filename = NULL;
   priv->track_print_status = FALSE;
   priv->is_sync = FALSE;
+  priv->support_selection = FALSE;
+  priv->has_selection = FALSE;
 
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_READY;
 
@@ -223,6 +225,7 @@ preview_iface_is_selected (GtkPrintOperationPreview *preview,
   
   switch (priv->print_pages)
     {
+    case GTK_PRINT_PAGES_SELECTION:
     case GTK_PRINT_PAGES_ALL:
       return (page_nr >= 0) && (page_nr < priv->nr_of_pages);
     case GTK_PRINT_PAGES_CURRENT:
@@ -830,9 +833,9 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @setup: actual page setup
    * @settings: actual print settings
    *
-   * Emmited after change of selected printer. The actual page setup and
+   * Emitted after change of selected printer. The actual page setup and
    * print settings are passed to the custom widget, which can actualize
-   * itself according to this change. 
+   * itself according to this change.
    *
    * Since: 2.18
    */
@@ -1192,6 +1195,39 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							P_("Label for the tab containing custom widgets."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkPrintOperation:support-selection:
+   *
+   * If %TRUE, the print operation will support print of selection.
+   * This allows the print dialog to show a "Selection" button.
+   * 
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_TRACK_PRINT_STATUS,
+				   g_param_spec_boolean ("support-selection",
+							 P_("Support Selection"),
+							 P_("TRUE if the print operation will support print of selection."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
+  /**
+   * GtkPrintOperation:has-selection:
+   *
+   * Determines whether there is a selection in your application.
+   * This can allow your application to print the selection.
+   * This is typically used to make a "Selection" button sensitive.
+   * 
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_TRACK_PRINT_STATUS,
+				   g_param_spec_boolean ("has-selection",
+							 P_("Has Selection"),
+							 P_("TRUE if a selecion exists."),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 
 }
 
@@ -1946,7 +1982,8 @@ typedef struct
   GtkWidget *progress;
  
   gboolean initialized;
-  gboolean is_preview; 
+  gboolean is_preview;
+  gboolean done;
 } PrintPagesData;
 
 static void
@@ -1989,7 +2026,7 @@ clamp_page_ranges (PrintPagesData *data)
   data->num_ranges = num_of_correct_ranges;
 }
 
-static gboolean 
+static void
 increment_page_sequence (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv = data->op->priv;
@@ -2006,7 +2043,10 @@ increment_page_sequence (PrintPagesData *data)
           data->uncollated++;
         }
       else
-        return FALSE;
+        {
+          data->done = TRUE;
+	  return;
+        }
     }
   else
     {
@@ -2033,11 +2073,14 @@ increment_page_sequence (PrintPagesData *data)
                       priv->page_position >= priv->nr_of_pages_to_print ||
                       data->sheet < 0 ||
                       data->sheet >= data->num_of_sheets)
-                    return FALSE;
+		    {
+                      data->done = TRUE;
+		      return;
+		    }
                   else
                     data->page = data->pages[priv->page_position];
 
-                  return TRUE;
+                  return;
                 }
               else
                 data->collated = 0;
@@ -2060,13 +2103,14 @@ increment_page_sequence (PrintPagesData *data)
       priv->page_position >= priv->nr_of_pages_to_print ||
       data->sheet < 0 ||
       data->sheet >= data->num_of_sheets)
-    return FALSE;
+    {
+      data->done = TRUE;
+      return;
+    }
   else
     data->page = data->pages[priv->page_position];
 
   data->total++;
-
-  return TRUE;
 }
 
 static void
@@ -2115,8 +2159,8 @@ update_progress (PrintPagesData *data)
     {
       if (priv->status == GTK_PRINT_STATUS_PREPARING)
 	{
-	  if (priv->nr_of_pages > 0)
-	    text = g_strdup_printf (_("Preparing %d"), priv->nr_of_pages);
+	  if (priv->nr_of_pages_to_print > 0)
+	    text = g_strdup_printf (_("Preparing %d"), priv->nr_of_pages_to_print);
 	  else
 	    text = g_strdup (_("Preparing"));
 	}
@@ -2581,7 +2625,7 @@ static gboolean
 print_pages_idle (gpointer user_data)
 {
   PrintPagesData *data; 
-  GtkPrintOperationPrivate *priv; 
+  GtkPrintOperationPrivate *priv;
   gboolean done = FALSE;
 
   data = (PrintPagesData*)user_data;
@@ -2603,10 +2647,13 @@ print_pages_idle (gpointer user_data)
           goto out;
         }
 
-      common_render_page (data->op, data->page);
-
-      if (!increment_page_sequence (data))
-        done = TRUE;
+      if (!data->done)
+        {
+	  common_render_page (data->op, data->page);
+	  increment_page_sequence (data);
+        }
+      else
+        done = priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY;
 
  out:
 
@@ -2965,7 +3012,99 @@ gtk_print_operation_cancel (GtkPrintOperation *op)
   op->priv->cancelled = TRUE;
 }
 
+/**
+ * gtk_print_operation_set_support_selection:
+ * @op: a #GtkPrintOperation
+ * @support_selection: %TRUE to support selection
+ *
+ * Sets whether selection is supported by #GtkPrintOperation.
+ *
+ * Since: 2.18
+ */
+void
+gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
+                                           gboolean            support_selection)
+{
+  GtkPrintOperationPrivate *priv;
 
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  support_selection = support_selection != FALSE;
+  if (priv->support_selection != support_selection)
+    {
+      priv->support_selection = support_selection;
+      g_object_notify (G_OBJECT (op), "support-selection");
+    }
+}
+
+/**
+ * gtk_print_operation_get_support_selection:
+ * @op: a #GtkPrintOperation
+ *
+ * Gets the value of #GtkPrintOperation::support-selection property.
+ * 
+ * Returns: whether the application supports print of selection
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_operation_get_support_selection (GtkPrintOperation *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
+
+  return op->priv->support_selection;
+}
+
+/**
+ * gtk_print_operation_set_has_selection:
+ * @op: a #GtkPrintOperation
+ * @has_selection: %TRUE indicates that a selection exists
+ *
+ * Sets whether there is a selection to print.
+ *
+ * Application has to set number of pages to which the selection
+ * will draw by gtk_print_operation_set_n_pages() in a callback of
+ * #GtkPrintOperation::begin-print.
+ *
+ * Since: 2.18
+ */
+void
+gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
+                                       gboolean            has_selection)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  has_selection = has_selection != FALSE;
+  if (priv->has_selection != has_selection)
+    {
+      priv->has_selection = has_selection;
+      g_object_notify (G_OBJECT (op), "has-selection");
+    }
+}
+
+/**
+ * gtk_print_operation_get_has_selection:
+ * @op: a #GtkPrintOperation
+ *
+ * Gets the value of #GtkPrintOperation::has-selection property.
+ * 
+ * Returns: whether there is a selection
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_operation_get_has_selection (GtkPrintOperation *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
+
+  return op->priv->has_selection;
+}
 
 #define __GTK_PRINT_OPERATION_C__
 #include "gtkaliasdef.c"

@@ -9,12 +9,10 @@ Filesystem utilities
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -45,8 +43,8 @@ Filesystem utilities
 
 </para>
 
-@parent:
-@Returns:
+@parent: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_mount_operation_is_showing ##### -->
@@ -54,8 +52,8 @@ Filesystem utilities
 
 </para>
 
-@op:
-@Returns:
+@op: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_mount_operation_set_parent ##### -->
@@ -63,8 +61,8 @@ Filesystem utilities
 
 </para>
 
-@op:
-@parent:
+@op: 
+@parent: 
 
 
 <!-- ##### FUNCTION gtk_mount_operation_get_parent ##### -->
@@ -72,8 +70,8 @@ Filesystem utilities
 
 </para>
 
-@op:
-@Returns:
+@op: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_mount_operation_set_screen ##### -->
@@ -81,8 +79,8 @@ Filesystem utilities
 
 </para>
 
-@op:
-@screen:
+@op: 
+@screen: 
 
 
 <!-- ##### FUNCTION gtk_mount_operation_get_screen ##### -->
@@ -90,8 +88,8 @@ Filesystem utilities
 
 </para>
 
-@op:
-@Returns:
+@op: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_show_uri ##### -->
@@ -99,10 +97,10 @@ Filesystem utilities
 
 </para>
 
-@screen:
-@uri:
-@timestamp:
-@error:
-@Returns:
+@screen: 
+@uri: 
+@timestamp: 
+@error: 
+@Returns: 
 
 

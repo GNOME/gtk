@@ -736,7 +736,10 @@ init_randr13 (GdkScreen *screen)
       randr12_compat |= !g_strcmp0(output->name, "default");
 
       if (output->connection == RR_Disconnected)
-        continue;
+        {
+          XRRFreeOutputInfo (output);
+          continue;
+        }
 
       if (output->crtc)
 	{

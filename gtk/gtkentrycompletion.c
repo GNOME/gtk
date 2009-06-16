@@ -1426,9 +1426,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (completion->priv->tree_view));
   gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
 
-  /* default on no match */
-  completion->priv->current_selected = -1;
-
   if (actions)
     {
       gtk_widget_show (completion->priv->action_view);
@@ -1497,6 +1494,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   g_list_free (renderers);
 
   gtk_widget_show_all (completion->priv->vbox);
+
+  /* default on no match */
+  completion->priv->current_selected = -1;
 
   _gtk_entry_completion_resize_popup (completion);
 
