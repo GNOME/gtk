@@ -752,7 +752,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 GtkWidget*
 gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
 {
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
 
   return info_bar->priv->action_area;
 }
@@ -770,7 +770,7 @@ gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
 GtkWidget*
 gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
 {
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
 
   return info_bar->priv->content_area;
 }
@@ -1251,7 +1251,7 @@ gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
 {
   GtkInfoBarPrivate *priv;
 
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), GTK_MESSAGE_OTHER);
 
   priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
 
