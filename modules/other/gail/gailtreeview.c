@@ -867,7 +867,7 @@ gail_tree_view_ref_child (AtkObject *obj,
   gtk_tree_view_column_cell_set_cell_data (tv_col, tree_model, &iter, 
                                            is_expander, is_expanded);
 
-  renderer_list = gtk_tree_view_column_get_cell_renderers (tv_col);
+  renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 
   /* If there are more than one renderer in the list, make a container */
 
