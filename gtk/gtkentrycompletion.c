@@ -758,7 +758,7 @@ gtk_entry_completion_get_cells (GtkCellLayout *cell_layout)
 
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
-  return gtk_tree_view_column_get_cell_renderers (priv->column);
+  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
 }
 
 /* all those callbacks */

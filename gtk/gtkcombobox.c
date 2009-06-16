@@ -1695,7 +1695,7 @@ cell_view_is_sensitive (GtkCellView *cell_view)
   GList *cells, *list;
   gboolean sensitive;
   
-  cells = gtk_cell_view_get_cell_renderers (cell_view);
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
