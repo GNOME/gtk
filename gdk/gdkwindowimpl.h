@@ -43,7 +43,8 @@ struct _GdkWindowImplIface
 {
   GTypeInterface g_iface;
 
-  void         (* show)                 (GdkWindow       *window);
+  void         (* show)                 (GdkWindow       *window,
+					 gboolean         already_mapped);
   void         (* hide)                 (GdkWindow       *window);
   void         (* withdraw)             (GdkWindow       *window);
   void         (* raise)                (GdkWindow       *window);

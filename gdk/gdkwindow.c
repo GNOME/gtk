@@ -1548,7 +1548,7 @@ gdk_window_ensure_native (GdkWindow *window)
   GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
 
   if (gdk_window_is_viewable (window))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window);
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show (window, FALSE);
 
   return TRUE;
 }
@@ -5684,7 +5684,7 @@ gdk_window_raise_internal (GdkWindow *window)
 }
 
 static void
-show_all_visible_impls (GdkWindowObject *private)
+show_all_visible_impls (GdkWindowObject *private, gboolean already_mapped)
 {
   GdkWindowObject *child;
   GList *l;
@@ -5693,11 +5693,11 @@ show_all_visible_impls (GdkWindowObject *private)
     {
       child = l->data;
       if (GDK_WINDOW_IS_MAPPED (child))
-	show_all_visible_impls (child);
+	show_all_visible_impls (child, FALSE);
     }
 
   if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show ((GdkWindow *)private);
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show ((GdkWindow *)private, already_mapped);
 }
 
 static void
@@ -5731,7 +5731,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     }
 
   if (gdk_window_is_viewable (window))
-    show_all_visible_impls (private);
+    show_all_visible_impls (private, was_mapped);
 
   if (!was_mapped)
     {

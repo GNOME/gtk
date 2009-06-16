@@ -1298,7 +1298,7 @@ set_initial_hints (GdkWindow *window)
 }
 
 static void
-gdk_window_x11_show (GdkWindow *window)
+gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkWindowObject *private = (GdkWindowObject*) window;
   GdkDisplay *display;
@@ -1308,8 +1308,9 @@ gdk_window_x11_show (GdkWindow *window)
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   Window xwindow = GDK_WINDOW_XID (window);
   gboolean unset_bg;
-      
-  set_initial_hints (window);
+
+  if (!already_mapped)
+    set_initial_hints (window);
       
   if (WINDOW_IS_TOPLEVEL (window))
     {
