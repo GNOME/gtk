@@ -728,7 +728,7 @@ scroll_new_row (ScrollFixture *fixture,
 
 	/* Set up a signal handler to acquire the editable widget */
 	column = gtk_tree_view_get_column (GTK_TREE_VIEW (fixture->tree_view), 0);
-	renderers = gtk_tree_view_column_get_cell_renderers (column);
+	renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
 
 	g_signal_connect (G_OBJECT (renderers->data), "editing-started",
 			  G_CALLBACK (scroll_new_row_editing_started),

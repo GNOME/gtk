@@ -1147,7 +1147,7 @@ test_treeview_column (void)
   g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
   g_assert (strcmp (gtk_tree_view_column_get_title (column), "Test") == 0);
 
-  renderers = gtk_tree_view_column_get_cell_renderers (column);
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
   g_assert (g_list_length (renderers) == 1);
   renderer = g_list_nth_data (renderers, 0);
   g_assert (renderer);
@@ -1423,7 +1423,7 @@ test_cell_view (void)
   path = gtk_tree_path_new_first ();
   gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (cellview), path);
   
-  renderers = gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (cellview));
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview));
   g_assert (renderers);
   g_assert (g_list_length (renderers) == 1);
   
