@@ -436,13 +436,13 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Since: 2.18
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("content-area-border",
-                                                             P_("Content area border"),
-                                                             P_("Width of border around the content area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             8,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("content-area-border",
+                                                                P_("Content area border"),
+                                                                P_("Width of border around the content area"),
+                                                                0,
+                                                                G_MAXINT,
+                                                                GTK_SIZE_ONE_TWELFTH_EM (8),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkInfoBar:content-area-spacing:
@@ -453,13 +453,13 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Since: 2.18
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("content-area-spacing",
-                                                             P_("Content area spacing"),
-                                                             P_("Spacing between elements of the area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             16,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("content-area-spacing",
+                                                                P_("Content area spacing"),
+                                                                P_("Spacing between elements of the area"),
+                                                                0,
+                                                                G_MAXINT,
+                                                                GTK_SIZE_ONE_TWELFTH_EM (16),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkInfoBar:button-spacing:
@@ -469,13 +469,13 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Since: 2.18
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("button-spacing",
-                                                             P_("Button spacing"),
-                                                             P_("Spacing between buttons"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             6,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("button-spacing",
+                                                                P_("Button spacing"),
+                                                                P_("Spacing between buttons"),
+                                                                0,
+                                                                G_MAXINT,
+                                                                GTK_SIZE_ONE_TWELFTH_EM (6),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkInfoBar:action-area-border:
@@ -485,13 +485,13 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Since: 2.18
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("action-area-border",
-                                                             P_("Action area border"),
-                                                             P_("Width of border around the action area"),
-                                                             0,
-                                                             G_MAXINT,
-                                                             5,
-                                                             GTK_PARAM_READABLE));
+                                           gtk_param_spec_size ("action-area-border",
+                                                                P_("Action area border"),
+                                                                P_("Width of border around the action area"),
+                                                                0,
+                                                                G_MAXINT,
+                                                                GTK_SIZE_ONE_TWELFTH_EM (5),
+                                                                GTK_PARAM_READABLE));
 
   /**
    * GtkInfoBar:use-tooltip-style:
