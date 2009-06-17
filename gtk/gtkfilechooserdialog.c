@@ -181,7 +181,6 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   GtkFileChooserDialogPrivate *priv;
   gint default_width, default_height;
   GtkRequisition req, widget_req;
-  int xpos, ypos;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
