@@ -31,6 +31,60 @@
 #include "gtkalias.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
+typedef struct _FileModelNode           FileModelNode;
+
+struct _GtkFileSystemModel
+{
+  GObject parent_instance;
+
+  GtkFileSystem  *file_system;
+  gchar          *attributes;
+  FileModelNode  *roots;
+  GtkFolder      *root_folder;
+  GFile          *root_file;
+
+  GtkFileSystemModelFilter filter_func;
+  gpointer filter_data;
+
+  GSList *idle_clears;
+  GSource *idle_clear_source;
+
+  gushort max_depth;
+
+  GSList *pending_cancellables;
+
+  guint show_hidden : 1;
+  guint show_folders : 1;
+  guint show_files : 1;
+  guint folders_only : 1;
+  guint has_editable : 1;
+};
+
+struct _FileModelNode
+{
+  GFile *file;
+  FileModelNode *next;
+
+  GFileInfo *info;
+  GtkFolder *folder;
+
+  FileModelNode *children;
+  FileModelNode *parent;
+  GtkFileSystemModel *model;
+
+  guint ref_count;
+  guint n_referenced_children;
+
+  gushort depth;
+
+  guint has_dummy : 1;
+  guint is_dummy : 1;
+  guint is_visible : 1;
+  guint loaded : 1;
+  guint idle_clear : 1;
+  guint load_pending : 1;
+};
+
 
 #define GTK_FILE_SYSTEM_MODEL_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_MODEL, GtkFileSystemModelClass))
 #define GTK_IS_FILE_SYSTEM_MODEL_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FILE_SYSTEM_MODEL))
