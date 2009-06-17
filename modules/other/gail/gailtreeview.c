@@ -2127,7 +2127,7 @@ gail_tree_view_get_cell_area (GailCellParent *parent,
           GtkCellRenderer *renderer;
 
 	  cell_index = atk_object_get_index_in_parent (ATK_OBJECT (cell));
-	  renderers = gtk_cel_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
+	  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 	  renderer = g_list_nth_data (renderers, cell_index);
 
 	  found = gtk_tree_view_column_cell_get_position (tv_col, renderer, &cell_start, &cell_width);
@@ -3177,7 +3177,7 @@ update_cell_value (GailRendererCell *renderer_cell,
       gtk_tree_view_column_cell_set_cell_data (cell_info->cell_col_ref,
                                   tree_model, &iter, is_expander, is_expanded);
     }
-  renderers = gtk_cell_layout_get_cells (GKT_CELL_LAYOUT (cell_info->cell_col_ref));
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_info->cell_col_ref));
   gail_return_val_if_fail (renderers, FALSE);
 
   /*

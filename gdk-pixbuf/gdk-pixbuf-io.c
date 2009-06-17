@@ -2452,7 +2452,7 @@ gchar *
 gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
 {
 	gchar *domain;
-	gchar *description;
+	const gchar *description;
 	g_return_val_if_fail (format != NULL, NULL);
 
 	if (format->domain != NULL) 

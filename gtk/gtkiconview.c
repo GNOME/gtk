@@ -9014,12 +9014,14 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
   GtkIconViewItem *item;
   GtkIconViewAccessible *a11y_view;
   GtkIconViewItemAccessible *a11y_item;
-  gchar *name, *text;
+  const gchar *name;
+  gchar *text;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (user_data));
   a11y_view = GTK_ICON_VIEW_ACCESSIBLE (atk_obj);
   index = gtk_tree_path_get_indices(path)[0];
-  a11y_item = gtk_icon_view_accessible_find_child (atk_obj, index);
+  a11y_item = GTK_ICON_VIEW_ITEM_ACCESSIBLE (
+      gtk_icon_view_accessible_find_child (atk_obj, index));
 
   if (a11y_item)
     {

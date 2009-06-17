@@ -2518,17 +2518,17 @@ test_message_area (void)
     "</interface>";
 
   error = NULL;
-  builder = builder_new_from_string (buffer, -1, &error);
+  builder = builder_new_from_string (buffer, -1, NULL);
   g_assert (error == NULL);
   obj = gtk_builder_get_object (builder, "infobar1");
   g_assert (GTK_IS_INFO_BAR (obj));
   obj1 = gtk_builder_get_object (builder, "content");
   g_assert (GTK_IS_LABEL (obj1));
-  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (obj1)) == obj);
+  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (obj1))) == GTK_WIDGET (obj));
 
   obj1 = gtk_builder_get_object (builder, "button_ok");
   g_assert (GTK_IS_BUTTON (obj1));
-  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (obj1)) == obj);
+  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (obj1))) == GTK_WIDGET (obj));
 
   g_object_unref (builder);
 }
