@@ -1687,7 +1687,7 @@ main (int argc, char **argv)
     {
       if (path)
 	{
-	  g_printerr (_("No theme index file."));
+	  g_printerr (_("No theme index file.\n"));
 	}
       else
 	{

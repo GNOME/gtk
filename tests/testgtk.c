@@ -5297,7 +5297,7 @@ entry_toggle_pulse (GtkWidget *checkbutton,
                     GtkWidget *entry)
 {
   g_object_set_data (G_OBJECT (entry), "progress-pulse",
-                     GINT_TO_POINTER (GTK_TOGGLE_BUTTON (checkbutton)->active));
+                     GUINT_TO_POINTER ((guint) GTK_TOGGLE_BUTTON (checkbutton)->active));
 }
 
 static void

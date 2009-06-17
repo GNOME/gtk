@@ -213,6 +213,11 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintOperation:has-selection ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:job-name ##### -->
 <para>
 
@@ -239,6 +244,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:status-string ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:support-selection ##### -->
 <para>
 
 </para>
@@ -522,6 +532,42 @@ The #GQuark used for #GtkPrintError errors.
 
 
 <!-- ##### FUNCTION gtk_print_operation_is_finished ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_support_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@support_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_support_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_has_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@has_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_has_selection ##### -->
 <para>
 
 </para>

@@ -1701,7 +1701,7 @@ cell_view_is_sensitive (GtkCellView *cell_view)
   GList *cells, *list;
   gboolean sensitive;
   
-  cells = gtk_cell_view_get_cell_renderers (cell_view);
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -1738,7 +1738,7 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
 					   priv->model,
 					   iter, FALSE, FALSE);
 
-  cells = gtk_tree_view_column_get_cell_renderers (priv->column);
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -4103,7 +4103,7 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
       gtk_tree_view_column_cell_set_cell_data (column, model, &iter,
 					       FALSE, FALSE);
 
-      cell = cells = gtk_tree_view_column_get_cell_renderers (column);
+      cell = cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
       while (cell)
         {
 	  g_object_get (cell->data,

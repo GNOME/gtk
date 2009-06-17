@@ -1356,6 +1356,9 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
   if (val == NULL || (strcmp (val, "all") == 0))
     return GTK_PRINT_PAGES_ALL;
 
+  if (strcmp (val, "selection") == 0)
+    return GTK_PRINT_PAGES_SELECTION;
+
   if (strcmp (val, "current") == 0)
     return GTK_PRINT_PAGES_CURRENT;
   
@@ -1388,6 +1391,9 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
       break;
     case GTK_PRINT_PAGES_CURRENT:
       str = "current";
+      break;
+    case GTK_PRINT_PAGES_SELECTION:
+      str = "selection";
       break;
     case GTK_PRINT_PAGES_RANGES:
       str = "ranges";

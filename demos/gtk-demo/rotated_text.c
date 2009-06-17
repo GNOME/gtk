@@ -211,15 +211,15 @@ do_rotated_text (GtkWidget *do_widget)
       label = gtk_label_new (text);
       gtk_container_add (GTK_CONTAINER (box), label);
 
-      gtk_label_set_angle (label, 45);
+      gtk_label_set_angle (GTK_LABEL (label), 45);
 
       /* Set up fancy stuff on the label */
-      layout = gtk_label_get_layout (label);
+      layout = gtk_label_get_layout (GTK_LABEL (label));
       pango_cairo_context_set_shape_renderer (pango_layout_get_context (layout),
 					      fancy_shape_renderer,
 					      NULL, NULL);
       attrs = create_fancy_attr_list_for_layout (layout);
-      gtk_label_set_attributes (label, attrs);
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
       pango_attr_list_unref (attrs);
     }
 

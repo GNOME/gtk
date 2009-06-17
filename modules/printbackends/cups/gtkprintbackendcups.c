@@ -3964,6 +3964,39 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
       g_free (custom_name);
     }
 
+  if (gtk_print_settings_get_number_up (settings) > 1)
+    {
+      GtkNumberUpLayout  layout = gtk_print_settings_get_number_up_layout (settings);
+      GEnumClass        *enum_class;
+      GEnumValue        *enum_value;
+
+      switch (gtk_page_setup_get_orientation (page_setup))
+        {
+          case GTK_PAGE_ORIENTATION_PORTRAIT:
+            break;
+          case GTK_PAGE_ORIENTATION_LANDSCAPE:
+            if (layout < 4)
+              layout = layout + 5 - 2 * (layout % 2);
+            else
+              layout = layout - 6 + 4 * (1 - (layout - 4) / 2);
+            break;
+          case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+            layout = (layout + 3 - 2 * (layout % 2)) % 4 + 4 * (layout / 4);
+            break;
+          case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+            if (layout < 4)
+              layout = layout + 2 + 4 * (1 - layout / 2);
+            else
+              layout = layout - 3 - 2 * (layout % 2);
+            break;
+        }
+
+      enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
+      enum_value = g_enum_get_value (enum_class, layout);
+      gtk_print_settings_set (settings, "cups-number-up-layout", enum_value->value_nick);
+      g_type_class_unref (enum_class);
+    }
+
   print_job->rotate_to_orientation = TRUE;
 }
 

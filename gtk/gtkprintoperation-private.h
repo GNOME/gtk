@@ -54,6 +54,8 @@ struct _GtkPrintOperationPrivate
   guint cancelled          : 1;
   guint allow_async        : 1;
   guint is_sync            : 1;
+  guint support_selection  : 1;
+  guint has_selection      : 1;
 
   GtkPageDrawingState      page_drawing_state;
 

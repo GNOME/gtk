@@ -758,7 +758,7 @@ gtk_entry_completion_get_cells (GtkCellLayout *cell_layout)
 
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
-  return gtk_tree_view_column_get_cell_renderers (priv->column);
+  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
 }
 
 /* all those callbacks */
@@ -1426,9 +1426,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (completion->priv->tree_view));
   gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
 
-  /* default on no match */
-  completion->priv->current_selected = -1;
-
   if (actions)
     {
       gtk_widget_show (completion->priv->action_view);
@@ -1489,7 +1486,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   completion->priv->ignore_enter = TRUE;
     
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
-  renderers = gtk_tree_view_column_get_cell_renderers (column);
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
   gtk_widget_ensure_style (completion->priv->tree_view);
   g_object_set (GTK_CELL_RENDERER (renderers->data), "cell-background-gdk",
                 &completion->priv->tree_view->style->bg[GTK_STATE_NORMAL],
@@ -1497,6 +1494,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   g_list_free (renderers);
 
   gtk_widget_show_all (completion->priv->vbox);
+
+  /* default on no match */
+  completion->priv->current_selected = -1;
 
   _gtk_entry_completion_resize_popup (completion);
 

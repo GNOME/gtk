@@ -449,6 +449,8 @@ Returns the #GtkWidget that the menu is attached to.
 A user function supplied when calling gtk_menu_popup() which controls the
 positioning of the menu when it is displayed.  The function sets the @x
 and @y parameters to the coordinates where the menu is to be drawn.
+To make the menu appear on a different monitor than the mouse pointer,
+gtk_menu_set_monitor() must be called.
 </para>
 
 @menu: a #GtkMenu.

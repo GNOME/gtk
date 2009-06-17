@@ -1147,7 +1147,7 @@ test_treeview_column (void)
   g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
   g_assert (strcmp (gtk_tree_view_column_get_title (column), "Test") == 0);
 
-  renderers = gtk_tree_view_column_get_cell_renderers (column);
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
   g_assert (g_list_length (renderers) == 1);
   renderer = g_list_nth_data (renderers, 0);
   g_assert (renderer);
@@ -1423,7 +1423,7 @@ test_cell_view (void)
   path = gtk_tree_path_new_first ();
   gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (cellview), path);
   
-  renderers = gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (cellview));
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview));
   g_assert (renderers);
   g_assert (g_list_length (renderers) == 1);
   
@@ -2483,6 +2483,56 @@ test_file (const gchar *filename)
   builder = NULL;
 }
 
+static void
+test_message_area (void)
+{
+  GtkBuilder *builder;
+  GError *error;
+  GObject *obj, *obj1;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkInfoBar\" id=\"infobar1\">"
+    "    <child internal-child=\"content_area\">"
+    "      <object class=\"GtkHBox\" id=\"contentarea1\">"
+    "        <child>"
+    "          <object class=\"GtkLabel\" id=\"content\">"
+    "            <property name=\"label\" translatable=\"yes\">Message</property>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "    <child internal-child=\"action_area\">"
+    "      <object class=\"GtkVButtonBox\" id=\"actionarea1\">"
+    "        <child>"
+    "          <object class=\"GtkButton\" id=\"button_ok\">"
+    "            <property name=\"label\">gtk-ok</property>"
+    "            <property name=\"use-stock\">yes</property>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "    <action-widgets>"
+    "      <action-widget response=\"1\">button_ok</action-widget>"
+    "    </action-widgets>"
+    "  </object>"
+    "</interface>";
+
+  error = NULL;
+  builder = builder_new_from_string (buffer, -1, NULL);
+  g_assert (error == NULL);
+  obj = gtk_builder_get_object (builder, "infobar1");
+  g_assert (GTK_IS_INFO_BAR (obj));
+  obj1 = gtk_builder_get_object (builder, "content");
+  g_assert (GTK_IS_LABEL (obj1));
+  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (obj1))) == GTK_WIDGET (obj));
+
+  obj1 = gtk_builder_get_object (builder, "button_ok");
+  g_assert (GTK_IS_BUTTON (obj1));
+  g_assert (gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (obj1))) == GTK_WIDGET (obj));
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2525,6 +2575,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Requires", test_requires);
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
   g_test_add_func ("/Builder/Menus", test_menus);
+  g_test_add_func ("/Builder/MessageArea", test_message_area);
 
   return g_test_run();
 }

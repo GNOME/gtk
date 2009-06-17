@@ -449,7 +449,7 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
           /* Some apps are using the object data directly...
            * so continue to set it for a bit longer
            */
-          g_object_set_data (activatable, "gtk-action", NULL);
+          g_object_set_data (G_OBJECT (activatable), "gtk-action", NULL);
 
           /*
            * We don't want prev_action to be activated
@@ -478,7 +478,7 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
 
 	  _gtk_action_add_to_proxy_list (action, GTK_WIDGET (activatable));
 
-          g_object_set_data (activatable, "gtk-action", action);
+          g_object_set_data (G_OBJECT (activatable), "gtk-action", action);
 	}
     }
 }

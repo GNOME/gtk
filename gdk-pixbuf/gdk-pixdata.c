@@ -428,9 +428,10 @@ gdk_pixbuf_from_pixdata (const GdkPixdata *pixdata,
 	{
 	  g_set_error (error, GDK_PIXBUF_ERROR,
 		       GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-		       ngettext("failed to allocate image buffer of %u byte",
-				"failed to allocate image buffer of %u bytes",
-				pixdata->rowstride * pixdata->height),
+		       g_dngettext(GETTEXT_PACKAGE,
+				   "failed to allocate image buffer of %u byte",
+				   "failed to allocate image buffer of %u bytes",
+				   pixdata->rowstride * pixdata->height),
 		       pixdata->rowstride * pixdata->height);
 	  return NULL;
 	}

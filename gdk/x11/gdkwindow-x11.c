@@ -57,9 +57,7 @@
 #include <string.h>
 
 
-#ifdef HAVE_SHAPE_EXT
 #include <X11/extensions/shape.h>
-#endif
 
 #ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>
@@ -2118,7 +2116,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_MODAL"), 
-			     NULL);
+			     GDK_NONE);
 }
 
 /**
@@ -2152,8 +2150,8 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_taskbar, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"), 
-			     NULL);
+			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_TASKBAR"),
+			     GDK_NONE);
 }
 
 /**
@@ -2190,7 +2188,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (skips_pager, window,
 			     gdk_atom_intern_static_string ("_NET_WM_STATE_SKIP_PAGER"), 
-			     NULL);
+			     GDK_NONE);
 }
 
 /**
@@ -3394,7 +3392,6 @@ do_shape_combine_region (GdkWindow       *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   
-#ifdef HAVE_SHAPE_EXT
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -3463,7 +3460,6 @@ do_shape_combine_region (GdkWindow       *window,
       
       g_free (xrects);
     }
-#endif /* HAVE_SHAPE_EXT */
 }
 
 static void
@@ -4000,7 +3996,7 @@ gdk_window_stick (GdkWindow *window)
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       NULL);
+			       GDK_NONE);
 
       /* Request desktop 0xFFFFFFFF */
       memset (&xclient, 0, sizeof (xclient));
@@ -4050,7 +4046,7 @@ gdk_window_unstick (GdkWindow *window)
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
 			       gdk_atom_intern_static_string ("_NET_WM_STATE_STICKY"),
-			       NULL);
+			       GDK_NONE);
 
       move_to_current_desktop (window);
     }
@@ -4570,7 +4566,6 @@ xwindow_get_shape (Display *xdisplay,
 
   shape = NULL;
   
-#if defined(HAVE_SHAPE_EXT)
   xrl = XShapeGetRectangles (xdisplay,
 			     window,
 			     shape_type, &rn, &ord);
@@ -4599,7 +4594,6 @@ xwindow_get_shape (Display *xdisplay,
   
   shape = _gdk_region_new_from_yxbanded_rects (rl, rn);
   g_free (rl);
-#endif
   
   return shape;
 }
@@ -4637,12 +4631,10 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 GdkRegion *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
-#if defined(HAVE_SHAPE_EXT)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
 			      GDK_WINDOW_XID (window), ShapeBounding);
-#endif
 
   return NULL;
 }
@@ -4650,7 +4642,7 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
 GdkRegion *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
-#if defined(HAVE_SHAPE_EXT)
+#if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
     return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),

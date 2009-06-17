@@ -9,12 +9,10 @@ GtkActivatable
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### SECTION Stability_Level ##### -->
 
@@ -40,17 +38,17 @@ GtkActivatable
 
 </para>
 
-@g_iface:
-@update:
-@sync_action_properties:
+@g_iface: 
+@update: 
+@sync_action_properties: 
 
 <!-- ##### FUNCTION gtk_activatable_do_set_related_action ##### -->
 <para>
 
 </para>
 
-@activatable:
-@action:
+@activatable: 
+@action: 
 
 
 <!-- ##### FUNCTION gtk_activatable_get_related_action ##### -->
@@ -58,8 +56,8 @@ GtkActivatable
 
 </para>
 
-@activatable:
-@Returns:
+@activatable: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_activatable_get_use_action_appearance ##### -->
@@ -67,8 +65,8 @@ GtkActivatable
 
 </para>
 
-@activatable:
-@Returns:
+@activatable: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_activatable_sync_action_properties ##### -->
@@ -76,8 +74,8 @@ GtkActivatable
 
 </para>
 
-@activatable:
-@action:
+@activatable: 
+@action: 
 
 
 <!-- ##### FUNCTION gtk_activatable_set_related_action ##### -->
@@ -85,8 +83,8 @@ GtkActivatable
 
 </para>
 
-@activatable:
-@action:
+@activatable: 
+@action: 
 
 
 <!-- ##### FUNCTION gtk_activatable_set_use_action_appearance ##### -->
@@ -94,7 +92,7 @@ GtkActivatable
 
 </para>
 
-@activatable:
-@use_appearance:
+@activatable: 
+@use_appearance: 
 
 

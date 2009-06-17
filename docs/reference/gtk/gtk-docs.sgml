@@ -159,6 +159,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtklabel.xml" />
       <xi:include href="xml/gtkprogressbar.xml" />
       <xi:include href="xml/gtkstatusbar.xml" />
+      <xi:include href="xml/gtkinfobar.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
     </chapter>
 

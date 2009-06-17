@@ -90,6 +90,16 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 
 </para>
 
+<!-- ##### ARG GtkPrintUnixDialog:has-selection ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:manual-capabilities ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintUnixDialog:page-setup ##### -->
 <para>
 
@@ -101,6 +111,11 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 </para>
 
 <!-- ##### ARG GtkPrintUnixDialog:selected-printer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:support-selection ##### -->
 <para>
 
 </para>
@@ -188,6 +203,42 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 @tab_label: 
 
 
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_support_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@support_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_support_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_has_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@has_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_has_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkPrintCapabilities ##### -->
 <para>
 An enum for specifying which features the print dialog should offer.
@@ -218,5 +269,14 @@ formats are supported.
 
 @dialog: 
 @capabilities: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_manual_capabilities ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
 
 

@@ -1336,7 +1336,8 @@ file_model_node_is_visible (GtkFileSystemModel *model,
 	  model->show_folders != is_folder)
 	return FALSE;
 
-      if (!model->show_hidden && g_file_info_get_is_hidden (info))
+      if (!model->show_hidden &&
+          (g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info)))
 	return FALSE;
 
       if (model->filter_func &&
