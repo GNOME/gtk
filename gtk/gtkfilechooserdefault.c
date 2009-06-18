@@ -4697,6 +4697,9 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_set_title (column, _("Size"));
 
   renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, 
+                "alignment", PANGO_ALIGN_RIGHT,
+                NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
@@ -11235,7 +11238,6 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
   g_object_set (cell,
   		"text", str,
 		"sensitive", sensitive,
-		"alignment", PANGO_ALIGN_RIGHT,
 		NULL);
 
   g_free (str);
