@@ -1415,11 +1415,11 @@ validate_file (const gchar *file)
 
   if (!_gtk_icon_cache_validate (&info)) 
     {
-      g_mapped_file_free (map);
+      g_mapped_file_unref (map);
       return FALSE;
     }
   
-  g_mapped_file_free (map);
+  g_mapped_file_unref (map);
 
   return TRUE;
 }
