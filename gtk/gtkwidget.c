@@ -9806,6 +9806,44 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
   return FALSE;
 }
 
+void
+_gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
+					  GtkWidget *toplevel,
+					  gpointer   user_data)
+{
+  AccelGroupParserData *accel_data;
+  GSList *accel_groups;
+  GtkAccelGroup *accel_group;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (toplevel));
+  g_return_if_fail (user_data != NULL);
+
+  accel_data = (AccelGroupParserData*)user_data;
+  accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
+  if (g_slist_length (accel_groups) == 0)
+    {
+      accel_group = gtk_accel_group_new ();
+      gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
+    }
+  else
+    {
+      g_assert (g_slist_length (accel_groups) == 1);
+      accel_group = g_slist_nth_data (accel_groups, 0);
+    }
+
+  gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
+			      accel_data->signal,
+			      accel_group,
+			      accel_data->key,
+			      accel_data->modifiers,
+			      GTK_ACCEL_VISIBLE);
+
+  g_object_unref (accel_data->object);
+  g_free (accel_data->signal);
+  g_slice_free (AccelGroupParserData, accel_data);
+}
+
 static void
 gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder,
@@ -9816,8 +9854,6 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
   AccelGroupParserData *accel_data;
   AccessibilitySubParserData *a11y_data;
   GtkWidget *toplevel;
-  GSList *accel_groups;
-  GtkAccelGroup *accel_group;
 
   if (strcmp (tagname, "accelerator") == 0)
     {
@@ -9825,26 +9861,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       g_assert (accel_data->object);
 
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (accel_data->object));
-      accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
-      if (g_slist_length (accel_groups) == 0)
-	{
-	  accel_group = gtk_accel_group_new ();
-	  gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
-	}
-      else
-	{
-	  g_assert (g_slist_length (accel_groups) == 1);
-	  accel_group = g_slist_nth_data (accel_groups, 0);
-	}
-      gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
-				  accel_data->signal,
-				  accel_group,
-				  accel_data->key,
-				  accel_data->modifiers,
-				  GTK_ACCEL_VISIBLE);
-      g_object_unref (accel_data->object);
-      g_free (accel_data->signal);
-      g_slice_free (AccelGroupParserData, accel_data);
+
+      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), toplevel, user_data);
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {

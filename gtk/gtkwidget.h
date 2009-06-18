@@ -841,6 +841,10 @@ void       _gtk_widget_synthesize_crossing (GtkWidget      *from,
 
 GdkColormap* _gtk_widget_peek_colormap (void);
 
+void         _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
+						       GtkWidget *toplevel,
+						       gpointer   user_data);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */
