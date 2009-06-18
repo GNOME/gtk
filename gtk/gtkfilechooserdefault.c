@@ -6114,7 +6114,10 @@ settings_load (GtkFileChooserDefault *impl)
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
-  set_sort_column (impl);
+  /* We don't call set_sort_column() here as the models may not have been
+   * created yet.  The individual functions that create and set the models will
+   * call set_sort_column() themselves.
+   */
 }
 
 static void
