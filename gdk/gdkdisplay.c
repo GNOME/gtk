@@ -825,7 +825,7 @@ free_pointer_grab (GdkPointerGrabInfo *info)
   g_free (info);
 }
 
-/* _gdk_syntesize_crossing_events only works inside one toplevel.
+/* _gdk_synthesize_crossing_events only works inside one toplevel.
    This function splits things into two calls if needed, converting the
    coordinates to the right toplevel */
 static void
@@ -858,7 +858,7 @@ synthesize_crossing_events (GdkDisplay *display,
       /* Same toplevels */
       gdk_window_get_pointer (dest_toplevel,
 			      &x, &y, &state);
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      src_window,
 				      dest_window,
 				      crossing_mode,
@@ -871,7 +871,7 @@ synthesize_crossing_events (GdkDisplay *display,
     {
       gdk_window_get_pointer (src_toplevel,
 			      &x, &y, &state);
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      src_window,
 				      NULL,
 				      crossing_mode,
@@ -885,7 +885,7 @@ synthesize_crossing_events (GdkDisplay *display,
       /* Different toplevels */
       gdk_window_get_pointer (src_toplevel,
 			      &x, &y, &state);
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      src_window,
 				      NULL,
 				      crossing_mode,
@@ -895,7 +895,7 @@ synthesize_crossing_events (GdkDisplay *display,
 				      serial);
       gdk_window_get_pointer (dest_toplevel,
 			      &x, &y, &state);
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      NULL,
 				      dest_window,
 				      crossing_mode,

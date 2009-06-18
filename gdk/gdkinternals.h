@@ -626,7 +626,7 @@ GdkEvent * _gdk_make_event (GdkWindow    *window,
 			    GdkEvent     *event_in_queue,
 			    gboolean      before_event);
 
-void _gdk_syntesize_crossing_events (GdkDisplay                 *display,
+void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				     GdkWindow                  *src,
 				     GdkWindow                  *dest,
 				     GdkCrossingMode             mode,
@@ -640,7 +640,7 @@ void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 					    GdkWindow *window);
 
 
-void _gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
+void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
 
 GdkRegion *_gdk_window_calculate_full_clip_region    (GdkWindow     *window,
                                                       GdkWindow     *base_window,

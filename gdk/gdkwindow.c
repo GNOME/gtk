@@ -1455,7 +1455,7 @@ gdk_window_reparent (GdkWindow *window,
   if (show)
     gdk_window_show_unraised (window);
   else
-    _gdk_syntesize_crossing_events_for_geometry_change (window);
+    _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 /**
@@ -5751,7 +5751,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 
       if (gdk_window_is_viewable (window))
 	{
-	  _gdk_syntesize_crossing_events_for_geometry_change (window);
+	  _gdk_synthesize_crossing_events_for_geometry_change (window);
 	  gdk_window_invalidate_rect (window, NULL, TRUE);
 	}
     }
@@ -5920,7 +5920,7 @@ gdk_window_lower (GdkWindow *window)
 
   recompute_visible_regions (private, TRUE, FALSE);
 
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
   gdk_window_invalidate_in_parent (private);
 }
 
@@ -6040,7 +6040,7 @@ gdk_window_hide (GdkWindow *window)
       if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
 	_gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
 
-      _gdk_syntesize_crossing_events_for_geometry_change (GDK_WINDOW (private->parent));
+      _gdk_synthesize_crossing_events_for_geometry_change (GDK_WINDOW (private->parent));
     }
 
   /* Invalidate the rect */
@@ -6081,7 +6081,7 @@ gdk_window_withdraw (GdkWindow *window)
 	  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
 	    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
 
-	  _gdk_syntesize_crossing_events_for_geometry_change (GDK_WINDOW (private->parent));
+	  _gdk_synthesize_crossing_events_for_geometry_change (GDK_WINDOW (private->parent));
 	}
 
       recompute_visible_regions (private, TRUE, FALSE);
@@ -6210,7 +6210,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
       gdk_region_destroy (new_region);
     }
 
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 
@@ -6458,7 +6458,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
       gdk_region_destroy (new_native_child_region);
     }
 
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 
@@ -6647,7 +6647,7 @@ gdk_window_scroll (GdkWindow *window,
       gdk_region_destroy (new_native_child_region);
     }
 
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 /**
@@ -7347,7 +7347,7 @@ gdk_window_input_shape_combine_region (GdkWindow       *window,
     GDK_WINDOW_IMPL_GET_IFACE (private->impl)->input_shape_combine_region ((GdkWindow *)private, private->input_shape, 0, 0);
 
   /* Pointer may have e.g. moved outside window due to the input mask change */
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static void
@@ -8399,7 +8399,7 @@ send_crossing_event (GdkDisplay                 *display,
  * before crossing to another toplevel.
  */
 void
-_gdk_syntesize_crossing_events (GdkDisplay                 *display,
+_gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				GdkWindow                  *src,
 				GdkWindow                  *dest,
 				GdkCrossingMode             mode,
@@ -8718,7 +8718,7 @@ gdk_window_get_has_offscreen_children (GdkWindow *window)
 void
 gdk_window_offscreen_children_changed (GdkWindow *window)
 {
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static gboolean
@@ -8751,7 +8751,7 @@ do_synthesize_crossing_event (gpointer data)
       if (new_window_under_pointer !=
 	  display->pointer_info.window_under_pointer)
 	{
-	  _gdk_syntesize_crossing_events (display,
+	  _gdk_synthesize_crossing_events (display,
 					  display->pointer_info.window_under_pointer,
 					  new_window_under_pointer,
 					  GDK_CROSSING_NORMAL,
@@ -8769,7 +8769,7 @@ do_synthesize_crossing_event (gpointer data)
 }
 
 void
-_gdk_syntesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
+_gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 {
   GdkDisplay *display;
   GdkWindow *toplevel;
@@ -8898,7 +8898,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 
       /* Send leave events from window under pointer to event window
 	 that will get the subwindow == NULL window */
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      display->pointer_info.window_under_pointer,
 				      event_window,
 				      source_event->crossing.mode,
@@ -8950,7 +8950,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 			   serial);
 
       /* Send enter events from event window to pointer_window */
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      event_window,
 				      pointer_window,
 				      source_event->crossing.mode,
@@ -8968,7 +8968,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	 or a motion notify that got into another child window  */
 
       /* Different than last time, send crossing events */
-      _gdk_syntesize_crossing_events (display,
+      _gdk_synthesize_crossing_events (display,
 				      display->pointer_info.window_under_pointer,
 				      pointer_window,
 				      GDK_CROSSING_NORMAL,

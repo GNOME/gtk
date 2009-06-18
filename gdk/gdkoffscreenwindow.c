@@ -678,9 +678,9 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   if (new_parent_private)
     private->parent->children = g_list_prepend (private->parent->children, window);
 
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
   if (old_parent)
-    _gdk_syntesize_crossing_events_for_geometry_change (GDK_WINDOW (old_parent));
+    _gdk_synthesize_crossing_events_for_geometry_change (GDK_WINDOW (old_parent));
 
   return was_mapped;
 }
@@ -868,14 +868,14 @@ static void
 gdk_offscreen_window_raise (GdkWindow *window)
 {
   /* gdk_window_raise already changed the stacking order */
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static void
 gdk_offscreen_window_lower (GdkWindow *window)
 {
   /* gdk_window_lower already changed the stacking order */
-  _gdk_syntesize_crossing_events_for_geometry_change (window);
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static void
@@ -935,7 +935,7 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
     {
       // TODO: Only invalidate new area, i.e. for larger windows
       gdk_window_invalidate_rect (window, NULL, TRUE);
-      _gdk_syntesize_crossing_events_for_geometry_change (window);
+      _gdk_synthesize_crossing_events_for_geometry_change (window);
     }
 }
 
