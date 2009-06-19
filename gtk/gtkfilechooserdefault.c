@@ -791,7 +791,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
-  impl->show_size_column = FALSE;
+  impl->show_size_column = TRUE;
   impl->icon_size = FALLBACK_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
