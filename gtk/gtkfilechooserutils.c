@@ -286,7 +286,7 @@ delegate_remove_shortcut_folder (GtkFileChooser  *chooser,
 static GSList *
 delegate_list_shortcut_folders (GtkFileChooser *chooser)
 {
-  return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
+  return _gtk_file_chooser_list_shortcut_folder_files (get_delegate (chooser));
 }
 
 static gboolean
