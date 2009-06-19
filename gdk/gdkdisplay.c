@@ -454,7 +454,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display)
       serial = _gdk_windowing_window_get_next_serial (display);
       /* We might not actually generate the next request, so
 	 make sure this triggers always, this may cause it to
-	 trigger slightly to early, but this is just a hint
+	 trigger slightly too early, but this is just a hint
 	 anyway. */
       if (serial > 0)
 	serial--;
@@ -548,7 +548,7 @@ gdk_window_real_window_get_pointer (GdkDisplay       *display,
   normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_pointer (window,
 									 &tmpx, &tmpy,
 									 &tmp_mask);
-  /* We got the coords on the impl, conver to the window */
+  /* We got the coords on the impl, convert to the window */
   tmpx -= private->abs_x;
   tmpy -= private->abs_y;
 
