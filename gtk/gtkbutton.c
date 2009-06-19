@@ -997,9 +997,14 @@ gtk_button_construct_child (GtkButton *button)
 
       if (label_text)
 	{
-	  label = gtk_label_new_with_mnemonic (label_text);
-	  gtk_label_set_mnemonic_widget (GTK_LABEL (label), 
-					 GTK_WIDGET (button));
+          if (button->use_underline)
+            {
+	      label = gtk_label_new_with_mnemonic (label_text);
+	      gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                             GTK_WIDGET (button));
+            }
+          else
+            label = gtk_label_new (label_text);
 
 	  if (priv->image_position == GTK_POS_RIGHT ||
 	      priv->image_position == GTK_POS_BOTTOM)
