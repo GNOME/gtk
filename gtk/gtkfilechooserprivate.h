@@ -102,6 +102,7 @@ gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *cho
 gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
 							  GFile             *folder,
 							  GError           **error);
+GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
 /* GtkFileChooserDialog private */
 
