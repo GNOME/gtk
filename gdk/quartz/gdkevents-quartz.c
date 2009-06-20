@@ -116,27 +116,16 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
 }
 
 GdkGrabStatus
-gdk_pointer_grab (GdkWindow    *window,
-		  gboolean	owner_events,
-		  GdkEventMask	event_mask,
-		  GdkWindow    *confine_to,
-		  GdkCursor    *cursor,
-		  guint32	time)
+_gdk_windowing_pointer_grab (GdkWindow    *window,
+                             GdkWindow    *native,
+                             gboolean	   owner_events,
+                             GdkEventMask  event_mask,
+                             GdkWindow    *confine_to,
+                             GdkCursor    *cursor,
+                             guint32       time)
 {
-  GdkWindow *native;
-
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
-
-  native = gdk_window_get_toplevel (window);
-
-  /* TODO: What do we do for offscreens and  their children? We need to proxy the grab somehow */
-  if (!GDK_IS_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (native)->impl))
-    return GDK_GRAB_SUCCESS;
-
-  if (!_gdk_window_has_impl (window) &&
-      !gdk_window_is_viewable (window))
-    return GDK_GRAB_NOT_VIEWABLE;
 
   _gdk_display_add_pointer_grab (_gdk_display,
                                  window,
