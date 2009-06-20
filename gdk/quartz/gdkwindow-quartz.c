@@ -1023,9 +1023,11 @@ _gdk_windowing_window_destroy_foreign (GdkWindow *window)
   /* Foreign windows aren't supported in OSX. */
 }
 
-/* FIXME: This might be possible to simplify with client-side windows. */
+/* FIXME: This might be possible to simplify with client-side windows. Also
+ * note that already_mapped is not used yet, see the x11 backend.
+*/
 static void
-gdk_window_quartz_show (GdkWindow *window)
+gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
@@ -1656,9 +1658,11 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
 }
 
 static gint
-gdk_window_quartz_get_origin (GdkWindow *window,
-                              gint      *x,
-                              gint      *y)
+gdk_window_quartz_get_root_coords (GdkWindow *window,
+                                   gint       x,
+                                   gint       y,
+                                   gint      *root_x,
+                                   gint      *root_y)
 {
   GdkWindowObject *private;
   int tmp_x = 0, tmp_y = 0;
@@ -1668,20 +1672,20 @@ gdk_window_quartz_get_origin (GdkWindow *window,
 
   if (GDK_WINDOW_DESTROYED (window)) 
     {
-      if (x) 
-	*x = 0;
-      if (y) 
-	*y = 0;
+      if (root_x)
+	*root_x = 0;
+      if (root_y)
+	*root_y = 0;
       
       return 0;
     }
 
   if (window == _gdk_root)
     {
-      if (x)
-        *x = 0;
-      if (y)
-        *y = 0;
+      if (root_x)
+        *root_x = x;
+      if (root_y)
+        *root_y = y;
 
       return 1;
     }
@@ -1693,8 +1697,8 @@ gdk_window_quartz_get_origin (GdkWindow *window,
 
   content_rect = [impl->toplevel contentRectForFrameRect:[impl->toplevel frame]];
 
-  tmp_x = content_rect.origin.x;
-  tmp_y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
+  tmp_x = x + content_rect.origin.x;
+  tmp_y = y + _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
 
   while (private != GDK_WINDOW_OBJECT (toplevel))
     {
@@ -1707,10 +1711,10 @@ gdk_window_quartz_get_origin (GdkWindow *window,
       private = private->parent;
     }
 
-  if (x)
-    *x = tmp_x;
-  if (y)
-    *y = tmp_y;
+  if (root_x)
+    *root_x = tmp_x;
+  if (root_y)
+    *root_y = tmp_y;
 
   return TRUE;
 }
@@ -1742,27 +1746,12 @@ gdk_window_get_root_origin (GdkWindow *window,
     *y = rect.y;
 }
 
-/* Returns coordinates relative to the root. */
-void
-_gdk_windowing_get_pointer (GdkDisplay       *display,
-			    GdkScreen       **screen,
-			    gint             *x,
-			    gint             *y,
-			    GdkModifierType  *mask)
-{
-  g_return_if_fail (display == _gdk_display);
-  
-  *screen = _gdk_screen;
-  _gdk_windowing_window_get_pointer (_gdk_display, _gdk_root, x, y, mask);
-}
-
 /* Returns coordinates relative to the passed in window. */
-GdkWindow *
-_gdk_windowing_window_get_pointer (GdkDisplay      *display,
-				   GdkWindow       *window,
-				   gint            *x,
-				   gint            *y,
-				   GdkModifierType *mask)
+static GdkWindow *
+gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
+                                      gint            *x,
+                                      gint            *y,
+                                      GdkModifierType *mask)
 {
   GdkWindowObject *toplevel;
   GdkWindowObject *private;
@@ -1820,6 +1809,29 @@ _gdk_windowing_window_get_pointer (GdkDisplay      *display,
   return found_window;
 }
 
+static gboolean
+gdk_window_quartz_get_pointer (GdkWindow       *window,
+                               gint            *x,
+                               gint            *y,
+                               GdkModifierType *mask)
+{
+  return gdk_window_quartz_get_pointer_helper (window, x, y, mask) != NULL;
+}
+
+/* Returns coordinates relative to the root. */
+void
+_gdk_windowing_get_pointer (GdkDisplay       *display,
+                            GdkScreen       **screen,
+                            gint             *x,
+                            gint             *y,
+                            GdkModifierType  *mask)
+{
+  g_return_if_fail (display == _gdk_display);
+  
+  *screen = _gdk_screen;
+  gdk_window_quartz_get_pointer_helper (_gdk_root, x, y, mask);
+}
+
 void
 gdk_display_warp_pointer (GdkDisplay *display,
 			  GdkScreen  *screen,
@@ -1840,10 +1852,9 @@ _gdk_windowing_window_at_pointer (GdkDisplay      *display,
   gint x, y;
   GdkModifierType tmp_mask = 0;
 
-  found_window = _gdk_windowing_window_get_pointer (display,
-						    _gdk_root,
-						    &x, &y,
-						    &tmp_mask);
+  found_window = gdk_window_quartz_get_pointer_helper (_gdk_root,
+                                                       &x, &y,
+                                                       &tmp_mask);
   if (found_window)
     {
       GdkWindowObject *private;
@@ -2880,7 +2891,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->reparent = gdk_window_quartz_reparent;
   iface->set_cursor = gdk_window_quartz_set_cursor;
   iface->get_geometry = gdk_window_quartz_get_geometry;
-  iface->get_origin = gdk_window_quartz_get_origin;
+  iface->get_root_coords = gdk_window_quartz_get_root_coords;
+  iface->get_pointer = gdk_window_quartz_get_pointer;
   iface->get_deskrelative_origin = gdk_window_quartz_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_quartz_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
