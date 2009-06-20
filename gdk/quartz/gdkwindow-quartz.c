@@ -2830,12 +2830,9 @@ gdk_window_destroy_notify (GdkWindow *window)
 }
 
 void 
-gdk_window_beep (GdkWindow *window)
+_gdk_windowing_window_beep (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
 
   gdk_display_beep (_gdk_display);
 }
