@@ -235,7 +235,7 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
   while (tree_store->stamp == 0);
 
   tree_store->sort_list = NULL;
-  tree_store->sort_column_id = -2;
+  tree_store->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
   tree_store->columns_dirty = FALSE;
 }
 

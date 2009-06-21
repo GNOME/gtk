@@ -210,7 +210,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->seq = g_sequence_new (NULL);
   list_store->sort_list = NULL;
   list_store->stamp = g_random_int ();
-  list_store->sort_column_id = -2;
+  list_store->sort_column_id = GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID;
   list_store->columns_dirty = FALSE;
   list_store->length = 0;
 }
