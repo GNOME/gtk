@@ -37,14 +37,14 @@ source code release of GTK+. For binary distributions, please check with
 your vendor.</para>
 
 <para>A copy is available online for reference at <ulink 
-url="http://www.gtk.org/tutorial/">http://www.gtk.org/tutorial</ulink>.</para>
+url="http://www.gtk.org/documentation.html#Tutorials">http://www.gtk.org/documentation.html#Tutorials</ulink>. You can also find other GTK+ tutorials there.</para>
 
-<para>A packaged verion of this tutorial is available from
+<para>A packaged version of this tutorial is available from
 <ulink url="ftp://ftp.gtk.org/pub/gtk/tutorial/">
 ftp://ftp.gtk.org/pub/gtk/tutorial</ulink> which contains the tutorial in
-various different formats. This
-package is primary for those people wanting to have the tutorial
-available for offline reference and for printing.</para>
+various different formats. This package is primary for those people wanting
+to have the tutorial available for offline reference and for printing. Note
+that the packaged version may be older than the online version.</para>
 
 </chapter>
 
