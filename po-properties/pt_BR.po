@@ -6711,7 +6711,7 @@ msgstr "Se o widget tem ou não o foco de entrada"
 
 #: gtk/gtkwidget.c:551
 msgid "Is focus"
-msgstr "Tem foco"
+msgstr "É foco"
 
 #: gtk/gtkwidget.c:552
 msgid "Whether the widget is the focus widget within the toplevel"
