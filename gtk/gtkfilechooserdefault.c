@@ -4312,7 +4312,6 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_files_popup_menu_add_shortcut_item = item;
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
 				 gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
-  gtk_widget_set_sensitive (item, FALSE);
   g_signal_connect (item, "activate",
 		    G_CALLBACK (add_to_shortcuts_cb), impl);
   gtk_widget_show (item);
@@ -4335,6 +4334,8 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
                     G_CALLBACK (show_size_column_toggled_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  bookmarks_check_add_sensitivity (impl);
 }
 
 /* Updates the popup menu for the file list, creating it if necessary */
