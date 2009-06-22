@@ -23,7 +23,8 @@ demos =						\
 	iconview.c				\
 	iconview_edit.c				\
 	images.c				\
-        links.c					\
+	infobar.c				\
+	links.c					\
 	list_store.c				\
 	menus.c					\
 	panes.c					\
