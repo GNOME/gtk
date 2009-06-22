@@ -2431,9 +2431,14 @@ gtk_menu_size_request (GtkWidget      *widget,
        priv->heights[t] = MAX (priv->heights[t], part);
     }
 
-  /* if the menu doesn't include any images or check items
-   * reserve the space so that all menus are consistent */
-  if (max_toggle_size == 0 && !priv->no_toggle_size)
+  /* If the menu doesn't include any images or check items
+   * reserve the space so that all menus are consistent.
+   * We only do this for 'ordinary' menus, not for combobox
+   * menus or multi-column menus
+   */
+  if (max_toggle_size == 0 && 
+      gtk_menu_get_n_columns (menu) == 1 &&
+      !priv->no_toggle_size)
     {
       guint toggle_spacing;
       guint indicator_size;
