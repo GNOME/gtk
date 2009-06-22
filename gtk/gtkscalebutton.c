@@ -927,7 +927,9 @@ gtk_scale_popup (GtkWidget *widget,
   gdouble v;
   GdkDisplay *display;
   GdkScreen *screen;
+  gboolean is_moved;
 
+  is_moved = FALSE;
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
   adj = priv->adjustment;
@@ -1004,15 +1006,24 @@ gtk_scale_popup (GtkWidget *widget,
       else
         x += button_event->x;
 
-      if (y < rect.y)
+      /* Move the dock, but set is_moved so we
+       * don't forward the first click later on,
+       * as it could make the scale go to the bottom */
+      if (y < rect.y) {
 	y = rect.y;
-      else if (y + d->allocation.height > rect.height + rect.y)
+	is_moved = TRUE;
+      } else if (y + d->allocation.height > rect.height + rect.y) {
 	y = rect.y + rect.height - d->allocation.height;
+	is_moved = TRUE;
+      }
 
-      if (x < rect.x)
+      if (x < rect.x) {
 	x = rect.x;
-      else if (x + d->allocation.width > rect.width + rect.x)
+	is_moved = TRUE;
+      } else if (x + d->allocation.width > rect.width + rect.x) {
 	x = rect.x + rect.width - d->allocation.width;
+	is_moved = TRUE;
+      }
     }
 
   gtk_window_move (GTK_WINDOW (priv->dock), x, y);
@@ -1043,7 +1054,7 @@ gtk_scale_popup (GtkWidget *widget,
 
   gtk_widget_grab_focus (priv->dock);
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS && !is_moved)
     {
       GdkEventButton *e;
       GdkEventButton *button_event = (GdkEventButton *) event;
