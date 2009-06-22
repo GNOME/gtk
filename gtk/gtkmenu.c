@@ -73,11 +73,9 @@ struct _GtkMenuAttachData
 
 struct _GtkMenuPrivate 
 {
-  gboolean seen_item_enter;
-
-  gboolean have_position;
   gint x;
   gint y;
+  gboolean initially_pushed_in;
 
   /* info used for the table */
   guint *heights;
@@ -86,7 +84,6 @@ struct _GtkMenuPrivate
   gint monitor_num;
 
   /* Cached layout information */
-  gboolean have_layout;
   gint n_rows;
   gint n_columns;
 
@@ -96,8 +93,11 @@ struct _GtkMenuPrivate
   GtkStateType lower_arrow_state;
   GtkStateType upper_arrow_state;
 
-  gboolean ignore_button_release;
-  gboolean initially_pushed_in;
+  guint have_layout           : 1;
+  guint seen_item_enter       : 1;
+  guint have_position         : 1;
+  guint ignore_button_release : 1;
+  guint no_toggle_size        : 1;
 };
 
 typedef struct
@@ -2433,7 +2433,7 @@ gtk_menu_size_request (GtkWidget      *widget,
 
   /* if the menu doesn't include any images or check items
    * reserve the space so that all menus are consistent */
-  if (max_toggle_size == 0)
+  if (max_toggle_size == 0 && !priv->no_toggle_size)
     {
       guint toggle_spacing;
       guint indicator_size;
@@ -4139,6 +4139,7 @@ gtk_menu_position (GtkMenu *menu)
   GtkRequisition requisition;
   GtkMenuPrivate *private;
   gint x, y;
+  gboolean initially_pushed_in;
   gint scroll_offset;
   gint menu_height;
   GdkScreen *screen;
@@ -4184,6 +4185,7 @@ gtk_menu_position (GtkMenu *menu)
     {
       (* menu->position_func) (menu, &x, &y, &private->initially_pushed_in,
                                menu->position_func_data);
+
       if (private->monitor_num < 0) 
 	private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
@@ -5275,6 +5277,15 @@ gtk_menu_grab_notify (GtkWidget *widget,
       if (GTK_MENU_SHELL (widget)->active && !GTK_IS_MENU_SHELL (grab))
         gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
     }
+}
+
+void
+_gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
+                                   gboolean  reserve)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  
+  priv->no_toggle_size = !reserve;
 }
 
 #define __GTK_MENU_C__
