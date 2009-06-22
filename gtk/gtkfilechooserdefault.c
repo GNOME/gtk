@@ -4694,6 +4694,7 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Size column */
 
   column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_title (column, _("Size"));
 
   renderer = gtk_cell_renderer_text_new ();
