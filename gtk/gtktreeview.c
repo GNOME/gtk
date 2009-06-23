@@ -10712,9 +10712,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 			 GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (model != NULL)
-    g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   if (model == tree_view->priv->model)
     return;
@@ -11526,8 +11524,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
                                    GtkTreeViewColumn *column)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  if (column != NULL)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
 
   if (tree_view->priv->expander_column != column)
     {
@@ -12695,8 +12692,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (tree_view->priv->tree != NULL);
   g_return_if_fail (path != NULL);
-  if (focus_column)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (focus_column));
+  g_return_if_fail (focus_column == NULL || GTK_IS_TREE_VIEW_COLUMN (focus_column));
   if (focus_cell)
     {
       g_return_if_fail (focus_column);
@@ -14077,8 +14073,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 				GtkEntry    *entry)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  if (entry != NULL)
-    g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry));
 
   if (tree_view->priv->search_custom_entry_set)
     {
@@ -15457,12 +15452,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-
-  if (column)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
-
-  if (cell)
-    g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
+  g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
   /* Determine x values. */
   if (column && cell)
