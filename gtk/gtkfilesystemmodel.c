@@ -1136,39 +1136,85 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
 
 }
 
-/**
- * _gtk_file_system_model_new:
- * @directory: the directory to show.
- * @attributes: attributes to immediately load or %NULL for all
- * @error: location to store error, or %NULL.
- *
- * Creates a new #GtkFileSystemModel object. The #GtkFileSystemModel
- * object wraps the given @directory as a #GtkTreeModel.
- * The model will query the given @attributes immediately and only add 
- * files with those attributes present.
- * 
- * Return value: the newly created #GtkFileSystemModel object, or NULL if there
- * was an error.
- **/
-GtkFileSystemModel *
-_gtk_file_system_model_new (GFile *                    dir,
-			    const gchar *              attributes,
-                            GtkFileSystemModelGetValue get_func,
-                            gpointer                   get_data,
-                            guint                      n_columns,
-                            ...)
+static GtkFileSystemModel *
+_gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
+                                   gpointer            get_data,
+                                   guint               n_columns,
+                                   va_list             args)
 {
   GtkFileSystemModel *model;
-  va_list args;
-
-  g_return_val_if_fail (G_IS_FILE (dir), NULL);
 
   model = g_object_new (GTK_TYPE_FILE_SYSTEM_MODEL, NULL);
   model->get_func = get_func;
   model->get_data = get_data;
 
-  va_start (args, n_columns);
   gtk_file_system_model_set_n_columns (model, n_columns, args);
+
+  return model;
+}
+
+/**
+ * _gtk_file_system_model_new:
+ * @get_func: function to call for getting a value
+ * @get_data: user data argument passed to @get_func
+ * @n_columns: number of columns
+ * @...: @n_columns #GType types for the columns
+ *
+ * Creates a new #GtkFileSystemModel object. You need to add files
+ * to the list using _gtk_file_system_model_add_file().
+ *
+ * Return value: the newly created #GtkFileSystemModel
+ **/
+GtkFileSystemModel *
+_gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
+                            gpointer            get_data,
+                            guint               n_columns,
+                            ...)
+{
+  GtkFileSystemModel *model;
+  va_list args;
+
+  g_return_val_if_fail (get_func != NULL, NULL);
+  g_return_val_if_fail (n_columns > 0, NULL);
+
+  va_start (args, n_columns);
+  model = _gtk_file_system_model_new_valist (get_func, get_data, n_columns, args);
+  va_end (args);
+
+  return model;
+}
+
+/**
+ * _gtk_file_system_model_new_for_directory:
+ * @directory: the directory to show.
+ * @attributes: attributes to immediately load or %NULL for all
+ *
+ * Creates a new #GtkFileSystemModel object. The #GtkFileSystemModel
+ * object wraps the given @directory as a #GtkTreeModel.
+ * The model will query the given directory with the given @attributes
+ * and add all files inside the directory automatically. If supported,
+ * it will also monitor the drectory and update the model's
+ * contents to reflect changes, if the @directory supports monitoring.
+ * 
+ * Return value: the newly created #GtkFileSystemModel
+ **/
+GtkFileSystemModel *
+_gtk_file_system_model_new_for_directory (GFile *                    dir,
+                                          const gchar *              attributes,
+                                          GtkFileSystemModelGetValue get_func,
+                                          gpointer                   get_data,
+                                          guint                      n_columns,
+                                          ...)
+{
+  GtkFileSystemModel *model;
+  va_list args;
+
+  g_return_val_if_fail (G_IS_FILE (dir), NULL);
+  g_return_val_if_fail (get_func != NULL, NULL);
+  g_return_val_if_fail (n_columns > 0, NULL);
+
+  va_start (args, n_columns);
+  model = _gtk_file_system_model_new_valist (get_func, get_data, n_columns, args);
   va_end (args);
 
   gtk_file_system_model_set_directory (model, dir, attributes);

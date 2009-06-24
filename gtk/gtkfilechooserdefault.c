@@ -6829,7 +6829,7 @@ set_list_model (GtkFileChooserDefault *impl,
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
   impl->browse_files_model = 
-    _gtk_file_system_model_new (impl->current_folder,
+    _gtk_file_system_model_new_for_directory (impl->current_folder,
         MODEL_ATTRIBUTES,
         file_system_model_set,
         impl,
