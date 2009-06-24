@@ -7871,11 +7871,11 @@ from_parent (GdkWindowObject *window,
 	     double parent_x, double parent_y,
 	     double *offscreen_x, double *offscreen_y)
 {
-  g_signal_emit_by_name (window,
-			 "from_parent",
-			 parent_x, parent_y,
-			 offscreen_x, offscreen_y,
-			 NULL);
+  g_signal_emit (window,
+		 FROM_PARENT,
+		 parent_x, parent_y,
+		 offscreen_x, offscreen_y,
+		 NULL);
 }
 
 static void
@@ -7976,9 +7976,9 @@ pick_offscreen_child (GdkWindowObject *window,
   GdkWindowObject *res;
 
   res = NULL;
-  g_signal_emit_by_name (window,
-			 "pick-offscreen-child",
-			 x, y, &res);
+  g_signal_emit (window,
+		 PICK_OFFSCREEN_CHILD,
+		 x, y, &res);
 
   return res;
 }
@@ -8599,9 +8599,9 @@ gdk_window_get_offscreen_parent (GdkWindow *window)
   GdkWindow *res;
 
   res = NULL;
-  g_signal_emit_by_name (private->impl_window,
-			 "get-offscreen-parent",
-			 &res);
+  g_signal_emit (private->impl_window,
+		 GET_OFFSCREEN_PARENT,
+		 &res);
 
   return res;
 }
