@@ -749,15 +749,12 @@ _gdk_display_get_last_pointer_grab (GdkDisplay *display)
 {
   GList *l;
 
-  l = display->pointer_grabs;
+  l = g_list_last (display->pointer_grabs);
 
   if (l == NULL)
     return NULL;
-
-  while (l->next != NULL)
-    l = l->next;
-
-  return (GdkPointerGrabInfo *)l->data;
+  else
+    return (GdkPointerGrabInfo *)l->data;
 }
 
 
