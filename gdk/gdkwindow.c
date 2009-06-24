@@ -999,6 +999,27 @@ get_native_event_mask (GdkWindowObject *private)
     return private->event_mask;
 }
 
+/* Puts the native window in the right order wrt the other native windows
+   in the hierarchy, given the position it has in the client side data.
+   This is useful if some operation changed the stacking order. */
+static void
+sync_native_window_stack_position (GdkWindow *window)
+{
+  GdkWindowObject *above;
+  GdkWindowObject *private;
+  GList listhead = {0};
+
+  private = (GdkWindowObject *) window;
+
+  above = find_native_sibling_above (private->parent, private);
+  if (above)
+    {
+      listhead.data = window;
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
+								&listhead);
+    }
+}
+
 /**
  * gdk_window_new:
  * @parent: a #GdkWindow, or %NULL to create the window as a child of
@@ -1163,9 +1184,6 @@ gdk_window_new (GdkWindow     *parent,
     }
   else if (native)
     {
-      GdkWindowObject *above;
-      GList listhead = {0};
-
       event_mask = get_native_event_mask (private);
 
       /* Create the impl */
@@ -1174,14 +1192,7 @@ gdk_window_new (GdkWindow     *parent,
 
       /* This will put the native window topmost in the native parent, which may
        * be wrong wrt other native windows in the non-native hierarchy, so restack */
-      above = find_native_sibling_above (private->parent, private);
-      if (above)
-	{
-	  listhead.data = window;
-	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
-								    &listhead);
-	}
-
+      sync_native_window_stack_position (window);
     }
   else
     {
@@ -1437,19 +1448,10 @@ gdk_window_reparent (GdkWindow *window,
     reparent_to_impl (private);
   else
     {
-      GdkWindowObject *above;
-      GList listhead = {0};
-
       /* The reparent will have put the native window topmost in the native parent,
        * which may be wrong wrt other native windows in the non-native hierarchy,
        * so restack */
-      above = find_native_sibling_above (private->parent, private);
-      if (above)
-	{
-	  listhead.data = window;
-	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->restack_under ((GdkWindow *)above,
-								    &listhead);
-	}
+      sync_native_window_stack_position (window);
     }
 
   if (show)
