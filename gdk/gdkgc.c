@@ -619,7 +619,6 @@ _gdk_gc_set_clip_region_internal (GdkGC     *gc,
 }
 
 
-/* returns old clip region */
 void
 _gdk_gc_add_drawable_clip (GdkGC     *gc,
 			   guint32    region_tag,
