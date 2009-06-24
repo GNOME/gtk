@@ -21,7 +21,8 @@
 #ifndef __GTK_FILE_SYSTEM_MODEL_H__
 #define __GTK_FILE_SYSTEM_MODEL_H__
 
-#include "gtkfilesystem.h"
+#include <gio/gio.h>
+#include <gtk/gtkfilefilter.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
@@ -80,14 +81,8 @@ void                _gtk_file_system_model_thaw_updates     (GtkFileSystemModel 
 void                _gtk_file_system_model_clear_cache      (GtkFileSystemModel *model,
                                                              int                 column);
 
-typedef gboolean (*GtkFileSystemModelFilter) (GtkFileSystemModel *model,
-					      GFile              *file,
-					      GFileInfo          *info,
-					      gpointer            user_data);
-
-void     _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
-					    GtkFileSystemModelFilter filter,
-					    gpointer                 user_data);
+void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
+                                                             GtkFileFilter      *filter);
 
 void _gtk_file_system_model_add_editable    (GtkFileSystemModel *model,
 					     GtkTreeIter        *iter);

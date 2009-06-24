@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gtkfilesystem.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreedatalist.h"
@@ -77,8 +78,7 @@ struct _GtkFileSystemModel
   GtkFileSystemModelGetValue get_func;  /* function to call to fill in values in columns */
   gpointer              get_data;       /* data to pass to get_func */
 
-  GtkFileSystemModelFilter filter_func; /* filter to use for deciding which nodes are visible */
-  gpointer              filter_data;    /* data to pass to filter_func */
+  GtkFileFilter *       filter;         /* filter to use for deciding which nodes are visible */
 
   int                   sort_column_id; /* current sorting column */
   GtkSortType           sort_order;     /* current sorting order */
@@ -214,7 +214,12 @@ static gboolean
 node_should_be_visible (GtkFileSystemModel *model, guint id)
 {
   FileModelNode *node = get_node (model, id);
-  gboolean is_folder;
+  GtkFileFilterInfo filter_info = { 0, };
+  GtkFileFilterFlags required;
+  gboolean is_folder, result;
+  char *mime_type = NULL;
+  char *filename = NULL;
+  char *uri = NULL;
 
   if (node->info == NULL)
     return FALSE;
@@ -230,12 +235,65 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
       model->show_folders != is_folder)
     return FALSE;
 
+  if (is_folder)
+    return TRUE;
 
-  if (model->filter_func &&
-      !model->filter_func (model, node->file, node->info, model->filter_data))
-    return FALSE;
+  if (model->filter == NULL)
+    return TRUE;
 
-  return TRUE;
+  /* fill info */
+  required = gtk_file_filter_get_needed (model->filter);
+
+  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME;
+  filter_info.display_name = g_file_info_get_display_name (node->info);
+
+  if (required & GTK_FILE_FILTER_MIME_TYPE)
+    {
+      filter_info.mime_type = g_file_info_get_attribute_string (node->info, "filechooser::mime-type");
+      if (filter_info.mime_type != NULL)
+        filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
+      else
+        {
+          const char *s = g_file_info_get_content_type (node->info);
+          if (s)
+            {
+              mime_type = g_content_type_get_mime_type (s);
+              if (mime_type)
+                {
+                  filter_info.mime_type = mime_type;
+                  filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
+                }
+            }
+        }
+    }
+
+  if (required & GTK_FILE_FILTER_FILENAME)
+    {
+      filename = g_file_get_path (node->file);
+      if (filter_info.filename)
+        {
+          filter_info.filename = filename;
+	  filter_info.contains |= GTK_FILE_FILTER_FILENAME;
+        }
+    }
+
+  if (required & GTK_FILE_FILTER_URI)
+    {
+      uri = g_file_get_uri (node->file);
+      if (uri)
+        {
+          filter_info.uri = uri;
+	  filter_info.contains |= GTK_FILE_FILTER_URI;
+        }
+    }
+
+  result = gtk_file_filter_filter (model->filter, &filter_info);
+
+  g_free (mime_type);
+  g_free (filename);
+  g_free (uri);
+
+  return result;
 }
 
 /*** GtkTreeModel ***/
@@ -797,6 +855,8 @@ gtk_file_system_model_finalize (GObject *object)
   if (model->dir_monitor)
     g_object_unref (model->dir_monitor);
   g_hash_table_destroy (model->file_lookup);
+  if (model->filter)
+    g_object_unref (model->filter);
 
   _gtk_tree_data_list_header_free (model->sort_list);
   if (model->default_sort_destroy)
@@ -1483,22 +1543,23 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 /**
  * _gtk_file_system_model_set_filter:
  * @mode: a #GtkFileSystemModel
- * @filter: function to be called for each file
- * @user_data: data to pass to @filter
+ * @filter: %NULL or filter to use
  * 
- * Sets a callback called for each file/directory to see whether
- * it should be included in model. If this function was made
- * public, we'd want to include a GDestroyNotify as well.
+ * Sets a filter to be used for deciding if a row should be visible or not.
+ * Directories are always visible.
  **/
 void
 _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
-				   GtkFileSystemModelFilter filter,
-				   gpointer                 user_data)
+				   GtkFileFilter *          filter)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (filter == NULL || GTK_IS_FILE_FILTER (filter));
   
-  model->filter_func = filter;
-  model->filter_data = user_data;
+  if (filter)
+    g_object_ref (filter);
+  if (model->filter)
+    g_object_unref (model->filter);
+  model->filter = filter;
 
   gtk_file_system_model_refilter_all (model);
 }
