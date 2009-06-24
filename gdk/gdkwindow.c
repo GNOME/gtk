@@ -393,10 +393,10 @@ gdk_window_init (GdkWindowObject *window)
 
 /* Stop and return on the first non-NULL parent */
 static gboolean
-accumulate_get_parent	(GSignalInvocationHint *ihint,
-			 GValue		       *return_accu,
-			 const GValue	       *handler_return,
-			 gpointer               data)
+accumulate_get_window (GSignalInvocationHint *ihint,
+		       GValue		       *return_accu,
+		       const GValue	       *handler_return,
+		       gpointer               data)
 {
   g_value_copy (handler_return, return_accu);
   /* Continue while returning NULL */
@@ -453,7 +453,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  0,
-		  accumulate_get_parent, NULL,
+		  accumulate_get_window, NULL,
 		  gdk_marshal_OBJECT__VOID,
 		  GDK_TYPE_WINDOW,
 		  0);
@@ -462,7 +462,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  0,
-		  accumulate_get_parent, NULL,
+		  accumulate_get_window, NULL,
 		  gdk_marshal_OBJECT__DOUBLE_DOUBLE,
 		  GDK_TYPE_WINDOW,
 		  2,
