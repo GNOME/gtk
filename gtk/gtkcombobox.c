@@ -2840,7 +2840,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   /* create our funky menu */
   menu = gtk_menu_new ();
   gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
-  _gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
+  gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
   
   g_signal_connect (menu, "key-press-event",
 		    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
@@ -2953,7 +2953,7 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 	  if (gtk_tree_model_iter_has_child (model, &iter))
 	    {
 	      submenu = gtk_menu_new ();
-              _gtk_menu_set_reserve_toggle_size (GTK_MENU (submenu), FALSE);
+              gtk_menu_set_reserve_toggle_size (GTK_MENU (submenu), FALSE);
 	      gtk_widget_show (submenu);
 	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
 	      
@@ -3464,7 +3464,7 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
       if (!menu)
 	{
 	  menu = gtk_menu_new ();
-          _gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
+          gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
 	  gtk_widget_show (menu);
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (parent), menu);
 	  
