@@ -209,12 +209,6 @@ enum {
   MODEL_COL_NUM_COLUMNS
 };
 
-enum {
-  RECENT_MODEL_COL_CANCELLABLE = MODEL_COL_NUM_COLUMNS,
-  RECENT_MODEL_COL_INFO,
-  RECENT_MODEL_COL_NUM_COLUMNS
-};
-
 /* Identifiers for target types */
 enum {
   GTK_TREE_MODEL_ROW,
@@ -419,9 +413,6 @@ static void     recent_clear_model           (GtkFileChooserDefault *impl,
 static gboolean recent_should_respond        (GtkFileChooserDefault *impl);
 static void     recent_switch_to_browse_mode (GtkFileChooserDefault *impl);
 static GSList * recent_get_selected_files    (GtkFileChooserDefault *impl);
-static void     recent_get_valid_child_iter  (GtkFileChooserDefault *impl,
-                                              GtkTreeIter           *child_iter,
-                                              GtkTreeIter           *iter);
 static void     set_file_system_backend      (GtkFileChooserDefault *impl);
 static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
 
@@ -455,32 +446,6 @@ G_DEFINE_TYPE_WITH_CODE (ShortcutsPaneModelFilter,
 static GtkTreeModel *shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
 						      GtkTreeModel          *child_model,
 						      GtkTreePath           *root);
-
-
-typedef struct {
-  GtkTreeModelSort parent;
-
-  GtkFileChooserDefault *impl;
-} RecentModelSort;
-
-typedef struct {
-  GtkTreeModelSortClass parent_class;
-} RecentModelSortClass;
-
-#define RECENT_MODEL_SORT_TYPE (_recent_model_sort_get_type ())
-#define RECENT_MODEL_SORT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), RECENT_MODEL_SORT_TYPE, RecentModelSort))
-
-static void recent_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (RecentModelSort,
-                         _recent_model_sort,
-                         GTK_TYPE_TREE_MODEL_SORT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
-                                                recent_model_sort_drag_source_iface_init));
-
-static GtkTreeModel *recent_model_sort_new (GtkFileChooserDefault *impl,
-                                            GtkTreeModel          *child_model);
-
 
 
 
@@ -9209,7 +9174,6 @@ recent_clear_model (GtkFileChooserDefault *impl,
                     gboolean               remove_from_treeview)
 {
   GtkTreeModel *model;
-  GtkTreeIter iter;
 
   if (!impl->recent_model)
     return;
@@ -9219,40 +9183,8 @@ recent_clear_model (GtkFileChooserDefault *impl,
   if (remove_from_treeview)
     gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
-  if (gtk_tree_model_get_iter_first (model, &iter))
-    {
-      do
-        {
-	  GFile *file;
-	  GCancellable *cancellable;
-          GtkRecentInfo *recent_info;
-          gchar *display_name;
-
-          gtk_tree_model_get (model, &iter,
-                              MODEL_COL_NAME, &display_name,
-                              MODEL_COL_FILE, &file,
-                              RECENT_MODEL_COL_CANCELLABLE, &cancellable,
-                              RECENT_MODEL_COL_INFO, &recent_info,
-                              -1);
-
-          if (cancellable)
-	    g_cancellable_cancel (cancellable);
-
-	  g_object_unref (file);
-          gtk_recent_info_unref (recent_info);
-          g_free (display_name);
-        }
-      while (gtk_tree_model_iter_next (model, &iter));
-    }
-
   g_object_unref (impl->recent_model);
   impl->recent_model = NULL;
-
-  g_object_unref (impl->recent_model_filter);
-  impl->recent_model_filter = NULL;
-
-  g_object_unref (impl->recent_model_sort);
-  impl->recent_model_sort = NULL;
 }
 
 /* Stops any ongoing loading of the recent files list; does
@@ -9304,129 +9236,37 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
   file_list_set_sort_column_ids (impl);
 }
 
-static gboolean
-recent_get_is_filtered (GtkFileChooserDefault *impl,
-			GFile                 *file,
-                        GtkRecentInfo         *recent_info)
-{
-  GtkFileFilterInfo filter_info;
-  GtkFileFilterFlags needed;
-  gboolean result;
-
-  if (!impl->current_filter)
-    return FALSE;
-
-  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
-  needed = gtk_file_filter_get_needed (impl->current_filter);
-
-  filter_info.display_name = gtk_recent_info_get_display_name (recent_info);
-  filter_info.mime_type = gtk_recent_info_get_mime_type (recent_info);
-
-  if (needed & GTK_FILE_FILTER_FILENAME)
-    {
-      filter_info.filename = g_file_get_path (file);
-      if (filter_info.filename)
-        filter_info.contains |= GTK_FILE_FILTER_FILENAME;
-    }
-  else
-    filter_info.filename = NULL;
-
-  if (needed & GTK_FILE_FILTER_URI)
-    {
-      filter_info.uri = g_file_get_uri (file);
-      if (filter_info.uri)
-        filter_info.contains |= GTK_FILE_FILTER_URI;
-    }
-  else
-    filter_info.uri = NULL;
-
-  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
-
-  if (filter_info.filename)
-    g_free ((gchar *) filter_info.filename);
-  if (filter_info.uri)
-    g_free ((gchar *) filter_info.uri);
-
-  return !result;
-}
-
-/* Visibility function for the recent filter model */
-static gboolean
-recent_model_visible_func (GtkTreeModel *model,
-                           GtkTreeIter  *iter,
-                           gpointer      user_data)
-{
-  GtkFileChooserDefault *impl = user_data;
-  GFile *file;
-  GtkRecentInfo *recent_info;
-  gboolean is_folder;
-
-  if (!impl->current_filter)
-    return TRUE;
-
-  gtk_tree_model_get (model, iter,
-                      RECENT_MODEL_COL_INFO, &recent_info,
-                      MODEL_COL_FILE, &file,
-                      MODEL_COL_IS_FOLDER, &is_folder,
-                      -1);
-
-  if (!recent_info)
-    return TRUE;
-
-  if (is_folder)
-    return TRUE;
-
-  return !recent_get_is_filtered (impl, file, recent_info);
-}
-
 static void
 recent_setup_model (GtkFileChooserDefault *impl)
 {
   g_assert (impl->recent_model == NULL);
-  g_assert (impl->recent_model_filter == NULL);
-  g_assert (impl->recent_model_sort == NULL);
 
-  impl->recent_model = gtk_list_store_new (RECENT_MODEL_COL_NUM_COLUMNS,
-                                           G_TYPE_STRING, /* MODEL_COL_NAME */
-                                           G_TYPE_INT64, /* MODEL_COL_SIZE */
-                                           G_TYPE_LONG, /* MODEL_COL_MTIME */
-                                           G_TYPE_FILE, /* MODEL_COL_FILE */
-                                           G_TYPE_STRING, /* MODEL_COL_NAME_COLLATED */
-                                           G_TYPE_BOOLEAN, /* MODEL_COL_IS_FOLDER */
-                                           GDK_TYPE_PIXBUF, /* MODEL_COL_PIXBUF */
-                                           G_TYPE_STRING, /* MODEL_COL_SIZE_TEXT */
-                                           G_TYPE_STRING, /* MODEL_COL_MTIME_TEXT */
-                                           PANGO_TYPE_ELLIPSIZE_MODE, /* MODEL_COL_ELLIPSIZE */
-                                           G_TYPE_CANCELLABLE, /* RECENT_MODEL_COL_CANCELLABLE */
-                                           G_TYPE_POINTER /* RECENT_MODEL_COL_INFO */
-                                          );
+  impl->recent_model = _gtk_file_system_model_new (file_system_model_set,
+                                                   impl,
+                                                   MODEL_COL_NUM_COLUMNS,
+                                                   G_TYPE_STRING, /* MODEL_COL_NAME */
+                                                   G_TYPE_INT64, /* MODEL_COL_SIZE */
+                                                   G_TYPE_LONG, /* MODEL_COL_MTIME */
+                                                   G_TYPE_FILE, /* MODEL_COL_FILE */
+                                                   G_TYPE_STRING, /* MODEL_COL_NAME_COLLATED */
+                                                   G_TYPE_BOOLEAN, /* MODEL_COL_IS_FOLDER */
+                                                   GDK_TYPE_PIXBUF, /* MODEL_COL_PIXBUF */
+                                                   G_TYPE_STRING, /* MODEL_COL_SIZE_TEXT */
+                                                   G_TYPE_STRING, /* MODEL_COL_MTIME_TEXT */
+                                                   PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
+                                                  );
 
-  impl->recent_model_filter =
-    GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (impl->recent_model), NULL));
-  gtk_tree_model_filter_set_visible_func (impl->recent_model_filter,
-                                          recent_model_visible_func,
-                                          impl,
-                                          NULL);
-  
-  /* this is the model that will actually be added to
-   * the browse_files_tree_view widget; remember: we are
-   * stuffing the real model into a filter model and then
-   * into a sort model; this means we'll have to translate
-   * the child iterator *twice* to get from a path or an
-   * iterator coming from the tree view widget to the
-   * real data inside the model.
-   */
-  impl->recent_model_sort =
-    GTK_TREE_MODEL_SORT (recent_model_sort_new (impl, GTK_TREE_MODEL (impl->recent_model_filter)));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
+  _gtk_file_system_model_set_filter (impl->recent_model,
+                                     impl->current_filter);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model),
 				   MODEL_COL_NAME,
 				   name_sort_func,
 				   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model),
                                    MODEL_COL_SIZE,
                                    size_sort_func,
                                    impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model_sort),
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->recent_model),
                                    MODEL_COL_MTIME,
                                    mtime_sort_func,
                                    impl, NULL);
@@ -9449,7 +9289,7 @@ recent_idle_cleanup (gpointer data)
   GtkFileChooserDefault *impl = load_data->impl;
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->recent_model_sort));
+                           GTK_TREE_MODEL (impl->recent_model));
 
   set_busy_cursor (impl, FALSE);
   
@@ -9462,80 +9302,6 @@ recent_idle_cleanup (gpointer data)
     }
 
   g_free (load_data);
-}
-
-struct RecentItemInsertRequest
-{
-  GtkFileChooserDefault *impl;
-  GFile *file;
-  GtkTreeRowReference *row_ref;
-};
-
-static void
-recent_item_get_info_cb (GCancellable *cancellable,
-			 GFileInfo    *info,
-			 const GError *error,
-			 gpointer      data)
-{
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  GCancellable *model_cancellable;
-  gboolean is_folder = FALSE;
-  struct RecentItemInsertRequest *request = data;
-  char *size_text;
-  gint64 size;
-
-  if (!request->impl->recent_model)
-    goto out;
-
-  path = gtk_tree_row_reference_get_path (request->row_ref);
-  if (!path)
-    goto out;
-
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->recent_model),
-                           &iter, path);
-  gtk_tree_path_free (path);
-
-  gtk_tree_model_get (GTK_TREE_MODEL (request->impl->recent_model), &iter,
-                      RECENT_MODEL_COL_CANCELLABLE, &model_cancellable,
-                      -1);
-  g_object_unref (model_cancellable);
-  if (cancellable != model_cancellable)
-    goto out;
-
-  gtk_list_store_set (request->impl->recent_model, &iter,
-                      RECENT_MODEL_COL_CANCELLABLE, NULL,
-                      -1);
-
-  if (cancelled)
-    goto out;
-
-  if (!info)
-    {
-      gtk_list_store_remove (request->impl->recent_model, &iter);
-      goto out;
-    }
-
-  is_folder = _gtk_file_info_consider_as_directory (info);
-  size = g_file_info_get_size (info);
-  size_text = is_folder ? g_format_size_for_display (size) : g_strdup ("");
-
-  gtk_list_store_set (request->impl->recent_model, &iter,
-                      MODEL_COL_IS_FOLDER, is_folder,
-                      MODEL_COL_SIZE, size,
-                      MODEL_COL_SIZE_TEXT, size_text,
-                      -1);
-
-  g_free (size_text);
-
-out:
-  g_object_unref (request->impl);
-  g_object_unref (request->file);
-  gtk_tree_row_reference_free (request->row_ref);
-  g_free (request);
-
-  g_object_unref (cancellable);
 }
 
 static gint
@@ -9569,14 +9335,8 @@ recent_idle_load (gpointer data)
 {
   RecentLoadData *load_data = data;
   GtkFileChooserDefault *impl = load_data->impl;
-  GtkTreeIter iter;
-  GtkTreePath *p;
-  GtkRecentInfo *info;
-  const gchar *uri, *display_name, *mtime_text, *collated_name;
-  glong mtime;
+  GList *walk;
   GFile *file;
-  GCancellable *cancellable;
-  struct RecentItemInsertRequest *request;
 
   if (!impl->recent_manager)
     return FALSE;
@@ -9626,56 +9386,23 @@ recent_idle_load (gpointer data)
       return TRUE;
     }
 
-  info = g_list_nth_data (load_data->items, load_data->n_loaded_items);
-  g_assert (info != NULL);
-
-  uri = gtk_recent_info_get_uri (info);
-  display_name = gtk_recent_info_get_display_name (info);
-  file = g_file_new_for_uri (uri);
-
-  gtk_list_store_append (impl->recent_model, &iter);
-  p = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->recent_model), &iter);
-
-  request = g_new0 (struct RecentItemInsertRequest, 1);
-  request->impl = g_object_ref (impl);
-  request->file = g_object_ref (file);
-  request->row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (impl->recent_model), p);
-  gtk_tree_path_free (p);
-
-  cancellable = _gtk_file_system_get_info (impl->file_system, file,
-					   "standard::type,standard::size",
-					   recent_item_get_info_cb,
-					   request);
-
-  collated_name = g_utf8_collate_key_for_filename (gtk_recent_info_get_display_name (info), -1);
-  mtime = gtk_recent_info_get_modified (info);
-  mtime_text = mtime ? my_g_format_time_for_display (mtime) : g_strdup (_("Unknown"));
-
-  gtk_list_store_set (impl->recent_model, &iter,
-                      MODEL_COL_FILE, file,
-                      MODEL_COL_NAME, gtk_recent_info_get_display_name (info),
-                      MODEL_COL_NAME_COLLATED, collated_name,
-                      MODEL_COL_PIXBUF, gtk_recent_info_get_icon (info, impl->icon_size),
-                      MODEL_COL_MTIME, mtime,
-                      MODEL_COL_MTIME_TEXT, mtime_text,
-                      MODEL_COL_ELLIPSIZE, PANGO_ELLIPSIZE_END,
-                      RECENT_MODEL_COL_CANCELLABLE, cancellable,
-                      RECENT_MODEL_COL_INFO, gtk_recent_info_ref (info),
-                      -1);
-
-  load_data->n_loaded_items += 1;
-
   /* finished loading items */
-  if (load_data->n_loaded_items == load_data->n_items)
+  for (walk = load_data->items; walk; walk = walk->next)
     {
-      g_list_foreach (load_data->items, (GFunc) gtk_recent_info_unref, NULL);
-      g_list_free (load_data->items);
-      load_data->items = NULL;
+      GtkRecentInfo *info = walk->data;
+      file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
 
-      return FALSE;
+      _gtk_file_system_model_add_and_query_file (impl->recent_model,
+                                                 file,
+                                                 MODEL_ATTRIBUTES);
+      gtk_recent_info_unref (walk->data);
+      g_object_unref (file);
     }
 
-  return TRUE;
+  g_list_free (load_data->items);
+  load_data->items = NULL;
+
+  return FALSE;
 }
 
 static void
@@ -9809,34 +9536,6 @@ recent_activate (GtkFileChooserDefault *impl)
   recent_start_loading (impl);
 }
 
-/* convert an iterator coming from the model bound to 
- * browse_files_tree_view to an interator inside the
- * real recent_model
- */
-static void
-recent_get_valid_child_iter (GtkFileChooserDefault *impl,
-                             GtkTreeIter           *child_iter,
-                             GtkTreeIter           *iter)
-{
-  GtkTreeIter middle;
-
-  if (!impl->recent_model)
-    return;
-
-  if (!impl->recent_model_filter || !impl->recent_model_sort)
-    return;
-
-  /* pass 1: get the iterator in the filter model */
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->recent_model_sort,
-                                                  &middle, iter);
-  
-  /* pass 2: get the iterator in the real model */
-  gtk_tree_model_filter_convert_iter_to_child_iter (impl->recent_model_filter,
-                                                    child_iter,
-                                                    &middle);
-}
-
-
 static void
 set_current_filter (GtkFileChooserDefault *impl,
 		    GtkFileFilter         *filter)
@@ -9869,8 +9568,8 @@ set_current_filter (GtkFileChooserDefault *impl,
       if (impl->search_model)
         _gtk_file_system_model_set_filter (impl->search_model, filter);
 
-      if (impl->recent_model_filter)
-        gtk_tree_model_filter_refilter (impl->recent_model_filter);
+      if (impl->recent_model)
+        _gtk_file_system_model_set_filter (impl->recent_model, filter);
 
       g_object_notify (G_OBJECT (impl), "filter");
     }
@@ -10676,92 +10375,6 @@ shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
 			"virtual-root", root,
 			NULL);
 
-  model->impl = impl;
-
-  return GTK_TREE_MODEL (model);
-}
-
-
-
-static gboolean
-recent_model_sort_row_draggable (GtkTreeDragSource *drag_source,
-                                 GtkTreePath       *path)
-{
-  RecentModelSort *model;
-  GtkTreeIter iter, child_iter;
-  gboolean is_folder;
-
-  model = RECENT_MODEL_SORT (drag_source);
-  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-    return FALSE;
-
-  recent_get_valid_child_iter (model->impl, &child_iter, &iter);
-  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->recent_model), &child_iter,
-                      MODEL_COL_IS_FOLDER, &is_folder,
-                      -1);
-
-  return is_folder;
-}
-
-static gboolean
-recent_model_sort_drag_data_get (GtkTreeDragSource *drag_source,
-                                 GtkTreePath       *path,
-			         GtkSelectionData  *selection_data)
-{
-  RecentModelSort *model;
-  GtkTreeIter iter, child_iter;
-  GFile *file;
-  gchar *uris[2];
-
-  model = RECENT_MODEL_SORT (drag_source);
-  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-    return FALSE;
-
-  recent_get_valid_child_iter (model->impl, &child_iter, &iter);
-  gtk_tree_model_get (GTK_TREE_MODEL (model->impl->recent_model), &child_iter,
-                      MODEL_COL_FILE, &file,
-                      -1);
-  g_assert (file != NULL);
-
-  uris[0] = g_file_get_uri (file);
-  uris[1] = NULL;
-
-  gtk_selection_data_set_uris (selection_data, uris);
-
-  g_free (uris[0]);
-  g_object_unref (file);
-
-  return TRUE;
-}
-
-static void
-recent_model_sort_drag_source_iface_init (GtkTreeDragSourceIface *iface)
-{
-  iface->row_draggable = recent_model_sort_row_draggable;
-  iface->drag_data_get = recent_model_sort_drag_data_get;
-}
-
-static void
-_recent_model_sort_class_init (RecentModelSortClass *klass)
-{
-
-}
-
-static void
-_recent_model_sort_init (RecentModelSort *model)
-{
-  model->impl = NULL;
-}
-
-static GtkTreeModel *
-recent_model_sort_new (GtkFileChooserDefault *impl,
-                       GtkTreeModel          *child_model)
-{
-  RecentModelSort *model;
-
-  model = g_object_new (RECENT_MODEL_SORT_TYPE,
-                        "model", child_model,
-                        NULL);
   model->impl = impl;
 
   return GTK_TREE_MODEL (model);

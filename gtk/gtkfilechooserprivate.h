@@ -199,10 +199,8 @@ struct _GtkFileChooserDefault
   /* OPERATION_MODE_RECENT */
   GtkWidget *recent_hbox;
   GtkRecentManager *recent_manager;
-  GtkListStore *recent_model;
+  GtkFileSystemModel *recent_model;
   guint load_recent_id;
-  GtkTreeModelFilter *recent_model_filter;
-  GtkTreeModelSort *recent_model_sort;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
