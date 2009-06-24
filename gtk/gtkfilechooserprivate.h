@@ -194,9 +194,7 @@ struct _GtkFileChooserDefault
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
-  GtkListStore *search_model;
-  GtkTreeModelFilter *search_model_filter;
-  GtkTreeModelSort *search_model_sort;
+  GtkFileSystemModel *search_model;
 
   /* OPERATION_MODE_RECENT */
   GtkWidget *recent_hbox;

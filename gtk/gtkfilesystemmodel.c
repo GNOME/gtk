@@ -1767,3 +1767,30 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
   /* FIXME: resort? */
 }
 
+/**
+ * _gtk_file_system_model_add_and_query_file:
+ * @model: a #GtkFileSystemModel
+ * @file: the file to add
+ * @attributes: attributes to query before adding the file
+ *
+ * This is a conenience function that calls g_file_query_info_async() on 
+ * the given file, and when successful, adds it to the model with
+ * _gtk_file_system_model_add_file(). Upon failure, the @file is discarded.
+ **/
+void
+_gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
+                                           GFile *             file,
+                                           const char *        attributes)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (attributes != NULL);
+
+  g_file_query_info_async (file,
+                           attributes,
+                           0,
+                           IO_PRIORITY,
+                           model->cancellable,
+                           gtk_file_system_model_query_done,
+                           model);
+}
