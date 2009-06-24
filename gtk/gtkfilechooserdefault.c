@@ -2732,13 +2732,20 @@ selection_check_foreach_cb (GtkTreeModel *model,
 {
   struct selection_check_closure *closure;
   gboolean is_folder;
+  GFile *file;
+
+  gtk_tree_model_get (model, iter,
+                      MODEL_COL_FILE, &file,
+                      MODEL_COL_IS_FOLDER, &is_folder,
+                      -1);
+
+  if (file == NULL)
+    return;
+
+  g_object_unref (file);
 
   closure = data;
   closure->num_selected++;
-
-  gtk_tree_model_get (model, iter,
-                      MODEL_COL_IS_FOLDER, &is_folder,
-                      -1);
 
   closure->all_folders = closure->all_folders && is_folder;
   closure->all_files = closure->all_files && !is_folder;
