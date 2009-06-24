@@ -67,6 +67,9 @@ const GValue *      _gtk_file_system_model_get_value        (GtkFileSystemModel 
 void                _gtk_file_system_model_add_file         (GtkFileSystemModel *model,
                                                              GFile              *file,
                                                              GFileInfo          *info);
+void                _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
+                                                             GFile              *file,
+                                                             const char         *attributes);
 void                _gtk_file_system_model_remove_file      (GtkFileSystemModel *model,
                                                              GFile              *file);
 void                _gtk_file_system_model_update_file      (GtkFileSystemModel *model,
