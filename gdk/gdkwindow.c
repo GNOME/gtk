@@ -2786,7 +2786,7 @@ append_move_region (GdkWindowObject *impl_window,
 
   /* We approach this by taking the new move and pushing it ahead of moves
      starting at the end of the list and stopping when its not safe to do so.
-     Its not safe to push past a move is either the source of the new move
+     It's not safe to push past a move if either the source of the new move
      is in the destination of the old move, or if the destination of the new
      move is in the source of the new move, or if the destination of the new
      move overlaps the destination of the old move. We simplify this by
@@ -5674,7 +5674,7 @@ gdk_window_raise_internal (GdkWindow *window)
 								      native_children);
 	  else
 	    {
-	      /* Right order, since native_chilren is bottom-opmost first */
+	      /* Right order, since native_children is bottom-topmost first */
 	      for (l = native_children; l != NULL; l = l->next)
 		GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (l->data);
 	    }
@@ -5856,7 +5856,7 @@ gdk_window_lower_internal (GdkWindow *window)
 								      native_children);
 	  else
 	    {
-	      /* Right order, since native_chilren is bottom-opmost first */
+	      /* Right order, since native_children is bottom-topmost first */
 	      for (l = native_children; l != NULL; l = l->next)
 		GDK_WINDOW_IMPL_GET_IFACE (private->impl)->raise (l->data);
 	    }
@@ -9280,7 +9280,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
       (_gdk_display_has_pointer_grab (display, serial) ||
        event->crossing.detail == GDK_NOTIFY_INFERIOR))
     {
-      /* We synthesize all crossing events due to grabs outselves,
+      /* We synthesize all crossing events due to grabs ourselves,
        * so we ignore the native ones caused by our native pointer_grab
        * calls. Otherwise we would proxy these crossing event and cause
        * multiple copies of crossing events for grabs.
