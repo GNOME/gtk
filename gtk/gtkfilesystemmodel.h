@@ -42,7 +42,11 @@ typedef gboolean (*GtkFileSystemModelGetValue)   (GtkFileSystemModel *model,
                                                   GValue             *value,
                                                   gpointer            user_data);
 
-GtkFileSystemModel *_gtk_file_system_model_new              (GFile *             dir,
+GtkFileSystemModel *_gtk_file_system_model_new              (GtkFileSystemModelGetValue get_func,
+                                                             gpointer            get_data,
+                                                             guint               n_columns,
+                                                             ...);
+GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *             dir,
                                                              const gchar *       attributes,
                                                              GtkFileSystemModelGetValue get_func,
                                                              gpointer            get_data,
