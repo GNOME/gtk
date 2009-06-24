@@ -6069,45 +6069,11 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   impl->reload_state = RELOAD_WAS_UNMAPPED;
 }
 
-static gboolean
-list_model_filter_func (GtkFileSystemModel *model,
-			GFile              *file,
-			GFileInfo          *file_info,
-			gpointer            user_data)
-{
-  GtkFileChooserDefault *impl = user_data;
-
-  if (!impl->current_filter)
-    return TRUE;
-
-  if (_gtk_file_info_consider_as_directory (file_info))
-    return TRUE;
-
-  return !get_is_file_filtered (impl, file, file_info);
-}
-
 static void
 install_list_model_filter (GtkFileChooserDefault *impl)
 {
-  GtkFileSystemModelFilter filter;
-  gpointer data;
-
-  g_assert (impl->browse_files_model != NULL);
-
-  if (impl->current_filter)
-    {
-      filter = list_model_filter_func;
-      data   = impl;
-    }
-  else
-    {
-      filter = NULL;
-      data   = NULL;
-    }
-  
   _gtk_file_system_model_set_filter (impl->browse_files_model,
-				     filter,
-				     data);
+                                     impl->current_filter);
 }
 
 #define COMPARE_DIRECTORIES										       \
