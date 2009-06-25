@@ -6380,8 +6380,7 @@ out:
 static gboolean
 show_and_select_files (GtkFileChooserDefault *impl,
 		       GFile                 *parent_file,
-		       GSList                *files,
-		       GError                **error)
+		       GSList                *files)
 {
   struct ShowAndSelectPathsData *info;
 
@@ -6419,8 +6418,7 @@ pending_select_files_process (GtkFileChooserDefault *impl)
 
   if (impl->pending_select_files)
     {
-      /* NULL GError */
-      show_and_select_files (impl, impl->current_folder, impl->pending_select_files, NULL);
+      show_and_select_files (impl, impl->current_folder, impl->pending_select_files);
       pending_select_files_free (impl);
       browse_files_center_selected_row (impl);
     }
@@ -7333,7 +7331,7 @@ gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
       files.data = (gpointer) file;
       files.next = NULL;
 
-      result = show_and_select_files (impl, parent_file, &files, error);
+      result = show_and_select_files (impl, parent_file, &files);
       g_object_unref (parent_file);
       return result;
     }
