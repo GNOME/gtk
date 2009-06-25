@@ -5520,8 +5520,6 @@ update_appearance (GtkFileChooserDefault *impl)
 	  gtk_widget_hide (impl->browse_widgets);
 	}
 
-      gtk_widget_show (impl->browse_new_folder_button);
-
       if (impl->select_multiple)
 	{
 	  g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
@@ -9131,7 +9129,11 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->search_entry = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  gtk_widget_show (impl->browse_new_folder_button);
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    gtk_widget_hide (impl->browse_new_folder_button);
+  else
+    gtk_widget_show (impl->browse_new_folder_button);
+
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -9696,7 +9698,10 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->recent_hbox = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  gtk_widget_show (impl->browse_new_folder_button);
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    gtk_widget_hide (impl->browse_new_folder_button);
+  else
+    gtk_widget_show (impl->browse_new_folder_button);
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
