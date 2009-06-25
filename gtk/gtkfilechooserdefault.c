@@ -3955,9 +3955,8 @@ show_size_column_toggled_cb (GtkCheckMenuItem *item,
 {
   impl->show_size_column = gtk_check_menu_item_get_active (item);
 
-  if (impl->list_size_column)
-    gtk_tree_view_column_set_visible (impl->list_size_column,
-                                      impl->show_size_column);
+  gtk_tree_view_column_set_visible (impl->list_size_column,
+                                    impl->show_size_column);
 }
 
 /* Shows an error dialog about not being able to select a dragged file */
@@ -5861,8 +5860,7 @@ settings_load (GtkFileChooserDefault *impl)
     gtk_expander_set_expanded (GTK_EXPANDER (impl->save_expander), expand_folders);
 
   impl->show_size_column = show_size_column;
-  if (impl->list_size_column)
-    gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
+  gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
@@ -9526,9 +9524,6 @@ recent_activate (GtkFileChooserDefault *impl)
   stop_operation (impl, previous_mode);
 
   recent_hide_entry (impl);
-
-  /* hide the file size column if it's visible */
-  gtk_tree_view_column_set_visible (impl->list_size_column, FALSE);
 
   file_list_set_sort_column_ids (impl);
   recent_start_loading (impl);
