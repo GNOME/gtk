@@ -147,7 +147,9 @@ GtkWidget *
 do_printing (GtkWidget *do_widget)
 {
   GtkPrintOperation *operation;
+  GtkPrintSettings *settings;
   PrintData *data;
+  gchar *uri;
   GError *error = NULL;
 
   operation = gtk_print_operation_new ();
@@ -155,19 +157,28 @@ do_printing (GtkWidget *do_widget)
   data->filename = demo_find_file ("printing.c", NULL);
   data->font_size = 12.0;
 
-  g_signal_connect (G_OBJECT (operation), "begin-print", 
+  g_signal_connect (G_OBJECT (operation), "begin-print",
 		    G_CALLBACK (begin_print), data);
-  g_signal_connect (G_OBJECT (operation), "draw-page", 
+  g_signal_connect (G_OBJECT (operation), "draw-page",
 		    G_CALLBACK (draw_page), data);
-  g_signal_connect (G_OBJECT (operation), "end-print", 
+  g_signal_connect (G_OBJECT (operation), "end-print",
 		    G_CALLBACK (end_print), data);
 
   gtk_print_operation_set_use_full_page (operation, FALSE);
   gtk_print_operation_set_unit (operation, GTK_UNIT_POINTS);
 
+  settings = gtk_print_settings_new ();
+  uri = g_strconcat ("file://",
+                     g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS),
+                     "/gtk-demo-printing-example.pdf", NULL);
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
+  gtk_print_operation_set_print_settings (operation, settings);
+
   gtk_print_operation_run (operation, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG, GTK_WINDOW (do_widget), &error);
 
   g_object_unref (operation);
+  g_object_unref (settings);
+  g_free (uri);
 
   if (error)
     {
