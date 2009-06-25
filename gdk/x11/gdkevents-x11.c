@@ -1835,6 +1835,7 @@ gdk_event_translate (GdkDisplay *display,
 	  window_private->width = xevent->xconfigure.width;
 	  window_private->height = xevent->xconfigure.height;
 
+	  _gdk_window_update_size (window);
 	  _gdk_x11_drawable_update_size (window_private->impl);
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }

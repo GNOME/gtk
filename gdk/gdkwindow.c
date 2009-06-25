@@ -774,7 +774,8 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 
       old_clip_region_with_children = private->clip_region_with_children;
       private->clip_region_with_children = gdk_region_copy (private->clip_region);
-      remove_child_area (private, NULL, FALSE, private->clip_region_with_children);
+      if (GDK_WINDOW_TYPE (private) != GDK_WINDOW_ROOT)
+	remove_child_area (private, NULL, FALSE, private->clip_region_with_children);
 
       if (clip_region_changed ||
 	  !gdk_region_equal (private->clip_region_with_children, old_clip_region_with_children))
@@ -817,8 +818,9 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	}
     }
 
-  /* Update all children, recursively. */
-  if (abs_pos_changed || clip_region_changed || recalculate_children)
+  /* Update all children, recursively (except for root, where children are not exact). */
+  if ((abs_pos_changed || clip_region_changed || recalculate_children) &&
+      GDK_WINDOW_TYPE (private) != GDK_WINDOW_ROOT)
     {
       for (l = private->children; l; l = l->next)
 	{
@@ -840,7 +842,9 @@ recompute_visible_regions_internal (GdkWindowObject *private,
        (private->parent != NULL &&
 	GDK_WINDOW_TYPE (private->parent) != GDK_WINDOW_ROOT)) &&
       /* or for foreign windows */
-      GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN
+      GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN &&
+      /* or for the root window */
+      GDK_WINDOW_TYPE (private) != GDK_WINDOW_ROOT
       )
     {
       GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);

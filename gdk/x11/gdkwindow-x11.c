@@ -450,6 +450,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->abs_y = 0;
   private->width = WidthOfScreen (screen_x11->xscreen);
   private->height = HeightOfScreen (screen_x11->xscreen);
+  _gdk_window_update_size (screen_x11->root_window);
   
   _gdk_xid_table_insert (screen_x11->display,
 			 &screen_x11->xroot_window,
