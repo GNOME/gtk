@@ -5707,6 +5707,9 @@ gdk_window_raise_internal (GdkWindow *window)
     }
 }
 
+/* Showing a non-native parent may cause children to become visible,
+   we need to handle this by manually showing them then. To simplify
+   things we hide them all when they are not visible. */
 static void
 show_all_visible_impls (GdkWindowObject *private, gboolean already_mapped)
 {
@@ -5716,7 +5719,12 @@ show_all_visible_impls (GdkWindowObject *private, gboolean already_mapped)
   for (l = private->children; l != NULL; l = l->next)
     {
       child = l->data;
-      if (GDK_WINDOW_IS_MAPPED (child))
+
+      /* For foreign windows, only show if if was
+	 explicitly hidden, otherwise we might cause
+	 suprising things to happen to the other client. */
+      if (GDK_WINDOW_IS_MAPPED (child) &&
+	  GDK_WINDOW_TYPE (child) != GDK_WINDOW_FOREIGN)
 	show_all_visible_impls (child, FALSE);
     }
 
@@ -5968,6 +5976,10 @@ gdk_window_show (GdkWindow *window)
   gdk_window_show_internal (window, TRUE);
 }
 
+/* Hiding a non-native parent may cause parents to become non-visible,
+   even if their parent native window is visible. We need to handle this
+   by manually hiding them then. To simplify things we hide them all
+   when they are not visible. */
 static void
 hide_all_visible_impls (GdkWindowObject *private)
 {
@@ -5978,7 +5990,11 @@ hide_all_visible_impls (GdkWindowObject *private)
     {
       child = l->data;
 
-      if (GDK_WINDOW_IS_MAPPED (child))
+      /* For foreign windows, only hide if if was
+	 explicitly hidden, otherwise we might cause
+	 suprising things to happen to the other client. */
+      if (GDK_WINDOW_IS_MAPPED (child) &&
+	  GDK_WINDOW_TYPE (child) != GDK_WINDOW_FOREIGN)
 	hide_all_visible_impls (child);
     }
 
