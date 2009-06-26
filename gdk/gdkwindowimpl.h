@@ -71,6 +71,12 @@ struct _GdkWindowImplIface
                                          GdkWindow       *new_parent,
                                          gint             x,
                                          gint             y);
+  void         (* clear_area)           (GdkWindow       *window,
+                                         gint             x,
+                                         gint             y,
+					 gint             width,
+					 gint             height,
+					 gboolean         send_expose);
   
   void         (* set_cursor)           (GdkWindow       *window,
                                          GdkCursor       *cursor);

@@ -4059,6 +4059,16 @@ gdk_window_clear_area_internal (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+    {
+      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_area
+	(window, x, y, width, height, send_expose);
+      return;
+    }
+
   /* This is what XClearArea does, and e.g. GtkCList uses it,
      so we need to duplicate that */
   if (width == 0)
