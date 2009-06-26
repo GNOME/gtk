@@ -1661,16 +1661,24 @@ gdk_window_x11_reparent (GdkWindow *window,
 }
 
 static void
-gdk_window_x11_clear_area (GdkWindow *window,
-			   gint       x,
-			   gint       y,
-			   gint       width,
-			   gint       height,
-			   gboolean   send_expose)
+gdk_window_x11_clear_region (GdkWindow *window,
+			     GdkRegion *region,
+			     gboolean   send_expose)
 {
-  XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-	      x, y, width, height,
-	      send_expose);
+  GdkRectangle *rectangles;
+  int n_rectangles, i;
+
+  gdk_region_get_rectangles  (region,
+			      &rectangles,
+			      &n_rectangles);
+
+  for (i = 0; i < n_rectangles; i++)
+    XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+		rectangles[i].x, rectangles[i].y,
+		rectangles[i].width, rectangles[i].height,
+		send_expose);
+
+  g_free (rectangles);
 }
 
 static void
@@ -5569,7 +5577,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_background = gdk_window_x11_set_background;
   iface->set_back_pixmap = gdk_window_x11_set_back_pixmap;
   iface->reparent = gdk_window_x11_reparent;
-  iface->clear_area = gdk_window_x11_clear_area;
+  iface->clear_region = gdk_window_x11_clear_region;
   iface->set_cursor = gdk_window_x11_set_cursor;
   iface->get_geometry = gdk_window_x11_get_geometry;
   iface->get_root_coords = gdk_window_x11_get_root_coords;

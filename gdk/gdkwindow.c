@@ -4039,9 +4039,24 @@ gdk_window_clear_region_internal (GdkWindow *window,
       if (private->redirect)
 	gdk_window_clear_backing_region_redirect (window, region);
 
-      gdk_window_clear_backing_region_direct (window, region);
-      if (send_expose)
-	gdk_window_invalidate_region (window, region, FALSE);
+      if (GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_region &&
+	  gdk_window_has_impl (private))
+	{
+	  GdkRegion *copy;
+	  copy = gdk_region_copy (region);
+	  gdk_region_intersect (copy, private->clip_region_with_children);
+
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_region
+	    (window, copy, send_expose);
+
+	  gdk_region_destroy (copy);
+	}
+      else
+	{
+	  gdk_window_clear_backing_region_direct (window, region);
+	  if (send_expose)
+	    gdk_window_invalidate_region (window, region, FALSE);
+	}
     }
 }
 
@@ -4061,13 +4076,6 @@ gdk_window_clear_area_internal (GdkWindow *window,
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
-  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-    {
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_area
-	(window, x, y, width, height, send_expose);
-      return;
-    }
 
   /* This is what XClearArea does, and e.g. GtkCList uses it,
      so we need to duplicate that */
