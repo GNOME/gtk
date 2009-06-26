@@ -4417,7 +4417,7 @@ gdk_window_set_cairo_clip (GdkDrawable *drawable,
       cairo_reset_clip (cr);
 
       cairo_new_path (cr);
-      gdk_cairo_region (cr, private->clip_region);
+      gdk_cairo_region (cr, private->clip_region_with_children);
 
       cairo_restore (cr);
       cairo_clip (cr);
