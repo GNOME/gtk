@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-06-20 20:33+0000\n"
-"PO-Revision-Date: 2009-06-21 10:47+0200\n"
+"POT-Creation-Date: 2009-06-24 05:00+0000\n"
+"PO-Revision-Date: 2009-06-27 14:56+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -272,7 +272,7 @@ msgid "A unique name for the action."
 msgstr "Un nombre único para la acción."
 
 #: ../gtk/gtkaction.c:198 ../gtk/gtkbutton.c:219 ../gtk/gtkexpander.c:195
-#: ../gtk/gtkframe.c:105 ../gtk/gtklabel.c:495 ../gtk/gtkmenuitem.c:300
+#: ../gtk/gtkframe.c:105 ../gtk/gtklabel.c:495 ../gtk/gtkmenuitem.c:305
 #: ../gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Etiqueta"
@@ -577,7 +577,7 @@ msgstr "Sombra de la flecha"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Apariencia de la sombra que rodea la flecha"
 
-#: ../gtk/gtkarrow.c:92 ../gtk/gtkmenu.c:689 ../gtk/gtkmenuitem.c:363
+#: ../gtk/gtkarrow.c:92 ../gtk/gtkmenu.c:711 ../gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Escalado de flechas"
 
@@ -815,12 +815,12 @@ msgstr ""
 "etiqueta del widget"
 
 #: ../gtk/gtkbutton.c:227 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:516
-#: ../gtk/gtkmenuitem.c:315 ../gtk/gtktoolbutton.c:209
+#: ../gtk/gtkmenuitem.c:320 ../gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
 #: ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:204 ../gtk/gtklabel.c:517
-#: ../gtk/gtkmenuitem.c:316
+#: ../gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1781,7 +1781,7 @@ msgstr "Espacio del indicador"
 msgid "Spacing around check or radio indicator"
 msgstr "Espacio que rodea el indicador de radio o casilla"
 
-#: ../gtk/gtkcheckmenuitem.c:98 ../gtk/gtkmenu.c:500
+#: ../gtk/gtkcheckmenuitem.c:98 ../gtk/gtkmenu.c:501
 #: ../gtk/gtktoggleaction.c:119 ../gtk/gtktogglebutton.c:115
 #: ../gtk/gtktoggletoolbutton.c:114
 msgid "Active"
@@ -2012,7 +2012,7 @@ msgstr "Indica si el ComboBox dibuja un marco alrededor del hijo"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Indica si el ComboBox obtiene el foco cuando se pulsa con el ratón"
 
-#: ../gtk/gtkcombobox.c:805 ../gtk/gtkmenu.c:555
+#: ../gtk/gtkcombobox.c:805 ../gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Título del tirador"
 
@@ -3195,7 +3195,7 @@ msgstr "Siempre mostrar la imagen"
 msgid "Whether the image will always be shown"
 msgstr "Indica si la imagen se mostrará siempre"
 
-#: ../gtk/gtkimagemenuitem.c:184 ../gtk/gtkmenu.c:515
+#: ../gtk/gtkimagemenuitem.c:184 ../gtk/gtkmenu.c:516
 msgid "Accel Group"
 msgstr "Grupo de aceleración"
 
@@ -3371,33 +3371,33 @@ msgstr "Visitado"
 msgid "Whether this link has been visited."
 msgstr "Indica si este enlace se ha visitado."
 
-#: ../gtk/gtkmenu.c:501
+#: ../gtk/gtkmenu.c:502
 msgid "The currently selected menu item"
 msgstr "El elemento del menú actualmente seleccionado"
 
-#: ../gtk/gtkmenu.c:516
+#: ../gtk/gtkmenu.c:517
 msgid "The accel group holding accelerators for the menu"
 msgstr "El grupo de aceleración que contiene los aceleradores para el menú"
 
-#: ../gtk/gtkmenu.c:530 ../gtk/gtkmenuitem.c:285
+#: ../gtk/gtkmenu.c:531 ../gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Ruta del acelerador"
 
-#: ../gtk/gtkmenu.c:531
+#: ../gtk/gtkmenu.c:532
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "Una ruta de acelerador usada para construir convenientemente rutas de "
 "aceleración de elementos hijo"
 
-#: ../gtk/gtkmenu.c:547
+#: ../gtk/gtkmenu.c:548
 msgid "Attach Widget"
 msgstr "Acoplar widget"
 
-#: ../gtk/gtkmenu.c:548
+#: ../gtk/gtkmenu.c:549
 msgid "The widget the menu is attached to"
 msgstr "El menú al que está acoplado el widget"
 
-#: ../gtk/gtkmenu.c:556
+#: ../gtk/gtkmenu.c:557
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -3405,43 +3405,55 @@ msgstr ""
 "Un título que podría mostrarse por el administrador de ventanas cuando este "
 "menú se desprenda"
 
-#: ../gtk/gtkmenu.c:570
+#: ../gtk/gtkmenu.c:571
 msgid "Tearoff State"
 msgstr "Estado de desprendimiento"
 
-#: ../gtk/gtkmenu.c:571
+#: ../gtk/gtkmenu.c:572
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Un booleano que indica si el menú ha sido desprendido"
 
-#: ../gtk/gtkmenu.c:585
+#: ../gtk/gtkmenu.c:586
 msgid "Monitor"
 msgstr "Monitor"
 
-#: ../gtk/gtkmenu.c:586
+#: ../gtk/gtkmenu.c:587
 msgid "The monitor the menu will be popped up on"
 msgstr "El monitor en el que se mostrará el menú"
 
-#: ../gtk/gtkmenu.c:592
+#: ../gtk/gtkmenu.c:593
 msgid "Vertical Padding"
 msgstr "Separación vertical"
 
-#: ../gtk/gtkmenu.c:593
+#: ../gtk/gtkmenu.c:594
 msgid "Extra space at the top and bottom of the menu"
 msgstr "El espacio adicional en la parte superior e inferior del menú"
 
-#: ../gtk/gtkmenu.c:601
+#: ../gtk/gtkmenu.c:616
+msgid "Reserve Toggle Size"
+msgstr "Reservar tamaño para conmutar"
+
+#: ../gtk/gtkmenu.c:617
+#| msgid "A boolean that indicates whether the menu is torn-off"
+msgid ""
+"A boolean that indicates whether the menu reserves space for toggles and "
+"icons"
+msgstr ""
+"Un booleano que indica si el menú reserva espacio para conmutadores e iconos"
+
+#: ../gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
 msgstr "Separación horizontal"
 
-#: ../gtk/gtkmenu.c:602
+#: ../gtk/gtkmenu.c:624
 msgid "Extra space at the left and right edges of the menu"
 msgstr "El espacio adicional en los bordes derecho e izquierdo del menú"
 
-#: ../gtk/gtkmenu.c:610
+#: ../gtk/gtkmenu.c:632
 msgid "Vertical Offset"
 msgstr "Desplazamiento vertical"
 
-#: ../gtk/gtkmenu.c:611
+#: ../gtk/gtkmenu.c:633
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3449,11 +3461,11 @@ msgstr ""
 "Cuando el menú es un submenú, colocarlo este número de píxeles de "
 "desplazamiento vertical"
 
-#: ../gtk/gtkmenu.c:619
+#: ../gtk/gtkmenu.c:641
 msgid "Horizontal Offset"
 msgstr "Desplazamiento horizontal"
 
-#: ../gtk/gtkmenu.c:620
+#: ../gtk/gtkmenu.c:642
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3461,87 +3473,87 @@ msgstr ""
 "Cuando el menú es un submenú, colocarlo este número de píxeles de "
 "desplazamiento horizontal"
 
-#: ../gtk/gtkmenu.c:628
+#: ../gtk/gtkmenu.c:650
 msgid "Double Arrows"
 msgstr "Dobles flechas"
 
-#: ../gtk/gtkmenu.c:629
+#: ../gtk/gtkmenu.c:651
 msgid "When scrolling, always show both arrows."
 msgstr "Al desplazar, siempre mostrar ambas flechas."
 
-#: ../gtk/gtkmenu.c:642
+#: ../gtk/gtkmenu.c:664
 msgid "Arrow Placement"
 msgstr "Colocación de flecha"
 
-#: ../gtk/gtkmenu.c:643
+#: ../gtk/gtkmenu.c:665
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Indica si las flechas de desplazamiento se deben colocar"
 
-#: ../gtk/gtkmenu.c:651
+#: ../gtk/gtkmenu.c:673
 msgid "Left Attach"
 msgstr "Acoplar a la izquierda"
 
-#: ../gtk/gtkmenu.c:652 ../gtk/gtktable.c:174
+#: ../gtk/gtkmenu.c:674 ../gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columnas que acoplar al lado izquierdo del hijo"
 
-#: ../gtk/gtkmenu.c:659
+#: ../gtk/gtkmenu.c:681
 msgid "Right Attach"
 msgstr "Acoplar a la derecha"
 
-#: ../gtk/gtkmenu.c:660
+#: ../gtk/gtkmenu.c:682
 msgid "The column number to attach the right side of the child to"
 msgstr "El número de columnas que acoplar al lado derecho del hijo"
 
-#: ../gtk/gtkmenu.c:667
+#: ../gtk/gtkmenu.c:689
 msgid "Top Attach"
 msgstr "Acoplamiento superior"
 
-#: ../gtk/gtkmenu.c:668
+#: ../gtk/gtkmenu.c:690
 msgid "The row number to attach the top of the child to"
 msgstr "El número de filas que acoplar por encima del hijo"
 
-#: ../gtk/gtkmenu.c:675
+#: ../gtk/gtkmenu.c:697
 msgid "Bottom Attach"
 msgstr "Acoplamiento inferior"
 
-#: ../gtk/gtkmenu.c:676 ../gtk/gtktable.c:195
+#: ../gtk/gtkmenu.c:698 ../gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "El número de filas que acoplar por debajo del hijo"
 
-#: ../gtk/gtkmenu.c:690
+#: ../gtk/gtkmenu.c:712
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr ""
 "Constante arbitraria para reducir el escalado del tamaño de la flecha de "
 "desplazamiento"
 
-#: ../gtk/gtkmenu.c:777
+#: ../gtk/gtkmenu.c:799
 msgid "Can change accelerators"
 msgstr "Puede cambiar aceleradores"
 
-#: ../gtk/gtkmenu.c:778
+#: ../gtk/gtkmenu.c:800
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Indica si los aceleradores del menú pueden cambiarse pulsando una tecla "
 "sobre el elemento del menú"
 
-#: ../gtk/gtkmenu.c:783
+#: ../gtk/gtkmenu.c:805
 msgid "Delay before submenus appear"
 msgstr "Retraso antes de que aparezcan los submenús"
 
-#: ../gtk/gtkmenu.c:784
+#: ../gtk/gtkmenu.c:806
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tiempo mínimo en que el puntero debe permanecer sobre un elemento de menú "
 "antes de que el submenú aparezca"
 
-#: ../gtk/gtkmenu.c:791
+#: ../gtk/gtkmenu.c:813
 msgid "Delay before hiding a submenu"
 msgstr "Retraso antes de ocultar un submenú"
 
-#: ../gtk/gtkmenu.c:792
+#: ../gtk/gtkmenu.c:814
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3587,44 +3599,44 @@ msgstr "Retardo antes de que aparezcan los menús desplegables"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Retardo antes de que aparezcan los submenús de una barra de menús"
 
-#: ../gtk/gtkmenuitem.c:252
+#: ../gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "Justificado a la derecha"
 
-#: ../gtk/gtkmenuitem.c:253
+#: ../gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Establece si el elemento del menú aparece justificado en la parte derecha de "
 "una barra de menú"
 
-#: ../gtk/gtkmenuitem.c:267
+#: ../gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "Submenú"
 
-#: ../gtk/gtkmenuitem.c:268
+#: ../gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "El submenú acoplado al elemento del menú, o NULL si no tiene ninguno"
 
-#: ../gtk/gtkmenuitem.c:286
+#: ../gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "Establece la ruta del acelerador del elemento del menú"
 
-#: ../gtk/gtkmenuitem.c:301
+#: ../gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "El texto para la etiqueta hijo"
 
-#: ../gtk/gtkmenuitem.c:364
+#: ../gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Cantidad de espacio ocupado por una flecha, relativa al tamaño de tipografía "
 "del elemento del menú"
 
-#: ../gtk/gtkmenuitem.c:377
+#: ../gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "Anchura en caracteres"
 
-#: ../gtk/gtkmenuitem.c:378
+#: ../gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "La anchura mínima deseada del elemento del menú en caracteres"
 
@@ -5658,7 +5670,6 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "El contenido de los consejos para este icono de la bandeja"
 
 #: ../gtk/gtkstatusicon.c:421
-#| msgid "The size of the icon"
 msgid "The title of this tray icon"
 msgstr "El título de este icono de la bandeja"
 
