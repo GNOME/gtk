@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.16.2 to 2.16.3
+==============================================
+
+* Bugs fixed:
+ 565317 Resulting image of GtkCellRendererPixbuf depends on order
+ 586315 gtk_file_chooser_list_shortcut_folders() was crashing
+ 461944 pressing the volume icon in full screen shuts down the...
+ 529908 Sanitize handling of motion events in GtkNotebook
+ 564063	regression: Left margin in popup menus
+ 585626 Setting widget tooltip hammers X11 server on any TCP/IP X...
+ 585858	right-click Add-to-Booksmarks is sometimes greyed out
+ 585953	Invalid link in the first page of GTK tutorial
+ 586330	GtkButton ignores use_underline when an image is set
+
+* Updated translations:
+ Bengali India
+ Brazilian Portuguese
+ Hindi
+ Japanese
+ Oriya
+ Punjabi
+ Swedish
+
+
 Overview of Changes from GTK+ 2.16.1 to 2.16.2
 ==============================================
 
