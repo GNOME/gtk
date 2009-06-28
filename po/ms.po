@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:08-0400\n"
 "PO-Revision-Date: 2004-04-04 01:11+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@my-penguin.org>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -1759,136 +1759,136 @@ msgstr ""
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4324
 msgid "Show _Hidden Files"
 msgstr "Papar Fail _Tersembunyi"
 
-#: gtk/gtkfilechooserdefault.c:4332
+#: gtk/gtkfilechooserdefault.c:4331
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fail"
 
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Name"
 msgstr "Nama"
 
-#: gtk/gtkfilechooserdefault.c:4661
+#: gtk/gtkfilechooserdefault.c:4662
 msgid "Size"
 msgstr "Saiz"
 
-#: gtk/gtkfilechooserdefault.c:4675
+#: gtk/gtkfilechooserdefault.c:4676
 msgid "Modified"
 msgstr "Diubahsuai"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4895 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: gtk/gtkfilechooserdefault.c:4938
+#: gtk/gtkfilechooserdefault.c:4939
 msgid "_Browse for other folders"
 msgstr "_Lungsur folder lain"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5209
 #, fuzzy
 msgid "Type a file name"
 msgstr "Namafail tidak sah: %s"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5246
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Cipta _Folder"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5256
 #, fuzzy
 msgid "_Location:"
 msgstr "_Lokasi:"
 
-#: gtk/gtkfilechooserdefault.c:5459
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Save in _folder:"
 msgstr "Simpan di _folder:"
 
-#: gtk/gtkfilechooserdefault.c:5461
+#: gtk/gtkfilechooserdefault.c:5462
 msgid "Create in _folder:"
 msgstr "Cipta di _folder:"
 
-#: gtk/gtkfilechooserdefault.c:7151
+#: gtk/gtkfilechooserdefault.c:7152
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Tak dapat tukar ke folder kerana ianya bukan tempatan"
 
-#: gtk/gtkfilechooserdefault.c:7776 gtk/gtkfilechooserdefault.c:7797
+#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:7887
+#: gtk/gtkfilechooserdefault.c:7888
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:8149 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
 #, fuzzy
 msgid "_Replace"
 msgstr "_Tukarnama"
 
-#: gtk/gtkfilechooserdefault.c:8919
+#: gtk/gtkfilechooserdefault.c:8920
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8921
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8934
+#: gtk/gtkfilechooserdefault.c:8935
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9401
+#: gtk/gtkfilechooserdefault.c:9402
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10354
+#: gtk/gtkfilechooserdefault.c:10355
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Tak dapat memilih %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:11029
+#: gtk/gtkfilechooserdefault.c:11030
 msgid "Type name of new folder"
 msgstr "Taip nama bagi folder baru"
 
-#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
-#: gtk/gtkfilechooserdefault.c:11300
+#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
+#: gtk/gtkfilechooserdefault.c:11301
 msgid "Unknown"
 msgstr "Entah"
 
-#: gtk/gtkfilechooserdefault.c:11247
+#: gtk/gtkfilechooserdefault.c:11248
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11249
+#: gtk/gtkfilechooserdefault.c:11250
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Semalam"
@@ -2395,7 +2395,7 @@ msgstr ""
 msgid "Remember _forever"
 msgstr ""
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
+#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"

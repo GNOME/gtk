@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:09-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -379,7 +379,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Sensitive"
 msgstr "סענסיטיװ"
 
@@ -389,7 +389,7 @@ msgid "Whether the action is enabled."
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:293
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
 msgid "Visible"
 msgstr "זעעװדיק"
 
@@ -5791,7 +5791,7 @@ msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 msgid "The orientation of the tray"
 msgstr "די אָריִענטירונג פֿון דעם מכשיר־װײַזער"
 
-#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:632
+#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:633
 #, fuzzy
 msgid "Has tooltip"
 msgstr "ניץ פֿאַרצײַכענונג"
@@ -5801,17 +5801,17 @@ msgstr "ניץ פֿאַרצײַכענונג"
 msgid "Whether this tray icon has a tooltip"
 msgstr "אױב דאָס צעפּיכעסל האָט דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
+#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:654
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "פֿאַרגרעסער גרײס"
 
-#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "דער אינהאַלט פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
+#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:675
 msgid "Tooltip markup"
 msgstr ""
 
@@ -6984,27 +6984,27 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "שטעלט פֿעסט װי דאָס פֿאַרשאָטנטע קעסטל אַרום דעם געשטאַלט־פֿענצטער צײכנט זיך"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Widget name"
 msgstr "צעפּיכעסל נאָמען"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The name of the widget"
 msgstr "דער נאָמען פֿון דעם צעפּיכעסל"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Parent widget"
 msgstr "טאַטע־מאַמע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "דער טאַטע־מאַמע פֿון דעם צעפּיכעסל.  מוז זײַן אַ פּעקל צעפּיכעסל."
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Width request"
 msgstr "ברײט בקשה"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7012,11 +7012,11 @@ msgstr ""
 "דער בײַקום איבער דער ברײט בקשה פֿון דעם צעפּיכעסל, אָדער -1 אָנצונעמען די "
 "נאַטירלעכע בקשה"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:508
 msgid "Height request"
 msgstr "הײך בקשה"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7024,84 +7024,84 @@ msgstr ""
 "דער בײַקום איבער דער הײך בקשה פֿון דעם צעפּיכעסל, אָדער -1 אָנצונעמען די "
 "נאַטירלעכע בקשה"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget is visible"
 msgstr "אױב דאָס צעפּיכעסל איז זעעװדיק"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the widget responds to input"
 msgstr "אױב דאָס צעפּיכעסל ענטפֿערט אױף אַרײַנשרײַב"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Application paintable"
 msgstr "אַפּליקאַציע מאָלעװדיק"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the application will paint directly on the widget"
 msgstr "אױב די אַפּליקאַציע װעט מאָלן דירעקט אױף דעם צעפּיכעסל"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Can focus"
 msgstr "קען פֿאָקוסירן"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget can accept the input focus"
 msgstr "אױב דאָס צעפּיכעסל קען אָננעמען דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Has focus"
 msgstr "האָט פֿאָקוס"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget has the input focus"
 msgstr "אױב דאָס צעפּיכעסל האָט דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Is focus"
 msgstr "איז פֿאָקוס"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "צי דאָס צעפּיכעסל איז דאָס פֿאָקוס־צעפּיכעסל אין דער העכסטער מדרגה"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Can default"
 msgstr "קען זײַן געװײנטלעך"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget can be the default widget"
 msgstr "אױב דאָס צעפּיכעסל קען װערן דאָס געװײנטלעכע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Has default"
 msgstr "איז געװײנטלעך"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Whether the widget is the default widget"
 msgstr "אױב דאָס צעפּיכעסל איז דאָס געװײנטלעכע צעפּיכעסל"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Receives default"
 msgstr "באַקומט געװײנטלעך"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "אױב „יאָ“, װעט דאָס צעפּיכעסל באַקומען די געװײנטלעכע אַקציע װען עס האָט פֿאָקוס"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Composite child"
 msgstr "קאָמפּאָזיטע קינד"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Whether the widget is part of a composite widget"
 msgstr "אױב דאָס צעפּיכעסל איז אַ טײל פֿון אַ קאָמפּאָזיט צעפּיכעסל"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Style"
 msgstr "סטיל"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -7109,90 +7109,90 @@ msgstr ""
 "דער סטיל פֿון דעם צעפּיכעסל, װאָס פֿאַרמאָגט אינפֿאָרמאַציע װעגן זײַן געשטאַלט (פֿאַרבן "
 "אד”ג)."
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:594
 msgid "Events"
 msgstr "טרעפֿענישן"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "די מאַסקע װאָס שטעלט פֿעסט װאָסערע Gdk טרעפֿענישן דאָס צעפּיכעסל באַקומט"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:602
 msgid "Extension events"
 msgstr "צוגעגעבענע טרעפֿענישן"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "די מאַסקע װאָס שטעלט פֿעסט װאָסערע צוגעגעבענע טרעפֿענישן דאָס צעפּיכעסל באַקומט"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:610
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:634
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "אױב דאָס צעפּיכעסל האָט דעם אַרײַנשרײַב־פֿאָקוס"
 
-#: gtk/gtkwidget.c:689
+#: gtk/gtkwidget.c:690
 #, fuzzy
 msgid "Window"
 msgstr "פֿענצטער סאָרט"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "The widget's window if it is realized"
 msgstr ""
 
-#: gtk/gtkwidget.c:2212
+#: gtk/gtkwidget.c:2213
 msgid "Interior Focus"
 msgstr "אינערלעכער פֿאָקוס"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2214
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "אױב אַ פֿאָקוס־סימן זאָל זיך צײכענען אין דרינען פֿון צעפּיכעסלעך"
 
-#: gtk/gtkwidget.c:2219
+#: gtk/gtkwidget.c:2220
 msgid "Focus linewidth"
 msgstr "פֿאָקוס ליניע־ברײט"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2221
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ברײט, אין בילדצעלן, פֿון דער פֿאָקוס־סימן ליניע"
 
-#: gtk/gtkwidget.c:2226
+#: gtk/gtkwidget.c:2227
 msgid "Focus line dash pattern"
 msgstr "פֿאָקוס־ליניע מקף־סכעמע"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2228
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "די מקף־סכעמע מיט װעלכער די פֿאָקוס־סימן צײכנט זיך"
 
-#: gtk/gtkwidget.c:2232
+#: gtk/gtkwidget.c:2233
 msgid "Focus padding"
 msgstr "פֿאָקוס לײדיק אָרט"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2234
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ברײט, אין בילדצעלן, צװישן דעם פֿאָקוס־סימן און דעם צעפּיכעסל „קאַסטן”"
 
-#: gtk/gtkwidget.c:2238
+#: gtk/gtkwidget.c:2239
 msgid "Cursor color"
 msgstr "לױפֿער פֿאַרב"
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2240
 msgid "Color with which to draw insertion cursor"
 msgstr "פֿאַרב מיט װעלכער די אַרײַנלײג־לױפֿער צײכנט זיך"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2245
 msgid "Secondary cursor color"
 msgstr "צװײטע לױפֿערפֿאַרב"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2246
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7200,88 +7200,88 @@ msgstr ""
 "פֿאַרב מיט װעלכער דער צװײטער אַרײַנלײג־לױפֿער צײכנט זיך װען מען רעדאַגירט "
 "בײד־ריכטונגדיקן טעקסט"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2251
 msgid "Cursor line aspect ratio"
 msgstr "לױפֿער ליניע אַספּעקט־פּראָפּאָרץ"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2252
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "די אַספּעקט־פּראָפּאָרץ מיט װעלכער דער אַרײַנלײג־לױפֿער צײכנט זיך"
 
-#: gtk/gtkwidget.c:2265
+#: gtk/gtkwidget.c:2266
 #, fuzzy
 msgid "Draw Border"
 msgstr "הענטל צאַמרינע"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2267
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:2279
+#: gtk/gtkwidget.c:2280
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "איצטיקע פֿאַרב"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2281
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkwidget.c:2293
+#: gtk/gtkwidget.c:2294
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "איצטיקע פֿאַרב"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2295
 #, fuzzy
 msgid "Color of visited links"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkwidget.c:2308
+#: gtk/gtkwidget.c:2309
 #, fuzzy
 msgid "Wide Separators"
 msgstr "האָט אַ צעשײדער"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2310
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2323
+#: gtk/gtkwidget.c:2324
 #, fuzzy
 msgid "Separator Width"
 msgstr "װערטיקאַלישע צעשײד־ברײט"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2325
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2338
+#: gtk/gtkwidget.c:2339
 #, fuzzy
 msgid "Separator Height"
 msgstr "געװײנטלעכע הײך"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2340
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2353
+#: gtk/gtkwidget.c:2354
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "האָריזאָנטאַלישע דורכבלעטערער פּאָליטיק"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2355
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "װען דער האָריזאָנטאַלישער דורכבלעטערער װײַזט זיך"
 
-#: gtk/gtkwidget.c:2368
+#: gtk/gtkwidget.c:2369
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "װערטיקאַלישע דורכבלעטערער פּאָליטיק"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2370
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "װען דער װערטיקאַלישער  דורכבלעטערער װײַזט זיך"

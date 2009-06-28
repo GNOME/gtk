@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:09-0400\n"
 "PO-Revision-Date: 2009-03-16 17:51+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: American English <fedora-trans-as@redhat.com>\n"
@@ -362,7 +362,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "TRUE হ'লে এই কামৰ ৰিক্ত তালিকা নিযুক্তকক লুকাই ৰখা হয় ।"
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Sensitive"
 msgstr "সংবেদনশীল"
 
@@ -371,7 +371,7 @@ msgid "Whether the action is enabled."
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:293
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
 msgid "Visible"
 msgstr "দৃশ্যমান"
 
@@ -5475,7 +5475,7 @@ msgstr "হলো"
 msgid "The orientation of the tray"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:632
+#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:633
 msgid "Has tooltip"
 msgstr "Has tooltip"
 
@@ -5484,15 +5484,15 @@ msgstr "Has tooltip"
 msgid "Whether this tray icon has a tooltip"
 msgstr "এই ট্যাগ (tag) ফন্ট আকাৰকে প্ৰভাবিত কৰে নে নাই"
 
-#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
+#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:654
 msgid "Tooltip Text"
 msgstr "টুলটিপ Text"
 
-#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
 msgid "The contents of the tooltip for this widget"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
-#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
+#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:675
 msgid "Tooltip markup"
 msgstr "টুলটিপ"
 
@@ -6602,27 +6602,27 @@ msgstr "ভিউপোৰ্টেৰ উলম্ব অবস্থান ন
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "শ্যাডো বাক্স'ৰ চাৰপাশে কিভাবে ভিউপোৰ্ট আঁকা হ'ব তা নিৰ্ধাৰণ কৰে"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Widget name"
 msgstr "উইজেটেৰ নাম"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The name of the widget"
 msgstr "উইজেটেৰ নাম"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Parent widget"
 msgstr "পেৰেন্ট উইজেট"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "এই উইজেটেৰ পেৰেন্ট উইজেট। এটিকে অবশ্যই এটা কনটেইনাৰ উইজেট হতে হ'ব"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Width request"
 msgstr "প্ৰস্থেৰ বাবে অনুৰোধ"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6630,11 +6630,11 @@ msgstr ""
 "উইজেটেৰ প্ৰস্থ বিষয়ক আবেদন অগ্ৰাহ্যকাৰী মান; ইয়াৰ মান -১ হলে স্বাভাবিক আবেদন "
 "অনুমোদন কৰা হ'ব"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:508
 msgid "Height request"
 msgstr "উচ্চতাৰ বাবে অনুৰোধ"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6642,171 +6642,171 @@ msgstr ""
 "উইজেটেৰ দৈৰ্ঘ্য বিষয়ক আবেদন অগ্ৰাহ্যকাৰী মান; ইয়াৰ মান -১ হলে স্বাভাবিক আবেদন "
 "অনুমোদন কৰা হ'ব"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget is visible"
 msgstr "উইজেট দৃশ্যমান নে নাই"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the widget responds to input"
 msgstr "ইনপুটেৰ প্ৰতি উইজেট সাড়া দেয় নে নাই"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Application paintable"
 msgstr "আঁকাৰযোগ্য অ্যাপলিকেশন"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the application will paint directly on the widget"
 msgstr "অ্যাপলিকেশনটি সৰাসৰি উইজেটে আঁকবে নে নাই"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Can focus"
 msgstr "ফোকাস কৰতে পাৰে"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget can accept the input focus"
 msgstr "উইজেটটি ইনপুটেৰ ফ'কাচ গ্ৰহণ কৰতে পাৰে নে নাই"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Has focus"
 msgstr "ফোকাস আছে"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget has the input focus"
 msgstr "উইজেটটিৰ ইনপুট ফ'কাচ আছে নে নাই"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Is focus"
 msgstr "ফোকাস"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "উইজেটটি সৰ্বোচ্চ স্তৰেৰ ফ'কাচ উইজেট নে নাই"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Can default"
 msgstr "অবিকল্পিত হতে পাৰে"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget can be the default widget"
 msgstr "উইজেটটি অবিকল্পিত উইজেট হতে পাৰবে নে নাই"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Has default"
 msgstr "অবিকল্পিত আছে"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Whether the widget is the default widget"
 msgstr "উইজেটটি অবিকল্পিত উইজেট নে নাই"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Receives default"
 msgstr "অবিকল্পিত গ্ৰহণ কৰে"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "যদি TRUE হয় তেন্তে ফোকাসকৃত অবস্থায় উইজেটটি অবিকল্পিত অ্যাকশন গ্ৰহণ কৰবে"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Composite child"
 msgstr "কম্পোসিট চাইল্ড"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Whether the widget is part of a composite widget"
 msgstr "উইজেটটি কোন কম্পোসিট চাইল্ডৰ অংশ নে নাই"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Style"
 msgstr "বিন্যাস"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "উইজেটেৰ ধৰন, যা উইজেটেৰ চেহাৰা সংক্ৰান্ত তথ্য ধাৰণ কৰে (ৰং ইত্যাদি)"
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:594
 msgid "Events"
 msgstr "ঘটনাসমূহ "
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "যি ইভেন্ট মাস্কটি নিৰ্ধাৰণ কৰে এই উইজেটটি কি ধৰনেৰ GdkEvents গ্ৰহণ কৰতে পাৰে"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:602
 msgid "Extension events"
 msgstr "বৰ্ধিত ইভেন্ট"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "যি মাস্কটি নিৰ্ধাৰণ কৰে এই উইজেটটি কি ধৰনেৰ বৰ্ধিত ইভেন্ট গ্ৰহণ কৰতে পাৰে"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:610
 msgid "No show all"
 msgstr "সবকিছু দেখাও অকেজো"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() এই উইজেটকে প্ৰভাবিত কৰবে না নে নাই"
 
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:634
 msgid "Whether this widget has a tooltip"
 msgstr "Whether this widget has a tooltip"
 
 #
-#: gtk/gtkwidget.c:689
+#: gtk/gtkwidget.c:690
 msgid "Window"
 msgstr "সংযোগ পথ"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "The widget's window if it is realized"
 msgstr "The widget's window if it is realized"
 
-#: gtk/gtkwidget.c:2212
+#: gtk/gtkwidget.c:2213
 msgid "Interior Focus"
 msgstr "অভ্যন্তৰীণ ফোকাস"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2214
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ফোকাস নিৰ্দেশকটি উইজেটেৰ ভেতৰ আঁকা হ'ব নে নাই"
 
-#: gtk/gtkwidget.c:2219
+#: gtk/gtkwidget.c:2220
 msgid "Focus linewidth"
 msgstr "ফোকাসেৰ লাইনব্যাপ্তি"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2221
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "পিক্সেল হিচাপে ফ'কাচ নিৰ্দেশক লাইনেৰ প্ৰস্থ"
 
-#: gtk/gtkwidget.c:2226
+#: gtk/gtkwidget.c:2227
 msgid "Focus line dash pattern"
 msgstr "ফোকাস লাইনেৰ ড্যাশ পেটাৰ্ন"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2228
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ফোকাস নিৰ্দেশক আঁকতে যি ধৰনেৰ ড্যাশ পেটাৰ্ন আঁকতে হ'ব"
 
-#: gtk/gtkwidget.c:2232
+#: gtk/gtkwidget.c:2233
 msgid "Focus padding"
 msgstr "ফোকাস পেডিং"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2234
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "পিক্সেল হিচাপে ফ'কাচ নিৰ্দেশক আৰু উইজেট 'বক্সৰ' মধ্যবৰ্তী স্থানেৰ প্ৰস্থ"
 
-#: gtk/gtkwidget.c:2238
+#: gtk/gtkwidget.c:2239
 msgid "Cursor color"
 msgstr "কাৰ্সাৰেৰ ৰং "
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2240
 msgid "Color with which to draw insertion cursor"
 msgstr "অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্সাৰ আঁকতে যি ৰং ব্যৱহৃত হ'ব"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2245
 msgid "Secondary cursor color"
 msgstr "কাৰ্সাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2246
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6814,43 +6814,43 @@ msgstr ""
 "ডান-থেকে-বাম এবং বাম-থেকে-ডান এ লেখায় হয় ইয়াৰকম টেক্সটৰ মিশ্ৰণ এডিট কৰাৰ সময় "
 "অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্সাৰ আঁকতে যি ৰং ব্যৱহৃত হ'ব"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2251
 msgid "Cursor line aspect ratio"
 msgstr "কাৰ্সাৰ লাইনেৰ আবয়ব অনুপাত"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2252
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "যি আবয়ব অনুপাতে অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্সাৰ আঁকা হ'ব"
 
-#: gtk/gtkwidget.c:2265
+#: gtk/gtkwidget.c:2266
 msgid "Draw Border"
 msgstr "প্ৰান্ত আঁকো"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2267
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "উইজেটেৰ বৰাদ্দকৃত অংশেৰ বাইৰে যিখানে আঁকা হ'ব তাৰ আকাৰ"
 
-#: gtk/gtkwidget.c:2279
+#: gtk/gtkwidget.c:2280
 msgid "Unvisited Link Color"
 msgstr "সংযোগ"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2281
 msgid "Color of unvisited links"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkwidget.c:2293
+#: gtk/gtkwidget.c:2294
 msgid "Visited Link Color"
 msgstr "পৰিদৰ্শিত সংযোগেৰ ৰং"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2295
 msgid "Color of visited links"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkwidget.c:2308
+#: gtk/gtkwidget.c:2309
 msgid "Wide Separators"
 msgstr "Wide Separators"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2310
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6858,35 +6858,35 @@ msgstr ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 
-#: gtk/gtkwidget.c:2323
+#: gtk/gtkwidget.c:2324
 msgid "Separator Width"
 msgstr "বিভাজন ৰেখা Width"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2325
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "প্ৰস্থ সৰ্বমোট হলো"
 
-#: gtk/gtkwidget.c:2338
+#: gtk/gtkwidget.c:2339
 msgid "Separator Height"
 msgstr "বিভাজন ৰেখা উচ্চতা"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2340
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "দৈৰ্ঘ্য সৰ্বমোট হলো"
 
-#: gtk/gtkwidget.c:2353
+#: gtk/gtkwidget.c:2354
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Horizontal Scroll Arrow Length"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2355
 msgid "The length of horizontal scroll arrows"
 msgstr "সৰ্বমোট"
 
-#: gtk/gtkwidget.c:2368
+#: gtk/gtkwidget.c:2369
 msgid "Vertical Scroll Arrow Length"
 msgstr "Vertical Scroll Arrow Length"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2370
 msgid "The length of vertical scroll arrows"
 msgstr "সৰ্বমোট"
 

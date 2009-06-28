@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:09-0400\n"
 "PO-Revision-Date: 2004-07-19 00:47+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -380,7 +380,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Kada je TRUE, prazni proxy-ji menija za ovu akciju sa skriveni."
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Sensitive"
 msgstr "Osjetljivo"
 
@@ -389,7 +389,7 @@ msgid "Whether the action is enabled."
 msgstr "Da li je akcija omogućena."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:293
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
 msgid "Visible"
 msgstr "Vidljivo"
 
@@ -5733,7 +5733,7 @@ msgstr "Da li je akcija vidljiva."
 msgid "The orientation of the tray"
 msgstr "Orijentacija trake s alatima"
 
-#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:632
+#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:633
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Opis alata"
@@ -5743,17 +5743,17 @@ msgstr "Opis alata"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Da li grafički element ima fokusirani unos"
 
-#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
+#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:654
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Opis alata"
 
-#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Sadržaj unosa"
 
-#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
+#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:675
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Opis alata"
@@ -6919,27 +6919,27 @@ msgstr "GtkAdjustment koji određuje vrijednosti uspravne pozicije ovog pogleda"
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Određuje kako će se iscrtati sjenka oko pogleda"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Widget name"
 msgstr "Ime grafičkog elementa"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The name of the widget"
 msgstr "Ime grafičkog elementa"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Parent widget"
 msgstr "Nadređeni grafički element"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Nadređeni element ovog grafičkog elementa. Mora biti Container"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Width request"
 msgstr "Tražena širina"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -6947,11 +6947,11 @@ msgstr ""
 "Prepiši preko tražene širine grafičkog elementa, ili -1 ukoliko treba "
 "koristiti prirodni zahtjev"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:508
 msgid "Height request"
 msgstr "Tražena visina"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6959,176 +6959,176 @@ msgstr ""
 "Prepiši preko tražene visine grafičkog elementa, ili -1 ukoliko treba "
 "koristiti prirodni zahtjev"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget is visible"
 msgstr "Da li je grafički element vidljiv"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the widget responds to input"
 msgstr "Da li grafički element odgovara na unos"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Application paintable"
 msgstr "Aplikacija može bojiti"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the application will paint directly on the widget"
 msgstr "Da li će aplikacija crtati direktno na grafički element"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Can focus"
 msgstr "Može fokusirati"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget can accept the input focus"
 msgstr "Da li grafički element prihvata fokusiranje unosa"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Has focus"
 msgstr "Ima fokus"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget has the input focus"
 msgstr "Da li grafički element ima fokusirani unos"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Is focus"
 msgstr "Jeste fokus"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Da li je grafički element fokusirani element unutar glavnog nivoa"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Can default"
 msgstr "Može biti uobičajen"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget can be the default widget"
 msgstr "Da li ovaj element može biti uobičajeni grafički element"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Has default"
 msgstr "Uobičajeno"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Whether the widget is the default widget"
 msgstr "Da li je ovaj element uobičajeni grafički element"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Receives default"
 msgstr "Prima uobičajeno"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ako je TRUE, grafički element će primiti uobičajenu radnju kada je fokusiran"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Composite child"
 msgstr "Složen podređeni element"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Whether the widget is part of a composite widget"
 msgstr "Da li je element dio složenog grafičkog elementa"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Style"
 msgstr "Stil"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "Stil grafičkog elementa, sadrži informacije o izgledu (boje itd.)"
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:594
 msgid "Events"
 msgstr "Događaji"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Maska događaja koja odlučuje koji tip GdkEvents će ovaj grafički element "
 "primiti"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:602
 msgid "Extension events"
 msgstr "Dodatni događaji"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Maska koja odlučuje koje će dodatne događaje dobiti ovaj grafički element"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:610
 msgid "No show all"
 msgstr "Nemoj prikazati sve"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Da li gtk_widget_show_all() neće utjecati na ovaj grafički element"
 
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:634
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Da li grafički element ima fokusirani unos"
 
-#: gtk/gtkwidget.c:689
+#: gtk/gtkwidget.c:690
 #, fuzzy
 msgid "Window"
 msgstr "Tip prozora"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "The widget's window if it is realized"
 msgstr ""
 
-#: gtk/gtkwidget.c:2212
+#: gtk/gtkwidget.c:2213
 msgid "Interior Focus"
 msgstr "Unutrašnji fokus"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2214
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Da li crtati pokazivač fokusa u grafičkim elementima"
 
-#: gtk/gtkwidget.c:2219
+#: gtk/gtkwidget.c:2220
 msgid "Focus linewidth"
 msgstr "Širina linije fokusa"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2221
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Širina, u pikslama, linije pokazivača fokusa"
 
-#: gtk/gtkwidget.c:2226
+#: gtk/gtkwidget.c:2227
 msgid "Focus line dash pattern"
 msgstr "Šablon za crtanje linije fokusa"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2228
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Šablon koji se koristi za crtanje pokazivač fokusa"
 
-#: gtk/gtkwidget.c:2232
+#: gtk/gtkwidget.c:2233
 msgid "Focus padding"
 msgstr "Popunjavanje za fokus"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2234
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Širina, u pikslama, između pokazivača fokusa i okvira grafičkog elementa"
 
-#: gtk/gtkwidget.c:2238
+#: gtk/gtkwidget.c:2239
 msgid "Cursor color"
 msgstr "Boja kursora"
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2240
 msgid "Color with which to draw insertion cursor"
 msgstr "Boja kursora za unos"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2245
 msgid "Secondary cursor color"
 msgstr "Boja sekundarnog kursora"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2246
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7136,88 +7136,88 @@ msgstr ""
 "Boja sekundarnog kursora pri izmjenama miješanog desno-na-lijevo i lijevo-na-"
 "desno teksta"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2251
 msgid "Cursor line aspect ratio"
 msgstr "Omjer kursora"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2252
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Omjer u kojem će se crtati kursor za unos"
 
-#: gtk/gtkwidget.c:2265
+#: gtk/gtkwidget.c:2266
 #, fuzzy
 msgid "Draw Border"
 msgstr "Rub kartice"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2267
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:2279
+#: gtk/gtkwidget.c:2280
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Trenutna boja"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2281
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Naslov dijaloga za odabir fonta"
 
-#: gtk/gtkwidget.c:2293
+#: gtk/gtkwidget.c:2294
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Trenutna boja"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2295
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Naslov dijaloga za odabir fonta"
 
-#: gtk/gtkwidget.c:2308
+#: gtk/gtkwidget.c:2309
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Koristi liniju razdvajanja"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2310
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2323
+#: gtk/gtkwidget.c:2324
 #, fuzzy
 msgid "Separator Width"
 msgstr "Širina uspravne linije razdvajanja"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2325
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2338
+#: gtk/gtkwidget.c:2339
 #, fuzzy
 msgid "Separator Height"
 msgstr "Uobičajena visina"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2340
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2353
+#: gtk/gtkwidget.c:2354
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Ponašanje vodoravne trake s klizačem"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2355
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Kada će se prikazati vodoravna traka s klizačem"
 
-#: gtk/gtkwidget.c:2368
+#: gtk/gtkwidget.c:2369
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Ponašanje uspravne trake s klizačem"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2370
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Kada će se prikazati uspravna traka s klizačem"

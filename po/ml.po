@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:08-0400\n"
 "PO-Revision-Date: 2009-03-17 21:05+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1674,95 +1674,95 @@ msgstr "ഫയല്‍ തെരഞ്ഞെടുക്കുവാന്‍ �
 msgid "_Add to Bookmarks"
 msgstr "ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് _ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4324
 msgid "Show _Hidden Files"
 msgstr "_അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4332
+#: gtk/gtkfilechooserdefault.c:4331
 msgid "Show _Size Column"
 msgstr "_വ്യാപ്തിയ്ക്കുള്ള നിര കാണിക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4587 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ഫയലുകള്‍"
 
-#: gtk/gtkfilechooserdefault.c:4636
+#: gtk/gtkfilechooserdefault.c:4637
 msgid "Name"
 msgstr "പേരു്"
 
-#: gtk/gtkfilechooserdefault.c:4661
+#: gtk/gtkfilechooserdefault.c:4662
 msgid "Size"
 msgstr "വലിപ്പം"
 
-#: gtk/gtkfilechooserdefault.c:4675
+#: gtk/gtkfilechooserdefault.c:4676
 msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയവ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4895 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_പേരു്:"
 
-#: gtk/gtkfilechooserdefault.c:4938
+#: gtk/gtkfilechooserdefault.c:4939
 msgid "_Browse for other folders"
 msgstr "മറ്റ് അറകള്‍ക്കായി പരതുക"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5209
 msgid "Type a file name"
 msgstr "ഒരു ഫയലിന്റെ പേരു് ടൈപ്പ് ചെയ്യുക"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5246
 msgid "Create Fo_lder"
 msgstr "_അറ ഉണ്ടാക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5256
 msgid "_Location:"
 msgstr "_സ്ഥാനം:"
 
-#: gtk/gtkfilechooserdefault.c:5459
+#: gtk/gtkfilechooserdefault.c:5460
 msgid "Save in _folder:"
 msgstr "_അറയില്‍ സൂക്ഷിക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:5461
+#: gtk/gtkfilechooserdefault.c:5462
 msgid "Create in _folder:"
 msgstr "_അറയില്‍ ഉണ്ടാക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:7151
+#: gtk/gtkfilechooserdefault.c:7152
 msgid "Cannot change to folder because it is not local"
 msgstr "ലോക്കല്‍ ആയതിനാല്‍ അറയിലേയ്ക്കു് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7776 gtk/gtkfilechooserdefault.c:7797
+#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലുണ്ട്"
 
-#: gtk/gtkfilechooserdefault.c:7887
+#: gtk/gtkfilechooserdefault.c:7888
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8149 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:8152 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
-#: gtk/gtkfilechooserdefault.c:8157 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8919
+#: gtk/gtkfilechooserdefault.c:8920
 msgid "Could not start the search process"
 msgstr "തിരച്ചില്‍ പ്രക്രിയ ആരംഭിക്കുവാനായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8921
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1770,34 +1770,34 @@ msgstr ""
 "indexer ഡെമണിലേക്ക് ഒരു കണക്ഷന്‍ ഉണ്ടാക്കുവാന്‍ പ്രോഗ്റാമിന് സാധ്യമായില്ല.  അത് പ്രവറ്‍ത്തിക്കുന്നു "
 "എന്നുറപ്പാക്കുക."
 
-#: gtk/gtkfilechooserdefault.c:8934
+#: gtk/gtkfilechooserdefault.c:8935
 msgid "Could not send the search request"
 msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ്ക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9401
+#: gtk/gtkfilechooserdefault.c:9402
 msgid "_Search:"
 msgstr "തെരയുക (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10354
+#: gtk/gtkfilechooserdefault.c:10355
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:11029
+#: gtk/gtkfilechooserdefault.c:11030
 msgid "Type name of new folder"
 msgstr "പുതിയ അറയുടെ പേരു് ടൈപ്പ് ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:11207 gtk/gtkfilechooserdefault.c:11229
-#: gtk/gtkfilechooserdefault.c:11300
+#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
+#: gtk/gtkfilechooserdefault.c:11301
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: gtk/gtkfilechooserdefault.c:11247
+#: gtk/gtkfilechooserdefault.c:11248
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11249
+#: gtk/gtkfilechooserdefault.c:11250
 msgid "Yesterday at %H:%M"
 msgstr "ഇന്നലെ %H:%M"
 
@@ -2276,7 +2276,7 @@ msgstr "_പുറത്തു് കടക്കുന്നതു്വരെ 
 msgid "Remember _forever"
 msgstr "_എന്നേക്കുമായി സൂക്ഷിക്കുക"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
+#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
 msgid "Page %u"
 msgstr "താള്‍ %u"

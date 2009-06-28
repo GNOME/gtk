@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-31 00:06-0400\n"
+"POT-Creation-Date: 2009-06-28 00:09-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -373,7 +373,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "ངེས་བདེན་སྐབས་ བྱ་བ་འདི་གི་ དཀར་ཆག་སྟོང་པའི་ པོརོག་སི་ཚུ་ སྦ་བཞགཔ་ཨིན།"
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Sensitive"
 msgstr "ཉེན་ཅན། "
 
@@ -382,7 +382,7 @@ msgid "Whether the action is enabled."
 msgstr "བྱ་བ་དེ་ ལྕོགས་ཅན་ཨིན་ན།"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:293
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
 msgid "Visible"
 msgstr "མཐོང་ཚུགསཔ།"
 
@@ -5562,7 +5562,7 @@ msgstr "གནས་ཚད་ངོས་དཔར་དེ་ མཐོང་�
 msgid "The orientation of the tray"
 msgstr "ཤོག་སྣོད་ཀྱི་ཕྱོགས།"
 
-#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:632
+#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:633
 #, fuzzy
 msgid "Has tooltip"
 msgstr "ལག་ཆས་ཕན་བསླབ།"
@@ -5572,17 +5572,17 @@ msgstr "ལག་ཆས་ཕན་བསླབ།"
 msgid "Whether this tray icon has a tooltip"
 msgstr "ཝིཌི་གེཊི་དེ་ལུ་ ཨིན་པུཊི་གི་ ཆེད་དམིགས་ཡོད་ག་མེད།"
 
-#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
+#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:654
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "འགོ་བཙུགས་ངལ་མཚམས།"
 
-#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "ཐོ་བཀོད་ཀྱི་ནང་དོན་ཚུ།"
 
-#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
+#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:675
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "ལག་ཆས་ཕན་བསླབ།"
@@ -6704,38 +6704,38 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "གྱིབ་མ་ཅན་གྱི་སྒྲོམ་དེ་ མཐོང་སྣང་འདྲེན་ལམ་གྱི་མཐའ་སྐོར་ལུ་ ག་དེ་སྦེ་ འབྲི་དགོཔཨིན་ན་ ཐག་གཅདཔ་ཨིན།"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Widget name"
 msgstr "ཝིཌི་གེཊི་གི་མིང༌།"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The name of the widget"
 msgstr "ཝིཌི་གེཊི་གི་མིང་དེ།"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Parent widget"
 msgstr "རྩ་ལག་གི་ཝིཌི་གེཊི།"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "ཝིཌི་གེཊི་འདི་གི་ རྩ་ལག་གི་ཝིཌི་གེཊི། འཛིན་སྣོད་ཝིཌི་གེཊི་ཅིག་ཨིན་དགོ"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Width request"
 msgstr "རྒྱ་ཚད་ཀྱི་ཞུ་བ།"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "ཝིཌི་གེཊི་གི་ རྒྱ་ཚད་ཀྱི་ཞུ་བ་ ཟུར་བཞག་འབད་ནིའམ་ རང་བཞིན་གྱི་ཞུ་བ་ ལག་ལེན་འཐབ་དགོ་པ་ཅིན་  -༡ ཨིན།"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:508
 msgid "Height request"
 msgstr "མཐོ་ཚད་ཀྱི་ཞུ་བ།"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6743,172 +6743,172 @@ msgstr ""
 "ཝིཌི་གེཊི་གི་ མཐོ་ཚད་ཀྱི་ཞུ་བ་ ཟུར་བཞག་འབད་ནིའམ་ རང་བཞིན་གྱི་ཞུ་བ་ ལག་ལེན་འཐབ་དགོ་པ་ཅིན་  -༡ "
 "ཨིན།"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget is visible"
 msgstr "ཝིཌི་གེཊི་དེ་ མཐོང་ཚུགས་ག་མི་ཚུགས།"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the widget responds to input"
 msgstr "ཝིཌི་གེཊི་དེ་གིས་ ཨིན་པུཊི་ལུ་ ངོས་ལན་འབདཝ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Application paintable"
 msgstr "གློག་རིམ་དེ་ ཚོན་གཏང་བཏུབ།"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the application will paint directly on the widget"
 msgstr "གློག་རིམ་དེ་གིས་ ཝིཌི་གེཊི་ལུ་ ཐད་ཀར་དུ་ ཚོན་གཏང་ག་མི་གཏང་།"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Can focus"
 msgstr "ཆེད་དམིགས་འབད་ཚུགས།"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget can accept the input focus"
 msgstr "ཝིཌི་གེཊི་དེ་གིས་ ཨིན་པུཊི་ཆེད་དམིགས་ལུ་ དང་ལེན་འབད་ཚུགས་ག་མི་ཚུགས།"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Has focus"
 msgstr "ཆེད་དམིགས་འདུག"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget has the input focus"
 msgstr "ཝིཌི་གེཊི་དེ་ལུ་ ཨིན་པུཊི་གི་ ཆེད་དམིགས་ཡོད་ག་མེད།"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Is focus"
 msgstr "ཆེད་དམིགས་ཨིན།"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "ཝིཌི་གེཊི་དེ་ མཐོ་རིམ་གནས་རིམ་ནང་འཁོད་ཀྱི་ ཆེད་དམིགས་ཝིཌི་གེཊི་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Can default"
 msgstr "སྔོན་སྒྲིག་འབད་ཚུགས།"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget can be the default widget"
 msgstr "ཝིཌི་གེཊི་དེ་ སྔོན་སྒྲིག་ཝིཌི་གེཊི་སྦེ་བཏུབ་ག་མི་བཏུབ།"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Has default"
 msgstr "སྔོན་སྒྲིག་འདུག"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Whether the widget is the default widget"
 msgstr "ཝིཌི་གེཊི་དེ་ སྔོན་སྒྲིག་ཝིཌི་གེཊི་དེ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Receives default"
 msgstr "སྔོན་སྒྲིག་ཐོབ་ཨིན།"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "ངེས་བདེན་ཨིན་པ་ཅིན་ ཝིཌི་གེཊི་དེ་གིས་ ཆེད་དམིགས་འབད་པའི་སྐབས་ སྔོན་སྒྲིག་བྱ་བ་དེ་འཐོབ་འོང༌།"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Composite child"
 msgstr "སྣ་སྡུད་ཆ་ལག"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Whether the widget is part of a composite widget"
 msgstr "ཝིཌི་གེཊི་དེ་ སྣ་སྡུད་ཝིཌི་གེཊི་ཅིག་གི་ ཡན་ལག་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Style"
 msgstr "བཟོ་རྣམ།"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "ཚོས་གཞི་ལ་སོགས་པ་ ག་དེ་སྦེ་མཐོངམ་ཨིན་ན་གི་སྐོར་ལས་ བརྡ་དོན་འཛིན་མི་ ཝིཌི་གེཊི་གི་བཟོ་རྣམ།"
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:594
 msgid "Events"
 msgstr "བྱུང་ལས།"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "ཝིཌི་གེཊི་འདི་ལུ་ GdkEvents ག་ཅི་བཟུམ་ཅིག་ འཐོབ་ནི་ཨིན་ན་ གྲོས་ཐག་གཅད་མི་ བྱུང་ལས་ཀྱི་གདོང་ཁེབས།"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:602
 msgid "Extension events"
 msgstr "རྒྱ་བསྐྱེད་ཀྱི་བྱུང་ལས།"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "ཝིཌི་གེཊི་འདི་ལུ་ རྒྱ་བསྐྱེད་བྱུང་ལས་ ག་ཅི་བཟུམ་ཅིག་ འཐོབ་ནི་ཨིན་ན་ གྲོས་ཐག་གཅད་མི་གདོང་ཁེབས།"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:610
 msgid "No show all"
 msgstr "ཆ་མཉམ་མ་སྟོན།"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() གིས་ ཝིཌི་གེཊི་འདི་ལུ་ ཕན་གནོད་མེདཔ་སྦེ་ དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:634
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "ཝིཌི་གེཊི་དེ་ལུ་ ཨིན་པུཊི་གི་ ཆེད་དམིགས་ཡོད་ག་མེད།"
 
-#: gtk/gtkwidget.c:689
+#: gtk/gtkwidget.c:690
 #, fuzzy
 msgid "Window"
 msgstr "སྒོ་སྒྲིག་གི་དབྱེ་བ།"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "The widget's window if it is realized"
 msgstr ""
 
-#: gtk/gtkwidget.c:2212
+#: gtk/gtkwidget.c:2213
 msgid "Interior Focus"
 msgstr "ནང་ཁོངས་ཆེད་དམིགས།"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2214
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ཝིཌི་གེཊི་ཚུ་གི་ནང་ན་ ཆེད་དམིགས་བརྡ་སྟོན་པ་ འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:2219
+#: gtk/gtkwidget.c:2220
 msgid "Focus linewidth"
 msgstr "ཆེད་དམིགས་ཀྱི་ གྱལ་རིམ་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2221
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པའི་ གྱལ་རིམ་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtkwidget.c:2226
+#: gtk/gtkwidget.c:2227
 msgid "Focus line dash pattern"
 msgstr "ཐིག་གི་སྦྲེལ་རྟགས་དཔེ་གཞི་ལུ་ ཆེད་དམིགས་འབད།"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2228
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པ་ འབྲི་ནི་ལུ་ ལག་ལེན་འཐབ་མི་ སྦྲེལ་རྟགས་ཀྱི་དཔེ་གཞི།"
 
-#: gtk/gtkwidget.c:2232
+#: gtk/gtkwidget.c:2233
 msgid "Focus padding"
 msgstr "ཆེད་དམིགས་བར་ཤབས།"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2234
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ཆེད་དམིགས་བརྡ་སྟོན་པ་དང་ ཝིཌི་གེཊི་སྒྲོམ་གྱི་བར་ནའི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtkwidget.c:2238
+#: gtk/gtkwidget.c:2239
 msgid "Cursor color"
 msgstr "འོད་རྟགས་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2240
 msgid "Color with which to draw insertion cursor"
 msgstr "བར་བཙུགས་འོད་རྟགས་ འབྲི་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2245
 msgid "Secondary cursor color"
 msgstr "གལ་གནད་ཆུང་བའི་ འོད་རྟགས་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2246
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6916,43 +6916,43 @@ msgstr ""
 "ཚིག་ཡིག་གཡས་ལས་གཡོན་དང་ གཡོན་ལསགཡས་ལུ་ བླ་བསྲེས་སྦེ་ ཞུན་དག་བརྐྱབ་དགོཔའི་སྐབས་ གལ་གནད་ཆུང་བའི་ "
 "བར་བཙུགས་འོད་རྟགས་ འབྲི་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2251
 msgid "Cursor line aspect ratio"
 msgstr "འོད་རྟགས་གྱལ་རིམ་རྣམ་པ་གི་དཔྱ་ཚད།"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2252
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "བར་བཙུགས་འོད་རྟགས་འབྲི་ནིའི་ དཔྱ་ཚད་ཀྱི་རྣམ་པ།"
 
-#: gtk/gtkwidget.c:2265
+#: gtk/gtkwidget.c:2266
 msgid "Draw Border"
 msgstr "མཐའ་མཚམས་བྲིས།"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2267
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "ཝི་གེཊི་གི་སྐལ་སྤྲོད་ས་སྒོའི་ཕྱི་ཁར་ འབྲི་དགོ་པའི་མངའ་ཁོངས་ཀྱི་ཚད།"
 
-#: gtk/gtkwidget.c:2279
+#: gtk/gtkwidget.c:2280
 msgid "Unvisited Link Color"
 msgstr "ལྟ་སྤྱོད་མ་འབད་བའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2281
 msgid "Color of unvisited links"
 msgstr "ལྟ་སྤྱོད་མ་འབད་བའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2293
+#: gtk/gtkwidget.c:2294
 msgid "Visited Link Color"
 msgstr "ལྟ་སྤྱོད་འབད་ཡོད་པའི་འབྲེལ་ལམ་ཚོས་གཞི། "
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2295
 msgid "Color of visited links"
 msgstr "ལྟ་སྤྱོད་འབད་ཡོད་པའི་འབྲེལ་ལམ་ཚོས་གཞི།"
 
-#: gtk/gtkwidget.c:2308
+#: gtk/gtkwidget.c:2309
 msgid "Wide Separators"
 msgstr "རྒྱ་ཅན་དབྱེ་བྱེད།"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2310
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6960,35 +6960,35 @@ msgstr ""
 "དབྱེ་བྱེད་ཚུ་ལུ་ རིམ་སྒྲིག་འབད་བཏུབ་པའི་རྒྱ་ཚད་ཡོད་དགོཔ་ཨིན་ན་མེན་དང་ ཐིག་གི་ཚབ་ལུ་སྒྲོམ་ཅིག་ལག་ལེན་"
 "འཐབ་ཐོག་ལས་འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkwidget.c:2323
+#: gtk/gtkwidget.c:2324
 msgid "Separator Width"
 msgstr "དབྱེ་བྱེད་ཀྱི་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2325
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "རྒྱ་ཅན་དབྱེ་བྱེད་ཚུ་བདེན་པ་ཨིན་པ་ཅིན་ དབྱེ་བྱེད་ཚུ་གི་རྒྱ་ཚད།"
 
-#: gtk/gtkwidget.c:2338
+#: gtk/gtkwidget.c:2339
 msgid "Separator Height"
 msgstr "དབྱེ་བྱེད་ཀྱི་མཐོ་ཚད།"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2340
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "་གལ་སྲིད\"wide-separators\"དེ་ བདེན་པ་ཨིན་པ་ཅིན་ དབྱེ་བྱེད་ཚུ་གི་མཐོ་ཚད། "
 
-#: gtk/gtkwidget.c:2353
+#: gtk/gtkwidget.c:2354
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ཐད་སྙོམས་ཀྱི་བཤུད་སྒྲིལ་མདའ་རྟགས་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2355
 msgid "The length of horizontal scroll arrows"
 msgstr "ཐད་སྙོམས་ཀྱི་བཤུད་སྒྲིལ་མདའ་རྟགས་ཚུ་གི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:2368
+#: gtk/gtkwidget.c:2369
 msgid "Vertical Scroll Arrow Length"
 msgstr "ཀེར་ཕྲང་གི་བཤུད་སྒྲིལ་མཐའ་རྟགས་ཀྱི་རིང་ཚད།"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2370
 msgid "The length of vertical scroll arrows"
 msgstr "ཀེར་ཕྲང་གི་བཤུད་སྒྲིལ་མཐའ་རྟགས་ཚུ་གི་རིང་ཚད།"
 
