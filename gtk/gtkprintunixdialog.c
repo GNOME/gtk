@@ -1424,12 +1424,6 @@ options_changed_cb (GtkPrintUnixDialog *dialog)
 
   schedule_idle_mark_conflicts (dialog);
 
-  if (priv->initial_settings)
-    {
-      g_object_unref (priv->initial_settings);
-      priv->initial_settings = NULL;
-    }
-
   g_free (priv->waiting_for_printer);
   priv->waiting_for_printer = NULL;
 }
