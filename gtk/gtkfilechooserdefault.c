@@ -191,6 +191,9 @@ typedef enum {
   SHORTCUT_TYPE_RECENT
 } ShortcutType;
 
+#define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
+                         "standard::is-hidden,standard::is-backup,standard::size," \
+                         "standard::content-type,time::modified"
 enum {
   /* the first 3 must be these due to settings caching sort column */
   MODEL_COL_NAME,
@@ -6861,7 +6864,7 @@ set_list_model (GtkFileChooserDefault *impl,
 
   impl->browse_files_model = 
     _gtk_file_system_model_new (impl->current_folder,
-        "standard,time,thumbnail::*",
+        MODEL_ATTRIBUTES,
         file_system_model_set,
         impl,
         MODEL_COL_NUM_COLUMNS,
