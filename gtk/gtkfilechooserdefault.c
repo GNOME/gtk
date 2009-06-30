@@ -4489,6 +4489,10 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_set_title (impl->list_name_column, _("Name"));
 
   renderer = gtk_cell_renderer_pixbuf_new ();
+  /* We set a fixed size so that we get an emoty row even if no icons are loaded yet */
+  gtk_cell_renderer_set_fixed_size (renderer, 
+                                    renderer->xpad * 2 + impl->icon_size,
+                                    renderer->ypad * 2 + impl->icon_size);
   gtk_tree_view_column_pack_start (impl->list_name_column, renderer, FALSE);
 
   impl->list_name_renderer = gtk_cell_renderer_text_new ();
@@ -5699,6 +5703,8 @@ change_icon_theme (GtkFileChooserDefault *impl)
 {
   GtkSettings *settings;
   gint width, height;
+  GtkCellRenderer *renderer;
+  GList *cells;
 
   profile_start ("start", NULL);
 
@@ -5710,6 +5716,16 @@ change_icon_theme (GtkFileChooserDefault *impl)
     impl->icon_size = FALLBACK_ICON_SIZE;
 
   shortcuts_reload_icons (impl);
+  /* the first cell in the first column is the icon column, and we have a fixed size there */
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
+        gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0)));
+  renderer = GTK_CELL_RENDERER (cells->data);
+  gtk_cell_renderer_set_fixed_size (renderer, 
+                                    renderer->xpad * 2 + impl->icon_size,
+                                    renderer->ypad * 2 + impl->icon_size);
+  g_list_free (cells);
+  if (impl->browse_files_model)
+    _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_PIXBUF);
   gtk_widget_queue_resize (impl->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -6676,7 +6692,44 @@ my_g_format_time_for_display (glong secs)
   return date_str;
 }
 
-static gboolean 
+#define copy_attribute(to, from, attribute) G_STMT_START { \
+  GFileAttributeType type; \
+  gpointer value; \
+\
+  if (g_file_info_get_attribute_data (from, attribute, &type, &value, NULL)) \
+    g_file_info_set_attribute (to, attribute, type, value); \
+}G_STMT_END
+
+static void
+file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer data)
+{
+  GtkFileSystemModel *model = data; /* might be unreffed if operation was cancelled */
+  GFile *file = G_FILE (object);
+  GFileInfo *queried, *info;
+  GtkTreeIter iter;
+
+  queried = g_file_query_info_finish (file, res, NULL);
+  if (queried == NULL)
+    return;
+
+  /* now we know model is valid */
+
+  /* file was deleted */
+  if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
+    return;
+
+  info = g_file_info_dup (_gtk_file_system_model_get_info (model, &iter));
+
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
+
+  _gtk_file_system_model_update_file (model, file, info, FALSE);
+
+  g_object_unref (info);
+}
+
+static gboolean
 file_system_model_set (GtkFileSystemModel *model,
                        GFile              *file,
                        GFileInfo          *info,
@@ -6708,7 +6761,52 @@ file_system_model_set (GtkFileSystemModel *model,
       break;
     case MODEL_COL_PIXBUF:
       if (info)
-        g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size));
+        {
+          if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
+            {
+              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size));
+            }
+          else
+            {
+              GtkTreeModel *tree_model;
+              GtkTreePath *path, *start, *end;
+              GtkTreeIter iter;
+
+              if (impl->browse_files_tree_view == NULL ||
+                  g_file_info_has_attribute (info, "filechooser::queried"))
+                return FALSE;
+
+              tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
+              if (tree_model != GTK_TREE_MODEL (model))
+                return FALSE;
+
+              if (!_gtk_file_system_model_get_iter_for_file (impl->browse_files_model,
+                                                              &iter,
+                                                              file))
+                g_assert_not_reached ();
+              if (!gtk_tree_view_get_visible_range (GTK_TREE_VIEW (impl->browse_files_tree_view), &start, &end))
+                return FALSE;
+              path = gtk_tree_model_get_path (tree_model, &iter);
+              if (gtk_tree_path_compare (start, path) != 1 &&
+                  gtk_tree_path_compare (path, end) != 1)
+                {
+                  g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
+                  g_file_query_info_async (file,
+                                           G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
+                                           G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
+                                           G_FILE_ATTRIBUTE_STANDARD_ICON,
+                                           0,
+                                           G_PRIORITY_DEFAULT,
+                                           _gtk_file_system_model_get_cancellable (model),
+                                           file_system_model_got_thumbnail,
+                                           model);
+                }
+              gtk_tree_path_free (path);
+              gtk_tree_path_free (start);
+              gtk_tree_path_free (end);
+              return FALSE;
+            }
+        }
       else
         g_value_set_object (value, NULL);
       break;
