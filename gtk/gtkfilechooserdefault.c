@@ -216,6 +216,12 @@ enum {
   RECENT_MODEL_COL_NUM_COLUMNS
 };
 
+typedef enum {
+  GTK_FILE_SYSTEM_MODEL_INFO,
+  GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME,
+  GTK_FILE_SYSTEM_MODEL_N_COLUMNS
+} GtkFileSystemModelColumns;
+
 /* Identifiers for target types */
 enum {
   GTK_TREE_MODEL_ROW,
@@ -6618,10 +6624,18 @@ show_and_select_files_finished_loading (GtkFolder *folder,
   for (l = data->files; l; l = l->next)
     {
       GFile *file;
+      GtkTreePath *path;
+      GtkTreeIter iter;
 
       file = l->data;
-      _gtk_file_system_model_path_do (data->impl->browse_files_model, file,
-				      select_func, data->impl);
+      if (!_gtk_file_system_model_get_iter_for_file (data->impl->browse_files_model,
+                                                     &iter,
+                                                     file))
+        return;
+
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (data->impl->browse_files_model), &iter);
+      select_func (data->impl->browse_files_model, path, &iter, data->impl);
+      gtk_tree_path_free (path);
     }
 
   browse_files_center_selected_row (data->impl);
@@ -6736,6 +6750,7 @@ pending_select_files_process (GtkFileChooserDefault *impl)
 /* Callback used when the file system model finishes loading */
 static void
 browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
+                                        GError                *error,
 					GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
@@ -6791,6 +6806,30 @@ stop_loading_and_clear_list_model (GtkFileChooserDefault *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 }
 
+static gboolean 
+file_system_model_set (GtkFileSystemModel *model,
+                       GFile              *file,
+                       GFileInfo          *info,
+                       int                 column,
+                       GValue             *value,
+                       gpointer            user_data)
+{
+  switch (column)
+    {
+    case GTK_FILE_SYSTEM_MODEL_INFO:
+      g_value_set_object (value, info);
+      break;
+    case GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME:
+      if (info)
+	g_value_set_string (value, g_file_info_get_display_name (info));
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
 /* Gets rid of the old list model and creates a new one for the current folder */
 static gboolean
 set_list_model (GtkFileChooserDefault *impl,
@@ -6805,10 +6844,15 @@ set_list_model (GtkFileChooserDefault *impl,
   set_busy_cursor (impl, TRUE);
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
-  impl->browse_files_model = _gtk_file_system_model_new (impl->file_system,
-							 impl->current_folder, 0,
-							 "standard,time,thumbnail::*",
-							 error);
+  impl->browse_files_model = 
+    _gtk_file_system_model_new (impl->current_folder,
+        "standard,time,thumbnail::*",
+        file_system_model_set,
+        impl,
+        GTK_FILE_SYSTEM_MODEL_N_COLUMNS,
+        G_TYPE_FILE_INFO,
+        G_TYPE_STRING);
+
   if (!impl->browse_files_model)
     {
       set_busy_cursor (impl, FALSE);
@@ -7414,12 +7458,20 @@ gtk_file_chooser_default_unselect_file (GtkFileChooser *chooser,
 					GFile          *file)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+  GtkTreePath *path;
+  GtkTreeIter iter;
 
   if (!impl->browse_files_model)
     return;
 
-  _gtk_file_system_model_path_do (impl->browse_files_model, file,
-				  unselect_func, impl);
+  if (!_gtk_file_system_model_get_iter_for_file (impl->browse_files_model,
+                                                 &iter,
+                                                 file))
+    return;
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
+  unselect_func (impl->browse_files_model, path, &iter, impl);
+  gtk_tree_path_free (path);
 }
 
 static gboolean
