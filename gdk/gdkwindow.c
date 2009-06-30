@@ -6990,6 +6990,15 @@ gdk_window_get_origin (GdkWindow *window,
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
+  if (GDK_WINDOW_DESTROYED (window))
+    {
+      if (x)
+	*x = 0;
+      if (y)
+	*y = 0;
+      return 0;
+    }
+  
   private = (GdkWindowObject *) window;
 
   GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_root_coords (window,
@@ -7012,10 +7021,8 @@ gdk_window_get_origin (GdkWindow *window,
  * window coordinates. This is similar to
  * gdk_window_get_origin() but allows you go pass
  * in any position in the window, not just the origin.
- *
- * Return value: not meaningful, ignore
  */
-gint
+void
 gdk_window_get_root_coords (GdkWindow *window,
 			    gint       x,
 			    gint       y,
@@ -7028,6 +7035,15 @@ gdk_window_get_root_coords (GdkWindow *window,
 
   private = (GdkWindowObject *) window;
 
+  if (GDK_WINDOW_DESTROYED (window))
+    {
+      if (x)
+	*root_x = x;
+      if (y)
+	*root_y = y;
+      return;
+    }
+  
   GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_root_coords (window,
 							      x + private->abs_x,
 							      y + private->abs_y,

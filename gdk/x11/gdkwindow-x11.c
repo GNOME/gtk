@@ -2788,19 +2788,14 @@ gdk_window_x11_get_root_coords (GdkWindow *window,
 {
   gint return_val;
   Window child;
-  gint tx = 0;
-  gint ty = 0;
+  gint tx;
+  gint ty;
   
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
-					  GDK_WINDOW_XID (window),
-					  GDK_WINDOW_XROOTWIN (window),
-					  x, y, &tx, &ty,
-					  &child);
-    }
-  else
-    return_val = 0;
+  return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
+				      GDK_WINDOW_XID (window),
+				      GDK_WINDOW_XROOTWIN (window),
+				      x, y, &tx, &ty,
+				      &child);
   
   if (root_x)
     *root_x = tx;

@@ -531,7 +531,7 @@ void	      gdk_window_get_position	 (GdkWindow	  *window,
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
-gint	      gdk_window_get_root_coords (GdkWindow	  *window,
+void	      gdk_window_get_root_coords (GdkWindow	  *window,
 					  gint             x,
 					  gint             y,
 					  gint		  *root_x,
