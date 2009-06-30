@@ -190,7 +190,7 @@ typedef struct _GtkWindowPrivate GtkWindowPrivate;
 struct _GtkWindowPrivate
 {
   GtkMnemonicHash *mnemonic_hash;
-  
+
   guint above_initially : 1;
   guint below_initially : 1;
   guint fullscreen_initially : 1;
@@ -1529,6 +1529,7 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_widget_set_name (button, "gtk-window-decorated-minimize-button");
       image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -1538,6 +1539,7 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_widget_set_name (button, "gtk-window-decorated-maximize-button");
       image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -1547,6 +1549,7 @@ ensure_title_box (GtkWindow *window)
 
       button = gtk_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+      gtk_widget_set_name (button, "gtk-window-decorated-close-button");
       image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -1631,6 +1634,7 @@ gtk_window_set_title (GtkWindow   *window,
     {
       GtkWidget *child = gtk_label_new (title);
 
+      gtk_widget_set_name (child, "gtk-window-decorated-title-label");
       gtk_widget_show (child);
       gtk_window_set_label_widget (window, child);
     }
@@ -4496,7 +4500,7 @@ gtk_window_move (GtkWindow *window,
                             "decoration-border-left", &frame_left,
                             NULL);
     }
-  
+
   if (gtk_widget_get_mapped (widget))
     {
       /* we have now sent a request with this position
