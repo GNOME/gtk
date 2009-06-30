@@ -232,8 +232,6 @@ struct _GtkFileChooserDefault
    */
   GtkTreeModel *shortcuts_combo_filter_model;
 
-  GtkTreeModelSort *sort_model;
-
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
