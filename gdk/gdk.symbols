@@ -717,6 +717,10 @@ gdk_window_thaw_updates
 gdk_window_set_composited
 gdk_pointer_grab
 gdk_window_beep
+gdk_window_set_has_offscreen_children
+gdk_window_get_has_offscreen_children
+gdk_window_offscreen_children_changed
+gdk_window_ensure_native
 #endif
 #endif
 
