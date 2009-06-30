@@ -877,14 +877,11 @@ store_selection_foreach (GtkTreeModel *model,
 			 gpointer      data)
 {
   GtkFileChooserDefault *impl;
-  GtkTreeIter child_iter;
   GFile *file;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (data);
 
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, iter);
-
-  file = _gtk_file_system_model_get_file (impl->browse_files_model, &child_iter);
+  file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
   pending_select_files_add (impl, file);
 }
 
@@ -947,9 +944,6 @@ gtk_file_chooser_default_finalize (GObject *object)
   /* Free all the Models we have */
   if (impl->browse_files_model)
     g_object_unref (impl->browse_files_model);
-
-  if (impl->sort_model)
-    g_object_unref (impl->sort_model);
 
   search_clear_model (impl, FALSE);
   recent_clear_model (impl, FALSE);
@@ -5874,6 +5868,9 @@ set_sort_column (GtkFileChooserDefault *impl)
   GtkTreeSortable *sortable;
 
   sortable = GTK_TREE_SORTABLE (gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view)));
+  /* can happen when we're still populating the model */
+  if (sortable == NULL)
+    return;
 
   gtk_tree_sortable_set_sort_column_id (sortable,
                                         impl->sort_column,
@@ -6225,27 +6222,15 @@ load_set_model (GtkFileChooserDefault *impl)
   profile_start ("start", NULL);
 
   g_assert (impl->browse_files_model != NULL);
-  g_assert (impl->sort_model == NULL);
-
-  profile_msg ("    gtk_tree_model_sort_new_with_model start", NULL);
-  impl->sort_model = (GtkTreeModelSort *)gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (impl->browse_files_model));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->sort_model), MODEL_COL_MTIME, mtime_sort_func, impl, NULL);
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->sort_model), NULL, NULL, NULL);
-  profile_msg ("    gtk_tree_model_sort_new_with_model end", NULL);
-
-  g_signal_connect (impl->sort_model, "sort-column-changed",
-		    G_CALLBACK (list_sort_column_changed_cb), impl);
 
   profile_msg ("    gtk_tree_view_set_model start", NULL);
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-			   GTK_TREE_MODEL (impl->sort_model));
+			   GTK_TREE_MODEL (impl->browse_files_model));
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (impl->browse_files_tree_view));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->browse_files_tree_view),
 				   MODEL_COL_NAME);
-  profile_msg ("    gtk_tree_view_set_model end", NULL);
   set_sort_column (impl);
+  profile_msg ("    gtk_tree_view_set_model end", NULL);
   impl->list_sort_ascending = TRUE;
 
   profile_end ("end", NULL);
@@ -6311,11 +6296,11 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
   GtkTreeIter dummy_iter;
   GtkTreeModel *tree_model;
 
-  if (!impl->sort_model)
-    return;
-
   path = gtk_tree_path_new_from_indices (0, -1);
   tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
+
+  if (!tree_model)
+    return;
 
   /* If the list is empty, do nothing. */
   if (gtk_tree_model_get_iter (tree_model, &dummy_iter, path))
@@ -6516,7 +6501,6 @@ pending_select_files_process (GtkFileChooserDefault *impl)
 {
   g_assert (impl->load_state == LOAD_FINISHED);
   g_assert (impl->browse_files_model != NULL);
-  g_assert (impl->sort_model != NULL);
 
   if (impl->pending_select_files)
     {
@@ -6591,12 +6575,6 @@ stop_loading_and_clear_list_model (GtkFileChooserDefault *impl)
       impl->browse_files_model = NULL;
     }
 
-  if (impl->sort_model)
-    {
-      g_object_unref (impl->sort_model);
-      impl->sort_model = NULL;
-    }
-  
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 }
 
@@ -6800,12 +6778,22 @@ set_list_model (GtkFileChooserDefault *impl,
         G_TYPE_STRING,
         PANGO_TYPE_ELLIPSIZE_MODE);
 
+  _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
+
+  profile_msg ("    set sort function", NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), MODEL_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (impl->browse_files_model), NULL, NULL, NULL);
+  set_sort_column (impl);
+  impl->list_sort_ascending = TRUE;
+  g_signal_connect (impl->browse_files_model, "sort-column-changed",
+		    G_CALLBACK (list_sort_column_changed_cb), impl);
+
   load_setup_timer (impl); /* This changes the state to LOAD_PRELOAD */
 
   g_signal_connect (impl->browse_files_model, "finished-loading",
 		    G_CALLBACK (browse_files_model_finished_loading_cb), impl);
-
-  _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
 
   install_list_model_filter (impl);
 
@@ -6886,18 +6874,12 @@ update_chooser_entry (GtkFileChooserDefault *impl)
     }
   else if (closure.num_selected == 1)
     {
-      GtkTreeIter child_iter;
-      
       if (impl->operation_mode == OPERATION_MODE_BROWSE)
         {
           GFileInfo *info;
           gboolean change_entry;
 
-          gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-                                                          &child_iter,
-                                                          &closure.first_selected_iter);
-
-          info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
+          info = _gtk_file_system_model_get_info (impl->browse_files_model, &closure.first_selected_iter);
 
           /* If the cursor moved to the row of the newly created folder, 
            * retrieving info will return NULL.
@@ -7313,12 +7295,10 @@ select_func (GtkFileSystemModel *model,
 {
   GtkFileChooserDefault *impl = user_data;
   GtkTreeSelection *selection;
-  GtkTreeIter sorted_iter;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
-  gtk_tree_model_sort_convert_child_iter_to_iter (impl->sort_model, &sorted_iter, iter);
-  gtk_tree_selection_select_iter (selection, &sorted_iter);
+  gtk_tree_selection_select_iter (selection, iter);
 }
 
 static gboolean
@@ -7382,21 +7362,18 @@ gtk_file_chooser_default_unselect_file (GtkFileChooser *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   GtkTreeView *tree_view = GTK_TREE_VIEW (impl->browse_files_tree_view);
-  GtkTreeIter iter, sorted_iter;
- 
-   if (!impl->browse_files_model)
-     return;
- 
+  GtkTreeIter iter;
+
+  if (!impl->browse_files_model)
+    return;
+
   if (!_gtk_file_system_model_get_iter_for_file (impl->browse_files_model,
                                                  &iter,
                                                  file))
     return;
 
-  gtk_tree_model_sort_convert_child_iter_to_iter (impl->sort_model,
-                                                  &sorted_iter,
-                                                  &iter);
   gtk_tree_selection_unselect_iter (gtk_tree_view_get_selection (tree_view),
-                                    &sorted_iter);
+                                    &iter);
 }
 
 static gboolean
@@ -7440,7 +7417,7 @@ gtk_file_chooser_default_select_all (GtkFileChooser *chooser)
     }
 
   if (impl->select_multiple)
-    gtk_tree_model_foreach (GTK_TREE_MODEL (impl->sort_model), 
+    gtk_tree_model_foreach (GTK_TREE_MODEL (impl->browse_files_model), 
 			    maybe_select, impl);
 }
 
@@ -7556,13 +7533,11 @@ get_files_foreach (GtkTreeModel *model,
   struct get_files_closure *info;
   GFile *file;
   GtkFileSystemModel *fs_model;
-  GtkTreeIter sel_iter;
 
   info = data;
   fs_model = info->impl->browse_files_model;
-  gtk_tree_model_sort_convert_iter_to_child_iter (info->impl->sort_model, &sel_iter, iter);
 
-  file = _gtk_file_system_model_get_file (fs_model, &sel_iter);
+  file = _gtk_file_system_model_get_file (fs_model, iter);
   if (!file)
     return; /* We are on the editable row */
 
@@ -8108,13 +8083,10 @@ switch_folder_foreach_cb (GtkTreeModel      *model,
 			  gpointer           data)
 {
   struct switch_folder_closure *closure;
-  GtkTreeIter child_iter;
 
   closure = data;
 
-  gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
-
-  closure->file = _gtk_file_system_model_get_file (closure->impl->browse_files_model, &child_iter);
+  closure->file = _gtk_file_system_model_get_file (closure->impl->browse_files_model, iter);
   closure->num_selected++;
 }
 
@@ -8149,7 +8121,7 @@ get_selected_file_info_from_file_list (GtkFileChooserDefault *impl,
 				       gboolean              *had_selection)
 {
   GtkTreeSelection *selection;
-  GtkTreeIter iter, child_iter;
+  GtkTreeIter iter;
   GFileInfo *info;
 
   g_assert (!impl->select_multiple);
@@ -8162,11 +8134,7 @@ get_selected_file_info_from_file_list (GtkFileChooserDefault *impl,
 
   *had_selection = TRUE;
 
-  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-						  &child_iter,
-						  &iter);
-
-  info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
+  info = _gtk_file_system_model_get_info (impl->browse_files_model, &iter);
   return info;
 }
 
