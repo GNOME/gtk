@@ -7430,41 +7430,26 @@ gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
 }
 
 static void
-unselect_func (GtkFileSystemModel *model,
-	       GtkTreePath        *path,
-	       GtkTreeIter        *iter,
-	       gpointer            user_data)
-{
-  GtkFileChooserDefault *impl = user_data;
-  GtkTreeView *tree_view = GTK_TREE_VIEW (impl->browse_files_tree_view);
-  GtkTreePath *sorted_path;
-
-  sorted_path = gtk_tree_model_sort_convert_child_path_to_path (impl->sort_model,
-								path);
-  gtk_tree_selection_unselect_path (gtk_tree_view_get_selection (tree_view),
-				    sorted_path);
-  gtk_tree_path_free (sorted_path);
-}
-
-static void
 gtk_file_chooser_default_unselect_file (GtkFileChooser *chooser,
 					GFile          *file)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  GtkTreePath *path;
-  GtkTreeIter iter;
-
-  if (!impl->browse_files_model)
-    return;
-
+  GtkTreeView *tree_view = GTK_TREE_VIEW (impl->browse_files_tree_view);
+  GtkTreeIter iter, sorted_iter;
+ 
+   if (!impl->browse_files_model)
+     return;
+ 
   if (!_gtk_file_system_model_get_iter_for_file (impl->browse_files_model,
                                                  &iter,
                                                  file))
     return;
 
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
-  unselect_func (impl->browse_files_model, path, &iter, impl);
-  gtk_tree_path_free (path);
+  gtk_tree_model_sort_convert_child_iter_to_iter (impl->sort_model,
+                                                  &sorted_iter,
+                                                  &iter);
+  gtk_tree_selection_unselect_iter (gtk_tree_view_get_selection (tree_view),
+                                    &sorted_iter);
 }
 
 static gboolean
