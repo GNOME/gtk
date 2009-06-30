@@ -399,26 +399,7 @@ static void remove_bookmark_button_clicked_cb (GtkButton             *button,
 static void save_folder_combo_changed_cb      (GtkComboBox           *combo,
 					       GtkFileChooserDefault *impl);
 
-static void list_icon_data_func (GtkTreeViewColumn *tree_column,
-				 GtkCellRenderer   *cell,
-				 GtkTreeModel      *tree_model,
-				 GtkTreeIter       *iter,
-				 gpointer           data);
-static void list_name_data_func (GtkTreeViewColumn *tree_column,
-				 GtkCellRenderer   *cell,
-				 GtkTreeModel      *tree_model,
-				 GtkTreeIter       *iter,
-				 gpointer           data);
-static void list_size_data_func (GtkTreeViewColumn *tree_column,
-				 GtkCellRenderer   *cell,
-				 GtkTreeModel      *tree_model,
-				 GtkTreeIter       *iter,
-				 gpointer           data);
-static void list_mtime_data_func (GtkTreeViewColumn *tree_column,
-				  GtkCellRenderer   *cell,
-				  GtkTreeModel      *tree_model,
-				  GtkTreeIter       *iter,
-				  gpointer           data);
+static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 
 static GFileInfo       *get_list_file_info (GtkFileChooserDefault *impl,
 					    GtkTreeIter           *iter);
@@ -4609,8 +4590,6 @@ create_file_list (GtkFileChooserDefault *impl)
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (impl->list_name_column, renderer, FALSE);
-  gtk_tree_view_column_set_cell_data_func (impl->list_name_column, renderer,
-					   list_icon_data_func, impl, NULL);
 
   impl->list_name_renderer = gtk_cell_renderer_text_new ();
   g_object_set (impl->list_name_renderer,
@@ -4621,8 +4600,6 @@ create_file_list (GtkFileChooserDefault *impl)
   g_signal_connect (impl->list_name_renderer, "editing-canceled",
 		    G_CALLBACK (renderer_editing_canceled_cb), impl);
   gtk_tree_view_column_pack_start (impl->list_name_column, impl->list_name_renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (impl->list_name_column, impl->list_name_renderer,
-					   list_name_data_func, impl, NULL);
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), impl->list_name_column);
 
@@ -4637,8 +4614,6 @@ create_file_list (GtkFileChooserDefault *impl)
                 "alignment", PANGO_ALIGN_RIGHT,
                 NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   list_size_data_func, impl, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), column);
   impl->list_size_column = column;
 
@@ -4650,12 +4625,11 @@ create_file_list (GtkFileChooserDefault *impl)
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   list_mtime_data_func, impl, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->browse_files_tree_view), column);
   impl->list_mtime_column = column;
   
   file_list_set_sort_column_ids (impl);
+  update_cell_renderer_attributes (impl);
 
   gtk_widget_show_all (swin);
 
@@ -5517,6 +5491,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
 		set_select_multiple (impl, FALSE, TRUE);
 	      }
 	    impl->action = action;
+            update_cell_renderer_attributes (impl);
 	    update_appearance (impl);
 	    settings_load (impl);
 	  }
@@ -10812,364 +10787,67 @@ get_list_file_info (GtkFileChooserDefault *impl,
 }
 
 static void
-list_icon_data_func (GtkTreeViewColumn *tree_column,
-		     GtkCellRenderer   *cell,
-		     GtkTreeModel      *tree_model,
-		     GtkTreeIter       *iter,
-		     gpointer           data)
+update_cell_renderer_attributes (GtkFileChooserDefault *impl)
 {
-  GtkFileChooserDefault *impl = data;
-  GtkTreeIter child_iter;
-  GdkPixbuf *pixbuf = NULL;
-  gboolean sensitive = TRUE;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GList *walk, *list;
+  gboolean always_sensitive;
 
-  profile_start ("start", NULL);
-  
-  switch (impl->operation_mode)
+  always_sensitive = impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
+                     impl->action != GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+
+  /* name */
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0);
+  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+  for (walk = list; walk; walk = walk->next)
     {
-    case OPERATION_MODE_SEARCH:
-      {
-        GtkTreeIter child_iter;
-        gboolean is_folder;
-
-        search_get_valid_child_iter (impl, &child_iter, iter);
-        gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                            MODEL_COL_PIXBUF, &pixbuf,
-                            MODEL_COL_IS_FOLDER, &is_folder,
-                            -1);
-        
-        if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-            impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-          sensitive = is_folder;
-      }
-      break;
-
-    case OPERATION_MODE_RECENT:
-      {
-        GtkTreeIter child_iter;
-        GtkRecentInfo *info;
-        gboolean is_folder;
-
-        recent_get_valid_child_iter (impl, &child_iter, iter);
-        gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
-                            RECENT_MODEL_COL_INFO, &info,
-                            MODEL_COL_IS_FOLDER, &is_folder,
-                            -1);
-        
-        pixbuf = gtk_recent_info_get_icon (info, impl->icon_size);
-      
-        if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER || 
-            impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-          sensitive = is_folder;
-      }
-      break;
-    
-    case OPERATION_MODE_BROWSE:
-      {
-	GFileInfo *info;
-	GFile *file;
-
-        info = get_list_file_info (impl, iter);
-
-        gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-                                                        &child_iter,
-                                                        iter);
-        file = _gtk_file_system_model_get_file (impl->browse_files_model, &child_iter);
-        if (file)
-          {
-            if (info)
-              {
-                /* FIXME: NULL GError */
-		pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (impl), impl->icon_size);
-	      }
-          }
-        else
-          {
-            /* We are on the editable row */
-            pixbuf = NULL;
-          }
-
-        if (info &&
-            (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-             impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
-          sensitive = _gtk_file_info_consider_as_directory (info);
-      }
-      break;
-    }
-    
-  g_object_set (cell,
-		"pixbuf", pixbuf,
-		"sensitive", sensitive,
-		NULL);
-    
-  if (pixbuf)
-    g_object_unref (pixbuf);
-
-  profile_end ("end", NULL);
-}
-
-static void
-list_name_data_func (GtkTreeViewColumn *tree_column,
-		     GtkCellRenderer   *cell,
-		     GtkTreeModel      *tree_model,
-		     GtkTreeIter       *iter,
-		     gpointer           data)
-{
-  GtkFileChooserDefault *impl = data;
-  GFileInfo *info;
-  gboolean sensitive = TRUE;
-
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
-    {
-      GtkTreeIter child_iter;
-      gchar *display_name;
-      gboolean is_folder;
-
-      search_get_valid_child_iter (impl, &child_iter, iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                          MODEL_COL_NAME, &display_name,
-                          MODEL_COL_IS_FOLDER, &is_folder,
-			  -1);
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      renderer = walk->data;
+      if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
         {
-          sensitive = is_folder;
+          gtk_tree_view_column_set_attributes (column, renderer, 
+                                               "pixbuf", MODEL_COL_PIXBUF,
+                                               NULL);
         }
-
-      g_object_set (cell,
-		    "text", display_name,
-		    "sensitive", sensitive,
-		    "ellipsize", PANGO_ELLIPSIZE_END,
-		    NULL);
-      
-      return;
-    }
-
-  if (impl->operation_mode == OPERATION_MODE_RECENT)
-    {
-      GtkTreeIter child_iter;
-      GtkRecentInfo *recent_info;
-      gchar *display_name;
-      gboolean is_folder;
-
-      recent_get_valid_child_iter (impl, &child_iter, iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
-                          RECENT_MODEL_COL_INFO, &recent_info,
-                          MODEL_COL_IS_FOLDER, &is_folder,
-                          -1);
-      
-      display_name = gtk_recent_info_get_short_name (recent_info);
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      else
         {
-          sensitive = is_folder;
+          gtk_tree_view_column_set_attributes (column, renderer, 
+                                               "text", MODEL_COL_NAME,
+                                               "ellipsize", MODEL_COL_ELLIPSIZE,
+                                               NULL);
         }
-
-      g_object_set (cell,
-                    "text", display_name,
-                    "sensitive", sensitive,
-                    "ellipsize", PANGO_ELLIPSIZE_END,
-                    NULL);
-
-      g_free (display_name);
-
-      return;
-    }
-
-  info = get_list_file_info (impl, iter);
-  sensitive = TRUE;
-
-  if (!info)
-    {
-      g_object_set (cell,
-		    "text", DEFAULT_NEW_FOLDER_NAME,
-		    "sensitive", TRUE,
-		    "ellipsize", PANGO_ELLIPSIZE_NONE,
-		    NULL);
-
-      return;
-    }
-
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    {
-      sensitive = _gtk_file_info_consider_as_directory (info);
-    }
-
-  g_object_set (cell,
-		"text", g_file_info_get_display_name (info),
-		"sensitive", sensitive,
-		"ellipsize", PANGO_ELLIPSIZE_END,
-		NULL);
-}
-
-static void
-list_size_data_func (GtkTreeViewColumn *tree_column,
-		     GtkCellRenderer   *cell,
-		     GtkTreeModel      *tree_model,
-		     GtkTreeIter       *iter,
-		     gpointer           data)
-{
-  GtkFileChooserDefault *impl = data;
-  GFileInfo *info;
-  goffset size;
-  gchar *str;
-  gboolean sensitive = TRUE;
-
-  if (impl->operation_mode == OPERATION_MODE_RECENT)
-    return;
-
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
-    {
-      GtkTreeIter child_iter;
-      gboolean is_folder = FALSE;
-
-      search_get_valid_child_iter (impl, &child_iter, iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                          MODEL_COL_SIZE, &size,
-                          MODEL_COL_IS_FOLDER, &is_folder,
-			  -1);
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-        sensitive = is_folder ? TRUE : FALSE;
-
-      if (!is_folder)
-        str = g_format_size_for_display (size);
+      if (always_sensitive)
+        g_object_set (renderer, "sensitive", TRUE, NULL);
       else
-        str = NULL;
-
-      g_object_set (cell,
-                    "text", str,
-                    "sensitive", sensitive,
-                    NULL);
-
-      g_free (str);
-
-      return;
+        gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_FOLDER);
     }
+  g_list_free (list);
 
-  info = get_list_file_info (impl, iter);
-
-  if (!info || _gtk_file_info_consider_as_directory (info))
-    {
-      g_object_set (cell,
-		    "text", NULL,
-		    "sensitive", sensitive,
-		    NULL);
-      return;
-    }
-
-  size = g_file_info_get_size (info);
-  str = g_format_size_for_display (size);
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-      impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-    sensitive = FALSE;
-
-  g_object_set (cell,
-  		"text", str,
-		"sensitive", sensitive,
-		NULL);
-
-  g_free (str);
-}
-
-/* Tree column data callback for the file list; fetches the mtime of a file */
-static void
-list_mtime_data_func (GtkTreeViewColumn *tree_column,
-                  GtkCellRenderer   *cell,
-		      GtkTreeModel      *tree_model,
-		      GtkTreeIter       *iter,
-		      gpointer           data)
-{
-  GtkFileChooserDefault *impl;
-  GTimeVal timeval = { 0, };
-  time_t time_mtime;
-  gchar *date_str = NULL;
-  gboolean sensitive = TRUE;
-#ifdef G_OS_WIN32
-  const char *locale, *dot = NULL;
-  gint64 codepage = -1;
-  char charset[20];
-#endif
-
-  impl = data;
-
-  if (impl->operation_mode == OPERATION_MODE_SEARCH)
-    {
-      GtkTreeIter child_iter;
-      guint64 mtime;
-      gboolean is_folder;
-
-      search_get_valid_child_iter (impl, &child_iter, iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->search_model), &child_iter,
-                          MODEL_COL_MTIME, &mtime,
-                          MODEL_COL_IS_FOLDER, &is_folder,
-			  -1);
-
-      time_mtime = (time_t) mtime;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-        sensitive = is_folder;
-    }
-  else if (impl->operation_mode == OPERATION_MODE_RECENT)
-    {
-      GtkTreeIter child_iter;
-      GtkRecentInfo *info;
-      gboolean is_folder;
-
-      recent_get_valid_child_iter (impl, &child_iter, iter);
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->recent_model), &child_iter,
-                          RECENT_MODEL_COL_INFO, &info,
-                          MODEL_COL_IS_FOLDER, &is_folder,
-                          -1);
-
-      if (info)
-        time_mtime = gtk_recent_info_get_modified (info);
-      else
-        time_mtime = 0;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-          impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-        sensitive = is_folder;
-    }
+  /* size */
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 1);
+  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+  renderer = list->data;
+  gtk_tree_view_column_set_attributes (column, renderer, 
+                                       "text", MODEL_COL_SIZE_TEXT,
+                                       NULL);
+  if (always_sensitive)
+    g_object_set (renderer, "sensitive", TRUE, NULL);
   else
-    {
-      GFileInfo *info;
+    gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_FOLDER);
+  g_list_free (list);
 
-      info = get_list_file_info (impl, iter);
-      if (!info)
-	{
-	  g_object_set (cell,
-			"text", "",
-			"sensitive", TRUE,
-			NULL);
-	  return;
-	}
-
-      g_file_info_get_modification_time (info, &timeval);
-      time_mtime = timeval.tv_sec;
-
-      if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-	sensitive = _gtk_file_info_consider_as_directory (info);
-    }
-
-  if (G_UNLIKELY (time_mtime == 0))
-    date_str = g_strdup (_("Unknown"));
+  /* mtime */
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 2);
+  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+  renderer = list->data;
+  gtk_tree_view_column_set_attributes (column, renderer, 
+                                       "text", MODEL_COL_MTIME_TEXT,
+                                       NULL);
+  if (always_sensitive)
+    g_object_set (renderer, "sensitive", TRUE, NULL);
   else
-    date_str = my_g_format_time_for_display (time_mtime);
-
-  g_object_set (cell,
-		"text", date_str,
-		"sensitive", sensitive,
-		NULL);
-  g_free (date_str);
+    gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_FOLDER);
+  g_list_free (list);
 }
 
 GtkWidget *
