@@ -338,29 +338,19 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
   GType *new_columns;
+  int i;
 
   if (list_store->n_columns == n_columns)
     return;
 
-  new_columns = g_new0 (GType, n_columns);
-  if (list_store->column_headers)
-    {
-      /* copy the old header orders over */
-      if (n_columns >= list_store->n_columns)
-	memcpy (new_columns, list_store->column_headers, list_store->n_columns * sizeof (gchar *));
-      else
-	memcpy (new_columns, list_store->column_headers, n_columns * sizeof (GType));
-
-      g_free (list_store->column_headers);
-    }
+  list_store->column_headers = g_renew (GType, list_store->column_headers, n_columns);
+  for (i = list_store->n_columns; i < n_columns; i++)
+    list_store->column_headers[i] = G_TYPE_INVALID;
+  list_store->n_columns = n_columns;
 
   if (list_store->sort_list)
     _gtk_tree_data_list_header_free (list_store->sort_list);
-
   list_store->sort_list = _gtk_tree_data_list_header_new (n_columns, list_store->column_headers);
-
-  list_store->column_headers = new_columns;
-  list_store->n_columns = n_columns;
 }
 
 static void
