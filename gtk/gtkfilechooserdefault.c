@@ -369,11 +369,6 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkTreeViewColumn     *column,
 					GtkFileChooserDefault *impl);
 
-static void select_func (GtkFileSystemModel *model,
-			 GtkTreePath        *path,
-			 GtkTreeIter        *iter,
-			 gpointer            user_data);
-
 static void path_bar_clicked (GtkPathBar            *path_bar,
 			      GFile                 *file,
 			      GFile                 *child,
@@ -5543,12 +5538,6 @@ gtk_file_chooser_default_dispose (GObject *object)
       impl->update_current_folder_cancellable = NULL;
     }
 
-  if (impl->show_and_select_files_cancellable)
-    {
-      g_cancellable_cancel (impl->show_and_select_files_cancellable);
-      impl->show_and_select_files_cancellable = NULL;
-    }
-
   if (impl->should_respond_get_info_cancellable)
     {
       g_cancellable_cancel (impl->should_respond_get_info_cancellable);
@@ -5766,52 +5755,6 @@ gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
-}
-
-static gboolean
-get_is_file_filtered (GtkFileChooserDefault *impl,
-		      GFile                 *file,
-		      GFileInfo             *file_info)
-{
-  GtkFileFilterInfo filter_info;
-  GtkFileFilterFlags needed;
-  gboolean result;
-
-  if (!impl->current_filter)
-    return FALSE;
-
-  filter_info.contains = GTK_FILE_FILTER_DISPLAY_NAME | GTK_FILE_FILTER_MIME_TYPE;
-
-  needed = gtk_file_filter_get_needed (impl->current_filter);
-
-  filter_info.display_name = g_file_info_get_display_name (file_info);
-  filter_info.mime_type = g_content_type_get_mime_type (g_file_info_get_content_type (file_info));
-
-  if (needed & GTK_FILE_FILTER_FILENAME)
-    {
-      filter_info.filename = g_file_get_path (file);
-      if (filter_info.filename)
-	filter_info.contains |= GTK_FILE_FILTER_FILENAME;
-    }
-  else
-    filter_info.filename = NULL;
-
-  if (needed & GTK_FILE_FILTER_URI)
-    {
-      filter_info.uri = g_file_get_uri (file);
-      if (filter_info.uri)
-	filter_info.contains |= GTK_FILE_FILTER_URI;
-    }
-  else
-    filter_info.uri = NULL;
-
-  result = gtk_file_filter_filter (impl->current_filter, &filter_info);
-
-  g_free ((gchar *)filter_info.filename);
-  g_free ((gchar *)filter_info.uri);
-  g_free ((gchar *)filter_info.mime_type);
-
-  return !result;
 }
 
 static void
@@ -6262,151 +6205,58 @@ browse_files_center_selected_row (GtkFileChooserDefault *impl)
   gtk_tree_selection_selected_foreach (selection, center_selected_row_foreach_cb, &closure);
 }
 
-struct ShowAndSelectPathsData
-{
-  GtkFileChooserDefault *impl;
-  GSList *files;
-};
-
-static void
-show_and_select_files_finished_loading (GtkFolder *folder,
-					gpointer   user_data)
-{
-  gboolean have_hidden;
-  gboolean have_filtered;
-  GSList *l;
-  struct ShowAndSelectPathsData *data = user_data;
-
-  have_hidden = FALSE;
-  have_filtered = FALSE;
-
-  for (l = data->files; l; l = l->next)
-    {
-      GFile *file;
-      GFileInfo *info;
-
-      file = l->data;
-
-      info = _gtk_folder_get_info (folder, file);
-      if (info)
-	{
-	  if (!have_hidden)
-	    have_hidden = g_file_info_get_is_hidden (info)
-	                    || g_file_info_get_is_backup (info);
-
-	  if (!have_filtered)
-	    have_filtered = (! _gtk_file_info_consider_as_directory (info)) &&
-			     get_is_file_filtered (data->impl, file, info);
-	
-	  g_object_unref (info);
-
-	  if (have_hidden && have_filtered)
-	    break; /* we now have all the information we need */
-	}
-    }
-
-  g_signal_handlers_disconnect_by_func (folder,
-					show_and_select_files_finished_loading,
-				        user_data);
-
-  if (have_hidden)
-    g_object_set (data->impl, "show-hidden", TRUE, NULL);
-
-  if (have_filtered)
-    set_current_filter (data->impl, NULL);
-
-  for (l = data->files; l; l = l->next)
-    {
-      GFile *file;
-      GtkTreePath *path;
-      GtkTreeIter iter;
-
-      file = l->data;
-      if (!_gtk_file_system_model_get_iter_for_file (data->impl->browse_files_model,
-                                                     &iter,
-                                                     file))
-        return;
-
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (data->impl->browse_files_model), &iter);
-      select_func (data->impl->browse_files_model, path, &iter, data->impl);
-      gtk_tree_path_free (path);
-    }
-
-  browse_files_center_selected_row (data->impl);
-
-  g_object_unref (data->impl);
-  g_slist_foreach (data->files, (GFunc) g_object_unref, NULL);
-  g_slist_free (data->files);
-  g_free (data);
-}
-
-static void
-show_and_select_files_get_folder_cb (GCancellable *cancellable,
-				     GtkFolder    *folder,
-				     const GError *error,
-				     gpointer      user_data)
-{
-  gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  struct ShowAndSelectPathsData *data = user_data;
-
-  if (data->impl->show_and_select_files_cancellable != cancellable)
-    goto out;
-
-  data->impl->show_and_select_files_cancellable = NULL;
-
-  if (cancelled || error)
-    goto out;
-
-  g_object_unref (cancellable);
-
-  if (_gtk_folder_is_finished_loading (folder))
-    show_and_select_files_finished_loading (folder, user_data);
-  else
-    g_signal_connect (folder, "finished-loading",
-		      G_CALLBACK (show_and_select_files_finished_loading),
-		      user_data);
-
-  return;
-
-out:
-  g_object_unref (data->impl);
-  g_slist_foreach (data->files, (GFunc) g_object_unref, NULL);
-  g_slist_free (data->files);
-  g_free (data);
-
-  g_object_unref (cancellable);
-}
-
 static gboolean
 show_and_select_files (GtkFileChooserDefault *impl,
-		       GFile                 *parent_file,
 		       GSList                *files)
 {
-  struct ShowAndSelectPathsData *info;
+  GtkTreeSelection *selection;
+  GtkFileSystemModel *fsmodel;
+  gboolean can_have_hidden, can_have_filtered, selected_a_file;
+  GSList *walk;
 
-  profile_start ("start", NULL);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+  fsmodel = GTK_FILE_SYSTEM_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view)));
+  can_have_hidden = !impl->show_hidden;
+  can_have_filtered = impl->current_filter != NULL;
+  selected_a_file = FALSE;
 
-  if (!files)
+  for (walk = files; walk && (can_have_hidden || can_have_filtered); walk = walk->next)
     {
-      profile_end ("end", NULL);
-      return TRUE;
+      GFile *file = walk->data;
+      GtkTreeIter iter;
+
+      if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
+        continue;
+
+      if (!_gtk_file_system_model_get_is_visible (fsmodel, &iter))
+        {
+          GFileInfo *info = _gtk_file_system_model_get_info (fsmodel, &iter);
+
+          if (can_have_hidden &&
+              (g_file_info_get_is_hidden (info) ||
+               g_file_info_get_is_backup (info)))
+            {
+              g_object_set (impl, "show-hidden", TRUE, NULL);
+              can_have_hidden = FALSE;
+            }
+
+          if (can_have_filtered)
+            {
+              set_current_filter (impl, NULL);
+              can_have_filtered = FALSE;
+            }
+        }
+          
+      if (_gtk_file_system_model_get_is_visible (fsmodel, &iter))
+        {
+          gtk_tree_selection_select_iter (selection, &iter);
+          selected_a_file = TRUE;
+        }
     }
 
-  info = g_new (struct ShowAndSelectPathsData, 1);
-  info->impl = g_object_ref (impl);
-  info->files = g_slist_copy (files);
-  g_slist_foreach (info->files, (GFunc) g_object_ref, NULL);
+  browse_files_center_selected_row (impl);
 
-  if (impl->show_and_select_files_cancellable)
-    g_cancellable_cancel (impl->show_and_select_files_cancellable);
-
-  impl->show_and_select_files_cancellable =
-    _gtk_file_system_get_folder (impl->file_system, parent_file,
- 				 "standard::is-hidden,standard::is-backup,standard::type,standard::name,standard::content-type",
-			         show_and_select_files_get_folder_cb, info);
-
-  profile_end ("end", NULL);
-  return TRUE;
+  return selected_a_file;
 }
 
 /* Processes the pending operation when a folder is finished loading */
@@ -6418,7 +6268,7 @@ pending_select_files_process (GtkFileChooserDefault *impl)
 
   if (impl->pending_select_files)
     {
-      show_and_select_files (impl, impl->current_folder, impl->pending_select_files);
+      show_and_select_files (impl, impl->pending_select_files);
       pending_select_files_free (impl);
       browse_files_center_selected_row (impl);
     }
@@ -7282,20 +7132,6 @@ gtk_file_chooser_default_set_current_name (GtkFileChooser *chooser,
   _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), name);
 }
 
-static void
-select_func (GtkFileSystemModel *model,
-	     GtkTreePath        *path,
-	     GtkTreeIter        *iter,
-	     gpointer            user_data)
-{
-  GtkFileChooserDefault *impl = user_data;
-  GtkTreeSelection *selection;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-
-  gtk_tree_selection_select_iter (selection, iter);
-}
-
 static gboolean
 gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
 				      GFile           *file,
@@ -7331,7 +7167,7 @@ gtk_file_chooser_default_select_file (GtkFileChooser  *chooser,
       files.data = (gpointer) file;
       files.next = NULL;
 
-      result = show_and_select_files (impl, parent_file, &files);
+      result = show_and_select_files (impl, &files);
       g_object_unref (parent_file);
       return result;
     }
