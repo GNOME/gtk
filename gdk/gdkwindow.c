@@ -7031,7 +7031,7 @@ gdk_window_get_root_coords (GdkWindow *window,
 {
   GdkWindowObject *private;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_if_fail (GDK_IS_WINDOW (window));
 
   private = (GdkWindowObject *) window;
 
@@ -7048,8 +7048,6 @@ gdk_window_get_root_coords (GdkWindow *window,
 							      x + private->abs_x,
 							      y + private->abs_y,
 							      root_x, root_y);
-
-  return TRUE;
 }
 
 
