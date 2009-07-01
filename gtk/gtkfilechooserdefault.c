@@ -6012,10 +6012,11 @@ install_list_model_filter (GtkFileChooserDefault *impl)
 
 #define COMPARE_DIRECTORIES										       \
   GtkFileChooserDefault *impl = user_data;								       \
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);                                                \
   gboolean dir_a, dir_b;										       \
 													       \
-  gtk_tree_model_get (model, a, MODEL_COL_IS_FOLDER, &dir_a, -1);                                              \
-  gtk_tree_model_get (model, b, MODEL_COL_IS_FOLDER, &dir_b, -1);                                              \
+  dir_a = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_IS_FOLDER));           \
+  dir_b = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_IS_FOLDER));           \
 													       \
   if (dir_a != dir_b)											       \
     return impl->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
@@ -6030,23 +6031,20 @@ name_sort_func (GtkTreeModel *model,
   COMPARE_DIRECTORIES;
   else
     {
-      gchar *key_a, *key_b;
+      const char *key_a, *key_b;
       gint result;
 
-      gtk_tree_model_get (model, a, MODEL_COL_NAME_COLLATED, &key_a, -1);
-      gtk_tree_model_get (model, b, MODEL_COL_NAME_COLLATED, &key_b, -1);
+      key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_NAME_COLLATED));
+      key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_NAME_COLLATED));
 
       if (key_a && key_b)
         result = strcmp (key_a, key_b);
       else if (key_a)
-        return 1;
+        result = 1;
       else if (key_b)
-        return -1;
+        result = -1;
       else
-        return 0;
-
-      g_free (key_a);
-      g_free (key_b);
+        result = 0;
 
       return result;
     }
@@ -6064,8 +6062,8 @@ size_sort_func (GtkTreeModel *model,
     {
       gint64 size_a, size_b;
 
-      gtk_tree_model_get (model, a, MODEL_COL_SIZE, &size_a, -1);
-      gtk_tree_model_get (model, b, MODEL_COL_SIZE, &size_b, -1);
+      size_a = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_SIZE));
+      size_b = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_SIZE));
 
       return size_a > size_b ? -1 : (size_a == size_b ? 0 : 1);
     }
@@ -6083,8 +6081,8 @@ mtime_sort_func (GtkTreeModel *model,
     {
       glong ta, tb;
 
-      gtk_tree_model_get (model, a, MODEL_COL_MTIME, &ta, -1);
-      gtk_tree_model_get (model, b, MODEL_COL_MTIME, &tb, -1);
+      ta = g_value_get_long (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_MTIME));
+      tb = g_value_get_long (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_MTIME));
 
       return ta > tb ? -1 : (ta == tb ? 0 : 1);
     }
