@@ -1686,7 +1686,7 @@ _gdk_win32_blit (gboolean              use_fg_bg,
 
   hdc = gdk_win32_hdc_get (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 
-  gdk_drawable_get_size (src, &src_width, &src_height);
+  gdk_drawable_get_size (src_impl->wrapper, &src_width, &src_height);
 
   if ((src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1)) == NULL)
     {
