@@ -2916,17 +2916,14 @@ adjust_wrap_width (GtkIconView     *icon_view,
       else
 	item_width = item->width;
 
-      if (item->width == -1)
-        {
-	  if (item_width > 0)
-	    wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
-	  else
-	    wrap_width = MAX (2 * pixbuf_width, 50);
-	}
-      else if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
-	wrap_width = item_width;
-      else
-	wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
+      if (icon_view->priv->orientation == GTK_ORIENTATION_VERTICAL)
+        wrap_width = item_width;
+      else {
+        if (item->width == -1 && item_width <= 0)
+          wrap_width = MAX (2 * pixbuf_width, 50);
+        else
+          wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
+        }
 
       wrap_width -= ITEM_PADDING * 2;
 
