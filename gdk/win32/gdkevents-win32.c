@@ -1557,29 +1557,6 @@ handle_wm_paint (MSG        *msg,
 
   EndPaint (msg->hwnd, &paintstruct);
 
-  /* HB: don't generate GDK_EXPOSE events for InputOnly
-   * windows -> backing store now works!
-   */
-  if (((GdkWindowObject *) window)->input_only)
-    {
-      DeleteObject (hrgn);
-      return;
-    }
-
-  if (!(((GdkWindowObject *) window)->event_mask & GDK_EXPOSURE_MASK))
-    {
-      GDK_NOTE (EVENTS, g_print (" (ignored)"));
-      DeleteObject (hrgn);
-      return;
-    }
-
-#if 0 /* we need to process exposes even with GDK_NO_BG
-   * Otherwise The GIMP canvas update is broken ....
-   */
-  if (((GdkWindowObject *) window)->bg_pixmap == GDK_NO_BG)
-    break;
-#endif
-
   if ((paintstruct.rcPaint.right == paintstruct.rcPaint.left) ||
       (paintstruct.rcPaint.bottom == paintstruct.rcPaint.top))
     {
@@ -1621,12 +1598,8 @@ handle_wm_paint (MSG        *msg,
     }
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
-
-
-  //_gdk_win32_windowing_window_get_offsets (window, &xoffset, &yoffset);
-  //gdk_region_offset (update_region, xoffset, yoffset);
-
-  _gdk_window_process_expose (window, update_region);
+  if (!gdk_region_empty (update_region))
+    _gdk_window_invalidate_for_expose (window, update_region);
   gdk_region_destroy (update_region);
 
   DeleteObject (hrgn);

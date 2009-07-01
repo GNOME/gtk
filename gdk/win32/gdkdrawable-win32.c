@@ -1883,19 +1883,9 @@ _gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
 				     gint width,
 				     gint height)
 {
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  RECT rect;
-
   HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
   if (!hdc)
-    {
-      return NULL;
-    }
-
-  GetClipBox (hdc, &rect);
-  g_print ("create_cairo_surface(): [%d %d %d %d]\n",
-	   rect.left, rect.top, rect.right, rect.bottom);
-
+    return NULL;
   return cairo_win32_surface_create (hdc);
 }
 
@@ -1939,7 +1929,6 @@ _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 				       gint height)
 {
   // Do nothing.  The surface size is determined by the DC
-  g_print ("*** set_cairo_surface_size()\n");
 }
 
 static gint

@@ -3609,6 +3609,7 @@ _gdk_win32_window_queue_translation (GdkWindow *window,
 				     gint       dx,
 				     gint       dy)
 {
+  /* TODO: Get current updateregion, move any part of it that intersects area by dx,dy */
   g_print ("queue_translation\n");
 }
 

@@ -234,9 +234,6 @@ void _gdk_win32_windowing_window_get_offsets (GdkWindow *window,
 					      gint      *y_offset);
 
 
-void _gdk_window_process_expose    (GdkWindow *window,
-                                    GdkRegion *invalidate_region);
-
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 

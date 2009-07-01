@@ -115,26 +115,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
 }
 
 void
-_gdk_window_process_expose (GdkWindow *window,
-			    GdkRegion *invalidate_region)
-{
-  GdkWindowImplWin32 *impl;
-  //GdkRegion *clip_region;
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-  
-  GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose: %p %s\n",
-			     GDK_WINDOW_HWND (window),
-			     _gdk_win32_gdkregion_to_string (invalidate_region)));
-
-  if (!gdk_region_empty (invalidate_region))
-    _gdk_window_invalidate_for_expose (window, invalidate_region);
-  else
-    g_print ("process_expose(), empty region\n");
-  
-  //gdk_region_destroy (invalidate_region);
-}
-
-void
 _gdk_win32_window_tmp_unset_bg (GdkWindow *window,
 				gboolean recurse)
 {
