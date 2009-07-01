@@ -15,11 +15,12 @@ GDK_PIXBUF_VER = 2.0
 # but not yet -DINCLUDE_png 
 ##USEGDIP=1
 # to get _working_ include modules we need respective defines ...
+#   
 BUILT_IN_FORMATS = \
 !IFDEF USEGDIP
 	-DINCLUDE_gdiplus \
 !ELSE
-	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg  -DINCLUDE_tiff \
+	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg -DINCLUDE_tiff \
 !ENDIF
 	-DINCLUDE_png \
 	-DINCLUDE_xpm -DINCLUDE_wbmp \
