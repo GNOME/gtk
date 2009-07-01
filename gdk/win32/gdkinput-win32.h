@@ -32,7 +32,6 @@
 
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-typedef struct _GdkInputWindow GdkInputWindow;
 
 /* information about a device axis */
 struct _GdkAxisInfo
