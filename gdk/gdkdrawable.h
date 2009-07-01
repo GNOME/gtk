@@ -100,13 +100,13 @@ struct _GdkDrawableClass
   void (*draw_drawable)  (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkDrawable  *src,
-			  GdkDrawable  *original_src,
 			  gint		xsrc,
 			  gint		ysrc,
 			  gint		xdest,
 			  gint		ydest,
 			  gint		width,
-			  gint		height);
+			  gint		height,
+			  GdkDrawable  *original_src);
   void (*draw_points)	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkPoint     *points,

@@ -72,13 +72,13 @@ static void   gdk_pixmap_draw_text_wc   (GdkDrawable     *drawable,
 static void   gdk_pixmap_draw_drawable  (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPixmap       *src,
-					 GdkPixmap       *original_src,
 					 gint             xsrc,
 					 gint             ysrc,
 					 gint             xdest,
 					 gint             ydest,
 					 gint             width,
-					 gint             height);
+					 gint             height,
+					 GdkPixmap       *original_src);
 static void   gdk_pixmap_draw_points    (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
@@ -375,13 +375,13 @@ static void
 gdk_pixmap_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
-			  GdkPixmap   *original_src,
 			  gint         xsrc,
 			  gint         ysrc,
 			  gint         xdest,
 			  gint         ydest,
 			  gint         width,
-			  gint         height)
+			  gint         height,
+			  GdkPixmap   *original_src)
 {
   GdkPixmapObject *private = (GdkPixmapObject *)drawable;
 

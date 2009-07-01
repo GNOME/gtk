@@ -669,11 +669,12 @@ gdk_draw_drawable (GdkDrawable *drawable,
      area in the destination instead. */
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc,
-						    composite_impl, src,
+						    composite_impl,
                                                     xsrc - composite_x_offset,
                                                     ysrc - composite_y_offset,
                                                     xdest, ydest,
-                                                    width, height);
+                                                    width, height,
+						    src);
 
   g_object_unref (composite);
 }

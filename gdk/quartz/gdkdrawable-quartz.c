@@ -326,13 +326,13 @@ static void
 gdk_quartz_draw_drawable (GdkDrawable *drawable,
 			  GdkGC       *gc,
 			  GdkPixmap   *src,
-			  GdkDrawable *original_src,
 			  gint         xsrc,
 			  gint         ysrc,
 			  gint         xdest,
 			  gint         ydest,
 			  gint         width,
-			  gint         height)
+			  gint         height,
+			  GdkDrawable *original_src)
 {
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);

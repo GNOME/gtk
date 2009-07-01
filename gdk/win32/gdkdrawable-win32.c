@@ -87,13 +87,13 @@ static void gdk_win32_draw_text_wc   (GdkDrawable    *drawable,
 static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPixmap      *src,
-				      GdkDrawable    *original_src,
 				      gint            xsrc,
 				      gint            ysrc,
 				      gint            xdest,
 				      gint            ydest,
 				      gint            width,
-				      gint            height);
+				      gint            height,
+				      GdkDrawable    *original_src);
 static void gdk_win32_draw_points    (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPoint       *points,
@@ -1144,13 +1144,13 @@ static void
 gdk_win32_draw_drawable (GdkDrawable *drawable,
 			 GdkGC       *gc,
 			 GdkPixmap   *src,
-			 GdkDrawable *original_src,
 			 gint         xsrc,
 			 gint         ysrc,
 			 gint         xdest,
 			 gint         ydest,
 			 gint         width,
-			 gint         height)
+			 gint         height,
+			 GdkDrawable *original_src)
 {
   g_assert (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable));
 

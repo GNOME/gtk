@@ -284,13 +284,13 @@ static void
 gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 				    GdkGC       *gc,
 				    GdkPixmap   *src,
-				    GdkDrawable *original_src,
 				    gint         xsrc,
 				    gint         ysrc,
 				    gint         xdest,
 				    gint         ydest,
 				    gint         width,
-				    gint         height)
+				    gint         height,
+				    GdkDrawable *original_src)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
   GdkDrawable *real_drawable = get_real_drawable (offscreen);
