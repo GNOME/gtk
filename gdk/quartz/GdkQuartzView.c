@@ -35,6 +35,11 @@
   return gdk_window;
 }
 
+-(NSTrackingRectTag)trackingRect
+{
+  return trackingRect;
+}
+
 -(BOOL)isFlipped
 {
   return YES;
@@ -67,46 +72,39 @@
   if (NSEqualRects (rect, NSZeroRect))
     return;
 
-  GDK_QUARTZ_ALLOC_POOL;
-
   [self getRectsBeingDrawn:&drawn_rects count:&count];
 
-  region = gdk_region_new ();
-
-  for (i = 0; i < count; i++)
+  /* Note: arbitrary limit here to not degrade performace too much. It would
+   * be better to optimize the construction of the region below, by using
+   * _gdk_region_new_from_yxbanded_rects.
+   */
+  if (count > 25)
     {
-      gdk_rect.x = drawn_rects[i].origin.x;
-      gdk_rect.y = drawn_rects[i].origin.y;
-      gdk_rect.width = drawn_rects[i].size.width;
-      gdk_rect.height = drawn_rects[i].size.height;
-
-      gdk_region_union_with_rect (region, &gdk_rect);
-    }
-
-  if (!gdk_region_empty (region))
-    {
-      GdkEvent event;
-      
       gdk_rect.x = rect.origin.x;
       gdk_rect.y = rect.origin.y;
       gdk_rect.width = rect.size.width;
       gdk_rect.height = rect.size.height;
-      
-      event.expose.type = GDK_EXPOSE;
-      event.expose.window = g_object_ref (gdk_window);
-      event.expose.send_event = FALSE;
-      event.expose.count = 0;
-      event.expose.region = region;
-      event.expose.area = gdk_rect;
-      
-      impl->in_paint_rect_count++;
 
-      (*_gdk_event_func) (&event, _gdk_event_data);
-
-      impl->in_paint_rect_count--;
-
-      g_object_unref (gdk_window);
+      region = gdk_region_rectangle (&gdk_rect);
     }
+  else
+    {
+      region = gdk_region_new ();
+
+      for (i = 0; i < count; i++)
+        {
+          gdk_rect.x = drawn_rects[i].origin.x;
+          gdk_rect.y = drawn_rects[i].origin.y;
+          gdk_rect.width = drawn_rects[i].size.width;
+          gdk_rect.height = drawn_rects[i].size.height;
+
+          gdk_region_union_with_rect (region, &gdk_rect);
+        }
+    }
+
+  impl->in_paint_rect_count++;
+  _gdk_window_process_updates_recurse (gdk_window, region);
+  impl->in_paint_rect_count--;
 
   gdk_region_destroy (region);
 
@@ -115,8 +113,6 @@
       [[self window] invalidateShadow];
       needsInvalidateShadow = NO;
     }
-
-  GDK_QUARTZ_RELEASE_POOL;
 }
 
 -(void)setNeedsInvalidateShadow:(BOOL)invalidate
@@ -132,6 +128,9 @@
   GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   NSRect rect;
+
+  if (!impl->toplevel)
+    return;
 
   if (trackingRect)
     {

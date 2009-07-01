@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -47,10 +47,10 @@ void
 _gdk_init_input_core (GdkDisplay *display)
 {
   GdkDevicePrivate *private;
-  
+
   display->core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
   private = (GdkDevicePrivate *)display->core_pointer;
-  
+
   display->core_pointer->name = "Core Pointer";
   display->core_pointer->source = GDK_SOURCE_MOUSE;
   display->core_pointer->mode = GDK_MODE_SCREEN;
@@ -87,12 +87,12 @@ gdk_device_get_type (void)
 	  0,              /* n_preallocs */
 	  (GInstanceInitFunc) NULL,
 	};
-      
+
       object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            g_intern_static_string ("GdkDevice"),
-                                            &object_info, 0);
+					    g_intern_static_string ("GdkDevice"),
+					    &object_info, 0);
     }
-  
+
   return object_type;
 }
 
@@ -115,10 +115,10 @@ gdk_device_dispose (GObject *object)
     {
 #ifndef XINPUT_NONE
       if (gdkdev->xdevice)
-        {
-          XCloseDevice (GDK_DISPLAY_XDISPLAY (gdkdev->display), gdkdev->xdevice);
-          gdkdev->xdevice = NULL;
-        }
+	{
+	  XCloseDevice (GDK_DISPLAY_XDISPLAY (gdkdev->display), gdkdev->xdevice);
+	  gdkdev->xdevice = NULL;
+	}
       g_free (gdkdev->axes);
       gdkdev->axes = NULL;
 #endif /* !XINPUT_NONE */
@@ -140,7 +140,7 @@ gdk_device_dispose (GObject *object)
  *
  * Returns the list of available input devices for the default display.
  * The list is statically allocated and should not be freed.
- * 
+ *
  * Return value: a list of #GdkDevice
  **/
 GList *
@@ -155,16 +155,16 @@ gdk_devices_list (void)
  *
  * Returns the list of available input devices attached to @display.
  * The list is statically allocated and should not be freed.
- * 
+ *
  * Return value: a list of #GdkDevice
  *
  * Since: 2.2
  **/
-GList * 
+GList *
 gdk_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
+
   return GDK_DISPLAY_X11 (display)->input_devices;
 }
 
@@ -219,6 +219,22 @@ gdk_device_set_axis_use (GdkDevice   *device,
     }
 }
 
+static gboolean
+impl_coord_in_window (GdkWindow *window,
+		      int impl_x,
+		      int impl_y)
+{
+  GdkWindowObject *priv = (GdkWindowObject *)window;
+
+  if (impl_x < priv->abs_x ||
+      impl_x > priv->abs_x + priv->width)
+    return FALSE;
+  if (impl_y < priv->abs_y ||
+      impl_y > priv->abs_y + priv->height)
+    return FALSE;
+  return TRUE;
+}
+
 /**
  * gdk_device_get_history:
  * @device: a #GdkDevice
@@ -227,14 +243,14 @@ gdk_device_set_axis_use (GdkDevice   *device,
  * @stop: ending timestamp for the range of events to return
  * @events: location to store a newly-allocated array of #GdkTimeCoord, or %NULL
  * @n_events: location to store the length of @events, or %NULL
- * 
+ *
  * Obtains the motion history for a device; given a starting and
  * ending timestamp, return all events in the motion history for
  * the device in the given range of time. Some windowing systems
  * do not support motion history, in which case, %FALSE will
  * be returned. (This is not distinguishable from the case where
  * motion history is supported and no events were found.)
- * 
+ *
  * Return value: %TRUE if the windowing system supports motion history and
  *  at least one event was found.
  **/
@@ -247,29 +263,38 @@ gdk_device_get_history  (GdkDevice         *device,
 			 gint              *n_events)
 {
   GdkTimeCoord **coords = NULL;
+  GdkWindow *impl_window;
   gboolean result = FALSE;
   int tmp_n_events = 0;
-  int i;
+  int i, j;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), FALSE);
+
+  impl_window = _gdk_window_get_impl_window (window);
 
   if (GDK_WINDOW_DESTROYED (window))
     /* Nothing */ ;
   else if (GDK_IS_CORE (device))
     {
       XTimeCoord *xcoords;
-      
+
       xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
-				  GDK_DRAWABLE_XID (window),
+				  GDK_DRAWABLE_XID (impl_window),
 				  start, stop, &tmp_n_events);
       if (xcoords)
 	{
+	  GdkWindowObject *priv = (GdkWindowObject *)window;
 	  coords = _gdk_device_allocate_history (device, tmp_n_events);
+	  j = 0;
 	  for (i=0; i<tmp_n_events; i++)
 	    {
-	      coords[i]->time = xcoords[i].time;
-	      coords[i]->axes[0] = xcoords[i].x;
-	      coords[i]->axes[1] = xcoords[i].y;
+	      if (impl_coord_in_window (window, xcoords[i].x, xcoords[i].y))
+		{
+		  coords[j]->time = xcoords[i].time;
+		  coords[j]->axes[0] = xcoords[i].x - priv->abs_x;
+		  coords[j]->axes[1] = xcoords[i].y - priv->abs_y;
+		  j++;
+		}
 	    }
 
 	  XFree (xcoords);
@@ -292,7 +317,7 @@ gdk_device_get_history  (GdkDevice         *device,
   return result;
 }
 
-GdkTimeCoord ** 
+GdkTimeCoord **
 _gdk_device_allocate_history (GdkDevice *device,
 			      gint       n_events)
 {
@@ -306,36 +331,48 @@ _gdk_device_allocate_history (GdkDevice *device,
   return result;
 }
 
-void 
+void
 gdk_device_free_history (GdkTimeCoord **events,
 			 gint           n_events)
 {
   gint i;
-  
+
   for (i=0; i<n_events; i++)
     g_free (events[i]);
 
   g_free (events);
 }
 
-GdkInputWindow *
-_gdk_input_window_find(GdkWindow *window)
+static void
+unset_extension_events (GdkWindow *window)
 {
-  GList *tmp_list;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+  GdkWindowObject *window_private;
+  GdkWindowObject *impl_window;
+  GdkDisplayX11 *display_x11;
+  GdkInputWindow *iw;
 
-  for (tmp_list=display_x11->input_windows; tmp_list; tmp_list=tmp_list->next)
-    if (((GdkInputWindow *)(tmp_list->data))->window == window)
-      return (GdkInputWindow *)(tmp_list->data);
+  window_private = (GdkWindowObject*) window;
+  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
+  iw = impl_window->input_window;
 
-  return NULL;      /* Not found */
+  display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+
+  if (window_private->extension_events != 0)
+    {
+      g_assert (iw != NULL);
+      g_assert (g_list_find (iw->windows, window) != NULL);
+
+      iw->windows = g_list_remove (iw->windows, window);
+      if (iw->windows == NULL)
+	{
+	  impl_window->input_window = NULL;
+	  display_x11->input_windows = g_list_remove (display_x11->input_windows, iw);
+	  g_free (iw);
+	}
+    }
+
+  window_private->extension_events = 0;
 }
-
-/* FIXME: this routine currently needs to be called between creation
-   and the corresponding configure event (because it doesn't get the
-   root_relative_geometry).  This should work with
-   gtk_window_set_extension_events, but will likely fail in other
-   cases */
 
 void
 gdk_input_set_extension_events (GdkWindow *window, gint mask,
@@ -343,63 +380,56 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 {
   GdkWindowObject *window_private;
   GList *tmp_list;
+  GdkWindowObject *impl_window;
   GdkInputWindow *iw;
   GdkDisplayX11 *display_x11;
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_IS_X11 (window));
 
   window_private = (GdkWindowObject*) window;
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
+
+  if (mode == GDK_EXTENSION_EVENTS_ALL && mask != 0)
+    mask |= GDK_ALL_DEVICES_MASK;
+
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
 
-  iw = _gdk_input_window_find (window);
+  iw = impl_window->input_window;
 
   if (mask != 0)
     {
       if (!iw)
-        {
-          iw = g_new(GdkInputWindow,1);
+	{
+	  iw = g_new0 (GdkInputWindow,1);
 
-          iw->window = window;
-          iw->mode = mode;
+	  iw->impl_window = (GdkWindow *)impl_window;
 
-          iw->obscuring = NULL;
-          iw->num_obscuring = 0;
-          iw->grabbed = FALSE;
+	  iw->windows = NULL;
+	  iw->grabbed = FALSE;
 
-          display_x11->input_windows = g_list_append(display_x11->input_windows,iw);
-        }
-
-      window_private->extension_events = mask;
+	  display_x11->input_windows = g_list_append (display_x11->input_windows, iw);
 
 #ifndef XINPUT_NONE
-      /* Add enter window events to the event mask */
-      /* this is not needed for XINPUT_NONE */
-      gdk_window_set_events (window,
-			     gdk_window_get_events (window) | 
-			     GDK_ENTER_NOTIFY_MASK);
-
-      /* we might not receive ConfigureNotify so get the root_relative_geometry
-       * now, just in case */
-      _gdk_input_get_root_relative_geometry (GDK_WINDOW_XDISPLAY (window),
-                                             GDK_WINDOW_XWINDOW (window),
-                                             &iw->root_x, &iw->root_y, NULL, NULL);
+	  /* we might not receive ConfigureNotify so get the root_relative_geometry
+	   * now, just in case */
+	  _gdk_input_get_root_relative_geometry (window, &iw->root_x, &iw->root_y);
 #endif /* !XINPUT_NONE */
+	  impl_window->input_window = iw;
+	}
+
+      if (window_private->extension_events == 0)
+	iw->windows = g_list_append (iw->windows, window);
+      window_private->extension_events = mask;
     }
   else
     {
-      if (iw)
-	{
-	  display_x11->input_windows = g_list_remove(display_x11->input_windows,iw);
-	  g_free(iw);
-	}
-
-      window_private->extension_events = 0;
+      unset_extension_events (window);
     }
 
   for (tmp_list = display_x11->input_devices; tmp_list; tmp_list = tmp_list->next)
@@ -407,57 +437,14 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       GdkDevicePrivate *gdkdev = tmp_list->data;
 
       if (!GDK_IS_CORE (gdkdev))
-	{
-	  if (mask != 0 && gdkdev->info.mode != GDK_MODE_DISABLED
-	      && (gdkdev->info.has_cursor || mode == GDK_EXTENSION_EVENTS_ALL))
-	    _gdk_input_enable_window (window,gdkdev);
-	  else
-	    _gdk_input_disable_window (window,gdkdev);
-	}
+	_gdk_input_select_events ((GdkWindow *)impl_window, gdkdev);
     }
 }
 
 void
 _gdk_input_window_destroy (GdkWindow *window)
 {
-  GdkInputWindow *input_window;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
-
-  input_window = _gdk_input_window_find (window);
-  g_return_if_fail (input_window != NULL);
-
-  display_x11->input_windows = g_list_remove (display_x11->input_windows, input_window);
-  g_free(input_window);
-}
-
-void
-_gdk_input_exit (void)
-{
-  GList *tmp_list;
-  GSList *display_list;
-  GdkDevicePrivate *gdkdev;
-
-  for (display_list = _gdk_displays ; display_list ; display_list = display_list->next)
-    {
-      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display_list->data);
-      
-      for (tmp_list = display_x11->input_devices; tmp_list; tmp_list = tmp_list->next)
-	{
-	  gdkdev = (GdkDevicePrivate *)(tmp_list->data);
-	  if (!GDK_IS_CORE (gdkdev))
-	    {
-	      gdk_device_set_mode (&gdkdev->info, GDK_MODE_DISABLED);
-	      g_object_unref(gdkdev);
-	    }
-	}
-      
-      g_list_free(display_x11->input_devices);
-      
-      for (tmp_list = display_x11->input_windows; tmp_list; tmp_list = tmp_list->next)
-	g_free(tmp_list->data);
-      
-      g_list_free(display_x11->input_windows);
-    }
+  unset_extension_events (window);
 }
 
 /**
@@ -466,10 +453,10 @@ _gdk_input_exit (void)
  * @axes: pointer to an array of axes
  * @use: the use to look for
  * @value: location to store the found value.
- * 
+ *
  * Interprets an array of double as axis values for a given device,
  * and locates the value in the array for a given axis use.
- * 
+ *
  * Return value: %TRUE if the given axis use was found, otherwise %FALSE
  **/
 gboolean
@@ -479,12 +466,12 @@ gdk_device_get_axis (GdkDevice  *device,
 		     gdouble    *value)
 {
   gint i;
-  
+
   g_return_val_if_fail (device != NULL, FALSE);
 
   if (axes == NULL)
     return FALSE;
-  
+
   for (i=0; i<device->num_axes; i++)
     if (device->axes[i].use == use)
       {
@@ -492,7 +479,7 @@ gdk_device_get_axis (GdkDevice  *device,
 	  *value = axes[i];
 	return TRUE;
       }
-  
+
   return FALSE;
 }
 

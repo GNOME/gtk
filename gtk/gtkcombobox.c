@@ -1470,14 +1470,16 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   
   /* FIXME: is using the size request here broken? */
   child = GTK_BIN (combo_box)->child;
-   
-  gdk_window_get_origin (child->window, &sx, &sy);
-   
+
+  sx = sy = 0;
+
   if (GTK_WIDGET_NO_WINDOW (child))
     {
       sx += child->allocation.x;
       sy += child->allocation.y;
     }
+
+  gdk_window_get_root_coords (child->window, sx, sy, &sx, &sy);
 
   if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
     sx -= GTK_WIDGET (combo_box)->style->xthickness;
@@ -1537,10 +1539,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   menu_width = requisition.width;
 
   active = gtk_menu_get_active (GTK_MENU (combo_box->priv->popup_widget));
-  gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
 
-  menu_xpos += widget->allocation.x;
-  menu_ypos += widget->allocation.y + widget->allocation.height / 2 - 2;
+  menu_xpos = widget->allocation.x;
+  menu_ypos = widget->allocation.y + widget->allocation.height / 2 - 2;
 
   if (active != NULL)
     {
@@ -1567,6 +1568,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     menu_xpos = menu_xpos + widget->allocation.width - menu_width;
+
+  gdk_window_get_root_coords (widget->window, menu_xpos, menu_ypos,
+			      &menu_xpos, &menu_ypos);
 
   /* Clamp the position on screen */
   screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
@@ -1630,7 +1634,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
      see bug #340204 */
   GtkWidget *sample = GTK_WIDGET (combo_box);
 
-  gdk_window_get_origin (sample->window, x, y);
+  *x = *y = 0;
 
   if (GTK_WIDGET_NO_WINDOW (sample))
     {
@@ -1638,6 +1642,8 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
       *y += sample->allocation.y;
     }
   
+  gdk_window_get_root_coords (sample->window, *x, *y, x, y);
+
   *width = sample->allocation.width;
 
   hpolicy = vpolicy = GTK_POLICY_NEVER;

@@ -29,6 +29,7 @@
 
 -(void)setGdkWindow:(GdkWindow *)window;
 -(GdkWindow *)gdkWindow;
+-(NSTrackingRectTag)trackingRect;
 -(void)setNeedsInvalidateShadow:(BOOL)invalidate;
 
 @end

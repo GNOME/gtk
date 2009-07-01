@@ -44,22 +44,6 @@ typedef struct _GdkWindowImplX11 GdkWindowImplX11;
 typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
 typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
-struct _GdkXPositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to X coordinates within window */
-  gint y_offset;		/*   to get GDK coodinates within window */
-  guint big : 1;
-  guint mapped : 1;
-  guint no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-
-
 /* Window implementation for X11
  */
 
@@ -74,13 +58,11 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
-  gint width;
-  gint height;
-  
-  GdkXPositionInfo position_info;
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   gint8 toplevel_window_type;
+  guint no_bg : 1;	        /* Set when the window background is temporarily
+				 * unset during resizing and scaling */
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
 
@@ -158,15 +140,16 @@ struct _GdkToplevelX11
 
 GType gdk_window_impl_x11_get_type (void);
 
-void             gdk_x11_window_set_user_time (GdkWindow *window,
-                                               guint32    timestamp);
+void            gdk_x11_window_set_user_time        (GdkWindow *window,
+						     guint32    timestamp);
 
-GdkToplevelX11 *_gdk_x11_window_get_toplevel  (GdkWindow *window);
-void		_gdk_x11_window_tmp_unset_bg  (GdkWindow *window,
-					       gboolean   recurse);
-void            _gdk_x11_window_tmp_reset_bg  (GdkWindow *window,
-					       gboolean   recurse);
-
+GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
+void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
+						     gboolean   recurse);
+void            _gdk_x11_window_tmp_reset_bg        (GdkWindow *window,
+						     gboolean   recurse);
+void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
+void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 
 GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
 void            _gdk_x11_window_get_offsets   (GdkWindow *window,

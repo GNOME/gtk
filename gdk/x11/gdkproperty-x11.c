@@ -546,7 +546,7 @@ gdk_property_get (GdkWindow   *window,
   Atom xtype;
   int res;
 
-  g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (!window || GDK_WINDOW_IS_X11 (window), FALSE);
 
   if (!window)
     {
@@ -555,6 +555,8 @@ gdk_property_get (GdkWindow   *window,
       
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_get(): window is NULL\n"));
     }
+  else if (!GDK_WINDOW_IS_X11 (window))
+    return FALSE;
 
   if (GDK_WINDOW_DESTROYED (window))
     return FALSE;
@@ -680,7 +682,7 @@ gdk_property_change (GdkWindow    *window,
   Atom xproperty;
   Atom xtype;
 
-  g_return_if_fail (!window || GDK_IS_WINDOW (window));
+  g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
     {
@@ -691,7 +693,8 @@ gdk_property_change (GdkWindow    *window,
       
       GDK_NOTE (MULTIHEAD, g_message ("gdk_property_change(): window is NULL\n"));
     }
-
+  else if (!GDK_WINDOW_IS_X11 (window))
+    return;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -731,7 +734,7 @@ void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  g_return_if_fail (!window || GDK_IS_WINDOW (window));
+  g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
     {
@@ -741,6 +744,8 @@ gdk_property_delete (GdkWindow *window,
       GDK_NOTE (MULTIHEAD, 
 		g_message ("gdk_property_delete(): window is NULL\n"));
     }
+  else if (!GDK_WINDOW_IS_X11 (window))
+    return;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;

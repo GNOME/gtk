@@ -121,6 +121,63 @@ _gdk_event_queue_append (GdkDisplay *display,
 }
 
 /**
+ * _gdk_event_queue_insert_after:
+ * @display: a #GdkDisplay
+ * @sibling: Append after this event.
+ * @event: Event to append.
+ *
+ * Appends an event after the specified event, or if it isn't in
+ * the queue, onto the tail of the event queue.
+ *
+ * Returns: the newly appended list node.
+ *
+ * Since: 2.16
+ */
+GList*
+_gdk_event_queue_insert_after (GdkDisplay *display,
+                               GdkEvent   *sibling,
+                               GdkEvent   *event)
+{
+  GList *prev = g_list_find (display->queued_events, sibling);
+  if (prev && prev->next)
+    {
+      display->queued_events = g_list_insert_before (display->queued_events, prev->next, event);
+      return prev->next;
+    }
+  else
+    return _gdk_event_queue_append (display, event);
+}
+
+/**
+ * _gdk_event_queue_insert_after:
+ * @display: a #GdkDisplay
+ * @sibling: Append after this event.
+ * @event: Event to append.
+ *
+ * Appends an event before the specified event, or if it isn't in
+ * the queue, onto the tail of the event queue.
+ *
+ * Returns: the newly appended list node.
+ *
+ * Since: 2.16
+ */
+GList*
+_gdk_event_queue_insert_before (GdkDisplay *display,
+				GdkEvent   *sibling,
+				GdkEvent   *event)
+{
+  GList *next = g_list_find (display->queued_events, sibling);
+  if (next)
+    {
+      display->queued_events = g_list_insert_before (display->queued_events, next, event);
+      return next->prev;
+    }
+  else
+    return _gdk_event_queue_append (display, event);
+}
+
+
+/**
  * _gdk_event_queue_remove_link:
  * @display: a #GdkDisplay
  * @node: node to remove
@@ -575,6 +632,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* return current time */
         break;
       }
@@ -653,6 +711,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* no state field */
         break;
       }
@@ -884,9 +943,17 @@ gdk_event_get_axis (const GdkEvent *event,
 void
 gdk_event_request_motions (const GdkEventMotion *event)
 {
+  GdkDisplay *display;
+  
   g_return_if_fail (event != NULL);
+  
   if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
-    gdk_device_get_state (event->device, event->window, NULL, NULL);
+    {
+      gdk_device_get_state (event->device, event->window, NULL, NULL);
+      
+      display = gdk_drawable_get_display (event->window);
+      _gdk_display_enable_motion_hints (display);
+    }
 }
 
 /**
@@ -1101,13 +1168,16 @@ gdk_synthesize_click (GdkDisplay *display,
 		      gint	  nclicks)
 {
   GdkEvent temp_event;
+  GdkEvent *event_copy;
+  GList *link;
   
   g_return_if_fail (event != NULL);
   
   temp_event = *event;
   temp_event.type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
-  
-  gdk_display_put_event (display, &temp_event);
+
+  event_copy = gdk_event_copy (&temp_event);
+  link = _gdk_event_queue_append (display, event_copy);
 }
 
 void

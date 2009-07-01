@@ -102,6 +102,8 @@ extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
+#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
+
 /* Initialization */
 void _gdk_windowing_window_init  (void);
 void _gdk_events_init            (void);
@@ -149,21 +151,13 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
 
 /* Events */
 typedef enum {
-  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP,
-  GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
 } GdkQuartzEventSubType;
 
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
-GdkWindow *  _gdk_quartz_events_get_mouse_window       (gboolean   consider_grabs);
-void         _gdk_quartz_events_update_mouse_window    (GdkWindow *window);
-void         _gdk_quartz_events_update_cursor          (GdkWindow *window);
-void         _gdk_quartz_events_send_map_events        (GdkWindow *window);
+void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
-void         _gdk_quartz_events_trigger_crossing_events(gboolean   defer_to_mainloop);
-
-extern GdkWindow *_gdk_quartz_keyboard_grab_window;
-extern GdkWindow *_gdk_quartz_pointer_grab_window;
 
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
@@ -186,14 +180,17 @@ gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
 
 /* Drawable */
 void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
+void        _gdk_quartz_drawable_flush  (GdkDrawable *drawable);
 
 /* Geometry */
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
-void        _gdk_quartz_window_move_region (GdkWindow       *window,
-                                            const GdkRegion *region,
-                                            gint             dx,
-                                            gint             dy);
+void        _gdk_quartz_window_queue_translation (GdkWindow *window,
+                                                  GdkRegion *area,
+                                                  gint       dx,
+                                                  gint       dy);
+gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
+                                                  GdkRegion *area);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

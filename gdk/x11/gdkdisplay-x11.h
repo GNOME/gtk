@@ -30,6 +30,7 @@
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkinternals.h>
 #include <gdk/gdk.h>		/* For gdk_get_program_class() */
 
 G_BEGIN_DECLS
@@ -93,21 +94,6 @@ struct _GdkDisplayX11
    * (grabs, properties etc.) Otherwise always TRUE. */
   gboolean trusted_client;
 
-  /* Information about current pointer and keyboard grabs held by this
-   * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window
-   * window is NULL, then the other associated fields are ignored
-   */
-  GdkWindowObject *pointer_xgrab_window;
-  gulong pointer_xgrab_serial;
-  gboolean pointer_xgrab_owner_events;
-  gboolean pointer_xgrab_implicit;
-  guint32 pointer_xgrab_time;
-
-  GdkWindowObject *keyboard_xgrab_window;
-  gulong keyboard_xgrab_serial;
-  gboolean keyboard_xgrab_owner_events;
-  guint32 keyboard_xgrab_time;
-
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
@@ -147,11 +133,6 @@ struct _GdkDisplayX11
   /* input GdkWindow list */
   GList *input_windows;
 
-  gint input_ignore_core;
-  /* information about network port and host for gxid daemon */
-  gchar *input_gxid_host;
-  gint   input_gxid_port;
-
   /* Startup notification */
   gchar *startup_notification_id;
 
@@ -169,6 +150,9 @@ struct _GdkDisplayX11
 
   /* Alpha mask picture format */
   XRenderPictFormat *mask_format;
+
+  /* The offscreen window that has the pointer in it (if any) */
+  GdkWindow *active_offscreen_window;
 };
 
 struct _GdkDisplayX11Class

@@ -31,6 +31,7 @@
 
 #include <glib.h>
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen.h"
@@ -439,6 +440,13 @@ process_internal_connection (GIOChannel  *gioc,
   return TRUE;
 }
 
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return NextRequest (GDK_DISPLAY_XDISPLAY (display));
+}
+
+
 static GdkInternalConnection *
 gdk_add_connection_handler (Display *display,
 			    guint    fd)
@@ -579,6 +587,20 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+struct XPointerUngrabInfo {
+  GdkDisplay *display;
+  guint32 time;
+};
+
+static void
+pointer_ungrab_callback (GdkDisplay *display,
+			 gpointer data,
+			 gulong serial)
+{
+  _gdk_display_pointer_grab_update (display, serial);
+}
+
+
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
@@ -595,43 +617,35 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
  */
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
-			    guint32     time)
+			    guint32     time_)
 {
   Display *xdisplay;
   GdkDisplayX11 *display_x11;
+  GdkPointerGrabInfo *grab;
+  unsigned long serial;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  serial = NextRequest (xdisplay);
   
-  _gdk_input_ungrab_pointer (display, time);
-  XUngrabPointer (xdisplay, time);
+  _gdk_input_ungrab_pointer (display, time_);
+  XUngrabPointer (xdisplay, time_);
   XFlush (xdisplay);
 
-  if (time == GDK_CURRENT_TIME || 
-      display_x11->pointer_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->pointer_xgrab_time, time))
-    display_x11->pointer_xgrab_window = NULL;
-}
-
-/**
- * gdk_display_pointer_is_grabbed:
- * @display: a #GdkDisplay
- *
- * Test if the pointer is grabbed.
- *
- * Returns: %TRUE if an active X pointer grab is in effect
- *
- * Since: 2.2
- */
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-  
-  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL &&
-	  !GDK_DISPLAY_X11 (display)->pointer_xgrab_implicit);
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab &&
+      (time_ == GDK_CURRENT_TIME ||
+       grab->time == GDK_CURRENT_TIME ||
+       !XSERVER_TIME_IS_LATER (grab->time, time_)))
+    {
+      grab->serial_end = serial;
+      _gdk_x11_roundtrip_async (display, 
+				pointer_ungrab_callback,
+				NULL);
+    }
 }
 
 /**
@@ -659,9 +673,9 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   XFlush (xdisplay);
   
   if (time == GDK_CURRENT_TIME || 
-      display_x11->keyboard_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->keyboard_xgrab_time, time))
-    display_x11->keyboard_xgrab_window = NULL;
+      display->keyboard_grab.time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display->keyboard_grab.time, time))
+    _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 /**
@@ -1330,7 +1344,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
-  
+
+  g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
+
   clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
   save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
 
