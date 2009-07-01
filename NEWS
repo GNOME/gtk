@@ -1,3 +1,10 @@
+Overview of Changes from GTK+ 2.16.3 to 2.16.4
+==============================================
+
+* Fix a side-effect introduced by the fix for bug 586330 that
+  caused all stock buttons to loose their mnemonics.
+
+
 Overview of Changes from GTK+ 2.16.2 to 2.16.3
 ==============================================
 
