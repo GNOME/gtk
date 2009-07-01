@@ -2949,7 +2949,7 @@ gtk_status_icon_get_title (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;
 
-  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
 
   priv = status_icon->priv;
 
