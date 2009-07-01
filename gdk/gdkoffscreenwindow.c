@@ -1224,7 +1224,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   drawable_class->draw_polygon = gdk_offscreen_window_draw_polygon;
   drawable_class->draw_text = gdk_offscreen_window_draw_text;
   drawable_class->draw_text_wc = gdk_offscreen_window_draw_text_wc;
-  drawable_class->draw_drawable = gdk_offscreen_window_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_offscreen_window_draw_drawable;
   drawable_class->draw_points = gdk_offscreen_window_draw_points;
   drawable_class->draw_segments = gdk_offscreen_window_draw_segments;
   drawable_class->draw_lines = gdk_offscreen_window_draw_lines;

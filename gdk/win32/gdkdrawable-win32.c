@@ -180,7 +180,7 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_polygon = gdk_win32_draw_polygon;
   drawable_class->draw_text = gdk_win32_draw_text;
   drawable_class->draw_text_wc = gdk_win32_draw_text_wc;
-  drawable_class->draw_drawable = gdk_win32_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;

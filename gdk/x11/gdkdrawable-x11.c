@@ -160,7 +160,7 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_polygon = gdk_x11_draw_polygon;
   drawable_class->draw_text = gdk_x11_draw_text;
   drawable_class->draw_text_wc = gdk_x11_draw_text_wc;
-  drawable_class->draw_drawable = gdk_x11_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
   drawable_class->draw_lines = gdk_x11_draw_lines;

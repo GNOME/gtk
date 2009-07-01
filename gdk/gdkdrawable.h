@@ -105,8 +105,7 @@ struct _GdkDrawableClass
 			  gint		xdest,
 			  gint		ydest,
 			  gint		width,
-			  gint		height,
-			  GdkDrawable  *original_src);
+			  gint		height);
   void (*draw_points)	 (GdkDrawable  *drawable,
 			  GdkGC	       *gc,
 			  GdkPoint     *points,
@@ -210,6 +209,17 @@ struct _GdkDrawableClass
 					     int width,
 					     int height);
 
+  void (*draw_drawable_with_src)  (GdkDrawable  *drawable,
+				   GdkGC	       *gc,
+				   GdkDrawable  *src,
+				   gint		xsrc,
+				   gint		ysrc,
+				   gint		xdest,
+				   gint		ydest,
+				   gint		width,
+				   gint		height,
+				   GdkDrawable  *original_src);
+
   /* Padding for future expansion */
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
@@ -219,7 +229,6 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved13) (void);
   void         (*_gdk_reserved14) (void);
   void         (*_gdk_reserved15) (void);
-  void         (*_gdk_reserved16) (void);
 };
 
 struct _GdkTrapezoid

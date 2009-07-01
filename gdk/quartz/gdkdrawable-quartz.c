@@ -661,7 +661,7 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->draw_polygon = gdk_quartz_draw_polygon;
   drawable_class->draw_text = gdk_quartz_draw_text;
   drawable_class->draw_text_wc = gdk_quartz_draw_text_wc;
-  drawable_class->draw_drawable = gdk_quartz_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
   drawable_class->draw_points = gdk_quartz_draw_points;
   drawable_class->draw_segments = gdk_quartz_draw_segments;
   drawable_class->draw_lines = gdk_quartz_draw_lines;
