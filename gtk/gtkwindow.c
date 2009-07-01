@@ -5064,8 +5064,6 @@ is_client_side_decorated (GtkWindow *window)
                         "client-side-decorated", &client_side_decorated,
                         NULL);
 
-  return 1 && window->decorated && !priv->disable_client_side_decorations; // XXX - remove this :)
-
   return client_side_decorated && window->decorated && !priv->disable_client_side_decorations;
 }
 
