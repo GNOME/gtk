@@ -1314,6 +1314,7 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowObject *private;
   GdkWindowObject *new_parent_private;
   GdkWindowObject *old_parent;
+  GdkScreen *screen;
   gboolean show, was_toplevel, was_mapped;
   gboolean do_reparent_to_impl;
 
@@ -1325,8 +1326,9 @@ gdk_window_reparent (GdkWindow *window,
       (new_parent && GDK_WINDOW_DESTROYED (new_parent)))
     return;
 
+  screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
   if (!new_parent)
-    new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
+    new_parent = gdk_screen_get_root_window (screen);
 
   private = (GdkWindowObject *) window;
   new_parent_private = (GdkWindowObject *)new_parent;
@@ -1392,7 +1394,7 @@ gdk_window_reparent (GdkWindow *window,
    */
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
     {
-      new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
+      new_parent = gdk_screen_get_root_window (screen);
       new_parent_private = (GdkWindowObject *)new_parent;
     }
 
