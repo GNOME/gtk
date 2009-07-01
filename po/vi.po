@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-15 20:52-0400\n"
-"PO-Revision-Date: 2009-02-09 23:42+0930\n"
+"PO-Revision-Date: 2009-07-01 14:13+1000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1168,9 +1168,8 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Đang mở %d mục"
 
 #: gtk/gtkaboutdialog.c:183
-#, fuzzy
 msgid "Could not show link"
-msgstr "Không thể xoá danh sách"
+msgstr "Không thể hiện liên kết"
 
 #: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
 msgid "License"
@@ -1286,14 +1285,14 @@ msgid "Backslash"
 msgstr "Xoá lùi"
 
 #: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Hàm kiểu không hợp lệ: « %s »"
+msgstr "Hàm kiểu không hợp lệ tại dòng %d: '%s'"
 
 #: gtk/gtkbuilderparser.c:402
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với trên dòng %d)"
 
 #: gtk/gtkbuilderparser.c:853
 #, c-format
@@ -1396,10 +1395,9 @@ msgstr "Bị tắt"
 #. * to gtk_accelerator_valid().
 #.
 #: gtk/gtkcellrendereraccel.c:253
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "URI không hợp lệ"
+msgstr "Không hợp lệ"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1799,14 +1797,12 @@ msgid "Could not send the search request"
 msgstr "Không thể gửi yêu cầu tìm kiếm"
 
 #: gtk/gtkfilechooserdefault.c:9499
-#, fuzzy
 msgid "<b>_Search:</b>"
-msgstr "Tìm _kiếm:"
+msgstr "<b>Tìm _kiếm:</b>"
 
 #: gtk/gtkfilechooserdefault.c:10232
-#, fuzzy
 msgid "<b>Recently Used</b>"
-msgstr "Vừa dùng"
+msgstr "<b>Vừa dùng</b>"
 
 #: gtk/gtkfilechooserdefault.c:10470
 #, c-format
@@ -2210,14 +2206,13 @@ msgstr "_Dọn"
 
 #. Open Link
 #: gtk/gtklabel.c:5504
-#, fuzzy
 msgid "_Open Link"
-msgstr "_Mở"
+msgstr "_Mở liên kết"
 
 #. Copy Link Address
 #: gtk/gtklabel.c:5516
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "Chép địa chỉ _liên kết"
 
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -2438,19 +2433,16 @@ msgid "File System Root"
 msgstr "Gốc hệ tập tin"
 
 #: gtk/gtkprintbackend.c:740
-#, fuzzy
 msgid "Authentication"
-msgstr "Ứng dụng"
+msgstr "Xác thực"
 
 #: gtk/gtkprintbackend.c:772
-#, fuzzy
 msgid "Username:"
-msgstr "Tên người _dùng:"
+msgstr "Tên người dùng:"
 
 #: gtk/gtkprintbackend.c:782
-#, fuzzy
 msgid "Password:"
-msgstr "Mật _khẩu :"
+msgstr "Mật khẩu:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2635,9 +2627,8 @@ msgid "C_urrent Page"
 msgstr "Trang _hiện thời"
 
 #: gtk/gtkprintunixdialog.c:1886
-#, fuzzy
 msgid "Se_lection"
-msgstr "_Vùng chọn: "
+msgstr "_Vùng chọn"
 
 #: gtk/gtkprintunixdialog.c:1895
 msgid "Pag_es:"
@@ -2652,9 +2643,8 @@ msgstr ""
 " v.d. 1-3,7,11"
 
 #: gtk/gtkprintunixdialog.c:1906
-#, fuzzy
 msgid "Pages"
-msgstr "T_rang:"
+msgstr "Trang"
 
 #: gtk/gtkprintunixdialog.c:1919
 msgid "Copies"
@@ -2740,14 +2730,12 @@ msgid "Right to left"
 msgstr "Phải sang trái"
 
 #: gtk/gtkprintunixdialog.c:2567
-#, fuzzy
 msgid "Top to bottom"
-msgstr "Trên xuống dưới, trái sang phải"
+msgstr "Trên xuống dưới"
 
 #: gtk/gtkprintunixdialog.c:2568
-#, fuzzy
 msgid "Bottom to top"
-msgstr "Dưới lên trên, trái sang phải"
+msgstr "Dưới lên trên"
 
 #: gtk/gtkprintunixdialog.c:2646
 msgid "Layout"
@@ -2843,7 +2831,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:2909
 msgid "Time of print"
-msgstr ""
+msgstr "Thời điểm in"
 
 #: gtk/gtkprintunixdialog.c:2925
 msgid "On _hold"
@@ -2851,7 +2839,7 @@ msgstr "Tạ_m ngừng"
 
 #: gtk/gtkprintunixdialog.c:2926
 msgid "Hold the job until it is explicitly released"
-msgstr "Giữ lại công việc đến khi nó được nhả dứt khoát"
+msgstr "Giữ lại yêu cầu đến khi nó được nhả dứt khoát"
 
 #: gtk/gtkprintunixdialog.c:2946
 msgid "Add Cover Page"
@@ -2876,7 +2864,7 @@ msgstr "S_au:"
 #.
 #: gtk/gtkprintunixdialog.c:2991
 msgid "Job"
-msgstr "Yêu cầu"
+msgstr "Yêu cầu in"
 
 #: gtk/gtkprintunixdialog.c:3057
 msgid "Advanced"
@@ -4655,9 +4643,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "Không phải bộ nhớ tạm biểu tượng hợp lệ: %s\n"
 
 #: gtk/updateiconcache.c:1690
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "Không có tập tin chỉ mục sắc thái"
+msgstr "Không có tập tin chỉ mục sắc thái.\n"
 
 #: gtk/updateiconcache.c:1694
 #, c-format
@@ -4727,50 +4715,50 @@ msgstr "Phương pháp gõ X (XIM)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:769
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "Cần xác thực để lấy tập tin từ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:773
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "Cần xác thực để in tài liệu '%s' trên máy in %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:775
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "Cần xác thực để in tài liệu trên %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:779
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "Cần xác thực để lấy thuộc tính của yêu cầu '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:781
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "Cần xác thực để lấy thuộc tính của yêu cầu in"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:785
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "Cần xác thực để lấy thuộc tính của máy in %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:787
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "Cần xác thực để lấy thuộc tính của máy in"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:790
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "Cần xác thực để lấy máy in mặc định cho %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:793
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "Cần xác thực để lấy máy in mặc định từ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:796
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "Cần xác thực trên %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1412
 #, c-format
