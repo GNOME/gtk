@@ -1070,27 +1070,13 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
     }
 }
 
-static GdkWindow *
-gdk_window_get_offscreen_parent (GdkWindow *window)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindow *res;
-
-  res = NULL;
-  g_signal_emit_by_name (private->impl_window,
-			 "get-offscreen-parent",
-			 &res);
-
-  return res;
-}
-
 /* Gets the toplevel for a window as used for events,
    i.e. including offscreen parents */
 static GdkWindowObject *
 get_event_parent (GdkWindowObject *window)
 {
-  if (window->window_type ==GDK_WINDOW_OFFSCREEN)
-    return (GdkWindowObject *)gdk_window_get_offscreen_parent ((GdkWindow *)window);
+  if (window->window_type == GDK_WINDOW_OFFSCREEN)
+    return (GdkWindowObject *)gdk_offscreen_window_get_embedder ((GdkWindow *)window);
   else
     return window->parent;
 }

@@ -260,8 +260,8 @@ struct _GdkWindowObject
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
-  guint has_offscreen_children : 1;
 
+  guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
   GdkInputWindow *input_window; /* only set for impl windows */
 

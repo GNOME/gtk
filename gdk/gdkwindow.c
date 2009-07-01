@@ -122,10 +122,9 @@
 #define GDK_VISIBILITY_NOT_VIEWABLE 3
 
 enum {
-  GET_OFFSCREEN_PARENT,
-  PICK_OFFSCREEN_CHILD, /* only called if has_offscreen_children */
-  TO_PARENT,
-  FROM_PARENT,
+  PICK_EMBEDDED_CHILD, /* only called if children are embedded */
+  TO_EMBEDDER,
+  FROM_EMBEDDER,
   LAST_SIGNAL
 };
 
@@ -312,7 +311,6 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
-static GdkWindow *gdk_window_get_offscreen_parent (GdkWindow *window);
 static void move_native_children (GdkWindowObject *private);
 static void update_cursor (GdkDisplay *display);
 static gboolean is_event_parent_of (GdkWindow *parent,
@@ -448,17 +446,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
 
-  signals[GET_OFFSCREEN_PARENT] =
-    g_signal_new (g_intern_static_string ("get-offscreen-parent"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  0,
-		  accumulate_get_window, NULL,
-		  gdk_marshal_OBJECT__VOID,
-		  GDK_TYPE_WINDOW,
-		  0);
-  signals[PICK_OFFSCREEN_CHILD] =
-    g_signal_new (g_intern_static_string ("pick-offscreen-child"),
+  signals[PICK_EMBEDDED_CHILD] =
+    g_signal_new (g_intern_static_string ("pick-embedded-child"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  0,
@@ -468,8 +457,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  2,
 		  G_TYPE_DOUBLE,
 		  G_TYPE_DOUBLE);
-  signals[TO_PARENT] =
-    g_signal_new (g_intern_static_string ("to-parent"),
+  signals[TO_EMBEDDER] =
+    g_signal_new (g_intern_static_string ("to-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  0,
@@ -481,8 +470,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  G_TYPE_DOUBLE,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);
-  signals[FROM_PARENT] =
-    g_signal_new (g_intern_static_string ("from-parent"),
+  signals[FROM_EMBEDDER] =
+    g_signal_new (g_intern_static_string ("from-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  0,
@@ -7854,8 +7843,8 @@ gdk_window_redirect_free (GdkWindowRedirect *redirect)
 static GdkWindowObject *
 get_event_parent (GdkWindowObject *window)
 {
-  if (window->window_type ==GDK_WINDOW_OFFSCREEN)
-    return (GdkWindowObject *)gdk_window_get_offscreen_parent ((GdkWindow *)window);
+  if (window->window_type == GDK_WINDOW_OFFSCREEN)
+    return (GdkWindowObject *)gdk_offscreen_window_get_embedder ((GdkWindow *)window);
   else
     return window->parent;
 }
@@ -7923,13 +7912,13 @@ update_cursor (GdkDisplay *display)
 }
 
 static void
-from_parent (GdkWindowObject *window,
-	     double parent_x, double parent_y,
-	     double *offscreen_x, double *offscreen_y)
+from_embedder (GdkWindowObject *window,
+	       double embedder_x, double embedder_y,
+	       double *offscreen_x, double *offscreen_y)
 {
   g_signal_emit (window,
-		 signals[FROM_PARENT], 0,
-		 parent_x, parent_y,
+		 signals[FROM_EMBEDDER], 0,
+		 embedder_x, embedder_y,
 		 offscreen_x, offscreen_y,
 		 NULL);
 }
@@ -7941,8 +7930,8 @@ convert_coords_to_child (GdkWindowObject *child,
 {
   if (gdk_window_is_offscreen (child))
     {
-      from_parent (child, x, y,
-		   child_x, child_y);
+      from_embedder (child, x, y,
+		     child_x, child_y);
     }
   else
     {
@@ -8026,14 +8015,14 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 }
 
 static GdkWindowObject *
-pick_offscreen_child (GdkWindowObject *window,
+pick_embedded_child (GdkWindowObject *window,
 		      double x, double y)
 {
   GdkWindowObject *res;
 
   res = NULL;
   g_signal_emit (window,
-		 signals[PICK_OFFSCREEN_CHILD], 0,
+		 signals[PICK_EMBEDDED_CHILD], 0,
 		 x, y, &res);
 
   return res;
@@ -8066,10 +8055,10 @@ _gdk_window_find_child_at (GdkWindow *window,
 	    return (GdkWindow *)sub;
 	}
 
-      if (private->has_offscreen_children)
+      if (private->num_offscreen_children > 0)
 	{
-	  sub = pick_offscreen_child (private,
-				      x, y);
+	  sub = pick_embedded_child (private,
+				     x, y);
 	  if (sub)
 	    return (GdkWindow *)sub;
 	}
@@ -8117,15 +8106,15 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
 		}
 	    }
 	  if (!found &&
-	      private->has_offscreen_children)
+	      private->num_offscreen_children > 0)
 	    {
-	      sub = pick_offscreen_child (private,
-					  x, y);
+	      sub = pick_embedded_child (private,
+					 x, y);
 	      if (sub)
 		{
 		  found = TRUE;
 		  private = sub;
-		  from_parent (sub, x, y, &x, &y);
+		  from_embedder (sub, x, y, &x, &y);
 		}
 	    }
 	}
@@ -8648,20 +8637,6 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
   _gdk_display_enable_motion_hints (display);
 }
 
-static GdkWindow *
-gdk_window_get_offscreen_parent (GdkWindow *window)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindow *res;
-
-  res = NULL;
-  g_signal_emit (private->impl_window,
-		 signals[GET_OFFSCREEN_PARENT], 0,
-		 &res);
-
-  return res;
-}
-
 /*
  *--------------------------------------------------------------
  * gdk_pointer_grab
@@ -8719,7 +8694,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   native = gdk_window_get_toplevel (window);
   while (gdk_window_is_offscreen ((GdkWindowObject *)native))
     {
-      native = gdk_window_get_offscreen_parent (native);
+      native = gdk_offscreen_window_get_embedder (native);
 
       if (native == NULL ||
 	  (!_gdk_window_has_impl (native) &&
@@ -8755,24 +8730,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 }
 
 void
-gdk_window_set_has_offscreen_children (GdkWindow *window,
-				       gboolean has_offscreen_children)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  private->has_offscreen_children = !!has_offscreen_children;
-}
-
-gboolean
-gdk_window_get_has_offscreen_children (GdkWindow *window)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  return private->has_offscreen_children;
-}
-
-void
-gdk_window_offscreen_children_changed (GdkWindow *window)
+gdk_window_geometry_changed (GdkWindow *window)
 {
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }

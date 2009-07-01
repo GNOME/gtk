@@ -141,13 +141,6 @@ gtk_offscreen_box_new (void)
 }
 
 static GdkWindow *
-get_offscreen_parent (GdkWindow *offscreen_window,
-		      GtkOffscreenBox *offscreen_box)
-{
-  return GTK_WIDGET (offscreen_box)->window;
-}
-
-static GdkWindow *
 pick_offscreen_child (GdkWindow *offscreen_window,
 		      double widget_x, double widget_y,
 		      GtkOffscreenBox *offscreen_box)
@@ -273,8 +266,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
-  gdk_window_set_has_offscreen_children (widget->window, TRUE);
-  g_signal_connect (widget->window, "pick-offscreen-child",
+  g_signal_connect (widget->window, "pick-embedded-child",
 		    G_CALLBACK (pick_offscreen_child), offscreen_box);
 
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
@@ -293,11 +285,12 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   if (offscreen_box->child1)
     gtk_widget_set_parent_window (offscreen_box->child1, offscreen_box->offscreen_window1);
 
-  g_signal_connect (offscreen_box->offscreen_window1, "get-offscreen-parent",
-		    G_CALLBACK (get_offscreen_parent), offscreen_box);
-  g_signal_connect (offscreen_box->offscreen_window1, "to_parent",
+  gdk_offscreen_window_set_embedder (offscreen_box->offscreen_window1,
+				     widget->window);
+  
+  g_signal_connect (offscreen_box->offscreen_window1, "to-embedder",
 		    G_CALLBACK (offscreen_window_to_parent1), offscreen_box);
-  g_signal_connect (offscreen_box->offscreen_window1, "from_parent",
+  g_signal_connect (offscreen_box->offscreen_window1, "from-embedder",
 		    G_CALLBACK (offscreen_window_from_parent1), offscreen_box);
 
   /* Child 2 */
@@ -313,11 +306,11 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   gdk_window_set_user_data (offscreen_box->offscreen_window2, widget);
   if (offscreen_box->child2)
     gtk_widget_set_parent_window (offscreen_box->child2, offscreen_box->offscreen_window2);
-  g_signal_connect (offscreen_box->offscreen_window2, "get-offscreen-parent",
-		    G_CALLBACK (get_offscreen_parent), offscreen_box);
-  g_signal_connect (offscreen_box->offscreen_window2, "to_parent",
+  gdk_offscreen_window_set_embedder (offscreen_box->offscreen_window2,
+				     widget->window);
+  g_signal_connect (offscreen_box->offscreen_window2, "to-embedder",
 		    G_CALLBACK (offscreen_window_to_parent2), offscreen_box);
-  g_signal_connect (offscreen_box->offscreen_window2, "from_parent",
+  g_signal_connect (offscreen_box->offscreen_window2, "from-embedder",
 		    G_CALLBACK (offscreen_window_from_parent2), offscreen_box);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
@@ -590,7 +583,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 
 	  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
 	    {
-	      pixmap = gdk_window_get_offscreen_pixmap (offscreen_box->offscreen_window1);
+	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window1);
               child_area = offscreen_box->child1->allocation;
 
 	      cr = gdk_cairo_create (widget->window);
@@ -607,7 +600,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	    {
               gint w, h;
 
-	      pixmap = gdk_window_get_offscreen_pixmap (offscreen_box->offscreen_window2);
+	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window2);
               child_area = offscreen_box->child2->allocation;
 
 	      cr = gdk_cairo_create (widget->window);

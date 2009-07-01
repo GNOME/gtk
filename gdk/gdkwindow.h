@@ -660,11 +660,11 @@ GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
 GdkWindow *gdk_get_default_root_window (void);
 
 /* Offscreen redirection */
-GdkPixmap *gdk_window_get_offscreen_pixmap   (GdkWindow     *window);
-void       gdk_window_set_has_offscreen_children (GdkWindow     *window,
-						  gboolean       has_offscreen_children);
-gboolean   gdk_window_get_has_offscreen_children (GdkWindow     *window);
-void       gdk_window_offscreen_children_changed (GdkWindow     *window);
+GdkPixmap *gdk_offscreen_window_get_pixmap     (GdkWindow     *window);
+void       gdk_offscreen_window_set_embedder   (GdkWindow     *window,
+						GdkWindow     *embedder);
+GdkWindow *gdk_offscreen_window_get_embedder   (GdkWindow     *window);
+void       gdk_window_geometry_changed         (GdkWindow     *window);
 
 void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
                                               GdkDrawable   *drawable,

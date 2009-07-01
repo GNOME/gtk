@@ -59,6 +59,7 @@ struct _GdkOffscreenWindow
   GdkScreen *screen;
 
   GdkPixmap *pixmap;
+  GdkWindow *embedder;
 };
 
 struct _GdkOffscreenWindowClass
@@ -113,6 +114,8 @@ gdk_offscreen_window_destroy (GdkWindow *window,
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
+  gdk_offscreen_window_set_embedder (window, NULL);
+  
   if (!recursing)
     gdk_offscreen_window_hide (window);
 
@@ -685,52 +688,35 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   return was_mapped;
 }
 
-
-static GdkWindow *
-get_offscreen_parent (GdkWindow *window)
-{
-  GdkWindowObject *private;
-  GdkWindow *res;
-
-  private = (GdkWindowObject *)window;
-
-  res = NULL;
-  g_signal_emit_by_name (private->impl_window,
-			 "get-offscreen-parent",
-			 &res);
-
-  return res;
-}
-
 static void
-from_parent (GdkWindow *window,
-	     double parent_x, double parent_y,
-	     double *offscreen_x, double *offscreen_y)
+from_embedder (GdkWindow *window,
+	       double embedder_x, double embedder_y,
+	       double *offscreen_x, double *offscreen_y)
 {
   GdkWindowObject *private;
 
   private = (GdkWindowObject *)window;
 
   g_signal_emit_by_name (private->impl_window,
-			 "from_parent",
-			 parent_x, parent_y,
+			 "from-embedder",
+			 embedder_x, embedder_y,
 			 offscreen_x, offscreen_y,
 			 NULL);
 }
 
 static void
-to_parent (GdkWindow *window,
-	   double offscreen_x, double offscreen_y,
-	   double *parent_x, double *parent_y)
+to_embedder (GdkWindow *window,
+	     double offscreen_x, double offscreen_y,
+	     double *embedder_x, double *embedder_y)
 {
   GdkWindowObject *private;
 
   private = (GdkWindowObject *)window;
 
   g_signal_emit_by_name (private->impl_window,
-			 "to_parent",
+			 "to-embedder",
 			 offscreen_x, offscreen_y,
-			 parent_x, parent_y,
+			 embedder_x, embedder_y,
 			 NULL);
 }
 
@@ -741,22 +727,23 @@ gdk_offscreen_window_get_root_coords (GdkWindow *window,
 				      gint      *root_x,
 				      gint      *root_y)
 {
-  GdkWindow *parent;
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkOffscreenWindow *offscreen;
   int tmpx, tmpy;
 
   tmpx = x;
   tmpy = y;
 
-  parent = get_offscreen_parent (window);
-  if (parent)
+  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
+  if (offscreen->embedder)
     {
       double dx, dy;
-      to_parent (window,
-		 x, y,
-		 &dx, &dy);
+      to_embedder (window,
+		   x, y,
+		   &dx, &dy);
       tmpx = floor (dx + 0.5);
       tmpy = floor (dy + 0.5);
-      gdk_window_get_root_coords (parent,
+      gdk_window_get_root_coords (offscreen->embedder,
 				  tmpx, tmpy,
 				  &tmpx, &tmpy);
 
@@ -775,22 +762,23 @@ gdk_offscreen_window_get_deskrelative_origin (GdkWindow *window,
 					      gint      *x,
 					      gint      *y)
 {
-  GdkWindow *parent;
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkOffscreenWindow *offscreen;
   int tmpx, tmpy;
 
   tmpx = 0;
   tmpy = 0;
 
-  parent = get_offscreen_parent (window);
-  if (parent)
+  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
+  if (offscreen->embedder)
     {
       double dx, dy;
-      gdk_window_get_deskrelative_origin (parent,
+      gdk_window_get_deskrelative_origin (offscreen->embedder,
 					  &tmpx, &tmpy);
 
-      to_parent (window,
-		 0, 0,
-		 &dx, &dy);
+      to_embedder (window,
+		   0, 0,
+		   &dx, &dy);
       tmpx = floor (tmpx + dx + 0.5);
       tmpy = floor (tmpy + dy + 0.5);
     }
@@ -810,22 +798,23 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
 				  gint            *y,
 				  GdkModifierType *mask)
 {
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
+  GdkOffscreenWindow *offscreen;
   int tmpx, tmpy;
   double dtmpx, dtmpy;
   GdkModifierType tmpmask;
-  GdkWindow *parent;
 
   tmpx = 0;
   tmpy = 0;
   tmpmask = 0;
 
-  parent = get_offscreen_parent (window);
-  if (parent != NULL)
+  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
+  if (offscreen->embedder != NULL)
     {
-      gdk_window_get_pointer (parent, &tmpx, &tmpy, &tmpmask);
-      from_parent (window,
-		   tmpx, tmpy,
-		   &dtmpx, &dtmpy);
+      gdk_window_get_pointer (offscreen->embedder, &tmpx, &tmpy, &tmpmask);
+      from_embedder (window,
+		     tmpx, tmpy,
+		     &dtmpx, &dtmpy);
       tmpx = floor (dtmpx + 0.5);
       tmpy = floor (dtmpy + 0.5);
     }
@@ -840,7 +829,7 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
 }
 
 /**
- * gdk_window_get_offscreen_pixmap:
+ * gdk_offscreen_window_get_pixmap:
  * @window: a #GdkWindow
  *
  * Gets the offscreen pixmap that an offscreen window renders into. If
@@ -850,7 +839,7 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
  * Returns: The offscreen pixmap, or NULL if not offscreen
  **/
 GdkPixmap *
-gdk_window_get_offscreen_pixmap (GdkWindow *window)
+gdk_offscreen_window_get_pixmap (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
@@ -970,7 +959,8 @@ gdk_offscreen_window_move_resize (GdkWindow *window,
 }
 
 static void
-gdk_offscreen_window_show (GdkWindow *window)
+gdk_offscreen_window_show (GdkWindow *window,
+			   gboolean already_mapped)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
@@ -1165,6 +1155,50 @@ gdk_offscreen_window_queue_translation (GdkWindow *window,
 {
 }
 
+void
+gdk_offscreen_window_set_embedder (GdkWindow     *window,
+				   GdkWindow     *embedder)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkOffscreenWindow *offscreen;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (!GDK_IS_OFFSCREEN_WINDOW (private->impl))
+    return;
+
+  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
+
+  if (embedder)
+    {
+      g_object_ref (embedder);
+      GDK_WINDOW_OBJECT (embedder)->num_offscreen_children++;
+    }
+
+  if (offscreen->embedder)
+    {
+      g_object_unref (offscreen->embedder);
+      GDK_WINDOW_OBJECT (offscreen->embedder)->num_offscreen_children--;
+    }
+
+  offscreen->embedder = embedder;
+}
+
+GdkWindow *
+gdk_offscreen_window_get_embedder (GdkWindow *window)
+{
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkOffscreenWindow *offscreen;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (!GDK_IS_OFFSCREEN_WINDOW (private->impl))
+    return NULL;
+
+  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
+
+  return offscreen->embedder;
+}
 
 static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
