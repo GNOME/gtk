@@ -598,12 +598,11 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
     }
 
   if (reset_origin)
-  {
-	  gc->clip_x_origin = 0;
-	  gc->clip_y_origin = 0;
-  }
-
-  win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+      win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+    }
 }
 
 void
