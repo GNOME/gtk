@@ -6853,13 +6853,6 @@ set_list_model (GtkFileChooserDefault *impl,
         G_TYPE_FILE_INFO,
         G_TYPE_STRING);
 
-  if (!impl->browse_files_model)
-    {
-      set_busy_cursor (impl, FALSE);
-      profile_end ("end", NULL);
-      return FALSE;
-    }
-
   load_setup_timer (impl); /* This changes the state to LOAD_PRELOAD */
 
   g_signal_connect (impl->browse_files_model, "finished-loading",
