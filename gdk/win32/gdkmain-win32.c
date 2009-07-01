@@ -623,6 +623,9 @@ _gdk_win32_window_exstyle_to_string (LONG style)
   BIT (ACCEPTFILES);
   BIT (APPWINDOW);
   BIT (CLIENTEDGE);
+#ifndef WS_EX_COMPOSITED
+#  define WS_EX_COMPOSITED 0x02000000L
+#endif
   BIT (COMPOSITED);
   BIT (CONTEXTHELP);
   BIT (CONTROLPARENT);
