@@ -1472,16 +1472,8 @@ static void
 min_button_clicked (GtkWidget *widget, gpointer data)
 {
   GtkWindow *window = (GtkWindow *)data;
-  GdkWindowState state = gdk_window_get_state (widget->window);
 
-  if (state & GDK_WINDOW_STATE_ICONIFIED)
-    {
-      gtk_window_deiconify (window);
-    }
-  else
-    {
-      gtk_window_iconify (window);
-    }
+  gtk_window_iconify (window);
 }
 
 static void
