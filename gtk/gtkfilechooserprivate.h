@@ -233,7 +233,6 @@ struct _GtkFileChooserDefault
   GSList *reload_icon_cancellables;
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
-  GCancellable *show_and_select_files_cancellable;
   GCancellable *should_respond_get_info_cancellable;
   GCancellable *file_exists_get_info_cancellable;
   GCancellable *update_from_entry_cancellable;

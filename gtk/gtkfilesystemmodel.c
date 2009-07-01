@@ -968,17 +968,17 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
                                      model->cancellable,
                                      gtk_file_system_model_closed_enumerator,
                                      NULL);
-      if (error)
-        g_error_free (error);
-      else
-        g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, NULL);
-
       if (model->dir_thaw_source != 0)
         {
           g_source_remove (model->dir_thaw_source);
           model->dir_thaw_source = 0;
           _gtk_file_system_model_thaw_updates (model);
         }
+
+      if (error)
+        g_error_free (error);
+      else
+        g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, NULL);
 
       g_object_unref (model);
     }
@@ -1315,12 +1315,49 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
     }
 }
 
+/**
+ * _gtk_file_system_model_get_cancellable:
+ * @model: the model
+ *
+ * Gets the cancellable used by the @model. This is the cancellable used
+ * internally by the @model that will be cancelled when @model is 
+ * disposed. So you can use it for operations that should be cancelled
+ * when the model goes away.
+ *
+ * Returns: The cancellable used by @model
+ **/
 GCancellable *
 _gtk_file_system_model_get_cancellable (GtkFileSystemModel *model)
 {
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), NULL);
 
   return model->cancellable;
+}
+
+/**
+ * _gtk_file_system_model_get_is_visible:
+ * @model: the model
+ * @iter: a valid iterator
+ *
+ * Checks if the iterator is visible. A visible iterator references
+ * a row that is currently exposed using the #GtkTreeModel API. If
+ * the iterator is invisible, it references a file that is not shown
+ * for some reason, such as being filtered by the current filter or
+ * being a hidden file.
+ *
+ * Returns: %TRUE if the iterator is visible
+ **/
+gboolean
+_gtk_file_system_model_get_is_visible (GtkFileSystemModel *model,
+				       GtkTreeIter        *iter)
+{
+  FileModelNode *node;
+
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  node = get_node (model, ITER_INDEX (iter));
+  return node->visible;
 }
 
 /**
@@ -1347,6 +1384,7 @@ _gtk_file_system_model_get_info (GtkFileSystemModel *model,
   FileModelNode *node;
 
   g_return_val_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model), NULL);
+  g_return_val_if_fail (iter != NULL, NULL);
 
   node = get_node (model, ITER_INDEX (iter));
   g_assert (node->info == NULL || G_IS_FILE_INFO (node->info));
@@ -1447,6 +1485,20 @@ node_get_for_file (GtkFileSystemModel *model,
   return 0;
 }
 
+/**
+ * _gtk_file_system_model_get_iter_for_file:
+ * @model: the model
+ * @iter: the iterator to be initialized
+ * @file: the file to look up
+ *
+ * Initializes @iter to point to the row used for @file, if @file is part 
+ * of the model. Note that upon successful return, @iter may point to an 
+ * invisible row in the @model. Use 
+ * _gtk_file_system_model_get_is_visible() to make sure it is visible to
+ * the tree view.
+ *
+ * Returns: %TRUE if file is part of the model and @iter was initialized
+ **/
 gboolean
 _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
 					  GtkTreeIter        *iter,
