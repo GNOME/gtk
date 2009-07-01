@@ -1977,8 +1977,6 @@ _gdk_win32_drawable_finish (GdkDrawable *drawable)
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key, NULL, NULL);
     }
 
-  g_print ("hdc_count == %d\n", impl->hdc_count);
-  
-  //g_assert (impl->hdc_count == 0);
+  //TODO_CSW: g_assert (impl->hdc_count == 0);
 }
 
