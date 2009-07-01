@@ -31,6 +31,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testaccel			\
 	testassistant			\
 	testbbox			\
+	testbuttons			\
 	testcairo			\
 	testcalendar			\
 	testcombo			\
@@ -115,6 +116,7 @@ testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
+testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
@@ -175,6 +177,7 @@ print_editor_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
+testbuttons_LDADD = $(LDADDS)
 testframe_LDADD = $(LDADDS)
 testcairo_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
@@ -305,6 +308,9 @@ testactions_SOURCES = 		\
 
 testbbox_SOURCES = 		\
 	testbbox.c
+
+testbuttons_SOURCES = 		\
+	testbuttons.c
 
 testframe_SOURCES = 		\
 	testframe.c
