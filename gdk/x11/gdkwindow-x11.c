@@ -39,11 +39,11 @@
 #include <unistd.h>
 
 #include "gdk.h"
+#include "gdkx.h"
 
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkasync.h"
-#include "gdkinputprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkregion.h"
@@ -1158,8 +1158,10 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   _gdk_selection_window_destroyed (window);
   
+#if 0
   if (private->extension_events != 0)
     _gdk_input_window_destroy (window);
+#endif
 
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)

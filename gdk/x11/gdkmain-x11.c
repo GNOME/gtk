@@ -48,7 +48,6 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkregion-generic.h"
-#include "gdkinputprivate.h"
 #include "gdkalias.h"
 
 typedef struct _GdkPredicate  GdkPredicate;
@@ -230,11 +229,15 @@ gdk_pointer_grab (GdkWindow *	  window,
 	xevent_mask |= _gdk_event_mask_table[i];
     }
   
+#if 0
   return_val = _gdk_input_grab_pointer (window,
 					owner_events,
 					event_mask,
 					confine_to,
 					time);
+#else
+  return_val = GrabSuccess;
+#endif
 
   if (return_val == GrabSuccess || 
       G_UNLIKELY (!display_x11->trusted_client && return_val == AlreadyGrabbed))

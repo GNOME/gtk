@@ -38,7 +38,6 @@
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
-#include "gdkinputprivate.h"
 #include "xsettings-client.h"
 #include "gdkalias.h"
 
@@ -663,11 +662,13 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
 
+#if 0
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
+#endif
 
 #ifdef HAVE_XSYNC
       if (toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
@@ -992,6 +993,29 @@ _gdk_event_init (GdkDisplay *display)
   device_manager = gdk_device_manager_get_for_display (display);
   gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                    GDK_EVENT_TRANSLATOR (device_manager));
+}
+
+static void
+_gdk_input_init (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11;
+  GdkDeviceManager *device_manager;
+  GList *list;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+  device_manager = gdk_device_manager_get_for_display (display);
+
+  /* Add all devices */
+  display_x11->input_devices = gdk_device_manager_get_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+  list = gdk_device_manager_get_devices (device_manager, GDK_DEVICE_TYPE_SLAVE);
+  display_x11->input_devices = g_list_concat (display_x11->input_devices, list);
+
+  list = gdk_device_manager_get_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+  display_x11->input_devices = g_list_concat (display_x11->input_devices, list);
+
+  /* Now set "core" pointer to the first master device */
+  display->core_pointer = display_x11->input_devices->data;
 }
 
 /**
@@ -1464,7 +1488,9 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
   
+#if 0
   _gdk_input_ungrab_pointer (display, time);
+#endif
   XUngrabPointer (xdisplay, time);
   XFlush (xdisplay);
 
@@ -2324,6 +2350,24 @@ gdk_display_supports_composite (GdkDisplay *display)
 	 x11_display->have_xfixes;
 }
 
+/**
+ * gdk_display_list_devices:
+ * @display: a #GdkDisplay
+ *
+ * Returns the list of available input devices attached to @display.
+ * The list is statically allocated and should not be freed.
+ *
+ * Return value: a list of #GdkDevice
+ *
+ * Since: 2.2
+ **/
+GList *
+gdk_display_list_devices (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_X11 (display)->input_devices;
+}
 
 #define __GDK_DISPLAY_X11_C__
 #include "gdkaliasdef.c"

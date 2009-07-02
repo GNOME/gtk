@@ -21,7 +21,7 @@
 #include <gdk/gdkdevicemanager.h>
 #include "gdkdevicemanager-core.h"
 #include "gdkeventtranslator.h"
-#include "gdkinputprivate.h"
+#include "gdkdevice-core.h"
 #include "gdkkeysyms.h"
 
 #ifdef HAVE_XKB
@@ -31,11 +31,6 @@
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
-
-static GdkDeviceAxis gdk_input_core_axes[] = {
-  { GDK_AXIS_X, 0, 0 },
-  { GDK_AXIS_Y, 0, 0 }
-};
 
 static GList * gdk_device_manager_core_get_devices (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
@@ -69,24 +64,13 @@ gdk_device_manager_event_translator_init (GdkEventTranslatorIface *iface)
 static GdkDevice *
 create_core_pointer (GdkDisplay *display)
 {
-  GdkDevice *core_pointer;
-  GdkDevicePrivate *private;
-
-  core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
-  private = (GdkDevicePrivate *) core_pointer;
-
-  core_pointer->name = "Core Pointer";
-  core_pointer->source = GDK_SOURCE_MOUSE;
-  core_pointer->mode = GDK_MODE_SCREEN;
-  core_pointer->has_cursor = TRUE;
-  core_pointer->num_axes = G_N_ELEMENTS (gdk_input_core_axes);
-  core_pointer->axes = gdk_input_core_axes;
-  core_pointer->num_keys = 0;
-  core_pointer->keys = NULL;
-
-  private->display = display;
-
-  return core_pointer;
+  /* FIXME: set mode */
+  return g_object_new (GDK_TYPE_DEVICE_CORE,
+                       "name", "Core Pointer",
+                       "input-source", GDK_SOURCE_MOUSE,
+                       "has-cursor", TRUE,
+                       "display", display,
+                       NULL);
 }
 
 static void
@@ -677,11 +661,13 @@ gdk_device_manager_translate_event (GdkEventTranslator *translator,
 	    }
 	}
 
+#if 0
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  window_private->extension_events != 0)
 	_gdk_input_enter_event (&xevent->xcrossing, window);
+#endif
 
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;

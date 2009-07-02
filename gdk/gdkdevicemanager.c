@@ -20,6 +20,7 @@
 #include "gdkdevicemanager.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
+#include "gdkalias.h"
 
 
 static void gdk_device_manager_set_property (GObject      *object,
@@ -236,3 +237,6 @@ gdk_device_manager_set_window_events (GdkDeviceManager *device_manager,
   if (GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->set_window_events)
     GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->set_window_events (device_manager, window, event_mask);
 }
+
+#define __GDK_DEVICE_MANAGER_C__
+#include "gdkaliasdef.c"

@@ -67,6 +67,7 @@ gdk_public_h_sources =				\
 	gdkcairo.h				\
 	gdkcolor.h				\
 	gdkcursor.h				\
+	gdkdevice.h				\
 	gdkdevicemanager.h			\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
@@ -108,6 +109,7 @@ gdk_c_sources =                 \
 	gdkcairo.c		\
 	gdkcolor.c		\
 	gdkcursor.c		\
+	gdkdevice.c		\
 	gdkdevicemanager.c	\
 	gdkdisplay.c		\
 	gdkdisplaymanager.c	\
@@ -118,6 +120,7 @@ gdk_c_sources =                 \
 	gdkgc.c			\
 	gdkglobals.c		\
 	gdkimage.c		\
+	gdkinput.c		\
 	gdkinternals.h  	\
 	gdkintl.h		\
 	gdkkeys.c		\

@@ -25,7 +25,7 @@
 #define __GDK_DEVICE_MANAGER_H__
 
 #include <gdk/gdktypes.h>
-#include <gdk/gdkinput.h>
+#include <gdk/gdkdevice.h>
 #include <gdk/gdkdisplay.h>
 
 G_BEGIN_DECLS

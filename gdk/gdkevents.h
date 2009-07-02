@@ -34,7 +34,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
-#include <gdk/gdkinput.h>
+#include <gdk/gdkdevice.h>
 
 G_BEGIN_DECLS
 

@@ -42,7 +42,6 @@
 
 #include <string.h>
 
-#include "gdkinputprivate.h"
 #include "gdksettings.c"
 #include "gdkalias.h"
 
@@ -1289,11 +1288,13 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	}
 
+#if 0
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  window_private->extension_events != 0)
 	_gdk_input_enter_event (&xevent->xcrossing, window);
+#endif
       
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
@@ -1836,11 +1837,13 @@ gdk_event_translate (GdkDisplay *display,
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
 
+#if 0
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0))
 	_gdk_input_configure_event (&xevent->xconfigure, window);
+#endif
       
 #ifdef HAVE_XSYNC
       if (toplevel && display_x11->use_sync && !XSyncValueIsZero (toplevel->pending_counter_value))
@@ -2152,12 +2155,13 @@ gdk_event_translate (GdkDisplay *display,
 #endif
 	{
 	  /* something else - (e.g., a Xinput event) */
-	  
+#if 0
 	  if (window_private &&
 	      !GDK_WINDOW_DESTROYED (window_private) &&
 	      (window_private->extension_events != 0))
 	    return_val = _gdk_input_other_event(event, xevent, window);
 	  else
+#endif
 	    return_val = FALSE;
 	  
 	  break;

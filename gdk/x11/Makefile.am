@@ -40,7 +40,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkglobals-x11.c   	\
 	gdkim-x11.c	   	\
 	gdkimage-x11.c	   	\
-	gdkinput.c	   	\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
 	gdkpixmap-x11.c	   	\
@@ -58,7 +57,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkxid.c	   	\
 	gdkx.h		   	\
 	gdkprivate-x11.h   	\
-	gdkinputprivate.h  	\
 	xsettings-client.h	\
 	xsettings-client.c	\
 	xsettings-common.h	\
@@ -67,7 +65,7 @@ libgdk_x11_la_SOURCES =    	\
 if XINPUT_XFREE
 libgdk_x11_la_SOURCES += gdkinput-x11.c gdkinput-xfree.c
 else
-libgdk_x11_la_SOURCES += gdkinput-none.c gdkdevicemanager-core.c
+libgdk_x11_la_SOURCES += gdkdevicemanager-core.c gdkdevice-core.c
 endif
 
 

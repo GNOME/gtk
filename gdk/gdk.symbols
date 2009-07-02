@@ -79,6 +79,8 @@ gdk_pointer_grab_info_libgtk_only
 #if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_DISPLAY_C__)
 gdk_beep
+gdk_device_get_core_pointer
+gdk_display_get_core_pointer
 gdk_set_pointer_hooks
 gdk_keyboard_ungrab
 gdk_pointer_is_grabbed
@@ -107,6 +109,7 @@ gdk_flush
 
 #if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_DISPLAY_X11_C__)
+gdk_display_list_devices
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 #endif
@@ -376,42 +379,33 @@ gdk_cursor_get_image
 #endif
 #endif
 
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_INPUT_C__)
+#if IN_HEADER(__GDK_DEVICE_MANAGER_H__)
+#if IN_FILE(__GDK_DEVICE_MANAGER_C__)
+gdk_device_manager_get_display
+gdk_device_manager_get_for_display
+gdk_device_manager_get_type G_GNUC_CONST
+gdk_device_manager_set_window_events
+#endif
+#endif
+
+#if IN_HEADER(__GDK_DEVICE_H__)
+#if IN_FILE(__GDK_DEVICE_C__)
 gdk_device_free_history
 gdk_device_get_axis
 gdk_device_get_history
+gdk_device_get_state
 gdk_device_get_type G_GNUC_CONST
 gdk_device_set_axis_use
 gdk_device_set_key
+gdk_device_set_mode
 gdk_device_set_source
+#endif
+#endif
+
+#if IN_HEADER(__GDK_INPUT_H__)
+#if IN_FILE(__GDK_INPUT_C__)
 gdk_devices_list
 gdk_input_set_extension_events
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_DISPLAY_C__)
-gdk_device_get_core_pointer
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_INPUT_X11_C__)
-gdk_device_get_state
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_INPUT_XFREE_C__)
-gdk_device_set_mode
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_INPUT_NONE_C__)
-gdk_device_get_state
-gdk_device_set_mode
 #endif
 #endif
 
@@ -424,7 +418,6 @@ gdk_display_add_client_message_filter
 #if IN_HEADER(__GDK_DISPLAY_H__)
 #if IN_FILE(__GDK_DISPLAY_C__)
 gdk_display_close
-gdk_display_get_core_pointer
 gdk_display_get_event
 gdk_display_get_pointer
 gdk_display_get_type G_GNUC_CONST
@@ -477,12 +470,6 @@ gdk_display_supports_selection_notification
 gdk_display_supports_shapes
 gdk_display_supports_input_shapes
 gdk_display_supports_composite
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_INPUT_C__)
-gdk_display_list_devices
 #endif
 #endif
 
