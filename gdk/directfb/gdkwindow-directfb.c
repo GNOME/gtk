@@ -1640,9 +1640,8 @@ gdk_directfb_window_clear_area (GdkWindow *window,
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
 
-  /**
-	Follow XClearArea definition for zero height width
-  **/
+  /* Follow XClearArea definition for zero height width
+   */
   if( width == 0 )
 		width = impl->width-x;
   if( height == 0 )

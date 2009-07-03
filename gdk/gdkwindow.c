@@ -446,6 +446,19 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
 
+  /**
+   * GdkWindow::pick-embedded-child:
+   * @window: the window on which the signal is emitted
+   * @x: x coordinate in the window
+   * @y: y coordinate in the window
+   *
+   * The ::pick-embedded-child signal is emitted to find an embedded
+   * child at the given position.
+   *
+   * Returns: the GdkWindow of the embedded child at @x, @y, or %NULL
+   *
+   * Since: 2.18
+   */
   signals[PICK_EMBEDDED_CHILD] =
     g_signal_new (g_intern_static_string ("pick-embedded-child"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -457,6 +470,20 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  2,
 		  G_TYPE_DOUBLE,
 		  G_TYPE_DOUBLE);
+
+  /**
+   * GdkWindow::to-embedder:
+   * @window: the offscreen window on which the signal is emitted
+   * @offscreen-x: x coordinate in the offscreen window
+   * @offscreen-y: y coordinate in the offscreen window
+   * @embedder-x: return location for the x coordinate in the embedder window
+   * @embedder-y: return location for the y coordinate in the embedder window
+   *
+   * The ::to-embedder signal is emitted to translate coordinates
+   * in an offscreen window to its embedder.
+   *
+   * Since: 2.18
+   */
   signals[TO_EMBEDDER] =
     g_signal_new (g_intern_static_string ("to-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -470,6 +497,20 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  G_TYPE_DOUBLE,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);
+
+  /**
+   * GdkWindow::from-embedder:
+   * @window: the offscreen window on which the signal is emitted
+   * @embedder-x: x coordinate in the embedder window
+   * @embedder-y: y coordinate in the embedder window
+   * @offscreen-x: return location for the x coordinate in the offscreen window
+   * @offscreen-y: return location for the y coordinate in the offscreen window
+   *
+   * The ::from-embedder signal is emitted to translate coordinates
+   * in the embedder of an offscreen window to the offscreen window.
+   *
+   * Since: 2.18
+   */
   signals[FROM_EMBEDDER] =
     g_signal_new (g_intern_static_string ("from-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
