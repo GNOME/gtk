@@ -832,12 +832,12 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
  * gdk_offscreen_window_get_pixmap:
  * @window: a #GdkWindow
  *
- * Gets the offscreen pixmap that an offscreen window renders into. If
- * you need to keep this around over window resizes, you need to add a
- * reference to it.
+ * Gets the offscreen pixmap that an offscreen window renders into.
+ * If you need to keep this around over window resizes, you need to
+ * add a reference to it.
  *
- * Returns: The offscreen pixmap, or NULL if not offscreen
- **/
+ * Returns: The offscreen pixmap, or %NULL if not offscreen
+ */
 GdkPixmap *
 gdk_offscreen_window_get_pixmap (GdkWindow *window)
 {
@@ -1155,6 +1155,13 @@ gdk_offscreen_window_queue_translation (GdkWindow *window,
 {
 }
 
+/**
+ * gdk_offscreen_window_set_embedder:
+ * @window: a #GdkWindow
+ * @embedder: the #GdkWindow that @window gets embedded in
+ *
+ * Since: 2.18
+ */
 void
 gdk_offscreen_window_set_embedder (GdkWindow     *window,
 				   GdkWindow     *embedder)
@@ -1184,6 +1191,17 @@ gdk_offscreen_window_set_embedder (GdkWindow     *window,
   offscreen->embedder = embedder;
 }
 
+/**
+ * gdk_offscreen_window_get_embedder:
+ * @window: a #GdkWindow
+ *
+ * Gets the window that @window is embedded in.
+ *
+ * Returns: the embedding #GdkWindow, or %NULL if @window is not an
+ *     embedded offscreen window
+ *
+ * Since: 2.18
+ */
 GdkWindow *
 gdk_offscreen_window_get_embedder (GdkWindow *window)
 {

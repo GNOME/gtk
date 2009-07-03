@@ -1469,7 +1469,7 @@ gdk_window_reparent (GdkWindow *window,
  * Returns: %TRUE if the window has a native window, %FALSE otherwise
  *
  * Since: 2.18
- **/
+ */
 gboolean
 gdk_window_ensure_native (GdkWindow *window)
 {
@@ -8729,6 +8729,12 @@ gdk_pointer_grab (GdkWindow *	  window,
   return res;
 }
 
+/**
+ * gdk_window_geometry_changed:
+ * @window: a #GdkWindow
+ *
+ * Since: 2.18
+ */
 void
 gdk_window_geometry_changed (GdkWindow *window)
 {
