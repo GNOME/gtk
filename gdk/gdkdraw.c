@@ -1842,7 +1842,7 @@ _gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable)
 }
 
 
-/**
+/*
  * _gdk_drawable_get_source_drawable:
  * @drawable: a #GdkDrawable
  *
