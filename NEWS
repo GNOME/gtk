@@ -31,6 +31,7 @@ Overview of Changes from GTK+ 2.17.2 to 2.17.3
  585802 Add API to make GtkStatusIcon accessible with a name
  585858 right-click Add-to-Booksmarks is sometimes greyed out
  586330 GtkButton ignores user_underline when an image is set
+ 318807 Offscreen windows and window redirection
 
 * Updated translations
  Brazilian Portuguese
