@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <gdk/gdkwindow.h>
 #include "gdkdevice-core.h"
 
 static void gdk_device_core_get_state ();
