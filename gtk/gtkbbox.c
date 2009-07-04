@@ -26,6 +26,8 @@
 
 #include "config.h"
 #include "gtkbbox.h"
+#include "gtkhbbox.h"
+#include "gtkvbbox.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
