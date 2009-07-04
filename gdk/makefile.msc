@@ -95,6 +95,8 @@ gdk_OBJECTS = \
 	gdkkeynames.obj \
 	gdkkeys.obj \
 	gdkkeyuni.obj \
+	gdkmarshalers.obj \
+	gdkoffscreenwindow.obj \
 	gdkpango.obj \
 	gdkpixbuf-drawable.obj \
 	gdkpixbuf-render.obj \

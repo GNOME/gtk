@@ -264,6 +264,7 @@ gtk_OBJECTS = \
 	gtkimcontextsimple.obj \
 	gtkimmodule.obj	\
 	gtkimmulticontext.obj \
+	gtkinfobar.obj \
 	gtkinputdialog.obj \
 	gtkinvisible.obj \
 	gtkitem.obj \
