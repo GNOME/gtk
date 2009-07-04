@@ -2437,7 +2437,7 @@ common_render_page (GtkPrintOperation *op,
           if (priv->manual_scale != 1.0)
             cairo_scale (cr, priv->manual_scale, priv->manual_scale);
 
-          cairo_rotate (cr, - M_PI / 2);
+          cairo_rotate (cr, - G_PI / 2);
         }
     }
   else
