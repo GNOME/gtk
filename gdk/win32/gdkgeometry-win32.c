@@ -196,7 +196,7 @@ void
 _gdk_win32_window_tmp_reset_bg (GdkWindow *window,
 				gboolean   recurse)
 {
-  GdkWindowObject *private;
+  GdkWindowObject *private = (GdkWindowObject*)window;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
