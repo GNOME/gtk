@@ -5738,7 +5738,8 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 
   if (region == GTK_WINDOW_REGION_TITLE ||
       region == GTK_WINDOW_REGION_INNER ||
-      (state & GDK_WINDOW_STATE_MAXIMIZED))
+      (state & GDK_WINDOW_STATE_MAXIMIZED) ||
+      !GTK_WINDOW (widget)->allow_grow)
     {
       cursor_type = GDK_ARROW;
     }
