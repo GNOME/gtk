@@ -580,11 +580,9 @@ _gdk_window_impl_new (GdkWindow     *window,
 	}
       break;
 
-	  /*
     case GDK_WINDOW_CHILD:
       dwStyle = WS_CHILDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       break;
-	  */
 
     case GDK_WINDOW_TEMP:
       /* A temp window is not necessarily a top level window */
