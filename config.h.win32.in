@@ -269,7 +269,11 @@
 /* #undef USE_MEDIALIB25 */
 
 /* Define to 1 if XXM is available and should be used */
-#define USE_MMX 1
+#ifndef _MSC_VER
+#  define USE_MMX 1
+#else
+#  undef USE_MMX
+#endif
 
 /* Define to 1 if no XInput should be used */
 /* #undef XINPUT_NONE */
