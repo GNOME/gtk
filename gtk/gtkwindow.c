@@ -1506,6 +1506,36 @@ close_button_clicked (GtkWidget *widget, gpointer data)
 }
 
 static void
+update_window_buttons (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (is_client_side_decorated (window))
+    {
+      // XXX: should this be using GdkWMFunction instead?
+      if (priv->client_side_decorations & GDK_DECOR_MINIMIZE)
+        {
+          gtk_widget_show_all (priv->min_button);
+        }
+      else
+        {
+          gtk_widget_hide (priv->min_button);
+        }
+
+      if (priv->client_side_decorations & GDK_DECOR_MAXIMIZE)
+        {
+          gtk_widget_show_all (priv->max_button);
+        }
+      else
+        {
+          gtk_widget_hide (priv->max_button);
+        }
+
+      // close?
+    }
+}
+
+static void
 ensure_title_box (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -1552,6 +1582,8 @@ ensure_title_box (GtkWindow *window)
       priv->button_box = hbox;
 
       gtk_widget_show_all (priv->button_box);
+
+      update_window_buttons (window);
     }
 }
 
@@ -3250,6 +3282,8 @@ gtk_window_set_client_side_decorations (GtkWindow       *window,
             }
         }
     }
+
+  update_window_buttons (window);
 }
 
 GdkWMDecoration
