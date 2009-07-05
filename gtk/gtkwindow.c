@@ -1510,7 +1510,7 @@ ensure_title_box (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  if (!priv->button_box)
+  if (is_client_side_decorated (window) && !priv->button_box)
     {
       GtkWidget *hbox;
       GtkWidget *button;
