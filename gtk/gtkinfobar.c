@@ -330,8 +330,8 @@ gtk_info_bar_expose (GtkWidget      *widget,
                      detail,
                      widget->allocation.x,
                      widget->allocation.y,
-                     widget->allocation.width + 1,
-                     widget->allocation.height + 1);
+                     widget->allocation.width,
+                     widget->allocation.height);
     }
 
   if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event)
@@ -625,6 +625,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_box_pack_start (GTK_BOX (info_bar), action_area, FALSE, TRUE, 0);
 
   gtk_widget_set_app_paintable (GTK_WIDGET (info_bar), TRUE);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (info_bar), TRUE);
 
   info_bar->priv->content_area = content_area;
   info_bar->priv->action_area = action_area;
