@@ -388,9 +388,22 @@ gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
   else
     {
       XRenderPictureAttributes pa;
-      pa.clip_mask = None;
+      GdkBitmap *mask;
+      gulong pa_mask;
+
+      pa_mask = CPClipMask;
+      if (gc && (mask = _gdk_gc_get_clip_mask (gc)))
+	{
+	  pa.clip_mask = GDK_PIXMAP_XID (mask);
+	  pa.clip_x_origin = gc->clip_x_origin;
+	  pa.clip_y_origin = gc->clip_y_origin;
+	  pa_mask |= CPClipXOrigin | CPClipYOrigin;
+	}
+      else
+	pa.clip_mask = None;
+
       XRenderChangePicture (xdisplay, picture,
-			    CPClipMask, &pa);
+			    pa_mask, &pa);
     }
 }
 

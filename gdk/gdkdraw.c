@@ -752,9 +752,6 @@ gdk_draw_image (GdkDrawable *drawable,
  * On older X servers, rendering pixbufs with an alpha channel involves round 
  * trips to the X server, and may be somewhat slow.
  *
- * The clip mask of @gc is ignored, but clip rectangles and clip regions work
- * fine.
- *
  * If GDK is built with the Sun mediaLib library, the gdk_draw_pixbuf
  * function is accelerated using mediaLib, which provides hardware
  * acceleration on Intel, AMD, and Sparc chipsets.  If desired, mediaLib

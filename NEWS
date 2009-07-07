@@ -1,3 +1,12 @@
+Overview of Changes from GTK+ 2.17.3 to 2.17.4
+==============================================
+
+* Support for clipmasks in gdk_draw_pixbuf now works, this will
+  introduce visual changes in code that uses clipmasks when drawing
+  pixbufs. However, since this never worked that is unlikely to happen.
+  Old code using gdk_pixbuf_render_threshold_alpha masks when rendering
+  pixbufs will now produce truncated results at the edges.
+
 Overview of Changes from GTK+ 2.17.2 to 2.17.3
 ==============================================
 
