@@ -12,6 +12,8 @@ Overview of Changes from GTK+ 2.17.2 to 2.17.3
  - The default theme now includes color definitions for infobars
  - The ::use-tooltip-style style property has been removed
 
+* GtkMountOperation now supports interaction during unmount operations.
+
 * The client-side windows branch has been merged; GDK now maintains
   its own window hierarchy client-side, and only uses X windows where
   unavoidable. Some of the benefits of this change are
@@ -32,10 +34,13 @@ Overview of Changes from GTK+ 2.17.2 to 2.17.3
  585858 right-click Add-to-Booksmarks is sometimes greyed out
  586330 GtkButton ignores user_underline when an image is set
  318807 Offscreen windows and window redirection
+ 587716 GtkInfoBar broken on resize
+ 587485 GMountOperation::show-processes support
 
 * Updated translations
  Brazilian Portuguese
  Estonian
+ Hebrew
  Spanish
  Swedish
  Vietnamese
