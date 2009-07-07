@@ -751,9 +751,10 @@ gtk_calendar_init (GtkCalendar *calendar)
    * Do *not* translate it to anything else, if it
    * it isn't calendar:YM or calendar:MY it will not work.
    *
-   * Note that this flipping is in top of the text direction flipping,
-   * so if you have a default text direction of RTL and YM, then
-   * the year will appear on the right.
+   * Note that the ordering described here is logical order, which is
+   * further influenced by BIDI ordering. Thus, if you have a default
+   * text direction of RTL and specify "calendar:YM", then the year
+   * will appear to the right of the month.
    */
   year_before = _("calendar:MY");
   if (strcmp (year_before, "calendar:YM") == 0)
