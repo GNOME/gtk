@@ -120,7 +120,7 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkDisplayClass, closed),
 		  NULL, NULL,
-		  gdk_marshal_VOID__BOOLEAN,
+		  _gdk_marshal_VOID__BOOLEAN,
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_BOOLEAN);
@@ -1070,34 +1070,6 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
     }
 }
 
-/* Gets the toplevel for a window as used for events,
-   i.e. including offscreen parents */
-static GdkWindowObject *
-get_event_parent (GdkWindowObject *window)
-{
-  if (window->window_type == GDK_WINDOW_OFFSCREEN)
-    return (GdkWindowObject *)gdk_offscreen_window_get_embedder ((GdkWindow *)window);
-  else
-    return window->parent;
-}
-
-is_event_parent_of (GdkWindow *parent,
-		    GdkWindow *child)
-{
-  GdkWindow *w;
-
-  w = child;
-  while (w != NULL)
-    {
-      if (w == parent)
-	return TRUE;
-
-      w = (GdkWindow *)get_event_parent ((GdkWindowObject *)w);
-    }
-
-  return FALSE;
-}
-
 static GList *
 find_pointer_grab (GdkDisplay *display,
 		   gulong serial)
@@ -1149,7 +1121,7 @@ _gdk_display_end_pointer_grab (GdkDisplay *display,
   grab = l->data;
   if (grab &&
       (if_child == NULL ||
-       is_event_parent_of (grab->window, if_child)))
+       _gdk_window_event_parent_of (grab->window, if_child)))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;

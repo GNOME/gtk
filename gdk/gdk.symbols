@@ -730,6 +730,12 @@ gdk_offscreen_window_get_embedder
 #endif
 #endif
 
+#if IN_HEADER(__GDK_INTERNALS_H__)
+#if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
+gdk_offscreen_window_get_type G_GNUC_CONST
+#endif
+#endif
+
 #if IN_HEADER(__GDK_WINDOW_H__)
 #if IN_FILE(__GDK_DND_X11_C__)
 gdk_window_register_dnd
@@ -957,6 +963,7 @@ gdk_region_copy
 gdk_region_destroy
 gdk_region_empty
 gdk_region_equal
+gdk_region_rect_equal
 gdk_region_get_clipbox
 gdk_region_get_rectangles
 gdk_region_intersect

@@ -269,11 +269,11 @@ gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
 # Marshaller generation
 #
 gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
