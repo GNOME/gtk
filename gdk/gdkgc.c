@@ -646,24 +646,49 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       GdkPixmap *new_mask;
       GdkGC *tmp_gc;
       GdkColor black = {0, 0, 0, 0};
+      GdkRectangle r;
+      GdkOverlapType overlap;
       
-      priv->old_clip_mask = g_object_ref (priv->clip_mask);
-      gdk_drawable_get_size (priv->old_clip_mask, &w, &h);
+      gdk_drawable_get_size (priv->clip_mask, &w, &h);
 
-      new_mask = gdk_pixmap_new	(priv->old_clip_mask, w, h, -1);
-      tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)new_mask, FALSE);
+      r.x = 0;
+      r.y = 0;
+      r.width = w;
+      r.height = h;
 
-      gdk_gc_set_foreground (tmp_gc, &black);
-      gdk_draw_rectangle (new_mask, tmp_gc, TRUE, 0, 0, -1, -1);
-      _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE); /* Takes ownership of region */
-      gdk_draw_drawable  (new_mask,
-			  tmp_gc,
-			  priv->old_clip_mask,
-			  0, 0,
-			  0, 0,
-			  -1, -1);
-      gdk_gc_set_clip_region (tmp_gc, NULL);
-      gdk_gc_set_clip_mask (gc, new_mask);
+      /* Its quite common to expose areas that are completely in or outside
+       * the region, so we try to avoid allocating bitmaps that are just fully
+       * set or completely unset.
+       */ 
+      overlap = gdk_region_rect_in (region, &r);
+      if (overlap == GDK_OVERLAP_RECTANGLE_PART)
+	{
+	   /* The region and the mask intersect, create a new clip mask that
+	      includes both areas */
+	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
+	  new_mask = gdk_pixmap_new (priv->old_clip_mask, w, h, -1);
+	  tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)new_mask, FALSE);
+
+	  gdk_gc_set_foreground (tmp_gc, &black);
+	  gdk_draw_rectangle (new_mask, tmp_gc, TRUE, 0, 0, -1, -1);
+	  _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE); /* Takes ownership of region */
+	  gdk_draw_drawable  (new_mask,
+			      tmp_gc,
+			      priv->old_clip_mask,
+			      0, 0,
+			      0, 0,
+			      -1, -1);
+	  gdk_gc_set_clip_region (tmp_gc, NULL);
+	  gdk_gc_set_clip_mask (gc, new_mask);
+	}
+      else if (overlap == GDK_OVERLAP_RECTANGLE_OUT)
+	{
+	  GdkRegion *empty = gdk_region_new ();
+
+	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
+	  _gdk_windowing_gc_set_clip_region (gc, empty, FALSE);
+	  gdk_region_destroy (empty);
+	}
     }
   else
     {
