@@ -639,7 +639,12 @@ remove_child_area (GdkWindowObject *private,
       child_region = gdk_region_rectangle (&r);
 
       if (child->shape)
-	gdk_region_intersect (child_region, child->shape);
+	{
+	  /* Adjust shape region to parent window coords */
+	  gdk_region_offset (child->shape, child->x, child->y);
+	  gdk_region_intersect (child_region, child->shape);
+	  gdk_region_offset (child->shape, -child->x, -child->y);
+	}
       else if (private->window_type == GDK_WINDOW_FOREIGN)
 	{
 	  shape = _gdk_windowing_window_get_shape ((GdkWindow *)child);
@@ -4660,7 +4665,12 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
       child_region = gdk_region_rectangle (&r);
       if (child->shape)
-	gdk_region_intersect (child_region, child->shape);
+	{
+	  /* Adjust shape region to parent window coords */
+	  gdk_region_offset (child->shape, child->x, child->y);
+	  gdk_region_intersect (child_region, child->shape);
+	  gdk_region_offset (child->shape, -child->x, -child->y);
+	}
 
       if (child->impl == private->impl)
 	{
