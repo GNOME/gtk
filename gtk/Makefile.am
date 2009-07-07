@@ -369,6 +369,7 @@ gtk_private_h_sources =		\
 	gtkintl.h		\
 	gtkkeyhash.h		\
 	gtkmnemonichash.h	\
+	gtkmountoperationprivate.h \
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkprintoperation-private.h\
