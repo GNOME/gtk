@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-15 20:52-0400\n"
+"POT-Creation-Date: 2009-07-07 00:15-0400\n"
 "PO-Revision-Date: 2009-03-09 13:51+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1147,7 +1147,7 @@ msgid "COLORS"
 msgstr "COLORS"
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:92
+#: gdk/x11/gdkmain-x11.c:93
 msgid "Make X calls synchronous"
 msgstr "X அழைப்புகளை ஒருங்கிணைப்படுத்து"
 
@@ -1697,94 +1697,94 @@ msgstr "கோப்பினை தேர்ந்தெடுக்க மு�
 msgid "_Add to Bookmarks"
 msgstr "புத்தக்குறிகளில் சேர் (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4326
+#: gtk/gtkfilechooserdefault.c:4325
 msgid "Show _Hidden Files"
 msgstr "மறைவான கோப்புகளை காட்டு (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4333
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Show _Size Column"
 msgstr "நிரலின் அளவை காட்டு (_S)"
 
-#: gtk/gtkfilechooserdefault.c:4623 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4624 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "கோப்புகள்"
 
-#: gtk/gtkfilechooserdefault.c:4672
+#: gtk/gtkfilechooserdefault.c:4673
 msgid "Name"
 msgstr "பெயர்"
 
-#: gtk/gtkfilechooserdefault.c:4696
+#: gtk/gtkfilechooserdefault.c:4698
 msgid "Size"
 msgstr "அளவு"
 
-#: gtk/gtkfilechooserdefault.c:4709
+#: gtk/gtkfilechooserdefault.c:4714
 msgid "Modified"
 msgstr "மாற்றப்பட்டது"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4935 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "பெயர்: (_N)"
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:4978
 msgid "_Browse for other folders"
 msgstr "பிற அமைவிற்கு உலாவவும் (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5245
+#: gtk/gtkfilechooserdefault.c:5250
 msgid "Type a file name"
 msgstr "கோப்பு பெயரை தட்டச்சு செய்யவும்"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5286
+#: gtk/gtkfilechooserdefault.c:5291
 msgid "Create Fo_lder"
 msgstr "அடைவினை உருவாக்கு (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5296
+#: gtk/gtkfilechooserdefault.c:5301
 msgid "_Location:"
 msgstr "இடம் (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5500
+#: gtk/gtkfilechooserdefault.c:5505
 msgid "Save in _folder:"
 msgstr "அடைவில் சேமி: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:5502
+#: gtk/gtkfilechooserdefault.c:5507
 msgid "Create in _folder:"
 msgstr "அடைவில் உருவாக்கு: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:7243
+#: gtk/gtkfilechooserdefault.c:7249
 msgid "Cannot change to folder because it is not local"
 msgstr "அடைவினை மாற்ற முடியாது ஏனெனில் அது உள்ளமைவில் இல்லை"
 
-#: gtk/gtkfilechooserdefault.c:7868 gtk/gtkfilechooserdefault.c:7889
+#: gtk/gtkfilechooserdefault.c:7874 gtk/gtkfilechooserdefault.c:7895
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s குறுக்குவழி ஏற்கனவே உள்ளது"
 
-#: gtk/gtkfilechooserdefault.c:7979
+#: gtk/gtkfilechooserdefault.c:7985
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "குறுக்குவழி %s இல்லை"
 
-#: gtk/gtkfilechooserdefault.c:8241 gtk/gtkprintunixdialog.c:403
+#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:402
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "கோப்பு பெயர் \"%s\" ஏற்கனவே உள்ளது.  அதனை மாற்ற வேண்டுமா?"
 
-#: gtk/gtkfilechooserdefault.c:8244 gtk/gtkprintunixdialog.c:407
+#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:406
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ல் கோப்பு ஏற்கனவே உள்ளது.  மாற்றினால் உள்ளடக்கங்களை மேலே எழுதும்."
 
-#: gtk/gtkfilechooserdefault.c:8249 gtk/gtkprintunixdialog.c:414
+#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:413
 msgid "_Replace"
 msgstr "மாற்று (_R)"
 
-#: gtk/gtkfilechooserdefault.c:9011
+#: gtk/gtkfilechooserdefault.c:9017
 msgid "Could not start the search process"
 msgstr "தேடும் செயலை துவக்க முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:9012
+#: gtk/gtkfilechooserdefault.c:9018
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1792,35 +1792,35 @@ msgstr ""
 "இந்த நிரல் indexer daemonக்கு இணைப்பை உருவாக்க முடியவில்லை. இது இயங்குகிறதா என "
 "உறுதிபடுத்தவும்."
 
-#: gtk/gtkfilechooserdefault.c:9026
+#: gtk/gtkfilechooserdefault.c:9032
 msgid "Could not send the search request"
 msgstr "தேடுதல் கோரிக்கையை அனுப்ப முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:9499
+#: gtk/gtkfilechooserdefault.c:9509
 #, fuzzy
 msgid "<b>_Search:</b>"
 msgstr "தேடு (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10232
+#: gtk/gtkfilechooserdefault.c:10245
 #, fuzzy
 msgid "<b>Recently Used</b>"
 msgstr "சமீபகாத்தில் பயன்படுத்தப்பட்டது"
 
-#: gtk/gtkfilechooserdefault.c:10470
+#: gtk/gtkfilechooserdefault.c:10483
 #, c-format
 msgid "Could not mount %s"
 msgstr "%sஐ ஏற்ற முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:11323 gtk/gtkfilechooserdefault.c:11345
-#: gtk/gtkfilechooserdefault.c:11416
+#: gtk/gtkfilechooserdefault.c:11335 gtk/gtkfilechooserdefault.c:11357
+#: gtk/gtkfilechooserdefault.c:11428
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: gtk/gtkfilechooserdefault.c:11363
+#: gtk/gtkfilechooserdefault.c:11375
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11365
+#: gtk/gtkfilechooserdefault.c:11377
 msgid "Yesterday at %H:%M"
 msgstr "நேற்று இந்நேரத்தில்  %H:%M"
 
@@ -2271,43 +2271,57 @@ msgstr "GTK+ விருப்பங்கள்"
 msgid "Show GTK+ Options"
 msgstr "GTK+ விருப்பங்களை காட்டு"
 
-#: gtk/gtkmountoperation.c:468
+#: gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
 msgstr "இணை (_n)"
 
-#: gtk/gtkmountoperation.c:535
+#: gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
 msgstr "பெயரில்லாமல் இணை (_a)"
 
-#: gtk/gtkmountoperation.c:544
+#: gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
 msgstr "பயணராக இணைக்கவும் (u_):"
 
-#: gtk/gtkmountoperation.c:582
+#: gtk/gtkmountoperation.c:603
 msgid "_Username:"
 msgstr "பயனர்பெயர் (_U):"
 
-#: gtk/gtkmountoperation.c:587
+#: gtk/gtkmountoperation.c:608
 msgid "_Domain:"
 msgstr "செய்களம் (_D):"
 
-#: gtk/gtkmountoperation.c:593
+#: gtk/gtkmountoperation.c:614
 msgid "_Password:"
 msgstr "கடவுச்சொல் (_P)"
 
-#: gtk/gtkmountoperation.c:611
+#: gtk/gtkmountoperation.c:632
 msgid "Forget password _immediately"
 msgstr "கடவிச்சொல்லை உடனே மறக்கவும் (_i)"
 
-#: gtk/gtkmountoperation.c:621
+#: gtk/gtkmountoperation.c:642
 msgid "Remember password until you _logout"
 msgstr "வெளியேறும் வரை கடவுச்சொல்லை நினைவு கொள்ளவும் (_l)"
 
-#: gtk/gtkmountoperation.c:631
+#: gtk/gtkmountoperation.c:652
 msgid "Remember _forever"
 msgstr "எப்பொழுதும் நினைவில் கொள்ளவும் (_f)"
 
-#: gtk/gtknotebook.c:4427 gtk/gtknotebook.c:6949
+#: gtk/gtkmountoperation.c:881
+#, c-format
+msgid "Unknown Application (pid %d)"
+msgstr ""
+
+#: gtk/gtkmountoperation.c:1063
+#, c-format
+msgid "Unable to end process"
+msgstr ""
+
+#: gtk/gtkmountoperation.c:1100
+msgid "_End Process"
+msgstr ""
+
+#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
 msgid "Page %u"
 msgstr "பக்கம் %u"
@@ -2373,7 +2387,7 @@ msgstr "தாள் அளவு: (_P)"
 msgid "_Orientation:"
 msgstr "திசையமைப்பு: (_O)"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2793
 msgid "Page Setup"
 msgstr "பக்க அமைவு"
 
@@ -2606,42 +2620,42 @@ msgstr "PrintDlgExஐ தவறான கையாளுதல்"
 msgid "Unspecified error"
 msgstr "குறிப்பிடப்படாத பிழை"
 
-#: gtk/gtkprintunixdialog.c:1817
+#: gtk/gtkprintunixdialog.c:1804
 msgid "Printer"
 msgstr "அச்சடிப்பி"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1827
+#: gtk/gtkprintunixdialog.c:1814
 msgid "Location"
 msgstr "இடம்"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1838
+#: gtk/gtkprintunixdialog.c:1825
 msgid "Status"
 msgstr "நிலை"
 
-#: gtk/gtkprintunixdialog.c:1864
+#: gtk/gtkprintunixdialog.c:1851
 msgid "Range"
 msgstr "வரம்பு"
 
-#: gtk/gtkprintunixdialog.c:1868
+#: gtk/gtkprintunixdialog.c:1855
 msgid "_All Pages"
 msgstr "அனைத்து பக்கங்கள் (_A)"
 
-#: gtk/gtkprintunixdialog.c:1875
+#: gtk/gtkprintunixdialog.c:1862
 msgid "C_urrent Page"
 msgstr "நடப்பு பக்கம் (_u)"
 
-#: gtk/gtkprintunixdialog.c:1886
+#: gtk/gtkprintunixdialog.c:1872
 #, fuzzy
 msgid "Se_lection"
 msgstr "தெரிவு _செய்தது:"
 
-#: gtk/gtkprintunixdialog.c:1895
+#: gtk/gtkprintunixdialog.c:1881
 msgid "Pag_es:"
 msgstr "பக்கங்கள் (_e):"
 
-#: gtk/gtkprintunixdialog.c:1896
+#: gtk/gtkprintunixdialog.c:1882
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2649,29 +2663,29 @@ msgstr ""
 "ஒன்று அல்லது பல பக்க வரம்புகளை குறிப்பிடவும்,\n"
 " எ.கா. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1906
+#: gtk/gtkprintunixdialog.c:1892
 #, fuzzy
 msgid "Pages"
 msgstr "பக்கங்கள் (_e):"
 
-#: gtk/gtkprintunixdialog.c:1919
+#: gtk/gtkprintunixdialog.c:1905
 msgid "Copies"
 msgstr "நகல்கள்"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1924
+#: gtk/gtkprintunixdialog.c:1910
 msgid "Copie_s:"
 msgstr "நகல்கள்: (_s)"
 
-#: gtk/gtkprintunixdialog.c:1942
+#: gtk/gtkprintunixdialog.c:1928
 msgid "C_ollate"
 msgstr "அடுக்கு (_o)"
 
-#: gtk/gtkprintunixdialog.c:1950
+#: gtk/gtkprintunixdialog.c:1936
 msgid "_Reverse"
 msgstr "பின்னோக்கு (_R)"
 
-#: gtk/gtkprintunixdialog.c:1970
+#: gtk/gtkprintunixdialog.c:1956
 msgid "General"
 msgstr "பொது"
 
@@ -2681,42 +2695,42 @@ msgstr "பொது"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2503
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr "இடமிருந்து வலம், மேலிருந்து கீழே"
 
-#: gtk/gtkprintunixdialog.c:2518
+#: gtk/gtkprintunixdialog.c:2503
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr "இடமிருந்து வலம், கீழேயிருந்து மேலே"
 
-#: gtk/gtkprintunixdialog.c:2519
+#: gtk/gtkprintunixdialog.c:2504
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr "வலமிருந்து இடம், மேலிருந்து கீழே"
 
-#: gtk/gtkprintunixdialog.c:2519
+#: gtk/gtkprintunixdialog.c:2504
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr "வலமிருந்து இடம், கீழேயிருந்து மேலே"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2505
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr "மேலிருந்து கீழே, இடமிருந்து வலம்"
 
-#: gtk/gtkprintunixdialog.c:2520
+#: gtk/gtkprintunixdialog.c:2505
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr "மேலிருந்து கீழே, வலமிருந்து இடம்"
 
-#: gtk/gtkprintunixdialog.c:2521
+#: gtk/gtkprintunixdialog.c:2506
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr "கீழேயிருந்து மேலே, இடமிருந்து வலம்"
 
-#: gtk/gtkprintunixdialog.c:2521
+#: gtk/gtkprintunixdialog.c:2506
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr "கீழேயிருந்து மேலே, வலமிருந்து இடம்"
@@ -2724,106 +2738,106 @@ msgstr "கீழேயிருந்து மேலே, வலமிருந
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2525 gtk/gtkprintunixdialog.c:2538
+#: gtk/gtkprintunixdialog.c:2510 gtk/gtkprintunixdialog.c:2523
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "பக்க வரிசைப்படுத்தல்"
 
-#: gtk/gtkprintunixdialog.c:2554
+#: gtk/gtkprintunixdialog.c:2539
 msgid "Left to right"
 msgstr "இடமிருந்து வலம்"
 
-#: gtk/gtkprintunixdialog.c:2555
+#: gtk/gtkprintunixdialog.c:2540
 msgid "Right to left"
 msgstr "வலமிருந்து இடம்"
 
-#: gtk/gtkprintunixdialog.c:2567
+#: gtk/gtkprintunixdialog.c:2552
 #, fuzzy
 msgid "Top to bottom"
 msgstr "மேலிருந்து கீழே, இடமிருந்து வலம்"
 
-#: gtk/gtkprintunixdialog.c:2568
+#: gtk/gtkprintunixdialog.c:2553
 #, fuzzy
 msgid "Bottom to top"
 msgstr "கீழேயிருந்து மேலே, இடமிருந்து வலம்"
 
-#: gtk/gtkprintunixdialog.c:2646
+#: gtk/gtkprintunixdialog.c:2631
 msgid "Layout"
 msgstr "அமைப்பு"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:2635
 msgid "T_wo-sided:"
 msgstr "இரட்டை பக்கங்கள்: (_w)"
 
-#: gtk/gtkprintunixdialog.c:2665
+#: gtk/gtkprintunixdialog.c:2650
 msgid "Pages per _side:"
 msgstr "பக்கங்களுக்கான பக்கம் (_s):"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:2667
 msgid "Page or_dering:"
 msgstr "தாள் வரிசை (_d):"
 
-#: gtk/gtkprintunixdialog.c:2699
+#: gtk/gtkprintunixdialog.c:2683
 msgid "_Only print:"
 msgstr "அச்சிடுதல் மட்டும்: (_O)"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2714
+#: gtk/gtkprintunixdialog.c:2698
 msgid "All sheets"
 msgstr "அனைத்து தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2715
+#: gtk/gtkprintunixdialog.c:2699
 msgid "Even sheets"
 msgstr "இரட்டை தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2716
+#: gtk/gtkprintunixdialog.c:2700
 msgid "Odd sheets"
 msgstr "ஒற்றை தாள்கள்"
 
-#: gtk/gtkprintunixdialog.c:2719
+#: gtk/gtkprintunixdialog.c:2703
 msgid "Sc_ale:"
 msgstr "அளவு: (_a)"
 
-#: gtk/gtkprintunixdialog.c:2746
+#: gtk/gtkprintunixdialog.c:2730
 msgid "Paper"
 msgstr "தாள்"
 
-#: gtk/gtkprintunixdialog.c:2750
+#: gtk/gtkprintunixdialog.c:2734
 msgid "Paper _type:"
 msgstr "தாள் வகை: (_t)"
 
-#: gtk/gtkprintunixdialog.c:2765
+#: gtk/gtkprintunixdialog.c:2749
 msgid "Paper _source:"
 msgstr "தாள் மூலம்: (_s)"
 
-#: gtk/gtkprintunixdialog.c:2780
+#: gtk/gtkprintunixdialog.c:2764
 msgid "Output t_ray:"
 msgstr "வெளீயிடு தட்டு: (_r)"
 
-#: gtk/gtkprintunixdialog.c:2834
+#: gtk/gtkprintunixdialog.c:2818
 msgid "Job Details"
 msgstr "பணி விவரங்கள்"
 
-#: gtk/gtkprintunixdialog.c:2840
+#: gtk/gtkprintunixdialog.c:2824
 msgid "Pri_ority:"
 msgstr "முன்னுரிமை: (_o)"
 
-#: gtk/gtkprintunixdialog.c:2855
+#: gtk/gtkprintunixdialog.c:2839
 msgid "_Billing info:"
 msgstr "இரசீது தகவல்: (_B)"
 
-#: gtk/gtkprintunixdialog.c:2873
+#: gtk/gtkprintunixdialog.c:2857
 msgid "Print Document"
 msgstr "ஆவணத்தை அச்சிடு"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2882
+#: gtk/gtkprintunixdialog.c:2866
 msgid "_Now"
 msgstr "இப்போது (_N)"
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:2877
 msgid "A_t:"
 msgstr "A_t:"
 
@@ -2831,7 +2845,7 @@ msgstr "A_t:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2899
+#: gtk/gtkprintunixdialog.c:2883
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2839,64 +2853,64 @@ msgstr ""
 "அச்சடிப்பதற்கு நேரத்தை குறிப்படவும்,\n"
 " எ.கா. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:2909
+#: gtk/gtkprintunixdialog.c:2893
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2925
+#: gtk/gtkprintunixdialog.c:2909
 msgid "On _hold"
 msgstr "நிறுத்திவைப்பு (_h)"
 
-#: gtk/gtkprintunixdialog.c:2926
+#: gtk/gtkprintunixdialog.c:2910
 msgid "Hold the job until it is explicitly released"
 msgstr "வெளியிடுவது வரை இந்த பணியை நிறுத்தி வைக்கவும்"
 
-#: gtk/gtkprintunixdialog.c:2946
+#: gtk/gtkprintunixdialog.c:2930
 msgid "Add Cover Page"
 msgstr "அட்டை பக்கத்தையும் சேர்"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2955
+#: gtk/gtkprintunixdialog.c:2939
 msgid "Be_fore:"
 msgstr "முன்: (_f)"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2973
+#: gtk/gtkprintunixdialog.c:2957
 msgid "_After:"
 msgstr "பின்: (_A)"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2991
+#: gtk/gtkprintunixdialog.c:2975
 msgid "Job"
 msgstr "பணி"
 
-#: gtk/gtkprintunixdialog.c:3057
+#: gtk/gtkprintunixdialog.c:3041
 msgid "Advanced"
 msgstr "கூடுதல்"
 
-#: gtk/gtkprintunixdialog.c:3092
+#: gtk/gtkprintunixdialog.c:3075
 msgid "Image Quality"
 msgstr "பட தரம்"
 
-#: gtk/gtkprintunixdialog.c:3095
+#: gtk/gtkprintunixdialog.c:3078
 msgid "Color"
 msgstr "நிறம்"
 
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3081
 msgid "Finishing"
 msgstr "முடிக்கிறது"
 
-#: gtk/gtkprintunixdialog.c:3108
+#: gtk/gtkprintunixdialog.c:3091
 msgid "Some of the settings in the dialog conflict"
 msgstr "இந்த உரையாடலிலுள்ள சில அமைவுகள் முரணாக உள்ளது"
 
-#: gtk/gtkprintunixdialog.c:3131
+#: gtk/gtkprintunixdialog.c:3114
 msgid "Print"
 msgstr "அச்சிடு"
 

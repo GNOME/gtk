@@ -119,6 +119,11 @@ should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkMenu:reserve-toggle-size ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:tearoff-state ##### -->
 <para>
 
@@ -346,6 +351,24 @@ See gtk_menu_set_accel_group().
 
 
 <!-- ##### FUNCTION gtk_menu_get_tearoff_state ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_set_reserve_toggle_size ##### -->
+<para>
+
+</para>
+
+@menu: 
+@reserve_toggle_size: 
+
+
+<!-- ##### FUNCTION gtk_menu_get_reserve_toggle_size ##### -->
 <para>
 
 </para>

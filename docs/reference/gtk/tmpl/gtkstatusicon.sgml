@@ -172,6 +172,11 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 </para>
 
+<!-- ##### ARG GtkStatusIcon:title ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkStatusIcon:tooltip-markup ##### -->
 <para>
 
@@ -412,6 +417,24 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 
 <!-- ##### FUNCTION gtk_status_icon_get_has_tooltip ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_set_title ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@title: 
+
+
+<!-- ##### FUNCTION gtk_status_icon_get_title ##### -->
 <para>
 
 </para>

@@ -6917,7 +6917,7 @@ gdk_window_set_cursor (GdkWindow *window,
       if (cursor)
 	private->cursor = gdk_cursor_ref (cursor);
 
-      if (gdk_window_event_parent_of (window, display->pointer_info.window_under_pointer))
+      if (_gdk_window_event_parent_of (window, display->pointer_info.window_under_pointer))
 	update_cursor (display);
     }
 }
@@ -7940,7 +7940,7 @@ update_cursor (GdkDisplay *display)
      we've sent, as that would shortly be used anyway. */
   grab = _gdk_display_get_last_pointer_grab (display);
   if (grab != NULL &&
-      !gdk_window_event_parent_of (grab->window, (GdkWindow *)cursor_window))
+      !_gdk_window_event_parent_of (grab->window, (GdkWindow *)cursor_window))
     cursor_window = (GdkWindowObject *)grab->window;
 
   /* Set all cursors on toplevel, otherwise its tricky to keep track of
