@@ -399,6 +399,7 @@ void _gdk_gc_init (GdkGC           *gc,
 		   GdkGCValuesMask  values_mask);
 
 GdkRegion *_gdk_gc_get_clip_region (GdkGC *gc);
+GdkBitmap *_gdk_gc_get_clip_mask   (GdkGC *gc);
 gboolean   _gdk_gc_get_exposures   (GdkGC *gc);
 GdkFill    _gdk_gc_get_fill        (GdkGC *gc);
 GdkPixmap *_gdk_gc_get_tile        (GdkGC *gc);

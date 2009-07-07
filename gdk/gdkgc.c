@@ -775,6 +775,24 @@ _gdk_gc_get_clip_region (GdkGC *gc)
 }
 
 /**
+ * _gdk_gc_get_clip_mask:
+ * @gc: a #GdkGC
+ *
+ * Gets the current clip mask for @gc, if any.
+ *
+ * Return value: the clip mask for the GC, or %NULL.
+ *   (if a clip region is set, the return will be %NULL)
+ *   This value is owned by the GC and must not be freed.
+ **/
+GdkBitmap *
+_gdk_gc_get_clip_mask (GdkGC *gc)
+{
+  g_return_val_if_fail (GDK_IS_GC (gc), NULL);
+
+  return GDK_GC_GET_PRIVATE (gc)->clip_mask;
+}
+
+/**
  * _gdk_gc_get_fill:
  * @gc: a #GdkGC
  * 
