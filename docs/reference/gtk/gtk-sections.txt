@@ -2421,7 +2421,7 @@ gtk_menu_set_monitor
 gtk_menu_get_monitor
 gtk_menu_get_tearoff_state
 gtk_menu_set_reserve_toggle_size
-get_menu_get_reserve_toggle_size
+gtk_menu_get_reserve_toggle_size
 <SUBSECTION>
 gtk_menu_popdown
 gtk_menu_reposition
