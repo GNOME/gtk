@@ -5181,9 +5181,12 @@ gtk_window_realize (GtkWidget *widget)
   gint attributes_mask;
   GtkWindowPrivate *priv;
   gint label_height = 0;
+  gboolean client_decorated;
   
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  client_decorated = is_client_side_decorated (window);
 
   /* ensure widget tree is properly size allocated */
   if (widget->allocation.x == -1 &&
@@ -5243,7 +5246,7 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
-  if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
+  if (client_decorated && window->type != GTK_WINDOW_POPUP)
     {
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
       attributes.event_mask |= GDK_POINTER_MOTION_MASK;
@@ -5292,7 +5295,7 @@ gtk_window_realize (GtkWidget *widget)
   if (window->wm_role)
     gdk_window_set_role (widget->window, window->wm_role);
 
-  if (!window->decorated || is_client_side_decorated (window))
+  if (!window->decorated || client_decorated)
     {
       gdk_window_set_decorations (widget->window, 0);
     }
@@ -5460,11 +5463,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
   gint title_width = 0;
   gint icon_width = 0;
   GdkRectangle rect;
+  gboolean client_decorated;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
   widget->allocation = *allocation;
   priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  client_decorated = is_client_side_decorated (window);
 
   deco_allocation.width = deco_allocation.height = 0;
 
@@ -5478,7 +5484,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
                             NULL);
     }
 
-  if (is_client_side_decorated (window) && priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+  if (client_decorated && priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
     {
       gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
 
@@ -5492,7 +5498,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_icon, &deco_allocation);
     }
 
-  if (is_client_side_decorated (window) && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+  if (client_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
@@ -5506,7 +5512,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 
-  if (is_client_side_decorated (window) && priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+  if (client_decorated && priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
@@ -5520,7 +5526,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
-      if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
+      if (client_decorated && window->type != GTK_WINDOW_POPUP)
         {
           child_allocation.x = container->border_width + frame_left;
           child_allocation.y = container->border_width
