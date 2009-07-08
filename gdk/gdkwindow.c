@@ -5805,7 +5805,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
   if (gdk_window_is_viewable (window))
     show_all_visible_impls (private, was_mapped);
 
-  if (!was_mapped)
+  if (!was_mapped && !gdk_window_has_impl (private))
     {
       if (private->event_mask & GDK_STRUCTURE_MASK)
 	_gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
@@ -6112,7 +6112,7 @@ gdk_window_hide (GdkWindow *window)
   /* all decendants became non-visible, we need to send visibility notify */
   gdk_window_update_visibility_recursively (private, NULL);
 
-  if (was_mapped)
+  if (was_mapped && !gdk_window_has_impl (private))
     {
       if (private->event_mask & GDK_STRUCTURE_MASK)
 	_gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
