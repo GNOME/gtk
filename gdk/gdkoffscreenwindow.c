@@ -94,7 +94,7 @@ gdk_offscreen_window_finalize (GObject *object)
 
   offscreen->cursor = NULL;
 
-  gdk_pixmap_unref (offscreen->pixmap);
+  g_object_unref (offscreen->pixmap);
 
   G_OBJECT_CLASS (gdk_offscreen_window_parent_class)->finalize (object);
 }
