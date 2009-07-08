@@ -5838,7 +5838,7 @@ gtk_window_button_press_event (GtkWidget      *widget,
       return TRUE;
     }
 
-  return GTK_WIDGET_CLASS (gtk_window_parent_class)->button_press_event (widget, event);
+  return FALSE;
 }
 
 static void
