@@ -493,9 +493,9 @@ gtk_button_box_kludge_get_layout_default (GtkButtonBox *widget)
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    return gtk_hbutton_box_get_layout_default ();
+    return _gtk_hbutton_box_get_layout_default ();
   else
-    return gtk_vbutton_box_get_layout_default ();
+    return _gtk_vbutton_box_get_layout_default ();
 }
 
 static void
