@@ -86,6 +86,7 @@ gdk_test_simulate_key (GdkWindow      *window,
 {
   GdkScreen *screen;
   GdkKeymapKey *keys = NULL;
+  GdkWindowObject *priv;
   gboolean success;
   gint n_keys = 0;
   XKeyEvent xev = {
@@ -104,6 +105,12 @@ gdk_test_simulate_key (GdkWindow      *window,
       x /= 2;
       y /= 2;
     }
+
+  priv = (GdkWindowObject *)window;
+  /* Convert to impl coordinates */
+  x = x + priv->abs_x;
+  y = y + priv->abs_y;
+
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
   xev.display = GDK_DRAWABLE_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
@@ -190,6 +197,7 @@ gdk_test_simulate_button (GdkWindow      *window,
     1,  /* send_event */
   };
   gboolean success;
+  GdkWindowObject *priv;
 
   g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS || button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
   g_return_val_if_fail (window != NULL, FALSE);
@@ -203,6 +211,12 @@ gdk_test_simulate_button (GdkWindow      *window,
       x /= 2;
       y /= 2;
     }
+
+  priv = (GdkWindowObject *)window;
+  /* Convert to impl coordinates */
+  x = x + priv->abs_x;
+  y = y + priv->abs_y;
+
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
   xev.display = GDK_DRAWABLE_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
