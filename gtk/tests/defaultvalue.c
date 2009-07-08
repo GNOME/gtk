@@ -102,6 +102,9 @@ test_type (gconstpointer data)
     {
       GdkWindowAttr attributes;
       attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.event_mask = 0;
+      attributes.width = 100;
+      attributes.height = 100;
       instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
     }
   else
