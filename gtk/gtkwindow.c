@@ -131,6 +131,7 @@ typedef struct
   GdkPixmap *icon_pixmap;
   GdkPixmap *icon_mask;
   gchar     *icon_name;
+  GdkPixbuf *icon_pixbuf;
   guint      realized : 1;
   guint      using_default_icon : 1;
   guint      using_parent_icon : 1;
@@ -221,6 +222,7 @@ struct _GtkWindowPrivate
   gchar *startup_id;
 
   GtkWidget *title_label;
+  GtkWidget *title_icon;
   GtkWidget *min_button;
   GtkWidget *max_button;
   GtkWidget *close_button;
@@ -1513,22 +1515,28 @@ update_window_buttons (GtkWindow *window)
   if (is_client_side_decorated (window))
     {
       // XXX: should this be using GdkWMFunction instead?
-      if (priv->client_side_decorations & GDK_DECOR_MINIMIZE)
+      if (priv->min_button)
         {
-          gtk_widget_show_all (priv->min_button);
-        }
-      else
-        {
-          gtk_widget_hide (priv->min_button);
+          if (priv->client_side_decorations & GDK_DECOR_MINIMIZE)
+            {
+              gtk_widget_show_all (priv->min_button);
+            }
+          else
+            {
+              gtk_widget_hide (priv->min_button);
+            }
         }
 
-      if (priv->client_side_decorations & GDK_DECOR_MAXIMIZE)
+      if (priv->max_button)
         {
-          gtk_widget_show_all (priv->max_button);
-        }
-      else
-        {
-          gtk_widget_hide (priv->max_button);
+          if (priv->client_side_decorations & GDK_DECOR_MAXIMIZE)
+            {
+              gtk_widget_show_all (priv->max_button);
+            }
+          else
+            {
+              gtk_widget_hide (priv->max_button);
+            }
         }
 
       // close?
@@ -3406,6 +3414,7 @@ typedef struct {
   guint serial;
   GdkPixmap *pixmap;
   GdkPixmap *mask;
+  GdkPixbuf *pixbuf;
 } ScreenIconInfo;
 
 static ScreenIconInfo *
@@ -3446,7 +3455,8 @@ get_pixmap_and_mask (GdkWindow		*window,
                      gboolean            is_default_list,
                      GList              *icon_list,
                      GdkPixmap         **pmap_return,
-                     GdkBitmap         **mask_return)
+                     GdkBitmap         **mask_return,
+                     GdkPixbuf         **pixbuf_return)
 {
   GdkScreen *screen = gdk_drawable_get_screen (window);
   ScreenIconInfo *default_icon_info = get_screen_icon_info (screen);
@@ -3456,6 +3466,7 @@ get_pixmap_and_mask (GdkWindow		*window,
   
   *pmap_return = NULL;
   *mask_return = NULL;
+  *pixbuf_return = NULL;
   
   if (is_default_list &&
       default_icon_info->pixmap != NULL)
@@ -3466,9 +3477,12 @@ get_pixmap_and_mask (GdkWindow		*window,
         g_object_ref (default_icon_info->pixmap);
       if (default_icon_info->mask)
         g_object_ref (default_icon_info->mask);
+      if (default_icon_info->pixbuf)
+        g_object_ref (default_icon_info->pixbuf);
 
       *pmap_return = default_icon_info->pixmap;
       *mask_return = default_icon_info->mask;
+      *pixbuf_return = default_icon_info->pixbuf;
     }
   else if (parent_info && parent_info->icon_pixmap)
     {
@@ -3476,9 +3490,12 @@ get_pixmap_and_mask (GdkWindow		*window,
         g_object_ref (parent_info->icon_pixmap);
       if (parent_info->icon_mask)
         g_object_ref (parent_info->icon_mask);
-      
+      if (parent_info->icon_pixbuf)
+        g_object_ref (parent_info->icon_pixbuf);
+
       *pmap_return = parent_info->icon_pixmap;
       *mask_return = parent_info->icon_mask;
+      *pixbuf_return = parent_info->icon_pixbuf;
     }
   else
     {
@@ -3521,27 +3538,38 @@ get_pixmap_and_mask (GdkWindow		*window,
         }
 
       if (best_icon)
-        gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
-							gdk_screen_get_system_colormap (screen),
-							pmap_return,
-							mask_return,
-							128);
+        {
+          // XXX - should probably scale based on the height of the label?
+          best_icon = gdk_pixbuf_scale_simple (best_icon, 24, 24, GDK_INTERP_HYPER);
+
+          *pixbuf_return = best_icon;
+
+          gdk_pixbuf_render_pixmap_and_mask_for_colormap (best_icon,
+                                                          gdk_screen_get_system_colormap (screen),
+                                                          pmap_return,
+                                                          mask_return,
+                                                          128);
+        }
 
       /* Save pmap/mask for others to use if appropriate */
       if (parent_info)
         {
           parent_info->icon_pixmap = *pmap_return;
           parent_info->icon_mask = *mask_return;
+          parent_info->icon_pixbuf = *pixbuf_return;
 
           if (parent_info->icon_pixmap)
             g_object_ref (parent_info->icon_pixmap);
           if (parent_info->icon_mask)
             g_object_ref (parent_info->icon_mask);
+          if (parent_info->icon_pixbuf)
+            g_object_ref (parent_info->icon_pixbuf);
         }
       else if (is_default_list)
         {
           default_icon_info->pixmap = *pmap_return;
           default_icon_info->mask = *mask_return;
+          default_icon_info->pixbuf = *pixbuf_return;
 
           if (default_icon_info->pixmap)
 	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->pixmap),
@@ -3549,6 +3577,9 @@ get_pixmap_and_mask (GdkWindow		*window,
           if (default_icon_info->mask) 
 	    g_object_add_weak_pointer (G_OBJECT (default_icon_info->mask),
 				       (gpointer*)&default_icon_info->mask);
+          if (default_icon_info->pixbuf)
+            g_object_add_weak_pointer (G_OBJECT (default_icon_info->pixbuf),
+                                       (gpointer*)&default_icon_info->pixbuf);
         }
     }
 }
@@ -3591,6 +3622,37 @@ icon_list_from_theme (GtkWidget    *widget,
   return list;
 }
 
+static void
+ensure_title_icon (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  ensure_title_box (window);
+
+  if (!priv->title_icon)
+    {
+      priv->title_icon = gtk_image_new ();
+    }
+
+  gtk_widget_set_parent (priv->title_icon, GTK_WIDGET (window));
+
+  gtk_widget_show (priv->title_icon);
+
+  if (GTK_WIDGET_VISIBLE (window))
+    {
+      gtk_widget_queue_resize (GTK_WIDGET (window));
+    }
+}
+
+static void
+set_title_icon (GtkWindow *window, GdkPixbuf *pixbuf)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  ensure_title_icon (window);
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->title_icon), pixbuf);
+}
 
 static void
 gtk_window_realize_icon (GtkWindow *window)
@@ -3662,8 +3724,9 @@ gtk_window_realize_icon (GtkWindow *window)
                        info->using_default_icon,
                        icon_list,
                        &info->icon_pixmap,
-                       &info->icon_mask);
-  
+                       &info->icon_mask,
+                       &info->icon_pixbuf);
+
   /* This is a slight ICCCM violation since it's a color pixmap not
    * a bitmap, but everyone does it.
    */
@@ -3671,6 +3734,10 @@ gtk_window_realize_icon (GtkWindow *window)
                        NULL,
                        info->icon_pixmap,
                        info->icon_mask);
+
+  /* This is not an ICCCM violation. ;-)
+   */
+  set_title_icon (window, info->icon_pixbuf);
 
   info->realized = TRUE;
   
@@ -3720,7 +3787,6 @@ gtk_window_unrealize_icon (GtkWindow *window)
    */
 
   info->realized = FALSE;
-
 }
 
 /**
@@ -4941,6 +5007,13 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_map (priv->title_label);
     }
 
+  if (priv->title_icon &&
+      GTK_WIDGET_VISIBLE (priv->title_icon) &&
+      !GTK_WIDGET_MAPPED (priv->title_icon))
+    {
+      gtk_widget_map (priv->title_icon);
+    }
+
   if (priv->button_box &&
       GTK_WIDGET_VISIBLE (priv->button_box) &&
       !GTK_WIDGET_MAPPED (priv->button_box))
@@ -5090,7 +5163,9 @@ is_client_side_decorated (GtkWindow *window)
                         "client-side-decorated", &client_side_decorated,
                         NULL);
 
-  return client_side_decorated && window->decorated && !priv->disable_client_side_decorations;
+  return 1 && window->decorated && !priv->disable_client_side_decorations; // XXX - remove this :)
+
+  return client_side_decorated && window->decorated && priv->disable_client_side_decorations;
 }
 
 static void
@@ -5328,12 +5403,19 @@ gtk_window_size_request (GtkWidget      *widget,
   if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
     {
       GtkRequisition box_requisition;
+      GtkRequisition icon_requisition;
       gint child_height = 0;
 
       if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
         {
           gtk_widget_size_request (priv->title_label, &child_requisition);
           child_height = child_requisition.height;
+        }
+
+      if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+        {
+          gtk_widget_size_request (priv->title_icon, &icon_requisition);
+          child_height = MAX (child_height, icon_requisition.height);
         }
 
       if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
@@ -5372,6 +5454,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation box_allocation;
   gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
   gint title_width = 0;
+  gint icon_width = 0;
   GdkRectangle rect;
 
   window = GTK_WINDOW (widget);
@@ -5391,11 +5474,25 @@ gtk_window_size_allocate (GtkWidget     *widget,
                             NULL);
     }
 
+  if (is_client_side_decorated (window) && priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+    {
+      gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
+
+      deco_allocation.x = frame_left;
+      deco_allocation.y = frame_top;
+      deco_allocation.width = deco_requisition.width;
+      deco_allocation.height = deco_requisition.height;
+
+      icon_width = deco_allocation.width;
+
+      gtk_widget_size_allocate (priv->title_icon, &deco_allocation);
+    }
+
   if (is_client_side_decorated (window) && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
-      deco_allocation.x = frame_left;
+      deco_allocation.x = 2 * frame_left + icon_width;
       deco_allocation.y = frame_top;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
@@ -6015,6 +6112,9 @@ gtk_window_forall (GtkContainer   *container,
   if (bin->child)
     (* callback) (bin->child, callback_data);
 
+  if (priv->title_icon)
+    (* callback) (priv->title_icon, callback_data);
+
   if (priv->title_label)
     (* callback) (priv->title_label, callback_data);
 
@@ -6029,7 +6129,13 @@ gtk_window_remove (GtkContainer *container,
   GtkWindow *window = GTK_WINDOW (container);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  if (priv->title_label && priv->title_label == child)
+  if (priv->title_icon && priv->title_icon == child)
+    {
+      gtk_widget_unparent (priv->title_icon);
+      gtk_widget_destroy (priv->title_icon);
+      priv->title_icon = NULL;
+    }
+  else if (priv->title_label && priv->title_label == child)
     {
       gtk_widget_unparent (priv->title_label);
       gtk_widget_destroy (priv->title_label);
