@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-07 00:15-0400\n"
-"PO-Revision-Date: 2009-07-01 14:13+1000\n"
+"POT-Creation-Date: 2009-06-15 20:52-0400\n"
+"PO-Revision-Date: 2009-07-08 13:35+1000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -90,7 +90,7 @@ msgstr "Những cờ gỡ lỗi Gdk cần bỏ đặt"
 #: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "Xoá lùi"
+msgstr "BackSpace"
 
 #: gdk/keyname-table.h:3941
 msgctxt "keyboard label"
@@ -100,12 +100,12 @@ msgstr "Tab"
 #: gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr "Return"
+msgstr "Enter"
 
 #: gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Tạm ngừng"
+msgstr "Pause"
 
 #: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
@@ -115,17 +115,17 @@ msgstr "Scroll_Lock"
 #: gdk/keyname-table.h:3945
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "SysRq"
 
 #: gdk/keyname-table.h:3946
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Escape"
+msgstr "Esc"
 
 #: gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Đa phím"
+msgstr "Multi"
 
 #: gdk/keyname-table.h:3948
 msgctxt "keyboard label"
@@ -140,7 +140,7 @@ msgstr "Trái"
 #: gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "Trên"
+msgstr "Lên"
 
 #: gdk/keyname-table.h:3951
 msgctxt "keyboard label"
@@ -150,17 +150,17 @@ msgstr "Phải"
 #: gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Dưới"
+msgstr "Xuống"
 
 #: gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "PgUp"
 
 #: gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "PgDn"
 
 #: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
@@ -175,12 +175,12 @@ msgstr "Begin"
 #: gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "In"
+msgstr "Print"
 
 #: gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr "Insert"
+msgstr "Ins"
 
 #: gdk/keyname-table.h:3959
 msgctxt "keyboard label"
@@ -270,7 +270,7 @@ msgstr "KP_Delete"
 #: gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "Delete"
+msgstr "Del"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:968
 #: gdk-pixbuf/gdk-pixbuf-io.c:1228 tests/testfilechooser.c:222
@@ -1277,12 +1277,12 @@ msgstr "Meta"
 #: gtk/gtkaccellabel.c:715
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "Phím dài"
+msgstr "Phím cách"
 
 #: gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr "Xoá lùi"
+msgstr "Gạch chéo ngược"
 
 #: gtk/gtkbuilderparser.c:343
 #, c-format
