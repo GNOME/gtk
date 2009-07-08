@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -45,17 +45,13 @@ static void
 gtk_vbutton_box_init (GtkVButtonBox *vbutton_box)
 {
   gtk_orientable_set_orientation (GTK_ORIENTABLE (vbutton_box),
-		  GTK_ORIENTATION_VERTICAL);
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
-GtkWidget*
+GtkWidget *
 gtk_vbutton_box_new (void)
 {
-  GtkVButtonBox *vbutton_box;
-
-  vbutton_box = g_object_new (GTK_TYPE_VBUTTON_BOX, NULL);
-
-  return GTK_WIDGET (vbutton_box);
+  return g_object_new (GTK_TYPE_VBUTTON_BOX, NULL);
 }
 
 
