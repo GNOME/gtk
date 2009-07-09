@@ -3792,47 +3792,6 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
     }
 }
 
-static char *mode[] = {
-  "GDK_CROSSING_NORMAL",
-  "GDK_CROSSING_GRAB",
-  "GDK_CROSSING_UNGRAB",
-  "GDK_CROSSING_GTK_GRAB",
-  "GDK_CROSSING_GTK_UNGRAB",
-  "GDK_CROSSING_STATE_CHANGED",
-  NULL
-};
-
-static char *detail[] = {
-  "GDK_NOTIFY_ANCESTOR",
-  "GDK_NOTIFY_VIRTUAL",
-  "GDK_NOTIFY_INFERIOR",
-  "GDK_NOTIFY_NONLINEAR",
-  "GDK_NOTIFY_NONLINEAR_VIRTUAL",
-  "GDK_NOTIFY_UNKNOWN",
-  NULL
-};
-
-char *
-get_window_name (GtkWidget *widget, GdkWindow *window)
-{
-  GtkMenu *menu;
-  gpointer w;
-  menu = GTK_MENU (widget);
-  
-  if (window == widget->window)
-    return "widget->window";
-
-  if (window == menu->view_window)
-    return "menu->view_window";
-  
-  if (window == menu->bin_window)
-    return "menu->bin_window";
-
-  gdk_window_get_user_data (window, &w);
-  
-  return g_type_name_from_instance (w);
-}
-
 static gboolean
 gtk_menu_enter_notify (GtkWidget        *widget,
 		       GdkEventCrossing *event)
@@ -3845,10 +3804,6 @@ gtk_menu_enter_notify (GtkWidget        *widget,
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
 
-  g_print ("menu ENTER notify for %s mode: %s, detail %s\n",
-	   get_window_name (widget, event->window),
-	   mode[event->mode], detail[event->detail]);
-  
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen_mode,
                 NULL);
@@ -3891,7 +3846,6 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 		   * far enough away from the enter point. (see
 		   * gtk_menu_motion_notify())
 		   */
-		  g_print ("user-enter, not pop-under\n");
 		  menu_shell->activate_time = 0;
 		}
 	    }
@@ -3925,10 +3879,6 @@ gtk_menu_leave_notify (GtkWidget        *widget,
       event->mode == GDK_CROSSING_GTK_UNGRAB ||
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
-
-  g_print ("menu LEAVE notify for %s mode: %s, detail %s\n",
-	   get_window_name (widget, event->window),
-	   mode[event->mode], detail[event->detail]);
 
   menu = GTK_MENU (widget);
   menu_shell = GTK_MENU_SHELL (widget); 
