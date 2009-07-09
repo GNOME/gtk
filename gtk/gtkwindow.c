@@ -855,18 +855,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Decoration border width"),
                                                              0, G_MAXINT, 6, GTK_PARAM_READWRITE));
 
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-button-size",
-                                                             P_("Decoration button size"),
-                                                             P_("Client-side decoration button size"),
-                                                             0, G_MAXINT, 12, GTK_PARAM_READWRITE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-button-y-offset",
-                                                             P_("Decoration button Y offset"),
-                                                             P_("Client-side decoration button Y offset"),
-                                                             0, G_MAXINT, 4, GTK_PARAM_READWRITE));
-
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
