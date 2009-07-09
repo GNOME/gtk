@@ -1662,6 +1662,7 @@ gtk_window_set_label_widget (GtkWindow *window,
   priv->title_label = label;
 
   gtk_widget_set_parent (priv->title_label, GTK_WIDGET (window));
+  gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
 
   if (label)
     {
@@ -1670,7 +1671,7 @@ gtk_window_set_label_widget (GtkWindow *window,
 
   gtk_widget_show (priv->title_label);
 
-  if (GTK_WIDGET_VISIBLE (window))
+  if (gtk_widget_get_visible (window))
     {
       gtk_widget_queue_resize (GTK_WIDGET (window));
     }
@@ -5487,6 +5488,44 @@ gtk_window_size_request (GtkWidget      *widget,
     }
 }
 
+static gint
+get_available_size_for_label (GtkWindow *window)
+{
+  GtkWidget *widget;
+  GtkWindowPrivate *priv;
+  gint border_width = 0;
+  gint available_size;
+
+  if (!is_client_side_decorated (window))
+    return 0;
+
+  widget = GTK_WIDGET (window);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  available_size = widget->allocation.width;
+
+  if (priv->client_side_decorations & GDK_DECOR_BORDER)
+    {
+      gtk_widget_style_get (widget,
+                            "decoration-border-width", &border_width,
+                            NULL);
+    }
+
+  available_size -= border_width * 2;
+
+  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+    {
+      available_size -= priv->title_icon->allocation.width;
+    }
+
+  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+    {
+      available_size -= priv->button_box->allocation.width;
+    }
+
+  return available_size;
+}
+
 static void
 gtk_window_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
@@ -5521,7 +5560,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
                             NULL);
     }
 
-  if (client_decorated && priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+  if (client_decorated && priv->title_icon && gtk_widget_get_visible (priv->title_icon))
     {
       gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
 
@@ -5535,13 +5574,25 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_icon, &deco_allocation);
     }
 
-  if (client_decorated && priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+  if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
+    {
+      gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
+
+      box_allocation.x = allocation->width - frame_width - box_requisition.width;
+      box_allocation.y = frame_width;
+      box_allocation.width = box_requisition.width;
+      box_allocation.height = box_requisition.height;
+
+      gtk_widget_size_allocate (priv->button_box, &box_allocation);
+    }
+
+  if (client_decorated && priv->title_label && gtk_widget_get_visible (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
       deco_allocation.x = 2 * frame_width + icon_width;
       deco_allocation.y = frame_width;
-      deco_allocation.width = deco_requisition.width;
+      deco_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
       deco_allocation.height = deco_requisition.height;
 
       title_width = deco_allocation.width;
@@ -5549,7 +5600,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 
-  if (client_decorated && priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+  if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
