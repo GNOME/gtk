@@ -2306,6 +2306,8 @@ gtk_label_set_use_underline
 gtk_label_set_single_line_mode
 gtk_label_set_angle
 gtk_label_get_current_uri
+gtk_label_set_track_visited_links
+gtk_label_get_track_visited_links
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL
