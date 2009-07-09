@@ -246,6 +246,8 @@ static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
+static gint gtk_window_state_event        (GtkWidget           *widget,
+					   GdkEventWindowState *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
 					   GdkEventKey       *event);
 static gint gtk_window_key_release_event  (GtkWidget         *widget,
@@ -497,6 +499,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->size_request = gtk_window_size_request;
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->configure_event = gtk_window_configure_event;
+  widget_class->window_state_event = gtk_window_state_event;
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->enter_notify_event = gtk_window_enter_notify_event;
@@ -1540,6 +1543,29 @@ update_window_buttons (GtkWindow *window)
         }
 
       // close?
+    }
+}
+
+static void
+update_max_button (GtkWindow *window,
+                   gboolean   maximized)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWidget *button;
+  GtkWidget *image;
+
+  button = GTK_BIN (priv->max_button);
+  image = gtk_bin_get_child (GTK_BIN (button));
+
+  if (maximized)
+    {
+      gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_100, GTK_ICON_SIZE_MENU);
+      gtk_widget_set_tooltip_text (button, _("Restore Window"));
+    }
+  else
+    {
+      gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
+      gtk_widget_set_tooltip_text (button, _("Maximize Window"));
     }
 }
 
@@ -5621,6 +5647,21 @@ gtk_window_configure_event (GtkWidget         *widget,
   _gtk_container_queue_resize (GTK_CONTAINER (widget));
   
   return TRUE;
+}
+
+static gboolean
+gtk_window_state_event (GtkWidget           *widget,
+                        GdkEventWindowState *event)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  if (is_client_side_decorated (window))
+    {
+      if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
+        update_max_button (window, event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED);
+    }
+
+  return FALSE;
 }
 
 /* the accel_key and accel_mods fields of the key have to be setup
