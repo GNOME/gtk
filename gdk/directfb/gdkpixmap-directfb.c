@@ -114,10 +114,10 @@ gdk_pixmap_impl_directfb_finalize (GObject *object)
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
-                gint       width,
-                gint       height,
-                gint       depth)
+_gdk_pixmap_new (GdkDrawable *drawable,
+                 gint       width,
+                 gint       height,
+                 gint       depth)
 {
   DFBSurfacePixelFormat    format;
   IDirectFBSurface        *surface;
@@ -196,10 +196,10 @@ gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable   *drawable,
-                             const gchar *data,
-                             gint         width,
-                             gint         height)
+_gdk_bitmap_create_from_data (GdkDrawable   *drawable,
+                              const gchar *data,
+                              gint         width,
+                              gint         height)
 {
   GdkPixmap *pixmap;
 
@@ -249,13 +249,13 @@ gdk_bitmap_create_from_data (GdkDrawable   *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable   *drawable,
-                             const gchar *data,
-                             gint         width,
-                             gint         height,
-                             gint         depth,
-                             const GdkColor    *fg,
-                             const GdkColor    *bg)
+_gdk_pixmap_create_from_data (GdkDrawable   *drawable,
+                              const gchar *data,
+                              gint         width,
+                              gint         height,
+                              gint         depth,
+                              const GdkColor    *fg,
+                              const GdkColor    *bg)
 {
   GdkPixmap *pixmap;
 
