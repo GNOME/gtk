@@ -1554,7 +1554,7 @@ update_max_button (GtkWindow *window,
   GtkWidget *button;
   GtkWidget *image;
 
-  button = GTK_BIN (priv->max_button);
+  button = priv->max_button;
   image = gtk_bin_get_child (GTK_BIN (button));
 
   if (maximized)
@@ -5189,13 +5189,19 @@ is_client_side_decorated (GtkWindow *window)
   GtkWindowPrivate *priv;
   gboolean client_side_decorated;
 
+  if (!window->decorated)
+    return FALSE;
+
   priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (priv->disable_client_side_decorations)
+    return FALSE;
 
   gtk_widget_style_get (GTK_WIDGET (window),
                         "client-side-decorated", &client_side_decorated,
                         NULL);
 
-  return client_side_decorated && window->decorated && !priv->disable_client_side_decorations;
+  return client_side_decorated;
 }
 
 static void
@@ -5584,7 +5590,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       rect.y = 0;
       rect.width = allocation->width;
       rect.height = allocation->height;
-      gdk_window_invalidate_rect(widget->window, &rect, NULL);
+      gdk_window_invalidate_rect (widget->window, &rect, TRUE);
     }
 }
 
@@ -6049,6 +6055,13 @@ do_focus_change (GtkWidget *widget,
   gdk_event_free (fevent);
 }
 
+static void
+gtk_window_queue_draw_border (GtkWidget *widget)
+{
+  /* FIXME only invalidate the frame area */
+  gtk_widget_queue_draw (widget);
+}
+
 static gint
 gtk_window_focus_in_event (GtkWidget     *widget,
 			   GdkEventFocus *event)
@@ -6064,6 +6077,8 @@ gtk_window_focus_in_event (GtkWidget     *widget,
     {
       _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
+      if (is_client_side_decorated (window))
+        gtk_window_queue_draw_border (widget);
     }
       
   return FALSE;
@@ -6078,6 +6093,8 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 
   _gtk_window_set_has_toplevel_focus (window, FALSE);
   _gtk_window_set_is_active (window, FALSE);
+  if (is_client_side_decorated (window))
+    gtk_window_queue_draw_border (widget);
 
   /* set the mnemonic-visible property to false */
   g_object_get (gtk_widget_get_settings (widget),
@@ -7439,26 +7456,59 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
+static void
+get_frame_dimensions (GtkWindow *window,
+                      gint      *left,
+                      gint      *right,
+                      gint      *top,
+                      gint      *bottom)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  gint title = 0;
+
+  if (priv->client_side_decorations & GDK_DECOR_BORDER)
+    gtk_widget_style_get (GTK_WIDGET (window),
+                          "decoration-border-top", &frame_top,
+                          "decoration-border-bottom", &frame_bottom,
+                          "decoration-border-left", &frame_left,
+                          "decoration-border-right", &frame_right,
+                          NULL);
+  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+    title = MAX (title, priv->title_icon->allocation.height);
+  if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+    title = MAX (title, priv->title_label->allocation.height);
+  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+    title = MAX (title, priv->button_box->allocation.height);
+
+  *left = frame_left;
+  *right = frame_right;
+  *top = frame_top + title;
+  *bottom = frame_bottom;
+}
+
 // This is just temporary, because it looks cool :)
 static void
 gtk_window_paint (GtkWidget     *widget,
 		  GdkRectangle *area)
 {
-#if 0
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
-      gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL, 
+      gint left, right, top, bottom;
+
+      get_frame_dimensions (GTK_WINDOW (widget), &left, &right, &top, &bottom);
+
+      gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT, area, widget, "decoration", 0, 0, -1, -1);
+      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
+                          GTK_SHADOW_NONE, area, widget, "base",
+                          left, top,
+                          widget->allocation.width - left - right,
+                          widget->allocation.height - top - bottom);
     }
   else
-    {
-      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
-                          GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
-    }
-#else
-  gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
-                      GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
-#endif
+    gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
+                        GTK_SHADOW_NONE, area, widget, "base", 0, 0, -1, -1);
 }
 
 static gint

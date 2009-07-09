@@ -3534,7 +3534,12 @@ paint_decorated_window (GtkStyle *style,
 
   gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
                                           width / 2 + 1, height);
-  color = &style->bg[state_type];
+  if (GTK_IS_WINDOW (widget) &&
+      gtk_window_has_toplevel_focus (GTK_WINDOW (widget)) &&
+      gtk_window_is_active (GTK_WINDOW (widget)))
+    color = &style->bg[GTK_STATE_SELECTED];
+  else
+    color = &style->bg[GTK_STATE_NORMAL];
   cairo_pattern_add_color_stop_rgba (gradient, 0,
 				     color->red / 65535.,
 				     color->green / 65535.,
