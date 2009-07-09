@@ -850,27 +850,9 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                                  GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-border-top",
-                                                             P_("Top border decoration size"),
-                                                             P_("Top border decoration size"),
-                                                             0, G_MAXINT, 6, GTK_PARAM_READWRITE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-border-left",
-                                                             P_("Left border decoration size"),
-                                                             P_("Left border decoration size"),
-                                                             0, G_MAXINT, 6, GTK_PARAM_READWRITE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-border-right",
-                                                             P_("Right border decoration size"),
-                                                             P_("Right border decoration size"),
-                                                             0, G_MAXINT, 6, GTK_PARAM_READWRITE));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-border-bottom",
-                                                             P_("Bottom border decoration size"),
-                                                             P_("Bottom border decoration size"),
+                                           g_param_spec_int ("decoration-border-width",
+                                                             P_("Decoration border width"),
+                                                             P_("Decoration border width"),
                                                              0, G_MAXINT, 6, GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -4638,7 +4620,7 @@ gtk_window_move (GtkWindow *window,
   GtkWindowGeometryInfo *info;
   GtkWidget *widget;
   GtkWindowPrivate *priv;
-  gint frame_top = 0, frame_left = 0;
+  gint frame_width = 0;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -4650,8 +4632,7 @@ gtk_window_move (GtkWindow *window,
   if (is_client_side_decorated (window) && priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
-                            "decoration-border-top", &frame_top,
-                            "decoration-border-left", &frame_left,
+                            "decoration-border-width", &frame_width,
                             NULL);
     }
 
@@ -4689,8 +4670,8 @@ gtk_window_move (GtkWindow *window,
       /* FIXME are we handling gravity properly for framed windows? */
       if (window->frame)
         gdk_window_move (window->frame,
-                         x - frame_left,
-                         y - frame_top);
+                         x - frame_width,
+                         y - frame_width);
       else
         gdk_window_move (GTK_WIDGET (window)->window,
                          x, y);
@@ -5450,7 +5431,7 @@ gtk_window_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkRequisition child_requisition;
   GtkWindowPrivate *priv;
-  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  gint frame_width = 0;
 
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -5459,10 +5440,7 @@ gtk_window_size_request (GtkWidget      *widget,
   if (priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
-                            "decoration-border-top", &frame_top,
-                            "decoration-border-bottom", &frame_bottom,
-                            "decoration-border-left", &frame_left,
-                            "decoration-border-right", &frame_right,
+                            "decoration-border-width", &frame_width,
                             NULL);
     }
 
@@ -5496,8 +5474,8 @@ gtk_window_size_request (GtkWidget      *widget,
 
       // There should probably be some kind of padding property for
       // "between the title/buttons and the bin.child".
-      requisition->width += frame_left + frame_right;
-      requisition->height += frame_top + frame_bottom + child_height;
+      requisition->width += frame_width * 2;
+      requisition->height += frame_width * 2 + child_height;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -5521,7 +5499,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation deco_allocation;
   GtkRequisition box_requisition;
   GtkAllocation box_allocation;
-  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  gint frame_width = 0;
   gint title_width = 0;
   gint icon_width = 0;
   GdkRectangle rect;
@@ -5539,10 +5517,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   if (priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
-                            "decoration-border-top", &frame_top,
-                            "decoration-border-bottom", &frame_bottom,
-                            "decoration-border-left", &frame_left,
-                            "decoration-border-right", &frame_right,
+                            "decoration-border-width", &frame_width,
                             NULL);
     }
 
@@ -5550,8 +5525,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
 
-      deco_allocation.x = frame_left;
-      deco_allocation.y = frame_top;
+      deco_allocation.x = frame_width;
+      deco_allocation.y = frame_width;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
@@ -5564,8 +5539,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
-      deco_allocation.x = 2 * frame_left + icon_width;
-      deco_allocation.y = frame_top;
+      deco_allocation.x = 2 * frame_width + icon_width;
+      deco_allocation.y = frame_width;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
@@ -5578,8 +5553,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
-      box_allocation.x = allocation->width - frame_left - box_requisition.width;
-      box_allocation.y = frame_top;
+      box_allocation.x = allocation->width - frame_width - box_requisition.width;
+      box_allocation.y = frame_width;
       box_allocation.width = box_requisition.width;
       box_allocation.height = box_requisition.height;
 
@@ -5590,15 +5565,15 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       if (client_decorated && window->type != GTK_WINDOW_POPUP)
         {
-          child_allocation.x = container->border_width + frame_left;
+          child_allocation.x = container->border_width + frame_width;
           child_allocation.y = container->border_width
             + MAX (deco_allocation.height, box_allocation.height)
-            + frame_top; // XXX - padding style property?
+            + frame_width; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
-                                            - frame_left - frame_right));
+                                            - (frame_width * 2)));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
-                                             - frame_bottom
-                                             - frame_top // XXX - padding style property?
+                                             - (frame_width * 2)
+                                             // XXX - padding style property?
                                              - MAX (deco_allocation.height, box_allocation.height)));
         }
       else
@@ -6887,7 +6862,7 @@ gtk_window_move_resize (GtkWindow *window)
   gboolean configure_request_pos_changed;
   gboolean hints_changed; /* do we need to send these again */
   GtkWindowLastGeometryInfo saved_last_info;
-  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  gint frame_width = 0;
 
   widget = GTK_WIDGET (window);
   container = GTK_CONTAINER (widget);
@@ -6900,10 +6875,7 @@ gtk_window_move_resize (GtkWindow *window)
   if (is_client_side_decorated (window) && priv->client_side_decorations & GDK_DECOR_BORDER)
     {
       gtk_widget_style_get (widget,
-                            "decoration-border-top", &frame_top,
-                            "decoration-border-bottom", &frame_bottom,
-                            "decoration-border-left", &frame_left,
-                            "decoration-border-right", &frame_right,
+                            "decoration-border-width", &frame_width,
                             NULL);
     }
   
@@ -7149,15 +7121,12 @@ gtk_window_move_resize (GtkWindow *window)
 	    widget->allocation.height != new_request.height))
 
     {
-      gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+      gint frame_width = 0;
 
       if (priv->client_side_decorations & GDK_DECOR_BORDER)
         {
           gtk_widget_style_get (widget,
-                                "decoration-border-top", &frame_top,
-                                "decoration-border-bottom", &frame_bottom,
-                                "decoration-border-left", &frame_left,
-                                "decoration-border-right", &frame_right,
+                                "decoration-border-width", &frame_width,
                                 NULL);
         }
 
@@ -7182,10 +7151,10 @@ gtk_window_move_resize (GtkWindow *window)
 	  if (window->frame)
 	    {
 	      gdk_window_move_resize (window->frame,
-				      new_request.x - frame_left,
-                                      new_request.y - frame_top,
-				      new_request.width + frame_left + frame_right,
-				      new_request.height + frame_top + frame_bottom);
+				      new_request.x - frame_width,
+                                      new_request.y - frame_width,
+				      new_request.width + frame_width * 2,
+				      new_request.height + frame_width * 2);
 	      gdk_window_resize (widget->window,
                                  new_request.width, new_request.height);
 	    }
@@ -7198,8 +7167,8 @@ gtk_window_move_resize (GtkWindow *window)
 	{
 	  if (window->frame)
 	    gdk_window_resize (window->frame,
-			       new_request.width + frame_left + frame_right,
-			       new_request.height + frame_top + frame_bottom);
+			       new_request.width + frame_width * 2,
+			       new_request.height + frame_width * 2);
 	  gdk_window_resize (widget->window,
 			     new_request.width, new_request.height);
 	}
@@ -7258,8 +7227,8 @@ gtk_window_move_resize (GtkWindow *window)
 	  if (window->frame)
 	    {
 	      gdk_window_move (window->frame,
-			       new_request.x - frame_left,
-			       new_request.y - frame_top);
+			       new_request.x - frame_width,
+			       new_request.y - frame_width);
 	    }
 	  else
 	    gdk_window_move (widget->window,
@@ -7494,15 +7463,12 @@ get_frame_dimensions (GtkWindow *window,
                       gint      *bottom)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-  gint frame_left = 0, frame_right = 0, frame_top = 0, frame_bottom = 0;
+  gint frame_width = 0;
   gint title = 0;
 
   if (priv->client_side_decorations & GDK_DECOR_BORDER)
     gtk_widget_style_get (GTK_WIDGET (window),
-                          "decoration-border-top", &frame_top,
-                          "decoration-border-bottom", &frame_bottom,
-                          "decoration-border-left", &frame_left,
-                          "decoration-border-right", &frame_right,
+                          "decoration-border-width", &frame_width,
                           NULL);
   if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
     title = MAX (title, priv->title_icon->allocation.height);
@@ -7511,10 +7477,10 @@ get_frame_dimensions (GtkWindow *window,
   if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
     title = MAX (title, priv->button_box->allocation.height);
 
-  *left = frame_left;
-  *right = frame_right;
-  *top = frame_top + title;
-  *bottom = frame_bottom;
+  *left = frame_width;
+  *right = frame_width;
+  *top = frame_width + title;
+  *bottom = frame_width;
 }
 
 // This is just temporary, because it looks cool :)
