@@ -856,26 +856,26 @@ synthesize_crossing_events (GdkDisplay *display,
       gdk_window_get_pointer (dest_toplevel,
 			      &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
-				      src_window,
-				      dest_window,
-				      crossing_mode,
-				      x, y, state,
-				      time,
-				      NULL,
-				      serial);
+				       src_window,
+				       dest_window,
+				       crossing_mode,
+				       x, y, state,
+				       time,
+				       NULL,
+				       serial, FALSE);
     }
   else if (dest_toplevel == NULL)
     {
       gdk_window_get_pointer (src_toplevel,
 			      &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
-				      src_window,
-				      NULL,
-				      crossing_mode,
-				      x, y, state,
-				      time,
-				      NULL,
-				      serial);
+				       src_window,
+				       NULL,
+				       crossing_mode,
+				       x, y, state,
+				       time,
+				       NULL,
+				       serial, FALSE);
     }
   else
     {
@@ -883,23 +883,23 @@ synthesize_crossing_events (GdkDisplay *display,
       gdk_window_get_pointer (src_toplevel,
 			      &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
-				      src_window,
-				      NULL,
-				      crossing_mode,
-				      x, y, state,
-				      time,
-				      NULL,
-				      serial);
+				       src_window,
+				       NULL,
+				       crossing_mode,
+				       x, y, state,
+				       time,
+				       NULL,
+				       serial, FALSE);
       gdk_window_get_pointer (dest_toplevel,
 			      &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
-				      NULL,
-				      dest_window,
-				      crossing_mode,
-				      x, y, state,
-				      time,
-				      NULL,
-				      serial);
+				       NULL,
+				       dest_window,
+				       crossing_mode,
+				       x, y, state,
+				       time,
+				       NULL,
+				       serial, FALSE);
     }
 }
 

@@ -8494,20 +8494,20 @@ send_crossing_event (GdkDisplay                 *display,
  */
 void
 _gdk_synthesize_crossing_events (GdkDisplay                 *display,
-				GdkWindow                  *src,
-				GdkWindow                  *dest,
-				GdkCrossingMode             mode,
-				gint                        toplevel_x,
-				gint                        toplevel_y,
-				GdkModifierType             mask,
-				guint32                     time_,
-				GdkEvent                   *event_in_queue,
-				gulong                      serial)
+				 GdkWindow                  *src,
+				 GdkWindow                  *dest,
+				 GdkCrossingMode             mode,
+				 gint                        toplevel_x,
+				 gint                        toplevel_y,
+				 GdkModifierType             mask,
+				 guint32                     time_,
+				 GdkEvent                   *event_in_queue,
+				 gulong                      serial,
+				 gboolean                    non_linear)
 {
   GdkWindowObject *c;
   GdkWindowObject *win, *last, *next;
   GList *path, *list;
-  gboolean non_linear;
   GdkWindowObject *a;
   GdkWindowObject *b;
   GdkWindowObject *toplevel;
@@ -8522,7 +8522,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 
   c = find_common_ancestor (a, b);
 
-  non_linear = (c != a) && (c != b);
+  non_linear |= (c != a) && (c != b);
 
   if (a) /* There might not be a source (i.e. if no previous pointer_in_window) */
     {
@@ -8821,15 +8821,16 @@ do_synthesize_crossing_event (gpointer data)
 	  display->pointer_info.window_under_pointer)
 	{
 	  _gdk_synthesize_crossing_events (display,
-					  display->pointer_info.window_under_pointer,
-					  new_window_under_pointer,
-					  GDK_CROSSING_NORMAL,
-					  display->pointer_info.toplevel_x,
-					  display->pointer_info.toplevel_y,
-					  display->pointer_info.state,
-					  GDK_CURRENT_TIME,
-					  NULL,
-					  serial);
+					   display->pointer_info.window_under_pointer,
+					   new_window_under_pointer,
+					   GDK_CROSSING_NORMAL,
+					   display->pointer_info.toplevel_x,
+					   display->pointer_info.toplevel_y,
+					   display->pointer_info.state,
+					   GDK_CURRENT_TIME,
+					   NULL,
+					   serial,
+					   FALSE);
 	  _gdk_display_set_window_under_pointer (display, new_window_under_pointer);
 	}
     }
@@ -8939,6 +8940,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   guint state;
   gdouble toplevel_x, toplevel_y;
   guint32 time_;
+  gboolean non_linear;
 
   event_window = source_event->any.window;
   gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
@@ -8948,6 +8950,12 @@ proxy_pointer_event (GdkDisplay                 *display,
 						       toplevel_x, toplevel_y,
 						       &toplevel_x, &toplevel_y);
 
+  non_linear = FALSE;
+  if ((source_event->type == GDK_LEAVE_NOTIFY ||
+       source_event->type == GDK_ENTER_NOTIFY) &&
+      (source_event->crossing.detail == GDK_NOTIFY_NONLINEAR ||
+       source_event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL))
+    non_linear = TRUE;
 
   /* If we get crossing events with subwindow unexpectedly being NULL
      that means there is a native subwindow that gdk doesn't know about.
@@ -8968,13 +8976,14 @@ proxy_pointer_event (GdkDisplay                 *display,
       /* Send leave events from window under pointer to event window
 	 that will get the subwindow == NULL window */
       _gdk_synthesize_crossing_events (display,
-				      display->pointer_info.window_under_pointer,
-				      event_window,
-				      source_event->crossing.mode,
-				      toplevel_x, toplevel_y,
-				      state, time_,
-				      source_event,
-				      serial);
+				       display->pointer_info.window_under_pointer,
+				       event_window,
+				       source_event->crossing.mode,
+				       toplevel_x, toplevel_y,
+				       state, time_,
+				       source_event,
+				       serial,
+				       non_linear);
 
       /* Send subwindow == NULL event */
       send_crossing_event (display,
@@ -9020,13 +9029,13 @@ proxy_pointer_event (GdkDisplay                 *display,
 
       /* Send enter events from event window to pointer_window */
       _gdk_synthesize_crossing_events (display,
-				      event_window,
-				      pointer_window,
-				      source_event->crossing.mode,
-				      toplevel_x, toplevel_y,
-				      state, time_,
-				      source_event,
-				      serial);
+				       event_window,
+				       pointer_window,
+				       source_event->crossing.mode,
+				       toplevel_x, toplevel_y,
+				       state, time_,
+				       source_event,
+				       serial, non_linear);
       _gdk_display_set_window_under_pointer (display, pointer_window);
       return TRUE;
     }
@@ -9038,13 +9047,13 @@ proxy_pointer_event (GdkDisplay                 *display,
 
       /* Different than last time, send crossing events */
       _gdk_synthesize_crossing_events (display,
-				      display->pointer_info.window_under_pointer,
-				      pointer_window,
-				      GDK_CROSSING_NORMAL,
-				      toplevel_x, toplevel_y,
-				      state, time_,
-				      source_event,
-				      serial);
+				       display->pointer_info.window_under_pointer,
+				       pointer_window,
+				       GDK_CROSSING_NORMAL,
+				       toplevel_x, toplevel_y,
+				       state, time_,
+				       source_event,
+				       serial, non_linear);
       _gdk_display_set_window_under_pointer (display, pointer_window);
     }
   else if (source_event->type == GDK_MOTION_NOTIFY)

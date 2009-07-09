@@ -628,15 +628,16 @@ GdkEvent * _gdk_make_event (GdkWindow    *window,
 			    gboolean      before_event);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
-				     GdkWindow                  *src,
-				     GdkWindow                  *dest,
-				     GdkCrossingMode             mode,
-				     gint                        toplevel_x,
-				     gint                        toplevel_y,
-				     GdkModifierType             mask,
-				     guint32                     time_,
-				     GdkEvent                   *event_in_queue,
-				     gulong                      serial);
+				      GdkWindow                  *src,
+				      GdkWindow                  *dest,
+				      GdkCrossingMode             mode,
+				      gint                        toplevel_x,
+				      gint                        toplevel_y,
+				      GdkModifierType             mask,
+				      guint32                     time_,
+				      GdkEvent                   *event_in_queue,
+				      gulong                      serial,
+				      gboolean                    non_linear);
 void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 					    GdkWindow *window);
 
