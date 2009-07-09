@@ -267,8 +267,10 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static void gtk_window_check_resize       (GtkContainer      *container);
-static gint gtk_window_focus              (GtkWidget        *widget,
-				           GtkDirectionType  direction);
+static gint gtk_window_focus              (GtkWidget         *widget,
+				           GtkDirectionType   direction);
+static void gtk_window_style_set          (GtkWidget         *widget,
+                                           GtkStyle          *prev_style);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 
@@ -510,6 +512,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
   widget_class->button_press_event = gtk_window_button_press_event;
+  widget_class->style_set = gtk_window_style_set;
   widget_class->expose_event = gtk_window_expose;
 
   container_class->check_resize = gtk_window_check_resize;
@@ -1517,32 +1520,59 @@ update_window_buttons (GtkWindow *window)
 
   if (is_client_side_decorated (window))
     {
+      if (priv->button_box)
+        gtk_widget_show (priv->button_box);
       // XXX: should this be using GdkWMFunction instead?
       if (priv->min_button)
         {
           if (priv->client_side_decorations & GDK_DECOR_MINIMIZE)
-            {
-              gtk_widget_show_all (priv->min_button);
-            }
+            gtk_widget_show_all (priv->min_button);
           else
-            {
-              gtk_widget_hide (priv->min_button);
-            }
+            gtk_widget_hide (priv->min_button);
         }
 
       if (priv->max_button)
         {
           if (priv->client_side_decorations & GDK_DECOR_MAXIMIZE)
-            {
-              gtk_widget_show_all (priv->max_button);
-            }
+            gtk_widget_show_all (priv->max_button);
           else
-            {
-              gtk_widget_hide (priv->max_button);
-            }
+            gtk_widget_hide (priv->max_button);
         }
 
       // close?
+
+      if (priv->title_icon)
+        gtk_widget_show (priv->title_icon);
+      if (priv->title_label)
+        gtk_widget_show (priv->title_label);
+    }
+  else
+    {
+      if (priv->button_box)
+        gtk_widget_hide (priv->button_box);
+      if (priv->title_icon)
+        gtk_widget_hide (priv->title_icon);
+      if (priv->title_label)
+        gtk_widget_hide (priv->title_label);
+    }
+}
+
+static void
+gtk_window_style_set (GtkWidget *widget,
+                      GtkStyle  *prev_style)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->style_set (widget, prev_style);
+
+  update_window_buttons (window);
+  gtk_widget_queue_resize (widget);
+  if (widget->window)
+    {
+      if (window->decorated && !is_client_side_decorated (window))
+        gdk_window_set_decorations (widget->window, GDK_DECOR_ALL);
+      else
+        gdk_window_set_decorations (widget->window, 0);
     }
 }
 
