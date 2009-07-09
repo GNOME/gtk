@@ -4,14 +4,14 @@
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2009
 #
 # wanderlust <wanderlust@ukr.net>, 2009.
+# Wanderlust <wanderlust@ukr.net>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"+&component=general\n"
-"POT-Creation-Date: 2009-07-09 01:49+0000\n"
-"PO-Revision-Date: 2009-07-06 15:00+0300\n"
-"Last-Translator: wanderlust <wanderlust@ukr.net>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-07-09 23:55+0300\n"
+"PO-Revision-Date: 2009-07-09 15:39+0300\n"
+"Last-Translator: Wanderlust <wanderlust@ukr.net>\n"
 "Language-Team: ukrainian <Ukrainian <uk@li.org>>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -262,7 +262,7 @@ msgid "A unique name for the action."
 msgstr "Унікальна назва для дії."
 
 #: ../gtk/gtkaction.c:198 ../gtk/gtkbutton.c:219 ../gtk/gtkexpander.c:195
-#: ../gtk/gtkframe.c:105 ../gtk/gtklabel.c:495 ../gtk/gtkmenuitem.c:305
+#: ../gtk/gtkframe.c:105 ../gtk/gtklabel.c:496 ../gtk/gtkmenuitem.c:305
 #: ../gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Позначка"
@@ -806,12 +806,12 @@ msgid ""
 "widget"
 msgstr "Текст віджета позначки в кнопці, якщо кнопка містить віджет позначки"
 
-#: ../gtk/gtkbutton.c:227 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:516
+#: ../gtk/gtkbutton.c:227 ../gtk/gtkexpander.c:203 ../gtk/gtklabel.c:517
 #: ../gtk/gtkmenuitem.c:320 ../gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Використовувати підкреслення"
 
-#: ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:204 ../gtk/gtklabel.c:517
+#: ../gtk/gtkbutton.c:228 ../gtk/gtkexpander.c:204 ../gtk/gtklabel.c:518
 #: ../gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1361,7 +1361,7 @@ msgstr "Розмітка"
 msgid "Marked up text to render"
 msgstr "Розмітка тексту до візуалізації"
 
-#: ../gtk/gtkcellrenderertext.c:211 ../gtk/gtklabel.c:502
+#: ../gtk/gtkcellrenderertext.c:211 ../gtk/gtklabel.c:503
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -1524,7 +1524,7 @@ msgstr ""
 "під час візуалізації тексту. Якщо ви не розумієте цей параметр, то, напевно, "
 "він вам не потрібний."
 
-#: ../gtk/gtkcellrenderertext.c:411 ../gtk/gtklabel.c:627
+#: ../gtk/gtkcellrenderertext.c:411 ../gtk/gtklabel.c:628
 #: ../gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "Еліптизація"
@@ -1538,11 +1538,11 @@ msgstr ""
 "вистачає місця для відображення усього рядка"
 
 #: ../gtk/gtkcellrenderertext.c:431 ../gtk/gtkfilechooserbutton.c:421
-#: ../gtk/gtklabel.c:647
+#: ../gtk/gtklabel.c:648
 msgid "Width In Characters"
 msgstr "Ширина у символах"
 
-#: ../gtk/gtkcellrenderertext.c:432 ../gtk/gtklabel.c:648
+#: ../gtk/gtkcellrenderertext.c:432 ../gtk/gtklabel.c:649
 msgid "The desired width of the label, in characters"
 msgstr "Бажана ширина, у символах"
 
@@ -2156,28 +2156,26 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Ширина відступу навколо області кнопок діалогового вікна"
 
 #: ../gtk/gtkentry.c:630
-#, fuzzy
-#| msgid "Buffer"
 msgid "Text Buffer"
-msgstr "Буфер"
+msgstr "Буфер тексту"
 
 #: ../gtk/gtkentry.c:631
 msgid "Text buffer object which actually stores entry text"
-msgstr ""
+msgstr "Буфер тексту є об'єктом, який зберігає текст елементу"
 
-#: ../gtk/gtkentry.c:638 ../gtk/gtklabel.c:590
+#: ../gtk/gtkentry.c:638 ../gtk/gtklabel.c:591
 msgid "Cursor Position"
 msgstr "Позиція курсора"
 
-#: ../gtk/gtkentry.c:639 ../gtk/gtklabel.c:591
+#: ../gtk/gtkentry.c:639 ../gtk/gtklabel.c:592
 msgid "The current position of the insertion cursor in chars"
 msgstr "Поточна позиція точки вставки в символах"
 
-#: ../gtk/gtkentry.c:648 ../gtk/gtklabel.c:600
+#: ../gtk/gtkentry.c:648 ../gtk/gtklabel.c:601
 msgid "Selection Bound"
 msgstr "Границя виділення"
 
-#: ../gtk/gtkentry.c:649 ../gtk/gtklabel.c:601
+#: ../gtk/gtkentry.c:649 ../gtk/gtklabel.c:602
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Позиція протилежного кінця вибору від курсора в символах"
@@ -2510,7 +2508,7 @@ msgstr "Підказка стану"
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Чи передавати стан поля вводу для виводу тіні або тла"
 
-#: ../gtk/gtkentry.c:1736 ../gtk/gtklabel.c:830
+#: ../gtk/gtkentry.c:1736 ../gtk/gtklabel.c:848
 msgid "Select on focus"
 msgstr "Вибір на фокусуванні"
 
@@ -2627,11 +2625,11 @@ msgstr "Чи розширювач був відкритий для показу 
 msgid "Text of the expander's label"
 msgstr "Текст розгорнутої позначки"
 
-#: ../gtk/gtkexpander.c:211 ../gtk/gtklabel.c:509
+#: ../gtk/gtkexpander.c:211 ../gtk/gtklabel.c:510
 msgid "Use markup"
 msgstr "Використовувати розмітку"
 
-#: ../gtk/gtkexpander.c:212 ../gtk/gtklabel.c:510
+#: ../gtk/gtkexpander.c:212 ../gtk/gtklabel.c:511
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Текст позначки включає розмітку XML. Див. pango_parse_markup()"
 
@@ -3195,19 +3193,19 @@ msgstr "Чи потрібно відображати зображення у м�
 msgid "The screen where this window will be displayed"
 msgstr "Екран, на якому буде відображено це вікно"
 
-#: ../gtk/gtklabel.c:496
+#: ../gtk/gtklabel.c:497
 msgid "The text of the label"
 msgstr "Текст позначки"
 
-#: ../gtk/gtklabel.c:503
+#: ../gtk/gtklabel.c:504
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Список стильових ознак для застосування до тексту позначки"
 
-#: ../gtk/gtklabel.c:524 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:590
+#: ../gtk/gtklabel.c:525 ../gtk/gtktexttag.c:359 ../gtk/gtktextview.c:590
 msgid "Justification"
 msgstr "Вирівнювання"
 
-#: ../gtk/gtklabel.c:525
+#: ../gtk/gtklabel.c:526
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3217,11 +3215,11 @@ msgstr ""
 "вирівнювання позначки у вказаному для неї місці. Для цього дивіться GtkMisc::"
 "xalign"
 
-#: ../gtk/gtklabel.c:533
+#: ../gtk/gtklabel.c:534
 msgid "Pattern"
 msgstr "Шаблон"
 
-#: ../gtk/gtklabel.c:534
+#: ../gtk/gtklabel.c:535
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -3229,49 +3227,49 @@ msgstr ""
 "Рядок із символами підкреслення (_) в позиціях відповідних до позиції "
 "символів, які потрібно підкреслити в тексті"
 
-#: ../gtk/gtklabel.c:541
+#: ../gtk/gtklabel.c:542
 msgid "Line wrap"
 msgstr "Перенос рядків"
 
-#: ../gtk/gtklabel.c:542
+#: ../gtk/gtklabel.c:543
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Якщо встановлено, занадто довгі рядки переносяться"
 
-#: ../gtk/gtklabel.c:557
+#: ../gtk/gtklabel.c:558
 msgid "Line wrap mode"
 msgstr "Режим переносу рядків"
 
-#: ../gtk/gtklabel.c:558
+#: ../gtk/gtklabel.c:559
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr ""
 "Якщо встановлено перенос рядків, контролює як виконувати перенос рядків"
 
-#: ../gtk/gtklabel.c:565
+#: ../gtk/gtklabel.c:566
 msgid "Selectable"
 msgstr "Вибирається"
 
-#: ../gtk/gtklabel.c:566
+#: ../gtk/gtklabel.c:567
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Чи може текст позначки бути виділений використовуючи мишу"
 
-#: ../gtk/gtklabel.c:572
+#: ../gtk/gtklabel.c:573
 msgid "Mnemonic key"
 msgstr "Мнемонічна клавіша"
 
-#: ../gtk/gtklabel.c:573
+#: ../gtk/gtklabel.c:574
 msgid "The mnemonic accelerator key for this label"
 msgstr "Мнемонічна клавіша-прискорювач для цієї позначки"
 
-#: ../gtk/gtklabel.c:581
+#: ../gtk/gtklabel.c:582
 msgid "Mnemonic widget"
 msgstr "Мнемонічний віджет"
 
-#: ../gtk/gtklabel.c:582
+#: ../gtk/gtklabel.c:583
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Віджет, який буде активовано під час натиснення мнемонічної клавіші позначки"
 
-#: ../gtk/gtklabel.c:628
+#: ../gtk/gtklabel.c:629
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3279,31 +3277,39 @@ msgstr ""
 "Бажане місце для еліптизації рядка, якщо для відображення усього рядка не "
 "вистачає місця."
 
-#: ../gtk/gtklabel.c:668
+#: ../gtk/gtklabel.c:669
 msgid "Single Line Mode"
 msgstr "Режим одного рядка"
 
-#: ../gtk/gtklabel.c:669
+#: ../gtk/gtklabel.c:670
 msgid "Whether the label is in single line mode"
 msgstr "Чи знаходиться рядок у режимі одного рядка"
 
-#: ../gtk/gtklabel.c:686
+#: ../gtk/gtklabel.c:687
 msgid "Angle"
 msgstr "Кут"
 
-#: ../gtk/gtklabel.c:687
+#: ../gtk/gtklabel.c:688
 msgid "Angle at which the label is rotated"
 msgstr "Кут, на який повертається ярлик"
 
-#: ../gtk/gtklabel.c:707
+#: ../gtk/gtklabel.c:708
 msgid "Maximum Width In Characters"
 msgstr "Максимальна ширина в символах"
 
-#: ../gtk/gtklabel.c:708
+#: ../gtk/gtklabel.c:709
 msgid "The desired maximum width of the label, in characters"
 msgstr "Бажана максимальна ширина ярлика, у символах"
 
-#: ../gtk/gtklabel.c:831
+#: ../gtk/gtklabel.c:727
+msgid "Track visited links"
+msgstr "Колір відвіданого гіперпосилання"
+
+#: ../gtk/gtklabel.c:728
+msgid "Whether visited links should be tracked"
+msgstr "Чи показувати відвідані посилання"
+
+#: ../gtk/gtklabel.c:849
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Чи буде виділятись вміст позначки, коли їх передається фокус "
 
