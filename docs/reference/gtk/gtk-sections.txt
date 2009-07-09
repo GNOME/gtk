@@ -1268,7 +1268,10 @@ gtk_old_editable_get_type
 <TITLE>GtkEntry</TITLE>
 GtkEntry
 gtk_entry_new
+gtk_entry_new_with_buffer
 gtk_entry_new_with_max_length
+gtk_entry_get_buffer
+gtk_entry_set_buffer
 gtk_entry_set_text
 gtk_entry_append_text
 gtk_entry_prepend_text
@@ -1340,6 +1343,34 @@ GTK_IS_ENTRY_CLASS
 GTK_ENTRY_GET_CLASS
 <SUBSECTION Private>
 gtk_entry_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkentrybuffer</FILE>
+<TITLE>GtkEntryBuffer</TITLE>
+GtkEntryBuffer
+gtk_entry_buffer_new
+gtk_entry_buffer_get_text
+gtk_entry_buffer_set_text
+gtk_entry_buffer_get_bytes
+gtk_entry_buffer_get_length
+gtk_entry_buffer_get_max_length
+gtk_entry_buffer_set_max_length
+gtk_entry_buffer_insert_text
+gtk_entry_buffer_delete_text
+gtk_entry_buffer_emit_deleted_text
+gtk_entry_buffer_emit_inserted_text
+
+<SUBSECTION Standard>
+GTK_ENTRY_BUFFER
+GTK_IS_ENTRY_BUFFER
+GTK_TYPE_ENTRY_BUFFER
+GTK_ENTRY_BUFFER_CLASS
+GTK_IS_ENTRY_BUFFER_CLASS
+GTK_ENTRY_BUFFER_GET_CLASS
+GTK_ENTRY_BUFFER_MAX_SIZE
+<SUBSECTION Private>
+gtk_entry_buffer_get_type
 </SECTION>
 
 <SECTION>

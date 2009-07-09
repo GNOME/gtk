@@ -173,6 +173,11 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+<!-- ##### ARG GtkEntry:buffer ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkEntry:caps-lock-warning ##### -->
 <para>
 
@@ -401,12 +406,39 @@ The #GtkEntry-struct struct contains only private data.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_entry_new_with_buffer ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
 <para>
 </para>
 
 @max: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_buffer ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_set_buffer ##### -->
+<para>
+
+</para>
+
+@entry: 
+@buffer: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_text ##### -->
