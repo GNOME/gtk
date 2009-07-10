@@ -111,6 +111,7 @@ enum {
   LAST_ARG
 };
 
+/* Must be kept in sync with GdkWindowEdge ! */
 typedef enum
 {
   GTK_WINDOW_REGION_EDGE_NW,
@@ -122,7 +123,7 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_S,
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_INNER,
-  GTK_WINDOW_REGION_TITLE,
+  GTK_WINDOW_REGION_TITLE
 } GtkWindowRegion;
 
 typedef struct
@@ -227,6 +228,7 @@ struct _GtkWindowPrivate
   GtkWidget *max_button;
   GtkWidget *close_button;
   GtkWidget *button_box;
+  gint cursor_region;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -1018,6 +1020,7 @@ gtk_window_init (GtkWindow *window)
   gtk_window_set_client_side_decorations (window, GDK_DECOR_BORDER | GDK_DECOR_TITLE | GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
   priv->disable_client_side_decorations = FALSE;
+  priv->cursor_region = -1;
 
   label = gtk_label_new ("");
   gtk_widget_show (label);
@@ -5850,40 +5853,7 @@ get_region_type (GtkWindow *window, gint x, gint y)
       else
         return GTK_WINDOW_REGION_EDGE_W;
     }
-  else if (x < frame_width + resize_handle)
-    {
-      if (y < frame_width)
-        return GTK_WINDOW_REGION_EDGE_NW;
-      else if (y > widget->allocation.height - frame_width)
-        return GTK_WINDOW_REGION_EDGE_SW;
-      else if (y < frame_width + title_height)
-          return GTK_WINDOW_REGION_TITLE;
-      else
-        return GTK_WINDOW_REGION_INNER;
-    }
-  else if (x < widget->allocation.width - frame_width - resize_handle)
-    {
-      if (y < frame_width)
-        return GTK_WINDOW_REGION_EDGE_N;
-      else if (y > widget->allocation.height - frame_width)
-        return GTK_WINDOW_REGION_EDGE_S;
-      else if (y < frame_width + title_height)
-        return GTK_WINDOW_REGION_TITLE;
-      else
-        return GTK_WINDOW_REGION_INNER;
-    }
-  else if (x < widget->allocation.width - frame_width)
-    {
-      if (y < frame_width)
-        return GTK_WINDOW_REGION_EDGE_NE;
-      else if (y > widget->allocation.height - frame_width)
-        return GTK_WINDOW_REGION_EDGE_SE;
-      else if (y < frame_width + title_height)
-          return GTK_WINDOW_REGION_TITLE;
-      else
-        return GTK_WINDOW_REGION_INNER;
-    }
-  else
+  else if (x > widget->allocation.width - frame_width)
     {
       if (y < frame_width + MAX (title_height, resize_handle))
         return GTK_WINDOW_REGION_EDGE_NE;
@@ -5891,6 +5861,31 @@ get_region_type (GtkWindow *window, gint x, gint y)
         return GTK_WINDOW_REGION_EDGE_SE;
       else
         return GTK_WINDOW_REGION_EDGE_E;
+    }
+  else if (y < frame_width)
+    {
+      if (x < frame_width + resize_handle)
+        return GTK_WINDOW_REGION_EDGE_NW;
+      else if (x > widget->allocation.width - frame_width - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_NE;
+      else
+        return GTK_WINDOW_REGION_EDGE_N;
+    }
+  else if (y > widget->allocation.height - frame_width)
+    {
+      if (x < frame_width + resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SW;
+      else if (x > widget->allocation.width - frame_width - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SE;
+      else
+        return GTK_WINDOW_REGION_EDGE_S;
+    }
+  else
+    {
+      if (y < frame_width + title_height)
+        return GTK_WINDOW_REGION_TITLE;
+      else
+        return GTK_WINDOW_REGION_INNER;
     }
 }
 
@@ -5952,22 +5947,18 @@ gtk_window_button_press_event (GtkWidget      *widget,
 
       if (region == GTK_WINDOW_REGION_TITLE ||
           region == GTK_WINDOW_REGION_INNER)
-        {
-          gtk_window_begin_move_drag (GTK_WINDOW (widget),
+        gtk_window_begin_move_drag (GTK_WINDOW (widget),
+                                    event->button,
+                                    event->x_root,
+                                    event->y_root,
+                                    event->time);
+      else
+        gtk_window_begin_resize_drag (GTK_WINDOW (widget),
+                                      edge,
                                       event->button,
                                       event->x_root,
                                       event->y_root,
                                       event->time);
-        }
-      else if (region <= GTK_WINDOW_REGION_EDGE_SE)
-        {
-          gtk_window_begin_resize_drag (GTK_WINDOW (widget),
-                                        edge,
-                                        event->button,
-                                        event->x_root,
-                                        event->y_root,
-                                        event->time);
-        }
 
       return TRUE;
     }
@@ -6000,19 +5991,25 @@ gtk_window_move_focus (GtkWindow       *window,
 static void
 update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 {
-  GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWindowRegion region;
   GdkCursorType cursor_type;
   GdkCursor *cursor;
-  GdkWindowState state = gdk_window_get_state (widget->window);
+  GdkWindowState state;
 
-  if (region == GTK_WINDOW_REGION_TITLE ||
-      region == GTK_WINDOW_REGION_INNER ||
-      (state & GDK_WINDOW_STATE_MAXIMIZED) ||
-      !GTK_WINDOW (widget)->allow_grow)
+  region = get_region_type (window, x, y);
+
+  if (region == priv->cursor_region)
+    return;
+
+  state = gdk_window_get_state (widget->window);
+
+  if ((state & GDK_WINDOW_STATE_MAXIMIZED) || !window->allow_grow)
     {
       cursor_type = GDK_ARROW;
     }
-  else if (region <= GTK_WINDOW_REGION_EDGE_SE)
+  else
     {
       switch (region)
         {
@@ -6054,9 +6051,8 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
         }
     }
 
-  cursor = gdk_cursor_new (cursor_type);
-  gdk_window_set_cursor (widget->window,
-                         cursor);
+  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type);
+  gdk_window_set_cursor (widget->window, cursor);
 }
 
 static gint
