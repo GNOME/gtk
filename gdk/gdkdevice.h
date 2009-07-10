@@ -138,6 +138,10 @@ struct _GdkDeviceClass
                          gdouble    *axes,
                          GdkAxisUse  use,
                          gdouble    *value);
+
+  void (* set_window_cursor) (GdkDevice *device,
+                              GdkWindow *window,
+                              GdkCursor *cursor);
 };
 
 GType gdk_device_get_type (void) G_GNUC_CONST;
