@@ -24,6 +24,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"
+#include "gtkalias.h"
 
 #include <gdk/gdk.h>
 
@@ -739,3 +740,5 @@ gtk_entry_buffer_emit_deleted_text (GtkEntryBuffer *buffer,
   g_signal_emit (buffer, signals[DELETED_TEXT], 0, position, n_chars);
 }
 
+#define __GTK_ENTRY_BUFFER_C__
+#include "gtkaliasdef.c"

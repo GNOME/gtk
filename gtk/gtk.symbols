@@ -1322,6 +1322,7 @@ gtk_editable_set_position
 #if IN_FILE(__GTK_ENTRY_C__)
 gtk_entry_get_activates_default
 gtk_entry_get_alignment
+gtk_entry_get_buffer
 gtk_entry_get_completion
 gtk_entry_get_current_icon_drag_source
 gtk_entry_get_cursor_hadjustment
@@ -1351,9 +1352,11 @@ gtk_entry_get_visibility
 gtk_entry_get_width_chars
 gtk_entry_layout_index_to_text_index
 gtk_entry_new
+gtk_entry_new_with_buffer
 gtk_entry_progress_pulse
 gtk_entry_set_activates_default
 gtk_entry_set_alignment
+gtk_entry_set_buffer
 gtk_entry_set_completion
 gtk_entry_set_cursor_hadjustment
 gtk_entry_set_has_frame
@@ -1416,6 +1419,23 @@ gtk_entry_completion_set_popup_completion
 gtk_entry_completion_set_popup_set_width
 gtk_entry_completion_set_popup_single_match
 gtk_entry_completion_set_text_column
+#endif
+#endif
+
+#if IN_HEADER(__GTK_ENTRY_BUFFER_H__)
+#if IN_FILE(__GTK_ENTRY_BUFFER_C__)
+gtk_entry_buffer_get_type G_GNUC_CONST
+gtk_entry_buffer_new
+gtk_entry_buffer_get_bytes
+gtk_entry_buffer_get_length
+gtk_entry_buffer_get_text
+gtk_entry_buffer_set_text
+gtk_entry_buffer_set_max_length
+gtk_entry_buffer_get_max_length
+gtk_entry_buffer_insert_text
+gtk_entry_buffer_delete_text
+gtk_entry_buffer_emit_inserted_text
+gtk_entry_buffer_emit_deleted_text
 #endif
 #endif
 
@@ -2815,6 +2835,12 @@ gtk_paper_size_get_default_bottom_margin
 gtk_paper_size_get_default_left_margin
 gtk_paper_size_get_default_right_margin
 gtk_paper_size_get_default
+#endif
+#endif
+
+#if IN_HEADER(__GTK_CUSTOM_PAPER_UNIX_DIALOG_H__)
+#if IN_FILE(__GTK_CUSTOM_PAPER_UNIX_DIALOG_C__)
+gtk_custom_paper_unix_dialog_get_type G_GNUC_CONST
 #endif
 #endif
 
