@@ -48,7 +48,7 @@
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
-#define GTK_TREE_VIEW_NUM_ROWS_PER_IDLE 500
+#define GTK_TREE_VIEW_TIME_MS_PER_IDLE 30
 #define SCROLL_EDGE_SIZE 15
 #define EXPANDER_EXTRA_PADDING 4
 #define GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT 5000
@@ -2043,7 +2043,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
 
-  /* we validate GTK_TREE_VIEW_NUM_ROWS_PER_IDLE rows initially just to make
+  /* we validate GTK_TREE_VIEW_TIME_MS_PER_IDLE rows initially just to make
    * sure we have some size. In practice, with a lot of static lists, this
    * should get a good width.
    */
@@ -6118,6 +6118,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   gint retval = TRUE;
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
+  GTimer *timer;
   gint i = 0;
 
   gint prev_height = -1;
@@ -6135,6 +6136,9 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 
       return FALSE;
     }
+
+  timer = g_timer_new ();
+  g_timer_start (timer);
 
   do
     {
@@ -6213,7 +6217,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 
       i++;
     }
-  while (i < GTK_TREE_VIEW_NUM_ROWS_PER_IDLE);
+  while (g_timer_elapsed (timer, NULL) < GTK_TREE_VIEW_TIME_MS_PER_IDLE / 1000.);
 
   if (!tree_view->priv->fixed_height_check)
    {
@@ -6242,6 +6246,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
     }
 
   if (path) gtk_tree_path_free (path);
+  g_timer_destroy (timer);
 
   return retval;
 }
