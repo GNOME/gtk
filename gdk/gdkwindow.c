@@ -6256,7 +6256,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
   is_resize = (width != -1) || (height != -1);
 
-  if (GDK_WINDOW_IS_MAPPED (window) &&
+  if (gdk_window_is_viewable (window) &&
       !private->input_only)
     {
       expose = TRUE;
@@ -6405,7 +6405,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   old_x = private->x;
   old_y = private->y;
 
-  if (GDK_WINDOW_IS_MAPPED (window) &&
+  if (gdk_window_is_viewable (window) &&
       !private->input_only)
     {
       expose = TRUE;
