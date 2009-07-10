@@ -123,7 +123,8 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_S,
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_INNER,
-  GTK_WINDOW_REGION_TITLE
+  GTK_WINDOW_REGION_TITLE,
+  GTK_WINDOW_REGION_EDGE
 } GtkWindowRegion;
 
 typedef struct
@@ -5889,6 +5890,109 @@ get_region_type (GtkWindow *window, gint x, gint y)
     }
 }
 
+static GtkWindowRegion
+get_active_region_type (GtkWindow *window, gint x, gint y)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowRegion region;
+  gboolean resize_h, resize_v;
+  gint frame_width;
+  gint state;
+
+  region = get_region_type (window, x, y);
+
+  gtk_widget_style_get (widget,
+                        "decoration-border-width", &frame_width,
+                        NULL);
+
+  state = gdk_window_get_state (widget->window);
+  if (!window->allow_grow || (state & GDK_WINDOW_STATE_MAXIMIZED))
+    {
+      resize_h = resize_v = FALSE;
+    }
+  else
+    {
+      resize_h = resize_v = TRUE;
+      if (window->geometry_info)
+        {
+          GdkGeometry *geometry = &window->geometry_info->geometry;
+          GdkWindowHints flags = window->geometry_info->mask;
+
+          if ((flags & GDK_HINT_MIN_SIZE) && (flags & GDK_HINT_MAX_SIZE))
+            {
+              resize_h = geometry->min_width != geometry->max_width;
+              resize_v = geometry->min_height != geometry->max_height;
+            }
+        }
+    }
+
+  switch (region)
+    {
+    case GTK_WINDOW_REGION_EDGE_N:
+    case GTK_WINDOW_REGION_EDGE_S:
+      if (resize_v)
+        return region;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_W:
+    case GTK_WINDOW_REGION_EDGE_E:
+      if (resize_h)
+        return region;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_NW:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x < frame_width)
+        return GTK_WINDOW_REGION_EDGE_W;
+      else if (resize_v && y < frame_width)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_NE:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x > widget->allocation.width - frame_width)
+        return GTK_WINDOW_REGION_EDGE_E;
+      else if (resize_v && y < frame_width)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_SW:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x < frame_width)
+        return GTK_WINDOW_REGION_EDGE_W;
+      else if (resize_v && y > widget->allocation.height - frame_width)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_SE:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x > widget->allocation.width - frame_width)
+        return GTK_WINDOW_REGION_EDGE_E;
+      else if (resize_v && y > widget->allocation.height - frame_width)
+        return GTK_WINDOW_REGION_EDGE_S;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    default:
+      return region;
+    }
+}
+
 static gint
 gtk_window_key_press_event (GtkWidget   *widget,
 			    GdkEventKey *event)
@@ -5938,27 +6042,28 @@ gtk_window_button_press_event (GtkWidget      *widget,
 
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
-      GtkWindowRegion region = get_region_type (GTK_WINDOW (widget), x, y);
-      GdkWindowEdge edge = (GdkWindowEdge)region;
-      GdkWindowState state = gdk_window_get_state (widget->window);
+      GtkWindowRegion region = get_active_region_type (GTK_WINDOW (widget), x, y);
 
-      if (state & GDK_WINDOW_STATE_MAXIMIZED)
-        return TRUE;
-
-      if (region == GTK_WINDOW_REGION_TITLE ||
-          region == GTK_WINDOW_REGION_INNER)
-        gtk_window_begin_move_drag (GTK_WINDOW (widget),
-                                    event->button,
-                                    event->x_root,
-                                    event->y_root,
-                                    event->time);
-      else
-        gtk_window_begin_resize_drag (GTK_WINDOW (widget),
-                                      edge,
+      switch (region)
+        {
+        case GTK_WINDOW_REGION_TITLE:
+        case GTK_WINDOW_REGION_INNER:
+        case GTK_WINDOW_REGION_EDGE:
+          gtk_window_begin_move_drag (GTK_WINDOW (widget),
                                       event->button,
                                       event->x_root,
                                       event->y_root,
                                       event->time);
+          break;
+        default:
+          gtk_window_begin_resize_drag (GTK_WINDOW (widget),
+                                        (GdkWindowEdge)region,
+                                        event->button,
+                                        event->x_root,
+                                        event->y_root,
+                                        event->time);
+          break;
+        }
 
       return TRUE;
     }
@@ -5989,6 +6094,25 @@ gtk_window_move_focus (GtkWindow       *window,
 }
 
 static void
+get_resize_info (GtkWindow *window,
+                 gboolean  *horizontal,
+                 gboolean  *vertical)
+{
+  GdkGeometry *geometry;
+
+  if (window->geometry_info)
+    {
+      geometry = &window->geometry_info->geometry;
+      *horizontal = geometry->min_width != geometry->max_width;
+      *vertical = geometry->min_height != geometry->max_height;
+    }
+  else
+    {
+      *horizontal = *vertical = TRUE;
+    }
+}
+
+static void
 update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -5998,7 +6122,7 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
   GdkCursor *cursor;
   GdkWindowState state;
 
-  region = get_region_type (window, x, y);
+  region = get_active_region_type (window, x, y);
 
   if (region == priv->cursor_region)
     return;
