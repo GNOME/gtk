@@ -358,6 +358,7 @@ gtk_private_h_sources =		\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkbuilderprivate.h 	\
+	gtkcustompaperunixdialog.h\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -662,6 +663,7 @@ gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 
 gtk_os_unix_c_sources = \
+	gtkcustompaperunixdialog.c	\
 	gtkpagesetupunixdialog.c	\
 	gtkprinter.c			\
 	gtkprinteroption.c		\

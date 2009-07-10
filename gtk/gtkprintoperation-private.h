@@ -56,6 +56,7 @@ struct _GtkPrintOperationPrivate
   guint is_sync            : 1;
   guint support_selection  : 1;
   guint has_selection      : 1;
+  guint embed_page_setup   : 1;
 
   GtkPageDrawingState      page_drawing_state;
 

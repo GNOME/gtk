@@ -2998,6 +2998,8 @@ gtk_print_operation_set_support_selection
 gtk_print_operation_get_support_selection
 gtk_print_operation_set_has_selection
 gtk_print_operation_get_has_selection
+gtk_print_operation_set_embed_page_setup
+gtk_print_operation_get_embed_page_setup
 #endif
 #endif
 
@@ -3127,6 +3129,9 @@ gtk_print_unix_dialog_set_support_selection
 gtk_print_unix_dialog_get_support_selection
 gtk_print_unix_dialog_set_has_selection
 gtk_print_unix_dialog_get_has_selection
+gtk_print_unix_dialog_set_embed_page_setup
+gtk_print_unix_dialog_get_embed_page_setup
+gtk_print_unix_dialog_get_page_setup_set
 #endif
 #endif
 #endif

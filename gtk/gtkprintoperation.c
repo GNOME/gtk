@@ -69,7 +69,8 @@ enum
   PROP_EXPORT_FILENAME,
   PROP_STATUS,
   PROP_STATUS_STRING,
-  PROP_CUSTOM_TAB_LABEL
+  PROP_CUSTOM_TAB_LABEL,
+  PROP_EMBED_PAGE_SETUP
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -165,6 +166,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   priv->is_sync = FALSE;
   priv->support_selection = FALSE;
   priv->has_selection = FALSE;
+  priv->embed_page_setup = FALSE;
 
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_READY;
 
@@ -320,6 +322,9 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_CUSTOM_TAB_LABEL:
       gtk_print_operation_set_custom_tab_label (op, g_value_get_string (value));
       break;
+    case PROP_EMBED_PAGE_SETUP:
+      gtk_print_operation_set_embed_page_setup (op, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -378,6 +383,9 @@ gtk_print_operation_get_property (GObject    *object,
       break;
     case PROP_CUSTOM_TAB_LABEL:
       g_value_set_string (value, priv->custom_tab_label);
+      break;
+    case PROP_EMBED_PAGE_SETUP:
+      g_value_set_boolean (value, priv->embed_page_setup);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1229,6 +1237,21 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
+
+  /**
+   * GtkPrintOperation:embed-page-setup:
+   *
+   * If %TRUE, page size combo box and orientation combo box are embedded into page setup page.
+   * 
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_EMBED_PAGE_SETUP,
+				   g_param_spec_boolean ("embed-page-setup",
+							 P_("Embed Page Setup"),
+							 P_("TRUE if page setup combos are embedded in GtkPrintDialog"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 }
 
 /**
@@ -2195,6 +2218,52 @@ gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
   g_return_if_fail (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_DRAWING);
 
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_DEFERRED_DRAWING;
+}
+
+/**
+ * gtk_print_operation_set_embed_page_setup:
+ * @op: a #GtkPrintOperation
+ * @embed: %TRUE to embed page setup selection in the #GtkPrintDialog
+ *
+ * Embed page size combo box and orientation combo box into page setup page.
+ * Selected page setup is stored as default page setup in #GtkPrintOperation.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
+                                          gboolean            embed)
+{
+  GtkPrintOperationPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+
+  priv = op->priv;
+
+  embed = embed != FALSE;
+  if (priv->embed_page_setup != embed)
+    {
+      priv->embed_page_setup = embed;
+      g_object_notify (G_OBJECT (op), "embed-page-setup");
+    }
+}
+
+/**
+ * gtk_print_operation_get_embed_page_setup:
+ * @op: a #GtkPrintOperation
+ *
+ * Gets the value of #GtkPrintOperation::embed-page-setup property.
+ * 
+ * Returns: whether page setup selection combos are embedded
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_operation_get_embed_page_setup (GtkPrintOperation *op)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
+
+  return op->priv->embed_page_setup;
 }
 
 /**

@@ -166,6 +166,7 @@ do_printing (GtkWidget *do_widget)
 
   gtk_print_operation_set_use_full_page (operation, FALSE);
   gtk_print_operation_set_unit (operation, GTK_UNIT_POINTS);
+  gtk_print_operation_set_embed_page_setup (operation, TRUE);
 
   settings = gtk_print_settings_new ();
   dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
