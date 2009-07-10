@@ -173,7 +173,8 @@ test_type (gconstpointer data)
 
       /* Default invisible char is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
-	  strcmp (pspec->name, "invisible-char") == 0)
+	  strcmp (pspec->name, "invisible-char") == 0 ||
+          strcmp (pspec->name, "buffer") == 0)
 	continue;
 
       /* Gets set to the cwd */
