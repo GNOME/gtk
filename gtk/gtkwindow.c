@@ -6050,6 +6050,9 @@ gtk_window_button_press_event (GtkWidget      *widget,
   gint x = event->x;
   gint y = event->y;
 
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       GtkWindowRegion region = get_active_region_type (GTK_WINDOW (widget), x, y);
