@@ -21,11 +21,14 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
 #include "gtkbbox.h"
+#include "gtkhbbox.h"
+#include "gtkvbbox.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -48,6 +51,10 @@ static void gtk_button_box_get_property       (GObject           *object,
 					       guint              prop_id,
 					       GValue            *value,
 					       GParamSpec        *pspec);
+static void gtk_button_box_size_request       (GtkWidget         *widget,
+                                               GtkRequisition    *requisition);
+static void gtk_button_box_size_allocate      (GtkWidget         *widget,
+                                               GtkAllocation     *allocation);
 static void gtk_button_box_set_child_property (GtkContainer      *container,
 					       GtkWidget         *child,
 					       guint              property_id,
@@ -80,9 +87,12 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   gobject_class->set_property = gtk_button_box_set_property;
   gobject_class->get_property = gtk_button_box_get_property;
 
+  widget_class->size_request = gtk_button_box_size_request;
+  widget_class->size_allocate = gtk_button_box_size_allocate;
+
   container_class->set_child_property = gtk_button_box_set_child_property;
   container_class->get_child_property = gtk_button_box_get_child_property;
-  
+
   /* FIXME we need to override the "spacing" property on GtkBox once
    * libgobject allows that.
    */
@@ -156,7 +166,7 @@ gtk_button_box_set_property (GObject         *object,
 			     const GValue    *value,
 			     GParamSpec      *pspec)
 {
-  switch (prop_id) 
+  switch (prop_id)
     {
     case PROP_LAYOUT_STYLE:
       gtk_button_box_set_layout (GTK_BUTTON_BOX (object),
@@ -451,7 +461,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 	{
 	  nchildren += 1;
 	  gtk_widget_size_request (child->widget, &child_requisition);
-	  
+
 	  if (child_requisition.width + ipad_w > needed_width)
 	    needed_width = child_requisition.width + ipad_w;
 	  if (child_requisition.height + ipad_h > needed_height)
@@ -469,6 +479,343 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
     *width = needed_width;
   if (height)
     *height = needed_height;
+}
+
+/* this is a kludge function to support the deprecated
+ * gtk_[vh]button_box_set_layout_default() just in case anyone is still
+ * using it (why?)
+ */
+static GtkButtonBoxStyle
+gtk_button_box_kludge_get_layout_default (GtkButtonBox *widget)
+{
+  GtkOrientation orientation;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    return _gtk_hbutton_box_get_layout_default ();
+  else
+    return _gtk_vbutton_box_get_layout_default ();
+}
+
+static void
+gtk_button_box_size_request (GtkWidget      *widget,
+                             GtkRequisition *requisition)
+{
+  GtkBox *box;
+  GtkButtonBox *bbox;
+  gint nvis_children;
+  gint child_width;
+  gint child_height;
+  gint spacing;
+  GtkButtonBoxStyle layout;
+  GtkOrientation orientation;
+
+  box = GTK_BOX (widget);
+  bbox = GTK_BUTTON_BOX (widget);
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+  spacing = box->spacing;
+  layout = bbox->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+	  ? bbox->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+
+  _gtk_button_box_child_requisition (widget,
+                                     &nvis_children,
+				     NULL,
+                                     &child_width,
+                                     &child_height);
+
+  if (nvis_children == 0)
+    {
+      requisition->width = 0;
+      requisition->height = 0;
+    }
+  else
+    {
+      switch (layout)
+        {
+          case GTK_BUTTONBOX_SPREAD:
+            if (orientation == GTK_ORIENTATION_HORIZONTAL)
+              requisition->width =
+                      nvis_children*child_width + ((nvis_children+1)*spacing);
+            else
+              requisition->height =
+                      nvis_children*child_height + ((nvis_children+1)*spacing);
+
+            break;
+          case GTK_BUTTONBOX_EDGE:
+          case GTK_BUTTONBOX_START:
+          case GTK_BUTTONBOX_END:
+          case GTK_BUTTONBOX_CENTER:
+            if (orientation == GTK_ORIENTATION_HORIZONTAL)
+              requisition->width =
+                      nvis_children*child_width + ((nvis_children-1)*spacing);
+            else
+              requisition->height =
+                      nvis_children*child_height + ((nvis_children-1)*spacing);
+
+            break;
+          default:
+            g_assert_not_reached ();
+            break;
+        }
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        requisition->height = child_height;
+      else
+        requisition->width = child_width;
+    }
+
+  requisition->width += GTK_CONTAINER (box)->border_width * 2;
+  requisition->height += GTK_CONTAINER (box)->border_width * 2;
+}
+
+static void
+gtk_button_box_size_allocate (GtkWidget     *widget,
+                              GtkAllocation *allocation)
+{
+  GtkBox *base_box;
+  GtkButtonBox *box;
+  GtkBoxChild *child;
+  GList *children;
+  GtkAllocation child_allocation;
+  gint nvis_children;
+  gint n_secondaries;
+  gint child_width;
+  gint child_height;
+  gint x = 0;
+  gint y = 0;
+  gint secondary_x = 0;
+  gint secondary_y = 0;
+  gint width = 0;
+  gint height = 0;
+  gint childspace;
+  gint childspacing = 0;
+  GtkButtonBoxStyle layout;
+  gint spacing;
+  GtkOrientation orientation;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+  base_box = GTK_BOX (widget);
+  box = GTK_BUTTON_BOX (widget);
+  spacing = base_box->spacing;
+  layout = box->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+	  ? box->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+  _gtk_button_box_child_requisition (widget,
+                                     &nvis_children,
+                                     &n_secondaries,
+                                     &child_width,
+                                     &child_height);
+  widget->allocation = *allocation;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    width = allocation->width - GTK_CONTAINER (box)->border_width*2;
+  else
+    height = allocation->height - GTK_CONTAINER (box)->border_width*2;
+
+  switch (layout)
+    {
+      case GTK_BUTTONBOX_SPREAD:
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            childspacing = (width - (nvis_children * child_width))
+                    / (nvis_children + 1);
+            x = allocation->x + GTK_CONTAINER (box)->border_width
+                    + childspacing;
+            secondary_x = x + ((nvis_children - n_secondaries)
+                            * (child_width + childspacing));
+          }
+        else
+          {
+            childspacing = (height - (nvis_children * child_height))
+                    / (nvis_children + 1);
+            y = allocation->y + GTK_CONTAINER (box)->border_width
+                    + childspacing;
+            secondary_y = y + ((nvis_children - n_secondaries)
+                            * (child_height + childspacing));
+          }
+
+        break;
+
+      case GTK_BUTTONBOX_EDGE:
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            if (nvis_children >= 2)
+              {
+                childspacing = (width - (nvis_children * child_width))
+                      / (nvis_children - 1);
+                x = allocation->x + GTK_CONTAINER (box)->border_width;
+                secondary_x = x + ((nvis_children - n_secondaries)
+                                   * (child_width + childspacing));
+              }
+            else
+              {
+                /* one or zero children, just center */
+                childspacing = width;
+                x = secondary_x = allocation->x
+                      + (allocation->width - child_width) / 2;
+              }
+          }
+        else
+          {
+            if (nvis_children >= 2)
+              {
+                childspacing = (height - (nvis_children*child_height))
+                        / (nvis_children-1);
+                y = allocation->y + GTK_CONTAINER (box)->border_width;
+                secondary_y = y + ((nvis_children - n_secondaries)
+                                * (child_height + childspacing));
+              }
+            else
+              {
+                /* one or zero children, just center */
+                childspacing = height;
+                y = secondary_y = allocation->y
+                        + (allocation->height - child_height) / 2;
+              }
+          }
+
+        break;
+
+      case GTK_BUTTONBOX_START:
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            childspacing = spacing;
+            x = allocation->x + GTK_CONTAINER (box)->border_width;
+            secondary_x = allocation->x + allocation->width
+              - child_width * n_secondaries
+              - spacing * (n_secondaries - 1)
+              - GTK_CONTAINER (box)->border_width;
+          }
+        else
+          {
+            childspacing = spacing;
+            y = allocation->y + GTK_CONTAINER (box)->border_width;
+            secondary_y = allocation->y + allocation->height
+              - child_height * n_secondaries
+              - spacing * (n_secondaries - 1)
+              - GTK_CONTAINER (box)->border_width;
+          }
+
+        break;
+
+      case GTK_BUTTONBOX_END:
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            childspacing = spacing;
+            x = allocation->x + allocation->width
+              - child_width * (nvis_children - n_secondaries)
+              - spacing * (nvis_children - n_secondaries - 1)
+              - GTK_CONTAINER (box)->border_width;
+            secondary_x = allocation->x + GTK_CONTAINER (box)->border_width;
+          }
+        else
+          {
+            childspacing = spacing;
+            y = allocation->y + allocation->height
+              - child_height * (nvis_children - n_secondaries)
+              - spacing * (nvis_children - n_secondaries - 1)
+              - GTK_CONTAINER (box)->border_width;
+            secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
+          }
+
+        break;
+
+      case GTK_BUTTONBOX_CENTER:
+
+        if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          {
+            childspacing = spacing;
+            x = allocation->x +
+              (allocation->width
+               - (child_width * (nvis_children - n_secondaries)
+               + spacing * (nvis_children - n_secondaries - 1))) / 2
+              + (n_secondaries * child_width + n_secondaries * spacing) / 2;
+            secondary_x = allocation->x + GTK_CONTAINER (box)->border_width;
+          }
+        else
+          {
+            childspacing = spacing;
+            y = allocation->y +
+              (allocation->height
+               - (child_height * (nvis_children - n_secondaries)
+                  + spacing * (nvis_children - n_secondaries - 1))) / 2
+              + (n_secondaries * child_height + n_secondaries * spacing) / 2;
+            secondary_y = allocation->y + GTK_CONTAINER (box)->border_width;
+          }
+
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+
+    if (orientation == GTK_ORIENTATION_HORIZONTAL)
+      {
+        y = allocation->y + (allocation->height - child_height) / 2;
+        childspace = child_width + childspacing;
+      }
+    else
+      {
+        x = allocation->x + (allocation->width - child_width) / 2;
+        childspace = child_height + childspacing;
+      }
+
+  children = GTK_BOX (box)->children;
+
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (GTK_WIDGET_VISIBLE (child->widget))
+        {
+          child_allocation.width = child_width;
+          child_allocation.height = child_height;
+
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              child_allocation.y = y;
+
+              if (child->is_secondary)
+                {
+                  child_allocation.x = secondary_x;
+                  secondary_x += childspace;
+                }
+              else
+                {
+                  child_allocation.x = x;
+                  x += childspace;
+                }
+
+              if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+                  child_allocation.x = (allocation->x + allocation->width)
+                          - (child_allocation.x + child_width - allocation->x);
+            }
+          else
+            {
+              child_allocation.x = x;
+
+              if (child->is_secondary)
+                {
+                  child_allocation.y = secondary_y;
+                  secondary_y += childspace;
+                }
+              else
+                {
+                  child_allocation.y = y;
+                  y += childspace;
+                }
+            }
+
+          gtk_widget_size_allocate (child->widget, &child_allocation);
+        }
+    }
 }
 
 #define __GTK_BUTTON_BOX_C__

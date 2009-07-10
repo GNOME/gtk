@@ -315,7 +315,7 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   GdkEvent *event;
   
   g_return_val_if_fail (window != NULL, NULL);
-  
+
   XIfEvent (GDK_WINDOW_XDISPLAY (window), &xevent, 
 	    graphics_expose_predicate, (XPointer) window);
   
@@ -870,6 +870,24 @@ set_user_time (GdkWindow *window,
 }
 
 static gboolean
+is_parent_of (GdkWindow *parent,
+              GdkWindow *child)
+{
+  GdkWindow *w;
+
+  w = child;
+  while (w != NULL)
+    {
+      if (w == parent)
+	return TRUE;
+
+      w = gdk_window_get_parent (w);
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
 		     XEvent     *xevent,
@@ -881,7 +899,6 @@ gdk_event_translate (GdkDisplay *display,
   GdkWindow *filter_window;
   GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
-  gint xoffset, yoffset;
   GdkScreen *screen = NULL;
   GdkScreenX11 *screen_x11 = NULL;
   GdkToplevelX11 *toplevel = NULL;
@@ -944,6 +961,24 @@ gdk_event_translate (GdkDisplay *display,
     
   if (window != NULL)
     {
+      /* Apply keyboard grabs to non-native windows */
+      if (/* Is key event */
+	  (xevent->type == KeyPress || xevent->type == KeyRelease) &&
+	  /* And we have a grab */
+	  display->keyboard_grab.window != NULL &&
+	  (
+	   /* The window is not a descendant of the grabbed window */
+	   !is_parent_of ((GdkWindow *)display->keyboard_grab.window, window) ||
+	   /* Or owner event is false */
+	   !display->keyboard_grab.owner_events
+	   )
+	  )
+        {
+	  /* Report key event against grab window */
+          window = display->keyboard_grab.window;;
+          window_private = (GdkWindowObject *) window;
+        }
+
       window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
       
       /* Move key events on focus window to the real toplevel, and
@@ -1043,16 +1078,6 @@ gdk_event_translate (GdkDisplay *display,
 
   return_val = TRUE;
 
-  if (window)
-    {
-      _gdk_x11_window_get_offsets (window, &xoffset, &yoffset);
-    }
-  else
-    {
-      xoffset = 0;
-      yoffset = 0;
-    }
-
   switch (xevent->type)
     {
     case KeyPress:
@@ -1102,9 +1127,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
       
-      if (window_private == NULL || 
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1131,8 +1154,8 @@ gdk_event_translate (GdkDisplay *display,
 
 	  event->scroll.window = window;
 	  event->scroll.time = xevent->xbutton.time;
-	  event->scroll.x = xevent->xbutton.x + xoffset;
-	  event->scroll.y = xevent->xbutton.y + yoffset;
+	  event->scroll.x = xevent->xbutton.x;
+	  event->scroll.y = xevent->xbutton.y;
 	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
@@ -1150,8 +1173,8 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.type = GDK_BUTTON_PRESS;
 	  event->button.window = window;
 	  event->button.time = xevent->xbutton.time;
-	  event->button.x = xevent->xbutton.x + xoffset;
-	  event->button.y = xevent->xbutton.y + yoffset;
+	  event->button.x = xevent->xbutton.x;
+	  event->button.y = xevent->xbutton.y;
 	  event->button.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->button.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->button.axes = NULL;
@@ -1164,14 +1187,11 @@ gdk_event_translate (GdkDisplay *display,
 	      return_val = FALSE;
 	      break;
 	    }
-
-	  _gdk_event_button_generate (display, event);
           break;
 	}
 
       set_user_time (window, event);
 
-      _gdk_xgrab_check_button_event (window, xevent);
       break;
       
     case ButtonRelease:
@@ -1181,9 +1201,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
       
-      if (window_private == NULL ||
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1200,8 +1218,8 @@ gdk_event_translate (GdkDisplay *display,
       event->button.type = GDK_BUTTON_RELEASE;
       event->button.window = window;
       event->button.time = xevent->xbutton.time;
-      event->button.x = xevent->xbutton.x + xoffset;
-      event->button.y = xevent->xbutton.y + yoffset;
+      event->button.x = xevent->xbutton.x;
+      event->button.y = xevent->xbutton.y;
       event->button.x_root = (gfloat)xevent->xbutton.x_root;
       event->button.y_root = (gfloat)xevent->xbutton.y_root;
       event->button.axes = NULL;
@@ -1210,12 +1228,8 @@ gdk_event_translate (GdkDisplay *display,
       event->button.device = display->core_pointer;
 
       if (!set_screen_from_root (display, event, xevent->xbutton.root))
-	{
-	  return_val = FALSE;
-	  break;
-	}
-
-      _gdk_xgrab_check_button_event (window, xevent);
+	return_val = FALSE;
+      
       break;
       
     case MotionNotify:
@@ -1225,9 +1239,7 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xmotion.x, xevent->xmotion.y,
 			   (xevent->xmotion.is_hint) ? "true" : "false"));
       
-      if (window_private == NULL ||
-	  ((window_private->extension_events != 0) &&
-           display_x11->input_ignore_core))
+      if (window_private == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -1236,8 +1248,8 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = window;
       event->motion.time = xevent->xmotion.time;
-      event->motion.x = xevent->xmotion.x + xoffset;
-      event->motion.y = xevent->xmotion.y + yoffset;
+      event->motion.x = xevent->xmotion.x;
+      event->motion.y = xevent->xmotion.y;
       event->motion.x_root = (gfloat)xevent->xmotion.x_root;
       event->motion.y_root = (gfloat)xevent->xmotion.y_root;
       event->motion.axes = NULL;
@@ -1288,14 +1300,6 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	}
 
-#if 0
-      /* Tell XInput stuff about it if appropriate */
-      if (window_private &&
-	  !GDK_WINDOW_DESTROYED (window) &&
-	  window_private->extension_events != 0)
-	_gdk_input_enter_event (&xevent->xcrossing, window);
-#endif
-      
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
       
@@ -1308,8 +1312,8 @@ gdk_event_translate (GdkDisplay *display,
 	event->crossing.subwindow = NULL;
       
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = xevent->xcrossing.x + xoffset;
-      event->crossing.y = xevent->xcrossing.y + yoffset;
+      event->crossing.x = xevent->xcrossing.x;
+      event->crossing.y = xevent->xcrossing.y;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
       
@@ -1403,8 +1407,8 @@ gdk_event_translate (GdkDisplay *display,
 	event->crossing.subwindow = NULL;
       
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = xevent->xcrossing.x + xoffset;
-      event->crossing.y = xevent->xcrossing.y + yoffset;
+      event->crossing.x = xevent->xcrossing.x;
+      event->crossing.y = xevent->xcrossing.y;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
       
@@ -1600,8 +1604,8 @@ gdk_event_translate (GdkDisplay *display,
       {
 	GdkRectangle expose_rect;
 
-	expose_rect.x = xevent->xexpose.x + xoffset;
-	expose_rect.y = xevent->xexpose.y + yoffset;
+	expose_rect.x = xevent->xexpose.x;
+	expose_rect.y = xevent->xexpose.y;
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
@@ -1640,8 +1644,8 @@ gdk_event_translate (GdkDisplay *display,
             break;
           }
         
-	expose_rect.x = xevent->xgraphicsexpose.x + xoffset;
-	expose_rect.y = xevent->xgraphicsexpose.y + yoffset;
+	expose_rect.x = xevent->xgraphicsexpose.x;
+	expose_rect.y = xevent->xgraphicsexpose.y;
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
 	    
@@ -1830,9 +1834,10 @@ gdk_event_translate (GdkDisplay *display,
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
         { 
-	  window_impl->width = xevent->xconfigure.width;
-	  window_impl->height = xevent->xconfigure.height;
-	  
+	  window_private->width = xevent->xconfigure.width;
+	  window_private->height = xevent->xconfigure.height;
+
+	  _gdk_window_update_size (window);
 	  _gdk_x11_drawable_update_size (window_private->impl);
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
@@ -1841,7 +1846,7 @@ gdk_event_translate (GdkDisplay *display,
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
-	  (window_private->extension_events != 0))
+	  window_private->input_window != NULL)
 	_gdk_input_configure_event (&xevent->xconfigure, window);
 #endif
       
@@ -1853,7 +1858,7 @@ gdk_event_translate (GdkDisplay *display,
 	}
 #endif
 
-    if (!window ||
+      if (!window ||
 	  xevent->xconfigure.event != xevent->xconfigure.window ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD ||
           GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
@@ -1893,9 +1898,10 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  window_impl->width = xevent->xconfigure.width;
-	  window_impl->height = xevent->xconfigure.height;
+	  window_private->width = xevent->xconfigure.width;
+	  window_private->height = xevent->xconfigure.height;
 	  
+	  _gdk_window_update_size (window);
 	  _gdk_x11_drawable_update_size (window_private->impl);
 	  
 	  if (window_private->resize_count >= 1)
@@ -2158,8 +2164,8 @@ gdk_event_translate (GdkDisplay *display,
 #if 0
 	  if (window_private &&
 	      !GDK_WINDOW_DESTROYED (window_private) &&
-	      (window_private->extension_events != 0))
-	    return_val = _gdk_input_other_event(event, xevent, window);
+	      window_private->input_window)
+	    return_val = _gdk_input_other_event (event, xevent, window);
 	  else
 #endif
 	    return_val = FALSE;
@@ -2187,7 +2193,7 @@ gdk_event_translate (GdkDisplay *display,
   
   if (window)
     g_object_unref (window);
-  
+
   return return_val;
 }
 
@@ -2307,7 +2313,10 @@ _gdk_events_queue (GdkDisplay *display)
                                                 display, &xevent);
 
       if (event)
-        node = _gdk_event_queue_append (display, event);
+        {
+          _gdk_windowing_got_event (display, node, event, xevent.xany.serial);
+          node = _gdk_event_queue_append (display, event);
+        }
       else
         {
           event = gdk_event_new (GDK_NOTHING);
@@ -2322,6 +2331,7 @@ _gdk_events_queue (GdkDisplay *display)
           if (gdk_event_translate (display, event, &xevent, FALSE))
             {
               ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
+              _gdk_windowing_got_event (display, node, event, xevent.xany.serial);
             }
           else
             {

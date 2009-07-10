@@ -5377,6 +5377,12 @@ gtk_tree_view_key_press (GtkWidget   *widget,
   if (GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->key_press_event (widget, event))
     return TRUE;
 
+  if (tree_view->priv->search_entry_avoid_unhandled_binding)
+    {
+      tree_view->priv->search_entry_avoid_unhandled_binding = FALSE;
+      return FALSE;
+    }
+
   /* We pass the event to the search_entry.  If its text changes, then we start
    * the typeahead find capabilities. */
   if (GTK_WIDGET_HAS_FOCUS (tree_view)
@@ -10231,27 +10237,21 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
   GdkModifierType state;
 
   if (! GTK_WIDGET_HAS_FOCUS (tree_view))
-    return FALSE;
+    goto out;
 
   cursor_path = NULL;
   if (tree_view->priv->cursor)
     cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
 
   if (cursor_path == NULL)
-    return FALSE;
+    goto out;
 
   _gtk_tree_view_find_node (tree_view, cursor_path,
 			    &cursor_tree, &cursor_node);
   if (cursor_tree == NULL)
     {
       gtk_tree_path_free (cursor_path);
-      return FALSE;
-    }
-
-  if (gtk_get_current_event_state (&state))
-    {
-      if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
-        tree_view->priv->ctrl_pressed = TRUE;
+      goto out;
     }
 
   if (cursor_tree->parent_node)
@@ -10262,19 +10262,30 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
       gtk_tree_path_up (cursor_path);
 
+      if (gtk_get_current_event_state (&state))
+	{
+	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+	    tree_view->priv->ctrl_pressed = TRUE;
+	}
+
       gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
+      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+      gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+      gtk_tree_path_free (cursor_path);
+
+      tree_view->priv->ctrl_pressed = FALSE;
+
+      return TRUE;
     }
 
-  gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+ out:
 
-  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-  gtk_tree_path_free (cursor_path);
-
-  tree_view->priv->ctrl_pressed = FALSE;
-
-  return TRUE;
+  tree_view->priv->search_entry_avoid_unhandled_binding = TRUE;
+  return FALSE;
 }
+
 static gboolean
 gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
 {
@@ -10320,7 +10331,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
-  screen = gtk_widget_get_screen (tree_view);
+  screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
 
    if (tree_view->priv->search_window != NULL)
      {
@@ -10701,9 +10712,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 			 GtkTreeModel *model)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (model != NULL)
-    g_return_if_fail (GTK_IS_TREE_MODEL (model));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   if (model == tree_view->priv->model)
     return;
@@ -11515,8 +11524,7 @@ gtk_tree_view_set_expander_column (GtkTreeView       *tree_view,
                                    GtkTreeViewColumn *column)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  if (column != NULL)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+  g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
 
   if (tree_view->priv->expander_column != column)
     {
@@ -12684,8 +12692,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (tree_view->priv->tree != NULL);
   g_return_if_fail (path != NULL);
-  if (focus_column)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (focus_column));
+  g_return_if_fail (focus_column == NULL || GTK_IS_TREE_VIEW_COLUMN (focus_column));
   if (focus_cell)
     {
       g_return_if_fail (focus_column);
@@ -14066,8 +14073,7 @@ gtk_tree_view_set_search_entry (GtkTreeView *tree_view,
 				GtkEntry    *entry)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  if (entry != NULL)
-    g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry));
 
   if (tree_view->priv->search_custom_entry_set)
     {
@@ -15446,12 +15452,8 @@ gtk_tree_view_set_tooltip_cell (GtkTreeView       *tree_view,
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
-
-  if (column)
-    g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
-
-  if (cell)
-    g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
+  g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
   /* Determine x values. */
   if (column && cell)

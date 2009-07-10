@@ -572,7 +572,8 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region)
+                                   const GdkRegion *region,
+				   gboolean         reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
 
@@ -596,10 +597,12 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
       win32_gc->values_mask &= ~GDK_GC_CLIP_MASK;
     }
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
-  
-  win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+  if (reset_origin)
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+      win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+    }
 }
 
 void

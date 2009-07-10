@@ -274,6 +274,7 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
+static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
      
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
 					   gint       width,
@@ -2488,17 +2489,18 @@ gtk_widget_set_property (GObject         *object,
        * because an empty string would be useless for a tooltip:
        */
       if (tooltip_markup && (strlen (tooltip_markup) == 0))
-      {
-	g_free (tooltip_markup);
-        tooltip_markup = NULL;
-      }
+        {
+	  g_free (tooltip_markup);
+          tooltip_markup = NULL;
+        }
 
       g_object_set_qdata_full (object, quark_tooltip_markup,
 			       tooltip_markup, g_free);
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
-      gtk_widget_trigger_tooltip_query (widget);
+      if (GTK_WIDGET_VISIBLE (widget))
+        gtk_widget_queue_tooltip_query (widget);
       break;
     case PROP_TOOLTIP_TEXT:
       tooltip_window = g_object_get_qdata (object, quark_tooltip_window);
@@ -2518,7 +2520,8 @@ gtk_widget_set_property (GObject         *object,
 
       tmp = (tooltip_window != NULL || tooltip_markup != NULL);
       gtk_widget_real_set_has_tooltip (widget, tmp, FALSE);
-      gtk_widget_trigger_tooltip_query (widget);
+      if (GTK_WIDGET_VISIBLE (widget))
+        gtk_widget_queue_tooltip_query (widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -9803,6 +9806,44 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
   return FALSE;
 }
 
+void
+_gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
+					  GtkWidget *toplevel,
+					  gpointer   user_data)
+{
+  AccelGroupParserData *accel_data;
+  GSList *accel_groups;
+  GtkAccelGroup *accel_group;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (toplevel));
+  g_return_if_fail (user_data != NULL);
+
+  accel_data = (AccelGroupParserData*)user_data;
+  accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
+  if (g_slist_length (accel_groups) == 0)
+    {
+      accel_group = gtk_accel_group_new ();
+      gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
+    }
+  else
+    {
+      g_assert (g_slist_length (accel_groups) == 1);
+      accel_group = g_slist_nth_data (accel_groups, 0);
+    }
+
+  gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
+			      accel_data->signal,
+			      accel_group,
+			      accel_data->key,
+			      accel_data->modifiers,
+			      GTK_ACCEL_VISIBLE);
+
+  g_object_unref (accel_data->object);
+  g_free (accel_data->signal);
+  g_slice_free (AccelGroupParserData, accel_data);
+}
+
 static void
 gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder,
@@ -9813,8 +9854,6 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
   AccelGroupParserData *accel_data;
   AccessibilitySubParserData *a11y_data;
   GtkWidget *toplevel;
-  GSList *accel_groups;
-  GtkAccelGroup *accel_group;
 
   if (strcmp (tagname, "accelerator") == 0)
     {
@@ -9822,26 +9861,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
       g_assert (accel_data->object);
 
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (accel_data->object));
-      accel_groups = gtk_accel_groups_from_object (G_OBJECT (toplevel));
-      if (g_slist_length (accel_groups) == 0)
-	{
-	  accel_group = gtk_accel_group_new ();
-	  gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
-	}
-      else
-	{
-	  g_assert (g_slist_length (accel_groups) == 1);
-	  accel_group = g_slist_nth_data (accel_groups, 0);
-	}
-      gtk_widget_add_accelerator (GTK_WIDGET (accel_data->object),
-				  accel_data->signal,
-				  accel_group,
-				  accel_data->key,
-				  accel_data->modifiers,
-				  GTK_ACCEL_VISIBLE);
-      g_object_unref (accel_data->object);
-      g_free (accel_data->signal);
-      g_slice_free (AccelGroupParserData, accel_data);
+
+      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), toplevel, user_data);
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {
@@ -10144,8 +10165,8 @@ gtk_widget_set_tooltip_window (GtkWidget *widget,
   has_tooltip = (custom_window != NULL || tooltip_markup != NULL);
   gtk_widget_real_set_has_tooltip (widget, has_tooltip, FALSE);
 
-  if (has_tooltip)
-    gtk_widget_trigger_tooltip_query (widget);
+  if (has_tooltip && GTK_WIDGET_VISIBLE (widget))
+    gtk_widget_queue_tooltip_query (widget);
 }
 
 /**
@@ -10182,6 +10203,36 @@ void
 gtk_widget_trigger_tooltip_query (GtkWidget *widget)
 {
   gtk_tooltip_trigger_tooltip_query (gtk_widget_get_display (widget));
+}
+
+static guint tooltip_query_id;
+static GSList *tooltip_query_displays;
+
+static gboolean
+tooltip_query_idle (gpointer data)
+{
+  g_slist_foreach (tooltip_query_displays, (GFunc)gtk_tooltip_trigger_tooltip_query, NULL);
+  g_slist_foreach (tooltip_query_displays, (GFunc)g_object_unref, NULL);
+  g_slist_free (tooltip_query_displays);
+
+  tooltip_query_displays = NULL;
+  tooltip_query_id = 0;
+
+  return FALSE;
+}
+
+static void
+gtk_widget_queue_tooltip_query (GtkWidget *widget)
+{
+  GdkDisplay *display;
+
+  display = gtk_widget_get_display (widget);
+
+  if (!g_slist_find (tooltip_query_displays, display))
+    tooltip_query_displays = g_slist_prepend (tooltip_query_displays, g_object_ref (display));
+
+  if (tooltip_query_id == 0)
+    tooltip_query_id = gdk_threads_add_idle (tooltip_query_idle, NULL);
 }
 
 /**

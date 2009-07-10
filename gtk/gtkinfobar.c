@@ -307,7 +307,6 @@ gtk_info_bar_expose (GtkWidget      *widget,
                      GdkEventExpose *event)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR_GET_PRIVATE (widget);
-  gboolean use_tooltip_style;
   const char* type_detail[] = {
     "infobar-info",
     "infobar-warning",
@@ -315,28 +314,25 @@ gtk_info_bar_expose (GtkWidget      *widget,
     "infobar-error",
     "infobar"
   };
-  const char *detail;
 
-  gtk_widget_style_get (widget,
-                        "use-tooltip-style", &use_tooltip_style,
-                        NULL);
+  if (priv->message_type != GTK_MESSAGE_OTHER)
+    {
+      const char *detail;
 
-  if (use_tooltip_style)
-    detail = "toolbar";
-  else
-    detail = type_detail[priv->message_type];
+      detail = type_detail[priv->message_type];
 
-  gtk_paint_flat_box (widget->style,
-                      widget->window,
-                      GTK_STATE_NORMAL,
-                      GTK_SHADOW_OUT,
-                      NULL,
-                      widget,
-                      detail,
-                      widget->allocation.x,
-                      widget->allocation.y,
-                      widget->allocation.width + 1,
-                      widget->allocation.height + 1);
+      gtk_paint_box (widget->style,
+                     widget->window,
+                     GTK_STATE_NORMAL,
+                     GTK_SHADOW_OUT,
+                     NULL,
+                     widget,
+                     detail,
+                     widget->allocation.x,
+                     widget->allocation.y,
+                     widget->allocation.width,
+                     widget->allocation.height);
+    }
 
   if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event)
     GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->expose_event (widget, event);
@@ -374,8 +370,11 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * "info_fg_color", "info_bg_color",
    * "warning_fg_color", "warning_bg_color",
    * "question_fg_color", "question_bg_color",
-   * "error_fg_color", "error_bg_color",
+   * "error_fg_color", "error_bg_color".
    * "other_fg_color", "other_bg_color".
+   *
+   * If the type is #GTK_MESSAGE_OTHER, no info bar is painted but the
+   * colors are still set.
    *
    * Since: 2.18
    */
@@ -385,7 +384,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                       P_("Message Type"),
                                                       P_("The type of message"),
                                                       GTK_TYPE_MESSAGE_TYPE,
-                                                      GTK_MESSAGE_OTHER,
+                                                      GTK_MESSAGE_INFO,
                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   /**
    * GtkInfoBar::response:
@@ -493,22 +492,6 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                                              5,
                                                              GTK_PARAM_READABLE));
 
-  /**
-   * GtkInfoBar:use-tooltip-style:
-   *
-   * When %TRUE, use the same background/foreground color as #GtkTooltip.
-   * Otherwise, GTK+ uses #GtkInfoBar::message-type to determine which
-   * symbolic colors to use.
-   *
-   * Since: 2.18
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("use-tooltip-style",
-                                                                 P_("Use tooltip style"),
-                                                                 P_("Wether to use the same style as GtkTooltip for drawing"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE));
-
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0, "close", 0);
@@ -521,11 +504,18 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
 {
   GtkWidget *widget = (GtkWidget*)info_bar;
   GtkInfoBarPrivate *priv;
-  GdkColor default_border_color = { 0, 0xb800, 0xad00, 0x9d00 };
-  GdkColor default_fill_color = { 0, 0xff00, 0xff00, 0xbf00 };
+  GdkColor info_default_border_color     = { 0, 0xb800, 0xad00, 0x9d00 };
+  GdkColor info_default_fill_color       = { 0, 0xff00, 0xff00, 0xbf00 };
+  GdkColor warning_default_border_color  = { 0, 0xb000, 0x7a00, 0x2b00 };
+  GdkColor warning_default_fill_color    = { 0, 0xfc00, 0xaf00, 0x3e00 };
+  GdkColor question_default_border_color = { 0, 0x6200, 0x7b00, 0xd960 };
+  GdkColor question_default_fill_color   = { 0, 0x8c00, 0xb000, 0xd700 };
+  GdkColor error_default_border_color    = { 0, 0xa800, 0x2700, 0x2700 };
+  GdkColor error_default_fill_color      = { 0, 0xf000, 0x3800, 0x3800 };
+  GdkColor other_default_border_color    = { 0, 0xb800, 0xad00, 0x9d00 };
+  GdkColor other_default_fill_color      = { 0, 0xff00, 0xff00, 0xbf00 };
   GdkColor *fg, *bg;
   GdkColor sym_fg, sym_bg;
-  gboolean use_tooltip_style;
   GtkStyle *style;
   const char* fg_color_name[] = {
     "info_fg_color",
@@ -541,48 +531,51 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
     "error_bg_color",
     "other_bg_color"
   };
-  gboolean has_color;
 
   priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
   style = gtk_widget_get_style (widget);
-
-  gtk_widget_style_get (widget,
-                        "use-tooltip-style", &use_tooltip_style, NULL);
-
-  has_color = FALSE;
 
   if (gtk_style_lookup_color (style, fg_color_name[priv->message_type], &sym_fg) &&
       gtk_style_lookup_color (style, bg_color_name[priv->message_type], &sym_bg))
     {
       fg = &sym_fg;
       bg = &sym_bg;
-      has_color = TRUE;
     }
-  else if (use_tooltip_style)
+  else
     {
-      style = gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget),
-                                         "gtk-tooltip", "GtkTooltip", G_TYPE_NONE);
-      if (style)
+      switch (priv->message_type)
         {
-          fg = &style->fg[GTK_STATE_NORMAL];
-          bg = &style->bg[GTK_STATE_NORMAL];
-        }
-      else
-        {
-          fg = &default_border_color;
-          bg = &default_fill_color;
-        }
+        case GTK_MESSAGE_INFO:
+          fg = &info_default_border_color;
+          bg = &info_default_fill_color;
+          break;
 
-      has_color = TRUE;
+        case GTK_MESSAGE_WARNING:
+          fg = &warning_default_border_color;
+          bg = &warning_default_fill_color;
+          break;
+
+        case GTK_MESSAGE_QUESTION:
+          fg = &question_default_border_color;
+          bg = &question_default_fill_color;
+          break;
+
+        case GTK_MESSAGE_ERROR:
+          fg = &error_default_border_color;
+          bg = &error_default_fill_color;
+          break;
+
+        case GTK_MESSAGE_OTHER:
+          fg = &other_default_border_color;
+          bg = &other_default_fill_color;
+          break;
+        }
     }
 
-  if (has_color)
-    {
-      if (!gdk_color_equal (bg, &widget->style->bg[GTK_STATE_NORMAL]))
-        gtk_widget_modify_bg (widget, GTK_STATE_NORMAL, bg);
-      if (!gdk_color_equal (fg, &widget->style->fg[GTK_STATE_NORMAL]))
-        gtk_widget_modify_fg (widget, GTK_STATE_NORMAL, fg);
-    }
+  if (!gdk_color_equal (bg, &widget->style->bg[GTK_STATE_NORMAL]))
+    gtk_widget_modify_bg (widget, GTK_STATE_NORMAL, bg);
+  if (!gdk_color_equal (fg, &widget->style->fg[GTK_STATE_NORMAL]))
+    gtk_widget_modify_fg (widget, GTK_STATE_NORMAL, fg);
 }
 
 static void
@@ -632,6 +625,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
   gtk_box_pack_start (GTK_BOX (info_bar), action_area, FALSE, TRUE, 0);
 
   gtk_widget_set_app_paintable (GTK_WIDGET (info_bar), TRUE);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (info_bar), TRUE);
 
   info_bar->priv->content_area = content_area;
   info_bar->priv->action_area = action_area;
@@ -752,7 +746,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
 GtkWidget*
 gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
 {
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
 
   return info_bar->priv->action_area;
 }
@@ -770,7 +764,7 @@ gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
 GtkWidget*
 gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
 {
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
 
   return info_bar->priv->content_area;
 }
@@ -982,7 +976,7 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
 }
 
 /**
- * gtk_info_bar_set_default_response:
+ * gtk_info_bar_response:
  * @info_bar: a #GtkInfoBar
  * @response_id: a response ID
  *
@@ -1251,7 +1245,7 @@ gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
 {
   GtkInfoBarPrivate *priv;
 
-  g_return_if_fail (GTK_IS_INFO_BAR (info_bar));
+  g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), GTK_MESSAGE_OTHER);
 
   priv = GTK_INFO_BAR_GET_PRIVATE (info_bar);
 

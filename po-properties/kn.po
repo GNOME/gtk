@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 19:03-0400\n"
+"POT-Creation-Date: 2009-07-07 00:16-0400\n"
 "PO-Revision-Date: 2009-03-15 19:36+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -91,12 +91,12 @@ msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಪ್ರದರ್ಶಕ"
 msgid "The default display for GDK"
 msgstr "GDK ಗಾಗಿನ ಪೂರ್ವನಿಯೋಜಿತ ಪ್ರದರ್ಶಕ"
 
-#: gdk/gdkpango.c:537 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:155
-#: gtk/gtkstatusicon.c:277 gtk/gtkwindow.c:614
+#: gdk/gdkpango.c:538 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gtk/gtkstatusicon.c:280 gtk/gtkwindow.c:614
 msgid "Screen"
 msgstr "ತೆರೆ(Screen)"
 
-#: gdk/gdkpango.c:538
+#: gdk/gdkpango.c:539
 msgid "the GdkScreen for the renderer"
 msgstr "ನಿರೂಪಕನಿಗಾಗಿ(renderer) Gdkತೆರೆ"
 
@@ -259,7 +259,7 @@ msgid "A unique name for the action."
 msgstr "ಕಾರ್ಯಕ್ಕೆ ಒಂದು ವಿಶಿಷ್ಟ ಹೆಸರು."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:495 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:495 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "ಶೀರ್ಷಿಕೆ"
@@ -293,22 +293,22 @@ msgstr "ಶೇಖರಿತ ಚಿಹ್ನೆ"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr "ಈ ಕಾರ್ಯವನ್ನು ಪ್ರತಿನಿಧಿಸುವ ಶೇಖರಿತ ಚಿಹ್ನೆಗಳು ಸಂಪರ್ಕ ತಟದಲ್ಲಿ ಪ್ರದರ್ಶಿಸಲ್ಪಡುತ್ತವೆ."
 
-#: gtk/gtkaction.c:261 gtk/gtkstatusicon.c:250
+#: gtk/gtkaction.c:261 gtk/gtkstatusicon.c:253
 msgid "GIcon"
 msgstr "GIcon"
 
 #: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
-#: gtk/gtkstatusicon.c:251
+#: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "ತೋರಿಸಲಾಗುತ್ತಿರುವ  GIcon"
 
 #: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:234 gtk/gtkwindow.c:606
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "ಚಿಹ್ನೆಯ ಹೆಸರು"
 
 #: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
-#: gtk/gtkstatusicon.c:235
+#: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "ಚಿಹ್ನೆ ಥೀಮಿನಲ್ಲಿನ ಚಿಹ್ನೆಯ ಹೆಸರು"
 
@@ -367,7 +367,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "ನಿಜವಾದಾಗ, ಈ ಕಾರ್ಯಕ್ಕಾಗಿನ ಖಾಲಿ ಅಂಶ ಪ್ರಾಕ್ಸಿಗಳು ಅಡಗಿಸಲ್ಪಡುತ್ತದೆ."
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkwidget.c:524
 msgid "Sensitive"
 msgstr "ಸಂವೇದಿ"
 
@@ -375,8 +375,8 @@ msgstr "ಸಂವೇದಿ"
 msgid "Whether the action is enabled."
 msgstr "ಈ ಕ್ರಿಯೆಯು ಶಕ್ತಗೊಂಡಿದೆಯೆ."
 
-#: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:293
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
 msgid "Visible"
 msgstr "ಗೋಚರ"
 
@@ -553,7 +553,7 @@ msgstr "ಬಾಣದ ನೆರಳು"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "ಬಾಣದ ಸುತ್ತಮುತ್ತಲಿನ ನೆರಳಿನ ಸ್ವರೂಪ"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:711 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "ಬಾಣದ ಗಾತ್ರ ಬದಲಾವಣೆ"
 
@@ -649,43 +649,43 @@ msgstr "ಪೂರ್ಣಗೊಂಡ ಪುಟ"
 msgid "Whether all required fields on the page have been filled out"
 msgstr "ಪುಟದಲ್ಲಿನ ಅಗತ್ಯ ಕ್ಷೇತ್ರಗಳು ಪೂರ್ಣಗೊಂಡಿವೆಯೆ"
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:101
 msgid "Minimum child width"
 msgstr "ಚೈಲ್ಡಿನ ಕನಿಷ್ಠ ಅಗಲ"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:102
 msgid "Minimum width of buttons inside the box"
 msgstr "ಚೌಕಟ್ಟಿನೊಳಗಿನ ಗುಂಡಿಗಳ ಕನಿಷ್ಠ ಅಗಲ"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:110
 msgid "Minimum child height"
 msgstr "ಚೈಲ್ಡಿನ ಕನಿಷ್ಠ ಎತ್ತರ"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:111
 msgid "Minimum height of buttons inside the box"
 msgstr "ಚೌಕಟ್ಟಿನೊಳಗಿನ ಗುಂಡಿಗಳ ಕನಿಷ್ಠ ಉದ್ದ"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:119
 msgid "Child internal width padding"
 msgstr "ಚೈಲ್ಡಿನ ಆಂತರಿಕ ಅಗಲದ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:120
 msgid "Amount to increase child's size on either side"
 msgstr "ಚೈಲ್ಡಿನ ಎರಡೂ ಬದಿಗಳಲ್ಲೂ ಹೆಚ್ಚಿಸಬೇಕಿರುವ ಪ್ರಮಾಣ"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:128
 msgid "Child internal height padding"
 msgstr "ಚೈಲ್ಡಿನ ಆಂತರಿಕ ಎತ್ತರದ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:129
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "ಚೈಲ್ಡಿನ ಕೆಳಗೆ ಹಾಗು ಮೇಲೆ ಹೆಚ್ಚಿಸಬೇಕಿರುವ ಪ್ರಮಾಣ"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:137
 msgid "Layout style"
 msgstr "ಚೌಕಟ್ಟಿನ ಬಗೆ"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:138
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -693,11 +693,11 @@ msgstr ""
 "ಚೌಕದಲ್ಲಿ ಗುಂಡಿಗಳನ್ನು ಹೇಗೆ ಇರಿಸಬೇಕು. ಸಾಧ್ಯವಿರುವ ಮೌಲ್ಯಗಳೆಂದರೆ, ಹರಡಿದ, ಆರಂಭಿಕ ಹಾಗು "
 "ಕೊನೆಯ ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:146
 msgid "Secondary"
 msgstr "ಎರಡನೆಯ"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:147
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -789,12 +789,12 @@ msgstr ""
 "ತಟದ ಪಠ್ಯ"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:516
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "ಕೆಳಗೆರೆಯನ್ನು ಬಳಸು"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:517
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1206,7 +1206,7 @@ msgstr "Pixbuf ವಿಸ್ತಾರಕವನ್ನು ಮುಚ್ಚಲಾಗ�
 msgid "Pixbuf for closed expander"
 msgstr "ಮುಚ್ಚಲಾದ ವಿಸ್ತಾರಕಕ್ಕಾಗಿನ Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:226
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "ಶೇಖರಣಾ ID"
 
@@ -1215,7 +1215,7 @@ msgid "The stock ID of the stock icon to render"
 msgstr "ರೆಂಡರ್ ಮಾಡಲು ಶೇಖರಣಾ(ಸ್ಟಾಕ್) ಚಿಹ್ನೆಯ ಶೇಖರಣಾ ID"
 
 #: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:267
+#: gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "ಗಾತ್ರ"
 
@@ -1290,7 +1290,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "ಲಂಬ ಪಠ್ಯದ ಹೊಂದಿಕೆ, 0 (ಮೇಲೆ) ಯಿಂದ 1 ಕ್ಕೆ (ಕೆಳಗೆ)."
 
 #: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:729
-#: gtk/gtkorientable.c:74 gtk/gtkprogressbar.c:126 gtk/gtkstatusicon.c:325
+#: gtk/gtkorientable.c:74 gtk/gtkprogressbar.c:126 gtk/gtkstatusicon.c:328
 #: gtk/gtktrayicon-x11.c:110
 msgid "Orientation"
 msgstr "ನಿಲುವು (Orientation)"
@@ -1732,7 +1732,7 @@ msgstr "ಸೂಚಕದ(Indicator) ಅಂತರ"
 msgid "Spacing around check or radio indicator"
 msgstr "ಗುರುತುಹಾಕುವ ಅಥವ ರೇಡಿಯೋ ಸೂಚಕದ ಸುತ್ತಲಿನ ಜಾಗ"
 
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:500 gtk/gtktoggleaction.c:119
+#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
 #: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "ಸಕ್ರಿಯ"
@@ -1766,7 +1766,8 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "ಬಣ್ಣವು ಒಂದು ಆಲ್ಫಾ ಮೌಲ್ಯವನ್ನು ಕೊಡಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtktreeviewcolumn.c:264
 msgid "Title"
 msgstr "ಶೀರ್ಷಿಕೆ"
 
@@ -1954,7 +1955,7 @@ msgstr "ಒಂದು ಸಂಯೋಜನಾ ಚೌಕವು ಚೈಲ್ಡಿನ
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "ಮೌಸಿನಿಂದ ಸಂಯೋಜನಾ ಚೌಕವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿದಾಗ ಅದು ಗಮನ ಸೆಳೆಯಲ್ಪಡಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:555
+#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "ಹರಿದುಹಾಕುವ ಶೀರ್ಷಿಕೆ"
 
@@ -2710,7 +2711,7 @@ msgid "The desired width of the button widget, in characters."
 msgstr "ಗುಂಡಿ ವಿಜೆಟ್‌ನ ಇಚ್ಛೆಯ ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ."
 
 #: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
-#: gtk/gtkstatusicon.c:218
+#: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "ಕಡತದ ಹೆಸರು"
 
@@ -3009,11 +3010,11 @@ msgstr "ಆಯ್ಕೆ ಚೌಕ ಆಲ್ಫಾ"
 msgid "Opacity of the selection box"
 msgstr "ಆಯ್ಕೆ ಚೌಕದ ಅಪಾರದರ್ಶಕತೆ"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:210
+#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:211
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು ಒಂದು GdkPixbuf"
 
@@ -3041,11 +3042,11 @@ msgstr "ಮುಸುಕು(Mask)"
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage ಅಥವ GdkPixmap ನೊಂದಿಗೆ ಬಳಸಲು ಮುಸುಕು ಬಿಟ್‌ಮ್ಯಾಪ್"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:219
+#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "ಲೋಡ್ ಮಾಡಲು ಹಾಗು ಪ್ರದರ್ಶಿಸಲು ಕಡತದ ಹೆಸರು"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:227
+#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು ಶೇಖರಣಾ ಚಿತ್ರಿಕೆಗಾಗಿನ ಶೇಖರಣಾ ID"
 
@@ -3082,11 +3083,11 @@ msgstr "ಸಜೀವನಗಳು (ಆನಿಮೇಶನ್)"
 msgid "GdkPixbufAnimation to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು GdkPixbufAnimation"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:258
+#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "ಸಂಗ್ರಹ ಬಗೆ"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:259
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "ಚಿತ್ರಿಕೆ ದತ್ತಾಂಶಕ್ಕಾಗಿ ಬಳಸಲಾಗುವ ಪ್ರತಿನಿಧಿಸುವಿಕೆ"
 
@@ -3106,7 +3107,7 @@ msgstr "ಯಾವಾಗಲೂ ಚಿತ್ರವನ್ನು ತೋರಿಸು"
 msgid "Whether the image will always be shown"
 msgstr "ಚಿತ್ರವನ್ನು ಯಾವಾಗಲೂ ತೋರಿಸುತ್ತಿರಬೇಕೆ"
 
-#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:515
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:516
 msgid "Accel Group"
 msgstr "Accel ಸಮೂಹ"
 
@@ -3276,74 +3277,85 @@ msgstr "ಭೇಟಿನೀಡಲಾದ"
 msgid "Whether this link has been visited."
 msgstr "ಈ ಕೊಂಡಿಗೆ ಭೇಟಿನೀಡಲಾಗಿದೆಯೆ."
 
-#: gtk/gtkmenu.c:501
+#: gtk/gtkmenu.c:502
 msgid "The currently selected menu item"
 msgstr "ಪ್ರಸಕ್ತ ಆಯ್ಕೆ ಮಾಡಲಾದ ಮೆನು ಅಂಶ"
 
-#: gtk/gtkmenu.c:516
+#: gtk/gtkmenu.c:517
 msgid "The accel group holding accelerators for the menu"
 msgstr "ಮೆನುಗಾಗೆ ವೇಗವರ್ಧಕವನ್ನು ಹೊಂದಿರುವ accel ಸಮೂಹ"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:531 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Accel ಮಾರ್ಗ"
 
-#: gtk/gtkmenu.c:531
+#: gtk/gtkmenu.c:532
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "ಚೈಲ್ಡ್‍ ಅಂಶಗಳಿಗಾಗಿ ಅನುಕೂಲಕರವಾದ accel ಮಾರ್ಗಗಳನ್ನು ರಚಿಸಲು ಬಳಸುವ ಒಂದು accel ಮಾರ್ಗ"
 
-#: gtk/gtkmenu.c:547
+#: gtk/gtkmenu.c:548
 msgid "Attach Widget"
 msgstr "ವಿಜೆಟ್ ಅನ್ನು ಲಗತ್ತಿಸು"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:549
 msgid "The widget the menu is attached to"
 msgstr "ಮೆನವನ್ನು ಲಗತ್ತಿಸಲಾದ ವಿಜೆಟ್"
 
-#: gtk/gtkmenu.c:556
+#: gtk/gtkmenu.c:557
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "ಈ ಮೆನುವು ಹರಿದು ಹೋದಾಗ ವಿಂಡೋ ವ್ಯವಸ್ಥಾಪಕದಿಂದ ತೋರಿಸಬಹುದಾದ ಶೀರ್ಷಿಕೆ"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:571
 msgid "Tearoff State"
 msgstr "ಹರಿದುಹೋದ ಸ್ಥಿತಿ"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:572
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "ಮೆನುವು ಹರಿದುಹೋಗಿದೆಯೆ ಎಂದು ತೋರಿಸುವ ಒಂದು ಬೂಲಿಯನ್"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:586
 msgid "Monitor"
 msgstr "ಪರದೆ"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:587
 msgid "The monitor the menu will be popped up on"
 msgstr "ಮೆನುವನ್ನು ಪುಟಿಸುವ ಪರದೆ"
 
-#: gtk/gtkmenu.c:592
+#: gtk/gtkmenu.c:593
 msgid "Vertical Padding"
 msgstr "ಲಂಬ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:594
 msgid "Extra space at the top and bottom of the menu"
 msgstr "ಮೆನುವಿನ ಮೇಲ್ಭಾಗ ಹಾಗು ಕೆಳಭಾಗದಲ್ಲಿನ ಹೆಚ್ಚುವರಿ ಸ್ಥಳ"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:616
+msgid "Reserve Toggle Size"
+msgstr ""
+
+#: gtk/gtkmenu.c:617
+#, fuzzy
+msgid ""
+"A boolean that indicates whether the menu reserves space for toggles and "
+"icons"
+msgstr "ಮೆನುವು ಹರಿದುಹೋಗಿದೆಯೆ ಎಂದು ತೋರಿಸುವ ಒಂದು ಬೂಲಿಯನ್"
+
+#: gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
 msgstr "ಅಡ್ಡ ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkmenu.c:602
+#: gtk/gtkmenu.c:624
 msgid "Extra space at the left and right edges of the menu"
 msgstr "ಮೆನುವಿನ  ಎಡಭಾಗ ಹಾಗು ಬಲಭಾಗದಲ್ಲಿನ ಹೆಚ್ಚುವರಿ ಸ್ಥಳ"
 
-#: gtk/gtkmenu.c:610
+#: gtk/gtkmenu.c:632
 msgid "Vertical Offset"
 msgstr "ಲಂಬ ಆಫ್‌ಸೆಟ್"
 
-#: gtk/gtkmenu.c:611
+#: gtk/gtkmenu.c:633
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -3351,11 +3363,11 @@ msgstr ""
 "ಮೆನು ಒಂದು ಉಪಮೆನುವಾದಾಗ, ಈ ಸಂಖ್ಯೆಯ ಪಿಕ್ಸೆಲ್‌ಳಷ್ಟು ಸಂಖ್ಯೆಯ ಆಫ್‌ಸೆಟ್‌ಗಳನ್ನು ಲಂಬವಾಗಿ "
 "ಇರಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenu.c:619
+#: gtk/gtkmenu.c:641
 msgid "Horizontal Offset"
 msgstr "ಅಡ್ಡ ಆಫ್‌ಸೆಟ್"
 
-#: gtk/gtkmenu.c:620
+#: gtk/gtkmenu.c:642
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -3363,81 +3375,81 @@ msgstr ""
 "ಮೆನು ಒಂದು ಉಪಮೆನುವಾದಾಗ, ಈ ಸಂಖ್ಯೆಯ ಪಿಕ್ಸೆಲ್‌ಳಷ್ಟು ಸಂಖ್ಯೆಯ ಆಫ್‌ಸೆಟ್‌ಗಳನ್ನು ಅಡ್ಡವಾಗಿ "
 "ಇರಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenu.c:628
+#: gtk/gtkmenu.c:650
 msgid "Double Arrows"
 msgstr "ಜೋಡಿ ಬಾಣಗಳು"
 
-#: gtk/gtkmenu.c:629
+#: gtk/gtkmenu.c:651
 msgid "When scrolling, always show both arrows."
 msgstr "ಚಲಿಸುವಾಗ ಯಾವಾಗಲೂ ಎರಡೂ ಬಾಣಗಳನ್ನು ತೋರಿಸು."
 
-#: gtk/gtkmenu.c:642
+#: gtk/gtkmenu.c:664
 msgid "Arrow Placement"
 msgstr "ಬಾಣಗಳ ಇರಿಸುವಿಕೆ"
 
-#: gtk/gtkmenu.c:643
+#: gtk/gtkmenu.c:665
 msgid "Indicates where scroll arrows should be placed"
 msgstr "ಎಲ್ಲಿ ಚಲಿಸುವ(ಸ್ಕ್ರಾಲಿಂಗ್) ಬಾಣಗಳನ್ನು ಇರಿಸಬೇಕು ಎಂದು ಸೂಚಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenu.c:651
+#: gtk/gtkmenu.c:673
 msgid "Left Attach"
 msgstr "ಎಡ ಲಗತ್ತು"
 
-#: gtk/gtkmenu.c:652 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:674 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "ಚೈಲ್ಡಿನ ಎಡಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಾದ ಲಂಬಸಾಲಿನ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkmenu.c:659
+#: gtk/gtkmenu.c:681
 msgid "Right Attach"
 msgstr "ಬಲ ಲಗತ್ತು"
 
-#: gtk/gtkmenu.c:660
+#: gtk/gtkmenu.c:682
 msgid "The column number to attach the right side of the child to"
 msgstr "ಚೈಲ್ಡಿನ ಬಲಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಾದ ಲಂಬಸಾಲಿನ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:689
 msgid "Top Attach"
 msgstr "ಮೇಲಿನ ಲಗತ್ತು"
 
-#: gtk/gtkmenu.c:668
+#: gtk/gtkmenu.c:690
 msgid "The row number to attach the top of the child to"
 msgstr "ಚೈಲ್ಡಿನ ಮೇಲ್ಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಾದ ಅಡ್ಡಸಾಲಿನ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkmenu.c:675
+#: gtk/gtkmenu.c:697
 msgid "Bottom Attach"
 msgstr "ಕೆಳ ಲಗತ್ತು"
 
-#: gtk/gtkmenu.c:676 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:698 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "ಚೈಲ್ಡಿನ ಕೆಳಭಾಗಕ್ಕೆ ಲಗತ್ತಿಸಬೇಕಾದ ಅಡ್ಡಸಾಲಿನ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:712
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "ಚಲನಾ (ಸ್ಕ್ರಾಲ್) ಬಾಣದ ಗಾತ್ರವನ್ನು ಕಡಿಮೆ ಮಾಡಲು ಅಗತ್ಯವಿರುವ ಸ್ಥಿರಾಂಕ"
 
-#: gtk/gtkmenu.c:777
+#: gtk/gtkmenu.c:799
 msgid "Can change accelerators"
 msgstr "ವೇಗವರ್ಧಕಗಳನ್ನು ಬದಲಾಯಿಸಬಲ್ಲದು"
 
-#: gtk/gtkmenu.c:778
+#: gtk/gtkmenu.c:800
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "ಮೆನು ಅಂಶಗಳ ಮೇಲೆ ಒಂದು ಕೀಲಿಯನ್ನು ಒತ್ತುವುದರಿಂದ ಮೆನು ವೇಗವರ್ಧಕಗಳು ಬದಲಾಗಬೇಕೆ"
 
-#: gtk/gtkmenu.c:783
+#: gtk/gtkmenu.c:805
 msgid "Delay before submenus appear"
 msgstr "ಉಪಮೆನು ಕಾಣಿಸುಕೊಳ್ಳುವ ಮೊದಲು ವಿಳಂಬಿಸು"
 
-#: gtk/gtkmenu.c:784
+#: gtk/gtkmenu.c:806
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "ಉಪಮೆನು ಕಾಣಿಸುವ ಮೊದಲು ಸೂಚಕವು ಮೆನು ಅಂಶದ ಮೇಲೆ ಇರಬೇಕಿರುವ ಕನಿಷ್ಟ ಸಮಯ"
 
-#: gtk/gtkmenu.c:791
+#: gtk/gtkmenu.c:813
 msgid "Delay before hiding a submenu"
 msgstr "ಒಂದು ಉಪಪರಿವಿಡಿ(submenu) ಅನ್ನು ಅಡಗಿಸುವ ಮೊದಲು ವಿಳಂಬ"
 
-#: gtk/gtkmenu.c:792
+#: gtk/gtkmenu.c:814
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3479,42 +3491,42 @@ msgstr "ಬೀಳಿಕೆ ಮೆನುವು ಕಾಣಿಸುವ ಮುಂಚ
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "ಒಂದು ಮೆನುವಿನ ಉಪಮೆನುವು ಕಾಣಿಸುವ ಮುಂಚಿನ ವಿಳಂಬ"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "ಬಲಕ್ಕೆ ಹೊಂದಿಸಲಾದ"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "ಮೆನುವಿನಲ್ಲಿನ ಅಂಶವು ಮೆನು ಪಟ್ಟಿಯ ಬಲಭಾಗಕ್ಕೆ ಹೊಂದಿಸದಂತೆ ಕಾಣಿಸಬೇಕೆ ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "ಉಪಪರಿವಿಡಿ"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "ಮೆನು ಅಂಶಕ್ಕೆ ಲಗತ್ತಿಸಲಾದ ಉಪಮೆನು, ಅಥವ ಯಾವುದನ್ನೂ ಹೊಂದಿರದೆ ಇದ್ದಲ್ಲಿ NULL ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "ಮೆನು ಅಂಶದ ವೇಗವರ್ಧಕ ಮಾರ್ಗವನ್ನು ಹೊಂದಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "ಚೈಲ್ಡ್‍  ಲೇಬಲ್‌ನ ಪಠ್ಯ"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "ಮೆನು ಅಂಶದ ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಬಾಣದಿಂದ ಬಳಸಲಾದ ಜಾಗ"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "ಮೆನು ಅಂಶಗಳ ಇಚ್ಛೆಯ ಕನಿಷ್ಟ ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 
@@ -3625,23 +3637,23 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ವಿಜೆಟ್‌ನ ಮೇಲೆ ಹಾಗು ಕೆಳಭಾಗದಲ್ಲಿ ಸೇರಿಸಬೇಕಿರುವ ಪಠ್ಯದ ಪ್ರಮಾಣ, ಪಿಕ್ಸೆಲ್‌ಗಳಲ್ಲಿ"
 
-#: gtk/gtkmountoperation.c:139
+#: gtk/gtkmountoperation.c:160
 msgid "Parent"
 msgstr "ಮೂಲ"
 
-#: gtk/gtkmountoperation.c:140
+#: gtk/gtkmountoperation.c:161
 msgid "The parent window"
 msgstr "ಮೂಲ ವಿಂಡೋ"
 
-#: gtk/gtkmountoperation.c:147
+#: gtk/gtkmountoperation.c:168
 msgid "Is Showing"
 msgstr "ತೋರಿಸಲಾಗುತ್ತಿದೆಯೆ"
 
-#: gtk/gtkmountoperation.c:148
+#: gtk/gtkmountoperation.c:169
 msgid "Are we showing a dialog"
 msgstr "ನಾವು ಒಂದು ಸಂವಾದವನ್ನು ತೋರಿಸುತ್ತಿದ್ದೇವೆಯೆ"
 
-#: gtk/gtkmountoperation.c:156
+#: gtk/gtkmountoperation.c:177
 msgid "The screen where this window will be displayed."
 msgstr "ಈ ವಿಂಡೋವನ್ನು ತೋರಿಸಲಾಗುವ ತೆರೆ."
 
@@ -3933,7 +3945,7 @@ msgstr "ಕುಗ್ಗಿಸು"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "TRUE ಆದಲ್ಲಿ, ಚೈಲ್ಡನ್ನು ಅದು ಮನವಿ ಸಲ್ಲಿಸದಾದುಕ್ಕಿಂತ ಸಣ್ಣದಾಗಿಸಬಹುದು"
 
-#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:309
+#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:312
 msgid "Embedded"
 msgstr "ಹುದುಗಿಸಲ್ಪಟ್ಟ (ಎಂಬೆಡೆಡ್)"
 
@@ -4062,11 +4074,11 @@ msgstr "ಸಂಯೋಜನೆಗಳು"
 msgid "Printer settings"
 msgstr "ಮುದ್ರಕದ ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:258
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:266
 msgid "Page Setup"
 msgstr "ಪುಟದ ಸಂಯೋಜನೆ"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1053
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1056
 msgid "Track Print Status"
 msgstr "ಮುದ್ರಣದ ಸ್ಥಿತಿಯ ಜಾಡು"
 
@@ -4078,51 +4090,51 @@ msgstr ""
 "ಮುದ್ರಣ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಕಕ್ಕೆ ಅಥವ ಮುದ್ರಕ ಪರಿಚಾರಕಕ್ಕೆ ಕಳುಹಿಸಿದ ನಂತರ ಮುದ್ರಣ ಕಾರ್ಯವು "
 "ಸ್ಥಿತಿ-ಬದಲಾವಣೆಗೊಂಡ ಸೂಚನೆಗಳನ್ನು ನೀಡುವುದನ್ನು ಮುಂದುವರೆಸುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:925
+#: gtk/gtkprintoperation.c:928
 msgid "Default Page Setup"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತ ಪುಟ ಸಂಯೋಜನೆ"
 
-#: gtk/gtkprintoperation.c:926
+#: gtk/gtkprintoperation.c:929
 msgid "The GtkPageSetup used by default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಬಳಸಲಾಗುವ GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:944 gtk/gtkprintunixdialog.c:276
+#: gtk/gtkprintoperation.c:947 gtk/gtkprintunixdialog.c:284
 msgid "Print Settings"
 msgstr "ಮುದ್ರಣ ಸಂಯೋಜನೆಗಳು"
 
-#: gtk/gtkprintoperation.c:945 gtk/gtkprintunixdialog.c:277
+#: gtk/gtkprintoperation.c:948 gtk/gtkprintunixdialog.c:285
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ಸಂವಾದವನ್ನು ಆರಂಭಿಸಲು ಬಳಸಲಾಗುವ GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:963
+#: gtk/gtkprintoperation.c:966
 msgid "Job Name"
 msgstr "ಕೆಲಸದ ಹೆಸರು"
 
-#: gtk/gtkprintoperation.c:964
+#: gtk/gtkprintoperation.c:967
 msgid "A string used for identifying the print job."
 msgstr "ಮುದ್ರಣದ ಕೆಲಸವನ್ನು ಗುರುತಿಸಲು ಬಳಸಲಾಗುವ ಒಂದು ವಾಕ್ಯ."
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:991
 msgid "Number of Pages"
 msgstr "ಪುಟಗಳ ಸಂಖ್ಯೆ"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:992
 msgid "The number of pages in the document."
 msgstr "ದಸ್ತಾವೇಜಿನಲ್ಲಿರುವ ಪುಟಗಳ ಸಂಖ್ಯೆ."
 
-#: gtk/gtkprintoperation.c:1010 gtk/gtkprintunixdialog.c:266
+#: gtk/gtkprintoperation.c:1013 gtk/gtkprintunixdialog.c:274
 msgid "Current Page"
 msgstr "ಪ್ರಸ್ತುತ ಪುಟ"
 
-#: gtk/gtkprintoperation.c:1011 gtk/gtkprintunixdialog.c:267
+#: gtk/gtkprintoperation.c:1014 gtk/gtkprintunixdialog.c:275
 msgid "The current page in the document"
 msgstr "ದಸ್ತಾವೇಜಿನ ಪ್ರಸ್ತುತ ಪುಟ"
 
-#: gtk/gtkprintoperation.c:1032
+#: gtk/gtkprintoperation.c:1035
 msgid "Use full page"
 msgstr "ಸಂಪೂರ್ಣ ಪುಟವನ್ನು ಬಳಸು"
 
-#: gtk/gtkprintoperation.c:1033
+#: gtk/gtkprintoperation.c:1036
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4130,7 +4142,7 @@ msgstr ""
 "ಸನ್ನಿವೇಶದ ಮೂಲವು ಪುಟದ ತುದಿಯಲ್ಲಿ ಇರಬೇಕಿದ್ದಲ್ಲಿ ಹಾಗು ಬಿಂಬಿಸಬಹುದಾದ ಕ್ಷೇತ್ರದಲ್ಲಿ ಇರದೆ "
 "ಇದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkprintoperation.c:1054
+#: gtk/gtkprintoperation.c:1057
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4138,69 +4150,105 @@ msgstr ""
 "ಮುದ್ರಣ ಮಾಹಿತಿಯನ್ನು ಮುದ್ರಕಕ್ಕೆ ಅಥವ ಮುದ್ರಕ ಪರಿಚಾರಕಕ್ಕೆ ಕಳುಹಿಸಿದ ನಂತರ ಮುದ್ರಣ ಕಾರ್ಯವು "
 "ಸ್ಥಿತಿ-ಬದಲಾವಣೆಗೊಂಡ ಸೂಚನೆಗಳನ್ನು ನೀಡುವುದನ್ನು ಮುಂದುವರೆಸುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1071
+#: gtk/gtkprintoperation.c:1074
 msgid "Unit"
 msgstr "ಘಟಕ"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1075
 msgid "The unit in which distances can be measured in the context"
 msgstr "ಸನ್ನಿವೇಶದಲ್ಲಿ ದೂರವನ್ನು ಅಳೆಯಲು ಬಳಕೆಯಾಗುವ ಘಟಕ"
 
-#: gtk/gtkprintoperation.c:1089
+#: gtk/gtkprintoperation.c:1092
 msgid "Show Dialog"
 msgstr "ಸಂವಾದವನ್ನು ತೋರಿಸು"
 
-#: gtk/gtkprintoperation.c:1090
+#: gtk/gtkprintoperation.c:1093
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "ಮುದ್ರಿಸುವಾಗ ಒಂದು ಪ್ರಗತಿ ಸಂವಾದವನ್ನು ತೋರಿಸಲಾಗುತ್ತಿದ್ದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1113
+#: gtk/gtkprintoperation.c:1116
 msgid "Allow Async"
 msgstr "Async ಅನ್ನು ಸಮ್ಮತಿಸು"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1117
 msgid "TRUE if print process may run asynchronous."
 msgstr "ಮುದ್ರಣ ಪ್ರಕ್ರಿಯೆಯು ಏಕರೀತಿಯಲ್ಲಿರದೆ ಹೋದಲ್ಲಿ TRUE ಆಗಿರುತ್ತದೆ."
 
-#: gtk/gtkprintoperation.c:1136 gtk/gtkprintoperation.c:1137
+#: gtk/gtkprintoperation.c:1139 gtk/gtkprintoperation.c:1140
 msgid "Export filename"
 msgstr "ಕಡತದ ಹೆಸರುಗಳನ್ನು ರಫ್ತು ಮಾಡು"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1154
 msgid "Status"
 msgstr "ಸ್ಥಿತಿ"
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1155
 msgid "The status of the print operation"
 msgstr "ಮುದ್ರಣ ಕಾರ್ಯದ ಸ್ಥಿತಿಗತಿ"
 
-#: gtk/gtkprintoperation.c:1172
+#: gtk/gtkprintoperation.c:1175
 msgid "Status String"
 msgstr "ಸ್ಥಿತಿಗತಿಯ ವಾಕ್ಯ"
 
-#: gtk/gtkprintoperation.c:1173
+#: gtk/gtkprintoperation.c:1176
 msgid "A human-readable description of the status"
 msgstr "ಮಾನವ ಓದಬಹುದಾದ ಸ್ಥಿತಿಗತಿಯ ವಿವರಣೆ"
 
-#: gtk/gtkprintoperation.c:1191
+#: gtk/gtkprintoperation.c:1194
 msgid "Custom tab label"
 msgstr "ಇಚ್ಛೆಯ ಟ್ಯಾಬ್ ಲೇಬಲ್"
 
-#: gtk/gtkprintoperation.c:1192
+#: gtk/gtkprintoperation.c:1195
 msgid "Label for the tab containing custom widgets."
 msgstr "ಇಚ್ಛೆಯ ವಿಜೆಟ್‌ಗಳನ್ನು ಒಳಗೊಂಡಿರುವ ಟ್ಯಾಬ್‌ಗಾಗಿನ ಲೇಬಲ್."
 
-#: gtk/gtkprintunixdialog.c:259
+#: gtk/gtkprintoperation.c:1210 gtk/gtkprintunixdialog.c:309
+#, fuzzy
+msgid "Support Selection"
+msgstr "ಬಣ್ಣದ ಆಯ್ಕೆ"
+
+#: gtk/gtkprintoperation.c:1211
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1227 gtk/gtkprintunixdialog.c:317
+#, fuzzy
+msgid "Has Selection"
+msgstr "ಆಯ್ಕೆಯನ್ನು ಹೊಂದಿದೆ"
+
+#: gtk/gtkprintoperation.c:1228
+msgid "TRUE if a selecion exists."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:267
 msgid "The GtkPageSetup to use"
 msgstr "ಬಳಕೆಗಾಗಿನ GtkPageSetup"
 
-#: gtk/gtkprintunixdialog.c:284
+#: gtk/gtkprintunixdialog.c:292
 msgid "Selected Printer"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ ಮುದ್ರಕ"
 
-#: gtk/gtkprintunixdialog.c:285
+#: gtk/gtkprintunixdialog.c:293
 msgid "The GtkPrinter which is selected"
 msgstr "ಆರಿಸಲ್ಪಟ್ಟ GtkPrinter"
+
+#: gtk/gtkprintunixdialog.c:300
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:301
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:310
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯಲ್ಲಿ ಲೇಬಲ್ ಅನ್ನು ಚಿತ್ರಿಸಬೇಕೆ"
+
+#: gtk/gtkprintunixdialog.c:318
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "ಈ ಕ್ರಿಯೆಯು ಶಕ್ತಗೊಂಡಿದೆಯೆ."
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -5383,57 +5431,62 @@ msgstr "ಸ್ಥಿತಿ ಪಟ್ಟಿಕೆಯು ಮೇಲಿನ ಮಟ್
 msgid "Style of bevel around the statusbar text"
 msgstr "ಸ್ಥಿತಿಪಟ್ಟಿಕೆಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
-#: gtk/gtkstatusicon.c:268
+#: gtk/gtkstatusicon.c:271
 msgid "The size of the icon"
 msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
-#: gtk/gtkstatusicon.c:278
+#: gtk/gtkstatusicon.c:281
 msgid "The screen where this status icon will be displayed"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯನ್ನು ತೋರಿಸಲಾಗುವ ತೆರೆ"
 
-#: gtk/gtkstatusicon.c:285
+#: gtk/gtkstatusicon.c:288
 msgid "Blinking"
 msgstr "ಮಿಣುಕುವಿಕೆ"
 
-#: gtk/gtkstatusicon.c:286
+#: gtk/gtkstatusicon.c:289
 msgid "Whether or not the status icon is blinking"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯು ಮಿನುಗುತ್ತಿರಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
-#: gtk/gtkstatusicon.c:294
+#: gtk/gtkstatusicon.c:297
 msgid "Whether or not the status icon is visible"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯು ಕಾಣಿಸಿಕೊಳ್ಳಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
-#: gtk/gtkstatusicon.c:310
+#: gtk/gtkstatusicon.c:313
 msgid "Whether or not the status icon is embedded"
 msgstr "ಸ್ಥಿತಿ ಚಿಹ್ನೆಯನ್ನು ಹುದುಗಿಸಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
-#: gtk/gtkstatusicon.c:326 gtk/gtktrayicon-x11.c:111
+#: gtk/gtkstatusicon.c:329 gtk/gtktrayicon-x11.c:111
 msgid "The orientation of the tray"
 msgstr "ಟ್ರೇಯ ವಾಲಿಕೆ"
 
-#: gtk/gtkstatusicon.c:353 gtk/gtkwidget.c:632
+#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:633
 msgid "Has tooltip"
 msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ಹೊಂದಿದೆ"
 
-#: gtk/gtkstatusicon.c:354
+#: gtk/gtkstatusicon.c:357
 msgid "Whether this tray icon has a tooltip"
 msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಯು ಒಂದು ಟೂಲ್‌ಟಿಪ್ ಚಿಹ್ನೆಯನ್ನು ಹೊಂದಿದೆಯೆ"
 
-#: gtk/gtkstatusicon.c:375 gtk/gtkwidget.c:653
+#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:654
 msgid "Tooltip Text"
 msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳ ಪಠ್ಯ"
 
-#: gtk/gtkstatusicon.c:376 gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
 msgid "The contents of the tooltip for this widget"
 msgstr "ಈ ವಿಜೆಟ್‌ಗಾಗಿನ ಒಳವಿಷಯಗಳ ಉಪಕರಣ-ಸುಳಿವು"
 
-#: gtk/gtkstatusicon.c:399 gtk/gtkwidget.c:674
+#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:675
 msgid "Tooltip markup"
 msgstr "ಉಪಕರಣ-ಸುಳಿವು ಗುರುತು"
 
-#: gtk/gtkstatusicon.c:400
+#: gtk/gtkstatusicon.c:403
 msgid "The contents of the tooltip for this tray icon"
 msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಗಾಗಿನ ಉಪಕರಣ-ಸುಳಿವಿನ ಅಂಶ"
+
+#: gtk/gtkstatusicon.c:421
+#, fuzzy
+msgid "The title of this tray icon"
+msgstr "ಚಿಹ್ನೆಯ ಗಾತ್ರ"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6540,38 +6593,38 @@ msgstr ""
 "ನೋಟಸಂಪರ್ಕಸ್ಥಾನದ ಸುತ್ತಲಿನ ನೆರಳನ್ನು ಹೊಂದಿರುವ ಚೌಕವನ್ನು ಹೇಗೆ ಚಿತ್ರಿಸಬೇಕು ಎಂದು "
 "ನಿರ್ಧರಿಸುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:484
 msgid "Widget name"
 msgstr "ಸಂಪರ್ಕ ತಟದ(Widget ) ಹೆಸರು"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "The name of the widget"
 msgstr "ಸಂಪರ್ಕ ತಟದ ಹೆಸರು"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:491
 msgid "Parent widget"
 msgstr "ಮೂಲ ಸಂಪರ್ಕ ತಟ (Parent widget)"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "ಈ ವಿಜೆಟ್‌ನ ಮೂಲ ಸಂಪರ್ಕ ತಟ. ಒಂದು Container ಸಂಪರ್ಕತಟವಾಗಿರಬೇಕು"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:499
 msgid "Width request"
 msgstr "ಅಗಲದ ಮನವಿ"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "ವಿಜೆಟ್‌ನ ಅಗಲದ ಮನವಿಗಾಗಿನ ಅತಿಕ್ರಮಣ, ಅಥವ ನೈಸರ್ಗಿಕ ಮನವಿಯನ್ನು ಬಳಸಬೇಕಿದ್ದಲ್ಲಿ -1 ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:508
 msgid "Height request"
 msgstr "ಎತ್ತರದ ಮನವಿ"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -6579,173 +6632,173 @@ msgstr ""
 "ವಿಜೆಟ್‌ನ ಎತ್ತರದ ಮನವಿಗಾಗಿನ ಅತಿಕ್ರಮಣ, ಅಥವ ನೈಸರ್ಗಿಕ ಮನವಿಯನ್ನು ಬಳಸಬೇಕಿದ್ದಲ್ಲಿ -1 "
 "ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:518
 msgid "Whether the widget is visible"
 msgstr "ಸಂಪರ್ಕತಟವು ಗೋಚರಿಸುತ್ತದೆಯೆ"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Whether the widget responds to input"
 msgstr "ಸಂಪರ್ಕತಟವು ಪ್ರದಾನಕ್ಕೆ(input) ಪ್ರತಿಕ್ರಿಯಿಸಬಲ್ಲದೆ"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:531
 msgid "Application paintable"
 msgstr "ಅನ್ವಯಕ್ಕೆ ಬಣ್ಣಹಚ್ಚಬಹುದು"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Whether the application will paint directly on the widget"
 msgstr "ಅನ್ವಯವು ನೇರವಾಗು ವಿಜೆಟ್‌ಗೆ ಬಣ್ಣ ಬಳಿಯ ಬಲ್ಲದೆ"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:538
 msgid "Can focus"
 msgstr "ಗಮನ ಹೊಂದಬಲ್ಲದು"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Whether the widget can accept the input focus"
 msgstr "ವಿಜೆಟ್ ಇನ್‌ಪುಟ್ ಗಮನವನ್ನು ಅಂಗೀಕರಿಸುವುದೆ"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:545
 msgid "Has focus"
 msgstr "ಗಮನವನ್ನು ಹೊಂದಿದೆ"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Whether the widget has the input focus"
 msgstr "ವಿಜೆಟ್‌ ಇನ್‌ಪುಟ್‌ ಗಮನವನ್ನು ಹೊಂದಿದೆಯೆ"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:552
 msgid "Is focus"
 msgstr "ಗಮನದಲ್ಲಿದೆ"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "ವಿಜೆಟ್‌ ಮೇಲ್ಮಟ್ಟದ ಒಳಗೆಯೆ ಗಮನದ ವಿಜೆಟ್‌ ಆಗಿದೆಯೆ"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:559
 msgid "Can default"
 msgstr "ಪೂರ್ವನಿಯೋಜನೆಯಾಗಬಲ್ಲ"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Whether the widget can be the default widget"
 msgstr "ಸಂಪರ್ಕತಟವು ಪೂರ್ವನಿಯೋಜಿತ ಸಂಪರ್ಕತಟವಾಗಬಲ್ಲದೆ"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:566
 msgid "Has default"
 msgstr "ಪೂರ್ವನಿಯೋಜನೆಗಳನ್ನು ಹೊಂದಿದೆ"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Whether the widget is the default widget"
 msgstr "ಸಂಪರ್ಕತಟವು ಪೂರ್ವನಿಯೋಜಿತ ಸಂಪರ್ಕತಟವೆ"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:573
 msgid "Receives default"
 msgstr "ಪೂರ್ವನಿಯೋಜಿತವನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "TRUE ಆಗಿದ್ದಲ್ಲಿ, ಸಂಪರ್ಕತಟಕ್ಕೆ ಗಮನವನ್ನು ಕೇಂದ್ರೀಕರಿಸಿದಾಗ ಪೂರ್ವನಿಯೋಜಿತ ಕ್ರಿಯೆಯನ್ನು "
 "ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:580
 msgid "Composite child"
 msgstr "ಮಿಶ್ರಿತ ಚೈಲ್ಡ್‍"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Whether the widget is part of a composite widget"
 msgstr "ಸಂಪರ್ಕತಟವು ಒಂದು ಸಂಕೀರ್ಣ ವಿಜೆಟ್‌ನ ಒಂದು ಭಾಗವೆ"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:587
 msgid "Style"
 msgstr "ಶೈಲಿ"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 "ವಿಜೆಟ್‌ನ ಶೈಲಿ, ಅದು ಹೇಗೆ ಕಾಣಿಸುತ್ತದೆ (ಬಣ್ಣ ಇತ್ಯಾದಿ) ಎನ್ನುವ ಮಾಹಿತಿಯನ್ನು ಹೊಂದಿರುತ್ತದೆ"
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:594
 msgid "Events"
 msgstr "ಘಟನೆಗಳು"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "ಈ ವಿಜೆಟ್‌ ಯಾವ ಬಗೆಯ GdkEvents ಅನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ ಎಂದು ನಿರ್ಧರಿಸುವ ಘಟನೆ ಮುಸಕು"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:602
 msgid "Extension events"
 msgstr "ವಿಸ್ತರಣೆಯ ಘಟನೆಗಳು"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "ಈ ವಿಜೆಟ್‌ ಯಾವ ಬಗೆಯ ವಿಸ್ತರಣೆ ಘಟನೆಯನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ ಎಂದು ನಿರ್ಧರಿಸುವ ಮುಸಕು"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:610
 msgid "No show all"
 msgstr "ಏನನ್ನೂ ತೋರಿಸಬೇಡ"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() ಯು ಈ ವಿಜೆಟ್‌ನ ಮೇಲೆ ಯಾವುದೆ ಪರಿಣಾಮ ಬೀರಬಾರದೆ"
 
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:634
 msgid "Whether this widget has a tooltip"
 msgstr "ಈ ವಿಜೆಟ್‌ ಒಂದು ಸಲಕರಣೆ ಸುಳಿವನ್ನು ಹೊಂದಿದೆಯೆ"
 
-#: gtk/gtkwidget.c:689
+#: gtk/gtkwidget.c:690
 msgid "Window"
 msgstr "ವಿಂಡೊ"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "The widget's window if it is realized"
 msgstr "ವಾಸ್ತವಗೊಳಿಸಿದಲ್ಲಿನ ವಿಜೆಟ್‌ನ ವಿಂಡೋ"
 
-#: gtk/gtkwidget.c:2212
+#: gtk/gtkwidget.c:2213
 msgid "Interior Focus"
 msgstr "ಆಂತರಿಕ ಗಮನ"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:2214
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ವಿಜೆಟ್‌ನ ಒಳಗೆ ಗಮನ ಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಬೇಕೆ"
 
-#: gtk/gtkwidget.c:2219
+#: gtk/gtkwidget.c:2220
 msgid "Focus linewidth"
 msgstr "ಗಮನದ ಸಾಲಿನ ಅಗಲ"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2221
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "ಗಮನ ಸೂಚಕ ಸಾಲಿನ ಅಗಲ, ಪಿಕ್ಸುಲ್ಲುಗಳಲ್ಲಿ"
 
-#: gtk/gtkwidget.c:2226
+#: gtk/gtkwidget.c:2227
 msgid "Focus line dash pattern"
 msgstr "ಗಮನ ಸಾಲಿನ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2228
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ಗಮನ ಸೂಚಕವನ್ನು ಬರೆಯಲು ಬಳಸಲಾಗುವ ಡ್ಯಾಶ್ ವಿನ್ಯಾಸ"
 
-#: gtk/gtkwidget.c:2232
+#: gtk/gtkwidget.c:2233
 msgid "Focus padding"
 msgstr "ಗಮನ(ಫೋಕಸ್) ಪ್ಯಾಡಿಂಗ್"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2234
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "ಗಮನದ ಸೂಚಕ ಹಾಗು ವಿಜೆಟ್ ಚೌಕದ ನಡುವಿನ ಅಗಲ, ಪಿಕ್ಸೆಲ್ಲುಗಳಲ್ಲಿ"
 
-#: gtk/gtkwidget.c:2238
+#: gtk/gtkwidget.c:2239
 msgid "Cursor color"
 msgstr "ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2240
 msgid "Color with which to draw insertion cursor"
 msgstr "ಯಾವ ಬಣ್ಣದಲ್ಲಿ ತೆರೆಸೂಚಕವನ್ನು ಸೇರಿಸಬೇಕು"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2245
 msgid "Secondary cursor color"
 msgstr "ಎರಡನೆಯ ತೆರೆಸೂಚಕದ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2246
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6753,43 +6806,43 @@ msgstr ""
 "ಬಲದಿಂದ ಎಡಕ್ಕೆ ಹಾಗು ಎಡದಿಂದ ಬಲಕ್ಕೆ ಹೊಂದಿರುವ ಪಠ್ಯಗಳನ್ನು ಸಂಪಾದಿಸುವಾಗ ಎರಡನೆಯ "
 "ತೂರಿಸಲಾಗುವ ತೆರೆಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಬೇಕಿರುವ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2251
 msgid "Cursor line aspect ratio"
 msgstr "ತೆರೆಸೂಚಕ ಸಾಲಿನ ಆಕಾರ ಅನುಪಾತ"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2252
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "ತೂರಿಸುವ ತೆರೆಸೂಚಕವನ್ನು ಚಿತ್ರಿಸಲು ಬಳಸುವ ಆಕಾರ ಅನುಪಾತ"
 
-#: gtk/gtkwidget.c:2265
+#: gtk/gtkwidget.c:2266
 msgid "Draw Border"
 msgstr "ಅಂಚನ್ನು ಎಳೆ"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2267
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "ಚಿತ್ರಿಸಲು ನಿಯೋಜಿತವಾದ ವಿಜೆಟ್‌ನ ಹೊರಗಿನ ಜಾಗಗಳ ಗಾತ್ರ"
 
-#: gtk/gtkwidget.c:2279
+#: gtk/gtkwidget.c:2280
 msgid "Unvisited Link Color"
 msgstr "ಭೇಟಿ ನೀಡದೆ ಕೊಂಡಿಗಳ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2281
 msgid "Color of unvisited links"
 msgstr "ಭೇಟಿ ನೀಡದೆ ಹೋದ ಕೊಂಡಿಗಳ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2293
+#: gtk/gtkwidget.c:2294
 msgid "Visited Link Color"
 msgstr "ಭೇಟಿ ನೀಡಲಾದ ಕೊಂಡಿಗಳ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2295
 msgid "Color of visited links"
 msgstr "ಭೇಟಿ ನೀಡಲಾದ ಕೊಂಡಿಗಳ ಬಣ್ಣ"
 
-#: gtk/gtkwidget.c:2308
+#: gtk/gtkwidget.c:2309
 msgid "Wide Separators"
 msgstr "ಅಗಲ ವಿಭಜಕಗಳು"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2310
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6797,35 +6850,35 @@ msgstr ""
 "ವಿಭಜಕಗಳು ಸಂರಚಿಸಬಹುದಾದಂತಹ ಅಗಲವನ್ನು ಹೊಂದಿರಬೇಕೆ ಹಾಗು ರೇಖೆಯ ಬದಲಿಗೆ ಒಂದು ಚೌಕವನ್ನು "
 "ಬಳಸಿಕೊಂಡು ಚಿತ್ರಿಸಬೇಕೆ"
 
-#: gtk/gtkwidget.c:2323
+#: gtk/gtkwidget.c:2324
 msgid "Separator Width"
 msgstr "ವಿಭಜಕದ ಅಗಲ"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2325
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "ಅಗಲವಾದ ವಿಭಜಕವು TRUE ಆಗಿದ್ದಲ್ಲಿ ವಿಭಜಕದ ಅಗಲ"
 
-#: gtk/gtkwidget.c:2338
+#: gtk/gtkwidget.c:2339
 msgid "Separator Height"
 msgstr "ವಿಭಜಕದ ಉದ್ದ"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2340
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "\"wide-separators\" ಯು TRUE ಆದಲ್ಲಿ ವಿಭಜಕದ ಉದ್ದ"
 
-#: gtk/gtkwidget.c:2353
+#: gtk/gtkwidget.c:2354
 msgid "Horizontal Scroll Arrow Length"
 msgstr "ಸಮತಲ ಚಲನ ಬಾಣದ ಉದ್ದ"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2355
 msgid "The length of horizontal scroll arrows"
 msgstr "ಸಮತಲ ಚಲನ ಬಾಣಗಳ ಉದ್ದ"
 
-#: gtk/gtkwidget.c:2368
+#: gtk/gtkwidget.c:2369
 msgid "Vertical Scroll Arrow Length"
 msgstr "ಲಂಬ ಚಲನ ಬಾಣದ ಉದ್ದ"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2370
 msgid "The length of vertical scroll arrows"
 msgstr "ಲಂಬ ಚಲನ ಬಾಣಗಳ ಉದ್ದ"
 

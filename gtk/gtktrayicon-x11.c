@@ -441,7 +441,7 @@ gtk_tray_icon_send_manager_message (GtkTrayIcon *icon,
   gdk_error_trap_push ();
   XSendEvent (display,
 	      icon->priv->manager_window, False, NoEventMask, (XEvent *)&ev);
-  XSync (display, False);
+  gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (icon)));
   gdk_error_trap_pop ();
 }
 
@@ -646,11 +646,12 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 			     gint         len)
 {
   guint stamp;
-  
+  Display *xdisplay;
+ 
   g_return_val_if_fail (GTK_IS_TRAY_ICON (icon), 0);
   g_return_val_if_fail (timeout >= 0, 0);
   g_return_val_if_fail (message != NULL, 0);
-		     
+
   if (icon->priv->manager_window == None)
     return 0;
 
@@ -665,14 +666,12 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 				      timeout, len, stamp);
 
   /* Now to send the actual message */
+  xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
   gdk_error_trap_push ();
   while (len > 0)
     {
       XClientMessageEvent ev;
-      Display *xdisplay;
 
-      xdisplay = GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (icon)));
-      
       memset (&ev, 0, sizeof (ev));
       ev.type = ClientMessage;
       ev.window = (Window)gtk_plug_get_id (GTK_PLUG (icon));
@@ -692,11 +691,10 @@ _gtk_tray_icon_send_message (GtkTrayIcon *icon,
 	}
 
       XSendEvent (xdisplay,
-		  icon->priv->manager_window, False, 
+		  icon->priv->manager_window, False,
 		  StructureNotifyMask, (XEvent *)&ev);
-      XSync (xdisplay, False);
     }
-
+  gdk_display_sync (gtk_widget_get_display (GTK_WIDGET (icon)));
   gdk_error_trap_pop ();
 
   return stamp;

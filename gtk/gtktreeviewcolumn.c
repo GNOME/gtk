@@ -1540,18 +1540,10 @@ gtk_tree_view_column_clear (GtkTreeViewColumn *tree_column)
   gtk_cell_layout_clear (GTK_CELL_LAYOUT (tree_column));
 }
 
-/**
- * gtk_tree_view_column_get_cell_renderers:
- * @tree_column: A #GtkTreeViewColumn
- * 
- * Returns a newly-allocated #GList of all the cell renderers in the column, 
- * in no particular order.  The list must be freed with g_list_free().
- * 
- * Return value: A list of #GtkCellRenderers
- **/
-GList *
-gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
+static GList *
+gtk_tree_view_column_cell_layout_get_cells (GtkCellLayout *layout)
 {
+  GtkTreeViewColumn *tree_column = GTK_TREE_VIEW_COLUMN (layout);
   GList *retval = NULL, *list;
 
   g_return_val_if_fail (tree_column != NULL, NULL);
@@ -1566,10 +1558,21 @@ gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
   return retval;
 }
 
-static GList *
-gtk_tree_view_column_cell_layout_get_cells (GtkCellLayout *layout)
+/**
+ * gtk_tree_view_column_get_cell_renderers:
+ * @tree_column: A #GtkTreeViewColumn
+ *
+ * Returns a newly-allocated #GList of all the cell renderers in the column,
+ * in no particular order.  The list must be freed with g_list_free().
+ *
+ * Return value: A list of #GtkCellRenderers
+ *
+ * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
+ **/
+GList *
+gtk_tree_view_column_get_cell_renderers (GtkTreeViewColumn *tree_column)
 {
-  return gtk_tree_view_column_get_cell_renderers (GTK_TREE_VIEW_COLUMN (layout));
+  return gtk_tree_view_column_cell_layout_get_cells (GTK_CELL_LAYOUT (tree_column));
 }
 
 /**

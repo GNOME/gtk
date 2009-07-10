@@ -23,68 +23,16 @@
 #include "gdkprivate-quartz.h"
 
 void
-_gdk_quartz_window_scroll (GdkWindow *window,
-                           gint       dx,
-                           gint       dy)
+_gdk_quartz_window_queue_translation (GdkWindow *window,
+                                      GdkRegion *area,
+                                      gint       dx,
+                                      gint       dy)
 {
-  NSRect visible_nsrect;
-  GdkRectangle visible_rect, scrolled_rect;
-  GdkRegion *visible_region, *scrolled_region;
-  GdkRectangle *rects;
-  gint n_rects, i;
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  GList *list;
-
-  /* Move the current invalid region */
-  if (private->update_area)
-    gdk_region_offset (private->update_area, dx, dy);
-
-  visible_nsrect = [impl->view visibleRect];
-
-  visible_rect.x = visible_nsrect.origin.x;
-  visible_rect.y = visible_nsrect.origin.y;
-  visible_rect.width = visible_nsrect.size.width;
-  visible_rect.height = visible_nsrect.size.height;
-  
-  scrolled_rect = visible_rect;
-  scrolled_rect.x += dx;
-  scrolled_rect.y += dy;
-  
-  gdk_rectangle_intersect (&visible_rect, &scrolled_rect, &scrolled_rect);
-  
-  visible_region = gdk_region_rectangle (&visible_rect);
-  scrolled_region = gdk_region_rectangle (&scrolled_rect);
-
-  gdk_region_subtract (visible_region, scrolled_region);
-
-  [impl->view scrollRect:[impl->view bounds] by:NSMakeSize(dx, dy)];
-
-  gdk_region_get_rectangles (visible_region, &rects, &n_rects);
-  for (i = 0; i < n_rects; i++)
-    [impl->view setNeedsDisplayInRect:NSMakeRect (rects[i].x, rects[i].y, rects[i].width, rects[i].height)];
-  
-  g_free (rects);
-
-  gdk_region_destroy (visible_region);
-  gdk_region_destroy (scrolled_region);
-
-  /* Move child windows */
-  for (list = private->children; list; list = list->next)
-    {
-      GdkWindowObject *child = GDK_WINDOW_OBJECT (list->data);
-
-      gdk_window_move (list->data,
-		       child->x + dx,
-		       child->y + dy);
-    }
 }
 
-void
-_gdk_quartz_window_move_region (GdkWindow       *window,
-                                const GdkRegion *region,
-                                gint             dx,
-                                gint             dy)
+gboolean
+_gdk_quartz_window_queue_antiexpose (GdkWindow *window,
+                                     GdkRegion *area)
 {
-  /* FIXME: Implement */
+  return FALSE;
 }

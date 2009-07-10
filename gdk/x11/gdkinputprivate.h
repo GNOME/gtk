@@ -41,7 +41,6 @@
 
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-typedef struct _GdkInputWindow GdkInputWindow;
 
 /* information about a device axis */
 struct _GdkAxisInfo
@@ -97,32 +96,31 @@ struct _GdkDevicePrivate
 #endif /* !XINPUT_NONE */
 };
 
+#if 0
 struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 };
+#endif
+
+/* Addition used for extension_events mask */
+#define GDK_ALL_DEVICES_MASK (1<<30)
 
 struct _GdkInputWindow
 {
-  /* gdk window */
-  GdkWindow *window;
+  GList *windows; /* GdkWindow:s with extension_events set */
 
-  /* Extension mode (GDK_EXTENSION_EVENTS_ALL/CURSOR) */
-  GdkExtensionMode mode;
+  /* gdk window */
+  GdkWindow *impl_window; /* an impl window */
+  GdkWindow *button_down_window;
 
   /* position relative to root window */
   gint root_x;
   gint root_y;
 
-  /* rectangles relative to window of windows obscuring this one */
-  GdkRectangle *obscuring;
-  gint num_obscuring;
-
   /* Is there a pointer grab for this window ? */
   gint grabbed;
 };
-
-
 
 /* Global data */
 
@@ -139,18 +137,15 @@ void            _gdk_init_input_core         (GdkDisplay *display);
 /* The following functions are provided by each implementation
  * (xfree, gxi, and none)
  */
-gint             _gdk_input_enable_window     (GdkWindow        *window,
-					      GdkDevicePrivate *gdkdev);
-gint             _gdk_input_disable_window    (GdkWindow        *window,
-					      GdkDevicePrivate *gdkdev);
 void             _gdk_input_configure_event  (XConfigureEvent  *xevent,
 					      GdkWindow        *window);
-void             _gdk_input_enter_event      (XCrossingEvent   *xevent,
-					      GdkWindow        *window);
+void             _gdk_input_crossing_event   (GdkWindow        *window,
+					      gboolean          enter);
 gboolean         _gdk_input_other_event      (GdkEvent         *event,
 					      XEvent           *xevent,
 					      GdkWindow        *window);
 gint             _gdk_input_grab_pointer     (GdkWindow        *window,
+					      GdkWindow        *native_window,
 					      gint              owner_events,
 					      GdkEventMask      event_mask,
 					      GdkWindow        *confine_to,
@@ -172,22 +167,18 @@ gint               _gdk_input_common_init               (GdkDisplay	  *display,
 							 gint              include_core);
 GdkDevicePrivate * _gdk_input_find_device               (GdkDisplay	  *display,
 							 guint32           id);
-void               _gdk_input_get_root_relative_geometry(Display          *display,
-							 Window            w,
+void               _gdk_input_get_root_relative_geometry(GdkWindow        *window,
 							 int              *x_ret,
-							 int              *y_ret,
-							 int              *width_ret,
-							 int              *height_ret);
-void               _gdk_input_common_find_events        (GdkWindow        *window,
-							 GdkDevicePrivate *gdkdev,
+							 int              *y_ret);
+void               _gdk_input_common_find_events        (GdkDevicePrivate *gdkdev,
 							 gint              mask,
 							 XEventClass      *classes,
 							 int              *num_classes);
-void               _gdk_input_common_select_events      (GdkWindow        *window,
+void               _gdk_input_select_events             (GdkWindow        *impl_window,
 							 GdkDevicePrivate *gdkdev);
 gint               _gdk_input_common_other_event        (GdkEvent         *event,
 							 XEvent           *xevent,
-							 GdkInputWindow   *input_window,
+							 GdkWindow        *window,
 							 GdkDevicePrivate *gdkdev);
 
 #endif /* !XINPUT_NONE */

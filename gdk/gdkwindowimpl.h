@@ -44,11 +44,13 @@ struct _GdkWindowImplIface
   GTypeInterface g_iface;
 
   void         (* show)                 (GdkWindow       *window,
-                                         gboolean         raise);
+					 gboolean         already_mapped);
   void         (* hide)                 (GdkWindow       *window);
   void         (* withdraw)             (GdkWindow       *window);
   void         (* raise)                (GdkWindow       *window);
   void         (* lower)                (GdkWindow       *window);
+  void         (* restack_under)        (GdkWindow       *window,
+					 GList           *native_siblings);
 
   void         (* move_resize)          (GdkWindow       *window,
                                          gboolean         with_move,
@@ -56,25 +58,10 @@ struct _GdkWindowImplIface
                                          gint             y,
                                          gint             width,
                                          gint             height);
-  void         (* move_region)          (GdkWindow       *window,
-                                         const GdkRegion *region,
-                                         gint             dx,
-                                         gint             dy);
-  void         (* scroll)               (GdkWindow       *window,
-                                         gint             dx,
-                                         gint             dy);
-
-  void         (* clear_area)           (GdkWindow       *window,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height,
-                                         gboolean         send_expose);
   void         (* set_background)       (GdkWindow       *window,
                                          const GdkColor  *color);
   void         (* set_back_pixmap)      (GdkWindow       *window,
-                                         GdkPixmap       *pixmap,
-                                         gboolean         parent_relative);
+                                         GdkPixmap       *pixmap);
 
   GdkEventMask (* get_events)           (GdkWindow       *window);
   void         (* set_events)           (GdkWindow       *window,
@@ -84,6 +71,9 @@ struct _GdkWindowImplIface
                                          GdkWindow       *new_parent,
                                          gint             x,
                                          gint             y);
+  void         (* clear_region)         (GdkWindow       *window,
+					 GdkRegion       *region,
+					 gboolean         send_expose);
   
   void         (* set_cursor)           (GdkWindow       *window,
                                          GdkCursor       *cursor);
@@ -94,30 +84,86 @@ struct _GdkWindowImplIface
                                          gint            *width,
                                          gint            *height,
                                          gint            *depth);
-  gint         (* get_origin)           (GdkWindow       *window,
+  gint         (* get_root_coords)      (GdkWindow       *window,
+					 gint             x,
+					 gint             y,
+                                         gint            *root_x,
+                                         gint            *root_y);
+  gint         (* get_deskrelative_origin) (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);
-  void         (* get_offsets)          (GdkWindow       *window,
-                                         gint            *x_offset,
-                                         gint            *y_offset);
+  gboolean     (* get_pointer)          (GdkWindow       *window,
+                                         gint            *x,
+                                         gint            *y,
+					 GdkModifierType  *mask);
 
-  void         (* shape_combine_mask)   (GdkWindow       *window,
-                                         GdkBitmap       *mask,
-                                         gint             x,
-                                         gint             y);
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const GdkRegion *shape_region,
                                          gint             offset_x,
                                          gint             offset_y);
-  void         (* set_child_shapes)     (GdkWindow       *window);
-  void         (* merge_child_shapes)   (GdkWindow       *window);
+  void         (* input_shape_combine_region) (GdkWindow       *window,
+					       const GdkRegion *shape_region,
+					       gint             offset_x,
+					       gint             offset_y);
 
   gboolean     (* set_static_gravities) (GdkWindow       *window,
 				         gboolean         use_static);
+
+  /* Called before processing updates for a window. This gives the windowing
+   * layer a chance to save the region for later use in avoiding duplicate
+   * exposes. The return value indicates whether the function has a saved
+   * the region; if the result is TRUE, then the windowing layer is responsible
+   * for destroying the region later.
+   */
+  gboolean     (* queue_antiexpose)     (GdkWindow       *window,
+					 GdkRegion       *update_area);
+  void         (* queue_translation)    (GdkWindow       *window,
+					 GdkRegion       *area,
+					 gint            dx,
+					 gint            dy);
+
+/* Called to do the windowing system specific part of gdk_window_destroy(),
+ *
+ * window: The window being destroyed
+ * recursing: If TRUE, then this is being called because a parent
+ *            was destroyed. This generally means that the call to the windowing system
+ *            to destroy the window can be omitted, since it will be destroyed as a result
+ *            of the parent being destroyed. Unless @foreign_destroy
+ *            
+ * foreign_destroy: If TRUE, the window or a parent was destroyed by some external 
+ *            agency. The window has already been destroyed and no windowing
+ *            system calls should be made. (This may never happen for some
+ *            windowing systems.)
+ */
+  void         (* destroy)              (GdkWindow       *window,
+					 gboolean         recursing,
+					 gboolean         foreign_destroy);
+
+  void         (* input_window_destroy) (GdkWindow       *window);
+  void         (* input_window_crossing)(GdkWindow       *window,
+					 gboolean         enter);
 };
 
 /* Interface Functions */
 GType gdk_window_impl_get_type (void) G_GNUC_CONST;
+
+/* private definitions from gdkwindow.h */
+
+struct _GdkWindowRedirect
+{
+  GdkWindowObject *redirected;
+  GdkDrawable *pixmap;
+
+  gint src_x;
+  gint src_y;
+  gint dest_x;
+  gint dest_y;
+  gint width;
+  gint height;
+
+  GdkRegion *damage;
+  guint damage_idle;
+};
 
 G_END_DECLS
 

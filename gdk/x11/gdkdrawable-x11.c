@@ -93,7 +93,8 @@ static void gdk_x11_draw_drawable  (GdkDrawable    *drawable,
 				    gint            xdest,
 				    gint            ydest,
 				    gint            width,
-				    gint            height);
+				    gint            height,
+				    GdkDrawable    *original_src);
 static void gdk_x11_draw_points    (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPoint       *points,
@@ -159,7 +160,7 @@ _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_polygon = gdk_x11_draw_polygon;
   drawable_class->draw_text = gdk_x11_draw_text;
   drawable_class->draw_text_wc = gdk_x11_draw_text_wc;
-  drawable_class->draw_drawable = gdk_x11_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_x11_draw_drawable;
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
   drawable_class->draw_lines = gdk_x11_draw_lines;
@@ -387,9 +388,22 @@ gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
   else
     {
       XRenderPictureAttributes pa;
-      pa.clip_mask = None;
+      GdkBitmap *mask;
+      gulong pa_mask;
+
+      pa_mask = CPClipMask;
+      if (gc && (mask = _gdk_gc_get_clip_mask (gc)))
+	{
+	  pa.clip_mask = GDK_PIXMAP_XID (mask);
+	  pa.clip_x_origin = gc->clip_x_origin;
+	  pa.clip_y_origin = gc->clip_y_origin;
+	  pa_mask |= CPClipXOrigin | CPClipYOrigin;
+	}
+      else
+	pa.clip_mask = None;
+
       XRenderChangePicture (xdisplay, picture,
-			    CPClipMask, &pa);
+			    pa_mask, &pa);
     }
 }
 
@@ -623,7 +637,8 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 		       gint         xdest,
 		       gint         ydest,
 		       gint         width,
-		       gint         height)
+		       gint         height,
+		       GdkDrawable *original_src)
 {
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);
@@ -634,13 +649,50 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
 
   if (GDK_IS_DRAWABLE_IMPL_X11 (src))
     src_impl = GDK_DRAWABLE_IMPL_X11 (src);
+  else if (GDK_IS_WINDOW (src))
+    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)src)->impl);
   else
-    src_impl = NULL;
+    src_impl = GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)src)->impl);
+
+  if (GDK_IS_WINDOW_IMPL_X11 (impl) &&
+      GDK_IS_PIXMAP_IMPL_X11 (src_impl))
+    {
+      GdkPixmapImplX11 *src_pixmap = GDK_PIXMAP_IMPL_X11 (src_impl);
+      /* Work around an Xserver bug where non-visible areas from
+       * a pixmap to a window will clear the window background
+       * in destination areas that are supposed to be clipped out.
+       * This is a problem with client side windows as this means
+       * things may draw outside the virtual windows. This could
+       * also happen for window to window copies, but I don't
+       * think we generate any calls like that.
+       *
+       * See: 
+       * http://lists.freedesktop.org/archives/xorg/2009-February/043318.html
+       */
+      if (xsrc < 0)
+	{
+	  width += xsrc;
+	  xdest -= xsrc;
+	  xsrc = 0;
+	}
+      
+      if (ysrc < 0)
+	{
+	  height += ysrc;
+	  ydest -= ysrc;
+	  ysrc = 0;
+	}
+
+      if (xsrc + width > src_pixmap->width)
+	width = src_pixmap->width - xsrc;
+      if (ysrc + height > src_pixmap->height)
+	height = src_pixmap->height - ysrc;
+    }
   
   if (src_depth == 1)
     {
       XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
+                 src_impl->xid,
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
@@ -650,7 +702,7 @@ gdk_x11_draw_drawable (GdkDrawable *drawable,
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
       XCopyArea (GDK_SCREEN_XDISPLAY (impl->screen),
-                 src_impl ? src_impl->xid : GDK_DRAWABLE_XID (src),
+                 src_impl->xid,
 		 impl->xid,
 		 GDK_GC_GET_XGC (gc),
 		 xsrc, ysrc,
@@ -870,7 +922,29 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
   GdkDrawable *impl;
   
   if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkPixmapObject *)drawable)->impl;
+    {
+      GdkWindow *window = (GdkWindow *)drawable;
+      
+      /* Try to ensure the window has a native window */
+      if (!_gdk_window_has_impl (window))
+	{
+	  gdk_window_ensure_native (window);
+
+	  /* We sync here to ensure the window is created in the Xserver when
+	   * this function returns. This is required because the returned XID
+	   * for this window must be valid immediately, even with another
+	   * connection to the Xserver */
+	  gdk_display_sync (gdk_drawable_get_display (window));
+	}
+      
+      if (!GDK_WINDOW_IS_X11 (window))
+        {
+          g_warning (G_STRLOC " drawable is not a native X11 window");
+          return None;
+        }
+      
+      impl = ((GdkWindowObject *)drawable)->impl;
+    }
   else if (GDK_IS_PIXMAP (drawable))
     impl = ((GdkPixmapObject *)drawable)->impl;
   else
@@ -1447,6 +1521,45 @@ gdk_x11_cairo_surface_destroy (void *data)
   impl->cairo_surface = NULL;
 }
 
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+				       int width,
+				       int height)
+{
+  cairo_xlib_surface_set_size (surface, width, height);
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+				     int width,
+				     int height)
+{
+  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  GdkVisual *visual;
+    
+  visual = gdk_drawable_get_visual (drawable);
+  if (visual) 
+    return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
+				      impl->xid,
+				      GDK_VISUAL_XVISUAL (visual),
+				      width, height);
+  else if (gdk_drawable_get_depth (drawable) == 1)
+    return cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
+						    impl->xid,
+						    GDK_SCREEN_XSCREEN (impl->screen),
+						    width, height);
+  else
+    {
+      g_warning ("Using Cairo rendering requires the drawable argument to\n"
+		 "have a specified colormap. All windows have a colormap,\n"
+		 "however, pixmaps only have colormap by default if they\n"
+		 "were created with a non-NULL window argument. Otherwise\n"
+		 "a colormap must be set on them with gdk_drawable_set_colormap");
+      return NULL;
+    }
+  
+}
+
 static cairo_surface_t *
 gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 {
@@ -1458,35 +1571,15 @@ gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      GdkVisual *visual = NULL;
       int width, height;
   
-      visual = gdk_drawable_get_visual (drawable);
-
       gdk_drawable_get_size (drawable, &width, &height);
 
-      if (visual) 
-	impl->cairo_surface = cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
-							 impl->xid,
-							 GDK_VISUAL_XVISUAL (visual),
-							 width, height);
-      else if (gdk_drawable_get_depth (drawable) == 1)
-	impl->cairo_surface = cairo_xlib_surface_create_for_bitmap (GDK_SCREEN_XDISPLAY (impl->screen),
-								    impl->xid,
-								    GDK_SCREEN_XSCREEN (impl->screen),
-								    width, height);
-      else
-	{
-	  g_warning ("Using Cairo rendering requires the drawable argument to\n"
-		     "have a specified colormap. All windows have a colormap,\n"
-		     "however, pixmaps only have colormap by default if they\n"
-		     "were created with a non-NULL window argument. Otherwise\n"
-		     "a colormap must be set on them with gdk_drawable_set_colormap");
-	  return NULL;
-	}
-
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				   drawable, gdk_x11_cairo_surface_destroy);
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, width, height);
+      
+      if (impl->cairo_surface)
+	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				     drawable, gdk_x11_cairo_surface_destroy);
     }
   else
     cairo_surface_reference (impl->cairo_surface);

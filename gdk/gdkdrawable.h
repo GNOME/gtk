@@ -200,10 +200,27 @@ struct _GdkDrawableClass
 
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
+  GdkDrawable *(*get_source_drawable) (GdkDrawable *drawable);
+
+  void         (*set_cairo_clip)      (GdkDrawable *drawable,
+				       cairo_t *cr);
+
+  cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
+					     int width,
+					     int height);
+
+  void (*draw_drawable_with_src)  (GdkDrawable  *drawable,
+				   GdkGC	       *gc,
+				   GdkDrawable  *src,
+				   gint		xsrc,
+				   gint		ysrc,
+				   gint		xdest,
+				   gint		ydest,
+				   gint		width,
+				   gint		height,
+				   GdkDrawable  *original_src);
+
   /* Padding for future expansion */
-  void         (*_gdk_reserved4)  (void);
-  void         (*_gdk_reserved5)  (void);
-  void         (*_gdk_reserved6)  (void);
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
   void         (*_gdk_reserved10) (void);
@@ -212,7 +229,6 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved13) (void);
   void         (*_gdk_reserved14) (void);
   void         (*_gdk_reserved15) (void);
-  void         (*_gdk_reserved16) (void);
 };
 
 struct _GdkTrapezoid

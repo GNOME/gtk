@@ -31,6 +31,7 @@
 
 #include <glib.h>
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkeventsource.h"
@@ -329,7 +330,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   GdkScreenX11 *screen_x11 = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-  gint xoffset = 0, yoffset = 0;
   gboolean return_val;
   Window xwindow = None;
 
@@ -424,9 +424,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 
   return_val = TRUE;
 
-  if (window)
-    _gdk_x11_window_get_offsets (window, &xoffset, &yoffset);
-
   switch (xevent->type)
     {
     case KeymapNotify:
@@ -454,8 +451,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       {
 	GdkRectangle expose_rect;
 
-	expose_rect.x = xevent->xexpose.x + xoffset;
-	expose_rect.y = xevent->xexpose.y + yoffset;
+	expose_rect.x = xevent->xexpose.x;
+	expose_rect.y = xevent->xexpose.y;
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
@@ -479,8 +476,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
             break;
           }
 
-	expose_rect.x = xevent->xgraphicsexpose.x + xoffset;
-	expose_rect.y = xevent->xgraphicsexpose.y + yoffset;
+	expose_rect.x = xevent->xgraphicsexpose.x;
+	expose_rect.y = xevent->xgraphicsexpose.y;
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
 
@@ -655,9 +652,10 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
         {
-	  window_impl->width = xevent->xconfigure.width;
-	  window_impl->height = xevent->xconfigure.height;
+	  window_private->width = xevent->xconfigure.width;
+	  window_private->height = xevent->xconfigure.height;
 
+	  _gdk_window_update_size (window);
 	  _gdk_x11_drawable_update_size (window_private->impl);
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
@@ -666,7 +664,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       if (window &&
 	  xevent->xconfigure.event == xevent->xconfigure.window &&
 	  !GDK_WINDOW_DESTROYED (window) &&
-	  (window_private->extension_events != 0))
+          window_private->input_window != NULL)
 	_gdk_input_configure_event (&xevent->xconfigure, window);
 #endif
 
@@ -718,9 +716,10 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	    }
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  window_impl->width = xevent->xconfigure.width;
-	  window_impl->height = xevent->xconfigure.height;
+	  window_private->width = xevent->xconfigure.width;
+	  window_private->height = xevent->xconfigure.height;
 
+	  _gdk_window_update_size (window);
 	  _gdk_x11_drawable_update_size (window_private->impl);
 
 	  if (window_private->resize_count >= 1)
@@ -1322,6 +1321,13 @@ process_internal_connection (GIOChannel  *gioc,
   return TRUE;
 }
 
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return NextRequest (GDK_DISPLAY_XDISPLAY (display));
+}
+
+
 static GdkInternalConnection *
 gdk_add_connection_handler (Display *display,
 			    guint    fd)
@@ -1462,6 +1468,20 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+struct XPointerUngrabInfo {
+  GdkDisplay *display;
+  guint32 time;
+};
+
+static void
+pointer_ungrab_callback (GdkDisplay *display,
+			 gpointer data,
+			 gulong serial)
+{
+  _gdk_display_pointer_grab_update (display, serial);
+}
+
+
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
@@ -1478,45 +1498,37 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
  */
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
-			    guint32     time)
+			    guint32     time_)
 {
   Display *xdisplay;
   GdkDisplayX11 *display_x11;
+  GdkPointerGrabInfo *grab;
+  unsigned long serial;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  serial = NextRequest (xdisplay);
   
 #if 0
-  _gdk_input_ungrab_pointer (display, time);
+  _gdk_input_ungrab_pointer (display, time_);
 #endif
-  XUngrabPointer (xdisplay, time);
+  XUngrabPointer (xdisplay, time_);
   XFlush (xdisplay);
 
-  if (time == GDK_CURRENT_TIME || 
-      display_x11->pointer_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->pointer_xgrab_time, time))
-    display_x11->pointer_xgrab_window = NULL;
-}
-
-/**
- * gdk_display_pointer_is_grabbed:
- * @display: a #GdkDisplay
- *
- * Test if the pointer is grabbed.
- *
- * Returns: %TRUE if an active X pointer grab is in effect
- *
- * Since: 2.2
- */
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-  
-  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL &&
-	  !GDK_DISPLAY_X11 (display)->pointer_xgrab_implicit);
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab &&
+      (time_ == GDK_CURRENT_TIME ||
+       grab->time == GDK_CURRENT_TIME ||
+       !XSERVER_TIME_IS_LATER (grab->time, time_)))
+    {
+      grab->serial_end = serial;
+      _gdk_x11_roundtrip_async (display, 
+				pointer_ungrab_callback,
+				NULL);
+    }
 }
 
 /**
@@ -1544,9 +1556,9 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   XFlush (xdisplay);
   
   if (time == GDK_CURRENT_TIME || 
-      display_x11->keyboard_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->keyboard_xgrab_time, time))
-    display_x11->keyboard_xgrab_window = NULL;
+      display->keyboard_grab.time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display->keyboard_grab.time, time))
+    _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 /**
@@ -2220,7 +2232,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
-  
+
+  g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
+
   clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
   save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
 

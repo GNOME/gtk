@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-06-08 14:06+0000\n"
-"PO-Revision-Date: 2009-06-09 17:50+0300\n"
+"POT-Creation-Date: 2009-07-07 05:07+0000\n"
+"PO-Revision-Date: 2009-07-07 22:59+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -332,12 +332,6 @@ msgstr "Pildi vorming on tundmatu"
 
 msgid "Image pixel data corrupt"
 msgstr "Pildi piksliandmed on rikutud"
-
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "tõrge pildipuhvrile %u baidi eraldamisel"
-msgstr[1] "tõrge pildipuhvrile %u baidi eraldamisel"
 
 msgid "Unexpected icon chunk in animation"
 msgstr "Animatsioonis on ootamatu ikoonitükk"
@@ -911,12 +905,6 @@ msgstr "Käivitamine: %s"
 msgid "Opening %s"
 msgstr "Avamine: %s"
 
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "%d kirje avamine"
-msgstr[1] "%d kirje avamine"
-
 msgid "Could not show link"
 msgstr "Linki pole võimalik kuvada"
 
@@ -1259,6 +1247,9 @@ msgstr "(puudub)"
 msgid "Other..."
 msgstr "Muu..."
 
+msgid "Type name of new folder"
+msgstr "Sisesta uue kataloogi nimi"
+
 msgid "Could not retrieve information about the file"
 msgstr "Faili kohta pole võimalik teavet hankida"
 
@@ -1428,16 +1419,15 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
-#. Label
-msgid "_Search:"
-msgstr "_Otsing:"
+msgid "<b>_Search:</b>"
+msgstr "<b>_Otsing:</b>"
+
+msgid "<b>Recently Used</b>"
+msgstr "<b>Viimati kasutatud</b>"
 
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
-
-msgid "Type name of new folder"
-msgstr "Sisesta uue kataloogi nimi"
 
 msgid "Unknown"
 msgstr "tundmatu"
@@ -1831,6 +1821,16 @@ msgstr "_Jäta parool kuni väljalogimiseni meelde"
 
 msgid "Remember _forever"
 msgstr "_Jäta igavesti meelde"
+
+#, c-format
+msgid "Unknown Application (pid %d)"
+msgstr "Tundmatu rakendus (pid %d)"
+
+msgid "Unable to end process"
+msgstr "Protsessi pole võimalik lõpetada"
+
+msgid "_End Process"
+msgstr "_Lõpeta protsess"
 
 #, c-format
 msgid "Page %u"
@@ -3679,8 +3679,8 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "Ikoonipuhver pole korras: %s\n"
 
 #, c-format
-msgid "No theme index file."
-msgstr "Teema indeksifail on puudu."
+msgid "No theme index file.\n"
+msgstr "Teema indeksifail on puudu.\n"
 
 #, c-format
 msgid ""
@@ -4030,96 +4030,3 @@ msgstr "Printimine testprinterisse"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
-
-#~ msgid "calendar:day:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar:week:digits|%d"
-#~ msgstr "%d"
-
-#~ msgid "calendar year format|%Y"
-#~ msgstr "%Y"
-
-#~ msgid "Accelerator|Disabled"
-#~ msgstr "Keelatud"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "%d %%"
-
-#~ msgid "print operation status|Preparing to print"
-#~ msgstr "Printimiseks valmistumine"
-
-#~ msgid "print operation status|Generating data"
-#~ msgstr "Andmete genereerimine"
-
-#~ msgid "print operation status|Sending data"
-#~ msgstr "Andmete saatmine"
-
-#~ msgid "print operation status|Waiting"
-#~ msgstr "Ootamine"
-
-#~ msgid "print operation status|Blocking on issue"
-#~ msgstr "Probleemi tõttu blokeerunud"
-
-#~ msgid "print operation status|Printing"
-#~ msgstr "Printimine"
-
-#~ msgid "print operation status|Finished"
-#~ msgstr "Lõpetatud"
-
-#~ msgid "recent menu label|_%d. %s"
-#~ msgstr "_%d. %s"
-
-#~ msgid "recent menu label|%d. %s"
-#~ msgstr "%d. %s"
-
-#~ msgid "Navigation|_Bottom"
-#~ msgstr "Lõ_ppu"
-
-#~ msgid "Navigation|_First"
-#~ msgstr "E_simesele"
-
-#~ msgid "Navigation|_Last"
-#~ msgstr "_Viimasele"
-
-#~ msgid "Navigation|_Top"
-#~ msgstr "Al_gusesse"
-
-#~ msgid "Navigation|_Back"
-#~ msgstr "_Tagasi"
-
-#~ msgid "Navigation|_Down"
-#~ msgstr "_Alla"
-
-#~ msgid "Navigation|_Forward"
-#~ msgstr "_Edasi"
-
-#~ msgid "Navigation|_Up"
-#~ msgstr "Ü_les"
-
-#~ msgid "Justify|_Center"
-#~ msgstr "_Keskel"
-
-#~ msgid "Justify|_Fill"
-#~ msgstr "_Täida"
-
-#~ msgid "Justify|_Left"
-#~ msgstr "_Vasakule"
-
-#~ msgid "Justify|_Right"
-#~ msgstr "_Paremale"
-
-#~ msgid "Media|_Next"
-#~ msgstr "_Järgmine"
-
-#~ msgid "Media|P_ause"
-#~ msgstr "P_ausi"
-
-#~ msgid "Media|_Play"
-#~ msgstr "Es_ita"
-
-#~ msgid "Media|_Stop"
-#~ msgstr "_Peata"
-
-#~ msgid "volume percentage|%d %%"
-#~ msgstr "%d %%"

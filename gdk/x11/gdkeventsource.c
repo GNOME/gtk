@@ -140,7 +140,12 @@ _gdk_events_queue (GdkDisplay *display)
       event = gdk_event_source_translate_event (event_source, &xevent);
 
       if (event)
-        _gdk_event_queue_append (display, event);
+        {
+          GList *node;
+
+          node = _gdk_event_queue_append (display, event);
+          _gdk_windowing_got_event (display, node, event, xevent.xany.serial);
+        }
     }
 }
 

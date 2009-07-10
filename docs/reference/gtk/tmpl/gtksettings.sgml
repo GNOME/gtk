@@ -23,7 +23,7 @@ realized at least once. The following example demonstrates a way to do this:
 <informalexample><programlisting>
   gtk_init (&amp;argc, &amp;argv);
 
-  /&ast; make sure the type is realized &ast/
+  /&ast; make sure the type is realized &ast;/
   g_type_class_unref (g_type_class_ref (GTK_TYPE_IMAGE_MENU_ITEM));
 
   g_object_set (gtk_settings_get_default (), "gtk-menu-images", FALSE, NULL);

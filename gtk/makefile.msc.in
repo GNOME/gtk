@@ -55,6 +55,12 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
 	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
 	copy gtk-floppy.png gtk-save.png
+	copy gtk-harddisk.png drive-harddisk.png
+	copy gtk-directory.png folder.png
+	copy gtk-directory.png folder-remote.png
+	copy gtk-home.png user-home.png
+	copy gtk-directory.png user-desktop.png
+	copy gtk-file.png text-x-generic.png
 	cd ..\24
 	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
 	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
@@ -65,6 +71,12 @@ gtkbuiltincache.h: gtk-update-icon-cache.exe
 	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
 	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
 	copy gtk-floppy.png gtk-save.png
+	copy gtk-harddisk.png drive-harddisk.png
+	copy gtk-directory.png folder.png
+	copy gtk-directory.png folder-remote.png
+	copy gtk-home.png user-home.png
+	copy gtk-directory.png user-desktop.png
+	copy gtk-file.png text-x-generic.png
 	cd ..\..
 	del gtkicontheme.obj
 	gtk-update-icon-cache --force --ignore-theme-index 	\
@@ -101,6 +113,7 @@ gtk_OBJECTS_deprecated = \
 	gtklistitem.obj \
 	gtkprogress.obj \
 	gtktipsquery.obj \
+	gtkshow.obj \
 	gtksignal.obj \
 	gtkpixmap.obj \
 	gtkpreview.obj \
@@ -144,7 +157,6 @@ gtk_OBJECTS_file = \
 	gtkfilefilter.obj \
 	gtkfilesystem.obj \
 	gtkfilesystemmodel.obj \
-	gtkfilesystemwin32.obj \
 
 gtk_OBJECTS_print = \
 	gtkprint-win32.obj \
@@ -193,6 +205,7 @@ gtk_OBJECTS = \
 	gtkaccessible.obj \
 	gtkaction.obj \
 	gtkactiongroup.obj \
+	gtkactivatable.obj \
 	gtkadjustment.obj \
 	gtkalignment.obj \
 	gtkarrow.obj \
@@ -251,6 +264,7 @@ gtk_OBJECTS = \
 	gtkimcontextsimple.obj \
 	gtkimmodule.obj	\
 	gtkimmulticontext.obj \
+	gtkinfobar.obj \
 	gtkinputdialog.obj \
 	gtkinvisible.obj \
 	gtkitem.obj \
@@ -273,6 +287,7 @@ gtk_OBJECTS = \
 	gtkmountoperation.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
+	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
 	gtkpapersize.obj \
@@ -347,6 +362,7 @@ gtk_public_h_sources =		\
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\

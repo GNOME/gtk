@@ -647,7 +647,8 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble          *x_out,
 				 gdouble          *y_out)
 {
-  GdkWindowImplWin32 *impl, *root_impl;
+  GdkWindowImplWin32 *root_impl;
+  GdkWindowObject *window_object;
 
   int i;
   int x_axis = 0;
@@ -656,33 +657,31 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
   double device_width, device_height;
   double x_offset, y_offset, x_scale, y_scale;
 
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (input_window->window)->impl);
+  window_object = GDK_WINDOW_OBJECT (input_window);
 
   for (i=0; i<gdkdev->info.num_axes; i++)
     {
       switch (gdkdev->info.axes[i].use)
-	{
-	case GDK_AXIS_X:
-	  x_axis = i;
-	  break;
-	case GDK_AXIS_Y:
-	  y_axis = i;
-	  break;
-	default:
-	  break;
-	}
+		{
+		case GDK_AXIS_X:
+		  x_axis = i;
+		  break;
+		case GDK_AXIS_Y:
+		  y_axis = i;
+		  break;
+		default:
+		  break;
+		}
     }
   
-  device_width = gdkdev->axes[x_axis].max_value - 
-		   gdkdev->axes[x_axis].min_value;
-  device_height = gdkdev->axes[y_axis].max_value - 
-                    gdkdev->axes[y_axis].min_value;
+  device_width = gdkdev->axes[x_axis].max_value - gdkdev->axes[x_axis].min_value;
+  device_height = gdkdev->axes[y_axis].max_value - gdkdev->axes[y_axis].min_value;
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
       root_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl);
-      x_scale = root_impl->width / device_width;
-      y_scale = root_impl->height / device_height;
+      x_scale = GDK_WINDOW_OBJECT (_gdk_root)->width / device_width;
+      y_scale = GDK_WINDOW_OBJECT (_gdk_root)->height / device_height;
 
       x_offset = - input_window->root_x;
       y_offset = - input_window->root_y;
@@ -692,50 +691,48 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
       double device_aspect = (device_height*gdkdev->axes[y_axis].resolution) /
 	(device_width*gdkdev->axes[x_axis].resolution);
 
-      if (device_aspect * impl->width >= impl->height)
-	{
-	  /* device taller than window */
-	  x_scale = impl->width / device_width;
-	  y_scale = (x_scale * gdkdev->axes[x_axis].resolution)
-	    / gdkdev->axes[y_axis].resolution;
+      if (device_aspect * window_object->width >= window_object->height)
+		{
+		  /* device taller than window */
+		  x_scale = window_object->width / device_width;
+		  y_scale = (x_scale * gdkdev->axes[x_axis].resolution) / gdkdev->axes[y_axis].resolution;
 
-	  x_offset = 0;
-	  y_offset = -(device_height * y_scale - 
-			       impl->height)/2;
-	}
+		  x_offset = 0;
+		  y_offset = -(device_height * y_scale - window_object->height) / 2;
+		}
       else
-	{
-	  /* window taller than device */
-	  y_scale = impl->height / device_height;
-	  x_scale = (y_scale * gdkdev->axes[y_axis].resolution)
-	    / gdkdev->axes[x_axis].resolution;
+		{
+		  /* window taller than device */
+		  y_scale = window_object->height / device_height;
+		  x_scale = (y_scale * gdkdev->axes[y_axis].resolution)
+			/ gdkdev->axes[x_axis].resolution;
 
-	  y_offset = 0;
-	  x_offset = - (device_width * x_scale - impl->width)/2;
-	}
+		  y_offset = 0;
+		  x_offset = - (device_width * x_scale - window_object->width) / 2;
+		}
     }
 
-  for (i=0; i<gdkdev->info.num_axes; i++)
+  for (i = 0; i < gdkdev->info.num_axes; i++)
     {
       switch (gdkdev->info.axes[i].use)
-	{
-	case GDK_AXIS_X:
-	  axis_out[i] = x_offset + x_scale*axis_data[x_axis];
-	  if (x_out)
-	    *x_out = axis_out[i];
-	  break;
-	case GDK_AXIS_Y:
-	  axis_out[i] = y_offset + y_scale*axis_data[y_axis];
-	  if (y_out)
-	    *y_out = axis_out[i];
-	  break;
-	default:
-	  axis_out[i] =
-	    (gdkdev->info.axes[i].max * (axis_data[i] - gdkdev->axes[i].min_value) +
-	     gdkdev->info.axes[i].min * (gdkdev->axes[i].max_value - axis_data[i])) /
-	    (gdkdev->axes[i].max_value - gdkdev->axes[i].min_value);
-	  break;
-	}
+		{
+		case GDK_AXIS_X:
+		  axis_out[i] = x_offset + x_scale * axis_data[x_axis];
+		  if (x_out)
+			*x_out = axis_out[i];
+		  break;
+		case GDK_AXIS_Y:
+		  axis_out[i] = y_offset + y_scale * axis_data[y_axis];
+		  if (y_out)
+			*y_out = axis_out[i];
+		  break;
+		default:
+		  axis_out[i] =
+			(gdkdev->info.axes[i].max * (axis_data[i] - gdkdev->axes[i].min_value) +
+			 gdkdev->info.axes[i].min * (gdkdev->axes[i].max_value - axis_data[i])) /
+			(gdkdev->axes[i].max_value - gdkdev->axes[i].min_value);
+		  break;
+		}
     }
 }
 

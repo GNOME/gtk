@@ -2532,10 +2532,8 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	  priv->during_reorder = FALSE;
 	  priv->pressed_button = event->button;
 
-	  gdk_window_get_pointer (widget->window,
-				  &priv->mouse_x,
-				  &priv->mouse_y,
-				  NULL);
+	  priv->mouse_x = x;
+	  priv->mouse_y = y;
 
 	  priv->drag_begin_x = priv->mouse_x;
 	  priv->drag_begin_y = priv->mouse_y;
@@ -2969,6 +2967,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   GtkNotebookPointerPosition pointer_position;
   GtkSettings *settings;
   guint timeout;
+  gint x_win, y_win;
 
   page = notebook->cur_page;
 
@@ -2986,10 +2985,14 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
     return FALSE;
 
   priv->timestamp = event->time;
-  gdk_window_get_pointer (widget->window,
-			  &priv->mouse_x,
-			  &priv->mouse_y,
-			  NULL);
+
+  /* While animating the move, event->x is relative to the flying tab
+   * (priv->drag_window has a pointer grab), but we need coordinates relative to
+   * the notebook widget.
+   */
+  gdk_window_get_origin (widget->window, &x_win, &y_win);
+  priv->mouse_x = event->x_root - x_win;
+  priv->mouse_y = event->y_root - y_win;
 
   arrow = gtk_notebook_get_arrow (notebook, priv->mouse_x, priv->mouse_y);
   if (arrow != notebook->in_child)

@@ -57,6 +57,7 @@ typedef struct _ChildInfoState ChildInfoState;
 typedef struct _ListChildrenState ListChildrenState;
 typedef struct _SendEventState SendEventState;
 typedef struct _SetInputFocusState SetInputFocusState;
+typedef struct _RoundtripState RoundtripState;
 
 typedef enum {
   CHILD_INFO_GET_PROPERTY,
@@ -110,6 +111,16 @@ struct _SetInputFocusState
   _XAsyncHandler async;
   gulong set_input_focus_req;
   gulong get_input_focus_req;
+};
+
+struct _RoundtripState
+{
+  Display *dpy;
+  _XAsyncHandler async;
+  gulong get_input_focus_req;
+  GdkDisplay *display;
+  GdkRoundTripCallback callback;
+  gpointer data;
 };
 
 static gboolean
@@ -741,6 +752,93 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
   SyncHandle();
 
   return !state.have_error;
+}
+
+static gboolean
+roundtrip_callback_idle (gpointer data)
+{
+  RoundtripState *state = (RoundtripState *)data;  
+  
+  state->callback (state->display, state->data, state->get_input_focus_req);
+
+  g_free (state);
+
+  return FALSE;
+}
+
+static Bool
+roundtrip_handler (Display *dpy,
+		   xReply  *rep,
+		   char    *buf,
+		   int      len,
+		   XPointer data)
+{
+  RoundtripState *state = (RoundtripState *)data;  
+  
+  if (dpy->last_request_read == state->get_input_focus_req)
+    {
+      xGetInputFocusReply replbuf;
+      xGetInputFocusReply *repl;
+      
+      if (rep->generic.type != X_Error)
+	{
+	  /* Actually does nothing, since there are no additional bytes
+	   * to read, but maintain good form.
+	   */
+	  repl = (xGetInputFocusReply *)
+	    _XGetAsyncReply(dpy, (char *)&replbuf, rep, buf, len,
+			    (sizeof(xGetInputFocusReply) - sizeof(xReply)) >> 2,
+			    True);
+	}
+
+      
+      if (state->callback)
+        gdk_threads_add_idle (roundtrip_callback_idle, state);
+
+      DeqAsyncHandler(state->dpy, &state->async);
+
+      return (rep->generic.type != X_Error);
+    }
+
+  return False;
+}
+
+void
+_gdk_x11_roundtrip_async (GdkDisplay           *display, 
+			  GdkRoundTripCallback callback,
+			  gpointer              data)
+{
+  Display *dpy;
+  RoundtripState *state;
+  
+  dpy = GDK_DISPLAY_XDISPLAY (display);
+
+  state = g_new (RoundtripState, 1);
+
+  state->display = display;
+  state->dpy = dpy;
+  state->callback = callback;
+  state->data = data;
+  
+  LockDisplay(dpy);
+
+  state->async.next = dpy->async_handlers;
+  state->async.handler = roundtrip_handler;
+  state->async.data = (XPointer) state;
+  dpy->async_handlers = &state->async;
+
+  /*
+   * XSync (dpy, 0)
+   */
+  {
+    xReq *req;
+    
+    GetEmptyReq(GetInputFocus, req);
+    state->get_input_focus_req = dpy->request;
+  }
+  
+  UnlockDisplay(dpy);
+  SyncHandle();
 }
 
 #define __GDK_ASYNC_C__

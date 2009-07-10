@@ -52,7 +52,7 @@ EXTRALIBS = \
 	$(WTKIT)\lib\i386\wntab32x.lib \
 	$(GLIB_LIBS) \
 	..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
-	$(PANGOWIN32_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
+	$(PANGOWIN32_LIBS) $(PANGOCAIRO_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
 	$(PANGOCAIRO_LIBS)
 
 gdk-win32-backend :
@@ -95,6 +95,8 @@ gdk_OBJECTS = \
 	gdkkeynames.obj \
 	gdkkeys.obj \
 	gdkkeyuni.obj \
+	gdkmarshalers.obj \
+	gdkoffscreenwindow.obj \
 	gdkpango.obj \
 	gdkpixbuf-drawable.obj \
 	gdkpixbuf-render.obj \

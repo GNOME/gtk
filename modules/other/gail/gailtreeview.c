@@ -867,7 +867,7 @@ gail_tree_view_ref_child (AtkObject *obj,
   gtk_tree_view_column_cell_set_cell_data (tv_col, tree_model, &iter, 
                                            is_expander, is_expanded);
 
-  renderer_list = gtk_tree_view_column_get_cell_renderers (tv_col);
+  renderer_list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 
   /* If there are more than one renderer in the list, make a container */
 
@@ -2127,7 +2127,7 @@ gail_tree_view_get_cell_area (GailCellParent *parent,
           GtkCellRenderer *renderer;
 
 	  cell_index = atk_object_get_index_in_parent (ATK_OBJECT (cell));
-	  renderers = gtk_tree_view_column_get_cell_renderers (tv_col);
+	  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
 	  renderer = g_list_nth_data (renderers, cell_index);
 
 	  found = gtk_tree_view_column_cell_get_position (tv_col, renderer, &cell_start, &cell_width);
@@ -2180,7 +2180,7 @@ gail_tree_view_grab_cell_focus  (GailCellParent *parent,
        */
       GList *renderers;
 
-      renderers = gtk_tree_view_column_get_cell_renderers (tv_col);
+      renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (tv_col));
       if (cell_info->in_use) {
 	  index = atk_object_get_index_in_parent (cell_object);
 	  renderer = g_list_nth_data (renderers, index);
@@ -3177,7 +3177,7 @@ update_cell_value (GailRendererCell *renderer_cell,
       gtk_tree_view_column_cell_set_cell_data (cell_info->cell_col_ref,
                                   tree_model, &iter, is_expander, is_expanded);
     }
-  renderers = gtk_tree_view_column_get_cell_renderers (cell_info->cell_col_ref);
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_info->cell_col_ref));
   gail_return_val_if_fail (renderers, FALSE);
 
   /*
@@ -4001,7 +4001,7 @@ toggle_cell_toggled (GailCell *cell)
   gail_return_if_fail (path);
   pathstring = gtk_tree_path_to_string (path);
 
-  renderers = gtk_tree_view_column_get_cell_renderers (cell_info->cell_col_ref);
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_info->cell_col_ref));
   gail_return_if_fail (renderers);
 
   /* 

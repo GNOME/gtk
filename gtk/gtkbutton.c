@@ -934,15 +934,15 @@ gtk_button_construct_child (GtkButton *button)
   GtkWidget *image = NULL;
   gchar *label_text = NULL;
   gint image_spacing;
-  
+
   if (!button->constructed)
     return;
- 
+
   if (!button->label_text && !priv->image)
     return;
-  
-  gtk_widget_style_get (GTK_WIDGET (button), 
-			"image-spacing", &image_spacing, 
+
+  gtk_widget_style_get (GTK_WIDGET (button),
+			"image-spacing", &image_spacing,
 			NULL);
 
   if (priv->image && !priv->image_is_stock)
@@ -951,7 +951,7 @@ gtk_button_construct_child (GtkButton *button)
       if (image->parent)
 	gtk_container_remove (GTK_CONTAINER (image->parent), image);
     }
-  
+
   priv->image = NULL;
 
   if (GTK_BIN (button)->child)
@@ -973,7 +973,7 @@ gtk_button_construct_child (GtkButton *button)
   if (image)
     {
       priv->image = image;
-      g_object_set (priv->image, 
+      g_object_set (priv->image,
 		    "visible", show_image (button),
 		    "no-show-all", TRUE,
 		    NULL);
@@ -997,9 +997,14 @@ gtk_button_construct_child (GtkButton *button)
 
       if (label_text)
 	{
-	  label = gtk_label_new_with_mnemonic (label_text);
-	  gtk_label_set_mnemonic_widget (GTK_LABEL (label), 
-					 GTK_WIDGET (button));
+          if (button->use_underline || button->use_stock)
+            {
+	      label = gtk_label_new_with_mnemonic (label_text);
+	      gtk_label_set_mnemonic_widget (GTK_LABEL (label),
+                                             GTK_WIDGET (button));
+            }
+          else
+            label = gtk_label_new (label_text);
 
 	  if (priv->image_position == GTK_POS_RIGHT ||
 	      priv->image_position == GTK_POS_BOTTOM)
@@ -1007,7 +1012,7 @@ gtk_button_construct_child (GtkButton *button)
 	  else
 	    gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
 	}
-      
+
       gtk_container_add (GTK_CONTAINER (button), align);
       gtk_container_add (GTK_CONTAINER (align), box);
       gtk_widget_show_all (align);
@@ -1016,18 +1021,18 @@ gtk_button_construct_child (GtkButton *button)
 
       return;
     }
-  
-  if (button->use_underline)
+
+  if (button->use_underline || button->use_stock)
     {
       label = gtk_label_new_with_mnemonic (button->label_text);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (button));
     }
   else
     label = gtk_label_new (button->label_text);
-  
+
   if (priv->align_set)
     gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
-  
+
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
 }

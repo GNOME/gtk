@@ -59,9 +59,8 @@
 void
 _gdk_windowing_init (void)
 {
-  /** 
-    Not that usable called before parse_args
-  **/
+  /* Not that usable called before parse_args
+   */
 }
 
 void

@@ -1042,21 +1042,10 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
-/**
- * gtk_cell_view_get_cell_renderers:
- * @cell_view: a #GtkCellView
- * 
- * Returns the cell renderers which have been added to @cell_view.
- *
- * Return value: a list of cell renderers. The list, but not the
- *   renderers has been newly allocated and should be freed with
- *   g_list_free() when no longer needed.
- * 
- * Since: 2.6
- */
-GList *
-gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
+static GList *
+gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
 {
+  GtkCellView *cell_view = GTK_CELL_VIEW (layout);
   GList *retval = NULL, *list;
 
   g_return_val_if_fail (cell_view != NULL, NULL);
@@ -1073,12 +1062,25 @@ gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
   return g_list_reverse (retval);
 }
 
-static GList *
-gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
+/**
+ * gtk_cell_view_get_cell_renderers:
+ * @cell_view: a #GtkCellView
+ *
+ * Returns the cell renderers which have been added to @cell_view.
+ *
+ * Return value: a list of cell renderers. The list, but not the
+ *   renderers has been newly allocated and should be freed with
+ *   g_list_free() when no longer needed.
+ *
+ * Since: 2.6
+ *
+ * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
+ **/
+GList *
+gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
 {
-  return gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (layout));
+  return gtk_cell_view_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
 }
-
 
 static gboolean
 gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,

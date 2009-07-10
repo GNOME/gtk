@@ -150,7 +150,8 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_size != NULL)
+    GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
 }
 
 /**
@@ -623,7 +624,7 @@ gdk_draw_drawable (GdkDrawable *drawable,
 		   gint         width,
 		   gint         height)
 {
-  GdkDrawable *composite;
+  GdkDrawable *composite, *composite_impl;
   gint composite_x_offset = 0;
   gint composite_y_offset = 0;
 
@@ -652,13 +653,37 @@ gdk_draw_drawable (GdkDrawable *drawable,
                                                           &composite_x_offset,
                                                           &composite_y_offset);
 
-  
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite,
-                                                    xsrc - composite_x_offset,
-                                                    ysrc - composite_y_offset,
-                                                    xdest, ydest,
-                                                    width, height);
-  
+  /* The draw_drawable call below is will recurse into gdk_draw_drawable again,
+   * specifying the right impl for the destination. This means the composite
+   * we got here will be fed to get_composite_drawable again, which is a problem
+   * for window as that causes double the composite offset. Avoid this by passing
+   * in the impl directly.
+   */
+  if (GDK_IS_WINDOW (composite))
+    composite_impl = GDK_WINDOW_OBJECT (src)->impl;
+  else
+    composite_impl = composite;
+
+  /* TODO: For non-native windows this may copy stuff from other overlapping
+     windows. We should clip that and (for windows with bg != None) clear that
+     area in the destination instead. */
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src)
+    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable, gc,
+							       composite_impl,
+							       xsrc - composite_x_offset,
+							       ysrc - composite_y_offset,
+							       xdest, ydest,
+							       width, height,
+							       src);
+  else /* backwards compat for old out-of-tree implementations of GdkDrawable (are there any?) */
+    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc,
+						      composite_impl,
+						      xsrc - composite_x_offset,
+						      ysrc - composite_y_offset,
+						      xdest, ydest,
+						      width, height);
+
   g_object_unref (composite);
 }
 
@@ -726,9 +751,6 @@ gdk_draw_image (GdkDrawable *drawable,
  *
  * On older X servers, rendering pixbufs with an alpha channel involves round 
  * trips to the X server, and may be somewhat slow.
- *
- * The clip mask of @gc is ignored, but clip rectangles and clip regions work
- * fine.
  *
  * If GDK is built with the Sun mediaLib library, the gdk_draw_pixbuf
  * function is accelerated using mediaLib, which provides hardware
@@ -871,7 +893,7 @@ real_draw_glyphs (GdkDrawable       *drawable,
   cairo_t *cr;
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
 
   if (matrix)
     {
@@ -995,7 +1017,7 @@ gdk_draw_trapezoids (GdkDrawable        *drawable,
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
   
   for (i = 0; i < n_trapezoids; i++)
     {
@@ -1185,7 +1207,7 @@ gdk_drawable_real_get_image (GdkDrawable     *drawable,
   return gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
 }
 
-static GdkDrawable*
+static GdkDrawable *
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,
                                           gint         y,
@@ -1770,6 +1792,82 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
       return screen->normal_gcs[depth];
     }
 }
+
+/**
+ * _gdk_drawable_get_subwindow_scratch_gc:
+ * @drawable: A #GdkDrawable
+ * 
+ * Returns a #GdkGC suitable for drawing on @drawable. The #GdkGC has
+ * the standard values for @drawable, except for the graphics_exposures
+ * field which is %TRUE and the subwindow mode which is %GDK_INCLUDE_INFERIORS.
+ *
+ * The foreground color of the returned #GdkGC is undefined. The #GdkGC
+ * must not be altered in any way, except to change its foreground color.
+ * 
+ * Return value: A #GdkGC suitable for drawing on @drawable
+ * 
+ * Since: 2.18
+ **/
+GdkGC *
+_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable)
+{
+  GdkScreen *screen;
+  gint depth;
+
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  screen = gdk_drawable_get_screen (drawable);
+
+  g_return_val_if_fail (!screen->closed, NULL);
+
+  depth = gdk_drawable_get_depth (drawable) - 1;
+
+  if (!screen->subwindow_gcs[depth])
+    {
+      GdkGCValues values;
+      GdkGCValuesMask mask;
+      
+      values.graphics_exposures = TRUE;
+      values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+      mask = GDK_GC_EXPOSURES | GDK_GC_SUBWINDOW;  
+      
+      screen->subwindow_gcs[depth] =
+	gdk_gc_new_with_values (drawable, &values, mask);
+    }
+  
+  return screen->subwindow_gcs[depth];
+}
+
+
+/*
+ * _gdk_drawable_get_source_drawable:
+ * @drawable: a #GdkDrawable
+ *
+ * Returns a drawable for the passed @drawable that is guaranteed to be
+ * usable to create a pixmap (e.g.: not an offscreen window).
+ *
+ * Since: 2.16
+ */
+GdkDrawable *
+_gdk_drawable_get_source_drawable (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable)
+    return GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable (drawable);
+
+  return drawable;
+}
+
+cairo_surface_t *
+_gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
+				    int width,
+				    int height)
+{
+  return GDK_DRAWABLE_GET_CLASS (drawable)->create_cairo_surface (drawable,
+								  width, height);
+}
+
 
 #define __GDK_DRAW_C__
 #include "gdkaliasdef.c"

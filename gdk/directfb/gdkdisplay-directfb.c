@@ -57,9 +57,8 @@ const GOptionEntry _gdk_windowing_args[] =
   { NULL}
 };
 
-/**
-  Main entry point for gdk in 2.6 args are parsed
-**/
+/* Main entry point for gdk in 2.6 args are parsed
+ */
 GdkDisplay * gdk_display_open (const gchar *display_name)
 {
   IDirectFB              *directfb;

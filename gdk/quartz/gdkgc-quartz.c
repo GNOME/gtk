@@ -208,7 +208,8 @@ _gdk_quartz_gc_new (GdkDrawable      *drawable,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region)
+				   const GdkRegion *region,
+				   gboolean         reset_origin)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
 
@@ -224,8 +225,11 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
 
   private->have_clip_region = region != NULL;
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
+  if (reset_origin)
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+    }
 }
 
 void
@@ -281,7 +285,6 @@ gdk_quartz_draw_tiled_pattern (void         *info,
 			       CGContextRef  context)
 {
   GdkGC       *gc = GDK_GC (info);
-  GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
   CGImageRef   pattern_image;
   size_t       width, height;
 

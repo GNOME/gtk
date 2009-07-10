@@ -690,7 +690,9 @@ gtk_cell_renderer_toggle_set_radio
 
 #if IN_HEADER(__GTK_CELL_VIEW_H__)
 #if IN_FILE(__GTK_CELL_VIEW_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_cell_view_get_cell_renderers
+#endif
 gtk_cell_view_get_displayed_row
 gtk_cell_view_get_model
 gtk_cell_view_get_size_of_row
@@ -1211,6 +1213,8 @@ gtk_status_icon_is_embedded
 gtk_status_icon_position_menu
 gtk_status_icon_get_geometry
 gtk_status_icon_get_x11_window_id
+gtk_status_icon_get_title
+gtk_status_icon_set_title
 #endif
 #endif
 
@@ -2439,6 +2443,7 @@ gtk_menu_get_active
 gtk_menu_get_monitor
 gtk_menu_get_attach_widget
 gtk_menu_get_for_attach_widget
+gtk_menu_get_reserve_toggle_size
 gtk_menu_get_tearoff_state
 gtk_menu_get_title
 gtk_menu_get_type G_GNUC_CONST
@@ -2451,6 +2456,7 @@ gtk_menu_set_accel_group
 gtk_menu_set_accel_path
 gtk_menu_set_active
 gtk_menu_set_monitor
+gtk_menu_set_reserve_toggle_size
 gtk_menu_set_screen
 gtk_menu_set_tearoff_state
 gtk_menu_set_title
@@ -4602,7 +4608,9 @@ gtk_tree_view_column_clear_attributes
 gtk_tree_view_column_clicked
 gtk_tree_view_column_focus_cell
 gtk_tree_view_column_get_alignment
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_tree_view_column_get_cell_renderers
+#endif
 gtk_tree_view_column_get_clickable
 gtk_tree_view_column_get_expand
 gtk_tree_view_column_get_fixed_width
@@ -5176,6 +5184,7 @@ gtk_info_bar_add_button
 gtk_info_bar_add_buttons
 gtk_info_bar_set_response_sensitive
 gtk_info_bar_set_default_response
+gtk_info_bar_response
 gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
 #endif

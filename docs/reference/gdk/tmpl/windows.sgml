@@ -189,6 +189,38 @@ these types.
 </para>
 
 
+<!-- ##### SIGNAL GdkWindow::from-embedder ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GdkWindow::pick-embedded-child ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GdkWindow::to-embedder ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
 Describes the kind of window.
@@ -200,6 +232,7 @@ Describes the kind of window.
 @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
 @GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
 @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
+@GDK_WINDOW_OFFSCREEN: offscreen window. Since 2.18
 
 <!-- ##### ENUM GdkWindowClass ##### -->
 <para>
@@ -683,6 +716,15 @@ Deprecated equivalent of g_object_unref()
 @region: 
 @dx: 
 @dy: 
+
+
+<!-- ##### FUNCTION gdk_window_ensure_native ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_reparent ##### -->
@@ -1384,6 +1426,18 @@ Deprecated equivalent of gdk_drawable_get_type().
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_window_get_root_coords ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@root_x: 
+@root_y: 
+
+
 <!-- ##### FUNCTION gdk_window_get_pointer ##### -->
 <para>
 
@@ -1659,12 +1713,39 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-docs.sgml" "book" "refsect2" "")
-End:
--->
+<!-- ##### FUNCTION gdk_offscreen_window_get_pixmap ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_offscreen_window_set_embedder ##### -->
+<para>
+
+</para>
+
+@window: 
+@embedder: 
+
+
+<!-- ##### FUNCTION gdk_offscreen_window_get_embedder ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_geometry_changed ##### -->
+<para>
+
+</para>
+
+@window: 
 
 
 <!-- ##### FUNCTION gdk_window_redirect_to_drawable ##### -->
@@ -1688,5 +1769,13 @@ End:
 </para>
 
 @window: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-docs.sgml" "book" "refsect2" "")
+End:
+-->
 
 

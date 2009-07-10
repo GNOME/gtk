@@ -1,3 +1,60 @@
+Overview of Changes from GTK+ 2.17.3 to 2.17.4
+==============================================
+
+* Support for clipmasks in gdk_draw_pixbuf now works, this will
+  introduce visual changes in code that uses clipmasks when drawing
+  pixbufs. However, since this never worked that is unlikely to happen.
+  Old code using gdk_pixbuf_render_threshold_alpha masks when rendering
+  pixbufs will now produce truncated results at the edges.
+
+Overview of Changes from GTK+ 2.17.2 to 2.17.3
+==============================================
+
+* GtkFileChooser:
+ - Shows the size column by default now
+
+* GtkStatusIcon:
+ - Has a title property, which can be used by ATs when they
+   read status icons
+
+* GtkInfoBar:
+ - The default theme now includes color definitions for infobars
+ - The ::use-tooltip-style style property has been removed
+
+* GtkMountOperation now supports interaction during unmount operations.
+
+* The client-side windows branch has been merged; GDK now maintains
+  its own window hierarchy client-side, and only uses X windows where
+  unavoidable. Some of the benefits of this change are
+  - Reduced flicker
+  - The ability to do transformed and animated rendering of widgets
+  - Easier embedding of GTK+ widgets e.g. into Clutter scene graphs
+  This is a fundamental change to the way GDK works, so watch out for
+  regressions.
+
+* Bugs fixed:
+ 586315 Crash in GTK+ 2.14 when calling gtk.FileChooser.list_shor...
+ 461944 pressing the volume icon in full screen shuts down the sound
+ 490724 iconview item's height would be changed event with same m...
+ 564063 regression: Left margin in popup menus
+ 582025 Accelerators fail for submenus
+ 585626 Setting widget tooltip hammers X11 server on any TCP/IP X...
+ 585802 Add API to make GtkStatusIcon accessible with a name
+ 585858 right-click Add-to-Booksmarks is sometimes greyed out
+ 586330 GtkButton ignores user_underline when an image is set
+ 318807 Offscreen windows and window redirection
+ 587716 GtkInfoBar broken on resize
+ 587485 GMountOperation::show-processes support
+
+* Updated translations
+ Brazilian Portuguese
+ Estonian
+ Hebrew
+ Spanish
+ Swedish
+ Vietnamese
+
+
 Overview of Changes from GTK+ 2.17.1 to 2.17.2
 ==============================================
 
@@ -6,11 +63,67 @@ Overview of Changes from GTK+ 2.17.1 to 2.17.2
   supports theming for different message types (warnings,
   errors, etc)
 
+* GtkFileChooser:
+  - Improve path bar by ellipsizing long names and preventing
+    vertical size changes
+  - Backup files are now hidden by default
+  - GTK+ remembers the file chooser sorting state now
+
+* GtkButtonBox: Implements the GtkOrientable interface now.
+
+* Printing:
+ - GTK+ supports printing an application-defined 'selection' now,
+   in addition to usual page ranges.
+
 * Changes that are relevant for theme authors:
  - The new GtkInfoBar widget uses symbolic colors for theming
    its background color depending on the message type. By default,
    it uses the same background color as tooltips. This can be turned
    off with style property.
+ - The GTK+ file chooser (as well as nautilus and other users of GIO
+   icon information) can now show different icons for xdg user dirs.
+   The icon names are folder-documents, folder-download, folder-music,
+   folder-pictures, folder-publicshare, folder-templates, folder-videos,
+   with an automatic fallback to the standard folder icon.
+
+* Bugs fixed:
+ 584021 titchy leak
+ 579590 gtk_entry_set_icon_from_stock should warn when invalid st...
+ 584125 GtkAssistant asserts if last page is GTK_ASSISTANT_PAGE_C...
+ 171416 Resume editing if name of new folder is "Type name of new...
+ 420335 Page assignment when printing 4 pages to a sheet
+ 161670 Bad behaviour from gtk_file_chooser_set_filename
+ 327152 Long names in the FileChooserDialog directory buttons sho...
+ 355851 File Dialog shows Backup Files
+ 390312 Gtk grabs keyboard on DND
+ 486839 Filechooser 'Places' items should not move up and down th...
+ 562335 Deprecate gtk_tree_view_column_get_cell_renderers and gtk...
+ 565317 Resulting image of GtkCellRendererPixbuf depends on order...
+ 565998 configure script doesn't check for cairo-xlib.pc
+ 580079 Better configure detection of Xinerama on Solaris
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE as ...
+ 580560 Backspace key does not go to the parent directory
+ 584598 GtkButtonBox silently ignores gtk_orientable_set_orientation
+ 584637 Missing conditionals for X11 shape extension in GdkWindow
+ 584805 GtkEntryCompletion selection reset when calling gtk_entry...
+ 584832 Duplicate the exec string returned by gtk_recent_info_get...
+ 585024 some gtksettings properties need extra initialisation
+ 585371 Add additional sizes to the font selector
+ 585791 use g_*gettext instead of *gettext directly
+ 562579 [Patch] Remove error dialog when directory does not exist
+ 344519 custom print ranges
+ 484922 Should remember the sort state of columns
+ 555344 consider adding a message area widget
+
+* Updated translations:
+ Danish
+ Brazilian Portuguese
+ Estonian
+ Oriya
+ Bengali India
+ Norwegian bokmål
+ Hindi
+ Spanish
 
 
 Overview of Changes from GTK+ 2.17.0 to 2.17.1

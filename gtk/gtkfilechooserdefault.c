@@ -791,7 +791,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
-  impl->show_size_column = FALSE;
+  impl->show_size_column = TRUE;
   impl->icon_size = FALLBACK_ICON_SIZE;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
@@ -3707,7 +3707,7 @@ rename_selected_bookmark (GtkFileChooserDefault *impl)
     {
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
       column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), 0);
-      renderers = gtk_tree_view_column_get_cell_renderers (column);
+      renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
       cell = g_list_nth_data (renderers, 1);
       g_list_free (renderers);
       g_object_set (cell, "editable", TRUE, NULL);
@@ -4313,7 +4313,6 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_files_popup_menu_add_shortcut_item = item;
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
 				 gtk_image_new_from_stock (GTK_STOCK_ADD, GTK_ICON_SIZE_MENU));
-  gtk_widget_set_sensitive (item, FALSE);
   g_signal_connect (item, "activate",
 		    G_CALLBACK (add_to_shortcuts_cb), impl);
   gtk_widget_show (item);
@@ -4336,6 +4335,8 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
                     G_CALLBACK (show_size_column_toggled_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_files_popup_menu), item);
+
+  bookmarks_check_add_sensitivity (impl);
 }
 
 /* Updates the popup menu for the file list, creating it if necessary */
@@ -4693,9 +4694,13 @@ create_file_list (GtkFileChooserDefault *impl)
   /* Size column */
 
   column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_title (column, _("Size"));
 
   renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, 
+                "alignment", PANGO_ALIGN_RIGHT,
+                NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   list_size_data_func, impl, NULL);
@@ -5516,8 +5521,6 @@ update_appearance (GtkFileChooserDefault *impl)
 	  gtk_widget_hide (impl->browse_widgets);
 	}
 
-      gtk_widget_show (impl->browse_new_folder_button);
-
       if (impl->select_multiple)
 	{
 	  g_warning ("Save mode cannot be set in conjunction with multiple selection mode.  "
@@ -6114,7 +6117,10 @@ settings_load (GtkFileChooserDefault *impl)
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
-  set_sort_column (impl);
+  /* We don't call set_sort_column() here as the models may not have been
+   * created yet.  The individual functions that create and set the models will
+   * call set_sort_column() themselves.
+   */
 }
 
 static void
@@ -9124,7 +9130,11 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->search_entry = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  gtk_widget_show (impl->browse_new_folder_button);
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    gtk_widget_hide (impl->browse_new_folder_button);
+  else
+    gtk_widget_show (impl->browse_new_folder_button);
+
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -9689,7 +9699,10 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->recent_hbox = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  gtk_widget_show (impl->browse_new_folder_button);
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    gtk_widget_hide (impl->browse_new_folder_button);
+  else
+    gtk_widget_show (impl->browse_new_folder_button);
 
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
@@ -11231,7 +11244,6 @@ list_size_data_func (GtkTreeViewColumn *tree_column,
   g_object_set (cell,
   		"text", str,
 		"sensitive", sensitive,
-		"alignment", PANGO_ALIGN_RIGHT,
 		NULL);
 
   g_free (str);

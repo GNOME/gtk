@@ -2452,14 +2452,14 @@ gchar *
 gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
 {
 	gchar *domain;
-	gchar *description;
+	const gchar *description;
 	g_return_val_if_fail (format != NULL, NULL);
 
 	if (format->domain != NULL) 
 		domain = format->domain;
 	else 
 		domain = GETTEXT_PACKAGE;
-	description = dgettext (domain, format->description);
+	description = g_dgettext (domain, format->description);
 
 	return g_strdup (description);
 }

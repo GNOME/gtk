@@ -1761,7 +1761,7 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+  folders = _gtk_file_chooser_list_shortcut_folder_files (chooser);
 
   result = files_to_strings (folders, g_file_get_path);
   g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
@@ -1858,7 +1858,7 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  folders = GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+  folders = _gtk_file_chooser_list_shortcut_folder_files (chooser);
 
   result = files_to_strings (folders, g_file_get_uri);
   g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
@@ -1867,6 +1867,13 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
   return result;
 }
 
+GSList *
+_gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser)
+{
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->list_shortcut_folders (chooser);
+}
 
 /**
  * gtk_file_chooser_set_show_hidden:

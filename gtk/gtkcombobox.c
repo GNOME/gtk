@@ -1470,14 +1470,16 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   
   /* FIXME: is using the size request here broken? */
   child = GTK_BIN (combo_box)->child;
-   
-  gdk_window_get_origin (child->window, &sx, &sy);
-   
+
+  sx = sy = 0;
+
   if (GTK_WIDGET_NO_WINDOW (child))
     {
       sx += child->allocation.x;
       sy += child->allocation.y;
     }
+
+  gdk_window_get_root_coords (child->window, sx, sy, &sx, &sy);
 
   if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
     sx -= GTK_WIDGET (combo_box)->style->xthickness;
@@ -1537,10 +1539,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   menu_width = requisition.width;
 
   active = gtk_menu_get_active (GTK_MENU (combo_box->priv->popup_widget));
-  gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
 
-  menu_xpos += widget->allocation.x;
-  menu_ypos += widget->allocation.y + widget->allocation.height / 2 - 2;
+  menu_xpos = widget->allocation.x;
+  menu_ypos = widget->allocation.y + widget->allocation.height / 2 - 2;
 
   if (active != NULL)
     {
@@ -1567,6 +1568,9 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     menu_xpos = menu_xpos + widget->allocation.width - menu_width;
+
+  gdk_window_get_root_coords (widget->window, menu_xpos, menu_ypos,
+			      &menu_xpos, &menu_ypos);
 
   /* Clamp the position on screen */
   screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
@@ -1630,7 +1634,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
      see bug #340204 */
   GtkWidget *sample = GTK_WIDGET (combo_box);
 
-  gdk_window_get_origin (sample->window, x, y);
+  *x = *y = 0;
 
   if (GTK_WIDGET_NO_WINDOW (sample))
     {
@@ -1638,6 +1642,8 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
       *y += sample->allocation.y;
     }
   
+  gdk_window_get_root_coords (sample->window, *x, *y, x, y);
+
   *width = sample->allocation.width;
 
   hpolicy = vpolicy = GTK_POLICY_NEVER;
@@ -1695,7 +1701,7 @@ cell_view_is_sensitive (GtkCellView *cell_view)
   GList *cells, *list;
   gboolean sensitive;
   
-  cells = gtk_cell_view_get_cell_renderers (cell_view);
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -1732,7 +1738,7 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
 					   priv->model,
 					   iter, FALSE, FALSE);
 
-  cells = gtk_tree_view_column_get_cell_renderers (priv->column);
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -2840,6 +2846,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   /* create our funky menu */
   menu = gtk_menu_new ();
   gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
+  gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
   
   g_signal_connect (menu, "key-press-event",
 		    G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);
@@ -2952,6 +2959,7 @@ gtk_combo_box_menu_fill_level (GtkComboBox *combo_box,
 	  if (gtk_tree_model_iter_has_child (model, &iter))
 	    {
 	      submenu = gtk_menu_new ();
+              gtk_menu_set_reserve_toggle_size (GTK_MENU (submenu), FALSE);
 	      gtk_widget_show (submenu);
 	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
 	      
@@ -3462,6 +3470,7 @@ gtk_combo_box_menu_row_inserted (GtkTreeModel *model,
       if (!menu)
 	{
 	  menu = gtk_menu_new ();
+          gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
 	  gtk_widget_show (menu);
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (parent), menu);
 	  
@@ -4097,7 +4106,7 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
       gtk_tree_view_column_cell_set_cell_data (column, model, &iter,
 					       FALSE, FALSE);
 
-      cell = cells = gtk_tree_view_column_get_cell_renderers (column);
+      cell = cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
       while (cell)
         {
 	  g_object_get (cell->data,

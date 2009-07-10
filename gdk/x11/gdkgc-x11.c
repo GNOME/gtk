@@ -608,7 +608,8 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region)
+				   const GdkRegion *region,
+				   gboolean reset_origin)
 {
   GdkGCX11 *x11_gc = GDK_GC_X11 (gc);
 
@@ -623,8 +624,11 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
 
   x11_gc->have_clip_region = region != NULL;
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
+  if (reset_origin)
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+    }
 
   x11_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
 }

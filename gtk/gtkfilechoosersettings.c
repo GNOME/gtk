@@ -248,7 +248,7 @@ _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
   settings->sort_column = FILE_LIST_COL_NAME;
   settings->show_hidden = FALSE;
   settings->expand_folders = FALSE;
-  settings->show_size_column = FALSE;
+  settings->show_size_column = TRUE;
   settings->geometry_x	    = -1;
   settings->geometry_y	    = -1;
   settings->geometry_width  = -1;

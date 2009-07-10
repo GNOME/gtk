@@ -43,6 +43,9 @@ void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
 
+gboolean _gdk_window_event_parent_of (GdkWindow *parent,
+                                      GdkWindow *child);
+
 /* Tests whether a pair of x,y may cause overflows when converted to Pango
  * units (multiplied by PANGO_SCALE).  We don't allow the entire range, leave
  * some space for additions afterwards, to be safe...

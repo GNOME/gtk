@@ -125,6 +125,7 @@ gdk_c_sources =                 \
 	gdkintl.h		\
 	gdkkeys.c		\
 	gdkkeyuni.c		\
+	gdkoffscreenwindow.c	\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
@@ -156,10 +157,10 @@ gdk_built_sources =				\
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
-# gdkmarshalers.c is not here because it is currently an empty file
 common_sources =                \
 	$(gdk_c_sources)	\
 	gdkenumtypes.c		\
+	gdkmarshalers.c		\
 	gdkmarshalers.h
 
 libgdk_directfb_2_0_la_SOURCES = $(common_sources) 
@@ -273,11 +274,11 @@ gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
 # Marshaller generation
 #
 gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 

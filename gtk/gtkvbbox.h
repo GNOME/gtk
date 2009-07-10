@@ -73,6 +73,8 @@ GtkButtonBoxStyle gtk_vbutton_box_get_layout_default (void);
 void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout);
 #endif
 
+/* private API */
+GtkButtonBoxStyle _gtk_vbutton_box_get_layout_default (void);
 
 G_END_DECLS
 

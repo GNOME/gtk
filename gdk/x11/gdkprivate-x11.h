@@ -118,7 +118,6 @@ GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
 Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
 
 /* Routines from gdkgeometry-x11.c */
-void _gdk_window_init_position     (GdkWindow     *window);
 void _gdk_window_move_resize_child (GdkWindow     *window,
                                     gint           x,
                                     gint           y,
@@ -128,13 +127,12 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
-void _gdk_x11_window_scroll        (GdkWindow       *window,
-                                    gint             dx,
-                                    gint             dy);
-void _gdk_x11_window_move_region   (GdkWindow       *window,
-                                    const GdkRegion *region,
-                                    gint             dx,
-                                    gint             dy);
+gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
+					    GdkRegion *area);
+void     _gdk_x11_window_queue_translation (GdkWindow *window,
+					    GdkRegion *area,
+					    gint       dx,
+					    gint       dy);
 
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
@@ -166,8 +164,6 @@ void _gdk_x11_initialize_locale (void);
 void _gdk_xgrab_check_unmap        (GdkWindow *window,
 				    gulong     serial);
 void _gdk_xgrab_check_destroy      (GdkWindow *window);
-void _gdk_xgrab_check_button_event (GdkWindow *window,
-				    XEvent    *xevent);
 
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 					  Window      xroot_window);
@@ -215,5 +211,6 @@ extern gboolean          _gdk_synchronize;
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
+#define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 (((GdkWindowObject *)win)->impl))
 
 #endif /* __GDK_PRIVATE_X11_H__ */

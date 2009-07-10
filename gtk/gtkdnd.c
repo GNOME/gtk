@@ -483,10 +483,10 @@ grab_dnd_keys (GtkWidget *widget,
   gdk_flush ();
   gdk_error_trap_pop ();
 
-  gdk_window_add_filter (NULL, root_key_filter, GDK_WINDOW_XID (window));
+  gdk_window_add_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
 }
 
-void
+static void
 ungrab_dnd_keys (GtkWidget *widget,
                  guint32    time)
 {
@@ -497,7 +497,7 @@ ungrab_dnd_keys (GtkWidget *widget,
   window = widget->window;
   root = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
 
-  gdk_window_remove_filter (NULL, root_key_filter, GDK_WINDOW_XID (window));
+  gdk_window_remove_filter (NULL, root_key_filter, (gpointer) GDK_WINDOW_XID (window));
 
   gdk_error_trap_push ();
 

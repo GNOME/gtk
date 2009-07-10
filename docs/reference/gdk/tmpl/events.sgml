@@ -94,6 +94,7 @@ for the possible window states
   was added in 2.8.
 @GDK_DAMAGE: the content of the window has been changed. This event type
   was added in 2.14.
+@GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>

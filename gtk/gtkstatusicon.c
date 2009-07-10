@@ -82,7 +82,8 @@ enum
   PROP_BLINKING,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_TEXT,
-  PROP_TOOLTIP_MARKUP
+  PROP_TOOLTIP_MARKUP,
+  PROP_TITLE
 };
 
 enum 
@@ -116,12 +117,14 @@ struct _GtkStatusIconPrivate
   gint		last_click_x, last_click_y;
   GtkOrientation orientation;
   gchar         *tooltip_text;
+  gchar         *title;
 #endif
 	
 #ifdef GDK_WINDOWING_QUARTZ
   GtkWidget     *dummy_widget;
   GtkQuartzStatusIcon *status_item;
   gchar         *tooltip_text;
+  gchar         *title;
 #endif
 
   gint          size;
@@ -401,6 +404,23 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							NULL,
 							GTK_PARAM_READWRITE));
 
+
+  /**
+   * GtkStatusIcon:title:
+   *
+   * The title of this tray icon. This should be a short, human-readable,
+   * localized string describing the tray icon. It may be used by tools
+   * like screen readers to render the tray icon.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TITLE,
+                                   g_param_spec_string ("title",
+                                                        P_("Title"),
+                                                        P_("The title of this tray icon"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkStatusIcon::activate:
@@ -1022,10 +1042,16 @@ gtk_status_icon_set_property (GObject      *object,
       break;
     case PROP_HAS_TOOLTIP:
       gtk_status_icon_set_has_tooltip (status_icon, g_value_get_boolean (value));
+      break;
     case PROP_TOOLTIP_TEXT:
       gtk_status_icon_set_tooltip_text (status_icon, g_value_get_string (value));
+      break;
     case PROP_TOOLTIP_MARKUP:
       gtk_status_icon_set_tooltip_markup (status_icon, g_value_get_string (value));
+      break;
+    case PROP_TITLE:
+      gtk_status_icon_set_title (status_icon, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1107,6 +1133,9 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_TOOLTIP_MARKUP:
       g_value_set_string (value, gtk_status_icon_get_tooltip_markup (status_icon));
+      break;
+    case PROP_TITLE:
+      g_value_set_string (value, gtk_status_icon_get_title (status_icon));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2867,6 +2896,74 @@ gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
   return 0;
 #endif
 }
+
+/**
+ * gtk_status_icon_set_title:
+ * @status_icon: a #GtkStatusIcon
+ * @title: the title 
+ *
+ * Sets the title of this tray icon.
+ * This should be a short, human-readable, localized string 
+ * describing the tray icon. It may be used by tools like screen
+ * readers to render the tray icon.
+ *
+ * Since: 2.18
+ */
+void
+gtk_status_icon_set_title (GtkStatusIcon *status_icon,
+                           const gchar   *title)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  gtk_window_set_title (GTK_WINDOW (priv->tray_icon), title);
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  g_free (priv->title);
+  priv->title = g_strdup (title);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  g_free (priv->title);
+  priv->title = g_strdup (title);
+#endif
+
+  g_object_notify (G_OBJECT (status_icon), "title");
+}
+
+/**
+ * gtk_status_icon_get_title:
+ * @status_icon: a #GtkStatusIcon
+ *
+ * Gets the title of this tray icon. See gtk_status_icon_set_title().
+ *
+ * Returns: the title of the status icon
+ *
+ * Since: 2.18
+ */
+G_CONST_RETURN gchar *
+gtk_status_icon_get_title (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  return gtk_window_get_title (GTK_WINDOW (priv->tray_icon));
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+  return priv->title;
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  return priv->title;
+#endif
+}
+
 
 #define __GTK_STATUS_ICON_C__
 #include "gtkaliasdef.c"

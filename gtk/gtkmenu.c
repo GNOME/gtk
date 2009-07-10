@@ -73,11 +73,9 @@ struct _GtkMenuAttachData
 
 struct _GtkMenuPrivate 
 {
-  gboolean seen_item_enter;
-
-  gboolean have_position;
   gint x;
   gint y;
+  gboolean initially_pushed_in;
 
   /* info used for the table */
   guint *heights;
@@ -86,7 +84,6 @@ struct _GtkMenuPrivate
   gint monitor_num;
 
   /* Cached layout information */
-  gboolean have_layout;
   gint n_rows;
   gint n_columns;
 
@@ -96,8 +93,11 @@ struct _GtkMenuPrivate
   GtkStateType lower_arrow_state;
   GtkStateType upper_arrow_state;
 
-  gboolean ignore_button_release;
-  gboolean initially_pushed_in;
+  guint have_layout           : 1;
+  guint seen_item_enter       : 1;
+  guint have_position         : 1;
+  guint ignore_button_release : 1;
+  guint no_toggle_size        : 1;
 };
 
 typedef struct
@@ -125,7 +125,8 @@ enum {
   PROP_ATTACH_WIDGET,
   PROP_TEAROFF_STATE,
   PROP_TEAROFF_TITLE,
-  PROP_MONITOR
+  PROP_MONITOR,
+  PROP_RESERVE_TOGGLE_SIZE
 };
 
 enum {
@@ -596,6 +597,27 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     1,
 							     GTK_PARAM_READABLE));
 
+  /**
+   * GtkMenu:reserve-toggle-size:
+   *
+   * A boolean that indicates whether the menu reserves space for
+   * toggles and icons, regardless of their actual presence.
+   *
+   * This property should only be changed from its default value
+   * for special-purposes such as tabular menus. Regular menus that
+   * are connected to a menu bar or context menus should reserve
+   * toggle space for consistency.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_RESERVE_TOGGLE_SIZE,
+                                   g_param_spec_boolean ("reserve-toggle-size",
+							 P_("Reserve Toggle Size"),
+							 P_("A boolean that indicates whether the menu reserves space for toggles and icons"),
+							 TRUE,
+							 GTK_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("horizontal-padding",
                                                              P_("Horizontal Padding"),
@@ -840,6 +862,9 @@ gtk_menu_set_property (GObject      *object,
     case PROP_MONITOR:
       gtk_menu_set_monitor (menu, g_value_get_int (value));
       break;
+    case PROP_RESERVE_TOGGLE_SIZE:
+      gtk_menu_set_reserve_toggle_size (menu, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -876,6 +901,9 @@ gtk_menu_get_property (GObject     *object,
       break;
     case PROP_MONITOR:
       g_value_set_int (value, gtk_menu_get_monitor (menu));
+      break;
+    case PROP_RESERVE_TOGGLE_SIZE:
+      g_value_set_boolean (value, gtk_menu_get_reserve_toggle_size (menu));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2431,9 +2459,14 @@ gtk_menu_size_request (GtkWidget      *widget,
        priv->heights[t] = MAX (priv->heights[t], part);
     }
 
-  /* if the menu doesn't include any images or check items
-   * reserve the space so that all menus are consistent */
-  if (max_toggle_size == 0)
+  /* If the menu doesn't include any images or check items
+   * reserve the space so that all menus are consistent.
+   * We only do this for 'ordinary' menus, not for combobox
+   * menus or multi-column menus
+   */
+  if (max_toggle_size == 0 && 
+      gtk_menu_get_n_columns (menu) == 1 &&
+      !priv->no_toggle_size)
     {
       guint toggle_spacing;
       guint indicator_size;
@@ -4139,6 +4172,7 @@ gtk_menu_position (GtkMenu *menu)
   GtkRequisition requisition;
   GtkMenuPrivate *private;
   gint x, y;
+  gboolean initially_pushed_in;
   gint scroll_offset;
   gint menu_height;
   GdkScreen *screen;
@@ -4184,6 +4218,7 @@ gtk_menu_position (GtkMenu *menu)
     {
       (* menu->position_func) (menu, &x, &y, &private->initially_pushed_in,
                                menu->position_func_data);
+
       if (private->monitor_num < 0) 
 	private->monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
 
@@ -5275,6 +5310,52 @@ gtk_menu_grab_notify (GtkWidget *widget,
       if (GTK_MENU_SHELL (widget)->active && !GTK_IS_MENU_SHELL (grab))
         gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
     }
+}
+
+/**
+ * gtk_menu_set_reserve_toggle_size:
+ * @menu: a #GtkMenu
+ * @reserve_toggle_size: whether to reserve size for toggles
+ *
+ * Sets whether the menu should reserve space for drawing toggles 
+ * or icons, regardless of their actual presence.
+ *
+ * Since: 2.18
+ */
+void
+gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
+                                  gboolean  reserve_toggle_size)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  gboolean no_toggle_size;
+  
+  no_toggle_size = !reserve_toggle_size;
+
+  if (priv->no_toggle_size != no_toggle_size)
+    {
+      priv->no_toggle_size = no_toggle_size;
+
+      g_object_notify (G_OBJECT (menu), "reserve-toggle-size");
+    }
+}
+
+/**
+ * gtk_menu_get_reserve_toggle_size:
+ * @menu: a #GtkMenu
+ *
+ * Returns whether the menu reserves space for toggles and
+ * icons, regardless of their actual presence.
+ *
+ * Returns: Whether the menu reserves toggle space
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  return !priv->no_toggle_size;
 }
 
 #define __GTK_MENU_C__
