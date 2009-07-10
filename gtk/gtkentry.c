@@ -2280,7 +2280,8 @@ static void
 gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
-  
+  GtkEntryBuffer *buffer;
+
   GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
 
   entry->editable = TRUE;
@@ -2318,6 +2319,14 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
   g_signal_connect (entry->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
+
+  /* need to set a buffer here, so GtkEntry subclasses can do anything
+   * in their init() functions, just as it used to be before
+   * GtkEntryBuffer
+   */
+  buffer = gtk_entry_buffer_new (NULL, 0);
+  gtk_entry_set_buffer (entry, buffer);
+  g_object_unref (buffer);
 }
 
 static gint
