@@ -19,11 +19,16 @@
 
 #include <gdk/gdkwindow.h>
 #include "gdkdevice-core.h"
+#include "gdkprivate-x11.h"
+#include "gdkx.h"
 
 static void gdk_device_core_get_state (GdkDevice       *device,
                                        GdkWindow       *window,
                                        gdouble         *axes,
                                        GdkModifierType *mask);
+static void gdk_device_core_set_window_cursor (GdkDevice *device,
+                                               GdkWindow *window,
+                                               GdkCursor *cursor);
 
 
 G_DEFINE_TYPE (GdkDeviceCore, gdk_device_core, GDK_TYPE_DEVICE)
@@ -39,6 +44,7 @@ gdk_device_core_class_init (GdkDeviceCoreClass *klass)
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   device_class->get_state = gdk_device_core_get_state;
+  device_class->set_window_cursor = gdk_device_core_set_window_cursor;
 }
 
 static void
@@ -70,4 +76,24 @@ gdk_device_core_get_state (GdkDevice       *device,
       axes[0] = x_int;
       axes[1] = y_int;
     }
+}
+
+static void
+gdk_device_core_set_window_cursor (GdkDevice *device,
+                                   GdkWindow *window,
+                                   GdkCursor *cursor)
+{
+  GdkCursorPrivate *cursor_private;
+  Cursor xcursor;
+
+  cursor_private = (GdkCursorPrivate*) cursor;
+
+  if (!cursor)
+    xcursor = None;
+  else
+    xcursor = cursor_private->xcursor;
+
+  XDefineCursor (GDK_WINDOW_XDISPLAY (window),
+                 GDK_WINDOW_XID (window),
+                 xcursor);
 }
