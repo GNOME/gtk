@@ -5538,7 +5538,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation box_allocation;
   gint frame_width = 0;
   gint title_width = 0;
-  gint icon_width = 0;
+  gint left_width = 0;
   GdkRectangle rect;
   gboolean client_decorated;
 
@@ -5562,12 +5562,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
 
-      deco_allocation.x = frame_width;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        deco_allocation.x = allocation->width - frame_width - deco_requisition.width;
+      else
+        deco_allocation.x = frame_width;
       deco_allocation.y = frame_width;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
-      icon_width = deco_allocation.width;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+        left_width = deco_allocation.width;
 
       gtk_widget_size_allocate (priv->title_icon, &deco_allocation);
     }
@@ -5576,10 +5580,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
-      box_allocation.x = allocation->width - frame_width - box_requisition.width;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        box_allocation.x = frame_width;
+      else
+        box_allocation.x = allocation->width - frame_width - box_requisition.width;
       box_allocation.y = frame_width;
       box_allocation.width = box_requisition.width;
       box_allocation.height = box_requisition.height;
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+        left_width = box_allocation.width;
 
       gtk_widget_size_allocate (priv->button_box, &box_allocation);
     }
@@ -5588,7 +5598,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
-      deco_allocation.x = 2 * frame_width + icon_width;
+      deco_allocation.x = 2 * frame_width + left_width;
       deco_allocation.y = frame_width;
       deco_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
       deco_allocation.height = deco_requisition.height;
