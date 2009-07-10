@@ -297,7 +297,7 @@ main (int   argc,
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scale = gtk_hscale_new_with_range (0,
-				     M_PI * 2,
+				     G_PI * 2,
 				     0.01);
   gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
 
