@@ -1,11 +1,41 @@
 Overview of Changes from GTK+ 2.17.3 to 2.17.4
 ==============================================
 
+* GtkEntry now has model-view separation, with GtkEntryBuffer.
+  One intended use case for this is to support 'secure memory'
+  for password entries.
+
+* The print dialog can now optionally include the page setup
+  controls, avoiding the need for a separate page setup dialog
+  in many applications.
+
+* Coloring of visited links in GtkLabel can now be turned off, with
+  the ::track-visited-links property.
+
 * Support for clipmasks in gdk_draw_pixbuf now works, this will
   introduce visual changes in code that uses clipmasks when drawing
   pixbufs. However, since this never worked that is unlikely to happen.
   Old code using gdk_pixbuf_render_threshold_alpha masks when rendering
   pixbufs will now produce truncated results at the edges.
+
+* A number of regressions from the client-side window merge have
+  been fixed.
+
+* The directfb GDK backend has been fixed to build with csw.
+
+* Bugs fixed:
+ 569393 gtk calendar localization YM note is wrong
+ 587559 Popup closes immediately
+ 551409 Print dialog should include page size and orientation
+ 588115 gvim clipboard broken
+
+* Updated translations:
+ Dutch
+ Estonian
+ Spanish
+ Ukrainian
+ Vietnamese
+
 
 Overview of Changes from GTK+ 2.17.2 to 2.17.3
 ==============================================
