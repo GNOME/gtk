@@ -377,16 +377,18 @@ gdk_directfb_pointer_ungrab (guint32  time,
   g_object_unref (old_grab_window);
 }
 
-gint
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  return _gdk_directfb_pointer_grab_window != NULL;
-}
-
 void
-gdk_display_pointer_ungrab (GdkDisplay *display,guint32 time)
+gdk_display_pointer_ungrab (GdkDisplay *display,
+                            guint32 time)
 {
-  gdk_directfb_pointer_ungrab (time, _gdk_directfb_pointer_implicit_grab);
+  GdkPointerGrabInfo *grab = _gdk_display_get_last_pointer_grab (display);
+
+  if (grab)
+    {
+      grab->serial_end = 0;
+    }
+
+  _gdk_display_pointer_grab_update (display, 0);
 }
 
 
