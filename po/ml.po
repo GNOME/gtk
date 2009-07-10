@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-07 00:15-0400\n"
+"POT-Creation-Date: 2009-07-10 18:20-0400\n"
 "PO-Revision-Date: 2009-03-17 21:05+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <smc-discuss@googlegroups.com>\n"
@@ -1305,11 +1305,12 @@ msgstr "അണ്‍ഹാന്‍ഡില്‍ട് ടാഗ്: '%s'"
 #. * Do *not* translate it to anything else, if it
 #. * it isn't calendar:YM or calendar:MY it will not work.
 #. *
-#. * Note that this flipping is in top of the text direction flipping,
-#. * so if you have a default text direction of RTL and YM, then
-#. * the year will appear on the right.
+#. * Note that the ordering described here is logical order, which is
+#. * further influenced by BIDI ordering. Thus, if you have a default
+#. * text direction of RTL and specify "calendar:YM", then the year
+#. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:758
+#: gtk/gtkcalendar.c:759
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1317,7 +1318,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:796
+#: gtk/gtkcalendar.c:797
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1326,7 +1327,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1803
+#: gtk/gtkcalendar.c:1804
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1341,7 +1342,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
+#: gtk/gtkcalendar.c:1835 gtk/gtkcalendar.c:2493
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1357,7 +1358,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
+#: gtk/gtkcalendar.c:1867 gtk/gtkcalendar.c:2356
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1373,7 +1374,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2146
+#: gtk/gtkcalendar.c:2147
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1545,15 +1546,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "നിറം തെരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkentry.c:8448 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8571 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8462 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8585 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
-#: gtk/gtkentry.c:9830
+#: gtk/gtkentry.c:9953
 msgid "Caps Lock is on"
 msgstr "Caps Lock ഓണ്‍ ആണു്"
 
@@ -1760,19 +1761,19 @@ msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലു
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:402
+#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
-#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:413
+#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:457
 msgid "_Replace"
 msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
@@ -2205,13 +2206,13 @@ msgid "Cl_ear"
 msgstr "വെ_ടിപ്പാക്കുക"
 
 #. Open Link
-#: gtk/gtklabel.c:5504
+#: gtk/gtklabel.c:5529
 #, fuzzy
 msgid "_Open Link"
 msgstr "_തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5516
+#: gtk/gtklabel.c:5541
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2329,17 +2330,7 @@ msgstr "താള്‍ %u"
 msgid "Not a valid page setup file"
 msgstr "ശരിയായ താള്‍ ക്രമികരണ ഫയല്‍ അല്ല"
 
-#. Translate to the default units to use for presenting
-#. * lengths to the user. Translate to default:inch if you
-#. * want inches, otherwise translate to default:mm.
-#. * Do *not* translate it to "predefinito:mm", if it
-#. * it isn't default:mm or default:inch it will not work
-#.
-#: gtk/gtkpagesetupunixdialog.c:152
-msgid "default:mm"
-msgstr "default:mm"
-
-#: gtk/gtkpagesetupunixdialog.c:308
+#: gtk/gtkpagesetupunixdialog.c:168
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2347,15 +2338,15 @@ msgstr ""
 "<b>ഏതെങ്കിലും അച്ചടിയന്ത്രം</b>\n"
 "മാറ്റുവാന്‍ സാധ്യമാകുന്ന രേഖകള്‍"
 
-#: gtk/gtkpagesetupunixdialog.c:894 gtk/gtkpagesetupunixdialog.c:1403
+#: gtk/gtkpagesetupunixdialog.c:775
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:896 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:777
 msgid "inch"
 msgstr "ഇഞ്ച്"
 
-#: gtk/gtkpagesetupunixdialog.c:915
+#: gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2370,70 +2361,25 @@ msgstr ""
 " മുകളില്‍: %s %s\n"
 " താഴെ: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:964
+#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3187
 msgid "Manage Custom Sizes..."
 msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പംകള്‍ കൈകാര്യം ചെയ്യുക..."
 
-#: gtk/gtkpagesetupunixdialog.c:1012
+#: gtk/gtkpagesetupunixdialog.c:893
 msgid "_Format for:"
 msgstr "_മാതൃക:"
 
-#: gtk/gtkpagesetupunixdialog.c:1034
+#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3359
 msgid "_Paper size:"
 msgstr "_പേപ്പറിന്റെ വലിപ്പം:"
 
-#: gtk/gtkpagesetupunixdialog.c:1065
+#: gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
 msgstr "സംവേദനം (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2793
+#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3421
 msgid "Page Setup"
 msgstr "പേജിന്റെ ക്രമീകരണം"
-
-#: gtk/gtkpagesetupunixdialog.c:1448
-msgid "Margins from Printer..."
-msgstr "പ്രിന്ററില്‍ നിന്നുള്ള മാര്‍ജിനുകള്‍"
-
-#: gtk/gtkpagesetupunixdialog.c:1608
-#, c-format
-msgid "Custom Size %d"
-msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പം %d"
-
-#: gtk/gtkpagesetupunixdialog.c:1837
-msgid "Manage Custom Sizes"
-msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പംകള്‍ കൈകാര്യം ചെയ്യുക"
-
-#: gtk/gtkpagesetupunixdialog.c:1933
-msgid "_Width:"
-msgstr "_വീതി:"
-
-#: gtk/gtkpagesetupunixdialog.c:1945
-msgid "_Height:"
-msgstr "_ഉയരം:"
-
-#: gtk/gtkpagesetupunixdialog.c:1957
-msgid "Paper Size"
-msgstr "പേപ്പറിന്റെ വലിപ്പം"
-
-#: gtk/gtkpagesetupunixdialog.c:1967
-msgid "_Top:"
-msgstr "_മുകളില്‍:"
-
-#: gtk/gtkpagesetupunixdialog.c:1979
-msgid "_Bottom:"
-msgstr "_താഴെ:"
-
-#: gtk/gtkpagesetupunixdialog.c:1991
-msgid "_Left:"
-msgstr "_ഇടത്ത്:"
-
-#: gtk/gtkpagesetupunixdialog.c:2003
-msgid "_Right:"
-msgstr "_വലത്ത്:"
-
-#: gtk/gtkpagesetupunixdialog.c:2044
-msgid "Paper Margins"
-msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
 #: gtk/gtkpathbar.c:151
 msgid "Up Path"
@@ -2474,77 +2420,77 @@ msgstr "അറയില്‍ _സൂക്ഷിക്കുക:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:181
+#: gtk/gtkprintoperation.c:183
 #, c-format
 msgid "%s job #%d"
 msgstr "%s ജോലി #%d"
 
-#: gtk/gtkprintoperation.c:1579
+#: gtk/gtkprintoperation.c:1602
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "ആരംഭത്തിലുള്ള അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1580
+#: gtk/gtkprintoperation.c:1603
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതിനായി തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1581
+#: gtk/gtkprintoperation.c:1604
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "ഡേറ്റാ ലഭ്യമാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1582
+#: gtk/gtkprintoperation.c:1605
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "ഡേറ്റാ അയയ്ക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1583
+#: gtk/gtkprintoperation.c:1606
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "കാത്തിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1584
+#: gtk/gtkprintoperation.c:1607
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "ബ്ലോക്ക് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:1585
+#: gtk/gtkprintoperation.c:1608
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:1586
+#: gtk/gtkprintoperation.c:1609
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:1587
+#: gtk/gtkprintoperation.c:1610
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "പിശകോടെ പൂര്‍ത്തിയാക്കിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2163
+#: gtk/gtkprintoperation.c:2186
 #, c-format
 msgid "Preparing %d"
 msgstr "%d തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2165 gtk/gtkprintoperation.c:2730
+#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
 #, c-format
 msgid "Preparing"
 msgstr "തയ്യാറാക്കുന്നു"
 
-#: gtk/gtkprintoperation.c:2168
+#: gtk/gtkprintoperation.c:2191
 #, c-format
 msgid "Printing %d"
 msgstr "%d പ്രിന്റ് ചെയ്യുന്നു"
 
-#: gtk/gtkprintoperation.c:2760
+#: gtk/gtkprintoperation.c:2829
 #, c-format
 msgid "Error creating print preview"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതിനു് മുമ്പ് സ്ക്രീനില്‍ കാണുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation.c:2763
+#: gtk/gtkprintoperation.c:2832
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ഇതിനുള്ള കാരണം മിക്കവാറും താല്‍ക്കാലിക ഫയല്‍ ഉണ്ടാക്കപ്പെട്ടില്ല എന്നതാവും."
@@ -2559,7 +2505,7 @@ msgstr "തിരനോട്ടം ലഭ്യമാക്കുന്നത�
 msgid "Error printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:441 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "പ്രയോഗം"
 
@@ -2618,42 +2564,42 @@ msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡി�
 msgid "Unspecified error"
 msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:2077
 msgid "Printer"
 msgstr "പ്രിന്‍റര്‍"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:2087
 msgid "Location"
 msgstr "സ്ഥാനം"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1825
+#: gtk/gtkprintunixdialog.c:2098
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:2124
 msgid "Range"
 msgstr "പരിധി"
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:2128
 msgid "_All Pages"
 msgstr "_എല്ലാ പേജുകളും"
 
-#: gtk/gtkprintunixdialog.c:1862
+#: gtk/gtkprintunixdialog.c:2135
 msgid "C_urrent Page"
 msgstr "നി_ലവിലുളള താള്‍"
 
-#: gtk/gtkprintunixdialog.c:1872
+#: gtk/gtkprintunixdialog.c:2145
 #, fuzzy
 msgid "Se_lection"
 msgstr "_തെരഞ്ഞെടുക്കല്‍:"
 
-#: gtk/gtkprintunixdialog.c:1881
+#: gtk/gtkprintunixdialog.c:2154
 msgid "Pag_es:"
 msgstr "താ_ളുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:2155
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2661,29 +2607,29 @@ msgstr ""
 "ഒന്നോ അതിലധികമോ താള്‍ പരിധികള്‍ നല്‍കുക,\n"
 " ഉദാ. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:1892
+#: gtk/gtkprintunixdialog.c:2165
 #, fuzzy
 msgid "Pages"
 msgstr "താ_ളുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:1905
+#: gtk/gtkprintunixdialog.c:2178
 msgid "Copies"
 msgstr "പകര്‍പ്പുകള്‍"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1910
+#: gtk/gtkprintunixdialog.c:2183
 msgid "Copie_s:"
 msgstr "പ_കര്‍പ്പുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:1928
+#: gtk/gtkprintunixdialog.c:2201
 msgid "C_ollate"
 msgstr "_കോളേറ്റ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:1936
+#: gtk/gtkprintunixdialog.c:2209
 msgid "_Reverse"
 msgstr "_തിരിക്കുക"
 
-#: gtk/gtkprintunixdialog.c:1956
+#: gtk/gtkprintunixdialog.c:2229
 msgid "General"
 msgstr "സാധാരണ"
 
@@ -2693,42 +2639,42 @@ msgstr "സാധാരണ"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2931
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2931
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, താഴെ നിന്നും മുകളിലേക്ക്, "
 
-#: gtk/gtkprintunixdialog.c:2504
+#: gtk/gtkprintunixdialog.c:2932
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr "വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2504
+#: gtk/gtkprintunixdialog.c:2932
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr ", താഴെ നിന്നും മുകളിലേക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2505
+#: gtk/gtkprintunixdialog.c:2933
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2505
+#: gtk/gtkprintunixdialog.c:2933
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2934
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, "
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2934
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
@@ -2736,106 +2682,137 @@ msgstr "താഴെ നിന്നും മുകളിലേക്ക്, �
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2510 gtk/gtkprintunixdialog.c:2523
+#: gtk/gtkprintunixdialog.c:2938 gtk/gtkprintunixdialog.c:2951
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "പേജിന്റെ ക്രമം"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Left to right"
 msgstr "ഇടത് മുതല്‍ വലത്"
 
-#: gtk/gtkprintunixdialog.c:2540
+#: gtk/gtkprintunixdialog.c:2968
 msgid "Right to left"
 msgstr "വലതില്‍ നിന്നും എടത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2980
 #, fuzzy
 msgid "Top to bottom"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:2553
+#: gtk/gtkprintunixdialog.c:2981
 #, fuzzy
 msgid "Bottom to top"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, "
 
-#: gtk/gtkprintunixdialog.c:2631
+#. And show the custom paper dialog
+#: gtk/gtkprintunixdialog.c:3136
+msgid "Manage Custom Sizes"
+msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പംകള്‍ കൈകാര്യം ചെയ്യുക"
+
+#: gtk/gtkprintunixdialog.c:3210
 msgid "Layout"
 msgstr "ലേയൌട്ട് "
 
-#: gtk/gtkprintunixdialog.c:2635
+#: gtk/gtkprintunixdialog.c:3214
 msgid "T_wo-sided:"
 msgstr "_ഇരു വശമുള്ള:"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:3229
 msgid "Pages per _side:"
 msgstr "ഒരു _വശത്ത് എത്ര താള്‍:"
 
-#: gtk/gtkprintunixdialog.c:2667
+#: gtk/gtkprintunixdialog.c:3246
 msgid "Page or_dering:"
 msgstr "പേജിന്റെ _ക്രമം:"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:3262
 msgid "_Only print:"
 msgstr "പ്രിന്റ് മാത്രം ചെയ്യുക:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2698
+#: gtk/gtkprintunixdialog.c:3277
 msgid "All sheets"
 msgstr "എല്ലാ ഷീറ്റുകളും"
 
-#: gtk/gtkprintunixdialog.c:2699
+#: gtk/gtkprintunixdialog.c:3278
 msgid "Even sheets"
 msgstr "ഇവന്‍ ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2700
+#: gtk/gtkprintunixdialog.c:3279
 msgid "Odd sheets"
 msgstr "ഓഡ് ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2703
+#: gtk/gtkprintunixdialog.c:3282
 msgid "Sc_ale:"
 msgstr "അളവ് (_a):"
 
-#: gtk/gtkprintunixdialog.c:2730
+#: gtk/gtkprintunixdialog.c:3309
 msgid "Paper"
 msgstr "പേപ്പറ്‍"
 
-#: gtk/gtkprintunixdialog.c:2734
+#: gtk/gtkprintunixdialog.c:3313
 msgid "Paper _type:"
 msgstr "ഏത് തരം പേപ്പറ്‍ (_t):"
 
-#: gtk/gtkprintunixdialog.c:2749
+#: gtk/gtkprintunixdialog.c:3328
 msgid "Paper _source:"
 msgstr "പേപ്പറിന്റെ _ഉറവിടം:"
 
-#: gtk/gtkprintunixdialog.c:2764
+#: gtk/gtkprintunixdialog.c:3343
 msgid "Output t_ray:"
 msgstr "ഔട്ട്പുട്ട് ട്റേ (_r):"
 
-#: gtk/gtkprintunixdialog.c:2818
+#: gtk/gtkprintunixdialog.c:3383
+#, fuzzy
+msgid "Or_ientation:"
+msgstr "സംവേദനം (_O):"
+
+#. In enum order
+#: gtk/gtkprintunixdialog.c:3398
+#, fuzzy
+msgid "Portrait"
+msgstr "പോര്‍ട്രെയ്റ്റ്"
+
+#: gtk/gtkprintunixdialog.c:3399
+#, fuzzy
+msgid "Landscape"
+msgstr "ലാന്‍ഡ്സ്കേപ്പ്"
+
+#: gtk/gtkprintunixdialog.c:3400
+#, fuzzy
+msgid "Reverse portrait"
+msgstr "തിരിഞ്ഞ പോര്‍ട്രെയ്റ്റ്"
+
+#: gtk/gtkprintunixdialog.c:3401
+#, fuzzy
+msgid "Reverse landscape"
+msgstr "തിരിഞ്ഞ ലാന്‍ഡ്സ്കേപ്"
+
+#: gtk/gtkprintunixdialog.c:3446
 msgid "Job Details"
 msgstr "ജോലിയുടെ വിശദവിവരങ്ങള്‍"
 
-#: gtk/gtkprintunixdialog.c:2824
+#: gtk/gtkprintunixdialog.c:3452
 msgid "Pri_ority:"
 msgstr "മുന്‍ഗണന (_o):"
 
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:3467
 msgid "_Billing info:"
 msgstr "ബില്ലിങ് വിവരം (_B): "
 
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:3485
 msgid "Print Document"
 msgstr "രേഖ പ്രിന്റ് ചെയ്യുക"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2866
+#: gtk/gtkprintunixdialog.c:3494
 msgid "_Now"
 msgstr "ഉടന്‍ (_N)"
 
-#: gtk/gtkprintunixdialog.c:2877
+#: gtk/gtkprintunixdialog.c:3505
 msgid "A_t:"
 msgstr "എപ്പോള്‍ (_t):"
 
@@ -2843,7 +2820,7 @@ msgstr "എപ്പോള്‍ (_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2883
+#: gtk/gtkprintunixdialog.c:3511
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2851,64 +2828,64 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുന്നതിനുള്ള സമയം,\n"
 " ഉദാ. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:3521
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2909
+#: gtk/gtkprintunixdialog.c:3537
 msgid "On _hold"
 msgstr "തല്‍ക്കാലത്തേക്ക് _നിര്‍ത്തുക"
 
-#: gtk/gtkprintunixdialog.c:2910
+#: gtk/gtkprintunixdialog.c:3538
 msgid "Hold the job until it is explicitly released"
 msgstr "ഈ മാത്രമായി ലഭ്യമാക്കുന്നതു് വരെ ഇതു് ഹോള്‍ഡ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:2930
+#: gtk/gtkprintunixdialog.c:3558
 msgid "Add Cover Page"
 msgstr "കവര്‍ താള്‍ ചേര്‍ക്കുക"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2939
+#: gtk/gtkprintunixdialog.c:3567
 msgid "Be_fore:"
 msgstr "മുമ്പ് (_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2957
+#: gtk/gtkprintunixdialog.c:3585
 msgid "_After:"
 msgstr "ശേഷം (_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2975
+#: gtk/gtkprintunixdialog.c:3603
 msgid "Job"
 msgstr "ജോലി"
 
-#: gtk/gtkprintunixdialog.c:3041
+#: gtk/gtkprintunixdialog.c:3669
 msgid "Advanced"
 msgstr "പുരോഗമിച്ച"
 
-#: gtk/gtkprintunixdialog.c:3075
+#: gtk/gtkprintunixdialog.c:3703
 msgid "Image Quality"
 msgstr "ഇമേജിന്റെ നിലവാരം"
 
-#: gtk/gtkprintunixdialog.c:3078
+#: gtk/gtkprintunixdialog.c:3706
 msgid "Color"
 msgstr "നിറം"
 
-#: gtk/gtkprintunixdialog.c:3081
+#: gtk/gtkprintunixdialog.c:3709
 msgid "Finishing"
 msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
-#: gtk/gtkprintunixdialog.c:3091
+#: gtk/gtkprintunixdialog.c:3719
 msgid "Some of the settings in the dialog conflict"
 msgstr "ഡയലോഗിലുള്ള ചില ക്രമീകരണങ്ങള്‍ പൊരുത്തപ്പെടുന്നില്ല"
 
-#: gtk/gtkprintunixdialog.c:3114
+#: gtk/gtkprintunixdialog.c:3742
 msgid "Print"
 msgstr "പ്രിന്റ് ചെയ്യുക"
 
@@ -5099,3 +5076,36 @@ msgstr "ടെസ്റ്റ് പ്രിന്ററിലേക്ക് �
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വിവരം ലഭ്യമായില്ല: %s"
+
+#~ msgid "default:mm"
+#~ msgstr "default:mm"
+
+#~ msgid "Margins from Printer..."
+#~ msgstr "പ്രിന്ററില്‍ നിന്നുള്ള മാര്‍ജിനുകള്‍"
+
+#~ msgid "Custom Size %d"
+#~ msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പം %d"
+
+#~ msgid "_Width:"
+#~ msgstr "_വീതി:"
+
+#~ msgid "_Height:"
+#~ msgstr "_ഉയരം:"
+
+#~ msgid "Paper Size"
+#~ msgstr "പേപ്പറിന്റെ വലിപ്പം"
+
+#~ msgid "_Top:"
+#~ msgstr "_മുകളില്‍:"
+
+#~ msgid "_Bottom:"
+#~ msgstr "_താഴെ:"
+
+#~ msgid "_Left:"
+#~ msgstr "_ഇടത്ത്:"
+
+#~ msgid "_Right:"
+#~ msgstr "_വലത്ത്:"
+
+#~ msgid "Paper Margins"
+#~ msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"

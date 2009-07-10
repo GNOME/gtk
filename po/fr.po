@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-07 00:15-0400\n"
+"POT-Creation-Date: 2009-07-10 18:20-0400\n"
 "PO-Revision-Date: 2009-05-23 19:02+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -1339,11 +1339,12 @@ msgstr "Balise non gérée : « %s »"
 #. * Do *not* translate it to anything else, if it
 #. * it isn't calendar:YM or calendar:MY it will not work.
 #. *
-#. * Note that this flipping is in top of the text direction flipping,
-#. * so if you have a default text direction of RTL and YM, then
-#. * the year will appear on the right.
+#. * Note that the ordering described here is logical order, which is
+#. * further influenced by BIDI ordering. Thus, if you have a default
+#. * text direction of RTL and specify "calendar:YM", then the year
+#. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:758
+#: gtk/gtkcalendar.c:759
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1351,7 +1352,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:796
+#: gtk/gtkcalendar.c:797
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1360,7 +1361,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1803
+#: gtk/gtkcalendar.c:1804
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1375,7 +1376,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1834 gtk/gtkcalendar.c:2492
+#: gtk/gtkcalendar.c:1835 gtk/gtkcalendar.c:2493
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1391,7 +1392,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1866 gtk/gtkcalendar.c:2355
+#: gtk/gtkcalendar.c:1867 gtk/gtkcalendar.c:2356
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1407,7 +1408,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2146
+#: gtk/gtkcalendar.c:2147
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1580,15 +1581,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Sélecteur de couleurs"
 
-#: gtk/gtkentry.c:8448 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8571 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Méthodes de saisie"
 
-#: gtk/gtkentry.c:8462 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8585 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
-#: gtk/gtkentry.c:9830
+#: gtk/gtkentry.c:9953
 msgid "Caps Lock is on"
 msgstr "Le verrouillage majuscule est activé"
 
@@ -1796,18 +1797,18 @@ msgstr "Le raccourci %s existe déjà"
 msgid "Shortcut %s does not exist"
 msgstr "Le raccourci %s n'existe pas"
 
-#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:402
+#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Un fichier nommé « %s » existe déjà. Voulez-vous le remplacer ?"
 
-#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:406
+#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Le fichier existe déjà dans « %s ». Le remplacer écrasera son contenu."
 
-#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:413
+#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:457
 msgid "_Replace"
 msgstr "_Remplacer"
 
@@ -2244,12 +2245,12 @@ msgid "Cl_ear"
 msgstr "_Effacer"
 
 #. Open Link
-#: gtk/gtklabel.c:5504
+#: gtk/gtklabel.c:5529
 msgid "_Open Link"
 msgstr "_Ouvrir le lien"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5516
+#: gtk/gtklabel.c:5541
 msgid "Copy _Link Address"
 msgstr "Copier l'_adresse du lien"
 
@@ -2367,17 +2368,7 @@ msgstr "Page %u"
 msgid "Not a valid page setup file"
 msgstr "Fichier de mise en page non valide"
 
-#. Translate to the default units to use for presenting
-#. * lengths to the user. Translate to default:inch if you
-#. * want inches, otherwise translate to default:mm.
-#. * Do *not* translate it to "predefinito:mm", if it
-#. * it isn't default:mm or default:inch it will not work
-#.
-#: gtk/gtkpagesetupunixdialog.c:152
-msgid "default:mm"
-msgstr "default:mm"
-
-#: gtk/gtkpagesetupunixdialog.c:308
+#: gtk/gtkpagesetupunixdialog.c:168
 msgid ""
 "<b>Any Printer</b>\n"
 "For portable documents"
@@ -2385,15 +2376,15 @@ msgstr ""
 "<b>N'importe quelle imprimante</b>\n"
 "Pour les documents portables"
 
-#: gtk/gtkpagesetupunixdialog.c:894 gtk/gtkpagesetupunixdialog.c:1403
+#: gtk/gtkpagesetupunixdialog.c:775
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkpagesetupunixdialog.c:896 gtk/gtkpagesetupunixdialog.c:1401
+#: gtk/gtkpagesetupunixdialog.c:777
 msgid "inch"
 msgstr "pouce"
 
-#: gtk/gtkpagesetupunixdialog.c:915
+#: gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2408,70 +2399,25 @@ msgstr ""
 " Haut : %s %s\n"
 " Bas : %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:964
+#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3187
 msgid "Manage Custom Sizes..."
 msgstr "Gérer les tailles personnalisées...."
 
-#: gtk/gtkpagesetupunixdialog.c:1012
+#: gtk/gtkpagesetupunixdialog.c:893
 msgid "_Format for:"
 msgstr "_Formaté pour :"
 
-#: gtk/gtkpagesetupunixdialog.c:1034
+#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3359
 msgid "_Paper size:"
 msgstr "_Taille du papier :"
 
-#: gtk/gtkpagesetupunixdialog.c:1065
+#: gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
 msgstr "_Orientation :"
 
-#: gtk/gtkpagesetupunixdialog.c:1129 gtk/gtkprintunixdialog.c:2793
+#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3421
 msgid "Page Setup"
 msgstr "Mise en page"
-
-#: gtk/gtkpagesetupunixdialog.c:1448
-msgid "Margins from Printer..."
-msgstr "Marges de l'imprimante..."
-
-#: gtk/gtkpagesetupunixdialog.c:1608
-#, c-format
-msgid "Custom Size %d"
-msgstr "Taille personnalisée %d"
-
-#: gtk/gtkpagesetupunixdialog.c:1837
-msgid "Manage Custom Sizes"
-msgstr "Gérer les tailles personnalisées"
-
-#: gtk/gtkpagesetupunixdialog.c:1933
-msgid "_Width:"
-msgstr "_Largeur :"
-
-#: gtk/gtkpagesetupunixdialog.c:1945
-msgid "_Height:"
-msgstr "_Hauteur :"
-
-#: gtk/gtkpagesetupunixdialog.c:1957
-msgid "Paper Size"
-msgstr "Taille du papier"
-
-#: gtk/gtkpagesetupunixdialog.c:1967
-msgid "_Top:"
-msgstr "_Haut :"
-
-#: gtk/gtkpagesetupunixdialog.c:1979
-msgid "_Bottom:"
-msgstr "_Bas :"
-
-#: gtk/gtkpagesetupunixdialog.c:1991
-msgid "_Left:"
-msgstr "_Gauche :"
-
-#: gtk/gtkpagesetupunixdialog.c:2003
-msgid "_Right:"
-msgstr "_Droite :"
-
-#: gtk/gtkpagesetupunixdialog.c:2044
-msgid "Paper Margins"
-msgstr "Marges du papier"
 
 #: gtk/gtkpathbar.c:151
 msgid "Up Path"
@@ -2509,77 +2455,77 @@ msgstr "Enregistrer dans le _dossier :"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:181
+#: gtk/gtkprintoperation.c:183
 #, c-format
 msgid "%s job #%d"
 msgstr "%s, tâche n°%d"
 
-#: gtk/gtkprintoperation.c:1579
+#: gtk/gtkprintoperation.c:1602
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "État initial"
 
-#: gtk/gtkprintoperation.c:1580
+#: gtk/gtkprintoperation.c:1603
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Préparation de l'impression"
 
-#: gtk/gtkprintoperation.c:1581
+#: gtk/gtkprintoperation.c:1604
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Production des données"
 
-#: gtk/gtkprintoperation.c:1582
+#: gtk/gtkprintoperation.c:1605
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Envoi des données"
 
-#: gtk/gtkprintoperation.c:1583
+#: gtk/gtkprintoperation.c:1606
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "En attente"
 
-#: gtk/gtkprintoperation.c:1584
+#: gtk/gtkprintoperation.c:1607
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Interruption à cause d'un problème"
 
-#: gtk/gtkprintoperation.c:1585
+#: gtk/gtkprintoperation.c:1608
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Impression"
 
-#: gtk/gtkprintoperation.c:1586
+#: gtk/gtkprintoperation.c:1609
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Terminé"
 
-#: gtk/gtkprintoperation.c:1587
+#: gtk/gtkprintoperation.c:1610
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Terminé avec une erreur"
 
-#: gtk/gtkprintoperation.c:2163
+#: gtk/gtkprintoperation.c:2186
 #, c-format
 msgid "Preparing %d"
 msgstr "Préparation de %d"
 
-#: gtk/gtkprintoperation.c:2165 gtk/gtkprintoperation.c:2730
+#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
 #, c-format
 msgid "Preparing"
 msgstr "Préparation"
 
-#: gtk/gtkprintoperation.c:2168
+#: gtk/gtkprintoperation.c:2191
 #, c-format
 msgid "Printing %d"
 msgstr "Impression de %d"
 
-#: gtk/gtkprintoperation.c:2760
+#: gtk/gtkprintoperation.c:2829
 #, c-format
 msgid "Error creating print preview"
 msgstr "Erreur lors de la création de l'aperçu"
 
-#: gtk/gtkprintoperation.c:2763
+#: gtk/gtkprintoperation.c:2832
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -2595,7 +2541,7 @@ msgstr "Impossible de lancer l'aperçu"
 msgid "Error printing"
 msgstr "Erreur lors de l'impression"
 
-#: gtk/gtkprintoperation-unix.c:441 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Application"
 
@@ -2654,42 +2600,42 @@ msgstr "Identificateur non valide pour PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Erreur non précisée"
 
-#: gtk/gtkprintunixdialog.c:1804
+#: gtk/gtkprintunixdialog.c:2077
 msgid "Printer"
 msgstr "Imprimante"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:1814
+#: gtk/gtkprintunixdialog.c:2087
 msgid "Location"
 msgstr "Emplacement"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:1825
+#: gtk/gtkprintunixdialog.c:2098
 msgid "Status"
 msgstr "État"
 
-#: gtk/gtkprintunixdialog.c:1851
+#: gtk/gtkprintunixdialog.c:2124
 msgid "Range"
 msgstr "Plage"
 
-#: gtk/gtkprintunixdialog.c:1855
+#: gtk/gtkprintunixdialog.c:2128
 msgid "_All Pages"
 msgstr "_Toutes les pages"
 
-#: gtk/gtkprintunixdialog.c:1862
+#: gtk/gtkprintunixdialog.c:2135
 msgid "C_urrent Page"
 msgstr "Page act_uelle"
 
-#: gtk/gtkprintunixdialog.c:1872
+#: gtk/gtkprintunixdialog.c:2145
 #, fuzzy
 msgid "Se_lection"
 msgstr "_Sélection : "
 
-#: gtk/gtkprintunixdialog.c:1881
+#: gtk/gtkprintunixdialog.c:2154
 msgid "Pag_es:"
 msgstr "Pag_es :"
 
-#: gtk/gtkprintunixdialog.c:1882
+#: gtk/gtkprintunixdialog.c:2155
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2697,28 +2643,28 @@ msgstr ""
 "Indiquez une ou plusieurs intervalles de pages,\n"
 "p. ex. 1-3, 7, 11"
 
-#: gtk/gtkprintunixdialog.c:1892
+#: gtk/gtkprintunixdialog.c:2165
 msgid "Pages"
 msgstr "Pages"
 
-#: gtk/gtkprintunixdialog.c:1905
+#: gtk/gtkprintunixdialog.c:2178
 msgid "Copies"
 msgstr "Copies"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:1910
+#: gtk/gtkprintunixdialog.c:2183
 msgid "Copie_s:"
 msgstr "Copie_s :"
 
-#: gtk/gtkprintunixdialog.c:1928
+#: gtk/gtkprintunixdialog.c:2201
 msgid "C_ollate"
 msgstr "_Rassembler"
 
-#: gtk/gtkprintunixdialog.c:1936
+#: gtk/gtkprintunixdialog.c:2209
 msgid "_Reverse"
 msgstr "Inve_rser"
 
-#: gtk/gtkprintunixdialog.c:1956
+#: gtk/gtkprintunixdialog.c:2229
 msgid "General"
 msgstr "Général"
 
@@ -2729,42 +2675,42 @@ msgstr "Général"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2931
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr "De gauche à droite, du haut vers le bas"
 
-#: gtk/gtkprintunixdialog.c:2503
+#: gtk/gtkprintunixdialog.c:2931
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr "De gauche à droite, du bas vers le haut"
 
-#: gtk/gtkprintunixdialog.c:2504
+#: gtk/gtkprintunixdialog.c:2932
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr "De droite à gauche, du haut vers le bas"
 
-#: gtk/gtkprintunixdialog.c:2504
+#: gtk/gtkprintunixdialog.c:2932
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr "De droite à gauche, du bas vers le haut"
 
-#: gtk/gtkprintunixdialog.c:2505
+#: gtk/gtkprintunixdialog.c:2933
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr "Du haut vers le bas, de gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2505
+#: gtk/gtkprintunixdialog.c:2933
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr "Du haut vers le bas, de droite à gauche"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2934
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr "Du bas vers le haut, de gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2506
+#: gtk/gtkprintunixdialog.c:2934
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr "Du bas vers le haut, de droite à gauche"
@@ -2772,104 +2718,135 @@ msgstr "Du bas vers le haut, de droite à gauche"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2510 gtk/gtkprintunixdialog.c:2523
+#: gtk/gtkprintunixdialog.c:2938 gtk/gtkprintunixdialog.c:2951
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "Ordre des pages"
 
-#: gtk/gtkprintunixdialog.c:2539
+#: gtk/gtkprintunixdialog.c:2967
 msgid "Left to right"
 msgstr "De gauche à droite"
 
-#: gtk/gtkprintunixdialog.c:2540
+#: gtk/gtkprintunixdialog.c:2968
 msgid "Right to left"
 msgstr "De droite à gauche"
 
-#: gtk/gtkprintunixdialog.c:2552
+#: gtk/gtkprintunixdialog.c:2980
 msgid "Top to bottom"
 msgstr "De haut en bas"
 
-#: gtk/gtkprintunixdialog.c:2553
+#: gtk/gtkprintunixdialog.c:2981
 msgid "Bottom to top"
 msgstr "De bas en haut"
 
-#: gtk/gtkprintunixdialog.c:2631
+#. And show the custom paper dialog
+#: gtk/gtkprintunixdialog.c:3136
+msgid "Manage Custom Sizes"
+msgstr "Gérer les tailles personnalisées"
+
+#: gtk/gtkprintunixdialog.c:3210
 msgid "Layout"
 msgstr "Agencement"
 
-#: gtk/gtkprintunixdialog.c:2635
+#: gtk/gtkprintunixdialog.c:3214
 msgid "T_wo-sided:"
 msgstr "_Recto verso :"
 
-#: gtk/gtkprintunixdialog.c:2650
+#: gtk/gtkprintunixdialog.c:3229
 msgid "Pages per _side:"
 msgstr "Pages par _côté :"
 
-#: gtk/gtkprintunixdialog.c:2667
+#: gtk/gtkprintunixdialog.c:3246
 msgid "Page or_dering:"
 msgstr "Ordre des pages :"
 
-#: gtk/gtkprintunixdialog.c:2683
+#: gtk/gtkprintunixdialog.c:3262
 msgid "_Only print:"
 msgstr "Imprimer _seulement :"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:2698
+#: gtk/gtkprintunixdialog.c:3277
 msgid "All sheets"
 msgstr "Toutes les pages"
 
-#: gtk/gtkprintunixdialog.c:2699
+#: gtk/gtkprintunixdialog.c:3278
 msgid "Even sheets"
 msgstr "Pages paires"
 
-#: gtk/gtkprintunixdialog.c:2700
+#: gtk/gtkprintunixdialog.c:3279
 msgid "Odd sheets"
 msgstr "Pages impaires"
 
-#: gtk/gtkprintunixdialog.c:2703
+#: gtk/gtkprintunixdialog.c:3282
 msgid "Sc_ale:"
 msgstr "É_chelle :"
 
-#: gtk/gtkprintunixdialog.c:2730
+#: gtk/gtkprintunixdialog.c:3309
 msgid "Paper"
 msgstr "Papier"
 
-#: gtk/gtkprintunixdialog.c:2734
+#: gtk/gtkprintunixdialog.c:3313
 msgid "Paper _type:"
 msgstr "_Type de papier :"
 
-#: gtk/gtkprintunixdialog.c:2749
+#: gtk/gtkprintunixdialog.c:3328
 msgid "Paper _source:"
 msgstr "_Source du papier :"
 
-#: gtk/gtkprintunixdialog.c:2764
+#: gtk/gtkprintunixdialog.c:3343
 msgid "Output t_ray:"
 msgstr "_Bac de sortie :"
 
-#: gtk/gtkprintunixdialog.c:2818
+#: gtk/gtkprintunixdialog.c:3383
+#, fuzzy
+msgid "Or_ientation:"
+msgstr "_Orientation :"
+
+#. In enum order
+#: gtk/gtkprintunixdialog.c:3398
+#, fuzzy
+msgid "Portrait"
+msgstr "Portrait"
+
+#: gtk/gtkprintunixdialog.c:3399
+#, fuzzy
+msgid "Landscape"
+msgstr "Paysage"
+
+#: gtk/gtkprintunixdialog.c:3400
+#, fuzzy
+msgid "Reverse portrait"
+msgstr "Portrait inversé"
+
+#: gtk/gtkprintunixdialog.c:3401
+#, fuzzy
+msgid "Reverse landscape"
+msgstr "Paysage inversé"
+
+#: gtk/gtkprintunixdialog.c:3446
 msgid "Job Details"
 msgstr "Détails de la tâche"
 
-#: gtk/gtkprintunixdialog.c:2824
+#: gtk/gtkprintunixdialog.c:3452
 msgid "Pri_ority:"
 msgstr "_Priorité :"
 
-#: gtk/gtkprintunixdialog.c:2839
+#: gtk/gtkprintunixdialog.c:3467
 msgid "_Billing info:"
 msgstr "Informations de _facturation :"
 
-#: gtk/gtkprintunixdialog.c:2857
+#: gtk/gtkprintunixdialog.c:3485
 msgid "Print Document"
 msgstr "Impression du document"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2866
+#: gtk/gtkprintunixdialog.c:3494
 msgid "_Now"
 msgstr "_Maintenant"
 
-#: gtk/gtkprintunixdialog.c:2877
+#: gtk/gtkprintunixdialog.c:3505
 msgid "A_t:"
 msgstr "_À :"
 
@@ -2877,7 +2854,7 @@ msgstr "_À :"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:2883
+#: gtk/gtkprintunixdialog.c:3511
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2885,64 +2862,64 @@ msgstr ""
 "Indiquez l'heure de l'impression,\n"
 " par ex. 15:30, 14:15:20, etc."
 
-#: gtk/gtkprintunixdialog.c:2893
+#: gtk/gtkprintunixdialog.c:3521
 msgid "Time of print"
 msgstr "Heure de l'impression"
 
-#: gtk/gtkprintunixdialog.c:2909
+#: gtk/gtkprintunixdialog.c:3537
 msgid "On _hold"
 msgstr "En _attente"
 
-#: gtk/gtkprintunixdialog.c:2910
+#: gtk/gtkprintunixdialog.c:3538
 msgid "Hold the job until it is explicitly released"
 msgstr "Suspend la tâche jusqu'à ce qu'elle soit explicitement libérée"
 
-#: gtk/gtkprintunixdialog.c:2930
+#: gtk/gtkprintunixdialog.c:3558
 msgid "Add Cover Page"
 msgstr "Ajout d'une page de couverture"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2939
+#: gtk/gtkprintunixdialog.c:3567
 msgid "Be_fore:"
 msgstr "A_vant :"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:2957
+#: gtk/gtkprintunixdialog.c:3585
 msgid "_After:"
 msgstr "A_près :"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:2975
+#: gtk/gtkprintunixdialog.c:3603
 msgid "Job"
 msgstr "Tâche"
 
-#: gtk/gtkprintunixdialog.c:3041
+#: gtk/gtkprintunixdialog.c:3669
 msgid "Advanced"
 msgstr "Avancé"
 
-#: gtk/gtkprintunixdialog.c:3075
+#: gtk/gtkprintunixdialog.c:3703
 msgid "Image Quality"
 msgstr "Qualité de l'image"
 
-#: gtk/gtkprintunixdialog.c:3078
+#: gtk/gtkprintunixdialog.c:3706
 msgid "Color"
 msgstr "Couleur"
 
-#: gtk/gtkprintunixdialog.c:3081
+#: gtk/gtkprintunixdialog.c:3709
 msgid "Finishing"
 msgstr "Finalisation"
 
-#: gtk/gtkprintunixdialog.c:3091
+#: gtk/gtkprintunixdialog.c:3719
 msgid "Some of the settings in the dialog conflict"
 msgstr "Certains paramètres dans la boîte de dialogue sont en conflit"
 
-#: gtk/gtkprintunixdialog.c:3114
+#: gtk/gtkprintunixdialog.c:3742
 msgid "Print"
 msgstr "Imprimer"
 
@@ -5153,3 +5130,36 @@ msgstr "Imprimer vers une imprimante test"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Impossible d'obtenir les informations du fichier « %s » : %s"
+
+#~ msgid "default:mm"
+#~ msgstr "default:mm"
+
+#~ msgid "Margins from Printer..."
+#~ msgstr "Marges de l'imprimante..."
+
+#~ msgid "Custom Size %d"
+#~ msgstr "Taille personnalisée %d"
+
+#~ msgid "_Width:"
+#~ msgstr "_Largeur :"
+
+#~ msgid "_Height:"
+#~ msgstr "_Hauteur :"
+
+#~ msgid "Paper Size"
+#~ msgstr "Taille du papier"
+
+#~ msgid "_Top:"
+#~ msgstr "_Haut :"
+
+#~ msgid "_Bottom:"
+#~ msgstr "_Bas :"
+
+#~ msgid "_Left:"
+#~ msgstr "_Gauche :"
+
+#~ msgid "_Right:"
+#~ msgstr "_Droite :"
+
+#~ msgid "Paper Margins"
+#~ msgstr "Marges du papier"
