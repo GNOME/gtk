@@ -20,7 +20,11 @@
 #include <gdk/gdkwindow.h>
 #include "gdkdevice-core.h"
 
-static void gdk_device_core_get_state ();
+static void gdk_device_core_get_state (GdkDevice       *device,
+                                       GdkWindow       *window,
+                                       gdouble         *axes,
+                                       GdkModifierType *mask);
+
 
 G_DEFINE_TYPE (GdkDeviceCore, gdk_device_core, GDK_TYPE_DEVICE)
 
