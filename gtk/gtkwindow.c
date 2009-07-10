@@ -855,6 +855,12 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Decoration border width"),
                                                              0, G_MAXINT, 6, GTK_PARAM_READWRITE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-resize-handle",
+                                                             P_("Decoration resize handle size"),
+                                                             P_("Decoration resize handle size"),
+                                                             0, G_MAXINT, 20, GTK_PARAM_READWRITE));
+
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -5809,11 +5815,17 @@ static gint
 get_title_height (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gint title;
 
-  if (!is_client_side_decorated (window) || !priv->title_label)
-    return 0;
+  title = 0;
+  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+    title = MAX (title, priv->title_icon->allocation.height);
+  if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+    title = MAX (title, priv->title_label->allocation.height);
+  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+    title = MAX (title, priv->button_box->allocation.height);
 
-  return priv->title_label->allocation.height;
+  return title;
 }
 
 static GtkWindowRegion
@@ -5821,36 +5833,61 @@ get_region_type (GtkWindow *window, gint x, gint y)
 {
   GtkWidget *widget = GTK_WIDGET (window);
   gint title_height = get_title_height (window);
+  gint frame_width;
+  gint resize_handle;
 
-  if (x < window->frame_left)
+  gtk_widget_style_get (widget,
+                        "decoration-border-width", &frame_width,
+                        "decoration-resize-handle", &resize_handle,
+                        NULL);
+
+  if (x < frame_width)
     {
-      if (y < window->frame_top + title_height)
+      if (y < frame_width + MAX (title_height, resize_handle))
         return GTK_WINDOW_REGION_EDGE_NW;
-      else if (y > widget->allocation.height - window->frame_bottom)
+      else if (y > widget->allocation.height - frame_width - resize_handle)
         return GTK_WINDOW_REGION_EDGE_SW;
       else
         return GTK_WINDOW_REGION_EDGE_W;
     }
-  else if (x < widget->allocation.width - window->frame_right)
+  else if (x < frame_width + resize_handle)
     {
-      if (y < window->frame_top)
-        {
-          return GTK_WINDOW_REGION_EDGE_N;
-        }
-      else if (y < window->frame_top + title_height)
-        {
+      if (y < frame_width)
+        return GTK_WINDOW_REGION_EDGE_NW;
+      else if (y > widget->allocation.height - frame_width)
+        return GTK_WINDOW_REGION_EDGE_SW;
+      else if (y < frame_width + title_height)
           return GTK_WINDOW_REGION_TITLE;
-        }
-      else if (y > widget->allocation.height - window->frame_bottom)
+      else
+        return GTK_WINDOW_REGION_INNER;
+    }
+  else if (x < widget->allocation.width - frame_width - resize_handle)
+    {
+      if (y < frame_width)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else if (y > widget->allocation.height - frame_width)
         return GTK_WINDOW_REGION_EDGE_S;
+      else if (y < frame_width + title_height)
+        return GTK_WINDOW_REGION_TITLE;
+      else
+        return GTK_WINDOW_REGION_INNER;
+    }
+  else if (x < widget->allocation.width - frame_width)
+    {
+      if (y < frame_width)
+        return GTK_WINDOW_REGION_EDGE_NE;
+      else if (y > widget->allocation.height - frame_width)
+        return GTK_WINDOW_REGION_EDGE_SE;
+      else if (y < frame_width + title_height)
+          return GTK_WINDOW_REGION_TITLE;
       else
         return GTK_WINDOW_REGION_INNER;
     }
   else
     {
-      if (y < window->frame_top)
+      if (y < frame_width + MAX (title_height, resize_handle))
         return GTK_WINDOW_REGION_EDGE_NE;
-      else if (y > widget->allocation.height - window->frame_bottom)
+      else if (y > widget->allocation.height - frame_width - resize_handle)
         return GTK_WINDOW_REGION_EDGE_SE;
       else
         return GTK_WINDOW_REGION_EDGE_E;
@@ -7494,34 +7531,6 @@ gtk_window_compute_hints (GtkWindow   *window,
  * Redrawing functions *
  ***********************/
 
-static void
-get_frame_dimensions (GtkWindow *window,
-                      gint      *left,
-                      gint      *right,
-                      gint      *top,
-                      gint      *bottom)
-{
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-  gint frame_width = 0;
-  gint title = 0;
-
-  if (priv->client_side_decorations & GDK_DECOR_BORDER)
-    gtk_widget_style_get (GTK_WIDGET (window),
-                          "decoration-border-width", &frame_width,
-                          NULL);
-  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
-    title = MAX (title, priv->title_icon->allocation.height);
-  if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
-    title = MAX (title, priv->title_label->allocation.height);
-  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
-    title = MAX (title, priv->button_box->allocation.height);
-
-  *left = frame_width;
-  *right = frame_width;
-  *top = frame_width + title;
-  *bottom = frame_width;
-}
-
 // This is just temporary, because it looks cool :)
 static void
 gtk_window_paint (GtkWidget     *widget,
@@ -7529,17 +7538,20 @@ gtk_window_paint (GtkWidget     *widget,
 {
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
-      gint left, right, top, bottom;
+      gint frame_width, title_height;
 
-      get_frame_dimensions (GTK_WINDOW (widget), &left, &right, &top, &bottom);
+      gtk_widget_style_get (widget,
+                            "decoration-border-width", &frame_width,
+                            NULL);
+      title_height = get_title_height (GTK_WINDOW (widget));
 
       gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL,
 		     GTK_SHADOW_OUT, area, widget, "decoration", 0, 0, -1, -1);
       gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
                           GTK_SHADOW_NONE, area, widget, "base",
-                          left, top,
-                          widget->allocation.width - left - right,
-                          widget->allocation.height - top - bottom);
+                          frame_width, frame_width + title_height,
+                          widget->allocation.width - 2 * frame_width,
+                          widget->allocation.height - 2 * frame_width - title_height);
     }
   else
     gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
