@@ -781,7 +781,7 @@ gdk_window_lookup (GdkNativeWindow hwnd)
 }
 
 void
-_gdk_windowing_window_destroy (GdkWindow *window,
+_gdk_win32_window_destroy (GdkWindow *window,
 			       gboolean   recursing,
 			       gboolean   foreign_destroy)
 {
@@ -1866,7 +1866,6 @@ static void
 gdk_win32_window_set_background (GdkWindow      *window,
 				 const GdkColor *color)
 {
-#if 0
   GdkWindowObject *private = (GdkWindowObject *)window;
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_background: %p: %s\n",
@@ -1874,15 +1873,6 @@ gdk_win32_window_set_background (GdkWindow      *window,
 			   _gdk_win32_color_to_string (color)));
 
   private->bg_color = *color;
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    {
-      g_object_unref (private->bg_pixmap);
-      private->bg_pixmap = NULL;
-    }
-#endif
 }
 
 static void
@@ -1891,15 +1881,7 @@ gdk_win32_window_set_back_pixmap (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
-  if (pixmap == GDK_PARENT_RELATIVE_BG || pixmap == GDK_NO_BG)
-    {
-      private->bg_pixmap = pixmap;
-    }
+  /* TODO_CSW? but win32 has no XSetWindowBackgroundPixmap */
 }
 
 static void
@@ -3592,13 +3574,6 @@ _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
   /* CHECK: are these really supposed to be the same? */
   return _gdk_windowing_window_get_shape (window);
-}
-
-static void
-_gdk_win32_window_destroy (GdkWindow *window,
-			   gboolean   recursing,
-			   gboolean   foreign_destroy)
-{
 }
 
 static gboolean
