@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2004 Tor Lillqvist
- * Copyright (C) 2001-2004 Hans Breuer
+ * Copyright (C) 2001-2009 Hans Breuer
  * Copyright (C) 2007-2009 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
@@ -3556,8 +3556,13 @@ gdk_window_set_opacity (GdkWindow *window,
 GdkRegion *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
-	// XXX: TODO
-	return NULL;
+  GdkRegion *region;
+  HRGN hrgn = _gdk_win32_bitmap_to_hrgn (mask);
+
+  region = _gdk_win32_hrgn_to_region (hrgn);
+  DeleteObject (hrgn);
+
+  return region;
 }
 
 void
@@ -3568,13 +3573,25 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 GdkRegion *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
-	return NULL;
+  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
+  int  type = GetWindowRgn (GDK_WINDOW_HWND (window), hrgn);
+
+  if (type == SIMPLEREGION || type == COMPLEXREGION)
+    {
+      GdkRegion *region = _gdk_win32_hrgn_to_region (hrgn);
+
+      DeleteObject (hrgn);
+      return region;
+    }
+
+  return NULL;
 }
 
 GdkRegion *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
-	return NULL;
+  /* CHECK: are these really supposed to be the same? */
+  return _gdk_windowing_window_get_shape (window);
 }
 
 static void
@@ -3617,6 +3634,10 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      gint offset_x,
 				      gint offset_y)
 {
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  /* CHECK: are these really supposed to be the same? */
+  return gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
 }
 
 void
