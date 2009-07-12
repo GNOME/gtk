@@ -2840,7 +2840,9 @@ gtk_paper_size_get_default
 
 #if IN_HEADER(__GTK_CUSTOM_PAPER_UNIX_DIALOG_H__)
 #if IN_FILE(__GTK_CUSTOM_PAPER_UNIX_DIALOG_C__)
+#ifdef G_OS_UNIX
 gtk_custom_paper_unix_dialog_get_type G_GNUC_CONST
+#endif
 #endif
 #endif
 
