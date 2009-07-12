@@ -2565,7 +2565,6 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %#x %#x",
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-#ifdef TODO_CSW
       grab = _gdk_display_get_last_pointer_grab (_gdk_display);
       if (grab != NULL)
 	{
@@ -2589,8 +2588,6 @@ gdk_event_translate (MSG  *msg,
 	  return_val = TRUE;
 	  *ret_valp = TRUE;
 	}
-#endif
-      
       break;
 
     case WM_SHOWWINDOW:
