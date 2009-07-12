@@ -235,6 +235,7 @@ gtk_OBJECTS = \
 	gtkdrawingarea.obj \
 	gtkeditable.obj \
 	gtkentry.obj \
+	gtkentrybuffer.obj \
 	gtkentrycompletion.obj \
 	gtkeventbox.obj \
 	gtkexpander.obj \
@@ -285,6 +286,7 @@ gtk_OBJECTS = \
 	gtkmnemonichash.obj \
 	gtkmodules.obj \
 	gtkmountoperation.obj \
+	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
 	gtkorientable.obj \
@@ -406,6 +408,7 @@ gtk_public_h_sources =		\
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
