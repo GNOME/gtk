@@ -3625,7 +3625,11 @@ _gdk_win32_window_queue_translation (GdkWindow *window,
 				     gint       dy)
 {
   /* TODO: Get current updateregion, move any part of it that intersects area by dx,dy */
-  g_print ("queue_translation\n");
+  HRGN hrgn = _gdk_win32_gdkregion_to_hrgn (area, dx, dy);
+  
+  API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), hrgn, TRUE));
+
+  DeleteObject (hrgn);
 }
 
 static void
@@ -3637,7 +3641,7 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   /* CHECK: are these really supposed to be the same? */
-  return gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
+  gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
 }
 
 void
