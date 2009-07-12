@@ -802,7 +802,7 @@ pid_equal (gconstpointer a,
   pa = *((GPid *) a);
   pb = *((GPid *) b);
 
-  return pb - pa;
+  return GPOINTER_TO_INT(pb) - GPOINTER_TO_INT(pa);
 }
 
 static void
@@ -823,8 +823,8 @@ diff_sorted_arrays (GArray         *array1,
 
   while (n1 < array1->len && n2 < array2->len)
     {
-      order = (*compare) (((gconstpointer) array1->data) + n1 * elem_size,
-                          ((gconstpointer) array2->data) + n2 * elem_size);
+      order = (*compare) (((const char*) array1->data) + n1 * elem_size,
+                          ((const char*) array2->data) + n2 * elem_size);
       if (order < 0)
         {
           g_array_append_val (removed_indices, n1);
