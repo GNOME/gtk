@@ -95,6 +95,9 @@
   </link>
   <link linkend="GtkToolbar">
     <inlinegraphic fileref="toolbar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkToolPalette">
+    <inlinegraphic fileref="toolpalette.png" format="PNG"></inlinegraphic>
   </link> 
   <link linkend="GtkTreeView">
     <inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic>

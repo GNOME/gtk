@@ -87,6 +87,7 @@ IGNORE_HFILES=				\
 	gtktrayicon.h			\
 	gtktreedatalist.h		\
 	gtktreeprivate.h		\
+	gtktoolpaletteprivate.h		\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
@@ -335,6 +336,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\
+	$(srcdir)/images/toolpalette.png				\
 	$(srcdir)/images/tree-view-coordinates.png			\
 	$(srcdir)/images/volumebutton.png				\
 	$(srcdir)/images/window.png					\

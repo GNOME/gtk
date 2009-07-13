@@ -311,6 +311,8 @@ gtk_public_h_sources =          \
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
+	gtktoolitemgroup.h		\	
+	gtktoolpalette.h		\
 	gtktoolshell.h		\
 	gtktooltip.h		\
 	gtktreednd.h		\
@@ -586,6 +588,8 @@ gtk_base_c_sources =            \
 	gtktoolbar.c		\
 	gtktoolbutton.c		\
 	gtktoolitem.c		\
+	gtktoolitemgroup.c		\
+	gtktoolpalette.c	\
 	gtktoolshell.c		\
 	gtktooltip.c		\
 	gtktreedatalist.c	\
