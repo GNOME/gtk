@@ -3398,6 +3398,10 @@ gtk_entry_leave_notify (GtkWidget        *widget,
 
       if (icon_info != NULL && event->window == icon_info->window)
         {
+          /* a grab means that we may never see the button release */
+          if (event->mode == GDK_CROSSING_GRAB || event->mode == GDK_CROSSING_GTK_GRAB)
+            icon_info->pressed = FALSE;
+
           if (should_prelight (entry, i))
             {
               icon_info->prelight = FALSE;
@@ -7827,8 +7831,13 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
     {
       icon_info->insensitive = !sensitive;
 
+      icon_info->pressed = FALSE;
+      icon_info->prelight = FALSE;
+
       if (GTK_WIDGET_REALIZED (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
+
+      gtk_widget_queue_draw (GTK_WIDGET (entry));
 
       g_object_notify (G_OBJECT (entry),
                        icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-sensitive" : "secondary-icon-sensitive");
