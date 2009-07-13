@@ -4314,7 +4314,25 @@ gtk_entry_get_chars      (GtkEditable   *editable,
 			  gint           start_pos,
 			  gint           end_pos)
 {
-  return gtk_entry_get_display_text (GTK_ENTRY (editable), start_pos, end_pos);
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
+  const gchar *text;
+  gint text_length;
+  gint start_index, end_index;
+
+  text = gtk_entry_buffer_get_text (priv->buffer);
+  text_length = gtk_entry_buffer_get_length (priv->buffer);
+
+  if (end_pos < 0)
+    end_pos = text_length;
+
+  start_pos = MIN (text_length, start_pos);
+  end_pos = MIN (text_length, end_pos);
+
+  start_index = g_utf8_offset_to_pointer (text, start_pos) - entry->text;
+  end_index = g_utf8_offset_to_pointer (text, end_pos) - entry->text;
+
+  return g_strndup (text + start_index, end_index - start_index);
 }
 
 static void
