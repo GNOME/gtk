@@ -96,7 +96,9 @@ struct _GtkToolButtonPrivate
   gchar *label_text;
   GtkWidget *label_widget;
   GtkWidget *icon_widget;
-  
+
+  GtkSizeGroup *text_size_group;
+
   guint use_underline : 1;
   guint contents_invalid : 1;
 };
@@ -318,6 +320,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
   GtkIconSize icon_size;
   GtkWidget *box = NULL;
   guint icon_spacing;
+  GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
+  GtkSizeGroup *size_group = NULL;
 
   button->priv->contents_invalid = FALSE;
 
@@ -355,7 +359,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
   if (style == GTK_TOOLBAR_BOTH_HORIZ &&
       (gtk_tool_item_get_is_important (GTK_TOOL_ITEM (button)) ||
-       gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button)) == GTK_ORIENTATION_VERTICAL))
+       gtk_tool_item_get_orientation (GTK_TOOL_ITEM (button)) == GTK_ORIENTATION_VERTICAL ||
+       gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button)) == GTK_ORIENTATION_VERTICAL))
     {
       need_label = TRUE;
     }
@@ -415,6 +420,28 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  
 	  gtk_widget_show (label);
 	}
+
+      gtk_label_set_ellipsize (GTK_LABEL (label),
+			       gtk_tool_item_get_ellipsize_mode (GTK_TOOL_ITEM (button)));
+      text_orientation = gtk_tool_item_get_text_orientation (GTK_TOOL_ITEM (button));
+      if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+          gtk_label_set_angle (GTK_LABEL (label), 0);
+          gtk_misc_set_alignment (GTK_MISC (label),
+                                  gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
+                                  0.5);
+        }
+      else
+        {
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
+	  if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
+	    gtk_label_set_angle (GTK_LABEL (label), -90);
+	  else
+	    gtk_label_set_angle (GTK_LABEL (label), 90);
+          gtk_misc_set_alignment (GTK_MISC (label),
+                                  0.5,
+                                  1 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+        }
     }
 
   icon_size = gtk_tool_item_get_icon_size (GTK_TOOL_ITEM (button));
@@ -442,6 +469,22 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  icon = gtk_image_new_from_icon_name (button->priv->icon_name, icon_size);
 	  gtk_widget_show (icon);
 	}
+
+      if (icon && text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	gtk_misc_set_alignment (GTK_MISC (icon),
+				1.0 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
+				0.5);
+      else if (icon)
+	gtk_misc_set_alignment (GTK_MISC (icon),
+				0.5,
+				gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
+
+      if (icon)
+	{
+	  size_group = gtk_tool_item_get_text_size_group (GTK_TOOL_ITEM (button));
+	  if (size_group != NULL)
+	    gtk_size_group_add_widget (size_group, icon);
+	}
     }
 
   switch (style)
@@ -452,7 +495,10 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       break;
 
     case GTK_TOOLBAR_BOTH:
-      box = gtk_vbox_new (FALSE, icon_spacing);
+      if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	box = gtk_vbox_new (FALSE, icon_spacing);
+      else
+	box = gtk_hbox_new (FALSE, icon_spacing);
       if (icon)
 	gtk_box_pack_start (GTK_BOX (box), icon, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (box), label, FALSE, TRUE, 0);
@@ -460,11 +506,22 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       break;
 
     case GTK_TOOLBAR_BOTH_HORIZ:
-      box = gtk_hbox_new (FALSE, icon_spacing);
-      if (icon)
-	gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
-      if (label)
-	gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  box = gtk_hbox_new (FALSE, icon_spacing);
+	  if (icon)
+	    gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
+	  if (label)
+	    gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
+	}
+      else
+	{
+	  box = gtk_vbox_new (FALSE, icon_spacing);
+	  if (icon)
+	    gtk_box_pack_end (GTK_BOX (box), icon, label ? FALSE : TRUE, TRUE, 0);
+	  if (label)
+	    gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+	}
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       break;
 

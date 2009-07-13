@@ -4320,10 +4320,14 @@ gtk_toolbar_unset_style
 #if IN_HEADER(__GTK_TOOL_SHELL_H__)
 #if IN_FILE(__GTK_TOOL_SHELL_C__)
 gtk_tool_shell_get_type G_GNUC_CONST
+gtk_tool_shell_get_ellipsize_mode
 gtk_tool_shell_get_icon_size
 gtk_tool_shell_get_orientation
 gtk_tool_shell_get_style
 gtk_tool_shell_get_relief_style
+gtk_tool_shell_get_text_alignment
+gtk_tool_shell_get_text_orientation
+gtk_tool_shell_get_text_size_group
 gtk_tool_shell_rebuild_menu
 #endif
 #endif
@@ -4350,6 +4354,7 @@ gtk_tool_button_set_use_underline
 
 #if IN_HEADER(__GTK_TOOL_ITEM_H__)
 #if IN_FILE(__GTK_TOOL_ITEM_C__)
+gtk_tool_item_get_ellipsize_mode
 gtk_tool_item_get_expand
 gtk_tool_item_get_homogeneous
 gtk_tool_item_get_icon_size
@@ -4357,6 +4362,9 @@ gtk_tool_item_get_is_important
 gtk_tool_item_get_orientation
 gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_get_relief_style
+gtk_tool_item_get_text_alignment
+gtk_tool_item_get_text_orientation
+gtk_tool_item_get_text_size_group
 gtk_tool_item_get_toolbar_style
 gtk_tool_item_get_type G_GNUC_CONST
 gtk_tool_item_get_use_drag_window

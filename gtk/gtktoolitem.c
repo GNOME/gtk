@@ -688,6 +688,33 @@ gtk_tool_item_new (void)
 }
 
 /**
+ * gtk_tool_item_get_ellipsize_mode:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the ellipsize mode used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function to find out how text should
+ * be ellipsized.
+ * 
+ * Return value: a #PangoEllipsizeMode indicating how text in @tool_item
+ * should be ellipsized.
+ * 
+ * Since: 2.14
+ **/
+PangoEllipsizeMode
+gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
+    return PANGO_ELLIPSIZE_NONE;
+
+  return gtk_tool_shell_get_ellipsize_mode (GTK_TOOL_SHELL (parent));
+}
+
+/**
  * gtk_tool_item_get_icon_size:
  * @tool_item: a #GtkToolItem
  * 
@@ -809,6 +836,85 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
     return GTK_RELIEF_NONE;
 
   return gtk_tool_shell_get_relief_style (GTK_TOOL_SHELL (parent));
+}
+
+/**
+ * gtk_tool_item_get_text_alignment:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the text alignment used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function to find out how text should
+ * be aligned.
+ * 
+ * Return value: a #gfloat indicating the horizontal text alignment
+ * used for @tool_item
+ * 
+ * Since: 2.14
+ **/
+gfloat
+gtk_tool_item_get_text_alignment (GtkToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
+    return 0.5;
+
+  return gtk_tool_shell_get_text_alignment (GTK_TOOL_SHELL (parent));
+}
+
+/**
+ * gtk_tool_item_get_text_orientation:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the text orientation used for @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function to find out how text should
+ * be orientated.
+ * 
+ * Return value: a #GtkOrientation indicating the text orientation
+ * used for @tool_item
+ * 
+ * Since: 2.14
+ **/
+GtkOrientation
+gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
+    return GTK_ORIENTATION_HORIZONTAL;
+
+  return gtk_tool_shell_get_text_orientation (GTK_TOOL_SHELL (parent));
+}
+
+/**
+ * gtk_tool_item_get_text_size_group:
+ * @tool_item: a #GtkToolItem: 
+ * 
+ * Returns the size group used for labels in @tool_item. Custom subclasses of
+ * #GtkToolItem should call this function and use the size group for labels.
+ * 
+ * Return value: a #GtkSizeGroup
+ * 
+ * Since: 2.14
+ **/
+GtkSizeGroup *
+gtk_tool_item_get_text_size_group (GtkToolItem *tool_item)
+{
+  GtkWidget *parent;
+  
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+
+  parent = GTK_WIDGET (tool_item)->parent;
+  if (!parent || !GTK_IS_TOOL_SHELL (parent))
+    return NULL;
+
+  return gtk_tool_shell_get_text_size_group (GTK_TOOL_SHELL (parent));
 }
 
 /**
