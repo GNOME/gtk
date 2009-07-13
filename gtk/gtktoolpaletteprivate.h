@@ -49,11 +49,7 @@ gint _gtk_tool_item_group_get_size_for_limit   (GtkToolItemGroup *group,
                                                 gboolean          vertical,
                                                 gboolean          animation);
 
-#undef HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090
-/* #define HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090 */
 
-#ifdef HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090
 GtkSizeGroup *_gtk_tool_palette_get_size_group (GtkToolPalette   *palette);
-#endif
 
 #endif /* __GTK_TOOL_PALETTE_PRIVATE_H__ */

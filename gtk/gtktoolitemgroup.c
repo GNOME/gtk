@@ -154,8 +154,6 @@ gtk_tool_item_group_get_icon_size (GtkToolShell *shell)
   return GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
-#ifdef HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090
-
 static PangoEllipsizeMode
 gtk_tool_item_group_get_ellipsize_mode (GtkToolShell *shell)
 {
@@ -199,8 +197,6 @@ gtk_tool_item_group_get_text_size_group (GtkToolShell *shell)
 
   return NULL;
 }
-
-#endif
 
 static void
 animation_change_notify (GtkToolItemGroup *group)
@@ -272,12 +268,10 @@ gtk_tool_item_group_tool_shell_init (GtkToolShellIface *iface)
   iface->get_icon_size = gtk_tool_item_group_get_icon_size;
   iface->get_orientation = gtk_tool_item_group_get_orientation;
   iface->get_style = gtk_tool_item_group_get_style;
-#ifdef HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090
   iface->get_text_alignment = gtk_tool_item_group_get_text_alignment;
   iface->get_text_orientation = gtk_tool_item_group_get_text_orientation;
   iface->get_text_size_group = gtk_tool_item_group_get_text_size_group;
   iface->get_ellipsize_mode = gtk_tool_item_group_get_ellipsize_mode;
-#endif
 }
 
 static gboolean
@@ -1844,9 +1838,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
       group->priv->ellipsize = ellipsize;
       gtk_tool_item_group_header_adjust_style (group);
       g_object_notify (G_OBJECT (group), "ellipsize");
-#ifdef HAVE_EXTENDED_TOOL_SHELL_SUPPORT_BUG_535090
       _gtk_tool_item_group_palette_reconfigured (group);
-#endif
     }
 }
 
