@@ -405,23 +405,25 @@ gdk_keyboard_grab (GdkWindow *window,
 
 
 GdkGrabStatus
-gdk_display_pointer_grab (GdkDisplay *display,GdkWindow    *window,
-                  gint          owner_events,
-                  GdkEventMask  event_mask,
-                  GdkWindow    *confine_to,
-                  GdkCursor    *cursor,
-                  guint32       time)
+_gdk_windowing_pointer_grab (GdkWindow    *window,
+                             GdkWindow    *native,
+                             gboolean      owner_events,
+                             GdkEventMask  event_mask,
+                             GdkWindow    *confine_to,
+                             GdkCursor    *cursor,
+                             guint32       time)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  return gdk_directfb_pointer_grab (window,
-                                    owner_events,
-                                    event_mask,
-                                    confine_to,
-                                    cursor,
-                                    time,
-                                    FALSE);
+  _gdk_display_add_pointer_grab (_gdk_display,
+                                 window,
+                                 native,
+                                 owner_events,
+                                 event_mask,
+                                 confine_to,
+                                 cursor,
+                                 time);
 }
 
 #define __GDK_MAIN_X11_C__

@@ -2804,6 +2804,45 @@ gdk_window_impl_directfb_end_paint (GdkPaintable *paintable)
     D_DEBUG_AT( GDKDFB_Window, "  -> depth is still %d\n", impl->paint_depth );
 }
 
+GdkRegion *
+_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
+{
+  return NULL;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_shape (GdkWindow *window)
+{
+  return NULL;
+}
+
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return 0;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_input_shape (GdkWindow *window)
+{
+}
+
+void
+_gdk_windowing_before_process_all_updates (void)
+{
+}
+
+void
+_gdk_windowing_after_process_all_updates (void)
+{
+}
+
+void
+_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
+                                               GdkRegion *region)
+{
+  _gdk_window_process_updates_recurse (window, region);
+}
 
 static void
 gdk_window_impl_directfb_paintable_init (GdkPaintableIface *iface)
