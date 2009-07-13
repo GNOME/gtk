@@ -482,5 +482,46 @@ gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
   g_object_set (toggle, "active", setting ? TRUE : FALSE, NULL);
 }
 
+/**
+ * gtk_cell_renderer_toggle_get_activatable:
+ * @toggle: a #GtkCellRendererToggle
+ *
+ * Returns whether the cell renderer is activatable. See
+ * gtk_cell_renderer_toggle_set_activatable().
+ *
+ * Return value: %TRUE if the cell renderer is activatable.
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
+
+  return toggle->activatable;
+}
+
+/**
+ * gtk_cell_renderer_toggle_set_activatable:
+ * @toggle: a #GtkCellRendererToggle.
+ * @setting: the value to set.
+ *
+ * Makes the cell renderer activatable.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
+                                          gboolean               setting)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
+
+  if (toggle->activatable != setting)
+    {
+      toggle->activatable = setting ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (toggle), "activatable");
+    }
+}
+
 #define __GTK_CELL_RENDERER_TOGGLE_C__
 #include "gtkaliasdef.c"
