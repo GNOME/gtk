@@ -5259,6 +5259,26 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
 }
 
 /**
+ * gtk_widget_has_focus:
+ * @widget: a #GtkWidget
+ *
+ * Determines if the widget has the global input focus. See
+ * gtk_widget_is_focus() for the difference between having the global
+ * input focus, and only having the focus within a toplevel.
+ *
+ * Return value: %TRUE if the widget has the global input focus.
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_has_focus (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_HAS_FOCUS (widget);
+}
+
+/**
  * gtk_widget_is_focus:
  * @widget: a #GtkWidget
  * 
@@ -5564,6 +5584,42 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     gtk_widget_queue_draw (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");
+}
+
+/**
+ * gtk_widget_get_sensitive:
+ * @widget: a #GtkWidget
+ *
+ * Returns: %TRUE if the widget is sensitive (in the sense of returning
+ * the value that has been set using gtk_widget_set_sensitive()). The
+ * effective sensitivity of a widget is however determined by both its
+ * own and its parent widget's sensitivity. See gtk_widget_is_sensitive().
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_sensitive (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_SENSITIVE (widget);
+}
+
+/**
+ * gtk_widget_is_sensitive:
+ * @widget: a #GtkWidget
+ *
+ * Returns: %TRUE if the widget is effectively sensitive, which means
+ * it is sensitive itself and also its parent widget is sensntive
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_is_sensitive (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_IS_SENSITIVE (widget);
 }
 
 /**

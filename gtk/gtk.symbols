@@ -4978,6 +4978,7 @@ gtk_widget_get_parent_window
 gtk_widget_get_pointer
 gtk_widget_get_root_window
 gtk_widget_get_screen
+gtk_widget_get_sensitive
 gtk_widget_get_settings
 gtk_widget_get_size_request
 gtk_widget_get_snapshot
@@ -4990,6 +4991,7 @@ gtk_widget_get_type G_GNUC_CONST
 gtk_widget_get_visual
 gtk_widget_grab_default
 gtk_widget_grab_focus
+gtk_widget_has_focus
 gtk_widget_has_screen
 gtk_widget_hide
 gtk_widget_hide_all
@@ -4997,6 +4999,7 @@ gtk_widget_hide_on_delete
 gtk_widget_intersect
 gtk_widget_is_ancestor
 gtk_widget_is_focus
+gtk_widget_is_sensitive
 gtk_widget_keynav_failed
 gtk_widget_list_accel_closures
 gtk_widget_list_mnemonic_labels
