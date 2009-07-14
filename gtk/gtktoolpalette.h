@@ -95,13 +95,10 @@ gboolean                       gtk_tool_palette_get_expand            (GtkToolPa
 
 void                           gtk_tool_palette_set_icon_size         (GtkToolPalette            *palette,
                                                                        GtkIconSize                icon_size);
-void                           gtk_tool_palette_set_orientation       (GtkToolPalette            *palette,
-                                                                       GtkOrientation             orientation);
 void                           gtk_tool_palette_set_style             (GtkToolPalette            *palette,
                                                                        GtkToolbarStyle            style);
 
 GtkIconSize                    gtk_tool_palette_get_icon_size         (GtkToolPalette            *palette);
-GtkOrientation                 gtk_tool_palette_get_orientation       (GtkToolPalette            *palette);
 GtkToolbarStyle                gtk_tool_palette_get_style             (GtkToolPalette            *palette);
 
 GtkToolItem*                   gtk_tool_palette_get_drop_item         (GtkToolPalette            *palette,

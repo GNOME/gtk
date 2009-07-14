@@ -25,7 +25,7 @@ static void on_combo_orientation_changed(GtkComboBox *combo_box, gpointer user_d
   gint val = 0;
   gtk_tree_model_get (model, &iter, 1, &val, -1);
   
-  gtk_tool_palette_set_orientation (palette, val);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (palette), val);
 }
 
 static void on_combo_style_changed(GtkComboBox *combo_box, gpointer user_data)

@@ -165,9 +165,10 @@ static const GtkTargetEntry dnd_targets[] =
   { "application/x-GTK-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
 };
 
-G_DEFINE_TYPE (GtkToolPalette,
+G_DEFINE_TYPE_WITH_CODE (GtkToolPalette,
                gtk_tool_palette,
-               GTK_TYPE_CONTAINER);
+               GTK_TYPE_CONTAINER,
+               G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
 static void
 gtk_tool_palette_init (GtkToolPalette *palette)
@@ -256,7 +257,7 @@ gtk_tool_palette_get_property (GObject    *object,
         break;
 
       case PROP_ORIENTATION:
-        g_value_set_enum (value, gtk_tool_palette_get_orientation (palette));
+        g_value_set_enum (value, palette->priv->orientation);
         break;
 
       case PROP_TOOLBAR_STYLE:
@@ -895,14 +896,8 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (oclass, PROP_ORIENTATION,
-                                   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("Orientation of the tool palette"),
-                                                      GTK_TYPE_ORIENTATION,
-                                                      DEFAULT_ORIENTATION,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_override_property (oclass, PROP_ORIENTATION,
+                                    "orientation");
 
   g_object_class_install_property (oclass, PROP_TOOLBAR_STYLE,
                                    g_param_spec_enum ("toolbar-style",
@@ -970,25 +965,6 @@ gtk_tool_palette_set_icon_size (GtkToolPalette *palette,
 }
 
 /**
- * gtk_tool_palette_set_orientation:
- * @palette: an #GtkToolPalette.
- * @orientation: the #GtkOrientation that the tool palette shall have.
- *
- * Sets the orientation (horizontal or vertical) of the tool palette.
- *
- * Since: 2.18
- */
-void
-gtk_tool_palette_set_orientation (GtkToolPalette *palette,
-                                  GtkOrientation  orientation)
-{
-  g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
-
-  if (orientation != palette->priv->orientation)
-    g_object_set (palette, "orientation", orientation, NULL);
-}
-
-/**
  * gtk_tool_palette_set_style:
  * @palette: an #GtkToolPalette.
  * @style: the #GtkToolbarStyle that items in the tool palette shall have.
@@ -1022,21 +998,6 @@ gtk_tool_palette_get_icon_size (GtkToolPalette *palette)
 {
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), DEFAULT_ICON_SIZE);
   return palette->priv->icon_size;
-}
-
-/**
- * gtk_tool_palette_get_orientation:
- * @palette: an #GtkToolPalette.
- *
- * Gets the orientation (horizontal or vertical) of the tool palette. See gtk_tool_palette_set_orientation().
- *
- * Returns the #GtkOrientation of the tool palette.
- */
-GtkOrientation
-gtk_tool_palette_get_orientation (GtkToolPalette *palette)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), DEFAULT_ORIENTATION);
-  return palette->priv->orientation;
 }
 
 /**
