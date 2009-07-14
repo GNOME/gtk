@@ -5421,6 +5421,21 @@ gtk_widget_set_state (GtkWidget           *widget,
     }
 }
 
+/**
+ * gtk_widget_get_state:
+ * @widget: a #GtkWidget
+ *
+ * Returns: the state of @widget. See gtk_widget_set_state().
+ *
+ * Since: 2.18
+ **/
+GtkStateType
+gtk_widget_get_state (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_STATE_NORMAL);
+
+  return widget->state;
+}
 
 /**
  * gtk_widget_set_app_paintable:

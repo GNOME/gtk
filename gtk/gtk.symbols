@@ -4982,6 +4982,7 @@ gtk_widget_get_sensitive
 gtk_widget_get_settings
 gtk_widget_get_size_request
 gtk_widget_get_snapshot
+gtk_widget_get_state
 gtk_widget_get_style
 gtk_widget_get_tooltip_markup
 gtk_widget_get_tooltip_text
