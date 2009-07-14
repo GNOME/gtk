@@ -16,6 +16,7 @@ static void load_special_items (GtkToolPalette *palette);
 static void on_combo_orientation_changed(GtkComboBox *combo_box, gpointer user_data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (user_data);
+  GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW (GTK_WIDGET (palette)->parent);
   GtkTreeModel *model = gtk_combo_box_get_model (combo_box);
   
   GtkTreeIter iter;
@@ -26,6 +27,11 @@ static void on_combo_orientation_changed(GtkComboBox *combo_box, gpointer user_d
   gtk_tree_model_get (model, &iter, 1, &val, -1);
   
   gtk_orientable_set_orientation (GTK_ORIENTABLE (palette), val);
+
+  if (val == GTK_ORIENTATION_HORIZONTAL)
+    gtk_scrolled_window_set_policy (sw, GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
+  else
+    gtk_scrolled_window_set_policy (sw, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 }
 
 static void on_combo_style_changed(GtkComboBox *combo_box, gpointer user_data)
