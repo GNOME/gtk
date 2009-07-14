@@ -268,8 +268,13 @@ load_special_items (GtkToolPalette *palette)
 {
   GtkToolItem *item;
   GtkWidget *group;
+  GtkWidget *label_button;
 
-  group = gtk_tool_item_group_new (_("Advanced Features"));
+  group = gtk_tool_item_group_new (NULL);
+  label_button = gtk_button_new_with_label (_("Advanced Features"));
+  gtk_widget_show (label_button);
+  gtk_tool_item_group_set_label_widget (GTK_TOOL_ITEM_GROUP (group),
+    label_button);
   gtk_container_add (GTK_CONTAINER (palette), group);
 
   item = create_entry_item ("homogeneous=FALSE");
