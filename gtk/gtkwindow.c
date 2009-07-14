@@ -3337,18 +3337,6 @@ gtk_window_set_client_side_decorations (GtkWindow       *window,
   update_window_buttons (window);
 }
 
-GdkWMDecoration
-gtk_window_get_client_side_decorations (GtkWindow *window)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
-
-  priv = GTK_WINDOW_GET_PRIVATE (window);
-
-  return priv->client_side_decorations;
-}
-
 /**
  * gtk_window_set_deletable:
  * @window: a #GtkWindow
