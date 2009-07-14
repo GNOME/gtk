@@ -213,8 +213,6 @@ gtk_plug_init (GtkPlug *plug)
   window = GTK_WINDOW (plug);
 
   window->type = GTK_WINDOW_TOPLEVEL;
-
-  gtk_window_disable_client_side_decorations (window);
 }
 
 static void
@@ -557,7 +555,9 @@ gtk_plug_new_for_display (GdkDisplay	  *display,
 {
   GtkPlug *plug;
 
-  plug = g_object_new (GTK_TYPE_PLUG, NULL);
+  plug = g_object_new (GTK_TYPE_PLUG,
+                       "disable-client-side-decorations", TRUE,
+                       NULL);
   gtk_plug_construct_for_display (plug, display, socket_id);
   return GTK_WIDGET (plug);
 }

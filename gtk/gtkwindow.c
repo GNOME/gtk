@@ -72,6 +72,7 @@ enum {
 
   /* Construct */
   PROP_TYPE,
+  PROP_DISABLE_CLIENT_SIDE_DECORATIONS,
 
   /* Normal Props */
   PROP_TITLE,
@@ -844,7 +845,35 @@ gtk_window_class_init (GtkWindowClass *klass)
 							1.0,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:disable-client-side-decorations:
+   *
+   * Disable the use of client-side window decorations for this window.
+   * This is intended to be used by subclasses of GtkWindow that need to
+   * always disable client-side window decorations, for example GtkPlug.
+   * Normally client-side decorations should be controlled through
+   * GtkWindow's 'client-side-decorated' style property.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DISABLE_CLIENT_SIDE_DECORATIONS,
+                                   g_param_spec_boolean ("disable-client-side-decorations",
+                                                         P_("Disable client-side decorations"),
+                                                         P_("Disable client-side window decorations"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
   /* Style properties */
+
+  /**
+   * GtkWindow:client-side-decorated:
+   *
+   * Specifies that the window should draw its own decorations ratherthan
+   * relying upon a window manager to do so.
+   *
+   * Since: 2.18
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("client-side-decorated",
                                                                  P_("Client-side window decorations"),
@@ -3275,29 +3304,6 @@ gtk_window_get_decorated (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), TRUE);
 
   return window->decorated;
-}
-
-/**
- * gtk_window_disable_client_side_decorations:
- * @window: a #GtkWindow
- *
- * Disables client-side window decorations for the given window.
- * This is intended to be used by subclasses of GtkWindow that
- * need to always disable client-side decorations, for example
- * GtkPlug.  Normally client-side decorations should be
- * controlled through GtkWindow's client-side-decorated style
- * property.
- **/
-void
-gtk_window_disable_client_side_decorations (GtkWindow *window)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = GTK_WINDOW_GET_PRIVATE (window);
-
-  priv->disable_client_side_decorations = TRUE;
 }
 
 void
