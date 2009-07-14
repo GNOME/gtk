@@ -1081,15 +1081,17 @@ gtk_window_set_property (GObject      *object,
 {
   GtkWindow  *window;
   GtkWindowPrivate *priv;
-  
-  window = GTK_WINDOW (object);
 
+  window = GTK_WINDOW (object);
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   switch (prop_id)
     {
     case PROP_TYPE:
       window->type = g_value_get_enum (value);
+      break;
+    case PROP_DISABLE_CLIENT_SIDE_DECORATIONS:
+      priv->disable_client_side_decorations = g_value_get_boolean (value);
       break;
     case PROP_TITLE:
       gtk_window_set_title (window, g_value_get_string (value));
@@ -1208,6 +1210,9 @@ gtk_window_get_property (GObject      *object,
       GtkWindowGeometryInfo *info;
     case PROP_TYPE:
       g_value_set_enum (value, window->type);
+      break;
+    case PROP_DISABLE_CLIENT_SIDE_DECORATIONS:
+      g_value_set_boolean (value, priv->disable_client_side_decorations);
       break;
     case PROP_ROLE:
       g_value_set_string (value, window->wm_role);
