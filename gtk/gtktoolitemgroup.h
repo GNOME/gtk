@@ -55,9 +55,9 @@ struct _GtkToolItemGroupClass
 };
 
 GType                 gtk_tool_item_group_get_type          (void) G_GNUC_CONST;
-GtkWidget*            gtk_tool_item_group_new               (const gchar        *name);
+GtkWidget*            gtk_tool_item_group_new               (const gchar        *item_group_name);
 
-void                  gtk_tool_item_group_set_name          (GtkToolItemGroup   *group,
+void                  gtk_tool_item_group_set_item_group_name (GtkToolItemGroup   *group,
                                                              const gchar        *name);
 void                  gtk_tool_item_group_set_collapsed      (GtkToolItemGroup  *group,
                                                              gboolean            collapsed);
@@ -66,7 +66,7 @@ void                  gtk_tool_item_group_set_ellipsize     (GtkToolItemGroup   
 void                  gtk_tool_item_group_set_header_relief (GtkToolItemGroup   *group,
                                                              GtkReliefStyle      style);
 
-G_CONST_RETURN gchar* gtk_tool_item_group_get_name          (GtkToolItemGroup   *group);
+G_CONST_RETURN gchar* gtk_tool_item_group_get_item_group_name (GtkToolItemGroup   *group);
 gboolean              gtk_tool_item_group_get_collapsed     (GtkToolItemGroup   *group);
 PangoEllipsizeMode    gtk_tool_item_group_get_ellipsize     (GtkToolItemGroup   *group);
 GtkReliefStyle        gtk_tool_item_group_get_header_relief (GtkToolItemGroup   *group);

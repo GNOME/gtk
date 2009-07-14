@@ -52,7 +52,7 @@
 enum
 {
   PROP_NONE,
-  PROP_NAME,
+  PROP_ITEM_GROUP_NAME,
   PROP_COLLAPSED,
   PROP_ELLIPSIZE,
   PROP_RELIEF
@@ -431,8 +431,8 @@ gtk_tool_item_group_set_property (GObject      *object,
 
   switch (prop_id)
     {
-      case PROP_NAME:
-        gtk_tool_item_group_set_name (group, g_value_get_string (value));
+      case PROP_ITEM_GROUP_NAME:
+        gtk_tool_item_group_set_item_group_name (group, g_value_get_string (value));
         break;
 
       case PROP_COLLAPSED:
@@ -461,8 +461,8 @@ gtk_tool_item_group_get_property (GObject    *object,
 
   switch (prop_id)
     {
-      case PROP_NAME:
-        g_value_set_string (value, gtk_tool_item_group_get_name (group));
+      case PROP_ITEM_GROUP_NAME:
+        g_value_set_string (value, gtk_tool_item_group_get_item_group_name (group));
         break;
 
       case PROP_COLLAPSED:
@@ -539,7 +539,7 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
   GtkRequisition item_size;
   gint requested_rows;
 
-  if (group->priv->children && gtk_tool_item_group_get_name (group))
+  if (group->priv->children && gtk_tool_item_group_get_item_group_name (group))
     {
       gtk_widget_size_request (group->priv->header, requisition);
       gtk_widget_show (group->priv->header);
@@ -1512,8 +1512,11 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   cclass->set_child_property = gtk_tool_item_group_set_child_property;
   cclass->get_child_property = gtk_tool_item_group_get_child_property;
 
-  g_object_class_install_property (oclass, PROP_NAME,
-                                   g_param_spec_string ("name",
+  /* Note that this property is not just called "name" because that would 
+   * conflict with GtkWidget::"name".
+   */
+  g_object_class_install_property (oclass, PROP_ITEM_GROUP_NAME,
+                                   g_param_spec_string ("item-group-name",
                                                         P_("Name"),
                                                         P_("The name of this item group"),
                                                         DEFAULT_NAME,
@@ -1536,9 +1539,9 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (oclass, PROP_ELLIPSIZE,
+  g_object_class_install_property (oclass, PROP_RELIEF,
                                    g_param_spec_enum ("header-relief",
-                                                      P_("header-relif"),
+                                                      P_("Header Relief"),
                                                       P_("Relief of the group header button"),
                                                       GTK_TYPE_RELIEF_STYLE, GTK_RELIEF_NORMAL,
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
@@ -1620,13 +1623,14 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
  * Since: 2.18
  */
 GtkWidget*
-gtk_tool_item_group_new (const gchar *name)
+gtk_tool_item_group_new (const gchar *item_group_name)
 {
-  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "name", name, NULL);
+  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "item-group-name", 
+    item_group_name, NULL);
 }
 
 /**
- * gtk_tool_item_group_set_name:
+ * gtk_tool_item_group_set_item_group_name:
  * @group: an #GtkToolItemGroup.
  * @name: the new name of of the group.
  *
@@ -1636,14 +1640,14 @@ gtk_tool_item_group_new (const gchar *name)
  * Since: 2.18
  */
 void
-gtk_tool_item_group_set_name (GtkToolItemGroup *group,
+gtk_tool_item_group_set_item_group_name (GtkToolItemGroup *group,
                               const gchar      *name)
 {
   const gchar *current_name;
   GtkWidget *label;
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
-  current_name = gtk_tool_item_group_get_name (group);
+  current_name = gtk_tool_item_group_get_item_group_name (group);
 
   if (current_name != name && (!current_name || !name || strcmp (current_name, name)))
     {
@@ -1655,7 +1659,7 @@ gtk_tool_item_group_set_name (GtkToolItemGroup *group,
       else
         gtk_widget_hide (group->priv->header);
 
-      g_object_notify (G_OBJECT (group), "name");
+      g_object_notify (G_OBJECT (group), "item-group-name");
     }
 }
 
@@ -1843,7 +1847,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
 }
 
 /**
- * gtk_tool_item_group_get_name:
+ * gtk_tool_item_group_get_item_group_name:
  * @group: an #GtkToolItemGroup.
  *
  * Gets the name of @group.
@@ -1853,7 +1857,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
  * Since: 2.18
  */
 G_CONST_RETURN gchar*
-gtk_tool_item_group_get_name (GtkToolItemGroup *group)
+gtk_tool_item_group_get_item_group_name (GtkToolItemGroup *group)
 {
   GtkWidget *label;
 
