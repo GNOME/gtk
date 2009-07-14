@@ -11,6 +11,7 @@ gdk-pixbuf/gdk-pixbuf.c
 gdk-pixbuf/gdk-pixbuf-data.c
 gdk-pixbuf/gdk-pixbuf-io.c
 gdk-pixbuf/gdk-pixbuf-loader.c
+gdk-pixbuf/gdk-pixbuf-simple-anim.c
 gdk-pixbuf/gdk-pixdata.c
 gdk-pixbuf/io-ani.c
 gdk-pixbuf/io-bmp.c
@@ -46,6 +47,7 @@ gtk/gtkaccelmap.c
 gtk/gtkaccessible.c
 gtk/gtkaction.c
 gtk/gtkactiongroup.c
+gtk/gtkactivatable.c
 gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
@@ -84,12 +86,14 @@ gtk/gtkcombo.c
 gtk/gtkcontainer.c
 gtk/gtkctree.c
 gtk/gtkcurve.c
+gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
 gtk/gtkdnd.c
 gtk/gtkdnd-quartz.c
 gtk/gtkdrawingarea.c
 gtk/gtkeditable.c
 gtk/gtkentry.c
+gtk/gtkentrybuffer.c
 gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
@@ -130,6 +134,7 @@ gtk/gtkimcontext.c
 gtk/gtkimcontextsimple.c
 gtk/gtkimmodule.c
 gtk/gtkimmulticontext.c
+gtk/gtkinfobar.c
 gtk/gtkinputdialog.c
 gtk/gtkinvisible.c
 gtk/gtkitem.c
@@ -150,6 +155,8 @@ gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
 gtk/gtkmodules.c
 gtk/gtkmountoperation.c
+gtk/gtkmountoperation-stub.c
+gtk/gtkmountoperation-x11.c
 gtk/gtknotebook.c
 gtk/gtkobject.c
 gtk/gtkoldeditable.c
@@ -269,5 +276,6 @@ modules/input/imxim.c
 modules/printbackends/cups/gtkprintbackendcups.c
 modules/printbackends/file/gtkprintbackendfile.c
 modules/printbackends/lpr/gtkprintbackendlpr.c
+modules/printbackends/papi/gtkprintbackendpapi.c
 modules/printbackends/test/gtkprintbackendtest.c
 tests/testfilechooser.c
