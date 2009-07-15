@@ -38,6 +38,7 @@
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkbutton.h"
+#include "gtkeventbox.h"
 #include "gtkwindow.h"
 #include "gtklabel.h"
 #include "gtkbindings.h"
@@ -226,6 +227,7 @@ struct _GtkWindowPrivate
   gchar *startup_id;
 
   GtkWidget *title_label;
+  GtkWidget *icon_event_box;
   GtkWidget *title_icon;
   GtkWidget *min_button;
   GtkWidget *max_button;
@@ -1561,6 +1563,8 @@ update_window_buttons (GtkWindow *window)
 
       // close?
 
+      if (priv->icon_event_box)
+        gtk_widget_show (priv->icon_event_box);
       if (priv->title_icon)
         gtk_widget_show (priv->title_icon);
       if (priv->title_label)
@@ -1570,6 +1574,8 @@ update_window_buttons (GtkWindow *window)
     {
       if (priv->button_box)
         gtk_widget_hide (priv->button_box);
+      if (priv->icon_event_box)
+        gtk_widget_hide (priv->icon_event_box);
       if (priv->title_icon)
         gtk_widget_hide (priv->title_icon);
       if (priv->title_label)
@@ -3670,6 +3676,18 @@ icon_list_from_theme (GtkWidget    *widget,
   return list;
 }
 
+static gboolean
+icon_button_press (GtkWidget      *widget,
+                   GdkEventButton *event,
+                   gpointer        user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_do_popup (window, event);
+
+  return TRUE;
+}
+
 static void
 ensure_title_icon (GtkWindow *window)
 {
@@ -3677,14 +3695,25 @@ ensure_title_icon (GtkWindow *window)
 
   ensure_title_box (window);
 
-  if (!priv->title_icon)
+  if (!priv->icon_event_box)
     {
+      priv->icon_event_box = gtk_event_box_new ();
+      gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_event_box), FALSE);
+
       priv->title_icon = gtk_image_new ();
+
+      gtk_container_add (GTK_CONTAINER (priv->icon_event_box),
+                         priv->title_icon);
+
+      g_signal_connect (G_OBJECT (priv->icon_event_box),
+                        "button-press-event",
+                        G_CALLBACK (icon_button_press),
+                        window);
     }
 
-  gtk_widget_set_parent (priv->title_icon, GTK_WIDGET (window));
+  gtk_widget_set_parent (priv->icon_event_box, GTK_WIDGET (window));
 
-  gtk_widget_show (priv->title_icon);
+  gtk_widget_show_all (priv->icon_event_box);
 
   if (GTK_WIDGET_VISIBLE (window))
     {
@@ -5054,11 +5083,11 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_map (priv->title_label);
     }
 
-  if (priv->title_icon &&
-      GTK_WIDGET_VISIBLE (priv->title_icon) &&
-      !GTK_WIDGET_MAPPED (priv->title_icon))
+  if (priv->icon_event_box &&
+      GTK_WIDGET_VISIBLE (priv->icon_event_box) &&
+      !GTK_WIDGET_MAPPED (priv->icon_event_box))
     {
-      gtk_widget_map (priv->title_icon);
+      gtk_widget_map (priv->icon_event_box);
     }
 
   if (priv->button_box &&
@@ -5215,6 +5244,8 @@ is_client_side_decorated (GtkWindow *window)
   gtk_widget_style_get (GTK_WIDGET (window),
                         "client-side-decorated", &client_side_decorated,
                         NULL);
+
+  return TRUE;
 
   return client_side_decorated;
 }
@@ -5471,9 +5502,9 @@ gtk_window_size_request (GtkWidget      *widget,
           child_height = child_requisition.height;
         }
 
-      if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+      if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
         {
-          gtk_widget_size_request (priv->title_icon, &icon_requisition);
+          gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
           child_height = MAX (child_height, icon_requisition.height);
         }
 
@@ -5524,9 +5555,9 @@ get_available_size_for_label (GtkWindow *window)
 
   available_size -= border_width * 2;
 
-  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+  if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
     {
-      available_size -= priv->title_icon->allocation.width;
+      available_size -= priv->icon_event_box->allocation.width;
     }
 
   if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
@@ -5571,9 +5602,9 @@ gtk_window_size_allocate (GtkWidget     *widget,
                             NULL);
     }
 
-  if (client_decorated && priv->title_icon && gtk_widget_get_visible (priv->title_icon))
+  if (client_decorated && priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
     {
-      gtk_widget_get_child_requisition (priv->title_icon, &deco_requisition);
+      gtk_widget_get_child_requisition (priv->icon_event_box, &deco_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         deco_allocation.x = allocation->width - frame_width - deco_requisition.width;
@@ -5586,7 +5617,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         left_width = deco_allocation.width;
 
-      gtk_widget_size_allocate (priv->title_icon, &deco_allocation);
+      gtk_widget_size_allocate (priv->icon_event_box, &deco_allocation);
     }
 
   if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
@@ -6426,8 +6457,8 @@ gtk_window_forall (GtkContainer   *container,
   if (bin->child)
     (* callback) (bin->child, callback_data);
 
-  if (priv->title_icon)
-    (* callback) (priv->title_icon, callback_data);
+  if (priv->icon_event_box)
+    (* callback) (priv->icon_event_box, callback_data);
 
   if (priv->title_label)
     (* callback) (priv->title_label, callback_data);
@@ -6443,11 +6474,11 @@ gtk_window_remove (GtkContainer *container,
   GtkWindow *window = GTK_WINDOW (container);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  if (priv->title_icon && priv->title_icon == child)
+  if (priv->icon_event_box && priv->icon_event_box == child)
     {
-      gtk_widget_unparent (priv->title_icon);
-      gtk_widget_destroy (priv->title_icon);
-      priv->title_icon = NULL;
+      gtk_widget_unparent (priv->icon_event_box);
+      gtk_widget_destroy (priv->icon_event_box);
+      priv->icon_event_box = NULL;
     }
   else if (priv->title_label && priv->title_label == child)
     {
