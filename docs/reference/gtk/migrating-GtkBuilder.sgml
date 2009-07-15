@@ -53,7 +53,7 @@ GError* error = NULL;
 GtkBuilder* builder = gtk_builder_new (<!-- -->);
 if (!gtk_builder_add_from_file (builder, FILE, &amp;error))
   {
-    g_warning ("Couldn't load builder file: %amp;s", error->message);
+    g_warning ("Couldn't load builder file: &amp;s", error->message);
     g_error_free (error);
   }
 </screen>
