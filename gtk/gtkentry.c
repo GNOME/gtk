@@ -6708,6 +6708,7 @@ void
 gtk_entry_set_text (GtkEntry    *entry,
 		    const gchar *text)
 {
+  gint tmp_pos;
   GtkEntryCompletion *completion;
   GtkEntryPrivate *priv;
 
@@ -6727,7 +6728,9 @@ gtk_entry_set_text (GtkEntry    *entry,
 
   begin_change (entry);
   g_object_freeze_notify (G_OBJECT (entry));
-  gtk_entry_buffer_set_text (priv->buffer, text, -1);
+  gtk_editable_delete_text (GTK_EDITABLE (entry), 0, -1);
+  tmp_pos = 0;
+  gtk_editable_insert_text (GTK_EDITABLE (entry), text, strlen (text), &tmp_pos);
   g_object_thaw_notify (G_OBJECT (entry));
   end_change (entry);
 
