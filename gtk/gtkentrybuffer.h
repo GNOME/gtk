@@ -106,9 +106,9 @@ void                      gtk_entry_buffer_set_text               (GtkEntryBuffe
                                                                    gint             n_chars);
 
 void                      gtk_entry_buffer_set_max_length         (GtkEntryBuffer  *buffer,
-                                                                   guint            max_length);
+                                                                   gint             max_length);
 
-guint                     gtk_entry_buffer_get_max_length         (GtkEntryBuffer  *buffer);
+gint                      gtk_entry_buffer_get_max_length         (GtkEntryBuffer  *buffer);
 
 guint                     gtk_entry_buffer_insert_text            (GtkEntryBuffer  *buffer,
                                                                    guint            position,
