@@ -48,6 +48,7 @@
 #include "gtkmenubar.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
+#include "gtkimagemenuitem.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
@@ -231,6 +232,8 @@ struct _GtkWindowPrivate
   GtkWidget *close_button;
   GtkWidget *button_box;
   gint cursor_region;
+
+  GtkWidget *popup_menu;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -345,8 +348,10 @@ static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 static void        gtk_window_set_label_widget (GtkWindow *window,
                                                 GtkWidget *label);
 
-static gboolean    is_client_side_decorated    (GtkWindow *window);
-
+static gboolean    is_client_side_decorated    (GtkWindow      *window);
+static gboolean    gtk_window_popup_menu       (GtkWidget      *widget);
+static void        gtk_window_do_popup         (GtkWindow      *window,
+                                                GdkEventButton *event);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -517,6 +522,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->button_press_event = gtk_window_button_press_event;
   widget_class->style_set = gtk_window_style_set;
+  widget_class->popup_menu = gtk_window_popup_menu;
   widget_class->expose_event = gtk_window_expose;
 
   container_class->check_resize = gtk_window_check_resize;
@@ -5384,9 +5390,11 @@ static void
 gtk_window_unrealize (GtkWidget *widget)
 {
   GtkWindow *window;
+  GtkWindowPrivate *priv;
   GtkWindowGeometryInfo *info;
 
   window = GTK_WINDOW (widget);
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
@@ -5406,6 +5414,12 @@ gtk_window_unrealize (GtkWidget *widget)
       info->last.configure_request.height = -1;
       /* be sure we reset geom hints on re-realize */
       info->last.flags = 0;
+    }
+
+  if (priv->popup_menu)
+    {
+      gtk_widget_destroy (priv->popup_menu);
+      priv->popup_menu = NULL;
     }
   
   if (window->frame)
@@ -6057,29 +6071,38 @@ gtk_window_button_press_event (GtkWidget      *widget,
 
       if (event->type == GDK_BUTTON_PRESS)
         {
-          switch (region)
+          if (event->button == 1)
             {
-            case GTK_WINDOW_REGION_TITLE:
-            case GTK_WINDOW_REGION_INNER:
-            case GTK_WINDOW_REGION_EDGE:
-              gtk_window_begin_move_drag (window,
-                                          event->button,
-                                          event->x_root,
-                                          event->y_root,
-                                          event->time);
-              break;
+              switch (region)
+                {
+                case GTK_WINDOW_REGION_TITLE:
+                case GTK_WINDOW_REGION_INNER:
+                case GTK_WINDOW_REGION_EDGE:
+                  gtk_window_begin_move_drag (window,
+                                              event->button,
+                                              event->x_root,
+                                              event->y_root,
+                                              event->time);
+                  break;
 
-            default:
-              gtk_window_begin_resize_drag (window,
-                                            (GdkWindowEdge)region,
-                                            event->button,
-                                            event->x_root,
-                                            event->y_root,
-                                            event->time);
-              break;
+                default:
+                  gtk_window_begin_resize_drag (window,
+                                                (GdkWindowEdge)region,
+                                                event->button,
+                                                event->x_root,
+                                                event->y_root,
+                                                event->time);
+                  break;
+                }
+
+              return TRUE;
             }
+          else if (event->button == 3)
+            {
+              gtk_window_do_popup (window, event);
 
-          return TRUE;
+              return TRUE;
+            }
         }
       else if (event->type == GDK_2BUTTON_PRESS)
         {
@@ -6636,6 +6659,67 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   
   g_object_unref (widget);
   g_object_unref (window);
+}
+
+static void
+popup_menu_detach (GtkWidget *widget,
+                   GtkMenu   *menu)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
+
+  priv->popup_menu = NULL;
+}
+
+static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer   user_data)
+{
+}
+
+static void
+gtk_window_do_popup (GtkWindow      *window,
+                     GdkEventButton *event)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWidget *menuitem;
+
+  if (priv->popup_menu)
+    gtk_widget_destroy (priv->popup_menu);
+
+  priv->popup_menu = gtk_menu_new ();
+  gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
+                             GTK_WIDGET (window),
+                             popup_menu_detach);
+
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLOSE, NULL);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  if (event)
+    {
+      gtk_menu_popup (GTK_MENU (priv->popup_menu),
+                      NULL, NULL,
+                      NULL, NULL,
+                      event->button, event->time);
+    }
+  else
+    {
+      gtk_menu_popup (GTK_MENU (priv->popup_menu),
+                      NULL, NULL,
+                      popup_position_func, window,
+                      0, gtk_get_current_event_time ());
+    }
+}
+
+static gboolean
+gtk_window_popup_menu (GtkWidget *widget)
+{
+  gtk_window_do_popup (GTK_WINDOW (widget), NULL);
+
+  return TRUE;
 }
 
 /*********************************
