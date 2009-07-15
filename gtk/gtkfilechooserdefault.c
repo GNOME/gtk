@@ -4775,6 +4775,38 @@ save_folder_combo_changed_cb (GtkComboBox           *combo,
     }
 }
 
+static void
+save_folder_update_tooltip (GtkComboBox           *combo,
+			    GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+  gchar *tooltip;
+
+  tooltip = NULL;
+
+  if (gtk_combo_box_get_active_iter (combo, &iter))
+    {
+      GtkTreeIter child_iter;
+      gpointer col_data;
+      ShortcutType shortcut_type;
+
+      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model),
+                                                        &child_iter,
+                                                        &iter);
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter,
+                          SHORTCUTS_COL_DATA, &col_data,
+                          SHORTCUTS_COL_TYPE, &shortcut_type,
+                          -1);
+
+      if (shortcut_type == SHORTCUT_TYPE_FILE)
+        tooltip = g_file_get_parse_name (G_FILE (col_data));
+   }
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (combo), tooltip);
+  gtk_widget_set_has_tooltip (GTK_WIDGET (combo),
+                              gtk_widget_get_sensitive (GTK_WIDGET (combo)));
+}
+
 /* Filter function used to filter out the Search item and its separator.  
  * Used for the "Save in folder" combo box, so that these items do not appear in it.
  */
@@ -4865,6 +4897,8 @@ save_folder_combo_create (GtkFileChooserDefault *impl)
 
   g_signal_connect (combo, "changed",
 		    G_CALLBACK (save_folder_combo_changed_cb), impl);
+  g_signal_connect (combo, "changed",
+		    G_CALLBACK (save_folder_update_tooltip), impl);
 
   return combo;
 }
@@ -5467,12 +5501,14 @@ update_appearance (GtkFileChooserDefault *impl)
 	{
 	  gtk_widget_set_sensitive (impl->save_folder_label, FALSE);
 	  gtk_widget_set_sensitive (impl->save_folder_combo, FALSE);
+	  gtk_widget_set_has_tooltip (impl->save_folder_combo, FALSE);
 	  gtk_widget_show (impl->browse_widgets);
 	}
       else
 	{
 	  gtk_widget_set_sensitive (impl->save_folder_label, TRUE);
 	  gtk_widget_set_sensitive (impl->save_folder_combo, TRUE);
+	  gtk_widget_set_has_tooltip (impl->save_folder_combo, TRUE);
 	  gtk_widget_hide (impl->browse_widgets);
 	}
 
