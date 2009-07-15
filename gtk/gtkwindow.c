@@ -6046,38 +6046,48 @@ static gboolean
 gtk_window_button_press_event (GtkWidget      *widget,
                                GdkEventButton *event)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
   gint x = event->x;
   gint y = event->y;
 
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
-  if (is_client_side_decorated (GTK_WINDOW (widget)))
+  if (is_client_side_decorated (window))
     {
-      GtkWindowRegion region = get_active_region_type (GTK_WINDOW (widget), x, y);
+      GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+      GtkWindowRegion region = get_active_region_type (window, x, y);
 
-      switch (region)
+      if (event->type == GDK_BUTTON_PRESS)
         {
-        case GTK_WINDOW_REGION_TITLE:
-        case GTK_WINDOW_REGION_INNER:
-        case GTK_WINDOW_REGION_EDGE:
-          gtk_window_begin_move_drag (GTK_WINDOW (widget),
-                                      event->button,
-                                      event->x_root,
-                                      event->y_root,
-                                      event->time);
-          break;
-        default:
-          gtk_window_begin_resize_drag (GTK_WINDOW (widget),
-                                        (GdkWindowEdge)region,
-                                        event->button,
-                                        event->x_root,
-                                        event->y_root,
-                                        event->time);
-          break;
-        }
+          switch (region)
+            {
+            case GTK_WINDOW_REGION_TITLE:
+            case GTK_WINDOW_REGION_INNER:
+            case GTK_WINDOW_REGION_EDGE:
+              gtk_window_begin_move_drag (window,
+                                          event->button,
+                                          event->x_root,
+                                          event->y_root,
+                                          event->time);
+              break;
 
-      return TRUE;
+            default:
+              gtk_window_begin_resize_drag (window,
+                                            (GdkWindowEdge)region,
+                                            event->button,
+                                            event->x_root,
+                                            event->y_root,
+                                            event->time);
+              break;
+            }
+
+          return TRUE;
+        }
+      else if (event->type == GDK_2BUTTON_PRESS)
+        {
+          if (region == GTK_WINDOW_REGION_TITLE)
+            {
+              gtk_button_clicked (GTK_BUTTON (priv->max_button));
+            }
+        }
     }
 
   return FALSE;
