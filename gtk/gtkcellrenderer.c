@@ -860,6 +860,44 @@ gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
 }
 
 /**
+ * gtk_cell_renderer_set_visible:
+ * @cell: A #GtkCellRenderer
+ * @visible: the visibility of the cell
+ *
+ * Sets the cell renderer's visibility.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
+                               gboolean         visible)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (cell->visible != visible)
+    {
+      cell->visible = visible ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (cell), "visible");
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_visible:
+ * @cell: A #GtkCellRenderer
+ *
+ * Returns the cell renderer's visibility.
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_cell_renderer_get_visible  (GtkCellRenderer *cell)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  return cell->visible;
+}
+
+/**
  * gtk_cell_renderer_set_sensitive:
  * @cell: A #GtkCellRenderer
  * @sensitive: the sensitivity of the cell
