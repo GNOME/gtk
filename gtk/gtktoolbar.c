@@ -625,20 +625,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
                                                               GTK_PARAM_READABLE));
-  
-  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-style",
-                                                    P_("Toolbar style"),
-                                                    P_("Whether default toolbars have text only, text and icons, icons only, etc."),
-                                                    GTK_TYPE_TOOLBAR_STYLE,
-                                                    DEFAULT_TOOLBAR_STYLE,
-                                                    GTK_PARAM_READWRITE));
-  
-  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
-                                                    P_("Toolbar icon size"),
-                                                    P_("Size of icons in default toolbars"),
-                                                    GTK_TYPE_ICON_SIZE,
-                                                    DEFAULT_ICON_SIZE,
-                                                    GTK_PARAM_READWRITE));  
 
   binding_set = gtk_binding_set_by_class (klass);
   

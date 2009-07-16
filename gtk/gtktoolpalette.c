@@ -109,6 +109,7 @@ enum
 {
   PROP_NONE,
   PROP_ICON_SIZE,
+  PROP_ICON_SIZE_SET,
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
 };
@@ -139,12 +140,17 @@ struct _GtkToolPalettePrivate
   GtkAdjustment        *vadjustment;
 
   GtkIconSize           icon_size;
+  gboolean              icon_size_set;
   GtkOrientation        orientation;
   GtkToolbarStyle       style;
+  gboolean              style_set;
 
   GtkWidget            *expanding_child;
 
   GtkSizeGroup         *text_size_group;
+  
+  GtkSettings       *settings;
+  gulong             settings_connection;
 
   guint                 sparse_groups : 1;
   guint                 drag_source : 2;
@@ -182,8 +188,10 @@ gtk_tool_palette_init (GtkToolPalette *palette)
   palette->priv->groups = g_new0 (GtkToolItemGroupInfo, palette->priv->groups_size);
 
   palette->priv->icon_size = DEFAULT_ICON_SIZE;
+  palette->priv->icon_size_set = FALSE;
   palette->priv->orientation = DEFAULT_ORIENTATION;
   palette->priv->style = DEFAULT_TOOLBAR_STYLE;
+  palette->priv->style_set = FALSE;
 
   palette->priv->text_size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
 }
@@ -216,6 +224,14 @@ gtk_tool_palette_set_property (GObject      *object,
         if ((guint) g_value_get_enum (value) != palette->priv->icon_size)
           {
             palette->priv->icon_size = g_value_get_enum (value);
+            gtk_tool_palette_reconfigured (palette);
+          }
+        break;
+        
+      case PROP_ICON_SIZE_SET:
+        if ((guint) g_value_get_enum (value) != palette->priv->icon_size)
+          {
+            palette->priv->icon_size_set = g_value_get_enum (value);
             gtk_tool_palette_reconfigured (palette);
           }
         break;
@@ -254,6 +270,10 @@ gtk_tool_palette_get_property (GObject    *object,
     {
       case PROP_ICON_SIZE:
         g_value_set_enum (value, gtk_tool_palette_get_icon_size (palette));
+        break;
+        
+      case PROP_ICON_SIZE_SET:
+        g_value_set_boolean (value, palette->priv->icon_size_set);
         break;
 
       case PROP_ORIENTATION:
@@ -842,6 +862,81 @@ gtk_tool_palette_get_child_property (GtkContainer *container,
 }
 
 static void
+style_change_notify (GtkToolPalette *palette)
+{
+  GtkToolPalettePrivate* priv = palette->priv;
+  
+  if (!priv->style_set)
+    {
+      /* pretend it was set, then unset, thus reverting to new default */
+      priv->style_set = TRUE;
+      gtk_tool_palette_unset_style (palette);
+    }
+}
+
+static void
+icon_size_change_notify (GtkToolPalette *palette)
+{
+  GtkToolPalettePrivate* priv = palette->priv;
+  
+  if (!priv->icon_size_set)
+    {
+      /* pretend it was set, then unset, thus reverting to new default */
+      priv->icon_size_set = TRUE;
+      gtk_tool_palette_unset_icon_size (palette);
+    }
+}
+
+static void
+gtk_tool_palette_settings_change_notify (GtkSettings      *settings,
+                                         const GParamSpec *pspec,
+                                         GtkToolPalette   *palette)
+{
+  if (! strcmp (pspec->name, "gtk-toolbar-style"))
+    style_change_notify (palette);
+  else if (! strcmp (pspec->name, "gtk-toolbar-icon-size"))
+    icon_size_change_notify (palette);
+}
+
+static void
+gtk_tool_palette_screen_changed (GtkWidget *widget,
+                                 GdkScreen *previous_screen)
+{
+  GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
+  GtkToolPalettePrivate* priv = palette->priv;
+  GtkSettings *old_settings = priv->settings;
+  GtkSettings *settings;
+  
+  if (gtk_widget_has_screen (GTK_WIDGET (palette)))
+    settings = gtk_widget_get_settings (GTK_WIDGET (palette));
+  else
+    settings = NULL;
+  
+  if (settings == old_settings)
+    return;
+  
+  if (old_settings)
+  {
+    g_signal_handler_disconnect (old_settings, priv->settings_connection);
+    g_object_unref (old_settings);
+  }
+
+  if (settings)
+  {
+    priv->settings_connection =
+      g_signal_connect (settings, "notify",
+                        G_CALLBACK (gtk_tool_palette_settings_change_notify),
+                        palette);
+    priv->settings = g_object_ref (settings);
+  }
+  else
+    priv->settings = NULL;
+
+  gtk_tool_palette_reconfigured (palette);
+}
+
+
+static void
 gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
 {
   GObjectClass      *oclass   = G_OBJECT_CLASS (cls);
@@ -866,6 +961,11 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   cclass->get_child_property  = gtk_tool_palette_get_child_property;
 
   cls->set_scroll_adjustments = gtk_tool_palette_set_scroll_adjustments;
+  
+  /* Handle screen-changed so we can update our GtkSettings.
+   */
+  wclass->screen_changed      = gtk_tool_palette_screen_changed;
+    
   /**
    * GtkToolPalette::set-scroll-adjustments:
    * @widget: the GtkToolPalette that received the signal
@@ -887,18 +987,48 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                   GTK_TYPE_ADJUSTMENT,
                   GTK_TYPE_ADJUSTMENT);
 
-  g_object_class_install_property (oclass, PROP_ICON_SIZE,
+  g_object_class_override_property (oclass, PROP_ORIENTATION,
+                                    "orientation");
+                                                      
+ /**
+   * GtkToolPalette:icon-size:
+   *
+   * The size of the icons in a tool palette is normally determined by
+   * the toolbar-icon-size setting. When this property is set, it 
+   * overrides the setting. 
+   * 
+   * This should only be used for special-purpose toolbars, normal
+   * application toolbars should respect the user preferences for the
+   * size of icons.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (oclass,
+                                   PROP_ICON_SIZE,
                                    g_param_spec_enum ("icon-size",
-                                                      P_("Icon Size"),
-                                                      P_("The size of palette icons"),
+                                                      P_("Icon size"),
+                                                      P_("Size of icons in this tool palette"),
                                                       GTK_TYPE_ICON_SIZE,
                                                       DEFAULT_ICON_SIZE,
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_override_property (oclass, PROP_ORIENTATION,
-                                    "orientation");
-
+  /**
+   * GtkToolbar:icon-size-set:
+   *
+   * Is %TRUE if the icon-size property has been set.
+   *
+   * Since: 2.10
+   */
+  g_object_class_install_property (oclass,
+                                   PROP_ICON_SIZE_SET,
+                                   g_param_spec_boolean ("icon-size-set",
+                                                      P_("Icon size set"),
+                                                      P_("Whether the icon-size property has been set"),
+                                                      FALSE,
+                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
+                                                      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                      
   g_object_class_install_property (oclass, PROP_TOOLBAR_STYLE,
                                    g_param_spec_enum ("toolbar-style",
                                                       P_("Toolbar Style"),
@@ -907,6 +1037,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                       DEFAULT_TOOLBAR_STYLE,
                                                       G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
                                                       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+							 
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_EXCLUSIVE,
                                               g_param_spec_boolean ("exclusive",
@@ -958,15 +1089,103 @@ void
 gtk_tool_palette_set_icon_size (GtkToolPalette *palette,
                                 GtkIconSize     icon_size)
 {
+  GtkToolPalettePrivate *priv;
+  
   g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
+  g_return_if_fail (icon_size != GTK_ICON_SIZE_INVALID);
 
-  if (icon_size != palette->priv->icon_size)
-    g_object_set (palette, "icon-size", icon_size, NULL);
+  priv = palette->priv;
+    
+  if (!priv->icon_size_set)
+    {
+      priv->icon_size_set = TRUE;  
+      g_object_notify (G_OBJECT (palette), "icon-size-set");
+    }
+
+  if (priv->icon_size == icon_size)
+    return;
+  
+  priv->icon_size = icon_size;
+  g_object_notify (G_OBJECT (palette), "icon-size");
+  
+  gtk_tool_palette_reconfigured (palette);
+  
+  gtk_widget_queue_resize (GTK_WIDGET (palette));
+}
+
+static GtkSettings *
+toolpalette_get_settings (GtkToolPalette *palette)
+{
+  GtkToolPalettePrivate *priv = palette->priv;
+  return priv->settings;
 }
 
 /**
- * gtk_tool_palette_set_style:
+ * gtk_tool_palette_unset_icon_size:
  * @palette: an #GtkToolPalette.
+ *
+ * Unsets the tool palette icon size set with gtk_tool_palette_set_icon_size(), so that
+ * user preferences will be used to determine the icon size.
+ *
+ * Since: 2.18
+ */
+void
+gtk_tool_palette_unset_icon_size (GtkToolPalette *palette)
+{
+  GtkToolPalettePrivate* priv = palette->priv;
+  GtkIconSize size;
+  
+  g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
+  
+  if (palette->priv->icon_size_set)
+    {
+      GtkSettings *settings = toolpalette_get_settings (palette);
+      
+      if (settings)
+        {
+          g_object_get (settings,
+            "gtk-toolbar-icon-size", &size,
+            NULL);
+        }
+      else
+        size = DEFAULT_ICON_SIZE;
+      
+      if (size != palette->priv->icon_size)
+      {
+        gtk_tool_palette_set_icon_size (palette, size);
+        g_object_notify (G_OBJECT (palette), "icon-size");	  
+	    }
+      
+      priv->icon_size_set = FALSE;
+      g_object_notify (G_OBJECT (palette), "icon-size-set");      
+    }
+}
+
+/* Set the "toolbar-style" property and do appropriate things.
+ * GtkToolbar does this by emiting a signal instead of just calling a function, 
+ * but I don't see how that is useful. murrayc.
+ */
+static void
+gtk_tool_palette_change_style (GtkToolPalette     *palette,
+				GtkToolbarStyle style)
+{
+  GtkToolPalettePrivate* priv = palette->priv;
+  
+  if (priv->style != style)
+    {
+      priv->style = style;
+      
+      gtk_tool_palette_reconfigured (palette);
+      
+      gtk_widget_queue_resize (GTK_WIDGET (palette));
+      g_object_notify (G_OBJECT (palette), "toolbar-style");
+    }
+}
+
+
+/**
+ * gtk_tool_palette_set_style:
+ * @palette: a #GtkToolPalette.
  * @style: the #GtkToolbarStyle that items in the tool palette shall have.
  *
  * Sets the style (text, icons or both) of items in the tool palette.
@@ -979,8 +1198,42 @@ gtk_tool_palette_set_style (GtkToolPalette  *palette,
 {
   g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
 
-  if (style != palette->priv->style)
-    g_object_set (palette, "toolbar-style", style, NULL);
+  palette->pr->style_set = TRUE; 
+  gtk_tool_palette_change_style (palette, style);
+}
+
+
+/**
+ * gtk_tool_palette_unset_style:
+ * @palette: a #GtkToolPalette.
+ * 
+ * Unsets a toolbar style set with gtk_tool_palette_set_style(), so that
+ * user preferences will be used to determine the toolbar style.
+ **/
+void
+gtk_tool_palette_unset_style (GtkToolPalette *palette)
+{
+  GtkToolPalettePrivate* priv = palette->priv;
+  GtkToolbarStyle style;
+  
+  g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
+  
+  if (priv->style_set)
+    {
+      GtkSettings *settings = toolpalette_get_settings (palette);
+      
+      if (settings)
+	      g_object_get (settings,
+		      "gtk-toolbar-style", &style,
+		      NULL);
+      else
+        style = DEFAULT_TOOLBAR_STYLE;
+      
+      if (style != priv->style)
+        gtk_tool_palette_change_style (palette, style);
+      
+      priv->style_set = FALSE;
+    }
 }
 
 /**

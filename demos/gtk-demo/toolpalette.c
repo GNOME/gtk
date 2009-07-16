@@ -46,7 +46,10 @@ static void on_combo_style_changed(GtkComboBox *combo_box, gpointer user_data)
   gint val = 0;
   gtk_tree_model_get (model, &iter, 1, &val, -1);
   
-  gtk_tool_palette_set_style (palette, val);
+  if (val == -1)
+    gtk_tool_palette_unset_style (palette);
+  else
+    gtk_tool_palette_set_style (palette, val);
 }
 
 GtkWidget *
@@ -112,6 +115,9 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_list_store_append (combo_style_model, &iter);
       gtk_list_store_set (combo_style_model, &iter,
         0, "Icons", 1, GTK_TOOLBAR_ICONS, -1);
+      gtk_list_store_append (combo_style_model, &iter);
+      gtk_list_store_set (combo_style_model, &iter,
+        0, "Default", 1, -1 /* A custom meaning for this demo. */, -1);
       combo_style = gtk_combo_box_new_with_model (  
         GTK_TREE_MODEL (combo_style_model));
       cell_renderer = gtk_cell_renderer_text_new ();

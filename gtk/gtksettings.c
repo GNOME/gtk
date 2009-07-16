@@ -116,7 +116,9 @@ enum {
   PROP_SOUND_THEME_NAME,
   PROP_ENABLE_INPUT_FEEDBACK_SOUNDS,
   PROP_ENABLE_EVENT_SOUNDS,
-  PROP_ENABLE_TOOLTIPS
+  PROP_ENABLE_TOOLTIPS,
+  PROP_TOOLBAR_STYLE,
+  PROP_TOOLBAR_ICON_SIZE
 };
 
 
@@ -961,6 +963,40 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_TOOLTIPS);
+
+  /**
+   * GtkSettings:toolbar-style:
+   *
+   * The size of icons in default toolbars.
+   *
+   * Since: 2.18
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-toolbar-style",
+                                                                   P_("Toolbar style"),
+                                                                   P_("Whether default toolbars have text only, text and icons, icons only, etc."),
+                                                                   GTK_TYPE_TOOLBAR_STYLE,
+                                                                   GTK_TOOLBAR_BOTH,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_TOOLBAR_STYLE);
+
+  /**
+   * GtkSettings:toolbar-icon-size:
+   *
+   * The size of icons in default toolbars.
+   *
+   * Since: 2.18
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-toolbar-icon-size",
+                                                                   P_("Toolbar Icon Size"),
+                                                                   P_("The size of icons in default toolbars."),
+                                                                   GTK_TYPE_ICON_SIZE,
+                                                                   GTK_ICON_SIZE_LARGE_TOOLBAR,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_TOOLBAR_ICON_SIZE);
 }
 
 static void
@@ -1310,6 +1346,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
     case G_TYPE_STRING:
+    case G_TYPE_ENUM:
       break;
     case G_TYPE_BOXED:
       if (strcmp (g_param_spec_get_name (pspec), "color-hash") == 0)
