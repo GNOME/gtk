@@ -1198,7 +1198,7 @@ gtk_tool_palette_set_style (GtkToolPalette  *palette,
 {
   g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
 
-  palette->pr->style_set = TRUE; 
+  palette->priv->style_set = TRUE; 
   gtk_tool_palette_change_style (palette, style);
 }
 
