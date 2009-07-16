@@ -481,14 +481,13 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
 
   /* Properties */
-
   /**
    * GdkWindow:cursor:
    *
    * The mouse pointer for a #GdkWindow. See gdk_window_set_cursor() and
    * gdk_window_get_cursor() for details.
    *
-   * Since: 2.18
+   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_CURSOR,
@@ -7929,6 +7928,30 @@ gdk_window_set_back_pixmap (GdkWindow *window,
  * Return value: a #GdkCursor, or %NULL. The returned object is owned
  *   by the #GdkWindow and should not be unreferenced directly. Use
  *   gdk_window_set_cursor() to unset the cursor of the window
+ *
+ * Since: 2.18
+ */
+GdkCursor *
+gdk_window_get_cursor (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject *) window;
+
+  return private->cursor;
+}
+
+/**
+ * gdk_window_get_cursor:
+ * @window: a #GdkWindow
+ * @cursor: a cursor
+ *
+ * Retrieves a #GdkCursor pointer for the cursor currently set on the
+ * specified #GdkWindow, or %NULL.  If the return value is %NULL then
+ * there is no custom cursor set on the specified window, and it is
+ * using the cursor for its parent window.
  *
  * Since: 2.18
  */
