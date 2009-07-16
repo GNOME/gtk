@@ -32,6 +32,7 @@
 #include "gdk.h"		/* For gdk_rectangle_union() */
 #include "gdkpixmap.h"
 #include "gdkdrawable.h"
+#include "gdkintl.h"
 #include "gdkscreen.h"
 #include "gdkmarshalers.h"
 #include "gdkalias.h"
@@ -126,6 +127,11 @@ enum {
   TO_EMBEDDER,
   FROM_EMBEDDER,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_CURSOR
 };
 
 struct _GdkWindowPaint
@@ -293,6 +299,16 @@ static void gdk_window_free_paint_stack (GdkWindow *window);
 static void gdk_window_init       (GdkWindowObject      *window);
 static void gdk_window_class_init (GdkWindowObjectClass *klass);
 static void gdk_window_finalize   (GObject              *object);
+
+static void gdk_window_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec);
+static void gdk_window_get_property (GObject      *object,
+                                     guint         prop_id,
+                                     GValue       *value,
+                                     GParamSpec   *pspec);
+
 static void gdk_window_clear_backing_region (GdkWindow *window,
 					     GdkRegion *region);
 static void gdk_window_redirect_free      (GdkWindowRedirect *redirect);
@@ -410,6 +426,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_finalize;
+  object_class->set_property = gdk_window_set_property;
+  object_class->get_property = gdk_window_get_property;
 
   drawable_class->create_gc = gdk_window_create_gc;
   drawable_class->draw_rectangle = gdk_window_draw_rectangle;
@@ -443,6 +461,14 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
+
+  /* Properties */
+  g_object_class_install_property (object_class,
+                                   PROP_CURSOR,
+                                   g_param_spec_pointer ("cursor",
+                                                         P_("Cursor"),
+                                                         P_("Cursor"),
+                                                         G_PARAM_READWRITE));
 
   /**
    * GdkWindow::pick-embedded-child:
@@ -566,6 +592,46 @@ gdk_window_finalize (GObject *object)
     gdk_cursor_unref (obj->cursor);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gdk_window_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GdkWindow *window = (GdkWindow *)object;
+
+  switch (prop_id)
+    {
+    case PROP_CURSOR:
+      gdk_window_set_cursor (window, g_value_get_pointer (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_window_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GdkWindow *window = (GdkWindow *) object;
+
+  switch (prop_id)
+    {
+    case PROP_CURSOR:
+      g_value_set_pointer (value, gdk_window_get_cursor (window));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static gboolean
@@ -6948,6 +7014,30 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 }
 
 /**
+ * gdk_window_get_cursor:
+ * @window: a #GdkWindow
+ * @cursor: a cursor
+ *
+ * Retrieves a #GdkCursor pointer for the cursor currently set on the
+ * specified #GdkWindow, or %NULL.  If the return value is %NULL then
+ * there is no custom cursor set on the specified window, and it is
+ * using the cursor for its parent window.
+ *
+ * Since: 2.18
+ */
+GdkCursor *
+gdk_window_get_cursor (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject *) window;
+
+  return private->cursor;
+}
+
+/**
  * gdk_window_set_cursor:
  * @window: a #GdkWindow
  * @cursor: a cursor
@@ -6983,6 +7073,8 @@ gdk_window_set_cursor (GdkWindow *window,
 
       if (_gdk_window_event_parent_of (window, display->pointer_info.window_under_pointer))
 	update_cursor (display);
+
+      g_object_notify (G_OBJECT (window), "cursor");
     }
 }
 
