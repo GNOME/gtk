@@ -236,6 +236,8 @@ struct _GtkWindowPrivate
   gint cursor_region;
 
   GtkWidget *popup_menu;
+
+  GdkCursor *default_cursor;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -264,8 +266,6 @@ static gint gtk_window_key_release_event  (GtkWidget         *widget,
 static gboolean gtk_window_button_press_event (GtkWidget      *widget,
                                                GdkEventButton *event);
 static gint gtk_window_enter_notify_event (GtkWidget         *widget,
-					   GdkEventCrossing  *event);
-static gint gtk_window_leave_notify_event (GtkWidget         *widget,
 					   GdkEventCrossing  *event);
 static gboolean gtk_window_motion_notify_event (GtkWidget    *widget,
                                                 GdkEventMotion *event);
@@ -354,6 +354,10 @@ static gboolean    is_client_side_decorated    (GtkWindow      *window);
 static gboolean    gtk_window_popup_menu       (GtkWidget      *widget);
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
+
+static void        window_cursor_changed       (GdkWindow  *window,
+                                                GParamSpec *pspec,
+                                                GtkWidget  *widget);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -516,7 +520,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->key_press_event = gtk_window_key_press_event;
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->enter_notify_event = gtk_window_enter_notify_event;
-  widget_class->leave_notify_event = gtk_window_leave_notify_event;
   widget_class->motion_notify_event = gtk_window_motion_notify_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
@@ -5245,6 +5248,8 @@ is_client_side_decorated (GtkWindow *window)
                         "client-side-decorated", &client_side_decorated,
                         NULL);
 
+  return TRUE;
+
   return client_side_decorated;
 }
 
@@ -5410,6 +5415,12 @@ gtk_window_realize (GtkWidget *widget)
       if (!startup_id_is_fake (priv->startup_id)) 
         gdk_window_set_startup_id (widget->window, priv->startup_id);
     }
+
+  /* get the default cursor */
+  priv->default_cursor = gdk_window_get_cursor (widget->window);
+  g_signal_connect (G_OBJECT (widget->window), "notify::cursor",
+                    G_CALLBACK (window_cursor_changed),
+                    widget);
 
   /* Icons */
   gtk_window_realize_icon (window);
@@ -6187,6 +6198,16 @@ get_resize_info (GtkWindow *window,
 }
 
 static void
+window_cursor_changed (GdkWindow  *window,
+                       GParamSpec *pspec,
+                       GtkWidget  *widget)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
+
+  priv->default_cursor = gdk_window_get_cursor (window);
+}
+
+static void
 update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -6195,6 +6216,7 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
   GdkCursorType cursor_type;
   GdkCursor *cursor;
   GdkWindowState state;
+  gboolean use_default = FALSE;
 
   region = get_active_region_type (window, x, y);
 
@@ -6205,7 +6227,7 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 
   if ((state & GDK_WINDOW_STATE_MAXIMIZED) || !window->allow_grow)
     {
-      cursor_type = GDK_ARROW;
+      use_default = TRUE;
     }
   else
     {
@@ -6244,13 +6266,28 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
           break;
 
         default:
-          cursor_type = GDK_ARROW;
+          use_default = TRUE;
           break;
         }
     }
 
-  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type);
-  gdk_window_set_cursor (widget->window, cursor);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (widget->window),
+                                        G_CALLBACK (window_cursor_changed),
+                                        widget);
+
+  if (use_default)
+    {
+      gdk_window_set_cursor (widget->window, priv->default_cursor);
+    }
+  else
+    {
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type);
+      gdk_window_set_cursor (widget->window, cursor);
+    }
+
+  g_signal_connect (G_OBJECT (widget->window), "notify::cursor",
+                    G_CALLBACK (window_cursor_changed),
+                    widget);
 }
 
 static gint
@@ -6273,17 +6310,6 @@ gtk_window_enter_notify_event (GtkWidget        *widget,
       GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
       gdk_window_set_cursor (widget->window, cursor);
     }
-
-  return FALSE;
-}
-
-static gint
-gtk_window_leave_notify_event (GtkWidget        *widget,
-			       GdkEventCrossing *event)
-{
-  GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
-
-  gdk_window_set_cursor (widget->window, cursor);
 
   return FALSE;
 }
