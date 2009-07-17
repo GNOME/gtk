@@ -782,8 +782,8 @@ gdk_window_lookup (GdkNativeWindow hwnd)
 
 void
 _gdk_win32_window_destroy (GdkWindow *window,
-			       gboolean   recursing,
-			       gboolean   foreign_destroy)
+			   gboolean   recursing,
+			   gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
@@ -3593,17 +3593,40 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
+/*
+ * queue_translation is meant to only move any outstanding invalid area
+ * in the given area by dx,dy. A typical example of when its needed is an
+ * app with two toplevels where one (A) overlaps the other (B). If the
+ * app first moves A so that B is invalidated and then scrolls B before
+ * handling the expose. The scroll operation will copy the invalid area
+ * to a new position, but when the invalid area is then exposed it only
+ * redraws the old areas not the place where the invalid data was copied
+ * by the scroll.
+ */
 static void
 _gdk_win32_window_queue_translation (GdkWindow *window,
 				     GdkRegion *area,
 				     gint       dx,
 				     gint       dy)
 {
-  /* TODO: Get current updateregion, move any part of it that intersects area by dx,dy */
-  HRGN hrgn = _gdk_win32_gdkregion_to_hrgn (area, dx, dy);
-  
-  API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), hrgn, TRUE));
-
+  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
+  int ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
+  if (ret == ERROR)
+    WIN32_API_FAILED ("GetUpdateRgn");
+  else if (ret != NULLREGION)
+    {
+      /* Get current updateregion, move any part of it that intersects area by dx,dy */
+      HRGN update = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
+      ret = CombineRgn (update, hrgn, update, RGN_AND);
+      if (ret == ERROR)
+        WIN32_API_FAILED ("CombineRgn");
+      else if (ret != NULLREGION)
+	{
+	  OffsetRgn (update, dx, dy);
+          API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), update, TRUE));
+	}
+      DeleteObject (update);
+    }
   DeleteObject (hrgn);
 }
 
