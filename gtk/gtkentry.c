@@ -4545,7 +4545,7 @@ gtk_entry_real_delete_text (GtkEditable *editable,
    * buffer_notify_text(), buffer_notify_length()
    */
 
-  gtk_entry_buffer_delete_text (GTK_ENTRY_GET_PRIVATE (editable)->buffer, start_pos, end_pos - start_pos);
+  gtk_entry_buffer_delete_text (get_buffer (GTK_ENTRY (editable)), start_pos, end_pos - start_pos);
 }
 
 /* GtkEntryBuffer signal handlers
