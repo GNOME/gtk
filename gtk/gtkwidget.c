@@ -154,7 +154,8 @@ enum {
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
-  PROP_WINDOW
+  PROP_WINDOW,
+  PROP_DOUBLE_BUFFERED
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -691,6 +692,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							P_("The widget's window if it is realized"),
 							GDK_TYPE_WINDOW,
 							GTK_PARAM_READABLE));
+
+  /**
+   * GtkWidget::double-buffered
+   *
+   * Whether or not the widget is double buffered.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DOUBLE_BUFFERED,
+                                   g_param_spec_boolean ("double-buffered",
+                                                         P_("Double Buffered"),
+                                                         P_("Whether or not the widget is double buffered"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
 
   widget_signals[SHOW] =
     g_signal_new (I_("show"),
@@ -2523,6 +2539,9 @@ gtk_widget_set_property (GObject         *object,
       if (GTK_WIDGET_VISIBLE (widget))
         gtk_widget_queue_tooltip_query (widget);
       break;
+    case PROP_DOUBLE_BUFFERED:
+      gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2629,6 +2648,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_WINDOW:
       g_value_set_object (value, gtk_widget_get_window (widget));
+      break;
+    case PROP_DOUBLE_BUFFERED:
+      g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -5651,6 +5673,27 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_get_app_paintable:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the application intends to draw on the widget in
+ * an #GtkWidget::expose-event handler.
+ *
+ * See gtk_widget_set_app_paintable()
+ *
+ * Return value: %TRUE if the widget is app paintable
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_app_paintable (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_APP_PAINTABLE) != 0;
+}
+
+/**
  * gtk_widget_set_double_buffered:
  * @widget: a #GtkWidget
  * @double_buffered: %TRUE to double-buffer a widget
@@ -5680,10 +5723,35 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (double_buffered)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
-  else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+  if (double_buffered != GTK_WIDGET_DOUBLE_BUFFERED (widget))
+    {
+      if (double_buffered)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+
+      g_object_notify (G_OBJECT (widget), "double-buffered");
+    }
+}
+
+/**
+ * gtk_widget_get_double_buffered:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is double buffered.
+ *
+ * See gtk_widget_set_double_buffered()
+ *
+ * Return value: %TRUE if the widget is double buffered
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_double_buffered (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_DOUBLE_BUFFERED) != 0;
 }
 
 /**

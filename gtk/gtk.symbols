@@ -4957,6 +4957,7 @@ gtk_widget_event
 gtk_widget_freeze_child_notify
 gtk_widget_get_accessible
 gtk_widget_get_ancestor
+gtk_widget_get_app_paintable
 gtk_widget_get_child_requisition
 gtk_widget_get_child_visible
 gtk_widget_get_clipboard
@@ -4968,6 +4969,7 @@ gtk_widget_get_default_style
 gtk_widget_get_default_visual
 gtk_widget_get_direction
 gtk_widget_get_display
+gtk_widget_get_double_buffered
 gtk_widget_get_events
 gtk_widget_get_extension_events
 gtk_widget_get_has_tooltip

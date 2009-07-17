@@ -580,8 +580,12 @@ gboolean              gtk_widget_get_has_window         (GtkWidget    *widget);
 
 void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
 							 gboolean      app_paintable);
+gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
+
 void                  gtk_widget_set_double_buffered    (GtkWidget    *widget,
 							 gboolean      double_buffered);
+gboolean              gtk_widget_get_double_buffered    (GtkWidget    *widget);
+
 void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
 							 gboolean      redraw_on_allocate);
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
