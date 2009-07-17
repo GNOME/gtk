@@ -5086,6 +5086,13 @@ gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
 gtk_widget_get_window
+gtk_widget_set_has_window
+gtk_widget_get_has_window
+gtk_widget_set_can_default
+gtk_widget_get_can_default
+gtk_widget_has_default
+gtk_widget_set_can_focus
+gtk_widget_get_can_focus
 #endif
 #endif
 

@@ -5066,8 +5066,10 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * 
  * Causes @widget to have the keyboard focus for the #GtkWindow it's
  * inside. @widget must be a focusable widget, such as a #GtkEntry;
- * something like #GtkFrame won't work. (More precisely, it must have the
- * %GTK_CAN_FOCUS flag set.)
+ * something like #GtkFrame won't work.
+ *
+ * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
+ * gtk_widget_set_can_focus() to modify that flag.
  **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
@@ -5259,6 +5261,54 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
 }
 
 /**
+ * gtk_widget_set_can_focus:
+ * @widget: a #GtkWidget
+ * @can_focus: whether or not @widget can own the input focus.
+ *
+ * Specifies whether @widget can own the input focus. See
+ * gtk_widget_grab_focus() for actually setting the input focus on a
+ * widget.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_can_focus (GtkWidget *widget,
+                          gboolean   can_focus)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (can_focus != GTK_WIDGET_CAN_FOCUS (widget))
+    {
+      if (can_focus)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
+
+      gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (widget), "can-focus");
+    }
+}
+
+/**
+ * gtk_widget_get_can_focus:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can own the input focus. See
+ * gtk_widget_set_can_focus().
+ *
+ * Return value: %TRUE if @widget can own the input focus, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_can_focus (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_CAN_FOCUS (widget);
+}
+
+/**
  * gtk_widget_has_focus:
  * @widget: a #GtkWidget
  *
@@ -5305,13 +5355,81 @@ gtk_widget_is_focus (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_set_can_default:
+ * @widget: a #GtkWidget
+ * @can_default: whether or not @widget can be a default widget.
+ *
+ * Specifies whether @widget can be a default widget. See
+ * gtk_widget_grab_default() for details about the meaning of
+ * "default".
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_can_default (GtkWidget *widget,
+                            gboolean   can_default)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (can_default != GTK_WIDGET_CAN_DEFAULT (widget))
+    {
+      if (can_default)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
+
+      gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (widget), "can-default");
+    }
+}
+
+/**
+ * gtk_widget_get_can_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can be a default widget. See
+ * gtk_widget_set_can_default().
+ *
+ * Return value: %TRUE if @widget can be a default widget, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_can_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_CAN_DEFAULT (widget);
+}
+
+/**
+ * gtk_widget_get_has_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is the current default widget within its
+ * toplevel. See gtk_widget_set_can_default().
+ *
+ * Return value: %TRUE if @widget is the current default widget within
+ * its toplevel, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_has_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_HAS_DEFAULT (widget);
+}
+
+/**
  * gtk_widget_grab_default:
  * @widget: a #GtkWidget
  *
  * Causes @widget to become the default widget. @widget must have the
  * %GTK_CAN_DEFAULT flag set; typically you have to set this flag
- * yourself by calling <literal>GTK_WIDGET_SET_FLAGS (@widget,
- * GTK_CAN_DEFAULT)</literal>. The default widget is activated when 
+ * yourself by calling <literal>gtk_widget_set_can_default (@widget,
+ * %TRUE)</literal>. The default widget is activated when 
  * the user presses Enter in a window. Default widgets must be 
  * activatable, that is, gtk_widget_activate() should affect them.
  **/
@@ -5435,6 +5553,55 @@ gtk_widget_get_state (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_STATE_NORMAL);
 
   return widget->state;
+}
+
+/**
+ * gtk_widget_set_has_window:
+ * @widget: a #GtkWidget
+ * @has_window: whether or not @widget has a window.
+ *
+ * Specifies whether @widget has a #GdkWindow of its own. Note that
+ * all realized widgets have a non-%NULL "window" pointer
+ * (gtk_widget_get_window() never returns a %NULL window when a widget
+ * is realized), but for many of them it's actually the #GdkWindow of
+ * one of its parent widgets. Widgets that create a %window for
+ * themselves in GtkWidget::realize() however must announce this by
+ * calling this function with @has_window = %TRUE.
+ *
+ * This function should only be called by widget implementations,
+ * and they should call it in their init() function.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_has_window (GtkWidget *widget,
+                           gboolean   has_window)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (has_window)
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_WINDOW);
+  else
+    GTK_WIDGET_SET_FLAGS (widget, GTK_NO_WINDOW);
+}
+
+/**
+ * gtk_widget_get_has_window:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget has a #GdkWindow of its own. See
+ * gtk_widget_set_has_window().
+ *
+ * Return value: %TRUE if @widget has a window, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_has_window (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return !GTK_WIDGET_NO_WINDOW (widget);
 }
 
 /**
