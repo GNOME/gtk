@@ -2537,6 +2537,7 @@ draw_page_cb (GtkWidget          *widget,
   gdouble paper_width, paper_height;
   gdouble pos_x, pos_y;
   gint pages_per_sheet;
+  gboolean ltr = TRUE;
 
   orientation = gtk_page_setup_get_orientation (priv->page_setup);
   landscape =
@@ -2835,8 +2836,14 @@ draw_page_cb (GtkWidget          *widget,
       g_free (text);
       pango_layout_get_size (layout, &layout_w, &layout_h);
 
-      cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
-                           widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+      ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
+
+      if (ltr)
+        cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+      else
+        cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
 
       pango_cairo_show_layout (cr, layout);
 
@@ -2863,17 +2870,34 @@ draw_page_cb (GtkWidget          *widget,
 
       cairo_set_line_width (cr, 1);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE, pos_y);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE, pos_y + h);
-      cairo_stroke (cr);
+      if (ltr)
+        {
+          cairo_move_to (cr, pos_x - RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
-      cairo_stroke (cr);
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
-      cairo_stroke (cr);
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
 
       cairo_move_to (cr, pos_x, pos_y + h + shadow_offset + RULER_DISTANCE);
       cairo_line_to (cr, pos_x + w, pos_y + h + shadow_offset + RULER_DISTANCE);
