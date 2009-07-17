@@ -34,6 +34,9 @@ Release notes for 2.18
   old custom_widget. Custom_widget does not get destroyed when the
   tooltip goes away.
 
+* JPEG2000 support is no longer enabled by default. It must be
+  explicitly turned on, by passing --with-libjasper to configure.
+
 
 Release notes for 2.16
 ======================
