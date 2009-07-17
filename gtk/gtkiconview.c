@@ -7161,7 +7161,7 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
   
   /* special case a drop on an empty model */
   icon_view->priv->empty_view_drop = FALSE;
-  if (pos == GTK_TREE_VIEW_DROP_BEFORE && path
+  if (pos == GTK_ICON_VIEW_DROP_ABOVE && path
       && gtk_tree_path_get_depth (path) == 1
       && gtk_tree_path_get_indices (path)[0] == 0)
     {
