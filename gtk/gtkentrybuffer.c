@@ -347,10 +347,13 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class, PROP_TEXT,
-                     g_param_spec_string ("text", P_("Text"),
-                                          P_("The contents of the buffer"),
-                                          "", GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT,
+                                   g_param_spec_string ("text",
+                                                        P_("Text"),
+                                                        P_("The contents of the buffer"),
+                                                        "",
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkEntryBuffer:length:
@@ -359,10 +362,13 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class, PROP_LENGTH,
-                     g_param_spec_uint ("length", P_("Text length"),
-                                        P_("Length of the text currently in the buffer"),
-                                        0, GTK_ENTRY_BUFFER_MAX_SIZE, 0, GTK_PARAM_READABLE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_LENGTH,
+                                   g_param_spec_uint ("length",
+                                                      P_("Text length"),
+                                                      P_("Length of the text currently in the buffer"),
+                                                      0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
+                                                      GTK_PARAM_READABLE));
 
   /**
    * GtkEntryBuffer:max-length:
@@ -371,10 +377,13 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class, PROP_MAX_LENGTH,
-                     g_param_spec_uint ("max-length", P_("Maximum length"),
-                                        P_("Maximum number of characters for this entry. Zero if no maximum"),
-                                        0, GTK_ENTRY_BUFFER_MAX_SIZE, 0, GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_MAX_LENGTH,
+                                   g_param_spec_int ("max-length",
+                                                     P_("Maximum length"),
+                                                     P_("Maximum number of characters for this entry. Zero if no maximum"),
+                                   0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
+                                   GTK_PARAM_READWRITE));
 
   /**
    * GtkEntry::inserted-text:
