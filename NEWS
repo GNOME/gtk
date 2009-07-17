@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.17.4 to 2.17.5
+==============================================
+
+* Client-side windows:
+ - Quite a few fixes have happened for the win32 and directfb backends
+
+* GSEAL:
+ - Accessors have been added for sealed members in GtkCellRenderer and
+   GtkWidget
+
+* Changes that are relevant for distributors:
+ - The jpeg2000 pixbuf loader is now optional. Pass --with-libjasper
+   to configure to build it
+
+* Bugs fixed
+ 588373 Menus broken by client-side-windows
+ 588379 testgtk::panes does not change the cursor on mouse over
+ 588388 shape rendering is back
+ 588461 gtk_editable_get_chars() behaviour change in 2.17.4
+ 588666 Incorrect clamping of max_length
+ 588665 insert-text signal is not emitted
+ 588395 Crash when opening a GtkBuilder file
+ 524066 Mandatory jpeg2000?
+ 527583 GtkAssistant should set buttons as default widget
+ 588694 Missing % in C code
+ 588484 Iconview DnD fails when Destination is empty
+ 583522 Trivial error in GtkBuilder migration documentation
+ 150951 collapsed save dialog needs to indicate filesystem...
+
+* Updated translations:
+ Brazilian Portuguese
+ Norwegian bokmål
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes from GTK+ 2.17.3 to 2.17.4
 ==============================================
 
