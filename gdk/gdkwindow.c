@@ -774,7 +774,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
    * siblings in parents above window
    */
   clip_region_changed = FALSE;
-  if (recalculate_clip)
+  if (recalculate_clip && private->viewable)
     {
       /* Calculate visible region (sans children) in parent window coords */
       r.x = private->x;
@@ -862,7 +862,9 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	   * there is no way the child clip region could change (its has not e.g. moved)
 	   * Except if recalculate_children is set to force child updates
 	   */
-	  recompute_visible_regions_internal (child, recalculate_clip && (clip_region_changed || recalculate_children), FALSE, FALSE);
+	  recompute_visible_regions_internal (child,
+					      recalculate_clip && (clip_region_changed || recalculate_children),
+					      FALSE, FALSE);
 	}
     }
 
