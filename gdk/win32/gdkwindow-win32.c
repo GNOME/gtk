@@ -236,20 +236,16 @@ void
 _gdk_root_window_size_init (void)
 {
   GdkWindowObject *window_object;
-  //GdkWindowImplWin32 *impl;
   GdkRectangle rect;
   int i;
 
   window_object = GDK_WINDOW_OBJECT (_gdk_root);
-  //impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_root)->impl);
   rect = _gdk_monitors[0].rect;
   for (i = 1; i < _gdk_num_monitors; i++)
     gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
 
   window_object->width = rect.width;
   window_object->height = rect.height;
-  //impl->width = rect.width;
-  //impl->height = rect.height;
 }
 
 void
@@ -598,8 +594,6 @@ _gdk_window_impl_new (GdkWindow     *window,
       g_assert_not_reached ();
     }
 
-  //_gdk_window_init_position (GDK_WINDOW (private));
-
   if (private->window_type != GDK_WINDOW_CHILD)
     {
       rect.left = rect.top = 0;
@@ -642,17 +636,17 @@ _gdk_window_impl_new (GdkWindow     *window,
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
   
   hwndNew = CreateWindowExW (dwExStyle,
-							 MAKEINTRESOURCEW (klass),
-							 wtitle,
-							 dwStyle,
-							 ((attributes_mask & GDK_WA_X) ?
-							  private->x - offset_x : CW_USEDEFAULT),
-							 private->y - offset_y, 
-							 window_width, window_height,
-							 hparent,
-							 NULL,
-							 _gdk_app_hmodule,
-							 window);
+			     MAKEINTRESOURCEW (klass),
+			     wtitle,
+			     dwStyle,
+			     ((attributes_mask & GDK_WA_X) ?
+			       private->x - offset_x : CW_USEDEFAULT),
+			     private->y - offset_y,
+			     window_width, window_height,
+			     hparent,
+			     NULL,
+			     _gdk_app_hmodule,
+			     window);
   if (GDK_WINDOW_HWND (window) != hwndNew)
     {
       g_warning ("gdk_window_new: gdk_event_translate::WM_CREATE (%p, %p) HWND mismatch.",
@@ -762,8 +756,6 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   private->viewable = TRUE;
 
   private->depth = gdk_visual_get_system ()->depth;
-
-  //_gdk_window_init_position (GDK_WINDOW (private));
 
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
@@ -884,9 +876,9 @@ get_outer_rect (GdkWindow *window,
 
 static void
 adjust_for_gravity_hints (GdkWindow *window,
-						  RECT      *outer_rect,
-						  gint		*x,
-						  gint		*y)
+			  RECT      *outer_rect,
+			  gint		*x,
+			  gint		*y)
 {
 	GdkWindowObject *obj;
 	GdkWindowImplWin32 *impl;
@@ -1033,10 +1025,10 @@ show_window_internal (GdkWindow *window,
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
 
-	  if (!raise)
-		flags |= SWP_NOZORDER;
+      if (!raise)
+	flags |= SWP_NOZORDER;
       if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
-		flags |= SWP_NOACTIVATE;
+	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_WINDOW_HWND (window), top, 0, 0, 0, 0, flags);
 
@@ -1427,7 +1419,6 @@ gdk_win32_window_reparent (GdkWindow *window,
       g_list_remove (old_parent_private->children, window);
 
   parent_private->children = g_list_prepend (parent_private->children, window);
-  //_gdk_window_init_position (GDK_WINDOW (window_private));
 
   return FALSE;
 }
@@ -2890,30 +2881,6 @@ gdk_win32_window_merge_child_shapes (GdkWindow *window)
   gdk_propagate_shapes (GDK_WINDOW_HWND (window), TRUE);
 }
 
-#if 0
-void 
-gdk_window_set_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* Not yet implemented. See comment in
-   * gdk_window_input_shape_combine_mask().
-   */
-}
-#endif
-
-#if 0
-void 
-gdk_window_merge_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* Not yet implemented. See comment in
-   * gdk_window_input_shape_combine_mask().
-   */
-}
-#endif
-
 static gboolean 
 gdk_win32_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
@@ -3379,6 +3346,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 #if 0 /* Should we also turn off the minimize and maximize buttons? */
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE,
 		     GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU));
+     
       SetWindowPos (GDK_WINDOW_HWND (window), NULL,
 		    0, 0, 0, 0,
 		    SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
