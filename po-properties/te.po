@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-15 19:19+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -266,7 +266,7 @@ msgid "A unique name for the action."
 msgstr "క్రియ కొరకు ఒక ఏక నామము."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "లేబుల్"
@@ -554,7 +554,7 @@ msgstr "బాణపు నీడ"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "బాణమును చుట్టి ఉన్న నీడ రూపము"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "బాణపు స్కేలింగ్"
 
@@ -785,12 +785,12 @@ msgid ""
 msgstr "బొత్తము లోపల లేబుల్ విడ్జెట్ యొక్క పాఠము, ఒకవేళ బొత్తము ఒక లేబుల్ విడ్జెట్ ను కలిగి ఉంటే"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "కిందగీతనుపయోగించుము"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3242,7 +3242,7 @@ msgstr "ప్రస్తుతం యెంపికకాబడిన మె�
 msgid "The accel group holding accelerators for the menu"
 msgstr "ఏక్సెల్ సమూహం త్వరుణిలను మెనూకొరకు పట్టివుంచుతాయి"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "ఏక్సెల్ పాత్"
 
@@ -3432,40 +3432,40 @@ msgstr "డ్రాప్ డౌన్ మెనూలు కనిపించ
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "మెనూపట్టీ యొక్క వుపమెనూలు కనిపించుటకు ముందు ఆలస్యం"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "కుడి సర్దుబాటు"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "కనిపించే మెనూఅంశము మెనూపట్టీయొక్క కుడిప్రక్కన సర్దుబాటు కావలెనంటే అమర్చుతుంది"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "ఉపమెనూ"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "మెనూ అంశమునకు వుపమెనూను అనుభందించుము, లేదా అది యేదికలిగిలేకపోతే NULL"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "మెనూ అంశముయొక్క త్వరుణి పాత్‌ను అమర్చుతుంది"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "శిశు లేబుల్ కొరకు పాఠ్యము"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "మెనూ అంశముయొక్క ఫాంట్ పరిమాణమునకు సారూప్యంగా, బాణముచేత వుపయోగించబడిన ఖాళీమొత్తము"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "అక్షరాలలో వెడల్పు"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "అక్షరాలాలో లేబుల్ యొక్క ఆశించిన వెడల్పు"
 

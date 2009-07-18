@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-15 19:36+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -259,7 +259,7 @@ msgid "A unique name for the action."
 msgstr "ಕಾರ್ಯಕ್ಕೆ ಒಂದು ವಿಶಿಷ್ಟ ಹೆಸರು."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "ಶೀರ್ಷಿಕೆ"
@@ -553,7 +553,7 @@ msgstr "ಬಾಣದ ನೆರಳು"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "ಬಾಣದ ಸುತ್ತಮುತ್ತಲಿನ ನೆರಳಿನ ಸ್ವರೂಪ"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "ಬಾಣದ ಗಾತ್ರ ಬದಲಾವಣೆ"
 
@@ -789,12 +789,12 @@ msgstr ""
 "ತಟದ ಪಠ್ಯ"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "ಕೆಳಗೆರೆಯನ್ನು ಬಳಸು"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3284,7 +3284,7 @@ msgstr "ಪ್ರಸಕ್ತ ಆಯ್ಕೆ ಮಾಡಲಾದ ಮೆನು �
 msgid "The accel group holding accelerators for the menu"
 msgstr "ಮೆನುಗಾಗೆ ವೇಗವರ್ಧಕವನ್ನು ಹೊಂದಿರುವ accel ಸಮೂಹ"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Accel ಮಾರ್ಗ"
 
@@ -3479,42 +3479,42 @@ msgstr "ಬೀಳಿಕೆ ಮೆನುವು ಕಾಣಿಸುವ ಮುಂಚ
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "ಒಂದು ಮೆನುವಿನ ಉಪಮೆನುವು ಕಾಣಿಸುವ ಮುಂಚಿನ ವಿಳಂಬ"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "ಬಲಕ್ಕೆ ಹೊಂದಿಸಲಾದ"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "ಮೆನುವಿನಲ್ಲಿನ ಅಂಶವು ಮೆನು ಪಟ್ಟಿಯ ಬಲಭಾಗಕ್ಕೆ ಹೊಂದಿಸದಂತೆ ಕಾಣಿಸಬೇಕೆ ಎಂದು ನಿರ್ಧರಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "ಉಪಪರಿವಿಡಿ"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "ಮೆನು ಅಂಶಕ್ಕೆ ಲಗತ್ತಿಸಲಾದ ಉಪಮೆನು, ಅಥವ ಯಾವುದನ್ನೂ ಹೊಂದಿರದೆ ಇದ್ದಲ್ಲಿ NULL ಆಗಿರುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "ಮೆನು ಅಂಶದ ವೇಗವರ್ಧಕ ಮಾರ್ಗವನ್ನು ಹೊಂದಿಸುತ್ತದೆ"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "ಚೈಲ್ಡ್‍  ಲೇಬಲ್‌ನ ಪಠ್ಯ"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "ಮೆನು ಅಂಶದ ಅಕ್ಷರಶೈಲಿಯ ಗಾತ್ರಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಬಾಣದಿಂದ ಬಳಸಲಾದ ಜಾಗ"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "ಮೆನು ಅಂಶಗಳ ಇಚ್ಛೆಯ ಕನಿಷ್ಟ ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 

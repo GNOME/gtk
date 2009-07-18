@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-16.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-04-28 13:48+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -1540,15 +1540,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ಬಣ್ಣದ ಆಯ್ಕೆ"
 
-#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "ಆದಾನ ಪದ್ದತಿಗಳು(_M)"
 
-#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "ಯುನಿಕೊಡ್ ನಿಯಂತ್ರಣ ಚಿಹ್ನೆ (_I)"
 
-#: gtk/gtkentry.c:9802
+#: gtk/gtkentry.c:9811
 msgid "Caps Lock is on"
 msgstr "Caps Lock ಚಾಲಿತವಾಗಿದೆ"
 
@@ -1709,56 +1709,56 @@ msgid "Modified"
 msgstr "ಮಾರ್ಪಾಟುಗೊಂಡಿದೆ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "ಹೆಸರು(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4939
+#: gtk/gtkfilechooserdefault.c:4973
 msgid "_Browse for other folders"
 msgstr "ಇತರೆ ಕಡತಕೋಶಗಳಿಗಾಗಿ ಹುಡುಕು(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5209
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "Type a file name"
 msgstr "ಒಂದು ಕಡತದ ಹೆಸರನ್ನು ಟೈಪಿಸು"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5246
+#: gtk/gtkfilechooserdefault.c:5280
 msgid "Create Fo_lder"
 msgstr "ಕಡತಕೋಶವನ್ನು ಸೃಷ್ಟಿಸು(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5256
+#: gtk/gtkfilechooserdefault.c:5290
 msgid "_Location:"
 msgstr "ತಾಣ(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5494
 msgid "Save in _folder:"
 msgstr "ಈ ಕಡತಕೋಶದಲ್ಲಿ ಉಳಿಸು(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5462
+#: gtk/gtkfilechooserdefault.c:5496
 msgid "Create in _folder:"
 msgstr "ಈ ಕಡತಕೋಶದಲ್ಲಿ ಸೃಷ್ಟಿಸು(_f):"
 
-#: gtk/gtkfilechooserdefault.c:7152
+#: gtk/gtkfilechooserdefault.c:7188
 msgid "Cannot change to folder because it is not local"
 msgstr "ಕಡತಕೋಶಕ್ಕೆ ಬದಲಾಯಿಸಲಾಗಿಲ್ಲ ಏಕೆಂದರೆ ಅದು ಸ್ಥಳಿಯವಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
+#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ"
 
-#: gtk/gtkfilechooserdefault.c:7888
+#: gtk/gtkfilechooserdefault.c:7924
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ಶೀಘ್ರಮಾರ್ಗ (ಶಾರ್ಟ್ ಕಟ್) %s ಅಸ್ತಿತ್ವದಲ್ಲಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಲು ಬಯಸುತ್ತಿರೆ?"
 
-#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1766,15 +1766,15 @@ msgstr ""
 "\"%s\" ಹೆಸರಿನ ಒಂದು ಕಡತವು ಈಗಾಗಲೆ ಅಸ್ತಿತ್ವದಲ್ಲಿದೆ.  ನೀವದನ್ನು ಬದಲಿ ಮಾಡಿದರೆ ಅದು "
 "ತಿದ್ದಿಬರೆಯಲ್ಪಡುತ್ತದೆ."
 
-#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "ಬದಲಿ ಮಾಡು (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8956
 msgid "Could not start the search process"
 msgstr "ಶೋಧಿಸುವ ಪ್ರಕ್ರಿಯೆಯನ್ನು ಆರಂಭಿಸಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:8921
+#: gtk/gtkfilechooserdefault.c:8957
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1782,34 +1782,34 @@ msgstr ""
 "ಈ ಪ್ರೋಗ್ರಾಂ ಸೂಚಕ ಡೆಮೊನಿಗೆ (indexer daemon) ಸಂಪರ್ಕವನ್ನು ಕಲ್ಪಿಸಲಾಗಿಲ್ಲ. ಅದು "
 "ಚಾಲನೆಯಲ್ಲಿದೆ ಎಂದು ದಯವಿಟ್ಟು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ."
 
-#: gtk/gtkfilechooserdefault.c:8935
+#: gtk/gtkfilechooserdefault.c:8971
 msgid "Could not send the search request"
 msgstr "ಶೋಧನೆಯ ಮನವಿಯನ್ನು ಕಳುಹಿಸಲಾಗಿಲ್ಲ್ಲ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9402
+#: gtk/gtkfilechooserdefault.c:9438
 msgid "_Search:"
 msgstr "ಶೋಧಿಸು(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10355
+#: gtk/gtkfilechooserdefault.c:10391
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ಅನ್ನು ಆರೋಹಿಸಲಾಗಿಲ್ಲ"
 
-#: gtk/gtkfilechooserdefault.c:11030
+#: gtk/gtkfilechooserdefault.c:11066
 msgid "Type name of new folder"
 msgstr "ಹೊಸ ಕಡತಕೋಶದ ಹೆಸರನ್ನು ಟೈಪಿಸಿ"
 
-#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
-#: gtk/gtkfilechooserdefault.c:11301
+#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
+#: gtk/gtkfilechooserdefault.c:11337
 msgid "Unknown"
 msgstr "ಗೊತ್ತಿರದ"
 
-#: gtk/gtkfilechooserdefault.c:11248
+#: gtk/gtkfilechooserdefault.c:11284
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11250
+#: gtk/gtkfilechooserdefault.c:11286
 msgid "Yesterday at %H:%M"
 msgstr "ನಿನ್ನೆ %H:%M ಗೆ"
 

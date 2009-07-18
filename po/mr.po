@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-15 16:42+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -1524,15 +1524,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "फॉन्ट निवडणे"
 
-#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "इनपुट पद्धती (_M)"
 
-#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियंत्रण अक्षर घाला(_I)"
 
-#: gtk/gtkentry.c:9802
+#: gtk/gtkentry.c:9811
 msgid "Caps Lock is on"
 msgstr "Caps Lock सुरू आहे"
 
@@ -1692,55 +1692,55 @@ msgid "Modified"
 msgstr "बदलेले"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "नाव(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4939
+#: gtk/gtkfilechooserdefault.c:4973
 msgid "_Browse for other folders"
 msgstr "इतर फोल्डरसाठी ब्राउज करा(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5209
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "Type a file name"
 msgstr "फाइलचे नाव टाइप करा"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5246
+#: gtk/gtkfilechooserdefault.c:5280
 msgid "Create Fo_lder"
 msgstr "फोल्डर निर्माण करा(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5256
+#: gtk/gtkfilechooserdefault.c:5290
 msgid "_Location:"
 msgstr "ठिकाण(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5494
 msgid "Save in _folder:"
 msgstr "या फोल्डरमध्ये सुरक्षित करा(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5462
+#: gtk/gtkfilechooserdefault.c:5496
 msgid "Create in _folder:"
 msgstr "या फोल्डरमध्ये निर्माण करा(_f):"
 
-#: gtk/gtkfilechooserdefault.c:7152
+#: gtk/gtkfilechooserdefault.c:7188
 msgid "Cannot change to folder because it is not local"
 msgstr "स्थानिक नसल्यामुळे फोल्डरमध्ये जाऊ शकत नाही"
 
-#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
+#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "शॉर्टकट %s आधीच अस्तित्वात आहे"
 
-#: gtk/gtkfilechooserdefault.c:7888
+#: gtk/gtkfilechooserdefault.c:7924
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "शॉर्टकट %s अस्तित्वात नाही"
 
-#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तुम्ही तिला बदली करू इच्छिता काय?"
 
-#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1748,49 +1748,49 @@ msgstr ""
 "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तिला बदली केल्याने तिच्यातील मजकूर गिरवला "
 "जाईल."
 
-#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "बदलवा(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8956
 msgid "Could not start the search process"
 msgstr "शोध माहीती सुरू करू शकले नाही"
 
-#: gtk/gtkfilechooserdefault.c:8921
+#: gtk/gtkfilechooserdefault.c:8957
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "अणूक्रमणीका डीमन करीता कार्यक्रम जुळवणी करू शकला नाही.  ते कार्यरत आहे याची खात्री करा."
 
-#: gtk/gtkfilechooserdefault.c:8935
+#: gtk/gtkfilechooserdefault.c:8971
 msgid "Could not send the search request"
 msgstr "शोध विनंती पाठवू शकले नाही"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9402
+#: gtk/gtkfilechooserdefault.c:9438
 msgid "_Search:"
 msgstr "शोधा (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10355
+#: gtk/gtkfilechooserdefault.c:10391
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s आरोहित करता आले नाही"
 
-#: gtk/gtkfilechooserdefault.c:11030
+#: gtk/gtkfilechooserdefault.c:11066
 msgid "Type name of new folder"
 msgstr "नविन फोल्डरचे नाव टाइप करा"
 
-#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
-#: gtk/gtkfilechooserdefault.c:11301
+#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
+#: gtk/gtkfilechooserdefault.c:11337
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: gtk/gtkfilechooserdefault.c:11248
+#: gtk/gtkfilechooserdefault.c:11284
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11250
+#: gtk/gtkfilechooserdefault.c:11286
 msgid "Yesterday at %H:%M"
 msgstr "काल %H:%M यावेळी"
 

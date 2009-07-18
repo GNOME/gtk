@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-12 15:04+0800\n"
 "Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -256,7 +256,7 @@ msgid "A unique name for the action."
 msgstr "动作的唯一名称。"
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "标签"
@@ -539,7 +539,7 @@ msgstr "箭头阴影"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "箭头周围阴影的外观"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "箭头的缩放比例"
 
@@ -766,12 +766,12 @@ msgid ""
 msgstr "按钮中的文字标签，如果该按钮包含一个标签的话"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "使用下划线"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3213,7 +3213,7 @@ msgstr "当前已选择的菜单项"
 msgid "The accel group holding accelerators for the menu"
 msgstr "保存菜单加速键的加速组"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "加速路径"
 
@@ -3403,40 +3403,40 @@ msgstr "下拉菜单出现前的延迟"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "菜单栏的子菜单出现前的延迟"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "右对齐"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "设置是否让菜单项显示为在菜单栏右边对齐"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "子菜单"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "子菜单附属于菜单项，或等于 NULL，如果它是 none"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "设置菜单项的加速路径"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "子标签的文字"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "箭头所占空间大小，相对于菜单项中的字体大小"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "以字符数计的宽度"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "菜单项的最小期望宽度，以字符数计"
 

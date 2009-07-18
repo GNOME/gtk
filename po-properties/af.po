@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -265,7 +265,7 @@ msgid "A unique name for the action."
 msgstr "n  Unieke naam vir die aksie."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Etiket"
@@ -563,7 +563,7 @@ msgstr "Pyltjieskadu"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Vertoon van die skadu wat die pyltjie omring"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 #, fuzzy
 msgid "Arrow Scaling"
 msgstr "Ryspasiëring"
@@ -813,12 +813,12 @@ msgstr ""
 "etiketdingesie bevat"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Gebruik onderstreep"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3462,7 +3462,7 @@ msgstr "Die huidig geselekteerde lêernaam"
 msgid "The accel group holding accelerators for the menu"
 msgstr "Die mnemoniese snelsleutel vir hierdie etiket"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr ""
 
@@ -3680,42 +3680,42 @@ msgstr "Vertraging voor aftuimelkieslyste verskyn"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vertraging voor die subkieslyste van 'n kieslysstaaf verskyn"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 #, fuzzy
 msgid "The text for the child label"
 msgstr "Die teks van die etiket"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 #, fuzzy
 msgid "Width in Characters"
 msgstr "Wydte in karakters"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr ""
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-02-09 18:47+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -260,7 +260,7 @@ msgid "A unique name for the action."
 msgstr "Tên duy nhất cho hành động này."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Nhãn"
@@ -555,7 +555,7 @@ msgstr "Bóng mũi tên"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Diện mạo của bóng chung quang mũi tên"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Co giãn mũi tên"
 
@@ -796,12 +796,12 @@ msgstr ""
 "khiển"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Gạch dưới"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3297,7 +3297,7 @@ msgstr "Mục trình đơn hiện thời được chọn"
 msgid "The accel group holding accelerators for the menu"
 msgstr "Nhóm tăng tốc chứa các phím tăng tốc cho trình đơn"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Đường dẫn Tăng tốc"
 
@@ -3500,44 +3500,44 @@ msgstr "Khoảng chờ trước khi trình đơn thả xuống xuất hiện"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Khoảng chờ trước khi trình đơn phụ của thanh trình đơn xuất hiện"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "Sắp thẳng bên phải"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Đặt nếu mục trình đơn xuất hiện được sắp thẳng bên phải thanh trình đơn, hay "
 "không"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "Trình đơn con"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "Trình đơn con được gắn vào mục trình đơn, hay NULL nếu không có"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "Đặt đường dẫn tăng tốc của mục trình đơn"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "Chuỗi trên nhãn con"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Khoảng cách dùng bởi mũi tên chỉ lên, tương đối với kích cỡ phông chữ của "
 "mục trình đơn"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "Bề rộng theo ký tự"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Chiều rộng tối thiểu (theo ký tự) đã muốn cho mục trình đơn"
 

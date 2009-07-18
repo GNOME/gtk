@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.15.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-02-23 20:23+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -1510,15 +1510,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "顏色選擇"
 
-#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
-#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "插入統一碼控制字元(_I)"
 
-#: gtk/gtkentry.c:9802
+#: gtk/gtkentry.c:9811
 msgid "Caps Lock is on"
 msgstr "Cpas Lock 已開啟"
 
@@ -1678,102 +1678,102 @@ msgid "Modified"
 msgstr "已修改"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4939
+#: gtk/gtkfilechooserdefault.c:4973
 msgid "_Browse for other folders"
 msgstr "瀏覽其它資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5209
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5246
+#: gtk/gtkfilechooserdefault.c:5280
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5256
+#: gtk/gtkfilechooserdefault.c:5290
 msgid "_Location:"
 msgstr "位置(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5494
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5462
+#: gtk/gtkfilechooserdefault.c:5496
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:7152
+#: gtk/gtkfilechooserdefault.c:7188
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
+#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: gtk/gtkfilechooserdefault.c:7888
+#: gtk/gtkfilechooserdefault.c:7924
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為「%s」的檔案已存在。是否要取代它？"
 
-#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "該檔案已存在於「%s」。取代它會覆蓋它的內容。"
 
-#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8956
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: gtk/gtkfilechooserdefault.c:8921
+#: gtk/gtkfilechooserdefault.c:8957
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: gtk/gtkfilechooserdefault.c:8935
+#: gtk/gtkfilechooserdefault.c:8971
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9402
+#: gtk/gtkfilechooserdefault.c:9438
 msgid "_Search:"
 msgstr "搜尋(_S):"
 
-#: gtk/gtkfilechooserdefault.c:10355
+#: gtk/gtkfilechooserdefault.c:10391
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:11030
+#: gtk/gtkfilechooserdefault.c:11066
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
-#: gtk/gtkfilechooserdefault.c:11301
+#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
+#: gtk/gtkfilechooserdefault.c:11337
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:11248
+#: gtk/gtkfilechooserdefault.c:11284
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11250
+#: gtk/gtkfilechooserdefault.c:11286
 msgid "Yesterday at %H:%M"
 msgstr "昨天的 %H:%M"
 

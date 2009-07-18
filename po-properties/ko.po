@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-09 18:43+0900\n"
 "Last-Translator: Eunju Kim <eukim@redhat.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -257,7 +257,7 @@ msgid "A unique name for the action."
 msgstr "이 동작의 고유한 이름."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "레이블"
@@ -546,7 +546,7 @@ msgstr "화살표 그림자"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "화살표 주위의 그림자 모양"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "화살표 크기 조정"
 
@@ -782,12 +782,12 @@ msgid ""
 msgstr "단추 내의 레이블의 텍스트 (단추 내에 레이블 위젯이 들어 있는 경우)"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "밑줄 사용"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3253,7 +3253,7 @@ msgstr "현재 선택한 메뉴 항목"
 msgid "The accel group holding accelerators for the menu"
 msgstr "메뉴의 단축키가 들어 있는 단축키 그룹"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "단축 경로"
 
@@ -3447,40 +3447,40 @@ msgstr "드롭 다운 메뉴를 표시하기 전까지의 지연 시간"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "메뉴 모음의 하위 메뉴를 표시하기 전까지의 지연 시간"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "오른쪽 정렬"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "메뉴 항목을 메뉴 모음의 오른쪽에 맞출 지 여부를 설정"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "하위 메뉴"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "메뉴 항목에 첨부된 하위 메뉴 또는 하위 메뉴가 없으면 NULL"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "메뉴 항목의 단축키 경로를 설정"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "하위 레이블에 사용할 텍스트"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "화살표가 사용한 공간의 크기, 메뉴 항목의 글꼴 크기에 상대 크기"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "너비 (문자 개수 단위)"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "메뉴 항목의 최소 너비, 문자 개수 단위"
 

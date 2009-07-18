@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-17 20:32+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -263,7 +263,7 @@ msgid "A unique name for the action."
 msgstr "പ്രവര്‍ത്തനത്തിനു മാത്രമുളള പേര്."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "ലേബല്‍"
@@ -548,7 +548,7 @@ msgstr "സൂചികയുടെ നിഴല്‍"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "സൂചികയുടെ ചുറ്റമുളള നിഴലിന്‍റെ കാഴ്ച"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "ആരോ സ്കേലിങ്"
 
@@ -782,12 +782,12 @@ msgid ""
 msgstr "ബട്ടണില്‍ ലേബല്‍ വിഡ്ജറ്റുണ്ടെങ്കില്‍, അതിന്‍റെ ടെക്സ്റ്റ്"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "അടിവര ഉപയോഗിക്കുക"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3254,7 +3254,7 @@ msgstr "ഇപ്പോള്‍ തെരഞ്ഞെടുത്ത മെന�
 msgid "The accel group holding accelerators for the menu"
 msgstr "മെനുവില്‍ ആക്സിലറേറ്റുകള്‍ കൈകാര്യം ചെയ്യുന്നതിനുള്ള ആക്സല്‍ ഗ്രൂപ്പ്"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "ആക്സല്‍ പാഥ്"
 
@@ -3448,40 +3448,40 @@ msgstr "ഡ്രോപ്പ് ഡൌണ്‍ മെനുകള്‍ കാ
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "ഒരു മെനുവിന്‍റെ സബ്മെനുകള്‍ കാണുന്നതിന് മുന്പുളള സമയം"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "വലത്ത് നിന്നും ആരംഭിക്കുക"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "മെനുബാറിന്റെ വലത്തു് വശത്തേക്കു് മെനു വസ്തു സജ്ജമാക്കുന്നു"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "സബ്മെനു"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "മെനു വസ്തുവിലേക്കു് ഘടിപ്പിച്ചിട്ടുള്ള സബ്മെനു, or NULL if it has none"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "മെനു വസ്തുവിന്റെ ആക്സിലറ്റേറര്‍ പാഥ് സജ്ജമാക്കുന്നു"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "ചൈള്‍ഡ് ലേബലിനുള്ള വാചകം"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "മെനു വസ്തുവിനുള്ള അക്ഷരസഞ്ചയം അനുസരിച്ചുള്ള ആരോ ഉപയോഗിക്കുന്ന സ്ഥലം"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "വീതി അക്ഷരങ്ങളില്‍ "
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "മെനു വസ്തുവിന്റെ ഏറ്റവും കൂറഞ്ഞ വീതി, അക്ഷരങ്ങളില്‍"
 

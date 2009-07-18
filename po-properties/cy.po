@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2007-05-14 22:44-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -259,7 +259,7 @@ msgid "A unique name for the action."
 msgstr "Enw unigryw ar gyfer y weithred."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Label"
@@ -559,7 +559,7 @@ msgstr "Cysgod y saeth"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Edrychiad y cysgod o amgylch y saeth"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Graddio Saeth"
 
@@ -796,12 +796,12 @@ msgstr ""
 "Testun y teclyn label o fewn y botwm, os mae'r botwm yn cynnwys teclyn label"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Defnyddio tanlinellu"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3396,7 +3396,7 @@ msgstr "Y ffeil sydd wedi ei ddewis"
 msgid "The accel group holding accelerators for the menu"
 msgstr "Y fysell coflythyren cyflymu ar gyfer y label hwn"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr ""
 
@@ -3602,43 +3602,43 @@ msgstr "Saib cyn mae dewislenni gostwng yn ymddangos"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Y saib cyn mae is-ddewislenni'r bar dewislen yn ymddangos"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 #, fuzzy
 msgid "The text for the child label"
 msgstr "Testun y label"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "Faint o le ddefnyddir gan y saeth"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 #, fuzzy
 msgid "Width in Characters"
 msgstr "Lled Mewn Nodau"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Lled ddewisol y label, mewn nodau"

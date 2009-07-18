@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2005-07-09 12:08+0200\n"
 "Last-Translator: Danilo Šegan <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -267,7 +267,7 @@ msgid "A unique name for the action."
 msgstr "Jedinstveno ime za akciju."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "Oznaka"
@@ -564,7 +564,7 @@ msgstr "Senka strelice"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Izgled senke koja okružuje strelicu"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 #, fuzzy
 msgid "Arrow Scaling"
 msgstr "Razmak redova"
@@ -815,12 +815,12 @@ msgid ""
 msgstr "Sadržaj oznake unutar dugmeta, ukoliko dugme sadrži oznaku"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "Koristi podvlaku"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3418,7 +3418,7 @@ msgstr "Trenutno izabrano ime datoteke"
 msgid "The accel group holding accelerators for the menu"
 msgstr "Taster prečica za ovu oznaku"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr ""
 
@@ -3618,42 +3618,42 @@ msgstr "Vreme pre pojave padajućih menija"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vreme pre pojave podmenija sa linije menija"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 #, fuzzy
 msgid "The text for the child label"
 msgstr "Tekst oznake"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 #, fuzzy
 msgid "Width in Characters"
 msgstr "Širina u znakovima"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Željena širina oznake, kao broj znakova"

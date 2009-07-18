@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2009-03-15 15:48+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -261,7 +261,7 @@ msgid "A unique name for the action."
 msgstr "कृतीसाठी विशेष नाव."
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "लेबल"
@@ -547,7 +547,7 @@ msgstr "बाणाची छाया"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "बाणाला वेढणाऱ्या छायेचे दर्शन"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "बाणाचे प्रमाणन"
 
@@ -777,12 +777,12 @@ msgid ""
 msgstr "जर बटणांमधे लेबल widget असेल तर, बटणांमधील लेबल विजेटची वाक्यरचना"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "अधोरेखीत करा "
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3242,7 +3242,7 @@ msgstr "वर्तमानक्षणी निवडलेले मेन�
 msgid "The accel group holding accelerators for the menu"
 msgstr "मेन्यू करीता प्रवेगक एकत्र करणारे accel समुह"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "प्रवेगक मार्ग"
 
@@ -3434,40 +3434,40 @@ msgstr "खाली उतरणारे मेन्यु दिसण्य
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "मेन्युपट्टीतील उपमेन्यु दिसण्यापूर्वीचा उशीर"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "उजवी बाजूकडे हलवा"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "मेन्यू घटक मेन्यू पट्टीच्या उजव्या बाजूस दर्शविले जाते का ते निश्चित केले जाते"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "उपमेन्यु"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "मेन्यु घटकास जोडले गेलेले उपमेन्यु, किंवा काहीच नसल्यास NULL"
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "मेन्यू घटकाचे प्रवेगक मार्ग निश्चित करतो"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "उप लेबल करीता पाठ्य"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "बाण द्वारे वापरले गेले रिकामी जागा, जे मेन्यू घटकातील फॉन्ट आकाराशी निगडीत आहे"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "अक्षर अंतर्गत रूंदी"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "मेन्यू घटकाचे अक्षर नुरूप किमान इच्छिक रूंदी"
 

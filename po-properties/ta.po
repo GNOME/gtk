@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-10.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2006-08-29 18:20+0530\n"
 "Last-Translator: Felix <ifelix25@gmail.com>\n"
 "Language-Team: Tamil <ta@li.org>\n"
@@ -269,7 +269,7 @@ msgid "A unique name for the action."
 msgstr "செயலுக்கான ஒரு தனித்தன்மையான பெயர்"
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "அடையாளம்"
@@ -557,7 +557,7 @@ msgstr "அம்பு நிழல்"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "அம்பைச் சுற்றிருக்கும் நிழலின் தோற்றம்"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "அம்புக்குறி அளவிடல்"
 
@@ -790,12 +790,12 @@ msgid ""
 msgstr " பொத்தானில்   அடையாள விட்செட் இருப்பின் அதன் உரை "
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "அடிக்கோடு பயன்படுத்தவும்"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3264,7 +3264,7 @@ msgstr "தற்போது தேர்ந்தெடுக்கப்ப�
 msgid "The accel group holding accelerators for the menu"
 msgstr "மெனு பட்டிக்கு  முடுக்கு விசைகளை கொண்டுள்ள ஆக்ஸெல் குழு"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "ஆக்ஸல் பாதை"
 
@@ -3456,40 +3456,40 @@ msgstr "கீழே இறங்கும் மெனு தோன்றும
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "மெனு பட்டியில் இருந் கீழே இறங்கும் துணைமெனுக்கள் தோன்றும் முன் தாமதம் "
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr "வலது நிரப்பப்பட்டது"
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr "மெனு பட்டியின் வலது பக்கம்  நிரப்பப்பட்டு மெனு உருப்படி தோன்றுமா என அமைக்கிறது"
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "துணை மெனு"
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "மெனு உருப்படிக்கு ஒட்டிய துணை மெனு பட்டியல், அல்லது ஒன்றும் இல்லையானால் NULL "
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr "மெனு உருப்படிக்கு முடுக்கி பாதையை அமைக்கிறது"
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 msgid "The text for the child label"
 msgstr "சேய் லேபிளுக்கான உரை"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "மெனு உருப்படியின் எழுத்துரு அளவு பொருந்தி அம்புக்குறி அடைத்துக்கொள்ளும் இடம்"
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "எழுத்துக்களின் அகலம்"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
 msgstr "மெனு உருப்படிகளின் குறைந்த பட்ச விரும்பிய அகலம்  எண் எழுத்துக்கள் குறியீடுகளில்"
 

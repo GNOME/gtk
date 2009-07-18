@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2006-09-23 16:18+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
@@ -1573,15 +1573,15 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Tchoezixhaedje del coleur"
 
-#: gtk/gtkentry.c:8420 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Metôdes d' intrêye"
 
-#: gtk/gtkentry.c:8434 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "_Sititchî caractere di contrôle unicôde"
 
-#: gtk/gtkentry.c:9802
+#: gtk/gtkentry.c:9811
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Copyî _eplaeçmint"
@@ -1740,104 +1740,104 @@ msgid "Modified"
 msgstr "Candjî"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4896 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_No:"
 
-#: gtk/gtkfilechooserdefault.c:4939
+#: gtk/gtkfilechooserdefault.c:4973
 msgid "_Browse for other folders"
 msgstr "_Foyter dins ds ôtes ridants"
 
-#: gtk/gtkfilechooserdefault.c:5209
+#: gtk/gtkfilechooserdefault.c:5243
 msgid "Type a file name"
 msgstr "Tapez on no d' fitchî"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5246
+#: gtk/gtkfilechooserdefault.c:5280
 msgid "Create Fo_lder"
 msgstr "Ahiver _ridant"
 
-#: gtk/gtkfilechooserdefault.c:5256
+#: gtk/gtkfilechooserdefault.c:5290
 msgid "_Location:"
 msgstr "_Eplaeçmint:"
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5494
 msgid "Save in _folder:"
 msgstr "Schaper e _ridant:"
 
-#: gtk/gtkfilechooserdefault.c:5462
+#: gtk/gtkfilechooserdefault.c:5496
 msgid "Create in _folder:"
 msgstr "Ahiver e _ridant:"
 
-#: gtk/gtkfilechooserdefault.c:7152
+#: gtk/gtkfilechooserdefault.c:7188
 msgid "Cannot change to folder because it is not local"
 msgstr "Nén possibe di candjî viè l' ridant, ca c' est nén on ridant locå"
 
-#: gtk/gtkfilechooserdefault.c:7777 gtk/gtkfilechooserdefault.c:7798
+#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Li rascourti %s egzistêye dedja"
 
-#: gtk/gtkfilechooserdefault.c:7888
+#: gtk/gtkfilechooserdefault.c:7924
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Li rascourti %s n' egzistêye nén"
 
-#: gtk/gtkfilechooserdefault.c:8150 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "I gn a ddja on fitchî lomé «%s».  El voloz vs replaecî?"
 
-#: gtk/gtkfilechooserdefault.c:8153 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Li fitchî egzistêye dedja e «%s».  El replaecî va spotchî si contnou."
 
-#: gtk/gtkfilechooserdefault.c:8158 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Replaecî"
 
-#: gtk/gtkfilechooserdefault.c:8920
+#: gtk/gtkfilechooserdefault.c:8956
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Dji n' a savou schaper l' restant"
 
-#: gtk/gtkfilechooserdefault.c:8921
+#: gtk/gtkfilechooserdefault.c:8957
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8935
+#: gtk/gtkfilechooserdefault.c:8971
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Dji n' a savou schaper l' restant"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9402
+#: gtk/gtkfilechooserdefault.c:9438
 msgid "_Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10355
+#: gtk/gtkfilechooserdefault.c:10391
 #, c-format
 msgid "Could not mount %s"
 msgstr "Dji n' a nén savou monter %s"
 
-#: gtk/gtkfilechooserdefault.c:11030
+#: gtk/gtkfilechooserdefault.c:11066
 msgid "Type name of new folder"
 msgstr "Tapez l' no do novea ridant"
 
-#: gtk/gtkfilechooserdefault.c:11208 gtk/gtkfilechooserdefault.c:11230
-#: gtk/gtkfilechooserdefault.c:11301
+#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
+#: gtk/gtkfilechooserdefault.c:11337
 msgid "Unknown"
 msgstr "Nén cnoxhou"
 
-#: gtk/gtkfilechooserdefault.c:11248
+#: gtk/gtkfilechooserdefault.c:11284
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11250
+#: gtk/gtkfilechooserdefault.c:11286
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ayir"

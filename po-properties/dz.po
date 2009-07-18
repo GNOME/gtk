@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 17:48-0400\n"
+"POT-Creation-Date: 2009-07-18 00:26-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -263,7 +263,7 @@ msgid "A unique name for the action."
 msgstr "བྱ་བའི་དོན་ལུ་ མཐུན་མིང་གི་མིང༌།"
 
 #: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:300
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:367 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:202
 msgid "Label"
 msgstr "ཁ་ཡིག"
@@ -556,7 +556,7 @@ msgstr "མདའ་རྟགས་ཀྱི་གྱིབ་མ།"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "མདའ་རྟགས་ཀྱི་མཐའ་སྐོར་ལུ་ གྱིབ་མའི་བྱུང་སྣང་།"
 
-#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:363
+#: gtk/gtkarrow.c:92 gtk/gtkmenu.c:689 gtk/gtkmenuitem.c:368
 #, fuzzy
 msgid "Arrow Scaling"
 msgstr "གྲལ་ཐིག་བར་སྟོང་།"
@@ -806,12 +806,12 @@ msgid ""
 msgstr "ཨེབ་རྟ་ནང་ལུ་ ཁ་ཡིག་ཅིག་ཡོད་པ་ཅིན་ ཁ་ཡིག་ཝི་གེཊི་གི་ ཚིག་ཡིག་དེ་ ཨེབ་རྟ་ནང་འཁོད་འོང་དགོ"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:388
-#: gtk/gtkmenuitem.c:315 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
 msgid "Use underline"
 msgstr "འོག་ཐིག་ལག་ལེན་འཐབ།"
 
 #: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:389
-#: gtk/gtkmenuitem.c:316
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -3371,7 +3371,7 @@ msgstr "ད་ལྟོ་སེལ་འཐུ་འབད་མི་ ཡི�
 msgid "The accel group holding accelerators for the menu"
 msgstr "ཁ་ཡིག་འདི་གི་དོན་ལུ་ དྲན་སྐྱེད་མགྱོགས་འཕྲུལ་གྱི་ལྡེ་མིག"
 
-#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:285
+#: gtk/gtkmenu.c:530 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr ""
 
@@ -3570,42 +3570,42 @@ msgstr "གདམ་ཐོའི་དཀར་ཆག་ མ་བྱུང་�
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "དཀར་ཆག་ཕྲ་རིང་ཅིག་གི་ དཀར་ཆག་ཡན་ལག་ཚུ་ མ་བྱུང་པའི་སྔོན་གྱི ཕྱིར་འགྱངས།"
 
-#: gtk/gtkmenuitem.c:252
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:253
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:267
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:268
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:286
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:301
+#: gtk/gtkmenuitem.c:306
 #, fuzzy
 msgid "The text for the child label"
 msgstr "ཁ་ཡིག་གི་ཚིག་ཡིག་དེ།"
 
-#: gtk/gtkmenuitem.c:364
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 
-#: gtk/gtkmenuitem.c:377
+#: gtk/gtkmenuitem.c:382
 #, fuzzy
 msgid "Width in Characters"
 msgstr "རྒྱ་ཚད་ཡིག་འབྲུ་ནང་།"
 
-#: gtk/gtkmenuitem.c:378
+#: gtk/gtkmenuitem.c:383
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
 msgstr "རེ་འདུན་བསྐྱེད་མི་ཁ་ཡིག་གི་རྒྱ་ཚད་ ཡིག་འབྲུའི་ནང་།"
