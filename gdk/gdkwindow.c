@@ -4971,7 +4971,7 @@ gdk_window_invalidate_rect (GdkWindow          *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (private->input_only || !GDK_WINDOW_IS_MAPPED (window))
+  if (private->input_only || !private->viewable)
     return;
 
   if (!rect)
@@ -5056,7 +5056,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
     return;
 
   if (private->input_only ||
-      !GDK_WINDOW_IS_MAPPED (window) ||
+      !private->viewable ||
       gdk_region_empty (region))
     return;
 
@@ -7813,7 +7813,7 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
   if (base_y_offset)
     *base_y_offset = 0;
 
-  if (!GDK_WINDOW_IS_MAPPED (window) || private->input_only)
+  if (!private->viewable || private->input_only)
     return gdk_region_new ();
 
   window_get_size_rectangle (window, &visible_rect);
