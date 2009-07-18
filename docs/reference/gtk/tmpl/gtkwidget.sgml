@@ -693,6 +693,11 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 
 </para>
 
+<!-- ##### ARG GtkWidget:double-buffered ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:events ##### -->
 <para>
 

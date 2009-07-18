@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-10 18:20-0400\n"
+"POT-Creation-Date: 2009-07-17 22:23-0400\n"
 "PO-Revision-Date: 2004-04-04 01:11+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@my-penguin.org>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -1617,15 +1617,86 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Pemilihan Warna"
 
-#: gtk/gtkentry.c:8571 gtk/gtktextview.c:7767
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: gtk/gtkcustompaperunixdialog.c:119
+#, fuzzy
+msgid "default:mm"
+msgstr "default:LTR"
+
+#. And show the custom paper dialog
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3160
+msgid "Manage Custom Sizes"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+msgid "inch"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+msgid "mm"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:584
+msgid "Margins from Printer..."
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:750
+#, c-format
+msgid "Custom Size %d"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:1057
+msgid "_Width:"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:1069
+#, fuzzy
+msgid "_Height:"
+msgstr "_Hue:"
+
+#: gtk/gtkcustompaperunixdialog.c:1081
+#, fuzzy
+msgid "Paper Size"
+msgstr "_Ciri-ciri"
+
+#: gtk/gtkcustompaperunixdialog.c:1090
+#, fuzzy
+msgid "_Top:"
+msgstr "_Atas"
+
+#: gtk/gtkcustompaperunixdialog.c:1102
+#, fuzzy
+msgid "_Bottom:"
+msgstr "_Bawah"
+
+#: gtk/gtkcustompaperunixdialog.c:1114
+#, fuzzy
+msgid "_Left:"
+msgstr "Ki_ri"
+
+#: gtk/gtkcustompaperunixdialog.c:1126
+#, fuzzy
+msgid "_Right:"
+msgstr "_Hue:"
+
+#: gtk/gtkcustompaperunixdialog.c:1167
+msgid "Paper Margins"
+msgstr ""
+
+#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "_Method input"
 
-#: gtk/gtkentry.c:8585 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "Sel_itkan aksara Kawalan Unicode"
 
-#: gtk/gtkentry.c:9953
+#: gtk/gtkentry.c:9959
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Buka Lokasi"
@@ -1806,110 +1877,110 @@ msgid "Modified"
 msgstr "Diubahsuai"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4935 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4969 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: gtk/gtkfilechooserdefault.c:4978
+#: gtk/gtkfilechooserdefault.c:5012
 msgid "_Browse for other folders"
 msgstr "_Lungsur folder lain"
 
-#: gtk/gtkfilechooserdefault.c:5250
+#: gtk/gtkfilechooserdefault.c:5284
 #, fuzzy
 msgid "Type a file name"
 msgstr "Namafail tidak sah: %s"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5291
+#: gtk/gtkfilechooserdefault.c:5325
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Cipta _Folder"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5335
 #, fuzzy
 msgid "_Location:"
 msgstr "_Lokasi:"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5539
 msgid "Save in _folder:"
 msgstr "Simpan di _folder:"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5541
 msgid "Create in _folder:"
 msgstr "Cipta di _folder:"
 
-#: gtk/gtkfilechooserdefault.c:7249
+#: gtk/gtkfilechooserdefault.c:7285
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Tak dapat tukar ke folder kerana ianya bukan tempatan"
 
-#: gtk/gtkfilechooserdefault.c:7874 gtk/gtkfilechooserdefault.c:7895
+#: gtk/gtkfilechooserdefault.c:7910 gtk/gtkfilechooserdefault.c:7931
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8021
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "pintasan %s tak wujud"
 
-#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkfilechooserdefault.c:8283 gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:450
+#: gtk/gtkfilechooserdefault.c:8286 gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkfilechooserdefault.c:8291 gtk/gtkprintunixdialog.c:457
 #, fuzzy
 msgid "_Replace"
 msgstr "_Tukarnama"
 
-#: gtk/gtkfilechooserdefault.c:9017
+#: gtk/gtkfilechooserdefault.c:9053
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
-#: gtk/gtkfilechooserdefault.c:9018
+#: gtk/gtkfilechooserdefault.c:9054
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9032
+#: gtk/gtkfilechooserdefault.c:9068
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Tak dapat menyimpang yang selebihnya"
 
-#: gtk/gtkfilechooserdefault.c:9509
+#: gtk/gtkfilechooserdefault.c:9545
 msgid "<b>_Search:</b>"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10245
+#: gtk/gtkfilechooserdefault.c:10281
 msgid "<b>Recently Used</b>"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10483
+#: gtk/gtkfilechooserdefault.c:10519
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
 "Tak dapat memilih %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:11335 gtk/gtkfilechooserdefault.c:11357
-#: gtk/gtkfilechooserdefault.c:11428
+#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
+#: gtk/gtkfilechooserdefault.c:11464
 msgid "Unknown"
 msgstr "Entah"
 
-#: gtk/gtkfilechooserdefault.c:11375
+#: gtk/gtkfilechooserdefault.c:11411
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11377
+#: gtk/gtkfilechooserdefault.c:11413
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Semalam"
@@ -2441,6 +2512,37 @@ msgstr ""
 msgid "_End Process"
 msgstr ""
 
+#: gtk/gtkmountoperation-stub.c:64
+#, c-format
+msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:864
+#, fuzzy
+msgid "Terminal Pager"
+msgstr "Pre_biu Cetakan"
+
+#: gtk/gtkmountoperation-x11.c:865
+msgid "Top Command"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:866
+msgid "Bourne Again Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:867
+msgid "Bourne Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:868
+msgid "Z Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:963
+#, c-format
+msgid "Cannot end process with pid %d: %s"
+msgstr ""
+
 #: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
 msgid "Page %u"
@@ -2456,14 +2558,6 @@ msgid ""
 "For portable documents"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:775
-msgid "mm"
-msgstr ""
-
-#: gtk/gtkpagesetupunixdialog.c:777
-msgid "inch"
-msgstr ""
-
 #: gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
@@ -2474,7 +2568,7 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3187
+#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr ""
 
@@ -2482,7 +2576,7 @@ msgstr ""
 msgid "_Format for:"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3359
+#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
 #, fuzzy
 msgid "_Paper size:"
 msgstr "_Ciri-ciri"
@@ -2492,7 +2586,7 @@ msgstr "_Ciri-ciri"
 msgid "_Orientation:"
 msgstr "Ke_tepuan:"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3421
+#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
 #, fuzzy
 msgid "Page Setup"
 msgstr "Halaman %u"
@@ -2770,42 +2864,42 @@ msgstr ""
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr ""
@@ -2813,142 +2907,137 @@ msgstr ""
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2938 gtk/gtkprintunixdialog.c:2951
+#: gtk/gtkprintunixdialog.c:2962 gtk/gtkprintunixdialog.c:2975
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Amaran"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2991
 #, fuzzy
 msgid "Left to right"
 msgstr "LRM tanda Ki_ri-ke-kanan"
 
-#: gtk/gtkprintunixdialog.c:2968
+#: gtk/gtkprintunixdialog.c:2992
 #, fuzzy
 msgid "Right to left"
 msgstr "_Cetak"
 
-#: gtk/gtkprintunixdialog.c:2980
+#: gtk/gtkprintunixdialog.c:3004
 msgid "Top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2981
+#: gtk/gtkprintunixdialog.c:3005
 msgid "Bottom to top"
 msgstr ""
 
-#. And show the custom paper dialog
-#: gtk/gtkprintunixdialog.c:3136
-msgid "Manage Custom Sizes"
-msgstr ""
-
-#: gtk/gtkprintunixdialog.c:3210
+#: gtk/gtkprintunixdialog.c:3234
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3214
+#: gtk/gtkprintunixdialog.c:3238
 msgid "T_wo-sided:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3229
+#: gtk/gtkprintunixdialog.c:3253
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:3246
+#: gtk/gtkprintunixdialog.c:3270
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:3262
+#: gtk/gtkprintunixdialog.c:3286
 #, fuzzy
 msgid "_Only print:"
 msgstr "_Cetak"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkprintunixdialog.c:3301
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3278
+#: gtk/gtkprintunixdialog.c:3302
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3279
+#: gtk/gtkprintunixdialog.c:3303
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3282
+#: gtk/gtkprintunixdialog.c:3306
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "_Nilai:"
 
-#: gtk/gtkprintunixdialog.c:3309
+#: gtk/gtkprintunixdialog.c:3333
 msgid "Paper"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3313
+#: gtk/gtkprintunixdialog.c:3337
 #, fuzzy
 msgid "Paper _type:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:3328
+#: gtk/gtkprintunixdialog.c:3352
 #, fuzzy
 msgid "Paper _source:"
 msgstr "_Ciri-ciri"
 
-#: gtk/gtkprintunixdialog.c:3343
+#: gtk/gtkprintunixdialog.c:3367
 msgid "Output t_ray:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkprintunixdialog.c:3407
 #, fuzzy
 msgid "Or_ientation:"
 msgstr "Ke_tepuan:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3398
+#: gtk/gtkprintunixdialog.c:3422
 #, fuzzy
 msgid "Portrait"
 msgstr "_Cetak"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3423
 msgid "Landscape"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3400
+#: gtk/gtkprintunixdialog.c:3424
 msgid "Reverse portrait"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3401
+#: gtk/gtkprintunixdialog.c:3425
 msgid "Reverse landscape"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3446
+#: gtk/gtkprintunixdialog.c:3470
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3452
+#: gtk/gtkprintunixdialog.c:3476
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3467
+#: gtk/gtkprintunixdialog.c:3491
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3485
+#: gtk/gtkprintunixdialog.c:3509
 msgid "Print Document"
 msgstr ""
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3494
+#: gtk/gtkprintunixdialog.c:3518
 #, fuzzy
 msgid "_Now"
 msgstr "_Tidak"
 
-#: gtk/gtkprintunixdialog.c:3505
+#: gtk/gtkprintunixdialog.c:3529
 msgid "A_t:"
 msgstr ""
 
@@ -2956,72 +3045,72 @@ msgstr ""
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkprintunixdialog.c:3535
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3521
+#: gtk/gtkprintunixdialog.c:3545
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3537
+#: gtk/gtkprintunixdialog.c:3561
 #, fuzzy
 msgid "On _hold"
 msgstr "_Bold"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3562
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3558
+#: gtk/gtkprintunixdialog.c:3582
 msgid "Add Cover Page"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3567
+#: gtk/gtkprintunixdialog.c:3591
 msgid "Be_fore:"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3585
+#: gtk/gtkprintunixdialog.c:3609
 msgid "_After:"
 msgstr ""
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3603
+#: gtk/gtkprintunixdialog.c:3627
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3669
+#: gtk/gtkprintunixdialog.c:3693
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3703
+#: gtk/gtkprintunixdialog.c:3727
 msgid "Image Quality"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3706
+#: gtk/gtkprintunixdialog.c:3730
 #, fuzzy
 msgid "Color"
 msgstr "_Warna"
 
-#: gtk/gtkprintunixdialog.c:3709
+#: gtk/gtkprintunixdialog.c:3733
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3719
+#: gtk/gtkprintunixdialog.c:3743
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3742
+#: gtk/gtkprintunixdialog.c:3766
 #, fuzzy
 msgid "Print"
 msgstr "_Cetak"
@@ -5314,6 +5403,35 @@ msgstr "Imej mempunyai ketinggian sifar"
 msgid "Command Line"
 msgstr ""
 
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:810
+#, fuzzy
+msgid "printer offline"
+msgstr "Tiada pengepala XPM dijumpai"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:828
+#, fuzzy
+msgid "ready to print"
+msgstr "Amaran"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:831
+msgid "processing job"
+msgstr ""
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:835
+#, fuzzy
+msgid "paused"
+msgstr "Te_pek"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:838
+#, fuzzy
+msgid "unknown"
+msgstr "(tidak diketahui)"
+
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
@@ -5329,26 +5447,6 @@ msgstr "_Cetak"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tak dapat peroleh maklumat bagi fail '%s': %s"
-
-#, fuzzy
-#~ msgid "default:mm"
-#~ msgstr "default:LTR"
-
-#, fuzzy
-#~ msgid "_Height:"
-#~ msgstr "_Hue:"
-
-#, fuzzy
-#~ msgid "_Top:"
-#~ msgstr "_Atas"
-
-#, fuzzy
-#~ msgid "_Bottom:"
-#~ msgstr "_Bawah"
-
-#, fuzzy
-#~ msgid "_Left:"
-#~ msgstr "Ki_ri"
 
 #, fuzzy
 #~ msgid "Couldn't create pixbuf"
@@ -5428,10 +5526,6 @@ msgstr "Tak dapat peroleh maklumat bagi fail '%s': %s"
 
 #~ msgid "Default"
 #~ msgstr "Default"
-
-#, fuzzy
-#~ msgid "Print Pages"
-#~ msgstr "Pre_biu Cetakan"
 
 #, fuzzy
 #~ msgid "_All"

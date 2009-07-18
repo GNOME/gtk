@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-10 18:20-0400\n"
+"POT-Creation-Date: 2009-07-17 22:23-0400\n"
 "PO-Revision-Date: 2009-03-11 12:57+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: American English <fedora-trans-as@redhat.com>\n"
@@ -1544,15 +1544,79 @@ msgstr ""
 msgid "Color Selection"
 msgstr "ৰঙৰ নিৰ্ব্বাচন"
 
-#: gtk/gtkentry.c:8571 gtk/gtktextview.c:7767
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: gtk/gtkcustompaperunixdialog.c:119
+msgid "default:mm"
+msgstr "অবিকল্পিত:mm"
+
+#. And show the custom paper dialog
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3160
+msgid "Manage Custom Sizes"
+msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক"
+
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+msgid "inch"
+msgstr "ইঞ্চি"
+
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+msgid "mm"
+msgstr "mm"
+
+#: gtk/gtkcustompaperunixdialog.c:584
+msgid "Margins from Printer..."
+msgstr "মুদ্ৰকৰ পৰা প্ৰান্তিক অংশ..."
+
+#: gtk/gtkcustompaperunixdialog.c:750
+#, c-format
+msgid "Custom Size %d"
+msgstr "পছন্দৰ আয়তন %d"
+
+#: gtk/gtkcustompaperunixdialog.c:1057
+msgid "_Width:"
+msgstr "বহল (_W):"
+
+#: gtk/gtkcustompaperunixdialog.c:1069
+msgid "_Height:"
+msgstr "উচ্চতা (_H):"
+
+#: gtk/gtkcustompaperunixdialog.c:1081
+msgid "Paper Size"
+msgstr "কাগজৰ আয়তন"
+
+#: gtk/gtkcustompaperunixdialog.c:1090
+msgid "_Top:"
+msgstr "ওপৰ (_T):"
+
+#: gtk/gtkcustompaperunixdialog.c:1102
+msgid "_Bottom:"
+msgstr "তল (_B):"
+
+#: gtk/gtkcustompaperunixdialog.c:1114
+msgid "_Left:"
+msgstr "বাওঁ ফালৰ (_L):"
+
+#: gtk/gtkcustompaperunixdialog.c:1126
+msgid "_Right:"
+msgstr "সোঁ ফালৰ (_R):"
+
+#: gtk/gtkcustompaperunixdialog.c:1167
+msgid "Paper Margins"
+msgstr "কাগজৰ প্ৰান্তিক অংশ"
+
+#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8585 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: gtk/gtkentry.c:9953
+#: gtk/gtkentry.c:9959
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্স-লক কি সক্ৰিয় আছে"
 
@@ -1717,69 +1781,69 @@ msgid "Modified"
 msgstr "সলনি কৰা হ'ল"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4935 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4969 gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "নাম (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4978
+#: gtk/gtkfilechooserdefault.c:5012
 msgid "_Browse for other folders"
 msgstr "অন্য ফোল্ডাৰৰ বাবে চৰক (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5250
+#: gtk/gtkfilechooserdefault.c:5284
 msgid "Type a file name"
 msgstr "নথিপত্ৰৰ নাম এটা লিখক"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5291
+#: gtk/gtkfilechooserdefault.c:5325
 msgid "Create Fo_lder"
 msgstr "ফোল্ডাৰ সৃষ্টি কৰক (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5335
 msgid "_Location:"
 msgstr "স্থান (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5539
 msgid "Save in _folder:"
 msgstr "ফোল্ডাৰত ৰক্ষা কৰক (_f):"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5541
 msgid "Create in _folder:"
 msgstr "ফোল্ডাৰত সৃষ্টি কৰক (_f):"
 
-#: gtk/gtkfilechooserdefault.c:7249
+#: gtk/gtkfilechooserdefault.c:7285
 msgid "Cannot change to folder because it is not local"
 msgstr "ফোল্ডাৰলৈ সলনি কৰিব নোৱাৰি কাৰণ সেইটো স্থানিক নহয়"
 
-#: gtk/gtkfilechooserdefault.c:7874 gtk/gtkfilechooserdefault.c:7895
+#: gtk/gtkfilechooserdefault.c:7910 gtk/gtkfilechooserdefault.c:7931
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "হ্ৰস্বপথ %s ইতিমধ্যে আছে"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8021
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "হ্ৰস্বপথ %s নাই"
 
-#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkfilechooserdefault.c:8283 gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "নথিপত্ৰৰ নাম \"%s\" ইতিমধ্যে আছে । আপুনি প্ৰতিস্থাপন কৰিব খোজে নেকি ?"
 
-#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:450
+#: gtk/gtkfilechooserdefault.c:8286 gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "নথিপত্ৰ ইতিমধ্যে \"%s\" ত আছে । প্ৰতিস্থাপন কৰিলে বিষয়বস্তু পুনঃ লিখা যাব ।"
 
-#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkfilechooserdefault.c:8291 gtk/gtkprintunixdialog.c:457
 msgid "_Replace"
 msgstr "প্ৰতিস্থাপন কৰক (_R)"
 
-#: gtk/gtkfilechooserdefault.c:9017
+#: gtk/gtkfilechooserdefault.c:9053
 msgid "Could not start the search process"
 msgstr "বিচৰা প্ৰক্ৰিয়া আৰম্ভ কৰিব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:9018
+#: gtk/gtkfilechooserdefault.c:9054
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1787,35 +1851,35 @@ msgstr ""
 "indexer ডেমনলৈ অনুপ্ৰয়োগে সংযোগ সৃষ্টি কৰিব নোৱাৰিলে । সেইটো চলি থকাটো নিশ্চিত "
 "কৰক ।"
 
-#: gtk/gtkfilechooserdefault.c:9032
+#: gtk/gtkfilechooserdefault.c:9068
 msgid "Could not send the search request"
 msgstr "বিচৰাৰ অনুৰোধ পঠিয়াব নোৱাৰিলো"
 
-#: gtk/gtkfilechooserdefault.c:9509
+#: gtk/gtkfilechooserdefault.c:9545
 #, fuzzy
 msgid "<b>_Search:</b>"
 msgstr "বিচাৰক (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10245
+#: gtk/gtkfilechooserdefault.c:10281
 #, fuzzy
 msgid "<b>Recently Used</b>"
 msgstr "অলপতে ব্যৱহাৰ কৰা"
 
-#: gtk/gtkfilechooserdefault.c:10483
+#: gtk/gtkfilechooserdefault.c:10519
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s তুলি ল'ব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:11335 gtk/gtkfilechooserdefault.c:11357
-#: gtk/gtkfilechooserdefault.c:11428
+#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
+#: gtk/gtkfilechooserdefault.c:11464
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:11375
+#: gtk/gtkfilechooserdefault.c:11411
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11377
+#: gtk/gtkfilechooserdefault.c:11413
 msgid "Yesterday at %H:%M"
 msgstr "যোৱাকালি %H:%M ত"
 
@@ -2317,6 +2381,38 @@ msgstr ""
 msgid "_End Process"
 msgstr ""
 
+#: gtk/gtkmountoperation-stub.c:64
+#, c-format
+msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:864
+#, fuzzy
+msgid "Terminal Pager"
+msgstr "পৃষ্ঠাসমূহ মুদ্ৰণ কৰক"
+
+#: gtk/gtkmountoperation-x11.c:865
+#, fuzzy
+msgid "Top Command"
+msgstr "আদেশ শাৰী"
+
+#: gtk/gtkmountoperation-x11.c:866
+msgid "Bourne Again Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:867
+msgid "Bourne Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:868
+msgid "Z Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:963
+#, c-format
+msgid "Cannot end process with pid %d: %s"
+msgstr ""
+
 #: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
 msgid "Page %u"
@@ -2334,14 +2430,6 @@ msgstr ""
 "<b>যিকোনো মুদ্ৰক</b>\n"
 "সুবহ প্ৰলেক্ষৰ বাবে"
 
-#: gtk/gtkpagesetupunixdialog.c:775
-msgid "mm"
-msgstr "mm"
-
-#: gtk/gtkpagesetupunixdialog.c:777
-msgid "inch"
-msgstr "ইঞ্চি"
-
 #: gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
@@ -2357,7 +2445,7 @@ msgstr ""
 " ওপৰ: %s %s\n"
 " তল: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3187
+#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক..."
 
@@ -2365,7 +2453,7 @@ msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক..."
 msgid "_Format for:"
 msgstr "কাৰণে আকৃতি দিয়ক (_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3359
+#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "কাগজৰ আয়তন (_P):"
 
@@ -2373,7 +2461,7 @@ msgstr "কাগজৰ আয়তন (_P):"
 msgid "_Orientation:"
 msgstr "দিক্‌বিন্যাস (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3421
+#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "পৃষ্ঠাৰ প্ৰতিস্থাপন"
 
@@ -2635,42 +2723,42 @@ msgstr "সাধাৰণ"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr "ওপৰৰ পৰা তললৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr "ওপৰৰ পৰা তললৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr "তলৰ পৰা ওপৰলৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
@@ -2678,137 +2766,132 @@ msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা �
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2938 gtk/gtkprintunixdialog.c:2951
+#: gtk/gtkprintunixdialog.c:2962 gtk/gtkprintunixdialog.c:2975
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 msgid "Page Ordering"
 msgstr "পৃষ্ঠা শৃংখলাবদ্ধ কৰা"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2991
 msgid "Left to right"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2968
+#: gtk/gtkprintunixdialog.c:2992
 msgid "Right to left"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2980
+#: gtk/gtkprintunixdialog.c:3004
 #, fuzzy
 msgid "Top to bottom"
 msgstr "ওপৰৰ পৰা তললৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
-#: gtk/gtkprintunixdialog.c:2981
+#: gtk/gtkprintunixdialog.c:3005
 #, fuzzy
 msgid "Bottom to top"
 msgstr "তলৰ পৰা ওপৰলৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
-#. And show the custom paper dialog
-#: gtk/gtkprintunixdialog.c:3136
-msgid "Manage Custom Sizes"
-msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক"
-
-#: gtk/gtkprintunixdialog.c:3210
+#: gtk/gtkprintunixdialog.c:3234
 msgid "Layout"
 msgstr "পৰিকল্পনা"
 
-#: gtk/gtkprintunixdialog.c:3214
+#: gtk/gtkprintunixdialog.c:3238
 msgid "T_wo-sided:"
 msgstr "দ্বিপাৰ্শ্বিক (_w):"
 
-#: gtk/gtkprintunixdialog.c:3229
+#: gtk/gtkprintunixdialog.c:3253
 msgid "Pages per _side:"
 msgstr "প্ৰতিটো ফালৰ পৃষ্ঠা(_s):"
 
-#: gtk/gtkprintunixdialog.c:3246
+#: gtk/gtkprintunixdialog.c:3270
 msgid "Page or_dering:"
 msgstr "পৃষ্ঠা শৃংখলাবদ্ধ কৰা (_d):"
 
-#: gtk/gtkprintunixdialog.c:3262
+#: gtk/gtkprintunixdialog.c:3286
 msgid "_Only print:"
 msgstr "অকল মুদ্ৰণ কৰক (_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkprintunixdialog.c:3301
 msgid "All sheets"
 msgstr "সকলো পাত"
 
-#: gtk/gtkprintunixdialog.c:3278
+#: gtk/gtkprintunixdialog.c:3302
 msgid "Even sheets"
 msgstr "যুগ্ম সংখ্যাৰ পাত"
 
-#: gtk/gtkprintunixdialog.c:3279
+#: gtk/gtkprintunixdialog.c:3303
 msgid "Odd sheets"
 msgstr "অযুগ্ম সংখ্যাৰ পাত"
 
-#: gtk/gtkprintunixdialog.c:3282
+#: gtk/gtkprintunixdialog.c:3306
 msgid "Sc_ale:"
 msgstr "মাপ (_a):"
 
-#: gtk/gtkprintunixdialog.c:3309
+#: gtk/gtkprintunixdialog.c:3333
 msgid "Paper"
 msgstr "কাগজ"
 
-#: gtk/gtkprintunixdialog.c:3313
+#: gtk/gtkprintunixdialog.c:3337
 msgid "Paper _type:"
 msgstr "কাগজৰ ধৰণ (_t):"
 
-#: gtk/gtkprintunixdialog.c:3328
+#: gtk/gtkprintunixdialog.c:3352
 msgid "Paper _source:"
 msgstr "কাগজৰ উৎস (_s):"
 
-#: gtk/gtkprintunixdialog.c:3343
+#: gtk/gtkprintunixdialog.c:3367
 msgid "Output t_ray:"
 msgstr "নিৰ্গমৰ ডলা (_r):"
 
-#: gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkprintunixdialog.c:3407
 #, fuzzy
 msgid "Or_ientation:"
 msgstr "দিক্‌বিন্যাস (_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3398
+#: gtk/gtkprintunixdialog.c:3422
 #, fuzzy
 msgid "Portrait"
 msgstr "পোর্ট্রেট"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3423
 #, fuzzy
 msgid "Landscape"
 msgstr "নৈসর্গিক দৃশ্য"
 
-#: gtk/gtkprintunixdialog.c:3400
+#: gtk/gtkprintunixdialog.c:3424
 #, fuzzy
 msgid "Reverse portrait"
 msgstr "বিপৰীত প্ৰতিকৃতি বিন্যাস"
 
-#: gtk/gtkprintunixdialog.c:3401
+#: gtk/gtkprintunixdialog.c:3425
 #, fuzzy
 msgid "Reverse landscape"
 msgstr "বিপৰীত ভূদৃশ্য বিন্যাস"
 
-#: gtk/gtkprintunixdialog.c:3446
+#: gtk/gtkprintunixdialog.c:3470
 msgid "Job Details"
 msgstr "কাৰ্য্যৰ বিৱৰণ"
 
-#: gtk/gtkprintunixdialog.c:3452
+#: gtk/gtkprintunixdialog.c:3476
 msgid "Pri_ority:"
 msgstr "শ্ৰেষ্ঠতা (_o):"
 
-#: gtk/gtkprintunixdialog.c:3467
+#: gtk/gtkprintunixdialog.c:3491
 msgid "_Billing info:"
 msgstr "সাধনীৰ তথ্য (_B):"
 
-#: gtk/gtkprintunixdialog.c:3485
+#: gtk/gtkprintunixdialog.c:3509
 msgid "Print Document"
 msgstr "প্ৰলেক্ষ মুদ্ৰণ কৰক"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3494
+#: gtk/gtkprintunixdialog.c:3518
 msgid "_Now"
 msgstr "এতিয়া (_N)"
 
-#: gtk/gtkprintunixdialog.c:3505
+#: gtk/gtkprintunixdialog.c:3529
 msgid "A_t:"
 msgstr "অ'ত (_t):"
 
@@ -2816,7 +2899,7 @@ msgstr "অ'ত (_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkprintunixdialog.c:3535
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2824,64 +2907,64 @@ msgstr ""
 "মূদ্ৰণৰ সময় নিৰ্ধাৰণ কৰা হ'ব\n"
 " উদাহৰণ ১৫:৩০, ২:৩৫ অপৰাহ্ন, ১৪:১৫:২০, ১১:৪৬:৩০ পূৰ্বাহ্ন, ৪ অপৰাহ্ন"
 
-#: gtk/gtkprintunixdialog.c:3521
+#: gtk/gtkprintunixdialog.c:3545
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3537
+#: gtk/gtkprintunixdialog.c:3561
 msgid "On _hold"
 msgstr "ধৰি ৰখা হৈছে (_h)"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3562
 msgid "Hold the job until it is explicitly released"
 msgstr "আৰম্ভেৰ সুনিৰ্দিষ্ট নিৰ্দেশ না দেৱ অবধি কৰ্ম স্থগিত ৰাখা হ'ব"
 
-#: gtk/gtkprintunixdialog.c:3558
+#: gtk/gtkprintunixdialog.c:3582
 msgid "Add Cover Page"
 msgstr "বেটুপাত পৃষ্ঠা যোগ দিয়ক"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3567
+#: gtk/gtkprintunixdialog.c:3591
 msgid "Be_fore:"
 msgstr "আগৰ (_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3585
+#: gtk/gtkprintunixdialog.c:3609
 msgid "_After:"
 msgstr "পিছৰ (_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3603
+#: gtk/gtkprintunixdialog.c:3627
 msgid "Job"
 msgstr "কাৰ্য্য"
 
-#: gtk/gtkprintunixdialog.c:3669
+#: gtk/gtkprintunixdialog.c:3693
 msgid "Advanced"
 msgstr "উন্নত"
 
-#: gtk/gtkprintunixdialog.c:3703
+#: gtk/gtkprintunixdialog.c:3727
 msgid "Image Quality"
 msgstr "প্ৰতিমূৰ্তিৰ গুণ"
 
-#: gtk/gtkprintunixdialog.c:3706
+#: gtk/gtkprintunixdialog.c:3730
 msgid "Color"
 msgstr "ৰং"
 
-#: gtk/gtkprintunixdialog.c:3709
+#: gtk/gtkprintunixdialog.c:3733
 msgid "Finishing"
 msgstr "অন্ত কৰা হৈছে"
 
-#: gtk/gtkprintunixdialog.c:3719
+#: gtk/gtkprintunixdialog.c:3743
 msgid "Some of the settings in the dialog conflict"
 msgstr "সংলাপৰ কিছুমান পছন্দৰ সংঘৰ্ষ হৈছে"
 
-#: gtk/gtkprintunixdialog.c:3742
+#: gtk/gtkprintunixdialog.c:3766
 msgid "Print"
 msgstr "মুদ্ৰণ"
 
@@ -5057,6 +5140,35 @@ msgstr "প্ৰতিটো পাতৰ পৃষ্ঠা"
 msgid "Command Line"
 msgstr "আদেশ শাৰী"
 
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:810
+#, fuzzy
+msgid "printer offline"
+msgstr "মুদ্ৰক সতাঁৰ নহয়"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:828
+#, fuzzy
+msgid "ready to print"
+msgstr "মূদ্ৰণৰ প্ৰস্তুতি কৰা হৈছে"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:831
+msgid "processing job"
+msgstr ""
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:835
+#, fuzzy
+msgid "paused"
+msgstr "বিৰাম দিয়া হৈছে"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:838
+#, fuzzy
+msgid "unknown"
+msgstr "(অজ্ঞাত)"
+
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
@@ -5071,39 +5183,6 @@ msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰ
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' নথিপত্ৰৰ বাবে তথ্য পোৱা ন'গ'ল: %s"
-
-#~ msgid "default:mm"
-#~ msgstr "অবিকল্পিত:mm"
-
-#~ msgid "Margins from Printer..."
-#~ msgstr "মুদ্ৰকৰ পৰা প্ৰান্তিক অংশ..."
-
-#~ msgid "Custom Size %d"
-#~ msgstr "পছন্দৰ আয়তন %d"
-
-#~ msgid "_Width:"
-#~ msgstr "বহল (_W):"
-
-#~ msgid "_Height:"
-#~ msgstr "উচ্চতা (_H):"
-
-#~ msgid "Paper Size"
-#~ msgstr "কাগজৰ আয়তন"
-
-#~ msgid "_Top:"
-#~ msgstr "ওপৰ (_T):"
-
-#~ msgid "_Bottom:"
-#~ msgstr "তল (_B):"
-
-#~ msgid "_Left:"
-#~ msgstr "বাওঁ ফালৰ (_L):"
-
-#~ msgid "_Right:"
-#~ msgstr "সোঁ ফালৰ (_R):"
-
-#~ msgid "Paper Margins"
-#~ msgstr "কাগজৰ প্ৰান্তিক অংশ"
 
 #~ msgid "directfb arg"
 #~ msgstr "directfb arg"
@@ -5775,9 +5854,6 @@ msgstr "'%s' নথিপত্ৰৰ বাবে তথ্য পোৱা ন
 
 #~ msgid "Default"
 #~ msgstr "অবিকল্পিত"
-
-#~ msgid "Print Pages"
-#~ msgstr "পৃষ্ঠাসমূহ মুদ্ৰণ কৰক"
 
 #~ msgid "_All"
 #~ msgstr "সকলো (_A)"

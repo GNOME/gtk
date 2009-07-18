@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-10 18:20-0400\n"
+"POT-Creation-Date: 2009-07-17 22:23-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1771,16 +1771,92 @@ msgstr ""
 msgid "Color Selection"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkentry.c:8571 gtk/gtktextview.c:7767
+#. Translate to the default units to use for presenting
+#. * lengths to the user. Translate to default:inch if you
+#. * want inches, otherwise translate to default:mm.
+#. * Do *not* translate it to "predefinito:mm", if it
+#. * it isn't default:mm or default:inch it will not work
+#.
+#: gtk/gtkcustompaperunixdialog.c:119
+#, fuzzy
+msgid "default:mm"
+msgstr "Mburabuzi"
+
+#. And show the custom paper dialog
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3160
+msgid "Manage Custom Sizes"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+msgid "inch"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+msgid "mm"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:584
+msgid "Margins from Printer..."
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:750
+#, c-format
+msgid "Custom Size %d"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:1057
+msgid "_Width:"
+msgstr ""
+
+# svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
+#: gtk/gtkcustompaperunixdialog.c:1069
+#, fuzzy
+msgid "_Height:"
+msgstr "Ibara"
+
+# #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
+# basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
+# #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
+# basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
+#: gtk/gtkcustompaperunixdialog.c:1081
+#, fuzzy
+msgid "Paper Size"
+msgstr "indangakintu"
+
+# basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
+#: gtk/gtkcustompaperunixdialog.c:1090
+#, fuzzy
+msgid "_Top:"
+msgstr "Guhagarara"
+
+#: gtk/gtkcustompaperunixdialog.c:1102
+msgid "_Bottom:"
+msgstr ""
+
+#: gtk/gtkcustompaperunixdialog.c:1114
+msgid "_Left:"
+msgstr ""
+
+# svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
+#: gtk/gtkcustompaperunixdialog.c:1126
+#, fuzzy
+msgid "_Right:"
+msgstr "Ibara"
+
+#: gtk/gtkcustompaperunixdialog.c:1167
+msgid "Paper Margins"
+msgstr ""
+
+#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7767
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8585 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7781
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkentry.c:9953
+#: gtk/gtkentry.c:9959
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Intaho:"
@@ -1966,115 +2042,115 @@ msgstr "cya/byahinduwe"
 
 # basctl/source\basicide\moduldlg.src:RID_DLG_NEWLIB.RID_FT_NEWLIB.text
 #. Label
-#: gtk/gtkfilechooserdefault.c:4935 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4969 gtk/gtkprinteroptionwidget.c:796
 #, fuzzy
 msgid "_Name:"
 msgstr "Izina:"
 
-#: gtk/gtkfilechooserdefault.c:4978
+#: gtk/gtkfilechooserdefault.c:5012
 #, fuzzy
 msgid "_Browse for other folders"
 msgstr "kugirango Ikindi"
 
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:5250
+#: gtk/gtkfilechooserdefault.c:5284
 #, fuzzy
 msgid "Type a file name"
 msgstr "Izina ry'idosiye siryo"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5291
+#: gtk/gtkfilechooserdefault.c:5325
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Guhimba idosiye:%s"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkfilechooserdefault.c:5301
+#: gtk/gtkfilechooserdefault.c:5335
 #, fuzzy
 msgid "_Location:"
 msgstr "Intaho:"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5539
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "Kubika in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:5507
+#: gtk/gtkfilechooserdefault.c:5541
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:7249
+#: gtk/gtkfilechooserdefault.c:7285
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Guhindura>> Kuri Ububiko ni OYA"
 
-#: gtk/gtkfilechooserdefault.c:7874 gtk/gtkfilechooserdefault.c:7895
+#: gtk/gtkfilechooserdefault.c:7910 gtk/gtkfilechooserdefault.c:7931
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:7985
+#: gtk/gtkfilechooserdefault.c:8021
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:8247 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkfilechooserdefault.c:8283 gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8250 gtk/gtkprintunixdialog.c:450
+#: gtk/gtkfilechooserdefault.c:8286 gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
-#: gtk/gtkfilechooserdefault.c:8255 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkfilechooserdefault.c:8291 gtk/gtkprintunixdialog.c:457
 #, fuzzy
 msgid "_Replace"
 msgstr "Guhindura izina"
 
-#: gtk/gtkfilechooserdefault.c:9017
+#: gtk/gtkfilechooserdefault.c:9053
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Kubika"
 
-#: gtk/gtkfilechooserdefault.c:9018
+#: gtk/gtkfilechooserdefault.c:9054
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9032
+#: gtk/gtkfilechooserdefault.c:9068
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Kubika"
 
-#: gtk/gtkfilechooserdefault.c:9509
+#: gtk/gtkfilechooserdefault.c:9545
 msgid "<b>_Search:</b>"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10245
+#: gtk/gtkfilechooserdefault.c:10281
 msgid "<b>Recently Used</b>"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:10483
+#: gtk/gtkfilechooserdefault.c:10519
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:11335 gtk/gtkfilechooserdefault.c:11357
-#: gtk/gtkfilechooserdefault.c:11428
+#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
+#: gtk/gtkfilechooserdefault.c:11464
 msgid "Unknown"
 msgstr "Itazwi"
 
-#: gtk/gtkfilechooserdefault.c:11375
+#: gtk/gtkfilechooserdefault.c:11411
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:11377
+#: gtk/gtkfilechooserdefault.c:11413
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ejo"
@@ -2647,6 +2723,38 @@ msgstr ""
 msgid "_End Process"
 msgstr ""
 
+#: gtk/gtkmountoperation-stub.c:64
+#, c-format
+msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgstr ""
+
+# sc/source\ui\src\scstring.src:SCSTR_PREVIEWSHELL.text
+#: gtk/gtkmountoperation-x11.c:864
+#, fuzzy
+msgid "Terminal Pager"
+msgstr "Igaragazambere ryo Gucapa"
+
+#: gtk/gtkmountoperation-x11.c:865
+msgid "Top Command"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:866
+msgid "Bourne Again Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:867
+msgid "Bourne Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:868
+msgid "Z Shell"
+msgstr ""
+
+#: gtk/gtkmountoperation-x11.c:963
+#, c-format
+msgid "Cannot end process with pid %d: %s"
+msgstr ""
+
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
@@ -2666,14 +2774,6 @@ msgid ""
 "For portable documents"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:775
-msgid "mm"
-msgstr ""
-
-#: gtk/gtkpagesetupunixdialog.c:777
-msgid "inch"
-msgstr ""
-
 #: gtk/gtkpagesetupunixdialog.c:796
 #, c-format
 msgid ""
@@ -2684,7 +2784,7 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3187
+#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr ""
 
@@ -2696,7 +2796,7 @@ msgstr ""
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3359
+#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
 #, fuzzy
 msgid "_Paper size:"
 msgstr "indangakintu"
@@ -2711,7 +2811,7 @@ msgstr "Ubwuzurane"
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3421
+#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
 #, fuzzy
 msgid "Page Setup"
 msgstr "Ipaji..."
@@ -3004,42 +3104,42 @@ msgstr ""
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2931
+#: gtk/gtkprintunixdialog.c:2955
 #: modules/printbackends/cups/gtkprintbackendcups.c:3130
 msgid "Left to right, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2932
+#: gtk/gtkprintunixdialog.c:2956
 #: modules/printbackends/cups/gtkprintbackendcups.c:3131
 msgid "Right to left, bottom to top"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2933
+#: gtk/gtkprintunixdialog.c:2957
 #: modules/printbackends/cups/gtkprintbackendcups.c:3132
 msgid "Top to bottom, right to left"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, left to right"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2934
+#: gtk/gtkprintunixdialog.c:2958
 #: modules/printbackends/cups/gtkprintbackendcups.c:3133
 msgid "Bottom to top, right to left"
 msgstr ""
@@ -3047,42 +3147,37 @@ msgstr ""
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2938 gtk/gtkprintunixdialog.c:2951
+#: gtk/gtkprintunixdialog.c:2962 gtk/gtkprintunixdialog.c:2975
 #: modules/printbackends/cups/gtkprintbackendcups.c:3164
 #, fuzzy
 msgid "Page Ordering"
 msgstr "Iburira"
 
-#: gtk/gtkprintunixdialog.c:2967
+#: gtk/gtkprintunixdialog.c:2991
 #, fuzzy
 msgid "Left to right"
 msgstr "Kuri Iburyo: Ikimenyetso"
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:2968
+#: gtk/gtkprintunixdialog.c:2992
 #, fuzzy
 msgid "Right to left"
 msgstr "Gucapa"
 
-#: gtk/gtkprintunixdialog.c:2980
+#: gtk/gtkprintunixdialog.c:3004
 msgid "Top to bottom"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2981
+#: gtk/gtkprintunixdialog.c:3005
 msgid "Bottom to top"
 msgstr ""
 
-#. And show the custom paper dialog
-#: gtk/gtkprintunixdialog.c:3136
-msgid "Manage Custom Sizes"
-msgstr ""
-
-#: gtk/gtkprintunixdialog.c:3210
+#: gtk/gtkprintunixdialog.c:3234
 msgid "Layout"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3214
+#: gtk/gtkprintunixdialog.c:3238
 msgid "T_wo-sided:"
 msgstr ""
 
@@ -3090,7 +3185,7 @@ msgstr ""
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:3229
+#: gtk/gtkprintunixdialog.c:3253
 #, fuzzy
 msgid "Pages per _side:"
 msgstr "indangakintu"
@@ -3099,37 +3194,37 @@ msgstr "indangakintu"
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:3246
+#: gtk/gtkprintunixdialog.c:3270
 #, fuzzy
 msgid "Page or_dering:"
 msgstr "indangakintu"
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:3262
+#: gtk/gtkprintunixdialog.c:3286
 #, fuzzy
 msgid "_Only print:"
 msgstr "Gucapa"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkprintunixdialog.c:3301
 msgid "All sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3278
+#: gtk/gtkprintunixdialog.c:3302
 msgid "Even sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3279
+#: gtk/gtkprintunixdialog.c:3303
 msgid "Odd sheets"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3282
+#: gtk/gtkprintunixdialog.c:3306
 #, fuzzy
 msgid "Sc_ale:"
 msgstr "Agaciro:"
 
-#: gtk/gtkprintunixdialog.c:3309
+#: gtk/gtkprintunixdialog.c:3333
 msgid "Paper"
 msgstr ""
 
@@ -3137,7 +3232,7 @@ msgstr ""
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:3313
+#: gtk/gtkprintunixdialog.c:3337
 #, fuzzy
 msgid "Paper _type:"
 msgstr "indangakintu"
@@ -3146,17 +3241,17 @@ msgstr "indangakintu"
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkprintunixdialog.c:3328
+#: gtk/gtkprintunixdialog.c:3352
 #, fuzzy
 msgid "Paper _source:"
 msgstr "indangakintu"
 
-#: gtk/gtkprintunixdialog.c:3343
+#: gtk/gtkprintunixdialog.c:3367
 msgid "Output t_ray:"
 msgstr ""
 
 # svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_SATURATION.text
-#: gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkprintunixdialog.c:3407
 #, fuzzy
 msgid "Or_ientation:"
 msgstr "Ubwuzurane"
@@ -3164,48 +3259,48 @@ msgstr "Ubwuzurane"
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3398
+#: gtk/gtkprintunixdialog.c:3422
 #, fuzzy
 msgid "Portrait"
 msgstr "Gucapa"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3423
 msgid "Landscape"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3400
+#: gtk/gtkprintunixdialog.c:3424
 msgid "Reverse portrait"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3401
+#: gtk/gtkprintunixdialog.c:3425
 msgid "Reverse landscape"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3446
+#: gtk/gtkprintunixdialog.c:3470
 msgid "Job Details"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3452
+#: gtk/gtkprintunixdialog.c:3476
 msgid "Pri_ority:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3467
+#: gtk/gtkprintunixdialog.c:3491
 msgid "_Billing info:"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3485
+#: gtk/gtkprintunixdialog.c:3509
 msgid "Print Document"
 msgstr ""
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3494
+#: gtk/gtkprintunixdialog.c:3518
 #, fuzzy
 msgid "_Now"
 msgstr "Oya"
 
-#: gtk/gtkprintunixdialog.c:3505
+#: gtk/gtkprintunixdialog.c:3529
 msgid "A_t:"
 msgstr ""
 
@@ -3213,13 +3308,13 @@ msgstr ""
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkprintunixdialog.c:3535
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3521
+#: gtk/gtkprintunixdialog.c:3545
 msgid "Time of print"
 msgstr ""
 
@@ -3227,65 +3322,65 @@ msgstr ""
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.UnderLine..12.text
 # #-#-#-#-#  officecfg.pot (Gnome 2.12)  #-#-#-#-#
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.Strikeout..4.text
-#: gtk/gtkprintunixdialog.c:3537
+#: gtk/gtkprintunixdialog.c:3561
 #, fuzzy
 msgid "On _hold"
 msgstr "UTSINDAGIYE"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3562
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3558
+#: gtk/gtkprintunixdialog.c:3582
 msgid "Add Cover Page"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3567
+#: gtk/gtkprintunixdialog.c:3591
 msgid "Be_fore:"
 msgstr ""
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3585
+#: gtk/gtkprintunixdialog.c:3609
 msgid "_After:"
 msgstr ""
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3603
+#: gtk/gtkprintunixdialog.c:3627
 msgid "Job"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3669
+#: gtk/gtkprintunixdialog.c:3693
 msgid "Advanced"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3703
+#: gtk/gtkprintunixdialog.c:3727
 msgid "Image Quality"
 msgstr ""
 
 # goodies/source\filter.vcl\eps\dlgeps.src:DLG_EXPORT_EPS.RB_COLOR.text
-#: gtk/gtkprintunixdialog.c:3706
+#: gtk/gtkprintunixdialog.c:3730
 #, fuzzy
 msgid "Color"
 msgstr "Ibara"
 
-#: gtk/gtkprintunixdialog.c:3709
+#: gtk/gtkprintunixdialog.c:3733
 msgid "Finishing"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3719
+#: gtk/gtkprintunixdialog.c:3743
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkprintunixdialog.c:3742
+#: gtk/gtkprintunixdialog.c:3766
 #, fuzzy
 msgid "Print"
 msgstr "Gucapa"
@@ -5725,6 +5820,36 @@ msgstr "Zeru Ubuhagarike"
 msgid "Command Line"
 msgstr ""
 
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:810
+#, fuzzy
+msgid "printer offline"
+msgstr "Umutwempangano Byabonetse"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:828
+#, fuzzy
+msgid "ready to print"
+msgstr "Iburira"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:831
+msgid "processing job"
+msgstr ""
+
+# dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:835
+#, fuzzy
+msgid "paused"
+msgstr "Komeka"
+
+#. SUN_BRANDING
+#: modules/printbackends/papi/gtkprintbackendpapi.c:838
+#, fuzzy
+msgid "unknown"
+msgstr "(Itazwi>"
+
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
@@ -5742,20 +5867,6 @@ msgstr "Gucapa"
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "OYA Kubona Ibisobanuro kugirango IDOSIYE"
-
-#, fuzzy
-#~ msgid "default:mm"
-#~ msgstr "Mburabuzi"
-
-# svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
-#, fuzzy
-#~ msgid "_Height:"
-#~ msgstr "Ibara"
-
-# basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
-#, fuzzy
-#~ msgid "_Top:"
-#~ msgstr "Guhagarara"
 
 #, fuzzy
 #~ msgid "Couldn't create pixbuf"
@@ -5862,11 +5973,6 @@ msgstr "OYA Kubona Ibisobanuro kugirango IDOSIYE"
 
 #~ msgid "Default"
 #~ msgstr "Mburabuzi"
-
-# sc/source\ui\src\scstring.src:SCSTR_PREVIEWSHELL.text
-#, fuzzy
-#~ msgid "Print Pages"
-#~ msgstr "Igaragazambere ryo Gucapa"
 
 # offmgr/source\offapp\dialog\fontsubs.src:RID_SVX_FONT_SUBSTITUTION.TBX_SUBSTNEWDEL.BT_SUBSTAPPLY.text
 #, fuzzy

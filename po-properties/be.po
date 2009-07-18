@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-10 18:20-0400\n"
+"POT-Creation-Date: 2009-07-17 22:23-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -14,6 +14,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.6\n"
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:165
+msgid "Loop"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
+#, fuzzy
+msgid "Whether the animation should loop when it reaches the end"
+msgstr "Ці павіна пры выбары колеру выкарыс�оўвывацца непразрыстасьць"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -380,7 +389,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Sensitive"
 msgstr "Адчувальны"
 
@@ -390,7 +399,7 @@ msgid "Whether the action is enabled."
 msgstr "Ці будзе віджэт бачны"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
+#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "Бачны"
 
@@ -423,6 +432,24 @@ msgstr "Ці будзе віджэт бачны"
 #, fuzzy
 msgid "Whether the action group is visible."
 msgstr "Ці будзе віджэт бачны"
+
+#: gtk/gtkactivatable.c:304
+#, fuzzy
+msgid "Related Action"
+msgstr "Дроб"
+
+#: gtk/gtkactivatable.c:305
+msgid "The action this activatable will activate and receive updates from"
+msgstr ""
+
+#: gtk/gtkactivatable.c:327
+msgid "Use Action Appearance"
+msgstr ""
+
+#: gtk/gtkactivatable.c:328
+#, fuzzy
+msgid "Whether to use the related actions appearance properties"
+msgstr "Ці можа тэкст адмеціны быць вызначаным з дапамогай мышы."
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
 #: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
@@ -957,7 +984,7 @@ msgid ""
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:691 gtk/gtkentry.c:1715
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:689 gtk/gtkentry.c:1713
 #, fuzzy
 msgid "Inner Border"
 msgstr "Мяжы лычкі"
@@ -1332,8 +1359,8 @@ msgid "Value of the progress bar"
 msgstr "Тэкст, які будзе адлюстроўвацца ў палосцы посьпеху"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:734 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
-#: gtk/gtktextbuffer.c:198
+#: gtk/gtkentry.c:732 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "Тэкст"
 
@@ -1470,7 +1497,7 @@ msgstr "Асноўны колер"
 msgid "Foreground color as a GdkColor"
 msgstr "Асноўны колер як GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:658 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:573
 msgid "Editable"
 msgstr "Рэдактыруемы"
@@ -2056,7 +2083,7 @@ msgstr ""
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ці павінны укладкі мець аднолькавя памеры"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:683
+#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "Мае кадар"
 
@@ -2121,7 +2148,7 @@ msgstr "Накірунак стрэлкі"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Разнавід для адлюстраваньня дрэва"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:783 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2204,7 +2231,7 @@ msgstr "Мае падзяляльнік"
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Дыялёг мае падзяляльную мяжу над яго кнопкамі"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:191 gtk/gtkinfobar.c:439
 msgid "Content area border"
 msgstr "Мяжа вобласьці зьместу"
 
@@ -2212,7 +2239,7 @@ msgstr "Мяжа вобласьці зьместу"
 msgid "Width of border around the main dialog area"
 msgstr "Шырыня мяжы вакол асноўнай плошчы дыялёгу"
 
-#: gtk/gtkdialog.c:209
+#: gtk/gtkdialog.c:209 gtk/gtkinfobar.c:456
 #, fuzzy
 msgid "Content area spacing"
 msgstr "Напханьне"
@@ -2222,15 +2249,15 @@ msgstr "Напханьне"
 msgid "Spacing between elements of the main dialog area"
 msgstr "Прастора паміж тэкстам і паўзунком/накіроўваючай"
 
-#: gtk/gtkdialog.c:217
+#: gtk/gtkdialog.c:217 gtk/gtkinfobar.c:472
 msgid "Button spacing"
 msgstr "Міжкнопачная прастора"
 
-#: gtk/gtkdialog.c:218
+#: gtk/gtkdialog.c:218 gtk/gtkinfobar.c:473
 msgid "Spacing between buttons"
 msgstr "Прастора між кнопачак"
 
-#: gtk/gtkdialog.c:226
+#: gtk/gtkdialog.c:226 gtk/gtkinfobar.c:488
 msgid "Action area border"
 msgstr "Мяжы обласьці дзеяньня"
 
@@ -2238,50 +2265,50 @@ msgstr "Мяжы обласьці дзеяньня"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Шырыня мяжы вакол кнопкі ўнізе дыялёгу"
 
-#: gtk/gtkentry.c:630
+#: gtk/gtkentry.c:628
 msgid "Text Buffer"
 msgstr ""
 
-#: gtk/gtkentry.c:631
+#: gtk/gtkentry.c:629
 msgid "Text buffer object which actually stores entry text"
 msgstr ""
 
-#: gtk/gtkentry.c:638 gtk/gtklabel.c:591
+#: gtk/gtkentry.c:636 gtk/gtklabel.c:591
 msgid "Cursor Position"
 msgstr "Становішча курсору"
 
-#: gtk/gtkentry.c:639 gtk/gtklabel.c:592
+#: gtk/gtkentry.c:637 gtk/gtklabel.c:592
 msgid "The current position of the insertion cursor in chars"
 msgstr "Бягучае становішча курсора ўстаўкі ў знаках."
 
-#: gtk/gtkentry.c:648 gtk/gtklabel.c:601
+#: gtk/gtkentry.c:646 gtk/gtklabel.c:601
 msgid "Selection Bound"
 msgstr "Мяжа вызначэньня"
 
-#: gtk/gtkentry.c:649 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:647 gtk/gtklabel.c:602
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Становішча супрацьлеглага канчатку абраньня ад курсора ў знаках."
 
-#: gtk/gtkentry.c:659
+#: gtk/gtkentry.c:657
 msgid "Whether the entry contents can be edited"
 msgstr "Ці можна рэдагаваць зьмест запісу"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:664 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "Найбольшая даўжыня"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:665 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Найбольшая колькасьць знакаў для гэтага запісу. Нуль - калі няма "
 "абьмежаваньняў."
 
-#: gtk/gtkentry.c:675
+#: gtk/gtkentry.c:673
 msgid "Visibility"
 msgstr "Бачнасьць"
 
-#: gtk/gtkentry.c:676
+#: gtk/gtkentry.c:674
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2289,29 +2316,29 @@ msgstr ""
 "FALSE адлюстроўвае \"нябачныя знакі\" замес� рэчаіснага тэксту (рэжым уводу "
 "паролю)"
 
-#: gtk/gtkentry.c:684
+#: gtk/gtkentry.c:682
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE прыбірае зьнешнюю рамку з запісу."
 
-#: gtk/gtkentry.c:692
+#: gtk/gtkentry.c:690
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 
-#: gtk/gtkentry.c:699 gtk/gtkentry.c:1265
+#: gtk/gtkentry.c:697 gtk/gtkentry.c:1263
 msgid "Invisible character"
 msgstr "Нябачны знак"
 
-#: gtk/gtkentry.c:700 gtk/gtkentry.c:1266
+#: gtk/gtkentry.c:698 gtk/gtkentry.c:1264
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Знак, выкарыстоўвываемы для хаваньня зьместа ўводу (у \"рэжыме пароль\")"
 
-#: gtk/gtkentry.c:707
+#: gtk/gtkentry.c:705
 msgid "Activates default"
 msgstr "Задзейнічаць дапомны"
 
-#: gtk/gtkentry.c:708
+#: gtk/gtkentry.c:706
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2319,331 +2346,340 @@ msgstr ""
 "Ці задзейнічаць дапомны віджэт (такі як дапомная кнопка ў дыялёгу), калі "
 "націснулі Enter."
 
-#: gtk/gtkentry.c:714
+#: gtk/gtkentry.c:712
 msgid "Width in chars"
 msgstr "Шырыня ў знаках"
 
-#: gtk/gtkentry.c:715
+#: gtk/gtkentry.c:713
 msgid "Number of characters to leave space for in the entry"
 msgstr "Колькасьць знакаў для якіх пакінута прастора ў запісы."
 
-#: gtk/gtkentry.c:724
+#: gtk/gtkentry.c:722
 msgid "Scroll offset"
 msgstr "Зьмяшчэньне пры пракручваньні"
 
-#: gtk/gtkentry.c:725
+#: gtk/gtkentry.c:723
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Колькасьць піксэлаў запісу, пайшоўшых за левую мяжу экрана пры пракручваньні"
 
-#: gtk/gtkentry.c:735
+#: gtk/gtkentry.c:733
 msgid "The contents of the entry"
 msgstr "Зьмест запісу"
 
-#: gtk/gtkentry.c:750 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:748 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Выроўніваньне па X"
 
-#: gtk/gtkentry.c:751 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:749 gtk/gtkmisc.c:74
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "Гарызантальнае выроўніваньне, ад 0 (зьлев�) да 1 (зправа)"
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:765
 #, fuzzy
 msgid "Truncate multiline"
 msgstr "Адзначыць некалькі"
 
-#: gtk/gtkentry.c:768
+#: gtk/gtkentry.c:766
 #, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Ці могуць быць адзначаны некалькі файлаў запар."
 
-#: gtk/gtkentry.c:784
+#: gtk/gtkentry.c:782
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:799 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
 #, fuzzy
 msgid "Overwrite mode"
 msgstr "Рэжым зьмяненьня памераў"
 
-#: gtk/gtkentry.c:800
+#: gtk/gtkentry.c:798
 #, fuzzy
 msgid "Whether new text overwrites existing text"
 msgstr "Ці будзе посьпех адлюстроўвацца як тэкст"
 
-#: gtk/gtkentry.c:814
+#: gtk/gtkentry.c:812 gtk/gtkentrybuffer.c:368
 #, fuzzy
 msgid "Text length"
 msgstr "Выроўніваньне тэксту па X"
 
-#: gtk/gtkentry.c:815
+#: gtk/gtkentry.c:813
 msgid "Length of the text currently in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:830
+#: gtk/gtkentry.c:828
 #, fuzzy
 msgid "Invisible char set"
 msgstr "Нябачны"
 
-#: gtk/gtkentry.c:831
+#: gtk/gtkentry.c:829
 #, fuzzy
 msgid "Whether the invisible char has been set"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtkentry.c:849
+#: gtk/gtkentry.c:847
 msgid "Caps Lock warning"
 msgstr ""
 
-#: gtk/gtkentry.c:850
+#: gtk/gtkentry.c:848
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:862
 #, fuzzy
 msgid "Progress Fraction"
 msgstr "Дроб"
 
-#: gtk/gtkentry.c:865
+#: gtk/gtkentry.c:863
 #, fuzzy
 msgid "The current fraction of the task that's been completed"
 msgstr "Частка завершанае працы"
 
-#: gtk/gtkentry.c:882
+#: gtk/gtkentry.c:880
 #, fuzzy
 msgid "Progress Pulse Step"
 msgstr "Крок"
 
-#: gtk/gtkentry.c:883
+#: gtk/gtkentry.c:881
 #, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
 msgstr "Частка агульнага посьпеху пры якой павялічваецца паказальнік посьпеху"
 
-#: gtk/gtkentry.c:899
+#: gtk/gtkentry.c:897
 #, fuzzy
 msgid "Primary pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkentry.c:900
+#: gtk/gtkentry.c:898
 #, fuzzy
 msgid "Primary pixbuf for the entry"
 msgstr "Pixbuf для адкрытага пашыральніка."
 
-#: gtk/gtkentry.c:914
+#: gtk/gtkentry.c:912
 #, fuzzy
 msgid "Secondary pixbuf"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:915
+#: gtk/gtkentry.c:913
 #, fuzzy
 msgid "Secondary pixbuf for the entry"
 msgstr "Дадатковая кнопка руху наперад"
 
-#: gtk/gtkentry.c:929
+#: gtk/gtkentry.c:927
 msgid "Primary stock ID"
 msgstr ""
 
-#: gtk/gtkentry.c:930
+#: gtk/gtkentry.c:928
 msgid "Stock ID for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:944
+#: gtk/gtkentry.c:942
 #, fuzzy
 msgid "Secondary stock ID"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:945
+#: gtk/gtkentry.c:943
 msgid "Stock ID for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:959
+#: gtk/gtkentry.c:957
 #, fuzzy
 msgid "Primary icon name"
 msgstr "Назва шрыфту"
 
-#: gtk/gtkentry.c:960
+#: gtk/gtkentry.c:958
 msgid "Icon name for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:974
+#: gtk/gtkentry.c:972
 #, fuzzy
 msgid "Secondary icon name"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:975
+#: gtk/gtkentry.c:973
 msgid "Icon name for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:989
+#: gtk/gtkentry.c:987
 msgid "Primary GIcon"
 msgstr ""
 
-#: gtk/gtkentry.c:990
+#: gtk/gtkentry.c:988
 #, fuzzy
 msgid "GIcon for primary icon"
 msgstr "Значка для гэтага акна"
 
-#: gtk/gtkentry.c:1004
+#: gtk/gtkentry.c:1002
 #, fuzzy
 msgid "Secondary GIcon"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:1005
+#: gtk/gtkentry.c:1003
 msgid "GIcon for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:1019
+#: gtk/gtkentry.c:1017
 #, fuzzy
 msgid "Primary storage type"
 msgstr "Тып захоўваньня"
 
-#: gtk/gtkentry.c:1020
+#: gtk/gtkentry.c:1018
 #, fuzzy
 msgid "The representation being used for primary icon"
 msgstr "Уяўленьне выкарыстоўваецца для адлюстраваньня даньнаяў"
 
-#: gtk/gtkentry.c:1035
+#: gtk/gtkentry.c:1033
 #, fuzzy
 msgid "Secondary storage type"
 msgstr "Дадатковая кнопка руху наперад"
 
-#: gtk/gtkentry.c:1036
+#: gtk/gtkentry.c:1034
 #, fuzzy
 msgid "The representation being used for secondary icon"
 msgstr "Уяўленьне выкарыстоўваецца для адлюстраваньня даньнаяў"
 
-#: gtk/gtkentry.c:1057
+#: gtk/gtkentry.c:1055
 msgid "Primary icon activatable"
 msgstr ""
 
-#: gtk/gtkentry.c:1058
+#: gtk/gtkentry.c:1056
 #, fuzzy
 msgid "Whether the primary icon is activatable"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtkentry.c:1078
+#: gtk/gtkentry.c:1076
 #, fuzzy
 msgid "Secondary icon activatable"
 msgstr "Колер другога курсору"
 
-#: gtk/gtkentry.c:1079
+#: gtk/gtkentry.c:1077
 #, fuzzy
 msgid "Whether the secondary icon is activatable"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtkentry.c:1101
+#: gtk/gtkentry.c:1099
 #, fuzzy
 msgid "Primary icon sensitive"
 msgstr "Адлюстроўваць ячэйку"
 
-#: gtk/gtkentry.c:1102
+#: gtk/gtkentry.c:1100
 #, fuzzy
 msgid "Whether the primary icon is sensitive"
 msgstr "Ці ўлічвае пры пошуку элемэнту ў сьпісе рэгістр."
 
-#: gtk/gtkentry.c:1123
+#: gtk/gtkentry.c:1121
 #, fuzzy
 msgid "Secondary icon sensitive"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:1124
+#: gtk/gtkentry.c:1122
 #, fuzzy
 msgid "Whether the secondary icon is sensitive"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtkentry.c:1140
+#: gtk/gtkentry.c:1138
 #, fuzzy
 msgid "Primary icon tooltip text"
 msgstr "Адлюстроўваць ячэйку"
 
-#: gtk/gtkentry.c:1141 gtk/gtkentry.c:1177
+#: gtk/gtkentry.c:1139 gtk/gtkentry.c:1175
 #, fuzzy
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Зьмест запісу"
 
-#: gtk/gtkentry.c:1157
+#: gtk/gtkentry.c:1155
 #, fuzzy
 msgid "Secondary icon tooltip text"
 msgstr "Колер другога курсору"
 
-#: gtk/gtkentry.c:1158 gtk/gtkentry.c:1196
+#: gtk/gtkentry.c:1156 gtk/gtkentry.c:1194
 #, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Зьмест запісу"
 
-#: gtk/gtkentry.c:1176
+#: gtk/gtkentry.c:1174
 #, fuzzy
 msgid "Primary icon tooltip markup"
 msgstr "Назва шрыфту"
 
-#: gtk/gtkentry.c:1195
+#: gtk/gtkentry.c:1193
 #, fuzzy
 msgid "Secondary icon tooltip markup"
 msgstr "Падпарадкаваны"
 
-#: gtk/gtkentry.c:1215 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
 #, fuzzy
 msgid "IM module"
 msgstr "Дапомная шырыня"
 
-#: gtk/gtkentry.c:1216 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Ці павінна выкарыстоўвывацца палітра"
 
-#: gtk/gtkentry.c:1230
+#: gtk/gtkentry.c:1228
 #, fuzzy
 msgid "Icon Prelight"
 msgstr "Вышыня"
 
-#: gtk/gtkentry.c:1231
+#: gtk/gtkentry.c:1229
 #, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtkentry.c:1244
+#: gtk/gtkentry.c:1242
 #, fuzzy
 msgid "Progress Border"
 msgstr "Мяжа накіроўвываючай"
 
-#: gtk/gtkentry.c:1245
+#: gtk/gtkentry.c:1243
 #, fuzzy
 msgid "Border around the progress bar"
 msgstr "Тэкст, які будзе адлюстроўвацца ў палосцы посьпеху"
 
-#: gtk/gtkentry.c:1716
+#: gtk/gtkentry.c:1714
 msgid "Border between text and frame."
 msgstr ""
 
-#: gtk/gtkentry.c:1730
+#: gtk/gtkentry.c:1728
 #, fuzzy
 msgid "State Hint"
 msgstr "Падказкі правілаў"
 
-#: gtk/gtkentry.c:1731
+#: gtk/gtkentry.c:1729
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Бітавы ўзор, які выкарыстоўвываецца пры адлюстраваньні тла тэксту."
 
-#: gtk/gtkentry.c:1736 gtk/gtklabel.c:848
+#: gtk/gtkentry.c:1734 gtk/gtklabel.c:848
 msgid "Select on focus"
 msgstr "Адзначэньне пры засяроджваньні"
 
-#: gtk/gtkentry.c:1737
+#: gtk/gtkentry.c:1735
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ці зьмест запісу адзначаецца пры засяроджваньні."
 
-#: gtk/gtkentry.c:1751
+#: gtk/gtkentry.c:1749
 msgid "Password Hint Timeout"
 msgstr ""
 
-#: gtk/gtkentry.c:1752
+#: gtk/gtkentry.c:1750
 msgid "How long to show the last input character in hidden entries"
+msgstr ""
+
+#: gtk/gtkentrybuffer.c:354
+#, fuzzy
+msgid "The contents of the buffer"
+msgstr "Зьмест запісу"
+
+#: gtk/gtkentrybuffer.c:369
+msgid "Length of the text currently in the buffer"
 msgstr ""
 
 #: gtk/gtkentrycompletion.c:279
@@ -3356,6 +3392,29 @@ msgstr "Паказаць лычкі"
 msgid "Whether images should be shown in menus"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
+#: gtk/gtkinfobar.c:384 gtk/gtkmessagedialog.c:128
+msgid "Message Type"
+msgstr "Від паведамленьня"
+
+#: gtk/gtkinfobar.c:385 gtk/gtkmessagedialog.c:129
+msgid "The type of message"
+msgstr "Тып паведамленьня"
+
+#: gtk/gtkinfobar.c:440
+#, fuzzy
+msgid "Width of border around the content area"
+msgstr "Шырыня мяжы вакол асноўнай плошчы дыялёгу"
+
+#: gtk/gtkinfobar.c:457
+#, fuzzy
+msgid "Spacing between elements of the area"
+msgstr "Прастора паміж тэкстам і паўзунком/накіроўваючай"
+
+#: gtk/gtkinfobar.c:489
+#, fuzzy
+msgid "Width of border around the action area"
+msgstr "Шырыня мяжы вакол асноўнай плошчы дыялёгу"
+
 #: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Экран, дзе гэтае акно будзе адлюстравана"
@@ -3847,14 +3906,6 @@ msgstr "Мае падзяляльнік"
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
-
-#: gtk/gtkmessagedialog.c:128
-msgid "Message Type"
-msgstr "Від паведамленьня"
-
-#: gtk/gtkmessagedialog.c:129
-msgid "The type of message"
-msgstr "Тып паведамленьня"
 
 #: gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
@@ -5903,7 +5954,7 @@ msgstr "Ці будзе віджэт бачны"
 msgid "The orientation of the tray"
 msgstr "Мейсцазнаходжаньне палоскі прылад"
 
-#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:633
+#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:634
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Выкарыстоўваць разьметку"
@@ -5913,17 +5964,17 @@ msgstr "Выкарыстоўваць разьметку"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Ці мае гэты віджэт засяроджаньне для ўводу"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:654
+#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Пашыраемы памер"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Зьмест запісу"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr ""
 
@@ -7109,29 +7160,29 @@ msgstr ""
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Вызначае, як будзе адлюстроўвацца цень вакол кропкі гледжаньня."
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "Widget name"
 msgstr "Назоў віджэту"
 
-#: gtk/gtkwidget.c:485
+#: gtk/gtkwidget.c:486
 msgid "The name of the widget"
 msgstr "Назоў гэтага віджэту"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Parent widget"
 msgstr "Бацькоўскі віджэт"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Бацькоўскі віджэт гэтага віджэту. Павінен быць зьмяшчальнікам (Container "
 "widget)."
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid "Width request"
 msgstr "Запыт шырыні"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7139,11 +7190,11 @@ msgstr ""
 "Перакрываць запыт на шырыню віджэта, ці -1, калі звычайнызапыт павінен "
 "выкарыстоўвацца."
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid "Height request"
 msgstr "Запыт вышыні"
 
-#: gtk/gtkwidget.c:509
+#: gtk/gtkwidget.c:510
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7151,175 +7202,184 @@ msgstr ""
 "Перакрываць запыт на вышыню віджэта, ці -1, калі звычайнызапыт павінен "
 "выкарыстоўвацца."
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:519
 msgid "Whether the widget is visible"
 msgstr "Ці будзе віджэт бачны"
 
-#: gtk/gtkwidget.c:525
+#: gtk/gtkwidget.c:526
 msgid "Whether the widget responds to input"
 msgstr "Ці будзе віджэт адказваць на ўвод"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Application paintable"
 msgstr "Адлюстроўвываемы дастасаваньнем"
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:533
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ці будзе дастасаваньне напрамую маляваць на віджэце"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Can focus"
 msgstr "Можа засяроджвацца"
 
-#: gtk/gtkwidget.c:539
+#: gtk/gtkwidget.c:540
 msgid "Whether the widget can accept the input focus"
 msgstr "Ці можа віджэт прымаць засяроджаньне для ўводу"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Has focus"
 msgstr "Мае засяроджаньне"
 
-#: gtk/gtkwidget.c:546
+#: gtk/gtkwidget.c:547
 msgid "Whether the widget has the input focus"
 msgstr "Ці мае гэты віджэт засяроджаньне для ўводу"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Is focus"
 msgstr "Засяроджаньне"
 
-#: gtk/gtkwidget.c:553
+#: gtk/gtkwidget.c:554
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Ці гэты віджэт зьяўляецца засяроджаным у межах верхняга ўзроўню"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Can default"
 msgstr "Можа быць дапомным"
 
-#: gtk/gtkwidget.c:560
+#: gtk/gtkwidget.c:561
 msgid "Whether the widget can be the default widget"
 msgstr "Ці можа гэты віджэт быць дапомным."
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Has default"
 msgstr "Дапомны"
 
-#: gtk/gtkwidget.c:567
+#: gtk/gtkwidget.c:568
 msgid "Whether the widget is the default widget"
 msgstr "Ці зьяўляецца гэты віджэт дапомным."
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Receives default"
 msgstr "Атрымлівае дапомнае"
 
-#: gtk/gtkwidget.c:574
+#: gtk/gtkwidget.c:575
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Калі ІСЬЦІНА (TRUE), віджэт атрымлівае дапомнае дзеяньне, калі ён мае "
 "засяроджаньне."
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Composite child"
 msgstr "Складаны нашчадак"
 
-#: gtk/gtkwidget.c:581
+#: gtk/gtkwidget.c:582
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ці зьяўляецца гэты віджэт часткай складанага віджэту."
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "Style"
 msgstr "Стыль"
 
-#: gtk/gtkwidget.c:588
+#: gtk/gtkwidget.c:589
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr ""
 "Стыль віджэту, які зьмяшчае зьвесткі аб уласным выглядзе (колеры й інш.)."
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Events"
 msgstr "Здарэньні"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "Маска, якая вырашае, якога роду GdkEvents атрымлівае віджэт."
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "Extension events"
 msgstr "Дадатковыя здарэньні"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "Маска, якая вырашае, якія дадатковыя здарэньні атрымлівае гэты віджэт."
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "No show all"
 msgstr ""
 
-#: gtk/gtkwidget.c:611
+#: gtk/gtkwidget.c:612
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:634
+#: gtk/gtkwidget.c:635
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Ці мае гэты віджэт засяроджаньне для ўводу"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 #, fuzzy
 msgid "Window"
 msgstr "Тып акна"
 
-#: gtk/gtkwidget.c:691
+#: gtk/gtkwidget.c:692
 msgid "The widget's window if it is realized"
 msgstr ""
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:706
+msgid "Double Buffered"
+msgstr ""
+
+#: gtk/gtkwidget.c:707
+#, fuzzy
+msgid "Whether or not the widget is double buffered"
+msgstr "Ці будзе віджэт бачны"
+
+#: gtk/gtkwidget.c:2229
 msgid "Interior Focus"
 msgstr "Унутранае засяроджаньне"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2230
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Ці будзе адлюстроўвацца паказальнік засяроджаньня ўнутры віджэтаў."
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2236
 msgid "Focus linewidth"
 msgstr "Шырыня лініі засяроджаньня"
 
-#: gtk/gtkwidget.c:2221
+#: gtk/gtkwidget.c:2237
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Шырыня, у піксэлях, лініі засяроджаньня."
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2243
 msgid "Focus line dash pattern"
 msgstr "Узор лініі засяроджаньня"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2244
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Узор штрыхоў для адлюстраваньня засяроджаньня."
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2249
 msgid "Focus padding"
 msgstr "Спад засяроджаньня"
 
-#: gtk/gtkwidget.c:2234
+#: gtk/gtkwidget.c:2250
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Шырыня, у піксалях, паміж паказальнікам засяроджаньня й віджэтам \"box\"."
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2255
 msgid "Cursor color"
 msgstr "Колер курсора"
 
-#: gtk/gtkwidget.c:2240
+#: gtk/gtkwidget.c:2256
 msgid "Color with which to draw insertion cursor"
 msgstr "Колер, выкарыстоўвываемы для адлюстраваньня курсору"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2261
 msgid "Secondary cursor color"
 msgstr "Колер другога курсору"
 
-#: gtk/gtkwidget.c:2246
+#: gtk/gtkwidget.c:2262
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7327,88 +7387,88 @@ msgstr ""
 "Колер для адлюстраваньня другога курсору, калі выкарыстоўвываецца зьмешаны"
 "(зьлева направа й справа налева) ўвод тэксту."
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2267
 msgid "Cursor line aspect ratio"
 msgstr "Прапорцыі курсору"
 
-#: gtk/gtkwidget.c:2252
+#: gtk/gtkwidget.c:2268
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Прапорцыі курсору"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2282
 #, fuzzy
 msgid "Draw Border"
 msgstr "Мяжы лычкі"
 
-#: gtk/gtkwidget.c:2267
+#: gtk/gtkwidget.c:2283
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2296
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkwidget.c:2281
+#: gtk/gtkwidget.c:2297
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2310
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Бягучы колер"
 
-#: gtk/gtkwidget.c:2295
+#: gtk/gtkwidget.c:2311
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2325
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Мае падзяляльнік"
 
-#: gtk/gtkwidget.c:2310
+#: gtk/gtkwidget.c:2326
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2340
 #, fuzzy
 msgid "Separator Width"
 msgstr "Шырыня вэртыкальнага падзяляльніку"
 
-#: gtk/gtkwidget.c:2325
+#: gtk/gtkwidget.c:2341
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2355
 #, fuzzy
 msgid "Separator Height"
 msgstr "Дапомная вышыня"
 
-#: gtk/gtkwidget.c:2340
+#: gtk/gtkwidget.c:2356
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2370
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Гарызантальная пракрутка"
 
-#: gtk/gtkwidget.c:2355
+#: gtk/gtkwidget.c:2371
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Калі будзе адлюстроўвацца гарызантальная паласа пракруткі"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2385
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Вэртыкальная пракрутка"
 
-#: gtk/gtkwidget.c:2370
+#: gtk/gtkwidget.c:2386
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Калі будзе адлюстроўвацца вэртыкальная паласа пракруткі"
