@@ -4,6 +4,16 @@ Overview of Changes from GTK+ 2.16.3 to 2.16.4
 * Fix a side-effect introduced by the fix for bug 586330 that
   caused all stock buttons to loose their mnemonics.
 
+* Bugs fixed:
+ 582025 Accelerators fail for submenus
+ 150951 collapsed save dialog needs to indicate filesystem...
+ 527583 GtkAssistant should set buttons as default widget
+ 588484 Iconview DnD fails when Destination is empty
+
+* Updated translations:
+ Gujarati
+ Hindi
+
 
 Overview of Changes from GTK+ 2.16.2 to 2.16.3
 ==============================================
