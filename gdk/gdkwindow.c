@@ -1579,7 +1579,8 @@ gdk_window_ensure_native (GdkWindow *window)
 
   /* The shape may not have been set, as the clip region doesn't actually
      change, so do it here manually */
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
+  if (private->viewable)
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
 
   reparent_to_impl (private);
 
