@@ -7269,7 +7269,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     gdk_region_destroy (private->shape);
 
   old_region = NULL;
-  if (GDK_WINDOW_IS_MAPPED (window))
+  if (private->viewable)
     old_region = gdk_region_copy (private->clip_region);
 
   if (shape_region)
