@@ -260,6 +260,7 @@ struct _GdkWindowObject
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
+  guint viewable : 1; /* mapped and all parents mapped */
 
   guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
@@ -385,6 +386,7 @@ void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
+void       _gdk_window_update_viewable   (GdkWindow      *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 GdkRegion *expose_region);

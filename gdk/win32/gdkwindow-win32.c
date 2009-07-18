@@ -283,6 +283,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private->abs_y = 0;
   private->width = GetSystemMetrics (SM_CXSCREEN);
   private->height = GetSystemMetrics (SM_CYSCREEN);
+  private->viewable = TRUE;
 
   gdk_win32_handle_table_insert ((HANDLE *) &draw_impl->handle, _gdk_root);
 
@@ -758,6 +759,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   else
     private->state &= (~GDK_WINDOW_STATE_ABOVE);
   private->state &= (~GDK_WINDOW_STATE_BELOW);
+  private->viewable = TRUE;
 
   private->depth = gdk_visual_get_system ()->depth;
 

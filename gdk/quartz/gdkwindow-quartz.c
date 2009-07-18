@@ -969,6 +969,7 @@ _gdk_windowing_window_init (void)
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = 24;
+  private->viewable = TRUE;
 
   drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (private->impl);
   

@@ -1479,6 +1479,8 @@ gdk_window_reparent (GdkWindow *window,
       apply_redirect_to_children (private, private->redirect);
     }
 
+  _gdk_window_update_viewable (window);
+
   recompute_visible_regions (private, TRUE, FALSE);
   if (old_parent && GDK_WINDOW_TYPE (old_parent) != GDK_WINDOW_ROOT)
     recompute_visible_regions (old_parent, FALSE, TRUE);
@@ -2208,25 +2210,13 @@ gboolean
 gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkScreen *screen;
-  GdkWindow *root_window;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  screen = gdk_drawable_get_screen (window);
-  root_window = gdk_screen_get_root_window (screen);
+  if (private->destroyed)
+    return FALSE;
 
-  while (private &&
-	 (private != (GdkWindowObject *)root_window) &&
-	 (private->window_type != GDK_WINDOW_FOREIGN))
-    {
-      if (GDK_WINDOW_DESTROYED (private) || !GDK_WINDOW_IS_MAPPED (private))
-	return FALSE;
-
-      private = (GdkWindowObject *)private->parent;
-    }
-
-  return TRUE;
+  return private->viewable;
 }
 
 /**
@@ -5775,6 +5765,45 @@ show_all_visible_impls (GdkWindowObject *private, gboolean already_mapped)
 }
 
 static void
+set_viewable (GdkWindowObject *w,
+	      gboolean val)
+{
+  GdkWindowObject *child;
+  GList *l;
+
+  w->viewable = val;
+
+  for (l = w->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (GDK_WINDOW_IS_MAPPED (child) &&
+	  child->window_type != GDK_WINDOW_FOREIGN)
+	set_viewable (child, val);
+    }
+}
+
+void
+_gdk_window_update_viewable (GdkWindow *window)
+{
+  GdkWindowObject *priv = (GdkWindowObject *)window;
+  gboolean viewable;
+
+  if (priv->window_type == GDK_WINDOW_FOREIGN ||
+      priv->window_type == GDK_WINDOW_ROOT)
+    viewable = TRUE;
+  else if (priv->parent == NULL ||
+	   priv->parent->window_type == GDK_WINDOW_ROOT ||
+	   priv->parent->viewable)
+    viewable = GDK_WINDOW_IS_MAPPED (priv);
+  else
+    viewable = FALSE;
+
+  if (priv->viewable != viewable)
+    set_viewable (priv, viewable);
+}
+
+static void
 gdk_window_show_internal (GdkWindow *window, gboolean raise)
 {
   GdkWindowObject *private;
@@ -5803,6 +5832,8 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     {
       private->state = 0;
     }
+
+  _gdk_window_update_viewable (window);
 
   if (gdk_window_is_viewable (window))
     show_all_visible_impls (private, was_mapped);
@@ -6105,6 +6136,8 @@ gdk_window_hide (GdkWindow *window)
 
       private->state = GDK_WINDOW_STATE_WITHDRAWN;
     }
+
+  _gdk_window_update_viewable (window);
 
   if (was_viewable)
     hide_all_visible_impls (private);

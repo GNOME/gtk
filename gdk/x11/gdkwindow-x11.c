@@ -450,6 +450,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->abs_y = 0;
   private->width = WidthOfScreen (screen_x11->xscreen);
   private->height = HeightOfScreen (screen_x11->xscreen);
+  private->viewable = TRUE;
   _gdk_window_update_size (screen_x11->root_window);
   
   _gdk_xid_table_insert (screen_x11->display,
@@ -936,6 +937,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
     private->state = GDK_WINDOW_STATE_WITHDRAWN;
   else
     private->state = 0;
+  private->viewable = TRUE;
 
   private->depth = attrs.depth;
   
@@ -944,7 +946,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 
   /* Update the clip region, etc */
   _gdk_window_update_size (window);
-  
+
   return window;
 }
 

@@ -313,6 +313,7 @@ _gdk_windowing_window_init (void)
   private->window_type = GDK_WINDOW_ROOT;
   private->state       = 0;
   private->children    = NULL;
+  private->viewable = TRUE;
 //  impl->drawable.paint_region   = NULL;
   impl->gdkWindow      = _gdk_parent_root;
   impl->window           = NULL;
@@ -2501,6 +2502,7 @@ gdk_window_foreign_new_for_display (GdkDisplay* display,GdkNativeWindow anid)
     private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
     private->parent = parent_private;
     private->window_type = GDK_WINDOW_TOPLEVEL;
+    private->viewable = TRUE;
     impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
     impl->drawable.wrapper = GDK_DRAWABLE (window);
