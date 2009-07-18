@@ -783,7 +783,12 @@ recompute_visible_regions_internal (GdkWindowObject *private,
       r.height = private->height;
       new_clip = gdk_region_rectangle (&r);
 
-      if (private->parent != NULL && private->parent->window_type != GDK_WINDOW_ROOT)
+      if (private->parent != NULL &&
+	  private->parent->window_type != GDK_WINDOW_ROOT &&
+	  /* For foreign children, don't remove local parents, as parent
+	     may not be mapped yet, and the non-native parents are not really
+	     enforced for it anyways. */
+	  private->window_type != GDK_WINDOW_FOREIGN)
 	{
 	  gdk_region_intersect (new_clip, private->parent->clip_region);
 
