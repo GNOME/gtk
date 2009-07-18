@@ -6364,6 +6364,9 @@ collect_native_child_region_helper (GdkWindowObject *window,
     {
       child = l->data;
 
+      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
+	continue;
+
       if (child->impl != impl)
 	{
 	  tmp = gdk_region_copy (child->clip_region);
@@ -6393,7 +6396,7 @@ collect_native_child_region (GdkWindowObject *window,
 {
   GdkRegion *region;
 
-  if (include_this && gdk_window_has_impl (window))
+  if (include_this && gdk_window_has_impl (window) && window->viewable)
     return gdk_region_copy (window->clip_region);
 
   region = NULL;
@@ -6443,6 +6446,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   old_x = private->x;
   old_y = private->y;
 
+  old_native_child_region = NULL;
   if (gdk_window_is_viewable (window) &&
       !private->input_only)
     {
@@ -6451,21 +6455,21 @@ gdk_window_move_resize_internal (GdkWindow *window,
       old_region = gdk_region_copy (private->clip_region);
       /* Adjust region to parent window coords */
       gdk_region_offset (old_region, private->x, private->y);
-    }
 
-  old_native_child_region = collect_native_child_region (private, TRUE);
-  if (old_native_child_region)
-    {
-      /* Adjust region to parent window coords */
-      gdk_region_offset (old_native_child_region, private->x, private->y);
+      old_native_child_region = collect_native_child_region (private, TRUE);
+      if (old_native_child_region)
+	{
+	  /* Adjust region to parent window coords */
+	  gdk_region_offset (old_native_child_region, private->x, private->y);
 
-      /* Any native window move will immediately copy stuff to the destination, which may overwrite a
-       * source or destination for a delayed GdkWindowRegionMove. So, we need
-       * to flush those here for the parent window and all overlapped subwindows
-       * of it. And we need to do this before setting the new clips as those will be
-       * affecting this.
-       */
-      gdk_window_flush_recursive (private->parent);
+	  /* Any native window move will immediately copy stuff to the destination, which may overwrite a
+	   * source or destination for a delayed GdkWindowRegionMove. So, we need
+	   * to flush those here for the parent window and all overlapped subwindows
+	   * of it. And we need to do this before setting the new clips as those will be
+	   * affecting this.
+	   */
+	  gdk_window_flush_recursive (private->parent);
+	}
     }
 
   /* Set the new position and size */
