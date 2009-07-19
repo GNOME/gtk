@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-07-17 22:23-0400\n"
-"PO-Revision-Date: 2009-02-12 14:42+0700\n"
+"PO-Revision-Date: 2009-07-19 12:57+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1146,9 +1146,8 @@ msgid_plural "Opening %d Items"
 msgstr[0] "กำลังเปิด %d รายการ"
 
 #: gtk/gtkaboutdialog.c:183
-#, fuzzy
 msgid "Could not show link"
-msgstr "ล้างรายการไม่สำเร็จ"
+msgstr "ไม่สามารถแสดงลิงก์ได้"
 
 #: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
 msgid "License"
@@ -1264,14 +1263,14 @@ msgid "Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้: `%s'"
+msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้ที่บรรทัด %d: '%s'"
 
 #: gtk/gtkbuilderparser.c:402
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "id ของอ็อบเจกต์ '%s' ซ้ำที่บรรทัด %d (ใช้แล้วที่บรรทัด %d)"
 
 #: gtk/gtkbuilderparser.c:853
 #, c-format
@@ -1375,10 +1374,9 @@ msgstr "ปิดใช้งาน"
 #. * to gtk_accelerator_valid().
 #.
 #: gtk/gtkcellrendereraccel.c:253
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "URI ไม่ถูกต้อง"
+msgstr "ไม่ถูกต้อง"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1613,7 +1611,7 @@ msgstr "อื่นๆ ..."
 
 #: gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
-msgstr "พิมพ์ชื่อของโฟลเดอร์ใหม่"
+msgstr "ป้อนชื่อของโฟลเดอร์ใหม่"
 
 #: gtk/gtkfilechooserdefault.c:1058
 msgid "Could not retrieve information about the file"
@@ -1828,14 +1826,12 @@ msgid "Could not send the search request"
 msgstr "ส่งคำขอค้นหาไม่สำเร็จ"
 
 #: gtk/gtkfilechooserdefault.c:9545
-#, fuzzy
 msgid "<b>_Search:</b>"
-msgstr "_ค้นหา:"
+msgstr "<b>_ค้นหา:</b>"
 
 #: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
 msgid "<b>Recently Used</b>"
-msgstr "เอกสารล่าสุด"
+msgstr "<b>เอกสารล่าสุด</b>"
 
 #: gtk/gtkfilechooserdefault.c:10519
 #, c-format
@@ -2237,14 +2233,13 @@ msgstr "_ล้าง"
 
 #. Open Link
 #: gtk/gtklabel.c:5529
-#, fuzzy
 msgid "_Open Link"
-msgstr "เปิดตำแหน่ง"
+msgstr "_เปิดลิงก์"
 
 #. Copy Link Address
 #: gtk/gtklabel.c:5541
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "คัดลอกที่อยู่_ลิงก์"
 
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -2340,48 +2335,46 @@ msgstr "จำรหัสผ่านไว้_ตลอดไป"
 #: gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
-msgstr ""
+msgstr "โปรแกรมไม่ทราบชื่อ (pid %d)"
 
 #: gtk/gtkmountoperation.c:1063
 #, c-format
 msgid "Unable to end process"
-msgstr ""
+msgstr "ไม่สามารถจบโพรเซสได้"
 
 #: gtk/gtkmountoperation.c:1100
 msgid "_End Process"
-msgstr ""
+msgstr "_จบโพรเซส"
 
 #: gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr ""
+msgstr "ไม่สามารถฆ่าโพรเซสที่มี pid %d ได้ เนื่องจากยังไม่ได้ทำปฏิบัติการนี้"
 
 #: gtk/gtkmountoperation-x11.c:864
-#, fuzzy
 msgid "Terminal Pager"
-msgstr "หน้าที่พิมพ์"
+msgstr "โปรแกรมแบ่งแสดงหน้าข้อมูลบนเทอร์มินัล"
 
 #: gtk/gtkmountoperation-x11.c:865
-#, fuzzy
 msgid "Top Command"
-msgstr "บรรทัดคำสั่ง"
+msgstr "คำสั่ง Top"
 
 #: gtk/gtkmountoperation-x11.c:866
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
 #: gtk/gtkmountoperation-x11.c:868
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:963
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "ไม่สามารถจบโพรเซสที่มี pid %d ได้: %s"
 
 #: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
 #, c-format
@@ -2448,19 +2441,16 @@ msgid "File System Root"
 msgstr "รากของระบบแฟ้ม"
 
 #: gtk/gtkprintbackend.c:740
-#, fuzzy
 msgid "Authentication"
-msgstr "โปรแกรม"
+msgstr "การยืนยันตัวบุคคล"
 
 #: gtk/gtkprintbackend.c:772
-#, fuzzy
 msgid "Username:"
-msgstr "ชื่_อผู้ใช้:"
+msgstr "ชื่อผู้ใช้:"
 
 #: gtk/gtkprintbackend.c:782
-#, fuzzy
 msgid "Password:"
-msgstr "_รหัสผ่าน::"
+msgstr "รหัสผ่าน::"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2645,9 +2635,8 @@ msgid "C_urrent Page"
 msgstr "หน้า_ปัจจุบัน"
 
 #: gtk/gtkprintunixdialog.c:2145
-#, fuzzy
 msgid "Se_lection"
-msgstr "_สิ่งที่เลือก: "
+msgstr "ส่วนที่เ_ลือก"
 
 #: gtk/gtkprintunixdialog.c:2154
 msgid "Pag_es:"
@@ -2662,9 +2651,8 @@ msgstr ""
 " เช่น 1-3,7,11"
 
 #: gtk/gtkprintunixdialog.c:2165
-#, fuzzy
 msgid "Pages"
-msgstr "_หน้า:"
+msgstr "หน้า"
 
 #: gtk/gtkprintunixdialog.c:2178
 msgid "Copies"
@@ -2750,14 +2738,12 @@ msgid "Right to left"
 msgstr "ขวามาซ้าย"
 
 #: gtk/gtkprintunixdialog.c:3004
-#, fuzzy
 msgid "Top to bottom"
-msgstr "บนลงล่าง, ซ้ายไปขวา"
+msgstr "บนลงล่าง"
 
 #: gtk/gtkprintunixdialog.c:3005
-#, fuzzy
 msgid "Bottom to top"
-msgstr "ขยายให้พอดี (_F)"
+msgstr "ล่างขึ้นบน"
 
 #: gtk/gtkprintunixdialog.c:3234
 msgid "Layout"
@@ -2813,28 +2799,23 @@ msgid "Output t_ray:"
 msgstr "ถาดกระดาษ_ออก:"
 
 #: gtk/gtkprintunixdialog.c:3407
-#, fuzzy
 msgid "Or_ientation:"
 msgstr "แ_นววาง:"
 
 #. In enum order
 #: gtk/gtkprintunixdialog.c:3422
-#, fuzzy
 msgid "Portrait"
 msgstr "แนวตั้ง"
 
 #: gtk/gtkprintunixdialog.c:3423
-#, fuzzy
 msgid "Landscape"
 msgstr "แนวนอน"
 
 #: gtk/gtkprintunixdialog.c:3424
-#, fuzzy
 msgid "Reverse portrait"
 msgstr "แนวตั้งกลับด้าน"
 
 #: gtk/gtkprintunixdialog.c:3425
-#, fuzzy
 msgid "Reverse landscape"
 msgstr "แนวนอนกลับด้าน"
 
@@ -2879,7 +2860,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3545
 msgid "Time of print"
-msgstr ""
+msgstr "เวลาที่จะพิมพ์"
 
 #: gtk/gtkprintunixdialog.c:3561
 msgid "On _hold"
@@ -4683,9 +4664,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "ไม่ใช่แคชของไอคอนที่ใช้การได้: %s\n"
 
 #: gtk/updateiconcache.c:1690
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "ไม่มีแฟ้มดัชนีของชุดตกแต่ง"
+msgstr "ไม่มีแฟ้มดัชนีของชุดตกแต่ง\n"
 
 #: gtk/updateiconcache.c:1694
 #, c-format
@@ -4754,50 +4735,50 @@ msgstr "X Input Method"
 #: modules/printbackends/cups/gtkprintbackendcups.c:769
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านแฟ้มจาก %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:773
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร '%s' ที่เครื่องพิมพ์ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:775
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารที่ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:779
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับงานพิมพ์ '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:781
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับงานพิมพ์"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:785
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับเครื่องพิมพ์ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:787
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านข้อมูลเกี่ยวกับเครื่องพิมพ์"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:790
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านค่าเครื่องพิมพ์ปริยายของ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:793
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะอ่านรายชื่อเครื่องพิมพ์จาก %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:796
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "ต้องมีการยืนยันตัวบุคคลที่ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1412
 #, c-format
@@ -5114,32 +5095,28 @@ msgstr "บรรทัดคำสั่ง"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:810
-#, fuzzy
 msgid "printer offline"
 msgstr "เครื่องพิมพ์ไม่ได้เชื่อมต่อ"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:828
-#, fuzzy
 msgid "ready to print"
-msgstr "กำลังเตรียมพิมพ์"
+msgstr "พร้อมที่จะพิมพ์"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:831
 msgid "processing job"
-msgstr ""
+msgstr "กำลังประมวลงานพิมพ์"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:835
-#, fuzzy
 msgid "paused"
 msgstr "หยุดพัก"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:838
-#, fuzzy
 msgid "unknown"
-msgstr "(ไม่รู้จัก)"
+msgstr "ไม่ทราบ"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
