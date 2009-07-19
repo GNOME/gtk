@@ -623,6 +623,11 @@ remove_child_area (GdkWindowObject *private,
       if (child == until)
 	break;
 
+      /* If region is empty already, no need to do
+	 anything potentially costly */
+      if (gdk_region_empty (region))
+	break;
+
       if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
 	continue;
 
