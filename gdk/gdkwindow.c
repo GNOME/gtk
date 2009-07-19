@@ -636,6 +636,10 @@ remove_child_area (GdkWindowObject *private,
       r.width = child->width;
       r.height = child->height;
 
+      /* Bail early if child totally outside region */
+      if (gdk_region_rect_in (region, &r) == GDK_OVERLAP_RECTANGLE_OUT)
+	continue;
+
       child_region = gdk_region_rectangle (&r);
 
       if (child->shape)
