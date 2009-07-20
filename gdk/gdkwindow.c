@@ -5786,6 +5786,9 @@ set_viewable (GdkWindowObject *w,
 
   w->viewable = val;
 
+  if (val)
+    recompute_visible_regions (w, FALSE, FALSE);
+
   for (l = w->children; l != NULL; l = l->next)
     {
       child = l->data;
