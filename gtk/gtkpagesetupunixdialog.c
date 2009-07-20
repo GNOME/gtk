@@ -165,7 +165,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
 						   G_TYPE_OBJECT);
 
   gtk_list_store_append (priv->printer_list, &iter);
-  tmp = g_strdup_print ("<b>%s</b>\n%s", _("Any Printer"), _("For portable documents"));
+  tmp = g_strdup_printf ("<b>%s</b>\n%s", _("Any Printer"), _("For portable documents"));
   gtk_list_store_set (priv->printer_list, &iter,
                       PRINTER_LIST_COL_NAME, tmp,
                       PRINTER_LIST_COL_PRINTER, NULL,
