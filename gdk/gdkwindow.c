@@ -783,33 +783,38 @@ recompute_visible_regions_internal (GdkWindowObject *private,
    * siblings in parents above window
    */
   clip_region_changed = FALSE;
-  if (recalculate_clip && private->viewable)
+  if (recalculate_clip)
     {
-      /* Calculate visible region (sans children) in parent window coords */
-      r.x = private->x;
-      r.y = private->y;
-      r.width = private->width;
-      r.height = private->height;
-      new_clip = gdk_region_rectangle (&r);
-
-      if (private->parent != NULL &&
-	  private->parent->window_type != GDK_WINDOW_ROOT &&
-	  /* For foreign children, don't remove local parents, as parent
-	     may not be mapped yet, and the non-native parents are not really
-	     enforced for it anyways. */
-	  private->window_type != GDK_WINDOW_FOREIGN)
+      if (private->viewable)
 	{
-	  gdk_region_intersect (new_clip, private->parent->clip_region);
+	  /* Calculate visible region (sans children) in parent window coords */
+	  r.x = private->x;
+	  r.y = private->y;
+	  r.width = private->width;
+	  r.height = private->height;
+	  new_clip = gdk_region_rectangle (&r);
 
-	  /* Remove all overlapping children from parent */
-	  remove_child_area (private->parent, private, FALSE, new_clip);
+	  if (private->parent != NULL &&
+	      private->parent->window_type != GDK_WINDOW_ROOT &&
+	      /* For foreign children, don't remove local parents, as parent
+		 may not be mapped yet, and the non-native parents are not really
+		 enforced for it anyways. */
+	      private->window_type != GDK_WINDOW_FOREIGN)
+	    {
+	      gdk_region_intersect (new_clip, private->parent->clip_region);
+
+	      /* Remove all overlapping children from parent */
+	      remove_child_area (private->parent, private, FALSE, new_clip);
+	    }
+
+	  /* Convert from parent coords to window coords */
+	  gdk_region_offset (new_clip, -private->x, -private->y);
+
+	  if (private->shape)
+	    gdk_region_intersect (new_clip, private->shape);
 	}
-
-      /* Convert from parent coords to window coords */
-      gdk_region_offset (new_clip, -private->x, -private->y);
-
-      if (private->shape)
-	gdk_region_intersect (new_clip, private->shape);
+      else
+	new_clip = gdk_region_new ();
 
       if (private->clip_region == NULL ||
 	  !gdk_region_equal (private->clip_region, new_clip))
