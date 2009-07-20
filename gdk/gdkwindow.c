@@ -2400,10 +2400,6 @@ gdk_window_begin_paint_rect (GdkWindow          *window,
   gdk_region_destroy (region);
 }
 
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
-
 /**
  * gdk_window_begin_paint_region:
  * @window: a #GdkWindow
