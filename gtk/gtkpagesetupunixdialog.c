@@ -146,7 +146,7 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
 
   object_class->finalize = gtk_page_setup_unix_dialog_finalize;
 
-  g_type_class_add_private (class, sizeof (GtkPageSetupUnixDialogPrivate));  
+  g_type_class_add_private (class, sizeof (GtkPageSetupUnixDialogPrivate));
 }
 
 static void
@@ -154,21 +154,24 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
 {
   GtkPageSetupUnixDialogPrivate *priv;
   GtkTreeIter iter;
+  gchar *tmp;
 
   priv = dialog->priv = GTK_PAGE_SETUP_UNIX_DIALOG_GET_PRIVATE (dialog);
 
   priv->print_backends = NULL;
 
   priv->printer_list = gtk_list_store_new (PRINTER_LIST_N_COLS,
-						   G_TYPE_STRING, 
+						   G_TYPE_STRING,
 						   G_TYPE_OBJECT);
 
   gtk_list_store_append (priv->printer_list, &iter);
+  tmp = g_strdup_print ("<b>%s</b>\n%s", _("Any Printer"), _("For portable documents"));
   gtk_list_store_set (priv->printer_list, &iter,
-                      PRINTER_LIST_COL_NAME, _("<b>Any Printer</b>\nFor portable documents"),
+                      PRINTER_LIST_COL_NAME, tmp,
                       PRINTER_LIST_COL_PRINTER, NULL,
                       -1);
-  
+  g_free (tmp);
+
   priv->page_setup_list = gtk_list_store_new (PAGE_SETUP_LIST_N_COLS,
 						      G_TYPE_OBJECT,
 						      G_TYPE_BOOLEAN);
@@ -260,7 +263,7 @@ printer_added_cb (GtkPrintBackend        *backend,
   GtkPageSetupUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter iter;
   gchar *str;
-  const gchar *location;;
+  const gchar *location;
 
   if (gtk_printer_is_virtual (printer))
     return;
@@ -271,18 +274,17 @@ printer_added_cb (GtkPrintBackend        *backend,
   str = g_strdup_printf ("<b>%s</b>\n%s",
 			 gtk_printer_get_name (printer),
 			 location);
-  
+
   gtk_list_store_append (priv->printer_list, &iter);
   gtk_list_store_set (priv->printer_list, &iter,
                       PRINTER_LIST_COL_NAME, str,
                       PRINTER_LIST_COL_PRINTER, printer,
                       -1);
 
-  g_object_set_data_full (G_OBJECT (printer), 
-			  "gtk-print-tree-iter", 
+  g_object_set_data_full (G_OBJECT (printer),
+			  "gtk-print-tree-iter",
                           gtk_tree_iter_copy (&iter),
                           (GDestroyNotify) gtk_tree_iter_free);
-  
   g_free (str);
 
   if (priv->waiting_for_printer != NULL &&
@@ -316,7 +318,7 @@ printer_status_cb (GtkPrintBackend        *backend,
   GtkPageSetupUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter *iter;
   gchar *str;
-  const gchar *location;;
+  const gchar *location;
   
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
 

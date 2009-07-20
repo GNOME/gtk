@@ -9530,6 +9530,7 @@ search_setup_widgets (GtkFileChooserDefault *impl)
 {
   GtkWidget *label;
   GtkWidget *image;
+  gchar *tmp;
 
   impl->search_hbox = gtk_hbox_new (FALSE, 12);
   
@@ -9542,8 +9543,10 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   /* Label */
 
   label = gtk_label_new (NULL);
-  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("<b>_Search:</b>"));
+  tmp = g_strdup_printf ("<b>%s</b>", _("Search:"));
+  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), tmp);
   gtk_box_pack_start (GTK_BOX (impl->search_hbox), label, FALSE, FALSE, 0);
+  g_free (tmp);
 
   /* Entry */
 
@@ -10268,6 +10271,7 @@ recent_hide_entry (GtkFileChooserDefault *impl)
 {
   GtkWidget *label;
   GtkWidget *image;
+  gchar *tmp;
 
   impl->recent_hbox = gtk_hbox_new (FALSE, 12);
   
@@ -10278,8 +10282,10 @@ recent_hide_entry (GtkFileChooserDefault *impl)
 
   /* Label */
   label = gtk_label_new (NULL);
-  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), _("<b>Recently Used</b>"));
+  tmp = g_strdup_print ("<b>%s</b>", _("Recently Used"));
+  gtk_label_set_markup_with_mnemonic (GTK_LABEL (label), tmp);
   gtk_box_pack_start (GTK_BOX (impl->recent_hbox), label, FALSE, FALSE, 0);
+  g_free (tmp);
 
   gtk_widget_hide (impl->browse_path_bar);
   gtk_widget_hide (impl->browse_new_folder_button);
