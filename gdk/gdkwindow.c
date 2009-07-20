@@ -2475,10 +2475,10 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   implicit_paint = impl_window->implicit_paint;
 
   paint = g_new (GdkWindowPaint, 1);
-  paint->region = gdk_region_copy (region);
+  paint->region = gdk_window_get_visible_region ((GdkDrawable *)window);
+  gdk_region_intersect (paint->region, region);
   paint->region_tag = new_region_tag ();
 
-  gdk_region_intersect (paint->region, private->clip_region_with_children);
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   /* Convert to impl coords */
@@ -2641,6 +2641,9 @@ gdk_window_end_paint (GdkWindow *window)
   private->paint_stack = g_slist_delete_link (private->paint_stack,
 					      private->paint_stack);
 
+  if (!private->viewable)
+    goto non_viewable;
+
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
@@ -2679,6 +2682,8 @@ gdk_window_end_paint (GdkWindow *window)
 
   /* Reset clip region of the cached GdkGC */
   gdk_gc_set_clip_region (tmp_gc, NULL);
+
+ non_viewable:
 
   cairo_surface_destroy (paint->surface);
   g_object_unref (paint->pixmap);
