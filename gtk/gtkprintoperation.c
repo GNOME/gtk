@@ -70,7 +70,9 @@ enum
   PROP_STATUS,
   PROP_STATUS_STRING,
   PROP_CUSTOM_TAB_LABEL,
-  PROP_EMBED_PAGE_SETUP
+  PROP_EMBED_PAGE_SETUP,
+  PROP_HAS_SELECTION,
+  PROP_SUPPORT_SELECTION
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -325,6 +327,12 @@ gtk_print_operation_set_property (GObject      *object,
     case PROP_EMBED_PAGE_SETUP:
       gtk_print_operation_set_embed_page_setup (op, g_value_get_boolean (value));
       break;
+    case PROP_HAS_SELECTION:
+      gtk_print_operation_set_has_selection (op, g_value_get_boolean (value));
+      break;
+    case PROP_SUPPORT_SELECTION:
+      gtk_print_operation_set_support_selection (op, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -386,6 +394,12 @@ gtk_print_operation_get_property (GObject    *object,
       break;
     case PROP_EMBED_PAGE_SETUP:
       g_value_set_boolean (value, priv->embed_page_setup);
+      break;
+    case PROP_HAS_SELECTION:
+      g_value_set_boolean (value, priv->has_selection);
+      break;
+    case PROP_SUPPORT_SELECTION:
+      g_value_set_boolean (value, priv->support_selection);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1213,7 +1227,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Since: 2.18
    */
   g_object_class_install_property (gobject_class,
-				   PROP_TRACK_PRINT_STATUS,
+				   PROP_SUPPORT_SELECTION,
 				   g_param_spec_boolean ("support-selection",
 							 P_("Support Selection"),
 							 P_("TRUE if the print operation will support print of selection."),
@@ -1230,7 +1244,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * Since: 2.18
    */
   g_object_class_install_property (gobject_class,
-				   PROP_TRACK_PRINT_STATUS,
+				   PROP_HAS_SELECTION,
 				   g_param_spec_boolean ("has-selection",
 							 P_("Has Selection"),
 							 P_("TRUE if a selecion exists."),
