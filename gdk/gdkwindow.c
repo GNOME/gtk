@@ -3494,12 +3494,23 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
 }
 
 static GdkRegion*
+gdk_window_get_visible_region (GdkDrawable *drawable)
+{
+  GdkWindowObject *private = (GdkWindowObject*) drawable;
+
+  if (private->viewable)
+    return gdk_region_copy (private->clip_region);
+  else
+    return gdk_region_new ();
+}
+
+static GdkRegion*
 gdk_window_get_clip_region (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkRegion *result;
 
-  result = gdk_region_copy (private->clip_region);
+  result = gdk_window_get_visible_region (drawable);
 
   if (private->paint_stack)
     {
@@ -3520,14 +3531,6 @@ gdk_window_get_clip_region (GdkDrawable *drawable)
     }
 
   return result;
-}
-
-static GdkRegion*
-gdk_window_get_visible_region (GdkDrawable *drawable)
-{
-  GdkWindowObject *private = (GdkWindowObject*) drawable;
-
-  return gdk_region_copy (private->clip_region);
 }
 
 static void
