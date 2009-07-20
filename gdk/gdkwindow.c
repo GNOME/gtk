@@ -795,11 +795,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	  new_clip = gdk_region_rectangle (&r);
 
 	  if (private->parent != NULL &&
-	      private->parent->window_type != GDK_WINDOW_ROOT &&
-	      /* For foreign children, don't remove local parents, as parent
-		 may not be mapped yet, and the non-native parents are not really
-		 enforced for it anyways. */
-	      private->window_type != GDK_WINDOW_FOREIGN)
+	      private->parent->window_type != GDK_WINDOW_ROOT)
 	    {
 	      gdk_region_intersect (new_clip, private->parent->clip_region);
 
@@ -1598,8 +1594,7 @@ gdk_window_ensure_native (GdkWindow *window)
 
   /* The shape may not have been set, as the clip region doesn't actually
      change, so do it here manually */
-  if (private->viewable)
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
+  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
 
   reparent_to_impl (private);
 
@@ -2480,10 +2475,10 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   implicit_paint = impl_window->implicit_paint;
 
   paint = g_new (GdkWindowPaint, 1);
-  paint->region = gdk_window_get_visible_region ((GdkDrawable *)window);
-  gdk_region_intersect (paint->region, region);
+  paint->region = gdk_region_copy (region);
   paint->region_tag = new_region_tag ();
 
+  gdk_region_intersect (paint->region, private->clip_region_with_children);
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   /* Convert to impl coords */
@@ -2646,9 +2641,6 @@ gdk_window_end_paint (GdkWindow *window)
   private->paint_stack = g_slist_delete_link (private->paint_stack,
 					      private->paint_stack);
 
-  if (!private->viewable)
-    goto non_viewable;
-
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
@@ -2687,8 +2679,6 @@ gdk_window_end_paint (GdkWindow *window)
 
   /* Reset clip region of the cached GdkGC */
   gdk_gc_set_clip_region (tmp_gc, NULL);
-
- non_viewable:
 
   cairo_surface_destroy (paint->surface);
   g_object_unref (paint->pixmap);
@@ -3504,23 +3494,12 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
 }
 
 static GdkRegion*
-gdk_window_get_visible_region (GdkDrawable *drawable)
-{
-  GdkWindowObject *private = (GdkWindowObject*) drawable;
-
-  if (private->viewable)
-    return gdk_region_copy (private->clip_region);
-  else
-    return gdk_region_new ();
-}
-
-static GdkRegion*
 gdk_window_get_clip_region (GdkDrawable *drawable)
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkRegion *result;
 
-  result = gdk_window_get_visible_region (drawable);
+  result = gdk_region_copy (private->clip_region);
 
   if (private->paint_stack)
     {
@@ -3541,6 +3520,14 @@ gdk_window_get_clip_region (GdkDrawable *drawable)
     }
 
   return result;
+}
+
+static GdkRegion*
+gdk_window_get_visible_region (GdkDrawable *drawable)
+{
+  GdkWindowObject *private = (GdkWindowObject*) drawable;
+
+  return gdk_region_copy (private->clip_region);
 }
 
 static void
@@ -7295,7 +7282,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     gdk_region_destroy (private->shape);
 
   old_region = NULL;
-  if (private->viewable)
+  if (GDK_WINDOW_IS_MAPPED (window))
     old_region = gdk_region_copy (private->clip_region);
 
   if (shape_region)
