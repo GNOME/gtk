@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-07-18 11:54+0000\n"
-"PO-Revision-Date: 2009-07-19 18:34+0200\n"
+"POT-Creation-Date: 2009-07-20 05:12+0000\n"
+"PO-Revision-Date: 2009-07-20 20:14+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1587,11 +1587,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Gestionar tamaños personalizados"
 
-#: ../gtk/gtkcustompaperunixdialog.c:537 ../gtk/gtkpagesetupunixdialog.c:777
+#: ../gtk/gtkcustompaperunixdialog.c:537 ../gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "pulgadas"
 
-#: ../gtk/gtkcustompaperunixdialog.c:539 ../gtk/gtkpagesetupunixdialog.c:775
+#: ../gtk/gtkcustompaperunixdialog.c:539 ../gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
@@ -1714,7 +1714,7 @@ msgstr "%1$s en %2$s"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../gtk/gtkfilechooserdefault.c:1875
+#: ../gtk/gtkfilechooserdefault.c:1875 ../gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "Usados recientemente"
 
@@ -1886,29 +1886,26 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:9545
-msgid "<b>_Search:</b>"
-msgstr "<b>_Buscar:</b>"
+#: ../gtk/gtkfilechooserdefault.c:9546
+#| msgid "Search"
+msgid "Search:"
+msgstr "Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:10281
-msgid "<b>Recently Used</b>"
-msgstr "<b>Usados recientemente</b>"
-
-#: ../gtk/gtkfilechooserdefault.c:10519
+#: ../gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
 
-#: ../gtk/gtkfilechooserdefault.c:11371 ../gtk/gtkfilechooserdefault.c:11393
-#: ../gtk/gtkfilechooserdefault.c:11464
+#: ../gtk/gtkfilechooserdefault.c:11377 ../gtk/gtkfilechooserdefault.c:11399
+#: ../gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:11411
+#: ../gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11413
+#: ../gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
@@ -2422,27 +2419,28 @@ msgstr ""
 "No se puede matar el proceso con el pid %d. La operación no está "
 "implementada."
 
-#: ../gtk/gtkmountoperation-x11.c:864
-msgid "Terminal Pager"
-msgstr ""
-
+#. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
+msgid "Terminal Pager"
+msgstr "Paginador del terminal («less»)"
+
+#: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
 msgstr "Comando top"
 
-#: ../gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr "Shell Bourne Again"
 
-#: ../gtk/gtkmountoperation-x11.c:867
+#: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr "Shell Bourne"
 
-#: ../gtk/gtkmountoperation-x11.c:868
+#: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr "Shell Z"
 
-#: ../gtk/gtkmountoperation-x11.c:963
+#: ../gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr "No se puede finalizar el proceso con el pid %d: %s"
@@ -2458,14 +2456,18 @@ msgid "Not a valid page setup file"
 msgstr "No es un archivo válido de configuración de página"
 
 #: ../gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
-msgstr ""
-"<b>Cualquier impresora</b>\n"
-"Para documentos portables"
+#| msgid "Printer"
+msgid "Any Printer"
+msgstr "Cualquier impresora"
 
-#: ../gtk/gtkpagesetupunixdialog.c:796
+#: ../gtk/gtkpagesetupunixdialog.c:168
+#| msgid ""
+#| "<b>Any Printer</b>\n"
+#| "For portable documents"
+msgid "For portable documents"
+msgstr "Para documentos portables"
+
+#: ../gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2480,23 +2482,23 @@ msgstr ""
 " Superior: %s %s\n"
 " Inferior: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3211
+#: ../gtk/gtkpagesetupunixdialog.c:847 ../gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "Gestión de tamaños personalizados…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:893
+#: ../gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "_Formato para:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:915 ../gtk/gtkprintunixdialog.c:3383
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "Tamaño del _papel:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:946
+#: ../gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1010 ../gtk/gtkprintunixdialog.c:3445
+#: ../gtk/gtkpagesetupunixdialog.c:1012 ../gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "Configuración de página"
 
@@ -2536,75 +2538,75 @@ msgstr "_Guardar en la carpeta:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:183
+#: ../gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s tarea #%d"
 
-#: ../gtk/gtkprintoperation.c:1602
+#: ../gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estado inicial"
 
-#: ../gtk/gtkprintoperation.c:1603
+#: ../gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Preparándose para imprimir"
 
-#: ../gtk/gtkprintoperation.c:1604
+#: ../gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Generando datos"
 
-#: ../gtk/gtkprintoperation.c:1605
+#: ../gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Enviando datos"
 
-#: ../gtk/gtkprintoperation.c:1606
+#: ../gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Esperando"
 
-#: ../gtk/gtkprintoperation.c:1607
+#: ../gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloqueado en una hoja"
 
-#: ../gtk/gtkprintoperation.c:1608
+#: ../gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimiendo"
 
-#: ../gtk/gtkprintoperation.c:1609
+#: ../gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Terminando"
 
-#: ../gtk/gtkprintoperation.c:1610
+#: ../gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Terminado con error"
 
-#: ../gtk/gtkprintoperation.c:2186
+#: ../gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: ../gtk/gtkprintoperation.c:2188 ../gtk/gtkprintoperation.c:2799
+#: ../gtk/gtkprintoperation.c:2202 ../gtk/gtkprintoperation.c:2813
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ../gtk/gtkprintoperation.c:2191
+#: ../gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimiendo %d"
 
-#: ../gtk/gtkprintoperation.c:2829
+#: ../gtk/gtkprintoperation.c:2843
 msgid "Error creating print preview"
 msgstr "Error al crear la vista previa de impresión"
 
-#: ../gtk/gtkprintoperation.c:2832
+#: ../gtk/gtkprintoperation.c:2846
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
 
@@ -5210,6 +5212,12 @@ msgstr "Imprimir a la impresora de prueba"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
+
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "<b>_Buscar:</b>"
+
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "<b>Usados recientemente</b>"
 
 #~ msgid "failed to allocate image buffer of %u byte"
 #~ msgid_plural "failed to allocate image buffer of %u bytes"
