@@ -861,6 +861,7 @@ get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
 
 static const gchar *well_known_commands[] =
 {
+  /* translators: this string is a name for the 'less' command */
   "less", N_("Terminal Pager"),
   "top", N_("Top Command"),
   "bash", N_("Bourne Again Shell"),
