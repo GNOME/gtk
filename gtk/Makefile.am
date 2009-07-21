@@ -178,6 +178,7 @@ gtk_public_h_sources =          \
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
+	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
@@ -289,6 +290,7 @@ gtk_public_h_sources =          \
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
+	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -433,6 +435,7 @@ gtk_base_c_sources =            \
 	gtkcellrendererpixbuf.c	\
 	gtkcellrendererprogress.c \
 	gtkcellrendererspin.c   \
+	gtkcellrendererspinner.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
@@ -557,6 +560,7 @@ gtk_base_c_sources =            \
 	gtkshow.c		\
 	gtksocket.c		\
 	gtkspinbutton.c		\
+	gtkspinner.c		\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\

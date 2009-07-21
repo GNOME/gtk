@@ -313,6 +313,14 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            y,
                                           gint            width,
                                           gint            height);
+static void gtk_default_draw_spinner     (GtkStyle     *style,
+					  GdkWindow    *window,
+					  GtkStateType  state_type,
+					  guint         step,
+					  gint           x,
+					  gint           y,
+					  gint           width,
+					  gint           height);
 
 static void rgb_to_hls			(gdouble	 *r,
 					 gdouble	 *g,
@@ -511,6 +519,7 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_expander = gtk_default_draw_expander;
   klass->draw_layout = gtk_default_draw_layout;
   klass->draw_resize_grip = gtk_default_draw_resize_grip;
+  klass->draw_spinner = gtk_default_draw_spinner;
 
   g_type_class_add_private (object_class, sizeof (GtkStylePrivate));
 
@@ -1764,8 +1773,9 @@ gtk_style_get_style_property (GtkStyle     *style,
   GtkRcPropertyParser parser;
   const GValue *peek_value;
 
-  klass = g_type_class_peek (widget_type);
+  klass = g_type_class_ref (widget_type);
   pspec = gtk_widget_class_find_style_property (klass, property_name);
+  g_type_class_unref (klass);
 
   if (!pspec)
     {
@@ -5598,6 +5608,80 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
     }
 }
 
+static void
+gtk_default_draw_spinner (GtkStyle     *style,
+                          GdkWindow    *window,
+                          GtkStateType  state_type,
+                          guint         step,
+                          gint          x,
+                          gint          y,
+                          gint          width,
+                          gint          height)
+{
+  GdkColor *color;
+  cairo_t *cr;
+  guint num_steps;
+  gdouble dx, dy;
+  gdouble radius;
+  gdouble half;
+  gint i;
+  guint real_step;
+
+  gtk_style_get (style, GTK_TYPE_SPINNER,
+                 "num-steps", &num_steps,
+                 NULL);
+  real_step = step % num_steps;
+
+  /* get cairo context */
+  cr = gdk_cairo_create (window);
+
+  /* set a clip region for the expose event */
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
+
+  cairo_translate (cr, x, y);
+
+  /* draw clip region */
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  color = &style->fg[state_type];
+  dx = width / 2;
+  dy = height / 2;
+  radius = MIN (width / 2, height / 2);
+  half = num_steps / 2;
+
+  for (i = 0; i < num_steps; i++)
+    {
+      gint inset = 0.7 * radius;
+
+      /* transparency is a function of time and intial value */
+      gdouble t = (gdouble) ((i + num_steps - real_step)
+                             % num_steps) / num_steps;
+
+      cairo_save (cr);
+
+      cairo_set_source_rgba (cr,
+                             color->red / 65535.,
+                             color->green / 65535.,
+                             color->blue / 65535.,
+                             t);
+
+      cairo_set_line_width (cr, 2.0);
+      cairo_move_to (cr,
+                     dx + (radius - inset) * cos (i * G_PI / half),
+                     dy + (radius - inset) * sin (i * G_PI / half));
+      cairo_line_to (cr,
+                     dx + radius * cos (i * G_PI / half),
+                     dy + radius * sin (i * G_PI / half));
+      cairo_stroke (cr);
+
+      cairo_restore (cr);
+    }
+
+  /* free memory */
+  cairo_destroy (cr);
+}
+
 void
 _gtk_style_shade (const GdkColor *a,
                   GdkColor       *b,
@@ -6629,6 +6713,38 @@ gtk_paint_resize_grip (GtkStyle           *style,
   GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
                                                  (GdkRectangle *) area, widget, detail,
                                                  edge, x, y, width, height);
+}
+
+/**
+ * gtk_paint_spinner:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @widget: the widget
+ * @step: the nth step, a value between 0 and GtkSpinner::num-steps
+ * @x: the x origin of the rectangle in which to draw the resize grip
+ * @y: the y origin of the rectangle in which to draw the resize grip
+ * @width: the width of the rectangle in which to draw the resize grip
+ * @height: the height of the rectangle in which to draw the resize grip
+ *
+ * Draws a spinner on @window using the given parameters.
+ */
+void
+gtk_paint_spinner (GtkStyle     *style,
+		   GdkWindow    *window,
+		   GtkStateType  state_type,
+		   guint         step,
+		   gint          x,
+		   gint          y,
+		   gint          width,
+		   gint          height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
+
+  GTK_STYLE_GET_CLASS (style)->draw_spinner (style, window, state_type,
+					     step, x, y, width, height);
 }
 
 /**

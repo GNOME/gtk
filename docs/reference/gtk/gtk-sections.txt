@@ -3585,6 +3585,24 @@ gtk_spin_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkspinner</FILE>
+<TITLE>GtkSpinner</TITLE>
+GtkSpinner
+gtk_spinner_new
+gtk_spinner_start
+gtk_spinner_stop
+<SUBSECTION Standard>
+GTK_SPINNER
+GTK_IS_SPINNER
+GTK_TYPE_SPINNER
+GTK_SPINNER_CLASS
+GTK_IS_SPINER_CLASS
+GTK_SPINNER_GET_CLASS
+<SUBSECTION Private>
+gtk_spinner_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkstatusbar</FILE>
 <TITLE>GtkStatusbar</TITLE>
 GtkStatusbar
@@ -5107,6 +5125,23 @@ gtk_cell_renderer_spin_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcellrendererspinner</FILE>
+<TITLE>GtkCellRendererSpinner</TITLE>
+GtkCellRendererSpinner
+gtk_cell_renderer_spinner_new
+<SUBSECTION Standard>
+GTK_TYPE_CELL_RENDERER_SPINNER
+GTK_CELL_RENDERER_SPINNER
+GTK_CELL_RENDERER_SPINNER_CLASS
+GTK_IS_CELL_RENDERER_SPINNER
+GTK_IS_CELL_RENDERER_SPINNER_CLASS
+GTK_CELL_RENDERER_SPINNER_GET_CLASS
+<SUBSECTION Private>
+GtkCellRendererSpinnerPrivate
+gtk_cell_renderer_spinner_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcellrendererpixbuf</FILE>
 <TITLE>GtkCellRendererPixbuf</TITLE>
 GtkCellRendererPixbuf
@@ -5929,6 +5964,7 @@ gtk_paint_polygon
 gtk_paint_shadow
 gtk_paint_shadow_gap
 gtk_paint_slider
+gtk_paint_spinner
 gtk_paint_string
 gtk_paint_tab
 gtk_paint_vline

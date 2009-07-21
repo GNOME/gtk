@@ -670,6 +670,13 @@ gtk_cell_renderer_spin_new
 #endif
 #endif
 
+#if IN_HEADER(__GTK_CELL_RENDERER_SPINNER_H__)
+#if IN_FILE(__GTK_CELL_RENDERER_SPINNER_C__)
+gtk_cell_renderer_spinner_get_type G_GNUC_CONST
+gtk_cell_renderer_spinner_new
+#endif
+#endif
+
 #if IN_HEADER(__GTK_CELL_RENDERER_PROGRESS_H__)
 #if IN_FILE(__GTK_CELL_RENDERER_PROGRESS_C__)
 gtk_cell_renderer_progress_get_type G_GNUC_CONST
@@ -1277,6 +1284,7 @@ gtk_paint_resize_grip
 gtk_paint_shadow
 gtk_paint_shadow_gap
 gtk_paint_slider
+gtk_paint_spinner
 gtk_paint_tab
 gtk_paint_vline
 gtk_border_new G_GNUC_MALLOC
@@ -3799,6 +3807,15 @@ gtk_spin_button_set_value
 gtk_spin_button_set_wrap
 gtk_spin_button_spin
 gtk_spin_button_update
+#endif
+#endif
+
+#if IN_HEADER(__GTK_SPINNER_H__)
+#if IN_FILE(__GTK_SPINNER_C__)
+gtk_spinner_get_type G_GNUC_CONST
+gtk_spinner_new
+gtk_spinner_start
+gtk_spinner_stop
 #endif
 #endif
 

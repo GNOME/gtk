@@ -59,6 +59,7 @@
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrendererprogress.h>
 #include <gtk/gtkcellrendererspin.h>
+#include <gtk/gtkcellrendererspinner.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellview.h>
@@ -168,6 +169,7 @@
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
+#include <gtk/gtkspinner.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>

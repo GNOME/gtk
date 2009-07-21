@@ -37,6 +37,7 @@ demos =						\
 	rotated_text.c				\
 	search_entry.c				\
 	sizegroup.c				\
+	spinner.c				\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
