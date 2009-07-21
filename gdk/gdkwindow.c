@@ -7392,7 +7392,7 @@ gdk_window_merge_child_shapes (GdkWindow *window)
 /**
  * gdk_window_input_shape_combine_mask:
  * @window: a #GdkWindow
- * @mask: shape mask
+ * @mask: shape mask, or %NULL
  * @x: X position of shape mask with respect to @window
  * @y: Y position of shape mask with respect to @window
  *
@@ -7437,7 +7437,8 @@ gdk_window_input_shape_combine_mask (GdkWindow *window,
 					 region,
 					 x, y);
 
-  gdk_region_destroy (region);
+  if (region != NULL)
+    gdk_region_destroy (region);
 }
 
 /**
