@@ -22,8 +22,8 @@
 
   <para>
     Alternatively, GTK+ also offers the
-    <link linkend="gtk-builder-convert">gtk-builder-convert</link> script to
-    do the conversion; in which case you should be careful to inspect the output
+    <link linkend="gtk-builder-convert">gtk-builder-convert</link> script you can use
+    to do the conversion; in which case you should be careful to inspect the output
     and make sure you didn't lose any data.
   </para>
 
