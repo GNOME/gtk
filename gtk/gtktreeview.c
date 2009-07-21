@@ -10320,7 +10320,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
-  screen = gtk_widget_get_screen (tree_view);
+  screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
 
    if (tree_view->priv->search_window != NULL)
      {
