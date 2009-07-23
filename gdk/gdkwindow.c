@@ -4225,6 +4225,7 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
 			gint             y_dither)
 {
   GdkWindowObject *private = (GdkWindowObject *)drawable;
+  GdkDrawableClass *klass;
 
   if (GDK_WINDOW_DESTROYED (drawable))
     return;
@@ -4235,16 +4236,19 @@ gdk_window_draw_pixbuf (GdkDrawable     *drawable,
     gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
 
   BEGIN_DRAW;
+
+  klass = GDK_DRAWABLE_GET_CLASS (impl);
+
   if (private->paint_stack)
-    gdk_draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
-		     dest_x - x_offset, dest_y - y_offset,
-		     width, height,
-		     dither, x_dither - x_offset, y_dither - y_offset);
+    klass->draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
+			dest_x - x_offset, dest_y - y_offset,
+			width, height,
+			dither, x_dither - x_offset, y_dither - y_offset);
   else
-    gdk_draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
-		     dest_x - x_offset, dest_y - y_offset,
-		     width, height,
-		     dither, x_dither, y_dither);
+    klass->draw_pixbuf (impl, gc, pixbuf, src_x, src_y,
+			dest_x - x_offset, dest_y - y_offset,
+			width, height,
+			dither, x_dither, y_dither);
   END_DRAW;
 }
 
