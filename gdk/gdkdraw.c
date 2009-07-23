@@ -1525,6 +1525,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   GdkRegion *clip;
   GdkRegion *drect;
   GdkRectangle tmp_rect;
+  GdkDrawable  *real_drawable;
 
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
@@ -1597,6 +1598,16 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   /* Actually draw */
   if (!gc)
     gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
+
+  /* Drawable is a wrapper here, but at this time we
+     have already retargeted the destination to any
+     impl window and set the clip, so what we really
+     want to do is draw directly on the impl, ignoring
+     client side subwindows. */
+  if (GDK_IS_WINDOW (drawable))
+    real_drawable = GDK_WINDOW_OBJECT (drawable)->impl;
+  else
+    real_drawable = drawable;
   
   if (pixbuf->has_alpha)
     {
@@ -1667,7 +1678,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 				     image->bpl,
 				     visual->byte_order,
 				     width1, height1);
-		  gdk_draw_image (drawable, gc, image,
+		  gdk_draw_image (real_drawable, gc, image,
 				  xs0, ys0,
 				  dest_x + x0, dest_y + y0,
 				  width1, height1);
@@ -1708,7 +1719,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
     {
       guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
 
-      gdk_draw_rgb_32_image_dithalign (drawable, gc,
+      gdk_draw_rgb_32_image_dithalign (real_drawable, gc,
 				       dest_x, dest_y,
 				       width, height,
 				       dither,
@@ -1719,7 +1730,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
     {
       guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
 
-      gdk_draw_rgb_image_dithalign (drawable, gc,
+      gdk_draw_rgb_image_dithalign (real_drawable, gc,
 				    dest_x, dest_y,
 				    width, height,
 				    dither,
