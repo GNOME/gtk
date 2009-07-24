@@ -2501,13 +2501,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       paint->x_offset = -private->abs_x + implicit_paint->x_offset;
       paint->y_offset = -private->abs_y + implicit_paint->y_offset;
 
-      /* It would be nice if we had some cairo support here so we
-	 could set the clip rect on the cairo surface */
-      width = private->abs_x + private->width;
-      height = private->abs_y + private->height;
-
+      gdk_drawable_get_size (paint->pixmap, &width, &height);
       paint->surface = _gdk_drawable_create_cairo_surface (paint->pixmap, width, height);
-
     }
   else
     {
