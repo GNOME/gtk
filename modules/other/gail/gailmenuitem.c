@@ -258,6 +258,7 @@ gail_menu_item_ref_state_set (AtkObject *obj)
   if (!atk_state_set_contains_state (parent_state_set, ATK_STATE_SELECTED))
     {
       atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
+      atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
     }
 
   return state_set;
