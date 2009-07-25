@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-03-03 08:23+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -1573,11 +1573,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "その他のサイズの管理"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "インチ"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "ミリ"
 
@@ -1699,7 +1699,7 @@ msgstr "%2$s:%1$s"
 msgid "Search"
 msgstr "検索"
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "最近開いたファイル"
 
@@ -1868,31 +1868,26 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
-#: gtk/gtkfilechooserdefault.c:9545
+#: gtk/gtkfilechooserdefault.c:9546
 #, fuzzy
-msgid "<b>_Search:</b>"
-msgstr "検索(_S):"
+msgid "Search:"
+msgstr "検索"
 
-#: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
-msgid "<b>Recently Used</b>"
-msgstr "最近開いたファイル"
-
-#: gtk/gtkfilechooserdefault.c:10519
+#: gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s をマウントできませんでした"
 
-#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
-#: gtk/gtkfilechooserdefault.c:11464
+#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
+#: gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:11411
+#: gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11413
+#: gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "昨日の %H:%M"
 
@@ -2399,28 +2394,29 @@ msgstr ""
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:864
+#. translators: this string is a name for the 'less' command
+#: gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:866
 #, fuzzy
 msgid "Top Command"
 msgstr "コマンドライン"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:963
+#: gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
@@ -2435,14 +2431,18 @@ msgid "Not a valid page setup file"
 msgstr "妥当なページ設定のファイルではありません"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
+#, fuzzy
+msgid "Any Printer"
+msgstr "プリンタ"
+
+#: gtk/gtkpagesetupunixdialog.c:168
+#, fuzzy
+msgid "For portable documents"
 msgstr ""
 "<b>任意のプリンタ</b>\n"
 "ポータブルなドキュメント用"
 
-#: gtk/gtkpagesetupunixdialog.c:796
+#: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2457,23 +2457,23 @@ msgstr ""
 " 上側: %s %s\n"
 " 下側: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "その他のサイズ..."
 
-#: gtk/gtkpagesetupunixdialog.c:893
+#: gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "フォーマット(_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "用紙のサイズ(_P):"
 
-#: gtk/gtkpagesetupunixdialog.c:946
+#: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "用紙の向き(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "ページの設定"
 
@@ -2516,77 +2516,77 @@ msgstr "フォルダの中に保存(_S):"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:183
+#: gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s (印刷ジョブの番号 #%d)"
 
-#: gtk/gtkprintoperation.c:1602
+#: gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初期状態"
 
-#: gtk/gtkprintoperation.c:1603
+#: gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "プリンタの準備中"
 
-#: gtk/gtkprintoperation.c:1604
+#: gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "データの生成中"
 
-#: gtk/gtkprintoperation.c:1605
+#: gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "データの送信中"
 
-#: gtk/gtkprintoperation.c:1606
+#: gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "待機中"
 
-#: gtk/gtkprintoperation.c:1607
+#: gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "障害の発生中"
 
-#: gtk/gtkprintoperation.c:1608
+#: gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "印刷中"
 
-#: gtk/gtkprintoperation.c:1609
+#: gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "完了"
 
-#: gtk/gtkprintoperation.c:1610
+#: gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "完了 (エラー有り)"
 
-#: gtk/gtkprintoperation.c:2186
+#: gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "%d の準備中です"
 
-#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
+#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
 #, c-format
 msgid "Preparing"
 msgstr "準備中"
 
-#: gtk/gtkprintoperation.c:2191
+#: gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "%d の印刷中です"
 
-#: gtk/gtkprintoperation.c:2829
+#: gtk/gtkprintoperation.c:2843
 #, c-format
 msgid "Error creating print preview"
 msgstr "プレビューを生成する際にエラー"
 
-#: gtk/gtkprintoperation.c:2832
+#: gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "作業用のファイルを生成できないことが一番考えられそうな原因です。"
@@ -5204,3 +5204,11 @@ msgstr "テスト用プリンタに印刷する"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' というファイルの情報を取得できませんでした: %s"
+
+#, fuzzy
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "検索(_S):"
+
+#, fuzzy
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "最近開いたファイル"

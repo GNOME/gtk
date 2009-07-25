@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-03-03 21:07+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
@@ -4251,7 +4251,7 @@ msgstr "Ustawienia drukarki"
 msgid "Page Setup"
 msgstr "Ustawienia strony"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
 msgid "Track Print Status"
 msgstr "Śledzenie stanu drukowania"
 
@@ -4263,51 +4263,51 @@ msgstr ""
 "Ustawione, jeżeli zadanie wydruku będzie kontynuowało wysyłanie sygnałów "
 "status-changed po wysłaniu danych drukowania na drukarkę lub serwer wydruku."
 
-#: gtk/gtkprintoperation.c:936
+#: gtk/gtkprintoperation.c:950
 msgid "Default Page Setup"
 msgstr "Domyślne ustawienia strony"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:951
 msgid "The GtkPageSetup used by default"
 msgstr "Domyślnie użyte GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:955 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Ustawienia wydruku"
 
-#: gtk/gtkprintoperation.c:956 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings użyte do zainicjowania okna"
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:988
 msgid "Job Name"
 msgstr "Nazwa zadania"
 
-#: gtk/gtkprintoperation.c:975
+#: gtk/gtkprintoperation.c:989
 msgid "A string used for identifying the print job."
 msgstr "Ciąg tekstowy użyty do identyfikacji zadania wydruku."
 
-#: gtk/gtkprintoperation.c:999
+#: gtk/gtkprintoperation.c:1013
 msgid "Number of Pages"
 msgstr "Liczba stron"
 
-#: gtk/gtkprintoperation.c:1000
+#: gtk/gtkprintoperation.c:1014
 msgid "The number of pages in the document."
 msgstr "Licba stron w dokumencie"
 
-#: gtk/gtkprintoperation.c:1021 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Bieżąca strona"
 
-#: gtk/gtkprintoperation.c:1022 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "Bieżąca strona w dokumencie"
 
-#: gtk/gtkprintoperation.c:1043
+#: gtk/gtkprintoperation.c:1057
 msgid "Use full page"
 msgstr "Cała strona"
 
-#: gtk/gtkprintoperation.c:1044
+#: gtk/gtkprintoperation.c:1058
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4315,7 +4315,7 @@ msgstr ""
 "Określa, czy początek kontekstu powinien znajdować się w narożniku strony a "
 "nie w narożniku obrazowanego obszaru"
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1079
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4323,83 +4323,83 @@ msgstr ""
 "Określa, czy operacja wydruku będzie kontynuować zgłaszanie stanu zadania "
 "wydruku po wysłaniu danych wydruku na drukarkę lub serwer drukowania."
 
-#: gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintoperation.c:1096
 msgid "Unit"
 msgstr "Jednostka"
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1097
 msgid "The unit in which distances can be measured in the context"
 msgstr "Jednostka, według której mierzone są odległości w kontekście"
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1114
 msgid "Show Dialog"
 msgstr "Okno dialogowe"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1115
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 "Określa, czy podczas drukowania wyświetlane jest okno dialogowe postępu."
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1138
 msgid "Allow Async"
 msgstr "Asynchronicznie"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1139
 msgid "TRUE if print process may run asynchronous."
 msgstr "Ustawione, jeżeli proces wydruku może być uruchomiony asynchronicznie."
 
-#: gtk/gtkprintoperation.c:1147 gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
 msgid "Export filename"
 msgstr "Nazwa eksportowanego pliku"
 
-#: gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1176
 msgid "Status"
 msgstr "Stan"
 
-#: gtk/gtkprintoperation.c:1163
+#: gtk/gtkprintoperation.c:1177
 msgid "The status of the print operation"
 msgstr "Stan operacji wydruku"
 
-#: gtk/gtkprintoperation.c:1183
+#: gtk/gtkprintoperation.c:1197
 msgid "Status String"
 msgstr "Ciąg tekstowy stanu"
 
-#: gtk/gtkprintoperation.c:1184
+#: gtk/gtkprintoperation.c:1198
 msgid "A human-readable description of the status"
 msgstr "Czytelny dla człowieka opis stanu"
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1216
 msgid "Custom tab label"
 msgstr "Etykieta własnej karty"
 
-#: gtk/gtkprintoperation.c:1203
+#: gtk/gtkprintoperation.c:1217
 msgid "Label for the tab containing custom widgets."
 msgstr "Etykieta karty zawierającej własne widżety."
 
-#: gtk/gtkprintoperation.c:1218 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Wybór koloru"
 
-#: gtk/gtkprintoperation.c:1219
+#: gtk/gtkprintoperation.c:1233
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1235 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Posiada zaznaczeie"
 
-#: gtk/gtkprintoperation.c:1236
+#: gtk/gtkprintoperation.c:1250
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1251 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Ustawienia strony"
 
-#: gtk/gtkprintoperation.c:1252
+#: gtk/gtkprintoperation.c:1266
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 

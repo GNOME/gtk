@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -4418,7 +4418,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Største storleik"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
 msgid "Track Print Status"
 msgstr ""
 
@@ -4428,151 +4428,151 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:936
+#: gtk/gtkprintoperation.c:950
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Standardhøgde"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:951
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:955 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:956 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:988
 #, fuzzy
 msgid "Job Name"
 msgstr "Skriftnamn"
 
-#: gtk/gtkprintoperation.c:975
+#: gtk/gtkprintoperation.c:989
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:999
+#: gtk/gtkprintoperation.c:1013
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Tal på kolonner i tabellen"
 
-#: gtk/gtkprintoperation.c:1000
+#: gtk/gtkprintoperation.c:1014
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Tal på rader i tabellen"
 
-#: gtk/gtkprintoperation.c:1021 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
 #, fuzzy
 msgid "Current Page"
 msgstr "Noverande alfa"
 
-#: gtk/gtkprintoperation.c:1022 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Tilstanden til knappen (av/på)"
 
 # TRN: «Alpha» eller «alfa»?
-#: gtk/gtkprintoperation.c:1043
+#: gtk/gtkprintoperation.c:1057
 #, fuzzy
 msgid "Use full page"
 msgstr "Bruk alfa"
 
-#: gtk/gtkprintoperation.c:1044
+#: gtk/gtkprintoperation.c:1058
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1079
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintoperation.c:1096
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1097
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1114
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Vis overskrift"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1115
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1138
 #, fuzzy
 msgid "Allow Async"
 msgstr "Tillat reglar"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1139
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1147 gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
 #, fuzzy
 msgid "Export filename"
 msgstr "Filnamn"
 
-#: gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1176
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1163
+#: gtk/gtkprintoperation.c:1177
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Tilstanden til knappen (av/på)"
 
-#: gtk/gtkprintoperation.c:1183
+#: gtk/gtkprintoperation.c:1197
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1184
+#: gtk/gtkprintoperation.c:1198
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1216
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Eigendefinert palett"
 
-#: gtk/gtkprintoperation.c:1203
+#: gtk/gtkprintoperation.c:1217
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1218 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Tittelen på skrifttypeveljardialogen"
 
-#: gtk/gtkprintoperation.c:1219
+#: gtk/gtkprintoperation.c:1233
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1235 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Det valde året"
 
-#: gtk/gtkprintoperation.c:1236
+#: gtk/gtkprintoperation.c:1250
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1251 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Største storleik"
 
-#: gtk/gtkprintoperation.c:1252
+#: gtk/gtkprintoperation.c:1266
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.mai\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-02-27 15:44+0530\n"
 "Last-Translator: Rajesh Ranjan <rranjan@redhat.com>\n"
 "Language-Team: maithili <maithili.sf.net>\n"
@@ -1549,11 +1549,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "पसंदीदा आकार प्रबंधित करू"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "इंच"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "मिमी"
 
@@ -1675,7 +1675,7 @@ msgstr "%1$s %2$s पर"
 msgid "Search"
 msgstr "खोजू"
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "हालमे प्रयुक्त"
 
@@ -1845,31 +1845,26 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "खोजि आग्रह नहि भेजि सकल"
 
-#: gtk/gtkfilechooserdefault.c:9545
+#: gtk/gtkfilechooserdefault.c:9546
 #, fuzzy
-msgid "<b>_Search:</b>"
-msgstr "खोजू (_S):"
+msgid "Search:"
+msgstr "खोजू"
 
-#: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
-msgid "<b>Recently Used</b>"
-msgstr "हालमे प्रयुक्त"
-
-#: gtk/gtkfilechooserdefault.c:10519
+#: gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s केँ आरोहित नहि कए सकल"
 
-#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
-#: gtk/gtkfilechooserdefault.c:11464
+#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
+#: gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/gtkfilechooserdefault.c:11411
+#: gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11413
+#: gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "काल्हि एतबा समय पर %H:%M"
 
@@ -2375,28 +2370,29 @@ msgstr ""
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:864
+#. translators: this string is a name for the 'less' command
+#: gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:866
 #, fuzzy
 msgid "Top Command"
 msgstr "कमांड लाइन"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:963
+#: gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
@@ -2411,14 +2407,18 @@ msgid "Not a valid page setup file"
 msgstr "कोनो मान्य पृष्ठ सेटअप फाइल नहि"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
+#, fuzzy
+msgid "Any Printer"
+msgstr "मुद्रक"
+
+#: gtk/gtkpagesetupunixdialog.c:168
+#, fuzzy
+msgid "For portable documents"
 msgstr ""
 "<b> कोनो मुद्रक</b>\n"
 "पोर्टेवल दस्ताबेज क' लेल"
 
-#: gtk/gtkpagesetupunixdialog.c:796
+#: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2433,23 +2433,23 @@ msgstr ""
 " उप्पर:%s %s\n"
 " नीच्चाँ:%s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "पसंदीदा आकार प्रबंधित करू..."
 
-#: gtk/gtkpagesetupunixdialog.c:893
+#: gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "एकरा लेल प्रारूप (_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "कागज क' आकार (_P):"
 
-#: gtk/gtkpagesetupunixdialog.c:946
+#: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "अभिमुखन (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "पृष्ठ सेटअप"
 
@@ -2492,77 +2492,77 @@ msgstr "फोल्डरमे सहेजू (_S):"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:183
+#: gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s job #%d"
 
-#: gtk/gtkprintoperation.c:1602
+#: gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "आरंभिक स्थिति"
 
-#: gtk/gtkprintoperation.c:1603
+#: gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "छापैक लेल तैआर कए रहल अछि"
 
-#: gtk/gtkprintoperation.c:1604
+#: gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "आँकड़ा बनाए रहल अछि"
 
-#: gtk/gtkprintoperation.c:1605
+#: gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "आँकड़ा भेजि रहल अछि"
 
-#: gtk/gtkprintoperation.c:1606
+#: gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "प्रतीक्षा कए रहल अछि"
 
-#: gtk/gtkprintoperation.c:1607
+#: gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "मुद्दा पर रूकल"
 
-#: gtk/gtkprintoperation.c:1608
+#: gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "छापि रहल अछि"
 
-#: gtk/gtkprintoperation.c:1609
+#: gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "समाप्त"
 
-#: gtk/gtkprintoperation.c:1610
+#: gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "त्रुटि क' सँग समाप्त"
 
-#: gtk/gtkprintoperation.c:2186
+#: gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "%d तैआर कए रहल अछि"
 
-#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
+#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
 #, c-format
 msgid "Preparing"
 msgstr "तैआरी"
 
-#: gtk/gtkprintoperation.c:2191
+#: gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "%d छपाइ कए रहल अछि"
 
-#: gtk/gtkprintoperation.c:2829
+#: gtk/gtkprintoperation.c:2843
 #, c-format
 msgid "Error creating print preview"
 msgstr "छपाइ पूर्वावलोकन बनाबै मे त्रुटि"
 
-#: gtk/gtkprintoperation.c:2832
+#: gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -5171,3 +5171,11 @@ msgstr "जाँचि मुद्रकमे छापू"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "फाइल '%s' लेल जानकारी नहि पाबि सकल: %s"
+
+#, fuzzy
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "खोजू (_S):"
+
+#, fuzzy
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "हालमे प्रयुक्त"

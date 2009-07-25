@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-02-09 18:47+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -4178,7 +4178,7 @@ msgstr "Thiết lập máy in"
 msgid "Page Setup"
 msgstr "Thiết lập trang"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
 msgid "Track Print Status"
 msgstr "Theo dõi trạng thái in"
 
@@ -4190,51 +4190,51 @@ msgstr ""
 "TRUE (đúng) nếu công việc in này sẽ tiếp tục tín hiệu thay đổi trạng thái "
 "sau khi dữ liệu in đã được gởi cho máy in hay máy phục vụ in."
 
-#: gtk/gtkprintoperation.c:936
+#: gtk/gtkprintoperation.c:950
 msgid "Default Page Setup"
 msgstr "Thiết lập trang mặc định"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:951
 msgid "The GtkPageSetup used by default"
 msgstr "Thiết lập trang GtkPageSetup được dùng theo mặc định"
 
-#: gtk/gtkprintoperation.c:955 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Thiết lập in"
 
-#: gtk/gtkprintoperation.c:956 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Thiết lập in GtkPrintSettings được dùng để sở khởi hộp thoại"
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:988
 msgid "Job Name"
 msgstr "Tên công việc"
 
-#: gtk/gtkprintoperation.c:975
+#: gtk/gtkprintoperation.c:989
 msgid "A string used for identifying the print job."
 msgstr "Chuỗi được dùng để nhận diện công việc in."
 
-#: gtk/gtkprintoperation.c:999
+#: gtk/gtkprintoperation.c:1013
 msgid "Number of Pages"
 msgstr "Số trang"
 
-#: gtk/gtkprintoperation.c:1000
+#: gtk/gtkprintoperation.c:1014
 msgid "The number of pages in the document."
 msgstr "Số trang trong tài liệu đó."
 
-#: gtk/gtkprintoperation.c:1021 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Trang hiện có"
 
-#: gtk/gtkprintoperation.c:1022 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "Trang hiện thời trong tài liệu đó"
 
-#: gtk/gtkprintoperation.c:1043
+#: gtk/gtkprintoperation.c:1057
 msgid "Use full page"
 msgstr "Dùng toàn trang"
 
-#: gtk/gtkprintoperation.c:1044
+#: gtk/gtkprintoperation.c:1058
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4242,7 +4242,7 @@ msgstr ""
 "TRUE (đúng) nếu gốc của ngữ cảnh nên nằm trong góc trang, không phải trong "
 "góc của vùng có thể chứa ảnh"
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1079
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4250,82 +4250,82 @@ msgstr ""
 "TRUE (đúng) nếu thao tác in sẽ tiếp tục thông báo trạng thái của công việc "
 "in sau khi dữ liệu in đã được gởi cho máy in hay máy phục vụ in."
 
-#: gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintoperation.c:1096
 msgid "Unit"
 msgstr "Đơn vị"
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1097
 msgid "The unit in which distances can be measured in the context"
 msgstr "Đơn vị đo khoảng cách trong ngữ cảnh đó"
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1114
 msgid "Show Dialog"
 msgstr "Hiện hộp thoại"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1115
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE (đúng) nếu hộp thoại tiến hành được hiển thị trong khi in."
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1138
 msgid "Allow Async"
 msgstr "Cho phép không đồng bộ"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1139
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE (đúng) nếu cho phép tiến trình in chạy không đồng bộ"
 
-#: gtk/gtkprintoperation.c:1147 gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
 msgid "Export filename"
 msgstr "Xuất khẩu tên tập tin"
 
-#: gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1176
 msgid "Status"
 msgstr "Trạng thái"
 
-#: gtk/gtkprintoperation.c:1163
+#: gtk/gtkprintoperation.c:1177
 msgid "The status of the print operation"
 msgstr "Trạng thái của thao tác in"
 
-#: gtk/gtkprintoperation.c:1183
+#: gtk/gtkprintoperation.c:1197
 msgid "Status String"
 msgstr "Chuỗi trạng thái"
 
-#: gtk/gtkprintoperation.c:1184
+#: gtk/gtkprintoperation.c:1198
 msgid "A human-readable description of the status"
 msgstr "Mô tả cho người đọc về trạng thái"
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1216
 msgid "Custom tab label"
 msgstr "Nhãn tab riêng"
 
-#: gtk/gtkprintoperation.c:1203
+#: gtk/gtkprintoperation.c:1217
 msgid "Label for the tab containing custom widgets."
 msgstr "Nhãn cho tab chứa các ô điều khiển riêng."
 
-#: gtk/gtkprintoperation.c:1218 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Chọn Màu"
 
-#: gtk/gtkprintoperation.c:1219
+#: gtk/gtkprintoperation.c:1233
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1235 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Có phần chọn"
 
-#: gtk/gtkprintoperation.c:1236
+#: gtk/gtkprintoperation.c:1250
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1251 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Thiết lập trang"
 
-#: gtk/gtkprintoperation.c:1252
+#: gtk/gtkprintoperation.c:1266
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 

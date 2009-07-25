@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-05-23 17:47-0300\n"
 "Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
@@ -1591,11 +1591,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Gerenciar tamanhos personalizados"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "polegada"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
@@ -1718,7 +1718,7 @@ msgstr "%1$s em %2$s"
 msgid "Search"
 msgstr "Pesquisar"
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "Usado recentemente"
 
@@ -1888,31 +1888,26 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "Não foi possível enviar o pedido de pesquisa"
 
-#: gtk/gtkfilechooserdefault.c:9545
+#: gtk/gtkfilechooserdefault.c:9546
 #, fuzzy
-msgid "<b>_Search:</b>"
-msgstr "_Pesquisar:"
+msgid "Search:"
+msgstr "Pesquisar"
 
-#: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
-msgid "<b>Recently Used</b>"
-msgstr "Usado recentemente"
-
-#: gtk/gtkfilechooserdefault.c:10519
+#: gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "Não foi possível montar %s"
 
-#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
-#: gtk/gtkfilechooserdefault.c:11464
+#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
+#: gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:11411
+#: gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11413
+#: gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "Ontem às %H:%M"
 
@@ -2422,29 +2417,30 @@ msgstr ""
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:864
+#. translators: this string is a name for the 'less' command
+#: gtk/gtkmountoperation-x11.c:865
 #, fuzzy
 msgid "Terminal Pager"
 msgstr "Imprimir em"
 
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:866
 #, fuzzy
 msgid "Top Command"
 msgstr "Linha de comando"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:963
+#: gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
@@ -2459,14 +2455,18 @@ msgid "Not a valid page setup file"
 msgstr "Não é um arquivo de configuração de página válido"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
+#, fuzzy
+msgid "Any Printer"
+msgstr "Impressora"
+
+#: gtk/gtkpagesetupunixdialog.c:168
+#, fuzzy
+msgid "For portable documents"
 msgstr ""
 "<b>Qualquer impressora</b>\n"
 "Para documentos portáveis"
 
-#: gtk/gtkpagesetupunixdialog.c:796
+#: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2481,23 +2481,23 @@ msgstr ""
 " Cima: %s %s\n"
 " Baixo: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "Gerenciar tamanhos personalizados..."
 
-#: gtk/gtkpagesetupunixdialog.c:893
+#: gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "_Formatar para:"
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "Tamanho do _papel:"
 
-#: gtk/gtkpagesetupunixdialog.c:946
+#: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "_Orientação:"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "Configurar página"
 
@@ -2539,77 +2539,77 @@ msgstr "_Salvar na pasta:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:183
+#: gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s tarefa #%d"
 
-#: gtk/gtkprintoperation.c:1602
+#: gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estado inicial"
 
-#: gtk/gtkprintoperation.c:1603
+#: gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Preparando para imprimir"
 
-#: gtk/gtkprintoperation.c:1604
+#: gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Gerando dados"
 
-#: gtk/gtkprintoperation.c:1605
+#: gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Enviando dados"
 
-#: gtk/gtkprintoperation.c:1606
+#: gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Esperando"
 
-#: gtk/gtkprintoperation.c:1607
+#: gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloqueando na questão"
 
-#: gtk/gtkprintoperation.c:1608
+#: gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimindo"
 
-#: gtk/gtkprintoperation.c:1609
+#: gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Concluído"
 
-#: gtk/gtkprintoperation.c:1610
+#: gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Concluído com erro"
 
-#: gtk/gtkprintoperation.c:2186
+#: gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
+#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
 #, c-format
 msgid "Preparing"
 msgstr "Preparando"
 
-#: gtk/gtkprintoperation.c:2191
+#: gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimindo %d"
 
-#: gtk/gtkprintoperation.c:2829
+#: gtk/gtkprintoperation.c:2843
 #, c-format
 msgid "Error creating print preview"
 msgstr "Erro ao criar visualização de impressão"
 
-#: gtk/gtkprintoperation.c:2832
+#: gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "A razão mais provável é que um arquivo temporário não pôde ser criado."
@@ -5236,6 +5236,14 @@ msgstr "Imprimir para testar impressora"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Não foi possível obter informações sobre o arquivo \"%s\": %s"
+
+#, fuzzy
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "_Pesquisar:"
+
+#, fuzzy
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "Usado recentemente"
 
 #~ msgid "directfb arg"
 #~ msgstr "directfb"

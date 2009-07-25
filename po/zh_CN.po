@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-04-12 01:44+0800\n"
 "Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
@@ -1537,11 +1537,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "管理自定义大小"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "英寸"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "毫米"
 
@@ -1663,7 +1663,7 @@ msgstr "%2$s 上的 %1$s"
 msgid "Search"
 msgstr "搜索"
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "最近使用的"
 
@@ -1830,31 +1830,26 @@ msgstr "程序无法连接到索引守护进程。请确保它在运行。"
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
-#: gtk/gtkfilechooserdefault.c:9545
+#: gtk/gtkfilechooserdefault.c:9546
 #, fuzzy
-msgid "<b>_Search:</b>"
-msgstr "搜索(_S)："
+msgid "Search:"
+msgstr "搜索"
 
-#: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
-msgid "<b>Recently Used</b>"
-msgstr "最近使用的"
-
-#: gtk/gtkfilechooserdefault.c:10519
+#: gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "无法挂载 %s"
 
-#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
-#: gtk/gtkfilechooserdefault.c:11464
+#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
+#: gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:11411
+#: gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11413
+#: gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "昨天于 %H:%M"
 
@@ -2358,28 +2353,29 @@ msgstr ""
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:864
+#. translators: this string is a name for the 'less' command
+#: gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:866
 #, fuzzy
 msgid "Top Command"
 msgstr "命令行"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:963
+#: gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
@@ -2394,14 +2390,18 @@ msgid "Not a valid page setup file"
 msgstr "非法的页面设置文件"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
+#, fuzzy
+msgid "Any Printer"
+msgstr "打印机"
+
+#: gtk/gtkpagesetupunixdialog.c:168
+#, fuzzy
+msgid "For portable documents"
 msgstr ""
 "<b>任意打印机</b>\n"
 "用于便携文档"
 
-#: gtk/gtkpagesetupunixdialog.c:796
+#: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2416,23 +2416,23 @@ msgstr ""
 " 上：%s %s\n"
 " 下：%s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "管理自定义大小..."
 
-#: gtk/gtkpagesetupunixdialog.c:893
+#: gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "格式(_F)："
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "纸张大小(_P)："
 
-#: gtk/gtkpagesetupunixdialog.c:946
+#: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "方向(_O)："
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "页面设置"
 
@@ -2475,77 +2475,77 @@ msgstr "保存于文件夹(_S)："
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:183
+#: gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s 的打印作业 #%d"
 
-#: gtk/gtkprintoperation.c:1602
+#: gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初始状态"
 
-#: gtk/gtkprintoperation.c:1603
+#: gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "准备打印"
 
-#: gtk/gtkprintoperation.c:1604
+#: gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "生成数据"
 
-#: gtk/gtkprintoperation.c:1605
+#: gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "发送数据"
 
-#: gtk/gtkprintoperation.c:1606
+#: gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "等候"
 
-#: gtk/gtkprintoperation.c:1607
+#: gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "塞纸"
 
-#: gtk/gtkprintoperation.c:1608
+#: gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "打印"
 
-#: gtk/gtkprintoperation.c:1609
+#: gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "完成"
 
-#: gtk/gtkprintoperation.c:1610
+#: gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "有错误完成"
 
-#: gtk/gtkprintoperation.c:2186
+#: gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "正在准备 %d"
 
-#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
+#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
 #, c-format
 msgid "Preparing"
 msgstr "正在准备"
 
-#: gtk/gtkprintoperation.c:2191
+#: gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "正在打印 %d"
 
-#: gtk/gtkprintoperation.c:2829
+#: gtk/gtkprintoperation.c:2843
 #, c-format
 msgid "Error creating print preview"
 msgstr "创建打印预览时出错"
 
-#: gtk/gtkprintoperation.c:2832
+#: gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是无法创建临时文件。"
@@ -5152,6 +5152,14 @@ msgstr "打印到测试打印机"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "无法获得文件“%s”的信息：%s"
+
+#, fuzzy
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "搜索(_S)："
+
+#, fuzzy
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "最近使用的"
 
 #~ msgid "directfb arg"
 #~ msgstr "directfb 参数"

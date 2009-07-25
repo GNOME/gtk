@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-17 22:23-0400\n"
+"POT-Creation-Date: 2009-07-24 23:18-0400\n"
 "PO-Revision-Date: 2009-03-11 12:57+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@fedoraproject.org>\n"
 "Language-Team: American English <fedora-trans-as@redhat.com>\n"
@@ -1559,11 +1559,11 @@ msgstr "অবিকল্পিত:mm"
 msgid "Manage Custom Sizes"
 msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "ইঞ্চি"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:775
+#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
@@ -1686,7 +1686,7 @@ msgstr "%1$s %2$s ত"
 msgid "Search"
 msgstr "বিচাৰক"
 
-#: gtk/gtkfilechooserdefault.c:1875
+#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
 msgid "Recently Used"
 msgstr "অলপতে ব্যৱহাৰ কৰা"
 
@@ -1855,31 +1855,26 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "বিচৰাৰ অনুৰোধ পঠিয়াব নোৱাৰিলো"
 
-#: gtk/gtkfilechooserdefault.c:9545
+#: gtk/gtkfilechooserdefault.c:9546
 #, fuzzy
-msgid "<b>_Search:</b>"
-msgstr "বিচাৰক (_S):"
+msgid "Search:"
+msgstr "বিচাৰক"
 
-#: gtk/gtkfilechooserdefault.c:10281
-#, fuzzy
-msgid "<b>Recently Used</b>"
-msgstr "অলপতে ব্যৱহাৰ কৰা"
-
-#: gtk/gtkfilechooserdefault.c:10519
+#: gtk/gtkfilechooserdefault.c:10525
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s তুলি ল'ব পৰা ন'গ'ল"
 
-#: gtk/gtkfilechooserdefault.c:11371 gtk/gtkfilechooserdefault.c:11393
-#: gtk/gtkfilechooserdefault.c:11464
+#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
+#: gtk/gtkfilechooserdefault.c:11470
 msgid "Unknown"
 msgstr "অজ্ঞাত"
 
-#: gtk/gtkfilechooserdefault.c:11411
+#: gtk/gtkfilechooserdefault.c:11417
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11413
+#: gtk/gtkfilechooserdefault.c:11419
 msgid "Yesterday at %H:%M"
 msgstr "যোৱাকালি %H:%M ত"
 
@@ -2386,29 +2381,30 @@ msgstr ""
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:864
+#. translators: this string is a name for the 'less' command
+#: gtk/gtkmountoperation-x11.c:865
 #, fuzzy
 msgid "Terminal Pager"
 msgstr "পৃষ্ঠাসমূহ মুদ্ৰণ কৰক"
 
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:866
 #, fuzzy
 msgid "Top Command"
 msgstr "আদেশ শাৰী"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:963
+#: gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
@@ -2423,14 +2419,18 @@ msgid "Not a valid page setup file"
 msgstr "বৈধ পৃষ্ঠা প্ৰতিষ্ঠাৰ নথিপত্ৰ নহয়"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-msgid ""
-"<b>Any Printer</b>\n"
-"For portable documents"
+#, fuzzy
+msgid "Any Printer"
+msgstr "মুদ্ৰক"
+
+#: gtk/gtkpagesetupunixdialog.c:168
+#, fuzzy
+msgid "For portable documents"
 msgstr ""
 "<b>যিকোনো মুদ্ৰক</b>\n"
 "সুবহ প্ৰলেক্ষৰ বাবে"
 
-#: gtk/gtkpagesetupunixdialog.c:796
+#: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2445,23 +2445,23 @@ msgstr ""
 " ওপৰ: %s %s\n"
 " তল: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:845 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
 msgid "Manage Custom Sizes..."
 msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক..."
 
-#: gtk/gtkpagesetupunixdialog.c:893
+#: gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
 msgstr "কাৰণে আকৃতি দিয়ক (_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:915 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
 msgid "_Paper size:"
 msgstr "কাগজৰ আয়তন (_P):"
 
-#: gtk/gtkpagesetupunixdialog.c:946
+#: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
 msgstr "দিক্‌বিন্যাস (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1010 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
 msgid "Page Setup"
 msgstr "পৃষ্ঠাৰ প্ৰতিস্থাপন"
 
@@ -2504,77 +2504,77 @@ msgstr "ফোল্ডাৰত ৰক্ষা কৰক (_S):"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:183
+#: gtk/gtkprintoperation.c:185
 #, c-format
 msgid "%s job #%d"
 msgstr "%s কাৰ্য্য #%d"
 
-#: gtk/gtkprintoperation.c:1602
+#: gtk/gtkprintoperation.c:1616
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "প্ৰাৰম্ভিক অবস্থা"
 
-#: gtk/gtkprintoperation.c:1603
+#: gtk/gtkprintoperation.c:1617
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "মূদ্ৰণৰ প্ৰস্তুতি কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:1604
+#: gtk/gtkprintoperation.c:1618
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "তথ্য একত্ৰিত কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:1605
+#: gtk/gtkprintoperation.c:1619
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "তথ্যে প্ৰেৰিত হৈছে"
 
-#: gtk/gtkprintoperation.c:1606
+#: gtk/gtkprintoperation.c:1620
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "অপেক্ষাৰত"
 
-#: gtk/gtkprintoperation.c:1607
+#: gtk/gtkprintoperation.c:1621
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "কাৰণবসত অবৰুদ্ধ"
 
-#: gtk/gtkprintoperation.c:1608
+#: gtk/gtkprintoperation.c:1622
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "মুদ্ৰিত হৈ আছে"
 
-#: gtk/gtkprintoperation.c:1609
+#: gtk/gtkprintoperation.c:1623
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "সমাপ্ত"
 
-#: gtk/gtkprintoperation.c:1610
+#: gtk/gtkprintoperation.c:1624
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "ত্ৰুটিসহ কৰ্ম সমাপ্ত"
 
-#: gtk/gtkprintoperation.c:2186
+#: gtk/gtkprintoperation.c:2200
 #, c-format
 msgid "Preparing %d"
 msgstr "%d প্ৰস্তুত কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:2188 gtk/gtkprintoperation.c:2799
+#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
 #, c-format
 msgid "Preparing"
 msgstr "প্ৰস্তুত কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:2191
+#: gtk/gtkprintoperation.c:2205
 #, c-format
 msgid "Printing %d"
 msgstr "%d মুদ্ৰণ কৰা হৈছে"
 
-#: gtk/gtkprintoperation.c:2829
+#: gtk/gtkprintoperation.c:2843
 #, c-format
 msgid "Error creating print preview"
 msgstr "মূদ্ৰণৰ পূৰ্ব-প্ৰদৰ্শন সৃষ্টি কৰোঁতে ভুল"
 
-#: gtk/gtkprintoperation.c:2832
+#: gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "খুব সম্ভৱ এটা অস্থায়ী নথিপত্ৰ সৃষ্টি কৰিব পৰা ন'গ'ল ।"
@@ -5183,6 +5183,14 @@ msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰ
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' নথিপত্ৰৰ বাবে তথ্য পোৱা ন'গ'ল: %s"
+
+#, fuzzy
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "বিচাৰক (_S):"
+
+#, fuzzy
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "অলপতে ব্যৱহাৰ কৰা"
 
 #~ msgid "directfb arg"
 #~ msgstr "directfb arg"
