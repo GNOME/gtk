@@ -1,3 +1,37 @@
+Overview of Changes from GTK+ 2.17.5 to 2.17.6
+==============================================
+
+* Client-side windows:
+ - Several optimizations, such as client-side tracking of
+   viewable windows
+ - Clipping for drawing pixbufs on windows has been fixed
+ - Rendering to large subwindows has been fixed
+
+* Changes that are relevant for translators:
+ - Markup has been removed from several strings
+
+* Bugs fixed:
+ 588398 Leak with testgtk::preview_(color|gray) and more
+ 588943 set correct selection before emitting cursor-changed...
+ 588076 Gnumeric fonts stopped working on upgrading gtk+ 2.17.2 -...
+ 574674	GtkMenuItem gets Selected and Focused states when SelectC...
+ 582674 Menu item and menu accessibles retain "showing" state aft...
+ 588553 [csw] gdk_draw_pixbuf doesnt draw outside expose events s...
+ 588897 Strange include x11/gdkx.h
+ 588958 Typo in startup-id window property
+ 589035 Context needed for a propoer translation
+ 589275 [csw] Trying to destroy NULL regions
+ 588964 Remove markup from translatable string in gtkfilechooserd...
+ 587337 Suggest to use Glade instead gtk-builder-convert script
+
+* Updated translations:
+ Estonian
+ French
+ Spanish
+ Swedish
+ Thai
+
+
 Overview of Changes from GTK+ 2.17.4 to 2.17.5
 ==============================================
 
