@@ -1928,7 +1928,8 @@ gdk_win32_window_set_cursor (GdkWindow *window,
     {
       /* If the pointer is over our window, set new cursor */
       GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
-      if (curr_window == window)
+      if (curr_window == window ||
+	  (curr_window && window == gdk_window_get_toplevel (curr_window)))
         SetCursor (impl->hcursor);
       else
 	{
