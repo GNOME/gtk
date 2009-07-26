@@ -129,48 +129,18 @@ static GdkScreen *  gdk_win32_get_screen     (GdkDrawable    *drawable);
 
 static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
 
-static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass);
-
 static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
-static gpointer parent_class = NULL;
 static const cairo_user_data_key_t gdk_win32_cairo_key;
 
-GType
-gdk_drawable_impl_win32_get_type (void)
-{
-  static GType object_type = 0;
+G_DEFINE_TYPE (GdkDrawableImplWin32,  _gdk_drawable_impl_win32, GDK_TYPE_DRAWABLE)
 
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDrawableImplWin32Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_impl_win32_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDrawableImplWin32),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkDrawableImplWin32",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 static void
-gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
+_gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_drawable_impl_win32_finalize;
 
@@ -199,11 +169,16 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 }
 
 static void
+_gdk_drawable_impl_win32_init (GdkDrawableImplWin32 *impl)
+{
+}
+
+static void
 gdk_drawable_impl_win32_finalize (GObject *object)
 {
   gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_drawable_impl_win32_parent_class)->finalize (object);
 }
 
 /*****************************************************
