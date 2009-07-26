@@ -115,6 +115,18 @@ static void gdk_win32_draw_image     (GdkDrawable     *drawable,
 				      gint             ydest,
 				      gint             width,
 				      gint             height);
+static void gdk_win32_draw_pixbuf     (GdkDrawable     *drawable,
+				      GdkGC           *gc,
+				      GdkPixbuf       *pixbuf,
+				      gint             src_x,
+				      gint             src_y,
+				      gint             dest_x,
+				      gint             dest_y,
+				      gint             width,
+				      gint             height,
+				      GdkRgbDither     dither,
+				      gint             x_dither,
+				      gint             y_dither);
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -155,6 +167,7 @@ _gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;
   drawable_class->draw_image = gdk_win32_draw_image;
+  drawable_class->draw_pixbuf = gdk_win32_draw_pixbuf;
   
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
@@ -1757,6 +1770,27 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
   _gdk_win32_blit (TRUE, (GdkDrawableImplWin32 *) drawable,
 		   gc, (GdkPixmap *) image->windowing_data,
 		   xsrc, ysrc, xdest, ydest, width, height);
+}
+
+static void
+gdk_win32_draw_pixbuf (GdkDrawable     *drawable,
+			GdkGC           *gc,
+			GdkPixbuf       *pixbuf,
+			gint             src_x,
+			gint             src_y,
+			gint             dest_x,
+			gint             dest_y,
+			gint             width,
+			gint             height,
+			GdkRgbDither     dither,
+			gint             x_dither,
+			gint             y_dither)
+{
+  GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper;
+  GDK_DRAWABLE_CLASS (_gdk_drawable_impl_win32_parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
+									     src_x, src_y, dest_x, dest_y,
+									     width, height,
+									     dither, x_dither, y_dither);
 }
 
 /**
