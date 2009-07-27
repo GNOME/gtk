@@ -3649,26 +3649,34 @@ shortcuts_row_separator_func (GtkTreeModel *model,
   return shortcut_type == SHORTCUT_TYPE_SEPARATOR;
 }
 
-/* Since GtkTreeView has a keybinding attached to '/', we need to catch
- * keypresses before the TreeView gets them.
- */
 static gboolean
-tree_view_keybinding_cb (GtkWidget             *tree_view,
-			 GdkEventKey           *event,
-			 GtkFileChooserDefault *impl)
+shortcuts_key_press_event_after_cb (GtkWidget             *tree_view,
+				    GdkEventKey           *event,
+				    GtkFileChooserDefault *impl)
 {
-  if ((event->keyval == GDK_slash
-       || event->keyval == GDK_KP_Divide
-#ifdef G_OS_UNIX
-       || event->keyval == GDK_asciitilde
-#endif
-       ) && ! (event->state & (~GDK_SHIFT_MASK & gtk_accelerator_get_default_mod_mask ())))
-    {
-      location_popup_handler (impl, event->string);
-      return TRUE;
-    }
+  GtkWidget *entry;
 
-  return FALSE;
+  /* don't screw up focus switching with Tab */
+  if (event->keyval == GDK_Tab
+      || event->keyval == GDK_KP_Tab
+      || event->keyval == GDK_ISO_Left_Tab
+      || event->length < 1)
+    return FALSE;
+
+  if (impl->location_entry)
+    entry = impl->location_entry;
+  else if (impl->search_entry)
+    entry = impl->search_entry;
+  else
+    entry = NULL;
+
+  if (entry)
+    {
+      gtk_widget_grab_focus (entry);
+      return gtk_widget_event (entry, (GdkEvent *) event);
+    }
+  else
+    return FALSE;
 }
 
 /* Callback used when the file list's popup menu is detached */
@@ -3887,8 +3895,24 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 #ifdef PROFILE_FILE_CHOOSER
   g_object_set_data (G_OBJECT (impl->browse_shortcuts_tree_view), "fmq-name", "shortcuts");
 #endif
-  g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
-		    G_CALLBACK (tree_view_keybinding_cb), impl);
+
+  /* Connect "after" to key-press-event on the shortcuts pane.  We want this action to be possible:
+   *
+   *   1. user brings up a SAVE dialog
+   *   2. user clicks on a shortcut in the shortcuts pane
+   *   3. user starts typing a filename
+   *
+   * Normally, the user's typing would be ignored, as the shortcuts treeview doesn't
+   * support interactive search.  However, we'd rather focus the location entry
+   * so that the user can type *there*.
+   *
+   * To preserve keyboard navigation in the shortcuts pane, we don't focus the
+   * filename entry if one clicks on a shortcut; rather, we focus the entry only
+   * if the user starts typing while the focus is in the shortcuts pane.
+   */
+  g_signal_connect_after (impl->browse_shortcuts_tree_view, "key-press-event",
+			  G_CALLBACK (shortcuts_key_press_event_after_cb), impl);
+
   g_signal_connect (impl->browse_shortcuts_tree_view, "popup-menu",
 		    G_CALLBACK (shortcuts_popup_menu_cb), impl);
   g_signal_connect (impl->browse_shortcuts_tree_view, "button-press-event",
