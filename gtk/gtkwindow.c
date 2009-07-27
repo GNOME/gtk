@@ -5248,8 +5248,6 @@ is_client_side_decorated (GtkWindow *window)
                         "client-side-decorated", &client_side_decorated,
                         NULL);
 
-  return TRUE;
-
   return client_side_decorated;
 }
 
