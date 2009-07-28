@@ -2440,10 +2440,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->width = r.right - r.left;
   rect->height = r.bottom - r.top;
 
-  GDK_NOTE (MISC, g_print ("gdk_window_get_frame_extents: %p: %ldx%ld@%+ld%+ld\n",
+  GDK_NOTE (MISC, g_print ("gdk_window_get_frame_extents: %p: %dx%d@%+d%+d\n",
 			   GDK_WINDOW_HWND (window),
-			   r.right - r.left, r.bottom - r.top,
-			   r.left, r.top));
+			   rect->width, rect->height, rect->x, rect->y));
 }
 
 GdkWindow*
