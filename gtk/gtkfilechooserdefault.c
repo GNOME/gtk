@@ -801,6 +801,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->sort_column = FILE_LIST_COL_NAME;
   impl->sort_order = GTK_SORT_ASCENDING;
   impl->recent_manager = gtk_recent_manager_get_default ();
+  impl->create_folders = TRUE;
 
   gtk_box_set_spacing (GTK_BOX (impl), 12);
 
@@ -5621,7 +5622,7 @@ update_appearance (GtkFileChooserDefault *impl)
   if (impl->location_entry)
     _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->action);
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || !impl->create_folders)
     gtk_widget_hide (impl->browse_new_folder_button);
   else
     gtk_widget_show (impl->browse_new_folder_button);
@@ -5736,6 +5737,14 @@ gtk_file_chooser_default_set_property (GObject      *object,
       }
       break;
 
+    case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
+      {
+        gboolean create_folders = g_value_get_boolean (value);
+        impl->create_folders = create_folders;
+        update_appearance (impl);
+      }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5790,6 +5799,10 @@ gtk_file_chooser_default_get_property (GObject    *object,
 
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
       g_value_set_boolean (value, impl->do_overwrite_confirmation);
+      break;
+
+    case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
+      g_value_set_boolean (value, impl->create_folders);
       break;
 
     default:
@@ -9211,7 +9224,7 @@ search_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->search_entry = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || !impl->create_folders)
     gtk_widget_hide (impl->browse_new_folder_button);
   else
     gtk_widget_show (impl->browse_new_folder_button);
@@ -9783,7 +9796,7 @@ recent_switch_to_browse_mode (GtkFileChooserDefault *impl)
   impl->recent_hbox = NULL;
 
   gtk_widget_show (impl->browse_path_bar);
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN || !impl->create_folders)
     gtk_widget_hide (impl->browse_new_folder_button);
   else
     gtk_widget_show (impl->browse_new_folder_button);
