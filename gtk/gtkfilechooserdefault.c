@@ -4054,14 +4054,28 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   return vbox;
 }
 
+static gboolean
+key_is_left_or_right (GdkEventKey *event)
+{
+  guint modifiers;
+
+  modifiers = gtk_accelerator_get_default_mod_mask ();
+
+  return ((event->keyval == GDK_Right
+	   || event->keyval == GDK_KP_Right
+	   || event->keyval == GDK_Left
+	   || event->keyval == GDK_KP_Left)
+	  && (event->state & modifiers) == 0);
+}
+
 /* Handles key press events on the file list, so that we can trap Enter to
  * activate the default button on our own.  Also, checks to see if '/' has been
  * pressed.  See comment by tree_view_keybinding_cb() for more details.
  */
 static gboolean
-trap_activate_cb (GtkWidget   *widget,
-		  GdkEventKey *event,
-		  gpointer     data)
+browse_files_key_press_event_cb (GtkWidget   *widget,
+				 GdkEventKey *event,
+				 gpointer     data)
 {
   GtkFileChooserDefault *impl;
   int modifiers;
@@ -4078,6 +4092,12 @@ trap_activate_cb (GtkWidget   *widget,
        ) && ! (event->state & (~GDK_SHIFT_MASK & modifiers)))
     {
       location_popup_handler (impl, event->string);
+      return TRUE;
+    }
+
+  if (key_is_left_or_right (event))
+    {
+      gtk_widget_grab_focus (impl->browse_shortcuts_tree_view);
       return TRUE;
     }
 
@@ -4624,7 +4644,7 @@ create_file_list (GtkFileChooserDefault *impl)
   g_signal_connect (impl->browse_files_tree_view, "row-activated",
 		    G_CALLBACK (list_row_activated), impl);
   g_signal_connect (impl->browse_files_tree_view, "key-press-event",
-    		    G_CALLBACK (trap_activate_cb), impl);
+    		    G_CALLBACK (browse_files_key_press_event_cb), impl);
   g_signal_connect (impl->browse_files_tree_view, "popup-menu",
 		    G_CALLBACK (list_popup_menu_cb), impl);
   g_signal_connect (impl->browse_files_tree_view, "button-press-event",
@@ -10639,6 +10659,12 @@ shortcuts_key_press_event_cb (GtkWidget             *widget,
   guint modifiers;
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
+
+  if (key_is_left_or_right (event))
+    {
+      gtk_widget_grab_focus (impl->browse_files_tree_view);
+      return TRUE;
+    }
 
   if ((event->keyval == GDK_BackSpace
       || event->keyval == GDK_Delete
