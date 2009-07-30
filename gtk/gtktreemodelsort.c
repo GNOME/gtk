@@ -2084,6 +2084,7 @@ gtk_tree_model_sort_convert_child_iter_to_iter (GtkTreeModelSort *tree_model_sor
   g_return_val_if_fail (tree_model_sort->child_model != NULL, FALSE);
   g_return_val_if_fail (sort_iter != NULL, FALSE);
   g_return_val_if_fail (child_iter != NULL, FALSE);
+  g_return_val_if_fail (sort_iter != child_iter, FALSE);
 
   sort_iter->stamp = 0;
 
@@ -2182,6 +2183,7 @@ gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sor
   g_return_if_fail (tree_model_sort->child_model != NULL);
   g_return_if_fail (child_iter != NULL);
   g_return_if_fail (VALID_ITER (sorted_iter, tree_model_sort));
+  g_return_if_fail (sorted_iter != child_iter);
 
   if (GTK_TREE_MODEL_SORT_CACHE_CHILD_ITERS (tree_model_sort))
     {
