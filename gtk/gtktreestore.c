@@ -620,7 +620,10 @@ gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -646,7 +649,10 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -708,7 +714,10 @@ gtk_tree_store_iter_nth_child (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -733,7 +742,10 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 
