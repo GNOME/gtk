@@ -4956,6 +4956,7 @@ gtk_widget_error_bell
 gtk_widget_event
 gtk_widget_freeze_child_notify
 gtk_widget_get_accessible
+gtk_widget_get_allocation
 gtk_widget_get_ancestor
 gtk_widget_get_app_paintable
 gtk_widget_get_child_requisition
