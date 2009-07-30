@@ -7023,6 +7023,10 @@ gdk_window_set_back_pixmap (GdkWindow *window,
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
+ * Return value: a #GdkCursor, or %NULL. The returned object is owned
+ *   by the #GdkWindow and should not be unreferenced directly. Use
+ *   gdk_window_set_cursor() to unset the cursor of the window
+ *
  * Since: 2.18
  */
 GdkCursor *
