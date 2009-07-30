@@ -12517,6 +12517,9 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  * This function is often followed by @gtk_widget_grab_focus (@tree_view) 
  * in order to give keyboard focus to the widget.  Please note that editing 
  * can only happen when the widget is realized.
+ *
+ * If @path is invalid for @model, the current cursor (if any) will be unset
+ * and the function will return without failing.
  **/
 void
 gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
@@ -12548,6 +12551,9 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * widget.  Please note that editing can only happen when the widget is
  * realized.
  *
+ * If @path is invalid for @model, the current cursor (if any) will be unset
+ * and the function will return without failing.
+ *
  * Since: 2.2
  **/
 void
@@ -12558,9 +12564,12 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 				  gboolean           start_editing)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (tree_view->priv->tree != NULL);
   g_return_if_fail (path != NULL);
   g_return_if_fail (focus_column == NULL || GTK_IS_TREE_VIEW_COLUMN (focus_column));
+
+  if (!tree_view->priv->model)
+    return;
+
   if (focus_cell)
     {
       g_return_if_fail (focus_column);
