@@ -12642,7 +12642,8 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * with the column at that point.  @cell_x and @cell_y return the coordinates
  * relative to the cell background (i.e. the @background_area passed to
  * gtk_cell_renderer_render()).  This function is only meaningful if
- * @tree_view is realized.
+ * @tree_view is realized.  Therefore this function will always return %FALSE
+ * if @tree_view is not realized or does not have a model.
  *
  * For converting widget coordinates (eg. the ones you get from
  * GtkWidget::query-tooltip), please see
@@ -12664,12 +12665,14 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
   gint y_offset;
 
   g_return_val_if_fail (tree_view != NULL, FALSE);
-  g_return_val_if_fail (tree_view->priv->bin_window != NULL, FALSE);
 
   if (path)
     *path = NULL;
   if (column)
     *column = NULL;
+
+  if (tree_view->priv->bin_window == NULL)
+    return FALSE;
 
   if (tree_view->priv->tree == NULL)
     return FALSE;
@@ -13493,9 +13496,12 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * @pos: Return location for the drop position, or %NULL
  * 
  * Determines the destination row for a given position.  @drag_x and
- * @drag_y are expected to be in widget coordinates.
+ * @drag_y are expected to be in widget coordinates.  This function is only
+ * meaningful if @tree_view is realized.  Therefore this function will always
+ * return %FALSE if @tree_view is not realized or does not have a model.
  * 
- * Return value: whether there is a row at the given position.
+ * Return value: whether there is a row at the given position, %TRUE if this
+ * is indeed the case.
  **/
 gboolean
 gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
@@ -13519,11 +13525,12 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   g_return_val_if_fail (tree_view != NULL, FALSE);
   g_return_val_if_fail (drag_x >= 0, FALSE);
   g_return_val_if_fail (drag_y >= 0, FALSE);
-  g_return_val_if_fail (tree_view->priv->bin_window != NULL, FALSE);
-
 
   if (path)
     *path = NULL;
+
+  if (tree_view->priv->bin_window == NULL)
+    return FALSE;
 
   if (tree_view->priv->tree == NULL)
     return FALSE;

@@ -69,6 +69,33 @@ test_bug_546005 (void)
   gtk_tree_path_free (path);
 }
 
+static void
+test_bug_539377 (void)
+{
+  GtkWidget *view;
+  GtkTreePath *path;
+  GtkListStore *list_store;
+
+  /* Test provided by Bjorn Lindqvist */
+
+  /* Non-realized view, no model */
+  view = gtk_tree_view_new ();
+  g_assert (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
+                                           NULL, NULL, NULL) == FALSE);
+  g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
+                                               &path, NULL) == FALSE);
+
+  /* Non-realized view, with model */
+  list_store = gtk_list_store_new (1, G_TYPE_STRING);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (view),
+                           GTK_TREE_MODEL (list_store));
+
+  g_assert (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
+                                           NULL, NULL, NULL) == FALSE);
+  g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
+                                               &path, NULL) == FALSE);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -76,6 +103,7 @@ main (int    argc,
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/TreeView/cursor/bug-546005", test_bug_546005);
+  g_test_add_func ("/TreeView/cursor/bug-539377", test_bug_539377);
 
   return g_test_run ();
 }
