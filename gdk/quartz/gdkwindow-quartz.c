@@ -2876,6 +2876,27 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
+GdkRegion *
+_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
+{
+  /* FIXME: implement */
+  return NULL;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_shape (GdkWindow *window)
+{
+  /* FIXME: implement */
+  return NULL;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_input_shape (GdkWindow *window)
+{
+  /* FIXME: implement */
+  return NULL;
+}
+
 static void
 gdk_window_impl_iface_init (GdkWindowImplIface *iface)
 {
