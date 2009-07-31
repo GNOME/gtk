@@ -3006,24 +3006,27 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
   GtkTreeIter iter;
   gboolean removable = FALSE;
   gchar *name = NULL;
+  gchar *tip;
   
   if (shortcuts_get_selected (impl, &iter))
-    gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
-			SHORTCUTS_COL_REMOVABLE, &removable,
-			SHORTCUTS_COL_NAME, &name,
-			-1);
-
-  gtk_widget_set_sensitive (impl->browse_shortcuts_remove_button, removable);
-
-  if (removable)
     {
-      gchar *tip;
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+                          SHORTCUTS_COL_REMOVABLE, &removable,
+                          SHORTCUTS_COL_NAME, &name,
+                          -1);
+      gtk_widget_set_sensitive (impl->browse_shortcuts_remove_button, removable);
 
-      tip = g_strdup_printf (_("Remove the bookmark '%s'"), name);
+      if (removable)
+        tip = g_strdup_printf (_("Remove the bookmark '%s'"), name);
+      else
+        tip = g_strdup_printf (_("Bookmark '%s' cannot be removed"), name);
+
       gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button, tip);
       g_free (tip);
     }
-
+  else
+    gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button,
+                                 _("Remove the selected bookmark"));
   g_free (name);
 }
 
