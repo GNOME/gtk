@@ -1318,7 +1318,6 @@ GDK_PIXBUF_XLIB_PACKAGES=
 GDK_PIXBUF_XLIB_EXTRA_CFLAGS=
 GDK_PIXBUF_XLIB_EXTRA_LIBS=
 	
-X_PACKAGES=fontconfig
 GDK_EXTRA_LIBS="$GDK_WLIBS"
 GDK_EXTRA_CFLAGS=
 	
@@ -1327,6 +1326,8 @@ GTK_DEP_PACKAGES_FOR_X=
 GTK_DEP_LIBS_FOR_X=
 
 if test "x$gdktarget" = "xx11"; then
+  X_PACKAGES=fontconfig
+
   #
   # We use fontconfig very peripherally when decoding the default
   # settings.
@@ -1627,6 +1628,8 @@ if test "x$gdktarget" = "xx11"; then
 
   AM_CONDITIONAL(USE_X11, true)
 else
+  XPACKAGES=
+
   AM_CONDITIONAL(XINPUT_XFREE, false)
   AM_CONDITIONAL(USE_X11, false)
   AM_CONDITIONAL(HAVE_X11R6, false)
@@ -1901,8 +1904,8 @@ fi
 AM_CONDITIONAL(HAVE_PAPI_CUPS, test $have_papi = yes && test "x$CUPS_CONFIG" != "xno")
 
 gtk_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS"
-			  
+CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS $GDK_DEP_CFLAGS"
+
 AC_CHECK_HEADER(cairo-pdf.h,,AC_MSG_ERROR([
 *** Can't find cairo-pdf.h. You must build Cairo with the pdf
 *** backend enabled.]))
