@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.15.x\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-27 16:36+0200\n"
-"PO-Revision-Date: 2009-07-13 11:07+0200\n"
+"Project-Id-Version: gtk+ 2.17.x\n"
+"Report-Msgid-Bugs-To:\n"
+"POT-Creation-Date: 2009-08-03 00:18+0200\n"
+"PO-Revision-Date: 2009-08-03 00:21+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -269,19 +269,19 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Slett"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:968
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1228 ../tests/testfilechooser.c:222
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:974
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1234 ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Klarte ikke å åpne fil «%s»: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:980
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:986
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildefil «%s» inneholder ikke data"
 
-#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1016
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1280 ../tests/testfilechooser.c:267
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1022
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1286 ../tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -298,12 +298,12 @@ msgstr ""
 "Feil under lasting av animasjon «%s»: årsak ikke kjent, sannsynligvis korrupt "
 "animasjonsfil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:701
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:707
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Kan ikke laste modul for innlesing av bilder: %s: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:716
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:722
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -312,54 +312,54 @@ msgstr ""
 "Modul %s for bildelasting eksporterer ikke riktig grensesnitt; kanskje den "
 "er fra en annen GTK-versjon?"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:725 ../gdk-pixbuf/gdk-pixbuf-io.c:776
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:731 ../gdk-pixbuf/gdk-pixbuf-io.c:782
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildetype «%s» er ikke støttet"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:849
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:855
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Kunne ikke gjenkjenne bildeformatet for fil «%s»"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:857
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:863
 msgid "Unrecognized image file format"
 msgstr "Ikke-gjenkjent bildeformat"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1025
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1031
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Feil under lasting av bilde «%s»: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1659 ../gdk-pixbuf/io-gdip-utils.c:952
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1665 ../gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Feil under skriving til bildefil: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1704 ../gdk-pixbuf/gdk-pixbuf-io.c:1834
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1710 ../gdk-pixbuf/gdk-pixbuf-io.c:1840
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Dette versjonen av gdk-pixbuf støtter ikke lagring av bildeformatet: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1738
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1744
 msgid "Insufficient memory to save image to callback"
 msgstr "Ikke nok minne til å lagre bilde til callback"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1751
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1757
 msgid "Failed to open temporary file"
 msgstr "Kunne ikke åpne midlertidig fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:1777
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1783
 msgid "Failed to read from temporary file"
 msgstr "Kunne ikke lese fra midlertidig fil"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2011
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Feil under åpning av «%s» for skriving: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2036
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2042
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -368,11 +368,11 @@ msgstr ""
 "Feil under lukking av «%s» under skriving av bilde. Det er ikke sikkert at "
 "alle data er lagret: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2256 ../gdk-pixbuf/gdk-pixbuf-io.c:2307
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2262 ../gdk-pixbuf/gdk-pixbuf-io.c:2313
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ikke nok minne til å lagre bilde til buffer"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2353
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2359
 msgid "Error writing to image stream"
 msgstr "Feil under skriving til bildestrøm"
 
@@ -1553,9 +1553,8 @@ msgstr "Fargevalg"
 #. * it isn't default:mm or default:inch it will not work
 #.
 #: ../gtk/gtkcustompaperunixdialog.c:119
-#, fuzzy
 msgid "default:mm"
-msgstr "default:LTR"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3160
@@ -1572,50 +1571,44 @@ msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:584
 msgid "Margins from Printer..."
-msgstr ""
+msgstr "Marger fra skriver..."
 
 #: ../gtk/gtkcustompaperunixdialog.c:750
-#, fuzzy, c-format
+#, c-format
 msgid "Custom Size %d"
-msgstr "Egendefinert størrelse"
+msgstr "Egendefinert størrelse %d"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1057
 msgid "_Width:"
-msgstr ""
+msgstr "_Bredde:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1069
-#, fuzzy
 msgid "_Height:"
-msgstr "Høy_re"
+msgstr "_Høyde:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1081
-#, fuzzy
 msgid "Paper Size"
-msgstr "_Papirstørrelse:"
+msgstr "Papirstørrelse:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1090
-#, fuzzy
 msgid "_Top:"
-msgstr "_Topp"
+msgstr "_Topp:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1102
-#, fuzzy
 msgid "_Bottom:"
-msgstr "_Bunn"
+msgstr "_Bunn:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1114
-#, fuzzy
 msgid "_Left:"
-msgstr "_Venstre"
+msgstr "_Venstre:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1126
-#, fuzzy
 msgid "_Right:"
-msgstr "Høy_re"
+msgstr "Høy_re:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1167
 msgid "Paper Margins"
-msgstr ""
+msgstr "Papirmarger"
 
 #: ../gtk/gtkentry.c:8577 ../gtk/gtktextview.c:7767
 msgid "Input _Methods"
@@ -1633,7 +1626,7 @@ msgstr "Caps Lock er på"
 msgid "Select A File"
 msgstr "Velg en fil"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1932
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1933
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -1641,7 +1634,7 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:2014
+#: ../gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
 msgstr "Annet..."
 
@@ -1649,23 +1642,23 @@ msgstr "Annet..."
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:1058
+#: ../gtk/gtkfilechooserdefault.c:1059
 msgid "Could not retrieve information about the file"
 msgstr "Kunne ikke hente informasjon om filen"
 
-#: ../gtk/gtkfilechooserdefault.c:1069
+#: ../gtk/gtkfilechooserdefault.c:1070
 msgid "Could not add a bookmark"
 msgstr "Kunne ikke legge til bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:1080
+#: ../gtk/gtkfilechooserdefault.c:1081
 msgid "Could not remove bookmark"
 msgstr "Kunne ikke fjerne bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:1091
+#: ../gtk/gtkfilechooserdefault.c:1092
 msgid "The folder could not be created"
 msgstr "Mappen kunne ikke opprettes"
 
-#: ../gtk/gtkfilechooserdefault.c:1104
+#: ../gtk/gtkfilechooserdefault.c:1105
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1673,11 +1666,11 @@ msgstr ""
 "Kunne ikke opprette mappen på grunn av at det allerede eksisterer en fil med "
 "samme navnet. Bruk et annet navn for mappen eller gi et nytt navn til filen."
 
-#: ../gtk/gtkfilechooserdefault.c:1115
+#: ../gtk/gtkfilechooserdefault.c:1116
 msgid "Invalid file name"
 msgstr "Ugyldig filnavn"
 
-#: ../gtk/gtkfilechooserdefault.c:1125
+#: ../gtk/gtkfilechooserdefault.c:1126
 msgid "The folder contents could not be displayed"
 msgstr "Mappeinholdet kunne ikke vises"
 
@@ -1685,159 +1678,159 @@ msgstr "Mappeinholdet kunne ikke vises"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1675
+#: ../gtk/gtkfilechooserdefault.c:1676
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1851
+#: ../gtk/gtkfilechooserdefault.c:1852
 msgid "Search"
 msgstr "Søk"
 
-#: ../gtk/gtkfilechooserdefault.c:1875 ../gtk/gtkfilechooserdefault.c:10285
+#: ../gtk/gtkfilechooserdefault.c:1876 ../gtk/gtkfilechooserdefault.c:10343
 msgid "Recently Used"
 msgstr "Sist brukt"
 
-#: ../gtk/gtkfilechooserdefault.c:2511
+#: ../gtk/gtkfilechooserdefault.c:2512
 msgid "Select which types of files are shown"
 msgstr "Velg hvilke filtyper som skal vises"
 
-#: ../gtk/gtkfilechooserdefault.c:2940
+#: ../gtk/gtkfilechooserdefault.c:2941
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Legg til mappe «%s» i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2981
+#: ../gtk/gtkfilechooserdefault.c:2982
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Legg til aktiv mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2983
+#: ../gtk/gtkfilechooserdefault.c:2984
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Legg til valgte mapper i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:3023
+#: ../gtk/gtkfilechooserdefault.c:3024
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Fjern bokmerke «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:3741
+#: ../gtk/gtkfilechooserdefault.c:3750
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../gtk/gtkfilechooserdefault.c:3750
+#: ../gtk/gtkfilechooserdefault.c:3759
 msgid "Rename..."
 msgstr "Gi nytt navn..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3896
+#: ../gtk/gtkfilechooserdefault.c:3922
 msgid "Places"
 msgstr "Steder"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3953
+#: ../gtk/gtkfilechooserdefault.c:3979
 msgid "_Places"
 msgstr "_Steder"
 
-#: ../gtk/gtkfilechooserdefault.c:4009
+#: ../gtk/gtkfilechooserdefault.c:4035
 msgid "_Add"
 msgstr "_Legg til"
 
-#: ../gtk/gtkfilechooserdefault.c:4016
+#: ../gtk/gtkfilechooserdefault.c:4042
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Legg til valgt mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:4021
+#: ../gtk/gtkfilechooserdefault.c:4047
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../gtk/gtkfilechooserdefault.c:4028
+#: ../gtk/gtkfilechooserdefault.c:4054
 msgid "Remove the selected bookmark"
 msgstr "Fjern valgt bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:4137
+#: ../gtk/gtkfilechooserdefault.c:4183
 msgid "Could not select file"
 msgstr "Kunne ikke velge fil"
 
-#: ../gtk/gtkfilechooserdefault.c:4312
+#: ../gtk/gtkfilechooserdefault.c:4358
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:4325
+#: ../gtk/gtkfilechooserdefault.c:4371
 msgid "Show _Hidden Files"
 msgstr "Vis sk_julte filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4332
+#: ../gtk/gtkfilechooserdefault.c:4378
 msgid "Show _Size Column"
 msgstr "Vis kolonne for _størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4624 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4670 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4673
+#: ../gtk/gtkfilechooserdefault.c:4719
 msgid "Name"
 msgstr "Navn"
 
-#: ../gtk/gtkfilechooserdefault.c:4698
+#: ../gtk/gtkfilechooserdefault.c:4744
 msgid "Size"
 msgstr "Størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4714
+#: ../gtk/gtkfilechooserdefault.c:4760
 msgid "Modified"
 msgstr "Endret"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4969 ../gtk/gtkprinteroptionwidget.c:796
+#: ../gtk/gtkfilechooserdefault.c:5015 ../gtk/gtkprinteroptionwidget.c:796
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserdefault.c:5012
+#: ../gtk/gtkfilechooserdefault.c:5058
 msgid "_Browse for other folders"
 msgstr "_Se gjennom andre mapper"
 
-#: ../gtk/gtkfilechooserdefault.c:5284
+#: ../gtk/gtkfilechooserdefault.c:5330
 msgid "Type a file name"
 msgstr "Skriv et filnavn"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5325
+#: ../gtk/gtkfilechooserdefault.c:5371
 msgid "Create Fo_lder"
 msgstr "Opprett _mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:5335
+#: ../gtk/gtkfilechooserdefault.c:5381
 msgid "_Location:"
 msgstr "_Lokasjon:"
 
-#: ../gtk/gtkfilechooserdefault.c:5539
+#: ../gtk/gtkfilechooserdefault.c:5585
 msgid "Save in _folder:"
 msgstr "Lagre i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:5541
+#: ../gtk/gtkfilechooserdefault.c:5587
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:7285
+#: ../gtk/gtkfilechooserdefault.c:7343
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
 
-#: ../gtk/gtkfilechooserdefault.c:7910 ../gtk/gtkfilechooserdefault.c:7931
+#: ../gtk/gtkfilechooserdefault.c:7968 ../gtk/gtkfilechooserdefault.c:7989
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Snarvei %s eksisterer allerede"
 
-#: ../gtk/gtkfilechooserdefault.c:8021
+#: ../gtk/gtkfilechooserdefault.c:8079
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: ../gtk/gtkfilechooserdefault.c:8283 ../gtk/gtkprintunixdialog.c:446
+#: ../gtk/gtkfilechooserdefault.c:8341 ../gtk/gtkprintunixdialog.c:446
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserdefault.c:8286 ../gtk/gtkprintunixdialog.c:450
+#: ../gtk/gtkfilechooserdefault.c:8344 ../gtk/gtkprintunixdialog.c:450
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1845,15 +1838,15 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserdefault.c:8291 ../gtk/gtkprintunixdialog.c:457
+#: ../gtk/gtkfilechooserdefault.c:8349 ../gtk/gtkprintunixdialog.c:457
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserdefault.c:9053
+#: ../gtk/gtkfilechooserdefault.c:9111
 msgid "Could not start the search process"
 msgstr "Kunne ikke starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserdefault.c:9054
+#: ../gtk/gtkfilechooserdefault.c:9112
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1861,29 +1854,29 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserdefault.c:9068
+#: ../gtk/gtkfilechooserdefault.c:9126
 msgid "Could not send the search request"
 msgstr "Kunne ikke sende søkeforespørselen"
 
-#: ../gtk/gtkfilechooserdefault.c:9546
+#: ../gtk/gtkfilechooserdefault.c:9604
 msgid "Search:"
 msgstr "Søk:"
 
-#: ../gtk/gtkfilechooserdefault.c:10525
+#: ../gtk/gtkfilechooserdefault.c:10587
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
-#: ../gtk/gtkfilechooserdefault.c:11377 ../gtk/gtkfilechooserdefault.c:11399
-#: ../gtk/gtkfilechooserdefault.c:11470
+#: ../gtk/gtkfilechooserdefault.c:11445 ../gtk/gtkfilechooserdefault.c:11467
+#: ../gtk/gtkfilechooserdefault.c:11538
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserdefault.c:11417
+#: ../gtk/gtkfilechooserdefault.c:11485
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:11419
+#: ../gtk/gtkfilechooserdefault.c:11487
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
@@ -2386,7 +2379,7 @@ msgstr "A_vslutt prosess"
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr ""
+msgstr "Kan ikke terminere prosess med pid %d. Operasjonen er ikke implementert."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
@@ -2394,26 +2387,25 @@ msgid "Terminal Pager"
 msgstr ""
 
 #: ../gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
-msgstr "Kommandolinje"
+msgstr "Top-kommando"
 
 #: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "Kan ikke avslutte prosess med pid %d: %s"
 
 #: ../gtk/gtknotebook.c:4430 ../gtk/gtknotebook.c:6952
 #, c-format
@@ -2426,16 +2418,12 @@ msgid "Not a valid page setup file"
 msgstr "Ikke en gyldig fil for sideoppsett"
 
 #: ../gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "Any Printer"
-msgstr "Skriver"
+msgstr "Alle skrivere"
 
 #: ../gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "For portable documents"
-msgstr ""
-"<b>Enhver skriver</b>\n"
-"For portable dokumenter"
+msgstr "For portable dokumenter"
 
 #: ../gtk/gtkpagesetupunixdialog.c:798
 #, c-format
@@ -5134,32 +5122,28 @@ msgstr "Kommandolinje"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:810
-#, fuzzy
 msgid "printer offline"
-msgstr "Skriver er frakoblet"
+msgstr "skriver er frakoblet"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:828
-#, fuzzy
 msgid "ready to print"
-msgstr "Forbereder utskrift"
+msgstr "klar til å skrive ut"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:831
 msgid "processing job"
-msgstr ""
+msgstr "prosesserer jobb"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:835
-#, fuzzy
 msgid "paused"
-msgstr "Pause"
+msgstr "på pause"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:838
-#, fuzzy
 msgid "unknown"
-msgstr "(ukjent)"
+msgstr "ukjent"
 
 #. default filename used for print-to-test
 #: ../modules/printbackends/test/gtkprintbackendtest.c:234
@@ -5175,9 +5159,3 @@ msgstr "Skriv ut til testskriver"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke hente informasjon for fil «%s»: %s"
-
-#~ msgid "<b>_Search:</b>"
-#~ msgstr "<b>_Søk:</b>"
-
-#~ msgid "<b>Recently Used</b>"
-#~ msgstr "<b>Sist brukt</b>"
