@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
 "POT-Creation-Date: 2009-07-25 03:53+0000\n"
-"PO-Revision-Date: 2009-07-30 08:15+0300\n"
+"PO-Revision-Date: 2009-08-03 20:39+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1428,7 +1428,7 @@ msgid "_Location:"
 msgstr "Asuk_oht:"
 
 msgid "Save in _folder:"
-msgstr "Salvestada _kataloogi:"
+msgstr "Salvestatakse _kataloogi:"
 
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
@@ -1887,19 +1887,19 @@ msgstr ""
 
 #. translators: this string is a name for the 'less' command
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Terminaliaknas lehitseja"
 
 msgid "Top Command"
-msgstr ""
+msgstr "Top-käsk"
 
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again kest"
 
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne kest"
 
 msgid "Z Shell"
-msgstr ""
+msgstr "Z-kest"
 
 #, c-format
 msgid "Cannot end process with pid %d: %s"
