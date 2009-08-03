@@ -84,7 +84,7 @@ struct _GtkTooltipClass
 
 static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
-static void       gtk_tooltip_finalize             (GObject         *object);
+static void       gtk_tooltip_dispose              (GObject         *object);
 
 static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip);
@@ -106,7 +106,7 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_tooltip_finalize;
+  object_class->dispose = gtk_tooltip_dispose;
 }
 
 static void
@@ -166,7 +166,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 }
 
 static void
-gtk_tooltip_finalize (GObject *object)
+gtk_tooltip_dispose (GObject *object)
 {
   GtkTooltip *tooltip = GTK_TOOLTIP (object);
 
@@ -194,9 +194,10 @@ gtk_tooltip_finalize (GObject *object)
 					    gtk_tooltip_display_closed,
 					    tooltip);
       gtk_widget_destroy (tooltip->window);
+      tooltip->window = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_tooltip_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_tooltip_parent_class)->dispose (object);
 }
 
 /* public API */
