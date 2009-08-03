@@ -174,6 +174,8 @@ do_printing (GtkWidget *do_widget)
     dir = g_get_home_dir ();
   if (g_strcmp0 (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT), "ps") == 0)
     ext = ".ps";
+  else if (g_strcmp0 (gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT), "svg") == 0)
+    ext = ".svg";
   else
     ext = ".pdf";
 
