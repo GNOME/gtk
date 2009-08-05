@@ -115,8 +115,6 @@ struct _GtkPrintBackendCups
   GtkCupsConnectionTest *cups_connection_test;
 
   char **covers;
-  char  *default_cover_before;
-  char  *default_cover_after;
   int    number_of_covers;
 
   GList      *requests;
@@ -598,8 +596,6 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->authentication_lock = FALSE;
 
   backend_cups->covers = NULL;
-  backend_cups->default_cover_before = NULL;
-  backend_cups->default_cover_after = NULL;
   backend_cups->number_of_covers = 0;
 
   backend_cups->default_printer_poll = 0;
@@ -625,9 +621,6 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   g_strfreev (backend_cups->covers);
   backend_cups->number_of_covers = 0;
-
-  g_free (backend_cups->default_cover_before);
-  g_free (backend_cups->default_cover_after);
 
   gtk_cups_connection_test_free (backend_cups->cups_connection_test);
   backend_cups->cups_connection_test = NULL;
@@ -1431,6 +1424,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gboolean is_accepting_jobs = TRUE;
       gboolean default_printer = FALSE;
       gboolean got_printer_type = FALSE;
+      gchar   *default_cover_before = NULL;
+      gchar   *default_cover_after = NULL;
       
       /* Skip leading attributes until we hit a printer...
        */
@@ -1523,22 +1518,17 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               {
                 cups_backend->number_of_covers = attr->num_values;
                 cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
-
                 for (i = 0; i < cups_backend->number_of_covers; i++)
                   cups_backend->covers[i] = g_strdup (attr->values[i].string.text);
-
                 cups_backend->covers[cups_backend->number_of_covers] = NULL;
               }
           }
         else if (strcmp (attr->name, "job-sheets-default") == 0)
           {
-            if ( (cups_backend->default_cover_before == NULL) && (cups_backend->default_cover_after == NULL))
+            if (attr->num_values == 2)
               {
-                if (attr->num_values == 2)
-                  {
-                    cups_backend->default_cover_before = g_strdup (attr->values[0].string.text);
-                    cups_backend->default_cover_after = g_strdup (attr->values[1].string.text);
-                  }
+                default_cover_before = attr->values[0].string.text;
+                default_cover_after = attr->values[1].string.text;
               }
           }
         else if (strcmp (attr->name, "printer-type") == 0)
@@ -1655,6 +1645,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 	    strcpy (hostname, cups_server);
 
 	  g_free (cups_server);
+
+          cups_printer->default_cover_before = g_strdup (default_cover_before);
+          cups_printer->default_cover_after = g_strdup (default_cover_after);
 
 	  cups_printer->hostname = g_strdup (hostname);
 	  cups_printer->port = port;
@@ -3136,6 +3129,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   cups_option_t *opts = NULL;
   GtkPrintBackendCups *backend;
   GtkTextDirection text_direction;
+  GtkPrinterCups *cups_printer = NULL;
 
 
   set = gtk_printer_option_set_new ();
@@ -3200,8 +3194,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   g_object_unref (option);
 
   backend = GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer));
+  cups_printer = GTK_PRINTER_CUPS (printer);
 
-  if (backend != NULL)
+  if (backend != NULL && printer != NULL)
     {
       char *cover_default[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
       /* Translators, these strings are names for various 'standard' cover 
@@ -3246,8 +3241,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
 
-      if (backend->default_cover_before != NULL)
-        gtk_printer_option_set (option, backend->default_cover_before);
+      if (cups_printer->default_cover_before != NULL)
+        gtk_printer_option_set (option, cups_printer->default_cover_before);
       else
         gtk_printer_option_set (option, "none");
       set_option_from_settings (option, settings);
@@ -3260,8 +3255,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       option = gtk_printer_option_new ("gtk-cover-after", _("After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
-      if (backend->default_cover_after != NULL)
-        gtk_printer_option_set (option, backend->default_cover_after);
+      if (cups_printer->default_cover_after != NULL)
+        gtk_printer_option_set (option, cups_printer->default_cover_after);
       else
         gtk_printer_option_set (option, "none");
       set_option_from_settings (option, settings);

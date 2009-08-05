@@ -52,6 +52,9 @@ struct _GtkPrinterCups
   gboolean reading_ppd;
   gchar      *ppd_name;
   ppd_file_t *ppd_file;
+
+  gchar  *default_cover_before;
+  gchar  *default_cover_after;
 };
 
 struct _GtkPrinterCupsClass
