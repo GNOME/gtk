@@ -380,6 +380,32 @@ get_toplevel (GtkWidget *widget)
 }
 
 static void
+set_busy_cursor (GtkPrintUnixDialog *dialog,
+		 gboolean            busy)
+{
+  GtkWindow *toplevel;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  toplevel = get_toplevel (GTK_WIDGET (dialog));
+  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+    return;
+
+  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+
+  if (busy)
+    cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
+  else
+    cursor = NULL;
+
+  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_display_flush (display);
+
+  if (cursor)
+    gdk_cursor_unref (cursor);
+}
+
+static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
                              const gchar *mnemonic_label,
                              const gchar *stock_id,
@@ -418,72 +444,81 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
     {
       printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
 
-      /* Shows overwrite confirmation dialog in the case of printing to file which
-       * already exists. */
-      if (printer != NULL && gtk_printer_is_virtual (printer))
+      if (printer != NULL)
         {
-          option = gtk_printer_option_set_lookup (priv->options,
-                                                  "gtk-main-page-custom-input");
-
-          if (option != NULL &&
-              option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
+          if (priv->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
             {
-              file = g_file_new_for_uri (option->value);
+              g_signal_stop_emission_by_name (print_dialog, "response");
+              return TRUE;
+            }
 
-              if (file != NULL &&
-                  g_file_query_exists (file, NULL))
+          /* Shows overwrite confirmation dialog in the case of printing to file which
+           * already exists. */
+          if (gtk_printer_is_virtual (printer))
+            {
+              option = gtk_printer_option_set_lookup (priv->options,
+                                                      "gtk-main-page-custom-input");
+
+              if (option != NULL &&
+                  option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
                 {
-                  toplevel = get_toplevel (GTK_WIDGET (print_dialog));
+                  file = g_file_new_for_uri (option->value);
 
-                  basename = g_file_get_basename (file);
-                  dirname = g_file_get_parse_name (g_file_get_parent (file));
-
-                  dialog = gtk_message_dialog_new (toplevel,
-                                                   GTK_DIALOG_MODAL |
-                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_QUESTION,
-                                                   GTK_BUTTONS_NONE,
-                                                   _("A file named \"%s\" already exists.  Do you want to replace it?"),
-                                                   basename);
-
-                  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                            _("The file already exists in \"%s\".  Replacing it will "
-                                                            "overwrite its contents."),
-                                                            dirname);
-
-                  gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-                  add_custom_button_to_dialog (GTK_DIALOG (dialog),
-                                               _("_Replace"),
-                                               GTK_STOCK_PRINT,
-                                               GTK_RESPONSE_ACCEPT);
-                  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                                           GTK_RESPONSE_ACCEPT,
-                                                           GTK_RESPONSE_CANCEL,
-                                                           -1);
-                  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                                   GTK_RESPONSE_ACCEPT);
-
-                  if (toplevel->group)
-                    gtk_window_group_add_window (toplevel->group,
-                                                 GTK_WINDOW (dialog));
-
-                  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-                  gtk_widget_destroy (dialog);
-
-                  g_free (dirname);
-                  g_free (basename);
-
-                  if (response != GTK_RESPONSE_ACCEPT)
+                  if (file != NULL &&
+                      g_file_query_exists (file, NULL))
                     {
-                      g_signal_stop_emission_by_name (print_dialog, "response");
-                      g_object_unref (file);
-                      return TRUE;
-                    }
-                }
+                      toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
-              g_object_unref (file);
+                      basename = g_file_get_basename (file);
+                      dirname = g_file_get_parse_name (g_file_get_parent (file));
+
+                      dialog = gtk_message_dialog_new (toplevel,
+                                                       GTK_DIALOG_MODAL |
+                                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                       GTK_MESSAGE_QUESTION,
+                                                       GTK_BUTTONS_NONE,
+                                                       _("A file named \"%s\" already exists.  Do you want to replace it?"),
+                                                       basename);
+
+                      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                                _("The file already exists in \"%s\".  Replacing it will "
+                                                                "overwrite its contents."),
+                                                                dirname);
+
+                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                      add_custom_button_to_dialog (GTK_DIALOG (dialog),
+                                                   _("_Replace"),
+                                                   GTK_STOCK_PRINT,
+                                                   GTK_RESPONSE_ACCEPT);
+                      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                                               GTK_RESPONSE_ACCEPT,
+                                                               GTK_RESPONSE_CANCEL,
+                                                               -1);
+                      gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                                       GTK_RESPONSE_ACCEPT);
+
+                      if (toplevel->group)
+                        gtk_window_group_add_window (toplevel->group,
+                                                     GTK_WINDOW (dialog));
+
+                      response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+                      gtk_widget_destroy (dialog);
+
+                      g_free (dirname);
+                      g_free (basename);
+
+                      if (response != GTK_RESPONSE_ACCEPT)
+                        {
+                          g_signal_stop_emission_by_name (print_dialog, "response");
+                          g_object_unref (file);
+                          return TRUE;
+                        }
+                    }
+
+                  g_object_unref (file);
+                }
             }
         }
     }
@@ -570,6 +605,13 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
       g_signal_handler_disconnect (priv->request_details_printer,
                                    priv->request_details_tag);
       priv->request_details_tag = 0;
+      set_busy_cursor (dialog, FALSE);
+      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                          g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                             "gtk-print-tree-iter"),
+                          PRINTER_LIST_COL_STATE,
+                          gtk_printer_get_state_message (priv->request_details_printer),
+                          -1);
       g_object_unref (priv->request_details_printer);
       priv->request_details_printer = NULL;
     }
@@ -1806,6 +1848,11 @@ selected_printer_changed (GtkTreeSelection   *selection,
       /* take the reference */
       priv->request_details_printer = printer;
       gtk_printer_request_details (printer);
+      set_busy_cursor (dialog, TRUE);
+      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                          g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
+                          PRINTER_LIST_COL_STATE, _("Getting printer information..."),
+                          -1);
       return;
     }
 
