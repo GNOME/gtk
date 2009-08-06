@@ -3094,8 +3094,6 @@ static gint
 gtk_notebook_focus_in (GtkWidget     *widget,
 		       GdkEventFocus *event)
 {
-  GTK_NOTEBOOK (widget)->child_has_focus = FALSE;
-
   gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
   
   return FALSE;
@@ -3978,6 +3976,8 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 	    }
 	}
     }
+  else
+    notebook->child_has_focus = FALSE;
 
   GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->set_focus_child (container, child);
 }
@@ -5799,8 +5799,13 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 			       GtkNotebookPage *page,
 			       guint            page_num)
 {
+  gboolean child_has_focus;
+
   if (notebook->cur_page == page || !GTK_WIDGET_VISIBLE (page->child))
     return;
+
+  /* save the value here, changing visibility changes focus */
+  child_has_focus = notebook->child_has_focus;
 
   if (notebook->cur_page)
     gtk_widget_set_child_visible (notebook->cur_page->child, FALSE);
@@ -5818,7 +5823,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
    * element on the new page, if possible, or if not, to the
    * notebook itself.
    */
-  if (notebook->child_has_focus)
+  if (child_has_focus)
     {
       if (notebook->cur_page->last_focus_child &&
 	  gtk_widget_is_ancestor (notebook->cur_page->last_focus_child, notebook->cur_page->child))
