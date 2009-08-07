@@ -5472,6 +5472,27 @@ gtk_widget_grab_default (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_has_grab:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is currently grabbing events, so it
+ * is the only widget receiving input events (keyboard and mouse).
+ *
+ * See also gtk_grab_add().
+ *
+ * Return value: %TRUE if the widget is in the grab_widgets stack
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_has_grab (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_HAS_GRAB) != 0;
+}
+
+/**
  * gtk_widget_set_name:
  * @widget: a #GtkWidget
  * @name: name for the widget

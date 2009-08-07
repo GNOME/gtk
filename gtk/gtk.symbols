@@ -5002,7 +5002,9 @@ gtk_widget_get_visible
 gtk_widget_get_visual
 gtk_widget_grab_default
 gtk_widget_grab_focus
+gtk_widget_has_default
 gtk_widget_has_focus
+gtk_widget_has_grab
 gtk_widget_has_screen
 gtk_widget_hide
 gtk_widget_hide_all
@@ -5099,7 +5101,6 @@ gtk_widget_set_has_window
 gtk_widget_get_has_window
 gtk_widget_set_can_default
 gtk_widget_get_can_default
-gtk_widget_has_default
 gtk_widget_set_can_focus
 gtk_widget_get_can_focus
 #endif
