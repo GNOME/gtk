@@ -2033,8 +2033,8 @@ gdk_window_set_transient_for (GdkWindow *window,
   GdkWindowImplQuartz *window_impl;
   GdkWindowImplQuartz *parent_impl;
 
-  if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
-      WINDOW_IS_TOPLEVEL (window))
+  if (GDK_WINDOW_DESTROYED (window)  || GDK_WINDOW_DESTROYED (parent) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
