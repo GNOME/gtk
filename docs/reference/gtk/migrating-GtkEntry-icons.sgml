@@ -7,10 +7,10 @@
   <title>Migrating from SexyIconEntry to GtkEntry</title>
 
   <para>
-    GTK+ 2.16 supports showing icons inside a #GtkEntry, similar to 
-    SexyIconEntry. Porting from SexyIconEntry to GtkEntry is relatively 
-    straightforward. The main difference between the two APIs is that 
-    SexyIconEntry uses #GtkImage widgets in a somewhat awkward way as 
+    GTK+ 2.16 supports showing icons inside a #GtkEntry, similar to
+    SexyIconEntry. Porting from SexyIconEntry to GtkEntry is relatively
+    straightforward. The main difference between the two APIs is that
+    SexyIconEntry uses #GtkImage widgets in a somewhat awkward way as
     storage vehicles for icons, while GtkEntry allows to specify icons
     via pixbufs, stock ids, icon names or #GIcons. So, if your code uses
     e.g.:
@@ -130,7 +130,7 @@ text_changed_cb (GtkEntry   *entry,
   gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
                                  GTK_ENTRY_ICON_SECONDARY,
                                  GTK_STOCK_CLEAR);
-  g_signal_connect (entry, "icon-pressed",
+  g_signal_connect (entry, "icon-press",
                     G_CALLBACK (icon_pressed_cb), NULL);
   g_signal_connect (entry, "notify::text",
                     G_CALLBACK (text_changed_cb), find_button);
