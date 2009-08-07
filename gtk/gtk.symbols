@@ -1988,6 +1988,7 @@ gtk_icon_theme_set_search_path_utf8
 gtk_icon_view_get_column_spacing
 gtk_icon_view_get_columns
 gtk_icon_view_get_cursor
+gtk_icon_view_get_item_padding
 gtk_icon_view_get_item_width
 gtk_icon_view_get_margin
 gtk_icon_view_get_markup_column
@@ -2015,6 +2016,7 @@ gtk_icon_view_select_path
 gtk_icon_view_set_column_spacing
 gtk_icon_view_set_columns
 gtk_icon_view_set_cursor
+gtk_icon_view_set_item_padding
 gtk_icon_view_set_item_width
 gtk_icon_view_set_margin
 gtk_icon_view_set_markup_column
