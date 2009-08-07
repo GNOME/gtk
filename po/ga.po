@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-08-07 01:06-0600\n"
-"PO-Revision-Date: 2009-08-07 01:16-0600\n"
+"PO-Revision-Date: 2009-08-07 02:27-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3178,7 +3178,7 @@ msgstr "Ba_rr:"
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label, navigation"
 msgid "_Back"
-msgstr "Ar _Ais"
+msgstr "Ar A_is"
 
 #. This is a navigation label as in "go down"
 #: ../gtk/gtkstock.c:329
@@ -3190,7 +3190,7 @@ msgstr "_Síos"
 #: ../gtk/gtkstock.c:331
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Ar Aghaidh"
+msgstr "Ar A_ghaidh"
 
 #. This is a navigation label as in "go up"
 #: ../gtk/gtkstock.c:333
