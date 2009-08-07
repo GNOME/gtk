@@ -2002,7 +2002,7 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)window)->impl);
