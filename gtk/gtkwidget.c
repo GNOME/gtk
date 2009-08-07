@@ -5578,6 +5578,58 @@ gtk_widget_get_state (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_set_visible:
+ * @widget: a #GtkWidget
+ * @visible: whether the widget should be shown or not
+ *
+ * Sets the visibility state of @widget. Note that setting this to
+ * %TRUE doesn't mean the widget is actually viewable, see
+ * gtk_widget_get_visible().
+ *
+ * This function simply calls gtk_widget_show() or gtk_widget_hide()
+ * but is nicer to use when the visibility of the widget depends on
+ * some condition.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_visible (GtkWidget *widget,
+                        gboolean   visible)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (visible != GTK_WIDGET_VISIBLE (widget))
+    {
+      if (visible)
+        gtk_widget_show (widget);
+      else
+        gtk_widget_hide (widget);
+    }
+}
+
+/**
+ * gtk_widget_get_visible:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is visible. Note that this doesn't
+ * take into account whether the widget's parent is also visible
+ * or the widget is obscured in any way.
+ *
+ * See gtk_widget_set_visible().
+ *
+ * Return value: %TRUE if the widget is visible
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_visible (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_VISIBLE) != 0;
+}
+
+/**
  * gtk_widget_set_has_window:
  * @widget: a #GtkWidget
  * @has_window: whether or not @widget has a window.

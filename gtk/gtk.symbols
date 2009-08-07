@@ -4998,6 +4998,7 @@ gtk_widget_get_tooltip_text
 gtk_widget_get_tooltip_window
 gtk_widget_get_toplevel
 gtk_widget_get_type G_GNUC_CONST
+gtk_widget_get_visible
 gtk_widget_get_visual
 gtk_widget_grab_default
 gtk_widget_grab_focus
@@ -5076,6 +5077,7 @@ gtk_widget_set_style
 gtk_widget_set_tooltip_markup
 gtk_widget_set_tooltip_text
 gtk_widget_set_tooltip_window
+gtk_widget_set_visible
 gtk_widget_shape_combine_mask
 gtk_widget_input_shape_combine_mask
 gtk_widget_show
