@@ -113,6 +113,10 @@ static void         gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
 
+#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
@@ -1816,10 +1820,10 @@ gdk_window_focus (GdkWindow *window,
 {
   GdkDisplay *display;
 
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
-  
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = GDK_WINDOW_DISPLAY (window);
@@ -1890,7 +1894,7 @@ gdk_window_set_hints (GdkWindow *window,
   XSizeHints size_hints;
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   size_hints.flags = 0;
@@ -1944,7 +1948,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
   Atom atom;
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_drawable_get_display (window);
@@ -2028,7 +2032,7 @@ gdk_window_get_type_hint (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return GDK_WINDOW_TYPE_HINT_NORMAL;
 
   type = GDK_WINDOW_TYPE_HINT_NORMAL;
@@ -2130,7 +2134,7 @@ gdk_window_set_modal_hint (GdkWindow *window,
   GdkWindowObject *private;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   private = (GdkWindowObject*) window;
@@ -2166,7 +2170,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_window_get_toplevel (window);
@@ -2203,7 +2207,7 @@ gdk_window_set_skip_pager_hint (GdkWindow *window,
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_window_get_toplevel (window);
@@ -2234,7 +2238,7 @@ gdk_window_set_urgency_hint (GdkWindow *window,
   g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_window_get_toplevel (window);
@@ -2280,7 +2284,7 @@ gdk_window_set_geometry_hints (GdkWindow         *window,
   XSizeHints size_hints;
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   size_hints.flags = 0;
@@ -2388,7 +2392,7 @@ gdk_window_get_geometry_hints (GdkWindow      *window,
   *geom_mask = 0;
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   size_hints = XAllocSizeHints ();
@@ -2546,7 +2550,7 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   display = gdk_drawable_get_display (window);
@@ -2592,20 +2596,20 @@ gdk_window_set_role (GdkWindow   *window,
 		     const gchar *role)
 {
   GdkDisplay *display;
-  
+
   display = gdk_drawable_get_display (window);
 
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      WINDOW_IS_TOPLEVEL (window))
-    {
-      if (role)
-	XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
-			 gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"),
-			 XA_STRING, 8, PropModeReplace, (guchar *)role, strlen (role));
-      else
-	XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
-			 gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"));
-    }
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  if (role)
+    XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                     gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"),
+                     XA_STRING, 8, PropModeReplace, (guchar *)role, strlen (role));
+  else
+    XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                     gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"));
 }
 
 /**
@@ -2619,28 +2623,28 @@ gdk_window_set_role (GdkWindow   *window,
  * Since: 2.12
  *
  **/
-void          
+void
 gdk_window_set_startup_id (GdkWindow   *window,
 			   const gchar *startup_id)
 {
   GdkDisplay *display;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   display = gdk_drawable_get_display (window);
 
-  if (!GDK_WINDOW_DESTROYED (window) &&
-      WINDOW_IS_TOPLEVEL (window))
-    {
-      if (startup_id)
-	XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
-			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"), 
-			 gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-			 PropModeReplace, (unsigned char *)startup_id, strlen (startup_id));
-      else
-	XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
-			 gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
-    }
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  if (startup_id)
+    XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                     gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"), 
+                     gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+                     PropModeReplace, (unsigned char *)startup_id, strlen (startup_id));
+  else
+    XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                     gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
 }
 
 /**
@@ -2655,14 +2659,13 @@ gdk_window_set_startup_id (GdkWindow   *window,
  *
  * See gtk_window_set_transient_for() if you're using #GtkWindow or
  * #GtkDialog.
- * 
  **/
-void          
-gdk_window_set_transient_for (GdkWindow *window, 
+void
+gdk_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
   if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
-      WINDOW_IS_TOPLEVEL (window))
+      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), 
 			  GDK_WINDOW_XID (window),
 			  GDK_WINDOW_XID (parent));
@@ -3524,7 +3527,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
   XSetWindowAttributes attr;
   
   if (!GDK_WINDOW_DESTROYED (window) &&
-      WINDOW_IS_TOPLEVEL (window))
+      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     {
       GdkWindowObject *private = (GdkWindowObject *)window;
       GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
@@ -3567,7 +3570,7 @@ gdk_window_set_accept_focus (GdkWindow *window,
       private->accept_focus = accept_focus;
 
       if (!GDK_WINDOW_DESTROYED (window) &&
-	  WINDOW_IS_TOPLEVEL (window))
+	  WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
 	update_wm_hints (window, FALSE);
     }
 }
@@ -3604,7 +3607,7 @@ gdk_window_set_focus_on_map (GdkWindow *window,
       
       if ((!GDK_WINDOW_DESTROYED (window)) &&
 	  (!private->focus_on_map) &&
-	  WINDOW_IS_TOPLEVEL (window))
+	  WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
 	gdk_x11_window_set_user_time (window, 0);
     }
 }
@@ -3640,7 +3643,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
   Window xid;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_drawable_get_display (window);
@@ -3711,7 +3714,7 @@ gdk_window_set_icon_list (GdkWindow *window,
   gint n;
   
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_drawable_get_display (window);
@@ -3821,10 +3824,8 @@ gdk_window_set_icon (GdkWindow *window,
 {
   GdkToplevelX11 *toplevel;
 
-  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD);
-  
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   toplevel = _gdk_x11_window_get_toplevel (window);
@@ -3887,7 +3888,7 @@ gdk_window_set_icon_name (GdkWindow   *window,
   GdkDisplay *display;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      WINDOW_IS_TOPLEVEL (window))
+      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_drawable_get_display (window);
@@ -3933,7 +3934,7 @@ void
 gdk_window_iconify (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -3966,7 +3967,7 @@ void
 gdk_window_deiconify (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4001,7 +4002,7 @@ void
 gdk_window_stick (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4057,7 +4058,7 @@ void
 gdk_window_unstick (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4100,7 +4101,7 @@ void
 gdk_window_maximize (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4134,7 +4135,7 @@ void
 gdk_window_unmaximize (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4171,7 +4172,7 @@ void
 gdk_window_fullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4206,7 +4207,7 @@ void
 gdk_window_unfullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4244,7 +4245,7 @@ gdk_window_set_keep_above (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4286,7 +4287,7 @@ gdk_window_set_keep_below (GdkWindow *window, gboolean setting)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -4320,8 +4321,6 @@ gdk_window_get_group (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel;
   
-  g_return_val_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD, NULL);
-
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return NULL;
@@ -4348,7 +4347,7 @@ gdk_window_get_group (GdkWindow *window)
  * if your application pretends to be multiple applications.
  **/
 void          
-gdk_window_set_group (GdkWindow *window, 
+gdk_window_set_group (GdkWindow *window,
 		      GdkWindow *leader)
 {
   GdkToplevelX11 *toplevel;
@@ -4364,7 +4363,7 @@ gdk_window_set_group (GdkWindow *window,
 
   toplevel = _gdk_x11_window_get_toplevel (window);
 
-  if (leader == NULL) 
+  if (leader == NULL)
     leader = gdk_display_get_default_group (gdk_drawable_get_display (window));
   
   if (toplevel->group_leader != leader)
@@ -4486,7 +4485,7 @@ gdk_window_set_decorations (GdkWindow      *window,
   MotifWmHints hints;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -4513,7 +4512,7 @@ gdk_window_get_decorations(GdkWindow       *window,
   gboolean result = FALSE;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return FALSE;
   
   hints = gdk_window_get_mwm_hints (window);
@@ -4562,7 +4561,7 @@ gdk_window_set_functions (GdkWindow    *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -5304,7 +5303,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               guint32        timestamp)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
@@ -5481,7 +5480,6 @@ gdk_window_set_opacity (GdkWindow *window,
   guint32 cardinal;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
