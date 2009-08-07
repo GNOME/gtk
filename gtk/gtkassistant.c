@@ -625,9 +625,9 @@ on_assistant_apply (GtkWidget    *widget,
 {
   gboolean success;
 
-  success = compute_next_step (assistant);
-
   g_signal_emit (assistant, signals [APPLY], 0);
+
+  success = compute_next_step (assistant);
 
   /* if the assistant hasn't switched to another page, just emit
    * the CLOSE signal, it't the last page in the assistant flow
