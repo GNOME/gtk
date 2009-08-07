@@ -3094,6 +3094,8 @@ static gint
 gtk_notebook_focus_in (GtkWidget     *widget,
 		       GdkEventFocus *event)
 {
+  GTK_NOTEBOOK (widget)->child_has_focus = FALSE;
+
   gtk_notebook_redraw_tabs (GTK_NOTEBOOK (widget));
   
   return FALSE;
@@ -3976,8 +3978,6 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 	    }
 	}
     }
-  else
-    notebook->child_has_focus = FALSE;
 
   GTK_CONTAINER_CLASS (gtk_notebook_parent_class)->set_focus_child (container, child);
 }
