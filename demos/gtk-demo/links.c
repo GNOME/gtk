@@ -47,7 +47,6 @@ GtkWidget *
 do_links (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *box;
   GtkWidget *label;
 
   if (!window)

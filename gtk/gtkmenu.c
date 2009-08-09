@@ -4172,7 +4172,6 @@ gtk_menu_position (GtkMenu *menu)
   GtkRequisition requisition;
   GtkMenuPrivate *private;
   gint x, y;
-  gboolean initially_pushed_in;
   gint scroll_offset;
   gint menu_height;
   GdkScreen *screen;

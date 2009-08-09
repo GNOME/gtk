@@ -1078,7 +1078,6 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 {
   gint width, height;
   GdkDisplayX11 *display_x11;
-  gboolean monitors_changed;
 
   width = gdk_screen_get_width (screen);
   height = gdk_screen_get_height (screen);

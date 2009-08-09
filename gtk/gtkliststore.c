@@ -337,7 +337,6 @@ static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
-  GType *new_columns;
   int i;
 
   if (list_store->n_columns == n_columns)

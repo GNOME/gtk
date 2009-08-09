@@ -1578,7 +1578,6 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 {
   GtkScale *scale = GTK_SCALE (buildable);
   MarksSubparserData *marks_data;
-  GtkWidget *toplevel;
 
   if (strcmp (tagname, "marks") == 0)
     {

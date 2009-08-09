@@ -27,7 +27,6 @@ int main (int argc, char *argv[])
   GtkWidget *box2;
   GtkWidget *frame;
   GtkWidget *scale;
-  GIcon *icon;
   gdouble marks[3] = { 0.0, 50.0, 100.0 };
   const gchar *labels[3] = { 
     "<small>Left</small>", 
