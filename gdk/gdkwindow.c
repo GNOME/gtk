@@ -5135,7 +5135,8 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 
   if (private->input_only ||
       !private->viewable ||
-      gdk_region_empty (region))
+      gdk_region_empty (region) ||
+      private->window_type == GDK_WINDOW_ROOT)
     return;
 
   visible_region = gdk_drawable_get_visible_region (window);
