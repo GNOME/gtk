@@ -5978,6 +5978,7 @@ void
 gdk_window_raise (GdkWindow *window)
 {
   GdkWindowObject *private;
+  GdkRegion *old_region, *new_region;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5985,12 +5986,26 @@ gdk_window_raise (GdkWindow *window)
   if (private->destroyed)
     return;
 
+  old_region = NULL;
+  if (gdk_window_is_viewable (window) &&
+      !private->input_only)
+    old_region = gdk_region_copy (private->clip_region);
+
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
 
   recompute_visible_regions (private, TRUE, FALSE);
 
-  gdk_window_invalidate_rect (window, NULL, TRUE);
+  if (old_region)
+    {
+      new_region = gdk_region_copy (private->clip_region);
+
+      gdk_region_subtract (new_region, old_region);
+      gdk_window_invalidate_region (window, new_region, TRUE);
+
+      gdk_region_destroy (old_region);
+      gdk_region_destroy (new_region);
+    }
 }
 
 static void
