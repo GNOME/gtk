@@ -2097,6 +2097,12 @@ increment_page_sequence (PrintPagesData *data)
   GtkPrintOperationPrivate *priv = data->op->priv;
   gint inc;
 
+  if (data->total == -1)
+    {
+      data->total = 0;
+      return;
+    }
+
   /* check whether we reached last position */
   if (priv->page_position == data->last_position &&
       !(data->collated_copies > 1 && data->collated < (data->collated_copies - 1)))
@@ -2230,7 +2236,7 @@ update_progress (PrintPagesData *data)
 	    text = g_strdup (_("Preparing"));
 	}
       else if (priv->status == GTK_PRINT_STATUS_GENERATING_DATA)
-	text = g_strdup_printf (_("Printing %d"), data->total - 1);
+	text = g_strdup_printf (_("Printing %d"), data->total);
       
       if (text)
 	{
@@ -2660,7 +2666,7 @@ prepare_data (PrintPagesData *data)
         counter++;
       }
 
-  data->total = 0;
+  data->total = -1;
   data->collated = 0;
   data->uncollated = 0;
 
@@ -2758,11 +2764,10 @@ print_pages_idle (gpointer user_data)
           goto out;
         }
 
+      increment_page_sequence (data);
+
       if (!data->done)
-        {
-	  common_render_page (data->op, data->page);
-	  increment_page_sequence (data);
-        }
+        common_render_page (data->op, data->page);
       else
         done = priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY;
 
