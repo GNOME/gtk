@@ -645,6 +645,7 @@ file_printer_get_options (GtkPrinter           *printer,
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), 
 				   GTK_PRINTER_OPTION_TYPE_FILESAVE);
+  gtk_printer_option_set_activates_default (option, TRUE);
   gtk_printer_option_set (option, uri);
   g_free (uri);
   option->group = g_strdup ("GtkPrintDialogExtension");
