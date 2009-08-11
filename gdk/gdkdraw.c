@@ -61,6 +61,15 @@ static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *draw
 							      GdkRgbDither  dither,
 							      gint          x_dither,
 							      gint          y_dither);
+static void         gdk_drawable_real_draw_drawable          (GdkDrawable  *drawable,
+							      GdkGC	   *gc,
+							      GdkDrawable  *src,
+							      gint          xsrc,
+							      gint	    ysrc,
+							      gint	    xdest,
+							      gint	    ydest,
+							      gint	    width,
+							      gint	    height);
      
 
 G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
@@ -74,6 +83,7 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
   klass->draw_pixbuf = gdk_drawable_real_draw_pixbuf;
+  klass->draw_drawable = gdk_drawable_real_draw_drawable;
 }
 
 static void
@@ -1504,6 +1514,31 @@ composite_565 (guchar      *src_buf,
       src += src_rowstride;
       dest += dest_rowstride;
     }
+}
+
+/* Implementation of the old vfunc in terms of the new one
+   in case someone calls it directly (which they shouldn't!) */
+static void
+gdk_drawable_real_draw_drawable (GdkDrawable  *drawable,
+				 GdkGC	       *gc,
+				 GdkDrawable  *src,
+				 gint		xsrc,
+				 gint		ysrc,
+				 gint		xdest,
+				 gint		ydest,
+				 gint		width,
+				 gint		height)
+{
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable,
+							     gc,
+							     src,
+							     xsrc,
+							     ysrc,
+							     xdest,
+							     ydest,
+							     width,
+							     height,
+							     src);
 }
 
 static void
