@@ -767,6 +767,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
     case GTK_PRINTER_OPTION_TYPE_STRING:
       priv->entry = gtk_entry_new ();
+      gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
+                                       gtk_printer_option_get_activates_default (source));
       gtk_widget_show (priv->entry);
       gtk_box_pack_start (GTK_BOX (widget), priv->entry, TRUE, TRUE, 0);
       g_signal_connect (priv->entry, "changed", G_CALLBACK (entry_changed_cb), widget);
@@ -792,6 +794,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                                                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 
         g_object_set (priv->combo, "local-only", FALSE, NULL);
+        gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
+                                         gtk_printer_option_get_activates_default (source));
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);

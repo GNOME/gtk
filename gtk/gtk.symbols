@@ -2905,6 +2905,8 @@ gtk_printer_option_clear_has_conflict
 gtk_printer_option_set_boolean
 gtk_printer_option_allocate_choices
 gtk_printer_option_choices_from_array
+gtk_printer_option_set_activates_default
+gtk_printer_option_get_activates_default
 #endif
 #endif
 #endif
