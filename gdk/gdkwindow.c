@@ -5818,37 +5818,16 @@ gdk_window_raise_internal (GdkWindow *window)
     }
 }
 
-/* Showing a non-native parent may cause children to become visible,
-   we need to handle this by manually showing them then. To simplify
-   things we hide them all when they are not visible. */
-static void
-show_all_visible_impls (GdkWindowObject *private, gboolean already_mapped)
-{
-  GdkWindowObject *child;
-  GList *l;
-
-  for (l = private->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      /* For foreign windows, only show if if was
-	 explicitly hidden, otherwise we might cause
-	 suprising things to happen to the other client. */
-      if (GDK_WINDOW_IS_MAPPED (child) &&
-	  child->window_type != GDK_WINDOW_FOREIGN)
-	show_all_visible_impls (child, FALSE);
-    }
-
-  if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show ((GdkWindow *)private, already_mapped);
-}
-
-static void
+/* Returns TRUE If the native window was mapped or unmapped */
+static gboolean
 set_viewable (GdkWindowObject *w,
 	      gboolean val)
 {
   GdkWindowObject *child;
   GList *l;
+
+  if (w->viewable == val)
+    return FALSE;
 
   w->viewable = val;
 
@@ -5863,9 +5842,48 @@ set_viewable (GdkWindowObject *w,
 	  child->window_type != GDK_WINDOW_FOREIGN)
 	set_viewable (child, val);
     }
+
+  if (gdk_window_has_impl (w)  &&
+      w->window_type != GDK_WINDOW_FOREIGN &&
+      w->parent != NULL &&
+      w->parent->window_type != GDK_WINDOW_ROOT)
+    {
+      /* For most native windows we show/hide them not when they are
+       * mapped/unmapped, because that may not produce the correct results.
+       * For instance, if a native window have a non-native parent which is
+       * hidden, but its native parent is viewable then showing the window
+       * would make it viewable to X but its not viewable wrt the non-native
+       * hierarchy. In order to handle this we track the gdk side viewability
+       * and only map really viewable windows.
+       *
+       * There are two exceptions though:
+       *
+       * For foreign windows we don't want ever change the mapped state
+       * except when explicitly done via gdk_window_show/hide, as this may
+       * cause problems for client owning the foreign window when its window
+       * is suddenly mapped or unmapped.
+       *
+       * For toplevel windows embedded in a foreign window (e.g. a plug)
+       * we sometimes synthesize a map of a window, but the native
+       * window is really shown by the embedder, so we don't want to
+       * do the show ourselves. We can't really tell this case from the normal
+       * toplevel show as such toplevels are seen by gdk as parents of the
+       * root window, so we make an exception for all toplevels.
+       */
+
+      if (val)
+	GDK_WINDOW_IMPL_GET_IFACE (w->impl)->show ((GdkWindow *)w, FALSE);
+      else
+	GDK_WINDOW_IMPL_GET_IFACE (w->impl)->hide ((GdkWindow *)w);
+
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
-void
+/* Returns TRUE If the native window was mapped or unmapped */
+gboolean
 _gdk_window_update_viewable (GdkWindow *window)
 {
   GdkWindowObject *priv = (GdkWindowObject *)window;
@@ -5881,15 +5899,15 @@ _gdk_window_update_viewable (GdkWindow *window)
   else
     viewable = FALSE;
 
-  if (priv->viewable != viewable)
-    set_viewable (priv, viewable);
+  return set_viewable (priv, viewable);
 }
 
 static void
 gdk_window_show_internal (GdkWindow *window, gboolean raise)
 {
   GdkWindowObject *private;
-  gboolean was_mapped;
+  gboolean was_mapped, was_viewable;
+  gboolean did_show;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5898,6 +5916,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
     return;
 
   was_mapped = GDK_WINDOW_IS_MAPPED (window);
+  was_viewable = private->viewable;
 
   if (raise)
     /* Keep children in (reverse) stacking order */
@@ -5915,10 +5934,17 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       private->state = 0;
     }
 
-  _gdk_window_update_viewable (window);
+  did_show = _gdk_window_update_viewable (window);
 
-  if (gdk_window_is_viewable (window))
-    show_all_visible_impls (private, was_mapped);
+  /* If it was already viewable the backend show op won't be called, call it
+     again to ensure things happen right if the mapped tracking was not right
+     for e.g. a foreign window.
+     Dunno if this is strictly needed but its what happened pre-csw.
+     Also show if not done by gdk_window_update_viewable. */
+  if (gdk_window_has_impl (private) && (was_viewable || !did_show))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->show ((GdkWindow *)private,
+						     !did_show ?
+						     was_mapped : TRUE);
 
   if (!was_mapped && !gdk_window_has_impl (private))
     {
@@ -6146,33 +6172,6 @@ gdk_window_show (GdkWindow *window)
   gdk_window_show_internal (window, TRUE);
 }
 
-/* Hiding a non-native parent may cause parents to become non-visible,
-   even if their parent native window is visible. We need to handle this
-   by manually hiding them then. To simplify things we hide them all
-   when they are not visible. */
-static void
-hide_all_visible_impls (GdkWindowObject *private)
-{
-  GdkWindowObject *child;
-  GList *l;
-
-  for (l = private->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      /* For foreign windows, only hide if if was
-	 explicitly hidden, otherwise we might cause
-	 suprising things to happen to the other client. */
-      if (GDK_WINDOW_IS_MAPPED (child) &&
-	  child->window_type != GDK_WINDOW_FOREIGN)
-	hide_all_visible_impls (child);
-    }
-
-  if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->hide ((GdkWindow *)private);
-}
-
-
 /**
  * gdk_window_hide:
  * @window: a #GdkWindow
@@ -6186,7 +6185,7 @@ void
 gdk_window_hide (GdkWindow *window)
 {
   GdkWindowObject *private;
-  gboolean was_mapped, was_viewable;
+  gboolean was_mapped, did_hide;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6195,7 +6194,6 @@ gdk_window_hide (GdkWindow *window)
     return;
 
   was_mapped = GDK_WINDOW_IS_MAPPED (private);
-  was_viewable = gdk_window_is_viewable (window);
 
   if (gdk_window_has_impl (private))
     {
@@ -6234,10 +6232,11 @@ gdk_window_hide (GdkWindow *window)
       private->state = GDK_WINDOW_STATE_WITHDRAWN;
     }
 
-  _gdk_window_update_viewable (window);
+  did_hide = _gdk_window_update_viewable (window);
 
-  if (was_viewable)
-    hide_all_visible_impls (private);
+  /* Hide foreign window as those are not handled by update_viewable. */
+  if (gdk_window_has_impl (private) && (!did_hide))
+    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->hide ((GdkWindow *)private);
 
   recompute_visible_regions (private, TRUE, FALSE);
 

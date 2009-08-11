@@ -386,7 +386,7 @@ void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
-void       _gdk_window_update_viewable   (GdkWindow      *window);
+gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 GdkRegion *expose_region);
