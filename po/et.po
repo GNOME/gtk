@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-08-03 17:49+0000\n"
-"PO-Revision-Date: 2009-08-04 08:24+0300\n"
+"POT-Creation-Date: 2009-08-06 21:30+0000\n"
+"PO-Revision-Date: 2009-08-10 18:09+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1360,6 +1360,13 @@ msgstr "Valitud kataloogide lisamine järjehoidjatesse"
 msgid "Remove the bookmark '%s'"
 msgstr "Järjehoidja '%s' eemaldamine"
 
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr "Järjehoidjat '%s' pole võimalik eemaldada"
+
+msgid "Remove the selected bookmark"
+msgstr "Eemalda valitud järjehoidja"
+
 msgid "Remove"
 msgstr "Eemalda"
 
@@ -1382,9 +1389,6 @@ msgstr "Valitud kataloogi lisamine järjehoidjate hulka"
 
 msgid "_Remove"
 msgstr "_Eemalda"
-
-msgid "Remove the selected bookmark"
-msgstr "Eemalda valitud järjehoidja"
 
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
@@ -2081,6 +2085,9 @@ msgstr "Vigane PrintDlgEx käsitleja"
 
 msgid "Unspecified error"
 msgstr "Kirjeldamata viga"
+
+msgid "Getting printer information..."
+msgstr "Printeri andmete hankimine..."
 
 msgid "Printer"
 msgstr "Printer"
