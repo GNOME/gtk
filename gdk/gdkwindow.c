@@ -7108,7 +7108,10 @@ gdk_window_set_cursor (GdkWindow *window,
       if (cursor)
 	private->cursor = gdk_cursor_ref (cursor);
 
-      if (_gdk_window_event_parent_of (window, display->pointer_info.window_under_pointer))
+      if (private->window_type == GDK_WINDOW_ROOT ||
+          private->window_type == GDK_WINDOW_FOREIGN)
+        GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_cursor (window, cursor);
+      else if (_gdk_window_event_parent_of (window, display->pointer_info.window_under_pointer))
 	update_cursor (display);
 
       g_object_notify (G_OBJECT (window), "cursor");
