@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2009-03-15 15:48+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
@@ -59,7 +59,7 @@ msgstr "बिट्स दर सॅम्पल"
 msgid "The number of bits per sample"
 msgstr "दर सॅम्पल करीता एकूण सॅम्पल"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "रुंदी"
 
@@ -323,11 +323,11 @@ msgstr "चिन्ह  नाव"
 msgid "The name of the icon from the icon theme"
 msgstr "चिन्ह सुत्रयोजापासूनचे चिन्हाचे नाव"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "दर्शनीय"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -344,17 +344,17 @@ msgid ""
 msgstr ""
 "खरे असल्यास, या कृतीसाठीचे साधनघटक प्रॉक्सी साधनपट्टी अगाऊ मेन्यु मध्ये दर्शविलेले जाते."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "दर्शनीय"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "सुस्पष्ट चित्र."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "महत्वाचे आहे"
 
@@ -384,7 +384,7 @@ msgid "Whether the action is enabled."
 msgstr "कृती कार्यान्वीत केले गेले आहे का."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "दर्शनीय"
 
@@ -725,8 +725,8 @@ msgid ""
 msgstr ""
 "जर मुल्य TRUE(खरे), असेल तर ही उप चौकट दुय्यम गटात मानली जाईल,उदा. 'मदतकरा' ही बटणे"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "मोकळी जागा ठेवा"
 
@@ -744,7 +744,7 @@ msgid "Whether the children should all be the same size"
 msgstr "सर्व उपरचना एकाच आकाराचे असायला हवे का"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "विस्तार करा"
 
@@ -1542,7 +1542,7 @@ msgstr "कवर करा रुंदी "
 msgid "The width at which the text is wrapped"
 msgstr "रुंदी "
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "रचना"
 
@@ -1774,7 +1774,7 @@ msgstr "अल्फा मुल्य करीता रंग द्या�
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "शीर्षक"
 
@@ -2500,7 +2500,7 @@ msgstr "किमान किल्लीची लांबी"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "शोधक चावीची समानता पहाण्यासाठी हवी असलेली कमीत कमी लांबी"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "लिखाण"
 
@@ -2602,11 +2602,11 @@ msgstr "लेबल विडगेट"
 msgid "A widget to display in place of the usual expander label"
 msgstr "सामान्य फ्रेम लेबलच्या स्थानावर एक नियंत्रण घटक प्रदर्शित करा"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "विस्तारकाचा आकार"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "विस्तारक बाणाचा आकार"
 
@@ -2703,6 +2703,20 @@ msgstr "निश्चितता पुन्हा खोडून लिह
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"फाइल निवडक संचयन पध्दती मध्ये खोडून पुन्हा लिहण्यास खात्रीपूर्वक संवाद आवश्यक अस्लयास "
+"दर्शवेल."
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "फाइलींच्या क्रिया दाखवा"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "फाइल निवडक संचयन पध्दती मध्ये खोडून पुन्हा लिहण्यास खात्रीपूर्वक संवाद आवश्यक अस्लयास "
 "दर्शवेल."
@@ -2901,83 +2915,83 @@ msgid ""
 "detached."
 msgstr "हॅन्डलबॉक्सचे उपघटक जोडले गेले किंवा नाही, हे ठरविणारे बूलीयन मुल्य."
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "रीत"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "रीत"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "अक्षरबिंदुसंच"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "चिन्ह pixbuf जेथून प्राप्त करायचे त्या प्रारूपातील स्तंभ"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "पाठ्य जेथून प्राप्त करायचे त्या प्रारूपातील स्तंभ"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "(हवे ते लिखाण) चिन्हांकित करा  "
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "Pango मार्कअप वापरत असल्यास प्राप्त करण्याकरीता वापरण्यजोगी प्रारूपातील स्तंभ"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "चिन्ह प्रारूप"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "चिन्ह दृश्य करीताचे प्रारूप"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "स्तंभची एकूण संख्या"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "प्रदर्शित करण्याकरीताचे स्तंभाची एकूण संख्या"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "रुंदी"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "रुंदी "
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "घटकाच्या कक्षा अंतर्गत अंतर्भूत करायची ती मोकळी जागा"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "मोकळी जागा ठेवा"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "ग्रीड ओळीच्यामध्ये अंतर्भूत करायची ती मोकळी जागा"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "मोकळी जागा ठेवा"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "ग्रीड स्तंभ मध्ये अंतर्भूत करायची ती मोकळी जागा"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "समास"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "चिन्ह दृश्यच्या किनारे अंतर्भूत केलेली मोकळी जागा"
 
@@ -2986,15 +3000,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "परस्पररित्या प्रत्येक घटकाकरीताचे पाठ्य व चिन्ह कशा प्रकारे स्थित आहेत"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "पुनः सूचना करण्यासाठी योग्य"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "हे दृश्य पुनः पाहण्यासाठी योग्य"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
 msgstr "साधनटिप स्तंभ"
 
@@ -3002,19 +3016,28 @@ msgstr "साधनटिप स्तंभ"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "प्रारूप मधिल घटक करीता स्तंभ मध्ये समाविष्टीत साधनटिप पाठ्य"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "तळातील मोकळी जागा"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "निवडक चौकोन रंग"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "निवडक चौकोनाचे रंग"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "निवड चौकोन Alpha"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "निवड चौकोनाची अपारर्दर्शकता"
 
@@ -4099,7 +4122,7 @@ msgstr "छपाईयंत्र संयोजना"
 msgid "Page Setup"
 msgstr "पृष्ठ व्यवस्था"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "छपाई स्थिती नियंत्रण"
 
@@ -4111,58 +4134,58 @@ msgstr ""
 "छपाई माहिती छपाईयंत्रास किंवा छपाई सर्वर करीता पाठविले असल्यास छपाई कार्य स्थिती-बदल "
 "संकेत पाठविणे पुढे चालवितो हे खरे आहे."
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "पान"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "मुलभूत द्वारे वापरण्याजोगी GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "छपाईकरीताचे संयोजना"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "संवाद प्रारंभ करण्याकरीताचे GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "कार्याचे नाव"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr "छपाई कार्य ओळखण्याकरीता वापरलेली अक्षरमाळा."
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "पानांची एकूण संख्या"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "दस्तऐवजात पानांची एकूण संख्या."
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "पान"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "दस्तऐवजातील सद्याचे पान"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "पूर्ण पान वापरा"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 "प्रतिमा कक्षाच्या कोपऱ्यास न राहता व संदर्भाचे उगम पानाच्या कोपऱ्यास असल्यावर खरे असते"
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4170,84 +4193,94 @@ msgstr ""
 "छपाई माहिती छपाईयंत्र किंवा छपाई सर्वर करीता पाठविल्या नंतर जर छपाई कार्यपध्दती छपाई "
 "कार्य विषयी तपशील पाठवित असल्यास खरे होते."
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "एकक"
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr "संदर्भ मध्ये अंतर मोजण्याकरीता एकक"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "संवाद दर्शवा"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "छपाई करतेवेळी प्रगती संवाद दर्शवित असल्यास खरे होते."
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "Async करीता सहमती द्या"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "छपाई कार्यपध्दती सुसंगतरित्या कर्यरत नसल्यास खरे असते."
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "फाइलनाव पाठवा"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "स्थिती"
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "छपाई कार्यपध्दतीची स्थिती"
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "स्तिथी अक्षरमाळा"
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr "स्थितीचे मानवीय वाचण्याजोगी वर्णन"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "इच्छिक टॅब लेबल"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "लेबल."
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "रंग चयन"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "निवड आहे"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "पृष्ठ व्यवस्था"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "पानांची एकूण संख्या"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "दस्तऐवजात पानांची एकूण संख्या."
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -4830,11 +4863,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "सरकपट्टीच्या विरूध्द दिशेस दुसरे पुढे निर्देशीत बाणचे बटण दर्शवा"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "क्षितिजपातळीवरील जुळणी"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "उभ्या दिशेने जुळणी"
 
@@ -6229,7 +6262,7 @@ msgstr "चिन्ह"
 msgid "Spacing in pixels between the icon and label"
 msgstr "मोकळी जागा ठेवा"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6245,331 +6278,340 @@ msgstr "ट्रीमॉडेल ही एक माहिती क्र�
 msgid "The model for the TreeModelSort to sort"
 msgstr "माहिती क्रमबध्द करण्यासाठी ट्रीमॉडेलसॉर्टचे स्वरुप"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "ट्रीमॉडेलच्या(बहुस्तरीय) स्वरुपात पहा"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "ट्रीमॉडेलचे (बहुस्तरीय) स्वरुप"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "विजेट करीता आडवी सुस्थिती"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "विजेट करीता उभी सुस्थिती"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "शिर्षक दर्शनीय"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "स्तंभावरील शीर्षकांची बटणे दाखवा"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "शिर्षक क्लिकजोगी"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "क्लिक होणाऱ्या घटनांना प्रतिसाद देणारी स्तंभ शिर्षके"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "स्तंभ विस्तारक"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "स्तंभ विस्ताराकरीता स्तंभाची रचना करा"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "नियम"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "एक सोडून एक येतील अशा पर्यायी रंगामध्ये ओळी बनविण्यासाठी थीमइंजिनला कळतील अशा सूचना "
 "द्या"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "शोधकाम क्रियाशील करा"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "माहितीच्या अशा स्वरुपामुळे युजरला (कॉम्प्युटर वापरणाऱ्या व्यक्तीला) अनेक स्तंभातून सहजपणे हवे "
 "ते शोधकार्य करता येते"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "स्तंभामधून शोधा"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through during interactive search"
 msgstr "सुसंवाद शोधवेळी शोधण्याजोगी प्रारूचे स्तंभ"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "ऊंची मोड (रूप)"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "सर्व आडव्या रेषांना समांतर उंची आहे हे समजून GtkTreeView वेग वाढवतो"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "फॉन्ट निवड"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "रंगनिवडकाने अपारदर्शकाचे नियंत्रण करावे का"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "विस्तार करा"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "पॉईंटर त्यावर फिरविल्यास ओळी विस्तारीत/नष्ट करायचे का"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "विस्तार दर्शवा"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "विस्तार म्हणून पहा"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "स्थर रचना"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "प्रत्येक स्थर करीता अगाऊ रचना"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "रब्बर बँडींग"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "माउस पॉईंटर ओढूण एकापेक्षा जास्त घटक कार्यान्वीत करायचे का"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "ग्रीड ओळी कार्यान्वीत करा"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "वृक्षीय दृश्य मध्ये ग्रीड ओळी दर्शवायचे का"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "वृक्षीय ओळी कार्यान्वीत करायचे का"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "वृक्षीय दृश्य मध्ये वृक्ष ओळी दर्शवायचे का"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "ओळींकरीता साधनटिप पाठ्य साविष्टीत प्रारूप मधिल स्तंभ"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "उभ्या विभाजकाची रुंदी"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "कक्षांमधील उभी जागा.  ही सम संख्या असावी"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "क्षितिजपातळीवरील विभाजकाची रुंदी"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "कक्षांमधील आडवी जागा.  ही सम संख्या असावी"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "नियमांचे पालन करण्याची सूचना द्या"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "एका नंतर एक येतील अशा रंगाची ओळ बनविण्यास अनुमती द्या"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "परिच्छेद जागेसाठी विस्तारक"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "परिच्छेद जागेसाठी विस्तारक बनवा"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "सम ओळींचा रंग"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "सम ओळी करीता वापरण्याजोगी रंग"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "विषम ओळींचा रंग"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "विषम ओळीसांठी वापरायचा रंग"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "ओळी समाप्ति करीताचे तपशील"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr "विस्तारीत ओळीकरीता पार्श्वभूमी सुत्रयोजना कार्यान्वीत करा"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "रुंदी "
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "रुंदी"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "रुंदी "
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "रुंदी"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "ग्रीड ओळ रचना"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "वृक्षीय दृश्य ग्रीड ओळी रेखाटण्याकरीता वापरण्याजोगी डॅश रचना"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "वृक्षीय ओळ रचना"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "वृक्षीय दृश्य ओळी रेखाटण्याकरीता वापरण्याजोगी डॅश रचना"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "स्तंभ प्रदर्शित करायचा आहे का"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "आकार बदलता येतो"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "हा स्तंभ उपयोगकर्त्याला हवातसा बदलता येतो"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "स्तंभाची वर्तमान रुंदी "
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "कक्षा मधिल अंतर्भूत करण्याकरीता रिकामी जागा"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "आकार बनवा"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "स्तंभाचा आकार बदलण्याची रीत"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "स्थिर रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "स्तंभाची वर्तमान स्थिर रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "किमान रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "अनुमती प्राप्त स्तंभाची किमान रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "कमाल रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "अनुमती प्राप्त स्तंभाची कमाल रुंदी"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "स्तंभ शीर्षकामध्ये दिसणारा शीर्षक"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "रुंदी "
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "क्लिक साठी योग्य"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "शीर्षक क्लिक करता येईल का"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "विजेट"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr "स्तंभ शीर्षकाऐवजी स्तंभ शिर्षक बटणावर देता येणारे विजेट"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "स्तंभ शिर्षकातील मजकुर किंवा विजेटची X दिशेने जाणारी दिशा"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "शिर्षकाभोवती असणारा स्तंभ नव्या स्वरुपात घेता येईल का"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "क्रमांक लावणारा सूचनादर्शक"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "क्रमांक लावणारा सूचनादर्शक दाखवायचा का"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "क्रमांक दर्शक"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "क्रमांक सूचकाने क्रमांकाची दिशा काय आहे ते सूचवावे"
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "लिखाण"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

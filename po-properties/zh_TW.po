@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.17.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2009-07-12 08:22+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -59,7 +59,7 @@ msgstr "單位樣本位元數"
 msgid "The number of bits per sample"
 msgstr "每單位樣本所使用的位元數"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "寬度"
 
@@ -316,11 +316,11 @@ msgstr "圖示名稱"
 msgid "The name of the icon from the icon theme"
 msgstr "圖示主題的圖示名稱"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "水平顯示時為可見"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -336,17 +336,17 @@ msgid ""
 "overflow menu."
 msgstr "當為 TRUE 時，此指令的工具選項代理會被顯示在工具列 overflow 選單。"
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "垂直顯示時為可見"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "當工具列呈垂直顯示時工具列項目是否為可見。"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "重要的"
 
@@ -376,7 +376,7 @@ msgid "Whether the action is enabled."
 msgstr "本指令是否有效。"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "可見的"
 
@@ -715,8 +715,8 @@ msgid ""
 "g., help buttons"
 msgstr "如設為定為‘TRUE’，子元件將出現於次要的子元件群組中，適用於：求助按鈕"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "間距"
 
@@ -734,7 +734,7 @@ msgid "Whether the children should all be the same size"
 msgstr "子元件的大小應否全部相同"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "擴張"
 
@@ -1526,7 +1526,7 @@ msgstr "換行寬度"
 msgid "The width at which the text is wrapped"
 msgstr "文字在那個長度後斷行"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "對齊"
 
@@ -1758,7 +1758,7 @@ msgstr "是否顏色包含有透明度的值"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "標題"
 
@@ -2480,7 +2480,7 @@ msgstr "最小關鍵字長度"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "用來搜尋的關鍵字的最小長度"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "文字欄位"
 
@@ -2580,11 +2580,11 @@ msgstr "標籤元件"
 msgid "A widget to display in place of the usual expander label"
 msgstr "替代展開器原本文字標籤的視窗元件"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "展開器大小"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "展開器箭號的大小"
 
@@ -2681,6 +2681,18 @@ msgstr "覆寫時作出確認"
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr "在儲存模式的檔案選擇程式是否在需要時顯示覆寫確認對話盒。"
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "顯示檔案操作按鈕"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr "在儲存模式的檔案選擇程式是否在需要時顯示覆寫確認對話盒。"
 
 #: gtk/gtkfilechooserbutton.c:376
@@ -2874,83 +2886,83 @@ msgid ""
 "detached."
 msgstr "一個用來表示把手方塊(handlebox)的子項是結合或分離的布林數值。"
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "選擇模式"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "選擇模式"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "Pixbuf 欄"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "用來取得圖示 pixbuf 的典型欄"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "用來取得文字 pixbuf 的典型欄"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "標記欄位"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "如果使用 Pango 標記時用來取得文字的典型欄"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "Icon View 模型"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "圖示檢視所使用的模型"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "欄位數目"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "要顯示的欄數"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "各項目的寬度"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "用於各個項目的寬度"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "用來插入項目的格位之間的空間"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "行的間隔"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "用來插入格線行之間的空間"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "欄的間隔"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "用來插入格線欄之間的空間"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "邊界"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "用來插入圖示檢視邊緣的空間"
 
@@ -2959,15 +2971,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "每個項目的文字與圖示之間要如何排列"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "可重新排列"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "該顯示為可排序的"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
 msgstr "工具提示欄位"
 
@@ -2975,19 +2987,28 @@ msgstr "工具提示欄位"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "包含項目的工具提示文字的模型欄位"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "底部填充"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "選取區方塊色彩"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "選取區方塊的色彩"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "選取區方塊的α混色"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "選取區方塊的透明度"
 
@@ -4062,7 +4083,7 @@ msgstr "印表機設定值"
 msgid "Page Setup"
 msgstr "頁面設定"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "追蹤列印狀態"
 
@@ -4074,57 +4095,57 @@ msgstr ""
 "如果此列印工作在送出列印資料到印表機或列印伺服器後會繼續發出狀態改變信號則為 "
 "TRUE。"
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "預設頁面設定"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "預設使用的 GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "列印設定值"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "用來初始化對話盒的 GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "工作名稱"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr "用來識別此列印工作的字串。"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "頁數"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "文件中的頁數。"
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "目前的頁面"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "文件中目前的頁面"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "使用整頁"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr "如果原始的上下文在頁面的角落，而不是在可成像區域的角落，則為 TRUE"
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4132,81 +4153,91 @@ msgstr ""
 "如果此列印操作在送出列印資料到印表機或列印伺服器後會繼續回報列印工作狀態則為 "
 "TRUE。"
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "單位"
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr "在上下文中能被測量的距離單位"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "顯示對話盒"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "如果在列印時要顯示進度對話盒則為 TRUE。"
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "允許 Async"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "如果列印程序可以非同步方式執行則為 TRUE。"
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "匯出檔案名稱"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "狀態"
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "列印操作的狀態"
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "狀態字串"
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr "供人類閱讀的狀態描述"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "自訂分頁標籤"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "包含自訂視窗元件分頁的標籤。"
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 msgid "Support Selection"
 msgstr "支授選擇區域"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr "如果列印動作支援選擇區域的列印則設定為 TRUE。"
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 msgid "Has Selection"
 msgstr "具有選擇區域"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr "如果選擇區域存在則為 TRUE。"
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
 msgstr "內嵌頁面設定"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr "如果頁面設定組合內嵌於 GtkPrintDialog 則設定為 TRUE"
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "頁數"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "文件中的頁數。"
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -4778,11 +4809,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "在捲動列對另一端顯示第二個前進箭頭按鈕"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "水平調整"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "垂直調整"
 
@@ -6156,7 +6187,7 @@ msgstr "圖示間距"
 msgid "Spacing in pixels between the icon and label"
 msgstr "圖示與標籤間的間距(像素)"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6172,327 +6203,336 @@ msgstr "TreeModelSort 模型"
 msgid "The model for the TreeModelSort to sort"
 msgstr "給 TreeModelSort 排序的模型"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "TreeView 模型"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "樹狀顯示所使用的模型"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "元件的水平調整"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "元件的垂直調整"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "顯示標頭"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "顯示欄位標頭按鈕"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "可以按下標頭"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "欄位標頭對滑鼠點擊有反應"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "可擴展欄位"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "設定此欄位為可擴展欄位"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "規則提示"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "提供佈景主題引擎提示以顯示交錯的行列底色"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "啟動搜尋"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "該顯示允許使用者以互動方式搜尋所有欄位"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "搜尋欄位"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through during interactive search"
 msgstr "經由互動式搜尋來搜尋的模型欄位"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "固定高度模式"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "設定每一行為等高以加速GtkTreeView"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "隨游標選取"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "是否隨游標改變選取範圍"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "隨游標展開"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "當游標移到該行時是否展開/摺疊它"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "顯示展開器"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "檢視含有展開器"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "等級識別"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "每個層級的額外縮排"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "彈性限制"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "是否啟用以滑鼠指標同時選取多個項目"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "啟用格線"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "是否在樹狀檢視中繪出格線"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "啟用樹狀線"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "是否在樹狀檢視中繪出樹狀線"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "包含此列工具提示字串的模型欄位"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "垂直分隔元件寬度"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "儲存格之間的垂直寬度。必須是偶數"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "水平分隔元件寬度"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "儲存格之間的水平寬度。必須是偶數"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "允許分割線"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "允許行與行繪製交錯底色"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "縮排可開展欄位"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "令展開資料的箭頭縮排"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "偶數行的顏色"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "在偶數的行中所使用的顏色"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "奇數行的顏色"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "在奇數的行中所使用的顏色"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "行細尾細節"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr "啟用延伸的列背景主題"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "格線寬度"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "樹狀檢視格線的寬度，以像素為單位"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "樹狀線寬度"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "樹狀檢視示樹狀線的寬度，以像素為單位"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "格線樣式"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "用來繪製樹狀檢視格線的虛線樣式"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "樹狀線樣式"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "用來繪製樹狀檢視樹狀線的虛線樣式"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "是否顯示該列資料"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "可調整尺寸"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "欄寬可以調整"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "目前的欄寬"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "插入格位之間的間隔"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "調整大小"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "欄位的調整模式"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "固定寬度"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "目前的固定欄寬"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "最小寬度"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "可接受的最小欄寬"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "最大寬度"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "可接受的最大欄寬"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "欄位標題中所顯示的文字"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "欄位取得分享給所屬元件增加的寬度"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "可按下"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "可否按下欄位標頭"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "元件"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr "在欄位標頭中，以指定元件代替標題文字"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "欄位標頭文字或元件的水平對齊"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "是否該欄位可以在標頭下重新排序"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "排序指示標記"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "是否顯示排序指示標記"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "排列次序"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "排序指示器應顯示的排序方向"
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "文字欄位"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

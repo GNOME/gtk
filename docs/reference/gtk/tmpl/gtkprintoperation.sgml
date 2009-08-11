@@ -233,6 +233,11 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintOperation:n-pages-to-print ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:print-settings ##### -->
 <para>
 
@@ -417,6 +422,15 @@ The #GQuark used for #GtkPrintError errors.
 
 @op: 
 @n_pages: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_n_pages_to_print ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_set_current_page ##### -->

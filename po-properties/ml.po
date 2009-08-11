@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2009-03-17 20:32+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -64,7 +64,7 @@ msgstr "ഒരു സാപിളില്‍ ഉളള ബിറ്റുകള
 msgid "The number of bits per sample"
 msgstr "ഓരോ സാപിളിലും ഉളള ബിറ്റുകളുടെ എണ്ണം"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "വീതി"
 
@@ -325,11 +325,11 @@ msgstr "ഐക്കണ്‍ന്‍റെ പേര്"
 msgid "The name of the icon from the icon theme"
 msgstr "ഐക്കള്‍ ഥീമില്‍ നിന്നുളള ഐക്കണന്‍റെ പേര്"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "ഹോറിസോണ്‍ട്ടല്‍ ആണേല്‍ ദൃശ്യമാകുക"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -346,17 +346,17 @@ msgid ""
 msgstr ""
 "TRUE ആണേല്‍, ഈ പ്രവര്‍ത്തനത്തിനുളള ടൂള്‍ഐറ്റം പ്രോക്സികള്‍ ടൂള്‍ബാര്‍ ഓവര്‍ഫ്ലോണ്‍ മെനുവില്‍ കാണിക്കുന്നു."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "വെര്‍ട്ടിക്കല്‍ ആണേല്‍ ദൃശ്യമാകുക"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "വെര്‍ട്ടിക്കല്‍ ആണേല്‍ ടൂള്‍ബാര്‍ ഐറ്റം ദൃശ്യമാകുമോ എന്ന്."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "സുപ്രധാനമാണ്"
 
@@ -386,7 +386,7 @@ msgid "Whether the action is enabled."
 msgstr "പ്രവര്‍ത്തനം സജ്ജമാക്കിയിട്ടുണ്ടോ എന്ന്."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "ദൃശ്യമായ"
 
@@ -728,8 +728,8 @@ msgstr ""
 "TRUE ആണെങ്കില്‍, ചൈള്‍ഡിന്‍റെ രണ്ടാമത്തെ ഗ്രൂപ്പില്‍ ഈ ചൈള്‍ഡ് പ്രത്യക്ഷപ്പെടുന്നു. ഉദാഹരണത്തിന്, ഇവ "
 "സഹായ ബട്ടണുകള്‍ക്ക് ഉപയോഗപ്പെടുന്നു."
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "സ്പെയിസിങ്"
 
@@ -747,7 +747,7 @@ msgid "Whether the children should all be the same size"
 msgstr "എല്ലാ ചൈള്‍ഡിന്‍റേയും വലിപ്പം ഒരേപോലെ ആയിരിക്കണമോ"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "വികസിപ്പിക്കുക"
 
@@ -1552,7 +1552,7 @@ msgstr "നിരത്തല്‍ വീതി"
 msgid "The width at which the text is wrapped"
 msgstr "വാചകം നിരത്തുന്ന വീതി"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "ക്രമീകരണം"
 
@@ -1784,7 +1784,7 @@ msgstr "നിറത്തിന് ആല്‍ഫാ മൂല്ല്യം 
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "തലക്കെട്ട്"
 
@@ -2512,7 +2512,7 @@ msgstr "ഏറ്റവും കുറഞ്ഞ കീ നീളം"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "പൊരുത്തമുളളവ കണ്ടുപിടിക്കുന്നതിനായി കീയുടെ ഏറ്റവും കുറഞ്ഞ നീളം"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "ടെക്സ്റ്റിനുളള നിര"
 
@@ -2616,11 +2616,11 @@ msgstr "വിഡ്ജറ്റ് ലേബല്‍ ചെയ്യുക"
 msgid "A widget to display in place of the usual expander label"
 msgstr "സാധാരണയുളള എക്സ്പാന്‍ഡര്‍ ലേബലിയുടെ സ്ഥാനത്ത് പ്രദര്‍ശിപ്പിക്കേണ്ട വിഡ്ജറ്റ്"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "വികസിതരൂപം"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "എക്സ്പാന്‍ഡര്‍ ആരോയുടെ വലിപ്പം"
 
@@ -2717,6 +2717,20 @@ msgstr "മാറ്റി എഴുത്ത് പ്രക്രിയ ഉറ
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"ആവശ്യമെങ്കില്‍, സുരക്ഷ മോഡില്‍ ഫയല്‍ തെരഞ്ഞെടുക്കല്‍ സംവിധാനം മാറ്റഎഴുതുന്നതിനുള്ള ഉറപ്പാക്കല്‍ ഡയലോഗ് "
+"നല്‍കുമോ എന്നു്"
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "ഫയലിന്‍റെ പ്രവര്‍ത്തനങ്ങള്‍ കാണിക്കുക"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "ആവശ്യമെങ്കില്‍, സുരക്ഷ മോഡില്‍ ഫയല്‍ തെരഞ്ഞെടുക്കല്‍ സംവിധാനം മാറ്റഎഴുതുന്നതിനുള്ള ഉറപ്പാക്കല്‍ ഡയലോഗ് "
 "നല്‍കുമോ എന്നു്"
@@ -2913,83 +2927,83 @@ msgid ""
 "detached."
 msgstr "ഹാന്‍ഡില്‍ബോക്സിന്റെ ചൈള്‍ഡ് ചേര്‍ത്തിട്ടുണ്ടോ എന്നു് സൂചിപ്പിക്കുന്ന ബൂളിയന്‍ മൂല്ല്യം."
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "തിരഞ്ഞെടുക്കല്‍ രീതി"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "തിരഞ്ഞെടുക്കല്‍ രീതി"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "Pixbuf നിര"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "ചിഹ്നത്തിന്റെ pixbuf മോഡല്‍ കോളം ഉപയോഗിച്ചു് എവിടെ നിന്നും ലഭ്യമക്കണം"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "വാചകം മോഡല്‍ കോളം ഉപയോഗിച്ചു് എവിടെ നിന്നും ലഭ്യമക്കണം"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "മാര്‍ക്കപ്പ് നിര"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "പാങ്കോ മാര്‍ക്കപ്പ് ഉപയോഗിക്കുന്നെങ്കില്‍ വാചകം ലഭ്യമാക്കുന്നതിനുള്ള മോഡല്‍ നിര"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "ചിഹ്നത്തിന്റെ ദൃശ്യ മാതൃക"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "ചിഹ്നത്തിന്റെ ദൃശ്യത്തിനുള്ള മാതൃക"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "നിരകളുടെ എണ്ണം"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "പ്രദര്‍ശിപ്പിക്കുന്നതിനുളള നിരകളുടെ എണ്ണം"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "ഓരോ വസ്തുവിന്‍റേയും വീതി"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "ഓരോ വസ്തുവിനും ഉപയോഗിക്കുന്ന വീതി"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "ഒരു വസ്തുവിന്‍റെ സെല്ലുകളുടെ ഇടയിലുളള സ്ഥലം"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "വരികളുടെ ഇടയിലുളള സ്ഥലം"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "ഗ്രിഡ് വരികളുടെ ഇടയില്‍ ചേര്‍ക്കുന്ന സ്ഥലം"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "നിരകളുടെ ഇടയിലുളള സ്ഥലം"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "ഗ്രിഡ് നിരകളുടെ ഇടയില്‍ ചേര്‍ക്കുന്ന സ്ഥലം"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "മാര്‍ജിന്‍"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "ചിഹ്നത്തിന്റെ ദൃശ്യത്തിന്റെ അതിരുകളില്‍ നല്‍കിയിരിക്കുന്ന സ്ഥലം"
 
@@ -2998,15 +3012,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "ഓരോ വസ്തുവിനുമുള്ള വാചകവും ചിഹ്നവും എങ്ങനെ സ്ഥാപിച്ചിരിക്കുന്നു"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "പുനഃകൃമീകരിക്കാവുന്നത്"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "കാഴ്ച പുനഃകൃമീകരിക്കാവുന്നതാണ്"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
 msgstr "ടൂള്‍ടിപ്പ് കോളം"
 
@@ -3014,19 +3028,28 @@ msgstr "ടൂള്‍ടിപ്പ് കോളം"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "വസ്തുക്കള്‍ക്കുള്ള ടൂള്‍ടിപ്പ് വാചകങ്ങള്‍ അടങ്ങുന്ന മോഡലിന്‍റെ നിര."
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "ബോട്ടം പാഡിങ്"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "തിരഞ്ഞെടുക്കല്‍ ബോക്സിന്‍റെ നിറം"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "തിരഞ്ഞെടുക്കല്‍ ബോക്സിന്‍റെ നിറം"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "ആല്‍ഫാ തിരഞ്ഞെടുക്കല്‍ ബോക്സ്"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "തിരഞ്ഞെടുത്ത ബോക്സിന്‍റെ അതാര്യത"
 
@@ -4114,7 +4137,7 @@ msgstr "പ്രിന്‍ററിന്‍റെ ക്രമീകരണ�
 msgid "Page Setup"
 msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "പ്രിന്‍റിന്‍റെ അവസ്ഥ കണ്ടുപിടിക്കുന്നു"
 
@@ -4126,57 +4149,57 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുവാനുള്ളതു് പ്രിന്റര്‍ അല്ലെങ്കില്‍ പ്രിന്റ് സര്‍വറിലേക്കു് അയച്ചതിനു് ശേഷം അവസ്ഥ മാറ്റമുള്ള "
 "സിഗ്നലുകള്‍ പ്രിന്റ് ജോലി നല്‍കിയാല്‍, TRUE."
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "ഡീഫോള്‍ട്ടായ പേജ് സെറ്റപ്പ്"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "ഡീഫോള്‍ട്ടായി ഉപയോഗിക്കുന്ന GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനുളള സജ്ജീകരണങ്ങള്‍"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ഡയലോഗ് ആരംഭിക്കുന്നതിനുളള GtkPrintSettings"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "ജോലിയുടെ പേര്"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr "പ്രിന്‍റ് ജോലി തിരിച്ചറിയുന്നതിന് ഉപയോഗിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "പേജുകളുടെ എണ്ണം"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "രേഖയിലുളള പേജുകളുടെ എണ്ണം."
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "രേഖയില്‍ നിലവിലുളള പേജ്"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "മുഴുവന്‍ പേജ് ഉപയോഗിക്കുക"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr "താളിന്റെ മൂലയില്‍ ആയിരിക്കണം കോണ്‍ടെക്സ്റ്റ് എങ്കില്‍ TRUE"
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4184,84 +4207,94 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുവാനുള്ളതു് പ്രിന്റര്‍ അല്ലെങ്കില്‍ പ്രിന്റ് സര്‍വറിലേക്കു് അയച്ചതിനു് ശേഷം പ്രിന്റ് ജോലികളുടെ "
 "അവസ്ഥ പ്രിന്റ് പ്രക്രിയ ലഭ്യമാക്കുന്ന എങ്കില്‍, TRUE."
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr "കോണ്‍ട്ടക്സ്റ്റില്‍ ദൂരം അളക്കുന്നതിനുളള യൂണിറ്റ്"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "ഡയലോഗ് കാണിക്കുക"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "പ്രിന്‍റ് ചെയ്യുന്നതിനിടയില്‍ പുരോഗതിയുടെ ഡയലോഗ് കാണിച്ചാല്‍ TRUE ആണ്."
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "Async അനുവദിക്കുക"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "പ്രിന്റ് പ്രക്രിയ അസിന്‍ക്രൊണസ് ആയി പ്രവര്‍ത്തിക്കുന്നു എങ്കില്‍, TRUE"
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "ഫയലിന്‍റെ പേര് എക്സ്പോര്‍ട്ട് ചെയ്യുക"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "പ്രിന്‍റ് പ്രക്രിയയുടെ അവസ്ഥ"
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "അവസ്ഥ കാണിക്കുന്ന സ്ട്രിങ്"
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr "വായിക്കുവാന്‍ സാധ്യമായ അവസ്ഥയുടെ വിവരണം"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "ടാബിന്‍റെ ലേബല്‍ ഇഷ്ടമുളള രീതിയില്‍ ക്രമീകരിക്കുക"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "യഥേഷ്ടമുള്ള വിഡ്ജറ്റുകള്‍ അടങ്ങുന്ന റ്റാബിനുള്ള ലേബല്‍"
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "നിറം തെരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "തെരഞ്ഞെടുത്ത രചനാനാമം"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "പേജിന്‍റെ ക്രമീകരണം"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "പേജുകളുടെ എണ്ണം"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "രേഖയിലുളള പേജുകളുടെ എണ്ണം."
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -4844,11 +4877,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "സ്ക്രോള്‍ ബാറിന്റെ എതിര്‍വശത്തു് ഒരു സെക്കന്‍ഡ് ഫോര്‍വേര്‍ഡ് ആരോ ബട്ടണ്‍ കാണിക്കുക"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "ഇടത്ത് നിന്നും വലത്തേക്കുളള ക്രമീകരണം"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "മുകളില്‍ നിന്നും താഴേക്കുളള ക്രമീകരണം"
 
@@ -6241,7 +6274,7 @@ msgstr "ഐക്കണ്‍ സ്പെയിസിങ്"
 msgid "Spacing in pixels between the icon and label"
 msgstr "പ്രതിരൂപവും ലേബലും തമ്മിലുള്ള ദൂരം പിക്സലുകളില്‍"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6257,327 +6290,336 @@ msgstr "ട്രീമോഡല്‍സോറ്‍ട്ട് മോഡല�
 msgid "The model for the TreeModelSort to sort"
 msgstr "മാതൃക"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "വൃക്ഷകാഴ്ചാരീതി"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "വൃക്ഷകാഴ്ചയുടെ മാതൃക"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "വിഡ്ജറ്റിന് ഇടത് നിന്നും വലത്തേക്കുള്ള ക്റമികരണം"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "വിഡ്ജറ്റിന് മുകളില്‍ നിന്നും താഴേക്കുള്ള ക്റമികരണം"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "ക്ളിക്ക് ചെയ്യാവുന്നത്"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "നിര തലവാചകമൊട്ടുകള് കാണിക്കുക"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "തലാവചകങ്ങള്‌ ക്ളിക്ക് ചെയ്യാവുന്നത്"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "ക്ലിക്ക് ഇവന്റുകളോടു് നിരകളുടെ ഹെഡറുകള്‍ മറുപടി നല്‍കുന്നു"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "വികസിതനിര"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "എക്സപാന്‍ഡര്‍ നിരയ്ക്കുള്ള നിര സജ്ജമാക്കുന്നു"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "നിബന്ധനകള്‍ക്കുള്ള സൂചന"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "നിരകള്‍‌ക്കു് ഒന്നിടവിട്ടു് നിറം നല്‍കുവാന്‍ ഥീം എഞ്ചിനു് സൂചന സജ്ജമാക്കുക"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "തെരച്ചില്‌ സജീവമാക്കുക"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "നിരകളിലൂടെ തെരയുന്നതിനായി കാഴ്ച ഉപയോക്താവിനെ അനുവദിക്കുന്നു"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "നിര പരതൂ"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through during interactive search"
 msgstr "ഇന്ററാക്ടീവ് തെരച്ചിലിലൂടെ തെരയുവാനുള്ള മോഡല്‍ നിര"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "സ്ഥിരമായ ഉയരം മോഡ്"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "എല്ലാ വരികള്‍ക്കും ഒരേ ഉയരം എന്നു് കരുതി GtkTreeView-ന്റെ വേഗത കൂട്ടുന്നു"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "തെരഞ്ഞെടുത്തതിനു് പറത്തൂടെ നീങ്ങുക"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "പോയിന്റര്‍ അനുസരിച്ചു് തെരഞ്ഞെടുപ്പു് മാറണമോ"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "എക്സ്പാന്‍ഡിനു് പറത്തൂടെ നീങ്ങുക"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "പോയിന്റര്‍ വരികളുടെ പുറത്തൂടെ നീക്കുമ്പോള്‍ അവ എക്സ്പെന്‍ഡ്/കൊളാപ്സ് ചെയ്യണമോ എന്നു്"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "എക്സ്പാന്‍ഡറുകള്‍ കാണിക്കുക"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "കാഴ്ചയ്ക്കു് എക്സ്പാന്‍ഡറുകള്‍ ലഭ്യമാണു്"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "ലവല്‍ ഇന്‍ഡന്റേഷന്‍"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "ഓരോ ലവലിനും അധികമായ ഇന്‍ഡന്റേഷന്‍"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "റബറ്‍ ബാന്‍ഡിങ്"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "ഉപയോഗിക്കേണ്ടതുണ്ടോ"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "സജീവമാക്കൂ"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "ദൃശ്യമാക്കേണ്ടതു‌ണ്ടോ"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "സജീവമാക്കൂ"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "ദൃശ്യമാക്കേണ്ടതു‌ണ്ടോ"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "നിരകള്‍ക്കാവശ്യമുള്ള ടൂള്‍ടിപ്പ് വാചകങ്ങള്‍ അടങ്ങുന്ന മാതൃകയിലുള്ള വരി"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "ലംബ വേ‌ര്തിരിവിന്റെ വീതി"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "കളങ്ങളുടെ ഇടയില്‍ മുകളില്‍ നിന്നും താഴേക്കുള്ള സ്ഥലം. ഈവന്‍ നംബറ്‍ ആയിരിക്കണം "
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "തിരശ്ചീന വേ‌ര്തിരിവിന്റെ വീതി"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "കളങ്ങളുടെ ഇടയില്‍ ഇടത് നിന്നും വലത്തേക്കുള്ള സ്ഥലം. ഈവന്‍ നംബറ്‍ ആയിരിക്കണം "
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "നിയമങ്ങള്‌ അനുവദിക്കുക"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "ഒന്നിടവിട്ടുള്ള നിറങ്ങള്‍ നിരകള്‍ക്കു് അനുവദിക്കുക"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "വികസിതം"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "എക്സ്പാന്‍ഡറുകള്‍ ഇന്‍ഡന്റഡ് ആക്കുക"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "ഇരട്ടനിരയുടെ വ‌‌‌ര്ണങ്ങള്‌"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "ഇരട്ടനിരകള്‌ക്ക് ഉപയോഗിക്കേണ്ട വ‌ര്ണം"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "ഒറ്റനിര വ‌ര്ണം"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "ഒറ്റനിരയുടെ ഉപയോഗിക്കേണ്ട വ‌ര്ണം"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "നിരയുടെ അവസാനത്തിന്റെ വിശദാംശങ്ങള്‍"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr "എക്സ്റ്റെന്‍ഡട് റോ ബാക്ക്ഗ്രൌണ്ട് ഥീമിങ് സജ്ജമാക്കുക"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "ഗ്രിഡ് ലൈനിന്റെ വീതി"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "ട്രീ വ്യൂ ഗ്രിഡ് വരകള്‍ക്കുള്ള വീതി, പിക്സലുകളില്‍"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "ട്രീ ലൈന്‍ മാതൃക"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "ട്രീ വ്യൂ വരകള്‍ക്കുള്ള വീതി, പിക്സലുകളില്‍"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "ഗ്രിഡ് ലൈന്‍ മാതൃക"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "ട്രീ വ്യൂ ഗ്രിഡ് വരകള്‍ വരയ്ക്കുന്നതിനുള്ള ഡാഷ് ശൈലി"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "ട്രീ ലൈന്‍ മാതൃക"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "ട്രീ വ്യൂ വരകള്‍ വരയ്ക്കുന്നതിനുള്ള ഡാഷ് ശൈലി"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "നിര പ്രദ‌ര്ശിപ്പിക്കണമോ"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "വലിപ്പം മാറ്റാവുന്ന"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "നിര ഉപയോക്താവിന‌് പുനക്രമീകരിക്കാവുന്നതാണോ"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "നിരയുടെ ഇപ്പോഴത്തെ വീതി"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "കളങ്ങളുടെ ഇടയിലുള്ള സ്ഥലം"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "വലിപ്പം"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "നിരയുടെ ഇപ്പോഴത്തെ വലിപ്പം"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "സ്ഥിരവീതി"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "നിരയുടെ ഇപ്പോഴത്തെ സ്ഥിരമായ വീതി"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "ഏറ്റവും കുറഞ്ഞ വീതി"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "ഏറ്റവും കുറച്ച് അനുവദിക്കാവുന്ന നിരയുടെ വീതി"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "പരമാവധി വീതി"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "പരമാവധി അനുവദിക്കാവുന്ന നിരയുടെ വീതി"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "കോളം ഹെഡറില്‍ ലഭ്യമാകുന്ന തലക്കെട്ട്"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "വിഡ്ജറ്റിനു് ലഭ്യമാക്കിയ അധികമായ വീതി നിരകള്‍ പങ്കിടുക"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "ക്ളിക്ക് ചെയ്യാവുന്നത്"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "തലവാചകം ക്ളിക്ക് ചെയ്യാവുന്നതാണോ"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "വിഡ്ജറ്റ്"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr "നിരയുടെ തലക്കെട്ടിനു് പകരം നിരയുടെ ഹെഡര്‍ ബട്ടണില്‍ വിഡ്ജറ്റ് സ്ഥാപിക്കുക"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "കോളം ഹെഡര്‍ വാചകത്തിന്റെ അല്ലെങ്കില്‍ വിഡ്ജറ്റിന്റെ X ക്റമികരണം"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "ഹെഡറുകള്‍ അനുസരിച്ചു് നിര വീണ്ടും ക്രമികരിക്കണമോ എന്നു്"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "ക്രമീകരണ സൂചകം"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "ക്രമീകരണ സൂചകം ദൃശ്യമാക്കേണ്ടതു‌ണ്ടോ"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "ക്രമീകരണ മുറ"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "ക്രമ സൂചിക അനുസരിച്ചു് ക്രമം നിശ്ചയിക്കുക"
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "ടെക്സ്റ്റിനുളള നിര"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

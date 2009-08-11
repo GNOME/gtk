@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.17.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:22-0400\n"
 "PO-Revision-Date: 2009-07-12 08:11+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Taiwan) <zh-l10n@lists.linux.org.tw>\n"
@@ -272,19 +272,19 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:968
-#: gdk-pixbuf/gdk-pixbuf-io.c:1228 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:974
+#: gdk-pixbuf/gdk-pixbuf-io.c:1234 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "開啟檔案「%s」失敗：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:980
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:986
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "圖片檔‘%s’沒有內容"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1016
-#: gdk-pixbuf/gdk-pixbuf-io.c:1280 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1022
+#: gdk-pixbuf/gdk-pixbuf-io.c:1286 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -297,76 +297,76 @@ msgid ""
 "animation file"
 msgstr "無法載入動畫檔‘%s’：原因不明，可能動畫檔已經損毀"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:701
+#: gdk-pixbuf/gdk-pixbuf-io.c:707
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "無法載入用來載入圖片的模組：%s：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:716
+#: gdk-pixbuf/gdk-pixbuf-io.c:722
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr "圖片載入模組 %s 沒有匯出正確的介面；它是否屬於另一個 GTK 版本？"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:725 gdk-pixbuf/gdk-pixbuf-io.c:776
+#: gdk-pixbuf/gdk-pixbuf-io.c:731 gdk-pixbuf/gdk-pixbuf-io.c:782
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "不支援圖片類型‘%s’"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:849
+#: gdk-pixbuf/gdk-pixbuf-io.c:855
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "無法識別圖片檔‘%s’的圖片格式"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:857
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 msgid "Unrecognized image file format"
 msgstr "無法識別的圖片檔格式"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1025
+#: gdk-pixbuf/gdk-pixbuf-io.c:1031
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "無法載入圖片‘%s’：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1659 gdk-pixbuf/io-gdip-utils.c:952
+#: gdk-pixbuf/gdk-pixbuf-io.c:1665 gdk-pixbuf/io-gdip-utils.c:952
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "寫入圖片檔時發生錯誤 (%s)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1704 gdk-pixbuf/gdk-pixbuf-io.c:1834
+#: gdk-pixbuf/gdk-pixbuf-io.c:1710 gdk-pixbuf/gdk-pixbuf-io.c:1840
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "此 gdk-pixbuf 版本不支援儲存以下的圖片格式：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1738
+#: gdk-pixbuf/gdk-pixbuf-io.c:1744
 msgid "Insufficient memory to save image to callback"
 msgstr "記憶體不足以儲存圖片到 callback"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1751
+#: gdk-pixbuf/gdk-pixbuf-io.c:1757
 msgid "Failed to open temporary file"
 msgstr "無法開啟暫存檔"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1777
+#: gdk-pixbuf/gdk-pixbuf-io.c:1783
 msgid "Failed to read from temporary file"
 msgstr "無法讀入暫存檔"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2011
+#: gdk-pixbuf/gdk-pixbuf-io.c:2017
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "無法開啟‘%s’以供寫入資料：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2036
+#: gdk-pixbuf/gdk-pixbuf-io.c:2042
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "寫入圖片後無法關閉‘%s’，資料可能無法完整地儲存：%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2256 gdk-pixbuf/gdk-pixbuf-io.c:2307
+#: gdk-pixbuf/gdk-pixbuf-io.c:2262 gdk-pixbuf/gdk-pixbuf-io.c:2313
 msgid "Insufficient memory to save image into a buffer"
 msgstr "記憶體不足以將圖片寫入緩衝區"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2353
+#: gdk-pixbuf/gdk-pixbuf-io.c:2359
 msgid "Error writing to image stream"
 msgstr "寫入圖片串流時發生錯誤"
 
@@ -1535,7 +1535,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3160
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3207
 msgid "Manage Custom Sizes"
 msgstr "管理自訂大小"
 
@@ -1604,7 +1604,7 @@ msgstr "Cpas Lock 已開啟"
 msgid "Select A File"
 msgstr "選取檔案"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1932
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1933
 msgid "Desktop"
 msgstr "桌面"
 
@@ -1612,7 +1612,7 @@ msgstr "桌面"
 msgid "(None)"
 msgstr "（沒有）"
 
-#: gtk/gtkfilechooserbutton.c:2014
+#: gtk/gtkfilechooserbutton.c:2015
 msgid "Other..."
 msgstr "其它..."
 
@@ -1620,23 +1620,23 @@ msgstr "其它..."
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: gtk/gtkfilechooserdefault.c:1058
+#: gtk/gtkfilechooserdefault.c:1059
 msgid "Could not retrieve information about the file"
 msgstr "無法取得關於檔案的資訊"
 
-#: gtk/gtkfilechooserdefault.c:1069
+#: gtk/gtkfilechooserdefault.c:1070
 msgid "Could not add a bookmark"
 msgstr "無法加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:1080
+#: gtk/gtkfilechooserdefault.c:1081
 msgid "Could not remove bookmark"
 msgstr "無法移除書籤"
 
-#: gtk/gtkfilechooserdefault.c:1091
+#: gtk/gtkfilechooserdefault.c:1092
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: gtk/gtkfilechooserdefault.c:1104
+#: gtk/gtkfilechooserdefault.c:1105
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1644,11 +1644,11 @@ msgstr ""
 "此資料夾無法建立，因為已有相同名稱的檔案存在。試著使用不同的資料夾名稱，或者"
 "先重新命名該檔案。"
 
-#: gtk/gtkfilechooserdefault.c:1115
+#: gtk/gtkfilechooserdefault.c:1116
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: gtk/gtkfilechooserdefault.c:1125
+#: gtk/gtkfilechooserdefault.c:1126
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
@@ -1656,202 +1656,207 @@ msgstr "無法顯示資料夾內容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1675
+#: gtk/gtkfilechooserdefault.c:1676
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1851
+#: gtk/gtkfilechooserdefault.c:1852
 msgid "Search"
 msgstr "搜尋"
 
-#: gtk/gtkfilechooserdefault.c:1875 gtk/gtkfilechooserdefault.c:10285
+#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10346
 msgid "Recently Used"
 msgstr "最近使用的"
 
-#: gtk/gtkfilechooserdefault.c:2511
+#: gtk/gtkfilechooserdefault.c:2512
 msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
-#: gtk/gtkfilechooserdefault.c:2940
+#: gtk/gtkfilechooserdefault.c:2941
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "將資料夾‘%s’加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2981
+#: gtk/gtkfilechooserdefault.c:2982
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "將目前的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:2983
+#: gtk/gtkfilechooserdefault.c:2984
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:3023
+#: gtk/gtkfilechooserdefault.c:3022
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "移除書籤‘%s’"
 
-#: gtk/gtkfilechooserdefault.c:3741
+#: gtk/gtkfilechooserdefault.c:3024
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3031 gtk/gtkfilechooserdefault.c:4057
+msgid "Remove the selected bookmark"
+msgstr "移除已選的書籤"
+
+#: gtk/gtkfilechooserdefault.c:3753
 msgid "Remove"
 msgstr "移除"
 
-#: gtk/gtkfilechooserdefault.c:3750
+#: gtk/gtkfilechooserdefault.c:3762
 msgid "Rename..."
 msgstr "重新命名..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3896
+#: gtk/gtkfilechooserdefault.c:3925
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3953
+#: gtk/gtkfilechooserdefault.c:3982
 msgid "_Places"
 msgstr "位置(_P)"
 
-#: gtk/gtkfilechooserdefault.c:4009
+#: gtk/gtkfilechooserdefault.c:4038
 msgid "_Add"
 msgstr "加入(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4016
+#: gtk/gtkfilechooserdefault.c:4045
 msgid "Add the selected folder to the Bookmarks"
 msgstr "將已選的資料夾加入書籤"
 
-#: gtk/gtkfilechooserdefault.c:4021
+#: gtk/gtkfilechooserdefault.c:4050
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4028
-msgid "Remove the selected bookmark"
-msgstr "移除已選的書籤"
-
-#: gtk/gtkfilechooserdefault.c:4137
+#: gtk/gtkfilechooserdefault.c:4186
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: gtk/gtkfilechooserdefault.c:4312
+#: gtk/gtkfilechooserdefault.c:4361
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4325
+#: gtk/gtkfilechooserdefault.c:4374
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4332
+#: gtk/gtkfilechooserdefault.c:4381
 msgid "Show _Size Column"
 msgstr "顯示大小欄位(_S)"
 
-#: gtk/gtkfilechooserdefault.c:4624 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4673 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "檔案"
 
-#: gtk/gtkfilechooserdefault.c:4673
+#: gtk/gtkfilechooserdefault.c:4722
 msgid "Name"
 msgstr "名稱"
 
-#: gtk/gtkfilechooserdefault.c:4698
+#: gtk/gtkfilechooserdefault.c:4747
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:4714
+#: gtk/gtkfilechooserdefault.c:4763
 msgid "Modified"
 msgstr "已修改"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4969 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:5018 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: gtk/gtkfilechooserdefault.c:5012
+#: gtk/gtkfilechooserdefault.c:5061
 msgid "_Browse for other folders"
 msgstr "瀏覽其它資料夾(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5284
+#: gtk/gtkfilechooserdefault.c:5333
 msgid "Type a file name"
 msgstr "輸入檔案名稱"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5325
+#: gtk/gtkfilechooserdefault.c:5374
 msgid "Create Fo_lder"
 msgstr "建立資料夾(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5335
+#: gtk/gtkfilechooserdefault.c:5384
 msgid "_Location:"
 msgstr "位置(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5539
+#: gtk/gtkfilechooserdefault.c:5588
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F):"
 
-#: gtk/gtkfilechooserdefault.c:5541
+#: gtk/gtkfilechooserdefault.c:5590
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: gtk/gtkfilechooserdefault.c:7285
+#: gtk/gtkfilechooserdefault.c:7346
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: gtk/gtkfilechooserdefault.c:7910 gtk/gtkfilechooserdefault.c:7931
+#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkfilechooserdefault.c:7992
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "捷徑 %s 已經存在"
 
-#: gtk/gtkfilechooserdefault.c:8021
+#: gtk/gtkfilechooserdefault.c:8082
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "捷徑 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:8283 gtk/gtkprintunixdialog.c:446
+#: gtk/gtkfilechooserdefault.c:8344 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "名為「%s」的檔案已存在。是否要取代它？"
 
-#: gtk/gtkfilechooserdefault.c:8286 gtk/gtkprintunixdialog.c:450
+#: gtk/gtkfilechooserdefault.c:8347 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "該檔案已存在於「%s」。取代它會覆蓋它的內容。"
 
-#: gtk/gtkfilechooserdefault.c:8291 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkfilechooserdefault.c:8352 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: gtk/gtkfilechooserdefault.c:9053
+#: gtk/gtkfilechooserdefault.c:9114
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: gtk/gtkfilechooserdefault.c:9054
+#: gtk/gtkfilechooserdefault.c:9115
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: gtk/gtkfilechooserdefault.c:9068
+#: gtk/gtkfilechooserdefault.c:9129
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
-#: gtk/gtkfilechooserdefault.c:9546
+#: gtk/gtkfilechooserdefault.c:9607
 #, fuzzy
 msgid "Search:"
 msgstr "搜尋"
 
-#: gtk/gtkfilechooserdefault.c:10525
+#: gtk/gtkfilechooserdefault.c:10590
 #, c-format
 msgid "Could not mount %s"
 msgstr "無法掛載 %s"
 
-#: gtk/gtkfilechooserdefault.c:11377 gtk/gtkfilechooserdefault.c:11399
-#: gtk/gtkfilechooserdefault.c:11470
+#: gtk/gtkfilechooserdefault.c:11448 gtk/gtkfilechooserdefault.c:11470
+#: gtk/gtkfilechooserdefault.c:11541
 msgid "Unknown"
 msgstr "不明"
 
-#: gtk/gtkfilechooserdefault.c:11417
+#: gtk/gtkfilechooserdefault.c:11488
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11419
+#: gtk/gtkfilechooserdefault.c:11490
 msgid "Yesterday at %H:%M"
 msgstr "昨天的 %H:%M"
 
@@ -2419,7 +2424,7 @@ msgstr ""
 " 上：%s %s\n"
 " 下：%s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3211
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3258
 msgid "Manage Custom Sizes..."
 msgstr "管理自訂大小..."
 
@@ -2427,7 +2432,7 @@ msgstr "管理自訂大小..."
 msgid "_Format for:"
 msgstr "格式(_F)"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3383
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
 msgid "_Paper size:"
 msgstr "紙張大小(_P):"
 
@@ -2435,7 +2440,7 @@ msgstr "紙張大小(_P):"
 msgid "_Orientation:"
 msgstr "方向(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3445
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3492
 msgid "Page Setup"
 msgstr "頁面設定"
 
@@ -2467,7 +2472,7 @@ msgstr "密碼："
 msgid "Not available"
 msgstr "不存在"
 
-#: gtk/gtkprinteroptionwidget.c:808
+#: gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
 msgstr "儲存在資料夾中(_S)："
 
@@ -2475,77 +2480,77 @@ msgstr "儲存在資料夾中(_S)："
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:185
+#: gtk/gtkprintoperation.c:186
 #, c-format
 msgid "%s job #%d"
 msgstr "%s 的工作 #%d"
 
-#: gtk/gtkprintoperation.c:1616
+#: gtk/gtkprintoperation.c:1644
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初始化狀態"
 
-#: gtk/gtkprintoperation.c:1617
+#: gtk/gtkprintoperation.c:1645
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "正在準備列印"
 
-#: gtk/gtkprintoperation.c:1618
+#: gtk/gtkprintoperation.c:1646
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "正在產生資料"
 
-#: gtk/gtkprintoperation.c:1619
+#: gtk/gtkprintoperation.c:1647
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "正在傳送資料"
 
-#: gtk/gtkprintoperation.c:1620
+#: gtk/gtkprintoperation.c:1648
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "正在等待"
 
-#: gtk/gtkprintoperation.c:1621
+#: gtk/gtkprintoperation.c:1649
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "因問題被阻擋"
 
-#: gtk/gtkprintoperation.c:1622
+#: gtk/gtkprintoperation.c:1650
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "正在列印"
 
-#: gtk/gtkprintoperation.c:1623
+#: gtk/gtkprintoperation.c:1651
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "已完成"
 
-#: gtk/gtkprintoperation.c:1624
+#: gtk/gtkprintoperation.c:1652
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "已完成但發生錯誤"
 
-#: gtk/gtkprintoperation.c:2200
+#: gtk/gtkprintoperation.c:2234
 #, c-format
 msgid "Preparing %d"
 msgstr "正在準備 %d"
 
-#: gtk/gtkprintoperation.c:2202 gtk/gtkprintoperation.c:2813
+#: gtk/gtkprintoperation.c:2236 gtk/gtkprintoperation.c:2846
 #, c-format
 msgid "Preparing"
 msgstr "正在準備"
 
-#: gtk/gtkprintoperation.c:2205
+#: gtk/gtkprintoperation.c:2239
 #, c-format
 msgid "Printing %d"
 msgstr "正在列印 %d"
 
-#: gtk/gtkprintoperation.c:2843
+#: gtk/gtkprintoperation.c:2876
 #, c-format
 msgid "Error creating print preview"
 msgstr "建立列印預覽時發生錯誤"
 
-#: gtk/gtkprintoperation.c:2846
+#: gtk/gtkprintoperation.c:2879
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是無法建立暫存檔案。"
@@ -2574,7 +2579,7 @@ msgstr "沒有紙"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1710
+#: modules/printbackends/cups/gtkprintbackendcups.c:1703
 msgid "Paused"
 msgstr "已暫停"
 
@@ -2619,41 +2624,45 @@ msgstr "給 PrintDlgEx 的處理無效"
 msgid "Unspecified error"
 msgstr "無法指定的錯誤"
 
-#: gtk/gtkprintunixdialog.c:2077
+#: gtk/gtkprintunixdialog.c:1854
+msgid "Getting printer information..."
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:2124
 msgid "Printer"
 msgstr "印表機"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2087
+#: gtk/gtkprintunixdialog.c:2134
 msgid "Location"
 msgstr "位置"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2098
+#: gtk/gtkprintunixdialog.c:2145
 msgid "Status"
 msgstr "狀態"
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2171
 msgid "Range"
 msgstr "範圍"
 
-#: gtk/gtkprintunixdialog.c:2128
+#: gtk/gtkprintunixdialog.c:2175
 msgid "_All Pages"
 msgstr "所有頁面(_A)"
 
-#: gtk/gtkprintunixdialog.c:2135
+#: gtk/gtkprintunixdialog.c:2182
 msgid "C_urrent Page"
 msgstr "目前頁面(_U)"
 
-#: gtk/gtkprintunixdialog.c:2145
+#: gtk/gtkprintunixdialog.c:2192
 msgid "Se_lection"
 msgstr "選擇區域(_L)"
 
-#: gtk/gtkprintunixdialog.c:2154
+#: gtk/gtkprintunixdialog.c:2201
 msgid "Pag_es:"
 msgstr "頁數(_E):"
 
-#: gtk/gtkprintunixdialog.c:2155
+#: gtk/gtkprintunixdialog.c:2202
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2661,28 +2670,28 @@ msgstr ""
 "指定一或多個頁面範圍，\n"
 "例如 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2165
+#: gtk/gtkprintunixdialog.c:2212
 msgid "Pages"
 msgstr " 頁"
 
-#: gtk/gtkprintunixdialog.c:2178
+#: gtk/gtkprintunixdialog.c:2225
 msgid "Copies"
 msgstr "列印份數"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2183
+#: gtk/gtkprintunixdialog.c:2230
 msgid "Copie_s:"
 msgstr "份數(_S)："
 
-#: gtk/gtkprintunixdialog.c:2201
+#: gtk/gtkprintunixdialog.c:2248
 msgid "C_ollate"
 msgstr "順序(_O)"
 
-#: gtk/gtkprintunixdialog.c:2209
+#: gtk/gtkprintunixdialog.c:2256
 msgid "_Reverse"
 msgstr "反序(_R)"
 
-#: gtk/gtkprintunixdialog.c:2229
+#: gtk/gtkprintunixdialog.c:2276
 msgid "General"
 msgstr "一般"
 
@@ -2692,168 +2701,168 @@ msgstr "一般"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2955
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+#: gtk/gtkprintunixdialog.c:3002
+#: modules/printbackends/cups/gtkprintbackendcups.c:3123
 msgid "Left to right, top to bottom"
 msgstr "由左至右，由上至下"
 
-#: gtk/gtkprintunixdialog.c:2955
-#: modules/printbackends/cups/gtkprintbackendcups.c:3130
+#: gtk/gtkprintunixdialog.c:3002
+#: modules/printbackends/cups/gtkprintbackendcups.c:3123
 msgid "Left to right, bottom to top"
 msgstr "由左至右，由下至上"
 
-#: gtk/gtkprintunixdialog.c:2956
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+#: gtk/gtkprintunixdialog.c:3003
+#: modules/printbackends/cups/gtkprintbackendcups.c:3124
 msgid "Right to left, top to bottom"
 msgstr "由右至左，由上至下"
 
-#: gtk/gtkprintunixdialog.c:2956
-#: modules/printbackends/cups/gtkprintbackendcups.c:3131
+#: gtk/gtkprintunixdialog.c:3003
+#: modules/printbackends/cups/gtkprintbackendcups.c:3124
 msgid "Right to left, bottom to top"
 msgstr "由右至左，由下至上"
 
-#: gtk/gtkprintunixdialog.c:2957
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+#: gtk/gtkprintunixdialog.c:3004
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Top to bottom, left to right"
 msgstr "由上至下，由左至右"
 
-#: gtk/gtkprintunixdialog.c:2957
-#: modules/printbackends/cups/gtkprintbackendcups.c:3132
+#: gtk/gtkprintunixdialog.c:3004
+#: modules/printbackends/cups/gtkprintbackendcups.c:3125
 msgid "Top to bottom, right to left"
 msgstr "由上至下，由右至左"
 
-#: gtk/gtkprintunixdialog.c:2958
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+#: gtk/gtkprintunixdialog.c:3005
+#: modules/printbackends/cups/gtkprintbackendcups.c:3126
 msgid "Bottom to top, left to right"
 msgstr "由下至上，由左至右"
 
-#: gtk/gtkprintunixdialog.c:2958
-#: modules/printbackends/cups/gtkprintbackendcups.c:3133
+#: gtk/gtkprintunixdialog.c:3005
+#: modules/printbackends/cups/gtkprintbackendcups.c:3126
 msgid "Bottom to top, right to left"
 msgstr "由下至上，由右至左"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:2962 gtk/gtkprintunixdialog.c:2975
-#: modules/printbackends/cups/gtkprintbackendcups.c:3164
+#: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
+#: modules/printbackends/cups/gtkprintbackendcups.c:3158
 msgid "Page Ordering"
 msgstr "頁面順序"
 
-#: gtk/gtkprintunixdialog.c:2991
+#: gtk/gtkprintunixdialog.c:3038
 msgid "Left to right"
 msgstr "左至右"
 
-#: gtk/gtkprintunixdialog.c:2992
+#: gtk/gtkprintunixdialog.c:3039
 msgid "Right to left"
 msgstr "右至左"
 
-#: gtk/gtkprintunixdialog.c:3004
+#: gtk/gtkprintunixdialog.c:3051
 msgid "Top to bottom"
 msgstr "由上至下"
 
-#: gtk/gtkprintunixdialog.c:3005
+#: gtk/gtkprintunixdialog.c:3052
 msgid "Bottom to top"
 msgstr "由下至上"
 
-#: gtk/gtkprintunixdialog.c:3234
+#: gtk/gtkprintunixdialog.c:3281
 msgid "Layout"
 msgstr "配置"
 
-#: gtk/gtkprintunixdialog.c:3238
+#: gtk/gtkprintunixdialog.c:3285
 msgid "T_wo-sided:"
 msgstr "雙面(_W)："
 
-#: gtk/gtkprintunixdialog.c:3253
+#: gtk/gtkprintunixdialog.c:3300
 msgid "Pages per _side:"
 msgstr "每張紙的頁數(_S):"
 
-#: gtk/gtkprintunixdialog.c:3270
+#: gtk/gtkprintunixdialog.c:3317
 msgid "Page or_dering:"
 msgstr "頁面順序(_D):"
 
-#: gtk/gtkprintunixdialog.c:3286
+#: gtk/gtkprintunixdialog.c:3333
 msgid "_Only print:"
 msgstr "列印範圍(_O)："
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3301
+#: gtk/gtkprintunixdialog.c:3348
 msgid "All sheets"
 msgstr "所有頁面"
 
-#: gtk/gtkprintunixdialog.c:3302
+#: gtk/gtkprintunixdialog.c:3349
 msgid "Even sheets"
 msgstr "奇數頁"
 
-#: gtk/gtkprintunixdialog.c:3303
+#: gtk/gtkprintunixdialog.c:3350
 msgid "Odd sheets"
 msgstr "偶數頁"
 
-#: gtk/gtkprintunixdialog.c:3306
+#: gtk/gtkprintunixdialog.c:3353
 msgid "Sc_ale:"
 msgstr "比例(_A)："
 
-#: gtk/gtkprintunixdialog.c:3333
+#: gtk/gtkprintunixdialog.c:3380
 msgid "Paper"
 msgstr "紙張"
 
-#: gtk/gtkprintunixdialog.c:3337
+#: gtk/gtkprintunixdialog.c:3384
 msgid "Paper _type:"
 msgstr "紙張類型(_T)："
 
-#: gtk/gtkprintunixdialog.c:3352
+#: gtk/gtkprintunixdialog.c:3399
 msgid "Paper _source:"
 msgstr "紙張來源(_S)："
 
-#: gtk/gtkprintunixdialog.c:3367
+#: gtk/gtkprintunixdialog.c:3414
 msgid "Output t_ray:"
 msgstr "出紙匣(_R)："
 
-#: gtk/gtkprintunixdialog.c:3407
+#: gtk/gtkprintunixdialog.c:3454
 msgid "Or_ientation:"
 msgstr "方向(_I):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3422
+#: gtk/gtkprintunixdialog.c:3469
 msgid "Portrait"
 msgstr "直向"
 
-#: gtk/gtkprintunixdialog.c:3423
+#: gtk/gtkprintunixdialog.c:3470
 msgid "Landscape"
 msgstr "橫向"
 
-#: gtk/gtkprintunixdialog.c:3424
+#: gtk/gtkprintunixdialog.c:3471
 msgid "Reverse portrait"
 msgstr "直向倒轉"
 
-#: gtk/gtkprintunixdialog.c:3425
+#: gtk/gtkprintunixdialog.c:3472
 msgid "Reverse landscape"
 msgstr "橫向倒轉"
 
-#: gtk/gtkprintunixdialog.c:3470
+#: gtk/gtkprintunixdialog.c:3517
 msgid "Job Details"
 msgstr "列印工作詳細資料"
 
-#: gtk/gtkprintunixdialog.c:3476
+#: gtk/gtkprintunixdialog.c:3523
 msgid "Pri_ority:"
 msgstr "優先權(_O):"
 
-#: gtk/gtkprintunixdialog.c:3491
+#: gtk/gtkprintunixdialog.c:3538
 msgid "_Billing info:"
 msgstr "帳目資訊(_B)："
 
-#: gtk/gtkprintunixdialog.c:3509
+#: gtk/gtkprintunixdialog.c:3556
 msgid "Print Document"
 msgstr "列印文件"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3518
+#: gtk/gtkprintunixdialog.c:3565
 msgid "_Now"
 msgstr "現在(_N)"
 
-#: gtk/gtkprintunixdialog.c:3529
+#: gtk/gtkprintunixdialog.c:3576
 msgid "A_t:"
 msgstr "於(_T)："
 
@@ -2861,7 +2870,7 @@ msgstr "於(_T)："
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3535
+#: gtk/gtkprintunixdialog.c:3582
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2869,64 +2878,64 @@ msgstr ""
 "指定列印的時刻格式，\n"
 " 例如 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3545
+#: gtk/gtkprintunixdialog.c:3592
 msgid "Time of print"
 msgstr "列印時刻"
 
-#: gtk/gtkprintunixdialog.c:3561
+#: gtk/gtkprintunixdialog.c:3608
 msgid "On _hold"
 msgstr "擱置(_H)"
 
-#: gtk/gtkprintunixdialog.c:3562
+#: gtk/gtkprintunixdialog.c:3609
 msgid "Hold the job until it is explicitly released"
 msgstr "保留此工作直到它被明確的釋出"
 
-#: gtk/gtkprintunixdialog.c:3582
+#: gtk/gtkprintunixdialog.c:3629
 msgid "Add Cover Page"
 msgstr "加入封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3591
+#: gtk/gtkprintunixdialog.c:3638
 msgid "Be_fore:"
 msgstr "這頁之前(_F)："
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3609
+#: gtk/gtkprintunixdialog.c:3656
 msgid "_After:"
 msgstr "這頁之後(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3627
+#: gtk/gtkprintunixdialog.c:3674
 msgid "Job"
 msgstr "列印工作"
 
-#: gtk/gtkprintunixdialog.c:3693
+#: gtk/gtkprintunixdialog.c:3740
 msgid "Advanced"
 msgstr "進階"
 
-#: gtk/gtkprintunixdialog.c:3727
+#: gtk/gtkprintunixdialog.c:3774
 msgid "Image Quality"
 msgstr "圖片品質"
 
-#: gtk/gtkprintunixdialog.c:3730
+#: gtk/gtkprintunixdialog.c:3777
 msgid "Color"
 msgstr "顏色"
 
-#: gtk/gtkprintunixdialog.c:3733
+#: gtk/gtkprintunixdialog.c:3780
 msgid "Finishing"
 msgstr "準備完成"
 
-#: gtk/gtkprintunixdialog.c:3743
+#: gtk/gtkprintunixdialog.c:3790
 msgid "Some of the settings in the dialog conflict"
 msgstr "對話視窗中某些設定有衝突"
 
-#: gtk/gtkprintunixdialog.c:3766
+#: gtk/gtkprintunixdialog.c:3813
 msgid "Print"
 msgstr "列印"
 
@@ -4743,230 +4752,230 @@ msgstr "越南文 (VIQR)"
 msgid "X Input Method"
 msgstr "一般輸入法 (XIM)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#: modules/printbackends/cups/gtkprintbackendcups.c:762
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "從 %s 取得檔案需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:773
+#: modules/printbackends/cups/gtkprintbackendcups.c:766
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "要在印表機 %2$s 列印文件「%1$s」需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#: modules/printbackends/cups/gtkprintbackendcups.c:768
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "要在 %s 列印文件需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:779
+#: modules/printbackends/cups/gtkprintbackendcups.c:772
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "要取得工作「%s」的屬性需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:781
+#: modules/printbackends/cups/gtkprintbackendcups.c:774
 msgid "Authentication is required to get attributes of a job"
 msgstr "要取得工作的屬性需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:785
+#: modules/printbackends/cups/gtkprintbackendcups.c:778
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "要取得印表機「%s」的屬性需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:787
+#: modules/printbackends/cups/gtkprintbackendcups.c:780
 msgid "Authentication is required to get attributes of a printer"
 msgstr "要取得印表機的屬性需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:790
+#: modules/printbackends/cups/gtkprintbackendcups.c:783
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "要取得 %s 的預設印表機需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:793
+#: modules/printbackends/cups/gtkprintbackendcups.c:786
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "要從 %s 取得印表機需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:796
+#: modules/printbackends/cups/gtkprintbackendcups.c:789
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s 需要驗證"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1412
+#: modules/printbackends/cups/gtkprintbackendcups.c:1405
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "印表機「%s」碳粉/墨水不足。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1406
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "印表機「%s」碳粉/墨水用完。"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1415
+#: modules/printbackends/cups/gtkprintbackendcups.c:1408
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "印表機「%s」顯像劑不足。"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1417
+#: modules/printbackends/cups/gtkprintbackendcups.c:1410
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "印表機「%s」顯像劑用完。"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1419
+#: modules/printbackends/cups/gtkprintbackendcups.c:1412
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "印表機「%s」至少有一個碳粉/墨水不足。"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: modules/printbackends/cups/gtkprintbackendcups.c:1414
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "印表機「%s」至少有一個碳粉/墨水用完。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1415
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "印表機「%s」的外殼是打開的。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1416
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "印表機「%s」的紙匣門是打開的。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: modules/printbackends/cups/gtkprintbackendcups.c:1417
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "印表機「%s」紙張不足。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: modules/printbackends/cups/gtkprintbackendcups.c:1418
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "印表機「%s」紙張用完。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: modules/printbackends/cups/gtkprintbackendcups.c:1419
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "印表機「%s」目前離線。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: modules/printbackends/cups/gtkprintbackendcups.c:1420
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "印表機「%s」可能尚未連線。"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "印表機「%s」發生問題。"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1707
+#: modules/printbackends/cups/gtkprintbackendcups.c:1700
 msgid "Paused ; Rejecting Jobs"
 msgstr "已暫停；正在拒絕工作"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1713
+#: modules/printbackends/cups/gtkprintbackendcups.c:1706
 msgid "Rejecting Jobs"
 msgstr "正在拒絕工作"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2399
+#: modules/printbackends/cups/gtkprintbackendcups.c:2392
 msgid "Two Sided"
 msgstr "雙面"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2400
+#: modules/printbackends/cups/gtkprintbackendcups.c:2393
 msgid "Paper Type"
 msgstr "紙張類型"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2401
+#: modules/printbackends/cups/gtkprintbackendcups.c:2394
 msgid "Paper Source"
 msgstr "紙張來源"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2402
+#: modules/printbackends/cups/gtkprintbackendcups.c:2395
 msgid "Output Tray"
 msgstr "出紙匣"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2403
+#: modules/printbackends/cups/gtkprintbackendcups.c:2396
 msgid "Resolution"
 msgstr "解析度"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2404
+#: modules/printbackends/cups/gtkprintbackendcups.c:2397
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript 前置過濾器"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2413
+#: modules/printbackends/cups/gtkprintbackendcups.c:2406
 msgid "One Sided"
 msgstr "單面"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2415
+#: modules/printbackends/cups/gtkprintbackendcups.c:2408
 msgid "Long Edge (Standard)"
 msgstr "長邊（標準）"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2417
+#: modules/printbackends/cups/gtkprintbackendcups.c:2410
 msgid "Short Edge (Flip)"
 msgstr "短邊（翻轉）"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2419
-#: modules/printbackends/cups/gtkprintbackendcups.c:2421
-#: modules/printbackends/cups/gtkprintbackendcups.c:2429
+#: modules/printbackends/cups/gtkprintbackendcups.c:2412
+#: modules/printbackends/cups/gtkprintbackendcups.c:2414
+#: modules/printbackends/cups/gtkprintbackendcups.c:2422
 msgid "Auto Select"
 msgstr "自動選擇"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2423
-#: modules/printbackends/cups/gtkprintbackendcups.c:2425
-#: modules/printbackends/cups/gtkprintbackendcups.c:2427
-#: modules/printbackends/cups/gtkprintbackendcups.c:2431
-#: modules/printbackends/cups/gtkprintbackendcups.c:2917
+#: modules/printbackends/cups/gtkprintbackendcups.c:2416
+#: modules/printbackends/cups/gtkprintbackendcups.c:2418
+#: modules/printbackends/cups/gtkprintbackendcups.c:2420
+#: modules/printbackends/cups/gtkprintbackendcups.c:2424
+#: modules/printbackends/cups/gtkprintbackendcups.c:2910
 msgid "Printer Default"
 msgstr "印表機預設"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2433
+#: modules/printbackends/cups/gtkprintbackendcups.c:2426
 msgid "Embed GhostScript fonts only"
 msgstr "只有內嵌的 GhostScript 字型"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2435
+#: modules/printbackends/cups/gtkprintbackendcups.c:2428
 msgid "Convert to PS level 1"
 msgstr "轉換為 PS 等級 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2437
+#: modules/printbackends/cups/gtkprintbackendcups.c:2430
 msgid "Convert to PS level 2"
 msgstr "轉換為 PS 等級 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2439
+#: modules/printbackends/cups/gtkprintbackendcups.c:2432
 msgid "No pre-filtering"
 msgstr "無前置過濾器"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:2441
 msgid "Miscellaneous"
 msgstr "雜項"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3125
+#: modules/printbackends/cups/gtkprintbackendcups.c:3118
 msgid "Urgent"
 msgstr "緊急"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3125
+#: modules/printbackends/cups/gtkprintbackendcups.c:3118
 msgid "High"
 msgstr "高"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3125
+#: modules/printbackends/cups/gtkprintbackendcups.c:3118
 msgid "Medium"
 msgstr "中"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3125
+#: modules/printbackends/cups/gtkprintbackendcups.c:3118
 msgid "Low"
 msgstr "低"
 
@@ -4974,66 +4983,66 @@ msgstr "低"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3148
+#: modules/printbackends/cups/gtkprintbackendcups.c:3142
 msgid "Pages per Sheet"
 msgstr "每表頁數"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3185
+#: modules/printbackends/cups/gtkprintbackendcups.c:3179
 msgid "Job Priority"
 msgstr "工作優先權:"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3196
+#: modules/printbackends/cups/gtkprintbackendcups.c:3190
 msgid "Billing Info"
 msgstr "計費資訊"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "None"
 msgstr "沒有"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Classified"
 msgstr "已分類"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Confidential"
 msgstr "機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Secret"
 msgstr "密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Standard"
 msgstr "標準"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Top Secret"
 msgstr "高度機密"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3210
+#: modules/printbackends/cups/gtkprintbackendcups.c:3205
 msgid "Unclassified"
 msgstr "未分類"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3245
+#: modules/printbackends/cups/gtkprintbackendcups.c:3240
 msgid "Before"
 msgstr "封面"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3260
+#: modules/printbackends/cups/gtkprintbackendcups.c:3255
 msgid "After"
 msgstr "封底"
 
@@ -5041,14 +5050,14 @@ msgstr "封底"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3280
+#: modules/printbackends/cups/gtkprintbackendcups.c:3275
 msgid "Print at"
 msgstr "列印於"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3291
+#: modules/printbackends/cups/gtkprintbackendcups.c:3286
 msgid "Print at time"
 msgstr "於指定時刻列印"
 
@@ -5056,39 +5065,43 @@ msgstr "於指定時刻列印"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3326
+#: modules/printbackends/cups/gtkprintbackendcups.c:3321
 #, c-format
 msgid "Custom %sx%s"
 msgstr "自訂 %sx%s"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:235
+#: modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
 msgstr "output.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:469
+#: modules/printbackends/file/gtkprintbackendfile.c:498
 msgid "Print to File"
 msgstr "列印至檔案"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:546
+#: modules/printbackends/file/gtkprintbackendfile.c:575
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:546
+#: modules/printbackends/file/gtkprintbackendfile.c:575
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:558
+#: modules/printbackends/file/gtkprintbackendfile.c:575
+msgid "SVG"
+msgstr ""
+
+#: modules/printbackends/file/gtkprintbackendfile.c:587
 #: modules/printbackends/test/gtkprintbackendtest.c:506
 msgid "Pages per _sheet:"
 msgstr "每張紙的頁數(_S)"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:604
+#: modules/printbackends/file/gtkprintbackendfile.c:646
 msgid "File"
 msgstr "檔案"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:613
+#: modules/printbackends/file/gtkprintbackendfile.c:656
 msgid "_Output format"
 msgstr "輸出格式(_O)"
 

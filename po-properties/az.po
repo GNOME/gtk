@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2004-03-07 18:05+0200\n"
 "Last-Translator: Mətin Əmirov <metin@karegen.com>\n"
 "Language-Team: Azerbaijani Turkish <translation-team-az@lists.sourceforge."
@@ -83,7 +83,7 @@ msgstr "Şablon başına bit"
 msgid "The number of bits per sample"
 msgstr "Şablon başına bit ədədi"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "En"
 
@@ -355,11 +355,11 @@ msgstr "Yazı növü adı"
 msgid "The name of the icon from the icon theme"
 msgstr "Seçili yazı növünün adı"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "Üfüqi ikən görünən"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -379,11 +379,11 @@ msgid ""
 "overflow menu."
 msgstr "TRUE olanda, bu gedişat üçün boş menyu vəkilləri gizli olacaqdır."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "Şaquli ikən görünən"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -391,7 +391,7 @@ msgstr ""
 "Vasitə çubuğunun şaquli istiqamətdə olduğu zaman vasitə çubuğu üzvünün "
 "göstərilməsi."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "Vacibdir"
 
@@ -421,7 +421,7 @@ msgid "Whether the action is enabled."
 msgstr "Gedişatın fəal olması."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "Görünən"
 
@@ -777,8 +777,8 @@ msgstr ""
 "DOĞRU isə, törəmə ikinci törəmə qrupunda ortaya çıxır, məs. yardım düymələri "
 "üçün uyğundur"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "Boşluq"
 
@@ -796,7 +796,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Törəmənin eyni böyüklükdə olub olmayacağı"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Genişlət"
 
@@ -1632,7 +1632,7 @@ msgstr "Qırma eni"
 msgid "The width at which the text is wrapped"
 msgstr "Hazırkı dəyərin göstəriləcəyi mövqe"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "USəviyyələmə"
 
@@ -1872,7 +1872,7 @@ msgstr "Rəngə alfa qiymətinin verilməsi"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Başlıq"
 
@@ -2663,7 +2663,7 @@ msgstr "Minimal Açar Uzunluğu"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Nəticələri axtarmaq üçün minimal axtarış açarı uzunluğu"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 #, fuzzy
 msgid "Text column"
 msgstr "Mətn Sütünü"
@@ -2772,11 +2772,11 @@ msgstr "Etiket widgeti"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Həmişəki genişləndirici etiketin yerində göstəriləvək widget"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "Genişləndirici Böyüklüyü"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "Genişlədici oxun böyüklüyü"
 
@@ -2875,6 +2875,17 @@ msgstr ""
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "Fayl əməliyyatlarını göstər"
+
+#: gtk/gtkfilechooser.c:284
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 
 #: gtk/gtkfilechooserbutton.c:376
@@ -3073,95 +3084,95 @@ msgid ""
 "detached."
 msgstr ""
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 #, fuzzy
 msgid "Selection mode"
 msgstr "Seçim Sahəsi"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 #, fuzzy
 msgid "The selection mode"
 msgstr "Seçili il"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 #, fuzzy
 msgid "Pixbuf column"
 msgstr "Mətn Sütünü"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr ""
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr ""
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 #, fuzzy
 msgid "Markup column"
 msgstr "İşarət"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 #, fuzzy
 msgid "Icon View Model"
 msgstr "AğacGörünüşü Modeli"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 #, fuzzy
 msgid "The model for the icon view"
 msgstr "Ağac görünüşü modeli"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 #, fuzzy
 msgid "Number of columns"
 msgstr "Kanal Ədədi"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 #, fuzzy
 msgid "Number of columns to display"
 msgstr "Göstəriləcək onluq sahə miqdarı"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 #, fuzzy
 msgid "Width for each item"
 msgstr "Üzv etiketində işlədiləcək timsal"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr ""
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr ""
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 #, fuzzy
 msgid "Row Spacing"
 msgstr "Sətir aralığı"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 #, fuzzy
 msgid "Column Spacing"
 msgstr "Sütünlar arası boşluq"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr ""
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 #, fuzzy
 msgid "Margin"
 msgstr "Sol Kənar"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
@@ -3170,15 +3181,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "Yenidən sıraya qoyula bilən"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "Görünüş yenidən sıraya qoyula bilər"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "Mətn Sütünü"
@@ -3188,22 +3199,31 @@ msgstr "Mətn Sütünü"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Data source modelindəki qatarların alınacağı sütun"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "Alt Kənarlama"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 #, fuzzy
 msgid "Selection Box Color"
 msgstr "Seçim Sahəsi"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 #, fuzzy
 msgid "Color of the selection box"
 msgstr "Yazı növü seçmə dialoqunun etiketi"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 #, fuzzy
 msgid "Selection Box Alpha"
 msgstr "Seçim Sahəsi"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 #, fuzzy
 msgid "Opacity of the selection box"
 msgstr "Yazı növü seçmə dialoqunun etiketi"
@@ -4382,7 +4402,7 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Səhifə Böyüklüyü"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr ""
 
@@ -4392,152 +4412,162 @@ msgid ""
 "print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 #, fuzzy
 msgid "Default Page Setup"
 msgstr "Əsas Hündürlük"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 #, fuzzy
 msgid "Job Name"
 msgstr "Yazı növü adı"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 #, fuzzy
 msgid "Number of Pages"
 msgstr "Kanal Ədədi"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 #, fuzzy
 msgid "The number of pages in the document."
 msgstr "Cəvəldəki sıraların miqdarı"
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 #, fuzzy
 msgid "Current Page"
 msgstr "Hazırkı Alfa"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 #, fuzzy
 msgid "The current page in the document"
 msgstr "Qurğunun səhifə böyüklüyü"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 #, fuzzy
 msgid "Use full page"
 msgstr "Alfa işlət"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 #, fuzzy
 msgid "Show Dialog"
 msgstr "Başlığı Göstər"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 #, fuzzy
 msgid "Allow Async"
 msgstr "Xədkeşlərə icazə ver"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 #, fuzzy
 msgid "Export filename"
 msgstr "Fayl adı"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 #, fuzzy
 msgid "The status of the print operation"
 msgstr "Düymənin Açma/Qapama halı."
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 #, fuzzy
 msgid "Custom tab label"
 msgstr "Hazırkı palet"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Yazı növü seçmə dialoqunun etiketi"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Seçili il"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Səhifə Böyüklüyü"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "Kanal Ədədi"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "Cəvəldəki sıraların miqdarı"
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -5163,11 +5193,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Sürüşdürmə çubuğunun qarşı tərəfində ikinci irəli ox düyməsini göstər"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "Üfüqi Yayma"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "Şaquli Yayılma"
 
@@ -6644,7 +6674,7 @@ msgstr "Sətir aralığı"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Step düymələri və thumb arasındakı məsafə"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6660,350 +6690,359 @@ msgstr "TreeModelSort Modeli"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort ağac görünüşü modeli üçün çeşidləmə modeli"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "AğacGörünüşü Modeli"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "Ağac görünüşü modeli"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "Pəncərəciyin Üfüqi Yayılması"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "Pəncərəciyin Şaquli Yayılması"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 #, fuzzy
 msgid "Headers Visible"
 msgstr "Tıqlana Bilən Başlıqlar"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "Sütun başlığı düymələrini göstər"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "Tıqlana Bilən Başlıqlar"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "Sütunların başlıqları kliqləmə gedişatlarına cavab versin"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "Açıcı Sütunu"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "Genişlədici sütun olacaq sütunu seç"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "Qayda Məsləhəti"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Örtük motoruna sətrləri alternativ rənglərdə göstərilməsini ehkam et"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "Axtarışı Fəallaşdır"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "Görünüş, istifadəçilərə model sütunları içində axtarma imkanı verir"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "Sütün Axtar"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 #, fuzzy
 msgid "Model column to search through during interactive search"
 msgstr "Kodun içində axtarırkən, içində axtarılacaq model sütunu"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "Sabit Hündürlük Modu"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Bütün sətirlərin eyni hündürlüyə malik olduğunu qəbul edərək GtkTreeView-nu "
 "sürətləndirir"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr ""
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr "Rəng seçicisinin harda matlıq qurğusunu alıb ala bilməyəcəyi"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 #, fuzzy
 msgid "Hover Expand"
 msgstr "Genişlət"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Pəncərənin pəncərə idarəçisi tərəfindən bəzənməsi"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 #, fuzzy
 msgid "Show Expanders"
 msgstr "Genişləndiricidir"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 #, fuzzy
 msgid "View has expanders"
 msgstr "Genişləndiricidir"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr ""
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr ""
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr ""
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 #, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "Birdən çox faylın seçilə bilməsinə icazə verilməsi"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 #, fuzzy
 msgid "Enable Grid Lines"
 msgstr "Ox düymələrini fəallaşdır"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 #, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "Ox düymələrini fəallaşdır"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Kənarın harda göstərilib göstərilməyəcəyi"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "Data source modelindəki qatarların alınacağı sütun"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "Şaquli Ayırıcı Eni"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Hüceyrələr arasındakı şaquli aralıq. Cüt rəqəm olmalıdır"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "Üfüqi Ayırıcı Eni"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Hüceyrələr arasındakı üfqi aralıq. Cüt rəqəm olmalıdır"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "Xədkeşlərə icazə ver"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "Alternativ sətirlərin göstərilməsinə icazə ver"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "İndent Açıcılar"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "Genişləndiriciləri çərtmələ"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "Cüt Sətir Rəngi"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "Cüt sətirlər üçün işlədiləcək rəng"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "Tək Sətir Rəngi"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "Tək sətirlər üçün işlədiləcək rəng"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 #, fuzzy
 msgid "Grid line width"
 msgstr "Fokus uzunluğu"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Piksel olaraq fokus indikatoru eni"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 #, fuzzy
 msgid "Tree line width"
 msgstr "Sabit en"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Piksel olaraq fokus indikatoru eni"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Fokus sətiri tire naxışı"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Fokus indikatoru göstərilməsi üçün lazımi tire naxışı"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Fokus sətiri tire naxışı"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Fokus indikatoru göstərilməsi üçün lazımi tire naxışı"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "Sütunu harda göstərək"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Böyüklüyü dəyişdirilə bilən"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "Sütunun böyüklüyü istifadəçi tərəfindən dəyişdirilə bilsin"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "Sütunun hazırkı eni"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "Böyüklük"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "Sütunların mod böyüklüyünü dəyişdir"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "Sabit En"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "Sütunun hazırkı sabit eni"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "Minimal En"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "Sütunun qəbul edilmiş minimal eni"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "Maksimal En"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "Sütunun qəbul edilmiş maksimal eni"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "Sütun başlığındakı bənd"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Sütun widget-ə ayırılan əlavə endən pay alır"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "Tıqlana bilən"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "Başlığın tıqlanma qabiliyyəti"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr "Sütun başlığı yerinə göstəriləcək sütun başlığı düyməsi pəncərəciyi"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "Sütun başlığı ya da pəncərəciyinin X səviyyələməsi"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "Sütünün başlıqlar ətrafında yenidən sıralanıb sıralanamayacağı"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "Sıralama indikatoru"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "Sıralama indikatoru göstərilməsi"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "Süzmə əmri"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sıralama indikatorundakı sıralama istiqaməti buranı göstərsin: "
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "Mətn Sütünü"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

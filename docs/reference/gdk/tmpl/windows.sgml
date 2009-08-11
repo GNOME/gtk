@@ -221,6 +221,11 @@ these types.
 @arg3: 
 @arg4: 
 
+<!-- ##### ARG GdkWindow:cursor ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
 Describes the kind of window.

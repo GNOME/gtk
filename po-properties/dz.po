@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -60,7 +60,7 @@ msgstr "དཔེ་ཚད་རེའི་ བིཊིསི།"
 msgid "The number of bits per sample"
 msgstr "དཔེ་ཚད་རེའི་ བིཊིསི་གི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "རྒྱ་ཚད།"
 
@@ -327,11 +327,11 @@ msgstr "ངོས་དཔར་གྱི་མིང༌།"
 msgid "The name of the icon from the icon theme"
 msgstr "ངོས་དཔར་བརྗོད་དོན་ནང་ལས་ ངོས་དཔར་གྱི་མིང༌།"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "ཐད་སྙོམས་སྐབས་ མཐོང་ཚུགསཔ།"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -350,11 +350,11 @@ msgstr ""
 "ངེས་བདེན་སྐབས་ བྱ་བ་འདི་གི་ ལག་ཆས་རྣམ་གྲངས་ཀྱི་ པོརོག་སི་ཚུ་ ལག་ཆས་ཕྲ་རིང་ ཕྱིར་ལུད་དཀར་ཆག་ནང་ "
 "ངོ་ཚབ་འབད་དེ་ཡོདཔ་ཨིན།"
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "ཀེར་ཕྲང་སྐབས་ མཐོང་ཚུགས།"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -362,7 +362,7 @@ msgstr ""
 "ལག་ཆས་ཕྲ་རིང་དེ་ ཀེར་ཕྲང་གི་ཕྱོགས་ནང་ཡོད་པའི་སྐབས་ ལག་ཆས་ཕྲ་རིང་གི་རྣམ་གྲངས་དེ་ མཐོང་ཚུགས་ག་མི་"
 "ཚུགས།"
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "གལ་ཅན་ཨིན།"
 
@@ -392,7 +392,7 @@ msgid "Whether the action is enabled."
 msgstr "བྱ་བ་དེ་ ལྕོགས་ཅན་ཨིན་ན།"
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "མཐོང་ཚུགསཔ།"
 
@@ -748,8 +748,8 @@ msgstr ""
 "ངེས་བདེན་ཨིན་པ་ཅིན་ ཆ་ལག་དེ་ གནད་གལ་ཆུང་བའི་ ཆ་ལག་སྡེ་ཚན་ཅིག་ནང་ཐོནམ་ལས་ དཔེར་ན་ གྲོགས་རམ་"
 "ཨེབ་རྟ་ཚུ་ལུ་ འོས་འབབ་ཡོདཔ་ཨིན།"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "བར་སྟོང༌བཞག་ཐངས། "
 
@@ -767,7 +767,7 @@ msgid "Whether the children should all be the same size"
 msgstr "ཆ་ལག་ཆ་མཉམ་རང་ ཆེ་ཆུང་འདྲན་འདྲ་ འོང་དགོཔ་ཨིན་ན་མེན།"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "རྒྱ་འཕར།"
 
@@ -1589,7 +1589,7 @@ msgstr "རྒྱ་ཚད་ལོག་མཚམས་བཟོ།"
 msgid "The width at which the text is wrapped"
 msgstr "ཚིག་ཡིག་ལོག་མཚམས་རྒྱ་ཚད།"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "ཕྲང་སྒྲིག"
 
@@ -1823,7 +1823,7 @@ msgstr "ཚོས་གཞི་ལུ་ ཨཱལ་ཕ་གི་བེ་�
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "མགོ་མིང༌།"
 
@@ -2603,7 +2603,7 @@ msgstr "ལྡེ་མིག་གི་ རིང་ཚད་ཉུང་མ�
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "མཐུན་སྒྲིག་བལྟ་ནིའི་དོན་ལུ་ འཚོལ་ཞིབ་ལྡེ་མིག་གི་ རིང་ཚད་ཉུང་མཐའ།"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "ཚིག་ཡིག་གི་ཀེར་ཐིག"
 
@@ -2710,11 +2710,11 @@ msgstr "ཁ་ཡིག་གི་ ཝིཌ་གེཊི།"
 msgid "A widget to display in place of the usual expander label"
 msgstr "ཨ་རྟག་གི་འཕར་བྱེད་ ཁ་ཡིག་ཚབ་ལུ་ བཀྲམ་སྟོན་འབད་ནིའི་ ཝིཌ་གེཊི་ཅིག"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "འཕར་བྱེད་ཀྱི་ཚད།"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "འཕར་བྱེད་མདའ་རྟགས་ཀྱི་ཚད།"
 
@@ -2813,6 +2813,20 @@ msgstr "ངེས་དཔྱད་ཚབ་སྲུང་འབད་ནི་
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"སྲུང་བཞག་ཐབས་ལམ་ནང་གི་ ཡིག་སྣོད་འདེམས་བྱེད་དེ་གིས་ དགོས་མཁོ་བྱུང་པ་ཅིན་ ཚབ་སྲུང་འབད་ནིའི་ངེས་དཔྱད་"
+"འབད་དགོཔ་ཨིན་ན་མེན།"
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "ཡིག་སྣོད་བཀོལ་སྤྱོད་ཚུ་སྟོན།"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "སྲུང་བཞག་ཐབས་ལམ་ནང་གི་ ཡིག་སྣོད་འདེམས་བྱེད་དེ་གིས་ དགོས་མཁོ་བྱུང་པ་ཅིན་ ཚབ་སྲུང་འབད་ནིའི་ངེས་དཔྱད་"
 "འབད་དགོཔ་ཨིན་ན་མེན།"
@@ -3013,84 +3027,84 @@ msgid ""
 "detached."
 msgstr ""
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "སེལ་འཐུའི་ཐབས་ལམ།"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "སེལ་འཐུའི་ཐབས་ལམ་དེ།"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "པར་ཁོངས་ཀེར་ཐིག"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "པར་ཁོངས་ངོས་དཔར་ སླར་འདྲེན་གྱི་དོན་ལུ་ ལག་ལེན་འཐབ་མི་ ཀེར་ཐིག་དཔེ།"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "ཚིག་ཡིག་སླར་འདྲེན་གྱི་དོན་ལུ་ ལག་ལེན་འཐབ་མི་ ཀེར་ཐིག་དཔེ།"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "རྟགས་བཀོད་ཀེར་ཐིག"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "པང་གོ་རྟགས་བཀོད་ ལག་ལེན་འཐབ་ཨིན་པ་ཅིན་ ཚིག་ཡིག་སླར་འདྲེན་གྱི་དོན་ལུ་ ལག་ལེན་འཐབ་མི་ ཀེར་ཐིག་དཔེ།"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "ངོས་དཔར་མཐོང་སྣང་གི་དཔེ།"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "ངོས་དཔར་མཐོང་སྣང་གི་དོན་ལུ་དཔེ་དེ། "
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "ཀེར་ཐིག་གྲངས།"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "བཀྲམ་སྟོན་འབད་ནིའི་ ཀེར་ཐིག་གྲངས།"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "རྣམ་གྲངས་རེའི་རྒྱ་ཚད།"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "རྣམ་གྲངས་རེ་རེའི་དོན་ལུ་ ལག་ལེན་འཐབ་མི་རྒྱ་ཚད།"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "རྣམ་གྲངས་ཅིག་གི་ ནང་ཐིག་ཚུ་གི་བར་ན་ བཙུགས་མི་བར་སྟོང༌།"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "གྲལ་ཐིག་བར་སྟོང་།"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "གི་རིཌི་གྲལ་རིམ་ཚུ་གི་བར་ན་ བཙུགས་མི་བར་སྟོང༌།"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "ཀེར་ཐིག་བར་སྟོང་།"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "གི་རིཌི་ཀེར་ཐིག་ཚུ་གི་བར་ན་བཙུགས་མི་བར་སྟོང༌།"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "ས་སྟོང༌།"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "ངོས་དཔར་མཐོང་སྣང་གི་ མཐའ་མར་བཙུགས་མི་བར་སྟོང༌།"
 
@@ -3099,15 +3113,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "རྣམ་གྲངས་རེ་རེ་བཞིན་དུའི་ ཚིག་ཡིག་དང་ ངོས་དཔར་ཚུ་ རེ་རེའི་འབྲེལ་བ་དང་འཁྲིལ་ཏེ་གནས་ཐངས།"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "གོ་རིམ་བསྐྱར་སྒྲིག་འབད་བཏུབ།"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "མཐོང་སྣང་དེ་ གོ་རིམ་བསྐྱར་སྒྲིག་འབད་བཏུབ།"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "ཚིག་ཡིག་གི་ཀེར་ཐིག"
@@ -3117,19 +3131,28 @@ msgstr "ཚིག་ཡིག་གི་ཀེར་ཐིག"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "ཡིག་རྒྱུན་འཛིན་ཏེ་ཡོད་མི་ དཔེའི་ཀེར་ཐིག"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "མཇུག་གི་བར་ཤབས།"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "སེལ་འཐུའི་སྒྲོམ་གྱི་ཚོས་གཞི།"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "སེལ་འཐུའི་སྒྲོམ་དེ་གི་ཚོས་གཞི།"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "སེལ་འཐུའི་སྒྲོམ་གྱི་ཨཱལ་ཕ།"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "སེལ་འཐུའི་སྒྲོམ་གྱི་དྭངས་སྒྲིབ།"
 
@@ -4257,7 +4280,7 @@ msgstr "དཔར་འཕྲུལ་སྒྲིག་སྟངས།"
 msgid "Page Setup"
 msgstr "ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "དཔར་བསྐྲུན་གནས་ཚད་རྗེས་འཚོལ་འབད།"
 
@@ -4269,51 +4292,51 @@ msgstr ""
 "དཔར་བསྐྲུན་གནད་སྡུད་དེ་ དཔར་འཕྲུལ་ ཡང་ན་ དཔར་བསྐྲུན་སར་བར་ལུ་ བཏང་ཚར་བའི་ཤུལ་ལུ་ དཔར་བསྐྲུན་ལས་"
 "གཡོག་གིས་ འཕྲོ་མཐུད་དེ་རང་ གནས་ཚད་བསྒྱུར་བཅོས་ཀྱི་བརྡ་མཚོན་སྟོན་པ་ཅིན་ བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "སྔོན་སྒྲིག་ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "སྔོན་སྒྲིག་ཐོག་ལས་ལག་ལེན་འཐབ་མི་ ཇི་ཊི་ཀེ་ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "དཔར་བསྐྲུན་སྒྲིག་སྟངས།"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "ཌའི་ལོག་འགོ་འབྱེད་འབད་ནི་ལུ་ལག་ལེན་འཐབ་མི་ ཇི་ཊི་ཀེ་དཔར་བསྐྲུན་སྒྲིག་སྟངས།"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "ལས་གཡོག་གི་མིང༌།"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr "དཔར་བསྐྲུན་ལས་གཡོག་ ངོས་འཛིན་འབད་ནི་ལུ་ལག་ལེན་འཐབ་མི་ཡིག་རྒྱུན།"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "ཤོག་གྲངས།"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "ཡིག་ཆའི་ནང་གི་ཤོག་གྲངས།"
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "ད་ལྟོའི་ཤོག་ལེབ།"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "ཡིག་ཆ་ནང་ད་ལྟོའི་ཤོག་ལེབ།"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "ཤོག་ལེབ་གངམ་ལག་ལེན་འཐབ།"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 #, fuzzy
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
@@ -4322,7 +4345,7 @@ msgstr ""
 "སྐབས་དོན་འདི་གི་བྱུང་ས་ གཟུགས་བརྙན་བཟོ་བཏུབ་པའི་མངའ་ཁོངས་ཀྱི་ཟུར་ཁར་་མེན་པར་ ཤོག་ལེབ་ཀྱི་ཟུར་ཁརཨིན་"
 "པ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4331,86 +4354,96 @@ msgstr ""
 "བཀོལ་སྤྱོད་ཀྱིས་ དཔར་བསྐྲུན་གྱི་ལས་གཡོག་གནས་ཚད་ཀྱི་སྐོར་ལས་ འཕྲོ་མཐུད་དེ་རང་སྙན་ཞུ་འབད་བ་ཅིན་ བདེན་པ་"
 "ཨིན།"
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "ཆ་ཕྲན།"
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr "སྐབས་དོན་ནང་ རིང་ཚད་འཇལ་བཏུབ་པའི་ཆ་ཕྲན།"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "ཌའི་ལོག་སྟོན།"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "དཔར་བསྐྲུན་འབད་བའི་སྐབས་ལུ་ ཡར་འཕེལ་གྱི་ཌའི་ལོག་ཅིག་སྟོན་པ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "མཉམ་འབྱུང་འབད་བཅུག"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "དཔར་བསྐྲུན་བྱ་རིམ་གྱིས་ གནད་སྡུད་རྒྱུན་སྤེལ་གཡོག་བཀོལ་བ་ཅིན་བདེན་པ་ཨིན།"
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "་ཡིག་སྣོད་མིང་ཕྱིར་འདྲེན་འབད།"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "གནས་ལུགས།"
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "དཔར་བསྐྲུན་བཀོལ་སྤྱོད་གནས་ལུགས།"
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "གནས་ལུགས་ཡིག་རྒྱུན།"
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr "གནས་ལུགས་དེ་གི་ མི་གིས་ལྷག་ཚུགས་པའི་འགྲེལ་བཤད་ཅིག"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "་སྲོལ་སྒྲིག་ཨེབ་ལྡེའི་ཁ་ཡིག"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "སྲོལ་སྒྲིག་ཝི་གེཊསི་ཡོད་པའི་ཨེབ་ལྡེའི་དོན་ལུ་ཁ་ཡིག"
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "འཕུར་ལྡིང་གི་སེལ་འཐུ།"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 #, fuzzy
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 "%བདེན་པ། གལ་སྲིད་ ཇི་ཊི་ཀེ་ དཔར་བསྐྲུན་ བཀོལ་སྤྱོད་ གཡོག་བོཀལ་གྱིས་ དཔར་བསྐྲུན་ཌའི་ལོག་སྟོན་དགོ་པ་ཅིན།"
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "སེལ་འཐུ་འདུག"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "ཤོག་གྲངས།"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "ཡིག་ཆའི་ནང་གི་ཤོག་གྲངས།"
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -5016,11 +5049,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "བཤུད་ཕྲ་གི་མཇུག་ལྡོག་ལུ་ གདོང་བསྐྱོད་ཀྱི་མདའ་རྟགས་ཨེབ་རྟ་ གཉིས་པ་ཅིག་ བཀྲམ་སྟོན་འབད།"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "ཐད་སྙོམས་བདེ་སྒྲིག"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "ཀེར་ཕྲང་བདེ་སྒྲིག"
 
@@ -6471,7 +6504,7 @@ msgstr "ངོས་དཔར་གྱི་བར་སྟོང་བཞག་
 msgid "Spacing in pixels between the icon and label"
 msgstr "ངོས་དཔར་དང་ ཝཁ་ཡིག་གི་བར་ན་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6487,332 +6520,341 @@ msgstr "TreeModelSortདཔེ།"
 msgid "The model for the TreeModelSort to sort"
 msgstr "དབྱེ་སེལ་འབད་ནིའི་དོན་ལས་ TreeModelSort དཔེ་དེ།"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་གི་དཔེ།"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་གི་དཔེ་དེ།"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "ཝིཌི་གེཊི་གི་དོན་ལུ་ ཐད་སྙོམས་བདེ་སྒྲིག"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "ཝིཌི་གེཊི་གི་དོན་ལུ་ ཀེར་ཕྲང་བདེ་སྒྲིག"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "མཐོང་ཚུགས་པའི་མགོ་ཡིག་ཚུ།"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "ཀེར་ཐིག་མགོ་ཡིག་ཨེབ་རྟ་ཚུ་སྟོན།"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "མགོ་ཡིག་ཚུ་ ཨེབ་གཏང་འབད་བཏུབ།"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "ཀེར་ཐིག་མགོ་ཡིག་ཚུ་གིས་ ཨེབ་གཏང་བྱུང་ལས་ཚུ་ལུ་ ངོས་ལན་འབདཝ་ཨིན།"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "འཕར་བྱེད་ཀེར་ཐིག"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "འཕར་བྱེད་ཀེར་ཐིག་དོན་ལུ་ ཀེར་ཐིག་གཞི་སྒྲིག་འབད།"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "ལམ་ལུགས་ཀྱི་སྤུས་ཚད་ལེགས་བཅོས།"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "ཀེར་ཐིག་ཚུ་ སོར་སྡེབ་ཚོས་གཞི་ཐོག་ལུ་ འཐེན་ནིའི་དོན་ལུ་ བརྗོད་དོན་གྱི་མ་འཕྲུལ་ནང་ སྤུས་ཚད་ལེགས་བཅོས་ཅིག་ "
 "གཞི་སྒྲིག་འབད།"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "འཚོལ་ཞིབ་ལྕོགས་ཅན་བཟོ།"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "མཐོང་སྣང་གིས་ ལག་ལེན་འཐབ་མི་ཚུ་ ཀེར་ཐིག་ཚུ་བརྒྱུད་དེ་ ཕན་ཚུན་འཚོལ་ཞིབ་ འབད་བཅུགཔ་ཨིན།"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "ཀེར་ཐིག་འཚོལ་ཞིབ་འབད།"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 #, fuzzy
 msgid "Model column to search through during interactive search"
 msgstr "ཀོཌི་བརྒྱུད་དེ་ འཚོལ་ཞིབ་འབདཝ་ད་ བརྒྱུད་དེ་འཚོལ་ཞིབ་འབད་ནིའི་ ཀེར་ཐིག་གི་དཔེ།"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "གཏན་བཟོས་མཐོ་ཚད་ཐབས་ལམ།"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "གྲལ་ཐིག་ཆ་མཉམ་ལུ་ མཐོ་ཚད་འདྲ་མཉམ་ཡོད་པའི་ དབང་དུ་བཏང་སྟེ་ GtkTreeView མྱུར་བསྐྱོད་འབད།"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "འཕུར་ལྡིང་གི་སེལ་འཐུ།"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "སེལ་འཐུ་དེ་གིས་ དཔག་བྱེད་ཀྱི་ རྟིང་བདའ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "འཕུར་ལྡིང་གི་རྒྱ་འཕར།"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "དཔག་བྱེད་དེ་ གྲལ་ཐིག་གུ་ལས་ཕར་འགྱོཝ་ད་ གྲལ་ཐིག་ཚུ་ རྒྱ་འཕར་དགོཔ་/རམ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "འཕར་བྱེད་སྟོན།"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "མཐོང་སྣང་ལུ་འཕར་བྱེད་འདུག"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "གནས་རིམ་གྱི་འགོ་མཚམས།"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "གནས་རིམ་རེ་རེའི་དོན་ལུ་འགོ་མཚམས་ཐེབས།"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "གྱིབ་ཐག་གིས་བསྡམ་ནི།"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "སྣ་མང་རྣམ་གྲངས་ཚུ་ མའུསི་དཔག་བྱེད་འདྲུད་པའི་ཐོག་ལས་ སེལ་འཐུ་ལྕོགས་ཅན་བཟོ་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "གིརིཌི་གི་ཐིག་ཚུ་ ལྕོགས་ཅན་བཟོ། "
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "གིརིཌི་གི་ཐིག་ཚུ་ རྩ་འབྲེལ་མཐོང་སྣང་ནང་ འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "རྩ་འབྲེལ་གྱི་ཐིག་ཚུ་ ལྕོགས་ཅན་བཟོ།"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "རྩ་འབྲེལ་གྱི་ཐིག་ཚུ་ རྩ་འབྲེལ་གྱི་མཐོང་སྣང་ནང་ འབྲི་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "ཡིག་རྒྱུན་འཛིན་ཏེ་ཡོད་མི་ དཔེའི་ཀེར་ཐིག"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "ཀེར་ཕྲང་དབྱེ་བྱེད་ཀྱི་རྒྱ་ཚད།"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "ནང་ཐིག་ཚུ་གི་བར་ནའི་ ཀེར་ཕྲང་གི་བར་སྟོང་། ཆ་ཅན་ཅིག་ཨིན་དགོ"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "ཐད་སྙོམས་དབྱེ་བྱེད་ཀྱི་རྒྱ་ཚད།"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "ནང་ཐིག་ཚུ་གི་བར་ནའི་ ཐིག་སྙོམས་ཀྱི་བར་སྟོང་། ཆ་ཅན་ཅིག་ཨིན་དགོ"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "ལམ་ལུགས་ལག་ལེན་འཐབ་བཅུག་ནི།"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "སོར་སྡེབ་ཚོས་གཞིའི་གྲལ་ཐིག་ཚུ་འཐེན་བཅུག"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "འགོ་མཚམས་འཕར་བྱེད།"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "འཕར་བྱེད་ཚུ་ལུ་ འགོ་མཚམས་བཟོ།"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "གྲལ་ཐིག་ཆ་ཅན་གྱི་ཚོས་གཞི།"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "གྲལ་ཐིག་ཆ་ཅན་གྱི་དོན་ལུ་ ལག་ལེན་འཐབ་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "གྲལ་ཐིག་ཡ་ཅན་ཚོས་གཞི།"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "གྲལ་ཐིག་ཡ་ཅན་གྱི་དོན་ལུ་ ལག་ལེན་འཐབ་ནིའི་ཚོས་གཞི།"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "གྲལ་ཐིག་མཇུག་བསྡུའི་རྒྱས་བཤད།"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr "རྒྱ་བསྐྱེད་ཅན་གྱི་གྲལ་ཐིག་རྒྱབ་གཞིའི་བརྗོད་དོན་བཀོད་ནི་ལྕོགས་ཅན་བཟོ།"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "གིརིཌི་ཐི་གི་རྒྱ་ཚད།"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་གི་ གིརིཌི་ཐིག་གི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "རྩ་འབྲེལ་ཐིག་གི་རྒྱ་ཚད།"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་ཐིག་གི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "གིརིཌི་ཐིག་གི་དཔེ་གཞི།"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་གི་ཐིག་ འབྲི་ནི་ལུ་ ལག་ལེན་འཐབ་མི་ སྦྲེལ་རྟགས་དཔེ་གཞི།"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "རྩ་འབྲེལ་ཐིག་གི་དཔེ་གཞི།"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "རྩ་འབྲེལ་མཐོང་སྣང་གི་ཐིག་ འབྲི་ནི་ལུ་ ལག་ལེན་འཐབ་ནིའི་ སྦྲེལ་རྟགས་དཔེ་གཞི།"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "ཀེར་ཐིག་བཀྲམ་སྟོན་འབད་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "ཚད་བསྐྱར་བཟོ་་བཏུབ།"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "ཀེར་ཐིག་དེ་ ལག་ལེན་འཐབ་མི་གིས་ ཚད་བསྐྱར་བཟོ་འབད་་བཏུབ།"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "ཀེར་ཐིག་གི ད་ལྟོའི་རྒྱ་ཚད།"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "ནང་ཐིག་ཚུ་གི་བར་ན་ བཙུགས་མི་བར་སྟོང༌།"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "ཚད་བཟོ།"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "ཀེར་ཐིག་གི་ ཚད་བསྐྱར་བཟོའི་་ཐབས་ལམ།"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "གཏན་བཟོས་རྒྱ་ཚད།"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "ཀེར་ཐིག་གི་ ད་ལྟོའི་གཏན་བཟོས་རྒྱ་ཚད།"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "རྒྱ་ཚད་ཀྱི་ཉུང་མཐའ།"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "ཀེར་ཐིག་ལུ་ ཆོག་པའི་རྒྱ་ཚད་ཀྱི་ཉུང་མཐའ།"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "རྒྱ་ཚད་ཀྱི་མང་མཐའ།"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "ཀེར་ཐིག་ལུ་ ཆོག་པའི་རྒྱ་ཚད་ཀྱི་མང་མཐའ།"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "ཀེར་ཐིག་ མགོ་ཡིག་ནང་འབྱུང་དགོ་པའི་ མགོ་མིང་།"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "ཝིཌི་གེཊི་ལུ་སྐལ་སྤྲོད་འབད་མི་ རྒྱ་ཚད་ཐེབས་ཀྱི་དཔྱ་བགོ་དེ་ ཀེར་ཐིག་ལུ་འཐོབ་ཨིན།"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "ཨེབ་གཏང་འབད་བཏུབ།"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "མགུ་རྒྱན་དེ་ ཨེབ་གཏང་འབད་བཏུབ་ག་མི་བཏུབ།"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "ཝིཌི་གེཊི།"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr "ཝིཌི་གེཊི་དེ་ ཀེར་ཐིག་མགོ་མིང་ནང་མེན་པར་ ཀེར་ཐིག་མགུ་རྒྱན་གྱི་ ཨེབ་རྟའི་ནང་བཙུགས་དགོ"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "ཀེར་ཐིག་མགུ་རྒྱན་ནམ་ ཝིགི་གེཊི་གི་ ཨེགསི་ཕྲང་སྒྲིག"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "ཀེར་ཐིག་དེ་ མགུ་རྒྱན་གྱི་མཐའ་སྐོར་ཏེ་ གོ་རིམ་བསྐྱར་སྒྲིག་འབད་བཏུབ་ག་མི་བཏུབ།"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "དབྱེ་སེལ་བརྡ་སྟོན་པ།"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "དབྱེ་སེལ་བརྡ་སྟོན་པ་ཅིག་ སྟོན་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "དབྱེ་སེལ་གྱི་གོ་རིམ།"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "དབྱེ་སེལ་བརྡ་སྟོན་པ་གིས་ བརྡ་སྟོན་དགོ་པའི་ དབྱེ་སེལ་ཁ་ཕྱོགས།"
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "ཚིག་ཡིག་གི་ཀེར་ཐིག"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-24 23:18-0400\n"
+"POT-Creation-Date: 2009-08-11 14:23-0400\n"
 "PO-Revision-Date: 2009-03-27 09:21+0200\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -78,7 +78,7 @@ msgstr "Bits ανα δείγμα"
 msgid "The number of bits per sample"
 msgstr "Ο αριθμός των Bits ανα δείγμα"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "Πλάτος"
 
@@ -348,11 +348,11 @@ msgstr "Όνομα Εικονιδίου"
 msgid "The name of the icon from the icon theme"
 msgstr "Το όνομα του επιλεγμένου εικονιδίου από το θέμα εικονιδίου"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "Ορατό σε οριζόντια θέση"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -372,11 +372,11 @@ msgstr ""
 "Όταν είναι TRUE, οι κενοί διαμεσολαβητές μενού για αυτή την ενέργεια θα "
 "εςμφανίζονται στο μενού υπερχείλισης."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "Ορατό σε κάθετη θέση"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -384,7 +384,7 @@ msgstr ""
 "Αν το αντικείμενο εργαλειοθήκης θα είναι ορατό όταν η εργαλειοθήκη έχει "
 "κάθετοπροσανατολισμό."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "Είναι σημαντικό"
 
@@ -417,7 +417,7 @@ msgid "Whether the action is enabled."
 msgstr "Αν αυτή η ενέργεια θα είναι ενεργοποιημένη."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:518
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "Ορατό"
 
@@ -771,8 +771,8 @@ msgstr ""
 "Αν TRUE, το θυγατρικό εμφανίζεται σε μια δεύτερη ομάδα θυγατρικών κατάλληλη "
 "για π.χ κουμπιά βοήθειας"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "Διάκενο"
 
@@ -790,7 +790,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Αν όλα τα θυγατρικά θα είναι στο ίδιο μέγεθος"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Ανάπτυξη"
 
@@ -1617,7 +1617,7 @@ msgstr "Πλάτος αναδίπλωσης"
 msgid "The width at which the text is wrapped"
 msgstr "Το πλάτος στο οποίο θα αναδιπλώνεται το κείμενο"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "Στοίχιση"
 
@@ -1852,7 +1852,7 @@ msgstr "Αν θα δοθεί ή όχι στο χρώμα μια τιμή άλφ�
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
 #: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Τίτλος"
 
@@ -2603,7 +2603,7 @@ msgstr "Ελάχιστη διάρκεια κλειδιού"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Ελάχιστη διάρκεια του κλειδιού αναζήτησης για την εύρεση ταιριασμάτων"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "Στήλη κειμένου"
 
@@ -2712,11 +2712,11 @@ msgstr "Γραφικό συστατικό ετικέτας"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Ένα  γραφικό συστατικό στη θέση της σύνηθους ετικέττας αναπτυσόμμενου"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "Μέγεθος αναπτυσσόμενου"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "Μέγεθος του βέλους ανάπτυξης"
 
@@ -2821,6 +2821,20 @@ msgstr "Να γίνεται επιβεβαίωση αντικατάστασης"
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"Αν θα εμφανίζεται, όπου απαιτείται, διάλογος επιβεβαίωσης της αντικατάστασης "
+"κατά την αποθήκευση αρχείων με τον επιλογέα αρχείων."
+
+#: gtk/gtkfilechooser.c:283
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "Προβολή εργασιών αρχείου"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "Αν θα εμφανίζεται, όπου απαιτείται, διάλογος επιβεβαίωσης της αντικατάστασης "
 "κατά την αποθήκευση αρχείων με τον επιλογέα αρχείων."
@@ -3025,85 +3039,85 @@ msgstr ""
 "Τιμή bool που υποδεικνύει αν το θυγατρικό του κουτιού χειρισμού είναι "
 "συνημμένο ή αποσπασμένο."
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "Λειτουργία επιλογής"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "Η λειτουργία επιλογής"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "Στήλη Pixbuf"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Το μοντέλο στήλης για τη λήψη του pixbuf εικονιδίου από"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "Το μοντέλο στήλης που χρησιμοποιείται για τη λήψη του κειμένου από"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "Στήλη επισήμανσης"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Το μοντέλο στήλης για τη λήψη του κειμένου, στην περίπτωση χρήσης σήμανσης "
 "Pango"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "Μοντέλο προβολής εικονιδίων"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "Το μοντέλο για προβολή εικονιδίου"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "Ο αριθμός των στηλών"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "Ο αριθμός των στηλών που προβάλλεται"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "Πλάτος κάθε αντικειμένου"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "Το πλάτος που χρησιμοποιείται για κάθε στοιχείο"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "Το διάστημα που εισάγεται ανάμεσα στα κελιά ενός στοιχείου"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "Διάκενο γραμμών"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "Το διάστημα που εισάγεται ανάμεσα στα κελιά γραμμών πλέγματος"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "Διάκενο στηλών"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "Το διάστημα που εισάγεται ανάμεσα στις στήλες πλέγματος"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "Περιθώριο"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Το διάστημα που εισάγεται στα όρια της προβολής εικονιδίου"
 
@@ -3113,15 +3127,15 @@ msgid ""
 msgstr ""
 "Πως το κείμενο και κάθε στοιχείο τοποθετούνται σχετικά το ένα με το άλλο"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "Δυνατότητα αναδιάταξης"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "Η προβολή έχει δυνατότητα αναδιάταξης"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
 msgstr "Στήλη  αναδυόμενων συμβουλών"
 
@@ -3129,19 +3143,28 @@ msgstr "Στήλη  αναδυόμενων συμβουλών"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Στήλη στο μοντέλο που περιέχει τα κείμενα των αναδυόμενων συμβουλών"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "Γέμισμα προς τα κάτω"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "Χρώμα κουτιού επιλογής"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "Το χρώμα του κουτιού επιλογής"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "Άλφα κουτιού επιλογής"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "Αδιαφάνεια του κουτιού επιλογής"
 
@@ -4273,7 +4296,7 @@ msgstr "Ρυθμίσεις εκτυπωτή"
 msgid "Page Setup"
 msgstr "Διαμόρφωση σελίδας"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1078
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "Παρακολούθηση κατάστασης εκτύπωσης"
 
@@ -4286,53 +4309,53 @@ msgstr ""
 "κατάστασης μετά την αποστολή των δεδομένων στον εκτυπωτή ή τον εξυπηρετητή "
 "εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:950
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "Προεπιλεγμένη διαμόρφωση σελίδας"
 
-#: gtk/gtkprintoperation.c:951
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "Το προεπιλεγμένο GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Ρυθμίσεις εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr ""
 "Τα GtkPrintSettings που χρησιμοποιούνται κατά την αρχικοποίηση του διαλόγου"
 
-#: gtk/gtkprintoperation.c:988
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "Όνομα εργασίας"
 
-#: gtk/gtkprintoperation.c:989
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr ""
 "Αλφαριθμητικό που χρησιμοποιείται ως αναγνωριστικό της εργασίας εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "Αριθμός σελίδων"
 
-#: gtk/gtkprintoperation.c:1014
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "Ο αριθμός των σελίδων στο έγγραφο."
 
-#: gtk/gtkprintoperation.c:1035 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Τρέχουσα σελίδα"
 
-#: gtk/gtkprintoperation.c:1036 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "Η τρέχουσα σελίδα στο έγγραφο"
 
-#: gtk/gtkprintoperation.c:1057
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "Χρήση πλήρης σελίδας"
 
-#: gtk/gtkprintoperation.c:1058
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4340,7 +4363,7 @@ msgstr ""
 "TRUE αν η αρχή των περιεχομένων θα πρέπει να βρίσκεται στη γωνία της σελίδας "
 "και όχι στη γωνία της απεικονίσιμης περιοχής (imageable area)"
 
-#: gtk/gtkprintoperation.c:1079
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4349,86 +4372,96 @@ msgstr ""
 "εργασιών εκτύπωσης και μετά την αποστολή των δεδομένων στον εκτυπωτή ή τον "
 "εξυπηρετητή εκτύπωσης."
 
-#: gtk/gtkprintoperation.c:1096
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "Μονάδα"
 
-#: gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr ""
 "Η μονάδα με την οποία μπορούν να μετρηθούν οι αποστάσεις στα περιεχόμενα"
 
-#: gtk/gtkprintoperation.c:1114
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "Εμφάνιση διαλόγου"
 
-#: gtk/gtkprintoperation.c:1115
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE αν θα εμφανίζεται ο διάλογος προόδου κατά την εκτύπωση."
 
-#: gtk/gtkprintoperation.c:1138
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "Να επιτρέπεται Async"
 
-#: gtk/gtkprintoperation.c:1139
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE αν η διαδικασία εκτύπωσης μπορεί να εκτελείται ασύγχρονα."
 
-#: gtk/gtkprintoperation.c:1161 gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "Εξαγωγή ονόματος αρχείου"
 
-#: gtk/gtkprintoperation.c:1176
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: gtk/gtkprintoperation.c:1177
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "Η κατάσταση της εργασίας εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:1197
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "Αλφαριθμητικό κατάστασης"
 
-#: gtk/gtkprintoperation.c:1198
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr ""
 "Περιγραφή της κατάστασης σε μορφή προορισμένη για ανάγνωση από ανθρώπους"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "Προσαρμοσμένη ετικέτα καρτέλας"
 
-#: gtk/gtkprintoperation.c:1217
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "Ετικέτα της καρτέλας που περιέχει προσαρμοσμένα γραφικά συστατικά."
 
-#: gtk/gtkprintoperation.c:1232 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Επιλογή χρώματος"
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1249 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Έχει επιλογή"
 
-#: gtk/gtkprintoperation.c:1250
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1265 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Διαμόρφωση σελίδας"
 
-#: gtk/gtkprintoperation.c:1266
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#: gtk/gtkprintoperation.c:1291
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "Αριθμός σελίδων"
+
+#: gtk/gtkprintoperation.c:1292
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "Ο αριθμός των σελίδων στο έγγραφο."
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -5044,11 +5077,11 @@ msgstr ""
 "Προβολή ενός δεύτερου κουμπιού βέλους προς τα μπροστά στην αντίθετη άκρη της "
 "γραμμής κύλισης"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "Οριζόντια στοίχιση"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "Κάθετη στοίχιση"
 
@@ -6510,7 +6543,7 @@ msgstr "Διάκενο εικονιδίων"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Διάκενο σε εικονοστοιχεία μεταξύ εικονιδίου και ετικέτας"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6526,345 +6559,354 @@ msgstr "Μοντέλο δενδροειδούς ταξινόμησης"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Το μοντέλο για δενδροειδή ταξινόμηση"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "Μοντέλο Δενδροειδούς Προβολής"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "Το μοντέλο για δενδροειδή προβολή"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "Οριζόντια στοίχιση για το γραφικό συστατικό"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "Κάθετη  στοίχιση για το γραφικό συστατικό"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "Ορατές Κεφαλίδες"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "Προβολή των κουμπιών της κεφαλίδας στήλης"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "Δυνατότητα Κλικ στις Κεφαλίδες"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "Οι κεφαλίδες στηλών να ανταποκρίνονται σε γεγονότα κλικ"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "Διαστελλόμενη στήλη"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "Ορισμός στήλης για τη διαστελλόμενη στήλη"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "Συμβουλή κανόνων"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Ορισμός συμβουλής στη μηχανή θεμάτων για το σχεδιασμό γραμμών σε εναλλακτικά "
 "χρώματα."
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "Ενεργοποίηση Αναζήτησης"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "Η προβολή επιτρέπει τη  διαδραστική αναζήτηση μέσω στηλών"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "Στήλη Αναζήτησης"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through during interactive search"
 msgstr ""
 "Στήλη του μοντέλου στην οποία θα γίνει αναζήτηση κατά τη διαδραστική "
 "αναζήτηση"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "Λειτουργία σταθερού ύψους"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Συντομεύει το GtkTreeView με το να θεωρεί ότι όλες οι γραμμές έχουν το ίδιο "
 "ύψος"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "Επιλογή Hover"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "Αν η επιλογή θα ακολουθεί το δρομέα"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "Ανάπτυξη Hover"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Αν το οι γραμμές θα αναπτύσσονται/συμπτήσσονταο όταν περνά από πάνω τους ο "
 "δείκτης"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "Προβολή expanders"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "Η προβολή διαθέτει expanders"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "Επίπεδα εσοχών"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "Επιπλέον εσοχή σε κάθε επίπεδο"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "Ομαδοποίηση"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
 "Αν θα επιτρέπεται η επιλογή πολλαπλών αντικειμένων με το σύρσιμο του "
 "ποντικιού"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "Ενεργοποίηση γραμμών πλέγματος"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Αν θα εμφανίζονται οι γραμμές πλέγματος στην προβολή δέντρου"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "Ενεργοποίηση γραμμών δένδρου"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Αν θα εμφανίζονται οι γραμμές δέντρου στην προβολή δέντρου"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr ""
 "Η στήλη στο μοντέλο που περιέχει τα κείμενα των αναδυόμενων συμβουλών για "
 "τις γραμμές"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "Πλάτος Κάθετου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Κάθετο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "Πλάτος Οριζόντιου Διαχωριστικού"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Οριζόντιο διάστημα μεταξύ κελιών. Πρέπει να είναι ζυγός αριθμός"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "Να Επιτρέπονται Κανόνες"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "Να επιτρέπεται ο σχεδιασμός γραμμών με εναλλαγές γραμμές χρωμάτων"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "Εσοχή Διαστελλόμενων Στοιχείων"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "Να οριοθετείται η εσοχή των διαστελλόμενων στοιχείων"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "Χρώμα Ζυγής Γραμμής"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις ζυγές γραμμές"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "Χρώμα Μονής Γραμμής"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "Χρώμα που θα χρησιμοποιείται για τις μονές γραμμές"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "Λεπτομέρειες τέλους γραμμής"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr ""
 "Ενεργοποίηση της επέκτασης της χρήσης θεμάτων για το παρασκήνιο των γραμμών"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "Πλάτος γραμμής πλέγματος"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Πλάτος, σε εικονοστοιχεία, των γραμμών πλέγματος στην προβολή δέντρου"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "Πλάτος γραμμής δένδρου"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Πλάτος, σε εικονοστοιχεία των γραμμών προβολής δένδρου"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "Μοτίβο γραμμής πλέγματος"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr ""
 "Διακεκομμένο μοτίβο που θα χρησιμοποιείται για τη σχεδίαση των γραμμών "
 "πλέγματος στην προβολή δέντρου"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "Μοτίβο γραμμής δένδρου"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr ""
 "Διακεκομμένο μοτίβο που θα χρησιμοποιείται για τη σχεδίαση των γραμμών "
 "προβολής δέντρου"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "Αν θα εμφανίζεται η στήλη"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Δυνατότητα αλλαγής μεγέθους"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "Η στήλη έχει δυνατότητα αλλαγής μεγέθους από το χρήστη"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "Τρέχον πλάτος της στήλης"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "Το διάστημα που εισάγεται ανάμεσα στα κελιά"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "Προσαρμογή μεγέθους"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "Κατάσταση αλλαγής μεγέθους της στήλης"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "Προκαθορισμένο πλάτος"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "Τρέχον προκαθορισμένο πλάτος της στήλης"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "Ελάχιστο Πλάτος"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "Ελάχιστο επιτρεπτό  πλάτος για τη στήλη"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "Μέγιστο Πλάτος"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "Μέγιστο επιτρεπτό  πλάτος για τη στήλη"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "Τίτλος που θα εμφανίζεται την κεφαλίδα στήλης"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Η στήλη πάιρνει μερίδιο από το έξτρα πλάτος του γραφικού συστατικού"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "Δυνατότητα πατήματος"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "Αν η κεφαλίδα μπορεί να πατηθεί με το ποντίκι"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "Γραφικό συστατικό"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 "Γραφικό συστατικό για τοποθέτηση στην κεφαλίδα στήλης αντί για τίτλο στήλης"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "Στοίχιση X της κεφαλίδας στήλης ή του γραφικού συστατικού"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "Αν η στήλη μπορεί να ανακαταταχθεί γύρω από τις κεφαλίδες"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "Επισήμανση ταξινόμησης"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "Αν θα εμφανίζεται επισήμανση ταξινόμησης"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "Σειρά ταξινόμησης"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Κατεύθυνση ταξινόμησης που δείχνει η επισήμανση ταξινόμησης"
+
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "Στήλη κειμένου"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

@@ -47,6 +47,7 @@ Overview of Changes from GTK+ 2.17.6 to 2.17.7
  564695 Pressing enter key in print to file "Name" box does not p...
  591218 Remove some unused variables
  357655 "Print to SVG file" for GtkPrintOperation
+ 591462 gdk_window_set_cursor doesn't work on the root window
 
 * Updated translations:
  Basque
