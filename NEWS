@@ -1,3 +1,65 @@
+Overview of Changes from GTK+ 2.17.6 to 2.17.7
+==============================================
+
+* Client-side windows: a number of regressions related to embedding
+  have been fixed
+
+* Printing: The file backend supports SVG output
+
+* Minor API additions:
+ - GtkIconView gained an icon-padding property that can be used to fine-tune
+   how much space each column needs
+ - GtkTreeViewColumn grew a sort-column-id property that can be used to set
+   up sort columns in GtkBuilder files
+ - GdkWindow gained a cursor property and associated getter
+ - GtkFileChooser has a create-folders property to allow disabling the
+   "New Folder" button
+ - gtk_print_operation_get_n_pages_to_print: returns the number of pages
+   that are being printed
+ - New getters and setters as part of the GSEAL effort:
+   gtk_widget_get_allocation, gtk_widget_get_visible, gtk_widget_set_visible
+
+* Bugs fixed:
+ 589336 Add GtkTreeViewColumn:sort-column-id property
+ 534462 Disable interactive search in the file chooser's shortcuts pane
+ 161489 n the file chooser, let the left/right arrow keys switch focus...
+ 514260 Better filtering for "Recently Used" files
+ 509650	ATK_STATE_SHOWING state is not set properly on menu items
+ 586374 code does not follow documentation (-> carshes when using...
+ 590442 csw broke gvim x11 embedding
+ 498010 gtk_tree_view_set_cursor fails if model!=NULL
+ 555109 Synthesized crossing events should have proper coordinates
+ 570516 Can't disable folder creation
+ 573321 additional check in gtk_tree_model_filter_convert_child_i...
+ 576601 Double clicking prints to the wrong printer
+ 586100 ITEM_PADDING breaks vertical icon views
+ 588438 awn uses 100% cpu with gtk+ 2.17.3 (csw)
+ 589732 behavior change of gdk_window_get_type_hint
+ 589745 Apply message in GtkAssistant
+ 590084 print to FILE with multiple pages per sheet has bad results
+ 590086 configure.in is broken on non-X platforms
+ 590309 Default cover pages for CUPS printers incorrectly set
+ 590448 [win32] build fails because gdk-pixbuf manges a path
+ 590959 Set child_has_focus flag properly
+ 591288 compat problem with draw_drawable being NULL
+ 539377 Unnecessary warnings when GtkTreeView is not realized.
+ 546005 priv->tree is not created for unrealized (I think) treeview
+ 564695 Pressing enter key in print to file "Name" box does not p...
+ 591218 Remove some unused variables
+ 357655 "Print to SVG file" for GtkPrintOperation
+
+* Updated translations:
+ Basque
+ Brazilian Portuguese
+ Breton
+ Estonian
+ Galician
+ Hebrew
+ Norwegian bokmål
+ Spanish
+ Swedish
+
+
 Overview of Changes from GTK+ 2.17.5 to 2.17.6
 ==============================================
 
