@@ -4126,6 +4126,24 @@ gdk_window_clear (GdkWindow *window)
 			 width, height);
 }
 
+static gboolean
+clears_on_native (GdkWindowObject *private)
+{
+  GdkWindowObject *next;
+
+  next = private;
+  do
+    {
+      private = next;
+      if (gdk_window_has_impl (private))
+	return TRUE;
+      next = private->parent;
+    }
+  while (private->bg_pixmap == GDK_PARENT_RELATIVE_BG &&
+	 next && next->window_type != GDK_WINDOW_ROOT);
+  return FALSE;
+}
+
 static void
 gdk_window_clear_region_internal (GdkWindow *window,
 				  GdkRegion *region,
@@ -4141,7 +4159,7 @@ gdk_window_clear_region_internal (GdkWindow *window,
 	gdk_window_clear_backing_region_redirect (window, region);
 
       if (GDK_WINDOW_IMPL_GET_IFACE (private->impl)->clear_region &&
-	  gdk_window_has_impl (private))
+	  clears_on_native (private))
 	{
 	  GdkRegion *copy;
 	  copy = gdk_region_copy (region);
