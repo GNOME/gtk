@@ -1233,6 +1233,10 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_tooltip_column (icon_view, g_value_get_int (value));
       break;
 
+    case PROP_ITEM_PADDING:
+      gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1292,6 +1296,10 @@ gtk_icon_view_get_property (GObject      *object,
       break;
     case PROP_TOOLTIP_COLUMN:
       g_value_set_int (value, icon_view->priv->tooltip_column);
+      break;
+
+    case PROP_ITEM_PADDING:
+      g_value_set_int (value, icon_view->priv->item_padding);
       break;
 
     default:
