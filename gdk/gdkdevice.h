@@ -142,6 +142,11 @@ struct _GdkDeviceClass
   void (* set_window_cursor) (GdkDevice *device,
                               GdkWindow *window,
                               GdkCursor *cursor);
+
+  void (* warp)              (GdkDevice  *device,
+                              GdkScreen  *screen,
+                              gint        x,
+                              gint        y);
 };
 
 GType gdk_device_get_type (void) G_GNUC_CONST;
