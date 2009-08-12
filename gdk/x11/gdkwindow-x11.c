@@ -3186,13 +3186,13 @@ gdk_display_warp_pointer (GdkDisplay *display,
 			  gint        x,
 			  gint        y)
 {
-  Display *xdisplay;
-  Window dest;
+  GdkDevice *device;
 
-  xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  dest = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
 
-  XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0, x, y);  
+  device = display->core_pointer;
+  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
 }
 
 GdkWindow*
