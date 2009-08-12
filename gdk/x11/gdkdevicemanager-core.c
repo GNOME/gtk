@@ -33,6 +33,8 @@
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
+static void    gdk_device_manager_core_constructed (GObject *object);
+
 static GList * gdk_device_manager_core_get_devices (GdkDeviceManager *device_manager,
                                                     GdkDeviceType     type);
 
@@ -54,7 +56,9 @@ static void
 gdk_device_manager_core_class_init (GdkDeviceManagerCoreClass *klass)
 {
   GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gdk_device_manager_core_constructed;
   device_manager_class->get_devices = gdk_device_manager_core_get_devices;
 }
 
@@ -80,10 +84,15 @@ create_core_pointer (GdkDisplay *display)
 static void
 gdk_device_manager_core_init (GdkDeviceManagerCore *device_manager)
 {
+}
+
+static void
+gdk_device_manager_core_constructed (GObject *object)
+{
   GdkDisplay *display;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
-  device_manager->core_pointer = create_core_pointer (display);
+  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
+  GDK_DEVICE_MANAGER_CORE (object)->core_pointer = create_core_pointer (display);
 }
 
 static void
