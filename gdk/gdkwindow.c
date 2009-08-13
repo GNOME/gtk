@@ -3008,7 +3008,10 @@ move_region_on_impl (GdkWindowObject *private,
       /* Convert from target to source */
       gdk_region_offset (update_area, -dx, -dy);
       gdk_region_intersect (update_area, impl_window->update_area);
-      gdk_region_subtract (impl_window->update_area, update_area);
+      /* We only copy the area, so keep the old update area invalid.
+	 It would be safe to remove it too, as code that uses
+	 move_region_on_impl generally also invalidate the source
+	 area. However, it would just use waste cycles. */
 
       /* Convert back */
       gdk_region_offset (update_area, dx, dy);
