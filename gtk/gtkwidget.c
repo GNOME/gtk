@@ -10779,8 +10779,8 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * Since: 2.18
  */
 void
-gtk_widget_set_allocation (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+gtk_widget_set_allocation (GtkWidget           *widget,
+                           const GtkAllocation *allocation)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (allocation != NULL);
