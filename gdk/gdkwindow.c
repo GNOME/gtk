@@ -6960,17 +6960,19 @@ gdk_window_move_region (GdkWindow       *window,
   gdk_region_offset (copy_area, dx, dy);
   gdk_region_intersect (copy_area, private->clip_region_with_children);
 
-  /* invalidate parts of the region not covered by the copy */
+  /* Invalidate parts of the region (source and dest) not covered
+     by the copy */
   nocopy_area = gdk_region_copy (region);
   gdk_region_offset (nocopy_area, dx, dy);
+  gdk_region_union (nocopy_area, region);
   gdk_region_subtract (nocopy_area, copy_area);
-  gdk_window_invalidate_region (window, nocopy_area, FALSE);
-  gdk_region_destroy (nocopy_area);
 
   /* convert from window coords to impl */
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
-
   move_region_on_impl (impl_window, copy_area, dx, dy); /* Takes ownership of copy_area */
+
+  gdk_window_invalidate_region (window, nocopy_area, FALSE);
+  gdk_region_destroy (nocopy_area);
 }
 
 /**
