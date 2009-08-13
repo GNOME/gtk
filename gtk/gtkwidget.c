@@ -10769,6 +10769,26 @@ gtk_widget_get_allocation (GtkWidget     *widget,
 }
 
 /**
+ * gtk_widget_set_allocation:
+ * @widget: a #GtkWidget
+ * @allocation: a pointer to a #GtkAllocation to copy from
+ *
+ * Sets the widget's allocation.  This should not be used
+ * directly, but from within a widget's size_allocate method.
+ *
+ * Since: 2.18
+ */
+void
+gtk_widget_set_allocation (GtkWidget     *widget,
+                           GtkAllocation *allocation)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (allocation != NULL);
+
+  widget->allocation = *allocation;
+}
+
+/**
  * gtk_widget_get_window:
  * @widget: a #GtkWidget
  *
