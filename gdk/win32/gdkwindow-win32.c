@@ -3576,6 +3576,7 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
  */
 static void
 _gdk_win32_window_queue_translation (GdkWindow *window,
+				     GdkGC     *gc,
 				     GdkRegion *area,
 				     gint       dx,
 				     gint       dy)

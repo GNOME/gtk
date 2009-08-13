@@ -1149,6 +1149,7 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
 
 static void
 gdk_offscreen_window_queue_translation (GdkWindow *window,
+					GdkGC     *gc,
 					GdkRegion *area,
 					gint       dx,
 					gint       dy)

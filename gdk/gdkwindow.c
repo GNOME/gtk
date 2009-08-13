@@ -2828,16 +2828,16 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
     }
   tmp_gc = _gdk_drawable_get_subwindow_scratch_gc ((GdkWindow *)private);
 
+  gdk_region_get_clipbox (dest_region, &copy_rect);
+  gdk_gc_set_clip_region (tmp_gc, dest_region);
+
   /* The region area is moved and we queue translations for all expose events
      to the source area that were sent prior to the copy */
-  gdk_region_offset (dest_region, -dx, -dy); /* Temporarily move to source area */
+  gdk_region_offset (dest_region, -dx, -dy); /* Move to source region */
   GDK_WINDOW_IMPL_GET_IFACE (private->impl)->queue_translation ((GdkWindow *)impl_window,
+								tmp_gc,
 								dest_region, dx, dy);
-  gdk_region_offset (dest_region, dx, dy); /* back to dest area */
 
-  gdk_region_get_clipbox (dest_region, &copy_rect);
-
-  gdk_gc_set_clip_region (tmp_gc, dest_region);
   gdk_draw_drawable (impl_window->impl,
 		     tmp_gc,
 		     private->impl,

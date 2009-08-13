@@ -231,6 +231,7 @@ gdk_window_queue (GdkWindow          *window,
 
 void
 _gdk_x11_window_queue_translation (GdkWindow *window,
+				   GdkGC     *gc,
 				   GdkRegion *area,
 				   gint       dx,
 				   gint       dy)
@@ -241,6 +242,11 @@ _gdk_x11_window_queue_translation (GdkWindow *window,
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
+  /* Ensure that the gc is flushed so that we get the right
+     serial from NextRequest in gdk_window_queue, i.e. the
+     the serial for the XCopyArea, not the ones from flushing
+     the gc. */
+  _gdk_x11_gc_flush (gc);
   gdk_window_queue (window, item);
 }
 

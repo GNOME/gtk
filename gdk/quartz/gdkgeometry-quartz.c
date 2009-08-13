@@ -24,6 +24,7 @@
 
 void
 _gdk_quartz_window_queue_translation (GdkWindow *window,
+				      GdkGC     *gc,
                                       GdkRegion *area,
                                       gint       dx,
                                       gint       dy)

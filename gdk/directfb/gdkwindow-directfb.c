@@ -1957,6 +1957,7 @@ gdk_directfb_window_input_shape_combine_region (GdkWindow       *window,
 
 static void
 gdk_directfb_window_queue_translation (GdkWindow *window,
+				       GdkGC     *gc,
                                        GdkRegion *region,
                                        gint       dx,
                                        gint       dy)
