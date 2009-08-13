@@ -108,7 +108,7 @@ expose_serial_predicate (Display *xdisplay,
 {
   gulong *serial = (gulong *)arg;
 
-  if (xev->xany.type == Expose)
+  if (xev->xany.type == Expose || xev->xany.type == GraphicsExpose)
     *serial = MIN (*serial, xev->xany.serial);
 
   return False;
