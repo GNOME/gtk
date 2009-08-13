@@ -3503,11 +3503,11 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 		    }
 		}
 
-	      if (only_in_cell)
-		return NULL;
-	      
 	      if (cell_at_pos)
 		*cell_at_pos = NULL;
+
+	      if (only_in_cell)
+		return NULL;
 	    }
 
 	  return item;
