@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-12 09:18+0300\n"
-"PO-Revision-Date: 2009-08-12 09:21+0300\n"
+"POT-Creation-Date: 2009-08-13 07:33+0300\n"
+"PO-Revision-Date: 2009-08-13 07:32+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -1205,9 +1205,8 @@ msgid "Opening %s"
 msgstr "Отваряне на %s"
 
 #: ../gtk/gtkaboutdialog.c:183
-#, fuzzy
 msgid "Could not show link"
-msgstr "Списъкът не може да бъде изчистен"
+msgstr "Връзката не може да бъде показана"
 
 #: ../gtk/gtkaboutdialog.c:306 ../gtk/gtkaboutdialog.c:2200
 msgid "License"
@@ -2313,14 +2312,13 @@ msgstr "_Изчистване"
 
 #. Open Link
 #: ../gtk/gtklabel.c:5529
-#, fuzzy
 msgid "_Open Link"
-msgstr "_Отваряне"
+msgstr "_Отваряне на връзка"
 
 #. Copy Link Address
 #: ../gtk/gtklabel.c:5541
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "Копиране на _адреса на връзка"
 
 #: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -2420,49 +2418,49 @@ msgstr "_Запомняне завинаги"
 #: ../gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
-msgstr ""
+msgstr "Непозната програма (ид. пр. %d)"
 
 #: ../gtk/gtkmountoperation.c:1063
 msgid "Unable to end process"
-msgstr ""
+msgstr "Неуспех при приключването на процес"
 
 #: ../gtk/gtkmountoperation.c:1100
 msgid "_End Process"
-msgstr ""
+msgstr "_Приключване на процес"
 
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
+"Процесът с ид. пр. %d не може да бъде убит — операцията не е реализирана."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Странициране в терминал"
 
 #: ../gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
-msgstr "Команден ред"
+msgstr "Командата top"
 
 #: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Обвивка bash"
 
 #: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Обвивка bash"
 
 #: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr ""
+msgstr "Обвивка zsh"
 
 #: ../gtk/gtkmountoperation-x11.c:964
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "Процесът с ид. пр. %d не може да бъде приключен: %s"
 
-#: ../gtk/gtknotebook.c:4430 ../gtk/gtknotebook.c:6952
+#: ../gtk/gtknotebook.c:4430 ../gtk/gtknotebook.c:6957
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2528,19 +2526,16 @@ msgid "File System Root"
 msgstr "Корен на файловата система"
 
 #: ../gtk/gtkprintbackend.c:740
-#, fuzzy
 msgid "Authentication"
-msgstr "Програма"
+msgstr "Идентификация"
 
 #: ../gtk/gtkprintbackend.c:772
-#, fuzzy
 msgid "Username:"
-msgstr "_Потребител:"
+msgstr "Потребител:"
 
 #: ../gtk/gtkprintbackend.c:782
-#, fuzzy
 msgid "Password:"
-msgstr "Па_рола:"
+msgstr "Парола:"
 
 #: ../gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2695,7 +2690,7 @@ msgstr "Неуказана грешка"
 
 #: ../gtk/gtkprintunixdialog.c:1854
 msgid "Getting printer information..."
-msgstr ""
+msgstr "Получаване на информацията за принтера…"
 
 #: ../gtk/gtkprintunixdialog.c:2124
 msgid "Printer"
@@ -2724,9 +2719,8 @@ msgid "C_urrent Page"
 msgstr "_Текущата страница"
 
 #: ../gtk/gtkprintunixdialog.c:2192
-#, fuzzy
 msgid "Se_lection"
-msgstr "_Избор: "
+msgstr "_Избор"
 
 #: ../gtk/gtkprintunixdialog.c:2201
 msgid "Pag_es:"
@@ -2828,14 +2822,12 @@ msgid "Right to left"
 msgstr "Отдясно наляво"
 
 #: ../gtk/gtkprintunixdialog.c:3051
-#, fuzzy
 msgid "Top to bottom"
-msgstr "Отгоре надолу, отляво надясно"
+msgstr "Отгоре надолу"
 
 #: ../gtk/gtkprintunixdialog.c:3052
-#, fuzzy
 msgid "Bottom to top"
-msgstr "Отгоре надолу, отляво надясно"
+msgstr "Отдолу нагоре"
 
 #: ../gtk/gtkprintunixdialog.c:3281
 msgid "Layout"
@@ -2891,28 +2883,23 @@ msgid "Output t_ray:"
 msgstr "_Изходна касета:"
 
 #: ../gtk/gtkprintunixdialog.c:3454
-#, fuzzy
 msgid "Or_ientation:"
 msgstr "_Ориентация:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:3469
-#, fuzzy
 msgid "Portrait"
 msgstr "Вертикална"
 
 #: ../gtk/gtkprintunixdialog.c:3470
-#, fuzzy
 msgid "Landscape"
 msgstr "Хоризонтална"
 
 #: ../gtk/gtkprintunixdialog.c:3471
-#, fuzzy
 msgid "Reverse portrait"
 msgstr "Хоризонтална, обърната"
 
 #: ../gtk/gtkprintunixdialog.c:3472
-#, fuzzy
 msgid "Reverse landscape"
 msgstr "Вертикална, обърната"
 
@@ -4774,9 +4761,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "Неправилен файл за временно съхранение на икони: %s\n"
 
 #: ../gtk/updateiconcache.c:1690
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "Няма файл с индекс за иконите."
+msgstr "Няма файл с индекс за темите.\n"
 
 #: ../gtk/updateiconcache.c:1694
 #, c-format
@@ -4847,50 +4834,54 @@ msgstr "Метод за въвеждане към X"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:762
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "За получаването на файл от %s се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:766
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "За отпечатването на файла „%s“ на принтера %s се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:768
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "За отпечатването на принтера %s се изисква идентификация<"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:772
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
+"За получаването на атрибутите на задачата за печат „%s“ се изисква "
+"идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:774
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
+"За получаването на атрибутите на задачата за печат се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:778
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
+"За получаването на атрибутите на принтера „%s“ се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:780
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "За получаването на атрибутите на принтер се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:783
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "За получаването на стандартния принтер на %s се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:786
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "За получаването на принтерите от %s се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:789
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "%s изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1405
 #, c-format
@@ -5212,32 +5203,28 @@ msgstr "Команден ред"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:810
-#, fuzzy
 msgid "printer offline"
-msgstr "Принтерът не е на линия"
+msgstr "принтерът не е на линия"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:828
-#, fuzzy
 msgid "ready to print"
-msgstr "Подготовка за печат"
+msgstr "готовност за печат"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:831
 msgid "processing job"
-msgstr ""
+msgstr "обработка на задача"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:835
-#, fuzzy
 msgid "paused"
 msgstr "На пауза"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:838
-#, fuzzy
 msgid "unknown"
-msgstr "(неизвестен)"
+msgstr "(неизвестно)"
 
 #. default filename used for print-to-test
 #: ../modules/printbackends/test/gtkprintbackendtest.c:234
@@ -5253,27 +5240,3 @@ msgstr "Печат към тестов принтер"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Информацията за файла „%s“ не може да бъде получена: %s"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "неуспех при заделяне на буфер от %u байт за изображението"
-#~ msgstr[1] "неуспех при заделяне на буфер от %u байта за изображението"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "Отваряне на %d елемент"
-#~ msgstr[1] "Отваряне на %d елемента"
-
-#, fuzzy
-#~ msgid "<b>_Search:</b>"
-#~ msgstr "_Търсене:"
-
-#, fuzzy
-#~ msgid "<b>Recently Used</b>"
-#~ msgstr "Скоро отваряни"
-
-#~ msgid "directfb arg"
-#~ msgstr "аргумент на directfb"
-
-#~ msgid "sdl|system"
-#~ msgstr "системни"
