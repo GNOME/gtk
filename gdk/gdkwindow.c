@@ -2981,8 +2981,8 @@ append_move_region (GdkWindowObject *impl_window,
     }
 }
 
-/* Moves bits and update area by dx/dy in impl window,
-   takes ownership of region */
+/* Moves bits and update area by dx/dy in impl window.
+   Takes ownership of region to avoid copy (because we may change it) */
 static void
 move_region_on_impl (GdkWindowObject *private,
 		     GdkRegion *region, /* In impl window coords */
