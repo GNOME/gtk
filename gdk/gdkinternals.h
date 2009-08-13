@@ -605,7 +605,7 @@ void _gdk_display_enable_motion_hints     (GdkDisplay *display);
 
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
-					const GdkRegion *region);
+					GdkRegion       *region);
 
 void _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 					    int width,

@@ -5300,8 +5300,37 @@ gdk_window_invalidate_region (GdkWindow       *window,
  **/
 void
 _gdk_window_invalidate_for_expose (GdkWindow       *window,
-				   const GdkRegion *region)
+				   GdkRegion       *region)
 {
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowRegionMove *move;
+  GdkRegion *move_region;
+  GList *l;
+
+  /* Any invalidations comming from the windowing system will
+     be in areas that may be moved by outstanding moves,
+     so we need to modify the expose region correspondingly,
+     otherwise we would expose in the wrong place, as the
+     outstanding moves will be copied before we draw the
+     exposes. */
+  for (l = private->outstanding_moves; l != NULL; l = l->next)
+    {
+      move = l->data;
+
+      /* covert to move source region */
+      move_region = gdk_region_copy (move->dest_region);
+      gdk_region_offset (move_region, -move->dx, -move->dy);
+
+      /* Move area of region that intersects with move source
+	 by dx, dy of the move*/
+      gdk_region_intersect (move_region, region);
+      gdk_region_subtract (region, move_region);
+      gdk_region_offset (move_region, move->dx, move->dy);
+      gdk_region_union (region, move_region);
+
+      gdk_region_destroy (move_region);
+    }
+
   gdk_window_invalidate_maybe_recurse (window, region,
 				       (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
 				       NULL);
