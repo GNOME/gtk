@@ -329,6 +329,7 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
 static void move_native_children (GdkWindowObject *private);
 static void update_cursor (GdkDisplay *display);
+static void gdk_window_region_move_free (GdkWindowRegionMove *move);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -1866,6 +1867,25 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    {
 	      g_object_unref (display->pointer_info.toplevel_under_pointer);
 	      display->pointer_info.toplevel_under_pointer = NULL;
+	    }
+
+	  if (private->clip_region)
+	    {
+	      gdk_region_destroy (private->clip_region);
+	      private->clip_region = NULL;
+	    }
+
+	  if (private->clip_region_with_children)
+	    {
+	      gdk_region_destroy (private->clip_region_with_children);
+	      private->clip_region_with_children = NULL;
+	    }
+
+	  if (private->outstanding_moves)
+	    {
+	      g_list_foreach (private->outstanding_moves, gdk_window_region_move_free, NULL);
+	      g_list_free (private->outstanding_moves);
+	      private->outstanding_moves = NULL;
 	    }
 	}
       break;
