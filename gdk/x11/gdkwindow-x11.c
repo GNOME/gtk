@@ -50,6 +50,7 @@
 #include "gdkinternals.h"
 #include "MwmUtil.h"
 #include "gdkwindow-x11.h"
+#include "gdkdeviceprivate.h"
 #include "gdkalias.h"
 
 #include <stdlib.h>

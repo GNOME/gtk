@@ -69,6 +69,7 @@ gdk_public_h_sources =				\
 	gdkcursor.h				\
 	gdkdevice.h				\
 	gdkdevicemanager.h			\
+	gdkdeviceprivate.h			\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\

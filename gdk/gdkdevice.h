@@ -30,13 +30,9 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_DEVICE         (gdk_device_get_type ())
 #define GDK_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE, GdkDevice))
-#define GDK_DEVICE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE, GdkDeviceClass))
 #define GDK_IS_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE))
-#define GDK_IS_DEVICE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE))
-#define GDK_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE, GdkDeviceClass))
 
 typedef struct _GdkDevice GdkDevice;
-typedef struct _GdkDeviceClass GdkDeviceClass;
 
 typedef struct _GdkDeviceKey GdkDeviceKey;
 typedef struct _GdkDeviceAxis GdkDeviceAxis;
@@ -116,37 +112,6 @@ struct _GdkDevice
 
   gint num_keys;
   GdkDeviceKey *keys;
-};
-
-struct _GdkDeviceClass
-{
-  GObjectClass parent_class;
-
-  gboolean (* get_history) (GdkDevice      *device,
-                            GdkWindow      *window,
-                            guint32         start,
-                            guint32         stop,
-                            GdkTimeCoord ***events,
-                            guint          *n_events);
-
-  void (* get_state) (GdkDevice       *device,
-                      GdkWindow       *window,
-                      gdouble         *axes,
-                      GdkModifierType *mask);
-
-  gboolean (* get_axis) (GdkDevice  *device,
-                         gdouble    *axes,
-                         GdkAxisUse  use,
-                         gdouble    *value);
-
-  void (* set_window_cursor) (GdkDevice *device,
-                              GdkWindow *window,
-                              GdkCursor *cursor);
-
-  void (* warp)              (GdkDevice  *device,
-                              GdkScreen  *screen,
-                              gint        x,
-                              gint        y);
 };
 
 GType gdk_device_get_type (void) G_GNUC_CONST;

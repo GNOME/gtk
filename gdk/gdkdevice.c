@@ -18,6 +18,7 @@
  */
 
 #include "gdkdevice.h"
+#include "gdkdeviceprivate.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
 #include "gdkalias.h"
