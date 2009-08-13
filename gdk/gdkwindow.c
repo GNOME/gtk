@@ -1273,7 +1273,7 @@ gdk_window_new (GdkWindow     *parent,
       private->input_only = FALSE;
       private->depth = visual->depth;
 
-      private->bg_color.pixel = 0; // TODO: BlackPixel (xdisplay, screen_x11->screen_num);
+      private->bg_color.pixel = 0; /* TODO: BlackPixel (xdisplay, screen_x11->screen_num); */
       private->bg_color.red = private->bg_color.green = private->bg_color.blue = 0;
 
       private->bg_pixmap = NULL;
