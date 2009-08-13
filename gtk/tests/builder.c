@@ -1951,6 +1951,8 @@ test_icon_factory (void)
   gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
   image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
   g_assert (image != NULL);
+  g_object_ref_sink (image);
+  g_object_unref (image);
 
   g_object_unref (builder);
 
@@ -2136,6 +2138,7 @@ test_requires (void)
                              GTK_BUILDER_ERROR_VERSION_MISMATCH));
   g_object_unref (builder);
   g_error_free (error);
+  g_free (buffer);
 }
 
 static void
