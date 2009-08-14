@@ -284,13 +284,13 @@ gdk_device_set_axis_use (GdkDevice   *device,
 GdkDisplay *
 gdk_device_get_display (GdkDevice *device)
 {
-        GdkDevicePrivate *priv;
+  GdkDevicePrivate *priv;
 
-        g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-        priv = GDK_DEVICE_GET_PRIVATE (device);
+  priv = GDK_DEVICE_GET_PRIVATE (device);
 
-        return priv->display;
+  return priv->display;
 }
 
 #define __GDK_DEVICE_C__
