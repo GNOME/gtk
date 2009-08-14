@@ -49,6 +49,7 @@ enum {
   PROP_DISPLAY,
   PROP_NAME,
   PROP_INPUT_SOURCE,
+  PROP_INPUT_MODE,
   PROP_HAS_CURSOR,
 };
 
@@ -83,6 +84,14 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                       GDK_TYPE_INPUT_SOURCE,
                                                       GDK_SOURCE_MOUSE,
                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_INPUT_MODE,
+				   g_param_spec_enum ("input-mode",
+                                                      P_("Input mode for the device"),
+                                                      P_("Input mode for the device"),
+                                                      GDK_TYPE_INPUT_MODE,
+                                                      GDK_MODE_DISABLED,
+                                                      G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_HAS_CURSOR,
 				   g_param_spec_boolean ("has-cursor",
@@ -122,6 +131,9 @@ gdk_device_set_property (GObject      *object,
     case PROP_INPUT_SOURCE:
       device->source = g_value_get_enum (value);
       break;
+    case PROP_INPUT_MODE:
+      gdk_device_set_mode (device, g_value_get_enum (value));
+      break;
     case PROP_HAS_CURSOR:
       device->has_cursor = g_value_get_boolean (value);
       break;
@@ -150,8 +162,10 @@ gdk_device_get_property (GObject    *object,
                           device->name);
       break;
     case PROP_INPUT_SOURCE:
-      g_value_set_enum (value,
-                        device->source);
+      g_value_set_enum (value, device->source);
+      break;
+    case PROP_INPUT_MODE:
+      g_value_set_enum (value, device->mode);
       break;
     case PROP_HAS_CURSOR:
       g_value_set_boolean (value,
@@ -236,7 +250,12 @@ gboolean
 gdk_device_set_mode (GdkDevice    *device,
                      GdkInputMode  mode)
 {
-  return FALSE;
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  device->mode = mode;
+  g_object_notify (G_OBJECT (device), "input-mode");
+
+  return TRUE;
 }
 
 void
