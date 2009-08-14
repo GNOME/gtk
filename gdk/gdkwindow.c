@@ -4839,6 +4839,13 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
     }
 }
 
+/* Process and remove any invalid area on the native window by creating
+ * expose events for the window and all non-native descendants.
+ * Also processes any outstanding moves on the window before doing
+ * any drawing. Note that its possible to have outstanding moves without
+ * any invalid area as we use the update idle mechanism to coalesce
+ * multiple moves as well as multiple invalidations.
+ */
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
@@ -4860,7 +4867,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	{
 	  GdkRectangle window_rect;
 	  GdkRegion *expose_region;
-	  GdkRegion *window_region;
 	  gboolean end_implicit;
 
 	  /* Clip to part visible in toplevel */
@@ -4873,24 +4879,12 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      g_usleep (70000);
 	    }
 
-	  save_region = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->queue_antiexpose (window, update_area);
-	  if (save_region)
-	    expose_region = gdk_region_copy (update_area);
-	  else
-	    expose_region = update_area;
-
-	  window_rect.x = 0;
-	  window_rect.y = 0;
-	  window_rect.width = private->width;
-	  window_rect.height = private->height;
-
-	  window_region = gdk_region_rectangle (&window_rect);
-	  gdk_region_intersect (expose_region,
-				window_region);
-	  gdk_region_destroy (window_region);
-
-
-	  /* No need to do any moves that will end up over the update area */
+	  /* At this point we will be completely redrawing all of update_area.
+	   * If we have any outstanding moves that end up moving stuff inside
+	   * this area we don't actually need to move that as that part would
+	   * be overdrawn by the expose anyway. So, in order to copy less data
+	   * we remove these areas from the outstanding moves.
+	   */
 	  if (private->outstanding_moves)
 	    {
 	      GdkWindowRegionMove *move;
@@ -4898,10 +4892,13 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      GList *l, *prev;
 
 	      remove = gdk_region_copy (update_area);
+	      /* We iterate backwards, starting from the state that would be
+		 if we had applied all the moves. */
 	      for (l = g_list_last (private->outstanding_moves); l != NULL; l = prev)
 		{
 		  prev = l->prev;
 		  move = l->data;
+
 		  /* Don't need this area */
 		  gdk_region_subtract (move->dest_region, remove);
 
@@ -4917,26 +4914,82 @@ gdk_window_process_updates_internal (GdkWindow *window)
 		      private->outstanding_moves =
 			g_list_delete_link (private->outstanding_moves, l);
 		    }
-		  else
+		  else /* move back */
 		    gdk_region_offset (move->dest_region, move->dx, move->dy);
 		}
 	      gdk_region_destroy (remove);
 	    }
 
-	  gdk_region_get_clipbox (expose_region, &clip_box);
+	  /* By now we a set of window moves that should be applied, and then
+	   * an update region that should be repainted. A trivial implementation
+	   * would just do that in order, however in order to get nicer drawing
+	   * we do some tricks:
+	   *
+	   * First of all, each subwindow expose may be double buffered by
+	   * itself (depending on widget setting) via
+	   * gdk_window_begin/end_paint(). But we also do an "implicit" paint,
+	   * creating a single pixmap the size of the invalid area on the
+	   * native window which all the individual normal paints will draw
+	   * into. This way in the normal case there will be only one pixmap
+	   * allocated and only once pixmap draw done for all the windows
+	   * in this native window.
+	   * There are a couple of reasons this may fail, for instance, some
+	   * backends (like quartz) do its own double buffering, so we disable
+	   * gdk double buffering there. Secondly, some subwindow could be
+	   * non-double buffered and draw directly to the window outside a
+	   * begin/end_paint pair. That will be lead to a gdk_window_flush
+	   * which immediately executes all outstanding moves and paints+removes
+	   * the implicit paint (further paints will allocate their own pixmap).
+	   *
+	   * Secondly, in the case of implicit double buffering we expose all
+	   * the child windows into the implicit pixmap before we execute
+	   * the outstanding moves. This way we minimize the time between
+	   * doing the moves and rendering the new update area, thus minimizing
+	   * flashing. Of course, if any subwindow is non-double buffered we
+	   * well flush earlier than that.
+	   *
+	   * Thirdly, after having done the outstanding moves we queue an
+	   * "antiexpose" on the area that will be drawn by the expose, which
+	   * means that any invalid region on the native window side before
+	   * the first expose drawing operation will be discarded, as it
+	   * has by then been overdrawn with valid data. This means we can
+	   * avoid doing the unnecessary repaint any outstanding expose events.
+	   */
+
+	  gdk_region_get_clipbox (update_area, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
-	  if (end_implicit) /* rendering is not double buffered, do moves now */
-	      gdk_window_flush_outstanding_moves (window);
-	  _gdk_windowing_window_process_updates_recurse (window, expose_region);
-	  if (end_implicit)
+	  expose_region = gdk_region_copy (update_area);
+	  if (!end_implicit)
 	    {
-	      /* Do moves right before exposes are rendered */
+	      /* Rendering is not double buffered by gdk, do outstanding
+	       * moves and queue antiexposure immediately. No need to do
+	       * any tricks */
 	      gdk_window_flush_outstanding_moves (window);
-	      gdk_window_end_implicit_paint (window);
+	      save_region = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->queue_antiexpose (window, update_area);
 	    }
 
-	  if (expose_region != update_area)
-	    gdk_region_destroy (expose_region);
+	  /* Render the invalid areas to the implicit paint, by sending exposes.
+	   * May flush if non-double buffered widget draw. */
+	  _gdk_windowing_window_process_updates_recurse (window, expose_region);
+
+	  if (end_implicit)
+	    {
+	      /* Do moves right before exposes are rendered to the window */
+	      gdk_window_flush_outstanding_moves (window);
+
+	      /* By this time we know that any outstanding expose for this
+	       * area is invalid and we can avoid it, so queue an antiexpose.
+	       * However, it may be that due to an non-double buffered expose
+	       * we have already started drawing to the window, so it would
+	       * be to late to anti-expose now. Since this is merely an
+	       * optimization we just avoid doing it at all in that case.
+	       */
+	      if (private->implicit_paint != NULL) /* didn't flush implicit paint */
+		save_region = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->queue_antiexpose (window, update_area);
+
+	      gdk_window_end_implicit_paint (window);
+	    }
+	  gdk_region_destroy (expose_region);
 	}
       if (!save_region)
 	gdk_region_destroy (update_area);
