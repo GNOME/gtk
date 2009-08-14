@@ -380,7 +380,12 @@ parse_object (GMarkupParseContext  *context,
           data->inside_requested_object = TRUE;
         }
       else
-        return;
+        {
+          g_free (object_class);
+          g_free (object_id);
+          g_free (constructor);
+          return;
+        }
     }
 
   object_info = g_slice_new0 (ObjectInfo);
