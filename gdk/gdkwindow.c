@@ -1883,7 +1883,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  if (private->outstanding_moves)
 	    {
-	      g_list_foreach (private->outstanding_moves, gdk_window_region_move_free, NULL);
+	      g_list_foreach (private->outstanding_moves, (GFunc)gdk_window_region_move_free, NULL);
 	      g_list_free (private->outstanding_moves);
 	      private->outstanding_moves = NULL;
 	    }
@@ -4758,7 +4758,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
   /* Make this reentrancy safe for expose handlers freeing windows */
   children = g_list_copy (private->children);
-  g_list_foreach (children, g_object_ref, NULL);
+  g_list_foreach (children, (GFunc)g_object_ref, NULL);
 
   /* Iterate over children, starting at topmost */
   for (l = children; l != NULL; l = l->next)
@@ -4803,7 +4803,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       gdk_region_destroy (child_region);
     }
 
-  g_list_foreach (children, g_object_unref, NULL);
+  g_list_foreach (children, (GFunc)g_object_unref, NULL);
   g_list_free (children);
 
   if (!gdk_region_empty (expose_region))
