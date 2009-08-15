@@ -26,10 +26,25 @@
 #define GDK_DEVICE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GDK_TYPE_DEVICE, GdkDevicePrivate))
 
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
+typedef struct _GdkAxisInfo GdkAxisInfo;
+
+struct _GdkAxisInfo
+{
+  GdkAtom label;
+  GdkAxisUse use;
+
+  gdouble min_axis;
+  gdouble max_axis;
+
+  gdouble min_value;
+  gdouble max_value;
+  gdouble resolution;
+};
 
 struct _GdkDevicePrivate
 {
   GdkDisplay *display;
+  GArray *axes;
 };
 
 static void gdk_device_set_property (GObject      *object,
@@ -51,6 +66,7 @@ enum {
   PROP_INPUT_SOURCE,
   PROP_INPUT_MODE,
   PROP_HAS_CURSOR,
+  PROP_N_AXES
 };
 
 
@@ -99,6 +115,13 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                          P_("Whether there is a visible cursor following device motion"),
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_N_AXES,
+				   g_param_spec_uint ("n-axes",
+                                                      P_("Number of axes in the device"),
+                                                      P_("Number of axes in the device"),
+                                                      0, G_MAXUINT, 0,
+                                                      G_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GdkDevicePrivate));
 }
@@ -106,6 +129,10 @@ gdk_device_class_init (GdkDeviceClass *klass)
 static void
 gdk_device_init (GdkDevice *device)
 {
+  GdkDevicePrivate *priv;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+  priv->axes = g_array_new (FALSE, TRUE, sizeof (GdkAxisInfo));
 }
 
 static void
@@ -171,6 +198,9 @@ gdk_device_get_property (GObject    *object,
       g_value_set_boolean (value,
                            device->has_cursor);
       break;
+    case PROP_N_AXES:
+      g_value_set_uint (value, priv->axes->len);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -219,22 +249,6 @@ gdk_device_free_history (GdkTimeCoord **events,
     g_free (events[i]);
 
   g_free (events);
-}
-
-gboolean
-gdk_device_get_axis (GdkDevice  *device,
-                     gdouble    *axes,
-                     GdkAxisUse  use,
-                     gdouble    *value)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (axes != NULL, FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  if (!GDK_DEVICE_GET_CLASS (device)->get_axis)
-    return FALSE;
-
-  return GDK_DEVICE_GET_CLASS (device)->get_axis (device, axes, use, value);
 }
 
 void
@@ -310,6 +324,285 @@ gdk_device_get_display (GdkDevice *device)
   priv = GDK_DEVICE_GET_PRIVATE (device);
 
   return priv->display;
+}
+
+GList *
+gdk_device_list_axes (GdkDevice *device)
+{
+  GdkDevicePrivate *priv;
+  GList *axes = NULL;
+  gint i;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  for (i = 0; i < priv->axes->len; i++)
+    {
+      GdkAxisInfo axis_info;
+
+      axis_info = g_array_index (priv->axes, GdkAxisInfo, i);
+      axes = g_list_prepend (axes, GDK_ATOM_TO_POINTER (axis_info.label));
+    }
+
+  return g_list_reverse (axes);
+}
+
+gboolean
+gdk_device_get_axis_value (GdkDevice *device,
+                           gdouble   *axes,
+                           GdkAtom    axis_label,
+                           gdouble   *value)
+{
+  GdkDevicePrivate *priv;
+  gint i;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  if (axes == NULL)
+    return FALSE;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  for (i = 0; i < priv->axes->len; i++)
+    {
+      GdkAxisInfo axis_info;
+
+      axis_info = g_array_index (priv->axes, GdkAxisInfo, i);
+
+      if (axis_info.label != axis_label)
+        continue;
+
+      if (value)
+        *value = axes[i];
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_device_get_axis (GdkDevice  *device,
+                     gdouble    *axes,
+                     GdkAxisUse  use,
+                     gdouble    *value)
+{
+  GdkDevicePrivate *priv;
+  gint i;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  if (axes == NULL)
+    return FALSE;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  g_return_val_if_fail (priv->axes != NULL, FALSE);
+
+  for (i = 0; i < priv->axes->len; i++)
+    {
+      GdkAxisInfo axis_info;
+
+      axis_info = g_array_index (priv->axes, GdkAxisInfo, i);
+
+      if (axis_info.use != use)
+        continue;
+
+      if (value)
+        *value = axes[i];
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/* Private API */
+void
+_gdk_device_reset_axes (GdkDevice *device)
+{
+  GdkDevicePrivate *priv;
+  guint i;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  for (i = priv->axes->len - 1; i >= 0; i--)
+    g_array_remove_index (priv->axes, i);
+}
+
+guint
+_gdk_device_add_axis (GdkDevice   *device,
+                      GdkAtom      label_atom,
+                      GdkAxisUse   use,
+                      gdouble      min_value,
+                      gdouble      max_value,
+                      gdouble      resolution)
+{
+  GdkDevicePrivate *priv;
+  GdkAxisInfo axis_info;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  axis_info.use = use;
+  axis_info.label = label_atom;
+  axis_info.min_value = min_value;
+  axis_info.max_value = max_value;
+  axis_info.resolution = resolution;
+
+  switch (use)
+    {
+    case GDK_AXIS_X:
+    case GDK_AXIS_Y:
+      axis_info.min_axis = 0.;
+      axis_info.max_axis = 0.;
+      break;
+    case GDK_AXIS_XTILT:
+    case GDK_AXIS_YTILT:
+      axis_info.min_axis = -1.;
+      axis_info.max_axis = 1.;
+      break;
+    default:
+      axis_info.min_axis = 0.;
+      axis_info.max_axis = 1.;
+      break;
+    }
+
+  priv->axes = g_array_append_val (priv->axes, axis_info);
+
+  return priv->axes->len - 1;
+}
+
+GdkAxisInfo *
+find_axis_info (GArray     *array,
+                GdkAxisUse  use)
+{
+  GdkAxisInfo *info;
+  gint i;
+
+  for (i = 0; i < GDK_AXIS_LAST; i++)
+    {
+      info = &g_array_index (array, GdkAxisInfo, i);
+
+      if (info->use == use)
+        return info;
+    }
+
+  return NULL;
+}
+
+gboolean
+_gdk_device_translate_axis (GdkDevice *device,
+                            gdouble    window_width,
+                            gdouble    window_height,
+                            gdouble    window_x,
+                            gdouble    window_y,
+                            guint      index,
+                            gdouble    value,
+                            gdouble   *axis_value)
+{
+  GdkDevicePrivate *priv;
+  GdkAxisInfo axis_info;
+  gdouble out = 0;
+
+  priv = GDK_DEVICE_GET_PRIVATE (device);
+
+  if (index >= priv->axes->len)
+    return FALSE;
+
+  axis_info = g_array_index (priv->axes, GdkAxisInfo, index);
+
+  if (axis_info.use == GDK_AXIS_X ||
+      axis_info.use == GDK_AXIS_Y)
+    {
+      GdkAxisInfo *axis_info_x, *axis_info_y;
+      gdouble device_width, device_height;
+      gdouble x_offset, y_offset;
+      gdouble x_scale, y_scale;
+
+      if (axis_info.use == GDK_AXIS_X)
+        {
+          axis_info_x = &axis_info;
+          axis_info_y = find_axis_info (priv->axes, GDK_AXIS_Y);
+        }
+      else
+        {
+          axis_info_x = find_axis_info (priv->axes, GDK_AXIS_X);
+          axis_info_y = &axis_info;
+        }
+
+      device_width = axis_info_x->max_value - axis_info_x->min_value;
+      device_height = axis_info_y->max_value - axis_info_y->min_value;
+
+      if (device->mode == GDK_MODE_SCREEN)
+        {
+          if (axis_info.use == GDK_AXIS_X)
+            out = window_x;
+          else
+            out = window_y;
+        }
+      else /* GDK_MODE_WINDOW */
+        {
+          gdouble x_resolution, y_resolution, device_aspect;
+
+          x_resolution = axis_info_x->resolution;
+          y_resolution = axis_info_y->resolution;
+
+          /*
+           * Some drivers incorrectly report the resolution of the device
+           * as zero (in partiular linuxwacom < 0.5.3 with usb tablets).
+           * This causes the device_aspect to become NaN and totally
+           * breaks windowed mode.  If this is the case, the best we can
+           * do is to assume the resolution is non-zero is equal in both
+           * directions (which is true for many devices).  The absolute
+           * value of the resolution doesn't matter since we only use the
+           * ratio.
+           */
+          if (x_resolution == 0 || y_resolution == 0)
+            {
+              x_resolution = 1;
+              y_resolution = 1;
+            }
+
+          device_aspect = (device_height * y_resolution) /
+            (device_width * x_resolution);
+
+          if (device_aspect * window_width >= window_height)
+            {
+              /* device taller than window */
+              x_scale = window_width / device_width;
+              y_scale = (x_scale * x_resolution) / y_resolution;
+
+              x_offset = 0;
+              y_offset = - (device_height * y_scale - window_height) / 2;
+            }
+          else
+            {
+              /* window taller than device */
+              y_scale = window_height / device_height;
+              x_scale = (y_scale * y_resolution) / x_resolution;
+
+              y_offset = 0;
+              x_offset = - (device_width * x_scale - window_width) / 2;
+            }
+
+          if (axis_info.use == GDK_AXIS_X)
+            out = x_offset + x_scale * (value - axis_info.min_value);
+          else
+            out = y_offset + y_scale * (value - axis_info.min_value);
+        }
+    }
+  else
+    {
+      gdouble axis_width;
+
+      axis_width = axis_info.max_value - axis_info.min_value;
+      out = (axis_info.max_axis * (value - axis_info.min_value) +
+             axis_info.min_axis * (axis_info.max_value - value)) / axis_width;
+    }
+
+  if (axis_value)
+    *axis_value = out;
+
+  return TRUE;
 }
 
 #define __GDK_DEVICE_C__

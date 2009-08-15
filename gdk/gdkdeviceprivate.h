@@ -50,11 +50,6 @@ struct _GdkDeviceClass
                       gdouble         *axes,
                       GdkModifierType *mask);
 
-  gboolean (* get_axis) (GdkDevice  *device,
-                         gdouble    *axes,
-                         GdkAxisUse  use,
-                         gdouble    *value);
-
   void (* set_window_cursor) (GdkDevice *device,
                               GdkWindow *window,
                               GdkCursor *cursor);
@@ -64,6 +59,24 @@ struct _GdkDeviceClass
                               gint        x,
                               gint        y);
 };
+
+
+void  _gdk_device_reset_axes (GdkDevice   *device);
+guint _gdk_device_add_axis   (GdkDevice   *device,
+                              GdkAtom      label_atom,
+                              GdkAxisUse   use,
+                              gdouble      min_value,
+                              gdouble      max_value,
+                              gdouble      resolution);
+
+gboolean _gdk_device_translate_axis (GdkDevice *device,
+                                     gdouble    window_width,
+                                     gdouble    window_height,
+                                     gdouble    window_x,
+                                     gdouble    window_y,
+                                     guint      index,
+                                     gdouble    value,
+                                     gdouble   *axis_value);
 
 G_END_DECLS
 
