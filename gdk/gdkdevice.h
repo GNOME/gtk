@@ -145,6 +145,13 @@ gboolean gdk_device_get_history  (GdkDevice         *device,
 				  guint             *n_events);
 void     gdk_device_free_history (GdkTimeCoord     **events,
 				  gint               n_events);
+
+GList *  gdk_device_list_axes      (GdkDevice       *device);
+gboolean gdk_device_get_axis_value (GdkDevice       *device,
+                                    gdouble         *axes,
+                                    GdkAtom          axis_label,
+                                    gdouble         *value);
+
 gboolean gdk_device_get_axis     (GdkDevice         *device,
 				  gdouble           *axes,
 				  GdkAxisUse         use,
