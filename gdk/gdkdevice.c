@@ -421,7 +421,7 @@ void
 _gdk_device_reset_axes (GdkDevice *device)
 {
   GdkDevicePrivate *priv;
-  guint i;
+  gint i;
 
   priv = GDK_DEVICE_GET_PRIVATE (device);
 
