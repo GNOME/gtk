@@ -4865,7 +4865,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
       if (_gdk_event_func && gdk_window_is_viewable (window)  &&
 	  private->window_type != GDK_WINDOW_FOREIGN)
 	{
-	  GdkRectangle window_rect;
 	  GdkRegion *expose_region;
 	  gboolean end_implicit;
 
