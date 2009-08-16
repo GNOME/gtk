@@ -7272,7 +7272,7 @@ gdk_window_get_geometry (GdkWindow *window,
 			 gint      *height,
 			 gint      *depth)
 {
-  GdkWindowObject *private;
+  GdkWindowObject *private, *parent;
 
   if (!window)
     {
@@ -7289,9 +7289,19 @@ gdk_window_get_geometry (GdkWindow *window,
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (gdk_window_has_impl (private))
-	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_geometry (window, x, y,
-								 width, height,
-								 depth);
+	{
+	  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_geometry (window, x, y,
+								   width, height,
+								   depth);
+	  /* This reports the position wrt to the native parent, we need to convert
+	     it to be relative to the client side parent */
+	  parent = private->parent;
+	  if (!gdk_window_has_impl (parent))
+	    {
+	      *x -= parent->abs_x;
+	      *y -= parent->abs_y;
+	    }
+	}
       else
 	{
 	  if (x)
