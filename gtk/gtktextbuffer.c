@@ -3807,11 +3807,7 @@ gtk_text_buffer_delete_selection (GtkTextBuffer *buffer,
   else
     {
       if (interactive)
-        {
-          gtk_text_buffer_begin_user_action (buffer);
-          gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
-          gtk_text_buffer_end_user_action (buffer);
-        }
+        gtk_text_buffer_delete_interactive (buffer, &start, &end, default_editable);
       else
         gtk_text_buffer_delete (buffer, &start, &end);
 
