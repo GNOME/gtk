@@ -671,6 +671,8 @@ gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
       !activatable_update_gicon (image_menu_item, action))
     activatable_update_icon_name (image_menu_item, action);
 
+  gtk_image_menu_item_set_always_show_image (image_menu_item,
+                                             gtk_action_get_always_show_image (action));
 }
 
 

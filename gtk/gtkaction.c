@@ -72,6 +72,7 @@ struct _GtkActionPrivate
   guint is_important       : 1;
   guint hide_if_empty      : 1;
   guint visible_overflown  : 1;
+  guint always_show_image  : 1;
   guint recursion_guard    : 1;
   guint activate_blocked   : 1;
 
@@ -110,7 +111,8 @@ enum
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
   PROP_VISIBLE,
-  PROP_ACTION_GROUP
+  PROP_ACTION_GROUP,
+  PROP_ALWAYS_SHOW_IMAGE
 };
 
 /* GtkBuildable */
@@ -355,6 +357,25 @@ gtk_action_class_init (GtkActionClass *klass)
 							 GTK_PARAM_READWRITE));
 
   /**
+   * GtkAction:always-show-image:
+   *
+   * If %TRUE, the action's menu item proxies will ignore the #GtkSettings:gtk-menu-images 
+   * setting and always show their image, if available.
+   *
+   * Use this property if the menu item would be useless or hard to use
+   * without their image. 
+   *
+   * Since: 2.20
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALWAYS_SHOW_IMAGE,
+                                   g_param_spec_boolean ("always-show-image",
+                                                         P_("Always show image"),
+                                                         P_("Whether the image will always be shown"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
+  /**
    * GtkAction::activate:
    * @action: the #GtkAction
    *
@@ -390,6 +411,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->visible_overflown  = TRUE;
   action->private_data->is_important = FALSE;
   action->private_data->hide_if_empty = TRUE;
+  action->private_data->always_show_image = FALSE;
   action->private_data->activate_blocked = FALSE;
 
   action->private_data->sensitive = TRUE;
@@ -551,6 +573,9 @@ gtk_action_set_property (GObject         *object,
     case PROP_ACTION_GROUP:
       gtk_action_set_action_group (action, g_value_get_object (value));
       break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      gtk_action_set_always_show_image (action, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -613,6 +638,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_ACTION_GROUP:
       g_value_set_object (value, action->private_data->action_group);
+      break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      g_value_set_boolean (value, action->private_data->always_show_image);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1167,8 +1195,6 @@ gtk_action_set_is_important (GtkAction *action,
 {
   g_return_if_fail (GTK_IS_ACTION (action));
 
-  g_return_if_fail (GTK_IS_ACTION (action));
-
   is_important = is_important != FALSE;
   
   if (action->private_data->is_important != is_important)
@@ -1195,6 +1221,58 @@ gtk_action_get_is_important (GtkAction *action)
   g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
 
   return action->private_data->is_important;
+}
+
+/**
+ * gtk_action_set_always_show_image:
+ * @action: the action object
+ * @always_show: %TRUE if menuitem proxies should always show their image
+ *
+ * Sets whether @action<!-- -->'s menu item proxies will ignore the
+ * #GtkSettings:gtk-menu-images setting and always show their image, if available.
+ *
+ * Use this if the menu item would be useless or hard to use
+ * without their image.
+ *
+ * Since: 2.20
+ */
+void
+gtk_action_set_always_show_image (GtkAction *action,
+                                  gboolean   always_show)
+{
+  GtkActionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  priv = action->private_data;
+
+  always_show = always_show != FALSE;
+  
+  if (priv->always_show_image != always_show)
+    {
+      priv->always_show_image = always_show;
+
+      g_object_notify (G_OBJECT (action), "always-show-image");
+    }
+}
+
+/**
+ * gtk_action_get_always_show_image:
+ * @action:
+ *
+ * Returns whether @action<!-- -->'s menu item proxies will ignore the
+ * #GtkSettings:gtk-menu-images setting and always show their image, if available.
+ *
+ * Returns: %TRUE if the menu item proxies will always show their image
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_action_get_always_show_image  (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->always_show_image;
 }
 
 /**

@@ -160,6 +160,7 @@ gtk_action_disconnect_accelerator
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_action_disconnect_proxy
 #endif
+gtk_action_get_always_show_image
 gtk_action_get_accel_closure
 gtk_action_get_accel_path
 gtk_action_get_gicon
@@ -184,6 +185,7 @@ gtk_action_is_visible
 gtk_action_new
 gtk_action_set_accel_group
 gtk_action_set_accel_path
+gtk_action_set_always_show_image
 gtk_action_set_gicon
 gtk_action_set_icon_name
 gtk_action_set_is_important

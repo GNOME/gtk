@@ -170,6 +170,9 @@ gboolean              gtk_action_get_visible_vertical   (GtkAction   *action);
 void                  gtk_action_set_is_important       (GtkAction   *action,
                                                          gboolean     is_important);
 gboolean              gtk_action_get_is_important       (GtkAction   *action);
+void                  gtk_action_set_always_show_image  (GtkAction   *action,
+                                                         gboolean     always_show);
+gboolean              gtk_action_get_always_show_image  (GtkAction   *action);
 
 
 G_END_DECLS
