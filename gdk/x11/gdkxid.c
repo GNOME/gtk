@@ -77,14 +77,16 @@ _gdk_xid_table_remove (GdkDisplay *display,
     g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
-/** 
+/**
  * gdk_xid_table_lookup_for_display:
  * @display: the #GdkDisplay.
  * @xid: an X id.
  *
  * Returns the GDK object associated with the given X id.
  *
- * Returns: a GDK object associated with the given X id.
+ * Return value: the associated Gdk object, which may be a #GdkPixmap,
+ *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     with the X id.
  *
  * Since: 2.2
  */
@@ -109,12 +111,14 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
 /**
  * gdk_xid_table_lookup:
  * @xid: an X id.
- * 
- * Returns the Gdk object associated with the given X id.
- * 
+ *
+ * Returns the Gdk object associated with the given X id for the default
+ * display.
+ *
  * Return value: the associated Gdk object, which may be a #GdkPixmap,
- * a #GdkWindow or a #GdkFont.
- **/
+ *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     with the X id.
+ */
 gpointer
 gdk_xid_table_lookup (XID xid)
 {
