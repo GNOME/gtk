@@ -4314,7 +4314,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
           if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                     &start, &end) &&
-              gtk_text_iter_in_range (&iter, &start, &end))
+              gtk_text_iter_in_range (&iter, &start, &end) &&
+              !(event->state & GDK_SHIFT_MASK))
             {
               text_view->drag_start_x = event->x;
               text_view->drag_start_y = event->y;
