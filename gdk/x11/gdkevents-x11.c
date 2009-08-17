@@ -2197,6 +2197,7 @@ gdk_event_translate (GdkDisplay *display,
   return return_val;
 }
 
+#if 0
 static GdkFilterReturn
 gdk_wm_protocols_filter (GdkXEvent *xev,
 			 GdkEvent  *event,
@@ -2280,7 +2281,6 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   return GDK_FILTER_CONTINUE;
 }
 
-#if 0
 void
 _gdk_events_queue (GdkDisplay *display)
 {

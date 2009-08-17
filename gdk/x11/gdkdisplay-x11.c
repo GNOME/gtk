@@ -977,6 +977,89 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   return return_val;
 }
 
+static GdkFilterReturn
+gdk_wm_protocols_filter (GdkXEvent *xev,
+			 GdkEvent  *event,
+			 gpointer data)
+{
+  XEvent *xevent = (XEvent *)xev;
+  GdkWindow *win = event->any.window;
+  GdkDisplay *display;
+  Atom atom;
+
+  if (!win)
+      return GDK_FILTER_REMOVE;
+
+  display = GDK_WINDOW_DISPLAY (win);
+  atom = (Atom)xevent->xclient.data.l[0];
+
+  if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW"))
+    {
+  /* The delete window request specifies a window
+   *  to delete. We don't actually destroy the
+   *  window because "it is only a request". (The
+   *  window might contain vital data that the
+   *  program does not want destroyed). Instead
+   *  the event is passed along to the program,
+   *  which should then destroy the window.
+   */
+      GDK_NOTE (EVENTS,
+		g_message ("delete window:\t\twindow: %ld",
+			   xevent->xclient.window));
+
+      event->any.type = GDK_DELETE;
+
+      gdk_x11_window_set_user_time (win, xevent->xclient.data.l[1]);
+
+      return GDK_FILTER_TRANSLATE;
+    }
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
+    {
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      GdkWindowObject *private = (GdkWindowObject *)win;
+
+      /* There is no way of knowing reliably whether we are viewable;
+       * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
+       */
+      if (toplevel && private->accept_focus)
+	_gdk_x11_set_input_focus_safe (display, toplevel->focus_window,
+				       RevertToParent,
+				       xevent->xclient.data.l[1]);
+
+      return GDK_FILTER_REMOVE;
+    }
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING") &&
+	   !_gdk_x11_display_is_root_window (display,
+					     xevent->xclient.window))
+    {
+      XClientMessageEvent xclient = xevent->xclient;
+
+      xclient.window = GDK_WINDOW_XROOTWIN (win);
+      XSendEvent (GDK_WINDOW_XDISPLAY (win),
+		  xclient.window,
+		  False,
+		  SubstructureRedirectMask | SubstructureNotifyMask, (XEvent *)&xclient);
+
+      return GDK_FILTER_REMOVE;
+    }
+  else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST") &&
+	   GDK_DISPLAY_X11 (display)->use_sync)
+    {
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      if (toplevel)
+	{
+#ifdef HAVE_XSYNC
+	  XSyncIntsToValue (&toplevel->pending_counter_value,
+			    xevent->xclient.data.l[2],
+			    xevent->xclient.data.l[3]);
+#endif
+	}
+      return GDK_FILTER_REMOVE;
+    }
+
+  return GDK_FILTER_CONTINUE;
+}
+
 static void
 _gdk_event_init (GdkDisplay *display)
 {
@@ -992,6 +1075,11 @@ _gdk_event_init (GdkDisplay *display)
   device_manager = gdk_device_manager_get_for_display (display);
   gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
                                    GDK_EVENT_TRANSLATOR (device_manager));
+
+  gdk_display_add_client_message_filter (display,
+					 gdk_atom_intern_static_string ("WM_PROTOCOLS"),
+					 gdk_wm_protocols_filter,
+					 NULL);
 }
 
 static void
