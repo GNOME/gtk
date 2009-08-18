@@ -961,6 +961,40 @@ LDADDS =								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)
 
+if HAVE_INTROSPECTION
+BUILT_GIRSOURCES =
+
+Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) Makefile
+	$(INTROSPECTION_SCANNER) -v \
+		--namespace Gtk --nsversion=2.0 --strip-prefix=Gtk \
+		$(INCLUDES) \
+		--add-include-path=../gdk \
+		--add-include-path=../gdk-pixbuf \
+		--include=Gdk-2.0 \
+		--include=Atk-1.0 \
+		--library=$(gtktargetlib) \
+		--libtool="$(LIBTOOL)" \
+	        --output $@ \
+		-UGDK_DISABLE_DEPRECATED \
+		-UGTK_DISABLE_DEPRECATED \
+		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API \
+		$(gtkinclude_HEADERS) \
+		$(gtk_all_c_sources) gtktypebuiltins.h gtktypebuiltins.c
+BUILT_GIRSOURCES += Gtk-2.0.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(BUILT_GIRSOURCES)
+
+typelibsdir = $(libdir)/girepository-1.0/
+
+typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
+
+%.typelib: %.gir $(INTROSPECTION_COMPILER)
+	$(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. --includedir=../gdk-pixbuf --includedir=../gdk $(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
+
+CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+endif
+
 #
 # Installed tools
 #
