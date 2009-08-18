@@ -501,7 +501,7 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
-  gtk_printer_set_icon_name (printer, "gtk-floppy");
+  gtk_printer_set_icon_name (printer, "gtk-save");
   gtk_printer_set_is_active (printer, TRUE);
 
   gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
