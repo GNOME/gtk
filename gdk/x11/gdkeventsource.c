@@ -47,6 +47,44 @@ static GSourceFuncs event_funcs = {
 
 static GList *event_sources = NULL;
 
+static gint
+gdk_event_apply_filters (XEvent *xevent,
+			 GdkEvent *event,
+			 GList *filters)
+{
+  GList *tmp_list;
+  GdkFilterReturn result;
+
+  tmp_list = filters;
+
+  while (tmp_list)
+    {
+      GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
+
+      tmp_list = tmp_list->next;
+      result = filter->function (xevent, event, filter->data);
+
+      if (result !=  GDK_FILTER_CONTINUE)
+	return result;
+    }
+
+  return GDK_FILTER_CONTINUE;
+}
+
+static GdkWindow *
+gdk_event_source_get_filter_window (GdkEventSource *event_source,
+                                    XEvent         *xevent)
+{
+  GdkWindow *window;
+
+  window = gdk_window_lookup_for_display (event_source->display,
+                                          xevent->xany.window);
+
+  if (window && !GDK_IS_WINDOW (window))
+    window = NULL;
+
+  return window;
+}
 
 static GdkEvent *
 gdk_event_source_translate_event (GdkEventSource *event_source,
@@ -54,6 +92,46 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 {
   GdkEvent *event = NULL;
   GList *list = event_source->translators;
+  GdkFilterReturn result;
+  GdkWindow *filter_window;
+
+  /* Run default filters */
+  if (_gdk_default_filters)
+    {
+      /* Apply global filters */
+
+      result = gdk_event_apply_filters (xevent, event,
+                                        _gdk_default_filters);
+
+      if (result == GDK_FILTER_REMOVE)
+        return NULL;
+      else if (result == GDK_FILTER_TRANSLATE)
+        return event;
+    }
+
+  filter_window = gdk_event_source_get_filter_window (event_source, xevent);
+
+  if (filter_window)
+    {
+      /* Apply per-window filters */
+      GdkWindowObject *filter_private = (GdkWindowObject *) filter_window;
+      GdkFilterReturn result;
+
+      if (filter_private->filters)
+	{
+	  g_object_ref (filter_window);
+
+	  result = gdk_event_apply_filters (xevent, event,
+					    filter_private->filters);
+
+	  g_object_unref (filter_window);
+
+          if (result == GDK_FILTER_REMOVE)
+            return NULL;
+          else if (result == GDK_FILTER_TRANSLATE)
+            return event;
+	}
+    }
 
   while (list && !event)
     {
@@ -204,13 +282,6 @@ gdk_event_source_new (GdkDisplay *display)
   g_source_attach (source, NULL);
 
   event_sources = g_list_prepend (event_sources, source);
-
-#if 0
-  gdk_display_add_client_message_filter (display,
-					 gdk_atom_intern_static_string ("WM_PROTOCOLS"),
-					 gdk_wm_protocols_filter,
-					 NULL);
-#endif
 
   return source;
 }

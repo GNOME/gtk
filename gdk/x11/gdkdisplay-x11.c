@@ -323,7 +323,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
                                  GdkEvent           *event,
                                  XEvent             *xevent)
 {
-  GdkWindow *window, *filter_window;
+  GdkWindow *window;
   GdkWindowObject *window_private;
   GdkWindowImplX11 *window_impl = NULL;
   GdkScreen *screen = NULL;
@@ -333,14 +333,11 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   gboolean return_val;
   Window xwindow = None;
 
-  /* FIXME: default filters */
-
   /* Find the GdkWindow that this event relates to.
    * Basically this means substructure events
    * are reported same as structure events
    */
   window = gdk_event_translator_get_event_window (translator, display, xevent);
-  filter_window = gdk_event_translator_get_filter_window (translator, display, xevent);
   window_private = (GdkWindowObject *) window;
 
   if (window)
@@ -365,30 +362,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  goto done;
 	}
     }
-#if 0
-  else if (filter_window)
-    {
-      /* Apply per-window filters */
-      GdkWindowObject *filter_private = (GdkWindowObject *) filter_window;
-      GdkFilterReturn result;
-
-      if (filter_private->filters)
-	{
-	  g_object_ref (filter_window);
-
-	  result = gdk_event_apply_filters (xevent, event,
-					    filter_private->filters);
-
-	  g_object_unref (filter_window);
-
-	  if (result != GDK_FILTER_CONTINUE)
-	    {
-	      return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	      goto done;
-	    }
-	}
-    }
-#endif
 
   /* FIXME: if window is NULL, xwindow should still have something meaningful here? */
   if (xwindow != None &&

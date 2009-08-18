@@ -141,24 +141,3 @@ gdk_event_translator_get_event_window (GdkEventTranslator *translator,
 
   return get_gdk_window (display, xwindow);
 }
-
-GdkWindow *
-gdk_event_translator_get_filter_window (GdkEventTranslator *translator,
-                                        GdkDisplay         *display,
-                                        XEvent             *xevent)
-{
-  GdkEventTranslatorIface *iface;
-  Window xwindow = None;
-
-  g_return_val_if_fail (GDK_IS_EVENT_TRANSLATOR (translator), NULL);
-
-  iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
-
-  if (iface->get_filter_window)
-    xwindow = (iface->get_filter_window) (translator, xevent);
-
-  if (xwindow == None)
-    xwindow = xevent->xany.window;
-
-  return get_gdk_window (display, xwindow);
-}

@@ -59,9 +59,6 @@ GdkEvent * gdk_event_translator_translate (GdkEventTranslator *translator,
 GdkWindow * gdk_event_translator_get_event_window  (GdkEventTranslator *translator,
                                                     GdkDisplay         *display,
                                                     XEvent             *xevent);
-GdkWindow * gdk_event_translator_get_filter_window (GdkEventTranslator *translator,
-                                                    GdkDisplay         *display,
-                                                    XEvent             *xevent);
 
 G_END_DECLS
 

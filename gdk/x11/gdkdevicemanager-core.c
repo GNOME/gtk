@@ -311,7 +311,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
                                          XEvent             *xevent)
 {
   GdkDeviceManagerCore *device_manager;
-  GdkWindow *window, *filter_window;
+  GdkWindow *window;
   GdkWindowObject *window_private;
   GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
@@ -326,29 +326,11 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
   window_private = NULL;
   event->any.window = NULL;
 
-  /* Run default filters */
-#if 0
-  if (_gdk_default_filters)
-    {
-      /* Apply global filters */
-      GdkFilterReturn result;
-      result = gdk_event_apply_filters (xevent, event,
-                                        _gdk_default_filters);
-
-      if (result != GDK_FILTER_CONTINUE)
-        {
-          return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-          goto done;
-        }
-    }
-#endif
-
   /* Find the GdkWindow that this event relates to.
    * Basically this means substructure events
    * are reported same as structure events
    */
   window = gdk_event_translator_get_event_window (translator, display, xevent);
-  filter_window = gdk_event_translator_get_filter_window (translator, display, xevent);
   window_private = (GdkWindowObject *) window;
 
   if (window)
@@ -368,7 +350,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 	    case KeyPress:
 	    case KeyRelease:
 	      xwindow = GDK_WINDOW_XID (window);
-	      xevent->xany.window = xwindow;
+	      xevent->xany.window = xwindow
 	      break;
 	    default:
 	      return FALSE;
@@ -390,30 +372,6 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 	  goto done;
 	}
     }
-#if 0
-  else if (filter_window)
-    {
-      /* Apply per-window filters */
-      GdkWindowObject *filter_private = (GdkWindowObject *) filter_window;
-      GdkFilterReturn result;
-
-      if (filter_private->filters)
-	{
-	  g_object_ref (filter_window);
-
-	  result = gdk_event_apply_filters (xevent, event,
-					    filter_private->filters);
-
-	  g_object_unref (filter_window);
-
-	  if (result != GDK_FILTER_CONTINUE)
-	    {
-	      return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	      goto done;
-	    }
-	}
-    }
-#endif
 
   if (window &&
       (xevent->type == MotionNotify ||
