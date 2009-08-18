@@ -1326,6 +1326,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   ipp_t *response;
   gboolean list_has_changed;
   GList *removed_printer_checklist;
+  gchar *remote_default_printer = NULL;
 
   GDK_THREADS_ENTER ();
 
@@ -1426,6 +1427,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gboolean got_printer_type = FALSE;
       gchar   *default_cover_before = NULL;
       gchar   *default_cover_after = NULL;
+      gboolean remote_printer = FALSE;
       
       /* Skip leading attributes until we hit a printer...
        */
@@ -1538,6 +1540,11 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               default_printer = TRUE;
             else
               default_printer = FALSE;
+
+            if (attr->values[0].integer & 0x00000002)
+              remote_printer = TRUE;
+            else
+              remote_printer = FALSE;
           }
         else
 	  {
@@ -1561,8 +1568,16 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         {
           if (default_printer && !cups_backend->got_default_printer)
             {
-              cups_backend->got_default_printer = TRUE;
-              cups_backend->default_printer = g_strdup (printer_name);
+              if (!remote_printer)
+                {
+                  cups_backend->got_default_printer = TRUE;
+                  cups_backend->default_printer = g_strdup (printer_name);
+                }
+              else
+                {
+                  if (remote_default_printer == NULL)
+                    remote_default_printer = g_strdup (printer_name);
+                }
             }
         }
       else
@@ -1785,6 +1800,26 @@ done:
     g_signal_emit_by_name (backend, "printer-list-changed");
   
   gtk_print_backend_set_list_done (backend);
+
+  if (!cups_backend->got_default_printer && remote_default_printer != NULL)
+    {
+      cups_backend->default_printer = g_strdup (remote_default_printer);
+      cups_backend->got_default_printer = TRUE;
+      g_free (remote_default_printer);
+
+      if (cups_backend->default_printer != NULL)
+        {
+          GtkPrinter *default_printer = NULL;
+          default_printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (cups_backend),
+                                                            cups_backend->default_printer);
+          if (default_printer != NULL)
+            {
+              gtk_printer_set_is_default (default_printer, TRUE);
+              g_signal_emit_by_name (GTK_PRINT_BACKEND (cups_backend),
+                                     "printer-status-changed", default_printer);
+            }
+        }
+    }
 
   GDK_THREADS_LEAVE ();
 }
