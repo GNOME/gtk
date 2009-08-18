@@ -5,6 +5,7 @@ gdk/gdk.c
 gdk/gdkdisplaymanager.c
 gdk/gdkpango.c
 gdk/gdkscreen.c
+gdk/gdkwindow.c
 gdk/keyname-table.h
 gdk-pixbuf/gdk-pixbuf-animation.c
 gdk-pixbuf/gdk-pixbuf.c
