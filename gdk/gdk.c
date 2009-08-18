@@ -338,9 +338,10 @@ gdk_display_open_default_libgtk_only (void)
   return display;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_init_check
+/**
+ * gdk_init_check:
+ * @argc: (inout):
+ * @argv: (array length=argc) (inout):
  *
  *   Initialize the library for use.
  *
@@ -359,7 +360,6 @@ gdk_display_open_default_libgtk_only (void)
  *
  *--------------------------------------------------------------
  */
-
 gboolean
 gdk_init_check (int    *argc,
 		char ***argv)
@@ -369,6 +369,12 @@ gdk_init_check (int    *argc,
   return gdk_display_open_default_libgtk_only () != NULL;
 }
 
+
+/**
+ * gdk_init:
+ * @argc: (inout):
+ * @argv: (array length=argc) (inout):
+ */
 void
 gdk_init (int *argc, char ***argv)
 {

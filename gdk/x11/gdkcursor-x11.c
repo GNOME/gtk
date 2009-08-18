@@ -1035,8 +1035,8 @@ gdk_display_get_default_cursor_size (GdkDisplay    *display)
 /**
  * gdk_display_get_maximal_cursor_size:
  * @display: a #GdkDisplay
- * @width: the return location for the maximal cursor width
- * @height: the return location for the maximal cursor height
+ * @width: (out): the return location for the maximal cursor width
+ * @height: (out): the return location for the maximal cursor height
  *
  * Gets the maximal size to use for cursors on @display.
  *

@@ -318,8 +318,8 @@ gdk_color_get_type (void)
 /**
  * gdk_color_parse:
  * @spec: the string specifying the color.
- * @color: the #GdkColor to fill in
- * 
+ * @color: (out): the #GdkColor to fill in
+ *
  * Parses a textual specification of a color and fill in the
  * <structfield>red</structfield>, <structfield>green</structfield>,
  * and <structfield>blue</structfield> fields of a #GdkColor

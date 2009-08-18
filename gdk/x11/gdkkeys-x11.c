@@ -834,11 +834,11 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
 
 /**
  * gdk_keymap_get_entries_for_keyval:
- * @keymap: a #GdkKeymap, or %NULL to use the default keymap
+ * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default keymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: return location for an array of #GdkKeymapKey
- * @n_keys: return location for number of elements in returned array
- * 
+ * @keys: (out): return location for an array of #GdkKeymapKey
+ * @n_keys: (out): return location for number of elements in returned array
+ *
  * Obtains a list of keycode/group/level combinations that will
  * generate @keyval. Groups and levels are two kinds of keyboard mode;
  * in general, the level determines whether the top or bottom symbol
@@ -984,10 +984,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
 /**
  * gdk_keymap_get_entries_for_keycode:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: (allow-none): a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
- * @keys: return location for array of #GdkKeymapKey, or %NULL
- * @keyvals: return location for array of keyvals, or %NULL
+ * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out): return location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -1409,14 +1409,14 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
 
 /**
  * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap, or %NULL to use the default
+ * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default
  * @hardware_keycode: a keycode
- * @state: a modifier state 
+ * @state: a modifier state
  * @group: active keyboard group
- * @keyval: return location for keyval, or %NULL
- * @effective_group: return location for effective group, or %NULL
- * @level: return location for level, or %NULL
- * @consumed_modifiers: return location for modifiers that were used to
+ * @keyval: (out) (allow-none): return location for keyval, or %NULL
+ * @effective_group: (out) (allow-none): return location for effective group, or %NULL
+ * @level: (out) (allow-none):  return location for level, or %NULL
+ * @consumed_modifiers: (out) (allow-none):  return location for modifiers that were used to
  *     determine the group or level, or %NULL
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective

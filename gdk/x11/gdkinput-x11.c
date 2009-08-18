@@ -858,6 +858,16 @@ _gdk_device_get_history (GdkDevice         *device,
     return FALSE;
 }
 
+/**
+ * gdk_device_get_state:
+ * @device: a #GdkDevice.
+ * @window: a #GdkWindow.
+ * @axes: an array of doubles to store the values of the axes of @device in,
+ * or %NULL.
+ * @mask: location to store the modifiers, or %NULL.
+ *
+ * Gets the current state of a device.
+ */
 void
 gdk_device_get_state (GdkDevice       *device,
 		      GdkWindow       *window,

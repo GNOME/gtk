@@ -226,7 +226,7 @@ gdk_region_get_clipbox (const GdkRegion *region,
 /**
  * gdk_region_get_rectangles:
  * @region: a #GdkRegion
- * @rectangles: return location for an array of rectangles
+ * @rectangles: (array length=n_rectangles) (transfer container): return location for an array of rectangles
  * @n_rectangles: length of returned array
  *
  * Obtains the area covered by the region as a list of rectangles.
