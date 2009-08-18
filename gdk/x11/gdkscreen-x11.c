@@ -214,9 +214,9 @@ gdk_screen_get_number (GdkScreen *screen)
  * gdk_screen_get_root_window:
  * @screen: a #GdkScreen
  *
- * Gets the root window of @screen. 
- * 
- * Returns: the root window
+ * Gets the root window of @screen.
+ *
+ * Returns: (transfer none): the root window
  *
  * Since: 2.2
  **/

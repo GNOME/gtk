@@ -121,12 +121,12 @@ gdk_keymap_init (GdkKeymap *keymap)
 /**
  * gdk_keyval_convert_case:
  * @symbol: a keyval
- * @lower: return location for lowercase version of @symbol
- * @upper: return location for uppercase version of @symbol
+ * @lower: (out): return location for lowercase version of @symbol
+ * @upper: (out): return location for uppercase version of @symbol
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
  * Examples of keyvals are #GDK_a, #GDK_Enter, #GDK_F1, etc.
- * 
+ *
  **/
 void
 gdk_keyval_convert_case (guint symbol,

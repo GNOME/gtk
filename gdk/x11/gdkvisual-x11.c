@@ -466,8 +466,8 @@ gdk_visual_get_best_with_both (gint          depth,
 
 /**
  * gdk_query_depths:
- * @depths: return location for available depths 
- * @count: return location for number of available depths
+ * @depths: (out) (array): return location for available depths
+ * @count: (out): return location for number of available depths
  *
  * This function returns the available bit depths for the default
  * screen. It's equivalent to listing the visuals

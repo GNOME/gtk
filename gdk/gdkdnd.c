@@ -37,11 +37,11 @@
  *      should be ignored, since it is put up by the drag source as an icon.
  * @x_root: the x position of the pointer in root coordinates.
  * @y_root: the y position of the pointer in root coordinates.
- * @dest_window: location to store the destination window in.
- * @protocol: location to store the DND protocol in.
- * 
+ * @dest_window: (out): location to store the destination window in.
+ * @protocol: (out): location to store the DND protocol in.
+ *
  * Finds the destination window and DND protocol to use at the
- * given pointer position. 
+ * given pointer position.
  *
  * This function is called by the drag source to obtain the 
  * @dest_window and @protocol parameters for gdk_drag_motion().

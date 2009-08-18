@@ -147,11 +147,12 @@ gdk_display_manager_get_property (GObject      *object,
     }
 }
 
-/** 
+/**
  * gdk_display_manager_get:
- * @returns: the singleton #GdkDisplayManager object.
  *
- * Returns the global #GdkDisplayManager singleton; gdk_parse_pargs(),
+ * Gets the singleton #GdkDisplayManager object.
+ *
+ * Returns: (transfer none): The global #GdkDisplayManager singleton; gdk_parse_pargs(),
  * gdk_init(), or gdk_init_check() must have been called first.
  *
  * Since: 2.2
@@ -171,9 +172,9 @@ gdk_display_manager_get (void)
  * gdk_display_manager_get_default_display:
  * @display_manager: a #GdkDisplayManager 
  *
- * Gets the default #GdkDisplay. 
- * 
- * Returns: a #GdkDisplay, or %NULL if there is no default
+ * Gets the default #GdkDisplay.
+ *
+ * Returns: (transfer none): a #GdkDisplay, or %NULL if there is no default
  *   display.
  *
  * Since: 2.2
@@ -190,8 +191,8 @@ gdk_display_manager_get_default_display (GdkDisplayManager *display_manager)
  * Gets the default #GdkDisplay. This is a convenience
  * function for
  * <literal>gdk_display_manager_get_default_display (gdk_display_manager_get ())</literal>.
- * 
- * Returns: a #GdkDisplay, or %NULL if there is no default
+ *
+ * Returns: (transfer none): a #GdkDisplay, or %NULL if there is no default
  *   display.
  *
  * Since: 2.2
@@ -207,8 +208,8 @@ gdk_display_get_default (void)
  *
  * Gets the default screen for the default display. (See
  * gdk_display_get_default ()).
- * 
- * Returns: a #GdkScreen, or %NULL if there is no default display.
+ *
+ * Returns: (transfer none): a #GdkScreen, or %NULL if there is no default display.
  *
  * Since: 2.2
  */

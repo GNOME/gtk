@@ -1256,7 +1256,7 @@ sync_native_window_stack_position (GdkWindow *window)
 
 /**
  * gdk_window_new:
- * @parent: a #GdkWindow, or %NULL to create the window as a child of
+ * @parent: (allow-none): a #GdkWindow, or %NULL to create the window as a child of
  *   the default root window for the default display.
  * @attributes: attributes of the new window
  * @attributes_mask: mask indicating which fields in @attributes are valid
@@ -1266,7 +1266,7 @@ sync_native_window_stack_position (GdkWindow *window)
  * more details.  Note: to use this on displays other than the default
  * display, @parent must be specified.
  *
- * Return value: the new #GdkWindow
+ * Return value: (transfer none): the new #GdkWindow
  **/
 GdkWindow*
 gdk_window_new (GdkWindow     *parent,
@@ -3456,12 +3456,12 @@ gdk_window_get_offsets (GdkWindow *window,
 /**
  * gdk_window_get_internal_paint_info:
  * @window: a #GdkWindow
- * @real_drawable: location to store the drawable to which drawing should be
+ * @real_drawable: (out): location to store the drawable to which drawing should be
  *            done.
- * @x_offset: location to store the X offset between coordinates in @window,
+ * @x_offset: (out): location to store the X offset between coordinates in @window,
  *            and the underlying window system primitive coordinates for
  *            *@real_drawable.
- * @y_offset: location to store the Y offset between coordinates in @window,
+ * @y_offset: (out): location to store the Y offset between coordinates in @window,
  *            and the underlying window system primitive coordinates for
  *            *@real_drawable.
  *
@@ -6199,18 +6199,18 @@ gdk_window_constrain_size (GdkGeometry *geometry,
 /**
  * gdk_window_get_pointer:
  * @window: a #GdkWindow
- * @x: return location for X coordinate of pointer or %NULL to not
+ * @x: (out) (allow-none): return location for X coordinate of pointer or %NULL to not
  *      return the X coordinate
- * @y: return location for Y coordinate of pointer or %NULL to not
+ * @y: (out) (allow-none):  return location for Y coordinate of pointer or %NULL to not
  *      return the Y coordinate
- * @mask: return location for modifier mask or %NULL to not return the
+ * @mask: (out) (allow-none): return location for modifier mask or %NULL to not return the
  *      modifier mask
  *
  * Obtains the current pointer position and modifier state.
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
- * Return value: the window containing the pointer (as with
+ * Return value: (transfer none): the window containing the pointer (as with
  * gdk_window_at_pointer()), or %NULL if the window containing the
  * pointer isn't known to GDK
  **/
@@ -6259,8 +6259,8 @@ gdk_window_get_pointer (GdkWindow	  *window,
 
 /**
  * gdk_window_at_pointer:
- * @win_x: return location for origin of the window under the pointer
- * @win_y: return location for origin of the window under the pointer
+ * @win_x: (out) (allow-none): return location for origin of the window under the pointer
+ * @win_y: (out) (allow-none): return location for origin of the window under the pointer
  *
  * Obtains the window underneath the mouse pointer, returning the
  * location of that window in @win_x, @win_y. Returns %NULL if the
@@ -6271,7 +6271,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * NOTE: For multihead-aware widgets or applications use
  * gdk_display_get_window_at_pointer() instead.
  *
- * Return value: window under the mouse pointer
+ * Return value: (transfer none): window under the mouse pointer
  **/
 GdkWindow*
 gdk_window_at_pointer (gint *win_x,

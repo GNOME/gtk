@@ -145,16 +145,19 @@ void           gdk_device_set_key       (GdkDevice      *device,
 void     gdk_device_set_axis_use (GdkDevice         *device,
 				  guint              index_,
 				  GdkAxisUse         use);
+
 void     gdk_device_get_state    (GdkDevice         *device,
 				  GdkWindow         *window,
 				  gdouble           *axes,
 				  GdkModifierType   *mask);
+
 gboolean gdk_device_get_history  (GdkDevice         *device,
 				  GdkWindow         *window,
 				  guint32            start,
 				  guint32            stop,
 				  GdkTimeCoord    ***events,
 				  gint              *n_events);
+
 void     gdk_device_free_history (GdkTimeCoord     **events,
 				  gint               n_events);
 gboolean gdk_device_get_axis     (GdkDevice         *device,

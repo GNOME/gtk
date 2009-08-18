@@ -77,76 +77,15 @@ for the new pixmap. Can be %NULL, if the depth is given.
 
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm ##### -->
-<para>
-Create a pixmap from a XPM file.
-</para>
-
-@drawable: a #GdkDrawable, used to determine default values
-for the new pixmap.
-@mask: a pointer to a place to store a bitmap representing
-the transparency mask of the XPM file. Can be %NULL,
-in which case transparency will be ignored.
-@transparent_color: the color to be used for the pixels
-that are transparent in the input file. Can be %NULL,
-in which case a default color will be used.
-@filename: the filename of a file containing XPM data.
-@Returns: the #GdkPixmap
 
 
 <!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm ##### -->
-<para>
-Create a pixmap from a XPM file using a particular colormap.
-</para>
-
-@drawable: a #GdkDrawable, used to determine default values
-for the new pixmap. Can be %NULL if @colormap is given.
-@colormap: the #GdkColormap that the new pixmap will be use.
-  If omitted, the colormap for @window will be used.
-@mask: a pointer to a place to store a bitmap representing
-the transparency mask of the XPM file. Can be %NULL,
-in which case transparency will be ignored.
-@transparent_color: the color to be used for the pixels
-that are transparent in the input file. Can be %NULL,
-in which case a default color will be used.
-@filename: the filename of a file containing XPM data.
-@Returns: the #GdkPixmap.
 
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm_d ##### -->
-<para>
-Create a pixmap from data in XPM format.
-</para>
-
-@drawable: a #GdkDrawable, used to determine default values
-for the new pixmap.
-@mask: Pointer to a place to store a bitmap representing
-the transparency mask of the XPM file. Can be %NULL,
-in which case transparency will be ignored.
-@transparent_color: This color will be used for the pixels
-that are transparent in the input file. Can be %NULL
-in which case a default color will be used.
-@data: Pointer to a string containing the XPM data.
-@Returns: the #GdkPixmap
 
 
 <!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm_d ##### -->
-<para>
-Create a pixmap from data in XPM format using a particular
-colormap.
-</para>
-
-@drawable: a #GdkDrawable, used to determine default values
-for the new pixmap. Can be %NULL if @colormap is given.
-@colormap: the #GdkColormap that the new pixmap will be use.
-  If omitted, the colormap for @window will be used.
-@mask: a pointer to a place to store a bitmap representing
-the transparency mask of the XPM file. Can be %NULL,
-in which case transparency will be ignored.
-@transparent_color: the color to be used for the pixels
-that are transparent in the input file. Can be %NULL,
-in which case a default color will be used.
-@data: Pointer to a string containing the XPM data.
-@Returns: the #GdkPixmap.
 
 
 <!-- ##### MACRO gdk_pixmap_ref ##### -->

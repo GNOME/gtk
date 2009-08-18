@@ -142,12 +142,12 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
 /**
  * gdk_drawable_get_size:
  * @drawable: a #GdkDrawable
- * @width: location to store drawable's width, or %NULL
- * @height: location to store drawable's height, or %NULL
+ * @width: (out): location to store drawable's width, or %NULL
+ * @height: (out): location to store drawable's height, or %NULL
  *
  * Fills *@width and *@height with the size of @drawable.
  * @width or @height can be %NULL if you only want the other one.
- * 
+ *
  * On the X11 platform, if @drawable is a #GdkWindow, the returned
  * size is the size reported in the most-recently-processed configure
  * event, rather than the current size on the X server.
