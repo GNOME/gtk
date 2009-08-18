@@ -1,3 +1,33 @@
+Overview of Changes from GTK+ 2.17.7 to 2.17.8
+==============================================
+
+* Client-side windows:
+ - various fixes to expose handling
+ - fix memory leaks
+
+* Minor API additions:
+ - New setter as part of the GSEAL effort: gtk_widget_set_allocation
+
+* Bugs fixed:
+ 585211 Add accessor function for GtkWidget->allocation
+ 588437 gtk 2.17.3 causes dragging in firefox bookmarks sidebar t...
+ 589367 gedit crashed with SIGSEGV in IA__g_list_last()
+ 589877 Client side windows leak gdk regions
+ 590959 Set child_has_focus flag properly
+ 591432 There is incomplete information on the returning value of...
+ 591434 firefox-3.5 crashed with SIGSEGV in _gdk_window_process_u...
+ 591526 Accelerator keys with <super> modifier also triggered by ...
+ 591751 bad memory access with duplicated id
+ 591998 Support silent build rules with automake 1.11
+ 592003 Shift+click should always modify selection
+
+* Updated translations:
+ Brazilian
+ Bulgarian
+ Irish
+ Swedish
+
+
 Overview of Changes from GTK+ 2.17.6 to 2.17.7
 ==============================================
 
