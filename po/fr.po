@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-11 14:22-0400\n"
+"POT-Creation-Date: 2009-08-17 22:58-0400\n"
 "PO-Revision-Date: 2009-07-18 20:44+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -1318,18 +1318,18 @@ msgstr "Barre oblique inverse"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Fonction de type non valide à la ligne %d : « %s »"
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
 "Identifiant d'objet « %s » dupliqué à la ligne %d (précédemment à la ligne %d)"
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Élément racine non valide : « %s »"
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Balise non gérée : « %s »"
@@ -1645,11 +1645,11 @@ msgstr "_Droite :"
 msgid "Paper Margins"
 msgstr "Marges du papier"
 
-#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "_Méthodes de saisie"
 
-#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
@@ -2456,7 +2456,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Impossible de terminer le processus ayant le pid %d : %s"
 
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
+#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"

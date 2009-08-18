@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-11 14:22-0400\n"
+"POT-Creation-Date: 2009-08-17 22:58-0400\n"
 "PO-Revision-Date: 2008-10-17 18:05+0200\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -1311,17 +1311,17 @@ msgstr ""
 msgid "Invalid type function on line %d: '%s'"
 msgstr "მიუღებელი ტიპის ფუნქცია: `%s'"
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "არასწორი root ელემენტი: '%s'"
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "გადაუმუშავებელი ჭდე: '%s'"
@@ -1635,11 +1635,11 @@ msgstr "მა_რჯვნივ:"
 msgid "Paper Margins"
 msgstr "გვერდის ველები"
 
-#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "შეტანის _მეთოდები"
 
-#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "_უნიკოდის საკონტროლო სიმბოლოს ჩასმა"
 
@@ -2444,7 +2444,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6952
+#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
 #, c-format
 msgid "Page %u"
 msgstr "გვერდი %u"
