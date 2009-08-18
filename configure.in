@@ -1970,6 +1970,11 @@ if test -n "$export_dynamic"; then
   GTK_DEP_LIBS=`echo $GTK_DEP_LIBS | sed -e "s/$export_dynamic//"`
 fi
 
+##################################################
+# GObject introspection
+##################################################
+
+GOBJECT_INTROSPECTION_CHECK([0.6.4])
 
 ##################################################
 # Checks for gtk-doc and docbook-tools

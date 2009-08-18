@@ -4,6 +4,8 @@ include $(top_srcdir)/Makefile.decl
 SUBDIRS = $(gdktarget) . tests
 DIST_SUBDIRS = win32 x11 quartz directfb tests
 
+CLEANFILES =
+
 EXTRA_DIST +=			\
 	keynames.txt		\
 	keyname-table.h		\
@@ -178,6 +180,37 @@ libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
 libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
 libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
+
+if HAVE_INTROSPECTION
+BUILT_GIRSOURCES =
+
+Gdk-2.0.gir: $(INTROSPECTION_SCANNER) $(gdktargetlib) Makefile
+	$(INTROSPECTION_SCANNER) -v \
+		--namespace Gdk --nsversion=2.0 --strip-prefix=Gdk \
+		$(INCLUDES) \
+		--include=Gio-2.0 \
+		--add-include-path=../gdk-pixbuf \
+		--include=GdkPixbuf-2.0 \
+		--include=Pango-1.0 \
+		--library=$(gdktargetlib) \
+		--libtool="$(LIBTOOL)" \
+	        --output $@ \
+		$(gdk_public_h_sources) \
+		$(gdk_c_sources) gdkenumtypes.c gdkenumtypes.h
+BUILT_GIRSOURCES += Gdk-2.0.gir
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(BUILT_GIRSOURCES)
+
+typelibsdir = $(libdir)/girepository-1.0/
+
+typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
+
+%.typelib: %.gir $(INTROSPECTION_COMPILER)
+	$(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. --includedir=../gdk-pixbuf $(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
+
+CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+endif
 
 if OS_WIN32
 install-def-file: gdk.def
