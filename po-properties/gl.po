@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-19 13:39+0200\n"
-"PO-Revision-Date: 2009-08-18 14:13+0200\n"
+"POT-Creation-Date: 2009-08-19 16:26+0200\n"
+"PO-Revision-Date: 2009-08-19 14:04+0200\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@mancomun.org>\n"
 "MIME-Version: 1.0\n"
@@ -108,11 +108,11 @@ msgstr "Un punteiro para os datos de píxel do pixbuf"
 
 #: ../gdk/gdkdisplaymanager.c:103
 msgid "Default Display"
-msgstr "Pantalla predeterminada"
+msgstr "Pantalla predefinida"
 
 #: ../gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
-msgstr "Pantalla predeterminada para o GDK"
+msgstr "Pantalla predefinida para o GDK"
 
 #: ../gdk/gdkpango.c:538 ../gtk/gtkinvisible.c:86
 #: ../gtk/gtkmountoperation.c:176 ../gtk/gtkstatusicon.c:280
@@ -141,9 +141,8 @@ msgid "The resolution for fonts on the screen"
 msgstr "A resolución para os tipos de letra na pantalla"
 
 #: ../gdk/gdkwindow.c:470 ../gdk/gdkwindow.c:471
-#, fuzzy
 msgid "Cursor"
-msgstr "Intermitencia do cursor"
+msgstr "Cursor"
 
 #: ../gtk/gtkaboutdialog.c:239
 msgid "Program name"
@@ -154,7 +153,7 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
-"O nome do programa. Se non se define, usarase de forma predeterminada "
+"O nome do programa. Se non se define, usarase de forma predefinida "
 "g_get_application_name()"
 
 #: ../gtk/gtkaboutdialog.c:254
@@ -199,7 +198,7 @@ msgid ""
 "defaults to the URL"
 msgstr ""
 "A etiqueta para a ligazón ao sitio web do programa. Se non se define, "
-"usarase o URL predeterminado"
+"usarase o URL predefinido"
 
 #: ../gtk/gtkaboutdialog.c:356
 msgid "Authors"
@@ -243,7 +242,7 @@ msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
-"Un logotipo para a caixa Sobre. Se non se define, o predeterminado é "
+"Un logotipo para a caixa Sobre. Se non se define, o predefinido é "
 "gtk_window_get_default_icon_list()"
 
 #: ../gtk/gtkaboutdialog.c:440
@@ -744,7 +743,7 @@ msgid ""
 "edge, start and end"
 msgstr ""
 "Como dispor os botóns na caixa. Os valores posíbeis son: default "
-"(predeterminado), spread (afastados), edge (bordos), start (inicio) e end "
+"(predefinido), spread (afastados), edge (bordos), start (inicio) e end "
 "(final)"
 
 #: ../gtk/gtkbbox.c:146
@@ -912,7 +911,7 @@ msgstr "A posición da imaxe en relación ao texto"
 
 #: ../gtk/gtkbutton.c:433
 msgid "Default Spacing"
-msgstr "Espazamento predeterminado"
+msgstr "Espazamento predefinido"
 
 #: ../gtk/gtkbutton.c:434
 msgid "Extra space to add for CAN_DEFAULT buttons"
@@ -920,7 +919,7 @@ msgstr "Espazo adicional que engadir para os botóns CAN_DEFAULT"
 
 #: ../gtk/gtkbutton.c:440
 msgid "Default Outside Spacing"
-msgstr "Espazamento exterior predeterminado"
+msgstr "Espazamento exterior predefinido"
 
 #: ../gtk/gtkbutton.c:441
 msgid ""
@@ -2274,15 +2273,15 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:705
 msgid "Activates default"
-msgstr "Activa o predeterminado"
+msgstr "Activa o predefinido"
 
 #: ../gtk/gtkentry.c:706
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
-"Indica se se debe activar o widget predeterminado (como o botón "
-"predeterminado nunha caixa de diálogo) cando se prema a tecla Intro"
+"Indica se se debe activar o widget predefinido (como o botón predefinido "
+"nunha caixa de diálogo) cando se prema a tecla Intro"
 
 #: ../gtk/gtkentry.c:712
 msgid "Width in chars"
@@ -4297,7 +4296,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
-msgstr "Configuración de páxina predeterminada"
+msgstr "Configuración de páxina predefinida"
 
 #: ../gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
@@ -5271,7 +5270,7 @@ msgstr "Nome do tipo de letra"
 
 #: ../gtk/gtksettings.c:339
 msgid "Name of default font to use"
-msgstr "Nome do tipo de letra predeterminado que usar"
+msgstr "Nome do tipo de letra predefinido que usar"
 
 #: ../gtk/gtksettings.c:361
 msgid "Icon Sizes"
@@ -5297,7 +5296,7 @@ msgstr "Suavizado Xft"
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica se se suavizan os bordos dos tipo de letra Xft, 0=non, 1=si, -"
-"1=predeterminado"
+"1=predefinido"
 
 #: ../gtk/gtksettings.c:390
 msgid "Xft Hinting"
@@ -5307,7 +5306,7 @@ msgstr "Contorno Xft"
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indica se se usa o contorno dos tipo de letra Xft; 0=non, 1=si, -"
-"1=predeterminado"
+"1=predefinido"
 
 #: ../gtk/gtksettings.c:400
 msgid "Xft Hint Style"
@@ -5335,7 +5334,7 @@ msgstr "PPP Xft"
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Resolución para Xft, en 1024 * puntos por polgada. -1 para usar o valor "
-"predeterminado"
+"predefinido"
 
 #: ../gtk/gtksettings.c:430
 msgid "Cursor theme name"
@@ -5343,8 +5342,7 @@ msgstr "Nome do tema de cursor"
 
 #: ../gtk/gtksettings.c:431
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
-msgstr ""
-"Nome do tema de cursor que usar ou NULL para usar o tema predeterminado"
+msgstr "Nome do tema de cursor que usar ou NULL para usar o tema predefinido"
 
 #: ../gtk/gtksettings.c:439
 msgid "Cursor theme size"
@@ -5353,8 +5351,7 @@ msgstr "Tamaño do tema de cursor"
 #: ../gtk/gtksettings.c:440
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
-"Tamaño que se vai usar para os cursores ou 0 para usar o tamaño "
-"predeterminado"
+"Tamaño que se vai usar para os cursores ou 0 para usar o tamaño predefinido"
 
 #: ../gtk/gtksettings.c:450
 msgid "Alternative button order"
@@ -5375,7 +5372,7 @@ msgid ""
 "inverted compared to the default (where down means ascending)"
 msgstr ""
 "Indica se a dirección dos indicadores de orde na listaxe e a visualización "
-"en árbore está invertida en comparación coa predeterminada (onde abaixo "
+"en árbore está invertida en comparación coa predefinida (onde abaixo "
 "significa ascendente)"
 
 #: ../gtk/gtksettings.c:477
@@ -5518,7 +5515,7 @@ msgstr "Unha representación en táboa hash do esquema de cor."
 
 #: ../gtk/gtksettings.c:732
 msgid "Default file chooser backend"
-msgstr "Backend predeterminado do selector de ficheiros"
+msgstr "Backend predefinido do selector de ficheiros"
 
 #: ../gtk/gtksettings.c:733
 msgid "Name of the GtkFileChooser backend to use by default"
@@ -5526,7 +5523,7 @@ msgstr "Nome do backend do GtkFileChooser para usar por defecto"
 
 #: ../gtk/gtksettings.c:750
 msgid "Default print backend"
-msgstr "Backend de impresión predeterminado"
+msgstr "Backend de impresión predefinido"
 
 #: ../gtk/gtksettings.c:751
 msgid "List of the GtkPrintBackend backends to use by default"
@@ -5535,7 +5532,7 @@ msgstr "Lista dos backends do GtkPrintBackend para usar por defecto"
 #: ../gtk/gtksettings.c:774
 msgid "Default command to run when displaying a print preview"
 msgstr ""
-"Comando predeterminado para executar ao mostrar unha visualización previa de "
+"Comando predefinido para executar ao mostrar unha visualización previa de "
 "impresión"
 
 #: ../gtk/gtksettings.c:775
@@ -5569,7 +5566,7 @@ msgstr "Número de ficheiros usados recentemente"
 
 #: ../gtk/gtksettings.c:845
 msgid "Default IM module"
-msgstr "Módulo de MI predeterminado"
+msgstr "Módulo de MI predefinido"
 
 #: ../gtk/gtksettings.c:846
 msgid "Which IM module should be used by default"
@@ -6060,9 +6057,9 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 "Tamaño do tipo de letra como un factor de escala relativo ao tamaño "
-"predeterminado do tipo de letra. Esta propiedade adáptase aos cambios de "
-"tema etc., polo que é recomendábel. O Pango define previamente algunhas "
-"escalas tales como PANGO_SCALE_X_LARGE"
+"predefinido do tipo de letra. Esta propiedade adáptase aos cambios de tema "
+"etc., polo que é recomendábel. O Pango define previamente algunhas escalas "
+"tales como PANGO_SCALE_X_LARGE"
 
 #: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:591
 msgid "Left, right, or center justification"
@@ -6075,7 +6072,7 @@ msgid ""
 msgstr ""
 "O idioma no que está este texto, como un código ISO. O Pango pode usar isto "
 "como unha axuda ao renderizar o texto. Se non se estabelece este parámetro "
-"usarase como predeterminado o máis apropiado."
+"usarase como predefinido o máis apropiado."
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -7016,28 +7013,27 @@ msgstr "Indica se o widget é o widget co foco, dentro do nivel superior"
 
 #: ../gtk/gtkwidget.c:560
 msgid "Can default"
-msgstr "Pode ser o predeterminado"
+msgstr "Pode ser o predefinido"
 
 #: ../gtk/gtkwidget.c:561
 msgid "Whether the widget can be the default widget"
-msgstr "Indica se o widget pode ser o widget predeterminado"
+msgstr "Indica se o widget pode ser o widget predefinido"
 
 #: ../gtk/gtkwidget.c:567
 msgid "Has default"
-msgstr "É o predeterminado"
+msgstr "É o predefinido"
 
 #: ../gtk/gtkwidget.c:568
 msgid "Whether the widget is the default widget"
-msgstr "Indica se o widget é o widget predeterminado"
+msgstr "Indica se o widget é o widget predefinido"
 
 #: ../gtk/gtkwidget.c:574
 msgid "Receives default"
-msgstr "Recibe o predeterminado"
+msgstr "Recibe o predefinido"
 
 #: ../gtk/gtkwidget.c:575
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
-"Se é TRUE, o widget recibirá a acción predeterminada cando estea enfocado"
+msgstr "Se é TRUE, o widget recibirá a acción predefinida cando estea enfocado"
 
 #: ../gtk/gtkwidget.c:581
 msgid "Composite child"
@@ -7314,24 +7310,22 @@ msgstr "A posición inicial da xanela"
 
 #: ../gtk/gtkwindow.c:562
 msgid "Default Width"
-msgstr "Largura predeterminada"
+msgstr "Largura predefinida"
 
 #: ../gtk/gtkwindow.c:563
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
-"A largura predeterminada da xanela, usada cando se mostra inicialmente a "
-"xanela"
+"A largura predefinida da xanela, usada cando se mostra inicialmente a xanela"
 
 #: ../gtk/gtkwindow.c:572
 msgid "Default Height"
-msgstr "Altura predeterminada"
+msgstr "Altura predefinida"
 
 #: ../gtk/gtkwindow.c:573
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
-"A altura predeterminada da xanela, usada cando se mostra inicialmente a "
-"xanela"
+"A altura predefinida da xanela, usada cando se mostra inicialmente a xanela"
 
 #: ../gtk/gtkwindow.c:582
 msgid "Destroy with Parent"
