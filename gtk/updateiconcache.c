@@ -1516,9 +1516,11 @@ opentmp:
       g_unlink (bak_cache_path);
       if (g_rename (cache_path, bak_cache_path) == -1)
 	{
+          int errsv = errno;
+
 	  g_printerr (_("Could not rename %s to %s: %s, removing %s then.\n"),
 		      cache_path, bak_cache_path,
-		      g_strerror (errno),
+		      g_strerror (errsv),
 		      cache_path);
 	  g_unlink (cache_path);
 	  bak_cache_path = NULL;
@@ -1528,16 +1530,22 @@ opentmp:
 
   if (g_rename (tmp_cache_path, cache_path) == -1)
     {
+      int errsv = errno;
+
       g_printerr (_("Could not rename %s to %s: %s\n"),
 		  tmp_cache_path, cache_path,
-		  g_strerror (errno));
+		  g_strerror (errsv));
       g_unlink (tmp_cache_path);
 #ifdef G_OS_WIN32
       if (bak_cache_path != NULL)
 	if (g_rename (bak_cache_path, cache_path) == -1)
-	  g_printerr (_("Could not rename %s back to %s: %s.\n"),
-		      bak_cache_path, cache_path,
-		      g_strerror (errno));
+          {
+            errsv = errno;
+
+            g_printerr (_("Could not rename %s back to %s: %s.\n"),
+                        bak_cache_path, cache_path,
+                        g_strerror (errsv));
+          }
 #endif
       exit (1);
     }

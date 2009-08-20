@@ -952,6 +952,8 @@ _gtk_mount_operation_kill_process (GPid      pid,
 
   if (kill ((pid_t) pid, SIGTERM) != 0)
     {
+      int errsv = errno;
+
       /* TODO: On EPERM, we could use a setuid helper using polkit (very easy to implement
        *       via pkexec(1)) to allow the user to e.g. authenticate to gain the authorization
        *       to kill the process. But that's not how things currently work.
@@ -960,10 +962,10 @@ _gtk_mount_operation_kill_process (GPid      pid,
       ret = FALSE;
       g_set_error (error,
                    G_IO_ERROR,
-                   g_io_error_from_errno (errno),
+                   g_io_error_from_errno (errsv),
                    _("Cannot end process with pid %d: %s"),
                    pid,
-                   strerror (errno));
+                   g_strerror (errsv));
     }
 
   return ret;
