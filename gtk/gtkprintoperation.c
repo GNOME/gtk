@@ -3243,7 +3243,7 @@ gtk_print_operation_get_has_selection (GtkPrintOperation *op)
 gint
 gtk_print_operation_get_n_pages_to_print (GtkPrintOperation *op)
 {
-  g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
+  g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), -1);
 
   return op->priv->nr_of_pages_to_print;
 }
