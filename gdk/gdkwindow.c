@@ -4806,7 +4806,8 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   g_list_foreach (children, (GFunc)g_object_unref, NULL);
   g_list_free (children);
 
-  if (!gdk_region_empty (expose_region))
+  if (!gdk_region_empty (expose_region) &&
+      !private->destroyed)
     {
       if (private->event_mask & GDK_EXPOSURE_MASK)
 	{
@@ -4852,6 +4853,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
   GdkWindowObject *private = (GdkWindowObject *)window;
   gboolean save_region = FALSE;
   GdkRectangle clip_box;
+
+  /* Ensure the window lives while updating it */
+  g_object_ref (window);
 
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
@@ -5000,6 +5004,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	 no actual invalid area */
       gdk_window_flush_outstanding_moves (window);
     }
+
+  g_object_unref (window);
 }
 
 static void
@@ -5103,6 +5109,12 @@ gdk_window_process_updates (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  /* Make sure the window lives during the expose callouts */
+  g_object_ref (window);
+
   impl_window = gdk_window_get_impl_window (private);
   if ((impl_window->update_area ||
        impl_window->outstanding_moves) &&
@@ -5118,10 +5130,21 @@ gdk_window_process_updates (GdkWindow *window,
       /* process updates in reverse stacking order so composition or
        * painting over achieves the desired effect for offscreen windows
        */
-      GList *node;
-      for (node = g_list_last (private->children); node; node = node->prev)
-	gdk_window_process_updates (node->data, TRUE);
+      GList *node, *children;
+
+      children = g_list_copy (private->children);
+      g_list_foreach (children, (GFunc)g_object_ref, NULL);
+
+      for (node = g_list_last (children); node; node = node->prev)
+	{
+	  gdk_window_process_updates (node->data, TRUE);
+	  g_object_unref (node->data);
+	}
+
+      g_list_free (children);
     }
+
+  g_object_unref (window);
 }
 
 /**
