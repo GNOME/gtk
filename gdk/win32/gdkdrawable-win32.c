@@ -214,10 +214,10 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
     return;
   
   if (impl->colormap)
-    gdk_colormap_unref (impl->colormap);
+    g_object_unref (impl->colormap);
   impl->colormap = colormap;
   if (impl->colormap)
-    gdk_colormap_ref (impl->colormap);
+    g_object_ref (impl->colormap);
 }
 
 /* Drawing
@@ -494,7 +494,7 @@ draw_tiles (GdkDrawable *drawable,
 
   gdk_win32_hdc_release (drawable, gc, mask);
   gdk_win32_hdc_release (tile, gc_copy, mask);
-  gdk_gc_unref (gc_copy);
+  g_object_unref (gc_copy);
 }
 
 static void
@@ -629,11 +629,11 @@ generic_draw (GdkDrawable    *drawable,
 	      gdk_draw_rectangle (tile_pixmap, tile_gc, TRUE,
 				  0, 0, width, height);
 	    }
-	  gdk_gc_unref (stipple_gc);
+	  g_object_unref (stipple_gc);
 	}
 
-      gdk_gc_unref (mask_gc);
-      gdk_gc_unref (tile_gc);
+      g_object_unref (mask_gc);
+      g_object_unref (tile_gc);
 
       mask_hdc = CreateCompatibleDC (hdc);
 

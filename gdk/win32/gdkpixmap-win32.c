@@ -428,7 +428,7 @@ _gdk_pixmap_create_from_data (GdkDrawable    *drawable,
      GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (result)->impl),
      gc, source, 0, 0, 0, 0, width, height);
   g_object_unref (source);
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_create_from_data: %dx%dx%d=%p\n",
 			     width, height, depth,
