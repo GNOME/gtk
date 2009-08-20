@@ -277,6 +277,7 @@ correct_prefix (gchar **path)
   if (strncmp (*path, GTK_PREFIX "/", strlen (GTK_PREFIX "/")) == 0 ||
       strncmp (*path, GTK_PREFIX "\\", strlen (GTK_PREFIX "\\")) == 0)
     {
+	  gchar *tem = NULL;
       if (strlen(*path) > 5 && strncmp (*path - 5, ".libs", 5) == 0)
         {
           /* We are being run from inside the build tree, and shouldn't mess about. */
@@ -290,7 +291,7 @@ correct_prefix (gchar **path)
        * builder's machine. Replace the build-time prefix with the
        * installation prefix on this machine.
        */
-      gchar *tem = *path;
+      tem = *path;
       *path = g_strconcat (get_toplevel (), tem + strlen (GTK_PREFIX), NULL);
       g_free (tem);
     }
