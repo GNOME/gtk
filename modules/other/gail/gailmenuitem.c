@@ -251,16 +251,18 @@ gail_menu_item_ref_state_set (AtkObject *obj)
 
   menu_item = atk_object_get_parent (obj);
 
-  if (!GTK_IS_MENU_ITEM (GTK_ACCESSIBLE (menu_item)->widget))
-    return state_set;
-
-  parent_state_set = atk_object_ref_state_set (menu_item);
-  if (!atk_state_set_contains_state (parent_state_set, ATK_STATE_SELECTED))
+  if (menu_item)
     {
-      atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
-      atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
-    }
+      if (!GTK_IS_MENU_ITEM (GTK_ACCESSIBLE (menu_item)->widget))
+        return state_set;
 
+      parent_state_set = atk_object_ref_state_set (menu_item);
+      if (!atk_state_set_contains_state (parent_state_set, ATK_STATE_SELECTED))
+        {
+          atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
+          atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
+        }
+    }
   return state_set;
 }
 
