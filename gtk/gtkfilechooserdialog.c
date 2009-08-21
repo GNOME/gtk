@@ -224,6 +224,11 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
 {
   GList *children, *l;
 
+  dialog->priv->response_requested = TRUE;
+
+  if (gtk_window_activate_default (GTK_WINDOW (dialog)))
+    return;
+
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
@@ -239,11 +244,13 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
       response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
       if (is_stock_accept_response_id (response_id))
 	{
-	  dialog->priv->response_requested = TRUE;
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 	  break;
 	}
     }
+
+  if (l == NULL)
+    dialog->priv->response_requested = FALSE;
 
   g_list_free (children);
 }
