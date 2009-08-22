@@ -46,8 +46,6 @@ struct _GdkEventTranslatorIface
 
   Window (* get_event_window)  (GdkEventTranslator *translator,
                                 XEvent             *xevent);
-  Window (* get_filter_window) (GdkEventTranslator *translator,
-                                XEvent             *xevent);
 };
 
 GType      gdk_event_translator_get_type (void) G_GNUC_CONST;
