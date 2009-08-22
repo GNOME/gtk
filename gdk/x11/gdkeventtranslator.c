@@ -141,3 +141,33 @@ gdk_event_translator_get_event_window (GdkEventTranslator *translator,
 
   return get_gdk_window (display, xwindow);
 }
+
+GdkEventMask
+gdk_event_translator_get_handled_events (GdkEventTranslator *translator)
+{
+  GdkEventTranslatorIface *iface;
+
+  g_return_val_if_fail (GDK_IS_EVENT_TRANSLATOR (translator), 0);
+
+  iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
+
+  if (iface->get_handled_events)
+    return iface->get_handled_events (translator);
+
+  return 0;
+}
+
+void
+gdk_event_translator_select_window_events (GdkEventTranslator *translator,
+                                           Window              window,
+                                           GdkEventMask        event_mask)
+{
+  GdkEventTranslatorIface *iface;
+
+  g_return_if_fail (GDK_IS_EVENT_TRANSLATOR (translator));
+
+  iface = GDK_EVENT_TRANSLATOR_GET_IFACE (translator);
+
+  if (iface->select_window_events)
+    iface->select_window_events (translator, window, event_mask);
+}
