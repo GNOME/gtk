@@ -508,18 +508,31 @@ check_leader_window_title (GdkDisplay *display)
 }
 
 static Window
-create_focus_window (Display *xdisplay,
-		     XID      parent)
+create_focus_window (GdkDisplay *display,
+		     XID         parent)
 {
-  Window focus_window = XCreateSimpleWindow (xdisplay, parent,
-					     -1, -1, 1, 1, 0,
-					     0, 0);
-  
+  GdkDisplayX11 *display_x11;
+  GdkEventMask event_mask;
+  Display *xdisplay;
+  Window focus_window;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  focus_window = XCreateSimpleWindow (xdisplay, parent,
+                                      -1, -1, 1, 1, 0,
+                                      0, 0);
+
   /* FIXME: probably better to actually track the requested event mask for the toplevel
    */
-  XSelectInput (xdisplay, focus_window,
-		KeyPressMask | KeyReleaseMask | FocusChangeMask);
-  
+  event_mask = (GDK_KEY_PRESS_MASK |
+                GDK_KEY_RELEASE_MASK |
+                GDK_FOCUS_CHANGE_MASK);
+
+  gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                  focus_window,
+                                  event_mask, 0);
+
   XMapWindow (xdisplay, focus_window);
 
   return focus_window;
@@ -568,6 +581,7 @@ setup_toplevel_window (GdkWindow *window,
 {
   GdkWindowObject *obj = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+  GdkDisplay *display = gdk_drawable_get_display (window);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   XID xid = GDK_WINDOW_XID (window);
   XID xparent = GDK_WINDOW_XID (parent);
@@ -586,7 +600,7 @@ setup_toplevel_window (GdkWindow *window,
       /* The focus window is off the visible area, and serves to receive key
        * press events so they don't get sent to child windows.
        */
-      toplevel->focus_window = create_focus_window (xdisplay, xid);
+      toplevel->focus_window = create_focus_window (display, xid);
       _gdk_xid_table_insert (screen_x11->display, &toplevel->focus_window, window);
     }
   
@@ -3339,17 +3353,15 @@ gdk_window_x11_set_events (GdkWindow    *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
+      GdkDisplayX11 *display_x11;
+
       if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
         xevent_mask = StructureNotifyMask | PropertyChangeMask;
-      for (i = 0; i < _gdk_nenvent_masks; i++)
-	{
-	  if (event_mask & (1 << (i + 1)))
-	    xevent_mask |= _gdk_event_mask_table[i];
-	}
-      
-      XSelectInput (GDK_WINDOW_XDISPLAY (window),
-		    GDK_WINDOW_XID (window),
-		    xevent_mask);
+
+      display_x11 = GDK_DISPLAY_X11 (gdk_drawable_get_display (window));
+      gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                      GDK_WINDOW_XWINDOW (window), event_mask,
+                                      xevent_mask);
     }
 }
 
