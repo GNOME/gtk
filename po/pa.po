@@ -1274,7 +1274,7 @@ msgstr "ਲਾਈਨ %d ਉੱਤੇ ਗਲਤ ਟਾਈਪ ਫੰਕਸ਼ਨ: 
 #: ../gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr "ਲਾਈਨ %2$d ਉੱਤੇ ਡੁਪਲੀਕੇਟ ਆਬਜੈਕਟ id '%1$s' (ਲਾਈਨ %d ਉੱਤੇ ਪਿੱਛੇ)"
+msgstr "ਲਾਈਨ %2$d ਉੱਤੇ ਡੁਪਲੀਕੇਟ ਆਬਜੈਕਟ id '%1$s' (ਲਾਈਨ %3$d ਉੱਤੇ ਪਿੱਛੇ)"
 
 #: ../gtk/gtkbuilderparser.c:859
 #, c-format
