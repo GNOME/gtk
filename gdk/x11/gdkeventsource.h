@@ -32,6 +32,12 @@ GSource * gdk_event_source_new            (GdkDisplay *display);
 void      gdk_event_source_add_translator (GdkEventSource     *source,
                                            GdkEventTranslator *translator);
 
+void      gdk_event_source_select_events  (GdkEventSource *source,
+                                           Window          window,
+                                           GdkEventMask    event_mask,
+                                           unsigned int    extra_x_mask);
+
+
 G_END_DECLS
 
 #endif /* __GDK_EVENT_SOURCE_H__ */

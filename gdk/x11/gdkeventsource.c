@@ -294,3 +294,41 @@ gdk_event_source_add_translator (GdkEventSource     *source,
 
   source->translators = g_list_prepend (source->translators, translator);
 }
+
+void
+gdk_event_source_select_events (GdkEventSource *source,
+                                Window          window,
+                                GdkEventMask    event_mask,
+                                unsigned int    extra_x_mask)
+{
+  unsigned int xmask = extra_x_mask;
+  GList *list;
+  gint i;
+
+  list = source->translators;
+
+  while (list)
+    {
+      GdkEventTranslator *translator = list->data;
+      GdkEventMask translator_mask, mask;
+
+      translator_mask = gdk_event_translator_get_handled_events (translator);
+      mask = event_mask & translator_mask;
+
+      if (mask != 0)
+        {
+          gdk_event_translator_select_window_events (translator, window, mask);
+          event_mask &= ~(mask);
+        }
+
+      list = list->next;
+    }
+
+  for (i = 0; i < _gdk_nenvent_masks; i++)
+    {
+      if (event_mask & (1 << (i + 1)))
+        xmask |= _gdk_event_mask_table[i];
+    }
+
+  XSelectInput (GDK_DISPLAY_XDISPLAY (source->display), window, xmask);
+}
