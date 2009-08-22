@@ -51,6 +51,7 @@
 #include "MwmUtil.h"
 #include "gdkwindow-x11.h"
 #include "gdkdeviceprivate.h"
+#include "gdkeventsource.h"
 #include "gdkalias.h"
 
 #include <stdlib.h>
@@ -646,7 +647,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
-  GdkDeviceManager *device_manager;
+  GdkDisplayX11 *display_x11;
   
   Window xparent;
   Visual *xvisual;
@@ -659,12 +660,12 @@ _gdk_window_impl_new (GdkWindow     *window,
   
   unsigned int class;
   const char *title;
-  int i;
   
   private = (GdkWindowObject *) window;
   
   screen_x11 = GDK_SCREEN_X11 (screen);
   xparent = GDK_WINDOW_XID (real_parent);
+  display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
   
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
@@ -677,15 +678,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   xattributes_mask = 0;
 
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  
-  xattributes.event_mask = StructureNotifyMask | PropertyChangeMask;
-  for (i = 0; i < _gdk_nenvent_masks; i++)
-    {
-      if (event_mask & (1 << (i + 1)))
-	xattributes.event_mask |= _gdk_event_mask_table[i];
-    }
-  if (xattributes.event_mask)
-    xattributes_mask |= CWEventMask;
   
   if (attributes_mask & GDK_WA_NOREDIR)
     {
@@ -833,8 +825,9 @@ _gdk_window_impl_new (GdkWindow     *window,
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
 
-  device_manager = gdk_device_manager_get_for_display (GDK_WINDOW_DISPLAY (window));
-  gdk_device_manager_set_window_events (device_manager, window, attributes->event_mask);
+  gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                  GDK_WINDOW_XWINDOW (window), event_mask,
+                                  StructureNotifyMask | PropertyChangeMask);
 }
 
 static GdkEventMask

@@ -1153,6 +1153,8 @@ gdk_display_open (const gchar *display_name)
   /*set the default screen */
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
 
+  _gdk_event_init (display);
+
   attr.window_type = GDK_WINDOW_TOPLEVEL;
   attr.wclass = GDK_INPUT_OUTPUT;
   attr.x = 10;
@@ -1338,7 +1340,6 @@ gdk_display_open (const gchar *display_name)
   }
 #endif
 
-  _gdk_event_init (display);
   _gdk_windowing_image_init (display);
   _gdk_input_init (display);
   _gdk_dnd_init (display);
