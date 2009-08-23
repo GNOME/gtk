@@ -44,9 +44,6 @@ struct _GdkEventTranslatorIface
                                 GdkEvent           *event,
                                 XEvent             *xevent);
 
-  Window (* get_event_window)  (GdkEventTranslator *translator,
-                                XEvent             *xevent);
-
   GdkEventMask (* get_handled_events)   (GdkEventTranslator *translator);
   void         (* select_window_events) (GdkEventTranslator *translator,
                                          Window              window,
@@ -58,10 +55,6 @@ GType      gdk_event_translator_get_type (void) G_GNUC_CONST;
 GdkEvent * gdk_event_translator_translate (GdkEventTranslator *translator,
                                            GdkDisplay         *display,
                                            XEvent             *xevent);
-
-GdkWindow * gdk_event_translator_get_event_window  (GdkEventTranslator *translator,
-                                                    GdkDisplay         *display,
-                                                    XEvent             *xevent);
 
 GdkEventMask gdk_event_translator_get_handled_events   (GdkEventTranslator *translator);
 void         gdk_event_translator_select_window_events (GdkEventTranslator *translator,
