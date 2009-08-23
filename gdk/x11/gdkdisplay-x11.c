@@ -317,6 +317,36 @@ gdk_check_wm_state_changed (GdkWindow *window)
     do_net_wm_state_changes (window);
 }
 
+static GdkWindow *
+get_event_window (GdkEventTranslator *translator,
+                  XEvent             *xevent)
+{
+  GdkDisplay *display;
+  Window xwindow;
+
+  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (translator));
+
+  switch (xevent->type)
+    {
+    case DestroyNotify:
+      xwindow = xevent->xdestroywindow.window;
+      break;
+    case UnmapNotify:
+      xwindow = xevent->xunmap.window;
+      break;
+    case MapNotify:
+      xwindow = xevent->xmap.window;
+      break;
+    case ConfigureNotify:
+      xwindow = xevent->xconfigure.window;
+      break;
+    default:
+      xwindow = xevent->xany.window;
+    }
+
+  return gdk_window_lookup_for_display (display, xwindow);
+}
+
 static gboolean
 gdk_display_x11_translate_event (GdkEventTranslator *translator,
                                  GdkDisplay         *display,
@@ -337,11 +367,17 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
    * Basically this means substructure events
    * are reported same as structure events
    */
-  window = gdk_event_translator_get_event_window (translator, display, xevent);
+  window = get_event_window (translator, xevent);
   window_private = (GdkWindowObject *) window;
 
   if (window)
     {
+      /* We may receive events such as NoExpose/GraphicsExpose
+       * and ShmCompletion for pixmaps
+       */
+      if (!GDK_IS_WINDOW (window))
+        return FALSE;
+
       screen = GDK_WINDOW_SCREEN (window);
       screen_x11 = GDK_SCREEN_X11 (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
