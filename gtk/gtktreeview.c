@@ -5986,15 +5986,23 @@ validate_visible_area (GtkTreeView *tree_view)
   while (area_above > 0)
     {
       _gtk_rbtree_prev_full (tree, node, &tree, &node);
-      if (! gtk_tree_path_prev (above_path) && node != NULL)
-	{
-	  gtk_tree_path_free (above_path);
-	  above_path = _gtk_tree_view_find_path (tree_view, tree, node);
-	}
-      gtk_tree_model_get_iter (tree_view->priv->model, &iter, above_path);
+
+      /* Always find the new path in the tree.  We cannot just assume
+       * a gtk_tree_path_prev() is enough here, as there might be children
+       * in between this node and the previous sibling node.  If this
+       * appears to be a performance hotspot in profiles, we can look into
+       * intrigate logic for keeping path, node and iter in sync like
+       * we do for forward walks.  (Which will be hard because of the lacking
+       * iter_prev).
+       */
 
       if (node == NULL)
 	break;
+
+      gtk_tree_path_free (above_path);
+      above_path = _gtk_tree_view_find_path (tree_view, tree, node);
+
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, above_path);
 
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
