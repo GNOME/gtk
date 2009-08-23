@@ -9737,6 +9737,8 @@ gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
   if (!gtk_tree_path_compare (old_cursor_path, cursor_path))
     gtk_widget_error_bell (GTK_WIDGET (tree_view));
 
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+
 cleanup:
   gtk_tree_path_free (old_cursor_path);
   gtk_tree_path_free (cursor_path);
@@ -9831,6 +9833,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 				        cursor_node,
 				        NULL);
       g_signal_emit (tree_view, tree_view_signals[CURSOR_CHANGED], 0);
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
     }
   else
     {
@@ -9896,6 +9899,7 @@ gtk_tree_view_move_cursor_start_end (GtkTreeView *tree_view,
   if (gtk_tree_path_compare (old_path, path))
     {
       gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
     }
   else
     {
