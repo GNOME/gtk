@@ -1,6 +1,7 @@
 /* Scrolling test suite for GtkTreeView
  * Copyright (C) 2006  Kristian Rietveld  <kris@gtk.org>
  * Copyright (C) 2007  Imendio AB,  Kristian Rietveld
+ * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -913,7 +914,7 @@ add_test (const char *path,
 
 	align = align_string (use_align, row_align);
 
-	test_path = g_strdup_printf ("/treeview/scrolling/%s-%s-path-%s-%s",
+	test_path = g_strdup_printf ("/TreeView/scrolling/%s-%s-path-%s-%s",
 				     test_type_string (test_type),
 				     mixed ? "mixed" : "constant",
 				     path, align);
@@ -1013,42 +1014,42 @@ main (int argc, char **argv)
 	}
 
 	/* Test different alignments in view with single row */
-	g_test_add ("/treeview/scrolling/single-no-align", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-no-align", ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_no_align,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-0.0", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-align-0.0", ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_0_0,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-0.5", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-align-0.5", ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_0_5,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-1.0", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-align-1.0", ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_1_0,
 		    scroll_fixture_teardown);
 
 	/* Test scrolling in a very large model; also very slow */
 	if (g_test_slow ()) {
-		g_test_add ("/treeview/scrolling/constant-big-middle-no-align",
+		g_test_add ("/TreeView/scrolling/constant-big-middle-no-align",
 			    ScrollFixture, "50000",
 			    scroll_fixture_constant_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
-		g_test_add ("/treeview/scrolling/constant-big-end-no-align",
+		g_test_add ("/TreeView/scrolling/constant-big-end-no-align",
 			    ScrollFixture, "99999",
 			    scroll_fixture_constant_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
 
-		g_test_add ("/treeview/scrolling/mixed-big-middle-no-align",
+		g_test_add ("/TreeView/scrolling/mixed-big-middle-no-align",
 			    ScrollFixture, "50000",
 			    scroll_fixture_mixed_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
-		g_test_add ("/treeview/scrolling/mixed-big-end-no-align",
+		g_test_add ("/TreeView/scrolling/mixed-big-end-no-align",
 			    ScrollFixture, "99999",
 			    scroll_fixture_mixed_big_setup,
 			    scroll_no_align,
@@ -1056,12 +1057,12 @@ main (int argc, char **argv)
 	}
 
 	/* Test scrolling to a newly created row */
-	g_test_add ("/treeview/scrolling/new-row-path-0", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row-path-0", ScrollFixture,
 		    GINT_TO_POINTER (0),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-4", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row-path-4", ScrollFixture,
 		    GINT_TO_POINTER (4),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
@@ -1070,27 +1071,27 @@ main (int argc, char **argv)
 	 * based on my font setting of "Vera Sans 11" and
 	 * the separators set to 0.  (This should be made dynamic; FIXME).
 	 */
-	g_test_add ("/treeview/scrolling/new-row-path-8", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row-path-8", ScrollFixture,
 		    GINT_TO_POINTER (8),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-500", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row-path-500", ScrollFixture,
 		    GINT_TO_POINTER (500),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-999", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row-path-999", ScrollFixture,
 		    GINT_TO_POINTER (999),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
 
 	/* Misc. tests */
-	g_test_add ("/treeview/scrolling/bug-316689", ScrollFixture, NULL,
+	g_test_add ("/TreeView/scrolling/bug-316689", ScrollFixture, NULL,
 		    scroll_fixture_constant_setup, test_bug316689,
 		    scroll_fixture_teardown);
-	g_test_add_func ("/treeview/scrolling/bug-359231", test_bug359231);
+	g_test_add_func ("/TreeView/scrolling/bug-359231", test_bug359231);
 
 	return g_test_run ();
 }
