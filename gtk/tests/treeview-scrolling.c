@@ -38,6 +38,8 @@
  *   - Test that nothing happens if the row is fully visible.
  *   - The tests are dependent on the theme/font (size measurements,
  *     chosen paths).
+ *   - Convert to proper GTK+ coding style.
+ *   - Briefly test scrolling in tree stores as well.
  */
 
 
@@ -171,6 +173,34 @@ scroll_fixture_single_setup (ScrollFixture *fixture,
 
 	gtk_tree_store_append (store, &child, &iter);
 	gtk_tree_store_set (store, &child, 0, "Two\nLines", -1);
+
+	/* The teardown will also destroy the model */
+	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), test_data);
+}
+
+/* sets up a fixture with a tree store */
+static void
+scroll_fixture_tree_setup (ScrollFixture *fixture,
+			   gconstpointer   test_data)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter, child;
+	int i;
+
+	store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, "Root node", -1);
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &child, &iter);
+		gtk_tree_store_set (store, &child, 0, "Child node", -1);
+	}
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &iter, NULL);
+		gtk_tree_store_set (store, &iter, 0, "Other node", -1);
+	}
 
 	/* The teardown will also destroy the model */
 	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), test_data);
@@ -753,6 +783,56 @@ scroll_new_row (ScrollFixture *fixture,
 	gtk_tree_path_free (scroll_path);
 }
 
+static void
+scroll_new_row_tree (ScrollFixture *fixture,
+		     gconstpointer  test_data)
+{
+	GtkTreeModel *model;
+	GtkAdjustment *vadjustment;
+	int i;
+
+	/* The goal of this test is to append new rows at the end of a tree
+	 * store and immediately scroll to them.  If there is a parent
+	 * node with a couple of childs in the "area above" to explore,
+	 * this used to lead to unexpected results due to a bug.
+	 *
+	 * This issue has been reported by Miroslav Rajcic on
+	 * gtk-app-devel-list:
+	 * http://mail.gnome.org/archives/gtk-app-devel-list/2008-December/msg00068.html
+	 */
+
+	gtk_widget_show_all (fixture->window);
+
+	gtk_tree_view_expand_all (GTK_TREE_VIEW (fixture->tree_view));
+
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view));
+	vadjustment = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (fixture->tree_view));
+
+	for (i = 0; i < 5; i++) {
+		GtkTreeIter scroll_iter;
+		GtkTreePath *scroll_path;
+
+		gtk_tree_store_append (GTK_TREE_STORE (model), &scroll_iter,
+				       NULL);
+		gtk_tree_store_set (GTK_TREE_STORE (model), &scroll_iter,
+				    0, "New node", -1);
+
+		scroll_path = gtk_tree_model_get_path (model, &scroll_iter);
+		gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (fixture->tree_view),
+					      scroll_path, NULL, FALSE, 0.0, 0.0);
+		gtk_tree_path_free (scroll_path);
+
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
+
+		/* Test position, the scroll bar must be at the end */
+		g_assert (vadjustment->value == vadjustment->upper - vadjustment->page_size);
+	}
+}
+
 /* Test for GNOME bugzilla bug 359231; tests "recovery when removing a bunch of
  * rows at the bottom.
  */
@@ -1089,6 +1169,12 @@ main (int argc, char **argv)
 		    GINT_TO_POINTER (999),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
+		    scroll_fixture_teardown);
+
+	g_test_add ("/TreeView/scrolling/new-row/tree", ScrollFixture,
+		    NULL,
+		    scroll_fixture_tree_setup,
+		    scroll_new_row_tree,
 		    scroll_fixture_teardown);
 
 	/* Misc. tests */
