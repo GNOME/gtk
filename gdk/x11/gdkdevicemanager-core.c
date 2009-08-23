@@ -376,27 +376,6 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
     {
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
-
-      /* Move key events on focus window to the real toplevel, and
-       * filter out all other events on focus window
-       */
-      /* FIXME: is this needed? */
-#if 0
-      if (toplevel && xwindow == toplevel->focus_window)
-	{
-	  switch (xevent->type)
-	    {
-	    case KeyPress:
-	    case KeyRelease:
-	      xwindow = GDK_WINDOW_XID (window);
-	      xevent->xany.window = xwindow
-	      break;
-	    default:
-	      return FALSE;
-	    }
-	}
-#endif
-
       g_object_ref (window);
     }
 
