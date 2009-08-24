@@ -69,10 +69,10 @@ gdk_device_manager_event_translator_init (GdkEventTranslatorIface *iface)
 static GdkDevice *
 create_core_pointer (GdkDisplay *display)
 {
-  /* FIXME: set mode */
   return g_object_new (GDK_TYPE_DEVICE_CORE,
                        "name", "Core Pointer",
                        "input-source", GDK_SOURCE_MOUSE,
+                       "input-mode", GDK_MODE_SCREEN,
                        "has-cursor", TRUE,
                        "display", display,
                        NULL);
