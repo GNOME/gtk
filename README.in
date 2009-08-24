@@ -37,6 +37,13 @@ Release notes for 2.18
 * JPEG2000 support is no longer enabled by default. It must be
   explicitly turned on, by passing --with-libjasper to configure.
 
+* GDK has been reworked to implement 'client-side windows'. This offers
+  exciting new possibilities, such as transformed, offscreen rendering,
+  but it breaks some long-standing assumptions that applications may
+  have about GDK windows. Setting the environment variable
+  GDK_NATIVE_WINDOWS makes GDK create a native X11 window for each
+  GDK window, which might make problematic applications work better.
+
 
 Release notes for 2.16
 ======================
