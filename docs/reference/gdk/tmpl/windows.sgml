@@ -1247,6 +1247,15 @@ window.
 @cursor: 
 
 
+<!-- ##### FUNCTION gdk_window_get_cursor ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### MACRO gdk_window_set_colormap ##### -->
 <para>
 Deprecated equivalent to gdk_drawable_set_colormap()

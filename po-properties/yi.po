@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-17 22:58-0400\n"
+"POT-Creation-Date: 2009-08-24 18:21-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -133,6 +133,11 @@ msgstr "שריפֿט פּונקטן"
 #, fuzzy
 msgid "The resolution for fonts on the screen"
 msgstr "װי צו דערהײַנטיקן די גאַמע אױף דער עקראַן"
+
+#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#, fuzzy
+msgid "Cursor"
+msgstr "לױפֿער בליצלען"
 
 #: gtk/gtkaboutdialog.c:239
 #, fuzzy

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-17 22:58-0400\n"
+"POT-Creation-Date: 2009-08-24 18:21-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -124,6 +124,11 @@ msgstr "वर्णका बिन्दुहरु"
 #, fuzzy
 msgid "The resolution for fonts on the screen"
 msgstr "पर्दामा दायरा कसरी सुधार गरिन्छ"
+
+#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#, fuzzy
+msgid "Cursor"
+msgstr "करसर झिमझिम"
 
 #: gtk/gtkaboutdialog.c:239
 msgid "Program name"

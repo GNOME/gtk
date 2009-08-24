@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-17 22:58-0400\n"
+"POT-Creation-Date: 2009-08-24 18:21-0400\n"
 "PO-Revision-Date: 2006-01-16 19:14+0100\n"
 "Last-Translator: Erdal Ronahi <erdal.ronahi@gmail.com>\n"
 "Language-Team: Kurdish <ku@li.org>\n"
@@ -123,6 +123,10 @@ msgstr ""
 
 #: gdk/gdkscreen.c:84
 msgid "The resolution for fonts on the screen"
+msgstr ""
+
+#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+msgid "Cursor"
 msgstr ""
 
 #: gtk/gtkaboutdialog.c:239

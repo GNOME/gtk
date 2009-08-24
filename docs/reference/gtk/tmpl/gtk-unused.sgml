@@ -3885,14 +3885,6 @@ fundamental type.
 @group_cycling: 
 @Returns: 
 
-<!-- ##### FUNCTION gtk_widget_get_allocation ##### -->
-<para>
-
-</para>
-
-@widget: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_widget_get_usize ##### -->
 <para>
 
