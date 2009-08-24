@@ -324,7 +324,7 @@ get_event_window (GdkEventTranslator *translator,
   GdkDisplay *display;
   Window xwindow;
 
-  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (translator));
+  display = (GdkDisplay *) translator;
 
   switch (xevent->type)
     {
