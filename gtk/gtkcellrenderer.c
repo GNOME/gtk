@@ -887,10 +887,12 @@ gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
  *
  * Returns the cell renderer's visibility.
  *
+ * Returns: %TRUE if the cell renderer is visible
+ *
  * Since: 2.18
- **/
+ */
 gboolean
-gtk_cell_renderer_get_visible  (GtkCellRenderer *cell)
+gtk_cell_renderer_get_visible (GtkCellRenderer *cell)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
@@ -925,10 +927,12 @@ gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
  *
  * Returns the cell renderer's sensitivity.
  *
+ * Returns: %TRUE if the cell renderer is sensitive
+ *
  * Since: 2.18
- **/
+ */
 gboolean
-gtk_cell_renderer_get_sensitive  (GtkCellRenderer *cell)
+gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
 
