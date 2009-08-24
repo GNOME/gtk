@@ -1,3 +1,37 @@
+Overview of Changes from GTK+ 2.17.8 to 2.17.9
+==============================================
+
+* Client-side windows:
+ - Add a compatibility mode that falls back to always using native windows,
+   triggered by the GDK_NATIVE_WINDOWS environment variable
+
+* Bugs fixed:
+ 589367 gedit crashed with SIGSEGV in IA__g_list_last()
+ 478519 GtkTooltip segfaults on NULL gdk-display-current-tooltip.
+ 592461 preserve errno and use g_strerror
+ 592403 crash when close the second terminal...
+ 591549 Default printer in a network
+ 526149 GtkCellRendererAccel editing conflicts with mnemonics
+ 528283 Problems when using PageUp & PageDown to navigate Playlists pane
+
+* Updated translations:
+ Bengali
+ Brazilian Portuguese
+ Breton
+ Bulgarian
+ Catalan
+ Estonian
+ Galician
+ Irish
+ Korean
+ Norwegian bokmål
+ Portuguese
+ Punjabi
+ Spanish
+ Swedish
+ Thai
+
+
 Overview of Changes from GTK+ 2.17.7 to 2.17.8
 ==============================================
 
