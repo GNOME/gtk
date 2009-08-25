@@ -352,6 +352,7 @@ struct _GdkEventKey
   guint16 hardware_keycode;
   guint8 group;
   guint is_modifier : 1;
+  GdkDevice *device;
 };
 
 struct _GdkEventCrossing
@@ -377,6 +378,7 @@ struct _GdkEventFocus
   GdkWindow *window;
   gint8 send_event;
   gint16 in;
+  GdkDevice *device;
 };
 
 struct _GdkEventConfigure
