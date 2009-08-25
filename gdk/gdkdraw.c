@@ -1638,12 +1638,14 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
      have already retargeted the destination to any
      impl window and set the clip, so what we really
      want to do is draw directly on the impl, ignoring
-     client side subwindows. */
+     client side subwindows. We also use the impl
+     in the pixmap target case to avoid resetting the
+     already set clip on the GC. */
   if (GDK_IS_WINDOW (drawable))
     real_drawable = GDK_WINDOW_OBJECT (drawable)->impl;
   else
-    real_drawable = drawable;
-  
+    real_drawable = GDK_PIXMAP_OBJECT (drawable)->impl;
+
   if (pixbuf->has_alpha)
     {
       GdkVisual *visual = gdk_drawable_get_visual (drawable);
