@@ -385,10 +385,14 @@ gdk_pixmap_draw_drawable (GdkDrawable *drawable,
 {
   GdkPixmapObject *private = (GdkPixmapObject *)drawable;
 
-  _gdk_gc_remove_drawable_clip (gc);  
-  gdk_draw_drawable (private->impl, gc, src, xsrc, ysrc,
-                     xdest, ydest,
-                     width, height);
+  _gdk_gc_remove_drawable_clip (gc);
+  /* Call the method directly to avoid getting the composite drawable again */
+  GDK_DRAWABLE_GET_CLASS (private->impl)->draw_drawable_with_src (private->impl, gc,
+								  src,
+								  xsrc, ysrc,
+								  xdest, ydest,
+								  width, height,
+								  original_src);
 }
 
 static void

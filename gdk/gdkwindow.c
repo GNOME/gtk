@@ -3654,8 +3654,14 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 
   BEGIN_DRAW;
 
-  gdk_draw_drawable (impl, gc, src, xsrc, ysrc,
-		     xdest - x_offset, ydest - y_offset, width, height);
+  /* Call the method directly to avoid getting the composite drawable again */
+  GDK_DRAWABLE_GET_CLASS (impl)->draw_drawable_with_src (impl, gc,
+							 src,
+							 xsrc, ysrc,
+							 xdest - x_offset,
+							 ydest - y_offset,
+							 width, height,
+							 original_src);
 
   if (!private->paint_stack)
     {
