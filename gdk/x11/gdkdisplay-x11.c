@@ -1110,8 +1110,20 @@ _gdk_input_init (GdkDisplay *display)
   list = gdk_device_manager_get_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
   display_x11->input_devices = g_list_concat (display_x11->input_devices, list);
 
-  /* Now set "core" pointer to the first master device */
-  display->core_pointer = display_x11->input_devices->data;
+  /* Now set "core" pointer to the first master device that is a pointer */
+  list = display_x11->input_devices;
+
+  while (list)
+    {
+      GdkDevice *device = list->data;
+      list = list->next;
+
+      if (device->source != GDK_SOURCE_MOUSE)
+        continue;
+
+      display->core_pointer = device;
+      break;
+    }
 }
 
 /**
