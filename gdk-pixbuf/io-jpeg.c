@@ -468,7 +468,6 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	cinfo.err = jpeg_std_error (&jerr.pub);
 	jerr.pub.error_exit = fatal_error_handler;
         jerr.pub.output_message = output_message_handler;
-
         jerr.error = error;
         
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
@@ -1190,11 +1189,11 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
        }
 
        /* set up error handling */
+       cinfo.err = jpeg_std_error (&(jerr.pub));
        jerr.pub.error_exit = fatal_error_handler;
        jerr.pub.output_message = output_message_handler;
        jerr.error = error;
        
-       cinfo.err = jpeg_std_error (&(jerr.pub));
        if (sigsetjmp (jerr.setjmp_buffer, 1)) {
                jpeg_destroy_compress (&cinfo);
                g_free (buf);
