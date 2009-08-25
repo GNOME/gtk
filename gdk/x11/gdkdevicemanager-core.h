@@ -38,6 +38,7 @@ struct _GdkDeviceManagerCore
 {
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
+  GdkDevice *core_keyboard;
 };
 
 struct _GdkDeviceManagerCoreClass
