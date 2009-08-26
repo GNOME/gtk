@@ -70,6 +70,7 @@ struct _GtkFileSystemModel
 
   GCancellable *        cancellable;    /* cancellable in use for all operations - cancelled on dispose */
   GArray *              files;          /* array of FileModelNode containing all our files */
+  GSize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
   guint                 n_indexes_valid;/* count of valid indexes */
   GHashTable *          file_lookup;    /* file => array index table */
 
@@ -127,9 +128,8 @@ struct _GtkFileSystemModelClass
 
 /*** FileModelNode ***/
 
-#define NODE_SIZE(_model) (sizeof (FileModelNode) + sizeof (GValue) * (MAX ((_model)->n_columns, 1) - 1))
-#define get_node(_model, _index) ((FileModelNode *) (((guint8 *) (_model)->files->data) + (_index) * NODE_SIZE (_model)))
-#define node_index(_model, _node) (((guint8 *) (_node) - (guint8 *) (_model)->files->data) / NODE_SIZE (_model))
+#define get_node(_model, _index) ((FileModelNode *) ((_model)->files->data + (_index) * (_model)->node_size))
+#define node_index(_model, _node) (((gchar *) (_node) - (_model)->files->data) / (_model)->node_size)
 
 static void
 node_validate_indexes (GtkFileSystemModel *model, guint min_index, guint min_visible)
@@ -356,7 +356,7 @@ gtk_file_system_model_iter_nth_child (GtkTreeModel *tree_model,
       node = bsearch (GUINT_TO_POINTER (find), 
                       model->files->data,
                       model->n_indexes_valid,
-                      NODE_SIZE (model),
+                      model->node_size,
                       compare_indices);
       if (node == NULL)
         return FALSE;
@@ -590,7 +590,7 @@ gtk_file_system_model_sort (GtkFileSystemModel *model)
       g_hash_table_remove_all (model->file_lookup);
       g_qsort_with_data (get_node (model, 1),
                          model->files->len - 1,
-                         NODE_SIZE (model),
+                         model->node_size,
                          compare_array_element,
                          &data);
       g_assert (model->n_indexes_valid == 0);
@@ -1093,7 +1093,9 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
   g_assert (n_columns > 0);
 
   model->n_columns = n_columns;
-  model->column_types = g_slice_alloc0 (sizeof (GType) * n_columns);
+  model->column_types = g_slice_alloc (sizeof (GType) * n_columns);
+
+  model->node_size = sizeof (FileModelNode) + sizeof (GValue) * (n_columns - 1); /* minus 1 because FileModelNode.values[] has a default size of 1 */
 
   for (i = 0; i < (guint) n_columns; i++)
     {
@@ -1109,10 +1111,10 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
 
   model->sort_list = _gtk_tree_data_list_header_new (n_columns, model->column_types);
 
-  model->files = g_array_new (FALSE, FALSE, NODE_SIZE (model));
+  model->files = g_array_new (FALSE, FALSE, model->node_size);
   /* add editable node at start */
   g_array_set_size (model->files, 1);
-  memset (get_node (model, 0), 0, NODE_SIZE (model));
+  memset (get_node (model, 0), 0, model->node_size);
 }
 
 static void
@@ -1540,14 +1542,14 @@ _gtk_file_system_model_add_file (GtkFileSystemModel *model,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (G_IS_FILE_INFO (info));
 
-  node = g_slice_alloc0 (NODE_SIZE (model));
+  node = g_slice_alloc0 (model->node_size);
   node->file = g_object_ref (file);
   if (info)
     node->info = g_object_ref (info);
   node->frozen_add = model->frozen ? TRUE : FALSE;
 
   g_array_append_vals (model->files, node, 1);
-  g_slice_free1 (NODE_SIZE (model), node);
+  g_slice_free1 (model->node_size, node);
 
   if (!model->frozen)
     node_set_visible (model, model->files->len -1,
