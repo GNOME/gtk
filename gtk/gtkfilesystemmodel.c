@@ -1090,6 +1090,7 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
   guint i;
 
   g_assert (model->files == NULL);
+  g_assert (n_columns > 0);
 
   model->n_columns = n_columns;
   model->column_types = g_slice_alloc0 (sizeof (GType) * n_columns);
@@ -1099,8 +1100,8 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
       GType type = va_arg (args, GType);
       if (! _gtk_tree_data_list_check_type (type))
 	{
-	  g_warning ("%s: Invalid type %s\n", G_STRLOC, g_type_name (type));
-          continue;
+	  g_error ("%s: type %s cannot be a column type for GtkFileSystemModel\n", G_STRLOC, g_type_name (type));
+          return; /* not reached */
 	}
 
       model->column_types[i] = type;
