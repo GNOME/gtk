@@ -1111,7 +1111,7 @@ gtk_file_system_model_set_n_columns (GtkFileSystemModel *model,
 
   model->sort_list = _gtk_tree_data_list_header_new (n_columns, model->column_types);
 
-  model->files = g_array_new (FALSE, FALSE, model->node_size);
+  model->files = g_array_sized_new (FALSE, FALSE, model->node_size, FILES_PER_QUERY);
   /* add editable node at start */
   g_array_set_size (model->files, 1);
   memset (get_node (model, 0), 0, model->node_size);
