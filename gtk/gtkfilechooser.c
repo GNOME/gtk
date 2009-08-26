@@ -1239,7 +1239,8 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
  * If the file chooser is in folder mode, this function returns the selected
  * folder.
  *
- * Returns: a selected #GFile
+ * Returns: a selected #GFile. You own the returned file; use
+ *          g_object_unref() to release it.
  *
  * Since: 2.14
  **/
