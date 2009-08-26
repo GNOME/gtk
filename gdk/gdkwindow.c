@@ -1451,6 +1451,7 @@ gdk_window_reparent (GdkWindow *window,
   GdkScreen *screen;
   gboolean show, was_mapped;
   gboolean do_reparent_to_impl;
+  GdkEventMask old_native_event_mask;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
@@ -1501,9 +1502,11 @@ gdk_window_reparent (GdkWindow *window,
       new_parent_private->window_type == GDK_WINDOW_FOREIGN)
     gdk_window_ensure_native (window);
 
+  old_native_event_mask = 0;
   do_reparent_to_impl = FALSE;
   if (gdk_window_has_impl (private))
     {
+      old_native_event_mask = get_native_event_mask (private);
       /* Native window */
       show = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->reparent (window, new_parent, x, y);
     }
@@ -1570,7 +1573,13 @@ gdk_window_reparent (GdkWindow *window,
   /* We might have changed window type for a native windows, so we
      need to change the event mask too. */
   if (gdk_window_has_impl (private))
-    GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_events (window, get_native_event_mask (private));
+    {
+      GdkEventMask native_event_mask = get_native_event_mask (private);
+
+      if (native_event_mask != old_native_event_mask)
+	GDK_WINDOW_IMPL_GET_IFACE (private->impl)->set_events (window,
+							       native_event_mask);
+    }
 
   /* Inherit parent redirect if we don't have our own */
   if (private->parent && private->redirect == NULL)
