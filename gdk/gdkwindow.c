@@ -8717,6 +8717,8 @@ _gdk_make_event (GdkWindow    *window,
 
   event->any.window = g_object_ref (window);
   event->any.send_event = FALSE;
+  if (event_in_queue && event_in_queue->any.send_event)
+    event->any.send_event = TRUE;
 
   switch (type)
     {
