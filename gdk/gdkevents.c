@@ -1266,6 +1266,9 @@ gdk_synthesize_window_state (GdkWindow     *window,
   
   ((GdkWindowObject*) window)->state = temp_event.window_state.new_window_state;
 
+  if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
+    _gdk_window_update_viewable (window);
+
   /* We only really send the event to toplevels, since
    * all the window states don't apply to non-toplevels.
    * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag

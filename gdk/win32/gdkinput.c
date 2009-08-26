@@ -311,6 +311,34 @@ _gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
+_gdk_input_crossing_event (GdkWindow *window,
+			   gboolean enter)
+{
+  GdkWindowObject *priv = (GdkWindowObject *)window;
+  GdkInputWindow *input_window;
+  gint root_x, root_y;
+
+  if (enter)
+    {
+#if 0
+      /* No idea what to do... */
+#if 0
+      gdk_input_check_proximity(display);
+#endif
+      input_window = priv->input_window;
+      if (input_window != NULL)
+	{
+	  _gdk_input_get_root_relative_geometry (window, &root_x, &root_y);
+	  input_window->root_x = root_x;
+	  input_window->root_y = root_y;
+	}
+#endif
+    }
+  else
+    _gdk_input_ignore_core = FALSE;
+}
+
+void
 _gdk_input_exit (void)
 {
   GList *tmp_list;

@@ -296,7 +296,9 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
   GdkAtom virtual_atom = GDK_NONE;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_NONE);
-  g_return_val_if_fail (xatom != None, GDK_NONE);
+
+  if (xatom == None)
+    return GDK_NONE;
 
   if (display->closed)
     return GDK_NONE;

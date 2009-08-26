@@ -266,7 +266,7 @@ _gdk_win32_copy_to_image (GdkDrawable    *drawable,
     (FALSE,
      GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (image->windowing_data)->impl),
      gc, drawable, src_x, src_y, dest_x, dest_y, width, height);
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   return image;
 }
@@ -392,7 +392,7 @@ gdk_win32_image_destroy (GdkImage *image)
   GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p\n",
 			    GDK_PIXMAP_HBITMAP (pixmap)));
 
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
   image->windowing_data = NULL;
 }
 

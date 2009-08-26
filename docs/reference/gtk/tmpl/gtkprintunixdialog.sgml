@@ -90,6 +90,11 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 
 </para>
 
+<!-- ##### ARG GtkPrintUnixDialog:embed-page-setup ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintUnixDialog:has-selection ##### -->
 <para>
 
@@ -231,6 +236,33 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_get_has_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@embed: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_page_setup_set ##### -->
 <para>
 
 </para>

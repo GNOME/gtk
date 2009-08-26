@@ -269,6 +269,22 @@ gtk_file_chooser_class_init (gpointer g_iface)
 								"if necessary."),
 							     FALSE,
 							     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkFileChooser:create-folders:
+   * 
+   * Whether a file chooser not in %GTK_FILE_CHOOSER_ACTION_OPEN mode
+   * will offer the user to create new folders.
+   *
+   * Since: 2.18
+   */
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_boolean ("create-folders",
+							     P_("Allow folders creation"),
+							     P_("Whether a file chooser not in open mode "
+								"will offer the user to create new folders."),
+							     TRUE,
+							     GTK_PARAM_READWRITE));
 }
 
 /**
@@ -421,6 +437,49 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
   g_object_get (chooser, "select-multiple", &select_multiple, NULL);
 
   return select_multiple;
+}
+
+/**
+ * gtk_file_chooser_set_create_folders:
+ * @chooser: a #GtkFileChooser
+ * @create_folders: %TRUE if the New Folder button should be displayed
+ * 
+ * Sets whether file choser will offer to create new folders.
+ * This is only relevant if the action is not set to be 
+ * GTK_FILE_CHOOSER_ACTION_OPEN.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_file_chooser_set_create_folders (GtkFileChooser *chooser,
+				     gboolean        create_folders)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "create-folders", create_folders, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_create_folders:
+ * @chooser: a #GtkFileChooser
+ * 
+ * Gets whether file choser will offer to create new folders.
+ * See gtk_file_chooser_set_create_folders().
+ * 
+ * Return value: %TRUE if the New Folder button should be displayed.
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
+{
+  gboolean create_folders;
+  
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+
+  g_object_get (chooser, "create-folders", &create_folders, NULL);
+
+  return create_folders;
 }
 
 /**

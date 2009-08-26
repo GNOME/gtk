@@ -187,6 +187,7 @@ void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
 void        _gdk_quartz_window_queue_translation (GdkWindow *window,
+						  GdkGC     *gc,
                                                   GdkRegion *area,
                                                   gint       dx,
                                                   gint       dy);

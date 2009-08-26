@@ -3508,7 +3508,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  * @icon_theme: a #GtkIconTheme
  * @pixbuf: the pixbuf to wrap in a #GtkIconInfo
  *
- * Creates a #GtkIconInfo for a #GtkPixbuf. 
+ * Creates a #GtkIconInfo for a #GdkPixbuf.
  *
  * Returns: a #GtkIconInfo
  *

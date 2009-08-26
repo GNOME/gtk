@@ -168,6 +168,7 @@ expand_content_files = 				\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
 	migrating-GtkRecentChooser.sgml 	\
+	migrating-GtkLabel-links.sgml		\
 	migrating-GtkLinkButton.sgml		\
 	migrating-GtkBuilder.sgml		\
 	migrating-GtkTooltip.sgml		\

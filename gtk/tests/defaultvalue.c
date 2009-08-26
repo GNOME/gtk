@@ -102,6 +102,9 @@ test_type (gconstpointer data)
     {
       GdkWindowAttr attributes;
       attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.event_mask = 0;
+      attributes.width = 100;
+      attributes.height = 100;
       instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
     }
   else
@@ -170,7 +173,8 @@ test_type (gconstpointer data)
 
       /* Default invisible char is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
-	  strcmp (pspec->name, "invisible-char") == 0)
+	  strcmp (pspec->name, "invisible-char") == 0 ||
+          strcmp (pspec->name, "buffer") == 0)
 	continue;
 
       /* Gets set to the cwd */

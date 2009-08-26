@@ -615,7 +615,6 @@ gtk_image_menu_item_update (GtkActivatable *activatable,
 			    const gchar    *property_name)
 {
   GtkImageMenuItem *image_menu_item;
-  GtkWidget *image;
   gboolean   use_appearance;
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (activatable);

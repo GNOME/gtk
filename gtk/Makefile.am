@@ -197,6 +197,7 @@ gtk_public_h_sources =          \
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
@@ -357,6 +358,7 @@ gtk_private_h_sources =		\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkbuilderprivate.h 	\
+	gtkcustompaperunixdialog.h\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -447,6 +449,7 @@ gtk_base_c_sources =            \
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
 	gtkentry.c		\
+	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkexpander.c		\
@@ -660,6 +663,7 @@ gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 
 gtk_os_unix_c_sources = \
+	gtkcustompaperunixdialog.c	\
 	gtkpagesetupunixdialog.c	\
 	gtkprinter.c			\
 	gtkprinteroption.c		\

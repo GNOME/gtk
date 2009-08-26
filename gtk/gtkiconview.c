@@ -46,7 +46,6 @@
 #undef DEBUG_ICON_VIEW
 
 #define SCROLL_EDGE_SIZE 15
-#define ITEM_PADDING     6
 
 #define GTK_ICON_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ICON_VIEW, GtkIconViewPrivate))
 
@@ -150,6 +149,7 @@ struct _GtkIconViewPrivate
   gint row_spacing;
   gint column_spacing;
   gint margin;
+  gint item_padding;
 
   gint text_column;
   gint markup_column;
@@ -220,7 +220,8 @@ enum
   PROP_COLUMN_SPACING,
   PROP_MARGIN,
   PROP_REORDERABLE,
-  PROP_TOOLTIP_COLUMN
+  PROP_TOOLTIP_COLUMN,
+  PROP_ITEM_PADDING
 };
 
 /* GObject vfuncs */
@@ -714,7 +715,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     0, G_MAXINT, 6,
 						     GTK_PARAM_READWRITE));
 
-
   /**
    * GtkIconView:orientation:
    *
@@ -757,6 +757,22 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                        G_MAXINT,
                                                        -1,
                                                        GTK_PARAM_READWRITE));
+
+  /**
+   * GtkIconView:item-padding:
+   *
+   * The item-padding property specifies the padding around each
+   * of the icon view's item.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ITEM_PADDING,
+                                   g_param_spec_int ("item-padding",
+						     P_("Item Padding"),
+						     P_("Padding around icon view items"),
+						     0, G_MAXINT, 6,
+						     GTK_PARAM_READWRITE));
 
 
 
@@ -1106,6 +1122,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->row_spacing = 6;
   icon_view->priv->column_spacing = 6;
   icon_view->priv->margin = 6;
+  icon_view->priv->item_padding = 6;
 
   icon_view->priv->draw_focus = TRUE;
 }
@@ -1216,6 +1233,10 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_tooltip_column (icon_view, g_value_get_int (value));
       break;
 
+    case PROP_ITEM_PADDING:
+      gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1275,6 +1296,10 @@ gtk_icon_view_get_property (GObject      *object,
       break;
     case PROP_TOOLTIP_COLUMN:
       g_value_set_int (value, icon_view->priv->tooltip_column);
+      break;
+
+    case PROP_ITEM_PADDING:
+      g_value_set_int (value, icon_view->priv->item_padding);
       break;
 
     default:
@@ -1418,10 +1443,10 @@ gtk_icon_view_allocate_children (GtkIconView *icon_view)
       /* totally ignore our child's requisition */
       if (child->cell < 0)
 	{
-	  allocation.x = child->item->x + ITEM_PADDING;
-	  allocation.y = child->item->y + ITEM_PADDING;
-	  allocation.width = child->item->width - ITEM_PADDING * 2;
-	  allocation.height = child->item->height - ITEM_PADDING * 2;
+	  allocation.x = child->item->x + icon_view->priv->item_padding;
+	  allocation.y = child->item->y + icon_view->priv->item_padding;
+	  allocation.width = child->item->width - icon_view->priv->item_padding * 2;
+	  allocation.height = child->item->height - icon_view->priv->item_padding * 2;
 	}
       else
 	{
@@ -2858,16 +2883,16 @@ gtk_icon_view_get_cell_area (GtkIconView         *icon_view,
   if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       cell_area->x = item->box[info->position].x - item->before[info->position];
-      cell_area->y = item->y + ITEM_PADDING;
+      cell_area->y = item->y + icon_view->priv->item_padding;
       cell_area->width = item->box[info->position].width + 
 	item->before[info->position] + item->after[info->position];
-      cell_area->height = item->height - ITEM_PADDING * 2;
+      cell_area->height = item->height - icon_view->priv->item_padding * 2;
     }
   else
     {
-      cell_area->x = item->x + ITEM_PADDING;
+      cell_area->x = item->x + icon_view->priv->item_padding;
       cell_area->y = item->box[info->position].y - item->before[info->position];
-      cell_area->width = item->width - ITEM_PADDING * 2;
+      cell_area->width = item->width - icon_view->priv->item_padding * 2;
       cell_area->height = item->box[info->position].height + 
 	item->before[info->position] + item->after[info->position];
     }
@@ -2925,7 +2950,7 @@ adjust_wrap_width (GtkIconView     *icon_view,
           wrap_width = item_width - pixbuf_width - icon_view->priv->spacing;
         }
 
-      wrap_width -= ITEM_PADDING * 2;
+      wrap_width -= icon_view->priv->item_padding * 2;
 
       g_object_set (text_info->cell, "wrap-width", wrap_width, NULL);
       g_object_set (text_info->cell, "width", wrap_width, NULL);
@@ -2986,8 +3011,8 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
 	}
     }
 
-  item->width += ITEM_PADDING * 2;
-  item->height += ITEM_PADDING * 2;
+  item->width += icon_view->priv->item_padding * 2;
+  item->height += icon_view->priv->item_padding * 2;
 }
 
 static void
@@ -3016,8 +3041,8 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	item->height += max_height[i] + (i > 0 ? spacing : 0);
     }
 
-  cell_area.x = item->x + ITEM_PADDING;
-  cell_area.y = item->y + ITEM_PADDING;
+  cell_area.x = item->x + icon_view->priv->item_padding;
+  cell_area.y = item->y + icon_view->priv->item_padding;
       
   for (k = 0; k < 2; k++)
     for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
@@ -3032,7 +3057,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 
 	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	  {
-            /* We should not subtract ITEM_PADDING from item->height,
+            /* We should not subtract icon_view->priv->item_padding from item->height,
              * because item->height is recalculated above using
              * max_height which does not contain item padding.
              */
@@ -3044,7 +3069,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
             /* item->width is not recalculated and thus needs to be
              * corrected for the padding.
              */
-	    cell_area.width = item->width - 2 * ITEM_PADDING;
+	    cell_area.width = item->width - 2 * icon_view->priv->item_padding;
 	    cell_area.height = max_height[i];
 	  }
 	
@@ -3063,9 +3088,9 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	  }
 	else
 	  {
-	    if (item->box[info->position].width > item->width - ITEM_PADDING * 2)
+	    if (item->box[info->position].width > item->width - icon_view->priv->item_padding * 2)
 	      {
-		item->width = item->box[info->position].width + ITEM_PADDING * 2;
+		item->width = item->box[info->position].width + icon_view->priv->item_padding * 2;
 		cell_area.width = item->width;
 	      }
 	    item->before[info->position] = item->box[info->position].y - cell_area.y;
@@ -3083,7 +3108,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	}      
     }
 
-  item->height += ITEM_PADDING * 2;
+  item->height += icon_view->priv->item_padding * 2;
 }
 
 static void
@@ -3478,11 +3503,11 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 		    }
 		}
 
-	      if (only_in_cell)
-		return NULL;
-	      
 	      if (cell_at_pos)
 		*cell_at_pos = NULL;
+
+	      if (only_in_cell)
+		return NULL;
 	    }
 
 	  return item;
@@ -6239,6 +6264,51 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
   return icon_view->priv->margin;
 }
 
+/**
+ * gtk_icon_view_set_item_padding:
+ * @icon_view: a #GtkIconView
+ * @column_spacing: the item padding
+ * 
+ * Sets the ::item-padding property which specifies the padding 
+ * around each of the icon view's items.
+ *
+ * Since: 2.18
+ */
+void 
+gtk_icon_view_set_item_padding (GtkIconView *icon_view,
+				gint         item_padding)
+{
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+  
+  if (icon_view->priv->item_padding != item_padding)
+    {
+      icon_view->priv->item_padding = item_padding;
+
+      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_icon_view_invalidate_sizes (icon_view);
+      gtk_icon_view_queue_layout (icon_view);
+      
+      g_object_notify (G_OBJECT (icon_view), "item-padding");
+    }  
+}
+
+/**
+ * gtk_icon_view_get_item_padding:
+ * @icon_view: a #GtkIconView
+ * 
+ * Returns the value of the ::item-padding property.
+ * 
+ * Return value: the padding around items
+ *
+ * Since: 2.18
+ */
+gint
+gtk_icon_view_get_item_padding (GtkIconView *icon_view)
+{
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), -1);
+
+  return icon_view->priv->item_padding;
+}
 
 /* Get/set whether drag_motion requested the drag data and
  * drag_data_received should thus not actually insert the data,
@@ -7155,7 +7225,7 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
   
   /* special case a drop on an empty model */
   icon_view->priv->empty_view_drop = FALSE;
-  if (pos == GTK_TREE_VIEW_DROP_BEFORE && path
+  if (pos == GTK_ICON_VIEW_DROP_ABOVE && path
       && gtk_tree_path_get_depth (path) == 1
       && gtk_tree_path_get_indices (path)[0] == 0)
     {

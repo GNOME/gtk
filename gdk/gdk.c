@@ -206,6 +206,9 @@ gdk_pre_parse_libgtk_only (void)
   }
 #endif	/* G_ENABLE_DEBUG */
 
+  if (getenv("GDK_NATIVE_WINDOWS"))
+    _gdk_native_windows = TRUE;
+
   g_type_init ();
 
   /* Do any setup particular to the windowing system

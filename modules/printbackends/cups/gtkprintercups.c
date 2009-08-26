@@ -75,6 +75,8 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->port = 0;
   printer->ppd_name = NULL;
   printer->ppd_file = NULL;
+  printer->default_cover_before = NULL;
+  printer->default_cover_after = NULL;
 }
 
 static void
@@ -90,6 +92,8 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->printer_uri);
   g_free (printer->hostname);
   g_free (printer->ppd_name);
+  g_free (printer->default_cover_before);
+  g_free (printer->default_cover_after);
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);

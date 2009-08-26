@@ -17,118 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/* gdkgeometry-x11.c: emulation of 32 bit coordinates within the
- * limits of X. 
- *
- * By Owen Taylor <otaylor@redhat.com>
- * Copyright Red Hat, Inc. 2000
- *
- * The algorithms implemented in this file are an extension of the
- * idea of guffaw scrolling, a technique (and name) taken from the classic
- * Netscape source code. The basic idea of guffaw scrolling is a trick
- * to get around a limitation of X: there is no way of scrolling the
- * contents of a window. Guffaw scrolling exploits the X concepts of
- * window gravity and bit gravity:
- *
- *  window gravity: the window gravity of a window affects what happens
- *   to a windows position when _its parent_ is resized, or
- *   moved and resized simultaneously.
- *
- *  bit gravity: the bit gravity of a window affects what happens to
- *  the pixels of a window when _it_ is is resized, or moved and
- *  resized simultaneously.
- *
- * These were basically intended to do things like have right
- * justified widgets in a window automatically stay right justified
- * when the window was resized, but there is also the special
- * "StaticGravity" which means "do nothing." We can exploit
- * StaticGravity to scroll a window:
- *
- *     |  VISIBLE  |
- * 
- *     |abcdefghijk|
- *     |abcdefghijk    |   (1) Resize bigger
- * |    efghijk    |       (2) Move  
- *     |efghijk    |       (3) Move-resize back to the original size
- *
- * Or, going the other way:
-
- *     |abcdefghijk|
- * |    abcdefghijk|       (1) Move-resize bigger
- *     |    abcdefghijk|   (2) Move  
- *     |    abcdefg|       (4) Resize back to the original size
- *
- * By using this technique, we can simulate scrolling around in a
- * large virtual space without having to actually have windows that
- * big; for the pixels of the window, this is all we have to do.  For
- * subwindows, we have to take care of one other detail - since
- * coordinates in X are limited to 16 bits, subwindows scrolled off
- * will wrap around and come back eventually. So, we have to take care
- * to unmap windows that go outside the 16-bit range and remap them as
- * they come back in.
- *
- * Since we are temporarily making the window bigger, this only looks
- * good if the edges of the window are obscured. Typically, we do
- * this by making the window we are scrolling the immediate child
- * of a "clip window".
- *
- * But, this isn't a perfect API for applications for several reasons:
- *
- *  - We have to use this inefficient technique even for small windows
- *    if the window _could_ be big.
- *  - Applications have to use a special scrolling API.
- *
- * What we'd like is to simply have windows with 32 bit coordinates
- * so applications could scroll in the classic way - just move a big
- * window around.
- *
- * It turns out that StaticGravity can also be used to achieve emulation
- * of 32 bit coordinates with only 16 bit coordinates if we expand
- * our horizons just a bit; what guffaw scrolling really is is a way
- * to move the contents of a window a different amount than we move
- * the borders of of the window. In the above example pictures we
- * ended up with the borders of the window not moving at all, but
- * that isn't necessary.
- *
- * So, what we do is set up a mapping from virtual 32 bit window position/size
- * to:
- *
- *  - Real window position/size
- *  - Offset between virtual coordinates and real coordinates for the window
- *  - Map state (mapped or unmapped)
- *
- * By the following rules:
- *
- *  - If the window is less than 32767 pixels in width (resp. height), we use it's
- *    virtual width and position.
- *  - Otherwise, we use a width of 32767 and determine the position of the window
- *    so that the portion of the real window [16384, 16383] in _toplevel window
- *    coordinates_ is the same as the portion of the real window 
- *
- * This is implemented in gdk_window_compute_position(). Then the algorithm
- * for a moving a window (_window_move_resize_child ()) is:
- * 
- *  - Compute the new window mappings for the window and all subwindows
- *  - Expand out the boundary of the window and all subwindows by the amount
- *    that the real/virtual offset changes for each window. 
- *    (compute_intermediate_position() computes expanded boundary)
- *  - Move the toplevel by the amount that it's contents need to translate.
- *  - Move/resize the window and all subwindows to the newly computed
- *    positions.
- *
- * If we just are scrolling (gdk_window_guffaw_scroll()), then things
- * are similar, except that the final mappings for the toplevel are
- * the same as the initial mappings, but we act as if it moved by the
- * amount we are scrolling by.
- *
- * Note that we don't have to worry about a clip window in
- * _gdk_window_move_resize() since we have set up our translation so
- * that things in the range [16384,16383] in toplevel window
- * coordinates look exactly as they would if we were simply moving the
- * windows, and nothing outside this range is going to be visible
- * unless the user has a _really_ huge screen.
- */
-
 #include "config.h"
 #include "gdk.h"		/* For gdk_rectangle_intersect */
 #include "gdkprivate-x11.h"
@@ -220,7 +108,7 @@ expose_serial_predicate (Display *xdisplay,
 {
   gulong *serial = (gulong *)arg;
 
-  if (xev->xany.type == Expose)
+  if (xev->xany.type == Expose || xev->xany.type == GraphicsExpose)
     *serial = MIN (*serial, xev->xany.serial);
 
   return False;
@@ -343,6 +231,7 @@ gdk_window_queue (GdkWindow          *window,
 
 void
 _gdk_x11_window_queue_translation (GdkWindow *window,
+				   GdkGC     *gc,
 				   GdkRegion *area,
 				   gint       dx,
 				   gint       dy)
@@ -353,6 +242,11 @@ _gdk_x11_window_queue_translation (GdkWindow *window,
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
+  /* Ensure that the gc is flushed so that we get the right
+     serial from NextRequest in gdk_window_queue, i.e. the
+     the serial for the XCopyArea, not the ones from flushing
+     the gc. */
+  _gdk_x11_gc_flush (gc);
   gdk_window_queue (window, item);
 }
 

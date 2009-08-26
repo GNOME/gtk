@@ -1267,11 +1267,12 @@ gdk_event_translate (GdkDisplay *display,
       
     case EnterNotify:
       GDK_NOTE (EVENTS,
-		g_message ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld",
-			   xevent->xcrossing.window,
-			   xevent->xcrossing.detail,
-			   xevent->xcrossing.subwindow));
- 
+                g_message ("enter notify:\t\twindow: %ld  detail: %d subwin: %ld mode: %d",
+                           xevent->xcrossing.window,
+                           xevent->xcrossing.detail,
+                           xevent->xcrossing.subwindow,
+                           xevent->xcrossing.mode));
+
       if (window_private == NULL)
         {
           return_val = FALSE;
@@ -1363,9 +1364,11 @@ gdk_event_translate (GdkDisplay *display,
       
     case LeaveNotify:
       GDK_NOTE (EVENTS, 
-		g_message ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld",
-			   xevent->xcrossing.window,
-			   xevent->xcrossing.detail, xevent->xcrossing.subwindow));
+                g_message ("leave notify:\t\twindow: %ld  detail: %d subwin: %ld mode: %d",
+                           xevent->xcrossing.window,
+                           xevent->xcrossing.detail,
+                           xevent->xcrossing.subwindow,
+                           xevent->xcrossing.mode));
 
       if (window_private == NULL)
         {

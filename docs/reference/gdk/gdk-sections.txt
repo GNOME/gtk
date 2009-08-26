@@ -720,6 +720,7 @@ gdk_window_set_background
 gdk_window_set_back_pixmap
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
+gdk_window_get_cursor
 gdk_window_set_colormap
 gdk_window_get_user_data
 gdk_window_get_geometry

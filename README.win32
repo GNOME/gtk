@@ -23,46 +23,102 @@ Use the configure script, and the resulting Makefiles (which use
 libtool and gcc to do the compilation). I use this myself, but it can
 be hard to setup correctly.
 
-The full script I run to build GTK+ 2.10 unpacked from a source
-distribution is as below. This is from bulding GTK+ 2.10.9, slightly
-edited to make it match this 2.11 development branch. Actually I don't
+The full script I run to build GTK+ 2.16 unpacked from a source
+distribution is as below. This is from bulding GTK+ 2.16.5. I don't
 use any script like this to build the development branch, as I don't
 distribute any binaries from development branches.
 
+# This is a shell script that calls functions and scripts from
+# tml@iki.fi's personal work envíronment. It is not expected to be
+# usable unmodified by others, and is included only for reference.
+
 MOD=gtk+
-VER=2.10.9
-THIS=$MOD-$VER
+VER=2.16.5
+REV=1
+ARCH=win32
+
+THIS=${MOD}_${VER}-${REV}_${ARCH}
+
+RUNZIP=${MOD}_${VER}-${REV}_${ARCH}.zip
+DEVZIP=${MOD}-dev_${VER}-${REV}_${ARCH}.zip
+
 HEX=`echo $THIS | md5sum | cut -d' ' -f1`
 TARGET=c:/devel/target/$HEX
-DEPS="`/devel/src/tml/latest.sh glib atk cairo pango`"
-sed -e 's/need_relink=yes/need_relink=no # no way --tml/' <ltmain.sh >ltmain.temp && mv ltmain.temp ltmain.sh
+
 usedev
 usemsvs6
-MY_PKG_CONFIG_PATH=""
+
+(
+
+set -x
+
+DEPS=`latest --arch=${ARCH} glib atk cairo pango libpng zlib libtiff jpeg`
+PROXY_LIBINTL=`latest --arch=${ARCH} proxy-libintl`
+
+PKG_CONFIG_PATH=
 for D in $DEPS; do
-    PATH=/devel/dist/$D/bin:$PATH
-    MY_PKG_CONFIG_PATH=/devel/dist/$D/lib/pkgconfig:$MY_PKG_CONFIG_PATH
+    PATH=/devel/dist/${ARCH}/$D/bin:$PATH
+    [ -d /devel/dist/${ARCH}/$D/lib/pkgconfig ] && PKG_CONFIG_PATH=/devel/dist/${ARCH}/$D/lib/pkgconfig:$PKG_CONFIG_PATH
 done
-PKG_CONFIG_PATH=$MY_PKG_CONFIG_PATH:$PKG_CONFIG_PATH CC='gcc -mtune=pentium3 -mthreads' CPPFLAGS='-I/opt/gnu/include -I/opt/gnuwin32/include -I/opt/misc/include' LDFLAGS='-L/opt/gnu/lib -L/opt/gnuwin32/lib -L/opt/misc/lib -Wl,--enable-auto-image-base' LIBS=-lintl CFLAGS=-O2 ./configure --with-gdktarget=win32 --enable-debug=yes --disable-gtk-doc --disable-static --prefix=$TARGET &&
+
+LIBPNG=`latest --arch=${ARCH} libpng`
+ZLIB=`latest --arch=${ARCH} zlib`
+LIBTIFF=`latest --arch=${ARCH} libtiff`
+JPEG=`latest --arch=${ARCH} jpeg`
+
+patch -p0 <<'EOF'
+EOF
+
+lt_cv_deplibs_check_method='pass_all' \
+CC='gcc -mtune=pentium3 -mthreads' \
+CPPFLAGS="-I/devel/dist/${ARCH}/${LIBPNG}/include \
+-I/devel/dist/${ARCH}/${ZLIB}/include \
+-I/devel/dist/${ARCH}/${LIBTIFF}/include \
+-I/devel/dist/${ARCH}/${JPEG}/include \
+-I/devel/dist/${ARCH}/${PROXY_LIBINTL}/include" \
+LDFLAGS="-L/devel/dist/${ARCH}/${LIBPNG}/lib \
+-L/devel/dist/${ARCH}/${ZLIB}/lib \
+-L/devel/dist/${ARCH}/${LIBTIFF}/lib \
+-L/devel/dist/${ARCH}/${JPEG}/lib \
+-L/devel/dist/${ARCH}/${PROXY_LIBINTL}/lib -Wl,--exclude-libs=libintl.a \
+-Wl,--enable-auto-image-base" \
+LIBS=-lintl \
+CFLAGS=-O2 \
+./configure \
+--with-gdktarget=win32 \
+--disable-gdiplus \
+--with-included-immodules \
+--without-libjasper \
+--enable-debug=yes \
+--enable-explicit-deps=no \
+--disable-gtk-doc \
+--disable-static \
+--prefix=$TARGET &&
+
 libtoolcacheize &&
-unset MY_PKG_CONFIG_PATH &&
-PATH=/devel/target/$HEX/bin:.libs:$PATH make install &&
-(cd $TARGET/bin; strip --strip-unneeded *.dll *.exe) &&
-(cd $TARGET/lib/gtk-2.0/2.10.0/loaders; strip --strip-unneeded *.dll) &&
-(cd $TARGET/lib/gtk-2.0/2.10.0/immodules; strip --strip-unneeded *.dll) &&
-(cd $TARGET/lib/gtk-2.0/2.10.0/engines; strip --strip-unneeded *.dll) &&
-PATH=$TARGET/bin:$PATH gdk-pixbuf-query-loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
+rm gtk/gtk.def &&
+(PATH="$PWD/gdk-pixbuf/.libs:/devel/target/$HEX/bin:$PATH" make -j3 install || (rm .libtool-cache* && PATH="/devel/target/$HEX/bin:$PATH" make -j3 install)) &&
+
+PATH="/devel/target/$HEX/bin:$PATH" gdk-pixbuf-query-loaders >/devel/target/$HEX/etc/gtk-2.0/gdk-pixbuf.loaders &&
+
 grep -v -E 'Automatically generated|Created by|LoaderDir =' <$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp &&
-mv $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
+    mv $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
 grep -v -E 'Automatically generated|Created by|ModulesPath =' <$TARGET/etc/gtk-2.0/gtk.immodules >$TARGET/etc/gtk-2.0/gtk.immodules.temp &&
-mv $TARGET/etc/gtk-2.0/gtk.immodules.temp $TARGET/etc/gtk-2.0/gtk.immodules &&
+    mv $TARGET/etc/gtk-2.0/gtk.immodules.temp $TARGET/etc/gtk-2.0/gtk.immodules &&
+
 ./gtk-zip.sh &&
-(cd /devel/src/tml && zip /tmp/$MOD-dev-$VER.zip make/$THIS.make) &&
-manifestify /tmp/$MOD*-$VER.zip
+
+mv /tmp/${MOD}-${VER}.zip /tmp/$RUNZIP &&
+mv /tmp/${MOD}-dev-${VER}.zip /tmp/$DEVZIP
+
+) 2>&1 | tee /devel/src/tml/packaging/$THIS.log
+
+(cd /devel && zip /tmp/$DEVZIP src/tml/packaging/$THIS.{sh,log}) &&
+manifestify /tmp/$RUNZIP /tmp/$DEVZIP
 
 You should not just copy the above blindly. There are some things in
 the script that are very specific to *my* build setup on *my* current
-machine. For instance the "latest.sh" script, the "usedev" and
+machine. For instance the "latest" command, the "usedev" and
 "usemsvs6" shell functions, the /devel/dist folder. The above script
 is really just meant for reference, to give an idea. You really need
 to understand what things like PKG_CONFIG_PATH are and set them up
@@ -72,6 +128,17 @@ As you see above, after running configure, one can just say "make
 install", like on Unix. A post-build fix is needed, running
 gdk-pixbuf-query-loaders once more to get a correct gdk-pixbuf.loaders
 file.
+
+For a 64-bit build you need to remove the gtk/gtk.def file and let it
+be regenerated by the makefilery. This is because the 64-bit GTK dll
+has a slightly different list of exported function names. This is on
+purpose and not a bug. The API is the same at the source level, and
+the same #defines of some function names to actually have a _utf8
+suffix is used (just to keep the header simpler). But the
+corresponding non-suffixed function to maintain ABI stability are not
+needed in the 64-bit case (because there are no older EXEs around that
+would require such for ABI stability).
+
 
 2) Microsoft's tools
 --------------------

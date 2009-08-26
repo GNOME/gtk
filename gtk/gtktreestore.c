@@ -358,30 +358,20 @@ static void
 gtk_tree_store_set_n_columns (GtkTreeStore *tree_store,
 			      gint          n_columns)
 {
-  GType *new_columns;
+  int i;
 
   if (tree_store->n_columns == n_columns)
     return;
 
-  new_columns = g_new0 (GType, n_columns);
-  if (tree_store->column_headers)
-    {
-      /* copy the old header orders over */
-      if (n_columns >= tree_store->n_columns)
-	memcpy (new_columns, tree_store->column_headers, tree_store->n_columns * sizeof (gchar *));
-      else
-	memcpy (new_columns, tree_store->column_headers, n_columns * sizeof (GType));
-
-      g_free (tree_store->column_headers);
-    }
+  tree_store->column_headers = g_renew (GType, tree_store->column_headers, n_columns);
+  for (i = tree_store->n_columns; i < n_columns; i++)
+    tree_store->column_headers[i] = G_TYPE_INVALID;
+  tree_store->n_columns = n_columns;
 
   if (tree_store->sort_list)
     _gtk_tree_data_list_header_free (tree_store->sort_list);
 
   tree_store->sort_list = _gtk_tree_data_list_header_new (n_columns, tree_store->column_headers);
-
-  tree_store->column_headers = new_columns;
-  tree_store->n_columns = n_columns;
 }
 
 /**
@@ -620,7 +610,10 @@ gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -646,7 +639,10 @@ gtk_tree_store_iter_children (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -708,7 +704,10 @@ gtk_tree_store_iter_nth_child (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -733,7 +732,10 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 

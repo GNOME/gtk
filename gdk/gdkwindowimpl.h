@@ -118,6 +118,7 @@ struct _GdkWindowImplIface
   gboolean     (* queue_antiexpose)     (GdkWindow       *window,
 					 GdkRegion       *update_area);
   void         (* queue_translation)    (GdkWindow       *window,
+					 GdkGC           *gc,
 					 GdkRegion       *area,
 					 gint            dx,
 					 gint            dy);

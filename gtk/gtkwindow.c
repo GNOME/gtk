@@ -496,7 +496,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							P_("Unique identifier for the window to be used when restoring a session"),
 							NULL,
 							GTK_PARAM_READWRITE));
-							
+
   /**
    * GtkWindow:startup-id:
    *
@@ -505,9 +505,9 @@ gtk_window_class_init (GtkWindowClass *klass)
    * for more details.
    *
    * Since: 2.12
-   */							
+   */
   g_object_class_install_property (gobject_class,
-                                   PROP_ROLE,
+                                   PROP_STARTUP_ID,
                                    g_param_spec_string ("startup-id",
 							P_("Startup ID"),
 							P_("Unique startup identifier for the window used by startup-notification"),

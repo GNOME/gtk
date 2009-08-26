@@ -369,76 +369,15 @@ gdk_error_trap_pop (void)
   return 0;
 }
 
-
-/**
- * gdk_pointer_grab_info_libgtk_only:
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_pointer_grab() was %TRUE.
- *
- * Determines information about the current pointer grab.
- * This is not public API and must not be used by applications.
- *
- * Return value: %TRUE if this application currently has the
- *  pointer grabbed.
- **/
-gboolean
-gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,GdkWindow **grab_window,
-				   gboolean    *owner_events)
-{
-  if (_gdk_directfb_pointer_grab_window)
-    {
-      if (grab_window)
-        *grab_window = (GdkWindow *)_gdk_directfb_pointer_grab_window;
-      if (owner_events)
-        *owner_events = _gdk_directfb_pointer_grab_owner_events;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-/**
- * gdk_keyboard_grab_info_libgtk_only:
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
- *
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- *
- * Return value: %TRUE if this application currently has the
- *  keyboard grabbed.
- **/
-gboolean
-gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,GdkWindow **grab_window,
-				    gboolean    *owner_events)
-{
-  if (_gdk_directfb_keyboard_grab_window)
-    {
-      if (grab_window)
-        *grab_window = (GdkWindow *) _gdk_directfb_keyboard_grab_window;
-      if (owner_events)
-        *owner_events = _gdk_directfb_keyboard_grab_owner_events;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *window,
                    gint       owner_events,
                    guint32    time) 
 {
-	return gdk_directfb_keyboard_grab(gdk_display_get_default(),
-			window,
-			owner_events,
-			time);
-
+  return gdk_directfb_keyboard_grab (gdk_display_get_default(),
+                                     window,
+                                     owner_events,
+                                     time);
 }
 
 /*
@@ -466,35 +405,25 @@ gdk_keyboard_grab (GdkWindow *window,
 
 
 GdkGrabStatus
-gdk_display_pointer_grab (GdkDisplay *display,GdkWindow    *window,
-                  gint          owner_events,
-                  GdkEventMask  event_mask,
-                  GdkWindow    *confine_to,
-                  GdkCursor    *cursor,
-                  guint32       time)
+_gdk_windowing_pointer_grab (GdkWindow    *window,
+                             GdkWindow    *native,
+                             gboolean      owner_events,
+                             GdkEventMask  event_mask,
+                             GdkWindow    *confine_to,
+                             GdkCursor    *cursor,
+                             guint32       time)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  return gdk_directfb_pointer_grab (window,
-                                    owner_events,
-                                    event_mask,
-                                    confine_to,
-                                    cursor,
-                                    time,
-                                    FALSE);
-}
-
-GdkGrabStatus
-gdk_pointer_grab (GdkWindow *     window,
-                  gint            owner_events,
-                  GdkEventMask    event_mask,
-                  GdkWindow *     confine_to,
-                  GdkCursor *     cursor,
-                  guint32         time)
-{
-	return gdk_directfb_pointer_grab(window, owner_events,event_mask,
-		confine_to,cursor,time,FALSE);	
+  _gdk_display_add_pointer_grab (_gdk_display,
+                                 window,
+                                 native,
+                                 owner_events,
+                                 event_mask,
+                                 confine_to,
+                                 cursor,
+                                 time);
 }
 
 #define __GDK_MAIN_X11_C__

@@ -39,6 +39,22 @@
 /**
  * SECTION:gtktoolitem
  * @short_description: The base class of widgets that can be added to GtkToolShell
+ * @see_also: <variablelist>
+ *   <varlistentry>
+ *     <term>#GtkToolbar</term>
+ *     <listitem><para>The toolbar widget</para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>#GtkToolButton</term>
+ *     <listitem><para>A subclass of #GtkToolItem that displays buttons on
+ *         the toolbar</para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>#GtkSeparatorToolItem</term>
+ *     <listitem><para>A subclass of #GtkToolItem that separates groups of
+ *         items on a toolbar</para></listitem>
+ *   </varlistentry>
+ * </variablelist>
  *
  * #GtkToolItem<!-- -->s are widgets that can appear on a toolbar. To
  * create a toolbar item that contain something else than a button, use

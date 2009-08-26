@@ -969,6 +969,7 @@ _gdk_windowing_window_init (void)
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = 24;
+  private->viewable = TRUE;
 
   drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (private->impl);
   
@@ -2001,7 +2002,7 @@ gdk_window_set_title (GdkWindow   *window,
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)window)->impl);
@@ -2032,8 +2033,8 @@ gdk_window_set_transient_for (GdkWindow *window,
   GdkWindowImplQuartz *window_impl;
   GdkWindowImplQuartz *parent_impl;
 
-  if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (parent) &&
-      WINDOW_IS_TOPLEVEL (window))
+  if (GDK_WINDOW_DESTROYED (window)  || GDK_WINDOW_DESTROYED (parent) ||
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   window_impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
@@ -2873,6 +2874,27 @@ gdk_window_set_opacity (GdkWindow *window,
 void
 _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
+}
+
+GdkRegion *
+_gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
+{
+  /* FIXME: implement */
+  return NULL;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_shape (GdkWindow *window)
+{
+  /* FIXME: implement */
+  return NULL;
+}
+
+GdkRegion *
+_gdk_windowing_window_get_input_shape (GdkWindow *window)
+{
+  /* FIXME: implement */
+  return NULL;
 }
 
 static void

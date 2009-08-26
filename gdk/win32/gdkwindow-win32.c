@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2004 Tor Lillqvist
- * Copyright (C) 2001-2004 Hans Breuer
+ * Copyright (C) 2001-2009 Hans Breuer
  * Copyright (C) 2007-2009 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
@@ -236,20 +236,16 @@ void
 _gdk_root_window_size_init (void)
 {
   GdkWindowObject *window_object;
-  //GdkWindowImplWin32 *impl;
   GdkRectangle rect;
   int i;
 
   window_object = GDK_WINDOW_OBJECT (_gdk_root);
-  //impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) _gdk_root)->impl);
   rect = _gdk_monitors[0].rect;
   for (i = 1; i < _gdk_num_monitors; i++)
     gdk_rectangle_union (&rect, &_gdk_monitors[i].rect, &rect);
 
   window_object->width = rect.width;
   window_object->height = rect.height;
-  //impl->width = rect.width;
-  //impl->height = rect.height;
 }
 
 void
@@ -283,6 +279,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private->abs_y = 0;
   private->width = GetSystemMetrics (SM_CXSCREEN);
   private->height = GetSystemMetrics (SM_CYSCREEN);
+  private->viewable = TRUE;
 
   gdk_win32_handle_table_insert ((HANDLE *) &draw_impl->handle, _gdk_root);
 
@@ -597,8 +594,6 @@ _gdk_window_impl_new (GdkWindow     *window,
       g_assert_not_reached ();
     }
 
-  //_gdk_window_init_position (GDK_WINDOW (private));
-
   if (private->window_type != GDK_WINDOW_CHILD)
     {
       rect.left = rect.top = 0;
@@ -641,17 +636,17 @@ _gdk_window_impl_new (GdkWindow     *window,
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
   
   hwndNew = CreateWindowExW (dwExStyle,
-							 MAKEINTRESOURCEW (klass),
-							 wtitle,
-							 dwStyle,
-							 ((attributes_mask & GDK_WA_X) ?
-							  private->x - offset_x : CW_USEDEFAULT),
-							 private->y - offset_y, 
-							 window_width, window_height,
-							 hparent,
-							 NULL,
-							 _gdk_app_hmodule,
-							 window);
+			     MAKEINTRESOURCEW (klass),
+			     wtitle,
+			     dwStyle,
+			     ((attributes_mask & GDK_WA_X) ?
+			       private->x - offset_x : CW_USEDEFAULT),
+			     private->y - offset_y,
+			     window_width, window_height,
+			     hparent,
+			     NULL,
+			     _gdk_app_hmodule,
+			     window);
   if (GDK_WINDOW_HWND (window) != hwndNew)
     {
       g_warning ("gdk_window_new: gdk_event_translate::WM_CREATE (%p, %p) HWND mismatch.",
@@ -758,10 +753,9 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   else
     private->state &= (~GDK_WINDOW_STATE_ABOVE);
   private->state &= (~GDK_WINDOW_STATE_BELOW);
+  private->viewable = TRUE;
 
   private->depth = gdk_visual_get_system ()->depth;
-
-  //_gdk_window_init_position (GDK_WINDOW (private));
 
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
@@ -781,9 +775,9 @@ gdk_window_lookup (GdkNativeWindow hwnd)
 }
 
 void
-_gdk_windowing_window_destroy (GdkWindow *window,
-			       gboolean   recursing,
-			       gboolean   foreign_destroy)
+_gdk_win32_window_destroy (GdkWindow *window,
+			   gboolean   recursing,
+			   gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
@@ -882,9 +876,9 @@ get_outer_rect (GdkWindow *window,
 
 static void
 adjust_for_gravity_hints (GdkWindow *window,
-						  RECT      *outer_rect,
-						  gint		*x,
-						  gint		*y)
+			  RECT      *outer_rect,
+			  gint		*x,
+			  gint		*y)
 {
 	GdkWindowObject *obj;
 	GdkWindowImplWin32 *impl;
@@ -1031,10 +1025,10 @@ show_window_internal (GdkWindow *window,
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE;
 
-	  if (!raise)
-		flags |= SWP_NOZORDER;
+      if (!raise)
+	flags |= SWP_NOZORDER;
       if (!raise || GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP || !focus_on_map)
-		flags |= SWP_NOACTIVATE;
+	flags |= SWP_NOACTIVATE;
 
       SetWindowPos (GDK_WINDOW_HWND (window), top, 0, 0, 0, 0, flags);
 
@@ -1425,7 +1419,6 @@ gdk_win32_window_reparent (GdkWindow *window,
       g_list_remove (old_parent_private->children, window);
 
   parent_private->children = g_list_prepend (parent_private->children, window);
-  //_gdk_window_init_position (GDK_WINDOW (window_private));
 
   return FALSE;
 }
@@ -1866,7 +1859,6 @@ static void
 gdk_win32_window_set_background (GdkWindow      *window,
 				 const GdkColor *color)
 {
-#if 0
   GdkWindowObject *private = (GdkWindowObject *)window;
   
   GDK_NOTE (MISC, g_print ("gdk_window_set_background: %p: %s\n",
@@ -1874,15 +1866,6 @@ gdk_win32_window_set_background (GdkWindow      *window,
 			   _gdk_win32_color_to_string (color)));
 
   private->bg_color = *color;
-
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    {
-      g_object_unref (private->bg_pixmap);
-      private->bg_pixmap = NULL;
-    }
-#endif
 }
 
 static void
@@ -1891,15 +1874,7 @@ gdk_win32_window_set_back_pixmap (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
 
-  if (private->bg_pixmap &&
-      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
-      private->bg_pixmap != GDK_NO_BG)
-    g_object_unref (private->bg_pixmap);
-
-  if (pixmap == GDK_PARENT_RELATIVE_BG || pixmap == GDK_NO_BG)
-    {
-      private->bg_pixmap = pixmap;
-    }
+  /* TODO_CSW? but win32 has no XSetWindowBackgroundPixmap */
 }
 
 static void
@@ -1953,7 +1928,8 @@ gdk_win32_window_set_cursor (GdkWindow *window,
     {
       /* If the pointer is over our window, set new cursor */
       GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
-      if (curr_window == window)
+      if (curr_window == window ||
+	  (curr_window && window == gdk_window_get_toplevel (curr_window)))
         SetCursor (impl->hcursor);
       else
 	{
@@ -2906,30 +2882,6 @@ gdk_win32_window_merge_child_shapes (GdkWindow *window)
   gdk_propagate_shapes (GDK_WINDOW_HWND (window), TRUE);
 }
 
-#if 0
-void 
-gdk_window_set_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* Not yet implemented. See comment in
-   * gdk_window_input_shape_combine_mask().
-   */
-}
-#endif
-
-#if 0
-void 
-gdk_window_merge_child_input_shapes (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  /* Not yet implemented. See comment in
-   * gdk_window_input_shape_combine_mask().
-   */
-}
-#endif
-
 static gboolean 
 gdk_win32_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
@@ -3395,6 +3347,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 #if 0 /* Should we also turn off the minimize and maximize buttons? */
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE,
 		     GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU));
+     
       SetWindowPos (GDK_WINDOW_HWND (window), NULL,
 		    0, 0, 0, 0,
 		    SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
@@ -3556,8 +3509,13 @@ gdk_window_set_opacity (GdkWindow *window,
 GdkRegion *
 _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 {
-	// XXX: TODO
-	return NULL;
+  GdkRegion *region;
+  HRGN hrgn = _gdk_win32_bitmap_to_hrgn (mask);
+
+  region = _gdk_win32_hrgn_to_region (hrgn);
+  DeleteObject (hrgn);
+
+  return region;
 }
 
 void
@@ -3568,20 +3526,25 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 GdkRegion *
 _gdk_windowing_window_get_shape (GdkWindow *window)
 {
-	return NULL;
+  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
+  int  type = GetWindowRgn (GDK_WINDOW_HWND (window), hrgn);
+
+  if (type == SIMPLEREGION || type == COMPLEXREGION)
+    {
+      GdkRegion *region = _gdk_win32_hrgn_to_region (hrgn);
+
+      DeleteObject (hrgn);
+      return region;
+    }
+
+  return NULL;
 }
 
 GdkRegion *
 _gdk_windowing_window_get_input_shape (GdkWindow *window)
 {
-	return NULL;
-}
-
-static void
-_gdk_win32_window_destroy (GdkWindow *window,
-			   gboolean   recursing,
-			   gboolean   foreign_destroy)
-{
+  /* CHECK: are these really supposed to be the same? */
+  return _gdk_windowing_window_get_shape (window);
 }
 
 static gboolean
@@ -3601,14 +3564,42 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
+/*
+ * queue_translation is meant to only move any outstanding invalid area
+ * in the given area by dx,dy. A typical example of when its needed is an
+ * app with two toplevels where one (A) overlaps the other (B). If the
+ * app first moves A so that B is invalidated and then scrolls B before
+ * handling the expose. The scroll operation will copy the invalid area
+ * to a new position, but when the invalid area is then exposed it only
+ * redraws the old areas not the place where the invalid data was copied
+ * by the scroll.
+ */
 static void
 _gdk_win32_window_queue_translation (GdkWindow *window,
+				     GdkGC     *gc,
 				     GdkRegion *area,
 				     gint       dx,
 				     gint       dy)
 {
-  /* TODO: Get current updateregion, move any part of it that intersects area by dx,dy */
-  g_print ("queue_translation\n");
+  HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
+  int ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
+  if (ret == ERROR)
+    WIN32_API_FAILED ("GetUpdateRgn");
+  else if (ret != NULLREGION)
+    {
+      /* Get current updateregion, move any part of it that intersects area by dx,dy */
+      HRGN update = _gdk_win32_gdkregion_to_hrgn (area, 0, 0);
+      ret = CombineRgn (update, hrgn, update, RGN_AND);
+      if (ret == ERROR)
+        WIN32_API_FAILED ("CombineRgn");
+      else if (ret != NULLREGION)
+	{
+	  OffsetRgn (update, dx, dy);
+          API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), update, TRUE));
+	}
+      DeleteObject (update);
+    }
+  DeleteObject (hrgn);
 }
 
 static void
@@ -3617,6 +3608,10 @@ gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      gint offset_x,
 				      gint offset_y)
 {
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  /* CHECK: are these really supposed to be the same? */
+  gdk_win32_window_shape_combine_region (window, shape_region, offset_x, offset_y);
 }
 
 void
@@ -3662,4 +3657,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
   iface->queue_translation = _gdk_win32_window_queue_translation;
   iface->destroy = _gdk_win32_window_destroy;
+  iface->input_window_destroy = _gdk_input_window_destroy;
+  iface->input_window_crossing = _gdk_input_crossing_event;
 }

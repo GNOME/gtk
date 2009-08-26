@@ -208,6 +208,11 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintOperation:embed-page-setup ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:export-filename ##### -->
 <para>
 
@@ -224,6 +229,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:n-pages ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:n-pages-to-print ##### -->
 <para>
 
 </para>
@@ -414,6 +424,15 @@ The #GQuark used for #GtkPrintError errors.
 @n_pages: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_get_n_pages_to_print ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_print_operation_set_current_page ##### -->
 <para>
 
@@ -568,6 +587,24 @@ The #GQuark used for #GtkPrintError errors.
 
 
 <!-- ##### FUNCTION gtk_print_operation_get_has_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@op: 
+@embed: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_embed_page_setup ##### -->
 <para>
 
 </para>

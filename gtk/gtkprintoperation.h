@@ -184,6 +184,10 @@ gboolean                gtk_print_operation_get_support_selection  (GtkPrintOper
 void                    gtk_print_operation_set_has_selection      (GtkPrintOperation  *op,
                                                                     gboolean            has_selection);
 gboolean                gtk_print_operation_get_has_selection      (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_embed_page_setup   (GtkPrintOperation  *op,
+ 								    gboolean            embed);
+gboolean                gtk_print_operation_get_embed_page_setup   (GtkPrintOperation  *op);
+gint                    gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
 
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
 								    GtkPageSetup       *page_setup,

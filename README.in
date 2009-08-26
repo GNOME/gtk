@@ -34,6 +34,16 @@ Release notes for 2.18
   old custom_widget. Custom_widget does not get destroyed when the
   tooltip goes away.
 
+* JPEG2000 support is no longer enabled by default. It must be
+  explicitly turned on, by passing --with-libjasper to configure.
+
+* GDK has been reworked to implement 'client-side windows'. This offers
+  exciting new possibilities, such as transformed, offscreen rendering,
+  but it breaks some long-standing assumptions that applications may
+  have about GDK windows. Setting the environment variable
+  GDK_NATIVE_WINDOWS makes GDK create a native X11 window for each
+  GDK window, which might make problematic applications work better.
+
 
 Release notes for 2.16
 ======================
@@ -427,8 +437,4 @@ report.
 Otherwise, enter a new bug report that describes the patch, and attach
 the patch to that bug report.
 
-Bug reports containing patches should include the PATCH keyword in their
-keyword fields. If the patch adds to or changes the GTK+ programming
-interface, the API keyword should also be included.
-  
-Patches should be in unified diff form. (The -u option to GNU diff.)
+Patches should be in unified diff form. (The -up option to GNU diff.)

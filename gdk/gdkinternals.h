@@ -107,6 +107,7 @@ extern gint		 _gdk_error_code;
 extern gint		 _gdk_error_warnings;
 
 extern guint _gdk_debug_flags;
+extern gboolean _gdk_native_windows;
 
 #ifdef G_ENABLE_DEBUG
 
@@ -260,6 +261,7 @@ struct _GdkWindowObject
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
+  guint viewable : 1; /* mapped and all parents mapped */
 
   guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
@@ -388,6 +390,7 @@ void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
+gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 GdkRegion *expose_region);
@@ -606,7 +609,7 @@ void _gdk_display_enable_motion_hints     (GdkDisplay *display);
 
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
-					const GdkRegion *region);
+					GdkRegion       *region);
 
 void _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 					    int width,
@@ -631,15 +634,16 @@ GdkEvent * _gdk_make_event (GdkWindow    *window,
 			    gboolean      before_event);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
-				     GdkWindow                  *src,
-				     GdkWindow                  *dest,
-				     GdkCrossingMode             mode,
-				     gint                        toplevel_x,
-				     gint                        toplevel_y,
-				     GdkModifierType             mask,
-				     guint32                     time_,
-				     GdkEvent                   *event_in_queue,
-				     gulong                      serial);
+				      GdkWindow                  *src,
+				      GdkWindow                  *dest,
+				      GdkCrossingMode             mode,
+				      gint                        toplevel_x,
+				      gint                        toplevel_y,
+				      GdkModifierType             mask,
+				      guint32                     time_,
+				      GdkEvent                   *event_in_queue,
+				      gulong                      serial,
+				      gboolean                    non_linear);
 void _gdk_display_set_window_under_pointer (GdkDisplay *display,
 					    GdkWindow *window);
 

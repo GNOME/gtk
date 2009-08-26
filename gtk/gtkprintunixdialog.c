@@ -50,16 +50,21 @@
 #include "gtkeventbox.h"
 #include "gtkbuildable.h"
 
+#include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter-private.h"
 #include "gtkprintunixdialog.h"
 #include "gtkprinteroptionwidget.h"
+#include "gtkprintutils.h"
 #include "gtkalias.h"
 
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
 
 #define EXAMPLE_PAGE_AREA_SIZE 140
+#define RULER_DISTANCE 7.5
+#define RULER_RADIUS 2
+
 
 #define GTK_PRINT_UNIX_DIALOG_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_UNIX_DIALOG, GtkPrintUnixDialogPrivate))
@@ -103,12 +108,34 @@ static void     set_cell_sensitivity_func          (GtkTreeViewColumn *tree_colu
                                                     gpointer           data);
 static gboolean set_active_printer                 (GtkPrintUnixDialog *dialog,
                                                     const gchar        *printer_name);
+static void redraw_page_layout_preview             (GtkPrintUnixDialog *dialog);
 
 /* GtkBuildable */
 static void gtk_print_unix_dialog_buildable_init                    (GtkBuildableIface *iface);
 static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildable *buildable,
                                                                      GtkBuilder   *builder,
                                                                      const gchar  *childname);
+
+static const gchar const common_paper_sizes[][16] = {
+  "na_letter",
+  "na_legal",
+  "iso_a4",
+  "iso_a5",
+  "roc_16k",
+  "iso_b5",
+  "jis_b5",
+  "na_number-10",
+  "iso_dl",
+  "jpn_chou3",
+  "na_ledger",
+  "iso_a3",
+};
+
+enum {
+  PAGE_SETUP_LIST_COL_PAGE_SETUP,
+  PAGE_SETUP_LIST_COL_IS_SEPARATOR,
+  PAGE_SETUP_LIST_N_COLS
+};
 
 enum {
   PROP_0,
@@ -118,7 +145,8 @@ enum {
   PROP_SELECTED_PRINTER,
   PROP_MANUAL_CAPABILITIES,
   PROP_SUPPORT_SELECTION,
-  PROP_HAS_SELECTION
+  PROP_HAS_SELECTION,
+  PROP_EMBED_PAGE_SETUP
 };
 
 enum {
@@ -145,6 +173,9 @@ struct GtkPrintUnixDialogPrivate
 
   GtkPageSetup *page_setup;
   gboolean page_setup_set;
+  gboolean embed_page_setup;
+  GtkListStore *page_setup_list;
+  GtkListStore *custom_paper_list;
 
   gboolean support_selection;
   gboolean has_selection;
@@ -168,6 +199,11 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *print_at_entry;
   GtkWidget *print_hold_radio;
   GtkWidget *preview_button;
+  GtkWidget *paper_size_combo;
+  GtkWidget *paper_size_combo_label;
+  GtkWidget *orientation_combo;
+  GtkWidget *orientation_combo_label;
+  gboolean internal_page_setup_change;
   gboolean updating_print_at;
   GtkPrinterOptionWidget *pages_per_sheet;
   GtkPrinterOptionWidget *duplex;
@@ -319,6 +355,14 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
+   g_object_class_install_property (object_class,
+ 				   PROP_EMBED_PAGE_SETUP,
+ 				   g_param_spec_boolean ("embed-page-setup",
+ 							 P_("Embed Page Setup"),
+ 							 P_("TRUE if page setup combos are embedded in GtkPrintUnixDialog"),
+ 							 FALSE,
+ 							 GTK_PARAM_READWRITE));
+
   g_type_class_add_private (class, sizeof (GtkPrintUnixDialogPrivate));
 }
 
@@ -333,6 +377,32 @@ get_toplevel (GtkWidget *widget)
     return NULL;
   else
     return GTK_WINDOW (toplevel);
+}
+
+static void
+set_busy_cursor (GtkPrintUnixDialog *dialog,
+		 gboolean            busy)
+{
+  GtkWindow *toplevel;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  toplevel = get_toplevel (GTK_WIDGET (dialog));
+  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+    return;
+
+  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+
+  if (busy)
+    cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
+  else
+    cursor = NULL;
+
+  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_display_flush (display);
+
+  if (cursor)
+    gdk_cursor_unref (cursor);
 }
 
 static void
@@ -374,72 +444,81 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
     {
       printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
 
-      /* Shows overwrite confirmation dialog in the case of printing to file which
-       * already exists. */
-      if (printer != NULL && gtk_printer_is_virtual (printer))
+      if (printer != NULL)
         {
-          option = gtk_printer_option_set_lookup (priv->options,
-                                                  "gtk-main-page-custom-input");
-
-          if (option != NULL &&
-              option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
+          if (priv->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
             {
-              file = g_file_new_for_uri (option->value);
+              g_signal_stop_emission_by_name (print_dialog, "response");
+              return TRUE;
+            }
 
-              if (file != NULL &&
-                  g_file_query_exists (file, NULL))
+          /* Shows overwrite confirmation dialog in the case of printing to file which
+           * already exists. */
+          if (gtk_printer_is_virtual (printer))
+            {
+              option = gtk_printer_option_set_lookup (priv->options,
+                                                      "gtk-main-page-custom-input");
+
+              if (option != NULL &&
+                  option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
                 {
-                  toplevel = get_toplevel (GTK_WIDGET (print_dialog));
+                  file = g_file_new_for_uri (option->value);
 
-                  basename = g_file_get_basename (file);
-                  dirname = g_file_get_parse_name (g_file_get_parent (file));
-
-                  dialog = gtk_message_dialog_new (toplevel,
-                                                   GTK_DIALOG_MODAL |
-                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_QUESTION,
-                                                   GTK_BUTTONS_NONE,
-                                                   _("A file named \"%s\" already exists.  Do you want to replace it?"),
-                                                   basename);
-
-                  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                            _("The file already exists in \"%s\".  Replacing it will "
-                                                            "overwrite its contents."),
-                                                            dirname);
-
-                  gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-                  add_custom_button_to_dialog (GTK_DIALOG (dialog),
-                                               _("_Replace"),
-                                               GTK_STOCK_PRINT,
-                                               GTK_RESPONSE_ACCEPT);
-                  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                                           GTK_RESPONSE_ACCEPT,
-                                                           GTK_RESPONSE_CANCEL,
-                                                           -1);
-                  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                                   GTK_RESPONSE_ACCEPT);
-
-                  if (toplevel->group)
-                    gtk_window_group_add_window (toplevel->group,
-                                                 GTK_WINDOW (dialog));
-
-                  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-                  gtk_widget_destroy (dialog);
-
-                  g_free (dirname);
-                  g_free (basename);
-
-                  if (response != GTK_RESPONSE_ACCEPT)
+                  if (file != NULL &&
+                      g_file_query_exists (file, NULL))
                     {
-                      g_signal_stop_emission_by_name (print_dialog, "response");
-                      g_object_unref (file);
-                      return TRUE;
-                    }
-                }
+                      toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
-              g_object_unref (file);
+                      basename = g_file_get_basename (file);
+                      dirname = g_file_get_parse_name (g_file_get_parent (file));
+
+                      dialog = gtk_message_dialog_new (toplevel,
+                                                       GTK_DIALOG_MODAL |
+                                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                       GTK_MESSAGE_QUESTION,
+                                                       GTK_BUTTONS_NONE,
+                                                       _("A file named \"%s\" already exists.  Do you want to replace it?"),
+                                                       basename);
+
+                      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                                _("The file already exists in \"%s\".  Replacing it will "
+                                                                "overwrite its contents."),
+                                                                dirname);
+
+                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                      add_custom_button_to_dialog (GTK_DIALOG (dialog),
+                                                   _("_Replace"),
+                                                   GTK_STOCK_PRINT,
+                                                   GTK_RESPONSE_ACCEPT);
+                      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                                               GTK_RESPONSE_ACCEPT,
+                                                               GTK_RESPONSE_CANCEL,
+                                                               -1);
+                      gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                                       GTK_RESPONSE_ACCEPT);
+
+                      if (toplevel->group)
+                        gtk_window_group_add_window (toplevel->group,
+                                                     GTK_WINDOW (dialog));
+
+                      response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+                      gtk_widget_destroy (dialog);
+
+                      g_free (dirname);
+                      g_free (basename);
+
+                      if (response != GTK_RESPONSE_ACCEPT)
+                        {
+                          g_signal_stop_emission_by_name (print_dialog, "response");
+                          g_object_unref (file);
+                          return TRUE;
+                        }
+                    }
+
+                  g_object_unref (file);
+                }
             }
         }
     }
@@ -459,6 +538,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   priv->page_setup = gtk_page_setup_new ();
   priv->page_setup_set = FALSE;
+  priv->embed_page_setup = FALSE;
+  priv->internal_page_setup_change = FALSE;
 
   priv->support_selection = FALSE;
   priv->has_selection = FALSE;
@@ -471,6 +552,11 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   g_signal_connect (dialog,
                     "response",
                     (GCallback) error_dialogs,
+                    NULL);
+
+  g_signal_connect (dialog,
+                    "notify::page-setup",
+                    (GCallback) redraw_page_layout_preview,
                     NULL);
 
   priv->preview_button = gtk_button_new_from_stock (GTK_STOCK_PRINT_PREVIEW);
@@ -492,6 +578,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_OK, FALSE);
 
+  priv->page_setup_list = gtk_list_store_new (PAGE_SETUP_LIST_N_COLS,
+                                              G_TYPE_OBJECT,
+                                              G_TYPE_BOOLEAN);
+
+  priv->custom_paper_list = gtk_list_store_new (1, G_TYPE_OBJECT);
+  _gtk_print_load_custom_papers (priv->custom_paper_list);
+
   populate_dialog (dialog);
 }
 
@@ -512,6 +605,13 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
       g_signal_handler_disconnect (priv->request_details_printer,
                                    priv->request_details_tag);
       priv->request_details_tag = 0;
+      set_busy_cursor (dialog, FALSE);
+      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                          g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                             "gtk-print-tree-iter"),
+                          PRINTER_LIST_COL_STATE,
+                          gtk_printer_get_state_message (priv->request_details_printer),
+                          -1);
       g_object_unref (priv->request_details_printer);
       priv->request_details_printer = NULL;
     }
@@ -538,6 +638,12 @@ gtk_print_unix_dialog_finalize (GObject *object)
     {
       g_object_unref (priv->printer_list);
       priv->printer_list = NULL;
+    }
+
+  if (priv->custom_paper_list)
+    {
+      g_object_unref (priv->custom_paper_list);
+      priv->custom_paper_list = NULL;
     }
 
   if (priv->printer_list_filter)
@@ -602,6 +708,12 @@ gtk_print_unix_dialog_finalize (GObject *object)
 
   g_list_free (priv->print_backends);
   priv->print_backends = NULL;
+
+  if (priv->page_setup_list)
+    {
+      g_object_unref (priv->page_setup_list);
+      priv->page_setup_list = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->finalize (object);
 }
@@ -826,6 +938,9 @@ gtk_print_unix_dialog_set_property (GObject      *object,
     case PROP_HAS_SELECTION:
       gtk_print_unix_dialog_set_has_selection (dialog, g_value_get_boolean (value));
       break;
+    case PROP_EMBED_PAGE_SETUP:
+      gtk_print_unix_dialog_set_embed_page_setup (dialog, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -863,6 +978,9 @@ gtk_print_unix_dialog_get_property (GObject    *object,
       break;
     case PROP_HAS_SELECTION:
       g_value_set_boolean (value, priv->has_selection);
+      break;
+    case PROP_EMBED_PAGE_SETUP:
+      g_value_set_boolean (value, priv->embed_page_setup);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1348,6 +1466,196 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   gtk_tree_model_filter_refilter (priv->printer_list_filter);
 }
 
+static gboolean
+page_setup_is_equal (GtkPageSetup *a, 
+		     GtkPageSetup *b)
+{
+  return
+    gtk_paper_size_is_equal (gtk_page_setup_get_paper_size (a),
+			     gtk_page_setup_get_paper_size (b)) &&
+    gtk_page_setup_get_top_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_top_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_bottom_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_bottom_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_left_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_left_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_right_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_right_margin (b, GTK_UNIT_MM);
+}
+
+static gboolean
+page_setup_is_same_size (GtkPageSetup *a,
+			 GtkPageSetup *b)
+{
+  return gtk_paper_size_is_equal (gtk_page_setup_get_paper_size (a),
+				  gtk_page_setup_get_paper_size (b));
+}
+
+static gboolean
+set_paper_size (GtkPrintUnixDialog *dialog,
+		GtkPageSetup       *page_setup,
+		gboolean            size_only,
+		gboolean            add_item)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkPageSetup *list_page_setup;
+
+  if (!priv->internal_page_setup_change)
+    return TRUE;
+
+  if (page_setup == NULL)
+    return FALSE;
+
+  model = GTK_TREE_MODEL (priv->page_setup_list);
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      do
+	{
+	  gtk_tree_model_get (GTK_TREE_MODEL (priv->page_setup_list), &iter,
+			      PAGE_SETUP_LIST_COL_PAGE_SETUP, &list_page_setup, -1);
+	  if (list_page_setup == NULL)
+	    continue;
+	  
+	  if ((size_only && page_setup_is_same_size (page_setup, list_page_setup)) ||
+	      (!size_only && page_setup_is_equal (page_setup, list_page_setup)))
+	    {
+	      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->paper_size_combo),
+					     &iter);
+	      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->orientation_combo),
+					gtk_page_setup_get_orientation (page_setup));
+	      g_object_unref (list_page_setup);
+	      return TRUE;
+	    }
+	      
+	  g_object_unref (list_page_setup);
+	  
+	} while (gtk_tree_model_iter_next (model, &iter));
+    }
+
+  if (add_item)
+    {
+      gtk_list_store_append (priv->page_setup_list, &iter);
+      gtk_list_store_set (priv->page_setup_list, &iter,
+			  PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
+			  -1);
+      gtk_list_store_append (priv->page_setup_list, &iter);
+      gtk_list_store_set (priv->page_setup_list, &iter,
+			  PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
+			  -1);
+      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->paper_size_combo),
+				     &iter);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->orientation_combo),
+				gtk_page_setup_get_orientation (page_setup));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+fill_custom_paper_sizes (GtkPrintUnixDialog *dialog)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkTreeIter iter, paper_iter;
+  GtkTreeModel *model;
+
+  model = GTK_TREE_MODEL (priv->custom_paper_list);
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    {
+      gtk_list_store_append (priv->page_setup_list, &paper_iter);
+      gtk_list_store_set (priv->page_setup_list, &paper_iter,
+			  PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
+			  -1);
+      do
+	{
+	  GtkPageSetup *page_setup;
+	  gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
+
+	  gtk_list_store_append (priv->page_setup_list, &paper_iter);
+	  gtk_list_store_set (priv->page_setup_list, &paper_iter,
+			      PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
+			      -1);
+
+	  g_object_unref (page_setup);
+	} while (gtk_tree_model_iter_next (model, &iter));
+    }
+  
+  gtk_list_store_append (priv->page_setup_list, &paper_iter);
+  gtk_list_store_set (priv->page_setup_list, &paper_iter,
+                      PAGE_SETUP_LIST_COL_IS_SEPARATOR, TRUE,
+                      -1);
+  gtk_list_store_append (priv->page_setup_list, &paper_iter);
+  gtk_list_store_set (priv->page_setup_list, &paper_iter,
+                      PAGE_SETUP_LIST_COL_PAGE_SETUP, NULL,
+                      -1);
+}
+
+static void
+fill_paper_sizes (GtkPrintUnixDialog *dialog,
+                  GtkPrinter         *printer)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GList *list, *l;
+  GtkPageSetup *page_setup;
+  GtkPaperSize *paper_size;
+  GtkTreeIter iter;
+  gint i;
+
+  gtk_list_store_clear (priv->page_setup_list);
+
+  if (printer == NULL || (list = gtk_printer_list_papers (printer)) == NULL)
+    {
+      for (i = 0; i < G_N_ELEMENTS (common_paper_sizes); i++)
+	{
+	  page_setup = gtk_page_setup_new ();
+	  paper_size = gtk_paper_size_new (common_paper_sizes[i]);
+	  gtk_page_setup_set_paper_size_and_default_margins (page_setup, paper_size);
+	  gtk_paper_size_free (paper_size);
+
+	  gtk_list_store_append (priv->page_setup_list, &iter);
+	  gtk_list_store_set (priv->page_setup_list, &iter,
+			      PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
+			      -1);
+	  g_object_unref (page_setup);
+	}
+    }
+  else
+    {
+      for (l = list; l != NULL; l = l->next)
+	{
+	  page_setup = l->data;
+	  gtk_list_store_append (priv->page_setup_list, &iter);
+	  gtk_list_store_set (priv->page_setup_list, &iter,
+			      PAGE_SETUP_LIST_COL_PAGE_SETUP, page_setup,
+			      -1);
+	  g_object_unref (page_setup);
+	}
+      g_list_free (list);
+    }
+
+  fill_custom_paper_sizes (dialog);
+}
+
+static void
+update_paper_sizes (GtkPrintUnixDialog *dialog)
+{
+  GtkPageSetup *current_page_setup = NULL;
+  GtkPrinter   *printer;
+
+  printer = gtk_print_unix_dialog_get_selected_printer (dialog);
+
+  fill_paper_sizes (dialog, printer);
+
+  current_page_setup = gtk_page_setup_copy (gtk_print_unix_dialog_get_page_setup (dialog));
+
+  if (current_page_setup)
+    {
+      if (!set_paper_size (dialog, current_page_setup, FALSE, FALSE))
+        set_paper_size (dialog, current_page_setup, TRUE, TRUE);
+
+      g_object_unref (current_page_setup);
+    }
+}
+
 static void
 mark_conflicts (GtkPrintUnixDialog *dialog)
 {
@@ -1540,6 +1848,11 @@ selected_printer_changed (GtkTreeSelection   *selection,
       /* take the reference */
       priv->request_details_printer = printer;
       gtk_printer_request_details (printer);
+      set_busy_cursor (dialog, TRUE);
+      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                          g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
+                          PRINTER_LIST_COL_STATE, _("Getting printer information..."),
+                          -1);
       return;
     }
 
@@ -1581,6 +1894,9 @@ selected_printer_changed (GtkTreeSelection   *selection,
           if (!page_setup)
             page_setup = gtk_page_setup_new ();
 
+          if (page_setup && priv->page_setup)
+            gtk_page_setup_set_orientation (page_setup, gtk_page_setup_get_orientation (priv->page_setup));
+
           g_object_unref (priv->page_setup);
           priv->page_setup = page_setup;
         }
@@ -1597,6 +1913,10 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
   update_dialog_from_settings (dialog);
   update_dialog_from_capabilities (dialog);
+
+  priv->internal_page_setup_change = TRUE;
+  update_paper_sizes (dialog);
+  priv->internal_page_setup_change = FALSE;
 
   g_object_notify ( G_OBJECT(dialog), "selected-printer");
 }
@@ -2260,6 +2580,11 @@ draw_page_cb (GtkWidget          *widget,
   gint start_x, end_x, start_y, end_y;
   gint dx, dy;
   gboolean horizontal;
+  GtkPageSetup *page_setup;
+  gdouble paper_width, paper_height;
+  gdouble pos_x, pos_y;
+  gint pages_per_sheet;
+  gboolean ltr = TRUE;
 
   orientation = gtk_page_setup_get_orientation (priv->page_setup);
   landscape =
@@ -2270,14 +2595,49 @@ draw_page_cb (GtkWidget          *widget,
 
   cr = gdk_cairo_create (widget->window);
 
-  cairo_translate (cr, widget->allocation.x, widget->allocation.y);
+  cairo_save (cr);
 
-  ratio = G_SQRT2;
+  page_setup = gtk_print_unix_dialog_get_page_setup (dialog);  
 
-  w = (EXAMPLE_PAGE_AREA_SIZE - 3) / ratio;
-  h = w * ratio;
+  if (page_setup != NULL)
+    {
+      if (!landscape)
+        {
+          paper_width = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM);
+          paper_height = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM);
+        }
+      else
+        {
+          paper_width = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_MM);
+          paper_height = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_MM);
+        }
 
-  switch (dialog_get_pages_per_sheet (dialog))
+      if (paper_width < paper_height)
+        {
+          h = EXAMPLE_PAGE_AREA_SIZE - 3;
+          w = (paper_height != 0) ? h * paper_width / paper_height : 0;
+        }
+      else
+        {
+          w = EXAMPLE_PAGE_AREA_SIZE - 3;
+          h = (paper_width != 0) ? w * paper_height / paper_width : 0;
+        }
+
+      if (paper_width == 0)
+        w = 0;
+
+      if (paper_height == 0)
+        h = 0;
+    }
+  else
+    {
+      ratio = G_SQRT2;
+      w = (EXAMPLE_PAGE_AREA_SIZE - 3) / ratio;
+      h = EXAMPLE_PAGE_AREA_SIZE - 3;
+    }
+
+  pages_per_sheet = dialog_get_pages_per_sheet (dialog);
+  switch (pages_per_sheet)
     {
     default:
     case 1:
@@ -2313,6 +2673,11 @@ draw_page_cb (GtkWidget          *widget,
       pages_y = tmp;
     }
 
+  pos_x = widget->allocation.x + (widget->allocation.width - w) / 2;
+  pos_y = widget->allocation.y + (widget->allocation.height - h) / 2 - 10;
+  color = &widget->style->text[GTK_STATE_NORMAL];
+  cairo_translate (cr, pos_x, pos_y);
+
   shadow_offset = 3;
 
   color = &widget->style->text[GTK_STATE_NORMAL];
@@ -2324,7 +2689,7 @@ draw_page_cb (GtkWidget          *widget,
   cairo_rectangle (cr, 1, 1, w, h);
   cairo_fill (cr);
   cairo_set_line_width (cr, 1.0);
-  cairo_rectangle (cr, 0.5, 0.5, w+1, h+1);
+  cairo_rectangle (cr, 0.5, 0.5, w + 1, h + 1);
 
   gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
   cairo_stroke (cr);
@@ -2338,7 +2703,12 @@ draw_page_cb (GtkWidget          *widget,
 
   font = pango_font_description_new ();
   pango_font_description_set_family (font, "sans");
-  pango_font_description_set_absolute_size (font, page_height * 0.4 * PANGO_SCALE);
+
+  if (page_height > 0)
+    pango_font_description_set_absolute_size (font, page_height * 0.4 * PANGO_SCALE);
+  else
+    pango_font_description_set_absolute_size (font, 1);
+
   pango_layout_set_font_description (layout, font);
   pango_font_description_free (font);
 
@@ -2460,6 +2830,135 @@ draw_page_cb (GtkWidget          *widget,
       }
 
   g_object_unref (layout);
+
+  if (page_setup != NULL)
+    {
+      pos_x += 1;
+      pos_y += 1;
+
+      if (pages_per_sheet == 2 || pages_per_sheet == 6)
+        {
+          paper_width = gtk_page_setup_get_paper_height (page_setup, _gtk_print_get_default_user_units ());
+          paper_height = gtk_page_setup_get_paper_width (page_setup, _gtk_print_get_default_user_units ());
+        }
+      else
+        {
+          paper_width = gtk_page_setup_get_paper_width (page_setup, _gtk_print_get_default_user_units ());
+          paper_height = gtk_page_setup_get_paper_height (page_setup, _gtk_print_get_default_user_units ());
+        }
+
+      cairo_restore (cr);
+      cairo_save (cr);
+
+      layout  = pango_cairo_create_layout (cr);
+
+      font = pango_font_description_new ();
+      pango_font_description_set_family (font, "sans");
+
+      PangoContext *pango_c = NULL;
+      PangoFontDescription *pango_f = NULL;
+      gint font_size = 12 * PANGO_SCALE;
+
+      pango_c = gtk_widget_get_pango_context (widget);
+      if (pango_c != NULL)
+        {
+          pango_f = pango_context_get_font_description (pango_c);
+          if (pango_f != NULL)
+            font_size = pango_font_description_get_size (pango_f);
+        }
+
+      pango_font_description_set_size (font, font_size);
+      pango_layout_set_font_description (layout, font);
+      pango_font_description_free (font);
+
+      pango_layout_set_width (layout, -1);
+      pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
+
+      if (_gtk_print_get_default_user_units () == GTK_UNIT_MM)
+        text = g_strdup_printf ("%.1f mm", paper_height);
+      else
+        text = g_strdup_printf ("%.2f inch", paper_height);
+
+      pango_layout_set_text (layout, text, -1);
+      g_free (text);
+      pango_layout_get_size (layout, &layout_w, &layout_h);
+
+      ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
+
+      if (ltr)
+        cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+      else
+        cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+
+      pango_cairo_show_layout (cr, layout);
+
+      cairo_restore (cr);
+      cairo_save (cr);
+
+      if (_gtk_print_get_default_user_units () == GTK_UNIT_MM)
+        text = g_strdup_printf ("%.1f mm", paper_width);
+      else
+        text = g_strdup_printf ("%.2f inch", paper_width);
+
+      pango_layout_set_text (layout, text, -1);
+      g_free (text);
+      pango_layout_get_size (layout, &layout_w, &layout_h);
+
+      cairo_translate (cr, widget->allocation.x + (widget->allocation.width - layout_w / PANGO_SCALE) / 2,
+                           pos_y + h + shadow_offset + 2 * RULER_DISTANCE);
+
+      pango_cairo_show_layout (cr, layout);
+
+      g_object_unref (layout);
+
+      cairo_restore (cr);
+
+      cairo_set_line_width (cr, 1);
+
+      if (ltr)
+        {
+          cairo_move_to (cr, pos_x - RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
+
+      cairo_move_to (cr, pos_x, pos_y + h + shadow_offset + RULER_DISTANCE);
+      cairo_line_to (cr, pos_x + w, pos_y + h + shadow_offset + RULER_DISTANCE);
+      cairo_stroke (cr);
+
+      cairo_move_to (cr, pos_x - 0.5, pos_y + h + shadow_offset + RULER_DISTANCE - RULER_RADIUS);
+      cairo_line_to (cr, pos_x - 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
+      cairo_stroke (cr);
+
+      cairo_move_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE - RULER_RADIUS);
+      cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
+      cairo_stroke (cr);
+    }
+
   cairo_destroy (cr);
 
   return TRUE;
@@ -2610,12 +3109,163 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
 }
 
 static void
+custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
+				 gint       response_id,
+				 gpointer   user_data)
+{
+  GtkPrintUnixDialog        *print_dialog = GTK_PRINT_UNIX_DIALOG (user_data);
+  GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
+  GtkTreeModel              *model;
+  GtkTreeIter                iter;
+
+  _gtk_print_load_custom_papers (priv->custom_paper_list);
+
+  priv->internal_page_setup_change = TRUE;
+  update_paper_sizes (print_dialog);
+  priv->internal_page_setup_change = FALSE;
+
+  if (priv->page_setup_set)
+    {
+      model = GTK_TREE_MODEL (priv->custom_paper_list);
+      if (gtk_tree_model_get_iter_first (model, &iter))
+        {
+          do
+            {
+              GtkPageSetup *page_setup;
+              gtk_tree_model_get (model, &iter, 0, &page_setup, -1);
+
+              if (page_setup &&
+                  g_strcmp0 (gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (page_setup)),
+                             gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (priv->page_setup))) == 0)
+                gtk_print_unix_dialog_set_page_setup (print_dialog, page_setup);
+
+              g_object_unref (page_setup);
+            } while (gtk_tree_model_iter_next (model, &iter));
+        }
+    }
+
+  gtk_widget_destroy (GTK_WIDGET (custom_paper_dialog));
+}
+
+static void
+orientation_changed (GtkComboBox        *combo_box,
+                     GtkPrintUnixDialog *dialog)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkPageOrientation         orientation;
+  GtkPageSetup              *page_setup;
+
+  if (priv->internal_page_setup_change)
+    return;
+
+  orientation = (GtkPageOrientation) gtk_combo_box_get_active (GTK_COMBO_BOX (priv->orientation_combo));
+
+  if (priv->page_setup)
+    {
+      page_setup = gtk_page_setup_copy (priv->page_setup);
+      if (page_setup)
+        gtk_page_setup_set_orientation (page_setup, orientation);
+
+      gtk_print_unix_dialog_set_page_setup (dialog, page_setup);
+    }
+
+  redraw_page_layout_preview (dialog);
+}
+
+static void
+paper_size_changed (GtkComboBox        *combo_box,
+                    GtkPrintUnixDialog *dialog)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkTreeIter iter;
+  GtkPageSetup *page_setup, *last_page_setup;
+  GtkPageOrientation orientation;
+
+  if (priv->internal_page_setup_change)
+    return;
+
+  if (gtk_combo_box_get_active_iter (combo_box, &iter))
+    {
+      gtk_tree_model_get (gtk_combo_box_get_model (combo_box),
+                          &iter, PAGE_SETUP_LIST_COL_PAGE_SETUP, &page_setup, -1);
+
+      if (page_setup == NULL)
+        {
+          GtkWidget *custom_paper_dialog;
+
+          /* Change from "manage" menu item to last value */
+          if (priv->page_setup)
+            last_page_setup = g_object_ref (priv->page_setup);
+          else
+            last_page_setup = gtk_page_setup_new (); /* "good" default */
+
+          if (!set_paper_size (dialog, last_page_setup, FALSE, FALSE))
+            set_paper_size (dialog, last_page_setup, TRUE, TRUE);
+          g_object_unref (last_page_setup);
+
+          /* And show the custom paper dialog */
+          custom_paper_dialog = _gtk_custom_paper_unix_dialog_new (GTK_WINDOW (dialog), _("Manage Custom Sizes"));
+          g_signal_connect (custom_paper_dialog, "response", G_CALLBACK (custom_paper_dialog_response_cb), dialog);
+          gtk_window_present (GTK_WINDOW (custom_paper_dialog));
+
+          return;
+        }
+
+      if (priv->page_setup)
+        orientation = gtk_page_setup_get_orientation (priv->page_setup);
+      else
+        orientation = GTK_PAGE_ORIENTATION_PORTRAIT;
+
+      gtk_page_setup_set_orientation (page_setup, orientation);
+      gtk_print_unix_dialog_set_page_setup (dialog, page_setup);
+
+      g_object_unref (page_setup);
+    }
+
+  redraw_page_layout_preview (dialog);
+}
+
+static gboolean
+paper_size_row_is_separator (GtkTreeModel *model,
+                             GtkTreeIter  *iter,
+                             gpointer      data)
+{
+  gboolean separator;
+
+  gtk_tree_model_get (model, iter, PAGE_SETUP_LIST_COL_IS_SEPARATOR, &separator, -1);
+  return separator;
+}
+
+static void
+page_name_func (GtkCellLayout   *cell_layout,
+                GtkCellRenderer *cell,
+                GtkTreeModel    *tree_model,
+                GtkTreeIter     *iter,
+                gpointer         data)
+{
+  GtkPageSetup *page_setup;
+  GtkPaperSize *paper_size;
+
+  gtk_tree_model_get (tree_model, iter,
+                      PAGE_SETUP_LIST_COL_PAGE_SETUP, &page_setup, -1);
+  if (page_setup)
+    {
+      paper_size = gtk_page_setup_get_paper_size (page_setup);
+      g_object_set (cell, "text",  gtk_paper_size_get_display_name (paper_size), NULL);
+      g_object_unref (page_setup);
+    }
+  else
+    g_object_set (cell, "text",  _("Manage Custom Sizes..."), NULL);
+}
+
+static void
 create_page_setup_page (GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkWidget *main_vbox, *label, *hbox, *hbox2;
   GtkWidget *frame, *table, *widget;
   GtkWidget *combo, *spinbutton, *draw;
+  GtkCellRenderer *cell;
 
   main_vbox = gtk_vbox_new (FALSE, 18);
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
@@ -2776,6 +3426,55 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
                     0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), widget);
 
+
+  label = gtk_label_new_with_mnemonic (_("_Paper size:"));
+  priv->paper_size_combo_label = GTK_WIDGET (label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label,
+		    0, 1, 3, 4,  GTK_FILL, 0,
+		    0, 0);
+
+  combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (priv->page_setup_list));
+  priv->paper_size_combo = GTK_WIDGET (combo);
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (combo), 
+                                        paper_size_row_is_separator, NULL, NULL);
+  cell = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), cell,
+                                      page_name_func, NULL, NULL);
+  gtk_table_attach (GTK_TABLE (table), combo,
+		    1, 2, 3, 4,  GTK_FILL, 0,
+		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
+  gtk_widget_set_sensitive (combo, FALSE);
+  gtk_widget_show (combo);
+
+
+  label = gtk_label_new_with_mnemonic (_("Or_ientation:"));
+  priv->orientation_combo_label = GTK_WIDGET (label);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label,
+		    0, 1, 4, 5,
+		    GTK_FILL, 0, 0, 0);
+
+  combo = gtk_combo_box_new_text ();
+  priv->orientation_combo = GTK_WIDGET (combo);
+  gtk_table_attach (GTK_TABLE (table), combo,
+		    1, 2, 4, 5,  GTK_FILL, 0,
+		    0, 0);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
+  /* In enum order */
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Portrait"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Landscape"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Reverse portrait"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Reverse landscape"));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
+  gtk_widget_set_sensitive (combo, FALSE);
+  gtk_widget_show (combo);
+
+
   /* Add the page layout preview */
   hbox2 = gtk_hbox_new (FALSE, 0);
   gtk_widget_show (hbox2);
@@ -2784,7 +3483,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   draw = gtk_drawing_area_new ();
   GTK_WIDGET_SET_FLAGS (draw, GTK_NO_WINDOW);
   priv->page_layout_preview = draw;
-  gtk_widget_set_size_request (draw, 200, 200);
+  gtk_widget_set_size_request (draw, 350, 200);
   g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
@@ -3190,6 +3889,24 @@ gtk_print_unix_dialog_get_page_setup (GtkPrintUnixDialog *dialog)
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), NULL);
 
   return dialog->priv->page_setup;
+}
+
+/**
+ * gtk_print_unix_dialog_get_page_setup_set:
+ * @dialog: a #GtkPrintUnixDialog
+ *
+ * Gets the page setup that is used by the #GtkPrintUnixDialog.
+ *
+ * Returns: whether a page setup was set by user.
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
+
+  return dialog->priv->page_setup_set;
 }
 
 /**
@@ -3618,6 +4335,74 @@ gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
   g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
 
   return dialog->priv->has_selection;
+}
+
+/**
+ * gtk_print_unix_dialog_set_embed_page_setup
+ * @dialog: a #GtkPrintUnixDialog
+ * @embed: embed page setup selection
+ *
+ * Embed page size combo box and orientation combo box into page setup page.
+ *
+ * Since: 2.18
+ */
+void
+gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
+                                            gboolean            embed)
+{
+  GtkPrintUnixDialogPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog));
+
+  priv = dialog->priv;
+
+  embed = embed != FALSE;
+  if (priv->embed_page_setup != embed)
+    {
+      priv->embed_page_setup = embed;
+
+      gtk_widget_set_sensitive (priv->paper_size_combo, priv->embed_page_setup);
+      gtk_widget_set_sensitive (priv->orientation_combo, priv->embed_page_setup);
+
+      if (priv->embed_page_setup)
+        {
+          if (priv->paper_size_combo != NULL)
+            g_signal_connect (priv->paper_size_combo, "changed", G_CALLBACK (paper_size_changed), dialog);
+
+          if (priv->orientation_combo)
+            g_signal_connect (priv->orientation_combo, "changed", G_CALLBACK (orientation_changed), dialog);
+        }
+      else
+        {
+          if (priv->paper_size_combo != NULL)
+            g_signal_handlers_disconnect_by_func (priv->paper_size_combo, G_CALLBACK (paper_size_changed), dialog);
+
+          if (priv->orientation_combo)
+            g_signal_handlers_disconnect_by_func (priv->orientation_combo, G_CALLBACK (orientation_changed), dialog);
+        }
+
+      priv->internal_page_setup_change = TRUE;
+      update_paper_sizes (dialog);
+      priv->internal_page_setup_change = FALSE;
+    }
+}
+
+/**
+ * gtk_print_unix_dialog_get_embed_page_setup:
+ * @dialog: a #GtkPrintUnixDialog
+ *
+ * Gets the value of #GtkPrintUnixDialog::embed-page-setup property.
+ *
+ * Returns: whether there is a selection
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_print_unix_dialog_get_embed_page_setup (GtkPrintUnixDialog *dialog)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_UNIX_DIALOG (dialog), FALSE);
+
+  return dialog->priv->embed_page_setup;
 }
 
 #define __GTK_PRINT_UNIX_DIALOG_C__

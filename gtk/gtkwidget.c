@@ -154,7 +154,8 @@ enum {
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
-  PROP_WINDOW
+  PROP_WINDOW,
+  PROP_DOUBLE_BUFFERED
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -691,6 +692,21 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							P_("The widget's window if it is realized"),
 							GDK_TYPE_WINDOW,
 							GTK_PARAM_READABLE));
+
+  /**
+   * GtkWidget::double-buffered
+   *
+   * Whether or not the widget is double buffered.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DOUBLE_BUFFERED,
+                                   g_param_spec_boolean ("double-buffered",
+                                                         P_("Double Buffered"),
+                                                         P_("Whether or not the widget is double buffered"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
 
   widget_signals[SHOW] =
     g_signal_new (I_("show"),
@@ -2523,6 +2539,9 @@ gtk_widget_set_property (GObject         *object,
       if (GTK_WIDGET_VISIBLE (widget))
         gtk_widget_queue_tooltip_query (widget);
       break;
+    case PROP_DOUBLE_BUFFERED:
+      gtk_widget_set_double_buffered (widget, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2629,6 +2648,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_WINDOW:
       g_value_set_object (value, gtk_widget_get_window (widget));
+      break;
+    case PROP_DOUBLE_BUFFERED:
+      g_value_set_boolean (value, gtk_widget_get_double_buffered (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -5066,8 +5088,10 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * 
  * Causes @widget to have the keyboard focus for the #GtkWindow it's
  * inside. @widget must be a focusable widget, such as a #GtkEntry;
- * something like #GtkFrame won't work. (More precisely, it must have the
- * %GTK_CAN_FOCUS flag set.)
+ * something like #GtkFrame won't work.
+ *
+ * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
+ * gtk_widget_set_can_focus() to modify that flag.
  **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
@@ -5259,6 +5283,74 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
 }
 
 /**
+ * gtk_widget_set_can_focus:
+ * @widget: a #GtkWidget
+ * @can_focus: whether or not @widget can own the input focus.
+ *
+ * Specifies whether @widget can own the input focus. See
+ * gtk_widget_grab_focus() for actually setting the input focus on a
+ * widget.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_can_focus (GtkWidget *widget,
+                          gboolean   can_focus)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (can_focus != GTK_WIDGET_CAN_FOCUS (widget))
+    {
+      if (can_focus)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
+
+      gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (widget), "can-focus");
+    }
+}
+
+/**
+ * gtk_widget_get_can_focus:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can own the input focus. See
+ * gtk_widget_set_can_focus().
+ *
+ * Return value: %TRUE if @widget can own the input focus, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_can_focus (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_CAN_FOCUS (widget);
+}
+
+/**
+ * gtk_widget_has_focus:
+ * @widget: a #GtkWidget
+ *
+ * Determines if the widget has the global input focus. See
+ * gtk_widget_is_focus() for the difference between having the global
+ * input focus, and only having the focus within a toplevel.
+ *
+ * Return value: %TRUE if the widget has the global input focus.
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_has_focus (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_HAS_FOCUS (widget);
+}
+
+/**
  * gtk_widget_is_focus:
  * @widget: a #GtkWidget
  * 
@@ -5285,13 +5377,81 @@ gtk_widget_is_focus (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_set_can_default:
+ * @widget: a #GtkWidget
+ * @can_default: whether or not @widget can be a default widget.
+ *
+ * Specifies whether @widget can be a default widget. See
+ * gtk_widget_grab_default() for details about the meaning of
+ * "default".
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_can_default (GtkWidget *widget,
+                            gboolean   can_default)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (can_default != GTK_WIDGET_CAN_DEFAULT (widget))
+    {
+      if (can_default)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
+
+      gtk_widget_queue_resize (widget);
+      g_object_notify (G_OBJECT (widget), "can-default");
+    }
+}
+
+/**
+ * gtk_widget_get_can_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can be a default widget. See
+ * gtk_widget_set_can_default().
+ *
+ * Return value: %TRUE if @widget can be a default widget, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_can_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_CAN_DEFAULT (widget);
+}
+
+/**
+ * gtk_widget_has_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is the current default widget within its
+ * toplevel. See gtk_widget_set_can_default().
+ *
+ * Return value: %TRUE if @widget is the current default widget within
+ *     its toplevel, %FALSE otherwise
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_widget_has_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_HAS_DEFAULT (widget);
+}
+
+/**
  * gtk_widget_grab_default:
  * @widget: a #GtkWidget
  *
  * Causes @widget to become the default widget. @widget must have the
  * %GTK_CAN_DEFAULT flag set; typically you have to set this flag
- * yourself by calling <literal>GTK_WIDGET_SET_FLAGS (@widget,
- * GTK_CAN_DEFAULT)</literal>. The default widget is activated when 
+ * yourself by calling <literal>gtk_widget_set_can_default (@widget,
+ * %TRUE)</literal>. The default widget is activated when 
  * the user presses Enter in a window. Default widgets must be 
  * activatable, that is, gtk_widget_activate() should affect them.
  **/
@@ -5309,6 +5469,27 @@ gtk_widget_grab_default (GtkWidget *widget)
     gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
+}
+
+/**
+ * gtk_widget_has_grab:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is currently grabbing events, so it
+ * is the only widget receiving input events (keyboard and mouse).
+ *
+ * See also gtk_grab_add().
+ *
+ * Return value: %TRUE if the widget is in the grab_widgets stack
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_has_grab (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_HAS_GRAB) != 0;
 }
 
 /**
@@ -5401,6 +5582,124 @@ gtk_widget_set_state (GtkWidget           *widget,
     }
 }
 
+/**
+ * gtk_widget_get_state:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget's state. See gtk_widget_set_state().
+ *
+ * Returns: the state of @widget.
+ *
+ * Since: 2.18
+ */
+GtkStateType
+gtk_widget_get_state (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_STATE_NORMAL);
+
+  return widget->state;
+}
+
+/**
+ * gtk_widget_set_visible:
+ * @widget: a #GtkWidget
+ * @visible: whether the widget should be shown or not
+ *
+ * Sets the visibility state of @widget. Note that setting this to
+ * %TRUE doesn't mean the widget is actually viewable, see
+ * gtk_widget_get_visible().
+ *
+ * This function simply calls gtk_widget_show() or gtk_widget_hide()
+ * but is nicer to use when the visibility of the widget depends on
+ * some condition.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_visible (GtkWidget *widget,
+                        gboolean   visible)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (visible != GTK_WIDGET_VISIBLE (widget))
+    {
+      if (visible)
+        gtk_widget_show (widget);
+      else
+        gtk_widget_hide (widget);
+    }
+}
+
+/**
+ * gtk_widget_get_visible:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is visible. Note that this doesn't
+ * take into account whether the widget's parent is also visible
+ * or the widget is obscured in any way.
+ *
+ * See gtk_widget_set_visible().
+ *
+ * Return value: %TRUE if the widget is visible
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_visible (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_VISIBLE) != 0;
+}
+
+/**
+ * gtk_widget_set_has_window:
+ * @widget: a #GtkWidget
+ * @has_window: whether or not @widget has a window.
+ *
+ * Specifies whether @widget has a #GdkWindow of its own. Note that
+ * all realized widgets have a non-%NULL "window" pointer
+ * (gtk_widget_get_window() never returns a %NULL window when a widget
+ * is realized), but for many of them it's actually the #GdkWindow of
+ * one of its parent widgets. Widgets that create a %window for
+ * themselves in GtkWidget::realize() however must announce this by
+ * calling this function with @has_window = %TRUE.
+ *
+ * This function should only be called by widget implementations,
+ * and they should call it in their init() function.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_has_window (GtkWidget *widget,
+                           gboolean   has_window)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (has_window)
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_WINDOW);
+  else
+    GTK_WIDGET_SET_FLAGS (widget, GTK_NO_WINDOW);
+}
+
+/**
+ * gtk_widget_get_has_window:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget has a #GdkWindow of its own. See
+ * gtk_widget_set_has_window().
+ *
+ * Return value: %TRUE if @widget has a window, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_has_window (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return !GTK_WIDGET_NO_WINDOW (widget);
+}
 
 /**
  * gtk_widget_set_app_paintable:
@@ -5449,6 +5748,27 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_get_app_paintable:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the application intends to draw on the widget in
+ * an #GtkWidget::expose-event handler.
+ *
+ * See gtk_widget_set_app_paintable()
+ *
+ * Return value: %TRUE if the widget is app paintable
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_app_paintable (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_APP_PAINTABLE) != 0;
+}
+
+/**
  * gtk_widget_set_double_buffered:
  * @widget: a #GtkWidget
  * @double_buffered: %TRUE to double-buffer a widget
@@ -5478,10 +5798,35 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (double_buffered)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
-  else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+  if (double_buffered != GTK_WIDGET_DOUBLE_BUFFERED (widget))
+    {
+      if (double_buffered)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+
+      g_object_notify (G_OBJECT (widget), "double-buffered");
+    }
+}
+
+/**
+ * gtk_widget_get_double_buffered:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget is double buffered.
+ *
+ * See gtk_widget_set_double_buffered()
+ *
+ * Return value: %TRUE if the widget is double buffered
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_double_buffered (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_DOUBLE_BUFFERED) != 0;
 }
 
 /**
@@ -5564,6 +5909,47 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     gtk_widget_queue_draw (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");
+}
+
+/**
+ * gtk_widget_get_sensitive:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget's sensitivity (in the sense of returning
+ * the value that has been set using gtk_widget_set_sensitive()).
+ *
+ * The effective sensitivity of a widget is however determined by both its
+ * own and its parent widget's sensitivity. See gtk_widget_is_sensitive().
+ *
+ * Returns: %TRUE if the widget is sensitive
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_widget_get_sensitive (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_SENSITIVE (widget);
+}
+
+/**
+ * gtk_widget_is_sensitive:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget's effective sensitivity, which means
+ * it is sensitive itself and also its parent widget is sensntive
+ *
+ * Returns: %TRUE if the widget is effectively sensitive
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_widget_is_sensitive (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_IS_SENSITIVE (widget);
 }
 
 /**
@@ -10368,6 +10754,45 @@ gtk_widget_get_has_tooltip (GtkWidget *widget)
   g_object_get (G_OBJECT (widget), "has-tooltip", &has_tooltip, NULL);
 
   return has_tooltip;
+}
+
+/**
+ * gtk_widget_get_allocation:
+ * @widget: a #GtkWidget
+ * @allocation: a pointer to a #GtkAllocation to copy to
+ *
+ * Retrieves the widget's allocation.
+ *
+ * Since: 2.18
+ */
+void
+gtk_widget_get_allocation (GtkWidget     *widget,
+                           GtkAllocation *allocation)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (allocation != NULL);
+
+  *allocation = widget->allocation;
+}
+
+/**
+ * gtk_widget_set_allocation:
+ * @widget: a #GtkWidget
+ * @allocation: a pointer to a #GtkAllocation to copy from
+ *
+ * Sets the widget's allocation.  This should not be used
+ * directly, but from within a widget's size_allocate method.
+ *
+ * Since: 2.18
+ */
+void
+gtk_widget_set_allocation (GtkWidget           *widget,
+                           const GtkAllocation *allocation)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (allocation != NULL);
+
+  widget->allocation = *allocation;
 }
 
 /**

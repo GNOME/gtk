@@ -32,6 +32,7 @@
 #include <cairo.h>
 #include <cairo-pdf.h>
 #include <cairo-ps.h>
+#include <cairo-svg.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -64,13 +65,15 @@ typedef enum
 {
   FORMAT_PDF,
   FORMAT_PS,
+  FORMAT_SVG,
   N_FORMATS
 } OutputFormat;
 
 static const gchar* formats[N_FORMATS] =
 {
   "pdf",
-  "ps"
+  "ps",
+  "svg"
 };
 
 static GObjectClass *backend_parent_class;
@@ -228,7 +231,19 @@ output_file_from_settings (GtkPrintSettings *settings,
           OutputFormat format;
 
           format = format_from_settings (settings);
-          extension = format == FORMAT_PS ? "ps" : "pdf";
+          switch (format)
+            {
+              default:
+              case FORMAT_PDF:
+                extension = "pdf";
+                break;
+              case FORMAT_PS:
+                extension = "ps";
+                break;
+              case FORMAT_SVG:
+                extension = "svg";
+                break;
+            }
         }
  
       /* default filename used for print-to-file */ 
@@ -298,13 +313,27 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
 {
   cairo_surface_t *surface;
   OutputFormat format;
+  const cairo_svg_version_t *versions;
+  int num_versions = 0;
 
   format = format_from_settings (settings);
 
-  if (format == FORMAT_PS)
-    surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
-  else
-    surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
+  switch (format)
+    {
+      default:
+      case FORMAT_PDF:
+        surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        break;
+      case FORMAT_PS:
+        surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        break;
+      case FORMAT_SVG:
+        surface = cairo_svg_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        cairo_svg_get_versions (&versions, &num_versions);
+        if (num_versions > 0)
+          cairo_svg_surface_restrict_to_version (surface, versions[num_versions - 1]);
+        break;
+    }
 
   if (gtk_print_settings_get_printer_lpi (settings) == 0.0)
     gtk_print_settings_set_printer_lpi (settings, 150.0);
@@ -472,7 +501,7 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
-  gtk_printer_set_icon_name (printer, "gtk-floppy");
+  gtk_printer_set_icon_name (printer, "gtk-save");
   gtk_printer_set_is_active (printer, TRUE);
 
   gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
@@ -543,7 +572,7 @@ file_printer_get_options (GtkPrinter           *printer,
   GtkPrinterOption *option;
   const gchar *n_up[] = {"1", "2", "4", "6", "9", "16" };
   const gchar *pages_per_sheet = NULL;
-  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript") };
+  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript"), N_("SVG") };
   const gchar *supported_formats[N_FORMATS];
   gchar *display_format_names[N_FORMATS];
   gint n_formats = 0;
@@ -591,7 +620,20 @@ file_printer_get_options (GtkPrinter           *printer,
     }
   else
     {
-      current_format = format == FORMAT_PS ? FORMAT_PS : FORMAT_PDF;
+      switch (format)
+        {
+          default:
+          case FORMAT_PDF:
+            current_format = FORMAT_PDF;
+            break;
+          case FORMAT_PS:
+            current_format = FORMAT_PS;
+            break;
+          case FORMAT_SVG:
+            current_format = FORMAT_SVG;            
+            break;
+        }
+
       for (n_formats = 0; n_formats < N_FORMATS; ++n_formats)
         {
 	  supported_formats[n_formats] = formats[n_formats];
@@ -603,6 +645,7 @@ file_printer_get_options (GtkPrinter           *printer,
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), 
 				   GTK_PRINTER_OPTION_TYPE_FILESAVE);
+  gtk_printer_option_set_activates_default (option, TRUE);
   gtk_printer_option_set (option, uri);
   g_free (uri);
   option->group = g_strdup ("GtkPrintDialogExtension");

@@ -85,6 +85,10 @@ void                 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChoo
 								     gboolean        do_overwrite_confirmation);
 gboolean             gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser);
 
+void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
+							  gboolean               create_folders);
+gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *chooser);
+
 /* Suggested name for the Save-type actions
  */
 void     gtk_file_chooser_set_current_name   (GtkFileChooser *chooser,

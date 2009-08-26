@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
+ * Copyright (C) 2001,2009 Hans Breuer
  * Copyright (C) 2007-2009 Cody Russell
  *
  * This library is free software; you can redistribute it and/or
@@ -98,18 +99,6 @@ static gboolean is_modally_blocked (GdkWindow   *window);
 
 /* Private variable declarations
  */
-
-#if 0
-static GdkWindow *p_grab_window = NULL; /* Window that currently holds
-					 * the pointer grab
-					 */
-
-static GdkWindow *p_grab_confine_to = NULL;
-
-static GdkWindow *k_grab_window = NULL; /* Window the holds the
-					 * keyboard grab
-					 */
-#endif
 
 static GList *client_filters;	/* Filters for client messages */
 
@@ -273,7 +262,7 @@ inner_window_procedure (HWND   hwnd,
   else
     {
       /* Otherwise call DefWindowProcW(). */
-      GDK_NOTE (EVENTS, g_print (" DefWindowProcW"));
+      GDK_NOTE (EVENTLOOP, g_print (" DefWindowProcW"));
       return DefWindowProcW (hwnd, message, wparam, lparam);
     }
 }
@@ -485,9 +474,52 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
 			     GdkCursor    *cursor,
 			     guint32	time)
 {
-  SetCapture (GDK_WINDOW_HWND (native_window));
-  /* TODO_CSW: grab brokens, confine window, cursor, input_grab */
-  return GDK_GRAB_SUCCESS;
+  HCURSOR hcursor;
+  GdkCursorPrivate *cursor_private;
+  gint return_val;
+
+  g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
+  
+  cursor_private = (GdkCursorPrivate*) cursor;
+  
+  if (!cursor)
+    hcursor = NULL;
+  else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
+    WIN32_API_FAILED ("CopyCursor");
+
+  return_val = _gdk_input_grab_pointer (native_window,
+					owner_events,
+					event_mask,
+					confine_to,
+					time);
+
+  if (return_val == GDK_GRAB_SUCCESS)
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) native_window)->impl);
+
+      SetCapture (GDK_WINDOW_HWND (native_window));
+      /* TODO_CSW: grab brokens, confine window, input_grab */
+      if (p_grab_cursor != NULL)
+	{
+	  if (GetCursor () == p_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (p_grab_cursor);
+	}
+
+      p_grab_cursor = hcursor;
+
+      if (p_grab_cursor != NULL)
+	SetCursor (p_grab_cursor);
+      else if (impl->hcursor != NULL)
+	SetCursor (impl->hcursor);
+      else
+	SetCursor (LoadCursor (NULL, IDC_ARROW));
+
+    }
+
+  return return_val;
 }
 
 void
@@ -505,6 +537,52 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
   /* TODO_CSW: cursor, confines, etc */
 
   _gdk_display_pointer_grab_update (display, 0);
+}
+
+
+static GdkWindow *
+find_window_for_mouse_event (GdkWindow* reported_window,
+			     MSG*       msg)
+{
+  HWND hwnd;
+  POINTS points;
+  POINT pt;
+  GdkWindow* other_window = NULL;
+
+  if (!_gdk_display_get_last_pointer_grab (_gdk_display))
+    return reported_window;
+
+  points = MAKEPOINTS (msg->lParam);
+  pt.x = points.x;
+  pt.y = points.y;
+  ClientToScreen (msg->hwnd, &pt);
+
+  hwnd = WindowFromPoint (pt);
+
+  if (hwnd != NULL)
+    {
+      RECT rect;
+
+      GetClientRect (hwnd, &rect);
+      ScreenToClient (hwnd, &pt);
+      if (!PtInRect (&rect, pt))
+	return _gdk_root;
+
+      other_window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
+    }
+
+  if (other_window == NULL)
+    return _gdk_root;
+
+  /* need to also adjust the coordinates to the new window */
+  pt.x = points.x;
+  pt.y = points.y;
+  ClientToScreen (msg->hwnd, &pt);
+  ScreenToClient (GDK_WINDOW_HWND (other_window), &pt);
+  /* ATTENTION: need to update client coords */
+  msg->lParam = MAKELPARAM (pt.x, pt.y);
+
+  return other_window;
 }
 
 GdkGrabStatus
@@ -696,7 +774,7 @@ print_event_state (guint state)
 }
 
 static void
-print_event (GdkEvent *event)
+print_event (const GdkEvent *event)
 {
   gchar *escaped, *kvname;
   gchar *selection_name, *target_name, *property_name;
@@ -910,9 +988,14 @@ append_event (GdkEvent *event)
   GList *link;
   
   fixup_event (event);
+#if 1
   link = _gdk_event_queue_append (_gdk_display, event);
+  /* event morphing, the passed in may not be valid afterwards */
   _gdk_windowing_got_event (_gdk_display, link, event, 0);
+#else
+  _gdk_event_queue_append (_gdk_display, event);
   GDK_NOTE (EVENTS, print_event (event));
+#endif
 }
 
 static void
@@ -2209,9 +2292,12 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      assign_object (&window, find_window_for_mouse_event (window, msg));
+      /* TODO_CSW?: there used to some synthesize and propagate */
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+      /* TODO_CSW? Emulate X11's automatic active grab */
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, msg);
 
@@ -2241,6 +2327,7 @@ gdk_event_translate (MSG  *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      assign_object (&window, find_window_for_mouse_event (window, msg));
 #if 0
       if (((GdkWindowObject *) window)->extension_events != 0 &&
 	  _gdk_input_ignore_core)
@@ -2262,9 +2349,13 @@ gdk_event_translate (MSG  *msg,
 			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      assign_object (&window, find_window_for_mouse_event (window, msg));
       toplevel = gdk_window_get_toplevel (window);
       if (current_toplevel != toplevel)
 	{
+	  GDK_NOTE (EVENTS, g_print (" toplevel %p -> %p", 
+	      current_toplevel ? GDK_WINDOW_HWND (current_toplevel) : NULL, 
+	      toplevel ? GDK_WINDOW_HWND (toplevel) : NULL));
 	  if (current_toplevel)
 	    synthesize_enter_or_leave_event (current_toplevel, msg, 
 					     GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
@@ -2273,7 +2364,7 @@ gdk_event_translate (MSG  *msg,
 	  assign_object (&current_toplevel, toplevel);
 	  track_mouse_event (TME_LEAVE, GDK_WINDOW_HWND (toplevel));
 	}
-      
+
       /* If we haven't moved, don't create any GDK event. Windows
        * sends WM_MOUSEMOVE messages after a new window is shows under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
@@ -2306,7 +2397,14 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
-
+#if 0 /* TODO_CSW? */
+      if (current_toplevel != NULL &&
+	  (((GdkWindowObject *) current_toplevel)->event_mask & GDK_LEAVE_NOTIFY_MASK))
+	{
+	  synthesize_enter_or_leave_event (current_toplevel, msg,
+	                                   GDK_LEAVE_NOTIFY, GDK_CROSSING_NORMAL, GDK_NOTIFY_ANCESTOR);
+	}
+#endif
       break;
 
     case WM_MOUSELEAVE:
@@ -2510,7 +2608,6 @@ gdk_event_translate (MSG  *msg,
       GDK_NOTE (EVENTS, g_print (" %#x %#x",
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
-#ifdef TODO_CSW
       grab = _gdk_display_get_last_pointer_grab (_gdk_display);
       if (grab != NULL)
 	{
@@ -2534,8 +2631,6 @@ gdk_event_translate (MSG  *msg,
 	  return_val = TRUE;
 	  *ret_valp = TRUE;
 	}
-#endif
-      
       break;
 
     case WM_SHOWWINDOW:

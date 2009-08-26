@@ -1600,6 +1600,32 @@ gdk_directfb_cairo_surface_destroy (void *data)
   impl->cairo_surface = NULL;
 }
 
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+                                       int width,
+                                       int height)
+{
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+                                     int width,
+                                     int height)
+{
+  GdkDrawableImplDirectFB *impl;
+  IDirectFB *dfb;
+  cairo_surface_t *ret;
+
+  impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
+  dfb = GDK_DISPLAY_DFB (gdk_drawable_get_display (drawable))->directfb;
+
+  ret = cairo_directfb_surface_create (dfb, impl->surface);
+  cairo_surface_set_user_data (ret,
+                               &gdk_directfb_cairo_key, drawable,
+                               gdk_directfb_cairo_surface_destroy);
+
+  return ret;
+}
 
 static cairo_surface_t *
 gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)

@@ -380,7 +380,12 @@ parse_object (GMarkupParseContext  *context,
           data->inside_requested_object = TRUE;
         }
       else
-        return;
+        {
+          g_free (object_class);
+          g_free (object_id);
+          g_free (constructor);
+          return;
+        }
     }
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -404,7 +409,8 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
-  g_hash_table_insert (data->object_ids, object_id, GINT_TO_POINTER (line));
+
+  g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
 }
 
 static void
@@ -1128,7 +1134,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->builder = builder;
   data->filename = filename;
   data->domain = g_strdup (domain);
-  data->object_ids = g_hash_table_new (g_str_hash, g_str_equal);
+  data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
+					    (GDestroyNotify)g_free, NULL);
 
   data->requested_objects = NULL;
   if (requested_objs)

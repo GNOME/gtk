@@ -548,21 +548,50 @@ void	gtk_widget_child_notify		  (GtkWidget	       *widget,
 					   const gchar	       *child_property);
 void	gtk_widget_thaw_child_notify	  (GtkWidget	       *widget);
 
+void       gtk_widget_set_can_focus       (GtkWidget           *widget,
+                                           gboolean             can_focus);
+gboolean   gtk_widget_get_can_focus       (GtkWidget           *widget);
+gboolean   gtk_widget_has_focus           (GtkWidget           *widget);
 gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
-void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
-void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
+void       gtk_widget_grab_focus          (GtkWidget           *widget);
+
+void       gtk_widget_set_can_default     (GtkWidget           *widget,
+                                           gboolean             can_default);
+gboolean   gtk_widget_get_can_default     (GtkWidget           *widget);
+gboolean   gtk_widget_has_default         (GtkWidget           *widget);
+void       gtk_widget_grab_default        (GtkWidget           *widget);
+
+gboolean   gtk_widget_has_grab            (GtkWidget           *widget);
 
 void                  gtk_widget_set_name               (GtkWidget    *widget,
 							 const gchar  *name);
 G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
+
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);
+GtkStateType          gtk_widget_get_state              (GtkWidget    *widget);
+
 void                  gtk_widget_set_sensitive          (GtkWidget    *widget,
 							 gboolean      sensitive);
+gboolean              gtk_widget_get_sensitive          (GtkWidget    *widget);
+gboolean              gtk_widget_is_sensitive           (GtkWidget    *widget);
+
+void                  gtk_widget_set_visible            (GtkWidget    *widget,
+                                                         gboolean      visible);
+gboolean              gtk_widget_get_visible            (GtkWidget    *widget);
+
+void                  gtk_widget_set_has_window         (GtkWidget    *widget,
+                                                         gboolean      has_window);
+gboolean              gtk_widget_get_has_window         (GtkWidget    *widget);
+
 void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
 							 gboolean      app_paintable);
+gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
+
 void                  gtk_widget_set_double_buffered    (GtkWidget    *widget,
 							 gboolean      double_buffered);
+gboolean              gtk_widget_get_double_buffered    (GtkWidget    *widget);
+
 void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
 							 gboolean      redraw_on_allocate);
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
@@ -575,6 +604,11 @@ void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
 							 gboolean      is_visible);
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 GdkWindow*            gtk_widget_get_window             (GtkWidget    *widget);
+
+void                  gtk_widget_get_allocation         (GtkWidget     *widget,
+                                                         GtkAllocation *allocation);
+void                  gtk_widget_set_allocation         (GtkWidget     *widget,
+                                                         const GtkAllocation *allocation);
 
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);

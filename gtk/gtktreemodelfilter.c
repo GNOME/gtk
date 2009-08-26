@@ -3037,6 +3037,7 @@ gtk_tree_model_filter_convert_child_iter_to_iter (GtkTreeModelFilter *filter,
   g_return_val_if_fail (filter->priv->child_model != NULL, FALSE);
   g_return_val_if_fail (filter_iter != NULL, FALSE);
   g_return_val_if_fail (child_iter != NULL, FALSE);
+  g_return_val_if_fail (filter_iter != child_iter, FALSE);
 
   filter_iter->stamp = 0;
 
@@ -3076,6 +3077,7 @@ gtk_tree_model_filter_convert_iter_to_child_iter (GtkTreeModelFilter *filter,
   g_return_if_fail (child_iter != NULL);
   g_return_if_fail (filter_iter != NULL);
   g_return_if_fail (filter_iter->stamp == filter->priv->stamp);
+  g_return_if_fail (filter_iter != child_iter);
 
   if (GTK_TREE_MODEL_FILTER_CACHE_CHILD_ITERS (filter))
     {

@@ -138,12 +138,16 @@ struct _GdkWin32SingleFont
   FONTSIGNATURE fs;
 };
 
+#ifndef GDK_DISABLE_DEPRECATED
+
 struct _GdkFontPrivateWin32
 {
   GdkFontPrivate base;
   GSList *fonts;		/* List of GdkWin32SingleFonts */
   GSList *names;
 };
+
+#endif /* GDK_DISABLE_DEPRECATED */
 
 struct _GdkVisualClass
 {

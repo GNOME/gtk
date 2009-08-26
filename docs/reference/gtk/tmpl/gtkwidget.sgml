@@ -693,6 +693,11 @@ internal child "accessible" of a <structname>GtkWidget</structname>.
 
 </para>
 
+<!-- ##### ARG GtkWidget:double-buffered ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWidget:events ##### -->
 <para>
 
@@ -2628,6 +2633,168 @@ This function is deprecated; it does nothing.
 
 
 <!-- ##### FUNCTION gtk_widget_get_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_allocation ##### -->
+<para>
+
+</para>
+
+@widget: 
+@allocation: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_allocation ##### -->
+<para>
+
+</para>
+
+@widget: 
+@allocation: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_app_paintable ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_can_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_can_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+@can_default: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_can_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_can_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+@can_focus: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_double_buffered ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_has_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_has_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@has_window: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_sensitive ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_is_sensitive ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_state ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_visible ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_set_visible ##### -->
+<para>
+
+</para>
+
+@widget: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_widget_has_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_has_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_has_grab ##### -->
 <para>
 
 </para>

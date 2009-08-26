@@ -235,6 +235,7 @@ gtk_OBJECTS = \
 	gtkdrawingarea.obj \
 	gtkeditable.obj \
 	gtkentry.obj \
+	gtkentrybuffer.obj \
 	gtkentrycompletion.obj \
 	gtkeventbox.obj \
 	gtkexpander.obj \
@@ -285,6 +286,7 @@ gtk_OBJECTS = \
 	gtkmnemonichash.obj \
 	gtkmodules.obj \
 	gtkmountoperation.obj \
+	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
 	gtkorientable.obj \
@@ -406,6 +408,7 @@ gtk_public_h_sources =		\
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
@@ -569,10 +572,10 @@ gtk.def: gtk.symbols makefile.msc
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
-	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h
+	$(PERL) makegtkalias.pl < gtk.symbols > gtkalias.h
 
 gtkaliasdef.c: gtk.symbols
-	 perl makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
+	 $(PERL) makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'

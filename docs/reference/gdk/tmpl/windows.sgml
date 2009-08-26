@@ -221,6 +221,11 @@ these types.
 @arg3: 
 @arg4: 
 
+<!-- ##### ARG GdkWindow:cursor ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
 Describes the kind of window.
@@ -1240,6 +1245,15 @@ window.
 
 @window: 
 @cursor: 
+
+
+<!-- ##### FUNCTION gdk_window_get_cursor ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### MACRO gdk_window_set_colormap ##### -->

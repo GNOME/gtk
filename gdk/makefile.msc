@@ -18,22 +18,6 @@ WTKIT = $(TOP)\wtkit126
 ###############################################################
 
 # Nothing much configurable below
-
-!IFNDEF DEBUG
-# Full optimization:
-OPTIMIZE = -Ox -MD -Zi
-LINKDEBUG = /nodefaultlib:libc.lib
-!ELSE
-# Debugging:
-OPTIMIZE = -Zi -MDd
-LINKDEBUG = /nodefaultlib:libcd.lib /nodefaultlib:libc.lib /debug
-!ENDIF
-
-# cl -? describes the options
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
-
-LDFLAGS = /link $(LINKDEBUG)
-
 # overwrite version?
 GTK_VER=2.0
 GDK_PIXBUF_VER=$(GTK_VER)
@@ -42,11 +26,15 @@ GDK_PIXBUF_VER=$(GTK_VER)
 PERL = perl
 !ENDIF
 
-CFLAGS = -FImsvc_recommended_pragmas.h -I . -I .. \
+INCLUDES = -FImsvc_recommended_pragmas.h \
+	-I . -I .. \
 	$(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) -I ../gdk-pixbuf \
-	$(G_DEBUGGING) -DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN \
+
+DEFINES = \
+	-DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN \
 	-DGDK_VERSION=\"$(GTK_VER)\" \
-	-DG_LOG_DOMAIN=\"Gdk\"
+	-DG_LOG_DOMAIN=\"Gdk\" \
+	-DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
 
 EXTRALIBS = \
 	$(WTKIT)\lib\i386\wntab32x.lib \
@@ -137,10 +125,10 @@ gdk_public_h_sources = \
 
 # private marshalers
 gdkmarshalers.h : gdkmarshalers.list
-	$(GLIB)\gobject\glib-genmarshal --prefix=gdk_marshal gdkmarshalers.list --header >>gdkmarshalers.h
+	$(GLIB)\gobject\glib-genmarshal --prefix=_gdk_marshal gdkmarshalers.list --header >>gdkmarshalers.h
 
 gdkmarshalers.c : gdkmarshalers.list
-	$(GLIB)\gobject\glib-genmarshal --prefix=gdk_marshal gdkmarshalers.list --body >gdkmarshalers.c
+	$(GLIB)\gobject\glib-genmarshal --prefix=_gdk_marshal gdkmarshalers.list --body >gdkmarshalers.c
 
 gdkenumtypes.h: $(gdk_public_h_sources) gdkenumtypes.h.template
 	$(PERL) $(GLIB)\gobject\glib-mkenums --template gdkenumtypes.h.template \
@@ -183,9 +171,6 @@ gdk-x11-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def x11\gdk-x11.lib
 
 testgdk.exe : libgdk-win32-$(GTK_VER)-0.dll testgdk.obj
 	$(CC) -Fetestgdk.exe testgdk.obj gdk-win32-$(GTK_VER).lib $(EXTRALIBS) $(LDFLAGS)
-
-.c.obj :
-	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
 clean::
 	cd win32

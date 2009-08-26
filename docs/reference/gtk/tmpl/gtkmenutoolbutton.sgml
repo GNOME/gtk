@@ -19,19 +19,21 @@ A GtkToolItem containing a button with an additional dropdown menu
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-  <varlistentry>
-    <term>#GtkToolbar</term>
-    <listitem><para>The toolbar widget</para></listitem>
-    <term>#GtkToolButton</term>
-    <listitem>
-      <para>
-	The parent class of #GtkMenuToolButton. The properties
-	"label_widget", "label", "icon_widget", and "stock_id" on
-	#GtkToolButton determine the label and icon used on
-	#GtkMenuToolButton<!-- -->s.
-      </para>
-    </listitem>
-  </varlistentry>
+  <variablelist>
+    <varlistentry>
+      <term>#GtkToolbar</term>
+      <listitem><para>The toolbar widget</para></listitem>
+      <term>#GtkToolButton</term>
+      <listitem>
+        <para>
+          The parent class of #GtkMenuToolButton. The properties
+          "label_widget", "label", "icon_widget", and "stock_id" on
+          #GtkToolButton determine the label and icon used on
+          #GtkMenuToolButton<!-- -->s.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->

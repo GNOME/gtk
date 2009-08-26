@@ -1268,7 +1268,10 @@ gtk_old_editable_get_type
 <TITLE>GtkEntry</TITLE>
 GtkEntry
 gtk_entry_new
+gtk_entry_new_with_buffer
 gtk_entry_new_with_max_length
+gtk_entry_get_buffer
+gtk_entry_set_buffer
 gtk_entry_set_text
 gtk_entry_append_text
 gtk_entry_prepend_text
@@ -1340,6 +1343,34 @@ GTK_IS_ENTRY_CLASS
 GTK_ENTRY_GET_CLASS
 <SUBSECTION Private>
 gtk_entry_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkentrybuffer</FILE>
+<TITLE>GtkEntryBuffer</TITLE>
+GtkEntryBuffer
+gtk_entry_buffer_new
+gtk_entry_buffer_get_text
+gtk_entry_buffer_set_text
+gtk_entry_buffer_get_bytes
+gtk_entry_buffer_get_length
+gtk_entry_buffer_get_max_length
+gtk_entry_buffer_set_max_length
+gtk_entry_buffer_insert_text
+gtk_entry_buffer_delete_text
+gtk_entry_buffer_emit_deleted_text
+gtk_entry_buffer_emit_inserted_text
+
+<SUBSECTION Standard>
+GTK_ENTRY_BUFFER
+GTK_IS_ENTRY_BUFFER
+GTK_TYPE_ENTRY_BUFFER
+GTK_ENTRY_BUFFER_CLASS
+GTK_IS_ENTRY_BUFFER_CLASS
+GTK_ENTRY_BUFFER_GET_CLASS
+GTK_ENTRY_BUFFER_MAX_SIZE
+<SUBSECTION Private>
+gtk_entry_buffer_get_type
 </SECTION>
 
 <SECTION>
@@ -1452,6 +1483,8 @@ gtk_file_chooser_set_show_hidden
 gtk_file_chooser_get_show_hidden
 gtk_file_chooser_set_do_overwrite_confirmation
 gtk_file_chooser_get_do_overwrite_confirmation
+gtk_file_chooser_set_create_folders
+gtk_file_chooser_get_create_folders
 gtk_file_chooser_set_current_name
 gtk_file_chooser_get_filename
 gtk_file_chooser_set_filename
@@ -1939,6 +1972,8 @@ gtk_icon_view_set_column_spacing
 gtk_icon_view_get_column_spacing
 gtk_icon_view_set_margin
 gtk_icon_view_get_margin
+gtk_icon_view_set_item_padding
+gtk_icon_view_get_item_padding
 gtk_icon_view_select_path
 gtk_icon_view_unselect_path
 gtk_icon_view_path_is_selected
@@ -2275,6 +2310,8 @@ gtk_label_set_use_underline
 gtk_label_set_single_line_mode
 gtk_label_set_angle
 gtk_label_get_current_uri
+gtk_label_set_track_visited_links
+gtk_label_get_track_visited_links
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL
@@ -4995,6 +5032,14 @@ gtk_cell_renderer_editing_canceled
 gtk_cell_renderer_stop_editing
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_set_fixed_size
+gtk_cell_renderer_get_visible
+gtk_cell_renderer_set_visible
+gtk_cell_renderer_get_sensitive
+gtk_cell_renderer_set_sensitive
+gtk_cell_renderer_get_alignment
+gtk_cell_renderer_set_alignment
+gtk_cell_renderer_get_padding
+gtk_cell_renderer_set_padding
 
 <SUBSECTION Standard>
 GTK_CELL_RENDERER
@@ -5100,6 +5145,9 @@ gtk_cell_renderer_toggle_get_radio
 gtk_cell_renderer_toggle_set_radio
 gtk_cell_renderer_toggle_get_active
 gtk_cell_renderer_toggle_set_active
+gtk_cell_renderer_toggle_get_activatable
+gtk_cell_renderer_toggle_set_activatable
+
 <SUBSECTION Standard>
 GTK_CELL_RENDERER_TOGGLE
 GTK_IS_CELL_RENDERER_TOGGLE
@@ -5529,6 +5577,25 @@ gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 gtk_widget_get_snapshot
 gtk_widget_get_window
+gtk_widget_get_allocation
+gtk_widget_set_allocation
+gtk_widget_get_app_paintable
+gtk_widget_get_can_default
+gtk_widget_set_can_default
+gtk_widget_get_can_focus
+gtk_widget_set_can_focus
+gtk_widget_get_double_buffered
+gtk_widget_get_has_window
+gtk_widget_set_has_window
+gtk_widget_get_sensitive
+gtk_widget_is_sensitive
+gtk_widget_get_state
+gtk_widget_get_visible
+gtk_widget_set_visible
+gtk_widget_has_default
+gtk_widget_has_focus
+gtk_widget_has_grab
+
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -6554,6 +6621,7 @@ gtk_print_operation_set_print_settings
 gtk_print_operation_get_print_settings
 gtk_print_operation_set_job_name
 gtk_print_operation_set_n_pages
+gtk_print_operation_get_n_pages_to_print
 gtk_print_operation_set_current_page
 gtk_print_operation_set_use_full_page
 gtk_print_operation_set_unit
@@ -6572,6 +6640,8 @@ gtk_print_operation_set_support_selection
 gtk_print_operation_get_support_selection
 gtk_print_operation_set_has_selection
 gtk_print_operation_get_has_selection
+gtk_print_operation_set_embed_page_setup
+gtk_print_operation_get_embed_page_setup
 gtk_print_run_page_setup_dialog
 GtkPageSetupDoneFunc
 gtk_print_run_page_setup_dialog_async
@@ -6620,6 +6690,9 @@ gtk_print_unix_dialog_set_support_selection
 gtk_print_unix_dialog_get_support_selection
 gtk_print_unix_dialog_set_has_selection
 gtk_print_unix_dialog_get_has_selection
+gtk_print_unix_dialog_set_embed_page_setup
+gtk_print_unix_dialog_get_embed_page_setup
+gtk_print_unix_dialog_get_page_setup_set
 GtkPrintCapabilities
 gtk_print_unix_dialog_set_manual_capabilities
 gtk_print_unix_dialog_get_manual_capabilities

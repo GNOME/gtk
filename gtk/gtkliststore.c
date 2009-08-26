@@ -337,7 +337,6 @@ static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
-  GType *new_columns;
   int i;
 
   if (list_store->n_columns == n_columns)
@@ -494,10 +493,16 @@ static gboolean
 gtk_list_store_iter_next (GtkTreeModel  *tree_model,
 			  GtkTreeIter   *iter)
 {
+  gboolean retval;
+
   g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, FALSE);
   iter->user_data = g_sequence_iter_next (iter->user_data);
 
-  return !g_sequence_iter_is_end (iter->user_data);
+  retval = g_sequence_iter_is_end (iter->user_data);
+  if (retval)
+    iter->stamp = 0;
+
+  return !retval;
 }
 
 static gboolean
@@ -509,7 +514,10 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
   
   /* this is a list, nodes have no children */
   if (parent)
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 
   if (g_sequence_get_length (list_store->seq) > 0)
     {
@@ -518,7 +526,10 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
       return TRUE;
     }
   else
-    return FALSE;
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
 }
 
 static gboolean
@@ -551,6 +562,8 @@ gtk_list_store_iter_nth_child (GtkTreeModel *tree_model,
   GtkListStore *list_store = (GtkListStore *) tree_model;
   GSequenceIter *child;
 
+  iter->stamp = 0;
+
   if (parent)
     return FALSE;
 
@@ -570,6 +583,7 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
 			    GtkTreeIter  *iter,
 			    GtkTreeIter  *child)
 {
+  iter->stamp = 0;
   return FALSE;
 }
 

@@ -645,6 +645,7 @@ gdk_window_move_region
 gdk_window_set_background
 gdk_window_set_back_pixmap
 gdk_window_set_cursor
+gdk_window_get_cursor
 gdk_window_get_geometry
 gdk_window_get_origin
 gdk_window_get_root_coords

@@ -945,8 +945,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   g_object_get (tooltip_widget, "has-tooltip", &has_tooltip, NULL);
 
-  g_assert (tooltip != NULL);
-
   return_value = gtk_tooltip_run_requery (&tooltip_widget, tooltip, &x, &y);
   if (!return_value)
     return;
@@ -1048,11 +1046,17 @@ tooltip_popup_timeout (gpointer data)
   GtkTooltip *tooltip;
 
   display = GDK_DISPLAY_OBJECT (data);
+  tooltip = g_object_get_data (G_OBJECT (display),
+			       "gdk-display-current-tooltip");
+
+  /* This usually does not happen.  However, it does occur in language
+   * bindings were reference counting of objects behaves differently.
+   */
+  if (!tooltip)
+    return FALSE;
 
   gtk_tooltip_show_tooltip (display);
 
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
   tooltip->timeout_id = 0;
 
   return FALSE;
@@ -1068,7 +1072,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
 
-  if (tooltip && GTK_TOOLTIP_VISIBLE (tooltip))
+  if (!tooltip || GTK_TOOLTIP_VISIBLE (tooltip))
     return;
 
   if (tooltip->timeout_id)
