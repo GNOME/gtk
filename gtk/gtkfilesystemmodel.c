@@ -1130,7 +1130,7 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
   g_object_ref (model);
   g_file_enumerate_children_async (model->dir,
                                    attributes,
-                                   0,
+                                   G_FILE_QUERY_INFO_NONE,
                                    IO_PRIORITY,
                                    model->cancellable,
                                    gtk_file_system_model_got_enumerator,
