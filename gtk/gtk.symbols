@@ -3294,6 +3294,7 @@ gtk_radio_tool_button_set_group
 #if IN_FILE(__GTK_RANGE_C__)
 gtk_range_get_adjustment
 gtk_range_get_fill_level
+gtk_range_get_flippable
 gtk_range_get_inverted
 gtk_range_get_lower_stepper_sensitivity
 gtk_range_get_restrict_to_fill_level
@@ -3304,6 +3305,7 @@ gtk_range_get_upper_stepper_sensitivity
 gtk_range_get_value
 gtk_range_set_adjustment
 gtk_range_set_fill_level
+gtk_range_set_flippable
 gtk_range_set_increments
 gtk_range_set_inverted
 gtk_range_set_lower_stepper_sensitivity
