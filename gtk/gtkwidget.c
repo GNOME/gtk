@@ -694,7 +694,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							GTK_PARAM_READABLE));
 
   /**
-   * GtkWidget::double-buffered
+   * GtkWidget:double-buffered
    *
    * Whether or not the widget is double buffered.
    *
