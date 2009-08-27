@@ -65,8 +65,8 @@ struct _GtkFileSystemModel
 
   GFile *               dir;            /* directory that's displayed */
   guint                 dir_thaw_source;/* GSource id for unfreezing the model */
-  char *                attributes;     /* attributes the file info must contain */
-  GFileMonitor *        dir_monitor;    /* directory that is monitored */
+  char *                attributes;     /* attributes the file info must contain, or NULL for all attributes */
+  GFileMonitor *        dir_monitor;    /* directory that is monitored, or NULL if monitoring was not supported */
 
   GCancellable *        cancellable;    /* cancellable in use for all operations - cancelled on dispose */
   GArray *              files;          /* array of FileModelNode containing all our files */
