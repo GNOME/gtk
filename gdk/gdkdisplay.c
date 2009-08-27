@@ -1037,11 +1037,6 @@ switch_to_pointer_grab (GdkDisplay *display,
 	  
 	  /* We're now ungrabbed, update the window_under_pointer */
 	  _gdk_display_set_window_under_pointer (display, pointer_window);
-
-	  if (last_grab->implicit_ungrab)
-	    generate_grab_broken_event (last_grab->window,
-					FALSE, TRUE,
-					NULL);
 	}
     }
   
@@ -1089,12 +1084,11 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
 	    next_grab = NULL; /* Actually its not yet active */
 	}
 
-      if (next_grab == NULL ||
-	  current_grab->window != next_grab->window)
+      if ((next_grab == NULL && current_grab->implicit_ungrab) ||
+	  (next_grab != NULL && current_grab->window != next_grab->window))
 	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
 				    FALSE, current_grab->implicit,
 				    next_grab? next_grab->window : NULL);
-
 
       /* Remove old grab */
       display->pointer_grabs =
