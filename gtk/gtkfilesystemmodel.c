@@ -1191,6 +1191,10 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
  * _gtk_file_system_model_new_for_directory:
  * @directory: the directory to show.
  * @attributes: attributes to immediately load or %NULL for all
+ * @get_func: function that the model should call to query data about a file
+ * @get_data: user data to pass to the @get_func
+ * @n_columns: number of columns
+ * @...: @n_columns #GType types for the columns
  *
  * Creates a new #GtkFileSystemModel object. The #GtkFileSystemModel
  * object wraps the given @directory as a #GtkTreeModel.
