@@ -9732,6 +9732,18 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (!event_window)
     return;
 
+  event_private = GDK_WINDOW_OBJECT (event_window);
+
+#ifdef DEBUG_WINDOW_PRINTING
+  if (event->type == GDK_KEY_PRESS &&
+      (event->key.keyval == 0xa7 ||
+       event->key.keyval == 0xbd))
+    {
+      gdk_window_print_tree (event_window, 0,
+			     event->key.keyval == 0xbd);
+    }
+#endif
+
   if (_gdk_native_windows)
     {
       if (event->type == GDK_BUTTON_PRESS &&
@@ -9767,18 +9779,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
 
       return;
     }
-
-  event_private = GDK_WINDOW_OBJECT (event_window);
-
-#ifdef DEBUG_WINDOW_PRINTING
-  if (event->type == GDK_KEY_PRESS &&
-      (event->key.keyval == 0xa7 ||
-       event->key.keyval == 0xbd))
-    {
-      gdk_window_print_tree (event_window, 0,
-			     event->key.keyval == 0xbd);
-    }
-#endif
 
   if (event->type == GDK_VISIBILITY_NOTIFY)
     {
