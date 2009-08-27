@@ -6246,7 +6246,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
       gtk_adjustment_changed (tree_view->priv->vadjustment);
 
       if (queue_resize)
-        gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
+        gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 
   if (path) gtk_tree_path_free (path);
