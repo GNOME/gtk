@@ -1136,7 +1136,9 @@ _gdk_display_has_pointer_grab (GdkDisplay *display,
   return NULL;
 }
 
-/* Returns true if last grab was ended */
+/* Returns true if last grab was ended
+ * If if_child is non-NULL, end the grab only if the grabbed
+ * window is the same as if_child or a descendant of it */
 gboolean
 _gdk_display_end_pointer_grab (GdkDisplay *display,
 			       gulong serial,
@@ -1154,7 +1156,7 @@ _gdk_display_end_pointer_grab (GdkDisplay *display,
   grab = l->data;
   if (grab &&
       (if_child == NULL ||
-       _gdk_window_event_parent_of (grab->window, if_child)))
+       _gdk_window_event_parent_of (if_child, grab->window)))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;
