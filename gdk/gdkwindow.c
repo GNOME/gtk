@@ -822,6 +822,61 @@ gdk_window_update_visibility_recursively (GdkWindowObject *private,
     }
 }
 
+static gboolean
+should_apply_clip_as_shape (GdkWindowObject *private)
+{
+  return
+    gdk_window_has_impl (private) &&
+    /* Not for offscreens */
+    private->window_type != GDK_WINDOW_OFFSCREEN &&
+    /* or for toplevels */
+    !gdk_window_is_toplevel (private) &&
+    /* or for foreign windows */
+    private->window_type != GDK_WINDOW_FOREIGN &&
+    /* or for the root window */
+    private->window_type != GDK_WINDOW_ROOT;
+}
+
+static void
+apply_shape (GdkWindowObject *private,
+	     GdkRegion *region)
+{
+  GdkWindowImplIface *impl_iface;
+
+  /* We trash whether we applied a shape so that
+     we can avoid unsetting it many times, which
+     could happen in e.g. apply_clip_as_shape as
+     windows get resized */
+  impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
+  if (region)
+    impl_iface->shape_combine_region ((GdkWindow *)private,
+				      region, 0, 0);
+  else if (private->applied_shape)
+    impl_iface->shape_combine_region ((GdkWindow *)private,
+				      NULL, 0, 0);
+
+  private->applied_shape = region != NULL;
+}
+
+static void
+apply_clip_as_shape (GdkWindowObject *private)
+{
+  GdkRectangle r;
+
+  r.x = r.y = 0;
+  r.width = private->width;
+  r.height = private->height;
+
+  /* We only apply the clip region if would differ
+     from the actual clip region implied by the size
+     of the window. This is to avoid unneccessarily
+     adding meaningless shapes to all native subwindows */
+  if (!gdk_region_rect_equal (private->clip_region, &r))
+    apply_shape (private, private->clip_region);
+  else
+    apply_shape (private, NULL);
+}
+
 static void
 recompute_visible_regions_internal (GdkWindowObject *private,
 				    gboolean recalculate_clip,
@@ -971,21 +1026,8 @@ recompute_visible_regions_internal (GdkWindowObject *private,
     }
 
   if (clip_region_changed &&
-      gdk_window_has_impl (private) &&
-      /* Not for offscreens */
-      private->window_type != GDK_WINDOW_OFFSCREEN &&
-      /* or for non-shaped toplevels */
-      (private->shaped ||
-       (private->parent != NULL &&
-	private->parent->window_type != GDK_WINDOW_ROOT)) &&
-      /* or for foreign windows */
-      private->window_type != GDK_WINDOW_FOREIGN &&
-      /* or for the root window */
-      private->window_type != GDK_WINDOW_ROOT
-      )
-    {
-      GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
-    }
+      should_apply_clip_as_shape (private))
+    apply_clip_as_shape (private);
 
   if (recalculate_siblings &&
       !gdk_window_is_toplevel (private))
@@ -1470,7 +1512,7 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowObject *new_parent_private;
   GdkWindowObject *old_parent;
   GdkScreen *screen;
-  gboolean show, was_mapped;
+  gboolean show, was_mapped, applied_clip_as_shape;
   gboolean do_reparent_to_impl;
   GdkEventMask old_native_event_mask;
   GdkWindowImplIface *impl_iface;
@@ -1524,6 +1566,8 @@ gdk_window_reparent (GdkWindow *window,
   if (new_parent_private->window_type == GDK_WINDOW_ROOT ||
       new_parent_private->window_type == GDK_WINDOW_FOREIGN)
     gdk_window_ensure_native (window);
+
+  applied_clip_as_shape = should_apply_clip_as_shape (private);
 
   old_native_event_mask = 0;
   do_reparent_to_impl = FALSE;
@@ -1615,6 +1659,13 @@ gdk_window_reparent (GdkWindow *window,
   recompute_visible_regions (private, TRUE, FALSE);
   if (old_parent && GDK_WINDOW_TYPE (old_parent) != GDK_WINDOW_ROOT)
     recompute_visible_regions (old_parent, FALSE, TRUE);
+
+  /* We used to apply the clip as the shape, but no more.
+     Reset this to the real shape */
+  if (gdk_window_has_impl (private) &&
+      applied_clip_as_shape &&
+      !should_apply_clip_as_shape (private))
+    apply_shape (private, private->shape);
 
   if (do_reparent_to_impl)
     reparent_to_impl (private);
@@ -1714,7 +1765,8 @@ gdk_window_ensure_native (GdkWindow *window)
 
   /* The shape may not have been set, as the clip region doesn't actually
      change, so do it here manually */
-  GDK_WINDOW_IMPL_GET_IFACE (private->impl)->shape_combine_region ((GdkWindow *)private, private->clip_region, 0, 0);
+  if (should_apply_clip_as_shape (private))
+    apply_clip_as_shape (private);
 
   reparent_to_impl (private);
 
@@ -7699,6 +7751,10 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     private->shape = NULL;
 
   recompute_visible_regions (private, TRUE, FALSE);
+
+  if (gdk_window_has_impl (private) &&
+      !should_apply_clip_as_shape (private))
+    apply_shape (private, private->shape);
 
   if (old_region)
     {

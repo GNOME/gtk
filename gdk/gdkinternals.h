@@ -262,6 +262,7 @@ struct _GdkWindowObject
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
   guint viewable : 1; /* mapped and all parents mapped */
+  guint applied_shape : 1;
 
   guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
