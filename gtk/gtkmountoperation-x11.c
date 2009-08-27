@@ -665,7 +665,7 @@ pid_get_env (GPid         pid,
               ret = g_strdup (env + n + key_len + 1);
 
               /* skip invalid UTF-8 */
-              if (!g_utf8_validate (ret, -1, (const gchar *) &end))
+              if (!g_utf8_validate (ret, -1, (const gchar **) &end))
                 *end = '\0';
               break;
             }
@@ -707,7 +707,7 @@ pid_get_command_line (GPid pid)
     }
 
   /* skip invalid UTF-8 */
-  if (!g_utf8_validate (cmdline_contents, -1, (const gchar *) &end))
+  if (!g_utf8_validate (cmdline_contents, -1, (const gchar **) &end))
       *end = '\0';
 
  out:
