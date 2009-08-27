@@ -1069,9 +1069,9 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
                                           model);
       g_object_unref (enumerator);
       model->dir_monitor = g_file_monitor_directory (model->dir,
-                                                     0,
+                                                     G_FILE_MONITOR_NONE,
                                                      model->cancellable,
-                                                     NULL);
+                                                     NULL); /* we don't mind if directory monitoring isn't supported, so the GError is NULL here */
       if (model->dir_monitor)
         g_signal_connect (model->dir_monitor,
                           "changed",
