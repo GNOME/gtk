@@ -1122,8 +1122,7 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
                                      GFile *             dir,
 			             const gchar *       attributes)
 {
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (dir == NULL || G_IS_FILE (dir));
+  g_assert (G_IS_FILE (dir));
 
   model->dir = g_object_ref (dir);
   model->attributes = g_strdup (attributes);
