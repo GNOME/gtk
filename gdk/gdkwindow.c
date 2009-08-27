@@ -7368,8 +7368,10 @@ gdk_window_get_geometry (GdkWindow *window,
 	  parent = private->parent;
 	  if (parent && !gdk_window_has_impl (parent))
 	    {
-	      *x -= parent->abs_x;
-	      *y -= parent->abs_y;
+	      if (x)
+		*x -= parent->abs_x;
+	      if (y)
+		*y -= parent->abs_y;
 	    }
 	}
       else
