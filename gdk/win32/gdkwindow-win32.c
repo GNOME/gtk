@@ -2353,8 +2353,6 @@ gdk_win32_window_shape_combine_mask (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_mask: %p: none\n",
 			       GDK_WINDOW_HWND (window)));
       SetWindowRgn (GDK_WINDOW_HWND (window), NULL, TRUE);
-
-      private->shaped = FALSE;
     }
   else
     {
@@ -2368,8 +2366,6 @@ gdk_win32_window_shape_combine_mask (GdkWindow *window,
       hrgn = _gdk_win32_bitmap_to_hrgn (mask);
 
       do_shape_combine_region (window, hrgn, x, y);
-
-      private->shaped = TRUE;
     }
 }
 
@@ -3422,8 +3418,6 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
       GDK_NOTE (MISC, g_print ("gdk_window_shape_combine_region: %p: none\n",
 			       GDK_WINDOW_HWND (window)));
       SetWindowRgn (GDK_WINDOW_HWND (window), NULL, TRUE);
-
-      private->shaped = FALSE;
     }
   else
     {
@@ -3436,8 +3430,6 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
 			       hrgn));
 
       do_shape_combine_region (window, hrgn, offset_x, offset_y);
-
-      private->shaped = TRUE;
     }
 }
 
