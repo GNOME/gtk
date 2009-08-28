@@ -5088,6 +5088,7 @@ gtk_widget_set_tooltip_markup
 gtk_widget_set_tooltip_text
 gtk_widget_set_tooltip_window
 gtk_widget_set_visible
+gtk_widget_set_window
 gtk_widget_shape_combine_mask
 gtk_widget_input_shape_combine_mask
 gtk_widget_show
