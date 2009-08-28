@@ -9638,6 +9638,15 @@ gdk_window_print (GdkWindowObject *window,
 		  int indent)
 {
   GdkRectangle r;
+  const char *window_types[] = {
+    "root",
+    "toplevel",
+    "child",
+    "dialog",
+    "temp",
+    "foreign",
+    "offscreen"
+  };
 
   g_print ("%*s%p: [%s] %d,%d %dx%d", indent, "", window,
 	   window->user_data ? g_type_name_from_instance (window->user_data) : "no widget",
@@ -9652,8 +9661,14 @@ gdk_window_print (GdkWindowObject *window,
 #endif
     }
 
+  if (window->window_type != GDK_WINDOW_CHILD)
+    g_print (" %s", window_types[window->window_type]);
+
   if (window->input_only)
     g_print (" input-only");
+
+  if (window->shaped)
+    g_print (" shaped");
 
   if (!gdk_window_is_visible ((GdkWindow *)window))
     g_print (" hidden");
