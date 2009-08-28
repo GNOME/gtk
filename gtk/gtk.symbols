@@ -5018,6 +5018,8 @@ gtk_widget_intersect
 gtk_widget_is_ancestor
 gtk_widget_is_focus
 gtk_widget_is_sensitive
+gtk_widget_is_toplevel
+gtk_widget_is_drawable
 gtk_widget_keynav_failed
 gtk_widget_list_accel_closures
 gtk_widget_list_mnemonic_labels

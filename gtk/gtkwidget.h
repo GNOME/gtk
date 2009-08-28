@@ -584,6 +584,9 @@ void                  gtk_widget_set_has_window         (GtkWidget    *widget,
                                                          gboolean      has_window);
 gboolean              gtk_widget_get_has_window         (GtkWidget    *widget);
 
+gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
+gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
+
 void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
 							 gboolean      app_paintable);
 gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
@@ -594,12 +597,15 @@ gboolean              gtk_widget_get_double_buffered    (GtkWidget    *widget);
 
 void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
 							 gboolean      redraw_on_allocate);
+
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
 							 GtkWidget    *parent);
 GtkWidget           * gtk_widget_get_parent             (GtkWidget    *widget);
+
 void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
 							 GdkWindow    *parent_window);
 GdkWindow           * gtk_widget_get_parent_window      (GtkWidget    *widget);
+
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
 							 gboolean      is_visible);
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);

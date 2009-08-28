@@ -5702,6 +5702,46 @@ gtk_widget_get_has_window (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_is_toplevel:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is a toplevel widget. Currently only
+ * #GtkWindow and #GtkInvisible are toplevel widgets. Toplevel
+ * widgets have no parent widget.
+ *
+ * Return value: %TRUE if @widget is a toplevel, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_is_toplevel (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_TOPLEVEL) != 0;
+}
+
+/**
+ * gtk_widget_is_drawable:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can be drawn to. A widget can be drawn
+ * to if it is mapped and visible.
+ *
+ * Return value: %TRUE if @widget is drawable, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_is_drawable (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0 &&
+          (GTK_WIDGET_FLAGS (wid) & GTK_MAPPED) != 0);
+}
+
+/**
  * gtk_widget_set_app_paintable:
  * @widget: a #GtkWidget
  * @app_paintable: %TRUE if the application will paint on the widget
