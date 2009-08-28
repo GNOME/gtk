@@ -12558,14 +12558,24 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
   gtk_tree_row_reference_free (tree_view->priv->cursor);
   tree_view->priv->cursor = NULL;
 
-  /* One cannot set the cursor on a separator. */
-  if (!row_is_separator (tree_view, NULL, path))
+  /* One cannot set the cursor on a separator.   Also, if
+   * _gtk_tree_view_find_node returns TRUE, it ran out of tree
+   * before finding the tree and node belonging to path.  The
+   * path maps to a non-existing path and we will silently bail out.
+   * We unset tree and node to avoid further processing.
+   */
+  if (!row_is_separator (tree_view, NULL, path)
+      && _gtk_tree_view_find_node (tree_view, path, &tree, &node) == FALSE)
     {
       tree_view->priv->cursor =
-	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-					  tree_view->priv->model,
-					  path);
-      _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+          gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+                                            tree_view->priv->model,
+                                            path);
+    }
+  else
+    {
+      tree = NULL;
+      node = NULL;
     }
 
   if (tree != NULL)
