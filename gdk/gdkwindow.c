@@ -6128,7 +6128,8 @@ set_viewable (GdkWindowObject *w,
 	set_viewable (child, val);
     }
 
-  if (gdk_window_has_impl (w)  &&
+  if (!_gdk_native_windows &&
+      gdk_window_has_impl (w)  &&
       w->window_type != GDK_WINDOW_FOREIGN &&
       !gdk_window_is_toplevel (w))
     {
@@ -6153,6 +6154,9 @@ set_viewable (GdkWindowObject *w,
        * do the show ourselves. We can't really tell this case from the normal
        * toplevel show as such toplevels are seen by gdk as parents of the
        * root window, so we make an exception for all toplevels.
+       *
+       * Also, when in GDK_NATIVE_WINDOW mode we never need to play games
+       * like this, so we just always show/hide directly.
        */
 
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (w->impl);
