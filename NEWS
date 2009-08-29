@@ -1,3 +1,33 @@
+Overview of Changes from GTK+ 2.16.5 to 2.16.6
+==============================================
+
+* Bugs fixed:
+ 161489 Make left/right arrows change focus between bookmarks...
+ 592883 Spin cell rendererer problem with double click
+ 478519 GtkTooltip segfaults on NULL gdk-display-current-tooltip.
+ 592003 Shift+click should always modify selection
+ 589195 gtktreeview.c warning
+ 588199 GtkTreeView rendering glitch while using a default sort...
+ 526149 GtkCellRendererAccel editing conflicts with mnemonics
+ 592901 Crash in JPEG pixbuf loader instead of error
+ 592461 preserve errno and use g_strerror
+ 589745 Apply message in GtkAssistant
+ 588943 set correct selection before emitting cursor-changed...
+ 592606 Activate the default button in a respose-request callback
+ 591526 Accelerator keys with <super> modifier also triggered...
+ 588958 Typo in startup-id window property
+ 580511 gdk_x11_atom_to_xatom_for_display translates GDK_NONE...
+ 564695 Pressing enter key in print to file "Name" box does not print
+ 528283 Problems when using PageUp & PageDown to navigate...
+ 534462 Focus issues in file chooser
+ 543310 set_enable_tree_lines doesn't work when a cellrenderer...
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan (Valencian)
+ Galician
+
+
 Overview of Changes from GTK+ 2.16.4 to 2.16.5
 ==============================================
 
