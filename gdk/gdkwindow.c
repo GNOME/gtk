@@ -8590,7 +8590,7 @@ gdk_window_beep (GdkWindow *window)
   toplevel = get_event_toplevel (window);
   display = gdk_drawable_get_display (GDK_DRAWABLE (window));
 
-  if (toplevel && gdk_window_is_offscreen ((GdkWindowObject *)toplevel))
+  if (toplevel && !gdk_window_is_offscreen ((GdkWindowObject *)toplevel))
     _gdk_windowing_window_beep (toplevel);
   else
     gdk_display_beep (display);
