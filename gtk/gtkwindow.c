@@ -507,7 +507,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Since: 2.12
    */							
   g_object_class_install_property (gobject_class,
-                                   PROP_ROLE,
+                                   PROP_STARTUP_ID,
                                    g_param_spec_string ("startup-id",
 							P_("Startup ID"),
 							P_("Unique startup identifier for the window used by startup-notification"),
