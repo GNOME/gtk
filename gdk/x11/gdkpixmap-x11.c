@@ -427,7 +427,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
  * For example in the X backend, a native pixmap handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the #GdkWindow wrapper for the native window,
+ * Return value: the #GdkPixmap wrapper for the native pixmap,
  *    or %NULL if there is none.
  **/
 GdkPixmap*
