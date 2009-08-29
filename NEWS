@@ -21,6 +21,7 @@ Overview of Changes from GTK+ 2.17.9 to 2.17.10
  592883 Spin cell rendererer problem with double click
  588199 GtkTreeView rendering glitch while using a default...
  543310 set_enable_tree_lines doesn't work when a cellrenderer...
+ 589636 csw broke DND from panel menus
 
 * Translation updates:
  Tamil
