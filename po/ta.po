@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-18 00:26-0400\n"
+"POT-Creation-Date: 2009-08-29 00:06-0400\n"
 "PO-Revision-Date: 2009-03-09 13:51+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -642,41 +642,41 @@ msgstr "JPEG 2000 உருவ வகை"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG (%s) உருவக் கோப்பை வாசிக்கும்போது பிழை"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr "உருவத்தை ஏற்றுவதற்கு நினைவகம் போதாது, நினைவகத்தை விடுக்க சில கோப்புகளை மூடவும்"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "துணையில்லா JPEG நிற இடைவெளி (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG கோப்பை ஏற்றுவதற்கு நினைவகத்தை ஒதுக்கீடு செய்ய முடியவில்லை"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "இடமாற்றப்ப JPEG அகலம் மற்றும் உயரம் பூஜ்ஜியமாகும்."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%s' அலகிட முடியவில்லை."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG தரம் 0 க்கும் 100 இடையில் இருக்க வேண்டும்; '%d' மதிப்பிக்கு அனுமதி கிடையாது."
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG உருவடிவ வகை"
 
@@ -1286,17 +1286,17 @@ msgstr "Backslash"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "தவறான வகை செயல்பாடு: %s"
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "தவறான ரூட் உருப்படி: '%s'"
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "கையாளப்படாத ஒட்டு: '%s'"
@@ -1391,7 +1391,7 @@ msgstr "செயல்பட முடியவில்லை"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:593
 msgid "New accelerator..."
 msgstr "புதிய மாற்றி..."
 
@@ -1535,11 +1535,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "வண்ணம் தேர்ந்தெடுத்தல்"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "உள்ளீட்பு _முறைகள்"
 
-#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "யூனிகோட் கட்டுப்பாட்டு வரியுரு _சொருகவும்"
 
@@ -1631,141 +1631,146 @@ msgstr "புத்தகக்குறிகளுக்கு நடப்�
 msgid "Add the selected folders to the bookmarks"
 msgstr "புத்தகக்குறிகளுக்கு தேர்ந்தெடுக்கப்பட்ட அடைவுகளை சேர்"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:3020
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "புத்தகக்குறிகளை நீக்கு '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3740
+#: gtk/gtkfilechooserdefault.c:3022
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3029 gtk/gtkfilechooserdefault.c:4055
+msgid "Remove the selected bookmark"
+msgstr "தேர்ந்தெடுக்கப்பட்ட புத்தகக்குறியை நீக்கு"
+
+#: gtk/gtkfilechooserdefault.c:3751
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3760
 msgid "Rename..."
 msgstr "மறுபெயர்..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3895
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Places"
 msgstr "இடங்கள்"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "_Places"
 msgstr "இடங்கள் (_P)"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Add"
 msgstr "_சேர்"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:4043
 msgid "Add the selected folder to the Bookmarks"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அடைவினை புத்தகக்குறியில் சேர்க்கவும்"
 
-#: gtk/gtkfilechooserdefault.c:4020
+#: gtk/gtkfilechooserdefault.c:4048
 msgid "_Remove"
 msgstr "நீக்கு (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4027
-msgid "Remove the selected bookmark"
-msgstr "தேர்ந்தெடுக்கப்பட்ட புத்தகக்குறியை நீக்கு"
-
-#: gtk/gtkfilechooserdefault.c:4136
+#: gtk/gtkfilechooserdefault.c:4184
 msgid "Could not select file"
 msgstr "கோப்பினை தேர்ந்தெடுக்க முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:4311
+#: gtk/gtkfilechooserdefault.c:4359
 msgid "_Add to Bookmarks"
 msgstr "புத்தக்குறிகளில் சேர் (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4372
 msgid "Show _Hidden Files"
 msgstr "மறைவான கோப்புகளை காட்டு (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4379
 msgid "Show _Size Column"
 msgstr "நிரலின் அளவை காட்டு (_S)"
 
-#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4636 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "கோப்புகள்"
 
-#: gtk/gtkfilechooserdefault.c:4637
+#: gtk/gtkfilechooserdefault.c:4685
 msgid "Name"
 msgstr "பெயர்"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4710
 msgid "Size"
 msgstr "அளவு"
 
-#: gtk/gtkfilechooserdefault.c:4676
+#: gtk/gtkfilechooserdefault.c:4724
 msgid "Modified"
 msgstr "மாற்றப்பட்டது"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4978 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "பெயர்: (_N)"
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:5021
 msgid "_Browse for other folders"
 msgstr "பிற அமைவிற்கு உலாவவும் (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5243
+#: gtk/gtkfilechooserdefault.c:5291
 msgid "Type a file name"
 msgstr "கோப்பு பெயரை தட்டச்சு செய்யவும்"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5280
+#: gtk/gtkfilechooserdefault.c:5328
 msgid "Create Fo_lder"
 msgstr "அடைவினை உருவாக்கு (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5290
+#: gtk/gtkfilechooserdefault.c:5338
 msgid "_Location:"
 msgstr "இடம் (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5494
+#: gtk/gtkfilechooserdefault.c:5542
 msgid "Save in _folder:"
 msgstr "அடைவில் சேமி: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:5496
+#: gtk/gtkfilechooserdefault.c:5544
 msgid "Create in _folder:"
 msgstr "அடைவில் உருவாக்கு: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7236
 msgid "Cannot change to folder because it is not local"
 msgstr "அடைவினை மாற்ற முடியாது ஏனெனில் அது உள்ளமைவில் இல்லை"
 
-#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
+#: gtk/gtkfilechooserdefault.c:7861 gtk/gtkfilechooserdefault.c:7882
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s குறுக்குவழி ஏற்கனவே உள்ளது"
 
-#: gtk/gtkfilechooserdefault.c:7924
+#: gtk/gtkfilechooserdefault.c:7972
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "குறுக்குவழி %s இல்லை"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8234 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "கோப்பு பெயர் \"%s\" ஏற்கனவே உள்ளது.  அதனை மாற்ற வேண்டுமா?"
 
-#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8237 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ல் கோப்பு ஏற்கனவே உள்ளது.  மாற்றினால் உள்ளடக்கங்களை மேலே எழுதும்."
 
-#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8242 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "மாற்று (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8956
+#: gtk/gtkfilechooserdefault.c:9004
 msgid "Could not start the search process"
 msgstr "தேடும் செயலை துவக்க முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:8957
+#: gtk/gtkfilechooserdefault.c:9005
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1773,34 +1778,34 @@ msgstr ""
 "இந்த நிரல் indexer daemonக்கு இணைப்பை உருவாக்க முடியவில்லை. இது இயங்குகிறதா என "
 "உறுதிபடுத்தவும்."
 
-#: gtk/gtkfilechooserdefault.c:8971
+#: gtk/gtkfilechooserdefault.c:9019
 msgid "Could not send the search request"
 msgstr "தேடுதல் கோரிக்கையை அனுப்ப முடியவில்லை"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9438
+#: gtk/gtkfilechooserdefault.c:9486
 msgid "_Search:"
 msgstr "தேடு (_S):"
 
-#: gtk/gtkfilechooserdefault.c:10391
+#: gtk/gtkfilechooserdefault.c:10439
 #, c-format
 msgid "Could not mount %s"
 msgstr "%sஐ ஏற்ற முடியவில்லை"
 
-#: gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Type name of new folder"
 msgstr "புதிய அடைவின் பெயரை உள்ளீடுக"
 
-#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
-#: gtk/gtkfilechooserdefault.c:11337
+#: gtk/gtkfilechooserdefault.c:11298 gtk/gtkfilechooserdefault.c:11320
+#: gtk/gtkfilechooserdefault.c:11391
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: gtk/gtkfilechooserdefault.c:11284
+#: gtk/gtkfilechooserdefault.c:11338
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11286
+#: gtk/gtkfilechooserdefault.c:11340
 msgid "Yesterday at %H:%M"
 msgstr "நேற்று இந்நேரத்தில்  %H:%M"
 
@@ -1862,7 +1867,7 @@ msgid "Path does not exist"
 msgstr "பாதை தோன்றவில்லை"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' அடைவு உருவாக்கும் பிழை: %s"
@@ -1879,7 +1884,7 @@ msgstr "அடைவுகள் (_d)"
 msgid "_Files"
 msgstr "கோப்புகள் (_F)"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "அடைவு வாசிக்க முடியாது: %s"
@@ -1912,70 +1917,70 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "\"%s\" அடைவு பெயரில் கோப்பு பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் உள்ளன"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1394
 msgid "New Folder"
 msgstr "புதிய அடைவு"
 
-#: gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
 msgstr "அடைவு பெயர்: (_F)"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 msgid "C_reate"
 msgstr "உ_ருவாக்கு"
 
-#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "கோப்புப் பெயர்களில் அநுமதிக்கமுடியாத குறியீடுகள் கோப்புப் பெயரில் உள்ளன \"%s\""
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "'%s' கோப்பினை அழிக்கும்போது பிழை: %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "கட்டாயமாக \"%s\" கோப்பு அழிக்க வேண்டுமா?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1539
 msgid "Delete File"
 msgstr "கோப்பை நீக்கு"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr " \"%s\"க்கு கோப்பு மறுபெயரிடுதலில் பிழை: %s"
 
-#: gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "\"%s\" கோப்பினை மறுபெயரிடுதலில் பிழை: %s"
 
-#: gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1611
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "\"%s\" கோப்பினை \"%s\" க்கு மறுபெயரிடும்போது பிழை: %s"
 
-#: gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1658
 msgid "Rename File"
 msgstr "கோப்பின் பெயரை மாற்று"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "\"%s\" கோப்பின் பெயரை இதட்கு மாற்று:"
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1702
 msgid "_Rename"
 msgstr "_பெயர் மாற்று"
 
-#: gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2134
 msgid "_Selection: "
 msgstr "தெரிவு _செய்தது:"
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3056
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1984,15 +1989,15 @@ msgstr ""
 "கோப்பு பெயர் \"%s\" UTF-8க்கு மாற்ற முடியவில்லை. (சூழல் மாறியை "
 "G_FILENAME_ENCODINGஐ அமைக்க முயற்சிக்கிறது): %s"
 
-#: gtk/gtkfilesel.c:3053
+#: gtk/gtkfilesel.c:3059
 msgid "Invalid UTF-8"
 msgstr "தவறான UTF-8"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3933
 msgid "Name too long"
 msgstr "மிக-நீண்ட பெயர்"
 
-#: gtk/gtkfilesel.c:3929
+#: gtk/gtkfilesel.c:3935
 msgid "Couldn't convert filename"
 msgstr "கோப்புப் பெயரை மாற்ற முடியவில்லை"
 
@@ -2407,7 +2412,7 @@ msgstr "கோப்பு அமைப்பு மூலம்"
 msgid "Not available"
 msgstr "இல்லை"
 
-#: gtk/gtkprinteroptionwidget.c:808
+#: gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
 msgstr "அடைவில் சேமி: (_S)"
 
@@ -4481,66 +4486,66 @@ msgstr "இடமாற்று கோப்பினை எழுத முட
 msgid "The generated cache was invalid.\n"
 msgstr "உருவாக்கப்பட்ட இடையகம் தவறானது.\n"
 
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s லிருந்து %sஐ மறுபெயரிட முடியாது: %s, பின் %s ஐ நீக்குகிறது.\n"
 
-#: gtk/updateiconcache.c:1531
+#: gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s லிருந்து %sக்கு மறுபெயரிட முடியவில்லை: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s லிருந்து %sக்கு மாற்றாக மறுபெயரிட முடியாது: %s.\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "இடமாற்று கோப்பு வெற்றிகரமாக உருவாக்கப்பட்டது.\n"
 
-#: gtk/updateiconcache.c:1603
+#: gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "புதுப்பிக்கப்பட்டாத இருந்தாலும், ஏற்கனவே இருக்கும் இடமாற்றினை மேலேழுதுகிறது"
 
-#: gtk/updateiconcache.c:1604
+#: gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "index.themeல் இருப்பதை சரிபார்க்க வேண்டாம்"
 
-#: gtk/updateiconcache.c:1605
+#: gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr "இடமாற்றில் உரு தரவினை சேர்க்க வேண்டாம்"
 
-#: gtk/updateiconcache.c:1606
+#: gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "ஒரு C தலைப்பு கோப்பின் வெளியீடு"
 
-#: gtk/updateiconcache.c:1607
+#: gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "verbose வெளியீட்டை நிறுத்தவும்"
 
-#: gtk/updateiconcache.c:1608
+#: gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "இருக்கும் சின்னத்தின் இடையக்கத்தை மதிப்பிடவும்"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1679
 #, c-format
 msgid "File not found: %s\n"
 msgstr "கோப்பினை காண முடியவில்லை: %s\n"
 
-#: gtk/updateiconcache.c:1677
+#: gtk/updateiconcache.c:1685
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "ஒரு சரியான சின்னத்தின் இடையகம் இல்லை: %s\n"
 
-#: gtk/updateiconcache.c:1690
+#: gtk/updateiconcache.c:1698
 #, c-format
 msgid "No theme index file."
 msgstr "தீம் இன்டக்ஸ் கோப்பு இல்லை."
 
-#: gtk/updateiconcache.c:1694
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4937,7 +4942,7 @@ msgstr "தாளுக்கான பக்கங்கள்: (_s)"
 msgid "File"
 msgstr "கோப்பு"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:613
+#: modules/printbackends/file/gtkprintbackendfile.c:614
 msgid "_Output format"
 msgstr "வெளியீடு வடிவம் (_O)"
 

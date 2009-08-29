@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-18 00:26-0400\n"
+"POT-Creation-Date: 2009-08-29 00:06-0400\n"
 "PO-Revision-Date: 2009-03-11 13:49+0200\n"
 "Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -644,7 +644,7 @@ msgstr "JPEG 2000 paveikslėlio formatas"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Klaida interpretuojant JPEG paveikslėlio failą (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -652,21 +652,21 @@ msgstr ""
 "Nepakanka atminties pakrauti paveikslėlį, uždarykite dalį programų, kad "
 "atlaisvinti atmintį"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepalaikoma JPEG spalvų gama (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nepakako atminties įkelti JPEG failą"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "Pakeistas JPEG turi nulinį plotį arba aukštį."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -675,14 +675,14 @@ msgstr ""
 "JPEG kokybės reikšmė turi būti tarp 0 ir 100, reikšmės „%s“ nepavyko "
 "apdoroti."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG kokybės reikšmė turi būti tarp 0 ir 100; reikšmė „%d“ yra neleistina."
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG paveikslėlio formatas"
 
@@ -1297,17 +1297,17 @@ msgstr "Backslash"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Netinkamo tipo funkcija: „%s“"
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Netinkamas šakninis elementas: „%s“"
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Neapdorota žymė: „%s“"
@@ -1402,7 +1402,7 @@ msgstr "Išjungta"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:593
 msgid "New accelerator..."
 msgstr "Naujas akseleratorius..."
 
@@ -1547,11 +1547,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Spalvos pasirinkimas"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
@@ -1643,142 +1643,147 @@ msgstr "Įdėti esamą aplanką į žymeles"
 msgid "Add the selected folders to the bookmarks"
 msgstr "Įdėti pažymėtus aplankus į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:3020
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Pašalinti žymelę „%s“"
 
-#: gtk/gtkfilechooserdefault.c:3740
+#: gtk/gtkfilechooserdefault.c:3022
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3029 gtk/gtkfilechooserdefault.c:4055
+msgid "Remove the selected bookmark"
+msgstr "Pašalinti pažymėtas žymeles"
+
+#: gtk/gtkfilechooserdefault.c:3751
 msgid "Remove"
 msgstr "Pašalinti"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3760
 msgid "Rename..."
 msgstr "Pervadinti..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3895
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Places"
 msgstr "Vietos"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "_Places"
 msgstr "_Vietos"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Add"
 msgstr "P_ridėti"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:4043
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Įdėti pažymėtą aplanką į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:4020
+#: gtk/gtkfilechooserdefault.c:4048
 msgid "_Remove"
 msgstr "_Pašalinti"
 
-#: gtk/gtkfilechooserdefault.c:4027
-msgid "Remove the selected bookmark"
-msgstr "Pašalinti pažymėtas žymeles"
-
-#: gtk/gtkfilechooserdefault.c:4136
+#: gtk/gtkfilechooserdefault.c:4184
 msgid "Could not select file"
 msgstr "Failo pasirinkti nepavyko"
 
-#: gtk/gtkfilechooserdefault.c:4311
+#: gtk/gtkfilechooserdefault.c:4359
 msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4372
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptus failus"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4379
 msgid "Show _Size Column"
 msgstr "Rodydi _dydžio stulpelį"
 
-#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4636 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Failai"
 
-#: gtk/gtkfilechooserdefault.c:4637
+#: gtk/gtkfilechooserdefault.c:4685
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4710
 msgid "Size"
 msgstr "Dydis"
 
-#: gtk/gtkfilechooserdefault.c:4676
+#: gtk/gtkfilechooserdefault.c:4724
 msgid "Modified"
 msgstr "Pakeista"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4978 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:5021
 msgid "_Browse for other folders"
 msgstr "_Naršyti kitų aplankų"
 
-#: gtk/gtkfilechooserdefault.c:5243
+#: gtk/gtkfilechooserdefault.c:5291
 msgid "Type a file name"
 msgstr "Įveskite failo pavadinimą"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5280
+#: gtk/gtkfilechooserdefault.c:5328
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
-#: gtk/gtkfilechooserdefault.c:5290
+#: gtk/gtkfilechooserdefault.c:5338
 msgid "_Location:"
 msgstr "Vi_eta:"
 
-#: gtk/gtkfilechooserdefault.c:5494
+#: gtk/gtkfilechooserdefault.c:5542
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:5496
+#: gtk/gtkfilechooserdefault.c:5544
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7236
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
+#: gtk/gtkfilechooserdefault.c:7861 gtk/gtkfilechooserdefault.c:7882
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Nuoroda %s jau egzistuoja"
 
-#: gtk/gtkfilechooserdefault.c:7924
+#: gtk/gtkfilechooserdefault.c:7972
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8234 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau egzistuoja. Ar norite jį perrašyti?"
 
-#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8237 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
 
-#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8242 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: gtk/gtkfilechooserdefault.c:8956
+#: gtk/gtkfilechooserdefault.c:9004
 msgid "Could not start the search process"
 msgstr "Nepavyko paleisti paieškos proceso"
 
-#: gtk/gtkfilechooserdefault.c:8957
+#: gtk/gtkfilechooserdefault.c:9005
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1786,34 +1791,34 @@ msgstr ""
 "Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad "
 "ji veikia."
 
-#: gtk/gtkfilechooserdefault.c:8971
+#: gtk/gtkfilechooserdefault.c:9019
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9438
+#: gtk/gtkfilechooserdefault.c:9486
 msgid "_Search:"
 msgstr "_Ieškoti:"
 
-#: gtk/gtkfilechooserdefault.c:10391
+#: gtk/gtkfilechooserdefault.c:10439
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
 
-#: gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Type name of new folder"
 msgstr "Įveskite naujo aplanko pavadinimą"
 
-#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
-#: gtk/gtkfilechooserdefault.c:11337
+#: gtk/gtkfilechooserdefault.c:11298 gtk/gtkfilechooserdefault.c:11320
+#: gtk/gtkfilechooserdefault.c:11391
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: gtk/gtkfilechooserdefault.c:11284
+#: gtk/gtkfilechooserdefault.c:11338
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11286
+#: gtk/gtkfilechooserdefault.c:11340
 msgid "Yesterday at %H:%M"
 msgstr "Vakar %H:%M"
 
@@ -1875,7 +1880,7 @@ msgid "Path does not exist"
 msgstr "Tokio kelio nėra"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Klaida kuriant aplanką „%s“: %s"
@@ -1892,7 +1897,7 @@ msgstr "_Aplankai"
 msgid "_Files"
 msgstr "_Failai"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Aplankas neperskaitomas: %s"
@@ -1927,70 +1932,70 @@ msgid ""
 msgstr ""
 "Aplanko pavadinime „%s“ yra simbolių, kurių negalima naudoti failų varduose"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1394
 msgid "New Folder"
 msgstr "Naujas aplankas"
 
-#: gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
 msgstr "_Aplanko vardas:"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 msgid "C_reate"
 msgstr "Suku_rti"
 
-#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Failo varde „%s“ yra varduose neleidžiamų simbolių."
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Klaida trinant failą „%s“: %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Tikrai ištrinti failą „%s“?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1539
 msgid "Delete File"
 msgstr "Ištrinti failą"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Klaida pervadinant failą į „%s“: %s"
 
-#: gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Klaida pervadinant failą „%s“: %s"
 
-#: gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1611
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Klaida pervadinant failą „%s“ į „%s“: %s"
 
-#: gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1658
 msgid "Rename File"
 msgstr "Pervardinti failą"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Pervardinti failą „%s“ į:"
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1702
 msgid "_Rename"
 msgstr "Pe_rvardinti"
 
-#: gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2134
 msgid "_Selection: "
 msgstr "Pa_sirinkimas: "
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3056
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1999,15 +2004,15 @@ msgstr ""
 "Failo vardas „%s“ negali būti konvertuotas į UTF-8 (pabandykite nustatyti "
 "aplinkos kintamąjį G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3053
+#: gtk/gtkfilesel.c:3059
 msgid "Invalid UTF-8"
 msgstr "Neleistinas UTF-8"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3933
 msgid "Name too long"
 msgstr "Vardas per ilgas"
 
-#: gtk/gtkfilesel.c:3929
+#: gtk/gtkfilesel.c:3935
 msgid "Couldn't convert filename"
 msgstr "Nepavyko pakeisti failo vardo"
 
@@ -2422,7 +2427,7 @@ msgstr "Failų sistemos šakninis aplankas"
 msgid "Not available"
 msgstr "Neprieinama"
 
-#: gtk/gtkprinteroptionwidget.c:808
+#: gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
 msgstr "Iš_saugoti aplanke:"
 
@@ -4496,66 +4501,66 @@ msgstr "Nepavyko įrašyti podėlio failo: %s\n"
 msgid "The generated cache was invalid.\n"
 msgstr "Sugeneruotas podėlis buvo netinkamas.\n"
 
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Nepavyko pervadinti %s į %s: %s, taigi %s pašalinama.\n"
 
-#: gtk/updateiconcache.c:1531
+#: gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Nepavyko pervadinti %s į %s: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Nepavyko pervadinti %s atgal į %s: %s.\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Podėlio failas sukurtas sėkmingai.\n"
 
-#: gtk/updateiconcache.c:1603
+#: gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Perrašyti esamą podėlį, netgi jei nepasenęs"
 
-#: gtk/updateiconcache.c:1604
+#: gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "Netikrinti, ar egzistuoja index.theme"
 
-#: gtk/updateiconcache.c:1605
+#: gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr "Neįtraukti paveikslėlio duomenų į podėlį"
 
-#: gtk/updateiconcache.c:1606
+#: gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "Išvesti C antraštės failą"
 
-#: gtk/updateiconcache.c:1607
+#: gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "Išjungti išsamią išvestį"
 
-#: gtk/updateiconcache.c:1608
+#: gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "Patvirtinti esantį piktogramų podėlį"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1679
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Failas nerastas: %s\n"
 
-#: gtk/updateiconcache.c:1677
+#: gtk/updateiconcache.c:1685
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Netinkamas piktogramų podėlis: %s\n"
 
-#: gtk/updateiconcache.c:1690
+#: gtk/updateiconcache.c:1698
 #, c-format
 msgid "No theme index file."
 msgstr "Nėra temos indekso failo."
 
-#: gtk/updateiconcache.c:1694
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4952,7 +4957,7 @@ msgstr "Puslapių _lakšte:"
 msgid "File"
 msgstr "Failas"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:613
+#: modules/printbackends/file/gtkprintbackendfile.c:614
 msgid "_Output format"
 msgstr "_Išvesties formatas"
 

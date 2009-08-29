@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-18 00:26-0400\n"
+"POT-Creation-Date: 2009-08-29 00:06-0400\n"
 "PO-Revision-Date: 2009-04-12 01:44+0800\n"
 "Last-Translator: Deng Xiyue <manphiz@gmail.com>\n"
 "Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
@@ -626,40 +626,40 @@ msgstr "JPEG 2000 图像格式"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "分析 JPEG 图像文件时出错(%s)"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr "内存不足以载入图像，试试关闭其它应用程序来释放内存"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "不支持的 JPEG 色彩空间(%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "无法分配内存来载入 JPEG 文件"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "变形 JPEG 宽度或高度为零。"
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；无法解析数值“%s”。"
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG 质量一定要在 0 至 100 之间；不允许使用数值“%d”。"
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "JPEG 图像格式"
 
@@ -1265,17 +1265,17 @@ msgstr "\\"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "无效的类型函数出现于第 %d 行：“%s”"
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr "重复的对象ID“%s”出现在第 %d 行(之前出现在第 %d 行)"
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "无效的根元素：“%s”"
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "未处理的标记：“%s”"
@@ -1370,7 +1370,7 @@ msgstr "禁用"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:593
 msgid "New accelerator..."
 msgstr "新建加速键..."
 
@@ -1506,11 +1506,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "颜色选择"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "插入 Unicode 控制字符(_I)"
 
@@ -1602,174 +1602,179 @@ msgstr "将当前文件夹添加到书签"
 msgid "Add the selected folders to the bookmarks"
 msgstr "将选中文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:3020
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "删除书签“%s”"
 
-#: gtk/gtkfilechooserdefault.c:3740
+#: gtk/gtkfilechooserdefault.c:3022
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3029 gtk/gtkfilechooserdefault.c:4055
+msgid "Remove the selected bookmark"
+msgstr "删除选中的书签"
+
+#: gtk/gtkfilechooserdefault.c:3751
 msgid "Remove"
 msgstr "删除"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3760
 msgid "Rename..."
 msgstr "重命名..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3895
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Places"
 msgstr "位置"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "_Places"
 msgstr "位置(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Add"
 msgstr "添加(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:4043
 msgid "Add the selected folder to the Bookmarks"
 msgstr "将选中的文件夹添加到书签"
 
-#: gtk/gtkfilechooserdefault.c:4020
+#: gtk/gtkfilechooserdefault.c:4048
 msgid "_Remove"
 msgstr "删除(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4027
-msgid "Remove the selected bookmark"
-msgstr "删除选中的书签"
-
-#: gtk/gtkfilechooserdefault.c:4136
+#: gtk/gtkfilechooserdefault.c:4184
 msgid "Could not select file"
 msgstr "无法选择文件"
 
-#: gtk/gtkfilechooserdefault.c:4311
+#: gtk/gtkfilechooserdefault.c:4359
 msgid "_Add to Bookmarks"
 msgstr "添加到书签(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4372
 msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4379
 msgid "Show _Size Column"
 msgstr "显示大小列(_S)"
 
-#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4636 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "文件"
 
-#: gtk/gtkfilechooserdefault.c:4637
+#: gtk/gtkfilechooserdefault.c:4685
 msgid "Name"
 msgstr "名称"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4710
 msgid "Size"
 msgstr "大小"
 
-#: gtk/gtkfilechooserdefault.c:4676
+#: gtk/gtkfilechooserdefault.c:4724
 msgid "Modified"
 msgstr "修改日期"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4978 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:5021
 msgid "_Browse for other folders"
 msgstr "浏览其它文件夹(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5243
+#: gtk/gtkfilechooserdefault.c:5291
 msgid "Type a file name"
 msgstr "输入文件名"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5280
+#: gtk/gtkfilechooserdefault.c:5328
 msgid "Create Fo_lder"
 msgstr "创建文件夹(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5290
+#: gtk/gtkfilechooserdefault.c:5338
 msgid "_Location:"
 msgstr "位置(_L)："
 
-#: gtk/gtkfilechooserdefault.c:5494
+#: gtk/gtkfilechooserdefault.c:5542
 msgid "Save in _folder:"
 msgstr "保存于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:5496
+#: gtk/gtkfilechooserdefault.c:5544
 msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7236
 msgid "Cannot change to folder because it is not local"
 msgstr "无法更改为文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
+#: gtk/gtkfilechooserdefault.c:7861 gtk/gtkfilechooserdefault.c:7882
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "快捷方式 %s 已经存在"
 
-#: gtk/gtkfilechooserdefault.c:7924
+#: gtk/gtkfilechooserdefault.c:7972
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "快捷方式 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8234 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "已经存在名为“%s”的文件。您是否想要替换？"
 
-#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8237 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "文件已经在“%s”中存在了。替换该文件将覆盖其中的内容。"
 
-#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8242 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "替换(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8956
+#: gtk/gtkfilechooserdefault.c:9004
 msgid "Could not start the search process"
 msgstr "无法开启搜索进程"
 
-#: gtk/gtkfilechooserdefault.c:8957
+#: gtk/gtkfilechooserdefault.c:9005
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "程序无法连接到索引守护进程。请确保它在运行。"
 
-#: gtk/gtkfilechooserdefault.c:8971
+#: gtk/gtkfilechooserdefault.c:9019
 msgid "Could not send the search request"
 msgstr "无法发送搜索请求"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9438
+#: gtk/gtkfilechooserdefault.c:9486
 msgid "_Search:"
 msgstr "搜索(_S)："
 
-#: gtk/gtkfilechooserdefault.c:10391
+#: gtk/gtkfilechooserdefault.c:10439
 #, c-format
 msgid "Could not mount %s"
 msgstr "无法挂载 %s"
 
-#: gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Type name of new folder"
 msgstr "输入新建文件夹的名称"
 
-#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
-#: gtk/gtkfilechooserdefault.c:11337
+#: gtk/gtkfilechooserdefault.c:11298 gtk/gtkfilechooserdefault.c:11320
+#: gtk/gtkfilechooserdefault.c:11391
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:11284
+#: gtk/gtkfilechooserdefault.c:11338
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11286
+#: gtk/gtkfilechooserdefault.c:11340
 msgid "Yesterday at %H:%M"
 msgstr "昨天于 %H:%M"
 
@@ -1831,7 +1836,7 @@ msgid "Path does not exist"
 msgstr "路径不存在"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "创建目录“%s”时出错：%s"
@@ -1848,7 +1853,7 @@ msgstr "文件夹(_D)"
 msgid "_Files"
 msgstr "文件(_F)"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "文件夹不可读：%s"
@@ -1881,70 +1886,70 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件夹名称“%s”含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1394
 msgid "New Folder"
 msgstr "新建文件夹"
 
-#: gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
 msgstr "文件夹名称(_F)："
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "文件名“%s”中含有不允许存在于文件名中的符号"
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "删除文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "真的要删除文件“%s”吗？"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1539
 msgid "Delete File"
 msgstr "删除文件"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "将文件重命名为“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "重命名文件“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1611
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "将文件“%s”重命名为“%s”时出错：%s"
 
-#: gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1658
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "将文件“%s”重命名为："
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1702
 msgid "_Rename"
 msgstr "重命名(_R)"
 
-#: gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2134
 msgid "_Selection: "
 msgstr "选择(_S)："
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3056
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1952,15 +1957,15 @@ msgid ""
 msgstr ""
 "文件名“%s”无法转换为 UTF-8。(请尝试设置环境变量 G_FILENAME_ENCODING)：%s"
 
-#: gtk/gtkfilesel.c:3053
+#: gtk/gtkfilesel.c:3059
 msgid "Invalid UTF-8"
 msgstr "无效的 UTF-8"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3933
 msgid "Name too long"
 msgstr "名称太长"
 
-#: gtk/gtkfilesel.c:3929
+#: gtk/gtkfilesel.c:3935
 msgid "Couldn't convert filename"
 msgstr "无法转换文件名"
 
@@ -2374,7 +2379,7 @@ msgstr "根文件系统"
 msgid "Not available"
 msgstr "不可用"
 
-#: gtk/gtkprinteroptionwidget.c:808
+#: gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
 msgstr "保存于文件夹(_S)："
 
@@ -4445,66 +4450,66 @@ msgstr "写入缓存文件失败：%s\n"
 msgid "The generated cache was invalid.\n"
 msgstr "生成的缓存非法。\n"
 
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "无法将 %s 重命名为 %s：%s，请删除 %s。\n"
 
-#: gtk/updateiconcache.c:1531
+#: gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "无法将 %s 重命名为 %s：%s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "无法将 %s 重命名回 %s：%s\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "缓存文件创建成功。\n"
 
-#: gtk/updateiconcache.c:1603
+#: gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "覆盖已有缓存，即使它已是最新"
 
-#: gtk/updateiconcache.c:1604
+#: gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "不检查已有的 index.theme"
 
-#: gtk/updateiconcache.c:1605
+#: gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr "不再缓存中包含图像数据"
 
-#: gtk/updateiconcache.c:1606
+#: gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "输出 C 头文件"
 
-#: gtk/updateiconcache.c:1607
+#: gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "关闭详细输出"
 
-#: gtk/updateiconcache.c:1608
+#: gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "验证已有的图标缓存"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1679
 #, c-format
 msgid "File not found: %s\n"
 msgstr "文件未找到：%s\n"
 
-#: gtk/updateiconcache.c:1677
+#: gtk/updateiconcache.c:1685
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "非法图标缓存：%s\n"
 
-#: gtk/updateiconcache.c:1690
+#: gtk/updateiconcache.c:1698
 #, c-format
 msgid "No theme index file."
 msgstr "无主题索引文件。"
 
-#: gtk/updateiconcache.c:1694
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4900,7 +4905,7 @@ msgstr "每张页数(_S)："
 msgid "File"
 msgstr "文件"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:613
+#: modules/printbackends/file/gtkprintbackendfile.c:614
 msgid "_Output format"
 msgstr "输出格式(_O)"
 

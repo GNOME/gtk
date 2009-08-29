@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-18 00:26-0400\n"
+"POT-Creation-Date: 2009-08-29 00:06-0400\n"
 "PO-Revision-Date: 2009-06-14 22:12+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -638,7 +638,7 @@ msgstr "Bildformatet JPEG 2000"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Fel vid tolkning av JPEG-bildfil (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -646,21 +646,21 @@ msgstr ""
 "Inte tillräckligt med minne för att läsa in bild, försök att avsluta några "
 "program för att frigöra minne"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG-färgrymden stöds inte (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kunde inte allokera minne för inläsning av JPEG-fil"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "Transformerad JPEG har bredden eller höjden noll."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -669,7 +669,7 @@ msgstr ""
 "JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%s\" kunde "
 "inte tolkas."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -677,7 +677,7 @@ msgstr ""
 "JPEG-kvaliteten måste vara ett värde mellan 0 och 100; värdet \"%d\" är inte "
 "tillåtet."
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Bildformatet JPEG"
 
@@ -1291,17 +1291,17 @@ msgstr "Omvänt snedstreck"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Ogiltig typfunktion på rad %d: \"%s\""
 
-#: gtk/gtkbuilderparser.c:402
+#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr "Duplikat objekt-id \"%s\" på rad %d (tidigare på rad %d)"
 
-#: gtk/gtkbuilderparser.c:853
+#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Ogiltigt rotelement: \"%s\""
 
-#: gtk/gtkbuilderparser.c:892
+#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Ohanterad tagg: \"%s\""
@@ -1398,7 +1398,7 @@ msgstr "Inaktiverad"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:591
+#: gtk/gtkcellrendereraccel.c:379 gtk/gtkcellrendereraccel.c:593
 msgid "New accelerator..."
 msgstr "Ny snabbtangent..."
 
@@ -1543,11 +1543,11 @@ msgstr ""
 msgid "Color Selection"
 msgstr "Färgval"
 
-#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7767
+#: gtk/gtkentry.c:8429 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
-#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7781
+#: gtk/gtkentry.c:8443 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -1639,127 +1639,132 @@ msgstr "Lägg till den aktuella mappen till dina bokmärken"
 msgid "Add the selected folders to the bookmarks"
 msgstr "Lägg till de valda mapparna till bokmärkena"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:3020
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Ta bort bokmärket \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:3740
+#: gtk/gtkfilechooserdefault.c:3022
+#, c-format
+msgid "Bookmark '%s' cannot be removed"
+msgstr ""
+
+#: gtk/gtkfilechooserdefault.c:3029 gtk/gtkfilechooserdefault.c:4055
+msgid "Remove the selected bookmark"
+msgstr "Ta bort markerat bokmärke"
+
+#: gtk/gtkfilechooserdefault.c:3751
 msgid "Remove"
 msgstr "Ta bort"
 
-#: gtk/gtkfilechooserdefault.c:3749
+#: gtk/gtkfilechooserdefault.c:3760
 msgid "Rename..."
 msgstr "Byt namn..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3895
+#: gtk/gtkfilechooserdefault.c:3923
 msgid "Places"
 msgstr "Platser"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3952
+#: gtk/gtkfilechooserdefault.c:3980
 msgid "_Places"
 msgstr "_Platser"
 
-#: gtk/gtkfilechooserdefault.c:4008
+#: gtk/gtkfilechooserdefault.c:4036
 msgid "_Add"
 msgstr "_Lägg till"
 
-#: gtk/gtkfilechooserdefault.c:4015
+#: gtk/gtkfilechooserdefault.c:4043
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Lägg till den valda mappen i bokmärkena"
 
-#: gtk/gtkfilechooserdefault.c:4020
+#: gtk/gtkfilechooserdefault.c:4048
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: gtk/gtkfilechooserdefault.c:4027
-msgid "Remove the selected bookmark"
-msgstr "Ta bort markerat bokmärke"
-
-#: gtk/gtkfilechooserdefault.c:4136
+#: gtk/gtkfilechooserdefault.c:4184
 msgid "Could not select file"
 msgstr "Kunde inte välja fil"
 
-#: gtk/gtkfilechooserdefault.c:4311
+#: gtk/gtkfilechooserdefault.c:4359
 msgid "_Add to Bookmarks"
 msgstr "_Lägg till i bokmärkena"
 
-#: gtk/gtkfilechooserdefault.c:4324
+#: gtk/gtkfilechooserdefault.c:4372
 msgid "Show _Hidden Files"
 msgstr "Visa _dolda filer"
 
-#: gtk/gtkfilechooserdefault.c:4331
+#: gtk/gtkfilechooserdefault.c:4379
 msgid "Show _Size Column"
 msgstr "Visa kolumnen _Storlek"
 
-#: gtk/gtkfilechooserdefault.c:4588 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4636 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Filer"
 
-#: gtk/gtkfilechooserdefault.c:4637
+#: gtk/gtkfilechooserdefault.c:4685
 msgid "Name"
 msgstr "Namn"
 
-#: gtk/gtkfilechooserdefault.c:4662
+#: gtk/gtkfilechooserdefault.c:4710
 msgid "Size"
 msgstr "Storlek"
 
-#: gtk/gtkfilechooserdefault.c:4676
+#: gtk/gtkfilechooserdefault.c:4724
 msgid "Modified"
 msgstr "Ändrad"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4930 gtk/gtkprinteroptionwidget.c:796
+#: gtk/gtkfilechooserdefault.c:4978 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Namn:"
 
-#: gtk/gtkfilechooserdefault.c:4973
+#: gtk/gtkfilechooserdefault.c:5021
 msgid "_Browse for other folders"
 msgstr "_Bläddra efter andra mappar"
 
-#: gtk/gtkfilechooserdefault.c:5243
+#: gtk/gtkfilechooserdefault.c:5291
 msgid "Type a file name"
 msgstr "Ange ett filnamn"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5280
+#: gtk/gtkfilechooserdefault.c:5328
 msgid "Create Fo_lder"
 msgstr "Skapa ma_pp"
 
-#: gtk/gtkfilechooserdefault.c:5290
+#: gtk/gtkfilechooserdefault.c:5338
 msgid "_Location:"
 msgstr "_Plats:"
 
-#: gtk/gtkfilechooserdefault.c:5494
+#: gtk/gtkfilechooserdefault.c:5542
 msgid "Save in _folder:"
 msgstr "Spara i _mappen:"
 
-#: gtk/gtkfilechooserdefault.c:5496
+#: gtk/gtkfilechooserdefault.c:5544
 msgid "Create in _folder:"
 msgstr "Skapa i _mappen:"
 
-#: gtk/gtkfilechooserdefault.c:7188
+#: gtk/gtkfilechooserdefault.c:7236
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
-#: gtk/gtkfilechooserdefault.c:7813 gtk/gtkfilechooserdefault.c:7834
+#: gtk/gtkfilechooserdefault.c:7861 gtk/gtkfilechooserdefault.c:7882
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Genvägen %s finns redan"
 
-#: gtk/gtkfilechooserdefault.c:7924
+#: gtk/gtkfilechooserdefault.c:7972
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Genvägen %s finns inte"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:370
+#: gtk/gtkfilechooserdefault.c:8234 gtk/gtkprintunixdialog.c:370
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med namnet \"%s\" finns redan. Vill du ersätta den?"
 
-#: gtk/gtkfilechooserdefault.c:8189 gtk/gtkprintunixdialog.c:374
+#: gtk/gtkfilechooserdefault.c:8237 gtk/gtkprintunixdialog.c:374
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1767,15 +1772,15 @@ msgstr ""
 "Filen finns redan i \"%s\". Att ersätta den kommer att skriva över dess "
 "innehåll."
 
-#: gtk/gtkfilechooserdefault.c:8194 gtk/gtkprintunixdialog.c:381
+#: gtk/gtkfilechooserdefault.c:8242 gtk/gtkprintunixdialog.c:381
 msgid "_Replace"
 msgstr "_Ersätt"
 
-#: gtk/gtkfilechooserdefault.c:8956
+#: gtk/gtkfilechooserdefault.c:9004
 msgid "Could not start the search process"
 msgstr "Kunde inte starta sökprocessen"
 
-#: gtk/gtkfilechooserdefault.c:8957
+#: gtk/gtkfilechooserdefault.c:9005
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1783,34 +1788,34 @@ msgstr ""
 "Programmet kunde inte skapa en anslutning till indexeringsdemonen. Försäkra "
 "dig om att den kör."
 
-#: gtk/gtkfilechooserdefault.c:8971
+#: gtk/gtkfilechooserdefault.c:9019
 msgid "Could not send the search request"
 msgstr "Kunde inte skicka sökbegäran"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:9438
+#: gtk/gtkfilechooserdefault.c:9486
 msgid "_Search:"
 msgstr "_Sök:"
 
-#: gtk/gtkfilechooserdefault.c:10391
+#: gtk/gtkfilechooserdefault.c:10439
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunde inte montera %s"
 
-#: gtk/gtkfilechooserdefault.c:11066
+#: gtk/gtkfilechooserdefault.c:11120
 msgid "Type name of new folder"
 msgstr "Ange namnet på den nya mappen"
 
-#: gtk/gtkfilechooserdefault.c:11244 gtk/gtkfilechooserdefault.c:11266
-#: gtk/gtkfilechooserdefault.c:11337
+#: gtk/gtkfilechooserdefault.c:11298 gtk/gtkfilechooserdefault.c:11320
+#: gtk/gtkfilechooserdefault.c:11391
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/gtkfilechooserdefault.c:11284
+#: gtk/gtkfilechooserdefault.c:11338
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: gtk/gtkfilechooserdefault.c:11286
+#: gtk/gtkfilechooserdefault.c:11340
 msgid "Yesterday at %H:%M"
 msgstr "Igår klockan %H.%M"
 
@@ -1872,7 +1877,7 @@ msgid "Path does not exist"
 msgstr "Sökvägen finns inte"
 
 #: gtk/gtkfilechoosersettings.c:362 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1358
+#: gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Fel vid skapande av mappen \"%s\": %s"
@@ -1889,7 +1894,7 @@ msgstr "_Mappar"
 msgid "_Files"
 msgstr "_Filer"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2148
+#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Mappen är oläsbar: %s"
@@ -1923,70 +1928,70 @@ msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Mappnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
-#: gtk/gtkfilesel.c:1392
+#: gtk/gtkfilesel.c:1394
 msgid "New Folder"
 msgstr "Ny mapp"
 
-#: gtk/gtkfilesel.c:1407
+#: gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
 msgstr "_Mappnamn:"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1433
 msgid "C_reate"
 msgstr "S_kapa"
 
-#: gtk/gtkfilesel.c:1474 gtk/gtkfilesel.c:1581 gtk/gtkfilesel.c:1594
+#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Filnamnet \"%s\" innehåller tecken som inte är tillåtna i filnamn"
 
-#: gtk/gtkfilesel.c:1477 gtk/gtkfilesel.c:1487
+#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Fel vid borttagning av filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1530
+#: gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Verkligen ta bort filen \"%s\"?"
 
-#: gtk/gtkfilesel.c:1535
+#: gtk/gtkfilesel.c:1539
 msgid "Delete File"
 msgstr "Ta bort fil"
 
-#: gtk/gtkfilesel.c:1583
+#: gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Fel vid namnbyte på filen till \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1596
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Fel vid namnbyte på filen \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1605
+#: gtk/gtkfilesel.c:1611
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Fel vid byte av namn på filen \"%s\" till \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1652
+#: gtk/gtkfilesel.c:1658
 msgid "Rename File"
 msgstr "Byt namn på fil"
 
-#: gtk/gtkfilesel.c:1667
+#: gtk/gtkfilesel.c:1673
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Byt namn på filen \"%s\" till:"
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1702
 msgid "_Rename"
 msgstr "_Byt namn"
 
-#: gtk/gtkfilesel.c:2128
+#: gtk/gtkfilesel.c:2134
 msgid "_Selection: "
 msgstr "_Markering: "
 
-#: gtk/gtkfilesel.c:3050
+#: gtk/gtkfilesel.c:3056
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -1995,15 +2000,15 @@ msgstr ""
 "Filnamnet \"%s\" kunde inte konverteras till UTF-8 (prova att ställa in "
 "miljövariabeln G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3053
+#: gtk/gtkfilesel.c:3059
 msgid "Invalid UTF-8"
 msgstr "Ogiltig UTF-8"
 
-#: gtk/gtkfilesel.c:3927
+#: gtk/gtkfilesel.c:3933
 msgid "Name too long"
 msgstr "Namnet är för långt"
 
-#: gtk/gtkfilesel.c:3929
+#: gtk/gtkfilesel.c:3935
 msgid "Couldn't convert filename"
 msgstr "Kunde inte konvertera filnamn"
 
@@ -2420,7 +2425,7 @@ msgstr "Filsystemsrot"
 msgid "Not available"
 msgstr "Inte tillgänglig"
 
-#: gtk/gtkprinteroptionwidget.c:808
+#: gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
 msgstr "_Spara i mapp:"
 
@@ -4496,66 +4501,66 @@ msgstr "Misslyckades med att skriva cachefil: %s\n"
 msgid "The generated cache was invalid.\n"
 msgstr "Den genererade cachen var ogiltig.\n"
 
-#: gtk/updateiconcache.c:1519
+#: gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Kunde inte byta namn på %s till %s: %s, tar bort %s.\n"
 
-#: gtk/updateiconcache.c:1531
+#: gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Kunde inte byta namn på %s till %s: %s\n"
 
-#: gtk/updateiconcache.c:1538
+#: gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Kunde inte byta namn på %s tillbaka till %s: %s.\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Cachefil skapades.\n"
 
-#: gtk/updateiconcache.c:1603
+#: gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Skriv över en befintlig cache, även om den är uppdaterad"
 
-#: gtk/updateiconcache.c:1604
+#: gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "Kontrollera inte om index.theme finns"
 
-#: gtk/updateiconcache.c:1605
+#: gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr "Inkludera inte bilddata i cachen"
 
-#: gtk/updateiconcache.c:1606
+#: gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "Skriv ut en C-headerfil"
 
-#: gtk/updateiconcache.c:1607
+#: gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "Stäng av informativ utskrift"
 
-#: gtk/updateiconcache.c:1608
+#: gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "Validera befintlig ikoncache"
 
-#: gtk/updateiconcache.c:1671
+#: gtk/updateiconcache.c:1679
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Filen hittades inte: %s\n"
 
-#: gtk/updateiconcache.c:1677
+#: gtk/updateiconcache.c:1685
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Inte en giltig ikoncache: %s\n"
 
-#: gtk/updateiconcache.c:1690
+#: gtk/updateiconcache.c:1698
 #, c-format
 msgid "No theme index file."
 msgstr "Ingen temaindexfil."
 
-#: gtk/updateiconcache.c:1694
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4955,7 +4960,7 @@ msgstr "Sidor per _blad:"
 msgid "File"
 msgstr "Fil"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:613
+#: modules/printbackends/file/gtkprintbackendfile.c:614
 msgid "_Output format"
 msgstr "_Utskriftsformat"
 

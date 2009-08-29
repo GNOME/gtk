@@ -101,6 +101,30 @@ Debugging
 gtkenums.sgml
 
 
+<!-- ##### SECTION ./tmpl/gtkinfobar.sgml:Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkinfobar.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkinfobar.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkinfobar.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkinfobar.sgml:Title ##### -->
+GtkInfoBar
+
+
 <!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
 <refsect2>
 <title>What are Signal Marshallers?</title>
@@ -1128,6 +1152,57 @@ a RC file.
 @Returns: a #GtkPixmap representing @filename
 
 <!-- ##### STRUCT GtkImageMenuItemClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkInfoBar ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkInfoBar::close ##### -->
+<para>
+
+</para>
+
+@infobar: the object which received the signal.
+
+<!-- ##### SIGNAL GtkInfoBar::response ##### -->
+<para>
+
+</para>
+
+@infobar: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkInfoBar:action-area-border ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkInfoBar:button-spacing ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkInfoBar:content-area-border ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkInfoBar:content-area-spacing ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkInfoBar:message-type ##### -->
 <para>
 
 </para>
@@ -2673,6 +2748,107 @@ Get the type of GtkIdentifier.
 </para>
 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_add_action_widget ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@child: 
+@response_id: 
+
+<!-- ##### FUNCTION gtk_info_bar_add_button ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@button_text: 
+@response_id: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_add_buttons ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@first_button_text: 
+@Varargs: 
+
+<!-- ##### FUNCTION gtk_info_bar_get_action_area ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_get_content_area ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_get_message_type ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_new_with_buttons ##### -->
+<para>
+
+</para>
+
+@first_button_text: 
+@Varargs: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_info_bar_response ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@response_id: 
+
+<!-- ##### FUNCTION gtk_info_bar_set_default_response ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@response_id: 
+
+<!-- ##### FUNCTION gtk_info_bar_set_message_type ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@message_type: 
+
+<!-- ##### FUNCTION gtk_info_bar_set_response_sensitive ##### -->
+<para>
+
+</para>
+
+@info_bar: 
+@response_id: 
+@setting: 
 
 <!-- ##### FUNCTION gtk_item_factory_dump_items ##### -->
 <para>
