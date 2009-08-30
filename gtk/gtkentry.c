@@ -9389,6 +9389,9 @@ keypress_completion_out:
            event->keyval == GDK_KP_Enter ||
 	   event->keyval == GDK_Return)
     {
+      GtkTreeIter iter;
+      GtkTreeModel *model = NULL;
+      GtkTreeSelection *sel;
       gboolean retval = TRUE;
 
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
@@ -9396,9 +9399,6 @@ keypress_completion_out:
 
       if (completion->priv->current_selected < matches)
         {
-          GtkTreeIter iter;
-          GtkTreeModel *model = NULL;
-          GtkTreeSelection *sel;
           gboolean entry_set;
 
           sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
@@ -9430,15 +9430,18 @@ keypress_completion_out:
         }
       else if (completion->priv->current_selected - matches >= 0)
         {
-          GtkTreePath *path;
+          sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view));
+          if (gtk_tree_selection_get_selected (sel, &model, &iter))
+            {
+              GtkTreePath *path;
 
-          _gtk_entry_reset_im_context (GTK_ENTRY (widget));
-
-          path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
-
-          g_signal_emit_by_name (completion, "action-activated",
-                                 gtk_tree_path_get_indices (path)[0]);
-          gtk_tree_path_free (path);
+              path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
+              g_signal_emit_by_name (completion, "action-activated",
+                                     gtk_tree_path_get_indices (path)[0]);
+              gtk_tree_path_free (path);
+            }
+          else
+            retval = FALSE;
         }
 
       g_free (completion->priv->completion_prefix);
