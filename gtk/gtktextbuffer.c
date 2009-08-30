@@ -3887,13 +3887,14 @@ gtk_text_buffer_backspace (GtkTextBuffer *buffer,
   if (gtk_text_buffer_delete_interactive (buffer, &start, &end,
 					  default_editable))
     {
-      if (backspace_deletes_character)
+      /* special case \r\n, since we never want to reinsert \r */
+      if (backspace_deletes_character && strcmp ("\r\n", cluster_text))
 	{
 	  gchar *normalized_text = g_utf8_normalize (cluster_text,
 						     strlen (cluster_text),
 						     G_NORMALIZE_NFD);
 	  glong len = g_utf8_strlen (normalized_text, -1);
-	  
+
 	  if (len > 1)
 	    gtk_text_buffer_insert_interactive (buffer,
 						&start,
