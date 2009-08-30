@@ -4892,6 +4892,7 @@ save_folder_update_tooltip (GtkComboBox           *combo,
   gtk_widget_set_tooltip_text (GTK_WIDGET (combo), tooltip);
   gtk_widget_set_has_tooltip (GTK_WIDGET (combo),
                               gtk_widget_get_sensitive (GTK_WIDGET (combo)));
+  g_free (tooltip);
 }
 
 /* Filter function used to filter out the Search item and its separator.  
