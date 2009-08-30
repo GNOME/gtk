@@ -2656,9 +2656,6 @@ construct_icon_info (GtkWidget            *widget,
   if (GTK_WIDGET_REALIZED (widget))
     realize_icon_info (widget, icon_pos);
 
-  if (GTK_WIDGET_MAPPED (widget))
-    gdk_window_show_unraised (icon_info->window);
-
   return icon_info;
 }
 
@@ -7536,6 +7533,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-pixbuf");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7600,6 +7600,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-stock");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7667,6 +7670,9 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-name");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7731,6 +7737,9 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-gicon");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
