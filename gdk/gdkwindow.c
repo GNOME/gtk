@@ -913,23 +913,26 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 
       if (gdk_region_empty (private->clip_region))
 	visibility = GDK_VISIBILITY_FULLY_OBSCURED;
-      else {
-	if (private->shape)
-	  fully_visible = gdk_region_equal (private->clip_region,
-					    private->shape);
-	else
-	  {
-	    r.x = 0;
-	    r.y = 0;
-	    r.width = private->width;
-	    r.height = private->height;
-	    fully_visible = gdk_region_rect_equal (private->clip_region, &r);
-	  }
+      else
+        {
+          if (private->shape)
+            {
+	      fully_visible = gdk_region_equal (private->clip_region,
+	                                        private->shape);
+            }
+          else
+            {
+	      r.x = 0;
+	      r.y = 0;
+	      r.width = private->width;
+	      r.height = private->height;
+	      fully_visible = gdk_region_rect_equal (private->clip_region, &r);
+	    }
 
-	if (fully_visible)
-	  visibility = GDK_VISIBILITY_UNOBSCURED;
-	else
-	  visibility = GDK_VISIBILITY_PARTIAL;
+	  if (fully_visible)
+	    visibility = GDK_VISIBILITY_UNOBSCURED;
+	  else
+	    visibility = GDK_VISIBILITY_PARTIAL;
 	}
 
       if (private->visibility != visibility)
@@ -1194,7 +1197,10 @@ gdk_window_new (GdkWindow     *parent,
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
   if (GDK_WINDOW_DESTROYED (parent))
-    return NULL;
+    {
+      g_warning ("gdk_window_new(): parent is destroyed\n");
+      return NULL;
+    }
 
   if (attributes->window_type == GDK_WINDOW_OFFSCREEN &&
       _gdk_native_windows)
