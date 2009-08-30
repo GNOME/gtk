@@ -1185,7 +1185,7 @@ gtk_print_settings_set_number_up (GtkPrintSettings *settings,
 gint
 gtk_print_settings_get_resolution (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION, 300);
 }
 
 /**
@@ -1224,7 +1224,7 @@ gtk_print_settings_set_resolution (GtkPrintSettings *settings,
 gint
 gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_X, 300);
 }
 
 /**
@@ -1240,7 +1240,7 @@ gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
 gint
 gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y, 300);
 }
 
 /**
@@ -1281,7 +1281,7 @@ gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
 gdouble
 gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_double (settings, GTK_PRINT_SETTINGS_PRINTER_LPI);
+  return gtk_print_settings_get_double_with_default (settings, GTK_PRINT_SETTINGS_PRINTER_LPI, 150.0);
 }
 
 /**

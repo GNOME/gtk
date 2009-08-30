@@ -361,16 +361,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
               if (sscanf (ppd_attr_res->value, "%dx%ddpi", &res_x, &res_y) == 2)
                 {
-                  if (res_x != 0 && res_y != 0)
+                  if (res_x > 0 && res_y > 0)
                     gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
                 }
               else if (sscanf (ppd_attr_res->value, "%ddpi", &res) == 1)
                 {
-                  if (res != 0)
+                  if (res > 0)
                     gtk_print_settings_set_resolution (settings, res);
                 }
-              else
-                gtk_print_settings_set_resolution (settings, 300);
             }
         }
 
@@ -390,17 +388,10 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
       ppd_attr_screen_freq = ppdFindAttr (ppd_file, "ScreenFreq", NULL);
 
-      if (ppd_attr_res_screen_freq != NULL)
+      if (ppd_attr_res_screen_freq != NULL && atof (ppd_attr_res_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_res_screen_freq->value));
-      else if (ppd_attr_screen_freq != NULL)
+      else if (ppd_attr_screen_freq != NULL && atof (ppd_attr_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
-      else
-        gtk_print_settings_set_printer_lpi (settings, 150.0);
-    }
-  else
-    {
-      gtk_print_settings_set_resolution (settings, 300);
-      gtk_print_settings_set_printer_lpi (settings, 150.0);
     }
 
   if (level == 2)
@@ -3781,12 +3772,12 @@ foreach_option_get_settings (GtkPrinterOption *option,
 
       if (sscanf (value, "%dx%ddpi", &res_x, &res_y) == 2)
         {
-          if (res_x != 0 && res_y != 0)
+          if (res_x > 0 && res_y > 0)
             gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
         }
       else if (sscanf (value, "%ddpi", &res) == 1)
         {
-          if (res != 0)
+          if (res > 0)
             gtk_print_settings_set_resolution (settings, res);
         }
 
