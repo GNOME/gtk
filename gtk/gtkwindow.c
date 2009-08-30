@@ -4400,6 +4400,7 @@ static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkMnemonicHash *mnemonic_hash;
 
   g_free (window->title);
@@ -4427,11 +4428,11 @@ gtk_window_finalize (GObject *object)
     }
 
   if (window->screen)
-    {
-      g_signal_handlers_disconnect_by_func (window->screen,
-					    gtk_window_on_composited_changed, window);
-    }
-      
+    g_signal_handlers_disconnect_by_func (window->screen,
+                                          gtk_window_on_composited_changed, window);
+
+  g_free (priv->startup_id);
+
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
@@ -4601,7 +4602,8 @@ gtk_window_map (GtkWidget *widget)
           /* Make sure we have a "real" id */
           if (!startup_id_is_fake (priv->startup_id)) 
             gdk_notify_startup_complete_with_id (priv->startup_id);
-            
+
+          g_free (priv->startup_id);
           priv->startup_id = NULL;
         }
       else if (!sent_startup_notification)
