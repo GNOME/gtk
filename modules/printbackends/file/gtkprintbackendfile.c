@@ -335,9 +335,6 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
         break;
     }
 
-  if (gtk_print_settings_get_printer_lpi (settings) == 0.0)
-    gtk_print_settings_set_printer_lpi (settings, 150.0);
-
   cairo_surface_set_fallback_resolution (surface,
                                          2.0 * gtk_print_settings_get_printer_lpi (settings),
                                          2.0 * gtk_print_settings_get_printer_lpi (settings));
