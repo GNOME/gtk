@@ -1161,6 +1161,13 @@ gdk_offscreen_window_queue_translation (GdkWindow *window,
  * @window: a #GdkWindow
  * @embedder: the #GdkWindow that @window gets embedded in
  *
+ * Sets @window to be embedded in @embedder.
+ *
+ * To fully embed an offscreen window, in addition to calling this
+ * function, it is also necessary to handle the #GdkWindow::pick-embedded-child
+ * signal on the @embedder and the #GdkWindow::to-embedder and
+ * #GdkWindow::from-embedder signals on @window.
+ *
  * Since: 2.18
  */
 void

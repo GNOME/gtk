@@ -480,7 +480,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    * The ::pick-embedded-child signal is emitted to find an embedded
    * child at the given position.
    *
-   * Returns: the GdkWindow of the embedded child at @x, @y, or %NULL
+   * Returns: the #GdkWindow of the embedded child at @x, @y, or %NULL
    *
    * Since: 2.18
    */
@@ -506,6 +506,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    *
    * The ::to-embedder signal is emitted to translate coordinates
    * in an offscreen window to its embedder.
+   *
+   * See also #GtkWindow::from-embedder.
    *
    * Since: 2.18
    */
@@ -533,6 +535,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    *
    * The ::from-embedder signal is emitted to translate coordinates
    * in the embedder of an offscreen window to the offscreen window.
+   *
+   * See also #GtkWindow::to-embedder.
    *
    * Since: 2.18
    */
@@ -2307,7 +2311,7 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
  * Return value: list of toplevel windows, free with g_list_free()
  *
  * Deprecated: 2.16: Use gdk_screen_get_toplevel_windows() instead.
- **/
+ */
 GList *
 gdk_window_get_toplevels (void)
 {
@@ -7238,7 +7242,6 @@ gdk_window_set_back_pixmap (GdkWindow *window,
 /**
  * gdk_window_get_cursor:
  * @window: a #GdkWindow
- * @cursor: a cursor
  *
  * Retrieves a #GdkCursor pointer for the cursor currently set on the
  * specified #GdkWindow, or %NULL.  If the return value is %NULL then
@@ -8074,8 +8077,8 @@ apply_redirect_to_children (GdkWindowObject   *private,
  * @src_y: y position in @window
  * @dest_x: x position in @drawable
  * @dest_y: y position in @drawable
- * @width: width of redirection
- * @height: height of redirection
+ * @width: width of redirection, or -1 to use the width of @window
+ * @height: height of redirection or -1 to use the height of @window
  *
  * Redirects drawing into @window so that drawing to the
  * window in the rectangle specified by @src_x, @src_y,
@@ -8351,8 +8354,10 @@ update_cursor (GdkDisplay *display)
 
 static void
 from_embedder (GdkWindowObject *window,
-	       double embedder_x, double embedder_y,
-	       double *offscreen_x, double *offscreen_y)
+	       gdouble          embedder_x,
+               gdouble          embedder_y,
+	       gdouble         *offscreen_x,
+               gdouble         *offscreen_y)
 {
   g_signal_emit (window,
 		 signals[FROM_EMBEDDER], 0,
@@ -8363,8 +8368,10 @@ from_embedder (GdkWindowObject *window,
 
 static void
 convert_coords_to_child (GdkWindowObject *child,
-			 double x, double y,
-			 double *child_x, double *child_y)
+			 gdouble          x,
+                         gdouble          y,
+			 gdouble         *child_x,
+                         gdouble         *child_y)
 {
   if (gdk_window_is_offscreen (child))
     {
@@ -8380,7 +8387,8 @@ convert_coords_to_child (GdkWindowObject *child,
 
 static gboolean
 point_in_window (GdkWindowObject *window,
-		 double x, double y)
+		 gdouble          x,
+                 gdouble          y)
 {
   return
     x >= 0 && x < window->width &&
@@ -8395,8 +8403,10 @@ point_in_window (GdkWindowObject *window,
 
 static GdkWindow *
 convert_native_coords_to_toplevel (GdkWindow *window,
-				   double child_x, double child_y,
-				   double *toplevel_x, double *toplevel_y)
+				   gdouble    child_x,
+                                   gdouble    child_y,
+				   gdouble   *toplevel_x,
+                                   gdouble   *toplevel_y)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   gdouble x, y;
@@ -8454,7 +8464,8 @@ convert_toplevel_coords_to_window (GdkWindow *window,
 
 static GdkWindowObject *
 pick_embedded_child (GdkWindowObject *window,
-		      double x, double y)
+		     gdouble          x,
+                     gdouble          y)
 {
   GdkWindowObject *res;
 
@@ -8468,7 +8479,8 @@ pick_embedded_child (GdkWindowObject *window,
 
 GdkWindow *
 _gdk_window_find_child_at (GdkWindow *window,
-			   int x, int y)
+			   int        x,
+                           int        y)
 {
   GdkWindowObject *private, *sub;
   double child_x, child_y;
@@ -8507,12 +8519,13 @@ _gdk_window_find_child_at (GdkWindow *window,
 
 GdkWindow *
 _gdk_window_find_descendant_at (GdkWindow *toplevel,
-				double x, double y,
-				double *found_x,
-				double *found_y)
+				gdouble    x,
+                                gdouble    y,
+				gdouble   *found_x,
+				gdouble   *found_y)
 {
   GdkWindowObject *private, *sub;
-  double child_x, child_y;
+  gdouble child_x, child_y;
   GList *l;
   gboolean found;
 
