@@ -830,6 +830,12 @@ gtk_file_system_model_dispose (GObject *object)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
 
+  if (model->dir_thaw_source)
+    {
+      g_source_remove (model->dir_thaw_source);
+      model->dir_thaw_source = 0;
+    }
+
   g_cancellable_cancel (model->cancellable);
   if (model->dir_monitor)
     g_file_monitor_cancel (model->dir_monitor);
