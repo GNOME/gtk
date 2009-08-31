@@ -377,7 +377,7 @@ get_monitor (GdkScreen *screen,
  *
  * Gets the width in millimeters of the specified monitor, if available.
  *
- * Returns the width of the monitor, or -1 if not available
+ * Returns: the width of the monitor, or -1 if not available
  *
  * Since: 2.14
  */
