@@ -66,9 +66,6 @@ const GValue *      _gtk_file_system_model_get_value        (GtkFileSystemModel 
                                                              GtkTreeIter *       iter,
                                                              int                 column);
 
-void                _gtk_file_system_model_add_file         (GtkFileSystemModel *model,
-                                                             GFile              *file,
-                                                             GFileInfo          *info);
 void                _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
                                                              GFile              *file,
                                                              const char         *attributes);
