@@ -971,15 +971,21 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
           g_object_unref (info);
         }
       g_list_free (files);
-    }
 
-  if (files == NULL)
+      g_file_enumerator_next_files_async (enumerator,
+					  g_file_is_native (model->dir) ? 50 * FILES_PER_QUERY : FILES_PER_QUERY,
+					  IO_PRIORITY,
+					  model->cancellable,
+					  gtk_file_system_model_got_files,
+					  model);
+    }
+  else
     {
       g_file_enumerator_close_async (enumerator, 
                                      IO_PRIORITY,
                                      model->cancellable,
                                      gtk_file_system_model_closed_enumerator,
-                                     NULL);
+                                     model);
       if (model->dir_thaw_source != 0)
         {
           g_source_remove (model->dir_thaw_source);
@@ -987,20 +993,13 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
           _gtk_file_system_model_thaw_updates (model);
         }
 
+      g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
+
       if (error)
         g_error_free (error);
-      else
-        g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, NULL);
 
       g_object_unref (model);
     }
-  else
-    g_file_enumerator_next_files_async (enumerator,
-                                        g_file_is_native (model->dir) ? 50 * FILES_PER_QUERY : FILES_PER_QUERY,
-                                        IO_PRIORITY,
-                                        model->cancellable,
-                                        gtk_file_system_model_got_files,
-                                        model);
 
   gdk_threads_leave ();
 }
