@@ -13,6 +13,9 @@
     longer correct to assume that each window has an associated XID.
     Code that makes this assumption can sometimes be fixed by calling
     gdk_window_ensure_native() on the windows in question.
+    Calling gdk_x11_drawable_get_xid() from the X11-specific API on a
+    non-native window will explicitly call gdk_window_ensure_native(),
+    so old code using this will continue to work.
   </para>
 
   <para>
