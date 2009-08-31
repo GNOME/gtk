@@ -114,6 +114,9 @@ struct _GtkFileSystemModelClass
 static void add_file (GtkFileSystemModel *model,
 		      GFile              *file,
 		      GFileInfo          *info);
+static void remove_file (GtkFileSystemModel *model,
+			 GFile              *file);
+
 /* iter setup:
  * @user_data: the model
  * @user_data2: GUINT_TO_POINTER of array index of current entry
@@ -1034,7 +1037,7 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
                                  model);
         break;
       case G_FILE_MONITOR_EVENT_DELETED:
-        _gtk_file_system_model_remove_file (model, file);
+        remove_file (model, file);
         break;
       case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
         /* FIXME: use freeze/thaw with this somehow? */
@@ -1565,7 +1568,7 @@ add_file (GtkFileSystemModel *model,
 }
 
 /**
- * _gtk_file_system_model_remove_file:
+ * remove_file:
  * @model: the model
  * @file: file to remove from the model. The file must have been 
  *        added to the model previously
@@ -1573,9 +1576,9 @@ add_file (GtkFileSystemModel *model,
  * Removes the given file from the model. If the file is not part of 
  * @model, this function does nothing.
  **/
-void
-_gtk_file_system_model_remove_file (GtkFileSystemModel *model,
-                                   GFile              *file)
+static void
+remove_file (GtkFileSystemModel *model,
+	     GFile              *file)
 {
   FileModelNode *node;
   guint id;
