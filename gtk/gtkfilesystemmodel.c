@@ -111,6 +111,9 @@ struct _GtkFileSystemModelClass
   void (*finished_loading) (GtkFileSystemModel *model, GError *error);
 };
 
+static void add_file (GtkFileSystemModel *model,
+		      GFile              *file,
+		      GFileInfo          *info);
 /* iter setup:
  * @user_data: the model
  * @user_data2: GUINT_TO_POINTER of array index of current entry
@@ -954,7 +957,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
               continue;
             }
           file = g_file_get_child (model->dir, name);
-          _gtk_file_system_model_add_file (model, file, info);
+          add_file (model, file, info);
           g_object_unref (file);
           g_object_unref (info);
         }
@@ -1163,7 +1166,8 @@ _gtk_file_system_model_new_valist (GtkFileSystemModelGetValue get_func,
  * @...: @n_columns #GType types for the columns
  *
  * Creates a new #GtkFileSystemModel object. You need to add files
- * to the list using _gtk_file_system_model_add_file().
+ * to the list using _gtk_file_system_model_add_and_query_file()
+ * or _gtk_file_system_model_update_file().
  *
  * Return value: the newly created #GtkFileSystemModel
  **/
@@ -1526,7 +1530,7 @@ _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
 }
 
 /**
- * _gtk_file_system_model_add_file:
+ * add_file:
  * @model: the model
  * @file: the file to add
  * @info: the information to associate with the file
@@ -1534,10 +1538,10 @@ _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
  * Adds the given @file with its associated @info to the @model. 
  * If the model is frozen, the file will only show up after it is thawn.
  **/
-void
-_gtk_file_system_model_add_file (GtkFileSystemModel *model,
-                                 GFile              *file,
-                                 GFileInfo          *info)
+static void
+add_file (GtkFileSystemModel *model,
+	  GFile              *file,
+	  GFileInfo          *info)
 {
   FileModelNode *node;
   
@@ -1617,7 +1621,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 
   id = node_get_for_file (model, file);
   if (id == 0)
-    _gtk_file_system_model_add_file (model, file, info);
+    add_file (model, file, info);
 
   node = get_node (model, id);
   if (node->info)
@@ -1832,8 +1836,8 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
  * @attributes: attributes to query before adding the file
  *
  * This is a conenience function that calls g_file_query_info_async() on 
- * the given file, and when successful, adds it to the model with
- * _gtk_file_system_model_add_file(). Upon failure, the @file is discarded.
+ * the given file, and when successful, adds it to the model.
+ * Upon failure, the @file is discarded.
  **/
 void
 _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
