@@ -129,6 +129,7 @@ content_files =					\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
+        migrating-ClientSideWindows.sgml	\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkAction.sgml		\
 	migrating-GtkAssistant.sgml		\

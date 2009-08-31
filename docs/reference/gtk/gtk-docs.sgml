@@ -435,6 +435,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/migrating-GtkTooltip.sgml" />
     <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
     <xi:include href="xml/migrating-GtkLabel-links.sgml" />
+    <xi:include href="xml/migrating-ClientSideWindows.sgml" />
   </part>
 
   <part>
