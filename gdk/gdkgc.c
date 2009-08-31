@@ -1486,6 +1486,10 @@ _gdk_gc_update_context (GdkGC          *gc,
     return;
 
   cairo_reset_clip (cr);
+  /* The reset above resets the window clip rect, so we want to re-set that */
+  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
+
   if (priv->clip_region)
     {
       cairo_save (cr);
@@ -1501,9 +1505,6 @@ _gdk_gc_update_context (GdkGC          *gc,
       cairo_clip (cr);
     }
 
-  /* The reset above resets the window clip rect, so we want to re-set that */
-  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
 }
 
 
