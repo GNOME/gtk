@@ -206,8 +206,13 @@ gdk_pre_parse_libgtk_only (void)
   }
 #endif	/* G_ENABLE_DEBUG */
 
-  if (getenv("GDK_NATIVE_WINDOWS"))
-    _gdk_native_windows = TRUE;
+  if (getenv ("GDK_NATIVE_WINDOWS"))
+    {
+      _gdk_native_windows = TRUE;
+      /* Ensure that this is not propagated
+	 to spawned applications */
+      g_unsetenv ("GDK_NATIVE_WINDOWS");
+    }
 
   g_type_init ();
 
