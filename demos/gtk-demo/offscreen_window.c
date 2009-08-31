@@ -366,7 +366,7 @@ gtk_rotated_bin_set_angle (GtkRotatedBin *bin,
   bin->angle = angle;
   gtk_widget_queue_resize (GTK_WIDGET (bin));
 
-  /* TODO: Really needs to resent pointer events if over the rotated window */
+  gdk_window_geometry_changed (bin->offscreen_window);
 }
 
 static void
