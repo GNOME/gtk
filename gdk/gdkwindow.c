@@ -663,6 +663,14 @@ gdk_window_has_impl (GdkWindowObject *window)
   return window->impl_window == window;
 }
 
+static gboolean
+gdk_window_is_toplevel (GdkWindowObject *window)
+{
+  return
+    window->parent == NULL ||
+    window->parent->window_type == GDK_WINDOW_ROOT;
+}
+
 gboolean
 _gdk_window_has_impl (GdkWindow *window)
 {
@@ -865,8 +873,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
 	  r.height = private->height;
 	  new_clip = gdk_region_rectangle (&r);
 
-	  if (private->parent != NULL &&
-	      private->parent->window_type != GDK_WINDOW_ROOT)
+	  if (!gdk_window_is_toplevel (private))
 	    {
 	      gdk_region_intersect (new_clip, private->parent->clip_region);
 
@@ -981,8 +988,7 @@ recompute_visible_regions_internal (GdkWindowObject *private,
     }
 
   if (recalculate_siblings &&
-      private->parent != NULL &&
-      private->parent->window_type != GDK_WINDOW_ROOT)
+      !gdk_window_is_toplevel (private))
     {
       /* If we moved a child window in parent or changed the stacking order, then we
        * need to recompute the visible area of all the other children in the parent
@@ -2099,8 +2105,7 @@ gdk_window_get_toplevel (GdkWindow *window)
 
   while (obj->window_type == GDK_WINDOW_CHILD)
     {
-      if (obj->parent == NULL ||
-	  obj->parent->window_type == GDK_WINDOW_ROOT)
+      if (gdk_window_is_toplevel (obj))
 	break;
       obj = obj->parent;
     }
@@ -2879,8 +2884,7 @@ do_move_region_bits_on_impl (GdkWindowObject *impl_window,
    * so we copy from the toplevel with INCLUDE_INFERIORS.
    */
   private = impl_window;
-  while (private->parent != NULL &&
-	 private->parent->window_type != GDK_WINDOW_ROOT)
+  while (!gdk_window_is_toplevel (private))
     {
       dx -= private->parent->abs_x + private->x;
       dy -= private->parent->abs_y + private->y;
@@ -5972,8 +5976,7 @@ gdk_window_raise_internal (GdkWindow *window)
     }
 
   /* Just do native raise for toplevels */
-  if (private->parent == NULL ||
-      private->parent->window_type == GDK_WINDOW_ROOT ||
+  if (gdk_window_is_toplevel (private) ||
       /* The restack_under codepath should work correctly even if the parent
 	 is native, but it relies on the order of ->children to be correct,
 	 and some apps like SWT reorder the x windows without gdks knowledge,
@@ -6048,8 +6051,7 @@ set_viewable (GdkWindowObject *w,
 
   if (gdk_window_has_impl (w)  &&
       w->window_type != GDK_WINDOW_FOREIGN &&
-      w->parent != NULL &&
-      w->parent->window_type != GDK_WINDOW_ROOT)
+      !gdk_window_is_toplevel (w))
     {
       /* For most native windows we show/hide them not when they are
        * mapped/unmapped, because that may not produce the correct results.
@@ -6095,8 +6097,7 @@ _gdk_window_update_viewable (GdkWindow *window)
   if (priv->window_type == GDK_WINDOW_FOREIGN ||
       priv->window_type == GDK_WINDOW_ROOT)
     viewable = TRUE;
-  else if (priv->parent == NULL ||
-	   priv->parent->window_type == GDK_WINDOW_ROOT ||
+  else if (gdk_window_is_toplevel (priv) ||
 	   priv->parent->viewable)
     viewable = GDK_WINDOW_IS_MAPPED (priv);
   else
@@ -6253,8 +6254,7 @@ gdk_window_lower_internal (GdkWindow *window)
     }
 
   /* Just do native lower for toplevels */
-  if (private->parent == NULL ||
-      private->parent->window_type == GDK_WINDOW_ROOT ||
+  if (gdk_window_is_toplevel (private) ||
       /* The restack_under codepath should work correctly even if the parent
 	 is native, but it relies on the order of ->children to be correct,
 	 and some apps like SWT reorder the x windows without gdks knowledge,
@@ -6307,8 +6307,7 @@ gdk_window_invalidate_in_parent (GdkWindowObject *private)
 {
   GdkRectangle r, child;
 
-  if (private->parent == NULL ||
-      private->parent->window_type == GDK_WINDOW_ROOT)
+  if (gdk_window_is_toplevel (private))
     return;
 
   /* get the visible rectangle of the parent */
@@ -6731,8 +6730,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   if (private->destroyed)
     return;
 
-  if (private->parent == NULL ||
-      private->parent->window_type == GDK_WINDOW_ROOT)
+  if (gdk_window_is_toplevel (private))
     {
       gdk_window_move_resize_toplevel (window, with_move, x, y, width, height);
       return;
@@ -7643,8 +7641,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 
       gdk_region_destroy (diff);
 
-      if (private->parent != NULL &&
-	  private->parent->window_type != GDK_WINDOW_ROOT)
+      if (!gdk_window_is_toplevel (private))
 	{
 	  /* New area in the non-root parent window, needs invalidation */
 	  diff = gdk_region_copy (old_region);
@@ -8414,8 +8411,7 @@ convert_native_coords_to_toplevel (GdkWindow *window,
   x = child_x;
   y = child_y;
 
-  while (private->parent != NULL &&
-	 (private->parent->window_type != GDK_WINDOW_ROOT))
+  while (!gdk_window_is_toplevel (private))
     {
       x += private->x;
       y += private->y;
@@ -9811,9 +9807,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
       event_private->window_type == GDK_WINDOW_ROOT)
     return;
 
-  is_toplevel =
-    event_private->parent == NULL ||
-    event_private->parent->window_type == GDK_WINDOW_ROOT;
+  is_toplevel = gdk_window_is_toplevel (event_private);
 
   if ((event->type == GDK_ENTER_NOTIFY ||
        event->type == GDK_LEAVE_NOTIFY) &&
