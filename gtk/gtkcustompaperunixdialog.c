@@ -381,6 +381,7 @@ _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
     {
       gtk_window_set_modal (GTK_WINDOW (result), TRUE);
       gtk_window_set_transient_for (GTK_WINDOW (result), parent);
+      gtk_window_set_destroy_with_parent (GTK_WINDOW (result), TRUE);
     }
 
   return result;
