@@ -9332,7 +9332,11 @@ gdk_pointer_grab (GdkWindow *	  window,
 
 /**
  * gdk_window_geometry_changed:
- * @window: a #GdkWindow
+ * @window: an embedded offscreen #GdkWindow
+ *
+ * This function informs GDK that the geometry of an embedded
+ * offscreen window has changed. This is necessary for GDK to keep
+ * track of which offscreen window the pointer is in.
  *
  * Since: 2.18
  */
