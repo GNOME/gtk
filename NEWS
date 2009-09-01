@@ -36,6 +36,7 @@ Overview of Changes from GTK+ 2.17.9 to 2.17.10
  592862 There is a misprint on the returning value of gdk_pixmap_lookup()
  586466 GtkPrintOperation printing fails if it is the only event source
  434318 printer detail acquisition needs events
+ 593712 configure fails to to check properly for cups...
 
 * Translation updates:
  Asturian
