@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2006-08-15 19:52+0200\n"
 "Last-Translator: Nickolay V. Shmyrev <nshmyrev@yandex.ru>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -5562,11 +5562,11 @@ msgstr "Включить всплывающие подсказки"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Показывать ли всплывающие подсказки для виджетов"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Режим"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5574,11 +5574,11 @@ msgstr ""
 "Направления, в которых «группа по размеру» влияет на заданные размеры "
 "входящих в нее элементов управления"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Игнорировать скрытые"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

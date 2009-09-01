@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2009-08-24 20:16+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -662,7 +662,7 @@ msgstr "El format d'imatge JPEG 2000"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -670,21 +670,21 @@ msgstr ""
 "La memòria per carregar la imatge és insuficient, proveu de sortir d'algunes "
 "aplicacions per a alliberar memòria"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espai de color JPEG no implementat (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "No es pot obtenir memòria per a carregar el fitxer JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "El JPEG transformat té amplada o alçada zero."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -693,14 +693,14 @@ msgstr ""
 "La qualitat de JPEG ha de ser un valor entre 0 i 100; el valor «%s» no es pot "
 "analitzar."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "La qualitat JPEG ha de ser un valor entre 0 i 100; el valor «%d» no és permès."
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "El format d'imatge JPEG"
 
@@ -1604,64 +1604,64 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Gestioneu mides personalitzades"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "inch"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:584
+#: gtk/gtkcustompaperunixdialog.c:585
 msgid "Margins from Printer..."
 msgstr "Marges de la impressora..."
 
-#: gtk/gtkcustompaperunixdialog.c:750
+#: gtk/gtkcustompaperunixdialog.c:751
 #, c-format
 msgid "Custom Size %d"
 msgstr "Mida personalitzada %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1057
+#: gtk/gtkcustompaperunixdialog.c:1058
 msgid "_Width:"
 msgstr "_Amplada:"
 
-#: gtk/gtkcustompaperunixdialog.c:1069
+#: gtk/gtkcustompaperunixdialog.c:1070
 msgid "_Height:"
 msgstr "_Alçada:"
 
-#: gtk/gtkcustompaperunixdialog.c:1081
+#: gtk/gtkcustompaperunixdialog.c:1082
 msgid "Paper Size"
 msgstr "Mida del paper"
 
-#: gtk/gtkcustompaperunixdialog.c:1090
+#: gtk/gtkcustompaperunixdialog.c:1091
 msgid "_Top:"
 msgstr "_Superior:"
 
-#: gtk/gtkcustompaperunixdialog.c:1102
+#: gtk/gtkcustompaperunixdialog.c:1103
 msgid "_Bottom:"
 msgstr "_Inferior:"
 
-#: gtk/gtkcustompaperunixdialog.c:1114
+#: gtk/gtkcustompaperunixdialog.c:1115
 msgid "_Left:"
 msgstr "_Esquerre:"
 
-#: gtk/gtkcustompaperunixdialog.c:1126
+#: gtk/gtkcustompaperunixdialog.c:1127
 msgid "_Right:"
 msgstr "_Dret:"
 
-#: gtk/gtkcustompaperunixdialog.c:1167
+#: gtk/gtkcustompaperunixdialog.c:1168
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
-#: gtk/gtkentry.c:9959
+#: gtk/gtkentry.c:9971
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
@@ -1731,7 +1731,7 @@ msgstr "%1$s a %2$s"
 msgid "Search"
 msgstr "Cerca"
 
-#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10346
+#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10347
 msgid "Recently Used"
 msgstr "Utilitzats recentment"
 
@@ -1831,55 +1831,55 @@ msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:5018 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:5019 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:5061
+#: gtk/gtkfilechooserdefault.c:5062
 msgid "_Browse for other folders"
 msgstr "Na_vega per altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:5333
+#: gtk/gtkfilechooserdefault.c:5334
 msgid "Type a file name"
 msgstr "Escriviu un nom de fitxer"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5374
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
-#: gtk/gtkfilechooserdefault.c:5384
+#: gtk/gtkfilechooserdefault.c:5385
 msgid "_Location:"
 msgstr "_Ubicació:"
 
-#: gtk/gtkfilechooserdefault.c:5588
+#: gtk/gtkfilechooserdefault.c:5589
 msgid "Save in _folder:"
 msgstr "De_sa en la carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:5590
+#: gtk/gtkfilechooserdefault.c:5591
 msgid "Create in _folder:"
 msgstr "Crea en la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:7346
+#: gtk/gtkfilechooserdefault.c:7347
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkfilechooserdefault.c:7992
+#: gtk/gtkfilechooserdefault.c:7972 gtk/gtkfilechooserdefault.c:7993
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La drecera %s ja existeix"
 
-#: gtk/gtkfilechooserdefault.c:8082
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: gtk/gtkfilechooserdefault.c:8344 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8345 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
 
-#: gtk/gtkfilechooserdefault.c:8347 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8348 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1887,15 +1887,15 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si ho reemplaceu sobreescriureu el seu "
 "contingut."
 
-#: gtk/gtkfilechooserdefault.c:8352 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8353 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:9114
+#: gtk/gtkfilechooserdefault.c:9115
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:9115
+#: gtk/gtkfilechooserdefault.c:9116
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1903,30 +1903,30 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:9129
+#: gtk/gtkfilechooserdefault.c:9130
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserdefault.c:9607
+#: gtk/gtkfilechooserdefault.c:9608
 #, fuzzy
 msgid "Search:"
 msgstr "Cerca"
 
-#: gtk/gtkfilechooserdefault.c:10590
+#: gtk/gtkfilechooserdefault.c:10591
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
-#: gtk/gtkfilechooserdefault.c:11448 gtk/gtkfilechooserdefault.c:11470
-#: gtk/gtkfilechooserdefault.c:11541
+#: gtk/gtkfilechooserdefault.c:11449 gtk/gtkfilechooserdefault.c:11471
+#: gtk/gtkfilechooserdefault.c:11542
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:11488
+#: gtk/gtkfilechooserdefault.c:11489
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11490
+#: gtk/gtkfilechooserdefault.c:11491
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
@@ -2664,7 +2664,7 @@ msgstr "No hi ha paper"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1718
+#: modules/printbackends/cups/gtkprintbackendcups.c:1725
 msgid "Paused"
 msgstr "En pausa"
 
@@ -2788,42 +2788,42 @@ msgstr "General"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3158
+#: modules/printbackends/cups/gtkprintbackendcups.c:3165
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
 #: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3158
+#: modules/printbackends/cups/gtkprintbackendcups.c:3165
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
 #: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3159
+#: modules/printbackends/cups/gtkprintbackendcups.c:3166
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
 #: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3159
+#: modules/printbackends/cups/gtkprintbackendcups.c:3166
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
 #: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3167
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
 #: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3167
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
 #: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3161
+#: modules/printbackends/cups/gtkprintbackendcups.c:3168
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
 #: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3161
+#: modules/printbackends/cups/gtkprintbackendcups.c:3168
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
 
@@ -2831,7 +2831,7 @@ msgstr "De baix a dalt, de dreta a esquerra"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3193
+#: modules/printbackends/cups/gtkprintbackendcups.c:3200
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
@@ -4859,78 +4859,78 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Mètode d'entrada d'X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:762
+#: modules/printbackends/cups/gtkprintbackendcups.c:753
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:766
+#: modules/printbackends/cups/gtkprintbackendcups.c:757
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:768
+#: modules/printbackends/cups/gtkprintbackendcups.c:759
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:772
+#: modules/printbackends/cups/gtkprintbackendcups.c:763
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:765
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:778
+#: modules/printbackends/cups/gtkprintbackendcups.c:769
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:771
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:783
+#: modules/printbackends/cups/gtkprintbackendcups.c:774
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:786
+#: modules/printbackends/cups/gtkprintbackendcups.c:777
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:789
+#: modules/printbackends/cups/gtkprintbackendcups.c:780
 #, c-format
 msgid "Authentication is required on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1406
+#: modules/printbackends/cups/gtkprintbackendcups.c:1413
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "El nivell del tòner de la impressora «%s» és baix."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1407
+#: modules/printbackends/cups/gtkprintbackendcups.c:1414
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "No li queda tòner a la impressora «%s»."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1409
+#: modules/printbackends/cups/gtkprintbackendcups.c:1416
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "El nivell del revelador de la impressora «%s» és baix."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1411
+#: modules/printbackends/cups/gtkprintbackendcups.c:1418
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "No li queda revelador a la impressora «%s»."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1420
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
@@ -4938,154 +4938,154 @@ msgstr ""
 "baix."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1415
+#: modules/printbackends/cups/gtkprintbackendcups.c:1422
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 "No li queda tinta a almenys un dels contenidors de color a la impressora «%s»."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "La tapa de la impressora «%s» està oberta."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1417
+#: modules/printbackends/cups/gtkprintbackendcups.c:1424
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "La porta de la impressora «%s» està oberta."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1425
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "El nivell del paper de la impressora «%s» és baix."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1419
+#: modules/printbackends/cups/gtkprintbackendcups.c:1426
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "No li queda paper a la impressora «%s»."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1427
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "La impressora «%s» actualment no està en línia."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Pot ser que la impressora «%s» no estigui connectada."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1429
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Hi ha un problema a l'impressora «%s»."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1722
 msgid "Paused ; Rejecting Jobs"
 msgstr "En pausa; refusa les tasques"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1721
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "Rejecting Jobs"
 msgstr "Refusa les tasques"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2427
+#: modules/printbackends/cups/gtkprintbackendcups.c:2434
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2428
+#: modules/printbackends/cups/gtkprintbackendcups.c:2435
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2429
+#: modules/printbackends/cups/gtkprintbackendcups.c:2436
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2430
+#: modules/printbackends/cups/gtkprintbackendcups.c:2437
 msgid "Output Tray"
 msgstr "Safata de sortida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2431
+#: modules/printbackends/cups/gtkprintbackendcups.c:2438
 msgid "Resolution"
 msgstr "Resolució"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2432
+#: modules/printbackends/cups/gtkprintbackendcups.c:2439
 msgid "GhostScript pre-filtering"
 msgstr "Filtrat previ del GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2441
+#: modules/printbackends/cups/gtkprintbackendcups.c:2448
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2443
+#: modules/printbackends/cups/gtkprintbackendcups.c:2450
 msgid "Long Edge (Standard)"
 msgstr "Cantó llarg (estàndard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2445
+#: modules/printbackends/cups/gtkprintbackendcups.c:2452
 msgid "Short Edge (Flip)"
 msgstr "Cantó curt (capgirat)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2447
-#: modules/printbackends/cups/gtkprintbackendcups.c:2449
-#: modules/printbackends/cups/gtkprintbackendcups.c:2457
+#: modules/printbackends/cups/gtkprintbackendcups.c:2454
+#: modules/printbackends/cups/gtkprintbackendcups.c:2456
+#: modules/printbackends/cups/gtkprintbackendcups.c:2464
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2451
-#: modules/printbackends/cups/gtkprintbackendcups.c:2453
-#: modules/printbackends/cups/gtkprintbackendcups.c:2455
-#: modules/printbackends/cups/gtkprintbackendcups.c:2459
-#: modules/printbackends/cups/gtkprintbackendcups.c:2945
+#: modules/printbackends/cups/gtkprintbackendcups.c:2458
+#: modules/printbackends/cups/gtkprintbackendcups.c:2460
+#: modules/printbackends/cups/gtkprintbackendcups.c:2462
+#: modules/printbackends/cups/gtkprintbackendcups.c:2466
+#: modules/printbackends/cups/gtkprintbackendcups.c:2952
 msgid "Printer Default"
 msgstr "Predeterminat de la impressora"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2461
+#: modules/printbackends/cups/gtkprintbackendcups.c:2468
 msgid "Embed GhostScript fonts only"
 msgstr "Incrusta només els tipus de lletra GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2463
+#: modules/printbackends/cups/gtkprintbackendcups.c:2470
 msgid "Convert to PS level 1"
 msgstr "Converteix a PS, nivell 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2465
+#: modules/printbackends/cups/gtkprintbackendcups.c:2472
 msgid "Convert to PS level 2"
 msgstr "Converteix a PS, nivell 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2467
+#: modules/printbackends/cups/gtkprintbackendcups.c:2474
 msgid "No pre-filtering"
 msgstr "Sense filtratge previ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2476
+#: modules/printbackends/cups/gtkprintbackendcups.c:2483
 msgid "Miscellaneous"
 msgstr "Miscel·lània"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Medium"
 msgstr "Mitjana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Low"
 msgstr "Baixa"
 
@@ -5093,52 +5093,52 @@ msgstr "Baixa"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3177
+#: modules/printbackends/cups/gtkprintbackendcups.c:3184
 msgid "Pages per Sheet"
 msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3214
+#: modules/printbackends/cups/gtkprintbackendcups.c:3221
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3225
+#: modules/printbackends/cups/gtkprintbackendcups.c:3232
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "None"
 msgstr "Cap"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Classified"
 msgstr "Classificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Standard"
 msgstr "Estàndard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Unclassified"
 msgstr "Desclassificat"
 
@@ -5146,7 +5146,7 @@ msgstr "Desclassificat"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3275
+#: modules/printbackends/cups/gtkprintbackendcups.c:3282
 msgid "Before"
 msgstr "Abans"
 
@@ -5154,7 +5154,7 @@ msgstr "Abans"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3290
+#: modules/printbackends/cups/gtkprintbackendcups.c:3297
 msgid "After"
 msgstr "Després"
 
@@ -5162,7 +5162,7 @@ msgstr "Després"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3310
+#: modules/printbackends/cups/gtkprintbackendcups.c:3317
 msgid "Print at"
 msgstr "Imprimeix"
 
@@ -5170,7 +5170,7 @@ msgstr "Imprimeix"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3321
+#: modules/printbackends/cups/gtkprintbackendcups.c:3328
 msgid "Print at time"
 msgstr "Imprimeix a una hora o data determinada"
 
@@ -5178,7 +5178,7 @@ msgstr "Imprimeix a una hora o data determinada"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3356
+#: modules/printbackends/cups/gtkprintbackendcups.c:3363
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalitzat %sx%s"
@@ -5189,74 +5189,74 @@ msgstr "Personalitzat %sx%s"
 msgid "output.%s"
 msgstr "sortida %s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:498
+#: modules/printbackends/file/gtkprintbackendfile.c:495
 msgid "Print to File"
 msgstr "Imprimeix a un fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "SVG"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:587
-#: modules/printbackends/test/gtkprintbackendtest.c:506
+#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Pàgines per _full:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:646
+#: modules/printbackends/file/gtkprintbackendfile.c:643
 msgid "File"
 msgstr "Fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:656
+#: modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "_Output format"
 msgstr "F_ormat de sortida"
 
 # FIXME
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:400
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
 msgstr "Imprimeix a LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Pàgines per full"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:433
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Línia d'ordres"
 
 # Connectada? (josep)
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:810
+#: modules/printbackends/papi/gtkprintbackendpapi.c:811
 #, fuzzy
 msgid "printer offline"
 msgstr "La impressora no està en línia"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:828
+#: modules/printbackends/papi/gtkprintbackendpapi.c:829
 #, fuzzy
 msgid "ready to print"
 msgstr "S'està preparant per a imprimir"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:831
+#: modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr ""
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:835
+#: modules/printbackends/papi/gtkprintbackendpapi.c:836
 #, fuzzy
 msgid "paused"
 msgstr "En pausa"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:838
+#: modules/printbackends/papi/gtkprintbackendpapi.c:839
 #, fuzzy
 msgid "unknown"
 msgstr "(desconegut)"
@@ -5267,7 +5267,7 @@ msgstr "(desconegut)"
 msgid "test-output.%s"
 msgstr "prova-de-sortida.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:470
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Imprimiu per a provar la impressora"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2009-08-22 19:04+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -5563,11 +5563,11 @@ msgstr "Включване на подсказки"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Дали да се показват подсказки към графичните обекти"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Режим"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5575,11 +5575,11 @@ msgstr ""
 "Посоките, в които тази група за размери оказва влияние на заявените размери "
 "на своите съставни елементи"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Игнориране на скритите"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

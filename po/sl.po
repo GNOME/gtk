@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2009-03-10 11:21+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -642,7 +642,7 @@ msgstr "Vrsta zapisa slike JPEG 2000"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Napaka ob interpretiranju slikovne datoteke JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:529
+#: gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -650,21 +650,21 @@ msgstr ""
 "Ni dovolj pomnilnika za naložitev slike; za sprostiev pomnilnika zaprite "
 "nekaj programov"
 
-#: gdk-pixbuf/io-jpeg.c:570 gdk-pixbuf/io-jpeg.c:776
+#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepodprta vrsta barvnega prostora JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
+#: gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ni mogoče rezervirati pomnilnika za nalaganje datoteke JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:920
+#: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr "Preoblikovan JPEG ima ničelno višino ali širino."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -673,14 +673,14 @@ msgstr ""
 "Kvaliteta JPEG mora biti vrednost med 0 in 100; vrednost '%s' ne more biti "
 "razčlenjena."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Kvaliteta JPEG mora biti vrednost med 0 in 100; vrednost '%d' ni dovoljena."
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Vrsta zapisa slike JPEG"
 
@@ -1575,64 +1575,64 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
-#: gtk/gtkcustompaperunixdialog.c:537 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "palec"
 
-#: gtk/gtkcustompaperunixdialog.c:539 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:584
+#: gtk/gtkcustompaperunixdialog.c:585
 msgid "Margins from Printer..."
 msgstr "Robovi pri tiskalniku ..."
 
-#: gtk/gtkcustompaperunixdialog.c:750
+#: gtk/gtkcustompaperunixdialog.c:751
 #, c-format
 msgid "Custom Size %d"
 msgstr "Poljubna velikost %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1057
+#: gtk/gtkcustompaperunixdialog.c:1058
 msgid "_Width:"
 msgstr "Š_irina:"
 
-#: gtk/gtkcustompaperunixdialog.c:1069
+#: gtk/gtkcustompaperunixdialog.c:1070
 msgid "_Height:"
 msgstr "_Višina:"
 
-#: gtk/gtkcustompaperunixdialog.c:1081
+#: gtk/gtkcustompaperunixdialog.c:1082
 msgid "Paper Size"
 msgstr "Velikost papirja"
 
-#: gtk/gtkcustompaperunixdialog.c:1090
+#: gtk/gtkcustompaperunixdialog.c:1091
 msgid "_Top:"
 msgstr "_Zgoraj:"
 
-#: gtk/gtkcustompaperunixdialog.c:1102
+#: gtk/gtkcustompaperunixdialog.c:1103
 msgid "_Bottom:"
 msgstr "_Spodaj:"
 
-#: gtk/gtkcustompaperunixdialog.c:1114
+#: gtk/gtkcustompaperunixdialog.c:1115
 msgid "_Left:"
 msgstr "_Levo:"
 
-#: gtk/gtkcustompaperunixdialog.c:1126
+#: gtk/gtkcustompaperunixdialog.c:1127
 msgid "_Right:"
 msgstr "_Desno:"
 
-#: gtk/gtkcustompaperunixdialog.c:1167
+#: gtk/gtkcustompaperunixdialog.c:1168
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:8577 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
 msgid "Input _Methods"
 msgstr "_Načini vnosa"
 
-#: gtk/gtkentry.c:8591 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
 msgid "_Insert Unicode Control Character"
 msgstr "_Vstavi nadzorni znak Unicode"
 
-#: gtk/gtkentry.c:9959
+#: gtk/gtkentry.c:9971
 msgid "Caps Lock is on"
 msgstr "Tipka velikih črk je vključena."
 
@@ -1701,7 +1701,7 @@ msgstr "%1$s na %2$s"
 msgid "Search"
 msgstr "Najdi"
 
-#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10346
+#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10347
 msgid "Recently Used"
 msgstr "Nazadnje uporabljeno"
 
@@ -1801,55 +1801,55 @@ msgid "Modified"
 msgstr "Spremenjena"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:5018 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:5019 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:5061
+#: gtk/gtkfilechooserdefault.c:5062
 msgid "_Browse for other folders"
 msgstr "_Brskaj za drugimi mapami"
 
-#: gtk/gtkfilechooserdefault.c:5333
+#: gtk/gtkfilechooserdefault.c:5334
 msgid "Type a file name"
 msgstr "Vpišite ime datoteke"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5374
+#: gtk/gtkfilechooserdefault.c:5375
 msgid "Create Fo_lder"
 msgstr "Ustvari _mapo"
 
-#: gtk/gtkfilechooserdefault.c:5384
+#: gtk/gtkfilechooserdefault.c:5385
 msgid "_Location:"
 msgstr "_Mesto:"
 
-#: gtk/gtkfilechooserdefault.c:5588
+#: gtk/gtkfilechooserdefault.c:5589
 msgid "Save in _folder:"
 msgstr "S_hrani v mapo"
 
-#: gtk/gtkfilechooserdefault.c:5590
+#: gtk/gtkfilechooserdefault.c:5591
 msgid "Create in _folder:"
 msgstr "Us_tvari v mapi:"
 
-#: gtk/gtkfilechooserdefault.c:7346
+#: gtk/gtkfilechooserdefault.c:7347
 msgid "Cannot change to folder because it is not local"
 msgstr "Ni mogoče zamenjati mape, ker ni krajevna"
 
-#: gtk/gtkfilechooserdefault.c:7971 gtk/gtkfilechooserdefault.c:7992
+#: gtk/gtkfilechooserdefault.c:7972 gtk/gtkfilechooserdefault.c:7993
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Bližnjica %s že obstaja"
 
-#: gtk/gtkfilechooserdefault.c:8082
+#: gtk/gtkfilechooserdefault.c:8083
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Bližnjica %s še ne obstaja"
 
-#: gtk/gtkfilechooserdefault.c:8344 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8345 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Datoteka \"%s\" že obstaja. Ali jo želite zamenjati?"
 
-#: gtk/gtkfilechooserdefault.c:8347 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8348 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1857,15 +1857,15 @@ msgstr ""
 "Datoteka že obstaja v \"%s\". Če jo boste zamenjali, bo njena vsebina "
 "prepisana."
 
-#: gtk/gtkfilechooserdefault.c:8352 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8353 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: gtk/gtkfilechooserdefault.c:9114
+#: gtk/gtkfilechooserdefault.c:9115
 msgid "Could not start the search process"
 msgstr "Ni mogoče zagnati postopka iskanja"
 
-#: gtk/gtkfilechooserdefault.c:9115
+#: gtk/gtkfilechooserdefault.c:9116
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1873,30 +1873,30 @@ msgstr ""
 "Program ni mogel ustvariti povezave z demonom indeksacije. Prosim, "
 "preverite, da ta teče."
 
-#: gtk/gtkfilechooserdefault.c:9129
+#: gtk/gtkfilechooserdefault.c:9130
 msgid "Could not send the search request"
 msgstr "Ni mogoče poslati zahteve po iskanju"
 
-#: gtk/gtkfilechooserdefault.c:9607
+#: gtk/gtkfilechooserdefault.c:9608
 #, fuzzy
 msgid "Search:"
 msgstr "Najdi"
 
-#: gtk/gtkfilechooserdefault.c:10590
+#: gtk/gtkfilechooserdefault.c:10591
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ni mogoče priklopiti %s"
 
-#: gtk/gtkfilechooserdefault.c:11448 gtk/gtkfilechooserdefault.c:11470
-#: gtk/gtkfilechooserdefault.c:11541
+#: gtk/gtkfilechooserdefault.c:11449 gtk/gtkfilechooserdefault.c:11471
+#: gtk/gtkfilechooserdefault.c:11542
 msgid "Unknown"
 msgstr "Neznan"
 
-#: gtk/gtkfilechooserdefault.c:11488
+#: gtk/gtkfilechooserdefault.c:11489
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:11490
+#: gtk/gtkfilechooserdefault.c:11491
 msgid "Yesterday at %H:%M"
 msgstr "Včeraj ob %H:%M"
 
@@ -2625,7 +2625,7 @@ msgstr "Brez papirja"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1718
+#: modules/printbackends/cups/gtkprintbackendcups.c:1725
 msgid "Paused"
 msgstr "Premor"
 
@@ -2750,42 +2750,42 @@ msgstr "Splošno"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3158
+#: modules/printbackends/cups/gtkprintbackendcups.c:3165
 msgid "Left to right, top to bottom"
 msgstr "Z leve proti desni, od zgoraj navzdol"
 
 #: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3158
+#: modules/printbackends/cups/gtkprintbackendcups.c:3165
 msgid "Left to right, bottom to top"
 msgstr "Z leve proti desni, od spodaj navzgor"
 
 #: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3159
+#: modules/printbackends/cups/gtkprintbackendcups.c:3166
 msgid "Right to left, top to bottom"
 msgstr "Z desne proti levi, od zgoraj navzdol"
 
 #: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3159
+#: modules/printbackends/cups/gtkprintbackendcups.c:3166
 msgid "Right to left, bottom to top"
 msgstr "Z desne proti levi, od spodaj navzgor"
 
 #: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3167
 msgid "Top to bottom, left to right"
 msgstr "Od zgoraj navzdol, od leve proti desni"
 
 #: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3167
 msgid "Top to bottom, right to left"
 msgstr "Od zgoraj navzdol, od desne proti levi"
 
 #: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3161
+#: modules/printbackends/cups/gtkprintbackendcups.c:3168
 msgid "Bottom to top, left to right"
 msgstr "Od spodaj navzgor, od leve proti desni"
 
 #: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3161
+#: modules/printbackends/cups/gtkprintbackendcups.c:3168
 msgid "Bottom to top, right to left"
 msgstr "Od spodaj navzgor, od desne proti levi"
 
@@ -2793,7 +2793,7 @@ msgstr "Od spodaj navzgor, od desne proti levi"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3193
+#: modules/printbackends/cups/gtkprintbackendcups.c:3200
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
 
@@ -4814,230 +4814,230 @@ msgstr "vietnamski (VIQR)"
 msgid "X Input Method"
 msgstr "Vnosni način X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:762
+#: modules/printbackends/cups/gtkprintbackendcups.c:753
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:766
+#: modules/printbackends/cups/gtkprintbackendcups.c:757
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:768
+#: modules/printbackends/cups/gtkprintbackendcups.c:759
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:772
+#: modules/printbackends/cups/gtkprintbackendcups.c:763
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:765
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:778
+#: modules/printbackends/cups/gtkprintbackendcups.c:769
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:771
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:783
+#: modules/printbackends/cups/gtkprintbackendcups.c:774
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:786
+#: modules/printbackends/cups/gtkprintbackendcups.c:777
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:789
+#: modules/printbackends/cups/gtkprintbackendcups.c:780
 #, c-format
 msgid "Authentication is required on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1406
+#: modules/printbackends/cups/gtkprintbackendcups.c:1413
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Tiskalnik '%s' ima skoraj prazen toner."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1407
+#: modules/printbackends/cups/gtkprintbackendcups.c:1414
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "V tiskalniku '%s' je prazen toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1409
+#: modules/printbackends/cups/gtkprintbackendcups.c:1416
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Tiskalnik '%s' ima le še malo razvijalca."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1411
+#: modules/printbackends/cups/gtkprintbackendcups.c:1418
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Tiskalnik '%s' je brez razvijalca."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:1420
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena posoda z barvo."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1415
+#: modules/printbackends/cups/gtkprintbackendcups.c:1422
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "V tiskalniku '%s' je prazna vsaj ena posoda z barvo."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Tiskalnik '%s' ima odprt pokrov."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1417
+#: modules/printbackends/cups/gtkprintbackendcups.c:1424
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Tiskalnik '%s' ima odprta vratca."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1425
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "V tiskalniku '%s' je le še malo papirja."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1419
+#: modules/printbackends/cups/gtkprintbackendcups.c:1426
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Tiskalnik '%s' je brez papirja."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1427
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Tiskalnik '%s' trenutno ni povezan."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Tiskalnik '%s' morda ni ustrezno priklopljen."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1429
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Prišlo je do napake na tiskalniku '%s'."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1715
+#: modules/printbackends/cups/gtkprintbackendcups.c:1722
 msgid "Paused ; Rejecting Jobs"
 msgstr "Zaustavljeno; zavračanje opravil"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1721
+#: modules/printbackends/cups/gtkprintbackendcups.c:1728
 msgid "Rejecting Jobs"
 msgstr "Zavračanje opravil"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2427
+#: modules/printbackends/cups/gtkprintbackendcups.c:2434
 msgid "Two Sided"
 msgstr "Dvostransko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2428
+#: modules/printbackends/cups/gtkprintbackendcups.c:2435
 msgid "Paper Type"
 msgstr "Vrsta papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2429
+#: modules/printbackends/cups/gtkprintbackendcups.c:2436
 msgid "Paper Source"
 msgstr "Izvor papirja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2430
+#: modules/printbackends/cups/gtkprintbackendcups.c:2437
 msgid "Output Tray"
 msgstr "Pladenj za papir"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2431
+#: modules/printbackends/cups/gtkprintbackendcups.c:2438
 msgid "Resolution"
 msgstr "Ločljivost"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2432
+#: modules/printbackends/cups/gtkprintbackendcups.c:2439
 msgid "GhostScript pre-filtering"
 msgstr "Predfiltriranje Ghostscript pisave"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2441
+#: modules/printbackends/cups/gtkprintbackendcups.c:2448
 msgid "One Sided"
 msgstr "Enostransko"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2443
+#: modules/printbackends/cups/gtkprintbackendcups.c:2450
 msgid "Long Edge (Standard)"
 msgstr "Dolga stranica (standardno)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2445
+#: modules/printbackends/cups/gtkprintbackendcups.c:2452
 msgid "Short Edge (Flip)"
 msgstr "Kratka stranica (obrnjeno)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2447
-#: modules/printbackends/cups/gtkprintbackendcups.c:2449
-#: modules/printbackends/cups/gtkprintbackendcups.c:2457
+#: modules/printbackends/cups/gtkprintbackendcups.c:2454
+#: modules/printbackends/cups/gtkprintbackendcups.c:2456
+#: modules/printbackends/cups/gtkprintbackendcups.c:2464
 msgid "Auto Select"
 msgstr "Samodejno izberi"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2451
-#: modules/printbackends/cups/gtkprintbackendcups.c:2453
-#: modules/printbackends/cups/gtkprintbackendcups.c:2455
-#: modules/printbackends/cups/gtkprintbackendcups.c:2459
-#: modules/printbackends/cups/gtkprintbackendcups.c:2945
+#: modules/printbackends/cups/gtkprintbackendcups.c:2458
+#: modules/printbackends/cups/gtkprintbackendcups.c:2460
+#: modules/printbackends/cups/gtkprintbackendcups.c:2462
+#: modules/printbackends/cups/gtkprintbackendcups.c:2466
+#: modules/printbackends/cups/gtkprintbackendcups.c:2952
 msgid "Printer Default"
 msgstr "Privzeto za tiskalnik"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2461
+#: modules/printbackends/cups/gtkprintbackendcups.c:2468
 msgid "Embed GhostScript fonts only"
 msgstr "Samo vključene GhostScript pisave"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2463
+#: modules/printbackends/cups/gtkprintbackendcups.c:2470
 msgid "Convert to PS level 1"
 msgstr "Pretvori v PS ravni 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2465
+#: modules/printbackends/cups/gtkprintbackendcups.c:2472
 msgid "Convert to PS level 2"
 msgstr "Pretvori v PS ravni 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2467
+#: modules/printbackends/cups/gtkprintbackendcups.c:2474
 msgid "No pre-filtering"
 msgstr "Brez predfiltriranja"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2476
+#: modules/printbackends/cups/gtkprintbackendcups.c:2483
 msgid "Miscellaneous"
 msgstr "Različno"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Urgent"
 msgstr "Nujno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "High"
 msgstr "Visoka"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Medium"
 msgstr "Srednja"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3153
+#: modules/printbackends/cups/gtkprintbackendcups.c:3160
 msgid "Low"
 msgstr "Nizka"
 
@@ -5045,66 +5045,66 @@ msgstr "Nizka"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3177
+#: modules/printbackends/cups/gtkprintbackendcups.c:3184
 msgid "Pages per Sheet"
 msgstr "Strani na list"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3214
+#: modules/printbackends/cups/gtkprintbackendcups.c:3221
 msgid "Job Priority"
 msgstr "Prednost opravila"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3225
+#: modules/printbackends/cups/gtkprintbackendcups.c:3232
 msgid "Billing Info"
 msgstr "Podatki plačila"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "None"
 msgstr "Noben"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Classified"
 msgstr "Omejeno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Confidential"
 msgstr "Zaupno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Secret"
 msgstr "Skrivno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Standard"
 msgstr "Standardno"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Top Secret"
 msgstr "Najstrožja skrivnost"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3240
+#: modules/printbackends/cups/gtkprintbackendcups.c:3247
 msgid "Unclassified"
 msgstr "Neomejeno"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3275
+#: modules/printbackends/cups/gtkprintbackendcups.c:3282
 msgid "Before"
 msgstr "Pred"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3290
+#: modules/printbackends/cups/gtkprintbackendcups.c:3297
 msgid "After"
 msgstr "Po"
 
@@ -5112,14 +5112,14 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3310
+#: modules/printbackends/cups/gtkprintbackendcups.c:3317
 msgid "Print at"
 msgstr "Natisni"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3321
+#: modules/printbackends/cups/gtkprintbackendcups.c:3328
 msgid "Print at time"
 msgstr "Tiskaj ob času"
 
@@ -5127,7 +5127,7 @@ msgstr "Tiskaj ob času"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3356
+#: modules/printbackends/cups/gtkprintbackendcups.c:3363
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Po meri %sx%s"
@@ -5138,72 +5138,72 @@ msgstr "Po meri %sx%s"
 msgid "output.%s"
 msgstr "izhod.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:498
+#: modules/printbackends/file/gtkprintbackendfile.c:495
 msgid "Print to File"
 msgstr "Natisni v datoteko"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "Postscript"
 msgstr "PostScript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:575
+#: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "SVG"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:587
-#: modules/printbackends/test/gtkprintbackendtest.c:506
+#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Strani na _list:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:646
+#: modules/printbackends/file/gtkprintbackendfile.c:643
 msgid "File"
 msgstr "Datoteka"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:656
+#: modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "_Output format"
 msgstr "_Izhodni format"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:400
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
 msgid "Print to LPR"
 msgstr "Tiskaj preko LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Strani na list"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:433
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Ukazna vrstica"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:810
+#: modules/printbackends/papi/gtkprintbackendpapi.c:811
 #, fuzzy
 msgid "printer offline"
 msgstr "Nepriključen tiskalnik"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:828
+#: modules/printbackends/papi/gtkprintbackendpapi.c:829
 #, fuzzy
 msgid "ready to print"
 msgstr "Priprava na tiskanje"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:831
+#: modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr ""
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:835
+#: modules/printbackends/papi/gtkprintbackendpapi.c:836
 #, fuzzy
 msgid "paused"
 msgstr "Premor"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:838
+#: modules/printbackends/papi/gtkprintbackendpapi.c:839
 #, fuzzy
 msgid "unknown"
 msgstr "(neznano)"
@@ -5214,7 +5214,7 @@ msgstr "(neznano)"
 msgid "test-output.%s"
 msgstr "preizkusni-izhod.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:470
+#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
 

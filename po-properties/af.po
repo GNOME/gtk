@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -5809,11 +5809,11 @@ msgstr "Nutswenk"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Of oortjies vertoon moet word of nie"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Modus"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 #, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
@@ -5822,11 +5822,11 @@ msgstr ""
 "Die rigtings waarin die grootte van die groep 'n uitwerking op die gevraagde "
 "groottes van sy komponentdingesies het"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr ""
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

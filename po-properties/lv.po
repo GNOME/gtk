@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2009-02-19 09:32+0200\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -5427,11 +5427,11 @@ msgstr "Aktizvizēt paskaidres"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Vai logdaļām rādīt paskaidres"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Režīms"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5439,11 +5439,11 @@ msgstr ""
 "Virzieni, kādos izmēra grupa ietekmē pieprasītos izmērus tā komponentu "
 "logdaļām"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Ignorēt slēpto"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

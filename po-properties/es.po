@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2009-08-22 12:10+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
@@ -5608,11 +5608,11 @@ msgstr "Activar consejos"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Indica si se deben mostrar los consejos en los widgets"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Modo"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5620,11 +5620,11 @@ msgstr ""
 "Las direcciones en las cuales el tamaño del grupo afecta a los tamaños "
 "solicitados de sus widgets componentes"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Ignorar ocultas"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
