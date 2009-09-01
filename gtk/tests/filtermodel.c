@@ -145,6 +145,7 @@ static void
 filter_test_enable_filter (FilterTest *fixture)
 {
   gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
+  gtk_tree_model_filter_refilter (fixture->filter);
 }
 
 static void
