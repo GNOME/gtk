@@ -1164,6 +1164,46 @@ specific_bug_364946 (void)
 
 
 static gboolean
+specific_bug_464173_visible_func (GtkTreeModel *model,
+                                  GtkTreeIter  *iter,
+                                  gpointer      data)
+{
+  gboolean *visible = (gboolean *)data;
+
+  return *visible;
+}
+
+static void
+specific_bug_464173 (void)
+{
+  /* Test case for GNOME Bugzilla bug 464173, test case written
+   * by Andreas Koehler.
+   */
+  GtkTreeStore *model;
+  GtkTreeModelFilter *f_model;
+  GtkTreeIter iter1, iter2;
+  GtkWidget *view;
+  gboolean visible = TRUE;
+
+  model = gtk_tree_store_new (1, G_TYPE_STRING);
+  gtk_tree_store_append (model, &iter1, NULL);
+  gtk_tree_store_set (model, &iter1, 0, "Foo", -1);
+  gtk_tree_store_append (model, &iter2, &iter1);
+  gtk_tree_store_set (model, &iter2, 0, "Bar", -1);
+
+  f_model = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL(model), NULL));
+  gtk_tree_model_filter_set_visible_func (f_model,
+                                          specific_bug_464173_visible_func,
+                                          &visible, NULL);
+
+  view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (f_model));
+
+  visible = FALSE;
+  gtk_tree_model_filter_refilter (f_model);
+}
+
+
+static gboolean
 specific_bug_540201_filter_func (GtkTreeModel *model,
                                  GtkTreeIter  *iter,
                                  gpointer      data)
@@ -1211,6 +1251,76 @@ specific_bug_540201 (void)
 
   gtk_tree_store_append (store, &iter, &root);
   gtk_tree_store_set (store, &iter, 0, 22, -1);
+}
+
+
+static gboolean
+specific_bug_549287_visible_func (GtkTreeModel *model,
+                                  GtkTreeIter  *iter,
+                                  gpointer      data)
+{
+  gboolean result = FALSE;
+
+  result = gtk_tree_model_iter_has_child (model, iter);
+
+  return result;
+}
+
+static void
+specific_bug_549287 (void)
+{
+  /* Test case for GNOME Bugzilla bug 529287, provided by Julient Puydt */
+
+  int i;
+  GtkTreeStore *store;
+  GtkTreeModel *filtered;
+  GtkWidget *view;
+  GtkTreeIter iter;
+  GtkTreeIter *swap, *parent, *child;
+
+  store = gtk_tree_store_new (1, G_TYPE_STRING);
+  filtered = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filtered),
+                                          specific_bug_549287_visible_func,
+                                          NULL, NULL);
+
+  view = gtk_tree_view_new_with_model (filtered);
+
+  for (i = 0; i < 4; i++)
+    {
+      if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter))
+        {
+          parent = gtk_tree_iter_copy (&iter);
+          child = gtk_tree_iter_copy (&iter);
+
+          while (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store),
+                                                child, parent, 0))
+            {
+
+              swap = parent;
+              parent = child;
+              child = swap;
+            }
+
+          gtk_tree_store_append (store, child, parent);
+          gtk_tree_store_set (store, child,
+                              0, "Something",
+                              -1);
+
+          gtk_tree_iter_free (parent);
+          gtk_tree_iter_free (child);
+        }
+      else
+        {
+          gtk_tree_store_append (store, &iter, NULL);
+          gtk_tree_store_set (store, &iter,
+                              0, "Something",
+                              -1);
+        }
+
+      /* since we inserted something, we changed the visibility conditions: */
+      gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (filtered));
+    }
 }
 
 /* main */
@@ -1298,8 +1408,12 @@ main (int    argc,
                    specific_bug_346800);
   g_test_add_func ("/FilterModel/specific/bug-364946",
                    specific_bug_364946);
+  g_test_add_func ("/FilterModel/specific/bug-464173",
+                   specific_bug_464173);
   g_test_add_func ("/FilterModel/specific/bug-540201",
                    specific_bug_540201);
+  g_test_add_func ("/FilterModel/specific/bug-549287",
+                   specific_bug_549287);
 
   return g_test_run ();
 }
