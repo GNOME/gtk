@@ -257,6 +257,8 @@ static GtkTreePath *gtk_real_tree_model_filter_convert_child_path_to_path (GtkTr
 static FilterElt   *gtk_tree_model_filter_get_nth                         (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            int                     n);
+static gboolean    gtk_tree_model_filter_elt_is_visible_in_target         (FilterLevel            *level,
+                                                                           FilterElt              *elt);
 static FilterElt   *gtk_tree_model_filter_get_nth_visible                 (GtkTreeModelFilter     *filter,
                                                                            FilterLevel            *level,
                                                                            int                     n);
@@ -804,6 +806,29 @@ gtk_tree_model_filter_get_nth (GtkTreeModelFilter *filter,
   return &g_array_index (level->array, FilterElt, n);
 }
 
+static gboolean
+gtk_tree_model_filter_elt_is_visible_in_target (FilterLevel *level,
+                                                FilterElt   *elt)
+{
+  if (!elt->visible)
+    return FALSE;
+
+  if (!level->parent_elt)
+    return TRUE;
+
+  do
+    {
+      elt = level->parent_elt;
+      level = level->parent_level;
+
+      if (elt && !elt->visible)
+        return FALSE;
+    }
+  while (level);
+
+  return TRUE;
+}
+
 static FilterElt *
 gtk_tree_model_filter_get_nth_visible (GtkTreeModelFilter *filter,
                                        FilterLevel        *level,
@@ -1289,7 +1314,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       level->visible_nodes++;
     }
 
-  if ((level->parent_elt && level->parent_elt->visible) || !level->parent_elt)
+  if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
     {
       /* visibility changed -- reget path */
       gtk_tree_path_free (path);
