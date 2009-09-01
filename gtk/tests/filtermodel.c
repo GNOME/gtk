@@ -628,7 +628,7 @@ empty_vroot_show_nodes (FilterTest    *fixture,
 
   set_path_visibility (fixture, "2:2:2", TRUE);
   check_filter_model_with_root (fixture, path);
-  check_level_length (fixture->filter, "0", 0);
+  check_level_length (fixture->filter, NULL, 0);
 
   set_path_visibility (fixture, "2:2", TRUE);
   check_filter_model_with_root (fixture, path);
