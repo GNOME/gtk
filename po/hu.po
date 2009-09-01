@@ -653,7 +653,6 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nem támogatott JPEG-színtér (%s)"
 
-#: ../gdk-pixbuf/io-jpeg.c:667 ../gdk-pixbuf/io-jpeg.c:943
 #: ../gdk-pixbuf/io-jpeg.c:1176 ../gdk-pixbuf/io-jpeg.c:1185
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nem lehet memóriát kiosztani a JPEG fájl betöltéséhez"
@@ -5169,6 +5168,7 @@ msgstr "a nyomtató nem érhető el"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
+>>>>>>> 2.17.10
 msgid "ready to print"
 msgstr "nyomtatásra kész"
 

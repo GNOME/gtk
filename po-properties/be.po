@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-01 08:43-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -5863,11 +5863,11 @@ msgstr "Уключыць усплываючае"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Ці павінны адлюстроўвацца лычкі"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Рэжым"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 #, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
@@ -5876,11 +5876,11 @@ msgstr ""
 "Накірункі ў якіх памер групы ўзьдзейнічае на запатрабаваныя памеры "
 "ўваходзячых у яе частак віджэтаў."
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr ""
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""

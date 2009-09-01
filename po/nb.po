@@ -1575,19 +1575,6 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
-#: ../gtk/gtkcustompaperunixdialog.c:538 ../gtk/gtkpagesetupunixdialog.c:779
-msgid "inch"
-msgstr "tomme"
-
-#: ../gtk/gtkcustompaperunixdialog.c:540 ../gtk/gtkpagesetupunixdialog.c:777
-msgid "mm"
-msgstr "mm"
-
-#: ../gtk/gtkcustompaperunixdialog.c:585
-msgid "Margins from Printer..."
-msgstr "Marger fra skriver..."
-
-#: ../gtk/gtkcustompaperunixdialog.c:751
 #, c-format
 msgid "Custom Size %d"
 msgstr "Egendefinert størrelse %d"
