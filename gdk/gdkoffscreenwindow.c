@@ -837,6 +837,8 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
  * add a reference to it.
  *
  * Returns: The offscreen pixmap, or %NULL if not offscreen
+ *
+ * Since: 2.18
  */
 GdkPixmap *
 gdk_offscreen_window_get_pixmap (GdkWindow *window)

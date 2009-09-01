@@ -160,6 +160,7 @@ expand_content_files = 				\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
+        migrating-ClientSideWindows.sgml	\
 	migrating-GtkAction.sgml		\
 	migrating-GtkComboBox.sgml		\
 	migrating-GtkEntry-icons.sgml		\

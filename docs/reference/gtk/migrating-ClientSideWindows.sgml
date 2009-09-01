@@ -19,7 +19,7 @@
   </para>
 
   <para>
-    GDK looks for the <envvar>GDK_NATIVE_WINDOWS</envvar> environment variable
+    GDK looks for the <envar>GDK_NATIVE_WINDOWS</envar> environment variable
     and makes all windows native if it is set. It also tries to be more
     compatible with the way prior versions worked in some other ways.
   </para>

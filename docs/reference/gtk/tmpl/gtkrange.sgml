@@ -346,3 +346,21 @@ at the end of range widgets.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_range_get_flippable ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_flippable ##### -->
+<para>
+
+</para>
+
+@range: 
+@flippable: 
+
+
