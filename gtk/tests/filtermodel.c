@@ -289,6 +289,27 @@ set_path_visibility (FilterTest  *fixture,
                       -1);
 }
 
+static void
+insert_path_with_visibility (FilterTest  *fixture,
+                             const gchar *path_string,
+                             gboolean     visible)
+{
+  int position;
+  GtkTreePath *path;
+  GtkTreeIter parent, iter;
+
+  path = gtk_tree_path_new_from_string (path_string);
+  position = gtk_tree_path_get_indices (path)[gtk_tree_path_get_depth (path)];
+  gtk_tree_path_up (path);
+
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store), &parent, path))
+    {
+      gtk_tree_store_insert (fixture->store, &iter, &parent, position);
+      create_tree_store_set_values (fixture->store, &iter, visible);
+    }
+  gtk_tree_path_free (path);
+}
+
 /*
  * The actual tests.
  */
