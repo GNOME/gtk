@@ -745,9 +745,12 @@ unfiltered_show_single_child (FilterTest    *fixture,
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 0);
 
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
   set_path_visibility (fixture, "2", TRUE);
   check_level_length (fixture->filter, NULL, 1);
-  check_level_length (fixture->filter, "2", 1);
+  check_level_length (fixture->filter, "0", 1);
 }
 
 static void
@@ -767,11 +770,14 @@ unfiltered_show_single_multi_level (FilterTest    *fixture,
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 0);
 
+  /* From here we are filtered, "2" in the real model is "0" in the filter
+   * model.
+   */
   set_path_visibility (fixture, "2", TRUE);
   check_filter_model (fixture);
   check_level_length (fixture->filter, NULL, 1);
-  check_level_length (fixture->filter, "2", 1);
-  check_level_length (fixture->filter, "2:2", 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
 }
 
 
