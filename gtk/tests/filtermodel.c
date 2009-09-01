@@ -1195,9 +1195,8 @@ static void
 specific_root_mixed_visibility (void)
 {
   int i;
-  /* A bit nasty, apologies */
-  GtkWidget *view;
   GtkTreeModel *filter;
+  /* A bit nasty, apologies */
   FilterTest fixture;
 
   fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
