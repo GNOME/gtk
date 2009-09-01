@@ -91,8 +91,11 @@ static void
 filter_test_setup (FilterTest    *fixture,
                    gconstpointer  test_data)
 {
+  const GtkTreePath *vroot = test_data;
+
   fixture->store = create_tree_store (3, TRUE);
-  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), NULL));
+  /* Please forgive me for casting const away. */
+  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), (GtkTreePath *)vroot));
   gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
 
   /* We need a tree view that's listening to get ref counting from that
@@ -251,6 +254,15 @@ check_filter_model (FilterTest *fixture)
   check_filter_model_recurse (fixture, path, gtk_tree_path_copy (path));
 }
 
+static void
+check_filter_model_with_root (FilterTest  *fixture,
+                              GtkTreePath *path)
+{
+  check_filter_model_recurse (fixture,
+                              gtk_tree_path_copy (path),
+                              gtk_tree_path_new ());
+}
+
 /* Helpers */
 
 static void
@@ -319,6 +331,13 @@ verify_test_suite (FilterTest    *fixture,
                    gconstpointer  user_data)
 {
   check_filter_model (fixture);
+}
+
+static void
+verify_test_suite_vroot (FilterTest    *fixture,
+                         gconstpointer  user_data)
+{
+  check_filter_model_with_root (fixture, (GtkTreePath *)user_data);
 }
 
 
@@ -401,6 +420,165 @@ filled_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:4", 2);
 }
 
+
+static void
+filled_vroot_hide_root_level (FilterTest    *fixture,
+                              gconstpointer  user_data)
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  /* These changes do not affect the filter's root level */
+  set_path_visibility (fixture, "0", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  set_path_visibility (fixture, "4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  /* Even though we set the virtual root parent node to FALSE,
+   * the virtual root contents remain.
+   */
+  set_path_visibility (fixture, "2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  /* No change */
+  set_path_visibility (fixture, "1", FALSE);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  set_path_visibility (fixture, "3", FALSE);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  check_filter_model_with_root (fixture, path);
+
+  /* Show some */
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  set_path_visibility (fixture, "1", TRUE);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  set_path_visibility (fixture, "3", TRUE);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH);
+
+  check_filter_model_with_root (fixture, path);
+
+  /* Now test changes in the virtual root level */
+  set_path_visibility (fixture, "2:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "1:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:4", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:0", FALSE);
+  set_path_visibility (fixture, "2:1", FALSE);
+  set_path_visibility (fixture, "2:2", FALSE);
+  set_path_visibility (fixture, "2:3", FALSE);
+  set_path_visibility (fixture, "2:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "1:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2:4", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 4);
+
+  set_path_visibility (fixture, "2:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2:0", TRUE);
+  set_path_visibility (fixture, "2:1", TRUE);
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH - 2);
+}
+
+static void
+filled_vroot_hide_child_levels (FilterTest    *fixture,
+                                gconstpointer  user_data)
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  set_path_visibility (fixture, "2:0:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 1);
+
+  set_path_visibility (fixture, "2:0:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:3", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4:0", FALSE);
+  set_path_visibility (fixture, "2:0:4:1", FALSE);
+  set_path_visibility (fixture, "2:0:4:2", FALSE);
+  set_path_visibility (fixture, "2:0:4:4", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0", LEVEL_LENGTH - 2);
+
+  set_path_visibility (fixture, "2:0:4", TRUE);
+  /* Since "0:2" is hidden, "0:4" must be "0:3" in the filter model */
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:3", 0);
+
+  set_path_visibility (fixture, "2:0:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0:2", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
+  check_level_length (fixture->filter, "0:4", 0);
+
+  set_path_visibility (fixture, "2:0:4:2", TRUE);
+  set_path_visibility (fixture, "2:0:4:4", TRUE);
+  check_level_length (fixture->filter, "0:4", 2);
+}
+
+
 static void
 empty_show_nodes (FilterTest    *fixture,
                   gconstpointer  user_data)
@@ -436,6 +614,45 @@ empty_show_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, "0", 1);
   check_level_length (fixture->filter, "0:0", 2);
   check_level_length (fixture->filter, "0:0:0", 0);
+}
+
+static void
+empty_vroot_show_nodes (FilterTest    *fixture,
+                        gconstpointer  user_data)
+{
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2:2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, "0", 0);
+
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 0);
+
+  set_path_visibility (fixture, "3", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+
+  set_path_visibility (fixture, "2:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2:2:1", TRUE);
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 2);
+  check_level_length (fixture->filter, "0:1", 0);
 }
 
 
@@ -1337,6 +1554,18 @@ main (int    argc,
               verify_test_suite,
               filter_test_teardown);
 
+  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-1",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup,
+              verify_test_suite_vroot,
+              filter_test_teardown);
+  g_test_add ("/FilterModel/self/verify-test-suite/vroot/depth-2",
+              FilterTest, gtk_tree_path_new_from_indices (2, 3, -1),
+              filter_test_setup,
+              verify_test_suite_vroot,
+              filter_test_teardown);
+
+
   g_test_add ("/FilterModel/filled/hide-root-level",
               FilterTest, NULL,
               filter_test_setup,
@@ -1348,11 +1577,30 @@ main (int    argc,
               filled_hide_child_levels,
               filter_test_teardown);
 
+  g_test_add ("/FilterModel/filled/hide-root-level/vroot",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup,
+              filled_vroot_hide_root_level,
+              filter_test_teardown);
+  g_test_add ("/FilterModel/filled/hide-child-levels/vroot",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup,
+              filled_vroot_hide_child_levels,
+              filter_test_teardown);
+
+
   g_test_add ("/FilterModel/empty/show-nodes",
               FilterTest, NULL,
               filter_test_setup_empty,
               empty_show_nodes,
               filter_test_teardown);
+
+  g_test_add ("/FilterModel/empty/show-nodes/vroot",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty,
+              empty_vroot_show_nodes,
+              filter_test_teardown);
+
 
   g_test_add ("/FilterModel/unfiltered/hide-single",
               FilterTest, NULL,
