@@ -997,7 +997,10 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
    *  if level != root level and visible nodes == 0, emit row-has-child-toggled.
    */
 
-  if (level != filter->priv->root && level->visible_nodes == 0)
+  if (level != filter->priv->root
+      && level->visible_nodes == 0
+      && level->parent_elt
+      && level->parent_elt->visible)
     emit_child_toggled = TRUE;
 
   if (length > 1)
