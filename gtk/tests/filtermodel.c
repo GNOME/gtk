@@ -276,10 +276,12 @@ check_level_length (GtkTreeModelFilter *filter,
   else
     {
       int l;
+      gboolean retrieved_iter = FALSE;
       GtkTreeIter iter;
 
-      gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (filter),
-                                           &iter, level);
+      retrieved_iter = gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (filter),
+                                                            &iter, level);
+      g_return_if_fail (retrieved_iter);
       l = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (filter), &iter);
       g_return_if_fail (l == length);
     }
