@@ -1054,6 +1054,44 @@ specific_sort_filter_remove_root (void)
 
 
 static void
+specific_root_mixed_visibility (void)
+{
+  int i;
+  /* A bit nasty, apologies */
+  GtkWidget *view;
+  GtkTreeModel *filter;
+  FilterTest fixture;
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+
+  for (i = 0; i < LEVEL_LENGTH; i++)
+    {
+      GtkTreeIter iter;
+
+      gtk_tree_store_insert (fixture.store, &iter, NULL, i);
+      if (i % 2 == 0)
+        create_tree_store_set_values (fixture.store, &iter, TRUE);
+      else
+        create_tree_store_set_values (fixture.store, &iter, FALSE);
+    }
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+
+  gtk_tree_model_filter_set_visible_column (fixture.filter, 1);
+
+  /* In order to trigger the potential bug, we should not access
+   * the filter model here (so don't call the check functions).
+   */
+
+  /* Change visibility of an odd row to TRUE */
+  set_path_visibility (&fixture, "3", TRUE);
+  check_filter_model (&fixture);
+  check_level_length (fixture.filter, NULL, 4);
+}
+
+
+static void
 specific_filter_add_child (void)
 {
   /* This test is based on one of the test cases I found in my
@@ -1649,6 +1687,8 @@ main (int    argc,
                    specific_sort_filter_remove_node);
   g_test_add_func ("/FilterModel/specific/sort-filter-remove-root",
                    specific_sort_filter_remove_root);
+  g_test_add_func ("/FilterModel/specific/root-mixed-visibility",
+                   specific_root_mixed_visibility);
   g_test_add_func ("/FilterModel/specific/filter-add-child",
                    specific_filter_add_child);
 
