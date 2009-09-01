@@ -88,60 +88,57 @@ typedef struct
 } FilterTest;
 
 static void
-filter_test_setup (FilterTest    *fixture,
-                   gconstpointer  test_data)
+filter_test_setup_generic (FilterTest    *fixture,
+                           gconstpointer  test_data,
+                           int            depth,
+                           gboolean       empty,
+                           gboolean       unfiltered)
 {
   const GtkTreePath *vroot = test_data;
+  GtkTreeModel *filter;
 
-  fixture->store = create_tree_store (3, TRUE);
+  fixture->store = create_tree_store (depth, !empty);
+
   /* Please forgive me for casting const away. */
-  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), (GtkTreePath *)vroot));
-  gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store),
+                                      (GtkTreePath *)vroot);
+  fixture->filter = GTK_TREE_MODEL_FILTER (filter);
+
+  if (!unfiltered)
+    gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
 
   /* We need a tree view that's listening to get ref counting from that
    * side.
    */
-  fixture->tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (fixture->filter));
+  fixture->tree_view = gtk_tree_view_new_with_model (filter);
+}
+
+static void
+filter_test_setup (FilterTest    *fixture,
+                   gconstpointer  test_data)
+{
+  filter_test_setup_generic (fixture, test_data, 3, FALSE, FALSE);
 }
 
 static void
 filter_test_setup_empty (FilterTest    *fixture,
                          gconstpointer  test_data)
 {
-  fixture->store = create_tree_store (3, FALSE);
-  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), NULL));
-  gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
-
-  /* We need a tree view that's listening to get ref counting from that
-   * side.
-   */
-  fixture->tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (fixture->filter));
+  filter_test_setup_generic (fixture, test_data, 3, TRUE, FALSE);
 }
 
 static void
 filter_test_setup_unfiltered (FilterTest    *fixture,
                               gconstpointer  test_data)
 {
-  fixture->store = create_tree_store (3, TRUE);
-  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), NULL));
-
-  /* We need a tree view that's listening to get ref counting from that
-   * side.
-   */
-  fixture->tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (fixture->filter));
+  filter_test_setup_generic (fixture, test_data, 3, FALSE, TRUE);
 }
 
 static void
 filter_test_setup_empty_unfiltered (FilterTest    *fixture,
                                     gconstpointer  test_data)
 {
-  fixture->store = create_tree_store (3, FALSE);
-  fixture->filter = GTK_TREE_MODEL_FILTER (gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store), NULL));
-
-  /* We need a tree view that's listening to get ref counting from that
-   * side.
-   */
-  fixture->tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (fixture->filter));
+  filter_test_setup_generic (fixture, test_data, 3, TRUE, TRUE);
 }
 
 static void
