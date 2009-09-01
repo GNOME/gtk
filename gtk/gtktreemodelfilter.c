@@ -1284,13 +1284,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);
 
       root = FILTER_LEVEL (filter->priv->root);
-
-      if (root)
-        {
-          for (i = 0; i < root->array->len; i++)
-            g_array_index (root->array, FilterElt, i).visible = FALSE;
-          root->visible_nodes = 0;
-        }
     }
 
   gtk_tree_model_filter_increment_stamp (filter);
