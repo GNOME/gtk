@@ -1162,6 +1162,57 @@ specific_bug_364946 (void)
   gtk_tree_model_sort_clear_cache (GTK_TREE_MODEL_SORT (s_model));
 }
 
+
+static gboolean
+specific_bug_540201_filter_func (GtkTreeModel *model,
+                                 GtkTreeIter  *iter,
+                                 gpointer      data)
+{
+  gboolean has_children;
+
+  has_children = gtk_tree_model_iter_has_child (model, iter);
+
+  return has_children;
+}
+
+static void
+specific_bug_540201 (void)
+{
+  /* Test case for GNOME Bugzilla bug 540201, steps provided by
+   * Charles Day.
+   */
+  GtkTreeIter iter, root;
+  GtkTreeStore *store;
+  GtkTreeModel *filter;
+
+  GtkWidget *tree_view;
+
+  store = gtk_tree_store_new (1, G_TYPE_INT);
+
+  gtk_tree_store_append (store, &root, NULL);
+  gtk_tree_store_set (store, &root, 0, 33, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+  tree_view = gtk_tree_view_new_with_model (filter);
+
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
+                                          specific_bug_540201_filter_func,
+                                          NULL, NULL);
+
+  gtk_tree_store_append (store, &iter, &root);
+  gtk_tree_store_set (store, &iter, 0, 50, -1);
+
+  gtk_tree_store_append (store, &iter, &root);
+  gtk_tree_store_set (store, &iter, 0, 22, -1);
+
+
+  gtk_tree_store_append (store, &root, NULL);
+  gtk_tree_store_set (store, &root, 0, 33, -1);
+
+  gtk_tree_store_append (store, &iter, &root);
+  gtk_tree_store_set (store, &iter, 0, 22, -1);
+}
+
 /* main */
 
 int
@@ -1247,6 +1298,8 @@ main (int    argc,
                    specific_bug_346800);
   g_test_add_func ("/FilterModel/specific/bug-364946",
                    specific_bug_364946);
+  g_test_add_func ("/FilterModel/specific/bug-540201",
+                   specific_bug_540201);
 
   return g_test_run ();
 }
