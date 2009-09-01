@@ -5,6 +5,7 @@ Overview of Changes from GTK+ 2.17.9 to 2.17.10
  - Regression fixes continue
  - Multiple clipping issues have been fixed
  - gdk_window_beep() works again
+ - gtk-demo now has a few offscreen window demos
 
 * GSEAL:
  - Several more getters and setters have been added:
@@ -22,16 +23,33 @@ Overview of Changes from GTK+ 2.17.9 to 2.17.10
  588199 GtkTreeView rendering glitch while using a default...
  543310 set_enable_tree_lines doesn't work when a cellrenderer...
  589636 csw broke DND from panel menus
+ 593595 broken clip handling in GtkLabel
+ 590921 NULL should not be a valid return value for gdk_window_new()
+ 590861 cups_printer_create_cairo_surface() sets a fallback resolution...
+ 544724 delete new line requires two keystrokes
+ 593001 Emit 'update-custom-widget' on page setup change
+ 593317 gtkwindow leaks startup ID
+ 593080 mem leak
+ 593481 GtkEntryCompletion action-activated signal is emitted...
+ 593135 gtk_entry_set_icon_from_pixbuf only works one time
+ 593012 configure doesn't handle --enable-{cups,papi} correctly
+ 592862 There is a misprint on the returning value of gdk_pixmap_lookup()
+ 586466 GtkPrintOperation printing fails if it is the only event source
+ 434318 printer detail acquisition needs events
 
 * Translation updates:
- Tamil
- Hindi
- Basque
  Asturian
+ Basque
+ Bengali India
+ Czech
  Finnish
- Serbian
+ Hindi
+ Kannada
  Oriya
  Polish
+ Serbian
+ Tamil
+ Telugu
 
 
 Overview of Changes from GTK+ 2.17.8 to 2.17.9
