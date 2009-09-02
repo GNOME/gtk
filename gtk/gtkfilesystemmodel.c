@@ -313,7 +313,7 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
   if (required & GTK_FILE_FILTER_FILENAME)
     {
       filename = g_file_get_path (node->file);
-      if (filter_info.filename)
+      if (filename)
         {
           filter_info.filename = filename;
 	  filter_info.contains |= GTK_FILE_FILTER_FILENAME;
