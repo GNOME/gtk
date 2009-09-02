@@ -72,7 +72,12 @@ struct _GtkFileSystemModel
   GArray *              files;          /* array of FileModelNode containing all our files */
   GSize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
   guint                 n_indexes_valid;/* count of valid indexes */
-  GHashTable *          file_lookup;    /* file => array index table */
+  GHashTable *          file_lookup;    /* file => array index table.
+					 * This hash table doesn't always have the same number of entries as the files array;
+					 * it can get cleared completely when we resort.
+					 * The hash table gets re-populated in node_get_for_file() if this mismatch is
+					 * detected.
+					 */
 
   guint                 n_columns;      /* number of columns */
   GType *               column_types;   /* types of each column */
@@ -1490,7 +1495,15 @@ node_get_for_file (GtkFileSystemModel *model,
   if (i != 0)
     return i;
 
-  /* node 0 is the editable row and has no associated file or entry in the table */
+  /* Node 0 is the editable row and has no associated file or entry in the table, so we start counting from 1.
+   *
+   * The invariant here is that the files in model->files[n] for n < g_hash_table_size (model->file_lookup)
+   * are already added to the hash table. The table can get cleared when we re-sort; this loop merely rebuilds
+   * our (file -> index) mapping on demand.
+   *
+   * If we exit the loop, the next pending batch of mappings will be resolved when this function gets called again
+   * with another file that is not yet in the mapping.
+   */
   for (i = g_hash_table_size (model->file_lookup) + 1; i < model->files->len; i++)
     {
       FileModelNode *node = get_node (model, i);
