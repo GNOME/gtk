@@ -6288,6 +6288,29 @@ pending_select_files_process (GtkFileChooserDefault *impl)
   g_assert (impl->pending_select_files == NULL);
 }
 
+static void
+show_error_on_reading_current_folder (GtkFileChooserDefault *impl, GError *error)
+{
+  GFileInfo *info;
+  char *msg;
+
+  info = g_file_query_info (impl->current_folder,
+			    G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+			    G_FILE_QUERY_INFO_NONE,
+			    NULL,
+			    NULL);
+  if (info)
+    {
+      msg = g_strdup (_("Could not read the contents of %s"), g_file_info_get_display_name (info));
+      g_object_unref (info);
+    }
+  else
+    msg = g_strdup (_("Could not read the contents of the folder"));
+
+  error_message (impl, msg, error->message);
+  g_free (msg);
+}
+
 /* Callback used when the file system model finishes loading */
 static void
 browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
@@ -6295,6 +6318,9 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 					GtkFileChooserDefault *impl)
 {
   profile_start ("start", NULL);
+
+  if (error)
+    show_error_on_reading_current_folder (impl, error);
 
   if (impl->load_state == LOAD_PRELOAD)
     {
