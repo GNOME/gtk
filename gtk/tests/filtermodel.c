@@ -1228,6 +1228,185 @@ specific_root_mixed_visibility (void)
 }
 
 
+
+static gboolean
+specific_has_child_filter_filter_func (GtkTreeModel *model,
+                                       GtkTreeIter  *iter,
+                                       gpointer      data)
+{
+  return gtk_tree_model_iter_has_child (model, iter);
+}
+
+static void
+specific_has_child_filter (void)
+{
+  GtkTreeModel *filter;
+  GtkTreeIter iter, root;
+  /* A bit nasty, apologies */
+  FilterTest fixture;
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+
+  /* We will filter on parent state using a filter function.  We will
+   * manually keep the boolean column in sync, so that we can use
+   * check_filter_model() to check the consistency of the model.
+   */
+  /* FIXME: We need a check_filter_model() that is not tied to LEVEL_LENGTH
+   * to be able to check the structure here.  We keep the calls to
+   * check_filter_model() commented out until then.
+   */
+  gtk_tree_model_filter_set_visible_func (fixture.filter,
+                                          specific_has_child_filter_filter_func,
+                                          NULL, NULL);
+
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  create_tree_store_set_values (fixture.store, &root, FALSE);
+
+  /* check_filter_model (&fixture); */
+  check_level_length (fixture.filter, NULL, 0);
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* Parent must now be visible.  Do the level length check first,
+   * to avoid modifying the child model triggering a row-changed to
+   * the filter model.
+   */
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 0);
+
+  set_path_visibility (&fixture, "0", TRUE);
+  /* check_filter_model (&fixture); */
+
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  check_level_length (fixture.filter, NULL, 1);
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "1", 0);
+
+  create_tree_store_set_values (fixture.store, &root, TRUE);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* check_filter_model (&fixture); */
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "0", 0);
+  check_level_length (fixture.filter, "1", 0);
+
+  /* Now remove one of the remaining child rows */
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
+                                       &iter, "0:0");
+  gtk_tree_store_remove (fixture.store, &iter);
+
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 0);
+
+  set_path_visibility (&fixture, "0", FALSE);
+  /* check_filter_model (&fixture); */
+}
+
+
+static gboolean
+specific_root_has_child_filter_filter_func (GtkTreeModel *model,
+                                            GtkTreeIter  *iter,
+                                            gpointer      data)
+{
+  int depth;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (model, iter);
+  depth = gtk_tree_path_get_depth (path);
+  gtk_tree_path_free (path);
+
+  if (depth > 1)
+    return TRUE;
+  /* else */
+  return gtk_tree_model_iter_has_child (model, iter);
+}
+
+static void
+specific_root_has_child_filter (void)
+{
+  GtkTreeModel *filter;
+  GtkTreeIter iter, root;
+  /* A bit nasty, apologies */
+  FilterTest fixture;
+
+  /* This is a variation on the above test case wherein the has-child
+   * check for visibility only applies to root level nodes.
+   */
+
+  fixture.store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture.store), NULL);
+  fixture.filter = GTK_TREE_MODEL_FILTER (filter);
+
+  /* We will filter on parent state using a filter function.  We will
+   * manually keep the boolean column in sync, so that we can use
+   * check_filter_model() to check the consistency of the model.
+   */
+  /* FIXME: We need a check_filter_model() that is not tied to LEVEL_LENGTH
+   * to be able to check the structure here.  We keep the calls to
+   * check_filter_model() commented out until then.
+   */
+  gtk_tree_model_filter_set_visible_func (fixture.filter,
+                                          specific_root_has_child_filter_filter_func,
+                                          NULL, NULL);
+
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  create_tree_store_set_values (fixture.store, &root, FALSE);
+
+  /* check_filter_model (&fixture); */
+  check_level_length (fixture.filter, NULL, 0);
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* Parent must now be visible.  Do the level length check first,
+   * to avoid modifying the child model triggering a row-changed to
+   * the filter model.
+   */
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 1);
+
+  set_path_visibility (&fixture, "0", TRUE);
+  /* check_filter_model (&fixture); */
+
+  gtk_tree_store_append (fixture.store, &root, NULL);
+  check_level_length (fixture.filter, NULL, 1);
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "1", 1);
+
+  create_tree_store_set_values (fixture.store, &root, TRUE);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+
+  /* check_filter_model (&fixture); */
+
+  gtk_tree_store_append (fixture.store, &iter, &root);
+  create_tree_store_set_values (fixture.store, &iter, TRUE);
+  check_level_length (fixture.filter, NULL, 2);
+  check_level_length (fixture.filter, "0", 1);
+  check_level_length (fixture.filter, "1", 2);
+
+  /* Now remove one of the remaining child rows */
+  gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (fixture.store),
+                                       &iter, "0:0");
+  gtk_tree_store_remove (fixture.store, &iter);
+
+  check_level_length (fixture.filter, NULL, 1);
+  check_level_length (fixture.filter, "0", 2);
+
+  set_path_visibility (&fixture, "0", FALSE);
+  /* check_filter_model (&fixture); */
+}
+
+
 static void
 specific_filter_add_child (void)
 {
@@ -1860,6 +2039,10 @@ main (int    argc,
                    specific_sort_filter_remove_root);
   g_test_add_func ("/FilterModel/specific/root-mixed-visibility",
                    specific_root_mixed_visibility);
+  g_test_add_func ("/FilterModel/specific/has-child-filter",
+                   specific_has_child_filter);
+  g_test_add_func ("/FilterModel/specific/root-has-child-filter",
+                   specific_root_has_child_filter);
   g_test_add_func ("/FilterModel/specific/filter-add-child",
                    specific_filter_add_child);
 
