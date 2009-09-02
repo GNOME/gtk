@@ -192,11 +192,43 @@ gtk_tree_path_new_from_node (GtkFileSystemModel *model, guint id)
 }
 
 static void
+emit_row_inserted_for_node (GtkFileSystemModel *model, guint id)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_path_new_from_node (model, id);
+  ITER_INIT_FROM_INDEX (model, &iter, id);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
+  gtk_tree_path_free (path);
+}
+
+static void
+emit_row_changed_for_node (GtkFileSystemModel *model, guint id)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_path_new_from_node (model, id);
+  ITER_INIT_FROM_INDEX (model, &iter, id);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
+  gtk_tree_path_free (path);
+}
+
+static void
+emit_row_deleted_for_visible_index (GtkFileSystemModel *model, guint visible_index)
+{
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_indices (visible_index, -1);
+  gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
+  gtk_tree_path_free (path);
+}
+
+static void
 node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
 {
   FileModelNode *node = get_node (model, id);
-  GtkTreePath *path;
-  GtkTreeIter iter;
 
   if (node->visible == visible ||
       node->frozen_add)
@@ -206,18 +238,18 @@ node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
     {
       node->visible = TRUE;
       node_invalidate_index (model, id);
-      path = gtk_tree_path_new_from_node (model, id);
-      ITER_INIT_FROM_INDEX (model, &iter, id);
-      gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
-      gtk_tree_path_free (path);
+      emit_row_inserted_for_node (model, id);
     }
   else
     {
-      path = gtk_tree_path_new_from_node (model, id);
+      guint visible_index;
+
+      visible_index = node_get_index (model, id);
+      g_assert (visible_index < model->files->len);
+
       node->visible = FALSE;
       node_invalidate_index (model, id);
-      gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
-      gtk_tree_path_free (path);
+      emit_row_deleted_for_visible_index (model, visible_index);
     }
 }
 
@@ -1664,15 +1696,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
     }
 
   if (node->visible)
-    {
-      GtkTreePath *path;
-      GtkTreeIter iter;
-      
-      path = gtk_tree_path_new_from_node (model, id);
-      ITER_INIT_FROM_INDEX (model, &iter, id);
-      gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-      gtk_tree_path_free (path);
-    }
+    emit_row_changed_for_node (model, id);
 
   if (requires_resort)
     gtk_file_system_model_sort_node (model, id);
@@ -1845,15 +1869,7 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
         }
 
       if (changed && node->visible)
-        {
-          GtkTreePath *path;
-          GtkTreeIter iter;
-          
-          path = gtk_tree_path_new_from_node (model, i);
-          ITER_INIT_FROM_INDEX (model, &iter, i);
-          gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
-          gtk_tree_path_free (path);
-        }
+	emit_row_changed_for_node (model, i);
     }
 
   /* FIXME: resort? */
