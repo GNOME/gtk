@@ -1610,10 +1610,15 @@ remove_file (GtkFileSystemModel *model,
 
   node = get_node (model, id);
   node_set_visible (model, id, FALSE);
+
+  g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
+
   if (node->info)
     g_object_unref (node->info);
+
   g_array_remove_index (model->files, id);
+  /* FMQ: do we need to resort? */
 }
 
 /**
