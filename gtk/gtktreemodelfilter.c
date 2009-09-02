@@ -1576,6 +1576,7 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
   GtkTreeIter iter;
   FilterLevel *level;
   FilterElt *elt;
+  gboolean requested_state;
 
   g_return_if_fail (c_path != NULL && c_iter != NULL);
 
@@ -1589,8 +1590,9 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
       return;
     }
 
-  if (!gtk_tree_model_filter_visible (filter, c_iter))
-    return;
+  /* For all other levels, there is a chance that the visibility state
+   * of the parent has changed now.
+   */
 
   path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                 c_path,
@@ -1601,12 +1603,52 @@ gtk_tree_model_filter_row_has_child_toggled (GtkTreeModel *c_model,
 
   gtk_tree_model_filter_get_iter_full (GTK_TREE_MODEL (data), &iter, path);
 
-  gtk_tree_path_free (path);
-
   level = FILTER_LEVEL (iter.user_data);
   elt = FILTER_ELT (iter.user_data2);
 
-  g_assert (elt->visible);
+  gtk_tree_path_free (path);
+
+  requested_state = gtk_tree_model_filter_visible (filter, c_iter);
+
+  if (!elt->visible && !requested_state)
+    {
+      /* The parent node currently is not visible and will not become
+       * visible, so we will not pass on the row-has-child-toggled event.
+       */
+      return;
+    }
+  else if (elt->visible && !requested_state)
+    {
+      /* The node is no longer visible, so it has to be removed.
+       * _remove_node() takes care of emitting row-has-child-toggled
+       * when required.
+       */
+      level->visible_nodes--;
+
+      gtk_tree_model_filter_remove_node (filter, &iter);
+
+      return;
+    }
+  else if (!elt->visible && requested_state)
+    {
+      elt->visible = TRUE;
+      level->visible_nodes++;
+
+      /* Only insert if the parent is visible in the target */
+      if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
+        {
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
+          gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
+          gtk_tree_path_free (path);
+
+          /* We do not update children now, because that will happen
+           * below.
+           */
+        }
+    }
+  /* For the remaining possibility, elt->visible && requested_state
+   * no action is required.
+   */
 
   /* If this node is referenced and has children, build the level so we
    * can monitor it for changes.
