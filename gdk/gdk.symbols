@@ -651,6 +651,7 @@ gdk_window_get_events
 gdk_window_set_events
 gdk_window_raise
 gdk_window_lower
+gdk_window_restack
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize

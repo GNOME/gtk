@@ -2092,6 +2092,14 @@ gdk_win32_window_restack_under (GdkWindow *window,
 	// ### TODO
 }
 
+static void
+gdk_win32_window_restack_toplevel (GdkWindow *window,
+				   GdkWindow *sibling,
+				   gboolean   above)
+{
+	// ### TODO
+}
+
 void
 gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,
@@ -3634,6 +3642,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->raise = gdk_win32_window_raise;
   iface->lower = gdk_win32_window_lower;
   iface->restack_under = gdk_win32_window_restack_under;
+  iface->restack_toplevel = gdk_win32_window_restack_toplevel;
   iface->move_resize = gdk_win32_window_move_resize;
   iface->set_background = gdk_win32_window_set_background;
   iface->set_back_pixmap = gdk_win32_window_set_back_pixmap;

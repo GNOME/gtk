@@ -364,6 +364,9 @@ void          gdk_window_clear_area_e          (GdkWindow     *window,
                                                 gint           height);
 void          gdk_window_raise                 (GdkWindow     *window);
 void          gdk_window_lower                 (GdkWindow     *window);
+void          gdk_window_restack               (GdkWindow     *window,
+						GdkWindow     *sibling,
+						gboolean       above);
 void          gdk_window_focus                 (GdkWindow     *window,
                                                 guint32        timestamp);
 void          gdk_window_set_user_data         (GdkWindow     *window,

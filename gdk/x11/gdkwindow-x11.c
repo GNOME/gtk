@@ -1716,6 +1716,21 @@ gdk_window_x11_restack_under (GdkWindow *window,
 }
 
 static void
+gdk_window_x11_restack_toplevel (GdkWindow *window,
+				 GdkWindow *sibling,
+				 gboolean   above)
+{
+  XWindowChanges changes;
+
+  changes.sibling = GDK_WINDOW_XID (sibling);
+  changes.stack_mode = above ? Above : Below;
+  XReconfigureWMWindow (GDK_WINDOW_XDISPLAY (window),
+			GDK_WINDOW_XID (window),
+			GDK_WINDOW_SCREEN (window),
+			CWStackMode | CWSibling, &changes);
+}
+
+static void
 gdk_window_x11_lower (GdkWindow *window)
 {
   XLowerWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
@@ -5562,6 +5577,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->raise = gdk_window_x11_raise;
   iface->lower = gdk_window_x11_lower;
   iface->restack_under = gdk_window_x11_restack_under;
+  iface->restack_toplevel = gdk_window_x11_restack_toplevel;
   iface->move_resize = gdk_window_x11_move_resize;
   iface->set_background = gdk_window_x11_set_background;
   iface->set_back_pixmap = gdk_window_x11_set_back_pixmap;

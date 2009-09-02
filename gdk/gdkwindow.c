@@ -6449,6 +6449,122 @@ gdk_window_lower (GdkWindow *window)
 }
 
 /**
+ * gdk_window_restack:
+ * @window: a #GdkWindow
+ * @sibling: a #GdkWindow that is a sibling of @window, or %NULL
+ * @above: a boolean
+ *
+ * Changes the position of  @window in the Z-order (stacking order), so that
+ * it is above @sibling (if @above is %TRUE) or below @sibling (if @above is
+ * %FALSE).
+ *
+ * If @sibling is %NULL, then this either raises (if @above is %TRUE) or
+ * lowers the window.
+ *
+ * If @window is a toplevel, the window manager may choose to deny the
+ * request to move the window in the Z-order, gdk_window_restack() only
+ * requests the restack, does not guarantee it.
+ *
+ * Since: 2.18
+ */
+void
+gdk_window_restack (GdkWindow     *window,
+		    GdkWindow     *sibling,
+		    gboolean       above)
+{
+  GdkWindowObject *private;
+  GdkWindowImplIface *impl_iface;
+  GdkWindowObject *parent;
+  GdkWindowObject *above_native;
+  GList *sibling_link;
+  GList *native_children;
+  GList *l, listhead;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (sibling == NULL || GDK_IS_WINDOW (sibling));
+
+  private = (GdkWindowObject *) window;
+  if (private->destroyed)
+    return;
+
+  if (sibling == NULL)
+    {
+      if (above)
+	gdk_window_raise (window);
+      else
+	gdk_window_lower (window);
+      return;
+    }
+
+  if (gdk_window_is_toplevel (private))
+    {
+      g_return_if_fail (gdk_window_is_toplevel (sibling));
+      impl_iface->restack_toplevel (window, sibling, above);
+      return;
+    }
+
+  parent = private->parent;
+  if (parent)
+    {
+      sibling_link = g_list_find (parent->children, sibling);
+      g_return_if_fail (sibling_link != NULL);
+      if (sibling_link == NULL)
+	return;
+
+      parent->children = g_list_remove (parent->children, window);
+      if (above)
+	parent->children = g_list_insert_before (parent->children,
+						 sibling_link,
+						 window);
+      else
+	parent->children = g_list_insert_before (parent->children,
+						 sibling_link->next,
+						 window);
+
+      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
+      if (gdk_window_has_impl (private))
+	{
+	  above_native = find_native_sibling_above (parent, private);
+	  if (above_native)
+	    {
+	      listhead.data = window;
+	      listhead.next = NULL;
+	      listhead.prev = NULL;
+	      impl_iface->restack_under ((GdkWindow *)above_native, &listhead);
+	    }
+	  else
+	    impl_iface->raise (window);
+	}
+      else
+	{
+	  native_children = NULL;
+	  get_all_native_children (private, &native_children);
+	  if (native_children != NULL)
+	    {
+	      above_native = find_native_sibling_above (parent, private);
+	      if (above_native)
+		impl_iface->restack_under ((GdkWindow *)above_native,
+					   native_children);
+	      else
+		{
+		  /* Right order, since native_children is bottom-topmost first */
+		  for (l = native_children; l != NULL; l = l->next)
+		    impl_iface->raise (l->data);
+		}
+
+	      g_list_free (native_children);
+	    }
+	}
+    }
+
+  recompute_visible_regions (private, TRUE, FALSE);
+
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
+  gdk_window_invalidate_in_parent (private);
+}
+
+
+/**
  * gdk_window_show:
  * @window: a #GdkWindow
  *

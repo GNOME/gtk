@@ -1542,6 +1542,14 @@ gdk_window_quartz_lower (GdkWindow *window)
 }
 
 static void
+gdk_window_quartz_restack_toplevel (GdkWindow *window,
+				    GdkWindow *sibling,
+				    gboolean   above)
+{
+  /* FIXME: Implement this */
+}
+
+static void
 gdk_window_quartz_set_background (GdkWindow      *window,
                                   const GdkColor *color)
 {
@@ -2907,6 +2915,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_events = gdk_window_quartz_get_events;
   iface->raise = gdk_window_quartz_raise;
   iface->lower = gdk_window_quartz_lower;
+  iface->restack_toplevel = gdk_window_quartz_restack_toplevel;
   iface->move_resize = gdk_window_quartz_move_resize;
   iface->set_background = gdk_window_quartz_set_background;
   iface->set_back_pixmap = gdk_window_quartz_set_back_pixmap;
