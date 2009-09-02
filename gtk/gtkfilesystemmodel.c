@@ -1640,6 +1640,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 {
   FileModelNode *node;
   guint i, id;
+  GFileInfo *old_info;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1650,9 +1651,12 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
     add_file (model, file, info);
 
   node = get_node (model, id);
-  if (node->info)
-    g_object_unref (node->info);
+
+  old_info = node->info;
   node->info = g_object_ref (info);
+  if (old_info)
+    g_object_unref (old_info);
+
   for (i = 0; i < model->n_columns; i++)
     {
       if (G_VALUE_TYPE (&node->values[i]))
