@@ -543,6 +543,28 @@ manual_clicked (GtkWidget *button,
 }
 
 static void
+restack_clicked (GtkWidget *button,
+		 gpointer data)
+{
+  GList *selected;
+
+  selected = get_selected_windows ();
+
+  if (g_list_length (selected) != 2)
+    {
+      g_warning ("select two windows");
+    }
+
+  gdk_window_restack (selected->data,
+		      selected->next->data,
+		      GPOINTER_TO_INT (data));
+
+  g_list_free (selected);
+
+  update_store ();
+}
+
+static void
 scroll_window_clicked (GtkWidget *button, 
 		       gpointer data)
 {
@@ -860,7 +882,7 @@ main (int argc, char **argv)
   gtk_widget_show (scrolled);
   gtk_widget_show (treeview);
   
-  table = gtk_table_new (4, 4, TRUE);
+  table = gtk_table_new (5, 4, TRUE);
   gtk_box_pack_start (GTK_BOX (vbox),
 		      table,
 		      FALSE, FALSE,
@@ -1006,6 +1028,26 @@ main (int argc, char **argv)
 			     button,
 			     3, 4,
 			     2, 3);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Restack above");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (restack_clicked),
+		    1);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     button,
+			     2, 3,
+			     3, 4);
+  gtk_widget_show (button);
+
+  button = gtk_button_new_with_label ("Restack below");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (restack_clicked),
+		    0);
+  gtk_table_attach_defaults (GTK_TABLE (table),
+			     button,
+			     3, 4,
+			     3, 4);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("draw drawable");
