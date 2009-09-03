@@ -86,7 +86,7 @@ void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
 				    guint32	  time_);
-gboolean   gdk_selection_property_get (GdkWindow  *requestor,
+gint       gdk_selection_property_get (GdkWindow  *requestor,
 				       guchar	 **data,
 				       GdkAtom	  *prop_type,
 				       gint	  *prop_format);
