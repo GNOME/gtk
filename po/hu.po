@@ -5168,7 +5168,6 @@ msgstr "a nyomtató nem érhető el"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
->>>>>>> 2.17.10
 msgid "ready to print"
 msgstr "nyomtatásra kész"
 
