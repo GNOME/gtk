@@ -3,7 +3,6 @@
  * Offscreen windows can be used to transform parts of a widget
  * hierarchy. Note that the rotated button is fully functional.
  */
-#define _GNU_SOURCE
 #include <math.h>
 #include <gtk/gtk.h>
 
@@ -73,7 +72,8 @@ to_child (GtkRotatedBin *bin,
   double c, s;
   double w, h;
 
-  sincos (bin->angle, &s, &c);
+  s = sin (bin->angle);
+  c = cos (bin->angle);
   child_area = bin->child->allocation;
 
   w = c * child_area.width + s * child_area.height;
@@ -112,7 +112,8 @@ to_parent (GtkRotatedBin *bin,
   double c, s;
   double w, h;
 
-  sincos (bin->angle, &s, &c);
+  s = sin (bin->angle);
+  c = cos (bin->angle);
   child_area = bin->child->allocation;
 
   w = c * child_area.width + s * child_area.height;
@@ -384,7 +385,8 @@ gtk_rotated_bin_size_request (GtkWidget      *widget,
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     gtk_widget_size_request (bin->child, &child_requisition);
 
-  sincos (bin->angle, &s, &c);
+  s = sin (bin->angle);
+  c = cos (bin->angle);
   w = c * child_requisition.width + s * child_requisition.height;
   h = s * child_requisition.width + c * child_requisition.height;
 
@@ -419,7 +421,8 @@ gtk_rotated_bin_size_allocate (GtkWidget     *widget,
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
 
-      sincos (bin->angle, &s, &c);
+      s = sin (bin->angle);
+      c = cos (bin->angle);
 
       gtk_widget_get_child_requisition (bin->child, &child_requisition);
       child_allocation.x = 0;
@@ -479,7 +482,8 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
               cr = gdk_cairo_create (widget->window);
 
               /* transform */
-              sincos (bin->angle, &s, &c);
+              s = sin (bin->angle);
+              c = cos (bin->angle);
               w = c * child_area.width + s * child_area.height;
               h = s * child_area.width + c * child_area.height;
 
