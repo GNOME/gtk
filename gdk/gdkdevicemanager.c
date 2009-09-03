@@ -226,17 +226,5 @@ gdk_device_manager_get_devices (GdkDeviceManager *device_manager,
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->get_devices (device_manager, type);
 }
 
-void
-gdk_device_manager_set_window_events (GdkDeviceManager *device_manager,
-                                      GdkWindow        *window,
-                                      GdkEventMask      event_mask)
-{
-  g_return_if_fail (GDK_IS_DEVICE_MANAGER (device_manager));
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->set_window_events)
-    GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->set_window_events (device_manager, window, event_mask);
-}
-
 #define __GDK_DEVICE_MANAGER_C__
 #include "gdkaliasdef.c"

@@ -378,7 +378,6 @@ gdk_cursor_get_image
 gdk_device_manager_get_display
 gdk_device_manager_get_for_display
 gdk_device_manager_get_type G_GNUC_CONST
-gdk_device_manager_set_window_events
 #endif
 #endif
 
