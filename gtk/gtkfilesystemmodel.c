@@ -292,22 +292,16 @@ node_should_be_visible (GtkFileSystemModel *model, guint id)
 
   if (required & GTK_FILE_FILTER_MIME_TYPE)
     {
-      filter_info.mime_type = g_file_info_get_attribute_string (node->info, "filechooser::mime-type");
-      if (filter_info.mime_type != NULL)
-        filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
-      else
-        {
-          const char *s = g_file_info_get_content_type (node->info);
-          if (s)
-            {
-              mime_type = g_content_type_get_mime_type (s);
-              if (mime_type)
-                {
-                  filter_info.mime_type = mime_type;
-                  filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
-                }
-            }
-        }
+      const char *s = g_file_info_get_content_type (node->info);
+      if (s)
+	{
+	  mime_type = g_content_type_get_mime_type (s);
+	  if (mime_type)
+	    {
+	      filter_info.mime_type = mime_type;
+	      filter_info.contains |= GTK_FILE_FILTER_MIME_TYPE;
+	    }
+	}
     }
 
   if (required & GTK_FILE_FILTER_FILENAME)
