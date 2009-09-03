@@ -33,6 +33,60 @@
 #include "gtktreemodel.h"
 #include "gtkalias.h"
 
+/*** Structure: how GtkFileSystemModel works
+ *
+ * This is a custom GtkTreeModel used to hold a collection of files for GtkFileChooser.  There are two use cases:
+ *
+ *   1. The model populates itself from a folder, using the GIO file enumerator API.  This happens if you use
+ *      _gtk_file_system_model_new_for_directory().  This is the normal usage for showing the contents of a folder.
+ *
+ *   2. The caller populates the model by hand, with files not necessarily in the same folder.  This happens
+ *      if you use _gtk_file_system_model_new() and then _gtk_file_system_model_add_and_query_file().  This is
+ *      the special kind of usage for "search" and "recent-files", where the file chooser gives the model the
+ *      files to be displayed.
+ *
+ * Each file is kept in a FileModelNode structure.  Each FileModelNode holds a GFile* and other data.  All the
+ * node structures have the same size, determined at runtime, depending on the number of columns that were passed
+ * to _gtk_file_system_model_new() or _gtk_file_system_model_new_for_directory() (that is, the size of a node is
+ * not sizeof (FileModelNode), but rather model->node_size).  The last field in the FileModelNode structure,
+ * node->values[], is an array of GValue, used to hold the data for those columns.
+ *
+ * The model stores an array of FileModelNode structures in model->files.  This is a GArray where each element is
+ * model->node_size bytes in size (the model computes that node size when initializing itself).  There are
+ * convenience macros, get_node() and node_index(), to access that array based on an array index or a pointer to
+ * a node inside the array.
+ *
+ * The model accesses files through two of its fields:
+ *
+ *   model->files - GArray of FileModelNode structures.
+ *
+ *   model->file_lookup - hash table that maps a GFile* to an index inside the model->files array.
+ *
+ * The model->file_lookup hash table is populated lazily.  It is both accessed and populated with the
+ * node_get_for_file() function.  The invariant is that the files in model->files[n] for n < g_hash_table_size
+ * (model->file_lookup) are already added to the hash table. The hash table will get cleared when we re-sort the
+ * files, as the array will be in a different order and the indexes need to be rebuilt.
+ *
+ * Each FileModelNode has a node->visible field, which indicates whether the node is visible in the GtkTreeView.
+ * A node may be invisible if, for example, it corresponds to a hidden file and the file chooser is not showing
+ * hidden files.
+ *
+ * Since not all nodes in the model->files array may be visible, we need a way to map visible row indexes from
+ * the treeview to array indexes in our array of files.
+ *
+ * Each FileModelNode has a node->index field which is the number of visible nodes in the treeview, *before and
+ * including* that node.  This means that node->index is 1-based, instead of 0-based --- this makes some code
+ * simpler, believe it or not :)  This also means that when the calling GtkTreeView gives us a GtkTreePath, we
+ * turn the 0-based treepath into a 1-based index for our purposes.
+ *
+ * We try to compute the node->index fields lazily.  For this, the model keeps a model->n_indexes_valid field
+ * which is the count of valid indexes starting from the beginning of the model->files array.  When a node
+ * changes its information, or when a node gets deleted, that node and the following ones get invalidated by
+ * simply setting model->n_indexes_valid to the array index of the node.  If the model happens to need a node's
+ * visible index and that node is in the model->files array after model->n_indexes_valid, then the indexes get
+ * re-validated up to the sought node.  See node_validate_indexes() for this logic.
+ */
+
 /*** DEFINES ***/
 
 /* priority used for all async callbacks in the main loop
@@ -51,7 +105,9 @@ struct _FileModelNode
   GFile *               file;           /* file represented by this node or NULL for editable */
   GFileInfo *           info;           /* info for this file or NULL if unknown */
 
-  guint                 index;          /* if valid, index in path - aka visible nodes before this one */
+  guint                 index;          /* if valid (see model->n_valid_indexes), visible nodes before and including
+					 * this one - see the "Structure" comment above.
+					 */
 
   guint                 visible :1;     /* if the file is currently visible */
   guint                 frozen_add :1;  /* true if the model was frozen and the entry has not been added yet */
@@ -139,9 +195,17 @@ static void remove_file (GtkFileSystemModel *model,
 
 /*** FileModelNode ***/
 
+/* Get a FileModelNode structure given an index in the model->files array of nodes */
 #define get_node(_model, _index) ((FileModelNode *) ((_model)->files->data + (_index) * (_model)->node_size))
+
+/* Get an index within the model->files array of nodes, given a FileModelNode* */
 #define node_index(_model, _node) (((gchar *) (_node) - (_model)->files->data) / (_model)->node_size)
 
+/* @min_index: smallest model->array index that will be valid after this call
+ * @min_visible: smallest node->index that will be valid after this call
+ *
+ * Passing G_MAXUINT is fine for either/both of those arguments for "validate all nodes".
+ */
 static void
 node_validate_indexes (GtkFileSystemModel *model, guint min_index, guint min_visible)
 {
