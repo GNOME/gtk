@@ -24,6 +24,7 @@
 #include "gtkcellrendereraccel.h"
 #include "gtklabel.h"
 #include "gtkeventbox.h"
+#include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkalias.h"
