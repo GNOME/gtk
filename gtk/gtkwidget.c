@@ -2415,11 +2415,10 @@ gtk_widget_set_property (GObject         *object,
   switch (prop_id)
     {
       gboolean tmp;
-      guint32 saved_flags;
       gchar *tooltip_markup;
       const gchar *tooltip_text;
       GtkWindow *tooltip_window;
-      
+
     case PROP_NAME:
       gtk_widget_set_name (widget, g_value_get_string (value));
       break;
@@ -2442,13 +2441,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_app_paintable (widget, g_value_get_boolean (value));
       break;
     case PROP_CAN_FOCUS:
-      saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
-      if (saved_flags != GTK_WIDGET_FLAGS (widget))
-	gtk_widget_queue_resize (widget);
+      gtk_widget_set_can_focus (widget, g_value_get_boolean (value));
       break;
     case PROP_HAS_FOCUS:
       if (g_value_get_boolean (value))
@@ -2459,23 +2452,14 @@ gtk_widget_set_property (GObject         *object,
 	gtk_widget_grab_focus (widget);
       break;
     case PROP_CAN_DEFAULT:
-      saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
-      if (saved_flags != GTK_WIDGET_FLAGS (widget))
-	gtk_widget_queue_resize (widget);
+      gtk_widget_set_can_default (widget, g_value_get_boolean (value));
       break;
     case PROP_HAS_DEFAULT:
       if (g_value_get_boolean (value))
 	gtk_widget_grab_default (widget);
       break;
     case PROP_RECEIVES_DEFAULT:
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
     case PROP_STYLE:
       gtk_widget_set_style (widget, g_value_get_object (value));
