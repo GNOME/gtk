@@ -4990,6 +4990,7 @@ gtk_widget_get_pango_context
 gtk_widget_get_parent
 gtk_widget_get_parent_window
 gtk_widget_get_pointer
+gtk_widget_get_receives_default
 gtk_widget_get_root_window
 gtk_widget_get_screen
 gtk_widget_get_sensitive
@@ -5078,6 +5079,7 @@ gtk_widget_set_name
 gtk_widget_set_no_show_all
 gtk_widget_set_parent
 gtk_widget_set_parent_window
+gtk_widget_set_receives_default
 gtk_widget_set_redraw_on_allocate
 gtk_widget_set_scroll_adjustments
 gtk_widget_set_sensitive

@@ -5472,6 +5472,60 @@ gtk_widget_grab_default (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_set_receives_default:
+ * @widget: a #GtkWidget
+ * @receives_default: whether or not @widget can be a default widget.
+ *
+ * Specifies whether @widget will be treated as the default widget
+ * within its toplevel when it has the focus, even if another widget
+ * is the default.
+ *
+ * See gtk_widget_grab_default() for details about the meaning of
+ * "default".
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_receives_default (GtkWidget *widget,
+                                 gboolean   receives_default)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (receives_default != gtk_widget_get_receives_default (widget))
+    {
+      if (receives_default)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+
+      g_object_notify (G_OBJECT (widget), "receives-default");
+    }
+}
+
+/**
+ * gtk_widget_get_receives_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is alyways treated as default widget
+ * withing its toplevel when it has the focus, even if another widget
+ * is the default.
+ *
+ * See gtk_widget_set_receives_default().
+ *
+ * Return value: %TRUE if @widget acts as default widget when focussed,
+ *               %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_receives_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_RECEIVES_DEFAULT) != 0;
+}
+
+/**
  * gtk_widget_has_grab:
  * @widget: a #GtkWidget
  *

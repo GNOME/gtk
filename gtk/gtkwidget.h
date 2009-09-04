@@ -561,6 +561,10 @@ gboolean   gtk_widget_get_can_default     (GtkWidget           *widget);
 gboolean   gtk_widget_has_default         (GtkWidget           *widget);
 void       gtk_widget_grab_default        (GtkWidget           *widget);
 
+void      gtk_widget_set_receives_default (GtkWidget           *widget,
+                                           gboolean             receives_default);
+gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
+
 gboolean   gtk_widget_has_grab            (GtkWidget           *widget);
 
 void                  gtk_widget_set_name               (GtkWidget    *widget,
