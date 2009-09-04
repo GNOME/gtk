@@ -276,6 +276,8 @@ struct _GdkWindowObject
   cairo_surface_t *cairo_surface;
 };
 
+#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
