@@ -3781,6 +3781,7 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 	    clip = private->clip_region;
 	  gdk_region_intersect (exposure_region, clip);
 
+	  _gdk_gc_remove_drawable_clip (gc);
 	  clip = _gdk_gc_get_clip_region (gc);
 	  if (clip)
 	    {
