@@ -1,3 +1,4 @@
+#undef GDK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>

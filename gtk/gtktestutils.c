@@ -21,6 +21,8 @@
 /* need to get the prototypes of all get_type functions */
 #define GTK_ENABLE_BROKEN
 #undef GTK_DISABLE_DEPRECATED
+/* Need to get GDK_WINDOW_OBJECT */
+#undef GDK_DISABLE_DEPRECATED
 
 #include "config.h"
 

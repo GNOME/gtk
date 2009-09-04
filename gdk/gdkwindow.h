@@ -258,9 +258,12 @@ typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 #define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
 #define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
 #define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+
+#ifndef GDK_DISABLE_DEPRECATED
 #define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
 
 #ifndef GDK_COMPILATION
+
 /* We used to export all of GdkWindowObject, but we don't want to keep doing so.
    However, there are various parts of it accessed by macros and other code,
    so we keep the old exported version public, but in reality it is larger. */
@@ -315,6 +318,7 @@ struct _GdkWindowObject
 
   GdkWindowRedirect *redirect;
 };
+#endif
 #endif
 
 struct _GdkWindowObjectClass
