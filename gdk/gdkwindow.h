@@ -330,6 +330,7 @@ GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 gint           attributes_mask);
 void          gdk_window_destroy               (GdkWindow     *window);
 GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
+gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);
 void          gdk_window_show                  (GdkWindow     *window);

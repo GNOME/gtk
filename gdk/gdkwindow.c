@@ -2097,6 +2097,20 @@ gdk_window_get_window_type (GdkWindow *window)
 }
 
 /**
+ * gdk_window_is_destroyed:
+ * @window: a #GdkWindow
+ *
+ * Check to see if a window is destroyed..
+ *
+ * Return value: %TRUE if the window is destroyed
+ **/
+gboolean
+gdk_window_is_destroyed (GdkWindow *window)
+{
+  return GDK_WINDOW_DESTROYED (window);
+}
+
+/**
  * gdk_window_get_position:
  * @window: a #GdkWindow
  * @x: X coordinate of window
