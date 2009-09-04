@@ -1219,6 +1219,8 @@ gdk_x11_display_get_startup_notification_id
 #if IN_FILE(__GDK_DRAWABLE_X11_C__)
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
+gdk_x11_window_get_drawable_impl
+gdk_x11_pixmap_get_drawable_impl
 #endif
 
 #if IN_FILE(__GDK_FONT_X11_C__)

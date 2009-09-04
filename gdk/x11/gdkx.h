@@ -40,6 +40,8 @@ extern Display          *gdk_display;
 
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
+GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
+GdkDrawable *gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap);
 Display *gdk_x11_image_get_xdisplay       (GdkImage    *image);
 XImage  *gdk_x11_image_get_ximage         (GdkImage    *image);
 Display *gdk_x11_colormap_get_xdisplay    (GdkColormap *colormap);
@@ -105,10 +107,10 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
-#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (gdk_x11_window_get_drawable_impl (win)))
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_drawable_get_xid (win))
-#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkPixmapObject *)win)->impl))
+#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (gdk_x11_pixmap_get_drawable_impl (win)))
 #define GDK_PIXMAP_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))
