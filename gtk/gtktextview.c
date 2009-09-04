@@ -1894,6 +1894,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
                             gdouble        xalign,
                             gdouble        yalign)
 {
+  const char *mark_name;
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
 
@@ -1906,6 +1907,12 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
   scroll->xalign = xalign;
   scroll->yalign = yalign;
   
+  /* We need to verify that the buffer contains the mark, otherwise this
+   * can lead to data structure corruption later on.
+   */
+  mark_name = gtk_text_mark_get_name (mark);
+  g_return_if_fail (gtk_text_buffer_get_mark (get_buffer (text_view), mark_name));
+
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, mark);
 
   scroll->mark = gtk_text_buffer_create_mark (get_buffer (text_view),
