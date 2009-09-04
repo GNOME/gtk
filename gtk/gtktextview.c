@@ -2194,6 +2194,11 @@ gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_TEXT_MARK (mark));
 
+  /* We need to verify that the buffer contains the mark, otherwise this
+   * can lead to data structure corruption later on.
+   */
+  g_return_if_fail (get_buffer (text_view) == gtk_text_mark_get_buffer (mark));
+
   gtk_text_view_scroll_to_mark (text_view, mark, 0.0, FALSE, 0.0, 0.0);
 }
 
