@@ -72,19 +72,34 @@
  * hidden files.
  *
  * Since not all nodes in the model->files array may be visible, we need a way to map visible row indexes from
- * the treeview to array indexes in our array of files.
+ * the treeview to array indexes in our array of files.  And thus we introduce a bit of terminology:
  *
- * Each FileModelNode has a node->index field which is the number of visible nodes in the treeview, *before and
- * including* that node.  This means that node->index is 1-based, instead of 0-based --- this makes some code
+ *   index - An index in the model->files array.  All variables/fields that represent indexes are either called
+ *   "index" or "i_*", or simply "i" for things like loop counters.
+ *
+ *   row - An index in the GtkTreeView, i.e. the index of a row within the outward-facing API of the
+ *   GtkFileSystemModel.  However, note that our rows are 1-based, not 0-based, for the reason explained in the
+ *   following paragraph.  Variables/fields that represent visible rows are called "row", or "r_*", or simply
+ *   "r".
+ *
+ * Each FileModelNode has a node->row field which is the number of visible rows in the treeview, *before and
+ * including* that node.  This means that node->row is 1-based, instead of 0-based --- this makes some code
  * simpler, believe it or not :)  This also means that when the calling GtkTreeView gives us a GtkTreePath, we
- * turn the 0-based treepath into a 1-based index for our purposes.
+ * turn the 0-based treepath into a 1-based row for our purposes.  If a node is not visible, it will have the
+ * same row number as its closest preceding visible node.
  *
- * We try to compute the node->index fields lazily.  For this, the model keeps a model->n_indexes_valid field
- * which is the count of valid indexes starting from the beginning of the model->files array.  When a node
- * changes its information, or when a node gets deleted, that node and the following ones get invalidated by
- * simply setting model->n_indexes_valid to the array index of the node.  If the model happens to need a node's
- * visible index and that node is in the model->files array after model->n_indexes_valid, then the indexes get
- * re-validated up to the sought node.  See node_validate_indexes() for this logic.
+ * We try to compute the node->row fields lazily.  A node is said to be "valid" if its node->row is accurate.
+ * For this, the model keeps a model->n_nodes_valid field which is the count of valid nodes starting from the
+ * beginning of the model->files array.  When a node changes its information, or when a node gets deleted, that
+ * node and the following ones get invalidated by simply setting model->n_nodes_valid to the array index of the
+ * node.  If the model happens to need a node's row number and that node is in the model->files array after
+ * model->n_nodes_valid, then the nodes get re-validated up to the sought node.  See node_validate_rows() for
+ * this logic.
+ *
+ * You never access a node->row directly.  Instead, call node_get_tree_row().  That function will validate the nodes
+ * up to the sought one if the node is not valid yet, and it will return a proper 0-based row.
+ *
+ * TODO: replace "indices" for "rows", prefix all variables with i_ or r_ as appropriate.  Te quedaste en "AQUI".
  */
 
 /*** DEFINES ***/
@@ -105,7 +120,7 @@ struct _FileModelNode
   GFile *               file;           /* file represented by this node or NULL for editable */
   GFileInfo *           info;           /* info for this file or NULL if unknown */
 
-  guint                 index;          /* if valid (see model->n_valid_indexes), visible nodes before and including
+  guint                 row;            /* if valid (see model->n_valid_indexes), visible nodes before and including
 					 * this one - see the "Structure" comment above.
 					 */
 
@@ -127,8 +142,8 @@ struct _GtkFileSystemModel
   GCancellable *        cancellable;    /* cancellable in use for all operations - cancelled on dispose */
   GArray *              files;          /* array of FileModelNode containing all our files */
   GSize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
-  guint                 n_indexes_valid;/* count of valid indexes */
-  GHashTable *          file_lookup;    /* file => array index table.
+  guint                 n_nodes_valid;  /* count of valid nodes (i.e. those whose node->row is accurate) */
+  GHashTable *          file_lookup;    /* mapping of GFile => array index in model->files
 					 * This hash table doesn't always have the same number of entries as the files array;
 					 * it can get cleared completely when we resort.
 					 * The hash table gets re-populated in node_get_for_file() if this mismatch is
@@ -201,54 +216,59 @@ static void remove_file (GtkFileSystemModel *model,
 /* Get an index within the model->files array of nodes, given a FileModelNode* */
 #define node_index(_model, _node) (((gchar *) (_node) - (_model)->files->data) / (_model)->node_size)
 
-/* @min_index: smallest model->array index that will be valid after this call
- * @min_visible: smallest node->index that will be valid after this call
+/* @up_to_index: smallest model->files array index that will be valid after this call
+ * @up_to_row: smallest node->row that will be valid after this call
  *
- * Passing G_MAXUINT is fine for either/both of those arguments for "validate all nodes".
+ * If you want to validate up to an index or up to a row, specify the index or
+ * the row you want and specify G_MAXUINT for the other argument.  Pass
+ * G_MAXUINT for both arguments for "validate everything".
  */
 static void
-node_validate_indexes (GtkFileSystemModel *model, guint min_index, guint min_visible)
+node_validate_rows (GtkFileSystemModel *model, guint up_to_index, guint up_to_row)
 {
-  guint validate, current;
+  guint i, row;
 
   if (model->files->len == 0)
     return;
-  min_index = MIN (min_index, model->files->len - 1);
-  validate = model->n_indexes_valid;
-  if (validate)
-    current = get_node (model, validate - 1)->index;
+
+  up_to_index = MIN (up_to_index, model->files->len - 1);
+
+  i = model->n_nodes_valid;
+  if (i != 0)
+    row = get_node (model, i - 1)->row;
   else
-    current = 0;
-  while (validate <= min_index && current <= min_visible)
+    row = 0;
+
+  while (i <= up_to_index && row <= up_to_row)
     {
-      FileModelNode *node = get_node (model, validate);
+      FileModelNode *node = get_node (model, i);
       if (node->visible)
-        current++;
-      node->index = current;
-      validate++;
+        row++;
+      node->row = row;
+      i++;
     }
-  model->n_indexes_valid = validate;
+  model->n_nodes_valid = i;
 }
 
 static guint
-node_get_index (GtkFileSystemModel *model, guint id)
+node_get_tree_row (GtkFileSystemModel *model, guint index)
 {
-  if (model->n_indexes_valid <= id)
-    node_validate_indexes (model, id, G_MAXUINT);
+  if (model->n_nodes_valid <= index)
+    node_validate_rows (model, index, G_MAXUINT);
 
-  return get_node (model, id)->index - 1;
+  return get_node (model, index)->row - 1;
 }
 
 static void 
 node_invalidate_index (GtkFileSystemModel *model, guint id)
 {
-  model->n_indexes_valid = MIN (model->n_indexes_valid, id);
+  model->n_nodes_valid = MIN (model->n_nodes_valid, id);
 }
 
 static GtkTreePath *
 gtk_tree_path_new_from_node (GtkFileSystemModel *model, guint id)
 {
-  guint i = node_get_index (model, id);
+  guint i = node_get_tree_row (model, id);
 
   g_assert (i < model->files->len);
 
@@ -280,11 +300,11 @@ emit_row_changed_for_node (GtkFileSystemModel *model, guint id)
 }
 
 static void
-emit_row_deleted_for_visible_index (GtkFileSystemModel *model, guint visible_index)
+emit_row_deleted_for_row (GtkFileSystemModel *model, guint row)
 {
   GtkTreePath *path;
 
-  path = gtk_tree_path_new_from_indices (visible_index, -1);
+  path = gtk_tree_path_new_from_indices (row, -1);
   gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
   gtk_tree_path_free (path);
 }
@@ -306,14 +326,14 @@ node_set_visible (GtkFileSystemModel *model, guint id, gboolean visible)
     }
   else
     {
-      guint visible_index;
+      guint row;
 
-      visible_index = node_get_index (model, id);
-      g_assert (visible_index < model->files->len);
+      row = node_get_tree_row (model, id);
+      g_assert (row < model->files->len);
 
       node->visible = FALSE;
       node_invalidate_index (model, id);
-      emit_row_deleted_for_visible_index (model, visible_index);
+      emit_row_deleted_for_row (model, row);
     }
 }
 
@@ -430,7 +450,7 @@ compare_indices (gconstpointer key, gconstpointer _node)
 {
   const FileModelNode *node = _node;
 
-  return GPOINTER_TO_UINT (key) - node->index;
+  return GPOINTER_TO_UINT (key) - node->row;
 }
 
 static gboolean
@@ -441,36 +461,46 @@ gtk_file_system_model_iter_nth_child (GtkTreeModel *tree_model,
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (tree_model);
   char *node;
-  guint id, find;
+  guint id;
+  guint row_to_find;
 
   g_return_val_if_fail (n >= 0, FALSE);
 
   if (parent != NULL)
     return FALSE;
 
-  find = n + 1;
+  row_to_find = n + 1; /* plus one as our node->row numbers are 1-based; see the "Structure" comment at the beginning */
 
-  if (model->n_indexes_valid > 0 &&
-      get_node (model, model->n_indexes_valid - 1)->index >= find)
+  if (model->n_nodes_valid > 0 &&
+      get_node (model, model->n_nodes_valid - 1)->row >= row_to_find)
     {
-      /* fast path */
-      node = bsearch (GUINT_TO_POINTER (find), 
+      /* Fast path - the nodes are valid up to the sought one.
+       *
+       * First, find a node with the sought row number...*/
+
+      node = bsearch (GUINT_TO_POINTER (row_to_find), 
                       model->files->data,
-                      model->n_indexes_valid,
+                      model->n_nodes_valid,
                       model->node_size,
                       compare_indices);
       if (node == NULL)
         return FALSE;
 
+      /* ... Second, back up until we find the first visible node with that row number */
+
       id = node_index (model, node);
       while (!get_node (model, id)->visible)
         id--;
+
+      g_assert (get_node (model, id)->row == row_to_find);
     }
   else
     {
-      node_validate_indexes (model, G_MAXUINT, n);
-      id = model->n_indexes_valid - 1;
-      if (model->n_indexes_valid == 0 || get_node (model, id)->index != find)
+      /* Slow path - the nodes need to be validated up to the sought one */
+
+      node_validate_rows (model, G_MAXUINT, n);
+      id = model->n_nodes_valid - 1;
+      if (model->n_nodes_valid == 0 || get_node (model, id)->row != row_to_find)
         return FALSE;
     }
 
@@ -571,7 +601,7 @@ gtk_file_system_model_iter_n_children (GtkTreeModel *tree_model,
   if (iter)
     return 0;
 
-  return node_get_index (model, model->files->len - 1) + 1;
+  return node_get_tree_row (model, model->files->len - 1) + 1;
 }
 
 static gboolean
@@ -685,16 +715,16 @@ gtk_file_system_model_sort (GtkFileSystemModel *model)
       GtkTreePath *path;
       guint i, j, n_elements;
 
-      node_validate_indexes (model, G_MAXUINT, G_MAXUINT);
-      n_elements = node_get_index (model, model->files->len - 1) + 1;
-      model->n_indexes_valid = 0;
+      node_validate_rows (model, G_MAXUINT, G_MAXUINT);
+      n_elements = node_get_tree_row (model, model->files->len - 1) + 1;
+      model->n_nodes_valid = 0;
       g_hash_table_remove_all (model->file_lookup);
       g_qsort_with_data (get_node (model, 1),
                          model->files->len - 1,
                          model->node_size,
                          compare_array_element,
                          &data);
-      g_assert (model->n_indexes_valid == 0);
+      g_assert (model->n_nodes_valid == 0);
       g_assert (g_hash_table_size (model->file_lookup) == 0);
       if (n_elements)
         {
@@ -706,13 +736,13 @@ gtk_file_system_model_sort (GtkFileSystemModel *model)
               FileModelNode *node = get_node (model, i);
               if (!node->visible)
                 {
-                  node->index = j;
+                  node->row = j;
                   continue;
                 }
 
-              new_order[j] = node->index;
+              new_order[j] = node->row;
               j++;
-              node->index = j;
+              node->row = j;
             }
           g_assert (j == n_elements);
           path = gtk_tree_path_new ();
