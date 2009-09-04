@@ -498,7 +498,7 @@ gtk_file_system_model_iter_nth_child (GtkTreeModel *tree_model,
     {
       /* Slow path - the nodes need to be validated up to the sought one */
 
-      node_validate_rows (model, G_MAXUINT, n);
+      node_validate_rows (model, G_MAXUINT, n); /* note that this is really "n", not row_to_find - see node_validate_rows() */
       id = model->n_nodes_valid - 1;
       if (model->n_nodes_valid == 0 || get_node (model, id)->row != row_to_find)
         return FALSE;
@@ -1738,7 +1738,7 @@ remove_file (GtkFileSystemModel *model,
     g_object_unref (node->info);
 
   g_array_remove_index (model->files, id);
-  /* FMQ: do we need to resort? */
+  /* We don't need to resort, as removing a row doesn't change the sorting order */
 }
 
 /**
