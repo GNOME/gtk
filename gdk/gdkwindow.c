@@ -6498,7 +6498,8 @@ gdk_window_restack (GdkWindow     *window,
 
   if (gdk_window_is_toplevel (private))
     {
-      g_return_if_fail (gdk_window_is_toplevel (sibling));
+      g_return_if_fail (gdk_window_is_toplevel (GDK_WINDOW_OBJECT (sibling)));
+      impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->restack_toplevel (window, sibling, above);
       return;
     }
