@@ -616,14 +616,14 @@ static void
 gtk_file_system_model_ref_node (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  /* FIXME: implement */
+  /* nothing to do */
 }
 
 static void
 gtk_file_system_model_unref_node (GtkTreeModel *tree_model,
 				  GtkTreeIter  *iter)
 {
-  /* FIXME: implement */
+  /* nothing to do */
 }
 
 static void
