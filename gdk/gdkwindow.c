@@ -2528,6 +2528,9 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
   if (!gdk_region_empty (region))
     {
+      /* Remove flushed region from the implicit paint */
+      gdk_region_subtract (paint->region, region);
+
       /* Some regions are valid, push these to window now */
       tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
       _gdk_gc_set_clip_region_internal (tmp_gc, region, TRUE);
@@ -2535,9 +2538,6 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 			 0, 0, paint->x_offset, paint->y_offset, -1, -1);
       /* Reset clip region of the cached GdkGC */
       gdk_gc_set_clip_region (tmp_gc, NULL);
-
-      /* Remove flushed region from the implicit paint */
-      gdk_region_subtract (paint->region, region);
     }
   else
     gdk_region_destroy (region);
