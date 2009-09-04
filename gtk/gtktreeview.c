@@ -15010,6 +15010,10 @@ gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
   tree_view->priv->row_separator_func = func;
   tree_view->priv->row_separator_data = data;
   tree_view->priv->row_separator_destroy = destroy;
+
+  /* Have the tree recalculate heights */
+  _gtk_rbtree_mark_invalid (tree_view->priv->tree);
+  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
 
   
