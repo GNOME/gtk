@@ -438,6 +438,8 @@ gtk_cell_view_expose (GtkWidget      *widget,
 
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
+  else if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
+    state = GTK_CELL_RENDERER_INSENSITIVE;
   else
     state = 0;
       
