@@ -1258,14 +1258,18 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
        */
       gtk_tree_path_free (path);
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
-      gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
 
       level = FILTER_LEVEL (iter.user_data);
       elt = FILTER_ELT (iter.user_data2);
 
-      /* and update the children */
-      if (gtk_tree_model_iter_children (c_model, &children, &real_c_iter))
-        gtk_tree_model_filter_update_children (filter, level, elt);
+      if (gtk_tree_model_filter_elt_is_visible_in_target (level, elt))
+        {
+          gtk_tree_model_row_changed (GTK_TREE_MODEL (filter), path, &iter);
+
+          /* and update the children */
+          if (gtk_tree_model_iter_children (c_model, &children, &real_c_iter))
+            gtk_tree_model_filter_update_children (filter, level, elt);
+        }
 
       goto done;
     }
@@ -1288,10 +1292,14 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
   gtk_tree_model_filter_increment_stamp (filter);
 
+  /* We need to allow to build new levels, because we are then pulling
+   * in a child in an invisible level.  We only want to find path if it
+   * is in a visible level (and thus has a parent that is visible).
+   */
   if (!path)
     path = gtk_real_tree_model_filter_convert_child_path_to_path (filter,
                                                                   c_path,
-                                                                  TRUE,
+                                                                  FALSE,
                                                                   TRUE);
 
   if (!path)
