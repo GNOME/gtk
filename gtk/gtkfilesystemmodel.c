@@ -713,38 +713,39 @@ gtk_file_system_model_sort (GtkFileSystemModel *model)
   if (sort_data_init (&data, model))
     {
       GtkTreePath *path;
-      guint i, j, n_elements;
+      guint i;
+      guint r, n_visible_rows;
 
       node_validate_rows (model, G_MAXUINT, G_MAXUINT);
-      n_elements = node_get_tree_row (model, model->files->len - 1) + 1;
+      n_visible_rows = node_get_tree_row (model, model->files->len - 1) + 1;
       model->n_nodes_valid = 0;
       g_hash_table_remove_all (model->file_lookup);
-      g_qsort_with_data (get_node (model, 1),
+      g_qsort_with_data (get_node (model, 1), /* start at index 1; don't sort the editable row */
                          model->files->len - 1,
                          model->node_size,
                          compare_array_element,
                          &data);
       g_assert (model->n_nodes_valid == 0);
       g_assert (g_hash_table_size (model->file_lookup) == 0);
-      if (n_elements)
+      if (n_visible_rows)
         {
-          int *new_order = g_new (int, n_elements);
+          int *new_order = g_new (int, n_visible_rows);
         
-          j = 0;
+          r = 0;
           for (i = 0; i < model->files->len; i++)
             {
               FileModelNode *node = get_node (model, i);
               if (!node->visible)
                 {
-                  node->row = j;
+                  node->row = r;
                   continue;
                 }
 
-              new_order[j] = node->row;
-              j++;
-              node->row = j;
+              new_order[r] = node->row;
+              r++;
+              node->row = r;
             }
-          g_assert (j == n_elements);
+          g_assert (r == n_visible_rows);
           path = gtk_tree_path_new ();
           gtk_tree_model_rows_reordered (GTK_TREE_MODEL (model),
                                          path,
