@@ -630,6 +630,8 @@ GdkEvent * _gdk_make_event (GdkWindow    *window,
 			    GdkEventType  type,
 			    GdkEvent     *event_in_queue,
 			    gboolean      before_event);
+gboolean _gdk_window_event_parent_of (GdkWindow *parent,
+                                      GdkWindow *child);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      GdkWindow                  *src,
