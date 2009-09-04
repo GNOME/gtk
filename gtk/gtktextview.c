@@ -7196,6 +7196,11 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
    */
   gtk_text_view_update_layout_width (text_view);
   
+  /* We also update the IM spot location here, since the IM context
+   * might do something that leads to validation.
+   */
+  gtk_text_view_update_im_spot_location (text_view);
+
   /* note that validation of onscreen could invoke this function
    * recursively, by scrolling to maintain first_para, or in response
    * to updating the layout width, however there is no problem with
@@ -7230,6 +7235,9 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
       text_view->first_validate_idle = 0;
     }
 
+  /* Finally we update the IM cursor location again, to ensure any
+   * changes made by the validation are pushed through.
+   */
   gtk_text_view_update_im_spot_location (text_view);
   
   DV(g_print(">End scroll offset changed handler ("G_STRLOC")\n"));
