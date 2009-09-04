@@ -685,17 +685,13 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   if (GDK_IS_DRAWABLE (client_window))
     {
       screen = gdk_drawable_get_screen (GDK_DRAWABLE (client_window));
-      if (screen)
-        settings = gtk_settings_get_for_screen (screen);
-      else
-        settings = gtk_settings_get_default ();
-
+      settings = gtk_settings_get_for_screen (screen);
       g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
       if (tmp)
         {
           if (strcmp (tmp, SIMPLE_ID) == 0)
             context_id = SIMPLE_ID;
-          else 
+          else
             {
               GtkIMModule *module;
               module = g_hash_table_lookup (contexts_hash, tmp);
@@ -704,7 +700,7 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
             }
           g_free (tmp);
 
-       	  if (context_id) 
+       	  if (context_id)
             return context_id;
         }
     }
