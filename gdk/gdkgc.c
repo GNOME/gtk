@@ -1396,6 +1396,8 @@ _gdk_gc_update_context (GdkGC          *gc,
 
   priv = GDK_GC_GET_PRIVATE (gc);
 
+  _gdk_gc_remove_drawable_clip (gc);
+
   fill = priv->fill;
   if (override_stipple && fill != GDK_OPAQUE_STIPPLED)
     fill = GDK_STIPPLED;
