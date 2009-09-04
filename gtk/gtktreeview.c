@@ -10531,6 +10531,9 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
           if (!tree_view->priv->in_top_row_to_dy)
             gtk_tree_view_dy_to_top_row (tree_view);
 	}
+
+      gdk_window_process_updates (tree_view->priv->header_window, TRUE);
+      gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
     }
 }
 
