@@ -349,6 +349,7 @@ static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 						  GdkEventButton    *event);
 
+static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
                                                   GtkTextMark   *mark,
                                                   gdouble        within_margin,
@@ -1412,16 +1413,21 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (text_view->buffer,
                                             gtk_text_view_paste_done_handler,
                                             text_view);
-      g_object_unref (text_view->buffer);
-      text_view->dnd_mark = NULL;
-      text_view->first_para_mark = NULL;
 
       if (GTK_WIDGET_REALIZED (text_view))
 	{
 	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
 	  gtk_text_buffer_remove_selection_clipboard (text_view->buffer, clipboard);
-	}
+        }
+
+      if (text_view->layout)
+        gtk_text_layout_set_buffer (text_view->layout, NULL);
+
+      g_object_unref (text_view->buffer);
+      text_view->dnd_mark = NULL;
+      text_view->first_para_mark = NULL;
+      cancel_pending_scroll (text_view);
     }
 
   text_view->buffer = buffer;
