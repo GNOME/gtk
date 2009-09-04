@@ -142,6 +142,7 @@ struct _GdkWindowPaint
   gint y_offset;
   cairo_surface_t *surface;
   guint uses_implicit : 1;
+  guint flushed : 1;
   guint32 region_tag;
 };
 
@@ -2484,6 +2485,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   paint->x_offset = rect->x;
   paint->y_offset = rect->y;
   paint->uses_implicit = FALSE;
+  paint->flushed = FALSE;
   paint->surface = NULL;
   paint->pixmap =
     gdk_pixmap_new (window,
@@ -2512,6 +2514,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
     return;
 
   paint = impl_window->implicit_paint;
+  paint->flushed = TRUE;
   region = gdk_region_copy (private->clip_region_with_children);
 
   /* Don't flush active double buffers, as that may show partially done
@@ -5109,7 +5112,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	       * be to late to anti-expose now. Since this is merely an
 	       * optimization we just avoid doing it at all in that case.
 	       */
-	      if (private->implicit_paint != NULL) /* didn't flush implicit paint */
+	      if (private->implicit_paint != NULL &&
+		  !private->implicit_paint->flushed)
 		{
 		  impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
 		  save_region = impl_iface->queue_antiexpose (window, update_area);
