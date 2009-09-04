@@ -1920,7 +1920,7 @@ _gtk_file_system_model_thaw_updates (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_clear_cached_values:
+ * _gtk_file_system_model_clear_cache:
  * @model: a #GtkFileSystemModel
  * @column: the column to clear or -1 for all columns
  *
@@ -1941,7 +1941,7 @@ _gtk_file_system_model_clear_cache (GtkFileSystemModel *model,
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (column >= -1 && (guint) column < model->n_columns);
 
-  if (column)
+  if (column > -1)
     {
       start = column;
       end = column + 1;
