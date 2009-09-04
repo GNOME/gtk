@@ -2433,10 +2433,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
       break;
     case PROP_VISIBLE:
-      if (g_value_get_boolean (value))
-	gtk_widget_show (widget);
-      else
-	gtk_widget_hide (widget);
+      gtk_widget_set_visible (widget, g_value_get_boolean (value));
       break;
     case PROP_SENSITIVE:
       gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
