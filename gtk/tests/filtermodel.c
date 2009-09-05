@@ -43,13 +43,18 @@ create_tree_store_set_values (GtkTreeStore *store,
                               gboolean      visible)
 {
   GtkTreePath *path;
+  gchar *path_string;
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (store), iter);
+  path_string = gtk_tree_path_to_string (path);
+
   gtk_tree_store_set (store, iter,
-                      0, gtk_tree_path_to_string (path),
+                      0, path_string,
                       1, visible,
                       -1);
+
   gtk_tree_path_free (path);
+  g_free (path_string);
 }
 
 static void
