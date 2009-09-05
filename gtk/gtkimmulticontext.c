@@ -289,6 +289,9 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 
   if (g_strcmp0 (multicontext->context_id, get_effective_context_id (multicontext)) != 0)
     gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
+
+  if (multicontext->slave)
+    gtk_im_context_set_client_window (multicontext->slave, window);
 }
 
 static void
