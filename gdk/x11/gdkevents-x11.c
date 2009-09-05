@@ -1053,7 +1053,7 @@ gdk_event_translate (GdkDisplay *display,
               /* careful, reentrancy */
               _gdk_x11_screen_window_manager_changed (screen);
 
-              retval = FALSE;
+              return_val = FALSE;
               goto done;
             }
         }
