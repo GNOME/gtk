@@ -20,6 +20,17 @@
 #include <gtk/gtk.h>
 
 
+/* Left to do:
+ *   - Proper coverage checking to see if the unit tests cover
+ *     all possible cases.
+ *   - Verify if the ref counting is done properly for both the
+ *     normal ref_count and the zero_ref_count.  One way to test
+ *     this area is by collapsing/expanding branches on the view
+ *     that is connected to the filter model.
+ *   - Check if the iterator stamp is incremented at the correct times.
+ */
+
+
 /*
  * Model creation
  */
