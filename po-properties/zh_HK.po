@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.17.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-07-12 15:38+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -125,7 +125,7 @@ msgstr "字型解像度"
 msgid "The resolution for fonts on the screen"
 msgstr "螢幕上字型的解像度"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "閃爍游標"
@@ -1130,35 +1130,35 @@ msgstr "格位背景設定"
 msgid "Whether this tag affects the cell background color"
 msgstr "本標記可以變動該格位的背景顏色"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "捷徑鍵"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "捷徑鍵的鍵值"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "捷徑鍵的特殊按鍵（例如 Alt、Ctrl）"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "捷徑鍵的修飾字遮罩"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "捷徑鍵碼"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "捷徑鍵的硬件按鍵碼"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "捷徑鍵模式"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "捷徑鍵類型"
 
@@ -1385,11 +1385,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "以 GdkColor 方式表達的前景顏色"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "可編輯"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "使用者可否修改文字"
 
@@ -2219,7 +2219,7 @@ msgstr "可否將多行貼上截短為一行。"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "當設定 has-frame 時要在項目周圍繪出何種類型的陰影"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "覆寫模式"
 
@@ -2407,11 +2407,11 @@ msgstr "主要圖示工具提示標記"
 msgid "Secondary icon tooltip markup"
 msgstr "次要圖示工具提示標記"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "IM 模組"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "預設要使用哪一個 IM 模組"
 
@@ -3164,7 +3164,7 @@ msgstr "標籤中的文字"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "標籤中的文字可以採用的樣式屬性清單"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "對齊方式"
 
@@ -5739,7 +5739,7 @@ msgstr ""
 "字型大小作為縮放比例，相對於預設文字大小。本屬性隨佈景主題等設定而改變，故建"
 "議使用。Pango預先定義了某些縮放比，例如 PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "靠左、靠右或是置中對齊"
 
@@ -5755,7 +5755,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左邊邊界"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "左邊邊界的闊度，以像素數目表示"
 
@@ -5763,15 +5763,15 @@ msgstr "左邊邊界的闊度，以像素數目表示"
 msgid "Right margin"
 msgstr "右邊邊界"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "右邊邊界的闊度，以像素數目表示"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "增加縮排"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落縮排的程度，以像素數目表示"
 
@@ -5785,7 +5785,7 @@ msgstr "文字在基準線以上的距離（負數表示文字在基準線以下
 msgid "Pixels above lines"
 msgstr "段落頂端空間"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落頂端的空間的像素數目"
 
@@ -5793,7 +5793,7 @@ msgstr "段落頂端的空間的像素數目"
 msgid "Pixels below lines"
 msgstr "段落底部空間"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落底部的空間的像素數目"
 
@@ -5801,20 +5801,20 @@ msgstr "段落底部的空間的像素數目"
 msgid "Pixels inside wrap"
 msgstr "換行時加上的像素"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落內部的行距的像素數目"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "選擇永遠不換行、字詞邊界換行或是字符邊界換行"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "分頁"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "本文字的自選 tab"
 
@@ -5958,63 +5958,63 @@ msgstr "段落背景設定"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "本標籤會否影響段落的背景顏色"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "每行頂部加上的像素"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "每行底部加上的像素"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "段落內部行距"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "換行模式"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "左邊邊界"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "右邊邊界"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "顯示游標"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "是否顯示游標"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "緩衝區"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "用來顯示的緩衝區"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "是否輸入文字可以覆寫既有文字"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "接受Tab鍵"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "是否 Tab 鍵會導致 Tab字符輸入"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "錯誤的底線顏色"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "繪畫游標使用的顏色"
 

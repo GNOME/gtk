@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2008-09-19 20:36+0200\n"
 "Last-Translator: Goran Rakić <grakic@devbase.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1421,7 +1421,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Isključeno"
@@ -1430,7 +1430,7 @@ msgstr "Isključeno"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Neispravan"
@@ -1439,7 +1439,7 @@ msgstr "Neispravan"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Nova prečica..."
 
@@ -1650,11 +1650,11 @@ msgstr "D_esno:"
 msgid "Paper Margins"
 msgstr "Margine"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "_Načini unosa"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni Unikod znak"
 
@@ -2219,12 +2219,12 @@ msgstr "Neuspelo učitavanje ikonice"
 msgid "Simple"
 msgstr "Jednostavna"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistem"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4743,22 +4743,22 @@ msgstr "Isključi opširnost ispisa"
 msgid "Validate existing icon cache"
 msgstr "Proveri ispravnost postojeće ostave ikonica"
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Datoteka nije pronađena: %s\n"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Neispravna ostava za ikonice: %s\n"
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Nije nađena indeks datoteka za temu.\n"
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-HEAD-po-el-3920.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2009-04-22 00:51+0300\n"
 "Last-Translator: Jennie Petoumenou <epetoumenou@gmail.com>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -1424,7 +1424,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Ανενεργό"
@@ -1433,7 +1433,7 @@ msgstr "Ανενεργό"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Μη έγκυρο"
@@ -1442,7 +1442,7 @@ msgstr "Μη έγκυρο"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Νέα συντόμευση..."
 
@@ -1651,11 +1651,11 @@ msgstr "_Δεξιά:"
 msgid "Paper Margins"
 msgstr "Περιθώρια χαρτιού"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "_Μέθοδοι εισαγωγής"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Εισαγωγή χαρακτήρα ελέγχου Unicode"
 
@@ -2221,12 +2221,12 @@ msgstr "Αποτυχία φόρτωσης εικονιδίου"
 msgid "Simple"
 msgstr "Απλό"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
 msgstr "Σύστημα"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4763,22 +4763,22 @@ msgstr "Απενεργοποίηση αναλυτικής εξόδου μηνυ�
 msgid "Validate existing icon cache"
 msgstr "Επαλήθευση υπάρχουσας λανθάνουσας μνήμης εικονιδίων"
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Δε βρέθηκε το αρχείο: %s\n"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Δεν είναι έγκυρη λανθάνουσα μνήμη εικονιδίων: %s\n"
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, fuzzy, c-format
 msgid "No theme index file.\n"
 msgstr "Δε βρέθηκε αρχείο ευρετηρίου θέματος."
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

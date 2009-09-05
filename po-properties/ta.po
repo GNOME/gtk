@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-08-25 13:16+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
@@ -137,7 +137,7 @@ msgstr "எழுத்துரு திரைத்திறன்"
 msgid "The resolution for fonts on the screen"
 msgstr "திரையில் எழுத்துருக்களின் திரைத்திறன்"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 msgid "Cursor"
 msgstr "நிலைக்காட்டி"
 
@@ -1153,35 +1153,35 @@ msgstr "செல் பின்னணி அமைக்கப்பட்ட�
 msgid "Whether this tag affects the cell background color"
 msgstr "இந்த ஒட்டு அறையின் பின்னணி நிறத்தை பாதிக்குமா"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "முடுக்கம்டுகல் விசை"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "மாற்றியின் விசை மதிப்பு"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "முடுக்கம்டுகல் மாற்றிகள்"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "மாற்றியின் மாற்றி முகமூடி"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "முடுக்கம்டுகல் விசை"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "மாற்றியின் வன்பொருள் விசை குறியீடு"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "முடக்கி பாங்கு"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "மாற்றிகளின் வகை"
 
@@ -1411,11 +1411,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "பதிப்பிக்கக்கூடியது"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "பயனரால் மாற்றக்கூடிய உரையாக இருகக்கூடும்"
 
@@ -2257,7 +2257,7 @@ msgstr "ஒரு வரியில் ஒட்டப்பட்ட பல்
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "ஹாஸ் சட்டம் அமத்தபின் உள்ளீட்டை சுற்றி எந்த மாதிரி நிழல் வரைய வேண்டும்."
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "மேல் எழுதும் முறைமை"
 
@@ -2445,11 +2445,11 @@ msgstr "முதன்மை சின்னம்  மீது காட்�
 msgid "Secondary icon tooltip markup"
 msgstr "இரண்டாம் சின்னம்  மீது காட்டும் கருவி குறிப்பின் பாங்கு"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "IM தொகுதி"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "எந்த IM முறைமை பயன்படுத்தப்பட வேண்டும்"
 
@@ -3203,7 +3203,7 @@ msgstr "அடையாளத்தின் உரை"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "அடையாளத்தின் உரைக்கு பயன்படுத்த பாங்குகளின் பண்புக்கூறு பட்டியல்."
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "நேர்த்தி செய்தல்"
 
@@ -5837,7 +5837,7 @@ msgstr ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "இடது, வலது, அல்லது நேர்த்தி செய்தல்"
 
@@ -5853,7 +5853,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "இடது ஓரம்"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "பிக்சல்களில் இடது ஓரத்தின் அகலம்"
 
@@ -5861,15 +5861,15 @@ msgstr "பிக்சல்களில் இடது ஓரத்தின�
 msgid "Right margin"
 msgstr "வலது ஓரம்"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "பிக்சல்களில் வலது ஓரத்தின் அகலம்"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "உள்தள்"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "பிசெல்களில், பத்தியை உள்தள்ளும் அளவு"
 
@@ -5885,7 +5885,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "வரிசைகளுக்கு மேல் பிசெல்கள்"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "பத்திகளுக்கு மேல் வெற்று-இடைவெளி பிக்செல்கள்"
 
@@ -5893,7 +5893,7 @@ msgstr "பத்திகளுக்கு மேல் வெற்று-இ
 msgid "Pixels below lines"
 msgstr "வரிசைகளுக்கு கீழ் பிசெல்கள்"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "பத்திகளுக்கு கீழ் வெற்று-இடைவெளி பிக்செல்கள்"
 
@@ -5901,20 +5901,20 @@ msgstr "பத்திகளுக்கு கீழ் வெற்று-இ
 msgid "Pixels inside wrap"
 msgstr "மடிப்புக்குள் பிக்செல்கள்"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "பத்திகளில் மடிக்கப்பட்ட வரிவைகளுக்கு நடுவில் வெற்று-இடைவெளி பிக்செல்கள்"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "சொல் எல்லைகளில், அல்லது வரியுரு எல்லைகளில், அல்லது வரிசைகளை மடிப்பிக்க வேண்டுமா"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "தத்தகள்"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "இந்த உரைகளுக்காக தனிப்பயனாக தத்தகள்"
 
@@ -6058,63 +6058,63 @@ msgstr "பத்தி பின்னணி அமைக்கவும்"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "இந்த ஒட்டு பத்தி பின்னணி நிறத்தை பாதிக்குமா"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "வரிசைகளுக்கு மேல் பிக்செல்கள்"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "வரிசைகளுக்கு கீழ் பிக்செல்கள்"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "மடிப்புக்குள் பிக்செல்கள்"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "மடிப்பு முறைமை"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "இடது ஓரம்"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "வலது ஓரம்"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "நிலை காட்டி பாக்கக்கூடியது"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "நிலைக்காட்டி உள்நுழைக்கப்படுவதை காட்டப்பட்டால்"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "இடையகம்"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "தோன்றும் இடையக சேமிப்பகம்"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "உள்ளிடப்பட்ட உரை இருக்கும் உள்ளடக்கத்தை மேலெழுதுகிறதா"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "தத்தலை ஏற்கிறது"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "கீற்று  எழுத்தாக உள்ளிடப்பட்டது தத்தலாக தீர்வாகுமா"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "பிழை அடிக்கோடு நிறம்"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "நிறத்தோடு கூட பிழையை அடிக்கோடிட்டுக் காட்டுகிறது "
 

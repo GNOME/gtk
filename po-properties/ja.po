@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-03-16 07:38+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -128,7 +128,7 @@ msgstr "フォントの解像度"
 msgid "The resolution for fonts on the screen"
 msgstr "画面上でのフォントの解像度です"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "カーソルの点滅"
@@ -1158,35 +1158,35 @@ msgstr "セルの背景色設定"
 msgid "Whether this tag affects the cell background color"
 msgstr "このタグがセルの背景色に影響を与えるかどうかです"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "アクセラレータ・キー"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "アクセラレータ・キーの値です"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "アクセラレータの修飾キー"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "アクセラレータに対する修飾キーのマスクです"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "アクセラレータのキーコード"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "アクセラレータのハードウェア的なキーコードです"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "アクセラレータのモード"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "アクセラレータの種類です"
 
@@ -1417,11 +1417,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "前景色を示す GdkColor 形式の文字列です"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "編集可能"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "ユーザがテキストを変更できるかどうかです"
 
@@ -2267,7 +2267,7 @@ msgstr "複数行のエントリを単一のエントリにまとめるかどう
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "\"フレーム有り\" を有効にした時にエントリの周囲に描画する影の種類です"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "上書きモードかどうか"
 
@@ -2456,11 +2456,11 @@ msgstr "一番目のアイコンのツールチップ (マークアップ付き)
 msgid "Secondary icon tooltip markup"
 msgstr "一番目のアイコンのツールチップ (マークアップ付き)"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "IM モジュール"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "使用する入力メソッド (IM) のモジュールです"
 
@@ -3233,7 +3233,7 @@ msgstr "ラベルのテキスト"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "ラベルのテキストに適用するスタイル属性の一覧"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "行端の揃え方"
 
@@ -5875,7 +5875,7 @@ msgstr ""
 "す。これはテーマの変更などに正しく対応します。よって推奨になります。Pango で"
 "は PANGO_SCALE_X_LARGE などのようないくつかの大きさを予め定義されています。"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "行端を左寄せ、右寄せ、あるいは中央寄せにします"
 
@@ -5892,7 +5892,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "左マージン"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "左マージンの幅 (ピクセル単位)"
 
@@ -5900,15 +5900,15 @@ msgstr "左マージンの幅 (ピクセル単位)"
 msgid "Right margin"
 msgstr "右マージン"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "右マージンの幅 (ピクセル単位)"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "インデント"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "段落のインデント量 (ピクセル単位)"
 
@@ -5924,7 +5924,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "ラインより上のピクセル数"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "段落の上にある空白のピクセル数"
 
@@ -5932,7 +5932,7 @@ msgstr "段落の上にある空白のピクセル数"
 msgid "Pixels below lines"
 msgstr "ラインより下のピクセル数"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "段落の下にある空白のピクセル数"
 
@@ -5940,20 +5940,20 @@ msgstr "段落の下にある空白のピクセル数"
 msgid "Pixels inside wrap"
 msgstr "ラップ内部のピクセル数"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "段落でラップした行間との間に挿入する空白のピクセル数"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "単語単位で行ラップしない、または文字単位で行ラップしないかどうかです"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "タブ"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "このテキストのカスタム・タブ"
 
@@ -6097,63 +6097,63 @@ msgstr "段落の背景色設定"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "このタグが段落の背景色に影響するかどうかです"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "ラインより上のピクセル数"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "ラインより下のピクセル数"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "ラップ内部のピクセル数"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "ラップ・モード"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "左マージン"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "右マージン"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "カーソルの表示"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "挿入カーソルを表示するかどうかです"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "バッファ"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "表示されるバッファ"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "入力されたテキストが既にある内容を上書きするかどうかです"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "タブを許可する"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "入力されているタブ文字をタブとして表示するかどうかです"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "エラーを示す下線の色"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "エラーを示す下線を描画する色です"
 

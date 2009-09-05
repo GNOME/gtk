@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1413,7 +1413,7 @@ msgstr "Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1423,7 +1423,7 @@ msgstr "अक्षम पारिएको"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1433,7 +1433,7 @@ msgstr "अवैध UTF-8"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr ""
 
@@ -1650,11 +1650,11 @@ msgstr "ह्यु:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "आगत विधिहरू"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
@@ -2230,13 +2230,13 @@ msgstr "TIFF छवि लोड गर्न असफल"
 msgid "Simple"
 msgstr "साइज"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "फाइल प्रणाली"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4885,22 +4885,22 @@ msgstr ""
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "%s माउण्ट गर्न सकेन"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

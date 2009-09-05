@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2009-02-13 22:19+0100\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1389,7 +1389,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Deaktivované"
@@ -1398,7 +1398,7 @@ msgstr "Deaktivované"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1408,7 +1408,7 @@ msgstr "Neplatné URI"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Nová klávesová skratka..."
 
@@ -1617,11 +1617,11 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "_Metódy vstupu"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložiť ovládací znak Unicode"
 
@@ -2184,12 +2184,12 @@ msgstr "Nepodarilo sa načítať ikonu"
 msgid "Simple"
 msgstr "Jednoduchá"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
 msgstr "Systémová"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4720,22 +4720,22 @@ msgstr "Vypnúť ukecaný výstup"
 msgid "Validate existing icon cache"
 msgstr "Overiť existujúce úložisko ikon"
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Súbor nenájdený: %s\n"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Nie je platné úložisko ikon: %s\n"
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, fuzzy, c-format
 msgid "No theme index file.\n"
 msgstr "Žiaden indexový súbor témy."
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

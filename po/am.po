@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -1394,7 +1394,7 @@ msgstr "Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1404,7 +1404,7 @@ msgstr "የተበላሸ"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1414,7 +1414,7 @@ msgstr "Utf-8 ተቀብሏል"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr ""
 
@@ -1620,11 +1620,11 @@ msgstr "ቀኝ (_R)"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "ዘገባ የማስትገባት ዘዴዎች (_M)"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -2198,13 +2198,13 @@ msgstr "የአሁኑን ቀለም"
 msgid "Simple"
 msgstr "መጠን"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "ፋይሎች"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4843,22 +4843,22 @@ msgstr ""
 msgid "Validate existing icon cache"
 msgstr ""
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, fuzzy, c-format
 msgid "File not found: %s\n"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr ""
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

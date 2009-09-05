@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-03-17 20:32+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -130,7 +130,7 @@ msgstr "ലിപിയുടെ സാന്ദ്രത"
 msgid "The resolution for fonts on the screen"
 msgstr "സ്ക്രീനില്‍ ലിപികളുടെ സാന്ദ്രത"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "മിന്നുന്ന സ്ഥാനസൂചി"
@@ -1149,35 +1149,35 @@ msgstr "സെല്ലിന്‍റെ പശ്ചാത്തലത്ത�
 msgid "Whether this tag affects the cell background color"
 msgstr "സെല്ലിന്‍റെ പശ്ചാത്തലത്തിലുളള നിറത്തിന് ടാഗ് ബാധകമാകുമോ എന്ന്"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "ആക്സലറേറ്റര്‍ കീ"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "ആക്സലറേറ്ററിന്‍റെ keyval"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "ആക്സലറേറ്റര്‍ മോഡിഫയേറ്സ്"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "ആക്സലറേറ്ററിന്‍റെ മോഡിഫയര്‍ മാസ്ക്"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "ആക്സലറേറ്റര്‍ keycode"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "ആക്സലറേറ്ററിനുളള ഹാര്‍ഡ്‍വയര്‍ കീകോഡ്"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "ആക്സലറേറ്റര്‍ രീതി"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "ഏത് തരം ആക്സലറേറ്റര്‍സ്"
 
@@ -1406,11 +1406,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "പശ്ചാത്തല നിറം ഒരു GdkColor പോലെ"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "ചിട്ടപ്പെടുത്തിയ"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "ഉപയോക്താവിന് വാചകത്തില്‍ മാറ്റം വരുത്തുവാന്‍ സാധ്യമോ എന്ന്"
 
@@ -2251,7 +2251,7 @@ msgstr "അനവധിവരികളില്‍ നിന്നു് ഒറ�
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "has-frame സജ്ജമാക്കുമ്പോള്‍ എന്‍ട്രിയ്ക്കു് ചുറ്റും വരേണ്ടതു് ഏതു് തരത്തിലുള്ള ഷാഡോ"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "മാറ്റി എഴുതുന്ന രീതി"
 
@@ -2439,11 +2439,11 @@ msgstr "പ്രൈമറി ചിഹ്നം ടൂള്‍ടിപ്പ�
 msgid "Secondary icon tooltip markup"
 msgstr "സെക്കന്‍ഡറി ചിഹ്നം ടൂള്‍ടിപ്പ് അടയാളം"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "IM ഘടകം"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "ഏതു് IM ഘടകം ഉപയോഗിക്കണം "
 
@@ -3206,7 +3206,7 @@ msgstr "ലേബലിന്‍റെ ടെക്സ്റ്റ്"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "ലേബലിന്റെ വാചകത്തിനുള്ള സ്റ്റൈല്‍ സവിശേഷതകളുടെ പട്ടിക"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "ഖണ്ഡികയുടെ ഇടതും വലതും ക്രമീകരിക്കല്‍"
 
@@ -5819,7 +5819,7 @@ msgstr ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "ഇടതു്, വലത്തു് അല്ലെങ്കില്‍ മദ്ധ്യത്തില്‍"
 
@@ -5835,7 +5835,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "ഇടത്തുള്ള മാര്‍ജിന്‍"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "ഇടത്തുള്ള മാര്‍ജിന്റെ വീതി, പിക്സലില്‍"
 
@@ -5843,15 +5843,15 @@ msgstr "ഇടത്തുള്ള മാര്‍ജിന്റെ വീത�
 msgid "Right margin"
 msgstr "വലത് മാര്‍ജിന്‍"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "വലത്തുള്ള മാര്‍ജിന്റെ വീതി, പിക്സലില്‍"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "വിടവ്"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "ഖണ്ഡിക ഇന്‍ഡറ്റ് ചെയ്യേണ്ട അളവ്, പിക്സലുകളില്‍"
 
@@ -5866,7 +5866,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "വരികള്‍ക്കു് മുകളിലുള്ള പിക്സലുകള്‍"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "ഖണ്ഡികകള്‍ക്കു് മുകളിലുള്ള ശൂന്യമായ സ്ഥലത്തിനുള്ള പിക്സലുകള്‍"
 
@@ -5874,7 +5874,7 @@ msgstr "ഖണ്ഡികകള്‍ക്കു് മുകളിലുള�
 msgid "Pixels below lines"
 msgstr "വരികള്‍ക്കു് താഴെയുള്ള പിക്സലുകള്‍"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "ഖണ്ഡികകള്‍ക്കു് താഴെയുള്ള ശൂന്യമായ സ്ഥലത്തിനുള്ള പിക്സലുകള്‍"
 
@@ -5882,21 +5882,21 @@ msgstr "ഖണ്ഡികകള്‍ക്കു് താഴെയുള്�
 msgid "Pixels inside wrap"
 msgstr "റാപ്പിനുള്ളിലുള്ള പിക്സലുകള്‍"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "ഒരു ഖണ്ഡികയിലുള്ള റാപ്പ് ചെയ്ത വരികളുടെ ഇടയിലുള്ള ശൂന്യമായ സ്ഥലത്തിനുള്ള പിക്സലുകള്‍"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "ഒരിക്കലും വരികള്‍ റാപ്പ് ചെയ്യേണ്ടെ, അതോ വാക്കിന്റെ അതിരുകളില്‍ അതോ അക്ഷരത്തിനുള്ള അതിരുകളില്‍"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "ചെറുജാലകങ്ങള്"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "ഈ വാക്യത്തിനുവേണ്ടിയുള്ള ഇഷ്ടചെറുജാലകം"
 
@@ -6040,63 +6040,63 @@ msgstr "ഖണ്ഡികയ്ക്കുള്ള പശ്ചാത്ത�
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ഖണ്ഡികയുടെ പശ്ചാത്തല നിറത്തെ ഈ റ്റാഗ് ബാധിക്കുമോ എന്നു്."
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "പിക്സലുകള് വരിക്കു മുകളില്"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "പിക്സലുകള് വരിക്കു താഴെ"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr " "
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "നിരത്തല്‌ രീതി"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "ഇടത് ക്രമീകരണം"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "വലത് കര്മീകരണം"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "ദൃശ്യമായ സ്ഥാനസൂചി"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "ചേര്‍ക്കുവാനുള്ള കര്‍സര്‍ കാണിച്ചിട്ടുണ്ടെങ്കില്‍"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "ബഫര്‍"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "ലഭ്യമാക്കിയട്ടുള്ള ബഫര്‍"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "നിലവിലുള്ള ഉള്ളടക്കം നല്‍കിയിട്ടുള്ള വാചകത്തെ തിരുത്തി എഴുതുന്നുണ്ടോ എന്നു്"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "റ്റാബുകള്‍ സ്വീകരിക്കുക"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "റ്റാബ്, ഒരു റ്റാബ് അക്ഷരം നല്‍കുമോ എന്നു്"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "അടിവരയുടെ നിറത്തില്‍ പിശക്"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "പിശക് സൂചിപ്പിക്കുന്നതിനുള്ള അടിവരകളുടെ നിറം"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-08-31 14:33+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -127,7 +127,7 @@ msgstr "Rozdzielczość czcionki"
 msgid "The resolution for fonts on the screen"
 msgstr "Rozdzielczość czcinek na ekranie"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 msgid "Cursor"
 msgstr "Kursor"
 
@@ -1188,35 +1188,35 @@ msgstr "Ustawienie tła komórki"
 msgid "Whether this tag affects the cell background color"
 msgstr "Określa, czy ten znacznik wpływa na kolor tła komórki"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "Klawisz skrótu"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "Wartość klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "Modyfikatory klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "Maska modyfikatora klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "Kod klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "Sprzętowy kod klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "Tryb klawisza skrótu"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "Rodzaj klawiszy skrótów"
 
@@ -1447,11 +1447,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Kolor elementu jako GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Modyfikowalny"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
@@ -2324,7 +2324,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Rodzaj cienia rysowany wokół elementu, gdy opcja posiada-ramkę jest ustawiona"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Tryb nadpisywania"
 
@@ -2514,11 +2514,11 @@ msgstr "Znacznik podpowiedzi ikony podstawowej"
 msgid "Secondary icon tooltip markup"
 msgstr "Znacznik podpowiedzi ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "Moduł trybu wprowadzania"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "Określa, który moduł IM powinien być używany domyślnie"
 
@@ -3294,7 +3294,7 @@ msgstr "Tekst etykiety"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Lista atrybutów stylu stosowanych do tekstu etykiety"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "Wyrównanie"
 
@@ -6008,7 +6008,7 @@ msgstr ""
 "definiuje standardowo kilka wartości skalujących, takich jak "
 "PANGO_SCALE_X_LARGE."
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "Wyrównanie do lewej, prawej, lub do środka"
 
@@ -6025,7 +6025,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "Szerokość lewego marginesu w pikselach"
 
@@ -6033,15 +6033,15 @@ msgstr "Szerokość lewego marginesu w pikselach"
 msgid "Right margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "Szerokość prawego marginesu w pikselach"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "Wcięcie"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Rozmiar wcięcia akapitu w pikselach"
 
@@ -6057,7 +6057,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 
@@ -6065,7 +6065,7 @@ msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 msgid "Pixels below lines"
 msgstr "Pikseli nad wierszami"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 
@@ -6073,23 +6073,23 @@ msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 msgid "Pixels inside wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Ilość wolnego miejsca pomiędzy zawiniętymi wierszami akapitu w pikselach"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Określa sposób zawijania wierszy: nigdy, na granicach słów lub na granicach "
 "znaków"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "Tabulatory"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "Dowolne tabulatory powiązane z tekstem"
 
@@ -6235,63 +6235,63 @@ msgstr "Ustawienie tła akapitu"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Określa, czy ten znacznik wpływa na kolor tła akapitu"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "Miejsce pod wierszami"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "Tryb zawijania"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "Widoczność kursora"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "Określa, czy kursor wstawiania jest wyświetlany"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "Bufor"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "Wyświetlany bufor"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "Określa, czy wprowadzony tekst nadpisuje istniejącą zawartość"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "Akceptowanie tabulacji"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Określa, czy tabulacja powinna być uwzględniana jako wprowadzany znak"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "Kolor podkreślenia błędu"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "Kolor, przy użyciu którego będą rysowane podkreślenia błędów"
 

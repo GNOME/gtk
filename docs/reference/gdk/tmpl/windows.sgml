@@ -566,6 +566,15 @@ Deprecated equivalent of g_object_unref()
 @window: 
 
 
+<!-- ##### FUNCTION gdk_window_is_destroyed ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_is_visible ##### -->
 <para>
 
@@ -840,6 +849,16 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_restack ##### -->
+<para>
+
+</para>
+
+@window: 
+@sibling: 
+@above: 
 
 
 <!-- ##### FUNCTION gdk_window_focus ##### -->

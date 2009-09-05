@@ -85,3 +85,12 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 @region: 
 
 
+<!-- ##### FUNCTION gdk_cairo_reset_clip ##### -->
+<para>
+
+</para>
+
+@cairo_t: 
+@drawable: 
+
+

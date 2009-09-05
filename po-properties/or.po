@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-08-28 17:50+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -126,7 +126,7 @@ msgstr "ଅକ୍ଷରରୂପ ବିଭେଦନ"
 msgid "The resolution for fonts on the screen"
 msgstr "ପରଦାରେ ଅକ୍ଷରରୂପ ପାଇଁ ବିଭେଦନ"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 msgid "Cursor"
 msgstr "ଦର୍ଶିକା"
 
@@ -1148,35 +1148,35 @@ msgstr "କୋଷ ପୃଷ୍ଠଭୂମି ବିନ୍ୟାସ"
 msgid "Whether this tag affects the cell background color"
 msgstr "ଏହି ଟ୍ୟାଗଟି କୋଷ ପୃଷ୍ଠଭୂମି ରଙ୍ଗ ଉପରେ ପ୍ରଭାବ ପକାଏ କି ନାହିଁ"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "ତ୍ୱରକ କି"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "ତ୍ୱରକର କି ମୂଲ୍ୟ"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "ତ୍ୱରକ ପରିବର୍ତ୍ତନ କାରୀ"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "ତ୍ୱରକର ପରିବର୍ତ୍ତନକାରୀ ମାସ୍କ"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "ତ୍ୱରକ କି ସଂକେତ"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "ତ୍ୱରକର ହାର୍ଡ଼ୱେର କି ସଂକେତ"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "ତ୍ୱରକ ଧାରା"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "ତ୍ୱରକମାନଙ୍କର ପ୍ରକାର"
 
@@ -1405,11 +1405,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "ଗୋଟିଏ GdkColor ପରି ପୃଷ୍ଠଭୂମି ରଙ୍ଗଙ୍ଗ"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "ସମ୍ପାଦନ ଯୋଗ୍ଯ"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "ପାଠ୍ଯଟି ବ୍ଯବହାରକାରୀଙ୍କ ଦ୍ୱାରା ପରିବର୍ତ୍ତିତ ହୋଇପାରିବ କି ନାହିଁ"
 
@@ -2246,7 +2246,7 @@ msgstr "ଏକାଧିକ ଧାଡ଼ିକୁ ଗୋଟିଏ ଧାଡ଼ି
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "ଫ୍ରେମ ସେଟ ହେବା ପରେ କେଉଁ ପ୍ରକାରର ଛାୟାକୁ ଭରଣ ଚାରିପଟେ ଅଙ୍କାଯିବା ଉଚିତ"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "ନବଲିଖନ ଧାରା"
 
@@ -2433,11 +2433,11 @@ msgstr "ପ୍ରାଥମିକ ଚିତ୍ରସଙ୍କେତ ଉପକର�
 msgid "Secondary icon tooltip markup"
 msgstr "ଦ୍ବିତୀୟକ ଚିତ୍ରସଂକେତ ଉପକରଣ ଚିହ୍ନଟ"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "IM ଏକକାଂଶ"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "କେଉଁ IM ଏକକାଂଶକୁ ବ୍ୟବହାର କରିବା ଉଚିତ"
 
@@ -3192,7 +3192,7 @@ msgstr "ନାମପଟିର ପାଠ୍ଯ"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr ""
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "ଯଥାର୍ଥତା"
 
@@ -5769,7 +5769,7 @@ msgid ""
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "ବାମ, ଡାହାଣ, କିମ୍ବା କେନ୍ଦ୍ର ଯଥାର୍ଥତା"
 
@@ -5783,7 +5783,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "ବାମ ମାର୍ଜିନ"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "ପିକ୍ସେଲରେ ବାମ ମାର୍ଜିନର ଓସାର"
 
@@ -5791,15 +5791,15 @@ msgstr "ପିକ୍ସେଲରେ ବାମ ମାର୍ଜିନର ଓସା
 msgid "Right margin"
 msgstr "ଦକ୍ଷିଣ ମାର୍ଜିନ"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "ପିକ୍ସେଲରେ ଦକ୍ଷିଣ ମାର୍ଜିନର ଓସାର"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "ଅନୁଚ୍ଛେଦ ଦିଅନ୍ତୁ"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "ଅନୁଚ୍ଛେଦ ଛାଡ଼ିବା ପରିମାଣ, ପିକ୍ସେଲରେ"
 
@@ -5813,7 +5813,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "ରେଖା ମାନଙ୍କ ଉପରେ ପିକ୍ସେଲ"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "ପରଚ୍ଛେଦ ଉପରେ ଖାଲି ସ୍ଥାନର ପିକ୍ସେଲ"
 
@@ -5821,7 +5821,7 @@ msgstr "ପରଚ୍ଛେଦ ଉପରେ ଖାଲି ସ୍ଥାନର ପ�
 msgid "Pixels below lines"
 msgstr "ରେଖା ମାନଙ୍କ ତଳେ ପିକ୍ସେଲ"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "ପରଚ୍ଛେଦ ତଳେ ଖାଲି ସ୍ଥାନର ପିକ୍ସେଲ"
 
@@ -5829,20 +5829,20 @@ msgstr "ପରଚ୍ଛେଦ ତଳେ ଖାଲି ସ୍ଥାନର ପି�
 msgid "Pixels inside wrap"
 msgstr "ପାଠ୍ଯଭଙ୍ଗ ମଧ୍ଯରେ ପିକ୍ସେଲ"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "ଗୋଟିଏ ପରିଚ୍ଛେଦରେ ପାଠ୍ଯଭଙ୍ଗ ରେଖା ମାନଙ୍କ ମଧ୍ଯରେ ଖାଲି ସ୍ଥାନ ମାନଙ୍କର ପିକ୍ସେଲ"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "ଟ୍ଯାବ"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "ଏହି ପାଠ୍ଯ ପାଇଁ ଇଚ୍ଛାରୂପଣ ଟ୍ଯାବ"
 
@@ -5986,63 +5986,63 @@ msgstr "ପରିଚ୍ଛେଦ ପୃଷ୍ଠଭୂମି ବିନ୍ଯା�
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ଏହି ଟ୍ଯାଗଟି ପରିଚ୍ଛେଦ ପୃଷ୍ଠଭୂମି ଉପରେ ପ୍ରଭାବ ପକାଇଥାଏ କି"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "ଲାଇନ ଉପରେ ପିକ୍ସେଲ"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "ଲାଇନ ତଳେ ପିକ୍ସେଲ"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "ମୋଡ଼ ଭିତରେ ପିକ୍ସେଲ"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "ଧାଡ଼ି ମୋଡ଼ା ଧାରା"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "ବାମ ସୀମାରେଖା"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "ଡାହାଣ ସୀମାରେଖା"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "ଦର୍ଶିକା ଦୃଶ୍ଯମାନ"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "ଭରଣ ଦର୍ଶିକାଟି ପ୍ରଦର୍ଶିତ ଅଛି କି"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "ବଫର"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "ପ୍ରଦର୍ଶିତ ବଫର"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "ଭରଣ କରାଯାଇଥିବା ପାଠ୍ଯ ଅବସ୍ଥିତ ବିଷୟବସ୍ତୁକୁ ନବଲିଖନ କରିଦେବ କି"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "ସ୍ବୀକାର୍ଯ୍ଯ ଟ୍ଯାବ"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ଟ୍ଯାବଟି ଗୋଟିଏ ଟ୍ଯାବ ଅକ୍ଷର ପ୍ରବିଷ୍ଟି ସହିତ ଅନ୍ତ ହେବ କି"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "ରେଖାଙ୍କିତ ରଙ୍ଗରେ ତୃଟି"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "ତୃଟି ସୂଚକ ରେଖାଙ୍କିତ ପଙ୍କ୍ତିକୁ ଅଙ୍କନ କରିବା ପାଇଁ କେଉଁ ରଙ୍ଗ ବ୍ଯବହାର କରାଯିବ"
 

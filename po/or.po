@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2009-08-28 16:36+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -1388,7 +1388,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "ନିଷ୍କ୍ରିୟ ହୋଇଛି"
@@ -1397,7 +1397,7 @@ msgstr "ନିଷ୍କ୍ରିୟ ହୋଇଛି"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "ଅବୈଧ"
@@ -1406,7 +1406,7 @@ msgstr "ଅବୈଧ"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "ନୂତନ ତ୍ବରକ..."
 
@@ -1611,11 +1611,11 @@ msgstr "ଡାହାଣ (_R):"
 msgid "Paper Margins"
 msgstr "କାଗଜ ମାର୍ଜିନ"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
@@ -2176,12 +2176,12 @@ msgstr "ଚିତ୍ର ସଂକେତ ଧାରଣ କରିବାରେ ଅ�
 msgid "Simple"
 msgstr "ସରଳ"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
 msgstr "ଫାଇଲ ତନ୍ତ୍ର"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4691,22 +4691,22 @@ msgstr "ଦୃଷ୍ଟି ସୂଚନାଯୁକ୍ତ ନିର୍ଗମକ�
 msgid "Validate existing icon cache"
 msgstr "ସ୍ଥିତବାନ ଚିତ୍ରସଂକେତ କେଶେକୁ ବୈଧିକୃତ କରନ୍ତୁ"
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ଫାଇଲ ମିଳୁନାହିଁ: %s\n"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "ଗୋଟିଏ ବୈଧ ଚିତ୍ରସଂକେତ କେଶେ ନୁହଁ: %s\n"
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr "କୌଣସି ପ୍ରସଙ୍ଗ ଅନୁକ୍ରମଣିକା ଫାଇଲ ନାହିଁ।\n"
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

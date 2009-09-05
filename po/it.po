@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2009-04-17 22:57+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -1508,7 +1508,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Disabilitato"
@@ -1518,7 +1518,7 @@ msgstr "Disabilitato"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1528,7 +1528,7 @@ msgstr "URI non valido"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Nuovo acceleratore..."
 
@@ -1745,11 +1745,11 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "_Metodi di input"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserisci carattere di controllo unicode"
 
@@ -2372,12 +2372,12 @@ msgstr "Caricamento dell'icona fallito"
 msgid "Simple"
 msgstr "Semplice"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistema"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -5017,24 +5017,24 @@ msgid "Validate existing icon cache"
 msgstr "Convalida una cache di icone esistente"
 
 # GTK-2-12
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "File non trovato: %s\n"
 
 # GTK-2-12
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Non è una cache di icone valida: %s\n"
 
 # GTK-2-14
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, fuzzy, c-format
 msgid "No theme index file.\n"
 msgstr "Nessun file indice di tema."
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

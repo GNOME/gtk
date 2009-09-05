@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:28-0400\n"
 "PO-Revision-Date: 2008-10-17 18:05+0200\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -1408,7 +1408,7 @@ msgstr ""
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:243
+#: gtk/gtkcellrendereraccel.c:244
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1418,7 +1418,7 @@ msgstr "ამორთულია"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:253
+#: gtk/gtkcellrendereraccel.c:254
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1428,7 +1428,7 @@ msgstr "მცდარი URI"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:388 gtk/gtkcellrendereraccel.c:602
+#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "ახალი ამჩქარებელი..."
 
@@ -1635,11 +1635,11 @@ msgstr "მა_რჯვნივ:"
 msgid "Paper Margins"
 msgstr "გვერდის ველები"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7768
+#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "შეტანის _მეთოდები"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7782
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_უნიკოდის საკონტროლო სიმბოლოს ჩასმა"
 
@@ -2205,13 +2205,13 @@ msgstr "ხატულა ვერ ჩაიტვირთა"
 msgid "Simple"
 msgstr "უბრალო"
 
-#: gtk/gtkimmulticontext.c:541
+#: gtk/gtkimmulticontext.c:538
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "ფაილური სისტემა"
 
-#: gtk/gtkimmulticontext.c:625
+#: gtk/gtkimmulticontext.c:622
 #, fuzzy, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -4890,22 +4890,22 @@ msgstr "სრული გამოტანის ამორთვა"
 msgid "Validate existing icon cache"
 msgstr "მიმდინარე ქეშ ხატულას შემოწმება"
 
-#: gtk/updateiconcache.c:1679
+#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "ფაილი არ არის ნაპოვნი: %s\n"
 
-#: gtk/updateiconcache.c:1685
+#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "არამართებული ქეში: %s\n"
 
-#: gtk/updateiconcache.c:1698
+#: gtk/updateiconcache.c:1702
 #, fuzzy, c-format
 msgid "No theme index file.\n"
 msgstr "შეუძლებელია გაფორმების ინდექს ფაილის პოვნა."
 
-#: gtk/updateiconcache.c:1702
+#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-01 08:43-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2009-03-11 01:36+0200\n"
 "Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -131,7 +131,7 @@ msgstr "Šrifto raiška"
 msgid "The resolution for fonts on the screen"
 msgstr "Šriftų ekrane raiška"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "Mirksintis žymeklis"
@@ -1168,35 +1168,35 @@ msgstr "Langelio fonas nustatytas"
 msgid "Whether this tag affects the cell background color"
 msgstr "Ar žymė keičia langelio fono spalvą"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "Spartusis klavišas"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "Sparčiojo klavišo kodas"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "Sparčiojo klavišo modifikatoriai"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "Sparčiojo klavišo modifikatoriaus šablonas"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "Sparčiojo klavišo kodas"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "Sparčiojo klavišo aparatūrinis kodas"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "Sparčiojo klavišo veiksena"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "Sparčiųjų klavišų tipas"
 
@@ -1427,11 +1427,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Priekinio plano spalva kaip GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Taisomas"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "Ar tekstas gali būti keičiamas vartotojo"
 
@@ -2279,7 +2279,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Kokio tipo šešėlį piešti aplink įvesties laukelį, kai nustatyta „has-frame“"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Perrašymo veiksena"
 
@@ -2467,11 +2467,11 @@ msgstr "Pirminės piktogramos paaiškinimo teksto ženklinimas"
 msgid "Secondary icon tooltip markup"
 msgstr "Antrinės piktogramos paaiškinimo teksto ženklinimas"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "Įvesties metodo modulis"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "Kurį įvesties metodo modulį naudoti"
 
@@ -3240,7 +3240,7 @@ msgstr "Žymės tekstas"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Žymės teksto stiliaus atributų sąrašas"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "Abipusė lygiuotė"
 
@@ -5894,7 +5894,7 @@ msgstr ""
 "prisitaiko prie temos pakeitimo ir t.t. Ji yra naudotina. Pango posistemė "
 "aprašo dalį mastelių kaip pvz. PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "Kairys, dešinys arba vidurinis lygiavimas"
 
@@ -5911,7 +5911,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "Kairės paraštės plotis pikseliais"
 
@@ -5919,15 +5919,15 @@ msgstr "Kairės paraštės plotis pikseliais"
 msgid "Right margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "Dešinės paraštės plotis pikseliais"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "Įtraukti"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Pastraipos atitraukimo dydis, pikseliais"
 
@@ -5943,7 +5943,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Taškai virš eilučių"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "Tuščia erdvė taškais virš pastraipų"
 
@@ -5951,7 +5951,7 @@ msgstr "Tuščia erdvė taškais virš pastraipų"
 msgid "Pixels below lines"
 msgstr "Taškai žemiau eilučių"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "Tuščia erdvė taškais žemiau pastraipų"
 
@@ -5959,20 +5959,20 @@ msgstr "Tuščia erdvė taškais žemiau pastraipų"
 msgid "Pixels inside wrap"
 msgstr "Taškai laužymo viduje"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Taškai sudarantys tarpą tarp laužomų pastraipos eilučių"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Nelaužyti eilučių, laužyti jas žodžiais ar laužyti jas simboliais"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "Tabai"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "Specialūs šio teksto lapai"
 
@@ -6116,63 +6116,63 @@ msgstr "Pastraipos fonas nustatytas"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ar ši žyma keičia pastraipos fono spalvą"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "Pikseliai virš eilučių"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "Pikseliai žemiau eilučių"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "Pikseliai tarp eilučių"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "Laužymo veiksena"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "Žymeklis matomas"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "Jei įterpimo žymeklis yra rodomas"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "Buferis"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "Išvedamas buferis"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "Ar įvedamas tekstas pakeičia esamas vertes"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "Leisti tabuliaciją"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Ar Tab klavišas turi įvesti tabuliacijos simbolį"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "Klaidinga pabraukimo spalva"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "Spalva, kuria spalvinti klaidas rodančius pabraukimus"
 

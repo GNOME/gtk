@@ -2830,6 +2830,24 @@ This function is deprecated; it does nothing.
 @window: 
 
 
+<!-- ##### FUNCTION gtk_widget_set_receives_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+@receives_default: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_receives_default ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 
