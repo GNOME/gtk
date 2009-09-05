@@ -1292,7 +1292,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   /* make sure the new item has been pulled in */
   if (!filter->priv->root)
     {
-      gint i;
       FilterLevel *root;
 
       gtk_tree_model_filter_build_level (filter, NULL, NULL, FALSE);

@@ -737,6 +737,7 @@ set_path_visibility (FilterTest  *fixture,
                       -1);
 }
 
+#if 0
 static void
 insert_path_with_visibility (FilterTest  *fixture,
                              const gchar *path_string,
@@ -757,6 +758,7 @@ insert_path_with_visibility (FilterTest  *fixture,
     }
   gtk_tree_path_free (path);
 }
+#endif
 
 /*
  * The actual tests.
