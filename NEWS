@@ -1,3 +1,42 @@
+Overview of Changes from GTK+ 2.17.10 to 2.17.11
+================================================
+
+* Client-side windows:
+ - Add gdk_cairo_reset_clip that lets you get back the original
+   drawable clip
+ - Add gdk_window_restack to more conveniently restack child windows
+ - Add gdk_window_is_destroyed as a replacement for GDK_WINDOW_DESTROYED
+ - Deprecated GDK_WINDOW_OBJECT and GdkWindowObject
+
+* GSEAL:
+ - Add gtk_widget_set_receives_default and gtk_widget_get_receives_default
+   accessors for GTK_RECEIVES_DEFAULT
+
+* GtkTreeView:
+ - Correctly propagate insensitive state to cell renderers
+
+* GtkTextView:
+ - Merge a number of scrolling-related fixes from Maemo
+
+* Bugs fixed:
+ 564160 gtk_combo_box_entry_set_text_column too restrictive
+ 593868 gtk_im_multicontext_set_client_window recreate a new slave...
+ 593644 gdk_x11_screen_get_window_manager_name should not cache...
+ 594178 gdk-pixbuf-query-loaders segfault in write_loader_info
+ 567124 proposal to delay doing something related to immodule...
+ 588788 GTK+ compilation should work with automake1.10
+ 584638 Build of gtkupdateiconcache without NLS breaks
+ 593788 misprint in the returning value of gdk_selection_property_get
+ 593606 Missing include in gtk/gtkcellrendereraccel.c
+ 593877 Undefined symbols while compilation
+
+* Translation updates:
+ French
+ Hebrew
+ Hungarian
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.17.9 to 2.17.10
 ===============================================
 
