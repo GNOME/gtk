@@ -1008,8 +1008,12 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
       GtkTreePath *path;
       FilterElt *tmp;
 
-      /* we emit row-deleted, and remove the node from the cache.
+      /* We emit row-deleted, and remove the node from the cache.
+       * If it has any children, these will be removed here as well.
        */
+
+      if (elt->children)
+        gtk_tree_model_filter_free_level (filter, elt->children);
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
       elt->visible = FALSE;
@@ -1052,9 +1056,15 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
     {
       GtkTreePath *path;
 
-      /* we emit row-deleted, but keep the node in the cache and
-       * referenced.
+      /* We emit row-deleted, but keep the node in the cache and
+       * referenced.  Its children will be removed.
        */
+
+      if (elt->children)
+        {
+          gtk_tree_model_filter_free_level (filter, elt->children);
+          elt->children = NULL;
+        }
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
       elt->visible = FALSE;
@@ -1066,7 +1076,7 @@ gtk_tree_model_filter_remove_node (GtkTreeModelFilter *filter,
     {
       GtkTreePath *path;
 
-      /* blow level away */
+      /* Blow level away, including any child levels */
 
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), iter);
       elt->visible = FALSE;
