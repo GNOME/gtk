@@ -856,8 +856,9 @@ filled_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  /* FIXME: We are missing a row-has-child-toggled signal for path "0:4" */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
+  /* Once 0:4:0 got inserted, 0:4 became a parent */
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:0");
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4:1");
@@ -1048,11 +1049,12 @@ filled_vroot_hide_child_levels (FilterTest    *fixture,
   check_level_length (fixture->filter, "0:3", LEVEL_LENGTH);
   check_level_length (fixture->filter, "0:4", 0);
 
-  /* FIXME: We are missing a row-has-child-toggled signal for path "0:4" */
   /* FIXME: Inconsistency!  For the non-vroot case we also receive two
    * row-has-child-toggled signals here.
    */
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:0");
+  /* Once 0:4:0 got inserted, 0:4 became a parent */
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:4");
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:4:1");
   set_path_visibility (fixture, "2:0:4:2", TRUE);
   set_path_visibility (fixture, "2:0:4:4", TRUE);
@@ -1080,6 +1082,7 @@ empty_show_nodes (FilterTest    *fixture,
   check_level_length (fixture->filter, "0", 0);
 
   signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
   signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
   set_path_visibility (fixture, "3:2", TRUE);
   check_filter_model (fixture);

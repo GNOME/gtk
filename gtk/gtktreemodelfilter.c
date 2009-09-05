@@ -1336,6 +1336,21 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
 
       gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
 
+      if (level->parent_level && level->visible_nodes == 1)
+        {
+          /* We know that this is the first visible node in this level, so
+           * we need to emit row-has-child-toggled on the parent.  This
+           * does not apply to the root level.
+           */
+
+          gtk_tree_path_up (path);
+          gtk_tree_model_get_iter (GTK_TREE_MODEL (filter), &iter, path);
+
+          gtk_tree_model_row_has_child_toggled (GTK_TREE_MODEL (filter),
+                                                path,
+                                                &iter);
+        }
+
       if (gtk_tree_model_iter_children (c_model, &children, c_iter))
         gtk_tree_model_filter_update_children (filter, level, elt);
     }
