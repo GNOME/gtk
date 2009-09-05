@@ -368,9 +368,10 @@ void
 gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
                                      gint              text_column)
 {
+  GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (entry_box));
+
   g_return_if_fail (text_column >= 0);
-  g_return_if_fail (text_column < gtk_tree_model_get_n_columns (gtk_combo_box_get_model (GTK_COMBO_BOX (entry_box))));
-  g_return_if_fail (entry_box->priv->text_column == -1);
+  g_return_if_fail (model == NULL || text_column < gtk_tree_model_get_n_columns (model));
 
   entry_box->priv->text_column = text_column;
 
