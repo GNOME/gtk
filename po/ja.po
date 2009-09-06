@@ -2,7 +2,7 @@
 # Copyright (C) 1998,2000-2009 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
-# Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002.
+# Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009.
 # Akira TAGOH <tagoh@gnome.gr.jp>, 2002.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2003-2009.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
@@ -10,16 +10,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ trunk\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:28-0400\n"
-"PO-Revision-Date: 2009-03-03 08:23+0900\n"
-"Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
+"Project-Id-Version: gtk+ master\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
+"POT-Creation-Date: 2009-09-06 11:42+0900\n"
+"PO-Revision-Date: 2009-09-06 18:01+0900\n"
+"Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -414,7 +414,6 @@ msgstr "画像のピクセルデータが壊れています"
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "%uバイトの画像バッファの確保に失敗しました"
-msgstr[1] "%uバイトの画像バッファの確保に失敗しました"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1173,12 +1172,10 @@ msgstr "%s を開いています"
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d 個のアイテムを開いています"
-msgstr[1] "%d 個のアイテムを開いています"
 
 #: gtk/gtkaboutdialog.c:183
-#, fuzzy
 msgid "Could not show link"
-msgstr "一覧をクリアできませんでした"
+msgstr "リンクを表示できませんでした"
 
 #: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
 msgid "License"
@@ -1294,14 +1291,14 @@ msgid "Backslash"
 msgstr "\\"
 
 #: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "関数の型が間違っています: '%s'"
+msgstr "%d行目に無効な型関数: '%s'"
 
 #: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "オブジェクト ID '%s' が %d行目で重複しています (前は%d行目)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1405,10 +1402,9 @@ msgstr "無効"
 #. * to gtk_accelerator_valid().
 #.
 #: gtk/gtkcellrendereraccel.c:254
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "URI が間違っています"
+msgstr "無効"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1600,7 +1596,7 @@ msgstr "高さ(_H):"
 
 #: gtk/gtkcustompaperunixdialog.c:1082
 msgid "Paper Size"
-msgstr "用紙のサイズ"
+msgstr "用紙サイズ"
 
 #: gtk/gtkcustompaperunixdialog.c:1091
 msgid "_Top:"
@@ -1730,7 +1726,7 @@ msgstr "'%s' というブックマークを削除します"
 #: gtk/gtkfilechooserdefault.c:3024
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr ""
+msgstr "ブックマーク '%s'を削除できません"
 
 #: gtk/gtkfilechooserdefault.c:3031 gtk/gtkfilechooserdefault.c:4057
 msgid "Remove the selected bookmark"
@@ -1874,9 +1870,8 @@ msgid "Could not send the search request"
 msgstr "検索結果をプログラム側に送信できませんでした"
 
 #: gtk/gtkfilechooserdefault.c:9608
-#, fuzzy
 msgid "Search:"
-msgstr "検索"
+msgstr "検索:"
 
 #: gtk/gtkfilechooserdefault.c:10591
 #, c-format
@@ -2104,7 +2099,7 @@ msgstr "ルート・フォルダのストック・アイコンを取得できま
 
 #: gtk/gtkfilesystemmodel.c:1301
 msgid "(Empty)"
-msgstr "(空です)"
+msgstr "(空)"
 
 #: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
@@ -2280,14 +2275,13 @@ msgstr "クリア(_E)"
 
 #. Open Link
 #: gtk/gtklabel.c:5529
-#, fuzzy
 msgid "_Open Link"
-msgstr "開く(_O)"
+msgstr "リンクを開く(_O)"
 
 #. Copy Link Address
 #: gtk/gtklabel.c:5541
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "リンクのアドレスをコピー(_L)"
 
 #: gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -2383,48 +2377,47 @@ msgstr "期限なしで記憶する(_F)"
 #: gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
-msgstr ""
+msgstr "不明なアプリケーション (pid %d)"
 
 #: gtk/gtkmountoperation.c:1063
 #, c-format
 msgid "Unable to end process"
-msgstr ""
+msgstr "プロセスを終了できません"
 
 #: gtk/gtkmountoperation.c:1100
 msgid "_End Process"
-msgstr ""
+msgstr "プロセスを終了(_E)"
 
 #: gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr ""
+msgstr "pid %d のプロセスを kill できません。操作が実装されていません。"
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
-msgstr ""
+msgstr "端末ページャ"
 
 #: gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
-msgstr "コマンドライン"
+msgstr "top コマンド"
 
 #: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "bash"
 
 #: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr ""
+msgstr "sh"
 
 #: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr ""
+msgstr "zsh"
 
 #: gtk/gtkmountoperation-x11.c:966
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "pid %d のプロセスを終了できません: %s"
 
 #: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
 #, c-format
@@ -2436,16 +2429,12 @@ msgid "Not a valid page setup file"
 msgstr "妥当なページ設定のファイルではありません"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "Any Printer"
-msgstr "プリンタ"
+msgstr "任意のプリンタ"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "For portable documents"
-msgstr ""
-"<b>任意のプリンタ</b>\n"
-"ポータブルなドキュメント用"
+msgstr "ポータブルなドキュメント用"
 
 #: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
@@ -2472,7 +2461,7 @@ msgstr "フォーマット(_F):"
 
 #: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
 msgid "_Paper size:"
-msgstr "用紙のサイズ(_P):"
+msgstr "用紙サイズ(_P):"
 
 #: gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
@@ -2495,19 +2484,16 @@ msgid "File System Root"
 msgstr "ファイル・システムのルート"
 
 #: gtk/gtkprintbackend.c:740
-#, fuzzy
 msgid "Authentication"
-msgstr "アプリケーション"
+msgstr "認証"
 
 #: gtk/gtkprintbackend.c:772
-#, fuzzy
 msgid "Username:"
-msgstr "ユーザ名(_U):"
+msgstr "ユーザ名:"
 
 #: gtk/gtkprintbackend.c:782
-#, fuzzy
 msgid "Password:"
-msgstr "パスワード(_P):"
+msgstr "パスワード:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2667,7 +2653,7 @@ msgstr "原因不明のエラー"
 
 #: gtk/gtkprintunixdialog.c:1854
 msgid "Getting printer information..."
-msgstr ""
+msgstr "プリンタの情報を取得中..."
 
 #: gtk/gtkprintunixdialog.c:2124
 msgid "Printer"
@@ -2696,13 +2682,12 @@ msgid "C_urrent Page"
 msgstr "現在のページだけ(_U)"
 
 #: gtk/gtkprintunixdialog.c:2192
-#, fuzzy
 msgid "Se_lection"
-msgstr "選択(_S): "
+msgstr "選択(_L)"
 
 #: gtk/gtkprintunixdialog.c:2201
 msgid "Pag_es:"
-msgstr "指定する(_E):"
+msgstr "ページ(_E):"
 
 #: gtk/gtkprintunixdialog.c:2202
 msgid ""
@@ -2713,9 +2698,8 @@ msgstr ""
 "例: 1-3,7,11"
 
 #: gtk/gtkprintunixdialog.c:2212
-#, fuzzy
 msgid "Pages"
-msgstr "指定する(_E):"
+msgstr "ページ"
 
 #: gtk/gtkprintunixdialog.c:2225
 msgid "Copies"
@@ -2801,14 +2785,12 @@ msgid "Right to left"
 msgstr "右から左へ"
 
 #: gtk/gtkprintunixdialog.c:3051
-#, fuzzy
 msgid "Top to bottom"
-msgstr "上から下へ、左から右へ"
+msgstr "上から下へ"
 
 #: gtk/gtkprintunixdialog.c:3052
-#, fuzzy
 msgid "Bottom to top"
-msgstr "下から上へ、左から右へ"
+msgstr "下から上へ"
 
 #: gtk/gtkprintunixdialog.c:3281
 msgid "Layout"
@@ -2864,30 +2846,25 @@ msgid "Output t_ray:"
 msgstr "出力先のトレイ(_R):"
 
 #: gtk/gtkprintunixdialog.c:3454
-#, fuzzy
 msgid "Or_ientation:"
-msgstr "用紙の向き(_O):"
+msgstr "用紙の向き(_I):"
 
 #. In enum order
 #: gtk/gtkprintunixdialog.c:3469
-#, fuzzy
 msgid "Portrait"
-msgstr "縦置き"
+msgstr "縦方向"
 
 #: gtk/gtkprintunixdialog.c:3470
-#, fuzzy
 msgid "Landscape"
-msgstr "横置き"
+msgstr "横方向"
 
 #: gtk/gtkprintunixdialog.c:3471
-#, fuzzy
 msgid "Reverse portrait"
-msgstr "縦置きの逆"
+msgstr "縦方向(逆向き)"
 
 #: gtk/gtkprintunixdialog.c:3472
-#, fuzzy
 msgid "Reverse landscape"
-msgstr "横置きの逆"
+msgstr "横方向(逆向き)"
 
 #: gtk/gtkprintunixdialog.c:3517
 msgid "Job Details"
@@ -2930,7 +2907,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3592
 msgid "Time of print"
-msgstr ""
+msgstr "プリント時間"
 
 #: gtk/gtkprintunixdialog.c:3608
 msgid "On _hold"
@@ -2997,7 +2974,7 @@ msgstr "インクルードファイルが見つかりません: \"%s\""
 #: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "pixmap_path に画像ファイルがありません: \"%s\""
+msgstr "pixmap_path に画像ファイルが見つかりません: \"%s\""
 
 #: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
 #: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
@@ -4735,9 +4712,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "妥当なアイコン・キャッシュではありません: %s\n"
 
 #: gtk/updateiconcache.c:1702
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "テーマの index ファイルがありません"
+msgstr "テーマの index ファイルがありません。\n"
 
 #: gtk/updateiconcache.c:1706
 #, c-format
@@ -4808,50 +4785,50 @@ msgstr "Ｘの入力メソッド"
 #: modules/printbackends/cups/gtkprintbackendcups.c:753
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "%s からファイルを取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:757
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
+msgstr "文書 '%s' をプリンタ '%s' で印刷するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:759
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "文書を %s で印刷するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:763
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "ジョブ '%s' の属性を取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:765
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "ジョブの属性を取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:769
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "プリンタ %s の属性を取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:771
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "プリンタの属性を取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:774
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "%s のデフォルトのプリンタを取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:777
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "%s からプリンタを取得するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:780
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "%s には認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1413
 #, c-format
@@ -5147,7 +5124,7 @@ msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:572
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:584
 #: modules/printbackends/test/gtkprintbackendtest.c:503
@@ -5176,32 +5153,28 @@ msgstr "コマンドライン"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
-#, fuzzy
 msgid "printer offline"
-msgstr "プリンタはオフラインです"
+msgstr "プリンタはオフライン"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:829
-#, fuzzy
 msgid "ready to print"
-msgstr "プリンタの準備中"
+msgstr "印刷可能"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
-msgstr ""
+msgstr "ジョブを処理中"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:836
-#, fuzzy
 msgid "paused"
 msgstr "一時停止"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:839
-#, fuzzy
 msgid "unknown"
-msgstr "(不明)"
+msgstr "不明"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
