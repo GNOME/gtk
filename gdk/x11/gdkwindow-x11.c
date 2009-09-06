@@ -455,6 +455,10 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->width = WidthOfScreen (screen_x11->xscreen);
   private->height = HeightOfScreen (screen_x11->xscreen);
   private->viewable = TRUE;
+
+  /* see init_randr_support() in gdkscreen-x11.c */
+  private->event_mask = GDK_STRUCTURE_MASK;
+
   _gdk_window_update_size (screen_x11->root_window);
   
   _gdk_xid_table_insert (screen_x11->display,
