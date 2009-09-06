@@ -6432,6 +6432,10 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   GtkRBNode *node;
   int new_dy;
 
+  /* Avoid recursive calls */
+  if (tree_view->priv->in_top_row_to_dy)
+    return;
+
   if (tree_view->priv->top_row)
     path = gtk_tree_row_reference_get_path (tree_view->priv->top_row);
   else
