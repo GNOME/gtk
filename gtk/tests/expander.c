@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 static void
-test_click (void)
+test_click_expander (void)
 {
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test click on expander");
   GtkWidget *expander = gtk_expander_new ("Test Expander");
@@ -57,11 +57,38 @@ test_click (void)
   g_assert (!expanded);
 }
 
+static void
+test_click_content_widget (void)
+{
+  GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test click on content widget");
+  GtkWidget *expander = gtk_expander_new ("Test Expander");
+  GtkWidget *entry = gtk_entry_new ();
+  gboolean expanded;
+  gboolean simsuccess;
+  gtk_container_add (GTK_CONTAINER (expander), entry);
+  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), expander);
+  gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
+  gtk_widget_show (expander);
+  gtk_widget_show (entry);
+  gtk_widget_show_now (window);
+
+  /* check click on content with expander open */
+  expanded = gtk_expander_get_expanded (GTK_EXPANDER (expander));
+  g_assert (expanded);
+  simsuccess = gtk_test_widget_click (entry, 1, 0);
+  g_assert (simsuccess == TRUE);
+  while (gtk_events_pending ()) /* let expander timeout/idle handlers update */
+    gtk_main_iteration ();
+  expanded = gtk_expander_get_expanded (GTK_EXPANDER (expander));
+  g_assert (expanded);
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv);
-  g_test_add_func ("/expander/click", test_click);
+  g_test_add_func ("/expander/click-expander", test_click_expander);
+  g_test_add_func ("/expander/click-content-widget", test_click_content_widget);
   return g_test_run();
 }
