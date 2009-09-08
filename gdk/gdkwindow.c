@@ -8599,28 +8599,36 @@ _gdk_window_event_parent_of (GdkWindow *parent,
 static void
 update_cursor (GdkDisplay *display)
 {
-  GdkWindowObject *pointer_window, *cursor_window, *parent, *toplevel;
+  GdkWindowObject *cursor_window, *parent, *toplevel;
+  GdkWindow *pointer_window;
   GdkWindowImplIface *impl_iface;
   GdkPointerGrabInfo *grab;
 
-  pointer_window = (GdkWindowObject *)display->pointer_info.window_under_pointer;
+  pointer_window = display->pointer_info.window_under_pointer;
 
-  cursor_window = pointer_window;
+  /* We ignore the serials here and just pick the last grab
+     we've sent, as that would shortly be used anyway. */
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (/* have grab */
+      grab != NULL &&
+      /* the pointer is not in a descendant of the grab window */
+      !_gdk_window_event_parent_of (grab->window, pointer_window))
+    /* use the cursor from the grab window */
+    cursor_window = (GdkWindowObject *)grab->window;
+  else
+    /* otherwise use the cursor from the pointer window */
+    cursor_window = (GdkWindowObject *)pointer_window;
+
+  /* Find the first window with the cursor actually set, as
+     the cursor is inherited from the parent */
   while (cursor_window->cursor == NULL &&
 	 (parent = get_event_parent (cursor_window)) != NULL &&
 	 parent->window_type != GDK_WINDOW_ROOT)
     cursor_window = parent;
 
-  /* We ignore the serials here and just pick the last grab
-     we've sent, as that would shortly be used anyway. */
-  grab = _gdk_display_get_last_pointer_grab (display);
-  if (grab != NULL &&
-      !_gdk_window_event_parent_of (grab->window, (GdkWindow *)cursor_window))
-    cursor_window = (GdkWindowObject *)grab->window;
-
   /* Set all cursors on toplevel, otherwise its tricky to keep track of
    * which native window has what cursor set. */
-  toplevel = (GdkWindowObject *)get_event_toplevel ((GdkWindow *)pointer_window);
+  toplevel = (GdkWindowObject *)get_event_toplevel (pointer_window);
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (toplevel->impl);
   impl_iface->set_cursor ((GdkWindow *)toplevel, cursor_window->cursor);
 }
