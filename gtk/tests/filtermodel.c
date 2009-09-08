@@ -2071,6 +2071,30 @@ specific_filter_add_child (void)
   gtk_tree_store_set (store, &child, 0, "Hello", -1);
 }
 
+static void
+specific_list_store_clear (void)
+{
+  int i;
+  GtkTreeIter iter;
+  GtkListStore *list;
+  GtkTreeModel *filter;
+  GtkWidget *view;
+
+  list = gtk_list_store_new (1, G_TYPE_INT);
+  gtk_list_store_insert_with_values (list, &iter, 0, 0, 1, -1);
+  gtk_list_store_insert_with_values (list, &iter, 1, 0, 2, -1);
+  gtk_list_store_insert_with_values (list, &iter, 2, 0, 3, -1);
+  gtk_list_store_insert_with_values (list, &iter, 3, 0, 4, -1);
+  gtk_list_store_insert_with_values (list, &iter, 4, 0, 5, -1);
+  gtk_list_store_insert_with_values (list, &iter, 5, 0, 6, -1);
+  gtk_list_store_insert_with_values (list, &iter, 6, 0, 7, -1);
+  gtk_list_store_insert_with_values (list, &iter, 7, 0, 8, -1);
+
+  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (list), NULL);
+  view = gtk_tree_view_new_with_model (filter);
+
+  gtk_list_store_clear (list);
+}
 
 static void
 specific_bug_300089 (void)
@@ -2674,6 +2698,8 @@ main (int    argc,
                    specific_root_has_child_filter);
   g_test_add_func ("/FilterModel/specific/filter-add-child",
                    specific_filter_add_child);
+  g_test_add_func ("/FilterModel/specific/list-store-clear",
+                   specific_list_store_clear);
 
   g_test_add_func ("/FilterModel/specific/bug-300089",
                    specific_bug_300089);

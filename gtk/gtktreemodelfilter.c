@@ -1720,11 +1720,12 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (data);
   GtkTreePath *path;
   GtkTreeIter iter;
-  FilterElt *elt, *parent = NULL;
+  FilterElt *elt;
   FilterLevel *level, *parent_level = NULL;
   gboolean emit_child_toggled = FALSE;
   gint offset;
   gint i;
+  gint parent_elt_index = -1;
 
   g_return_if_fail (c_path != NULL);
 
@@ -1887,7 +1888,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
         {
           emit_child_toggled = TRUE;
           parent_level = level->parent_level;
-          parent = FILTER_LEVEL_PARENT_ELT (level);
+          parent_elt_index = level->parent_elt_index;
         }
 
       /* emit row_deleted */
@@ -1943,7 +1944,7 @@ gtk_tree_model_filter_row_deleted (GtkTreeModel *c_model,
 
       iter.stamp = filter->priv->stamp;
       iter.user_data = parent_level;
-      iter.user_data2 = parent;
+      iter.user_data2 = &g_array_index (parent_level->array, FilterElt, parent_elt_index);
 
       /* We set in_row_deleted to TRUE to avoid a level build triggered
        * by row-has-child-toggled (parent model could call iter_has_child
