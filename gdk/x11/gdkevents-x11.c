@@ -305,6 +305,8 @@ graphics_expose_predicate (Display  *display,
  *
  * Return value:  a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
  * NoExpose event was received.
+ *
+ * Deprecated:2.18
  **/
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
@@ -1598,13 +1600,13 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xexpose.x, xevent->xexpose.y,
 			   xevent->xexpose.width, xevent->xexpose.height,
 			   event->any.send_event ? " (send)" : ""));
-      
+     
       if (window_private == NULL)
         {
           return_val = FALSE;
           break;
         }
-      
+
       {
 	GdkRectangle expose_rect;
 
@@ -1613,25 +1615,10 @@ gdk_event_translate (GdkDisplay *display,
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
-	if (return_exposes)
-	  {
-	    event->expose.type = GDK_EXPOSE;
-	    event->expose.area = expose_rect;
-	    event->expose.region = gdk_region_rectangle (&expose_rect);
-	    event->expose.window = window;
-	    event->expose.count = xevent->xexpose.count;
-
-	    return_val = TRUE;
-	  }
-	else
-	  {
-	    _gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
-	    return_val = FALSE;
-	  }
-	
-	return_val = FALSE;
+	_gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
+	 return_val = FALSE;
       }
-	
+
       break;
       
     case GraphicsExpose:

@@ -22,7 +22,9 @@
 #if IN_HEADER(__GDK_EVENTS_H__)
 #if IN_FILE(__GDK_EVENTS_X11_C__)
 gdk_add_client_message_filter
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_event_get_graphics_expose
+#endif
 gdk_events_pending
 #endif
 #endif
