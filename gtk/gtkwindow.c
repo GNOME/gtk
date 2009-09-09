@@ -8321,7 +8321,7 @@ _gtk_window_set_is_active (GtkWindow *window,
 }
 
 /**
- * _gtk_windwo_set_is_toplevel:
+ * _gtk_window_set_is_toplevel:
  * @window: a #GtkWindow
  * @is_toplevel: %TRUE if the window is still a real toplevel (nominally a
  * parent of the root window); %FALSE if it is not (for example, for an
