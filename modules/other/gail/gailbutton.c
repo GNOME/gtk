@@ -154,10 +154,8 @@ gail_button_class_init (GailButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class;
   GailContainerClass *container_class;
 
-  widget_class = (GailWidgetClass*)klass;
   container_class = (GailContainerClass*)klass;
 
   gobject_class->finalize = gail_button_finalize;
