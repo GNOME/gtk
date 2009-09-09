@@ -320,21 +320,19 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 				    GDestroyNotify          dnotify)
 {
   GError *print_error = NULL;
-  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gint argc;  
+  gint argc;
   gint in_fd;
   gchar **argv = NULL;
   const char *cmd_line;
-  
-  printer = gtk_print_job_get_printer (job);
+
   settings = gtk_print_job_get_settings (job);
 
   cmd_line = gtk_print_settings_get (settings, "lpr-commandline");
   if (cmd_line == NULL)
     cmd_line = LPR_COMMAND;
-  
+
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
@@ -344,7 +342,7 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 
  /* spawn lpr with pipes and pipe ps file to lpr */
   if (!g_shell_parse_argv (cmd_line, &argc, &argv, &print_error))
-    goto out; 
+    goto out;
 
   if (!g_spawn_async_with_pipes (NULL,
                                  argv,
@@ -366,13 +364,13 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
     {
       if (ps->in != NULL)
         g_io_channel_unref (ps->in);
-      
+
       goto out;
     }
 
   g_io_channel_set_close_on_unref (ps->in, TRUE);
 
-  g_io_add_watch (data_io, 
+  g_io_add_watch (data_io,
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
                   (GIOFunc) lpr_write,
                   ps);
