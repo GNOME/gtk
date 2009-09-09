@@ -854,7 +854,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
   switch (source->type)
     {
     case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
-      if (strcmp (source->value, "True") == 0)
+      if (g_ascii_strcasecmp (source->value, "True") == 0)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), TRUE);
       else
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), FALSE);
