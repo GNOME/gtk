@@ -98,8 +98,6 @@
  *
  * You never access a node->row directly.  Instead, call node_get_tree_row().  That function will validate the nodes
  * up to the sought one if the node is not valid yet, and it will return a proper 0-based row.
- *
- * TODO: replace "indices" for "rows", prefix all variables with i_ or r_ as appropriate.  Te quedaste en "AQUI".
  */
 
 /*** DEFINES ***/
