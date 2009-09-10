@@ -8483,15 +8483,12 @@ _gdk_window_calculate_full_clip_region (GdkWindow *window,
     {
       GList *cur;
       GdkRectangle real_clip_rect;
-      gboolean is_offscreen;
 
       if (parentwin != private)
 	{
 	  x_offset += GDK_WINDOW_OBJECT (lastwin)->x;
 	  y_offset += GDK_WINDOW_OBJECT (lastwin)->y;
 	}
-
-      is_offscreen = gdk_window_is_offscreen (parentwin);
 
       /* children is ordered in reverse stack order */
       for (cur = parentwin->children;
@@ -9376,14 +9373,10 @@ void
 _gdk_display_set_window_under_pointer (GdkDisplay *display,
 				       GdkWindow *window)
 {
-  GdkWindowObject *private;
-
   /* We don't track this if all native, and it can cause issues
      with the update_cursor call below */
   if (_gdk_native_windows)
     return;
-
-  private = (GdkWindowObject *)window;
 
   if (display->pointer_info.window_under_pointer)
     g_object_unref (display->pointer_info.window_under_pointer);

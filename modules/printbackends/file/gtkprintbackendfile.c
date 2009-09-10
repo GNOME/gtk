@@ -442,13 +442,11 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 				     GDestroyNotify          dnotify)
 {
   GError *internal_error = NULL;
-  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   gchar *uri;
   GFile *file = NULL;
 
-  printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   ps = g_new0 (_PrintStreamData, 1);

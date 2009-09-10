@@ -419,7 +419,6 @@ void
 _gdk_windowing_window_init (GdkScreen * screen)
 {
   GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
 
@@ -436,7 +435,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
 
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
   draw_impl->screen = screen;
@@ -1601,11 +1599,9 @@ gdk_window_x11_reparent (GdkWindow *window,
 {
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
-  GdkWindowObject *old_parent_private;
   GdkWindowImplX11 *impl;
 
   window_private = (GdkWindowObject*) window;
-  old_parent_private = (GdkWindowObject*)window_private->parent;
   parent_private = (GdkWindowObject*) new_parent;
   impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
 
@@ -5526,7 +5522,6 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 {
 #if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   GdkWindowObject *private = (GdkWindowObject *) window;
-  GdkDisplayX11 *x11_display;
   GdkWindowImplX11 *impl;
   GdkDisplay *display;
   Display *dpy;
@@ -5535,7 +5530,6 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
   display = gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (impl)->screen);
-  x11_display = GDK_DISPLAY_X11 (display);
   dpy = GDK_DISPLAY_XDISPLAY (display);
   xid = GDK_WINDOW_XWINDOW (private);
 

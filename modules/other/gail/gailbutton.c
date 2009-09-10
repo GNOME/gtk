@@ -874,15 +874,12 @@ gail_button_ref_state_set (AtkObject *obj)
 {
   AtkStateSet *state_set;
   GtkWidget *widget;
-  GtkButton *button;
 
   state_set = ATK_OBJECT_CLASS (gail_button_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
     return state_set;
-
-  button = GTK_BUTTON (widget);
 
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);

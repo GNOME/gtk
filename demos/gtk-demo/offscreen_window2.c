@@ -374,7 +374,6 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
       if (event->window == widget->window)
         {
           GdkPixmap *pixmap;
-          GtkAllocation child_area;
           cairo_t *cr;
           cairo_matrix_t matrix;
           cairo_pattern_t *mask;
@@ -383,7 +382,6 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
             {
               pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
               gdk_drawable_get_size (pixmap, &width, &height);
-              child_area = bin->child->allocation;
 
               cr = gdk_cairo_create (widget->window);
 
