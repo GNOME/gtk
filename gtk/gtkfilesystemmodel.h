@@ -53,7 +53,7 @@ GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *            
                                                              guint               n_columns,
                                                              ...);
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
-gboolean            _gtk_file_system_model_get_is_visible   (GtkFileSystemModel *model,
+gboolean            _gtk_file_system_model_iter_is_visible  (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
 GFileInfo *         _gtk_file_system_model_get_info         (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);

@@ -1485,7 +1485,7 @@ _gtk_file_system_model_get_cancellable (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_get_is_visible:
+ * _gtk_file_system_model_iter_is_visible:
  * @model: the model
  * @iter: a valid iterator
  *
@@ -1498,8 +1498,8 @@ _gtk_file_system_model_get_cancellable (GtkFileSystemModel *model)
  * Returns: %TRUE if the iterator is visible
  **/
 gboolean
-_gtk_file_system_model_get_is_visible (GtkFileSystemModel *model,
-				       GtkTreeIter        *iter)
+_gtk_file_system_model_iter_is_visible (GtkFileSystemModel *model,
+					GtkTreeIter        *iter)
 {
   FileModelNode *node;
 
@@ -1652,7 +1652,7 @@ node_get_for_file (GtkFileSystemModel *model,
  * Initializes @iter to point to the row used for @file, if @file is part 
  * of the model. Note that upon successful return, @iter may point to an 
  * invisible row in the @model. Use 
- * _gtk_file_system_model_get_is_visible() to make sure it is visible to
+ * _gtk_file_system_model_iter_is_visible() to make sure it is visible to
  * the tree view.
  *
  * Returns: %TRUE if file is part of the model and @iter was initialized

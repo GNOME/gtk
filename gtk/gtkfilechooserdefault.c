@@ -6228,7 +6228,7 @@ show_and_select_files (GtkFileChooserDefault *impl,
       if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
         continue;
 
-      if (!_gtk_file_system_model_get_is_visible (fsmodel, &iter))
+      if (!_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
           GFileInfo *info = _gtk_file_system_model_get_info (fsmodel, &iter);
 
@@ -6247,7 +6247,7 @@ show_and_select_files (GtkFileChooserDefault *impl,
             }
         }
           
-      if (_gtk_file_system_model_get_is_visible (fsmodel, &iter))
+      if (_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
           gtk_tree_selection_select_iter (selection, &iter);
           selected_a_file = TRUE;
