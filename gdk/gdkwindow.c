@@ -4875,10 +4875,10 @@ gdk_window_schedule_update (GdkWindow *window)
     return;
 
   if (!update_idle)
-    {
-      update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
-				     gdk_window_update_idle, NULL, NULL);
-    }
+    update_idle =
+      gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
+				 gdk_window_update_idle,
+				 NULL, NULL);
 }
 
 void
@@ -5187,11 +5187,19 @@ gdk_window_process_all_updates (void)
   GSList *old_update_windows = update_windows;
   GSList *tmp_list = update_windows;
   static gboolean in_process_all_updates = FALSE;
+  static gboolean got_recursive_update = FALSE;
 
   if (in_process_all_updates)
-    return;
+    {
+      /* We can't do this now since that would recurse, so
+	 delay it until after the recursion is done. */
+      got_recursive_update = TRUE;
+      update_idle = 0;
+      return;
+    }
 
   in_process_all_updates = TRUE;
+  got_recursive_update = FALSE;
 
   if (update_idle)
     g_source_remove (update_idle);
@@ -5227,6 +5235,16 @@ gdk_window_process_all_updates (void)
   _gdk_windowing_after_process_all_updates ();
 
   in_process_all_updates = FALSE;
+
+  /* If we ignored a recursive call, schedule a
+     redraw now so that it eventually happens,
+     otherwise we could miss an update if nothing
+     else schedules an update. */
+  if (got_recursive_update && !update_idle)
+    update_idle =
+      gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW,
+				 gdk_window_update_idle,
+				 NULL, NULL);
 }
 
 /**
