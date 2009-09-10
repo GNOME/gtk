@@ -1809,14 +1809,19 @@ void
 _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
 				   GtkFileFilter *          filter)
 {
+  GtkFileFilter *old_filter;
+
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (filter == NULL || GTK_IS_FILE_FILTER (filter));
   
   if (filter)
     g_object_ref (filter);
-  if (model->filter)
-    g_object_unref (model->filter);
+
+  old_filter = model->filter;
   model->filter = filter;
+
+  if (old_filter)
+    g_object_unref (old_filter);
 
   gtk_file_system_model_refilter_all (model);
 }
