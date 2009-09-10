@@ -10090,7 +10090,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	      (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
 	    {
 	      button_release_grab->serial_end = serial;
-	      button_release_grab->implicit_ungrab = TRUE;
+	      button_release_grab->implicit_ungrab = FALSE;
 	      _gdk_display_pointer_grab_update (display, serial);
 	    }
 	}
@@ -10213,7 +10213,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	  (event->button.state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (event->button.button - 1))) == 0)
 	{
 	  button_release_grab->serial_end = serial;
-	  button_release_grab->implicit_ungrab = TRUE;
+	  button_release_grab->implicit_ungrab = FALSE;
 	  _gdk_display_pointer_grab_update (display, serial);
 	}
     }
