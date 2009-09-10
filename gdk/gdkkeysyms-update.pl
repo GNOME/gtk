@@ -145,10 +145,20 @@ while (<IN_XF86KEYSYM>)
 	if ($_ eq "XF86XK_XF86BackForward") {
 		$keysymelements[1] = "XF86XK_AudioForward";
 	}
+	# XF86XK_Clear could end up a dupe of XK_Clear
+	# XF86XK_Select could end up a dupe of XK_Select
+	if ($_ eq "XF86XK_Clear") {
+		$keysymelements[1] = "XF86XK_WindowClear";
+	}
+	if ($_ eq "XF86XK_Select") {
+		$keysymelements[1] = "XF86XK_SelectButton";
+	}
 
 	# Ignore XF86XK_Q
 	next if ( $_ eq "XF86XK_Q");
-	
+	# XF86XK_Calculater is misspelled, and a dupe
+	next if ( $_ eq "XF86XK_Calculater");
+
 	$_ = $keysymelements[2];
 	die "Internal error, was expecting \"0x*\", found: $_\n" if ( ! /^0x/ );
 

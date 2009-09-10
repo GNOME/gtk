@@ -2116,8 +2116,7 @@
 #define GDK_ApplicationRight 0x1008ff51
 #define GDK_Book 0x1008ff52
 #define GDK_CD 0x1008ff53
-#define GDK_Calculater 0x1008ff54
-#define GDK_Clear 0x1008ff55
+#define GDK_WindowClear 0x1008ff55
 #define GDK_Close 0x1008ff56
 #define GDK_Copy 0x1008ff57
 #define GDK_Cut 0x1008ff58
@@ -2187,7 +2186,7 @@
 #define GDK_FrameBack 0x1008ff9d
 #define GDK_FrameForward 0x1008ff9e
 #define GDK_Time 0x1008ff9f
-#define GDK_Select 0x1008ffa0
+#define GDK_SelectButton 0x1008ffa0
 #define GDK_View 0x1008ffa1
 #define GDK_TopMenu 0x1008ffa2
 #define GDK_Red 0x1008ffa3
