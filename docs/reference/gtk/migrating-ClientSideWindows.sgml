@@ -30,6 +30,8 @@
     example that we've seen is changing the child window stacking order
     using XRestackWindows(). Fixing this properly requires to fix the code
     to use GDK functions to achieve whatever it is trying to achieve.
+    To make this easier in the case of stacking order changes, we've added
+    a gdk_window_restack() function.
   </para>
 
   <para>
