@@ -39,4 +39,17 @@
     may be affected by this.
   </para>
 
+  <para>
+    Problems can also occur when using cairo for drawing. One thing that can
+    go wrong is clip handling. If you ever need to reset the clip region on
+    a cairo_t (i.e. use cairo_reset_clip()), you have to to use
+    gdk_cairo_reset_clip() instead. The reason for this is that the cairo_reset_clip() call will remove the initial clip region that limits your drawing to
+    the client-side window at hand, so you will end up drawing over stuff
+    outside the window. You also need to use gdk_cairo_reset_clip() if you
+    use a cairo_t that was not allocated in a double-buffered expose handler
+    and keep it in use after window hierarchy changes (resizing, moving,
+    stacking order changes). The easiest fix for this kind of problem is to
+    simply create a new cairo context for each expose event.
+  </para>
+
 </chapter>
