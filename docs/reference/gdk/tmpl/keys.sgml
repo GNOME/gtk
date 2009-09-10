@@ -17,7 +17,7 @@ it must be included independently, because the file is quite large.
 <para>
 Key values are regularly updated from the upstream X.org X11 implementation,
 so new values are added regularly. They will be prefixed with GDK_ rather than
-XF86XK_.
+XF86XK_ or XK_ (for older symbols).
 </para>
 <para>
 Key values can be converted into a string representation using
