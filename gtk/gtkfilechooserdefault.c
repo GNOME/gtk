@@ -4427,7 +4427,7 @@ create_file_list (GtkFileChooserDefault *impl)
   gtk_tree_view_column_set_title (impl->list_name_column, _("Name"));
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  /* We set a fixed size so that we get an emoty row even if no icons are loaded yet */
+  /* We set a fixed size so that we get an empty slot even if no icons are loaded yet */
   gtk_cell_renderer_set_fixed_size (renderer, 
                                     renderer->xpad * 2 + impl->icon_size,
                                     renderer->ypad * 2 + impl->icon_size);
