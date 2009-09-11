@@ -54,4 +54,14 @@
     simply create a new cairo context for each expose event.
   </para>
 
+  <para>
+    Due to a weird API in XClearArea the gdk_window_clear_area() call handled
+    a specified width or height of zero to mean "to end of window" for
+    non-doublebuffered drawing. This has been changed to be consistent with
+    the docs and what happens in the doublebuffered case. All code in gtk+
+    that relied on this has been fixed, but it is possible (although unlikely)
+    that third party applications rely on this. If you need to do this, just
+    implement it yourself using gdk_drawable_get_size().
+  </para>
+
 </chapter>

@@ -4349,7 +4349,6 @@ gdk_window_clear_area_internal (GdkWindow *window,
 				gint       height,
 				gboolean   send_expose)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRectangle rect;
   GdkRegion *region;
 
@@ -4358,12 +4357,10 @@ gdk_window_clear_area_internal (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* This is what XClearArea does, and e.g. GtkCList uses it,
-     so we need to duplicate that */
-  if (width == 0)
-    width = private->width - x;
-  if (height == 0)
-    height = private->height - y;
+  /* Terminate early to avoid weird interpretation of
+     zero width/height by XClearArea */
+  if (width == 0 || height == 0)
+    return;
 
   rect.x = x;
   rect.y = y;
