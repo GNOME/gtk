@@ -2718,11 +2718,16 @@ get_selected_file_foreach_cb (GtkTreeModel *model,
 {
   struct get_selected_file_closure *closure = data;
 
-  gtk_tree_model_get (model, iter,
-                      MODEL_COL_FILE, &closure->file,
-                      -1);
   if (closure->file)
-    g_object_unref (closure->file);
+    {
+      /* Just in case this function gets run more than once with a multiple selection; we only care about one file */
+      g_object_unref (closure->file);
+      closure->file = NULL;
+    }
+
+  gtk_tree_model_get (model, iter,
+                      MODEL_COL_FILE, &closure->file, /* this will give us a reffed file */
+                      -1);
 }
 
 /* Returns a selected path from the file list */
@@ -2793,6 +2798,8 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 
       file = get_selected_file (impl);
       active = file && all_folders && (shortcut_find_position (impl, file) == -1);
+      if (file)
+	g_object_unref (file);
     }
   else
     active = all_folders;
