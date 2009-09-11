@@ -6584,7 +6584,7 @@ file_system_model_set (GtkFileSystemModel *model,
                                            G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
                                            G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
                                            G_FILE_ATTRIBUTE_STANDARD_ICON,
-                                           0,
+                                           G_FILE_QUERY_INFO_NONE,
                                            G_PRIORITY_DEFAULT,
                                            _gtk_file_system_model_get_cancellable (model),
                                            file_system_model_got_thumbnail,
