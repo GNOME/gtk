@@ -4419,6 +4419,8 @@ create_file_list (GtkFileChooserDefault *impl)
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (list_selection_changed), impl);
 
+  /* Keep the column order in sync with update_cell_renderer_attributes() */
+
   /* Filename column */
 
   impl->list_name_column = gtk_tree_view_column_new ();
@@ -9918,6 +9920,8 @@ update_cell_renderer_attributes (GtkFileChooserDefault *impl)
 
   always_sensitive = impl->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
                      impl->action != GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+
+  /* Keep the following column numbers in sync with create_file_list() */
 
   /* name */
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0);
