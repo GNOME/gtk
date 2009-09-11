@@ -4352,6 +4352,14 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
   return TRUE;
 }
 
+static void
+set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer *renderer)
+{
+  gtk_cell_renderer_set_fixed_size (renderer, 
+                                    renderer->xpad * 2 + impl->icon_size,
+                                    renderer->ypad * 2 + impl->icon_size);
+}
+
 /* Creates the widgets for the file list */
 static GtkWidget *
 create_file_list (GtkFileChooserDefault *impl)
@@ -4430,9 +4438,7 @@ create_file_list (GtkFileChooserDefault *impl)
 
   renderer = gtk_cell_renderer_pixbuf_new ();
   /* We set a fixed size so that we get an empty slot even if no icons are loaded yet */
-  gtk_cell_renderer_set_fixed_size (renderer, 
-                                    renderer->xpad * 2 + impl->icon_size,
-                                    renderer->ypad * 2 + impl->icon_size);
+  set_icon_cell_renderer_fixed_size (impl, renderer);
   gtk_tree_view_column_pack_start (impl->list_name_column, renderer, FALSE);
 
   impl->list_name_renderer = gtk_cell_renderer_text_new ();
@@ -5654,9 +5660,7 @@ change_icon_theme (GtkFileChooserDefault *impl)
   cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
         gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_files_tree_view), 0)));
   renderer = GTK_CELL_RENDERER (cells->data);
-  gtk_cell_renderer_set_fixed_size (renderer, 
-                                    renderer->xpad * 2 + impl->icon_size,
-                                    renderer->ypad * 2 + impl->icon_size);
+  set_icon_cell_renderer_fixed_size (impl, renderer);
   g_list_free (cells);
   if (impl->browse_files_model)
     _gtk_file_system_model_clear_cache (impl->browse_files_model, MODEL_COL_PIXBUF);
