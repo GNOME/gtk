@@ -6479,13 +6479,15 @@ my_g_format_time_for_display (glong secs)
   return date_str;
 }
 
-#define copy_attribute(to, from, attribute) G_STMT_START { \
-  GFileAttributeType type; \
-  gpointer value; \
-\
-  if (g_file_info_get_attribute_data (from, attribute, &type, &value, NULL)) \
-    g_file_info_set_attribute (to, attribute, type, value); \
-}G_STMT_END
+static void
+copy_attribute (GFileInfo *to, GFileInfo *from, const char *attribute)
+{
+  GFileAttributeType type;
+  gpointer value;
+
+  if (g_file_info_get_attribute_data (from, attribute, &type, &value, NULL))
+    g_file_info_set_attribute (to, attribute, type, value);
+}
 
 static void
 file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer data)
