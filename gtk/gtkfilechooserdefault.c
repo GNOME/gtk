@@ -209,6 +209,20 @@ enum {
   MODEL_COL_NUM_COLUMNS
 };
 
+/* This list of types is passed to _gtk_file_system_model_new*() */
+#define MODEL_COLUMN_TYPES					\
+	MODEL_COL_NUM_COLUMNS,					\
+	G_TYPE_STRING,		  /* MODEL_COL_NAME */		\
+	G_TYPE_INT64,		  /* MODEL_COL_SIZE */		\
+	G_TYPE_LONG,		  /* MODEL_COL_MTIME */		\
+	G_TYPE_FILE,		  /* MODEL_COL_FILE */		\
+	G_TYPE_STRING,		  /* MODEL_COL_NAME_COLLATED */	\
+	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_FOLDER */	\
+	GDK_TYPE_PIXBUF,	  /* MODEL_COL_PIXBUF */	\
+	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
+	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
+	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
+
 /* Identifiers for target types */
 enum {
   GTK_TREE_MODEL_ROW,
@@ -6650,20 +6664,10 @@ set_list_model (GtkFileChooserDefault *impl,
 
   impl->browse_files_model = 
     _gtk_file_system_model_new_for_directory (impl->current_folder,
-        MODEL_ATTRIBUTES,
-        file_system_model_set,
-        impl,
-        MODEL_COL_NUM_COLUMNS,
-        G_TYPE_STRING,
-        G_TYPE_INT64,
-        G_TYPE_LONG,
-        G_TYPE_FILE,
-        G_TYPE_STRING,
-        G_TYPE_BOOLEAN,
-        GDK_TYPE_PIXBUF,
-        G_TYPE_STRING,
-        G_TYPE_STRING,
-        PANGO_TYPE_ELLIPSIZE_MODE);
+					      MODEL_ATTRIBUTES,
+					      file_system_model_set,
+					      impl,
+					      MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_show_hidden (impl->browse_files_model, impl->show_hidden);
 
@@ -8811,18 +8815,7 @@ search_setup_model (GtkFileChooserDefault *impl)
 
   impl->search_model = _gtk_file_system_model_new (file_system_model_set,
                                                    impl,
-                                                   MODEL_COL_NUM_COLUMNS,
-                                                   G_TYPE_STRING, /* MODEL_COL_NAME */
-                                                   G_TYPE_INT64, /* MODEL_COL_SIZE */
-                                                   G_TYPE_LONG, /* MODEL_COL_MTIME */
-                                                   G_TYPE_FILE, /* MODEL_COL_FILE */
-                                                   G_TYPE_STRING, /* MODEL_COL_NAME_COLLATED */
-                                                   G_TYPE_BOOLEAN, /* MODEL_COL_IS_FOLDER */
-                                                   GDK_TYPE_PIXBUF, /* MODEL_COL_PIXBUF */
-                                                   G_TYPE_STRING, /* MODEL_COL_SIZE_TEXT */
-                                                   G_TYPE_STRING, /* MODEL_COL_MTIME_TEXT */
-                                                   PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
-                                                  );
+						   MODEL_COLUMN_TYPES);
 
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (impl->search_model),
 				   MODEL_COL_NAME,
@@ -9115,18 +9108,7 @@ recent_setup_model (GtkFileChooserDefault *impl)
 
   impl->recent_model = _gtk_file_system_model_new (file_system_model_set,
                                                    impl,
-                                                   MODEL_COL_NUM_COLUMNS,
-                                                   G_TYPE_STRING, /* MODEL_COL_NAME */
-                                                   G_TYPE_INT64, /* MODEL_COL_SIZE */
-                                                   G_TYPE_LONG, /* MODEL_COL_MTIME */
-                                                   G_TYPE_FILE, /* MODEL_COL_FILE */
-                                                   G_TYPE_STRING, /* MODEL_COL_NAME_COLLATED */
-                                                   G_TYPE_BOOLEAN, /* MODEL_COL_IS_FOLDER */
-                                                   GDK_TYPE_PIXBUF, /* MODEL_COL_PIXBUF */
-                                                   G_TYPE_STRING, /* MODEL_COL_SIZE_TEXT */
-                                                   G_TYPE_STRING, /* MODEL_COL_MTIME_TEXT */
-                                                   PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
-                                                  );
+						   MODEL_COLUMN_TYPES);
 
   _gtk_file_system_model_set_filter (impl->recent_model,
                                      impl->current_filter);
