@@ -6167,11 +6167,12 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
   GtkTreeIter dummy_iter;
   GtkTreeModel *tree_model;
 
-  path = gtk_tree_path_new_from_indices (0, -1);
   tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
   if (!tree_model)
     return;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
 
   /* If the list is empty, do nothing. */
   if (gtk_tree_model_get_iter (tree_model, &dummy_iter, path))
