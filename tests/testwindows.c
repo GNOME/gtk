@@ -1034,7 +1034,7 @@ main (int argc, char **argv)
   button = gtk_button_new_with_label ("Restack above");
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (restack_clicked),
-		    1);
+		    GINT_TO_POINTER (1));
   gtk_table_attach_defaults (GTK_TABLE (table),
 			     button,
 			     2, 3,
