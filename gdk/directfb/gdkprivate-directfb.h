@@ -205,7 +205,7 @@ typedef struct
 } GdkImageDirectFB;
 
 
-#define GDK_TYPE_GC_DIRECTFB       (gdk_gc_directfb_get_type ())
+#define GDK_TYPE_GC_DIRECTFB       (_gdk_gc_directfb_get_type ())
 #define GDK_GC_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_DIRECTFB, GdkGCDirectFB))
 #define GDK_IS_GC_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_DIRECTFB))
 
@@ -224,11 +224,11 @@ typedef struct
   GdkGCClass        parent_class;
 } GdkGCDirectFBClass;
 
-GType     gdk_gc_directfb_get_type (void);
+GType     _gdk_gc_directfb_get_type (void);
 
-GdkGC *  _gdk_directfb_gc_new      (GdkDrawable     *drawable,
-                                    GdkGCValues     *values,
-                                    GdkGCValuesMask  values_mask);
+GdkGC *   _gdk_directfb_gc_new      (GdkDrawable     *drawable,
+                                     GdkGCValues     *values,
+                                     GdkGCValuesMask  values_mask);
 
 GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
                                        GdkImage     *image,

@@ -57,48 +57,21 @@ static void gdk_directfb_gc_set_dashes (GdkGC           *gc,
                                         gint8            dash_list[],
                                         gint             n);
 
-static void gdk_gc_directfb_class_init (GdkGCDirectFBClass *klass);
+
 static void gdk_gc_directfb_finalize   (GObject            *object);
 
+G_DEFINE_TYPE (GdkGCDirectFB, _gdk_gc_directfb, GDK_TYPE_GC)
 
-static gpointer parent_class = NULL;
-
-
-GType
-gdk_gc_directfb_get_type (void)
+static void
+_gdk_gc_directfb_init (GdkGCDirectFB *directfb_gc)
 {
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkGCDirectFBClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_gc_directfb_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkGCDirectFB),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-
-      object_type = g_type_register_static (GDK_TYPE_GC,
-                                            "GdkGCDirectFB",
-                                            &object_info, 0);
-    }
-
-  return object_type;
 }
 
 static void
-gdk_gc_directfb_class_init (GdkGCDirectFBClass *klass)
+_gdk_gc_directfb_class_init (GdkGCDirectFBClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkGCClass   *gc_class     = GDK_GC_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_gc_directfb_finalize;
 
@@ -110,23 +83,22 @@ gdk_gc_directfb_class_init (GdkGCDirectFBClass *klass)
 static void
 gdk_gc_directfb_finalize (GObject *object)
 {
-  GdkGC         *gc      = GDK_GC (object);
-  GdkGCDirectFB *private = GDK_GC_DIRECTFB (gc);
+  GdkGCDirectFB *directfb_gc = GDK_GC_DIRECTFB (object);
 
-  if (private->clip_region.numRects)
-    temp_region_deinit (&private->clip_region);
-  if (private->values.clip_mask)
-    g_object_unref (private->values.clip_mask);
-  if (private->values.stipple)
-    g_object_unref (private->values.stipple);
-  if (private->values.tile)
-    g_object_unref (private->values.tile);
+  if (directfb_gc->clip_region.numRects)
+    temp_region_deinit (&directfb_gc->clip_region);
+  if (directfb_gc->values.clip_mask)
+    g_object_unref (directfb_gc->values.clip_mask);
+  if (directfb_gc->values.stipple)
+    g_object_unref (directfb_gc->values.stipple);
+  if (directfb_gc->values.tile)
+    g_object_unref (directfb_gc->values.tile);
 
-  if (G_OBJECT_CLASS (parent_class)->finalize)
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_gc_directfb_parent_class)->finalize (object);
 }
 
-GdkGC*
+
+GdkGC *
 _gdk_directfb_gc_new (GdkDrawable     *drawable,
                       GdkGCValues     *values,
                       GdkGCValuesMask  values_mask)
@@ -134,9 +106,11 @@ _gdk_directfb_gc_new (GdkDrawable     *drawable,
   GdkGC         *gc;
   GdkGCDirectFB *private;
 
+  /* NOTICE that the drawable here has to be the impl drawable, not the
+     publicly visible drawable. */
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable), NULL);
 
-  gc = GDK_GC (g_object_new (gdk_gc_directfb_get_type (), NULL));
+  gc = GDK_GC (g_object_new (_gdk_gc_directfb_get_type (), NULL));
 
   _gdk_gc_init (gc, drawable, values, values_mask);
 
