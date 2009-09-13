@@ -490,8 +490,10 @@ gdk_cursor_get_display (GdkCursor *cursor)
 }
 
 guint
-gdk_display_get_default_cursor_size (GdkDisplay    *display)
+gdk_display_get_default_cursor_size (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
   return 16;
 }
 
@@ -510,8 +512,12 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
                                      guint       *width,
                                      guint       *height)
 {
-  *width=gdk_display_get_default_cursor_size(display);
-  *height=*width;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  /* Cursor sizes in DirectFB can be large (4095x4095), but we limit this to
+     128x128 for max compatibility with the x11 backend. */
+  *width = 128;
+  *height = 128;
 }
 
 /**
