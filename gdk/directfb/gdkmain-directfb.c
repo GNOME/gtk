@@ -416,14 +416,16 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  _gdk_display_add_pointer_grab (_gdk_display,
+  _gdk_display_add_pointer_grab (&_gdk_display->parent,
                                  window,
                                  native,
                                  owner_events,
                                  event_mask,
-                                 confine_to,
-                                 cursor,
-                                 time);
+                                 0,
+                                 time,
+                                 FALSE);
+
+  return GDK_GRAB_SUCCESS;
 }
 
 #define __GDK_MAIN_X11_C__
