@@ -51,9 +51,7 @@ typedef struct {
 } GdkColormapPrivateDirectFB;
 
 
-static void  gdk_colormap_init          (GdkColormap      *colormap);
-static void  gdk_colormap_class_init    (GdkColormapClass *klass);
-static void  gdk_colormap_finalize      (GObject          *object);
+static void  gdk_colormap_finalize (GObject *object);
 
 static gint  gdk_colormap_alloc_pseudocolors (GdkColormap *colormap,
                                               GdkColor    *colors,
@@ -64,35 +62,7 @@ static gint  gdk_colormap_alloc_pseudocolors (GdkColormap *colormap,
 static void  gdk_directfb_allocate_color_key (GdkColormap *colormap);
 
 
-static GObjectClass *parent_class = NULL;
-
-
-GType
-gdk_colormap_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type) {
-    const GTypeInfo object_info =
-      {
-        sizeof (GdkColormapClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_colormap_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkColormap),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_colormap_init,
-      };
-
-    object_type = g_type_register_static (G_TYPE_OBJECT,
-                                          "GdkColormap",
-                                          &object_info, 0);
-  }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GdkColormap, gdk_colormap, G_TYPE_OBJECT)
 
 static void
 gdk_colormap_init (GdkColormap *colormap)
@@ -107,8 +77,6 @@ gdk_colormap_class_init (GdkColormapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_colormap_finalize;
 }
 
@@ -119,7 +87,6 @@ gdk_colormap_finalize (GObject *object)
   GdkColormapPrivateDirectFB *private  = colormap->windowing_data;
 
   g_free (colormap->colors);
-  colormap->colors = NULL;
 
   if (private)
     {
@@ -132,7 +99,7 @@ gdk_colormap_finalize (GObject *object)
       colormap->windowing_data = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_colormap_parent_class)->finalize (object);
 }
 
 GdkColormap*
