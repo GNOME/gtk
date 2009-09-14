@@ -402,8 +402,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    gdk_display_request_selection_notification (display, 
-						GDK_SCREEN_X11 (display_x11->screens[i])->cm_selection_atom);
+    _gdk_x11_screen_setup (display_x11->screens[i]);
 
   g_signal_emit_by_name (gdk_display_manager_get(),
 			 "display_opened", display);
