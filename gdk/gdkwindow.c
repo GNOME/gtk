@@ -6990,6 +6990,14 @@ gdk_window_move_resize_internal (GdkWindow *window,
       return;
     }
 
+  /* Bail early if no change */
+  if (private->width == width &&
+      private->height == height &&
+      (!with_move ||
+       (private->x == x &&
+	private->y == y)))
+    return;
+
   /* Handle child windows */
 
   expose = FALSE;
