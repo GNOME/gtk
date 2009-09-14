@@ -509,6 +509,7 @@ void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 void	      gdk_window_begin_paint_region (GdkWindow          *window,
 					     const GdkRegion    *region);
 void	      gdk_window_end_paint          (GdkWindow          *window);
+void	      gdk_window_flush             (GdkWindow          *window);
 
 void	      gdk_window_set_title	   (GdkWindow	  *window,
 					    const gchar	  *title);

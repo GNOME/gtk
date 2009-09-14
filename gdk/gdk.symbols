@@ -687,6 +687,7 @@ gdk_window_clear_area_e
 gdk_window_constrain_size
 gdk_window_destroy
 gdk_window_end_paint
+gdk_window_flush
 gdk_window_foreign_new
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
