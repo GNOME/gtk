@@ -5278,7 +5278,11 @@ gdk_window_process_updates (GdkWindow *window,
   if ((impl_window->update_area ||
        impl_window->outstanding_moves) &&
       !impl_window->update_freeze_count &&
-      !gdk_window_is_toplevel_frozen (window))
+      !gdk_window_is_toplevel_frozen (window) &&
+
+      /* Don't recurse into process_updates_internal, we'll
+       * do the update later when idle instead. */
+      impl_window->implicit_paint == NULL)
     {
       gdk_window_process_updates_internal ((GdkWindow *)impl_window);
       gdk_window_remove_update_window ((GdkWindow *)impl_window);
