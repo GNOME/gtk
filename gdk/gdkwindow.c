@@ -328,8 +328,10 @@ static void do_move_region_bits_on_impl (GdkWindowObject *private,
 					 GdkRegion *region, /* In impl window coords */
 					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindowObject *private);
-static void move_native_children (GdkWindowObject *private);
-static void update_cursor (GdkDisplay *display);
+static void move_native_children        (GdkWindowObject *private);
+static void update_cursor               (GdkDisplay *display);
+static void impl_window_add_update_area (GdkWindowObject *impl_window,
+					 GdkRegion *region);
 static void gdk_window_region_move_free (GdkWindowRegionMove *move);
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -5377,6 +5379,20 @@ draw_ugly_color (GdkWindow       *window,
   g_object_unref (ugly_gc);
 }
 
+static void
+impl_window_add_update_area (GdkWindowObject *impl_window,
+			     GdkRegion *region)
+{
+  if (impl_window->update_area)
+    gdk_region_union (impl_window->update_area, region);
+  else
+    {
+      gdk_window_add_update_window ((GdkWindow *)impl_window);
+      impl_window->update_area = gdk_region_copy (region);
+      gdk_window_schedule_update ((GdkWindow *)impl_window);
+    }
+}
+
 /**
  * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
@@ -5483,17 +5499,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 
       /* Convert to impl coords */
       gdk_region_offset (visible_region, private->abs_x, private->abs_y);
-      if (impl_window->update_area)
-	{
-	  gdk_region_union (impl_window->update_area, visible_region);
-	}
-      else
-	{
-	  gdk_window_add_update_window ((GdkWindow *)impl_window);
-	  impl_window->update_area = gdk_region_copy (visible_region);
-
-	  gdk_window_schedule_update ((GdkWindow *)impl_window);
-	}
+      impl_window_add_update_area (impl_window, visible_region);
     }
 
   gdk_region_destroy (visible_region);
