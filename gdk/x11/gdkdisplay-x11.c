@@ -690,8 +690,8 @@ void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
-  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
+
+  XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
 }
 
 /**
