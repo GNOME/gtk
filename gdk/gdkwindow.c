@@ -3236,6 +3236,32 @@ gdk_window_flush (GdkWindow *window)
   gdk_window_flush_implicit_paint (window);
 }
 
+/* If we're about to move/resize or otherwise change the
+ * hierarchy of a client side window in an impl and we're
+ * called from an expose event handler then we need to
+ * flush any already painted parts of the implicit paint
+ * that are not part of the current paint, as these may
+ * be used when scrolling or may overdraw the changes
+ * caused by the hierarchy change.
+ */
+static void
+gdk_window_flush_if_exposing (GdkWindow *window)
+{
+  GdkWindowObject *private;
+  GdkWindowObject *impl_window;
+  GList *l;
+  GdkWindowRegionMove *move;
+
+  private = (GdkWindowObject *) window;
+  impl_window = gdk_window_get_impl_window (private);
+
+  /* If we're in an implicit paint (i.e. in an expose handler, flush
+     all the already finished exposes to get things to an uptodate state. */
+  if (impl_window->implicit_paint)
+    gdk_window_flush (window);
+}
+
+
 static void
 gdk_window_flush_recursive_helper (GdkWindowObject *window,
 				   GdkWindow *impl)
@@ -6362,6 +6388,8 @@ gdk_window_raise (GdkWindow *window)
   if (private->destroyed)
     return;
 
+  gdk_window_flush_if_exposing (window);
+
   old_region = NULL;
   if (gdk_window_is_viewable (window) &&
       !private->input_only)
@@ -6498,6 +6526,8 @@ gdk_window_lower (GdkWindow *window)
   if (private->destroyed)
     return;
 
+  gdk_window_flush_if_exposing (window);
+
   /* Keep children in (reverse) stacking order */
   gdk_window_lower_internal (window);
 
@@ -6554,6 +6584,8 @@ gdk_window_restack (GdkWindow     *window,
 	gdk_window_lower (window);
       return;
     }
+
+  gdk_window_flush_if_exposing (window);
 
   if (gdk_window_is_toplevel (private))
     {
@@ -7023,6 +7055,8 @@ gdk_window_move_resize_internal (GdkWindow *window,
 	private->y == y)))
     return;
 
+  gdk_window_flush_if_exposing (window);
+
   /* Handle child windows */
 
   expose = FALSE;
@@ -7283,6 +7317,8 @@ gdk_window_scroll (GdkWindow *window,
 
   if (private->destroyed)
     return;
+
+  gdk_window_flush_if_exposing (window);
 
   old_native_child_region = collect_native_child_region (private, FALSE);
   if (old_native_child_region)
