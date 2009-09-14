@@ -3136,12 +3136,10 @@ append_move_region (GdkWindowObject *impl_window,
 /* Moves bits and update area by dx/dy in impl window.
    Takes ownership of region to avoid copy (because we may change it) */
 static void
-move_region_on_impl (GdkWindowObject *private,
+move_region_on_impl (GdkWindowObject *impl_window,
 		     GdkRegion *region, /* In impl window coords */
 		     int dx, int dy)
 {
-  GdkWindowObject *impl_window;
-
   if ((dx == 0 && dy == 0) ||
       gdk_region_empty (region))
     {
@@ -3149,12 +3147,13 @@ move_region_on_impl (GdkWindowObject *private,
       return;
     }
 
-  impl_window = gdk_window_get_impl_window (private);
+  g_assert (impl_window == gdk_window_get_impl_window (impl_window));
 
   /* Move any old invalid regions in the copy source area by dx/dy */
   if (impl_window->update_area)
     {
       GdkRegion *update_area;
+
       update_area = gdk_region_copy (region);
 
       /* Convert from target to source */
@@ -3174,6 +3173,22 @@ move_region_on_impl (GdkWindowObject *private,
       gdk_region_subtract (region, update_area);
 
       gdk_region_destroy (update_area);
+    }
+
+  /* If we're currently exposing this window, don't copy to this
+     destination, as it will be overdrawn when the expose is done,
+     instead invalidate it and repaint later. */
+  if (impl_window->implicit_paint)
+    {
+      GdkWindowPaint *implicit_paint = impl_window->implicit_paint;
+      GdkRegion *exposing;
+
+      exposing = gdk_region_copy (implicit_paint->region);
+      gdk_region_intersect (exposing, region);
+      gdk_region_subtract (region, exposing);
+
+      impl_window_add_update_area (impl_window, exposing);
+      gdk_region_destroy (exposing);
     }
 
   if (1) /* Enable flicker free handling of moves. */
