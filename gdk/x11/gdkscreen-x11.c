@@ -1010,7 +1010,7 @@ _gdk_x11_screen_setup (GdkScreen *screen)
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
   screen_x11->cm_selection_atom = make_cm_atom (screen_x11->screen_num);
-  gdk_display_request_selection_notification (screen_x11->display, 
+  gdk_display_request_selection_notification (screen_x11->display,
 					      screen_x11->cm_selection_atom);
   screen_x11->is_composited = check_is_composited (screen_x11->display, screen_x11);
 }
