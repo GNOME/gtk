@@ -9234,21 +9234,27 @@ send_crossing_event (GdkDisplay                 *display,
 		     gulong                      serial)
 {
   GdkEvent *event;
-  guint32 event_mask;
+  guint32 window_event_mask, type_event_mask;
   GdkPointerGrabInfo *grab;
   GdkWindowImplIface *impl_iface;
 
   grab = _gdk_display_has_pointer_grab (display, serial);
 
   if (grab != NULL &&
-      !grab->owner_events &&
-      (GdkWindow *)window != grab->window)
-    return;
+      !grab->owner_events)
+    {
+      /* !owner_event => only report events wrt grab window, ignore rest */
+      if ((GdkWindow *)window != grab->window)
+	return;
+      window_event_mask = grab->event_mask;
+    }
+  else
+    window_event_mask = window->event_mask;
 
   if (type == GDK_LEAVE_NOTIFY)
-    event_mask = GDK_LEAVE_NOTIFY_MASK;
+    type_event_mask = GDK_LEAVE_NOTIFY_MASK;
   else
-    event_mask = GDK_ENTER_NOTIFY_MASK;
+    type_event_mask = GDK_ENTER_NOTIFY_MASK;
 
   if (window->extension_events != 0)
     {
@@ -9257,7 +9263,7 @@ send_crossing_event (GdkDisplay                 *display,
 					 type == GDK_ENTER_NOTIFY);
     }
 
-  if (window->event_mask & event_mask)
+  if (window_event_mask & type_event_mask)
     {
       event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, TRUE);
       event->crossing.time = time_;
