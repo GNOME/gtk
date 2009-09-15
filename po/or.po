@@ -1,6 +1,6 @@
 # translation of or.po to Oriya
 # Oriya translation of gtk+.HEAD.pot.
-# Copyright (C) 2005, 2006, Free Software Foundation, Inc.
+# Copyright (C) 2005, 2006, 2009, Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # $Id: or.po,v 1.15.2.10 2006/12/14 06:21:39 sbehera Exp $
 # $Id: or.po,v 1.15.2.10 2006/12/14 06:21:39 sbehera Exp $
@@ -8,18 +8,19 @@
 # Gora Mohanty <gora_mohanty@yahoo.co.in>, 2005.
 # Subhransu Behera <arya_subhransu@yahoo.co.in>, 2006.
 # Subhransu Behera <sbehera@redhat.com>, 2006.
+# Manoj Kumar Giri <mgiri@redhat.com>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-07-16 16:30-0400\n"
-"PO-Revision-Date: 2006-12-14 11:48+0530\n"
-"Last-Translator: Subhransu Behera <sbehera@redhat.com>\n"
-"Language-Team: Oriya <oriya-group@lists.sarovar.org>\n"
+"PO-Revision-Date: 2009-09-15 18:07+0530\n"
+"Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
+"Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
 "\n"
 "\n"
 "\n"
@@ -40,8 +41,7 @@ msgstr "'%s' ଚିତ୍ର ଫାଇଲରେ କୌଣସି ତଥ୍ଯ ନ
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:907
 #: gdk-pixbuf/gdk-pixbuf-io.c:1164 tests/testfilechooser.c:263
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "'%s' ଚିତ୍ର ଫାଇଲ ଧାରଣ କରିବାରେ ଅସଫଳ: କାରଣ ଜଣା ନାହିଁ, ସମ୍ଭବତଃ ଏହା ଗୋଟିଏ ତୃଟିଯୁକ୍ତ ଚିତ୍ର ଫାଇଲ "
 "ଅଟେ"
@@ -124,8 +124,7 @@ msgstr "'%s'କୁ ଲେଖିବା ପ୍ରତି ଖୋଲିବାରେ �
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr ""
-"ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
+msgstr "ଚିତ୍ର ଲେଖିବା ସମୟରେ '%s'କୁ ବନ୍ଦ କରିବାରେ ଅସଫଳ, ସମ୍ପୂର୍ଣ ତଥ୍ଯ ସଂରକ୍ଷିତ ନ ହୋଇଥାଇପାରେ: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1991 gdk-pixbuf/gdk-pixbuf-io.c:2041
 #, c-format
@@ -375,8 +374,7 @@ msgstr "JPEG ଚିତ୍ର ଫାଇଲ ବ୍ଯାଖ୍ଯା କରିବ�
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
-msgstr ""
-"ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
+msgstr "ଚିତ୍ର ଧାରଣ କରିବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ମୃତି ନାହିଁ, ସ୍ମୃତି ମୁକ୍ତି ପାଇଁ କିଛି ପ୍ରୟୋଗ ବନ୍ଦ କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ"
 
 #: gdk-pixbuf/io-jpeg.c:388 gdk-pixbuf/io-jpeg.c:591
 #, c-format
@@ -390,9 +388,9 @@ msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
 
 #: gdk-pixbuf/io-jpeg.c:725
-#, fuzzy, c-format
+#, c-format
 msgid "Transformed JPEG has zero width or height."
-msgstr "ପରିବର୍ତ୍ତିତ PNG ର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ"
+msgstr "ପରିବର୍ତ୍ତିତ JPEGର ଓସାର ବା ଉଚ୍ଚତା ଶୂନ୍ଯ ଅଟେ।"
 
 #: gdk-pixbuf/io-jpeg.c:934
 #, c-format
@@ -403,8 +401,7 @@ msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭ�
 
 #: gdk-pixbuf/io-jpeg.c:949
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "JPEG ଗୁଣବତ୍ତାର ମୂଲ୍ଯ ୦ ଓ ୧୦୦ ଭିତରେ ଥିବା ଉଚିତ; '%d' ମୂଲ୍ଯର ଅନୁମତି ନାହିଁ."
 
 #: gdk-pixbuf/io-jpeg.c:1106
@@ -521,8 +518,7 @@ msgstr "PNG ଫାଇଲ ପଢ଼ିବାରେ ମାରାତ୍ମକ ତ�
 
 #: gdk-pixbuf/io-png.c:826
 #, c-format
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ୍ଷର ଭିତରେ ହୋଇଥିବା ଆବଶ୍ଯକ."
 
 #: gdk-pixbuf/io-png.c:834
@@ -1363,8 +1359,7 @@ msgstr "ବାହାର ମଣ୍ଡଳରୁ ରଙ୍ଗ ବାଛନ୍ତୁ
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr ""
-"ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
+msgstr "ଆଖିଡ୍ରପର ଉପରେ ମାଉସ ଚାବି ଦବାଇ, ରଙ୍ଗ ବାଛିବା ପାଇଁ ପରଦାର କୌଣସି ରଙ୍ଗ ଉପରେ ମାଉସ ଚାବି ଦବାନ୍ତୁ।"
 
 #: gtk/gtkcolorsel.c:1972
 msgid "_Hue:"
@@ -1665,8 +1660,7 @@ msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପ
 
 #: gtk/gtkfilechooserdefault.c:7422
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
 #: gtk/gtkfilechooserdefault.c:7427
@@ -1737,8 +1731,7 @@ msgstr ""
 
 #: gtk/gtkfilechoosersettings.c:205
 #, c-format
-msgid ""
-"Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
+msgid "Line %d, column %d: expected \"%s\" at the toplevel, but found \"%s\" instead"
 msgstr ""
 "ଲାଇନ %d, ସ୍ତମ୍ଭ %d: ଉପର ସ୍ତରରେ \"%s\"କୁ ଆଶା କରାଯାଉଥିଲା, କିନ୍ତୁ ଏହା ପରିବର୍ତ୍ତେ \"%s\" "
 "ମିଳିଲା"
@@ -1798,8 +1791,7 @@ msgstr "ଫାଇଲର ନାମ ବଦଳାନ୍ତୁ (_R)"
 
 #: gtk/gtkfilesel.c:1406
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ଫୋଲ୍ଡରର ନାମ \"%s\"ରେ କିଛି ପ୍ରତୀକ ଅଛି ଯେଉଁଗୁଡ଼ିକ ଫାଇଲ ନାମରେ ମନା"
 
 #: gtk/gtkfilesel.c:1408 gtk/gtkfilesel.c:1417 gtk/gtkfilesystemunix.c:1062
@@ -1882,7 +1874,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:3115
 msgid "Invalid UTF-8"
-msgstr "ଅବୈଧ ୟୁ.ଟି.ଏଫ.-୮"
+msgstr "ଅବୈଧ UTF-8"
 
 #: gtk/gtkfilesel.c:3991
 msgid "Name too long"
@@ -1927,8 +1919,7 @@ msgstr "ଫାଇଲ ତନ୍ତ୍ର"
 msgid ""
 "The name \"%s\" is not valid because it contains the character \"%s\". "
 "Please use a different name."
-msgstr ""
-"\"%s\" ନାମରେ \"%s\" ଅକ୍ଷର ଥିବାରୁ ଏହା ଅବୈଧ. ଦୟା କରି ଗୋଟିଏ ଅନ୍ଯ ନାମ ବ୍ଯବହାର କରନ୍ତୁ."
+msgstr "\"%s\" ନାମରେ \"%s\" ଅକ୍ଷର ଥିବାରୁ ଏହା ଅବୈଧ. ଦୟା କରି ଗୋଟିଏ ଅନ୍ଯ ନାମ ବ୍ଯବହାର କରନ୍ତୁ."
 
 #: gtk/gtkfilesystemunix.c:1893 gtk/gtkfilesystemwin32.c:1938
 #, c-format
@@ -2180,7 +2171,7 @@ msgstr "ପୃଷ୍ଠା %u"
 #.
 #: gtk/gtkpagesetupunixdialog.c:154
 msgid "default:mm"
-msgstr "ପୂର୍ବନିର୍ଦ୍ଧାରିତ:ମିମି"
+msgstr "default:mm"
 
 #: gtk/gtkpagesetupunixdialog.c:339
 msgid ""
@@ -2293,7 +2284,7 @@ msgstr "ଫୋଲ୍ଡରରେ ସଂରକ୍ଷିତ କରନ୍ତୁ (_S
 #: gtk/gtkprintoperation.c:171
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s କାର୍ଯ୍ୟ #%d"
 
 #. translators, strip the prefix up to and including the first |
 #: gtk/gtkprintoperation.c:1499
@@ -4196,8 +4187,7 @@ msgstr "\"%s\" ଟି ଗୋଟିଏ ବୈଧ ଗୁଣ ନାମ ନୁହେ
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" କୁ \"%s\" ପ୍ରକାରର ଗୋଟିଏ ମୂଲ୍ଯର \"%s\" ଗୁଣ ପାଇଁ ବଦଳା ଯାଇ ପାରିଲା ନାହିଁ"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -4236,10 +4226,8 @@ msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପର
 
 #: gtk/gtktextbufferserialize.c:1866
 #, c-format
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr "ଧାରାବହିକ ତଥ୍ଯକୁ ବିକୃତ ରୂପରେ ଗଠନ କରାଯାଇଛି। ପ୍ରଥମ ଭାଗଟି GTKTEXTBUFFERCONTENTS-0001 ନୁହେଁ"
 
 #: gtk/updateiconcache.c:413
 #, c-format
@@ -4320,3 +4308,4 @@ msgstr ""
 "'%s' ରେ କୌଣସି ପ୍ରସଙ୍ଗ ଅନୁକ୍ରମଣିକା ଫାଇଲ ନାହିଁ।\n"
 "ଯଦି ଆପଣ ପ୍ରକୃତରେ ଏଠାରେ ଗୋଟିଏ ଚିତ୍ରସଙ୍କେତ ସଞ୍ଚୟେକୁ ସୃଷ୍ଟି କରିବା ପାଇଁ ଚାହୁଁଛନ୍ତି, ତାହାହେଲେ--"
 "ignore-theme-index ନିର୍ଦ୍ଦେଶ କୁ ବ୍ଯବହାର କରନ୍ତୁ।\n"
+
