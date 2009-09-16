@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.gu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-09-05 04:37+0000\n"
-"PO-Revision-Date: 2009-09-10 12:56+0530\n"
+"POT-Creation-Date: 2009-09-15 14:02+0000\n"
+"PO-Revision-Date: 2009-09-16 10:49+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -52,9 +52,8 @@ msgid "Loop"
 msgstr "લુપ"
 
 #: ../gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
-#, fuzzy
 msgid "Whether the animation should loop when it reaches the end"
-msgstr "શું પસંદ કરનારે રંગ અપારદર્શકતાની ગોઠવણી માટે પરવાનગી આપવી જોઇએ છે"
+msgstr "ક્યાંતો એનિમેશન લુપ હોવી જોઇએ જ્યારે તે અંતમાં પહોંચે છે"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -155,7 +154,7 @@ msgstr "ફોન્ટ રીઝોલ્યુશન"
 msgid "The resolution for fonts on the screen"
 msgstr "સ્ક્રીન પર ફોન્ટ માટેનું રીઝોલ્યુશન"
 
-#: ../gdk/gdkwindow.c:471 ../gdk/gdkwindow.c:472
+#: ../gdk/gdkwindow.c:472 ../gdk/gdkwindow.c:473
 msgid "Cursor"
 msgstr "કર્સર"
 
@@ -457,7 +456,7 @@ msgstr "Action Appearance ને વાપરો"
 
 #: ../gtk/gtkactivatable.c:328
 msgid "Whether to use the related actions appearance properties"
-msgstr ""
+msgstr "ક્યાંતો સંબંધિત ક્રિયાઓ દેખાતા ગુણધર્મોને વાપરે છે"
 
 #: ../gtk/gtkadjustment.c:93 ../gtk/gtkcellrendererprogress.c:128
 #: ../gtk/gtkscalebutton.c:206 ../gtk/gtkspinbutton.c:269
@@ -852,7 +851,7 @@ msgstr "જથ્થાનો ઉપયોગ કરવો"
 msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "જો સુયોજિત હોય તો, દર્શાવવાની જગ્યાએ લેબલનો ઉપયોગ જથ્થાની વસ્તુને પસંદ કરવા માટે થાય છે"
 
-#: ../gtk/gtkbutton.c:243 ../gtk/gtkcombobox.c:789
+#: ../gtk/gtkbutton.c:243 ../gtk/gtkcombobox.c:791
 #: ../gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "ક્લિક પર ફોકસ"
@@ -1568,7 +1567,7 @@ msgstr ""
 "કેવી રીતે શબ્દમાળાને ઘણી લીટીઓમાં તોડવી, જો કોષ રેન્ડર કરનાર પાસે વર્તમાન શબ્દમાળા "
 "દર્શાવવા માટે પૂરતી જગ્યા નહિં હોય"
 
-#: ../gtk/gtkcellrenderertext.c:470 ../gtk/gtkcombobox.c:678
+#: ../gtk/gtkcellrenderertext.c:470 ../gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "પહોળાઈ લપેટો"
 
@@ -1813,7 +1812,7 @@ msgstr "શું રંગને આલ્ફા કિંમત આપવી �
 
 #: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:407
 #: ../gtk/gtkfontbutton.c:142 ../gtk/gtkprintjob.c:116
-#: ../gtk/gtkstatusicon.c:420 ../gtk/gtktreeviewcolumn.c:265
+#: ../gtk/gtkstatusicon.c:424 ../gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "શીર્ષક"
 
@@ -1941,111 +1940,111 @@ msgstr "યાદીમાં કિંમત"
 msgid "Whether entered values must already be present in the list"
 msgstr "શું પ્રવેશ કરાતી કિંમતો મેનુમાં પહેલેથી જ હોવી જોઇએ"
 
-#: ../gtk/gtkcombobox.c:661
+#: ../gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "ComboBox મોડેલ"
 
-#: ../gtk/gtkcombobox.c:662
+#: ../gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "કમ્બો બોક્સ માટે મોડેલ"
 
-#: ../gtk/gtkcombobox.c:679
+#: ../gtk/gtkcombobox.c:681
 msgid "Wrap width for laying out the items in a grid"
 msgstr "જાળીમાં વસ્તુઓ ગોઠવવા માટે લપેટવાની પહોળાઈ"
 
-#: ../gtk/gtkcombobox.c:701
+#: ../gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "હરોળ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:702
+#: ../gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "હરોળ વિસ્તારક કિંમતો સમાવતો TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:723
+#: ../gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "સ્તંભ વચ્ચેની જગ્યા"
 
-#: ../gtk/gtkcombobox.c:724
+#: ../gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "સ્તંભ વિસ્તારતી કિંમતો સમાવતી TreeModel સ્તંભ"
 
-#: ../gtk/gtkcombobox.c:745
+#: ../gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "ક્રિયાશીલ વસ્તુ"
 
-#: ../gtk/gtkcombobox.c:746
+#: ../gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "વસ્તુ કે જે વર્તમાનમાં ક્રિયાશીલ છે"
 
-#: ../gtk/gtkcombobox.c:765 ../gtk/gtkuimanager.c:222
+#: ../gtk/gtkcombobox.c:767 ../gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "મેનુઓમાં ટ્રેડઓફ ઉમેરો"
 
-#: ../gtk/gtkcombobox.c:766
+#: ../gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "શું ડ્રોપડાઉન પાસે ટીયરઓફ મેનુ વસ્તુઓ હોવી જોઈએ"
 
-#: ../gtk/gtkcombobox.c:781 ../gtk/gtkentry.c:681
+#: ../gtk/gtkcombobox.c:783 ../gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "ચોકઠુ ધરાવે છે"
 
-#: ../gtk/gtkcombobox.c:782
+#: ../gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr "શું હેડરોની આસપાસ સ્તંભને ફરીથી ક્રમબધ કરી શકાય છે"
 
-#: ../gtk/gtkcombobox.c:790
+#: ../gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "શું કમ્બો બોક્સ ફોકસ મેળવે છે જ્યારે તે માઉસ સાથે ક્લિક થાય છે"
 
-#: ../gtk/gtkcombobox.c:805 ../gtk/gtkmenu.c:556
+#: ../gtk/gtkcombobox.c:807 ../gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Tearoff શીર્ષક"
 
-#: ../gtk/gtkcombobox.c:806
+#: ../gtk/gtkcombobox.c:808
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "શીર્ષક કે જે વિન્ડો વ્યવસ્થાપક દ્રારા દર્શાવવામાં આવશે જ્યારે પોપઅપ એ બંધ હોય"
 
-#: ../gtk/gtkcombobox.c:823
+#: ../gtk/gtkcombobox.c:825
 msgid "Popup shown"
 msgstr "પોપઅપ બતાવાયેલ"
 
-#: ../gtk/gtkcombobox.c:824
+#: ../gtk/gtkcombobox.c:826
 msgid "Whether the combo's dropdown is shown"
 msgstr "શું કમ્બોનું ડ્રોપડાઉન બતાવાયેલ છે"
 
-#: ../gtk/gtkcombobox.c:840
+#: ../gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr "બટન સંવેદનશીલ"
 
-#: ../gtk/gtkcombobox.c:841
+#: ../gtk/gtkcombobox.c:843
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "જ્યારે મોડેલ ખાલી હોય ત્યારે શું નીચેઆવતું બટન સંવેદનશીલ હોય"
 
-#: ../gtk/gtkcombobox.c:848
+#: ../gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "યાદી તરીકે દેખાય છે"
 
-#: ../gtk/gtkcombobox.c:849
+#: ../gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "શું ડ્રોપડાઉનો મેનુઓની જગ્યાએ યાદીઓ તરીકે દેખાવા જોઈએ"
 
-#: ../gtk/gtkcombobox.c:865
+#: ../gtk/gtkcombobox.c:867
 msgid "Arrow Size"
 msgstr "તીર માપ"
 
-#: ../gtk/gtkcombobox.c:866
+#: ../gtk/gtkcombobox.c:868
 msgid "The minimum size of the arrow in the combo box"
 msgstr "કમ્બો બોક્સમાં તીરનું ન્યૂનતમ માપ"
 
-#: ../gtk/gtkcombobox.c:881 ../gtk/gtkentry.c:781 ../gtk/gtkhandlebox.c:174
+#: ../gtk/gtkcombobox.c:883 ../gtk/gtkentry.c:781 ../gtk/gtkhandlebox.c:174
 #: ../gtk/gtkmenubar.c:194 ../gtk/gtkstatusbar.c:186 ../gtk/gtktoolbar.c:623
 #: ../gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "પડછાયાનો પ્રકાર"
 
-#: ../gtk/gtkcombobox.c:882
+#: ../gtk/gtkcombobox.c:884
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "કમ્બો બોક્સની ફરતે કયા પ્રકારનો પડછાયો દોરવો"
 
@@ -2745,13 +2744,10 @@ msgid "Allow folders creation"
 msgstr "ફોલ્ડરો પસંદગી ને પરવાનગી આપો"
 
 #: ../gtk/gtkfilechooser.c:284
-#, fuzzy
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
-msgstr ""
-"શું ફાઈલ પસંદગીકારક એ સંગ્રહો સ્થિતિમાં જો જરૂરી હોય ત્યારે ઉપર ફરીથી લખવા માટેની "
-"ખાતરીવાળો સંવાદ દર્શાવશે."
+msgstr "ક્યાંતો ફાઇલ પસંદગીકારક ખુલ્લી સ્થિતિમાં નથી તે નવા ફોલ્ડરોને બનાવવા માટે વપરાશકર્તાને માંગણી કરશે."
 
 #: ../gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
@@ -3046,13 +3042,12 @@ msgid "The column in the model containing the tooltip texts for the items"
 msgstr "વસ્તુઓમાંથી સાધનમદદ લખાણો સમાવતો મોડેલમાંનો સ્તંભ"
 
 #: ../gtk/gtkiconview.c:772
-#, fuzzy
 msgid "Item Padding"
-msgstr "ખાલી જગ્યા ભરો"
+msgstr "વસ્તુ પેડિંગ"
 
 #: ../gtk/gtkiconview.c:773
 msgid "Padding around icon view items"
-msgstr ""
+msgstr "ચિહ્ન દૃશ્ય વસ્તુઓની આસપાસ પેડિંગ"
 
 #: ../gtk/gtkiconview.c:782
 msgid "Selection Box Color"
@@ -3420,11 +3415,10 @@ msgid "Reserve Toggle Size"
 msgstr "ટોગલ માપ ને આરક્ષિત કરો"
 
 #: ../gtk/gtkmenu.c:617
-#, fuzzy
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
-msgstr "જ્યારે આ મેનુ બંધ કરવામાં આવે ત્યારે વિન્ડો મેનેજર દ્વારા આ શીર્ષક દર્શાવવામાં આવે છે"
+msgstr "બુલિયન કે જે સૂચવે છે કે ક્યાંતો મેનુ ટોગલો અને ચિહ્નો માટે આરક્ષિત રાખે છે"
 
 #: ../gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
@@ -4271,7 +4265,7 @@ msgstr "પસંદગી છે"
 
 #: ../gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
-msgstr "TRUE જો પસંદગી અસ્તિત્વ ધરાવે તો"
+msgstr "TRUE જો પસંદગી અસ્તિત્વ ધરાવે તો."
 
 #: ../gtk/gtkprintoperation.c:1269 ../gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
@@ -4287,7 +4281,7 @@ msgstr "છાપવા માટે પાનાંઓની સંખ્યા
 
 #: ../gtk/gtkprintoperation.c:1292
 msgid "The number of pages that will be printed."
-msgstr "પાનાંઓની સંખ્યા કે જે છપાશે"
+msgstr "પાનાંઓની સંખ્યા કે જે છપાશે."
 
 #: ../gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -5506,23 +5500,23 @@ msgstr "ને સાધનમદદ છે"
 msgid "Whether this tray icon has a tooltip"
 msgstr "ક્યાં તો આ ટ્રે આઇકોન પાસે સાધનમદદ હોય"
 
-#: ../gtk/gtkstatusicon.c:378 ../gtk/gtkwidget.c:655
+#: ../gtk/gtkstatusicon.c:382 ../gtk/gtkwidget.c:655
 msgid "Tooltip Text"
 msgstr "સાધનમદદ લખાણ"
 
-#: ../gtk/gtkstatusicon.c:379 ../gtk/gtkwidget.c:656 ../gtk/gtkwidget.c:677
+#: ../gtk/gtkstatusicon.c:383 ../gtk/gtkwidget.c:656 ../gtk/gtkwidget.c:677
 msgid "The contents of the tooltip for this widget"
 msgstr "આ વિજેટ માટે સાધનમદદના સમાવિષ્ટો"
 
-#: ../gtk/gtkstatusicon.c:402 ../gtk/gtkwidget.c:676
+#: ../gtk/gtkstatusicon.c:406 ../gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr "સાધનમદદ ચિહ્ન"
 
-#: ../gtk/gtkstatusicon.c:403
+#: ../gtk/gtkstatusicon.c:407
 msgid "The contents of the tooltip for this tray icon"
 msgstr "આ ટ્રે આઇકોન માટે સાધનમદદના સમાવિષ્ટો"
 
-#: ../gtk/gtkstatusicon.c:421
+#: ../gtk/gtkstatusicon.c:425
 msgid "The title of this tray icon"
 msgstr "આ ટ્રે ચિહ્નનું શિર્ષક"
 
@@ -6250,11 +6244,11 @@ msgstr ""
 "શું સાધનપટ્ટી વસ્તુ એ મહત્વની તરીકે સમજાયેલ છે. જ્યારે સાચું હોય, તો સાધનપટ્ટી બટનો "
 "GTK_TOOLBAR_BOTH_HORIZ સ્થિતિમાં બતાવો"
 
-#: ../gtk/gtktreemodelsort.c:274
+#: ../gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort મોડલ"
 
-#: ../gtk/gtktreemodelsort.c:275
+#: ../gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "ક્રમમાં ગોઠવવા માટે TreeModelSort મોડલ"
 
@@ -6584,7 +6578,7 @@ msgstr "ટૂંકું સ્તંભ ID"
 
 #: ../gtk/gtktreeviewcolumn.c:342
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr ""
+msgstr "લોજીકલ ટૂંકા સ્તંભ ID જો આ સ્તંભને ટૂંકુ કરે છે જ્યારે ટૂંકુ કરવા માટે પસંદ કરેલ છે"
 
 #: ../gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
