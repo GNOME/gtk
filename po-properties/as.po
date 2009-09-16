@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-04 23:29-0400\n"
-"PO-Revision-Date: 2009-09-15 17:52+0530\n"
+"PO-Revision-Date: 2009-09-16 11:40+0530\n"
 "Last-Translator: \n"
 "Language-Team: American English <>\n"
 "MIME-Version: 1.0\n"
@@ -912,7 +912,7 @@ msgstr "ফোকাস সৰাও"
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
-msgstr "child_displacement_x/_y বৈশিষ্ট্য ফোকাসকাৰী আয়তক্ষেত্ৰকেও প্ৰভাবিত কৰবে নে নাই"
+msgstr "child_displacement_x/_y বৈশিষ্ট্য ফোকাসকাৰী আয়তক্ষেত্ৰকেও প্ৰভাবিত কৰিব নে নাই"
 
 #: gtk/gtkbutton.c:485 gtk/gtkentry.c:689 gtk/gtkentry.c:1713
 msgid "Inner Border"
@@ -3056,11 +3056,11 @@ msgstr "প্ৰতিটি বস্তুৰ আইকন আৰু টে�
 
 #: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
-msgstr "পুনৰায় সাজানোৰ যোগ্য"
+msgstr "পুনৰায় সজোৱাৰ যোগ্য"
 
 #: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
-msgstr "প্ৰদৰ্শিত দৃশ্য পুনৰায় সাজানোৰ যোগ্য"
+msgstr "প্ৰদৰ্শিত দৃশ্য পুনৰায় সজোৱাৰ যোগ্য"
 
 #: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
@@ -3895,7 +3895,7 @@ msgstr "ট্যাব পূৰণ"
 
 #: gtk/gtknotebook.c:709
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "চাইল্ডৰ ট্যাব বৰাদ্দকৃত ক্ষেত্ৰ পূৰণ কৰবে নে নাই"
+msgstr "চাইল্ডৰ ট্যাব বৰাদ্দকৃত ক্ষেত্ৰ পূৰণ কৰিব নে নাই"
 
 #: gtk/gtknotebook.c:715
 msgid "Tab pack type"
@@ -4377,7 +4377,7 @@ msgstr "অনুপ্ৰয়োগত নিৰ্বাচন আছে নে
 
 #: gtk/gtkprintunixdialog.c:362
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr ""
+msgstr "TRUE যদি পৃষ্ঠা প্ৰতিষ্ঠাৰ কম্বোক GtkPrintUnixDialog ত প্ৰোথিত কৰা হৈছে"
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -5207,7 +5207,7 @@ msgstr "বিকল্প বুটাম-বিন্যাস"
 
 #: gtk/gtksettings.c:451
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "ডায়ালগেৰ বুটামসমূহ বিকল্প বুটাম-বিন্যাস ব্যৱহাৰ কৰবে নে নাই"
+msgstr "ডায়ালগেৰ বুটামসমূহ বিকল্প বুটাম-বিন্যাস ব্যৱহাৰ কৰিব নে নাই"
 
 #: gtk/gtksettings.c:468
 msgid "Alternative sort indicator direction"
@@ -5523,7 +5523,7 @@ msgstr "আপডেট কৰাৰ নীতি"
 
 #: gtk/gtkspinbutton.c:261
 msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr "স্পিন বুটাম কখন আপডেট কৰবে - সৰ্বদা নাকি কেবল মানটি বৈধ হলেই"
+msgstr "স্পিন বুটাম কখন আপডেট কৰিব - সৰ্বদা নাকি কেবল মানটি বৈধ হলেই"
 
 #: gtk/gtkspinbutton.c:270
 msgid "Reads the current value, or sets a new value"
@@ -5601,9 +5601,8 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
 #: gtk/gtkstatusicon.c:421
-#, fuzzy
 msgid "The title of this tray icon"
-msgstr "সৰ্বমোট"
+msgstr "এই ট্ৰে আইকণৰ শিৰোনাম"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6220,7 +6219,7 @@ msgstr "Whether the icon-size property has been set"
 
 #: gtk/gtktoolbar.c:566
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "টুলবাৰৰ আকৃতি বৃদ্ধি পেলে জিনিষটি অতিৰিক্ত স্থান দখল কৰবে নে নাই"
+msgstr "টুলবাৰৰ আকৃতি বৃদ্ধি পেলে জিনিষটি অতিৰিক্ত স্থান দখল কৰিব নে নাই"
 
 #: gtk/gtktoolbar.c:574
 msgid "Whether the item should be the same size as other homogeneous items"
@@ -6344,7 +6343,7 @@ msgstr "TreeModelSort মডেল"
 
 #: gtk/gtktreemodelsort.c:275
 msgid "The model for the TreeModelSort to sort"
-msgstr "TreeModelSort তৰ যি মডেলকে ক্ৰমানুসাৰ সাজানো হ'ব"
+msgstr "TreeModelSort তৰ যি মডেলকে ক্ৰমানুসাৰ সজোৱাৰ হ'ব"
 
 #: gtk/gtktreeview.c:561
 msgid "TreeView Model"
@@ -6655,28 +6654,27 @@ msgstr "হেডাৰৰ চাৰপাশে স্তম্ভকে পু
 
 #: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
-msgstr "ক্ৰমানুসাৰে সাজানো নিৰ্দেশক"
+msgstr "ক্ৰমানুসাৰে সজোৱাৰ নিৰ্দেশক"
 
 #: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
-msgstr "সাজানো নিৰ্দেশক প্ৰদৰ্শন কৰা হ'ব নে নাই"
+msgstr "সজোৱাৰ নিৰ্দেশক প্ৰদৰ্শন কৰা হ'ব নে নাই"
 
 #: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
-msgstr "সাজানোৰ ধাৰা"
+msgstr "সজোৱাৰ ধাৰা"
 
 #: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
-msgstr "সাজানো নিৰ্দেশকটি যি সাজানোৰ ধাৰা নিৰ্দেশক কৰবে"
+msgstr "সজোৱাৰ নিৰ্দেশক যি সজোৱাৰ ধাৰা নিৰ্দেশকে কৰিব"
 
 #: gtk/gtktreeviewcolumn.c:341
-#, fuzzy
 msgid "Sort column ID"
-msgstr "টেক্সট স্তম্ভ"
+msgstr "স্তম্ভৰ ID সজাওক"
 
 #: gtk/gtktreeviewcolumn.c:342
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr ""
+msgstr "সজোৱাৰ কাৰণে নিৰ্বাচন কৰাৰ পিছত এই স্তম্ভই সজোৱা লজিকেলভাবে সজোৱা স্তম্ভৰ "
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
@@ -6808,7 +6806,7 @@ msgstr "অবিকল্পিত গ্ৰহণ কৰি"
 
 #: gtk/gtkwidget.c:575
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "যদি TRUE হয় তেন্তে ফোকাসকৃত অবস্থায় উইজেটটি অবিকল্পিত অ্যাকশন গ্ৰহণ কৰবে"
+msgstr "যদি TRUE হয় তেন্তে ফোকাসকৃত অবস্থায় উইজেটটি অবিকল্পিত অ্যাকশন গ্ৰহণ কৰিব"
 
 #: gtk/gtkwidget.c:581
 msgid "Composite child"
@@ -6850,7 +6848,7 @@ msgstr "সবকিছু দেখাও অকেজো"
 
 #: gtk/gtkwidget.c:612
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr "gtk_widget_show_all() এই উইজেটকে প্ৰভাবিত কৰবে না নে নাই"
+msgstr "gtk_widget_show_all() এই উইজেটকে প্ৰভাবিত কৰিব না নে নাই"
 
 #: gtk/gtkwidget.c:635
 msgid "Whether this widget has a tooltip"
@@ -6866,14 +6864,12 @@ msgid "The widget's window if it is realized"
 msgstr "The widget's window if it is realized"
 
 #: gtk/gtkwidget.c:706
-#, fuzzy
 msgid "Double Buffered"
-msgstr "বাফাৰ"
+msgstr "ডাবুল বাফাৰ"
 
 #: gtk/gtkwidget.c:707
-#, fuzzy
 msgid "Whether or not the widget is double buffered"
-msgstr "হলো"
+msgstr "ৱিজেটক ডাবুল বাফাৰ কৰা হৈছে নে নাই"
 
 #: gtk/gtkwidget.c:2229
 msgid "Interior Focus"
@@ -7188,7 +7184,7 @@ msgstr "সজ্জিত"
 
 #: gtk/gtkwindow.c:709
 msgid "Whether the window should be decorated by the window manager"
-msgstr "উইন্ডো ব্যৱস্থাপক উইন্ডোটি সজ্জিত কৰবে নে নাই"
+msgstr "উইন্ডো ব্যৱস্থাপক উইন্ডোটি সজ্জিত কৰিব নে নাই"
 
 #: gtk/gtkwindow.c:723
 msgid "Deletable"
