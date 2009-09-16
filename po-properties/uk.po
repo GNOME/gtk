@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-16 16:02+0300\n"
+"POT-Creation-Date: 2009-09-16 16:29+0300\n"
 "PO-Revision-Date: 2009-07-09 15:39+0300\n"
 "Last-Translator: Wanderlust <wanderlust@ukr.net>\n"
 "Language-Team: ukrainian <Ukrainian <uk@li.org>>\n"
@@ -445,8 +445,7 @@ msgstr "Використовувати властивості вигляду д�
 
 #: ../gtk/gtkactivatable.c:328
 msgid "Whether to use the related actions appearance properties"
-msgstr "Чи використовувати властивості вигляду відповідних дій"
-"меню"
+msgstr "Чи використовувати властивості вигляду відповідних дійменю"
 
 #: ../gtk/gtkadjustment.c:93 ../gtk/gtkcellrendererprogress.c:128
 #: ../gtk/gtkscalebutton.c:206 ../gtk/gtkspinbutton.c:269
@@ -2801,7 +2800,8 @@ msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
 msgstr ""
-"Чи селектор файлів у режимі відкривання файлів матиме функцію створення нових тек."
+"Чи селектор файлів у режимі відкривання файлів матиме функцію створення "
+"нових тек."
 
 #: ../gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
@@ -4387,7 +4387,8 @@ msgstr "Вбудувати параметри сторінки"
 
 #: ../gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
-msgstr "TRUE, якщо розкривні списки параметрів сторінки вбудовані у GtkPrintDialog"
+msgstr ""
+"TRUE, якщо розкривні списки параметрів сторінки вбудовані у GtkPrintDialog"
 
 #: ../gtk/gtkprintoperation.c:1291
 msgid "Number of Pages To Print"
@@ -6786,7 +6787,9 @@ msgstr "Ідентифікатор сортування стовпчика"
 
 #: ../gtk/gtktreeviewcolumn.c:342
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr "Ідентифікатор сортування стовпчика, за яким сортується цей стовпчик, коли він виділений для сортування"
+msgstr ""
+"Ідентифікатор сортування стовпчика, за яким сортується цей стовпчик, коли "
+"він виділений для сортування"
 
 #: ../gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
@@ -7080,8 +7083,8 @@ msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
-"Чи ширина елементів розділення може налаштовуватись, та вони показуються "
-"у вигляді прямокутника замість лінії"
+"Чи ширина елементів розділення може налаштовуватись, та вони показуються у "
+"вигляді прямокутника замість лінії"
 
 #: ../gtk/gtkwidget.c:2340
 msgid "Separator Width"
