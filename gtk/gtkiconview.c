@@ -160,8 +160,6 @@ struct _GtkIconViewPrivate
 
   gint tooltip_column;
 
-  guint draw_focus : 1;
-
   /* Drag-and-drop. */
   GdkModifierType start_button_mask;
   gint pressed_button;
@@ -186,7 +184,9 @@ struct _GtkIconViewPrivate
   guint empty_view_drop :1;
 
   guint ctrl_pressed : 1;
-  guint shift_pressed : 1;  
+  guint shift_pressed : 1;
+
+  guint draw_focus : 1;
 };
 
 /* Signals */
