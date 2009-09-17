@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master.or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-09-12 01:21+0000\n"
-"PO-Revision-Date: 2009-09-17 19:03+0530\n"
+"PO-Revision-Date: 2009-09-17 22:14+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -3436,6 +3439,8 @@ msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
+"ଯେତେବେଳେ ତାଲିକାଟି ଗୋଟିଏ ଉପତାଲିକା ହୋଇଥାଏ, ସେତେବେଳେ ଏତିକି ସଂଖ୍ୟକ ପିକସେଲକୁ "
+"ଭୂଲମ୍ବ ଆକାରରେ ଅଫସେଟ କରି ରଖନ୍ତୁ"
 
 #: ../gtk/gtkmenu.c:641
 msgid "Horizontal Offset"
@@ -3446,6 +3451,8 @@ msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
+"ଯେତେବେଳେ ତାଲିକାଟି ଗୋଟିଏ ଉପତାଲିକା ହୋଇଥାଏ, ସେତେବେଳେ ଏତିକି ସଂଖ୍ୟକ ପିକସେଲକୁ "
+"ଭୂସମାନ୍ତରାଳ ଆକାରରେ ଅଫସେଟ କରି ରଖନ୍ତୁ"
 
 #: ../gtk/gtkmenu.c:650
 msgid "Double Arrows"
@@ -3567,7 +3574,7 @@ msgstr "ଡାହାଣ ୟୁକ୍ତିୟୁକ୍ତ"
 
 #: ../gtk/gtkmenuitem.c:258
 msgid "Sets whether the menu item appears justified at the right side of a menu bar"
-msgstr ""
+msgstr "ଦୃଶ୍ୟମାନ ହେଉଥିବା ତାଲିକା ବସ୍ତୁ ତାଲିକା ପଟିର ଡାହାଣ ପାଖରେ ରଖିବା ଯୁକ୍ତିଯୁକ୍ତ ହେଉଛି କି ନାହିଁ ତାହା ସେଟ କରନ୍ତୁ"
 
 #: ../gtk/gtkmenuitem.c:272
 msgid "Submenu"
@@ -3587,7 +3594,7 @@ msgstr "ନିମ୍ନସ୍ତର ନାମପଟି ପାଇଁ ପାଠ୍
 
 #: ../gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
-msgstr ""
+msgstr "ତୀର ଦ୍ୱାରା ବ୍ୟବହୃତ ସ୍ଥାନର ପରିମାଣ, ତାଲିକା ବସ୍ତୁଗୁଡ଼ିକର ଅକ୍ଷରରୂପ ଆକାର ସହିତ ସମ୍ପୃକ୍ତ"
 
 #: ../gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
@@ -3603,7 +3610,7 @@ msgstr "କେନ୍ଦିଭୁତକିରଣ"
 
 #: ../gtk/gtkmenushell.c:375
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr ""
+msgstr "ତାଲିକା କିବୋର୍ଡ ଲକ୍ଷ୍ୟକୁ ଧାରଣ କରିଥାଏ କି ନାହିଁ ତାହା ନିର୍ଦ୍ଧାରଣ କରିବା ପାଇଁ ଗୋଟିଏ ବୁଲିଆନ"
 
 #: ../gtk/gtkmenutoolbutton.c:245 ../gtk/gtkoptionmenu.c:161
 msgid "Menu"
@@ -3619,7 +3626,7 @@ msgstr "ପ୍ରତିଛବି/ସୂଚକ ଧାର"
 
 #: ../gtk/gtkmessagedialog.c:99
 msgid "Width of border around the label and image in the message dialog"
-msgstr ""
+msgstr "ନାମପଟି ଚାରିପଟେ ସୀମାରେଖାର ଓସାର ଏବଂ ସନ୍ଦେଶ ସଂଳାପରେ ପ୍ରତିଛବି"
 
 #: ../gtk/gtkmessagedialog.c:114
 msgid "Use separator"
@@ -3627,7 +3634,7 @@ msgstr "ବିଭାଜକ ବ୍ଯବହାର କରନ୍ତୁ"
 
 #: ../gtk/gtkmessagedialog.c:115
 msgid "Whether to put a separator between the message dialog's text and the buttons"
-msgstr ""
+msgstr "ସନ୍ଦେଶ ସଂଳାପ ପାଠ୍ୟ ଏବଂ ବଟନଗୁଡ଼ିକ ମଧ୍ଯରେ ବିଭାଜକ ରଖିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
@@ -3786,6 +3793,8 @@ msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
+"ଯଦି TRUE, ଡାହାଣ ମାଉସ ବଟନକୁ ଟିପ୍ପଣୀ ବହିରେ ଦବାଇବା ଫଳରେ ଗୋଟିଏ ତାଲିକା ପପଅପ ହୋଇଥାଏ "
+"ଯାହାକୁ ଆପଣ କୌଣସି ପୃଷ୍ଠାକୁ ଯିବା ପାଇଁ ବ୍ୟବହାର କରିପାରିବେ"
 
 #: ../gtk/gtknotebook.c:650
 msgid "Whether tabs should have homogeneous sizes"
@@ -4135,6 +4144,8 @@ msgid ""
 "TRUE if the print job will continue to emit status-changed signals after the "
 "print data has been sent to the printer or print server."
 msgstr ""
+"TRUE ଯଦି ମୁଦ୍ରଣ କାର୍ଯ୍ୟ ସ୍ଥିତି-ପରିବର୍ତ୍ତନ ସଙ୍କେତକୁ ମୁଦ୍ରଣ ତଥ୍ୟ ମୁଦ୍ରଣୀ ଅଥବା ମୁଦ୍ରଣୀ ସର୍ଭର "
+"ପାଖକୁ ପଠାସରିବା ପରେ ତ୍ୟାଗ କରିଥାଏ।"
 
 #: ../gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
@@ -4185,12 +4196,16 @@ msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
 msgstr ""
+"TRUE ଯଦି ସେହି ପ୍ରସଙ୍ଗର ମୂଳ ସ୍ଥାନ ପୃଷ୍ଠା କୋଣରେ ଥିବା ଉଚିତ ଏବଂ "
+"ପ୍ରତିଛବି କ୍ଷେତ୍ରର କୋଣରେ ଥିବା ଉଚିତ ନୁହଁ"
 
 #: ../gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
 msgstr ""
+"TRUE ଯଦି ମୁଦ୍ରଣ କାର୍ଯ୍ୟ ସ୍ଥିତି-ପରିବର୍ତ୍ତନ ସଙ୍କେତକୁ ମୁଦ୍ରଣ ତଥ୍ୟ ମୁଦ୍ରଣୀ ଅଥବା ମୁଦ୍ରଣୀ ସର୍ଭର "
+"ପାଖକୁ ପଠାସରିବା ପରେ ତ୍ୟାଗ କରିଥାଏ।"
 
 #: ../gtk/gtkprintoperation.c:1100
 msgid "Unit"
@@ -4468,7 +4483,7 @@ msgstr "ପ୍ରଚଳିତ ମୂଲ୍ୟ"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "ସାମ୍ପ୍ରତିକ ସକ୍ରିୟ ସଦସ୍ୟର ଗୁଣଧର୍ମ ଯାହା ପାଇଁ ଏହି କାର୍ଯ୍ଯଟି ଥାଏ।"
 
 #: ../gtk/gtkradiobutton.c:83
 msgid "The radio button whose group this widget belongs to."
@@ -4520,7 +4535,7 @@ msgstr "ଉପର ଷ୍ଟେପର ସ୍ପର୍ଷକାତର"
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
-msgstr ""
+msgstr "ପଦାତିକ ପାଇଁ ଏହି ସ୍ପର୍ଷକାତର ନିତୀ ଯାହାକି ଉପର ପାର୍ଶ୍ୱକୁ ସଜାଡ଼ିଥାଏ"
 
 #: ../gtk/gtkrange.c:410
 msgid "Show Fill Level"
@@ -4603,6 +4618,8 @@ msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr ""
+"ଏହି ବିକଳ୍ପକୁ TRUE ସେଟ କରିବା ଦ୍ୱାରା, ସର୍ପକମାନଙ୍କୁ ସକ୍ରିୟ ଅଙ୍କାହୋଇଥାଏ "
+"ଏବଂ ଟାଣିବା ସମୟରେ ଛାୟାତିତ ହୋଇଥାଏ"
 
 #: ../gtk/gtkrange.c:524
 msgid "Trough Side Details"
@@ -4624,7 +4641,7 @@ msgstr "ପଦକ୍ଷେପ ତଳେ ନ୍ୟୁନତମ"
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
-msgstr ""
+msgstr "ସମ୍ପୂର୍ଣ୍ଣ ଲମ୍ବ ପରିସର ପାଇଁ ଅଙ୍କାହେବା ଉଚିତ କି ନୁହଁ ଅଥବା ପଦାତିକ ଏବଂ ଫାଙ୍କକୁ ବାଦଦେବା ଉଚିତ"
 
 #: ../gtk/gtkrange.c:555
 msgid "Arrow scaling"
@@ -5675,7 +5692,7 @@ msgstr "ଲକ୍ଷ୍ୟ ତାଲିକା ଲଗାନ୍ତୁ"
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
-msgstr ""
+msgstr "ଲକ୍ଷ୍ଯସ୍ଥଳଗୁଡ଼ିକର ତାଲିକା ଯାହାକୁ ଏହି ବଫର କ୍ଲିପବୋର୍ଡରେ ଲଗାଇବା ଏବଂ DND ଲକ୍ଷ୍ଯସ୍ଥଳ ପାଇଁ ସମର୍ଥନ କରିଥାଏ"
 
 #: ../gtk/gtktextmark.c:90
 msgid "Mark name"
@@ -5771,6 +5788,9 @@ msgid ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
+"ପୂର୍ବନିର୍ଦ୍ଧାରିତ ଅକ୍ଷରରୂପ ଆକାର ସହିତ ସମ୍ପୃକ୍ତ ମାପଦଣ୍ଡ ଆକାରରେ ଅକ୍ଷରରୂପ ଆକାର। ଏହା "
+"ସଠିକ ଭାବରେ ପ୍ରସଙ୍ଗ ପରିବର୍ତ୍ତନ ଇତ୍ୟାଦି ସହିତ ଖାପଖାଇଥାଏ। ତେଣୁ ଏହାକୁ ପରାମର୍ଶ ଦିଆହୋଇଥାଏ। "
+"Pango ପୂର୍ବରୁ କିଛି ମାପଦଣ୍ଡକୁ ବ୍ୟାଖ୍ୟା କରିଥାଏ ଯେପରିକି PANGO_SCALE_X_LARGE"
 
 #: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
@@ -5781,6 +5801,9 @@ msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
 msgstr ""
+"ଏହି ପାଠ୍ୟଟି ଯେଉଁ ଭାଷାରେ ଲିଖିତ, ISO ସଂକେତ ଭାବରେ। ପାଠ୍ୟକୁ ଚିତ୍ରଣ କରିବା ସମୟରେ Pango "
+"ଏହାକୁ ଗୋଟିଏ ସୂଚକ ବାବରେ ବ୍ୟବହାର କରିପାରିବ। ଯଦି ସେଟ କରାହୋଇନଥାଏ, ତେବେ ଗୋଟିଏ ସଠିକ "
+"ପୂର୍ବନିର୍ଦ୍ଧାରିତକୁ ବ୍ୟବହାର କରାହେବ।"
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -6189,6 +6212,8 @@ msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
+"ଯଦି ସେଟ କରାହୋଇଛି, ତେବେ ନାମପଟିରେ ଗୋଟିଏ ରେଖାଙ୍କନ ସୂଚାଇଥାଏ ଯେ ପରବର୍ତ୍ତୀ ଅକ୍ଷରକୁ "
+"ସ୍ମରଣ ତ୍ୱରକ କି ଭାବରେ ଅତିପ୍ରବାହ ତାଲିକାରେ ବ୍ୟବହାର କରିବା ଉଚିତ"
 
 #: ../gtk/gtktoolbutton.c:217
 msgid "Widget to use as the item label"
@@ -6231,6 +6256,8 @@ msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
+"ସାଧନପଟି ବସ୍ତୁଟି ଆବଶ୍ୟକୀୟ କି ନୁହଁ ତାହା ଗ୍ରହଣ କରାଯାଇଛି କି ନାହିଁ। ଯେତେବେଳେ TRUE, ସେତେବେଳେ "
+"ସାଧନପଟି ବଟନଗୁଡ଼ିକ GTK_TOOLBAR_BOTH_HORIZ ଧାରାରେ ପାଠ୍ୟ ଦର୍ଶାଇଥାଏ"
 
 #: ../gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
