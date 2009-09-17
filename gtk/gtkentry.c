@@ -1231,7 +1231,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                  GTK_PARAM_READABLE));
 
   /**
-   * GtkEntry::progress-border:
+   * GtkEntry:progress-border:
    *
    * The border around the progress bar in the entry.
    *
@@ -1245,7 +1245,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_PARAM_READABLE));
   
   /**
-   * GtkEntry::invisible-char:
+   * GtkEntry:invisible-char:
    *
    * The invisible character is used when masking entry contents (in
    * \"password mode\")"). When it is not explicitly set with the
@@ -1256,7 +1256,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * This style property allows the theme to prepend a character
    * to the list of candidates.
    *
-   * Since: 2.22
+   * Since: 2.18
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_unichar ("invisible-char",
