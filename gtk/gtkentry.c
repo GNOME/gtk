@@ -8114,6 +8114,8 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
  * #GtkWidget::drag-begin signal to set a different icon. Note that you 
  * have to use g_signal_connect_after() to ensure that your signal handler
  * gets executed after the default handler.
+ *
+ * Since: 2.16
  */
 void
 gtk_entry_set_icon_drag_source (GtkEntry             *entry,
@@ -8153,6 +8155,8 @@ gtk_entry_set_icon_drag_source (GtkEntry             *entry,
  *
  * Returns: index of the icon which is the source of the current
  *          DND operation, or -1.
+ *
+ * Since: 2.16
  */
 gint
 gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
