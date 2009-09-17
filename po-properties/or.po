@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master.or\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
 "POT-Creation-Date: 2009-09-12 01:21+0000\n"
-"PO-Revision-Date: 2009-09-16 16:15+0530\n"
+"PO-Revision-Date: 2009-09-17 19:03+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n!=1);\n\n"
+"\n"
+"\n"
 "\n"
 "\n"
 "\n"
@@ -2903,6 +2905,8 @@ msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
 msgstr ""
+"ନିୟନ୍ତ୍ରଣ ବାକ୍ସର ପାର୍ଶ୍ୱ ଯାହାକି ଡକିଙ୍ଗ ବିନ୍ଦୁରେ ନିୟନ୍ତ୍ରଣ ବାକ୍ସକୁ କୋଳାଇବା"
+"ପାଇଁ ଧାଡ଼ିବାନ୍ଧିଥାଏ"
 
 #: ../gtk/gtkhandlebox.c:201
 msgid "Snap edge set"
@@ -2913,6 +2917,8 @@ msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
+"snap_edge ରୁ ମୂଲ୍ୟକୁ ସଠିକ ଭାବରେ ବ୍ୟବହାର କରିବା ପାଇଁ ଅଥବା "
+"handle_positionରୁ କଢ଼ାଯାଇଥିବା ମୂଲ୍ୟ ପାଇଁ"
 
 #: ../gtk/gtkhandlebox.c:209
 msgid "Child Detached"
@@ -2923,6 +2929,8 @@ msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 msgstr ""
+"ଗୋଟିଏ ବୁଲିଆନ ମୂଲ୍ୟ ସୂଚାଇଥାଏ ଯେ କାଳେ ନିୟନ୍ତ୍ରଣ ବାକ୍ସର ନିମ୍ନସ୍ତର "
+"ସଂଲଗ୍ନ ଅଛି ଅଥବା ପୃଥକ ଅଛି।"
 
 #: ../gtk/gtkiconview.c:549
 msgid "Selection mode"
@@ -3153,7 +3161,7 @@ msgstr "Accel ସମୂହ"
 
 #: ../gtk/gtkimagemenuitem.c:185
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr ""
+msgstr "ଭଣ୍ଡାର ତ୍ୱରକ କିଗୁଡ଼ିକ ପାଇଁ ବ୍ୟବହାର କରିବାକୁ ଥିବା Accel ଶ୍ରେଣୀ"
 
 #: ../gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
@@ -3205,6 +3213,9 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that"
 msgstr ""
+"ପରସ୍ପର ସହିତ ସମ୍ପୃକ୍ତ ପାଠ୍ୟରେ ଧାଡ଼ିଗୁଡ଼ିକର ଏହି ପାର୍ଶ୍ୱସଜ୍ଜା। "
+"ଏହା ନିଜ ସ୍ଥାନରେ ନାମପଟିଗୁଡ଼ିକ ଉପରେ ପ୍ରଭାବ ପକାଇନଥାଏ। "
+"ତାହା ପାଇଁ GtkMisc::xalign କୁ ଦେଖନ୍ତୁ"
 
 #: ../gtk/gtklabel.c:534
 msgid "Pattern"
@@ -3214,7 +3225,7 @@ msgstr "ନମୁନା"
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
-msgstr ""
+msgstr " _ ବର୍ଣ୍ଣ ବିଶିଷ୍ଟ ବାକ୍ୟଖଣ୍ଡଗୁଡ଼ିକ ସୂଚାଇଥାଏ କେଉଁ ପାଠ୍ୟକୁ ରେଖାଙ୍କିତ କରିବା ଉଚିତ"
 
 #: ../gtk/gtklabel.c:542
 msgid "Line wrap"
@@ -3261,6 +3272,8 @@ msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
 msgstr ""
+"ବାକ୍ୟଖଣ୍ଡକୁ ଅଣ୍ଡାକୃତି କରିବା ପାଇଁ ପସନ୍ଦ ଯୋଗ୍ୟ ସ୍ଥାନ, ଯଦି ସେହି ନାମପଟିରେ ସମ୍ପୂର୍ଣ୍ଣ ବାକ୍ୟଖଣ୍ଡକୁ "
+"ଦର୍ଶାଇବା ପାଇଁ ଯଥେଷ୍ଟ ସ୍ଥାନ ନଥାଏ"
 
 #: ../gtk/gtklabel.c:669
 msgid "Single Line Mode"
@@ -3296,7 +3309,7 @@ msgstr "ପରିଦର୍ଶିତ ସଂଯୋଗଗୁଡ଼ିକୁ ଅନ�
 
 #: ../gtk/gtklabel.c:849
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr ""
+msgstr "ଗୋଟିଏ ବଛାଯୋଗ୍ୟ ନାମପଟିର ବିଷୟବସ୍ତୁଗୁଡ଼ିକୁ ବାଛିବା ଉଚିତ କି ନୁହଁ ଯେତେବେଳେ ଏହାକୁ ଲକ୍ଷ୍ଯ କରାଯାଇଥାଏ"
 
 #: ../gtk/gtklayout.c:616 ../gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
@@ -3344,7 +3357,7 @@ msgstr "ବର୍ତ୍ତମାନ ବଛାହୋଇଥିବା ତାଲି�
 
 #: ../gtk/gtkmenu.c:517
 msgid "The accel group holding accelerators for the menu"
-msgstr ""
+msgstr "ତାଲିକା ପାଇଁ ତ୍ୱରକଗୁଡ଼ିକୁ ଧାରଣ କରିଥିବା accel ଶ୍ରେଣୀ"
 
 #: ../gtk/gtkmenu.c:531 ../gtk/gtkmenuitem.c:290
 msgid "Accel Path"
@@ -3352,7 +3365,7 @@ msgstr "Accel ପଥ"
 
 #: ../gtk/gtkmenu.c:532
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr ""
+msgstr "ନିମ୍ନସ୍ତର ବସ୍ତୁଗୁଡ଼ିକ ପାଇଁ ସୁରୁଖୁରୁରେ accel ପଥ ନିର୍ମାଣ କରିବା ପାଇଁ ବ୍ୟବହୃତ ଗୋଟିଏ accel ପଥ"
 
 #: ../gtk/gtkmenu.c:548
 msgid "Attach Widget"
@@ -3367,6 +3380,8 @@ msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
+"ୱିଣ୍ଡୋ ପରିଚାଳକଙ୍କ ଦ୍ୱାରା ଦର୍ଶାଯାଉଥିବା ଗୋଟିଏ ଶୀର୍ଷକ ପଟି ଯେତେବେଳେ "
+"ଏହି ତାଲିକାଟି ନଷ୍ଟ ହୋଇଥାଏ"
 
 #: ../gtk/gtkmenu.c:571
 msgid "Tearoff State"
@@ -3382,7 +3397,7 @@ msgstr "ମନିଟର"
 
 #: ../gtk/gtkmenu.c:587
 msgid "The monitor the menu will be popped up on"
-msgstr ""
+msgstr "ପପଅପ ହୋଇଥିବା ତାଲିକା ପାଇଁ ପ୍ରଦର୍ଶିକା"
 
 #: ../gtk/gtkmenu.c:593
 msgid "Vertical Padding"
@@ -3401,6 +3416,8 @@ msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
 msgstr ""
+"ଗୋଟିଏ ବୁଲିଆନ ଯିଏକି ସୂଚାଇଥାଏ ଯେ ତାଲିକା ଅଦଳ ବଦଳ ଏବଂ ଚିତ୍ର ସଂକେତ ପାଇଁ ସ୍ଥାନ ସଂରକ୍ଷଣ "
+"କରିବା ଉଚିତ କି ନୁହଁ"
 
 #: ../gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
@@ -3480,7 +3497,7 @@ msgstr "ନିମ୍ନ ସ୍ତରର ତଳେ ସଂଲଗ୍ନ କରି�
 
 #: ../gtk/gtkmenu.c:712
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
-msgstr ""
+msgstr "ଟଣା ତୀରର ଆକାରକୁ ତଳକୁ ଆଣିବା ପାଇଁ ମନଇଚ୍ଛା ସ୍ଥିର ମୂଲ୍ୟ"
 
 #: ../gtk/gtkmenu.c:799
 msgid "Can change accelerators"
@@ -3488,7 +3505,7 @@ msgstr "ତ୍ୱରକଗୁଡ଼ିକୁ ପରିବର୍ତ୍ତନ କ�
 
 #: ../gtk/gtkmenu.c:800
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
+msgstr "ତାଲିକା ବସ୍ତୁ ଉପରେ କ୍ଲିକ କରିବା ଫଳରେ ତାଲିକା ତ୍ୱରକମାନଙ୍କୁ ପରିବର୍ତ୍ତନ କରିହେବ କି ନାହିଁ"
 
 #: ../gtk/gtkmenu.c:805
 msgid "Delay before submenus appear"
@@ -3496,7 +3513,7 @@ msgstr "ଉପତାଲିକା ଦୃଶ୍ୟମାନ ହେବା ପୂର
 
 #: ../gtk/gtkmenu.c:806
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
+msgstr "ଉପତାଲିକା ଦୃଶ୍ୟମାନ ହେବା ପୂର୍ବରୁ ସୂଚକ ତାଲିକା ବସ୍ତୁ ଉପରେ ରହିବା ପାଇଁ ନେଉଥିବା ସର୍ବନିମ୍ନ ସମୟ"
 
 #: ../gtk/gtkmenu.c:813
 msgid "Delay before hiding a submenu"
@@ -3506,7 +3523,7 @@ msgstr "ଗୋଟିଏ ଉପ ତାଲିକାକୁ ଲୁଚାଇବା �
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr ""
+msgstr "ସୂଚକ ଉପତାଲିକା ଦିଗରେ ଅଗ୍ରସର ହେଉଥିବା ସମୟରେ ଉପତାଲିକାକୁ ଲୁଚାଇବା ପାଇଁ ଆବଶ୍ୟକୀୟ ସମୟ"
 
 #: ../gtk/gtkmenubar.c:168
 msgid "Pack direction"
@@ -3534,7 +3551,7 @@ msgstr "ଆଭ୍ୟନ୍ତରୀଣ ପ୍ୟାଡ଼ିଙ୍ଗ"
 
 #: ../gtk/gtkmenubar.c:203
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
+msgstr "ତାଲିକା ପଟି ଛାୟା ଏବଂ ତାଲିକା ବସ୍ତୁଗୁଡ଼ିକ ମଧ୍ଯରେ ଥିବା ସୀମା ସ୍ଥାନ"
 
 #: ../gtk/gtkmenubar.c:210
 msgid "Delay before drop down menus appear"
