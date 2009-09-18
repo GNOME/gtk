@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-04 23:29-0400\n"
-"PO-Revision-Date: 2009-03-07 21:14+0200\n"
+"PO-Revision-Date: 2009-09-18 22:33+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -17,14 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf-simple-anim.c:165
-#, fuzzy
 msgid "Loop"
-msgstr "Logo"
+msgstr "Buclă"
 
 #: gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
-#, fuzzy
 msgid "Whether the animation should loop when it reaches the end"
-msgstr "Specifică dacă selecția ar trebui să urmărească cursorul"
+msgstr "Specifică dacă animația trebuie redată repetat"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -126,9 +124,8 @@ msgid "The resolution for fonts on the screen"
 msgstr "Rezoluția fonturilor pentru ecran"
 
 #: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
-#, fuzzy
 msgid "Cursor"
-msgstr "Clipire cursor"
+msgstr "Cursor"
 
 #: gtk/gtkaboutdialog.c:239
 msgid "Program name"
@@ -426,24 +423,22 @@ msgid "Whether the action group is visible."
 msgstr "Specifică dacă grupul de acțiuni este vizibil."
 
 #: gtk/gtkactivatable.c:304
-#, fuzzy
 msgid "Related Action"
-msgstr "Acțiune"
+msgstr "Acțiune înrudită"
 
 #: gtk/gtkactivatable.c:305
 msgid "The action this activatable will activate and receive updates from"
-msgstr ""
+msgstr "Acțiune pe care acest element activabil o va activa și pentru care "
+"va primi actualizări"
 
 #: gtk/gtkactivatable.c:327
 msgid "Use Action Appearance"
-msgstr ""
+msgstr "Utilizează ilustrarea acțiunii"
 
 #: gtk/gtkactivatable.c:328
-#, fuzzy
 msgid "Whether to use the related actions appearance properties"
-msgstr ""
-"Specifică dacă se utilizează textul etichetei pentru a crea un element "
-"standard de meniu"
+msgstr "Specifică dacă se utilizează proprietățile ilustrărilor pentru "
+"acțiunile înrudite"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
 #: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
@@ -2172,13 +2167,12 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lățimea marginii în jurul ariei cu butoane de la baza dialogului"
 
 #: gtk/gtkentry.c:628
-#, fuzzy
 msgid "Text Buffer"
-msgstr "Buffer"
+msgstr "Buffer de text"
 
 #: gtk/gtkentry.c:629
 msgid "Text buffer object which actually stores entry text"
-msgstr ""
+msgstr "Obiect de tip buffer ce stochează text introdus"
 
 #: gtk/gtkentry.c:636 gtk/gtklabel.c:591
 msgid "Cursor Position"
@@ -2544,14 +2538,12 @@ msgid "How long to show the last input character in hidden entries"
 msgstr "Cât timp e afișat ultimul caracter introdus în intrări ascunse"
 
 #: gtk/gtkentrybuffer.c:354
-#, fuzzy
 msgid "The contents of the buffer"
-msgstr "Conținutul intrării"
+msgstr "Conținutul din buffer"
 
 #: gtk/gtkentrybuffer.c:369
-#, fuzzy
 msgid "Length of the text currently in the buffer"
-msgstr "Lungimea textului în intrarea curentă"
+msgstr "Lungimea textului aflat curent în buffer"
 
 #: gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2786,18 +2778,16 @@ msgstr ""
 "dialog de confirmare a suprascrierii."
 
 #: gtk/gtkfilechooser.c:283
-#, fuzzy
 msgid "Allow folders creation"
-msgstr "Arată operațiunile cu fișiere"
+msgstr "Permite crearea de dosare"
 
 #: gtk/gtkfilechooser.c:284
-#, fuzzy
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
 msgstr ""
-"Specifică dacă un selector de fișiere în modul de salvare va prezenta un "
-"dialog de confirmare a suprascrierii."
+"Specifică dacă un selector de fișiere va permite utilizatorului crearea de "
+"noi dosare în alt mod decât în cel de deschidere."
 
 #: gtk/gtkfilechooserbutton.c:376
 msgid "Dialog"
@@ -3104,13 +3094,12 @@ msgid "The column in the model containing the tooltip texts for the items"
 msgstr "O coloană a modelului ce conține textele indiciilor pentru elemente"
 
 #: gtk/gtkiconview.c:772
-#, fuzzy
 msgid "Item Padding"
-msgstr "Umplere dedesubt"
+msgstr "Umplere element"
 
 #: gtk/gtkiconview.c:773
 msgid "Padding around icon view items"
-msgstr ""
+msgstr "Umplere în jurul elementelor vizualizării de tip iconiță"
 
 #: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
@@ -3253,19 +3242,16 @@ msgid "The type of message"
 msgstr "Tipul mesajului"
 
 #: gtk/gtkinfobar.c:440
-#, fuzzy
 msgid "Width of border around the content area"
-msgstr "Lățimea marginii în jurul ariei principale a dialogului"
+msgstr "Lățimea marginii în jurul ariei conținutului"
 
 #: gtk/gtkinfobar.c:457
-#, fuzzy
 msgid "Spacing between elements of the area"
-msgstr "Spațiere între elementele din aria principală a dialogului"
+msgstr "Spațiere între elementele ariei"
 
 #: gtk/gtkinfobar.c:489
-#, fuzzy
 msgid "Width of border around the action area"
-msgstr "Lățimea marginii în jurul ariei principale a dialogului"
+msgstr "Lățimea marginii în jurul ariei acțiunii"
 
 #: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
@@ -3375,14 +3361,12 @@ msgid "The desired maximum width of the label, in characters"
 msgstr "Lățimea maximă dorită pentru etichetă, în caractere"
 
 #: gtk/gtklabel.c:727
-#, fuzzy
 msgid "Track visited links"
-msgstr "Culoarea linkurilor vizitate"
+msgstr "Diferențiază linkurile vizitate"
 
 #: gtk/gtklabel.c:728
-#, fuzzy
 msgid "Whether visited links should be tracked"
-msgstr "Specifică dacă elementele confidențiale ar trebui să fie afișate"
+msgstr "Specifică dacă linkurile vizitate ar trebui să fie diferențiate"
 
 #: gtk/gtklabel.c:849
 msgid "Whether to select the contents of a selectable label when it is focused"
@@ -3489,14 +3473,15 @@ msgstr "Spațiu în plus de adăugat deasupra și dedesubtul meniului"
 
 #: gtk/gtkmenu.c:616
 msgid "Reserve Toggle Size"
-msgstr ""
+msgstr "Rezervă spațiu pentru comutatoare"
 
 #: gtk/gtkmenu.c:617
-#, fuzzy
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
-msgstr "Valoare booleană ce indică dacă un meniu este desprins"
+msgstr ""
+"Valoare booleană ce indică dacă în meniu se rezervă spațiu pentru "
+"comutatoare și iconițe"
 
 #: gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
@@ -4369,41 +4354,37 @@ msgid "Label for the tab containing custom widgets."
 msgstr "Etichetă pentru tabul ce conține widgeturi personalizate."
 
 #: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
-#, fuzzy
 msgid "Support Selection"
-msgstr "Selecție de culoare"
+msgstr "Implementează selecție"
 
 #: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
+"TRUE dacă operațiunea de tipărire implementează tipărirea unei selecții."
 
 #: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
-#, fuzzy
 msgid "Has Selection"
 msgstr "Are selecție"
 
 #: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
-msgstr ""
+msgstr "TRUE dacă există o selecție."
 
 #: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
-#, fuzzy
 msgid "Embed Page Setup"
-msgstr "Opțiuni pagină"
+msgstr "Opțiuni înglobate de pagină"
 
 #: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
-msgstr ""
+msgstr "TRUE dacă listele de opțiuni sunt înglobate în GtkPrintDialog"
 
 #: gtk/gtkprintoperation.c:1291
-#, fuzzy
 msgid "Number of Pages To Print"
-msgstr "Număr de pagini"
+msgstr "Numărul paginilor de tipărit"
 
 #: gtk/gtkprintoperation.c:1292
-#, fuzzy
 msgid "The number of pages that will be printed."
-msgstr "Numărul de pagini în document."
+msgstr "Numărul paginilor ce vor fi tipărite."
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -4419,25 +4400,24 @@ msgstr "GtkPrinter selectat."
 
 #: gtk/gtkprintunixdialog.c:336
 msgid "Manual Capabilites"
-msgstr ""
+msgstr "Facilități manuale"
 
 #: gtk/gtkprintunixdialog.c:337
 msgid "Capabilities the application can handle"
-msgstr ""
+msgstr "Facilități implementate în aplicație"
 
 #: gtk/gtkprintunixdialog.c:346
-#, fuzzy
 msgid "Whether the dialog supports selection"
-msgstr "Specifică dacă eticheta utilizează fontul selectat"
+msgstr "Specifică dacă dialogul implementează selecția"
 
 #: gtk/gtkprintunixdialog.c:354
-#, fuzzy
 msgid "Whether the application has a selection"
-msgstr "Specifică dacă acțiunea este vizibilă"
+msgstr "Specifică dacă aplicația are o selecție"
 
 #: gtk/gtkprintunixdialog.c:362
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr ""
+msgstr "TRUE dacă listele cu opțiunile de pagină sunt înglobate în "
+"GtkPrintUnixDialog"
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -5704,9 +5684,8 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "Conținutul indiciului pentru această iconiță de stare"
 
 #: gtk/gtkstatusicon.c:421
-#, fuzzy
 msgid "The title of this tray icon"
-msgstr "Mărimea iconiței"
+msgstr "Titlul aceste iconițe de stare"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -6811,13 +6790,13 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "Direcție de sortare sugerată de indicatorul de sortare"
 
 #: gtk/gtktreeviewcolumn.c:341
-#, fuzzy
 msgid "Sort column ID"
-msgstr "Coloană text"
+msgstr "ID coloană de sortare"
 
 #: gtk/gtktreeviewcolumn.c:342
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr ""
+msgstr "ID-ul coloanei de sortare logică utilizat la sortare când coloana "
+"e selectată pentru sortare"
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
@@ -7015,14 +6994,12 @@ msgid "The widget's window if it is realized"
 msgstr "Fereastra widgetului dacă acesta e creat"
 
 #: gtk/gtkwidget.c:706
-#, fuzzy
 msgid "Double Buffered"
-msgstr "Buffer"
+msgstr "În buffer dublu"
 
 #: gtk/gtkwidget.c:707
-#, fuzzy
 msgid "Whether or not the widget is double buffered"
-msgstr "Specifică dacă elementul este înglobat"
+msgstr "Specifică dacă widgetul este într-un buffer dublu"
 
 #: gtk/gtkwidget.c:2229
 msgid "Interior Focus"
