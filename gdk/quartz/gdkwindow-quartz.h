@@ -59,6 +59,8 @@ struct _GdkWindowImplQuartz
 
   /* Sorted by z-order */
   GList *sorted_children;
+
+  GdkRegion *needs_display_region;
 };
  
 struct _GdkWindowImplQuartzClass 
