@@ -6733,10 +6733,39 @@ popup_position_func (GtkMenu   *menu,
 }
 
 static void
+minimize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_iconify (window);
+}
+
+static void
+maximize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  gtk_button_clicked (GTK_BUTTON (priv->max_button));
+}
+
+static void
+close_window_clicked (GtkMenuItem *menuitem,
+                      gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  close_button_clicked (window, NULL);
+}
+
+static void
 gtk_window_do_popup (GtkWindow      *window,
                      GdkEventButton *event)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GdkWindowState state = gdk_window_get_state (GTK_WIDGET (window)->window);
   GtkWidget *menuitem;
 
   if (priv->popup_menu)
@@ -6747,8 +6776,29 @@ gtk_window_do_popup (GtkWindow      *window,
                              GTK_WIDGET (window),
                              popup_menu_detach);
 
+  menuitem = gtk_menu_item_new_with_label ("Minimize");
+  gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (minimize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (state & GDK_WINDOW_STATE_MAXIMIZED ? "Unmaximize" : "Maximize");
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (maximize_window_clicked), window);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
   menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLOSE, NULL);
   gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (close_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   if (event)
