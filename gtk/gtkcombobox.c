@@ -3220,7 +3220,8 @@ gtk_combo_box_update_sensitivity (GtkComboBox *combo_box)
   gtk_widget_set_sensitive (combo_box->priv->button, sensitive);
 
   /* In list-mode, we also need to update sensitivity of the event box */
-  if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
+  if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view)
+      && combo_box->priv->cell_view)
     gtk_widget_set_sensitive (combo_box->priv->box, sensitive);
 }
 
