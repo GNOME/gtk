@@ -34,17 +34,16 @@ G_BEGIN_DECLS
 #define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
 #define GDK_NO_BG ((GdkPixmap *)2L)
 
-#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
-#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
+#ifndef GDK_COMPILATION
+#define GDK_WINDOW_TYPE(d) (gdk_window_get_window_type (GDK_WINDOW (d)))
+#define GDK_WINDOW_DESTROYED(d) (gdk_window_is_destroyed (GDK_WINDOW (d)))
+#endif
 
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
 void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
-
-gboolean _gdk_window_event_parent_of (GdkWindow *parent,
-                                      GdkWindow *child);
 
 /* Tests whether a pair of x,y may cause overflows when converted to Pango
  * units (multiplied by PANGO_SCALE).  We don't allow the entire range, leave

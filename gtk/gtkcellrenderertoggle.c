@@ -349,7 +349,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   else
     shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
-  if (!cell->sensitive)
+  if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
     {
       state = GTK_STATE_INSENSITIVE;
     }

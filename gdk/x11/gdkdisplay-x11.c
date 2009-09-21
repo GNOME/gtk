@@ -399,29 +399,30 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	}
     }
 
-  /* FIXME: if window is NULL, xwindow should still have something meaningful here? */
-  if (xwindow != None &&
-      screen_x11 && screen_x11->wmspec_check_window != None &&
-      xwindow == screen_x11->wmspec_check_window)
+  if (xevent->type == DestroyNotify)
     {
-      if (xevent->type == DestroyNotify)
+      int i, n;
+
+      n = gdk_display_get_n_screens (display);
+      for (i = 0; i < n; i++)
         {
-          screen_x11->wmspec_check_window = None;
-          g_free (screen_x11->window_manager_name);
-          screen_x11->window_manager_name = g_strdup ("unknown");
+          screen = gdk_display_get_screen (display, i);
+          screen_x11 = GDK_SCREEN_X11 (screen);
 
-          /* careful, reentrancy */
-          _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+          if (screen_x11->wmspec_check_window == xwindow)
+            {
+              screen_x11->wmspec_check_window = None;
+              screen_x11->last_wmspec_check_time = 0;
+              g_free (screen_x11->window_manager_name);
+              screen_x11->window_manager_name = g_strdup ("unknown");
+
+              /* careful, reentrancy */
+              _gdk_x11_screen_window_manager_changed (screen);
+
+              return_val = FALSE;
+              goto done;
+            }
         }
-
-      /* Eat events on this window unless someone had wrapped
-       * it as a foreign window
-       */
-      if (window == NULL)
-	{
-	  return_val = FALSE;
-	  goto done;
-	}
     }
 
   /* We do a "manual" conversion of the XEvent to a
@@ -491,7 +492,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	expose_rect.height = xevent->xgraphicsexpose.height;
 
         _gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
-
         return_val = FALSE;
       }
       break;
@@ -1393,8 +1393,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    gdk_display_request_selection_notification (display, 
-						GDK_SCREEN_X11 (display_x11->screens[i])->cm_selection_atom);
+    _gdk_x11_screen_setup (display_x11->screens[i]);
 
   g_signal_emit_by_name (gdk_display_manager_get(),
 			 "display_opened", display);
@@ -1683,8 +1682,8 @@ void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
-  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
+
+  XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
 }
 
 /**

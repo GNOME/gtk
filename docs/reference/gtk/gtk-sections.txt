@@ -3074,6 +3074,8 @@ gtk_range_set_lower_stepper_sensitivity
 gtk_range_get_lower_stepper_sensitivity
 gtk_range_set_upper_stepper_sensitivity
 gtk_range_get_upper_stepper_sensitivity
+gtk_range_get_flippable
+gtk_range_set_flippable
 <SUBSECTION Standard>
 GTK_RANGE
 GTK_IS_RANGE
@@ -5595,6 +5597,11 @@ gtk_widget_set_visible
 gtk_widget_has_default
 gtk_widget_has_focus
 gtk_widget_has_grab
+gtk_widget_is_drawable
+gtk_widget_is_toplevel
+gtk_widget_set_window
+gtk_widget_set_receives_default
+gtk_widget_get_receives_default
 
 <SUBSECTION>
 gtk_requisition_copy

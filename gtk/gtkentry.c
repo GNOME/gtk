@@ -2656,9 +2656,6 @@ construct_icon_info (GtkWidget            *widget,
   if (GTK_WIDGET_REALIZED (widget))
     realize_icon_info (widget, icon_pos);
 
-  if (GTK_WIDGET_MAPPED (widget))
-    gdk_window_show_unraised (icon_info->window);
-
   return icon_info;
 }
 
@@ -7536,6 +7533,9 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-pixbuf");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7600,6 +7600,9 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-stock");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7667,6 +7670,9 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-name");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -7731,6 +7737,9 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-gicon");
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
+
+      if (GTK_WIDGET_MAPPED (entry))
+          gdk_window_show_unraised (icon_info->window);
     }
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
@@ -9380,6 +9389,9 @@ keypress_completion_out:
            event->keyval == GDK_KP_Enter ||
 	   event->keyval == GDK_Return)
     {
+      GtkTreeIter iter;
+      GtkTreeModel *model = NULL;
+      GtkTreeSelection *sel;
       gboolean retval = TRUE;
 
       _gtk_entry_reset_im_context (GTK_ENTRY (widget));
@@ -9387,9 +9399,6 @@ keypress_completion_out:
 
       if (completion->priv->current_selected < matches)
         {
-          GtkTreeIter iter;
-          GtkTreeModel *model = NULL;
-          GtkTreeSelection *sel;
           gboolean entry_set;
 
           sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
@@ -9421,15 +9430,18 @@ keypress_completion_out:
         }
       else if (completion->priv->current_selected - matches >= 0)
         {
-          GtkTreePath *path;
+          sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view));
+          if (gtk_tree_selection_get_selected (sel, &model, &iter))
+            {
+              GtkTreePath *path;
 
-          _gtk_entry_reset_im_context (GTK_ENTRY (widget));
-
-          path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
-
-          g_signal_emit_by_name (completion, "action-activated",
-                                 gtk_tree_path_get_indices (path)[0]);
-          gtk_tree_path_free (path);
+              path = gtk_tree_path_new_from_indices (completion->priv->current_selected - matches, -1);
+              g_signal_emit_by_name (completion, "action-activated",
+                                     gtk_tree_path_get_indices (path)[0]);
+              gtk_tree_path_free (path);
+            }
+          else
+            retval = FALSE;
         }
 
       g_free (completion->priv->completion_prefix);

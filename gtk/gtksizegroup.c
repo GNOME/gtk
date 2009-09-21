@@ -223,6 +223,10 @@ queue_resize_on_widget (GtkWidget *widget,
 	      if (widget == parent)
 		real_queue_resize (parent);
 	    }
+	  else if (tmp_list->data == widget)
+            {
+              g_warning ("A container and its child are part of this SizeGroup");
+            }
 	  else
 	    queue_resize_on_widget (tmp_list->data, FALSE);
 
@@ -249,6 +253,10 @@ queue_resize_on_widget (GtkWidget *widget,
 	      if (widget == parent)
 		real_queue_resize (parent);
 	    }
+	  else if (tmp_list->data == widget)
+            {
+              g_warning ("A container and its child are part of this SizeGroup");
+            }
 	  else
 	    queue_resize_on_widget (tmp_list->data, FALSE);
 

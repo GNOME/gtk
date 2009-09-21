@@ -349,6 +349,7 @@ static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 						  GdkEventButton    *event);
 
+static void cancel_pending_scroll                (GtkTextView   *text_view);
 static void gtk_text_view_queue_scroll           (GtkTextView   *text_view,
                                                   GtkTextMark   *mark,
                                                   gdouble        within_margin,
@@ -1412,16 +1413,21 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
       g_signal_handlers_disconnect_by_func (text_view->buffer,
                                             gtk_text_view_paste_done_handler,
                                             text_view);
-      g_object_unref (text_view->buffer);
-      text_view->dnd_mark = NULL;
-      text_view->first_para_mark = NULL;
 
       if (GTK_WIDGET_REALIZED (text_view))
 	{
 	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
 	  gtk_text_buffer_remove_selection_clipboard (text_view->buffer, clipboard);
-	}
+        }
+
+      if (text_view->layout)
+        gtk_text_layout_set_buffer (text_view->layout, NULL);
+
+      g_object_unref (text_view->buffer);
+      text_view->dnd_mark = NULL;
+      text_view->first_para_mark = NULL;
+      cancel_pending_scroll (text_view);
     }
 
   text_view->buffer = buffer;
@@ -2154,6 +2160,11 @@ gtk_text_view_scroll_to_mark (GtkTextView *text_view,
   g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
   g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
 
+  /* We need to verify that the buffer contains the mark, otherwise this
+   * can lead to data structure corruption later on.
+   */
+  g_return_if_fail (get_buffer (text_view) == gtk_text_mark_get_buffer (mark));
+
   gtk_text_view_queue_scroll (text_view, mark,
                               within_margin,
                               use_align,
@@ -2182,6 +2193,11 @@ gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+
+  /* We need to verify that the buffer contains the mark, otherwise this
+   * can lead to data structure corruption later on.
+   */
+  g_return_if_fail (get_buffer (text_view) == gtk_text_mark_get_buffer (mark));
 
   gtk_text_view_scroll_to_mark (text_view, mark, 0.0, FALSE, 0.0, 0.0);
 }
@@ -7196,6 +7212,11 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
    */
   gtk_text_view_update_layout_width (text_view);
   
+  /* We also update the IM spot location here, since the IM context
+   * might do something that leads to validation.
+   */
+  gtk_text_view_update_im_spot_location (text_view);
+
   /* note that validation of onscreen could invoke this function
    * recursively, by scrolling to maintain first_para, or in response
    * to updating the layout width, however there is no problem with
@@ -7230,6 +7251,9 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
       text_view->first_validate_idle = 0;
     }
 
+  /* Finally we update the IM cursor location again, to ensure any
+   * changes made by the validation are pushed through.
+   */
   gtk_text_view_update_im_spot_location (text_view);
   
   DV(g_print(">End scroll offset changed handler ("G_STRLOC")\n"));

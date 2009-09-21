@@ -1396,6 +1396,8 @@ _gdk_gc_update_context (GdkGC          *gc,
 
   priv = GDK_GC_GET_PRIVATE (gc);
 
+  _gdk_gc_remove_drawable_clip (gc);
+
   fill = priv->fill;
   if (override_stipple && fill != GDK_OPAQUE_STIPPLED)
     fill = GDK_STIPPLED;
@@ -1486,6 +1488,10 @@ _gdk_gc_update_context (GdkGC          *gc,
     return;
 
   cairo_reset_clip (cr);
+  /* The reset above resets the window clip rect, so we want to re-set that */
+  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
+
   if (priv->clip_region)
     {
       cairo_save (cr);
@@ -1501,9 +1507,6 @@ _gdk_gc_update_context (GdkGC          *gc,
       cairo_clip (cr);
     }
 
-  /* The reset above resets the window clip rect, so we want to re-set that */
-  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
 }
 
 

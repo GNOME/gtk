@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2008-08-19 10:51+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -129,7 +129,7 @@ msgstr "Kualiteti i gërmave"
 msgid "The resolution for fonts on the screen"
 msgstr "Kualiteti për gërmat në ekran"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "Pulsimi i kursorit"
@@ -1190,35 +1190,35 @@ msgstr "Rregullimi i sfondit të kutisë"
 msgid "Whether this tag affects the cell background color"
 msgstr "Nëse ky tag ndikon apo jo tek ngjyrat e sfondit të kutive"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "Pulsanti përshpejtues"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "Keyval e përshpejtuesit"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "Ndryshuesit e përshpejtimit"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "Maska e ndryshuesit të përshpejtuesit"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "Keycode i përshpejtuesit"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "Keycode hardware i përshpejtuesit"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "Menyra e përshpejtimit"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "Lloji i përshpejtuesve"
 
@@ -1451,11 +1451,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Ngjyra e përparme e shprehur si GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "E ndryshueshme"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "Nëse teksti mund të ndryshohet nga përdoruesi"
 
@@ -2327,7 +2327,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Çfarë lloj hije duhet vizatuar rreth elementit kur është caktuar has-frame"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Modaliteti mbishkrim"
 
@@ -2552,12 +2552,12 @@ msgstr "Lista me emrat e ikonave"
 msgid "Secondary icon tooltip markup"
 msgstr "Teksti dytësor"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 #, fuzzy
 msgid "IM module"
 msgstr "Moduli IM i paracaktuar"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Kush modul IM duhet përdorur në menyrë të paracaktuar"
@@ -3363,7 +3363,7 @@ msgstr "Teksti i etiketës"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "NJë listë vetish stili për t'u zbatuar tek teksti i etiketës"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "Orientimi"
 
@@ -5729,11 +5729,11 @@ msgstr "Aktivizo propozimet"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Nëse duhen shfaqur propozimet në widget"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Modaliteti"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5741,11 +5741,11 @@ msgstr ""
 "Drejtimet në të cilat madhësia e grupit ndikon madhësitë e kërkuara nga "
 "widget-ët që e përbëjnë"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Shpërfill të padukshmit"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
@@ -6168,7 +6168,7 @@ msgstr ""
 "për gërmat. Kjo veti përshtatet me ndryshime temash etj, ndaj këshillohet. "
 "Pango përcakton paraprakisht disa shkallë si fjala vjen PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "Drejtimi majtas, djathtas, apo qendër"
 
@@ -6185,7 +6185,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kufiri i majtë"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "Gjerësia e kufirit të majtë në pixels"
 
@@ -6193,15 +6193,15 @@ msgstr "Gjerësia e kufirit të majtë në pixels"
 msgid "Right margin"
 msgstr "Kufiri i djathtë"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "Gjerësia e kufirit të djathtë në pixels"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "Ngushto"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Madhësia e kryeradhës së paragrafit, në piksel"
 
@@ -6217,7 +6217,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksel mbi rreshta"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels e hapësirës bosh mbi paragrafë"
 
@@ -6225,7 +6225,7 @@ msgstr "Pixels e hapësirës bosh mbi paragrafë"
 msgid "Pixels below lines"
 msgstr "Piksel nën rreshta"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels e hapësirës bosh nën paragrafë"
 
@@ -6233,22 +6233,22 @@ msgstr "Pixels e hapësirës bosh nën paragrafë"
 msgid "Pixels inside wrap"
 msgstr "Piksel brenda një në krye"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels e hapësirës bosh ndërmjet vijash të mbështjella në një paragraf"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Nëse duhet të mos mbështillen vija kurrë, në kufij fjalësh ose në kufij "
 "gërmash"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "Skedat"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "Skedat e personalizuara për këtë tekst"
 
@@ -6393,65 +6393,65 @@ msgstr "Rregullimi i sfondit të paragrafit"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Nëse ky tag ndikon tek ngjyra e sfondit të paragrafit"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "Piksel mbi rreshta"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "Piksel nën rreshta"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "Piksel brenda një në krye"
 
 # (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "Në krye automatikisht"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "Kufiri i majtë"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "Kufiri i djathtë"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "Kursor i dukshëm"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "Nëse kursori i futjes tregohet"
 
 # (pofilter) unchanged: please translate
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "Buffer"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "Buffer-i i shfaqur"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "Nëse teksti i shkruar mbishkruan përmbajtjen e ekzistuese"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "Pranon tab"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Kur Tab duhet të rezultojë në shtimin e një simboli tab"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "Ngjyra e nënvizimit të gabimeve"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "Ngjyra me të cilën duhen vizatuar nënvizimet që venë në dukje gabimet"
 

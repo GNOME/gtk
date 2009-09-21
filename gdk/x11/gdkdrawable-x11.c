@@ -956,6 +956,17 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
   return ((GdkDrawableImplX11 *)impl)->xid;
 }
 
+GdkDrawable *
+gdk_x11_window_get_drawable_impl (GdkWindow *window)
+{
+  return ((GdkWindowObject *)window)->impl;
+}
+GdkDrawable *
+gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap)
+{
+  return ((GdkPixmapObject *)pixmap)->impl;
+}
+
 /* Code for accelerated alpha compositing using the RENDER extension.
  * It's a bit long because there are lots of possibilities for
  * what's the fastest depending on the available picture formats,

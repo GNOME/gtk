@@ -379,6 +379,8 @@ static gboolean gtk_combo_box_menu_button_press    (GtkWidget        *widget,
                                                     gpointer          user_data);
 static void     gtk_combo_box_menu_item_activate   (GtkWidget        *item,
                                                     gpointer          user_data);
+
+static void     gtk_combo_box_update_sensitivity   (GtkComboBox      *combo_box);
 static void     gtk_combo_box_menu_row_inserted    (GtkTreeModel     *model,
                                                     GtkTreePath      *path,
                                                     GtkTreeIter      *iter,
@@ -2862,6 +2864,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   gtk_combo_box_sync_cells (combo_box, GTK_CELL_LAYOUT (priv->column));
 
   gtk_combo_box_update_title (combo_box);
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void
@@ -3215,6 +3218,11 @@ gtk_combo_box_update_sensitivity (GtkComboBox *combo_box)
     }
 
   gtk_widget_set_sensitive (combo_box->priv->button, sensitive);
+
+  /* In list-mode, we also need to update sensitivity of the event box */
+  if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view)
+      && combo_box->priv->cell_view)
+    gtk_widget_set_sensitive (combo_box->priv->box, sensitive);
 }
 
 static void
@@ -3755,6 +3763,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                     combo_box);
 
   gtk_widget_show (priv->tree_view);
+
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void

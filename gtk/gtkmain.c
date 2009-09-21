@@ -1559,7 +1559,15 @@ gtk_main_do_event (GdkEvent *event)
 	  gdk_window_end_paint (event->any.window);
 	}
       else
-	gtk_widget_send_expose (event_widget, event);
+	{
+	  /* The app may paint with a previously allocated cairo_t,
+	     which will draw directly to the window. We can't catch cairo
+	     drap operatoins to automatically flush the window, thus we
+	     need to explicitly flush any outstanding moves or double
+	     buffering */
+	  gdk_window_flush (event->any.window);
+	  gtk_widget_send_expose (event_widget, event);
+	}
       break;
 
     case GDK_PROPERTY_NOTIFY:

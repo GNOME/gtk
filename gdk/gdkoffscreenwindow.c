@@ -601,7 +601,6 @@ _gdk_offscreen_window_new (GdkWindow     *window,
 			   GdkWindowAttr *attributes,
 			   gint           attributes_mask)
 {
-  GdkWindowObject *parent_private;
   GdkWindowObject *private;
   GdkOffscreenWindow *offscreen;
 
@@ -615,7 +614,6 @@ _gdk_offscreen_window_new (GdkWindow     *window,
   if (private->parent != NULL && GDK_WINDOW_DESTROYED (private->parent))
     return;
 
-  parent_private = (GdkWindowObject*) private->parent;
   private->impl = g_object_new (GDK_TYPE_OFFSCREEN_WINDOW, NULL);
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
   offscreen->wrapper = window;
@@ -650,7 +648,6 @@ gdk_offscreen_window_reparent (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *new_parent_private = (GdkWindowObject *)new_parent;
   GdkWindowObject *old_parent;
-  GdkOffscreenWindow *offscreen;
   gboolean was_mapped;
 
   if (new_parent)
@@ -663,8 +660,6 @@ gdk_offscreen_window_reparent (GdkWindow *window,
       if (is_parent_of (window, new_parent))
 	return FALSE;
     }
-
-  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
   was_mapped = GDK_WINDOW_IS_MAPPED (window);
 
@@ -837,6 +832,8 @@ gdk_offscreen_window_get_pointer (GdkWindow       *window,
  * add a reference to it.
  *
  * Returns: The offscreen pixmap, or %NULL if not offscreen
+ *
+ * Since: 2.18
  */
 GdkPixmap *
 gdk_offscreen_window_get_pixmap (GdkWindow *window)
@@ -1119,9 +1116,6 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
 				   gint      *depth)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkOffscreenWindow *offscreen;
-
-  offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
 
@@ -1160,6 +1154,13 @@ gdk_offscreen_window_queue_translation (GdkWindow *window,
  * gdk_offscreen_window_set_embedder:
  * @window: a #GdkWindow
  * @embedder: the #GdkWindow that @window gets embedded in
+ *
+ * Sets @window to be embedded in @embedder.
+ *
+ * To fully embed an offscreen window, in addition to calling this
+ * function, it is also necessary to handle the #GdkWindow::pick-embedded-child
+ * signal on the @embedder and the #GdkWindow::to-embedder and
+ * #GdkWindow::from-embedder signals on @window.
  *
  * Since: 2.18
  */

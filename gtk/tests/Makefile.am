@@ -82,4 +82,12 @@ TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
 textbuffer_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS			+= filtermodel
+filtermodel_SOURCES		 = filtermodel.c
+filtermodel_LDADD		 = $(progs_ldadd)
+
+TEST_PROGS			+= expander
+expander_SOURCES		 = expander.c
+expander_LDADD		 = $(progs_ldadd)
+
 -include $(top_srcdir)/git.mk

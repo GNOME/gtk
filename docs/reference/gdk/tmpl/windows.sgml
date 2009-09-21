@@ -8,9 +8,17 @@ Onscreen display areas in the target window system
 <para>
 A #GdkWindow is a rectangular region on the screen. It's a low-level object,
 used to implement high-level objects such as #GtkWidget and #GtkWindow on the
-GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of 
-as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow. 
+GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of
+as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow.
 For example, each #GtkButton has a #GdkWindow associated with it.
+</para>
+<refsect2 id="COMPOSITED-WINDOWS"><title>Composited Windows</title>
+<para>
+Normally, the windowing system takes care of rendering the contents of a child
+window onto its parent window. This mechanism can be intercepted by calling
+gdk_window_set_composited() on the child window. For a
+<firstterm>composited</firstterm> window it is the responsibility of the
+application to render the window contents at the right spot.
 </para>
 <example id="composited-window-example"><title>Composited windows</title>
 <programlisting><![CDATA[
@@ -54,7 +62,7 @@ transparent_expose (GtkWidget      *widget,
  * this handler is called after the red has been drawn. If it was
  * called before then GTK would just blindly paint over our work.
  *
- * Note: if the child window has children, then you need a cairo 1.16
+ * Note: if the child window has children, then you need a cairo 1.6
  * feature to make this work correctly.
  */
 static gboolean
@@ -153,10 +161,10 @@ main (int argc, char **argv)
 ]]>
 </programlisting></example>
 <para>
-In the example <xref linkend="composited-window-example"/>, a button is 
-placed inside of an event box inside of a window. The event box is 
-set as composited and therefore is no longer automatically drawn to 
-the screen. 
+In the example <xref linkend="composited-window-example"/>, a button is
+placed inside of an event box inside of a window. The event box is
+set as composited and therefore is no longer automatically drawn to
+the screen.
 </para>
 <para>
 When the contents of the event box change, an expose event is
@@ -168,8 +176,31 @@ that it wishes.
 <para>
 In our case, we merge the contents with a 50% transparency. We
 also set the background colour of the window to red. The effect is
-that the background shows through the button. 
+that the background shows through the button.
 </para>
+</refsect2>
+<refsect2 id="OFFSCREEN-WINDOWS"><title>Offscreen Windows</title>
+<para>
+Offscreen windows are more general than composited windows, since they
+allow not only to modify the rendering of the child window onto its parent,
+but also to apply coordinate transformations.
+</para>
+<para>
+To integrate an offscreen window into a window hierarchy, one has to call
+gdk_window_set_embedder() and handle a number of signals. The
+gdk_offscreen_window_set_embedder() and handle a number of signals. The
+#GdkWindow::pick-embedded-child signal on the embedder window is used to
+select an offscreen child at given coordinates, and the #GdkWindow::to-embedder
+and #GdkWindow::from-embedder signals on the offscreen window are used to
+translate coordinates between the embedder and the offscreen window.
+</para>
+
+<para>
+For rendering an offscreen window onto its embedder, the contents of the
+offscreen window are available as a pixmap, via
+gdk_offscreen_window_get_pixmap().
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -237,7 +268,7 @@ Describes the kind of window.
 @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
 @GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
 @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
-@GDK_WINDOW_OFFSCREEN: offscreen window. Since 2.18
+@GDK_WINDOW_OFFSCREEN: offscreen window (see <xref linkend="OFFSCREEN-WINDOWS"/>). Since 2.18
 
 <!-- ##### ENUM GdkWindowClass ##### -->
 <para>
@@ -535,6 +566,15 @@ Deprecated equivalent of g_object_unref()
 @window: 
 
 
+<!-- ##### FUNCTION gdk_window_is_destroyed ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_is_visible ##### -->
 <para>
 
@@ -809,6 +849,16 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_restack ##### -->
+<para>
+
+</para>
+
+@window: 
+@sibling: 
+@above: 
 
 
 <!-- ##### FUNCTION gdk_window_focus ##### -->

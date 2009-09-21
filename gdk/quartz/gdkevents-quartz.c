@@ -498,7 +498,11 @@ find_window_for_ns_event (NSEvent *nsevent,
         grab = _gdk_display_get_last_pointer_grab (display);
 	if (grab)
 	  {
-	    if ((grab->event_mask & get_event_mask_from_ns_event (nsevent)) == 0)
+            /* Implicit grabs do not go through XGrabPointer and thus the
+             * event mask should not be checked.
+             */
+	    if (!grab->implicit
+                && (grab->event_mask & get_event_mask_from_ns_event (nsevent)) == 0)
               return NULL;
 
             if (grab->owner_events)

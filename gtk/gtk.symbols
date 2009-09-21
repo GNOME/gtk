@@ -3294,6 +3294,7 @@ gtk_radio_tool_button_set_group
 #if IN_FILE(__GTK_RANGE_C__)
 gtk_range_get_adjustment
 gtk_range_get_fill_level
+gtk_range_get_flippable
 gtk_range_get_inverted
 gtk_range_get_lower_stepper_sensitivity
 gtk_range_get_restrict_to_fill_level
@@ -3304,6 +3305,7 @@ gtk_range_get_upper_stepper_sensitivity
 gtk_range_get_value
 gtk_range_set_adjustment
 gtk_range_set_fill_level
+gtk_range_set_flippable
 gtk_range_set_increments
 gtk_range_set_inverted
 gtk_range_set_lower_stepper_sensitivity
@@ -4988,6 +4990,7 @@ gtk_widget_get_pango_context
 gtk_widget_get_parent
 gtk_widget_get_parent_window
 gtk_widget_get_pointer
+gtk_widget_get_receives_default
 gtk_widget_get_root_window
 gtk_widget_get_screen
 gtk_widget_get_sensitive
@@ -5016,6 +5019,8 @@ gtk_widget_intersect
 gtk_widget_is_ancestor
 gtk_widget_is_focus
 gtk_widget_is_sensitive
+gtk_widget_is_toplevel
+gtk_widget_is_drawable
 gtk_widget_keynav_failed
 gtk_widget_list_accel_closures
 gtk_widget_list_mnemonic_labels
@@ -5074,6 +5079,7 @@ gtk_widget_set_name
 gtk_widget_set_no_show_all
 gtk_widget_set_parent
 gtk_widget_set_parent_window
+gtk_widget_set_receives_default
 gtk_widget_set_redraw_on_allocate
 gtk_widget_set_scroll_adjustments
 gtk_widget_set_sensitive
@@ -5084,6 +5090,7 @@ gtk_widget_set_tooltip_markup
 gtk_widget_set_tooltip_text
 gtk_widget_set_tooltip_window
 gtk_widget_set_visible
+gtk_widget_set_window
 gtk_widget_shape_combine_mask
 gtk_widget_input_shape_combine_mask
 gtk_widget_show

@@ -955,16 +955,20 @@ _gdk_windowing_window_init (void)
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
 
-  /* Note: This needs to be reworked for multi-screen support. */
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
-  rect = [[NSScreen mainScreen] frame];
 
+  /* The size of the root window should be the same as the size of
+   * the screen it belongs to.
+   *
+   * FIXME: Of course this needs to be updated when you change the monitor
+   * configuration (add another one, remove one, etc).
+   */
   private->x = 0;
   private->y = 0;
   private->abs_x = 0;
   private->abs_y = 0;
-  private->width = rect.size.width;
-  private->height = rect.size.height;
+  private->width = gdk_screen_get_width (_gdk_screen);
+  private->height = gdk_screen_get_height (_gdk_screen);
 
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
@@ -1539,6 +1543,14 @@ gdk_window_quartz_lower (GdkWindow *window)
           impl->sorted_children = g_list_append (impl->sorted_children, window);
         }
     }
+}
+
+static void
+gdk_window_quartz_restack_toplevel (GdkWindow *window,
+				    GdkWindow *sibling,
+				    gboolean   above)
+{
+  /* FIXME: Implement this */
 }
 
 static void
@@ -2907,6 +2919,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_events = gdk_window_quartz_get_events;
   iface->raise = gdk_window_quartz_raise;
   iface->lower = gdk_window_quartz_lower;
+  iface->restack_toplevel = gdk_window_quartz_restack_toplevel;
   iface->move_resize = gdk_window_quartz_move_resize;
   iface->set_background = gdk_window_quartz_set_background;
   iface->set_back_pixmap = gdk_window_quartz_set_back_pixmap;

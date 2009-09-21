@@ -147,6 +147,10 @@ void               gtk_range_set_inverted                  (GtkRange      *range
                                                             gboolean       setting);
 gboolean           gtk_range_get_inverted                  (GtkRange      *range);
 
+void               gtk_range_set_flippable                 (GtkRange      *range,
+                                                            gboolean       flippable);
+gboolean           gtk_range_get_flippable                 (GtkRange      *range);
+
 void               gtk_range_set_lower_stepper_sensitivity (GtkRange      *range,
                                                             GtkSensitivityType sensitivity);
 GtkSensitivityType gtk_range_get_lower_stepper_sensitivity (GtkRange      *range);

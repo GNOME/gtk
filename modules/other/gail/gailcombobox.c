@@ -358,15 +358,14 @@ gail_combo_box_get_keybinding (AtkAction *action,
 {
   GailComboBox *combo_box;
   gchar *return_value = NULL;
-  combo_box = GAIL_COMBO_BOX (action);
   switch (i)
   {
      case 0:
       {
-	  GtkWidget *widget;							    
+	  GtkWidget *widget;
 	  GtkWidget *label;
 	  AtkRelationSet *set;
-	  AtkRelation *relation;							     
+	  AtkRelation *relation;
 	  GPtrArray *target;
 	  gpointer target_object;
 	  guint key_val;
@@ -375,7 +374,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  widget = GTK_ACCESSIBLE (combo_box)->widget;
 	  if (widget == NULL)
              return NULL;
-	  set = atk_object_ref_relation_set (ATK_OBJECT (action));							
+	  set = atk_object_ref_relation_set (ATK_OBJECT (action));
 	  if (!set)
              return NULL;
 	  label = NULL;
@@ -388,7 +387,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	     {
 	        label = GTK_ACCESSIBLE (target_object)->widget;
 	     }
-	  }  
+	  }
 	  g_object_unref (set);
 	  if (GTK_IS_LABEL (label))
 	  {
@@ -398,7 +397,8 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  }
 	   g_free (combo_box->press_keybinding);
 	   combo_box->press_keybinding = return_value;
-	   break;                                                                                    }                             
+	   break;
+       }
     default:
 	   break;
   }

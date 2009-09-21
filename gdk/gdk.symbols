@@ -22,7 +22,9 @@
 #if IN_HEADER(__GDK_EVENTS_H__)
 #if IN_FILE(__GDK_EVENTS_X11_C__)
 gdk_add_client_message_filter
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_event_get_graphics_expose
+#endif
 gdk_events_pending
 #endif
 #endif
@@ -302,6 +304,7 @@ gdk_fontset_load_for_display
 #if IN_HEADER(__GDK_CAIRO_H__)
 #if IN_FILE(__GDK_CAIRO_C__)
 gdk_cairo_create
+gdk_cairo_reset_clip
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
@@ -636,6 +639,7 @@ gdk_window_get_events
 gdk_window_set_events
 gdk_window_raise
 gdk_window_lower
+gdk_window_restack
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -669,6 +673,7 @@ gdk_window_clear_area_e
 gdk_window_constrain_size
 gdk_window_destroy
 gdk_window_end_paint
+gdk_window_flush
 gdk_window_foreign_new
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
@@ -685,6 +690,7 @@ gdk_window_get_toplevels
 gdk_window_get_update_area
 gdk_window_get_user_data
 gdk_window_get_window_type
+gdk_window_is_destroyed
 gdk_window_invalidate_maybe_recurse
 gdk_window_invalidate_rect
 gdk_window_invalidate_region
@@ -1202,6 +1208,8 @@ gdk_x11_display_get_startup_notification_id
 #if IN_FILE(__GDK_DRAWABLE_X11_C__)
 gdk_x11_drawable_get_xdisplay
 gdk_x11_drawable_get_xid
+gdk_x11_window_get_drawable_impl
+gdk_x11_pixmap_get_drawable_impl
 #endif
 
 #if IN_FILE(__GDK_FONT_X11_C__)

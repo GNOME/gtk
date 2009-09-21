@@ -361,16 +361,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
               if (sscanf (ppd_attr_res->value, "%dx%ddpi", &res_x, &res_y) == 2)
                 {
-                  if (res_x != 0 && res_y != 0)
+                  if (res_x > 0 && res_y > 0)
                     gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
                 }
               else if (sscanf (ppd_attr_res->value, "%ddpi", &res) == 1)
                 {
-                  if (res != 0)
+                  if (res > 0)
                     gtk_print_settings_set_resolution (settings, res);
                 }
-              else
-                gtk_print_settings_set_resolution (settings, 300);
             }
         }
 
@@ -390,17 +388,10 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
       ppd_attr_screen_freq = ppdFindAttr (ppd_file, "ScreenFreq", NULL);
 
-      if (ppd_attr_res_screen_freq != NULL)
+      if (ppd_attr_res_screen_freq != NULL && atof (ppd_attr_res_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_res_screen_freq->value));
-      else if (ppd_attr_screen_freq != NULL)
+      else if (ppd_attr_screen_freq != NULL && atof (ppd_attr_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
-      else
-        gtk_print_settings_set_printer_lpi (settings, 150.0);
-    }
-  else
-    {
-      gtk_print_settings_set_resolution (settings, 300);
-      gtk_print_settings_set_printer_lpi (settings, 150.0);
     }
 
   if (level == 2)
@@ -803,6 +794,39 @@ request_password (gpointer data)
   return FALSE;
 }
 
+static void
+cups_dispatch_add_poll (GSource *source)
+{
+  GtkPrintCupsDispatchWatch *dispatch;
+  GtkCupsPollState poll_state;
+
+  dispatch = (GtkPrintCupsDispatchWatch *) source;
+
+  poll_state = gtk_cups_request_get_poll_state (dispatch->request);
+
+  if (dispatch->request->http != NULL)
+    {
+      if (dispatch->data_poll == NULL)
+        {
+	  dispatch->data_poll = g_new0 (GPollFD, 1);
+
+	  if (poll_state == GTK_CUPS_HTTP_READ)
+	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
+	  else if (poll_state == GTK_CUPS_HTTP_WRITE)
+	    dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
+	  else
+	    dispatch->data_poll->events = 0;
+
+#ifdef HAVE_CUPS_API_1_2
+          dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
+#else
+          dispatch->data_poll->fd = dispatch->request->http->fd;
+#endif
+          g_source_add_poll (source, dispatch->data_poll);
+        }
+    }
+}
+
 static gboolean
 cups_dispatch_watch_check (GSource *source)
 {
@@ -817,29 +841,7 @@ cups_dispatch_watch_check (GSource *source)
 
   poll_state = gtk_cups_request_get_poll_state (dispatch->request);
 
-  if (dispatch->request->http != NULL)
-    {
-      if (dispatch->data_poll == NULL)
-	{
-	  dispatch->data_poll = g_new0 (GPollFD, 1);
-	  g_source_add_poll (source, dispatch->data_poll);
-	}
-      else
-	{
-	  if (poll_state == GTK_CUPS_HTTP_READ)
-	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
-	  else if (poll_state == GTK_CUPS_HTTP_WRITE)
-	    dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
-	  else
-	    dispatch->data_poll->events = 0;
-	}
-
-#ifdef HAVE_CUPS_API_1_2
-      dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
-#else
-      dispatch->data_poll->fd = dispatch->request->http->fd;
-#endif
-    }
+  cups_dispatch_add_poll (source);
     
   if (poll_state != GTK_CUPS_HTTP_IDLE && !dispatch->request->need_password)
     if (!(dispatch->data_poll->revents & dispatch->data_poll->events)) 
@@ -868,6 +870,7 @@ cups_dispatch_watch_prepare (GSource *source,
 			     gint    *timeout_)
 {
   GtkPrintCupsDispatchWatch *dispatch;
+  gboolean result;
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -876,7 +879,11 @@ cups_dispatch_watch_prepare (GSource *source,
 
   *timeout_ = -1;
   
-  return gtk_cups_request_read_write (dispatch->request);
+  result = gtk_cups_request_read_write (dispatch->request);
+
+  cups_dispatch_add_poll (source);
+
+  return result;
 }
 
 static gboolean
@@ -3765,12 +3772,12 @@ foreach_option_get_settings (GtkPrinterOption *option,
 
       if (sscanf (value, "%dx%ddpi", &res_x, &res_y) == 2)
         {
-          if (res_x != 0 && res_y != 0)
+          if (res_x > 0 && res_y > 0)
             gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
         }
       else if (sscanf (value, "%ddpi", &res) == 1)
         {
-          if (res != 0)
+          if (res > 0)
             gtk_print_settings_set_resolution (settings, res);
         }
 

@@ -370,6 +370,10 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * the default handler for the #GtkStatusIcon::query-tooltip signal
    * will take care of displaying the tooltip.
    *
+   * Note that some platforms have limitations on the length of tooltips
+   * that they allow on status icons, e.g. Windows only shows the first
+   * 64 characters.
+   *
    * Since: 2.16
    */
   g_object_class_install_property (gobject_class,

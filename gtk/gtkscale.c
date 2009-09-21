@@ -1423,7 +1423,7 @@ marks_start_element (GMarkupParseContext *context,
    ;
   else if (strcmp (element_name, "mark") == 0)
     {
-      gdouble value;
+      gdouble value = 0;
       gboolean has_value = FALSE;
       GtkPositionType position = GTK_POS_BOTTOM;
       const gchar *msg_context = NULL;

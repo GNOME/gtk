@@ -2,10 +2,10 @@
  *
  * There are several widgets involved in displaying menus. The
  * GtkMenuBar widget is a menu bar, which normally appears horizontally
- * at the top of an application, but can also be layed out vertically. 
- * The GtkMenu widget is the actual menu that pops up. Both GtkMenuBar 
- * and GtkMenu are subclasses of GtkMenuShell; a GtkMenuShell contains 
- * menu items (GtkMenuItem). Each menu item contains text and/or images 
+ * at the top of an application, but can also be layed out vertically.
+ * The GtkMenu widget is the actual menu that pops up. Both GtkMenuBar
+ * and GtkMenu are subclasses of GtkMenuShell; a GtkMenuShell contains
+ * menu items (GtkMenuItem). Each menu item contains text and/or images
  * and can be selected by the user.
  *
  * There are several kinds of menu item, including plain GtkMenuItem,
@@ -22,7 +22,6 @@
  * GtkUIManager provides a higher-level interface for creating menu bars
  * and menus; while you can construct menus manually, most people don't
  * do that. There's a separate demo for GtkUIManager.
- * 
  */
 
 #include <gtk/gtk.h>
@@ -118,37 +117,35 @@ change_orientation (GtkWidget *button,
     }
 }
 
+static GtkWidget *window = NULL;
+
 GtkWidget *
 do_menus (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
   GtkWidget *box;
   GtkWidget *box1;
   GtkWidget *box2;
   GtkWidget *button;
-  
+
   if (!window)
     {
       GtkWidget *menubar;
       GtkWidget *menu;
       GtkWidget *menuitem;
       GtkAccelGroup *accel_group;
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Menus");
       g_signal_connect (window, "destroy",
 			G_CALLBACK(gtk_widget_destroyed), &window);
-      g_signal_connect (window, "delete-event",
-			G_CALLBACK (gtk_true), NULL);
-      
+
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-      gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-      
-            
+
       box = gtk_hbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
       gtk_widget_show (box);
@@ -156,18 +153,18 @@ do_menus (GtkWidget *do_widget)
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (box), box1);
       gtk_widget_show (box1);
-      
+
       menubar = gtk_menu_bar_new ();
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
-      
+
       menu = create_menu (2, TRUE);
-      
+
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
-      
+
       menuitem = gtk_menu_item_new_with_label ("foo");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, TRUE));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
@@ -178,7 +175,7 @@ do_menus (GtkWidget *do_widget)
       gtk_menu_item_set_right_justified (GTK_MENU_ITEM (menuitem), TRUE);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
-      
+
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);

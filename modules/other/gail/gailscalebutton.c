@@ -187,12 +187,10 @@ static void
 gail_scale_button_get_current_value (AtkValue *obj,
                                      GValue   *value)
 {
-  GailScaleButton *scale_button;
   GtkScaleButton *gtk_scale_button;
 
   g_return_if_fail (GAIL_IS_SCALE_BUTTON (obj));
 
-  scale_button = GAIL_SCALE_BUTTON (obj);
   gtk_scale_button = GTK_SCALE_BUTTON (GTK_ACCESSIBLE (obj)->widget);
 
   g_value_set_double (g_value_init (value, G_TYPE_DOUBLE),

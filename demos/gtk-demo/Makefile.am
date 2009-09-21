@@ -28,6 +28,8 @@ demos =						\
 	links.c					\
 	list_store.c				\
 	menus.c					\
+	offscreen_window.c			\
+	offscreen_window2.c			\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\

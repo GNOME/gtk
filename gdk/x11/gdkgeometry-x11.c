@@ -60,26 +60,24 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkWindowImplX11 *impl;
   GdkWindowObject *obj;
-  
-  g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window)); 
 
-  impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
   obj = GDK_WINDOW_OBJECT (window);
 
   if (width > 65535 ||
       height > 65535)
     {
       g_warning ("Native children wider or taller than 65535 pixels are not supported");
-      
+
       if (width > 65535)
 	width = 65535;
       if (height > 65535)
 	height = 65535;
     }
-  
+
   obj->x = x;
   obj->y = y;
   obj->width = width;
@@ -89,7 +87,6 @@ _gdk_window_move_resize_child (GdkWindow *window,
      the window won't be visible anyway and thus it will be shaped
      to nothing */
 
-  
   _gdk_x11_window_tmp_unset_parent_bg (window);
   _gdk_x11_window_tmp_unset_bg (window, TRUE);
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
@@ -268,20 +265,18 @@ _gdk_window_process_expose (GdkWindow    *window,
 			    gulong        serial,
 			    GdkRectangle *area)
 {
-  GdkWindowImplX11 *impl;
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
-  impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
 
   if (display_x11->translate_queue)
     {
       GList *tmp_list = display_x11->translate_queue->head;
-      
+
       while (tmp_list)
 	{
 	  GdkWindowQueueItem *item = tmp_list->data;
           GList *next = tmp_list->next;
-	  
+
 	  /* an overflow-safe (serial < item->serial) */
 	  if (serial - item->serial > (gulong) G_MAXLONG)
 	    {
@@ -292,7 +287,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 		      if (item->u.translate.area)
 			{
 			  GdkRegion *intersection;
-			  
+
 			  intersection = gdk_region_copy (invalidate_region);
 			  gdk_region_intersect (intersection, item->u.translate.area);
 			  gdk_region_subtract (invalidate_region, intersection);
@@ -320,7 +315,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   if (!gdk_region_empty (invalidate_region))
     _gdk_window_invalidate_for_expose (window, invalidate_region);
-  
+
   gdk_region_destroy (invalidate_region);
 }
 

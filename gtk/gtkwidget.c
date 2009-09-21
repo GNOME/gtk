@@ -694,7 +694,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							GTK_PARAM_READABLE));
 
   /**
-   * GtkWidget::double-buffered
+   * GtkWidget:double-buffered
    *
    * Whether or not the widget is double buffered.
    *
@@ -2415,11 +2415,10 @@ gtk_widget_set_property (GObject         *object,
   switch (prop_id)
     {
       gboolean tmp;
-      guint32 saved_flags;
       gchar *tooltip_markup;
       const gchar *tooltip_text;
       GtkWindow *tooltip_window;
-      
+
     case PROP_NAME:
       gtk_widget_set_name (widget, g_value_get_string (value));
       break;
@@ -2433,10 +2432,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
       break;
     case PROP_VISIBLE:
-      if (g_value_get_boolean (value))
-	gtk_widget_show (widget);
-      else
-	gtk_widget_hide (widget);
+      gtk_widget_set_visible (widget, g_value_get_boolean (value));
       break;
     case PROP_SENSITIVE:
       gtk_widget_set_sensitive (widget, g_value_get_boolean (value));
@@ -2445,13 +2441,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_app_paintable (widget, g_value_get_boolean (value));
       break;
     case PROP_CAN_FOCUS:
-      saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
-      if (saved_flags != GTK_WIDGET_FLAGS (widget))
-	gtk_widget_queue_resize (widget);
+      gtk_widget_set_can_focus (widget, g_value_get_boolean (value));
       break;
     case PROP_HAS_FOCUS:
       if (g_value_get_boolean (value))
@@ -2462,23 +2452,14 @@ gtk_widget_set_property (GObject         *object,
 	gtk_widget_grab_focus (widget);
       break;
     case PROP_CAN_DEFAULT:
-      saved_flags = GTK_WIDGET_FLAGS (widget);
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
-      if (saved_flags != GTK_WIDGET_FLAGS (widget))
-	gtk_widget_queue_resize (widget);
+      gtk_widget_set_can_default (widget, g_value_get_boolean (value));
       break;
     case PROP_HAS_DEFAULT:
       if (g_value_get_boolean (value))
 	gtk_widget_grab_default (widget);
       break;
     case PROP_RECEIVES_DEFAULT:
-      if (g_value_get_boolean (value))
-	GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
-      else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
     case PROP_STYLE:
       gtk_widget_set_style (widget, g_value_get_object (value));
@@ -5472,6 +5453,60 @@ gtk_widget_grab_default (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_set_receives_default:
+ * @widget: a #GtkWidget
+ * @receives_default: whether or not @widget can be a default widget.
+ *
+ * Specifies whether @widget will be treated as the default widget
+ * within its toplevel when it has the focus, even if another widget
+ * is the default.
+ *
+ * See gtk_widget_grab_default() for details about the meaning of
+ * "default".
+ *
+ * Since: 2.18
+ **/
+void
+gtk_widget_set_receives_default (GtkWidget *widget,
+                                 gboolean   receives_default)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (receives_default != gtk_widget_get_receives_default (widget))
+    {
+      if (receives_default)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+
+      g_object_notify (G_OBJECT (widget), "receives-default");
+    }
+}
+
+/**
+ * gtk_widget_get_receives_default:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is alyways treated as default widget
+ * withing its toplevel when it has the focus, even if another widget
+ * is the default.
+ *
+ * See gtk_widget_set_receives_default().
+ *
+ * Return value: %TRUE if @widget acts as default widget when focussed,
+ *               %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_get_receives_default (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_RECEIVES_DEFAULT) != 0;
+}
+
+/**
  * gtk_widget_has_grab:
  * @widget: a #GtkWidget
  *
@@ -5699,6 +5734,46 @@ gtk_widget_get_has_window (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return !GTK_WIDGET_NO_WINDOW (widget);
+}
+
+/**
+ * gtk_widget_is_toplevel:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is a toplevel widget. Currently only
+ * #GtkWindow and #GtkInvisible are toplevel widgets. Toplevel
+ * widgets have no parent widget.
+ *
+ * Return value: %TRUE if @widget is a toplevel, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_is_toplevel (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_TOPLEVEL) != 0;
+}
+
+/**
+ * gtk_widget_is_drawable:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget can be drawn to. A widget can be drawn
+ * to if it is mapped and visible.
+ *
+ * Return value: %TRUE if @widget is drawable, %FALSE otherwise
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_widget_is_drawable (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return ((GTK_WIDGET_FLAGS (widget) & GTK_VISIBLE) != 0 &&
+          (GTK_WIDGET_FLAGS (widget) & GTK_MAPPED) != 0);
 }
 
 /**
@@ -10793,6 +10868,37 @@ gtk_widget_set_allocation (GtkWidget           *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
+}
+
+/**
+ * gtk_widget_set_window:
+ * @widget: a #GtkWidget
+ * @window: a #GdkWindow
+ *
+ * Sets a widget's window. This function should only be used in a
+ * widget's GtkWidget::realize() implementation. The %window passed is
+ * usually either new window created with gdk_window_new(), or the
+ * window of its parent widget as returned by
+ * gtk_widget_get_parent_window().
+ *
+ * Widgets must indicate whether they will create their own #GdkWindow
+ * by calling gtk_widget_set_has_window(). This is usually done in the
+ * widget's init() function.
+ *
+ * Since: 2.18
+ */
+void
+gtk_widget_set_window (GtkWidget *widget,
+                       GdkWindow *window)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
+
+  if (widget->window != window)
+    {
+      widget->window = window;
+      g_object_notify (G_OBJECT (widget), "window");
+    }
 }
 
 /**

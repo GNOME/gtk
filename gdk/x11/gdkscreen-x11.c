@@ -377,7 +377,7 @@ get_monitor (GdkScreen *screen,
  *
  * Gets the width in millimeters of the specified monitor, if available.
  *
- * Returns the width of the monitor, or -1 if not available
+ * Returns: the width of the monitor, or -1 if not available
  *
  * Since: 2.14
  */
@@ -989,8 +989,6 @@ _gdk_x11_screen_new (GdkDisplay *display,
   screen_x11->wmspec_check_window = None;
   /* we want this to be always non-null */
   screen_x11->window_manager_name = g_strdup ("unknown");
-  screen_x11->cm_selection_atom = make_cm_atom (screen_number);
-  screen_x11->is_composited = check_is_composited (display, screen_x11);
   
   init_multihead (screen);
   init_randr_support (screen);
@@ -999,6 +997,22 @@ _gdk_x11_screen_new (GdkDisplay *display,
   _gdk_windowing_window_init (screen);
   
   return screen;
+}
+
+/*
+ * It is important that we first request the selection
+ * notification, and then setup the initial state of
+ * is_composited to avoid a race condition here.
+ */
+void
+_gdk_x11_screen_setup (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  screen_x11->cm_selection_atom = make_cm_atom (screen_x11->screen_num);
+  gdk_display_request_selection_notification (screen_x11->display,
+					      screen_x11->cm_selection_atom);
+  screen_x11->is_composited = check_is_composited (screen_x11->display, screen_x11);
 }
 
 /**

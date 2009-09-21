@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-24 18:21-0400\n"
+"POT-Creation-Date: 2009-09-04 23:29-0400\n"
 "PO-Revision-Date: 2004-03-09 05:28+0100\n"
 "Last-Translator: Bojan Suzic <bojans@teol.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -132,7 +132,7 @@ msgstr "Писмо у тачкама"
 msgid "The resolution for fonts on the screen"
 msgstr "Како се опсег освјежава на екрану"
 
-#: gdk/gdkwindow.c:470 gdk/gdkwindow.c:471
+#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
 #, fuzzy
 msgid "Cursor"
 msgstr "Треперење курсора"
@@ -1203,40 +1203,40 @@ msgstr "Поставити боју позадине ћелије"
 msgid "Whether this tag affects the cell background color"
 msgstr "Да ли ове поставке утичу на боју позадине ћелије"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 #, fuzzy
 msgid "Accelerator key"
 msgstr "Елемент за пречицу"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 #, fuzzy
 msgid "The keyval of the accelerator"
 msgstr "Вриједност прилагођења"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 #, fuzzy
 msgid "Accelerator modifiers"
 msgstr "Елемент за пречицу"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr ""
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 #, fuzzy
 msgid "Accelerator keycode"
 msgstr "Елемент за пречицу"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr ""
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 #, fuzzy
 msgid "Accelerator Mode"
 msgstr "Елемент за пречицу"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 #, fuzzy
 msgid "The type of accelerators"
 msgstr "Врста обавјештења"
@@ -1476,11 +1476,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Боја исцртавања као GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Измјењив"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "Да ли корисник може мијењати текст"
 
@@ -2361,7 +2361,7 @@ msgstr "Да ли је дозвољен избор више датотека"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Начин преписивања"
 
@@ -2584,12 +2584,12 @@ msgstr "Име писма"
 msgid "Secondary icon tooltip markup"
 msgstr "Другоразредно"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 #, fuzzy
 msgid "IM module"
 msgstr "Уобичајена ширина"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Да ли треба користити палету"
@@ -3388,7 +3388,7 @@ msgstr "Текст ознаке"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Списак стилских особина које се примјењују на текст ознаке"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "Слагање редова"
 
@@ -5766,11 +5766,11 @@ msgstr "Облачић"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Да ли се језичци приказују или не"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Начин рада"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 #, fuzzy
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
@@ -5778,11 +5778,11 @@ msgid ""
 msgstr ""
 "Правци у којима „size group“ утиче на захтјеване величине садржаних елемената"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr ""
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
@@ -6201,7 +6201,7 @@ msgstr ""
 "Ово се исправно прилагођава измјени теме и слично, па се препоручује. Pango "
 "успоставља неке размјере као што је PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "Лијево, десно или средишње поравнање"
 
@@ -6219,7 +6219,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Лијева маргина"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "Ширина лијеве маргине у тачкама"
 
@@ -6227,15 +6227,15 @@ msgstr "Ширина лијеве маргине у тачкама"
 msgid "Right margin"
 msgstr "Десна маргина"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "Ширина десне маргине у тачкама"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "Увлачење"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Колико тачака треба користити за увлачење пасуса"
 
@@ -6250,7 +6250,7 @@ msgstr "Помјерај текста у односу на основну лин
 msgid "Pixels above lines"
 msgstr "Тачака изнад линија"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "Број тачака празног простора изнад пасуса"
 
@@ -6258,7 +6258,7 @@ msgstr "Број тачака празног простора изнад пас�
 msgid "Pixels below lines"
 msgstr "Тачака испод линија"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "Број тачака празног простора испод пасуса"
 
@@ -6266,20 +6266,20 @@ msgstr "Број тачака празног простора испод пас�
 msgid "Pixels inside wrap"
 msgstr "Тачака унутар пасуса"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Број тачака празног простора између преломљених редова у пасусу"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Да ли се прелом не врши никад, између рјечи, или између знакова"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "Табулатори"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "Постави табулаторе за овај текст"
 
@@ -6430,63 +6430,63 @@ msgstr "Поставити боју позадине ћелије"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Да ли ове поставке утичу на боју позадине"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "Тачака изнад линија"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "Тачака испод линија"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "Тачака између линија"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "Начин прелома"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "Лијева маргина"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "Десна маргина"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "Курсор се види"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "Да ли се приказује курсор за унос"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "Бафер"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "Бафер који се приказује"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "Да ли унијети текст иде преко постојећег садржаја"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "Прихвати табулатор"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Да ли ће Tab тастер унијети знак за табулацију"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "Боја подвлачења грешака"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "Боја којом се исцртавају подвлаке за истицање грешака"
 

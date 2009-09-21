@@ -640,6 +640,7 @@ gdk_window_at_pointer
 gdk_window_show
 gdk_window_show_unraised
 gdk_window_hide
+gdk_window_is_destroyed
 gdk_window_is_visible
 gdk_window_is_viewable
 gdk_window_get_state
@@ -661,6 +662,7 @@ gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
+gdk_window_flush
 gdk_window_ensure_native
 gdk_window_reparent
 gdk_window_clear
@@ -669,6 +671,7 @@ gdk_window_clear_area_e
 gdk_window_copy_area
 gdk_window_raise
 gdk_window_lower
+gdk_window_restack
 gdk_window_focus
 gdk_window_register_dnd
 gdk_window_begin_resize_drag
@@ -912,6 +915,7 @@ gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
 gdk_cairo_rectangle
 gdk_cairo_region
+gdk_cairo_reset_clip
 </SECTION>
 
 <SECTION>

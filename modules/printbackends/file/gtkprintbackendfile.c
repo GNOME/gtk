@@ -335,9 +335,6 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
         break;
     }
 
-  if (gtk_print_settings_get_printer_lpi (settings) == 0.0)
-    gtk_print_settings_set_printer_lpi (settings, 150.0);
-
   cairo_surface_set_fallback_resolution (surface,
                                          2.0 * gtk_print_settings_get_printer_lpi (settings),
                                          2.0 * gtk_print_settings_get_printer_lpi (settings));
@@ -445,13 +442,11 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 				     GDestroyNotify          dnotify)
 {
   GError *internal_error = NULL;
-  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
   gchar *uri;
   GFile *file = NULL;
 
-  printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   ps = g_new0 (_PrintStreamData, 1);

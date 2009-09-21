@@ -421,7 +421,6 @@ void
 _gdk_windowing_window_init (GdkScreen * screen)
 {
   GdkWindowObject *private;
-  GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
 
@@ -438,7 +437,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
 
-  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
   draw_impl->screen = screen;
@@ -457,6 +455,10 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->width = WidthOfScreen (screen_x11->xscreen);
   private->height = HeightOfScreen (screen_x11->xscreen);
   private->viewable = TRUE;
+
+  /* see init_randr_support() in gdkscreen-x11.c */
+  private->event_mask = GDK_STRUCTURE_MASK;
+
   _gdk_window_update_size (screen_x11->root_window);
   
   _gdk_xid_table_insert (screen_x11->display,
@@ -1609,11 +1611,9 @@ gdk_window_x11_reparent (GdkWindow *window,
 {
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
-  GdkWindowObject *old_parent_private;
   GdkWindowImplX11 *impl;
 
   window_private = (GdkWindowObject*) window;
-  old_parent_private = (GdkWindowObject*)window_private->parent;
   parent_private = (GdkWindowObject*) new_parent;
   impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
 
@@ -1725,6 +1725,21 @@ gdk_window_x11_restack_under (GdkWindow *window,
   XRestackWindows (GDK_WINDOW_XDISPLAY (window), windows, n_windows);
   
   g_free (windows);
+}
+
+static void
+gdk_window_x11_restack_toplevel (GdkWindow *window,
+				 GdkWindow *sibling,
+				 gboolean   above)
+{
+  XWindowChanges changes;
+
+  changes.sibling = GDK_WINDOW_XID (sibling);
+  changes.stack_mode = above ? Above : Below;
+  XReconfigureWMWindow (GDK_WINDOW_XDISPLAY (window),
+			GDK_WINDOW_XID (window),
+			GDK_WINDOW_SCREEN (window),
+			CWStackMode | CWSibling, &changes);
 }
 
 static void
@@ -3435,9 +3450,6 @@ do_shape_combine_region (GdkWindow       *window,
 	  : gdk_display_supports_input_shapes (GDK_WINDOW_DISPLAY (window)))
 	{
 	  if (shape == ShapeBounding)
-	    private->shaped = FALSE;
-	  
-	  if (shape == ShapeBounding)
 	    {
 	      _gdk_x11_window_tmp_unset_parent_bg (window);
 	      _gdk_x11_window_tmp_unset_bg (window, TRUE);
@@ -3463,9 +3475,6 @@ do_shape_combine_region (GdkWindow       *window,
     {
       gint n_rects = 0;
       XRectangle *xrects = NULL;
-
-      if (shape == ShapeBounding)
-	private->shaped = TRUE;
 
       _gdk_region_get_xrectangles (shape_region,
                                    0, 0,
@@ -5523,7 +5532,6 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 {
 #if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   GdkWindowObject *private = (GdkWindowObject *) window;
-  GdkDisplayX11 *x11_display;
   GdkWindowImplX11 *impl;
   GdkDisplay *display;
   Display *dpy;
@@ -5532,7 +5540,6 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
   display = gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (impl)->screen);
-  x11_display = GDK_DISPLAY_X11 (display);
   dpy = GDK_DISPLAY_XDISPLAY (display);
   xid = GDK_WINDOW_XWINDOW (private);
 
@@ -5578,6 +5585,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->raise = gdk_window_x11_raise;
   iface->lower = gdk_window_x11_lower;
   iface->restack_under = gdk_window_x11_restack_under;
+  iface->restack_toplevel = gdk_window_x11_restack_toplevel;
   iface->move_resize = gdk_window_x11_move_resize;
   iface->set_background = gdk_window_x11_set_background;
   iface->set_back_pixmap = gdk_window_x11_set_back_pixmap;
