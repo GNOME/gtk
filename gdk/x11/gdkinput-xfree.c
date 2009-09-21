@@ -256,17 +256,18 @@ _gdk_input_other_event (GdkEvent *event,
   if (event_type == GDK_NOTHING)
     return FALSE;
 
-  window = _gdk_window_get_input_window_for_event (event_window,
-						   event_type,
-						   x, y,
-						   xevent->xany.serial);
   /* If we're not getting any event window its likely because we're outside the
      window and there is no grab. We should still report according to the
      implicit grab though. */
   iw = ((GdkWindowObject *)event_window)->input_window;
-  if (window == NULL)
-    window = iw->button_down_window;
 
+  if (iw->button_down_window)
+    window = iw->button_down_window;
+  else
+    window = _gdk_window_get_input_window_for_event (event_window,
+                                                     event_type,
+                                                     x, y,
+                                                     xevent->xany.serial);
   priv = (GdkWindowObject *)window;
   if (window == NULL)
     return FALSE;
