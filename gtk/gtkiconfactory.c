@@ -1500,9 +1500,10 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 
   if (!tmp_pixbuf)
     {
-      g_warning ("Error loading theme icon '%s' for stock: %s", 
-                 icon_source->source.icon_name, error->message);
-      g_error_free (error);
+      g_warning ("Error loading theme icon '%s' for stock: %s",
+                 icon_source->source.icon_name, error ? error->message : "");
+      if (error)
+        g_error_free (error);
       return NULL;
     }
   
