@@ -272,6 +272,7 @@ _gdk_input_other_event (GdkEvent *event,
     return FALSE;
 
   if (gdkdev->info.mode == GDK_MODE_DISABLED ||
+      priv->extension_events == 0 ||
       !(gdkdev->info.has_cursor || (priv->extension_events & GDK_ALL_DEVICES_MASK)))
     return FALSE;
 
