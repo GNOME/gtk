@@ -870,6 +870,8 @@ icon_size_lookup_intern (GtkSettings *settings,
     {
       gboolean initial = FALSE;
 
+      settings_sizes = get_settings_sizes (settings, &initial);
+
       if (initial)
 	icon_sizes_init_for_settings (settings);
 
