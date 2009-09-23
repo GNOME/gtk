@@ -1,3 +1,71 @@
+Overview of Changes from GTK+ 2.17.11 to 2.17.12
+================================================
+
+* Add GtkTreeModelFilter testsuite and fix multiple bugs
+
+* Client-side windows:
+ - Fix issues around recursion and gdk_window_process_updates
+ - Fix issues with grabs and cursors
+ - Handle window hierarchy and geometry changes in expose handlers
+ - New function, gdk_window_flush, that may be needed in certain
+   situations
+ - Automatically flush windows when doing non-double-buffered exposes
+
+* Quartz backend:
+ - Fix various 'stuck UI' issues
+ - Fix the size of the root window
+
+* Bugs fixed:
+ 588455 run application broken when setting background color...
+ 346800 Rework sort/filter models to use indices to parents
+ 593678 select "Manage Custom Sizes" from print dialog hangs gedit
+ 594652 gtk printer dialog does not understand boolean printer options
+ 594668 Add new Xorg keysyms
+ 591583 Padre (a wxPerl+Gtk IDE) hangs when editing Perl code...
+ 594600 Windows only allows 64-character system-tray tooltips
+ 594679 Fix warning in testwindows.c
+ 594880 Drawing issues in ExoIconView
+ 593507 AbiWord's main drawing area not exposed properly
+ 594913 is_composited race ...
+ 594738 Windows often do not respond to events on dual-head
+ 503776 crash when trying to print to non-existent lpr printer
+ 595599 Don't focus unmapped radio buttons
+ 595790 Segfault in gtkiconfactory.c on NULL GError
+ 588649 extended input events sent to widgets that didn't...
+ 550939 GtkFileChooser listbox does not refresh selection
+
+* New deprecation:
+ gdk_event_get_graphics_exposes has been deprecated
+
+* Updated translations:
+ Afrikaans
+ Assamese
+ Bengali India
+ Brazilian Portuguese
+ British English
+ Catalan
+ Danish
+ Dutch
+ German
+ Greek
+ Gujarati
+ Hindi
+ Italian
+ Japanese
+ Lithuanian
+ Maithili
+ Malayalam
+ Marathi
+ Norwegian bokmål
+ Oriya
+ Polish
+ Romanian
+ Simplified Chinese
+ Slovenian
+ Traditional Chinese
+ Ukrainian
+
+
 Overview of Changes from GTK+ 2.17.10 to 2.17.11
 ================================================
 
