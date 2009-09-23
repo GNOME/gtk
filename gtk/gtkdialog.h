@@ -148,6 +148,8 @@ void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                         gboolean   setting);
 void gtk_dialog_set_default_response   (GtkDialog *dialog,
                                         gint       response_id);
+GtkWidget* gtk_dialog_get_widget_for_response (GtkDialog *dialog,
+                                               gint       response_id);
 gint gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 					 GtkWidget *widget);
 

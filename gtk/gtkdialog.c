@@ -1121,6 +1121,49 @@ _gtk_dialog_set_ignore_separator (GtkDialog *dialog,
 }
 
 /**
+ * gtk_dialog_get_widget_for_response:
+ * @dialog: a #GtkDialog
+ * @response_id: the response ID used by the @dialog widget
+ *
+ * Gets the widget button that uses the given response ID in the action area
+ * of a dialog.
+ *
+ * Returns: the @widget button that uses the given @response_id, or %NULL.
+ *
+ * Since: 2.20
+ */
+GtkWidget*
+gtk_dialog_get_widget_for_response (GtkDialog *dialog,
+				    gint       response_id)
+{
+  GList *children;
+  GList *tmp_list;
+
+  g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
+
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
+
+  tmp_list = children;
+  while (tmp_list != NULL)
+    {
+      GtkWidget *widget = tmp_list->data;
+      ResponseData *rd = get_response_data (widget, FALSE);
+
+      if (rd && rd->response_id == response_id)
+        {
+          g_list_free (children);
+          return widget;
+        }
+
+      tmp_list = g_list_next (tmp_list);
+    }
+
+  g_list_free (children);
+
+  return NULL;
+}
+
+/**
  * gtk_dialog_get_response_for_widget:
  * @dialog: a #GtkDialog
  * @widget: a widget in the action area of @dialog
