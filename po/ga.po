@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:28-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-08-19 06:36-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -1566,64 +1566,64 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Bainistigh Méideanna Saincheaptha"
 
-#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "orlach"
 
-#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:585
+#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Imill ón bPrintéir"
 
-#: gtk/gtkcustompaperunixdialog.c:751
+#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Méid Saincheaptha %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1058
+#: gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr "_Leithead:"
 
-#: gtk/gtkcustompaperunixdialog.c:1070
+#: gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
 msgstr "_Airde:"
 
-#: gtk/gtkcustompaperunixdialog.c:1082
+#: gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
 msgstr "Méid Pháipéir"
 
-#: gtk/gtkcustompaperunixdialog.c:1091
+#: gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
 msgstr "Ba_rr:"
 
-#: gtk/gtkcustompaperunixdialog.c:1103
+#: gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr "_Bun:"
 
-#: gtk/gtkcustompaperunixdialog.c:1115
+#: gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr "Ar _Chlé:"
 
-#: gtk/gtkcustompaperunixdialog.c:1127
+#: gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
 msgstr "Ar _Dheis:"
 
-#: gtk/gtkcustompaperunixdialog.c:1168
+#: gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr "Imill an Páipéar"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "_Modhanna Ionchurtha"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Ionsáigh Carachtar Rialú Unicode"
 
-#: gtk/gtkentry.c:9971
+#: gtk/gtkentry.c:9975
 msgid "Caps Lock is on"
 msgstr "Tá Caps Lock ann"
 
@@ -2153,7 +2153,7 @@ msgstr "Luach _gáma"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1404
+#: gtk/gtkiconfactory.c:1399
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Earráid agus deilbhín á luchtú: %s"
@@ -5104,32 +5104,32 @@ msgstr "%sx%s Saincheaptha"
 msgid "output.%s"
 msgstr "aschur.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:495
+#: modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Priontáil go Comhad"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "_Leathanaigh sa leathán:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:643
+#: modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Comhad"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:653
+#: modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "_Formáid aschurtha"
 

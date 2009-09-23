@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:29-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-09-18 22:33+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -123,7 +123,7 @@ msgstr "Rezoluție fonturi"
 msgid "The resolution for fonts on the screen"
 msgstr "Rezoluția fonturilor pentru ecran"
 
-#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
 msgid "Cursor"
 msgstr "Cursor"
 
@@ -428,8 +428,9 @@ msgstr "Acțiune înrudită"
 
 #: gtk/gtkactivatable.c:305
 msgid "The action this activatable will activate and receive updates from"
-msgstr "Acțiune pe care acest element activabil o va activa și pentru care "
-"va primi actualizări"
+msgstr ""
+"Acțiune pe care acest element activabil o va activa și pentru care va primi "
+"actualizări"
 
 #: gtk/gtkactivatable.c:327
 msgid "Use Action Appearance"
@@ -437,8 +438,9 @@ msgstr "Utilizează ilustrarea acțiunii"
 
 #: gtk/gtkactivatable.c:328
 msgid "Whether to use the related actions appearance properties"
-msgstr "Specifică dacă se utilizează proprietățile ilustrărilor pentru "
-"acțiunile înrudite"
+msgstr ""
+"Specifică dacă se utilizează proprietățile ilustrărilor pentru acțiunile "
+"înrudite"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
 #: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
@@ -850,7 +852,7 @@ msgstr ""
 "La activare, eticheta este utilizată pentru a alege un element standard în "
 "loc să fie afișată"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Focus la clic"
 
@@ -1571,7 +1573,7 @@ msgstr ""
 "Felul de a rupe un șir de caractere dacă nu există destul loc în celulă "
 "pentru a afișa întregul șir pe o singură linie"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "Lățime maximă"
 
@@ -1812,7 +1814,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Specifică dacă se va da culorii o valoare alpha"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Titlu"
@@ -1950,68 +1952,68 @@ msgid "Whether entered values must already be present in the list"
 msgstr ""
 "Specifică dacă valorile introduse trebuie să fie prezente deja în listă"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "Model pentru ComboBox"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Rupe pe lățime la aranjarea elementelor într-o grilă"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "Coloană cu înălțimea rândurilor"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "Coloană TreeModel ce conține valorile înălțimii rândurilor"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "Coloană cu lățimea coloanelor"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "Coloană TreeModel ce conține valorile lățimii coloanelor"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "Item activ"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "Elementul activ curent."
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Face posibilă desprinderea meniurilor"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Specifică dacă meniurile „dropdown” ar trebui să aibă „tearoff”"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "Are cadru"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Specifică dacă acest „combo box” desenează un cadru în jurul unui copil"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Specifică dacă acest „combo box” primește focus la un clic de maus"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Titlu desprindere"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -2019,46 +2021,46 @@ msgstr ""
 "Un titlu ce poate fi afișat de către administratorul de ferestre când acest "
 "„popup” este desprins"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 msgid "Popup shown"
 msgstr "„Popup” afișat"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 msgid "Whether the combo's dropdown is shown"
 msgstr ""
 "Specifică dacă ar trebui arătat meniul dropdown al elementului de tip combo"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr "Sensibilitatea butonului"
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Specifică dacă butonul dropdown este sensibil când modelul său e gol"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "Apare ca listă"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Dacă „combo box”-urile tip dropdown să arate ca liste și nu ca meniuri"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 msgid "Arrow Size"
 msgstr "Mărime săgeată"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Mărimea minimă pentru săgeata din „combo box”"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Tip umbră"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Tipul de umbră de desenat în jurul „combo box”-ului"
 
@@ -4416,8 +4418,8 @@ msgstr "Specifică dacă aplicația are o selecție"
 
 #: gtk/gtkprintunixdialog.c:362
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr "TRUE dacă listele cu opțiunile de pagină sunt înglobate în "
-"GtkPrintUnixDialog"
+msgstr ""
+"TRUE dacă listele cu opțiunile de pagină sunt înglobate în GtkPrintUnixDialog"
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -5667,23 +5669,23 @@ msgstr "Are indiciu"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Specifică dacă iconița de stare are indiciu"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 msgid "Tooltip Text"
 msgstr "Text indiciu"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 msgid "The contents of the tooltip for this widget"
 msgstr "Conținutul indiciului pentru acest widget"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr "Marcaj indiciu"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 msgid "The contents of the tooltip for this tray icon"
 msgstr "Conținutul indiciului pentru această iconiță de stare"
 
-#: gtk/gtkstatusicon.c:421
+#: gtk/gtkstatusicon.c:425
 msgid "The title of this tray icon"
 msgstr "Titlul aceste iconițe de stare"
 
@@ -6445,11 +6447,11 @@ msgstr ""
 "Specifică dacă elementul din bara cu unelte e considerat important. La "
 "activare, butoanele barei cu unelte au text în modul GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "Model TreeModelSort"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modelul de sortare TreeModelSort"
 
@@ -6795,8 +6797,9 @@ msgstr "ID coloană de sortare"
 
 #: gtk/gtktreeviewcolumn.c:342
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr "ID-ul coloanei de sortare logică utilizat la sortare când coloana "
-"e selectată pentru sortare"
+msgstr ""
+"ID-ul coloanei de sortare logică utilizat la sortare când coloana e "
+"selectată pentru sortare"
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"

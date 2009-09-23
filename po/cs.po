@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:28-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-08-29 20:20+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -1570,64 +1570,64 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Spravovat vlastní velikosti"
 
-#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "palec"
 
-#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:585
+#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Okraje z tiskárny..."
 
-#: gtk/gtkcustompaperunixdialog.c:751
+#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Vlastní velikost %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1058
+#: gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr "Šíř_ka:"
 
-#: gtk/gtkcustompaperunixdialog.c:1070
+#: gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
 msgstr "_Výška:"
 
-#: gtk/gtkcustompaperunixdialog.c:1082
+#: gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
 msgstr "Rozměry papíru"
 
-#: gtk/gtkcustompaperunixdialog.c:1091
+#: gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
 msgstr "_Horní:"
 
-#: gtk/gtkcustompaperunixdialog.c:1103
+#: gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr "_Dolní:"
 
-#: gtk/gtkcustompaperunixdialog.c:1115
+#: gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr "_Levý:"
 
-#: gtk/gtkcustompaperunixdialog.c:1127
+#: gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
 msgstr "P_ravý:"
 
-#: gtk/gtkcustompaperunixdialog.c:1168
+#: gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "Vloži_t řídící znak Unicode"
 
-#: gtk/gtkentry.c:9971
+#: gtk/gtkentry.c:9975
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
@@ -2155,7 +2155,7 @@ msgstr "Hodnota _gama"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1404
+#: gtk/gtkiconfactory.c:1399
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
@@ -5108,32 +5108,32 @@ msgstr "Vlastní %sx%s"
 msgid "output.%s"
 msgstr "výstup.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:495
+#: modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Tisknout do souboru"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "St_ran na list:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:643
+#: modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Soubor"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:653
+#: modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "_Výstupní formát"
 

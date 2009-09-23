@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:29-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2005-07-09 12:08+0200\n"
 "Last-Translator: Данило Шеган <danilo@gnome.org>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -134,7 +134,7 @@ msgstr "Писмо у тачкама"
 msgid "The resolution for fonts on the screen"
 msgstr "Како се опсег освежава на екрану"
 
-#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
 #, fuzzy
 msgid "Cursor"
 msgstr "Треперење курсора"
@@ -871,7 +871,7 @@ msgstr ""
 "Уколико је постављено, ознака се бира од већ припремљених ставки уместо "
 "приказивања"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Фокусирање кликом"
 
@@ -1611,7 +1611,7 @@ msgstr ""
 "Како преломити текст у више редова, уколико цртач ћелије не располаже "
 "довољним простором за приказ целог текста"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
@@ -1859,7 +1859,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Да ли ће или не боја бити делимично провидна"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Наслов"
@@ -2000,118 +2000,118 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "Ред обухвата стубац"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel стубац који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "Стубац обухвата стубац"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel стубац који садржи вредности обухватања стубаца"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Додај отцепљивање у меније"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Да ли падајући менији садрже и ставку за отцепљивање"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "Садржи оквир"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Да ли се падајућа листа исцртава оквир око садржаних елемената"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Да ли падајућа листа добија фокус када се кликне на њу мишем"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Наслов отцепљеног"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Наслов који може приказати управник прозора када се овај мени отцепи"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 #, fuzzy
 msgid "Popup shown"
 msgstr "Искочи исте ширине"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Да ли се ивица приказује или не"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Да ли дугме добија фокус када се кликне на њега мишем"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "Изгледа као списак"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Да ли падајући менији изгледају као спискови уместо као менији"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Смер стрелица"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Врста сенке"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Ширина ивице око ознака језичака"
@@ -5853,27 +5853,27 @@ msgstr "Облачић"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Да ли је елемент у жижи за унос"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Облачић"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Садржај поља"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Облачић"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 #, fuzzy
 msgid "The contents of the tooltip for this tray icon"
 msgstr "Садржај поља"
 
-#: gtk/gtkstatusicon.c:421
+#: gtk/gtkstatusicon.c:425
 #, fuzzy
 msgid "The title of this tray icon"
 msgstr "Наслов прозора"
@@ -6637,11 +6637,11 @@ msgstr ""
 "Да ли се ставка алатки сматра важном. Ако је постављено, дугмад алатке "
 "приказују и текст у режиму GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort модел"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "Модел који треба уредити помоћу TreeModelSort-а"
 

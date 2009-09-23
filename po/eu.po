@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:28-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-08-10 19:59+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -1570,64 +1570,64 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "Kudeatu tamaina pertsonalak"
 
-#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr "hazbete"
 
-#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:585
+#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Marjinak inprimagailutik..."
 
-#: gtk/gtkcustompaperunixdialog.c:751
+#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "%d tamaina pertsonalizatua"
 
-#: gtk/gtkcustompaperunixdialog.c:1058
+#: gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr "_Zabalera:"
 
-#: gtk/gtkcustompaperunixdialog.c:1070
+#: gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
 msgstr "_Altuera:"
 
-#: gtk/gtkcustompaperunixdialog.c:1082
+#: gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
 msgstr "Paper-tamaina"
 
-#: gtk/gtkcustompaperunixdialog.c:1091
+#: gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
 msgstr "_Goian:"
 
-#: gtk/gtkcustompaperunixdialog.c:1103
+#: gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr "_Behean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1115
+#: gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr "E_zkerrean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1127
+#: gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
 msgstr "E_skuinean:"
 
-#: gtk/gtkcustompaperunixdialog.c:1168
+#: gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr "Paper-marjinak"
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "Sartzeko _metodoak"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "_Txertatu Unicode kontrol-karakterea"
 
-#: gtk/gtkentry.c:9971
+#: gtk/gtkentry.c:9975
 msgid "Caps Lock is on"
 msgstr "Blok.maius. aktibatuta dago"
 
@@ -2158,7 +2158,7 @@ msgstr "_Gamma-balioa"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1404
+#: gtk/gtkiconfactory.c:1399
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Errorea ikonoa kargatzean: %s"
@@ -5110,32 +5110,32 @@ msgstr "%sx%s pertsonalizatua"
 msgid "output.%s"
 msgstr "irteera.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:495
+#: modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Inprimatu fitxategian"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Orrialdeak _orriko:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:643
+#: modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Fitxategia"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:653
+#: modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "_Irteerako formatua"
 

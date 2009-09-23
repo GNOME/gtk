@@ -763,6 +763,14 @@ Deprecated equivalent of g_object_unref()
 @dy: 
 
 
+<!-- ##### FUNCTION gdk_window_flush ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
 <!-- ##### FUNCTION gdk_window_ensure_native ##### -->
 <para>
 

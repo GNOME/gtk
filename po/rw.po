@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:28-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1787,29 +1787,29 @@ msgstr "Mburabuzi"
 msgid "Manage Custom Sizes"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:538 gtk/gtkpagesetupunixdialog.c:779
+#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:779
 msgid "inch"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:540 gtk/gtkpagesetupunixdialog.c:777
+#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:777
 msgid "mm"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:585
+#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:751
+#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:1058
+#: gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr ""
 
 # svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
-#: gtk/gtkcustompaperunixdialog.c:1070
+#: gtk/gtkcustompaperunixdialog.c:1066
 #, fuzzy
 msgid "_Height:"
 msgstr "Ibara"
@@ -1818,45 +1818,45 @@ msgstr "Ibara"
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkcustompaperunixdialog.c:1082
+#: gtk/gtkcustompaperunixdialog.c:1078
 #, fuzzy
 msgid "Paper Size"
 msgstr "indangakintu"
 
 # basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
-#: gtk/gtkcustompaperunixdialog.c:1091
+#: gtk/gtkcustompaperunixdialog.c:1087
 #, fuzzy
 msgid "_Top:"
 msgstr "Guhagarara"
 
-#: gtk/gtkcustompaperunixdialog.c:1103
+#: gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:1115
+#: gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr ""
 
 # svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
-#: gtk/gtkcustompaperunixdialog.c:1127
+#: gtk/gtkcustompaperunixdialog.c:1123
 #, fuzzy
 msgid "_Right:"
 msgstr "Ibara"
 
-#: gtk/gtkcustompaperunixdialog.c:1168
+#: gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8586 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkentry.c:9971
+#: gtk/gtkentry.c:9975
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Intaho:"
@@ -2441,7 +2441,7 @@ msgstr "Agaciro"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1404
+#: gtk/gtkiconfactory.c:1399
 #, fuzzy, c-format
 msgid "Error loading icon: %s"
 msgstr "Itangira... Agashushondanga"
@@ -5788,37 +5788,37 @@ msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: modules/printbackends/file/gtkprintbackendfile.c:495
+#: modules/printbackends/file/gtkprintbackendfile.c:493
 #, fuzzy
 msgid "Print to File"
 msgstr "Gucapa"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr ""
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 #, fuzzy
 msgid "Postscript"
 msgstr "Gucapa"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:572
+#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:584
+#: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr ""
 
-#: modules/printbackends/file/gtkprintbackendfile.c:643
+#: modules/printbackends/file/gtkprintbackendfile.c:641
 #, fuzzy
 msgid "File"
 msgstr "amadosiye"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:653
+#: modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr ""
 

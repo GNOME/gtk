@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:29-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-08-30 21:46+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -124,7 +124,7 @@ msgstr "ಅಕ್ಷರ ಶೈಲಿ ರೆಸೊಲ್ಯೂಶನ್"
 msgid "The resolution for fonts on the screen"
 msgstr "ತೆರೆಯಲ್ಲಿನ ಅಕ್ಷರ ಶೈಲಿಗಾಗಿನ ರೆಸೊಲ್ಯೂಶನ್"
 
-#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
 msgid "Cursor"
 msgstr "ತೆರೆಸೂಚಕ (ಕರ್ಸರ್)"
 
@@ -842,7 +842,7 @@ msgstr ""
 "ಹೊಂದಿಸಲಾಗಿದ್ದಲ್ಲಿ, ಲೇಬಲ್‌ ಅನ್ನು ಒಂದು ಶೇಖರಣಾ ಅಂಶವನ್ನು ತೋರಿಸುವ ಬದಲು ಆಯ್ಕೆ ಮಾಡಲು "
 "ಬಳಸಲಾಗುತ್ತದೆ"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "ಕ್ಲಿಕ್ ಆದಾಗ ಕೇಂದ್ರಿಕೃತಗೊಳ್ಳು(Focus)"
 
@@ -1556,7 +1556,7 @@ msgstr ""
 "ಸಂಪೂರ್ಣ ವಾಕ್ಯವನ್ನು ತೋರಿಸಲು ಕೋಶದ ರೆಂಡರರಿನಲ್ಲಿ ಸಾಕಷ್ಟು ಸ್ಥಳಾವಕಾಶವಿಲ್ಲದೆ ಇದ್ದರೆ ಅನೇಕ "
 "ಸಾಲುಗಳಾಗಿ ವಾಕ್ಯವನ್ನು ಹೇಗೆ ವಿಂಗಡಿಸಬೇಕು ಎನ್ನುವ ಸೂಚನೆ"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "ಆವರಿಕೆಯ ಅಗಲ"
 
@@ -1795,7 +1795,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "ಬಣ್ಣವು ಒಂದು ಆಲ್ಫಾ ಮೌಲ್ಯವನ್ನು ಕೊಡಬೇಕೆ ಅಥವ ಬೇಡವೆ"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "ಶೀರ್ಷಿಕೆ"
@@ -1928,112 +1928,112 @@ msgstr "ಪಟ್ಟಿಯಲ್ಲಿನ ಮೌಲ್ಯ"
 msgid "Whether entered values must already be present in the list"
 msgstr "ನಮೂದಿಸಲಾದ ಮೌಲ್ಯವು ಮೊದಲೆ ಪಟ್ಟಿಯಲ್ಲಿ ಇರಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "ಸಂಯೋಜನಾ ಚೌಕ ಮಾದರಿ"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "ಸಂಯೋಜನಾ ಚೌಕಕ್ಕಾಗಿನ ಮಾದರಿ"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 msgid "Wrap width for laying out the items in a grid"
 msgstr "ಒಂದು ಚೌಕಜಾಲದಲ್ಲಿ ಅಂಶಗಳನ್ನು ಇರಿಸಲು ಆವರಿಕೆಯ ಅಗಲ"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "ಲಂಬಸಾಲಿಗೆ ವ್ಯಾಪಿಸಿರುವ ಅಡ್ಡಸಾಲು"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "ಅಡ್ಡಸಾಲಿನ ವ್ಯಾಪ್ತಿಯ ಮೌಲ್ಯಗಳನ್ನು ಒಳಗೊಂಡಿರುವ TreeModel ಲಂಬಸಾಲು"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "ಲಂಬಸಾಲಿಗೆ ವ್ಯಾಪಿಸಿರುವ ಲಂಬಸಾಲು"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "ಲಂಬಸಾಲಿನ ವ್ಯಾಪ್ತಿಯ ಮೌಲ್ಯಗಳನ್ನು ಒಳಗೊಂಡಿರುವ TreeModel ಲಂಬಸಾಲು"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "ಸಕ್ರಿಯ ಅಂಶ"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "ಪ್ರಸ್ತುತ ಇರುವ ಅಂಶ"
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "ಮೆನುಗಳಿಗೆ ಹರಿದುಹಾಕುವಿಕೆಗಳನ್ನು ಸೇರಿಸು"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ಬೀಳಿಕೆಯು(ಡ್ರಾಪ್‌ಡೌನ್) ಹರಿದ ಮೆನು ಅಂಶವನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "ಚೌಕಟ್ಟನ್ನು ಹೊಂದಿದೆ"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr "ಒಂದು ಸಂಯೋಜನಾ ಚೌಕವು ಚೈಲ್ಡಿನ ಸುತ್ತ ಒಂದು ಚೌಕವನ್ನು ಎಳೆಯ ಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "ಮೌಸಿನಿಂದ ಸಂಯೋಜನಾ ಚೌಕವನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿದಾಗ ಅದು ಗಮನ ಸೆಳೆಯಲ್ಪಡಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "ಹರಿದುಹಾಕುವ ಶೀರ್ಷಿಕೆ"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "ಒಂದು ಪುಟಿಕೆಯನ್ನು ಹರಿದುಹಾಕಿದಾಗ ವಿಂಡೋ ವ್ಯವಸ್ಥಾಪಕನಿಂದ ತೋರಿಸಬೇಕಿರುವ ಒಂದು ಶೀರ್ಷಿಕೆ"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 msgid "Popup shown"
 msgstr "ತೋರಿಸಲಾಗುವ ಪುಟಿಕೆ"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 msgid "Whether the combo's dropdown is shown"
 msgstr "ಸಂಯೋಜನಾ ಚೌಕದ ಬೀಳಿಕೆಯು(ಡ್ರಾಪ್‌ಡೌನ್) ತೋರಿಸಲ್ಪಡಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr "ಗುಂಡಿಯ ಸಂವೇನಶೀಲತೆ"
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "ಮಾದರಿಯು ಖಾಲಿ ಇದ್ದಾಗ ಬೀಳಿಕೆಯ ಗುಂಡಿಯು ಸಂವೇದನಶೀಲವಾಗಿರಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "ಪಟ್ಟಿಯಾಗಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತದೆ"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ಬೀಳಿಕೆಗಳು ಮೆನುಗಳಂತೆ ಕಾಣದೆ ಗುಂಡಿಗಳಂತೆ ಕಾಣಿಸಬೇಕೆ"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 msgid "Arrow Size"
 msgstr "ಬಾಣದ ಗುರುತಿನ ಗಾತ್ರ"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 msgid "The minimum size of the arrow in the combo box"
 msgstr "ಸಂಯೋಜನಾ ಚೌಕದಲ್ಲಿನ ಬಾಣದ ಗುರುತಿನ ಕನಿಷ್ಠ ಗಾತ್ರ"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "ನೆರಳಿನ ಬಗೆ"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "ಸಂಯೋಜನಾ ಚೌಕದ ಸುತ್ತಮುತ್ತ ಯಾವ ಬಗೆಯ ನೆರಳು ಇರಬೇಕು"
 
@@ -5572,23 +5572,23 @@ msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳನ್ನು ಹೊಂದಿ�
 msgid "Whether this tray icon has a tooltip"
 msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಯು ಒಂದು ಟೂಲ್‌ಟಿಪ್ ಚಿಹ್ನೆಯನ್ನು ಹೊಂದಿದೆಯೆ"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 msgid "Tooltip Text"
 msgstr "ಸಲಕರಣೆ ಸುಳಿವುಗಳ ಪಠ್ಯ"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 msgid "The contents of the tooltip for this widget"
 msgstr "ಈ ವಿಜೆಟ್‌ಗಾಗಿನ ಒಳವಿಷಯಗಳ ಉಪಕರಣ-ಸುಳಿವು"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr "ಉಪಕರಣ-ಸುಳಿವು ಗುರುತು"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 msgid "The contents of the tooltip for this tray icon"
 msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಗಾಗಿನ ಉಪಕರಣ-ಸುಳಿವಿನ ಅಂಶ"
 
-#: gtk/gtkstatusicon.c:421
+#: gtk/gtkstatusicon.c:425
 msgid "The title of this tray icon"
 msgstr "ಈ ಟ್ರೇ ಚಿಹ್ನೆಯ ಶೀರ್ಷಿಕೆ"
 
@@ -6334,11 +6334,11 @@ msgstr ""
 "ಉಪಕರಣಪಟ್ಟಿ ಅಂಶವನ್ನು ಪ್ರಮುಖವಾದದ್ದು ಎಂದು ಪರಿಗಣಿಸಬೇಕೆ. TRUE ಆದಲ್ಲಿ, ಉಪಕರಣಪಟ್ಟಿ "
 "ಗುಂಡಿಗಳುGTK_TOOLBAR_BOTH_HORIZ ಕ್ರಮದಲ್ಲಿ ಪಠ್ಯವನ್ನು ತೋರಿಸುತ್ತದೆ"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort ಮಾದರಿ"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort ಅನ್ನು ವಿಂಗಡಿಸಲು ಮಾದರಿ"
 

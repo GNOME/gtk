@@ -90,7 +90,7 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 
 </para>
 
-@cairo_t: 
+@cr: 
 @drawable: 
 
 

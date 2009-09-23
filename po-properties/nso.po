@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:29-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -131,7 +131,7 @@ msgstr "Dintlha tša fonto"
 msgid "The resolution for fonts on the screen"
 msgstr "Kamoo mehuta e swanetšego go dirwa gore e be nakong sekirining"
 
-#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
 #, fuzzy
 msgid "Cursor"
 msgstr "Go Ponya ga Leswao leo le Bontšhago mo o lego"
@@ -887,7 +887,7 @@ msgstr ""
 "Ge eba go beakantšwe, leswao le dirišetšwa go kgetha selo sa setoko go e na "
 "le gore le bonagatšwe"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Lebiša hlokomelo go kgotla"
 
@@ -1647,7 +1647,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "Phuthela bophara"
 
@@ -1897,7 +1897,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Ge eba o swanetše go nea mmala boleng bja alfa goba aowa"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Sehlogo"
@@ -2042,72 +2042,72 @@ msgstr ""
 "Ge eba boleng bjo tsentšhitšwego bo swanetše gore bo be bo šetše go le gona "
 "lelokelelong"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "Mohlala wa Lepokisi la Kopanyo"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "Mohlala wa lepokisi la kopanyo"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 #, fuzzy
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Phuthela bophara bakeng sa go bea dilo sekopanying"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "Kholomo ya tekanyo ya mothalo"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr ""
 "Kholomo ya Mohlala ya Mohlare yeo e nago le dika tša tekanyo ya mothalo"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "Kholomo ya tekanyo ya kholomo"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "Kholomo ya Mohlala wa Mohlare e nago le dika tša tekanyo ya kholomo"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "Selo seo se šomago"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "Selo seo gona bjale se šomago"
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Oketša tše kgeitšwego lelokelelong la dikagare"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ge eba di-tab di swanetše go ba le bogolo bja mohuta o swanago"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "E na le foreime"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 #, fuzzy
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Ge eba kholomo e ka laelwa gape go dikologa dihlogwana"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 #, fuzzy
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Ge eba konope e tšea hlokomelo ge e kgotlwa ka legotlwana"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Sehlogo sa go Kgeila"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 #, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
@@ -2116,53 +2116,53 @@ msgstr ""
 "Sehlogo seo se ka bontšhwago ka molaodi wa lefesetere ge lelokelelo le la "
 "dikagare le kgeitšwe"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 #, fuzzy
 msgid "Popup shown"
 msgstr "Bophara bja mothaladi bja go lebiša hlokomelo"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 #, fuzzy
 msgid "Whether the combo's dropdown is shown"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Ge eba konope e tšea hlokomelo ge e kgotlwa ka legotlwana"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "E bonagala e le lelokelelo"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Ge eba lepokisi la go kopanya le wela fase le swanetše go bonagala bjalo ka "
 "malokelelo go e na le malokelelo a dikagare"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 #, fuzzy
 msgid "Arrow Size"
 msgstr "Mo Lerungwana le Lebilego"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Mohlala wa lepokisi la kopanyo"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Mohuta wa moriti"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 #, fuzzy
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Bophara bja mollwane go dikologa maswao a tab"
@@ -6086,27 +6086,27 @@ msgstr "Maele a sedirišwa"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Ge eba sedirišwa se na le go lebiša hlokomelo ga tsebišo"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Dikagare tša tseno"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 #, fuzzy
 msgid "The contents of the tooltip for this tray icon"
 msgstr "Dikagare tša tseno"
 
-#: gtk/gtkstatusicon.c:421
+#: gtk/gtkstatusicon.c:425
 #, fuzzy
 msgid "The title of this tray icon"
 msgstr "Sehlogo sa lefesetere"
@@ -6934,11 +6934,11 @@ msgstr ""
 "THEREŠO, dikonope tša bara ya sedirišwa di bontšha sengwalwa go mokgwa wa "
 "GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "Mohlala wa TreeModelSort"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "Mohlala wo o swanetšego go hlaolwa wa TreeModelSort"
 

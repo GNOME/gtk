@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 23:29-0400\n"
+"POT-Creation-Date: 2009-09-22 23:32-0400\n"
 "PO-Revision-Date: 2009-08-25 13:16+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
@@ -137,7 +137,7 @@ msgstr "எழுத்துரு திரைத்திறன்"
 msgid "The resolution for fonts on the screen"
 msgstr "திரையில் எழுத்துருக்களின் திரைத்திறன்"
 
-#: gdk/gdkwindow.c:471 gdk/gdkwindow.c:472
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
 msgid "Cursor"
 msgstr "நிலைக்காட்டி"
 
@@ -842,7 +842,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "அமைத்தால்  அடையாளம் காட்டப்படாமல் ஸ்டாக் உருப்படியை பொறுக்க  பயன்படும்."
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "முன்னிலைப்படுத்தலில் சொடுக்கு"
 
@@ -1554,7 +1554,7 @@ msgstr ""
 "அறை வரைவிக்கு முழு சரத்தை காட்ட போதிய இடமில்லாவிட்டால்  சரத்தை பல வரிகளாக எப்படி "
 "பிரிப்பது."
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "அகல மடிப்பு"
 
@@ -1793,7 +1793,7 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "நிறத்துக்கு ஒரு ஆல்பா மதிப்பு தரலாமா வேண்டாமா?"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "தலைப்பு"
@@ -1923,111 +1923,111 @@ msgstr "பட்டியலில் உள்ள மதிப்பு"
 msgid "Whether entered values must already be present in the list"
 msgstr "உள்ளிட்ட மதிப்புகள் பட்டியலில் ஏற்கெனெவே இருக்க வேண்டுமா"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "சேர்க்கை பெட்டி மாதிரி"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "சேர்க்கைப்பெட்டியின் மாதிரி"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 msgid "Wrap width for laying out the items in a grid"
 msgstr "மடக்கு அகலம் உருப்படிகளை ஒரு வலையாக அமைக்க"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "நிரை ஸ்பேன் நிரல்"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel நிரல் நிரை ஸ்பேன் மதிப்புகளை கொண்டுள்ளது"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "நிரல் அளவு நிரல்"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel நிரல் நிரல் ஸ்பேன் மதிப்புகளை கொண்டுள்ளது"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "செயலிலுள்ள உருப்படி"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "தற்போது செயலிலுள்ள உருப்படி"
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "tearoffகளை மெனுக்களுக்கு சேர்"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "கீழ் இறங்குவன கிழிக்கக்கூடிய பட்டியல் உருப்படியை உடையதாயிருக்க வேண்டுமா"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "சட்டம் கொன்டது"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr "இணைந்த பெட்டி சேயை சுற்றி ஒரு சட்டம் வரையுமா"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "இணைந்த பெட்டி சொடுக்கிய போது குவிப்பைபெறுமா"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Tearoff தலைப்பு"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "துள்ளுதல் கிழிக்கபட்டால் சாளரம் மேலாளர்  காட்டக்கூடிய ஒரு தலைப்பு"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 msgid "Popup shown"
 msgstr "பாப்பப் காட்டப்பட்டது"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 msgid "Whether the combo's dropdown is shown"
 msgstr "கீழ் இறங்கும் தொகுப்பு காட்டப்பட வேண்டுமா"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr "பொத்தான் உணர்வு தன்மை"
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "மாடல் காலியாக உள்ளபோது க்கிழிறங்கு பொத்தான் உணர்வுடன் இருக்குமா"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "பட்டியலாக தோன்றச்செய்"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "கீழிறங்குவன மெனு பட்டியலாக இல்லாமல் உரை பட்டியலாக இருக்க வேண்டுமா"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 msgid "Arrow Size"
 msgstr "அம்புக்குறி அளவு"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 msgid "The minimum size of the arrow in the combo box"
 msgstr "தொகுப்பு பெட்டியில் அம்புக்குறியின் குறைந்த பட்ச அளவு"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "நிழல் வகை"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "கீற்று  அடையாளத்தை சுற்றியுள்ள எல்லையின் அகலம்"
 
@@ -5549,23 +5549,23 @@ msgstr "உதவிகருவியை கொண்டுள்ளது"
 msgid "Whether this tray icon has a tooltip"
 msgstr "தட்டு சின்னம் ஒரு கருவிதுணுக்கை கொண்டிருக்கிறதா"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 msgid "Tooltip Text"
 msgstr "உதவிகருவி உரை"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 msgid "The contents of the tooltip for this widget"
 msgstr "இந்த விட்ஜிட்டிற்கான கருவிதுணுக்கின் உள்ளடக்கங்கள்"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr "கருவி துணுக்கு குறி"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 msgid "The contents of the tooltip for this tray icon"
 msgstr "இந்த தட்டு சின்னத்திற்கான கருவி துணுக்கின் உள்ளடக்கங்கள்"
 
-#: gtk/gtkstatusicon.c:421
+#: gtk/gtkstatusicon.c:425
 msgid "The title of this tray icon"
 msgstr "தட்டு சின்னத்தின் தலைப்பு"
 
@@ -6305,11 +6305,11 @@ msgstr ""
 "கருவிப்பட்டை உருப்படி முக்கியமானதாக கருதப்படுகிறதா. TRUE எனில், கருவிப்பட்டை "
 "பொத்தான்கள் GTK_TOOLBAR_BOTH_HORIZ முறையை காட்டும்"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort மாதிரி"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "வரிசைப்படுத்த வேண்டிய TreeModelSort ன் மாதிரி"
 
