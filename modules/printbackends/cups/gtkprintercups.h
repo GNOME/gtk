@@ -23,6 +23,7 @@
 #include <glib-object.h>
 #include <cups/cups.h>
 #include <cups/ppd.h>
+#include "gtkcupsutils.h"
 
 #include <gtk/gtkunixprint.h>
 
@@ -55,6 +56,10 @@ struct _GtkPrinterCups
 
   gchar  *default_cover_before;
   gchar  *default_cover_after;
+
+  gboolean remote;
+  guint get_remote_ppd_poll;
+  GtkCupsConnectionTest *remote_cups_connection_test;
 };
 
 struct _GtkPrinterCupsClass

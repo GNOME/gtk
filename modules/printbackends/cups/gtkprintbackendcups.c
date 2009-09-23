@@ -154,7 +154,7 @@ static GList *              cups_printer_list_papers               (GtkPrinter  
 static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
 static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
-static void                 cups_request_ppd                       (GtkPrinter                        *printer);
+static gboolean             cups_request_ppd                       (GtkPrinter                        *printer);
 static void                 cups_printer_get_hard_margins          (GtkPrinter                        *printer,
 								    double                            *top,
 								    double                            *bottom,
@@ -1686,6 +1686,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       else
 	g_object_ref (printer);
 
+      GTK_PRINTER_CUPS (printer)->remote = remote_printer;
+
       gtk_printer_set_is_paused (printer, is_paused);
       gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
 
@@ -1985,7 +1987,7 @@ done:
   GDK_THREADS_LEAVE ();
 }
 
-static void
+static gboolean
 cups_request_ppd (GtkPrinter *printer)
 {
   GError *error;
@@ -2004,6 +2006,26 @@ cups_request_ppd (GtkPrinter *printer)
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
+  if (cups_printer->remote)
+    {
+      GtkCupsConnectionState state;
+
+      state = gtk_cups_connection_test_get_state (cups_printer->remote_cups_connection_test);
+
+      if (state == GTK_CUPS_CONNECTION_IN_PROGRESS)
+        return TRUE;
+
+      gtk_cups_connection_test_free (cups_printer->remote_cups_connection_test);
+      cups_printer->remote_cups_connection_test = NULL;
+      cups_printer->get_remote_ppd_poll = 0;
+
+      if (state == GTK_CUPS_CONNECTION_NOT_AVAILABLE)
+        {
+          g_signal_emit_by_name (printer, "details-acquired", FALSE);
+          return FALSE;
+        }
+    }
 
   http = httpConnectEncrypt (cups_printer->hostname, 
 			     cups_printer->port,
@@ -2034,7 +2056,7 @@ cups_request_ppd (GtkPrinter *printer)
       g_free (data);
 
       g_signal_emit_by_name (printer, "details-acquired", FALSE);
-      return;
+      return FALSE;
     }
     
   data->http = http;
@@ -2072,6 +2094,8 @@ cups_request_ppd (GtkPrinter *printer)
 
   g_free (resource);
   g_free (ppd_filename);
+
+  return FALSE;
 }
 
 /* Ordering matters for default preference */
@@ -2369,7 +2393,22 @@ cups_printer_request_details (GtkPrinter *printer)
   cups_printer = GTK_PRINTER_CUPS (printer);
   if (!cups_printer->reading_ppd && 
       gtk_printer_cups_get_ppd (cups_printer) == NULL)
-    cups_request_ppd (printer); 
+    {
+      if (cups_printer->remote)
+        {
+          if (cups_printer->get_remote_ppd_poll == 0)
+            {
+              cups_printer->remote_cups_connection_test = gtk_cups_connection_test_new (cups_printer->hostname);
+
+              if (cups_request_ppd (printer))
+                cups_printer->get_remote_ppd_poll = gdk_threads_add_timeout (200,
+                                                    (GSourceFunc) cups_request_ppd,
+                                                    printer);
+            }
+        }
+      else
+        cups_request_ppd (printer);
+    }
 }
 
 static char *

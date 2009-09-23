@@ -77,6 +77,9 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->ppd_file = NULL;
   printer->default_cover_before = NULL;
   printer->default_cover_after = NULL;
+  printer->remote = FALSE;
+  printer->get_remote_ppd_poll = 0;
+  printer->remote_cups_connection_test = NULL;
 }
 
 static void
@@ -97,6 +100,11 @@ gtk_printer_cups_finalize (GObject *object)
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
+
+  if (printer->get_remote_ppd_poll > 0)
+    g_source_remove (printer->get_remote_ppd_poll);
+
+  gtk_cups_connection_test_free (printer->remote_cups_connection_test);
 
   G_OBJECT_CLASS (gtk_printer_cups_parent_class)->finalize (object);
 }

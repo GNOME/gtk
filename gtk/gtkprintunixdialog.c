@@ -596,7 +596,7 @@ gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)
 }
 
 static void
-disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
+disconnect_printer_details_request (GtkPrintUnixDialog *dialog, gboolean details_failed)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
@@ -606,12 +606,20 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
                                    priv->request_details_tag);
       priv->request_details_tag = 0;
       set_busy_cursor (dialog, FALSE);
-      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
-                          g_object_get_data (G_OBJECT (priv->request_details_printer),
-                                             "gtk-print-tree-iter"),
-                          PRINTER_LIST_COL_STATE,
-                          gtk_printer_get_state_message (priv->request_details_printer),
-                          -1);
+      if (details_failed)
+        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                               "gtk-print-tree-iter"),
+                            PRINTER_LIST_COL_STATE,
+                             _("Getting printer information failed"),
+                            -1);
+      else
+        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                               "gtk-print-tree-iter"),
+                            PRINTER_LIST_COL_STATE,
+                            gtk_printer_get_state_message (priv->request_details_printer),
+                            -1);
       g_object_unref (priv->request_details_printer);
       priv->request_details_printer = NULL;
     }
@@ -626,7 +634,7 @@ gtk_print_unix_dialog_finalize (GObject *object)
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, FALSE);
 
   if (priv->current_printer)
     {
@@ -1781,7 +1789,7 @@ printer_details_acquired (GtkPrinter         *printer,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, !success);
 
   if (success)
     {
@@ -1809,7 +1817,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
       priv->waiting_for_printer = NULL;
     }
 
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, FALSE);
 
   printer = NULL;
   if (gtk_tree_selection_get_selected (selection, NULL, &filter_iter))
