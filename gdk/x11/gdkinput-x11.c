@@ -729,6 +729,20 @@ _gdk_input_common_other_event (GdkEvent         *event,
   return FALSE;			/* wasn't one of our event types */
 }
 
+static GdkTimeCoord **
+_gdk_device_allocate_history (GdkDevice *device,
+			      gint       n_events)
+{
+  GdkTimeCoord **result = g_new (GdkTimeCoord *, n_events);
+  gint i;
+
+  for (i=0; i<n_events; i++)
+    result[i] = g_malloc (sizeof (GdkTimeCoord) -
+			  sizeof (double) * (GDK_MAX_TIMECOORD_AXES - device->num_axes));
+
+  return result;
+}
+
 gboolean
 _gdk_device_get_history (GdkDevice         *device,
 			 GdkWindow         *window,

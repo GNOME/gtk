@@ -207,19 +207,6 @@ gdk_device_get_property (GObject    *object,
     }
 }
 
-void
-gdk_device_get_state (GdkDevice       *device,
-                      GdkWindow       *window,
-                      gdouble         *axes,
-                      GdkModifierType *mask)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_DEVICE_GET_CLASS (device)->get_state)
-    GDK_DEVICE_GET_CLASS (device)->get_state (device, window, axes, mask);
-}
-
 gboolean
 gdk_device_get_history (GdkDevice      *device,
                         GdkWindow      *window,
@@ -258,18 +245,6 @@ gdk_device_set_source (GdkDevice      *device,
   g_return_if_fail (GDK_IS_DEVICE (device));
 
   device->source = source;
-}
-
-gboolean
-gdk_device_set_mode (GdkDevice    *device,
-                     GdkInputMode  mode)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  device->mode = mode;
-  g_object_notify (G_OBJECT (device), "input-mode");
-
-  return TRUE;
 }
 
 void

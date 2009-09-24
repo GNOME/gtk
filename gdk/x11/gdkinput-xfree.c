@@ -33,14 +33,6 @@
 
 static void gdk_input_check_proximity (GdkDisplay *display);
 
-void
-_gdk_input_init(GdkDisplay *display)
-{
-  _gdk_init_input_core (display);
-  display->ignore_core_events = FALSE;
-  _gdk_input_common_init (display, FALSE);
-}
-
 gboolean
 gdk_device_set_mode (GdkDevice      *device,
 		     GdkInputMode    mode)

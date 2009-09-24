@@ -130,8 +130,6 @@ struct _GdkInputWindow
 
 GdkInputWindow *_gdk_input_window_find       (GdkWindow *window);
 void            _gdk_input_window_destroy    (GdkWindow *window);
-GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
-					      gint       n_events);
 void            _gdk_init_input_core         (GdkDisplay *display);
 
 /* The following functions are provided by each implementation

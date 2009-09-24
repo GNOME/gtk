@@ -29,17 +29,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-void
-_gdk_input_init (GdkDisplay *display)
-{
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-  
-  _gdk_init_input_core (display);
-  
-  display_x11->input_devices = g_list_append (NULL, display->core_pointer);
-  display->ignore_core_events = FALSE;
-}
-
 void 
 gdk_device_get_state (GdkDevice       *device,
 		      GdkWindow       *window,
