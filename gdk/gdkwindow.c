@@ -5023,11 +5023,16 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
 	  g_object_unref (window);
 	}
-      else if (private->bg_pixmap != GDK_NO_BG)
+      else if (private->bg_pixmap != GDK_NO_BG &&
+	       private->window_type != GDK_WINDOW_FOREIGN)
 	{
 	  /* No exposure mask set, so nothing will be drawn, the
 	   * app relies on the background being what it specified
 	   * for the window. So, we need to clear this manually.
+	   *
+	   * For foreign windows if expose is not set that generally
+	   * means some other client paints them, so don't clear
+	   * there.
 	   *
 	   * We use begin/end_paint around the clear so that we can
 	   * piggyback on the implicit paint */
@@ -5066,8 +5071,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
 
-      if (_gdk_event_func && gdk_window_is_viewable (window)  &&
-	  private->window_type != GDK_WINDOW_FOREIGN)
+      if (_gdk_event_func && gdk_window_is_viewable (window))
 	{
 	  GdkRegion *expose_region;
 	  gboolean end_implicit;
