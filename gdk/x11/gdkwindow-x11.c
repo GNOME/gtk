@@ -5608,5 +5608,60 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
 #endif
 }
 
+static Bool
+timestamp_predicate (Display *display,
+		     XEvent  *xevent,
+		     XPointer arg)
+{
+  Window xwindow = GPOINTER_TO_UINT (arg);
+  GdkDisplay *gdk_display = gdk_x11_lookup_xdisplay (display);
+
+  if (xevent->type == PropertyNotify &&
+      xevent->xproperty.window == xwindow &&
+      xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (gdk_display,
+								       "GDK_TIMESTAMP_PROP"))
+    return True;
+
+  return False;
+}
+
+/**
+ * gdk_x11_get_server_time:
+ * @window: a #GdkWindow, used for communication with the server.
+ *          The window must have GDK_PROPERTY_CHANGE_MASK in its
+ *          events mask or a hang will result.
+ *
+ * Routine to get the current X server time stamp.
+ *
+ * Return value: the time stamp.
+ **/
+guint32
+gdk_x11_get_server_time (GdkWindow *window)
+{
+  Display *xdisplay;
+  Window   xwindow;
+  guchar c = 'a';
+  XEvent xevent;
+  Atom timestamp_prop_atom;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), 0);
+
+  xdisplay = GDK_WINDOW_XDISPLAY (window);
+  xwindow = GDK_WINDOW_XWINDOW (window);
+  timestamp_prop_atom =
+    gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+					   "GDK_TIMESTAMP_PROP");
+
+  XChangeProperty (xdisplay, xwindow, timestamp_prop_atom,
+		   timestamp_prop_atom,
+		   8, PropModeReplace, &c, 1);
+
+  XIfEvent (xdisplay, &xevent,
+	    timestamp_predicate, GUINT_TO_POINTER(xwindow));
+
+  return xevent.xproperty.time;
+}
+
 #define __GDK_WINDOW_X11_C__
 #include "gdkaliasdef.c"

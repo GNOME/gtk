@@ -173,8 +173,7 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
 			      const gchar * const *atom_names,
 			      gint                 n_atoms);
 
-void _gdk_x11_events_init_screen   (GdkScreen *screen);
-void _gdk_x11_events_uninit_screen (GdkScreen *screen);
+void _gdk_screen_x11_events_init   (GdkScreen *screen);
 
 void _gdk_events_init           (GdkDisplay *display);
 void _gdk_events_uninit         (GdkDisplay *display);

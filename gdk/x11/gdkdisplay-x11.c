@@ -85,6 +85,14 @@ static void gdk_internal_connection_watch (Display  *display,
 					   XPointer *watch_data);
 #endif /* HAVE_X11R6 */
 
+typedef struct _GdkEventTypeX11 GdkEventTypeX11;
+
+struct _GdkEventTypeX11
+{
+  gint base;
+  gint n_events;
+};
+
 /* Note that we never *directly* use WM_LOCALE_NAME, WM_PROTOCOLS,
  * but including them here has the side-effect of getting them
  * into the internal Xlib cache
@@ -1196,8 +1204,8 @@ gdk_display_open (const gchar *display_name)
    * structures in places
    */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_x11_events_init_screen (display_x11->screens[i]);
-  
+    _gdk_screen_x11_events_init (display_x11->screens[i]);
+
   /*set the default screen */
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
 
@@ -2490,6 +2498,210 @@ gdk_display_list_devices (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_X11 (display)->input_devices;
+}
+
+/**
+ * gdk_event_send_client_message_for_display:
+ * @display: the #GdkDisplay for the window where the message is to be sent.
+ * @event: the #GdkEvent to send, which should be a #GdkEventClient.
+ * @winid: the window to send the client message to.
+ *
+ * On X11, sends an X ClientMessage event to a given window. On
+ * Windows, sends a message registered with the name
+ * GDK_WIN32_CLIENT_MESSAGE.
+ *
+ * This could be used for communicating between different
+ * applications, though the amount of data is limited to 20 bytes on
+ * X11, and to just four bytes on Windows.
+ *
+ * Returns: non-zero on success.
+ *
+ * Since: 2.2
+ */
+gboolean
+gdk_event_send_client_message_for_display (GdkDisplay     *display,
+					   GdkEvent       *event,
+					   GdkNativeWindow winid)
+{
+  XEvent sev;
+
+  g_return_val_if_fail(event != NULL, FALSE);
+
+  /* Set up our event to send, with the exception of its target window */
+  sev.xclient.type = ClientMessage;
+  sev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
+  sev.xclient.format = event->client.data_format;
+  sev.xclient.window = winid;
+  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
+  sev.xclient.message_type = gdk_x11_atom_to_xatom_for_display (display, event->client.message_type);
+
+  return _gdk_send_xevent (display, winid, False, NoEventMask, &sev);
+}
+
+/**
+ * gdk_display_add_client_message_filter:
+ * @display: a #GdkDisplay for which this message filter applies
+ * @message_type: the type of ClientMessage events to receive.
+ *   This will be checked against the @message_type field
+ *   of the XClientMessage event struct.
+ * @func: the function to call to process the event.
+ * @data: user data to pass to @func.
+ *
+ * Adds a filter to be called when X ClientMessage events are received.
+ * See gdk_window_add_filter() if you are interested in filtering other
+ * types of events.
+ *
+ * Since: 2.2
+ **/
+void
+gdk_display_add_client_message_filter (GdkDisplay   *display,
+				       GdkAtom       message_type,
+				       GdkFilterFunc func,
+				       gpointer      data)
+{
+  GdkClientFilter *filter;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  filter = g_new (GdkClientFilter, 1);
+
+  filter->type = message_type;
+  filter->function = func;
+  filter->data = data;
+
+  GDK_DISPLAY_X11(display)->client_filters =
+    g_list_append (GDK_DISPLAY_X11 (display)->client_filters,
+		   filter);
+}
+
+/**
+ * gdk_add_client_message_filter:
+ * @message_type: the type of ClientMessage events to receive. This will be
+ *     checked against the <structfield>message_type</structfield> field of the
+ *     XClientMessage event struct.
+ * @func: the function to call to process the event.
+ * @data: user data to pass to @func.
+ *
+ * Adds a filter to the default display to be called when X ClientMessage events
+ * are received. See gdk_display_add_client_message_filter().
+ **/
+void
+gdk_add_client_message_filter (GdkAtom       message_type,
+			       GdkFilterFunc func,
+			       gpointer      data)
+{
+  gdk_display_add_client_message_filter (gdk_display_get_default (),
+					 message_type, func, data);
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_flush
+ *
+ *   Flushes the Xlib output buffer and then waits
+ *   until all requests have been received and processed
+ *   by the X server. The only real use for this function
+ *   is in dealing with XShm.
+ *
+ * Arguments:
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+void
+gdk_flush (void)
+{
+  GSList *tmp_list = _gdk_displays;
+
+  while (tmp_list)
+    {
+      XSync (GDK_DISPLAY_XDISPLAY (tmp_list->data), False);
+      tmp_list = tmp_list->next;
+    }
+}
+
+/**
+ * gdk_x11_register_standard_event_type:
+ * @display: a #GdkDisplay
+ * @event_base: first event type code to register
+ * @n_events: number of event type codes to register
+ *
+ * Registers interest in receiving extension events with type codes
+ * between @event_base and <literal>event_base + n_events - 1</literal>.
+ * The registered events must have the window field in the same place
+ * as core X events (this is not the case for e.g. XKB extension events).
+ *
+ * If an event type is registered, events of this type will go through
+ * global and window-specific filters (see gdk_window_add_filter()).
+ * Unregistered events will only go through global filters.
+ * GDK may register the events of some X extensions on its own.
+ *
+ * This function should only be needed in unusual circumstances, e.g.
+ * when filtering XInput extension events on the root window.
+ *
+ * Since: 2.4
+ **/
+void
+gdk_x11_register_standard_event_type (GdkDisplay *display,
+				      gint        event_base,
+				      gint        n_events)
+{
+  GdkEventTypeX11 *event_type;
+  GdkDisplayX11 *display_x11;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+  event_type = g_new (GdkEventTypeX11, 1);
+
+  event_type->base = event_base;
+  event_type->n_events = n_events;
+
+  display_x11->event_types = g_slist_prepend (display_x11->event_types, event_type);
+}
+
+static Bool
+graphics_expose_predicate (Display  *display,
+			   XEvent   *xevent,
+			   XPointer  arg)
+{
+  if (xevent->xany.window == GDK_DRAWABLE_XID ((GdkDrawable *)arg) &&
+      (xevent->xany.type == GraphicsExpose ||
+       xevent->xany.type == NoExpose))
+    return True;
+  else
+    return False;
+}
+
+/**
+ * gdk_event_get_graphics_expose:
+ * @window: the #GdkWindow to wait for the events for.
+ *
+ * Waits for a GraphicsExpose or NoExpose event from the X server.
+ * This is used in the #GtkText and #GtkCList widgets in GTK+ to make sure any
+ * GraphicsExpose events are handled before the widget is scrolled.
+ *
+ * Return value:  a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
+ * NoExpose event was received.
+ *
+ * Deprecated:2.18
+ **/
+GdkEvent*
+gdk_event_get_graphics_expose (GdkWindow *window)
+{
+  GdkDisplay *display;
+  XEvent xevent;
+
+  g_return_val_if_fail (window != NULL, NULL);
+
+  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+
+  XIfEvent (GDK_WINDOW_XDISPLAY (window), &xevent,
+	    graphics_expose_predicate, (XPointer) window);
+
+  if (xevent.xany.type == GraphicsExpose)
+    return gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (display),
+                                           display, &xevent);
+  return NULL;
 }
 
 #define __GDK_DISPLAY_X11_C__

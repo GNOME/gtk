@@ -19,16 +19,6 @@
 #define IN_HEADER(x) 1
 #endif
 
-#if IN_HEADER(__GDK_EVENTS_H__)
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_add_client_message_filter
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_event_get_graphics_expose
-#endif
-gdk_events_pending
-#endif
-#endif
-
 #if IN_HEADER(__GDK_TEST_UTILS_H__)
 #if IN_FILE(__GDK_TEST_UTILS_X11_C__)
 gdk_test_simulate_button
@@ -58,6 +48,19 @@ gdk_event_set_screen
 gdk_get_show_events
 gdk_set_show_events
 gdk_setting_get
+#endif
+#endif
+
+#if IN_HEADER(__GDK_EVENTS_H__)
+#if IN_FILE(__GDK_DISPLAY_X11_C__)
+gdk_add_client_message_filter
+gdk_event_get_graphics_expose
+#endif
+#endif
+
+#if IN_HEADER(__GDK_EVENTS_H__)
+#if IN_FILE(__GDK_EVENT_SOURCE_C__)
+gdk_events_pending
 #endif
 #endif
 
@@ -103,15 +106,10 @@ gdk_set_locale
 #endif
 
 #if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_event_send_client_message_for_display
-gdk_flush
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
 #if IN_FILE(__GDK_DISPLAY_X11_C__)
 gdk_display_list_devices
+gdk_event_send_client_message_for_display
+gdk_flush
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 #endif
@@ -406,12 +404,6 @@ gdk_input_set_extension_events
 #endif
 
 #if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_display_add_client_message_filter
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
 #if IN_FILE(__GDK_DISPLAY_C__)
 gdk_display_close
 gdk_display_get_event
@@ -447,6 +439,7 @@ gdk_display_supports_cursor_color
 
 #if IN_HEADER(__GDK_DISPLAY_H__)
 #if IN_FILE(__GDK_DISPLAY_X11_C__)
+gdk_display_add_client_message_filter
 gdk_display_beep
 gdk_display_sync
 gdk_display_flush
@@ -880,12 +873,6 @@ gdk_visual_get_type G_GNUC_CONST
 #endif
 #endif
 
-#if IN_HEADER(__GDK_X_H__)
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_net_wm_supports
-#endif
-#endif
-
 #if IN_HEADER(__GDK_PANGO_H__)
 #if IN_FILE(__GDK_PANGO_C__)
 gdk_pango_attr_emboss_color_new
@@ -1033,13 +1020,6 @@ gdk_screen_get_rgb_visual
 #endif
 
 #if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_screen_get_setting
-gdk_screen_broadcast_client_message
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
 #if IN_FILE(__GDK_VISUAL_X11_C__)
 gdk_screen_get_system_visual
 gdk_screen_list_visuals
@@ -1054,6 +1034,7 @@ gdk_screen_get_toplevel_windows
 
 #if IN_HEADER(__GDK_SCREEN_H__)
 #if IN_FILE(__GDK_SCREEN_X11_C__)
+gdk_screen_broadcast_client_message
 gdk_screen_get_display
 gdk_screen_get_width
 gdk_screen_get_width_mm
@@ -1061,6 +1042,7 @@ gdk_screen_get_height
 gdk_screen_get_height_mm
 gdk_screen_get_number
 gdk_screen_get_root_window
+gdk_screen_get_setting
 gdk_screen_get_default_colormap
 gdk_screen_set_default_colormap
 gdk_screen_get_n_monitors
@@ -1203,6 +1185,7 @@ gdk_x11_display_ungrab
 gdk_x11_lookup_xdisplay
 gdk_x11_display_broadcast_startup_message
 gdk_x11_display_get_startup_notification_id
+gdk_x11_register_standard_event_type
 #endif
 
 #if IN_FILE(__GDK_DRAWABLE_X11_C__)
@@ -1233,22 +1216,18 @@ gdk_x11_grab_server
 gdk_x11_ungrab_server
 #endif
 
-#if IN_FILE(__GDK_EVENTS_X11_C__)
-gdk_x11_get_server_time
-gdk_x11_register_standard_event_type
-gdk_x11_screen_get_window_manager_name
-gdk_x11_screen_supports_net_wm_hint
-#endif
-
 #if IN_FILE(__GDK_IMAGE_X11_C__)
 gdk_x11_image_get_xdisplay
 gdk_x11_image_get_ximage
 #endif
 
 #if IN_FILE(__GDK_SCREEN_X11_C__)
+gdk_net_wm_supports
 gdk_x11_screen_get_screen_number
+gdk_x11_screen_get_window_manager_name
 gdk_x11_screen_get_xscreen
 gdk_x11_screen_get_monitor_output
+gdk_x11_screen_supports_net_wm_hint
 #endif
 
 #if IN_FILE(__GDK_VISUAL_X11_C__)
@@ -1258,6 +1237,7 @@ gdkx_visual_get
 #endif
 
 #if IN_FILE(__GDK_WINDOW_X11_C__)
+gdk_x11_get_server_time
 gdk_x11_window_set_user_time
 gdk_x11_window_move_to_current_desktop
 #endif

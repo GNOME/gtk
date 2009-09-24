@@ -51,6 +51,8 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
+#include "gdksettings.c"
+
 static void         gdk_screen_x11_dispose     (GObject		  *object);
 static void         gdk_screen_x11_finalize    (GObject		  *object);
 static void	    init_randr_support	       (GdkScreen	  *screen);
@@ -65,6 +67,14 @@ enum
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkScreenX11, _gdk_screen_x11, GDK_TYPE_SCREEN)
+
+typedef struct _NetWmSupportedAtoms NetWmSupportedAtoms;
+
+struct _NetWmSupportedAtoms
+{
+  Atom *atoms;
+  gulong n_atoms;
+};
 
 struct _GdkX11Monitor
 {
@@ -273,11 +283,23 @@ gdk_screen_set_default_colormap (GdkScreen   *screen,
 }
 
 static void
+_gdk_screen_x11_events_uninit (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (screen_x11->xsettings_client)
+    {
+      xsettings_client_destroy (screen_x11->xsettings_client);
+      screen_x11->xsettings_client = NULL;
+    }
+}
+
+static void
 gdk_screen_x11_dispose (GObject *object)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
 
-  _gdk_x11_events_uninit_screen (GDK_SCREEN (object));
+  _gdk_screen_x11_events_uninit (GDK_SCREEN (object));
 
   if (screen_x11->default_colormap)
     {
@@ -1358,6 +1380,638 @@ gdk_screen_get_window_stack (GdkScreen *screen)
     XFree (data);
 
   return ret;
+}
+
+/* Sends a ClientMessage to all toplevel client windows */
+static gboolean
+gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
+					      XEvent     *xev,
+					      guint32     xid,
+					      guint       level)
+{
+  Atom type = None;
+  int format;
+  unsigned long nitems, after;
+  unsigned char *data;
+  Window *ret_children, ret_root, ret_parent;
+  unsigned int ret_nchildren;
+  gboolean send = FALSE;
+  gboolean found = FALSE;
+  gboolean result = FALSE;
+  int i;
+
+  gdk_error_trap_push ();
+
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid,
+			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
+			  0, 0, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, &data) != Success)
+    goto out;
+
+  if (type)
+    {
+      send = TRUE;
+      XFree (data);
+    }
+  else
+    {
+      /* OK, we're all set, now let's find some windows to send this to */
+      if (!XQueryTree (GDK_DISPLAY_XDISPLAY (display), xid,
+		      &ret_root, &ret_parent,
+		      &ret_children, &ret_nchildren))
+	goto out;
+
+      for(i = 0; i < ret_nchildren; i++)
+	if (gdk_event_send_client_message_to_all_recurse (display, xev, ret_children[i], level + 1))
+	  found = TRUE;
+
+      XFree (ret_children);
+    }
+
+  if (send || (!found && (level == 1)))
+    {
+      xev->xclient.window = xid;
+      _gdk_send_xevent (display, xid, False, NoEventMask, xev);
+    }
+
+  result = send || found;
+
+ out:
+  gdk_error_trap_pop ();
+
+  return result;
+}
+
+/**
+ * gdk_screen_broadcast_client_message:
+ * @screen: the #GdkScreen where the event will be broadcasted.
+ * @event: the #GdkEvent.
+ *
+ * On X11, sends an X ClientMessage event to all toplevel windows on
+ * @screen.
+ *
+ * Toplevel windows are determined by checking for the WM_STATE property,
+ * as described in the Inter-Client Communication Conventions Manual (ICCCM).
+ * If no windows are found with the WM_STATE property set, the message is
+ * sent to all children of the root window.
+ *
+ * On Windows, broadcasts a message registered with the name
+ * GDK_WIN32_CLIENT_MESSAGE to all top-level windows. The amount of
+ * data is limited to one long, i.e. four bytes.
+ *
+ * Since: 2.2
+ */
+
+void
+gdk_screen_broadcast_client_message (GdkScreen *screen,
+				     GdkEvent  *event)
+{
+  XEvent sev;
+  GdkWindow *root_window;
+
+  g_return_if_fail (event != NULL);
+
+  root_window = gdk_screen_get_root_window (screen);
+
+  /* Set up our event to send, with the exception of its target window */
+  sev.xclient.type = ClientMessage;
+  sev.xclient.display = GDK_WINDOW_XDISPLAY (root_window);
+  sev.xclient.format = event->client.data_format;
+  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
+  sev.xclient.message_type =
+    gdk_x11_atom_to_xatom_for_display (GDK_WINDOW_DISPLAY (root_window),
+				       event->client.message_type);
+
+  gdk_event_send_client_message_to_all_recurse (gdk_screen_get_display (screen),
+						&sev,
+						GDK_WINDOW_XID (root_window),
+						0);
+}
+
+static gboolean
+check_transform (const gchar *xsettings_name,
+		 GType        src_type,
+		 GType        dest_type)
+{
+  if (!g_value_type_transformable (src_type, dest_type))
+    {
+      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
+		 xsettings_name,
+		 g_type_name (src_type),
+		 g_type_name (dest_type));
+      return FALSE;
+    }
+  else
+    return TRUE;
+}
+
+/**
+ * gdk_screen_get_setting:
+ * @screen: the #GdkScreen where the setting is located
+ * @name: the name of the setting
+ * @value: location to store the value of the setting
+ *
+ * Retrieves a desktop-wide setting such as double-click time
+ * for the #GdkScreen @screen.
+ *
+ * FIXME needs a list of valid settings here, or a link to
+ * more information.
+ *
+ * Returns: %TRUE if the setting existed and a value was stored
+ *   in @value, %FALSE otherwise.
+ *
+ * Since: 2.2
+ **/
+gboolean
+gdk_screen_get_setting (GdkScreen   *screen,
+			const gchar *name,
+			GValue      *value)
+{
+
+  const char *xsettings_name = NULL;
+  XSettingsResult result;
+  XSettingsSetting *setting = NULL;
+  GdkScreenX11 *screen_x11;
+  gboolean success = FALSE;
+  gint i;
+  GValue tmp_val = { 0, };
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS(); i++)
+    if (strcmp (GDK_SETTINGS_GDK_NAME (i), name) == 0)
+      {
+	xsettings_name = GDK_SETTINGS_X_NAME (i);
+	break;
+      }
+
+  if (!xsettings_name)
+    goto out;
+
+  result = xsettings_client_get_setting (screen_x11->xsettings_client,
+					 xsettings_name, &setting);
+  if (result != XSETTINGS_SUCCESS)
+    goto out;
+
+  switch (setting->type)
+    {
+    case XSETTINGS_TYPE_INT:
+      if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
+	{
+	  g_value_init (&tmp_val, G_TYPE_INT);
+	  g_value_set_int (&tmp_val, setting->data.v_int);
+	  g_value_transform (&tmp_val, value);
+
+	  success = TRUE;
+	}
+      break;
+    case XSETTINGS_TYPE_STRING:
+      if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
+	{
+	  g_value_init (&tmp_val, G_TYPE_STRING);
+	  g_value_set_string (&tmp_val, setting->data.v_string);
+	  g_value_transform (&tmp_val, value);
+
+	  success = TRUE;
+	}
+      break;
+    case XSETTINGS_TYPE_COLOR:
+      if (!check_transform (xsettings_name, GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
+	{
+	  GdkColor color;
+
+	  g_value_init (&tmp_val, GDK_TYPE_COLOR);
+
+	  color.pixel = 0;
+	  color.red = setting->data.v_color.red;
+	  color.green = setting->data.v_color.green;
+	  color.blue = setting->data.v_color.blue;
+
+	  g_value_set_boxed (&tmp_val, &color);
+
+	  g_value_transform (&tmp_val, value);
+
+	  success = TRUE;
+	}
+      break;
+    }
+
+  g_value_unset (&tmp_val);
+
+ out:
+  if (setting)
+    xsettings_setting_free (setting);
+
+  if (success)
+    return TRUE;
+  else
+    return _gdk_x11_get_xft_setting (screen, name, value);
+}
+
+static void
+cleanup_atoms(gpointer data)
+{
+  NetWmSupportedAtoms *supported_atoms = data;
+  if (supported_atoms->atoms)
+      XFree (supported_atoms->atoms);
+  g_free (supported_atoms);
+}
+
+static void
+fetch_net_wm_check_window (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+  GdkDisplay *display;
+  Atom type;
+  gint format;
+  gulong n_items;
+  gulong bytes_after;
+  guchar *data;
+  Window *xwindow;
+  GTimeVal tv;
+  gint error;
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+  display = screen_x11->display;
+
+  g_return_if_fail (GDK_DISPLAY_X11 (display)->trusted_client);
+  
+  g_get_current_time (&tv);
+
+  if (ABS  (tv.tv_sec - screen_x11->last_wmspec_check_time) < 15)
+    return; /* we've checked recently */
+
+  screen_x11->last_wmspec_check_time = tv.tv_sec;
+
+  data = NULL;
+  XGetWindowProperty (screen_x11->xdisplay, screen_x11->xroot_window,
+		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
+		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
+		      &n_items, &bytes_after, &data);
+  
+  if (type != XA_WINDOW)
+    {
+      if (data)
+        XFree (data);
+      return;
+    }
+
+  xwindow = (Window *)data;
+
+  if (screen_x11->wmspec_check_window == *xwindow)
+    {
+      XFree (xwindow);
+      return;
+    }
+
+  gdk_error_trap_push ();
+
+  /* Find out if this WM goes away, so we can reset everything. */
+  XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
+  gdk_display_sync (display);
+
+  error = gdk_error_trap_pop ();
+  if (!error)
+    {
+      screen_x11->wmspec_check_window = *xwindow;
+      screen_x11->need_refetch_net_supported = TRUE;
+      screen_x11->need_refetch_wm_name = TRUE;
+
+      /* Careful, reentrancy */
+      _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+    }
+  else if (error == BadWindow)
+    {
+      /* Leftover property, try again immediately, new wm may be starting up */
+      screen_x11->last_wmspec_check_time = 0;
+    }
+
+  XFree (xwindow);
+}
+
+/**
+ * gdk_x11_screen_supports_net_wm_hint:
+ * @screen: the relevant #GdkScreen.
+ * @property: a property atom.
+ *
+ * This function is specific to the X11 backend of GDK, and indicates
+ * whether the window manager supports a certain hint from the
+ * Extended Window Manager Hints Specification. You can find this
+ * specification on
+ * <ulink url="http://www.freedesktop.org">http://www.freedesktop.org</ulink>.
+ *
+ * When using this function, keep in mind that the window manager
+ * can change over time; so you shouldn't use this function in
+ * a way that impacts persistent application state. A common bug
+ * is that your application can start up before the window manager
+ * does when the user logs in, and before the window manager starts
+ * gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
+ * You can monitor the window_manager_changed signal on #GdkScreen to detect
+ * a window manager change.
+ *
+ * Return value: %TRUE if the window manager supports @property
+ *
+ * Since: 2.2
+ **/
+gboolean
+gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
+				     GdkAtom    property)
+{
+  gulong i;
+  GdkScreenX11 *screen_x11;
+  NetWmSupportedAtoms *supported_atoms;
+  GdkDisplay *display;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+  display = screen_x11->display;
+
+  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+    return FALSE;
+
+  supported_atoms = g_object_get_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms");
+  if (!supported_atoms)
+    {
+      supported_atoms = g_new0 (NetWmSupportedAtoms, 1);
+      g_object_set_data_full (G_OBJECT (screen), "gdk-net-wm-supported-atoms", supported_atoms, cleanup_atoms);
+    }
+
+  fetch_net_wm_check_window (screen);
+
+  if (screen_x11->wmspec_check_window == None)
+    return FALSE;
+
+  if (screen_x11->need_refetch_net_supported)
+    {
+      /* WM has changed since we last got the supported list,
+       * refetch it.
+       */
+      Atom type;
+      gint format;
+      gulong bytes_after;
+
+      screen_x11->need_refetch_net_supported = FALSE;
+
+      if (supported_atoms->atoms)
+        XFree (supported_atoms->atoms);
+
+      supported_atoms->atoms = NULL;
+      supported_atoms->n_atoms = 0;
+
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
+                          gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTED"),
+                          0, G_MAXLONG, False, XA_ATOM, &type, &format,
+                          &supported_atoms->n_atoms, &bytes_after,
+                          (guchar **)&supported_atoms->atoms);
+
+      if (type != XA_ATOM)
+        return FALSE;
+    }
+
+  if (supported_atoms->atoms == NULL)
+    return FALSE;
+
+  i = 0;
+  while (i < supported_atoms->n_atoms)
+    {
+      if (supported_atoms->atoms[i] == gdk_x11_atom_to_xatom_for_display (display, property))
+        return TRUE;
+
+      ++i;
+    }
+
+  return FALSE;
+}
+
+/**
+ * gdk_net_wm_supports:
+ * @property: a property atom.
+ *
+ * This function is specific to the X11 backend of GDK, and indicates
+ * whether the window manager for the default screen supports a certain
+ * hint from the Extended Window Manager Hints Specification. See
+ * gdk_x11_screen_supports_net_wm_hint() for complete details.
+ *
+ * Return value: %TRUE if the window manager supports @property
+ **/
+gboolean
+gdk_net_wm_supports (GdkAtom property)
+{
+  return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
+}
+
+static void
+refcounted_grab_server (Display *xdisplay)
+{
+  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
+
+  gdk_x11_display_grab (display);
+}
+
+static void
+refcounted_ungrab_server (Display *xdisplay)
+{
+  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
+
+  gdk_x11_display_ungrab (display);
+}
+
+static GdkFilterReturn
+gdk_xsettings_client_event_filter (GdkXEvent *xevent,
+				   GdkEvent  *event,
+				   gpointer   data)
+{
+  GdkScreenX11 *screen = data;
+
+  if (xsettings_client_process_event (screen->xsettings_client, (XEvent *)xevent))
+    return GDK_FILTER_REMOVE;
+  else
+    return GDK_FILTER_CONTINUE;
+}
+
+static Bool
+gdk_xsettings_watch_cb (Window   window,
+			Bool	 is_start,
+			long     mask,
+			void    *cb_data)
+{
+  GdkWindow *gdkwin;
+  GdkScreen *screen = cb_data;
+
+  gdkwin = gdk_window_lookup_for_display (gdk_screen_get_display (screen), window);
+
+  if (is_start)
+    {
+      if (gdkwin)
+	g_object_ref (gdkwin);
+      else
+	{
+	  gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
+	  
+	  /* gdk_window_foreign_new_for_display() can fail and return NULL if the
+	   * window has already been destroyed.
+	   */
+	  if (!gdkwin)
+	    return False;
+	}
+
+      gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+    }
+  else
+    {
+      if (!gdkwin)
+	{
+	  /* gdkwin should not be NULL here, since if starting the watch succeeded
+	   * we have a reference on the window. It might mean that the caller didn't
+	   * remove the watch when it got a DestroyNotify event. Or maybe the
+	   * caller ignored the return value when starting the watch failed.
+	   */
+	  g_warning ("gdk_xsettings_watch_cb(): Couldn't find window to unwatch");
+	  return False;
+	}
+      
+      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+      g_object_unref (gdkwin);
+    }
+
+  return True;
+}
+
+static void
+gdk_xsettings_notify_cb (const char       *name,
+			 XSettingsAction   action,
+			 XSettingsSetting *setting,
+			 void             *data)
+{
+  GdkEvent new_event;
+  GdkScreen *screen = data;
+  GdkScreenX11 *screen_x11 = data;
+  int i;
+
+  if (screen_x11->xsettings_in_init)
+    return;
+  
+  new_event.type = GDK_SETTING;
+  new_event.setting.window = gdk_screen_get_root_window (screen);
+  new_event.setting.send_event = FALSE;
+  new_event.setting.name = NULL;
+
+  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS() ; i++)
+    if (strcmp (GDK_SETTINGS_X_NAME (i), name) == 0)
+      {
+	new_event.setting.name = (char*) GDK_SETTINGS_GDK_NAME (i);
+	break;
+      }
+  
+  if (!new_event.setting.name)
+    return;
+  
+  switch (action)
+    {
+    case XSETTINGS_ACTION_NEW:
+      new_event.setting.action = GDK_SETTING_ACTION_NEW;
+      break;
+    case XSETTINGS_ACTION_CHANGED:
+      new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
+      break;
+    case XSETTINGS_ACTION_DELETED:
+      new_event.setting.action = GDK_SETTING_ACTION_DELETED;
+      break;
+    }
+
+  gdk_event_put (&new_event);
+}
+
+void
+_gdk_screen_x11_events_init (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  /* Keep a flag to avoid extra notifies that we don't need
+   */
+  screen_x11->xsettings_in_init = TRUE;
+  screen_x11->xsettings_client = xsettings_client_new_with_grab_funcs (screen_x11->xdisplay,
+						                       screen_x11->screen_num,
+						                       gdk_xsettings_notify_cb,
+						                       gdk_xsettings_watch_cb,
+						                       screen,
+                                                                       refcounted_grab_server,
+                                                                       refcounted_ungrab_server);
+  screen_x11->xsettings_in_init = FALSE;
+}
+
+/**
+ * gdk_x11_screen_get_window_manager_name:
+ * @screen: a #GdkScreen
+ *
+ * Returns the name of the window manager for @screen.
+ *
+ * Return value: the name of the window manager screen @screen, or
+ * "unknown" if the window manager is unknown. The string is owned by GDK
+ * and should not be freed.
+ *
+ * Since: 2.2
+ **/
+const char*
+gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
+{
+  GdkScreenX11 *screen_x11;
+
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (!G_LIKELY (GDK_DISPLAY_X11 (screen_x11->display)->trusted_client))
+    return screen_x11->window_manager_name;
+
+  fetch_net_wm_check_window (screen);
+
+  if (screen_x11->need_refetch_wm_name)
+    {
+      /* Get the name of the window manager */
+      screen_x11->need_refetch_wm_name = FALSE;
+
+      g_free (screen_x11->window_manager_name);
+      screen_x11->window_manager_name = g_strdup ("unknown");
+
+      if (screen_x11->wmspec_check_window != None)
+        {
+          Atom type;
+          gint format;
+          gulong n_items;
+          gulong bytes_after;
+          gchar *name;
+
+          name = NULL;
+
+	  gdk_error_trap_push ();
+
+          XGetWindowProperty (GDK_DISPLAY_XDISPLAY (screen_x11->display),
+                              screen_x11->wmspec_check_window,
+                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                                                                     "_NET_WM_NAME"),
+                              0, G_MAXLONG, False,
+                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                                                                     "UTF8_STRING"),
+                              &type, &format,
+                              &n_items, &bytes_after,
+                              (guchar **)&name);
+
+          gdk_display_sync (screen_x11->display);
+
+          gdk_error_trap_pop ();
+
+          if (name != NULL)
+            {
+              g_free (screen_x11->window_manager_name);
+              screen_x11->window_manager_name = g_strdup (name);
+              XFree (name);
+            }
+        }
+    }
+
+  return GDK_SCREEN_X11 (screen)->window_manager_name;
 }
 
 #define __GDK_SCREEN_X11_C__

@@ -29,7 +29,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkdnd-x11.c	   	\
 	gdkdrawable-x11.c  	\
 	gdkdrawable-x11.h	\
-	gdkevents-x11.c	   	\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
 	gdkeventtranslator.c	\
