@@ -48,6 +48,7 @@ struct _GtkPrinterCups
   gchar *printer_uri;
   gchar *hostname;
   gint port;
+  gchar **auth_info_required;
 
   ipp_pstate_t state;
   gboolean reading_ppd;
