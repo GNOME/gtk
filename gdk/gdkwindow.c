@@ -1184,6 +1184,23 @@ get_native_event_mask (GdkWindowObject *private)
     }
 }
 
+static GdkEventMask
+get_native_grab_event_mask (GdkEventMask grab_mask)
+{
+  /* Similar to the above but for pointer events only */
+  return
+    GDK_POINTER_MOTION_MASK |
+    GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
+    GDK_SCROLL_MASK |
+    (grab_mask &
+     ~(GDK_POINTER_MOTION_HINT_MASK |
+       GDK_BUTTON_MOTION_MASK |
+       GDK_BUTTON1_MOTION_MASK |
+       GDK_BUTTON2_MOTION_MASK |
+       GDK_BUTTON3_MOTION_MASK));
+}
+
 /* Puts the native window in the right order wrt the other native windows
  * in the hierarchy, given the position it has in the client side data.
  * This is useful if some operation changed the stacking order.
@@ -9564,7 +9581,7 @@ gdk_pointer_grab (GdkWindow *	  window,
   res = _gdk_windowing_pointer_grab (window,
 				     native,
 				     owner_events,
-				     event_mask,
+				     get_native_grab_event_mask (event_mask),
 				     confine_to,
 				     cursor,
 				     time);
