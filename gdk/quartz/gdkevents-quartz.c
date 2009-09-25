@@ -33,6 +33,9 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-quartz.h"
 
+#define GRIP_WIDTH 15
+#define GRIP_HEIGHT 15
+
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
 
@@ -564,8 +567,6 @@ find_window_for_ns_event (NSEvent *nsevent,
               if (*y < 0)
                 return NULL;
 
-            /* FIXME: Also need to leave resize events to cocoa somehow? */
-
             /* As for owner events, we need to use the toplevel under the
              * pointer, not the window from the NSEvent.
              */
@@ -574,7 +575,38 @@ find_window_for_ns_event (NSEvent *nsevent,
                                                                   &x_tmp, &y_tmp);
             if (toplevel_under_pointer)
               {
+                GdkWindowObject *toplevel_private;
+                GdkWindowImplQuartz *toplevel_impl;
+
                 toplevel = toplevel_under_pointer;
+
+                toplevel_private = (GdkWindowObject *)toplevel;
+                toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
+
+                if ([toplevel_impl->toplevel showsResizeIndicator])
+                  {
+                    NSRect frame;
+
+                    /* If the resize indicator is visible and the event
+                     * is in the lower right 15x15 corner, we leave these
+                     * events to Cocoa as to be handled as resize events.
+                     * Applications may have widgets in this area.  These
+                     * will most likely be larger than 15x15 and for
+                     * scroll bars there are also other means to move
+                     * the scroll bar.  Since the resize indicator is
+                     * the only way of resizing windows on Mac OS, it
+                     * is too important to not make functional.
+                     */
+                    frame = [toplevel_impl->view bounds];
+                    if (x_tmp > frame.size.width - GRIP_WIDTH
+                        && x_tmp < frame.size.width
+                        && y_tmp > frame.size.height - GRIP_HEIGHT
+                        && y_tmp < frame.size.height)
+                      {
+                        return NULL;
+                      }
+                  }
+
                 *x = x_tmp;
                 *y = y_tmp;
               }
