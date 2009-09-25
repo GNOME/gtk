@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-09-23 12:42+0000\n"
-"PO-Revision-Date: 2009-09-23 17:17+0300\n"
+"POT-Creation-Date: 2009-09-24 13:36+0000\n"
+"PO-Revision-Date: 2009-09-24 20:43+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1963,12 +1963,6 @@ msgstr "Failisüsteemi juurkataloog"
 msgid "Authentication"
 msgstr "Autentimine"
 
-msgid "Username:"
-msgstr "Kasutajanimi:"
-
-msgid "Password:"
-msgstr "Parool:"
-
 msgid "Not available"
 msgstr "Pole saadaval"
 
@@ -2278,7 +2272,7 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
-"Määra trükkimise kellaaeg,\n"
+"Määra printimise kellaaeg,\n"
 " nt 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 msgid "Time of print"
@@ -2835,7 +2829,7 @@ msgstr "<%s> kirjes leidub nii \"id\" kui ka \"name\""
 
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "\"%s\" atribuut esineb <%s> kirjes kaks korda"
+msgstr "\"%s\" rekvisiit esineb <%s> kirjes kaks korda"
 
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
@@ -2843,15 +2837,15 @@ msgstr "<%s> kirjel on vigane id \"%s\""
 
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" atribuudid"
+msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" rekvisiidid"
 
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "Atribuuti \"%s\" korratakse kaks korda samas <%s> kirjes"
+msgstr "Rekvisiiti \"%s\" korratakse samas <%s> kirjes kaks korda"
 
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr "Atribuut \"%s\" on selle konteksti korral <%s> kirjes vigane"
+msgstr "Rekvisiit \"%s\" on <%s> kirjes selle konteksti korral vigane"
 
 #, c-format
 msgid "Tag \"%s\" has not been defined."
@@ -2870,22 +2864,22 @@ msgstr "Element <%s> pole <%s> sees lubatud"
 
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr "\"%s\" pole atribuudi liigiks lubatud"
+msgstr "\"%s\" pole rekvisiidi liigiks lubatud"
 
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "\"%s\" pole atribuudi väärtuseks lubatud"
+msgstr "\"%s\" pole rekvisiidi väärtuseks lubatud"
 
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"Väärtust \"%1$s\" pole võimalik atribuudi \"%3$s\" jaoks \"%2$s\"-"
+"Väärtust \"%1$s\" pole võimalik rekvisiidi \"%3$s\" jaoks \"%2$s\"-"
 "tüübiliseks väärtuseks teisendada"
 
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "\"%s\" pole atribuudile \"%s\" sobilik väärtus"
+msgstr "\"%s\" pole rekvisiidile \"%s\" sobilik väärtus"
 
 #, c-format
 msgid "Tag \"%s\" already defined"
@@ -3784,43 +3778,64 @@ msgstr "Vietnami (VIQR)"
 msgid "X Input Method"
 msgstr "X'i sisestusmeetod"
 
+msgid "Username:"
+msgstr "Kasutajanimi:"
+
+msgid "Password:"
+msgstr "Parool:"
+
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "Faili tõmbamiseks %s-st on vajalik autentimine"
+msgstr "Faili tõmbamiseks %s-st on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Dokumendi '%s' trükkimiseks printerisse %s on vajalik autentimine"
+msgstr "Dokumendi '%s' printimiseks printerisse %s on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "Dokumendi trükkimiseks %s-sse on vajalik autentimine"
+msgstr "Dokumendi printimiseks %s-sse on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "Töö '%s' atribuutide hankimiseks on vajalik autentimine"
+msgstr "Töö '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 msgid "Authentication is required to get attributes of a job"
-msgstr "Töö atribuutide hankimiseks on vajalik autentimine"
+msgstr "Töö rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "Printeri '%s' atribuutide hankimiseks on vajalik autentimine"
+msgstr "Printeri '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 msgid "Authentication is required to get attributes of a printer"
-msgstr "Printeri atribuutide hankimiseks on vajalik autentimine"
+msgstr "Printeri rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Vaikimisi printeri hankimiseks %s-st on vajalik autentimine"
+msgstr "Vaikimisi printeri hankimiseks %s-st on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "Printerite hankimiseks %s-st on vajalik autentimine"
+msgstr "Printerite hankimiseks %s-st on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "%s jaoks on vajalik autentimine"
+msgstr "%s jaoks on vaja eelnevalt autentida"
+
+msgid "Domain:"
+msgstr "Domeen:"
+
+#, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr "Dokumendi '%s' printimiseks on vaja eelnevalt autentida"
+
+#, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr ""
+"Selle dokumendi printimiseks printerisse %s on vaja eelnevalt autentida"
+
+msgid "Authentication is required to print this document"
+msgstr "Selle dokumendi printimiseks on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Printer '%s' is low on toner."
