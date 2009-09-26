@@ -63,7 +63,7 @@ _gdk_device_get_history (GdkDevice         *device,
 
 void
 _gdk_input_select_events (GdkWindow        *impl_window,
-			  GdkDevicePrivate *gdkdev)
+                          GdkDevice        *device)
 {
 }
 
