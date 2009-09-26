@@ -38,9 +38,7 @@
 #include <X11/extensions/XInput.h>
 #endif
 
-
 typedef struct _GdkAxisInfo    GdkAxisInfo;
-typedef struct _GdkDevicePrivate GdkDevicePrivate;
 
 /* information about a device axis */
 struct _GdkAxisInfo
@@ -60,48 +58,6 @@ struct _GdkAxisInfo
 };
 
 #define GDK_INPUT_NUM_EVENTC 6
-
-struct _GdkDevicePrivate
-{
-  GdkDevice info;
-
-  guint32 deviceid;
-
-  GdkDisplay *display;
-  
-
-#ifndef XINPUT_NONE
-  /* information about the axes */
-  GdkAxisInfo *axes;
-
-  /* Information about XInput device */
-  XDevice       *xdevice;
-
-  /* minimum key code for device */
-  gint min_keycode;	       
-
-  int buttonpress_type, buttonrelease_type, keypress_type,
-      keyrelease_type, motionnotify_type, proximityin_type, 
-      proximityout_type, changenotify_type;
-
-  /* true if we need to select a different set of events, but
-     can't because this is the core pointer */
-  gint needs_update;
-
-  /* Mask of buttons (used for button grabs) */
-  gint button_state;
-
-  /* true if we've claimed the device as active. (used only for XINPUT_GXI) */
-  gint claimed;
-#endif /* !XINPUT_NONE */
-};
-
-#if 0
-struct _GdkDeviceClass
-{
-  GObjectClass parent_class;
-};
-#endif
 
 /* Addition used for extension_events mask */
 #define GDK_ALL_DEVICES_MASK (1<<30)
@@ -124,7 +80,7 @@ struct _GdkInputWindow
 
 /* Global data */
 
-#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == ((GdkDevicePrivate *)(d))->display->core_pointer)
+#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == gdk_device_get_display (d)->core_pointer)
 
 /* Function declarations */
 
@@ -163,21 +119,23 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 gint               _gdk_input_common_init               (GdkDisplay	  *display,
 							 gint              include_core);
-GdkDevicePrivate * _gdk_input_find_device               (GdkDisplay	  *display,
+GdkDevice *        _gdk_input_find_device               (GdkDisplay	  *display,
 							 guint32           id);
 void               _gdk_input_get_root_relative_geometry(GdkWindow        *window,
 							 int              *x_ret,
 							 int              *y_ret);
-void               _gdk_input_common_find_events        (GdkDevicePrivate *gdkdev,
+void               _gdk_input_common_find_events        (GdkDevice        *device,
 							 gint              mask,
 							 XEventClass      *classes,
 							 int              *num_classes);
 void               _gdk_input_select_events             (GdkWindow        *impl_window,
-							 GdkDevicePrivate *gdkdev);
+                                                         GdkDevice        *device);
+#if 0
 gint               _gdk_input_common_other_event        (GdkEvent         *event,
 							 XEvent           *xevent,
 							 GdkWindow        *window,
-							 GdkDevicePrivate *gdkdev);
+                                                         GdkDevice        *device);
+#endif
 
 #endif /* !XINPUT_NONE */
 

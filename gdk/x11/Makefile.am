@@ -64,7 +64,7 @@ libgdk_x11_la_SOURCES =    	\
 	xsettings-common.c
 
 if XINPUT_XFREE
-libgdk_x11_la_SOURCES += gdkinput-x11.c gdkinput-xfree.c
+libgdk_x11_la_SOURCES += gdkdevicemanager-xi.c gdkdevice-xi.c gdkinput-x11.c gdkinput-xfree.c
 else
 libgdk_x11_la_SOURCES += gdkinput-none.c
 endif
