@@ -468,10 +468,11 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   /* Properties */
   g_object_class_install_property (object_class,
                                    PROP_CURSOR,
-                                   g_param_spec_pointer ("cursor",
-                                                         P_("Cursor"),
-                                                         P_("Cursor"),
-                                                         G_PARAM_READWRITE));
+                                   g_param_spec_boxed ("cursor",
+                                                       P_("Cursor"),
+                                                       P_("Cursor"),
+                                                       GDK_TYPE_CURSOR,
+                                                       G_PARAM_READWRITE));
 
   /**
    * GdkWindow::pick-embedded-child:
