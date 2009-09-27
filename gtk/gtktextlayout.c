@@ -1812,56 +1812,59 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
 {
   PangoLayout *layout = display->layout;
   PangoLayoutIter *run_iter;
-  
+
   run_iter = pango_layout_get_iter (layout);
-  
   do
     {
       PangoLayoutRun *run = pango_layout_iter_get_run_readonly (run_iter);
-      
+
       if (run && is_shape (run))
         {
           gint byte_index;
           GtkTextIter text_iter;
-          GtkTextChildAnchor *anchor = 0;
-          GList *widgets = 0;
-          
-          /* The pango iterator iterates in visual order. 
+          GtkTextChildAnchor *anchor = NULL;
+          GList *widgets = NULL;
+          GList *l;
+
+          /* The pango iterator iterates in visual order.
            * We use the byte index to find the child widget.
            */
-          
           byte_index = pango_layout_iter_get_index (run_iter);
           line_display_index_to_iter (text_layout, display, &text_iter, byte_index, 0);
           anchor = gtk_text_iter_get_child_anchor (&text_iter);
-          widgets = gtk_text_child_anchor_get_widgets (anchor);
-          
-          if (widgets)
+	  if (anchor)
+            widgets = gtk_text_child_anchor_get_widgets (anchor);
+
+          for (l = widgets; l; l = l->next)
             {
               PangoRectangle extents;
-              GtkWidget *child = widgets->data;
+              GtkWidget *child = l->data;
 
-              /* We emit "allocate_child" with the x,y of
-               * the widget with respect to the top of the line
-               * and the left side of the buffer
-               */
-              
-              pango_layout_iter_get_run_extents (run_iter,
-                                                 NULL,
-                                                 &extents);
-              
-              g_signal_emit (text_layout,
-                             signals[ALLOCATE_CHILD],
-                             0,
-                             child,
-                             PANGO_PIXELS (extents.x) + display->x_offset,
-                             PANGO_PIXELS (extents.y) + display->top_margin);
-              
-              g_list_free (widgets);
+              if (_gtk_anchored_child_get_layout (child) == text_layout)
+                {
+
+                  /* We emit "allocate_child" with the x,y of
+                   * the widget with respect to the top of the line
+                   * and the left side of the buffer
+                   */
+                  pango_layout_iter_get_run_extents (run_iter,
+                                                     NULL,
+                                                     &extents);
+
+                  g_signal_emit (text_layout,
+                                 signals[ALLOCATE_CHILD],
+                                 0,
+                                 child,
+                                 PANGO_PIXELS (extents.x) + display->x_offset,
+                                 PANGO_PIXELS (extents.y) + display->top_margin);
+                }
             }
+
+          g_list_free (widgets);
         }
     }
   while (pango_layout_iter_next_run (run_iter));
-  
+
   pango_layout_iter_free (run_iter);
 }
 
