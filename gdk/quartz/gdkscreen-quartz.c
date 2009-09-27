@@ -82,6 +82,13 @@ gdk_screen_set_default_colormap (GdkScreen   *screen,
     g_object_unref (old_colormap);
 }
 
+/* FIXME: note on the get_width() and the get_height() methods.  For
+ * now we only support screen layouts where the screens are laid out
+ * horizontally.  Mac OS X also supports laying out the screens vertically
+ * and the screens having "non-standard" offsets from eachother.  In the
+ * future we need a much more sophiscated algorithm to translate these
+ * layouts to GDK coordinate space and GDK screen layout.
+ */
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
@@ -221,6 +228,8 @@ screen_get_monitor_geometry (GdkScreen    *screen,
   NSArray *array;
   NSScreen *nsscreen;
   NSRect rect;
+  NSRect largest_rect;
+  int i;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -229,9 +238,30 @@ screen_get_monitor_geometry (GdkScreen    *screen,
   rect = [nsscreen frame];
   
   dest->x = rect.origin.x;
-  dest->y = rect.origin.y;
   dest->width = rect.size.width;
   dest->height = rect.size.height;
+
+  /* FIXME: as stated above the get_width() and get_height() functions
+   * in this file, we only support horizontal screen layouts for now.
+   */
+
+  /* Find the monitor with the largest height.  All monitors should be
+   * offset to this one in the GDK screen space instead of offset to
+   * the screen with the menu bar.
+   */
+  largest_rect = [[array objectAtIndex:0] frame];
+  for (i = 1; i < [array count]; i++)
+    {
+      NSRect rect = [[array objectAtIndex:i] frame];
+
+      if (rect.size.height > largest_rect.size.height)
+        largest_rect = [[array objectAtIndex:i] frame];
+    }
+
+  if (largest_rect.size.height - rect.size.height == 0)
+    dest->y = 0;
+  else
+    dest->y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
 
   if (in_mm)
     {

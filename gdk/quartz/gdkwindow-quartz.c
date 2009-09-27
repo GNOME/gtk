@@ -654,9 +654,16 @@ _gdk_quartz_window_is_ancestor (GdkWindow *ancestor,
 gint 
 _gdk_quartz_window_get_inverted_screen_y (gint y)
 {
-  NSRect rect = [[NSScreen mainScreen] frame];
+  int index;
+  GdkRectangle gdk_rect;
+  NSScreen *main_screen = [NSScreen mainScreen];
+  NSRect rect = [main_screen frame];
 
-  return rect.size.height - y;
+  index = [[NSScreen screens] indexOfObject:main_screen];
+
+  gdk_screen_get_monitor_geometry (_gdk_screen, index, &gdk_rect);
+
+  return gdk_rect.height - y + rect.origin.y + gdk_rect.y;
 }
 
 static GdkWindow *
