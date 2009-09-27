@@ -1030,7 +1030,6 @@ _gdk_windowing_window_init (void)
   GdkWindowObject *private;
   GdkWindowImplQuartz *impl;
   GdkDrawableImplQuartz *drawable_impl;
-  NSRect rect;
 
   g_assert (_gdk_root == NULL);
 
