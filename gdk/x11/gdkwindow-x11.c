@@ -3215,7 +3215,8 @@ GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
                                   gint       *win_x,
 				  gint       *win_y,
-				  GdkModifierType *mask)
+				  GdkModifierType *mask,
+				  gboolean   get_toplevel)
 {
   GdkWindow *window;
   GdkScreen *screen;
@@ -3251,6 +3252,10 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       while (xwindow)
 	{
 	  xwindow_last = xwindow;
+	  if (get_toplevel &&
+	      (window = gdk_window_lookup_for_display (display, xwindow)) != NULL &&
+	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	    break;
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
 	}
@@ -3310,6 +3315,10 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       while (xwindow)
 	{
 	  xwindow_last = xwindow;
+	  if (get_toplevel &&
+	      (window = gdk_window_lookup_for_display (display, xwindow)) != NULL &&
+	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	    break;
 	  gdk_error_trap_push ();
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);

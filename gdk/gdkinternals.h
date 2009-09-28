@@ -461,7 +461,8 @@ void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      gint             *win_x,
 					      gint             *win_y,
-					      GdkModifierType  *mask);
+					      GdkModifierType  *mask,
+					      gboolean          get_toplevel);
 GdkGrabStatus _gdk_windowing_pointer_grab    (GdkWindow        *window,
 					      GdkWindow        *native,
 					      gboolean          owner_events,

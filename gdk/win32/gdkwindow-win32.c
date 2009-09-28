@@ -2261,7 +2261,8 @@ GdkWindow*
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
 				  gint       *win_x,
 				  gint       *win_y,
-				  GdkModifierType *mask)
+				  GdkModifierType *mask,
+				  gboolean    get_toplevel)
 {
   GdkWindow *window;
   POINT point, pointc;
@@ -2283,6 +2284,11 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
   ScreenToClient (hwnd, &point);
 
   do {
+    if (get_toplevel &&
+	(window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd)) != NULL &&
+	GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+      break;
+
     hwndc = ChildWindowFromPoint (hwnd, point);
     ClientToScreen (hwnd, &point);
     ScreenToClient (hwndc, &point);
