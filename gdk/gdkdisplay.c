@@ -1046,9 +1046,7 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
       if (current_grab->serial_start > current_serial)
 	return; /* Hasn't started yet */
       
-      if (current_grab->serial_end > current_serial ||
-	  (current_grab->serial_end == current_serial &&
-	   current_grab->grab_one_pointer_release_event))
+      if (current_grab->serial_end > current_serial)
 	{
 	  /* This one hasn't ended yet.
 	     its the currently active one or scheduled to be active */

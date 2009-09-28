@@ -185,7 +185,6 @@ typedef struct
 
   gboolean activated;
   gboolean implicit_ungrab;
-  gboolean grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
 typedef struct _GdkInputWindow GdkInputWindow;
