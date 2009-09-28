@@ -111,17 +111,15 @@ gdk_input_device_new (GdkDisplay  *display,
 
   tmp_name = g_ascii_strdown (gdkdev->info.name, -1);
 
-  if (!strcmp (tmp_name, "pointer"))
-    gdkdev->info.source = GDK_SOURCE_MOUSE;
-  else if (!strcmp (tmp_name, "wacom") ||
-	   !strcmp (tmp_name, "pen"))
-    gdkdev->info.source = GDK_SOURCE_PEN;
-  else if (!strcmp (tmp_name, "eraser"))
+  if (g_strrstr (tmp_name, "eraser"))
     gdkdev->info.source = GDK_SOURCE_ERASER;
-  else if (!strcmp (tmp_name, "cursor"))
+  else if (g_strrstr (tmp_name, "cursor"))
     gdkdev->info.source = GDK_SOURCE_CURSOR;
-  else
+  else if (g_strrstr (tmp_name, "wacom") ||
+	   g_strrstr (tmp_name, "pen"))
     gdkdev->info.source = GDK_SOURCE_PEN;
+  else
+    gdkdev->info.source = GDK_SOURCE_MOUSE;
 
   g_free(tmp_name);
 
