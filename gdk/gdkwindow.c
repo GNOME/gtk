@@ -9967,6 +9967,7 @@ proxy_button_event (GdkEvent *source_event,
 						       &toplevel_x, &toplevel_y);
 
   if (type == GDK_BUTTON_PRESS &&
+      !source_event->any.send_event &&
       _gdk_display_has_pointer_grab (display, serial) == NULL)
     {
       pointer_window =
@@ -10176,6 +10177,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (_gdk_native_windows)
     {
       if (event->type == GDK_BUTTON_PRESS &&
+	  !event->any.send_event &&
 	  _gdk_display_has_pointer_grab (display, serial) == NULL)
 	{
 	  _gdk_display_add_pointer_grab  (display,
@@ -10189,7 +10191,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	  _gdk_display_pointer_grab_update (display,
 					    serial);
 	}
-      if (event->type == GDK_BUTTON_RELEASE)
+      if (event->type == GDK_BUTTON_RELEASE &&
+	  !event->any.send_event)
 	{
 	  button_release_grab =
 	    _gdk_display_has_pointer_grab (display, serial);
@@ -10312,7 +10315,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
     unlink_event = proxy_button_event (event,
 				       serial);
 
-  if (event->type == GDK_BUTTON_RELEASE)
+  if (event->type == GDK_BUTTON_RELEASE &&
+      !event->any.send_event)
     {
       button_release_grab =
 	_gdk_display_has_pointer_grab (display, serial);
