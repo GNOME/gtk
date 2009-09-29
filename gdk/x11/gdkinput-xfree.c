@@ -237,7 +237,6 @@ _gdk_input_other_event (GdkEvent *event,
   GdkWindowObject *priv;
   GdkInputWindow *iw;
   GdkDevicePrivate *gdkdev;
-  gint return_val;
   GdkEventType event_type;
   int x, y;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (event_window);
@@ -280,18 +279,19 @@ _gdk_input_other_event (GdkEvent *event,
   if (!display->ignore_core_events && priv->extension_events != 0)
     gdk_input_check_proximity (GDK_WINDOW_DISPLAY (window));
 
-  return_val = _gdk_input_common_other_event (event, xevent, window, gdkdev);
+  if (!_gdk_input_common_other_event (event, xevent, window, gdkdev))
+    return FALSE;
 
-  if (return_val && event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS)
     iw->button_down_window = window;
-  if (return_val && event->type == GDK_BUTTON_RELEASE)
+  if (event->type == GDK_BUTTON_RELEASE)
     iw->button_down_window = NULL;
 
-  if (return_val && event->type == GDK_PROXIMITY_OUT &&
+  if (event->type == GDK_PROXIMITY_OUT &&
       display->ignore_core_events)
     gdk_input_check_proximity (GDK_WINDOW_DISPLAY (window));
 
-  return return_val;
+  return TRUE;
 }
 
 gint
