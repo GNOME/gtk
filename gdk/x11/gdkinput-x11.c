@@ -278,6 +278,7 @@ _gdk_input_common_find_events (GdkDevicePrivate *gdkdev,
       DeviceMotionNotify (gdkdev->xdevice, gdkdev->motionnotify_type, class);
       if (class != 0)
 	  classes[i++] = class;
+      DeviceStateNotify (gdkdev->xdevice, gdkdev->devicestatenotify_type, class);
       if (class != 0)
 	  classes[i++] = class;
     }
@@ -699,6 +700,26 @@ _gdk_input_common_other_event (GdkEvent         *event,
       return TRUE;
     }
 
+  if (xevent->type == gdkdev->devicestatenotify_type)
+    {
+      int i;
+      XDeviceStateNotifyEvent *xdse = (XDeviceStateNotifyEvent *)(xevent);
+      XInputClass *input_class = (XInputClass *)xdse->data;
+      for (i=0; i<xdse->num_classes; i++)
+	{
+	  if (input_class->class == ValuatorClass)
+	    gdk_input_update_axes (gdkdev, gdkdev->info.num_axes, 0,
+				   ((XValuatorState *)input_class)->valuators);
+	  input_class = (XInputClass *)(((char *)input_class)+input_class->length);
+	}
+
+      GDK_NOTE (EVENTS,
+	g_print ("device state notify:\t\twindow: %ld  device: %ld\n",
+		 xdse->window,
+		 xdse->deviceid));
+
+      return FALSE;
+    }
   if (xevent->type == gdkdev->proximityin_type ||
       xevent->type == gdkdev->proximityout_type)
     {

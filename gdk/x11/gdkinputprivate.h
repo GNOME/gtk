@@ -83,7 +83,7 @@ struct _GdkDevicePrivate
 
   int buttonpress_type, buttonrelease_type, keypress_type,
       keyrelease_type, motionnotify_type, proximityin_type, 
-      proximityout_type, changenotify_type;
+      proximityout_type, changenotify_type, devicestatenotify_type;
 
   /* true if we need to select a different set of events, but
      can't because this is the core pointer */
