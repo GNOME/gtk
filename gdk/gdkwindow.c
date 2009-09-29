@@ -1163,25 +1163,44 @@ get_native_event_mask (GdkWindowObject *private)
     return private->event_mask;
   else
     {
-      return
-	/* We need thse for all native window so we can emulate
-	   events on children: */
+      GdkEventMask mask;
+
+      /* Do whatever the app asks to, since the app
+       * may be asking for weird things for native windows,
+       * but filter out things that override the special
+       * requests below. */
+      mask = private->event_mask &
+	~(GDK_POINTER_MOTION_HINT_MASK |
+	  GDK_BUTTON_MOTION_MASK |
+	  GDK_BUTTON1_MOTION_MASK |
+	  GDK_BUTTON2_MOTION_MASK |
+	  GDK_BUTTON3_MOTION_MASK);
+
+      /* We need thse for all native windows so we can
+	 emulate events on children: */
+      mask |=
 	GDK_EXPOSURE_MASK |
 	GDK_VISIBILITY_NOTIFY_MASK |
-	GDK_POINTER_MOTION_MASK |
-	GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
-	GDK_SCROLL_MASK |
-	/* Then do whatever the app asks to, since the app
-	 * may be asking for weird things for native windows,
-	 * but filter out things that override the above
-	 * requests somehow. */
-	(private->event_mask &
-	 ~(GDK_POINTER_MOTION_HINT_MASK |
-	   GDK_BUTTON_MOTION_MASK |
-	   GDK_BUTTON1_MOTION_MASK |
-	   GDK_BUTTON2_MOTION_MASK |
-	   GDK_BUTTON3_MOTION_MASK));
+	GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK;
+
+      /* Additionally we select for pointer and button events
+       * for toplevels as we need to get these to emulate
+       * them for non-native subwindows. Even though we don't
+       * select on them for all native windows we will get them
+       * as the events are propagated out to the first window
+       * that select for them.
+       * Not selecting for button press on all windows is an
+       * important thing, because in X only one client can do
+       * so, and we don't want to unexpectedly prevent another
+       * client from doing it.
+       */
+      if (gdk_window_is_toplevel (private))
+	mask |=
+	  GDK_POINTER_MOTION_MASK |
+	  GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+	  GDK_SCROLL_MASK;
+
+      return mask;
     }
 }
 
