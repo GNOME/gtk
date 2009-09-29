@@ -105,6 +105,34 @@ typedef enum
 }
 SignalName;
 
+static const char *
+signal_name_to_string (SignalName signal)
+{
+  switch (signal)
+    {
+      case ROW_INSERTED:
+          return "row-inserted";
+
+      case ROW_DELETED:
+          return "row-deleted";
+
+      case ROW_CHANGED:
+          return "row-changed";
+
+      case ROW_HAS_CHILD_TOGGLED:
+          return "row-has-child-toggled";
+
+      case ROWS_REORDERED:
+          return "rows-reordered";
+
+      default:
+          /* Fall through */
+          break;
+    }
+
+  return "(unknown)";
+}
+
 typedef struct
 {
   SignalName signal;
@@ -152,21 +180,45 @@ signal_monitor_generic_handler (SignalMonitor *m,
 {
   Signal *s;
 
-  g_return_if_fail (m->client == model);
-  g_return_if_fail (!g_queue_is_empty (m->queue));
+  if (g_queue_is_empty (m->queue))
+    {
+      g_error ("Signal queue empty\n");
+      g_assert_not_reached ();
+    }
+
+  if (m->client != model)
+    {
+      g_error ("Model mismatch; expected %p, got %p\n",
+               m->client, model);
+      g_assert_not_reached ();
+    }
+
+  s = g_queue_peek_tail (m->queue);
 
 #if 0
   /* For debugging: output signals that are coming in.  Leaks memory. */
   g_print ("signal=%d  path=%s\n", signal, gtk_tree_path_to_string (path));
 #endif
 
-  s = g_queue_peek_tail (m->queue);
+  if (s->signal != signal
+      || gtk_tree_path_compare (s->path, path) != 0)
+    {
+      gchar *path_str, *s_path_str;
 
-  g_return_if_fail (s->signal == signal);
+      s_path_str = gtk_tree_path_to_string (s->path);
+      path_str = gtk_tree_path_to_string (path);
+
+      g_error ("Signals don't match; expected signal %s path %s, got signal %s path %s\n",
+               signal_name_to_string (s->signal), s_path_str,
+               signal_name_to_string (signal), path_str);
+
+      g_free (s_path_str);
+      g_free (path_str);
+
+      g_assert_not_reached ();
+    }
 
   s = g_queue_pop_tail (m->queue);
-
-  g_return_if_fail (!gtk_tree_path_compare (path, s->path));
 
   signal_free (s);
 }
