@@ -179,6 +179,9 @@ gint               _gdk_input_common_other_event        (GdkEvent         *event
 							 XEvent           *xevent,
 							 GdkWindow        *window,
 							 GdkDevicePrivate *gdkdev);
+gboolean	   _gdk_input_common_event_selected     (GdkEvent         *event,
+							 GdkWindow        *window,
+							 GdkDevicePrivate *gdkdev);
 
 #endif /* !XINPUT_NONE */
 

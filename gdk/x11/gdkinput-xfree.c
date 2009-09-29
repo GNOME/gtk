@@ -291,7 +291,7 @@ _gdk_input_other_event (GdkEvent *event,
       display->ignore_core_events)
     gdk_input_check_proximity (GDK_WINDOW_DISPLAY (window));
 
-  return TRUE;
+  return _gdk_input_common_event_selected(event, window, gdkdev);
 }
 
 gint

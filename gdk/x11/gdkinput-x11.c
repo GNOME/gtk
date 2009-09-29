@@ -702,6 +702,55 @@ _gdk_input_common_other_event (GdkEvent         *event,
 }
 
 gboolean
+_gdk_input_common_event_selected (GdkEvent         *event,
+				  GdkWindow        *window,
+				  GdkDevicePrivate *gdkdev)
+{
+  GdkWindowObject *priv = (GdkWindowObject *) window;
+
+  switch (event->type) {
+    case GDK_BUTTON_PRESS:
+      return priv->extension_events & GDK_BUTTON_PRESS_MASK;
+
+    case GDK_BUTTON_RELEASE:
+      return priv->extension_events & GDK_BUTTON_RELEASE_MASK;
+
+    case GDK_KEY_PRESS:
+      return priv->extension_events & GDK_KEY_PRESS_MASK;
+
+    case GDK_KEY_RELEASE:
+      return priv->extension_events & GDK_KEY_RELEASE_MASK;
+
+    case GDK_MOTION_NOTIFY:
+      if (priv->extension_events & GDK_POINTER_MOTION_MASK)
+	return TRUE;
+      if (gdkdev->button_count && (priv->extension_events & GDK_BUTTON_MOTION_MASK))
+	return TRUE;
+
+      if ((gdkdev->button_state[0] & 1 << 1) && (priv->extension_events & GDK_BUTTON1_MOTION_MASK))
+	return TRUE;
+      if ((gdkdev->button_state[0] & 1 << 2) && (priv->extension_events & GDK_BUTTON2_MOTION_MASK))
+	return TRUE;
+      if ((gdkdev->button_state[0] & 1 << 3) && (priv->extension_events & GDK_BUTTON3_MOTION_MASK))
+	return TRUE;
+
+      return FALSE;
+
+    case GDK_PROXIMITY_IN:
+	  return priv->extension_events & GDK_PROXIMITY_IN_MASK;
+
+    case GDK_PROXIMITY_OUT:
+	  return priv->extension_events & GDK_PROXIMITY_OUT_MASK;
+
+    default:
+      return FALSE;
+  }
+
+
+}
+
+
+gboolean
 _gdk_device_get_history (GdkDevice         *device,
 			 GdkWindow         *window,
 			 guint32            start,
