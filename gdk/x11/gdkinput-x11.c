@@ -44,6 +44,10 @@ static void              gdk_input_translate_coordinates (GdkDevicePrivate *gdkd
 							  gdouble          *axis_out,
 							  gdouble          *x_out,
 							  gdouble          *y_out);
+static void              gdk_input_update_axes           (GdkDevicePrivate *gdkdev,
+							  gint             axes_count,
+							  gint             first_axis,
+							  gint             *axis_data);
 static guint             gdk_input_translate_state       (guint             state,
 							  guint             device_state);
 
@@ -175,6 +179,7 @@ gdk_input_device_new (GdkDisplay  *display,
 	  XValuatorInfo *xvi = (XValuatorInfo *)class;
 	  gdkdev->info.num_axes = xvi->num_axes;
 	  gdkdev->axes = g_new (GdkAxisInfo, xvi->num_axes);
+	  gdkdev->axis_data = g_new0 (gint, xvi->num_axes);
 	  gdkdev->info.axes = g_new0 (GdkDeviceAxis, xvi->num_axes);
 	  for (j=0;j<xvi->num_axes;j++)
 	    {
@@ -377,6 +382,19 @@ _gdk_input_common_init (GdkDisplay *display,
 }
 
 static void
+gdk_input_update_axes (GdkDevicePrivate *gdkdev,
+		       gint             axes_count,
+		       gint             first_axis,
+		       gint             *axis_data)
+{
+  int i;
+  g_return_if_fail (first_axis >= 0 && first_axis + axes_count <= gdkdev->info.num_axes);
+
+  for (i = 0; i < axes_count; i++)
+    gdkdev->axis_data[first_axis + i] = axis_data[i];
+}
+
+static void
 gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 GdkWindow        *window,
 				 gint             *axis_data,
@@ -545,7 +563,9 @@ _gdk_input_common_other_event (GdkEvent         *event,
       event->button.time = xdbe->time;
 
       event->button.axes = g_new (gdouble, gdkdev->info.num_axes);
-      gdk_input_translate_coordinates (gdkdev, window, xdbe->axis_data,
+      gdk_input_update_axes (gdkdev, xdbe->axes_count, xdbe->first_axis,
+			     xdbe->axis_data);
+      gdk_input_translate_coordinates (gdkdev, window, gdkdev->axis_data,
 				       event->button.axes,
 				       &event->button.x, &event->button.y);
       event->button.x_root = event->button.x + priv->abs_x + input_window->root_x;
@@ -647,7 +667,8 @@ _gdk_input_common_other_event (GdkEvent         *event,
       event->motion.device = &gdkdev->info;
 
       event->motion.axes = g_new (gdouble, gdkdev->info.num_axes);
-      gdk_input_translate_coordinates(gdkdev,window,xdme->axis_data,
+      gdk_input_update_axes (gdkdev, xdme->axes_count, xdme->first_axis, xdme->axis_data);
+      gdk_input_translate_coordinates(gdkdev, window, gdkdev->axis_data,
 				      event->motion.axes,
 				      &event->motion.x,&event->motion.y);
       event->motion.x_root = event->motion.x + priv->abs_x + input_window->root_x;

@@ -120,7 +120,9 @@ gdk_device_dispose (GObject *object)
 	  gdkdev->xdevice = NULL;
 	}
       g_free (gdkdev->axes);
+      g_free (gdkdev->axis_data);
       gdkdev->axes = NULL;
+      gdkdev->axis_data = NULL;
 #endif /* !XINPUT_NONE */
 
       g_free (gdkdev->info.name);

@@ -73,6 +73,7 @@ struct _GdkDevicePrivate
 #ifndef XINPUT_NONE
   /* information about the axes */
   GdkAxisInfo *axes;
+  gint *axis_data;
 
   /* Information about XInput device */
   XDevice       *xdevice;
