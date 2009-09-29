@@ -135,7 +135,8 @@ gdk_input_device_new (GdkDisplay  *display,
   gdkdev->info.has_cursor = 0;
   gdkdev->needs_update = FALSE;
   gdkdev->claimed = FALSE;
-  gdkdev->button_state = 0;
+  memset(gdkdev->button_state, 0, sizeof (gdkdev->button_state));
+  gdkdev->button_count = 0;
 
   class = device->inputclassinfo;
   for (i=0;i<device->num_classes;i++)
@@ -556,15 +557,24 @@ _gdk_input_common_other_event (GdkEvent         *event,
     {
       XDeviceButtonEvent *xdbe = (XDeviceButtonEvent *)(xevent);
 
+      g_return_val_if_fail (xdbe->button < 256, FALSE);
       if (xdbe->type == gdkdev->buttonpress_type)
 	{
 	  event->button.type = GDK_BUTTON_PRESS;
-	  gdkdev->button_state |= 1 << xdbe->button;
+	  if (!(gdkdev->button_state[xdbe->button/8] & 1 << (xdbe->button%8)))
+	    {
+	      gdkdev->button_state[xdbe->button/8] |= 1 << (xdbe->button%8);
+	      gdkdev->button_count++;
+	    }
 	}
       else
 	{
 	  event->button.type = GDK_BUTTON_RELEASE;
-	  gdkdev->button_state &= ~(1 << xdbe->button);
+	  if (gdkdev->button_state[xdbe->button/8] & 1 << (xdbe->button%8))
+	    {
+	      gdkdev->button_state[xdbe->button/8] &= ~(1 << (xdbe->button%8));
+	      gdkdev->button_count--;
+	    }
 	}
       event->button.device = &gdkdev->info;
       event->button.window = window;

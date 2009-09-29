@@ -369,10 +369,11 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
 	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice &&
-	      ((gdkdev->button_state != 0) || need_ungrab))
+	      ((gdkdev->button_count != 0) || need_ungrab))
 	    {
 	      XUngrabDevice (display_impl->xdisplay, gdkdev->xdevice, time);
-	      gdkdev->button_state = 0;
+	      memset(gdkdev->button_state, 0, sizeof (gdkdev->button_state));
+	      gdkdev->button_count = 0;
 	    }
 
 	  tmp_list = tmp_list->next;

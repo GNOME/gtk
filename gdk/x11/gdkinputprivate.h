@@ -89,7 +89,8 @@ struct _GdkDevicePrivate
   gint needs_update;
 
   /* Mask of buttons (used for button grabs) */
-  gint button_state;
+  char button_state[32];
+  gint button_count;
 
   /* true if we've claimed the device as active. (used only for XINPUT_GXI) */
   gint claimed;
