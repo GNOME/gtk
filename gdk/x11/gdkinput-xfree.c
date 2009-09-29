@@ -284,7 +284,7 @@ _gdk_input_other_event (GdkEvent *event,
 
   if (event->type == GDK_BUTTON_PRESS)
     iw->button_down_window = window;
-  if (event->type == GDK_BUTTON_RELEASE)
+  if (event->type == GDK_BUTTON_RELEASE && !gdkdev->button_count)
     iw->button_down_window = NULL;
 
   if (event->type == GDK_PROXIMITY_OUT &&
