@@ -266,49 +266,13 @@ _gdk_input_common_find_events (GdkDevicePrivate *gdkdev,
       if (class != 0)
 	  classes[i++] = class;
     }
-  if (mask & GDK_POINTER_MOTION_MASK)
+  if (mask & (GDK_POINTER_MOTION_MASK |
+	      GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK |
+	      GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_MOTION_MASK))
     {
-      DeviceMotionNotify  (gdkdev->xdevice, gdkdev->motionnotify_type, class);
+      DeviceMotionNotify (gdkdev->xdevice, gdkdev->motionnotify_type, class);
       if (class != 0)
 	  classes[i++] = class;
-    }
-  else
-    if (mask & (GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK |
-		GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_MOTION_MASK |
-		GDK_POINTER_MOTION_HINT_MASK))
-      {
-	/* Make sure gdkdev->motionnotify_type is set */
-	DeviceMotionNotify  (gdkdev->xdevice, gdkdev->motionnotify_type, class);
-      }
-  if (mask & GDK_BUTTON1_MOTION_MASK)
-    {
-      DeviceButton1Motion  (gdkdev->xdevice, 0, class);
-      if (class != 0)
-	  classes[i++] = class;
-    }
-  if (mask & GDK_BUTTON2_MOTION_MASK)
-    {
-      DeviceButton2Motion  (gdkdev->xdevice, 0, class);
-      if (class != 0)
-	  classes[i++] = class;
-    }
-  if (mask & GDK_BUTTON3_MOTION_MASK)
-    {
-      DeviceButton3Motion  (gdkdev->xdevice, 0, class);
-      if (class != 0)
-	  classes[i++] = class;
-    }
-  if (mask & GDK_BUTTON_MOTION_MASK)
-    {
-      DeviceButtonMotion  (gdkdev->xdevice, 0, class);
-      if (class != 0)
-	  classes[i++] = class;
-    }
-  if (mask & GDK_POINTER_MOTION_HINT_MASK)
-    {
-      /* We'll get into trouble if the macros change, but at least we'll
-	 know about it, and we avoid warnings now */
-      DevicePointerMotionHint (gdkdev->xdevice, 0, class);
       if (class != 0)
 	  classes[i++] = class;
     }
