@@ -768,6 +768,9 @@ static void
 gtk_tooltip_set_last_window (GtkTooltip *tooltip,
 			     GdkWindow  *window)
 {
+  if (tooltip->last_window == window)
+    return;
+
   if (tooltip->last_window)
     g_object_remove_weak_pointer (G_OBJECT (tooltip->last_window),
 				  (gpointer *) &tooltip->last_window);
