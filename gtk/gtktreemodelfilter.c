@@ -534,6 +534,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
     {
       if (gtk_tree_model_filter_visible (filter, &iter))
         {
+          GtkTreeIter f_iter;
           FilterElt filter_elt;
 
           filter_elt.offset = i;
@@ -548,26 +549,29 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
           g_array_append_val (new_level->array, filter_elt);
           new_level->visible_nodes++;
 
+          f_iter.stamp = filter->priv->stamp;
+          f_iter.user_data = new_level;
+          f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
+
           if (new_level->parent_level || filter->priv->virtual_root)
+            gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
+
+          if (emit_inserted)
             {
-              GtkTreeIter f_iter;
+              GtkTreePath *f_path;
+              GtkTreeIter children;
 
-              f_iter.stamp = filter->priv->stamp;
-              f_iter.user_data = new_level;
-              f_iter.user_data2 = &(g_array_index (new_level->array, FilterElt, new_level->array->len - 1));
+              f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
+                                                &f_iter);
+              gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter),
+                                           f_path, &f_iter);
+              gtk_tree_path_free (f_path);
 
-              gtk_tree_model_filter_ref_node (GTK_TREE_MODEL (filter), &f_iter);
-
-              if (emit_inserted)
-                {
-                  GtkTreePath *f_path;
-
-                  f_path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter),
-                                                    &f_iter);
-                  gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter),
-                                               f_path, &f_iter);
-                  gtk_tree_path_free (f_path);
-                }
+              if (gtk_tree_model_iter_children (filter->priv->child_model,
+                                                &children, &iter))
+                gtk_tree_model_filter_update_children (filter,
+                                                       new_level,
+                                                       FILTER_ELT (f_iter.user_data2));
             }
         }
       i++;
@@ -1224,6 +1228,7 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   gboolean requested_state;
   gboolean current_state;
   gboolean free_c_path = FALSE;
+  gboolean signals_emitted = FALSE;
 
   g_return_if_fail (c_path != NULL || c_iter != NULL);
 
@@ -1310,7 +1315,13 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
     {
       FilterLevel *root;
 
-      gtk_tree_model_filter_build_level (filter, NULL, -1, FALSE);
+      gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
+
+      /* We will only proceed below if the item is found.  If the item
+       * is found, we can be sure row-inserted has just been emitted
+       * for it.
+       */
+      signals_emitted = TRUE;
 
       root = FILTER_LEVEL (filter->priv->root);
     }
@@ -1349,7 +1360,8 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
       gtk_tree_path_free (path);
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (filter), &iter);
 
-      gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
+      if (!signals_emitted)
+        gtk_tree_model_row_inserted (GTK_TREE_MODEL (filter), path, &iter);
 
       if (level->parent_level && level->visible_nodes == 1)
         {
@@ -1366,7 +1378,8 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
                                                 &iter);
         }
 
-      if (gtk_tree_model_iter_children (c_model, &children, c_iter))
+      if (!signals_emitted
+          && gtk_tree_model_iter_children (c_model, &children, c_iter))
         gtk_tree_model_filter_update_children (filter, level, elt);
     }
 

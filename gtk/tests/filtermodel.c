@@ -367,7 +367,18 @@ typedef struct
   GtkTreeModelFilter *filter;
 
   SignalMonitor *monitor;
+
+  guint block_signals : 1;
 } FilterTest;
+
+
+static void
+filter_test_store_signal (FilterTest *fixture)
+{
+  if (fixture->block_signals)
+    g_signal_stop_emission_by_name (fixture->store, "row-changed");
+}
+
 
 static void
 filter_test_setup_generic (FilterTest    *fixture,
@@ -380,6 +391,9 @@ filter_test_setup_generic (FilterTest    *fixture,
   GtkTreeModel *filter;
 
   fixture->store = create_tree_store (depth, !empty);
+
+  g_signal_connect_swapped (fixture->store, "row-changed",
+                            G_CALLBACK (filter_test_store_signal), fixture);
 
   /* Please forgive me for casting const away. */
   filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (fixture->store),
@@ -626,6 +640,18 @@ filter_test_enable_filter (FilterTest *fixture)
 {
   gtk_tree_model_filter_set_visible_column (fixture->filter, 1);
   gtk_tree_model_filter_refilter (fixture->filter);
+}
+
+static void
+filter_test_block_signals (FilterTest *fixture)
+{
+  fixture->block_signals = TRUE;
+}
+
+static void
+filter_test_unblock_signals (FilterTest *fixture)
+{
+  fixture->block_signals = FALSE;
 }
 
 static void
@@ -1178,6 +1204,86 @@ empty_show_nodes (FilterTest    *fixture,
 }
 
 static void
+empty_show_multiple_nodes (FilterTest    *fixture,
+                           gconstpointer  user_data)
+{
+  GtkTreeIter iter;
+  GtkTreePath *changed_path;
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 0);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
+  signal_monitor_append_signal (fixture->monitor, ROW_CHANGED, "1");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
+
+  /* We simulate a change in visible func condition with this.  The
+   * visibility state of multiple nodes changes at once, we emit row-changed
+   * for these nodes (and others) after that.
+   */
+  filter_test_block_signals (fixture);
+  set_path_visibility (fixture, "3", TRUE);
+  set_path_visibility (fixture, "4", TRUE);
+  filter_test_unblock_signals (fixture);
+
+  changed_path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (changed_path, 2);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
+                           &iter, changed_path);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_free (changed_path);
+
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 2);
+  check_level_length (fixture->filter, "0", 0);
+
+  set_path_visibility (fixture, "3:2:2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 2);
+  check_level_length (fixture->filter, "0", 0);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0:0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0:0");
+  set_path_visibility (fixture, "3:2", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 2);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 1);
+  check_level_length (fixture->filter, "0:0:0", 0);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0");
+  set_path_visibility (fixture, "3", FALSE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 1);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "3:2:1", TRUE);
+  set_path_visibility (fixture, "3", TRUE);
+  check_filter_model (fixture);
+  check_level_length (fixture->filter, NULL, 2);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 2);
+  check_level_length (fixture->filter, "0:0:0", 0);
+}
+
+static void
 empty_vroot_show_nodes (FilterTest    *fixture,
                         gconstpointer  user_data)
 {
@@ -1217,6 +1323,117 @@ empty_vroot_show_nodes (FilterTest    *fixture,
   set_path_visibility (fixture, "2:2", TRUE);
   check_filter_model_with_root (fixture, path);
   check_level_length (fixture->filter, NULL, 1);
+  check_level_length (fixture->filter, "0", 2);
+  check_level_length (fixture->filter, "0:1", 0);
+}
+
+static void
+empty_vroot_show_multiple_nodes (FilterTest    *fixture,
+                                 gconstpointer  user_data)
+{
+  GtkTreeIter iter;
+  GtkTreePath *changed_path;
+  GtkTreePath *path = (GtkTreePath *)user_data;
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  /* We simulate a change in visible func condition with this.  The
+   * visibility state of multiple nodes changes at once, we emit row-changed
+   * for these nodes (and others) after that.
+   */
+  filter_test_block_signals (fixture);
+  set_path_visibility (fixture, "2", TRUE);
+  set_path_visibility (fixture, "3", TRUE);
+  filter_test_unblock_signals (fixture);
+
+  changed_path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (changed_path, 1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
+                           &iter, changed_path);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_free (changed_path);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  set_path_visibility (fixture, "2:2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 0);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "1");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "1");
+
+  /* Again, we simulate a call to refilter */
+  filter_test_block_signals (fixture);
+  set_path_visibility (fixture, "2:2", TRUE);
+  set_path_visibility (fixture, "2:3", TRUE);
+  filter_test_unblock_signals (fixture);
+
+  changed_path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (changed_path, 2);
+  gtk_tree_path_append_index (changed_path, 1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store),
+                           &iter, changed_path);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_next (changed_path);
+  gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store), &iter);
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (fixture->store),
+                              changed_path, &iter);
+
+  gtk_tree_path_free (changed_path);
+
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 2);
+  check_level_length (fixture->filter, "0", 1);
+  check_level_length (fixture->filter, "0:0", 0);
+
+  set_path_visibility (fixture, "3", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 2);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_DELETED, "0");
+  set_path_visibility (fixture, "2:2", FALSE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 1);
+
+  signal_monitor_append_signal (fixture->monitor, ROW_INSERTED, "0");
+  signal_monitor_append_signal (fixture->monitor, ROW_HAS_CHILD_TOGGLED, "0");
+  set_path_visibility (fixture, "2:2:1", TRUE);
+  set_path_visibility (fixture, "2:2", TRUE);
+  check_filter_model_with_root (fixture, path);
+  check_level_length (fixture->filter, NULL, 2);
   check_level_length (fixture->filter, "0", 2);
   check_level_length (fixture->filter, "0:1", 0);
 }
@@ -2659,11 +2876,21 @@ main (int    argc,
               filter_test_setup_empty,
               empty_show_nodes,
               filter_test_teardown);
+  g_test_add ("/FilterModel/empty/show-multiple-nodes",
+              FilterTest, NULL,
+              filter_test_setup_empty,
+              empty_show_multiple_nodes,
+              filter_test_teardown);
 
   g_test_add ("/FilterModel/empty/show-nodes/vroot",
               FilterTest, gtk_tree_path_new_from_indices (2, -1),
               filter_test_setup_empty,
               empty_vroot_show_nodes,
+              filter_test_teardown);
+  g_test_add ("/FilterModel/empty/show-multiple-nodes/vroot",
+              FilterTest, gtk_tree_path_new_from_indices (2, -1),
+              filter_test_setup_empty,
+              empty_vroot_show_multiple_nodes,
               filter_test_teardown);
 
 
