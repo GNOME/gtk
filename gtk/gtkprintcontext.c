@@ -177,11 +177,11 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
     case GTK_PAGE_ORIENTATION_PORTRAIT:
       break;
     case GTK_PAGE_ORIENTATION_LANDSCAPE:
-      cairo_translate (cr, width, 0);
+      cairo_translate (cr, 0, height);
       cairo_matrix_init (&matrix,
-			  0,  1,
-			 -1,  0,
-			  0,  0);
+			 0, -1,
+			 1,  0,
+			 0,  0);
       cairo_transform (cr, &matrix);
       break;
     case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
@@ -193,11 +193,11 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
       cairo_transform (cr, &matrix);
       break;
     case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
-      cairo_translate (cr, 0, height);
+      cairo_translate (cr, width, 0);
       cairo_matrix_init (&matrix,
-			 0, -1,
-			 1,  0,
-			 0,  0);
+			  0,  1,
+			 -1,  0,
+			  0,  0);
       cairo_transform (cr, &matrix);
       break;
     }
