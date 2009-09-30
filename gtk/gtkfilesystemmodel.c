@@ -984,8 +984,8 @@ gtk_file_system_model_finalize (GObject *object)
       if (node->info)
         g_object_unref (node->info);
 
-      for (v = 0; v < model->column_types; v++)
-	if (G_VALUE_TYPE (node->values[v]) != G_TYPE_INVALID)
+      for (v = 0; v < model->n_columns; v++)
+	if (G_VALUE_TYPE (&node->values[v]) != G_TYPE_INVALID)
 	  g_value_unset (&node->values[v]);
     }
   g_array_free (model->files, TRUE);
@@ -1000,7 +1000,7 @@ gtk_file_system_model_finalize (GObject *object)
   if (model->filter)
     g_object_unref (model->filter);
 
-  g_slice_free1 (sizeof (GType) * n_columns, model->column_types);
+  g_slice_free1 (sizeof (GType) * model->n_columns, model->column_types);
 
   _gtk_tree_data_list_header_free (model->sort_list);
   if (model->default_sort_destroy)
