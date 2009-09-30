@@ -6427,7 +6427,7 @@ show_error_on_reading_current_folder (GtkFileChooserDefault *impl, GError *error
 			    NULL);
   if (info)
     {
-      msg = g_strdup (_("Could not read the contents of %s"), g_file_info_get_display_name (info));
+      msg = g_strdup_printf (_("Could not read the contents of %s"), g_file_info_get_display_name (info));
       g_object_unref (info);
     }
   else
