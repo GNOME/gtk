@@ -60,6 +60,7 @@ struct _GtkPrinterCups
 
   gboolean remote;
   guint get_remote_ppd_poll;
+  gint  get_remote_ppd_attempts;
   GtkCupsConnectionTest *remote_cups_connection_test;
 };
 

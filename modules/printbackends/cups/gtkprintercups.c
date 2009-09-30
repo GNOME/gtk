@@ -79,6 +79,7 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->default_cover_after = NULL;
   printer->remote = FALSE;
   printer->get_remote_ppd_poll = 0;
+  printer->get_remote_ppd_attempts = 0;
   printer->remote_cups_connection_test = NULL;
   printer->auth_info_required = NULL;
 }
@@ -105,6 +106,7 @@ gtk_printer_cups_finalize (GObject *object)
 
   if (printer->get_remote_ppd_poll > 0)
     g_source_remove (printer->get_remote_ppd_poll);
+  printer->get_remote_ppd_attempts = 0;
 
   gtk_cups_connection_test_free (printer->remote_cups_connection_test);
 
