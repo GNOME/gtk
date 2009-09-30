@@ -239,7 +239,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
 	   strcmp (pspec->name, "gtk-im-module") == 0 ||
 	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-theme-name") == 0))
+	   strcmp (pspec->name, "gtk-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-sound-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-enable-input-feedback-sounds") == 0 ||
+           strcmp (pspec->name, "gtk-enable-event-sounds") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
