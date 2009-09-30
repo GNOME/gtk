@@ -401,8 +401,29 @@ drag_operation_to_drag_action (NSDragOperation operation)
 {
   GdkDragAction result = 0;
 
+  /* GDK and Quartz drag operations do not map 1:1.
+   * This mapping represents about the best that we
+   * can come up.
+   *
+   * Note that NSDragOperationPrivate and GDK_ACTION_PRIVATE
+   * have almost opposite meanings: the GDK one means that the
+   * destination is solely responsible for the action; the Quartz
+   * one means that the source and destination will agree
+   * privately on the action. NSOperationGeneric is close in meaning
+   * to GDK_ACTION_PRIVATE but there is a problem: it will be
+   * sent for any ordinary drag, and likely not understood
+   * by any intra-widget drag (since the source & dest are the
+   * same).
+   */
+
   if (operation & NSDragOperationGeneric)
+    result |= GDK_ACTION_MOVE;
+  if (operation & NSDragOperationCopy)
     result |= GDK_ACTION_COPY;
+  if (operation & NSDragOperationMove)
+    result |= GDK_ACTION_MOVE;
+  if (operation & NSDragOperationLink)
+    result |= GDK_ACTION_LINK;
 
   return result;
 }
@@ -414,6 +435,10 @@ drag_action_to_drag_operation (GdkDragAction action)
 
   if (action & GDK_ACTION_COPY)
     result |= NSDragOperationCopy;
+  if (action & GDK_ACTION_LINK)
+    result |= NSDragOperationLink;
+  if (action & GDK_ACTION_MOVE)
+    result |= NSDragOperationMove;
 
   return result;
 }
@@ -425,6 +450,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   GDK_DRAG_CONTEXT_PRIVATE (current_context)->dragging_info = sender;
   current_context->suggested_action = drag_operation_to_drag_action ([sender draggingSourceOperationMask]);
+  current_context->actions = current_context->suggested_action;
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
@@ -450,6 +476,10 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (void)draggingEnded:(id <NSDraggingInfo>)sender
 {
+  /* leave a note for the source about what action was taken */
+  if (_gdk_quartz_drag_source_context && current_context)
+   _gdk_quartz_drag_source_context->action = current_context->action;
+
   if (current_context)
     g_object_unref (current_context);
   current_context = NULL;
