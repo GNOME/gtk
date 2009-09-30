@@ -31,9 +31,15 @@
 
 typedef struct _TrackerClient TrackerClient;
 
+typedef enum
+{
+  TRACKER_0_6 = 1 << 0,
+  TRACKER_0_7 = 1 << 1
+} TrackerVersion;
+
 typedef void (*TrackerArrayReply) (char **result, GError *error, gpointer user_data);
 
-static TrackerClient * (*tracker_connect) (gboolean enable_warnings) = NULL;
+static TrackerClient * (*tracker_connect) (gboolean enable_warnings, gint timeout) = NULL;
 static void	       (*tracker_disconnect) (TrackerClient *client) = NULL;
 static int             (*tracker_get_version) (TrackerClient *client, GError **error) = NULL;
 static void            (*tracker_cancel_last_call) (TrackerClient *client) = NULL;
@@ -52,22 +58,24 @@ static struct TrackerDlMapping
 {
   const char *fn_name;
   gpointer *fn_ptr_ref;
+  TrackerVersion versions;
 } tracker_dl_mapping[] =
 {
-#define MAP(a) { #a, (gpointer *)&a }
-  MAP (tracker_connect),
-  MAP (tracker_disconnect),
-  MAP (tracker_get_version),
-  MAP (tracker_cancel_last_call),
-  MAP (tracker_search_metadata_by_text_async),
-  MAP (tracker_search_metadata_by_text_and_location_async),
+#define MAP(a,v) { #a, (gpointer *)&a, v }
+  MAP (tracker_connect, TRACKER_0_6 | TRACKER_0_7),
+  MAP (tracker_disconnect, TRACKER_0_6 | TRACKER_0_7),
+  MAP (tracker_get_version, TRACKER_0_6),
+  MAP (tracker_cancel_last_call, TRACKER_0_6 | TRACKER_0_7),
+  MAP (tracker_search_metadata_by_text_async, TRACKER_0_6 | TRACKER_0_7),
+  MAP (tracker_search_metadata_by_text_and_location_async, TRACKER_0_6 | TRACKER_0_7),
 #undef MAP
 };
 
-static void 
+static TrackerVersion
 open_libtracker (void)
 {
   static gboolean done = FALSE;
+  static TrackerVersion version = 0;
 
   if (!done)
     {
@@ -78,16 +86,29 @@ open_libtracker (void)
       done = TRUE;
       flags = G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL;
 
-      tracker = g_module_open ("libtrackerclient.so.0", flags);
+      tracker = g_module_open ("libtracker-client-0.7.so.0", flags);
+      version = TRACKER_0_7;
 
       if (!tracker)
-        tracker = g_module_open ("libtracker.so.0", flags);
+        {
+          tracker = g_module_open ("libtrackerclient.so.0", flags);
+          version = TRACKER_0_6;
+        }
 
       if (!tracker)
-	return;
+        {
+          tracker = g_module_open ("libtracker.so.0", flags);
+          version = TRACKER_0_6;
+        }
+
+      if (!tracker)
+	return 0;
       
       for (i = 0; i < G_N_ELEMENTS (tracker_dl_mapping); i++)
 	{
+	  if ((tracker_dl_mapping[i].versions & version) == 0)
+	    continue;
+
 	  if (!g_module_symbol (tracker, tracker_dl_mapping[i].fn_name,
 				tracker_dl_mapping[i].fn_ptr_ref))
 	    {
@@ -98,10 +119,12 @@ open_libtracker (void)
 	      for (i = 0; i < G_N_ELEMENTS (tracker_dl_mapping); i++)
 		tracker_dl_mapping[i].fn_ptr_ref = NULL;
 
-	      return;
+	      return 0;
 	    }
 	}
     }
+
+  return version;
 }
 
 struct _GtkSearchEngineTrackerPrivate 
@@ -109,6 +132,7 @@ struct _GtkSearchEngineTrackerPrivate
   GtkQuery 	*query;
   TrackerClient *client;
   gboolean 	 query_pending;
+  TrackerVersion version;
 };
 
 G_DEFINE_TYPE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE);
@@ -161,7 +185,11 @@ search_callback (gchar  **results,
     {
       gchar *uri;
 
-      uri = g_filename_to_uri (*results_p, NULL, NULL);
+      if (tracker->priv->version == TRACKER_0_6)
+        uri = g_filename_to_uri (*results_p, NULL, NULL);
+      else
+        uri = *results_p;
+
       if (uri)
 	hit_uris = g_list_prepend (hit_uris, uri);
     }
@@ -170,7 +198,8 @@ search_callback (gchar  **results,
   _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
 
   g_strfreev  (results);
-  g_list_foreach (hit_uris, (GFunc)g_free, NULL);
+  if (tracker->priv->version == TRACKER_0_6)
+    g_list_foreach (hit_uris, (GFunc)g_free, NULL);
   g_list_free (hit_uris);
 }
 
@@ -195,9 +224,14 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   location = NULL;
   if (location_uri)
     {
-      location = g_filename_from_uri (location_uri, NULL, NULL);
-      g_free (location_uri);
-    } 
+      if (tracker->priv->version == TRACKER_0_6)
+        {
+          location = g_filename_from_uri (location_uri, NULL, NULL);
+          g_free (location_uri);
+        }
+      else
+        location = location_uri;
+    }
 
   if (location) 
     {
@@ -287,34 +321,39 @@ _gtk_search_engine_tracker_new (void)
 {
   GtkSearchEngineTracker *engine;
   TrackerClient *tracker_client;
+  TrackerVersion version;
   GError *err = NULL;
 
-  open_libtracker ();
+  version = open_libtracker ();
 
   if (!tracker_connect)
     return NULL;
 
-  tracker_client = tracker_connect (FALSE);
+  tracker_client = tracker_connect (FALSE, -1);
   
   if (!tracker_client)
     return NULL;
 
-  if (!tracker_get_version)
-    return NULL;
-
-  tracker_get_version (tracker_client, &err);
-
-  if (err != NULL)
+  if (version == TRACKER_0_6)
     {
-      g_error_free (err);
-      tracker_disconnect (tracker_client);
-      return NULL;
+      if (!tracker_get_version)
+        return NULL;
+
+      tracker_get_version (tracker_client, &err);
+
+      if (err != NULL)
+        {
+          g_error_free (err);
+          tracker_disconnect (tracker_client);
+          return NULL;
+        }
     }
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
   engine->priv->client = tracker_client;
   engine->priv->query_pending = FALSE;
+  engine->priv->version = version;
   
   return GTK_SEARCH_ENGINE (engine);
 }
