@@ -91,9 +91,26 @@ unix_start_page (GtkPrintOperation *op,
       (op->priv->page_position % op->priv->manual_number_up == 0))
     {
       if (type == CAIRO_SURFACE_TYPE_PS)
-        cairo_ps_surface_set_size (op_unix->surface, w, h);
+        {
+          cairo_ps_surface_set_size (op_unix->surface, w, h);
+          cairo_ps_surface_dsc_begin_page_setup (op_unix->surface);
+          switch (gtk_page_setup_get_orientation (page_setup))
+            {
+              case GTK_PAGE_ORIENTATION_PORTRAIT:
+              case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Portrait");
+                break;
+
+              case GTK_PAGE_ORIENTATION_LANDSCAPE:
+              case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Landscape");
+                break;
+            }
+         }
       else if (type == CAIRO_SURFACE_TYPE_PDF)
-        cairo_pdf_surface_set_size (op_unix->surface, w, h);
+        {
+          cairo_pdf_surface_set_size (op_unix->surface, w, h);
+        }
     }
 }
 
