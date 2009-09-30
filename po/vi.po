@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-22 23:32-0400\n"
+"POT-Creation-Date: 2009-09-30 17:31-0400\n"
 "PO-Revision-Date: 2009-07-08 13:35+1000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -1560,7 +1560,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3207
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3215
 msgid "Manage Custom Sizes"
 msgstr "Quản lý kích cỡ riêng"
 
@@ -2454,7 +2454,7 @@ msgstr ""
 " Trên: %s %s\n"
 " Dưới: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3258
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3266
 msgid "Manage Custom Sizes..."
 msgstr "Quản lý kích cỡ riêng..."
 
@@ -2462,7 +2462,7 @@ msgstr "Quản lý kích cỡ riêng..."
 msgid "_Format for:"
 msgstr "Định dạng ch_o :"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3438
 msgid "_Paper size:"
 msgstr "Cỡ _giấy:"
 
@@ -2470,7 +2470,7 @@ msgstr "Cỡ _giấy:"
 msgid "_Orientation:"
 msgstr "_Hướng:"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3492
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3500
 msgid "Page Setup"
 msgstr "Thiết lập trang"
 
@@ -2486,17 +2486,9 @@ msgstr "Xuống đường dẫn"
 msgid "File System Root"
 msgstr "Gốc hệ tập tin"
 
-#: gtk/gtkprintbackend.c:740
+#: gtk/gtkprintbackend.c:743
 msgid "Authentication"
 msgstr "Xác thực"
-
-#: gtk/gtkprintbackend.c:772
-msgid "Username:"
-msgstr "Tên người dùng:"
-
-#: gtk/gtkprintbackend.c:782
-msgid "Password:"
-msgstr "Mật khẩu:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2585,17 +2577,17 @@ msgstr "Lỗi tạo xem thử bản in"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Lý do thường là không thể tạo tập tin tạm."
 
-#: gtk/gtkprintoperation-unix.c:265
+#: gtk/gtkprintoperation-unix.c:282
 #, c-format
 msgid "Error launching preview"
 msgstr "Gặp lỗi khi khởi chạy ô xem thử"
 
-#: gtk/gtkprintoperation-unix.c:309
+#: gtk/gtkprintoperation-unix.c:326
 #, c-format
 msgid "Error printing"
 msgstr "Lỗi in"
 
-#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:462 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Ứng dụng"
 
@@ -2609,7 +2601,7 @@ msgstr "Hết giấy"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1725
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "Bị tạm ngừng"
 
@@ -2654,45 +2646,49 @@ msgstr "Bộ thao tác không hợp lệ tới PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Lỗi chưa xác định"
 
-#: gtk/gtkprintunixdialog.c:1854
+#: gtk/gtkprintunixdialog.c:614
+msgid "Getting printer information failed"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "Máy in"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2134
+#: gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "Địa điểm"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2145
+#: gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "Trạng thái"
 
-#: gtk/gtkprintunixdialog.c:2171
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "Phạm vi"
 
-#: gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "_Mọi trang"
 
-#: gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "Trang _hiện thời"
 
-#: gtk/gtkprintunixdialog.c:2192
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "_Vùng chọn"
 
-#: gtk/gtkprintunixdialog.c:2201
+#: gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "T_rang:"
 
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2700,28 +2696,28 @@ msgstr ""
 "Hãy ghi rõ một hay nhiều phạm vi trang,\n"
 " v.d. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2212
+#: gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "Trang"
 
-#: gtk/gtkprintunixdialog.c:2225
+#: gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "Bản sao"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2230
+#: gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "Bản _sao :"
 
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "Đố_i chiếu"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "Để ngu_yên"
 
-#: gtk/gtkprintunixdialog.c:2276
+#: gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "Chung"
 
@@ -2731,173 +2727,173 @@ msgstr "Chung"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, top to bottom"
 msgstr "Trái sang phải, trên xuống dưới"
 
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, bottom to top"
 msgstr "Trái sang phải, dưới lên trên"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, top to bottom"
 msgstr "Phải sang trái, trên xuống dưới"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, bottom to top"
 msgstr "Phải sang trái, dưới lên trên"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, left to right"
 msgstr "Trên xuống dưới, trái sang phải"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, right to left"
 msgstr "Trên xuống dưới, phải sang trái"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, left to right"
 msgstr "Dưới lên trên, trái sang phải"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, right to left"
 msgstr "Dưới lên trên, phải sang trái"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3200
+#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Page Ordering"
 msgstr "Thứ tự trang"
 
-#: gtk/gtkprintunixdialog.c:3038
+#: gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "Trái sang phải"
 
-#: gtk/gtkprintunixdialog.c:3039
+#: gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "Phải sang trái"
 
-#: gtk/gtkprintunixdialog.c:3051
+#: gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "Trên xuống dưới"
 
-#: gtk/gtkprintunixdialog.c:3052
+#: gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "Dưới lên trên"
 
-#: gtk/gtkprintunixdialog.c:3281
+#: gtk/gtkprintunixdialog.c:3289
 msgid "Layout"
 msgstr "Bố trí"
 
-#: gtk/gtkprintunixdialog.c:3285
+#: gtk/gtkprintunixdialog.c:3293
 msgid "T_wo-sided:"
 msgstr "H_ai mặt:"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: gtk/gtkprintunixdialog.c:3308
 msgid "Pages per _side:"
 msgstr "Trang trên mỗi _mặt:"
 
-#: gtk/gtkprintunixdialog.c:3317
+#: gtk/gtkprintunixdialog.c:3325
 msgid "Page or_dering:"
 msgstr "_Thứ tự trang:"
 
-#: gtk/gtkprintunixdialog.c:3333
+#: gtk/gtkprintunixdialog.c:3341
 msgid "_Only print:"
 msgstr "In _chỉ:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3348
+#: gtk/gtkprintunixdialog.c:3356
 msgid "All sheets"
 msgstr "Mọi tờ"
 
-#: gtk/gtkprintunixdialog.c:3349
+#: gtk/gtkprintunixdialog.c:3357
 msgid "Even sheets"
 msgstr "Tờ chẵn"
 
-#: gtk/gtkprintunixdialog.c:3350
+#: gtk/gtkprintunixdialog.c:3358
 msgid "Odd sheets"
 msgstr "Tờ lẻ"
 
-#: gtk/gtkprintunixdialog.c:3353
+#: gtk/gtkprintunixdialog.c:3361
 msgid "Sc_ale:"
 msgstr "Tỷ _lệ:"
 
-#: gtk/gtkprintunixdialog.c:3380
+#: gtk/gtkprintunixdialog.c:3388
 msgid "Paper"
 msgstr "Giấy"
 
-#: gtk/gtkprintunixdialog.c:3384
+#: gtk/gtkprintunixdialog.c:3392
 msgid "Paper _type:"
 msgstr "_Kiểu giấy:"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3407
 msgid "Paper _source:"
 msgstr "_Nguồn giấy:"
 
-#: gtk/gtkprintunixdialog.c:3414
+#: gtk/gtkprintunixdialog.c:3422
 msgid "Output t_ray:"
 msgstr "Khay _xuất:"
 
-#: gtk/gtkprintunixdialog.c:3454
+#: gtk/gtkprintunixdialog.c:3462
 #, fuzzy
 msgid "Or_ientation:"
 msgstr "_Hướng:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3469
+#: gtk/gtkprintunixdialog.c:3477
 #, fuzzy
 msgid "Portrait"
 msgstr "Thẳng đứng"
 
-#: gtk/gtkprintunixdialog.c:3470
+#: gtk/gtkprintunixdialog.c:3478
 #, fuzzy
 msgid "Landscape"
 msgstr "Nằm ngang"
 
-#: gtk/gtkprintunixdialog.c:3471
+#: gtk/gtkprintunixdialog.c:3479
 #, fuzzy
 msgid "Reverse portrait"
 msgstr "Đảo thẳng đứng"
 
-#: gtk/gtkprintunixdialog.c:3472
+#: gtk/gtkprintunixdialog.c:3480
 #, fuzzy
 msgid "Reverse landscape"
 msgstr "Đảo nằm ngang"
 
-#: gtk/gtkprintunixdialog.c:3517
+#: gtk/gtkprintunixdialog.c:3525
 msgid "Job Details"
 msgstr "Chi tiết yêu cầu"
 
-#: gtk/gtkprintunixdialog.c:3523
+#: gtk/gtkprintunixdialog.c:3531
 msgid "Pri_ority:"
 msgstr "Ư_u tiên:"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3546
 msgid "_Billing info:"
 msgstr "Thông tin lập _hóa đơn:"
 
-#: gtk/gtkprintunixdialog.c:3556
+#: gtk/gtkprintunixdialog.c:3564
 msgid "Print Document"
 msgstr "In tài liệu"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3565
+#: gtk/gtkprintunixdialog.c:3573
 msgid "_Now"
 msgstr "_Bây giờ"
 
-#: gtk/gtkprintunixdialog.c:3576
+#: gtk/gtkprintunixdialog.c:3584
 msgid "A_t:"
 msgstr "_Tại:"
 
@@ -2905,7 +2901,7 @@ msgstr "_Tại:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3582
+#: gtk/gtkprintunixdialog.c:3590
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2913,64 +2909,64 @@ msgstr ""
 "Xác định giờ in, v.d.\n"
 " 15:30, 2:35 pm, 14:15:20, 11:46:30 sáng, 4 giờ chiều"
 
-#: gtk/gtkprintunixdialog.c:3592
+#: gtk/gtkprintunixdialog.c:3600
 msgid "Time of print"
 msgstr "Thời điểm in"
 
-#: gtk/gtkprintunixdialog.c:3608
+#: gtk/gtkprintunixdialog.c:3616
 msgid "On _hold"
 msgstr "Tạ_m ngừng"
 
-#: gtk/gtkprintunixdialog.c:3609
+#: gtk/gtkprintunixdialog.c:3617
 msgid "Hold the job until it is explicitly released"
 msgstr "Giữ lại yêu cầu đến khi nó được nhả dứt khoát"
 
-#: gtk/gtkprintunixdialog.c:3629
+#: gtk/gtkprintunixdialog.c:3637
 msgid "Add Cover Page"
 msgstr "Thêm trang bìa"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3638
+#: gtk/gtkprintunixdialog.c:3646
 msgid "Be_fore:"
 msgstr "T_rước:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3656
+#: gtk/gtkprintunixdialog.c:3664
 msgid "_After:"
 msgstr "S_au:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3674
+#: gtk/gtkprintunixdialog.c:3682
 msgid "Job"
 msgstr "Yêu cầu in"
 
-#: gtk/gtkprintunixdialog.c:3740
+#: gtk/gtkprintunixdialog.c:3748
 msgid "Advanced"
 msgstr "Cấp cao"
 
-#: gtk/gtkprintunixdialog.c:3774
+#: gtk/gtkprintunixdialog.c:3782
 msgid "Image Quality"
 msgstr "Chất lượng ảnh"
 
-#: gtk/gtkprintunixdialog.c:3777
+#: gtk/gtkprintunixdialog.c:3785
 msgid "Color"
 msgstr "Màu"
 
-#: gtk/gtkprintunixdialog.c:3780
+#: gtk/gtkprintunixdialog.c:3788
 msgid "Finishing"
 msgstr "Đang kết thúc"
 
-#: gtk/gtkprintunixdialog.c:3790
+#: gtk/gtkprintunixdialog.c:3798
 msgid "Some of the settings in the dialog conflict"
 msgstr "Một số thiết lập trong trường hợp xung đột hộp thoại"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: gtk/gtkprintunixdialog.c:3821
 msgid "Print"
 msgstr "In"
 
@@ -4796,230 +4792,261 @@ msgstr "Việt (VIQR)"
 msgid "X Input Method"
 msgstr "Phương pháp gõ X (XIM)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:753
+#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#: modules/printbackends/cups/gtkprintbackendcups.c:984
+msgid "Username:"
+msgstr "Tên người dùng:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:776
+#: modules/printbackends/cups/gtkprintbackendcups.c:993
+msgid "Password:"
+msgstr "Mật khẩu:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:814
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Cần xác thực để lấy tập tin từ %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:757
+#: modules/printbackends/cups/gtkprintbackendcups.c:818
+#: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Cần xác thực để in tài liệu '%s' trên máy in %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:759
+#: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Cần xác thực để in tài liệu trên %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:763
+#: modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Cần xác thực để lấy thuộc tính của yêu cầu '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:765
+#: modules/printbackends/cups/gtkprintbackendcups.c:826
 msgid "Authentication is required to get attributes of a job"
 msgstr "Cần xác thực để lấy thuộc tính của yêu cầu in"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#: modules/printbackends/cups/gtkprintbackendcups.c:830
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Cần xác thực để lấy thuộc tính của máy in %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:771
+#: modules/printbackends/cups/gtkprintbackendcups.c:832
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Cần xác thực để lấy thuộc tính của máy in"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Cần xác thực để lấy máy in mặc định cho %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:777
+#: modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Cần xác thực để lấy máy in mặc định từ %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:841
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Cần xác thực trên %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#, fuzzy
+msgid "Domain:"
+msgstr "_Miền:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#, fuzzy, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr "Cần xác thực để in tài liệu trên %s"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#, fuzzy, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "Cần xác thực để in tài liệu '%s' trên máy in %s"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#, fuzzy
+msgid "Authentication is required to print this document"
+msgstr "Cần xác thực để in tài liệu trên %s"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Máy in « %s » gần cạn mực sắc điệu."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Máy in « %s » cạn mực sắc điệu."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Máy in « %s » gần cạn thuốc rửa ảnh."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Máy in « %s » cạn thuốc rửa ảnh."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Máy in « %s » gần cạn ít nhất một mực ngụ ý."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Máy in « %s » cạn ít nhất một mực ngụ ý."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Cái nắp còn mở trên máy in « %s »."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Cửa còn mở trên máy in « %s »."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Máy in « %s » gần cạn giấy."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Máy in « %s » cạn giấy."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Máy in « %s » hiện thời ngoại tuyến."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1651
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Có lẽ máy in « %s » không có kết nối."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1429
+#: modules/printbackends/cups/gtkprintbackendcups.c:1652
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Gặp vấn đề trên máy in « %s »."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1722
+#: modules/printbackends/cups/gtkprintbackendcups.c:1960
 msgid "Paused ; Rejecting Jobs"
 msgstr "Tạm dừng; Từ chối nhận yêu cầu in"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1728
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
 msgid "Rejecting Jobs"
 msgstr "Từ chối nhận yêu cầu in"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2434
+#: modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Two Sided"
 msgstr "Mặt đôi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2435
+#: modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
 msgstr "Kiểu giấy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2436
+#: modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
 msgstr "Nguồn giấy"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2437
+#: modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
 msgstr "Khay xuất"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Resolution"
 msgstr "Độ phân giải"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2439
+#: modules/printbackends/cups/gtkprintbackendcups.c:2745
 msgid "GhostScript pre-filtering"
 msgstr "Tiền lọc GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:2754
 msgid "One Sided"
 msgstr "Mặt đơn"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:2756
 msgid "Long Edge (Standard)"
 msgstr "Cạnh dài (Chuẩn)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2452
+#: modules/printbackends/cups/gtkprintbackendcups.c:2758
 msgid "Short Edge (Flip)"
 msgstr "Cạnh ngắn (Lật)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2454
-#: modules/printbackends/cups/gtkprintbackendcups.c:2456
-#: modules/printbackends/cups/gtkprintbackendcups.c:2464
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#: modules/printbackends/cups/gtkprintbackendcups.c:2762
+#: modules/printbackends/cups/gtkprintbackendcups.c:2770
 msgid "Auto Select"
 msgstr "Chọn tự động"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2458
-#: modules/printbackends/cups/gtkprintbackendcups.c:2460
-#: modules/printbackends/cups/gtkprintbackendcups.c:2462
-#: modules/printbackends/cups/gtkprintbackendcups.c:2466
-#: modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: modules/printbackends/cups/gtkprintbackendcups.c:2764
+#: modules/printbackends/cups/gtkprintbackendcups.c:2766
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2772
+#: modules/printbackends/cups/gtkprintbackendcups.c:3258
 msgid "Printer Default"
 msgstr "Mặc định máy in"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2468
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Embed GhostScript fonts only"
 msgstr "Nhúng chỉ phông chữ GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2470
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
 msgstr "Chuyển đổi sang PS cấp 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2472
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
 msgstr "Chuyển đổi sang PS cấp 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2474
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "No pre-filtering"
 msgstr "Không tiền lọc"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#: modules/printbackends/cups/gtkprintbackendcups.c:2789
 msgid "Miscellaneous"
 msgstr "Linh tinh"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Urgent"
 msgstr "Khẩn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
 msgstr "Cao"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
 msgstr "Vừa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Low"
 msgstr "Thấp"
 
@@ -5027,66 +5054,66 @@ msgstr "Thấp"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3184
+#: modules/printbackends/cups/gtkprintbackendcups.c:3490
 msgid "Pages per Sheet"
 msgstr "Trang mỗi tờ giấy"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3221
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Job Priority"
 msgstr "Ưu tiên"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3232
+#: modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Billing Info"
 msgstr "Thông tin lập hóa đơn"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "None"
 msgstr "Không có"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Classified"
 msgstr "Xem riêng"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Confidential"
 msgstr "Mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Secret"
 msgstr "Rất mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
 msgstr "Chuẩn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
 msgstr "Tối mật"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Unclassified"
 msgstr "Xem chung"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3282
+#: modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Before"
 msgstr "Trước"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3297
+#: modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "After"
 msgstr "Sau"
 
@@ -5094,14 +5121,14 @@ msgstr "Sau"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3317
+#: modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Print at"
 msgstr "In lúc"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3328
+#: modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Print at time"
 msgstr "In tại thời điểm"
 
@@ -5109,7 +5136,7 @@ msgstr "In tại thời điểm"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3363
+#: modules/printbackends/cups/gtkprintbackendcups.c:3669
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Tự chọn  %sx%s"

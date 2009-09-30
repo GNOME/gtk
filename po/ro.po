@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-22 23:32-0400\n"
+"POT-Creation-Date: 2009-09-30 17:31-0400\n"
 "PO-Revision-Date: 2009-09-18 22:55+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -1572,7 +1572,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3207
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3215
 msgid "Manage Custom Sizes"
 msgstr "Gestionare formate personalizate"
 
@@ -2461,7 +2461,7 @@ msgstr ""
 " Sus: %s %s\n"
 " Jos: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3258
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3266
 msgid "Manage Custom Sizes..."
 msgstr "Gestionare formate personalizate..."
 
@@ -2469,7 +2469,7 @@ msgstr "Gestionare formate personalizate..."
 msgid "_Format for:"
 msgstr "_Formatare pentru:"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3438
 msgid "_Paper size:"
 msgstr "_Mărime hârtie:"
 
@@ -2477,7 +2477,7 @@ msgstr "_Mărime hârtie:"
 msgid "_Orientation:"
 msgstr "_Orientare:"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3492
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3500
 msgid "Page Setup"
 msgstr "Opțiuni pagină"
 
@@ -2493,17 +2493,9 @@ msgstr "Cale în jos"
 msgid "File System Root"
 msgstr "Rădăcina sistemului de fișiere"
 
-#: gtk/gtkprintbackend.c:740
+#: gtk/gtkprintbackend.c:743
 msgid "Authentication"
 msgstr "Autentificare"
-
-#: gtk/gtkprintbackend.c:772
-msgid "Username:"
-msgstr "Utilizator:"
-
-#: gtk/gtkprintbackend.c:782
-msgid "Password:"
-msgstr "Parolă:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2592,17 +2584,17 @@ msgstr "Eroare la crearea unei previzualizări pentru tipărire"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Cel mai probabil motiv este că nu s-a putut crea un fișier temporar."
 
-#: gtk/gtkprintoperation-unix.c:265
+#: gtk/gtkprintoperation-unix.c:282
 #, c-format
 msgid "Error launching preview"
 msgstr "Eroare la lansarea previzualizării"
 
-#: gtk/gtkprintoperation-unix.c:309
+#: gtk/gtkprintoperation-unix.c:326
 #, c-format
 msgid "Error printing"
 msgstr "Eroare la tipărire"
 
-#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:462 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "Aplicație"
 
@@ -2616,7 +2608,7 @@ msgstr "Fără hârtie"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1725
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "Momentan oprită"
 
@@ -2661,45 +2653,50 @@ msgstr "Handle incorect pentru PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Eroare nespecificată"
 
-#: gtk/gtkprintunixdialog.c:1854
+#: gtk/gtkprintunixdialog.c:614
+#, fuzzy
+msgid "Getting printer information failed"
+msgstr "Se obțin informațiile despre imprimantă..."
+
+#: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "Se obțin informațiile despre imprimantă..."
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "Imprimantă"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2134
+#: gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "Locație"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2145
+#: gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "Stare"
 
-#: gtk/gtkprintunixdialog.c:2171
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "Interval"
 
-#: gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "To_ate paginile"
 
-#: gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "Pagina c_urentă"
 
-#: gtk/gtkprintunixdialog.c:2192
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "Se_lecție"
 
-#: gtk/gtkprintunixdialog.c:2201
+#: gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "_Pagini:"
 
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2707,28 +2704,28 @@ msgstr ""
 "Specificați unul sau mai multe intervale,\n"
 " de ex. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2212
+#: gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "Pagini"
 
-#: gtk/gtkprintunixdialog.c:2225
+#: gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "Copíi"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2230
+#: gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "_Copíi:"
 
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "C_olaj"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "_Inversat"
 
-#: gtk/gtkprintunixdialog.c:2276
+#: gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "Generice"
 
@@ -2738,168 +2735,168 @@ msgstr "Generice"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, top to bottom"
 msgstr "De la stânga la dreapta, de sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, bottom to top"
 msgstr "De la stânga la dreapta, de jos în sus"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, top to bottom"
 msgstr "De la dreapta la stânga, de sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, bottom to top"
 msgstr "De la dreapta la stânga, de jos în sus"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, left to right"
 msgstr "De sus în jos, de la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, right to left"
 msgstr "De sus în jos, de la dreapta la stânga"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, left to right"
 msgstr "De jos în sus, de la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, right to left"
 msgstr "De jos în sus, de la dreapta la stânga"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3200
+#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Page Ordering"
 msgstr "Ordonare pagini"
 
-#: gtk/gtkprintunixdialog.c:3038
+#: gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "De la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3039
+#: gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "De la dreapta la stânga"
 
-#: gtk/gtkprintunixdialog.c:3051
+#: gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "De sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3052
+#: gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "De jos în sus"
 
-#: gtk/gtkprintunixdialog.c:3281
+#: gtk/gtkprintunixdialog.c:3289
 msgid "Layout"
 msgstr "Aspect"
 
-#: gtk/gtkprintunixdialog.c:3285
+#: gtk/gtkprintunixdialog.c:3293
 msgid "T_wo-sided:"
 msgstr "Pe am_bele părți"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: gtk/gtkprintunixdialog.c:3308
 msgid "Pages per _side:"
 msgstr "_Pagini per filă:"
 
-#: gtk/gtkprintunixdialog.c:3317
+#: gtk/gtkprintunixdialog.c:3325
 msgid "Page or_dering:"
 msgstr "_Ordine pagini"
 
-#: gtk/gtkprintunixdialog.c:3333
+#: gtk/gtkprintunixdialog.c:3341
 msgid "_Only print:"
 msgstr "Tipăr_ește:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3348
+#: gtk/gtkprintunixdialog.c:3356
 msgid "All sheets"
 msgstr "Toate paginile"
 
-#: gtk/gtkprintunixdialog.c:3349
+#: gtk/gtkprintunixdialog.c:3357
 msgid "Even sheets"
 msgstr "Paginile pare"
 
-#: gtk/gtkprintunixdialog.c:3350
+#: gtk/gtkprintunixdialog.c:3358
 msgid "Odd sheets"
 msgstr "Paginile impare"
 
-#: gtk/gtkprintunixdialog.c:3353
+#: gtk/gtkprintunixdialog.c:3361
 msgid "Sc_ale:"
 msgstr "Sc_alare:"
 
-#: gtk/gtkprintunixdialog.c:3380
+#: gtk/gtkprintunixdialog.c:3388
 msgid "Paper"
 msgstr "Hârtie"
 
-#: gtk/gtkprintunixdialog.c:3384
+#: gtk/gtkprintunixdialog.c:3392
 msgid "Paper _type:"
 msgstr "Tip _hârtie:"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3407
 msgid "Paper _source:"
 msgstr "_Sursă hârtie"
 
-#: gtk/gtkprintunixdialog.c:3414
+#: gtk/gtkprintunixdialog.c:3422
 msgid "Output t_ray:"
 msgstr "Tavă _ieșire:"
 
-#: gtk/gtkprintunixdialog.c:3454
+#: gtk/gtkprintunixdialog.c:3462
 msgid "Or_ientation:"
 msgstr "Or_ientare:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3469
+#: gtk/gtkprintunixdialog.c:3477
 msgid "Portrait"
 msgstr "Portret"
 
-#: gtk/gtkprintunixdialog.c:3470
+#: gtk/gtkprintunixdialog.c:3478
 msgid "Landscape"
 msgstr "Peisaj"
 
-#: gtk/gtkprintunixdialog.c:3471
+#: gtk/gtkprintunixdialog.c:3479
 msgid "Reverse portrait"
 msgstr "Portret inversat"
 
-#: gtk/gtkprintunixdialog.c:3472
+#: gtk/gtkprintunixdialog.c:3480
 msgid "Reverse landscape"
 msgstr "Peisaj inversat"
 
-#: gtk/gtkprintunixdialog.c:3517
+#: gtk/gtkprintunixdialog.c:3525
 msgid "Job Details"
 msgstr "Detalii"
 
-#: gtk/gtkprintunixdialog.c:3523
+#: gtk/gtkprintunixdialog.c:3531
 msgid "Pri_ority:"
 msgstr "Pri_oritate:"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3546
 msgid "_Billing info:"
 msgstr "Informații _de facturare"
 
-#: gtk/gtkprintunixdialog.c:3556
+#: gtk/gtkprintunixdialog.c:3564
 msgid "Print Document"
 msgstr "Tipărire document"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3565
+#: gtk/gtkprintunixdialog.c:3573
 msgid "_Now"
 msgstr "_Acum"
 
-#: gtk/gtkprintunixdialog.c:3576
+#: gtk/gtkprintunixdialog.c:3584
 msgid "A_t:"
 msgstr "_La:"
 
@@ -2907,7 +2904,7 @@ msgstr "_La:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3582
+#: gtk/gtkprintunixdialog.c:3590
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2915,64 +2912,64 @@ msgstr ""
 "Specificați ora tipăririi,\n"
 "de ex. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3592
+#: gtk/gtkprintunixdialog.c:3600
 msgid "Time of print"
 msgstr "Data tipăririi"
 
-#: gtk/gtkprintunixdialog.c:3608
+#: gtk/gtkprintunixdialog.c:3616
 msgid "On _hold"
 msgstr "Î_n așteptare"
 
-#: gtk/gtkprintunixdialog.c:3609
+#: gtk/gtkprintunixdialog.c:3617
 msgid "Hold the job until it is explicitly released"
 msgstr "Ține sarcina în așteptare până i se dă drumul"
 
-#: gtk/gtkprintunixdialog.c:3629
+#: gtk/gtkprintunixdialog.c:3637
 msgid "Add Cover Page"
 msgstr "Adaugă pagină de gardă"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3638
+#: gtk/gtkprintunixdialog.c:3646
 msgid "Be_fore:"
 msgstr "Îna_inte:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3656
+#: gtk/gtkprintunixdialog.c:3664
 msgid "_After:"
 msgstr "D_upă:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3674
+#: gtk/gtkprintunixdialog.c:3682
 msgid "Job"
 msgstr "Sarcină"
 
-#: gtk/gtkprintunixdialog.c:3740
+#: gtk/gtkprintunixdialog.c:3748
 msgid "Advanced"
 msgstr "Avansat"
 
-#: gtk/gtkprintunixdialog.c:3774
+#: gtk/gtkprintunixdialog.c:3782
 msgid "Image Quality"
 msgstr "Calitate imagine"
 
-#: gtk/gtkprintunixdialog.c:3777
+#: gtk/gtkprintunixdialog.c:3785
 msgid "Color"
 msgstr "Culoare"
 
-#: gtk/gtkprintunixdialog.c:3780
+#: gtk/gtkprintunixdialog.c:3788
 msgid "Finishing"
 msgstr "Se termină"
 
-#: gtk/gtkprintunixdialog.c:3790
+#: gtk/gtkprintunixdialog.c:3798
 msgid "Some of the settings in the dialog conflict"
 msgstr "Unele opțiuni din acest dialog sunt incompatibile"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: gtk/gtkprintunixdialog.c:3821
 msgid "Print"
 msgstr "Tipărire"
 
@@ -4791,236 +4788,270 @@ msgstr "Vietnameză (VIQR)"
 msgid "X Input Method"
 msgstr "Metodă de input X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:753
+#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#: modules/printbackends/cups/gtkprintbackendcups.c:984
+msgid "Username:"
+msgstr "Utilizator:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:776
+#: modules/printbackends/cups/gtkprintbackendcups.c:993
+msgid "Password:"
+msgstr "Parolă:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:814
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Pentru a prelua un fișier de la %s este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:757
+#: modules/printbackends/cups/gtkprintbackendcups.c:818
+#: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 "Pentru a tipări documentul „%s” la imprimanta %s este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:759
+#: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr ""
 "Pentru a tipări un document la imprimanta %s este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:763
+#: modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Pentru a afla atributele sarcinii „%s” este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:765
+#: modules/printbackends/cups/gtkprintbackendcups.c:826
 msgid "Authentication is required to get attributes of a job"
 msgstr "Pentru a afla atributele unei sarcini este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#: modules/printbackends/cups/gtkprintbackendcups.c:830
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Pentru a afla atributele imprimantei „%s” este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:771
+#: modules/printbackends/cups/gtkprintbackendcups.c:832
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Pentru a afla atributele unei imprimante este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 "Pentru a afla imprimanta implicită de pe %s este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:777
+#: modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Pentru a afla imprimantele de pe %s este nevoie de autentificare"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:841
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Este nevoie de autentificare pe %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#, fuzzy
+msgid "Domain:"
+msgstr "_Domeniu:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#, fuzzy, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr ""
+"Pentru a tipări un document la imprimanta %s este nevoie de autentificare"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#, fuzzy, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr ""
+"Pentru a tipări documentul „%s” la imprimanta %s este nevoie de autentificare"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#, fuzzy
+msgid "Authentication is required to print this document"
+msgstr ""
+"Pentru a tipări un document la imprimanta %s este nevoie de autentificare"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Imprimanta „%s” are toner pe terminate."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Imprimanta „%s” nu mai are toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Imprimanta „%s” are developator pe terminate."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Imprimanta „%s” nu mai are developator."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 "Imprimanta „%s” are pe terminate cel puțin una dintre rezervele de culori."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 "Imprimanta „%s” nu mai are culoare în cel puțin una dintre rezervele de "
 "culori."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Imprimanta „%s” are capacul ridicat."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Imprimanta „%s” are ușița deschisă."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Imprimanta „%s” are hârtie pe terminate."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Imprimanta „%s” nu mai are hârtie."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Imprimanta „%s” este momentan deconectată."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1651
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Imprimanta „%s” s-ar putea să nu fie conectată."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1429
+#: modules/printbackends/cups/gtkprintbackendcups.c:1652
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Imprimanta „%s” are o problemă."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1722
+#: modules/printbackends/cups/gtkprintbackendcups.c:1960
 msgid "Paused ; Rejecting Jobs"
 msgstr "Oprit momentan. Se refuză sarcini de tipărire"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1728
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
 msgid "Rejecting Jobs"
 msgstr "Se refuză sarcini de tipărire"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2434
+#: modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Two Sided"
 msgstr "Pe ambele părți"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2435
+#: modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
 msgstr "Tip hârtie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2436
+#: modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
 msgstr "Sursă hârtie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2437
+#: modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
 msgstr "Tavă de ieșire"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Resolution"
 msgstr "Rezoluție"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2439
+#: modules/printbackends/cups/gtkprintbackendcups.c:2745
 msgid "GhostScript pre-filtering"
 msgstr "Pre-filtrare GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:2754
 msgid "One Sided"
 msgstr "Pe o parte"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:2756
 msgid "Long Edge (Standard)"
 msgstr "Margine lungă (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2452
+#: modules/printbackends/cups/gtkprintbackendcups.c:2758
 msgid "Short Edge (Flip)"
 msgstr "Margine scurtă (întoarsă)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2454
-#: modules/printbackends/cups/gtkprintbackendcups.c:2456
-#: modules/printbackends/cups/gtkprintbackendcups.c:2464
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#: modules/printbackends/cups/gtkprintbackendcups.c:2762
+#: modules/printbackends/cups/gtkprintbackendcups.c:2770
 msgid "Auto Select"
 msgstr "Auto-selectare"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2458
-#: modules/printbackends/cups/gtkprintbackendcups.c:2460
-#: modules/printbackends/cups/gtkprintbackendcups.c:2462
-#: modules/printbackends/cups/gtkprintbackendcups.c:2466
-#: modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: modules/printbackends/cups/gtkprintbackendcups.c:2764
+#: modules/printbackends/cups/gtkprintbackendcups.c:2766
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2772
+#: modules/printbackends/cups/gtkprintbackendcups.c:3258
 msgid "Printer Default"
 msgstr "După opțiunile imprimantei"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2468
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Embed GhostScript fonts only"
 msgstr "Doar fonturile GhostScript înglobate"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2470
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
 msgstr "Convertește la PS nivelul 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2472
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
 msgstr "Convertește to PS nivelul 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2474
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "No pre-filtering"
 msgstr "Fără pre-filtrare"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#: modules/printbackends/cups/gtkprintbackendcups.c:2789
 msgid "Miscellaneous"
 msgstr "Altele"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
 msgstr "Înalt"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
 msgstr "Mediu"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Low"
 msgstr "Scăzut"
 
@@ -5028,66 +5059,66 @@ msgstr "Scăzut"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3184
+#: modules/printbackends/cups/gtkprintbackendcups.c:3490
 msgid "Pages per Sheet"
 msgstr "Pagini per foaie"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3221
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Job Priority"
 msgstr "Prioritate sarcină"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3232
+#: modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Billing Info"
 msgstr "Informații de facturare"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "None"
 msgstr "Nici unul"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Classified"
 msgstr "Clasificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Confidential"
 msgstr "Confidențial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
 msgstr "Standard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
 msgstr "Top Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Unclassified"
 msgstr "Neclasificat"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3282
+#: modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Before"
 msgstr "Înainte"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3297
+#: modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "After"
 msgstr "După"
 
@@ -5095,14 +5126,14 @@ msgstr "După"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3317
+#: modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Print at"
 msgstr "Tipărește la"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3328
+#: modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Print at time"
 msgstr "Tipărește la un anumit moment"
 
@@ -5110,7 +5141,7 @@ msgstr "Tipărește la un anumit moment"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3363
+#: modules/printbackends/cups/gtkprintbackendcups.c:3669
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalizat %sx%s"

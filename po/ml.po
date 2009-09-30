@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-22 23:32-0400\n"
+"POT-Creation-Date: 2009-09-30 17:31-0400\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1555,7 +1555,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3207
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3215
 msgid "Manage Custom Sizes"
 msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പംകള്‍ കൈകാര്യം ചെയ്യുക"
 
@@ -2444,7 +2444,7 @@ msgstr ""
 " മുകളില്‍: %s %s\n"
 " താഴെ: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3258
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3266
 msgid "Manage Custom Sizes..."
 msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പംകള്‍ കൈകാര്യം ചെയ്യുക..."
 
@@ -2452,7 +2452,7 @@ msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ�
 msgid "_Format for:"
 msgstr "_മാതൃക:"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3438
 msgid "_Paper size:"
 msgstr "_പേപ്പറിന്റെ വലിപ്പം:"
 
@@ -2460,7 +2460,7 @@ msgstr "_പേപ്പറിന്റെ വലിപ്പം:"
 msgid "_Orientation:"
 msgstr "സംവേദനം (_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3492
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3500
 msgid "Page Setup"
 msgstr "പേജിന്റെ ക്രമീകരണം"
 
@@ -2476,17 +2476,9 @@ msgstr "താഴേക്കുള്ള വഴി"
 msgid "File System Root"
 msgstr "ഫയല്‍ സിസ്റ്റം റൂട്ട്"
 
-#: gtk/gtkprintbackend.c:740
+#: gtk/gtkprintbackend.c:743
 msgid "Authentication"
 msgstr "ആധികാരികത ഉറപ്പാക്കല്‍"
-
-#: gtk/gtkprintbackend.c:772
-msgid "Username:"
-msgstr "ഉപയോക്താവിന്റെ പേരു്:"
-
-#: gtk/gtkprintbackend.c:782
-msgid "Password:"
-msgstr "അടയാളവാക്കു്:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2575,17 +2567,17 @@ msgstr "പ്രിന്റ് ചെയ്യുന്നതിനു് മ�
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "ഇതിനുള്ള കാരണം മിക്കവാറും താല്‍ക്കാലിക ഫയല്‍ ഉണ്ടാക്കപ്പെട്ടില്ല എന്നതാവും."
 
-#: gtk/gtkprintoperation-unix.c:265
+#: gtk/gtkprintoperation-unix.c:282
 #, c-format
 msgid "Error launching preview"
 msgstr "തിരനോട്ടം ലഭ്യമാക്കുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:309
+#: gtk/gtkprintoperation-unix.c:326
 #, c-format
 msgid "Error printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:462 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "പ്രയോഗം"
 
@@ -2599,7 +2591,7 @@ msgstr "പേപ്പറ്‍ തീറ്‍ന്നിരിക്കു�
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1725
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "തല്‍ക്കാലികമായി നിറ്‍ത്തിയിരിക്കുന്നു"
 
@@ -2644,45 +2636,50 @@ msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡി�
 msgid "Unspecified error"
 msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
-#: gtk/gtkprintunixdialog.c:1854
+#: gtk/gtkprintunixdialog.c:614
+#, fuzzy
+msgid "Getting printer information failed"
+msgstr "പ്രിന്ററിന്റെ വിവരങ്ങള്‍ ലഭ്യമാക്കുന്നു..."
+
+#: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "പ്രിന്ററിന്റെ വിവരങ്ങള്‍ ലഭ്യമാക്കുന്നു..."
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "പ്രിന്‍റര്‍"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2134
+#: gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "സ്ഥാനം"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2145
+#: gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "അവസ്ഥ"
 
-#: gtk/gtkprintunixdialog.c:2171
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "പരിധി"
 
-#: gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "_എല്ലാ പേജുകളും"
 
-#: gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "നി_ലവിലുളള താള്‍"
 
-#: gtk/gtkprintunixdialog.c:2192
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "_തെരഞ്ഞെടുക്കല്‍"
 
-#: gtk/gtkprintunixdialog.c:2201
+#: gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "താ_ളുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2690,28 +2687,28 @@ msgstr ""
 "ഒന്നോ അതിലധികമോ താള്‍ പരിധികള്‍ നല്‍കുക,\n"
 " ഉദാ. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2212
+#: gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "താളുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:2225
+#: gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "പകര്‍പ്പുകള്‍"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2230
+#: gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "പ_കര്‍പ്പുകള്‍:"
 
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "_കോളേറ്റ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "_തിരിക്കുക"
 
-#: gtk/gtkprintunixdialog.c:2276
+#: gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "സാധാരണ"
 
@@ -2721,168 +2718,168 @@ msgstr "സാധാരണ"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, top to bottom"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, bottom to top"
 msgstr "ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്, താഴെ നിന്നും മുകളിലേക്ക്, "
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, top to bottom"
 msgstr "വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്, മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, bottom to top"
 msgstr ", താഴെ നിന്നും മുകളിലേക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, left to right"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, ഇടതില്‍ നിന്നും വലത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, right to left"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, left to right"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, "
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, right to left"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്, വലതു്‌ നിന്നും ഇടത്തേയ്ക്ക്"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3200
+#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Page Ordering"
 msgstr "പേജിന്റെ ക്രമം"
 
-#: gtk/gtkprintunixdialog.c:3038
+#: gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "ഇടത് മുതല്‍ വലത്"
 
-#: gtk/gtkprintunixdialog.c:3039
+#: gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "വലതില്‍ നിന്നും എടത്തേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3051
+#: gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "മുകളില്‍ നിന്നും താഴേയ്ക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3052
+#: gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "താഴെ നിന്നും മുകളിലേക്ക്"
 
-#: gtk/gtkprintunixdialog.c:3281
+#: gtk/gtkprintunixdialog.c:3289
 msgid "Layout"
 msgstr "ലേയൌട്ട് "
 
-#: gtk/gtkprintunixdialog.c:3285
+#: gtk/gtkprintunixdialog.c:3293
 msgid "T_wo-sided:"
 msgstr "_ഇരു വശമുള്ള:"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: gtk/gtkprintunixdialog.c:3308
 msgid "Pages per _side:"
 msgstr "ഒരു _വശത്ത് എത്ര താള്‍:"
 
-#: gtk/gtkprintunixdialog.c:3317
+#: gtk/gtkprintunixdialog.c:3325
 msgid "Page or_dering:"
 msgstr "പേജിന്റെ _ക്രമം:"
 
-#: gtk/gtkprintunixdialog.c:3333
+#: gtk/gtkprintunixdialog.c:3341
 msgid "_Only print:"
 msgstr "പ്രിന്റ് മാത്രം ചെയ്യുക:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3348
+#: gtk/gtkprintunixdialog.c:3356
 msgid "All sheets"
 msgstr "എല്ലാ ഷീറ്റുകളും"
 
-#: gtk/gtkprintunixdialog.c:3349
+#: gtk/gtkprintunixdialog.c:3357
 msgid "Even sheets"
 msgstr "ഇവന്‍ ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:3350
+#: gtk/gtkprintunixdialog.c:3358
 msgid "Odd sheets"
 msgstr "ഓഡ് ഷീറ്റുകള്‍"
 
-#: gtk/gtkprintunixdialog.c:3353
+#: gtk/gtkprintunixdialog.c:3361
 msgid "Sc_ale:"
 msgstr "അളവ് (_a):"
 
-#: gtk/gtkprintunixdialog.c:3380
+#: gtk/gtkprintunixdialog.c:3388
 msgid "Paper"
 msgstr "പേപ്പറ്‍"
 
-#: gtk/gtkprintunixdialog.c:3384
+#: gtk/gtkprintunixdialog.c:3392
 msgid "Paper _type:"
 msgstr "ഏത് തരം പേപ്പറ്‍ (_t):"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3407
 msgid "Paper _source:"
 msgstr "പേപ്പറിന്റെ _ഉറവിടം:"
 
-#: gtk/gtkprintunixdialog.c:3414
+#: gtk/gtkprintunixdialog.c:3422
 msgid "Output t_ray:"
 msgstr "ഔട്ട്പുട്ട് ട്റേ (_r):"
 
-#: gtk/gtkprintunixdialog.c:3454
+#: gtk/gtkprintunixdialog.c:3462
 msgid "Or_ientation:"
 msgstr "_സംവേദനം:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3469
+#: gtk/gtkprintunixdialog.c:3477
 msgid "Portrait"
 msgstr "പോര്‍ട്രെയ്റ്റ്"
 
-#: gtk/gtkprintunixdialog.c:3470
+#: gtk/gtkprintunixdialog.c:3478
 msgid "Landscape"
 msgstr "ലാന്‍ഡ്സ്കേപ്പ്"
 
-#: gtk/gtkprintunixdialog.c:3471
+#: gtk/gtkprintunixdialog.c:3479
 msgid "Reverse portrait"
 msgstr "തിരിഞ്ഞ പോര്‍ട്രെയ്റ്റ്"
 
-#: gtk/gtkprintunixdialog.c:3472
+#: gtk/gtkprintunixdialog.c:3480
 msgid "Reverse landscape"
 msgstr "തിരിഞ്ഞ ലാന്‍ഡ്സ്കേപ്"
 
-#: gtk/gtkprintunixdialog.c:3517
+#: gtk/gtkprintunixdialog.c:3525
 msgid "Job Details"
 msgstr "ജോലിയുടെ വിശദവിവരങ്ങള്‍"
 
-#: gtk/gtkprintunixdialog.c:3523
+#: gtk/gtkprintunixdialog.c:3531
 msgid "Pri_ority:"
 msgstr "മുന്‍ഗണന (_o):"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3546
 msgid "_Billing info:"
 msgstr "ബില്ലിങ് വിവരം (_B): "
 
-#: gtk/gtkprintunixdialog.c:3556
+#: gtk/gtkprintunixdialog.c:3564
 msgid "Print Document"
 msgstr "രേഖ പ്രിന്റ് ചെയ്യുക"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3565
+#: gtk/gtkprintunixdialog.c:3573
 msgid "_Now"
 msgstr "ഉടന്‍ (_N)"
 
-#: gtk/gtkprintunixdialog.c:3576
+#: gtk/gtkprintunixdialog.c:3584
 msgid "A_t:"
 msgstr "എപ്പോള്‍ (_t):"
 
@@ -2890,7 +2887,7 @@ msgstr "എപ്പോള്‍ (_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3582
+#: gtk/gtkprintunixdialog.c:3590
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2898,64 +2895,64 @@ msgstr ""
 "പ്രിന്റ് ചെയ്യുന്നതിനുള്ള സമയം,\n"
 " ഉദാ. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3592
+#: gtk/gtkprintunixdialog.c:3600
 msgid "Time of print"
 msgstr "പ്രിന്റ് ചെയ്യുന്ന സമയം"
 
-#: gtk/gtkprintunixdialog.c:3608
+#: gtk/gtkprintunixdialog.c:3616
 msgid "On _hold"
 msgstr "തല്‍ക്കാലത്തേക്ക് _നിര്‍ത്തുക"
 
-#: gtk/gtkprintunixdialog.c:3609
+#: gtk/gtkprintunixdialog.c:3617
 msgid "Hold the job until it is explicitly released"
 msgstr "ഈ മാത്രമായി ലഭ്യമാക്കുന്നതു് വരെ ഇതു് ഹോള്‍ഡ് ചെയ്യുക"
 
-#: gtk/gtkprintunixdialog.c:3629
+#: gtk/gtkprintunixdialog.c:3637
 msgid "Add Cover Page"
 msgstr "കവര്‍ താള്‍ ചേര്‍ക്കുക"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3638
+#: gtk/gtkprintunixdialog.c:3646
 msgid "Be_fore:"
 msgstr "മുമ്പ് (_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3656
+#: gtk/gtkprintunixdialog.c:3664
 msgid "_After:"
 msgstr "ശേഷം (_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3674
+#: gtk/gtkprintunixdialog.c:3682
 msgid "Job"
 msgstr "ജോലി"
 
-#: gtk/gtkprintunixdialog.c:3740
+#: gtk/gtkprintunixdialog.c:3748
 msgid "Advanced"
 msgstr "പുരോഗമിച്ച"
 
-#: gtk/gtkprintunixdialog.c:3774
+#: gtk/gtkprintunixdialog.c:3782
 msgid "Image Quality"
 msgstr "ഇമേജിന്റെ നിലവാരം"
 
-#: gtk/gtkprintunixdialog.c:3777
+#: gtk/gtkprintunixdialog.c:3785
 msgid "Color"
 msgstr "നിറം"
 
-#: gtk/gtkprintunixdialog.c:3780
+#: gtk/gtkprintunixdialog.c:3788
 msgid "Finishing"
 msgstr "പൂറ്‍ത്തിയാക്കുന്നു"
 
-#: gtk/gtkprintunixdialog.c:3790
+#: gtk/gtkprintunixdialog.c:3798
 msgid "Some of the settings in the dialog conflict"
 msgstr "ഡയലോഗിലുള്ള ചില ക്രമീകരണങ്ങള്‍ പൊരുത്തപ്പെടുന്നില്ല"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: gtk/gtkprintunixdialog.c:3821
 msgid "Print"
 msgstr "പ്രിന്റ് ചെയ്യുക"
 
@@ -4771,230 +4768,261 @@ msgstr "വിയറ്റ്നാമീസ് (VIQR)"
 msgid "X Input Method"
 msgstr "X ഇന്‍പുട്ട് രീതി"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:753
+#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#: modules/printbackends/cups/gtkprintbackendcups.c:984
+msgid "Username:"
+msgstr "ഉപയോക്താവിന്റെ പേരു്:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:776
+#: modules/printbackends/cups/gtkprintbackendcups.c:993
+msgid "Password:"
+msgstr "അടയാളവാക്കു്:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:814
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s-ല്‍ നിന്നും ഒരു ഫയല്‍ ലഭ്യമാക്കുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:757
+#: modules/printbackends/cups/gtkprintbackendcups.c:818
+#: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "'%s' വിവരണം %s പ്രിന്ററില്‍ പ്രിന്റ് ചെയ്യുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:759
+#: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s-ല്‍ ഒരു വിവരണം പ്രിന്റ് ചെയ്യുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:763
+#: modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "'%s' ജോലിയുടെ വിശേഷതകള്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:765
+#: modules/printbackends/cups/gtkprintbackendcups.c:826
 msgid "Authentication is required to get attributes of a job"
 msgstr "ഒരു ജോലിയുടെ വിശേഷതകള്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#: modules/printbackends/cups/gtkprintbackendcups.c:830
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "പ്രിന്റര്‍ %s-ന്റെ വിശേഷതകള്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:771
+#: modules/printbackends/cups/gtkprintbackendcups.c:832
 msgid "Authentication is required to get attributes of a printer"
 msgstr "ഒരു പ്രിന്ററിന്റെ വിശേഷതകള്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s-ല്‍ നിന്നും സ്വതവേയുള്ള പ്രിന്റര്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:777
+#: modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s-ല്‍ നിന്നും പ്രിന്ററുകള്‍ ലഭ്യമാക്കുന്നതിനു് ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:841
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s-ല്‍ ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#, fuzzy
+msgid "Domain:"
+msgstr "_ഡൊമെയിന്‍:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#, fuzzy, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr "%s-ല്‍ ഒരു വിവരണം പ്രിന്റ് ചെയ്യുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#, fuzzy, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "'%s' വിവരണം %s പ്രിന്ററില്‍ പ്രിന്റ് ചെയ്യുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#, fuzzy
+msgid "Authentication is required to print this document"
+msgstr "%s-ല്‍ ഒരു വിവരണം പ്രിന്റ് ചെയ്യുന്നതിനായി ആധികാരികത ഉറപ്പാക്കേണ്ടതുണ്ടു്"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ ടോണര്‍ കുറവാണു്‌."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ ടോണര്‍ ഇല്ല."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ ഡെവെലപ്പര്‍ കുറവാണു്‌."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ ഡെവെലപ്പര്‍ ഇല്ല."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ സപ്പ്ലൈ എങ്കിലും കുറവാണു്‌."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു മാര്‍ക്കര്‍ സപ്പ്ലൈ എങ്കിലും ഇല്ല."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "പ്രിന്റര്‍  '%s'-ഇന്റെ കവര്‍ തുറന്നിരിക്കുന്നു"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "പ്രിന്റര്‍  '%s'-ഇന്റെ വാതില്‍ തുറന്നിരിക്കുന്നു"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ പേപ്പര്‍ കുറവാണു്‌"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ പേപ്പര്‍ ഇല്ല"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "പ്രിന്ററ്‍  '%s' ഇപ്പോള്‍ ഓഫ്-ലൈന്‍ ആണു്‌"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1651
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "പ്രിന്റര്‍  '%s' കണക്ര്റ് ചെയ്തിട്ടില്ലായിരിക്കാം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1429
+#: modules/printbackends/cups/gtkprintbackendcups.c:1652
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "പ്രിന്റര്‍  '%s'-ഇല്‍ ഒരു പ്രശ്നമുണ്ട്"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1722
+#: modules/printbackends/cups/gtkprintbackendcups.c:1960
 msgid "Paused ; Rejecting Jobs"
 msgstr "താല്‍കാല്‍കമായി നിര്‍ത്തി ; ജോലികള്‍ റിജെക്ര്റ് ചെയ്യുന്നു"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1728
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
 msgid "Rejecting Jobs"
 msgstr "ജോലികള്‍ റിജെക്ര്റ് ചെയ്യുന്നു"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2434
+#: modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Two Sided"
 msgstr "ഇരുവശവുമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2435
+#: modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
 msgstr "ഏത് തരം പേപ്പറ്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2436
+#: modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
 msgstr "പേപ്പറിന്റെ ഉറവിടം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2437
+#: modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
 msgstr "ഔട്ട്പുട്ട് ട്രേ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Resolution"
 msgstr "റിസല്യൂഷന്‍"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2439
+#: modules/printbackends/cups/gtkprintbackendcups.c:2745
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript പ്രീ-ഫില്‍‌റ്ററിങ്"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:2754
 msgid "One Sided"
 msgstr "ഒരു വശം മാത്രം"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:2756
 msgid "Long Edge (Standard)"
 msgstr "ലോങ് എഡ്ജ് (സാധാരണ)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2452
+#: modules/printbackends/cups/gtkprintbackendcups.c:2758
 msgid "Short Edge (Flip)"
 msgstr "ഷോര്‍ട്ട് എഡ്ജ് (ഫ്ലിപ്പ്)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2454
-#: modules/printbackends/cups/gtkprintbackendcups.c:2456
-#: modules/printbackends/cups/gtkprintbackendcups.c:2464
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#: modules/printbackends/cups/gtkprintbackendcups.c:2762
+#: modules/printbackends/cups/gtkprintbackendcups.c:2770
 msgid "Auto Select"
 msgstr "സ്വയം തെരഞ്ഞെടുക്കുക"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2458
-#: modules/printbackends/cups/gtkprintbackendcups.c:2460
-#: modules/printbackends/cups/gtkprintbackendcups.c:2462
-#: modules/printbackends/cups/gtkprintbackendcups.c:2466
-#: modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: modules/printbackends/cups/gtkprintbackendcups.c:2764
+#: modules/printbackends/cups/gtkprintbackendcups.c:2766
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2772
+#: modules/printbackends/cups/gtkprintbackendcups.c:3258
 msgid "Printer Default"
 msgstr "സ്വതവേസുള്ള പ്രിന്ററ്‍"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2468
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Embed GhostScript fonts only"
 msgstr "GhostScript അക്ഷരസഞ്ചയങ്ങള്‍ മാത്രം എംബഡ് ചെയ്യുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2470
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
 msgstr "പിഎസ് ലവല്‍ 1-ലേക്കു് വേര്‍തിരിക്കുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2472
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
 msgstr "പിഎസ് ലവല്‍ 2-ലേക്കു് വേര്‍തിരിക്കുക"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2474
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "No pre-filtering"
 msgstr "പ്രീ-ഫില്‍‌റ്ററിങ് ലഭ്യമല്ല"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#: modules/printbackends/cups/gtkprintbackendcups.c:2789
 msgid "Miscellaneous"
 msgstr "മറ്റുള്ളവ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Urgent"
 msgstr "അത്യാവശ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
 msgstr "കൂടിയ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
 msgstr "ഇടത്തരം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Low"
 msgstr "കുറഞ്ഞ"
 
@@ -5002,66 +5030,66 @@ msgstr "കുറഞ്ഞ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3184
+#: modules/printbackends/cups/gtkprintbackendcups.c:3490
 msgid "Pages per Sheet"
 msgstr "ഒരു ഷീറ്റില്‍ എത്ര താള്‍"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3221
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Job Priority"
 msgstr "ജോലി മുന്‍ഗണന"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3232
+#: modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Billing Info"
 msgstr "ബില്ലിങ് വിവരം"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "None"
 msgstr "ഒന്നുമില്ല"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Classified"
 msgstr "വേറ്‍തിരിച്ച"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Confidential"
 msgstr "വളരെ രഹസ്യമായ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Secret"
 msgstr "രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
 msgstr "നിലവാരമുള്ള"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
 msgstr "പരമ രഹസ്യം"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Unclassified"
 msgstr "വേറ്‍തിരിച്ചിട്ടില്ലാത്ത"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3282
+#: modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Before"
 msgstr "മുമ്പ്"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3297
+#: modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "After"
 msgstr "ശേഷം"
 
@@ -5069,14 +5097,14 @@ msgstr "ശേഷം"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3317
+#: modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Print at"
 msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3328
+#: modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Print at time"
 msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്"
 
@@ -5084,7 +5112,7 @@ msgstr "പ്രിന്റ് ചെയ്യുക ഈ സമയത്ത്
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3363
+#: modules/printbackends/cups/gtkprintbackendcups.c:3669
 #, c-format
 msgid "Custom %sx%s"
 msgstr "കസ്റ്റം %sx%s"

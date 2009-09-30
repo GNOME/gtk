@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-22 23:32-0400\n"
+"POT-Creation-Date: 2009-09-30 17:31-0400\n"
 "PO-Revision-Date: 2009-08-31 18:31+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -1549,7 +1549,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3207
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3215
 msgid "Manage Custom Sizes"
 msgstr "వినియోగదారుని పరిమాణాలను నిర్వహించు"
 
@@ -2433,7 +2433,7 @@ msgstr ""
 " పైన: %s %s\n"
 " క్రింద: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3258
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3266
 msgid "Manage Custom Sizes..."
 msgstr "వినియోగదారుని పరిమాణాలను నిర్వహించు..."
 
@@ -2441,7 +2441,7 @@ msgstr "వినియోగదారుని పరిమాణాలను �
 msgid "_Format for:"
 msgstr "దీనికొరకు రూపీకరించు(_F):"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3430
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3438
 msgid "_Paper size:"
 msgstr "పుట పరిమాణం(_P):"
 
@@ -2449,7 +2449,7 @@ msgstr "పుట పరిమాణం(_P):"
 msgid "_Orientation:"
 msgstr "సర్దుబాటు(_O):"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3492
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3500
 msgid "Page Setup"
 msgstr "పుచ అమర్పు"
 
@@ -2465,17 +2465,9 @@ msgstr "క్రింది పాత్"
 msgid "File System Root"
 msgstr "దస్త్ర వ్యవస్థ రూట్"
 
-#: gtk/gtkprintbackend.c:740
+#: gtk/gtkprintbackend.c:743
 msgid "Authentication"
 msgstr "దృవీకరణము"
-
-#: gtk/gtkprintbackend.c:772
-msgid "Username:"
-msgstr "వినియోగదారినామము:"
-
-#: gtk/gtkprintbackend.c:782
-msgid "Password:"
-msgstr "సంకేతపదము:"
 
 #: gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2564,17 +2556,17 @@ msgstr "ముద్రణ ఉపదర్శనం సృష్టించు�
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "తాత్కాలిక దస్త్రము సృష్టించబడదు అనేది ఎక్కువ సంభవమున్న కారణం."
 
-#: gtk/gtkprintoperation-unix.c:265
+#: gtk/gtkprintoperation-unix.c:282
 #, c-format
 msgid "Error launching preview"
 msgstr "ఉపదర్శనం దించుటలో దోషం"
 
-#: gtk/gtkprintoperation-unix.c:309
+#: gtk/gtkprintoperation-unix.c:326
 #, c-format
 msgid "Error printing"
 msgstr "ముద్రించుటలో దోషం"
 
-#: gtk/gtkprintoperation-unix.c:445 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:462 gtk/gtkprintoperation-win32.c:1425
 msgid "Application"
 msgstr "అప్లికేషన్"
 
@@ -2588,7 +2580,7 @@ msgstr "పుటలు అయిపోయాయి"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:594
-#: modules/printbackends/cups/gtkprintbackendcups.c:1725
+#: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "నిలుపబడింది"
 
@@ -2633,45 +2625,50 @@ msgstr "PrintDlgex కు చెల్లని సంభాలన"
 msgid "Unspecified error"
 msgstr "తెలుపబడని దోషం"
 
-#: gtk/gtkprintunixdialog.c:1854
+#: gtk/gtkprintunixdialog.c:614
+#, fuzzy
+msgid "Getting printer information failed"
+msgstr "ముద్రణాయంత్రము సమాచారమును పొందుచున్నది..."
+
+#: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "ముద్రణాయంత్రము సమాచారమును పొందుచున్నది..."
 
-#: gtk/gtkprintunixdialog.c:2124
+#: gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "ముద్రణాయంత్రం"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2134
+#: gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "స్థానము"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2145
+#: gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "స్థితి"
 
-#: gtk/gtkprintunixdialog.c:2171
+#: gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "పరిధి"
 
-#: gtk/gtkprintunixdialog.c:2175
+#: gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "అన్ని పేజీలు (_A)"
 
-#: gtk/gtkprintunixdialog.c:2182
+#: gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "ప్రస్తుత పేజీ (_u)"
 
-#: gtk/gtkprintunixdialog.c:2192
+#: gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "ఎంపిక(_l)"
 
-#: gtk/gtkprintunixdialog.c:2201
+#: gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "పేజీలు (_e):"
 
-#: gtk/gtkprintunixdialog.c:2202
+#: gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2679,28 +2676,28 @@ msgstr ""
 "ఒకటి లేదా ఎక్కువ పుట పరిధులను తెలుపుము,\n"
 " ఉ.దా. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2212
+#: gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "పేజీలు"
 
-#: gtk/gtkprintunixdialog.c:2225
+#: gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "నకళ్ళు"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2230
+#: gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "నకళ్ళు(_s):"
 
-#: gtk/gtkprintunixdialog.c:2248
+#: gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "తత్సంభంద(_o)"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "అపసవ్య(_R)"
 
-#: gtk/gtkprintunixdialog.c:2276
+#: gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "సాధారణ"
 
@@ -2710,168 +2707,168 @@ msgstr "సాధారణ"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, top to bottom"
 msgstr "ఎడమనుండి కుడికి, పైనుండి క్రిందికి"
 
-#: gtk/gtkprintunixdialog.c:3002
-#: modules/printbackends/cups/gtkprintbackendcups.c:3165
+#: gtk/gtkprintunixdialog.c:3010
+#: modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, bottom to top"
 msgstr "ఎడమనుండి కుడికి, క్రిందినుండి పైకి"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, top to bottom"
 msgstr "కుడినుండి ఎడమకి, పైనుండి క్రిందికి"
 
-#: gtk/gtkprintunixdialog.c:3003
-#: modules/printbackends/cups/gtkprintbackendcups.c:3166
+#: gtk/gtkprintunixdialog.c:3011
+#: modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, bottom to top"
 msgstr "కుడినుండి ఎడమకు, క్రిందినుండి పైకి"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, left to right"
 msgstr "పైనుండి క్రిందికి, ఎడమనుండి కుడికి"
 
-#: gtk/gtkprintunixdialog.c:3004
-#: modules/printbackends/cups/gtkprintbackendcups.c:3167
+#: gtk/gtkprintunixdialog.c:3012
+#: modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, right to left"
 msgstr "పైనుండి క్రిందికి, కుడినుండి ఎడముకు"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, left to right"
 msgstr "క్రిందినుండి పైకి, ఎడమనుండి కుడికి"
 
-#: gtk/gtkprintunixdialog.c:3005
-#: modules/printbackends/cups/gtkprintbackendcups.c:3168
+#: gtk/gtkprintunixdialog.c:3013
+#: modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, right to left"
 msgstr "క్రిందినుండి పైకి, కుడినుండి ఎడమకు"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3009 gtk/gtkprintunixdialog.c:3022
-#: modules/printbackends/cups/gtkprintbackendcups.c:3200
+#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Page Ordering"
 msgstr "పేజీ క్రమపరుచుట"
 
-#: gtk/gtkprintunixdialog.c:3038
+#: gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "ఎడమనుండి కుడికి"
 
-#: gtk/gtkprintunixdialog.c:3039
+#: gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "కుడినుండి ఎడమకు"
 
-#: gtk/gtkprintunixdialog.c:3051
+#: gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "పైనుండి క్రిందికి"
 
-#: gtk/gtkprintunixdialog.c:3052
+#: gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "క్రిందినుండి పైకి"
 
-#: gtk/gtkprintunixdialog.c:3281
+#: gtk/gtkprintunixdialog.c:3289
 msgid "Layout"
 msgstr "నమూనా"
 
-#: gtk/gtkprintunixdialog.c:3285
+#: gtk/gtkprintunixdialog.c:3293
 msgid "T_wo-sided:"
 msgstr "రైండు-వైపులా(_w):"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: gtk/gtkprintunixdialog.c:3308
 msgid "Pages per _side:"
 msgstr "ఒక ప్రక్కకి పుటలు(_s):"
 
-#: gtk/gtkprintunixdialog.c:3317
+#: gtk/gtkprintunixdialog.c:3325
 msgid "Page or_dering:"
 msgstr "పేజీ క్రమపరచుట (_d):"
 
-#: gtk/gtkprintunixdialog.c:3333
+#: gtk/gtkprintunixdialog.c:3341
 msgid "_Only print:"
 msgstr "ముద్రణ మాత్రమే(_O):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3348
+#: gtk/gtkprintunixdialog.c:3356
 msgid "All sheets"
 msgstr "అన్ని షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:3349
+#: gtk/gtkprintunixdialog.c:3357
 msgid "Even sheets"
 msgstr "సరి షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:3350
+#: gtk/gtkprintunixdialog.c:3358
 msgid "Odd sheets"
 msgstr "బేసి షీట్స్"
 
-#: gtk/gtkprintunixdialog.c:3353
+#: gtk/gtkprintunixdialog.c:3361
 msgid "Sc_ale:"
 msgstr "కొలత(_a):"
 
-#: gtk/gtkprintunixdialog.c:3380
+#: gtk/gtkprintunixdialog.c:3388
 msgid "Paper"
 msgstr "పుట"
 
-#: gtk/gtkprintunixdialog.c:3384
+#: gtk/gtkprintunixdialog.c:3392
 msgid "Paper _type:"
 msgstr "పుట రకం(_t):"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3407
 msgid "Paper _source:"
 msgstr "పుట మూలం(_s):"
 
-#: gtk/gtkprintunixdialog.c:3414
+#: gtk/gtkprintunixdialog.c:3422
 msgid "Output t_ray:"
 msgstr "అవుట్‌పుట్ ట్రే(_r):"
 
-#: gtk/gtkprintunixdialog.c:3454
+#: gtk/gtkprintunixdialog.c:3462
 msgid "Or_ientation:"
 msgstr "సర్దుబాటు(_i):"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3469
+#: gtk/gtkprintunixdialog.c:3477
 msgid "Portrait"
 msgstr "మూర్తిచిత్రము"
 
-#: gtk/gtkprintunixdialog.c:3470
+#: gtk/gtkprintunixdialog.c:3478
 msgid "Landscape"
 msgstr "లాండ్‌స్కేప్"
 
-#: gtk/gtkprintunixdialog.c:3471
+#: gtk/gtkprintunixdialog.c:3479
 msgid "Reverse portrait"
 msgstr "అపసవ్య మూర్తిచిత్రము"
 
-#: gtk/gtkprintunixdialog.c:3472
+#: gtk/gtkprintunixdialog.c:3480
 msgid "Reverse landscape"
 msgstr "అపసవ్య లాండ్‌స్కేప్"
 
-#: gtk/gtkprintunixdialog.c:3517
+#: gtk/gtkprintunixdialog.c:3525
 msgid "Job Details"
 msgstr "కార్యము వివరములు"
 
-#: gtk/gtkprintunixdialog.c:3523
+#: gtk/gtkprintunixdialog.c:3531
 msgid "Pri_ority:"
 msgstr "ప్రాముఖ్యత(_o):"
 
-#: gtk/gtkprintunixdialog.c:3538
+#: gtk/gtkprintunixdialog.c:3546
 msgid "_Billing info:"
 msgstr "బిల్లింగ్ సామాచారం(_B):"
 
-#: gtk/gtkprintunixdialog.c:3556
+#: gtk/gtkprintunixdialog.c:3564
 msgid "Print Document"
 msgstr "పత్రమును ముద్రించు"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3565
+#: gtk/gtkprintunixdialog.c:3573
 msgid "_Now"
 msgstr "ఇప్పడు(_N)"
 
-#: gtk/gtkprintunixdialog.c:3576
+#: gtk/gtkprintunixdialog.c:3584
 msgid "A_t:"
 msgstr "వద్ద(_t):"
 
@@ -2879,7 +2876,7 @@ msgstr "వద్ద(_t):"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3582
+#: gtk/gtkprintunixdialog.c:3590
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2887,64 +2884,64 @@ msgstr ""
 "ముద్రణయొక్క సమయాన్ని తెలుపుము.\n"
 " ఉ.దా. 15:30, 2:35 సా, 14:15:20, 11:46:30 ఉ, 4 సా"
 
-#: gtk/gtkprintunixdialog.c:3592
+#: gtk/gtkprintunixdialog.c:3600
 msgid "Time of print"
 msgstr "ముద్రించిన సమయం"
 
-#: gtk/gtkprintunixdialog.c:3608
+#: gtk/gtkprintunixdialog.c:3616
 msgid "On _hold"
 msgstr "నిలుపుదలలో ఉంది(_h)"
 
-#: gtk/gtkprintunixdialog.c:3609
+#: gtk/gtkprintunixdialog.c:3617
 msgid "Hold the job until it is explicitly released"
 msgstr "కార్యము బహిరంగముగా విడుదల అగునంతవరకు దానిని పట్టివుంచుము"
 
-#: gtk/gtkprintunixdialog.c:3629
+#: gtk/gtkprintunixdialog.c:3637
 msgid "Add Cover Page"
 msgstr "కవర్ పేజీని కలుపుము"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3638
+#: gtk/gtkprintunixdialog.c:3646
 msgid "Be_fore:"
 msgstr "ముందు(_f):"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3656
+#: gtk/gtkprintunixdialog.c:3664
 msgid "_After:"
 msgstr "తరువాత(_A):"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3674
+#: gtk/gtkprintunixdialog.c:3682
 msgid "Job"
 msgstr "కార్యము"
 
-#: gtk/gtkprintunixdialog.c:3740
+#: gtk/gtkprintunixdialog.c:3748
 msgid "Advanced"
 msgstr "ఆధునిక"
 
-#: gtk/gtkprintunixdialog.c:3774
+#: gtk/gtkprintunixdialog.c:3782
 msgid "Image Quality"
 msgstr "చిత్రము నాణ్యత"
 
-#: gtk/gtkprintunixdialog.c:3777
+#: gtk/gtkprintunixdialog.c:3785
 msgid "Color"
 msgstr "వర్ణము"
 
-#: gtk/gtkprintunixdialog.c:3780
+#: gtk/gtkprintunixdialog.c:3788
 msgid "Finishing"
 msgstr "ముగిస్తోంది"
 
-#: gtk/gtkprintunixdialog.c:3790
+#: gtk/gtkprintunixdialog.c:3798
 msgid "Some of the settings in the dialog conflict"
 msgstr "డైలాగ్ లోని కొన్ని అమర్పులు విభేదిస్తున్నాయి"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: gtk/gtkprintunixdialog.c:3821
 msgid "Print"
 msgstr "ముద్రించు"
 
@@ -4758,230 +4755,261 @@ msgstr "వియత్నాంసి (VIQR)"
 msgid "X Input Method"
 msgstr "X ఇన్‌పుట్ విధానం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:753
+#: modules/printbackends/cups/gtkprintbackendcups.c:775
+#: modules/printbackends/cups/gtkprintbackendcups.c:984
+msgid "Username:"
+msgstr "వినియోగదారినామము:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:776
+#: modules/printbackends/cups/gtkprintbackendcups.c:993
+msgid "Password:"
+msgstr "సంకేతపదము:"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:814
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s నుండి దస్త్రమును పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:757
+#: modules/printbackends/cups/gtkprintbackendcups.c:818
+#: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "ముద్రణాయంత్రము %2$s పైన పత్రము '%1$s'ను ముద్రించుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:759
+#: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s పైన పత్రముపైన ముద్రించుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:763
+#: modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "కార్యము '%s' యొక్క యాట్రిబ్యూట్లను పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:765
+#: modules/printbackends/cups/gtkprintbackendcups.c:826
 msgid "Authentication is required to get attributes of a job"
 msgstr "ఒక కార్యము యొక్క యాట్రిబ్యూట్లను పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:769
+#: modules/printbackends/cups/gtkprintbackendcups.c:830
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "ముద్రణాయంత్రము %s యొక్క యాట్రిబ్యూట్లను పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:771
+#: modules/printbackends/cups/gtkprintbackendcups.c:832
 msgid "Authentication is required to get attributes of a printer"
 msgstr "ముద్రణాయంత్రము యొక్క యాట్రిబ్యూట్లను పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:774
+#: modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s యొక్క అప్రమేయ ముద్రణాయంత్రమును పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:777
+#: modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s నుండి ముద్రణాయంత్రములను పొందుటకు దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:780
+#: modules/printbackends/cups/gtkprintbackendcups.c:841
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s పైన దృవీకరణము అవసరమైంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#, fuzzy
+msgid "Domain:"
+msgstr "డొమైన్ (_D):"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#, fuzzy, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr "%s పైన పత్రముపైన ముద్రించుటకు దృవీకరణము అవసరమైంది"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#, fuzzy, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "ముద్రణాయంత్రము %2$s పైన పత్రము '%1$s'ను ముద్రించుటకు దృవీకరణము అవసరమైంది"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#, fuzzy
+msgid "Authentication is required to print this document"
+msgstr "%s పైన పత్రముపైన ముద్రించుటకు దృవీకరణము అవసరమైంది"
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "టోనర్‌నందు ముద్రణాయంత్రం '%s' తక్కువగావుంది."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "ముద్రణాయంత్రం '%s' ఏ టోనర్ ఎడమను కలిగిలేదు."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "అభివృద్దియందు ముద్రణాయంత్రం '%s' తక్కువగావుంది"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "ముద్రణాయంత్రం '%s' అభివృద్దికి బయటవుంది."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "కనీసం ఏక వర్ణపు పంపిణీయందు కూడా ముద్రణాయంత్రం '%s' తక్కువగావుంది."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "కనీస ఏక వర్ణపు పంపిణీయందు ముద్రణాయంత్రం '%s' లేదు."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "ముద్రణాయంత్రం '%s' పైతొడుగు తెరిచివుంది."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "ముద్రణాయంత్రం '%s' పైని తలుపు తెరిచివుంది."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "ముద్రణాయంత్రం '%s' తక్కువ కాగితాలతోవుంది."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "ముద్రణాయంత్రం '%s'నందు కాగితాలులేవు."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "ముద్రణాయంత్రం '%s' ప్రస్తుతం ఆఫ్‌లైన్‌గావుంది."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1651
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "ముద్రణాయంత్రం '%s' అనుసంధానించబడి వుండకపోవచ్చు."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1429
+#: modules/printbackends/cups/gtkprintbackendcups.c:1652
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ముద్రణాయంత్రం '%s'నందు వొక సమస్యవుంది."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1722
+#: modules/printbackends/cups/gtkprintbackendcups.c:1960
 msgid "Paused ; Rejecting Jobs"
 msgstr "నిలిపివుంచబడింది ; కార్యములను తిరస్కరిస్తోంది"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1728
+#: modules/printbackends/cups/gtkprintbackendcups.c:1966
 msgid "Rejecting Jobs"
 msgstr "కార్యములను తిరస్కరిస్తోంది"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2434
+#: modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Two Sided"
 msgstr "రెండు వైపుల"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2435
+#: modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
 msgstr "పుట రకం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2436
+#: modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
 msgstr "పుట మూలం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2437
+#: modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
 msgstr "అవుట్‌పుట్ ట్రే"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2438
+#: modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Resolution"
 msgstr "తీవ్రత"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2439
+#: modules/printbackends/cups/gtkprintbackendcups.c:2745
 msgid "GhostScript pre-filtering"
 msgstr "గోస్టుస్క్రిప్టు ప్రి-ఫిల్టరింగ్"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2448
+#: modules/printbackends/cups/gtkprintbackendcups.c:2754
 msgid "One Sided"
 msgstr "ఒక ప్రక్క"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2450
+#: modules/printbackends/cups/gtkprintbackendcups.c:2756
 msgid "Long Edge (Standard)"
 msgstr "పొడవు అంచు (ప్రామాణికమైన)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2452
+#: modules/printbackends/cups/gtkprintbackendcups.c:2758
 msgid "Short Edge (Flip)"
 msgstr "పొట్టి అంచు (మడుచు)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2454
-#: modules/printbackends/cups/gtkprintbackendcups.c:2456
-#: modules/printbackends/cups/gtkprintbackendcups.c:2464
+#: modules/printbackends/cups/gtkprintbackendcups.c:2760
+#: modules/printbackends/cups/gtkprintbackendcups.c:2762
+#: modules/printbackends/cups/gtkprintbackendcups.c:2770
 msgid "Auto Select"
 msgstr "స్వయంచాలకంగా ఎంచుకొను"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2458
-#: modules/printbackends/cups/gtkprintbackendcups.c:2460
-#: modules/printbackends/cups/gtkprintbackendcups.c:2462
-#: modules/printbackends/cups/gtkprintbackendcups.c:2466
-#: modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: modules/printbackends/cups/gtkprintbackendcups.c:2764
+#: modules/printbackends/cups/gtkprintbackendcups.c:2766
+#: modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: modules/printbackends/cups/gtkprintbackendcups.c:2772
+#: modules/printbackends/cups/gtkprintbackendcups.c:3258
 msgid "Printer Default"
 msgstr "ముద్రణాయంత్రం అప్రమేయం"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2468
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Embed GhostScript fonts only"
 msgstr "కూర్చిన గోస్టుస్క్రిప్టు ఫాంట్లు మాత్రమే"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2470
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
 msgstr "PS స్థాయి 1కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2472
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
 msgstr "PS స్థాయి 2కు మార్చుము"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2474
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "No pre-filtering"
 msgstr "ముందస్తు-వడపోత లేదు"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2483
+#: modules/printbackends/cups/gtkprintbackendcups.c:2789
 msgid "Miscellaneous"
 msgstr "కలగలిసిన"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Urgent"
 msgstr "అత్యవసరం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
 msgstr "ఎక్కువ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
 msgstr "మద్యమం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3160
+#: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Low"
 msgstr "తక్కువ"
 
@@ -4989,66 +5017,66 @@ msgstr "తక్కువ"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3184
+#: modules/printbackends/cups/gtkprintbackendcups.c:3490
 msgid "Pages per Sheet"
 msgstr "ఒక్కో షీట్‌కు పేజీలు"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3221
+#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Job Priority"
 msgstr "కార్యపు ప్రాముఖ్యత"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3232
+#: modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Billing Info"
 msgstr "బిల్లింగ్ సామాచారం"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "None"
 msgstr "ఏదీకాదు"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Classified"
 msgstr "విభజించిన"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Confidential"
 msgstr "గుంభనంగా"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Secret"
 msgstr "రహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
 msgstr "ప్రమాణికం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
 msgstr "అతిరహస్యం"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3247
+#: modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Unclassified"
 msgstr "విభంజించని"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3282
+#: modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Before"
 msgstr "ముందు"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3297
+#: modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "After"
 msgstr "తరువాత"
 
@@ -5056,14 +5084,14 @@ msgstr "తరువాత"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3317
+#: modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Print at"
 msgstr "దీనివద్ద ముద్రించు"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3328
+#: modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Print at time"
 msgstr "ఈ సమయమువద్ద ముద్రించు"
 
@@ -5071,7 +5099,7 @@ msgstr "ఈ సమయమువద్ద ముద్రించు"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3363
+#: modules/printbackends/cups/gtkprintbackendcups.c:3669
 #, c-format
 msgid "Custom %sx%s"
 msgstr "మలుచుకొనిన %sx%s"
