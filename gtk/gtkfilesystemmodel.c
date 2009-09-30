@@ -139,7 +139,7 @@ struct _GtkFileSystemModel
 
   GCancellable *        cancellable;    /* cancellable in use for all operations - cancelled on dispose */
   GArray *              files;          /* array of FileModelNode containing all our files */
-  GSize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
+  gsize                 node_size;	/* Size of a FileModelNode structure once its ->values field has n_columns */
   guint                 n_nodes_valid;  /* count of valid nodes (i.e. those whose node->row is accurate) */
   GHashTable *          file_lookup;    /* mapping of GFile => array index in model->files
 					 * This hash table doesn't always have the same number of entries as the files array;
