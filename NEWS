@@ -1,5 +1,49 @@
-Overview of Changes from GTK+ 2.17.11 to 2.17.12
-================================================
+Overview of Changes from GTK+ 2.18.0 to 2.18.1
+==============================================
+
+* Client-side Windows:
+ - Fix a problem with the F-Spot screensaver
+ - Request native events that are necessary for grab emulation
+ - Fixes for input device and extended input event handling
+ - Allow up to 255 buttons in extended input events
+
+* OS X:
+ - Improve handling of multi-monitor setups
+ - Basic DND works
+ - Other improvements
+
+* Filechooser:
+ - Support Tracker 0.7 in the search code
+
+* Bugs fixed:
+ 596423 Landscape pages are the wrong way around
+ 588449 DnD doesn't work on GDK/Quartz
+ 596080 Mention "gtk-tooltip" in gtk_widget_set_tooltip_window
+ 596580 Blank rows in entry autocompletion
+ 588649 extended input events sent to widgets that didn't...
+ 596081 Update tracker support for version 0.7
+ 596345 clicking empty space in backgrounds...
+ 596494 New property "cursor" in 2.18's GdkWindow with wrong...
+ 596012 popup menu position is horribly off on gdk quartz...
+ 596250 Gdkcursor-quartz.c doesn't implement GDK_BLANK_CURSOR
+ 586207 Printing dialog with a CUPS printer connected...
+
+* Translation updates:
+ Assamese
+ British English
+ Czech
+ Estonian
+ French
+ Galician
+ German
+ Hungarian
+ Slovenian
+ Spanish
+ Swedish
+
+
+Overview of Changes from GTK+ 2.17.11 to 2.18.0
+===============================================
 
 * Add GtkTreeModelFilter testsuite and fix multiple bugs
 
