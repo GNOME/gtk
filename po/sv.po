@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-23 22:15+0200\n"
-"PO-Revision-Date: 2009-09-23 22:15+0100\n"
+"POT-Creation-Date: 2009-09-30 09:56+0200\n"
+"PO-Revision-Date: 2009-09-30 09:57+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -2504,17 +2504,9 @@ msgstr "Sökväg nedåt"
 msgid "File System Root"
 msgstr "Filsystemsrot"
 
-#: ../gtk/gtkprintbackend.c:740
+#: ../gtk/gtkprintbackend.c:743
 msgid "Authentication"
 msgstr "Autentisering"
-
-#: ../gtk/gtkprintbackend.c:772
-msgid "Username:"
-msgstr "Användarnamn:"
-
-#: ../gtk/gtkprintbackend.c:782
-msgid "Password:"
-msgstr "Lösenord:"
 
 #: ../gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
@@ -2624,7 +2616,7 @@ msgstr "Slut på papper"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:594
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1959
 msgid "Paused"
 msgstr "Pausad"
 
@@ -2753,42 +2745,42 @@ msgstr "Allmänt"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3204
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3437
 msgid "Left to right, top to bottom"
 msgstr "Vänster till höger, topp till botten"
 
 #: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3204
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3437
 msgid "Left to right, bottom to top"
 msgstr "Vänster till höger, botten till topp"
 
 #: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3205
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3438
 msgid "Right to left, top to bottom"
 msgstr "Höger till vänster, topp till botten"
 
 #: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3205
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3438
 msgid "Right to left, bottom to top"
 msgstr "Höger till vänster, botten till topp"
 
 #: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3206
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3439
 msgid "Top to bottom, left to right"
 msgstr "Topp till botten, vänster till höger"
 
 #: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3206
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3439
 msgid "Top to bottom, right to left"
 msgstr "Topp till botten, höger till vänster"
 
 #: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3207
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3440
 msgid "Bottom to top, left to right"
 msgstr "Botten till topp, vänster till höger"
 
 #: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3207
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3440
 msgid "Bottom to top, right to left"
 msgstr "Botten till topp, höger till vänster"
 
@@ -2797,7 +2789,7 @@ msgstr "Botten till topp, höger till vänster"
 #.
 #: ../gtk/gtkprintunixdialog.c:3017
 #: ../gtk/gtkprintunixdialog.c:3030
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3239
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Page Ordering"
 msgstr "Sidordning"
 
@@ -4819,231 +4811,260 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:772
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:981
+msgid "Username:"
+msgstr "Användarnamn:"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:773
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:990
+msgid "Password:"
+msgstr "Lösenord:"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:811
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Autentisering krävs för att hämta en fil från %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:757
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:815
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1003
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Autentisering krävs för att skriva ut dokumentet \"%s\" på skrivaren %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:759
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:817
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Autentisering krävs för att skriva ut ett dokument på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:763
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:821
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Autentisering krävs för att hämta attributen för jobbet \"%s\""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:765
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:823
 msgid "Authentication is required to get attributes of a job"
 msgstr "Autentisering krävs för att hämta attributen för ett jobb"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:769
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:827
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Autentisering krävs för att hämta attributen för skrivaren %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:771
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:829
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Autentisering krävs för att hämta attributen för en skrivare"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:774
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:832
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Autentisering krävs för att hämta standardskrivaren för %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:777
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Autentisering krävs för att hämta skrivare från %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:780
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Autentisering krävs på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1413
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:975
+msgid "Domain:"
+msgstr "Domän:"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1005
+#, c-format
+msgid "Authentication is required to print document '%s'"
+msgstr "Autentisering krävs för att skriva ut dokumentet \"%s\""
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1010
+#, c-format
+msgid "Authentication is required to print this document on printer %s"
+msgstr "Autentisering krävs för att skriva ut detta dokument på skrivaren %s"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1012
+msgid "Authentication is required to print this document"
+msgstr "Autentisering krävs för att skriva ut detta dokument"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1632
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Skrivaren \"%s\" har snart slut på toner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1633
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Skrivaren \"%s\" har slut på toner."
 
 # FIXME: Kolla denna. Hittar inget bättre ord
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1635
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Skrivaren \"%s\" har snart slut på framkallningsmaterial."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1418
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Skrivaren \"%s\" har slut på framkallningsmaterial."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1420
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Skrivaren \"%s\" har snart slut på minst en färgpenna."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1422
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Skrivaren \"%s\" har slut på minst en färgpenna."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1642
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Luckan är öppen på skrivaren \"%s\"."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1424
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Dörren är öppen på skrivaren \"%s\"."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1425
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1644
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Skrivaren \"%s\" har snart slut på papper."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1426
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Skrivaren \"%s\" har slut på papper."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1427
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Skrivaren \"%s\" är för närvarande frånkopplad."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Skrivaren \"%s\" kanske inte är ansluten."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1429
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Det har uppstått ett problem med skrivaren \"%s\"."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1724
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1956
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pausad ; Avvisar jobb"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1730
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1962
 msgid "Rejecting Jobs"
 msgstr "Avvisar jobb"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2706
 msgid "Two Sided"
 msgstr "Tvåsidig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2474
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2707
 msgid "Paper Type"
 msgstr "Papperstyp"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2475
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2708
 msgid "Paper Source"
 msgstr "Papperskälla"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2476
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2709
 msgid "Output Tray"
 msgstr "Utskriftsfack"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2477
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2710
 msgid "Resolution"
 msgstr "Upplösning"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2478
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2711
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript-förfiltrering"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2487
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2720
 msgid "One Sided"
 msgstr "Ensidigt"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2489
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2722
 msgid "Long Edge (Standard)"
 msgstr "Lång kant (Standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2491
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2724
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (Vänd)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2493
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2495
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2503
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2726
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2728
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2736
 msgid "Auto Select"
 msgstr "Välj automatiskt"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2497
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2499
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2501
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2505
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2991
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2730
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2732
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2734
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2738
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3224
 msgid "Printer Default"
 msgstr "Skrivarens standard"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2507
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Embed GhostScript fonts only"
 msgstr "Endast inbäddade GhostScript-typsnitt"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2509
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Convert to PS level 1"
 msgstr "Konvertera till PS nivå 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2511
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Convert to PS level 2"
 msgstr "Konvertera till PS nivå 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2513
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2746
 msgid "No pre-filtering"
 msgstr "Ingen förfiltrering"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2522
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2755
 msgid "Miscellaneous"
 msgstr "Diverse"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3432
 msgid "Urgent"
 msgstr "Viktigt"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3432
 msgid "High"
 msgstr "Hög"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3432
 msgid "Medium"
 msgstr "Medel"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3432
 msgid "Low"
 msgstr "Låg"
 
@@ -5051,68 +5072,68 @@ msgstr "Låg"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3223
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3456
 msgid "Pages per Sheet"
 msgstr "Sidor per blad"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3260
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3493
 msgid "Job Priority"
 msgstr "Jobbprioritet"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3271
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Billing Info"
 msgstr "Faktureringsinformation"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "None"
 msgstr "Ingen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Classified"
 msgstr "Klassificerat"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Confidential"
 msgstr "Konfidentiellt"
 
 # Se http://bugzilla.gnome.org/show_bug.cgi?id=148437 -- detta ska vara
 # "skärm"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Secret"
 msgstr "Hemlig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Standard"
 msgstr "Standard"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Top Secret"
 msgstr "Topphemligt"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3286
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3519
 msgid "Unclassified"
 msgstr "Inte klassificerat"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3321
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3554
 msgid "Before"
 msgstr "Före"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3336
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3569
 msgid "After"
 msgstr "Efter"
 
@@ -5120,14 +5141,14 @@ msgstr "Efter"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3356
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3589
 msgid "Print at"
 msgstr "Skriv ut den"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3367
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3600
 msgid "Print at time"
 msgstr "Skriv ut klockan"
 
@@ -5135,7 +5156,7 @@ msgstr "Skriv ut klockan"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3402
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3635
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Anpassad %sx%s"
