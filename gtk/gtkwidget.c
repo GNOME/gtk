@@ -10603,6 +10603,9 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
  * the default tooltip window. If @custom_window is %NULL, the default
  * tooltip window will be used.
  *
+ * If the custom window should have the default theming it needs to
+ * have the name "gtk-tooltip", see gtk_widget_set_name().
+ *
  * Since: 2.12
  */
 void
