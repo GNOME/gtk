@@ -613,7 +613,7 @@ gdk_window_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CURSOR:
-      gdk_window_set_cursor (window, g_value_get_pointer (value));
+      gdk_window_set_cursor (window, g_value_get_boxed (value));
       break;
 
     default:
@@ -633,7 +633,7 @@ gdk_window_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_CURSOR:
-      g_value_set_pointer (value, gdk_window_get_cursor (window));
+      g_value_set_boxed (value, gdk_window_get_cursor (window));
       break;
 
     default:
