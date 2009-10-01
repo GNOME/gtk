@@ -1726,7 +1726,7 @@ gdk_window_x11_restack_toplevel (GdkWindow *window,
   changes.stack_mode = above ? Above : Below;
   XReconfigureWMWindow (GDK_WINDOW_XDISPLAY (window),
 			GDK_WINDOW_XID (window),
-			GDK_WINDOW_SCREEN (window),
+			gdk_screen_get_number (GDK_WINDOW_SCREEN (window)),
 			CWStackMode | CWSibling, &changes);
 }
 
