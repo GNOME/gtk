@@ -44,6 +44,11 @@ Release notes for 2.18
   GDK_NATIVE_WINDOWS makes GDK create a native X11 window for each
   GDK window, which might make problematic applications work better.
 
+* GTK+ calls signal (SIGPIPE, SIG_IGN) during initialization, to ignore
+  SIGPIPE signals, since these are almost never wanted in graphical
+  applications. If you do need to handle SIGPIPE for some reason, reset
+  the handler after gtk_init(), but notice that other libraries (e.g.
+  libdbus or gvfs) might do similar things.
 
 Release notes for 2.16
 ======================

@@ -278,8 +278,6 @@ lpr_write (GIOChannel   *source,
     {
       gsize bytes_written;
 
-      signal (SIGPIPE, SIG_IGN);
-
       g_io_channel_write_chars (ps->in,
                                 buf, 
 				bytes_read, 
