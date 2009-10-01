@@ -141,9 +141,10 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 
   if (owner) 
     {
-      if (GDK_WINDOW_DESTROYED (owner))
+      if (GDK_WINDOW_DESTROYED (owner) || !GDK_WINDOW_IS_X11 (owner))
 	return FALSE;
       
+      gdk_window_ensure_native (owner);
       xdisplay = GDK_WINDOW_XDISPLAY (owner);
       xwindow = GDK_WINDOW_XID (owner);
     }
@@ -230,10 +231,11 @@ gdk_selection_convert (GdkWindow *requestor,
   GdkDisplay *display;
 
   g_return_if_fail (selection != GDK_NONE);
-  
-  if (GDK_WINDOW_DESTROYED (requestor))
+
+  if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     return;
 
+  gdk_window_ensure_native (requestor);
   display = GDK_WINDOW_DISPLAY (requestor);
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
@@ -279,10 +281,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+  g_return_val_if_fail (GDK_WINDOW_IS_X11 (requestor), 0);
   
   display = GDK_WINDOW_DISPLAY (requestor);
 
-  if (GDK_WINDOW_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     goto err;
 
   t = NULL;

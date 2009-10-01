@@ -175,6 +175,16 @@ included in the region, while areas overlapped an even number of times are not.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_region_rect_equal ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangle: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_region_point_in ##### -->
 <para>
 

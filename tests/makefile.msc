@@ -42,25 +42,27 @@ all :	\
 TESTAPPS = \
 #	autotestfilechooser autotestfilesystem \
 #	buildertest floatingtest \
+	flicker \
 	objecttests \
 	testaccel testactions testassistant \
-	testbbox \
-	testcairo testcalendar testcellrenderertext testcombo testcombochange \
+	testbbox testbuttons \
+	testcairo testcalendar testcellrenderertext testclientmessage testcombo testcombochange \
 	testdnd \
-	testellipsise testentrycompletion \
+	testellipsise testentrycompletion testentryicons \
 	testfilechooser testfilechooserbutton testframe \
 	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
 	testmenus testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
 	testnouiprint testnotebookdnd \
+	testoffscreen testorientable \
 	testprint \
 	testrecentchooser testrecentchoosermenu testrgb testrichtext \
-	testselection testspinbutton \
+	testscale testselection testspinbutton \
 	testtext testtoolbar testtooltips \
 	testtreecolumns testtreecolumnsizing testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
-	testthreads testvolumebutton testxinerama \
+	testthreads testvolumebutton testwindows testxinerama \
 	simple
 
 # syntax error : illegal character '-' in macro
@@ -79,6 +81,10 @@ EXTRA_OBJETCS = prop-editor.obj
 
 !IFDEF EXTRA_buildertest
 EXTRA_LIBS = $(ATK_LIBS)
+!ENDIF
+
+!IFDEF EXTRA_testoffscreen
+EXTRA_OBJETCS = gtkoffscreenbox.obj
 !ENDIF
 
 !IFDEF EXTRA_testprint

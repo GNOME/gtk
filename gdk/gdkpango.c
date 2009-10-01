@@ -214,7 +214,8 @@ get_cairo_context (GdkPangoRenderer *gdk_renderer,
 				  priv->cr,
 				  color,
 				  priv->stipple[part],
-				  priv->gc_changed);
+				  priv->gc_changed,
+				  priv->drawable);
 	}
 
       priv->last_part = part;

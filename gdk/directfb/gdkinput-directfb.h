@@ -37,7 +37,6 @@ extern GdkModifierType _gdk_directfb_modifiers;
 extern int _gdk_directfb_mouse_x, _gdk_directfb_mouse_y;
 
 typedef struct _GdkAxisInfo      GdkAxisInfo;
-typedef struct _GdkInputWindow   GdkInputWindow;
 
 /* information about a device axis */
 struct _GdkAxisInfo

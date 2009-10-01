@@ -640,6 +640,7 @@ gdk_window_at_pointer
 gdk_window_show
 gdk_window_show_unraised
 gdk_window_hide
+gdk_window_is_destroyed
 gdk_window_is_visible
 gdk_window_is_viewable
 gdk_window_get_state
@@ -661,6 +662,8 @@ gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
+gdk_window_flush
+gdk_window_ensure_native
 gdk_window_reparent
 gdk_window_clear
 gdk_window_clear_area
@@ -668,6 +671,7 @@ gdk_window_clear_area_e
 gdk_window_copy_area
 gdk_window_raise
 gdk_window_lower
+gdk_window_restack
 gdk_window_focus
 gdk_window_register_dnd
 gdk_window_begin_resize_drag
@@ -719,6 +723,7 @@ gdk_window_set_background
 gdk_window_set_back_pixmap
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
+gdk_window_get_cursor
 gdk_window_set_colormap
 gdk_window_get_user_data
 gdk_window_get_geometry
@@ -739,6 +744,7 @@ gdk_window_get_colormap
 gdk_window_get_type
 gdk_window_get_origin
 gdk_window_get_deskrelative_origin
+gdk_window_get_root_coords
 gdk_window_get_pointer
 GdkModifierType
 gdk_window_get_parent
@@ -767,6 +773,10 @@ GdkPointerHooks
 gdk_set_pointer_hooks
 
 <SUBSECTION>
+gdk_offscreen_window_get_pixmap
+gdk_offscreen_window_set_embedder
+gdk_offscreen_window_get_embedder
+gdk_window_geometry_changed
 gdk_window_redirect_to_drawable
 gdk_window_remove_redirection
 
@@ -905,6 +915,7 @@ gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_pixmap
 gdk_cairo_rectangle
 gdk_cairo_region
+gdk_cairo_reset_clip
 </SECTION>
 
 <SECTION>
@@ -931,6 +942,7 @@ gdk_region_get_clipbox
 gdk_region_get_rectangles
 gdk_region_empty
 gdk_region_equal
+gdk_region_rect_equal
 gdk_region_point_in
 gdk_region_rect_in
 GdkOverlapType

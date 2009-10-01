@@ -550,8 +550,8 @@ get_windows_version ()
 
   if (!have_version)
     {
-      have_version = TRUE;
       OSVERSIONINFOEX osvi;
+      have_version = TRUE;
 
       ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
       osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);

@@ -353,7 +353,6 @@ gdip_buffer_to_bitmap (const gchar *buffer, size_t size, GError **error)
   if (!hg)
     return NULL;
 
-  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
   hr = CreateStreamOnHGlobal (hg, FALSE, (LPSTREAM *)&stream);
 
   if (!SUCCEEDED (hr)) {
@@ -361,7 +360,9 @@ gdip_buffer_to_bitmap (const gchar *buffer, size_t size, GError **error)
     GlobalFree (hg);
     return NULL;
   }
-  
+
+  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
+
   status = GdipCreateBitmapFromStream (stream, &bitmap);
 
   if (Ok != status)

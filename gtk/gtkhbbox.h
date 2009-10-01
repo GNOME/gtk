@@ -72,6 +72,9 @@ void gtk_hbutton_box_set_spacing_default (gint spacing);
 void gtk_hbutton_box_set_layout_default (GtkButtonBoxStyle layout);
 #endif
 
+/* private API */
+GtkButtonBoxStyle _gtk_hbutton_box_get_layout_default (void);
+
 G_END_DECLS
 
 #endif /* __GTK_HBUTTON_BOX_H__ */

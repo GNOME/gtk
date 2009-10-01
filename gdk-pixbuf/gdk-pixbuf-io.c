@@ -277,6 +277,13 @@ correct_prefix (gchar **path)
   if (strncmp (*path, GTK_PREFIX "/", strlen (GTK_PREFIX "/")) == 0 ||
       strncmp (*path, GTK_PREFIX "\\", strlen (GTK_PREFIX "\\")) == 0)
     {
+	  gchar *tem = NULL;
+      if (strlen(*path) > 5 && strncmp (*path - 5, ".libs", 5) == 0)
+        {
+          /* We are being run from inside the build tree, and shouldn't mess about. */
+          return;
+	}
+
       /* This is an entry put there by gdk-pixbuf-query-loaders on the
        * packager's system. On Windows a prebuilt GTK+ package can be
        * installed in a random location. The gdk-pixbuf.loaders file
@@ -284,7 +291,7 @@ correct_prefix (gchar **path)
        * builder's machine. Replace the build-time prefix with the
        * installation prefix on this machine.
        */
-      gchar *tem = *path;
+      tem = *path;
       *path = g_strconcat (get_toplevel (), tem + strlen (GTK_PREFIX), NULL);
       g_free (tem);
     }

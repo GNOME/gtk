@@ -116,6 +116,13 @@ test_parser (void)
                              GTK_BUILDER_ERROR_INVALID_VALUE));
   g_error_free (error);
 
+  error = NULL;
+  gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"></object><object class=\"GtkButton\" id=\"a\"/></object></interface>", -1, &error);
+  g_assert (g_error_matches (error,
+                             GTK_BUILDER_ERROR,
+                             GTK_BUILDER_ERROR_DUPLICATE_ID));
+  g_error_free (error);
+
   g_object_unref (builder);
 }
 
@@ -1944,6 +1951,8 @@ test_icon_factory (void)
   gtk_icon_factory_add_default (GTK_ICON_FACTORY (factory));
   image = gtk_image_new_from_stock ("apple-red", GTK_ICON_SIZE_BUTTON);
   g_assert (image != NULL);
+  g_object_ref_sink (image);
+  g_object_unref (image);
 
   g_object_unref (builder);
 
@@ -2129,6 +2138,7 @@ test_requires (void)
                              GTK_BUILDER_ERROR_VERSION_MISMATCH));
   g_object_unref (builder);
   g_error_free (error);
+  g_free (buffer);
 }
 
 static void
@@ -2172,7 +2182,7 @@ test_add_objects (void)
     "  </object>"
     "  <object class=\"GtkWindow\" id=\"window2\">"
     "    <child>"
-    "      <object class=\"GtkLabel\" id=\"label1\">"
+    "      <object class=\"GtkLabel\" id=\"label3\">"
     "        <property name=\"label\" translatable=\"no\">second label</property>"
     "      </object>"
     "    </child>"

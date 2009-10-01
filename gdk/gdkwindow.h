@@ -37,10 +37,10 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkGeometry           GdkGeometry;
-typedef struct _GdkWindowAttr	      GdkWindowAttr;
-typedef struct _GdkPointerHooks	      GdkPointerHooks;
-typedef struct _GdkWindowRedirect     GdkWindowRedirect;
+typedef struct _GdkGeometry          GdkGeometry;
+typedef struct _GdkWindowAttr        GdkWindowAttr;
+typedef struct _GdkPointerHooks      GdkPointerHooks;
+typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -77,7 +77,8 @@ typedef enum
   GDK_WINDOW_CHILD,
   GDK_WINDOW_DIALOG,
   GDK_WINDOW_TEMP,
-  GDK_WINDOW_FOREIGN
+  GDK_WINDOW_FOREIGN,
+  GDK_WINDOW_OFFSCREEN
 } GdkWindowType;
 
 /* Window attribute mask values.
@@ -257,8 +258,17 @@ typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 #define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
 #define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
 #define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+
+#ifndef GDK_DISABLE_DEPRECATED
 #define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
 
+#ifndef GDK_COMPILATION
+
+/* We used to export all of GdkWindowObject, but we don't want to keep doing so.
+   However, there are various parts of it accessed by macros and other code,
+   so we keep the old exported version public, but in reality it is larger. */
+
+/**** DON'T CHANGE THIS STRUCT, the real version is in gdkinternals.h ****/
 struct _GdkWindowObject
 {
   GdkDrawable parent_instance;
@@ -308,6 +318,8 @@ struct _GdkWindowObject
 
   GdkWindowRedirect *redirect;
 };
+#endif
+#endif
 
 struct _GdkWindowObjectClass
 {
@@ -322,6 +334,7 @@ GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 gint           attributes_mask);
 void          gdk_window_destroy               (GdkWindow     *window);
 GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
+gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);
 void          gdk_window_show                  (GdkWindow     *window);
@@ -356,6 +369,9 @@ void          gdk_window_clear_area_e          (GdkWindow     *window,
                                                 gint           height);
 void          gdk_window_raise                 (GdkWindow     *window);
 void          gdk_window_lower                 (GdkWindow     *window);
+void          gdk_window_restack               (GdkWindow     *window,
+						GdkWindow     *sibling,
+						gboolean       above);
 void          gdk_window_focus                 (GdkWindow     *window,
                                                 guint32        timestamp);
 void          gdk_window_set_user_data         (GdkWindow     *window,
@@ -379,6 +395,7 @@ void	      gdk_window_move_region           (GdkWindow       *window,
 						const GdkRegion *region,
 						gint             dx,
 						gint             dy);
+gboolean      gdk_window_ensure_native        (GdkWindow       *window);
 
 /* 
  * This allows for making shaped (partially transparent) windows
@@ -492,6 +509,7 @@ void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 void	      gdk_window_begin_paint_region (GdkWindow          *window,
 					     const GdkRegion    *region);
 void	      gdk_window_end_paint          (GdkWindow          *window);
+void	      gdk_window_flush             (GdkWindow          *window);
 
 void	      gdk_window_set_title	   (GdkWindow	  *window,
 					    const gchar	  *title);
@@ -508,6 +526,7 @@ void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  gboolean	   parent_relative);
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
+GdkCursor    *gdk_window_get_cursor      (GdkWindow       *window);
 void	      gdk_window_get_user_data	 (GdkWindow	  *window,
 					  gpointer	  *data);
 void	      gdk_window_get_geometry	 (GdkWindow	  *window,
@@ -522,8 +541,13 @@ void	      gdk_window_get_position	 (GdkWindow	  *window,
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
+void	      gdk_window_get_root_coords (GdkWindow	  *window,
+					  gint             x,
+					  gint             y,
+					  gint		  *root_x,
+					  gint		  *root_y);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
 /* Used by gtk_handle_box_button_changed () */
 gboolean      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
 					  gint		  *x,
@@ -645,12 +669,22 @@ GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
 
 GdkWindow *gdk_get_default_root_window (void);
 
-void gdk_window_redirect_to_drawable (GdkWindow *window,
-				      GdkDrawable *drawable,
-				      gint src_x, gint src_y,
-				      gint dest_x, gint dest_y,
-				      gint width, gint height);
-void gdk_window_remove_redirection   (GdkWindow *window);
+/* Offscreen redirection */
+GdkPixmap *gdk_offscreen_window_get_pixmap     (GdkWindow     *window);
+void       gdk_offscreen_window_set_embedder   (GdkWindow     *window,
+						GdkWindow     *embedder);
+GdkWindow *gdk_offscreen_window_get_embedder   (GdkWindow     *window);
+void       gdk_window_geometry_changed         (GdkWindow     *window);
+
+void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
+                                              GdkDrawable   *drawable,
+                                              gint           src_x,
+                                              gint           src_y,
+                                              gint           dest_x,
+                                              gint           dest_y,
+                                              gint           width,
+                                              gint           height);
+void       gdk_window_remove_redirection     (GdkWindow     *window);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())

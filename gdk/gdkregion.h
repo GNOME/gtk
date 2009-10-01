@@ -77,6 +77,8 @@ void           gdk_region_get_rectangles  (const GdkRegion    *region,
 gboolean       gdk_region_empty           (const GdkRegion    *region);
 gboolean       gdk_region_equal           (const GdkRegion    *region1,
                                            const GdkRegion    *region2);
+gboolean       gdk_region_rect_equal      (const GdkRegion    *region,
+                                           const GdkRectangle *rectangle);
 gboolean       gdk_region_point_in        (const GdkRegion    *region,
                                            int                 x,
                                            int                 y);

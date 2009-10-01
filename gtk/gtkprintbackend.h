@@ -121,15 +121,16 @@ struct _GtkPrintBackendClass
   void                  (*printer_status_changed)            (GtkPrintBackend     *backend,
 							      GtkPrinter          *printer);
   void                  (*request_password)                  (GtkPrintBackend     *backend,
-                                                              const gchar         *hostname,
-                                                              const gchar         *username,
+                                                              gpointer             auth_info_required,
+                                                              gpointer             auth_info_default,
+                                                              gpointer             auth_info_display,
+                                                              gpointer             auth_info_visible,
                                                               const gchar         *prompt);
 
   /* not a signal */
   void                  (*set_password)                      (GtkPrintBackend     *backend,
-                                                              const gchar         *hostname,
-                                                              const gchar         *username,
-                                                              const gchar         *password);
+                                                              gchar              **auth_info_required,
+                                                              gchar              **auth_info);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -153,9 +154,8 @@ void        gtk_print_backend_print_stream         (GtkPrintBackend         *pri
 GList *     gtk_print_backend_load_modules         (void);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
 void        gtk_print_backend_set_password         (GtkPrintBackend         *backend, 
-                                                    const gchar             *hostname,
-                                                    const gchar             *username,
-                                                    const gchar             *password);
+                                                    gchar                  **auth_info_required,
+                                                    gchar                  **auth_info);
 
 /* Backend-only functions for GtkPrintBackend */
 

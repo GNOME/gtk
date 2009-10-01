@@ -96,6 +96,7 @@ static void miRegionOp   (GdkRegion       *newReg,
 			  overlapFunc      overlapFn,
 			  nonOverlapFunc   nonOverlap1Fn,
 			  nonOverlapFunc   nonOverlap2Fn);
+static void miSetExtents (GdkRegion       *pReg);
 
 /**
  * gdk_region_new:
@@ -121,6 +122,31 @@ gdk_region_new (void)
   
   return temp;
 }
+
+GdkRegion *
+_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects,
+				     int num_rects)
+{
+  GdkRegion *temp;
+  int i;
+
+  temp = g_slice_new (GdkRegion);
+
+  temp->rects = g_new (GdkRegionBox, num_rects);
+  temp->size = num_rects;
+  temp->numRects = num_rects;
+  for (i = 0; i < num_rects; i++)
+    {
+      temp->rects[i].x1 = rects[i].x;
+      temp->rects[i].y1 = rects[i].y;
+      temp->rects[i].x2 = rects[i].x + rects[i].width;
+      temp->rects[i].y2 = rects[i].y + rects[i].height;
+    }
+  miSetExtents (temp);  
+  
+  return temp;
+}
+
 
 /**
  * gdk_region_rectangle:
@@ -1552,6 +1578,32 @@ gdk_region_equal (const GdkRegion *region1,
 	else if (region1->rects[i].y1 != region2->rects[i].y1) return FALSE;
 	else if (region1->rects[i].y2 != region2->rects[i].y2) return FALSE;
       }
+  return TRUE;
+}
+
+/**
+ * gdk_region_rect_equal:
+ * @region: a #GdkRegion
+ * @rectangle: a #GdkRectangle
+ *
+ * Finds out if a regions is the same as a rectangle.
+ *
+ * Returns: %TRUE if @region and @rectangle are equal.
+ *
+ * Since: 2.18
+ */
+gboolean
+gdk_region_rect_equal (const GdkRegion    *region,
+		       const GdkRectangle *rectangle)
+{
+  g_return_val_if_fail (region != NULL, FALSE);
+  g_return_val_if_fail (rectangle != NULL, FALSE);
+
+  if (region->numRects != 1) return FALSE;
+  else if (region->extents.x1 != rectangle->x) return FALSE;
+  else if (region->extents.y1 != rectangle->y) return FALSE;
+  else if (region->extents.x2 != rectangle->x + rectangle->width) return FALSE;
+  else if (region->extents.y2 != rectangle->y + rectangle->height) return FALSE;
   return TRUE;
 }
 

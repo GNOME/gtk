@@ -879,6 +879,8 @@ split_r_n_separators_test (void)
 
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 3);
   g_assert (gtk_text_iter_ends_line (&iter));
+
+  g_object_unref (buffer);
 }
 
 static void
@@ -910,6 +912,40 @@ test_line_separator (void)
   g_free (str);
 
   split_r_n_separators_test ();
+}
+
+static void
+test_backspace (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  gboolean ret;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_set_text (buffer, "foo", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 2);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (ret);
+  g_assert_cmpint (1, ==, gtk_text_iter_get_offset (&iter));
+  g_assert_cmpint (2, ==, gtk_text_buffer_get_char_count (buffer));
+
+  gtk_text_buffer_set_text (buffer, "foo", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (!ret);
+  g_assert_cmpint (0, ==, gtk_text_iter_get_offset (&iter));
+  g_assert_cmpint (3, ==, gtk_text_buffer_get_char_count (buffer));
+
+  /* test bug #544724 */
+  gtk_text_buffer_set_text (buffer, "foo\r\n\r\nbar", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 5);
+  ret = gtk_text_buffer_backspace (buffer, &iter, TRUE, TRUE);
+  g_assert (ret);
+  g_assert_cmpint (0, ==, gtk_text_iter_get_line (&iter));
+  g_assert_cmpint (8, ==, gtk_text_buffer_get_char_count (buffer));
+
+  g_object_unref (buffer);
 }
 
 static void
@@ -1297,6 +1333,7 @@ main (int argc, char** argv)
 
   g_test_add_func ("/TextBuffer/UTF8 unknown char", test_utf8);
   g_test_add_func ("/TextBuffer/Line separator", test_line_separator);
+  g_test_add_func ("/TextBuffer/Backspace", test_backspace);
   g_test_add_func ("/TextBuffer/Logical motion", test_logical_motion);
   g_test_add_func ("/TextBuffer/Marks", test_marks);
   g_test_add_func ("/TextBuffer/Empty buffer", test_empty_buffer);

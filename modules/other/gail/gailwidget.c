@@ -106,6 +106,7 @@ static void       gail_widget_real_initialize    (AtkObject     *obj,
                                                   gpointer      data);
 static GtkWidget* gail_widget_find_viewport      (GtkWidget     *widget);
 static gboolean   gail_widget_on_screen          (GtkWidget     *widget);
+static gboolean   gail_widget_all_parents_visible(GtkWidget     *widget);
 
 G_DEFINE_TYPE_WITH_CODE (GailWidget, gail_widget, GTK_TYPE_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
@@ -518,8 +519,8 @@ gail_widget_ref_state_set (AtkObject *accessible)
       if (GTK_WIDGET_VISIBLE (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
-          if (gail_widget_on_screen (widget) &&
-              GTK_WIDGET_MAPPED (widget))
+          if (gail_widget_on_screen (widget) && GTK_WIDGET_MAPPED (widget) &&
+              gail_widget_all_parents_visible (widget))
             {
               atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
             }
@@ -1078,4 +1079,31 @@ static gboolean gail_widget_on_screen (GtkWidget *widget)
     }
 
   return return_value;
+}
+
+/**
+ * gail_widget_all_parents_visible:
+ * @widget: a #GtkWidget
+ *
+ * Checks if all the predecesors (the parent widget, his parent, etc) are visible
+ * Used to check properly the SHOWING state.
+ *
+ * Return value: TRUE if all the parent hierarchy is visible, FALSE otherwise
+ **/
+static gboolean gail_widget_all_parents_visible (GtkWidget *widget)
+{
+  GtkWidget *iter_parent = NULL;
+  gboolean result = TRUE;
+
+  for (iter_parent = gtk_widget_get_parent (widget); iter_parent;
+       iter_parent = gtk_widget_get_parent (iter_parent))
+    {
+      if (!GTK_WIDGET_VISIBLE (iter_parent))
+        {
+          result = FALSE;
+          break;
+        }
+    }
+
+  return result;
 }

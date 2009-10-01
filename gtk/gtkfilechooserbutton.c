@@ -810,6 +810,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
+    case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
       break;
 

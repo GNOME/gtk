@@ -147,7 +147,8 @@ enum {
   PROP_WIDTH_CHARS,
   PROP_SINGLE_LINE_MODE,
   PROP_ANGLE,
-  PROP_MAX_WIDTH_CHARS
+  PROP_MAX_WIDTH_CHARS,
+  PROP_TRACK_VISITED_LINKS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -710,6 +711,23 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkLabel:track-visited-links:
+   *
+   * Set this property to %TRUE to make the label track which links
+   * have been clicked. It will then apply the ::visited-link-color
+   * color, instead of ::link-color.
+   *
+   * Since: 2.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TRACK_VISITED_LINKS,
+                                   g_param_spec_boolean ("track-visited-links",
+                                                         P_("Track visited links"),
+                                                         P_("Whether visited links should be tracked"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
   /*
    * Key bindings
    */
@@ -893,6 +911,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_MAX_WIDTH_CHARS:
       gtk_label_set_max_width_chars (label, g_value_get_int (value));
       break;
+    case PROP_TRACK_VISITED_LINKS:
+      gtk_label_set_track_visited_links (label, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -976,7 +997,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, gtk_label_get_max_width_chars (label));
       break;
-
+    case PROP_TRACK_VISITED_LINKS:
+      g_value_set_boolean (value, gtk_label_get_track_visited_links (label));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1004,7 +1027,8 @@ gtk_label_init (GtkLabel *label)
   label->use_underline = FALSE;
   label->use_markup = FALSE;
   label->pattern_set = FALSE;
-  
+  label->track_links = TRUE;
+
   label->mnemonic_keyval = GDK_VoidSymbol;
   label->layout = NULL;
   label->text = NULL;
@@ -1012,7 +1036,7 @@ gtk_label_init (GtkLabel *label)
 
   label->mnemonic_widget = NULL;
   label->mnemonic_window = NULL;
-  
+
   gtk_label_set_text (label, "");
 }
 
@@ -1987,7 +2011,8 @@ start_element_handler (GMarkupParseContext  *context,
           return;
         }
 
-      if (pdata->label->select_info)
+      visited = FALSE;
+      if (pdata->label->track_links && pdata->label->select_info)
         {
           GList *l;
           for (l = pdata->label->select_info->links; l; l = l->next)
@@ -5651,7 +5676,7 @@ emit_activate_link (GtkLabel     *label,
   gboolean handled;
 
   g_signal_emit (label, signals[ACTIVATE_LINK], 0, link->uri, &handled);
-  if (handled && !link->visited)
+  if (handled && label->track_links && !link->visited)
     {
       link->visited = TRUE;
       /* FIXME: shouldn't have to redo everything here */
@@ -5737,6 +5762,53 @@ gtk_label_get_current_uri (GtkLabel *label)
   return NULL;
 }
 
+/**
+ * gtk_label_set_track_visited_links:
+ * @label: a #GtkLabel
+ * @track_links: %TRUE to track visited links
+ *
+ * Sets whether the label should keep track of clicked
+ * links (and use a different color for them).
+ *
+ * Since: 2.18
+ */
+void
+gtk_label_set_track_visited_links (GtkLabel *label,
+                                   gboolean  track_links)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  track_links = track_links != FALSE;
+
+  if (label->track_links != track_links)
+    {
+      label->track_links = track_links;
+
+      /* FIXME: shouldn't have to redo everything here */
+      gtk_label_recalculate (label);
+
+      g_object_notify (G_OBJECT (label), "track-visited-links");
+    }
+}
+
+/**
+ * gtk_label_get_track_visited_links:
+ * @label: a #GtkLabel
+ *
+ * Returns whether the label is currently keeping track
+ * of clicked links.
+ *
+ * Returns: %TRUE if clicked links are remembered
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_label_get_track_visited_links (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+
+  return label->track_links;
+}
 
 static gboolean
 gtk_label_query_tooltip (GtkWidget  *widget,

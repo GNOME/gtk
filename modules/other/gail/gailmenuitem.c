@@ -33,6 +33,7 @@ static void                  gail_menu_item_real_initialize
 static gint                  gail_menu_item_get_n_children (AtkObject      *obj);
 static AtkObject*            gail_menu_item_ref_child      (AtkObject      *obj,
                                                             gint           i);
+static AtkStateSet*          gail_menu_item_ref_state_set  (AtkObject      *obj);
 static void                  gail_menu_item_finalize       (GObject        *object);
 
 static void                  atk_action_interface_init     (AtkActionIface *iface);
@@ -73,6 +74,7 @@ gail_menu_item_class_init (GailMenuItemClass *klass)
 
   class->get_n_children = gail_menu_item_get_n_children;
   class->ref_child = gail_menu_item_ref_child;
+  class->ref_state_set = gail_menu_item_ref_state_set;
   class->initialize = gail_menu_item_real_initialize;
 }
 
@@ -237,6 +239,31 @@ gail_menu_item_ref_child (AtkObject *obj,
     accessible = NULL;
 
   return accessible;
+}
+
+static AtkStateSet*
+gail_menu_item_ref_state_set (AtkObject *obj)
+{
+  AtkObject *menu_item;
+  AtkStateSet *state_set, *parent_state_set;
+
+  state_set = ATK_OBJECT_CLASS (gail_menu_item_parent_class)->ref_state_set (obj);
+
+  menu_item = atk_object_get_parent (obj);
+
+  if (menu_item)
+    {
+      if (!GTK_IS_MENU_ITEM (GTK_ACCESSIBLE (menu_item)->widget))
+        return state_set;
+
+      parent_state_set = atk_object_ref_state_set (menu_item);
+      if (!atk_state_set_contains_state (parent_state_set, ATK_STATE_SELECTED))
+        {
+          atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
+          atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
+        }
+    }
+  return state_set;
 }
 
 static void
@@ -608,10 +635,18 @@ menu_item_selection (GtkItem  *item,
                      gboolean selected)
 {
   AtkObject *obj, *parent;
+  gint i;
 
   obj = gtk_widget_get_accessible (GTK_WIDGET (item));
   atk_object_notify_state_change (obj, ATK_STATE_SELECTED, selected);
- 
+
+  for (i = 0; i < atk_object_get_n_accessible_children (obj); i++)
+    {
+      AtkObject *child;
+      child = atk_object_ref_accessible_child (obj, i);
+      atk_object_notify_state_change (child, ATK_STATE_SHOWING, selected);
+      g_object_unref (child);
+    }
   parent = atk_object_get_parent (obj);
   g_signal_emit_by_name (parent, "selection_changed"); 
 }

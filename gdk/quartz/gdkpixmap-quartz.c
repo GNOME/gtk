@@ -137,10 +137,10 @@ data_provider_release (void *info, const void *data, size_t size)
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
-		gint         width,
-		gint         height,
-		gint         depth)
+_gdk_pixmap_new (GdkDrawable *drawable,
+                 gint         width,
+                 gint         height,
+                 gint         depth)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplQuartz *draw_impl;
@@ -224,10 +224,10 @@ gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable *window,
-			     const gchar *data,
-			     gint         width,
-			     gint         height)
+_gdk_bitmap_create_from_data (GdkDrawable *window,
+                              const gchar *data,
+                              gint         width,
+                              gint         height)
 {
   GdkPixmap *pixmap;
   GdkPixmapImplQuartz *impl;
@@ -264,13 +264,13 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable    *drawable,
-			     const gchar    *data,
-			     gint            width,
-			     gint            height,
-			     gint            depth,
-			     const GdkColor *fg,
-			     const GdkColor *bg)
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+                              const gchar    *data,
+                              gint            width,
+                              gint            height,
+                              gint            depth,
+                              const GdkColor *fg,
+                              const GdkColor *bg)
 {	
   /* FIXME: Implement */
   return NULL;

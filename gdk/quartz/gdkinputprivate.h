@@ -35,7 +35,6 @@
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkInputVTable GdkInputVTable;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-typedef struct _GdkInputWindow GdkInputWindow;
 
 struct _GdkInputVTable {
   gint (*set_mode) (guint32 deviceid, GdkInputMode mode);

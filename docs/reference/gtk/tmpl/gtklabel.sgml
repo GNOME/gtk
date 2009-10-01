@@ -301,6 +301,11 @@ described below.
 
 </para>
 
+<!-- ##### ARG GtkLabel:track-visited-links ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkLabel:use-markup ##### -->
 <para>
 
@@ -738,6 +743,24 @@ Sets the text within the GtkLabel widget.
 
 
 <!-- ##### FUNCTION gtk_label_get_current_uri ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_set_track_visited_links ##### -->
+<para>
+
+</para>
+
+@label: 
+@track_links: 
+
+
+<!-- ##### FUNCTION gtk_label_get_track_visited_links ##### -->
 <para>
 
 </para>

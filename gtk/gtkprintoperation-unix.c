@@ -91,9 +91,26 @@ unix_start_page (GtkPrintOperation *op,
       (op->priv->page_position % op->priv->manual_number_up == 0))
     {
       if (type == CAIRO_SURFACE_TYPE_PS)
-        cairo_ps_surface_set_size (op_unix->surface, w, h);
+        {
+          cairo_ps_surface_set_size (op_unix->surface, w, h);
+          cairo_ps_surface_dsc_begin_page_setup (op_unix->surface);
+          switch (gtk_page_setup_get_orientation (page_setup))
+            {
+              case GTK_PAGE_ORIENTATION_PORTRAIT:
+              case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Portrait");
+                break;
+
+              case GTK_PAGE_ORIENTATION_LANDSCAPE:
+              case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Landscape");
+                break;
+            }
+         }
       else if (type == CAIRO_SURFACE_TYPE_PDF)
-        cairo_pdf_surface_set_size (op_unix->surface, w, h);
+        {
+          cairo_pdf_surface_set_size (op_unix->surface, w, h);
+        }
     }
 }
 
@@ -372,9 +389,9 @@ job_status_changed_cb (GtkPrintJob       *job,
 
 
 static void
-printer_changed_cb (GtkPrintUnixDialog *print_dialog, 
-                    GParamSpec         *pspec,
-                    gpointer            user_data)
+print_setup_changed_cb (GtkPrintUnixDialog *print_dialog, 
+                        GParamSpec         *pspec,
+                        gpointer            user_data)
 {
   GtkPageSetup             *page_setup;
   GtkPrintSettings         *print_settings;
@@ -414,9 +431,13 @@ get_print_dialog (GtkPrintOperation *op,
   if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
 					priv->print_settings);
+
   if (priv->default_page_setup)
     gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
                                           priv->default_page_setup);
+
+  gtk_print_unix_dialog_set_embed_page_setup (GTK_PRINT_UNIX_DIALOG (pd),
+                                              priv->embed_page_setup);
 
   gtk_print_unix_dialog_set_current_page (GTK_PRINT_UNIX_DIALOG (pd), 
                                           priv->current_page);
@@ -446,7 +467,8 @@ get_print_dialog (GtkPrintOperation *op,
       gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
 					    priv->custom_widget, label);
 
-      g_signal_connect (pd, "notify::selected-printer", (GCallback) printer_changed_cb, op);
+      g_signal_connect (pd, "notify::selected-printer", (GCallback) print_setup_changed_cb, op);
+      g_signal_connect (pd, "notify::page-setup", (GCallback) print_setup_changed_cb, op);
     }
   
   return pd;
@@ -477,7 +499,8 @@ static void
 finish_print (PrintResponseData *rdata,
 	      GtkPrinter        *printer,
 	      GtkPageSetup      *page_setup,
-	      GtkPrintSettings  *settings)
+	      GtkPrintSettings  *settings,
+	      gboolean           page_setup_set)
 {
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
@@ -488,7 +511,9 @@ finish_print (PrintResponseData *rdata,
       gtk_print_operation_set_print_settings (op, settings);
       priv->print_context = _gtk_print_context_new (op);
 
-      if ( (page_setup != NULL) && (gtk_print_operation_get_default_page_setup (op) == NULL))
+      if (page_setup != NULL &&
+          (gtk_print_operation_get_default_page_setup (op) == NULL ||
+           page_setup_set))
         gtk_print_operation_set_default_page_setup (op, page_setup);
 
       _gtk_print_context_set_page_setup (priv->print_context, page_setup);
@@ -561,6 +586,7 @@ handle_print_response (GtkWidget *dialog,
   GtkPrintSettings *settings = NULL;
   GtkPageSetup *page_setup = NULL;
   GtkPrinter *printer = NULL;
+  gboolean page_setup_set = FALSE;
 
   if (response == GTK_RESPONSE_OK)
     {
@@ -585,11 +611,12 @@ handle_print_response (GtkWidget *dialog,
     {
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
+      page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
       
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     }
   
-  finish_print (rdata, printer, page_setup, settings);
+  finish_print (rdata, printer, page_setup, settings, page_setup_set);
 
   if (settings)
     g_object_unref (settings);
@@ -631,7 +658,7 @@ found_printer (GtkPrinter        *printer,
 	page_setup = gtk_page_setup_new ();
   }
   
-  finish_print (rdata, printer, page_setup, settings);
+  finish_print (rdata, printer, page_setup, settings, FALSE);
 
   if (settings)
     g_object_unref (settings);

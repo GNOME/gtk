@@ -102,6 +102,9 @@ test_type (gconstpointer data)
     {
       GdkWindowAttr attributes;
       attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.event_mask = 0;
+      attributes.width = 100;
+      attributes.height = 100;
       instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
     }
   else
@@ -170,7 +173,8 @@ test_type (gconstpointer data)
 
       /* Default invisible char is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
-	  strcmp (pspec->name, "invisible-char") == 0)
+	  (strcmp (pspec->name, "invisible-char") == 0 ||
+           strcmp (pspec->name, "buffer") == 0))
 	continue;
 
       /* Gets set to the cwd */
@@ -235,7 +239,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
 	   strcmp (pspec->name, "gtk-im-module") == 0 ||
 	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-theme-name") == 0))
+	   strcmp (pspec->name, "gtk-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-sound-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-enable-input-feedback-sounds") == 0 ||
+           strcmp (pspec->name, "gtk-enable-event-sounds") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&

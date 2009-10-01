@@ -31,6 +31,9 @@ typedef struct _GdkChildInfoX11 GdkChildInfoX11;
 typedef void (*GdkSendXEventCallback) (Window   window,
 				       gboolean success,
 				       gpointer data);
+typedef void (*GdkRoundTripCallback)  (GdkDisplay *display,
+				       gpointer data,
+				       gulong serial);
 
 struct _GdkChildInfoX11
 {
@@ -62,6 +65,10 @@ gboolean _gdk_x11_get_window_child_info (GdkDisplay       *display,
 					 gboolean         *win_has_wm_state,
 					 GdkChildInfoX11 **children,
 					 guint            *nchildren);
+
+void _gdk_x11_roundtrip_async           (GdkDisplay           *display, 
+					 GdkRoundTripCallback callback,
+					 gpointer              data);
 
 G_END_DECLS
 

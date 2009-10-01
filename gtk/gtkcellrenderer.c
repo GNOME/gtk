@@ -684,7 +684,7 @@ gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
  * @cell: A #GtkCellRenderer
  * @width: the width of the cell renderer, or -1
  * @height: the height of the cell renderer, or -1
- * 
+ *
  * Sets the renderer size to be explicit, independent of the properties set.
  **/
 void
@@ -718,9 +718,9 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
 /**
  * gtk_cell_renderer_get_fixed_size:
  * @cell: A #GtkCellRenderer
- * @width: location to fill in with the fixed width of the widget, or %NULL
- * @height: location to fill in with the fixed height of the widget, or %NULL
- * 
+ * @width: location to fill in with the fixed width of the cell, or %NULL
+ * @height: location to fill in with the fixed height of the cell, or %NULL
+ *
  * Fills in @width and @height with the appropriate size of @cell.
  **/
 void
@@ -731,9 +731,212 @@ gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
   if (width)
-    (* width) = cell->width;
+    *width = cell->width;
   if (height)
-    (* height) = cell->height;
+    *height = cell->height;
+}
+
+/**
+ * gtk_cell_renderer_set_alignment:
+ * @cell: A #GtkCellRenderer
+ * @xalign: the x alignment of the cell renderer
+ * @yalign: the y alignment of the cell renderer
+ *
+ * Sets the renderer's alignment within its available space.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_set_alignment (GtkCellRenderer *cell,
+                                 gfloat           xalign,
+                                 gfloat           yalign)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
+
+  if ((xalign != cell->xalign) || (yalign != cell->yalign))
+    {
+      g_object_freeze_notify (G_OBJECT (cell));
+
+      if (xalign != cell->xalign)
+        {
+          cell->xalign = xalign;
+          g_object_notify (G_OBJECT (cell), "xalign");
+        }
+
+      if (yalign != cell->yalign)
+        {
+          cell->yalign = yalign;
+          g_object_notify (G_OBJECT (cell), "yalign");
+        }
+
+      g_object_thaw_notify (G_OBJECT (cell));
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_alignment:
+ * @cell: A #GtkCellRenderer
+ * @xalign: location to fill in with the x alignment of the cell, or %NULL
+ * @yalign: location to fill in with the y alignment of the cell, or %NULL
+ *
+ * Fills in @xalign and @yalign with the appropriate values of @cell.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_get_alignment (GtkCellRenderer *cell,
+                                 gfloat          *xalign,
+                                 gfloat          *yalign)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (xalign)
+    *xalign = cell->xalign;
+  if (yalign)
+    *yalign = cell->yalign;
+}
+
+/**
+ * gtk_cell_renderer_set_padding:
+ * @cell: A #GtkCellRenderer
+ * @xpad: the x padding of the cell renderer
+ * @ypad: the y padding of the cell renderer
+ *
+ * Sets the renderer's padding.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
+                               gint             xpad,
+                               gint             ypad)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (xpad >= 0 && xpad >= 0);
+
+  if ((xpad != cell->xpad) || (ypad != cell->ypad))
+    {
+      g_object_freeze_notify (G_OBJECT (cell));
+
+      if (xpad != cell->xpad)
+        {
+          cell->xpad = xpad;
+          g_object_notify (G_OBJECT (cell), "xpad");
+        }
+
+      if (ypad != cell->ypad)
+        {
+          cell->ypad = ypad;
+          g_object_notify (G_OBJECT (cell), "ypad");
+        }
+
+      g_object_thaw_notify (G_OBJECT (cell));
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_padding:
+ * @cell: A #GtkCellRenderer
+ * @xpad: location to fill in with the x padding of the cell, or %NULL
+ * @ypad: location to fill in with the y padding of the cell, or %NULL
+ *
+ * Fills in @xpad and @ypad with the appropriate values of @cell.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_get_padding (GtkCellRenderer *cell,
+                               gint            *xpad,
+                               gint            *ypad)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (xpad)
+    *xpad = cell->xpad;
+  if (ypad)
+    *ypad = cell->ypad;
+}
+
+/**
+ * gtk_cell_renderer_set_visible:
+ * @cell: A #GtkCellRenderer
+ * @visible: the visibility of the cell
+ *
+ * Sets the cell renderer's visibility.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_set_visible (GtkCellRenderer *cell,
+                               gboolean         visible)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (cell->visible != visible)
+    {
+      cell->visible = visible ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (cell), "visible");
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_visible:
+ * @cell: A #GtkCellRenderer
+ *
+ * Returns the cell renderer's visibility.
+ *
+ * Returns: %TRUE if the cell renderer is visible
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_cell_renderer_get_visible (GtkCellRenderer *cell)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  return cell->visible;
+}
+
+/**
+ * gtk_cell_renderer_set_sensitive:
+ * @cell: A #GtkCellRenderer
+ * @sensitive: the sensitivity of the cell
+ *
+ * Sets the cell renderer's sensitivity.
+ *
+ * Since: 2.18
+ **/
+void
+gtk_cell_renderer_set_sensitive (GtkCellRenderer *cell,
+                                 gboolean         sensitive)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (cell->sensitive != sensitive)
+    {
+      cell->sensitive = sensitive ? TRUE : FALSE;
+      g_object_notify (G_OBJECT (cell), "sensitive");
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_sensitive:
+ * @cell: A #GtkCellRenderer
+ *
+ * Returns the cell renderer's sensitivity.
+ *
+ * Returns: %TRUE if the cell renderer is sensitive
+ *
+ * Since: 2.18
+ */
+gboolean
+gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  return cell->sensitive;
 }
 
 /**

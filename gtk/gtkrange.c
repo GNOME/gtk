@@ -844,6 +844,52 @@ gtk_range_get_inverted (GtkRange *range)
 }
 
 /**
+ * gtk_range_set_flippable:
+ * @range: a #GtkRange
+ * @flippable: %TRUE to make the range flippable
+ *
+ * If a range is flippable, it will switch its direction if it is
+ * horizontal and its direction is %GTK_TEXT_DIR_RTL.
+ *
+ * See gtk_widget_get_direction().
+ *
+ * Since: 2.18
+ **/
+void
+gtk_range_set_flippable (GtkRange *range,
+                         gboolean  flippable)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  flippable = flippable ? TRUE : FALSE;
+
+  if (flippable != range->flippable)
+    {
+      range->flippable = flippable;
+
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+    }
+}
+
+/**
+ * gtk_range_get_flippable:
+ * @range: a #GtkRange
+ *
+ * Gets the value set by gtk_range_set_flippable().
+ *
+ * Return value: %TRUE if the range is flippable
+ *
+ * Since: 2.18
+ **/
+gboolean
+gtk_range_get_flippable (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+
+  return range->flippable;
+}
+
+/**
  * gtk_range_set_lower_stepper_sensitivity:
  * @range:       a #GtkRange
  * @sensitivity: the lower stepper's sensitivity policy.

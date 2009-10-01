@@ -94,6 +94,8 @@ typedef struct
   GtkCupsRequest *request;
   GPollFD *data_poll;
   GtkPrintBackendCups *backend;
+  GtkPrintCupsResponseCallbackFunc callback;
+  gpointer                         callback_data;
 
 } GtkPrintCupsDispatchWatch;
 
@@ -110,13 +112,12 @@ struct _GtkPrintBackendCups
   
   guint list_printers_poll;
   guint list_printers_pending : 1;
+  gint  list_printers_attempts;
   guint got_default_printer   : 1;
   guint default_printer_poll;
   GtkCupsConnectionTest *cups_connection_test;
 
   char **covers;
-  char  *default_cover_before;
-  char  *default_cover_after;
   int    number_of_covers;
 
   GList      *requests;
@@ -156,7 +157,7 @@ static GList *              cups_printer_list_papers               (GtkPrinter  
 static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
 static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
-static void                 cups_request_ppd                       (GtkPrinter                        *printer);
+static gboolean             cups_request_ppd                       (GtkPrinter                        *printer);
 static void                 cups_printer_get_hard_margins          (GtkPrinter                        *printer,
 								    double                            *top,
 								    double                            *bottom,
@@ -181,13 +182,13 @@ static cairo_surface_t *    cups_printer_create_cairo_surface      (GtkPrinter  
 								    gdouble                            height,
 								    GIOChannel                        *cache_io);
 
-static void                 gtk_print_backend_cups_set_password    (GtkPrintBackend *backend, 
-                                                                    const gchar     *hostname,
-                                                                    const gchar     *username,
-                                                                    const gchar     *password);
+static void                 gtk_print_backend_cups_set_password    (GtkPrintBackend                   *backend, 
+                                                                    gchar                            **auth_info_required,
+                                                                    gchar                            **auth_info);
 
-void                        overwrite_and_free                      (gpointer data);
-static gboolean             is_address_local                        (const gchar *address);
+void                        overwrite_and_free                      (gpointer                          data);
+static gboolean             is_address_local                        (const gchar                      *address);
+static gboolean             request_auth_info                       (gpointer                          data);
 
 static void
 gtk_print_backend_cups_register_type (GTypeModule *module)
@@ -363,16 +364,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
               if (sscanf (ppd_attr_res->value, "%dx%ddpi", &res_x, &res_y) == 2)
                 {
-                  if (res_x != 0 && res_y != 0)
+                  if (res_x > 0 && res_y > 0)
                     gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
                 }
               else if (sscanf (ppd_attr_res->value, "%ddpi", &res) == 1)
                 {
-                  if (res != 0)
+                  if (res > 0)
                     gtk_print_settings_set_resolution (settings, res);
                 }
-              else
-                gtk_print_settings_set_resolution (settings, 300);
             }
         }
 
@@ -392,17 +391,10 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 
       ppd_attr_screen_freq = ppdFindAttr (ppd_file, "ScreenFreq", NULL);
 
-      if (ppd_attr_res_screen_freq != NULL)
+      if (ppd_attr_res_screen_freq != NULL && atof (ppd_attr_res_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_res_screen_freq->value));
-      else if (ppd_attr_screen_freq != NULL)
+      else if (ppd_attr_screen_freq != NULL && atof (ppd_attr_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
-      else
-        gtk_print_settings_set_printer_lpi (settings, 150.0);
-    }
-  else
-    {
-      gtk_print_settings_set_resolution (settings, 300);
-      gtk_print_settings_set_printer_lpi (settings, 150.0);
     }
 
   if (level == 2)
@@ -568,6 +560,9 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   ps->dnotify = dnotify;
   ps->job = g_object_ref (job);
 
+  request->need_auth_info = cups_printer->auth_info_required != NULL;
+  request->auth_info_required = g_strdupv (cups_printer->auth_info_required);
+
   cups_request_execute (GTK_PRINT_BACKEND_CUPS (print_backend),
                         request,
                         (GtkPrintCupsResponseCallbackFunc) cups_print_cb,
@@ -592,14 +587,13 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->list_printers_poll = FALSE;  
   backend_cups->got_default_printer = FALSE;  
   backend_cups->list_printers_pending = FALSE;
+  backend_cups->list_printers_attempts = 0;
 
   backend_cups->requests = NULL;
   backend_cups->auth = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, overwrite_and_free);
   backend_cups->authentication_lock = FALSE;
 
   backend_cups->covers = NULL;
-  backend_cups->default_cover_before = NULL;
-  backend_cups->default_cover_after = NULL;
   backend_cups->number_of_covers = 0;
 
   backend_cups->default_printer_poll = 0;
@@ -626,9 +620,6 @@ gtk_print_backend_cups_finalize (GObject *object)
   g_strfreev (backend_cups->covers);
   backend_cups->number_of_covers = 0;
 
-  g_free (backend_cups->default_cover_before);
-  g_free (backend_cups->default_cover_after);
-
   gtk_cups_connection_test_free (backend_cups->cups_connection_test);
   backend_cups->cups_connection_test = NULL;
 
@@ -652,6 +643,7 @@ gtk_print_backend_cups_dispose (GObject *object)
   if (backend_cups->list_printers_poll > 0)
     g_source_remove (backend_cups->list_printers_poll);
   backend_cups->list_printers_poll = 0;
+  backend_cups->list_printers_attempts = 0;
   
   if (backend_cups->default_printer_poll > 0)
     g_source_remove (backend_cups->default_printer_poll);
@@ -672,18 +664,38 @@ is_address_local (const gchar *address)
 }
 
 static void
-gtk_print_backend_cups_set_password (GtkPrintBackend *backend,
-                                     const gchar     *hostname,
-                                     const gchar     *username, 
-                                     const gchar     *password)
+gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
+                                     gchar           **auth_info_required,
+                                     gchar           **auth_info)
 {
   GtkPrintBackendCups *cups_backend = GTK_PRINT_BACKEND_CUPS (backend);
   GList *l;
   char   dispatch_hostname[HTTP_MAX_URI];
   gchar *key;
+  gchar *username = NULL;
+  gchar *hostname = NULL;
+  gchar *password = NULL;
+  gint   length;
+  gint   i;
 
-  key = g_strconcat (username, "@", hostname, NULL);
-  g_hash_table_insert (cups_backend->auth, key, g_strdup (password));
+  length = g_strv_length (auth_info_required);
+
+  if (auth_info != NULL)
+    for (i = 0; i < length; i++)
+      {
+        if (g_strcmp0 (auth_info_required[i], "username") == 0)
+          username = g_strdup (auth_info[i]);
+        else if (g_strcmp0 (auth_info_required[i], "hostname") == 0)
+          hostname = g_strdup (auth_info[i]);
+        else if (g_strcmp0 (auth_info_required[i], "password") == 0)
+          password = g_strdup (auth_info[i]);
+      }
+
+  if (hostname != NULL && username != NULL && password != NULL)
+    {
+      key = g_strconcat (username, "@", hostname, NULL);
+      g_hash_table_insert (cups_backend->auth, key, g_strdup (password));
+    }
 
   g_free (cups_backend->username);
   cups_backend->username = g_strdup (username);
@@ -699,7 +711,18 @@ gtk_print_backend_cups_set_password (GtkPrintBackend *backend,
       if (is_address_local (dispatch_hostname))
         strcpy (dispatch_hostname, "localhost");
 
-      if (strcmp (hostname, dispatch_hostname) == 0) 
+      if (dispatch->request->need_auth_info)
+        {
+          if (auth_info != NULL)
+            {
+              dispatch->request->auth_info = g_new0 (gchar *, length + 1);
+              for (i = 0; i < length; i++)
+                dispatch->request->auth_info[i] = g_strdup (auth_info[i]);
+            }
+          dispatch->backend->authentication_lock = FALSE;
+          dispatch->request->need_auth_info = FALSE;
+        }
+      else if (dispatch->request->password_state == GTK_CUPS_PASSWORD_REQUESTED || auth_info == NULL)
         {
           overwrite_and_free (dispatch->request->password);
           dispatch->request->password = g_strdup (password);
@@ -720,6 +743,12 @@ request_password (gpointer data)
   gchar                     *prompt = NULL;
   gchar                     *key = NULL;
   char                       hostname[HTTP_MAX_URI];
+  gchar                    **auth_info_required;
+  gchar                    **auth_info_default;
+  gchar                    **auth_info_display;
+  gboolean                  *auth_info_visible;
+  gint                       length = 3;
+  gint                       i;
 
   if (dispatch->backend->authentication_lock)
     return FALSE;
@@ -732,6 +761,22 @@ request_password (gpointer data)
     username = dispatch->backend->username;
   else
     username = cupsUser ();
+
+  auth_info_required = g_new0 (gchar*, length + 1);
+  auth_info_required[0] = g_strdup ("hostname");
+  auth_info_required[1] = g_strdup ("username");
+  auth_info_required[2] = g_strdup ("password");
+
+  auth_info_default = g_new0 (gchar*, length + 1);
+  auth_info_default[0] = g_strdup (hostname);
+  auth_info_default[1] = g_strdup (username);
+
+  auth_info_display = g_new0 (gchar*, length + 1);
+  auth_info_display[1] = g_strdup (_("Username:"));
+  auth_info_display[2] = g_strdup (_("Password:"));
+
+  auth_info_visible = g_new0 (gboolean, length + 1);
+  auth_info_visible[1] = TRUE;
 
   key = g_strconcat (username, "@", hostname, NULL);
   password = g_hash_table_lookup (dispatch->backend->auth, key);
@@ -800,12 +845,195 @@ request_password (gpointer data)
       g_free (printer_name);
 
       g_signal_emit_by_name (dispatch->backend, "request-password", 
-                             hostname, username, prompt);
+                             auth_info_required, auth_info_default, auth_info_display, auth_info_visible, prompt);
 
       g_free (prompt);
     }
 
+  for (i = 0; i < length; i++)
+    {
+      g_free (auth_info_required[i]);
+      g_free (auth_info_default[i]);
+      g_free (auth_info_display[i]);
+    }
+
+  g_free (auth_info_required);
+  g_free (auth_info_default);
+  g_free (auth_info_display);
+  g_free (auth_info_visible);
   g_free (key);
+
+  return FALSE;
+}
+
+static void
+cups_dispatch_add_poll (GSource *source)
+{
+  GtkPrintCupsDispatchWatch *dispatch;
+  GtkCupsPollState poll_state;
+
+  dispatch = (GtkPrintCupsDispatchWatch *) source;
+
+  poll_state = gtk_cups_request_get_poll_state (dispatch->request);
+
+  if (dispatch->request->http != NULL)
+    {
+      if (dispatch->data_poll == NULL)
+        {
+	  dispatch->data_poll = g_new0 (GPollFD, 1);
+
+	  if (poll_state == GTK_CUPS_HTTP_READ)
+	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
+	  else if (poll_state == GTK_CUPS_HTTP_WRITE)
+	    dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
+	  else
+	    dispatch->data_poll->events = 0;
+
+#ifdef HAVE_CUPS_API_1_2
+          dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
+#else
+          dispatch->data_poll->fd = dispatch->request->http->fd;
+#endif
+          g_source_add_poll (source, dispatch->data_poll);
+        }
+    }
+}
+
+static gboolean
+check_auth_info (gpointer user_data)
+{
+  GtkPrintCupsDispatchWatch *dispatch;
+  dispatch = (GtkPrintCupsDispatchWatch *) user_data;
+
+  if (!dispatch->request->need_auth_info)
+    {
+      if (dispatch->request->auth_info == NULL)
+        {
+          dispatch->callback (GTK_PRINT_BACKEND (dispatch->backend),
+                              gtk_cups_request_get_result (dispatch->request),
+                              dispatch->callback_data);
+          g_source_destroy ((GSource *) dispatch);
+        }
+      else
+        {
+          gint length;
+          gint i;
+
+          length = g_strv_length (dispatch->request->auth_info_required);
+
+          gtk_cups_request_ipp_add_strings (dispatch->request,
+                                            IPP_TAG_JOB,
+                                            IPP_TAG_TEXT,
+                                            "auth-info",
+                                            length,
+                                            NULL,
+                                            dispatch->request->auth_info);
+
+          g_source_attach ((GSource *) dispatch, NULL);
+          g_source_unref ((GSource *) dispatch);
+
+          for (i = 0; i < length; i++)
+            overwrite_and_free (dispatch->request->auth_info[i]);
+          g_free (dispatch->request->auth_info);
+          dispatch->request->auth_info = NULL;
+        }
+
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+request_auth_info (gpointer user_data)
+{
+  GtkPrintCupsDispatchWatch  *dispatch;
+  const char                 *job_title;
+  const char                 *printer_uri;
+  gchar                      *prompt = NULL;
+  char                       *printer_name = NULL;
+  gint                        length;
+  gint                        i;
+  gboolean                   *auth_info_visible = NULL;
+  gchar                     **auth_info_default = NULL;
+  gchar                     **auth_info_display = NULL;
+
+  dispatch = (GtkPrintCupsDispatchWatch *) user_data;
+
+  if (dispatch->backend->authentication_lock)
+    return FALSE;
+
+  job_title = gtk_cups_request_ipp_get_string (dispatch->request, IPP_TAG_NAME, "job-name");
+  printer_uri = gtk_cups_request_ipp_get_string (dispatch->request, IPP_TAG_URI, "printer-uri");
+  length = g_strv_length (dispatch->request->auth_info_required);
+
+  auth_info_visible = g_new0 (gboolean, length);
+  auth_info_default = g_new0 (gchar *, length + 1);
+  auth_info_display = g_new0 (gchar *, length + 1);
+
+  for (i = 0; i < length; i++)
+    {
+      if (g_strcmp0 (dispatch->request->auth_info_required[i], "domain") == 0)
+        {
+          auth_info_display[i] = g_strdup (_("Domain:"));
+          auth_info_default[i] = g_strdup ("WORKGROUP");
+          auth_info_visible[i] = TRUE;
+        }
+      else if (g_strcmp0 (dispatch->request->auth_info_required[i], "username") == 0)
+        {
+          auth_info_display[i] = g_strdup (_("Username:"));
+          if (dispatch->backend->username != NULL)
+            auth_info_default[i] = g_strdup (dispatch->backend->username);
+          else
+            auth_info_default[i] = g_strdup (cupsUser ());
+          auth_info_visible[i] = TRUE;
+        }
+      else if (g_strcmp0 (dispatch->request->auth_info_required[i], "password") == 0)
+        {
+          auth_info_display[i] = g_strdup (_("Password:"));
+          auth_info_visible[i] = FALSE;
+        }
+    }
+
+  if (printer_uri != NULL && strrchr (printer_uri, '/') != NULL)
+    printer_name = g_strdup (strrchr (printer_uri, '/') + 1);
+
+  dispatch->backend->authentication_lock = TRUE;
+
+  if (job_title != NULL)
+    {
+      if (printer_name != NULL)
+        prompt = g_strdup_printf ( _("Authentication is required to print document '%s' on printer %s"), job_title, printer_name);
+      else
+        prompt = g_strdup_printf ( _("Authentication is required to print document '%s'"), job_title);
+    }
+  else
+    {
+      if (printer_name != NULL)
+        prompt = g_strdup_printf ( _("Authentication is required to print this document on printer %s"), printer_name);
+      else
+        prompt = g_strdup ( _("Authentication is required to print this document"));
+    }
+
+  g_signal_emit_by_name (dispatch->backend, "request-password",
+                         dispatch->request->auth_info_required,
+                         auth_info_default,
+                         auth_info_display,
+                         auth_info_visible,
+                         prompt);
+
+  for (i = 0; i < length; i++)
+    {
+      g_free (auth_info_default[i]);
+      g_free (auth_info_display[i]);
+    }
+
+  g_free (auth_info_default);
+  g_free (auth_info_display);
+  g_free (printer_name);
+  g_free (prompt);
+
+  g_idle_add (check_auth_info, user_data);
 
   return FALSE;
 }
@@ -824,29 +1052,7 @@ cups_dispatch_watch_check (GSource *source)
 
   poll_state = gtk_cups_request_get_poll_state (dispatch->request);
 
-  if (dispatch->request->http != NULL)
-    {
-      if (dispatch->data_poll == NULL)
-	{
-	  dispatch->data_poll = g_new0 (GPollFD, 1);
-	  g_source_add_poll (source, dispatch->data_poll);
-	}
-      else
-	{
-	  if (poll_state == GTK_CUPS_HTTP_READ)
-	    dispatch->data_poll->events = G_IO_IN | G_IO_HUP | G_IO_ERR | G_IO_PRI;
-	  else if (poll_state == GTK_CUPS_HTTP_WRITE)
-	    dispatch->data_poll->events = G_IO_OUT | G_IO_ERR;
-	  else
-	    dispatch->data_poll->events = 0;
-	}
-
-#ifdef HAVE_CUPS_API_1_2
-      dispatch->data_poll->fd = httpGetFd (dispatch->request->http);
-#else
-      dispatch->data_poll->fd = dispatch->request->http->fd;
-#endif
-    }
+  cups_dispatch_add_poll (source);
     
   if (poll_state != GTK_CUPS_HTTP_IDLE && !dispatch->request->need_password)
     if (!(dispatch->data_poll->revents & dispatch->data_poll->events)) 
@@ -875,6 +1081,7 @@ cups_dispatch_watch_prepare (GSource *source,
 			     gint    *timeout_)
 {
   GtkPrintCupsDispatchWatch *dispatch;
+  gboolean result;
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -883,7 +1090,11 @@ cups_dispatch_watch_prepare (GSource *source,
 
   *timeout_ = -1;
   
-  return gtk_cups_request_read_write (dispatch->request);
+  result = gtk_cups_request_read_write (dispatch->request);
+
+  cups_dispatch_add_poll (source);
+
+  return result;
 }
 
 static gboolean
@@ -1008,13 +1219,24 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
   dispatch->request = request;
   dispatch->backend = g_object_ref (print_backend);
   dispatch->data_poll = NULL;
+  dispatch->callback = NULL;
+  dispatch->callback_data = NULL;
 
   print_backend->requests = g_list_prepend (print_backend->requests, dispatch);
 
   g_source_set_callback ((GSource *) dispatch, (GSourceFunc) callback, user_data, notify);
 
-  g_source_attach ((GSource *) dispatch, NULL);
-  g_source_unref ((GSource *) dispatch);
+  if (request->need_auth_info)
+    {
+      dispatch->callback = callback;
+      dispatch->callback_data = user_data;
+      request_auth_info (dispatch);
+    }
+  else
+    {
+      g_source_attach ((GSource *) dispatch, NULL);
+      g_source_unref ((GSource *) dispatch);
+    }
 }
 
 #if 0
@@ -1333,6 +1555,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   ipp_t *response;
   gboolean list_has_changed;
   GList *removed_printer_checklist;
+  gchar *remote_default_printer = NULL;
 
   GDK_THREADS_ENTER ();
 
@@ -1358,6 +1581,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           if (cups_backend->list_printers_poll > 0)
             g_source_remove (cups_backend->list_printers_poll);
           cups_backend->list_printers_poll = 0;
+          cups_backend->list_printers_attempts = 0;
         }
 
       goto done;
@@ -1431,6 +1655,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       gboolean is_accepting_jobs = TRUE;
       gboolean default_printer = FALSE;
       gboolean got_printer_type = FALSE;
+      gchar   *default_cover_before = NULL;
+      gchar   *default_cover_after = NULL;
+      gboolean remote_printer = FALSE;
+      gchar  **auth_info_required = NULL;
       
       /* Skip leading attributes until we hit a printer...
        */
@@ -1523,22 +1751,17 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               {
                 cups_backend->number_of_covers = attr->num_values;
                 cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
-
                 for (i = 0; i < cups_backend->number_of_covers; i++)
                   cups_backend->covers[i] = g_strdup (attr->values[i].string.text);
-
                 cups_backend->covers[cups_backend->number_of_covers] = NULL;
               }
           }
         else if (strcmp (attr->name, "job-sheets-default") == 0)
           {
-            if ( (cups_backend->default_cover_before == NULL) && (cups_backend->default_cover_after == NULL))
+            if (attr->num_values == 2)
               {
-                if (attr->num_values == 2)
-                  {
-                    cups_backend->default_cover_before = g_strdup (attr->values[0].string.text);
-                    cups_backend->default_cover_after = g_strdup (attr->values[1].string.text);
-                  }
+                default_cover_before = attr->values[0].string.text;
+                default_cover_after = attr->values[1].string.text;
               }
           }
         else if (strcmp (attr->name, "printer-type") == 0)
@@ -1548,6 +1771,20 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
               default_printer = TRUE;
             else
               default_printer = FALSE;
+
+            if (attr->values[0].integer & 0x00000002)
+              remote_printer = TRUE;
+            else
+              remote_printer = FALSE;
+          }
+        else if (strcmp (attr->name, "auth-info-required") == 0)
+          {
+            if (strcmp (attr->values[0].string.text, "none") != 0)
+              {
+                auth_info_required = g_new0 (gchar *, attr->num_values + 1);
+                for (i = 0; i < attr->num_values; i++)
+                  auth_info_required[i] = g_strdup (attr->values[i].string.text);
+              }
           }
         else
 	  {
@@ -1571,8 +1808,16 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         {
           if (default_printer && !cups_backend->got_default_printer)
             {
-              cups_backend->got_default_printer = TRUE;
-              cups_backend->default_printer = g_strdup (printer_name);
+              if (!remote_printer)
+                {
+                  cups_backend->got_default_printer = TRUE;
+                  cups_backend->default_printer = g_strdup (printer_name);
+                }
+              else
+                {
+                  if (remote_default_printer == NULL)
+                    remote_default_printer = g_strdup (printer_name);
+                }
             }
         }
       else
@@ -1656,9 +1901,15 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
 	  g_free (cups_server);
 
+          cups_printer->default_cover_before = g_strdup (default_cover_before);
+          cups_printer->default_cover_after = g_strdup (default_cover_after);
+
 	  cups_printer->hostname = g_strdup (hostname);
 	  cups_printer->port = port;
 	  
+          cups_printer->auth_info_required = g_strdupv (auth_info_required);
+          g_strfreev (auth_info_required);
+
 	  printer = GTK_PRINTER (cups_printer);
 	  
 	  if (cups_backend->default_printer != NULL &&
@@ -1670,6 +1921,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         }
       else
 	g_object_ref (printer);
+
+      GTK_PRINTER_CUPS (printer)->remote = remote_printer;
 
       gtk_printer_set_is_paused (printer, is_paused);
       gtk_printer_set_is_accepting_jobs (printer, is_accepting_jobs);
@@ -1793,6 +2046,26 @@ done:
   
   gtk_print_backend_set_list_done (backend);
 
+  if (!cups_backend->got_default_printer && remote_default_printer != NULL)
+    {
+      cups_backend->default_printer = g_strdup (remote_default_printer);
+      cups_backend->got_default_printer = TRUE;
+      g_free (remote_default_printer);
+
+      if (cups_backend->default_printer != NULL)
+        {
+          GtkPrinter *default_printer = NULL;
+          default_printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (cups_backend),
+                                                            cups_backend->default_printer);
+          if (default_printer != NULL)
+            {
+              gtk_printer_set_is_default (default_printer, TRUE);
+              g_signal_emit_by_name (GTK_PRINT_BACKEND (cups_backend),
+                                     "printer-status-changed", default_printer);
+            }
+        }
+    }
+
   GDK_THREADS_LEAVE ();
 }
 
@@ -1831,7 +2104,8 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "printer-is-accepting-jobs",
       "job-sheets-supported",
       "job-sheets-default",
-      "printer-type"
+      "printer-type",
+      "auth-info-required"
     };
 
   if (cups_backend->list_printers_pending)
@@ -1840,8 +2114,23 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
   state = gtk_cups_connection_test_get_state (cups_backend->cups_connection_test);
   update_backend_status (cups_backend, state);
 
+  if (cups_backend->list_printers_attempts == 60)
+    {
+      cups_backend->list_printers_attempts = -1;
+      if (cups_backend->list_printers_poll > 0)
+        g_source_remove (cups_backend->list_printers_poll);
+      cups_backend->list_printers_poll = gdk_threads_add_timeout (200,
+                                           (GSourceFunc) cups_request_printer_list,
+                                           cups_backend);
+    }
+  else if (cups_backend->list_printers_attempts != -1)
+    cups_backend->list_printers_attempts++;
+
   if (state == GTK_CUPS_CONNECTION_IN_PROGRESS || state == GTK_CUPS_CONNECTION_NOT_AVAILABLE)
     return TRUE;
+  else
+    if (cups_backend->list_printers_attempts > 0)
+      cups_backend->list_printers_attempts = 60;
 
   cups_backend->list_printers_pending = TRUE;
 
@@ -1879,9 +2168,9 @@ cups_get_printer_list (GtkPrintBackend *backend)
   if (cups_backend->list_printers_poll == 0)
     {
       if (cups_request_printer_list (cups_backend))
-        cups_backend->list_printers_poll = gdk_threads_add_timeout_seconds (3,
-                                                        (GSourceFunc) cups_request_printer_list,
-                                                        backend);
+        cups_backend->list_printers_poll = gdk_threads_add_timeout (50,
+                                             (GSourceFunc) cups_request_printer_list,
+                                             backend);
     }
 }
 
@@ -1950,7 +2239,7 @@ done:
   GDK_THREADS_LEAVE ();
 }
 
-static void
+static gboolean
 cups_request_ppd (GtkPrinter *printer)
 {
   GError *error;
@@ -1969,6 +2258,41 @@ cups_request_ppd (GtkPrinter *printer)
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
+  if (cups_printer->remote)
+    {
+      GtkCupsConnectionState state;
+
+      state = gtk_cups_connection_test_get_state (cups_printer->remote_cups_connection_test);
+
+      if (state == GTK_CUPS_CONNECTION_IN_PROGRESS)
+        {
+          if (cups_printer->get_remote_ppd_attempts == 60)
+            {
+              cups_printer->get_remote_ppd_attempts = -1;
+              if (cups_printer->get_remote_ppd_poll > 0)
+                g_source_remove (cups_printer->get_remote_ppd_poll);
+              cups_printer->get_remote_ppd_poll = gdk_threads_add_timeout (200,
+                                                    (GSourceFunc) cups_request_ppd,
+                                                    printer);
+            }
+          else if (cups_printer->get_remote_ppd_attempts != -1)
+            cups_printer->get_remote_ppd_attempts++;
+
+          return TRUE;
+        }
+
+      gtk_cups_connection_test_free (cups_printer->remote_cups_connection_test);
+      cups_printer->remote_cups_connection_test = NULL;
+      cups_printer->get_remote_ppd_poll = 0;
+      cups_printer->get_remote_ppd_attempts = 0;
+
+      if (state == GTK_CUPS_CONNECTION_NOT_AVAILABLE)
+        {
+          g_signal_emit_by_name (printer, "details-acquired", FALSE);
+          return FALSE;
+        }
+    }
 
   http = httpConnectEncrypt (cups_printer->hostname, 
 			     cups_printer->port,
@@ -1999,7 +2323,7 @@ cups_request_ppd (GtkPrinter *printer)
       g_free (data);
 
       g_signal_emit_by_name (printer, "details-acquired", FALSE);
-      return;
+      return FALSE;
     }
     
   data->http = http;
@@ -2037,6 +2361,8 @@ cups_request_ppd (GtkPrinter *printer)
 
   g_free (resource);
   g_free (ppd_filename);
+
+  return FALSE;
 }
 
 /* Ordering matters for default preference */
@@ -2209,9 +2535,9 @@ cups_get_default_printer (GtkPrintBackendCups *backend)
   if (cups_backend->default_printer_poll == 0)
     {
       if (cups_request_default_printer (cups_backend))
-        cups_backend->default_printer_poll = gdk_threads_add_timeout (500,
-                                                                      (GSourceFunc) cups_request_default_printer,
-                                                                      backend);
+        cups_backend->default_printer_poll = gdk_threads_add_timeout (200,
+                                               (GSourceFunc) cups_request_default_printer,
+                                               backend);
     }
 }
 
@@ -2334,7 +2660,22 @@ cups_printer_request_details (GtkPrinter *printer)
   cups_printer = GTK_PRINTER_CUPS (printer);
   if (!cups_printer->reading_ppd && 
       gtk_printer_cups_get_ppd (cups_printer) == NULL)
-    cups_request_ppd (printer); 
+    {
+      if (cups_printer->remote)
+        {
+          if (cups_printer->get_remote_ppd_poll == 0)
+            {
+              cups_printer->remote_cups_connection_test = gtk_cups_connection_test_new (cups_printer->hostname);
+
+              if (cups_request_ppd (printer))
+                cups_printer->get_remote_ppd_poll = gdk_threads_add_timeout (50,
+                                                    (GSourceFunc) cups_request_ppd,
+                                                    printer);
+            }
+        }
+      else
+        cups_request_ppd (printer);
+    }
 }
 
 static char *
@@ -3136,6 +3477,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   cups_option_t *opts = NULL;
   GtkPrintBackendCups *backend;
   GtkTextDirection text_direction;
+  GtkPrinterCups *cups_printer = NULL;
 
 
   set = gtk_printer_option_set_new ();
@@ -3200,8 +3542,9 @@ cups_printer_get_options (GtkPrinter           *printer,
   g_object_unref (option);
 
   backend = GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer));
+  cups_printer = GTK_PRINTER_CUPS (printer);
 
-  if (backend != NULL)
+  if (backend != NULL && printer != NULL)
     {
       char *cover_default[] = {"none", "classified", "confidential", "secret", "standard", "topsecret", "unclassified" };
       /* Translators, these strings are names for various 'standard' cover 
@@ -3246,8 +3589,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
 
-      if (backend->default_cover_before != NULL)
-        gtk_printer_option_set (option, backend->default_cover_before);
+      if (cups_printer->default_cover_before != NULL)
+        gtk_printer_option_set (option, cups_printer->default_cover_before);
       else
         gtk_printer_option_set (option, "none");
       set_option_from_settings (option, settings);
@@ -3260,8 +3603,8 @@ cups_printer_get_options (GtkPrinter           *printer,
       option = gtk_printer_option_new ("gtk-cover-after", _("After"), GTK_PRINTER_OPTION_TYPE_PICKONE);
       gtk_printer_option_choices_from_array (option, num_of_covers,
 					 cover, cover_display_translated);
-      if (backend->default_cover_after != NULL)
-        gtk_printer_option_set (option, backend->default_cover_after);
+      if (cups_printer->default_cover_after != NULL)
+        gtk_printer_option_set (option, cups_printer->default_cover_after);
       else
         gtk_printer_option_set (option, "none");
       set_option_from_settings (option, settings);
@@ -3735,12 +4078,12 @@ foreach_option_get_settings (GtkPrinterOption *option,
 
       if (sscanf (value, "%dx%ddpi", &res_x, &res_y) == 2)
         {
-          if (res_x != 0 && res_y != 0)
+          if (res_x > 0 && res_y > 0)
             gtk_print_settings_set_resolution_xy (settings, res_x, res_y);
         }
       else if (sscanf (value, "%ddpi", &res) == 1)
         {
-          if (res != 0)
+          if (res > 0)
             gtk_print_settings_set_resolution (settings, res);
         }
 

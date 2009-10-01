@@ -101,6 +101,12 @@ gdk_drag_context_unref (GdkDragContext *context)
 
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
+GdkDragContext *
+gdk_quartz_drag_source_context ()
+{
+  return _gdk_quartz_drag_source_context;
+}
+
 GdkDragContext * 
 gdk_drag_begin (GdkWindow     *window,
 		GList         *targets)

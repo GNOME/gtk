@@ -36,6 +36,12 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   g_assert (display == NULL || _gdk_display == display);
 }
 
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+	return 0;
+}
+
 #ifdef HAVE_MONITOR_INFO
 static BOOL CALLBACK
 count_monitor (HMONITOR hmonitor,
@@ -200,7 +206,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_visual_init ();
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
-  _gdk_windowing_window_init ();
+  _gdk_windowing_window_init (_gdk_screen);
   _gdk_windowing_image_init ();
   _gdk_events_init ();
   _gdk_input_init (_gdk_display);

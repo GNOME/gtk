@@ -67,6 +67,7 @@ struct _GtkLabel
   guint   GSEAL (in_click)         : 1;
   guint   GSEAL (wrap_mode)        : 3;
   guint   GSEAL (pattern_set)      : 1;
+  guint   GSEAL (track_links)      : 1;
 
   guint   GSEAL (mnemonic_keyval);
 
@@ -177,6 +178,9 @@ void         gtk_label_set_single_line_mode  (GtkLabel *label,
 gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
 G_CONST_RETURN gchar *gtk_label_get_current_uri (GtkLabel *label);
+void         gtk_label_set_track_visited_links  (GtkLabel *label,
+                                                 gboolean  track_links);
+gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
 #ifndef GTK_DISABLE_DEPRECATED
 

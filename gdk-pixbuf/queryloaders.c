@@ -119,17 +119,20 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
 	return 0;
 }
 
-static void 
+static void
 write_loader_info (const char *path, GdkPixbufFormat *info)
 {
 	const GdkPixbufModulePattern *pattern;
-	char **mime; 
-	char **ext; 
+	char **mime;
+	char **ext;
 
 	g_printf("\"%s\"\n", path);
-	g_printf ("\"%s\" %u \"%s\" \"%s\" \"%s\"\n", 
-		  info->name, info->flags, 
-		  info->domain ? info->domain : GETTEXT_PACKAGE, info->description, info->license);
+	g_printf ("\"%s\" %u \"%s\" \"%s\" \"%s\"\n",
+		  info->name,
+                  info->flags,
+		  info->domain ? info->domain : GETTEXT_PACKAGE,
+                  info->description,
+                  info->license ? info->license : "");
 	for (mime = info->mime_types; *mime; mime++) {
 		g_printf ("\"%s\" ", *mime);
 	}

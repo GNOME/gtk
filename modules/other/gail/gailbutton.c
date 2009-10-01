@@ -154,10 +154,8 @@ gail_button_class_init (GailButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class;
   GailContainerClass *container_class;
 
-  widget_class = (GailWidgetClass*)klass;
   container_class = (GailContainerClass*)klass;
 
   gobject_class->finalize = gail_button_finalize;
@@ -876,15 +874,12 @@ gail_button_ref_state_set (AtkObject *obj)
 {
   AtkStateSet *state_set;
   GtkWidget *widget;
-  GtkButton *button;
 
   state_set = ATK_OBJECT_CLASS (gail_button_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
     return state_set;
-
-  button = GTK_BUTTON (widget);
 
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);

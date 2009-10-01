@@ -149,13 +149,15 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
+  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
+  return GDK_WINDOW_OBJECT (_gdk_root)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
+  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
+  return GDK_WINDOW_OBJECT (_gdk_root)->height;
 }
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
@@ -621,6 +623,9 @@ _gdk_win32_window_exstyle_to_string (LONG style)
   BIT (ACCEPTFILES);
   BIT (APPWINDOW);
   BIT (CLIENTEDGE);
+#ifndef WS_EX_COMPOSITED
+#  define WS_EX_COMPOSITED 0x02000000L
+#endif
   BIT (COMPOSITED);
   BIT (CONTEXTHELP);
   BIT (CONTROLPARENT);
@@ -1162,6 +1167,8 @@ gchar *
 _gdk_win32_drawable_description (GdkDrawable *d)
 {
   gint width, height, depth;
+
+  g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
 
   gdk_drawable_get_size (d, &width, &height);
   depth = gdk_drawable_get_depth (d);

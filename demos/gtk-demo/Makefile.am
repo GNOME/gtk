@@ -17,6 +17,7 @@ demos =						\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
+	entry_buffer.c				\
 	entry_completion.c			\
 	expander.c  				\
 	hypertext.c				\
@@ -27,6 +28,8 @@ demos =						\
 	links.c					\
 	list_store.c				\
 	menus.c					\
+	offscreen_window.c			\
+	offscreen_window2.c			\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\

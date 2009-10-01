@@ -70,9 +70,17 @@ _gtk_socket_windowing_realize_window (GtkSocket *socket)
 			GDK_WINDOW_XWINDOW (window),
 			&xattrs);
 
+  /* Sooooo, it turns out that mozilla, as per the gtk2xt code selects
+     for input on the socket with a mask of 0x0fffff (for god knows why)
+     which includes ButtonPressMask causing a BadAccess if someone else
+     also selects for this. As per the client-side windows merge we always
+     normally selects for button press so we can emulate it on client
+     side children that selects for button press. However, we don't need
+     this for GtkSocket, so we unselect it here, fixing the crashes in
+     firefox. */
   XSelectInput (GDK_WINDOW_XDISPLAY (window),
 		GDK_WINDOW_XWINDOW (window), 
-		xattrs.your_event_mask | 
+		(xattrs.your_event_mask & ~ButtonPressMask) |
 		SubstructureNotifyMask | SubstructureRedirectMask);
 }
 

@@ -16,10 +16,13 @@ WTKIT = $(TOP)\wtkit126
 
 GTK_VER=2.0
 
-CFLAGS = -FImsvc_recommended_pragmas.h \
+DEFINES = \
+	-DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\" \
+	-DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
+
+INCLUDES = -FImsvc_recommended_pragmas.h \
 	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) \
 	-I$(WTKIT)\include -I$(GLIB) \
-	$(G_DEBUGGING) -DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\"
 
 all: \
 	..\..\config.h	\
@@ -67,9 +70,6 @@ gdk.res : rc\gdk.rc
 
 gdk-win32.lib : $(gdk_win32_OBJECTS)
 	lib -out:gdk-win32.lib $(gdk_win32_OBJECTS)
-
-.c.obj :
-	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<
 
 clean::
 	del *.obj

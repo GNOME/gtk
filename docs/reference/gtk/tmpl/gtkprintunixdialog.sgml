@@ -90,6 +90,11 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 
 </para>
 
+<!-- ##### ARG GtkPrintUnixDialog:embed-page-setup ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintUnixDialog:has-selection ##### -->
 <para>
 
@@ -239,6 +244,33 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@embed: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_page_setup_set ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkPrintCapabilities ##### -->
 <para>
 An enum for specifying which features the print dialog should offer.
@@ -256,7 +288,7 @@ formats are supported.
     the printer in PDF format
 @GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to 
     the printer in Postscript format
-@GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a previe
+@GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a preview
 @GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple 
     pages per sheet. Since 2.12
 @GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange 

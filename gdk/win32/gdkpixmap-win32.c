@@ -130,7 +130,7 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
+_gdk_pixmap_new (GdkDrawable *drawable,
 		gint         width,
 		gint         height,
 		gint         depth)
@@ -348,7 +348,7 @@ static const unsigned char mirror[256] = {
 };
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable *drawable,
+_gdk_bitmap_create_from_data (GdkDrawable *drawable,
 			     const gchar *data,
 			     gint         width,
 			     gint         height)
@@ -388,7 +388,7 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
 			     const gchar    *data,
 			     gint            width,
 			     gint            height,
@@ -428,7 +428,7 @@ gdk_pixmap_create_from_data (GdkDrawable    *drawable,
      GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (result)->impl),
      gc, source, 0, 0, 0, 0, width, height);
   g_object_unref (source);
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_create_from_data: %dx%dx%d=%p\n",
 			     width, height, depth,

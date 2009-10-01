@@ -741,7 +741,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * A comma-separated list of print backends to use in the print
    * dialog. Available print backends depend on the GTK+ installation,
-   * and may include "pdf", "cups" or "lpr".
+   * and may include "file", "cups", "lpr" or "papi".
    *
    * Since: 2.10
    */

@@ -125,6 +125,9 @@ gint           gtk_icon_view_get_column_spacing (GtkIconView    *icon_view);
 void           gtk_icon_view_set_margin        (GtkIconView    *icon_view, 
 					        gint            margin);
 gint           gtk_icon_view_get_margin        (GtkIconView    *icon_view);
+void           gtk_icon_view_set_item_padding  (GtkIconView    *icon_view, 
+					        gint            item_padding);
+gint           gtk_icon_view_get_item_padding  (GtkIconView    *icon_view);
 
 
 GtkTreePath *  gtk_icon_view_get_path_at_pos   (GtkIconView     *icon_view,

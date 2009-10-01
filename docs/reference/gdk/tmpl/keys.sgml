@@ -15,6 +15,11 @@ header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <f
 it must be included independently, because the file is quite large.
 </para>
 <para>
+Key values are regularly updated from the upstream X.org X11 implementation,
+so new values are added regularly. They will be prefixed with GDK_ rather than
+XF86XK_ or XK_ (for older symbols).
+</para>
+<para>
 Key values can be converted into a string representation using
 gdk_keyval_name(). The reverse function, converting a string to a key value,
 is provided by gdk_keyval_from_name().

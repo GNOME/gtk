@@ -99,6 +99,9 @@ struct _GtkCupsRequest
 
   gint own_http : 1;
   gint need_password : 1;
+  gint need_auth_info : 1;
+  gchar **auth_info_required;
+  gchar **auth_info;
   GtkCupsPasswordState password_state;
 };
 

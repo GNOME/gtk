@@ -206,7 +206,7 @@ gdk_device_get_history  (GdkDevice         *device,
 			 gint              *n_events)
 {
   g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GDK_WINDOW_IS_QUARTZ (window), FALSE);
   g_return_val_if_fail (events != NULL, FALSE);
   g_return_val_if_fail (n_events != NULL, FALSE);
 
@@ -262,7 +262,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_WINDOW_IS_QUARTZ (window));
 
   window_private = (GdkWindowObject*) window;
 

@@ -78,6 +78,7 @@
 #include <gtk/gtkdrawingarea.h>
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkentry.h>
+#include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>

@@ -187,6 +187,10 @@ gtk_cups_request_new_with_username (http_t             *connection,
                                      "requesting-user-name",
                                      NULL, cupsUser ());
 
+  request->auth_info_required = NULL;
+  request->auth_info = NULL;
+  request->need_auth_info = FALSE;
+
   cupsLangFree (language);
 
   return request;
@@ -241,6 +245,7 @@ gtk_cups_request_free (GtkCupsRequest *request)
     }
 
   g_free (request->username);
+  g_strfreev (request->auth_info_required);
 
   gtk_cups_result_free (request->result);
 

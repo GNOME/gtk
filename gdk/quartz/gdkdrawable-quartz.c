@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include <sys/time.h>
 #include <cairo-quartz.h>
 #include "gdkprivate-quartz.h"
 
@@ -31,18 +32,54 @@ typedef struct {
   CGContextRef  cg_context;
 } GdkQuartzCairoSurfaceData;
 
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+				       int              width,
+				       int              height)
+{
+  /* This is not supported with quartz surfaces. */
+}
+
 static void
 gdk_quartz_cairo_surface_destroy (void *data)
 {
   GdkQuartzCairoSurfaceData *surface_data = data;
   GdkDrawableImplQuartz *impl = GDK_DRAWABLE_IMPL_QUARTZ (surface_data->drawable);
 
-  gdk_quartz_drawable_release_context (surface_data->drawable, 
-				       surface_data->cg_context);
-
   impl->cairo_surface = NULL;
 
+  gdk_quartz_drawable_release_context (surface_data->drawable,
+                                       surface_data->cg_context);
+
   g_free (surface_data);
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+				     int          width,
+				     int          height)
+{
+  CGContextRef cg_context;
+  GdkQuartzCairoSurfaceData *surface_data;
+  cairo_surface_t *surface;
+
+  cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
+
+  if (!cg_context)
+    return NULL;
+
+  surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
+  surface_data->drawable = drawable;
+  surface_data->cg_context = cg_context;
+
+  surface = cairo_quartz_surface_create_for_cg_context (cg_context,
+                                                        width, height);
+
+  cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
+                               surface_data,
+                               gdk_quartz_cairo_surface_destroy);
+
+  return surface;
 }
 
 static cairo_surface_t *
@@ -56,24 +93,11 @@ gdk_quartz_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      CGContextRef cg_context;
       int width, height;
-      GdkQuartzCairoSurfaceData *surface_data;
-
-      cg_context = gdk_quartz_drawable_get_context (drawable, TRUE);
-      if (!cg_context)
-	return NULL;
 
       gdk_drawable_get_size (drawable, &width, &height);
-
-      impl->cairo_surface = cairo_quartz_surface_create_for_cg_context (cg_context, width, height);
-
-      surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
-      surface_data->drawable = drawable;
-      surface_data->cg_context = cg_context;
-
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_quartz_cairo_key,
-				   surface_data, gdk_quartz_cairo_surface_destroy);
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable,
+                                                                 width, height);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -183,8 +207,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 				    GDK_QUARTZ_CONTEXT_FILL :
 				    GDK_QUARTZ_CONTEXT_STROKE);
 
-  CGContextSaveGState (context);
-
   start_angle = angle1 * 2.0 * G_PI / 360.0 / 64.0;
   end_angle = start_angle + angle2 * 2.0 * G_PI / 360.0 / 64.0;
 
@@ -232,8 +254,6 @@ gdk_quartz_draw_arc (GdkDrawable *drawable,
 		       clockwise);
       CGContextStrokePath (context);
     }
-
-  CGContextRestoreGState (context);
 
   gdk_quartz_drawable_release_context (drawable, context);
 }
@@ -311,55 +331,76 @@ gdk_quartz_draw_drawable (GdkDrawable *drawable,
 			  gint         xdest,
 			  gint         ydest,
 			  gint         width,
-			  gint         height)
+			  gint         height,
+			  GdkDrawable *original_src)
 {
   int src_depth = gdk_drawable_get_depth (src);
   int dest_depth = gdk_drawable_get_depth (drawable);
   GdkDrawableImplQuartz *src_impl;
 
-  if (GDK_IS_DRAWABLE_IMPL_QUARTZ (src))
+  if (GDK_IS_WINDOW_IMPL_QUARTZ (src))
+    {
+      GdkWindowImplQuartz *window_impl;
+
+      window_impl = GDK_WINDOW_IMPL_QUARTZ (src);
+
+      /* We do support moving areas on the same drawable, if it can be done
+       * by using a scroll. FIXME: We need to check that the params support
+       * this hack, and make sure it's done properly with any offsets etc?
+       */
+      if (drawable == (GdkDrawable *)window_impl)
+        {
+          [window_impl->view scrollRect:NSMakeRect (xsrc, ysrc, width, height)
+                                     by:NSMakeSize (xdest - xsrc, ydest - ysrc)];
+
+
+        }
+      else
+        g_warning ("Drawing with window source != dest is not supported");
+
+      return;
+    }
+  else if (GDK_IS_DRAWABLE_IMPL_QUARTZ (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (src);
   else if (GDK_IS_PIXMAP (src))
     src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (src)->impl);
-  else if (GDK_IS_WINDOW (src))
+  else
     {
-      src_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_WINDOW_OBJECT (src)->impl);
-      /* FIXME: Implement drawing a window. */
+      g_warning ("Unsupported source %s", G_OBJECT_TYPE_NAME (src));
       return;
     }
-  else
-    g_assert_not_reached ();
-  
+
+  /* Handle drawable and pixmap sources. */
   if (src_depth == 1)
     {
       /* FIXME: src depth 1 is not supported yet */
+      g_warning ("Source with depth 1 unsupported");
     }
   else if (dest_depth != 0 && src_depth == dest_depth)
     {
+      GdkPixmapImplQuartz *pixmap_impl = GDK_PIXMAP_IMPL_QUARTZ (src_impl);
       CGContextRef context = gdk_quartz_drawable_get_context (drawable, FALSE);
 
       if (!context)
-	return;
+        return;
 
       _gdk_quartz_gc_update_cg_context (gc, drawable, context,
-					GDK_QUARTZ_CONTEXT_STROKE);
+                                        GDK_QUARTZ_CONTEXT_STROKE);
 
       CGContextClipToRect (context, CGRectMake (xdest, ydest, width, height));
       CGContextTranslateCTM (context, xdest - xsrc, ydest - ysrc +
-                             GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height);
+                             pixmap_impl->height);
       CGContextScaleCTM (context, 1.0, -1.0);
 
-      CGContextDrawImage (context, 
-			  CGRectMake(0, 0, 
-				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->width, 
-				     GDK_PIXMAP_IMPL_QUARTZ (src_impl)->height), 
-			  GDK_PIXMAP_IMPL_QUARTZ (src_impl)->image);
+      CGContextDrawImage (context,
+                          CGRectMake (0, 0, pixmap_impl->width, pixmap_impl->height),
+                          pixmap_impl->image);
 
       gdk_quartz_drawable_release_context (drawable, context);
     }
   else
     g_warning ("Attempt to draw a drawable with depth %d to a drawable with depth %d",
-	       src_depth, dest_depth);
+               src_depth, dest_depth);
 }
 
 static void
@@ -620,7 +661,7 @@ gdk_drawable_impl_quartz_class_init (GdkDrawableImplQuartzClass *klass)
   drawable_class->draw_polygon = gdk_quartz_draw_polygon;
   drawable_class->draw_text = gdk_quartz_draw_text;
   drawable_class->draw_text_wc = gdk_quartz_draw_text_wc;
-  drawable_class->draw_drawable = gdk_quartz_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_quartz_draw_drawable;
   drawable_class->draw_points = gdk_quartz_draw_points;
   drawable_class->draw_segments = gdk_quartz_draw_segments;
   drawable_class->draw_lines = gdk_quartz_draw_lines;
@@ -681,6 +722,51 @@ gdk_quartz_drawable_get_context (GdkDrawable *drawable,
   return GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->get_context (drawable, antialias);
 }
 
+/* Help preventing "beam sync penalty" where CG makes all graphics code
+ * block until the next vsync if we try to flush (including call display on
+ * a view) too often. We do this by limiting the manual flushing done
+ * outside of expose calls to less than some frequency when measured over
+ * the last 4 flushes. This is a bit arbitray, but seems to make it possible
+ * for some quick manual flushes (such as gtkruler or gimp's marching ants)
+ * without hitting the max flush frequency.
+ *
+ * If drawable NULL, no flushing is done, only registering that a flush was
+ * done externally.
+ */
+void
+_gdk_quartz_drawable_flush (GdkDrawable *drawable)
+{
+  static struct timeval prev_tv;
+  static gint intervals[4];
+  static gint index;
+  struct timeval tv;
+  gint ms;
+
+  gettimeofday (&tv, NULL);
+  ms = (tv.tv_sec - prev_tv.tv_sec) * 1000 + (tv.tv_usec - prev_tv.tv_usec) / 1000;
+  intervals[index++ % 4] = ms;
+
+  if (drawable)
+    {
+      ms = intervals[0] + intervals[1] + intervals[2] + intervals[3];
+
+      /* ~25Hz on average. */
+      if (ms > 4*40)
+        {
+          if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
+            {
+              GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
+
+              [window_impl->toplevel flushWindow];
+            }
+
+          prev_tv = tv;
+        }
+    }
+  else
+    prev_tv = tv;
+}
+
 void
 gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
 				     CGContextRef  cg_context)
@@ -694,7 +780,10 @@ gdk_quartz_drawable_release_context (GdkDrawable  *drawable,
 
       /* See comment in gdk_quartz_drawable_get_context(). */
       if (window_impl->in_paint_rect_count == 0)
-        [window_impl->view unlockFocus];
+        {
+          _gdk_quartz_drawable_flush (drawable);
+          [window_impl->view unlockFocus];
+        }
     }
   else if (GDK_IS_PIXMAP_IMPL_QUARTZ (drawable))
     CGContextRelease (cg_context);

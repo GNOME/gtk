@@ -13,21 +13,18 @@
   </para>
 
   <para>
-    A good way to start a migration from libglade to GtkBuilder is
-    to run the <link linkend="gtk-builder-convert">gtk-builder-convert</link>
-    utility on your glade file, and inspect the resulting output.
-    If your code uses the @root parameter of glade_xml_new(), you
-    may want to split your glade file into multiple GtkBuilder files
-    by using the <option>--root</option> option of
-    <application>gtk-builder-convert</application>. Alternatively, you
-    can use gtk_builder_add_objects_from_file() to construct only certain
+    A good way to start a migration from libglade to GtkBuilder is using
+    <application>glade3</application> to convert your .glade file.
+    If your code uses the @root parameter of glade_xml_new(),
+    you can use gtk_builder_add_objects_from_file() to construct only certain
     objects from a GtkBuilder file.
   </para>
 
   <para>
-    Alternatively, you can open the glade file with
-    <application>glade3</application> and then save it in GtkBuilder
-    format. This is supported by glade3 since version 3.6.
+    Alternatively, GTK+ also offers the
+    <link linkend="gtk-builder-convert">gtk-builder-convert</link> script you can use
+    to do the conversion; in which case you should be careful to inspect the output
+    and make sure you didn't lose any data.
   </para>
 
   <table pgwide="1" frame="topbot">
@@ -53,7 +50,7 @@ GError* error = NULL;
 GtkBuilder* builder = gtk_builder_new (<!-- -->);
 if (!gtk_builder_add_from_file (builder, FILE, &amp;error))
   {
-    g_warning ("Couldn't load builder file: %amp;s", error->message);
+    g_warning ("Couldn't load builder file: &percnt;s", error->message);
     g_error_free (error);
   }
 </screen>

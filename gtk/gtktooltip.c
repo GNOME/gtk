@@ -84,7 +84,7 @@ struct _GtkTooltipClass
 
 static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
-static void       gtk_tooltip_finalize             (GObject         *object);
+static void       gtk_tooltip_dispose              (GObject         *object);
 
 static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip);
@@ -106,7 +106,7 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_tooltip_finalize;
+  object_class->dispose = gtk_tooltip_dispose;
 }
 
 static void
@@ -166,7 +166,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 }
 
 static void
-gtk_tooltip_finalize (GObject *object)
+gtk_tooltip_dispose (GObject *object)
 {
   GtkTooltip *tooltip = GTK_TOOLTIP (object);
 
@@ -194,9 +194,10 @@ gtk_tooltip_finalize (GObject *object)
 					    gtk_tooltip_display_closed,
 					    tooltip);
       gtk_widget_destroy (tooltip->window);
+      tooltip->window = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_tooltip_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_tooltip_parent_class)->dispose (object);
 }
 
 /* public API */
@@ -767,6 +768,9 @@ static void
 gtk_tooltip_set_last_window (GtkTooltip *tooltip,
 			     GdkWindow  *window)
 {
+  if (tooltip->last_window == window)
+    return;
+
   if (tooltip->last_window)
     g_object_remove_weak_pointer (G_OBJECT (tooltip->last_window),
 				  (gpointer *) &tooltip->last_window);
@@ -945,8 +949,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   g_object_get (tooltip_widget, "has-tooltip", &has_tooltip, NULL);
 
-  g_assert (tooltip != NULL);
-
   return_value = gtk_tooltip_run_requery (&tooltip_widget, tooltip, &x, &y);
   if (!return_value)
     return;
@@ -1048,11 +1050,17 @@ tooltip_popup_timeout (gpointer data)
   GtkTooltip *tooltip;
 
   display = GDK_DISPLAY_OBJECT (data);
+  tooltip = g_object_get_data (G_OBJECT (display),
+			       "gdk-display-current-tooltip");
+
+  /* This usually does not happen.  However, it does occur in language
+   * bindings were reference counting of objects behaves differently.
+   */
+  if (!tooltip)
+    return FALSE;
 
   gtk_tooltip_show_tooltip (display);
 
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
   tooltip->timeout_id = 0;
 
   return FALSE;
@@ -1068,7 +1076,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
 
-  if (tooltip && GTK_TOOLTIP_VISIBLE (tooltip))
+  if (!tooltip || GTK_TOOLTIP_VISIBLE (tooltip))
     return;
 
   if (tooltip->timeout_id)

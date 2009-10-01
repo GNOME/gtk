@@ -61,6 +61,15 @@ static void         gdk_drawable_real_draw_pixbuf            (GdkDrawable  *draw
 							      GdkRgbDither  dither,
 							      gint          x_dither,
 							      gint          y_dither);
+static void         gdk_drawable_real_draw_drawable          (GdkDrawable  *drawable,
+							      GdkGC	   *gc,
+							      GdkDrawable  *src,
+							      gint          xsrc,
+							      gint	    ysrc,
+							      gint	    xdest,
+							      gint	    ydest,
+							      gint	    width,
+							      gint	    height);
      
 
 G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
@@ -74,6 +83,7 @@ gdk_drawable_class_init (GdkDrawableClass *klass)
   klass->get_clip_region = gdk_drawable_real_get_visible_region;
   klass->get_visible_region = gdk_drawable_real_get_visible_region;
   klass->draw_pixbuf = gdk_drawable_real_draw_pixbuf;
+  klass->draw_drawable = gdk_drawable_real_draw_drawable;
 }
 
 static void
@@ -150,7 +160,8 @@ gdk_drawable_get_size (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_size != NULL)
+    GDK_DRAWABLE_GET_CLASS (drawable)->get_size (drawable, width, height);  
 }
 
 /**
@@ -652,13 +663,26 @@ gdk_draw_drawable (GdkDrawable *drawable,
                                                           &composite_x_offset,
                                                           &composite_y_offset);
 
-  
-  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc, composite,
-                                                    xsrc - composite_x_offset,
-                                                    ysrc - composite_y_offset,
-                                                    xdest, ydest,
-                                                    width, height);
-  
+  /* TODO: For non-native windows this may copy stuff from other overlapping
+     windows. We should clip that and (for windows with bg != None) clear that
+     area in the destination instead. */
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src)
+    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable, gc,
+							       composite,
+							       xsrc - composite_x_offset,
+							       ysrc - composite_y_offset,
+							       xdest, ydest,
+							       width, height,
+							       src);
+  else /* backwards compat for old out-of-tree implementations of GdkDrawable (are there any?) */
+    GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable (drawable, gc,
+						      composite,
+						      xsrc - composite_x_offset,
+						      ysrc - composite_y_offset,
+						      xdest, ydest,
+						      width, height);
+
   g_object_unref (composite);
 }
 
@@ -726,9 +750,6 @@ gdk_draw_image (GdkDrawable *drawable,
  *
  * On older X servers, rendering pixbufs with an alpha channel involves round 
  * trips to the X server, and may be somewhat slow.
- *
- * The clip mask of @gc is ignored, but clip rectangles and clip regions work
- * fine.
  *
  * If GDK is built with the Sun mediaLib library, the gdk_draw_pixbuf
  * function is accelerated using mediaLib, which provides hardware
@@ -871,7 +892,7 @@ real_draw_glyphs (GdkDrawable       *drawable,
   cairo_t *cr;
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
 
   if (matrix)
     {
@@ -995,7 +1016,7 @@ gdk_draw_trapezoids (GdkDrawable        *drawable,
   g_return_if_fail (n_trapezoids == 0 || trapezoids != NULL);
 
   cr = gdk_cairo_create (drawable);
-  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE);
+  _gdk_gc_update_context (gc, cr, NULL, NULL, TRUE, drawable);
   
   for (i = 0; i < n_trapezoids; i++)
     {
@@ -1185,7 +1206,7 @@ gdk_drawable_real_get_image (GdkDrawable     *drawable,
   return gdk_drawable_copy_to_image (drawable, NULL, x, y, 0, 0, width, height);
 }
 
-static GdkDrawable*
+static GdkDrawable *
 gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
                                           gint         x,
                                           gint         y,
@@ -1484,6 +1505,31 @@ composite_565 (guchar      *src_buf,
     }
 }
 
+/* Implementation of the old vfunc in terms of the new one
+   in case someone calls it directly (which they shouldn't!) */
+static void
+gdk_drawable_real_draw_drawable (GdkDrawable  *drawable,
+				 GdkGC	       *gc,
+				 GdkDrawable  *src,
+				 gint		xsrc,
+				 gint		ysrc,
+				 gint		xdest,
+				 gint		ydest,
+				 gint		width,
+				 gint		height)
+{
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_drawable_with_src (drawable,
+							     gc,
+							     src,
+							     xsrc,
+							     ysrc,
+							     xdest,
+							     ydest,
+							     width,
+							     height,
+							     src);
+}
+
 static void
 gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 			       GdkGC        *gc,
@@ -1503,6 +1549,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   GdkRegion *clip;
   GdkRegion *drect;
   GdkRectangle tmp_rect;
+  GdkDrawable  *real_drawable;
 
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
   g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
@@ -1575,7 +1622,19 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   /* Actually draw */
   if (!gc)
     gc = _gdk_drawable_get_scratch_gc (drawable, FALSE);
-  
+
+  /* Drawable is a wrapper here, but at this time we
+     have already retargeted the destination to any
+     impl window and set the clip, so what we really
+     want to do is draw directly on the impl, ignoring
+     client side subwindows. We also use the impl
+     in the pixmap target case to avoid resetting the
+     already set clip on the GC. */
+  if (GDK_IS_WINDOW (drawable))
+    real_drawable = GDK_WINDOW_OBJECT (drawable)->impl;
+  else
+    real_drawable = GDK_PIXMAP_OBJECT (drawable)->impl;
+
   if (pixbuf->has_alpha)
     {
       GdkVisual *visual = gdk_drawable_get_visual (drawable);
@@ -1645,7 +1704,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 				     image->bpl,
 				     visual->byte_order,
 				     width1, height1);
-		  gdk_draw_image (drawable, gc, image,
+		  gdk_draw_image (real_drawable, gc, image,
 				  xs0, ys0,
 				  dest_x + x0, dest_y + y0,
 				  width1, height1);
@@ -1686,7 +1745,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
     {
       guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 4;
 
-      gdk_draw_rgb_32_image_dithalign (drawable, gc,
+      gdk_draw_rgb_32_image_dithalign (real_drawable, gc,
 				       dest_x, dest_y,
 				       width, height,
 				       dither,
@@ -1697,7 +1756,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
     {
       guchar *buf = pixbuf->pixels + src_y * pixbuf->rowstride + src_x * 3;
 
-      gdk_draw_rgb_image_dithalign (drawable, gc,
+      gdk_draw_rgb_image_dithalign (real_drawable, gc,
 				    dest_x, dest_y,
 				    width, height,
 				    dither,
@@ -1770,6 +1829,82 @@ _gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
       return screen->normal_gcs[depth];
     }
 }
+
+/**
+ * _gdk_drawable_get_subwindow_scratch_gc:
+ * @drawable: A #GdkDrawable
+ * 
+ * Returns a #GdkGC suitable for drawing on @drawable. The #GdkGC has
+ * the standard values for @drawable, except for the graphics_exposures
+ * field which is %TRUE and the subwindow mode which is %GDK_INCLUDE_INFERIORS.
+ *
+ * The foreground color of the returned #GdkGC is undefined. The #GdkGC
+ * must not be altered in any way, except to change its foreground color.
+ * 
+ * Return value: A #GdkGC suitable for drawing on @drawable
+ * 
+ * Since: 2.18
+ **/
+GdkGC *
+_gdk_drawable_get_subwindow_scratch_gc (GdkDrawable *drawable)
+{
+  GdkScreen *screen;
+  gint depth;
+
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  screen = gdk_drawable_get_screen (drawable);
+
+  g_return_val_if_fail (!screen->closed, NULL);
+
+  depth = gdk_drawable_get_depth (drawable) - 1;
+
+  if (!screen->subwindow_gcs[depth])
+    {
+      GdkGCValues values;
+      GdkGCValuesMask mask;
+      
+      values.graphics_exposures = TRUE;
+      values.subwindow_mode = GDK_INCLUDE_INFERIORS;
+      mask = GDK_GC_EXPOSURES | GDK_GC_SUBWINDOW;  
+      
+      screen->subwindow_gcs[depth] =
+	gdk_gc_new_with_values (drawable, &values, mask);
+    }
+  
+  return screen->subwindow_gcs[depth];
+}
+
+
+/*
+ * _gdk_drawable_get_source_drawable:
+ * @drawable: a #GdkDrawable
+ *
+ * Returns a drawable for the passed @drawable that is guaranteed to be
+ * usable to create a pixmap (e.g.: not an offscreen window).
+ *
+ * Since: 2.16
+ */
+GdkDrawable *
+_gdk_drawable_get_source_drawable (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable)
+    return GDK_DRAWABLE_GET_CLASS (drawable)->get_source_drawable (drawable);
+
+  return drawable;
+}
+
+cairo_surface_t *
+_gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
+				    int width,
+				    int height)
+{
+  return GDK_DRAWABLE_GET_CLASS (drawable)->create_cairo_surface (drawable,
+								  width, height);
+}
+
 
 #define __GDK_DRAW_C__
 #include "gdkaliasdef.c"

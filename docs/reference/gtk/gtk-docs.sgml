@@ -177,6 +177,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <chapter id="NumericEntry">
       <title>Numeric/Text Data Entry</title>
       <xi:include href="xml/gtkentry.xml" />
+      <xi:include href="xml/gtkentrybuffer.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
       <xi:include href="xml/gtkhscale.xml" />
       <xi:include href="xml/gtkvscale.xml" />
@@ -434,6 +435,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/migrating-GtkTooltip.sgml" />
     <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
     <xi:include href="xml/migrating-GtkLabel-links.sgml" />
+    <xi:include href="xml/migrating-ClientSideWindows.sgml" />
   </part>
 
   <part>

@@ -1033,6 +1033,25 @@ You may not attach these to signals created with the
 </para>
 
 
+<!-- ##### STRUCT GtkEntryBufferClass ##### -->
+<para>
+
+</para>
+
+@parent_class: 
+@inserted_text: 
+@deleted_text: 
+@get_text: 
+@get_length: 
+@insert_text: 
+@delete_text: 
+@_gtk_reserved0: 
+@_gtk_reserved1: 
+@_gtk_reserved2: 
+@_gtk_reserved3: 
+@_gtk_reserved4: 
+@_gtk_reserved5: 
+
 <!-- ##### ARG GtkFileChooser:file-system ##### -->
 <para>
 
@@ -3864,14 +3883,6 @@ fundamental type.
 
 @widget: 
 @group_cycling: 
-@Returns: 
-
-<!-- ##### FUNCTION gtk_widget_get_allocation ##### -->
-<para>
-
-</para>
-
-@widget: 
 @Returns: 
 
 <!-- ##### FUNCTION gtk_widget_get_usize ##### -->

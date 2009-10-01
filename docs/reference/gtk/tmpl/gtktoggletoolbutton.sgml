@@ -19,25 +19,27 @@ A GtkToolItem containing a toggle button
 <!-- ##### SECTION See_Also ##### -->
 
 <para>
-  <varlistentry>
-    <term>#GtkToolbar</term>
-    <listitem><para>The toolbar widget</para></listitem>
-    <term>#GtkToolButton</term>
-    <listitem>
-      <para>
-	The parent class of #GtkToggleToolButton. The properties
-	"label_widget", "label", "icon_widget", and "stock_id" on
-	#GtkToolButton determine the label and icon used on
-	#GtkToggleToolButton<!-- -->s.
-      </para>
-    </listitem>
-    <term>#GtkSeparatorToolItem</term>
-    <listitem>
-      <para>A subclass of #GtkToolItem that separates groups of
-	items on a toolbar.
-      </para>
-    </listitem>
-  </varlistentry>
+  <variablelist>
+    <varlistentry>
+      <term>#GtkToolbar</term>
+      <listitem><para>The toolbar widget</para></listitem>
+      <term>#GtkToolButton</term>
+      <listitem>
+        <para>
+          The parent class of #GtkToggleToolButton. The properties
+          "label_widget", "label", "icon_widget", and "stock_id" on
+          #GtkToolButton determine the label and icon used on
+          #GtkToggleToolButton<!-- -->s.
+        </para>
+      </listitem>
+      <term>#GtkSeparatorToolItem</term>
+      <listitem>
+        <para>A subclass of #GtkToolItem that separates groups of
+          items on a toolbar.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->

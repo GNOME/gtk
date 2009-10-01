@@ -197,6 +197,7 @@ gtk_public_h_sources =          \
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
@@ -357,6 +358,7 @@ gtk_private_h_sources =		\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
 	gtkbuilderprivate.h 	\
+	gtkcustompaperunixdialog.h\
 	gtkfilechooserdefault.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -369,6 +371,7 @@ gtk_private_h_sources =		\
 	gtkintl.h		\
 	gtkkeyhash.h		\
 	gtkmnemonichash.h	\
+	gtkmountoperationprivate.h \
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
 	gtkprintoperation-private.h\
@@ -446,6 +449,7 @@ gtk_base_c_sources =            \
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
 	gtkentry.c		\
+	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkexpander.c		\
@@ -659,6 +663,7 @@ gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
 
 gtk_os_unix_c_sources = \
+	gtkcustompaperunixdialog.c	\
 	gtkpagesetupunixdialog.c	\
 	gtkprinter.c			\
 	gtkprinteroption.c		\
@@ -697,19 +702,23 @@ gtk_use_x11_c_sources = \
 	gtkplug-x11.c   \
 	gtksocket-x11.c \
 	gtkxembed.c     \
-	gtktrayicon-x11.c
+	gtktrayicon-x11.c \
+	gtkmountoperation-x11.c
 gtk_use_win32_c_sources = \
 	gtkplug-win32.c   \
 	gtksocket-win32.c \
 	gtkwin32embed.c   \
-	gtkwin32embedwidget.c
+	gtkwin32embedwidget.c \
+	gtkmountoperation-stub.c
 gtk_use_quartz_c_sources =	\
 	gtksearchenginequartz.c	\
 	gtkplug-stub.c		\
-	gtksocket-stub.c
+	gtksocket-stub.c	\
+	gtkmountoperation-stub.c
 gtk_use_stub_c_sources = \
 	gtkplug-stub.c   \
-	gtksocket-stub.c
+	gtksocket-stub.c \
+	gtkmountoperation-stub.c
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 if USE_X11
 gtk_private_h_sources += gtkxembed.h gtktrayicon.h xembed.h

@@ -109,6 +109,11 @@ private fields and should not be directly accessed.
 
 </para>
 
+<!-- ##### ARG GtkIconView:item-padding ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkIconView:item-width ##### -->
 <para>
 
@@ -483,6 +488,24 @@ selected rows.  It will be called on every selected row in the view.
 
 
 <!-- ##### FUNCTION gtk_icon_view_get_margin ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_item_padding ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@item_padding: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_padding ##### -->
 <para>
 
 </para>

@@ -220,7 +220,7 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
                                      G_FILE_ERROR,
                                      g_file_error_from_errno (save_errno),
                                      _("Failure reading GIF: %s"), 
-                                     strerror (save_errno));
+                                     g_strerror (save_errno));
                 }
                 
 #ifdef IO_GIFDEBUG

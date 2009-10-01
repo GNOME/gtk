@@ -13746,12 +13746,7 @@ struct {
 } buttons[] =
 {
   { "alpha window", create_alpha_window },
-#ifdef G_OS_WIN32
-  /* dog slow on NT, no working at all on 9x */
-  { "big windows", create_big_windows, TRUE },
-#else
   { "big windows", create_big_windows },
-#endif
   { "button box", create_button_box },
   { "buttons", create_buttons },
   { "check buttons", create_check_buttons },
@@ -13760,7 +13755,7 @@ struct {
   { "composited window", create_composited_window },
   { "ctree", create_ctree },
   { "cursors", create_cursors },
-  { "dialog", create_dialog, TRUE },
+  { "dialog", create_dialog },
   { "display & screen", create_display_screen, TRUE },
   { "entry", create_entry },
   { "event box", create_event_box },

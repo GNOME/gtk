@@ -64,16 +64,20 @@ struct _GtkCellRendererToggleClass
   void (*_gtk_reserved4) (void);
 };
 
-GType            gtk_cell_renderer_toggle_get_type  (void) G_GNUC_CONST;
-GtkCellRenderer *gtk_cell_renderer_toggle_new       (void);
+GType            gtk_cell_renderer_toggle_get_type       (void) G_GNUC_CONST;
+GtkCellRenderer *gtk_cell_renderer_toggle_new            (void);
 
-gboolean         gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle);
-void             gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
-						     gboolean               radio);
+gboolean         gtk_cell_renderer_toggle_get_radio      (GtkCellRendererToggle *toggle);
+void             gtk_cell_renderer_toggle_set_radio      (GtkCellRendererToggle *toggle,
+                                                          gboolean               radio);
 
-gboolean        gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle);
-void            gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
-                                                     gboolean               setting);
+gboolean        gtk_cell_renderer_toggle_get_active      (GtkCellRendererToggle *toggle);
+void            gtk_cell_renderer_toggle_set_active      (GtkCellRendererToggle *toggle,
+                                                          gboolean               setting);
+
+gboolean        gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle);
+void            gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
+                                                          gboolean               setting);
 
 
 G_END_DECLS

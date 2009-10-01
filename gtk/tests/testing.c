@@ -38,9 +38,13 @@ test_button_clicks (void)
   g_assert (button != NULL);
   simsuccess = gtk_test_widget_click (button, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ())
+  while (gtk_events_pending ()) {
+    g_print ("iterate main loop\n");
     gtk_main_iteration ();
-  g_assert (a == 0 && b > 0 && c == 0);
+  }
+  g_assert (a == 0);
+  g_assert (b > 0);
+  g_assert (c == 0);
 }
 
 static void
@@ -62,7 +66,9 @@ test_button_keys (void)
   g_assert (simsuccess == TRUE);
   while (gtk_events_pending ())
     gtk_main_iteration ();
-  g_assert (a == 0 && b > 0 && c == 0);
+  g_assert (a == 0);
+  g_assert (b > 0);
+  g_assert (c == 0);
 }
 
 static void
