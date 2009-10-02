@@ -2077,7 +2077,8 @@ GdkWindow *
 _gdk_windowing_window_at_pointer (GdkDisplay *display,
                                   gint       *win_x,
 				  gint       *win_y,
-                                  GdkModifierType *mask)
+                                  GdkModifierType *mask,
+                                  gboolean get_toplevel)
 {
   GdkWindow *retval;
   gint       wx, wy;
@@ -2137,7 +2138,8 @@ _gdk_windowing_get_pointer (GdkDisplay       *display,
   gdk_directfb_window_get_pointer (_gdk_windowing_window_at_pointer (display,
                                                                      NULL,
                                                                      NULL,
-                                                                     NULL),
+                                                                     NULL,
+                                                                     FALSE),
                                    x, y, mask);
 }
 
