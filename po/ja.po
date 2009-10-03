@@ -11,9 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
-"PO-Revision-Date: 2009-09-06 18:01+0900\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2009-10-03 18:27+0900\n"
+"PO-Revision-Date: 2009-10-03 18:34+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -2321,20 +2322,20 @@ msgstr "無効にする GTK+ のデバッグ・フラグを指定する"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ディスプレイをオープンできません: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "GTK+ のオプション"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "GTK+ のオプションを表示する"
 
@@ -2644,9 +2645,8 @@ msgid "Unspecified error"
 msgstr "原因不明のエラー"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "プリンタの情報を取得中..."
+msgstr "プリンタの情報の取得に失敗しました。"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -4839,24 +4839,22 @@ msgid "Authentication is required on %s"
 msgstr "%s には認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "ドメイン(_D):"
+msgstr "ドメイン:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "文書を %s で印刷するには認証が必要"
+msgstr "文書 '%s' を印刷するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "文書 '%s' をプリンタ '%s' で印刷するには認証が必要"
+msgstr "この文書をプリンタ '%s' で印刷するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "文書を %s で印刷するには認証が必要"
+msgstr "この文書を印刷するには認証が必要"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
@@ -5167,15 +5165,15 @@ msgstr "ファイル"
 msgid "_Output format"
 msgstr "出力の形式(_O)"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "LPR に印刷する"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "段組印刷"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "コマンドライン"
 
