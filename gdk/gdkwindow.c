@@ -2624,6 +2624,8 @@ gdk_window_end_implicit_paint (GdkWindow *window)
       /* Reset clip region of the cached GdkGC */
       gdk_gc_set_clip_region (tmp_gc, NULL);
     }
+  else
+    gdk_region_destroy (paint->region);
 
   g_object_unref (paint->pixmap);
   g_free (paint);
