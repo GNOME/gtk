@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.17.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-09-14 00:22+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -2318,20 +2318,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -5158,15 +5158,15 @@ msgstr "Fil"
 msgid "_Output format"
 msgstr "F_ormat"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "Skriv ut til LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Sider per ark"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Kommandolinje"
 

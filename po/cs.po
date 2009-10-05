@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-09-30 21:22+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -2325,20 +2325,20 @@ msgstr "Ladicí příznaky GTK+, jejichž nastavení zruší"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nelze otevřít displej: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "Přepínače GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "Zobrazit přepínače GTK+"
 
@@ -5165,15 +5165,15 @@ msgstr "Soubor"
 msgid "_Output format"
 msgstr "_Výstupní formát"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "Tisknout na LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Stran na list"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Příkazový řádek"
 

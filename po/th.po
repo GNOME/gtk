@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-08-22 23:02+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2280,20 +2280,20 @@ msgstr "แฟล็กการดีบักของ GTK+ ที่จะป
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ไม่สามารถเปิดดิสเพลย์: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "ตัวเลือกของ GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
@@ -5119,15 +5119,15 @@ msgstr "แฟ้ม"
 msgid "_Output format"
 msgstr "รูปแ_บบผลลัพธ์"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "พิมพ์ออกทาง LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "จำนวนหน้าต่อแผ่น"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "บรรทัดคำสั่ง"
 

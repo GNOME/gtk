@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-07-08 13:35+1000\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -2319,20 +2319,20 @@ msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Không thể mở display: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "Tùy chọn GTK+"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "Hiện tùy chọn GTK+"
 
@@ -5178,15 +5178,15 @@ msgstr "Tập tin"
 msgid "_Output format"
 msgstr "Dạng _xuất"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "In vào LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Trang trên mỗi tờ"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Dòng lệnh"
 

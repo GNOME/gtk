@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-08-22 07:04+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -2300,20 +2300,20 @@ msgstr "ਅਣ-ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ਦਿੱਖ ਖੋਲ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "GTK+ ਚੋਣ"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "GTK+ ਚੋਣ ਵੇਖੋ"
 
@@ -5136,15 +5136,15 @@ msgstr "ਫਾਇਲ"
 msgid "_Output format"
 msgstr "ਆਉਟਪੁੱਟ ਫਾਰਮੈਟ(_O)"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "LPR ਲਈ ਪਰਿੰਟ ਕਰੋ"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "ਸਫ਼ੇ ਪ੍ਰਤੀ ਸ਼ੀਟ"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "ਕਮਾਂਡ ਲਾਈਨ"
 

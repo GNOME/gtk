@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-30 17:31-0400\n"
+"POT-Creation-Date: 2009-10-05 17:16-0400\n"
 "PO-Revision-Date: 2009-08-29 23:54+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -2325,20 +2325,20 @@ msgstr "ಹೊಂದಿಸದೆ ಇರಲು GTK+ ದೋಷ ನಿವಾರಕ 
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:707
+#: gtk/gtkmain.c:709
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:773
+#: gtk/gtkmain.c:775
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ಪ್ರದರ್ಶಕವನ್ನು ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ: %s"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "GTK+ Options"
 msgstr "GTK+ ಆಯ್ಕೆಗಳು"
 
-#: gtk/gtkmain.c:810
+#: gtk/gtkmain.c:812
 msgid "Show GTK+ Options"
 msgstr "GTK+ ಆಯ್ಕೆಗಳನ್ನು ತೋರಿಸು"
 
@@ -5166,15 +5166,15 @@ msgstr "ಕಡತ"
 msgid "_Output format"
 msgstr "ಪ್ರದಾನದ (ಔಟ್‌ಪುಟ್) ವಿನ್ಯಾಸ (_O)"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:397
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "LPR ಗೆ ಮುದ್ರಿಸು"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "ಪ್ರತಿ ಹಾಳೆಯಲ್ಲಿನ ಪುಟಗಳು"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "ಆಜ್ಞಾ ಸಾಲು"
 
