@@ -3252,12 +3252,15 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       while (xwindow)
 	{
 	  xwindow_last = xwindow;
-	  if (get_toplevel &&
-	      (window = gdk_window_lookup_for_display (display, xwindow)) != NULL &&
-	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-	    break;
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
+	  if (get_toplevel &&
+	      (window = gdk_window_lookup_for_display (display, xwindow_last)) != NULL &&
+	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	    {
+	      xwindow = xwindow_last;
+	      break;
+	    }
 	}
     } 
   else 
@@ -3315,15 +3318,15 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
       while (xwindow)
 	{
 	  xwindow_last = xwindow;
-	  if (get_toplevel &&
-	      (window = gdk_window_lookup_for_display (display, xwindow)) != NULL &&
-	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-	    break;
 	  gdk_error_trap_push ();
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
 	  gdk_flush ();
 	  if (gdk_error_trap_pop ())
+	    break;
+	  if (get_toplevel &&
+	      (window = gdk_window_lookup_for_display (display, xwindow_last)) != NULL &&
+	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	    break;
 	}
     }
