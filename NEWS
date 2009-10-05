@@ -1,3 +1,20 @@
+Overview of Changes from GTK+ 2.18.1 to 2.18.2
+==============================================
+
+* GTK+ now ignores SIGPIPE in gtk_init(). Previously
+  this was done deep in the lpr printbackend.
+
+* Fix compilation of the DirectFB backend.
+
+* Bugs fixed:
+ 597386 Cannot click buttons more than once...
+ 588059 sometimes notification icons are not visible with csw
+
+* Updated translations:
+ Italian
+ Japanese
+
+
 Overview of Changes from GTK+ 2.18.0 to 2.18.1
 ==============================================
 
