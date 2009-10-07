@@ -22,9 +22,6 @@ gail_c_sources =			\
 	gailcellparent.c		\
 	gailcheckmenuitem.c		\
 	gailchecksubmenuitem.c		\
-	gailclist.c			\
-	gailclistcell.c			\
-	gailcombo.c			\
 	gailcombobox.c			\
 	gailcontainer.c			\
 	gailcontainercell.c		\
@@ -35,14 +32,12 @@ gail_c_sources =			\
 	gailimagecell.c			\
 	gailitem.c			\
 	gaillabel.c			\
-	gaillist.c			\
 	gailmenu.c			\
 	gailmenushell.c			\
 	gailmenuitem.c			\
 	gailnotebook.c			\
 	gailnotebookpage.c		\
 	gailobject.c			\
-	gailoptionmenu.c		\
 	gailpaned.c			\
 	gailpixmap.c			\
 	gailprogressbar.c		\
@@ -82,9 +77,6 @@ gail_private_h_sources =		\
 	gailcellparent.h		\
 	gailcheckmenuitem.h		\
 	gailchecksubmenuitem.h		\
-	gailclist.h			\
-	gailclistcell.h			\
-	gailcombo.h			\
 	gailcombobox.h			\
 	gailcontainercell.h		\
 	gailcontainer.h			\
@@ -103,7 +95,6 @@ gail_private_h_sources =		\
 	gailnotebook.h			\
 	gailnotebookpage.h		\
 	gailobject.h			\
-	gailoptionmenu.h		\
 	gailpaned.h			\
 	gailpixmap.h			\
 	gailprogressbar.h		\
