@@ -1304,22 +1304,6 @@ _gtk_rc_style_unset_rc_property (GtkRcStyle *rc_style,
     }
 }
 
-void      
-gtk_rc_style_ref (GtkRcStyle *rc_style)
-{
-  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
-
-  g_object_ref (rc_style);
-}
-
-void      
-gtk_rc_style_unref (GtkRcStyle *rc_style)
-{
-  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
-
-  g_object_unref (rc_style);
-}
-
 static GtkRcStyle *
 gtk_rc_style_real_create_rc_style (GtkRcStyle *style)
 {
@@ -2198,48 +2182,6 @@ gtk_rc_add_rc_sets (GSList      *slist,
   rc_set->rc_style = rc_style;
   
   return g_slist_prepend (slist, rc_set);
-}
-
-void
-gtk_rc_add_widget_name_style (GtkRcStyle  *rc_style,
-			      const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_widget = gtk_rc_add_rc_sets (context->rc_sets_widget, rc_style, pattern, GTK_PATH_WIDGET);
-}
-
-void
-gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
-			       const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_widget_class = gtk_rc_add_rc_sets (context->rc_sets_widget_class, rc_style, pattern, GTK_PATH_WIDGET_CLASS);
-}
-
-void
-gtk_rc_add_class_style (GtkRcStyle  *rc_style,
-			const gchar *pattern)
-{
-  GtkRcContext *context;
-  
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (pattern != NULL);
-
-  context = gtk_rc_context_get (gtk_settings_get_default ());
-  
-  context->rc_sets_class = gtk_rc_add_rc_sets (context->rc_sets_class, rc_style, pattern, GTK_PATH_CLASS);
 }
 
 GScanner*
