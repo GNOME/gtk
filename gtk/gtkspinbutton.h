@@ -186,11 +186,6 @@ void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_spin_button_get_value_as_float gtk_spin_button_get_value
-#endif
-
 G_END_DECLS
 
 #endif /* __GTK_SPIN_BUTTON_H__ */
