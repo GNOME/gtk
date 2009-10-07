@@ -6,9 +6,6 @@
 #include <gail/gailcalendar.h>
 #include <gail/gailcell.h>
 #include <gail/gailcheckmenuitem.h>
-#include <gail/gailclist.h>
-#include <gail/gailclistcell.h>
-#include <gail/gailcombo.h>
 #include <gail/gailcombobox.h>
 #include <gail/gailcontainer.h>
 #include <gail/gailcontainercell.h>
@@ -19,13 +16,11 @@
 #include <gail/gailimagecell.h>
 #include <gail/gailitem.h>
 #include <gail/gaillabel.h>
-#include <gail/gaillist.h>
 #include <gail/gailmenu.h>
 #include <gail/gailmenushell.h>
 #include <gail/gailmenuitem.h>
 #include <gail/gailnotebook.h>
 #include <gail/gailobject.h>
-#include <gail/gailoptionmenu.h>
 #include <gail/gailpaned.h>
 #include <gail/gailpixmap.h>
 #include <gail/gailprogressbar.h>

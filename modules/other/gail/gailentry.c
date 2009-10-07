@@ -23,7 +23,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include "gailentry.h"
-#include "gailcombo.h"
 #include "gailcombobox.h"
 #include <libgail-util/gailmisc.h>
 

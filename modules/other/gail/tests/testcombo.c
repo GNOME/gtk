@@ -114,9 +114,11 @@ static void _check_combo_box (AtkObject *obj)
       }
       if (g_getenv ("TEST_ACCESSIBLE_COMBO_NOEDIT") != NULL)
       {
+        GtkWidget *combo;
         GtkEntry *entry;
 
-        entry = GTK_ENTRY (GTK_COMBO (GTK_ACCESSIBLE (combo_obj)->widget)->entry);
+        combo = GTK_ACCESSIBLE (combo_obj)->widget;
+        entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
         gtk_entry_set_editable (entry, FALSE);
       }
       _check_children (combo_obj);
