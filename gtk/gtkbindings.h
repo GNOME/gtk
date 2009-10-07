@@ -111,14 +111,6 @@ gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 					 GdkModifierType modifiers,
 					 GtkObject	*object);
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define	 gtk_binding_entry_add		gtk_binding_entry_clear
-void	 gtk_binding_entry_clear	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers);
-guint	 gtk_binding_parse_binding      (GScanner       *scanner);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void	 gtk_binding_entry_skip         (GtkBindingSet  *binding_set,
                                          guint           keyval,
                                          GdkModifierType modifiers);
