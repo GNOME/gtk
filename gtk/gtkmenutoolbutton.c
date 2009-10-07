@@ -593,33 +593,6 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
 }
 
 /**
- * gtk_menu_tool_button_set_arrow_tooltip:
- * @button: a #GtkMenuToolButton
- * @tooltips: the #GtkTooltips object to be used
- * @tip_text: (allow-none): text to be used as tooltip text for tool_item
- * @tip_private: (allow-none): text to be used as private tooltip text
- *
- * Sets the #GtkTooltips object to be used for arrow button which
- * pops up the menu. See gtk_tool_item_set_tooltip() for setting
- * a tooltip on the whole #GtkMenuToolButton.
- *
- * Since: 2.6
- *
- * Deprecated: 2.12: Use gtk_menu_tool_button_set_arrow_tooltip_text()
- * instead.
- **/
-void
-gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button,
-                                        GtkTooltips       *tooltips,
-                                        const gchar       *tip_text,
-                                        const gchar       *tip_private)
-{
-  g_return_if_fail (GTK_IS_MENU_TOOL_BUTTON (button));
-
-  gtk_tooltips_set_tip (tooltips, button->priv->arrow_button, tip_text, tip_private);
-}
-
-/**
  * gtk_menu_tool_button_set_arrow_tooltip_text:
  * @button: a #GtkMenuToolButton
  * @text: text to be used as tooltip text for button's arrow button
