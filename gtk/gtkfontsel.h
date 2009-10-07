@@ -156,10 +156,6 @@ PangoFontFace *
 gint         gtk_font_selection_get_size          (GtkFontSelection *fontsel);
 gchar*       gtk_font_selection_get_font_name     (GtkFontSelection *fontsel);
 
-#ifndef GTK_DISABLE_DEPRECATED
-GdkFont*     gtk_font_selection_get_font          (GtkFontSelection *fontsel);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 gboolean     gtk_font_selection_set_font_name     (GtkFontSelection *fontsel,
                                                    const gchar      *fontname);
 const gchar* gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel);
@@ -176,9 +172,6 @@ GType	   gtk_font_selection_dialog_get_type	       (void) G_GNUC_CONST;
 GtkWidget *gtk_font_selection_dialog_new	       (const gchar            *title);
 
 GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget *gtk_font_selection_dialog_get_apply_button  (GtkFontSelectionDialog *fsd);
-#endif
 GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font
@@ -187,13 +180,6 @@ GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *
    to see if it has been loaded OK.
    You should g_free() the returned font name after you're done with it. */
 gchar*	   gtk_font_selection_dialog_get_font_name     (GtkFontSelectionDialog *fsd);
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* This will return the current GdkFont, or NULL if none is selected or there
-   was a problem loading it. Remember to use gdk_font_ref/unref() if you want
-   to use the font (in a style, for example). */
-GdkFont*   gtk_font_selection_dialog_get_font	       (GtkFontSelectionDialog *fsd);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* This sets the currently displayed font. It should be a valid X Logical
    Font Description font name (anything else will be ignored), e.g.
