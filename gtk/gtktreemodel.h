@@ -149,10 +149,6 @@ gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
 gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
                                              GtkTreePath       *ancestor);
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_tree_path_new_root() gtk_tree_path_new_first()
-#endif /* !GTK_DISABLE_DEPRECATED */
-
 /* Row reference (an object that tracks model changes so it refers to the same
  * row always; a path refers to a position, not a fixed row).  You almost always
  * want to call gtk_tree_row_reference_new.
@@ -240,11 +236,6 @@ void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 void              gtk_tree_model_foreach         (GtkTreeModel            *model,
 						  GtkTreeModelForeachFunc  func,
 						  gpointer                 user_data);
-
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_tree_model_get_iter_root(tree_model, iter) gtk_tree_model_get_iter_first(tree_model, iter)
-#endif /* !GTK_DISABLE_DEPRECATED */
 
 /* Signals */
 void gtk_tree_model_row_changed           (GtkTreeModel *tree_model,
