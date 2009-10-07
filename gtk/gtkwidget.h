@@ -837,13 +837,6 @@ GtkWidget* gtk_widget_new		  (GType		type,
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
-void	   gtk_widget_unref		  (GtkWidget	       *widget);
-void	   gtk_widget_set		  (GtkWidget	       *widget,
-					   const gchar         *first_property_name,
-					   ...) G_GNUC_NULL_TERMINATED;
-#endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
@@ -865,16 +858,6 @@ void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
 					   gint                 y,
 					   gint                 width,
 					   gint                 height);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_widget_queue_clear	  (GtkWidget	       *widget);
-void	   gtk_widget_queue_clear_area	  (GtkWidget	       *widget,
-					   gint                 x,
-					   gint                 y,
-					   gint                 width,
-					   gint                 height);
-#endif /* GTK_DISABLE_DEPRECATED */
-
-
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
 #ifndef GTK_DISABLE_DEPRECATED
@@ -1032,9 +1015,6 @@ void       gtk_widget_get_size_request    (GtkWidget           *widget,
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
 					   gint			x,
 					   gint			y);
-void	   gtk_widget_set_usize		  (GtkWidget	       *widget,
-					   gint			width,
-					   gint			height);
 #endif
 
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
@@ -1307,11 +1287,6 @@ gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
-
-#if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
-#  define gtk_widget_ref g_object_ref
-#  define gtk_widget_unref g_object_unref
-#endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
 void              _gtk_widget_set_has_default             (GtkWidget    *widget,
                                                            gboolean      has_default);
