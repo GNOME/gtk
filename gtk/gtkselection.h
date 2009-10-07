@@ -197,10 +197,8 @@ gboolean gtk_targets_include_uri                 (GdkAtom       *targets,
 void gtk_selection_remove_all      (GtkWidget *widget);
 
 /* Event handlers */
-#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-gboolean gtk_selection_clear		  (GtkWidget 	     *widget,
+gboolean _gtk_selection_clear		  (GtkWidget 	     *widget,
 					   GdkEventSelection *event);
-#endif
 gboolean _gtk_selection_request		  (GtkWidget  	     *widget,
 					   GdkEventSelection *event);
 gboolean _gtk_selection_incr_event	  (GdkWindow         *window,
