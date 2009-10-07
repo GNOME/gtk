@@ -135,11 +135,6 @@ void      _gtk_menu_item_popup_submenu        (GtkWidget           *menu_item,
                                                gboolean             with_delay);
 void      _gtk_menu_item_popdown_submenu      (GtkWidget           *menu_item);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
-#define gtk_menu_item_right_justify(menu_item) gtk_menu_item_set_right_justified ((menu_item), TRUE)
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* __GTK_MENU_ITEM_H__ */

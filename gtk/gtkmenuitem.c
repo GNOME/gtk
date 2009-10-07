@@ -812,24 +812,6 @@ gtk_menu_item_get_submenu (GtkMenuItem *menu_item)
   return menu_item->submenu;
 }
 
-/**
- * gtk_menu_item_remove_submenu:
- * @menu_item: a #GtkMenuItem
- *
- * Removes the widget's submenu.
- *
- * Deprecated: 2.12: gtk_menu_item_remove_submenu() is deprecated and
- *                   should not be used in newly written code. Use
- *                   gtk_menu_item_set_submenu() instead.
- **/
-void
-gtk_menu_item_remove_submenu (GtkMenuItem *menu_item)
-{
-  g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
-
-  gtk_menu_item_set_submenu (menu_item, NULL);
-}
-
 void _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 				   GtkSubmenuPlacement  placement);
 
