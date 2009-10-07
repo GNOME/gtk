@@ -2458,26 +2458,6 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
 }
 
 /**
- * gtk_color_selection_set_color:
- * @colorsel: a #GtkColorSelection.
- * @color: an array of 4 doubles specifying the red, green, blue and opacity 
- *   to set the current color to.
- *
- * Sets the current color to be @color.  The first time this is called, it will
- * also set the original color to be @color too.
- *
- * Deprecated: 2.0: Use gtk_color_selection_set_current_color() instead.
- **/
-void
-gtk_color_selection_set_color (GtkColorSelection    *colorsel,
-			       gdouble              *color)
-{
-  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-
-  set_color_internal (colorsel, color);
-}
-
-/**
  * gtk_color_selection_get_current_color:
  * @colorsel: a #GtkColorSelection.
  * @color: a #GdkColor to fill in with the current color.
@@ -2516,30 +2496,6 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
   
   priv = colorsel->private_data;
   return priv->has_opacity ? UNSCALE (priv->color[COLORSEL_OPACITY]) : 65535;
-}
-
-/**
- * gtk_color_selection_get_color:
- * @colorsel: a #GtkColorSelection.
- * @color: an array of 4 #gdouble to fill in with the current color.
- *
- * Sets @color to be the current color in the GtkColorSelection widget.
- *
- * Deprecated: 2.0: Use gtk_color_selection_get_current_color() instead.
- **/
-void
-gtk_color_selection_get_color (GtkColorSelection *colorsel,
-			       gdouble           *color)
-{
-  ColorSelectionPrivate *priv;
-  
-  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  
-  priv = colorsel->private_data;
-  color[0] = priv->color[COLORSEL_RED];
-  color[1] = priv->color[COLORSEL_GREEN];
-  color[2] = priv->color[COLORSEL_BLUE];
-  color[3] = priv->has_opacity ? priv->color[COLORSEL_OPACITY] : 65535;
 }
 
 /**
@@ -2828,33 +2784,6 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
   g_strfreev (strs);
 
   return retval;
-}
-
-/**
- * gtk_color_selection_set_change_palette_hook:
- * @func: a function to call when the custom palette needs saving.
- * 
- * Installs a global function to be called whenever the user tries to
- * modify the palette in a color selection. This function should save
- * the new palette contents, and update the GtkSettings property
- * "gtk-color-palette" so all GtkColorSelection widgets will be modified.
- *
- * Return value: the previous change palette hook (that was replaced).
- *
- * Deprecated: 2.4: This function does not work in multihead environments.
- *     Use gtk_color_selection_set_change_palette_with_screen_hook() instead. 
- * 
- **/
-GtkColorSelectionChangePaletteFunc
-gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc func)
-{
-  GtkColorSelectionChangePaletteFunc old;
-
-  old = noscreen_change_palette_hook;
-
-  noscreen_change_palette_hook = func;
-
-  return old;
 }
 
 /**
