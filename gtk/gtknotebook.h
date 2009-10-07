@@ -173,13 +173,6 @@ void gtk_notebook_remove_page       (GtkNotebook *notebook,
 void gtk_notebook_set_window_creation_hook (GtkNotebookWindowCreationFunc  func,
 					    gpointer                       data,
                                             GDestroyNotify                 destroy);
-#ifndef GTK_DISABLE_DEPRECATED
-void gtk_notebook_set_group_id             (GtkNotebook *notebook,
-					    gint         group_id);
-gint gtk_notebook_get_group_id             (GtkNotebook *notebook);
-
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void gtk_notebook_set_group                (GtkNotebook *notebook,
 					    gpointer     group);
 gpointer gtk_notebook_get_group            (GtkNotebook *notebook);
@@ -214,18 +207,6 @@ gboolean gtk_notebook_get_show_tabs        (GtkNotebook     *notebook);
 void     gtk_notebook_set_tab_pos          (GtkNotebook     *notebook,
 				            GtkPositionType  pos);
 GtkPositionType gtk_notebook_get_tab_pos   (GtkNotebook     *notebook);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void     gtk_notebook_set_homogeneous_tabs (GtkNotebook     *notebook,
-					    gboolean         homogeneous);
-void     gtk_notebook_set_tab_border       (GtkNotebook     *notebook,
-					    guint            border_width);
-void     gtk_notebook_set_tab_hborder      (GtkNotebook     *notebook,
-					    guint            tab_hborder);
-void     gtk_notebook_set_tab_vborder      (GtkNotebook     *notebook,
-					    guint            tab_vborder);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void     gtk_notebook_set_scrollable       (GtkNotebook     *notebook,
 					    gboolean         scrollable);
 gboolean gtk_notebook_get_scrollable       (GtkNotebook     *notebook);
@@ -292,11 +273,6 @@ GtkWidget* gtk_notebook_get_action_widget (GtkNotebook *notebook,
 void       gtk_notebook_set_action_widget (GtkNotebook *notebook,
                                            GtkWidget   *widget,
                                            GtkPackType  pack_type);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_notebook_current_page               gtk_notebook_get_current_page
-#define gtk_notebook_set_page                   gtk_notebook_set_current_page
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 
