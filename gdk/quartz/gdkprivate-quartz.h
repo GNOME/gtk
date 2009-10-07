@@ -152,6 +152,9 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
 void       _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
                                                          GdkRectangle *rect);
 
+/* Screen */
+void       _gdk_quartz_screen_init (void);
+
 /* Events */
 typedef enum {
   GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP

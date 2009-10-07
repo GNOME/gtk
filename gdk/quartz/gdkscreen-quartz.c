@@ -24,6 +24,13 @@
 
 static GdkColormap *default_colormap = NULL;
 
+void
+_gdk_quartz_screen_init (void)
+{
+  gdk_screen_set_default_colormap (_gdk_screen,
+                                   gdk_screen_get_system_colormap (_gdk_screen));
+}
+
 GdkDisplay *
 gdk_screen_get_display (GdkScreen *screen)
 {
