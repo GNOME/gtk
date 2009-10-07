@@ -503,23 +503,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							 P_("If an arrow should be shown if the toolbar doesn't fit"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  
-
-  /**
-   * GtkToolbar:tooltips:
-   * 
-   * If the tooltips of the toolbar should be active or not.
-   * 
-   * Since: 2.8
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_TOOLTIPS,
-				   g_param_spec_boolean ("tooltips",
-							 P_("Tooltips"),
-							 P_("If the tooltips of the toolbar should be active or not"),
-							 TRUE,
-							 GTK_PARAM_READWRITE));
-  
 
   /**
    * GtkToolbar:icon-size:
@@ -676,8 +659,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->style = DEFAULT_TOOLBAR_STYLE;
   toolbar->icon_size = DEFAULT_ICON_SIZE;
   priv->animation = DEFAULT_ANIMATION_STATE;
-  toolbar->tooltips = gtk_tooltips_new ();
-  g_object_ref_sink (toolbar->tooltips);
+  toolbar->tooltips = NULL; /* FIXME: Remove this */
   
   priv->arrow_button = gtk_toggle_button_new ();
   g_signal_connect (priv->arrow_button, "button-press-event",
@@ -728,9 +710,6 @@ gtk_toolbar_set_property (GObject      *object,
     case PROP_SHOW_ARROW:
       gtk_toolbar_set_show_arrow (toolbar, g_value_get_boolean (value));
       break;
-    case PROP_TOOLTIPS:
-      gtk_toolbar_set_tooltips (toolbar, g_value_get_boolean (value));
-      break;
     case PROP_ICON_SIZE:
       gtk_toolbar_set_icon_size (toolbar, g_value_get_int (value));
       break;
@@ -765,9 +744,6 @@ gtk_toolbar_get_property (GObject    *object,
       break;
     case PROP_SHOW_ARROW:
       g_value_set_boolean (value, priv->show_arrow);
-      break;
-    case PROP_TOOLTIPS:
-      g_value_set_boolean (value, gtk_toolbar_get_tooltips (toolbar));
       break;
     case PROP_ICON_SIZE:
       g_value_set_int (value, gtk_toolbar_get_icon_size (toolbar));
@@ -2466,10 +2442,7 @@ gtk_toolbar_add (GtkContainer *container,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (container);
 
-  if (GTK_IS_TOOL_ITEM (widget))
-    gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (widget), -1);
-  else
-    gtk_toolbar_append_widget (toolbar, widget, NULL, NULL);
+  gtk_toolbar_insert (toolbar, GTK_TOOL_ITEM (widget), -1);
 }
 
 static void
@@ -2819,43 +2792,6 @@ gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
 }
 
 /**
- * gtk_toolbar_set_orientation:
- * @toolbar: a #GtkToolbar.
- * @orientation: a new #GtkOrientation.
- *
- * Sets whether a toolbar should appear horizontally or vertically.
- *
- * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
- **/
-void
-gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
-			     GtkOrientation  orientation)
-{
-  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-  
-  g_signal_emit (toolbar, toolbar_signals[ORIENTATION_CHANGED], 0, orientation);
-}
-
-/**
- * gtk_toolbar_get_orientation:
- * @toolbar: a #GtkToolbar
- *
- * Retrieves the current orientation of the toolbar. See
- * gtk_toolbar_set_orientation().
- *
- * Return value: the orientation
- *
- * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
- **/
-GtkOrientation
-gtk_toolbar_get_orientation (GtkToolbar *toolbar)
-{
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ORIENTATION_HORIZONTAL);
-  
-  return toolbar->orientation;
-}
-
-/**
  * gtk_toolbar_set_style:
  * @toolbar: a #GtkToolbar.
  * @style: the new style for @toolbar.
@@ -2919,50 +2855,6 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
       
       toolbar->style_set = FALSE;
     }
-}
-
-/**
- * gtk_toolbar_set_tooltips:
- * @toolbar: a #GtkToolbar.
- * @enable: set to %FALSE to disable the tooltips, or %TRUE to enable them.
- * 
- * Sets if the tooltips of a toolbar should be active or not.
- *
- * Deprecated: 2.14: The toolkit-wide #GtkSettings:gtk-enable-tooltips property
- * is now used instead.
- **/
-void
-gtk_toolbar_set_tooltips (GtkToolbar *toolbar,
-			  gboolean    enable)
-{
-  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-  
-  if (enable)
-    gtk_tooltips_enable (toolbar->tooltips);
-  else
-    gtk_tooltips_disable (toolbar->tooltips);
-
-  g_object_notify (G_OBJECT (toolbar), "tooltips");
-}
-
-/**
- * gtk_toolbar_get_tooltips:
- * @toolbar: a #GtkToolbar
- *
- * Retrieves whether tooltips are enabled. See
- * gtk_toolbar_set_tooltips().
- *
- * Return value: %TRUE if tooltips are enabled
- *
- * Deprecated: 2.14: The toolkit-wide #GtkSettings:gtk-enable-tooltips property
- * is now used instead.
- **/
-gboolean
-gtk_toolbar_get_tooltips (GtkToolbar *toolbar)
-{
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
-  
-  return TRUE;
 }
 
 /**
@@ -3165,9 +3057,6 @@ gtk_toolbar_finalize (GObject *object)
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
-  if (toolbar->tooltips)
-    g_object_unref (toolbar->tooltips);
-  
   if (priv->arrow_button)
     gtk_widget_unparent (priv->arrow_button);
 
@@ -3267,458 +3156,6 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
       toolbar->icon_size_set = FALSE;
       g_object_notify (G_OBJECT (toolbar), "icon-size-set");      
     }
-}
-
-/*
- * Deprecated API
- */
-
-/**
- * gtk_toolbar_append_item:
- * @toolbar: a #GtkToolbar.
- * @text: give your toolbar button a label.
- * @tooltip_text: a string that appears when the user holds the mouse over this item.
- * @tooltip_private_text: use with #GtkTipsQuery.
- * @icon: a #GtkWidget that should be used as the button's icon.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: a pointer to any data you wish to be passed to the callback.
- *
- * Inserts a new item into the toolbar. You must specify the position
- * in the toolbar where it will be inserted.
- *
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar item as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget *
-gtk_toolbar_append_item (GtkToolbar    *toolbar,
-			 const char    *text,
-			 const char    *tooltip_text,
-			 const char    *tooltip_private_text,
-			 GtkWidget     *icon,
-			 GCallback      callback,
-			 gpointer       user_data)
-{
-  return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
-				     NULL, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data,
-				     toolbar->num_children);
-}
-
-/**
- * gtk_toolbar_prepend_item:
- * @toolbar: a #GtkToolbar.
- * @text: give your toolbar button a label.
- * @tooltip_text: a string that appears when the user holds the mouse over this item.
- * @tooltip_private_text: use with #GtkTipsQuery.
- * @icon: a #GtkWidget that should be used as the button's icon.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: a pointer to any data you wish to be passed to the callback.
- *
- * Adds a new button to the beginning (top or left edges) of the given toolbar.
- *
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar item as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget *
-gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
-			  const char    *text,
-			  const char    *tooltip_text,
-			  const char    *tooltip_private_text,
-			  GtkWidget     *icon,
-			  GCallback      callback,
-			  gpointer       user_data)
-{
-  return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
-				     NULL, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data,
-				     0);
-}
-
-/**
- * gtk_toolbar_insert_item:
- * @toolbar: a #GtkToolbar.
- * @text: give your toolbar button a label.
- * @tooltip_text: a string that appears when the user holds the mouse over this item.
- * @tooltip_private_text: use with #GtkTipsQuery.
- * @icon: a #GtkWidget that should be used as the button's icon.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: a pointer to any data you wish to be passed to the callback.
- * @position: the number of widgets to insert this item after.
- *
- * Inserts a new item into the toolbar. You must specify the position in the
- * toolbar where it will be inserted.
- *
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar item as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget *
-gtk_toolbar_insert_item (GtkToolbar    *toolbar,
-			 const char    *text,
-			 const char    *tooltip_text,
-			 const char    *tooltip_private_text,
-			 GtkWidget     *icon,
-			 GCallback      callback,
-			 gpointer       user_data,
-			 gint           position)
-{
-  return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
-				     NULL, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data,
-				     position);
-}
-
-/**
- * gtk_toolbar_insert_stock:
- * @toolbar: A #GtkToolbar
- * @stock_id: The id of the stock item you want to insert
- * @tooltip_text: The text in the tooltip of the toolbar button
- * @tooltip_private_text: The private text of the tooltip
- * @callback: The callback called when the toolbar button is clicked.
- * @user_data: user data passed to callback
- * @position: The position the button shall be inserted at.
- *            -1 means at the end.
- *
- * Inserts a stock item at the specified position of the toolbar.  If
- * @stock_id is not a known stock item ID, it's inserted verbatim,
- * except that underscores used to mark mnemonics are removed.
- *
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Returns: the inserted widget
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- */
-GtkWidget*
-gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
-			  const gchar     *stock_id,
-			  const char      *tooltip_text,
-			  const char      *tooltip_private_text,
-			  GCallback        callback,
-			  gpointer         user_data,
-			  gint             position)
-{
-  return internal_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
-				  NULL, stock_id,
-				  tooltip_text, tooltip_private_text,
-				  NULL, callback, user_data,
-				  position, TRUE);
-}
-
-/**
- * gtk_toolbar_append_space:
- * @toolbar: a #GtkToolbar.
- *
- * Adds a new space to the end of the toolbar.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_append_space (GtkToolbar *toolbar)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_SPACE,
-			      NULL, NULL,
-			      NULL, NULL,
-			      NULL, NULL, NULL,
-			      toolbar->num_children);
-}
-
-/**
- * gtk_toolbar_prepend_space:
- * @toolbar: a #GtkToolbar.
- *
- * Adds a new space to the beginning of the toolbar.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_prepend_space (GtkToolbar *toolbar)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_SPACE,
-			      NULL, NULL,
-			      NULL, NULL,
-			      NULL, NULL, NULL,
-			      0);
-}
-
-/**
- * gtk_toolbar_insert_space:
- * @toolbar: a #GtkToolbar
- * @position: the number of widgets after which a space should be inserted.
- *
- * Inserts a new space in the toolbar at the specified position.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_insert_space (GtkToolbar *toolbar,
-			  gint        position)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_SPACE,
-			      NULL, NULL,
-			      NULL, NULL,
-			      NULL, NULL, NULL,
-			      position);
-}
-
-/**
- * gtk_toolbar_remove_space:
- * @toolbar: a #GtkToolbar.
- * @position: the index of the space to remove.
- *
- * Removes a space from the specified position.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_remove_space (GtkToolbar *toolbar,
-			  gint        position)
-{
-  GtkToolbarPrivate *priv;
-  ToolbarContent *content;
-  
-  g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
-  
-  if (!gtk_toolbar_check_old_api (toolbar))
-    return;
-  
-  priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  content = g_list_nth_data (priv->content, position);
-  
-  if (!content)
-    {
-      g_warning ("Toolbar position %d doesn't exist", position);
-      return;
-    }
-  
-  if (!toolbar_content_is_separator (content))
-    {
-      g_warning ("Toolbar position %d is not a space", position);
-      return;
-    }
-  
-  toolbar_content_remove (content, toolbar);
-  toolbar_content_free (content);
-}
-
-/**
- * gtk_toolbar_append_widget:
- * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar.
- * @tooltip_text: (allow-none): the element's tooltip.
- * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
- *
- * Adds a widget to the end of the given toolbar.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_append_widget (GtkToolbar  *toolbar,
-			   GtkWidget   *widget,
-			   const gchar *tooltip_text,
-			   const gchar *tooltip_private_text)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_WIDGET,
-			      widget, NULL,
-			      tooltip_text, tooltip_private_text,
-			      NULL, NULL, NULL,
-			      toolbar->num_children);
-}
-
-/**
- * gtk_toolbar_prepend_widget:
- * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar.
- * @tooltip_text: (allow-none): the element's tooltip.
- * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
- *
- * Adds a widget to the beginning of the given toolbar.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-void
-gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
-			    GtkWidget   *widget,
-			    const gchar *tooltip_text,
-			    const gchar *tooltip_private_text)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_WIDGET,
-			      widget, NULL,
-			      tooltip_text, tooltip_private_text,
-			      NULL, NULL, NULL,
-			      0);
-}
-
-/**
- * gtk_toolbar_insert_widget:
- * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar.
- * @tooltip_text: (allow-none): the element's tooltip.
- * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
- * @position: the number of widgets to insert this widget after.
- *
- * Inserts a widget in the toolbar at the given position.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/ 
-void
-gtk_toolbar_insert_widget (GtkToolbar *toolbar,
-			   GtkWidget  *widget,
-			   const char *tooltip_text,
-			   const char *tooltip_private_text,
-			   gint        position)
-{
-  gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_WIDGET,
-			      widget, NULL,
-			      tooltip_text, tooltip_private_text,
-			      NULL, NULL, NULL,
-			      position);
-}
-
-/**
- * gtk_toolbar_append_element:
- * @toolbar: a #GtkToolbar.
- * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: (allow-none): a #GtkWidget, or %NULL.
- * @text: the element's label.
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * @icon: a #GtkWidget that provides pictorial representation of the element's function.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: any data you wish to pass to the callback.
- * 
- * Adds a new element to the end of a toolbar.
- * 
- * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
- * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
- * the radio group for the new element. In all other cases, @widget must
- * be %NULL.
- * 
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar element as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget*
-gtk_toolbar_append_element (GtkToolbar          *toolbar,
-			    GtkToolbarChildType  type,
-			    GtkWidget           *widget,
-			    const char          *text,
-			    const char          *tooltip_text,
-			    const char          *tooltip_private_text,
-			    GtkWidget           *icon,
-			    GCallback            callback,
-			    gpointer             user_data)
-{
-  return gtk_toolbar_insert_element (toolbar, type, widget, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data,
-				     toolbar->num_children);
-}
-
-/**
- * gtk_toolbar_prepend_element:
- * @toolbar: a #GtkToolbar.
- * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: (allow-none): a #GtkWidget, or %NULL
- * @text: the element's label.
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * @icon: a #GtkWidget that provides pictorial representation of the element's function.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: any data you wish to pass to the callback.
- *  
- * Adds a new element to the beginning of a toolbar.
- * 
- * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
- * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
- * the radio group for the new element. In all other cases, @widget must
- * be %NULL.
- * 
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar element as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget *
-gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
-			     GtkToolbarChildType  type,
-			     GtkWidget           *widget,
-			     const char          *text,
-			     const char          *tooltip_text,
-			     const char          *tooltip_private_text,
-			     GtkWidget           *icon,
-			     GCallback            callback,
-			     gpointer             user_data)
-{
-  return gtk_toolbar_insert_element (toolbar, type, widget, text,
-				     tooltip_text, tooltip_private_text,
-				     icon, callback, user_data, 0);
-}
-
-/**
- * gtk_toolbar_insert_element:
- * @toolbar: a #GtkToolbar.
- * @type: a value of type #GtkToolbarChildType that determines what @widget
- *   will be.
- * @widget: (allow-none): a #GtkWidget, or %NULL. 
- * @text: the element's label.
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * @icon: a #GtkWidget that provides pictorial representation of the element's function.
- * @callback: the function to be executed when the button is pressed.
- * @user_data: any data you wish to pass to the callback.
- * @position: the number of widgets to insert this element after.
- *
- * Inserts a new element in the toolbar at the given position. 
- *
- * If @type == %GTK_TOOLBAR_CHILD_WIDGET, @widget is used as the new element.
- * If @type == %GTK_TOOLBAR_CHILD_RADIOBUTTON, @widget is used to determine
- * the radio group for the new element. In all other cases, @widget must
- * be %NULL.
- *
- * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use G_CALLBACK() to cast the function to #GCallback.
- *
- * Return value: the new toolbar element as a #GtkWidget.
- *
- * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
- **/
-GtkWidget *
-gtk_toolbar_insert_element (GtkToolbar          *toolbar,
-			    GtkToolbarChildType  type,
-			    GtkWidget           *widget,
-			    const char          *text,
-			    const char          *tooltip_text,
-			    const char          *tooltip_private_text,
-			    GtkWidget           *icon,
-			    GCallback            callback,
-			    gpointer             user_data,
-			    gint                 position)
-{
-  return internal_insert_element (toolbar, type, widget, text,
-				  tooltip_text, tooltip_private_text,
-				  icon, callback, user_data, position, FALSE);
 }
 
 static void
@@ -3879,8 +3316,7 @@ internal_insert_element (GtkToolbar          *toolbar,
   
   if ((type != GTK_TOOLBAR_CHILD_SPACE) && tooltip_text)
     {
-      gtk_tooltips_set_tip (toolbar->tooltips, child_widget,
-			    tooltip_text, tooltip_private_text);
+      gtk_widget_set_tooltip_text (child_widget, tooltip_text);
     }
   
   content = toolbar_content_new_compatibility (toolbar, type, child_widget,
