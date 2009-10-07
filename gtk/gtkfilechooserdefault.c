@@ -5440,10 +5440,6 @@ gtk_file_chooser_default_set_property (GObject      *object,
       }
       break;
 
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
-      /* Ignore property */
-      break;
-
     case GTK_FILE_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
       break;
