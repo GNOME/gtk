@@ -865,25 +865,6 @@ gtk_about_dialog_show (GtkWidget *widget)
 }
 
 /**
- * gtk_about_dialog_get_name:
- * @about: a #GtkAboutDialog
- *
- * Returns the program name displayed in the about dialog.
- *
- * Return value: The program name. The string is owned by the about
- *  dialog and must not be modified.
- *
- * Since: 2.6
- *
- * Deprecated: 2.12: Use gtk_about_dialog_get_program_name() instead.
- */
-G_CONST_RETURN gchar *
-gtk_about_dialog_get_name (GtkAboutDialog *about)
-{
-  return gtk_about_dialog_get_program_name (about);
-}
-
-/**
  * gtk_about_dialog_get_program_name:
  * @about: a #GtkAboutDialog
  *
@@ -928,25 +909,6 @@ update_name_version (GtkAboutDialog *about)
   gtk_label_set_markup (GTK_LABEL (priv->name_label), name_string);
 
   g_free (name_string);
-}
-
-/**
- * gtk_about_dialog_set_name:
- * @about: a #GtkAboutDialog
- * @name: (allow-none): the program name
- *
- * Sets the name to display in the about dialog.
- * If this is not set, it defaults to g_get_application_name().
- *
- * Since: 2.6
- *
- * Deprecated: 2.12: Use gtk_about_dialog_set_program_name() instead.
- */
-void
-gtk_about_dialog_set_name (GtkAboutDialog *about,
-                           const gchar    *name)
-{
-    gtk_about_dialog_set_program_name (about, name);
 }
 
 /**
