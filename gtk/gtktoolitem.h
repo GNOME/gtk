@@ -86,13 +86,6 @@ gboolean        gtk_tool_item_get_homogeneous          (GtkToolItem *tool_item);
 void            gtk_tool_item_set_expand               (GtkToolItem *tool_item,
 							gboolean     expand);
 gboolean        gtk_tool_item_get_expand               (GtkToolItem *tool_item);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void            gtk_tool_item_set_tooltip              (GtkToolItem *tool_item,
-							GtkTooltips *tooltips,
-							const gchar *tip_text,
-							const gchar *tip_private);
-#endif /* GTK_DISABLE_DEPRECATED */
 void            gtk_tool_item_set_tooltip_text         (GtkToolItem *tool_item,
 							const gchar *text);
 void            gtk_tool_item_set_tooltip_markup       (GtkToolItem *tool_item,
