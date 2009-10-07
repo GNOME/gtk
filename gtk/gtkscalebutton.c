@@ -707,46 +707,6 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 }
 
 /**
- * gtk_scale_button_get_orientation:
- * @button: a #GtkScaleButton
- *
- * Gets the orientation of the #GtkScaleButton's popup window.
- *
- * Returns: the #GtkScaleButton's orientation.
- *
- * Since: 2.14
- *
- * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
- **/
-GtkOrientation
-gtk_scale_button_get_orientation (GtkScaleButton *button)
-{
-  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), GTK_ORIENTATION_VERTICAL);
-
-  return button->priv->orientation;
-}
-
-/**
- * gtk_scale_button_set_orientation:
- * @button: a #GtkScaleButton
- * @orientation: the new orientation
- *
- * Sets the orientation of the #GtkScaleButton's popup window.
- *
- * Since: 2.14
- *
- * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
- **/
-void
-gtk_scale_button_set_orientation (GtkScaleButton *button,
-                                  GtkOrientation  orientation)
-{
-  g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
-
-  gtk_scale_button_set_orientation_private (button, orientation);
-}
-
-/**
  * gtk_scale_button_get_plus_button:
  * @button: a #GtkScaleButton
  *
