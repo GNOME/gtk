@@ -534,42 +534,6 @@ gtk_layout_get_size (GtkLayout *layout,
     *height = layout->height;
 }
 
-/**
- * gtk_layout_freeze:
- * @layout: a #GtkLayout
- * 
- * This is a deprecated function, it doesn't do anything useful.
- **/
-void
-gtk_layout_freeze (GtkLayout *layout)
-{
-  g_return_if_fail (GTK_IS_LAYOUT (layout));
-
-  layout->freeze_count++;
-}
-
-/**
- * gtk_layout_thaw:
- * @layout: a #GtkLayout
- * 
- * This is a deprecated function, it doesn't do anything useful.
- **/
-void
-gtk_layout_thaw (GtkLayout *layout)
-{
-  g_return_if_fail (GTK_IS_LAYOUT (layout));
-
-  if (layout->freeze_count)
-    {
-      if (!(--layout->freeze_count))
-	{
-	  gtk_widget_queue_draw (GTK_WIDGET (layout));
-	  gdk_window_process_updates (GTK_WIDGET (layout)->window, TRUE);
-	}
-    }
-
-}
-
 /* Basic Object handling procedures
  */
 static void

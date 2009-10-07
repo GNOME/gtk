@@ -119,20 +119,6 @@ void           gtk_layout_set_hadjustment (GtkLayout     *layout,
 void           gtk_layout_set_vadjustment (GtkLayout     *layout,
 					   GtkAdjustment *adjustment);
 
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* These disable and enable moving and repainting the scrolling window
- * of the GtkLayout, respectively.  If you want to update the layout's
- * offsets but do not want it to repaint itself, you should use these
- * functions.
- *
- * - I don't understand these are supposed to work, so I suspect
- * - they don't now.                    OWT 1/20/98
- */
-void           gtk_layout_freeze          (GtkLayout     *layout);
-void           gtk_layout_thaw            (GtkLayout     *layout);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* __GTK_LAYOUT_H__ */
