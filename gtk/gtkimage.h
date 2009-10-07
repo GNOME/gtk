@@ -258,17 +258,6 @@ void       gtk_image_get_gicon     (GtkImage              *image,
 				    GtkIconSize           *size);
 gint       gtk_image_get_pixel_size (GtkImage             *image);
 
-#ifndef GTK_DISABLE_DEPRECATED
-/* These three are deprecated */
-
-void       gtk_image_set      (GtkImage   *image,
-			       GdkImage   *val,
-			       GdkBitmap  *mask);
-void       gtk_image_get      (GtkImage   *image,
-			       GdkImage  **val,
-			       GdkBitmap **mask);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* __GTK_IMAGE_H__ */
