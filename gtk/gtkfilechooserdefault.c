@@ -4927,8 +4927,6 @@ location_button_create (GtkFileChooserDefault *impl)
   impl->location_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
 					"image", image,
 					NULL);
-  
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->location_button);
 
   g_signal_connect (impl->location_button, "toggled",
 		    G_CALLBACK (location_button_toggled_cb), impl);
@@ -4965,6 +4963,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   location_button_create (impl);
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->location_button, FALSE, FALSE, 0);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->location_button);
 
   /* Path bar */
 
@@ -4972,6 +4971,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   g_signal_connect (impl->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->browse_path_bar);
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->browse_path_bar, TRUE, TRUE, 0);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->browse_path_bar);
 
   /* Create Folder */
   impl->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
@@ -8847,7 +8847,6 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   /* Image */
 
   image = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_BUTTON);
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (impl->browse_path_bar_size_group), image);
   gtk_box_pack_start (GTK_BOX (impl->search_hbox), image, FALSE, FALSE, 5);
 
   /* Label */
@@ -8892,6 +8891,7 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   /* Box for search widgets */
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->search_hbox, TRUE, TRUE, 0);
   gtk_widget_show_all (impl->search_hbox);
+  gtk_size_group_add_widget (GTK_SIZE_GROUP (impl->browse_path_bar_size_group), impl->search_hbox);
 
   /* Hide the location widgets temporarily */
 
@@ -9273,10 +9273,9 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   gchar *tmp;
 
   impl->recent_hbox = gtk_hbox_new (FALSE, 12);
-  
+
   /* Image */
   image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);
-  gtk_size_group_add_widget (impl->browse_path_bar_size_group, image);
   gtk_box_pack_start (GTK_BOX (impl->recent_hbox), image, FALSE, FALSE, 5);
 
   /* Label */
@@ -9291,6 +9290,7 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   
   /* Box for recent widgets */
   gtk_box_pack_start (GTK_BOX (impl->browse_path_bar_hbox), impl->recent_hbox, TRUE, TRUE, 0);
+  gtk_size_group_add_widget (impl->browse_path_bar_size_group, impl->recent_hbox);
   gtk_widget_show_all (impl->recent_hbox);
 
   /* Hide the location widgets temporarily */
