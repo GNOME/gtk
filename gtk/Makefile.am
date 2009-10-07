@@ -633,53 +633,16 @@ gtk_base_c_sources =            \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources)
 
-# Broken
-gtk_public_h_sources += \
-	gtktext.h		\
-	gtktree.h		\
-	gtktreeitem.h
-gtk_base_c_sources += \
-	gtktext.c		\
-	gtktree.c		\
-	gtktreeitem.c
-
 # Deprecated
 gtk_public_h_sources += \
-	gtkclist.h		\
-	gtkcombo.h		\
-	gtkctree.h		\
-	gtkcurve.h		\
-	gtkfilesel.h		\
-	gtkgamma.h		\
-	gtkinputdialog.h	\
-	gtkitemfactory.h	\
-	gtklist.h		\
-	gtklistitem.h		\
-	gtkoldeditable.h	\
-	gtkoptionmenu.h		\
 	gtkpixmap.h		\
-	gtkpreview.h		\
 	gtkprogress.h		\
 	gtksignal.h		\
-	gtktipsquery.h		\
 	gtktooltips.h
 gtk_base_c_sources += \
-	gtkclist.c		\
-	gtkcombo.c		\
-	gtkctree.c		\
-	gtkcurve.c		\
-	gtkfilesel.c		\
-	gtkgamma.c		\
-	gtkitemfactory.c	\
-	gtklist.c		\
-	gtklistitem.c		\
-	gtkoldeditable.c	\
-	gtkoptionmenu.c		\
 	gtkpixmap.c		\
-	gtkpreview.c		\
 	gtkprogress.c		\
 	gtksignal.c		\
-	gtktipsquery.c		\
 	gtktooltips.c
 
 gtk_c_sources = $(gtk_base_c_sources)
