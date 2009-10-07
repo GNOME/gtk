@@ -135,29 +135,6 @@ create_socket (void)
 }
 
 void
-steal (GtkWidget *window, GtkEntry *entry)
-{
-  guint32 xid;
-  const gchar *text;
-  Socket *socket;
-
-  text = gtk_entry_get_text (entry);
-
-  xid = strtol (text, NULL, 0);
-  if (xid == 0)
-    {
-      g_warning ("Invalid window id '%s'\n", text);
-      return;
-    }
-
-  socket = create_socket ();
-  gtk_box_pack_start (GTK_BOX (box), socket->box, TRUE, TRUE, 0);
-  gtk_widget_show (socket->box);
-
-  gtk_socket_steal (GTK_SOCKET (socket->socket), xid);
-}
-
-void
 remove_child (GtkWidget *window)
 {
   if (sockets)
@@ -407,13 +384,6 @@ main (int argc, char *argv[])
 
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX(hbox), entry, FALSE, FALSE, 0);
-
-  button = gtk_button_new_with_label ("Steal");
-  gtk_box_pack_start (GTK_BOX(hbox), button, FALSE, FALSE, 0);
-
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (steal),
-		    entry);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
