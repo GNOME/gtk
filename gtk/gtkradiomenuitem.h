@@ -85,10 +85,6 @@ GSList*    gtk_radio_menu_item_get_group                     (GtkRadioMenuItem *
 void       gtk_radio_menu_item_set_group                     (GtkRadioMenuItem *radio_menu_item,
 							      GSList           *group);
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_radio_menu_item_group gtk_radio_menu_item_get_group
-#endif
-
 G_END_DECLS
 
 #endif /* __GTK_RADIO_MENU_ITEM_H__ */
