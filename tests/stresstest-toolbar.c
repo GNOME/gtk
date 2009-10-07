@@ -35,7 +35,8 @@ add_random (GtkToolbar *toolbar, gint n)
   gint position;
   gchar *label = g_strdup_printf ("Button %d", n);
 
-  GtkWidget *widget = gtk_button_new_with_label (label);
+  GtkWidget *widget = gtk_tool_button_new (NULL, label);
+  gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (widget), "Bar");
 
   g_free (label);
   gtk_widget_show_all (widget);
@@ -45,7 +46,7 @@ add_random (GtkToolbar *toolbar, gint n)
   else
     position = g_random_int_range (0, g_list_length (toolbar->children));
 
-  gtk_toolbar_insert_widget (toolbar, widget, "Bar", "Baz", position);
+  gtk_toolbar_insert (toolbar, widget, position);
 }
 
 static void

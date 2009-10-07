@@ -146,27 +146,6 @@ void               gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
 PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
 
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-/* Everything below here is deprecated */
-GtkWidget* gtk_progress_bar_new_with_adjustment  (GtkAdjustment  *adjustment);
-void       gtk_progress_bar_set_bar_style        (GtkProgressBar *pbar,
-						  GtkProgressBarStyle style);
-void       gtk_progress_bar_set_discrete_blocks  (GtkProgressBar *pbar,
-						  guint           blocks);
-/* set_activity_step() is not only deprecated, it doesn't even work.
- * (Of course, it wasn't usable anyway, you had to set it from a size_allocate
- * handler or something)
- */
-void       gtk_progress_bar_set_activity_step    (GtkProgressBar *pbar,
-                                                  guint           step);
-void       gtk_progress_bar_set_activity_blocks  (GtkProgressBar *pbar,
-						  guint           blocks);
-void       gtk_progress_bar_update               (GtkProgressBar *pbar,
-						  gdouble         percentage);
-
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* __GTK_PROGRESS_BAR_H__ */
