@@ -192,24 +192,6 @@ struct _GtkAccelGroupEntry
 };
 
 
-#ifndef GTK_DISABLE_DEPRECATED
-/**
- * gtk_accel_group_ref:
- * 
- * Deprecated equivalent of g_object_ref().
- * 
- * Returns: the accel group that was passed in
- */
-#define	gtk_accel_group_ref	g_object_ref
-
-/**
- * gtk_accel_group_unref:
- * 
- * Deprecated equivalent of g_object_unref().
- */
-#define	gtk_accel_group_unref	g_object_unref
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 
