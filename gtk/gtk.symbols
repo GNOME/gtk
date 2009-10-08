@@ -591,9 +591,6 @@ gtk_cell_layout_set_cell_data_func
 #if IN_HEADER(__GTK_CELL_RENDERER_H__)
 #if IN_FILE(__GTK_CELL_RENDERER_C__)
 gtk_cell_renderer_activate
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_cell_renderer_editing_canceled
-#endif
 gtk_cell_renderer_get_alignment
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_get_padding

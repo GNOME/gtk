@@ -183,11 +183,8 @@ void             gtk_cell_renderer_set_sensitive  (GtkCellRenderer      *cell,
 gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 
 /* For use by cell renderer implementations only */
-#ifndef GTK_DISABLE_DEPRECATED
-void gtk_cell_renderer_editing_canceled (GtkCellRenderer *cell);
-#endif
-void gtk_cell_renderer_stop_editing     (GtkCellRenderer *cell,
-				         gboolean         canceled);
+void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,
+                                                   gboolean              canceled);
 
 
 G_END_DECLS
