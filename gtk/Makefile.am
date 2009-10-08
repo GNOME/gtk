@@ -947,7 +947,41 @@ LDADDS =								\
 bin_PROGRAMS = \
 	gtk-query-immodules-2.0 \
 	gtk-update-icon-cache
+
 bin_SCRIPTS = gtk-builder-convert
+
+if OS_WIN32
+
+# Workaround for UAC silliness: programs with "update" in their name
+# are believed to be installers and require elevated privileges to be
+# used... Use a manifest file to tell Windows that
+# gtk-update-icon-cache.exe doesn't require any special privileges.
+
+GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
+
+bin_SCRIPTS += \
+	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
+
+gtk-update-icon-cache.exe.manifest:
+	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
+	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
+	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
+	 echo '     processorArchitecture="'$(LIB_EXE_MACHINE_FLAG)'"' ; \
+	 echo '     name="gtk-update-icon-cache.exe"' ; \
+	 echo '     type="win32"/>' ; \
+	 echo '  <!-- Identify the application security requirements. -->' ; \
+	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
+	 echo '    <security>' ; \
+	 echo '      <requestedPrivileges>' ; \
+	 echo '        <requestedExecutionLevel' ; \
+	 echo '          level="asInvoker"' ; \
+	 echo '          uiAccess="false"/>' ; \
+	 echo '        </requestedPrivileges>' ; \
+	 echo '       </security>' ; \
+	 echo '  </trustInfo>' ; \
+	 echo '</assembly>' ) >$@
+
+endif
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS)
@@ -1267,7 +1301,7 @@ gtk_update_icon_cache_program =							\
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
-	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
+	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
