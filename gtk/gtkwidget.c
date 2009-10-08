@@ -3757,39 +3757,6 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_draw:
- * @widget: a #GtkWidget
- * @area: area to draw
- *
- * In GTK+ 1.2, this function would immediately render the
- * region @area of a widget, by invoking the virtual draw method of a
- * widget. In GTK+ 2.0, the draw method is gone, and instead
- * gtk_widget_draw() simply invalidates the specified region of the
- * widget, then updates the invalid region of the widget immediately.
- * Usually you don't want to update the region immediately for
- * performance reasons, so in general gtk_widget_queue_draw_area() is
- * a better choice if you want to draw a region of a widget.
- **/
-void
-gtk_widget_draw (GtkWidget          *widget,
-		 const GdkRectangle *area)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      if (area)
-        gtk_widget_queue_draw_area (widget,
-                                    area->x, area->y,
-                                    area->width, area->height);
-      else
-        gtk_widget_queue_draw (widget);
-
-      gdk_window_process_updates (widget->window, TRUE);
-    }
-}
-
-/**
  * gtk_widget_size_request:
  * @widget: a #GtkWidget
  * @requisition: a #GtkRequisition to be filled in
@@ -7772,76 +7739,6 @@ gtk_widget_error_bell (GtkWidget *widget)
 
   if (beep && widget->window)
     gdk_window_beep (widget->window);
-}
-
-/**
- * gtk_widget_set_uposition:
- * @widget: a #GtkWidget
- * @x: x position; -1 to unset x; -2 to leave x unchanged
- * @y: y position; -1 to unset y; -2 to leave y unchanged
- * 
- *
- * Sets the position of a widget. The funny "u" in the name comes from
- * the "user position" hint specified by the X Window System, and
- * exists for legacy reasons. This function doesn't work if a widget
- * is inside a container; it's only really useful on #GtkWindow.
- *
- * Don't use this function to center dialogs over the main application
- * window; most window managers will do the centering on your behalf
- * if you call gtk_window_set_transient_for(), and it's really not
- * possible to get the centering to work correctly in all cases from
- * application code. But if you insist, use gtk_window_set_position()
- * to set #GTK_WIN_POS_CENTER_ON_PARENT, don't do the centering
- * manually.
- *
- * Note that although @x and @y can be individually unset, the position
- * is not honoured unless both @x and @y are set.
- **/
-void
-gtk_widget_set_uposition (GtkWidget *widget,
-			  gint	     x,
-			  gint	     y)
-{
-  /* FIXME this function is the only place that aux_info->x and
-   * aux_info->y are even used I believe, and this function is
-   * deprecated. Should be cleaned up.
-   *
-   * (Actually, size_allocate uses them) -Yosh
-   */
-  
-  GtkWidgetAuxInfo *aux_info;
-  
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
-  
-  if (x > -2)
-    {
-      if (x == -1)
-	aux_info->x_set = FALSE;
-      else
-	{
-	  aux_info->x_set = TRUE;
-	  aux_info->x = x;
-	}
-    }
-
-  if (y > -2)
-    {
-      if (y == -1)
-	aux_info->y_set = FALSE;
-      else
-	{
-	  aux_info->y_set = TRUE;
-	  aux_info->y = y;
-	}
-    }
-
-  if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
-    _gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
-  
-  if (gtk_widget_get_visible (widget) && widget->parent)
-    gtk_widget_size_allocate (widget, &widget->allocation);
 }
 
 static void

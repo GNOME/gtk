@@ -860,10 +860,6 @@ void	   gtk_widget_queue_draw_area	  (GtkWidget	       *widget,
 					   gint                 height);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_widget_draw		  (GtkWidget	       *widget,
-					   const GdkRectangle  *area);
-#endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
@@ -1011,12 +1007,6 @@ void       gtk_widget_set_size_request    (GtkWidget           *widget,
 void       gtk_widget_get_size_request    (GtkWidget           *widget,
                                            gint                *width,
                                            gint                *height);
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,
-					   gint			x,
-					   gint			y);
-#endif
-
 void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,
@@ -1040,42 +1030,6 @@ GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 					  GdkAtom    selection);
 GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
                                           GdkRectangle *clip_rect);
-
-#ifndef GTK_DISABLE_DEPRECATED
-
-/**
- * gtk_widget_set_visual:
- * @widget: a #GtkWidget
- * @visual: a visual
- *
- * This function is deprecated; it does nothing.
- */
-#define gtk_widget_set_visual(widget,visual)  ((void) 0)
-
-/**
- * gtk_widget_push_visual:
- * @visual: a visual
- *
- * This function is deprecated; it does nothing.
- */
-#define gtk_widget_push_visual(visual)        ((void) 0)
-
-/**
- * gtk_widget_pop_visual:
- *
- * This function is deprecated; it does nothing.
- */
-#define gtk_widget_pop_visual()               ((void) 0)
-
-/**
- * gtk_widget_set_default_visual:
- * @visual: a visual
- *
- * This function is deprecated; it does nothing.
- */
-#define gtk_widget_set_default_visual(visual) ((void) 0)
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
@@ -1141,29 +1095,6 @@ void        gtk_widget_modify_font        (GtkWidget            *widget,
 void        gtk_widget_modify_symbolic_color (GtkWidget         *widget,
                                            const gchar          *name,
                                            const GdkColor       *color);
-
-#ifndef GTK_DISABLE_DEPRECATED
-
-/**
- * gtk_widget_set_rc_style:
- * @widget: a #GtkWidget.
- *
- * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
- *
- * Deprecated: 2.0: Use gtk_widget_set_style() with a %NULL @style argument instead.
- */
-#define gtk_widget_set_rc_style(widget)          (gtk_widget_set_style (widget, NULL))
-
-/**
- * gtk_widget_restore_default_style:
- * @widget: a #GtkWidget.
- *
- * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
- *
- * Deprecated: 2.0: Use gtk_widget_set_style() with a %NULL @style argument instead.
- */
-#define gtk_widget_restore_default_style(widget) (gtk_widget_set_style (widget, NULL))
-#endif
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
