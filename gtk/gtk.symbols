@@ -142,21 +142,12 @@ gtk_accessible_get_widget
 #if IN_FILE(__GTK_ACTION_C__)
 gtk_action_activate
 gtk_action_block_activate
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_action_block_activate_from
-#endif
 gtk_action_connect_accelerator
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_action_connect_proxy
-#endif
 gtk_action_create_icon
 gtk_action_create_menu_item
 gtk_action_create_tool_item
 gtk_action_create_menu
 gtk_action_disconnect_accelerator
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_action_disconnect_proxy
-#endif
 gtk_action_get_always_show_image
 gtk_action_get_accel_closure
 gtk_action_get_accel_path
@@ -164,9 +155,6 @@ gtk_action_get_gicon
 gtk_action_get_label
 gtk_action_get_name
 gtk_action_get_proxies
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_widget_get_action
-#endif
 gtk_action_get_icon_name
 gtk_action_get_is_important
 gtk_action_get_sensitive
@@ -195,9 +183,6 @@ gtk_action_set_visible
 gtk_action_set_visible_horizontal
 gtk_action_set_visible_vertical
 gtk_action_unblock_activate
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_action_unblock_activate_from
-#endif
 #endif
 #endif
 
