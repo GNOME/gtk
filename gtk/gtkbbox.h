@@ -76,43 +76,6 @@ void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
 						      GtkWidget         *child,
 						      gboolean           is_secondary);
 
-#ifndef GTK_DISABLE_DEPRECATED
-/**
- * gtk_button_box_set_spacing:
- * @b: a #GtkButtonBox
- * @s: the number of pixels of spacing
- *
- * Sets the amount of spacing between buttons in a given button box.
- *
- * Deprecated: Use gtk_box_set_spacing() instead.
- */
-#define gtk_button_box_set_spacing(b,s) gtk_box_set_spacing (GTK_BOX (b), s)
-
-/**
- * gtk_button_box_get_spacing:
- * @b: a #GtkButtonBox
- *
- * Retrieves how much space a button box is placing between each child button.
- *
- * Deprecated: Use gtk_box_get_spacing() instead.
- * Returns: the current spacing applied to the buttons in @widget
- */
-#define gtk_button_box_get_spacing(b)   gtk_box_get_spacing (GTK_BOX (b))
-
-void gtk_button_box_set_child_size     (GtkButtonBox *widget,
-					gint          min_width,
-					gint          min_height);
-void gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
-					gint          ipad_x,
-					gint          ipad_y);
-void gtk_button_box_get_child_size     (GtkButtonBox *widget,
-					gint         *min_width,
-					gint         *min_height);
-void gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
-					gint         *ipad_x,
-					gint         *ipad_y);
-#endif
-
 /* Internal method - do not use. */
 void _gtk_button_box_child_requisition (GtkWidget *widget,
 					int       *nvis_children,
