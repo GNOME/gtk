@@ -686,7 +686,9 @@ do_post_parse_initialization (int    *argc,
 
   gettext_initialization ();
 
+#ifdef SIGPIPE
   signal (SIGPIPE, SIG_IGN);
+#endif
 
   if (g_fatal_warnings)
     {
