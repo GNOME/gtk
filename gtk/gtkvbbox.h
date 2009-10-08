@@ -63,20 +63,11 @@ struct _GtkVButtonBoxClass
 GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_vbutton_box_new      (void);
 
-/* buttons can be added by gtk_container_add() */
-
-#ifndef GTK_DISABLE_DEPRECATED
-gint gtk_vbutton_box_get_spacing_default (void);
-void gtk_vbutton_box_set_spacing_default (gint spacing);
-
-GtkButtonBoxStyle gtk_vbutton_box_get_layout_default (void);
-void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout);
-#endif
 
 /* private API */
 GtkButtonBoxStyle _gtk_vbutton_box_get_layout_default (void);
 
-G_END_DECLS
 
+G_END_DECLS
 
 #endif /* __GTK_VBBOX_H__ */

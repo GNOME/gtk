@@ -85,68 +85,6 @@ gtk_vbutton_box_new (void)
   return g_object_new (GTK_TYPE_VBUTTON_BOX, NULL);
 }
 
-/**
- * gtk_vbutton_box_set_spacing_default:
- * @spacing: an integer value.
- *
- * Changes the default spacing that is placed between widgets in an
- * vertical button box.
- *
- * Deprecated: 2.0: Use gtk_box_set_spacing() instead.
- */
-void
-gtk_vbutton_box_set_spacing_default (gint spacing)
-{
-  default_spacing = spacing;
-}
-
-/**
- * gtk_vbutton_box_set_layout_default:
- * @layout: a new #GtkButtonBoxStyle.
- *
- * Sets a new layout mode that will be used by all button boxes.
- *
- * Deprecated: 2.0: Use gtk_button_box_set_layout() instead.
- */
-void
-gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
-{
-  g_return_if_fail (layout >= GTK_BUTTONBOX_DEFAULT_STYLE &&
-		    layout <= GTK_BUTTONBOX_CENTER);
-
-  default_layout_style = layout;
-}
-
-/**
- * gtk_vbutton_box_get_spacing_default:
- *
- * Retrieves the current default spacing for vertical button boxes. This is the number of pixels
- * to be placed between the buttons when they are arranged.
- *
- * Returns: the default number of pixels between buttons.
- *
- * Deprecated: 2.0: Use gtk_box_get_spacing() instead.
- */
-gint
-gtk_vbutton_box_get_spacing_default (void)
-{
-  return default_spacing;
-}
-
-/**
- * gtk_vbutton_box_get_layout_default:
- *
- * Retrieves the current layout used to arrange buttons in button box widgets.
- *
- * Returns: the current #GtkButtonBoxStyle.
- *
- * Deprecated: 2.0: Use gtk_button_box_get_layout() instead.
- */
-GtkButtonBoxStyle
-gtk_vbutton_box_get_layout_default (void)
-{
-  return default_layout_style;
-}
 
 GtkButtonBoxStyle
 _gtk_vbutton_box_get_layout_default (void)
