@@ -352,14 +352,6 @@ void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           root_y,
                                    guint32        timestamp);
 
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_window_set_policy               (GtkWindow           *window,
-						gint                 allow_shrink,
-						gint                 allow_grow,
-						gint                 auto_shrink);
-#define	gtk_window_position			gtk_window_set_position
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Set initial default size of the window (does not constrain user
  * resize operations)
  */

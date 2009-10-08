@@ -1734,17 +1734,6 @@ gtk_window_set_policy_internal (GtkWindow *window,
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
-void
-gtk_window_set_policy (GtkWindow *window,
-		       gboolean   allow_shrink,
-		       gboolean   allow_grow,
-		       gboolean   auto_shrink)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  gtk_window_set_policy_internal (window, allow_shrink, allow_grow, auto_shrink);
-}
-
 static gboolean
 handle_keys_changed (gpointer data)
 {
