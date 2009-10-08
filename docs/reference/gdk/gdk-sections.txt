@@ -1086,7 +1086,6 @@ GDK_PRIORITY_REDRAW
 gdk_events_pending
 gdk_event_peek
 gdk_event_get
-gdk_event_get_graphics_expose
 gdk_event_put
 gdk_event_new
 gdk_event_copy

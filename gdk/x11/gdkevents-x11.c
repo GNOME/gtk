@@ -295,44 +295,6 @@ graphics_expose_predicate (Display  *display,
     return False;
 }
 
-/**
- * gdk_event_get_graphics_expose:
- * @window: the #GdkWindow to wait for the events for.
- * 
- * Waits for a GraphicsExpose or NoExpose event from the X server.
- * This is used in the #GtkText and #GtkCList widgets in GTK+ to make sure any
- * GraphicsExpose events are handled before the widget is scrolled.
- *
- * Return value:  a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
- * NoExpose event was received.
- *
- * Deprecated: 2.18:
- **/
-GdkEvent*
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  XEvent xevent;
-  GdkEvent *event;
-  
-  g_return_val_if_fail (window != NULL, NULL);
-
-  XIfEvent (GDK_WINDOW_XDISPLAY (window), &xevent, 
-	    graphics_expose_predicate, (XPointer) window);
-  
-  if (xevent.xany.type == GraphicsExpose)
-    {
-      event = gdk_event_new (GDK_NOTHING);
-      
-      if (gdk_event_translate (GDK_WINDOW_DISPLAY (window), event,
-			       &xevent, TRUE))
-	return event;
-      else
-	gdk_event_free (event);
-    }
-  
-  return NULL;	
-}
-
 static gint
 gdk_event_apply_filters (XEvent *xevent,
 			 GdkEvent *event,
