@@ -258,11 +258,7 @@ gdk_pixmap_create_from_xpm
 gdk_pixmap_colormap_create_from_xpm
 gdk_pixmap_create_from_xpm_d
 gdk_pixmap_colormap_create_from_xpm_d
-gdk_pixmap_ref
-gdk_pixmap_unref
 GdkBitmap
-gdk_bitmap_ref
-gdk_bitmap_unref
 
 <SUBSECTION Standard>
 GDK_PIXMAP

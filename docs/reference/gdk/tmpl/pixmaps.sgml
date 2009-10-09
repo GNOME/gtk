@@ -118,21 +118,6 @@ for the new pixmap. Can be %NULL, if the depth is given.
 @Returns: 
 
 
-<!-- ##### MACRO gdk_pixmap_ref ##### -->
-<para>
-Deprecated equivalent of g_object_ref().
-</para>
-
-@Returns: @pixmap
-
-
-<!-- ##### MACRO gdk_pixmap_unref ##### -->
-<para>
-Deprecated equivalent of g_object_unref().
-</para>
-
-
-
 <!-- ##### TYPEDEF GdkBitmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable of depth
@@ -140,20 +125,3 @@ An opaque structure representing an offscreen drawable of depth
 #GdkWindow, can often be used interchangeably.  The type #GdkDrawable
 refers generically to any of these types.
 </para>
-
-
-<!-- ##### MACRO gdk_bitmap_ref ##### -->
-<para>
-Deprecated equivalent of g_object_ref().
-</para>
-
-@Returns: @pixmap
-
-
-<!-- ##### MACRO gdk_bitmap_unref ##### -->
-<para>
-Deprecated equivalent of g_object_unref().
-</para>
-
-
-
