@@ -4155,11 +4155,6 @@ create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
-#if 0
-      if (depth % 2)
-	gtk_check_menu_item_set_show_toggle (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-#endif
-
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       if (i == 3)

@@ -709,9 +709,6 @@ gtk_check_menu_item_new_with_mnemonic
 gtk_check_menu_item_set_active
 gtk_check_menu_item_set_draw_as_radio
 gtk_check_menu_item_set_inconsistent
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_check_menu_item_set_show_toggle
-#endif
 gtk_check_menu_item_toggled
 #endif
 #endif
