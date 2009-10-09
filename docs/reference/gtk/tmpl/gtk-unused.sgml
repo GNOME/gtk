@@ -3117,16 +3117,6 @@ the names, types, and values of the arguments).
 @packer: 
 @spacing: 
 
-<!-- ##### FUNCTION gtk_paned_compute_position ##### -->
-<para>
-Internal function used by #GtkHPaned and #GtkVPaned
-</para>
-
-@paned: 
-@allocation: 
-@child1_req: 
-@child2_req: 
-
 <!-- ##### MACRO gtk_paned_handle_size ##### -->
 <para>
 Old name for gtk_paned_set_handle_size().

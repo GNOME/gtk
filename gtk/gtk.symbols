@@ -2459,9 +2459,6 @@ gtk_paned_get_type G_GNUC_CONST
 gtk_paned_pack1
 gtk_paned_pack2
 gtk_paned_set_position
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_paned_compute_position
-#endif
 #endif
 #endif
 

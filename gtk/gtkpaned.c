@@ -1570,17 +1570,6 @@ gtk_paned_get_child2 (GtkPaned *paned)
   return paned->child2;
 }
 
-void
-gtk_paned_compute_position (GtkPaned *paned,
-			    gint      allocation,
-			    gint      child1_req,
-			    gint      child2_req)
-{
-  g_return_if_fail (GTK_IS_PANED (paned));
-
-  gtk_paned_calc_position (paned, allocation, child1_req, child2_req);
-}
-
 static void
 gtk_paned_calc_position (GtkPaned *paned,
                          gint      allocation,

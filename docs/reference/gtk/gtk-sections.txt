@@ -2845,12 +2845,10 @@ gtk_option_menu_get_type
 GtkPaned
 gtk_paned_add1
 gtk_paned_add2
-gtk_paned_gutter_size
 gtk_paned_pack1
 gtk_paned_pack2
 gtk_paned_get_child1
 gtk_paned_get_child2
-gtk_paned_set_gutter_size
 gtk_paned_set_position
 gtk_paned_get_position
 gtk_paned_get_handle_window
@@ -2864,7 +2862,6 @@ GTK_PANED_GET_CLASS
 
 <SUBSECTION Private>
 gtk_paned_get_type
-gtk_paned_compute_position
 </SECTION>
 
 <SECTION>
