@@ -85,10 +85,6 @@ GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio
 void       gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
                                                            GSList         *group);
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_radio_button_group gtk_radio_button_get_group
-#endif
-
 G_END_DECLS
 
 #endif /* __GTK_RADIO_BUTTON_H__ */
