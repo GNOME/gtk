@@ -1224,14 +1224,12 @@ gdk_drag_context_new
 gdk_drag_drop
 gdk_drag_find_window
 gdk_drag_find_window_for_screen
-gdk_drag_context_ref
 gdk_drag_begin
 gdk_drag_motion
 gdk_drop_finish
 gdk_drag_get_protocol
 gdk_drag_get_protocol_for_display
 GdkDragProtocol
-gdk_drag_context_unref
 GdkDragContext
 GdkDragAction
 gdk_drag_status

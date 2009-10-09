@@ -203,22 +203,6 @@ gdk_drag_context_new (void)
   return g_object_new (GDK_TYPE_DRAG_CONTEXT, NULL);
 }
 
-void
-gdk_drag_context_ref (GdkDragContext *context)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  g_object_ref (context);
-}
-
-void
-gdk_drag_context_unref (GdkDragContext *context)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  g_object_unref (context);
-}
-
 static GdkDragContext *
 gdk_drag_context_find (gboolean   is_source,
 		       GdkWindow *source,

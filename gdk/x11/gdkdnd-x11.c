@@ -220,38 +220,6 @@ gdk_drag_context_new (void)
   return g_object_new (GDK_TYPE_DRAG_CONTEXT, NULL);
 }
 
-/**
- * gdk_drag_context_ref:
- * @context: a #GdkDragContext.
- *
- * Deprecated function; use g_object_ref() instead.
- *
- * Deprecated: 2.2: Use g_object_ref() instead.
- **/
-void            
-gdk_drag_context_ref (GdkDragContext *context)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  g_object_ref (context);
-}
-
-/**
- * gdk_drag_context_unref:
- * @context: a #GdkDragContext.
- *
- * Deprecated function; use g_object_unref() instead.
- *
- * Deprecated: 2.2: Use g_object_unref() instead.
- **/
-void            
-gdk_drag_context_unref (GdkDragContext *context)
-{
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-
-  g_object_unref (context);
-}
-
 static GdkDragContext *
 gdk_drag_context_find (GdkDisplay *display,
 		       gboolean    is_source,

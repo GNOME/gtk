@@ -511,10 +511,6 @@ gdk_drag_abort
 gdk_drag_begin
 gdk_drag_context_get_type G_GNUC_CONST
 gdk_drag_context_new
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_drag_context_ref
-gdk_drag_context_unref
-#endif
 gdk_drag_drop
 gdk_drag_drop_succeeded
 gdk_drag_find_window_for_screen

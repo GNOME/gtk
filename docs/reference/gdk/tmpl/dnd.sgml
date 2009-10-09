@@ -91,13 +91,6 @@ the GTK+ documentation for more information.
 @protocol: 
 
 
-<!-- ##### FUNCTION gdk_drag_context_ref ##### -->
-<para>
-</para>
-
-@context: 
-
-
 <!-- ##### FUNCTION gdk_drag_begin ##### -->
 <para>
 </para>
@@ -165,13 +158,6 @@ which DND is done.
 @GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
 @GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
 @GDK_DRAG_PROTO_LOCAL: Intra-application DND.
-
-<!-- ##### FUNCTION gdk_drag_context_unref ##### -->
-<para>
-</para>
-
-@context: 
-
 
 <!-- ##### STRUCT GdkDragContext ##### -->
 <para>
