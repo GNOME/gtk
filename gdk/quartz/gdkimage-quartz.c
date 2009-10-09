@@ -224,16 +224,6 @@ gdk_image_get_type (void)
   return object_type;
 }
 
-GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint width, gint height)
-{
-  /* We don't implement this function because it's broken, deprecated and 
-   * tricky to implement. */
-  g_warning ("This function is unimplemented");
-
-  return NULL;
-}
-
 GdkImage*
 _gdk_image_new_for_depth (GdkScreen    *screen,
 			  GdkImageType  type,

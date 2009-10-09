@@ -281,11 +281,6 @@ GdkPixmapObjectClass
 GdkImage
 gdk_image_new
 GdkImageType
-gdk_image_new_bitmap
-gdk_image_get
-gdk_image_ref
-gdk_image_unref
-gdk_image_destroy
 gdk_image_get_colormap
 gdk_image_set_colormap
 

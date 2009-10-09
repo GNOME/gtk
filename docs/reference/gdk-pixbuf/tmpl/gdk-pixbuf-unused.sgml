@@ -8,12 +8,6 @@
   </para>
 
 
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
-  <para>
-    gdk_image_get().
-  </para>
-
-
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:Short_Description ##### -->
 Getting parts of a drawable's image data into a pixbuf.
 

@@ -794,11 +794,6 @@ gdk_window_configure_finished
 
 #if IN_HEADER(__GDK_IMAGE_H__)
 #if IN_FILE(__GDK_IMAGE_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_image_ref
-gdk_image_unref
-gdk_image_get
-#endif
 gdk_image_set_colormap
 gdk_image_get_colormap
 gdk_image_new
@@ -807,9 +802,6 @@ gdk_image_new
 
 #if IN_HEADER(__GDK_IMAGE_H__)
 #if IN_FILE(__GDK_IMAGE_X11_C__)
-#ifdef GDK_ENABLE_BROKEN
-gdk_image_new_bitmap
-#endif
 gdk_image_get_pixel
 gdk_image_put_pixel
 gdk_image_get_type G_GNUC_CONST
