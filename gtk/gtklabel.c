@@ -3841,6 +3841,7 @@ get_layout_index (GtkLabel *label,
   gint trailing = 0;
   const gchar *cluster;
   const gchar *cluster_end;
+  gboolean inside;
 
   *index = 0;
 
@@ -3851,24 +3852,21 @@ get_layout_index (GtkLabel *label,
   x *= PANGO_SCALE;
   y *= PANGO_SCALE;
 
-  if (pango_layout_xy_to_index (label->layout,
-                                x, y,
-                                index, &trailing))
+  inside = pango_layout_xy_to_index (label->layout,
+                                     x, y,
+                                     index, &trailing);
+
+  cluster = label->text + *index;
+  cluster_end = cluster;
+  while (trailing)
     {
-      cluster = label->text + *index;
-      cluster_end = cluster;
-      while (trailing)
-        {
-          cluster_end = g_utf8_next_char (cluster_end);
-          --trailing;
-        }
-
-      *index += (cluster_end - cluster);
-
-      return TRUE;
+      cluster_end = g_utf8_next_char (cluster_end);
+      --trailing;
     }
 
-  return FALSE;
+  *index += (cluster_end - cluster);
+
+  return inside;
 }
 
 static void
