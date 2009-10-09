@@ -144,7 +144,6 @@ GTK_IS_ACCEL_LABEL_CLASS
 GTK_ACCEL_LABEL_GET_CLASS
 <SUBSECTION Private>
 gtk_accel_label_get_type
-gtk_accel_label_accelerator_width
 </SECTION>
 
 <SECTION>

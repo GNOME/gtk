@@ -90,9 +90,6 @@ struct _GtkAccelLabelClass
   void (*_gtk_reserved4) (void);
 };
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_accel_label_accelerator_width	gtk_accel_label_get_accel_width
-#endif /* GTK_DISABLE_DEPRECATED */
 
 GType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
 GtkWidget* gtk_accel_label_new		     (const gchar   *string);
