@@ -56,8 +56,6 @@ gtk_about_dialog_get_type
 <TITLE>Keyboard Accelerators</TITLE>
 GtkAccelGroup
 gtk_accel_group_new
-gtk_accel_group_ref
-gtk_accel_group_unref
 gtk_accel_group_connect
 gtk_accel_group_connect_by_path
 GtkAccelGroupActivate
