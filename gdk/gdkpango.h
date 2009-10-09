@@ -108,10 +108,6 @@ PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
 #ifndef GDK_MULTIHEAD_SAFE
 PangoContext *gdk_pango_context_get            (void);
 #endif
-#ifndef GDK_DISABLE_DEPRECATED
-void          gdk_pango_context_set_colormap   (PangoContext *context,
-                                                GdkColormap  *colormap);
-#endif 
 
 
 /* Get a clip region to draw only part of a layout or

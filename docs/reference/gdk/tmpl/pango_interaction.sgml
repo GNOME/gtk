@@ -222,15 +222,6 @@ g_object_unref (gc);
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_pango_context_set_colormap ##### -->
-<para>
-
-</para>
-
-@context: 
-@colormap: 
-
-
 <!-- ##### STRUCT GdkPangoAttrEmbossed ##### -->
 <para>
 A Pango text attribute containing a embossed bitmap to be used when

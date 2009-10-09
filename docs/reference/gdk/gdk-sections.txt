@@ -870,7 +870,6 @@ gdk_pango_renderer_set_stipple
 gdk_pango_renderer_set_override_color
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
-gdk_pango_context_set_colormap
 GdkPangoAttrEmbossed
 GdkPangoAttrEmbossColor
 GdkPangoAttrStipple

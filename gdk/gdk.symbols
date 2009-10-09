@@ -895,9 +895,6 @@ gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_pango_context_set_colormap
-#endif
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
 gdk_pango_renderer_get_default
