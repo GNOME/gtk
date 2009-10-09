@@ -226,11 +226,6 @@ GdkGC *gdk_gc_new_with_values	  (GdkDrawable	    *drawable,
 				   GdkGCValues	    *values,
 				   GdkGCValuesMask   values_mask);
 
-#ifndef GDK_DISABLE_DEPRECATED
-GdkGC *gdk_gc_ref		  (GdkGC	    *gc);
-void   gdk_gc_unref		  (GdkGC	    *gc);
-#endif
-
 void   gdk_gc_get_values	  (GdkGC	    *gc,
 				   GdkGCValues	    *values);
 void   gdk_gc_set_values          (GdkGC           *gc,
@@ -240,10 +235,6 @@ void   gdk_gc_set_foreground	  (GdkGC	    *gc,
 				   const GdkColor   *color);
 void   gdk_gc_set_background	  (GdkGC	    *gc,
 				   const GdkColor   *color);
-#ifndef GDK_DISABLE_DEPRECATED
-void   gdk_gc_set_font		  (GdkGC	    *gc,
-				   GdkFont	    *font);
-#endif /* GDK_DISABLE_DEPRECATED */
 void   gdk_gc_set_function	  (GdkGC	    *gc,
 				   GdkFunction	     function);
 void   gdk_gc_set_fill		  (GdkGC	    *gc,
@@ -293,9 +284,6 @@ void         gdk_gc_set_rgb_bg_color (GdkGC          *gc,
 				      const GdkColor *color);
 GdkScreen *  gdk_gc_get_screen	     (GdkGC          *gc);
 
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_gc_destroy                 g_object_unref
-#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

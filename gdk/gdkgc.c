@@ -223,36 +223,6 @@ gdk_gc_finalize (GObject *object)
 }
 
 /**
- * gdk_gc_ref:
- * @gc: a #GdkGC
- *
- * Deprecated function; use g_object_ref() instead.
- *
- * Return value: the gc.
- *
- * Deprecated: 2.0: Use g_object_ref() instead.
- **/
-GdkGC *
-gdk_gc_ref (GdkGC *gc)
-{
-  return (GdkGC *) g_object_ref (gc);
-}
-
-/**
- * gdk_gc_unref:
- * @gc: a #GdkGC
- *
- * Decrement the reference count of @gc.
- *
- * Deprecated: 2.0: Use g_object_unref() instead.
- **/
-void
-gdk_gc_unref (GdkGC *gc)
-{
-  g_object_unref (gc);
-}
-
-/**
  * gdk_gc_get_values:
  * @gc:  a #GdkGC.
  * @values: the #GdkGCValues structure in which to store the results.
@@ -407,29 +377,6 @@ gdk_gc_set_background (GdkGC	      *gc,
 
   values.background = *color;
   gdk_gc_set_values (gc, &values, GDK_GC_BACKGROUND);
-}
-
-/**
- * gdk_gc_set_font:
- * @gc: a #GdkGC.
- * @font: the new font. 
- * 
- * Sets the font for a graphics context. (Note that
- * all text-drawing functions in GDK take a @font
- * argument; the value set here is used when that
- * argument is %NULL.)
- **/
-void
-gdk_gc_set_font (GdkGC	 *gc,
-		 GdkFont *font)
-{
-  GdkGCValues values;
-
-  g_return_if_fail (GDK_IS_GC (gc));
-  g_return_if_fail (font != NULL);
-
-  values.font = font;
-  gdk_gc_set_values (gc, &values, GDK_GC_FONT);
 }
 
 /**

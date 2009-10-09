@@ -522,16 +522,12 @@ GdkFunction
 gdk_gc_new
 gdk_gc_new_with_values
 gdk_gc_get_screen
-gdk_gc_ref
-gdk_gc_unref
-gdk_gc_destroy
 gdk_gc_set_values
 gdk_gc_get_values
 gdk_gc_set_foreground
 gdk_gc_set_background
 gdk_gc_set_rgb_fg_color
 gdk_gc_set_rgb_bg_color
-gdk_gc_set_font
 gdk_gc_set_function
 gdk_gc_set_fill
 GdkFill
