@@ -1570,12 +1570,6 @@ gtk_hbox_new
 #if IN_FILE(__GTK_HBUTTON_BOX_C__)
 gtk_hbutton_box_new
 gtk_hbutton_box_get_type G_GNUC_CONST
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_hbutton_box_get_layout_default
-gtk_hbutton_box_get_spacing_default
-gtk_hbutton_box_set_layout_default
-gtk_hbutton_box_set_spacing_default
-#endif
 #endif
 #endif
 

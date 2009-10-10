@@ -1814,10 +1814,6 @@ gtk_handle_box_get_type
 <TITLE>GtkHButtonBox</TITLE>
 GtkHButtonBox
 gtk_hbutton_box_new
-gtk_hbutton_box_get_spacing_default
-gtk_hbutton_box_get_layout_default
-gtk_hbutton_box_set_spacing_default
-gtk_hbutton_box_set_layout_default
 <SUBSECTION Standard>
 GTK_HBUTTON_BOX
 GTK_IS_HBUTTON_BOX
