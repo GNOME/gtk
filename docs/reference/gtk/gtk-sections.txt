@@ -5371,10 +5371,6 @@ gtk_list_store_get_type
 <TITLE>GtkVButtonBox</TITLE>
 GtkVButtonBox
 gtk_vbutton_box_new
-gtk_vbutton_box_get_spacing_default
-gtk_vbutton_box_set_spacing_default
-gtk_vbutton_box_get_layout_default
-gtk_vbutton_box_set_layout_default
 <SUBSECTION Standard>
 GTK_VBUTTON_BOX
 GTK_IS_VBUTTON_BOX
