@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
 G_DEFINE_TYPE (GtkHButtonBox, gtk_hbutton_box, GTK_TYPE_BUTTON_BOX)
 
