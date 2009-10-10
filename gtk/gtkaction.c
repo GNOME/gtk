@@ -964,7 +964,7 @@ _gtk_action_remove_from_proxy_list (GtkAction     *action,
  * @action: the action object
  * 
  * Returns the proxy widgets for an action.
- * See also gtk_widget_get_action().
+ * See also gtk_activatable_get_related_action().
  *
  * Return value: (element-type GtkWidget) (transfer none): a #GSList of proxy widgets. The list is owned by GTK+
  * and must not be modified.
