@@ -1003,7 +1003,6 @@ gtk_container_get_resize_mode
 gtk_container_set_resize_mode
 gtk_container_check_resize
 gtk_container_foreach
-gtk_container_foreach_full
 gtk_container_children
 gtk_container_get_children
 gtk_container_set_reallocate_redraws

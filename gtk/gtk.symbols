@@ -877,9 +877,6 @@ gtk_container_class_install_child_property
 gtk_container_class_list_child_properties
 gtk_container_forall
 gtk_container_foreach
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_container_foreach_full
-#endif
 gtk_container_get_border_width
 gtk_container_get_children
 gtk_container_get_focus_chain

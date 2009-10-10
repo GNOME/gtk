@@ -292,19 +292,6 @@ Does the same as gtk_container_set_border_width().
 @callback_data:
 
 
-<!-- ##### FUNCTION gtk_container_foreach_full ##### -->
-<para>
-
-</para>
-
-@container:
-@callback:
-@marshal:
-@callback_data:
-@notify:
-@Deprecated: Use gtk_container_foreach() instead.
-
-
 <!-- ##### MACRO gtk_container_children ##### -->
 <para>
 Does the same as gtk_container_get_children().
