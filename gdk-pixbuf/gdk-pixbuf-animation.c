@@ -258,36 +258,6 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 #endif
 
 /**
- * gdk_pixbuf_animation_ref:
- * @animation: An animation.
- *
- * Adds a reference to an animation. 
- *
- * Return value: The same as the @animation argument.
- *
- * Deprecated: 2.0: Use g_object_ref().
- **/
-GdkPixbufAnimation *
-gdk_pixbuf_animation_ref (GdkPixbufAnimation *animation)
-{
-        return (GdkPixbufAnimation*) g_object_ref (animation);
-}
-
-/**
- * gdk_pixbuf_animation_unref:
- * @animation: An animation.
- * 
- * Removes a reference from an animation. 
- *
- * Deprecated: 2.0: Use g_object_unref().
- **/
-void
-gdk_pixbuf_animation_unref (GdkPixbufAnimation *animation)
-{
-        g_object_unref (animation);
-}
-
-/**
  * gdk_pixbuf_animation_is_static_image:
  * @animation: a #GdkPixbufAnimation
  * 

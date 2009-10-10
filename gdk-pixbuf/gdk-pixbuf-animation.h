@@ -58,11 +58,6 @@ GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
                                                           GError            **error);
 
-#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
-GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
-void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);
-#endif
-
 int                 gdk_pixbuf_animation_get_width       (GdkPixbufAnimation *animation);
 int                 gdk_pixbuf_animation_get_height      (GdkPixbufAnimation *animation);
 gboolean            gdk_pixbuf_animation_is_static_image  (GdkPixbufAnimation *animation);
