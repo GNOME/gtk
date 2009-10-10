@@ -1553,6 +1553,36 @@ gtk_container_foreach_unmarshal (GtkWidget *child,
   fdata->callback (fdata->container, fdata->callback_data, 1, args);
 }
 
+void
+gtk_container_foreach_full (GtkContainer       *container,
+			    GtkCallback         callback,
+			    GtkCallbackMarshal  marshal,
+			    gpointer            callback_data,
+			    GDestroyNotify      notify)
+{
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
+  if (marshal)
+    {
+      GtkForeachData fdata;
+  
+      fdata.container     = GTK_OBJECT (container);
+      fdata.callback      = marshal;
+      fdata.callback_data = callback_data;
+
+      gtk_container_foreach (container, gtk_container_foreach_unmarshal, &fdata);
+    }
+  else
+    {
+      g_return_if_fail (callback != NULL);
+
+      gtk_container_foreach (container, callback, &callback_data);
+    }
+
+  if (notify)
+    notify (callback_data);
+}
+
 /**
  * gtk_container_set_focus_child:
  * @container: a #GtkContainer
