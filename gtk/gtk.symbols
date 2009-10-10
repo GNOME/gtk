@@ -493,12 +493,6 @@ gtk_builder_value_from_string_type
 
 #if IN_HEADER(__GTK_BUTTON_BOX_H__)
 #if IN_FILE(__GTK_BUTTON_BOX_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_button_box_set_child_size
-gtk_button_box_set_child_ipadding
-gtk_button_box_get_child_ipadding
-gtk_button_box_get_child_size
-#endif
 gtk_button_box_get_child_secondary
 gtk_button_box_get_layout
 gtk_button_box_get_type G_GNUC_CONST
