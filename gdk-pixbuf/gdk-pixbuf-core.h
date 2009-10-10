@@ -84,13 +84,6 @@ GQuark gdk_pixbuf_error_quark (void);
 
 GType gdk_pixbuf_get_type (void) G_GNUC_CONST;
 
-/* Reference counting */
-
-#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
-GdkPixbuf *gdk_pixbuf_ref      (GdkPixbuf *pixbuf);
-void       gdk_pixbuf_unref    (GdkPixbuf *pixbuf);
-#endif
-
 /* GdkPixbuf accessors */
 
 GdkColorspace gdk_pixbuf_get_colorspace      (const GdkPixbuf *pixbuf);

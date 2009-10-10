@@ -15,10 +15,6 @@
 #if IN_FILE(__GDK_PIXBUF_C__)
 gdk_pixbuf_error_quark
 gdk_pixbuf_get_type G_GNUC_CONST
-#ifndef GDK_PIXBUF_DISABLE_DEPRECATED
-gdk_pixbuf_ref
-gdk_pixbuf_unref
-#endif
 gdk_pixbuf_new
 gdk_pixbuf_get_bits_per_sample
 gdk_pixbuf_get_colorspace
