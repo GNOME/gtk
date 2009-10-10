@@ -7,14 +7,14 @@
 static void cb_itemsignal( GtkWidget *item,
                            gchar     *signame )
 {
-  gchar *name;
+  const gchar *name;
   GtkLabel *label;
 
   /* It's a Bin, so it has one child, which we know to be a
      label, so get that */
-  label = GTK_LABEL (GTK_BIN (item)->child);
+  label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
   /* Get the text of the label */
-  gtk_label_get (label, &name);
+  name = gtk_label_get_text (label);
   /* Get the level of the tree which the item is in */
   g_print ("%s called for item %s->%p, level %d\n", signame, name,
 	   item, GTK_TREE (item->parent)->level);
@@ -47,14 +47,14 @@ static void cb_selection_changed( GtkWidget *tree )
 
   i = GTK_TREE_SELECTION_OLD (tree);
   while (i) {
-    gchar *name;
+    const gchar *name;
     GtkLabel *label;
     GtkWidget *item;
 
     /* Get a GtkWidget pointer from the list node */
     item = GTK_WIDGET (i->data);
-    label = GTK_LABEL (GTK_BIN (item)->child);
-    gtk_label_get (label, &name);
+    label = GTK_LABEL (gtk_bin_get_child (GTK_BIN (item)));
+    name = gtk_label_get_text (label);
     g_print ("\t%s on level %d\n", name, GTK_TREE
 	     (item->parent)->level);
     i = i->next;

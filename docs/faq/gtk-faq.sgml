@@ -2629,8 +2629,8 @@ underlined, and the relevant accelerators are created.</para>
   gtk_box_pack_start (GTK_BOX (vbox1), menubar1, FALSE, FALSE, 0);
 
   file1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (file1)->child),
-                                   _("_File"));
+  gtk_label_set_use_underline (GTK_LABEL (gtk_bin_get_child (GTK_BIN (file1))),
+                               TRUE);
   gtk_widget_add_accelerator (file1, "activate_item", accel_group,
                               tmp_key, GDK_MOD1_MASK, 0);
   gtk_object_set_data (GTK_OBJECT (window1), "file1", file1);
@@ -2643,8 +2643,8 @@ underlined, and the relevant accelerators are created.</para>
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (file1), file1_menu);
 
   new1 = gtk_menu_item_new_with_label ("");
-  tmp_key = gtk_label_parse_uline (GTK_LABEL (GTK_BIN (new1)->child),
-                                   _("_New"));
+  gtk_label_set_use_underline (GTK_LABEL (gtk_bin_get_child (GTK_BIN (new1))),
+                               TRUE);
   gtk_widget_add_accelerator (new1, "activate_item", file1_menu_accels,
                               tmp_key, 0, 0);
   gtk_object_set_data (GTK_OBJECT (window1), "new1", new1);
@@ -2670,9 +2670,9 @@ GtkMenuItem with:</para>
       /* do stuff with child */
       if (GTK_IS_LABEL (child))
       {
-        gchar *text;
+        const gchar *text;
     
-        gtk_label_get (GTK_LABEL (child), &amp;text);
+        text = gtk_label_get_text (GTK_LABEL (child));
         g_print ("menu item text: %s\n", text);
       }
     }

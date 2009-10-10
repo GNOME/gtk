@@ -117,7 +117,7 @@ gint main( int    argc,
      */
     for (i = 0; i < 5; i++) {
 	GtkWidget       *label;
-	gchar           *string;
+	const gchar     *string;
 
 	sprintf(buffer, "ListItemContainer with Label #%d", i);
 	label=gtk_label_new (buffer);
@@ -126,7 +126,7 @@ gint main( int    argc,
 	gtk_widget_show (label);
 	gtk_container_add (GTK_CONTAINER (gtklist), list_item);
 	gtk_widget_show (list_item);
-	gtk_label_get (GTK_LABEL (label), &string);
+	string = gtk_label_get_text (GTK_LABEL (label));
 	g_object_set_data (G_OBJECT (list_item), list_item_data_key, string);
     }
     /* Here, we are creating another 5 labels, this time

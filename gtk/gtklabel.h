@@ -182,20 +182,6 @@ void         gtk_label_set_track_visited_links  (GtkLabel *label,
                                                  gboolean  track_links);
 gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
 
-#ifndef GTK_DISABLE_DEPRECATED
-
-#define  gtk_label_set           gtk_label_set_text
-void       gtk_label_get           (GtkLabel          *label,
-                                    gchar            **str);
-
-/* Convenience function to set the name and pattern by parsing
- * a string with embedded underscores, and return the appropriate
- * key symbol for the accelerator.
- */
-guint gtk_label_parse_uline            (GtkLabel    *label,
-					const gchar *string);
-
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* private */
 

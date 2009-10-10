@@ -2278,7 +2278,6 @@ gtk_label_set_ellipsize
 gtk_label_set_width_chars
 gtk_label_set_max_width_chars
 gtk_label_get
-gtk_label_parse_uline
 gtk_label_set_line_wrap
 gtk_label_set_line_wrap_mode
 gtk_label_set
