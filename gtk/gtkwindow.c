@@ -889,7 +889,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                            g_param_spec_boolean ("client-side-decorated",
                                                                  P_("Client-side window decorations"),
                                                                  P_("Whether to decorate windows without the WM"),
-                                                                 FALSE,
+                                                                 TRUE,
                                                                  GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -903,6 +903,18 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Decoration resize handle size"),
                                                              P_("Decoration resize handle size"),
                                                              0, G_MAXINT, 20, GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWindow:decoration-extents:
+   *
+   * Specifies the size of the client-side window extents, which can be
+   * used for client-side window drop-shadows or window glow.
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-extents",
+                                                             P_("Decoration extent size"),
+                                                             P_("Decoration extent size"),
+                                                             0, G_MAXINT, 0, GTK_PARAM_READWRITE));
 
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
@@ -1067,7 +1079,7 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_show (label);
   gtk_window_set_label_widget (window, label);
 
-#if 1
+#if 0
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
     gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
@@ -5482,6 +5494,7 @@ gtk_window_size_request (GtkWidget      *widget,
   GtkRequisition child_requisition;
   GtkWindowPrivate *priv;
   gint frame_width = 0;
+  gint extents = 0;
 
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -5491,41 +5504,48 @@ gtk_window_size_request (GtkWidget      *widget,
     {
       gtk_widget_style_get (widget,
                             "decoration-border-width", &frame_width,
+                            "decoration-extents", &extents,
                             NULL);
     }
 
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
-  if (is_client_side_decorated (window) && window->type != GTK_WINDOW_POPUP)
+  if (is_client_side_decorated (window))
     {
-      GtkRequisition box_requisition;
-      GtkRequisition icon_requisition;
-      gint child_height = 0;
+      requisition->width += extents * 2;
+      requisition->height += extents * 2;
 
-      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+      if (window->type != GTK_WINDOW_POPUP)
         {
-          gtk_widget_size_request (priv->title_label, &child_requisition);
-          child_height = child_requisition.height;
+          GtkRequisition box_requisition;
+          GtkRequisition icon_requisition;
+          gint child_height = 0;
+
+          if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+            {
+              gtk_widget_size_request (priv->title_label, &child_requisition);
+              child_height = child_requisition.height;
+            }
+
+          if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
+            {
+              gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
+              child_height = MAX (child_height, icon_requisition.height);
+            }
+
+          if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+            {
+              gtk_widget_size_request (priv->button_box, &box_requisition);
+
+              child_height = MAX (child_height, box_requisition.height);
+            }
+
+          // There should probably be some kind of padding property for
+          // "between the title/buttons and the bin.child".
+          requisition->width += frame_width * 2;
+          requisition->height += frame_width * 2 + child_height;
         }
-
-      if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
-        {
-          gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
-          child_height = MAX (child_height, icon_requisition.height);
-        }
-
-      if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
-        {
-          gtk_widget_size_request (priv->button_box, &box_requisition);
-
-          child_height = MAX (child_height, box_requisition.height);
-        }
-
-      // There should probably be some kind of padding property for
-      // "between the title/buttons and the bin.child".
-      requisition->width += frame_width * 2;
-      requisition->height += frame_width * 2 + child_height;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
