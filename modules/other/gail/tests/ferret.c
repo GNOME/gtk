@@ -1666,7 +1666,6 @@ _create_window (void)
     {
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         gtk_widget_set_name (window, "Ferret Window");
-        gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);
 
         g_signal_connect (GTK_OBJECT (window), "destroy",
                            G_CALLBACK (gtk_widget_destroyed),

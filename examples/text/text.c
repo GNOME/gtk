@@ -47,7 +47,6 @@ int main( int argc,
  
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request (window, 600, 500);
-  gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);  
   g_signal_connect (G_OBJECT (window), "destroy",
                     G_CALLBACK (close_application),
                     NULL);
