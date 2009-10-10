@@ -19,20 +19,9 @@ gtk_widget_set_style ()
   This will override a previously set user style or
   previously set rc styles.
 
-gtk_widget_set_rc_style ()
-  Set GTK_RC_STYLE to indicate that an rc lookup has been performed.
-  If there is an rc style for a widget, set it and save the default style,
-  restore the default style otherwise.
-  This will override a previously set user style or rc style.
-
 gtk_widget_reset_rc_styles ()
   Descends through a widget hierarchy and sets the rc style
   on all widgets that don't have a user style set.
-
-gtk_widget_restore_default_style ()
-  Reset the widget's style to the default style, this is only useful if
-  the widgets default style had been saved by previous calls to
-  gtk_widget_set_style() or gtk_widget_set_rc_style().
 
 gtk_widget_ensure_style ()
   Ensure that the widget either has a user style set, or an rc lookup
