@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-05 17:16-0400\n"
-"PO-Revision-Date: 2009-09-18 22:55+0300\n"
+"PO-Revision-Date: 2009-10-11 14:28+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2654,9 +2654,8 @@ msgid "Unspecified error"
 msgstr "Eroare nespecificată"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "Se obțin informațiile despre imprimantă..."
+msgstr "Obținerea informațiilor despre imprimantă a eșuat"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -4851,27 +4850,23 @@ msgid "Authentication is required on %s"
 msgstr "Este nevoie de autentificare pe %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "_Domeniu:"
+msgstr "Domeniu:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr ""
-"Pentru a tipări un document la imprimanta %s este nevoie de autentificare"
+msgstr "Pentru a tipări documentul „%s” este nevoie de autentificare"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
-"Pentru a tipări documentul „%s” la imprimanta %s este nevoie de autentificare"
+"Pentru a tipări acest document la imprimanta %s este nevoie de autentificare"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr ""
-"Pentru a tipări un document la imprimanta %s este nevoie de autentificare"
+msgstr "Pentru a tipări acest document este nevoie de autentificare"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
