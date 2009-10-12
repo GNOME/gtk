@@ -21,14 +21,74 @@
 #include "config.h"
 #include "gdk.h"
 #include "gdkprivate-quartz.h"
-
+ 
+/* FIXME: If we want to do it properly, this should be stored
+ * in a proper GdkScreen subclass.
+ */
 static GdkColormap *default_colormap = NULL;
+static int n_screens = 0;
+static GdkRectangle *screen_rects = NULL;
+
+
+static void
+screen_rects_init (void)
+{
+  NSArray *array;
+  NSRect largest_rect;
+  int i;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  array = [NSScreen screens];
+
+  n_screens = [array count];
+  screen_rects = g_new0 (GdkRectangle, n_screens);
+
+  /* FIXME: as stated above the get_width() and get_height() functions
+   * in this file, we only support horizontal screen layouts for now.
+   */
+
+  /* Find the monitor with the largest height.  All monitors should be
+   * offset to this one in the GDK screen space instead of offset to
+   * the screen with the menu bar.
+   */
+  largest_rect = [[array objectAtIndex:0] frame];
+  for (i = 1; i < [array count]; i++)
+    {
+      NSRect rect = [[array objectAtIndex:i] frame];
+
+      if (rect.size.height > largest_rect.size.height)
+        largest_rect = [[array objectAtIndex:i] frame];
+    }
+
+  for (i = 0; i < n_screens; i++)
+    {
+      NSScreen *nsscreen;
+      NSRect rect;
+
+      nsscreen = [array objectAtIndex:i];
+      rect = [nsscreen frame];
+
+      screen_rects[i].x = rect.origin.x;
+      screen_rects[i].width = rect.size.width;
+      screen_rects[i].height = rect.size.height;
+
+      if (largest_rect.size.height - rect.size.height == 0)
+        screen_rects[i].y = 0;
+      else
+        screen_rects[i].y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
+    }
+
+  GDK_QUARTZ_RELEASE_POOL;
+}
 
 void
 _gdk_quartz_screen_init (void)
 {
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
+
+  screen_rects_init ();
 }
 
 GdkDisplay *
@@ -214,93 +274,49 @@ gdk_screen_get_height_mm (GdkScreen *screen)
 int
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
-  int n;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  GDK_QUARTZ_ALLOC_POOL;
-  NSArray *array = [NSScreen screens];
-
-  n = [array count];
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  return n;
+  return n_screens;
 }
 
-static void
-screen_get_monitor_geometry (GdkScreen    *screen, 
-                             gint          monitor_num,
-                             GdkRectangle *dest,
-                             gboolean      in_mm)
+static NSScreen *
+get_nsscreen_for_monitor (gint monitor_num)
 {
   NSArray *array;
-  NSScreen *nsscreen;
-  NSRect rect;
-  NSRect largest_rect;
-  int i;
+  NSScreen *screen;
 
   GDK_QUARTZ_ALLOC_POOL;
 
   array = [NSScreen screens];
-  nsscreen = [array objectAtIndex:monitor_num];
-  rect = [nsscreen frame];
-  
-  dest->x = rect.origin.x;
-  dest->width = rect.size.width;
-  dest->height = rect.size.height;
-
-  /* FIXME: as stated above the get_width() and get_height() functions
-   * in this file, we only support horizontal screen layouts for now.
-   */
-
-  /* Find the monitor with the largest height.  All monitors should be
-   * offset to this one in the GDK screen space instead of offset to
-   * the screen with the menu bar.
-   */
-  largest_rect = [[array objectAtIndex:0] frame];
-  for (i = 1; i < [array count]; i++)
-    {
-      NSRect rect = [[array objectAtIndex:i] frame];
-
-      if (rect.size.height > largest_rect.size.height)
-        largest_rect = [[array objectAtIndex:i] frame];
-    }
-
-  if (largest_rect.size.height - rect.size.height == 0)
-    dest->y = 0;
-  else
-    dest->y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
-
-  if (in_mm)
-    {
-      dest->x = get_mm_from_pixels (nsscreen, dest->x);
-      dest->y = get_mm_from_pixels (nsscreen, dest->y);
-      dest->width = get_mm_from_pixels (nsscreen, dest->width);
-      dest->height = get_mm_from_pixels (nsscreen, dest->height);
-    }
+  screen = [array objectAtIndex:monitor_num];
 
   GDK_QUARTZ_RELEASE_POOL;
+
+  return screen;
 }
 
 gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 				 gint       monitor_num)
 {
-  GdkRectangle rect;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 0);
+  g_return_val_if_fail (monitor_num >= 0, 0);
 
-  screen_get_monitor_geometry (screen, monitor_num, &rect, TRUE);
-
-  return rect.width;
+  return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
+                             screen_rects[monitor_num].width);
 }
 
 gint
 gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                   gint       monitor_num)
 {
-  GdkRectangle rect;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 0);
+  g_return_val_if_fail (monitor_num >= 0, 0);
 
-  screen_get_monitor_geometry (screen, monitor_num, &rect, TRUE);
-
-  return rect.height;
+  return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
+                             screen_rects[monitor_num].height);
 }
 
 gchar *
@@ -320,7 +336,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
   g_return_if_fail (monitor_num >= 0);
 
-  screen_get_monitor_geometry (screen, monitor_num, dest, FALSE);
+  *dest = screen_rects[monitor_num];
 }
 
 gchar *
