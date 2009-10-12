@@ -9564,7 +9564,7 @@ which owns it will be collapsed. So, if you want it to stick around,
 do something like the following:
 
 <tscreen><verb>
-gtk_widget_ref (tree);
+g_object_ref (tree);
 owner = GTK_TREE(tree)->tree_owner;
 gtk_container_remove (GTK_CONTAINER(tree), item);
 if (tree->parent == NULL){
@@ -9572,7 +9572,7 @@ if (tree->parent == NULL){
   gtk_tree_item_set_subtree (GTK_TREE_ITEM(owner), tree);
 }
 else
-  gtk_widget_unref (tree);
+  g_object_unref (tree);
 </verb></tscreen>
 
 Finally, drag-n-drop <em>does</em> work with TreeItems. You just

@@ -8986,7 +8986,7 @@ se colapsará. Por lo tanto, si quiere que se mantenga el subárbol
 tendrá que hacer algo así:
 
 <tscreen><verb>
-gtk_widget_ref (arbol);
+g_object_ref (arbol);
 propietario = GTK_TREE(arbol)->tree_owner;
 gtk_container_remove (GTK_CONTAINER(arbol), item);
 if (arbol->parent == NULL){
@@ -8994,7 +8994,7 @@ if (arbol->parent == NULL){
   gtk_tree_item_set_subtree (GTK_TREE_ITEM(propietario), arbol);
 }
 else
-  gtk_widget_unref (arbol);
+  g_object_unref (arbol);
 </verb></tscreen>
 
 Finalmente, hay que mencionar que la opción de drag-n-drop (arrastar y

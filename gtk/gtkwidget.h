@@ -863,8 +863,8 @@ GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
 
 #if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
-#  define gtk_widget_ref gtk_object_ref
-#  define gtk_widget_unref gtk_object_unref
+#  define gtk_widget_ref g_object_ref
+#  define gtk_widget_unref g_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
 void              _gtk_widget_grab_notify                 (GtkWidget    *widget,
