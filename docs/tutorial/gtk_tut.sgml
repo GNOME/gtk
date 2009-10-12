@@ -16978,7 +16978,7 @@ gtk_dial_expose (GtkWidget      *widget,
                     points, 5,
                     FALSE);
 
-  gtk_style_unref(blankstyle);
+  g_object_unref(blankstyle);
 
 
   /* Draw ticks */
