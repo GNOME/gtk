@@ -1,5 +1,7 @@
+# translation of ru.po to Russian
 # Russian translation of gtk+
 # Copyright (C) 1999-2009 Free Software Foundation, Inc.
+#
 #
 #
 # Sergey Panov <sipan@mit.edu>, 1999.
@@ -7,25 +9,24 @@
 # Dmitry Mastrukov <dmitry@taurussoft.org>, 2002-2004.
 # Sun G11n <gnome_int_l10n@ireland.sun.com>, 2002.
 # Andrew W. Nosenko <awn@bcs.zp.ua>, 2003.
-# Leonid Kanter <leon@asplinux.ru>, 2004-2006.
+# Leonid Kanter <leon@asplinux.ru>, 2004-2006, 2009.
 # Alexander Sigachov <alexander.sigachov@gmail.com>, 2006.
 # Vasiliy Faronov <qvvx@yandex.ru>, 2007.
 # Anton Shestakov <engored@ya.ru>, 2008.
 # Lebedev Roman <roman@lebedev.com>, 2009.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.master\n"
+"Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-05 17:16-0400\n"
-"PO-Revision-Date: 2009-05-17 17:31+0400\n"
-"Last-Translator: Lebedev Roman <roman@lebedev.com>\n"
-"Language-Team: Russian <gnome-cyr@gnome.org>\n"
+"PO-Revision-Date: 2009-10-13 17:19+0300\n"
+"Last-Translator: Leonid Kanter <leon@asplinux.ru>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -294,8 +295,7 @@ msgstr "Файл изображения «%s» не содержит данны�
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1023
 #: gdk-pixbuf/gdk-pixbuf-io.c:1287 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Не удалось загрузить изображение «%s»: причина неизвестна, возможно, файл "
 "изображения повреждён"
@@ -418,12 +418,9 @@ msgstr "Пиксельные данные изображения поврежд�
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"не удалось выделить память в размере %u байта для буфера изображения"
-msgstr[1] ""
-"не удалось выделить память в размере %u байтов для буфера изображения"
-msgstr[2] ""
-"не удалось выделить память в размере %u байтов для буфера изображения"
+msgstr[0] "не удалось выделить память в размере %u байта для буфера изображения"
+msgstr[1] "не удалось выделить память в размере %u байтов для буфера изображения"
+msgstr[2] "не удалось выделить память в размере %u байтов для буфера изображения"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -525,8 +522,7 @@ msgstr "Недостаточно памяти для создания кадра
 
 #: gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
-"Изображение формата GIF повреждено (неправильное сжатие алгоритмом LZW)"
+msgstr "Изображение формата GIF повреждено (неправильное сжатие алгоритмом LZW)"
 
 #: gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
@@ -623,8 +619,7 @@ msgstr "Не удалось декодировать изображение"
 
 #: gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
-msgstr ""
-"Преобразованное изображение формата JPEG2000 имеет нулевую ширину или высоту"
+msgstr "Преобразованное изображение формата JPEG2000 имеет нулевую ширину или высоту"
 
 #: gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
@@ -671,8 +666,7 @@ msgstr "Не удалось выделить память для загрузк�
 
 #: gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
-msgstr ""
-"Преобразованное изображение формата JPEG имеет нулевую ширину или высоту"
+msgstr "Преобразованное изображение формата JPEG имеет нулевую ширину или высоту"
 
 #: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
@@ -685,10 +679,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Качество формата JPEG должно быть между 0 и 100; значение «%d» недопустимо."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Качество формата JPEG должно быть между 0 и 100; значение «%d» недопустимо."
 
 #: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -745,8 +737,7 @@ msgstr "Значение числа бит на канал для изображ
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
-msgstr ""
-"Преобразованное изображение формата PNG имеет нулевую ширину или высоту"
+msgstr "Преобразованное изображение формата PNG имеет нулевую ширину или высоту"
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
@@ -789,12 +780,10 @@ msgstr "Произошла фатальная ошибка при чтении �
 #: gdk-pixbuf/io-png.c:733
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
-"Произошла фатальная ошибка при чтении файла изображения формата PNG: %s"
+msgstr "Произошла фатальная ошибка при чтении файла изображения формата PNG: %s"
 
 #: gdk-pixbuf/io-png.c:825
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Ключи для блоков текста в изображении формата PNG должны содержать не менее "
 "1 и не более 79 символов."
@@ -836,8 +825,7 @@ msgstr "Формат изображений PNG"
 
 #: gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"Загрузчик изображений формата PNM ожидал найти целое число, но не нашёл его"
+msgstr "Загрузчик изображений формата PNM ожидал найти целое число, но не нашёл его"
 
 #: gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
@@ -974,13 +962,11 @@ msgstr "Формат изображений Targa"
 
 #: gdk-pixbuf/io-tiff.c:160
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
-"Не удалось определить ширину изображения (испорченный файл формата TIFF)"
+msgstr "Не удалось определить ширину изображения (испорченный файл формата TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:167
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
-"Не удалось определить высоту изображения (испорченный файл формата TIFF)"
+msgstr "Не удалось определить высоту изображения (испорченный файл формата TIFF)"
 
 #: gdk-pixbuf/io-tiff.c:175
 msgid "Width or height of TIFF image is zero"
@@ -1327,8 +1313,7 @@ msgstr "Недопустимый тип функции в строке %d: «%s�
 #: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr ""
-"Повторяющийся идентификатор обьекта «%s» в строке %d (ранее в строке %d)"
+msgstr "Повторяющийся идентификатор обьекта «%s» в строке %d (ранее в строке %d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1758,7 +1743,7 @@ msgstr "Удалить закладку «%s»"
 #: gtk/gtkfilechooserdefault.c:3024
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr ""
+msgstr "Закладка '%s' не может быть удалена"
 
 #: gtk/gtkfilechooserdefault.c:3031 gtk/gtkfilechooserdefault.c:4057
 msgid "Remove the selected bookmark"
@@ -1877,10 +1862,8 @@ msgstr "Файл с именем «%s» уже существует. Замен�
 
 #: gtk/gtkfilechooserdefault.c:8348 gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr ""
-"Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
 #: gtk/gtkfilechooserdefault.c:8353 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -1903,9 +1886,8 @@ msgid "Could not send the search request"
 msgstr "Не удалось послать запрос на поиск"
 
 #: gtk/gtkfilechooserdefault.c:9608
-#, fuzzy
 msgid "Search:"
-msgstr "Поиск"
+msgstr "Поиск:"
 
 #: gtk/gtkfilechooserdefault.c:10591
 #, c-format
@@ -2030,8 +2012,7 @@ msgstr "Пе_реименовать файл"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Имя папки «%s» содержит символы, недопустимые в именах файлов"
 
 #: gtk/gtkfilesel.c:1394
@@ -2411,48 +2392,47 @@ msgstr "Запомнить _навсегда"
 #: gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
-msgstr ""
+msgstr "Неизвестное приложение (pid %d)"
 
 #: gtk/gtkmountoperation.c:1063
 #, c-format
 msgid "Unable to end process"
-msgstr ""
+msgstr "Не удаётся завершить процесс"
 
 #: gtk/gtkmountoperation.c:1100
 msgid "_End Process"
-msgstr ""
+msgstr "_Завершить процесс"
 
 #: gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
-msgstr ""
+msgstr "Не удаётся завершить процесс с PID %d. Действие не реализовано."
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Терминальный пейджер"
 
 #: gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
-msgstr "Командная строка"
+msgstr "Команда top"
 
 #: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
 #: gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:966
 #, c-format
 msgid "Cannot end process with pid %d: %s"
-msgstr ""
+msgstr "Не удаётся завершить процесс с PID %d: %s"
 
 #: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
 #, c-format
@@ -2464,16 +2444,12 @@ msgid "Not a valid page setup file"
 msgstr "Некорректный файл настройки печати"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "Any Printer"
-msgstr "Принтер"
+msgstr "Любой принтер"
 
 #: gtk/gtkpagesetupunixdialog.c:168
-#, fuzzy
 msgid "For portable documents"
-msgstr ""
-"<b>Любой принтер</b>\n"
-"Для переносимых документов"
+msgstr "Для переносимых документов"
 
 #: gtk/gtkpagesetupunixdialog.c:798
 #, c-format
@@ -2684,11 +2660,11 @@ msgstr "Неуказанная ошибка"
 
 #: gtk/gtkprintunixdialog.c:614
 msgid "Getting printer information failed"
-msgstr ""
+msgstr "Сбой получения данных о принтере"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
-msgstr ""
+msgstr "Получение информации о принтере..."
 
 #: gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
@@ -2717,9 +2693,8 @@ msgid "C_urrent Page"
 msgstr "_Текущую страницу"
 
 #: gtk/gtkprintunixdialog.c:2200
-#, fuzzy
 msgid "Se_lection"
-msgstr "_Выбор: "
+msgstr "_Выбор:"
 
 #: gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
@@ -2882,30 +2857,25 @@ msgid "Output t_ray:"
 msgstr "Выходной лоток:"
 
 #: gtk/gtkprintunixdialog.c:3462
-#, fuzzy
 msgid "Or_ientation:"
-msgstr "_Расположение:"
+msgstr "_Ориентация:"
 
 #. In enum order
 #: gtk/gtkprintunixdialog.c:3477
-#, fuzzy
 msgid "Portrait"
-msgstr "Портрет"
+msgstr "Книжная"
 
 #: gtk/gtkprintunixdialog.c:3478
-#, fuzzy
 msgid "Landscape"
-msgstr "Пейзаж"
+msgstr "Альбомная"
 
 #: gtk/gtkprintunixdialog.c:3479
-#, fuzzy
 msgid "Reverse portrait"
-msgstr "Обратный портрет"
+msgstr "Обратная книжная"
 
 #: gtk/gtkprintunixdialog.c:3480
-#, fuzzy
 msgid "Reverse landscape"
-msgstr "Обратный пейзаж"
+msgstr "Обратная альбомная"
 
 #: gtk/gtkprintunixdialog.c:3525
 msgid "Job Details"
@@ -3687,8 +3657,7 @@ msgstr "«%s» не является допустимым именем атри�
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "«%s» не может быть преобразовано к значению типа «%s» для атрибута «%s»"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3727,8 +3696,7 @@ msgid "Serialized data is malformed"
 msgstr "Сериализованные данные неправильно сформированы"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Сериализованные данные неправильно сформированы. Первым разделом является не "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -4753,9 +4721,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "Некорректный кеш значков: %s\n"
 
 #: gtk/updateiconcache.c:1702
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "Нет файла с индексом темы."
+msgstr "Нет файла с индексом темы.\n"
 
 #: gtk/updateiconcache.c:1706
 #, c-format
@@ -4841,8 +4809,7 @@ msgstr "Для получения файла из %s требуется пров
 #: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
-"Для печати документа %s на принтере %s требуется проверить права доступа"
+msgstr "Для печати документа %s на принтере %s требуется проверить права доступа"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
@@ -4870,8 +4837,7 @@ msgstr "Для получения параметров принтера треб
 #: modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
-"Для получения принтера по умолчанию на %s требуется проверить права доступа"
+msgstr "Для получения принтера по умолчанию на %s требуется проверить права доступа"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
@@ -4884,30 +4850,27 @@ msgid "Authentication is required on %s"
 msgstr "Для доступа к %s нужно ввести пароль"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "_Домен:"
+msgstr "Домен:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "Для печати документа на принтере %s требуется проверить права доступа"
+msgstr "Для печати документа '%s' требуется аутентификация"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
-"Для печати документа %s на принтере %s требуется проверить права доступа"
+msgstr "Для печати этого документа на принтере %s требуется аутентификация"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "Для печати документа на принтере %s требуется проверить права доступа"
+msgstr "Для печати этого документа требуется аутентификация"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "В принтере «%s» кончается тонер."
+msgstr "В принтере «%s» заканчивается тонер."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
@@ -5194,7 +5157,7 @@ msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
@@ -5223,32 +5186,28 @@ msgstr "Командная строка"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
-#, fuzzy
 msgid "printer offline"
-msgstr "Принтер отключён"
+msgstr "принтер отключён"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:829
-#, fuzzy
 msgid "ready to print"
-msgstr "Подготовка к печати"
+msgstr "готов печатать"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
-msgstr ""
+msgstr "обрабатывается задание"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:836
-#, fuzzy
 msgid "paused"
-msgstr "Приостановлено"
+msgstr "приостановлен"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:839
-#, fuzzy
 msgid "unknown"
-msgstr "(неизвестен)"
+msgstr "неизвестно"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
@@ -5265,10 +5224,3 @@ msgstr "Печатать на тестовый принтер"
 msgid "Could not get information for file '%s': %s"
 msgstr "Не удалось получить информацию о файле «%s»: %s"
 
-#, fuzzy
-#~ msgid "<b>_Search:</b>"
-#~ msgstr "_Найти:"
-
-#, fuzzy
-#~ msgid "<b>Recently Used</b>"
-#~ msgstr "Недавние документы"
