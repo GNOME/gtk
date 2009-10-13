@@ -919,6 +919,9 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 gboolean
 xp_theme_is_active (void)
 {
+  /* Workaround for bug #598299 */
+  return FALSE;
+
   return use_xp_theme;
 }
 
