@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-05 17:16-0400\n"
-"PO-Revision-Date: 2009-07-08 13:35+1000\n"
+"PO-Revision-Date: 2009-10-13 20:08+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1738,12 +1738,12 @@ msgstr "Đổi tên..."
 #. Accessible object name for the file chooser's shortcuts pane
 #: gtk/gtkfilechooserdefault.c:3925
 msgid "Places"
-msgstr "Nơi"
+msgstr "Mở nhanh"
 
 #. Column header for the file chooser's shortcuts pane
 #: gtk/gtkfilechooserdefault.c:3982
 msgid "_Places"
-msgstr "_Nơi"
+msgstr "_Mở nhanh"
 
 #: gtk/gtkfilechooserdefault.c:4038
 msgid "_Add"
