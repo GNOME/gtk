@@ -335,6 +335,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/scrolledwindow.png				\
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\
+	$(srcdir)/images/spinner.png					\
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\
