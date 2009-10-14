@@ -58,25 +58,25 @@
 /**
  * SECTION:filesystem
  * @short_description: Functions for working with GIO
+ * @Title: Filesystem utilities
  *
  * The functions and objects described here make working with GTK+ and
- * GIO more convenient. #GtkMountOperation is needed when mounting volumes
- * and gtk_show_uri() is a convenient way to launch applications for URIs.
- * Another object that is worth mentioning in this context is 
- * #GdkAppLaunchContext, which provides visual feedback when lauching
- * applications.
- */
-
-/**
- * GtkMountOperation:
+ * GIO more convenient.
  *
- * #GtkMountOperation is an implementation of #GMountOperation that
- * can be used with GIO functions for mounting volumes such as
+ * #GtkMountOperation is needed when mounting volumes:
+ * It is an implementation of #GMountOperation that can be used with
+ * GIO functions for mounting volumes such as
  * g_file_mount_enclosing_volume(), g_file_mount_mountable(),
- * g_volume_mount(), g_mount_unmount() and others.
+ * g_volume_mount(), g_mount_unmount_with_operation() and others.
  *
  * When necessary, #GtkMountOperation shows dialogs to ask for
  * passwords, questions or show processes blocking unmount.
+ *
+ * gtk_show_uri() is a convenient way to launch applications for URIs.
+ *
+ * Another object that is worth mentioning in this context is
+ * #GdkAppLaunchContext, which provides visual feedback when lauching
+ * applications.
  */
 
 static void   gtk_mount_operation_finalize     (GObject          *object);
