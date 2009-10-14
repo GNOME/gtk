@@ -57,6 +57,67 @@
 
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkaboutdialog
+ * @Short_description: Display information about an application
+ * @Title: GtkAboutDialog
+ * @See_also:#GTK_STOCK_ABOUT
+ *
+ * The #GtkAboutDialog offers a simple way to display information about
+ * a program like its logo, name, copyright, website and license. It is
+ * also possible to give credits to the authors, documenters, translators
+ * and artists who have worked on the program. An about dialog is typically
+ * opened when the user selects the <literal>About</literal> option from
+ * the <literal>Help</literal> menu. All parts of the dialog are optional.
+ *
+ * About dialog often contain links and email addresses. #GtkAboutDialog
+ * supports this by offering global hooks, which are called when the user
+ * clicks on a link or email address, see gtk_about_dialog_set_email_hook()
+ * and gtk_about_dialog_set_url_hook(). Email addresses in the
+ * authors, documenters and artists properties are recognized by looking for
+ * <literal><user@<!-- -->host></literal>, URLs are
+ * recognized by looking for <literal>http://url</literal>, with
+ * <literal>url</literal> extending to the next space, tab or line break.
+ *
+ * <para id="gtk-about-dialog-hook-setup">
+ * Since 2.18 #GtkAboutDialog provides default website and email hooks that use
+ * gtk_show_uri().
+ *
+ * If you want provide your own hooks overriding the default ones, it is important
+ * to do so before setting the website and email URL properties, like this:
+ *
+ * <informalexample><programlisting>
+ * gtk_about_dialog_set_url_hook (GTK_ABOUT_DIALOG (dialog), launch_url, NULL, NULL);
+ * gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog), app_url);
+ * </programlisting></informalexample>
+ * To disable the default hooks, you can pass %NULL as the hook func. Then,
+ * the #GtkAboutDialog widget will not display the website or the
+ * email addresses as clickable.
+ *
+ * To make constructing a #GtkAboutDialog as convenient as possible, you can
+ * use the function gtk_show_about_dialog() which constructs and shows a dialog
+ * and keeps it around so that it can be shown again.
+ *
+ * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
+ * on the dialog window (where &percnt;s is replaced by the name of the
+ * application, but in order to ensure proper translation of the title,
+ * applications should set the title property explicitly when constructing
+ * a #GtkAboutDialog, as shown in the following example:
+ *
+ * <informalexample><programlisting>
+ * gtk_show_about_dialog (NULL,
+ *                        "program-name", "ExampleCode",
+ *                        "logo", example_logo,
+ *                        "title" _("About ExampleCode"),
+ *                        NULL);
+ * </programlisting></informalexample>
+ * Note that prior to GTK+ 2.12, the #GtkAboutDialog:program-name property
+ * was called "name". This was changed to avoid the conflict with the
+ * #GtkWidget:name property.
+ */
+
+
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
