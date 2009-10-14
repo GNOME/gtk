@@ -67,6 +67,7 @@ struct _GtkSpinnerPrivate
 {
   guint current;
   guint num_steps;
+  guint cycle_duration;
   guint timeout;
 };
 
@@ -128,17 +129,34 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
    * GtkSpinner:num-steps:
    *
    * The number of steps for the spinner to complete a full loop.
-   * The animation will complete a full cycle in one second.
+   * The animation will complete a full cycle in one second by default
+   * (see the #GtkSpinner:cycle-duration style property).
    *
    * Since: 2.20
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_uint ("num-steps",
                                                              P_("Number of steps"),
-                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second."),
+                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner::cycle-duration)."),
                                                              1,
                                                              G_MAXUINT,
                                                              12,
+                                                             G_PARAM_READABLE));
+
+  /**
+   * GtkSpinner::cycle-duration:
+   *
+   * The duration in milliseconds for the spinner to complete a full cycle.
+   *
+   * Since: 2.20
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_uint ("cycle-duration",
+                                                             P_("Animation duration"),
+                                                             P_("The length of time in milliseconds for the spinner to complete a full loop"),
+                                                             500,
+                                                             G_MAXUINT,
+                                                             1000,
                                                              G_PARAM_READABLE));
 }
 
@@ -252,6 +270,7 @@ gtk_spinner_style_set (GtkWidget *widget,
 
   gtk_widget_style_get (GTK_WIDGET (widget),
                         "num-steps", &(priv->num_steps),
+                        "cycle-duration", &(priv->cycle_duration),
                         NULL);
 
   if (priv->current > priv->num_steps)
@@ -515,7 +534,7 @@ gtk_spinner_start (GtkSpinner *spinner)
   if (priv->timeout != 0)
     return;
 
-  priv->timeout = gdk_threads_add_timeout (1000 / priv->num_steps, gtk_spinner_timeout, spinner);
+  priv->timeout = gdk_threads_add_timeout (priv->cycle_duration / priv->num_steps, gtk_spinner_timeout, spinner);
   g_object_notify (G_OBJECT (spinner), "active");
 }
 

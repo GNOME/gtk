@@ -275,8 +275,10 @@ do_list_store (GtkWidget *do_widget)
   if (!GTK_WIDGET_VISIBLE (window))
     {
       gtk_widget_show_all (window);
-      if (timeout == 0)
+      if (timeout == 0) {
+        //FIXME this should use the animation-duration instead
         timeout = g_timeout_add (80, spinner_timeout, NULL);
+      }
     }
   else
     {
