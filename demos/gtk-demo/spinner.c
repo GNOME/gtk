@@ -77,6 +77,10 @@ do_spinner (GtkWidget *do_widget)
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (on_stop_clicked), spinner);
     gtk_container_add (GTK_CONTAINER (vbox), button);
+
+    /* Start by default to test for:
+     * https://bugzilla.gnome.org/show_bug.cgi?id=598496 */
+    on_play_clicked (NULL, NULL);
   }
 
   if (!GTK_WIDGET_VISIBLE (window))
