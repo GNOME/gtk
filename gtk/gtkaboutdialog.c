@@ -76,7 +76,7 @@
  * clicks on a link or email address, see gtk_about_dialog_set_email_hook()
  * and gtk_about_dialog_set_url_hook(). Email addresses in the
  * authors, documenters and artists properties are recognized by looking for
- * <literal><user@<!-- -->host></literal>, URLs are
+ * <literal>&lt;user@<!-- -->host&gt;</literal>, URLs are
  * recognized by looking for <literal>http://url</literal>, with
  * <literal>url</literal> extending to the next space, tab or line break.
  *
