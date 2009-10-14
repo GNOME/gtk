@@ -34,6 +34,26 @@
 #include "gtkcellrendererspinner.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkcellrendererspinner
+ * @Short_description: Renders a spinning animation in a cell
+ * @Title: GtkCellRendererSpinner
+ * @See_also: #GtkSpinner, #GtkCellRendererProgress
+ *
+ * GtkCellRendererSpinner renders a spinning animation in a cell, very
+ * similar to #GtkSpinner. It can often be used as an alternative
+ * to a #GtkCellRendererProgress for displaying indefinite activity,
+ * instead of actual progress.
+ *
+ * To start the animation in a cell, set the #GtkCellRendererSpinner:active
+ * property to %TRUE and increment the #GtkCellRendererSpinner:pulse property
+ * at regular intervals. The usual way to set the cell renderer properties
+ * for each cell is to bind them to columns in your tree model using e.g.
+ * gtk_tree_view_column_add_attribute().
+ */
+
+
 enum {
   PROP_0,
   PROP_ACTIVE,
@@ -54,28 +74,28 @@ struct _GtkCellRendererSpinnerPrivate
                         GTK_TYPE_CELL_RENDERER_SPINNER, \
                         GtkCellRendererSpinnerPrivate))
 
-static void gtk_cell_renderer_spinner_get_property        (GObject                *object,
-                                                         guint                         param_id,
-                                                         GValue                        *value,
-                                                         GParamSpec                *pspec);
-static void gtk_cell_renderer_spinner_set_property        (GObject                *object,
-                                                         guint                         param_id,
-                                                         const GValue                *value,
-                                                         GParamSpec                *pspec);
-static void gtk_cell_renderer_spinner_get_size                (GtkCellRenderer        *cell,
-                                                         GtkWidget                *widget,
-                                                         GdkRectangle                *cell_area,
-                                                         gint                        *x_offset,
-                                                         gint                        *y_offset,
-                                                         gint                        *width,
-                                                         gint                        *height);
-static void gtk_cell_renderer_spinner_render                (GtkCellRenderer        *cell,
-                                                         GdkWindow                *window,
-                                                         GtkWidget                *widget,
-                                                         GdkRectangle                *background_area,
-                                                         GdkRectangle                *cell_area,
-                                                         GdkRectangle                *expose_area,
-                                                         guint                         flags);
+static void gtk_cell_renderer_spinner_get_property (GObject         *object,
+                                                    guint            param_id,
+                                                    GValue          *value,
+                                                    GParamSpec      *pspec);
+static void gtk_cell_renderer_spinner_set_property (GObject         *object,
+                                                    guint            param_id,
+                                                    const GValue    *value,
+                                                    GParamSpec      *pspec);
+static void gtk_cell_renderer_spinner_get_size     (GtkCellRenderer *cell,
+                                                    GtkWidget       *widget,
+                                                    GdkRectangle    *cell_area,
+                                                    gint            *x_offset,
+                                                    gint            *y_offset,
+                                                    gint            *width,
+                                                    gint            *height);
+static void gtk_cell_renderer_spinner_render       (GtkCellRenderer *cell,
+                                                    GdkWindow       *window,
+                                                    GtkWidget       *widget,
+                                                    GdkRectangle    *background_area,
+                                                    GdkRectangle    *cell_area,
+                                                    GdkRectangle    *expose_area,
+                                                    guint            flags);
 
 G_DEFINE_TYPE (GtkCellRendererSpinner, gtk_cell_renderer_spinner, GTK_TYPE_CELL_RENDERER)
 
@@ -91,7 +111,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
   cell_class->get_size = gtk_cell_renderer_spinner_get_size;
   cell_class->render = gtk_cell_renderer_spinner_render;
 
-  /* GtkCellRendererSpinner::active:
+  /* GtkCellRendererSpinner:active:
    *
    * Whether the spinner is active (ie. shown) in the cell
    *
@@ -104,11 +124,15 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                          P_("Whether the spinner is active (ie. shown) in the cell"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
-  /* GtkCellRendererSpinner::pulse:
+  /**
+   * GtkCellRendererSpinner:pulse:
    *
-   * Pulse of the spinner. Increment this value to draw the next frame of the spinner animation.
-   * Usually, you would update this value in a timeout, every 80 milliseconds to show a full
-   * animation within one second.
+   * Pulse of the spinner. Increment this value to draw the next frame of the
+   * spinner animation. Usually, you would update this value in a timeout.
+   *
+   * The #GtkSpinner widget draws one full cycle of the animation per second.
+   * You can learn about the number of frames used by the theme
+   * by looking at the #GtkSpinner:num-steps style property
    *
    * Since 2.20
    */
@@ -119,7 +143,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                       P_("Pulse of the spinner"),
                                                       0, G_MAXUINT, 0,
                                                       G_PARAM_READWRITE));
-  /* GtkCellRendererSpinner::size:
+  /**
+   * GtkCellRendererSpinner:size:
    *
    * The #GtkIconSize value that specifies the size of the rendered spinner.
    *
@@ -129,7 +154,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                    PROP_SIZE,
                                    g_param_spec_enum ("size",
                                                       P_("Size"),
-                                                      P_("The #GtkIconSize value that specifies the size of the rendered spinner"),
+                                                      P_("The GtkIconSize value that specifies the size of the rendered spinner"),
                                                       GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_MENU,
                                                       G_PARAM_READWRITE));
 
@@ -164,7 +189,7 @@ gtk_cell_renderer_spinner_new (void)
 
 static void
 gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
-                                       GtkWidget *widget)
+                                       GtkWidget              *widget)
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
   GdkScreen *screen;
@@ -238,12 +263,12 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
 
 static void
 gtk_cell_renderer_spinner_get_size (GtkCellRenderer *cellr,
-                                    GtkWidget *widget,
-                                    GdkRectangle *cell_area,
-                                    gint *x_offset,
-                                    gint *y_offset,
-                                    gint *width,
-                                    gint *height)
+                                    GtkWidget       *widget,
+                                    GdkRectangle    *cell_area,
+                                    gint            *x_offset,
+                                    gint            *y_offset,
+                                    gint            *width,
+                                    gint            *height)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
@@ -296,12 +321,12 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer *cellr,
 
 static void
 gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
-                                  GdkWindow *window,
-                                  GtkWidget *widget,
-                                  GdkRectangle *background_area,
-                                  GdkRectangle *cell_area,
-                                  GdkRectangle *expose_area,
-                                  guint flags)
+                                  GdkWindow       *window,
+                                  GtkWidget       *widget,
+                                  GdkRectangle    *background_area,
+                                  GdkRectangle    *cell_area,
+                                  GdkRectangle    *expose_area,
+                                  guint            flags)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
   GtkCellRendererSpinnerPrivate *priv = cell->priv;

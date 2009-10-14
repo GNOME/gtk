@@ -161,6 +161,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkstatusbar.xml" />
       <xi:include href="xml/gtkinfobar.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
+      <xi:include href="xml/gtkspinner.xml" />
     </chapter>
 
     <chapter id="ButtonWidgets">
@@ -219,6 +220,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkcellrendererspin.xml" />
       <xi:include href="xml/gtkcellrenderertext.xml" />
       <xi:include href="xml/gtkcellrenderertoggle.xml" />
+      <xi:include href="xml/gtkcellrendererspinner.xml" />
       <xi:include href="xml/gtkliststore.xml" />
       <xi:include href="xml/gtktreestore.xml" />
     </chapter>
@@ -490,5 +492,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index id="api-index-2-18" role="2.18">
     <title>Index of new symbols in 2.18</title>
     <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-20" role="2.20">
+    <title>Index of new symbols in 2.20</title>
+    <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
   </index>
 </book>

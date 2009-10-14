@@ -81,12 +81,13 @@
  * <literal>url</literal> extending to the next space, tab or line break.
  *
  * <para id="gtk-about-dialog-hook-setup">
- * Since 2.18 #GtkAboutDialog provides default website and email hooks that use
- * gtk_show_uri().
+ * Since 2.18 #GtkAboutDialog provides default website and email hooks that
+ * use gtk_show_uri().
+ * </para>
  *
- * If you want provide your own hooks overriding the default ones, it is important
- * to do so before setting the website and email URL properties, like this:
- *
+ * If you want provide your own hooks overriding the default ones, it is
+ * important to do so before setting the website and email URL properties,
+ * like this:
  * <informalexample><programlisting>
  * gtk_about_dialog_set_url_hook (GTK_ABOUT_DIALOG (dialog), launch_url, NULL, NULL);
  * gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog), app_url);
@@ -104,7 +105,6 @@
  * application, but in order to ensure proper translation of the title,
  * applications should set the title property explicitly when constructing
  * a #GtkAboutDialog, as shown in the following example:
- *
  * <informalexample><programlisting>
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",

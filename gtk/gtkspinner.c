@@ -38,6 +38,22 @@
 #include "gtkstyle.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkspinner
+ * @Short_description: Show a spinner animation
+ * @Title: GtkSpinner
+ * @See_also: #GtkCellRendererSpinner, #GtkProgressBar
+ *
+ * A GtkSpinner widget displays an icon-size spinning animation.
+ * It is often used as an alternative to a #GtkProgressBar for
+ * displaying indefinite activity, instead of actual progress.
+ *
+ * To start the animation, use gtk_spinner_start(), to stop it
+ * use gtk_spinner_stop().
+ */
+
+
 #define GTK_SPINNER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SPINNER, GtkSpinnerPrivate))
 
 G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_DRAWING_AREA);
@@ -54,22 +70,26 @@ struct _GtkSpinnerPrivate
   guint timeout;
 };
 
-static void gtk_spinner_class_init (GtkSpinnerClass *klass);
-static void gtk_spinner_init (GtkSpinner *spinner);
-static void gtk_spinner_dispose (GObject *gobject);
-static gboolean gtk_spinner_expose (GtkWidget *widget, GdkEventExpose *event);
-static void gtk_spinner_screen_changed (GtkWidget* widget, GdkScreen* old_screen);
-static void gtk_spinner_style_set (GtkWidget *widget, GtkStyle *prev_style);
-static void gtk_spinner_get_property (GObject    *object,
-                                      guint       param_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec);
-static void gtk_spinner_set_property (GObject      *object,
-                                      guint         param_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec);
-static AtkObject *gtk_spinner_get_accessible (GtkWidget *widget);
-static GType gtk_spinner_accessible_get_type (void);
+static void gtk_spinner_class_init     (GtkSpinnerClass *klass);
+static void gtk_spinner_init           (GtkSpinner      *spinner);
+static void gtk_spinner_dispose        (GObject         *gobject);
+static gboolean gtk_spinner_expose     (GtkWidget       *widget,
+                                        GdkEventExpose  *event);
+static void gtk_spinner_screen_changed (GtkWidget       *widget,
+                                        GdkScreen       *old_screen);
+static void gtk_spinner_style_set      (GtkWidget       *widget,
+                                        GtkStyle        *prev_style);
+static void gtk_spinner_get_property   (GObject         *object,
+                                        guint            param_id,
+                                        GValue          *value,
+                                        GParamSpec      *pspec);
+static void gtk_spinner_set_property   (GObject         *object,
+                                        guint            param_id,
+                                        const GValue    *value,
+                                        GParamSpec      *pspec);
+
+static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
+static GType      gtk_spinner_accessible_get_type (void);
 
 static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
@@ -91,7 +111,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->style_set = gtk_spinner_style_set;
   widget_class->get_accessible = gtk_spinner_get_accessible;
 
-  /* GtkSpinner::active:
+  /* GtkSpinner:active:
    *
    * Whether the spinner is active
    *
@@ -105,17 +125,17 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   /**
-   * GtkSpinner::num-steps:
+   * GtkSpinner:num-steps:
    *
-   * The number of steps for the spinner to complete a full loop. The animation will
-   * complete a full revolution in one second.
+   * The number of steps for the spinner to complete a full loop.
+   * The animation will complete a full cycle in one second.
    *
    * Since: 2.20
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_uint ("num-steps",
                                                              P_("Number of steps"),
-                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full revolution in one second."),
+                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second."),
                                                              1,
                                                              G_MAXUINT,
                                                              12,
@@ -246,13 +266,9 @@ gtk_spinner_timeout (gpointer data)
   priv = GTK_SPINNER_GET_PRIVATE (data);
 
   if (priv->current + 1 >= priv->num_steps)
-    {
-      priv->current = 0;
-    }
+    priv->current = 0;
   else
-    {
-      priv->current++;
-    }
+    priv->current++;
 
   gtk_widget_queue_draw (GTK_WIDGET (data));
 
@@ -355,8 +371,8 @@ gtk_spinner_accessible_class_init (AtkObjectClass *klass)
 
 static void
 gtk_spinner_accessible_image_get_size (AtkImage *image,
-                                             gint     *width,
-                                             gint     *height)
+                                       gint     *width,
+                                       gint     *height)
 {
   GtkWidget *widget;
 
@@ -465,7 +481,7 @@ gtk_spinner_get_accessible (GtkWidget *widget)
 }
 
 /**
- * gtk_spinner_new
+ * gtk_spinner_new:
  *
  * Returns a new spinner widget. Not yet started.
  *
@@ -480,9 +496,10 @@ gtk_spinner_new (void)
 }
 
 /**
- * gtk_spinner_start
+ * gtk_spinner_start:
+ * @spinner: a #GtkSpinner
  *
- * Starts the animation on the #GtkSpinner
+ * Starts the animation of the spinner.
  *
  * Since: 2.20
  */
@@ -494,18 +511,19 @@ gtk_spinner_start (GtkSpinner *spinner)
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
   priv = GTK_SPINNER_GET_PRIVATE (spinner);
+
   if (priv->timeout != 0)
-    {
-      return;
-    }
+    return;
+
   priv->timeout = gdk_threads_add_timeout (1000 / priv->num_steps, gtk_spinner_timeout, spinner);
   g_object_notify (G_OBJECT (spinner), "active");
 }
 
 /**
- * gtk_spinner_stop
+ * gtk_spinner_stop:
+ * @spinner: a #GtkSpinner
  *
- * Stops the animation on the #GtkSpinner
+ * Stops the animation of the spinner.
  *
  * Since: 2.20
  */
@@ -518,9 +536,8 @@ gtk_spinner_stop (GtkSpinner *spinner)
 
   priv = GTK_SPINNER_GET_PRIVATE (spinner);
   if (priv->timeout == 0)
-    {
-      return;
-    }
+    return;
+
   g_source_remove (priv->timeout);
   priv->timeout = 0;
   g_object_notify (G_OBJECT (spinner), "active");
