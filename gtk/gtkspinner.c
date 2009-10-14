@@ -336,8 +336,8 @@ static void
 gtk_spinner_accessible_initialize (AtkObject *accessible,
                                    gpointer   widget)
 {
-  atk_object_set_name (accessible, _("spinner"));
-  atk_object_set_description (accessible, _("provides visual status"));
+  atk_object_set_name (accessible, _("Spinner"));
+  atk_object_set_description (accessible, _("Provides visual status"));
 
   a11y_parent_class->initialize (accessible, widget);
 }
