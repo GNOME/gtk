@@ -70,6 +70,7 @@ gtk/gtkcellrenderercombo.c
 gtk/gtkcellrendererpixbuf.c
 gtk/gtkcellrendererprogress.c
 gtk/gtkcellrendererspin.c
+gtk/gtkcellrendererspinner.c
 gtk/gtkcellrenderertext.c
 gtk/gtkcellrenderertoggle.c
 gtk/gtkcellview.c
@@ -205,6 +206,7 @@ gtk/gtksettings.c
 gtk/gtksizegroup.c
 gtk/gtksocket.c
 gtk/gtkspinbutton.c
+gtk/gtkspinner.c
 gtk/gtkstatusbar.c
 gtk/gtkstatusicon.c
 gtk/gtkstock.c
