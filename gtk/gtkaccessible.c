@@ -25,6 +25,13 @@
 #include "gtkaccessible.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkaccessible
+ * @Short_description: Accessibility support for widgets
+ * @Title: GtkAccessible
+ */
+
+
 static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_DEFINE_TYPE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
