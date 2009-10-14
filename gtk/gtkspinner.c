@@ -137,14 +137,14 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_uint ("num-steps",
                                                              P_("Number of steps"),
-                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner::cycle-duration)."),
+                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner:cycle-duration)."),
                                                              1,
                                                              G_MAXUINT,
                                                              12,
                                                              G_PARAM_READABLE));
 
   /**
-   * GtkSpinner::cycle-duration:
+   * GtkSpinner:cycle-duration:
    *
    * The duration in milliseconds for the spinner to complete a full cycle.
    *
