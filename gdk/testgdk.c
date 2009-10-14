@@ -303,7 +303,7 @@ test_gcs (void)
   gdk_gc_copy (black_gc, gc);
   gdk_gc_get_values (black_gc, &gcvalues);
   TEST (test_default_gc (&gcvalues, TRUE));
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   gdk_gc_set_foreground (black_gc, &black);
   gdk_gc_get_values (black_gc, &gcvalues);

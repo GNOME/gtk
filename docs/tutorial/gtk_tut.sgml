@@ -4114,7 +4114,7 @@ static const char * xpm_data[] = {
 
 When we're done using a pixmap and not likely to reuse it again soon,
 it is a good idea to release the resource using
-gdk_pixmap_unref(). Pixmaps should be considered a precious resource,
+g_object_unref(). Pixmaps should be considered a precious resource,
 because they take up memory in the end-user's X server process. Even
 though the X client you write may run on a powerful "server" computer,
 the user may be running the X server on a small personal computer.
@@ -14476,7 +14476,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -17406,7 +17406,7 @@ static gint configure_event( GtkWidget         *widget,
                              GdkEventConfigure *event )
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -17592,7 +17592,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-     gdk_pixmap_unref(pixmap);
+     g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
                           widget->allocation.width,

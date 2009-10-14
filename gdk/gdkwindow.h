@@ -693,8 +693,8 @@ void       gdk_window_remove_redirection     (GdkWindow     *window);
 #define gdk_window_get_colormap        gdk_drawable_get_colormap
 #define gdk_window_set_colormap        gdk_drawable_set_colormap
 #define gdk_window_get_visual          gdk_drawable_get_visual
-#define gdk_window_ref                 gdk_drawable_ref
-#define gdk_window_unref               gdk_drawable_unref
+#define gdk_window_ref                 g_object_ref
+#define gdk_window_unref               g_object_unref
 
 #define gdk_window_copy_area(drawable,gc,x,y,source_drawable,source_x,source_y,width,height) \
    gdk_draw_pixmap(drawable,gc,source_drawable,source_x,source_y,x,y,width,height)

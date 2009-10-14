@@ -129,7 +129,7 @@ GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 #endif /* GDK_ENABLE_BROKEN */
 
 #ifndef GDK_DISABLE_DEPRECATED
-#define gdk_image_destroy              gdk_image_unref
+#define gdk_image_destroy              g_object_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS

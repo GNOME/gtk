@@ -347,8 +347,8 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
  *  mask = gdk_bitmap_create_from_data (NULL, cursor1mask_bits,
  *                                      cursor1_width, cursor1_height);
  *  cursor = gdk_cursor_new_from_pixmap (source, mask, &amp;fg, &amp;bg, 8, 8);
- *  gdk_pixmap_unref (source);
- *  gdk_pixmap_unref (mask);
+ *  g_object_unref (source);
+ *  g_object_unref (mask);
  *  
  *  
  *  gdk_window_set_cursor (widget->window, cursor);

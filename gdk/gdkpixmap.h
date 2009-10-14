@@ -119,10 +119,10 @@ GdkPixmap*    gdk_pixmap_foreign_new_for_screen  (GdkScreen       *screen,
                                                   gint             depth);
 
 #ifndef GDK_DISABLE_DEPRECATED
-#define gdk_bitmap_ref                 gdk_drawable_ref
-#define gdk_bitmap_unref               gdk_drawable_unref
-#define gdk_pixmap_ref                 gdk_drawable_ref
-#define gdk_pixmap_unref               gdk_drawable_unref
+#define gdk_bitmap_ref                 g_object_ref
+#define gdk_bitmap_unref               g_object_unref
+#define gdk_pixmap_ref                 g_object_ref
+#define gdk_pixmap_unref               g_object_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
