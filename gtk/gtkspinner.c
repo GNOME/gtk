@@ -151,7 +151,10 @@ gtk_spinner_set_property (GObject      *object,
   switch (param_id)
     {
       case PROP_ACTIVE:
-        gtk_spinner_start (GTK_SPINNER (object));
+        if (g_value_get_boolean (value))
+          gtk_spinner_start (GTK_SPINNER (object));
+        else
+          gtk_spinner_stop (GTK_SPINNER (object));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -496,6 +499,7 @@ gtk_spinner_start (GtkSpinner *spinner)
       return;
     }
   priv->timeout = gdk_threads_add_timeout (1000 / priv->num_steps, gtk_spinner_timeout, spinner);
+  g_object_notify (G_OBJECT (spinner), "active");
 }
 
 /**
@@ -519,6 +523,7 @@ gtk_spinner_stop (GtkSpinner *spinner)
     }
   g_source_remove (priv->timeout);
   priv->timeout = 0;
+  g_object_notify (G_OBJECT (spinner), "active");
 }
 
 #define __GTK_SPINNER_C__
