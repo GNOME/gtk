@@ -37,6 +37,31 @@
 #include "gtkmarshalers.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkaccelgroup
+ * @Short_description: Groups of global keyboard accelerators for an entire GtkWindow
+ * @Title: Accelerator Groups
+ * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
+ * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
+ * 
+ * A #GtkAccelGroup represents a group of keyboard accelerators,
+ * typically attached to a toplevel #GtkWindow (with
+ * gtk_window_add_accel_group()). Usually you won't need to create a
+ * #GtkAccelGroup directly; instead, when using #GtkItemFactory, GTK+
+ * automatically sets up the accelerators for your menus in the item
+ * factory's #GtkAccelGroup.
+ * 
+ * 
+ * Note that <firstterm>accelerators</firstterm> are different from
+ * <firstterm>mnemonics</firstterm>. Accelerators are shortcuts for
+ * activating a menu item; they appear alongside the menu item they're a
+ * shortcut for. For example "Ctrl+Q" might appear alongside the "Quit"
+ * menu item. Mnemonics are shortcuts for GUI elements such as text
+ * entries or buttons; they appear as underlined characters. See
+ * gtk_label_new_with_mnemonic(). Menu items can have both accelerators
+ * and mnemonics, of course.
+ */
+
 
 /* --- prototypes --- */
 static void gtk_accel_group_finalize     (GObject    *object);
