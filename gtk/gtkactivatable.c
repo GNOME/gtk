@@ -20,6 +20,7 @@
 /**
  * SECTION:gtkactivatable
  * @Short_Description: An interface for activatable widgets
+ * @Title: GtkActivatable
  *
  * Activatable widgets can be connected to a #GtkAction and reflects
  * the state of its action. A #GtkActivatable can also provide feedback
