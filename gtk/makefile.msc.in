@@ -114,7 +114,6 @@ gtk_OBJECTS_deprecated = \
 	gtkprogress.obj \
 	gtktipsquery.obj \
 	gtkshow.obj \
-	gtkpixmap.obj \
 	gtkpreview.obj \
 	gtkseparatortoolitem.obj \
 	gtktypeutils.obj \
@@ -468,7 +467,6 @@ gtk_public_h_sources =		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
-	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
 	gtkprintcontext.h	\

@@ -2848,25 +2848,6 @@ gtk_paned_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkpixmap</FILE>
-<TITLE>GtkPixmap</TITLE>
-GtkPixmap
-gtk_pixmap_new
-gtk_pixmap_set
-gtk_pixmap_get
-gtk_pixmap_set_build_insensitive
-<SUBSECTION Standard>
-GTK_PIXMAP
-GTK_IS_PIXMAP
-GTK_TYPE_PIXMAP
-GTK_PIXMAP_CLASS
-GTK_IS_PIXMAP_CLASS
-GTK_PIXMAP_GET_CLASS
-<SUBSECTION Private>
-gtk_pixmap_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkplug</FILE>
 <TITLE>GtkPlug</TITLE>
 GtkPlug

@@ -635,11 +635,9 @@ gtk_base_c_sources =            \
 
 # Deprecated
 gtk_public_h_sources += \
-	gtkpixmap.h		\
 	gtkprogress.h		\
 	gtktooltips.h
 gtk_base_c_sources += \
-	gtkpixmap.c		\
 	gtkprogress.c		\
 	gtktooltips.c
 

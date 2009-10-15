@@ -2452,18 +2452,6 @@ gtk_path_bar_get_type G_GNUC_CONST
 #endif
 #endif
 
-#if IN_HEADER(__GTK_PIXMAP_H__)
-#if IN_FILE(__GTK_PIXMAP_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_pixmap_get
-gtk_pixmap_get_type G_GNUC_CONST
-gtk_pixmap_new
-gtk_pixmap_set
-gtk_pixmap_set_build_insensitive
-#endif
-#endif
-#endif
-
 #if IN_HEADER(__GTK_PLUG_H__)
 #if IN_FILE(__GTK_PLUG_C__)
 gtk_plug_construct
