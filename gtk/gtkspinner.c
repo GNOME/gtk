@@ -102,8 +102,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
 
-  gtk_spinner_parent_class = g_type_class_peek_parent (klass);
-
   gobject_class = G_OBJECT_CLASS(klass);
   g_type_class_add_private (gobject_class, sizeof (GtkSpinnerPrivate));
   gobject_class->dispose = gtk_spinner_dispose;
