@@ -91,7 +91,8 @@ static void gtk_spinner_set_property   (GObject         *object,
                                         guint            param_id,
                                         const GValue    *value,
                                         GParamSpec      *pspec);
-
+static void gtk_spinner_set_active     (GtkSpinner      *spinner,
+                                        gboolean         active);
 static AtkObject *gtk_spinner_get_accessible      (GtkWidget *widget);
 static GType      gtk_spinner_accessible_get_type (void);
 
@@ -173,7 +174,7 @@ gtk_spinner_get_property (GObject    *object,
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (object);
+  priv = GTK_SPINNER (object)->priv;
 
   switch (param_id)
     {
@@ -194,10 +195,7 @@ gtk_spinner_set_property (GObject      *object,
   switch (param_id)
     {
       case PROP_ACTIVE:
-        if (g_value_get_boolean (value))
-          gtk_spinner_start (GTK_SPINNER (object));
-        else
-          gtk_spinner_stop (GTK_SPINNER (object));
+        gtk_spinner_set_active (GTK_SPINNER (object), g_value_get_boolean (value));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -213,6 +211,8 @@ gtk_spinner_init (GtkSpinner *spinner)
   priv->current = 0;
   priv->timeout = 0;
 
+  spinner->priv = priv;
+
   GTK_WIDGET_SET_FLAGS (GTK_WIDGET (spinner), GTK_NO_WINDOW);
 }
 
@@ -223,7 +223,7 @@ gtk_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
   GtkSpinnerPrivate *priv;
   int width, height;
 
-  priv = GTK_SPINNER_GET_PRIVATE (widget);
+  priv = GTK_SPINNER (widget)->priv;
 
   width = widget->allocation.width;
   height = widget->allocation.height;
@@ -245,17 +245,55 @@ gtk_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
   return FALSE;
 }
 
+static gboolean
+gtk_spinner_timeout (gpointer data)
+{
+  GtkSpinnerPrivate *priv;
+
+  priv = GTK_SPINNER (data)->priv;
+
+  if (priv->current + 1 >= priv->num_steps)
+    priv->current = 0;
+  else
+    priv->current++;
+
+  gtk_widget_queue_draw (GTK_WIDGET (data));
+
+  return TRUE;
+}
+
+static void
+gtk_spinner_add_timeout (GtkSpinner *spinner)
+{
+  GtkSpinnerPrivate *priv;
+
+  priv = spinner->priv;
+
+  priv->timeout = gdk_threads_add_timeout ((guint) priv->cycle_duration / priv->num_steps, gtk_spinner_timeout, spinner);
+}
+
+static void
+gtk_spinner_remove_timeout (GtkSpinner *spinner)
+{
+  GtkSpinnerPrivate *priv;
+
+  priv = spinner->priv;
+
+  g_source_remove (priv->timeout);
+  priv->timeout = 0;
+}
+
 static void
 gtk_spinner_realize (GtkWidget *widget)
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (widget);
+  priv = GTK_SPINNER (widget)->priv;
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->realize (widget);
 
   if (priv->active)
-    gtk_spinner_start (GTK_SPINNER (widget));
+    gtk_spinner_add_timeout (GTK_SPINNER (widget));
 }
 
 static void
@@ -263,12 +301,11 @@ gtk_spinner_unrealize (GtkWidget *widget)
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (widget);
+  priv = GTK_SPINNER (widget)->priv;
 
   if (priv->timeout != 0)
     {
-      g_source_remove (priv->timeout);
-      priv->timeout = 0;
+      gtk_spinner_remove_timeout (GTK_SPINNER (widget));
     }
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unrealize (widget);
@@ -281,7 +318,7 @@ gtk_spinner_screen_changed (GtkWidget* widget, GdkScreen* old_screen)
   GdkScreen* new_screen;
   GdkColormap* colormap;
 
-  spinner = GTK_SPINNER(widget);
+  spinner = GTK_SPINNER (widget);
 
   new_screen = gtk_widget_get_screen (widget);
   colormap = gdk_screen_get_rgba_colormap (new_screen);
@@ -300,7 +337,7 @@ gtk_spinner_style_set (GtkWidget *widget,
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (widget);
+  priv = GTK_SPINNER (widget)->priv;
 
   gtk_widget_style_get (GTK_WIDGET (widget),
                         "num-steps", &(priv->num_steps),
@@ -311,36 +348,44 @@ gtk_spinner_style_set (GtkWidget *widget,
     priv->current = 0;
 }
 
-static gboolean
-gtk_spinner_timeout (gpointer data)
-{
-  GtkSpinnerPrivate *priv;
-
-  priv = GTK_SPINNER_GET_PRIVATE (data);
-
-  if (priv->current + 1 >= priv->num_steps)
-    priv->current = 0;
-  else
-    priv->current++;
-
-  gtk_widget_queue_draw (GTK_WIDGET (data));
-
-  return TRUE;
-}
 static void
 gtk_spinner_dispose (GObject *gobject)
 {
   GtkSpinnerPrivate *priv;
 
-  priv = GTK_SPINNER_GET_PRIVATE (gobject);
+  priv = GTK_SPINNER (gobject)->priv;
 
   if (priv->timeout != 0)
     {
-      g_source_remove (priv->timeout);
-      priv->timeout = 0;
+      gtk_spinner_remove_timeout (GTK_SPINNER (gobject));
     }
 
   G_OBJECT_CLASS (gtk_spinner_parent_class)->dispose (gobject);
+}
+
+static void
+gtk_spinner_set_active (GtkSpinner *spinner, gboolean active)
+{
+  GtkSpinnerPrivate *priv;
+
+  active = active != FALSE;
+
+  priv = GTK_SPINNER (spinner)->priv;
+
+  if (priv->active != active)
+    {
+      priv->active = active;
+      g_object_notify (G_OBJECT (spinner), "active");
+
+      if (active && GTK_WIDGET_REALIZED (GTK_WIDGET (spinner)) && priv->timeout == 0)
+        {
+          gtk_spinner_add_timeout (spinner);
+        }
+      else if (!active && priv->timeout != 0)
+        {
+          gtk_spinner_remove_timeout (spinner);
+        }
+    }
 }
 
 static GType
@@ -559,21 +604,9 @@ gtk_spinner_new (void)
 void
 gtk_spinner_start (GtkSpinner *spinner)
 {
-  GtkSpinnerPrivate *priv;
-
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
-  priv = GTK_SPINNER_GET_PRIVATE (spinner);
-
-  priv->active = TRUE;
-  g_object_notify (G_OBJECT (spinner), "active");
-
-  if (priv->timeout != 0)
-    return;
-  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (spinner)))
-    return;
-
-  priv->timeout = gdk_threads_add_timeout ((guint) priv->cycle_duration / priv->num_steps, gtk_spinner_timeout, spinner);
+  gtk_spinner_set_active (spinner, TRUE);
 }
 
 /**
@@ -587,20 +620,9 @@ gtk_spinner_start (GtkSpinner *spinner)
 void
 gtk_spinner_stop (GtkSpinner *spinner)
 {
-  GtkSpinnerPrivate *priv;
-
   g_return_if_fail (GTK_IS_SPINNER (spinner));
 
-  priv = GTK_SPINNER_GET_PRIVATE (spinner);
-
-  priv->active = FALSE;
-  g_object_notify (G_OBJECT (spinner), "active");
-
-  if (priv->timeout == 0)
-    return;
-
-  g_source_remove (priv->timeout);
-  priv->timeout = 0;
+  gtk_spinner_set_active (spinner, FALSE);
 }
 
 #define __GTK_SPINNER_C__

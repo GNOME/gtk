@@ -47,12 +47,12 @@ typedef struct _GtkSpinnerPrivate  GtkSpinnerPrivate;
 struct _GtkSpinner
 {
   GtkDrawingArea parent;
+  GtkSpinnerPrivate *priv;
 };
 
 struct _GtkSpinnerClass
 {
   GtkDrawingAreaClass parent_class;
-  GtkSpinnerPrivate *priv;
 };
 
 GType      gtk_spinner_get_type  (void) G_GNUC_CONST;
