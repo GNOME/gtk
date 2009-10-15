@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-09-15 12:27+0000\n"
-"PO-Revision-Date: 2009-10-12 09:32+0100\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"POT-Creation-Date: 2009-10-15 12:30+0000\n"
+"PO-Revision-Date: 2009-10-15 14:58+0100\n"
+"Last-Translator: Matej Urbančič <matej.urban@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1750,7 +1750,7 @@ msgstr "Ni mogoče poslati zahteve po iskanju"
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:9364
 msgid "_Search:"
-msgstr "I_skanje:"
+msgstr "_Poišči:"
 
 #: ../gtk/gtkfilechooserdefault.c:10317
 #, c-format
@@ -2267,7 +2267,7 @@ msgid ""
 "For portable documents"
 msgstr ""
 "<b>Katerikoli tiskalnik</b>\n"
-"za prenosljive dokumente"
+"Za prenosljive dokumente"
 
 #: ../gtk/gtkpagesetupunixdialog.c:883
 #: ../gtk/gtkpagesetupunixdialog.c:1395
@@ -2532,15 +2532,15 @@ msgstr "Natisni strani"
 
 #: ../gtk/gtkprintunixdialog.c:1686
 msgid "_All"
-msgstr "_Vsem"
+msgstr "_Vse"
 
 #: ../gtk/gtkprintunixdialog.c:1693
 msgid "C_urrent"
-msgstr "_Trenutna"
+msgstr "_Trenutna stran"
 
 #: ../gtk/gtkprintunixdialog.c:1702
 msgid "Ra_nge"
-msgstr "O_bseg"
+msgstr "_Območje"
 
 #: ../gtk/gtkprintunixdialog.c:1703
 msgid ""
@@ -2815,7 +2815,7 @@ msgstr "Ni mogoče najti predmeta z URI '%s'"
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:288
 msgid "Information"
-msgstr "Podatki"
+msgstr "Podrobnosti"
 
 #: ../gtk/gtkstock.c:289
 msgid "Warning"
@@ -2834,7 +2834,7 @@ msgstr "Vprašanje"
 #.
 #: ../gtk/gtkstock.c:296
 msgid "_About"
-msgstr "_About"
+msgstr "_O Programu"
 
 #: ../gtk/gtkstock.c:298
 msgid "_Apply"
@@ -2862,7 +2862,7 @@ msgstr "_Zapri"
 
 #: ../gtk/gtkstock.c:304
 msgid "C_onnect"
-msgstr "Po_vezava"
+msgstr "_Poveži"
 
 #: ../gtk/gtkstock.c:305
 msgid "_Convert"
@@ -2882,7 +2882,7 @@ msgstr "_Zbriši"
 
 #: ../gtk/gtkstock.c:309
 msgid "_Discard"
-msgstr "_Zavrži"
+msgstr "_Zavrzi"
 
 #: ../gtk/gtkstock.c:310
 msgid "_Disconnect"
@@ -3015,7 +3015,7 @@ msgstr "_Desno"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:353
 msgid "Media|_Forward"
-msgstr "N_aprej"
+msgstr "_Naprej"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:355
@@ -3035,7 +3035,7 @@ msgstr "_Predvajaj"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:361
 msgid "Media|Pre_vious"
-msgstr "Pr_ejšnji"
+msgstr "_Predhodno"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:363
@@ -3045,7 +3045,7 @@ msgstr "_Snemanje"
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:365
 msgid "Media|R_ewind"
-msgstr "Na_zaj"
+msgstr "Pre_vij nazaj"
 
 #. translators, strip the prefix up to and including the first |
 #: ../gtk/gtkstock.c:367
@@ -3094,7 +3094,7 @@ msgstr "_Prilepi"
 
 #: ../gtk/gtkstock.c:378
 msgid "_Preferences"
-msgstr "_Preferences"
+msgstr "_Nastavitve"
 
 #: ../gtk/gtkstock.c:379
 msgid "_Print"
@@ -3110,7 +3110,7 @@ msgstr "_Lastnosti"
 
 #: ../gtk/gtkstock.c:382
 msgid "_Quit"
-msgstr "_Quit"
+msgstr "_Končaj"
 
 #: ../gtk/gtkstock.c:383
 msgid "_Redo"
@@ -3146,7 +3146,7 @@ msgstr "_Pisava"
 
 #: ../gtk/gtkstock.c:392
 msgid "_Ascending"
-msgstr "_Naraščujoče"
+msgstr "_Naraščujoč"
 
 #: ../gtk/gtkstock.c:393
 msgid "_Descending"
@@ -3154,11 +3154,11 @@ msgstr "_Padajoče"
 
 #: ../gtk/gtkstock.c:394
 msgid "_Spell Check"
-msgstr "_Preverjanje črkovanja"
+msgstr "_Črkovanje"
 
 #: ../gtk/gtkstock.c:395
 msgid "_Stop"
-msgstr "U_stavi"
+msgstr "Zau_stavi"
 
 #: ../gtk/gtkstock.c:396
 msgid "_Strikethrough"
@@ -3166,7 +3166,7 @@ msgstr "Prečr_tano"
 
 #: ../gtk/gtkstock.c:397
 msgid "_Undelete"
-msgstr "Od_briši"
+msgstr "Pov_rni"
 
 #: ../gtk/gtkstock.c:398
 msgid "_Underline"
@@ -3844,7 +3844,7 @@ msgstr "Ovojnica kahu"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:175
 msgid "paper size|kaku2 Envelope"
-msgstr "Ovojnica kaku2"
+msgstr "Ovojnica kahu2"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:177
@@ -3975,7 +3975,7 @@ msgstr "edp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:229
 msgid "paper size|European edp"
-msgstr "Evropski edp"
+msgstr "Evropska edp"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:231
@@ -3990,7 +3990,7 @@ msgstr "f"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:235
 msgid "paper size|FanFold European"
-msgstr "Evropski FanFold"
+msgstr "FanFold evropska"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:237
@@ -4000,17 +4000,17 @@ msgstr "FanFold US"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:239
 msgid "paper size|FanFold German Legal"
-msgstr "FanFold German Legal"
+msgstr "FanFold Namška"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:241
 msgid "paper size|Government Legal"
-msgstr "Government Legal"
+msgstr "Pravno vladno pismo"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:243
 msgid "paper size|Government Letter"
-msgstr "Government Letter"
+msgstr "Vladno pismo"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:245
@@ -4025,7 +4025,7 @@ msgstr "Indeks 4x6 (dopisnica)"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:249
 msgid "paper size|Index 4x6 ext"
-msgstr "Indeks 4x6 ext"
+msgstr "Indeks 4x6"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:251
@@ -4050,27 +4050,27 @@ msgstr "US Legal"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:259
 msgid "paper size|US Legal Extra"
-msgstr "US Legal Extra"
+msgstr "US Legal posebna"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:261
 msgid "paper size|US Letter"
-msgstr "US Letter"
+msgstr "US Pisemska"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:263
 msgid "paper size|US Letter Extra"
-msgstr "US Letter Extra"
+msgstr "US Pisemska posebna"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:265
 msgid "paper size|US Letter Plus"
-msgstr "US Letter Plus"
+msgstr "US Pisemska ovojnica"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:267
 msgid "paper size|Monarch Envelope"
-msgstr "Monarch Envelope"
+msgstr "Ovojnica M"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:269
@@ -4120,7 +4120,7 @@ msgstr "Super B"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:287
 msgid "paper size|Wide Format"
-msgstr "Širok format"
+msgstr "Široki format"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:289
@@ -4140,12 +4140,12 @@ msgstr "Folio sp"
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:295
 msgid "paper size|Invite Envelope"
-msgstr "Ovojnica za povabilo"
+msgstr "Ovojnica vabila"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:297
 msgid "paper size|Italian Envelope"
-msgstr "Italijanska ovojnica"
+msgstr "Italianka"
 
 #. translators, strip everything up to the first |
 #: ../gtk/paper_names_offsets.c:299
@@ -4919,6 +4919,10 @@ msgstr "Ni mogoče dobiti podatkov o datoteki '%s': %s"
 #~ msgctxt "recent menu label"
 #~ msgid "%d. %s"
 #~ msgstr "%d. %s"
+#~ msgid "Spinner"
+#~ msgstr "Vrtavka"
+#~ msgid "Provides visual status"
+#~ msgstr "Predoči stanje"
 #~ msgctxt "Stock label"
 #~ msgid "_Add"
 #~ msgstr "_Dodaj"
