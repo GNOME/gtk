@@ -2501,9 +2501,8 @@ gtk_print (gchar *str)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  G_CALLBACK (gtk_widget_destroyed),
-			  &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
       
       gtk_window_set_title (GTK_WINDOW (window), "Messages");
       
@@ -2552,9 +2551,8 @@ gtk_print (gchar *str)
       
       
       button = gtk_button_new_with_label ("close");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 G_CALLBACK (gtk_widget_hide),
-				 GTK_OBJECT (window));
+      g_signal_connect_swapped (button, "clicked",
+				G_CALLBACK (gtk_widget_hide), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);

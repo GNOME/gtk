@@ -1898,7 +1898,7 @@ not applied you'll have to use the
 function. <literal>gtk_object_class_user_signal_new</literal> allows you
 to add a new signal to a predefined GTK+ widget without any
 modification of the GTK+ source code. The new signal can be
-emited with <literal>gtk_signal_emit</literal> and can be
+emited with <literal>g_signal_emit</literal> and can be
 handled in the same way as other signals.</para>
 
 <para>Tim Janik posted this code snippet:</para>
@@ -1920,7 +1920,7 @@ gtk_widget_user_action (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_signal_emit (GTK_OBJECT (widget), signal_user_action, act_data);
+  g_signal_emit (widget, signal_user_action, act_data);
 }
 </programlisting>
 
@@ -2559,10 +2559,10 @@ into the entry.</para>
 signal handler with</para>
 
 <programlisting role="C">
-      gtk_signal_connect(GTK_COMBO(cb)->entry,
-                         "changed",
-                         GTK_SIGNAL_FUNC(my_cb_change_handler),
-                         NULL);
+      g_signal_connect(GTK_COMBO(cb)->entry,
+                       "changed",
+                       G_CALLBACK(my_cb_change_handler),
+                       NULL);
 </programlisting>
 
 </sect1>
@@ -2864,9 +2864,9 @@ be:</para>
 
 <programlisting role="C">
   entry = gtk_entry_new();
-  gtk_signal_connect (GTK_OBJECT(entry), "activate",
-                      GTK_SIGNAL_FUNC(entry_callback),
-                      NULL);
+  g_signal_connect (entry, "activate",
+                    G_CALLBACK(entry_callback),
+                    NULL);
 </programlisting>
 
 </sect1>
@@ -3044,8 +3044,8 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), text);
 
   /* connect after everything else */
-  gtk_signal_connect_after (GTK_OBJECT(text), "button_press_event",
-    GTK_SIGNAL_FUNC (insert_bar), NULL);
+  g_signal_connect_after (text, "button_press_event",
+                          G_CALLBACK (insert_bar), NULL);
 
   gtk_widget_show_all(window);
   gtk_main();

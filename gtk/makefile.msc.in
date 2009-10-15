@@ -114,7 +114,6 @@ gtk_OBJECTS_deprecated = \
 	gtkprogress.obj \
 	gtktipsquery.obj \
 	gtkshow.obj \
-	gtksignal.obj \
 	gtkpixmap.obj \
 	gtkpreview.obj \
 	gtkseparatortoolitem.obj \
@@ -502,7 +501,6 @@ gtk_public_h_sources =		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
-	gtksignal.h		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
@@ -618,8 +616,6 @@ gtkmarshal.c : gtkmarshal.list
 
 gtktypefuncs.c : makefile.msc
 	echo /*none*/ > gtktypefuncs.c
-gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
-	$(CC) $(CFLAGS) -GD -c -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" gtksignal.c
 
 gtk-win32.res : gtk-win32.rc
 	rc -DBUILDNUMBER=0 -r -fo gtk-win32.res gtk-win32.rc

@@ -637,12 +637,10 @@ gtk_base_c_sources =            \
 gtk_public_h_sources += \
 	gtkpixmap.h		\
 	gtkprogress.h		\
-	gtksignal.h		\
 	gtktooltips.h
 gtk_base_c_sources += \
 	gtkpixmap.c		\
 	gtkprogress.c		\
-	gtksignal.c		\
 	gtktooltips.c
 
 gtk_c_sources = $(gtk_base_c_sources)

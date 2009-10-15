@@ -36,9 +36,6 @@
 
 #include <gtk/gtkwidget.h>
 
-/* Not needed, retained for compatibility -Yosh */
-#include <gtk/gtksignal.h>
-
 
 G_BEGIN_DECLS
 

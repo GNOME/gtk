@@ -45,7 +45,6 @@
 
 /* Not needed, retained for compatibility -Yosh */
 #include <gtk/gtkpixmap.h>
-#include <gtk/gtksignal.h>
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
