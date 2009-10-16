@@ -57,12 +57,7 @@ devices without having to keep track of complicated per-device
 settings.
 </para>
 <para>
-Various aspects of each device may be configured. The easiest way of
-creating a GUI to allow the user to configure such a device
-is to use the #GtkInputDialog widget in GTK+. 
-However, even when using this widget, application writers
-will need to directly query and set the configuration parameters
-in order to save the state between invocations of the application.
+Various aspects of each device may be configured.
 The configuration of devices is queried using gdk_devices_list().
 Each device must be activated using gdk_device_set_mode(), which
 also controls whether the device's range is mapped to the

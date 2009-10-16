@@ -2428,8 +2428,10 @@ gtk_main_quit
 
 #if IN_HEADER(__GTK_INPUTDIALOG_H__)
 #if IN_FILE(__GTK_INPUTDIALOG_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_input_dialog_get_type G_GNUC_CONST
 gtk_input_dialog_new
+#endif
 #endif
 #endif
 

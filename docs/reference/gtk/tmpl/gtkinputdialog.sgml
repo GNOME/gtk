@@ -5,15 +5,6 @@ GtkInputDialog
 Configure devices for the XInput extension
 
 <!-- ##### SECTION Long_Description ##### -->
-<para>
- NOTE this widget is considered too specialized/little-used for
- GTK+, and will in the future be moved to some other package.  If
- your application needs this widget, feel free to use it, as the
- widget does work and is useful in some applications; it's just not
- of general interest. However, we are not accepting new features for
- the widget, and it will eventually move out of the GTK+
- distribution.
-</para>
 
 <para>
 #GtkInputDialog displays a dialog which allows the user
@@ -31,6 +22,9 @@ the dialog, and one for saving the changes.
 No actions are bound to these by default.
 The changes that the user makes take effect
 immediately. 
+</para>
+<para>
+As of GTK+ 2.20, #GtkInputDialog has been deprecated since it is too specialized.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -55,6 +49,7 @@ to #GDK_MODE_ENABLED.
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly disabled device.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 <!-- ##### SIGNAL GtkInputDialog::enable-device ##### -->
 <para>
@@ -65,6 +60,7 @@ mode of a device from #GDK_MODE_DISABLED to a
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly enabled device.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 <!-- ##### FUNCTION gtk_input_dialog_new ##### -->
 <para>
@@ -72,5 +68,4 @@ Creates a new #GtkInputDialog.
 </para>
 
 @Returns: the new #GtkInputDialog.
-
-
+@Deprecated: 2.20: Don't use this widget anymore.

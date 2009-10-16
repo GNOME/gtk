@@ -113,7 +113,6 @@
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
-#include <gtk/gtkinputdialog.h>
 #include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>
 #include <gtk/gtklabel.h>
@@ -227,6 +226,7 @@
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkctree.h>
 #include <gtk/gtkfilesel.h>
+#include <gtk/gtkinputdialog.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>

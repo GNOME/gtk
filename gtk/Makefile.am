@@ -233,7 +233,6 @@ gtk_public_h_sources =          \
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinfobar.h		\
-	gtkinputdialog.h	\
 	gtkinvisible.h		\
 	gtkitem.h		\
 	gtklabel.h		\
@@ -635,6 +634,7 @@ gtk_public_h_sources += \
 	gtkcombo.h		\
 	gtkctree.h		\
 	gtkfilesel.h		\
+	gtkinputdialog.h	\
 	gtkitemfactory.h	\
 	gtklist.h		\
 	gtklistitem.h		\
