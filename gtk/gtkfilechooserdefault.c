@@ -6504,6 +6504,11 @@ my_g_format_time_for_display (glong secs)
   gchar *locale_format = NULL;
   gchar buf[256];
   char *date_str = NULL;
+#ifdef G_OS_WIN32
+  const char *locale, *dot = NULL;
+  gint64 codepage = -1;
+  char charset[20];
+#endif
 
   time_mtime = secs;
 
@@ -6511,7 +6516,7 @@ my_g_format_time_for_display (glong secs)
   localtime_r ((time_t *) &time_mtime, &tm_mtime);
 #else
   {
-    struct tm *ptm = localtime ((time_t *) &timeval.tv_sec);
+    struct tm *ptm = localtime ((time_t *) &time_mtime);
 
     if (!ptm)
       {
