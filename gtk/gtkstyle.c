@@ -41,6 +41,7 @@
 #include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 #include "gtkintl.h"
 #include "gtkalias.h"
+#include "gtkspinner.h"
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
