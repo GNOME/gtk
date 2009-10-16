@@ -506,7 +506,6 @@ gtk_base_c_sources =            \
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinfobar.c		\
-	gtkinputdialog.c	\
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkkeyhash.c		\
