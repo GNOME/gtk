@@ -22,7 +22,6 @@
 #include <gail/gailnotebook.h>
 #include <gail/gailobject.h>
 #include <gail/gailpaned.h>
-#include <gail/gailpixmap.h>
 #include <gail/gailprogressbar.h>
 #include <gail/gailradiobutton.h>
 #include <gail/gailradiomenuitem.h>

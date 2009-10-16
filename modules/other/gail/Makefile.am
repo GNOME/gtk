@@ -39,7 +39,6 @@ gail_c_sources =			\
 	gailnotebookpage.c		\
 	gailobject.c			\
 	gailpaned.c			\
-	gailpixmap.c			\
 	gailprogressbar.c		\
 	gailradiobutton.c		\
 	gailradiomenuitem.c		\
@@ -96,7 +95,6 @@ gail_private_h_sources =		\
 	gailnotebookpage.h		\
 	gailobject.h			\
 	gailpaned.h			\
-	gailpixmap.h			\
 	gailprogressbar.h		\
 	gailradiobutton.h		\
 	gailradiomenuitem.h		\
