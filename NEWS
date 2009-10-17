@@ -1,3 +1,21 @@
+Overview of Changes from GTK+ 2.18.2 to 2.18.3
+==============================================
+
+* Make selecting the last character in a label work again
+
+* Set accessible names on tool buttons
+
+* Win32:
+ - Fix the GDI+ pixbuf loader
+ - Disable XP themes for now
+ - Build fixes
+
+* Updated translations:
+ Brazilian Portuguese
+ Catalan
+ Estonian
+
+
 Overview of Changes from GTK+ 2.18.1 to 2.18.2
 ==============================================
 
