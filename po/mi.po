@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:16-0400\n"
+"POT-Creation-Date: 2009-10-17 00:20-0400\n"
 "PO-Revision-Date: 2004-01-27 07:36+1300\n"
 "Last-Translator: Wesley Parish <wes.parish@paradise.net.nz>\n"
 "Language-Team: GNOME Māori Team <maori@nzlinux.org.nz>\n"
@@ -349,7 +349,7 @@ msgstr "Kaore te whakatakotoranga a te puarahi a te whakaahua i te mohiotia"
 msgid "Failed to load image '%s': %s"
 msgstr "kua hinga kia uta i te whakaahua '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:953
+#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "He tuhituhi ki te puarahi a te whakaahua: %s"
@@ -1109,43 +1109,43 @@ msgstr "Te whakatakotoranga a te ataahua XPM"
 msgid "The EMF image format"
 msgstr "Te whakatakotoranga a te ataahua BMP"
 
-#: gdk-pixbuf/io-gdip-utils.c:220
+#: gdk-pixbuf/io-gdip-utils.c:232
 #, fuzzy, c-format
 msgid "Could not allocate memory: %s"
 msgstr "Kaore taea e whakarato pumahara mo "
 
-#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:359
-#: gdk-pixbuf/io-gdip-utils.c:395
+#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
+#: gdk-pixbuf/io-gdip-utils.c:411
 #, fuzzy, c-format
 msgid "Could not create stream: %s"
 msgstr "He tanga  '%s' : %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:259
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, fuzzy, c-format
 msgid "Could not seek stream: %s"
 msgstr "Mea whiriwhiri a te atanga"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: gdk-pixbuf/io-gdip-utils.c:283
 #, fuzzy, c-format
 msgid "Could not read from stream: %s"
 msgstr "He tanga  '%s' : %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:684 gdk-pixbuf/io-gdip-utils.c:816
+#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
 #, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "Kaore e taea e   i te ingoa a te puarahi"
 
-#: gdk-pixbuf/io-gdip-utils.c:839
+#: gdk-pixbuf/io-gdip-utils.c:847
 #, fuzzy
 msgid "Couldn't load metafile"
 msgstr "Kaore e taea e   i te ingoa a te puarahi"
 
-#: gdk-pixbuf/io-gdip-utils.c:998
+#: gdk-pixbuf/io-gdip-utils.c:1006
 #, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "He  ataahua RAS tautokotia"
 
-#: gdk-pixbuf/io-gdip-utils.c:1005
+#: gdk-pixbuf/io-gdip-utils.c:1013
 #, fuzzy
 msgid "Couldn't save"
 msgstr "Kaore e taea te toenga e pupuri"
@@ -2340,13 +2340,13 @@ msgid "Cl_ear"
 msgstr "_Whakawātea"
 
 #. Open Link
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5527
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Huaki"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5541
+#: gtk/gtklabel.c:5539
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2390,20 +2390,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:709
+#: gtk/gtkmain.c:711
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:777
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "Show GTK+ Options"
 msgstr ""
 

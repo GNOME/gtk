@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:16-0400\n"
+"POT-Creation-Date: 2009-10-17 00:20-0400\n"
 "PO-Revision-Date: 2009-08-24 17:09+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -337,7 +337,7 @@ msgstr "अपरिचित छवि फ़ाइल फ़ॉर्मेट
 msgid "Failed to load image '%s': %s"
 msgstr "छवि '%s' को लोड करने में असफल: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:953
+#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "छवि फ़ाइल में लिखने में त्रुटि: %s"
@@ -1068,40 +1068,40 @@ msgstr "XPM छवि फ़ॉर्मेट"
 msgid "The EMF image format"
 msgstr "EMF छवि फ़ॉर्मेट"
 
-#: gdk-pixbuf/io-gdip-utils.c:220
+#: gdk-pixbuf/io-gdip-utils.c:232
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "स्मृति आवंटित नहीं किया जा सका: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:359
-#: gdk-pixbuf/io-gdip-utils.c:395
+#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
+#: gdk-pixbuf/io-gdip-utils.c:411
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "स्ट्रीम नहीं बना सका: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:259
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "स्ट्रीम पा नहीं सका: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: gdk-pixbuf/io-gdip-utils.c:283
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "स्ट्रीम से पढ़ नहीं सका: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:684 gdk-pixbuf/io-gdip-utils.c:816
+#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
 msgstr "बिटमैप भारित नहीं किया जा सका"
 
-#: gdk-pixbuf/io-gdip-utils.c:839
+#: gdk-pixbuf/io-gdip-utils.c:847
 msgid "Couldn't load metafile"
 msgstr "मेटाफ़ाइल लोड नहीं किया जा सका"
 
-#: gdk-pixbuf/io-gdip-utils.c:998
+#: gdk-pixbuf/io-gdip-utils.c:1006
 msgid "Unsupported image format for GDI+"
 msgstr "GDI+ के लिए असमर्थित छवि प्रारूप"
 
-#: gdk-pixbuf/io-gdip-utils.c:1005
+#: gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
 msgstr "सहेज नहीं सका"
 
@@ -2283,12 +2283,12 @@ msgid "Cl_ear"
 msgstr "साफ करें (_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5527
 msgid "_Open Link"
 msgstr "कड़ी खोलें (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5541
+#: gtk/gtklabel.c:5539
 msgid "Copy _Link Address"
 msgstr "कड़ी पता की नक़ल लें (_L)"
 
@@ -2334,20 +2334,20 @@ msgstr "GTK+ डिबगिंग फ्लैग अनसेट किया 
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:709
+#: gtk/gtkmain.c:711
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:777
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "डिस्प्ले खोल नही सकता है: %s"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "GTK+ Options"
 msgstr "GTK+ विकल्प"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "Show GTK+ Options"
 msgstr "GTK+ विकल्प दिखायें"
 

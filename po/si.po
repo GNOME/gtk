@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:16-0400\n"
+"POT-Creation-Date: 2009-10-17 00:20-0400\n"
 "PO-Revision-Date: 2007-12-28 13:32+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
@@ -345,7 +345,7 @@ msgstr "හදුනා නොගත් පිළිඹිබු සංයුත
 msgid "Failed to load image '%s': %s"
 msgstr "'%s' පිළිඹිබුවට පූරණය දෝෂ සහිතයි: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:953
+#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "පිළිඹිබුවට ලිවීම දෝෂ සහිතයි : %s"
@@ -1086,43 +1086,43 @@ msgstr "XPM පිළිඹිබු සංයුතිය"
 msgid "The EMF image format"
 msgstr "BMP පිළිඹිබු සංයුතිය"
 
-#: gdk-pixbuf/io-gdip-utils.c:220
+#: gdk-pixbuf/io-gdip-utils.c:232
 #, fuzzy, c-format
 msgid "Could not allocate memory: %s"
 msgstr "ශීර්ෂකය සඳහා මතකය වෙන් කළ නොහැකි විය"
 
-#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:359
-#: gdk-pixbuf/io-gdip-utils.c:395
+#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
+#: gdk-pixbuf/io-gdip-utils.c:411
 #, fuzzy, c-format
 msgid "Could not create stream: %s"
 msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
 
-#: gdk-pixbuf/io-gdip-utils.c:259
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, fuzzy, c-format
 msgid "Could not seek stream: %s"
 msgstr "අයිතමය ඉවත් කළ නොහැකි විය"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: gdk-pixbuf/io-gdip-utils.c:283
 #, fuzzy, c-format
 msgid "Could not read from stream: %s"
 msgstr "%s හි නම %s ලෙස වෙනස් කළ නොහැක: %s\n"
 
-#: gdk-pixbuf/io-gdip-utils.c:684 gdk-pixbuf/io-gdip-utils.c:816
+#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
 #, fuzzy
 msgid "Couldn't load bitmap"
 msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
 
-#: gdk-pixbuf/io-gdip-utils.c:839
+#: gdk-pixbuf/io-gdip-utils.c:847
 #, fuzzy
 msgid "Couldn't load metafile"
 msgstr "ගොනු නාමය පරිවර්තනය කළ නොහැකි විය"
 
-#: gdk-pixbuf/io-gdip-utils.c:998
+#: gdk-pixbuf/io-gdip-utils.c:1006
 #, fuzzy
 msgid "Unsupported image format for GDI+"
 msgstr "සහාය නොදක්වන RAS පිළිඹිබු විචලනය"
 
-#: gdk-pixbuf/io-gdip-utils.c:1005
+#: gdk-pixbuf/io-gdip-utils.c:1013
 #, fuzzy
 msgid "Couldn't save"
 msgstr "ඉතිරිය සුරකීය නොහැක"
@@ -2289,13 +2289,13 @@ msgid "Cl_ear"
 msgstr "පැහැදිලි කරන්න (_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5527
 #, fuzzy
 msgid "_Open Link"
 msgstr "විවෘත කරන්න (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5541
+#: gtk/gtklabel.c:5539
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2337,20 +2337,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:709
+#: gtk/gtkmain.c:711
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:777
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "GTK+ Options"
 msgstr "GTK+ විකල්ප"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "Show GTK+ Options"
 msgstr "GTK+ විකල්ප දර්ශනය කරන්න"
 

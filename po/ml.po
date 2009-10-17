@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:16-0400\n"
+"POT-Creation-Date: 2009-10-17 00:20-0400\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -331,7 +331,7 @@ msgstr "ഇമേജ് ഫയലിന്റെ അപരിചിതമായ 
 msgid "Failed to load image '%s': %s"
 msgstr "'%s' എന്ന ഇമേജ് ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:953
+#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "ഇമേജ് ഫയലിലേക്ക് സൂക്ഷിക്കുന്നതില്‍ പരാജയം: %s"
@@ -1069,40 +1069,40 @@ msgstr "XPM ഇമേജ് രീതി"
 msgid "The EMF image format"
 msgstr "EMF ഇമേജ് രീതി"
 
-#: gdk-pixbuf/io-gdip-utils.c:220
+#: gdk-pixbuf/io-gdip-utils.c:232
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല :%s"
 
-#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:359
-#: gdk-pixbuf/io-gdip-utils.c:395
+#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
+#: gdk-pixbuf/io-gdip-utils.c:411
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "സ്റ്റ്രീം ഉണ്ടാക്കാന്‍ കഴിഞ്ഞില്ല : %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:259
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "സ്റ്റ്രീം കണ്ടുപിടിക്കാന്‍/തിരയാന്‍ കഴിഞ്ഞില്ല : %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: gdk-pixbuf/io-gdip-utils.c:283
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "സ്റ്റ്രീം വായിക്കാന്‍ കഴിഞ്ഞില്ല : %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:684 gdk-pixbuf/io-gdip-utils.c:816
+#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
 msgstr "ബിറ്റ്മാപ് തുരക്കാന്‍ കഴിഞ്ഞില്ല"
 
-#: gdk-pixbuf/io-gdip-utils.c:839
+#: gdk-pixbuf/io-gdip-utils.c:847
 msgid "Couldn't load metafile"
 msgstr "മെറ്റാഫയല്‍ തുരക്കാന്‍ കഴിഞ്ഞില്ല"
 
-#: gdk-pixbuf/io-gdip-utils.c:998
+#: gdk-pixbuf/io-gdip-utils.c:1006
 msgid "Unsupported image format for GDI+"
 msgstr "പിന്തുണ ലഭ്യമല്ലാത്ത ചിത്ര രീതി,  GDI+ -ഇനുള്ളതു്‌"
 
-#: gdk-pixbuf/io-gdip-utils.c:1005
+#: gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
 msgstr "സൂക്ഷിക്കുവാന്‍ സാധ്യമായില്ല"
 
@@ -2267,12 +2267,12 @@ msgid "Cl_ear"
 msgstr "വെ_ടിപ്പാക്കുക"
 
 #. Open Link
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5527
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5541
+#: gtk/gtklabel.c:5539
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 
@@ -2314,20 +2314,20 @@ msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GT
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:709
+#: gtk/gtkmain.c:711
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:777
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ഡിസ്പ്ലെ തുറക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:814
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
