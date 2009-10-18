@@ -149,14 +149,12 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
   return GDK_WINDOW_OBJECT (_gdk_root)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
   return GDK_WINDOW_OBJECT (_gdk_root)->height;
 }
 gint
