@@ -2071,7 +2071,7 @@ gdk_win32_window_get_root_coords (GdkWindow *window,
   GDK_NOTE (MISC, g_print ("gdk_win32_window_get_root_coords: %p: %+d%+d %+d%+d\n",
 			   GDK_WINDOW_HWND (window),
 			   x, y,
-			   tx, ty));
+			   tx + _gdk_offset_x, ty + _gdk_offset_y));
   return 1;
 }
 
