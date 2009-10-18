@@ -1872,8 +1872,6 @@ static void
 gdk_win32_window_set_back_pixmap (GdkWindow *window,
 				  GdkPixmap *pixmap)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
   /* TODO_CSW? but win32 has no XSetWindowBackgroundPixmap */
 }
 
@@ -2355,34 +2353,6 @@ do_shape_combine_region (GdkWindow *window,
   SetWindowRgn (GDK_WINDOW_HWND (window), hrgn, TRUE);
 }
 
-static void
-gdk_win32_window_shape_combine_mask (GdkWindow *window,
-				     GdkBitmap *mask,
-				     gint x, gint y)
-{
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  if (!mask)
-    {
-      GDK_NOTE (MISC, g_print ("gdk_win32_window_shape_combine_mask: %p: none\n",
-			       GDK_WINDOW_HWND (window)));
-      SetWindowRgn (GDK_WINDOW_HWND (window), NULL, TRUE);
-    }
-  else
-    {
-      HRGN hrgn;
-
-      GDK_NOTE (MISC, g_print ("gdk_win32_window_shape_combine_mask: %p: %p\n",
-			       GDK_WINDOW_HWND (window),
-			       GDK_WINDOW_HWND (mask)));
-
-      /* Convert mask bitmap to region */
-      hrgn = _gdk_win32_bitmap_to_hrgn (mask);
-
-      do_shape_combine_region (window, hrgn, x, y);
-    }
-}
-
 void
 gdk_window_set_override_redirect (GdkWindow *window,
 				  gboolean   override_redirect)
@@ -2833,63 +2803,6 @@ QueryTree (HWND   hwnd,
 	  *children[i] = child;
 	}
     }
-}
-
-static void
-gdk_propagate_shapes (HANDLE   win,
-		      gboolean merge)
-{
-   RECT emptyRect;
-   HRGN region, childRegion;
-   HWND *list = NULL;
-   gint i, num;
-
-   SetRectEmpty (&emptyRect);
-   region = CreateRectRgnIndirect (&emptyRect);
-   if (merge)
-     GetWindowRgn (win, region);
-   
-   QueryTree (win, &list, &num);
-   if (list != NULL)
-     {
-       WINDOWPLACEMENT placement;
-
-       placement.length = sizeof (WINDOWPLACEMENT);
-       /* go through all child windows and combine regions */
-       for (i = 0; i < num; i++)
-	 {
-	   GetWindowPlacement (list[i], &placement);
-	   if (placement.showCmd == SW_SHOWNORMAL)
-	     {
-	       childRegion = CreateRectRgnIndirect (&emptyRect);
-	       GetWindowRgn (list[i], childRegion);
-	       CombineRgn (region, region, childRegion, RGN_OR);
-	       DeleteObject (childRegion);
-	     }
-	  }
-       SetWindowRgn (win, region, TRUE);
-       g_free (list);
-     }
-   else
-     DeleteObject (region);
-}
-
-static void
-gdk_win32_window_set_child_shapes (GdkWindow *window)
-{
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  gdk_propagate_shapes (GDK_WINDOW_HWND (window), FALSE);
-}
-
-static void
-gdk_win32_window_merge_child_shapes (GdkWindow *window)
-{
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  gdk_propagate_shapes (GDK_WINDOW_HWND (window), TRUE);
 }
 
 static gboolean 
@@ -3422,8 +3335,6 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
 				       gint             offset_x,
 				       gint             offset_y)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
