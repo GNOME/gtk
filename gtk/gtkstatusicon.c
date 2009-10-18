@@ -1352,7 +1352,7 @@ find_icon_size (GtkWidget *widget,
   dist = G_MAXINT;
   size = GTK_ICON_SIZE_MENU;
 
-  for (s = GTK_ICON_SIZE_MENU; s < GTK_ICON_SIZE_DIALOG; s++)
+  for (s = GTK_ICON_SIZE_MENU; s <= GTK_ICON_SIZE_DIALOG; s++)
     {
       if (gtk_icon_size_lookup_for_settings (settings, s, &w, &h) &&
 	  w <= pixel_size && h <= pixel_size)
