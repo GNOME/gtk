@@ -2773,38 +2773,6 @@ _gdk_window_get_functions (GdkWindow     *window,
   return (functions_set != NULL);
 }
 
-static void
-QueryTree (HWND   hwnd,
-	   HWND **children,
-	   gint  *nchildren)
-{
-  guint i, n;
-  HWND child = NULL;
-
-  n = 0;
-  do {
-    if (n == 0)
-      child = GetWindow (hwnd, GW_CHILD);
-    else
-      child = GetWindow (child, GW_HWNDNEXT);
-    if (child != NULL)
-      n++;
-  } while (child != NULL);
-
-  if (n > 0)
-    {
-      *children = g_new (HWND, n);
-      for (i = 0; i < n; i++)
-	{
-	  if (i == 0)
-	    child = GetWindow (hwnd, GW_CHILD);
-	  else
-	    child = GetWindow (child, GW_HWNDNEXT);
-	  *children[i] = child;
-	}
-    }
-}
-
 static gboolean 
 gdk_win32_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
