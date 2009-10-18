@@ -548,7 +548,7 @@ _gdk_window_impl_new (GdkWindow     *window,
       private->input_only = TRUE;
       draw_impl->colormap = gdk_screen_get_system_colormap (_gdk_screen);
       g_object_ref (draw_impl->colormap);
-      GDK_NOTE (MISC, g_print ("... GDK_INPUT_ONLY, system colormap"));
+      GDK_NOTE (MISC, g_print ("... GDK_INPUT_ONLY, system colormap\n"));
     }
 
   switch (private->window_type)
