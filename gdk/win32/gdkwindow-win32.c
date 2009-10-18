@@ -277,8 +277,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   private->y = 0;
   private->abs_x = 0;
   private->abs_y = 0;
-  private->width = GetSystemMetrics (SM_CXSCREEN);
-  private->height = GetSystemMetrics (SM_CYSCREEN);
+  /* width and height already initialised in _gdk_root_window_size_init() */
   private->viewable = TRUE;
 
   gdk_win32_handle_table_insert ((HANDLE *) &draw_impl->handle, _gdk_root);
