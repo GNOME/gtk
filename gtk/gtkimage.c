@@ -45,6 +45,7 @@ struct _GtkImagePrivate
   gchar *filename;
 
   gint pixel_size;
+  guint need_calc_size : 1;
 };
 
 #define GTK_IMAGE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_IMAGE, GtkImagePrivate))
@@ -1710,6 +1711,7 @@ gtk_image_expose (GtkWidget      *widget,
     {
       GtkImage *image;
       GtkMisc *misc;
+      GtkImagePrivate *priv;
       GdkRectangle area, image_bound;
       gfloat xalign;
       gint x, y, mask_x, mask_y;
@@ -1719,6 +1721,7 @@ gtk_image_expose (GtkWidget      *widget,
 
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
+      priv = GTK_IMAGE_GET_PRIVATE (image);
 
       area = event->area;
 
@@ -1727,7 +1730,7 @@ gtk_image_expose (GtkWidget      *widget,
        * and size_request() if something explicitely forces
        * a redraw.
        */
-      if (widget->requisition.width == 0 && widget->requisition.height == 0)
+      if (priv->need_calc_size)
 	gtk_image_calc_size (image);
       
       if (!gdk_rectangle_intersect (&area, &widget->allocation, &area))
@@ -1737,7 +1740,7 @@ gtk_image_expose (GtkWidget      *widget,
 	xalign = misc->xalign;
       else
 	xalign = 1.0 - misc->xalign;
-  
+
       x = floor (widget->allocation.x + misc->xpad
 		 + ((widget->allocation.width - widget->requisition.width) * xalign));
       y = floor (widget->allocation.y + misc->ypad 
@@ -2149,8 +2152,13 @@ gtk_image_reset (GtkImage *image)
 void
 gtk_image_clear (GtkImage *image)
 {
-  gtk_image_reset (image);
+  GtkImagePrivate *priv;
 
+  priv = GTK_IMAGE_GET_PRIVATE (image);
+
+  priv->need_calc_size = 1;
+
+  gtk_image_reset (image);
   gtk_image_update_size (image, 0, 0);
 }
 
@@ -2159,7 +2167,12 @@ gtk_image_calc_size (GtkImage *image)
 {
   GtkWidget *widget = GTK_WIDGET (image);
   GdkPixbuf *pixbuf = NULL;
-  
+  GtkImagePrivate *priv;
+
+  priv = GTK_IMAGE_GET_PRIVATE (image);
+
+  priv->need_calc_size = 0;
+
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
    * image, we just update the requisition when the image data
