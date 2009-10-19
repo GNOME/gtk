@@ -501,7 +501,7 @@ gtk_tooltip_window_style_set (GtkTooltip *tooltip)
 			     tooltip->window->style->ythickness,
 			     tooltip->window->style->xthickness,
 			     tooltip->window->style->xthickness);
-  gtk_box_set_spacing (GTK_BOX (tooltip->hbox,
+  gtk_box_set_spacing (GTK_BOX (tooltip->box),
 		       tooltip->window->style->xthickness);
 
   gtk_widget_queue_draw (tooltip->window);
