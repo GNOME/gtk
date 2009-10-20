@@ -33,10 +33,6 @@
 
 #include <gtk/gtk.h>
 
-#ifdef G_OS_WIN32
-#include <direct.h> /* for _getcwd() */
-#endif
-
 #include "prop-editor.h"
 
 static gchar *backend = "gtk+";
@@ -267,7 +263,7 @@ main (int   argc,
   GtkWidget *hbox, *label, *chooser, *button;
   GtkSizeGroup *label_group;
   GOptionContext *context;
-  gchar cwd[2048];
+  gchar *cwd;
 
   context = g_option_context_new ("- test GtkFileChooserButton widget");
   g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
@@ -281,8 +277,9 @@ main (int   argc,
   if (rtl)
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
-  getcwd (cwd, sizeof (cwd));
+  cwd = g_get_current_dir();
   gtk_src_dir = g_path_get_dirname (cwd);
+  g_free (cwd);
 
   win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, GTK_DIALOG_NO_SEPARATOR,
 				     GTK_STOCK_QUIT, GTK_RESPONSE_CLOSE, NULL);
