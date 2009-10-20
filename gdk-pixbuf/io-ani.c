@@ -329,7 +329,7 @@ ani_load_chunk (AniLoaderContext *context, GError **error)
 			 (context->Flags & 0x2) != 0, 
 			 (context->Flags & 0x1) != 0);
 #endif
-		if (!context->Flags & 0x2) 
+		if (!(context->Flags & 0x2))
 		{
 			g_set_error_literal (error,
                                              GDK_PIXBUF_ERROR,
