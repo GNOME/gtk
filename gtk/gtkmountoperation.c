@@ -981,21 +981,22 @@ update_process_list_store (GtkMountOperation *mount_operation,
 
   diff_sorted_arrays (current_pids, processes, pid_equal, pid_indices_to_add, pid_indices_to_remove);
 
-  if (pid_indices_to_add->len > 0)
-    lookup_context = _gtk_mount_operation_lookup_context_get (gtk_widget_get_display (mount_operation->priv->process_tree_view));
-  for (n = 0; n < pid_indices_to_add->len; n++)
-    {
-      pid = g_array_index (processes, GPid, n);
-      add_pid_to_process_list_store (mount_operation, lookup_context, list_store, pid);
-    }
-
   for (n = 0; n < pid_indices_to_remove->len; n++)
     {
       pid = g_array_index (current_pids, GPid, n);
       remove_pid_from_process_list_store (mount_operation, list_store, pid);
     }
+
   if (pid_indices_to_add->len > 0)
-    _gtk_mount_operation_lookup_context_free (lookup_context);
+    {
+      lookup_context = _gtk_mount_operation_lookup_context_get (gtk_widget_get_display (mount_operation->priv->process_tree_view));
+      for (n = 0; n < pid_indices_to_add->len; n++)
+        {
+          pid = g_array_index (processes, GPid, n);
+          add_pid_to_process_list_store (mount_operation, lookup_context, list_store, pid);
+        }
+      _gtk_mount_operation_lookup_context_free (lookup_context);
+    }
 
   /* select the first item, if we went from a zero to a non-zero amount of processes */
   if (current_pids->len == 0 && pid_indices_to_add->len > 0)
