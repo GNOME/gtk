@@ -3309,8 +3309,6 @@ gdk_window_flush_if_exposing (GdkWindow *window)
 {
   GdkWindowObject *private;
   GdkWindowObject *impl_window;
-  GList *l;
-  GdkWindowRegionMove *move;
 
   private = (GdkWindowObject *) window;
   impl_window = gdk_window_get_impl_window (private);

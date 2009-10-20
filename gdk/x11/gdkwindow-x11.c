@@ -3439,8 +3439,6 @@ do_shape_combine_region (GdkWindow       *window,
 			 gint             offset_y,
 			 gint             shape)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  
   if (GDK_WINDOW_DESTROYED (window))
     return;
 

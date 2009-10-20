@@ -2343,7 +2343,6 @@ specific_filter_add_child (void)
 static void
 specific_list_store_clear (void)
 {
-  int i;
   GtkTreeIter iter;
   GtkListStore *list;
   GtkTreeModel *filter;
