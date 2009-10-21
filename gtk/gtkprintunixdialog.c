@@ -3790,12 +3790,16 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   create_main_page (print_dialog);
   create_page_setup_page (print_dialog);
   create_job_page (print_dialog);
+  /* Translators: this will appear as tab label in print dialog. */
   create_optional_page (print_dialog, _("Image Quality"),
                         &priv->image_quality_table,
                         &priv->image_quality_page);
+  /* Translators: this will appear as tab label in print dialog. */
   create_optional_page (print_dialog, _("Color"),
                         &priv->color_table,
                         &priv->color_page);
+  /* Translators: this will appear as tab label in print dialog. */
+  /* It's a typographical term, as in "Binding and finishing" */
   create_optional_page (print_dialog, _("Finishing"),
                         &priv->finishing_table,
                         &priv->finishing_page);
