@@ -1156,14 +1156,6 @@ gtk_entry_set_visibility
 gtk_entry_set_width_chars
 gtk_entry_text_index_to_layout_index
 gtk_entry_unset_invisible_char
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_entry_append_text
-gtk_entry_new_with_max_length
-gtk_entry_prepend_text
-gtk_entry_select_region
-gtk_entry_set_editable
-gtk_entry_set_position
-#endif
 #endif
 #endif
 

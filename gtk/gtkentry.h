@@ -303,28 +303,6 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GdkDragAction         actions);
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
 
-GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
-                                                          GtkEntryIconPosition  icon_pos);
-
-
-/* Deprecated compatibility functions
- */
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget* gtk_entry_new_with_max_length	(gint           max);
-void       gtk_entry_append_text    		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_prepend_text   		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_set_position   		(GtkEntry      *entry,
-						 gint           position);
-void       gtk_entry_select_region  		(GtkEntry      *entry,
-						 gint           start,
-						 gint           end);
-void       gtk_entry_set_editable   		(GtkEntry      *entry,
-						 gboolean       editable);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_H__ */
