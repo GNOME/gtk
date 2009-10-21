@@ -1105,6 +1105,7 @@ gtk_ctree_unselect_recursive
 
 #if IN_HEADER(__GTK_CURVE_H__)
 #if IN_FILE(__GTK_CURVE_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_curve_get_type G_GNUC_CONST
 gtk_curve_get_vector
 gtk_curve_new
@@ -1113,6 +1114,7 @@ gtk_curve_set_curve_type
 gtk_curve_set_gamma
 gtk_curve_set_range
 gtk_curve_set_vector
+#endif
 #endif
 #endif
 
@@ -1773,8 +1775,10 @@ gtk_frame_set_shadow_type
 
 #if IN_HEADER(__GTK_GAMMA_CURVE_H__)
 #if IN_FILE(__GTK_GAMMA_CURVE_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_gamma_curve_get_type G_GNUC_CONST
 gtk_gamma_curve_new
+#endif
 #endif
 #endif
 

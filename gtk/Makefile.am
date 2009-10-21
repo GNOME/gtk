@@ -191,7 +191,6 @@ gtk_public_h_sources =          \
 	gtkcombobox.h		\
 	gtkcomboboxentry.h	\
 	gtkcontainer.h		\
-	gtkcurve.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -212,7 +211,6 @@ gtk_public_h_sources =          \
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
-	gtkgamma.h		\
 	gtkgc.h			\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
@@ -446,7 +444,6 @@ gtk_base_c_sources =            \
 	gtkcombobox.c		\
 	gtkcomboboxentry.c	\
 	gtkcontainer.c		\
-	gtkcurve.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
@@ -471,7 +468,6 @@ gtk_base_c_sources =            \
 	gtkfontbutton.c         \
 	gtkfontsel.c            \
 	gtkframe.c		\
-	gtkgamma.c		\
 	gtkgc.c			\
 	gtkhandlebox.c		\
 	gtkhbbox.c		\
@@ -633,7 +629,9 @@ gtk_public_h_sources += \
 	gtkclist.h		\
 	gtkcombo.h		\
 	gtkctree.h		\
+ 	gtkcurve.h		\
 	gtkfilesel.h		\
+ 	gtkgamma.h		\
 	gtkinputdialog.h	\
 	gtkitemfactory.h	\
 	gtklist.h		\
@@ -650,7 +648,9 @@ gtk_base_c_sources += \
 	gtkclist.c		\
 	gtkcombo.c		\
 	gtkctree.c		\
+	gtkcurve.c		\
 	gtkfilesel.c		\
+	gtkgamma.c		\
 	gtkitemfactory.c	\
 	gtklist.c		\
 	gtklistitem.c		\

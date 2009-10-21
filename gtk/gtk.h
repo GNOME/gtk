@@ -72,7 +72,6 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxentry.h>
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtkcurve.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
@@ -93,7 +92,6 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkgamma.h>
 #include <gtk/gtkgc.h>
 #include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbbox.h>
@@ -225,7 +223,9 @@
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkctree.h>
+#include <gtk/gtkcurve.h>
 #include <gtk/gtkfilesel.h>
+#include <gtk/gtkgamma.h>
 #include <gtk/gtkinputdialog.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklist.h>
