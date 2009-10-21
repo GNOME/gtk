@@ -349,21 +349,13 @@ gchar *_gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
 
 gchar  *_gdk_win32_last_error_string (void);
 void    _gdk_win32_api_failed        (const gchar *where,
-				     gint line,
 				     const gchar *api);
 void    _gdk_other_api_failed        (const gchar *where,
-				     gint line,
 				     const gchar *api);
 
-#if defined(__GNUC__) && (__GNUC__ < 3)
-#define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
+#define WIN32_API_FAILED(api) _gdk_win32_api_failed (G_STRLOC , api)
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
-#define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__ ":" __PRETTY_FUNCTION__, __LINE__, api)
-#else
-#define WIN32_API_FAILED(api) _gdk_win32_api_failed (__FILE__, __LINE__, api)
-#define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
-#define OTHER_API_FAILED(api) _gdk_other_api_failed (__FILE__, __LINE__, api)
-#endif
+#define OTHER_API_FAILED(api) _gdk_other_api_failed (G_STRLOC, api)
  
 /* These two macros call a GDI or other Win32 API and if the return
  * value is zero or NULL, print a warning message. The majority of GDI
