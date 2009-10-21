@@ -1318,7 +1318,7 @@ gdk_pixbuf__bmp_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 	put32 (dst, 0);			/* biClrUsed */
 	put32 (dst, 0);			/* biClrImportant */
 
-	if (!save_func (BFH_BIH, 14 + 40, error, user_data))
+	if (!save_func ((gchar *)BFH_BIH, 14 + 40, error, user_data))
 		return FALSE;
 
 	dst_line = buf = g_try_malloc (size);
@@ -1341,7 +1341,7 @@ gdk_pixbuf__bmp_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 			dst[2] = src[0];
 		}
 	}
-	ret = save_func (buf, size, error, user_data);
+	ret = save_func ((gchar *)buf, size, error, user_data);
 	g_free (buf);
 
 	return ret;
