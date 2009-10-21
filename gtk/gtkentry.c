@@ -216,7 +216,8 @@ enum {
   PROP_TOOLTIP_TEXT_SECONDARY,
   PROP_TOOLTIP_MARKUP_PRIMARY,
   PROP_TOOLTIP_MARKUP_SECONDARY,
-  PROP_IM_MODULE
+  PROP_IM_MODULE,
+  PROP_EDITING_CANCELED
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -621,6 +622,10 @@ gtk_entry_class_init (GtkEntryClass *class)
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
   quark_cursor_hadjustment = g_quark_from_static_string ("gtk-hadjustment");
   quark_capslock_feedback = g_quark_from_static_string ("gtk-entry-capslock-feedback");
+
+  g_object_class_override_property (gobject_class,
+                                    PROP_EDITING_CANCELED,
+                                    "editing-canceled");
 
   g_object_class_install_property (gobject_class,
                                    PROP_BUFFER,
@@ -2194,6 +2199,11 @@ gtk_entry_get_property (GObject         *object,
     case PROP_TOOLTIP_MARKUP_SECONDARY:
       g_value_take_string (value,
                            gtk_entry_get_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY));
+      break;
+
+    case PROP_EDITING_CANCELED:
+      g_value_set_boolean (value,
+                           entry->editing_canceled);
       break;
 
     default:
