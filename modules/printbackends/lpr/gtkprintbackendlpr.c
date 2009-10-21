@@ -191,7 +191,7 @@ _cairo_write (void                *closure,
 	}    
 
       GTK_NOTE (PRINTING,
-                g_print ("LPR Backend: Wrote %i bytes to temp file\n", written));
+                g_print ("LPR Backend: Wrote %" G_GSIZE_FORMAT " bytes to temp file\n", written));
 
       data += written;
       length -= written;
@@ -303,7 +303,7 @@ lpr_write (GIOChannel   *source,
     }
 
   GTK_NOTE (PRINTING,
-            g_print ("LPR Backend: Writting %i byte chunk to lpr pipe\n", bytes_read));
+            g_print ("LPR Backend: Writting %" G_GSIZE_FORMAT " byte chunk to lpr pipe\n", bytes_read));
 
 
   return TRUE;
