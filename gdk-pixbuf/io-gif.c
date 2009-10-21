@@ -1344,7 +1344,7 @@ gif_get_next_step (GifContext *context)
 }
 
 
-#define LOG(x) /* g_print ("%d: %s\n", __LINE__, x); */
+#define LOG(x) /* g_print ("%s: %s\n", G_STRLOC, x); */
 
 static gint
 gif_main_loop (GifContext *context)
