@@ -53,8 +53,8 @@
 
 #define CQTESTF(quiet, expr, failfmt) \
   (tmpb = (expr), \
-   (tmpb ? (quiet ? 0 : printf ("PASS: %d %s\n", __LINE__, #expr)) \
-         : (printf ("FAIL: %d %s", __LINE__, #expr), \
+   (tmpb ? (quiet ? 0 : printf ("PASS: %s %s\n", G_STRLOC, #expr)) \
+         : (printf ("FAIL: %s %s", G_STRLOC, #expr), \
          printf failfmt, \
          printf ("\n"), \
          retval = FALSE, \
