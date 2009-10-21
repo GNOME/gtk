@@ -192,8 +192,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
 static void                 gtk_about_dialog_show           (GtkWidget          *widge);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
-static void                 activate_url                    (GtkWidget          *widget,
-							     gpointer            data);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
 							     GtkTextView        *text_view,
 							     GtkTextIter        *iter);
@@ -1753,30 +1751,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   g_object_notify (G_OBJECT (about), "logo-icon-name");
 
   g_object_thaw_notify (G_OBJECT (about));
-}
-
-static void
-activate_url (GtkWidget *widget, 
-	      gpointer   data)
-{
-  GtkAboutDialog *about = GTK_ABOUT_DIALOG (data);
-  const gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
-  GtkAboutDialogActivateLinkFunc url_hook;
-  gpointer url_hook_data;
-
-  if (activate_url_hook_set)
-    {
-      url_hook = activate_url_hook;
-      url_hook_data = activate_url_hook_data;
-    }
-  else
-    {
-      url_hook = default_url_hook;
-      url_hook_data = NULL;
-    }
-
-  if (url_hook)
-    url_hook (about, url, url_hook_data);
 }
 
 static void
