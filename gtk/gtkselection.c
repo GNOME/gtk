@@ -3067,7 +3067,7 @@ gtk_selection_default_handler (GtkWidget	*widget,
     {
       gtk_selection_data_set (data,
 			      gdk_atom_intern_static_string ("NULL"),
-			      32, "", 0);
+			      32, NULL, 0);
     }
   else
     {
