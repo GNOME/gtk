@@ -2302,6 +2302,12 @@ update_label_and_image (GtkFileChooserButton *button)
   label_text = NULL;
   pixbuf = NULL;
 
+  if (priv->update_button_cancellable)
+    {
+      g_cancellable_cancel (priv->update_button_cancellable);
+      priv->update_button_cancellable = NULL;
+    }
+
   if (files && files->data)
     {
       GFile *file;
@@ -2331,12 +2337,6 @@ update_label_and_image (GtkFileChooserButton *button)
 
 	  if (label_text)
 	    goto out;
-	}
-
-      if (priv->update_button_cancellable)
-	{
-	  g_cancellable_cancel (priv->update_button_cancellable);
-	  priv->update_button_cancellable = NULL;
 	}
 
       if (g_file_is_native (file))
