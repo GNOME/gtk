@@ -2077,19 +2077,6 @@ gtk_get_option_group
 gtk_get_current_event
 gtk_get_current_event_state
 gtk_get_current_event_time
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_exit
-gtk_idle_add
-gtk_idle_add_full
-gtk_idle_add_priority
-gtk_idle_remove
-gtk_idle_remove_by_data
-gtk_timeout_add
-gtk_timeout_add_full
-gtk_timeout_remove
-gtk_input_add_full
-gtk_input_remove
-#endif
 gtk_false G_GNUC_CONST
 gtk_true G_GNUC_CONST
 gtk_events_pending
