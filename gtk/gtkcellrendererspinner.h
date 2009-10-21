@@ -20,10 +20,14 @@
  * Boston, MA  02111-1307, USA.
  */
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_CELL_RENDERER_SPINNER_H__
 #define __GTK_CELL_RENDERER_SPINNER_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtkcellrenderer.h>
 
 G_BEGIN_DECLS
 
@@ -61,4 +65,3 @@ GtkCellRenderer *gtk_cell_renderer_spinner_new      (void);
 G_END_DECLS
 
 #endif /* __GTK_CELL_RENDERER_SPINNER_H__ */
-

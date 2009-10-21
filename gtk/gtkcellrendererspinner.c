@@ -29,9 +29,10 @@
 
 #include "config.h"
 
-#include "gtkintl.h"
-#include <gtk/gtk.h>
 #include "gtkcellrendererspinner.h"
+#include "gtkiconfactory.h"
+#include "gtkicontheme.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
