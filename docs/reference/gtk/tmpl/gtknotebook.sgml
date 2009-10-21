@@ -256,7 +256,8 @@ Emitted when the user or a function changes the current page.
 
 <!-- ##### ARG GtkNotebook:tab-pack ##### -->
 <para>
-
+ Deprecated: 2.20: The tab packing functionality of children should not
+ be used anymore and support will be removed in the future.
 </para>
 
 <!-- ##### ARG GtkNotebook:arrow-spacing ##### -->
