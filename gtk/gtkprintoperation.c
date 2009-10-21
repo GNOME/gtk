@@ -2496,6 +2496,10 @@ common_render_page (GtkPrintOperation *op,
             x = columns - 1 - (priv->page_position / rows) % columns;
             y = rows - 1 - priv->page_position % rows;
             break;
+          default:
+            g_assert_not_reached();
+            x = 0;
+            y = 0;
         }
 
       if (priv->manual_number_up == 4 || priv->manual_number_up == 9 || priv->manual_number_up == 16)
