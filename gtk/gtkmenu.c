@@ -2734,6 +2734,7 @@ get_arrows_visible_area (GtkMenu      *menu,
     default:
        g_assert_not_reached();
        upper->x = upper->y = upper->width = upper->height = 0;
+       lower->x = lower->y = lower->width = lower->height = 0;
     }
 
   *arrow_space = scroll_arrow_height - 2 * widget->style->ythickness;
