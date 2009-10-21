@@ -514,7 +514,6 @@ gtk_base_c_sources =            \
 	gtklinkbutton.c		\
 	gtkliststore.c		\
 	gtkmain.c		\
-	gtkmarshal.c		\
 	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
@@ -737,7 +736,6 @@ EXTRA_DIST += gtkquartz.h
 
 # built sources that get installed with the header files
 gtk_built_public_sources =			\
-	gtkmarshal.h				\
 	gtktypebuiltins.h
 
 # built headers that don't get installed
@@ -752,13 +750,11 @@ gtk_built_sources =				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
-	gtkmarshal.c				\
 	${gtk_built_private_headers}		\
 	${gtk_built_public_sources}
 
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
-	stamp-gtkmarshal.h			\
 	stamp-gtktypebuiltins.h			\
 	stamp-icons
 
@@ -772,8 +768,7 @@ gtk_extra_sources =				\
 	gtkstatusicon-quartz.c                  \
 	gtk.symbols				\
 	gtkversion.h.in				\
-	gtkmarshalers.list			\
-	gtkmarshal.list
+	gtkmarshalers.list
 
 #
 # setup GTK+ sources and their dependencies
@@ -811,24 +806,6 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
-
-gtkmarshal.h: stamp-gtkmarshal.h
-	@true
-stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list
-	echo "#ifndef GTK_DISABLE_DEPRECATED" > xgen-gmh					\
-        && $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --header >> xgen-gmh \
-	&& echo "#endif /* GTK_DISABLE_DEPRECATED */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
-	&& rm -f xgen-gmh \
-	&& echo timestamp > $(@F)
-gtkmarshal.c: @REBUILD@ gtkmarshal.list
-	(echo "#include \"gtkmarshal.h\""; \
-	 echo "#include \"gtkalias.h\""; \
-	 $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body; \
-	 echo "#define __gtk_marshal_MARSHAL_C__"; \
-	 echo "#include \"gtkaliasdef.c\"") >> xgen-gmc \
-	&& cp xgen-gmc gtkmarshal.c \
-	&& rm -f xgen-gmc
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
