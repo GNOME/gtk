@@ -228,7 +228,7 @@ gboolean
 gdk_device_set_mode (GdkDevice    *device,
                      GdkInputMode  mode)
 {
-  g_message ("unimplemented %s", __FUNCTION__);
+  g_message ("unimplemented %s", G_STRFUNC);
 
   return FALSE;
 }
@@ -303,7 +303,7 @@ gdk_input_set_extension_events (GdkWindow        *window,
                                 gint              mask,
                                 GdkExtensionMode  mode)
 {
-  g_message ("unimplemented %s", __FUNCTION__);
+  g_message ("unimplemented %s", G_STRFUNC);
 }
 
 GList *

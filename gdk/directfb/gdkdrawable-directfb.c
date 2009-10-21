@@ -160,7 +160,7 @@ gdk_directfb_set_colormap (GdkDrawable *drawable,
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p ) <- old %p\n", __FUNCTION__, drawable, colormap, impl->colormap );
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p ) <- old %p\n", G_STRFUNC, drawable, colormap, impl->colormap );
 
   if (impl->colormap == colormap)
     return;
@@ -235,7 +235,7 @@ gdk_directfb_clip_region (GdkDrawable  *drawable,
   g_return_if_fail (GDK_IS_DRAWABLE_IMPL_DIRECTFB (drawable));
   g_return_if_fail (ret_clip != NULL);
 
-  D_DEBUG_AT( GDKDFB_DrawClip, "%s( %p, %p, %p )\n", __FUNCTION__, drawable, gc, draw_rect );
+  D_DEBUG_AT( GDKDFB_DrawClip, "%s( %p, %p, %p )\n", G_STRFUNC, drawable, gc, draw_rect );
 
   private = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
 
@@ -435,7 +435,7 @@ gdk_directfb_draw_rectangle (GdkDrawable *drawable,
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %4d,%4d - %4dx%4d )\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %4d,%4d - %4dx%4d )\n", G_STRFUNC,
               drawable, gc, filled ? " filled" : "outline", x, y, width, height );
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -593,7 +593,7 @@ gdk_directfb_draw_polygon (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %p, %d )\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %s, %p, %d )\n", G_STRFUNC,
               drawable, gc, filled ? " filled" : "outline", points, npoints );
 
   if (npoints < 3)
@@ -704,7 +704,7 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
   DFBRectangle rect = { xsrc, ysrc, width, height };
   gint i;
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", G_STRFUNC,
               drawable, gc, src, xsrc, ysrc, xdest, ydest, width, height );
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -749,7 +749,7 @@ gdk_directfb_draw_points (GdkDrawable *drawable,
 
   DFBRegion region = { points->x, points->y, points->x, points->y };
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, points, npoints );
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, points, npoints );
 
   if (npoints < 1)
     return;
@@ -798,7 +798,7 @@ gdk_directfb_draw_segments (GdkDrawable *drawable,
 
 //  DFBRegion region = { segs->x1, segs->y1, segs->x2, segs->y2 };
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, segs, nsegs );
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, segs, nsegs );
 
   if (nsegs < 1)
     return;
@@ -878,7 +878,7 @@ gdk_directfb_draw_lines (GdkDrawable *drawable,
 
   DFBRegion region = { points->x, points->y, points->x, points->y };
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", __FUNCTION__, drawable, gc, points, npoints );
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %d )\n", G_STRFUNC, drawable, gc, points, npoints );
 
   if (npoints < 2)
     return;
@@ -953,7 +953,7 @@ gdk_directfb_draw_image (GdkDrawable *drawable,
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (image != NULL);
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", G_STRFUNC,
               drawable, gc, image, xsrc, ysrc, xdest, ydest, width, height );
 
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (drawable);
@@ -1202,7 +1202,7 @@ gdk_directfb_draw_pixbuf (GdkDrawable  *drawable,
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
   g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p, %p, %p, %4d,%4d -> %4d,%4d - %dx%d )\n", G_STRFUNC,
               drawable, gc, pixbuf, src_x, src_y, dest_x, dest_y, width, height );
 
   /* Clip to the drawable; this is required for get_from_drawable() so
@@ -1494,7 +1494,7 @@ gdk_drawable_impl_directfb_finalize (GObject *object)
   GdkDrawableImplDirectFB *impl;
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (object);
 
-  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p ) <- %dx%d (%s at %4d,%4d)\n", __FUNCTION__,
+  D_DEBUG_AT( GDKDFB_Drawable, "%s( %p ) <- %dx%d (%s at %4d,%4d)\n", G_STRFUNC,
               object, impl->width, impl->height,
               drawable_impl_type_name( object ),
               impl->abs_x, impl->abs_y );
