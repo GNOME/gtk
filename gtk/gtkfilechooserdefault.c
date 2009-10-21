@@ -7571,6 +7571,12 @@ gtk_file_chooser_default_unselect_all (GtkFileChooser *chooser)
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
 
+  if (impl->show_and_select_files_cancellable)
+    {
+      g_cancellable_cancel (impl->show_and_select_files_cancellable);
+      impl->show_and_select_files_cancellable = NULL;
+    }
+
   gtk_tree_selection_unselect_all (selection);
   pending_select_files_free (impl);
 }
