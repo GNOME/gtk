@@ -378,7 +378,7 @@ paste (GtkWidget *widget, GtkWidget *entry)
 void
 quit (void)
 {
-  gtk_exit (0);
+  exit (0);
 }
 
 int

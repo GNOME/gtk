@@ -1063,13 +1063,6 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 
 #endif
 
-void
-gtk_exit (gint errorcode)
-{
-  exit (errorcode);
-}
-
-
 /**
  * gtk_set_locale:
  *

@@ -135,7 +135,7 @@ static void _check_combo_box (AtkObject *obj)
  
   if (!done)
   {
-    gtk_idle_add (_open_combo_list, obj);
+    g_idle_add ((GSourceFunc)_open_combo_list, obj);
     done = TRUE;
   }
   else
@@ -150,7 +150,7 @@ static gint _open_combo_list (gpointer data)
   g_print ("_open_combo_list\n");
   atk_action_do_action (ATK_ACTION (obj), 0);
 
-  gtk_timeout_add (5000, _close_combo_list, obj);
+  g_timeout_add (5000, _close_combo_list, obj);
   return FALSE;
 }
 

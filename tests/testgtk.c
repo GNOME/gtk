@@ -9847,7 +9847,7 @@ static void
 destroy_progress (GtkWidget     *widget,
 		  ProgressData **pdata)
 {
-  gtk_timeout_remove ((*pdata)->timer);
+  g_source_remove ((*pdata)->timer);
   (*pdata)->timer = 0;
   (*pdata)->window = NULL;
   g_free (*pdata);
@@ -10061,7 +10061,7 @@ create_progress_bar (GtkWidget *widget)
       gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
 				      "%v from [%l,%u] (=%p%%)");
       gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-      pdata->timer = gtk_timeout_add (100, progress_timeout, pdata->pbar);
+      pdata->timer = g_timeout_add (100, (GSourceFunc)progress_timeout, pdata->pbar);
 
       align = gtk_alignment_new (0.5, 0.5, 0, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
@@ -11067,7 +11067,7 @@ start_timeout_test (GtkWidget *widget,
 {
   if (!timer)
     {
-      timer = gtk_timeout_add (100, (GtkFunction) timeout_test, label);
+      timer = g_timeout_add (100, (GSourceFunc)timeout_test, label);
     }
 }
 
@@ -11077,7 +11077,7 @@ stop_timeout_test (GtkWidget *widget,
 {
   if (timer)
     {
-      gtk_timeout_remove (timer);
+      g_source_remove (timer);
       timer = 0;
     }
 }
@@ -11177,7 +11177,7 @@ start_idle_test (GtkWidget *widget,
 {
   if (!idle_id)
     {
-      idle_id = gtk_idle_add ((GtkFunction) idle_test, label);
+      idle_id = g_idle_add ((GSourceFunc) idle_test, label);
     }
 }
 
@@ -11187,7 +11187,7 @@ stop_idle_test (GtkWidget *widget,
 {
   if (idle_id)
     {
-      gtk_idle_remove (idle_id);
+      g_source_remove (idle_id);
       idle_id = 0;
     }
 }

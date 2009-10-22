@@ -9374,20 +9374,20 @@ What if you have a function which you want to be called when nothing
 else is happening ?</para>
 
 <programlisting role="C">
-gint gtk_idle_add( GtkFunction function,
-                   gpointer    data );
+guint g_idle_add( GSourceFunc function,
+                  gpointer    data );
 </programlisting>
 
 <para>This causes GTK to call the specified function whenever nothing else
 is happening.</para>
 
 <programlisting role="C">
-void gtk_idle_remove( gint tag );
+void g_source_remove( guint tag );
 </programlisting>
 
 <para>I won't explain the meaning of the arguments as they follow very much
 like the ones above. The function pointed to by the first argument to
-gtk_idle_add will be called whenever the opportunity arises. As with
+g_idle_add will be called whenever the opportunity arises. As with
 the others, returning FALSE will stop the idle function from being
 called.</para>
 

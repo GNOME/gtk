@@ -5882,7 +5882,6 @@ gtk_init
 gtk_init_check
 gtk_init_with_args
 gtk_get_option_group
-gtk_exit
 gtk_events_pending
 gtk_main
 gtk_main_level
@@ -5912,28 +5911,7 @@ gtk_quit_remove
 gtk_quit_remove_by_data
 
 <SUBSECTION>
-gtk_timeout_add_full
-gtk_timeout_add
-gtk_timeout_remove
-
-<SUBSECTION>
-gtk_idle_add
-gtk_idle_add_priority
-gtk_idle_add_full
-gtk_idle_remove
-gtk_idle_remove_by_data
-
-<SUBSECTION>
-gtk_input_add_full
-gtk_input_remove
-
-<SUBSECTION>
-GTK_PRIORITY_REDRAW
 GTK_PRIORITY_RESIZE
-GTK_PRIORITY_HIGH
-GTK_PRIORITY_INTERNAL
-GTK_PRIORITY_DEFAULT
-GTK_PRIORITY_LOW
 
 <SUBSECTION>
 gtk_key_snooper_install
