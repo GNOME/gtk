@@ -48,8 +48,9 @@ G_BEGIN_DECLS
 #define GTK_ACCEL_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCEL_LABEL, GtkAccelLabelClass))
 
 
-typedef struct _GtkAccelLabel	    GtkAccelLabel;
-typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
+typedef struct _GtkAccelLabel	     GtkAccelLabel;
+typedef struct _GtkAccelLabelClass   GtkAccelLabelClass;
+typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 
 /**
  * GtkAccelLabel:
@@ -60,14 +61,7 @@ typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
 struct _GtkAccelLabel
 {
   GtkLabel label;
-
-  guint          GSEAL (gtk_reserved);
-  guint          GSEAL (accel_padding);      /* should be style property? */
-  GtkWidget     *GSEAL (accel_widget);       /* done*/
-  GClosure      *GSEAL (accel_closure);      /* has set function */
-  GtkAccelGroup *GSEAL (accel_group);        /* set by set_accel_closure() */
-  gchar         *GSEAL (accel_string);       /* has set function */
-  guint16        GSEAL (accel_string_width); /* seems to be private */
+  GtkAccelLabelPrivate *priv;
 };
 
 struct _GtkAccelLabelClass
