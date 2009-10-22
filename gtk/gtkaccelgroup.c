@@ -815,6 +815,14 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
   g_object_unref (accel_group);
 }
 
+GSList*
+_gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group)
+{
+    g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), NULL);
+
+    return accel_group->priv->acceleratables;
+}
+
 /**
  * gtk_accel_group_query:
  * @accel_group:      the accelerator group to query

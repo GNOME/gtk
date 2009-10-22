@@ -179,6 +179,7 @@ GtkAccelGroupEntry*	gtk_accel_group_query	(GtkAccelGroup	*accel_group,
 
 void		     _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
 						 GQuark         accel_path_quark);
+GSList*       _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group);
 
 struct _GtkAccelGroupEntry
 {

@@ -319,7 +319,7 @@ internal_change_entry (const gchar    *accel_path,
     {
       GtkAccelGroup *group = slist->data;
 
-      for (node = group->acceleratables; node; node = node->next)
+      for (node = _gtk_accel_group_get_accelerables (group); node; node = node->next)
 	g_hash_table_insert (window_hm, node->data, node->data);
     }
   g_slist_free (group_list);
