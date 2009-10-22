@@ -1977,7 +1977,7 @@ _get_name_value(GroupInfo *group, const gchar *label,
         name_value->label = GTK_LABEL(gtk_label_new(label));
         name_value->string = gtk_label_new (NULL);
         name_value->boolean = gtk_check_button_new ();
-        name_value->text = gtk_entry_new_with_max_length (1000);
+        gtk_entry_buffer_set_max_length (gtk_entry_get_buffer (name_value->text), 1000);
         name_value->button = GTK_BUTTON(gtk_button_new ());
 
         gtk_box_pack_end(GTK_BOX(name_value->column1),

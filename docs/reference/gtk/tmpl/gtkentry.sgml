@@ -423,14 +423,6 @@ The #GtkEntry-struct struct contains only private data.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_entry_new_with_max_length ##### -->
-<para>
-</para>
-
-@max: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_entry_get_buffer ##### -->
 <para>
 
@@ -458,33 +450,6 @@ The #GtkEntry-struct struct contains only private data.
 @text: 
 
 
-<!-- ##### FUNCTION gtk_entry_append_text ##### -->
-<para>
-
-</para>
-
-@entry: 
-@text: 
-
-
-<!-- ##### FUNCTION gtk_entry_prepend_text ##### -->
-<para>
-
-</para>
-
-@entry: 
-@text: 
-
-
-<!-- ##### FUNCTION gtk_entry_set_position ##### -->
-<para>
-
-</para>
-
-@entry: 
-@position: 
-
-
 <!-- ##### FUNCTION gtk_entry_get_text ##### -->
 <para>
 
@@ -501,16 +466,6 @@ The #GtkEntry-struct struct contains only private data.
 
 @entry: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_entry_select_region ##### -->
-<para>
-
-</para>
-
-@entry: 
-@start: 
-@end: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_visibility ##### -->
@@ -537,15 +492,6 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 @entry: 
-
-
-<!-- ##### FUNCTION gtk_entry_set_editable ##### -->
-<para>
-
-</para>
-
-@entry: 
-@editable: 
 
 
 <!-- ##### FUNCTION gtk_entry_set_max_length ##### -->

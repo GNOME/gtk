@@ -2527,15 +2527,15 @@ using the following expression:</para>
 
 <para>If you don't want the user to be able to modify the
 content of this entry, you can use the
-gtk_entry_set_editable() function:</para>
+gtk_editable_set_editable() function:</para>
 
 
 <programlisting role="C">
-      void gtk_entry_set_editable(GtkEntry *entry, 
-                                  gboolean editable);
+void gtk_editable_set_editable (GtkEditable *editable,
+                                gboolean     is_editable);
 </programlisting>
 
-<para>Set the editable parameter to FALSE to disable typing
+<para>Set the is_editable parameter to FALSE to disable typing
 into the entry.</para>
 </sect1>
 
