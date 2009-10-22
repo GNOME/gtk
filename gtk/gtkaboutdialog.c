@@ -547,6 +547,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   GtkDialog *dialog = GTK_DIALOG (about);
   GtkAboutDialogPrivate *priv;
   GtkWidget *vbox, *hbox, *button, *close_button, *image;
+  GtkWidget *content_area, *action_area;
 
   /* Data */
   priv = GTK_ABOUT_DIALOG_GET_PRIVATE (about);
@@ -569,17 +570,20 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->hovering_over_link = FALSE;
   priv->wrap_license = FALSE;
 
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
+
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 
   /* Widgets */
   gtk_widget_push_composite_child ();
 
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
   priv->logo_image = gtk_image_new ();
   gtk_box_pack_start (GTK_BOX (vbox), priv->logo_image, FALSE, FALSE, 0);
@@ -626,9 +630,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   image = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON);
   gtk_button_set_image (GTK_BUTTON (button), image);
   gtk_widget_set_no_show_all (button, TRUE);
-  gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area),
-                    button, FALSE, TRUE, 0);
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
+  gtk_box_pack_end (GTK_BOX (action_area), 
+		    button, FALSE, TRUE, 0); 
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), button, TRUE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (display_credits_dialog), about);
   priv->credits_button = button;
@@ -638,9 +642,9 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   button = gtk_button_new_from_stock (_("_License"));
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_set_no_show_all (button, TRUE);
-  gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area),
-                    button, FALSE, TRUE, 0);
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (GTK_DIALOG (about)->action_area), button, TRUE);
+  gtk_box_pack_end (GTK_BOX (action_area), 
+		    button, FALSE, TRUE, 0); 
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), button, TRUE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (display_license_dialog), about);
   priv->license_button = button;
@@ -1950,7 +1954,7 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
 {
   gint wx, wy, bx, by;
 
-  gdk_window_get_pointer (text_view->window, &wx, &wy, NULL);
+  gdk_window_get_pointer (gtk_widget_get_window (text_view), &wx, &wy, NULL);
 
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
@@ -2138,6 +2142,8 @@ display_credits_dialog (GtkWidget *button,
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->priv;
   GtkWidget *dialog, *notebook;
   GtkDialog *credits_dialog;
+  GtkWidget *content_area;
+  GtkWidget *action_area;
 
   if (priv->credits_dialog != NULL)
     {
@@ -2151,10 +2157,14 @@ display_credits_dialog (GtkWidget *button,
                                         GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
                                         NULL);
   credits_dialog = GTK_DIALOG (dialog);
+
+  content_area = gtk_dialog_get_content_area (credits_dialog);
+  action_area = gtk_dialog_get_action_area (credits_dialog);
+
   gtk_dialog_set_has_separator (credits_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (credits_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 
   priv->credits_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
@@ -2171,7 +2181,7 @@ display_credits_dialog (GtkWidget *button,
 
   notebook = gtk_notebook_new ();
   gtk_container_set_border_width (GTK_CONTAINER (notebook), 5);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), notebook, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), notebook, TRUE, TRUE, 0);
 
   if (priv->authors != NULL)
     add_credits_page (about, dialog, notebook, _("Written by"), priv->authors);
@@ -2213,7 +2223,9 @@ display_license_dialog (GtkWidget *button,
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->priv;
   GtkWidget *dialog, *view, *sw;
-  GtkDialog *licence_dialog;
+  GtkDialog *license_dialog;
+  GtkWidget *content_area;
+  GtkWidget *action_area;
   gchar *strings[2];
 
   if (priv->license_dialog != NULL)
@@ -2223,19 +2235,23 @@ display_license_dialog (GtkWidget *button,
     }
 
   dialog = gtk_dialog_new_with_buttons (_("License"),
-                                        GTK_WINDOW (about),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
-                                        NULL);
-  licence_dialog = GTK_DIALOG (dialog);
-  gtk_dialog_set_has_separator (licence_dialog, FALSE);
-  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (licence_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (licence_dialog->action_area), 5);
+					GTK_WINDOW (about),
+					GTK_DIALOG_DESTROY_WITH_PARENT,
+					GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
+					NULL);
+  license_dialog = GTK_DIALOG (dialog);
+
+  content_area = gtk_dialog_get_content_area (license_dialog);
+  action_area = gtk_dialog_get_action_area (license_dialog);
+
+  gtk_dialog_set_has_separator (license_dialog, FALSE);
+  gtk_container_set_border_width (GTK_CONTAINER (license_dialog), 5);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 
   priv->license_dialog = dialog;
   gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (licence_dialog, GTK_RESPONSE_CANCEL);
+  gtk_dialog_set_default_response (license_dialog, GTK_RESPONSE_CANCEL);
 
   gtk_window_set_modal (GTK_WINDOW (dialog),
                         gtk_window_get_modal (GTK_WINDOW (about)));
@@ -2254,7 +2270,7 @@ display_license_dialog (GtkWidget *button,
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
   g_signal_connect (sw, "map", G_CALLBACK (set_policy), NULL);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), sw, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), sw, TRUE, TRUE, 0);
 
   strings[0] = priv->license;
   strings[1] = NULL;
