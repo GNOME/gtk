@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkAboutDialog        GtkAboutDialog;
 typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
+typedef struct _GtkAboutDialogPrivate GtkAboutDialogPrivate;
 
 /**
  * GtkAboutDialog:
@@ -54,7 +55,7 @@ struct _GtkAboutDialog
   GtkDialog parent_instance;
 
   /*< private >*/
-  gpointer GSEAL (private_data);
+  GtkAboutDialogPrivate *priv;
 };
 
 struct _GtkAboutDialogClass 
