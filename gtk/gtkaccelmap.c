@@ -367,7 +367,7 @@ internal_change_entry (const gchar    *accel_path,
 	for (i = 0; i < n; i++)
 	  {
 	    seen_accel = TRUE;
-	    removable = !group->lock_count && !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
+	    removable = !gtk_accel_group_get_is_locked (group) && !(ag_entry[i].key.accel_flags & GTK_ACCEL_LOCKED);
 	    if (!removable)
 	      goto break_loop_step5;
 	    if (ag_entry[i].accel_path_quark)
