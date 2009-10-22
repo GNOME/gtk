@@ -62,6 +62,16 @@
  * and mnemonics, of course.
  */
 
+#define GTK_ACCEL_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupPrivate))
+
+struct _GtkAccelGroupPrivate
+{
+  guint               lock_count;
+  GdkModifierType     modifier_mask;
+  GSList             *acceleratables;
+  guint               n_accels;
+  GtkAccelGroupEntry *priv_accels;
+};
 
 /* --- prototypes --- */
 static void gtk_accel_group_finalize     (GObject    *object);
@@ -171,6 +181,8 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
 		  G_TYPE_UINT,
 		  GDK_TYPE_MODIFIER_TYPE,
 		  G_TYPE_CLOSURE);
+
+  g_type_class_add_private (object_class, sizeof (GtkAccelGroupPrivate));
 }
 
 static void
@@ -179,9 +191,9 @@ gtk_accel_group_finalize (GObject *object)
   GtkAccelGroup *accel_group = GTK_ACCEL_GROUP (object);
   guint i;
   
-  for (i = 0; i < accel_group->n_accels; i++)
+  for (i = 0; i < accel_group->priv->n_accels; i++)
     {
-      GtkAccelGroupEntry *entry = &accel_group->priv_accels[i];
+      GtkAccelGroupEntry *entry = &accel_group->priv->priv_accels[i];
 
       if (entry->accel_path_quark)
 	{
@@ -195,7 +207,7 @@ gtk_accel_group_finalize (GObject *object)
       g_closure_unref (entry->closure);
     }
 
-  g_free (accel_group->priv_accels);
+  g_free (accel_group->priv->priv_accels);
 
   G_OBJECT_CLASS (gtk_accel_group_parent_class)->finalize (object);
 }
@@ -211,10 +223,10 @@ gtk_accel_group_get_property (GObject    *object,
   switch (param_id)
     {
     case PROP_IS_LOCKED:
-      g_value_set_boolean (value, accel_group->lock_count > 0);
+      g_value_set_boolean (value, accel_group->priv->lock_count > 0);
       break;
     case PROP_MODIFIER_MASK:
-      g_value_set_flags (value, accel_group->modifier_mask);
+      g_value_set_flags (value, accel_group->priv->modifier_mask);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -225,11 +237,15 @@ gtk_accel_group_get_property (GObject    *object,
 static void
 gtk_accel_group_init (GtkAccelGroup *accel_group)
 {
-  accel_group->lock_count = 0;
-  accel_group->modifier_mask = gtk_accelerator_get_default_mod_mask ();
-  accel_group->acceleratables = NULL;
-  accel_group->n_accels = 0;
-  accel_group->priv_accels = NULL;
+  GtkAccelGroupPrivate *priv = GTK_ACCEL_GROUP_GET_PRIVATE (accel_group);
+
+  priv->lock_count = 0;
+  priv->modifier_mask = gtk_accelerator_get_default_mod_mask ();
+  priv->acceleratables = NULL;
+  priv->n_accels = 0;
+  priv->priv_accels = NULL;
+
+  accel_group->priv = priv;
 }
 
 /**
@@ -261,7 +277,7 @@ gtk_accel_group_get_is_locked (GtkAccelGroup *accel_group)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
-  return accel_group->lock_count > 0;
+  return accel_group->priv->lock_count > 0;
 }
 
 /**
@@ -280,7 +296,7 @@ gtk_accel_group_get_modifier_mask (GtkAccelGroup *accel_group)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), 0);
 
-  return accel_group->modifier_mask;
+  return accel_group->priv->modifier_mask;
 }
 
 static void
@@ -294,7 +310,7 @@ accel_group_weak_ref_detach (GSList  *free_list,
       GtkAccelGroup *accel_group;
       
       accel_group = slist->data;
-      accel_group->acceleratables = g_slist_remove (accel_group->acceleratables, stale_object);
+      accel_group->priv->acceleratables = g_slist_remove (accel_group->priv->acceleratables, stale_object);
       g_object_unref (accel_group);
     }
   g_slist_free (free_list);
@@ -309,10 +325,10 @@ _gtk_accel_group_attach (GtkAccelGroup *accel_group,
   
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
   g_return_if_fail (G_IS_OBJECT (object));
-  g_return_if_fail (g_slist_find (accel_group->acceleratables, object) == NULL);
+  g_return_if_fail (g_slist_find (accel_group->priv->acceleratables, object) == NULL);
   
   g_object_ref (accel_group);
-  accel_group->acceleratables = g_slist_prepend (accel_group->acceleratables, object);
+  accel_group->priv->acceleratables = g_slist_prepend (accel_group->priv->acceleratables, object);
   slist = g_object_get_qdata (object, quark_acceleratable_groups);
   if (slist)
     g_object_weak_unref (object,
@@ -333,9 +349,9 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
   
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
   g_return_if_fail (G_IS_OBJECT (object));
-  g_return_if_fail (g_slist_find (accel_group->acceleratables, object) != NULL);
+  g_return_if_fail (g_slist_find (accel_group->priv->acceleratables, object) != NULL);
   
-  accel_group->acceleratables = g_slist_remove (accel_group->acceleratables, object);
+  accel_group->priv->acceleratables = g_slist_remove (accel_group->priv->acceleratables, object);
   slist = g_object_get_qdata (object, quark_acceleratable_groups);
   g_object_weak_unref (object,
 		       (GWeakNotify) accel_group_weak_ref_detach,
@@ -389,12 +405,12 @@ gtk_accel_group_find (GtkAccelGroup        *accel_group,
   g_return_val_if_fail (find_func != NULL, NULL);
 
   g_object_ref (accel_group);
-  for (i = 0; i < accel_group->n_accels; i++)
-    if (find_func (&accel_group->priv_accels[i].key,
-		   accel_group->priv_accels[i].closure,
+  for (i = 0; i < accel_group->priv->n_accels; i++)
+    if (find_func (&accel_group->priv->priv_accels[i].key,
+		   accel_group->priv->priv_accels[i].closure,
 		   data))
       {
-	key = &accel_group->priv_accels[i].key;
+	key = &accel_group->priv->priv_accels[i].key;
 	break;
       }
   g_object_unref (accel_group);
@@ -421,9 +437,9 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
 {
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
   
-  accel_group->lock_count += 1;
+  accel_group->priv->lock_count += 1;
 
-  if (accel_group->lock_count == 1) {
+  if (accel_group->priv->lock_count == 1) {
     /* State change from unlocked to locked */
     g_object_notify (G_OBJECT (accel_group), "is-locked");
   }
@@ -439,11 +455,11 @@ void
 gtk_accel_group_unlock (GtkAccelGroup *accel_group)
 {
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
-  g_return_if_fail (accel_group->lock_count > 0);
+  g_return_if_fail (accel_group->priv->lock_count > 0);
 
-  accel_group->lock_count -= 1;
+  accel_group->priv->lock_count -= 1;
 
-  if (accel_group->lock_count < 1) {
+  if (accel_group->priv->lock_count < 1) {
     /* State change from locked to unlocked */
     g_object_notify (G_OBJECT (accel_group), "is-locked");
   }
@@ -479,25 +495,25 @@ quick_accel_add (GtkAccelGroup  *accel_group,
 		 GClosure       *closure,
 		 GQuark          path_quark)
 {
-  guint pos, i = accel_group->n_accels++;
+  guint pos, i = accel_group->priv->n_accels++;
   GtkAccelGroupEntry key;
 
   /* find position */
   key.key.accel_key = accel_key;
   key.key.accel_mods = accel_mods;
   for (pos = 0; pos < i; pos++)
-    if (bsearch_compare_accels (&key, accel_group->priv_accels + pos) < 0)
+    if (bsearch_compare_accels (&key, accel_group->priv->priv_accels + pos) < 0)
       break;
 
   /* insert at position, ref closure */
-  accel_group->priv_accels = g_renew (GtkAccelGroupEntry, accel_group->priv_accels, accel_group->n_accels);
-  g_memmove (accel_group->priv_accels + pos + 1, accel_group->priv_accels + pos,
-	     (i - pos) * sizeof (accel_group->priv_accels[0]));
-  accel_group->priv_accels[pos].key.accel_key = accel_key;
-  accel_group->priv_accels[pos].key.accel_mods = accel_mods;
-  accel_group->priv_accels[pos].key.accel_flags = accel_flags;
-  accel_group->priv_accels[pos].closure = g_closure_ref (closure);
-  accel_group->priv_accels[pos].accel_path_quark = path_quark;
+  accel_group->priv->priv_accels = g_renew (GtkAccelGroupEntry, accel_group->priv->priv_accels, accel_group->priv->n_accels);
+  g_memmove (accel_group->priv->priv_accels + pos + 1, accel_group->priv->priv_accels + pos,
+	     (i - pos) * sizeof (accel_group->priv->priv_accels[0]));
+  accel_group->priv->priv_accels[pos].key.accel_key = accel_key;
+  accel_group->priv->priv_accels[pos].key.accel_mods = accel_mods;
+  accel_group->priv->priv_accels[pos].key.accel_flags = accel_flags;
+  accel_group->priv->priv_accels[pos].closure = g_closure_ref (closure);
+  accel_group->priv->priv_accels[pos].accel_path_quark = path_quark;
   g_closure_sink (closure);
   
   /* handle closure invalidation and reverse lookups */
@@ -528,7 +544,7 @@ quick_accel_remove (GtkAccelGroup      *accel_group,
                     guint               pos)
 {
   GQuark accel_quark = 0;
-  GtkAccelGroupEntry *entry = accel_group->priv_accels + pos;
+  GtkAccelGroupEntry *entry = accel_group->priv->priv_accels + pos;
   guint accel_key = entry->key.accel_key;
   GdkModifierType accel_mods = entry->key.accel_mods;
   GClosure *closure = entry->closure;
@@ -554,9 +570,9 @@ quick_accel_remove (GtkAccelGroup      *accel_group,
     _gtk_accel_map_remove_group (g_quark_to_string (entry->accel_path_quark), accel_group);
 
   /* physically remove */
-  accel_group->n_accels -= 1;
+  accel_group->priv->n_accels -= 1;
   g_memmove (entry, entry + 1,
-	     (accel_group->n_accels - pos) * sizeof (accel_group->priv_accels[0]));
+	     (accel_group->priv->n_accels - pos) * sizeof (accel_group->priv->priv_accels[0]));
 
   /* and notify */
   if (accel_quark)
@@ -577,24 +593,24 @@ quick_accel_find (GtkAccelGroup  *accel_group,
 
   *count_p = 0;
 
-  if (!accel_group->n_accels)
+  if (!accel_group->priv->n_accels)
     return NULL;
 
   key.key.accel_key = accel_key;
   key.key.accel_mods = accel_mods;
-  entry = bsearch (&key, accel_group->priv_accels, accel_group->n_accels,
-		   sizeof (accel_group->priv_accels[0]), bsearch_compare_accels);
+  entry = bsearch (&key, accel_group->priv->priv_accels, accel_group->priv->n_accels,
+		   sizeof (accel_group->priv->priv_accels[0]), bsearch_compare_accels);
   
   if (!entry)
     return NULL;
 
   /* step back to the first member */
-  for (; entry > accel_group->priv_accels; entry--)
+  for (; entry > accel_group->priv->priv_accels; entry--)
     if (entry[-1].key.accel_key != accel_key ||
 	entry[-1].key.accel_mods != accel_mods)
       break;
   /* count equal members */
-  for (; entry + *count_p < accel_group->priv_accels + accel_group->n_accels; (*count_p)++)
+  for (; entry + *count_p < accel_group->priv->priv_accels + accel_group->priv->n_accels; (*count_p)++)
     if (entry[*count_p].key.accel_key != accel_key ||
 	entry[*count_p].key.accel_mods != accel_mods)
       break;
@@ -708,8 +724,8 @@ gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
 
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
-  for (i = 0; i < accel_group->n_accels; i++)
-    if (accel_group->priv_accels[i].closure == closure || !closure)
+  for (i = 0; i < accel_group->priv->n_accels; i++)
+    if (accel_group->priv->priv_accels[i].closure == closure)
       {
 	g_object_ref (accel_group);
 	quick_accel_remove (accel_group, i);
@@ -778,10 +794,10 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
 
   g_object_ref (accel_group);
 
-  for (i = 0; i < accel_group->n_accels; i++)
-    if (accel_group->priv_accels[i].accel_path_quark == accel_path_quark)
+  for (i = 0; i < accel_group->priv->n_accels; i++)
+    if (accel_group->priv->priv_accels[i].accel_path_quark == accel_path_quark)
       {
-	GClosure *closure = g_closure_ref (accel_group->priv_accels[i].closure);
+	GClosure *closure = g_closure_ref (accel_group->priv->priv_accels[i].closure);
 
 	clist = g_slist_prepend (clist, closure);
       }

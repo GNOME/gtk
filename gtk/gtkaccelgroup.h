@@ -57,10 +57,11 @@ typedef enum
 
 
 /* --- typedefs & structures --- */
-typedef struct _GtkAccelGroup	   GtkAccelGroup;
-typedef struct _GtkAccelGroupClass GtkAccelGroupClass;
-typedef struct _GtkAccelKey        GtkAccelKey;
-typedef struct _GtkAccelGroupEntry GtkAccelGroupEntry;
+typedef struct _GtkAccelGroup	          GtkAccelGroup;
+typedef struct _GtkAccelGroupClass        GtkAccelGroupClass;
+typedef struct _GtkAccelGroupPrivate      GtkAccelGroupPrivate;
+typedef struct _GtkAccelKey               GtkAccelKey;
+typedef struct _GtkAccelGroupEntry        GtkAccelGroupEntry;
 typedef gboolean (*GtkAccelGroupActivate) (GtkAccelGroup  *accel_group,
 					   GObject        *acceleratable,
 					   guint           keyval,
@@ -85,13 +86,8 @@ typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
  */
 struct _GtkAccelGroup
 {
-  GObject             parent;
-
-  guint               GSEAL (lock_count);
-  GdkModifierType     GSEAL (modifier_mask);
-  GSList             *GSEAL (acceleratables);
-  guint	              GSEAL (n_accels);
-  GtkAccelGroupEntry *GSEAL (priv_accels);
+  GObject               parent;
+  GtkAccelGroupPrivate *priv;
 };
 
 struct _GtkAccelGroupClass
