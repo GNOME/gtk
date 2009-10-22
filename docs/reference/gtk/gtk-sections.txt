@@ -2145,22 +2145,6 @@ GtkIMMulticontextPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkinputdialog</FILE>
-<TITLE>GtkInputDialog</TITLE>
-GtkInputDialog
-gtk_input_dialog_new
-<SUBSECTION Standard>
-GTK_INPUT_DIALOG
-GTK_IS_INPUT_DIALOG
-GTK_TYPE_INPUT_DIALOG
-GTK_INPUT_DIALOG_CLASS
-GTK_IS_INPUT_DIALOG_CLASS
-GTK_INPUT_DIALOG_GET_CLASS
-<SUBSECTION Private>
-gtk_input_dialog_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkinvisible</FILE>
 <TITLE>GtkInvisible</TITLE>
 GtkInvisible
