@@ -219,20 +219,7 @@ static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
 						    GtkToolbar          *toolbar);
 static void       gtk_toolbar_update_button_relief (GtkToolbar          *toolbar);
 static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
-static GtkWidget *internal_insert_element          (GtkToolbar          *toolbar,
-						    GtkToolbarChildType  type,
-						    GtkWidget           *widget,
-						    const char          *text,
-						    const char          *tooltip_text,
-						    const char          *tooltip_private_text,
-						    GtkWidget           *icon,
-						    GCallback            callback,
-						    gpointer             user_data,
-						    gint                 position,
-						    gboolean             use_stock);
 static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
-static gboolean   gtk_toolbar_check_new_api        (GtkToolbar          *toolbar);
-static gboolean   gtk_toolbar_check_old_api        (GtkToolbar          *toolbar);
 
 static GtkReliefStyle       get_button_relief    (GtkToolbar *toolbar);
 static gint                 get_internal_padding (GtkToolbar *toolbar);
@@ -245,12 +232,6 @@ static GtkToolbarSpaceStyle get_space_style      (GtkToolbar *toolbar);
 static ToolbarContent *toolbar_content_new_tool_item        (GtkToolbar          *toolbar,
 							     GtkToolItem         *item,
 							     gboolean             is_placeholder,
-							     gint                 pos);
-static ToolbarContent *toolbar_content_new_compatibility    (GtkToolbar          *toolbar,
-							     GtkToolbarChildType  type,
-							     GtkWidget           *widget,
-							     GtkWidget           *icon,
-							     GtkWidget           *label,
 							     gint                 pos);
 static void            toolbar_content_remove               (ToolbarContent      *content,
 							     GtkToolbar          *toolbar);
@@ -2259,8 +2240,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
   g_return_if_fail (tool_item == NULL || GTK_IS_TOOL_ITEM (tool_item));
   
-  gtk_toolbar_check_new_api (toolbar);
-  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   if (!tool_item)
@@ -2736,9 +2715,6 @@ gtk_toolbar_insert (GtkToolbar  *toolbar,
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
   g_return_if_fail (GTK_IS_TOOL_ITEM (item));
   
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return;
-  
   if (pos >= 0)
     pos = logical_to_physical (toolbar, pos);
 
@@ -2768,9 +2744,6 @@ gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), -1);
   g_return_val_if_fail (GTK_IS_TOOL_ITEM (item), -1);
   g_return_val_if_fail (GTK_WIDGET (item)->parent == GTK_WIDGET (toolbar), -1);
-  
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return -1;
   
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
@@ -2874,9 +2847,6 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
   
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), -1);
   
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return -1;
-  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   return physical_to_logical (toolbar, g_list_length (priv->content));
@@ -2904,9 +2874,6 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
   gint n_items;
   
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
-  
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return NULL;
   
   n_items = gtk_toolbar_get_n_items (toolbar);
   
@@ -3012,9 +2979,6 @@ gtk_toolbar_get_show_arrow (GtkToolbar *toolbar)
   
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), FALSE);
   
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return FALSE;
-  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   return priv->show_arrow;
@@ -3043,9 +3007,6 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 			    gint        y)
 {
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), -1);
-  
-  if (!gtk_toolbar_check_new_api (toolbar))
-    return -1;
   
   return physical_to_logical (toolbar, find_drop_index (toolbar, x, y));
 }
@@ -3196,137 +3157,6 @@ set_child_packing_and_visibility(GtkToolbar      *toolbar,
     }
 }
 
-static GtkWidget *
-internal_insert_element (GtkToolbar          *toolbar,
-			 GtkToolbarChildType  type,
-			 GtkWidget           *widget,
-			 const char          *text,
-			 const char          *tooltip_text,
-			 const char          *tooltip_private_text,
-			 GtkWidget           *icon,
-			 GCallback            callback,
-			 gpointer             user_data,
-			 gint                 position,
-			 gboolean             use_stock)
-{
-  GtkWidget *box;
-  ToolbarContent *content;
-  char *free_me = NULL;
-
-  GtkWidget *child_widget;
-  GtkWidget *child_label;
-  GtkWidget *child_icon;
-
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
-  if (type == GTK_TOOLBAR_CHILD_WIDGET)
-    g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  else if (type != GTK_TOOLBAR_CHILD_RADIOBUTTON)
-    g_return_val_if_fail (widget == NULL, NULL);
-  if (GTK_IS_TOOL_ITEM (widget))
-    g_warning (MIXED_API_WARNING);
-  
-  if (!gtk_toolbar_check_old_api (toolbar))
-    return NULL;
-  
-  child_widget = NULL;
-  child_label = NULL;
-  child_icon = NULL;
-  
-  switch (type)
-    {
-    case GTK_TOOLBAR_CHILD_SPACE:
-      break;
-      
-    case GTK_TOOLBAR_CHILD_WIDGET:
-      child_widget = widget;
-      break;
-      
-    case GTK_TOOLBAR_CHILD_BUTTON:
-    case GTK_TOOLBAR_CHILD_TOGGLEBUTTON:
-    case GTK_TOOLBAR_CHILD_RADIOBUTTON:
-      if (type == GTK_TOOLBAR_CHILD_BUTTON)
-	{
-	  child_widget = gtk_button_new ();
-	}
-      else if (type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
-	{
-	  child_widget = gtk_toggle_button_new ();
-	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child_widget), FALSE);
-	}
-      else /* type == GTK_TOOLBAR_CHILD_RADIOBUTTON */
-	{
-	  GSList *group = NULL;
-
-	  if (widget)
-	    group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
-	  
-	  child_widget = gtk_radio_button_new (group);
-	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child_widget), FALSE);
-	}
-
-      gtk_button_set_relief (GTK_BUTTON (child_widget), get_button_relief (toolbar));
-      gtk_button_set_focus_on_click (GTK_BUTTON (child_widget), FALSE);
-      
-      if (callback)
-	{
-	  g_signal_connect (child_widget, "clicked",
-			    callback, user_data);
-	}
-      
-      if (toolbar->style == GTK_TOOLBAR_BOTH_HORIZ)
-	box = gtk_hbox_new (FALSE, 0);
-      else
-	box = gtk_vbox_new (FALSE, 0);
-
-      gtk_container_add (GTK_CONTAINER (child_widget), box);
-      gtk_widget_show (box);
-      
-      if (text && use_stock)
-	{
-	  GtkStockItem stock_item;
-	  if (gtk_stock_lookup (text, &stock_item))
-	    {
-	      if (!icon)
-		icon = gtk_image_new_from_stock (text, toolbar->icon_size);
-	  
-	      text = free_me = _gtk_toolbar_elide_underscores (stock_item.label);
-	    }
-	}
-      
-      if (text)
-	{
-	  child_label = gtk_label_new (text);
-	  
-	  gtk_container_add (GTK_CONTAINER (box), child_label);
-	}
-      
-      if (icon)
-	{
-	  child_icon = GTK_WIDGET (icon);
-          gtk_container_add (GTK_CONTAINER (box), child_icon);
-	}
-      
-      gtk_widget_show (child_widget);
-      break;
-      
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-  
-  if ((type != GTK_TOOLBAR_CHILD_SPACE) && tooltip_text)
-    {
-      gtk_widget_set_tooltip_text (child_widget, tooltip_text);
-    }
-  
-  content = toolbar_content_new_compatibility (toolbar, type, child_widget,
-					       child_icon, child_label, position);
-  
-  g_free (free_me);
-  
-  return child_widget;
-}
-
 /*
  * ToolbarContent methods
  */
@@ -3391,54 +3221,6 @@ toolbar_content_new_tool_item (GtkToolbar  *toolbar,
 
   gtk_widget_queue_resize (GTK_WIDGET (toolbar));
   priv->need_rebuild = TRUE;
-  
-  return content;
-}
-
-static ToolbarContent *
-toolbar_content_new_compatibility (GtkToolbar          *toolbar,
-				   GtkToolbarChildType  type,
-				   GtkWidget		*widget,
-				   GtkWidget		*icon,
-				   GtkWidget		*label,
-				   gint			 pos)
-{
-  ToolbarContent *content;
-  GtkToolbarChild *child;
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  content = g_slice_new0 (ToolbarContent);
-
-  child = &(content->u.compatibility.child);
-  
-  content->type = COMPATIBILITY;
-  child->type = type;
-  child->widget = widget;
-  child->icon = icon;
-  child->label = label;
-  
-  if (type != GTK_TOOLBAR_CHILD_SPACE)
-    {
-      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
-    }
-  else
-    {
-      content->u.compatibility.space_visible = TRUE;
-      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
-    }
- 
-  if (type == GTK_TOOLBAR_CHILD_BUTTON ||
-      type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON ||
-      type == GTK_TOOLBAR_CHILD_RADIOBUTTON)
-    {
-      set_child_packing_and_visibility (toolbar, child);
-    }
-
-  priv->content = g_list_insert (priv->content, content, pos);
-  toolbar->children = g_list_insert (toolbar->children, child, pos);
-  priv->need_rebuild = TRUE;
-  
-  toolbar->num_children++;
   
   return content;
 }
@@ -4258,39 +4040,6 @@ get_shadow_type (GtkToolbar *toolbar)
 			NULL);
   
   return shadow_type;
-}
-
-/*
- * API checks
- */
-static gboolean
-gtk_toolbar_check_old_api (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  if (priv->api_mode == NEW_API)
-    {
-      g_warning (MIXED_API_WARNING);
-      return FALSE;
-    }
-  
-  priv->api_mode = OLD_API;
-  return TRUE;
-}
-
-static gboolean
-gtk_toolbar_check_new_api (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
-  if (priv->api_mode == OLD_API)
-    {
-      g_warning (MIXED_API_WARNING);
-      return FALSE;
-    }
-  
-  priv->api_mode = NEW_API;
-  return TRUE;
 }
 
 /* GTK+ internal methods */
