@@ -4543,7 +4543,7 @@ _gtk_widget_get_accel_path (GtkWidget *widget,
 
   apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
   if (locked)
-    *locked = apath ? apath->accel_group->lock_count > 0 : TRUE;
+    *locked = apath ? gtk_accel_group_get_is_locked (apath->accel_group) : TRUE;
   return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
