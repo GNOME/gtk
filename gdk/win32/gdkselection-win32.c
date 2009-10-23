@@ -810,7 +810,7 @@ gdk_selection_convert (GdkWindow *requestor,
       if (dropfiles_prop != NULL)
 	{
 	  selection_property_store
-	    (requestor, selection, dropfiles_prop->format,
+	    (requestor, dropfiles_prop->type, dropfiles_prop->format,
 	     dropfiles_prop->data, dropfiles_prop->length);
 	  g_free (dropfiles_prop);
 	  dropfiles_prop = NULL;
