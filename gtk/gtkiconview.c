@@ -1545,6 +1545,11 @@ gtk_icon_view_expose (GtkWidget *widget,
   if (expose->window != icon_view->priv->bin_window)
     return FALSE;
 
+  /* If a layout has been scheduled, do it now so that all
+   * cell view items have valid sizes before we proceed. */
+  if (icon_view->priv->layout_idle_id != 0)
+    gtk_icon_view_layout (icon_view);
+
   cr = gdk_cairo_create (icon_view->priv->bin_window);
   cairo_set_line_width (cr, 1.);
 
