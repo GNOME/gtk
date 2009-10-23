@@ -147,6 +147,9 @@ gint               _gdk_input_disable_window (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
 void               _gdk_init_input_core      (void);
 
+void               _gdk_input_window_crossing (GdkWindow       *window,
+                                               gboolean         enter);
+
 void _gdk_input_exit           (void);
 
 #endif /* __GDK_INPUTPRIVATE_H__ */

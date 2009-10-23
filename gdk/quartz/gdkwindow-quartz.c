@@ -25,6 +25,7 @@
 #include "gdk.h"
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinputprivate.h"
 
 static gpointer parent_class;
 
@@ -3035,4 +3036,6 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
   iface->queue_translation = _gdk_quartz_window_queue_translation;
   iface->destroy = _gdk_quartz_window_destroy;
+  iface->input_window_destroy = _gdk_input_window_destroy;
+  iface->input_window_crossing = _gdk_input_window_crossing;
 }
