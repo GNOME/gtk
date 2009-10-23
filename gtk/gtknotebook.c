@@ -412,15 +412,6 @@ static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
 					      GtkMenu          *menu);
 
 /*** GtkNotebook Private Setters ***/
-static void gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
-							gboolean     homogeneous);
-static void gtk_notebook_set_tab_border_internal       (GtkNotebook *notebook,
-							guint        border_width);
-static void gtk_notebook_set_tab_hborder_internal      (GtkNotebook *notebook,
-							guint        tab_hborder);
-static void gtk_notebook_set_tab_vborder_internal      (GtkNotebook *notebook,
-							guint        tab_vborder);
-
 static void gtk_notebook_update_tab_states             (GtkNotebook *notebook);
 static gboolean gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
 							    gboolean overload,
@@ -6233,75 +6224,6 @@ gtk_notebook_menu_detacher (GtkWidget *widget,
   g_return_if_fail (notebook->menu == (GtkWidget*) menu);
 
   notebook->menu = NULL;
-}
-
-/* Private GtkNotebook Setter Functions:
- *
- * gtk_notebook_set_homogeneous_tabs_internal
- * gtk_notebook_set_tab_border_internal
- * gtk_notebook_set_tab_hborder_internal
- * gtk_notebook_set_tab_vborder_internal
- */
-static void
-gtk_notebook_set_homogeneous_tabs_internal (GtkNotebook *notebook,
-				            gboolean     homogeneous)
-{
-  if (homogeneous == notebook->homogeneous)
-    return;
-
-  notebook->homogeneous = homogeneous;
-  gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "homogeneous");
-}
-
-static void
-gtk_notebook_set_tab_border_internal (GtkNotebook *notebook,
-				      guint        border_width)
-{
-  notebook->tab_hborder = border_width;
-  notebook->tab_vborder = border_width;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_freeze_notify (G_OBJECT (notebook));
-  g_object_notify (G_OBJECT (notebook), "tab-hborder");
-  g_object_notify (G_OBJECT (notebook), "tab-vborder");
-  g_object_thaw_notify (G_OBJECT (notebook));
-}
-
-static void
-gtk_notebook_set_tab_hborder_internal (GtkNotebook *notebook,
-				       guint        tab_hborder)
-{
-  if (notebook->tab_hborder == tab_hborder)
-    return;
-
-  notebook->tab_hborder = tab_hborder;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "tab-hborder");
-}
-
-static void
-gtk_notebook_set_tab_vborder_internal (GtkNotebook *notebook,
-				       guint        tab_vborder)
-{
-  if (notebook->tab_vborder == tab_vborder)
-    return;
-
-  notebook->tab_vborder = tab_vborder;
-
-  if (notebook->show_tabs &&
-      gtk_widget_get_visible (GTK_WIDGET (notebook)))
-    gtk_widget_queue_resize (GTK_WIDGET (notebook));
-
-  g_object_notify (G_OBJECT (notebook), "tab-vborder");
 }
 
 /* Public GtkNotebook Page Insert/Remove Methods :
