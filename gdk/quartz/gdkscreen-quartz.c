@@ -20,20 +20,89 @@
 
 #include "config.h"
 #include "gdk.h"
+#include "gdkscreen-quartz.h"
 #include "gdkprivate-quartz.h"
  
-/* FIXME: If we want to do it properly, this should be stored
- * in a proper GdkScreen subclass.
- */
-static GdkColormap *default_colormap = NULL;
-static int n_screens = 0;
-static GdkRectangle *screen_rects = NULL;
 
-static guint screen_changed_id = 0;
+static void  gdk_screen_quartz_dispose          (GObject         *object);
+static void  gdk_screen_quartz_finalize         (GObject         *object);
+static void  gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen);
+
+static void display_reconfiguration_callback (CGDirectDisplayID            display,
+                                              CGDisplayChangeSummaryFlags  flags,
+                                              void                        *userInfo);
+
+G_DEFINE_TYPE (GdkScreenQuartz, _gdk_screen_quartz, GDK_TYPE_SCREEN);
+
+static void
+_gdk_screen_quartz_class_init (GdkScreenQuartzClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = gdk_screen_quartz_dispose;
+  object_class->finalize = gdk_screen_quartz_finalize;
+}
+
+static void
+_gdk_screen_quartz_init (GdkScreenQuartz *screen_quartz)
+{
+  GdkScreen *screen = GDK_SCREEN (screen_quartz);
+
+  gdk_screen_set_default_colormap (screen,
+                                   gdk_screen_get_system_colormap (screen));
+
+  gdk_screen_quartz_calculate_layout (screen_quartz);
+
+  CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
+                                            screen);
+}
+
+static void
+gdk_screen_quartz_dispose (GObject *object)
+{
+  GdkScreenQuartz *screen = GDK_SCREEN_QUARTZ (object);
+
+  if (screen->default_colormap)
+    {
+      g_object_unref (screen->default_colormap);
+      screen->default_colormap = NULL;
+    }
+
+  if (screen->screen_changed_id)
+    {
+      g_source_remove (screen->screen_changed_id);
+      screen->screen_changed_id = 0;
+    }
+
+  CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
+                                          screen);
+
+  G_OBJECT_CLASS (_gdk_screen_quartz_parent_class)->dispose (object);
+}
+
+static void
+gdk_screen_quartz_screen_rects_free (GdkScreenQuartz *screen)
+{
+  screen->n_screens = 0;
+
+  if (screen->screen_rects)
+    {
+      g_free (screen->screen_rects);
+      screen->screen_rects = NULL;
+    }
+}
+
+static void
+gdk_screen_quartz_finalize (GObject *object)
+{
+  GdkScreenQuartz *screen = GDK_SCREEN_QUARTZ (object);
+
+  gdk_screen_quartz_screen_rects_free (screen);
+}
 
 
 static void
-screen_rects_init (void)
+gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
 {
   NSArray *array;
   NSRect largest_rect;
@@ -41,14 +110,29 @@ screen_rects_init (void)
 
   GDK_QUARTZ_ALLOC_POOL;
 
+  gdk_screen_quartz_screen_rects_free (screen);
+
   array = [NSScreen screens];
 
-  n_screens = [array count];
-  screen_rects = g_new0 (GdkRectangle, n_screens);
-
-  /* FIXME: as stated above the get_width() and get_height() functions
-   * in this file, we only support horizontal screen layouts for now.
+  /* FIXME: For now we only support screen layouts where the screens are laid
+   * out horizontally.  Mac OS X also supports laying out the screens vertically
+   * and the screens having "non-standard" offsets from eachother.  In the
+   * future we need a much more sophiscated algorithm to translate these
+   * layouts to GDK coordinate space and GDK screen layout.
    */
+  screen->width = 0;
+  screen->height = 0;
+
+  for (i = 0; i < [array count]; i++)
+    {
+      NSRect rect = [[array objectAtIndex:i] frame];
+
+      screen->width += rect.size.width;
+      screen->height = MAX (screen->height, rect.size.height);
+    }
+
+  screen->n_screens = [array count];
+  screen->screen_rects = g_new0 (GdkRectangle, screen->n_screens);
 
   /* Find the monitor with the largest height.  All monitors should be
    * offset to this one in the GDK screen space instead of offset to
@@ -63,7 +147,7 @@ screen_rects_init (void)
         largest_rect = [[array objectAtIndex:i] frame];
     }
 
-  for (i = 0; i < n_screens; i++)
+  for (i = 0; i < screen->n_screens; i++)
     {
       NSScreen *nsscreen;
       NSRect rect;
@@ -71,57 +155,54 @@ screen_rects_init (void)
       nsscreen = [array objectAtIndex:i];
       rect = [nsscreen frame];
 
-      screen_rects[i].x = rect.origin.x;
-      screen_rects[i].width = rect.size.width;
-      screen_rects[i].height = rect.size.height;
+      screen->screen_rects[i].x = rect.origin.x;
+      screen->screen_rects[i].width = rect.size.width;
+      screen->screen_rects[i].height = rect.size.height;
 
       if (largest_rect.size.height - rect.size.height == 0)
-        screen_rects[i].y = 0;
+        screen->screen_rects[i].y = 0;
       else
-        screen_rects[i].y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
+        screen->screen_rects[i].y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
     }
 
   GDK_QUARTZ_RELEASE_POOL;
 }
 
-static void
-screen_rects_free (void)
-{
-  n_screens = 0;
-
-  g_free (screen_rects);
-  screen_rects = NULL;
-}
-
 
 static void
-process_display_reconfiguration (void)
+process_display_reconfiguration (GdkScreenQuartz *screen)
 {
-  screen_rects_free ();
-  screen_rects_init ();
+  int width, height;
 
-  /* FIXME: We should only emit this when the size of screen really
-   * has changed.  We need to start bookkeeping width, height once
-   * we have a proper GdkScreen subclass.
-   */
-  g_signal_emit_by_name (_gdk_screen, "size-changed");
+  width = gdk_screen_get_width (GDK_SCREEN (screen));
+  height = gdk_screen_get_height (GDK_SCREEN (screen));
+
+  gdk_screen_quartz_calculate_layout (GDK_SCREEN_QUARTZ (screen));
+
+  if (width != gdk_screen_get_width (GDK_SCREEN (screen))
+      || height != gdk_screen_get_height (GDK_SCREEN (screen)))
+    g_signal_emit_by_name (_gdk_screen, "size-changed");
 }
 
 static gboolean
 screen_changed_idle (gpointer data)
 {
-  process_display_reconfiguration ();
+  GdkScreenQuartz *screen = data;
 
-  screen_changed_id = 0;
+  process_display_reconfiguration (data);
+
+  screen->screen_changed_id = 0;
 
   return FALSE;
 }
 
 static void
-screen_changed (CGDirectDisplayID            display,
-                CGDisplayChangeSummaryFlags  flags,
-                void                        *userInfo)
+display_reconfiguration_callback (CGDirectDisplayID            display,
+                                  CGDisplayChangeSummaryFlags  flags,
+                                  void                        *userInfo)
 {
+  GdkScreenQuartz *screen = userInfo;
+
   if (flags & kCGDisplayBeginConfigurationFlag)
     {
       /* Ignore the begin configuration signal. */
@@ -137,21 +218,16 @@ screen_changed (CGDirectDisplayID            display,
        * yet, so we delay our refresh into an idle handler.
        */
 
-      if (!screen_changed_id)
-        screen_changed_id = gdk_threads_add_idle (screen_changed_idle, NULL);
+      if (!screen->screen_changed_id)
+        screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
+                                                          screen);
     }
 }
 
-void
-_gdk_quartz_screen_init (void)
+GdkScreen *
+_gdk_screen_quartz_new (void)
 {
-  gdk_screen_set_default_colormap (_gdk_screen,
-                                   gdk_screen_get_system_colormap (_gdk_screen));
-
-  screen_rects_init ();
-
-  CGDisplayRegisterReconfigurationCallback (screen_changed,
-                                            _gdk_screen);
+  return g_object_new (GDK_TYPE_SCREEN_QUARTZ, NULL);
 }
 
 GdkDisplay *
@@ -192,7 +268,9 @@ _gdk_windowing_substitute_screen_number (const gchar *display_name,
 GdkColormap*
 gdk_screen_get_default_colormap (GdkScreen *screen)
 {
-  return default_colormap;
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  return GDK_SCREEN_QUARTZ (screen)->default_colormap;
 }
 
 void
@@ -204,67 +282,28 @@ gdk_screen_set_default_colormap (GdkScreen   *screen,
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
-  old_colormap = default_colormap;
+  old_colormap = GDK_SCREEN_QUARTZ (screen)->default_colormap;
 
-  default_colormap = g_object_ref (colormap);
+  GDK_SCREEN_QUARTZ (screen)->default_colormap = g_object_ref (colormap);
   
   if (old_colormap)
     g_object_unref (old_colormap);
 }
 
-/* FIXME: note on the get_width() and the get_height() methods.  For
- * now we only support screen layouts where the screens are laid out
- * horizontally.  Mac OS X also supports laying out the screens vertically
- * and the screens having "non-standard" offsets from eachother.  In the
- * future we need a much more sophiscated algorithm to translate these
- * layouts to GDK coordinate space and GDK screen layout.
- */
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  int i;
-  int width;
-  NSArray *array;
-
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  GDK_QUARTZ_ALLOC_POOL;
-  array = [NSScreen screens];
-
-  width = 0;
-  for (i = 0; i < [array count]; i++) 
-    {
-      NSRect rect = [[array objectAtIndex:i] frame];
-      width += rect.size.width;
-    }
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  return width;
+  return GDK_SCREEN_QUARTZ (screen)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  int i;
-  int height;
-  NSArray *array;
-
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  GDK_QUARTZ_ALLOC_POOL;
-  array = [NSScreen screens];
-
-  height = 0;
-  for (i = 0; i < [array count]; i++) 
-    {
-      NSRect rect = [[array objectAtIndex:i] frame];
-      height = MAX (height, rect.size.height);
-    }
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  return height;
+  return GDK_SCREEN_QUARTZ (screen)->height;
 }
 
 static gint
@@ -281,65 +320,6 @@ get_mm_from_pixels (NSScreen *screen, int pixels)
 #endif
 
   return (pixels / dpi) * 25.4;
-}
-
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
-{
-  int i;
-  gint width;
-  NSArray *array;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  GDK_QUARTZ_ALLOC_POOL;
-  array = [NSScreen screens];
-
-  width = 0;
-  for (i = 0; i < [array count]; i++)
-    {
-      NSScreen *screen = [array objectAtIndex:i];
-      NSRect rect = [screen frame];
-      width += get_mm_from_pixels (screen, rect.size.width);
-    }
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  return width;
-}
-
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
-{
-  int i;
-  gint height;
-  NSArray *array;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  GDK_QUARTZ_ALLOC_POOL;
-  array = [NSScreen screens];
-
-  height = 0;
-  for (i = 0; i < [array count]; i++)
-    {
-      NSScreen *screen = [array objectAtIndex:i];
-      NSRect rect = [screen frame];
-      gint h = get_mm_from_pixels (screen, rect.size.height);
-      height = MAX (height, h);
-    }
-
-  GDK_QUARTZ_RELEASE_POOL;
-
-  return height;
-}
-
-int
-gdk_screen_get_n_monitors (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return n_screens;
 }
 
 static NSScreen *
@@ -359,6 +339,32 @@ get_nsscreen_for_monitor (gint monitor_num)
 }
 
 gint
+gdk_screen_get_width_mm (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return get_mm_from_pixels (get_nsscreen_for_monitor (0),
+                             GDK_SCREEN_QUARTZ (screen)->width);
+}
+
+gint
+gdk_screen_get_height_mm (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return get_mm_from_pixels (get_nsscreen_for_monitor (0),
+                             GDK_SCREEN_QUARTZ (screen)->height);
+}
+
+int
+gdk_screen_get_n_monitors (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_QUARTZ (screen)->n_screens;
+}
+
+gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 				 gint       monitor_num)
 {
@@ -367,7 +373,7 @@ gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
   g_return_val_if_fail (monitor_num >= 0, 0);
 
   return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
-                             screen_rects[monitor_num].width);
+                             GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num].width);
 }
 
 gint
@@ -379,7 +385,7 @@ gdk_screen_get_monitor_height_mm (GdkScreen *screen,
   g_return_val_if_fail (monitor_num >= 0, 0);
 
   return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
-                             screen_rects[monitor_num].height);
+                             GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num].height);
 }
 
 gchar *
@@ -399,7 +405,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
   g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
   g_return_if_fail (monitor_num >= 0);
 
-  *dest = screen_rects[monitor_num];
+  *dest = GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num];
 }
 
 gchar *
