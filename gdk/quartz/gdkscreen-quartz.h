@@ -47,6 +47,8 @@ struct _GdkScreenQuartz
   GdkRectangle *screen_rects;
 
   guint screen_changed_id;
+
+  guint emit_monitors_changed : 1;
 };
 
 struct _GdkScreenQuartzClass

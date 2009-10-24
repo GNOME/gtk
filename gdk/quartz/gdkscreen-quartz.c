@@ -60,6 +60,8 @@ _gdk_screen_quartz_init (GdkScreenQuartz *screen_quartz)
 
   CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
                                             screen);
+
+  screen_quartz->emit_monitors_changed = FALSE;
 }
 
 static void
@@ -187,6 +189,12 @@ process_display_reconfiguration (GdkScreenQuartz *screen)
   if (width != gdk_screen_get_width (GDK_SCREEN (screen))
       || height != gdk_screen_get_height (GDK_SCREEN (screen)))
     g_signal_emit_by_name (_gdk_screen, "size-changed");
+
+  if (screen->emit_monitors_changed)
+    {
+      g_signal_emit_by_name (screen, "monitors-changed");
+      screen->emit_monitors_changed = FALSE;
+    }
 }
 
 static gboolean
@@ -211,18 +219,25 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
   if (flags & kCGDisplayBeginConfigurationFlag)
     {
       /* Ignore the begin configuration signal. */
-
-      /* FIXME: We can most probably use this flag to properly
-       * emit monitors-changed.
-       */
       return;
     }
   else
     {
+      /* We save information about the changes, so we can emit
+       * ::monitors-changed when appropriate.  This signal must be
+       * emitted when the number, size of position of one of the
+       * monitors changes.
+       */
+      if (flags & kCGDisplayMovedFlag
+          || flags & kCGDisplayAddFlag
+          || flags & kCGDisplayRemoveFlag
+          || flags & kCGDisplayEnabledFlag
+          || flags & kCGDisplayDisabledFlag)
+        screen->emit_monitors_changed = TRUE;
+
       /* At this point Cocoa does not know about the new screen data
        * yet, so we delay our refresh into an idle handler.
        */
-
       if (!screen->screen_changed_id)
         screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
                                                           screen);
