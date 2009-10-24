@@ -1522,13 +1522,14 @@ gdk_directfb_window_move_resize (GdkWindow *window,
     }
   else if (impl->window)
     {
-      private->x = x;
-      private->y = y;
+      if (with_move) {
+        private->x = x;
+        private->y = y;
+        impl->window->MoveTo (impl->window, x, y);
+      }
       impl->drawable.width = width;
       impl->drawable.height = height;
 
-      if (with_move)
-        impl->window->MoveTo (impl->window, x, y);
       impl->window->Resize (impl->window, width, height);
     }
   else
