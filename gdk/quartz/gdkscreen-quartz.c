@@ -29,6 +29,8 @@ static GdkColormap *default_colormap = NULL;
 static int n_screens = 0;
 static GdkRectangle *screen_rects = NULL;
 
+static guint screen_changed_id = 0;
+
 
 static void
 screen_rects_init (void)
@@ -82,6 +84,64 @@ screen_rects_init (void)
   GDK_QUARTZ_RELEASE_POOL;
 }
 
+static void
+screen_rects_free (void)
+{
+  n_screens = 0;
+
+  g_free (screen_rects);
+  screen_rects = NULL;
+}
+
+
+static void
+process_display_reconfiguration (void)
+{
+  screen_rects_free ();
+  screen_rects_init ();
+
+  /* FIXME: We should only emit this when the size of screen really
+   * has changed.  We need to start bookkeeping width, height once
+   * we have a proper GdkScreen subclass.
+   */
+  g_signal_emit_by_name (_gdk_screen, "size-changed");
+}
+
+static gboolean
+screen_changed_idle (gpointer data)
+{
+  process_display_reconfiguration ();
+
+  screen_changed_id = 0;
+
+  return FALSE;
+}
+
+static void
+screen_changed (CGDirectDisplayID            display,
+                CGDisplayChangeSummaryFlags  flags,
+                void                        *userInfo)
+{
+  if (flags & kCGDisplayBeginConfigurationFlag)
+    {
+      /* Ignore the begin configuration signal. */
+
+      /* FIXME: We can most probably use this flag to properly
+       * emit monitors-changed.
+       */
+      return;
+    }
+  else
+    {
+      /* At this point Cocoa does not know about the new screen data
+       * yet, so we delay our refresh into an idle handler.
+       */
+
+      if (!screen_changed_id)
+        screen_changed_id = gdk_threads_add_idle (screen_changed_idle, NULL);
+    }
+}
+
 void
 _gdk_quartz_screen_init (void)
 {
@@ -89,6 +149,9 @@ _gdk_quartz_screen_init (void)
                                    gdk_screen_get_system_colormap (_gdk_screen));
 
   screen_rects_init ();
+
+  CGDisplayRegisterReconfigurationCallback (screen_changed,
+                                            _gdk_screen);
 }
 
 GdkDisplay *
