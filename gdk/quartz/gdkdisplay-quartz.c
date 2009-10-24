@@ -57,9 +57,6 @@ gdk_display_open (const gchar *display_name)
 
   _gdk_screen = _gdk_screen_quartz_new ();
 
-  nsscreen = [[NSScreen screens] objectAtIndex:0];
-  gdk_screen_set_resolution (_gdk_screen, 72.0 * [nsscreen userSpaceScaleFactor]);
-
   _gdk_windowing_window_init ();
 
   _gdk_events_init ();

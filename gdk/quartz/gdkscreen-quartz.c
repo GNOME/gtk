@@ -47,9 +47,14 @@ static void
 _gdk_screen_quartz_init (GdkScreenQuartz *screen_quartz)
 {
   GdkScreen *screen = GDK_SCREEN (screen_quartz);
+  NSScreen *nsscreen;
 
   gdk_screen_set_default_colormap (screen,
                                    gdk_screen_get_system_colormap (screen));
+
+  nsscreen = [[NSScreen screens] objectAtIndex:0];
+  gdk_screen_set_resolution (screen,
+                             72.0 * [nsscreen userSpaceScaleFactor]);
 
   gdk_screen_quartz_calculate_layout (screen_quartz);
 
