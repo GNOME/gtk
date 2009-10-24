@@ -188,7 +188,7 @@ process_display_reconfiguration (GdkScreenQuartz *screen)
 
   if (width != gdk_screen_get_width (GDK_SCREEN (screen))
       || height != gdk_screen_get_height (GDK_SCREEN (screen)))
-    g_signal_emit_by_name (_gdk_screen, "size-changed");
+    g_signal_emit_by_name (screen, "size-changed");
 
   if (screen->emit_monitors_changed)
     {
