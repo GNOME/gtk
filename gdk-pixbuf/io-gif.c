@@ -411,8 +411,8 @@ gif_get_extension (GifContext *context)
                                 retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
                                 if (retval != 0)
                                         return retval;
-                                if (!strncmp (context->block_buf, "NETSCAPE2.0", 11) ||
-                                    !strncmp (context->block_buf, "ANIMEXTS1.0", 11)) {
+                                if (!strncmp ((gchar *)context->block_buf, "NETSCAPE2.0", 11) ||
+                                    !strncmp ((gchar *)context->block_buf, "ANIMEXTS1.0", 11)) {
                                         context->in_loop_extension = TRUE;
                                 }
                                 context->block_count = 0;
