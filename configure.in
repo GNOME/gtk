@@ -990,7 +990,7 @@ fi
 # because some important apps like GIMP need to read and write
 # arbitrary tEXt chunks which doesn't seem to be possible through GDI+
 
-all_loaders="ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm"
+all_loaders="ani,icns,pcx,ras,tga,png,pnm,wbmp,xbm,xpm,qtif"
 if test x$with_libjasper != xno; then
   all_loaders="$all_loaders,jasper"
 fi
@@ -1061,6 +1061,7 @@ AM_CONDITIONAL(INCLUDE_TGA, [test x"$INCLUDE_tga" = xyes])
 AM_CONDITIONAL(INCLUDE_PCX, [test x"$INCLUDE_pcx" = xyes])
 AM_CONDITIONAL(INCLUDE_ICNS, [test x"$INCLUDE_icns" = xyes])
 AM_CONDITIONAL(INCLUDE_JASPER, [test x"$INCLUDE_jasper" = xyes])
+AM_CONDITIONAL(INCLUDE_QTIF, [test x"$INCLUDE_qtif" = xyes])
 # As all GDI+ loaders are either built-in or not, arbitrarily just
 # check one of the variables here
 AM_CONDITIONAL(INCLUDE_GDIPLUS, [test x"$INCLUDE_gdip_ico" = xyes])

@@ -193,6 +193,14 @@ libpixbufloader_jasper_la_SOURCES = io-jasper.c
 libpixbufloader_jasper_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_jasper_la_LIBADD = $(LIBJASPER) $(module_libs)
 
+#
+# The QTIF loader
+#
+libstatic_pixbufloader_qtif_la_SOURCES = io-qtif.c
+libpixbufloader_qtif_la_SOURCES = io-qtif.c
+libpixbufloader_qtif_la_LDFLAGS = -avoid-version -module $(no_undefined)
+libpixbufloader_qtif_la_LIBADD = $(module_libs)
+
 if BUILD_GDIPLUS_LOADERS
 
 if INCLUDE_GDIPLUS
@@ -451,6 +459,12 @@ JASPER_LIB = libpixbufloader-jasper.la
 endif
 endif
 
+if INCLUDE_QTIF
+STATIC_QTIF_LIB = libstatic-pixbufloader-qtif.la
+else
+QTIF_LIB = libpixbufloader-qtif.la
+endif
+
 if BUILD_DYNAMIC_MODULES
 
 loader_LTLIBRARIES = 	\
@@ -470,6 +484,7 @@ loader_LTLIBRARIES = 	\
 	$(ICNS_LIB)	\
 	$(PCX_LIB)	\
 	$(JASPER_LIB)	\
+	$(QTIF_LIB)	\
 	$(GDIPLUS_LIBS)
 
 
@@ -492,6 +507,7 @@ noinst_LTLIBRARIES =		\
 	$(STATIC_ICNS_LIB)	\
 	$(STATIC_PCX_LIB)	\
 	$(STATIC_JASPER_LIB)	\
+	$(STATIC_QTIF_LIB)	\
 	$(STATIC_GDIPLUS_LIBS)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
