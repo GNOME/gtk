@@ -35,6 +35,12 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#ifdef GDK_WINDOWING_QUARTZ
+#define DEFAULT_KEY_THEME "Mac"
+#else
+#define DEFAULT_KEY_THEME NULL
+#endif
+
 #define DEFAULT_TIMEOUT_INITIAL 200
 #define DEFAULT_TIMEOUT_REPEAT   20
 #define DEFAULT_TIMEOUT_EXPAND  500
@@ -310,7 +316,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-key-theme-name",
 								  P_("Key Theme Name"),
 								  P_("Name of key theme RC file to load"),
-								  NULL,
+								  DEFAULT_KEY_THEME,
 								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEY_THEME_NAME);    
