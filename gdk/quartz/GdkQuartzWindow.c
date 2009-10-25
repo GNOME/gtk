@@ -144,8 +144,9 @@
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkEvent *event;
 
-  private->x = content_rect.origin.x;
-  private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
+  _gdk_quartz_window_xy_to_gdk_xy (content_rect.origin.x,
+                                   content_rect.origin.y + content_rect.size.height,
+                                   &private->x, &private->y);
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
@@ -183,12 +184,13 @@
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
 
--(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag
+-(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
 {
   self = [super initWithContentRect:contentRect
 	                  styleMask:styleMask
 	                    backing:backingType
-	                      defer:flag];
+	                      defer:flag
+                             screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
   [self setDelegate:self];
@@ -506,16 +508,18 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
   GdkEvent event;
+  int gx, gy;
 
   update_context_from_dragging_info (sender);
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event.dnd.type = GDK_DRAG_MOTION;
   event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event.dnd.send_event = FALSE;
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
+  event.dnd.x_root = gx;
+  event.dnd.y_root = gy;
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 
@@ -529,16 +533,18 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
   GdkEvent event;
+  int gy, gx;
 
   update_context_from_dragging_info (sender);
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event.dnd.type = GDK_DROP_START;
   event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event.dnd.send_event = FALSE;
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
+  event.dnd.x_root = gx;
+  event.dnd.y_root = gy;
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 

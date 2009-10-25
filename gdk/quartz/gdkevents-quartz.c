@@ -465,8 +465,7 @@ find_window_for_ns_event (NSEvent *nsevent,
   *x = point.x;
   *y = private->height - point.y;
 
-  *x_root = screen_point.x;
-  *y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, x_root, y_root);
 
   event_type = [nsevent type];
 

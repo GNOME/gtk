@@ -138,7 +138,17 @@ void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
                                                      GdkWindow *window);
-gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
+void       _gdk_quartz_window_gdk_xy_to_xy          (gint       gdk_x,
+                                                     gint       gdk_y,
+                                                     gint      *ns_x,
+                                                     gint      *ns_y);
+void       _gdk_quartz_window_xy_to_gdk_xy          (gint       ns_x,
+                                                     gint       ns_y,
+                                                     gint      *gdk_x,
+                                                     gint      *gdk_y);
+void       _gdk_quartz_window_nspoint_to_gdk_xy     (NSPoint    point,
+                                                     gint      *x,
+                                                     gint      *y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
 						     gint       y);

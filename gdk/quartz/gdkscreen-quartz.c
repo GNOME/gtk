@@ -129,6 +129,8 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
    */
   screen->width = 0;
   screen->height = 0;
+  screen->min_x = 0;
+  screen->min_y = 0;
 
   for (i = 0; i < [array count]; i++)
     {
@@ -136,6 +138,8 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
 
       screen->width += rect.size.width;
       screen->height = MAX (screen->height, rect.size.height);
+      screen->min_x = MIN (screen->min_x, rect.origin.x);
+      screen->min_y = MIN (screen->min_y, rect.origin.y);
     }
 
   screen->n_screens = [array count];
@@ -162,7 +166,7 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
       nsscreen = [array objectAtIndex:i];
       rect = [nsscreen frame];
 
-      screen->screen_rects[i].x = rect.origin.x;
+      screen->screen_rects[i].x = rect.origin.x - screen->min_x;
       screen->screen_rects[i].width = rect.size.width;
       screen->screen_rects[i].height = rect.size.height;
 
