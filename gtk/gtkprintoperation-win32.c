@@ -444,6 +444,7 @@ win32_start_page (GtkPrintOperation *op,
   GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
   LPDEVMODEW devmode;
   GtkPaperSize *paper_size;
+  double x_off, y_off;
 
   devmode = GlobalLock (op_win32->devmode);
   
@@ -468,6 +469,10 @@ win32_start_page (GtkPrintOperation *op,
   ResetDCW (op_win32->hdc, devmode);
   
   GlobalUnlock (op_win32->devmode);
+
+  x_off = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETX);
+  y_off = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETY);
+  cairo_surface_set_device_offset (op_win32->surface, -x_off, -y_off);
   
   StartPage (op_win32->hdc);
 }
