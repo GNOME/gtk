@@ -659,10 +659,14 @@ gtk_rc_color_hash_changed (GtkSettings  *settings,
 			   GParamSpec   *pspec,
 			   GtkRcContext *context)
 {
-  if (context->color_hash)
-    g_hash_table_unref (context->color_hash);
-  
+  GHashTable *old_hash;
+
+  old_hash = context->color_hash;
+
   g_object_get (settings, "color-hash", &context->color_hash, NULL);
+
+  if (old_hash)
+    g_hash_table_unref (old_hash);
 
   gtk_rc_reparse_all_for_settings (settings, TRUE);
 }
@@ -3148,8 +3152,10 @@ gtk_rc_parse_style (GtkRcContext *context,
           break;
         case GTK_RC_TOKEN_COLOR:
           if (our_hash == NULL)
-            gtk_rc_style_prepend_empty_color_hash (rc_style);
-          our_hash = rc_priv->color_hashes->data;
+            {
+              gtk_rc_style_prepend_empty_color_hash (rc_style);
+              our_hash = rc_priv->color_hashes->data;
+            }
           token = gtk_rc_parse_logical_color (scanner, rc_style, our_hash);
           break;
 	case G_TOKEN_IDENTIFIER:
