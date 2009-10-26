@@ -61,7 +61,7 @@ struct _GtkComposeTableCompact
 static const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
-  23,
+  24,
   6
 };
 
