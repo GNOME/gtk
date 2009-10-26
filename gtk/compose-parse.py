@@ -425,30 +425,61 @@ except:
 """ Look if there is a lookaside (supplementary) compose file in the current
     directory, and if so, open, then merge with upstream Compose file.
 """
+xorg_compose_sequences_raw = []
+for seq in composefile.readlines():
+        xorg_compose_sequences_raw.append(seq)
+
 try:
         composefile_lookaside = open(FILENAME_COMPOSE_SUPPLEMENTARY, 'r')
+        for seq in composefile_lookaside.readlines():
+                xorg_compose_sequences_raw.append(seq)
 except IOError, (errno, strerror):
-        if not opt_quiet:
+        if opt_verbose:
                 print "I/O error(%s): %s" % (errno, strerror)
                 print "Did not find lookaside compose file. Continuing..."
 except:
         print "Unexpected error: ", sys.exc_info()[0]
         sys.exit(-1)
 
-xorg_compose_sequences_raw = []
-for seq in composefile.readlines():
-        xorg_compose_sequences_raw.append(seq)
-for seq in composefile_lookaside.readlines():
-        xorg_compose_sequences_raw.append(seq)
-
 """ Parse the compose file in  xorg_compose_sequences"""
 xorg_compose_sequences = []
 xorg_compose_sequences_algorithmic = []
 linenum_compose = 0
+comment_nest_depth = 0
 for line in xorg_compose_sequences_raw:
 	linenum_compose += 1
 	line = line.strip()
-	if line is "" or match("^XCOMM", line) or match("^#", line):
+	if match("^XCOMM", line) or match("^#", line):
+		continue
+
+	line = sub(r"\/\*([^\*]*|[\*][^/])\*\/", "", line)
+
+	comment_start = line.find("/*")
+
+	if comment_start >= 0:
+		if comment_nest_depth == 0:
+			line = line[:comment_start]
+		else:
+			line = ""
+
+		comment_nest_depth += 1
+	else:
+		comment_end = line.find("*/")
+
+		if comment_end >= 0:
+			comment_nest_depth -= 1
+
+		if comment_nest_depth < 0:
+			print "Invalid comment %(linenum_compose)d in %(filename)s: \
+			Closing '*/' without opening '/*'" % { "linenum_compose": linenum_compose, "filename": filename_compose }
+			exit(-1)
+
+		if comment_nest_depth > 0:
+			line = ""
+		else:
+			line = line[comment_end + 2:]
+
+	if line is "":
 		continue
 
 	#line = line[:-1]
