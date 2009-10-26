@@ -1091,6 +1091,26 @@ _gdk_window_impl_new (GdkWindow     *window,
 }
 
 void
+_gdk_windowing_update_root_window_size (GdkScreen *screen)
+{
+  GdkWindowObject *private = (GdkWindowObject *)_gdk_root;
+
+  /* The size of the root window is so that it can contain all
+   * monitors attached to this machine.  The monitors are laid out
+   * within this root window.  We calculate the size of the root window
+   * and the positions of the different monitors in gdkscreen-quartz.c.
+   *
+   * This data is updated when the monitor configuration is changed.
+   */
+  private->x = 0;
+  private->y = 0;
+  private->abs_x = 0;
+  private->abs_y = 0;
+  private->width = gdk_screen_get_width (screen);
+  private->height = gdk_screen_get_height (screen);
+}
+
+void
 _gdk_windowing_window_init (void)
 {
   GdkWindowObject *private;
@@ -1107,18 +1127,7 @@ _gdk_windowing_window_init (void)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
 
-  /* The size of the root window should be the same as the size of
-   * the screen it belongs to.
-   *
-   * FIXME: Of course this needs to be updated when you change the monitor
-   * configuration (add another one, remove one, etc).
-   */
-  private->x = 0;
-  private->y = 0;
-  private->abs_x = 0;
-  private->abs_y = 0;
-  private->width = gdk_screen_get_width (_gdk_screen);
-  private->height = gdk_screen_get_height (_gdk_screen);
+  _gdk_windowing_update_root_window_size (_gdk_screen);
 
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;
