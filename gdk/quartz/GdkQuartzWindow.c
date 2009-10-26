@@ -139,14 +139,11 @@
 
 -(void)windowDidMove:(NSNotification *)aNotification
 {
-  NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkEvent *event;
 
-  _gdk_quartz_window_xy_to_gdk_xy (content_rect.origin.x,
-                                   content_rect.origin.y + content_rect.size.height,
-                                   &private->x, &private->y);
+  _gdk_quartz_window_update_position (window);
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);

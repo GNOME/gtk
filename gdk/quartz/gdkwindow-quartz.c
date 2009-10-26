@@ -1089,8 +1089,30 @@ _gdk_window_impl_new (GdkWindow     *window,
 }
 
 void
-_gdk_windowing_update_root_window_size (GdkScreen *screen)
+_gdk_quartz_window_update_position (GdkWindow *window)
 {
+  NSRect frame_rect;
+  NSRect content_rect;
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  frame_rect = [impl->toplevel frame];
+  content_rect = [impl->toplevel contentRectForFrameRect:frame_rect];
+
+  _gdk_quartz_window_xy_to_gdk_xy (content_rect.origin.x,
+                                   content_rect.origin.y + content_rect.size.height,
+                                   &private->x, &private->y);
+
+
+  GDK_QUARTZ_RELEASE_POOL;
+}
+
+void
+_gdk_windowing_update_window_sizes (GdkScreen *screen)
+{
+  GList *windows, *list;
   GdkWindowObject *private = (GdkWindowObject *)_gdk_root;
 
   /* The size of the root window is so that it can contain all
@@ -1106,6 +1128,13 @@ _gdk_windowing_update_root_window_size (GdkScreen *screen)
   private->abs_y = 0;
   private->width = gdk_screen_get_width (screen);
   private->height = gdk_screen_get_height (screen);
+
+  windows = gdk_screen_get_toplevel_windows (screen);
+
+  for (list = windows; list; list = list->next)
+    _gdk_quartz_window_update_position (list->data);
+
+  g_list_free (windows);
 }
 
 void
@@ -1125,7 +1154,7 @@ _gdk_windowing_window_init (void)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl);
 
-  _gdk_windowing_update_root_window_size (_gdk_screen);
+  _gdk_windowing_update_window_sizes (_gdk_screen);
 
   private->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   private->window_type = GDK_WINDOW_ROOT;

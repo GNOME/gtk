@@ -105,7 +105,7 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 #define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
 
 /* Initialization */
-void _gdk_windowing_update_root_window_size (GdkScreen *screen);
+void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
 void _gdk_windowing_window_init             (void);
 void _gdk_events_init                       (void);
 void _gdk_visual_init                       (void);
@@ -162,6 +162,8 @@ void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
 
 void       _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
                                                          GdkRectangle *rect);
+
+void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
 /* Events */
 typedef enum {

@@ -177,7 +177,7 @@ process_display_reconfiguration (GdkScreenQuartz *screen)
 
   gdk_screen_quartz_calculate_layout (GDK_SCREEN_QUARTZ (screen));
 
-  _gdk_windowing_update_root_window_size (GDK_SCREEN (screen));
+  _gdk_windowing_update_window_sizes (GDK_SCREEN (screen));
 
   if (screen->emit_monitors_changed)
     {
