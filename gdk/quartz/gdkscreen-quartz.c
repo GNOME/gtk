@@ -1,6 +1,7 @@
 /* gdkscreen-quartz.c
  *
  * Copyright (C) 2005 Imendio AB
+ * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
