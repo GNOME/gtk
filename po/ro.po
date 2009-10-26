@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-26 22:27+0200\n"
-"PO-Revision-Date: 2009-10-26 22:27+0200\n"
+"PO-Revision-Date: 2009-10-26 22:37+0200\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1762,7 +1762,7 @@ msgstr "Adaugă ca favorit dosarul selectat"
 
 #: ../gtk/gtkfilechooserdefault.c:4050
 msgid "_Remove"
-msgstr "_Elimină"
+msgstr "E_limină"
 
 #: ../gtk/gtkfilechooserdefault.c:4186
 msgid "Could not select file"
@@ -3213,7 +3213,7 @@ msgstr "Mărime _normală"
 #: ../gtk/gtkstock.c:319
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Bază:"
+msgstr "J_os de tot"
 
 #. This is a navigation label as in "go to the first page"
 #: ../gtk/gtkstock.c:321
@@ -3231,7 +3231,7 @@ msgstr "_Ultimul"
 #: ../gtk/gtkstock.c:325
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Vârf:"
+msgstr "S_us de tot"
 
 #. This is a navigation label as in "go back"
 #: ../gtk/gtkstock.c:327
@@ -3471,7 +3471,7 @@ msgstr "Actuali_zează"
 #: ../gtk/gtkstock.c:390
 msgctxt "Stock label"
 msgid "_Remove"
-msgstr "_Elimină"
+msgstr "E_limină"
 
 #: ../gtk/gtkstock.c:391
 msgctxt "Stock label"
