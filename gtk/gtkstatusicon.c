@@ -702,7 +702,7 @@ wndproc (HWND   hwnd,
 
 	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
 	    {
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
 	      priv->nid.hWnd = NULL;
 	      continue;
 	    }
@@ -902,7 +902,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 
   if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
     {
-      g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
+      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
       priv->nid.hWnd = NULL;
     }
 
@@ -1391,7 +1391,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
       priv->nid.uFlags |= NIF_ICON;
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
       if (prev_hicon)
 	DestroyIcon (prev_hicon);
 #endif
@@ -1440,7 +1440,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    priv->nid.uFlags |= NIF_ICON;
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-		  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+		  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	    if (prev_hicon)
 	      DestroyIcon (prev_hicon);
 #endif
@@ -1461,7 +1461,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    priv->nid.uFlags &= ~NIF_ICON;
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-		g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+		g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
       [priv->status_item setImage:NULL];
@@ -1491,7 +1491,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	  if (prev_hicon)
 	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
@@ -1535,7 +1535,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	  if (prev_hicon)
 	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
@@ -1582,7 +1582,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
         priv->nid.uFlags |= NIF_ICON;
         if (priv->nid.hWnd != NULL && priv->visible)
           if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-            g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+            g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
           if (prev_hicon)
             DestroyIcon (prev_hicon);
           g_object_unref (pixbuf);
@@ -1615,7 +1615,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
       priv->nid.uFlags &= ~NIF_ICON;
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
         {
@@ -2737,7 +2737,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
     }
   if (priv->nid.hWnd != NULL && priv->visible)
     if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-      g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+      g_warning (G_STRLOC ": Shell_NotifyIconW(NIM_MODIFY) failed");
 
   g_free (priv->tooltip_text);
   priv->tooltip_text = g_strdup (text);
