@@ -112,8 +112,8 @@ static void
 gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
 {
   NSArray *array;
-  NSRect largest_rect;
   int i;
+  int max_x, max_y;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -121,42 +121,32 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
 
   array = [NSScreen screens];
 
-  /* FIXME: For now we only support screen layouts where the screens are laid
-   * out horizontally.  Mac OS X also supports laying out the screens vertically
-   * and the screens having "non-standard" offsets from eachother.  In the
-   * future we need a much more sophiscated algorithm to translate these
-   * layouts to GDK coordinate space and GDK screen layout.
-   */
   screen->width = 0;
   screen->height = 0;
   screen->min_x = 0;
   screen->min_y = 0;
+  max_x = max_y = 0;
 
+  /* We determine the minimum and maximum x and y coordinates
+   * covered by the monitors.  From this we can deduce the width
+   * and height of the root screen.
+   */
   for (i = 0; i < [array count]; i++)
     {
       NSRect rect = [[array objectAtIndex:i] frame];
 
-      screen->width += rect.size.width;
-      screen->height = MAX (screen->height, rect.size.height);
       screen->min_x = MIN (screen->min_x, rect.origin.x);
+      max_x = MAX (max_x, rect.origin.x + rect.size.width);
+
       screen->min_y = MIN (screen->min_y, rect.origin.y);
+      max_y = MAX (max_y, rect.origin.y + rect.size.height);
     }
+
+  screen->width = max_x - screen->min_x;
+  screen->height = max_y - screen->min_y;
 
   screen->n_screens = [array count];
   screen->screen_rects = g_new0 (GdkRectangle, screen->n_screens);
-
-  /* Find the monitor with the largest height.  All monitors should be
-   * offset to this one in the GDK screen space instead of offset to
-   * the screen with the menu bar.
-   */
-  largest_rect = [[array objectAtIndex:0] frame];
-  for (i = 1; i < [array count]; i++)
-    {
-      NSRect rect = [[array objectAtIndex:i] frame];
-
-      if (rect.size.height > largest_rect.size.height)
-        largest_rect = [[array objectAtIndex:i] frame];
-    }
 
   for (i = 0; i < screen->n_screens; i++)
     {
@@ -167,13 +157,10 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
       rect = [nsscreen frame];
 
       screen->screen_rects[i].x = rect.origin.x - screen->min_x;
+      screen->screen_rects[i].y
+          = screen->height - (rect.origin.y + rect.size.height) + screen->min_y;
       screen->screen_rects[i].width = rect.size.width;
       screen->screen_rects[i].height = rect.size.height;
-
-      if (largest_rect.size.height - rect.size.height == 0)
-        screen->screen_rects[i].y = 0;
-      else
-        screen->screen_rects[i].y = largest_rect.size.height - rect.size.height + largest_rect.origin.y;
     }
 
   GDK_QUARTZ_RELEASE_POOL;
