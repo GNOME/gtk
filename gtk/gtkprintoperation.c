@@ -78,11 +78,15 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static int job_nr = 0;
+typedef struct _PrintPagesData PrintPagesData;
 
-static void          preview_iface_init (GtkPrintOperationPreviewIface *iface);
-static GtkPageSetup *create_page_setup  (GtkPrintOperation             *op);
-static void          common_render_page (GtkPrintOperation             *op,
-					 gint                           page_nr);
+static void          preview_iface_init      (GtkPrintOperationPreviewIface *iface);
+static GtkPageSetup *create_page_setup       (GtkPrintOperation             *op);
+static void          common_render_page      (GtkPrintOperation             *op,
+					      gint                           page_nr);
+static void          increment_page_sequence (PrintPagesData *data);
+static void          prepare_data            (PrintPagesData *data);
+static void          clamp_page_ranges       (PrintPagesData *data);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT,
@@ -260,13 +264,23 @@ preview_start_page (GtkPrintOperation *op,
 		    GtkPrintContext   *print_context,
 		    GtkPageSetup      *page_setup)
 {
-  g_signal_emit_by_name (op, "got-page-size", print_context, page_setup);
+  if ((op->priv->manual_number_up < 2) ||
+      (op->priv->page_position % op->priv->manual_number_up == 0))
+    g_signal_emit_by_name (op, "got-page-size", print_context, page_setup);
 }
 
 static void
 preview_end_page (GtkPrintOperation *op,
 		  GtkPrintContext   *print_context)
 {
+  cairo_t *cr;
+
+  cr = gtk_print_context_get_cairo_context (print_context);
+
+  if ((op->priv->manual_number_up < 2) ||
+      ((op->priv->page_position + 1) % op->priv->manual_number_up == 0) ||
+      (op->priv->page_position == op->priv->nr_of_pages_to_print - 1))
+    cairo_show_page (cr);
 }
 
 static void
@@ -411,6 +425,31 @@ gtk_print_operation_get_property (GObject    *object,
     }
 }
 
+struct _PrintPagesData
+{
+  GtkPrintOperation *op;
+  gint uncollated_copies;
+  gint collated_copies;
+  gint uncollated, collated, total;
+
+  gint range, num_ranges;
+  GtkPageRange *ranges;
+  GtkPageRange one_range;
+
+  gint page;
+  gint sheet;
+  gint first_position, last_position;
+  gint first_sheet;
+  gint num_of_sheets;
+  gint *pages;
+
+  GtkWidget *progress;
+ 
+  gboolean initialized;
+  gboolean is_preview;
+  gboolean done;
+};
+
 typedef struct
 {
   GtkPrintOperationPreview *preview;
@@ -418,8 +457,8 @@ typedef struct
   GtkWindow *parent;
   cairo_surface_t *surface;
   gchar *filename;
-  guint page_nr;
   gboolean wait;
+  PrintPagesData *pages_data;
 } PreviewOp;
 
 static void
@@ -441,6 +480,10 @@ preview_print_idle_done (gpointer data)
 
   gtk_print_operation_preview_end_preview (pop->preview);
 
+  g_object_unref (pop->pages_data->op);
+  g_free (pop->pages_data->pages);
+  g_free (pop->pages_data);
+
   g_object_unref (op);
   g_free (pop);
 }
@@ -450,9 +493,8 @@ preview_print_idle (gpointer data)
 {
   PreviewOp *pop;
   GtkPrintOperation *op;
-  gboolean retval = TRUE;
-  cairo_t *cr;
   GtkPrintOperationPrivate *priv; 
+  gboolean done = FALSE;
 
   pop = (PreviewOp *) data;
   op = GTK_PRINT_OPERATION (pop->preview);
@@ -461,24 +503,23 @@ preview_print_idle (gpointer data)
 
   if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
     {
-      /* TODO: print out sheets not pages and follow ranges */
-      if (pop->page_nr >= op->priv->nr_of_pages)
-        retval = FALSE;
-
-      if (pop->page_nr > 0)
+      if (!pop->pages_data->initialized)
         {
-          cr = gtk_print_context_get_cairo_context (pop->print_context);
-          _gtk_print_operation_platform_backend_preview_end_page (op, pop->surface, cr);
+          pop->pages_data->initialized = TRUE;
+          prepare_data (pop->pages_data);
         }
-
-      if (retval)
+      else
         {
-          gtk_print_operation_preview_render_page (pop->preview, pop->page_nr);
-          pop->page_nr++;
+          increment_page_sequence (pop->pages_data);
+
+          if (!pop->pages_data->done)
+            gtk_print_operation_preview_render_page (pop->preview, pop->pages_data->page);
+          else
+            done = priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY;
         }
     }
 
-  return retval;
+  return !done;
 }
 
 static void
@@ -502,7 +543,6 @@ preview_ready (GtkPrintOperationPreview *preview,
                GtkPrintContext          *context,
 	       PreviewOp                *pop)
 {
-  pop->page_nr = 0;
   pop->print_context = context;
 
   g_object_ref (preview);
@@ -529,6 +569,9 @@ gtk_print_operation_preview_handler (GtkPrintOperation        *op,
   pop->filename = NULL;
   pop->preview = preview;
   pop->parent = parent;
+  pop->pages_data = g_new0 (PrintPagesData, 1);
+  pop->pages_data->op = g_object_ref (GTK_PRINT_OPERATION (preview));
+  pop->pages_data->is_preview = TRUE;
 
   page_setup = gtk_print_context_get_page_setup (context);
 
@@ -2026,30 +2069,6 @@ run_pdf (GtkPrintOperation  *op,
   return GTK_PRINT_OPERATION_RESULT_APPLY; 
 }
 
-typedef struct
-{
-  GtkPrintOperation *op;
-  gint uncollated_copies;
-  gint collated_copies;
-  gint uncollated, collated, total;
-
-  gint range, num_ranges;
-  GtkPageRange *ranges;
-  GtkPageRange one_range;
-
-  gint page;
-  gint sheet;
-  gint first_position, last_position;
-  gint first_sheet;
-  gint num_of_sheets;
-  gint *pages;
-
-  GtkWidget *progress;
- 
-  gboolean initialized;
-  gboolean is_preview;
-  gboolean done;
-} PrintPagesData;
 
 static void
 clamp_page_ranges (PrintPagesData *data)
@@ -2127,7 +2146,8 @@ increment_page_sequence (PrintPagesData *data)
         inc = 1;
 
       /* changing sheet */
-      if ((priv->page_position + 1) % priv->manual_number_up == 0 ||
+      if (priv->manual_number_up < 2 ||
+          (priv->page_position + 1) % priv->manual_number_up == 0 ||
           priv->page_position == data->last_position ||
           priv->page_position == priv->nr_of_pages_to_print - 1)
         {
@@ -2583,26 +2603,26 @@ prepare_data (PrintPagesData *data)
 
   priv = data->op->priv;
 
+  if (priv->manual_collation)
+    {
+      data->uncollated_copies = priv->manual_num_copies;
+      data->collated_copies = 1;
+    }
+  else
+    {
+      data->uncollated_copies = 1;
+      data->collated_copies = priv->manual_num_copies;
+    }
+
   if (!data->initialized)
     {
       data->initialized = TRUE;
       page_setup = create_page_setup (data->op);
-      _gtk_print_context_set_page_setup (priv->print_context, 
-                                 page_setup);
+      _gtk_print_context_set_page_setup (priv->print_context,
+                                         page_setup);
       g_object_unref (page_setup);
 
       g_signal_emit (data->op, signals[BEGIN_PRINT], 0, priv->print_context);
-
-      if (priv->manual_collation)
-        {
-          data->uncollated_copies = priv->manual_num_copies;
-          data->collated_copies = 1;
-        }
-      else
-        {
-          data->uncollated_copies = 1;
-          data->collated_copies = priv->manual_num_copies;
-        }
 
       return;
     }
@@ -2674,10 +2694,15 @@ prepare_data (PrintPagesData *data)
   data->collated = 0;
   data->uncollated = 0;
 
-  if (priv->nr_of_pages_to_print % priv->manual_number_up == 0)
-    data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up;
+  if (priv->manual_number_up > 1)
+    {
+      if (priv->nr_of_pages_to_print % priv->manual_number_up == 0)
+        data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up;
+      else
+        data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up + 1;
+    }
   else
-    data->num_of_sheets = priv->nr_of_pages_to_print / priv->manual_number_up + 1;
+    data->num_of_sheets = priv->nr_of_pages_to_print;
 
   if (priv->manual_reverse)
     {
@@ -2910,12 +2935,12 @@ print_pages (GtkPrintOperation       *op,
 							      &priv->num_page_ranges);
       priv->manual_num_copies = 1;
       priv->manual_collation = FALSE;
-      priv->manual_reverse = FALSE;
-      priv->manual_page_set = GTK_PAGE_SET_ALL;
-      priv->manual_scale = 1.0;
-      priv->manual_orientation = TRUE;
-      priv->manual_number_up = 1;
-      priv->manual_number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+      priv->manual_reverse = gtk_print_settings_get_reverse (priv->print_settings);
+      priv->manual_page_set = gtk_print_settings_get_page_set (priv->print_settings);
+      priv->manual_scale = gtk_print_settings_get_scale (priv->print_settings) / 100.0;
+      priv->manual_orientation = gtk_page_setup_get_orientation (priv->default_page_setup);
+      priv->manual_number_up = gtk_print_settings_get_number_up (priv->print_settings);
+      priv->manual_number_up_layout = gtk_print_settings_get_number_up_layout (priv->print_settings);
     }
   
   priv->print_pages_idle_id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE + 10,

@@ -1152,7 +1152,7 @@ gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
 gint
 gtk_print_settings_get_number_up (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_NUMBER_UP);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_NUMBER_UP, 1);
 }
 
 /**
