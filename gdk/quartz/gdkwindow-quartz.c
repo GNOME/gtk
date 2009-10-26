@@ -885,7 +885,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
 }
 
 static NSScreen *
-get_nsscreen_for_x (gint x)
+get_nsscreen_for_point (gint x, gint y)
 {
   int i;
   NSArray *screens;
@@ -898,10 +898,8 @@ get_nsscreen_for_x (gint x)
     {
       NSRect rect = [[screens objectAtIndex:i] frame];
 
-      /* FIXME: Only horizontal layouts supported for now.  Also
-       * see comments in gdkscreen-quartz.c
-       */
-      if (x >= rect.origin.x && x <= rect.origin.x + rect.size.width)
+      if (x >= rect.origin.x && x <= rect.origin.x + rect.size.width &&
+          y >= rect.origin.y && y <= rect.origin.y + rect.size.height)
         return [screens objectAtIndex:i];
     }
 
@@ -1008,7 +1006,7 @@ _gdk_window_impl_new (GdkWindow     *window,
          */
         _gdk_quartz_window_gdk_xy_to_xy (private->x, private->y, &nx, &ny);
 
-        screen = get_nsscreen_for_x (nx);
+        screen = get_nsscreen_for_point (nx, ny);
         screen_rect = [screen frame];
         nx -= screen_rect.origin.x;
         ny -= screen_rect.origin.y;
