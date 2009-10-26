@@ -43,8 +43,6 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
-  NSScreen *nsscreen;
-
   if (_gdk_display != NULL)
     return NULL;
 
