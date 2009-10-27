@@ -582,7 +582,7 @@ gtk_combo_popdown_list (GtkCombo *combo)
   if (GTK_BUTTON (combo->button)->in_button)
     {
       GTK_BUTTON (combo->button)->in_button = FALSE;
-      gtk_button_released (GTK_BUTTON (combo->button));
+      g_signal_emit_by_name (combo->button, "released");
     }
 
   if (GTK_WIDGET_HAS_GRAB (combo->popwin))
@@ -666,7 +666,7 @@ gtk_combo_popup_button_press (GtkWidget        *button,
   popup_grab_on_window (combo->popwin->window,
 			gtk_get_current_event_time ());
 
-  gtk_button_pressed (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "depressed");
 
   gtk_grab_add (combo->popwin);
 
