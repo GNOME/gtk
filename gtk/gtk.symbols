@@ -541,7 +541,9 @@ gtk_button_box_set_layout
 #if IN_HEADER(__GTK_BUTTON_H__)
 #if IN_FILE(__GTK_BUTTON_C__)
 gtk_button_clicked
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_button_enter
+#endif
 gtk_button_get_alignment
 gtk_button_get_focus_on_click
 gtk_button_get_image
@@ -551,13 +553,17 @@ gtk_button_get_relief
 gtk_button_get_type G_GNUC_CONST
 gtk_button_get_use_stock
 gtk_button_get_use_underline
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_button_leave
+#endif
 gtk_button_new
 gtk_button_new_from_stock
 gtk_button_new_with_label
 gtk_button_new_with_mnemonic
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_button_pressed
 gtk_button_released
+#endif
 gtk_button_set_alignment
 gtk_button_set_focus_on_click
 gtk_button_set_image

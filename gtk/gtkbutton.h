@@ -93,11 +93,15 @@ GtkWidget*     gtk_button_new               (void);
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
+#ifndef GTK_DISABLE_DEPRECATED
 void           gtk_button_pressed           (GtkButton      *button);
 void           gtk_button_released          (GtkButton      *button);
+#endif
 void           gtk_button_clicked           (GtkButton      *button);
+#ifndef GTK_DISABLE_DEPRECATED
 void           gtk_button_enter             (GtkButton      *button);
 void           gtk_button_leave             (GtkButton      *button);
+#endif
 
 void                  gtk_button_set_relief         (GtkButton      *button,
 						     GtkReliefStyle  newstyle);

@@ -195,6 +195,7 @@ Emits a #GtkButton::pressed signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::button-press-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_released ##### -->
@@ -203,6 +204,7 @@ Emits a #GtkButton::released signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::button-release-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_clicked ##### -->
@@ -213,12 +215,14 @@ Emits a #GtkButton::clicked signal to the given #GtkButton.
 @button: The #GtkButton you want to send the signal to.
 
 
+
 <!-- ##### FUNCTION gtk_button_enter ##### -->
 <para>
 Emits a #GtkButton::enter signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::enter-notify-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_leave ##### -->
@@ -227,6 +231,7 @@ Emits a #GtkButton::leave signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::leave-notify-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_set_relief ##### -->
