@@ -4319,18 +4319,18 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
             break;
           case GTK_PAGE_ORIENTATION_LANDSCAPE:
             if (layout < 4)
-              layout = layout + 5 - 2 * (layout % 2);
+              layout = layout + 2 + 4 * (1 - layout / 2);
             else
-              layout = layout - 6 + 4 * (1 - (layout - 4) / 2);
+              layout = layout - 3 - 2 * (layout % 2);
             break;
           case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
             layout = (layout + 3 - 2 * (layout % 2)) % 4 + 4 * (layout / 4);
             break;
           case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
             if (layout < 4)
-              layout = layout + 2 + 4 * (1 - layout / 2);
+              layout = layout + 5 - 2 * (layout % 2);
             else
-              layout = layout - 3 - 2 * (layout % 2);
+              layout = layout - 6 + 4 * (1 - (layout - 4) / 2);
             break;
         }
 
