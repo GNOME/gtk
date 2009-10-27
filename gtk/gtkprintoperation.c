@@ -2938,7 +2938,7 @@ print_pages (GtkPrintOperation       *op,
       priv->manual_reverse = gtk_print_settings_get_reverse (priv->print_settings);
       priv->manual_page_set = gtk_print_settings_get_page_set (priv->print_settings);
       priv->manual_scale = gtk_print_settings_get_scale (priv->print_settings) / 100.0;
-      priv->manual_orientation = gtk_page_setup_get_orientation (priv->default_page_setup);
+      priv->manual_orientation = TRUE;
       priv->manual_number_up = gtk_print_settings_get_number_up (priv->print_settings);
       priv->manual_number_up_layout = gtk_print_settings_get_number_up_layout (priv->print_settings);
     }
