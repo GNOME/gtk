@@ -249,7 +249,7 @@ idle_do_action (gpointer data)
   button = GTK_BUTTON (widget); 
 
   button->in_button = TRUE;
-  gtk_button_enter (button);
+  g_signal_emit_by_name (button, "enter");
   /*
    * Simulate a button press event. calling gtk_button_pressed() does
    * not get the job done for a GtkOptionMenu.  
