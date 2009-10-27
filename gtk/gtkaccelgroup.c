@@ -690,11 +690,14 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 /**
  * gtk_accel_group_disconnect:
  * @accel_group: the accelerator group to remove an accelerator from
- * @closure:     the closure to remove from this accelerator group
+ * @closure:     the closure to remove from this accelerator group, or %NULL
+ *               to remove all closures
  * @returns:     %TRUE if the closure was found and got disconnected
  *
  * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
+ *
+ * Since 2.20 @closure can be %NULL.
  */
 gboolean
 gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
@@ -705,7 +708,7 @@ gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
   for (i = 0; i < accel_group->n_accels; i++)
-    if (accel_group->priv_accels[i].closure == closure)
+    if (accel_group->priv_accels[i].closure == closure || !closure)
       {
 	g_object_ref (accel_group);
 	quick_accel_remove (accel_group, i);
