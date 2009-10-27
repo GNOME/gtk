@@ -372,7 +372,6 @@ _gtk_socket_end_embedding (GtkSocket *socket)
 {
   GtkSocketPrivate *private = _gtk_socket_get_private (socket);
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
-  gint i;
   
   if (GTK_IS_WINDOW (toplevel))
     _gtk_socket_windowing_end_embedding_toplevel (socket);
@@ -383,12 +382,7 @@ _gtk_socket_end_embedding (GtkSocket *socket)
   socket->current_height = 0;
   private->resize_count = 0;
 
-  /* Remove from end to avoid indexes shifting. This is evil */
-  for (i = socket->accel_group->n_accels - 1; i >= 0; i--)
-    {
-      GtkAccelGroupEntry *accel_entry = &socket->accel_group->priv_accels[i];
-      gtk_accel_group_disconnect (socket->accel_group, accel_entry->closure);
-    }
+  gtk_accel_group_disconnect (socket->accel_group, NULL);
 }
 
 static void
@@ -594,22 +588,9 @@ _gtk_socket_remove_grabbed_key (GtkSocket      *socket,
 				guint           keyval,
 				GdkModifierType modifiers)
 {
-  gint i;
-
-  for (i = 0; i < socket->accel_group->n_accels; i++)
-    {
-      GtkAccelGroupEntry *accel_entry = &socket->accel_group->priv_accels[i];
-      if (accel_entry->key.accel_key == keyval &&
-	  accel_entry->key.accel_mods == modifiers)
-	{
-	  gtk_accel_group_disconnect (socket->accel_group,
-				      accel_entry->closure);
-	  return;
-	}
-    }
-
-  g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
-	     keyval, modifiers);
+  if (!gtk_accel_group_disconnect_key (socket->accel_group, keyval, modifiers))
+    g_warning ("GtkSocket: request to remove non-present grabbed key %u,%#x\n",
+	       keyval, modifiers);
 }
 
 static void
