@@ -2414,7 +2414,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
   GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
+  g_return_if_fail (!GTK_WIDGET_MAPPED (window));
 
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
