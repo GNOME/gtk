@@ -170,7 +170,7 @@ gdk_wcstombs (const GdkWChar *src)
        * We must copy the string into an area allocated by glib, because
        * the string 'tpr.value' must be freed by XFree().
        */
-      mbstr = g_strdup(tpr.value);
+      mbstr = g_strdup((gchar *)tpr.value);
       XFree (tpr.value);
     }
   else
