@@ -555,7 +555,7 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
   GtkRequisition item_size;
   gint requested_rows;
 
-  if (priv->children && gtk_tool_item_group_get_label (group))
+  if (priv->children && gtk_tool_item_group_get_label_widget (group))
     {
       gtk_widget_size_request (priv->header, requisition);
       gtk_widget_show (priv->header);
@@ -1730,13 +1730,10 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
   if (label_widget)
     {
       gtk_container_add (GTK_CONTAINER (alignment), label_widget);
-
-      /*
-      if (priv->prelight)
-	gtk_widget_set_state (label_widget, GTK_STATE_PRELIGHT);
-      */
     }
 
+  priv->label_widget = label_widget;
+  
   if (GTK_WIDGET_VISIBLE (group))
     gtk_widget_queue_resize (GTK_WIDGET (group));
 
