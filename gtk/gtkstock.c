@@ -27,6 +27,7 @@
 #include "config.h"
 #include <string.h>
 
+#include "gtkprivate.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"

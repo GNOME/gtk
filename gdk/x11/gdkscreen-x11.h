@@ -122,6 +122,7 @@ GType       _gdk_screen_x11_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
 
+void _gdk_x11_screen_setup                  (GdkScreen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
 void _gdk_x11_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);

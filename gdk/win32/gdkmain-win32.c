@@ -118,20 +118,18 @@ _gdk_windowing_init (void)
 
 void
 _gdk_win32_api_failed (const gchar *where,
-		      gint         line,
 		      const gchar *api)
 {
   gchar *msg = g_win32_error_message (GetLastError ());
-  g_warning ("%s:%d: %s failed: %s", where, line, api, msg);
+  g_warning ("%s: %s failed: %s", where, api, msg);
   g_free (msg);
 }
 
 void
 _gdk_other_api_failed (const gchar *where,
-		      gint         line,
 		      const gchar *api)
 {
-  g_warning ("%s:%d: %s failed", where, line, api);
+  g_warning ("%s: %s failed", where, api);
 }
 
 void
@@ -149,14 +147,12 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
   return GDK_WINDOW_OBJECT (_gdk_root)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  //return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
   return GDK_WINDOW_OBJECT (_gdk_root)->height;
 }
 gint

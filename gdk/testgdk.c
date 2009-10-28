@@ -53,8 +53,8 @@
 
 #define CQTESTF(quiet, expr, failfmt) \
   (tmpb = (expr), \
-   (tmpb ? (quiet ? 0 : printf ("PASS: %d %s\n", __LINE__, #expr)) \
-         : (printf ("FAIL: %d %s", __LINE__, #expr), \
+   (tmpb ? (quiet ? 0 : printf ("PASS: %s %s\n", G_STRLOC, #expr)) \
+         : (printf ("FAIL: %s %s", G_STRLOC, #expr), \
          printf failfmt, \
          printf ("\n"), \
          retval = FALSE, \
@@ -303,7 +303,7 @@ test_gcs (void)
   gdk_gc_copy (black_gc, gc);
   gdk_gc_get_values (black_gc, &gcvalues);
   TEST (test_default_gc (&gcvalues, TRUE));
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   gdk_gc_set_foreground (black_gc, &black);
   gdk_gc_get_values (black_gc, &gcvalues);

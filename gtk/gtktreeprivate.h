@@ -285,14 +285,13 @@ struct _GtkTreeViewPrivate
        {                                                                \
          g_log (G_LOG_DOMAIN,                                           \
                 G_LOG_LEVEL_CRITICAL,                                   \
-		"file %s: line %d (%s): assertion `%s' failed.\n"       \
+		"%s (%s): assertion `%s' failed.\n"                     \
 	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
 		"and the GtkTreeModel.  This generally means that the model has changed\n"\
 		"without letting the view know.  Any display from now on is likely to\n"  \
 		"be incorrect.\n",                                                        \
-                __FILE__,                                               \
-                __LINE__,                                               \
-                __PRETTY_FUNCTION__,                                    \
+                G_STRLOC,                                               \
+                G_STRFUNC,                                              \
                 #expr);                                                 \
          return ret;                                                    \
        };                               }G_STMT_END
@@ -302,14 +301,13 @@ struct _GtkTreeViewPrivate
        {                                                                \
          g_log (G_LOG_DOMAIN,                                           \
                 G_LOG_LEVEL_CRITICAL,                                   \
-		"file %s: line %d (%s): assertion `%s' failed.\n"       \
+		"%s (%s): assertion `%s' failed.\n"                     \
 	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
 		"and the GtkTreeModel.  This generally means that the model has changed\n"\
 		"without letting the view know.  Any display from now on is likely to\n"  \
 		"be incorrect.\n",                                                        \
-                __FILE__,                                               \
-                __LINE__,                                               \
-                __PRETTY_FUNCTION__,                                    \
+                G_STRLOC,                                               \
+                G_STRFUNC,                                              \
                 #expr);                                                 \
          return;                                                        \
        };                               }G_STMT_END

@@ -677,6 +677,11 @@ gtk_widget_destroy (chooser);
 
 </para>
 
+<!-- ##### ARG GtkFileChooser:create-folders ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkFileChooser:do-overwrite-confirmation ##### -->
 <para>
 
@@ -867,6 +872,24 @@ gtk_widget_destroy (chooser);
 
 
 <!-- ##### FUNCTION gtk_file_chooser_get_do_overwrite_confirmation ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_create_folders ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@create_folders: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_create_folders ##### -->
 <para>
 
 </para>

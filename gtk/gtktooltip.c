@@ -84,7 +84,7 @@ struct _GtkTooltipClass
 
 static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
-static void       gtk_tooltip_finalize             (GObject         *object);
+static void       gtk_tooltip_dispose              (GObject         *object);
 
 static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip);
@@ -106,7 +106,7 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 
   object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gtk_tooltip_finalize;
+  object_class->dispose = gtk_tooltip_dispose;
 }
 
 static void
@@ -166,7 +166,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 }
 
 static void
-gtk_tooltip_finalize (GObject *object)
+gtk_tooltip_dispose (GObject *object)
 {
   GtkTooltip *tooltip = GTK_TOOLTIP (object);
 
@@ -194,9 +194,10 @@ gtk_tooltip_finalize (GObject *object)
 					    gtk_tooltip_display_closed,
 					    tooltip);
       gtk_widget_destroy (tooltip->window);
+      tooltip->window = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_tooltip_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_tooltip_parent_class)->dispose (object);
 }
 
 /* public API */
@@ -317,15 +318,41 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
  * Since: 2.14
  */
 void
-gtk_tooltip_set_icon_from_icon_name(GtkTooltip  *tooltip,
-				    const gchar *icon_name,
-				    GtkIconSize  size)
+gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
+				     const gchar *icon_name,
+				     GtkIconSize  size)
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
   gtk_image_set_from_icon_name (GTK_IMAGE (tooltip->image), icon_name, size);
 
   if (icon_name)
+    gtk_widget_show (tooltip->image);
+  else
+    gtk_widget_hide (tooltip->image);
+}
+
+/**
+ * gtk_tooltip_set_from_gicon:
+ * @tooltip: a #GtkTooltip
+ * @gicon: a #GIcon representing the icon, or %NULL
+ * @size: a stock icon size
+ * Sets the icon of the tooltip (which is in front of the text) to be
+ * the icon indicated by @gicon with the size indicated
+ * by @size.  If @icon_name is %NULL, the image will be hidden.
+ *
+ * Since: 2.20
+ */
+void
+gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
+				 GIcon       *gicon,
+				 GtkIconSize  size)
+{
+  g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
+
+  gtk_image_set_from_gicon (GTK_IMAGE (tooltip->image), gicon, size);
+
+  if (gicon)
     gtk_widget_show (tooltip->image);
   else
     gtk_widget_hide (tooltip->image);
@@ -474,6 +501,8 @@ gtk_tooltip_window_style_set (GtkTooltip *tooltip)
 			     tooltip->window->style->ythickness,
 			     tooltip->window->style->xthickness,
 			     tooltip->window->style->xthickness);
+  gtk_box_set_spacing (GTK_BOX (tooltip->box),
+		       tooltip->window->style->xthickness);
 
   gtk_widget_queue_draw (tooltip->window);
 }
@@ -767,6 +796,9 @@ static void
 gtk_tooltip_set_last_window (GtkTooltip *tooltip,
 			     GdkWindow  *window)
 {
+  if (tooltip->last_window == window)
+    return;
+
   if (tooltip->last_window)
     g_object_remove_weak_pointer (G_OBJECT (tooltip->last_window),
 				  (gpointer *) &tooltip->last_window);
@@ -945,8 +977,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   g_object_get (tooltip_widget, "has-tooltip", &has_tooltip, NULL);
 
-  g_assert (tooltip != NULL);
-
   return_value = gtk_tooltip_run_requery (&tooltip_widget, tooltip, &x, &y);
   if (!return_value)
     return;
@@ -1048,11 +1078,17 @@ tooltip_popup_timeout (gpointer data)
   GtkTooltip *tooltip;
 
   display = GDK_DISPLAY_OBJECT (data);
+  tooltip = g_object_get_data (G_OBJECT (display),
+			       "gdk-display-current-tooltip");
+
+  /* This usually does not happen.  However, it does occur in language
+   * bindings were reference counting of objects behaves differently.
+   */
+  if (!tooltip)
+    return FALSE;
 
   gtk_tooltip_show_tooltip (display);
 
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
   tooltip->timeout_id = 0;
 
   return FALSE;
@@ -1068,7 +1104,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
 
-  if (tooltip && GTK_TOOLTIP_VISIBLE (tooltip))
+  if (!tooltip || GTK_TOOLTIP_VISIBLE (tooltip))
     return;
 
   if (tooltip->timeout_id)

@@ -474,9 +474,52 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
 			     GdkCursor    *cursor,
 			     guint32	time)
 {
-  SetCapture (GDK_WINDOW_HWND (native_window));
-  /* TODO_CSW: grab brokens, confine window, cursor, input_grab */
-  return GDK_GRAB_SUCCESS;
+  HCURSOR hcursor;
+  GdkCursorPrivate *cursor_private;
+  gint return_val;
+
+  g_return_val_if_fail (window != NULL, 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
+  
+  cursor_private = (GdkCursorPrivate*) cursor;
+  
+  if (!cursor)
+    hcursor = NULL;
+  else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
+    WIN32_API_FAILED ("CopyCursor");
+
+  return_val = _gdk_input_grab_pointer (native_window,
+					owner_events,
+					event_mask,
+					confine_to,
+					time);
+
+  if (return_val == GDK_GRAB_SUCCESS)
+    {
+      GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (((GdkWindowObject *) native_window)->impl);
+
+      SetCapture (GDK_WINDOW_HWND (native_window));
+      /* TODO_CSW: grab brokens, confine window, input_grab */
+      if (p_grab_cursor != NULL)
+	{
+	  if (GetCursor () == p_grab_cursor)
+	    SetCursor (NULL);
+	  DestroyCursor (p_grab_cursor);
+	}
+
+      p_grab_cursor = hcursor;
+
+      if (p_grab_cursor != NULL)
+	SetCursor (p_grab_cursor);
+      else if (impl->hcursor != NULL)
+	SetCursor (impl->hcursor);
+      else
+	SetCursor (LoadCursor (NULL, IDC_ARROW));
+
+    }
+
+  return return_val;
 }
 
 void

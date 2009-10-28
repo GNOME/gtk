@@ -250,12 +250,12 @@ Example code sequences that require reference wraps:
    /* gtk_container_remove() will unparent the child and therefore
     * cause its reference count to be decremented by one.
     */
-   gtk_widget_ref (widget);
+   g_object_ref (widget);
    gtk_container_remove (container, widget);
    /* without the reference count, the widget would have been destroyed here.
    */
    gtk_container_add (container, widget);
-   gtk_widget_unref (widget);
+   g_object_unref (widget);
 
 
   /* all items in item_list need to be referenced
@@ -267,7 +267,7 @@ Example code sequences that require reference wraps:
    slist = NULL;
    for (list = item_list; list; list = list->next)
    {
-     gtk_widget_ref (GTK_WIDGET (list->data));
+     g_object_ref (GTK_WIDGET (list->data));
      slist = g_slist_prepend (slist, list->data);
    }
    gtk_list_remove_items (list, item_list);
@@ -280,7 +280,7 @@ Example code sequences that require reference wraps:
      
      tmp = slist;
      slist = slist->next;
-     gtk_widget_unref (GTK_WIDGET (tmp->data));
+     g_object_unref (GTK_WIDGET (tmp->data));
      g_slist_free_1 (tmp);
    }
    

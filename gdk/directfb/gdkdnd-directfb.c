@@ -235,7 +235,7 @@ local_send_enter (GdkDragContext *context,
 
   if (current_dest_drag != NULL)
     {
-      gdk_drag_context_unref (current_dest_drag);
+      g_object_unref (current_dest_drag);
       current_dest_drag = NULL;
     }
 
@@ -627,7 +627,7 @@ gdk_drop_finish (GdkDragContext   *context,
 				       context->dest_window);
   if (src_context)
     {
-      gdk_drag_context_ref (src_context);
+      g_object_ref (src_context);
 
       event.dnd.type       = GDK_DROP_FINISHED;
       event.dnd.window     = src_context->source_window;

@@ -125,6 +125,8 @@ gtk_type_init (GTypeDebugFlags debug_flags)
   
   if (!initialized)
     {
+      GType unused;
+
       initialized = TRUE;
 
       /* initialize GLib type system
@@ -133,7 +135,7 @@ gtk_type_init (GTypeDebugFlags debug_flags)
       
       /* GTK_TYPE_OBJECT
        */
-      gtk_object_get_type ();
+      unused = gtk_object_get_type ();
     }
 }
 

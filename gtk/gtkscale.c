@@ -1423,7 +1423,7 @@ marks_start_element (GMarkupParseContext *context,
    ;
   else if (strcmp (element_name, "mark") == 0)
     {
-      gdouble value;
+      gdouble value = 0;
       gboolean has_value = FALSE;
       GtkPositionType position = GTK_POS_BOTTOM;
       const gchar *msg_context = NULL;
@@ -1578,7 +1578,6 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 {
   GtkScale *scale = GTK_SCALE (buildable);
   MarksSubparserData *marks_data;
-  GtkWidget *toplevel;
 
   if (strcmp (tagname, "marks") == 0)
     {

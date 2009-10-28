@@ -28,6 +28,8 @@ demos =						\
 	links.c					\
 	list_store.c				\
 	menus.c					\
+	offscreen_window.c			\
+	offscreen_window2.c			\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\
@@ -35,6 +37,7 @@ demos =						\
 	rotated_text.c				\
 	search_entry.c				\
 	sizegroup.c				\
+	spinner.c				\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\

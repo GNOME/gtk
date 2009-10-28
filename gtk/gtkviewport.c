@@ -556,6 +556,24 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
   return viewport->shadow_type;
 }
 
+/**
+ * gtk_viewport_get_bin_window:
+ * @viewport: a #GtkViewport
+ *
+ * Gets the bin window of the #GtkViewport.
+ *
+ * Return value: a #GdkWindow
+ *
+ * Since: 2.20
+ **/
+GdkWindow*
+gtk_viewport_get_bin_window (GtkViewport *viewport)
+{
+  g_return_val_if_fail (GTK_IS_VIEWPORT (viewport), NULL);
+
+  return viewport->bin_window;
+}
+
 static void
 gtk_viewport_realize (GtkWidget *widget)
 {

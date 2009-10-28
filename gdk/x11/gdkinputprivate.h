@@ -73,6 +73,7 @@ struct _GdkDevicePrivate
 #ifndef XINPUT_NONE
   /* information about the axes */
   GdkAxisInfo *axes;
+  gint *axis_data;
 
   /* Information about XInput device */
   XDevice       *xdevice;
@@ -82,14 +83,15 @@ struct _GdkDevicePrivate
 
   int buttonpress_type, buttonrelease_type, keypress_type,
       keyrelease_type, motionnotify_type, proximityin_type, 
-      proximityout_type, changenotify_type;
+      proximityout_type, changenotify_type, devicestatenotify_type;
 
   /* true if we need to select a different set of events, but
      can't because this is the core pointer */
   gint needs_update;
 
   /* Mask of buttons (used for button grabs) */
-  gint button_state;
+  char button_state[32];
+  gint button_count;
 
   /* true if we've claimed the device as active. (used only for XINPUT_GXI) */
   gint claimed;
@@ -176,6 +178,9 @@ void               _gdk_input_select_events             (GdkWindow        *impl_
 							 GdkDevicePrivate *gdkdev);
 gint               _gdk_input_common_other_event        (GdkEvent         *event,
 							 XEvent           *xevent,
+							 GdkWindow        *window,
+							 GdkDevicePrivate *gdkdev);
+gboolean	   _gdk_input_common_event_selected     (GdkEvent         *event,
 							 GdkWindow        *window,
 							 GdkDevicePrivate *gdkdev);
 

@@ -24,19 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-/*
- * NOTE this widget is considered too specialized/little-used for
- * GTK+, and will in the future be moved to some other package.  If
- * your application needs this widget, feel free to use it, as the
- * widget does work and is useful in some applications; it's just not
- * of general interest. However, we are not accepting new features for
- * the widget, and it will eventually move out of the GTK+
- * distribution.
- */
-
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
+#ifndef GTK_DISABLE_DEPRECATED
 
 #ifndef __GTK_GAMMA_CURVE_H__
 #define __GTK_GAMMA_CURVE_H__
@@ -90,3 +78,5 @@ GtkWidget* gtk_gamma_curve_new      (void);
 G_END_DECLS
 
 #endif /* __GTK_GAMMA_CURVE_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

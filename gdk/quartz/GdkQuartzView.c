@@ -72,6 +72,13 @@
   if (NSEqualRects (rect, NSZeroRect))
     return;
 
+  /* Clear our own bookkeeping of regions that need display */
+  if (impl->needs_display_region)
+    {
+      gdk_region_destroy (impl->needs_display_region);
+      impl->needs_display_region = NULL;
+    }
+
   [self getRectsBeingDrawn:&drawn_rects count:&count];
 
   /* Note: arbitrary limit here to not degrade performace too much. It would

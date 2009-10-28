@@ -31,6 +31,8 @@
 G_BEGIN_DECLS
 
 cairo_t *gdk_cairo_create            (GdkDrawable        *drawable);
+void     gdk_cairo_reset_clip        (cairo_t            *cr,
+				      GdkDrawable        *drawable);
 
 void     gdk_cairo_set_source_color  (cairo_t            *cr,
                                       const GdkColor     *color);

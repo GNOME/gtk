@@ -4061,7 +4061,7 @@ static const char * xpm_data[] = {
 
 Cuando hayamos acabado de usar un <em/pixmap/ y no lo vayamos a usar
 durante un tiempo suele ser conveniente liberar el recurso mediante
-gdk_pixmap_unref(). (Los <em/pixmaps/ deben ser considerados recursos
+g_object_unref(). (Los <em/pixmaps/ deben ser considerados recursos
 preciosos).
 
 Una vez que hemos creado el <em/pixmap/ lo podemos mostrar como un
@@ -8986,7 +8986,7 @@ se colapsará. Por lo tanto, si quiere que se mantenga el subárbol
 tendrá que hacer algo así:
 
 <tscreen><verb>
-gtk_widget_ref (arbol);
+g_object_ref (arbol);
 propietario = GTK_TREE(arbol)->tree_owner;
 gtk_container_remove (GTK_CONTAINER(arbol), item);
 if (arbol->parent == NULL){
@@ -8994,7 +8994,7 @@ if (arbol->parent == NULL){
   gtk_tree_item_set_subtree (GTK_TREE_ITEM(propietario), arbol);
 }
 else
-  gtk_widget_unref (arbol);
+  g_object_unref (arbol);
 </verb></tscreen>
 
 Finalmente, hay que mencionar que la opción de drag-n-drop (arrastar y
@@ -13967,7 +13967,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -16855,7 +16855,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,

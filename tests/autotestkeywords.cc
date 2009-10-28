@@ -18,12 +18,14 @@
 #endif
 #endif
 
+#ifndef __OBJC__
 #ifdef GDK_WINDOWING_WIN32
 #define gdk_display gdk_display_win32
 #include <gdk/win32/gdkwin32.h>
 #undef gdk_display
 #undef GDK_DISPLAY
 #undef GDK_ROOT_WINDOW
+#endif
 #endif
 
 #ifdef GDK_WINDOWING_X11

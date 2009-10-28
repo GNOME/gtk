@@ -198,6 +198,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   
   box = GTK_BOX (statusbar);
 
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
+
   box->spacing = 2;
   box->homogeneous = FALSE;
 
@@ -616,10 +618,10 @@ gtk_statusbar_create_window (GtkStatusbar *statusbar)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkRectangle rect;
-  
+
   g_return_if_fail (GTK_WIDGET_REALIZED (statusbar));
   g_return_if_fail (statusbar->has_resize_grip);
-  
+
   widget = GTK_WIDGET (statusbar);
 
   get_grip_rect (statusbar, &rect);
@@ -639,6 +641,8 @@ gtk_statusbar_create_window (GtkStatusbar *statusbar)
                                            &attributes, attributes_mask);
 
   gdk_window_set_user_data (statusbar->grip_window, widget);
+
+  gdk_window_raise (statusbar->grip_window);
 
   set_grip_cursor (statusbar);
 }
@@ -858,10 +862,10 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 
   if (statusbar->has_resize_grip)
     {
-      get_grip_rect (statusbar, &rect);    
-      
+      get_grip_rect (statusbar, &rect);
+
       extra_children = has_extra_children (statusbar);
-      
+
       /* If there are extra children, we don't want them to occupy
        * the space where we draw the resize grip, so we temporarily
        * shrink the allocation.
@@ -882,14 +886,6 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 
   if (statusbar->has_resize_grip)
     {
-      if (statusbar->grip_window)
-	{
-	  gdk_window_raise (statusbar->grip_window);
-	  gdk_window_move_resize (statusbar->grip_window,
-				  rect.x, rect.y,
-				  rect.width, rect.height);
-	}
-
       if (extra_children) 
 	{
 	  allocation->width += rect.width;
@@ -913,12 +909,23 @@ gtk_statusbar_size_allocate  (GtkWidget     *widget,
 	      /* shrink the label to make room for the grip */
 	      *allocation = child->allocation;
 	      allocation->width = MAX (1, allocation->width - rect.width);
-	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 		allocation->x += child->allocation.width - allocation->width;
 
 	      gtk_widget_size_allocate (child, allocation);
 	    }
 	}
+
+      if (statusbar->grip_window)
+	{
+          get_grip_rect (statusbar, &rect);
+
+	  gdk_window_raise (statusbar->grip_window);
+	  gdk_window_move_resize (statusbar->grip_window,
+				  rect.x, rect.y,
+				  rect.width, rect.height);
+	}
+
     }
 }
 

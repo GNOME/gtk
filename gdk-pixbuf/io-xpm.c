@@ -596,7 +596,7 @@ pixbuf_create_from_xpm (const gchar * (*get_buf) (enum buf_op op, gpointer handl
 		if ((!buffer) || (strlen (buffer) < wbytes))
 			continue;
 
-		for (n = 0, cnt = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++) {
+		for (n = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++) {
 			strncpy (pixel_str, &buffer[n], cpp);
 			pixel_str[cpp] = 0;
 

@@ -288,7 +288,7 @@ formats are supported.
     the printer in PDF format
 @GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to 
     the printer in Postscript format
-@GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a previe
+@GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a preview
 @GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple 
     pages per sheet. Since 2.12
 @GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange 

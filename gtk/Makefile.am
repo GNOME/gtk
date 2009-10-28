@@ -178,6 +178,7 @@ gtk_public_h_sources =          \
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
+	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
@@ -190,7 +191,6 @@ gtk_public_h_sources =          \
 	gtkcombobox.h		\
 	gtkcomboboxentry.h	\
 	gtkcontainer.h		\
-	gtkcurve.h		\
 	gtkdebug.h              \
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -211,7 +211,6 @@ gtk_public_h_sources =          \
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
-	gtkgamma.h		\
 	gtkgc.h			\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
@@ -232,7 +231,6 @@ gtk_public_h_sources =          \
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinfobar.h		\
-	gtkinputdialog.h	\
 	gtkinvisible.h		\
 	gtkitem.h		\
 	gtklabel.h		\
@@ -289,6 +287,7 @@ gtk_public_h_sources =          \
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
+	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -435,6 +434,7 @@ gtk_base_c_sources =            \
 	gtkcellrendererpixbuf.c	\
 	gtkcellrendererprogress.c \
 	gtkcellrendererspin.c   \
+	gtkcellrendererspinner.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
@@ -446,7 +446,6 @@ gtk_base_c_sources =            \
 	gtkcombobox.c		\
 	gtkcomboboxentry.c	\
 	gtkcontainer.c		\
-	gtkcurve.c		\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c           \
@@ -471,7 +470,6 @@ gtk_base_c_sources =            \
 	gtkfontbutton.c         \
 	gtkfontsel.c            \
 	gtkframe.c		\
-	gtkgamma.c		\
 	gtkgc.c			\
 	gtkhandlebox.c		\
 	gtkhbbox.c		\
@@ -559,6 +557,7 @@ gtk_base_c_sources =            \
 	gtkshow.c		\
 	gtksocket.c		\
 	gtkspinbutton.c		\
+	gtkspinner.c		\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\
@@ -634,7 +633,10 @@ gtk_public_h_sources += \
 	gtkclist.h		\
 	gtkcombo.h		\
 	gtkctree.h		\
+ 	gtkcurve.h		\
 	gtkfilesel.h		\
+ 	gtkgamma.h		\
+	gtkinputdialog.h	\
 	gtkitemfactory.h	\
 	gtklist.h		\
 	gtklistitem.h		\
@@ -650,7 +652,9 @@ gtk_base_c_sources += \
 	gtkclist.c		\
 	gtkcombo.c		\
 	gtkctree.c		\
+	gtkcurve.c		\
 	gtkfilesel.c		\
+	gtkgamma.c		\
 	gtkitemfactory.c	\
 	gtklist.c		\
 	gtklistitem.c		\
@@ -915,8 +919,19 @@ if DISABLE_EXPLICIT_DEPS
 	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gtktargetlib)
 endif
 
+if USE_QUARTZ
+install-mac-key-theme:
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key
+	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key/gtkrc
+uninstall-mac-key-theme:
+	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key/gtkrc
+else
+install-mac-key-theme:
+uninstall-mac-key-theme:
+endif
+
 # Install a RC file for the default GTK+ theme, and key themes
-install-data-local: install-ms-lib install-def-file
+install-data-local: install-ms-lib install-def-file install-mac-key-theme
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0
 	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key
@@ -924,7 +939,7 @@ install-data-local: install-ms-lib install-def-file
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
 
-uninstall-local: uninstall-ms-lib uninstall-def-file
+uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
 	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
@@ -951,7 +966,41 @@ LDADDS =								\
 bin_PROGRAMS = \
 	gtk-query-immodules-2.0 \
 	gtk-update-icon-cache
+
 bin_SCRIPTS = gtk-builder-convert
+
+if OS_WIN32
+
+# Workaround for UAC silliness: programs with "update" in their name
+# are believed to be installers and require elevated privileges to be
+# used... Use a manifest file to tell Windows that
+# gtk-update-icon-cache.exe doesn't require any special privileges.
+
+GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
+
+bin_SCRIPTS += \
+	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
+
+gtk-update-icon-cache.exe.manifest:
+	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
+	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
+	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
+	 echo '     processorArchitecture="'$(LIB_EXE_MACHINE_FLAG)'"' ; \
+	 echo '     name="gtk-update-icon-cache.exe"' ; \
+	 echo '     type="win32"/>' ; \
+	 echo '  <!-- Identify the application security requirements. -->' ; \
+	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
+	 echo '    <security>' ; \
+	 echo '      <requestedPrivileges>' ; \
+	 echo '        <requestedExecutionLevel' ; \
+	 echo '          level="asInvoker"' ; \
+	 echo '          uiAccess="false"/>' ; \
+	 echo '        </requestedPrivileges>' ; \
+	 echo '       </security>' ; \
+	 echo '  </trustInfo>' ; \
+	 echo '</assembly>' ) >$@
+
+endif
 
 gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_2_0_LDADD = $(LDADDS)
@@ -1271,7 +1320,7 @@ gtk_update_icon_cache_program =							\
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
-	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
+	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
@@ -1298,6 +1347,7 @@ EXTRA_DIST +=                   \
 	gtkrc.default		\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
+	gtkrc.key.mac		\
 	makefile.msc		\
 	makefile.msc.in		\
 	makegtkalias.pl		\

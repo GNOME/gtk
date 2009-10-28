@@ -1401,9 +1401,9 @@ gtk_clist_column_title_passive (GtkCList *clist,
   clist->column[column].button_passive = TRUE;
 
   if (button->button_down)
-    gtk_button_released (button);
+    g_signal_emit_by_name (button, "released");
   if (button->in_button)
-    gtk_button_leave (button);
+    g_signal_emit_by_name (button, "leave");
 
   gtk_signal_connect (GTK_OBJECT (clist->column[column].button), "event",
 		      G_CALLBACK (column_title_passive_func),
@@ -5925,8 +5925,14 @@ draw_rows (GtkCList     *clist,
     }
 
   if (!area)
-    gdk_window_clear_area (clist->clist_window, 0,
-			   ROW_TOP_YPIXEL (clist, i), 0, 0);
+    {
+      int w, h, y;
+      gdk_drawable_get_size (GDK_DRAWABLE (clist->clist_window), &w, &h);
+      y = ROW_TOP_YPIXEL (clist, i);
+      gdk_window_clear_area (clist->clist_window,
+			     0, y,
+			     w, h - y);
+    }
 }
 
 static void                          

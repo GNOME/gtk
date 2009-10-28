@@ -342,6 +342,16 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_NATIVE_WINDOWS</envar></title>
+
+  <para>
+    If set, GDK creates all windows as native windows. This can help
+    applications that make assumptions about 1-1 correspondence between
+    GDK windows and X11 windows.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>

@@ -196,7 +196,7 @@ functions), but they will all return %NULL values.
 @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
 @GTK_IMAGE_ICON_NAME: the widget contains a named icon. 
   This image type was added in GTK+ 2.6
-@GTK_IMAGE_GICON: the widgte contains a #GIcon.
+@GTK_IMAGE_GICON: the widget contains a #GIcon.
   This image type was added in GTK+ 2.14
 
 <!-- ##### FUNCTION gtk_image_get_icon_set ##### -->

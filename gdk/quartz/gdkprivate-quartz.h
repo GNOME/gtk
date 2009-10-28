@@ -105,11 +105,12 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 #define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
 
 /* Initialization */
-void _gdk_windowing_window_init  (void);
-void _gdk_events_init            (void);
-void _gdk_visual_init            (void);
-void _gdk_input_init             (void);
-void _gdk_quartz_event_loop_init (void);
+void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
+void _gdk_windowing_window_init             (void);
+void _gdk_events_init                       (void);
+void _gdk_visual_init                       (void);
+void _gdk_input_init                        (void);
+void _gdk_quartz_event_loop_init            (void);
 
 /* GC */
 typedef enum {
@@ -138,7 +139,17 @@ void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
                                                      GdkWindow *window);
-gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
+void       _gdk_quartz_window_gdk_xy_to_xy          (gint       gdk_x,
+                                                     gint       gdk_y,
+                                                     gint      *ns_x,
+                                                     gint      *ns_y);
+void       _gdk_quartz_window_xy_to_gdk_xy          (gint       ns_x,
+                                                     gint       ns_y,
+                                                     gint      *gdk_x,
+                                                     gint      *gdk_y);
+void       _gdk_quartz_window_nspoint_to_gdk_xy     (NSPoint    point,
+                                                     gint      *x,
+                                                     gint      *y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
 						     gint       y);
@@ -148,6 +159,11 @@ void       _gdk_quartz_window_did_become_main       (GdkWindow *window);
 void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
+
+void       _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
+                                                         GdkRectangle *rect);
+
+void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
 /* Events */
 typedef enum {
@@ -187,6 +203,7 @@ void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
 void        _gdk_quartz_window_queue_translation (GdkWindow *window,
+						  GdkGC     *gc,
                                                   GdkRegion *area,
                                                   gint       dx,
                                                   gint       dy);

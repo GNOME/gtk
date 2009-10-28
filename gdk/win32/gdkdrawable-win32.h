@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 typedef struct _GdkDrawableImplWin32 GdkDrawableImplWin32;
 typedef struct _GdkDrawableImplWin32Class GdkDrawableImplWin32Class;
 
-#define GDK_TYPE_DRAWABLE_IMPL_WIN32              (gdk_drawable_impl_win32_get_type ())
+#define GDK_TYPE_DRAWABLE_IMPL_WIN32              (_gdk_drawable_impl_win32_get_type ())
 #define GDK_DRAWABLE_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL_WIN32, GdkDrawableImplWin32))
 #define GDK_DRAWABLE_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE_IMPL_WIN32, GdkDrawableImplWin32Class))
 #define GDK_IS_DRAWABLE_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_WIN32))
@@ -63,7 +63,7 @@ struct _GdkDrawableImplWin32Class
   GdkDrawableClass parent_class;
 };
 
-GType gdk_drawable_impl_win32_get_type (void);
+GType _gdk_drawable_impl_win32_get_type (void);
 
 HDC  _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable);
 void _gdk_win32_drawable_release_dc (GdkDrawable *drawable);

@@ -154,10 +154,8 @@ gail_button_class_init (GailButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GailWidgetClass *widget_class;
   GailContainerClass *container_class;
 
-  widget_class = (GailWidgetClass*)klass;
   container_class = (GailContainerClass*)klass;
 
   gobject_class->finalize = gail_button_finalize;
@@ -532,7 +530,7 @@ idle_do_action (gpointer data)
 	  /* first a press */ 
 
 	  button->in_button = TRUE;
-	  gtk_button_enter (button);
+	  g_signal_emit_by_name (button, "enter");
 	  /*
 	   * Simulate a button press event. calling gtk_button_pressed() does
 	   * not get the job done for a GtkOptionMenu.  
@@ -550,11 +548,11 @@ idle_do_action (gpointer data)
 	  tmp_event.button.type = GDK_BUTTON_RELEASE;
 	  gtk_widget_event (widget, &tmp_event);
 	  button->in_button = FALSE;
-	  gtk_button_leave (button); 
+	  g_signal_emit_by_name (button, "leave");
 	  break;
 	case 1:
 	  button->in_button = TRUE;
-	  gtk_button_enter (button);
+	  g_signal_emit_by_name (button, "enter");
 	  /*
 	   * Simulate a button press event. calling gtk_button_pressed() does
 	   * not get the job done for a GtkOptionMenu.  
@@ -570,7 +568,7 @@ idle_do_action (gpointer data)
 	  break;
 	case 2:
 	  button->in_button = FALSE;
-	  gtk_button_leave (button);
+	  g_signal_emit_by_name (button, "leave");
 	  break;
 	default:
 	  g_assert_not_reached ();
@@ -876,15 +874,12 @@ gail_button_ref_state_set (AtkObject *obj)
 {
   AtkStateSet *state_set;
   GtkWidget *widget;
-  GtkButton *button;
 
   state_set = ATK_OBJECT_CLASS (gail_button_parent_class)->ref_state_set (obj);
   widget = GTK_ACCESSIBLE (obj)->widget;
 
   if (widget == NULL)
     return state_set;
-
-  button = GTK_BUTTON (widget);
 
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);

@@ -130,6 +130,7 @@ content_files =					\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
+        migrating-ClientSideWindows.sgml	\
 	migrating-GtkAboutDialog.sgml		\
 	migrating-GtkAction.sgml		\
 	migrating-GtkAssistant.sgml		\
@@ -160,6 +161,7 @@ expand_content_files = 				\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-checklist.sgml		\
+        migrating-ClientSideWindows.sgml	\
 	migrating-GtkAction.sgml		\
 	migrating-GtkComboBox.sgml		\
 	migrating-GtkEntry-icons.sgml		\
@@ -169,6 +171,7 @@ expand_content_files = 				\
 	migrating-GtkColorButton.sgml		\
 	migrating-GtkAssistant.sgml		\
 	migrating-GtkRecentChooser.sgml 	\
+	migrating-GtkLabel-links.sgml		\
 	migrating-GtkLinkButton.sgml		\
 	migrating-GtkBuilder.sgml		\
 	migrating-GtkTooltip.sgml		\
@@ -333,6 +336,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/scrolledwindow.png				\
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\
+	$(srcdir)/images/spinner.png					\
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\

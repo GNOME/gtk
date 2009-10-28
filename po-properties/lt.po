@@ -1,27 +1,37 @@
 # translation of lt.po to Lithuanian
 # Lithuanian translation of gtk+-properties
 # Copyright (C) 2000-2007 Free Software Foundation, Inc.
-#
 # Gediminas Paulauskas <menesis@delfi.lt>, 2000-2004.
 # Tomas Kuliavas <tokul@users.sourceforge.net>, 2004.
 # Žygimantas Beručka <uid0@akl.lt>, 2004-2007.
 # Gintautas Miliauskas <gintas@akl.lt>, 2006, 2007.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2006-2007.
 # Rimas Kudelis <rq@akl.lt>, 2008.
+# Gintautas Miliauskas <gintautas@miliauskas.lt>, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-10 18:20-0400\n"
-"PO-Revision-Date: 2009-03-11 01:36+0200\n"
-"Last-Translator: Vytautas Rėkus <v.rekus@gmail.com>\n"
+"POT-Creation-Date: 2009-10-05 17:17-0400\n"
+"PO-Revision-Date: 2009-09-10 13:45+0300\n"
+"Last-Translator: Gintautas Miliauskas <gintautas@miliauskas.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Virtaal 0.4.0\n"
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:165
+msgid "Loop"
+msgstr "Kartoti"
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
+#, fuzzy
+msgid "Whether the animation should loop when it reaches the end"
+msgstr "Ar pažymėta zona turėtų sekti žymeklį"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -55,7 +65,7 @@ msgstr "Bitų kiekis pavyzdyje"
 msgid "The number of bits per sample"
 msgstr "Bitų kiekis pavyzdyje"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "Plotis"
 
@@ -120,6 +130,10 @@ msgstr "Šrifto raiška"
 #: gdk/gdkscreen.c:84
 msgid "The resolution for fonts on the screen"
 msgstr "Šriftų ekrane raiška"
+
+#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
+msgid "Cursor"
+msgstr "Žymeklis"
 
 #: gtk/gtkaboutdialog.c:239
 msgid "Program name"
@@ -317,11 +331,11 @@ msgstr "Piktogramos pavadinimas"
 msgid "The name of the icon from the icon theme"
 msgstr "Piktogramos iš piktogramų temos pavadinimas"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:176
+#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "Matomas, kai horizontalus"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:177
+#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -341,11 +355,11 @@ msgstr ""
 "Kai TEIGIAMA, įrankių pakaitalai šiam veiksmui rodomi įrankių juostos "
 "papildomame meniu."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:183
+#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "Matomas, jei vertikalus"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:184
+#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -353,7 +367,7 @@ msgstr ""
 "Ar įrankių juostos elementas yra matomas, kai įrankių juosta yra "
 "vertikalioje padėtyje."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:190
+#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "Yra svarbus"
 
@@ -374,7 +388,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Jei teigiama, šio veiksmo tuščių meniu tarpinės yra paslėptos."
 
 #: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:525
 msgid "Sensitive"
 msgstr "Jautrus"
 
@@ -383,7 +397,7 @@ msgid "Whether the action is enabled."
 msgstr "Ar veiksmas yra įjungtas."
 
 #: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:517
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
 msgid "Visible"
 msgstr "Matoma"
 
@@ -414,6 +428,23 @@ msgstr "Ar veiksmų grupė yra įjungta."
 #: gtk/gtkactiongroup.c:185
 msgid "Whether the action group is visible."
 msgstr "Ar veiksmų grupė yra matoma."
+
+#: gtk/gtkactivatable.c:304
+msgid "Related Action"
+msgstr "Susijęs veiksmas"
+
+#: gtk/gtkactivatable.c:305
+msgid "The action this activatable will activate and receive updates from"
+msgstr ""
+
+#: gtk/gtkactivatable.c:327
+msgid "Use Action Appearance"
+msgstr ""
+
+#: gtk/gtkactivatable.c:328
+#, fuzzy
+msgid "Whether to use the related actions appearance properties"
+msgstr "Ar naudoti žymės tekstą sukuriant standartinį meniu įrašą"
 
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
 #: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
@@ -712,8 +743,8 @@ msgstr ""
 "Jei TRUE, susijęs objektas pasirodys antrinėje objektų grupėje, kuri gali "
 "tikti papildomiems, pvz. pagalbos mygtukams"
 
-#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:664
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "Tarpai"
 
@@ -731,7 +762,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Ar visi antriniai objektai turėtų būti to paties dydžio"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Sutraukti"
 
@@ -818,7 +849,7 @@ msgid ""
 msgstr ""
 "Jei įjungta, žymė yra naudojama parinkti standartinį punktą vietoj rodomo"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:789 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Aktyvinti spragtelėjus"
 
@@ -911,7 +942,7 @@ msgstr ""
 "Ar „child_displacement_x/_y“ savybės turėtų taip pat keisti aktyvinimo "
 "stačiakampį"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:691 gtk/gtkentry.c:1715
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:689 gtk/gtkentry.c:1713
 msgid "Inner Border"
 msgstr "Vidinis rėmelis"
 
@@ -1135,35 +1166,35 @@ msgstr "Langelio fonas nustatytas"
 msgid "Whether this tag affects the cell background color"
 msgstr "Ar žymė keičia langelio fono spalvą"
 
-#: gtk/gtkcellrendereraccel.c:113
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "Spartusis klavišas"
 
-#: gtk/gtkcellrendereraccel.c:114
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "Sparčiojo klavišo kodas"
 
-#: gtk/gtkcellrendereraccel.c:130
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "Sparčiojo klavišo modifikatoriai"
 
-#: gtk/gtkcellrendereraccel.c:131
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "Sparčiojo klavišo modifikatoriaus šablonas"
 
-#: gtk/gtkcellrendereraccel.c:148
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "Sparčiojo klavišo kodas"
 
-#: gtk/gtkcellrendereraccel.c:149
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "Sparčiojo klavišo aparatūrinis kodas"
 
-#: gtk/gtkcellrendereraccel.c:168
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "Sparčiojo klavišo veiksena"
 
-#: gtk/gtkcellrendereraccel.c:169
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "Sparčiųjų klavišų tipas"
 
@@ -1257,8 +1288,8 @@ msgid "Value of the progress bar"
 msgstr "Pažangos juostos reikšmė"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:734 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
-#: gtk/gtktextbuffer.c:198
+#: gtk/gtkentry.c:732 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "Tekstas"
 
@@ -1393,12 +1424,12 @@ msgstr "Priekinio plano spalva"
 msgid "Foreground color as a GdkColor"
 msgstr "Priekinio plano spalva kaip GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:658 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:573
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
+#: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Taisomas"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:574
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
 msgid "Whether the text can be modified by the user"
 msgstr "Ar tekstas gali būti keičiamas vartotojo"
 
@@ -1538,7 +1569,7 @@ msgstr ""
 "Kaip laužyti užrašą į keletą eilučių, jei langeliui atvaizduokliui nepakanka "
 "vietos parodyti visam užrašui"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:678
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
 msgid "Wrap width"
 msgstr "Eilučių laužymo plotis"
 
@@ -1546,7 +1577,7 @@ msgstr "Eilučių laužymo plotis"
 msgid "The width at which the text is wrapped"
 msgstr "Plotis, ties kuriuo laužiamas tekstas"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "Lygiavimas"
 
@@ -1777,8 +1808,8 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "Ar priskirti spalvą alfa kanalui"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:420
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "Pavadinimas"
 
@@ -1910,111 +1941,111 @@ msgstr "Reikšmė sąraše"
 msgid "Whether entered values must already be present in the list"
 msgstr "Ar įvestos reikšmės būtinai turi būti sąraše"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:663
 msgid "ComboBox model"
 msgstr "ComboBox modelis"
 
-#: gtk/gtkcombobox.c:662
+#: gtk/gtkcombobox.c:664
 msgid "The model for the combo box"
 msgstr "Combo box modelis"
 
-#: gtk/gtkcombobox.c:679
+#: gtk/gtkcombobox.c:681
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Laužymo plotis išdėstant elementus tinklelyje"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:703
 msgid "Row span column"
 msgstr "Eilučių suliejimo laukas"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:704
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel stulpelis, saugantis eilučių ištempimo reikšmes"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:725
 msgid "Column span column"
 msgstr "Stulpelių suliejimo laukas"
 
-#: gtk/gtkcombobox.c:724
+#: gtk/gtkcombobox.c:726
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel stulpelis, saugantis stulpelių ištempimo reikšmes"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:747
 msgid "Active item"
 msgstr "Aktyvus elementas"
 
-#: gtk/gtkcombobox.c:746
+#: gtk/gtkcombobox.c:748
 msgid "The item which is currently active"
 msgstr "Šiuo metu aktyvus elementas"
 
-#: gtk/gtkcombobox.c:765 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Pridėti atkabinimus į meniu"
 
-#: gtk/gtkcombobox.c:766
+#: gtk/gtkcombobox.c:768
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Ar išskleidžiami meniu turėtų turėti meniu atkabinimo elementą"
 
-#: gtk/gtkcombobox.c:781 gtk/gtkentry.c:683
+#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
 msgid "Has Frame"
 msgstr "Turi rėmelį"
 
-#: gtk/gtkcombobox.c:782
+#: gtk/gtkcombobox.c:784
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Ar išsiskleidžiantis laukelis piešia rėmelį apie antrinį elementą"
 
-#: gtk/gtkcombobox.c:790
+#: gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Ar išsiskleidžiantis laukelis suaktyvinamas, kai pažymima pele"
 
-#: gtk/gtkcombobox.c:805 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Nutraukimo pavadinimas"
 
-#: gtk/gtkcombobox.c:806
+#: gtk/gtkcombobox.c:808
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Pavadinimas, rodomas langų valdyklės, kai šis meniu nuplėštas"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:825
 msgid "Popup shown"
 msgstr "Iššokantis langas rodomas"
 
-#: gtk/gtkcombobox.c:824
+#: gtk/gtkcombobox.c:826
 msgid "Whether the combo's dropdown is shown"
 msgstr "Ar rodyti išsiskleidžiančio laukelio mygtuką"
 
-#: gtk/gtkcombobox.c:840
+#: gtk/gtkcombobox.c:842
 msgid "Button Sensitivity"
 msgstr "Mygtuko jautrumas"
 
-#: gtk/gtkcombobox.c:841
+#: gtk/gtkcombobox.c:843
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Ar išskleidimo mygtukas yra jautrus, kai modelis tuščias"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:850
 msgid "Appears as list"
 msgstr "Atrodo kaip sąrašas"
 
-#: gtk/gtkcombobox.c:849
+#: gtk/gtkcombobox.c:851
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Ar išskleidžiami meniu turi atrodyti kaip sąrašai, o ne kaip meniu"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:867
 msgid "Arrow Size"
 msgstr "Rodyklės dydis"
 
-#: gtk/gtkcombobox.c:866
+#: gtk/gtkcombobox.c:868
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Mažiausias rodyklės dydis išsiskleidžiančiame laukelyje"
 
-#: gtk/gtkcombobox.c:881 gtk/gtkentry.c:783 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Šešėlio tipas"
 
-#: gtk/gtkcombobox.c:882
+#: gtk/gtkcombobox.c:884
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Kokio tipo šešėlį piešti aplink išsiskleidžiantį laukelį"
 
@@ -2090,7 +2121,7 @@ msgstr "Turi skyriklį"
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialoge virš mygtukų yra skyriklis"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:191 gtk/gtkinfobar.c:439
 msgid "Content area border"
 msgstr "Turinio srities rėmelis"
 
@@ -2098,7 +2129,7 @@ msgstr "Turinio srities rėmelis"
 msgid "Width of border around the main dialog area"
 msgstr "Rėmelio, apie pagrindinę dialogo lango sritį, plotis"
 
-#: gtk/gtkdialog.c:209
+#: gtk/gtkdialog.c:209 gtk/gtkinfobar.c:456
 msgid "Content area spacing"
 msgstr "Turinio srities intervalas"
 
@@ -2106,15 +2137,15 @@ msgstr "Turinio srities intervalas"
 msgid "Spacing between elements of the main dialog area"
 msgstr "Intervalas tarp pagrindinio dialogo srities elementų"
 
-#: gtk/gtkdialog.c:217
+#: gtk/gtkdialog.c:217 gtk/gtkinfobar.c:472
 msgid "Button spacing"
 msgstr "Tarpai tarp mygtukų"
 
-#: gtk/gtkdialog.c:218
+#: gtk/gtkdialog.c:218 gtk/gtkinfobar.c:473
 msgid "Spacing between buttons"
 msgstr "Tarpai tarp mygtukų"
 
-#: gtk/gtkdialog.c:226
+#: gtk/gtkdialog.c:226 gtk/gtkinfobar.c:488
 msgid "Action area border"
 msgstr "Veiksmų srities rėmelis"
 
@@ -2122,49 +2153,48 @@ msgstr "Veiksmų srities rėmelis"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Mygtukų lauko paraštės plotas dialogo lango apačioje"
 
-#: gtk/gtkentry.c:630
-#, fuzzy
+#: gtk/gtkentry.c:628
 msgid "Text Buffer"
-msgstr "Buferis"
+msgstr "Teksto buferis"
 
-#: gtk/gtkentry.c:631
+#: gtk/gtkentry.c:629
 msgid "Text buffer object which actually stores entry text"
-msgstr ""
+msgstr "Teksto buferis, kuriame saugomas tekstas"
 
-#: gtk/gtkentry.c:638 gtk/gtklabel.c:591
+#: gtk/gtkentry.c:636 gtk/gtklabel.c:591
 msgid "Cursor Position"
 msgstr "Žymeklio vieta"
 
-#: gtk/gtkentry.c:639 gtk/gtklabel.c:592
+#: gtk/gtkentry.c:637 gtk/gtklabel.c:592
 msgid "The current position of the insertion cursor in chars"
 msgstr "Esama įterpimo žymeklio vieta simboliais"
 
-#: gtk/gtkentry.c:648 gtk/gtklabel.c:601
+#: gtk/gtkentry.c:646 gtk/gtklabel.c:601
 msgid "Selection Bound"
 msgstr "Pažymėjimo Riba"
 
-#: gtk/gtkentry.c:649 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:647 gtk/gtklabel.c:602
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Kito pažymėjimo galo vieta simboliais"
 
-#: gtk/gtkentry.c:659
+#: gtk/gtkentry.c:657
 msgid "Whether the entry contents can be edited"
 msgstr "Ar įvesties lauko turinys gali būti keičiamas"
 
-#: gtk/gtkentry.c:666
+#: gtk/gtkentry.c:664 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "Maksimalus ilgis"
 
-#: gtk/gtkentry.c:667
+#: gtk/gtkentry.c:665 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maksimalus simbolių skaičius šiame lauke. 0 jei neribojamas"
 
-#: gtk/gtkentry.c:675
+#: gtk/gtkentry.c:673
 msgid "Visibility"
 msgstr "Matomumas"
 
-#: gtk/gtkentry.c:676
+#: gtk/gtkentry.c:674
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2172,28 +2202,28 @@ msgstr ""
 "FALSE išveda „nematomą simbolį“ vietoj paprasto teksto (slaptažodžio "
 "veiksena)"
 
-#: gtk/gtkentry.c:684
+#: gtk/gtkentry.c:682
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE pašalina išorinį įrašo rėmelį"
 
-#: gtk/gtkentry.c:692
+#: gtk/gtkentry.c:690
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "Rėmelis tarp teksto ir kadro. Nepaiso inner-border stiliaus savybės"
 
-#: gtk/gtkentry.c:699 gtk/gtkentry.c:1265
+#: gtk/gtkentry.c:697 gtk/gtkentry.c:1263
 msgid "Invisible character"
 msgstr "Nematomas simbolis"
 
-#: gtk/gtkentry.c:700 gtk/gtkentry.c:1266
+#: gtk/gtkentry.c:698 gtk/gtkentry.c:1264
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Simbolis naudojamas paslėpti įrašo turinį („slaptažodžio veiksenoje“)"
 
-#: gtk/gtkentry.c:707
+#: gtk/gtkentry.c:705
 msgid "Activates default"
 msgstr "Aktyvina numatytąjį"
 
-#: gtk/gtkentry.c:708
+#: gtk/gtkentry.c:706
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2201,31 +2231,31 @@ msgstr ""
 "Ar aktyvinti numatytąjį objektą (pvz., kaip numatytąjį mygtuką dialoge), kai "
 "paspaudžiamas Enter klavišas"
 
-#: gtk/gtkentry.c:714
+#: gtk/gtkentry.c:712
 msgid "Width in chars"
 msgstr "Plotis simboliais"
 
-#: gtk/gtkentry.c:715
+#: gtk/gtkentry.c:713
 msgid "Number of characters to leave space for in the entry"
 msgstr "Kokiam simbolių kiekiui palikti vietos laukelyje"
 
-#: gtk/gtkentry.c:724
+#: gtk/gtkentry.c:722
 msgid "Scroll offset"
 msgstr "Perslinkimo žingsnis"
 
-#: gtk/gtkentry.c:725
+#: gtk/gtkentry.c:723
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Kiek pikselių įrašas perslenkamas į kairę nuo ekrano"
 
-#: gtk/gtkentry.c:735
+#: gtk/gtkentry.c:733
 msgid "The contents of the entry"
 msgstr "Įrašo turinys"
 
-#: gtk/gtkentry.c:750 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:748 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "X lygiuotė"
 
-#: gtk/gtkentry.c:751 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:749 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2233,64 +2263,64 @@ msgstr ""
 "Horizontali lygiuotė, nuo 0 (kairė) iki 1 (dešinė). RTL išdėstymams "
 "atvirkščiai."
 
-#: gtk/gtkentry.c:767
+#: gtk/gtkentry.c:765
 msgid "Truncate multiline"
 msgstr "Sujungti kelias eilutes"
 
-#: gtk/gtkentry.c:768
+#: gtk/gtkentry.c:766
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Ar sujungti kelių eilučių įdėjimus į vieną eilutę."
 
-#: gtk/gtkentry.c:784
+#: gtk/gtkentry.c:782
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Kokio tipo šešėlį piešti aplink įvesties laukelį, kai nustatyta „has-frame“"
 
-#: gtk/gtkentry.c:799 gtk/gtktextview.c:653
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Perrašymo veiksena"
 
-#: gtk/gtkentry.c:800
+#: gtk/gtkentry.c:798
 msgid "Whether new text overwrites existing text"
 msgstr "Ar įvedamas tekstas pakeičia esamą"
 
-#: gtk/gtkentry.c:814
+#: gtk/gtkentry.c:812 gtk/gtkentrybuffer.c:368
 msgid "Text length"
 msgstr "Teksto ilgis"
 
-#: gtk/gtkentry.c:815
+#: gtk/gtkentry.c:813
 msgid "Length of the text currently in the entry"
 msgstr "Šiuo metu į lauką įvesto teksto ilgis"
 
-#: gtk/gtkentry.c:830
+#: gtk/gtkentry.c:828
 msgid "Invisible char set"
 msgstr "Nematomų simbolių rinkinys"
 
-#: gtk/gtkentry.c:831
+#: gtk/gtkentry.c:829
 msgid "Whether the invisible char has been set"
 msgstr "Ar nustatytas nematomas simbolis"
 
-#: gtk/gtkentry.c:849
+#: gtk/gtkentry.c:847
 msgid "Caps Lock warning"
 msgstr "Caps Lock įspėjimas"
 
-#: gtk/gtkentry.c:850
+#: gtk/gtkentry.c:848
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "Ar įvedant slaptažodį bus rodomas įspėjimas, esant įjungtam Caps Lock"
 
-#: gtk/gtkentry.c:864
+#: gtk/gtkentry.c:862
 msgid "Progress Fraction"
 msgstr "Eigos dalis"
 
-#: gtk/gtkentry.c:865
+#: gtk/gtkentry.c:863
 msgid "The current fraction of the task that's been completed"
 msgstr "Jau atlikta užduoties dalis"
 
-#: gtk/gtkentry.c:882
+#: gtk/gtkentry.c:880
 msgid "Progress Pulse Step"
 msgstr "Eigos indikatoriaus žingsnis"
 
-#: gtk/gtkentry.c:883
+#: gtk/gtkentry.c:881
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2298,196 +2328,204 @@ msgstr ""
 "Dalis, kuria reikia padidinti eigos indikatoriaus juostą kiekvienam "
 "kreipiniui į gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:899
+#: gtk/gtkentry.c:897
 msgid "Primary pixbuf"
 msgstr "Pagrindinis pixbuf"
 
-#: gtk/gtkentry.c:900
+#: gtk/gtkentry.c:898
 msgid "Primary pixbuf for the entry"
 msgstr "Pirminis pixbuf elementui"
 
-#: gtk/gtkentry.c:914
+#: gtk/gtkentry.c:912
 msgid "Secondary pixbuf"
 msgstr "Antrinis pixbuf"
 
-#: gtk/gtkentry.c:915
+#: gtk/gtkentry.c:913
 msgid "Secondary pixbuf for the entry"
 msgstr "Antrinis pixbuf elementui"
 
-#: gtk/gtkentry.c:929
+#: gtk/gtkentry.c:927
 msgid "Primary stock ID"
 msgstr "Pirminis standartinis ID"
 
-#: gtk/gtkentry.c:930
+#: gtk/gtkentry.c:928
 msgid "Stock ID for primary icon"
 msgstr "Standartinis ID pirminei piktogramai"
 
-#: gtk/gtkentry.c:944
+#: gtk/gtkentry.c:942
 msgid "Secondary stock ID"
 msgstr "Antrinis standartinis ID"
 
-#: gtk/gtkentry.c:945
+#: gtk/gtkentry.c:943
 msgid "Stock ID for secondary icon"
 msgstr "Standartinis ID naudojamas su Standartinis ID antrinei piktogramai"
 
-#: gtk/gtkentry.c:959
+#: gtk/gtkentry.c:957
 msgid "Primary icon name"
 msgstr "Pirminis piktogramos pavadinimas"
 
-#: gtk/gtkentry.c:960
+#: gtk/gtkentry.c:958
 msgid "Icon name for primary icon"
 msgstr "Piktogramos pavadinimas pirminei piktogramai"
 
-#: gtk/gtkentry.c:974
+#: gtk/gtkentry.c:972
 msgid "Secondary icon name"
 msgstr "Antrinis piktogramos pavadinimas"
 
-#: gtk/gtkentry.c:975
+#: gtk/gtkentry.c:973
 msgid "Icon name for secondary icon"
 msgstr "Piktogramos pavadinimas antrinei piktogramai"
 
-#: gtk/gtkentry.c:989
+#: gtk/gtkentry.c:987
 msgid "Primary GIcon"
 msgstr "Pirminė GIcon"
 
-#: gtk/gtkentry.c:990
+#: gtk/gtkentry.c:988
 msgid "GIcon for primary icon"
 msgstr "GIcon pirminei piktogramai"
 
-#: gtk/gtkentry.c:1004
+#: gtk/gtkentry.c:1002
 msgid "Secondary GIcon"
 msgstr "Antrinė GIcon"
 
-#: gtk/gtkentry.c:1005
+#: gtk/gtkentry.c:1003
 msgid "GIcon for secondary icon"
 msgstr "GIcon antrinei piktogramai"
 
-#: gtk/gtkentry.c:1019
+#: gtk/gtkentry.c:1017
 msgid "Primary storage type"
 msgstr "Pirminis atminties tipas"
 
-#: gtk/gtkentry.c:1020
+#: gtk/gtkentry.c:1018
 msgid "The representation being used for primary icon"
 msgstr "Atvaizdavimas naudojamas pirminei piktogramai"
 
-#: gtk/gtkentry.c:1035
+#: gtk/gtkentry.c:1033
 msgid "Secondary storage type"
 msgstr "Numatytojo Antrinis atminties tipas"
 
-#: gtk/gtkentry.c:1036
+#: gtk/gtkentry.c:1034
 msgid "The representation being used for secondary icon"
 msgstr "Atvaizdavimas naudojamas antrinei piktogramai"
 
-#: gtk/gtkentry.c:1057
+#: gtk/gtkentry.c:1055
 msgid "Primary icon activatable"
 msgstr "Pirminė piktograma - aktyvinama"
 
-#: gtk/gtkentry.c:1058
+#: gtk/gtkentry.c:1056
 msgid "Whether the primary icon is activatable"
 msgstr "Ar pirminė piktograma yra aktyvinama"
 
-#: gtk/gtkentry.c:1078
+#: gtk/gtkentry.c:1076
 msgid "Secondary icon activatable"
 msgstr "Antrinė piktograma – aktyvinama"
 
-#: gtk/gtkentry.c:1079
+#: gtk/gtkentry.c:1077
 msgid "Whether the secondary icon is activatable"
 msgstr "Ar antrinė piktograma yra aktyvinama"
 
-#: gtk/gtkentry.c:1101
+#: gtk/gtkentry.c:1099
 msgid "Primary icon sensitive"
 msgstr "Pirminė piktograma – jautri"
 
-#: gtk/gtkentry.c:1102
+#: gtk/gtkentry.c:1100
 msgid "Whether the primary icon is sensitive"
 msgstr "Ar pirminė piktograma yra jautri"
 
-#: gtk/gtkentry.c:1123
+#: gtk/gtkentry.c:1121
 msgid "Secondary icon sensitive"
 msgstr "Antrinė piktograma – jautri"
 
-#: gtk/gtkentry.c:1124
+#: gtk/gtkentry.c:1122
 msgid "Whether the secondary icon is sensitive"
 msgstr "Ar antrinė piktograma yra jautri"
 
-#: gtk/gtkentry.c:1140
+#: gtk/gtkentry.c:1138
 msgid "Primary icon tooltip text"
 msgstr "Pirminės piktogramos paaiškinimo tekstas"
 
-#: gtk/gtkentry.c:1141 gtk/gtkentry.c:1177
+#: gtk/gtkentry.c:1139 gtk/gtkentry.c:1175
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Pirminės piktogramos paaiškinimo teksto turinys"
 
-#: gtk/gtkentry.c:1157
+#: gtk/gtkentry.c:1155
 msgid "Secondary icon tooltip text"
 msgstr "Antrinės piktogramos paaiškinimo tekstas"
 
-#: gtk/gtkentry.c:1158 gtk/gtkentry.c:1196
+#: gtk/gtkentry.c:1156 gtk/gtkentry.c:1194
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Antrinės piktogramos paaiškinimo teksto turinys"
 
-#: gtk/gtkentry.c:1176
+#: gtk/gtkentry.c:1174
 msgid "Primary icon tooltip markup"
 msgstr "Pirminės piktogramos paaiškinimo teksto ženklinimas"
 
-#: gtk/gtkentry.c:1195
+#: gtk/gtkentry.c:1193
 msgid "Secondary icon tooltip markup"
 msgstr "Antrinės piktogramos paaiškinimo teksto ženklinimas"
 
-#: gtk/gtkentry.c:1215 gtk/gtktextview.c:681
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "Įvesties metodo modulis"
 
-#: gtk/gtkentry.c:1216 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "Kurį įvesties metodo modulį naudoti"
 
-#: gtk/gtkentry.c:1230
+#: gtk/gtkentry.c:1228
 msgid "Icon Prelight"
 msgstr "Piktogramos pašviesinimas"
 
-#: gtk/gtkentry.c:1231
+#: gtk/gtkentry.c:1229
 msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Ar aktyvinamos piktogramos turi būti pašviesintos, kai virš jų yra pelės "
 "žymeklis"
 
-#: gtk/gtkentry.c:1244
+#: gtk/gtkentry.c:1242
 msgid "Progress Border"
 msgstr "Pažangos juostos rėmelis"
 
-#: gtk/gtkentry.c:1245
+#: gtk/gtkentry.c:1243
 msgid "Border around the progress bar"
 msgstr "Rėmelis aplink pažangos juostą"
 
-#: gtk/gtkentry.c:1716
+#: gtk/gtkentry.c:1714
 msgid "Border between text and frame."
 msgstr "Rėmelis tarp teksto ir kadro."
 
-#: gtk/gtkentry.c:1730
+#: gtk/gtkentry.c:1728
 msgid "State Hint"
 msgstr "Būsenos pranešimas"
 
-#: gtk/gtkentry.c:1731
+#: gtk/gtkentry.c:1729
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Ar perduoti tikrąją būseną piešiant šešėlį ar foną"
 
-#: gtk/gtkentry.c:1736 gtk/gtklabel.c:848
+#: gtk/gtkentry.c:1734 gtk/gtklabel.c:848
 msgid "Select on focus"
 msgstr "Pažymėti aktyvinant"
 
-#: gtk/gtkentry.c:1737
+#: gtk/gtkentry.c:1735
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ar pažymėti įvesties laukelio turinį, kai jis suaktyvintas"
 
-#: gtk/gtkentry.c:1751
+#: gtk/gtkentry.c:1749
 msgid "Password Hint Timeout"
 msgstr "Slaptažodžio užuominos laikas"
 
-#: gtk/gtkentry.c:1752
+#: gtk/gtkentry.c:1750
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Kiek ilgai rodyti paskutinį įvestą simbolį paslėptuose įvesties laukeliuose"
+
+#: gtk/gtkentrybuffer.c:354
+msgid "The contents of the buffer"
+msgstr "Buferio turinys"
+
+#: gtk/gtkentrybuffer.c:369
+msgid "Length of the text currently in the buffer"
+msgstr "Šiuo metu buferyje esančio teksto ilgis"
 
 #: gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2505,7 +2543,7 @@ msgstr "Mažiausias rakto ilgis"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Mažiausias paieškos rakto dydis naudojamas ieškant sutapimų"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:585
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "Teksto stulpelis"
 
@@ -2608,11 +2646,11 @@ msgstr "Žymės objektas"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Objektas rodomas vietoj įprastos išplėtimo žymės"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
 msgid "Expander Size"
 msgstr "Išplėtimo Dydis"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
 msgid "Size of the expander arrow"
 msgstr "Išplėtimo rodyklės dydis"
 
@@ -2709,6 +2747,19 @@ msgstr "Prašyti perrašymo patvirtinimo"
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"Ar failų parinkiklis išsaugojimo veiksenoje rodys perrašymo patvirtinimo "
+"langą, kai tai būtina."
+
+#: gtk/gtkfilechooser.c:283
+msgid "Allow folders creation"
+msgstr "Leisti aplankų kūrimą"
+
+#: gtk/gtkfilechooser.c:284
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "Ar failų parinkiklis išsaugojimo veiksenoje rodys perrašymo patvirtinimo "
 "langą, kai tai būtina."
@@ -2907,84 +2958,84 @@ msgstr ""
 "Loginė reikšmė, nurodanti, ar rodyklės lauko susijęs objektas yra "
 "atkabintas, ar ne."
 
-#: gtk/gtkiconview.c:548
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "Pasirinkimo veiksena"
 
-#: gtk/gtkiconview.c:549
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "Pasirinkimo modelis"
 
-#: gtk/gtkiconview.c:567
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "Pixbuf stulpelis"
 
-#: gtk/gtkiconview.c:568
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modelio stulpelis iš kurio gaunamas piktogramos pixbuf"
 
-#: gtk/gtkiconview.c:586
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "Modelio stulpelis iš kurio gaunamas tekstas"
 
-#: gtk/gtkiconview.c:605
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "Žymėjimo stulpelis"
 
-#: gtk/gtkiconview.c:606
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Modelio stulpelis naudojamas gauti tekstui, kai naudojamas Pango žymėjimas"
 
-#: gtk/gtkiconview.c:613
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "Piktogramų vaizdo modelis"
 
-#: gtk/gtkiconview.c:614
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "Piktogramų vaizdo modelis"
 
-#: gtk/gtkiconview.c:630
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "Stulpelių skaičius"
 
-#: gtk/gtkiconview.c:631
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "Rodomų stulpelių skaičius"
 
-#: gtk/gtkiconview.c:648
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "Kiekvieno elemento plotis"
 
-#: gtk/gtkiconview.c:649
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "Kiekvieno elemento plotis"
 
-#: gtk/gtkiconview.c:665
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "Tarpas, įterpiamas tarp elemento ląstelių"
 
-#: gtk/gtkiconview.c:680
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "Tarpai tarp eilučių"
 
-#: gtk/gtkiconview.c:681
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "Tarpas, įterpiamas tarp grotelių eilučių"
 
-#: gtk/gtkiconview.c:696
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "Tarpai tarp stulpelių"
 
-#: gtk/gtkiconview.c:697
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "Tarpas įterpiamas tarp grotelių stulpelių"
 
-#: gtk/gtkiconview.c:712
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "Paraštė"
 
-#: gtk/gtkiconview.c:713
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Tarpas, įterpiamas piktogramos vaizdo kraštuose"
 
@@ -2993,15 +3044,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "Kaip tekstas ir piktogramos išsidėstę vienas kito atžvilgiu"
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "Perrūšiuojamas"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
 msgid "View is reorderable"
 msgstr "Vaizdas yra rūšiuojamas"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
 msgid "Tooltip Column"
 msgstr "Paaiškinimo stulpelis"
 
@@ -3009,19 +3060,27 @@ msgstr "Paaiškinimo stulpelis"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Modelio, kuriame saugomi įrašų paaiškinimai, stulpelis"
 
-#: gtk/gtkiconview.c:766
+#: gtk/gtkiconview.c:772
+msgid "Item Padding"
+msgstr "Elementų apvalkalas"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr "Piktogramų rodinio elementų apvalkalas"
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "Pažymėjimo dėžutės spalva"
 
-#: gtk/gtkiconview.c:767
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "Pažymėjimo dėžutės spalva"
 
-#: gtk/gtkiconview.c:773
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "Pažymėjimo dėžutės permatomumas"
 
-#: gtk/gtkiconview.c:774
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "Pažymėjimo dėžutės permatomumas"
 
@@ -3139,6 +3198,29 @@ msgstr "Rodyti meniu paveikslėlius"
 msgid "Whether images should be shown in menus"
 msgstr "Ar paveikslėliai turi būti rodomi meniu"
 
+#: gtk/gtkinfobar.c:384 gtk/gtkmessagedialog.c:128
+msgid "Message Type"
+msgstr "Pranešimo tipas"
+
+#: gtk/gtkinfobar.c:385 gtk/gtkmessagedialog.c:129
+msgid "The type of message"
+msgstr "Pranešimo tipas"
+
+#: gtk/gtkinfobar.c:440
+#, fuzzy
+msgid "Width of border around the content area"
+msgstr "Rėmelio, apie pagrindinę dialogo lango sritį, plotis"
+
+#: gtk/gtkinfobar.c:457
+#, fuzzy
+msgid "Spacing between elements of the area"
+msgstr "Intervalas tarp pagrindinio dialogo srities elementų"
+
+#: gtk/gtkinfobar.c:489
+#, fuzzy
+msgid "Width of border around the action area"
+msgstr "Rėmelio, apie pagrindinę dialogo lango sritį, plotis"
+
 #: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
 msgid "The screen where this window will be displayed"
 msgstr "Ekranas, kuriame bus išvedamas šis langas"
@@ -3151,7 +3233,7 @@ msgstr "Žymės tekstas"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Žymės teksto stiliaus atributų sąrašas"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:590
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
 msgid "Justification"
 msgstr "Abipusė lygiuotė"
 
@@ -3249,14 +3331,12 @@ msgid "The desired maximum width of the label, in characters"
 msgstr "Pageidaujamas didžiausias užrašo plotis simboliais"
 
 #: gtk/gtklabel.c:727
-#, fuzzy
 msgid "Track visited links"
-msgstr "Aplankytų saitų spalva"
+msgstr "Sekti aplankytas nuorodas"
 
 #: gtk/gtklabel.c:728
-#, fuzzy
 msgid "Whether visited links should be tracked"
-msgstr "Ar privatūs elementai turėtų būti rodomi"
+msgstr "Ar aplankytos nuorodos turėtų būti sekamos"
 
 #: gtk/gtklabel.c:849
 msgid "Whether to select the contents of a selectable label when it is focused"
@@ -3360,14 +3440,15 @@ msgstr "Tarpas pridedamas meniu viršuje ir apačioje"
 
 #: gtk/gtkmenu.c:616
 msgid "Reserve Toggle Size"
-msgstr ""
+msgstr "Rezervuoti mygtuko dydį"
 
 #: gtk/gtkmenu.c:617
-#, fuzzy
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
-msgstr "Loginė reikšmė, nurodanti ar meniu yra atkabinamas"
+msgstr ""
+"Loginė reikšmė, nurodanti, ar meniu rezervuoja vietos piktogramoms ir "
+"mygtukams"
 
 #: gtk/gtkmenu.c:623
 msgid "Horizontal Padding"
@@ -3594,14 +3675,6 @@ msgstr "Naudoti skyriklį"
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Ar įterptį skyriklį tarp žinutės dialogo teksto ir mygtukų"
-
-#: gtk/gtkmessagedialog.c:128
-msgid "Message Type"
-msgstr "Pranešimo tipas"
-
-#: gtk/gtkmessagedialog.c:129
-msgid "The type of message"
-msgstr "Pranešimo tipas"
 
 #: gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
@@ -4109,7 +4182,7 @@ msgstr "Spausdintuvo nustatymai"
 msgid "Page Setup"
 msgstr "Puslapio nustatymai"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1064
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
 msgid "Track Print Status"
 msgstr "Sekti spausdinimo būseną"
 
@@ -4121,51 +4194,51 @@ msgstr ""
 "TEIGIAMA, jei spausdinimo užduotis tęs status-changed signalų siuntimą po "
 "spausdinimo duomenų nusiuntimo į spausdintuvą ar spausdinimo serverį."
 
-#: gtk/gtkprintoperation.c:936
+#: gtk/gtkprintoperation.c:954
 msgid "Default Page Setup"
 msgstr "Numatytieji puslapio nustatymai"
 
-#: gtk/gtkprintoperation.c:937
+#: gtk/gtkprintoperation.c:955
 msgid "The GtkPageSetup used by default"
 msgstr "Numatytasis naudojamas GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:955 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Spausdinimo nustatymai"
 
-#: gtk/gtkprintoperation.c:956 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings naudojamas dialogo inicializavimui"
 
-#: gtk/gtkprintoperation.c:974
+#: gtk/gtkprintoperation.c:992
 msgid "Job Name"
 msgstr "Užduoties pavadinimas"
 
-#: gtk/gtkprintoperation.c:975
+#: gtk/gtkprintoperation.c:993
 msgid "A string used for identifying the print job."
 msgstr "Užrašas naudojamas identifikuoti spausdinimo užduotims."
 
-#: gtk/gtkprintoperation.c:999
+#: gtk/gtkprintoperation.c:1017
 msgid "Number of Pages"
 msgstr "Puslapių skaičius"
 
-#: gtk/gtkprintoperation.c:1000
+#: gtk/gtkprintoperation.c:1018
 msgid "The number of pages in the document."
 msgstr "Puslapių skaičius dokumente."
 
-#: gtk/gtkprintoperation.c:1021 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Esamas puslapis"
 
-#: gtk/gtkprintoperation.c:1022 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "Esamas puslapis dokumente"
 
-#: gtk/gtkprintoperation.c:1043
+#: gtk/gtkprintoperation.c:1061
 msgid "Use full page"
 msgstr "Naudoti visą puslapį"
 
-#: gtk/gtkprintoperation.c:1044
+#: gtk/gtkprintoperation.c:1062
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4173,7 +4246,7 @@ msgstr ""
 "TEIGIAMA, jei konteksto kilmė turėtų būti puslapio kampe, o ne piešimo ploto "
 "kampe"
 
-#: gtk/gtkprintoperation.c:1065
+#: gtk/gtkprintoperation.c:1083
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4182,84 +4255,89 @@ msgstr ""
 "užduoties būsemą, po spausdinimo duomenų nusiuntimo į spausdintuvą ar "
 "spausdinimo serverį"
 
-#: gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintoperation.c:1100
 msgid "Unit"
 msgstr "Vienetas"
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1101
 msgid "The unit in which distances can be measured in the context"
 msgstr "Vienetas, kuriuo gali būti matuojami atstumai kontekste"
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1118
 msgid "Show Dialog"
 msgstr "Rodyti dialogą"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1119
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TEIGIAMA, jei spausdinant rodomas pažangos dialogas"
 
-#: gtk/gtkprintoperation.c:1124
+#: gtk/gtkprintoperation.c:1142
 msgid "Allow Async"
 msgstr "Leisti asinchroninį"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1143
 msgid "TRUE if print process may run asynchronous."
 msgstr "TEIGIAMA, jei spausdinimo procesas gali būti asinchroninis."
 
-#: gtk/gtkprintoperation.c:1147 gtk/gtkprintoperation.c:1148
+#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
 msgid "Export filename"
 msgstr "Eksportavimo failo pavadinimas"
 
-#: gtk/gtkprintoperation.c:1162
+#: gtk/gtkprintoperation.c:1180
 msgid "Status"
 msgstr "Būsena"
 
-#: gtk/gtkprintoperation.c:1163
+#: gtk/gtkprintoperation.c:1181
 msgid "The status of the print operation"
 msgstr "Spausdinimo operacijos būsena"
 
-#: gtk/gtkprintoperation.c:1183
+#: gtk/gtkprintoperation.c:1201
 msgid "Status String"
 msgstr "Būsenos užrašas"
 
-#: gtk/gtkprintoperation.c:1184
+#: gtk/gtkprintoperation.c:1202
 msgid "A human-readable description of the status"
 msgstr "Žmogui suprantamas būsenos aprašymas"
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1220
 msgid "Custom tab label"
 msgstr "Kitos kortelės užrašas"
 
-#: gtk/gtkprintoperation.c:1203
+#: gtk/gtkprintoperation.c:1221
 msgid "Label for the tab containing custom widgets."
 msgstr "Kortelės, kurioje yra kiti objektai, užrašas."
 
-#: gtk/gtkprintoperation.c:1218 gtk/gtkprintunixdialog.c:345
-#, fuzzy
+#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
 msgid "Support Selection"
-msgstr "Spalvų parinkiklis"
+msgstr "Palaikymo parinkiklis"
 
-#: gtk/gtkprintoperation.c:1219
+#: gtk/gtkprintoperation.c:1237
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1235 gtk/gtkprintunixdialog.c:353
-#, fuzzy
+#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
 msgid "Has Selection"
-msgstr "Yra pažymėto teksto"
+msgstr "Turi parinkimą"
 
-#: gtk/gtkprintoperation.c:1236
+#: gtk/gtkprintoperation.c:1254
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1251 gtk/gtkprintunixdialog.c:361
-#, fuzzy
+#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
-msgstr "Puslapio nustatymai"
+msgstr "Integruoti puslapio nustatymus"
 
-#: gtk/gtkprintoperation.c:1252
+#: gtk/gtkprintoperation.c:1270
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
-msgstr ""
+msgstr "TRUE, jei puslapio nustatymų kombinacijos integruotos į GtkPrintDialog"
+
+#: gtk/gtkprintoperation.c:1291
+msgid "Number of Pages To Print"
+msgstr "Spausdinamų puslapių skaičius"
+
+#: gtk/gtkprintoperation.c:1292
+msgid "The number of pages that will be printed."
+msgstr "Puslapių, kurie bus atspausdinti, skaičius."
 
 #: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
@@ -4282,14 +4360,12 @@ msgid "Capabilities the application can handle"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:346
-#, fuzzy
 msgid "Whether the dialog supports selection"
-msgstr "Ar žymė yra išvedama naudojant pasirinktą šriftą"
+msgstr "Ar dialogas palaiko žymėjimą"
 
 #: gtk/gtkprintunixdialog.c:354
-#, fuzzy
 msgid "Whether the application has a selection"
-msgstr "Ar veiksmas yra įjungtas."
+msgstr "Ar programa turi žymėjimą"
 
 #: gtk/gtkprintunixdialog.c:362
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
@@ -4846,11 +4922,11 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Rodyti antrą judėjimo pirmyn mygtuką kitame persukimo juostos gale"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
 msgid "Horizontal Adjustment"
 msgstr "Horizontalus priderinimas"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
 msgid "Vertical Adjustment"
 msgstr "Vertikalus priderinimas"
 
@@ -5386,11 +5462,11 @@ msgstr "Įjungti paaiškinimus"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Ar virš objektų turi būti rodomi paaiškinimai"
 
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "Veiksena"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -5398,11 +5474,11 @@ msgstr ""
 "Kryptys, kuriomis kinta susietų objektų dydis vykdant grupinio dydžio "
 "keitimo operacijas"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "Nepaisyti paslėptų"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr "Jei TEIGIAMA, nerodomi laukai ignoruojami nustatant grupės dydį"
@@ -5502,7 +5578,7 @@ msgstr "Ar būsenos piktograma integruota"
 msgid "The orientation of the tray"
 msgstr "Skydelio orientacija"
 
-#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:633
+#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:634
 msgid "Has tooltip"
 msgstr "Turi paaiškinimą"
 
@@ -5510,26 +5586,25 @@ msgstr "Turi paaiškinimą"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Ar ši dėklo piktograma turi paaiškinimą"
 
-#: gtk/gtkstatusicon.c:378 gtk/gtkwidget.c:654
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
 msgid "Tooltip Text"
 msgstr "Paaiškinimo tekstas"
 
-#: gtk/gtkstatusicon.c:379 gtk/gtkwidget.c:655 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
 msgid "The contents of the tooltip for this widget"
 msgstr "Objekto paaiškinimo turinys"
 
-#: gtk/gtkstatusicon.c:402 gtk/gtkwidget.c:675
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
 msgid "Tooltip markup"
 msgstr "Paaiškinimo tekstas"
 
-#: gtk/gtkstatusicon.c:403
+#: gtk/gtkstatusicon.c:407
 msgid "The contents of the tooltip for this tray icon"
 msgstr "Dėklo piktogramos paaiškinimo turinys"
 
-#: gtk/gtkstatusicon.c:421
-#, fuzzy
+#: gtk/gtkstatusicon.c:425
 msgid "The title of this tray icon"
-msgstr "Piktogramos dydis"
+msgstr "Dėklės piktogramos antraštė"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -5803,7 +5878,7 @@ msgstr ""
 "prisitaiko prie temos pakeitimo ir t.t. Ji yra naudotina. Pango posistemė "
 "aprašo dalį mastelių kaip pvz. PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:591
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
 msgid "Left, right, or center justification"
 msgstr "Kairys, dešinys arba vidurinis lygiavimas"
 
@@ -5820,7 +5895,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:600
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
 msgid "Width of the left margin in pixels"
 msgstr "Kairės paraštės plotis pikseliais"
 
@@ -5828,15 +5903,15 @@ msgstr "Kairės paraštės plotis pikseliais"
 msgid "Right margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:610
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
 msgid "Width of the right margin in pixels"
 msgstr "Dešinės paraštės plotis pikseliais"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:619
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
 msgid "Indent"
 msgstr "Įtraukti"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Pastraipos atitraukimo dydis, pikseliais"
 
@@ -5852,7 +5927,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Taškai virš eilučių"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:544
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
 msgid "Pixels of blank space above paragraphs"
 msgstr "Tuščia erdvė taškais virš pastraipų"
 
@@ -5860,7 +5935,7 @@ msgstr "Tuščia erdvė taškais virš pastraipų"
 msgid "Pixels below lines"
 msgstr "Taškai žemiau eilučių"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:554
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
 msgid "Pixels of blank space below paragraphs"
 msgstr "Tuščia erdvė taškais žemiau pastraipų"
 
@@ -5868,20 +5943,20 @@ msgstr "Tuščia erdvė taškais žemiau pastraipų"
 msgid "Pixels inside wrap"
 msgstr "Taškai laužymo viduje"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:564
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Taškai sudarantys tarpą tarp laužomų pastraipos eilučių"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:582
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Nelaužyti eilučių, laužyti jas žodžiais ar laužyti jas simboliais"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:629
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
 msgid "Tabs"
 msgstr "Tabai"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
 msgid "Custom tabs for this text"
 msgstr "Specialūs šio teksto lapai"
 
@@ -6025,63 +6100,63 @@ msgstr "Pastraipos fonas nustatytas"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Ar ši žyma keičia pastraipos fono spalvą"
 
-#: gtk/gtktextview.c:543
+#: gtk/gtktextview.c:544
 msgid "Pixels Above Lines"
 msgstr "Pikseliai virš eilučių"
 
-#: gtk/gtktextview.c:553
+#: gtk/gtktextview.c:554
 msgid "Pixels Below Lines"
 msgstr "Pikseliai žemiau eilučių"
 
-#: gtk/gtktextview.c:563
+#: gtk/gtktextview.c:564
 msgid "Pixels Inside Wrap"
 msgstr "Pikseliai tarp eilučių"
 
-#: gtk/gtktextview.c:581
+#: gtk/gtktextview.c:582
 msgid "Wrap Mode"
 msgstr "Laužymo veiksena"
 
-#: gtk/gtktextview.c:599
+#: gtk/gtktextview.c:600
 msgid "Left Margin"
 msgstr "Kairė paraštė"
 
-#: gtk/gtktextview.c:609
+#: gtk/gtktextview.c:610
 msgid "Right Margin"
 msgstr "Dešinė paraštė"
 
-#: gtk/gtktextview.c:637
+#: gtk/gtktextview.c:638
 msgid "Cursor Visible"
 msgstr "Žymeklis matomas"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "If the insertion cursor is shown"
 msgstr "Jei įterpimo žymeklis yra rodomas"
 
-#: gtk/gtktextview.c:645
+#: gtk/gtktextview.c:646
 msgid "Buffer"
 msgstr "Buferis"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "The buffer which is displayed"
 msgstr "Išvedamas buferis"
 
-#: gtk/gtktextview.c:654
+#: gtk/gtktextview.c:655
 msgid "Whether entered text overwrites existing contents"
 msgstr "Ar įvedamas tekstas pakeičia esamas vertes"
 
-#: gtk/gtktextview.c:661
+#: gtk/gtktextview.c:662
 msgid "Accepts tab"
 msgstr "Leisti tabuliaciją"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Ar Tab klavišas turi įvesti tabuliacijos simbolį"
 
-#: gtk/gtktextview.c:691
+#: gtk/gtktextview.c:692
 msgid "Error underline color"
 msgstr "Klaidinga pabraukimo spalva"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Color with which to draw error-indication underlines"
 msgstr "Spalva, kuria spalvinti klaidas rodančius pabraukimus"
 
@@ -6264,7 +6339,7 @@ msgstr "Piktogramos protarpis"
 msgid "Spacing in pixels between the icon and label"
 msgstr "Protarpis pikseliais tarp piktogramos ir užrašo"
 
-#: gtk/gtktoolitem.c:191
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6272,337 +6347,345 @@ msgstr ""
 "Ar įrankių juostos elementas yra laikomas svarbiu. Jei reikšmė teigiama, "
 "įrankių juostos mygtukai GTK_TOOLBAR_BOTH_HORIZ veiksenoje rodys tekstą"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort modelis"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort rūšiavimo modelis"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:561
 msgid "TreeView Model"
 msgstr "TreeView modelis"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:562
 msgid "The model for the tree view"
 msgstr "Tree-view modelis"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:570
 msgid "Horizontal Adjustment for the widget"
 msgstr "Valdymo elemento horizontalus pataisymas"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:578
 msgid "Vertical Adjustment for the widget"
 msgstr "Valdymo elemento vertikalus pataisymas"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:585
 msgid "Headers Visible"
 msgstr "Antraštės matomos"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:586
 msgid "Show the column header buttons"
 msgstr "Rodyti stulpelių antraščių mygtukus"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:593
 msgid "Headers Clickable"
 msgstr "Antraštės pasirenkamos"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:594
 msgid "Column headers respond to click events"
 msgstr "Stulpelių antraštės turi reaguoti į paspaudimus"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:601
 msgid "Expander Column"
 msgstr "Plėtiklio stulpelis"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:602
 msgid "Set the column for the expander column"
 msgstr "Nustatyti stulpelį kaip skirtą išplėtimui"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:617
 msgid "Rules Hint"
 msgstr "Taisyklių užuomina"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:618
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Nurodyti temų varikliukui spalvinti eilutes skirtingomis spalvomis"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:625
 msgid "Enable Search"
 msgstr "Įjungti paiešką"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:626
 msgid "View allows user to search through columns interactively"
 msgstr "Vartotojai gali vykdyti interaktyvią paiešką tarp stulpelių"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:633
 msgid "Search Column"
 msgstr "Paieškos stulpelis"
 
-#: gtk/gtktreeview.c:643
+#: gtk/gtktreeview.c:634
 msgid "Model column to search through during interactive search"
 msgstr "Modelio stulpelis, kuriame ieškoma interaktyviosios paieškos metu"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:654
 msgid "Fixed Height Mode"
 msgstr "Fiksuoto aukščio veiksena"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:655
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Pagreitina GtkTreeView sulyginant visų eilučių aukštį"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:675
 msgid "Hover Selection"
 msgstr "Sekti pelės žymeklį"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:676
 msgid "Whether the selection should follow the pointer"
 msgstr "Ar pažymėta zona turėtų sekti žymeklį"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:695
 msgid "Hover Expand"
 msgstr "Išplėtimas užvedant"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:696
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Ar eilutės turėtų būti išplėstos/sutrauktos, kai virš jų užvedamas žymeklis"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:710
 msgid "Show Expanders"
 msgstr "Rodyti plėtiklius"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:711
 msgid "View has expanders"
 msgstr "Vaizdas turi plėtiklius"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:725
 msgid "Level Indentation"
 msgstr "Lygių atitraukimas"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:726
 msgid "Extra indentation for each level"
 msgstr "Papildomas atitraukimas kiekvienam lygiui"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:735
 msgid "Rubber Banding"
 msgstr "„Guminis rišimas“"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:736
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "Ar įjungti keleto elementų pasirinkimą tempiant pelės žymeklį"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:743
 msgid "Enable Grid Lines"
 msgstr "Įjungti groteles"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:744
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Ar grotelių linijos turėtų būti rodomos medžio vaizde"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:752
 msgid "Enable Tree Lines"
 msgstr "Įjungti medžio eilutes"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:753
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Ar medžio linijos turėtų būti rodomos medžio vaizde"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:761
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "Modelio, kuriame saugomi paaiškinimų tekstai, stulpelis"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:783
 msgid "Vertical Separator Width"
 msgstr "Vertikalaus skirtuko plotis"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:784
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikalaus tarpo tarp laukelių dydis. Turi būti lyginis skaičius"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:792
 msgid "Horizontal Separator Width"
 msgstr "Horizontalaus skirtuko plotis"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:793
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontalaus tarpo tarp laukelių dydis. Turi būti lyginis skaičius"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:801
 msgid "Allow Rules"
 msgstr "Leisti taisykles"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:802
 msgid "Allow drawing of alternating color rows"
 msgstr "Išvesti eilutes skirtingomis spalvomis"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:808
 msgid "Indent Expanders"
 msgstr "Atitraukimo plėtikliai"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:809
 msgid "Make the expanders indented"
 msgstr "Padaryti plėtiklius atitrauktus"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:815
 msgid "Even Row Color"
 msgstr "Lyginės eilutės spalva"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:816
 msgid "Color to use for even rows"
 msgstr "Spalva naudojama lyginėse eilutėse"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:822
 msgid "Odd Row Color"
 msgstr "Nelyginės eilutės spalva"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:823
 msgid "Color to use for odd rows"
 msgstr "Spalva naudojama nelyginėse eilutėse"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:829
 msgid "Row Ending details"
 msgstr "Eilučių pabaigos detalės"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:830
 msgid "Enable extended row background theming"
 msgstr "Įjungti papildomą eilučių fono apipavidalinimo palaikymą "
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:836
 msgid "Grid line width"
 msgstr "Grotelių linijų plotis"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:837
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Medžio vaizdo grotelių linijų plotis pikseliais"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:843
 msgid "Tree line width"
 msgstr "Medžio linijų plotis"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:844
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Medžio vaizdo linijų plotis pikseliais"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:850
 msgid "Grid line pattern"
 msgstr "Grotelių linijų raštas"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:851
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Punktyras medžio lauko tinkleliui piešti"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:857
 msgid "Tree line pattern"
 msgstr "Medžio linijų raštas"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:858
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Punktyras medžio laukelio linijoms piešti"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "Ar rodyti stulpelį"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
 msgid "Resizable"
 msgstr "Keičiamo dydžio"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "Vartotojas gali keisti stulpelio plotį"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "Dabartinis stulpelio plotis"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "Erdvė įterpiama tarp langelių"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "Keičiama"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "Stulpelio dydžio keitimo veiksena"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "Fiksuoto pločio"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "Esamas fiksuotas stulpelio plotis"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "Mažiausias plotis"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "Mažiausias leistinas stulpelio plotis"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "Didžiausias plotis "
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "Didžiausias leistinas stulpelio plotis"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "Pavadinimas išvedama stulpelio antraštėje"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Stulpelis gauna papildomos erdvės dalį atsiradusią objekte"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "Spragtelimas"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "Ar antraštė gali būti spragtelta"
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
 msgstr "Objektas"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 "Objektas patalpinamas stulpelio antraštės mygtuke vietoj stulpelio antraštės"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
 msgstr "Stulpelio antraštės teksto ar objekto X lygiavimas"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "Ar gali būti keista stulpelių tvarka antraštėje"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "Rikiavimo žymė"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "Ar rodyti rūšiavimo indikatorių"
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "Rikiavimo tvarka"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Rūšiavimo kryptis kurią turi rodyti rūšiavimo indikatorius"
+
+#: gtk/gtktreeviewcolumn.c:341
+msgid "Sort column ID"
+msgstr "Stulpelio, pagal kurį rikiuojama, ID"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
 
 #: gtk/gtkuimanager.c:223
 msgid "Whether tearoff menu items should be added to menus"
@@ -6633,121 +6716,121 @@ msgstr "GtkAdjustment reikšmė, kuri nustato vertikalią išvedamo objekto pad�
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Nustato kaip yra rodomas šešėlis apie išvedamą objektą"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:485
 msgid "Widget name"
 msgstr "Objekto vardas"
 
-#: gtk/gtkwidget.c:485
+#: gtk/gtkwidget.c:486
 msgid "The name of the widget"
 msgstr "Objekto pavadinimas"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:492
 msgid "Parent widget"
 msgstr "Pirminis objektas"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:493
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Šio objekto pirminis objektas. Turi būti konteinerio tipo"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:500
 msgid "Width request"
 msgstr "Pločio užklausa"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:501
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr ""
 "Blokuoti objekto pločio nustatymą, arba -1 jei jis neturi būti blokuotas"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:509
 msgid "Height request"
 msgstr "Aukščio užklausa"
 
-#: gtk/gtkwidget.c:509
+#: gtk/gtkwidget.c:510
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr ""
 "Blokuoti objekto aukščio nustatymą, arba -1, jei jis neturi būti blokuotas"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:519
 msgid "Whether the widget is visible"
 msgstr "Ar objektas yra matomas"
 
-#: gtk/gtkwidget.c:525
+#: gtk/gtkwidget.c:526
 msgid "Whether the widget responds to input"
 msgstr "Ar objektas reaguoja į įvedimą"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:532
 msgid "Application paintable"
 msgstr "Programa braižoma"
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:533
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ar programa gali braižyti tiesiai ant objekto"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:539
 msgid "Can focus"
 msgstr "Gali būti aktyvinamas"
 
-#: gtk/gtkwidget.c:539
+#: gtk/gtkwidget.c:540
 msgid "Whether the widget can accept the input focus"
 msgstr "Ar objektas gali apdoroti įvedimo aktyvinimą"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:546
 msgid "Has focus"
 msgstr "Turi aktyvinimą"
 
-#: gtk/gtkwidget.c:546
+#: gtk/gtkwidget.c:547
 msgid "Whether the widget has the input focus"
 msgstr "Ar objektas turi įvedimo aktyvinimą"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:553
 msgid "Is focus"
 msgstr "Yra aktyvinimas"
 
-#: gtk/gtkwidget.c:553
+#: gtk/gtkwidget.c:554
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Ar objektas yra aktyvinamas objektas kai yra viršutiniame lygmenyje"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:560
 msgid "Can default"
 msgstr "Gali būti įprasta"
 
-#: gtk/gtkwidget.c:560
+#: gtk/gtkwidget.c:561
 msgid "Whether the widget can be the default widget"
 msgstr "Ar objektas gali būti numatytuoju"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:567
 msgid "Has default"
 msgstr "Nustatytas numatytas"
 
-#: gtk/gtkwidget.c:567
+#: gtk/gtkwidget.c:568
 msgid "Whether the widget is the default widget"
 msgstr "Ar objektas yra nustatytas kaip numatytas"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:574
 msgid "Receives default"
 msgstr "Gauna numatytąjį"
 
-#: gtk/gtkwidget.c:574
+#: gtk/gtkwidget.c:575
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Jei TRUE, objektas parinks standartinį veiksmą aktyvinimo metu"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:581
 msgid "Composite child"
 msgstr "Susietas objektas"
 
-#: gtk/gtkwidget.c:581
+#: gtk/gtkwidget.c:582
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ar objektas yra susieto objekto dalis"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:588
 msgid "Style"
 msgstr "Stilius"
 
-#: gtk/gtkwidget.c:588
+#: gtk/gtkwidget.c:589
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -6755,88 +6838,96 @@ msgstr ""
 "Objekto stilius, kuris saugo infomaciją apie tai kaip objektas turi atrodyti "
 "(spalva ir pan)"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:595
 msgid "Events"
 msgstr "Įvykiai"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:596
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "Įvykių kaukė, kuri lemia kokio tipo GdkEvents šis objektas apdoros"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:603
 msgid "Extension events"
 msgstr "Išplėtimo įvykiai"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:604
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "Kaukė, kuri nustato kokios išplėtimo įvykius apdoroja šis objektas"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:611
 msgid "No show all"
 msgstr "Nerodyti visko"
 
-#: gtk/gtkwidget.c:611
+#: gtk/gtkwidget.c:612
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Ar gtk_widget_show_all() turi nepaveikti šio objekto"
 
-#: gtk/gtkwidget.c:634
+#: gtk/gtkwidget.c:635
 msgid "Whether this widget has a tooltip"
 msgstr "Ar šis objektas turi paaiškinimą"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:691
 msgid "Window"
 msgstr "Langas"
 
-#: gtk/gtkwidget.c:691
+#: gtk/gtkwidget.c:692
 msgid "The widget's window if it is realized"
 msgstr "Objekto langas (jei jis realizuotas)"
 
-#: gtk/gtkwidget.c:2213
+#: gtk/gtkwidget.c:706
+msgid "Double Buffered"
+msgstr "Dvigubo buferio"
+
+#: gtk/gtkwidget.c:707
+msgid "Whether or not the widget is double buffered"
+msgstr "Ar objektas turi dvigubą buferį"
+
+#: gtk/gtkwidget.c:2229
 msgid "Interior Focus"
 msgstr "Vidinis aktyvinimas"
 
-#: gtk/gtkwidget.c:2214
+#: gtk/gtkwidget.c:2230
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Ar rodyti aktyvinimo indikatorių objektų viduje"
 
-#: gtk/gtkwidget.c:2220
+#: gtk/gtkwidget.c:2236
 msgid "Focus linewidth"
 msgstr "Aktyvinimo eilutės plotis"
 
-#: gtk/gtkwidget.c:2221
+#: gtk/gtkwidget.c:2237
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Aktyvinimo indikatoriaus linijos plotis, pikseliais"
 
-#: gtk/gtkwidget.c:2227
+#: gtk/gtkwidget.c:2243
 msgid "Focus line dash pattern"
 msgstr "Aktyvinti eilutės požymius"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2244
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Brūkšnelių raštas naudojamas aktyvinimo indikatoriaus piešimui"
 
-#: gtk/gtkwidget.c:2233
+#: gtk/gtkwidget.c:2249
 msgid "Focus padding"
 msgstr "Aktyvinimo apvalkalas"
 
-#: gtk/gtkwidget.c:2234
+#: gtk/gtkwidget.c:2250
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Atstumas tarp aktyvinimo indikatoriaus ir objekto „dėžutės“, pikseliais"
 
-#: gtk/gtkwidget.c:2239
+#: gtk/gtkwidget.c:2255
 msgid "Cursor color"
 msgstr "Žymeklio spalva"
 
-#: gtk/gtkwidget.c:2240
+#: gtk/gtkwidget.c:2256
 msgid "Color with which to draw insertion cursor"
 msgstr "Spalva, kuria piešiamas įterpimo žymeklis"
 
-#: gtk/gtkwidget.c:2245
+#: gtk/gtkwidget.c:2261
 msgid "Secondary cursor color"
 msgstr "Antrinė žymeklio spalva"
 
-#: gtk/gtkwidget.c:2246
+#: gtk/gtkwidget.c:2262
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6844,43 +6935,43 @@ msgstr ""
 "Spalva, kuria žymimas antras įterpimo žymeklis, kai dirbama maišytame "
 "redagavimo veiksenoje"
 
-#: gtk/gtkwidget.c:2251
+#: gtk/gtkwidget.c:2267
 msgid "Cursor line aspect ratio"
 msgstr "Žymeklio eilutės mastelis"
 
-#: gtk/gtkwidget.c:2252
+#: gtk/gtkwidget.c:2268
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Piešiamo įterpimo žymeklio mastelis"
 
-#: gtk/gtkwidget.c:2266
+#: gtk/gtkwidget.c:2282
 msgid "Draw Border"
 msgstr "Rodyti rėmelį"
 
-#: gtk/gtkwidget.c:2267
+#: gtk/gtkwidget.c:2283
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "Zonų laukelio piešimo ploto išorėje dydis"
 
-#: gtk/gtkwidget.c:2280
+#: gtk/gtkwidget.c:2296
 msgid "Unvisited Link Color"
 msgstr "Neaplankytų saitų spalva"
 
-#: gtk/gtkwidget.c:2281
+#: gtk/gtkwidget.c:2297
 msgid "Color of unvisited links"
 msgstr "Neaplankytų saitų spalva"
 
-#: gtk/gtkwidget.c:2294
+#: gtk/gtkwidget.c:2310
 msgid "Visited Link Color"
 msgstr "Aplankytų saitų spalva"
 
-#: gtk/gtkwidget.c:2295
+#: gtk/gtkwidget.c:2311
 msgid "Color of visited links"
 msgstr "Aplankytų saitų spalva"
 
-#: gtk/gtkwidget.c:2309
+#: gtk/gtkwidget.c:2325
 msgid "Wide Separators"
 msgstr "Platūs skirtukai"
 
-#: gtk/gtkwidget.c:2310
+#: gtk/gtkwidget.c:2326
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -6888,35 +6979,35 @@ msgstr ""
 "Ar skirtukų plotis konfigūruojamas ir turėtų būti brėžiamas naudojant "
 "dėžutę, vietoje linijos"
 
-#: gtk/gtkwidget.c:2324
+#: gtk/gtkwidget.c:2340
 msgid "Separator Width"
 msgstr "Skirtukų plotis"
 
-#: gtk/gtkwidget.c:2325
+#: gtk/gtkwidget.c:2341
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Skirtukų plotis, jei „wide-separators“ reikšmė TEIGIAMA"
 
-#: gtk/gtkwidget.c:2339
+#: gtk/gtkwidget.c:2355
 msgid "Separator Height"
 msgstr "Skirtukų aukštis"
 
-#: gtk/gtkwidget.c:2340
+#: gtk/gtkwidget.c:2356
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Skirtukų aukštis, jei „wide-separators“ reikšmė TEIGIAMA"
 
-#: gtk/gtkwidget.c:2354
+#: gtk/gtkwidget.c:2370
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Horizontalios slinkimo rodyklės ilgis"
 
-#: gtk/gtkwidget.c:2355
+#: gtk/gtkwidget.c:2371
 msgid "The length of horizontal scroll arrows"
 msgstr "Horizontalių slinkimo rodyklių ilgis"
 
-#: gtk/gtkwidget.c:2369
+#: gtk/gtkwidget.c:2385
 msgid "Vertical Scroll Arrow Length"
 msgstr "Horizontalios slinkimo rodyklės ilgis"
 
-#: gtk/gtkwidget.c:2370
+#: gtk/gtkwidget.c:2386
 msgid "The length of vertical scroll arrows"
 msgstr "Horizontalių slinkimo rodyklių ilgis"
 

@@ -68,12 +68,14 @@ extern gboolean            gdk_directfb_monochrome_fonts;
 void        gdk_directfb_window_set_opacity (GdkWindow             *window,
                                              guchar                 opacity);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkWindow * gdk_directfb_window_new         (GdkWindow             *parent,
                                              GdkWindowAttr         *attributes,
                                              gint                   attributes_mask,
                                              DFBWindowCapabilities  window_caps,
                                              DFBWindowOptions       window_options,
                                              DFBSurfaceCapabilities surface_caps);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkVisual * gdk_directfb_visual_by_format   (DFBSurfacePixelFormat  pixel_format);
 

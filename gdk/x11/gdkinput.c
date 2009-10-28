@@ -120,7 +120,9 @@ gdk_device_dispose (GObject *object)
 	  gdkdev->xdevice = NULL;
 	}
       g_free (gdkdev->axes);
+      g_free (gdkdev->axis_data);
       gdkdev->axes = NULL;
+      gdkdev->axis_data = NULL;
 #endif /* !XINPUT_NONE */
 
       g_free (gdkdev->info.name);
@@ -266,7 +268,6 @@ gdk_device_get_history  (GdkDevice         *device,
   GdkWindow *impl_window;
   gboolean result = FALSE;
   int tmp_n_events = 0;
-  int i, j;
 
   g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), FALSE);
 
@@ -284,9 +285,12 @@ gdk_device_get_history  (GdkDevice         *device,
       if (xcoords)
 	{
 	  GdkWindowObject *priv = (GdkWindowObject *)window;
+          int i, j;
+
 	  coords = _gdk_device_allocate_history (device, tmp_n_events);
 	  j = 0;
-	  for (i=0; i<tmp_n_events; i++)
+
+	  for (i = 0; i < tmp_n_events; i++)
 	    {
 	      if (impl_coord_in_window (window, xcoords[i].x, xcoords[i].y))
 		{
@@ -299,16 +303,32 @@ gdk_device_get_history  (GdkDevice         *device,
 
 	  XFree (xcoords);
 
-	  result = TRUE;
+          /* free the events we allocated too much */
+          for (i = j; i < tmp_n_events; i++)
+            {
+              g_free (coords[i]);
+              coords[i] = NULL;
+            }
+
+          tmp_n_events = j;
+
+          if (tmp_n_events > 0)
+            {
+              result = TRUE;
+            }
+          else
+            {
+              gdk_device_free_history (coords, tmp_n_events);
+              coords = NULL;
+            }
 	}
-      else
-	result = FALSE;
     }
   else
     result = _gdk_device_get_history (device, window, start, stop, &coords, &tmp_n_events);
 
   if (n_events)
     *n_events = tmp_n_events;
+
   if (events)
     *events = coords;
   else if (coords)

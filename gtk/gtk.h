@@ -59,6 +59,7 @@
 #include <gtk/gtkcellrendererpixbuf.h>
 #include <gtk/gtkcellrendererprogress.h>
 #include <gtk/gtkcellrendererspin.h>
+#include <gtk/gtkcellrendererspinner.h>
 #include <gtk/gtkcellrenderertext.h>
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellview.h>
@@ -71,7 +72,6 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxentry.h>
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtkcurve.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
@@ -92,7 +92,6 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkgamma.h>
 #include <gtk/gtkgc.h>
 #include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbbox.h>
@@ -112,7 +111,6 @@
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
-#include <gtk/gtkinputdialog.h>
 #include <gtk/gtkinvisible.h>
 #include <gtk/gtkitem.h>
 #include <gtk/gtklabel.h>
@@ -168,6 +166,7 @@
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
+#include <gtk/gtkspinner.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
@@ -226,7 +225,10 @@
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcombo.h>
 #include <gtk/gtkctree.h>
+#include <gtk/gtkcurve.h>
 #include <gtk/gtkfilesel.h>
+#include <gtk/gtkgamma.h>
+#include <gtk/gtkinputdialog.h>
 #include <gtk/gtkitemfactory.h>
 #include <gtk/gtklist.h>
 #include <gtk/gtklistitem.h>

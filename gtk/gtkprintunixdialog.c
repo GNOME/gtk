@@ -380,6 +380,32 @@ get_toplevel (GtkWidget *widget)
 }
 
 static void
+set_busy_cursor (GtkPrintUnixDialog *dialog,
+		 gboolean            busy)
+{
+  GtkWindow *toplevel;
+  GdkDisplay *display;
+  GdkCursor *cursor;
+
+  toplevel = get_toplevel (GTK_WIDGET (dialog));
+  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+    return;
+
+  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+
+  if (busy)
+    cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
+  else
+    cursor = NULL;
+
+  gdk_window_set_cursor (GTK_WIDGET (toplevel)->window, cursor);
+  gdk_display_flush (display);
+
+  if (cursor)
+    gdk_cursor_unref (cursor);
+}
+
+static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
                              const gchar *mnemonic_label,
                              const gchar *stock_id,
@@ -418,72 +444,81 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
     {
       printer = gtk_print_unix_dialog_get_selected_printer (print_dialog);
 
-      /* Shows overwrite confirmation dialog in the case of printing to file which
-       * already exists. */
-      if (printer != NULL && gtk_printer_is_virtual (printer))
+      if (printer != NULL)
         {
-          option = gtk_printer_option_set_lookup (priv->options,
-                                                  "gtk-main-page-custom-input");
-
-          if (option != NULL &&
-              option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
+          if (priv->request_details_tag || !gtk_printer_is_accepting_jobs (printer))
             {
-              file = g_file_new_for_uri (option->value);
+              g_signal_stop_emission_by_name (print_dialog, "response");
+              return TRUE;
+            }
 
-              if (file != NULL &&
-                  g_file_query_exists (file, NULL))
+          /* Shows overwrite confirmation dialog in the case of printing to file which
+           * already exists. */
+          if (gtk_printer_is_virtual (printer))
+            {
+              option = gtk_printer_option_set_lookup (priv->options,
+                                                      "gtk-main-page-custom-input");
+
+              if (option != NULL &&
+                  option->type == GTK_PRINTER_OPTION_TYPE_FILESAVE)
                 {
-                  toplevel = get_toplevel (GTK_WIDGET (print_dialog));
+                  file = g_file_new_for_uri (option->value);
 
-                  basename = g_file_get_basename (file);
-                  dirname = g_file_get_parse_name (g_file_get_parent (file));
-
-                  dialog = gtk_message_dialog_new (toplevel,
-                                                   GTK_DIALOG_MODAL |
-                                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_QUESTION,
-                                                   GTK_BUTTONS_NONE,
-                                                   _("A file named \"%s\" already exists.  Do you want to replace it?"),
-                                                   basename);
-
-                  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                            _("The file already exists in \"%s\".  Replacing it will "
-                                                            "overwrite its contents."),
-                                                            dirname);
-
-                  gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-                  add_custom_button_to_dialog (GTK_DIALOG (dialog),
-                                               _("_Replace"),
-                                               GTK_STOCK_PRINT,
-                                               GTK_RESPONSE_ACCEPT);
-                  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                                           GTK_RESPONSE_ACCEPT,
-                                                           GTK_RESPONSE_CANCEL,
-                                                           -1);
-                  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                                   GTK_RESPONSE_ACCEPT);
-
-                  if (toplevel->group)
-                    gtk_window_group_add_window (toplevel->group,
-                                                 GTK_WINDOW (dialog));
-
-                  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-                  gtk_widget_destroy (dialog);
-
-                  g_free (dirname);
-                  g_free (basename);
-
-                  if (response != GTK_RESPONSE_ACCEPT)
+                  if (file != NULL &&
+                      g_file_query_exists (file, NULL))
                     {
-                      g_signal_stop_emission_by_name (print_dialog, "response");
-                      g_object_unref (file);
-                      return TRUE;
-                    }
-                }
+                      toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
-              g_object_unref (file);
+                      basename = g_file_get_basename (file);
+                      dirname = g_file_get_parse_name (g_file_get_parent (file));
+
+                      dialog = gtk_message_dialog_new (toplevel,
+                                                       GTK_DIALOG_MODAL |
+                                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                       GTK_MESSAGE_QUESTION,
+                                                       GTK_BUTTONS_NONE,
+                                                       _("A file named \"%s\" already exists.  Do you want to replace it?"),
+                                                       basename);
+
+                      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                                _("The file already exists in \"%s\".  Replacing it will "
+                                                                "overwrite its contents."),
+                                                                dirname);
+
+                      gtk_dialog_add_button (GTK_DIALOG (dialog),
+                                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                      add_custom_button_to_dialog (GTK_DIALOG (dialog),
+                                                   _("_Replace"),
+                                                   GTK_STOCK_PRINT,
+                                                   GTK_RESPONSE_ACCEPT);
+                      gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                                               GTK_RESPONSE_ACCEPT,
+                                                               GTK_RESPONSE_CANCEL,
+                                                               -1);
+                      gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                                       GTK_RESPONSE_ACCEPT);
+
+                      if (toplevel->group)
+                        gtk_window_group_add_window (toplevel->group,
+                                                     GTK_WINDOW (dialog));
+
+                      response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+                      gtk_widget_destroy (dialog);
+
+                      g_free (dirname);
+                      g_free (basename);
+
+                      if (response != GTK_RESPONSE_ACCEPT)
+                        {
+                          g_signal_stop_emission_by_name (print_dialog, "response");
+                          g_object_unref (file);
+                          return TRUE;
+                        }
+                    }
+
+                  g_object_unref (file);
+                }
             }
         }
     }
@@ -561,7 +596,7 @@ gtk_print_unix_dialog_destroy (GtkPrintUnixDialog *dialog)
 }
 
 static void
-disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
+disconnect_printer_details_request (GtkPrintUnixDialog *dialog, gboolean details_failed)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
@@ -570,6 +605,21 @@ disconnect_printer_details_request (GtkPrintUnixDialog *dialog)
       g_signal_handler_disconnect (priv->request_details_printer,
                                    priv->request_details_tag);
       priv->request_details_tag = 0;
+      set_busy_cursor (dialog, FALSE);
+      if (details_failed)
+        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                               "gtk-print-tree-iter"),
+                            PRINTER_LIST_COL_STATE,
+                             _("Getting printer information failed"),
+                            -1);
+      else
+        gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                            g_object_get_data (G_OBJECT (priv->request_details_printer),
+                                               "gtk-print-tree-iter"),
+                            PRINTER_LIST_COL_STATE,
+                            gtk_printer_get_state_message (priv->request_details_printer),
+                            -1);
       g_object_unref (priv->request_details_printer);
       priv->request_details_printer = NULL;
     }
@@ -584,7 +634,7 @@ gtk_print_unix_dialog_finalize (GObject *object)
   GList *node;
 
   unschedule_idle_mark_conflicts (dialog);
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, FALSE);
 
   if (priv->current_printer)
     {
@@ -1739,7 +1789,7 @@ printer_details_acquired (GtkPrinter         *printer,
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
 
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, !success);
 
   if (success)
     {
@@ -1767,7 +1817,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
       priv->waiting_for_printer = NULL;
     }
 
-  disconnect_printer_details_request (dialog);
+  disconnect_printer_details_request (dialog, FALSE);
 
   printer = NULL;
   if (gtk_tree_selection_get_selected (selection, NULL, &filter_iter))
@@ -1806,6 +1856,11 @@ selected_printer_changed (GtkTreeSelection   *selection,
       /* take the reference */
       priv->request_details_printer = printer;
       gtk_printer_request_details (printer);
+      set_busy_cursor (dialog, TRUE);
+      gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
+                          g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
+                          PRINTER_LIST_COL_STATE, _("Getting printer information..."),
+                          -1);
       return;
     }
 
@@ -2537,6 +2592,7 @@ draw_page_cb (GtkWidget          *widget,
   gdouble paper_width, paper_height;
   gdouble pos_x, pos_y;
   gint pages_per_sheet;
+  gboolean ltr = TRUE;
 
   orientation = gtk_page_setup_get_orientation (priv->page_setup);
   landscape =
@@ -2835,8 +2891,14 @@ draw_page_cb (GtkWidget          *widget,
       g_free (text);
       pango_layout_get_size (layout, &layout_w, &layout_h);
 
-      cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
-                           widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+      ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
+
+      if (ltr)
+        cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
+      else
+        cairo_translate (cr, pos_x + w + shadow_offset + 2 * RULER_DISTANCE,
+                             widget->allocation.y + (widget->allocation.height - layout_h / PANGO_SCALE) / 2);
 
       pango_cairo_show_layout (cr, layout);
 
@@ -2863,17 +2925,34 @@ draw_page_cb (GtkWidget          *widget,
 
       cairo_set_line_width (cr, 1);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE, pos_y);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE, pos_y + h);
-      cairo_stroke (cr);
+      if (ltr)
+        {
+          cairo_move_to (cr, pos_x - RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
-      cairo_stroke (cr);
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
 
-      cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
-      cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
-      cairo_stroke (cr);
+          cairo_move_to (cr, pos_x - RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x - RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
+      else
+        {
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE, pos_y + h);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y - 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y - 0.5);
+          cairo_stroke (cr);
+
+          cairo_move_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE - RULER_RADIUS, pos_y + h + 0.5);
+          cairo_line_to (cr, pos_x + w + shadow_offset + RULER_DISTANCE + RULER_RADIUS, pos_y + h + 0.5);
+          cairo_stroke (cr);
+        }
 
       cairo_move_to (cr, pos_x, pos_y + h + shadow_offset + RULER_DISTANCE);
       cairo_line_to (cr, pos_x + w, pos_y + h + shadow_offset + RULER_DISTANCE);
@@ -2998,21 +3077,32 @@ update_number_up_layout (GtkPrintUnixDialog *dialog)
             {
               option = priv->number_up_layout_2_option;
 
-              if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM ||
-                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT)
-                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
+              switch (layout)
+                {
+                case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM:
+                case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT:
+                  enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
+                  break;
 
-              if (layout == GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP ||
-                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT)
-                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP);
+                case GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP:
+                case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT:
+                  enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP);
+                  break;
 
-              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM ||
-                  layout == GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT)
-                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM);
+                case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM:
+                case GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT:
+                  enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM);
+                  break;
 
-              if (layout == GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP ||
-                  layout == GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT)
-                enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP);
+                case GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP:
+                case GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT:
+                  enum_value = g_enum_get_value (enum_class, GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP);
+                  break;
+
+                default:
+                  g_assert_not_reached();
+                  enum_value = NULL;
+                }
             }
           else
             {
@@ -3700,12 +3790,16 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   create_main_page (print_dialog);
   create_page_setup_page (print_dialog);
   create_job_page (print_dialog);
+  /* Translators: this will appear as tab label in print dialog. */
   create_optional_page (print_dialog, _("Image Quality"),
                         &priv->image_quality_table,
                         &priv->image_quality_page);
+  /* Translators: this will appear as tab label in print dialog. */
   create_optional_page (print_dialog, _("Color"),
                         &priv->color_table,
                         &priv->color_page);
+  /* Translators: this will appear as tab label in print dialog. */
+  /* It's a typographical term, as in "Binding and finishing" */
   create_optional_page (print_dialog, _("Finishing"),
                         &priv->finishing_table,
                         &priv->finishing_page);

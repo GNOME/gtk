@@ -39,6 +39,9 @@
   <link linkend="GtkImage">
     <inlinegraphic fileref="image.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkSpinner">
+    <inlinegraphic fileref="spinner.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkLabel">
     <inlinegraphic fileref="label.png" format="PNG"></inlinegraphic>
   </link>

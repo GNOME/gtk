@@ -220,7 +220,7 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
                                      G_FILE_ERROR,
                                      g_file_error_from_errno (save_errno),
                                      _("Failure reading GIF: %s"), 
-                                     strerror (save_errno));
+                                     g_strerror (save_errno));
                 }
                 
 #ifdef IO_GIFDEBUG
@@ -411,8 +411,8 @@ gif_get_extension (GifContext *context)
                                 retval = get_data_block (context, (unsigned char *) context->block_buf, NULL);
                                 if (retval != 0)
                                         return retval;
-                                if (!strncmp (context->block_buf, "NETSCAPE2.0", 11) ||
-                                    !strncmp (context->block_buf, "ANIMEXTS1.0", 11)) {
+                                if (!strncmp ((gchar *)context->block_buf, "NETSCAPE2.0", 11) ||
+                                    !strncmp ((gchar *)context->block_buf, "ANIMEXTS1.0", 11)) {
                                         context->in_loop_extension = TRUE;
                                 }
                                 context->block_count = 0;

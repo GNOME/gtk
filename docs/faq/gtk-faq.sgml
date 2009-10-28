@@ -2108,10 +2108,10 @@ not.</para>
 snippet:</para>
 
 <programlisting role="C">
-     gtk_widget_ref(widget);
+     g_object_ref(widget);
      gtk_container_remove(GTK_CONTAINER(old_parent), widget);
      gtk_container_add(GTK_CONTAINER(new_parent), widget);
-     gtk_widget_unref(widget);
+     g_object_unref(widget);
 </programlisting>
 
 </sect1>
@@ -2307,8 +2307,8 @@ used, as in:</para>
                NULL, gtk_widget_get_colormap(top),
                &amp;pixmap_mask, NULL, pixfile);
   pixw = gtk_pixmap_new (pixmap, pixmap_mask);
-  gdk_pixmap_unref (pixmap);
-  gdk_pixmap_unref (pixmap_mask);
+  g_object_unref (pixmap);
+  g_object_unref (pixmap_mask);
 </programlisting>
 
 </sect1>

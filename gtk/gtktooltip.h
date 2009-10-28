@@ -48,6 +48,9 @@ void gtk_tooltip_set_icon_from_stock     (GtkTooltip         *tooltip,
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
 				          const gchar        *icon_name,
 				          GtkIconSize         size);
+void gtk_tooltip_set_icon_from_gicon     (GtkTooltip  *tooltip,
+					  GIcon       *gicon,
+					  GtkIconSize  size);
 void gtk_tooltip_set_custom	         (GtkTooltip         *tooltip,
                                           GtkWidget          *custom_widget);
 

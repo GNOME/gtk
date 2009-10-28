@@ -5,17 +5,6 @@ GtkCurve
 Allows direct editing of a curve
 
 <!-- ##### SECTION Long_Description ##### -->
-<note>
-<para>
- This widget is considered too specialized/little-used for
- GTK+, and will in the future be moved to some other package.  If
- your application needs this widget, feel free to use it, as the
- widget does work and is useful in some applications; it's just not
- of general interest. However, we are not accepting new features for
- the widget, and it will eventually move out of the GTK+
- distribution.
-</para>
-</note>
 <para>
 The #GtkCurve widget allows the user to edit a curve covering a range of
 values. It is typically used to fine-tune color balances in graphics
@@ -27,6 +16,9 @@ In spline mode the user places points on the curve which are automatically
 connected together into a smooth curve. In linear mode the user places points
 on the curve which are connected by straight lines. In free mode the user can
 draw the points of the curve freely, and they are not connected at all.
+</para>
+<para>
+As of GTK+ 2.20, #GtkCurve has been deprecated since it is too specialized.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -92,6 +84,7 @@ Creates a new #GtkCurve.
 </para>
 
 @Returns: a new #GtkCurve.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_reset ##### -->
@@ -102,6 +95,7 @@ The curve type is not changed.
 </para>
 
 @curve: a #GtkCurve.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_set_gamma ##### -->
@@ -115,6 +109,7 @@ FIXME: Needs a more precise definition of gamma.
 
 @curve: a #GtkCurve.
 @gamma_: the gamma value.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_set_range ##### -->
@@ -128,6 +123,7 @@ The curve is also reset with a call to gtk_curve_reset().
 @max_x: the maximum x value.
 @min_y: the minimum y value.
 @max_y: the maximum y value.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_get_vector ##### -->
@@ -138,6 +134,7 @@ Returns a vector of points representing the curve.
 @curve: a #GtkCurve.
 @veclen: the number of points to calculate.
 @vector: returns the points.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_set_vector ##### -->
@@ -149,6 +146,7 @@ The curve type is set to %GTK_CURVE_TYPE_FREE.
 @curve: a #GtkCurve.
 @veclen: the number of points.
 @vector: the points on the curve.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 
 <!-- ##### FUNCTION gtk_curve_set_curve_type ##### -->
@@ -160,5 +158,6 @@ curve will be changed as little as possible.
 
 @curve: a #GtkCurve.
 @type: the type of the curve.
+@Deprecated: 2.20: Don't use this widget anymore.
 
 

@@ -648,7 +648,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       GdkColor black = {0, 0, 0, 0};
       GdkRectangle r;
       GdkOverlapType overlap;
-      
+
       gdk_drawable_get_size (priv->clip_mask, &w, &h);
 
       r.x = 0;
@@ -659,7 +659,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       /* Its quite common to expose areas that are completely in or outside
        * the region, so we try to avoid allocating bitmaps that are just fully
        * set or completely unset.
-       */ 
+       */
       overlap = gdk_region_rect_in (region, &r);
       if (overlap == GDK_OVERLAP_RECTANGLE_PART)
 	{
@@ -683,11 +683,19 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
 	}
       else if (overlap == GDK_OVERLAP_RECTANGLE_OUT)
 	{
+	  /* No intersection, set empty clip region */
 	  GdkRegion *empty = gdk_region_new ();
 
+	  gdk_region_destroy (region);
 	  priv->old_clip_mask = g_object_ref (priv->clip_mask);
+	  priv->clip_region = empty;
 	  _gdk_windowing_gc_set_clip_region (gc, empty, FALSE);
-	  gdk_region_destroy (empty);
+	}
+      else
+	{
+	  /* Completely inside region, don't set unnecessary clip */
+	  gdk_region_destroy (region);
+	  return;
 	}
     }
   else
@@ -696,7 +704,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
       priv->clip_region = region;
       if (priv->old_clip_region)
 	gdk_region_intersect (region, priv->old_clip_region);
-      
+
       _gdk_windowing_gc_set_clip_region (gc, priv->clip_region, FALSE);
     }
 
@@ -718,6 +726,12 @@ _gdk_gc_remove_drawable_clip (GdkGC *gc)
 	  gdk_gc_set_clip_mask (gc, priv->old_clip_mask);
 	  g_object_unref (priv->old_clip_mask);
 	  priv->old_clip_mask = NULL;
+
+	  if (priv->clip_region)
+	    {
+	      g_object_unref (priv->clip_region);
+	      priv->clip_region = NULL;
+	    }
 	}
       else
 	{
@@ -1382,6 +1396,8 @@ _gdk_gc_update_context (GdkGC          *gc,
 
   priv = GDK_GC_GET_PRIVATE (gc);
 
+  _gdk_gc_remove_drawable_clip (gc);
+
   fill = priv->fill;
   if (override_stipple && fill != GDK_OPAQUE_STIPPLED)
     fill = GDK_STIPPLED;
@@ -1472,6 +1488,10 @@ _gdk_gc_update_context (GdkGC          *gc,
     return;
 
   cairo_reset_clip (cr);
+  /* The reset above resets the window clip rect, so we want to re-set that */
+  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
+
   if (priv->clip_region)
     {
       cairo_save (cr);
@@ -1487,9 +1507,6 @@ _gdk_gc_update_context (GdkGC          *gc,
       cairo_clip (cr);
     }
 
-  /* The reset above resets the window clip rect, so we want to re-set that */
-  if (target_drawable && GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (target_drawable)->set_cairo_clip (target_drawable, cr);
 }
 
 

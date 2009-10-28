@@ -375,13 +375,10 @@ _gtk_custom_paper_unix_dialog_new (GtkWindow   *parent,
 
   result = g_object_new (GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG,
                          "title", title,
+                         "transient-for", parent,
+                         "modal", parent != NULL,
+                         "destroy-with-parent", TRUE,
                          NULL);
-
-  if (parent)
-    {
-      gtk_window_set_modal (GTK_WINDOW (result), TRUE);
-      gtk_window_set_transient_for (GTK_WINDOW (result), parent);
-    }
 
   return result;
 }

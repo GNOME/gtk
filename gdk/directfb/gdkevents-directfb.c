@@ -209,7 +209,7 @@ dfb_events_io_func (GIOChannel   *channel,
 
   if (result == G_IO_STATUS_ERROR)
     {
-      g_warning ("%s: GIOError occured", __FUNCTION__);
+      g_warning ("%s: GIOError occured", G_STRFUNC);
       return TRUE;
     }
 

@@ -496,7 +496,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 							P_("Unique identifier for the window to be used when restoring a session"),
 							NULL,
 							GTK_PARAM_READWRITE));
-							
+
   /**
    * GtkWindow:startup-id:
    *
@@ -505,9 +505,9 @@ gtk_window_class_init (GtkWindowClass *klass)
    * for more details.
    *
    * Since: 2.12
-   */							
+   */
   g_object_class_install_property (gobject_class,
-                                   PROP_ROLE,
+                                   PROP_STARTUP_ID,
                                    g_param_spec_string ("startup-id",
 							P_("Startup ID"),
 							P_("Unique startup identifier for the window used by startup-notification"),
@@ -4400,6 +4400,7 @@ static void
 gtk_window_finalize (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkMnemonicHash *mnemonic_hash;
 
   g_free (window->title);
@@ -4427,11 +4428,11 @@ gtk_window_finalize (GObject *object)
     }
 
   if (window->screen)
-    {
-      g_signal_handlers_disconnect_by_func (window->screen,
-					    gtk_window_on_composited_changed, window);
-    }
-      
+    g_signal_handlers_disconnect_by_func (window->screen,
+                                          gtk_window_on_composited_changed, window);
+
+  g_free (priv->startup_id);
+
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
@@ -4601,7 +4602,8 @@ gtk_window_map (GtkWidget *widget)
           /* Make sure we have a "real" id */
           if (!startup_id_is_fake (priv->startup_id)) 
             gdk_notify_startup_complete_with_id (priv->startup_id);
-            
+
+          g_free (priv->startup_id);
           priv->startup_id = NULL;
         }
       else if (!sent_startup_notification)
@@ -5646,6 +5648,13 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
       if (info->resize_height > 0)
         *height = info->resize_height;
     }
+
+  /* Don't ever request zero width or height, its not supported by
+     gdk. The size allocation code will round it to 1 anyway but if
+     we do it then the value returned from this function will is
+     not comparable to the size allocation read from the GtkWindow. */
+  *width = MAX (*width, 1);
+  *height = MAX (*height, 1);
 }
 
 static GtkWindowPosition
@@ -5744,7 +5753,7 @@ clamp_window_to_rectangle (gint               *x,
                            const GdkRectangle *rect)
 {
 #ifdef DEBUGGING_OUTPUT
-  g_print ("%s: %+d%+d %dx%d: %+d%+d: %dx%d", __FUNCTION__, rect->x, rect->y, rect->width, rect->height, *x, *y, w, h);
+  g_print ("%s: %+d%+d %dx%d: %+d%+d: %dx%d", G_STRFUNC, rect->x, rect->y, rect->width, rect->height, *x, *y, w, h);
 #endif
 
   /* If it is too large, center it. If it fits on the monitor but is
@@ -8319,7 +8328,7 @@ _gtk_window_set_is_active (GtkWindow *window,
 }
 
 /**
- * _gtk_windwo_set_is_toplevel:
+ * _gtk_window_set_is_toplevel:
  * @window: a #GtkWindow
  * @is_toplevel: %TRUE if the window is still a real toplevel (nominally a
  * parent of the root window); %FALSE if it is not (for example, for an

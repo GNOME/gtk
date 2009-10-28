@@ -17,10 +17,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtkunixprint.h> can be included directly."
-#endif
-
 #ifndef __GTK_CUSTOM_PAPER_UNIX_DIALOG_H__
 #define __GTK_CUSTOM_PAPER_UNIX_DIALOG_H__
 

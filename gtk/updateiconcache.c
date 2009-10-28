@@ -1516,9 +1516,11 @@ opentmp:
       g_unlink (bak_cache_path);
       if (g_rename (cache_path, bak_cache_path) == -1)
 	{
+          int errsv = errno;
+
 	  g_printerr (_("Could not rename %s to %s: %s, removing %s then.\n"),
 		      cache_path, bak_cache_path,
-		      g_strerror (errno),
+		      g_strerror (errsv),
 		      cache_path);
 	  g_unlink (cache_path);
 	  bak_cache_path = NULL;
@@ -1528,16 +1530,22 @@ opentmp:
 
   if (g_rename (tmp_cache_path, cache_path) == -1)
     {
+      int errsv = errno;
+
       g_printerr (_("Could not rename %s to %s: %s\n"),
 		  tmp_cache_path, cache_path,
-		  g_strerror (errno));
+		  g_strerror (errsv));
       g_unlink (tmp_cache_path);
 #ifdef G_OS_WIN32
       if (bak_cache_path != NULL)
 	if (g_rename (bak_cache_path, cache_path) == -1)
-	  g_printerr (_("Could not rename %s back to %s: %s.\n"),
-		      bak_cache_path, cache_path,
-		      g_strerror (errno));
+          {
+            errsv = errno;
+
+            g_printerr (_("Could not rename %s back to %s: %s.\n"),
+                        bak_cache_path, cache_path,
+                        g_strerror (errsv));
+          }
 #endif
       exit (1);
     }
@@ -1648,8 +1656,12 @@ main (int argc, char **argv)
   
   setlocale (LC_ALL, "");
 
+#ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
+#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+#endif
+#endif
 
   context = g_option_context_new ("ICONPATH");
   g_option_context_add_main_entries (context, args, GETTEXT_PACKAGE);

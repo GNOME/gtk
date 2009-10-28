@@ -204,7 +204,8 @@ enum {
   PROP_HAS_FRAME,
   PROP_FOCUS_ON_CLICK,
   PROP_POPUP_SHOWN,
-  PROP_BUTTON_SENSITIVITY
+  PROP_BUTTON_SENSITIVITY,
+  PROP_EDITING_CANCELED
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -379,6 +380,8 @@ static gboolean gtk_combo_box_menu_button_press    (GtkWidget        *widget,
                                                     gpointer          user_data);
 static void     gtk_combo_box_menu_item_activate   (GtkWidget        *item,
                                                     gpointer          user_data);
+
+static void     gtk_combo_box_update_sensitivity   (GtkComboBox      *combo_box);
 static void     gtk_combo_box_menu_row_inserted    (GtkTreeModel     *model,
                                                     GtkTreePath      *path,
                                                     GtkTreeIter      *iter,
@@ -647,6 +650,10 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 				GTK_TYPE_SCROLL_TYPE, GTK_SCROLL_END);
 
   /* properties */
+  g_object_class_override_property (object_class,
+                                    PROP_EDITING_CANCELED,
+                                    "editing-canceled");
+
   /**
    * GtkComboBox:model:
    *
@@ -958,58 +965,58 @@ gtk_combo_box_set_property (GObject      *object,
 
   switch (prop_id)
     {
-      case PROP_MODEL:
-        gtk_combo_box_set_model (combo_box, g_value_get_object (value));
-        break;
+    case PROP_MODEL:
+      gtk_combo_box_set_model (combo_box, g_value_get_object (value));
+      break;
 
-      case PROP_WRAP_WIDTH:
-        gtk_combo_box_set_wrap_width (combo_box, g_value_get_int (value));
-        break;
+    case PROP_WRAP_WIDTH:
+      gtk_combo_box_set_wrap_width (combo_box, g_value_get_int (value));
+      break;
 
-      case PROP_ROW_SPAN_COLUMN:
-        gtk_combo_box_set_row_span_column (combo_box, g_value_get_int (value));
-        break;
+    case PROP_ROW_SPAN_COLUMN:
+      gtk_combo_box_set_row_span_column (combo_box, g_value_get_int (value));
+      break;
 
-      case PROP_COLUMN_SPAN_COLUMN:
-        gtk_combo_box_set_column_span_column (combo_box, g_value_get_int (value));
-        break;
+    case PROP_COLUMN_SPAN_COLUMN:
+      gtk_combo_box_set_column_span_column (combo_box, g_value_get_int (value));
+      break;
 
-      case PROP_ACTIVE:
-        gtk_combo_box_set_active (combo_box, g_value_get_int (value));
-        break;
+    case PROP_ACTIVE:
+      gtk_combo_box_set_active (combo_box, g_value_get_int (value));
+      break;
 
-      case PROP_ADD_TEAROFFS:
-        gtk_combo_box_set_add_tearoffs (combo_box, g_value_get_boolean (value));
-        break;
+    case PROP_ADD_TEAROFFS:
+      gtk_combo_box_set_add_tearoffs (combo_box, g_value_get_boolean (value));
+      break;
 
-      case PROP_HAS_FRAME:
-        combo_box->priv->has_frame = g_value_get_boolean (value);
-        break;
+    case PROP_HAS_FRAME:
+      combo_box->priv->has_frame = g_value_get_boolean (value);
+      break;
 
-      case PROP_FOCUS_ON_CLICK:
-	gtk_combo_box_set_focus_on_click (combo_box, 
-					  g_value_get_boolean (value));
-        break;
+    case PROP_FOCUS_ON_CLICK:
+      gtk_combo_box_set_focus_on_click (combo_box,
+                                        g_value_get_boolean (value));
+      break;
 
-      case PROP_TEAROFF_TITLE:
-	gtk_combo_box_set_title (combo_box, g_value_get_string (value));
-        break;
+    case PROP_TEAROFF_TITLE:
+      gtk_combo_box_set_title (combo_box, g_value_get_string (value));
+      break;
 
-      case PROP_POPUP_SHOWN:
-        if (g_value_get_boolean (value))
-          gtk_combo_box_popup (combo_box);
-        else
-          gtk_combo_box_popdown (combo_box);
-        break;
+    case PROP_POPUP_SHOWN:
+      if (g_value_get_boolean (value))
+        gtk_combo_box_popup (combo_box);
+      else
+        gtk_combo_box_popdown (combo_box);
+      break;
 
-      case PROP_BUTTON_SENSITIVITY:
-        gtk_combo_box_set_button_sensitivity (combo_box,
-                                              g_value_get_enum (value));
-        break;
+    case PROP_BUTTON_SENSITIVITY:
+      gtk_combo_box_set_button_sensitivity (combo_box,
+                                            g_value_get_enum (value));
+      break;
 
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-        break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -1020,6 +1027,7 @@ gtk_combo_box_get_property (GObject    *object,
                             GParamSpec *pspec)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
+  GtkComboBoxPrivate *priv = GTK_COMBO_BOX_GET_PRIVATE (combo_box);
 
   switch (prop_id)
     {
@@ -1065,6 +1073,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_BUTTON_SENSITIVITY:
         g_value_set_enum (value, combo_box->priv->button_sensitivity);
+        break;
+
+      case PROP_EDITING_CANCELED:
+        g_value_set_boolean (value, priv->editing_canceled);
         break;
 
       default:
@@ -2862,6 +2874,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   gtk_combo_box_sync_cells (combo_box, GTK_CELL_LAYOUT (priv->column));
 
   gtk_combo_box_update_title (combo_box);
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void
@@ -3215,6 +3228,11 @@ gtk_combo_box_update_sensitivity (GtkComboBox *combo_box)
     }
 
   gtk_widget_set_sensitive (combo_box->priv->button, sensitive);
+
+  /* In list-mode, we also need to update sensitivity of the event box */
+  if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view)
+      && combo_box->priv->cell_view)
+    gtk_widget_set_sensitive (combo_box->priv->box, sensitive);
 }
 
 static void
@@ -3755,6 +3773,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                     combo_box);
 
   gtk_widget_show (priv->tree_view);
+
+  gtk_combo_box_update_sensitivity (combo_box);
 }
 
 static void

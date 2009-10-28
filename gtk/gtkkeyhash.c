@@ -420,8 +420,8 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	  xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
 	  vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
-	  if ((entry->modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
-	      (entry->modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods))
+	  if ((entry->modifiers & ~consumed_modifiers & mask) == (state & ~consumed_modifiers & mask & ~vmods) ||
+	      (entry->modifiers & ~consumed_modifiers & mask) == (state & ~consumed_modifiers & mask & ~xmods))
 	    {
 	      gint i;
 
@@ -430,7 +430,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		  GTK_NOTE (KEYBINDINGS,
 			    g_message ("  found exact match, keyval = %u, modifiers = 0x%04x",
 				       entry->keyval, entry->modifiers));
-		  
+
 		  if (!have_exact)
 		    {
 		      g_slist_free (results);

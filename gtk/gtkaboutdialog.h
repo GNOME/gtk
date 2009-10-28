@@ -43,6 +43,12 @@ G_BEGIN_DECLS
 typedef struct _GtkAboutDialog        GtkAboutDialog;
 typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
 
+/**
+ * GtkAboutDialog:
+ *
+ * The <structname>GtkAboutDialog</structname> struct contains
+ * only private fields and should not be directly accessed.
+ */
 struct _GtkAboutDialog 
 {
   GtkDialog parent_instance;
@@ -118,6 +124,17 @@ G_CONST_RETURN gchar  *gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  
 void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  *about,
 								const gchar     *icon_name);
 
+/**
+ * GtkAboutDialogActivateLinkFunc:
+ * @about: the #GtkAboutDialog in which the link was activated
+ * @link_: the URL or email address to which the activated link points
+ * @data: user data that was passed when the function was registered
+ *  with gtk_about_dialog_set_email_hook() or
+ *  gtk_about_dialog_set_url_hook()
+ *
+ * The type of a function which is called when a URL or email
+ * link is activated.
+ */
 typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
 						 const gchar    *link_,
 						 gpointer        data);

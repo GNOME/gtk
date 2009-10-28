@@ -853,6 +853,72 @@ tree_store_test_move_before_single (void)
   g_object_unref (store);
 }
 
+
+/* iter invalidation */
+
+static void
+tree_store_test_iter_next_invalid (TreeStore     *fixture,
+                                   gconstpointer  user_data)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+
+  path = gtk_tree_path_new_from_indices (4, -1);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (fixture->store), &iter, path);
+  gtk_tree_path_free (path);
+
+  g_assert (gtk_tree_model_iter_next (GTK_TREE_MODEL (fixture->store),
+                                      &iter) == FALSE);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &iter) == FALSE);
+  g_assert (iter.stamp == 0);
+}
+
+static void
+tree_store_test_iter_children_invalid (TreeStore     *fixture,
+                                       gconstpointer  user_data)
+{
+  GtkTreeIter iter, child;
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (fixture->store), &iter);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &iter) == TRUE);
+
+  g_assert (gtk_tree_model_iter_children (GTK_TREE_MODEL (fixture->store),
+                                          &child, &iter) == FALSE);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &child) == FALSE);
+  g_assert (child.stamp == 0);
+}
+
+static void
+tree_store_test_iter_nth_child_invalid (TreeStore     *fixture,
+                                        gconstpointer  user_data)
+{
+  GtkTreeIter iter, child;
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (fixture->store), &iter);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &iter) == TRUE);
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (fixture->store),
+                                           &child, &iter, 0) == FALSE);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &child) == FALSE);
+  g_assert (child.stamp == 0);
+}
+
+static void
+tree_store_test_iter_parent_invalid (TreeStore     *fixture,
+                                     gconstpointer  user_data)
+{
+  GtkTreeIter iter, child;
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (fixture->store), &child);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &child) == TRUE);
+
+  g_assert (gtk_tree_model_iter_parent (GTK_TREE_MODEL (fixture->store),
+                                        &iter, &child) == FALSE);
+  g_assert (gtk_tree_store_iter_is_valid (fixture->store, &iter) == FALSE);
+  g_assert (iter.stamp == 0);
+}
+
+
 /* main */
 
 int
@@ -960,6 +1026,20 @@ main (int    argc,
 	      tree_store_teardown);
   g_test_add_func ("/tree-store/move-before-single",
 		   tree_store_test_move_before_single);
+
+  /* iter invalidation */
+  g_test_add ("/tree-store/iter-next-invalid", TreeStore, NULL,
+              tree_store_setup, tree_store_test_iter_next_invalid,
+              tree_store_teardown);
+  g_test_add ("/tree-store/iter-children-invalid", TreeStore, NULL,
+              tree_store_setup, tree_store_test_iter_children_invalid,
+              tree_store_teardown);
+  g_test_add ("/tree-store/iter-nth-child-invalid", TreeStore, NULL,
+              tree_store_setup, tree_store_test_iter_nth_child_invalid,
+              tree_store_teardown);
+  g_test_add ("/tree-store/iter-parent-invalid", TreeStore, NULL,
+              tree_store_setup, tree_store_test_iter_parent_invalid,
+              tree_store_teardown);
 
   return g_test_run ();
 }

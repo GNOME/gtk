@@ -665,7 +665,7 @@ pid_get_env (GPid         pid,
               ret = g_strdup (env + n + key_len + 1);
 
               /* skip invalid UTF-8 */
-              if (!g_utf8_validate (ret, -1, (const gchar *) &end))
+              if (!g_utf8_validate (ret, -1, (const gchar **) &end))
                 *end = '\0';
               break;
             }
@@ -707,7 +707,7 @@ pid_get_command_line (GPid pid)
     }
 
   /* skip invalid UTF-8 */
-  if (!g_utf8_validate (cmdline_contents, -1, (const gchar *) &end))
+  if (!g_utf8_validate (cmdline_contents, -1, (const gchar **) &end))
       *end = '\0';
 
  out:
@@ -861,6 +861,7 @@ get_pixbuf_for_window_with_pid (GtkMountOperationLookupContext *context,
 
 static const gchar *well_known_commands[] =
 {
+  /* translators: this string is a name for the 'less' command */
   "less", N_("Terminal Pager"),
   "top", N_("Top Command"),
   "bash", N_("Bourne Again Shell"),
@@ -951,6 +952,8 @@ _gtk_mount_operation_kill_process (GPid      pid,
 
   if (kill ((pid_t) pid, SIGTERM) != 0)
     {
+      int errsv = errno;
+
       /* TODO: On EPERM, we could use a setuid helper using polkit (very easy to implement
        *       via pkexec(1)) to allow the user to e.g. authenticate to gain the authorization
        *       to kill the process. But that's not how things currently work.
@@ -959,10 +962,10 @@ _gtk_mount_operation_kill_process (GPid      pid,
       ret = FALSE;
       g_set_error (error,
                    G_IO_ERROR,
-                   g_io_error_from_errno (errno),
+                   g_io_error_from_errno (errsv),
                    _("Cannot end process with pid %d: %s"),
                    pid,
-                   strerror (errno));
+                   g_strerror (errsv));
     }
 
   return ret;

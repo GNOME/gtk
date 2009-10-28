@@ -12,23 +12,6 @@ GtkToolItem
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
-<varlistentry>
-  <term>#GtkToolbar</term>
-  <listitem><para>The toolbar widget</para></listitem>
-</varlistentry>
-
-<varlistentry>
-  <term>#GtkToolButton</term>
-  <listitem><para>A subclass of #GtkToolItem that displays buttons on
-      the toolbar</para></listitem>
-</varlistentry>
-
-<varlistentry>
-  <term>#GtkSeparatorToolItem</term>
-  <listitem><para>A subclass of #GtkToolItem that separates groups of
-      items on a toolbar</para></listitem>
-</varlistentry>
-
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->

@@ -152,12 +152,35 @@ GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
 						   const GdkRectangle   *background_area,
 						   const GdkRectangle   *cell_area,
 						   GtkCellRendererState  flags);
+
 void             gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
 						   gint                  width,
 						   gint                  height);
 void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
 						   gint                 *width,
 						   gint                 *height);
+
+void             gtk_cell_renderer_set_alignment  (GtkCellRenderer      *cell,
+                                                   gfloat                xalign,
+                                                   gfloat                yalign);
+void             gtk_cell_renderer_get_alignment  (GtkCellRenderer      *cell,
+                                                   gfloat               *xalign,
+                                                   gfloat               *yalign);
+
+void             gtk_cell_renderer_set_padding    (GtkCellRenderer      *cell,
+                                                   gint                  xpad,
+                                                   gint                  ypad);
+void             gtk_cell_renderer_get_padding    (GtkCellRenderer      *cell,
+                                                   gint                 *xpad,
+                                                   gint                 *ypad);
+
+void             gtk_cell_renderer_set_visible    (GtkCellRenderer      *cell,
+                                                   gboolean              visible);
+gboolean         gtk_cell_renderer_get_visible    (GtkCellRenderer      *cell);
+
+void             gtk_cell_renderer_set_sensitive  (GtkCellRenderer      *cell,
+                                                   gboolean              sensitive);
+gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 
 /* For use by cell renderer implementations only */
 #ifndef GTK_DISABLE_DEPRECATED

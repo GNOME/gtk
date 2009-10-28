@@ -194,17 +194,13 @@ struct _GtkFileChooserDefault
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
-  GtkListStore *search_model;
-  GtkTreeModelFilter *search_model_filter;
-  GtkTreeModelSort *search_model_sort;
+  GtkFileSystemModel *search_model;
 
   /* OPERATION_MODE_RECENT */
   GtkWidget *recent_hbox;
   GtkRecentManager *recent_manager;
-  GtkListStore *recent_model;
+  GtkFileSystemModel *recent_model;
   guint load_recent_id;
-  GtkTreeModelFilter *recent_model_filter;
-  GtkTreeModelSort *recent_model_sort;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
@@ -232,14 +228,11 @@ struct _GtkFileChooserDefault
    */
   GtkTreeModel *shortcuts_combo_filter_model;
 
-  GtkTreeModelSort *sort_model;
-
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
-  GCancellable *show_and_select_files_cancellable;
   GCancellable *should_respond_get_info_cancellable;
   GCancellable *file_exists_get_info_cancellable;
   GCancellable *update_from_entry_cancellable;
@@ -308,67 +301,11 @@ struct _GtkFileChooserDefault
   guint has_search : 1;
   guint has_recent : 1;
   guint show_size_column : 1;
+  guint create_folders : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
 #endif
-};
-
-
-/* GtkFileSystemModel private */
-
-typedef struct _FileModelNode           FileModelNode;
-
-struct _GtkFileSystemModel
-{
-  GObject parent_instance;
-
-  GtkFileSystem  *file_system;
-  gchar          *attributes;
-  FileModelNode  *roots;
-  GtkFolder      *root_folder;
-  GFile          *root_file;
-
-  GtkFileSystemModelFilter filter_func;
-  gpointer filter_data;
-
-  GSList *idle_clears;
-  GSource *idle_clear_source;
-
-  gushort max_depth;
-
-  GSList *pending_cancellables;
-
-  guint show_hidden : 1;
-  guint show_folders : 1;
-  guint show_files : 1;
-  guint folders_only : 1;
-  guint has_editable : 1;
-};
-
-struct _FileModelNode
-{
-  GFile *file;
-  FileModelNode *next;
-
-  GFileInfo *info;
-  GtkFolder *folder;
-
-  FileModelNode *children;
-  FileModelNode *parent;
-  GtkFileSystemModel *model;
-
-  guint ref_count;
-  guint n_referenced_children;
-
-  gushort depth;
-
-  guint has_dummy : 1;
-  guint is_dummy : 1;
-  guint is_visible : 1;
-  guint loaded : 1;
-  guint idle_clear : 1;
-  guint load_pending : 1;
 };
 
 

@@ -242,7 +242,7 @@ pnm_read_next_value (PnmIOBuffer *inbuf, gint max_length, guint *value, GError *
 	    return PNM_SUSPEND;
 	
 	/* get the value */
-	result = strtol (buf, &endptr, 10);
+	result = strtol ((gchar *)buf, &endptr, 10);
 	if (*endptr != '\0' || result < 0 || result > G_MAXUINT) {
 		g_set_error_literal (error,
                                      GDK_PIXBUF_ERROR,

@@ -686,6 +686,10 @@ do_post_parse_initialization (int    *argc,
 
   gettext_initialization ();
 
+#ifdef SIGPIPE
+  signal (SIGPIPE, SIG_IGN);
+#endif
+
   if (g_fatal_warnings)
     {
       GLogLevelFlags fatal_mask;
@@ -845,9 +849,9 @@ gtk_get_option_group (gboolean open_default_display)
 gboolean
 gtk_init_with_args (int            *argc,
 		    char         ***argv,
-		    char           *parameter_string,  
+		    const char     *parameter_string,
 		    GOptionEntry   *entries,
-		    char           *translation_domain,
+		    const char     *translation_domain,
 		    GError        **error)
 {
   GOptionContext *context;
@@ -984,6 +988,15 @@ gtk_init_check (int	 *argc,
  * This function will terminate your program if it was unable to initialize 
  * the GUI for some reason. If you want your program to fall back to a 
  * textual interface you want to call gtk_init_check() instead.
+ * </para></note>
+ *
+ * <note><para>
+ * Since 2.18, GTK+ calls <literal>signal (SIGPIPE, SIG_IGN)</literal>
+ * during initialization, to ignore SIGPIPE signals, since these are
+ * almost never wanted in graphical applications. If you do need to
+ * handle SIGPIPE for some reason, reset the handler after gtk_init(),
+ * but notice that other libraries (e.g. libdbus or gvfs) might do
+ * similar things.
  * </para></note>
  **/
 void
@@ -1559,7 +1572,15 @@ gtk_main_do_event (GdkEvent *event)
 	  gdk_window_end_paint (event->any.window);
 	}
       else
-	gtk_widget_send_expose (event_widget, event);
+	{
+	  /* The app may paint with a previously allocated cairo_t,
+	     which will draw directly to the window. We can't catch cairo
+	     drap operatoins to automatically flush the window, thus we
+	     need to explicitly flush any outstanding moves or double
+	     buffering */
+	  gdk_window_flush (event->any.window);
+	  gtk_widget_send_expose (event_widget, event);
+	}
       break;
 
     case GDK_PROPERTY_NOTIFY:

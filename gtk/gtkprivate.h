@@ -103,6 +103,15 @@ gboolean _gtk_fnmatch (const char *pattern,
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
+/* Many keyboard shortcuts for Mac are the same as for X
+ * except they use Command key instead of Control (e.g. Cut,
+ * Copy, Paste). This symbol is for those simple cases. */
+#ifndef GDK_WINDOWING_QUARTZ
+#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_CONTROL_MASK
+#else
+#define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
+#endif
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */

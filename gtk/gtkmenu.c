@@ -2730,6 +2730,11 @@ get_arrows_visible_area (GtkMenu      *menu,
       lower->width = (border->width - 2 * border->x) / 2;
       lower->height = scroll_arrow_height;
       break;
+
+    default:
+       g_assert_not_reached();
+       upper->x = upper->y = upper->width = upper->height = 0;
+       lower->x = lower->y = lower->width = lower->height = 0;
     }
 
   *arrow_space = scroll_arrow_height - 2 * widget->style->ythickness;
@@ -4172,7 +4177,6 @@ gtk_menu_position (GtkMenu *menu)
   GtkRequisition requisition;
   GtkMenuPrivate *private;
   gint x, y;
-  gboolean initially_pushed_in;
   gint scroll_offset;
   gint menu_height;
   GdkScreen *screen;

@@ -29,6 +29,7 @@ gtk_cell_renderer_get_type
 gtk_cell_renderer_pixbuf_get_type
 gtk_cell_renderer_progress_get_type
 gtk_cell_renderer_spin_get_type
+gtk_cell_renderer_spinner_get_type
 gtk_cell_renderer_text_get_type
 gtk_cell_renderer_toggle_get_type
 gtk_cell_view_get_type
@@ -146,6 +147,7 @@ gtk_settings_get_type
 gtk_size_group_get_type
 gtk_socket_get_type
 gtk_spin_button_get_type
+gtk_spinner_get_type
 gtk_statusbar_get_type
 gtk_status_icon_get_type
 gtk_style_get_type

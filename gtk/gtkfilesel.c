@@ -1355,8 +1355,10 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 
   if (g_mkdir (sys_full_path, 0777) < 0)
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error creating folder '%s': %s"), 
-			     dirname, g_strerror (errno));
+			     dirname, g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
     }
 
@@ -1484,8 +1486,10 @@ gtk_file_selection_delete_file_response (GtkDialog *dialog,
 
   if (g_unlink (sys_full_path) < 0) 
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error deleting file '%s': %s"),
-			     fs->fileop_file, g_strerror (errno));
+			     fs->fileop_file, g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
     }
   
@@ -1602,9 +1606,11 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   
   if (g_rename (sys_old_filename, sys_new_filename) < 0) 
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error renaming file \"%s\" to \"%s\": %s"),
 			     sys_old_filename, sys_new_filename,
-			     g_strerror (errno));
+			     g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
       goto out2;
     }

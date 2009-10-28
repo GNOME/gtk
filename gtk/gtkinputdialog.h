@@ -34,9 +34,7 @@
  * distribution.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
+#ifndef GTK_DISABLE_DEPRECATED
 
 #ifndef __GTK_INPUTDIALOG_H__
 #define __GTK_INPUTDIALOG_H__
@@ -92,11 +90,11 @@ struct _GtkInputDialogClass
   void (*_gtk_reserved4) (void);
 };
 
-
 GType      gtk_input_dialog_get_type     (void) G_GNUC_CONST;
 GtkWidget* gtk_input_dialog_new          (void);
-
 
 G_END_DECLS
 
 #endif /* __GTK_INPUTDIALOG_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

@@ -22,6 +22,7 @@
 
 #include "gdk.h"
 #include "gdkprivate-quartz.h"
+#include "gdkscreen-quartz.h"
 
 GdkWindow *
 gdk_display_get_default_group (GdkDisplay *display)
@@ -42,8 +43,6 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
-  NSScreen *nsscreen;
-
   if (_gdk_display != NULL)
     return NULL;
 
@@ -51,14 +50,11 @@ gdk_display_open (const gchar *display_name)
   [NSApplication sharedApplication];
 
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
-  _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
-
-  nsscreen = [[NSScreen screens] objectAtIndex:0];
-  gdk_screen_set_resolution (_gdk_screen, 72.0 * [nsscreen userSpaceScaleFactor]);
 
   _gdk_visual_init ();
-  gdk_screen_set_default_colormap (_gdk_screen,
-                                   gdk_screen_get_system_colormap (_gdk_screen));
+
+  _gdk_screen = _gdk_screen_quartz_new ();
+
   _gdk_windowing_window_init ();
 
   _gdk_events_init ();

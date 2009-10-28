@@ -107,6 +107,7 @@ extern gint		 _gdk_error_code;
 extern gint		 _gdk_error_warnings;
 
 extern guint _gdk_debug_flags;
+extern gboolean _gdk_native_windows;
 
 #ifdef G_ENABLE_DEBUG
 
@@ -184,7 +185,6 @@ typedef struct
 
   gboolean activated;
   gboolean implicit_ungrab;
-  gboolean grab_one_pointer_release_event;
 } GdkPointerGrabInfo;
 
 typedef struct _GdkInputWindow GdkInputWindow;
@@ -260,6 +260,8 @@ struct _GdkWindowObject
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
+  guint viewable : 1; /* mapped and all parents mapped */
+  guint applied_shape : 1;
 
   guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
@@ -273,6 +275,8 @@ struct _GdkWindowObject
   cairo_surface_t *cairo_surface;
 };
 
+#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
@@ -385,6 +389,7 @@ void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
+gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 GdkRegion *expose_region);
@@ -455,7 +460,8 @@ void       _gdk_windowing_get_pointer        (GdkDisplay       *display,
 GdkWindow* _gdk_windowing_window_at_pointer  (GdkDisplay       *display,
 					      gint             *win_x,
 					      gint             *win_y,
-					      GdkModifierType  *mask);
+					      GdkModifierType  *mask,
+					      gboolean          get_toplevel);
 GdkGrabStatus _gdk_windowing_pointer_grab    (GdkWindow        *window,
 					      GdkWindow        *native,
 					      gboolean          owner_events,
@@ -603,7 +609,7 @@ void _gdk_display_enable_motion_hints     (GdkDisplay *display);
 
 
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
-					const GdkRegion *region);
+					GdkRegion       *region);
 
 void _gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
 					    int width,
@@ -626,6 +632,8 @@ GdkEvent * _gdk_make_event (GdkWindow    *window,
 			    GdkEventType  type,
 			    GdkEvent     *event_in_queue,
 			    gboolean      before_event);
+gboolean _gdk_window_event_parent_of (GdkWindow *parent,
+                                      GdkWindow *child);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      GdkWindow                  *src,

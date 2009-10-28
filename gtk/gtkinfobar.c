@@ -569,6 +569,11 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
           fg = &other_default_border_color;
           bg = &other_default_fill_color;
           break;
+
+        default:
+          g_assert_not_reached();
+          fg = NULL;
+          bg = NULL;
         }
     }
 

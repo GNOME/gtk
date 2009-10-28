@@ -99,9 +99,9 @@ gboolean gtk_init_check           (int    *argc,
   
 gboolean gtk_init_with_args       (int            *argc,
 				   char         ***argv,
-				   char           *parameter_string,
+				   const char     *parameter_string,
 				   GOptionEntry   *entries,
-				   char           *translation_domain,
+				   const char     *translation_domain,
 				   GError        **error);
 
 GOptionGroup *gtk_get_option_group (gboolean open_default_display);

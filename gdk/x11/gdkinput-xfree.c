@@ -237,7 +237,6 @@ _gdk_input_other_event (GdkEvent *event,
   GdkWindowObject *priv;
   GdkInputWindow *iw;
   GdkDevicePrivate *gdkdev;
-  gint return_val;
   GdkEventType event_type;
   int x, y;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (event_window);
@@ -256,40 +255,43 @@ _gdk_input_other_event (GdkEvent *event,
   if (event_type == GDK_NOTHING)
     return FALSE;
 
-  window = _gdk_window_get_input_window_for_event (event_window,
-						   event_type,
-						   x, y,
-						   xevent->xany.serial);
   /* If we're not getting any event window its likely because we're outside the
      window and there is no grab. We should still report according to the
      implicit grab though. */
   iw = ((GdkWindowObject *)event_window)->input_window;
-  if (window == NULL)
-    window = iw->button_down_window;
 
+  if (iw->button_down_window)
+    window = iw->button_down_window;
+  else
+    window = _gdk_window_get_input_window_for_event (event_window,
+                                                     event_type,
+                                                     x, y,
+                                                     xevent->xany.serial);
   priv = (GdkWindowObject *)window;
   if (window == NULL)
     return FALSE;
 
   if (gdkdev->info.mode == GDK_MODE_DISABLED ||
+      priv->extension_events == 0 ||
       !(gdkdev->info.has_cursor || (priv->extension_events & GDK_ALL_DEVICES_MASK)))
     return FALSE;
 
   if (!display->ignore_core_events && priv->extension_events != 0)
     gdk_input_check_proximity (GDK_WINDOW_DISPLAY (window));
 
-  return_val = _gdk_input_common_other_event (event, xevent, window, gdkdev);
+  if (!_gdk_input_common_other_event (event, xevent, window, gdkdev))
+    return FALSE;
 
-  if (return_val && event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS)
     iw->button_down_window = window;
-  if (return_val && event->type == GDK_BUTTON_RELEASE)
+  if (event->type == GDK_BUTTON_RELEASE && !gdkdev->button_count)
     iw->button_down_window = NULL;
 
-  if (return_val && event->type == GDK_PROXIMITY_OUT &&
+  if (event->type == GDK_PROXIMITY_OUT &&
       display->ignore_core_events)
     gdk_input_check_proximity (GDK_WINDOW_DISPLAY (window));
 
-  return return_val;
+  return _gdk_input_common_event_selected(event, window, gdkdev);
 }
 
 gint
@@ -367,10 +369,11 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 	{
 	  gdkdev = (GdkDevicePrivate *)tmp_list->data;
 	  if (!GDK_IS_CORE (gdkdev) && gdkdev->xdevice &&
-	      ((gdkdev->button_state != 0) || need_ungrab))
+	      ((gdkdev->button_count != 0) || need_ungrab))
 	    {
 	      XUngrabDevice (display_impl->xdisplay, gdkdev->xdevice, time);
-	      gdkdev->button_state = 0;
+	      memset(gdkdev->button_state, 0, sizeof (gdkdev->button_state));
+	      gdkdev->button_count = 0;
 	    }
 
 	  tmp_list = tmp_list->next;

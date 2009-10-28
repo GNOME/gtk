@@ -370,6 +370,10 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * the default handler for the #GtkStatusIcon::query-tooltip signal
    * will take care of displaying the tooltip.
    *
+   * Note that some platforms have limitations on the length of tooltips
+   * that they allow on status icons, e.g. Windows only shows the first
+   * 64 characters.
+   *
    * Since: 2.16
    */
   g_object_class_install_property (gobject_class,
@@ -698,7 +702,7 @@ wndproc (HWND   hwnd,
 
 	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
 	    {
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
 	      priv->nid.hWnd = NULL;
 	      continue;
 	    }
@@ -898,7 +902,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 
   if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
     {
-      g_warning ("%s:%d:Shell_NotifyIcon(NIM_ADD) failed", __FILE__, __LINE__-2);
+      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
       priv->nid.hWnd = NULL;
     }
 
@@ -1348,7 +1352,7 @@ find_icon_size (GtkWidget *widget,
   dist = G_MAXINT;
   size = GTK_ICON_SIZE_MENU;
 
-  for (s = GTK_ICON_SIZE_MENU; s < GTK_ICON_SIZE_DIALOG; s++)
+  for (s = GTK_ICON_SIZE_MENU; s <= GTK_ICON_SIZE_DIALOG; s++)
     {
       if (gtk_icon_size_lookup_for_settings (settings, s, &w, &h) &&
 	  w <= pixel_size && h <= pixel_size)
@@ -1387,7 +1391,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
       priv->nid.uFlags |= NIF_ICON;
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
       if (prev_hicon)
 	DestroyIcon (prev_hicon);
 #endif
@@ -1436,7 +1440,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    priv->nid.uFlags |= NIF_ICON;
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-		  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+		  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	    if (prev_hicon)
 	      DestroyIcon (prev_hicon);
 #endif
@@ -1457,7 +1461,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	    priv->nid.uFlags &= ~NIF_ICON;
 	    if (priv->nid.hWnd != NULL && priv->visible)
 	      if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-		g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+		g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
       [priv->status_item setImage:NULL];
@@ -1487,7 +1491,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	  if (prev_hicon)
 	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
@@ -1531,7 +1535,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	  priv->nid.uFlags |= NIF_ICON;
 	  if (priv->nid.hWnd != NULL && priv->visible)
 	    if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	      g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 	  if (prev_hicon)
 	    DestroyIcon (prev_hicon);
 	  g_object_unref (pixbuf);
@@ -1578,7 +1582,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
         priv->nid.uFlags |= NIF_ICON;
         if (priv->nid.hWnd != NULL && priv->visible)
           if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-            g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+            g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
           if (prev_hicon)
             DestroyIcon (prev_hicon);
           g_object_unref (pixbuf);
@@ -1611,7 +1615,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
       priv->nid.uFlags &= ~NIF_ICON;
       if (priv->nid.hWnd != NULL && priv->visible)
 	if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-	  g_warning ("%s:%d:Shell_NotifyIcon(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+	  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_MODIFY) failed");
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
         {
@@ -2733,7 +2737,7 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
     }
   if (priv->nid.hWnd != NULL && priv->visible)
     if (!Shell_NotifyIconW (NIM_MODIFY, &priv->nid))
-      g_warning ("%s:%d:Shell_NotifyIconW(NIM_MODIFY) failed", __FILE__, __LINE__-1);
+      g_warning (G_STRLOC ": Shell_NotifyIconW(NIM_MODIFY) failed");
 
   g_free (priv->tooltip_text);
   priv->tooltip_text = g_strdup (text);

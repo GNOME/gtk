@@ -57,6 +57,67 @@
 
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkaboutdialog
+ * @Short_description: Display information about an application
+ * @Title: GtkAboutDialog
+ * @See_also:#GTK_STOCK_ABOUT
+ *
+ * The #GtkAboutDialog offers a simple way to display information about
+ * a program like its logo, name, copyright, website and license. It is
+ * also possible to give credits to the authors, documenters, translators
+ * and artists who have worked on the program. An about dialog is typically
+ * opened when the user selects the <literal>About</literal> option from
+ * the <literal>Help</literal> menu. All parts of the dialog are optional.
+ *
+ * About dialog often contain links and email addresses. #GtkAboutDialog
+ * supports this by offering global hooks, which are called when the user
+ * clicks on a link or email address, see gtk_about_dialog_set_email_hook()
+ * and gtk_about_dialog_set_url_hook(). Email addresses in the
+ * authors, documenters and artists properties are recognized by looking for
+ * <literal>&lt;user@<!-- -->host&gt;</literal>, URLs are
+ * recognized by looking for <literal>http://url</literal>, with
+ * <literal>url</literal> extending to the next space, tab or line break.
+ *
+ * <para id="gtk-about-dialog-hook-setup">
+ * Since 2.18 #GtkAboutDialog provides default website and email hooks that
+ * use gtk_show_uri().
+ * </para>
+ *
+ * If you want provide your own hooks overriding the default ones, it is
+ * important to do so before setting the website and email URL properties,
+ * like this:
+ * <informalexample><programlisting>
+ * gtk_about_dialog_set_url_hook (GTK_ABOUT_DIALOG (dialog), launch_url, NULL, NULL);
+ * gtk_about_dialog_set_website (GTK_ABOUT_DIALOG (dialog), app_url);
+ * </programlisting></informalexample>
+ * To disable the default hooks, you can pass %NULL as the hook func. Then,
+ * the #GtkAboutDialog widget will not display the website or the
+ * email addresses as clickable.
+ *
+ * To make constructing a #GtkAboutDialog as convenient as possible, you can
+ * use the function gtk_show_about_dialog() which constructs and shows a dialog
+ * and keeps it around so that it can be shown again.
+ *
+ * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
+ * on the dialog window (where &percnt;s is replaced by the name of the
+ * application, but in order to ensure proper translation of the title,
+ * applications should set the title property explicitly when constructing
+ * a #GtkAboutDialog, as shown in the following example:
+ * <informalexample><programlisting>
+ * gtk_show_about_dialog (NULL,
+ *                        "program-name", "ExampleCode",
+ *                        "logo", example_logo,
+ *                        "title" _("About ExampleCode"),
+ *                        NULL);
+ * </programlisting></informalexample>
+ * Note that prior to GTK+ 2.12, the #GtkAboutDialog:program-name property
+ * was called "name". This was changed to avoid the conflict with the
+ * #GtkWidget:name property.
+ */
+
+
 static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 
@@ -131,8 +192,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
 static void                 gtk_about_dialog_show           (GtkWidget          *widge);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
-static void                 activate_url                    (GtkWidget          *widget,
-							     gpointer            data);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
 							     GtkTextView        *text_view,
 							     GtkTextIter        *iter);
@@ -1692,30 +1751,6 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   g_object_notify (G_OBJECT (about), "logo-icon-name");
 
   g_object_thaw_notify (G_OBJECT (about));
-}
-
-static void
-activate_url (GtkWidget *widget, 
-	      gpointer   data)
-{
-  GtkAboutDialog *about = GTK_ABOUT_DIALOG (data);
-  const gchar *url = gtk_link_button_get_uri (GTK_LINK_BUTTON (widget));
-  GtkAboutDialogActivateLinkFunc url_hook;
-  gpointer url_hook_data;
-
-  if (activate_url_hook_set)
-    {
-      url_hook = activate_url_hook;
-      url_hook_data = activate_url_hook_data;
-    }
-  else
-    {
-      url_hook = default_url_hook;
-      url_hook_data = NULL;
-    }
-
-  if (url_hook)
-    url_hook (about, url, url_hook_data);
 }
 
 static void

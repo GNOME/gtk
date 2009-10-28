@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
+#include "gtkprivate.h"
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
@@ -61,7 +62,7 @@ struct _GtkComposeTableCompact
 static const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
-  23,
+  24,
   6
 };
 
@@ -595,7 +596,7 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
  * with Ctrl-Shift-U, then release the modifiers before typing any
  * digits, and enter the digits without modifiers.
  */
-#define HEX_MOD_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK)
+#define HEX_MOD_MASK (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)
 
 static gboolean
 check_hex (GtkIMContextSimple *context_simple,

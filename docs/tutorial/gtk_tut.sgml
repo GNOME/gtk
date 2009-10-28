@@ -4114,7 +4114,7 @@ static const char * xpm_data[] = {
 
 When we're done using a pixmap and not likely to reuse it again soon,
 it is a good idea to release the resource using
-gdk_pixmap_unref(). Pixmaps should be considered a precious resource,
+g_object_unref(). Pixmaps should be considered a precious resource,
 because they take up memory in the end-user's X server process. Even
 though the X client you write may run on a powerful "server" computer,
 the user may be running the X server on a small personal computer.
@@ -9564,7 +9564,7 @@ which owns it will be collapsed. So, if you want it to stick around,
 do something like the following:
 
 <tscreen><verb>
-gtk_widget_ref (tree);
+g_object_ref (tree);
 owner = GTK_TREE(tree)->tree_owner;
 gtk_container_remove (GTK_CONTAINER(tree), item);
 if (tree->parent == NULL){
@@ -9572,7 +9572,7 @@ if (tree->parent == NULL){
   gtk_tree_item_set_subtree (GTK_TREE_ITEM(owner), tree);
 }
 else
-  gtk_widget_unref (tree);
+  g_object_unref (tree);
 </verb></tscreen>
 
 Finally, drag-n-drop <em>does</em> work with TreeItems. You just
@@ -14476,7 +14476,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -16978,7 +16978,7 @@ gtk_dial_expose (GtkWidget      *widget,
                     points, 5,
                     FALSE);
 
-  gtk_style_unref(blankstyle);
+  g_object_unref(blankstyle);
 
 
   /* Draw ticks */
@@ -17406,7 +17406,7 @@ static gint configure_event( GtkWidget         *widget,
                              GdkEventConfigure *event )
 {
   if (pixmap)
-    gdk_pixmap_unref(pixmap);
+    g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
@@ -17592,7 +17592,7 @@ static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
-     gdk_pixmap_unref(pixmap);
+     g_object_unref(pixmap);
 
   pixmap = gdk_pixmap_new(widget->window,
                           widget->allocation.width,

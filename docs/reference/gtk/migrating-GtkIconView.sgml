@@ -130,7 +130,7 @@
     <structname>GtkIconView</structname>:
     <itemizedlist> 
      <listitem><para>
-       <typename>GnomeIconListMode</typename> is replaced by the 
+       <type>GnomeIconListMode</type> is replaced by the 
        <link linkend="GtkIconView--orientation">orientation</link> 
        property of <structname>GtkIconView</structname>
      </para></listitem>

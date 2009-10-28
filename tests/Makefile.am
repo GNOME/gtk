@@ -102,8 +102,7 @@ autotestkeywords_SOURCES = autotestkeywords.cc
 autotestkeywords_CPPFLAGS = -I$(srcdir)/dummy-headers
 
 if HAVE_OBJC
-autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1
-autotestkeywords_CXXFLAGS = -x objective-c++
+autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
 endif
 
 endif

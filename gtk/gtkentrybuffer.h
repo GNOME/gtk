@@ -99,16 +99,16 @@ gsize                     gtk_entry_buffer_get_bytes              (GtkEntryBuffe
 
 guint                     gtk_entry_buffer_get_length             (GtkEntryBuffer  *buffer);
 
-const gchar*              gtk_entry_buffer_get_text               (GtkEntryBuffer  *buffer);
+G_CONST_RETURN gchar*     gtk_entry_buffer_get_text               (GtkEntryBuffer  *buffer);
 
 void                      gtk_entry_buffer_set_text               (GtkEntryBuffer  *buffer,
                                                                    const gchar     *chars,
                                                                    gint             n_chars);
 
 void                      gtk_entry_buffer_set_max_length         (GtkEntryBuffer  *buffer,
-                                                                   guint            max_length);
+                                                                   gint             max_length);
 
-guint                     gtk_entry_buffer_get_max_length         (GtkEntryBuffer  *buffer);
+gint                      gtk_entry_buffer_get_max_length         (GtkEntryBuffer  *buffer);
 
 guint                     gtk_entry_buffer_insert_text            (GtkEntryBuffer  *buffer,
                                                                    guint            position,

@@ -510,7 +510,7 @@ gdk_display_real_get_window_at_pointer (GdkDisplay *display,
   GdkWindow *window;
   gint x, y;
 
-  window = _gdk_windowing_window_at_pointer (display, &x, &y, NULL);
+  window = _gdk_windowing_window_at_pointer (display, &x, &y, NULL, FALSE);
 
   /* This might need corrections, as the native window returned
      may contain client side children */
@@ -836,6 +836,10 @@ synthesize_crossing_events (GdkDisplay *display,
   GdkWindow *src_toplevel, *dest_toplevel;
   GdkModifierType state;
   int x, y;
+
+  /* We use the native crossing events if all native */
+  if (_gdk_native_windows)
+    return;
   
   if (src_window)
     src_toplevel = gdk_window_get_toplevel (src_window);
@@ -909,34 +913,20 @@ get_current_toplevel (GdkDisplay *display,
 		      GdkModifierType *state_out)
 {
   GdkWindow *pointer_window;
-  GdkWindowObject *w;
   int x, y;
   GdkModifierType state;
 
-  pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state);
+  pointer_window = _gdk_windowing_window_at_pointer (display,  &x, &y, &state, TRUE);
   if (pointer_window != NULL &&
       (GDK_WINDOW_DESTROYED (pointer_window) ||
        GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_ROOT ||
        GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
     pointer_window = NULL;
 
-  w = (GdkWindowObject *)pointer_window;
-  if (w)
-    {
-      /* Convert to toplevel */
-      while (w->parent != NULL &&
-	     w->parent->window_type != GDK_WINDOW_ROOT)
-	{
-	  x += w->x;
-	  y += w->y;
-	  w = w->parent;
-	}
-    }
-
   *x_out = x;
   *y_out = y;
   *state_out = state;
-  return (GdkWindow *)w;
+  return pointer_window;
 }
 
 static void
@@ -1033,11 +1023,6 @@ switch_to_pointer_grab (GdkDisplay *display,
 	  
 	  /* We're now ungrabbed, update the window_under_pointer */
 	  _gdk_display_set_window_under_pointer (display, pointer_window);
-
-	  if (last_grab->implicit_ungrab)
-	    generate_grab_broken_event (last_grab->window,
-					FALSE, TRUE,
-					NULL);
 	}
     }
   
@@ -1061,9 +1046,7 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
       if (current_grab->serial_start > current_serial)
 	return; /* Hasn't started yet */
       
-      if (current_grab->serial_end > current_serial ||
-	  (current_grab->serial_end == current_serial &&
-	   current_grab->grab_one_pointer_release_event))
+      if (current_grab->serial_end > current_serial)
 	{
 	  /* This one hasn't ended yet.
 	     its the currently active one or scheduled to be active */
@@ -1085,12 +1068,11 @@ _gdk_display_pointer_grab_update (GdkDisplay *display,
 	    next_grab = NULL; /* Actually its not yet active */
 	}
 
-      if (next_grab == NULL ||
-	  current_grab->window != next_grab->window)
+      if ((next_grab == NULL && current_grab->implicit_ungrab) ||
+	  (next_grab != NULL && current_grab->window != next_grab->window))
 	generate_grab_broken_event (GDK_WINDOW (current_grab->window),
 				    FALSE, current_grab->implicit,
 				    next_grab? next_grab->window : NULL);
-
 
       /* Remove old grab */
       display->pointer_grabs =
@@ -1138,7 +1120,9 @@ _gdk_display_has_pointer_grab (GdkDisplay *display,
   return NULL;
 }
 
-/* Returns true if last grab was ended */
+/* Returns true if last grab was ended
+ * If if_child is non-NULL, end the grab only if the grabbed
+ * window is the same as if_child or a descendant of it */
 gboolean
 _gdk_display_end_pointer_grab (GdkDisplay *display,
 			       gulong serial,
@@ -1156,7 +1140,7 @@ _gdk_display_end_pointer_grab (GdkDisplay *display,
   grab = l->data;
   if (grab &&
       (if_child == NULL ||
-       _gdk_window_event_parent_of (grab->window, if_child)))
+       _gdk_window_event_parent_of (if_child, grab->window)))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;

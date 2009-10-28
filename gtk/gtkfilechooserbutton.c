@@ -810,6 +810,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_EXTRA_WIDGET:
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
+    case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
       break;
 
@@ -2301,6 +2302,12 @@ update_label_and_image (GtkFileChooserButton *button)
   label_text = NULL;
   pixbuf = NULL;
 
+  if (priv->update_button_cancellable)
+    {
+      g_cancellable_cancel (priv->update_button_cancellable);
+      priv->update_button_cancellable = NULL;
+    }
+
   if (files && files->data)
     {
       GFile *file;
@@ -2330,12 +2337,6 @@ update_label_and_image (GtkFileChooserButton *button)
 
 	  if (label_text)
 	    goto out;
-	}
-
-      if (priv->update_button_cancellable)
-	{
-	  g_cancellable_cancel (priv->update_button_cancellable);
-	  priv->update_button_cancellable = NULL;
 	}
 
       if (g_file_is_native (file))

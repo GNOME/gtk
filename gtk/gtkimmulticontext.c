@@ -220,23 +220,28 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
     g_signal_emit_by_name (multicontext, "preedit-changed");
 }
 
+static const gchar *
+get_effective_context_id (GtkIMMulticontext *multicontext)
+{
+  if (multicontext->priv->context_id)
+    return multicontext->priv->context_id;
+
+  if (!global_context_id)
+    global_context_id = _gtk_im_module_get_default_context_id (multicontext->priv->client_window);
+
+  return global_context_id;
+}
+
 static GtkIMContext *
 gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   if (!multicontext->slave)
     {
       GtkIMContext *slave;
-      
+
       g_free (multicontext->context_id);
-       
-      if (multicontext->priv->context_id)
-        multicontext->context_id = g_strdup (multicontext->priv->context_id);
-      else 
-        {
-          if (!global_context_id)
-            global_context_id = _gtk_im_module_get_default_context_id (multicontext->priv->client_window);
-          multicontext->context_id = g_strdup (global_context_id);
-        }
+
+      multicontext->context_id = g_strdup (get_effective_context_id (multicontext));
       slave = _gtk_im_module_create (multicontext->context_id);
       gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
       g_object_unref (slave);
@@ -264,28 +269,29 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 
   multicontext->priv->client_window = window;
 
-  gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
-
-  if (window == NULL) 
-    return;
-   
-  screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
-  if (screen)
-    settings = gtk_settings_get_for_screen (screen);
-  else
-    settings = gtk_settings_get_default ();
-
-  connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
-                                                  "gtk-im-module-connected"));
-  if (!connected) 
+  if (window)
     {
-      g_signal_connect (settings, "notify::gtk-im-module",
-                        G_CALLBACK (im_module_setting_changed), NULL);
-      g_object_set_data (G_OBJECT (settings), "gtk-im-module-connected",
-                         GINT_TO_POINTER (TRUE));
+      screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      settings = gtk_settings_get_for_screen (screen);
 
-      global_context_id = NULL;  
+      connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
+                                                      "gtk-im-module-connected"));
+      if (!connected)
+        {
+          g_signal_connect (settings, "notify::gtk-im-module",
+                            G_CALLBACK (im_module_setting_changed), NULL);
+          g_object_set_data (G_OBJECT (settings), "gtk-im-module-connected",
+                             GINT_TO_POINTER (TRUE));
+
+          global_context_id = NULL;
+        }
     }
+
+  if (g_strcmp0 (multicontext->context_id, get_effective_context_id (multicontext)) != 0)
+    gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
+
+  if (multicontext->slave)
+    gtk_im_context_set_client_window (multicontext->slave, window);
 }
 
 static void
@@ -327,16 +333,7 @@ gtk_im_multicontext_focus_in (GtkIMContext   *context)
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave;
 
-  /* If the global context type is different from the context we were
-   * using before, get rid of the old slave and create a new one
-   * for the new global context type.
-   */
-  if (multicontext->context_id == NULL || 
-      (multicontext->priv->context_id != NULL &&
-       strcmp (multicontext->priv->context_id, multicontext->context_id) != 0) ||
-      (multicontext->priv->context_id == NULL &&
-       (global_context_id == NULL ||
-        strcmp (global_context_id, multicontext->context_id) != 0)))
+  if (g_strcmp0 (multicontext->context_id, get_effective_context_id (multicontext)) != 0)
     gtk_im_multicontext_set_slave (multicontext, NULL, FALSE);
 
   slave = gtk_im_multicontext_get_slave (multicontext);

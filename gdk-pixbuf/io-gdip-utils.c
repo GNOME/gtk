@@ -31,6 +31,18 @@
 
 #define LOAD_BUFFER_SIZE 65536
 
+struct _GdipContext {
+  GdkPixbufModuleUpdatedFunc  updated_func;
+  GdkPixbufModulePreparedFunc prepared_func;
+  GdkPixbufModuleSizeFunc     size_func;
+
+  gpointer                    user_data;
+  GByteArray                 *buffer;
+  IStream                    *stream;
+  HGLOBAL                     hg;
+};
+typedef struct _GdipContext GdipContext;
+
 static GdiplusStartupFunc GdiplusStartup;
 static GdipCreateBitmapFromStreamFunc GdipCreateBitmapFromStream;
 static GdipBitmapGetPixelFunc GdipBitmapGetPixel;
@@ -339,21 +351,20 @@ gdip_pixbuf_to_bitmap (GdkPixbuf *pixbuf)
 }
 
 static GpBitmap *
-gdip_buffer_to_bitmap (const gchar *buffer, size_t size, GError **error)
+gdip_buffer_to_bitmap (GdipContext *context, GError **error)
 {
   HRESULT hr;
   HGLOBAL hg = NULL;
   GpBitmap *bitmap = NULL;
   IStream *stream = NULL;
   GpStatus status;
-  guint64 size64 = size;
+  guint64 size64 = context->buffer->len;
 
-  hg = gdip_buffer_to_hglobal (buffer, size, error);
+  hg = gdip_buffer_to_hglobal (context->buffer->data, context->buffer->len, error);
 
   if (!hg)
     return NULL;
 
-  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
   hr = CreateStreamOnHGlobal (hg, FALSE, (LPSTREAM *)&stream);
 
   if (!SUCCEEDED (hr)) {
@@ -361,29 +372,35 @@ gdip_buffer_to_bitmap (const gchar *buffer, size_t size, GError **error)
     GlobalFree (hg);
     return NULL;
   }
-  
+
+  IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
+
   status = GdipCreateBitmapFromStream (stream, &bitmap);
 
-  if (Ok != status)
+  if (Ok != status) {
     gdip_set_error_from_gpstatus (error, GDK_PIXBUF_ERROR_FAILED, status);
+    IStream_Release (stream);
+    GlobalFree (hg);
+    return NULL;
+  }
 
-  IStream_Release (stream);
-  GlobalFree (hg);
+  context->stream = stream;
+  context->hg = hg;
 
   return bitmap;
 }
 
 static GpImage *
-gdip_buffer_to_image (const gchar *buffer, size_t size, GError **error)
+gdip_buffer_to_image (GdipContext *context, GError **error)
 {
   HRESULT hr;
   HGLOBAL hg = NULL;
   GpImage *image = NULL;
   IStream *stream = NULL;
   GpStatus status;
-  guint64 size64 = size;
+  guint64 size64 = context->buffer->len;
 
-  hg = gdip_buffer_to_hglobal (buffer, size, error);
+  hg = gdip_buffer_to_hglobal (context->buffer->data, context->buffer->len, error);
 
   if (!hg)
     return NULL;
@@ -399,11 +416,15 @@ gdip_buffer_to_image (const gchar *buffer, size_t size, GError **error)
   IStream_SetSize (stream, *(ULARGE_INTEGER *)&size64);
   status = GdipLoadImageFromStream (stream, &image);
 
-  if (Ok != status)
+  if (Ok != status) {
     gdip_set_error_from_gpstatus (error, GDK_PIXBUF_ERROR_FAILED, status);
+    IStream_Release (stream);
+    GlobalFree (hg);
+    return NULL;
+  }
 
-  IStream_Release (stream);
-  GlobalFree (hg);
+  context->stream = stream;
+  context->hg = hg;
 
   return image;
 }
@@ -590,24 +611,14 @@ gdip_bitmap_get_n_loops (GpBitmap *bitmap, guint *loops)
   return success;
 }
 
-/*************************************************************************/
-/*************************************************************************/
-
-struct _GdipContext {
-  GdkPixbufModuleUpdatedFunc  updated_func;
-  GdkPixbufModulePreparedFunc prepared_func;
-  GdkPixbufModuleSizeFunc     size_func;
-
-  gpointer                    user_data;
-
-  GByteArray                 *buffer;
-};
-typedef struct _GdipContext GdipContext;
-
 static void
 destroy_gdipcontext (GdipContext *context)
 {
   if (context != NULL) {
+    if (context->stream != NULL) {
+      IStream_Release(context->stream);
+      GlobalFree (context->hg);
+    }
     g_byte_array_free (context->buffer, TRUE);
     g_free (context);
   }
@@ -806,9 +817,8 @@ gdk_pixbuf__gdip_image_stop_load (gpointer data, GError **error)
 {
   GdipContext *context = (GdipContext *)data;
   GpBitmap    *bitmap = NULL;
-  GByteArray *image_buffer = context->buffer;
 
-  bitmap = gdip_buffer_to_bitmap ((gchar *)image_buffer->data, image_buffer->len, error);
+  bitmap = gdip_buffer_to_bitmap (context, error);
 
   if (!bitmap) {
     destroy_gdipcontext (context);
@@ -823,7 +833,6 @@ static gboolean
 gdk_pixbuf__gdip_image_stop_vector_load (gpointer data, GError **error)
 {
   GdipContext *context = (GdipContext *)data;
-  GByteArray *image_buffer = context->buffer;
 
   GpImage *metafile;
   GpGraphics *graphics;
@@ -832,7 +841,7 @@ gdk_pixbuf__gdip_image_stop_vector_load (gpointer data, GError **error)
   float metafile_xres, metafile_yres;
   guint width, height;
 
-  metafile = gdip_buffer_to_image ((gchar *)image_buffer->data, image_buffer->len, error);
+  metafile = gdip_buffer_to_image (context, error);
   if (!metafile) {
     destroy_gdipcontext (context);
     g_set_error_literal (error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Couldn't load metafile"));

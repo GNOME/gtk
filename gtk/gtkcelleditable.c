@@ -21,10 +21,11 @@
 #include "config.h"
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-static void gtk_cell_editable_base_init (gpointer g_class);
+static void gtk_cell_editable_base_init (GtkCellEditableIface *iface);
 
 GType
 gtk_cell_editable_get_type (void)
@@ -35,12 +36,12 @@ gtk_cell_editable_get_type (void)
     {
       const GTypeInfo cell_editable_info =
       {
-	sizeof (GtkCellEditableIface), /* class_size */
-	gtk_cell_editable_base_init,   /* base_init */
-	NULL,		/* base_finalize */
+	sizeof (GtkCellEditableIface),                 /* class_size */
+	(GBaseInitFunc) gtk_cell_editable_base_init,   /* base_init */
+	NULL,		                               /* base_finalize */
 	NULL,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
+	NULL,		                               /* class_finalize */
+	NULL,		                               /* class_data */
 	0,
 	0,
 	NULL
@@ -57,12 +58,26 @@ gtk_cell_editable_get_type (void)
 }
 
 static void
-gtk_cell_editable_base_init (gpointer g_class)
+gtk_cell_editable_base_init (GtkCellEditableIface *iface)
 {
   static gboolean initialized = FALSE;
 
   if (! initialized)
     {
+      /**
+       * GtkCellEditable:editing-canceled:
+       *
+       * Indicates whether editing on the cell has been canceled.
+       *
+       * Since: 2.20
+       **/
+      g_object_interface_install_property (iface,
+                                           g_param_spec_boolean ("editing-canceled",
+                                                                 P_("Editing Canceled"),
+                                                                 P_("Indicates that editing has been canceled"),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READABLE));
+
       /**
        * GtkCellEditable::editing-done:
        * @cell_editable: the object on which the signal was emitted

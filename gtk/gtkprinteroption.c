@@ -63,6 +63,7 @@ static void
 gtk_printer_option_init (GtkPrinterOption *option)
 {
   option->value = g_strdup ("");
+  option->activates_default = FALSE;
 }
 
 static void
@@ -213,6 +214,23 @@ gtk_printer_option_has_choice (GtkPrinterOption     *option,
     }
   
   return FALSE;
+}
+
+void
+gtk_printer_option_set_activates_default (GtkPrinterOption *option,
+					  gboolean          activates)
+{
+  g_return_if_fail (GTK_IS_PRINTER_OPTION (option));
+
+  option->activates_default = activates;
+}
+
+gboolean
+gtk_printer_option_get_activates_default (GtkPrinterOption *option)
+{
+  g_return_val_if_fail (GTK_IS_PRINTER_OPTION (option), FALSE);
+
+  return option->activates_default;
 }
 
 

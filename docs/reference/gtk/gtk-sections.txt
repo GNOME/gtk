@@ -1483,6 +1483,8 @@ gtk_file_chooser_set_show_hidden
 gtk_file_chooser_get_show_hidden
 gtk_file_chooser_set_do_overwrite_confirmation
 gtk_file_chooser_get_do_overwrite_confirmation
+gtk_file_chooser_set_create_folders
+gtk_file_chooser_get_create_folders
 gtk_file_chooser_set_current_name
 gtk_file_chooser_get_filename
 gtk_file_chooser_set_filename
@@ -1970,6 +1972,8 @@ gtk_icon_view_set_column_spacing
 gtk_icon_view_get_column_spacing
 gtk_icon_view_set_margin
 gtk_icon_view_get_margin
+gtk_icon_view_set_item_padding
+gtk_icon_view_get_item_padding
 gtk_icon_view_select_path
 gtk_icon_view_unselect_path
 gtk_icon_view_path_is_selected
@@ -3070,6 +3074,8 @@ gtk_range_set_lower_stepper_sensitivity
 gtk_range_get_lower_stepper_sensitivity
 gtk_range_set_upper_stepper_sensitivity
 gtk_range_get_upper_stepper_sensitivity
+gtk_range_get_flippable
+gtk_range_set_flippable
 <SUBSECTION Standard>
 GTK_RANGE
 GTK_IS_RANGE
@@ -3576,6 +3582,24 @@ GTK_IS_SPIN_BUTTON_CLASS
 GTK_SPIN_BUTTON_GET_CLASS
 <SUBSECTION Private>
 gtk_spin_button_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkspinner</FILE>
+<TITLE>GtkSpinner</TITLE>
+GtkSpinner
+gtk_spinner_new
+gtk_spinner_start
+gtk_spinner_stop
+<SUBSECTION Standard>
+GTK_SPINNER
+GTK_IS_SPINNER
+GTK_TYPE_SPINNER
+GTK_SPINNER_CLASS
+GTK_IS_SPINER_CLASS
+GTK_SPINNER_GET_CLASS
+<SUBSECTION Private>
+gtk_spinner_get_type
 </SECTION>
 
 <SECTION>
@@ -4550,6 +4574,7 @@ gtk_tooltip_set_text
 gtk_tooltip_set_icon
 gtk_tooltip_set_icon_from_stock
 gtk_tooltip_set_icon_from_icon_name
+gtk_tooltip_set_icon_from_gicon
 gtk_tooltip_set_custom
 gtk_tooltip_trigger_tooltip_query
 gtk_tooltip_set_tip_area
@@ -5139,6 +5164,14 @@ gtk_cell_renderer_editing_canceled
 gtk_cell_renderer_stop_editing
 gtk_cell_renderer_get_fixed_size
 gtk_cell_renderer_set_fixed_size
+gtk_cell_renderer_get_visible
+gtk_cell_renderer_set_visible
+gtk_cell_renderer_get_sensitive
+gtk_cell_renderer_set_sensitive
+gtk_cell_renderer_get_alignment
+gtk_cell_renderer_set_alignment
+gtk_cell_renderer_get_padding
+gtk_cell_renderer_set_padding
 
 <SUBSECTION Standard>
 GTK_CELL_RENDERER
@@ -5203,6 +5236,23 @@ gtk_cell_renderer_spin_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcellrendererspinner</FILE>
+<TITLE>GtkCellRendererSpinner</TITLE>
+GtkCellRendererSpinner
+gtk_cell_renderer_spinner_new
+<SUBSECTION Standard>
+GTK_TYPE_CELL_RENDERER_SPINNER
+GTK_CELL_RENDERER_SPINNER
+GTK_CELL_RENDERER_SPINNER_CLASS
+GTK_IS_CELL_RENDERER_SPINNER
+GTK_IS_CELL_RENDERER_SPINNER_CLASS
+GTK_CELL_RENDERER_SPINNER_GET_CLASS
+<SUBSECTION Private>
+GtkCellRendererSpinnerPrivate
+gtk_cell_renderer_spinner_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkcellrendererpixbuf</FILE>
 <TITLE>GtkCellRendererPixbuf</TITLE>
 GtkCellRendererPixbuf
@@ -5244,6 +5294,9 @@ gtk_cell_renderer_toggle_get_radio
 gtk_cell_renderer_toggle_set_radio
 gtk_cell_renderer_toggle_get_active
 gtk_cell_renderer_toggle_set_active
+gtk_cell_renderer_toggle_get_activatable
+gtk_cell_renderer_toggle_set_activatable
+
 <SUBSECTION Standard>
 GTK_CELL_RENDERER_TOGGLE
 GTK_IS_CELL_RENDERER_TOGGLE
@@ -5673,6 +5726,30 @@ gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 gtk_widget_get_snapshot
 gtk_widget_get_window
+gtk_widget_get_allocation
+gtk_widget_set_allocation
+gtk_widget_get_app_paintable
+gtk_widget_get_can_default
+gtk_widget_set_can_default
+gtk_widget_get_can_focus
+gtk_widget_set_can_focus
+gtk_widget_get_double_buffered
+gtk_widget_get_has_window
+gtk_widget_set_has_window
+gtk_widget_get_sensitive
+gtk_widget_is_sensitive
+gtk_widget_get_state
+gtk_widget_get_visible
+gtk_widget_set_visible
+gtk_widget_has_default
+gtk_widget_has_focus
+gtk_widget_has_grab
+gtk_widget_is_drawable
+gtk_widget_is_toplevel
+gtk_widget_set_window
+gtk_widget_set_receives_default
+gtk_widget_get_receives_default
+
 <SUBSECTION>
 gtk_requisition_copy
 gtk_requisition_free
@@ -5998,6 +6075,7 @@ gtk_paint_polygon
 gtk_paint_shadow
 gtk_paint_shadow_gap
 gtk_paint_slider
+gtk_paint_spinner
 gtk_paint_string
 gtk_paint_tab
 gtk_paint_vline
@@ -6698,6 +6776,7 @@ gtk_print_operation_set_print_settings
 gtk_print_operation_get_print_settings
 gtk_print_operation_set_job_name
 gtk_print_operation_set_n_pages
+gtk_print_operation_get_n_pages_to_print
 gtk_print_operation_set_current_page
 gtk_print_operation_set_use_full_page
 gtk_print_operation_set_unit

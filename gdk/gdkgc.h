@@ -294,7 +294,7 @@ void         gdk_gc_set_rgb_bg_color (GdkGC          *gc,
 GdkScreen *  gdk_gc_get_screen	     (GdkGC          *gc);
 
 #ifndef GDK_DISABLE_DEPRECATED
-#define gdk_gc_destroy                 gdk_gc_unref
+#define gdk_gc_destroy                 g_object_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS

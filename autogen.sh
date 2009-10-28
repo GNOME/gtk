@@ -14,7 +14,10 @@ DIE=0
 
 have_libtool=false
 if libtoolize --version < /dev/null > /dev/null 2>&1 ; then
-	libtool_version=`libtoolize --version | sed 's/^[^0-9]*\([0-9.][0-9.]*\).*/\1/'`
+	libtool_version=`libtoolize --version |
+			 head -1 |
+			 sed -e 's/^\(.*\)([^)]*)\(.*\)$/\1\2/g' \
+			     -e 's/^[^0-9]*\([0-9.][0-9.]*\).*/\1/'`
 	case $libtool_version in
 	    1.4*|1.5*|2.2*)
 		have_libtool=true
@@ -45,15 +48,23 @@ fi
 	DIE=1
 }
 
-if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
+if automake-1.11 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.11
+    ACLOCAL=aclocal-1.11
+else if automake-1.10 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.10
+    ACLOCAL=aclocal-1.10
+else if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
     AUTOMAKE=automake-1.7
     ACLOCAL=aclocal-1.7
 else
 	echo
-	echo "You must have automake 1.7.x installed to compile $PROJECT."
+	echo "You must have automake 1.7.x, 1,10.x or 1.11.x installed to compile $PROJECT."
 	echo "Install the appropriate package for your distribution,"
 	echo "or get the source tarball at http://ftp.gnu.org/gnu/automake/"
 	DIE=1
+fi
+fi
 fi
 
 if test "$DIE" -eq 1; then

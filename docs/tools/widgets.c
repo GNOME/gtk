@@ -940,6 +940,26 @@ create_image (void)
 }
 
 static WidgetInfo *
+create_spinner (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align, *vbox;
+
+  widget = gtk_spinner_new ();
+  gtk_widget_set_size_request (widget, 24, 24);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Spinner"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("spinner", vbox, SMALL);
+}
+
+static WidgetInfo *
 create_volume_button (void)
 {
   GtkWidget *button, *widget;
@@ -985,6 +1005,7 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_button ());

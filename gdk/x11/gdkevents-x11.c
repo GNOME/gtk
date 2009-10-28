@@ -305,6 +305,8 @@ graphics_expose_predicate (Display  *display,
  *
  * Return value:  a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
  * NoExpose event was received.
+ *
+ * Deprecated:2.18
  **/
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
@@ -1032,28 +1034,31 @@ gdk_event_translate (GdkDisplay *display,
 	    }
 	}
     }
-      
-  if (screen_x11 && screen_x11->wmspec_check_window != None &&
-      xwindow == screen_x11->wmspec_check_window)
-    {
-      if (xevent->type == DestroyNotify)
-        {
-          screen_x11->wmspec_check_window = None;
-          g_free (screen_x11->window_manager_name);
-          screen_x11->window_manager_name = g_strdup ("unknown");
 
-          /* careful, reentrancy */
-          _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
+  if (xevent->type == DestroyNotify)
+    {
+      int i, n;
+
+      n = gdk_display_get_n_screens (display);
+      for (i = 0; i < n; i++)
+        {
+          screen = gdk_display_get_screen (display, i);
+          screen_x11 = GDK_SCREEN_X11 (screen);
+
+          if (screen_x11->wmspec_check_window == xwindow)
+            {
+              screen_x11->wmspec_check_window = None;
+              screen_x11->last_wmspec_check_time = 0;
+              g_free (screen_x11->window_manager_name);
+              screen_x11->window_manager_name = g_strdup ("unknown");
+
+              /* careful, reentrancy */
+              _gdk_x11_screen_window_manager_changed (screen);
+
+              return_val = FALSE;
+              goto done;
+            }
         }
-      
-      /* Eat events on this window unless someone had wrapped
-       * it as a foreign window
-       */
-      if (window == NULL)
-	{
-	  return_val = FALSE;
-	  goto done;
-	}
     }
 
   if (window &&
@@ -1595,13 +1600,13 @@ gdk_event_translate (GdkDisplay *display,
 			   xevent->xexpose.x, xevent->xexpose.y,
 			   xevent->xexpose.width, xevent->xexpose.height,
 			   event->any.send_event ? " (send)" : ""));
-      
+     
       if (window_private == NULL)
         {
           return_val = FALSE;
           break;
         }
-      
+
       {
 	GdkRectangle expose_rect;
 
@@ -1610,25 +1615,10 @@ gdk_event_translate (GdkDisplay *display,
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
-	if (return_exposes)
-	  {
-	    event->expose.type = GDK_EXPOSE;
-	    event->expose.area = expose_rect;
-	    event->expose.region = gdk_region_rectangle (&expose_rect);
-	    event->expose.window = window;
-	    event->expose.count = xevent->xexpose.count;
-
-	    return_val = TRUE;
-	  }
-	else
-	  {
-	    _gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
-	    return_val = FALSE;
-	  }
-	
-	return_val = FALSE;
+	_gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
+	 return_val = FALSE;
       }
-	
+
       break;
       
     case GraphicsExpose:
@@ -2629,23 +2619,24 @@ fetch_net_wm_check_window (GdkScreen *screen)
   guchar *data;
   Window *xwindow;
   GTimeVal tv;
-  
+  gint error;
+
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
 
   g_return_if_fail (GDK_DISPLAY_X11 (display)->trusted_client);
   
   g_get_current_time (&tv);
-      
+
   if (ABS  (tv.tv_sec - screen_x11->last_wmspec_check_time) < 15)
     return; /* we've checked recently */
 
   screen_x11->last_wmspec_check_time = tv.tv_sec;
 
   data = NULL;
-  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), screen_x11->xroot_window,
+  XGetWindowProperty (screen_x11->xdisplay, screen_x11->xroot_window,
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_SUPPORTING_WM_CHECK"),
-		      0, G_MAXLONG, False, XA_WINDOW, &type, &format, 
+		      0, G_MAXLONG, False, XA_WINDOW, &type, &format,
 		      &n_items, &bytes_after, &data);
   
   if (type != XA_WINDOW)
@@ -2664,22 +2655,28 @@ fetch_net_wm_check_window (GdkScreen *screen)
     }
 
   gdk_error_trap_push ();
-  
+
   /* Find out if this WM goes away, so we can reset everything. */
   XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
   gdk_display_sync (display);
 
-  if (gdk_error_trap_pop () == Success)
+  error = gdk_error_trap_pop ();
+  if (!error)
     {
       screen_x11->wmspec_check_window = *xwindow;
       screen_x11->need_refetch_net_supported = TRUE;
       screen_x11->need_refetch_wm_name = TRUE;
-      
+
       /* Careful, reentrancy */
       _gdk_x11_screen_window_manager_changed (GDK_SCREEN (screen_x11));
     }
+  else if (error == BadWindow)
+    {
+      /* Leftover property, try again immediately, new wm may be starting up */
+      screen_x11->last_wmspec_check_time = 0;
+    }
 
-  XFree (xwindow);    
+  XFree (xwindow);
 }
 
 /**

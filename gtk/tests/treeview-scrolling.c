@@ -1,6 +1,7 @@
 /* Scrolling test suite for GtkTreeView
  * Copyright (C) 2006  Kristian Rietveld  <kris@gtk.org>
  * Copyright (C) 2007  Imendio AB,  Kristian Rietveld
+ * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,6 +38,8 @@
  *   - Test that nothing happens if the row is fully visible.
  *   - The tests are dependent on the theme/font (size measurements,
  *     chosen paths).
+ *   - Convert to proper GTK+ coding style.
+ *   - Briefly test scrolling in tree stores as well.
  */
 
 
@@ -170,6 +173,34 @@ scroll_fixture_single_setup (ScrollFixture *fixture,
 
 	gtk_tree_store_append (store, &child, &iter);
 	gtk_tree_store_set (store, &child, 0, "Two\nLines", -1);
+
+	/* The teardown will also destroy the model */
+	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), test_data);
+}
+
+/* sets up a fixture with a tree store */
+static void
+scroll_fixture_tree_setup (ScrollFixture *fixture,
+			   gconstpointer   test_data)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter, child;
+	int i;
+
+	store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, "Root node", -1);
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &child, &iter);
+		gtk_tree_store_set (store, &child, 0, "Child node", -1);
+	}
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &iter, NULL);
+		gtk_tree_store_set (store, &iter, 0, "Other node", -1);
+	}
 
 	/* The teardown will also destroy the model */
 	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), test_data);
@@ -752,6 +783,56 @@ scroll_new_row (ScrollFixture *fixture,
 	gtk_tree_path_free (scroll_path);
 }
 
+static void
+scroll_new_row_tree (ScrollFixture *fixture,
+		     gconstpointer  test_data)
+{
+	GtkTreeModel *model;
+	GtkAdjustment *vadjustment;
+	int i;
+
+	/* The goal of this test is to append new rows at the end of a tree
+	 * store and immediately scroll to them.  If there is a parent
+	 * node with a couple of childs in the "area above" to explore,
+	 * this used to lead to unexpected results due to a bug.
+	 *
+	 * This issue has been reported by Miroslav Rajcic on
+	 * gtk-app-devel-list:
+	 * http://mail.gnome.org/archives/gtk-app-devel-list/2008-December/msg00068.html
+	 */
+
+	gtk_widget_show_all (fixture->window);
+
+	gtk_tree_view_expand_all (GTK_TREE_VIEW (fixture->tree_view));
+
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view));
+	vadjustment = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (fixture->tree_view));
+
+	for (i = 0; i < 5; i++) {
+		GtkTreeIter scroll_iter;
+		GtkTreePath *scroll_path;
+
+		gtk_tree_store_append (GTK_TREE_STORE (model), &scroll_iter,
+				       NULL);
+		gtk_tree_store_set (GTK_TREE_STORE (model), &scroll_iter,
+				    0, "New node", -1);
+
+		scroll_path = gtk_tree_model_get_path (model, &scroll_iter);
+		gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (fixture->tree_view),
+					      scroll_path, NULL, FALSE, 0.0, 0.0);
+		gtk_tree_path_free (scroll_path);
+
+		while (gtk_events_pending ())
+			gtk_main_iteration ();
+
+		/* Test position, the scroll bar must be at the end */
+		g_assert (vadjustment->value == vadjustment->upper - vadjustment->page_size);
+	}
+}
+
 /* Test for GNOME bugzilla bug 359231; tests "recovery when removing a bunch of
  * rows at the bottom.
  */
@@ -874,10 +955,10 @@ test_type_string (int test_type)
 {
 	switch (test_type) {
 		case BEFORE:
-			return "before";
+			return "before-realize";
 
 		case AFTER:
-			return "after";
+			return "after-realize";
 
 		case BOTH:
 			return "both";
@@ -913,7 +994,7 @@ add_test (const char *path,
 
 	align = align_string (use_align, row_align);
 
-	test_path = g_strdup_printf ("/treeview/scrolling/%s-%s-path-%s-%s",
+	test_path = g_strdup_printf ("/TreeView/scrolling/%s/%s-height/path-%s-%s",
 				     test_type_string (test_type),
 				     mixed ? "mixed" : "constant",
 				     path, align);
@@ -1013,42 +1094,46 @@ main (int argc, char **argv)
 	}
 
 	/* Test different alignments in view with single row */
-	g_test_add ("/treeview/scrolling/single-no-align", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-row/no-align",
+		    ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_no_align,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-0.0", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-row/align-0.0",
+		    ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_0_0,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-0.5", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-row/align-0.5",
+		    ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_0_5,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/single-align-1.0", ScrollFixture, "0",
+	g_test_add ("/TreeView/scrolling/single-row/align-1.0",
+		    ScrollFixture, "0",
 		    scroll_fixture_single_setup,
 		    scroll_align_1_0,
 		    scroll_fixture_teardown);
 
 	/* Test scrolling in a very large model; also very slow */
 	if (g_test_slow ()) {
-		g_test_add ("/treeview/scrolling/constant-big-middle-no-align",
+		g_test_add ("/TreeView/scrolling/large-model/constant-height/middle-no-align",
 			    ScrollFixture, "50000",
 			    scroll_fixture_constant_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
-		g_test_add ("/treeview/scrolling/constant-big-end-no-align",
+		g_test_add ("/TreeView/scrolling/large-model/constant-height/end-no-align",
 			    ScrollFixture, "99999",
 			    scroll_fixture_constant_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
 
-		g_test_add ("/treeview/scrolling/mixed-big-middle-no-align",
+		g_test_add ("/TreeView/scrolling/large-model/mixed-height/middle-no-align",
 			    ScrollFixture, "50000",
 			    scroll_fixture_mixed_big_setup,
 			    scroll_no_align,
 			    scroll_fixture_teardown);
-		g_test_add ("/treeview/scrolling/mixed-big-end-no-align",
+		g_test_add ("/TreeView/scrolling/large-model/mixed-height/end-no-align",
 			    ScrollFixture, "99999",
 			    scroll_fixture_mixed_big_setup,
 			    scroll_no_align,
@@ -1056,12 +1141,12 @@ main (int argc, char **argv)
 	}
 
 	/* Test scrolling to a newly created row */
-	g_test_add ("/treeview/scrolling/new-row-path-0", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row/path-0", ScrollFixture,
 		    GINT_TO_POINTER (0),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-4", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row/path-4", ScrollFixture,
 		    GINT_TO_POINTER (4),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
@@ -1070,27 +1155,35 @@ main (int argc, char **argv)
 	 * based on my font setting of "Vera Sans 11" and
 	 * the separators set to 0.  (This should be made dynamic; FIXME).
 	 */
-	g_test_add ("/treeview/scrolling/new-row-path-8", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row/path-8", ScrollFixture,
 		    GINT_TO_POINTER (8),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-500", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row/path-500", ScrollFixture,
 		    GINT_TO_POINTER (500),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
-	g_test_add ("/treeview/scrolling/new-row-path-999", ScrollFixture,
+	g_test_add ("/TreeView/scrolling/new-row/path-999", ScrollFixture,
 		    GINT_TO_POINTER (999),
 		    scroll_fixture_constant_setup,
 		    scroll_new_row,
 		    scroll_fixture_teardown);
 
+	g_test_add ("/TreeView/scrolling/new-row/tree", ScrollFixture,
+		    NULL,
+		    scroll_fixture_tree_setup,
+		    scroll_new_row_tree,
+		    scroll_fixture_teardown);
+
 	/* Misc. tests */
-	g_test_add ("/treeview/scrolling/bug-316689", ScrollFixture, NULL,
+	g_test_add ("/TreeView/scrolling/specific/bug-316689",
+			ScrollFixture, NULL,
 		    scroll_fixture_constant_setup, test_bug316689,
 		    scroll_fixture_teardown);
-	g_test_add_func ("/treeview/scrolling/bug-359231", test_bug359231);
+	g_test_add_func ("/TreeView/scrolling/specific/bug-359231",
+			test_bug359231);
 
 	return g_test_run ();
 }

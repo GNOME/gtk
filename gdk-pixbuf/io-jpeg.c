@@ -468,7 +468,6 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 	cinfo.err = jpeg_std_error (&jerr.pub);
 	jerr.pub.error_exit = fatal_error_handler;
         jerr.pub.output_message = output_message_handler;
-
         jerr.error = error;
         
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
@@ -1047,7 +1046,7 @@ to_callback_do_write (j_compress_ptr cinfo, gsize length)
 	ToFunctionDestinationManager *destmgr;
 
 	destmgr	= (ToFunctionDestinationManager*) cinfo->dest;
-        if (!destmgr->save_func (destmgr->buffer,
+        if (!destmgr->save_func ((gchar *)destmgr->buffer,
 				 length,
 				 destmgr->error,
 				 destmgr->user_data)) {
@@ -1190,11 +1189,11 @@ real_save_jpeg (GdkPixbuf          *pixbuf,
        }
 
        /* set up error handling */
+       cinfo.err = jpeg_std_error (&(jerr.pub));
        jerr.pub.error_exit = fatal_error_handler;
        jerr.pub.output_message = output_message_handler;
        jerr.error = error;
        
-       cinfo.err = jpeg_std_error (&(jerr.pub));
        if (sigsetjmp (jerr.setjmp_buffer, 1)) {
                jpeg_destroy_compress (&cinfo);
                g_free (buf);

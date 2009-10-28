@@ -48,15 +48,6 @@ Events that are assured to have a valid GdkEvent.any.window field are
 GDK_EXPOSE		GtkWidget::expose_event
 
 
-gtk_widget_ref() vs. gtk_object_ref()
--------------------------------------
-
-The widget referencing functions gtk_widget_ref() and gtk_widget_unref()
-are currently just wrappers about the corresponding referencing functions
-for objects. Still you should use the widget referencing functions if you
-are sure the referenced object is of type GTK_WIDGET_TYPE.
-
-
 Writing Gdk functions
 ---------------------
 

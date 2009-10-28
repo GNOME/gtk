@@ -365,7 +365,7 @@ When a widget receives the "realize" signal it should:
   1) set the realized flag
   2) set widget->window
       widget->window = gtk_widget_get_parent_window (widget);
-      gdk_window_ref (widget->window);
+      g_object_ref (widget->window);
   3) attach the widget's style
 
   widget->style = gtk_style_attach (widget->style, widget->window);

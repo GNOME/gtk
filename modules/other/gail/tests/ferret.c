@@ -429,11 +429,14 @@ static void _send_to_festival (const gchar *role_name,
 
 static void _festival_write (const gchar *command_string, int fd)
 {
+  gssize n_bytes;
+
   if (fd < 0) {
     perror("socket");
     return;
   }
-  write(fd, command_string, strlen(command_string));
+  n_bytes = write(fd, command_string, strlen(command_string));
+  g_assert (n_bytes == strlen(command_string));
 }
 
 static void _speak_caret_event (AtkObject *aobject)
