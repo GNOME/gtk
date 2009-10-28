@@ -99,7 +99,7 @@
  *                                 GDK_ACTION_COPY);
  * ]|
  *
- * Since: 2.18
+ * Since: 2.20
  */
 
 typedef struct _GtkToolItemGroupInfo   GtkToolItemGroupInfo;
@@ -974,7 +974,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    *
    * The ::set-scroll-adjustments when FIXME
    *
-   * Since: 2.18
+   * Since: 2.20
    */
   wclass->set_scroll_adjustments_signal =
     g_signal_new ("set-scroll-adjustments",
@@ -1001,7 +1001,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    * application toolbars should respect the user preferences for the
    * size of icons.
    *
-   * Since: 2.18
+   * Since: 2.20
    */
   g_object_class_install_property (oclass,
                                    PROP_ICON_SIZE,
@@ -1068,7 +1068,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
  *
  * Returns: a new #GtkToolPalette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkWidget*
 gtk_tool_palette_new (void)
@@ -1083,7 +1083,7 @@ gtk_tool_palette_new (void)
  *
  * Sets the size of icons in the tool palette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_set_icon_size (GtkToolPalette *palette,
@@ -1127,7 +1127,7 @@ toolpalette_get_settings (GtkToolPalette *palette)
  * Unsets the tool palette icon size set with gtk_tool_palette_set_icon_size(), so that
  * user preferences will be used to determine the icon size.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_unset_icon_size (GtkToolPalette *palette)
@@ -1190,7 +1190,7 @@ gtk_tool_palette_change_style (GtkToolPalette     *palette,
  *
  * Sets the style (text, icons or both) of items in the tool palette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_set_style (GtkToolPalette  *palette,
@@ -1244,7 +1244,7 @@ gtk_tool_palette_unset_style (GtkToolPalette *palette)
  * 
  * Returns: the #GtkIconSize of icons in the tool palette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkIconSize
 gtk_tool_palette_get_icon_size (GtkToolPalette *palette)
@@ -1261,7 +1261,7 @@ gtk_tool_palette_get_icon_size (GtkToolPalette *palette)
  *
  * Returns: the #GtkToolbarStyle of items in the tool palette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkToolbarStyle
 gtk_tool_palette_get_style (GtkToolPalette *palette)
@@ -1280,7 +1280,7 @@ gtk_tool_palette_get_style (GtkToolPalette *palette)
  * If position is 0 the group will become the first child, if position is
  * -1 it will become the last child.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_set_group_position (GtkToolPalette *palette,
@@ -1360,7 +1360,7 @@ gtk_tool_palette_group_notify_collapsed (GtkToolItemGroup *group,
  * Sets whether the group should be exclusive or not. If an exclusive group is expanded
  * all other groups are collapsed.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_set_exclusive (GtkToolPalette *palette,
@@ -1411,7 +1411,7 @@ gtk_tool_palette_set_exclusive (GtkToolPalette *palette,
  *
  * Sets whether the group should be given extra space.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_set_expand (GtkToolPalette *palette,
@@ -1446,7 +1446,7 @@ gtk_tool_palette_set_expand (GtkToolPalette *palette,
  *
  * Returns: the index of group or -1 if @group is not a child of @palette.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gint
 gtk_tool_palette_get_group_position (GtkToolPalette *palette,
@@ -1473,7 +1473,7 @@ gtk_tool_palette_get_group_position (GtkToolPalette *palette,
  *
  * Returns: %TRUE if group is exclusive.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gboolean
 gtk_tool_palette_get_exclusive (GtkToolPalette *palette,
@@ -1499,7 +1499,7 @@ gtk_tool_palette_get_exclusive (GtkToolPalette *palette,
  *
  * Returns: %TRUE if group should be given extra space, %FALSE otherwise.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gboolean
 gtk_tool_palette_get_expand (GtkToolPalette *palette,
@@ -1526,7 +1526,7 @@ gtk_tool_palette_get_expand (GtkToolPalette *palette,
  *
  * Returns: the #GtkToolItem at position or %NULL if there is no such item.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkToolItem*
 gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
@@ -1553,7 +1553,7 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
  *
  * Returns: the #GtkToolItemGroup at position or %NULL if there is no such group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkWidget*
 gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
@@ -1602,7 +1602,7 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
  *
  * Returns: the dragged item in selection.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkWidget*
 gtk_tool_palette_get_drag_item (GtkToolPalette         *palette,
@@ -1642,7 +1642,7 @@ gtk_tool_palette_get_drag_item (GtkToolPalette         *palette,
  *
  * See gtk_drag_source_set().
  *
- * Since: 2.18
+ * Since: 2.20
  *
  */
 void
@@ -1684,7 +1684,7 @@ gtk_tool_palette_set_drag_source (GtkToolPalette            *palette,
  *
  * See gtk_drag_dest_set().
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_palette_add_drag_dest (GtkToolPalette            *palette,
@@ -1835,7 +1835,7 @@ _gtk_tool_palette_child_set_drag_source (GtkWidget *child,
  *
  * Returns: the #GtkTargetEntry for a dragged item.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 G_CONST_RETURN GtkTargetEntry*
 gtk_tool_palette_get_drag_target_item (void)
@@ -1850,7 +1850,7 @@ gtk_tool_palette_get_drag_target_item (void)
  *
  * Returns: the #GtkTargetEntry for a dragged group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 G_CONST_RETURN GtkTargetEntry*
 gtk_tool_palette_get_drag_target_group (void)

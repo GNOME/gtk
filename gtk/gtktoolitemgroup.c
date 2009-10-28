@@ -46,7 +46,7 @@
  * An #GtkToolItemGroup is used together with #GtkToolPalette to add #GtkToolItem<!-- -->s to a palette like container
  * with different categories and drag and drop support.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 
 enum
@@ -1648,7 +1648,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
  *
  * Returns: a new #GtkToolItemGroup.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkWidget*
 gtk_tool_item_group_new (const gchar *label)
@@ -1665,7 +1665,7 @@ gtk_tool_item_group_new (const gchar *label)
  * Sets the label of the tool item group. The label is displayed in the header
  * of the group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_label (GtkToolItemGroup *group,
@@ -1700,7 +1700,7 @@ gtk_tool_item_group_set_label (GtkToolItemGroup *group,
  * Sets the label of the tool item group. The label is displayed in the header
  * of the group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
@@ -1757,7 +1757,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
  * Set the button relief of the group header. See #gtk_button_set_relief for
  * details
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_header_relief (GtkToolItemGroup   *group,
@@ -1868,7 +1868,7 @@ gtk_tool_item_group_animation_cb (gpointer data)
  *
  * Sets whether the @group should be collapsed or expanded.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
@@ -1923,7 +1923,7 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
  *
  * Sets the ellipsization mode which should be used by labels in @group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
@@ -1948,7 +1948,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
  *
  * Returns: the label of @group. The label is an internal string of @group and must not be modified.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 G_CONST_RETURN gchar*
 gtk_tool_item_group_get_label (GtkToolItemGroup *group)
@@ -1973,7 +1973,7 @@ gtk_tool_item_group_get_label (GtkToolItemGroup *group)
  *
  * Returns: the label of @group. The label is an internal string of @group and must not be modified.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkWidget*
 gtk_tool_item_group_get_label_widget (GtkToolItemGroup *group)
@@ -1990,7 +1990,7 @@ gtk_tool_item_group_get_label_widget (GtkToolItemGroup *group)
  *
  * Returns: %TRUE if @group is collapsed, %FALSE if it is expanded.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gboolean
 gtk_tool_item_group_get_collapsed (GtkToolItemGroup *group)
@@ -2007,7 +2007,7 @@ gtk_tool_item_group_get_collapsed (GtkToolItemGroup *group)
  *
  * Returns: the #PangoEllipsizeMode of @group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 PangoEllipsizeMode
 gtk_tool_item_group_get_ellipsize (GtkToolItemGroup *group)
@@ -2024,7 +2024,7 @@ gtk_tool_item_group_get_ellipsize (GtkToolItemGroup *group)
  *
  * Returns: the #GtkReliefStyle
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkReliefStyle
 gtk_tool_item_group_get_header_relief (GtkToolItemGroup   *group)
@@ -2041,7 +2041,7 @@ gtk_tool_item_group_get_header_relief (GtkToolItemGroup   *group)
  *
  * Inserts @item at @position in the list of children of @group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_insert (GtkToolItemGroup *group,
@@ -2085,7 +2085,7 @@ gtk_tool_item_group_insert (GtkToolItemGroup *group,
  *
  * Sets the position of @item in the list of children of @group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 void
 gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
@@ -2127,7 +2127,7 @@ gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
  *
  * Returns: the index of @item in @group or -1 if @item is no child of @group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gint
 gtk_tool_item_group_get_item_position (GtkToolItemGroup *group,
@@ -2152,7 +2152,7 @@ gtk_tool_item_group_get_item_position (GtkToolItemGroup *group,
  *
  * Returns: the number of tool items in group.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 guint
 gtk_tool_item_group_get_n_items (GtkToolItemGroup *group)
@@ -2171,7 +2171,7 @@ gtk_tool_item_group_get_n_items (GtkToolItemGroup *group)
  *
  * Returns: the #GtkToolItem at index.
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkToolItem*
 gtk_tool_item_group_get_nth_item (GtkToolItemGroup *group,
@@ -2196,7 +2196,7 @@ gtk_tool_item_group_get_nth_item (GtkToolItemGroup *group,
  *
  * Returns: the #GtkToolItem at position (x, y).
  *
- * Since: 2.18
+ * Since: 2.20
  */
 GtkToolItem*
 gtk_tool_item_group_get_drop_item (GtkToolItemGroup *group,
