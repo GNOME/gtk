@@ -717,7 +717,6 @@ do_post_parse_initialization (int    *argc,
 
   /* do what the call to gtk_type_init() used to do */
   g_type_init ();
-  gtk_object_get_type ();
 
   _gtk_accel_map_init ();
   _gtk_rc_init ();
