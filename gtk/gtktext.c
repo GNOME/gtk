@@ -1158,7 +1158,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
       guchar ch;
       ch = text->text.ch[end_pos];
       text->text.ch[end_pos] = 0;
-      retval = g_strdup (text->text.ch + start_pos);
+      retval = g_strdup ((gchar *)(text->text.ch + start_pos));
       text->text.ch[end_pos] = ch;
     }
 
@@ -4837,14 +4837,14 @@ draw_line (GtkText* text,
 						 buffer.wc, len);
 	      else
 	      pixel_width = gdk_text_width (gc_values.font,
-					      buffer.ch, len);
+					    (gchar *)buffer.ch, len);
 	    }
 	  else
 	    {
 	      if (text->use_wchar)
 		pixel_width = gdk_text_width_wc (font, buffer.wc, len);
 	      else
-		pixel_width = gdk_text_width (font, buffer.ch, len);
+		pixel_width = gdk_text_width (font, (gchar *)buffer.ch, len);
 	    }
 	  
 	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
@@ -4876,7 +4876,7 @@ draw_line (GtkText* text,
 			   fg_gc,
 			   running_offset,
 			   pixel_height,
-			   buffer.ch,
+			   (gchar *)buffer.ch,
 			   len);
 	  
 	  running_offset += pixel_width;
