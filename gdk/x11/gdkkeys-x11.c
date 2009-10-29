@@ -1198,8 +1198,8 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                               register unsigned int   mods,
                               unsigned int *          mods_rtrn,
                               KeySym *                keysym_rtrn,
-                              unsigned int *          group_rtrn,
-                              unsigned int *          level_rtrn)
+                              int *                   group_rtrn,
+                              int *                   level_rtrn)
 {
     XkbKeyTypeRec *type;
     int col,nKeyGroups;
@@ -1324,8 +1324,8 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
 		  guint           hardware_keycode,
 		  gint            group,
 		  GdkModifierType state,
-		  guint          *effective_group,
-		  guint          *effective_level)
+		  gint           *effective_group,
+		  gint           *effective_level)
 {
   const KeySym *map = get_keymap (keymap_x11);
   const KeySym *syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
