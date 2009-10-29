@@ -1068,7 +1068,7 @@ set_focus_line_attributes (GtkWidget *drawing_area,
 
   if (dash_list[0])
     {
-      gint n_dashes = strlen (dash_list);
+      gint n_dashes = strlen ((gchar *)dash_list);
       gdouble *dashes = g_new (gdouble, n_dashes);
       gdouble total_length = 0;
       gdouble dash_offset;
