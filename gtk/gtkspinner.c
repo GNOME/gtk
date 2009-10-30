@@ -120,7 +120,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
    *
    * Whether the spinner is active
    *
-   * Since 2.20
+   * Since: 2.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
