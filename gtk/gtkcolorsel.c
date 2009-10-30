@@ -945,6 +945,30 @@ color_sample_setup_dnd (GtkColorSelection *colorsel, GtkWidget *sample)
   
 }
 
+static void
+update_tooltips (GtkColorSelection *colorsel)
+{
+  ColorSelectionPrivate *priv;
+
+  priv = colorsel->private_data;
+
+  if (priv->has_palette == TRUE)
+    {
+      gtk_widget_set_tooltip_text (priv->old_sample,
+                            _("The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."));
+
+      gtk_widget_set_tooltip_text (priv->cur_sample,
+                            _("The color you've chosen. You can drag this color to a palette entry to save it for use in the future."));
+    }
+  else
+    {
+      gtk_widget_set_tooltip_text (priv->old_sample,
+                            _("The previously-selected color, for comparison to the color you're selecting now."));
+
+      gtk_widget_set_tooltip_text (priv->cur_sample,
+                            _("The color you've chosen."));
+    }
+}
 
 static void
 color_sample_new (GtkColorSelection *colorsel)
@@ -972,13 +996,8 @@ color_sample_new (GtkColorSelection *colorsel)
   color_sample_setup_dnd (colorsel, priv->old_sample);
   color_sample_setup_dnd (colorsel, priv->cur_sample);
 
-  gtk_widget_set_tooltip_text (priv->old_sample,
-                        _("The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."));
+  update_tooltips (colorsel);
 
-
-  gtk_widget_set_tooltip_text (priv->cur_sample,
-                        _("The color you've chosen. You can drag this color to a palette entry to save it for use in the future."));
-  
   gtk_widget_show_all (priv->sample_area);
 }
 
@@ -2364,7 +2383,9 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
 	gtk_widget_show (priv->palette_frame);
       else
 	gtk_widget_hide (priv->palette_frame);
-      
+
+      update_tooltips (colorsel);
+
       g_object_notify (G_OBJECT (colorsel), "has-palette");
     }
 }
