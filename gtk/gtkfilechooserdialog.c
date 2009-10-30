@@ -485,7 +485,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
  * Return value: a new #GtkFileChooserDialog
  *
  * Since: 2.4
- * Deprecated: 2.14
+ * Deprecated: 2.14: Use gtk_file_chooser_dialog_new() instead.
  **/
 GtkWidget *
 gtk_file_chooser_dialog_new_with_backend (const gchar          *title,

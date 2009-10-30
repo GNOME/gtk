@@ -306,7 +306,7 @@ graphics_expose_predicate (Display  *display,
  * Return value:  a #GdkEventExpose if a GraphicsExpose was received, or %NULL if a
  * NoExpose event was received.
  *
- * Deprecated:2.18
+ * Deprecated: 2.18:
  **/
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)

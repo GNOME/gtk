@@ -181,7 +181,7 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
  * Return value: a new #GtkFileChooserWidget
  *
  * Since: 2.4
- * Deprecated: 2.14
+ * Deprecated: 2.14: Use gtk_file_chooser_widget_new() instead.
  **/
 GtkWidget *
 gtk_file_chooser_widget_new_with_backend (GtkFileChooserAction  action,
