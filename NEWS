@@ -1,3 +1,82 @@
+Overview of Changes from GTK+ 2.18.x to 2.19.0
+==============================================
+
+* A throbber widget and cell renderer have been added: GtkSpinner and
+  GtkCellRendererSpinner
+
+* GtkFileSystemModel has been reimplemented, for major speedups and
+  other improvements
+
+* Synchronize compose sequences with the current X.org Compose file
+
+* Win32:
+ - The GDI+ image loader works again
+ - XP themes have been disabled since they don't work currently
+
+* OS X:
+ - Fix crashes due to unimplemented GdkWindowImplIface methods
+ - Use standard Mac keyboard shortcuts (Cmx-X, Cmd-C instead of
+   Ctrl-X, Ctrl-C, etc)
+ - Add a pixbuf loader for the QTIF format
+ - Improve multi-monitor handling
+
+* GSEAL work:
+ - New accessor for GtkDialog buttons: gtk_dialog_get_widget_for_response
+ - New accessor for GtkViewport bin_window: gtk_viewport_get_bin_window
+ - Add a GtkCellEditable::editing-canceled property
+
+* Deprecations:
+ - GtkInputDialog has been deprecated
+ - GtkCurve and GtkGammaCurve have been deprecated
+ - The tab-packing feature in GtkNotebook has been deprecated
+
+* Bugs fixed:
+ 594644 Cannot compile GTK+ with MinGW 4.4.0
+ 581150 GtkIconView tries to paint items with invalid sizes
+ 598881 Unimplemented GdkWindowImplIface methods crash gimp on OSX
+ 598218 Substitute deprecated gtk_*_ref/unref calls
+ 381371 Print margins not correct in WIN32 - not allowing for...
+ 597596 Toolbar button accessible objects don't have label name
+ 599118 Translators comment for "Finishing" labels
+ 598261 Add support to GtkTooltip to handle GIcons
+ 530351 Use standard mac shortcuts
+ 597865 Move documentation from templates to inline comments
+ 596083 Deprecate notebook label packing functionality
+ 594903 Deprecate GtkInputDialog
+ 599403 Avoid using accel group internals in GtkSocket
+ 590800 The window content is not updated correctly when scrolling
+ 598515 Do not assign the GtkSpinner parent class twice
+ 552678 gdi+ pixbuf loaders fail on "large" images
+ 598217 Substitute deprecated gdk_*_ref/unref calls
+ 596238 Make Quartz backend properly implement the GdkScreen...
+ 599446 atk_object_set_name () assertion in gtk_tool_button_set_label
+ 592582 Print preview doesn't reflect the printout
+ 563010 GtkFileChooserButton cannot have none file selected again
+ 596019 No accesors for GtkDialog buttons
+ 366217 Add QTIF image support
+ 594962 No accessor for GTK_ENTRY (entry)->editing_canceled
+
+* Updated translations:
+ Arabic
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Finnish
+ Greek
+ Norwegian bokmål
+ Oriya
+ Punjabi
+ Romanian
+ Russian
+ Serbian
+ Shavian
+ Slovenian
+ Spanish
+ Swedish
+ Slovenian
+ Vietnamese
+
+
 Overview of Changes from GTK+ 2.18.1 to 2.18.2
 ==============================================
 
