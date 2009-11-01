@@ -7194,12 +7194,12 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
  * @expand: whether to expand the bookmark or not
  * @fill: whether the bookmark should fill the allocated area or not
  * @pack_type: the position of the bookmark
- * 
+ *
  * Sets the packing parameters for the tab label of the page
  * containing @child. See gtk_box_pack_start() for the exact meaning
  * of the parameters.
  *
- * Deprecated: 2.20: Modify the "expand" and "fill" child properties instead.
+ * Deprecated: 2.20: Modify the expand and fill child properties instead.
  **/
 void
 gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
