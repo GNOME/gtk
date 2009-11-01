@@ -3,13 +3,12 @@
 # This file is distributed under the same license as the GTK package.
 # Thomas Thurman <tthurman@gnome.org>, 2009.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-12 21:20-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2009-10-31 22:19+0500\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
 "Language-Team: Shavian <ubuntu-l10n-en-shaw@launchpad.net>\n"
 "MIME-Version: 1.0\n"
@@ -338,7 +337,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"𐑦𐑯𐑑𐑻𐑯𐑩𐑤 𐑻𐑼: 𐑦𐑥𐑦𐑡 𐑤𐑴𐑛𐑻 𐑥𐑪𐑛𐑿𐑤 '%s' 𐑓𐑱𐑤𐑛 𐑑 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑩𐑯 𐑪𐑐𐑼𐑱𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑚𐑳𐑓𐑼 𐑝 %u 𐑚𐑲𐑑𐑖𐑩𐑯, 𐑚𐑳𐑑 𐑛𐑦𐑛𐑯𐑑 𐑜𐑦𐑝 "
+"𐑦𐑯𐑑𐑻𐑯𐑩𐑤 𐑻𐑼: 𐑦𐑥𐑦𐑡 𐑤𐑴𐑛𐑻 𐑥𐑪𐑛𐑿𐑤 '%s' 𐑓𐑱𐑤𐑛 𐑑 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑩𐑯 𐑪𐑐𐑼𐑱𐑓𐑱𐑤𐑛, 𐑚𐑳𐑑 𐑛𐑦𐑛𐑯𐑑 𐑜𐑦𐑝 "
 "𐑩 𐑮𐑰𐑟𐑩𐑯 𐑓𐑹 𐑞 𐑓𐑱𐑤𐑘𐑼"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:372
@@ -364,8 +363,9 @@ msgstr "𐑦𐑥𐑦𐑡 𐑐𐑦𐑒𐑕𐑩𐑤 𐑛𐑱𐑑𐑩 𐑒𐑼𐑳�
 #: gdk-pixbuf/gdk-pixdata.c:431
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
-msgid_plural "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑚𐑳𐑓𐑼 𐑝 %u 𐑚𐑲𐑑𐑕"
+msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑚𐑳𐑓𐑼 𐑝 %u 𐑚𐑲𐑑"
+msgstr[1] "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑚𐑳𐑓𐑼 𐑝 %u 𐑚𐑲𐑑𐑕"
 
 #: gdk-pixbuf/io-ani.c:244
 #, c-format
@@ -1745,8 +1745,9 @@ msgstr "𐑑𐑲𐑐 𐑯𐑱𐑥 𐑝 𐑯𐑿 𐑓𐑴𐑤𐑛𐑼"
 #: gtk/gtkfilechooserdefault.c:10971
 #, c-format
 msgid "%d byte"
-msgid_plural "%d 𐑚𐑲𐑑𐑕"
+msgid_plural "%d bytes"
 msgstr[0] "%d 𐑚𐑲𐑑"
+msgstr[1] "%d 𐑚𐑲𐑑𐑕"
 
 #: gtk/gtkfilechooserdefault.c:10973
 #, c-format
