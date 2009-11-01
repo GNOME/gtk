@@ -7252,7 +7252,7 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
  * Query the packing attributes for the tab label of the page
  * containing @child.
  *
- * Deprecated: 2.20: Modify the "expand" and "fill" child properties instead.
+ * Deprecated: 2.20: Modify the expand and fill child properties instead.
  **/
 void
 gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
