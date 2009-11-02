@@ -2269,8 +2269,8 @@ update_color_hash (ColorSchemeData   *data,
   gint i;
   GHashTable *old_hash;
   GHashTableIter iter;
-  gchar *name;
-  GdkColor *color;
+  gpointer name;
+  gpointer color;
 
   if ((str == NULL || *str == '\0') &&
       (data->lastentry[source] == NULL || data->lastentry[source][0] == '\0'))
