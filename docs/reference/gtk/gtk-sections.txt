@@ -1182,6 +1182,7 @@ gtk_dialog_set_default_response
 gtk_dialog_set_has_separator
 gtk_dialog_set_response_sensitive
 gtk_dialog_get_response_for_widget
+gtk_dialog_get_widget_for_response
 gtk_dialog_get_action_area
 gtk_dialog_get_content_area
 <SUBSECTION>
@@ -2633,7 +2634,6 @@ gtk_message_dialog_get_type
 GtkInfoBar
 gtk_info_bar_new
 gtk_info_bar_new_with_buttons
-gtk_info_bar_set_contents
 gtk_info_bar_add_action_widget
 gtk_info_bar_add_button
 gtk_info_bar_add_buttons
@@ -2820,7 +2820,6 @@ gtk_option_menu_get_type
 <FILE>gtkpaned</FILE>
 <TITLE>GtkPaned</TITLE>
 GtkPaned
-gtk_paned_new
 gtk_paned_add1
 gtk_paned_add2
 gtk_paned_gutter_size
@@ -3315,7 +3314,6 @@ gtk_recent_action_get_type
 <TITLE>GtkRuler</TITLE>
 GtkRuler
 GtkRulerMetric
-gtk_ruler_new
 gtk_ruler_set_metric
 gtk_ruler_set_range
 gtk_ruler_get_metric
@@ -3337,8 +3335,6 @@ gtk_ruler_draw_pos
 <FILE>gtkscale</FILE>
 <TITLE>GtkScale</TITLE>
 GtkScale
-gtk_scale_new
-gtk_scale_new_with_range
 gtk_scale_set_digits
 gtk_scale_set_draw_value
 gtk_scale_set_value_pos
@@ -3391,7 +3387,6 @@ gtk_scale_button_get_type
 <FILE>gtkscrollbar</FILE>
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
-gtk_scrollbar_new
 <SUBSECTION Standard>
 GTK_SCROLLBAR
 GTK_IS_SCROLLBAR
@@ -3437,7 +3432,6 @@ gtk_scrolled_window_get_type
 <FILE>gtkseparator</FILE>
 <TITLE>GtkSeparator</TITLE>
 GtkSeparator
-gtk_separator_new
 <SUBSECTION Standard>
 GTK_SEPARATOR
 GTK_IS_SEPARATOR
@@ -5315,6 +5309,7 @@ gtk_viewport_set_hadjustment
 gtk_viewport_set_vadjustment
 gtk_viewport_set_shadow_type
 gtk_viewport_get_shadow_type
+gtk_viewport_get_bin_window
 <SUBSECTION Standard>
 GTK_VIEWPORT
 GTK_IS_VIEWPORT
@@ -6966,8 +6961,10 @@ gtk_paper_size_to_key_file
 
 <SUBSECTION Standard>
 GTK_TYPE_PAPER_SIZE
+
 <SUBSECTION Private>
 gtk_paper_size_get_type
+gtk_custom_paper_unix_dialog_get_type
 </SECTION>
 
 

@@ -38,6 +38,11 @@ to be usable when editing the contents of a #GtkTreeView cell.
 
 @celleditable: the object which received the signal.
 
+<!-- ##### ARG GtkCellEditable:editing-canceled ##### -->
+<para>
+
+</para>
+
 <!-- ##### STRUCT GtkCellEditableIface ##### -->
 <para>
 
