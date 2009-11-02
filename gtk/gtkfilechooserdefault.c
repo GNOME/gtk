@@ -405,6 +405,8 @@ static void location_button_toggled_cb (GtkToggleButton *toggle,
 					GtkFileChooserDefault *impl);
 static void location_switch_to_path_bar (GtkFileChooserDefault *impl);
 
+static void stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
+                                               gboolean remove_from_treeview);
 static void     search_stop_searching        (GtkFileChooserDefault *impl,
                                               gboolean               remove_query);
 static void     search_clear_model           (GtkFileChooserDefault *impl, 
@@ -879,14 +881,13 @@ gtk_file_chooser_default_finalize (GObject *object)
   if (impl->browse_path_bar_size_group)
     g_object_unref (impl->browse_path_bar_size_group);
 
-  load_remove_timer (impl);
-
   /* Free all the Models we have */
-  if (impl->browse_files_model)
-    g_object_unref (impl->browse_files_model);
-
+  stop_loading_and_clear_list_model (impl, FALSE);
   search_clear_model (impl, FALSE);
   recent_clear_model (impl, FALSE);
+
+  /* stopping the load above should have cleared this */
+  g_assert (impl->load_timeout_id == 0);
 
   g_free (impl->preview_display_name);
 
@@ -6480,7 +6481,8 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 }
 
 static void
-stop_loading_and_clear_list_model (GtkFileChooserDefault *impl)
+stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
+                                   gboolean remove_from_treeview)
 {
   load_remove_timer (impl); /* This changes the state to LOAD_EMPTY */
   
@@ -6490,7 +6492,8 @@ stop_loading_and_clear_list_model (GtkFileChooserDefault *impl)
       impl->browse_files_model = NULL;
     }
 
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
+  if (remove_from_treeview)
+    gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 }
 
 static char *
@@ -6760,10 +6763,9 @@ set_list_model (GtkFileChooserDefault *impl,
 
   profile_start ("start", NULL);
 
-  stop_loading_and_clear_list_model (impl);
+  stop_loading_and_clear_list_model (impl, TRUE);
 
   set_busy_cursor (impl, TRUE);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view), NULL);
 
   impl->browse_files_model = 
     _gtk_file_system_model_new_for_directory (impl->current_folder,
@@ -9086,7 +9088,7 @@ stop_operation (GtkFileChooserDefault *impl, OperationMode mode)
   switch (mode)
     {
     case OPERATION_MODE_BROWSE:
-      stop_loading_and_clear_list_model (impl);
+      stop_loading_and_clear_list_model (impl, TRUE);
       break;
 
     case OPERATION_MODE_SEARCH:
