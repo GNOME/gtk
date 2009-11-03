@@ -7243,6 +7243,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 	     native windows, as we can't read that data */
 	  gdk_region_offset (new_native_child_region, dx, dy);
 	  gdk_region_subtract (copy_area, new_native_child_region);
+	  gdk_region_offset (new_native_child_region, -dx, -dy);
 	}
 
       gdk_region_subtract (new_region, copy_area);
@@ -7260,6 +7261,13 @@ gdk_window_move_resize_internal (GdkWindow *window,
        * We also invalidate any children in that area, which could include
        * this window if it still overlaps that area.
        */
+      if (old_native_child_region)
+	{
+	  /* No need to expose the region that the native window move copies */
+	  gdk_region_offset (old_native_child_region, dx, dy);
+	  gdk_region_intersect (old_native_child_region, new_native_child_region);
+	  gdk_region_subtract (new_region, old_native_child_region);
+	}
       gdk_window_invalidate_region (GDK_WINDOW (private->parent), new_region, TRUE);
 
       gdk_region_destroy (old_region);
@@ -7453,6 +7461,13 @@ gdk_window_scroll (GdkWindow *window,
   move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
 
   /* Invalidate not copied regions */
+  if (old_native_child_region)
+    {
+      /* No need to expose the region that the native window move copies */
+      gdk_region_offset (old_native_child_region, dx, dy);
+      gdk_region_intersect (old_native_child_region, new_native_child_region);
+      gdk_region_subtract (noncopy_area, old_native_child_region);
+    }
   gdk_window_invalidate_region (window, noncopy_area, TRUE);
 
   gdk_region_destroy (noncopy_area);
