@@ -6831,7 +6831,8 @@ gdk_window_hide (GdkWindow *window)
     }
 
   /* Invalidate the rect */
-  gdk_window_invalidate_in_parent (private);
+  if (was_mapped)
+    gdk_window_invalidate_in_parent (private);
 }
 
 /**
