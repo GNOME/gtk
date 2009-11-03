@@ -5606,6 +5606,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->destroy = _gdk_x11_window_destroy;
   iface->input_window_destroy = _gdk_input_window_destroy;
   iface->input_window_crossing = _gdk_input_crossing_event;
+  iface->supports_native_bg = TRUE;
 }
 
 #define __GDK_WINDOW_X11_C__
