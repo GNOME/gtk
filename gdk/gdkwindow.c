@@ -4429,6 +4429,10 @@ gdk_window_clear_region_internal (GdkWindow *window,
 	  gdk_region_intersect (copy,
 				private->clip_region_with_children);
 
+
+	  /* Drawing directly to the window, flush anything outstanding to
+	     guarantee ordering. */
+	  gdk_window_flush (window);
 	  impl_iface->clear_region (window, copy, send_expose);
 
 	  gdk_region_destroy (copy);
