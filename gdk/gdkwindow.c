@@ -134,6 +134,12 @@ enum {
   PROP_CURSOR
 };
 
+typedef enum {
+  CLEAR_BG_NONE,
+  CLEAR_BG_WINCLEARED, /* Clear backgrounds except those that the window system clears */
+  CLEAR_BG_ALL
+} ClearBg;
+
 struct _GdkWindowPaint
 {
   GdkRegion *region;
@@ -332,6 +338,14 @@ static void update_cursor               (GdkDisplay *display);
 static void impl_window_add_update_area (GdkWindowObject *impl_window,
 					 GdkRegion *region);
 static void gdk_window_region_move_free (GdkWindowRegionMove *move);
+static void gdk_window_invalidate_region_full (GdkWindow       *window,
+					       const GdkRegion *region,
+					       gboolean         invalidate_children,
+					       ClearBg          clear_bg);
+static void gdk_window_invalidate_rect_full (GdkWindow          *window,
+					     const GdkRectangle *rect,
+					     gboolean            invalidate_children,
+					     ClearBg             clear_bg);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -3924,9 +3938,10 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 	  gdk_region_subtract (exposure_region, clip);
 	  gdk_region_destroy (clip);
 
-	  gdk_window_invalidate_region (GDK_WINDOW (private),
-					exposure_region,
-					_gdk_gc_get_subwindow (gc) == GDK_INCLUDE_INFERIORS);
+	  gdk_window_invalidate_region_full (GDK_WINDOW (private),
+					      exposure_region,
+					      _gdk_gc_get_subwindow (gc) == GDK_INCLUDE_INFERIORS,
+					      CLEAR_BG_ALL);
 
 	  gdk_region_destroy (exposure_region);
 	}
@@ -5425,21 +5440,11 @@ gdk_window_process_updates (GdkWindow *window,
   g_object_unref (window);
 }
 
-/**
- * gdk_window_invalidate_rect:
- * @window: a #GdkWindow
- * @rect: rectangle to invalidate or %NULL to invalidate the whole
- *      window
- * @invalidate_children: whether to also invalidate child windows
- *
- * A convenience wrapper around gdk_window_invalidate_region() which
- * invalidates a rectangular region. See
- * gdk_window_invalidate_region() for details.
- **/
-void
-gdk_window_invalidate_rect (GdkWindow          *window,
-			    const GdkRectangle *rect,
-			    gboolean            invalidate_children)
+static void
+gdk_window_invalidate_rect_full (GdkWindow          *window,
+				  const GdkRectangle *rect,
+				  gboolean            invalidate_children,
+				  ClearBg             clear_bg)
 {
   GdkRectangle window_rect;
   GdkRegion *region;
@@ -5464,8 +5469,27 @@ gdk_window_invalidate_rect (GdkWindow          *window,
     }
 
   region = gdk_region_rectangle (rect);
-  gdk_window_invalidate_region (window, region, invalidate_children);
+  gdk_window_invalidate_region_full (window, region, invalidate_children, clear_bg);
   gdk_region_destroy (region);
+}
+
+/**
+ * gdk_window_invalidate_rect:
+ * @window: a #GdkWindow
+ * @rect: rectangle to invalidate or %NULL to invalidate the whole
+ *      window
+ * @invalidate_children: whether to also invalidate child windows
+ *
+ * A convenience wrapper around gdk_window_invalidate_region() which
+ * invalidates a rectangular region. See
+ * gdk_window_invalidate_region() for details.
+ **/
+void
+gdk_window_invalidate_rect (GdkWindow          *window,
+			    const GdkRectangle *rect,
+			    gboolean            invalidate_children)
+{
+  gdk_window_invalidate_rect_full (window, rect, invalidate_children, CLEAR_BG_NONE);
 }
 
 static void
@@ -5506,37 +5530,23 @@ impl_window_add_update_area (GdkWindowObject *impl_window,
     }
 }
 
-/**
- * gdk_window_invalidate_maybe_recurse:
- * @window: a #GdkWindow
- * @region: a #GdkRegion
- * @child_func: function to use to decide if to recurse to a child,
- *              %NULL means never recurse.
- * @user_data: data passed to @child_func
- *
- * Adds @region to the update area for @window. The update area is the
- * region that needs to be redrawn, or "dirty region." The call
- * gdk_window_process_updates() sends one or more expose events to the
- * window, which together cover the entire update area. An
- * application would normally redraw the contents of @window in
- * response to those expose events.
- *
- * GDK will call gdk_window_process_all_updates() on your behalf
- * whenever your program returns to the main loop and becomes idle, so
- * normally there's no need to do that manually, you just need to
- * invalidate regions that you know should be redrawn.
- *
- * The @child_func parameter controls whether the region of
- * each child window that intersects @region will also be invalidated.
- * Only children for which @child_func returns TRUE will have the area
- * invalidated.
- **/
-void
-gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
-				     const GdkRegion *region,
-				     gboolean       (*child_func) (GdkWindow *,
-								   gpointer),
-				     gpointer   user_data)
+/* clear_bg controls if the region will be cleared to
+ * the background color/pixmap if the exposure mask is not
+ * set for the window, whereas this might not otherwise be
+ * done (unless necessary to emulate background settings).
+ * Set this to CLEAR_BG_WINCLEARED or CLEAR_BG_ALL if you
+ * need to clear the background, such as when exposing the area beneath a
+ * hidden or moved window, but not when an app requests repaint or when the
+ * windowing system exposes a newly visible area (because then the windowing
+ * system has already cleared the area).
+ */
+static void
+gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
+					  const GdkRegion *region,
+					  ClearBg          clear_bg,
+					  gboolean       (*child_func) (GdkWindow *,
+									gpointer),
+					  gpointer   user_data)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *impl_window;
@@ -5587,8 +5597,8 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 	      gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
 	      gdk_region_intersect (child_region, tmp);
 
-	      gdk_window_invalidate_maybe_recurse ((GdkWindow *)child,
-						   child_region, child_func, user_data);
+	      gdk_window_invalidate_maybe_recurse_full ((GdkWindow *)child,
+							child_region, clear_bg, child_func, user_data);
 
 	      gdk_region_destroy (tmp);
 	    }
@@ -5612,10 +5622,56 @@ gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
 
       /* Convert to impl coords */
       gdk_region_offset (visible_region, private->abs_x, private->abs_y);
-      impl_window_add_update_area (impl_window, visible_region);
+
+      /* Only invalidate area if app requested expose events or if
+	 we need to clear the area (by request or to emulate background
+	 clearing for non-native windows or native windows with no support
+	 for window backgrounds */
+      if (private->event_mask & GDK_EXPOSURE_MASK ||
+	  clear_bg == CLEAR_BG_ALL ||
+	  (clear_bg == CLEAR_BG_WINCLEARED &&
+	   (!clears_as_native (private) ||
+	    !GDK_WINDOW_IMPL_GET_IFACE (private->impl)->supports_native_bg)))
+	impl_window_add_update_area (impl_window, visible_region);
     }
 
   gdk_region_destroy (visible_region);
+}
+
+/**
+ * gdk_window_invalidate_maybe_recurse:
+ * @window: a #GdkWindow
+ * @region: a #GdkRegion
+ * @child_func: function to use to decide if to recurse to a child,
+ *              %NULL means never recurse.
+ * @user_data: data passed to @child_func
+ *
+ * Adds @region to the update area for @window. The update area is the
+ * region that needs to be redrawn, or "dirty region." The call
+ * gdk_window_process_updates() sends one or more expose events to the
+ * window, which together cover the entire update area. An
+ * application would normally redraw the contents of @window in
+ * response to those expose events.
+ *
+ * GDK will call gdk_window_process_all_updates() on your behalf
+ * whenever your program returns to the main loop and becomes idle, so
+ * normally there's no need to do that manually, you just need to
+ * invalidate regions that you know should be redrawn.
+ *
+ * The @child_func parameter controls whether the region of
+ * each child window that intersects @region will also be invalidated.
+ * Only children for which @child_func returns TRUE will have the area
+ * invalidated.
+ **/
+void
+gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
+				     const GdkRegion *region,
+				     gboolean       (*child_func) (GdkWindow *,
+								   gpointer),
+				     gpointer   user_data)
+{
+  gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_NONE,
+					    child_func, user_data);
 }
 
 static gboolean
@@ -5623,6 +5679,18 @@ true_predicate (GdkWindow *window,
 		gpointer   user_data)
 {
   return TRUE;
+}
+
+static void
+gdk_window_invalidate_region_full (GdkWindow       *window,
+				    const GdkRegion *region,
+				    gboolean         invalidate_children,
+				    ClearBg          clear_bg)
+{
+  gdk_window_invalidate_maybe_recurse_full (window, region, clear_bg,
+					    invalidate_children ?
+					    true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
+				       NULL);
 }
 
 /**
@@ -5715,9 +5783,9 @@ _gdk_window_invalidate_for_expose (GdkWindow       *window,
       gdk_region_destroy (move_region);
     }
 
-  gdk_window_invalidate_maybe_recurse (window, region,
-				       (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
-				       NULL);
+  gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_WINCLEARED,
+					    (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
+					    NULL);
 }
 
 
@@ -6413,7 +6481,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       if (gdk_window_is_viewable (window))
 	{
 	  _gdk_synthesize_crossing_events_for_geometry_change (window);
-	  gdk_window_invalidate_rect (window, NULL, TRUE);
+	  gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
 	}
     }
 }
@@ -6477,7 +6545,7 @@ gdk_window_raise (GdkWindow *window)
       new_region = gdk_region_copy (private->clip_region);
 
       gdk_region_subtract (new_region, old_region);
-      gdk_window_invalidate_region (window, new_region, TRUE);
+      gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_ALL);
 
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
@@ -6568,7 +6636,7 @@ gdk_window_invalidate_in_parent (GdkWindowObject *private)
   child.height = private->height;
   gdk_rectangle_intersect (&r, &child, &r);
 
-  gdk_window_invalidate_rect (GDK_WINDOW (private->parent), &r, TRUE);
+  gdk_window_invalidate_rect_full (GDK_WINDOW (private->parent), &r, TRUE, CLEAR_BG_ALL);
 }
 
 
@@ -7000,7 +7068,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
        * roundtrip
        */
       gdk_region_subtract (new_region, old_region);
-      gdk_window_invalidate_region (window, new_region, TRUE);
+      gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_WINCLEARED);
 
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
@@ -7274,7 +7342,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 	  gdk_region_intersect (old_native_child_region, new_native_child_region);
 	  gdk_region_subtract (new_region, old_native_child_region);
 	}
-      gdk_window_invalidate_region (GDK_WINDOW (private->parent), new_region, TRUE);
+      gdk_window_invalidate_region_full (GDK_WINDOW (private->parent), new_region, TRUE, CLEAR_BG_ALL);
 
       gdk_region_destroy (old_region);
       gdk_region_destroy (new_region);
@@ -7474,7 +7542,7 @@ gdk_window_scroll (GdkWindow *window,
       gdk_region_intersect (old_native_child_region, new_native_child_region);
       gdk_region_subtract (noncopy_area, old_native_child_region);
     }
-  gdk_window_invalidate_region (window, noncopy_area, TRUE);
+  gdk_window_invalidate_region_full (window, noncopy_area, TRUE, CLEAR_BG_ALL);
 
   gdk_region_destroy (noncopy_area);
 
@@ -7543,7 +7611,7 @@ gdk_window_move_region (GdkWindow       *window,
   gdk_region_offset (copy_area, private->abs_x, private->abs_y);
   move_region_on_impl (impl_window, copy_area, dx, dy); /* Takes ownership of copy_area */
 
-  gdk_window_invalidate_region (window, nocopy_area, FALSE);
+  gdk_window_invalidate_region_full (window, nocopy_area, FALSE, CLEAR_BG_ALL);
   gdk_region_destroy (nocopy_area);
 }
 
@@ -8076,7 +8144,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
       diff = gdk_region_copy (new_region);
       gdk_region_subtract (diff, old_region);
 
-      gdk_window_invalidate_region (window, diff, TRUE);
+      gdk_window_invalidate_region_full (window, diff, TRUE, CLEAR_BG_ALL);
 
       gdk_region_destroy (diff);
 
@@ -8089,7 +8157,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 	  /* Adjust region to parent window coords */
 	  gdk_region_offset (diff, private->x, private->y);
 
-	  gdk_window_invalidate_region (GDK_WINDOW (private->parent), diff, TRUE);
+	  gdk_window_invalidate_region_full (GDK_WINDOW (private->parent), diff, TRUE, CLEAR_BG_ALL);
 
 	  gdk_region_destroy (diff);
 	}
