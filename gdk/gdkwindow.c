@@ -4387,8 +4387,12 @@ gdk_window_clear (GdkWindow *window)
 			 width, height);
 }
 
+/* TRUE if the window clears to the same pixels as a native
+   window clear. This means you can use the native window
+   clearing operation, and additionally it means any clearing
+   done by the native window system for you will already be right */
 static gboolean
-clears_on_native (GdkWindowObject *private)
+clears_as_native (GdkWindowObject *private)
 {
   GdkWindowObject *next;
 
@@ -4422,7 +4426,7 @@ gdk_window_clear_region_internal (GdkWindow *window,
 
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
 
-      if (impl_iface->clear_region && clears_on_native (private))
+      if (impl_iface->clear_region && clears_as_native (private))
 	{
 	  GdkRegion *copy;
 	  copy = gdk_region_copy (region);
