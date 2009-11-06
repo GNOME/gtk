@@ -216,8 +216,10 @@ gdk_drag_context_new (void)
 /**
  * gdk_drag_context_ref:
  * @context: a #GdkDragContext.
- * 
+ *
  * Deprecated function; use g_object_ref() instead.
+ *
+ * Deprecated: 2.2: Use g_object_ref() instead.
  **/
 void            
 gdk_drag_context_ref (GdkDragContext *context)
@@ -230,8 +232,10 @@ gdk_drag_context_ref (GdkDragContext *context)
 /**
  * gdk_drag_context_unref:
  * @context: a #GdkDragContext.
- * 
+ *
  * Deprecated function; use g_object_unref() instead.
+ *
+ * Deprecated: 2.2: Use g_object_unref() instead.
  **/
 void            
 gdk_drag_context_unref (GdkDragContext *context)
