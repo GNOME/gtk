@@ -1932,6 +1932,10 @@ if test "$os_win32" != "yes"; then
   AC_CHECK_HEADER(cairo-ps.h,,AC_MSG_ERROR([
 *** Can't find cairo-ps.h. You must build Cairo with the 
 *** postscript backend enabled.]))
+
+  AC_CHECK_HEADER(cairo-svg.h,,AC_MSG_ERROR([
+*** Can't find cairo-svg.h. You must build Cairo with the
+*** svg backend enabled.]))
 fi   
 
 CPPFLAGS="$gtk_save_cppflags"
