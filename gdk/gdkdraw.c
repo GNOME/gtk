@@ -284,6 +284,8 @@ gdk_drawable_get_colormap (GdkDrawable *drawable)
  * (Drawables were not objects in previous versions of GDK.)
  * 
  * Return value: the same @drawable passed in
+ *
+ * Deprecated: 2.0: Use g_object_ref() instead.
  **/
 GdkDrawable*
 gdk_drawable_ref (GdkDrawable *drawable)
@@ -294,9 +296,10 @@ gdk_drawable_ref (GdkDrawable *drawable)
 /**
  * gdk_drawable_unref:
  * @drawable: a #GdkDrawable
- * 
+ *
  * Deprecated equivalent of calling g_object_unref() on @drawable.
  * 
+ * Deprecated: 2.0: Use g_object_unref() instead.
  **/
 void
 gdk_drawable_unref (GdkDrawable *drawable)
@@ -512,7 +515,7 @@ gdk_draw_polygon (GdkDrawable    *drawable,
  * 
  * Draws a string of characters in the given font or fontset.
  * 
- * Deprecated: Use gdk_draw_layout() instead.
+ * Deprecated: 2.4: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_string (GdkDrawable *drawable,
@@ -543,7 +546,7 @@ gdk_draw_string (GdkDrawable *drawable,
  * 
  * Draws a number of characters in the given font or fontset.
  *
- * Deprecated: Use gdk_draw_layout() instead.
+ * Deprecated: 2.4: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_text (GdkDrawable *drawable,
@@ -576,7 +579,7 @@ gdk_draw_text (GdkDrawable *drawable,
  * If the font is a 1-byte font, the string is converted into 1-byte 
  * characters (discarding the high bytes) before output.
  * 
- * Deprecated: Use gdk_draw_layout() instead.
+ * Deprecated: 2.4: Use gdk_draw_layout() instead.
  **/
 void
 gdk_draw_text_wc (GdkDrawable	 *drawable,
