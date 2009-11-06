@@ -158,7 +158,7 @@ static GSList *status_windows = NULL;
 void
 gtk_im_context_xim_register_type (GTypeModule *type_module)
 {
-  static const GTypeInfo im_context_xim_info =
+  const GTypeInfo im_context_xim_info =
   {
     sizeof (GtkIMContextXIMClass),
     (GBaseInitFunc) NULL,

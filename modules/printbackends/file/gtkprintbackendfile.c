@@ -109,7 +109,7 @@ static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter  
 static void
 gtk_print_backend_file_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_file_info =
+  const GTypeInfo print_backend_file_info =
   {
     sizeof (GtkPrintBackendFileClass),
     NULL,		/* base_init */

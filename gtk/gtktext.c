@@ -471,7 +471,7 @@ gtk_text_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      static const GInterfaceInfo editable_info =
+      const GInterfaceInfo editable_info =
       {
 	(GInterfaceInitFunc) gtk_text_editable_init, /* interface_init */
 	NULL, /* interface_finalize */

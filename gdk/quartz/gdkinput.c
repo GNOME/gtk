@@ -83,7 +83,7 @@ gdk_device_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkDeviceClass),
         (GBaseInitFunc) NULL,

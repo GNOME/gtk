@@ -46,7 +46,7 @@ gail_text_util_get_type(void)
 
   if (!type)
     {
-      static const GTypeInfo tinfo =
+      const GTypeInfo tinfo =
       {
         sizeof (GailTextUtilClass),
         (GBaseInitFunc) NULL, /* base init */

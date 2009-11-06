@@ -65,7 +65,7 @@ gtk_dial_get_type ()
 
   if (!dial_type)
     {
-      static const GTypeInfo dial_info =
+      const GTypeInfo dial_info =
       {
 	sizeof (GtkDialClass),
 	NULL,

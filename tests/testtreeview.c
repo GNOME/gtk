@@ -891,7 +891,7 @@ gtk_tree_model_types_get_type (void)
 
   if (!model_types_type)
     {
-      static const GTypeInfo model_types_info =
+      const GTypeInfo model_types_info =
       {
         sizeof (GtkTreeModelTypesClass),
 	NULL,		/* base_init */
@@ -904,7 +904,7 @@ gtk_tree_model_types_get_type (void)
         (GInstanceInitFunc) gtk_tree_model_types_init
       };
 
-      static const GInterfaceInfo tree_model_info =
+      const GInterfaceInfo tree_model_info =
       {
 	(GInterfaceInitFunc) gtk_tree_model_types_tree_model_init,
 	NULL,

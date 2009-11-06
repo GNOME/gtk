@@ -155,7 +155,7 @@ gtk_container_get_type (void)
 	NULL,       /* value_table */
       };
 
-      static const GInterfaceInfo buildable_info =
+      const GInterfaceInfo buildable_info =
       {
 	(GInterfaceInitFunc) gtk_container_buildable_init,
 	NULL,

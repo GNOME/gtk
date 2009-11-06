@@ -11154,7 +11154,7 @@ tictactoe_get_type (void)
 
   if (!ttt_type)
     {
-      static const GTypeInfo ttt_info =
+      const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
 	NULL, /* base_init */
@@ -14606,7 +14606,7 @@ tictactoe_get_type (void)
 
   if (!ttt_type)
     {
-      static const GTypeInfo ttt_info =
+      const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
 	NULL, /* base_init */
@@ -14963,7 +14963,7 @@ gtk_dial_get_type ()
 
   if (!dial_type)
     {
-      static const GTypeInfo dial_info =
+      const GTypeInfo dial_info =
       {
 	sizeof (GtkDialClass),
 	NULL,

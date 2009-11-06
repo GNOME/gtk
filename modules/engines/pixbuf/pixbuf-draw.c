@@ -1058,7 +1058,7 @@ GType pixbuf_type_style = 0;
 void 
 pixbuf_style_register_type (GTypeModule *module) 
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
     {
     sizeof (PixbufStyleClass),
     (GBaseInitFunc) NULL,

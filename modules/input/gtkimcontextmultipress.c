@@ -63,7 +63,7 @@ static void vfunc_get_preedit_string (GtkIMContext   *context,
 void
 gtk_im_context_multipress_register_type (GTypeModule* type_module)
 {
-  static const GTypeInfo im_context_multipress_info =
+  const GTypeInfo im_context_multipress_info =
     {
       sizeof (GtkImContextMultipressClass),
       (GBaseInitFunc) NULL,

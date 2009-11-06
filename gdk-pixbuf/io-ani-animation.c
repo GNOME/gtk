@@ -49,7 +49,7 @@ gdk_pixbuf_ani_anim_get_type (void)
         static GType object_type = 0;
 
         if (!object_type) {
-                static const GTypeInfo object_info = {
+                const GTypeInfo object_info = {
                         sizeof (GdkPixbufAniAnimClass),
                         (GBaseInitFunc) NULL,
                         (GBaseFinalizeFunc) NULL,
@@ -191,7 +191,7 @@ gdk_pixbuf_ani_anim_iter_get_type (void)
         static GType object_type = 0;
 
         if (!object_type) {
-                static const GTypeInfo object_info = {
+                const GTypeInfo object_info = {
                         sizeof (GdkPixbufAniAnimIterClass),
                         (GBaseInitFunc) NULL,
                         (GBaseFinalizeFunc) NULL,

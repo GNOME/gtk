@@ -30,7 +30,7 @@ static GType gtk_printer_cups_type = 0;
 void 
 gtk_printer_cups_register_type (GTypeModule *module)
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
   {
     sizeof (GtkPrinterCupsClass),
     (GBaseInitFunc) NULL,

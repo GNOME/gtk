@@ -92,7 +92,7 @@ gdk_window_impl_directfb_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
         {
           sizeof (GdkWindowImplDirectFBClass),
           (GBaseInitFunc) NULL,
@@ -105,14 +105,14 @@ gdk_window_impl_directfb_get_type (void)
           (GInstanceInitFunc) gdk_window_impl_directfb_init,
         };
 
-      static const GInterfaceInfo paintable_info =
+      const GInterfaceInfo paintable_info =
         {
           (GInterfaceInitFunc) gdk_window_impl_directfb_paintable_init,
           NULL,
           NULL
         };
 
-      static const GInterfaceInfo window_impl_info =
+      const GInterfaceInfo window_impl_info =
         {
           (GInterfaceInitFunc) gdk_window_impl_iface_init,
           NULL,

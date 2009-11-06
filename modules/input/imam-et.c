@@ -43,7 +43,7 @@ static void am_et_init (GtkIMContextSimple *im_context);
 static void
 am_et_register_type (GTypeModule *module)
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
   {
     sizeof (GtkIMContextSimpleClass),
     (GBaseInitFunc) NULL,

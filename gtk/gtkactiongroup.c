@@ -131,7 +131,7 @@ gtk_action_group_get_type (void)
         (GInstanceInitFunc) gtk_action_group_init,
       };
 
-      static const GInterfaceInfo buildable_info =
+      const GInterfaceInfo buildable_info =
       {
 	(GInterfaceInitFunc) gtk_action_group_buildable_init,
 	NULL,

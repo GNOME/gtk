@@ -124,7 +124,7 @@ static GObjectClass *parent_class;
 void
 gtk_im_context_ime_register_type (GTypeModule *type_module)
 {
-  static const GTypeInfo im_context_ime_info = {
+  const GTypeInfo im_context_ime_info = {
     sizeof (GtkIMContextIMEClass),
     (GBaseInitFunc) NULL,
     (GBaseFinalizeFunc) NULL,

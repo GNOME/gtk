@@ -88,7 +88,7 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 static void
 gtk_print_backend_lpr_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_lpr_info =
+  const GTypeInfo print_backend_lpr_info =
   {
     sizeof (GtkPrintBackendLprClass),
     NULL,		/* base_init */
