@@ -38,6 +38,61 @@
 #include "gtkalias.h"
 #include <gdk/gdkkeysyms.h>
 
+/**
+ * SECTION:gtkaccellabel
+ * @Short_description: A label which displays an accelerator key on the right of the text
+ * @Title: GtkAccelLabel
+ * @See_also: #GtkItemFactory, #GtkAccelGroup
+ *
+ * The #GtkAccelLabel widget is a subclass of #GtkLabel that also displays an
+ * accelerator key on the right of the label text, e.g. 'Ctl+S'.
+ * It is commonly used in menus to show the keyboard short-cuts for commands.
+ *
+ * The accelerator key to display is not set explicitly.
+ * Instead, the #GtkAccelLabel displays the accelerators which have been added to
+ * a particular widget. This widget is set by calling
+ * gtk_accel_label_set_accel_widget().
+ *
+ * For example, a #GtkMenuItem widget may have an accelerator added to emit the
+ * "activate" signal when the 'Ctl+S' key combination is pressed.
+ * A #GtkAccelLabel is created and added to the #GtkMenuItem, and
+ * gtk_accel_label_set_accel_widget() is called with the #GtkMenuItem as the
+ * second argument. The #GtkAccelLabel will now display 'Ctl+S' after its label.
+ *
+ * Note that creating a #GtkMenuItem with gtk_menu_item_new_with_label() (or
+ * one of the similar functions for #GtkCheckMenuItem and #GtkRadioMenuItem)
+ * automatically adds a #GtkAccelLabel to the #GtkMenuItem and calls
+ * gtk_accel_label_set_accel_widget() to set it up for you.
+ *
+ * A #GtkAccelLabel will only display accelerators which have %GTK_ACCEL_VISIBLE
+ * set (see #GtkAccelFlags).
+ * A #GtkAccelLabel can display multiple accelerators and even signal names,
+ * though it is almost always used to display just one accelerator key.
+ * <example>
+ * <title>Creating a simple menu item with an accelerator key.</title>
+ * <programlisting>
+ *   GtkWidget *save_item;
+ *   GtkAccelGroup *accel_group;
+ *
+ *   /<!---->* Create a GtkAccelGroup and add it to the window. *<!---->/
+ *   accel_group = gtk_accel_group_new (<!-- -->);
+ *   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+ *
+ *   /<!---->* Create the menu item using the convenience function. *<!---->/
+ *   save_item = gtk_menu_item_new_with_label ("Save");
+ *   gtk_widget_show (save_item);
+ *   gtk_container_add (GTK_CONTAINER (menu), save_item);
+ *
+ *   /<!---->* Now add the accelerator to the GtkMenuItem. Note that since we called
+ *      gtk_menu_item_new_with_label(<!-- -->) to create the GtkMenuItem the
+ *      GtkAccelLabel is automatically set up to display the GtkMenuItem
+ *      accelerators. We just need to make sure we use GTK_ACCEL_VISIBLE here. *<!---->/
+ *   gtk_widget_add_accelerator (save_item, "activate", accel_group,
+ *                               GDK_s, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);
+ * </programlisting>
+ * </example>
+ */
+
 enum {
   PROP_0,
   PROP_ACCEL_CLOSURE,
@@ -191,6 +246,14 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   accel_label->accel_string = NULL;
 }
 
+/**
+ * gtk_accel_label_new:
+ * @string: the label string. Must be non-%NULL.
+ *
+ * Creates a new #GtkAccelLabel.
+ *
+ * Returns: a new #GtkAccelLabel.
+ */
 GtkWidget*
 gtk_accel_label_new (const gchar *string)
 {
@@ -233,8 +296,7 @@ gtk_accel_label_finalize (GObject *object)
  * Fetches the widget monitored by this accelerator label. See
  * gtk_accel_label_set_accel_widget().
  *
- * Return value: the object monitored by the accelerator label,
- *               or %NULL.
+ * Returns: the object monitored by the accelerator label, or %NULL.
  **/
 GtkWidget*
 gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
@@ -244,6 +306,16 @@ gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
   return accel_label->accel_widget;
 }
 
+/**
+ * gtk_accel_label_get_accel_width:
+ * @accel_label: a #GtkAccelLabel.
+ *
+ * Returns the width needed to display the accelerator key(s).
+ * This is used by menus to align all of the #GtkMenuItem widgets, and shouldn't
+ * be needed by applications.
+ *
+ * Returns: the width needed to display the accelerator key(s).
+ */
 guint
 gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {
@@ -749,6 +821,16 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
   return g_string_free (gstring, FALSE);
 }
 
+/**
+ * gtk_accel_label_refetch:
+ * @accel_label: a #GtkAccelLabel.
+ *
+ * Recreates the string representing the accelerator keys.
+ * This should not be needed since the string is automatically updated whenever
+ * accelerators are added or removed from the associated widget.
+ *
+ * Returns: always returns %FALSE.
+ */
 gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
