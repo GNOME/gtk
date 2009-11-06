@@ -51,6 +51,12 @@ G_BEGIN_DECLS
 typedef struct _GtkAccelLabel	    GtkAccelLabel;
 typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
 
+/**
+ * GtkAccelLabel:
+ *
+ * The #GtkAccelLabel-struct struct contains private data only, and
+ * should be accessed using the functions below.
+ */
 struct _GtkAccelLabel
 {
   GtkLabel label;
