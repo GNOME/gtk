@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-11-06 13:56+0000\n"
-"PO-Revision-Date: 2009-11-06 21:47+0100\n"
+"POT-Creation-Date: 2009-11-06 20:52+0000\n"
+"PO-Revision-Date: 2009-11-07 12:12+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -3115,15 +3115,13 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "No se ha podido encontrar un elemento con el URI «%s»"
 
 #: ../gtk/gtkspinner.c:454
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Super"
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr "Marcador incrementable"
 
 #: ../gtk/gtkspinner.c:455
-#| msgid "Provides visual status"
 msgid "Provides visual indication of progress"
 msgstr "Proporciona una indicación visual del progreso"
 
