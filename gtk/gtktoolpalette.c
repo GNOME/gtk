@@ -675,7 +675,7 @@ gtk_tool_palette_realize (GtkWidget *widget)
 }
 
 static void
-gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment G_GNUC_UNUSED,
+gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
                                            gpointer       data)
 {
   GtkWidget *widget = GTK_WIDGET (data);
@@ -789,7 +789,7 @@ gtk_tool_palette_remove (GtkContainer *container,
 
 static void
 gtk_tool_palette_forall (GtkContainer *container,
-                         gboolean      internals G_GNUC_UNUSED,
+                         gboolean      internals,
                          GtkCallback   callback,
                          gpointer      callback_data)
 {
@@ -806,7 +806,7 @@ gtk_tool_palette_forall (GtkContainer *container,
 }
 
 static GType
-gtk_tool_palette_child_type (GtkContainer *container G_GNUC_UNUSED)
+gtk_tool_palette_child_type (GtkContainer *container)
 {
   return GTK_TYPE_TOOL_ITEM_GROUP;
 }
@@ -1333,7 +1333,7 @@ gtk_tool_palette_set_group_position (GtkToolPalette *palette,
 
 static void
 gtk_tool_palette_group_notify_collapsed (GtkToolItemGroup *group,
-                                         GParamSpec       *pspec G_GNUC_UNUSED,
+                                         GParamSpec       *pspec,
                                          gpointer          data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (data);
@@ -1751,10 +1751,10 @@ _gtk_tool_palette_get_item_size (GtkToolPalette *palette,
 
 static void
 gtk_tool_palette_item_drag_data_get (GtkWidget        *widget,
-                                     GdkDragContext   *context G_GNUC_UNUSED,
+                                     GdkDragContext   *context,
                                      GtkSelectionData *selection,
-                                     guint             info G_GNUC_UNUSED,
-                                     guint             time G_GNUC_UNUSED,
+                                     guint             info,
+                                     guint             time,
                                      gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };
@@ -1769,10 +1769,10 @@ gtk_tool_palette_item_drag_data_get (GtkWidget        *widget,
 
 static void
 gtk_tool_palette_child_drag_data_get (GtkWidget        *widget,
-                                      GdkDragContext   *context G_GNUC_UNUSED,
+                                      GdkDragContext   *context,
                                       GtkSelectionData *selection,
-                                      guint             info G_GNUC_UNUSED,
-                                      guint             time G_GNUC_UNUSED,
+                                      guint             info,
+                                      guint             time,
                                       gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };

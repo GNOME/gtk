@@ -314,7 +314,7 @@ gtk_tool_item_group_header_expose_event_cb (GtkWidget      *widget,
 }
 
 static void
-gtk_tool_item_group_header_size_request_cb (GtkWidget      *widget G_GNUC_UNUSED,
+gtk_tool_item_group_header_size_request_cb (GtkWidget      *widget,
                                             GtkRequisition *requisition,
                                             gpointer        data)
 {
@@ -323,7 +323,7 @@ gtk_tool_item_group_header_size_request_cb (GtkWidget      *widget G_GNUC_UNUSED
 }
 
 static void
-gtk_tool_item_group_header_clicked_cb (GtkButton *button G_GNUC_UNUSED,
+gtk_tool_item_group_header_clicked_cb (GtkButton *button,
                                        gpointer   data)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
@@ -1048,7 +1048,7 @@ gtk_tool_item_group_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_tool_item_group_set_focus_cb (GtkWidget *window G_GNUC_UNUSED,
+gtk_tool_item_group_set_focus_cb (GtkWidget *window,
                                   GtkWidget *widget,
                                   gpointer   user_data)
 {
@@ -1284,7 +1284,7 @@ gtk_tool_item_group_forall (GtkContainer *container,
 }
 
 static GType
-gtk_tool_item_group_child_type (GtkContainer *container G_GNUC_UNUSED)
+gtk_tool_item_group_child_type (GtkContainer *container)
 {
   return GTK_TYPE_TOOL_ITEM;
 }
@@ -2421,7 +2421,7 @@ _gtk_tool_item_group_get_width_for_height (GtkToolItemGroup *group,
 
 static void
 gtk_tool_palette_reconfigured_foreach_item (GtkWidget *child,
-                                            gpointer   data G_GNUC_UNUSED)
+                                            gpointer   data)
 {
   if (GTK_IS_TOOL_ITEM (child))
     gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (child));
