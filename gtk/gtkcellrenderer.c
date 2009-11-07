@@ -132,7 +132,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * @path: the path identifying the edited cell
    *
    * This signal gets emitted when a cell starts to be edited.
-   * The indended use of this signal is to do special setup
+   * The intended use of this signal is to do special setup
    * on @editable, e.g. adding a #GtkEntryCompletion or setting
    * up additional columns in a #GtkComboBox.
    *
