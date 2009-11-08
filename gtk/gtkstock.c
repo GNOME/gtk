@@ -34,6 +34,31 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkstock
+ * @Short_description:
+Prebuilt common menu/toolbar items and corresponding icons
+ * @Title: Stock Items
+ *
+ * Stock items represent commonly-used menu or toolbar items such as
+ * "Open" or "Exit". Each stock item is identified by a stock ID;
+ * stock IDs are just strings, but macros such as #GTK_STOCK_OPEN are
+ * provided to avoid typing mistakes in the strings.
+ * Applications can register their own stock items in addition to those
+ * built-in to GTK+.
+ *
+ * Each stock ID can be associated with a #GtkStockItem, which contains
+ * the user-visible label, keyboard accelerator, and translation domain
+ * of the menu or toolbar item; and/or with an icon stored in a
+ * #GtkIconFactory. See <link
+ * linkend="gtk-Themeable-Stock-Images">GtkIconFactory</link> for
+ * more information on stock icons. The connection between a
+ * #GtkStockItem and stock icons is purely conventional (by virtue of
+ * using the same stock ID); it's possible to register a stock item but
+ * no icon, and vice versa. Stock icons may have a RTL variant which gets
+ * used for right-to-left locales.
+ */
+
 static GHashTable *translate_hash = NULL;
 static GHashTable *stock_hash = NULL;
 static void init_stock_hash (void);
