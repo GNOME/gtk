@@ -130,6 +130,7 @@ gtk_OBJECTS_cell = \
 	gtkcellrendererpixbuf.obj \
 	gtkcellrendererprogress.obj \
 	gtkcellrendererspin.obj	\
+	gtkcellrendererspinner.obj \
 	gtkcellview.obj \
 	gtkliststore.obj \
 	gtktreednd.obj \
@@ -287,6 +288,7 @@ gtk_OBJECTS = \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
+	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
@@ -320,6 +322,7 @@ gtk_OBJECTS = \
 	gtksocket.obj \
 	gtksocket-win32.obj \
 	gtkspinbutton.obj \
+	gtkspinner.obj \
 	gtkstatusicon.obj \
 	gtkstyle.obj \
 	gtkstatusbar.obj \
@@ -332,6 +335,8 @@ gtk_OBJECTS = \
 	gtktoggletoolbutton.obj \
 	gtktoolbutton.obj \
 	gtktoolitem.obj \
+	gtktoolitemgroup.obj \
+	gtktoolpalette.obj \
 	gtktoolshell.obj \
 	gtktooltip.obj \
 	gtktreedatalist.obj \
@@ -384,6 +389,7 @@ gtk_public_h_sources =		\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
+	gtkcellrendererspinner.h \
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
@@ -462,6 +468,7 @@ gtk_public_h_sources =		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkobject.h		\
+	gtkoffscreenwindow.h	\
 	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
 	gtkpagesetup.h		\
@@ -502,6 +509,7 @@ gtk_public_h_sources =		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
+	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -525,6 +533,8 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
+	gtktoolitemgroup.h		\
+	gtktoolpalette.h	\
 	gtktooltip.h		\
 	gtktooltips.h		\
 	gtktree.h		\
