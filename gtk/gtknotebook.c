@@ -1148,6 +1148,14 @@ gtk_notebook_buildable_add_child (GtkBuildable  *buildable,
       g_assert (page != NULL);
       gtk_notebook_set_tab_label (notebook, page, GTK_WIDGET (child));
     }
+  else if (type && strcmp (type, "action-start") == 0)
+    {
+      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_START);
+    }
+  else if (type && strcmp (type, "action-end") == 0)
+    {
+      gtk_notebook_set_action_widget (notebook, GTK_WIDGET (child), GTK_PACK_END);
+    }
   else if (!type)
     gtk_notebook_append_page (notebook, GTK_WIDGET (child), NULL);
   else
