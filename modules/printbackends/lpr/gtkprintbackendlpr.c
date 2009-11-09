@@ -179,7 +179,7 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, data, length, &written, &error);
+      g_io_channel_write_chars (io, (const gchar*)data, length, &written, &error);
 
       if (error != NULL)
 	{
