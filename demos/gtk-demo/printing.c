@@ -149,7 +149,8 @@ do_printing (GtkWidget *do_widget)
   GtkPrintOperation *operation;
   GtkPrintSettings *settings;
   PrintData *data;
-  gchar *uri, *dir, *ext;
+  gchar *uri, *ext;
+  const gchar *dir;
   GError *error = NULL;
 
   operation = gtk_print_operation_new ();
