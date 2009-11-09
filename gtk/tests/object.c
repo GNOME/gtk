@@ -224,12 +224,12 @@ object_test_property (GObject           *object,
       ignore_properties = list_ignore_properties (FALSE);
       for (i = 0; ignore_properties[i].name; i++)
         if (g_strcmp0 ("", ignore_properties[i].name) ||
-            g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
-            strcmp (pspec->name, ignore_properties[i].name) == 0 &&
-            (MATCH_ANY_VALUE == ignore_properties[i].value ||
-             value_as_pointer (&value) == ignore_properties[i].value ||
-             (G_VALUE_HOLDS_STRING (&value) &&
-              strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0)))
+            (g_type_is_a (G_OBJECT_TYPE (object), g_type_from_name (ignore_properties[i].type_name)) &&
+             strcmp (pspec->name, ignore_properties[i].name) == 0 &&
+             (MATCH_ANY_VALUE == ignore_properties[i].value ||
+              value_as_pointer (&value) == ignore_properties[i].value ||
+              (G_VALUE_HOLDS_STRING (&value) &&
+               strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0))))
           break;
       /* ignore known property bugs if not testing thoroughly */
       if (ignore_properties[i].name == NULL && !g_test_thorough ())
