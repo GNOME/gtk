@@ -5315,7 +5315,7 @@ send_client_message_to_embedded_windows (GtkWidget *widget,
       
       while (embedded_windows)
 	{
-	  GdkNativeWindow xid = (GdkNativeWindow) embedded_windows->data;
+	  GdkNativeWindow xid = GPOINTER_TO_UINT (embedded_windows->data);
 	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
 	  embedded_windows = embedded_windows->next;
 	}
