@@ -193,9 +193,9 @@ void sigh_button_event( GtkWidget      *gtklist,
 	/* Look for already imprisoned list items, we
 	 * will put them back into the list.
 	 * Remember to free the doubly linked list that
-	 * gtk_container_children() returns
+	 * gtk_container_get_children() returns
 	 */
-	dlist = gtk_container_children (GTK_CONTAINER (frame));
+	dlist = gtk_container_get_children (GTK_CONTAINER (frame));
 	free_list = dlist;
 	while (dlist) {
 	    GtkWidget       *list_item;

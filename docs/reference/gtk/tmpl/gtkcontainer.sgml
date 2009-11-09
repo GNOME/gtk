@@ -219,14 +219,6 @@ properties in set_child_property() and get_child_property() implementations.
 @pspec: the #GParamSpec of the property
 
 
-<!-- ##### MACRO gtk_container_border_width ##### -->
-<para>
-Does the same as gtk_container_set_border_width().
-</para>
-
-@Deprecated: Use gtk_container_set_border_width() instead.
-
-
 <!-- ##### FUNCTION gtk_container_add ##### -->
 <para>
 
@@ -290,14 +282,6 @@ Does the same as gtk_container_set_border_width().
 @container:
 @callback:
 @callback_data:
-
-
-<!-- ##### MACRO gtk_container_children ##### -->
-<para>
-Does the same as gtk_container_get_children().
-</para>
-
-@Deprecated: Use gtk_container_get_children() instead.
 
 
 <!-- ##### FUNCTION gtk_container_get_children ##### -->

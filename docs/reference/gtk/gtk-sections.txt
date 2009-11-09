@@ -985,7 +985,6 @@ gtk_combo_box_entry_get_type
 GtkContainer
 GTK_IS_RESIZE_CONTAINER
 GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID
-gtk_container_border_width
 gtk_container_add
 gtk_container_remove
 gtk_container_add_with_properties
@@ -993,7 +992,6 @@ gtk_container_get_resize_mode
 gtk_container_set_resize_mode
 gtk_container_check_resize
 gtk_container_foreach
-gtk_container_children
 gtk_container_get_children
 gtk_container_set_reallocate_redraws
 gtk_container_get_focus_child
