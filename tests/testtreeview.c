@@ -1266,6 +1266,8 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
  * Automated testing
  */
 
+#if 0
+
 static void
 treestore_torture_recurse (GtkTreeStore *store,
                            GtkTreeIter  *root,
@@ -1354,6 +1356,8 @@ treestore_torture_recurse (GtkTreeStore *store,
       gtk_tree_store_remove (store, &iter);
     }
 }
+
+#endif
 
 static void
 run_automated_tests (void)
