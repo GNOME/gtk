@@ -301,7 +301,7 @@ gtk_tool_item_group_header_expose_event_cb (GtkWidget      *widget,
       /* Unfortunatly gtk_paint_expander() doesn't support rotated drawing
        * modes. Luckily the following shady arithmetics produce the desired
        * result. */
-      expander_style = GTK_EXPANDER_EXPANDED - expander_style; /* XXX */
+      expander_style = GTK_EXPANDER_EXPANDED - expander_style;
     }
 
   gtk_paint_expander (widget->style, widget->window,
@@ -1680,10 +1680,6 @@ gtk_tool_item_group_set_label (GtkToolItemGroup *group,
   else
     {
       GtkWidget *child = gtk_label_new (label);
-      /*
-      gtk_label_set_use_underline (GTK_LABEL (child), group->priv->use_underline);
-      gtk_label_set_use_markup (GTK_LABEL (child), group->priv->use_markup);
-      */
       gtk_widget_show (child);
 
       gtk_tool_item_group_set_label_widget (group, child);
@@ -1824,7 +1820,10 @@ gtk_tool_item_group_animation_cb (gpointer data)
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
   GtkToolItemGroupPrivate* priv = group->priv; 
   gint64 timestamp = gtk_tool_item_group_get_animation_timestamp (group);
+  gboolean retval;
 
+  GDK_THREADS_ENTER();
+  
   /* Enque this early to reduce number of expose events. */
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (group));
 
@@ -1858,7 +1857,11 @@ gtk_tool_item_group_animation_cb (gpointer data)
    */
   gdk_window_process_updates (GTK_WIDGET (group)->window, TRUE);
 
-  return (priv->animation_timeout != NULL);
+  retval = (priv->animation_timeout != NULL);
+
+  GDK_THREADS_LEAVE();
+  
+  return retval;
 }
 
 /**
@@ -1947,6 +1950,7 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
  * Gets the label of @group.
  *
  * Returns: the label of @group. The label is an internal string of @group and must not be modified.
+ *          Note that NULL is returned if a custom label has been set with gtk_tool_item_group_set_label_widget()
  *
  * Since: 2.20
  */
@@ -1969,9 +1973,9 @@ gtk_tool_item_group_get_label (GtkToolItemGroup *group)
  * gtk_tool_item_group_get_label_widget:
  * @group: an #GtkToolItemGroup.
  *
- * Gets the label of @group.
+ * Gets the label widget of @group.
  *
- * Returns: the label of @group. The label is an internal string of @group and must not be modified.
+ * Returns: the label widget of @group. See gtk_tool_item_group_set_label_widget()
  *
  * Since: 2.20
  */

@@ -126,15 +126,14 @@ struct _GtkToolItemGroupInfo
   GtkToolItemGroup *widget;
 
   guint             notify_collapsed;
+  guint             pos;
   guint             exclusive : 1;
   guint             expand : 1;
 };
 
 struct _GtkToolPalettePrivate
 {
-  GtkToolItemGroupInfo *groups;
-  gsize                 groups_size;
-  gsize                 groups_length;
+  GPtrArray* groups;
 
   GtkAdjustment        *hadjustment;
   GtkAdjustment        *vadjustment;
@@ -152,7 +151,6 @@ struct _GtkToolPalettePrivate
   GtkSettings       *settings;
   gulong             settings_connection;
 
-  guint                 sparse_groups : 1;
   guint                 drag_source : 2;
 };
 
@@ -167,8 +165,8 @@ static GdkAtom dnd_target_atom_group = GDK_NONE;
 
 static const GtkTargetEntry dnd_targets[] =
 {
-  { "application/x-GTK-tool-palette-item", GTK_TARGET_SAME_APP, 0 },
-  { "application/x-GTK-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
+  { "application/x-gtk-tool-palette-item", GTK_TARGET_SAME_APP, 0 },
+  { "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolPalette,
@@ -183,9 +181,8 @@ gtk_tool_palette_init (GtkToolPalette *palette)
                                                GTK_TYPE_TOOL_PALETTE,
                                                GtkToolPalettePrivate);
 
-  palette->priv->groups_size = 4;
-  palette->priv->groups_length = 0;
-  palette->priv->groups = g_new0 (GtkToolItemGroupInfo, palette->priv->groups_size);
+  palette->priv->groups = g_ptr_array_sized_new(4);
+  g_ptr_array_set_free_func (palette->priv->groups, g_free);
 
   palette->priv->icon_size = DEFAULT_ICON_SIZE;
   palette->priv->icon_size_set = FALSE;
@@ -201,10 +198,11 @@ gtk_tool_palette_reconfigured (GtkToolPalette *palette)
 {
   guint i;
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      if (palette->priv->groups[i].widget)
-        _gtk_tool_item_group_palette_reconfigured (palette->priv->groups[i].widget);
+      GtkToolItemGroupInfo *info = g_ptr_array_index(palette->priv->groups, i);
+      if (info->widget)
+        _gtk_tool_item_group_palette_reconfigured (info->widget);
     }
 
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (palette));
@@ -308,9 +306,9 @@ gtk_tool_palette_dispose (GObject *object)
       palette->priv->vadjustment = NULL;
     }
 
-  for (i = 0; i < palette->priv->groups_size; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
 
       if (group->notify_collapsed)
         {
@@ -333,12 +331,7 @@ gtk_tool_palette_finalize (GObject *object)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (object);
 
-  if (palette->priv->groups)
-    {
-      palette->priv->groups_length = 0;
-      g_free (palette->priv->groups);
-      palette->priv->groups = NULL;
-    }
+  g_ptr_array_free(palette->priv->groups, TRUE);
 
   G_OBJECT_CLASS (gtk_tool_palette_parent_class)->finalize (object);
 }
@@ -355,9 +348,9 @@ gtk_tool_palette_size_request (GtkWidget      *widget,
   requisition->width = 0;
   requisition->height = 0;
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
 
       if (!group->widget)
         continue;
@@ -401,7 +394,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
 
   gint x;
 
-  gint *group_sizes = g_newa(gint, palette->priv->groups_length);
+  gint *group_sizes = g_newa(gint, palette->priv->groups->len);  
 
   GtkTextDirection direction = gtk_widget_get_direction (widget);
 
@@ -436,9 +429,9 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
 
   /* figure out the required size of all groups to be able to distribute the
    * remaining space on allocation */
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
       gint size;
 
       if (!group->widget)
@@ -517,9 +510,9 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
     x -= offset;
 
   /* allocate all groups at the calculated positions */
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
       GtkWidget *widget;
 
       if (!group->widget)
@@ -628,9 +621,12 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
 
   cairo_push_group (cr);
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
-    if (palette->priv->groups[i].widget)
-      _gtk_tool_item_group_paint (palette->priv->groups[i].widget, cr);
+  for (i = 0; i < palette->priv->groups->len; ++i)
+  {
+    GtkToolItemGroupInfo *info = g_ptr_array_index(palette->priv->groups, i);
+    if (info->widget)
+      _gtk_tool_item_group_paint (info->widget, cr);
+  }
 
   cairo_pop_group_to_source (cr);
 
@@ -713,55 +709,20 @@ gtk_tool_palette_set_scroll_adjustments (GtkWidget     *widget,
 }
 
 static void
-gtk_tool_palette_repack (GtkToolPalette *palette)
-{
-  guint si, di;
-
-  for (si = di = 0; di < palette->priv->groups_length; ++si)
-    {
-      if (palette->priv->groups[si].widget)
-        {
-          palette->priv->groups[di] = palette->priv->groups[si];
-          ++di;
-        }
-      else
-        --palette->priv->groups_length;
-    }
-
-  palette->priv->sparse_groups = FALSE;
-}
-
-static void
 gtk_tool_palette_add (GtkContainer *container,
                       GtkWidget    *child)
 {
   GtkToolPalette *palette;
-
+  GtkToolItemGroupInfo *info = g_new0(GtkToolItemGroupInfo, 1);
+  
   g_return_if_fail (GTK_IS_TOOL_PALETTE (container));
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (child));
 
   palette = GTK_TOOL_PALETTE (container);
 
-  if (palette->priv->groups_length == palette->priv->groups_size)
-    gtk_tool_palette_repack (palette);
-
-  if (palette->priv->groups_length == palette->priv->groups_size)
-    {
-      gsize old_size = palette->priv->groups_size;
-      gsize new_size = old_size * 2;
-
-      palette->priv->groups = g_renew (GtkToolItemGroupInfo,
-                                       palette->priv->groups,
-                                       new_size);
-
-      memset (palette->priv->groups + old_size, 0,
-              sizeof (GtkToolItemGroupInfo) * old_size);
-
-      palette->priv->groups_size = new_size;
-    }
-
-  palette->priv->groups[palette->priv->groups_length].widget = g_object_ref_sink (child);
-  palette->priv->groups_length += 1;
+  g_ptr_array_add (palette->priv->groups, info);
+  info->pos = palette->priv->groups->len - 1;
+  info->widget = g_object_ref_sink (child);
 
   gtk_widget_set_parent (child, GTK_WIDGET (palette));
 }
@@ -776,15 +737,17 @@ gtk_tool_palette_remove (GtkContainer *container,
   g_return_if_fail (GTK_IS_TOOL_PALETTE (container));
   palette = GTK_TOOL_PALETTE (container);
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
-    if ((GtkWidget*) palette->priv->groups[i].widget == child)
-      {
-        g_object_unref (child);
-        gtk_widget_unparent (child);
+  for (i = 0; i < palette->priv->groups->len; ++i)
+    {
+      GtkToolItemGroupInfo *info = g_ptr_array_index(palette->priv->groups, i);
+      if (GTK_WIDGET(info->widget) == child)
+        {
+          g_object_unref (child);
+          gtk_widget_unparent (child);
 
-        memset (&palette->priv->groups[i], 0, sizeof (GtkToolItemGroupInfo));
-        palette->priv->sparse_groups = TRUE;
-      }
+          g_ptr_array_remove_index (palette->priv->groups, i);
+        }
+    }
 }
 
 static void
@@ -796,12 +759,13 @@ gtk_tool_palette_forall (GtkContainer *container,
   GtkToolPalette *palette = GTK_TOOL_PALETTE (container);
   guint i;
 
-  if (palette->priv->groups)
+
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      for (i = 0; i < palette->priv->groups_length; ++i)
-        if (palette->priv->groups[i].widget)
-          callback (GTK_WIDGET (palette->priv->groups[i].widget),
-                    callback_data);
+      GtkToolItemGroupInfo *info = g_ptr_array_index(palette->priv->groups, i);
+      if (info->widget)
+        callback (GTK_WIDGET (info->widget),
+                  callback_data);
     }
 }
 
@@ -1270,6 +1234,17 @@ gtk_tool_palette_get_style (GtkToolPalette *palette)
   return palette->priv->style;
 }
 
+gint
+_gtk_tool_palette_compare_groups (gconstpointer a, 
+                               gconstpointer b)
+{
+  const GtkToolItemGroupInfo *group_a = a;
+  const GtkToolItemGroupInfo *group_b = b;
+
+  return group_a->pos - group_b->pos;
+
+}
+
 /**
  * gtk_tool_palette_set_group_position:
  * @palette: an #GtkToolPalette.
@@ -1287,46 +1262,34 @@ gtk_tool_palette_set_group_position (GtkToolPalette *palette,
                                      GtkWidget      *group,
                                      gint            position)
 {
-  GtkToolItemGroupInfo group_info;
+  GtkToolItemGroupInfo *group_new;
+  GtkToolItemGroupInfo *group_old;  
   gint old_position;
-  gpointer src, dst;
-  gsize len;
 
   g_return_if_fail (GTK_IS_TOOL_PALETTE (palette));
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
 
-  gtk_tool_palette_repack (palette);
-
   g_return_if_fail (position >= -1);
 
   if (-1 == position)
-    position = palette->priv->groups_length - 1;
+    position = palette->priv->groups->len - 1;
 
-  g_return_if_fail ((guint) position < palette->priv->groups_length);
+  g_return_if_fail ((guint) position < palette->priv->groups->len);
 
-  if (GTK_TOOL_ITEM_GROUP (group) == palette->priv->groups[position].widget)
+  group_new = g_ptr_array_index(palette->priv->groups, position);
+  
+  if (GTK_TOOL_ITEM_GROUP (group) == group_new->widget)
     return;
 
-  old_position = gtk_tool_palette_get_group_position (palette, group);
+  old_position = gtk_tool_palette_get_group_position (palette, group);  
   g_return_if_fail (old_position >= 0);
 
-  group_info = palette->priv->groups[old_position];
+  group_old = g_ptr_array_index(palette->priv->groups, old_position);
 
-  if (position < old_position)
-    {
-      dst = palette->priv->groups + position + 1;
-      src = palette->priv->groups + position;
-      len = old_position - position;
-    }
-  else
-    {
-      dst = palette->priv->groups + old_position;
-      src = palette->priv->groups + old_position + 1;
-      len = position - old_position;
-    }
+  group_new->pos = position;
+  group_old->pos = old_position;
 
-  memmove (dst, src, len * sizeof (*palette->priv->groups));
-  palette->priv->groups[position] = group_info;
+  g_ptr_array_sort (palette->priv->groups, _gtk_tool_palette_compare_groups);
 
   gtk_widget_queue_resize (GTK_WIDGET (palette));
 }
@@ -1342,12 +1305,13 @@ gtk_tool_palette_group_notify_collapsed (GtkToolItemGroup *group,
   if (gtk_tool_item_group_get_collapsed (group))
     return;
 
-  for (i = 0; i < palette->priv->groups_size; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroup *current_group = palette->priv->groups[i].widget;
+      GtkToolItemGroupInfo *info = g_ptr_array_index (palette->priv->groups, i);
+      GtkToolItemGroup *current_group = info->widget;
 
       if (current_group && current_group != group)
-        gtk_tool_item_group_set_collapsed (palette->priv->groups[i].widget, TRUE);
+        gtk_tool_item_group_set_collapsed (current_group, TRUE);
     }
 }
 
@@ -1376,7 +1340,7 @@ gtk_tool_palette_set_exclusive (GtkToolPalette *palette,
   position = gtk_tool_palette_get_group_position (palette, group);
   g_return_if_fail (position >= 0);
 
-  group_info = &palette->priv->groups[position];
+  group_info = g_ptr_array_index (palette->priv->groups, position);
 
   if (exclusive == group_info->exclusive)
     return;
@@ -1427,7 +1391,7 @@ gtk_tool_palette_set_expand (GtkToolPalette *palette,
   position = gtk_tool_palette_get_group_position (palette, group);
   g_return_if_fail (position >= 0);
 
-  group_info = &palette->priv->groups[position];
+  group_info = g_ptr_array_index (palette->priv->groups, position);
 
   if (expand != group_info->expand)
     {
@@ -1457,9 +1421,12 @@ gtk_tool_palette_get_group_position (GtkToolPalette *palette,
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), -1);
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), -1);
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
-    if ((gpointer) group == palette->priv->groups[i].widget)
-      return i;
+  for (i = 0; i < palette->priv->groups->len; ++i)
+    {
+      GtkToolItemGroupInfo *info = g_ptr_array_index (palette->priv->groups, i);
+      if ((gpointer) group == info->widget)
+        return i;
+    }
 
   return -1;
 }
@@ -1480,6 +1447,7 @@ gtk_tool_palette_get_exclusive (GtkToolPalette *palette,
                                 GtkWidget      *group)
 {
   gint position;
+  GtkToolItemGroupInfo *info;
 
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), DEFAULT_CHILD_EXCLUSIVE);
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), DEFAULT_CHILD_EXCLUSIVE);
@@ -1487,7 +1455,9 @@ gtk_tool_palette_get_exclusive (GtkToolPalette *palette,
   position = gtk_tool_palette_get_group_position (palette, group);
   g_return_val_if_fail (position >= 0, DEFAULT_CHILD_EXCLUSIVE);
 
-  return palette->priv->groups[position].exclusive;
+  info = g_ptr_array_index (palette->priv->groups, position);
+  
+  return info->exclusive;
 }
 
 /**
@@ -1506,6 +1476,7 @@ gtk_tool_palette_get_expand (GtkToolPalette *palette,
                              GtkWidget      *group)
 {
   gint position;
+  GtkToolItemGroupInfo *info;
 
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), DEFAULT_CHILD_EXPAND);
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), DEFAULT_CHILD_EXPAND);
@@ -1513,7 +1484,9 @@ gtk_tool_palette_get_expand (GtkToolPalette *palette,
   position = gtk_tool_palette_get_group_position (palette, group);
   g_return_val_if_fail (position >= 0, DEFAULT_CHILD_EXPAND);
 
-  return palette->priv->groups[position].expand;
+  info = g_ptr_array_index (palette->priv->groups, position);
+  
+  return info->expand;
 }
 
 /**
@@ -1570,9 +1543,9 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
   g_return_val_if_fail (x >= 0 && x < allocation->width, NULL);
   g_return_val_if_fail (y >= 0 && y < allocation->height, NULL);
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
       GtkWidget *widget;
       gint x0, y0;
 
@@ -1658,10 +1631,11 @@ gtk_tool_palette_set_drag_source (GtkToolPalette            *palette,
 
   palette->priv->drag_source |= targets;
 
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
-      if (palette->priv->groups[i].widget)
-        gtk_container_forall (GTK_CONTAINER (palette->priv->groups[i].widget),
+      GtkToolItemGroupInfo *info = g_ptr_array_index (palette->priv->groups, i);
+      if (info->widget)
+        gtk_container_forall (GTK_CONTAINER (info->widget),
                               _gtk_tool_palette_child_set_drag_source,
                               palette);
     }
@@ -1728,11 +1702,11 @@ _gtk_tool_palette_get_item_size (GtkToolPalette *palette,
   max_rows = 0;
 
   /* iterate over all groups and calculate the max item_size and max row request */
-  for (i = 0; i < palette->priv->groups_length; ++i)
+  for (i = 0; i < palette->priv->groups->len; ++i)
     {
       GtkRequisition requisition;
       gint rows;
-      GtkToolItemGroupInfo *group = &palette->priv->groups[i];
+      GtkToolItemGroupInfo *group = g_ptr_array_index(palette->priv->groups, i);
 
       if (!group->widget)
         continue;
