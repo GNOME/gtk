@@ -287,6 +287,12 @@ void gtk_notebook_set_tab_detachable      (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gboolean     detachable);
 
+GtkWidget* gtk_notebook_get_action_widget (GtkNotebook *notebook,
+                                           GtkPackType  pack_type);
+void       gtk_notebook_set_action_widget (GtkNotebook *notebook,
+                                           GtkWidget   *widget,
+                                           GtkPackType  pack_type);
+
 #ifndef GTK_DISABLE_DEPRECATED
 #define	gtk_notebook_current_page               gtk_notebook_get_current_page
 #define gtk_notebook_set_page                   gtk_notebook_set_current_page

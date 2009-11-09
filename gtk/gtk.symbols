@@ -2674,6 +2674,8 @@ gtk_notebook_get_tab_reorderable
 gtk_notebook_set_tab_reorderable
 gtk_notebook_get_tab_detachable
 gtk_notebook_set_tab_detachable
+gtk_notebook_get_action_widget
+gtk_notebook_set_action_widget
 #endif
 #endif
 
