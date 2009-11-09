@@ -1629,11 +1629,7 @@ int main(int argc, char *argv[])
   g_signal_connect(G_OBJECT (window), "destroy",
 		     G_CALLBACK(destroy), NULL);
 
-#if (GTK_MAJOR_VERSION == 1) &amp;&amp; (GTK_MINOR_VERSION == 0)
-  gtk_container_border_width(GTK_CONTAINER (window), 10);
-#else  
   gtk_container_set_border_width(GTK_CONTAINER (window), 10);
-#endif
 
   /* add a button to do something useful */
   button = gtk_button_new_with_label("Fork me!");
