@@ -7943,8 +7943,9 @@ gtk_notebook_get_action_widget (GtkNotebook *notebook,
  * @widget: a #GtkWidget
  * @pack_type: pack type of the action widget
  *
- * Adds @widget as action_widget to the notebook tab space. Depending
- * on the pack type the widget will be added before or after the tabs
+ * Sets @widget as one of the action widgets. Depending on the pack type
+ * the widget will be placed before or after the tabs. You can use
+ * a #GtkBox if you need to pack more than one widget on the same side.
  *
  * Since: 2.20
  */
