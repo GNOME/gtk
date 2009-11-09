@@ -181,15 +181,15 @@ value_as_pointer (GValue *value)
   if (g_value_fits_pointer (value))
     return g_value_peek_pointer (value);
   if (G_VALUE_HOLDS_BOOLEAN (value))
-    return (void*) g_value_get_boolean (value);
+    return GINT_TO_POINTER(g_value_get_boolean (value));
   if (G_VALUE_HOLDS_CHAR (value))
     return (void*) (gssize) g_value_get_char (value);
   if (G_VALUE_HOLDS_UCHAR (value))
     return (void*) (gsize) g_value_get_uchar (value);
   if (G_VALUE_HOLDS_INT (value))
-    return (void*) g_value_get_int (value);
+    return GINT_TO_POINTER(g_value_get_int (value));
   if (G_VALUE_HOLDS_UINT (value))
-    return (void*) g_value_get_uint (value);
+    return GUINT_TO_POINTER(g_value_get_uint (value));
   if (G_VALUE_HOLDS_LONG (value))
     return (void*) g_value_get_long (value);
   if (G_VALUE_HOLDS_ULONG (value))
