@@ -4269,11 +4269,13 @@ gtk_notebook_forall (GtkContainer *container,
 	}
     }
 
-  for (i = 0; i < N_ACTION_WIDGETS; i++)
-    {
-      if (priv->action_widget[i])
-        (* callback) (priv->action_widget[i], callback_data);
-    }
+  if (include_internals) {
+    for (i = 0; i < N_ACTION_WIDGETS; i++)
+      {
+        if (priv->action_widget[i])
+          (* callback) (priv->action_widget[i], callback_data);
+      }
+  }
 }
 
 static GType
@@ -7946,6 +7948,9 @@ gtk_notebook_get_action_widget (GtkNotebook *notebook,
  * Sets @widget as one of the action widgets. Depending on the pack type
  * the widget will be placed before or after the tabs. You can use
  * a #GtkBox if you need to pack more than one widget on the same side.
+ *
+ * Note that action widgets are "internal" children of the notebook and thus
+ * not included in the list returned from gtk_container_foreach().
  *
  * Since: 2.20
  */
