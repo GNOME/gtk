@@ -82,6 +82,12 @@ typedef struct _GdkAtom            *GdkAtom;
 #define GDK_ATOM_TO_POINTER(atom) (atom)
 #define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
 
+#ifdef GDK_NATIVE_WINDOW_POINTER
+#define GDK_GPOINTER_TO_NATIVE_WINDOW(p) ((GdkNativeWindow) (p))
+#else
+#define GDK_GPOINTER_TO_NATIVE_WINDOW(p) GPOINTER_TO_UINT(p)
+#endif
+
 #define _GDK_MAKE_ATOM(val) ((GdkAtom)GUINT_TO_POINTER(val))
 #define GDK_NONE            _GDK_MAKE_ATOM (0)
 
