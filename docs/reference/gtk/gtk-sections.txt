@@ -5744,6 +5744,7 @@ gtk_window_get_urgency_hint
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
+gtk_window_get_window_type
 gtk_window_move
 gtk_window_parse_geometry
 gtk_window_reshow_with_initial_size

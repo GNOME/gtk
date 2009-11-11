@@ -8409,6 +8409,24 @@ gtk_window_set_auto_startup_notification (gboolean setting)
   disable_startup_notification = !setting;
 }
 
+/**
+ * gtk_window_get_window_type:
+ * @window: a #GtkWindow
+ *
+ * Gets the type of the window. See #GtkWindowType.
+ *
+ * Return value: the type of the window
+ *
+ * Since: 2.20
+ **/
+GtkWindowType
+gtk_window_get_window_type (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), GTK_WINDOW_TOPLEVEL);
+
+  return window->type;
+}
+
 #if defined (G_OS_WIN32) && !defined (_WIN64)
 
 #undef gtk_window_set_icon_from_file

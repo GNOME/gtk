@@ -5198,6 +5198,7 @@ gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_type G_GNUC_CONST
 gtk_window_get_type_hint
+gtk_window_get_window_type
 gtk_window_group_add_window
 gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new
