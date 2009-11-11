@@ -3058,14 +3058,6 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
   g_return_if_fail (func != NULL);
   g_return_if_fail (filter->priv->visible_method_set == FALSE);
 
-  if (filter->priv->visible_func)
-    {
-      GDestroyNotify d = filter->priv->visible_destroy;
-
-      filter->priv->visible_destroy = NULL;
-      d (filter->priv->visible_data);
-    }
-
   filter->priv->visible_func = func;
   filter->priv->visible_data = data;
   filter->priv->visible_destroy = destroy;
