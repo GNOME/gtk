@@ -44,7 +44,7 @@ typedef struct _GtkToolPalettePrivate    GtkToolPalettePrivate;
  * @GTK_TOOL_PALETTE_DRAG_ITEMS: Support drag of items.
  * @GTK_TOOL_PALETTE_DRAG_GROUPS: Support drag of groups.
  *
- * Flags used to specify the supported drag targets. 
+ * Flags used to specify the supported drag targets.
  */
 typedef enum /*< flags >*/
 {
@@ -71,14 +71,14 @@ struct _GtkToolPaletteClass
   void (*set_scroll_adjustments) (GtkWidget     *widget,
                                   GtkAdjustment *hadjustment,
                                   GtkAdjustment *vadjustment);
-                                  
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);  
+  void (*_gtk_reserved6) (void);
 };
 
 GType                          gtk_tool_palette_get_type              (void) G_GNUC_CONST;
@@ -137,4 +137,4 @@ G_CONST_RETURN GtkTargetEntry* gtk_tool_palette_get_drag_target_group (void) G_G
 
 G_END_DECLS
 
-#endif /* __GTK_TOOL_PALETTE_H__ */ 
+#endif /* __GTK_TOOL_PALETTE_H__ */

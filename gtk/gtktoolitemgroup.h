@@ -92,4 +92,4 @@ GtkToolItem*          gtk_tool_item_group_get_drop_item     (GtkToolItemGroup   
 
 G_END_DECLS
 
-#endif /* __GTK_TOOL_ITEM_GROUP_H__ */ 
+#endif /* __GTK_TOOL_ITEM_GROUP_H__ */

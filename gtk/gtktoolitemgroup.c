@@ -215,15 +215,15 @@ gtk_tool_item_group_screen_changed (GtkWidget *widget,
   GtkToolItemGroupPrivate* priv = group->priv;
   GtkSettings *old_settings = priv->settings;
   GtkSettings *settings;
-  
+
   if (gtk_widget_has_screen (GTK_WIDGET (group)))
     settings = gtk_widget_get_settings (GTK_WIDGET (group));
   else
     settings = NULL;
-  
+
   if (settings == old_settings)
     return;
-  
+
   if (old_settings)
   {
     g_signal_handler_disconnect (old_settings, priv->settings_connection);
@@ -372,7 +372,7 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
 {
   GtkWidget *alignment;
   GtkToolItemGroupPrivate* priv;
-  
+
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (group), FALSE);
 
   group->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
@@ -503,7 +503,7 @@ gtk_tool_item_group_dispose (GObject *object)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (object);
   GtkToolItemGroupPrivate* priv = group->priv;
-  
+
   if (priv->toplevel)
     {
       /* disconnect focus tracking handler */
@@ -537,7 +537,7 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
 {
   const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
   GtkOrientation orientation;
   GtkRequisition item_size;
   gint requested_rows;
@@ -603,7 +603,7 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
 {
   const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
 
   GtkRequisition item_size;
   GtkAllocation item_area;
@@ -836,7 +836,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget      *widget,
 {
   const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
   GtkRequisition child_requisition;
   GtkAllocation child_allocation;
 
@@ -1108,7 +1108,7 @@ static void
 gtk_tool_item_group_set_toplevel_window (GtkToolItemGroup *group,
                                          GtkWidget        *toplevel)
 {
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
 
   if (toplevel != priv->toplevel)
     {
@@ -1224,7 +1224,7 @@ gtk_tool_item_group_remove (GtkContainer *container,
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (container));
   group = GTK_TOOL_ITEM_GROUP (container);
-  priv = group->priv; 
+  priv = group->priv;
 
   for (it = priv->children; it != NULL; it = it->next)
     {
@@ -1251,7 +1251,7 @@ gtk_tool_item_group_forall (GtkContainer *container,
                             gpointer      callback_data)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (container);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
   GList *children;
 
   if (internals && priv->header)
@@ -1263,7 +1263,7 @@ gtk_tool_item_group_forall (GtkContainer *container,
       GtkToolItemGroupChild *child = children->data;
       children = children->next; /* store pointer before call to callback
 				    because the child pointer is invalid if the
-				    child->item is removed from the item group 
+				    child->item is removed from the item group
 				    in callback */
 
       callback (GTK_WIDGET (child->item), callback_data);
@@ -1640,7 +1640,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
 GtkWidget*
 gtk_tool_item_group_new (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "label", 
+  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "label",
     label, NULL);
 }
 
@@ -1700,7 +1700,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
     return;
 
   alignment = gtk_tool_item_group_get_alignment (group);
-      
+
   if (priv->label_widget)
     {
       gtk_widget_set_state (priv->label_widget, GTK_STATE_NORMAL);
@@ -1712,7 +1712,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
       gtk_container_add (GTK_CONTAINER (alignment), label_widget);
 
   priv->label_widget = label_widget;
-  
+
   if (GTK_WIDGET_VISIBLE (group))
     gtk_widget_queue_resize (GTK_WIDGET (group));
 
@@ -1757,13 +1757,13 @@ gtk_tool_item_group_get_animation_timestamp (GtkToolItemGroup *group)
 static void
 gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
 {
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
 
   if (GTK_WIDGET_REALIZED (priv->header))
     {
       GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
       GdkRectangle area;
-      
+
       /* Find the header button's arrow area... */
       area.x = alignment->allocation.x;
       area.y = alignment->allocation.y + (alignment->allocation.height - priv->expander_size) / 2;
@@ -1801,12 +1801,12 @@ static gboolean
 gtk_tool_item_group_animation_cb (gpointer data)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
   gint64 timestamp = gtk_tool_item_group_get_animation_timestamp (group);
   gboolean retval;
 
   GDK_THREADS_ENTER();
-  
+
   /* Enque this early to reduce number of expose events. */
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (group));
 
@@ -1843,7 +1843,7 @@ gtk_tool_item_group_animation_cb (gpointer data)
   retval = (priv->animation_timeout != NULL);
 
   GDK_THREADS_LEAVE();
-  
+
   return retval;
 }
 
@@ -1865,7 +1865,7 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
 
-  priv = group->priv; 
+  priv = group->priv;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (group));
   if (GTK_IS_TOOL_PALETTE (parent) && !collapsed)
@@ -2090,7 +2090,7 @@ gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
   g_return_if_fail (position >= -1);
 
   child = gtk_tool_item_group_get_child (group, item, &old_position, &link);
-  priv = group->priv; 
+  priv = group->priv;
 
   g_return_if_fail (child != NULL);
 
@@ -2173,7 +2173,7 @@ gtk_tool_item_group_get_nth_item (GtkToolItemGroup *group,
   return child != NULL ? child->item : NULL;
 }
 
-/** 
+/**
  * gtk_tool_item_group_get_drop_item:
  * @group: an #GtkToolItemGroup.
  * @x: the x position.
@@ -2277,7 +2277,7 @@ _gtk_tool_item_group_paint (GtkToolItemGroup *group,
                             cairo_t          *cr)
 {
   GtkWidget *widget = GTK_WIDGET (group);
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
 
   gdk_cairo_set_source_pixmap (cr, widget->window,
                                widget->allocation.x,
@@ -2340,7 +2340,7 @@ _gtk_tool_item_group_get_size_for_limit (GtkToolItemGroup *group,
                                          gboolean          animation)
 {
   GtkRequisition requisition;
-  GtkToolItemGroupPrivate* priv = group->priv; 
+  GtkToolItemGroupPrivate* priv = group->priv;
 
   gtk_widget_size_request (GTK_WIDGET (group), &requisition);
 
