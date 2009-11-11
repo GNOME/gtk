@@ -203,10 +203,8 @@ gtk_tool_item_group_settings_change_notify (GtkSettings      *settings,
                                             const GParamSpec *pspec,
                                             GtkToolItemGroup *group)
 {
-  if (! strcmp (pspec->name, "gtk-enable-animations"))
-  {
+  if (strcmp (pspec->name, "gtk-enable-animations") == 0)
     animation_change_notify (group);
-  }
 }
 
 static void
@@ -1663,9 +1661,7 @@ gtk_tool_item_group_set_label (GtkToolItemGroup *group,
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
 
   if (!label)
-    {
-      gtk_tool_item_group_set_label_widget (group, NULL);
-    }
+    gtk_tool_item_group_set_label_widget (group, NULL);
   else
     {
       GtkWidget *child = gtk_label_new (label);
@@ -1713,9 +1709,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
 
 
   if (label_widget)
-    {
       gtk_container_add (GTK_CONTAINER (alignment), label_widget);
-    }
 
   priv->label_widget = label_widget;
   
