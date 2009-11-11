@@ -168,17 +168,6 @@ gtk_tool_item_group_get_text_alignment (GtkToolShell *shell)
 static GtkOrientation
 gtk_tool_item_group_get_text_orientation (GtkToolShell *shell)
 {
-  GtkWidget *parent = gtk_widget_get_parent (GTK_WIDGET (shell));
-
-  if (GTK_IS_TOOL_PALETTE (parent))
-    {
-      GtkOrientation orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (parent));
-      if (GTK_ORIENTATION_HORIZONTAL == orientation &&
-          (GTK_TOOLBAR_TEXT == gtk_tool_item_group_get_style (shell)/* ||
-           GTK_TOOLBAR_BOTH_HORIZ == gtk_tool_item_group_get_style (shell)*/))
-        return GTK_ORIENTATION_VERTICAL;
-    }
-
   return GTK_ORIENTATION_HORIZONTAL;
 }
 
