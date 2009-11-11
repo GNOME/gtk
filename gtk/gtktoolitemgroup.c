@@ -427,14 +427,11 @@ gtk_tool_item_group_set_property (GObject      *object,
       case PROP_LABEL:
         gtk_tool_item_group_set_label (group, g_value_get_string (value));
         break;
-
       case PROP_LABEL_WIDGET:
         gtk_tool_item_group_set_label_widget (group, g_value_get_object (value));
-
       case PROP_COLLAPSED:
         gtk_tool_item_group_set_collapsed (group, g_value_get_boolean (value));
         break;
-
       case PROP_ELLIPSIZE:
         gtk_tool_item_group_set_ellipsize (group, g_value_get_enum (value));
         break;
