@@ -181,7 +181,7 @@ gdk_color_white (GdkColormap *colormap,
  * @color: the location to store the color.
  * 
  * Returns the black color for a given colormap. The resulting
- * value has already benn allocated. 
+ * value has already been allocated. 
  * 
  * Return value: %TRUE if the allocation succeeded.
  **/
