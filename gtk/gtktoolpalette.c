@@ -685,16 +685,16 @@ gtk_tool_palette_set_scroll_adjustments (GtkWidget     *widget,
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
 
-  if (palette->priv->hadjustment)
-    g_object_unref (palette->priv->hadjustment);
-  if (palette->priv->vadjustment)
-    g_object_unref (palette->priv->vadjustment);
-
   if (hadjustment)
     g_object_ref_sink (hadjustment);
   if (vadjustment)
     g_object_ref_sink (vadjustment);
 
+  if (palette->priv->hadjustment)
+    g_object_unref (palette->priv->hadjustment);
+  if (palette->priv->vadjustment)
+    g_object_unref (palette->priv->vadjustment);
+  
   palette->priv->hadjustment = hadjustment;
   palette->priv->vadjustment = vadjustment;
 
