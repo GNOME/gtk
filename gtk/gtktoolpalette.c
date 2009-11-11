@@ -936,7 +936,9 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    * @hadjustment: The horizontal adjustment 
    * @vadjustment: The vertical adjustment
    *
-   * The ::set-scroll-adjustments when FIXME
+   * Set the scroll adjustments for the viewport. 
+   * Usually scrolled containers like GtkScrolledWindow will emit this signal to
+   * connect two instances of GtkScrollbar to the scroll directions of the GtkToolpalette.
    *
    * Since: 2.20
    */
@@ -982,7 +984,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    *
    * Is %TRUE if the icon-size property has been set.
    *
-   * Since: 2.10
+   * Since: 2.20
    */
   g_object_class_install_property (oclass,
                                    PROP_ICON_SIZE_SET,
@@ -1649,7 +1651,7 @@ gtk_tool_palette_set_drag_source (GtkToolPalette            *palette,
  * @targets: the #GtkToolPaletteDragTargets which the widget should support.
  * @actions: the #GdkDragAction<!-- -->s which the widget should suppport.
  *
- * Sets the tool palette as drag source (see gtk_tool_palette_set_drag_source) and
+ * Sets the tool palette as drag source (see gtk_tool_palette_set_drag_source()) and
  * sets widget as a drag destination for drags from palette. With flags the actions
  * (like highlighting and target checking) which should be performed by GTK+ for
  * drops on widget can be specified. With targets the supported drag targets 
