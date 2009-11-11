@@ -49,7 +49,8 @@ Definitions</link>.
                        position     (top|bot)    &num;IMPLIED >
 <!ATTLIST menuitem     name                      &num;IMPLIED
                        action                    &num;REQUIRED
-                       position     (top|bot)    &num;IMPLIED >
+                       position     (top|bot)    &num;IMPLIED
+                       always-show-image (true|false) &num;IMPLIED >
 <!ATTLIST toolitem     name                      &num;IMPLIED
                        action                    &num;REQUIRED
                        position     (top|bot)    &num;IMPLIED >
