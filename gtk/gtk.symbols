@@ -3841,6 +3841,7 @@ gtk_spinner_stop
 #if IN_FILE(__GTK_STATUSBAR_C__)
 gtk_statusbar_get_context_id
 gtk_statusbar_get_has_resize_grip
+gtk_statusbar_get_message_area
 gtk_statusbar_get_type G_GNUC_CONST
 gtk_statusbar_new
 gtk_statusbar_pop
