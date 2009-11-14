@@ -28,6 +28,9 @@
 #include "config.h"
 #include <string.h>
 
+#include <io.h>
+#include <fcntl.h>
+
 /* #define OLE2_DND */
 
 #define INITGUID
@@ -47,6 +50,7 @@
 #include <shlguid.h>
 
 #include <gdk/gdk.h>
+#include <glib/gstdio.h>
 
 typedef struct _GdkDragContextPrivateWin32 GdkDragContextPrivateWin32;
 
@@ -941,6 +945,45 @@ resolve_link (HWND     hWnd,
   return SUCCEEDED (hres);
 }
 
+#if 0
+
+/* Check for filenames like C:\Users\tml\AppData\Local\Temp\d5qtkvvs.bmp */
+static gboolean
+filename_looks_tempish (const char *filename)
+{
+  char *dirname;
+  char *p;
+  const char *q;
+  gboolean retval = FALSE;
+
+  dirname = g_path_get_dirname (filename);
+
+  p = dirname;
+  q = g_get_tmp_dir ();
+
+  while (*p && *q &&
+	 ((G_IS_DIR_SEPARATOR (*p) && G_IS_DIR_SEPARATOR (*q)) ||
+	  g_ascii_tolower (*p) == g_ascii_tolower (*q)))
+    p++, q++;
+
+  if (!*p && !*q)
+    retval = TRUE;
+
+  g_free (dirname);
+
+  return retval;
+}
+
+static gboolean
+close_it (gpointer data)
+{
+  close (GPOINTER_TO_INT (data));
+
+  return FALSE;
+}
+
+#endif
+
 static GdkFilterReturn
 gdk_dropfiles_filter (GdkXEvent *xev,
 		      GdkEvent  *event,
@@ -1000,7 +1043,6 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	  if (resolve_link (msg->hwnd, wfn, &linkedFile))
 	    {
 	      uri = g_filename_to_uri (linkedFile, NULL, NULL);
-	      g_free (linkedFile);
 	      if (uri != NULL)
 		{
 		  g_string_append (result, uri);
@@ -1008,6 +1050,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 					  fileName, linkedFile, uri));
 		  g_free (uri);
 		}
+	      g_free (fileName);
+	      fileName = linkedFile;
 	    }
 	  else
 	    {
@@ -1019,6 +1063,38 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 		  g_free (uri);
 		}
 	    }
+
+#if 0
+	  /* Awful hack to recognize temp files corresponding to
+	   * images dragged from Firefox... Open the file right here
+	   * so that it is less likely that Firefox manages to delete
+	   * it before the GTK+-using app (typically GIMP) has opened
+	   * it.
+	   *
+	   * Not compiled in for now, because it means images dragged
+	   * from Firefox would stay around in the temp folder which
+	   * is not what Firefox intended. I don't feel comfortable
+	   * with that, both from a geenral sanity point of view, and
+	   * from a privacy point of view. It's better to wait for
+	   * Firefox to fix the problem, for instance by deleting the
+	   * temp file after a longer delay, or to wait until we
+	   * implement the OLE2_DND...
+	   */
+	  if (filename_looks_tempish (fileName))
+	    {
+	      int fd = g_open (fileName, _O_RDONLY|_O_BINARY, 0);
+	      if (fd == -1)
+		{
+		  GDK_NOTE (DND, g_print ("Could not open %s, maybe an image dragged from Firefox that it already deleted\n", fileName));
+		}
+	      else
+		{
+		  GDK_NOTE (DND, g_print ("Opened %s as %d so that Firefox won't delete it\n", fileName, fd));
+		  g_timeout_add_seconds (1, close_it, GINT_TO_POINTER (fd));
+		}
+	    }
+#endif
+
 	  g_free (fileName);
 	  g_string_append (result, "\015\012");
 	}
