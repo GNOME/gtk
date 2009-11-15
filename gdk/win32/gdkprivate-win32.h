@@ -345,6 +345,8 @@ gchar *_gdk_win32_rect_to_string       (const RECT  *rect);
 gchar *_gdk_win32_gdkrectangle_to_string (const GdkRectangle *rect);
 gchar *_gdk_win32_gdkregion_to_string    (const GdkRegion    *box);
 
+void   _gdk_win32_print_event            (const GdkEvent     *event);
+
 #endif
 
 gchar  *_gdk_win32_last_error_string (void);
