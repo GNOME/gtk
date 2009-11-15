@@ -102,9 +102,6 @@ static gboolean is_modally_blocked (GdkWindow   *window);
 
 static GList *client_filters;	/* Filters for client messages */
 
-static gboolean p_grab_automatic;
-static GdkEventMask p_grab_mask;
-static gboolean p_grab_owner_events, k_grab_owner_events;
 static HCURSOR p_grab_cursor;
 
 static GSourceFuncs event_funcs = {
@@ -429,6 +426,8 @@ gdk_event_get_graphics_expose (GdkWindow *window)
   return NULL;	
 }
 
+#if 0 /* Unused, but might be useful to re-introduce in some debugging output? */
+
 static char *
 event_mask_string (GdkEventMask mask)
 {
@@ -464,6 +463,8 @@ event_mask_string (GdkEventMask mask)
 
   return bfr;
 }
+
+#endif
 
 GdkGrabStatus
 _gdk_windowing_pointer_grab (GdkWindow    *window,
@@ -1202,17 +1203,6 @@ do_show_window (GdkWindow *window, gboolean hide_window)
     }
 }
 
-static gboolean
-gdk_window_is_ancestor (GdkWindow *ancestor,
-			GdkWindow *window)
-{
-  if (ancestor == NULL || window == NULL)
-    return FALSE;
-
-  return (gdk_window_get_parent (window) == ancestor ||
-	  gdk_window_is_ancestor (ancestor, gdk_window_get_parent (window)));
-}
-
 static void
 synthesize_enter_or_leave_event (GdkWindow    	*window,
 				 MSG          	*msg,
@@ -1342,20 +1332,6 @@ update_colors (GdkWindow *window,
   GDK_NOTE (COLORMAP, (top ? g_print ("\n") : (void) 0));
 }
 
-static void
-translate_mouse_coords (GdkWindow *window1,
-			GdkWindow *window2,
-			MSG       *msg)
-{
-  POINT pt;
-
-  pt.x = GET_X_LPARAM (msg->lParam);
-  pt.y = GET_Y_LPARAM (msg->lParam);
-  ClientToScreen (GDK_WINDOW_HWND (window1), &pt);
-  ScreenToClient (GDK_WINDOW_HWND (window2), &pt);
-  msg->lParam = MAKELPARAM (pt.x, pt.y);
-}
-
 /* The check_extended flag controls whether to check if the windows want
  * events from extended input devices and if the message should be skipped
  * because an extended input device is active
@@ -1473,43 +1449,6 @@ doesnt_want_char (gint mask,
 		  MSG *msg)
 {
   return !(mask & (GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK));
-}
-
-static gboolean
-doesnt_want_button_press (gint mask,
-			  MSG *msg)
-{
-  return !(mask & GDK_BUTTON_PRESS_MASK);
-}
-
-static gboolean
-doesnt_want_button_release (gint mask,
-			    MSG *msg)
-{
-  return !(mask & GDK_BUTTON_RELEASE_MASK);
-}
-
-static gboolean
-doesnt_want_button_motion (gint mask,
-			   MSG *msg)
-{
-  return !((mask & GDK_POINTER_MOTION_MASK) ||
-	   ((msg->wParam & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON)) && (mask & GDK_BUTTON_MOTION_MASK)) ||
-	   ((msg->wParam & MK_LBUTTON) && (mask & GDK_BUTTON1_MOTION_MASK)) ||
-	   ((msg->wParam & MK_MBUTTON) && (mask & GDK_BUTTON2_MOTION_MASK)) ||
-	   ((msg->wParam & MK_RBUTTON) && (mask & GDK_BUTTON3_MOTION_MASK)));
-}
-
-static gboolean
-doesnt_want_scroll (gint mask,
-		    MSG *msg)
-{
-  /* As there are no separate scroll events in X11, button press
-   * events are used, so higher level code might be selecting for
-   * either GDK_BUTTON_PRESS_MASK or GDK_SCROLL_MASK when it wants GDK
-   * scroll events. Make sure this works in the Win32 backend, too.
-   */
-  return !(mask & (GDK_SCROLL_MASK|GDK_BUTTON_PRESS_MASK));
 }
 
 static void
@@ -1918,8 +1857,6 @@ gdk_event_translate (MSG  *msg,
 
   GdkPointerGrabInfo *grab = NULL;
   GdkWindow *grab_window = NULL;
-  guint grab_mask = 0;
-  gboolean grab_owner_events = FALSE;
 
   static gint update_colors_counter = 0;
   gint button;

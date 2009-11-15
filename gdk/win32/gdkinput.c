@@ -314,14 +314,12 @@ void
 _gdk_input_crossing_event (GdkWindow *window,
 			   gboolean enter)
 {
-  GdkWindowObject *priv = (GdkWindowObject *)window;
-  GdkInputWindow *input_window;
-  gint root_x, root_y;
-
   if (enter)
     {
-#if 0
-      /* No idea what to do... */
+#if 0 /* No idea what to do... */
+      GdkWindowObject *priv = (GdkWindowObject *)window;
+      GdkInputWindow *input_window;
+      gint root_x, root_y;
 #if 0
       gdk_input_check_proximity(display);
 #endif
