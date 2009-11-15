@@ -259,7 +259,7 @@ inner_window_procedure (HWND   hwnd,
   else
     {
       /* Otherwise call DefWindowProcW(). */
-      GDK_NOTE (EVENTLOOP, g_print (" DefWindowProcW"));
+      GDK_NOTE (EVENTS, g_print (" DefWindowProcW"));
       return DefWindowProcW (hwnd, message, wparam, lparam);
     }
 }
@@ -774,8 +774,8 @@ print_event_state (guint state)
 #undef CASE
 }
 
-static void
-print_event (const GdkEvent *event)
+void
+_gdk_win32_print_event (const GdkEvent *event)
 {
   gchar *escaped, *kvname;
   gchar *selection_name, *target_name, *property_name;
@@ -991,11 +991,12 @@ append_event (GdkEvent *event)
   fixup_event (event);
 #if 1
   link = _gdk_event_queue_append (_gdk_display, event);
+  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
   /* event morphing, the passed in may not be valid afterwards */
   _gdk_windowing_got_event (_gdk_display, link, event, 0);
 #else
   _gdk_event_queue_append (_gdk_display, event);
-  GDK_NOTE (EVENTS, print_event (event));
+  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 #endif
 }
 
@@ -1108,7 +1109,7 @@ apply_event_filters (GdkWindow  *window,
     {
       ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
       fixup_event (event);
-      GDK_NOTE (EVENTS, print_event (event));
+      GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
     }
   return result;
 }
@@ -1981,7 +1982,7 @@ gdk_event_translate (MSG  *msg,
 
 	case GDK_FILTER_TRANSLATE:
 	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-	  GDK_NOTE (EVENTS, print_event (event));
+	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 	  return_val = TRUE;
 	  goto done;
 
@@ -1995,7 +1996,7 @@ gdk_event_translate (MSG  *msg,
 	  event->client.data.l[0] = msg->lParam;
 	  for (i = 1; i < 5; i++)
 	    event->client.data.l[i] = 0;
-	  GDK_NOTE (EVENTS, print_event (event));
+	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 	  return_val = TRUE;
 	  goto done;
 	}
@@ -3156,7 +3157,7 @@ gdk_event_translate (MSG  *msg,
 
 	  fixup_event (event);
 	  GDK_NOTE (EVENTS, g_print (" (calling gdk_event_func)"));
-	  GDK_NOTE (EVENTS, print_event (event));
+	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
 	  (*_gdk_event_func) (event, _gdk_event_data);
 	  gdk_event_free (event);
 
