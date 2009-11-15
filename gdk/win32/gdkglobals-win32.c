@@ -54,6 +54,10 @@ GdkAtom           _utf8_string;
 GdkAtom		  _text;
 GdkAtom		  _compound_text;
 GdkAtom		  _text_uri_list;
+GdkAtom		  _image_png;
+GdkAtom		  _image_jpeg;
+GdkAtom		  _image_bmp;
+GdkAtom		  _image_gif;
 
 GdkAtom		  _local_dnd;
 GdkAtom		  _gdk_win32_dropfiles;
