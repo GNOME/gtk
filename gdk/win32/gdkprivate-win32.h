@@ -416,6 +416,10 @@ extern GdkAtom           _utf8_string;
 extern GdkAtom		 _text;
 extern GdkAtom		 _compound_text;
 extern GdkAtom		 _text_uri_list;
+extern GdkAtom		 _image_png;
+extern GdkAtom		 _image_jpeg;
+extern GdkAtom		 _image_bmp;
+extern GdkAtom		 _image_gif;
 
 /* DND selections */
 extern GdkAtom           _local_dnd;

@@ -108,6 +108,10 @@ _gdk_windowing_init (void)
   _text = gdk_atom_intern ("TEXT", FALSE);
   _compound_text = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
   _text_uri_list = gdk_atom_intern ("text/uri-list", FALSE);
+  _image_png = gdk_atom_intern ("image/png", FALSE);
+  _image_jpeg = gdk_atom_intern ("image/jpeg", FALSE);
+  _image_bmp = gdk_atom_intern ("image/bmp", FALSE);
+  _image_gif = gdk_atom_intern ("image/gif", FALSE);
 
   _local_dnd = gdk_atom_intern ("LocalDndSelection", FALSE);
   _gdk_win32_dropfiles = gdk_atom_intern ("DROPFILES_DND", FALSE);

@@ -63,10 +63,6 @@ static UINT cf_gif;
 /* GdkAtoms for well-known image formats */
 static GdkAtom *known_pixbuf_formats;
 static int n_known_pixbuf_formats;
-static GdkAtom image_png;
-static GdkAtom image_jpeg;
-static GdkAtom image_bmp;
-static GdkAtom image_gif;
 
 /* GdkAtoms for well-known text formats */
 static GdkAtom text_plain;
@@ -122,22 +118,17 @@ _gdk_win32_selection_init (void)
 
   g_slist_free (pixbuf_formats);
   
-  image_png = gdk_atom_intern ("image/png", FALSE);
-  image_jpeg = gdk_atom_intern ("image/jpeg", FALSE);
-  image_bmp = gdk_atom_intern ("image/bmp", FALSE);
-  image_gif = gdk_atom_intern ("image/gif", FALSE);
-
   text_plain = gdk_atom_intern ("text/plain", FALSE);
   text_plain_charset_utf_8= gdk_atom_intern ("text/plain;charset=utf-8", FALSE);
   text_plain_charset_CP1252 = gdk_atom_intern ("text/plain;charset=CP1252", FALSE);
 
   g_hash_table_replace (_format_atom_table,
 			GINT_TO_POINTER (cf_png),
-			image_png);
+			_image_png);
 
   g_hash_table_replace (_format_atom_table,
 			GINT_TO_POINTER (CF_DIB),
-			image_bmp);
+			_image_bmp);
 }
 
 /* The specifications for COMPOUND_TEXT and STRING specify that C0 and
@@ -263,13 +254,13 @@ _gdk_dropfiles_store (gchar *data)
 static gchar *
 get_mapped_gdk_atom_name (GdkAtom gdk_target)
 {
-  if (gdk_target == image_png)
+  if (gdk_target == _image_png)
     return g_strdup ("PNG");
 
-  if (gdk_target == image_jpeg)
+  if (gdk_target == _image_jpeg)
     return g_strdup ("JFIF");
   
-  if (gdk_target == image_gif)
+  if (gdk_target == _image_gif)
     return g_strdup ("GIF");
   
   return gdk_atom_name (gdk_target);
@@ -453,7 +444,7 @@ gdk_selection_convert (GdkWindow *requestor,
 	{
 	  if (fmt == cf_png)
 	    {
-	      targets[ntargets++] = image_png;
+	      targets[ntargets++] = _image_png;
 	      has_png = TRUE;
 	    }
 	}
@@ -481,21 +472,21 @@ gdk_selection_convert (GdkWindow *requestor,
 	       * transparency.
 	       */
 	      if (!has_bmp && !has_png)
-		targets[ntargets++] = image_bmp;
+		targets[ntargets++] = _image_bmp;
 	      has_bmp = TRUE;
 	    }
 	  else if (fmt == cf_jfif)
 	    {
 	      /* Ditto for JPEG */
 	      if (!has_png)
-		targets[ntargets++] = image_jpeg;
+		targets[ntargets++] = _image_jpeg;
 	    }
 	  else if (fmt == cf_gif)
 	    {
 	      /* Ditto for GIF.
 	       */
 	      if (!has_png)
-		targets[ntargets++] = image_gif;
+		targets[ntargets++] = _image_gif;
 	    }
 	  else if (GetClipboardFormatName (fmt, sFormat, 80) > 0)
 	    {
@@ -592,7 +583,7 @@ gdk_selection_convert (GdkWindow *requestor,
 
       API_CALL (CloseClipboard, ());
     }
-  else if (selection == GDK_SELECTION_CLIPBOARD && target == image_bmp)
+  else if (selection == GDK_SELECTION_CLIPBOARD && target == _image_bmp)
     {
       if (!API_CALL (OpenClipboard, (GDK_WINDOW_HWND (requestor))))
 	return;
@@ -746,7 +737,7 @@ gdk_selection_convert (GdkWindow *requestor,
 			      data_length);
 		    }
 
-	          selection_property_store (requestor, image_bmp, 8,
+	          selection_property_store (requestor, _image_bmp, 8,
 					    data, new_length);
                 }
 	      GlobalUnlock (hdata);
@@ -1294,7 +1285,7 @@ _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
       g_free (target_name);
     });
 
-  if (target == image_bmp)
+  if (target == _image_bmp)
     {
       /* No conversion is needed, just strip the BITMAPFILEHEADER */
       HGLOBAL hdatanew;
