@@ -2420,10 +2420,10 @@ test_menus (void)
   gtk_accel_label_refetch (GTK_ACCEL_LABEL (sample_accel_label));
   gtk_accel_label_refetch (GTK_ACCEL_LABEL (item_accel_label));
 
-  g_assert (GTK_ACCEL_LABEL (sample_accel_label)->accel_string != NULL);
-  g_assert (GTK_ACCEL_LABEL (item_accel_label)->accel_string != NULL);
-  g_assert (strcmp (GTK_ACCEL_LABEL (item_accel_label)->accel_string, 
-		    GTK_ACCEL_LABEL (sample_accel_label)->accel_string) == 0);
+  g_assert (gtk_label_get_text (GTK_LABEL (sample_accel_label)) != NULL);
+  g_assert (gtk_label_get_text (GTK_LABEL (item_accel_label)) != NULL);
+  g_assert (strcmp (gtk_label_get_text (GTK_LABEL (item_accel_label)),
+		    gtk_label_get_text (GTK_LABEL (sample_accel_label))) == 0);
 
   /* Check the menu hierarchy worked here  */
   g_assert (get_parent_menubar (item));
