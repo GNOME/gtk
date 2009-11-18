@@ -382,7 +382,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 
   direction = gtk_widget_get_direction (widget);
 
-  if (gtk_widget_is_drawable (widget))
+  if (gtk_widget_is_drawable (widget)) 
     {
       guint ac_width;
       GtkAllocation allocation;
