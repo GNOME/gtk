@@ -1538,25 +1538,6 @@ struct _GtkForeachData
   gpointer           callback_data;
 };
 
-static void
-gtk_container_foreach_unmarshal (GtkWidget *child,
-				 gpointer data)
-{
-  GtkForeachData *fdata = (GtkForeachData*) data;
-  GtkArg args[2];
-  
-  /* first argument */
-  args[0].name = NULL;
-  args[0].type = G_TYPE_FROM_INSTANCE (child);
-  GTK_VALUE_OBJECT (args[0]) = GTK_OBJECT (child);
-  
-  /* location for return value */
-  args[1].name = NULL;
-  args[1].type = G_TYPE_NONE;
-  
-  fdata->callback (fdata->container, fdata->callback_data, 1, args);
-}
-
 /**
  * gtk_container_set_focus_child:
  * @container: a #GtkContainer
