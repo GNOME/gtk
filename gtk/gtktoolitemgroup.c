@@ -1829,14 +1829,6 @@ gtk_tool_item_group_animation_cb (gpointer data)
   if (timestamp >= ANIMATION_DURATION)
     priv->animation_timeout = NULL;
 
-  /* Ensure that all composited windows and child windows are repainted, before
-   * the parent widget gets its expose-event. This is needed to avoid heavy
-   * rendering artifacts. GTK+ should take care about this issue by itself I
-   * guess, but currently it doesn't. Also I don't understand the parameters
-   * of this issue well enough yet, to file a bug report.
-   */
-  gdk_window_process_updates (GTK_WIDGET (group)->window, TRUE);
-
   retval = (priv->animation_timeout != NULL);
 
   GDK_THREADS_LEAVE();
