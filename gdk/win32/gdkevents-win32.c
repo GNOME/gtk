@@ -990,6 +990,7 @@ append_event (GdkEvent *event)
   fixup_event (event);
 #if 1
   link = _gdk_event_queue_append (_gdk_display, event);
+  GDK_NOTE (EVENTS, print_event (event));
   /* event morphing, the passed in may not be valid afterwards */
   _gdk_windowing_got_event (_gdk_display, link, event, 0);
 #else
