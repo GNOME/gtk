@@ -501,12 +501,7 @@ fallback_printer_get_hard_margins (GtkPrinter *printer,
 				   gdouble    *left,
 				   gdouble    *right)
 {
-  *top = 0;
-  *bottom = 0;
-  *left = 0;
-  *right = 0;
-
-  return TRUE;
+  return FALSE;
 }
 
 static GList *
