@@ -1079,15 +1079,6 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_show (label);
   gtk_window_set_label_widget (window, label);
 
-#if 0
-  colormap = _gtk_widget_peek_colormap ();
-  if (colormap)
-    gtk_widget_set_colormap (GTK_WIDGET (window), colormap);
-#else
-  gtk_widget_set_colormap (GTK_WIDGET (window),
-                           gdk_screen_get_rgba_colormap (gtk_widget_get_screen (GTK_WIDGET (window))));
-#endif
-
   g_object_ref_sink (window);
   window->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);

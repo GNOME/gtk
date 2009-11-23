@@ -241,9 +241,29 @@ gdk_screen_get_root_window (GdkScreen *screen)
 GdkColormap *
 gdk_screen_get_default_colormap (GdkScreen *screen)
 {
+  GdkScreenX11 *screen_x11;
+  GdkColormap *colormap;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return GDK_SCREEN_X11 (screen)->default_colormap;
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  if (!screen_x11->default_colormap)
+    {
+      if (!screen_x11->rgba_visual)
+        {
+          colormap = g_object_ref (gdk_screen_get_system_colormap (screen));
+        }
+      else
+        {
+          colormap = gdk_colormap_new (screen_x11->rgba_visual,
+                                       FALSE);
+        }
+
+      screen_x11->default_colormap = colormap;
+    }
+
+  return screen_x11->default_colormap;
 }
 
 /**

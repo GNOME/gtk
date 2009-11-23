@@ -426,9 +426,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   g_assert (screen_x11->root_window == NULL);
 
-  gdk_screen_set_default_colormap (screen,
-				   gdk_screen_get_system_colormap (screen));
-
   screen_x11->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
   private = (GdkWindowObject *) screen_x11->root_window;
