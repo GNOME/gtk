@@ -4136,7 +4136,6 @@ gtk_toggle_button_new_with_label
 gtk_toggle_button_new_with_mnemonic
 gtk_toggle_button_set_mode
 gtk_toggle_button_get_mode
-gtk_toggle_button_set_state
 gtk_toggle_button_toggled
 gtk_toggle_button_get_active
 gtk_toggle_button_set_active

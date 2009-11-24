@@ -152,14 +152,6 @@ Creates a new toggle button with a text label.
 @Returns: 
 
 
-<!-- ##### MACRO gtk_toggle_button_set_state ##### -->
-<para>
-This is a deprecated macro, and is only maintained for compatibility reasons.
-</para>
-
-@Deprecated: Use gtk_toggle_button_set_active() instead.
-
-
 <!-- ##### FUNCTION gtk_toggle_button_toggled ##### -->
 <para>
 Emits the <link linkend="GtkToggleButton-toggled">toggled</link>
