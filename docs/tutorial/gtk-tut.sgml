@@ -2021,7 +2021,6 @@ GObject
   | | `GtkTreeView
   | +GtkCalendar
   | +GtkDrawingArea
-  | | `GtkCurve
   | +GtkEditable
   | | +GtkEntry
   | |   `GtkSpinButton
@@ -13959,17 +13958,6 @@ void GtkStatusbar::text-popped	(GtkStatusbar *,
                               	 gguint,
                               	 GtkString *,
                               	 gpointer);
-</programlisting>
-
-</sect1>
-
-<!-- ----------------------------------------------------------------- -->
-<sect1 id="sec-GtkCurve">
-<title>GtkCurve</title>
-
-<programlisting role="C">
-void GtkCurve::curve-type-changed	(GtkCurve *,
-                                 	 gpointer);
 </programlisting>
 
 </sect1>

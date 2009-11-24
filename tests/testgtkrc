@@ -159,7 +159,6 @@ widget_class "*GtkRadioButton*" style "toggle_button"
 widget_class "*GtkButton*" style "button"
 widget_class "*Ruler" style "ruler"
 widget_class "*GtkText" style "text"
-widget "*GtkCurve" style "curve"
 
 binding "test1"
 {

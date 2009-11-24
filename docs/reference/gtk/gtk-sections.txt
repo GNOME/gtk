@@ -1128,28 +1128,6 @@ gtk_ctree_node_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcurve</FILE>
-<TITLE>GtkCurve</TITLE>
-GtkCurve
-gtk_curve_new
-gtk_curve_reset
-gtk_curve_set_gamma
-gtk_curve_set_range
-gtk_curve_get_vector
-gtk_curve_set_vector
-gtk_curve_set_curve_type
-<SUBSECTION Standard>
-GTK_CURVE
-GTK_IS_CURVE
-GTK_TYPE_CURVE
-GTK_CURVE_CLASS
-GTK_IS_CURVE_CLASS
-GTK_CURVE_GET_CLASS
-<SUBSECTION Private>
-gtk_curve_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkdialog</FILE>
 <TITLE>GtkDialog</TITLE>
 GtkDialog
@@ -6339,7 +6317,6 @@ GtkArrowType
 GtkAttachOptions
 GtkButtonBoxStyle
 GtkCornerType
-GtkCurveType
 GtkDeleteType
 GtkDirectionType
 GtkExpanderStyle

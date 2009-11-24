@@ -1159,7 +1159,6 @@ myapp --display=:1
      | +GtkToolbar
      | `GtkTree
      +GtkDrawingArea
-     | `GtkCurve
      +GtkEditable
      | +GtkEntry
      | | `GtkSpinButton

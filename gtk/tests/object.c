@@ -55,7 +55,6 @@ list_ignore_properties (gboolean buglist)
 {
   /* currently untestable properties */
   static const IgnoreProperty ignore_properties[] = {
-    { "GtkCurve",               "",                     NULL, },                        /* Just ignore it, not worth fixing */
     { "GtkContainer",           "child",                NULL, },                        /* needs working child widget */
     { "GtkRadioMenuItem",       "group",                NULL, },                        /* needs working sibling */
     { "GtkWidget",              "parent",               NULL, },                        /* needs working parent widget */
