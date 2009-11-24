@@ -197,7 +197,7 @@ GtkOptionMenu looks like this:
   /* menu_item->ref_count == 1 and it is flagged as `floating'.
    */
 
-  gtk_menu_append (GTK_MENU (menu), menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
   /* menu_item->ref_count still == 1, but it is no longer `floating'.
    */
   

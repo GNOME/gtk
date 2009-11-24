@@ -206,39 +206,6 @@ Creates a new #GtkMenu.
 @screen: 
 
 
-<!-- ##### MACRO gtk_menu_append ##### -->
-<para>
-Adds a new #GtkMenuItem to the end of the menu's item list.
-</para>
-
-@menu: a #GtkMenu.
-@child: The #GtkMenuItem to add.
-@Deprecated: Use gtk_menu_shell_append() instead.
-
-
-<!-- ##### MACRO gtk_menu_prepend ##### -->
-<para>
-Adds a new #GtkMenuItem to the beginning of the menu's item list.
-</para>
-
-@menu: a #GtkMenu.
-@child: The #GtkMenuItem to add.
-@Deprecated: Use gtk_menu_shell_prepend() instead.
-
-
-<!-- ##### MACRO gtk_menu_insert ##### -->
-<para>
-Adds a new #GtkMenuItem to the menu's item list at the position
-indicated by @position. 
-</para>
-
-@menu: a #GtkMenu.
-@child: The #GtkMenuItem to add.
-@pos: The position in the item list where @child is added.
-      Positions are numbered from 0 to n-1.
-@Deprecated: Use gtk_menu_shell_insert() instead.
-
-
 <!-- ##### FUNCTION gtk_menu_reorder_child ##### -->
 <para>
 Moves a #GtkMenuItem to a new position within the #GtkMenu.

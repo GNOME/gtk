@@ -2366,9 +2366,6 @@ gtk_list_item_get_type
 GtkMenu
 gtk_menu_new
 gtk_menu_set_screen
-gtk_menu_append
-gtk_menu_prepend
-gtk_menu_insert
 gtk_menu_reorder_child
 gtk_menu_attach
 gtk_menu_popup
