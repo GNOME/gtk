@@ -1763,22 +1763,6 @@ gtk_frame_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkgamma</FILE>
-<TITLE>GtkGammaCurve</TITLE>
-GtkGammaCurve
-gtk_gamma_curve_new
-<SUBSECTION Standard>
-GTK_GAMMA_CURVE
-GTK_IS_GAMMA_CURVE
-GTK_TYPE_GAMMA_CURVE
-GTK_GAMMA_CURVE_CLASS
-GTK_IS_GAMMA_CURVE_CLASS
-GTK_GAMMA_CURVE_GET_CLASS
-<SUBSECTION Private>
-gtk_gamma_curve_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkhandlebox</FILE>
 <TITLE>GtkHandleBox</TITLE>
 GtkHandleBox

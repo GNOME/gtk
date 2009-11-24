@@ -1137,8 +1137,7 @@ myapp --display=:1
      | | | +GtkCombo
      | | | `GtkStatusbar
      | | `GtkVBox
-     | |   +GtkColorSelection
-     | |   `GtkGammaCurve
+     | |   `GtkColorSelection
      | +GtkButton
      | | +GtkOptionMenu
      | | `GtkToggleButton

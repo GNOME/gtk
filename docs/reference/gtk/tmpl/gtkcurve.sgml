@@ -22,16 +22,6 @@ As of GTK+ 2.20, #GtkCurve has been deprecated since it is too specialized.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
-<para>
-<variablelist>
-<varlistentry>
-<term>#GtkGammaCurve</term>
-<listitem><para>a subclass for editing gamma curves.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-</para>
 
 <!-- ##### SECTION Stability_Level ##### -->
 

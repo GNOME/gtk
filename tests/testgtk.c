@@ -10831,56 +10831,6 @@ create_selection_test (GtkWidget *widget)
 }
 
 /*
- * Gamma Curve
- */
-
-void
-create_gamma_curve (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL, *curve;
-  static int count = 0;
-  gfloat vec[256];
-  gint max;
-  gint i;
-  
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      gtk_window_set_title (GTK_WINDOW (window), "test");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK(gtk_widget_destroyed),
-			&window);
-
-      curve = gtk_gamma_curve_new ();
-      gtk_container_add (GTK_CONTAINER (window), curve);
-      gtk_widget_show (curve);
-    }
-
-  max = 127 + (count % 2)*128;
-  gtk_curve_set_range (GTK_CURVE (GTK_GAMMA_CURVE (curve)->curve),
-		       0, max, 0, max);
-  for (i = 0; i < max; ++i)
-    vec[i] = (127 / sqrt (max)) * sqrt (i);
-  gtk_curve_set_vector (GTK_CURVE (GTK_GAMMA_CURVE (curve)->curve),
-			max, vec);
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else if (count % 4 == 3)
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
-
-  ++count;
-}
-
-/*
  * Test scrolling
  */
 
@@ -11761,7 +11711,6 @@ struct {
   { "flipping", create_flipping },
   { "focus", create_focus },
   { "font selection", create_font_selection },
-  { "gamma curve", create_gamma_curve, TRUE },
   { "gridded geometry", create_gridded_geometry },
   { "handle box", create_handle_box },
   { "image from drawable", create_get_image },

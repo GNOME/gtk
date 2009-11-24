@@ -2001,8 +2001,7 @@ GObject
   | | | | `GtkVButtonBox
   | | | +GtkVBox
   | | | | +GtkColorSelection
-  | | | | +GtkFontSelection
-  | | | | `GtkGammaCurve
+  | | | | `GtkFontSelection
   | | | `GtkHBox
   | | |   +GtkCombo
   | | |   `GtkStatusbar
