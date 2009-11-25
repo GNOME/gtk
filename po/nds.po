@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-11-15 14:31+0000\n"
-"PO-Revision-Date: 2009-11-15 13:52+0100\n"
+"POT-Creation-Date: 2009-11-15 18:11+0000\n"
+"PO-Revision-Date: 2009-11-22 19:48+0100\n"
 "Last-Translator: Nils-Christoph Fiedler <fiedler@medienkompanie.de>\n"
 "Language-Team: German, Low <nds-lowgerman@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -95,7 +95,7 @@ msgstr "Torügg"
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr "Registerkoort"
+msgstr "Tab"
 
 #: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
@@ -205,7 +205,7 @@ msgstr "KP_Enter"
 #: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Heimat"
+msgstr "KP_Pos1"
 
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
@@ -1091,7 +1091,7 @@ msgstr ""
 
 #: ../gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
-msgstr ""
+msgstr "Kunn nich sekern"
 
 #: ../gdk-pixbuf/io-gdip-wmf.c:58
 msgid "The WMF image format"
@@ -1135,12 +1135,12 @@ msgstr ""
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Starting %s"
-msgstr ""
+msgstr "Starte %s"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Opening %s"
-msgstr ""
+msgstr "Mak %s op"
 
 #: ../gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
@@ -1171,15 +1171,15 @@ msgstr "Över %s"
 
 #: ../gtk/gtkaboutdialog.c:2158
 msgid "Credits"
-msgstr ""
+msgstr "Nils-Christoph Fiedler <fiedler@medienkompanie.de>"
 
 #: ../gtk/gtkaboutdialog.c:2187
 msgid "Written by"
-msgstr ""
+msgstr "Schrieven vun"
 
 #: ../gtk/gtkaboutdialog.c:2190
 msgid "Documented by"
-msgstr ""
+msgstr "Dokumentert vun"
 
 #: ../gtk/gtkaboutdialog.c:2202
 msgid "Translated by"
@@ -1237,7 +1237,7 @@ msgstr "Super"
 #: ../gtk/gtkaccellabel.c:684
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr ""
+msgstr "Hyper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1247,17 +1247,17 @@ msgstr ""
 #: ../gtk/gtkaccellabel.c:698
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: ../gtk/gtkaccellabel.c:715
 msgctxt "keyboard label"
 msgid "Space"
-msgstr ""
+msgstr "Space"
 
 #: ../gtk/gtkaccellabel.c:718
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Backslash"
 
 #: ../gtk/gtkbuilderparser.c:343
 #, c-format
@@ -1309,7 +1309,7 @@ msgstr ""
 #: ../gtk/gtkcalendar.c:1804
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1459,7 +1459,7 @@ msgstr ""
 
 #: ../gtk/gtkcolorsel.c:402
 msgid "Op_acity:"
-msgstr ""
+msgstr "Döörsichtigk_eit:"
 
 #: ../gtk/gtkcolorsel.c:409 ../gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
@@ -1794,6 +1794,7 @@ msgid "Could not read the contents of %s"
 msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:6435
+#, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "Künn keene Informatschoonen över düsse Datei rutkregen"
 
@@ -1828,12 +1829,15 @@ msgstr ""
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
+"Eene Datei mit de Naam \"%s\" givt dat schon. Wullt je de överschrieven?"
 
 #: ../gtk/gtkfilechooserdefault.c:8177 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
+"Düsse Datei givt dat schon in \"%s\". Bi'm Ersetten warrt ook de all de "
+"Inholl överschrieven."
 
 #: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -1866,7 +1870,7 @@ msgstr ""
 #. * chooser's text entry, when the user enters an invalid path.
 #: ../gtk/gtkfilechooserentry.c:698 ../gtk/gtkfilechooserentry.c:1163
 msgid "Invalid path"
-msgstr ""
+msgstr "Invalider Pad"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
@@ -1917,7 +1921,7 @@ msgstr ""
 #. * and then hits Tab
 #: ../gtk/gtkfilechooserentry.c:1196
 msgid "Path does not exist"
-msgstr ""
+msgstr "Düssen Pad givt dat nich"
 
 #: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1360
@@ -1940,7 +1944,7 @@ msgstr "_Dateien"
 #: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr ""
+msgstr "Verteeknis unlesbar: %s"
 
 #: ../gtk/gtkfilesel.c:905
 #, c-format
@@ -1984,6 +1988,7 @@ msgstr "E_rstellen"
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"De Dateinaam \"%s\" hett Symbole in, de in Dateinaamen nich tolaten sünd"
 
 #: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
 #, c-format
@@ -1993,7 +1998,7 @@ msgstr ""
 #: ../gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
-msgstr ""
+msgstr "Wullt je de Datei \"%s\" wohrhaftig löschen?"
 
 #: ../gtk/gtkfilesel.c:1539
 msgid "Delete File"
@@ -2048,7 +2053,7 @@ msgstr "Naam to lang"
 
 #: ../gtk/gtkfilesel.c:3937
 msgid "Couldn't convert filename"
-msgstr ""
+msgstr "Kunn de Dateinaam nich ännern"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2061,12 +2066,12 @@ msgstr "Dateisystem"
 
 #: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
-msgstr ""
+msgstr "Schirftart utwählen"
 
 #. Initialize fields
 #: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: ../gtk/gtkfontbutton.c:785
 msgid "Font"
@@ -2076,11 +2081,11 @@ msgstr "Schriftart"
 #. can set it. Remember that some fonts only have capital letters.
 #: ../gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: ../gtk/gtkfontsel.c:343
 msgid "_Family:"
-msgstr ""
+msgstr "_Familje:"
 
 #: ../gtk/gtkfontsel.c:349
 msgid "_Style:"
@@ -2093,19 +2098,19 @@ msgstr "_Gröte:"
 #. create the text entry widget
 #: ../gtk/gtkfontsel.c:532
 msgid "_Preview:"
-msgstr ""
+msgstr "_Utblick:"
 
 #: ../gtk/gtkfontsel.c:1649
 msgid "Font Selection"
-msgstr ""
+msgstr "Schriftartutwahl"
 
 #: ../gtk/gtkgamma.c:410
 msgid "Gamma"
-msgstr ""
+msgstr "Gamma"
 
 #: ../gtk/gtkgamma.c:420
 msgid "_Gamma value"
-msgstr ""
+msgstr "_Gamma Weert"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2140,13 +2145,13 @@ msgstr "Eenfach"
 #: ../gtk/gtkimmulticontext.c:538
 msgctxt "input method menu"
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: ../gtk/gtkimmulticontext.c:622
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr ""
+msgstr "System (%s)"
 
 #: ../gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2158,7 +2163,7 @@ msgstr ""
 
 #: ../gtk/gtkinputdialog.c:220
 msgid "_Device:"
-msgstr ""
+msgstr "_Lööpwark:"
 
 #: ../gtk/gtkinputdialog.c:237
 msgid "Disabled"
@@ -2174,12 +2179,12 @@ msgstr "Finster"
 
 #: ../gtk/gtkinputdialog.c:258
 msgid "_Mode:"
-msgstr ""
+msgstr "_Modus:"
 
 #. The axis listbox
 #: ../gtk/gtkinputdialog.c:279
 msgid "Axes"
-msgstr ""
+msgstr "Achsen"
 
 #. Keys listbox
 #: ../gtk/gtkinputdialog.c:297
@@ -2188,27 +2193,27 @@ msgstr "Knöppe"
 
 #: ../gtk/gtkinputdialog.c:524
 msgid "_X:"
-msgstr ""
+msgstr "_X:"
 
 #: ../gtk/gtkinputdialog.c:525
 msgid "_Y:"
-msgstr ""
+msgstr "_Y:"
 
 #: ../gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
-msgstr ""
+msgstr "_Druck:"
 
 #: ../gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
-msgstr ""
+msgstr "X _tilt:"
 
 #: ../gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
-msgstr ""
+msgstr "Y t_ilt:"
 
 #: ../gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
-msgstr ""
+msgstr "_Rad:"
 
 #: ../gtk/gtkinputdialog.c:581
 msgid "none"
@@ -2243,17 +2248,17 @@ msgstr "URL koperen"
 
 #: ../gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
-msgstr ""
+msgstr "Invalide URI"
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:450
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Tosettliche GTK+ Module laden"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:451
 msgid "MODULES"
-msgstr ""
+msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:453
@@ -2277,7 +2282,7 @@ msgstr ""
 #.
 #: ../gtk/gtkmain.c:711
 msgid "default:LTR"
-msgstr ""
+msgstr "Standard:LTR"
 
 #: ../gtk/gtkmain.c:776
 #, c-format
@@ -2286,7 +2291,7 @@ msgstr ""
 
 #: ../gtk/gtkmain.c:813
 msgid "GTK+ Options"
-msgstr ""
+msgstr "GTK+ Optschoonen"
 
 #: ../gtk/gtkmain.c:813
 msgid "Show GTK+ Options"
@@ -2294,7 +2299,7 @@ msgstr ""
 
 #: ../gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
-msgstr ""
+msgstr "_Verbinnen"
 
 #: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
@@ -2384,7 +2389,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:168
 msgid "Any Printer"
-msgstr ""
+msgstr "Jiechtenseen Drucker"
 
 #: ../gtk/gtkpagesetupunixdialog.c:168
 msgid "For portable documents"
@@ -2406,11 +2411,11 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:895
 msgid "_Format for:"
-msgstr ""
+msgstr "_Format för:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
-msgstr ""
+msgstr "_Papiergröte:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:948
 msgid "_Orientation:"
@@ -2418,7 +2423,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:1012 ../gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
-msgstr ""
+msgstr "Sieteninstellens"
 
 #: ../gtk/gtkpathbar.c:151
 msgid "Up Path"
@@ -2438,11 +2443,11 @@ msgstr ""
 
 #: ../gtk/gtkprinteroptionwidget.c:693
 msgid "Not available"
-msgstr ""
+msgstr "Nich verfögbar"
 
 #: ../gtk/gtkprinteroptionwidget.c:812
 msgid "_Save in folder:"
-msgstr ""
+msgstr "In Verteeknis _spiekern:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2471,7 +2476,7 @@ msgstr ""
 #: ../gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Senne Daten"
 
 #: ../gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
@@ -2510,7 +2515,7 @@ msgstr ""
 #: ../gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Printing %d"
-msgstr ""
+msgstr "Drucke %d"
 
 #: ../gtk/gtkprintoperation.c:2905
 msgid "Error creating print preview"
@@ -2526,7 +2531,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation-unix.c:346
 msgid "Error printing"
-msgstr ""
+msgstr "Fehler bi'm Drucken"
 
 #: ../gtk/gtkprintoperation-unix.c:482 ../gtk/gtkprintoperation-win32.c:1430
 msgid "Application"
@@ -2534,17 +2539,17 @@ msgstr "Program"
 
 #: ../gtk/gtkprintoperation-win32.c:595
 msgid "Printer offline"
-msgstr ""
+msgstr "De Drucker is ut or hett keen Strom."
 
 #: ../gtk/gtkprintoperation-win32.c:597
 msgid "Out of paper"
-msgstr ""
+msgstr "Kiek mol nah dien Drucker. - Da is keen Papier mehr in!"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:599
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
-msgstr ""
+msgstr "Pause"
 
 #: ../gtk/gtkprintoperation-win32.c:601
 msgid "Need user intervention"
@@ -2611,7 +2616,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2179
 msgid "Range"
-msgstr ""
+msgstr "Wiede"
 
 #: ../gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
@@ -2637,11 +2642,11 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
-msgstr ""
+msgstr "Sieten"
 
 #: ../gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
-msgstr ""
+msgstr "Kopien"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:2238
@@ -2658,7 +2663,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:2284
 msgid "General"
-msgstr ""
+msgstr "Allgemeen"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -2716,23 +2721,23 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
-msgstr ""
+msgstr "Vun links nah rechts"
 
 #: ../gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
-msgstr ""
+msgstr "Vun rechts nah links"
 
 #: ../gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
-msgstr ""
+msgstr "Vun boven nah unnen"
 
 #: ../gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
-msgstr ""
+msgstr "Vun unnen nah boven"
 
 #: ../gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
-msgstr ""
+msgstr "Utsehn"
 
 #: ../gtk/gtkprintunixdialog.c:3304
 msgid "T_wo-sided:"
@@ -2753,7 +2758,7 @@ msgstr ""
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:3367
 msgid "All sheets"
-msgstr ""
+msgstr "All Sieten"
 
 #: ../gtk/gtkprintunixdialog.c:3368
 msgid "Even sheets"
@@ -2769,15 +2774,15 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3399
 msgid "Paper"
-msgstr ""
+msgstr "Papier"
 
 #: ../gtk/gtkprintunixdialog.c:3403
 msgid "Paper _type:"
-msgstr ""
+msgstr "Papier_typ:"
 
 #: ../gtk/gtkprintunixdialog.c:3418
 msgid "Paper _source:"
-msgstr ""
+msgstr "Papier_well:"
 
 #: ../gtk/gtkprintunixdialog.c:3433
 msgid "Output t_ray:"
@@ -2794,7 +2799,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3489
 msgid "Landscape"
-msgstr ""
+msgstr "Landschapt"
 
 #: ../gtk/gtkprintunixdialog.c:3490
 msgid "Reverse portrait"
@@ -2818,18 +2823,18 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3575
 msgid "Print Document"
-msgstr ""
+msgstr "Dokument drucken"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
 #: ../gtk/gtkprintunixdialog.c:3584
 msgid "_Now"
-msgstr ""
+msgstr "_Nu"
 
 #: ../gtk/gtkprintunixdialog.c:3595
 msgid "A_t:"
-msgstr ""
+msgstr "B_i:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
@@ -2862,14 +2867,14 @@ msgstr ""
 #.
 #: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
-msgstr ""
+msgstr "_Vor:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
 #: ../gtk/gtkprintunixdialog.c:3675
 msgid "_After:"
-msgstr ""
+msgstr "_Achter:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
@@ -2949,11 +2954,11 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
-msgstr ""
+msgstr "_Ut List löschen"
 
 #: ../gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
-msgstr ""
+msgstr "List op_klaren"
 
 #: ../gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
@@ -2971,7 +2976,7 @@ msgstr ""
 #.
 #: ../gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
-msgstr ""
+msgstr "Keene Elemente funnen"
 
 #: ../gtk/gtkrecentchoosermenu.c:508 ../gtk/gtkrecentchoosermenu.c:564
 #, c-format
@@ -2985,7 +2990,7 @@ msgstr "'%s' opmaken"
 
 #: ../gtk/gtkrecentchoosermenu.c:805
 msgid "Unknown item"
-msgstr ""
+msgstr "Unbekanntes Element"
 
 #. This is the label format that is used for the first 10 items
 #. * in a recent files menu. The %d is the number of the item,
@@ -3016,9 +3021,10 @@ msgid "Unable to find an item with URI '%s'"
 msgstr ""
 
 #: ../gtk/gtkspinner.c:454
+#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr ""
+msgstr "Super"
 
 #: ../gtk/gtkspinner.c:455
 msgid "Provides visual indication of progress"
@@ -3033,7 +3039,7 @@ msgstr "Informatschoon"
 #: ../gtk/gtkstock.c:290
 msgctxt "Stock label"
 msgid "Warning"
-msgstr ""
+msgstr "Achtung, Achtung"
 
 #: ../gtk/gtkstock.c:291
 msgctxt "Stock label"
@@ -3061,22 +3067,22 @@ msgstr "_Hentofögen"
 #: ../gtk/gtkstock.c:299
 msgctxt "Stock label"
 msgid "_Apply"
-msgstr ""
+msgstr "_OK"
 
 #: ../gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Bold"
-msgstr ""
+msgstr "_Dick"
 
 #: ../gtk/gtkstock.c:301
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr ""
+msgstr "_Avbreken"
 
 #: ../gtk/gtkstock.c:302
 msgctxt "Stock label"
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD-Rom"
 
 #: ../gtk/gtkstock.c:303
 msgctxt "Stock label"
@@ -3096,7 +3102,7 @@ msgstr "_Verbinnen"
 #: ../gtk/gtkstock.c:306
 msgctxt "Stock label"
 msgid "_Convert"
-msgstr ""
+msgstr "_Konverteren"
 
 #: ../gtk/gtkstock.c:307
 msgctxt "Stock label"
@@ -3146,7 +3152,7 @@ msgstr ""
 #: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "_Floppy"
-msgstr ""
+msgstr "_Diskettenlööpwark"
 
 #: ../gtk/gtkstock.c:317
 msgctxt "Stock label"
@@ -3234,7 +3240,7 @@ msgstr ""
 #: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_Index"
-msgstr ""
+msgstr "_Index"
 
 #: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
@@ -3244,18 +3250,18 @@ msgstr "_Informatschoon"
 #: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr ""
+msgstr "_Scheev"
 
 #: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr ""
+msgstr "_Hüpp to"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_Center"
-msgstr ""
+msgstr "_Midde"
 
 #. This is about text justification
 #: ../gtk/gtkstock.c:347
@@ -3375,7 +3381,7 @@ msgstr ""
 #: ../gtk/gtkstock.c:382
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr ""
+msgstr "Sieten_instellens"
 
 #: ../gtk/gtkstock.c:383
 msgctxt "Stock label"
@@ -3483,7 +3489,7 @@ msgstr ""
 #: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "_Undelete"
-msgstr ""
+msgstr "_Wedderherstellen"
 
 #. Font variant
 #: ../gtk/gtkstock.c:408
@@ -3710,11 +3716,11 @@ msgstr ""
 
 #: ../gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Luutstarke instellen"
 
 #: ../gtk/gtkvolumebutton.c:81 ../gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
-msgstr ""
+msgstr "Luutstarke daal"
 
 #: ../gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
@@ -3722,7 +3728,7 @@ msgstr ""
 
 #: ../gtk/gtkvolumebutton.c:87 ../gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
-msgstr ""
+msgstr "Luutstarke op"
 
 #: ../gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
@@ -3750,537 +3756,537 @@ msgstr ""
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: ../gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 Extra"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: ../gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: ../gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: ../gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: ../gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: ../gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: ../gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: ../gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: ../gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: ../gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: ../gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: ../gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: ../gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: ../gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: ../gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: ../gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: ../gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: ../gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: ../gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: ../gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: ../gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: ../gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: ../gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: ../gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: ../gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: ../gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #: ../gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: ../gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #: ../gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: ../gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: ../gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
-msgstr ""
+msgstr "DL Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: ../gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: ../gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: ../gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: ../gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr ""
+msgstr "Choukei 2 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr ""
+msgstr "Choukei 3 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr ""
+msgstr "Choukei 4 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (Postkoort)"
 
 #: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr ""
+msgstr "kahu Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr ""
+msgstr "Kaku2 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (Anterpostkoort)"
 
 #: ../gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr ""
+msgstr "you4 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
 #: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr ""
+msgstr "6x9 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr ""
+msgstr "7x9 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr ""
+msgstr "9x11 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr ""
+msgstr "a2 Breevumslag"
 
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: ../gtk/paper_names_offsets.c:112
 msgctxt "paper size"
@@ -4290,17 +4296,17 @@ msgstr ""
 #: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
@@ -4315,7 +4321,7 @@ msgstr ""
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
@@ -4691,17 +4697,17 @@ msgstr ""
 #. ID
 #: ../modules/input/imipa.c:145
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multipress"
 
 #. ID
 #: ../modules/input/imthai.c:35
 msgid "Thai-Lao"
-msgstr ""
+msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:453
@@ -4721,7 +4727,7 @@ msgstr ""
 #. ID
 #: ../modules/input/imxim.c:28
 msgid "X Input Method"
-msgstr ""
+msgstr "X Ingavart"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:775
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:984
@@ -4803,12 +4809,12 @@ msgstr ""
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr ""
+msgstr "De Toner in de Drucker '%s' is glieks leer."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr ""
+msgstr "De Toner in de Drucker '%s' is nu leer."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1639
@@ -4847,12 +4853,12 @@ msgstr ""
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr ""
+msgstr "Kiek mol achter dien Drucker '%s'. De hett glieks keen Papier över."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr ""
+msgstr "Kiek mol achter dien Drucker '%s'. De brukt nejes Papier."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
@@ -4885,11 +4891,11 @@ msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
-msgstr ""
+msgstr "Papiertyp"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
-msgstr ""
+msgstr "Papierwell"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
@@ -5022,7 +5028,7 @@ msgstr ""
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
@@ -5078,7 +5084,7 @@ msgstr ""
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
-msgstr ""
+msgstr "In Datei drucken"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
@@ -5125,7 +5131,7 @@ msgstr ""
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
-msgstr ""
+msgstr "Drucken künn losgahn"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
@@ -5150,9 +5156,12 @@ msgstr ""
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
-msgstr ""
+msgstr "Drucke mit Testdrucker"
 
 #: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
-msgstr ""
+msgstr "Kunn keene Informatschoon rutkregen över de Datei '%s': %s"
+
+#~ msgid "(Empty)"
+#~ msgstr "(Leer)"
