@@ -3508,28 +3508,43 @@ paint_decorated_window (GtkStyle *style,
   cairo_t *cr;
   const double hmargin = 2.5, vmargin = 2.5, radius = 5;
   GdkColor *color;
+  GdkWindowState state;
 
   if (width == -1)
     width = widget->allocation.width;
   if (height == -1)
     height = widget->allocation.height;
 
+  state = gdk_window_get_state (window);
+
   cr = gdk_cairo_create (window);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   cairo_paint (cr);
 
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_arc (cr, hmargin + radius, vmargin + radius,
-             radius, M_PI, 3 * M_PI / 2);
-  cairo_line_to (cr, width - hmargin - radius, vmargin);
-  cairo_arc (cr, width - hmargin - radius, vmargin + radius,
-             radius, 3 * M_PI / 2, 2 * M_PI);
-  cairo_line_to (cr, width - hmargin, height - vmargin - radius);
-  cairo_arc (cr, width - hmargin - radius, height - vmargin - radius,
-             radius, 0, M_PI / 2);
-  cairo_line_to (cr, hmargin + radius, height - vmargin);
-  cairo_arc (cr, hmargin + radius, height - vmargin - radius,
-             radius, M_PI / 2, M_PI);
+
+  if (state & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      cairo_rectangle (cr,
+                       0, 0,
+                       width, height);
+    }
+  else
+    {
+      cairo_arc (cr, hmargin + radius, vmargin + radius,
+                 radius, M_PI, 3 * M_PI / 2);
+      cairo_line_to (cr, width - hmargin - radius, vmargin);
+      cairo_arc (cr, width - hmargin - radius, vmargin + radius,
+                 radius, 3 * M_PI / 2, 2 * M_PI);
+      cairo_line_to (cr, width - hmargin, height - vmargin - radius);
+      cairo_arc (cr, width - hmargin - radius, height - vmargin - radius,
+                 radius, 0, M_PI / 2);
+      cairo_line_to (cr, hmargin + radius, height - vmargin);
+      cairo_arc (cr, hmargin + radius, height - vmargin - radius,
+                 radius, M_PI / 2, M_PI);
+      cairo_close_path (cr);
+    }
+
   cairo_close_path (cr);
 
   gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
