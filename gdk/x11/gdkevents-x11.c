@@ -618,6 +618,7 @@ translate_key_event (GdkDisplay *display,
   GdkKeymap *keymap = gdk_keymap_get_for_display (display);
   gunichar c = 0;
   gchar buf[7];
+  GdkModifierType consumed, state;
 
   event->key.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
   event->key.time = xevent->xkey.time;
@@ -633,9 +634,11 @@ translate_key_event (GdkDisplay *display,
 				       event->key.state,
 				       event->key.group,
 				       &event->key.keyval,
-				       NULL, NULL, NULL);
+                                       NULL, NULL, &consumed);
+   state = event->key.state & ~consumed;
+   _gdk_keymap_add_virtual_modifiers (keymap, &state);
+   event->key.state |= state;
 
-  _gdk_keymap_add_virtual_modifiers (keymap, &event->key.state);
   event->key.is_modifier = _gdk_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
   /* Fill in event->string crudely, since various programs
