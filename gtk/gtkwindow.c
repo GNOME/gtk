@@ -54,6 +54,7 @@
 #include "gtkplug.h"
 #include "gtkbuildable.h"
 #include "gtkstock.h"
+#include "gtkseparatormenuitem.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -1024,7 +1025,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 static void
 gtk_window_init (GtkWindow *window)
 {
-  GdkColormap *colormap;
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkWidget *label;
   
@@ -5623,7 +5623,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   gint left_width = 0;
   GdkRectangle rect;
   gboolean client_decorated;
-  gboolean maximized = FALSE;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
@@ -6783,7 +6782,7 @@ close_window_clicked (GtkMenuItem *menuitem,
 {
   GtkWindow *window = (GtkWindow *)user_data;
 
-  close_button_clicked (window, NULL);
+  close_button_clicked (GTK_WIDGET (window), NULL);
 }
 
 static void
