@@ -585,8 +585,6 @@ gdk_visual_get_best
 gdk_visual_get_best_with_depth
 gdk_visual_get_best_with_type
 gdk_visual_get_best_with_both
-gdk_visual_ref
-gdk_visual_unref
 gdk_visual_get_screen
 
 <SUBSECTION Standard>

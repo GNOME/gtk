@@ -234,23 +234,6 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 @Returns: 
 
 
-<!-- ##### MACRO gdk_visual_ref ##### -->
-<para>
-Deprecated equivalent of g_object_ref().
-</para>
-
-@v: a #GdkVisual
-@Returns: the same visual
-
-
-<!-- ##### MACRO gdk_visual_unref ##### -->
-<para>
-Deprecated equivalent of g_object_unref().
-</para>
-
-@v: a #GdkVisual
-
-
 <!-- ##### FUNCTION gdk_visual_get_screen ##### -->
 <para>
 

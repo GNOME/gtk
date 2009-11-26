@@ -119,10 +119,6 @@ GList* gdk_list_visuals (void);
 
 GdkScreen *gdk_visual_get_screen (GdkVisual *visual);
 
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_visual_ref(v) g_object_ref(v)
-#define gdk_visual_unref(v) g_object_unref(v)
-#endif
 
 G_END_DECLS
 
