@@ -980,7 +980,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   /**
-   * GtkToolbar:icon-size-set:
+   * GtkToolPalette:icon-size-set:
    *
    * Is %TRUE if the icon-size property has been set.
    *
