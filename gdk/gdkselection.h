@@ -55,14 +55,6 @@ G_BEGIN_DECLS
 #define GDK_SELECTION_TYPE_WINDOW 	_GDK_MAKE_ATOM (33)
 #define GDK_SELECTION_TYPE_STRING 	_GDK_MAKE_ATOM (31)
 
-#ifndef GDK_DISABLE_DEPRECATED
-
-typedef GdkAtom GdkSelection;
-typedef GdkAtom GdkTarget;
-typedef GdkAtom GdkSelectionType;
-
-#endif /* GDK_DISABLE_DEPRECATED */
-
 /* Selections
  */
 

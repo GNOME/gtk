@@ -798,9 +798,6 @@ gdk_window_thaw_toplevel_updates_libgtk_only
 <SECTION>
 <TITLE>Selections</TITLE>
 <FILE>selections</FILE>
-GdkSelection
-GdkSelectionType
-GdkTarget
 GDK_SELECTION_PRIMARY
 GDK_SELECTION_SECONDARY
 GDK_SELECTION_CLIPBOARD
