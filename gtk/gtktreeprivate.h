@@ -140,6 +140,9 @@ struct _GtkTreeViewPrivate
   gint press_start_x;
   gint press_start_y;
 
+  gint event_last_x;
+  gint event_last_y;
+
   GtkTreeRowReference *last_button_press;
   GtkTreeRowReference *last_button_press_2;
 

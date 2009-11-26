@@ -390,6 +390,9 @@ static void     remove_expand_collapse_timeout               (GtkTreeView       
 static void     cancel_arrow_animation                       (GtkTreeView        *tree_view);
 static gboolean do_expand_collapse                           (GtkTreeView        *tree_view);
 static void     gtk_tree_view_stop_rubber_band               (GtkTreeView        *tree_view);
+static void     update_prelight                              (GtkTreeView        *tree_view,
+                                                              int                 x,
+                                                              int                 y);
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
@@ -2447,6 +2450,11 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       /* This little hack only works if we have an LTR locale, and no column has the  */
       if (width_changed)
 	{
+          if (tree_view->priv->tree)
+            update_prelight (tree_view,
+                             tree_view->priv->event_last_x,
+                             tree_view->priv->event_last_y);
+
 	  if (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_LTR &&
 	      ! has_expand_column)
 	    invalidate_last_column (tree_view);
@@ -3268,6 +3276,26 @@ prelight_or_select (GtkTreeView *tree_view,
 }
 
 static void
+update_prelight (GtkTreeView *tree_view,
+                 gint         x,
+                 gint         y)
+{
+  int new_y;
+  GtkRBTree *tree;
+  GtkRBNode *node;
+
+  new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y);
+  if (new_y < 0)
+    new_y = 0;
+
+  _gtk_rbtree_find_offset (tree_view->priv->tree,
+                           new_y, &tree, &node);
+
+  if (node)
+    prelight_or_select (tree_view, tree, node, x, y);
+}
+
+static void
 ensure_unprelighted (GtkTreeView *tree_view)
 {
   do_prelight (tree_view,
@@ -4077,6 +4105,9 @@ gtk_tree_view_motion_bin_window (GtkWidget      *widget,
   if ((tree_view->priv->button_pressed_node != NULL) &&
       (tree_view->priv->button_pressed_node != node))
     node = NULL;
+
+  tree_view->priv->event_last_x = event->x;
+  tree_view->priv->event_last_y = event->y;
 
   prelight_or_select (tree_view, tree, node, event->x, event->y);
 
@@ -10503,9 +10534,15 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		       - tree_view->priv->hadjustment->value,
 		       0);
       dy = tree_view->priv->dy - (int) tree_view->priv->vadjustment->value;
-      if (dy && tree_view->priv->edited_column)
+      if (dy)
 	{
-	  if (GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
+          if (tree_view->priv->tree)
+            update_prelight (tree_view,
+                             tree_view->priv->event_last_x,
+                             tree_view->priv->event_last_y - dy);
+
+	  if (tree_view->priv->edited_column &&
+              GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
 	    {
 	      GList *list;
 	      GtkWidget *widget;
