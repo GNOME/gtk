@@ -72,16 +72,6 @@ occurs.
 @condition: the triggering condition.
 
 
-<!-- ##### USER_FUNCTION GdkDestroyNotify ##### -->
-<para>
-A callback function called when a piece of user data is 
-no longer being stored by GDK. Will typically free the
-structure or object that @data points to.
-</para>
-
-@data: the user data.
-
-
 <!-- ##### FUNCTION gdk_input_add ##### -->
 
 

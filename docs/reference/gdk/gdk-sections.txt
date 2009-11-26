@@ -1196,7 +1196,6 @@ gdk_cursor_get_type
 gdk_input_add_full
 GdkInputCondition
 GdkInputFunction
-GdkDestroyNotify
 gdk_input_add
 gdk_input_remove
 
