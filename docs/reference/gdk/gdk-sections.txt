@@ -305,7 +305,6 @@ gdk_image_get_type
 <SECTION>
 <TITLE>GdkRGB</TITLE>
 <FILE>rgb</FILE>
-gdk_rgb_init
 
 <SUBSECTION>
 gdk_draw_rgb_image
@@ -322,9 +321,6 @@ gdk_rgb_cmap_free
 GdkRgbCmap
 
 <SUBSECTION>
-gdk_rgb_gc_set_foreground
-gdk_rgb_gc_set_background
-gdk_rgb_xpixel_from_rgb
 gdk_rgb_find_color
 
 <SUBSECTION>

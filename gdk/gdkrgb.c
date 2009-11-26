@@ -672,21 +672,6 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
   return image_info;
 }
 
-void
-gdk_rgb_init (void)
-{
-  static const gint byte_order[1] = { 1 };
-
-  /* check endian sanity */
-#if G_BYTE_ORDER == G_BIG_ENDIAN
-  if (((char *)byte_order)[0] == 1)
-    g_error ("gdk_rgb_init: compiled for big endian, but this is a little endian machine.\n\n");
-#else
-  if (((char *)byte_order)[0] != 1)
-    g_error ("gdk_rgb_init: compiled for little endian, but this is a big endian machine.\n\n");
-#endif
-}
-
 static GdkRgbInfo *
 gdk_rgb_get_info_from_colormap (GdkColormap *cmap)
 {
@@ -777,36 +762,6 @@ gdk_rgb_xpixel_from_rgb_internal (GdkColormap *colormap,
     }
 
   return pixel;
-}
-
-/* convert an rgb value into an X pixel code */
-gulong
-gdk_rgb_xpixel_from_rgb (guint32 rgb)
-{
-  guint32 r = rgb & 0xff0000;
-  guint32 g = rgb & 0xff00;
-  guint32 b = rgb & 0xff;
-
-  return gdk_rgb_xpixel_from_rgb_internal (gdk_screen_get_rgb_colormap (gdk_screen_get_default ()),
-					   (r >> 8) + (r >> 16), g + (g >> 8), b + (b << 8));
-}
-
-void
-gdk_rgb_gc_set_foreground (GdkGC *gc, guint32 rgb)
-{
-  GdkColor color;
-
-  color.pixel = gdk_rgb_xpixel_from_rgb (rgb);
-  gdk_gc_set_foreground (gc, &color);
-}
-
-void
-gdk_rgb_gc_set_background (GdkGC *gc, guint32 rgb)
-{
-  GdkColor color;
-
-  color.pixel = gdk_rgb_xpixel_from_rgb (rgb);
-  gdk_gc_set_background (gc, &color);
 }
 
 /**

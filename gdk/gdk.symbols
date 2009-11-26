@@ -984,12 +984,6 @@ gdk_rgb_ditherable
 gdk_rgb_find_color
 gdk_rgb_get_colormap
 gdk_rgb_get_visual
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_rgb_init
-gdk_rgb_xpixel_from_rgb G_GNUC_CONST
-gdk_rgb_gc_set_background
-gdk_rgb_gc_set_foreground
-#endif
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_set_verbose

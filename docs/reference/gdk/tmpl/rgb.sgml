@@ -125,14 +125,6 @@ colors.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### FUNCTION gdk_rgb_init ##### -->
-<para>
-This function no longer does anything at all. It's completely useless
-(and harmless).
-</para>
-
-
-
 <!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
 <para>
 Draws an RGB image in the drawable. This is the core GdkRGB
@@ -327,37 +319,6 @@ colors. This is used only for gdk_draw_indexed_image().
 
 @colors: The colors, represented as 0xRRGGBB integer values.
 @n_colors: The number of colors in the cmap.
-
-<!-- ##### FUNCTION gdk_rgb_gc_set_foreground ##### -->
-<para>
-Sets the foreground color in @gc to the specified color (or the
-closest approximation, in the case of limited visuals).
-</para>
-
-@gc: The #GdkGC to modify.
-@rgb: The color, represented as a 0xRRGGBB integer value.
-
-
-<!-- ##### FUNCTION gdk_rgb_gc_set_background ##### -->
-<para>
-Sets the background color in @gc to the specified color (or the
-closest approximation, in the case of limited visuals).
-</para>
-
-@gc: The #GdkGC to modify.
-@rgb: The color, represented as a 0xRRGGBB integer value.
-
-
-<!-- ##### FUNCTION gdk_rgb_xpixel_from_rgb ##### -->
-<para>
-Finds the X pixel closest in color to the @rgb color specified. This
-value may be used to set the <structfield>pixel</structfield> field of
-a #GdkColor struct.
-</para>
-
-@rgb: The color, represented as a 0xRRGGBB integer value.
-@Returns: The X pixel value.
-
 
 <!-- ##### FUNCTION gdk_rgb_find_color ##### -->
 <para>
