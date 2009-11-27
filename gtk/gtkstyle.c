@@ -313,14 +313,17 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            y,
                                           gint            width,
                                           gint            height);
-static void gtk_default_draw_spinner     (GtkStyle     *style,
-					  GdkWindow    *window,
-					  GtkStateType  state_type,
-					  guint         step,
-					  gint           x,
-					  gint           y,
-					  gint           width,
-					  gint           height);
+static void gtk_default_draw_spinner     (GtkStyle       *style,
+					  GdkWindow      *window,
+					  GtkStateType    state_type,
+                                          GdkRectangle   *area,
+                                          GtkWidget      *widget,
+                                          const gchar    *detail,
+					  guint           step,
+					  gint            x,
+					  gint            y,
+					  gint            width,
+					  gint            height);
 
 static void rgb_to_hls			(gdouble	 *r,
 					 gdouble	 *g,
@@ -5612,6 +5615,9 @@ static void
 gtk_default_draw_spinner (GtkStyle     *style,
                           GdkWindow    *window,
                           GtkStateType  state_type,
+                          GdkRectangle *area,
+                          GtkWidget    *widget,
+                          const gchar  *detail,
                           guint         step,
                           gint          x,
                           gint          y,
@@ -6720,30 +6726,37 @@ gtk_paint_resize_grip (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @widget: the widget
- * @step: the nth step, a value between 0 and GtkSpinner::num-steps
- * @x: the x origin of the rectangle in which to draw the resize grip
- * @y: the y origin of the rectangle in which to draw the resize grip
- * @width: the width of the rectangle in which to draw the resize grip
- * @height: the height of the rectangle in which to draw the resize grip
+ * @area: clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: the widget (may be %NULL)
+ * @detail: a style detail (may be %NULL)
+ * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
+ * @x: the x origin of the rectangle in which to draw the spinner
+ * @y: the y origin of the rectangle in which to draw the spinner
+ * @width: the width of the rectangle in which to draw the spinner
+ * @height: the height of the rectangle in which to draw the spinner
  *
  * Draws a spinner on @window using the given parameters.
  */
 void
-gtk_paint_spinner (GtkStyle     *style,
-		   GdkWindow    *window,
-		   GtkStateType  state_type,
-		   guint         step,
-		   gint          x,
-		   gint          y,
-		   gint          width,
-		   gint          height)
+gtk_paint_spinner (GtkStyle           *style,
+		   GdkWindow          *window,
+		   GtkStateType        state_type,
+                   const GdkRectangle *area,
+                   GtkWidget          *widget,
+                   const gchar        *detail,
+		   guint               step,
+		   gint                x,
+		   gint                y,
+		   gint                width,
+		   gint                height)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
   g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
 
   GTK_STYLE_GET_CLASS (style)->draw_spinner (style, window, state_type,
+                                             (GdkRectangle *)area, widget, detail,
 					     step, x, y, width, height);
 }
 

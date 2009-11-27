@@ -215,7 +215,8 @@ gtk_spinner_init (GtkSpinner *spinner)
 }
 
 static gboolean
-gtk_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
+gtk_spinner_expose (GtkWidget      *widget,
+                    GdkEventExpose *event)
 {
   GtkStateType state_type;
   GtkSpinnerPrivate *priv;
@@ -236,6 +237,9 @@ gtk_spinner_expose (GtkWidget *widget, GdkEventExpose *event)
   gtk_paint_spinner (widget->style,
                      widget->window,
                      state_type,
+                     &event->area,
+                     widget,
+                     "spinner",
                      priv->current,
                      event->area.x, event->area.y,
                      event->area.width, event->area.height);
