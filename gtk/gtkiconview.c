@@ -6272,14 +6272,14 @@ gtk_icon_view_get_margin (GtkIconView *icon_view)
 /**
  * gtk_icon_view_set_item_padding:
  * @icon_view: a #GtkIconView
- * @column_spacing: the item padding
- * 
- * Sets the ::item-padding property which specifies the padding 
+ * @item_padding: the item padding
+ *
+ * Sets the #GtkIconView:item-padding property which specifies the padding
  * around each of the icon view's items.
  *
  * Since: 2.18
  */
-void 
+void
 gtk_icon_view_set_item_padding (GtkIconView *icon_view,
 				gint         item_padding)
 {
