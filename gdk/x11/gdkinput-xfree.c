@@ -18,6 +18,7 @@
  */
 
 #include "config.h"
+#include <string.h>
 #include "gdkinputprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkalias.h"
@@ -372,7 +373,7 @@ _gdk_input_grab_pointer (GdkWindow      *window,
 	      ((gdkdev->button_count != 0) || need_ungrab))
 	    {
 	      XUngrabDevice (display_impl->xdisplay, gdkdev->xdevice, time);
-	      memset(gdkdev->button_state, 0, sizeof (gdkdev->button_state));
+	      memset (gdkdev->button_state, 0, sizeof (gdkdev->button_state));
 	      gdkdev->button_count = 0;
 	    }
 
