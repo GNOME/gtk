@@ -1,3 +1,50 @@
+Overview of Changes from GTK+ 2.19.0 to 2.19.1
+==============================================
+
+* Client-side windows:
+ - Avoid some unnecessary exposes
+ - Avoid unnecessary redraws related to clearing windows
+
+* GtkNotebook gained an 'action area'
+
+* GtkStatusbar gained a 'message area'
+
+* GtkToolPalette is a new container to show tool items
+  in collapsible groups in a grid
+
+* GSEAL work:
+ - New accessor: gtk_window_get_window_type()
+
+* Bugs fixed:
+ 590017  Does not compile under MinGW32 + Wine
+ 569430 Gail should include a reciprocal relationship for NODE_CHILD_OF
+ 598758 Need context for a propper translation
+ 594535 No accesor for GtkStatusbar->label and ->frame
+ 602725 fix setting icon-size on GICON images
+ 599402 Landscape and Reverse Landscape icons need to be swapped
+ 588740 JPEG images open with blur effect?
+ 601337 Only use gdk_input_select_events() if XINPUT_NONE is defined
+ 598050 Flickering in a gtk_socket
+ 600158 Do not use static GTypeInfo and GInterfaceInfo
+ 561973 Problem dragging images from Firefox to GTK+ app on Windows
+ 601512 Remove unnecessary check in GtkTreeModelFilter
+ 600222 Check for existence of cairo-svg.h in configure.in
+ 595498 No accesor for GTK_WINDOW ()->type
+ 116650 "action area" for GtkNotebook (e.g. for tab close button)
+ 600150 GtkColorSelection tooltip issues
+
+* Updated translations:
+ Estonian
+ Galician
+ Japanese
+ Low German
+ Norwegian bokmål
+ Punjabi
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes from GTK+ 2.18.x to 2.19.0
 ==============================================
 
