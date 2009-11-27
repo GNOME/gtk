@@ -1286,7 +1286,6 @@ gtk_action_set_short_label (GtkAction   *action,
 /**
  * gtk_action_get_short_label:
  * @action: a #GtkAction
- * @label: the label text to set
  *
  * Gets the short label text of @action.
  *
