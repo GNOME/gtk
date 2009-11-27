@@ -309,20 +309,17 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
 
 
 /**
- * gtk_clipboard_get():
- * @selection: a #GdkAtom which identifies the clipboard
- *             to use.
- * 
+ * gtk_clipboard_get:
+ * @selection: a #GdkAtom which identifies the clipboard to use
+ *
  * Returns the clipboard object for the given selection.
  * See gtk_clipboard_get_for_display() for complete details.
- * 
- * Return value: the appropriate clipboard object. If no
- *             clipboard already exists, a new one will
- *             be created. Once a clipboard object has
- *             been created, it is persistent and, since
- *             it is owned by GTK+, must not be freed or
- *             unrefd.
- **/
+ *
+ * Return value: the appropriate clipboard object. If no clipboard
+ *     already exists, a new one will be created. Once a clipboard
+ *     object has been created, it is persistent and, since it is
+ *     owned by GTK+, must not be freed or unreffed.
+ */
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
