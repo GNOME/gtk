@@ -1375,6 +1375,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->tooltip_column = -1;
 
   tree_view->priv->post_validation_flag = FALSE;
+
+  tree_view->priv->last_button_x = -1;
+  tree_view->priv->last_button_y = -1;
 }
 
 
@@ -1611,18 +1614,6 @@ gtk_tree_view_destroy (GtkObject *object)
     {
       gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
       tree_view->priv->drag_dest_row = NULL;
-    }
-
-  if (tree_view->priv->last_button_press != NULL)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-      tree_view->priv->last_button_press = NULL;
-    }
-
-  if (tree_view->priv->last_button_press_2 != NULL)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
-      tree_view->priv->last_button_press_2 = NULL;
     }
 
   if (tree_view->priv->top_row != NULL)
@@ -2790,41 +2781,39 @@ gtk_tree_view_button_press (GtkWidget      *widget,
         }
 
       /* Test if a double click happened on the same row. */
-      if (event->button == 1)
+      if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
         {
-          /* We also handle triple clicks here, because a user could have done
-           * a first click and a second double click on different rows.
-           */
-          if ((event->type == GDK_2BUTTON_PRESS
-               || event->type == GDK_3BUTTON_PRESS)
-              && tree_view->priv->last_button_press)
+          if (tree_view->priv->last_button_x != -1)
             {
-              GtkTreePath *lsc;
+              int double_click_time, double_click_distance;
 
-              lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
+              g_object_get (gtk_settings_get_default (),
+                            "gtk-double-click-time", &double_click_time,
+                            "gtk-double-click-distance", &double_click_distance,
+                            NULL);
 
-              if (lsc)
+              /* Same conditions as _gdk_event_button_generate */
+              if ((event->time < tree_view->priv->last_button_time + double_click_time) &&
+                  (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
+                  (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
                 {
-                  row_double_click = !gtk_tree_path_compare (lsc, path);
-                  gtk_tree_path_free (lsc);
+                  /* We do no longer compare paths of this row and the
+                   * row clicked previously.  We use the double click
+                   * distance to decide whether this is a valid click,
+                   * allowing the mouse to slightly move over another row.
+                   */
+                  row_double_click = TRUE;
                 }
-            }
 
-          if (row_double_click)
-            {
-              if (tree_view->priv->last_button_press)
-                gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-              if (tree_view->priv->last_button_press_2)
-                gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
-              tree_view->priv->last_button_press = NULL;
-              tree_view->priv->last_button_press_2 = NULL;
+              tree_view->priv->last_button_time = 0;
+              tree_view->priv->last_button_x = -1;
+              tree_view->priv->last_button_y = -1;
             }
           else
             {
-              if (tree_view->priv->last_button_press)
-                gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-              tree_view->priv->last_button_press = tree_view->priv->last_button_press_2;
-              tree_view->priv->last_button_press_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+              tree_view->priv->last_button_time = event->time;
+              tree_view->priv->last_button_x = event->x;
+              tree_view->priv->last_button_y = event->y;
             }
         }
 
@@ -10695,10 +10684,6 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->anchor = NULL;
       gtk_tree_row_reference_free (tree_view->priv->top_row);
       tree_view->priv->top_row = NULL;
-      gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-      tree_view->priv->last_button_press = NULL;
-      gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
-      tree_view->priv->last_button_press_2 = NULL;
       gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
       tree_view->priv->scroll_to_path = NULL;
 
@@ -10710,6 +10695,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       tree_view->priv->fixed_height_check = 0;
       tree_view->priv->fixed_height = -1;
       tree_view->priv->dy = tree_view->priv->top_row_dy = 0;
+      tree_view->priv->last_button_x = -1;
+      tree_view->priv->last_button_y = -1;
     }
 
   tree_view->priv->model = model;
@@ -12202,27 +12189,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (anchor_path);
     }
 
-  if (gtk_tree_row_reference_valid (tree_view->priv->last_button_press))
-    {
-      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
-      if (gtk_tree_path_is_ancestor (path, lsc))
-        {
-	  gtk_tree_row_reference_free (tree_view->priv->last_button_press);
-	  tree_view->priv->last_button_press = NULL;
-	}
-      gtk_tree_path_free (lsc);
-    }
-
-  if (gtk_tree_row_reference_valid (tree_view->priv->last_button_press_2))
-    {
-      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press_2);
-      if (gtk_tree_path_is_ancestor (path, lsc))
-        {
-	  gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
-	  tree_view->priv->last_button_press_2 = NULL;
-	}
-      gtk_tree_path_free (lsc);
-    }
+  /* Stop a pending double click */
+  tree_view->priv->last_button_x = -1;
+  tree_view->priv->last_button_y = -1;
 
   remove_expand_collapse_timeout (tree_view);
 

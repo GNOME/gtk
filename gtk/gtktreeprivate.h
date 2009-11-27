@@ -143,8 +143,9 @@ struct _GtkTreeViewPrivate
   gint event_last_x;
   gint event_last_y;
 
-  GtkTreeRowReference *last_button_press;
-  GtkTreeRowReference *last_button_press_2;
+  guint last_button_time;
+  gint last_button_x;
+  gint last_button_y;
 
   GtkRBNode *prelight_node;
   GtkRBTree *prelight_tree;
