@@ -4,8 +4,10 @@
  * or a list of names.
  */
 
+#include <string.h>
 #include <gtk/gtk.h>
-#include <glib/gi18n.h>
+#include "config.h"
+#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 
@@ -167,9 +169,9 @@ palette_drag_data_received (GtkWidget        *widget,
                             gint              x,
                             gint              y,
                             GtkSelectionData *selection,
-                            guint             info G_GNUC_UNUSED,
-                            guint             time G_GNUC_UNUSED,
-                            gpointer          data G_GNUC_UNUSED)
+                            guint             info,
+                            guint             time,
+                            gpointer          data)
 {
   GtkWidget *drag_palette = gtk_drag_get_source_widget (context);
   GtkWidget *drag_item = NULL, *drop_group = NULL;
@@ -179,8 +181,10 @@ palette_drag_data_received (GtkWidget        *widget,
 
   if (drag_palette)
     {
-      drag_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (drag_palette), selection);
-      drop_group = gtk_tool_palette_get_drop_group (GTK_TOOL_PALETTE (widget), x, y);
+      drag_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (drag_palette),
+                                                  selection);
+      drop_group = gtk_tool_palette_get_drop_group (GTK_TOOL_PALETTE (widget),
+                                                    x, y);
     }
 
   if (GTK_IS_TOOL_ITEM_GROUP (drag_item))
@@ -202,9 +206,9 @@ passive_canvas_drag_data_received (GtkWidget        *widget,
                                    gint              x,
                                    gint              y,
                                    GtkSelectionData *selection,
-                                   guint             info G_GNUC_UNUSED,
-                                   guint             time G_GNUC_UNUSED,
-                                   gpointer          data G_GNUC_UNUSED)
+                                   guint             info,
+                                   guint             time,
+                                   gpointer          data)
 {
   /* find the tool button, which is the source of this DnD operation */
 
@@ -216,7 +220,8 @@ passive_canvas_drag_data_received (GtkWidget        *widget,
     palette = gtk_widget_get_parent (palette);
 
   if (palette)
-    tool_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette), selection);
+    tool_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette),
+                                                selection);
 
   g_assert (NULL == drop_item);
 
@@ -237,12 +242,12 @@ passive_canvas_drag_data_received (GtkWidget        *widget,
 /************************************/
 
 static gboolean
-interactive_canvas_drag_motion (GtkWidget        *widget,
-                                GdkDragContext   *context,
-                                gint              x,
-                                gint              y,
-                                guint             time,
-                                gpointer          data G_GNUC_UNUSED)
+interactive_canvas_drag_motion (GtkWidget      *widget,
+                                GdkDragContext *context,
+                                gint            x,
+                                gint            y,
+                                guint           time,
+                                gpointer        data)
 {
   if (drop_item)
     {
@@ -275,12 +280,12 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
                                        gint              x,
                                        gint              y,
                                        GtkSelectionData *selection,
-                                       guint             info G_GNUC_UNUSED,
-                                       guint             time G_GNUC_UNUSED,
-                                       gpointer          data G_GNUC_UNUSED)
+                                       guint             info,
+                                       guint             time,
+                                       gpointer          data)
 
 {
-  /* find the tool button, which is the source of this DnD operation */
+  /* find the tool button which is the source of this DnD operation */
 
   GtkWidget *palette = gtk_drag_get_source_widget (context);
   GtkWidget *tool_item = NULL;
@@ -289,7 +294,8 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
     palette = gtk_widget_get_parent (palette);
 
   if (palette)
-    tool_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette), selection);
+    tool_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette),
+                                                selection);
 
   /* create a drop indicator when a tool button was found */
 
@@ -304,12 +310,12 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
 }
 
 static gboolean
-interactive_canvas_drag_drop (GtkWidget        *widget,
-                              GdkDragContext   *context G_GNUC_UNUSED,
-                              gint              x,
-                              gint              y,
-                              guint             time,
-                              gpointer          data    G_GNUC_UNUSED)
+interactive_canvas_drag_drop (GtkWidget      *widget,
+                              GdkDragContext *context,
+                              gint            x,
+                              gint            y,
+                              guint           time,
+                              gpointer        data)
 {
   if (drop_item)
     {
@@ -349,28 +355,30 @@ interactive_canvas_real_drag_leave (gpointer data)
 }
 
 static void
-interactive_canvas_drag_leave (GtkWidget        *widget,
-                               GdkDragContext   *context G_GNUC_UNUSED,
-                               guint             time    G_GNUC_UNUSED,
-                               gpointer          data    G_GNUC_UNUSED)
+interactive_canvas_drag_leave (GtkWidget      *widget,
+                               GdkDragContext *context,
+                               guint           time,
+                               gpointer        data)
 {
   /* defer cleanup until a potential "drag-drop" signal was received */
   g_idle_add (interactive_canvas_real_drag_leave, widget);
 }
 
-static void on_combo_orientation_changed(GtkComboBox *combo_box, gpointer user_data)
+static void
+on_combo_orientation_changed (GtkComboBox *combo_box,
+                              gpointer     user_data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (user_data);
   GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW (GTK_WIDGET (palette)->parent);
   GtkTreeModel *model = gtk_combo_box_get_model (combo_box);
-  
   GtkTreeIter iter;
-  if(!gtk_combo_box_get_active_iter(combo_box, &iter))
+  gint val = 0;
+
+  if (!gtk_combo_box_get_active_iter (combo_box, &iter))
     return;
 
-  gint val = 0;
   gtk_tree_model_get (model, &iter, 1, &val, -1);
-  
+
   gtk_orientable_set_orientation (GTK_ORIENTABLE (palette), val);
 
   if (val == GTK_ORIENTATION_HORIZONTAL)
@@ -379,18 +387,20 @@ static void on_combo_orientation_changed(GtkComboBox *combo_box, gpointer user_d
     gtk_scrolled_window_set_policy (sw, GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 }
 
-static void on_combo_style_changed(GtkComboBox *combo_box, gpointer user_data)
+static void
+on_combo_style_changed (GtkComboBox *combo_box,
+                        gpointer     user_data)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (user_data);
   GtkTreeModel *model = gtk_combo_box_get_model (combo_box);
-  
   GtkTreeIter iter;
-  if(!gtk_combo_box_get_active_iter(combo_box, &iter))
+  gint val = 0;
+
+  if (!gtk_combo_box_get_active_iter (combo_box, &iter))
     return;
 
-  gint val = 0;
   gtk_tree_model_get (model, &iter, 1, &val, -1);
-  
+
   if (val == -1)
     gtk_tool_palette_unset_style (palette);
   else
@@ -403,9 +413,9 @@ do_toolpalette (GtkWidget *do_widget)
   GtkWidget *box = NULL;
   GtkWidget *hbox = NULL;
   GtkWidget *combo_orientation = NULL;
-  GtkListStore *combo_orientation_model = NULL;
+  GtkListStore *orientation_model = NULL;
   GtkWidget *combo_style = NULL;
-  GtkListStore *combo_style_model = NULL;
+  GtkListStore *style_model = NULL;
   GtkCellRenderer *cell_renderer = NULL;
   GtkTreeIter iter;
   GtkWidget *palette = NULL;
@@ -422,89 +432,107 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Tool Palette");
       gtk_window_set_default_size (GTK_WINDOW (window), 200, 600);
 
-      g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       /* Add widgets to control the ToolPalette appearance: */
       box = gtk_vbox_new (FALSE, 6);
       gtk_container_add (GTK_CONTAINER (window), box);
-      
+
       /* Orientation combo box: */
-      combo_orientation_model = gtk_list_store_new (2, 
-        G_TYPE_STRING, G_TYPE_INT);
-      gtk_list_store_append (combo_orientation_model, &iter);
-      gtk_list_store_set (combo_orientation_model, &iter,
-        0, "Horizontal", 1, GTK_ORIENTATION_HORIZONTAL, -1);
-      gtk_list_store_append (combo_orientation_model, &iter);
-      gtk_list_store_set (combo_orientation_model, &iter,
-        0, "Vertical", 1, GTK_ORIENTATION_VERTICAL, -1);
-      combo_orientation = gtk_combo_box_new_with_model (  
-        GTK_TREE_MODEL (combo_orientation_model));
+      orientation_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+      gtk_list_store_append (orientation_model, &iter);
+      gtk_list_store_set (orientation_model, &iter,
+                          0, "Horizontal",
+                          1, GTK_ORIENTATION_HORIZONTAL,
+                          -1);
+      gtk_list_store_append (orientation_model, &iter);
+      gtk_list_store_set (orientation_model, &iter,
+                          0, "Vertical",
+                          1, GTK_ORIENTATION_VERTICAL,
+                          -1);
+
+      combo_orientation =
+        gtk_combo_box_new_with_model (GTK_TREE_MODEL (orientation_model));
       cell_renderer = gtk_cell_renderer_text_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_orientation), 
-        cell_renderer, TRUE);
-      gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_orientation), 
-        cell_renderer, "text", 0, NULL); 
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_orientation), 
-        &iter);
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_orientation),
+                                  cell_renderer,
+                                  TRUE);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_orientation),
+                                      cell_renderer,
+                                      "text", 0,
+                                      NULL);
+      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_orientation), &iter);
       gtk_box_pack_start (GTK_BOX (box), combo_orientation, FALSE, FALSE, 0);
-      
+
       /* Style combo box: */
-      combo_style_model = gtk_list_store_new (2, 
-        G_TYPE_STRING, G_TYPE_INT);
-      gtk_list_store_append (combo_style_model, &iter);
-      gtk_list_store_set (combo_style_model, &iter,
-        0, "Text", 1, GTK_TOOLBAR_TEXT, -1);
-      gtk_list_store_append (combo_style_model, &iter);
-      gtk_list_store_set (combo_style_model, &iter,
-        0, "Both", 1, GTK_TOOLBAR_BOTH, -1);
-      gtk_list_store_append (combo_style_model, &iter);
-      gtk_list_store_set (combo_style_model, &iter,
-        0, "Both: Horizontal", 1, GTK_TOOLBAR_BOTH_HORIZ, -1);
-      gtk_list_store_append (combo_style_model, &iter);
-      gtk_list_store_set (combo_style_model, &iter,
-        0, "Icons", 1, GTK_TOOLBAR_ICONS, -1);
-      gtk_list_store_append (combo_style_model, &iter);
-      gtk_list_store_set (combo_style_model, &iter,
-        0, "Default", 1, -1 /* A custom meaning for this demo. */, -1);
-      combo_style = gtk_combo_box_new_with_model (  
-        GTK_TREE_MODEL (combo_style_model));
+      style_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+      gtk_list_store_append (style_model, &iter);
+      gtk_list_store_set (style_model, &iter,
+                          0, "Text",
+                          1, GTK_TOOLBAR_TEXT,
+                          -1);
+      gtk_list_store_append (style_model, &iter);
+      gtk_list_store_set (style_model, &iter,
+                          0, "Both",
+                          1, GTK_TOOLBAR_BOTH,
+                          -1);
+      gtk_list_store_append (style_model, &iter);
+      gtk_list_store_set (style_model, &iter,
+                          0, "Both: Horizontal",
+                          1, GTK_TOOLBAR_BOTH_HORIZ,
+                          -1);
+      gtk_list_store_append (style_model, &iter);
+      gtk_list_store_set (style_model, &iter,
+                          0, "Icons",
+                          1, GTK_TOOLBAR_ICONS,
+                          -1);
+      gtk_list_store_append (style_model, &iter);
+      gtk_list_store_set (style_model, &iter,
+                          0, "Default",
+                          1, -1,  /* A custom meaning for this demo. */
+                          -1);
+      combo_style = gtk_combo_box_new_with_model (GTK_TREE_MODEL (style_model));
       cell_renderer = gtk_cell_renderer_text_new ();
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_style), 
-        cell_renderer, TRUE);
-      gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_style), 
-        cell_renderer, "text", 0, NULL); 
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_style), 
-        &iter);
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_style),
+                                  cell_renderer,
+                                  TRUE);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_style),
+                                      cell_renderer,
+                                      "text", 0,
+                                      NULL);
+      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_style), &iter);
       gtk_box_pack_start (GTK_BOX (box), combo_style, FALSE, FALSE, 0);
 
       /* Add hbox */
       hbox = gtk_hbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
-      
+
       /* Add and fill the ToolPalette: */
       palette = gtk_tool_palette_new ();
-      
+
       load_stock_items (GTK_TOOL_PALETTE (palette));
       load_toggle_items (GTK_TOOL_PALETTE (palette));
       load_special_items (GTK_TOOL_PALETTE (palette));
-      
+
       palette_scroller = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (palette_scroller),
-        GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+                                      GTK_POLICY_NEVER,
+                                      GTK_POLICY_AUTOMATIC);
       gtk_container_set_border_width (GTK_CONTAINER (palette_scroller), 6);
+
       gtk_container_add (GTK_CONTAINER (palette_scroller), palette);
-      
       gtk_container_add (GTK_CONTAINER (hbox), palette_scroller);
-      
+
       gtk_widget_show_all (box);
-      
+
       /* Connect signals: */
-      g_signal_connect (combo_orientation, "changed", 
-        G_CALLBACK (on_combo_orientation_changed), palette);
-      g_signal_connect (combo_style, "changed", 
-        G_CALLBACK (on_combo_style_changed), palette);
-      
+      g_signal_connect (combo_orientation, "changed",
+                        G_CALLBACK (on_combo_orientation_changed), palette);
+      g_signal_connect (combo_style, "changed",
+                        G_CALLBACK (on_combo_style_changed), palette);
+
       /* Keep the widgets in sync: */
       on_combo_orientation_changed (GTK_COMBO_BOX (combo_orientation), palette);
 
@@ -513,15 +541,15 @@ do_toolpalette (GtkWidget *do_widget)
       notebook = gtk_notebook_new ();
       gtk_container_set_border_width (GTK_CONTAINER (notebook), 6);
       gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE, FALSE, 0);
-      
+
       /* ===== DnD for tool items ===== */
 
       g_signal_connect (palette, "drag-data-received",
-                        G_CALLBACK (palette_drag_data_received),
-                        NULL);
+                        G_CALLBACK (palette_drag_data_received), NULL);
 
       gtk_tool_palette_add_drag_dest (GTK_TOOL_PALETTE (palette),
-                                      palette, GTK_DEST_DEFAULT_ALL,
+                                      palette,
+                                      GTK_DEST_DEFAULT_ALL,
                                       GTK_TOOL_PALETTE_DRAG_ITEMS |
                                       GTK_TOOL_PALETTE_DRAG_GROUPS,
                                       GDK_ACTION_MOVE);
@@ -532,22 +560,26 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
-                        "signal::expose-event",       canvas_expose_event, NULL,
+                        "signal::expose-event", canvas_expose_event, NULL,
                         "signal::drag-data-received", passive_canvas_drag_data_received, NULL,
                         NULL);
 
       gtk_tool_palette_add_drag_dest (GTK_TOOL_PALETTE (palette),
-                                      contents, GTK_DEST_DEFAULT_ALL,
+                                      contents,
+                                      GTK_DEST_DEFAULT_ALL,
                                       GTK_TOOL_PALETTE_DRAG_ITEMS,
                                       GDK_ACTION_COPY);
 
       contents_scroller = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (contents_scroller),
-                                      GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller), contents);
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_ALWAYS);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller),
+                                             contents);
       gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
-      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), contents_scroller,
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
+                                contents_scroller,
                                 gtk_label_new ("Passive DnD Mode"));
 
       /* ===== interactive DnD dest ===== */
@@ -556,27 +588,29 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_widget_set_app_paintable (contents, TRUE);
 
       g_object_connect (contents,
-                        "signal::expose-event",       canvas_expose_event, NULL,
-                        "signal::drag-motion",        interactive_canvas_drag_motion, NULL,
+                        "signal::expose-event", canvas_expose_event, NULL,
+                        "signal::drag-motion", interactive_canvas_drag_motion, NULL,
                         "signal::drag-data-received", interactive_canvas_drag_data_received, NULL,
-                        "signal::drag-leave",         interactive_canvas_drag_leave, NULL,
-                        "signal::drag-drop",          interactive_canvas_drag_drop, NULL,
+                        "signal::drag-leave", interactive_canvas_drag_leave, NULL,
+                        "signal::drag-drop", interactive_canvas_drag_drop, NULL,
                         NULL);
 
       gtk_tool_palette_add_drag_dest (GTK_TOOL_PALETTE (palette),
-                                      contents, GTK_DEST_DEFAULT_HIGHLIGHT,
+                                      contents,
+                                      GTK_DEST_DEFAULT_HIGHLIGHT,
                                       GTK_TOOL_PALETTE_DRAG_ITEMS,
                                       GDK_ACTION_COPY);
 
       contents_scroller = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (contents_scroller),
-                                      GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller), contents);
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_ALWAYS);
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller),
+                                             contents);
       gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), contents_scroller,
                                 gtk_label_new ("Interactive DnD Mode"));
-      
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -596,10 +630,10 @@ do_toolpalette (GtkWidget *do_widget)
 static void
 load_stock_items (GtkToolPalette *palette)
 {
-  GtkWidget *group_af = gtk_tool_item_group_new (_("Stock Icons (A-F)"));
-  GtkWidget *group_gn = gtk_tool_item_group_new (_("Stock Icons (G-N)"));
-  GtkWidget *group_or = gtk_tool_item_group_new (_("Stock Icons (O-R)"));
-  GtkWidget *group_sz = gtk_tool_item_group_new (_("Stock Icons (S-Z)"));
+  GtkWidget *group_af = gtk_tool_item_group_new ("Stock Icons (A-F)");
+  GtkWidget *group_gn = gtk_tool_item_group_new ("Stock Icons (G-N)");
+  GtkWidget *group_or = gtk_tool_item_group_new ("Stock Icons (O-R)");
+  GtkWidget *group_sz = gtk_tool_item_group_new ("Stock Icons (S-Z)");
   GtkWidget *group = NULL;
 
   GtkToolItem *item;
@@ -661,7 +695,7 @@ load_toggle_items (GtkToolPalette *palette)
   char *label;
   int i;
 
-  group = gtk_tool_item_group_new (_("Radio Item"));
+  group = gtk_tool_item_group_new ("Radio Item");
   gtk_container_add (GTK_CONTAINER (palette), group);
 
   for (i = 1; i <= 10; ++i)
@@ -700,10 +734,10 @@ load_special_items (GtkToolPalette *palette)
   GtkWidget *label_button;
 
   group = gtk_tool_item_group_new (NULL);
-  label_button = gtk_button_new_with_label (_("Advanced Features"));
+  label_button = gtk_button_new_with_label ("Advanced Features");
   gtk_widget_show (label_button);
   gtk_tool_item_group_set_label_widget (GTK_TOOL_ITEM_GROUP (group),
-    label_button);
+                                        label_button);
   gtk_container_add (GTK_CONTAINER (palette), group);
 
   item = create_entry_item ("homogeneous=FALSE");
