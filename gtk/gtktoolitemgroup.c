@@ -37,7 +37,7 @@
 #define DEFAULT_EXPANDER_SIZE    16
 #define DEFAULT_HEADER_SPACING   2
 
-#define DEFAULT_LABEL            NULL
+#define DEFAULT_LABEL            ""
 #define DEFAULT_COLLAPSED        FALSE
 #define DEFAULT_ELLIPSIZE        PANGO_ELLIPSIZE_NONE
 
