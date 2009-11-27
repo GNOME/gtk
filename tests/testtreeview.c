@@ -891,7 +891,7 @@ gtk_tree_model_types_get_type (void)
 
   if (!model_types_type)
     {
-      static const GTypeInfo model_types_info =
+      const GTypeInfo model_types_info =
       {
         sizeof (GtkTreeModelTypesClass),
 	NULL,		/* base_init */
@@ -904,7 +904,7 @@ gtk_tree_model_types_get_type (void)
         (GInstanceInitFunc) gtk_tree_model_types_init
       };
 
-      static const GInterfaceInfo tree_model_info =
+      const GInterfaceInfo tree_model_info =
       {
 	(GInterfaceInitFunc) gtk_tree_model_types_tree_model_init,
 	NULL,
@@ -1266,6 +1266,8 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
  * Automated testing
  */
 
+#if 0
+
 static void
 treestore_torture_recurse (GtkTreeStore *store,
                            GtkTreeIter  *root,
@@ -1354,6 +1356,8 @@ treestore_torture_recurse (GtkTreeStore *store,
       gtk_tree_store_remove (store, &iter);
     }
 }
+
+#endif
 
 static void
 run_automated_tests (void)

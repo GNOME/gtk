@@ -132,6 +132,16 @@ return %TRUE to show the window, %FALSE to not show it.
 @size: 
 
 
+<!-- ##### FUNCTION gtk_tooltip_set_icon_from_gicon ##### -->
+<para>
+
+</para>
+
+@tooltip: 
+@gicon: 
+@size: 
+
+
 <!-- ##### FUNCTION gtk_tooltip_set_custom ##### -->
 <para>
 

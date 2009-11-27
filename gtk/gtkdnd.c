@@ -1239,6 +1239,28 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * and invokations of gtk_drag_finish() in #GtkWidget:drag-data-received.
  * Especially the later is dramatic, when your own #GtkWidget:drag-motion
  * handler calls gtk_drag_get_data() to inspect the dragged data.
+ *
+ * There's no way to set a default action here, you can use the
+ * #GtkWidget:drag-motion callback for that. Here's an example which selects
+ * the action to use depending on whether the control key is pressed or not:
+ * |[
+ * static void
+ * drag_motion (GtkWidget *widget,
+ *              GdkDragContext *context,
+ *              gint x,
+ *              gint y,
+ *              guint time)
+ * {
+ *   GdkModifierType mask;
+ *
+ *   gdk_window_get_pointer (gtk_widget_get_window (widget),
+ *                           NULL, NULL, &mask);
+ *   if (mask & GDK_CONTROL_MASK)
+ *     gdk_drag_status (context, GDK_ACTION_COPY, time);
+ *   else
+ *     gdk_drag_status (context, GDK_ACTION_MOVE, time);
+ * }
+ * ]|
  */
 void
 gtk_drag_dest_set (GtkWidget            *widget,

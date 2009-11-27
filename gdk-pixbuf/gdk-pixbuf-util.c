@@ -267,7 +267,7 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
  * Return value: A newly-created pixbuf, or a reference to the
  * input pixbuf (with an increased reference count).
  *
- * Since 2.12
+ * Since: 2.12
  **/
 GdkPixbuf *
 gdk_pixbuf_apply_embedded_orientation (GdkPixbuf *src)

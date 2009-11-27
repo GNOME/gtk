@@ -107,7 +107,7 @@ static void                 test_printer_request_details           (GtkPrinter  
 static void
 gtk_print_backend_test_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_test_info =
+  const GTypeInfo print_backend_test_info =
   {
     sizeof (GtkPrintBackendTestClass),
     NULL,		/* base_init */

@@ -748,9 +748,11 @@ gtk_ctree_realize (GtkWidget *widget)
 
   if (ctree->line_style == GTK_CTREE_LINES_DOTTED)
     {
+      gint8 dashes[] = { 1, 1 };
+
       gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
 				  GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
-      gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
+      gdk_gc_set_dashes (ctree->lines_gc, 0, dashes, G_N_ELEMENTS (dashes));
     }
 }
 
@@ -5315,6 +5317,8 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
 
   if (GTK_WIDGET_REALIZED (ctree))
     {
+      gint8 dashes[] = { 1, 1 };
+
       switch (line_style)
 	{
 	case GTK_CTREE_LINES_SOLID:
@@ -5326,7 +5330,7 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
 					GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	  gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
+	  gdk_gc_set_dashes (ctree->lines_gc, 0, dashes, G_N_ELEMENTS (dashes));
 	  break;
 	case GTK_CTREE_LINES_TABBED:
 	  if (GTK_WIDGET_REALIZED (ctree))

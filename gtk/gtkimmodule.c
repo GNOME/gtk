@@ -279,7 +279,7 @@ correct_localedir_prefix (gchar **path)
 #endif
 
 
-static GtkIMModule *
+G_GNUC_UNUSED static GtkIMModule *
 add_builtin_module (const gchar             *module_name,
 		    const GtkIMContextInfo **contexts,
 		    int                      n_contexts)

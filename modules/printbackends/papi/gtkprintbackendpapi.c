@@ -105,7 +105,7 @@ static void                 papi_display_printer_status_done       (gpointer use
 static void
 gtk_print_backend_papi_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_papi_info =
+  const GTypeInfo print_backend_papi_info =
   {
     sizeof (GtkPrintBackendPapiClass),
     NULL,		/* base_init */

@@ -43,7 +43,7 @@ GType gtk_type_im_context_thai = 0;
 void
 gtk_im_context_thai_register_type (GTypeModule *type_module)
 {
-  static const GTypeInfo im_context_thai_info =
+  const GTypeInfo im_context_thai_info =
   {
     sizeof (GtkIMContextThaiClass),
     (GBaseInitFunc) NULL,

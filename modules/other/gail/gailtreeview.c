@@ -1027,6 +1027,8 @@ gail_tree_view_ref_child (AtkObject *obj,
       relation = atk_relation_new (accessible_array, 1,
                                    ATK_RELATION_NODE_CHILD_OF);
       atk_relation_set_add (relation_set, relation);
+      atk_object_add_relationship (parent_node, ATK_RELATION_NODE_PARENT_OF,
+                                   child);
       g_object_unref (relation);
       g_object_unref (relation_set);
     }

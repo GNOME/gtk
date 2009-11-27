@@ -25,6 +25,40 @@
 #include "gdkprivate-quartz.h"
  
 
+/* A couple of notes about this file are in order.  In GDK, a
+ * GdkScreen can contain multiple monitors.  A GdkScreen has an
+ * associated root window, in which the monitors are placed.  The
+ * root window "spans" all monitors.  The origin is at the top-left
+ * corner of the root window.
+ *
+ * Cocoa works differently.  The system has a "screen" (NSScreen) for
+ * each monitor that is connected (note the conflicting definitions
+ * of screen).  The screen containing the menu bar is screen 0 and the
+ * bottom-left corner of this screen is the origin of the "monitor
+ * coordinate space".  All other screens are positioned according to this
+ * origin.  If the menu bar is on a secondary screen (for example on
+ * a monitor hooked up to a laptop), then this screen is screen 0 and
+ * other monitors will be positioned according to the "secondary screen".
+ * The main screen is the monitor that shows the window that is currently
+ * active (has focus), the position of the menu bar does not have influence
+ * on this!
+ *
+ * Upon start up and changes in the layout of screens, we calculate the
+ * size of the GdkScreen root window that is needed to be able to place
+ * all monitors in the root window.  Once that size is known, we iterate
+ * over the monitors and translate their Cocoa position to a position
+ * in the root window of the GdkScreen.  This happens below in the
+ * function gdk_screen_quartz_calculate_layout().
+ *
+ * A Cocoa coordinate is always relative to the origin of the monitor
+ * coordinate space.  Such coordinates are mapped to their respective
+ * position in the GdkScreen root window (_gdk_quartz_window_xy_to_gdk_xy)
+ * and vice versa (_gdk_quartz_window_gdk_xy_to_xy).  Both functions can
+ * be found in gdkwindow-quartz.c.  Note that Cocoa coordinates can have
+ * negative values (in case a monitor is located left or below of screen 0),
+ * but GDK coordinates can *not*!
+ */
+
 static void  gdk_screen_quartz_dispose          (GObject         *object);
 static void  gdk_screen_quartz_finalize         (GObject         *object);
 static void  gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen);

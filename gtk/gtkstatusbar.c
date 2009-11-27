@@ -33,6 +33,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkbuildable.h"
 #include "gtkalias.h"
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
@@ -57,6 +58,10 @@ enum
   PROP_HAS_RESIZE_GRIP
 };
 
+static void     gtk_statusbar_buildable_interface_init    (GtkBuildableIface *iface);
+static GObject *gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
+                                                            GtkBuilder   *builder,
+                                                            const gchar  *childname);
 static void     gtk_statusbar_destroy           (GtkObject         *object);
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
@@ -96,7 +101,9 @@ static void     label_selectable_changed        (GtkWidget         *label,
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE (GtkStatusbar, gtk_statusbar, GTK_TYPE_HBOX)
+G_DEFINE_TYPE_WITH_CODE (GtkStatusbar, gtk_statusbar, GTK_TYPE_HBOX,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_statusbar_buildable_interface_init));
 
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
@@ -194,6 +201,7 @@ static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkBox *box;
+  GtkWidget *message_area;
   GtkShadowType shadow_type;
   
   box = GTK_BOX (statusbar);
@@ -212,19 +220,45 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   gtk_box_pack_start (box, statusbar->frame, TRUE, TRUE, 0);
   gtk_widget_show (statusbar->frame);
 
+  message_area = gtk_hbox_new (FALSE, 4);
+  gtk_container_add (GTK_CONTAINER (statusbar->frame), message_area);
+  gtk_widget_show (message_area);
+
   statusbar->label = gtk_label_new ("");
   gtk_label_set_single_line_mode (GTK_LABEL (statusbar->label), TRUE);
   gtk_misc_set_alignment (GTK_MISC (statusbar->label), 0.0, 0.5);
   g_signal_connect (statusbar->label, "notify::selectable",
 		    G_CALLBACK (label_selectable_changed), statusbar);
   gtk_label_set_ellipsize (GTK_LABEL (statusbar->label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (statusbar->frame), statusbar->label);
+  gtk_container_add (GTK_CONTAINER (message_area), statusbar->label);
   gtk_widget_show (statusbar->label);
 
   statusbar->seq_context_id = 1;
   statusbar->seq_message_id = 1;
   statusbar->messages = NULL;
   statusbar->keys = NULL;
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_statusbar_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->get_internal_child = gtk_statusbar_buildable_get_internal_child;
+}
+
+static GObject *
+gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
+                                            GtkBuilder   *builder,
+                                            const gchar  *childname)
+{
+    if (strcmp (childname, "message_area") == 0)
+      return G_OBJECT (gtk_bin_get_child (GTK_BIN (GTK_STATUSBAR (buildable)->frame)));
+
+    return parent_buildable_iface->get_internal_child (buildable,
+                                                       builder,
+                                                       childname);
 }
 
 /**
@@ -480,6 +514,24 @@ gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), FALSE);
 
   return statusbar->has_resize_grip;
+}
+
+/**
+ * gtk_statusbar_get_message_area:
+ * @statusbar: a #GtkStatusBar
+ *
+ * Retrieves the box containing the label widget.
+ *
+ * Returns: a #GtkBox
+ *
+ * Since: 2.20
+ */
+GtkWidget*
+gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
+{
+  g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
+
+  return gtk_bin_get_child (GTK_BIN (statusbar->frame));
 }
 
 static void

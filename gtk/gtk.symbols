@@ -2674,6 +2674,8 @@ gtk_notebook_get_tab_reorderable
 gtk_notebook_set_tab_reorderable
 gtk_notebook_get_tab_detachable
 gtk_notebook_set_tab_detachable
+gtk_notebook_get_action_widget
+gtk_notebook_set_action_widget
 #endif
 #endif
 
@@ -3839,6 +3841,7 @@ gtk_spinner_stop
 #if IN_FILE(__GTK_STATUSBAR_C__)
 gtk_statusbar_get_context_id
 gtk_statusbar_get_has_resize_grip
+gtk_statusbar_get_message_area
 gtk_statusbar_get_type G_GNUC_CONST
 gtk_statusbar_new
 gtk_statusbar_pop
@@ -5254,6 +5257,7 @@ gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_type G_GNUC_CONST
 gtk_window_get_type_hint
+gtk_window_get_window_type
 gtk_window_group_add_window
 gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new

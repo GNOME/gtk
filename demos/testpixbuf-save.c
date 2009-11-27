@@ -72,7 +72,7 @@ save_to_loader (const gchar *buf, gsize count, GError **err, gpointer data)
 {
         GdkPixbufLoader *loader = data;
 
-        return gdk_pixbuf_loader_write (loader, buf, count, err);
+        return gdk_pixbuf_loader_write (loader, (const guchar *)buf, count, err);
 }
 
 static GdkPixbuf *
@@ -82,7 +82,7 @@ buffer_to_pixbuf (const gchar *buf, gsize count, GError **err)
         GdkPixbuf *pixbuf;
 
         loader = gdk_pixbuf_loader_new ();
-        if (gdk_pixbuf_loader_write (loader, buf, count, err) && 
+        if (gdk_pixbuf_loader_write (loader, (const guchar *)buf, count, err) &&
             gdk_pixbuf_loader_close (loader, err)) {
                 pixbuf = g_object_ref (gdk_pixbuf_loader_get_pixbuf (loader));
                 g_object_unref (loader);

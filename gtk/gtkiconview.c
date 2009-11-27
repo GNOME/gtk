@@ -8768,25 +8768,25 @@ gtk_icon_view_item_accessible_get_type (void)
         NULL /* value table */
       };
 
-      static const GInterfaceInfo atk_component_info =
+      const GInterfaceInfo atk_component_info =
       {
         (GInterfaceInitFunc) atk_component_item_interface_init,
         (GInterfaceFinalizeFunc) NULL,
         NULL
       };
-      static const GInterfaceInfo atk_action_info =
+      const GInterfaceInfo atk_action_info =
       {
         (GInterfaceInitFunc) atk_action_item_interface_init,
         (GInterfaceFinalizeFunc) NULL,
         NULL
       };
-      static const GInterfaceInfo atk_image_info =
+      const GInterfaceInfo atk_image_info =
       {
         (GInterfaceInitFunc) atk_image_item_interface_init,
         (GInterfaceFinalizeFunc) NULL,
         NULL
       };
-      static const GInterfaceInfo atk_text_info =
+      const GInterfaceInfo atk_text_info =
       {
         (GInterfaceInitFunc) atk_text_item_interface_init,
         (GInterfaceFinalizeFunc) NULL,
@@ -9711,7 +9711,7 @@ gtk_icon_view_accessible_get_type (void)
 
   if (!type)
     {
-      static GTypeInfo tinfo =
+      GTypeInfo tinfo =
       {
         0, /* class size */
         (GBaseInitFunc) NULL, /* base init */
@@ -9724,13 +9724,13 @@ gtk_icon_view_accessible_get_type (void)
         (GInstanceInitFunc) NULL, /* instance init */
         NULL /* value table */
       };
-      static const GInterfaceInfo atk_component_info =
+      const GInterfaceInfo atk_component_info =
       {
         (GInterfaceInitFunc) atk_component_interface_init,
         (GInterfaceFinalizeFunc) NULL,
         NULL
       };
-      static const GInterfaceInfo atk_selection_info = 
+      const GInterfaceInfo atk_selection_info =
       {
         (GInterfaceInitFunc) gtk_icon_view_accessible_selection_interface_init,
         (GInterfaceFinalizeFunc) NULL,

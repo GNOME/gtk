@@ -75,7 +75,7 @@ gdk_device_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
 	{
 	  sizeof (GdkDeviceClass),
 	  (GBaseInitFunc) NULL,
@@ -399,10 +399,12 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
 				GdkExtensionMode mode)
 {
   GdkWindowObject *window_private;
-  GList *tmp_list;
   GdkWindowObject *impl_window;
   GdkInputWindow *iw;
   GdkDisplayX11 *display_x11;
+#ifndef XINPUT_NONE
+  GList *tmp_list;
+#endif
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_WINDOW_IS_X11 (window));
@@ -452,6 +454,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       unset_extension_events (window);
     }
 
+#ifndef XINPUT_NONE
   for (tmp_list = display_x11->input_devices; tmp_list; tmp_list = tmp_list->next)
     {
       GdkDevicePrivate *gdkdev = tmp_list->data;
@@ -459,6 +462,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       if (!GDK_IS_CORE (gdkdev))
 	_gdk_input_select_events ((GdkWindow *)impl_window, gdkdev);
     }
+#endif /* !XINPUT_NONE */
 }
 
 void

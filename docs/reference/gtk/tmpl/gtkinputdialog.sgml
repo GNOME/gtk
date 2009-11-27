@@ -49,6 +49,7 @@ to #GDK_MODE_ENABLED.
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly disabled device.
+<!-- # Unused Parameters # -->
 @Deprecated: 2.20: Don't use this widget anymore.
 
 <!-- ##### SIGNAL GtkInputDialog::enable-device ##### -->
@@ -60,6 +61,7 @@ mode of a device from #GDK_MODE_DISABLED to a
 
 @inputdialog: the object which received the signal.
 @deviceid: The ID of the newly enabled device.
+<!-- # Unused Parameters # -->
 @Deprecated: 2.20: Don't use this widget anymore.
 
 <!-- ##### FUNCTION gtk_input_dialog_new ##### -->
@@ -69,3 +71,5 @@ Creates a new #GtkInputDialog.
 
 @Returns: the new #GtkInputDialog.
 @Deprecated: 2.20: Don't use this widget anymore.
+
+

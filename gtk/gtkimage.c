@@ -361,8 +361,12 @@ gtk_image_set_property (GObject      *object,
         gtk_image_set_from_icon_name (image,
 				      image->data.name.icon_name,
 				      g_value_get_int (value));
+      else if (image->storage_type == GTK_IMAGE_GICON)
+        gtk_image_set_from_gicon (image,
+                                  image->data.gicon.icon,
+                                  g_value_get_int (value));
       else
-        /* Save to be used when STOCK or ICON_SET property comes in */
+        /* Save to be used when STOCK, ICON_SET, ICON_NAME or GICON property comes in */
         image->icon_size = g_value_get_int (value);
       break;
     case PROP_PIXEL_SIZE:

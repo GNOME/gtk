@@ -12,7 +12,7 @@ AC_PREREQ(2.54)
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [19])
-m4_define([gtk_micro_version], [0])
+m4_define([gtk_micro_version], [1])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -33,7 +33,7 @@ m4_define([gtk_binary_version], [2.10.0])
 # required versions of other packages
 m4_define([glib_required_version], [2.21.3])
 m4_define([pango_required_version], [1.20])
-m4_define([atk_required_version], [1.13.0])
+m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.6])
 
 
@@ -1932,6 +1932,10 @@ if test "$os_win32" != "yes"; then
   AC_CHECK_HEADER(cairo-ps.h,,AC_MSG_ERROR([
 *** Can't find cairo-ps.h. You must build Cairo with the 
 *** postscript backend enabled.]))
+
+  AC_CHECK_HEADER(cairo-svg.h,,AC_MSG_ERROR([
+*** Can't find cairo-svg.h. You must build Cairo with the
+*** svg backend enabled.]))
 fi   
 
 CPPFLAGS="$gtk_save_cppflags"

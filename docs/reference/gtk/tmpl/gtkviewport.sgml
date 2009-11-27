@@ -123,3 +123,12 @@ exactly this, so you can ignore the presence of the viewport.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_viewport_get_bin_window ##### -->
+<para>
+
+</para>
+
+@viewport: 
+@Returns: 
+
+

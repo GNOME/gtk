@@ -676,7 +676,7 @@ append_common_prefix (GtkFileChooserEntry *chooser_entry,
   gboolean is_complete_not_unique;
   gboolean prefix_expands_the_file_part;
   GError *error;
-  CommonPrefixResult result;
+  CommonPrefixResult result = NO_MATCH;
   gboolean have_result;
 
   clear_completions (chooser_entry);

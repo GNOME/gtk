@@ -1925,8 +1925,10 @@ abort_column_resize (GtkCList *clist)
 
   if (GTK_CLIST_ADD_MODE(clist))
     {
+      gint8 dashes[] = { 4, 4 };
+
       gdk_gc_set_line_attributes (clist->xor_gc, 1, GDK_LINE_ON_OFF_DASH, 0,0);
-      gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
+      gdk_gc_set_dashes (clist->xor_gc, 0, dashes, G_N_ELEMENTS (dashes));
     }
 }
 
@@ -3666,10 +3668,12 @@ toggle_add_mode (GtkCList *clist)
   gtk_clist_draw_focus (GTK_WIDGET (clist));
   if (!GTK_CLIST_ADD_MODE(clist))
     {
+      gint8 dashes[] = { 4, 4 };
+
       GTK_CLIST_SET_FLAG (clist, CLIST_ADD_MODE);
       gdk_gc_set_line_attributes (clist->xor_gc, 1,
 				  GDK_LINE_ON_OFF_DASH, 0, 0);
-      gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
+      gdk_gc_set_dashes (clist->xor_gc, 0, dashes, G_N_ELEMENTS (dashes));
     }
   else
     {
@@ -5109,9 +5113,11 @@ gtk_clist_button_release (GtkWidget      *widget,
 
       if (GTK_CLIST_ADD_MODE(clist))
 	{
+	  gint8 dashes[] = { 4, 4 };
+
 	  gdk_gc_set_line_attributes (clist->xor_gc, 1,
 				      GDK_LINE_ON_OFF_DASH, 0, 0);
-	  gdk_gc_set_dashes (clist->xor_gc, 0, "\4\4", 2);
+	  gdk_gc_set_dashes (clist->xor_gc, 0, dashes, G_N_ELEMENTS (dashes));
 	}
 
       width = new_column_width (clist, i, &x);

@@ -116,7 +116,7 @@ gtk_tool_button_get_type (void)
   
   if (!type)
     {
-      static const GInterfaceInfo activatable_info =
+      const GInterfaceInfo activatable_info =
       {
         (GInterfaceInitFunc) gtk_tool_button_activatable_interface_init,
         (GInterfaceFinalizeFunc) NULL,

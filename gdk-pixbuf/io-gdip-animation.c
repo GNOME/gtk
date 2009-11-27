@@ -46,7 +46,7 @@ gdk_pixbuf_gdip_anim_get_type (void)
         static GType object_type = 0;
 
         if (!object_type) {
-                static const GTypeInfo object_info = {
+                const GTypeInfo object_info = {
                         sizeof (GdkPixbufGdipAnimClass),
                         (GBaseInitFunc) NULL,
                         (GBaseFinalizeFunc) NULL,
@@ -197,7 +197,7 @@ gdk_pixbuf_gdip_anim_iter_get_type (void)
         static GType object_type = 0;
 
         if (!object_type) {
-                static const GTypeInfo object_info = {
+                const GTypeInfo object_info = {
                         sizeof (GdkPixbufGdipAnimIterClass),
                         (GBaseInitFunc) NULL,
                         (GBaseFinalizeFunc) NULL,

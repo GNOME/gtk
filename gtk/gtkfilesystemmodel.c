@@ -1113,24 +1113,25 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     }
   else
     {
-      g_file_enumerator_close_async (enumerator, 
-                                     IO_PRIORITY,
-                                     model->cancellable,
-                                     gtk_file_system_model_closed_enumerator,
-                                     model);
-      if (model->dir_thaw_source != 0)
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         {
-          g_source_remove (model->dir_thaw_source);
-          model->dir_thaw_source = 0;
-          _gtk_file_system_model_thaw_updates (model);
-        }
+          g_file_enumerator_close_async (enumerator,
+                                         IO_PRIORITY,
+                                         model->cancellable,
+                                         gtk_file_system_model_closed_enumerator,
+                                         NULL);
+          if (model->dir_thaw_source != 0)
+            {
+              g_source_remove (model->dir_thaw_source);
+              model->dir_thaw_source = 0;
+              _gtk_file_system_model_thaw_updates (model);
+            }
 
-      g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
+          g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
+        }
 
       if (error)
         g_error_free (error);
-
-      g_object_unref (model);
     }
 
   gdk_threads_leave ();
@@ -1270,7 +1271,6 @@ gtk_file_system_model_set_directory (GtkFileSystemModel *model,
   model->dir = g_object_ref (dir);
   model->attributes = g_strdup (attributes);
 
-  g_object_ref (model);
   g_file_enumerate_children_async (model->dir,
                                    attributes,
                                    G_FILE_QUERY_INFO_NONE,

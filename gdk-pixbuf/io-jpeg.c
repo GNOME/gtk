@@ -921,6 +921,7 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data,
 				}
 			}
 			
+			cinfo->scale_num = 1;
 			for (cinfo->scale_denom = 2; cinfo->scale_denom <= 8; cinfo->scale_denom *= 2) {
 				jpeg_calc_output_dimensions (cinfo);
 				if (cinfo->output_width < width || cinfo->output_height < height) {

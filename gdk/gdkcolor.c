@@ -39,6 +39,8 @@
  * Deprecated function; use g_object_ref() instead.
  *
  * Return value: the colormap
+ *
+ * Deprecated: 2.0: Use g_object_ref() instead.
  **/
 GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)
@@ -50,7 +52,9 @@ gdk_colormap_ref (GdkColormap *cmap)
  * gdk_colormap_unref:
  * @cmap: a #GdkColormap
  *
- * Deprecated function; use g_object_ref() instead.
+ * Deprecated function; use g_object_unref() instead.
+ *
+ * Deprecated: 2.0: Use g_object_unref() instead.
  **/
 void
 gdk_colormap_unref (GdkColormap *cmap)
@@ -177,7 +181,7 @@ gdk_color_white (GdkColormap *colormap,
  * @color: the location to store the color.
  * 
  * Returns the black color for a given colormap. The resulting
- * value has already benn allocated. 
+ * value has already been allocated. 
  * 
  * Return value: %TRUE if the allocation succeeded.
  **/
@@ -247,7 +251,7 @@ gdk_colormap_alloc_color (GdkColormap *colormap,
  * 
  * Return value: %TRUE if the allocation succeeded.
  *
- * Deprecated: Use gdk_colormap_alloc_color() instead.
+ * Deprecated: 2.2: Use gdk_colormap_alloc_color() instead.
  **/
 gboolean
 gdk_color_alloc (GdkColormap *colormap,

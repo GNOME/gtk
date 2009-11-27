@@ -73,7 +73,7 @@ gdk_colormap_get_type (void)
   static GType object_type = 0;
 
   if (!object_type) {
-    static const GTypeInfo object_info =
+    const GTypeInfo object_info =
       {
         sizeof (GdkColormapClass),
         (GBaseInitFunc) NULL,

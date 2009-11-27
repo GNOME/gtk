@@ -3431,8 +3431,10 @@ find_parent_dir_fullname (gchar* dirname)
   
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
+      int ignored;
+
       cmpl_errno = errno;
-      chdir (sys_orig_dir);
+      ignored = g_chdir (sys_orig_dir);
       g_free (sys_dirname);
       g_free (sys_orig_dir);
       return NULL;

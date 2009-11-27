@@ -116,7 +116,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    *
    * Whether the spinner is active (ie. shown) in the cell
    *
-   * Since 2.20
+   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
@@ -136,7 +136,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * by looking at the #GtkSpinner:num-steps style property and the duration
    * of the cycle by looking at #GtkSpinner:cycle-duration.
    *
-   * Since 2.20
+   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
@@ -150,7 +150,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    *
    * The #GtkIconSize value that specifies the size of the rendered spinner.
    *
-   * Since 2.20
+   * Since: 2.20
    */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:17-0400\n"
+"POT-Creation-Date: 2009-11-01 18:55-0500\n"
 "PO-Revision-Date: 2007-12-09 14:44+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: i18n@mova.org <i18n@mova.org>\n"
@@ -130,11 +130,11 @@ msgstr "Pamier šryftoŭ na ekranie"
 msgid "Cursor"
 msgstr "Mirhańnie kursora"
 
-#: gtk/gtkaboutdialog.c:239
+#: gtk/gtkaboutdialog.c:298
 msgid "Program name"
 msgstr "Nazva prahramy"
 
-#: gtk/gtkaboutdialog.c:240
+#: gtk/gtkaboutdialog.c:299
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -142,43 +142,43 @@ msgstr ""
 "Nazva prahramy. Kali jana nie akreślenaja, zmoŭčana budzie vykarystanaja "
 "funkcyja g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:254
+#: gtk/gtkaboutdialog.c:313
 msgid "Program version"
 msgstr "Versija prahramy"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:314
 msgid "The version of the program"
 msgstr "Versija prahramy"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:328
 msgid "Copyright string"
 msgstr "Aŭtarskija pravy"
 
-#: gtk/gtkaboutdialog.c:270
+#: gtk/gtkaboutdialog.c:329
 msgid "Copyright information for the program"
 msgstr "Infarmacyja pra aŭtarskija pravy na prahramu"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:346
 msgid "Comments string"
 msgstr "Apisalny tekst"
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:347
 msgid "Comments about the program"
 msgstr "Apisańnie prahramy"
 
-#: gtk/gtkaboutdialog.c:322
+#: gtk/gtkaboutdialog.c:381
 msgid "Website URL"
 msgstr "Adras chatniaj staronki"
 
-#: gtk/gtkaboutdialog.c:323
+#: gtk/gtkaboutdialog.c:382
 msgid "The URL for the link to the website of the program"
 msgstr "Adras spasyłki da chatniaj staronki prahramy"
 
-#: gtk/gtkaboutdialog.c:339
+#: gtk/gtkaboutdialog.c:398
 msgid "Website label"
 msgstr "Etykietka chatniaj staronki"
 
-#: gtk/gtkaboutdialog.c:340
+#: gtk/gtkaboutdialog.c:399
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -186,46 +186,46 @@ msgstr ""
 "Etykietka spasyłki da chatniaj staronki prahramy. Kali jana nie akreślenaja, "
 "jana zmoŭčana ŭjaŭlaje saboj URL"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:415
 msgid "Authors"
 msgstr "Aŭtary"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:416
 msgid "List of authors of the program"
 msgstr "Śpis aŭtaraŭ prahramy"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:432
 msgid "Documenters"
 msgstr "Aŭtary dakumentacyi"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:433
 msgid "List of people documenting the program"
 msgstr "Śpis asobaŭ, jakija stvarajuć dakumentacyju prahramy"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:449
 msgid "Artists"
 msgstr "Mastaki"
 
-#: gtk/gtkaboutdialog.c:391
+#: gtk/gtkaboutdialog.c:450
 msgid "List of people who have contributed artwork to the program"
 msgstr "Śpis mastakoŭ, jakija pracujuć nad vyhladam prahramy"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:467
 msgid "Translator credits"
 msgstr "Zasłuhi pierakładčykaŭ"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:468
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Zasłuhi pierakładčykaŭ. Pavinna być paznačana, što hety radok možna "
 "pierakłaści"
 
-#: gtk/gtkaboutdialog.c:424
+#: gtk/gtkaboutdialog.c:483
 msgid "Logo"
 msgstr "Lahatyp"
 
-#: gtk/gtkaboutdialog.c:425
+#: gtk/gtkaboutdialog.c:484
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -233,21 +233,21 @@ msgstr ""
 "Lahatyp dla vakna z infarmacyjaj ab prahramie. Kali nie akreśleny, zmoŭčana "
 "pryjmaje vartaść gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:440
+#: gtk/gtkaboutdialog.c:499
 msgid "Logo Icon Name"
 msgstr "Nazva ikony lahatypu"
 
-#: gtk/gtkaboutdialog.c:441
+#: gtk/gtkaboutdialog.c:500
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Ikona, jakaja vykarystoŭvajecca jak lahatyp u vaknie z infarmacyjaj ab "
 "prahramie."
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:513
 msgid "Wrap license"
 msgstr "Pieranos radkoŭ u licenzii"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:514
 msgid "Whether to wrap the license text."
 msgstr "Akreślivaje, ci radki ŭ tekście licenzii pavinny pieranosicca."
 
@@ -317,18 +317,18 @@ msgstr "Ikona typovaha elementu, bačnaja na widgetach hetaj aperacyi."
 msgid "GIcon"
 msgstr "Ikona"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 #, fuzzy
 msgid "The GIcon being displayed"
 msgstr "Nabor ikon, kab pakazać"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Nazva ikony"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "Nazva ikony z matyvu ikon"
@@ -433,20 +433,20 @@ msgstr "Akreślivaje, ci dastupnaja aperacyjnaja hrupa."
 msgid "Whether the action group is visible."
 msgstr "Akreślivaje, ci bačnaja aperacyjnaja hrupa."
 
-#: gtk/gtkactivatable.c:304
+#: gtk/gtkactivatable.c:305
 #, fuzzy
 msgid "Related Action"
 msgstr "Aperacyja"
 
-#: gtk/gtkactivatable.c:305
+#: gtk/gtkactivatable.c:306
 msgid "The action this activatable will activate and receive updates from"
 msgstr ""
 
-#: gtk/gtkactivatable.c:327
+#: gtk/gtkactivatable.c:328
 msgid "Use Action Appearance"
 msgstr ""
 
-#: gtk/gtkactivatable.c:328
+#: gtk/gtkactivatable.c:329
 #, fuzzy
 msgid "Whether to use the related actions appearance properties"
 msgstr "Akreślivaje, ci tekst etykiety moža być zaznačany myšaj"
@@ -864,7 +864,7 @@ msgstr ""
 "Akreślivaje, ci treba ŭžyć etykietu dziela vybaru typovaha elementu zamiest "
 "taho, kab jaje pakazvać."
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:796 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Fokus ad kliku"
 
@@ -956,7 +956,7 @@ msgstr ""
 "Akreślivaje, ci ŭłaścivaści \"child_displacement_x/_y\" taksama pavinny mieć "
 "upłyŭ na pramavuholnik abjadnańnia"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:689 gtk/gtkentry.c:1713
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
 msgid "Inner Border"
 msgstr "Vonkavaja abvodka"
 
@@ -1069,6 +1069,15 @@ msgstr "Akno dyjalohu"
 #, fuzzy
 msgid "If TRUE, details are shown"
 msgstr "Paśla abrańnia vartaści \"PRAŬDA\" nazvy dzion pakazanyja"
+
+#: gtk/gtkcelleditable.c:76
+#, fuzzy
+msgid "Editing Canceled"
+msgstr "Anulavanaja"
+
+#: gtk/gtkcelleditable.c:77
+msgid "Indicates that editing has been canceled"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:177
 msgid "mode"
@@ -1271,7 +1280,7 @@ msgstr "Začynieny element razhortvańnia"
 msgid "Pixbuf for closed expander"
 msgstr "Abjekt pixbuf, źviazany z začynienym elementam razhortvańnia"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "ID typovaha elementu"
 
@@ -1305,7 +1314,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr ""
 "Akreślivaje, ci pakazvany bufer piksmapy pavinien mieć zhodny sa stanam koler"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Ikona"
 
@@ -1314,7 +1323,7 @@ msgid "Value of the progress bar"
 msgstr "Vartaść paneli prahresu"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:732 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkentry.c:737 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
 #: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "Tekst"
@@ -1449,7 +1458,7 @@ msgstr "Koler elementu"
 msgid "Foreground color as a GdkColor"
 msgstr "Koler elementu jak GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:661 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Madyfikavalny"
@@ -1594,7 +1603,7 @@ msgstr ""
 "Sposab parušeńnia tekstavaha łancuha pavodle radkoŭ, kali abjekt "
 "renderavańnia jačejek nia maje miesca pakazać jaho sucelna"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:685
 msgid "Wrap width"
 msgstr "Šyrynia pieranosu"
 
@@ -1982,115 +1991,115 @@ msgstr "Vartaść u śpisie"
 msgid "Whether entered values must already be present in the list"
 msgstr "Akreślivaje, ci ŭviedzienyja vartaści musiać znachodzicca ŭ śpisie"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:668
 msgid "ComboBox model"
 msgstr "Madel skrynki typu ComboBox"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:669
 msgid "The model for the combo box"
 msgstr "Madel dla skrynki tupu Combo"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:686
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Šyrynia pieranosu padčas pryviazki elementaŭ da sietki"
 
-#: gtk/gtkcombobox.c:703
+#: gtk/gtkcombobox.c:708
 msgid "Row span column"
 msgstr "Kalona vodstupaŭ radkoŭ"
 
-#: gtk/gtkcombobox.c:704
+#: gtk/gtkcombobox.c:709
 msgid "TreeModel column containing the row span values"
 msgstr "Kalona z vartaściami vodstupaŭ radkoŭ"
 
-#: gtk/gtkcombobox.c:725
+#: gtk/gtkcombobox.c:730
 msgid "Column span column"
 msgstr "Kalona vodstupaŭ u kalonie"
 
-#: gtk/gtkcombobox.c:726
+#: gtk/gtkcombobox.c:731
 msgid "TreeModel column containing the column span values"
 msgstr "Kalona z vartaściami vodstupaŭ kalon"
 
-#: gtk/gtkcombobox.c:747
+#: gtk/gtkcombobox.c:752
 msgid "Active item"
 msgstr "Dziejny element"
 
-#: gtk/gtkcombobox.c:748
+#: gtk/gtkcombobox.c:753
 msgid "The item which is currently active"
 msgstr "Dziejny element"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:772 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Dadavańnie novych razhortvalnikaŭ u menu"
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:773
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Akreślivaje, ci razhortvalnyja menu pavinny mieć element adklučeńnia"
 
-#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:686
 msgid "Has Frame"
 msgstr "Z ramkaj"
 
-#: gtk/gtkcombobox.c:784
+#: gtk/gtkcombobox.c:789
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Akreślivaje, ci element typu combo box rysuje ramku vakoł naščadka"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:797
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Akreślivaje, ci element combo box pierachopvaje fokus paśla kliku myšaj"
 
-#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Zahałovak pry adryvie"
 
-#: gtk/gtkcombobox.c:808
+#: gtk/gtkcombobox.c:813
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "Zahałovak, jaki moža być pakazany kiraŭnikom voknaŭ, kali menu adarvanaje"
 
-#: gtk/gtkcombobox.c:825
+#: gtk/gtkcombobox.c:830
 msgid "Popup shown"
 msgstr "Pakazvaje vakno popup"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:831
 msgid "Whether the combo's dropdown is shown"
 msgstr "Akreślivaje, ci było razhornutaje pole combo"
 
-#: gtk/gtkcombobox.c:842
+#: gtk/gtkcombobox.c:847
 msgid "Button Sensitivity"
 msgstr ""
 
-#: gtk/gtkcombobox.c:843
+#: gtk/gtkcombobox.c:848
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Akreślivaje, ci knopka fakusuje ad kliku myšaj"
 
-#: gtk/gtkcombobox.c:850
+#: gtk/gtkcombobox.c:855
 msgid "Appears as list"
 msgstr "Vyhlad śpisu"
 
-#: gtk/gtkcombobox.c:851
+#: gtk/gtkcombobox.c:856
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Akreślivaje, ci razhortvalnaje menu pavinna vyhladać jak śpis zamiest menu"
 
-#: gtk/gtkcombobox.c:867
+#: gtk/gtkcombobox.c:872
 msgid "Arrow Size"
 msgstr "Pamier strełki"
 
-#: gtk/gtkcombobox.c:868
+#: gtk/gtkcombobox.c:873
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimalny pamier strełki razhortvalnaha menu"
 
-#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:786 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Typ cieniu"
 
-#: gtk/gtkcombobox.c:884
+#: gtk/gtkcombobox.c:889
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Typ cieni vakoł razhortvalnaha menu"
 
@@ -2118,45 +2127,45 @@ msgstr "Naščadak"
 msgid "Can be used to add a new child to the container"
 msgstr "Moža być vykarystany, kab dadać u kantejner novaha naščadka"
 
-#: gtk/gtkcurve.c:124
+#: gtk/gtkcurve.c:126
 msgid "Curve type"
 msgstr "Typ kryvoj"
 
-#: gtk/gtkcurve.c:125
+#: gtk/gtkcurve.c:127
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr ""
 "Akreślivaje, ci kryvaja źjaŭlajecca prostaj, interpalavanaj, ci advolnaha "
 "kštałtu"
 
-#: gtk/gtkcurve.c:132
+#: gtk/gtkcurve.c:134
 msgid "Minimum X"
 msgstr "Najmienšaja X"
 
-#: gtk/gtkcurve.c:133
+#: gtk/gtkcurve.c:135
 msgid "Minimum possible value for X"
 msgstr "Najmienšaja mahčymaja vartaść X"
 
-#: gtk/gtkcurve.c:141
+#: gtk/gtkcurve.c:143
 msgid "Maximum X"
 msgstr "Najbolšaja X"
 
-#: gtk/gtkcurve.c:142
+#: gtk/gtkcurve.c:144
 msgid "Maximum possible X value"
 msgstr "Najbolšaja mahčymaja vartaść X"
 
-#: gtk/gtkcurve.c:150
+#: gtk/gtkcurve.c:152
 msgid "Minimum Y"
 msgstr "Najmienšaja Y"
 
-#: gtk/gtkcurve.c:151
+#: gtk/gtkcurve.c:153
 msgid "Minimum possible value for Y"
 msgstr "Najmienšaja mahčymaja vartaść Y"
 
-#: gtk/gtkcurve.c:159
+#: gtk/gtkcurve.c:161
 msgid "Maximum Y"
 msgstr "Najbolšaja Y"
 
-#: gtk/gtkcurve.c:160
+#: gtk/gtkcurve.c:162
 msgid "Maximum possible value for Y"
 msgstr "Najbolšaja mahčymaja vartaść Y"
 
@@ -2203,51 +2212,51 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr ""
 "Šyrynia bierahu vakoł prastory z knopkami ŭ nižniaj častcy akna dyjalohu"
 
-#: gtk/gtkentry.c:628
+#: gtk/gtkentry.c:633
 #, fuzzy
 msgid "Text Buffer"
 msgstr "Bufer"
 
-#: gtk/gtkentry.c:629
+#: gtk/gtkentry.c:634
 msgid "Text buffer object which actually stores entry text"
 msgstr ""
 
-#: gtk/gtkentry.c:636 gtk/gtklabel.c:591
+#: gtk/gtkentry.c:641 gtk/gtklabel.c:591
 msgid "Cursor Position"
 msgstr "Pazycyja kursora"
 
-#: gtk/gtkentry.c:637 gtk/gtklabel.c:592
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:592
 msgid "The current position of the insertion cursor in chars"
 msgstr "Dziejnaje pałažeńnie kursora ŭstaŭki, vyjaŭlenaje ŭ znakach"
 
-#: gtk/gtkentry.c:646 gtk/gtklabel.c:601
+#: gtk/gtkentry.c:651 gtk/gtklabel.c:601
 msgid "Selection Bound"
 msgstr "Miaža zaznačeńnia"
 
-#: gtk/gtkentry.c:647 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:602
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pałažeńnie kanca zaznačeńnia nasuprać kursora, vyjaŭlenaje ŭ znakach"
 
-#: gtk/gtkentry.c:657
+#: gtk/gtkentry.c:662
 msgid "Whether the entry contents can be edited"
 msgstr "Akreślivaje, ci možna redahavać źmiest elementu"
 
-#: gtk/gtkentry.c:664 gtk/gtkentrybuffer.c:383
+#: gtk/gtkentry.c:669 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "Maksymalnaja daŭžynia"
 
-#: gtk/gtkentry.c:665 gtk/gtkentrybuffer.c:384
+#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Maksymalnaja kolkaść znakaŭ dla hetaha elementu. Nulavaja vartaść aznačaje "
 "adsutnaść maksymumu."
 
-#: gtk/gtkentry.c:673
+#: gtk/gtkentry.c:678
 msgid "Visibility"
 msgstr "Bačnaść"
 
-#: gtk/gtkentry.c:674
+#: gtk/gtkentry.c:679
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2256,29 +2265,29 @@ msgstr ""
 "tekst budzie bačny ŭ vyhladzie łancuha \"niabačnych znakaŭ\", što prydatna "
 "pry zapisie parolaŭ."
 
-#: gtk/gtkentry.c:682
+#: gtk/gtkentry.c:687
 msgid "FALSE removes outside bevel from entry"
 msgstr "Akreślivaje, ci pavinien być bačny kant vakoł elementu"
 
-#: gtk/gtkentry.c:690
+#: gtk/gtkentry.c:695
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Bierah pamiž tekstam i ramkaj. Nadpisvaje ŭłaścivaść stylu inner-border"
 
-#: gtk/gtkentry.c:697 gtk/gtkentry.c:1263
+#: gtk/gtkentry.c:702 gtk/gtkentry.c:1268
 msgid "Invisible character"
 msgstr "Niabačny znak"
 
-#: gtk/gtkentry.c:698 gtk/gtkentry.c:1264
+#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak, užyvany pry maskavańni źmieściva elementu (u režymie parolu)"
 
-#: gtk/gtkentry.c:705
+#: gtk/gtkentry.c:710
 msgid "Activates default"
 msgstr "Aktyvizuje zmoŭčany"
 
-#: gtk/gtkentry.c:706
+#: gtk/gtkentry.c:711
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2286,31 +2295,31 @@ msgstr ""
 "Akreślivaje, ci pry nacisku klavišy Enter pavinien być aktyvizavany zmoŭčany "
 "widget (naprykład, zmoŭčanaja knopka ŭ vaknie dyjalohu)"
 
-#: gtk/gtkentry.c:712
+#: gtk/gtkentry.c:717
 msgid "Width in chars"
 msgstr "Šyrynia ŭ znakach"
 
-#: gtk/gtkentry.c:713
+#: gtk/gtkentry.c:718
 msgid "Number of characters to leave space for in the entry"
 msgstr "Kolkaść znakaŭ u elemencie, na jakuju pavinna być pakinutaje miesca"
 
-#: gtk/gtkentry.c:722
+#: gtk/gtkentry.c:727
 msgid "Scroll offset"
 msgstr "Pamier prakrutki"
 
-#: gtk/gtkentry.c:723
+#: gtk/gtkentry.c:728
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Kolkaść pikselaŭ elementu pierasunutych uleva za jahony abšar"
 
-#: gtk/gtkentry.c:733
+#: gtk/gtkentry.c:738
 msgid "The contents of the entry"
 msgstr "Źmieściva elementu"
 
-#: gtk/gtkentry.c:748 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:753 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Haryzantalnaje raŭnańnie"
 
-#: gtk/gtkentry.c:749 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:754 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2318,70 +2327,70 @@ msgstr ""
 "Haryzantalnaje raŭnańnie, ad 0 (levy) da 1 (pravy). Naadvarot dla raskładak "
 "RTL (z prava naleva)."
 
-#: gtk/gtkentry.c:765
+#: gtk/gtkentry.c:770
 msgid "Truncate multiline"
 msgstr "Abcinańnie šmatradkovych"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:771
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Akreślivaje, ci prycinać šmatradkovyja ŭstaŭki da adnaho radka."
 
-#: gtk/gtkentry.c:782
+#: gtk/gtkentry.c:787
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Vid cieniu, hieneravanaha vakoł razhortvalnaha menu"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:802 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Režym nadpisvańnia"
 
-#: gtk/gtkentry.c:798
+#: gtk/gtkentry.c:803
 #, fuzzy
 msgid "Whether new text overwrites existing text"
 msgstr "Akreślivaje, ci ŭvodžany tekst nadpisvaje dziejnaje źmieściva"
 
-#: gtk/gtkentry.c:812 gtk/gtkentrybuffer.c:368
+#: gtk/gtkentry.c:817 gtk/gtkentrybuffer.c:368
 #, fuzzy
 msgid "Text length"
 msgstr "Haryzantalnaje raŭnańnie tekstu"
 
-#: gtk/gtkentry.c:813
+#: gtk/gtkentry.c:818
 msgid "Length of the text currently in the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:828
+#: gtk/gtkentry.c:833
 #, fuzzy
 msgid "Invisible char set"
 msgstr "Nałady niabačnaści"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:834
 #, fuzzy
 msgid "Whether the invisible char has been set"
 msgstr "Akreślivaje, ci ŭłascivaści pamieru ikony byli akreślenyja"
 
-#: gtk/gtkentry.c:847
+#: gtk/gtkentry.c:852
 msgid "Caps Lock warning"
 msgstr ""
 
-#: gtk/gtkentry.c:848
+#: gtk/gtkentry.c:853
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 
-#: gtk/gtkentry.c:862
+#: gtk/gtkentry.c:867
 #, fuzzy
 msgid "Progress Fraction"
 msgstr "Častka"
 
-#: gtk/gtkentry.c:863
+#: gtk/gtkentry.c:868
 #, fuzzy
 msgid "The current fraction of the task that's been completed"
 msgstr "Skončanaja častka cełaha skazu"
 
-#: gtk/gtkentry.c:880
+#: gtk/gtkentry.c:885
 #, fuzzy
 msgid "Progress Pulse Step"
 msgstr "Krok impulsu"
 
-#: gtk/gtkentry.c:881
+#: gtk/gtkentry.c:886
 #, fuzzy
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
@@ -2389,229 +2398,229 @@ msgid ""
 msgstr ""
 "Častka prahresu, na jakuju pavinien być pierasunuty blok pry kožnym impulsie."
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:902
 #, fuzzy
 msgid "Primary pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkentry.c:898
+#: gtk/gtkentry.c:903
 #, fuzzy
 msgid "Primary pixbuf for the entry"
 msgstr "Abjekt pixbuf, źviazany z adčynienym elementam razhortvańnia"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:917
 #, fuzzy
 msgid "Secondary pixbuf"
 msgstr "Druhasny tekst"
 
-#: gtk/gtkentry.c:913
+#: gtk/gtkentry.c:918
 #, fuzzy
 msgid "Secondary pixbuf for the entry"
 msgstr "Dadatkovy krok napierad"
 
-#: gtk/gtkentry.c:927
+#: gtk/gtkentry.c:932
 msgid "Primary stock ID"
 msgstr ""
 
-#: gtk/gtkentry.c:928
+#: gtk/gtkentry.c:933
 msgid "Stock ID for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:942
+#: gtk/gtkentry.c:947
 #, fuzzy
 msgid "Secondary stock ID"
 msgstr "Druhasny tekst"
 
-#: gtk/gtkentry.c:943
+#: gtk/gtkentry.c:948
 msgid "Stock ID for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:957
+#: gtk/gtkentry.c:962
 #, fuzzy
 msgid "Primary icon name"
 msgstr "Śpis nazvaŭ ikon"
 
-#: gtk/gtkentry.c:958
+#: gtk/gtkentry.c:963
 msgid "Icon name for primary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:972
+#: gtk/gtkentry.c:977
 #, fuzzy
 msgid "Secondary icon name"
 msgstr "Druhasny tekst"
 
-#: gtk/gtkentry.c:973
+#: gtk/gtkentry.c:978
 msgid "Icon name for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:987
+#: gtk/gtkentry.c:992
 msgid "Primary GIcon"
 msgstr ""
 
-#: gtk/gtkentry.c:988
+#: gtk/gtkentry.c:993
 #, fuzzy
 msgid "GIcon for primary icon"
 msgstr "Ikona, źviazanaja z hetym aknom"
 
-#: gtk/gtkentry.c:1002
+#: gtk/gtkentry.c:1007
 #, fuzzy
 msgid "Secondary GIcon"
 msgstr "Druharadny"
 
-#: gtk/gtkentry.c:1003
+#: gtk/gtkentry.c:1008
 msgid "GIcon for secondary icon"
 msgstr ""
 
-#: gtk/gtkentry.c:1017
+#: gtk/gtkentry.c:1022
 #, fuzzy
 msgid "Primary storage type"
 msgstr "Sposab zapisu"
 
-#: gtk/gtkentry.c:1018
+#: gtk/gtkentry.c:1023
 #, fuzzy
 msgid "The representation being used for primary icon"
 msgstr "Sposab zapisu źviestak vyjavy"
 
-#: gtk/gtkentry.c:1033
+#: gtk/gtkentry.c:1038
 #, fuzzy
 msgid "Secondary storage type"
 msgstr "Dadatkovy krok napierad"
 
-#: gtk/gtkentry.c:1034
+#: gtk/gtkentry.c:1039
 #, fuzzy
 msgid "The representation being used for secondary icon"
 msgstr "Sposab zapisu źviestak vyjavy"
 
-#: gtk/gtkentry.c:1055
+#: gtk/gtkentry.c:1060
 msgid "Primary icon activatable"
 msgstr ""
 
-#: gtk/gtkentry.c:1056
+#: gtk/gtkentry.c:1061
 #, fuzzy
 msgid "Whether the primary icon is activatable"
 msgstr "Akreślivaje, ci aperacyja dastupnaja."
 
-#: gtk/gtkentry.c:1076
+#: gtk/gtkentry.c:1081
 #, fuzzy
 msgid "Secondary icon activatable"
 msgstr "Druhi koler kursora"
 
-#: gtk/gtkentry.c:1077
+#: gtk/gtkentry.c:1082
 #, fuzzy
 msgid "Whether the secondary icon is activatable"
 msgstr "Akreślivaje, ci aperacyja dastupnaja."
 
-#: gtk/gtkentry.c:1099
+#: gtk/gtkentry.c:1104
 #, fuzzy
 msgid "Primary icon sensitive"
 msgstr "Pakazvaje jačejku"
 
-#: gtk/gtkentry.c:1100
+#: gtk/gtkentry.c:1105
 #, fuzzy
 msgid "Whether the primary icon is sensitive"
 msgstr ""
 "Akreślivaje, ci razroźnivać małyja j vialikija litary pry dapasavańni "
 "elementaŭ śpisu"
 
-#: gtk/gtkentry.c:1121
+#: gtk/gtkentry.c:1126
 #, fuzzy
 msgid "Secondary icon sensitive"
 msgstr "Druhasny tekst"
 
-#: gtk/gtkentry.c:1122
+#: gtk/gtkentry.c:1127
 #, fuzzy
 msgid "Whether the secondary icon is sensitive"
 msgstr "Akreślivaje, ci aperacyja dastupnaja."
 
-#: gtk/gtkentry.c:1138
+#: gtk/gtkentry.c:1143
 #, fuzzy
 msgid "Primary icon tooltip text"
 msgstr "Pakazvaje jačejku"
 
-#: gtk/gtkentry.c:1139 gtk/gtkentry.c:1175
+#: gtk/gtkentry.c:1144 gtk/gtkentry.c:1180
 #, fuzzy
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Tekst padkazki dla hetaha widgetu"
 
-#: gtk/gtkentry.c:1155
+#: gtk/gtkentry.c:1160
 #, fuzzy
 msgid "Secondary icon tooltip text"
 msgstr "Druhi koler kursora"
 
-#: gtk/gtkentry.c:1156 gtk/gtkentry.c:1194
+#: gtk/gtkentry.c:1161 gtk/gtkentry.c:1199
 #, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Tekst padkazki dla hetaha widgetu"
 
-#: gtk/gtkentry.c:1174
+#: gtk/gtkentry.c:1179
 #, fuzzy
 msgid "Primary icon tooltip markup"
 msgstr "Śpis nazvaŭ ikon"
 
-#: gtk/gtkentry.c:1193
+#: gtk/gtkentry.c:1198
 #, fuzzy
 msgid "Secondary icon tooltip markup"
 msgstr "Druhasny tekst"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1218 gtk/gtktextview.c:682
 #, fuzzy
 msgid "IM module"
 msgstr "Zmoŭčanaja šyrynia"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:683
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Akreślivaje, ci pavinna być vykarystanaja palitra"
 
-#: gtk/gtkentry.c:1228
+#: gtk/gtkentry.c:1233
 #, fuzzy
 msgid "Icon Prelight"
 msgstr "Vyšynia"
 
-#: gtk/gtkentry.c:1229
+#: gtk/gtkentry.c:1234
 #, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "Akreślivaje, ci pakazvać zakładki pry natatniku"
 
-#: gtk/gtkentry.c:1242
+#: gtk/gtkentry.c:1247
 #, fuzzy
 msgid "Progress Border"
 msgstr "Niepasredny kraj"
 
-#: gtk/gtkentry.c:1243
+#: gtk/gtkentry.c:1248
 #, fuzzy
 msgid "Border around the progress bar"
 msgstr "Tekst na paneli prahresu"
 
-#: gtk/gtkentry.c:1714
+#: gtk/gtkentry.c:1719
 msgid "Border between text and frame."
 msgstr "Bierah pamiž tekstam i ramkaj."
 
-#: gtk/gtkentry.c:1728
+#: gtk/gtkentry.c:1733
 #, fuzzy
 msgid "State Hint"
 msgstr "Apisańnie stanu"
 
-#: gtk/gtkentry.c:1729
+#: gtk/gtkentry.c:1734
 #, fuzzy
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "Bitmapa, užyvanaja jak maska rysavańnia fonu tekstu"
 
-#: gtk/gtkentry.c:1734 gtk/gtklabel.c:848
+#: gtk/gtkentry.c:1739 gtk/gtklabel.c:848
 msgid "Select on focus"
 msgstr "Zaznačańnie pry fokusie"
 
-#: gtk/gtkentry.c:1735
+#: gtk/gtkentry.c:1740
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Akreślivaje, ci źmieściva elementu pavinna być zaznačanaje pry naviadzieńni "
 "fokusu"
 
-#: gtk/gtkentry.c:1749
+#: gtk/gtkentry.c:1754
 msgid "Password Hint Timeout"
 msgstr "Čas padkazki parolu"
 
-#: gtk/gtkentry.c:1750
+#: gtk/gtkentry.c:1755
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Akreślivaje, jak doŭha maje być pakazany apošni ŭviedzieny znak u palach sa "
@@ -2884,7 +2893,7 @@ msgstr "Zahałovak vakna dyjalohu vybaru fajłaŭ."
 msgid "The desired width of the button widget, in characters."
 msgstr "Pažadanaja šyrynia widgetu knopki (u znakach)."
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "Nazva fajłu"
@@ -3192,85 +3201,85 @@ msgstr "Vartaść alfa pramavuholnika zaznačeńnia"
 msgid "Opacity of the selection box"
 msgstr "Nieprazrystaść pramavuholnika zaznačeńnia"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "Abjekt GdkPixbuf, kab pakazać"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:140
 msgid "Pixmap"
 msgstr "Piksmapa"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:141
 msgid "A GdkPixmap to display"
 msgstr "Abjekt GdkPixmap, kab pakazać"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "Vyjava"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:149
 msgid "A GdkImage to display"
 msgstr "Vyjava GdkImage, kab pakazać"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:156
 msgid "Mask"
 msgstr "Maska"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:157
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Bitmapavaja maska, ŭžyvanaja ŭ spałučeńni z GdkImage albo GdkPixmap"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "Nazva fajłu, kab zahruzić i pakazać"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ID pakazvanaj typovaj vyjavy"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:181
 msgid "Icon set"
 msgstr "Nabor ikon"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:182
 msgid "Icon set to display"
 msgstr "Nabor ikon, kab pakazać"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Pamier ikony"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:190
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Symbaličny pamier, užyvany pry typovaj ikonie, nabory ikon albo nazvanaj "
 "ikonie"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:206
 msgid "Pixel size"
 msgstr "Pamier u pikselach"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:207
 msgid "Pixel size to use for named icon"
 msgstr "Pamier u pikselach, užyvany pry nazvanych ikonach"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:215
 msgid "Animation"
 msgstr "Animacyja"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:216
 msgid "GdkPixbufAnimation to display"
 msgstr "Abjekt GdkPixbufAnimation, kab pakazać"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "Sposab zapisu"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "Sposab zapisu źviestak vyjavy"
 
@@ -4329,7 +4338,7 @@ msgstr "Nałady drukarki"
 msgid "Page Setup"
 msgstr "Nałady staronki"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1125
 msgid "Track Print Status"
 msgstr "Adsočka stanu drukarki"
 
@@ -4341,51 +4350,51 @@ msgstr ""
 "PRAŬDA, kali zadańnie vydruku budzie praciahvać vysyłać syhnały źmieny stanu "
 "paśla vysyłki danych drukavańnia na drukarku albo server vydruku."
 
-#: gtk/gtkprintoperation.c:954
+#: gtk/gtkprintoperation.c:997
 msgid "Default Page Setup"
 msgstr "Zmoŭčanyja nałady staronki"
 
-#: gtk/gtkprintoperation.c:955
+#: gtk/gtkprintoperation.c:998
 msgid "The GtkPageSetup used by default"
 msgstr "Zmoŭčana ŭžyvajecca GtkPageSetup"
 
-#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:1016 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Nałady vydruku"
 
-#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:1017 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "GtkPrintSettings užyvajecca, kab inicyjavać vakno"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1035
 msgid "Job Name"
 msgstr "Nazva zadańnia"
 
-#: gtk/gtkprintoperation.c:993
+#: gtk/gtkprintoperation.c:1036
 msgid "A string used for identifying the print job."
 msgstr "Tekst, užyty dziela identyfikacyi zadańnia vydruku."
 
-#: gtk/gtkprintoperation.c:1017
+#: gtk/gtkprintoperation.c:1060
 msgid "Number of Pages"
 msgstr "Kolkaść staronak"
 
-#: gtk/gtkprintoperation.c:1018
+#: gtk/gtkprintoperation.c:1061
 msgid "The number of pages in the document."
 msgstr "Kolkaść staronak u dakumencie."
 
-#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1082 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Dziejnaja staronka"
 
-#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1083 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "Dziejnaja staronka dakumentu"
 
-#: gtk/gtkprintoperation.c:1061
+#: gtk/gtkprintoperation.c:1104
 msgid "Use full page"
 msgstr "Cełaja staronka"
 
-#: gtk/gtkprintoperation.c:1062
+#: gtk/gtkprintoperation.c:1105
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4393,7 +4402,7 @@ msgstr ""
 "PRAŬDA, kali pačatak kantekstu pavinien znachodzicca ŭ rahu staronki, a nie "
 "pakazanaha abšaru"
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1126
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4402,91 +4411,91 @@ msgstr ""
 "zadańnia vydruku paśla vysyłki źviestak vydruku na drukarku albo server "
 "drukavańnia."
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1143
 msgid "Unit"
 msgstr "Adzinka"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1144
 msgid "The unit in which distances can be measured in the context"
 msgstr "Adzinka, u jakoj mierajuć adlehłaści ŭ kantekście"
 
-#: gtk/gtkprintoperation.c:1118
+#: gtk/gtkprintoperation.c:1161
 msgid "Show Dialog"
 msgstr "Akno dyjalohu"
 
-#: gtk/gtkprintoperation.c:1119
+#: gtk/gtkprintoperation.c:1162
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "PRAŬDA, kali padčas drukavańnia pakazvajuć vakno prahresu."
 
-#: gtk/gtkprintoperation.c:1142
+#: gtk/gtkprintoperation.c:1185
 msgid "Allow Async"
 msgstr "Asynchronna"
 
-#: gtk/gtkprintoperation.c:1143
+#: gtk/gtkprintoperation.c:1186
 msgid "TRUE if print process may run asynchronous."
 msgstr "PRAŬDA, kali praces vydruku moža być uruchomleny asynchronna."
 
-#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1208 gtk/gtkprintoperation.c:1209
 msgid "Export filename"
 msgstr "Nazva ekspartavanaha fajłu"
 
-#: gtk/gtkprintoperation.c:1180
+#: gtk/gtkprintoperation.c:1223
 msgid "Status"
 msgstr "Stan"
 
-#: gtk/gtkprintoperation.c:1181
+#: gtk/gtkprintoperation.c:1224
 msgid "The status of the print operation"
 msgstr "Stan aperacyi vydruku"
 
-#: gtk/gtkprintoperation.c:1201
+#: gtk/gtkprintoperation.c:1244
 msgid "Status String"
 msgstr "Apisańnie stanu"
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1245
 msgid "A human-readable description of the status"
 msgstr "Čytelnaje apisańnie stanu"
 
-#: gtk/gtkprintoperation.c:1220
+#: gtk/gtkprintoperation.c:1263
 msgid "Custom tab label"
 msgstr "Etykieta ŭłasnaj zakładki"
 
-#: gtk/gtkprintoperation.c:1221
+#: gtk/gtkprintoperation.c:1264
 msgid "Label for the tab containing custom widgets."
 msgstr "Etykieta zakładki z ułasnymi widgetami."
 
-#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1279 gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
 msgstr "Zaznačaj abranaje"
 
-#: gtk/gtkprintoperation.c:1237
+#: gtk/gtkprintoperation.c:1280
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1296 gtk/gtkprintunixdialog.c:353
 #, fuzzy
 msgid "Has Selection"
 msgstr "Maje vybar"
 
-#: gtk/gtkprintoperation.c:1254
+#: gtk/gtkprintoperation.c:1297
 msgid "TRUE if a selecion exists."
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
 #, fuzzy
 msgid "Embed Page Setup"
 msgstr "Nałady staronki"
 
-#: gtk/gtkprintoperation.c:1270
+#: gtk/gtkprintoperation.c:1313
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 
-#: gtk/gtkprintoperation.c:1291
+#: gtk/gtkprintoperation.c:1334
 #, fuzzy
 msgid "Number of Pages To Print"
 msgstr "Kolkaść staronak"
 
-#: gtk/gtkprintoperation.c:1292
+#: gtk/gtkprintoperation.c:1335
 #, fuzzy
 msgid "The number of pages that will be printed."
 msgstr "Kolkaść staronak u dakumencie."
@@ -5201,11 +5210,11 @@ msgstr "Rysavańnie"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Akreślivaje, ci separatar bačny jak linija, ci jak pustoje miesca"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:221
 msgid "Double Click Time"
 msgstr "Čas padvojnaha kliku"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:222
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5213,11 +5222,11 @@ msgstr ""
 "Maksymalny dapuščalny čas pamiž dvuma klikami, usprymanymi jak padvojny klik "
 "(u milisekundach)"
 
-#: gtk/gtksettings.c:223
+#: gtk/gtksettings.c:229
 msgid "Double Click Distance"
 msgstr "Adlehłaść padvojnaha kliku"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:230
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5225,35 +5234,35 @@ msgstr ""
 "Maksymalnaja dapuščalnaja adlehłaść pamiž dvuma klikami, jakija ličacca "
 "padvojnym klikam (u pikselach)"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:246
 msgid "Cursor Blink"
 msgstr "Mirhańnie kursora"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:247
 msgid "Whether the cursor should blink"
 msgstr "Akreślivaje, ci kursor pavinien mirhać"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:254
 msgid "Cursor Blink Time"
 msgstr "Čas mirhańnia kursora"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:255
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Daŭžynia cyklu mirhańnia kursora, u milisekundach"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:274
 msgid "Cursor Blink Timeout"
 msgstr "Čas mirhańnia kursora"
 
-#: gtk/gtksettings.c:269
+#: gtk/gtksettings.c:275
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Čas (u sekundach) praź jaki kursor pierastaje mirhać"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:282
 msgid "Split Cursor"
 msgstr "Padzieł kursora"
 
-#: gtk/gtksettings.c:277
+#: gtk/gtksettings.c:283
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5261,156 +5270,156 @@ msgstr ""
 "Akreślivaje, ci pry tekstach pisanych źleva i sprava pavinny być bačnyja dva "
 "kursory"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:290
 msgid "Theme Name"
 msgstr "Nazva matyvu"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:291
 msgid "Name of theme RC file to load"
 msgstr "Nazva adčytvanaha fajłu matyvu RC"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:299
 msgid "Icon Theme Name"
 msgstr "Nazva matyvu ikon"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:300
 msgid "Name of icon theme to use"
 msgstr "Nazva ŭžyvanaha matyvu ikon"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:308
 msgid "Fallback Icon Theme Name"
 msgstr "Nazva zapasnoha matyvu ikon"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:309
 msgid "Name of a icon theme to fall back to"
 msgstr "Nazva zapasnoha matyvu ikon"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:317
 msgid "Key Theme Name"
 msgstr "Nazva hałoŭnaha matyvu"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:318
 msgid "Name of key theme RC file to load"
 msgstr "Nazva hałoŭnaha adčytvanaha fajłu matyvu RC"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:326
 msgid "Menu bar accelerator"
 msgstr "Akseleratary paneli menu"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:327
 msgid "Keybinding to activate the menu bar"
 msgstr "Kambinacyja klavišaŭ dla aktyvizacyi paneli menu"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:335
 msgid "Drag threshold"
 msgstr "Paroh pieraciahvańnia"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:336
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Kolkaść pikselaŭ, na jakuju moža zrušycca kursor pierad pačatkam "
 "pieraciahvańnia"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:344
 msgid "Font Name"
 msgstr "Nazva šryftu"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:345
 msgid "Name of default font to use"
 msgstr "Nazva zmoŭčanaha ŭžyvanaha šryftu"
 
-#: gtk/gtksettings.c:361
+#: gtk/gtksettings.c:367
 msgid "Icon Sizes"
 msgstr "Pamiery ikon"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:368
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Śpis pamieraŭ ikon (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:376
 msgid "GTK Modules"
 msgstr "Moduli GTK"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:377
 msgid "List of currently active GTK modules"
 msgstr "Śpis dziejna ŭžyvanych modulaŭ GTK"
 
-#: gtk/gtksettings.c:380
+#: gtk/gtksettings.c:386
 msgid "Xft Antialias"
 msgstr "Vyhładžvańnie Xft"
 
-#: gtk/gtksettings.c:381
+#: gtk/gtksettings.c:387
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Akreślivaje, ci vyhładžvać šryfty Xft; 0=nie, 1=tak, -1=zmoŭčany"
 
-#: gtk/gtksettings.c:390
+#: gtk/gtksettings.c:396
 msgid "Xft Hinting"
 msgstr "Hinting Xft"
 
-#: gtk/gtksettings.c:391
+#: gtk/gtksettings.c:397
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Akreślivaje, ci vykarystać hinting šryftoŭ Xft; 0=nie, 1=tak, -1=zmoŭčana"
 
-#: gtk/gtksettings.c:400
+#: gtk/gtksettings.c:406
 msgid "Xft Hint Style"
 msgstr "Styl hintingu Xft"
 
-#: gtk/gtksettings.c:401
+#: gtk/gtksettings.c:407
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Akreślivaje ŭzrovień užytaha hintingu; hintnone (niama), hintslight (lohki), "
 "hintmedium (siaredni), albo hintfull (poŭny)"
 
-#: gtk/gtksettings.c:410
+#: gtk/gtksettings.c:416
 msgid "Xft RGBA"
 msgstr "RGBA Xft"
 
-#: gtk/gtksettings.c:411
+#: gtk/gtksettings.c:417
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Typ vyhładžvańnia pikselaŭ; none (biez), rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:420
+#: gtk/gtksettings.c:426
 msgid "Xft DPI"
 msgstr "DPI Xft"
 
-#: gtk/gtksettings.c:421
+#: gtk/gtksettings.c:427
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Rezalucyja Xft, u 1024 * punkty/cal. -1 – vykarystańnie zmoŭčanaj vartaści"
 
-#: gtk/gtksettings.c:430
+#: gtk/gtksettings.c:436
 msgid "Cursor theme name"
 msgstr "Nazva matyvu kursora"
 
-#: gtk/gtksettings.c:431
+#: gtk/gtksettings.c:437
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Nazva ŭžyvanaha matyvu kursora, albo NULL, kab byŭ zmoŭčany"
 
-#: gtk/gtksettings.c:439
+#: gtk/gtksettings.c:445
 msgid "Cursor theme size"
 msgstr "Pamier matyvu kursora"
 
-#: gtk/gtksettings.c:440
+#: gtk/gtksettings.c:446
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Pamier, jakim karystajucca kursory, albo 0, kab byŭ zmoŭčany pamier"
 
-#: gtk/gtksettings.c:450
+#: gtk/gtksettings.c:456
 msgid "Alternative button order"
 msgstr "Alternatyŭnaje raspałažeńnie knopak"
 
-#: gtk/gtksettings.c:451
+#: gtk/gtksettings.c:457
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Akreślivaje, ci knopki ŭ voknach dyjalohu pavinny ŭžyvać alternatyŭnaha "
 "raspałažeńnia"
 
-#: gtk/gtksettings.c:468
+#: gtk/gtksettings.c:474
 msgid "Alternative sort indicator direction"
 msgstr "Alternatyŭnaje raspałažeńnie knopak"
 
-#: gtk/gtksettings.c:469
+#: gtk/gtksettings.c:475
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5418,11 +5427,11 @@ msgstr ""
 "Akreślivaje, ci napramak indykataraŭ sartavańnia śpisaŭ i drevaŭ nie "
 "źjaŭlajecca advarotnym, čym zmoŭčany (dzie strełka ŭniz aznačaje rost)"
 
-#: gtk/gtksettings.c:477
+#: gtk/gtksettings.c:483
 msgid "Show the 'Input Methods' menu"
 msgstr "Pakazvaj menu \"Metady ŭvodu\""
 
-#: gtk/gtksettings.c:478
+#: gtk/gtksettings.c:484
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -5430,11 +5439,11 @@ msgstr ""
 "Niešta ŭ kantekstnym menu albo vyhladzie tekstu pavinna prapanavać źmienu "
 "metadu ŭvodu źviestak"
 
-#: gtk/gtksettings.c:486
+#: gtk/gtksettings.c:492
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Pakazvaje menu \"Ustaŭ kiroŭny znak Unikodu\""
 
-#: gtk/gtksettings.c:487
+#: gtk/gtksettings.c:493
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -5442,225 +5451,225 @@ msgstr ""
 "Ci elementy kantekstnaha menu j vyhladaŭ tekstu pavinny dazvalać ustaŭku "
 "kiroŭnych znakaŭ"
 
-#: gtk/gtksettings.c:495
+#: gtk/gtksettings.c:501
 msgid "Start timeout"
 msgstr "Pačatak terminu čakańnia"
 
-#: gtk/gtksettings.c:496
+#: gtk/gtksettings.c:502
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Pačatkovaja vartaść dla terminaŭ čakańnia, kali klaviša nacisnutaja"
 
-#: gtk/gtksettings.c:505
+#: gtk/gtksettings.c:511
 msgid "Repeat timeout"
 msgstr "Paŭtary čakańnie"
 
-#: gtk/gtksettings.c:506
+#: gtk/gtksettings.c:512
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Paŭtaraje vartaść terminaŭ čakańnia, kali klaviša nacisnutaja"
 
-#: gtk/gtksettings.c:515
+#: gtk/gtksettings.c:521
 msgid "Expand timeout"
 msgstr "Pašyreńnie kanca"
 
-#: gtk/gtksettings.c:516
+#: gtk/gtksettings.c:522
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Pašyraje vartaść terminu čakańnia, kali widget pašyrajecca na novuju zonu"
 
-#: gtk/gtksettings.c:551
+#: gtk/gtksettings.c:557
 msgid "Color scheme"
 msgstr "Schiema koleraŭ"
 
-#: gtk/gtksettings.c:552
+#: gtk/gtksettings.c:558
 msgid "A palette of named colors for use in themes"
 msgstr "Palitra nazvanych koleraŭ dziela vykarystańnia ŭ jakaści fonu"
 
-#: gtk/gtksettings.c:561
+#: gtk/gtksettings.c:567
 msgid "Enable Animations"
 msgstr "Dazvol animacyju"
 
-#: gtk/gtksettings.c:562
+#: gtk/gtksettings.c:568
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Ci dazvalać animavanyja elementy interfejsu?"
 
-#: gtk/gtksettings.c:580
+#: gtk/gtksettings.c:586
 msgid "Enable Touchscreen Mode"
 msgstr "Dazvol režym Touchscreen"
 
-#: gtk/gtksettings.c:581
+#: gtk/gtksettings.c:587
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Kali PRAŬDA, na ekranie nie pajaŭlajucca paviedamleńni ab zdareńni ruchu"
 
-#: gtk/gtksettings.c:598
+#: gtk/gtksettings.c:604
 msgid "Tooltip timeout"
 msgstr "Čas demanstracyi padkazki"
 
-#: gtk/gtksettings.c:599
+#: gtk/gtksettings.c:605
 msgid "Timeout before tooltip is shown"
 msgstr "Praciahłaść demanstracyi padkazki"
 
-#: gtk/gtksettings.c:624
+#: gtk/gtksettings.c:630
 msgid "Tooltip browse timeout"
 msgstr "Praciahłaść demanstracyi padkazki padčas prahladańnia"
 
-#: gtk/gtksettings.c:625
+#: gtk/gtksettings.c:631
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "Praciahłaść demanstracyi padkazki ŭ režymie prahladańnia"
 
-#: gtk/gtksettings.c:646
+#: gtk/gtksettings.c:652
 msgid "Tooltip browse mode timeout"
 msgstr "Praciahłaść demanstracyi padkazki ŭ režymie prahladańnia"
 
-#: gtk/gtksettings.c:647
+#: gtk/gtksettings.c:653
 msgid "Timeout after which browse mode is disabled"
 msgstr "Čas, praź jaki ŭklučajecca režym prahladu"
 
-#: gtk/gtksettings.c:666
+#: gtk/gtksettings.c:672
 msgid "Keynav Cursor Only"
 msgstr "Tolki kursor navihacyi"
 
-#: gtk/gtksettings.c:667
+#: gtk/gtksettings.c:673
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Kali TRUE, dastupnyja tolki klavišy kursora dziela navihacyi pamiž widgetami"
 
-#: gtk/gtksettings.c:684
+#: gtk/gtksettings.c:690
 msgid "Keynav Wrap Around"
 msgstr "Zhortvańnie navihacyi kursoram"
 
-#: gtk/gtksettings.c:685
+#: gtk/gtksettings.c:691
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Akreślivaje, ci pieranosić kursor padčas navihacyi klavijaturaj"
 
-#: gtk/gtksettings.c:705
+#: gtk/gtksettings.c:711
 msgid "Error Bell"
 msgstr "Zvanok pamyłki"
 
-#: gtk/gtksettings.c:706
+#: gtk/gtksettings.c:712
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "Kali PRAŬDA, pry pamyłkach klavijaturnaj navihacyi razdajecca zvanok"
 
-#: gtk/gtksettings.c:723
+#: gtk/gtksettings.c:729
 msgid "Color Hash"
 msgstr "Hash koleru"
 
-#: gtk/gtksettings.c:724
+#: gtk/gtksettings.c:730
 msgid "A hash table representation of the color scheme."
 msgstr "Schiema koleraŭ, reprezentavanaja jak hash-tablica."
 
-#: gtk/gtksettings.c:732
+#: gtk/gtksettings.c:738
 msgid "Default file chooser backend"
 msgstr "Zmoŭčanaja padtrymka vybaru fajłaŭ"
 
-#: gtk/gtksettings.c:733
+#: gtk/gtksettings.c:739
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nazva zmoŭčana ŭžyvanaj padtrymki GtkFileChooser"
 
-#: gtk/gtksettings.c:750
+#: gtk/gtksettings.c:756
 msgid "Default print backend"
 msgstr "Zmoŭčanaja padtrymka drukarak"
 
-#: gtk/gtksettings.c:751
+#: gtk/gtksettings.c:757
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Śpis padtrymak GtkPrintBackend dziela zmoŭčanaha ŭžytku"
 
-#: gtk/gtksettings.c:774
+#: gtk/gtksettings.c:780
 msgid "Default command to run when displaying a print preview"
 msgstr "Zahad nievykanalny, pakul pakazvaje pieradahlad vydruku"
 
-#: gtk/gtksettings.c:775
+#: gtk/gtksettings.c:781
 msgid "Command to run when displaying a print preview"
 msgstr "Zahad zapusku pry pakazie pieradahladu vydruku"
 
-#: gtk/gtksettings.c:791
+#: gtk/gtksettings.c:797
 msgid "Enable Mnemonics"
 msgstr "Dazvol Mnemoniki"
 
-#: gtk/gtksettings.c:792
+#: gtk/gtksettings.c:798
 msgid "Whether labels should have mnemonics"
 msgstr "Akreślivaje, ci pavinny etykietki mieć mnemoniki"
 
-#: gtk/gtksettings.c:808
+#: gtk/gtksettings.c:814
 msgid "Enable Accelerators"
 msgstr "Dazvol akseleratary"
 
-#: gtk/gtksettings.c:809
+#: gtk/gtksettings.c:815
 msgid "Whether menu items should have accelerators"
 msgstr "Akreślivaje, ci elementy menu pavinny mieć akseleratary"
 
-#: gtk/gtksettings.c:826
+#: gtk/gtksettings.c:832
 msgid "Recent Files Limit"
 msgstr "Kolkaść niadaŭna ŭžyvanych fajłaŭ"
 
-#: gtk/gtksettings.c:827
+#: gtk/gtksettings.c:833
 msgid "Number of recently used files"
 msgstr "Kolkaść niadaŭna ŭžytych fajłaŭ"
 
-#: gtk/gtksettings.c:845
+#: gtk/gtksettings.c:851
 #, fuzzy
 msgid "Default IM module"
 msgstr "Zmoŭčanaja šyrynia"
 
-#: gtk/gtksettings.c:846
+#: gtk/gtksettings.c:852
 #, fuzzy
 msgid "Which IM module should be used by default"
 msgstr "Akreślivaje, ci pavinna być vykarystanaja palitra"
 
-#: gtk/gtksettings.c:864
+#: gtk/gtksettings.c:870
 #, fuzzy
 msgid "Recent Files Max Age"
 msgstr "Kolkaść niadaŭna ŭžyvanych fajłaŭ"
 
-#: gtk/gtksettings.c:865
+#: gtk/gtksettings.c:871
 #, fuzzy
 msgid "Maximum age of recently used files, in days"
 msgstr "Kolkaść niadaŭna ŭžytych fajłaŭ"
 
-#: gtk/gtksettings.c:874
+#: gtk/gtksettings.c:880
 msgid "Fontconfig configuration timestamp"
 msgstr ""
 
-#: gtk/gtksettings.c:875
+#: gtk/gtksettings.c:881
 msgid "Timestamp of current fontconfig configuration"
 msgstr ""
 
-#: gtk/gtksettings.c:897
+#: gtk/gtksettings.c:903
 #, fuzzy
 msgid "Sound Theme Name"
 msgstr "Nazva matyvu ikon"
 
-#: gtk/gtksettings.c:898
+#: gtk/gtksettings.c:904
 #, fuzzy
 msgid "XDG sound theme name"
 msgstr "Nazva matyvu kursora"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:920
+#: gtk/gtksettings.c:926
 msgid "Audible Input Feedback"
 msgstr ""
 
-#: gtk/gtksettings.c:921
+#: gtk/gtksettings.c:927
 #, fuzzy
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Akreślivaje, ci widget adkazvaje na zdareńni ŭvodu"
 
-#: gtk/gtksettings.c:942
+#: gtk/gtksettings.c:948
 #, fuzzy
 msgid "Enable Event Sounds"
 msgstr "Dazvol animacyju"
 
-#: gtk/gtksettings.c:943
+#: gtk/gtksettings.c:949
 #, fuzzy
 msgid "Whether to play any event sounds at all"
 msgstr "Akreślivaje, ci pavinien być pakazany stan \"supiarečny\""
 
-#: gtk/gtksettings.c:958
+#: gtk/gtksettings.c:964
 #, fuzzy
 msgid "Enable Tooltips"
 msgstr "Padkazki"
 
-#: gtk/gtksettings.c:959
+#: gtk/gtksettings.c:965
 #, fuzzy
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Akreślivaje, ci pakazvać zakładki pry natatniku"
@@ -7519,9 +7528,6 @@ msgstr "Sposab rysavańnia paneli stanu metadu ŭvodu"
 
 #~ msgid "Whether stock icons should be shown in buttons"
 #~ msgstr "Akreślivaje, ci na knopkach pavinny być bačnyja ikony"
-
-#~ msgid "Cancelled"
-#~ msgstr "Anulavanaja"
 
 #~ msgid "Whether or not the operation has been successfully cancelled"
 #~ msgstr "Akreślivaje, ci aperacyja była paśpiachova anulavanaja"

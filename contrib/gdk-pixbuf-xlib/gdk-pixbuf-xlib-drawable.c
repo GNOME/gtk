@@ -154,7 +154,7 @@ rgb1 (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	int bpl;
 	register guint8 data;
 	guint8 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	d (printf ("1 bits/pixel\n"));
 
@@ -191,7 +191,7 @@ rgb1a (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	int bpl;
 	register guint8 data;
 	guint8 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 	guint32 remap[2];
 
 	d (printf ("1 bits/pixel\n"));
@@ -241,7 +241,7 @@ rgb8 (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	int bpl;
 	guint32 mask;
 	register guint32 data;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 	register guint8 *s;
 	register guint8 *o;
 
@@ -282,7 +282,7 @@ rgb8a (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap)
 	guint32 remap[256];
 	register guint8 *s;	/* read 2 pixels at once */
 	register guint32 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -336,7 +336,7 @@ rgb565lsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	register guint8 *s;	/* read 2 pixels at once */
 #endif
 	register guint16 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -407,7 +407,7 @@ rgb565msb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	register guint32 *s;	/* read 2 pixels at once */
 #endif
 	register guint16 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -479,7 +479,7 @@ rgb565alsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 #endif
 	register guint32 *o;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -536,7 +536,7 @@ rgb565amsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 #endif
 	register guint32 *o;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -592,7 +592,7 @@ rgb555lsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	register guint8 *s;	/* read 2 pixels at once */
 #endif
 	register guint16 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -663,7 +663,7 @@ rgb555msb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	register guint32 *s;	/* read 2 pixels at once */
 #endif
 	register guint16 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -735,7 +735,7 @@ rgb555alsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 #endif
 	register guint32 *o;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -792,7 +792,7 @@ rgb555amsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 #endif
 	register guint32 *o;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -840,7 +840,7 @@ rgb888alsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 
 	guint8 *s;	/* for byte order swapping */
 	guint8 *o;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -871,7 +871,7 @@ rgb888lsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	int width, height;
 	int bpl;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 	guint8 *o, *s;
 
 	width = image->width;
@@ -901,7 +901,7 @@ rgb888amsb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colorma
 	int width, height;
 	int bpl;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 #ifdef LITTLE
 	guint32 *o;
 	guint32 *s;
@@ -949,7 +949,7 @@ rgb888msb (XImage *image, guchar *pixels, int rowstride, xlib_colormap *colormap
 	int width, height;
 	int bpl;
 
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 	guint8 *s;
 	guint8 *o;
 
@@ -983,7 +983,7 @@ convert_real_slow (XImage *image, guchar *pixels, int rowstride, xlib_colormap *
 	int xx, yy;
 	int width, height;
 	int bpl;
-	guint8 *srow = image->data, *orow = pixels;
+	guint8 *srow = (guint8 *)image->data, *orow = pixels;
 	guint8 *o;
 	guint32 pixel;
 	Visual *v;
@@ -1134,7 +1134,7 @@ xlib_window_is_viewable (Window w)
 
 	while (w != 0) {
 		Window parent, root, *children;
-		int nchildren;
+		guint nchildren;
 
 		XGetWindowAttributes (gdk_pixbuf_dpy, w, &wa);
 		if (wa.map_state != IsViewable)
@@ -1223,7 +1223,7 @@ gdk_pixbuf_xlib_get_from_drawable (GdkPixbuf *dest,
 				   int dest_x, int dest_y,
 				   int width, int height)
 {
-	int src_width, src_height;
+	guint src_width, src_height;
 	XImage *image;
 	int rowstride, bpp, alpha;
 	XWindowAttributes wa;
@@ -1260,7 +1260,8 @@ gdk_pixbuf_xlib_get_from_drawable (GdkPixbuf *dest,
 	    src_height = wa.height;
 	} else {
 	    Window root;
-	    int tx, ty, bwidth, depth;
+	    int tx, ty;
+	    guint bwidth, depth;
 	    XGetGeometry (gdk_pixbuf_dpy, src, &root, &tx, &ty,
 			  &src_width, &src_height, &bwidth, &depth);
 	}

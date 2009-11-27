@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:16-0400\n"
-"PO-Revision-Date: 2009-08-08 21:31+0300\n"
+"POT-Creation-Date: 2009-11-01 18:54-0500\n"
+"PO-Revision-Date: 2009-10-30 21:36+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -277,19 +277,19 @@ msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:975
-#: gdk-pixbuf/gdk-pixbuf-io.c:1235 tests/testfilechooser.c:222
+#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
+#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "فشل فتح الملف '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:987
+#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "لا يحتوي ملف الصورة '%s' على بيانات"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1023
-#: gdk-pixbuf/gdk-pixbuf-io.c:1287 tests/testfilechooser.c:267
+#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
+#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -304,12 +304,12 @@ msgstr ""
 "فشل تحميل الرسوم المتحرّكة '%s': السبب مجهول، ربما يكون ملف الرسوم المتحرّكة "
 "تالفًا"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:708
+#: gdk-pixbuf/gdk-pixbuf-io.c:715
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "تعذّر تحميل وحدة تحميل الصور: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:723
+#: gdk-pixbuf/gdk-pixbuf-io.c:730
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -317,64 +317,64 @@ msgid ""
 msgstr ""
 "وحدة تحميل الصور %s لا تصدّر الواجهة الصحيحة؛ قد تكون من إصدارة GTK مغايرة؟"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:732 gdk-pixbuf/gdk-pixbuf-io.c:783
+#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "نوع الصورة '%s' غير مدعوم"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:856
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "تعذّر تمييز صيغة ملف الصور للملف '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:864
+#: gdk-pixbuf/gdk-pixbuf-io.c:871
 msgid "Unrecognized image file format"
 msgstr "صيغة ملف صور تعذّر تمييزها"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1032
+#: gdk-pixbuf/gdk-pixbuf-io.c:1039
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "فشل تحميل الصورة '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/io-gdip-utils.c:953
+#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "فشلت الكتابة في ملف الصورة: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1711 gdk-pixbuf/gdk-pixbuf-io.c:1841
+#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "بناء gdk-pixbuf هذا لا يدعم الحفظ بصيغة الصور: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1745
+#: gdk-pixbuf/gdk-pixbuf-io.c:1752
 msgid "Insufficient memory to save image to callback"
 msgstr "ذاكرة غير كافية لحفظ الصورة إلى إعادة النداء (callback)"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1758
+#: gdk-pixbuf/gdk-pixbuf-io.c:1765
 msgid "Failed to open temporary file"
 msgstr "فشل فتح الملف المؤقّت"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1784
+#: gdk-pixbuf/gdk-pixbuf-io.c:1791
 msgid "Failed to read from temporary file"
 msgstr "فشلت القراءة من الملف المؤقّت"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2018
+#: gdk-pixbuf/gdk-pixbuf-io.c:2025
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "فشل فتح '%s' لكتابة: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2043
+#: gdk-pixbuf/gdk-pixbuf-io.c:2050
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "فشل غلق '%s' أثناء كتابة الصورة، ربما لم تُحفظ كل البيانات: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2263 gdk-pixbuf/gdk-pixbuf-io.c:2314
+#: gdk-pixbuf/gdk-pixbuf-io.c:2270 gdk-pixbuf/gdk-pixbuf-io.c:2321
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ذاكرة غير كافية لحفظ الصورة في براح"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2360
+#: gdk-pixbuf/gdk-pixbuf-io.c:2367
 msgid "Error writing to image stream"
 msgstr "فشلت الكتابة في دفق الصور"
 
@@ -1071,40 +1071,40 @@ msgstr "صيغة صور XPM"
 msgid "The EMF image format"
 msgstr "صيغة صور EMF"
 
-#: gdk-pixbuf/io-gdip-utils.c:220
+#: gdk-pixbuf/io-gdip-utils.c:232
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "تعذّر تحصيص ذاكرة: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:245 gdk-pixbuf/io-gdip-utils.c:359
-#: gdk-pixbuf/io-gdip-utils.c:395
+#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
+#: gdk-pixbuf/io-gdip-utils.c:411
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "تعذّر إنشاء الدفق: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:259
+#: gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "تعذّر الالتماس في الدفق: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: gdk-pixbuf/io-gdip-utils.c:283
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "تعذّر القراءة من الدفق: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:684 gdk-pixbuf/io-gdip-utils.c:816
+#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
 msgstr "تعذّر تحميل الصورة النقطية"
 
-#: gdk-pixbuf/io-gdip-utils.c:839
+#: gdk-pixbuf/io-gdip-utils.c:847
 msgid "Couldn't load metafile"
 msgstr "تعذّر تحميل ملف المعلومات الفوقية"
 
-#: gdk-pixbuf/io-gdip-utils.c:998
+#: gdk-pixbuf/io-gdip-utils.c:1006
 msgid "Unsupported image format for GDI+"
 msgstr "نسق صور لا يدعمه GDI+"
 
-#: gdk-pixbuf/io-gdip-utils.c:1005
+#: gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
 msgstr "تعذّر الحفظ"
 
@@ -1168,50 +1168,50 @@ msgstr[3] "يجري فتح %Id عناصر"
 msgstr[4] "يجري فتح %Id عنصرا"
 msgstr[5] "يجري فتح %Id عنصر"
 
-#: gtk/gtkaboutdialog.c:183
+#: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
 msgstr "تعذّر إظهار الوصلة"
 
-#: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2235
 msgid "License"
 msgstr "الترخيص"
 
-#: gtk/gtkaboutdialog.c:307
+#: gtk/gtkaboutdialog.c:366
 msgid "The license of the program"
 msgstr "ترخيص البرنامج"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:545
+#: gtk/gtkaboutdialog.c:604
 msgid "C_redits"
 msgstr "_شكْر"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:559
+#: gtk/gtkaboutdialog.c:618
 msgid "_License"
 msgstr "ال_ترخيص"
 
-#: gtk/gtkaboutdialog.c:827
+#: gtk/gtkaboutdialog.c:886
 #, c-format
 msgid "About %s"
 msgstr "عنْ %s"
 
-#: gtk/gtkaboutdialog.c:2123
+#: gtk/gtkaboutdialog.c:2158
 msgid "Credits"
 msgstr "إشادات"
 
-#: gtk/gtkaboutdialog.c:2152
+#: gtk/gtkaboutdialog.c:2187
 msgid "Written by"
 msgstr "كتَبَهُ"
 
-#: gtk/gtkaboutdialog.c:2155
+#: gtk/gtkaboutdialog.c:2190
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: gtk/gtkaboutdialog.c:2167
+#: gtk/gtkaboutdialog.c:2202
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: gtk/gtkaboutdialog.c:2171
+#: gtk/gtkaboutdialog.c:2206
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 
@@ -1557,7 +1557,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3215
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3226
 msgid "Manage Custom Sizes"
 msgstr "أدِر المقاسات المخصّصة"
 
@@ -1610,15 +1610,15 @@ msgstr "_يمين:"
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
 msgid "Input _Methods"
 msgstr "طرق ال_إدخال"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
 msgid "_Insert Unicode Control Character"
 msgstr "أ_درج محرف تحكم يونيكود"
 
-#: gtk/gtkentry.c:9975
+#: gtk/gtkentry.c:9985
 msgid "Caps Lock is on"
 msgstr "زر الحروف العالية مفعّل"
 
@@ -1626,7 +1626,7 @@ msgstr "زر الحروف العالية مفعّل"
 msgid "Select A File"
 msgstr "اختر ملفًا"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1933
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1849
 msgid "Desktop"
 msgstr "سطح المكتب"
 
@@ -1642,23 +1642,23 @@ msgstr "أخرى..."
 msgid "Type name of new folder"
 msgstr "اكتب اسما للمجلد الجديد"
 
-#: gtk/gtkfilechooserdefault.c:1059
+#: gtk/gtkfilechooserdefault.c:975
 msgid "Could not retrieve information about the file"
 msgstr "تعذّر جلب معلومات عن الملف"
 
-#: gtk/gtkfilechooserdefault.c:1070
+#: gtk/gtkfilechooserdefault.c:986
 msgid "Could not add a bookmark"
 msgstr "تعذّر إضافة علامة"
 
-#: gtk/gtkfilechooserdefault.c:1081
+#: gtk/gtkfilechooserdefault.c:997
 msgid "Could not remove bookmark"
 msgstr "تعذّر حذف العلامة"
 
-#: gtk/gtkfilechooserdefault.c:1092
+#: gtk/gtkfilechooserdefault.c:1008
 msgid "The folder could not be created"
 msgstr "تعذّر إنشاء المجلّد"
 
-#: gtk/gtkfilechooserdefault.c:1105
+#: gtk/gtkfilechooserdefault.c:1021
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1666,11 +1666,11 @@ msgstr ""
 "تعذّر إنشاء المجلد بسبب وجود ملف يحمل نفس الاسم. حاول استخدام اسم آخر للمجلد، "
 "أو غيّر اسم الملف أولا."
 
-#: gtk/gtkfilechooserdefault.c:1116
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "Invalid file name"
 msgstr "اسم ملف غير صالح"
 
-#: gtk/gtkfilechooserdefault.c:1126
+#: gtk/gtkfilechooserdefault.c:1042
 msgid "The folder contents could not be displayed"
 msgstr "تعذّر عرض محتويات المجلد."
 
@@ -1678,209 +1678,218 @@ msgstr "تعذّر عرض محتويات المجلد."
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1676
+#: gtk/gtkfilechooserdefault.c:1592
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s على %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1852
+#: gtk/gtkfilechooserdefault.c:1768
 msgid "Search"
 msgstr "ابحث"
 
-#: gtk/gtkfilechooserdefault.c:1876 gtk/gtkfilechooserdefault.c:10347
+#: gtk/gtkfilechooserdefault.c:1792 gtk/gtkfilechooserdefault.c:9456
 msgid "Recently Used"
 msgstr "مستخدمة مؤخرا"
 
-#: gtk/gtkfilechooserdefault.c:2512
+#: gtk/gtkfilechooserdefault.c:2428
 msgid "Select which types of files are shown"
 msgstr "اختر أنواع الملفات التي ستعرض"
 
-#: gtk/gtkfilechooserdefault.c:2941
+#: gtk/gtkfilechooserdefault.c:2787
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "أضِف المجلّد '%s' إلى العلامات"
 
-#: gtk/gtkfilechooserdefault.c:2982
+#: gtk/gtkfilechooserdefault.c:2831
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "أضِف المجلّد الحالي إلى العلامات"
 
-#: gtk/gtkfilechooserdefault.c:2984
+#: gtk/gtkfilechooserdefault.c:2833
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "أضِف المجلدات المحددة إلى العلامات"
 
-#: gtk/gtkfilechooserdefault.c:3022
+#: gtk/gtkfilechooserdefault.c:2871
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "احذِف العلامة '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3024
+#: gtk/gtkfilechooserdefault.c:2873
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "لا يمكن إزالة العلامة '%s'"
 
-#: gtk/gtkfilechooserdefault.c:3031 gtk/gtkfilechooserdefault.c:4057
+#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilechooserdefault.c:3906
 msgid "Remove the selected bookmark"
 msgstr "احذِف العلامة المحددة"
 
-#: gtk/gtkfilechooserdefault.c:3753
+#: gtk/gtkfilechooserdefault.c:3602
 msgid "Remove"
 msgstr "احذف"
 
-#: gtk/gtkfilechooserdefault.c:3762
+#: gtk/gtkfilechooserdefault.c:3611
 msgid "Rename..."
 msgstr "غيّر الاسم..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3925
+#: gtk/gtkfilechooserdefault.c:3774
 msgid "Places"
 msgstr "أماكن"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3982
+#: gtk/gtkfilechooserdefault.c:3831
 msgid "_Places"
 msgstr "أ_ماكن"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:3887
 msgid "_Add"
 msgstr "أ_ضف"
 
-#: gtk/gtkfilechooserdefault.c:4045
+#: gtk/gtkfilechooserdefault.c:3894
 msgid "Add the selected folder to the Bookmarks"
 msgstr "أضِف المجلد المحدد للعلامات"
 
-#: gtk/gtkfilechooserdefault.c:4050
+#: gtk/gtkfilechooserdefault.c:3899
 msgid "_Remove"
 msgstr "ا_حذِف"
 
-#: gtk/gtkfilechooserdefault.c:4186
+#: gtk/gtkfilechooserdefault.c:4034
 msgid "Could not select file"
 msgstr "تعذّر اختيار الملف"
 
-#: gtk/gtkfilechooserdefault.c:4361
+#: gtk/gtkfilechooserdefault.c:4209
 msgid "_Add to Bookmarks"
 msgstr "أ_ضف للعلامات"
 
-#: gtk/gtkfilechooserdefault.c:4374
+#: gtk/gtkfilechooserdefault.c:4222
 msgid "Show _Hidden Files"
 msgstr "أظهر الملفات ال_مخفيّة"
 
-#: gtk/gtkfilechooserdefault.c:4381
+#: gtk/gtkfilechooserdefault.c:4229
 msgid "Show _Size Column"
 msgstr "أظهر _عمود الحجم"
 
-#: gtk/gtkfilechooserdefault.c:4673 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4449 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ملفات"
 
-#: gtk/gtkfilechooserdefault.c:4722
+#: gtk/gtkfilechooserdefault.c:4500
 msgid "Name"
 msgstr "الا_سم"
 
-#: gtk/gtkfilechooserdefault.c:4747
+#: gtk/gtkfilechooserdefault.c:4523
 msgid "Size"
 msgstr "الحجم"
 
-#: gtk/gtkfilechooserdefault.c:4763
+#: gtk/gtkfilechooserdefault.c:4537
 msgid "Modified"
 msgstr "معدّل"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:5019 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4792 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "الا_سم:"
 
-#: gtk/gtkfilechooserdefault.c:5062
+#: gtk/gtkfilechooserdefault.c:4835
 msgid "_Browse for other folders"
 msgstr "_تصفّح لأدلّة أخرى"
 
-#: gtk/gtkfilechooserdefault.c:5334
+#: gtk/gtkfilechooserdefault.c:5107
 msgid "Type a file name"
 msgstr "اكتب اسم ملف"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5375
+#: gtk/gtkfilechooserdefault.c:5148
 msgid "Create Fo_lder"
 msgstr "أنشئ _مجلّدًا"
 
-#: gtk/gtkfilechooserdefault.c:5385
+#: gtk/gtkfilechooserdefault.c:5158
 msgid "_Location:"
 msgstr "ال_موقع:"
 
-#: gtk/gtkfilechooserdefault.c:5589
+#: gtk/gtkfilechooserdefault.c:5362
 msgid "Save in _folder:"
 msgstr "احفظ في ال_مجلّد:"
 
-#: gtk/gtkfilechooserdefault.c:5591
+#: gtk/gtkfilechooserdefault.c:5364
 msgid "Create in _folder:"
 msgstr "أنشئ في ال_مجلّد:"
 
-#: gtk/gtkfilechooserdefault.c:7347
+#: gtk/gtkfilechooserdefault.c:6430
+#, c-format
+msgid "Could not read the contents of %s"
+msgstr "تعذّرت قراءة محتويات %s"
+
+#: gtk/gtkfilechooserdefault.c:6434
+msgid "Could not read the contents of the folder"
+msgstr "تعذّرت قراءة محتويات المجلّد"
+
+#: gtk/gtkfilechooserdefault.c:6525 gtk/gtkfilechooserdefault.c:6593
+#: gtk/gtkfilechooserdefault.c:6738
+msgid "Unknown"
+msgstr "مجهول"
+
+#: gtk/gtkfilechooserdefault.c:6540
+msgid "%H:%M"
+msgstr "%OH:%OM"
+
+#: gtk/gtkfilechooserdefault.c:6542
+msgid "Yesterday at %H:%M"
+msgstr "أمس في %OH:%OM"
+
+#: gtk/gtkfilechooserdefault.c:7209
 msgid "Cannot change to folder because it is not local"
 msgstr "تعذّر الانتقال إلى المجلّد لأنه غير محلي"
 
-#: gtk/gtkfilechooserdefault.c:7972 gtk/gtkfilechooserdefault.c:7993
+#: gtk/gtkfilechooserdefault.c:7806 gtk/gtkfilechooserdefault.c:7827
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "الاختصار %s موجود مسبقا"
 
-#: gtk/gtkfilechooserdefault.c:8083
+#: gtk/gtkfilechooserdefault.c:7917
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "الاختصار %s غير موجود"
 
-#: gtk/gtkfilechooserdefault.c:8345 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8172 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "هناك ملف باسم \"%s\" موجود حاليا. أتريد استبداله؟"
 
-#: gtk/gtkfilechooserdefault.c:8348 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8175 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "الملف موجود بالفعل في  \"%s\". استبداله سيكتب فوق محتواه."
 
-#: gtk/gtkfilechooserdefault.c:8353 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8180 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "است_بدِل"
 
-#: gtk/gtkfilechooserdefault.c:9115
+#: gtk/gtkfilechooserdefault.c:8824
 msgid "Could not start the search process"
 msgstr "تعذّر تشغيل عملية البحث"
 
-#: gtk/gtkfilechooserdefault.c:9116
+#: gtk/gtkfilechooserdefault.c:8825
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "لم يمكن للبرنامج أن ينشئ اتصالا بخادوم الفهرسة. الرجاء التأكد من أنه مشتغل."
 
-#: gtk/gtkfilechooserdefault.c:9130
+#: gtk/gtkfilechooserdefault.c:8839
 msgid "Could not send the search request"
 msgstr "تعذّر إرسال طلب البحث"
 
-#: gtk/gtkfilechooserdefault.c:9608
+#: gtk/gtkfilechooserdefault.c:9028
 msgid "Search:"
 msgstr "ابحث:"
 
-#: gtk/gtkfilechooserdefault.c:10591
+#: gtk/gtkfilechooserdefault.c:9632
 #, c-format
 msgid "Could not mount %s"
 msgstr "تعذّر وصْل %s"
-
-#: gtk/gtkfilechooserdefault.c:11449 gtk/gtkfilechooserdefault.c:11471
-#: gtk/gtkfilechooserdefault.c:11542
-msgid "Unknown"
-msgstr "مجهول"
-
-#: gtk/gtkfilechooserdefault.c:11489
-msgid "%H:%M"
-msgstr "%OH:%OM"
-
-#: gtk/gtkfilechooserdefault.c:11491
-msgid "Yesterday at %H:%M"
-msgstr "أمس في %OH:%OM"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
@@ -2083,14 +2092,6 @@ msgstr "تعذّر تحويل اسم الملف"
 msgid "File System"
 msgstr "نظام ملفات"
 
-#: gtk/gtkfilesystemmodel.c:700
-msgid "Could not obtain root folder"
-msgstr "تعذّر معرفة المجلّد الجذر"
-
-#: gtk/gtkfilesystemmodel.c:1301
-msgid "(Empty)"
-msgstr "(فارغ)"
-
 #: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "اختر خطًا"
@@ -2131,11 +2132,11 @@ msgstr "_معاينة:"
 msgid "Font Selection"
 msgstr "اختيار الخط"
 
-#: gtk/gtkgamma.c:408
+#: gtk/gtkgamma.c:410
 msgid "Gamma"
 msgstr "غاما"
 
-#: gtk/gtkgamma.c:418
+#: gtk/gtkgamma.c:420
 msgid "_Gamma value"
 msgstr "قيمة _غاما"
 
@@ -2264,12 +2265,12 @@ msgid "Cl_ear"
 msgstr "ا_مسح"
 
 #. Open Link
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5527
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5541
+#: gtk/gtklabel.c:5539
 msgid "Copy _Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
@@ -2311,20 +2312,20 @@ msgstr "شارات تنقيح ج‌ت‌ك+ التي ستُصفّر"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:709
+#: gtk/gtkmain.c:711
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "غير قادر على فتح العرض: %s"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:813
 msgid "GTK+ Options"
 msgstr "خيارات ج‌ت‌ك+"
 
-#: gtk/gtkmain.c:812
+#: gtk/gtkmain.c:813
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات ج‌ت‌ك+"
 
@@ -2369,12 +2370,12 @@ msgstr "تذكر للأب_د"
 msgid "Unknown Application (pid %d)"
 msgstr "تطبيق مجهول (معرف العملية %d)"
 
-#: gtk/gtkmountoperation.c:1063
+#: gtk/gtkmountoperation.c:1064
 #, c-format
 msgid "Unable to end process"
 msgstr "تعذّر إنهاء العملية"
 
-#: gtk/gtkmountoperation.c:1100
+#: gtk/gtkmountoperation.c:1101
 msgid "_End Process"
 msgstr "أ_نه العملية"
 
@@ -2441,7 +2442,7 @@ msgstr ""
 "فوق: %s %s\n"
 "تحت: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3266
+#: gtk/gtkpagesetupunixdialog.c:847 gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "أدِر المقاسات المخصّصة..."
 
@@ -2449,7 +2450,7 @@ msgstr "أدِر المقاسات المخصّصة..."
 msgid "_Format for:"
 msgstr "_صيغة:"
 
-#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3438
+#: gtk/gtkpagesetupunixdialog.c:917 gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "_مقاس الورقة:"
 
@@ -2457,7 +2458,7 @@ msgstr "_مقاس الورقة:"
 msgid "_Orientation:"
 msgstr "الا_تجاه:"
 
-#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3500
+#: gtk/gtkpagesetupunixdialog.c:1012 gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
@@ -2489,154 +2490,153 @@ msgstr "ا_حفظ في مجلّد:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:186
+#: gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
 msgstr "%s مهمّة #%Id"
 
-#: gtk/gtkprintoperation.c:1644
+#: gtk/gtkprintoperation.c:1687
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "الحالة الأولية"
 
-#: gtk/gtkprintoperation.c:1645
+#: gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "يحضّر للطباعة"
 
-#: gtk/gtkprintoperation.c:1646
+#: gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "يولّد البيانات"
 
-#: gtk/gtkprintoperation.c:1647
+#: gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "يرسل البيانات"
 
-#: gtk/gtkprintoperation.c:1648
+#: gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "ينتظر"
 
-#: gtk/gtkprintoperation.c:1649
+#: gtk/gtkprintoperation.c:1692
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "متعطّل بسبب مشكلة"
 
-#: gtk/gtkprintoperation.c:1650
+#: gtk/gtkprintoperation.c:1693
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "يطبع"
 
-#: gtk/gtkprintoperation.c:1651
+#: gtk/gtkprintoperation.c:1694
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ينهي"
 
-#: gtk/gtkprintoperation.c:1652
+#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "تم مع خطأ"
 
-#: gtk/gtkprintoperation.c:2234
+#: gtk/gtkprintoperation.c:2254
 #, c-format
 msgid "Preparing %d"
 msgstr "يحضّر %Id"
 
-#: gtk/gtkprintoperation.c:2236 gtk/gtkprintoperation.c:2846
+#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
 #, c-format
 msgid "Preparing"
 msgstr "يحضّر"
 
-#: gtk/gtkprintoperation.c:2239
+#: gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Printing %d"
 msgstr "يطبع %Id"
 
-#: gtk/gtkprintoperation.c:2876
+#: gtk/gtkprintoperation.c:2905
 #, c-format
 msgid "Error creating print preview"
 msgstr "حدث خطأ أثناء إنشاء معاينة الطباعة"
 
-#: gtk/gtkprintoperation.c:2879
+#: gtk/gtkprintoperation.c:2908
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "السبب الأكثر احتمالاً هو عدم القدرة على إنشاء ملف مؤقت."
 
-#: gtk/gtkprintoperation-unix.c:282
+#: gtk/gtkprintoperation-unix.c:302
 #, c-format
 msgid "Error launching preview"
 msgstr "حدث خطأ أثناء بدء المعاينة"
 
-#: gtk/gtkprintoperation-unix.c:326
+#: gtk/gtkprintoperation-unix.c:346
 #, c-format
 msgid "Error printing"
 msgstr "حدث خطأ أثناء الطبع"
 
-#: gtk/gtkprintoperation-unix.c:462 gtk/gtkprintoperation-win32.c:1425
+#: gtk/gtkprintoperation-unix.c:482 gtk/gtkprintoperation-win32.c:1430
 msgid "Application"
 msgstr "تطبيق"
 
-#: gtk/gtkprintoperation-win32.c:590
+#: gtk/gtkprintoperation-win32.c:595
 msgid "Printer offline"
 msgstr "الطابعة غير متصلة"
 
-#: gtk/gtkprintoperation-win32.c:592
+#: gtk/gtkprintoperation-win32.c:597
 msgid "Out of paper"
 msgstr "نَفَذ الورق"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:594
+#: gtk/gtkprintoperation-win32.c:599
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "أُلبِث"
 
-#: gtk/gtkprintoperation-win32.c:596
+#: gtk/gtkprintoperation-win32.c:601
 msgid "Need user intervention"
 msgstr "بحاجة لتدخّل المستخدم"
 
-#: gtk/gtkprintoperation-win32.c:696
+#: gtk/gtkprintoperation-win32.c:701
 msgid "Custom size"
 msgstr "مقاس مخصصّ"
 
-#: gtk/gtkprintoperation-win32.c:1517
+#: gtk/gtkprintoperation-win32.c:1522
 msgid "No printer found"
 msgstr "لم يُعثر على أي طابعة"
 
-#: gtk/gtkprintoperation-win32.c:1544
+#: gtk/gtkprintoperation-win32.c:1549
 msgid "Invalid argument to CreateDC"
 msgstr "معطى غير صحيح لـ CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1578 gtk/gtkprintoperation-win32.c:1803
+#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
 msgid "Error from StartDoc"
 msgstr "خطأ من StartDoc "
 
-#: gtk/gtkprintoperation-win32.c:1660 gtk/gtkprintoperation-win32.c:1683
-#: gtk/gtkprintoperation-win32.c:1731
+#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
+#: gtk/gtkprintoperation-win32.c:1736
 msgid "Not enough free memory"
 msgstr "الذاكرة الخالية لا تكفي"
 
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1741
 msgid "Invalid argument to PrintDlgEx"
 msgstr "معطى غير صحيح لـ PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1746
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "مؤشّر غير صحيح ل PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1751
 msgid "Invalid handle to PrintDlgEx"
 msgstr "معالج غير صحيح ل PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1756
 msgid "Unspecified error"
 msgstr "خطأ غير محدد"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "يجلب معلومات الطابعة..."
+msgstr "فشل جلب معلومات الطابعة"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -2779,104 +2779,104 @@ msgstr "من الأعلى للأسفل"
 msgid "Bottom to top"
 msgstr "من الأسفل للأعلى"
 
-#: gtk/gtkprintunixdialog.c:3289
+#: gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
 msgstr "التصميم"
 
-#: gtk/gtkprintunixdialog.c:3293
+#: gtk/gtkprintunixdialog.c:3304
 msgid "T_wo-sided:"
 msgstr "ذو _وجهين:"
 
-#: gtk/gtkprintunixdialog.c:3308
+#: gtk/gtkprintunixdialog.c:3319
 msgid "Pages per _side:"
 msgstr "الصفحات لكل _جهة:"
 
-#: gtk/gtkprintunixdialog.c:3325
+#: gtk/gtkprintunixdialog.c:3336
 msgid "Page or_dering:"
 msgstr "_ترتيب الصفحات:"
 
-#: gtk/gtkprintunixdialog.c:3341
+#: gtk/gtkprintunixdialog.c:3352
 msgid "_Only print:"
 msgstr "اطبع _فقط:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3356
+#: gtk/gtkprintunixdialog.c:3367
 msgid "All sheets"
 msgstr "كل الورقات"
 
-#: gtk/gtkprintunixdialog.c:3357
+#: gtk/gtkprintunixdialog.c:3368
 msgid "Even sheets"
 msgstr "الورقات الزوجية"
 
-#: gtk/gtkprintunixdialog.c:3358
+#: gtk/gtkprintunixdialog.c:3369
 msgid "Odd sheets"
 msgstr "الورقات الفردية"
 
-#: gtk/gtkprintunixdialog.c:3361
+#: gtk/gtkprintunixdialog.c:3372
 msgid "Sc_ale:"
 msgstr "_المقياس:"
 
-#: gtk/gtkprintunixdialog.c:3388
+#: gtk/gtkprintunixdialog.c:3399
 msgid "Paper"
 msgstr "ورق"
 
-#: gtk/gtkprintunixdialog.c:3392
+#: gtk/gtkprintunixdialog.c:3403
 msgid "Paper _type:"
 msgstr "نوع الورق:"
 
-#: gtk/gtkprintunixdialog.c:3407
+#: gtk/gtkprintunixdialog.c:3418
 msgid "Paper _source:"
 msgstr "_مصدر الورق:"
 
-#: gtk/gtkprintunixdialog.c:3422
+#: gtk/gtkprintunixdialog.c:3433
 msgid "Output t_ray:"
 msgstr "_لوحة الخرْج:"
 
-#: gtk/gtkprintunixdialog.c:3462
+#: gtk/gtkprintunixdialog.c:3473
 msgid "Or_ientation:"
 msgstr "الا_تجاه:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3477
+#: gtk/gtkprintunixdialog.c:3488
 msgid "Portrait"
 msgstr "طوليّ"
 
-#: gtk/gtkprintunixdialog.c:3478
+#: gtk/gtkprintunixdialog.c:3489
 msgid "Landscape"
 msgstr "عرضيّ"
 
-#: gtk/gtkprintunixdialog.c:3479
+#: gtk/gtkprintunixdialog.c:3490
 msgid "Reverse portrait"
 msgstr "طوليّ مقلوب"
 
-#: gtk/gtkprintunixdialog.c:3480
+#: gtk/gtkprintunixdialog.c:3491
 msgid "Reverse landscape"
 msgstr "عرضيّ مقلوب"
 
-#: gtk/gtkprintunixdialog.c:3525
+#: gtk/gtkprintunixdialog.c:3536
 msgid "Job Details"
 msgstr "تفاصيل المهمّة"
 
-#: gtk/gtkprintunixdialog.c:3531
+#: gtk/gtkprintunixdialog.c:3542
 msgid "Pri_ority:"
 msgstr "الأو_لوية:"
 
-#: gtk/gtkprintunixdialog.c:3546
+#: gtk/gtkprintunixdialog.c:3557
 msgid "_Billing info:"
 msgstr " _معلومات الدفع:"
 
-#: gtk/gtkprintunixdialog.c:3564
+#: gtk/gtkprintunixdialog.c:3575
 msgid "Print Document"
 msgstr "اطبع المستند"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3573
+#: gtk/gtkprintunixdialog.c:3584
 msgid "_Now"
 msgstr "الآ_ن"
 
-#: gtk/gtkprintunixdialog.c:3584
+#: gtk/gtkprintunixdialog.c:3595
 msgid "A_t:"
 msgstr "_في:"
 
@@ -2884,7 +2884,7 @@ msgstr "_في:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3590
+#: gtk/gtkprintunixdialog.c:3601
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2892,73 +2892,77 @@ msgstr ""
 "حدد وقت الطباعة،\n"
 "مثلا: 15:30، 2:35 م، 14:15:20، 11:46:30 ص، 4 م"
 
-#: gtk/gtkprintunixdialog.c:3600
+#: gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
 msgstr "وقت الطباعة"
 
-#: gtk/gtkprintunixdialog.c:3616
+#: gtk/gtkprintunixdialog.c:3627
 msgid "On _hold"
 msgstr "قيد الان_تظار"
 
-#: gtk/gtkprintunixdialog.c:3617
+#: gtk/gtkprintunixdialog.c:3628
 msgid "Hold the job until it is explicitly released"
 msgstr "احجز المهمّة حتّى تطلق صراحة"
 
-#: gtk/gtkprintunixdialog.c:3637
+#: gtk/gtkprintunixdialog.c:3648
 msgid "Add Cover Page"
 msgstr "أضِف صفحة غلاف"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3646
+#: gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "ق_بل:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3664
+#: gtk/gtkprintunixdialog.c:3675
 msgid "_After:"
 msgstr "ب_عد:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3682
+#: gtk/gtkprintunixdialog.c:3693
 msgid "Job"
 msgstr "مَهمّة"
 
-#: gtk/gtkprintunixdialog.c:3748
+#: gtk/gtkprintunixdialog.c:3759
 msgid "Advanced"
 msgstr "متقدّم"
 
-#: gtk/gtkprintunixdialog.c:3782
+#. Translators: this will appear as tab label in print dialog.
+#: gtk/gtkprintunixdialog.c:3794
 msgid "Image Quality"
 msgstr "جودة الصورة"
 
-#: gtk/gtkprintunixdialog.c:3785
+#. Translators: this will appear as tab label in print dialog.
+#: gtk/gtkprintunixdialog.c:3798
 msgid "Color"
 msgstr "اللون"
 
-#: gtk/gtkprintunixdialog.c:3788
+#. Translators: this will appear as tab label in print dialog.
+#. It's a typographical term, as in "Binding and finishing"
+#: gtk/gtkprintunixdialog.c:3803
 msgid "Finishing"
 msgstr "يجري الإنهاء"
 
-#: gtk/gtkprintunixdialog.c:3798
+#: gtk/gtkprintunixdialog.c:3813
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعض الإعدادات في الحوار تتعارض"
 
-#: gtk/gtkprintunixdialog.c:3821
+#: gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "اطبع"
 
-#: gtk/gtkrc.c:2874
+#: gtk/gtkrc.c:2878
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "تعذّر العثور على ملف الاحتواء: \"%s\""
 
-#: gtk/gtkrc.c:3502 gtk/gtkrc.c:3505
+#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "تعذّر إيجاد موقع ملف الصورة في pixmap_path: \"%s\""
@@ -3062,23 +3066,31 @@ msgstr "%Id. %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "لا يُمكن العثور على عنصر بالعنوان '%s'"
 
+#: gtk/gtkspinner.c:454
+msgid "Spinner"
+msgstr "دوّارة"
+
+#: gtk/gtkspinner.c:455
+msgid "Provides visual status"
+msgstr "يوفر حالة مرئية"
+
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:288
+#: gtk/gtkstock.c:289
 msgctxt "Stock label"
 msgid "Information"
 msgstr "معلومات"
 
-#: gtk/gtkstock.c:289
+#: gtk/gtkstock.c:290
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "تحذير"
 
-#: gtk/gtkstock.c:290
+#: gtk/gtkstock.c:291
 msgctxt "Stock label"
 msgid "Error"
 msgstr "خطأ"
 
-#: gtk/gtkstock.c:291
+#: gtk/gtkstock.c:292
 msgctxt "Stock label"
 msgid "Question"
 msgstr "سؤال"
@@ -3086,477 +3098,477 @@ msgstr "سؤال"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:296
+#: gtk/gtkstock.c:297
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_عنْ"
 
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:298
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "أ_ضف"
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:299
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_طبّق"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:300
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_عريض"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:301
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "أل_غِ"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:302
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "ا_سطوانة"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:303
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "ا_مسح"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:304
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "أ_غلق"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:305
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "ا_تّصل"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:306
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_حوّل"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:307
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "ا_نسخ"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:308
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_قصّ"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:309
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "ا_حذف"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:310
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "ت_جاهل"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:311
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "ا_قطع الاتصال"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_نفِّذ"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_حرِّر"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "ا_بحث"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "ابحث وا_ستبدِل"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ق_رص مرن"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "ملء ال_شاشة"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_غادر ملء الشاشة"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_قعر"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "أ_ول"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "آ_خر"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_قمة"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "خل_ف"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "أ_سفل"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "أ_مام"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "ف_وق"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "قرص _صلب"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_مساعدة"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "ال_منزل"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "زِد المحاذاة"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "اخفض المحاذاة"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_فهرس"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_معلومات"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_مائل"
 
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "ا_قفز إلى"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:344
+#: gtk/gtkstock.c:345
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_وسّط"
 
 #. This is about text justification
-#: gtk/gtkstock.c:346
+#: gtk/gtkstock.c:347
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "ا_ملأ"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:348
+#: gtk/gtkstock.c:349
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_يسار"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:350
+#: gtk/gtkstock.c:351
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "ي_مين"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:353
+#: gtk/gtkstock.c:354
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "أ_مام"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:355
+#: gtk/gtkstock.c:356
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_جديد"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:357
+#: gtk/gtkstock.c:358
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "أُلبِ_ث"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:359
+#: gtk/gtkstock.c:360
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_شغّل"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:361
+#: gtk/gtkstock.c:362
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ال_سابق"
 
 #. Media label
-#: gtk/gtkstock.c:363
+#: gtk/gtkstock.c:364
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "س_جّل"
 
 #. Media label
-#: gtk/gtkstock.c:365
+#: gtk/gtkstock.c:366
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_رجوع"
 
 #. Media label
-#: gtk/gtkstock.c:367
+#: gtk/gtkstock.c:368
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_قف"
 
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:369
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_شبكة"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_جديد"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_لا"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_نعم"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "ا_فتح"
 
 #. Page orientation
-#: gtk/gtkstock.c:374
+#: gtk/gtkstock.c:375
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "عرضيّ"
 
 #. Page orientation
-#: gtk/gtkstock.c:376
+#: gtk/gtkstock.c:377
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "طوليّ"
 
 #. Page orientation
-#: gtk/gtkstock.c:378
+#: gtk/gtkstock.c:379
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "عرضيّ مقلوب"
 
 #. Page orientation
-#: gtk/gtkstock.c:380
+#: gtk/gtkstock.c:381
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "طوليّ مقلوب"
 
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:382
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "إعداد ال_صفحة"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:383
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "ا_لصق"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:384
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_التفضيلات"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:385
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "ا_طبع"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:386
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_معاينة الطباعة"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_الخصائص"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:388
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "أ_نهِ"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:389
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "أ_عد"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:390
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_حدِّث"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:391
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "ا_حذِف"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:392
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "ا_عكس"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:393
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "ا_حفظ"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "احفظ با_سم"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "اختر ال_كل"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_اللون"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_الخط"
 
 #. Sorting direction
-#: gtk/gtkstock.c:398
+#: gtk/gtkstock.c:399
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_تصاعدي"
 
 #. Sorting direction
-#: gtk/gtkstock.c:400
+#: gtk/gtkstock.c:401
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_تنازلي"
 
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_تدقيق إملائي"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:403
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_قف"
 
 #. Font variant
-#: gtk/gtkstock.c:404
+#: gtk/gtkstock.c:405
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "اش_طب"
 
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_تراجع عن الحذف"
 
 #. Font variant
-#: gtk/gtkstock.c:407
+#: gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_سطِّر"
 
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_تراجع"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_نعم"
 
 #. Zoom
-#: gtk/gtkstock.c:411
+#: gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_الحجم العادي"
 
 #. Zoom
-#: gtk/gtkstock.c:413
+#: gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "أفضل _ملاءمة"
 
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_قرّب"
 
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_بعّد"
@@ -4823,24 +4835,22 @@ msgid "Authentication is required on %s"
 msgstr "الاستيثاق مطلوب على %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "الن_طاق:"
+msgstr "النطاق:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "الاستيثاق مطلوب لطبع مستند على %s"
+msgstr "الاستيثاق مطلوب لطبع المستند '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "الاستيثاق مطلوب لطبع المستند '%s' على الطابعة %s"
+msgstr "الاستيثاق مطلوب لطبع هذا المستند على الطابعة %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "الاستيثاق مطلوب لطبع مستند على %s"
+msgstr "الاستيثاق مطلوب لطبع هذا المستند"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
@@ -5198,6 +5208,9 @@ msgstr "اطبع في طابعة اختبار"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "تعذّر جلب معلومات الملف '%s': %s"
+
+#~ msgid "(Empty)"
+#~ msgstr "(فارغ)"
 
 #, fuzzy
 #~ msgid "<b>_Search:</b>"

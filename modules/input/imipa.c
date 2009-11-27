@@ -37,7 +37,7 @@ static void ipa_init (GtkIMContextSimple *im_context);
 static void
 ipa_register_type (GTypeModule *module)
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
   {
     sizeof (GtkIMContextSimpleClass),
     (GBaseInitFunc) NULL,

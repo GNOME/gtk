@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-05 17:17-0400\n"
+"POT-Creation-Date: 2009-11-01 18:55-0500\n"
 "PO-Revision-Date: 2009-09-01 09:38+0200\n"
 "Last-Translator: Bruno Brouard <annoa.b@gmail.com>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -140,11 +140,11 @@ msgstr "La résolution des polices à l'écran"
 msgid "Cursor"
 msgstr "Curseur"
 
-#: gtk/gtkaboutdialog.c:239
+#: gtk/gtkaboutdialog.c:298
 msgid "Program name"
 msgstr "Nom du programme"
 
-#: gtk/gtkaboutdialog.c:240
+#: gtk/gtkaboutdialog.c:299
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -152,43 +152,43 @@ msgstr ""
 "Le nom du programme. S'il n'est pas défini, il sera par défaut "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:254
+#: gtk/gtkaboutdialog.c:313
 msgid "Program version"
 msgstr "Version du programme"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:314
 msgid "The version of the program"
 msgstr "La version du programme"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:328
 msgid "Copyright string"
 msgstr "Chaîne du copyright"
 
-#: gtk/gtkaboutdialog.c:270
+#: gtk/gtkaboutdialog.c:329
 msgid "Copyright information for the program"
 msgstr "Information de copyright pour le programme"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:346
 msgid "Comments string"
 msgstr "Chaîne des commentaires"
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:347
 msgid "Comments about the program"
 msgstr "Commentaires à propos du programme"
 
-#: gtk/gtkaboutdialog.c:322
+#: gtk/gtkaboutdialog.c:381
 msgid "Website URL"
 msgstr "Adresse du site Web"
 
-#: gtk/gtkaboutdialog.c:323
+#: gtk/gtkaboutdialog.c:382
 msgid "The URL for the link to the website of the program"
 msgstr "L'URL pour le lien vers le site Web du programme"
 
-#: gtk/gtkaboutdialog.c:339
+#: gtk/gtkaboutdialog.c:398
 msgid "Website label"
 msgstr "Étiquette du site Web"
 
-#: gtk/gtkaboutdialog.c:340
+#: gtk/gtkaboutdialog.c:399
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -196,45 +196,45 @@ msgstr ""
 "L'étiquette pour le lien vers le site Web du programme. Si non définie, "
 "l'étiquette par défaut est celle de l'URL"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:415
 msgid "Authors"
 msgstr "Auteurs"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:416
 msgid "List of authors of the program"
 msgstr "Liste des auteurs du programme"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:432
 msgid "Documenters"
 msgstr "Documentalistes"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:433
 msgid "List of people documenting the program"
 msgstr "Liste des documentalistes du programme"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:449
 msgid "Artists"
 msgstr "Artistes"
 
-#: gtk/gtkaboutdialog.c:391
+#: gtk/gtkaboutdialog.c:450
 msgid "List of people who have contributed artwork to the program"
 msgstr "Liste des contributeurs aux graphismes du programme"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:467
 msgid "Translator credits"
 msgstr "Remerciements aux traducteurs"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:468
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Remerciements aux traducteurs. Cette chaîne doit être marquée traduisible"
 
-#: gtk/gtkaboutdialog.c:424
+#: gtk/gtkaboutdialog.c:483
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:425
+#: gtk/gtkaboutdialog.c:484
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -242,20 +242,20 @@ msgstr ""
 "Un logo pour la boîte de dialogue « À propos ». Par défaut, sa valeur est "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:440
+#: gtk/gtkaboutdialog.c:499
 msgid "Logo Icon Name"
 msgstr "Nom de l'icône logo"
 
-#: gtk/gtkaboutdialog.c:441
+#: gtk/gtkaboutdialog.c:500
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Une icône à utiliser pour le logo dans la boîte de dialogue « À propos »."
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:513
 msgid "Wrap license"
 msgstr "Mettre en forme la licence"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:514
 msgid "Whether to wrap the license text."
 msgstr ""
 "Indique s'il faut ajouter les retours de ligne automatiques dans le texte de "
@@ -331,17 +331,17 @@ msgstr ""
 msgid "GIcon"
 msgstr "GIcon"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "L'objet « GIcon » affiché"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "Nom de l'icône"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "Le nom de l'icône dans le thème d'icône"
@@ -445,21 +445,21 @@ msgstr "Indique si le groupe d'actions est activé."
 msgid "Whether the action group is visible."
 msgstr "Indique si le groupe d'actions est visible."
 
-#: gtk/gtkactivatable.c:304
+#: gtk/gtkactivatable.c:305
 msgid "Related Action"
 msgstr "Action liée"
 
 # For the author: this is unclear 
-#: gtk/gtkactivatable.c:305
+#: gtk/gtkactivatable.c:306
 msgid "The action this activatable will activate and receive updates from"
 msgstr ""
 "L'action que cet objet activable active et dont elle obtient les mises à jour"
 
-#: gtk/gtkactivatable.c:327
+#: gtk/gtkactivatable.c:328
 msgid "Use Action Appearance"
 msgstr "Utiliser l'apparence de l'action"
 
-#: gtk/gtkactivatable.c:328
+#: gtk/gtkactivatable.c:329
 msgid "Whether to use the related actions appearance properties"
 msgstr "Indique si l'on utilise les propriétés d'apparence des actions liées"
 
@@ -874,7 +874,7 @@ msgstr ""
 "Si défini, l'étiquette est utilisée pour piocher un élément du stock au lieu "
 "d'être affichée"
 
-#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:791 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:796 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "Activation lors du clic"
 
@@ -964,7 +964,7 @@ msgstr ""
 "Indique si les propriétés child_displacement_x/_y doivent aussi affecter le "
 "rectangle d'activation"
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:689 gtk/gtkentry.c:1713
+#: gtk/gtkbutton.c:485 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
 msgid "Inner Border"
 msgstr "Bordure intérieure"
 
@@ -1071,6 +1071,15 @@ msgstr "Afficher les détails"
 #: gtk/gtkcalendar.c:578
 msgid "If TRUE, details are shown"
 msgstr "Si VRAI, les détails sont affichés"
+
+#: gtk/gtkcelleditable.c:76
+#, fuzzy
+msgid "Editing Canceled"
+msgstr "Édition"
+
+#: gtk/gtkcelleditable.c:77
+msgid "Indicates that editing has been canceled"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:177
 msgid "mode"
@@ -1274,7 +1283,7 @@ msgstr "Pixbuf de l'étendeur fermé"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf pour l'étendeur fermé"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "ID du stock"
 
@@ -1307,7 +1316,7 @@ msgstr "Suivre État"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Indique si le pixbuf rendu doit être colorié en accord avec l'état"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "Icône"
 
@@ -1316,7 +1325,7 @@ msgid "Value of the progress bar"
 msgstr "Valeur de la barre de progression"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:732 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkentry.c:737 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
 #: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "Texte"
@@ -1452,7 +1461,7 @@ msgstr "Couleur de premier plan"
 msgid "Foreground color as a GdkColor"
 msgstr "Couleur de premier plan en tant que GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:661 gtk/gtktexttag.c:251
 #: gtk/gtktextview.c:574
 msgid "Editable"
 msgstr "Éditable"
@@ -1598,7 +1607,7 @@ msgstr ""
 "Méthode pour couper la chaîne en lignes multiples, si l'espace n'est pas "
 "suffisant pour afficher la chaîne complète"
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:680
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:685
 msgid "Wrap width"
 msgstr "Largeur de la coupure"
 
@@ -1973,69 +1982,69 @@ msgid "Whether entered values must already be present in the list"
 msgstr ""
 "Indique si les valeurs entrées doivent déjà être présentes dans la liste"
 
-#: gtk/gtkcombobox.c:663
+#: gtk/gtkcombobox.c:668
 msgid "ComboBox model"
 msgstr "Modèle de ComboBox"
 
-#: gtk/gtkcombobox.c:664
+#: gtk/gtkcombobox.c:669
 msgid "The model for the combo box"
 msgstr "Le modèle pour la boîte combo"
 
-#: gtk/gtkcombobox.c:681
+#: gtk/gtkcombobox.c:686
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Largeur de la coupure pour l'agencement des éléments dans une grille"
 
-#: gtk/gtkcombobox.c:703
+#: gtk/gtkcombobox.c:708
 msgid "Row span column"
 msgstr "Espacement des colonnes "
 
-#: gtk/gtkcombobox.c:704
+#: gtk/gtkcombobox.c:709
 msgid "TreeModel column containing the row span values"
 msgstr "Colonne du TreeModel contenant les valeurs de fusion de la ligne"
 
-#: gtk/gtkcombobox.c:725
+#: gtk/gtkcombobox.c:730
 msgid "Column span column"
 msgstr "Espacement des colonnes"
 
-#: gtk/gtkcombobox.c:726
+#: gtk/gtkcombobox.c:731
 msgid "TreeModel column containing the column span values"
 msgstr "Colonne du TreeModel contenant les valeurs de fusion de la colonne"
 
-#: gtk/gtkcombobox.c:747
+#: gtk/gtkcombobox.c:752
 msgid "Active item"
 msgstr "Élément actif"
 
-#: gtk/gtkcombobox.c:748
+#: gtk/gtkcombobox.c:753
 msgid "The item which is currently active"
 msgstr "L'élément qui est actuellement actif"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:772 gtk/gtkuimanager.c:222
 msgid "Add tearoffs to menus"
 msgstr "Ajouter des séparateurs aux menus"
 
-#: gtk/gtkcombobox.c:768
+#: gtk/gtkcombobox.c:773
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Indique si les menus sont détachables"
 
-#: gtk/gtkcombobox.c:783 gtk/gtkentry.c:681
+#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:686
 msgid "Has Frame"
 msgstr "A une frame"
 
-#: gtk/gtkcombobox.c:784
+#: gtk/gtkcombobox.c:789
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Indique si la liste déroulante doit dessiner un cadre autour du fils"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:797
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
 "Indique si la liste déroulante est activée lorsqu'elle est cliquée avec la "
 "souris"
 
-#: gtk/gtkcombobox.c:807 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:556
 msgid "Tearoff Title"
 msgstr "Titre du séparateur"
 
-#: gtk/gtkcombobox.c:808
+#: gtk/gtkcombobox.c:813
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -2043,48 +2052,48 @@ msgstr ""
 "Un titre que le gestionnaire de fenêtres peut afficher lorsque le popup est "
 "détaché"
 
-#: gtk/gtkcombobox.c:825
+#: gtk/gtkcombobox.c:830
 msgid "Popup shown"
 msgstr "Popup affiché"
 
-#: gtk/gtkcombobox.c:826
+#: gtk/gtkcombobox.c:831
 msgid "Whether the combo's dropdown is shown"
 msgstr "Indique si la liste déroulante du combo est affichée"
 
-#: gtk/gtkcombobox.c:842
+#: gtk/gtkcombobox.c:847
 msgid "Button Sensitivity"
 msgstr "Sensibilité du bouton"
 
-#: gtk/gtkcombobox.c:843
+#: gtk/gtkcombobox.c:848
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr ""
 "Indique si le bouton de déroulement est sensible lorsque la liste est vide"
 
-#: gtk/gtkcombobox.c:850
+#: gtk/gtkcombobox.c:855
 msgid "Appears as list"
 msgstr "Apparaît comme une liste"
 
-#: gtk/gtkcombobox.c:851
+#: gtk/gtkcombobox.c:856
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Indique si les listes déroulantes doivent ressembler à des listes plutôt "
 "qu'à des menus"
 
-#: gtk/gtkcombobox.c:867
+#: gtk/gtkcombobox.c:872
 msgid "Arrow Size"
 msgstr "Taille de la flèche"
 
-#: gtk/gtkcombobox.c:868
+#: gtk/gtkcombobox.c:873
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Taille minimum de la flèche dans la boîte combo"
 
-#: gtk/gtkcombobox.c:883 gtk/gtkentry.c:781 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:786 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Type d'ombre"
 
-#: gtk/gtkcombobox.c:884
+#: gtk/gtkcombobox.c:889
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Indique le type d'ombre à dessiner autour de la boîte combo"
 
@@ -2112,45 +2121,45 @@ msgstr "Fils"
 msgid "Can be used to add a new child to the container"
 msgstr "Peut être utilisé pour ajouter un nouveau fils au conteneur"
 
-#: gtk/gtkcurve.c:124
+#: gtk/gtkcurve.c:126
 msgid "Curve type"
 msgstr "Type de courbe"
 
-#: gtk/gtkcurve.c:125
+#: gtk/gtkcurve.c:127
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr ""
 "Indique si cette courbe est linéaire, interpolée à l'aide d'une spline ou de "
 "forme libre"
 
-#: gtk/gtkcurve.c:132
+#: gtk/gtkcurve.c:134
 msgid "Minimum X"
 msgstr "X minimum"
 
-#: gtk/gtkcurve.c:133
+#: gtk/gtkcurve.c:135
 msgid "Minimum possible value for X"
 msgstr "Valeur minimale possible pour X"
 
-#: gtk/gtkcurve.c:141
+#: gtk/gtkcurve.c:143
 msgid "Maximum X"
 msgstr "X maximum"
 
-#: gtk/gtkcurve.c:142
+#: gtk/gtkcurve.c:144
 msgid "Maximum possible X value"
 msgstr "Valeur maximale possible pour X"
 
-#: gtk/gtkcurve.c:150
+#: gtk/gtkcurve.c:152
 msgid "Minimum Y"
 msgstr "Y minimum"
 
-#: gtk/gtkcurve.c:151
+#: gtk/gtkcurve.c:153
 msgid "Minimum possible value for Y"
 msgstr "Valeur minimale possible pour Y"
 
-#: gtk/gtkcurve.c:159
+#: gtk/gtkcurve.c:161
 msgid "Maximum Y"
 msgstr "Y maximum"
 
-#: gtk/gtkcurve.c:160
+#: gtk/gtkcurve.c:162
 msgid "Maximum possible value for Y"
 msgstr "Valeur maximale possible pour Y"
 
@@ -2194,52 +2203,52 @@ msgstr "Bordure de la zone d'action"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Largeur de la bordure autour de la zone des boutons en bas du dialogue"
 
-#: gtk/gtkentry.c:628
+#: gtk/gtkentry.c:633
 msgid "Text Buffer"
 msgstr "Tampon de texte"
 
-#: gtk/gtkentry.c:629
+#: gtk/gtkentry.c:634
 msgid "Text buffer object which actually stores entry text"
 msgstr "Objet de tampon de texte qui stocke le texte de la zone de saisie"
 
-#: gtk/gtkentry.c:636 gtk/gtklabel.c:591
+#: gtk/gtkentry.c:641 gtk/gtklabel.c:591
 msgid "Cursor Position"
 msgstr "Position du curseur"
 
-#: gtk/gtkentry.c:637 gtk/gtklabel.c:592
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:592
 msgid "The current position of the insertion cursor in chars"
 msgstr "La position actuelle du curseur d'insertion en caractères"
 
-#: gtk/gtkentry.c:646 gtk/gtklabel.c:601
+#: gtk/gtkentry.c:651 gtk/gtklabel.c:601
 msgid "Selection Bound"
 msgstr "Limite de la sélection"
 
-#: gtk/gtkentry.c:647 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:602
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "La position de l'autre extrêmité de la sélection comptée en caractères à "
 "partir de la position du curseur."
 
-#: gtk/gtkentry.c:657
+#: gtk/gtkentry.c:662
 msgid "Whether the entry contents can be edited"
 msgstr "Indique si le contenu de la zone de saisie peut être édité"
 
-#: gtk/gtkentry.c:664 gtk/gtkentrybuffer.c:383
+#: gtk/gtkentry.c:669 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "Longueur maximale"
 
-#: gtk/gtkentry.c:665 gtk/gtkentrybuffer.c:384
+#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Nombre maximum de caractères pour cette entrée, zéro s'il n'y a pas de "
 "maximum"
 
-#: gtk/gtkentry.c:673
+#: gtk/gtkentry.c:678
 msgid "Visibility"
 msgstr "Visibilité"
 
-#: gtk/gtkentry.c:674
+#: gtk/gtkentry.c:679
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2247,31 +2256,31 @@ msgstr ""
 "FAUX affiche le « caractère invisible » au lieu du texte tapé (mode mot de "
 "passe)"
 
-#: gtk/gtkentry.c:682
+#: gtk/gtkentry.c:687
 msgid "FALSE removes outside bevel from entry"
 msgstr "FAUX supprime la mise en relief extérieure de l'entrée"
 
-#: gtk/gtkentry.c:690
+#: gtk/gtkentry.c:695
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr ""
 "Bordure entre le texte et le cadre. Écrase la propriété de style inner-border"
 
-#: gtk/gtkentry.c:697 gtk/gtkentry.c:1263
+#: gtk/gtkentry.c:702 gtk/gtkentry.c:1268
 msgid "Invisible character"
 msgstr "Caractère invisible"
 
-#: gtk/gtkentry.c:698 gtk/gtkentry.c:1264
+#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Caractère à utiliser pour masquer le contenu d'une entrée (en « mode mot de "
 "passe »)"
 
-#: gtk/gtkentry.c:705
+#: gtk/gtkentry.c:710
 msgid "Activates default"
 msgstr "Activer les valeurs par défaut"
 
-#: gtk/gtkentry.c:706
+#: gtk/gtkentry.c:711
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2280,31 +2289,31 @@ msgstr ""
 "défaut dans une boîte de dialogue) doit être activé quand l'utilisateur "
 "appuie sur Entrée"
 
-#: gtk/gtkentry.c:712
+#: gtk/gtkentry.c:717
 msgid "Width in chars"
 msgstr "Largeur en caractères"
 
-#: gtk/gtkentry.c:713
+#: gtk/gtkentry.c:718
 msgid "Number of characters to leave space for in the entry"
 msgstr "Nombre de caractères d'espace à laisser pour cette entrée"
 
-#: gtk/gtkentry.c:722
+#: gtk/gtkentry.c:727
 msgid "Scroll offset"
 msgstr "Décalage du défilement"
 
-#: gtk/gtkentry.c:723
+#: gtk/gtkentry.c:728
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Nombre de pixels de l'entrée à défiler hors de l'écran vers la gauche"
 
-#: gtk/gtkentry.c:733
+#: gtk/gtkentry.c:738
 msgid "The contents of the entry"
 msgstr "Le contenu de l'entrée"
 
-#: gtk/gtkentry.c:748 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:753 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Alignement X"
 
-#: gtk/gtkentry.c:749 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:754 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2312,69 +2321,69 @@ msgstr ""
 "Alignement horizontal, de 0 (gauche) à 1 (droite). Inversé pour les "
 "dispositions RTL."
 
-#: gtk/gtkentry.c:765
+#: gtk/gtkentry.c:770
 msgid "Truncate multiline"
 msgstr "Tronquer si plusieurs lignes"
 
-#: gtk/gtkentry.c:766
+#: gtk/gtkentry.c:771
 msgid "Whether to truncate multiline pastes to one line."
 msgstr ""
 "Indique s'il faut tronquer les collages de plusieurs lignes à une seule "
 "ligne."
 
-#: gtk/gtkentry.c:782
+#: gtk/gtkentry.c:787
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Indique le type d'ombre à dessiner autour de l'entrée lorsqu'un cadre est "
 "défini"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:802 gtk/gtktextview.c:654
 msgid "Overwrite mode"
 msgstr "Mode d'écrasement"
 
-#: gtk/gtkentry.c:798
+#: gtk/gtkentry.c:803
 msgid "Whether new text overwrites existing text"
 msgstr "Indique si le texte saisi écrase le contenu existant"
 
-#: gtk/gtkentry.c:812 gtk/gtkentrybuffer.c:368
+#: gtk/gtkentry.c:817 gtk/gtkentrybuffer.c:368
 msgid "Text length"
 msgstr "Longueur du texte"
 
-#: gtk/gtkentry.c:813
+#: gtk/gtkentry.c:818
 msgid "Length of the text currently in the entry"
 msgstr "Longueur du texte actuellement dans le champ de saisie"
 
-#: gtk/gtkentry.c:828
+#: gtk/gtkentry.c:833
 msgid "Invisible char set"
 msgstr "Caractère invisible défini"
 
-#: gtk/gtkentry.c:829
+#: gtk/gtkentry.c:834
 msgid "Whether the invisible char has been set"
 msgstr "Indique si le caractère invisible a été défini"
 
-#: gtk/gtkentry.c:847
+#: gtk/gtkentry.c:852
 msgid "Caps Lock warning"
 msgstr "Avertissement du verrouillage majuscule"
 
-#: gtk/gtkentry.c:848
+#: gtk/gtkentry.c:853
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 "Indique si les zones de saisie de mots de passe affichent un avertissement "
 "lorsque le verrouillage majuscule est activé"
 
-#: gtk/gtkentry.c:862
+#: gtk/gtkentry.c:867
 msgid "Progress Fraction"
 msgstr "Fraction de progression"
 
-#: gtk/gtkentry.c:863
+#: gtk/gtkentry.c:868
 msgid "The current fraction of the task that's been completed"
 msgstr "La fraction actuelle de la tâche qui a déjà été effectuée"
 
-#: gtk/gtkentry.c:880
+#: gtk/gtkentry.c:885
 msgid "Progress Pulse Step"
 msgstr "Pas de la progression en pulsation"
 
-#: gtk/gtkentry.c:881
+#: gtk/gtkentry.c:886
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2382,197 +2391,197 @@ msgstr ""
 "Le pourcentage de la largeur totale de la zone dont doit se déplacer le bloc "
 "de progression pour chaque appel à gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:897
+#: gtk/gtkentry.c:902
 msgid "Primary pixbuf"
 msgstr "Pixbuf principal"
 
-#: gtk/gtkentry.c:898
+#: gtk/gtkentry.c:903
 msgid "Primary pixbuf for the entry"
 msgstr "Pixbuf principal pour la zone"
 
-#: gtk/gtkentry.c:912
+#: gtk/gtkentry.c:917
 msgid "Secondary pixbuf"
 msgstr "Pixbuf secondaire"
 
-#: gtk/gtkentry.c:913
+#: gtk/gtkentry.c:918
 msgid "Secondary pixbuf for the entry"
 msgstr "Pixbuf secondaire pour la zone"
 
-#: gtk/gtkentry.c:927
+#: gtk/gtkentry.c:932
 msgid "Primary stock ID"
 msgstr "ID prédéfini principal"
 
-#: gtk/gtkentry.c:928
+#: gtk/gtkentry.c:933
 msgid "Stock ID for primary icon"
 msgstr "L'ID prédéfini de l'icône principale"
 
-#: gtk/gtkentry.c:942
+#: gtk/gtkentry.c:947
 msgid "Secondary stock ID"
 msgstr "ID prédéfini secondaire"
 
-#: gtk/gtkentry.c:943
+#: gtk/gtkentry.c:948
 msgid "Stock ID for secondary icon"
 msgstr "L'ID prédéfini de l'icône secondaire"
 
-#: gtk/gtkentry.c:957
+#: gtk/gtkentry.c:962
 msgid "Primary icon name"
 msgstr "Nom d'icône principale"
 
-#: gtk/gtkentry.c:958
+#: gtk/gtkentry.c:963
 msgid "Icon name for primary icon"
 msgstr "Le nom de l'icône principale"
 
-#: gtk/gtkentry.c:972
+#: gtk/gtkentry.c:977
 msgid "Secondary icon name"
 msgstr "Nom d'icône secondaire"
 
-#: gtk/gtkentry.c:973
+#: gtk/gtkentry.c:978
 msgid "Icon name for secondary icon"
 msgstr "Le nom de l'icône secondaire"
 
-#: gtk/gtkentry.c:987
+#: gtk/gtkentry.c:992
 msgid "Primary GIcon"
 msgstr "GIcon principale"
 
-#: gtk/gtkentry.c:988
+#: gtk/gtkentry.c:993
 msgid "GIcon for primary icon"
 msgstr "GIcon pour l'icône principale"
 
-#: gtk/gtkentry.c:1002
+#: gtk/gtkentry.c:1007
 msgid "Secondary GIcon"
 msgstr "GIcon secondaire"
 
-#: gtk/gtkentry.c:1003
+#: gtk/gtkentry.c:1008
 msgid "GIcon for secondary icon"
 msgstr "GIcon pour l'icône secondaire"
 
-#: gtk/gtkentry.c:1017
+#: gtk/gtkentry.c:1022
 msgid "Primary storage type"
 msgstr "Type de stockage principal"
 
-#: gtk/gtkentry.c:1018
+#: gtk/gtkentry.c:1023
 msgid "The representation being used for primary icon"
 msgstr "La représentation utilisée pour l'icône principale"
 
-#: gtk/gtkentry.c:1033
+#: gtk/gtkentry.c:1038
 msgid "Secondary storage type"
 msgstr "Type de stockage secondaire"
 
-#: gtk/gtkentry.c:1034
+#: gtk/gtkentry.c:1039
 msgid "The representation being used for secondary icon"
 msgstr "La représentation utilisée pour l'icône secondaire"
 
-#: gtk/gtkentry.c:1055
+#: gtk/gtkentry.c:1060
 msgid "Primary icon activatable"
 msgstr "Icône principale activable"
 
-#: gtk/gtkentry.c:1056
+#: gtk/gtkentry.c:1061
 msgid "Whether the primary icon is activatable"
 msgstr "Indique si l'icône principale est activable"
 
-#: gtk/gtkentry.c:1076
+#: gtk/gtkentry.c:1081
 msgid "Secondary icon activatable"
 msgstr "Icône secondaire activable"
 
-#: gtk/gtkentry.c:1077
+#: gtk/gtkentry.c:1082
 msgid "Whether the secondary icon is activatable"
 msgstr "Indique si l'icône secondaire est activable"
 
-#: gtk/gtkentry.c:1099
+#: gtk/gtkentry.c:1104
 msgid "Primary icon sensitive"
 msgstr "Icône principale sensible"
 
-#: gtk/gtkentry.c:1100
+#: gtk/gtkentry.c:1105
 msgid "Whether the primary icon is sensitive"
 msgstr "Indique si l'icône principale est sensible"
 
-#: gtk/gtkentry.c:1121
+#: gtk/gtkentry.c:1126
 msgid "Secondary icon sensitive"
 msgstr "Icône secondaire sensible"
 
-#: gtk/gtkentry.c:1122
+#: gtk/gtkentry.c:1127
 msgid "Whether the secondary icon is sensitive"
 msgstr "Indique si l'icône secondaire est sensible"
 
-#: gtk/gtkentry.c:1138
+#: gtk/gtkentry.c:1143
 msgid "Primary icon tooltip text"
 msgstr "Texte de l'infobulle pour l'icône principale"
 
-#: gtk/gtkentry.c:1139 gtk/gtkentry.c:1175
+#: gtk/gtkentry.c:1144 gtk/gtkentry.c:1180
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Le contenu de l'infobulle pour l'icône principale"
 
-#: gtk/gtkentry.c:1155
+#: gtk/gtkentry.c:1160
 msgid "Secondary icon tooltip text"
 msgstr "Texte de l'infobulle pour l'icône secondaire"
 
-#: gtk/gtkentry.c:1156 gtk/gtkentry.c:1194
+#: gtk/gtkentry.c:1161 gtk/gtkentry.c:1199
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Le contenu de l'infobulle pour l'icône secondaire"
 
-#: gtk/gtkentry.c:1174
+#: gtk/gtkentry.c:1179
 msgid "Primary icon tooltip markup"
 msgstr "Balisage de l'infobulle pour l'icône principale"
 
-#: gtk/gtkentry.c:1193
+#: gtk/gtkentry.c:1198
 msgid "Secondary icon tooltip markup"
 msgstr "Balisage de l'infobulle pour l'icône secondaire"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1218 gtk/gtktextview.c:682
 msgid "IM module"
 msgstr "Module IM"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:683
 msgid "Which IM module should be used"
 msgstr "Indique le module de méthode de saisie à utiliser"
 
-#: gtk/gtkentry.c:1228
+#: gtk/gtkentry.c:1233
 msgid "Icon Prelight"
 msgstr "Icônes en surbrillance"
 
-#: gtk/gtkentry.c:1229
+#: gtk/gtkentry.c:1234
 msgid "Whether activatable icons should prelight when hovered"
 msgstr ""
 "Indique si les icônes activables doivent être en surbrillance lors d'un "
 "survol du pointeur (de la souris)"
 
-#: gtk/gtkentry.c:1242
+#: gtk/gtkentry.c:1247
 msgid "Progress Border"
 msgstr "Bordure de progression"
 
-#: gtk/gtkentry.c:1243
+#: gtk/gtkentry.c:1248
 msgid "Border around the progress bar"
 msgstr "Bordure autour de la barre de progression"
 
-#: gtk/gtkentry.c:1714
+#: gtk/gtkentry.c:1719
 msgid "Border between text and frame."
 msgstr "Bordure entre le texte et le cadre."
 
-#: gtk/gtkentry.c:1728
+#: gtk/gtkentry.c:1733
 msgid "State Hint"
 msgstr "Indice d'état"
 
-#: gtk/gtkentry.c:1729
+#: gtk/gtkentry.c:1734
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr ""
 "Indique si l'on doit passer un état correct lors du dessin de l'ombre ou de "
 "l'arrière-plan"
 
-#: gtk/gtkentry.c:1734 gtk/gtklabel.c:848
+#: gtk/gtkentry.c:1739 gtk/gtklabel.c:848
 msgid "Select on focus"
 msgstr "Sélection lors de l'activation"
 
-#: gtk/gtkentry.c:1735
+#: gtk/gtkentry.c:1740
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Indique si le contenu de l'entrée de texte doit être sélectionné quand elle "
 "est activée"
 
-#: gtk/gtkentry.c:1749
+#: gtk/gtkentry.c:1754
 msgid "Password Hint Timeout"
 msgstr "Délai de l'indice de mot de passe"
 
-#: gtk/gtkentry.c:1750
+#: gtk/gtkentry.c:1755
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Durée pendant laquelle afficher le dernier caractère saisi dans les entrées "
@@ -2852,7 +2861,7 @@ msgstr "Le titre de la boîte de dialogue de sélection de fichier."
 msgid "The desired width of the button widget, in characters."
 msgstr "La largeur désirée du contrôle bouton, en caractères."
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "Nom du fichier"
@@ -3170,85 +3179,85 @@ msgstr "Alpha de la boîte de sélection"
 msgid "Opacity of the selection box"
 msgstr "Opacité de la boîte de sélection"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "Un GdkPixbuf à afficher"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:140
 msgid "Pixmap"
 msgstr "Pixmap"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:141
 msgid "A GdkPixmap to display"
 msgstr "Un GdkPixmap à afficher"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "Image"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:149
 msgid "A GdkImage to display"
 msgstr "Un GdkImage à afficher"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:156
 msgid "Mask"
 msgstr "Masque"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:157
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Masque bitmap à utiliser avec GdkImage ou GdkPixmap"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "Nom du fichier à charger et à afficher"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ID du stock pour une image du stock à afficher"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:181
 msgid "Icon set"
 msgstr "Jeu d'icônes"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:182
 msgid "Icon set to display"
 msgstr "Jeu d'icônes à afficher"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "Taille de l'icône"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:190
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Taille symbolique à utiliser pour l'icône du stock, le jeu d'icônes ou "
 "l'icône nommée"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:206
 msgid "Pixel size"
 msgstr "Taille des pixels"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:207
 msgid "Pixel size to use for named icon"
 msgstr "Taille des pixels à utiliser pour l'icône nommée"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:215
 msgid "Animation"
 msgstr "Animation"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:216
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation à afficher"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "Type de stockage"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "La représentation à utiliser pour les données de l'image"
 
@@ -4284,7 +4293,7 @@ msgstr "Paramètres d'imprimante"
 msgid "Page Setup"
 msgstr "Mise en page"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1082
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1125
 msgid "Track Print Status"
 msgstr "Suivre l'état d'impression"
 
@@ -4297,52 +4306,52 @@ msgstr ""
 "modification d'état après que les données d'impression ont été envoyées à "
 "l'imprimante ou au serveur d'impression."
 
-#: gtk/gtkprintoperation.c:954
+#: gtk/gtkprintoperation.c:997
 msgid "Default Page Setup"
 msgstr "Mise en page par défaut"
 
-#: gtk/gtkprintoperation.c:955
+#: gtk/gtkprintoperation.c:998
 msgid "The GtkPageSetup used by default"
 msgstr "L'objet GtkPageSetup utilisé par défaut"
 
-#: gtk/gtkprintoperation.c:973 gtk/gtkprintunixdialog.c:320
+#: gtk/gtkprintoperation.c:1016 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "Paramètres d'impression"
 
-#: gtk/gtkprintoperation.c:974 gtk/gtkprintunixdialog.c:321
+#: gtk/gtkprintoperation.c:1017 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "L'objet GtkPrintSettings utilisé pour initialiser la boîte de dialogue"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1035
 msgid "Job Name"
 msgstr "Nom de la tâche"
 
-#: gtk/gtkprintoperation.c:993
+#: gtk/gtkprintoperation.c:1036
 msgid "A string used for identifying the print job."
 msgstr ""
 "Une chaîne de caractères permettant d'identifier le travail d'impression."
 
-#: gtk/gtkprintoperation.c:1017
+#: gtk/gtkprintoperation.c:1060
 msgid "Number of Pages"
 msgstr "Nombre de pages"
 
-#: gtk/gtkprintoperation.c:1018
+#: gtk/gtkprintoperation.c:1061
 msgid "The number of pages in the document."
 msgstr "Le nombre de pages du document."
 
-#: gtk/gtkprintoperation.c:1039 gtk/gtkprintunixdialog.c:310
+#: gtk/gtkprintoperation.c:1082 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "Page actuelle"
 
-#: gtk/gtkprintoperation.c:1040 gtk/gtkprintunixdialog.c:311
+#: gtk/gtkprintoperation.c:1083 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "La page actuelle du document"
 
-#: gtk/gtkprintoperation.c:1061
+#: gtk/gtkprintoperation.c:1104
 msgid "Use full page"
 msgstr "Utilise toute la page"
 
-#: gtk/gtkprintoperation.c:1062
+#: gtk/gtkprintoperation.c:1105
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -4350,7 +4359,7 @@ msgstr ""
 "Vrai si l'origine du contexte se situe à l'angle de la page et non pas à "
 "l'angle de la zone imageable."
 
-#: gtk/gtkprintoperation.c:1083
+#: gtk/gtkprintoperation.c:1126
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -4359,96 +4368,96 @@ msgstr ""
 "d'impression après que les données aient été envoyées à l'imprimante ou au "
 "serveur d'impression."
 
-#: gtk/gtkprintoperation.c:1100
+#: gtk/gtkprintoperation.c:1143
 msgid "Unit"
 msgstr "Unité"
 
-#: gtk/gtkprintoperation.c:1101
+#: gtk/gtkprintoperation.c:1144
 msgid "The unit in which distances can be measured in the context"
 msgstr "L'unité de mesure des distances dans le contexte"
 
-#: gtk/gtkprintoperation.c:1118
+#: gtk/gtkprintoperation.c:1161
 msgid "Show Dialog"
 msgstr "Afficher la boîte de dialogue"
 
-#: gtk/gtkprintoperation.c:1119
+#: gtk/gtkprintoperation.c:1162
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr ""
 "Défini à TRUE si une boîte de dialogue de progression est affichée durant "
 "l'impression."
 
-#: gtk/gtkprintoperation.c:1142
+#: gtk/gtkprintoperation.c:1185
 msgid "Allow Async"
 msgstr "Asynchrone autorisé"
 
-#: gtk/gtkprintoperation.c:1143
+#: gtk/gtkprintoperation.c:1186
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 "Défini à TRUE si le processus d'impression est autorisé à s'exécuter de "
 "manière asynchrone."
 
-#: gtk/gtkprintoperation.c:1165 gtk/gtkprintoperation.c:1166
+#: gtk/gtkprintoperation.c:1208 gtk/gtkprintoperation.c:1209
 msgid "Export filename"
 msgstr "Nom de fichier d'exportation"
 
-#: gtk/gtkprintoperation.c:1180
+#: gtk/gtkprintoperation.c:1223
 msgid "Status"
 msgstr "État"
 
-#: gtk/gtkprintoperation.c:1181
+#: gtk/gtkprintoperation.c:1224
 msgid "The status of the print operation"
 msgstr "L'état de l'opération d'impression"
 
-#: gtk/gtkprintoperation.c:1201
+#: gtk/gtkprintoperation.c:1244
 msgid "Status String"
 msgstr "Chaîne d'état"
 
-#: gtk/gtkprintoperation.c:1202
+#: gtk/gtkprintoperation.c:1245
 msgid "A human-readable description of the status"
 msgstr "Une description de l'état intelligible pour l'utilisateur"
 
-#: gtk/gtkprintoperation.c:1220
+#: gtk/gtkprintoperation.c:1263
 msgid "Custom tab label"
 msgstr "Étiquette de l'onglet personnalisé"
 
-#: gtk/gtkprintoperation.c:1221
+#: gtk/gtkprintoperation.c:1264
 msgid "Label for the tab containing custom widgets."
 msgstr ""
 "Étiquette pour l'onglet contenant les composants graphiques personnalisés."
 
-#: gtk/gtkprintoperation.c:1236 gtk/gtkprintunixdialog.c:345
+#: gtk/gtkprintoperation.c:1279 gtk/gtkprintunixdialog.c:345
 msgid "Support Selection"
 msgstr "Prise en charge de la sélection"
 
-#: gtk/gtkprintoperation.c:1237
+#: gtk/gtkprintoperation.c:1280
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 "Défini à TRUE si l'opération d'impression prend en charge l'impression de la "
 "sélection."
 
-#: gtk/gtkprintoperation.c:1253 gtk/gtkprintunixdialog.c:353
+#: gtk/gtkprintoperation.c:1296 gtk/gtkprintunixdialog.c:353
 msgid "Has Selection"
 msgstr "A une sélection"
 
-#: gtk/gtkprintoperation.c:1254
+#: gtk/gtkprintoperation.c:1297
 msgid "TRUE if a selecion exists."
 msgstr "Défini à TRUE si une sélection existe."
 
-#: gtk/gtkprintoperation.c:1269 gtk/gtkprintunixdialog.c:361
+#: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
 msgstr "Mise en page incorporée"
 
-#: gtk/gtkprintoperation.c:1270
+#: gtk/gtkprintoperation.c:1313
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
 "Défini à TRUE si les boîtes combinées de mise en page sont incorporées dans "
 "GtkPrintDialog"
 
-#: gtk/gtkprintoperation.c:1291
+#: gtk/gtkprintoperation.c:1334
 msgid "Number of Pages To Print"
 msgstr "Nombre de pages à imprimer"
 
-#: gtk/gtkprintoperation.c:1292
+#: gtk/gtkprintoperation.c:1335
 msgid "The number of pages that will be printed."
 msgstr "Le nombre de pages qui vont être imprimées"
 
@@ -5165,11 +5174,11 @@ msgstr "Dessiner"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indique si le séparateur doit être affiché, ou juste des blancs"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:221
 msgid "Double Click Time"
 msgstr "Vitesse du double-clic"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:222
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5177,11 +5186,11 @@ msgstr ""
 "Intervalle maximum entre deux clics pour qu'ils soient considérés comme un "
 "double-clic (en millisecondes)"
 
-#: gtk/gtksettings.c:223
+#: gtk/gtksettings.c:229
 msgid "Double Click Distance"
 msgstr "Distance du double-clic"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:230
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5189,35 +5198,35 @@ msgstr ""
 "Distance maximum entre deux clics pour qu'ils soient considérés comme un "
 "double-clic (en pixels)"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:246
 msgid "Cursor Blink"
 msgstr "Curseur clignotant"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:247
 msgid "Whether the cursor should blink"
 msgstr "Indique si le curseur doit clignoter"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:254
 msgid "Cursor Blink Time"
 msgstr "Vitesse de clignotement du curseur"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:255
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Longueur du cycle de clignotement du curseur, en millisecondes"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:274
 msgid "Cursor Blink Timeout"
 msgstr "Expiration du clignotement du curseur"
 
-#: gtk/gtksettings.c:269
+#: gtk/gtksettings.c:275
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Période après laquelle le curseur cesse de clignoter, en secondes"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:282
 msgid "Split Cursor"
 msgstr "Curseur divisé"
 
-#: gtk/gtksettings.c:277
+#: gtk/gtksettings.c:283
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5225,159 +5234,159 @@ msgstr ""
 "Indique si deux curseurs doivent être affichés lors de l'entrée simultanée "
 "de texte s'écrivant de droite à gauche et de gauche à droite"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:290
 msgid "Theme Name"
 msgstr "Nom du thème"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:291
 msgid "Name of theme RC file to load"
 msgstr "Nom du fichier RC de thème à charger"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:299
 msgid "Icon Theme Name"
 msgstr "Nom du thème d'icône"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:300
 msgid "Name of icon theme to use"
 msgstr "Nom du thème d'icône à utiliser"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:308
 msgid "Fallback Icon Theme Name"
 msgstr "Nom du thème d'icône de secours"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:309
 msgid "Name of a icon theme to fall back to"
 msgstr "Nom du thème d'icône à utiliser en cas de secours"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:317
 msgid "Key Theme Name"
 msgstr "Nom du thème pour les touches"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:318
 msgid "Name of key theme RC file to load"
 msgstr "Nom du fichier RC à charger pour le thème des touches"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:326
 msgid "Menu bar accelerator"
 msgstr "Accélérateur de barre de menus"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:327
 msgid "Keybinding to activate the menu bar"
 msgstr "Raccourci clavier activant la barre de menus"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:335
 msgid "Drag threshold"
 msgstr "Seuil de glissement"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:336
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Nombre de pixels que le curseur doit parcourir avant le glissement"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:344
 msgid "Font Name"
 msgstr "Nom de la police"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:345
 msgid "Name of default font to use"
 msgstr "Nom de la police à utiliser par défaut"
 
-#: gtk/gtksettings.c:361
+#: gtk/gtksettings.c:367
 msgid "Icon Sizes"
 msgstr "Tailles des icônes"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:368
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Liste des tailles d'icônes (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:376
 msgid "GTK Modules"
 msgstr "Modules GTK"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:377
 msgid "List of currently active GTK modules"
 msgstr "Liste des modules GTK actuellement actifs"
 
-#: gtk/gtksettings.c:380
+#: gtk/gtksettings.c:386
 msgid "Xft Antialias"
 msgstr "Lissage Xft"
 
-#: gtk/gtksettings.c:381
+#: gtk/gtksettings.c:387
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indique si les polices Xft doivent être lissées ; 0=non, 1=oui, -1=valeur "
 "par défaut"
 
-#: gtk/gtksettings.c:390
+#: gtk/gtksettings.c:396
 msgid "Xft Hinting"
 msgstr "Optimisation Xft"
 
-#: gtk/gtksettings.c:391
+#: gtk/gtksettings.c:397
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Indique s'il faut optimiser les polices Xft; 0=non, 1=oui, -1=par défaut"
 
-#: gtk/gtksettings.c:400
+#: gtk/gtksettings.c:406
 msgid "Xft Hint Style"
 msgstr "Style d'optimisation Xft"
 
-#: gtk/gtksettings.c:401
+#: gtk/gtksettings.c:407
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Le degré d'optimisation à utiliser ; sans lissage, lissage léger, lissage "
 "moyen, lissage complet"
 
-#: gtk/gtksettings.c:410
+#: gtk/gtksettings.c:416
 msgid "Xft RGBA"
 msgstr "Xft RVBA"
 
-#: gtk/gtksettings.c:411
+#: gtk/gtksettings.c:417
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Type d'anticrénelage sous-pixel: aucun, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:420
+#: gtk/gtksettings.c:426
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:421
+#: gtk/gtksettings.c:427
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Résolution pour Xft, en 1024 * points/pouces. -1 pour utiliser la valeur par "
 "défaut"
 
-#: gtk/gtksettings.c:430
+#: gtk/gtksettings.c:436
 msgid "Cursor theme name"
 msgstr "Nom du thème de curseur"
 
-#: gtk/gtksettings.c:431
+#: gtk/gtksettings.c:437
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Nom du thème de curseur à utiliser, ou NULL pour utiliser le thème par défaut"
 
-#: gtk/gtksettings.c:439
+#: gtk/gtksettings.c:445
 msgid "Cursor theme size"
 msgstr "Taille du thème de curseur"
 
-#: gtk/gtksettings.c:440
+#: gtk/gtksettings.c:446
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr ""
 "Taille à utiliser pour les curseurs, ou 0 pour utiliser la taille par défaut"
 
-#: gtk/gtksettings.c:450
+#: gtk/gtksettings.c:456
 msgid "Alternative button order"
 msgstr "Ordre des boutons alternatifs"
 
-#: gtk/gtksettings.c:451
+#: gtk/gtksettings.c:457
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr ""
 "Indique si les boutons dans la fenêtre de dialogue doit utiliser  l'ordre "
 "des boutons alternatif"
 
-#: gtk/gtksettings.c:468
+#: gtk/gtksettings.c:474
 msgid "Alternative sort indicator direction"
 msgstr "Direction alternative de l'indicateur de tri"
 
-#: gtk/gtksettings.c:469
+#: gtk/gtksettings.c:475
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5386,11 +5395,11 @@ msgstr ""
 "arborescences est inversée par rapport au standard (où le bas signifie ordre "
 "croissant)"
 
-#: gtk/gtksettings.c:477
+#: gtk/gtksettings.c:483
 msgid "Show the 'Input Methods' menu"
 msgstr "Afficher le menu « Méthodes de saisie »"
 
-#: gtk/gtksettings.c:478
+#: gtk/gtksettings.c:484
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -5398,11 +5407,11 @@ msgstr ""
 "Indique si le menu contextuel des zones de saisies et des zones de texte "
 "doit offrir la possibilité de changer la méthode de saisie"
 
-#: gtk/gtksettings.c:486
+#: gtk/gtksettings.c:492
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Afficher le menu « Insérer un caractère de contrôle Unicode »"
 
-#: gtk/gtksettings.c:487
+#: gtk/gtksettings.c:493
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -5410,228 +5419,228 @@ msgstr ""
 "Indique si le menu contextuel des zones de saisies et des zones de texte "
 "doit offrir la possibilité d'insérer des caractères de contrôle"
 
-#: gtk/gtksettings.c:495
+#: gtk/gtksettings.c:501
 msgid "Start timeout"
 msgstr "Délai de départ"
 
-#: gtk/gtksettings.c:496
+#: gtk/gtksettings.c:502
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Valeur initiale pour les délais, lorsqu'un bouton est appuyé"
 
-#: gtk/gtksettings.c:505
+#: gtk/gtksettings.c:511
 msgid "Repeat timeout"
 msgstr "Délai de répétition"
 
-#: gtk/gtksettings.c:506
+#: gtk/gtksettings.c:512
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Valeur de répétition pour les délais, lorsqu'un bouton est appuyé"
 
-#: gtk/gtksettings.c:515
+#: gtk/gtksettings.c:521
 msgid "Expand timeout"
 msgstr "Délai d'expansion"
 
-#: gtk/gtksettings.c:516
+#: gtk/gtksettings.c:522
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 "Valeur d'expansion pour les délais, lorsqu'un composant graphique s'étend à "
 "une nouvelle zone"
 
-#: gtk/gtksettings.c:551
+#: gtk/gtksettings.c:557
 msgid "Color scheme"
 msgstr "Espace de couleurs"
 
-#: gtk/gtksettings.c:552
+#: gtk/gtksettings.c:558
 msgid "A palette of named colors for use in themes"
 msgstr "Une palette de couleurs nommées à utiliser dans les thèmes"
 
-#: gtk/gtksettings.c:561
+#: gtk/gtksettings.c:567
 msgid "Enable Animations"
 msgstr "Activer les animations"
 
-#: gtk/gtksettings.c:562
+#: gtk/gtksettings.c:568
 msgid "Whether to enable toolkit-wide animations."
 msgstr ""
 "Indique s'il faut activer les animations pour l'ensemble des composants"
 
-#: gtk/gtksettings.c:580
+#: gtk/gtksettings.c:586
 msgid "Enable Touchscreen Mode"
 msgstr "Activer le mode écran tactile"
 
-#: gtk/gtksettings.c:581
+#: gtk/gtksettings.c:587
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 "Si défini à vrai, aucun événement de notification de mouvement n'est "
 "communiqué à cet écran"
 
-#: gtk/gtksettings.c:598
+#: gtk/gtksettings.c:604
 msgid "Tooltip timeout"
 msgstr "Délai d'infobulle"
 
-#: gtk/gtksettings.c:599
+#: gtk/gtksettings.c:605
 msgid "Timeout before tooltip is shown"
 msgstr "Délai avant affichage de l'infobulle"
 
-#: gtk/gtksettings.c:624
+#: gtk/gtksettings.c:630
 msgid "Tooltip browse timeout"
 msgstr "Délai d'infobulle en navigation"
 
-#: gtk/gtksettings.c:625
+#: gtk/gtksettings.c:631
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Délai avant affichage de l'infobulle lorsque le mode navigation est activé"
 
-#: gtk/gtksettings.c:646
+#: gtk/gtksettings.c:652
 msgid "Tooltip browse mode timeout"
 msgstr "Délai du mode navigation d'infobulle"
 
-#: gtk/gtksettings.c:647
+#: gtk/gtksettings.c:653
 msgid "Timeout after which browse mode is disabled"
 msgstr "Délai après lequel le mode navigation est désactivé"
 
-#: gtk/gtksettings.c:666
+#: gtk/gtksettings.c:672
 msgid "Keynav Cursor Only"
 msgstr "Navigation clavier uniquement"
 
-#: gtk/gtksettings.c:667
+#: gtk/gtksettings.c:673
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 "Si défini à vrai, seules les touches curseurs permettent de naviguer dans "
 "les composants graphiques"
 
-#: gtk/gtksettings.c:684
+#: gtk/gtksettings.c:690
 msgid "Keynav Wrap Around"
 msgstr "Boucler en navigation clavier"
 
-#: gtk/gtksettings.c:685
+#: gtk/gtksettings.c:691
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 "Indique s'il faut naviguer en boucle parmi les composants graphiques, avec "
 "le clavier"
 
-#: gtk/gtksettings.c:705
+#: gtk/gtksettings.c:711
 msgid "Error Bell"
 msgstr "Signal d'erreur"
 
-#: gtk/gtksettings.c:706
+#: gtk/gtksettings.c:712
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Si défini à vrai, la navigation au clavier et d'autres erreurs produisent un "
 "bip"
 
-#: gtk/gtksettings.c:723
+#: gtk/gtksettings.c:729
 msgid "Color Hash"
 msgstr "Hâchage des couleurs"
 
-#: gtk/gtksettings.c:724
+#: gtk/gtksettings.c:730
 msgid "A hash table representation of the color scheme."
 msgstr ""
 "Une représentation sous forme de table de hâchage de l'espace de couleurs."
 
-#: gtk/gtksettings.c:732
+#: gtk/gtksettings.c:738
 msgid "Default file chooser backend"
 msgstr "Moteur par défaut du sélecteur de fichier"
 
-#: gtk/gtksettings.c:733
+#: gtk/gtksettings.c:739
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nom du moteur GtkFileChooser à utiliser par défaut"
 
-#: gtk/gtksettings.c:750
+#: gtk/gtksettings.c:756
 msgid "Default print backend"
 msgstr "Moteur d'impression par défaut"
 
-#: gtk/gtksettings.c:751
+#: gtk/gtksettings.c:757
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Liste de moteurs GtkPrintBackend à utiliser par défaut"
 
-#: gtk/gtksettings.c:774
+#: gtk/gtksettings.c:780
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Commande par défaut à lancer lors de l'affichage d'un aperçu avant impression"
 
-#: gtk/gtksettings.c:775
+#: gtk/gtksettings.c:781
 msgid "Command to run when displaying a print preview"
 msgstr "Commande à lancer lors de l'affichage d'un aperçu avant impression"
 
-#: gtk/gtksettings.c:791
+#: gtk/gtksettings.c:797
 msgid "Enable Mnemonics"
 msgstr "Activer les lettres-raccourcis"
 
-#: gtk/gtksettings.c:792
+#: gtk/gtksettings.c:798
 msgid "Whether labels should have mnemonics"
 msgstr "Indique si les étiquettes disposent de lettres-raccourcis"
 
-#: gtk/gtksettings.c:808
+#: gtk/gtksettings.c:814
 msgid "Enable Accelerators"
 msgstr "Activer les raccourcis clavier"
 
-#: gtk/gtksettings.c:809
+#: gtk/gtksettings.c:815
 msgid "Whether menu items should have accelerators"
 msgstr "Indique si les éléments de menu doivent disposer de raccourcis clavier"
 
-#: gtk/gtksettings.c:826
+#: gtk/gtksettings.c:832
 msgid "Recent Files Limit"
 msgstr "Limite des fichiers récents"
 
-#: gtk/gtksettings.c:827
+#: gtk/gtksettings.c:833
 msgid "Number of recently used files"
 msgstr "Nombre de fichiers récemment utilisés"
 
-#: gtk/gtksettings.c:845
+#: gtk/gtksettings.c:851
 msgid "Default IM module"
 msgstr "Module IM par défaut"
 
-#: gtk/gtksettings.c:846
+#: gtk/gtksettings.c:852
 msgid "Which IM module should be used by default"
 msgstr "Indique quel module de méthode de saisie doit être utilisé par défaut"
 
-#: gtk/gtksettings.c:864
+#: gtk/gtksettings.c:870
 msgid "Recent Files Max Age"
 msgstr "Âge limite des fichiers récents"
 
-#: gtk/gtksettings.c:865
+#: gtk/gtksettings.c:871
 msgid "Maximum age of recently used files, in days"
 msgstr "Âge maximum des fichiers récemment utilisés, en jours"
 
-#: gtk/gtksettings.c:874
+#: gtk/gtksettings.c:880
 msgid "Fontconfig configuration timestamp"
 msgstr "Horodatage de la configuration Fontconfig"
 
-#: gtk/gtksettings.c:875
+#: gtk/gtksettings.c:881
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Horodatage de la configuration Fontconfig actuelle"
 
-#: gtk/gtksettings.c:897
+#: gtk/gtksettings.c:903
 msgid "Sound Theme Name"
 msgstr "Nom du thème sonore"
 
-#: gtk/gtksettings.c:898
+#: gtk/gtksettings.c:904
 msgid "XDG sound theme name"
 msgstr "Nom du thème sonore XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:920
+#: gtk/gtksettings.c:926
 msgid "Audible Input Feedback"
 msgstr "Retour sonore des saisies"
 
-#: gtk/gtksettings.c:921
+#: gtk/gtksettings.c:927
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
 "Indique si des notifications sonores sont émises en réponse aux entrées de "
 "l'utilisateur"
 
-#: gtk/gtksettings.c:942
+#: gtk/gtksettings.c:948
 msgid "Enable Event Sounds"
 msgstr "Activer les notifications sonores"
 
-#: gtk/gtksettings.c:943
+#: gtk/gtksettings.c:949
 msgid "Whether to play any event sounds at all"
 msgstr "Indique s'il faut émettre des notifications sonores"
 
-#: gtk/gtksettings.c:958
+#: gtk/gtksettings.c:964
 msgid "Enable Tooltips"
 msgstr "Activer les infobulles"
 
-#: gtk/gtksettings.c:959
+#: gtk/gtksettings.c:965
 msgid "Whether tooltips should be shown on widgets"
 msgstr ""
 "Indique si les infobulles des composants graphiques doivent être affichées"

@@ -468,7 +468,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
        * define these keyvals; if yes, discard results because a widget up in 
        * the stack may have an exact match and we don't want to 'steal' it.
        */
-      gint oldkeyval;
+      guint oldkeyval = 0;
       GtkKeyHashEntry *keyhashentry;
 
       results = sort_lookup_results_by_keyval (results);

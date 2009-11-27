@@ -281,7 +281,9 @@ static NodeData         *node_data_find         (NodeData *nd,
                                                  gpointer  view_id);
 
 static GtkTextBTreeNode     *gtk_text_btree_node_new                  (void);
+#if 0
 static void                  gtk_text_btree_node_invalidate_downward  (GtkTextBTreeNode *node);
+#endif
 static void                  gtk_text_btree_node_invalidate_upward    (GtkTextBTreeNode *node,
                                                                        gpointer          view_id);
 static NodeData *            gtk_text_btree_node_check_valid          (GtkTextBTreeNode *node,
@@ -4920,6 +4922,7 @@ gtk_text_btree_node_has_tag (GtkTextBTreeNode *node, GtkTextTag *tag)
 }
 
 /* Add node and all children to the damage region. */
+#if 0
 static void
 gtk_text_btree_node_invalidate_downward (GtkTextBTreeNode *node)
 {
@@ -4965,6 +4968,7 @@ gtk_text_btree_node_invalidate_downward (GtkTextBTreeNode *node)
         }
     }
 }
+#endif
 
 static void
 gtk_text_btree_node_invalidate_upward (GtkTextBTreeNode *node, gpointer view_id)

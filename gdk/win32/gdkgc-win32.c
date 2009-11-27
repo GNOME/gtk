@@ -60,7 +60,7 @@ _gdk_gc_win32_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkGCWin32Class),
         (GBaseInitFunc) NULL,

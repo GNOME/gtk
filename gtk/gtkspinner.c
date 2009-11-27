@@ -120,7 +120,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
    *
    * Whether the spinner is active
    *
-   * Since 2.20
+   * Since: 2.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -451,8 +451,8 @@ static void
 gtk_spinner_accessible_initialize (AtkObject *accessible,
                                    gpointer   widget)
 {
-  atk_object_set_name (accessible, _("Spinner"));
-  atk_object_set_description (accessible, _("Provides visual status"));
+  atk_object_set_name (accessible, C_("throbbing progress animation widget", "Spinner"));
+  atk_object_set_description (accessible, _("Provides visual indication of progress"));
 
   a11y_parent_class->initialize (accessible, widget);
 }

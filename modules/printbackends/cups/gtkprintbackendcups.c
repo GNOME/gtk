@@ -193,7 +193,7 @@ static gboolean             request_auth_info                       (gpointer   
 static void
 gtk_print_backend_cups_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_cups_info =
+  const GTypeInfo print_backend_cups_info =
   {
     sizeof (GtkPrintBackendCupsClass),
     NULL,		/* base_init */

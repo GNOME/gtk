@@ -841,6 +841,21 @@ Does the same as gtk_style_apply_default_background().
 @orientation: 
 
 
+<!-- ##### FUNCTION gtk_paint_spinner ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@step: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gtk_paint_string ##### -->
 <para>
 

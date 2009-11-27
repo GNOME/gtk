@@ -215,7 +215,6 @@ Emits a #GtkButton::clicked signal to the given #GtkButton.
 @button: The #GtkButton you want to send the signal to.
 
 
-
 <!-- ##### FUNCTION gtk_button_enter ##### -->
 <para>
 Emits a #GtkButton::enter signal to the given #GtkButton.

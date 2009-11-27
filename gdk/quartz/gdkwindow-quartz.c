@@ -653,6 +653,7 @@ _gdk_quartz_window_is_ancestor (GdkWindow *ancestor,
 }
 
 
+/* See notes on top of gdkscreen-quartz.c */
 void
 _gdk_quartz_window_gdk_xy_to_xy (gint  gdk_x,
                                  gint  gdk_y,

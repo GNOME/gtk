@@ -268,14 +268,14 @@ static gpointer gdk_pixbuf__qtif_image_begin_load (GdkPixbufModuleSizeFunc size_
     context->prepare_func = prepare_func;
     context->update_func = update_func;
 
-	return context;
+    return context;
 }
 
 /* Incremental load clean up. */
 static gboolean gdk_pixbuf__qtif_image_stop_load (gpointer data, GError **error)
 {
     QTIFContext *context = (QTIFContext *)data;
-    gboolean ret;
+    gboolean ret = TRUE;
 
     if(context->loader != NULL)
     {
@@ -288,7 +288,8 @@ static gboolean gdk_pixbuf__qtif_image_stop_load (gpointer data, GError **error)
         }
     }
     g_free(context);
-	return ret;
+
+    return ret;
 }
 
 /* Create a new GdkPixbufLoader and connect to its signals. */

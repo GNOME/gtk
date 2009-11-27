@@ -333,13 +333,14 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 }
 
 /**
- * gtk_tooltip_set_from_gicon:
+ * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
  * @gicon: a #GIcon representing the icon, or %NULL
  * @size: a stock icon size
- * Sets the icon of the tooltip (which is in front of the text) to be
- * the icon indicated by @gicon with the size indicated
- * by @size.  If @icon_name is %NULL, the image will be hidden.
+ *
+ * Sets the icon of the tooltip (which is in front of the text)
+ * to be the icon indicated by @gicon with the size indicated
+ * by @size. If @gicon is %NULL, the image will be hidden.
  *
  * Since: 2.20
  */

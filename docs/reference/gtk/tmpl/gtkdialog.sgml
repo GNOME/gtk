@@ -368,6 +368,16 @@ directly, but into the @vbox and @action_area, as described above.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_dialog_get_widget_for_response ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@response_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_dialog_get_action_area ##### -->
 <para>
 

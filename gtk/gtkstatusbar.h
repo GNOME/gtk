@@ -107,6 +107,8 @@ void     gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
 					    gboolean      setting);
 gboolean gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar);
 
+GtkWidget* gtk_statusbar_get_message_area  (GtkStatusbar *statusbar);
+
 G_END_DECLS
 
 #endif /* __GTK_STATUSBAR_H__ */

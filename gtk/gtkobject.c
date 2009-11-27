@@ -332,12 +332,12 @@ gtk_object_floating_flag_handler (GtkObject *object,
     case +1:    /* force floating if possible */
       do
         oldvalue = g_atomic_int_get (&object->flags);
-      while (!g_atomic_int_compare_and_exchange (&object->flags, oldvalue, oldvalue | GTK_FLOATING));
+      while (!g_atomic_int_compare_and_exchange ((gint *)&object->flags, oldvalue, oldvalue | GTK_FLOATING));
       return oldvalue & GTK_FLOATING;
     case -1:    /* sink if possible */
       do
         oldvalue = g_atomic_int_get (&object->flags);
-      while (!g_atomic_int_compare_and_exchange (&object->flags, oldvalue, oldvalue & ~(guint32) GTK_FLOATING));
+      while (!g_atomic_int_compare_and_exchange ((gint *)&object->flags, oldvalue, oldvalue & ~(guint32) GTK_FLOATING));
       return oldvalue & GTK_FLOATING;
     default:    /* check floating */
       return 0 != (g_atomic_int_get (&object->flags) & GTK_FLOATING);

@@ -37,10 +37,12 @@
 /**
  * gdk_image_ref:
  * @image: a #GdkImage
- * 
+ *
  * Deprecated function; use g_object_ref() instead.
  * 
  * Return value: the image
+ *
+ * Deprecated: 2.0: Use g_object_ref() instead.
  **/
 GdkImage *
 gdk_image_ref (GdkImage *image)
@@ -53,9 +55,10 @@ gdk_image_ref (GdkImage *image)
 /**
  * gdk_image_unref:
  * @image: a #GdkImage
- * 
+ *
  * Deprecated function; use g_object_unref() instead.
- * 
+ *
+ * Deprecated: 2.0: Use g_object_unref() instead.
  **/
 void
 gdk_image_unref (GdkImage *image)

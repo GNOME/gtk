@@ -2414,7 +2414,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
   GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!GTK_WIDGET_VISIBLE (window));
+  g_return_if_fail (!GTK_WIDGET_MAPPED (window));
 
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
@@ -5315,7 +5315,7 @@ send_client_message_to_embedded_windows (GtkWidget *widget,
       
       while (embedded_windows)
 	{
-	  GdkNativeWindow xid = (GdkNativeWindow) embedded_windows->data;
+	  GdkNativeWindow xid = GDK_GPOINTER_TO_NATIVE_WINDOW(embedded_windows->data);
 	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
 	  embedded_windows = embedded_windows->next;
 	}
@@ -8407,6 +8407,24 @@ void
 gtk_window_set_auto_startup_notification (gboolean setting)
 {
   disable_startup_notification = !setting;
+}
+
+/**
+ * gtk_window_get_window_type:
+ * @window: a #GtkWindow
+ *
+ * Gets the type of the window. See #GtkWindowType.
+ *
+ * Return value: the type of the window
+ *
+ * Since: 2.20
+ **/
+GtkWindowType
+gtk_window_get_window_type (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), GTK_WINDOW_TOPLEVEL);
+
+  return window->type;
 }
 
 #if defined (G_OS_WIN32) && !defined (_WIN64)
