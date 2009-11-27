@@ -205,7 +205,7 @@ gdk_screen_get_height_mm (GdkScreen *screen)
 gint
 gdk_screen_get_number (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   
   return GDK_SCREEN_X11 (screen)->screen_num;
 }
@@ -338,42 +338,26 @@ gdk_screen_x11_finalize (GObject *object)
 
 /**
  * gdk_screen_get_n_monitors:
- * @screen: a #GdkScreen.
+ * @screen: a #GdkScreen
  *
  * Returns the number of monitors which @screen consists of.
  *
- * Returns: number of monitors which @screen consists of.
+ * Returns: number of monitors which @screen consists of
  *
  * Since: 2.2
- **/
-gint 
+ */
+gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  
+
   return GDK_SCREEN_X11 (screen)->n_monitors;
-}
-
-static GdkX11Monitor *
-get_monitor (GdkScreen *screen,
-	     int	monitor_num)
-{
-  GdkScreenX11 *screen_x11;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
-  screen_x11 = GDK_SCREEN_X11 (screen);
-  
-  g_return_val_if_fail (monitor_num < screen_x11->n_monitors, NULL);
-  g_return_val_if_fail (monitor_num >= 0, NULL);
-  
-  return &(screen_x11->monitors[monitor_num]);
 }
 
 /**
  * gdk_screen_get_monitor_width_mm:
  * @screen: a #GdkScreen
- * @monitor_num: number of the monitor
+ * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
  * Gets the width in millimeters of the specified monitor, if available.
  *
@@ -385,15 +369,21 @@ gint
 gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
 				 gint       monitor_num)
 {
-  return get_monitor (screen, monitor_num)->width_mm;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  g_return_val_if_fail (monitor_num >= 0, -1);
+  g_return_val_if_fail (monitor_num < screen_x11->n_monitors, -1);
+
+  return screen_x11->monitors[monitor_num].width_mm;
 }
 
 /**
  * gdk_screen_get_monitor_height_mm:
  * @screen: a #GdkScreen
- * @monitor_num: number of the monitor
+ * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
- * Gets the height in millimeters of the specified monitor. 
+ * Gets the height in millimeters of the specified monitor.
  *
  * Returns: the height of the monitor, or -1 if not available
  *
@@ -403,18 +393,24 @@ gint
 gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                   gint       monitor_num)
 {
-  return get_monitor (screen, monitor_num)->height_mm;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
+  g_return_val_if_fail (monitor_num >= 0, -1);
+  g_return_val_if_fail (monitor_num < screen_x11->n_monitors, -1);
+
+  return screen_x11->monitors[monitor_num].height_mm;
 }
 
 /**
  * gdk_screen_get_monitor_plug_name:
  * @screen: a #GdkScreen
- * @monitor_num: number of the monitor
+ * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
- * Returns the output name of the specified monitor. 
+ * Returns the output name of the specified monitor.
  * Usually something like VGA, DVI, or TV, not the actual
  * product name of the display device.
- * 
+ *
  * Returns: a newly-allocated string containing the name of the monitor,
  *   or %NULL if the name cannot be determined
  *
@@ -424,16 +420,22 @@ gchar *
 gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 				  gint       monitor_num)
 {
-  return g_strdup (get_monitor (screen, monitor_num)->output_name);
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (monitor_num >= 0, NULL);
+  g_return_val_if_fail (monitor_num < screen_x11->n_monitors, NULL);
+
+  return g_strdup (screen_x11->monitors[monitor_num].output_name);
 }
 
 /**
  * gdk_x11_screen_get_monitor_output:
  * @screen: a #GdkScreen
- * @monitor_num: number of the monitor 
+ * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *
  * Gets the XID of the specified output/monitor.
- * If the X server does not support version 1.2 of the RANDR 
+ * If the X server does not support version 1.2 of the RANDR
  * extension, 0 is returned.
  *
  * Returns: the XID of the monitor
@@ -444,34 +446,42 @@ XID
 gdk_x11_screen_get_monitor_output (GdkScreen *screen,
                                    gint       monitor_num)
 {
-  return get_monitor (screen, monitor_num)->output;
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), None);
+  g_return_val_if_fail (monitor_num >= 0, None);
+  g_return_val_if_fail (monitor_num < screen_x11->n_monitors, None);
+
+  return screen_x11->monitors[monitor_num].output;
 }
 
 /**
  * gdk_screen_get_monitor_geometry:
- * @screen : a #GdkScreen.
- * @monitor_num: the monitor number. 
+ * @screen : a #GdkScreen
+ * @monitor_num: the monitor number, between 0 and gdk_screen_get_n_monitors (screen)
  * @dest : a #GdkRectangle to be filled with the monitor geometry
  *
- * Retrieves the #GdkRectangle representing the size and position of 
+ * Retrieves the #GdkRectangle representing the size and position of
  * the individual monitor within the entire screen area.
- * 
- * Note that the size of the entire screen area can be retrieved via 
+ *
+ * Note that the size of the entire screen area can be retrieved via
  * gdk_screen_get_width() and gdk_screen_get_height().
  *
  * Since: 2.2
- **/
-void 
+ */
+void
 gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 gint          monitor_num,
 				 GdkRectangle *dest)
 {
-  if (dest) 
-    {
-      GdkX11Monitor *monitor = get_monitor (screen, monitor_num);
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
-      *dest = monitor->geometry;
-    }
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor_num >= 0);
+  g_return_if_fail (monitor_num < screen_x11->n_monitors);
+
+  if (dest)
+    *dest = screen_x11->monitors[monitor_num].geometry;
 }
 
 /**
