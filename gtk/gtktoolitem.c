@@ -1383,20 +1383,19 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
 }
 
 /**
- * gtk_tool_item_rebuild_menu()
+ * gtk_tool_item_rebuild_menu:
  * @tool_item: a #GtkToolItem
- * 
+ *
  * Calling this function signals to the toolbar that the
  * overflow menu item for @tool_item has changed. If the
  * overflow menu is visible when this function it called,
  * the menu will be rebuilt.
  *
- * The function must be called when the tool item
- * changes what it will do in response to the "create_menu_proxy"
- * signal.
- * 
+ * The function must be called when the tool item changes what it
+ * will do in response to the #GtkToolItem::create-menu-proxy signal.
+ *
  * Since: 2.6
- **/
+ */
 void
 gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 {
