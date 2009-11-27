@@ -184,6 +184,10 @@ additional environment variables.
       <term>printing</term>
       <listitem><para>Printing support</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>builder</term>
+      <listitem><para>GtkBuilder support</para></listitem>
+    </varlistentry>
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all 
@@ -335,8 +339,33 @@ nevertheless.
       <term>xim</term>
       <listitem><para>Information about XIM support</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>nograbs</term>
+      <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>multihead</term>
+      <listitem><para>Information related to multiple screens</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>xinerama</term>
+      <listitem><para>Simulate a multi-monitor setup</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>cursor</term>
+      <listitem><para>Information about cursor objects (only win32)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>draw</term>
+      <listitem><para>Information about drawing operations (only win32)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>eventloop</term>
+      <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
+    </varlistentry>
+
   </variablelist>
-  The special value <literal>all</literal> can be used to turn on all 
+  The special value <literal>all</literal> can be used to turn on all
   debug options.
   </para>
 </formalpara>
