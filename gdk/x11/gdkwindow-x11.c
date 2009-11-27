@@ -2920,6 +2920,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 {
   GdkDisplay *display;
   GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
   Window xwindow;
   Window xparent;
   Window root;
@@ -2955,7 +2956,8 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   rect->y = private->y;
   gdk_drawable_get_size ((GdkDrawable *)private, &rect->width, &rect->height);
 
-  if (GDK_WINDOW_DESTROYED (private))
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  if (GDK_WINDOW_DESTROYED (private) || impl->override_redirect)
     return;
 
   nvroots = 0;
