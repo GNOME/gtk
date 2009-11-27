@@ -845,9 +845,8 @@ gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
 /**
  * gtk_image_menu_item_get_always_show_image:
  * @image_menu_item: a #GtkImageMenuItem
- * @always_show: %TRUE if the menuitem should always show the image
  *
- * Returns whether the menu item will ignore the #GtkSettings:gtk-menu-images 
+ * Returns whether the menu item will ignore the #GtkSettings:gtk-menu-images
  * setting and always show the image, if available.
  * 
  * Returns: %TRUE if the menu item will always show the image
