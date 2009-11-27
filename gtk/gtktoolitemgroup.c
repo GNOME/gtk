@@ -20,13 +20,16 @@
  *      Jan Arne Petersen
  */
 
+#include "config.h"
+
 #include "gtktoolpaletteprivate.h"
 
 #include <gtk/gtk.h>
 #include <math.h>
 #include <string.h>
-
-#define P_(msgid)               (msgid)
+#include "gtkprivate.h"
+#include "gtkintl.h"
+#include "gtkalias.h"
 
 #define ANIMATION_TIMEOUT        50
 #define ANIMATION_DURATION      (ANIMATION_TIMEOUT * 4)
@@ -39,12 +42,13 @@
 #define DEFAULT_ELLIPSIZE        PANGO_ELLIPSIZE_NONE
 
 /**
- * SECTION:GtkToolItemGroup
- * @short_description: A sub container used in a tool palette
- * @include: gtktoolitemgroup.h
+ * SECTION:gtktoolitemgroup
+ * @Short_description: A sub container used in a tool palette
+ * @Title: GtkToolItemGroup
  *
- * An #GtkToolItemGroup is used together with #GtkToolPalette to add #GtkToolItem<!-- -->s to a palette like container
- * with different categories and drag and drop support.
+ * A #GtkToolItemGroup is used together with #GtkToolPalette to add
+ * #GtkToolItem<!-- -->s to a palette like container with different
+ * categories and drag and drop support.
  *
  * Since: 2.20
  */
@@ -427,17 +431,22 @@ gtk_tool_item_group_set_property (GObject      *object,
       case PROP_LABEL:
         gtk_tool_item_group_set_label (group, g_value_get_string (value));
         break;
+
       case PROP_LABEL_WIDGET:
         gtk_tool_item_group_set_label_widget (group, g_value_get_object (value));
+
       case PROP_COLLAPSED:
         gtk_tool_item_group_set_collapsed (group, g_value_get_boolean (value));
         break;
+
       case PROP_ELLIPSIZE:
         gtk_tool_item_group_set_ellipsize (group, g_value_get_enum (value));
         break;
+
       case PROP_RELIEF:
         gtk_tool_item_group_set_header_relief (group, g_value_get_enum(value));
         break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -828,8 +837,8 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
 }
 
 static void
-gtk_tool_item_group_real_size_allocate (GtkWidget      *widget,
-                                        GtkAllocation  *allocation)
+gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
+                                        GtkAllocation *allocation)
 {
   const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
@@ -1524,40 +1533,35 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                         P_("Label"),
                                                         P_("The human-readable title of this item group"),
                                                         DEFAULT_LABEL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (oclass, PROP_LABEL_WIDGET,
                                    g_param_spec_object  ("label-widget",
                                                         P_("Label widget"),
                                                         P_("A widget to display in place of the usual label"),
                                                         GTK_TYPE_WIDGET,
-							G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                        G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (oclass, PROP_COLLAPSED,
                                    g_param_spec_boolean ("collapsed",
                                                          P_("Collapsed"),
                                                          P_("Wether the group has been collapsed and items are hidden"),
                                                          DEFAULT_COLLAPSED,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                         G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (oclass, PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
                                                       P_("ellipsize"),
                                                       P_("Ellipsize for item group headers"),
                                                       PANGO_TYPE_ELLIPSIZE_MODE, DEFAULT_ELLIPSIZE,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (oclass, PROP_RELIEF,
                                    g_param_spec_enum ("header-relief",
                                                       P_("Header Relief"),
                                                       P_("Relief of the group header button"),
                                                       GTK_TYPE_RELIEF_STYLE, GTK_RELIEF_NORMAL,
-                                                      G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                      GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (wclass,
                                            g_param_spec_int ("expander-size",
@@ -1566,8 +1570,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_EXPANDER_SIZE,
-                                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME |
-                                                             G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                             GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (wclass,
                                            g_param_spec_int ("header-spacing",
@@ -1576,40 +1579,35 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                              0,
                                                              G_MAXINT,
                                                              DEFAULT_HEADER_SPACING,
-                                                             G_PARAM_READABLE | G_PARAM_STATIC_NAME |
-                                                             G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                             GTK_PARAM_READABLE));
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_HOMOGENEOUS,
                                               g_param_spec_boolean ("homogeneous",
                                                                     P_("Homogeneous"),
                                                                     P_("Whether the item should be the same size as other homogeneous items"),
                                                                     TRUE,
-                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                                    G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                                    GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_EXPAND,
                                               g_param_spec_boolean ("expand",
                                                                     P_("Expand"),
-                                                                    P_("Whether the item should receive extra space when the toolbar grows"),
+                                                                    P_("Whether the item should receive extra space when the group grows"),
                                                                     FALSE,
-                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                                    G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                                    GTK_PARAM_READWRITE)); 
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_FILL,
                                               g_param_spec_boolean ("fill",
                                                                     P_("Fill"),
-                                                                    P_("Whether the item should fill the avaiable space"),
+                                                                    P_("Whether the item should fill the available space"),
                                                                     TRUE,
-                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                                    G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                                    GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_NEW_ROW,
                                               g_param_spec_boolean ("new-row",
                                                                     P_("New Row"),
                                                                     P_("Whether the item should start a new row"),
                                                                     FALSE,
-                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                                    G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                                    GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (cclass, CHILD_PROP_POSITION,
                                               g_param_spec_int ("position",
@@ -1618,15 +1616,14 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                                 0,
                                                                 G_MAXINT,
                                                                 0,
-                                                                G_PARAM_READWRITE | G_PARAM_STATIC_NAME |
-                                                                G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                                                                GTK_PARAM_READWRITE));
 
   g_type_class_add_private (cls, sizeof (GtkToolItemGroupPrivate));
 }
 
 /**
  * gtk_tool_item_group_new:
- * @label: the label of the new group.
+ * @label: the label of the new group
  *
  * Creates a new tool item group with label @label.
  *
@@ -1637,14 +1634,13 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
 GtkWidget*
 gtk_tool_item_group_new (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "label",
-    label, NULL);
+  return g_object_new (GTK_TYPE_TOOL_ITEM_GROUP, "label", label, NULL);
 }
 
 /**
  * gtk_tool_item_group_set_label:
- * @group: an #GtkToolItemGroup.
- * @label: the new human-readable label of of the group.
+ * @group: a #GtkToolItemGroup
+ * @label: the new human-readable label of of the group
  *
  * Sets the label of the tool item group. The label is displayed in the header
  * of the group.
@@ -1672,11 +1668,12 @@ gtk_tool_item_group_set_label (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_set_label_widget:
- * @group: an #GtkToolItemGroup.
- * @widget: the new human-readable label of of the group.
+ * @group: a #GtkToolItemGroup
+ * @label_widget: the widget to be displayed in place of the usual label
  *
- * Sets the label of the tool item group. The label is displayed in the header
- * of the group.
+ * Sets the label of the tool item group.
+ * The label widget is displayed in the header of the group, in place
+ * of the usual label.
  *
  * Since: 2.20
  */
@@ -1727,26 +1724,28 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_header_relief:
- * @group: an #GtkToolItemGroup.
- * @style: The GtkReliefStyle
+ * @group: a #GtkToolItemGroup
+ * @style: the #GtkReliefStyle
  *
- * Set the button relief of the group header. See #gtk_button_set_relief for
- * details
+ * Set the button relief of the group header.
+ * See gtk_button_set_relief() for details.
  *
  * Since: 2.20
  */
 void
-gtk_tool_item_group_set_header_relief (GtkToolItemGroup   *group,
-                                       GtkReliefStyle      style)
+gtk_tool_item_group_set_header_relief (GtkToolItemGroup *group,
+                                       GtkReliefStyle    style)
 {
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
-  gtk_button_set_relief (GTK_BUTTON(group->priv->header), style);
+
+  gtk_button_set_relief (GTK_BUTTON (group->priv->header), style);
 }
 
 static gint64
 gtk_tool_item_group_get_animation_timestamp (GtkToolItemGroup *group)
 {
   GTimeVal now;
+
   g_source_get_current_time (group->priv->animation_timeout, &now);
   return (now.tv_sec * G_USEC_PER_SEC + now.tv_usec - group->priv->animation_start) / 1000;
 }
@@ -1802,7 +1801,7 @@ gtk_tool_item_group_animation_cb (gpointer data)
   gint64 timestamp = gtk_tool_item_group_get_animation_timestamp (group);
   gboolean retval;
 
-  GDK_THREADS_ENTER();
+  GDK_THREADS_ENTER ();
 
   /* Enque this early to reduce number of expose events. */
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (group));
@@ -1831,15 +1830,15 @@ gtk_tool_item_group_animation_cb (gpointer data)
 
   retval = (priv->animation_timeout != NULL);
 
-  GDK_THREADS_LEAVE();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }
 
 /**
  * gtk_tool_item_group_set_collapsed:
- * @group: an #GtkToolItemGroup.
- * @collapsed: whether the @group should be collapsed or expanded.
+ * @group: a #GtkToolItemGroup
+ * @collapsed: whether the @group should be collapsed or expanded
  *
  * Sets whether the @group should be collapsed or expanded.
  *
@@ -1893,8 +1892,8 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_set_ellipsize:
- * @group: an #GtkToolItemGroup.
- * @ellipsize: the #PangoEllipsizeMode labels in @group should use.
+ * @group: a #GtkToolItemGroup
+ * @ellipsize: the #PangoEllipsizeMode labels in @group should use
  *
  * Sets the ellipsization mode which should be used by labels in @group.
  *
@@ -1917,12 +1916,13 @@ gtk_tool_item_group_set_ellipsize (GtkToolItemGroup   *group,
 
 /**
  * gtk_tool_item_group_get_label:
- * @group: an #GtkToolItemGroup.
+ * @group: a #GtkToolItemGroup
  *
  * Gets the label of @group.
  *
- * Returns: the label of @group. The label is an internal string of @group and must not be modified.
- *          Note that NULL is returned if a custom label has been set with gtk_tool_item_group_set_label_widget()
+ * Returns: the label of @group. The label is an internal string of @group
+ *     and must not be modified. Note that %NULL is returned if a custom
+ *     label has been set with gtk_tool_item_group_set_label_widget()
  *
  * Since: 2.20
  */
@@ -1943,11 +1943,12 @@ gtk_tool_item_group_get_label (GtkToolItemGroup *group)
 
 /**
  * gtk_tool_item_group_get_label_widget:
- * @group: an #GtkToolItemGroup.
+ * @group: a #GtkToolItemGroup
  *
  * Gets the label widget of @group.
+ * See gtk_tool_item_group_set_label_widget().
  *
- * Returns: the label widget of @group. See gtk_tool_item_group_set_label_widget()
+ * Returns: the label widget of @group
  *
  * Since: 2.20
  */
@@ -1955,16 +1956,17 @@ GtkWidget*
 gtk_tool_item_group_get_label_widget (GtkToolItemGroup *group)
 {
   GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
+
   return gtk_bin_get_child (GTK_BIN (alignment));
 }
 
 /**
  * gtk_tool_item_group_get_collapsed:
- * @group: an GtkToolItemGroup.
+ * @group: a GtkToolItemGroup
  *
  * Gets whether @group is collapsed or expanded.
  *
- * Returns: %TRUE if @group is collapsed, %FALSE if it is expanded.
+ * Returns: %TRUE if @group is collapsed, %FALSE if it is expanded
  *
  * Since: 2.20
  */
@@ -1972,16 +1974,17 @@ gboolean
 gtk_tool_item_group_get_collapsed (GtkToolItemGroup *group)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), DEFAULT_COLLAPSED);
+
   return group->priv->collapsed;
 }
 
 /**
  * gtk_tool_item_group_get_ellipsize:
- * @group: an #GtkToolItemGroup.
+ * @group: a #GtkToolItemGroup
  *
  * Gets the ellipsization mode of @group.
  *
- * Returns: the #PangoEllipsizeMode of @group.
+ * Returns: the #PangoEllipsizeMode of @group
  *
  * Since: 2.20
  */
@@ -1989,12 +1992,13 @@ PangoEllipsizeMode
 gtk_tool_item_group_get_ellipsize (GtkToolItemGroup *group)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), DEFAULT_ELLIPSIZE);
+
   return group->priv->ellipsize;
 }
 
 /**
  * gtk_tool_item_group_get_header_relief:
- * @group: an #GtkToolItemGroup.
+ * @group: a #GtkToolItemGroup
  *
  * Gets the relief mode of the header button of @group.
  *
@@ -2006,14 +2010,16 @@ GtkReliefStyle
 gtk_tool_item_group_get_header_relief (GtkToolItemGroup   *group)
 {
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), GTK_RELIEF_NORMAL);
+
   return gtk_button_get_relief (GTK_BUTTON (group->priv->header));
 }
 
 /**
  * gtk_tool_item_group_insert:
- * @group: an #GtkToolItemGroup.
- * @item: the #GtkToolItem to insert into @group.
- * @position: the position of @item in @group, starting with 0. The position -1 means end of list.
+ * @group: a #GtkToolItemGroup
+ * @item: the #GtkToolItem to insert into @group
+ * @position: the position of @item in @group, starting with 0.
+ *     The position -1 means end of list.
  *
  * Inserts @item at @position in the list of children of @group.
  *
@@ -2055,9 +2061,11 @@ gtk_tool_item_group_insert (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_set_item_position:
- * @group: an #GtkToolItemGroup.
- * @item: the #GtkToolItem to move to a new position, should be a child of @group.
- * @position: the new position of @item in @group, starting with 0. The position -1 means end of list.
+ * @group: a #GtkToolItemGroup
+ * @item: the #GtkToolItem to move to a new position, should
+ *     be a child of @group.
+ * @position: the new position of @item in @group, starting with 0.
+ *     The position -1 means end of list.
  *
  * Sets the position of @item in the list of children of @group.
  *
@@ -2075,7 +2083,6 @@ gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
   g_return_if_fail (GTK_IS_TOOL_ITEM (item));
-
   g_return_if_fail (position >= -1);
 
   child = gtk_tool_item_group_get_child (group, item, &old_position, &link);
@@ -2096,12 +2103,12 @@ gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_get_item_position:
- * @group: an #GtkToolItemGroup.
- * @item: a #GtkToolItem.
+ * @group: a #GtkToolItemGroup
+ * @item: a #GtkToolItem
  *
  * Gets the position of @item in @group as index.
  *
- * Returns: the index of @item in @group or -1 if @item is no child of @group.
+ * Returns: the index of @item in @group or -1 if @item is no child of @group
  *
  * Since: 2.20
  */
@@ -2122,11 +2129,11 @@ gtk_tool_item_group_get_item_position (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_get_n_items:
- * @group: an #GtkToolItemGroup.
+ * @group: a #GtkToolItemGroup
  *
- * Gets the number of tool items in group.
+ * Gets the number of tool items in @group.
  *
- * Returns: the number of tool items in group.
+ * Returns: the number of tool items in @group
  *
  * Since: 2.20
  */
@@ -2140,12 +2147,12 @@ gtk_tool_item_group_get_n_items (GtkToolItemGroup *group)
 
 /**
  * gtk_tool_item_group_get_nth_item:
- * @group: an #GtkToolItemGroup.
- * @index: the index.
+ * @group: a #GtkToolItemGroup
+ * @index: the index
  *
- * Gets the tool item at index in group.
+ * Gets the tool item at @index in group.
  *
- * Returns: the #GtkToolItem at index.
+ * Returns: the #GtkToolItem at index
  *
  * Since: 2.20
  */
@@ -2164,13 +2171,13 @@ gtk_tool_item_group_get_nth_item (GtkToolItemGroup *group,
 
 /**
  * gtk_tool_item_group_get_drop_item:
- * @group: an #GtkToolItemGroup.
- * @x: the x position.
- * @y: the y position.
+ * @group: a #GtkToolItemGroup
+ * @x: the x position
+ * @y: the y position
  *
  * Gets the tool item at position (x, y).
  *
- * Returns: the #GtkToolItem at position (x, y).
+ * Returns: the #GtkToolItem at position (x, y)
  *
  * Since: 2.20
  */
@@ -2413,3 +2420,7 @@ _gtk_tool_item_group_palette_reconfigured (GtkToolItemGroup *group)
 
   gtk_tool_item_group_header_adjust_style (group);
 }
+
+
+#define __GTK_TOOL_ITEM_GROUP_C__
+#include "gtkaliasdef.c"

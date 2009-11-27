@@ -730,6 +730,34 @@ create_toolbar (void)
 }
 
 static WidgetInfo *
+create_toolpalette (void)
+{
+  GtkWidget *widget, *group;
+  GtkToolItem *item;
+
+  widget = gtk_tool_palette_new ();
+  group = gtk_tool_item_group_new ("Tools");
+  gtk_container_add (GTK_CONTAINER (widget), group);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_ABOUT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_FILE);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CONNECT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+
+  group = gtk_tool_item_group_new ("More tools");
+  gtk_container_add (GTK_CONTAINER (widget), group);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CUT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_EXECUTE);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CANCEL);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+
+  return new_widget_info ("toolpalette", widget, MEDIUM);
+}
+
+static WidgetInfo *
 create_menubar (void)
 {
   GtkWidget *widget, *vbox, *align, *item;
@@ -1005,6 +1033,7 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_toolpalette ());
   retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());

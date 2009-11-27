@@ -27,12 +27,12 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TOOL_ITEM_GROUP           (gtk_tool_item_group_get_type())
-#define GTK_TOOL_ITEM_GROUP(obj)           (G_TYPE_CHECK_INSTANCE_CAST(obj, GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroup))
-#define GTK_TOOL_ITEM_GROUP_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST(cls, GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroupClass))
-#define GTK_IS_TOOL_ITEM_GROUP(obj)        (G_TYPE_CHECK_INSTANCE_TYPE(obj, GTK_TYPE_TOOL_ITEM_GROUP))
-#define GTK_IS_TOOL_ITEM_GROUP_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE(obj, GTK_TYPE_TOOL_ITEM_GROUP))
-#define GTK_TOOL_ITEM_GROUP_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS((obj), GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroupClass))
+#define GTK_TYPE_TOOL_ITEM_GROUP           (gtk_tool_item_group_get_type ())
+#define GTK_TOOL_ITEM_GROUP(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroup))
+#define GTK_TOOL_ITEM_GROUP_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroupClass))
+#define GTK_IS_TOOL_ITEM_GROUP(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_TOOL_ITEM_GROUP))
+#define GTK_IS_TOOL_ITEM_GROUP_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_TOOL_ITEM_GROUP))
+#define GTK_TOOL_ITEM_GROUP_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOL_ITEM_GROUP, GtkToolItemGroupClass))
 
 typedef struct _GtkToolItemGroup        GtkToolItemGroup;
 typedef struct _GtkToolItemGroupClass   GtkToolItemGroupClass;

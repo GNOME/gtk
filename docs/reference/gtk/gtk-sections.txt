@@ -4198,6 +4198,7 @@ gtk_tool_shell_get_style
 gtk_tool_shell_get_text_alignment
 gtk_tool_shell_get_text_orientation
 gtk_tool_shell_rebuild_menu
+gtk_tool_shell_get_text_size_group
 
 <SUBSECTION Standard>
 GTK_IS_TOOL_SHELL
@@ -4461,42 +4462,6 @@ gtk_tooltips_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtktoolpalette</FILE>
-<TITLE>GtkToolPalette</TITLE>
-GtkToolPalette
-gtk_tool_palette_new
-gtk_tool_palette_get_exclusive
-gtk_tool_palette_set_exclusive
-gtk_tool_palette_get_expand
-gtk_tool_palette_set_expand
-gtk_tool_palette_get_group_position
-gtk_tool_palette_set_group_position
-gtk_tool_palette_get_icon_size
-gtk_tool_palette_set_icon_size
-gtk_tool_palette_get_style
-gtk_tool_palette_set_style
-gtk_tool_palette_unset_style
-gtk_tool_palette_add_drag_dest
-gtk_tool_palette_get_drag_item
-gtk_tool_palette_get_drag_target_group
-gtk_tool_palette_get_drag_target_item
-gtk_tool_palette_get_drop_group
-gtk_tool_palette_get_drop_item
-gtk_tool_palette_set_drag_source
-<SUBSECTION Standard>
-GtkToolPaletteClass
-GTK_TOOL_PALETTE
-GTK_IS_TOOL_PALETTE
-GTK_TYPE_TOOL_PALETTE
-GTK_TOOL_PALETTE_CLASS
-GTK_IS_TOOL_PALETTE_CLASS
-GTK_TOOL_PALETTE_GET_CLASS
-<SUBSECTION Private>
-gtk_tool_palette_get_type
-GtkToolPalettePrivate
-</SECTION>
-
-<SECTION>
 <FILE>gtktoolitemgroup</FILE>
 <TITLE>GtkToolItemGroup</TITLE>
 GtkToolItemGroup
@@ -4508,6 +4473,7 @@ gtk_tool_item_group_get_n_items
 gtk_tool_item_group_get_label
 gtk_tool_item_group_get_label_widget
 gtk_tool_item_group_get_nth_item
+gtk_tool_item_group_get_header_relief
 gtk_tool_item_group_insert
 gtk_tool_item_group_new
 gtk_tool_item_group_set_collapsed
@@ -4515,6 +4481,7 @@ gtk_tool_item_group_set_ellipsize
 gtk_tool_item_group_set_item_position
 gtk_tool_item_group_set_label
 gtk_tool_item_group_set_label_widget
+gtk_tool_item_group_set_header_relief
 <SUBSECTION Standard>
 GtkToolItemGroupClass
 GTK_TOOL_ITEM_GROUP
@@ -4528,7 +4495,7 @@ gtk_tool_item_group_get_type
 </SECTION>
 
 <SECTION>
-<FILE>GtkToolPalette</FILE>
+<FILE>gtktoolpalette</FILE>
 <TITLE>GtkToolPalette</TITLE>
 GtkToolPalette
 gtk_tool_palette_new
@@ -4541,17 +4508,19 @@ gtk_tool_palette_set_group_position
 gtk_tool_palette_get_icon_size
 gtk_tool_palette_set_icon_size
 gtk_tool_palette_unset_icon_size
-gtk_tool_palette_get_orientation
-gtk_tool_palette_set_orientation
 gtk_tool_palette_get_style
 gtk_tool_palette_set_style
+gtk_tool_palette_unset_style
 gtk_tool_palette_add_drag_dest
 gtk_tool_palette_get_drag_item
 gtk_tool_palette_get_drag_target_group
 gtk_tool_palette_get_drag_target_item
 gtk_tool_palette_get_drop_group
 gtk_tool_palette_get_drop_item
+GtkToolPaletteDragTargets
 gtk_tool_palette_set_drag_source
+gtk_tool_palette_get_hadjustment
+gtk_tool_palette_get_vadjustment
 <SUBSECTION Standard>
 GtkToolPaletteClass
 GTK_TOOL_PALETTE
