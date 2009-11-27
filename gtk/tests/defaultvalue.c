@@ -278,6 +278,10 @@ test_type (gconstpointer data)
           strcmp (pspec->name, "buffer") == 0)
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_TOOL_ITEM_GROUP) &&
+          strcmp (pspec->name, "label-widget") == 0)
+        continue;
+
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
