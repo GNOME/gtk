@@ -55,6 +55,74 @@
 #include "gtkbuilderprivate.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkwidget
+ * @Short_description: Base class for all widgets
+ * @Title: GtkWidget
+ *
+ * GtkWidget is the base class all widgets in GTK+ derive from. It manages the
+ * widget lifecycle, states and style.
+ * <refsect2 id="style-properties">
+ * <para>
+ * <structname>GtkWidget</structname> introduces <firstterm>style
+ * properties</firstterm> - these are basically object properties that are stored
+ * not on the object, but in the style object associated to the widget. Style
+ * properties are set in <link linkend="gtk-Resource-Files">resource files</link>.
+ * This mechanism is used for configuring such things as the location of the
+ * scrollbar arrows through the theme, giving theme authors more control over the
+ * look of applications without the need to write a theme engine in C.
+ * </para>
+ * <para>
+ * Use gtk_widget_class_install_style_property() to install style properties for
+ * a widget class, gtk_widget_class_find_style_property() or
+ * gtk_widget_class_list_style_properties() to get information about existing
+ * style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
+ * gtk_widget_style_get_valist() to obtain the value of a style property.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="GtkWidget-BUILDER-UI">
+ * <title>GtkWidget as GtkBuildable</title>
+ * <para>
+ * The GtkWidget implementation of the GtkBuildable interface supports a
+ * custom &lt;accelerator&gt; element, which has attributes named key,
+ * modifiers and signal and allows to specify accelerators.
+ * </para>
+ * <example>
+ * <title>A UI definition fragment specifying an accelerator</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkButton">
+ *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * <para>
+ * In addition to accelerators, <structname>GtkWidget</structname> also support a
+ * custom &lt;accessible&gt; element, which supports actions and relations.
+ * Properties on the accessible implementation of an object can be set by accessing the
+ * internal child "accessible" of a <structname>GtkWidget</structname>.
+ * </para>
+ * <example>
+ * <title>A UI definition fragment specifying an accessible</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkButton" id="label1"/>
+ *   <property name="label">I am a Label for a Button</property>
+ * </object>
+ * <object class="GtkButton" id="button1">
+ *   <accessibility>
+ *     <action action_name="click" translatable="yes">Click the button.</action>
+ *     <relation target="label1" type="labelled-by"/>
+ *   </accessibility>
+ *   <child internal-child="accessible">
+ *     <object class="AtkObject" id="a11y-button1">
+ *       <property name="AtkObject::name">Clickable Button</property>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
 
@@ -708,6 +776,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWidget::show:
+   * @widget: the object which received the signal.
+   */
   widget_signals[SHOW] =
     g_signal_new (I_("show"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -716,6 +788,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::hide:
+   * @widget: the object which received the signal.
+   */
   widget_signals[HIDE] =
     g_signal_new (I_("hide"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -724,6 +801,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::map:
+   * @widget: the object which received the signal.
+   */
   widget_signals[MAP] =
     g_signal_new (I_("map"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -732,6 +814,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::unmap:
+   * @widget: the object which received the signal.
+   */
   widget_signals[UNMAP] =
     g_signal_new (I_("unmap"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -740,6 +827,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::realize:
+   * @widget: the object which received the signal.
+   */
   widget_signals[REALIZE] =
     g_signal_new (I_("realize"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -748,6 +840,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::unrealize:
+   * @widget: the object which received the signal.
+   */
   widget_signals[UNREALIZE] =
     g_signal_new (I_("unrealize"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -756,6 +853,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::size-request:
+   * @widget: the object which received the signal.
+   * @requisition:
+   */
   widget_signals[SIZE_REQUEST] =
     g_signal_new (I_("size-request"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -765,6 +868,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__BOXED,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GtkWidget::size-allocate:
+   * @widget: the object which received the signal.
+   * @allocation:
+   */
   widget_signals[SIZE_ALLOCATE] = 
     g_signal_new (I_("size-allocate"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -775,6 +884,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  /**
+   * GtkWidget::state-changed:
+   * @widget: the object which received the signal.
+   * @state:
+   */
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -906,6 +1020,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   g_cclosure_marshal_VOID__PARAM,
 		   G_TYPE_NONE, 1,
 		   G_TYPE_PARAM);
+
+  /**
+   * GtkWidget::mnemonic-activate:
+   * @widget: the object which received the signal.
+   * @arg1:
+   */
   widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new (I_("mnemonic-activate"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -915,6 +1035,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
+
+  /**
+   * GtkWidget::grab-focus:
+   * @widget: the object which received the signal.
+   */
   widget_signals[GRAB_FOCUS] =
     g_signal_new (I_("grab-focus"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -923,6 +1048,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  /**
+   * GtkWidget::focus:
+   * @widget: the object which received the signal.
+   * @direction:
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+   */
   widget_signals[FOCUS] =
     g_signal_new (I_("focus"),
 		  G_TYPE_FROM_CLASS (object_class),
@@ -932,6 +1065,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__ENUM,
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_DIRECTION_TYPE);
+
+  /**
+   * GtkWidget::move-focus:
+   * @widget: the object which received the signal.
+   * @direction:
+   */
   widget_signals[MOVE_FOCUS] =
     g_signal_new_class_handler (I_("move-focus"),
                                 G_TYPE_FROM_CLASS (object_class),
@@ -1503,6 +1642,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  /**
+   * GtkWidget::selection-notify-event:
+   * @widget: the object which received the signal.
+   * @event:
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
+   */
   widget_signals[SELECTION_NOTIFY_EVENT] =
     g_signal_new (I_("selection-notify-event"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1513,6 +1659,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 
+  /**
+   * GtkWidget::selection-received:
+   * @widget: the object which received the signal.
+   * @data:
+   * @time:
+   */
   widget_signals[SELECTION_RECEIVED] =
     g_signal_new (I_("selection-received"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1524,6 +1676,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT);
 
+  /**
+   * GtkWidget::selection-get:
+   * @widget: the object which received the signal.
+   * @data:
+   * @info:
+   * @time:
+   */
   widget_signals[SELECTION_GET] =
     g_signal_new (I_("selection-get"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1831,7 +1990,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_INT,
 		  G_TYPE_UINT);
 
-  /** 
+  /**
    * GtkWidget::drag-data-get:
    * @widget: the object which received the signal
    * @drag_context: the drag context
@@ -2143,6 +2302,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+
+  /**
+   * GtkWidget::show-help:
+   * @widget: the object which received the signal.
+   * @help_type:
+   */
   widget_signals[SHOW_HELP] =
     g_signal_new (I_("show-help"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -2152,6 +2317,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__ENUM,
 		  G_TYPE_BOOLEAN, 1,
 		  GTK_TYPE_WIDGET_HELP_TYPE);
+
+  /**
+   * GtkWidget::accel-closures-changed:
+   * @widget: the object which received the signal.
+   */
   widget_signals[ACCEL_CLOSURES_CHANGED] =
     g_signal_new (I_("accel-closures-changed"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -2179,6 +2349,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_SCREEN);
+
   /**
    * GtkWidget::can-activate-accel:
    * @widget: the object which received the signal
@@ -6799,6 +6970,17 @@ reset_rc_styles_recurse (GtkWidget *widget, gpointer data)
 			  NULL);
 }
 
+
+/**
+ * gtk_widget_reset_rc_styles:
+ * @widget: a #GtkWidget.
+ *
+ * Reset the styles of @widget and all descendents, so when
+ * they are looked up again, they get the correct values
+ * for the currently loaded RC file settings.
+ *
+ * This function is not useful for applications.
+ */
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
 {

@@ -41,8 +41,62 @@
 
 G_BEGIN_DECLS
 
-/* The flags that are used by GtkWidget on top of the
- * flags field of GtkObject.
+/**
+ * GtkWidgetFlags:
+ * @GTK_TOPLEVEL: widgets without a real parent, as there are #GtkWindow<!-- -->s and
+ *  #GtkMenu<!-- -->s have this flag set throughout their lifetime.
+ *  Toplevel widgets always contain their own #GdkWindow.
+ * @GTK_NO_WINDOW: Indicative for a widget that does not provide its own #GdkWindow.
+ *  Visible action (e.g. drawing) is performed on the parent's #GdkWindow.
+ * @GTK_REALIZED: Set by gtk_widget_realize(), unset by gtk_widget_unrealize().
+ *  A realized widget has an associated #GdkWindow.
+ * @GTK_MAPPED: Set by gtk_widget_map(), unset by gtk_widget_unmap().
+ *  Only realized widgets can be mapped. It means that gdk_window_show()
+ *  has been called on the widgets window(s).
+ * @GTK_VISIBLE: Set by gtk_widget_show(), unset by gtk_widget_hide(). Implies that a
+ *  widget will be mapped as soon as its parent is mapped.
+ * @GTK_SENSITIVE: Set and unset by gtk_widget_set_sensitive().
+ *  The sensitivity of a widget determines whether it will receive
+ *  certain events (e.g. button or key presses). One premise for
+ *  the widget's sensitivity is to have this flag set.
+ * @GTK_PARENT_SENSITIVE: Set and unset by gtk_widget_set_sensitive() operations on the
+ *  parents of the widget.
+ *  This is the second premise for the widget's sensitivity. Once
+ *  it has %GTK_SENSITIVE and %GTK_PARENT_SENSITIVE set, its state is
+ *  effectively sensitive. This is expressed (and can be examined) by
+ *  the #GTK_WIDGET_IS_SENSITIVE macro.
+ * @GTK_CAN_FOCUS: Determines whether a widget is able to handle focus grabs.
+ * @GTK_HAS_FOCUS: Set by gtk_widget_grab_focus() for widgets that also
+ *  have %GTK_CAN_FOCUS set. The flag will be unset once another widget
+ *  grabs the focus.
+ * @GTK_CAN_DEFAULT: The widget is allowed to receive the default action via
+ *  gtk_widget_grab_default() and will reserve space to draw the default if possible
+ * @GTK_HAS_DEFAULT: The widget currently is receiving the default action and
+ *  should be drawn appropriately if possible
+ * @GTK_HAS_GRAB: Set by gtk_grab_add(), unset by gtk_grab_remove(). It means that the
+ *  widget is in the grab_widgets stack, and will be the preferred one for
+ *  receiving events other than ones of cosmetic value.
+ * @GTK_RC_STYLE: Indicates that the widget's style has been looked up through the rc
+ *  mechanism. It does not imply that the widget actually had a style
+ *  defined through the rc mechanism.
+ * @GTK_COMPOSITE_CHILD: Indicates that the widget is a composite child of its parent; see
+ *  gtk_widget_push_composite_child(), gtk_widget_pop_composite_child().
+ * @GTK_NO_REPARENT: Unused since before GTK+ 1.2, will be removed in a future version.
+ * @GTK_APP_PAINTABLE: Set and unset by gtk_widget_set_app_paintable().
+ *  Must be set on widgets whose window the application directly draws on,
+ *  in order to keep GTK+ from overwriting the drawn stuff.  See
+ *  <xref linkend="app-paintable-widgets"/> for a detailed
+ *  description of this flag.
+ * @GTK_RECEIVES_DEFAULT: The widget when focused will receive the default action and have
+ *  %GTK_HAS_DEFAULT set even if there is a different widget set as default.
+ * @GTK_DOUBLE_BUFFERED: Set and unset by gtk_widget_set_double_buffered().
+ *  Indicates that exposes done on the widget should be
+ *  double-buffered.  See <xref linkend="double-buffering"/> for a
+ *  detailed discussion of how double-buffering works in GTK+ and
+ *  why you may want to disable it for special cases.
+ * @GTK_NO_SHOW_ALL:
+ *
+ * Tells about certain properties of the widget.
  */
 typedef enum
 {
@@ -55,28 +109,14 @@ typedef enum
   GTK_PARENT_SENSITIVE = 1 << 10,
   GTK_CAN_FOCUS        = 1 << 11,
   GTK_HAS_FOCUS        = 1 << 12,
-
-  /* widget is allowed to receive the default via gtk_widget_grab_default
-   * and will reserve space to draw the default if possible
-   */
   GTK_CAN_DEFAULT      = 1 << 13,
-
-  /* the widget currently is receiving the default action and should be drawn
-   * appropriately if possible
-   */
   GTK_HAS_DEFAULT      = 1 << 14,
-
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_NO_REPARENT      = 1 << 18,
   GTK_APP_PAINTABLE    = 1 << 19,
-
-  /* the widget when focused will receive the default action and have
-   * HAS_DEFAULT set even if there is a different widget set as default
-   */
   GTK_RECEIVES_DEFAULT = 1 << 20,
-
   GTK_DOUBLE_BUFFERED  = 1 << 21,
   GTK_NO_SHOW_ALL      = 1 << 22
 } GtkWidgetFlags;
@@ -100,37 +140,221 @@ typedef enum
 
 /* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */
+/**
+ * GTK_WIDGET_TYPE:
+ * @wid: a #GtkWidget.
+ *
+ * Gets the type of a widget.
+ */
 #define GTK_WIDGET_TYPE(wid)		  (GTK_OBJECT_TYPE (wid))
+
+/**
+ * GTK_WIDGET_STATE:
+ * @wid: a #GtkWidget.
+ *
+ * Returns the current state of the widget, as a #GtkStateType.
+ */
 #define GTK_WIDGET_STATE(wid)		  (GTK_WIDGET (wid)->state)
+
+/**
+ * GTK_WIDGET_SAVED_STATE:
+ * @wid: a #GtkWidget.
+ *
+ * Returns the saved state of the widget, as a #GtkStateType.
+ *
+ * The saved state will be restored when a widget gets sensitive
+ * again, after it has been made insensitive with gtk_widget_set_state()
+ * or gtk_widget_set_sensitive().
+ */
 #define GTK_WIDGET_SAVED_STATE(wid)	  (GTK_WIDGET (wid)->saved_state)
+
 
 /* Macros for extracting the widget flags from GtkWidget.
  */
+/**
+ * GTK_WIDGET_FLAGS:
+ * @wid: a #GtkWidget.
+ *
+ * Returns the widget flags from @wid.
+ */
 #define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
+
+/**
+ * GTK_WIDGET_TOPLEVEL:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is a toplevel widget.
+ */
 #define GTK_WIDGET_TOPLEVEL(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL) != 0)
+
+/**
+ * GTK_WIDGET_NO_WINDOW:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget doesn't have an own #GdkWindow.
+ */
 #define GTK_WIDGET_NO_WINDOW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW) != 0)
+
+/**
+ * GTK_WIDGET_REALIZED:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is realized.
+ */
 #define GTK_WIDGET_REALIZED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_REALIZED) != 0)
+
+/**
+ * GTK_WIDGET_MAPPED:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is mapped.
+ */
 #define GTK_WIDGET_MAPPED(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_MAPPED) != 0)
+
+/**
+ * GTK_WIDGET_VISIBLE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is visible.
+ */
 #define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
+
+/**
+ * GTK_WIDGET_DRAWABLE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is mapped and visible.
+ */
 #define GTK_WIDGET_DRAWABLE(wid)	  (GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid))
+
+/**
+ * GTK_WIDGET_SENSITIVE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the #GTK_SENSITIVE flag has be set on the widget.
+ */
 #define GTK_WIDGET_SENSITIVE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE) != 0)
+
+/**
+ * GTK_WIDGET_PARENT_SENSITIVE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the #GTK_PARENT_SENSITIVE flag has be set on the widget.
+ */
 #define GTK_WIDGET_PARENT_SENSITIVE(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_PARENT_SENSITIVE) != 0)
+
+/**
+ * GTK_WIDGET_IS_SENSITIVE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is effectively sensitive.
+ */
 #define GTK_WIDGET_IS_SENSITIVE(wid)	  (GTK_WIDGET_SENSITIVE (wid) && \
 					   GTK_WIDGET_PARENT_SENSITIVE (wid))
+/**
+ * GTK_WIDGET_CAN_FOCUS:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is able to handle focus grabs.
+ */
 #define GTK_WIDGET_CAN_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_FOCUS) != 0)
+
+/**
+ * GTK_WIDGET_HAS_FOCUS:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget has grabbed the focus and no other
+ * widget has done so more recently.
+ */
 #define GTK_WIDGET_HAS_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_FOCUS) != 0)
+
+/**
+ * GTK_WIDGET_CAN_DEFAULT:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is allowed to receive the default action
+ * via gtk_widget_grab_default().
+ */
 #define GTK_WIDGET_CAN_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_DEFAULT) != 0)
+
+/**
+ * GTK_WIDGET_HAS_DEFAULT:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget currently is receiving the default action.
+ */
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT) != 0)
+
+/**
+ * GTK_WIDGET_HAS_GRAB:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is in the grab_widgets stack, and will be
+ * the preferred one for receiving events other than ones of cosmetic value.
+ */
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
+
+/**
+ * GTK_WIDGET_RC_STYLE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget's style has been looked up through the rc
+ * mechanism.
+ */
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
+
+/**
+ * GTK_WIDGET_COMPOSITE_CHILD:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget is a composite child of its parent.
+ */
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
+
+/**
+ * GTK_WIDGET_APP_PAINTABLE:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the #GTK_APP_PAINTABLE flag has been set on the widget.
+ */
 #define GTK_WIDGET_APP_PAINTABLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_APP_PAINTABLE) != 0)
+
+/**
+ * GTK_WIDGET_RECEIVES_DEFAULT:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the widget when focused will receive the default action
+ * even if there is a different widget set as default.
+ */
 #define GTK_WIDGET_RECEIVES_DEFAULT(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_RECEIVES_DEFAULT) != 0)
+
+/**
+ * GTK_WIDGET_DOUBLE_BUFFERED:
+ * @wid: a #GtkWidget.
+ *
+ * Evaluates to %TRUE if the #GTK_DOUBLE_BUFFERED flag has been set on the widget.
+ */
 #define GTK_WIDGET_DOUBLE_BUFFERED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_DOUBLE_BUFFERED) != 0)
-  
+
+
 /* Macros for setting and clearing widget flags.
  */
+/**
+ * GTK_WIDGET_SET_FLAGS:
+ * @wid: a #GtkWidget.
+ * @flag: the flags to set.
+ *
+ * Turns on certain widget flags.
+ */
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
+
+/**
+ * GTK_WIDGET_UNSET_FLAGS:
+ * @wid: a #GtkWidget.
+ * @flag: the flags to unset.
+ *
+ * Turns off certain widget flags.
+ */
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
 
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
@@ -138,7 +362,6 @@ typedef enum
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
 typedef struct _GtkRequisition	   GtkRequisition;
-typedef 	GdkRectangle	   GtkAllocation;
 typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
@@ -146,11 +369,38 @@ typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 typedef struct _GtkClipboard	   GtkClipboard;
 typedef struct _GtkTooltip         GtkTooltip;
 typedef struct _GtkWindow          GtkWindow;
-typedef void     (*GtkCallback)        (GtkWidget        *widget,
-					gpointer	  data);
 
-/* A requisition is a desired amount of space which a
- *  widget may request.
+/**
+ * GtkAllocation:
+ * @x: the X position of the widget's area relative to its parents allocation.
+ * @y: the Y position of the widget's area relative to its parents allocation.
+ * @width: the width of the widget's allocated area.
+ * @height: the height of the widget's allocated area.
+ *
+ * A <structname>GtkAllocation</structname> of a widget represents region which has been allocated to the
+ * widget by its parent. It is a subregion of its parents allocation. See
+ * <xref linkend="size-allocation"/> for more information.
+ */
+typedef 	GdkRectangle	   GtkAllocation;
+
+/**
+ * GtkCallback:
+ * @widget: the widget to operate on
+ * @data: user-supplied data
+ *
+ * The type of the callback functions used for e.g. iterating over
+ * the children of a container, see gtk_container_foreach().
+ */
+typedef void    (*GtkCallback)     (GtkWidget        *widget,
+				    gpointer          data);
+
+/**
+ * GtkRequisition:
+ * @width: the widget's desired width
+ * @height: the widget's desired height
+ *
+ * A <structname>GtkRequisition</structname> represents the desired size of a widget. See
+ * <xref linkend="size-requisition"/> for more information.
  */
 struct _GtkRequisition
 {
@@ -229,6 +479,24 @@ struct _GtkWidget
   GtkWidget *GSEAL (parent);
 };
 
+/**
+ * GtkWidgetClass:
+ * @parent_class:
+ * @activate_signal:
+ * @set_scroll_adjustments_signal:
+ *
+ * <structfield>activate_signal</structfield>
+ * The signal to emit when a widget of this class is activated,
+ * gtk_widget_activate() handles the emission. Implementation of this
+ * signal is optional.
+ *
+ *
+ * <structfield>set_scroll_adjustment_signal</structfield>
+ * This signal is emitted  when a widget of this class is added
+ * to a scrolling aware parent, gtk_widget_set_scroll_adjustments()
+ * handles the emission.
+ * Implementation of this signal is optional.
+ */
 struct _GtkWidgetClass
 {
   /* The object class structure needs to be the first
@@ -669,10 +937,39 @@ GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
                                           GdkRectangle *clip_rect);
 
 #ifndef GTK_DISABLE_DEPRECATED
+
+/**
+ * gtk_widget_set_visual:
+ * @widget: a #GtkWidget
+ * @visual: a visual
+ *
+ * This function is deprecated; it does nothing.
+ */
 #define gtk_widget_set_visual(widget,visual)  ((void) 0)
+
+/**
+ * gtk_widget_push_visual:
+ * @visual: a visual
+ *
+ * This function is deprecated; it does nothing.
+ */
 #define gtk_widget_push_visual(visual)        ((void) 0)
+
+/**
+ * gtk_widget_pop_visual:
+ *
+ * This function is deprecated; it does nothing.
+ */
 #define gtk_widget_pop_visual()               ((void) 0)
+
+/**
+ * gtk_widget_set_default_visual:
+ * @visual: a visual
+ *
+ * This function is deprecated; it does nothing.
+ */
 #define gtk_widget_set_default_visual(visual) ((void) 0)
+
 #endif /* GTK_DISABLE_DEPRECATED */
 
 /* Accessibility support */
@@ -735,7 +1032,25 @@ void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
 
 #ifndef GTK_DISABLE_DEPRECATED
+
+/**
+ * gtk_widget_set_rc_style:
+ * @widget: a #GtkWidget.
+ *
+ * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
+ *
+ * Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
+ */
 #define gtk_widget_set_rc_style(widget)          (gtk_widget_set_style (widget, NULL))
+
+/**
+ * gtk_widget_restore_default_style:
+ * @widget: a #GtkWidget.
+ *
+ * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
+ *
+ * Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
+ */
 #define gtk_widget_restore_default_style(widget) (gtk_widget_set_style (widget, NULL))
 #endif
 
