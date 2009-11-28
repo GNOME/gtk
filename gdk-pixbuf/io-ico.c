@@ -1011,12 +1011,12 @@ fill_entry (IconEntry *icon,
 		return FALSE;
 	}
 
-	if ((icon->xor_rowstride % 4) != 0) 		
+	if ((icon->xor_rowstride % 4) != 0)
 		icon->xor_rowstride = 4 * ((icon->xor_rowstride / 4) + 1);
 	icon->xor = g_new0 (guchar, icon->xor_rowstride * icon->height);
 
-	icon->and_rowstride = icon->width / 8;
-	if ((icon->and_rowstride % 4) != 0) 		
+	icon->and_rowstride = (icon->width + 7) / 8;
+	if ((icon->and_rowstride % 4) != 0)
 		icon->and_rowstride = 4 * ((icon->and_rowstride / 4) + 1);
 	icon->and = g_new0 (guchar, icon->and_rowstride * icon->height);
 
