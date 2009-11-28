@@ -428,17 +428,33 @@ gtk_button_class_init (GtkButtonClass *klass)
 		  G_TYPE_NONE, 0);
   widget_class->activate_signal = button_signals[ACTIVATE];
 
+  /**
+   * GtkButton:default-border:
+   *
+   * The "default-border" style property defines the extra space to add
+   * around a button that can become the default widget of its window.
+   * For more information about default widgets, see gtk_widget_grab_default().
+   */
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("default-border",
 							       P_("Default Spacing"),
-							       P_("Extra space to add for CAN_DEFAULT buttons"),
+							       P_("Extra space to add for GTK_CAN_DEFAULT buttons"),
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE));
 
+  /**
+   * GtkButton:default-outside-border:
+   *
+   * The "default-outside-border" style property defines the extra outside
+   * space to add around a button that can become the default widget of its
+   * window. Extra outside space is always drawn outside the button border.
+   * For more information about default widgets, see gtk_widget_grab_default().
+   */
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("default-outside-border",
 							       P_("Default Outside Spacing"),
-							       P_("Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"),
+							       P_("Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"),
 							       GTK_TYPE_BORDER,
 							       GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
