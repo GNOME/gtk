@@ -620,7 +620,24 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	    
 	    return_val = GDK_FILTER_REMOVE;
 	  }
-	
+        else
+          {
+            if (socket->plug_window && xre->window == GDK_WINDOW_XWINDOW (socket->plug_window) && xre->parent != GDK_WINDOW_XWINDOW (widget->window))
+              {
+                gboolean result;
+
+                _gtk_socket_end_embedding (socket);
+
+                g_object_ref (widget);
+                g_signal_emit_by_name (widget, "plug-removed", &result);
+                if (!result)
+                  gtk_widget_destroy (widget);
+                g_object_unref (widget);
+
+                return_val = GDK_FILTER_REMOVE;
+              }
+          }
+
 	break;
       }
     case UnmapNotify:
