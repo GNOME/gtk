@@ -5604,7 +5604,7 @@ gtk_label_rescan_links (GtkLabel *label)
   PangoAttrIterator *iter;
   GList *links;
 
-  if (!label->select_info)
+  if (!label->select_info || !label->select_info->links)
     return;
 
   attlist = pango_layout_get_attributes (layout);
