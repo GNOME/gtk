@@ -982,7 +982,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_TYPE_TOOLBAR_STYLE,
                                                                    GTK_TOOLBAR_BOTH,
                                                                    GTK_PARAM_READWRITE),
-                                             NULL);
+                                             gtk_rc_property_parse_enum);
   g_assert (result == PROP_TOOLBAR_STYLE);
 
   /**
@@ -997,7 +997,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_TYPE_ICON_SIZE,
                                                                    GTK_ICON_SIZE_LARGE_TOOLBAR,
                                                                    GTK_PARAM_READWRITE),
-                                             NULL);
+                                             gtk_rc_property_parse_enum);
   g_assert (result == PROP_TOOLBAR_ICON_SIZE);
 }
 
