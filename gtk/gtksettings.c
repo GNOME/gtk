@@ -974,8 +974,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:toolbar-style:
    *
    * The size of icons in default toolbars.
-   *
-   * Since: 2.18
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-toolbar-style",
@@ -991,8 +989,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:toolbar-icon-size:
    *
    * The size of icons in default toolbars.
-   *
-   * Since: 2.18
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-toolbar-icon-size",

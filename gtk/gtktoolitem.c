@@ -705,16 +705,16 @@ gtk_tool_item_new (void)
 
 /**
  * gtk_tool_item_get_ellipsize_mode:
- * @tool_item: a #GtkToolItem: 
- * 
+ * @tool_item: a #GtkToolItem
+ *
  * Returns the ellipsize mode used for @tool_item. Custom subclasses of
  * #GtkToolItem should call this function to find out how text should
  * be ellipsized.
- * 
+ *
  * Return value: a #PangoEllipsizeMode indicating how text in @tool_item
  * should be ellipsized.
- * 
- * Since: 2.14
+ *
+ * Since: 2.20
  **/
 PangoEllipsizeMode
 gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
@@ -865,7 +865,7 @@ gtk_tool_item_get_relief_style (GtkToolItem *tool_item)
  * Return value: a #gfloat indicating the horizontal text alignment
  * used for @tool_item
  * 
- * Since: 2.14
+ * Since: 2.20
  **/
 gfloat
 gtk_tool_item_get_text_alignment (GtkToolItem *tool_item)
@@ -883,17 +883,17 @@ gtk_tool_item_get_text_alignment (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_text_orientation:
- * @tool_item: a #GtkToolItem: 
- * 
+ * @tool_item: a #GtkToolItem
+ *
  * Returns the text orientation used for @tool_item. Custom subclasses of
  * #GtkToolItem should call this function to find out how text should
  * be orientated.
- * 
+ *
  * Return value: a #GtkOrientation indicating the text orientation
  * used for @tool_item
- * 
- * Since: 2.14
- **/
+ *
+ * Since: 2.20
+ */
 GtkOrientation
 gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
 {
@@ -910,15 +910,15 @@ gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_text_size_group:
- * @tool_item: a #GtkToolItem: 
- * 
+ * @tool_item: a #GtkToolItem
+ *
  * Returns the size group used for labels in @tool_item. Custom subclasses of
  * #GtkToolItem should call this function and use the size group for labels.
- * 
+ *
  * Return value: a #GtkSizeGroup
- * 
- * Since: 2.14
- **/
+ *
+ * Since: 2.20
+ */
 GtkSizeGroup *
 gtk_tool_item_get_text_size_group (GtkToolItem *tool_item)
 {
@@ -935,16 +935,16 @@ gtk_tool_item_get_text_size_group (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_set_expand:
- * @tool_item: a #GtkToolItem 
+ * @tool_item: a #GtkToolItem
  * @expand: Whether @tool_item is allocated extra space
- * 
+ *
  * Sets whether @tool_item is allocated extra space when there
  * is more room on the toolbar then needed for the items. The
  * effect is that the item gets bigger when the toolbar gets bigger
  * and smaller when the toolbar gets smaller.
- * 
+ *
  * Since: 2.4
- **/
+ */
 void
 gtk_tool_item_set_expand (GtkToolItem *tool_item,
 			  gboolean     expand)
