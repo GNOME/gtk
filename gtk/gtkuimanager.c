@@ -943,6 +943,23 @@ gtk_ui_manager_get_action (GtkUIManager *self,
   return GTK_UI_MANAGER_GET_CLASS (self)->get_action (self, path);
 }
 
+static gboolean
+node_is_dead (GNode *node)
+{
+  GNode *child;
+
+  if (NODE_INFO (node)->uifiles != NULL)
+    return FALSE;
+
+  for (child = node->children; child != NULL; child = child->next)
+    {
+      if (!node_is_dead (child))
+	return FALSE;
+    }
+
+  return TRUE;
+}
+
 static GNode *
 get_child_node (GtkUIManager *self, 
 		GNode        *parent,
@@ -977,7 +994,18 @@ get_child_node (GtkUIManager *self,
 			       node_type, 
 			       NODE_INFO (child)->name,
 			       NODE_INFO (child)->type);
-		  
+
+                    if (node_is_dead (child))
+                      {
+                        /* This node was removed but is still dirty so
+                         * it is still in the tree. We want to treat this
+                         * as if it didn't exist, which means we move it
+                         * to the position it would have been created at.
+                         */
+                        g_node_unlink (child);
+                        goto insert_child;
+                      }
+
 		  return child;
 		}
 	    }
@@ -990,21 +1018,21 @@ get_child_node (GtkUIManager *self,
 	  mnode->type = node_type;
 	  mnode->name = g_strndup (childname, childname_length);
 
+	  child = g_node_new (mnode);
+	insert_child:
 	  if (sibling)
 	    {
 	      if (top)
-		child = g_node_insert_before (parent, sibling, 
-					      g_node_new (mnode));
+		g_node_insert_before (parent, sibling, child);
 	      else
-		child = g_node_insert_after (parent, sibling, 
-					     g_node_new (mnode));
+		g_node_insert_after (parent, sibling, child);
 	    }
 	  else
 	    {
 	      if (top)
-		child = g_node_prepend_data (parent, mnode);
+		g_node_prepend (parent, child);
 	      else
-		child = g_node_append_data (parent, mnode);
+		g_node_append (parent, child);
 	    }
 
 	  mark_node_dirty (child);
