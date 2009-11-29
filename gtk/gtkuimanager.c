@@ -31,6 +31,7 @@
 #include "config.h"
 
 #include <string.h>
+#include "gtkaccellabel.h"
 #include "gtkactivatable.h"
 #include "gtkbuildable.h"
 #include "gtkintl.h"
@@ -2625,8 +2626,9 @@ update_node (GtkUIManager *self,
           if (in_popup && !popup_accels)
 	    {
 	      /* don't show accels in popups */
-	      GtkWidget *label = GTK_BIN (info->proxy)->child;
-	      g_object_set (label, "accel-closure", NULL, NULL);
+	      GtkWidget *child = gtk_bin_get_child (GTK_BIN (info->proxy));
+	      if (GTK_IS_ACCEL_LABEL (child))
+	        g_object_set (child, "accel-closure", NULL, NULL);
 	    }
         }
       
