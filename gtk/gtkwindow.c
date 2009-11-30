@@ -898,13 +898,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                                            g_param_spec_int ("decoration-border-width",
                                                              P_("Decoration border width"),
                                                              P_("Decoration border width"),
-                                                             0, G_MAXINT, 6, GTK_PARAM_READWRITE));
+                                                             0, G_MAXINT,
+                                                             6, GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("decoration-resize-handle",
                                                              P_("Decoration resize handle size"),
                                                              P_("Decoration resize handle size"),
-                                                             0, G_MAXINT, 20, GTK_PARAM_READWRITE));
+                                                             0, G_MAXINT,
+                                                             20, GTK_PARAM_READWRITE));
 
   /**
    * GtkWindow:decoration-extents:
@@ -913,10 +915,37 @@ gtk_window_class_init (GtkWindowClass *klass)
    * used for client-side window drop-shadows or window glow.
    */
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-extents",
-                                                             P_("Decoration extent size"),
-                                                             P_("Decoration extent size"),
-                                                             0, G_MAXINT, 0, GTK_PARAM_READWRITE));
+                                           g_param_spec_int ("extents-left",
+                                                             P_("Left extents"),
+                                                             P_("Left extents area"),
+                                                             0, G_MAXINT,
+                                                             40,
+                                                             GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("extents-top",
+                                                             P_("Top extents"),
+                                                             P_("Top extents area"),
+                                                             0, G_MAXINT,
+                                                             40,
+                                                             GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("extents-right",
+                                                             P_("Right extents"),
+                                                             P_("Right extents area"),
+                                                             0, G_MAXINT,
+                                                             40,
+                                                             GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("extents-bottom",
+                                                             P_("Bottom extents"),
+                                                             P_("Bottom extents area"),
+                                                             0, G_MAXINT,
+                                                             40,
+                                                             GTK_PARAM_READWRITE));
+
 
   window_signals[SET_FOCUS] =
     g_signal_new (I_("set-focus"),
@@ -5509,29 +5538,39 @@ gtk_window_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkRequisition child_requisition;
   GtkWindowPrivate *priv;
-  gint frame_width = 0;
-  gint extents = 0;
 
   window = GTK_WINDOW (widget);
   priv = GTK_WINDOW_GET_PRIVATE (window);
   bin = GTK_BIN (window);
-
-  if (priv->client_side_decorations & GDK_DECOR_BORDER)
-    {
-      frame_width = get_decoration_frame_width (window);
-
-      gtk_widget_style_get (widget,
-                            "decoration-extents", &extents,
-                            NULL);
-    }
 
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
   if (is_client_side_decorated (window))
     {
-      requisition->width += extents * 2;
-      requisition->height += extents * 2;
+      gint frame_width = 0;
+      gint extents_left = 0, extents_right = 0, extents_top = 0, extents_bottom = 0;
+      GdkWindowState state;
+
+      if (widget->window != NULL)
+        state = gdk_window_get_state (widget->window);
+
+      if (widget->window && !(state & GDK_WINDOW_STATE_MAXIMIZED))
+        {
+          gtk_widget_style_get (widget,
+                                "extents-left",   &extents_left,
+                                "extents-top",    &extents_top,
+                                "extents-right",  &extents_right,
+                                "extents-bottom", &extents_bottom,
+                                NULL);
+        }
+
+      if (priv->client_side_decorations & GDK_DECOR_BORDER)
+        {
+          gtk_widget_style_get (widget,
+                                "decoration-border-width", &frame_width,
+                                NULL);
+        }
 
       if (window->type != GTK_WINDOW_POPUP)
         {
@@ -5563,6 +5602,9 @@ gtk_window_size_request (GtkWidget      *widget,
           requisition->width += frame_width * 2;
           requisition->height += frame_width * 2 + child_height;
         }
+
+      requisition->width += extents_left + extents_right;
+      requisition->height += extents_top + extents_bottom;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -5623,6 +5665,11 @@ gtk_window_size_allocate (GtkWidget     *widget,
   gint left_width = 0;
   GdkRectangle rect;
   gboolean client_decorated;
+  gint extents_left = 0;
+  gint extents_top = 0;
+  gint extents_right = 0;
+  gint extents_bottom = 0;
+  GdkWindowState state;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
@@ -5630,20 +5677,38 @@ gtk_window_size_allocate (GtkWidget     *widget,
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   client_decorated = is_client_side_decorated (window);
+  if (widget->window)
+    state = gdk_window_get_state (widget->window);
 
   deco_allocation.width = deco_allocation.height = 0;
 
-  frame_width = get_decoration_frame_width (window);
+  if (client_decorated)
+    {
+      if (widget->window && !(state & GDK_WINDOW_STATE_MAXIMIZED))
+        {
+          gtk_widget_style_get (widget,
+                                "extents-left",   &extents_left,
+                                "extents-top",    &extents_top,
+                                "extents-right",  &extents_right,
+                                "extents-bottom", &extents_bottom,
+                                NULL);
+        }
+
+      if (priv->client_side_decorations & GDK_DECOR_BORDER)
+        {
+          frame_width = get_decoration_frame_width (window);
+        }
+    }
 
   if (client_decorated && priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
     {
       gtk_widget_get_child_requisition (priv->icon_event_box, &deco_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        deco_allocation.x = allocation->width - frame_width - deco_requisition.width;
+        deco_allocation.x = allocation->width - frame_width - deco_requisition.width - extents_left;
       else
-        deco_allocation.x = frame_width;
-      deco_allocation.y = frame_width;
+        deco_allocation.x = frame_width + extents_left;
+      deco_allocation.y = frame_width + extents_top;
       deco_allocation.width = deco_requisition.width;
       deco_allocation.height = deco_requisition.height;
 
@@ -5658,10 +5723,10 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        box_allocation.x = frame_width;
+        box_allocation.x = frame_width + extents_left;
       else
-        box_allocation.x = allocation->width - frame_width - box_requisition.width;
-      box_allocation.y = frame_width;
+        box_allocation.x = allocation->width - frame_width - box_requisition.width - extents_right;
+      box_allocation.y = frame_width + extents_top;
       box_allocation.width = box_requisition.width;
       box_allocation.height = box_requisition.height;
 
@@ -5675,8 +5740,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
-      deco_allocation.x = 2 * frame_width + left_width;
-      deco_allocation.y = frame_width;
+      deco_allocation.x = 2 * frame_width + left_width + extents_left;
+      deco_allocation.y = frame_width + extents_top;
       deco_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
       deco_allocation.height = deco_requisition.height;
 
@@ -5701,31 +5766,33 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       if (client_decorated && window->type != GTK_WINDOW_POPUP)
         {
-          child_allocation.x = container->border_width + frame_width;
-          child_allocation.y = container->border_width
+          child_allocation.x = container->border_width + frame_width + extents_left;
+          child_allocation.y = container->border_width + extents_top
             + MAX (deco_allocation.height, box_allocation.height)
             + frame_width; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
+                                            - extents_left - extents_right
                                             - (frame_width * 2)));
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
+                                             - extents_top - extents_bottom
                                              - (frame_width * 2)
                                              // XXX - padding style property?
                                              - MAX (deco_allocation.height, box_allocation.height)));
         }
       else
         {
-          child_allocation.x = GTK_CONTAINER (window)->border_width;
-          child_allocation.y = GTK_CONTAINER (window)->border_width;
-          child_allocation.width =
-            MAX (1, (gint)allocation->width - child_allocation.x * 2);
-          child_allocation.height =
-            MAX (1, (gint)allocation->height - child_allocation.y * 2);
+          child_allocation.x = GTK_CONTAINER (window)->border_width + extents_left;
+          child_allocation.y = GTK_CONTAINER (window)->border_width + extents_top;
+          child_allocation.width = MAX (1,
+              (gint)allocation->width - child_allocation.x * 2 - extents_left - extents_right);
+          child_allocation.height = MAX (1,
+              (gint)allocation->height - child_allocation.y * 2 - extents_top - extents_bottom);
         }
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
 
-  if  (widget->window != NULL)
+  if (widget->window != NULL)
     {
       rect.x = 0;
       rect.y = 0;
@@ -7881,17 +7948,46 @@ gtk_window_paint (GtkWidget     *widget,
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       gint frame_width, title_height;
+      gint extents_left, extents_top, extents_right, extents_bottom;
 
-      frame_width = get_decoration_frame_width (GTK_WINDOW (widget));
-      title_height = get_title_height (GTK_WINDOW (widget));
+      frame_width = title_height = extents_left = extents_right = extents_top = extents_bottom = 0;
 
-      gtk_paint_box (widget->style, widget->window, GTK_STATE_NORMAL,
-		     GTK_SHADOW_OUT, area, widget, "decoration", 0, 0, -1, -1);
-      gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
-                          GTK_SHADOW_NONE, area, widget, "base",
-                          frame_width, frame_width + title_height,
-                          widget->allocation.width - 2 * frame_width,
-                          widget->allocation.height - 2 * frame_width - title_height);
+      if (is_client_side_decorated (GTK_WINDOW (widget)))
+        {
+          frame_width = get_decoration_frame_width (GTK_WINDOW (widget));
+          title_height = get_title_height (GTK_WINDOW (widget));
+
+          gtk_widget_style_get (widget,
+                                "decoration-border-width", &frame_width,
+                                "extents-left",            &extents_left,
+                                "extents-top",             &extents_top,
+                                "extents-right",           &extents_right,
+                                "extents-bottom",          &extents_bottom,
+                                NULL);
+        }
+
+      gtk_paint_box (widget->style,
+                     widget->window,
+                     GTK_STATE_NORMAL,
+		     GTK_SHADOW_OUT,
+                     area, widget,
+                     "decoration",
+                     extents_left,
+                     extents_top,
+                     -1,
+                     -1);
+
+      gtk_paint_flat_box (widget->style,
+                          widget->window,
+                          GTK_STATE_NORMAL,
+                          GTK_SHADOW_NONE,
+                          area,
+                          widget,
+                          "base",
+                          frame_width + extents_left,
+                          frame_width + title_height + extents_top,
+                          widget->allocation.width - 2 * frame_width - extents_left - extents_right,
+                          widget->allocation.height - 2 * frame_width - title_height - extents_top - extents_bottom);
     }
   else
     gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL,
