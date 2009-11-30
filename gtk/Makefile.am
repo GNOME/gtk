@@ -393,6 +393,7 @@ gtk_private_h_sources =		\
 	gtktextutil.h		\
 	gtkthemes.h		\
 	gtktoggleactionprivate.h\
+	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwindow-decorate.h	\
