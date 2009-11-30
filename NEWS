@@ -32,6 +32,30 @@ Overview of Changes from GTK+ 2.19.0 to 2.19.1
  595498 No accesor for GTK_WINDOW ()->type
  116650 "action area" for GtkNotebook (e.g. for tab close button)
  600150 GtkColorSelection tooltip issues
+ 480065 wrong tree collapsed (or expanded) after having scrolled
+ 596473 Second double-click of GtkTreeView row doesn't emit...
+ 601869 GtkUIManager assumes too much about popup menus
+ 581145 Wrong positioning for fullscreen gedit toolbar animation
+ 602724 gailimage doesn't handle GTK_IMAGE_{GICON,ICON_NAME}...
+ 561130 get_monitor_geometry segfaults if called with non-existant...
+ 597026 Missing include for memset()
+ 585383 Segfault in gdk_pixbuf__ico_image_save
+ 597865 Move documentation from templates to inline comments
+ 123569 Catch contents being reparented out of socket
+ 561334 Incorrect named constant in documentation of two GtkButton...
+ 601611 gtk_selection_data_get_targets() reads X Atom data as GdkAtoms
+ 601409 action area presence modifies notebook behaviour
+ 603268 wrong Since: markers in toolpalette merge
+ 603271 wrong toolbar style
+ 601959 must release compose key before continuing compose sequence
+ 603302 Incorrectly warn about links on text with color and underline
+ 603201 gtk_about_dialog_set_url_hook has no effect anymore
+ 591438 dfb_events_dispatch is not thread safe
+ 589842 GtkAction API to have its menu item proxies have always-show...
+ 584700 TIFF pixbuf loader should support compression
+ 603128 Adding new UI that was recently removed may cause wrong order
+ 601682 Print preview should use gtk_show_uri by default
+ 596083 Deprecate notebook label packing functionality
 
 * Updated translations:
  Estonian
