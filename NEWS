@@ -12,6 +12,8 @@ Overview of Changes from GTK+ 2.19.0 to 2.19.1
 * GtkToolPalette is a new container to show tool items
   in collapsible groups in a grid
 
+* gdk-pixbuf can now handle compressed TIFF images
+
 * GSEAL work:
  - New accessor: gtk_window_get_window_type()
 
