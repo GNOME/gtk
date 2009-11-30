@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-01 18:54-0500\n"
+"POT-Creation-Date: 2009-11-30 16:38-0500\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -375,12 +375,12 @@ msgstr "E paletšwe go bula faele ya motšwa-o-swere"
 msgid "Failed to read from temporary file"
 msgstr "E paletšwe go bala go tšwa faeleng ya motšwa-o-swere"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2025
+#: gdk-pixbuf/gdk-pixbuf-io.c:2029
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "E paletšwe go bula '%s' bakeng sa go ngwala: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2050
+#: gdk-pixbuf/gdk-pixbuf-io.c:2054
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -389,11 +389,11 @@ msgstr ""
 "E paletšwe go tswalela '%s' mola e dutše e ngwala seswantšho, tsebišo ka "
 "moka e ka ba e sa bolokwa: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2270 gdk-pixbuf/gdk-pixbuf-io.c:2321
+#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Kgopolo e sa lekanago go boloka seswantšho sešireletšing"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2367
+#: gdk-pixbuf/gdk-pixbuf-io.c:2371
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Phošo ya go ngwala faeleng ya seswantšho: %s"
@@ -688,8 +688,8 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Sekgoba sa mmala sa JPEG seo se sa thekgwego (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
-#: gdk-pixbuf/io-jpeg.c:1185
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "E ka se kgone go bea kgopolo bakeng sa go laiša faele ya JPEG"
 
@@ -698,7 +698,7 @@ msgstr "E ka se kgone go bea kgopolo bakeng sa go laiša faele ya JPEG"
 msgid "Transformed JPEG has zero width or height."
 msgstr "PNG e fetotšwego e na bophara goba bophagamo bja lefeela."
 
-#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -707,7 +707,7 @@ msgstr ""
 "Khwaliti ya JPEG e swanetše go ba boleng magareng ga 0 le 100; boleng bja '%"
 "s' bo ka se arolwe."
 
-#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -715,7 +715,7 @@ msgstr ""
 "Khwaliti ya JPEG e swanetše go ba boleng magareng ga 0 le 100; boleng bja '%"
 "d' ga bo a dumelelwa."
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Sebopego sa seswantšho sa JPEG"
 
@@ -1009,58 +1009,62 @@ msgstr "Tsebišo e oketšegilego ka faeleng"
 msgid "The Targa image format"
 msgstr "Sebopego sa seswantšho sa Targa"
 
-#: gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:161
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Ga e kgone go hwetša bophara bja seswantšho (faele e mpe ya TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:168
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Ga e kgone go hwetša bophagamo bja seswantšho (faele e mpe ya TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:176
 msgid "Width or height of TIFF image is zero"
 msgstr "Bophara goba bophagamo bja seswantšho sa TIFF ke lefeela"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
 msgid "Dimensions of TIFF image too large"
 msgstr "Bogolo bja seswantšho sa TIFF ke bjo bogolo kudu"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ga go na kgopolo e lekanego go ka bula faele ya TIFF"
 
-#: gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:283
 msgid "Failed to load RGB data from TIFF file"
 msgstr "E paletšwe go laiša tsebišo ya RGB go tšwa faeleng ya TIFF"
 
-#: gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:339
 msgid "Failed to open TIFF image"
 msgstr "E paletšwe go bula seswantšho sa TIFF"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
 msgid "TIFFClose operation failed"
 msgstr "Mošomo wa go tswalela TIFF o padile"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
 msgid "Failed to load TIFF image"
 msgstr "E paletšwe go laiša seswantšho sa TIFF"
 
-#: gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:678
 #, fuzzy
 msgid "Failed to save TIFF image"
 msgstr "E paletšwe go bula seswantšho sa TIFF"
 
-#: gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:713
+msgid "TIFF compression doesn't refer to a valid codec."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:741
 #, fuzzy
 msgid "Failed to write TIFF data"
 msgstr "E paletšwe go bula seswantšho sa TIFF"
 
-#: gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:793
 #, fuzzy
 msgid "Couldn't write to TIFF file"
 msgstr "E be e ka se fetole leina la faele"
 
-#: gdk-pixbuf/io-tiff.c:815
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "Sebopego sa seswantšho sa TIFF"
 
@@ -1261,7 +1265,7 @@ msgstr ""
 "E be e ka se kgethe %s:\n"
 "%s"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2235
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr ""
 
@@ -1270,38 +1274,38 @@ msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:604
+#: gtk/gtkaboutdialog.c:625
 #, fuzzy
 msgid "C_redits"
 msgstr "H_lama"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:618
+#: gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:886
+#: gtk/gtkaboutdialog.c:917
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2158
+#: gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2187
+#: gtk/gtkaboutdialog.c:2215
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2190
+#: gtk/gtkaboutdialog.c:2218
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2202
+#: gtk/gtkaboutdialog.c:2230
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2206
+#: gtk/gtkaboutdialog.c:2234
 msgid "Artwork by"
 msgstr ""
 
@@ -1615,7 +1619,7 @@ msgstr "_Sehlopha sa mebala"
 msgid "Color Wheel"
 msgstr "Leotwana la mmala"
 
-#: gtk/gtkcolorsel.c:976
+#: gtk/gtkcolorsel.c:958
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1626,7 +1630,7 @@ msgstr ""
 "kgetha mmala wo e le wa gona bjale ka go o goga o iše go kgoboketšo e nngwe "
 "ya mebala ka thoko."
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:961
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1634,11 +1638,21 @@ msgstr ""
 "Mmala wo o o kgethilego. O ka topa mmala wo wa o iša tsenong ya mebala "
 "bakeng sa go o bolokela go o diriša nakong e tlago."
 
-#: gtk/gtkcolorsel.c:1363
+#: gtk/gtkcolorsel.c:966
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:969
+msgid "The color you've chosen."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1382
 msgid "_Save color here"
 msgstr "_Boloka mmala mo"
 
-#: gtk/gtkcolorsel.c:1568
+#: gtk/gtkcolorsel.c:1587
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1740,7 +1754,7 @@ msgstr "Bula Lefelo"
 msgid "Select A File"
 msgstr "Phumola Faele"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1850
 msgid "Desktop"
 msgstr "Teseke"
 
@@ -1756,43 +1770,43 @@ msgstr ""
 msgid "Type name of new folder"
 msgstr "Tlanya leina la sephuthedi se seswa"
 
-#: gtk/gtkfilechooserdefault.c:975
+#: gtk/gtkfilechooserdefault.c:976
 #, fuzzy
 msgid "Could not retrieve information about the file"
 msgstr ""
 "E be e ka se kgone go tsošološa tshedimošo ka %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:986
+#: gtk/gtkfilechooserdefault.c:987
 #, fuzzy
 msgid "Could not add a bookmark"
 msgstr ""
 "E be e ka se kgone go oketša puku-tshwayo bakeng sa %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:997
+#: gtk/gtkfilechooserdefault.c:998
 #, fuzzy
 msgid "Could not remove bookmark"
 msgstr ""
 "E be e ka se kgone go tloša puku-tshwayo bakeng sa %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1008
+#: gtk/gtkfilechooserdefault.c:1009
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1022
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1033
 #, fuzzy
 msgid "Invalid file name"
 msgstr "Leina la faele leo e sego la kgonthe: %s"
 
-#: gtk/gtkfilechooserdefault.c:1042
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "The folder contents could not be displayed"
 msgstr ""
 
@@ -1800,231 +1814,231 @@ msgstr ""
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1592
+#: gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1768
+#: gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1792 gtk/gtkfilechooserdefault.c:9456
+#: gtk/gtkfilechooserdefault.c:1793 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2428
+#: gtk/gtkfilechooserdefault.c:2429
 msgid "Select which types of files are shown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2787
+#: gtk/gtkfilechooserdefault.c:2788
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2832
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2834
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2871
+#: gtk/gtkfilechooserdefault.c:2872
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2874
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:2881 gtk/gtkfilechooserdefault.c:3907
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3602
+#: gtk/gtkfilechooserdefault.c:3603
 #, fuzzy
 msgid "Remove"
 msgstr "_Tloša"
 
-#: gtk/gtkfilechooserdefault.c:3611
+#: gtk/gtkfilechooserdefault.c:3612
 #, fuzzy
 msgid "Rename..."
 msgstr "_Thea ka leswa"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3775
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3831
+#: gtk/gtkfilechooserdefault.c:3832
 #, fuzzy
 msgid "_Places"
 msgstr "_Thea ka leswa"
 
-#: gtk/gtkfilechooserdefault.c:3887
+#: gtk/gtkfilechooserdefault.c:3888
 msgid "_Add"
 msgstr "_Oketša"
 
-#: gtk/gtkfilechooserdefault.c:3894
+#: gtk/gtkfilechooserdefault.c:3895
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3899
+#: gtk/gtkfilechooserdefault.c:3900
 msgid "_Remove"
 msgstr "_Tloša"
 
-#: gtk/gtkfilechooserdefault.c:4034
+#: gtk/gtkfilechooserdefault.c:4035
 #, fuzzy
 msgid "Could not select file"
 msgstr ""
 "E be e ka se kgethe %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:4209
+#: gtk/gtkfilechooserdefault.c:4210
 #, fuzzy
 msgid "_Add to Bookmarks"
 msgstr "Dikgaoletšo"
 
-#: gtk/gtkfilechooserdefault.c:4222
+#: gtk/gtkfilechooserdefault.c:4223
 msgid "Show _Hidden Files"
 msgstr "Bontšha _Difaele tše Utilwego"
 
-#: gtk/gtkfilechooserdefault.c:4229
+#: gtk/gtkfilechooserdefault.c:4230
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4449 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4450 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Difaele"
 
-#: gtk/gtkfilechooserdefault.c:4500
+#: gtk/gtkfilechooserdefault.c:4501
 msgid "Name"
 msgstr "Leina"
 
-#: gtk/gtkfilechooserdefault.c:4523
+#: gtk/gtkfilechooserdefault.c:4524
 msgid "Size"
 msgstr "Bogolo"
 
-#: gtk/gtkfilechooserdefault.c:4537
+#: gtk/gtkfilechooserdefault.c:4538
 msgid "Modified"
 msgstr "Mpshafaditšwe"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4792 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Leina:"
 
-#: gtk/gtkfilechooserdefault.c:4835
+#: gtk/gtkfilechooserdefault.c:4836
 msgid "_Browse for other folders"
 msgstr "_Fetleka bakeng sa diphuthedi tše dingwe"
 
-#: gtk/gtkfilechooserdefault.c:5107
+#: gtk/gtkfilechooserdefault.c:5108
 #, fuzzy
 msgid "Type a file name"
 msgstr "Leina la faele leo e sego la kgonthe: %s"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5148
+#: gtk/gtkfilechooserdefault.c:5149
 msgid "Create Fo_lder"
 msgstr "Hlama Se_phuthedi"
 
-#: gtk/gtkfilechooserdefault.c:5158
+#: gtk/gtkfilechooserdefault.c:5159
 #, fuzzy
 msgid "_Location:"
 msgstr "_Lefelo:"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Save in _folder:"
 msgstr "Boloka _sephutheding:"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Create in _folder:"
 msgstr "Hlama _sephutheding:"
 
-#: gtk/gtkfilechooserdefault.c:6430
+#: gtk/gtkfilechooserdefault.c:6431
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "phošo ya go hlama tšhupetšo '%s': %s"
 
-#: gtk/gtkfilechooserdefault.c:6434
+#: gtk/gtkfilechooserdefault.c:6435
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr ""
 "E be e ka se kgone go hlama sephuthedi sa %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6525 gtk/gtkfilechooserdefault.c:6593
-#: gtk/gtkfilechooserdefault.c:6738
+#: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
+#: gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "E sa tsebjwego"
 
-#: gtk/gtkfilechooserdefault.c:6540
+#: gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6542
+#: gtk/gtkfilechooserdefault.c:6545
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Maabane"
 
-#: gtk/gtkfilechooserdefault.c:7209
+#: gtk/gtkfilechooserdefault.c:7211
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "E ka se fetolele sephutheding ka gobane ga se sa mo gae"
 
-#: gtk/gtkfilechooserdefault.c:7806 gtk/gtkfilechooserdefault.c:7827
+#: gtk/gtkfilechooserdefault.c:7808 gtk/gtkfilechooserdefault.c:7829
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "kgaoletšo ya %s ga e gona"
 
-#: gtk/gtkfilechooserdefault.c:7917
+#: gtk/gtkfilechooserdefault.c:7919
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "kgaoletšo ya %s ga e gona"
 
-#: gtk/gtkfilechooserdefault.c:8172 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8175 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8180 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
 #, fuzzy
 msgid "_Replace"
 msgstr "_Thea ka leswa"
 
-#: gtk/gtkfilechooserdefault.c:8824
+#: gtk/gtkfilechooserdefault.c:8826
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Ga e kgone go e boloka ka moka"
 
-#: gtk/gtkfilechooserdefault.c:8825
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8839
+#: gtk/gtkfilechooserdefault.c:8841
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Ga e kgone go e boloka ka moka"
 
-#: gtk/gtkfilechooserdefault.c:9028
+#: gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9632
+#: gtk/gtkfilechooserdefault.c:9634
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr ""
@@ -2227,11 +2241,11 @@ msgstr ""
 msgid "Invalid UTF-8"
 msgstr "UTF-8 yeo e sego ya kgonthe"
 
-#: gtk/gtkfilesel.c:3933
+#: gtk/gtkfilesel.c:3935
 msgid "Name too long"
 msgstr "Leina ke le letelele kudu"
 
-#: gtk/gtkfilesel.c:3935
+#: gtk/gtkfilesel.c:3937
 msgid "Couldn't convert filename"
 msgstr "E be e ka se fetole leina la faele"
 
@@ -2582,7 +2596,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
+#: gtk/gtknotebook.c:4698 gtk/gtknotebook.c:7249
 #, c-format
 msgid "Page %u"
 msgstr "Letlakala %u"
@@ -2743,17 +2757,17 @@ msgstr ""
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:302
+#: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
 #, c-format
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:346
+#: gtk/gtkprintoperation-unix.c:359
 #, c-format
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:482 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
 #, fuzzy
 msgid "Application"
 msgstr "_Lefelo:"
@@ -3278,34 +3292,35 @@ msgstr "%s: %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ga e kgone go hwetša go akaretša faele: \"%s\""
 
-#: gtk/gtkspinner.c:454
+#: gtk/gtkspinner.c:458
+msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr ""
 
-#: gtk/gtkspinner.c:455
-msgid "Provides visual status"
+#: gtk/gtkspinner.c:459
+msgid "Provides visual indication of progress"
 msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:289
+#: gtk/gtkstock.c:314
 #, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Tshedimošo"
 
-#: gtk/gtkstock.c:290
+#: gtk/gtkstock.c:315
 #, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Temošo"
 
-#: gtk/gtkstock.c:291
+#: gtk/gtkstock.c:316
 #, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Phošo"
 
-#: gtk/gtkstock.c:292
+#: gtk/gtkstock.c:317
 #, fuzzy
 msgctxt "Stock label"
 msgid "Question"
@@ -3314,558 +3329,558 @@ msgstr "Potšišo"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_About"
 msgstr ""
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:323
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Oketša"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:324
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Diriša"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:325
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Mongwalo o mokoto"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:326
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Khansela"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:327
 #, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-Rom"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:328
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Phumola"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:329
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Tswalela"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:330
 #, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Fetošetša"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:331
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Fetošetša"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:332
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Kopiša"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:333
 #, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Rip_a"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:334
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Phumola"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:335
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "Paledišitšwe"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:336
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Fetošetša"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:337
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Phethagatša"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:338
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "H_lama"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:339
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Hwetša"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:340
 #, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Hwetša le _go Tšeela Legato"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:341
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Flopi"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr ""
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr ""
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:345
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Tlase"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:347
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Mathomo"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:349
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Mafelelo"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:351
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Godimo"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:353
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Morago"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:355
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Fase"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:357
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Fetišetša"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:359
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Godimo"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:360
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Tisiki e thata"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Thušo"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:362
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Gae"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:363
 #, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Oketša Methaladi"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:364
 #, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Fokotša Mothaladi"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:365
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Tlhatlamano"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:366
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "Tshedimošo"
 
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Mongwalo o sekamego"
 
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:368
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Tshelela go"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Fetošetša"
 
 #. This is about text justification
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Difaele"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Lanngele"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Metswako ya mebala:"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:379
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Fetišetša"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:381
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Mpsha"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:383
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Kgomaretša"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:385
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Thea ka leswa"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr ""
 
 #. Media label
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:389
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Dira gape"
 
 #. Media label
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:391
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "_Hwetša"
 
 #. Media label
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:393
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Emiša"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:394
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Neteweke"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:395
 #, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Mpsha"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:396
 #, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Aowa"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:397
 #, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Go Lokile"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:398
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Bula"
 
 #. Page orientation
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr ""
 
 #. Page orientation
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:402
 #, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "_Gatiša"
 
 #. Page orientation
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr ""
 
 #. Page orientation
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr ""
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:407
 #, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Letlakala %u"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:408
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Kgomaretša"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:409
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Tše ratwago"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:410
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Gatiša"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:411
 #, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Gatiša Ponelo_pele"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:412
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Dipharologantšho"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:413
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Tlogela"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:414
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Dira gape"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:415
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Thoma o tšwelepele"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:416
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Tloša"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:417
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Boela morago"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:418
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Boloka"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:419
 #, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Boloka _Bjalo ka"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:420
 #, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Kgetha _ka Moka"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:421
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Mmala"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:422
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Fonto"
 
 #. Sorting direction
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:424
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Eya godimo"
 
 #. Sorting direction
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:426
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Theogela tlase"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:427
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Lekola Mopeleto"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:428
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Emiša"
 
 #. Font variant
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:430
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Kgabaganya"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:431
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_O seke wa phumola"
 
 #. Font variant
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:433
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Thalela"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:434
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Dirolla"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:435
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ee"
 
 #. Zoom
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:437
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Bogolo bjo Tlwaelegilego"
 
 #. Zoom
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:439
 #, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Go Lekana _go e Phalago ka moka"
 
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:440
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Godišetša _ka gare"
 
-#: gtk/gtkstock.c:416
+#: gtk/gtkstock.c:441
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
@@ -4034,19 +4049,19 @@ msgstr "Ga e kgone go hwetša entšene ya sehlogo tsejaneng ya_karolo: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ga go na keletšo ---"
 
-#: gtk/gtkuimanager.c:1463
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "Kgokaganyo ya go thoma yeo e sa letelwago la '%s' mothalading wa %d wa "
 "tlhaka ya %d"
 
-#: gtk/gtkuimanager.c:1553
+#: gtk/gtkuimanager.c:1594
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Tsebišo yeo e sa letelwago ya tlhaka mothalading wa %d wa tlhaka ya %d"
 
-#: gtk/gtkuimanager.c:2385
+#: gtk/gtkuimanager.c:2426
 msgid "Empty"
 msgstr "Ga e na selo"
 

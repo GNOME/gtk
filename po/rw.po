@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-01 18:54-0500\n"
+"POT-Creation-Date: 2009-11-30 16:38-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -399,24 +399,24 @@ msgstr "Kuri Gufungura By'igihe gito IDOSIYE"
 msgid "Failed to read from temporary file"
 msgstr "Kuri Gusoma Bivuye By'igihe gito IDOSIYE"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2025
+#: gdk-pixbuf/gdk-pixbuf-io.c:2029
 #, fuzzy, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Kuri Gufungura kugirango"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2050
+#: gdk-pixbuf/gdk-pixbuf-io.c:2054
 #, fuzzy, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "Kuri Gufunga Ishusho Byose Ibyatanzwe Gicurasi OYA"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2270 gdk-pixbuf/gdk-pixbuf-io.c:2321
+#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
 #, fuzzy
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ububiko Kuri Kubika Ishusho a"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2367
+#: gdk-pixbuf/gdk-pixbuf-io.c:2371
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Kuri Ishusho IDOSIYE"
@@ -734,8 +734,8 @@ msgstr "Ububiko Kuri Ibirimo Ishusho Porogaramu Kuri Kigenga Ububiko"
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ibara Umwanya"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
-#: gdk-pixbuf/io-jpeg.c:1185
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 #, fuzzy
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ububiko kugirango Itangira... IDOSIYE"
@@ -745,20 +745,20 @@ msgstr "Ububiko kugirango Itangira... IDOSIYE"
 msgid "Transformed JPEG has zero width or height."
 msgstr "Zeru Ubugari Cyangwa Ubuhagarike"
 
-#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, fuzzy, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro OYA"
 
-#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, fuzzy, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "Ubwiza a Agaciro hagati 0 Na 100 Agaciro ni OYA"
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 #, fuzzy
 msgid "The JPEG image format"
 msgstr "Ishusho Imiterere"
@@ -1075,67 +1075,71 @@ msgstr "Ibyatanzwe in IDOSIYE"
 msgid "The Targa image format"
 msgstr "Ishusho Imiterere"
 
-#: gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:161
 #, fuzzy
 msgid "Could not get image width (bad TIFF file)"
 msgstr "OYA Kubona Ishusho Ubugari IDOSIYE"
 
-#: gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:168
 #, fuzzy
 msgid "Could not get image height (bad TIFF file)"
 msgstr "OYA Kubona Ishusho Ubuhagarike IDOSIYE"
 
-#: gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:176
 #, fuzzy
 msgid "Width or height of TIFF image is zero"
 msgstr "Cyangwa Ubuhagarike Bya Ishusho ni Zeru"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
 #, fuzzy
 msgid "Dimensions of TIFF image too large"
 msgstr "Bya Ishusho Binini"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
 #, fuzzy
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ububiko Kuri Gufungura IDOSIYE"
 
-#: gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:283
 #, fuzzy
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Kuri Ibirimo Ibyatanzwe Bivuye IDOSIYE"
 
-#: gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:339
 #, fuzzy
 msgid "Failed to open TIFF image"
 msgstr "Kuri Gufungura Ishusho"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
 #, fuzzy
 msgid "TIFFClose operation failed"
 msgstr "Byanze"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
 #, fuzzy
 msgid "Failed to load TIFF image"
 msgstr "Kuri Ibirimo Ishusho"
 
-#: gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:678
 #, fuzzy
 msgid "Failed to save TIFF image"
 msgstr "Kuri Gufungura Ishusho"
 
-#: gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:713
+msgid "TIFF compression doesn't refer to a valid codec."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:741
 #, fuzzy
 msgid "Failed to write TIFF data"
 msgstr "Kuri Gufungura Ishusho"
 
-#: gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:793
 #, fuzzy
 msgid "Couldn't write to TIFF file"
 msgstr "Kuri IDOSIYE"
 
-#: gdk-pixbuf/io-tiff.c:815
+#: gdk-pixbuf/io-tiff.c:848
 #, fuzzy
 msgid "The TIFF image format"
 msgstr "Ishusho Imiterere"
@@ -1350,7 +1354,7 @@ msgstr[1] ""
 msgid "Could not show link"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2235
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr ""
 
@@ -1360,41 +1364,41 @@ msgid "The license of the program"
 msgstr "Bya Porogaramu"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:604
+#: gtk/gtkaboutdialog.c:625
 msgid "C_redits"
 msgstr ""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:618
+#: gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr ""
 
 # offmgr/source\offapp\intro\intro.hrc:TEXT_DEFAULTABOUT.text
-#: gtk/gtkaboutdialog.c:886
+#: gtk/gtkaboutdialog.c:917
 #, fuzzy, c-format
 msgid "About %s"
 msgstr "Ibyerekeye"
 
-#: gtk/gtkaboutdialog.c:2158
+#: gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2187
+#: gtk/gtkaboutdialog.c:2215
 #, fuzzy
 msgid "Written by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2190
+#: gtk/gtkaboutdialog.c:2218
 #, fuzzy
 msgid "Documented by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2202
+#: gtk/gtkaboutdialog.c:2230
 #, fuzzy
 msgid "Translated by"
 msgstr "ku"
 
-#: gtk/gtkaboutdialog.c:2206
+#: gtk/gtkaboutdialog.c:2234
 #, fuzzy
 msgid "Artwork by"
 msgstr "ku"
@@ -1733,7 +1737,7 @@ msgstr "Urwunge rw'ibara:"
 msgid "Color Wheel"
 msgstr ""
 
-#: gtk/gtkcolorsel.c:976
+#: gtk/gtkcolorsel.c:958
 #, fuzzy
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
@@ -1744,7 +1748,7 @@ msgstr ""
 "Urwunge rw'ibara: Icyinjijwe Cyangwa Guhitamo iyi Ibara Nka KIGEZWEHO ku "
 "Kuri Ikindi Ibara"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:961
 #, fuzzy
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
@@ -1753,12 +1757,22 @@ msgstr ""
 "Ibara Kurura iyi Ibara Kuri a Urwunge rw'ibara: Icyinjijwe Kuri Kubika "
 "kugirango Gukoresha in"
 
-#: gtk/gtkcolorsel.c:1363
+#: gtk/gtkcolorsel.c:966
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:969
+msgid "The color you've chosen."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1382
 #, fuzzy
 msgid "_Save color here"
 msgstr "Kubika Ibara"
 
-#: gtk/gtkcolorsel.c:1568
+#: gtk/gtkcolorsel.c:1587
 #, fuzzy
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
@@ -1867,7 +1881,7 @@ msgid "Select A File"
 msgstr "Hitamo Byose"
 
 # sfx2/source\explorer\explorer.src:STR_SFX_DESKTOP.text
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1850
 msgid "Desktop"
 msgstr "Ibiro"
 
@@ -1885,38 +1899,38 @@ msgstr "Ikindi..."
 msgid "Type name of new folder"
 msgstr "Izina: Bya Gishya Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:975
+#: gtk/gtkfilechooserdefault.c:976
 #, fuzzy
 msgid "Could not retrieve information about the file"
 msgstr "OYA Ibisobanuro Ibyerekeye IDOSIYE"
 
-#: gtk/gtkfilechooserdefault.c:986
+#: gtk/gtkfilechooserdefault.c:987
 #, fuzzy
 msgid "Could not add a bookmark"
 msgstr "OYA Kongeramo a Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:997
+#: gtk/gtkfilechooserdefault.c:998
 #, fuzzy
 msgid "Could not remove bookmark"
 msgstr "OYA Gukuraho... Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:1008
+#: gtk/gtkfilechooserdefault.c:1009
 #, fuzzy
 msgid "The folder could not be created"
 msgstr "Ububiko OYA Byaremwe"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1022
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1033
 msgid "Invalid file name"
 msgstr "Izina ry'idosiye siryo"
 
-#: gtk/gtkfilechooserdefault.c:1042
+#: gtk/gtkfilechooserdefault.c:1043
 #, fuzzy
 msgid "The folder contents could not be displayed"
 msgstr "Ububiko Ibigize OYA"
@@ -1925,243 +1939,243 @@ msgstr "Ububiko Ibigize OYA"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1592
+#: gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1768
+#: gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1792 gtk/gtkfilechooserdefault.c:9456
+#: gtk/gtkfilechooserdefault.c:1793 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2428
+#: gtk/gtkfilechooserdefault.c:2429
 #, fuzzy
 msgid "Select which types of files are shown"
 msgstr "Bya Idosiye"
 
-#: gtk/gtkfilechooserdefault.c:2787
+#: gtk/gtkfilechooserdefault.c:2788
 #, fuzzy, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2832
 #, fuzzy, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "KIGEZWEHO Ububiko Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2834
 #, fuzzy, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Byahiswemo Kuri Ibirango"
 
-#: gtk/gtkfilechooserdefault.c:2871
+#: gtk/gtkfilechooserdefault.c:2872
 #, fuzzy, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Akamenyetso"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2874
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:2881 gtk/gtkfilechooserdefault.c:3907
 #, fuzzy
 msgid "Remove the selected bookmark"
 msgstr "Byahiswemo Akamenyetso"
 
 # sc/source\ui\dbgui\pivot.src:RID_SCDLG_PIVOT_LAYOUT.BTN_REMOVE.text
-#: gtk/gtkfilechooserdefault.c:3602
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Remove"
 msgstr "Gukuraho"
 
 # sfx2/source\appl\newhelp.src:MENU_HELP_BOOKMARKS.MID_RENAME.text
-#: gtk/gtkfilechooserdefault.c:3611
+#: gtk/gtkfilechooserdefault.c:3612
 msgid "Rename..."
 msgstr "Guhindura Izina"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3775
 msgid "Places"
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3831
+#: gtk/gtkfilechooserdefault.c:3832
 #, fuzzy
 msgid "_Places"
 msgstr "Guhindura izina"
 
-#: gtk/gtkfilechooserdefault.c:3887
+#: gtk/gtkfilechooserdefault.c:3888
 #, fuzzy
 msgid "_Add"
 msgstr "Kongeramo"
 
-#: gtk/gtkfilechooserdefault.c:3894
+#: gtk/gtkfilechooserdefault.c:3895
 #, fuzzy
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Byahiswemo Ububiko Kuri Ibirango"
 
 # sc/source\ui\dbgui\pivot.src:RID_SCDLG_PIVOT_LAYOUT.BTN_REMOVE.text
-#: gtk/gtkfilechooserdefault.c:3899
+#: gtk/gtkfilechooserdefault.c:3900
 #, fuzzy
 msgid "_Remove"
 msgstr "Gukuraho"
 
-#: gtk/gtkfilechooserdefault.c:4034
+#: gtk/gtkfilechooserdefault.c:4035
 #, fuzzy
 msgid "Could not select file"
 msgstr "gutoranya ibara"
 
-#: gtk/gtkfilechooserdefault.c:4209
+#: gtk/gtkfilechooserdefault.c:4210
 #, fuzzy
 msgid "_Add to Bookmarks"
 msgstr "Kuri"
 
-#: gtk/gtkfilechooserdefault.c:4222
+#: gtk/gtkfilechooserdefault.c:4223
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4229
+#: gtk/gtkfilechooserdefault.c:4230
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4449 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4450 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "amadosiye"
 
-#: gtk/gtkfilechooserdefault.c:4500
+#: gtk/gtkfilechooserdefault.c:4501
 msgid "Name"
 msgstr "izina"
 
-#: gtk/gtkfilechooserdefault.c:4523
+#: gtk/gtkfilechooserdefault.c:4524
 msgid "Size"
 msgstr "Ingano"
 
-#: gtk/gtkfilechooserdefault.c:4537
+#: gtk/gtkfilechooserdefault.c:4538
 msgid "Modified"
 msgstr "cya/byahinduwe"
 
 # basctl/source\basicide\moduldlg.src:RID_DLG_NEWLIB.RID_FT_NEWLIB.text
 #. Label
-#: gtk/gtkfilechooserdefault.c:4792 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
 #, fuzzy
 msgid "_Name:"
 msgstr "Izina:"
 
-#: gtk/gtkfilechooserdefault.c:4835
+#: gtk/gtkfilechooserdefault.c:4836
 #, fuzzy
 msgid "_Browse for other folders"
 msgstr "kugirango Ikindi"
 
 # svtools/source\misc\errtxt.src:RID_ERRHDL.ERRCODE_IO_MISPLACEDCHAR.text
-#: gtk/gtkfilechooserdefault.c:5107
+#: gtk/gtkfilechooserdefault.c:5108
 #, fuzzy
 msgid "Type a file name"
 msgstr "Izina ry'idosiye siryo"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5148
+#: gtk/gtkfilechooserdefault.c:5149
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "Guhimba idosiye:%s"
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkfilechooserdefault.c:5158
+#: gtk/gtkfilechooserdefault.c:5159
 #, fuzzy
 msgid "_Location:"
 msgstr "Intaho:"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5363
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "Kubika in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5365
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "in Ububiko"
 
-#: gtk/gtkfilechooserdefault.c:6430
+#: gtk/gtkfilechooserdefault.c:6431
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "bushyinguro"
 
-#: gtk/gtkfilechooserdefault.c:6434
+#: gtk/gtkfilechooserdefault.c:6435
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "OYA Kubona a Agashushondanga kugirango"
 
-#: gtk/gtkfilechooserdefault.c:6525 gtk/gtkfilechooserdefault.c:6593
-#: gtk/gtkfilechooserdefault.c:6738
+#: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
+#: gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "Itazwi"
 
-#: gtk/gtkfilechooserdefault.c:6540
+#: gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6542
+#: gtk/gtkfilechooserdefault.c:6545
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ejo"
 
-#: gtk/gtkfilechooserdefault.c:7209
+#: gtk/gtkfilechooserdefault.c:7211
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Guhindura>> Kuri Ububiko ni OYA"
 
-#: gtk/gtkfilechooserdefault.c:7806 gtk/gtkfilechooserdefault.c:7827
+#: gtk/gtkfilechooserdefault.c:7808 gtk/gtkfilechooserdefault.c:7829
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:7917
+#: gtk/gtkfilechooserdefault.c:7919
 #, fuzzy, c-format
 msgid "Shortcut %s does not exist"
 msgstr "OYA"
 
-#: gtk/gtkfilechooserdefault.c:8172 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8175 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
-#: gtk/gtkfilechooserdefault.c:8180 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
 #, fuzzy
 msgid "_Replace"
 msgstr "Guhindura izina"
 
-#: gtk/gtkfilechooserdefault.c:8824
+#: gtk/gtkfilechooserdefault.c:8826
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Kubika"
 
-#: gtk/gtkfilechooserdefault.c:8825
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8839
+#: gtk/gtkfilechooserdefault.c:8841
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Kubika"
 
-#: gtk/gtkfilechooserdefault.c:9028
+#: gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9632
+#: gtk/gtkfilechooserdefault.c:9634
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "OYA"
@@ -2363,11 +2377,11 @@ msgstr "Izina ry'idosiye: Kuri 8 Igenamiterere IMPINDURAGACIRO"
 msgid "Invalid UTF-8"
 msgstr "8"
 
-#: gtk/gtkfilesel.c:3933
+#: gtk/gtkfilesel.c:3935
 msgid "Name too long"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3935
+#: gtk/gtkfilesel.c:3937
 #, fuzzy
 msgid "Couldn't convert filename"
 msgstr "GUHINDURA Izina ry'idosiye:"
@@ -2762,7 +2776,7 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
+#: gtk/gtknotebook.c:4698 gtk/gtknotebook.c:7249
 #, fuzzy, c-format
 msgid "Page %u"
 msgstr "Ipaji..."
@@ -2940,18 +2954,18 @@ msgstr ""
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:302
+#: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
 #, c-format
 msgid "Error launching preview"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:346
+#: gtk/gtkprintoperation-unix.c:359
 #, c-format
 msgid "Error printing"
 msgstr ""
 
 # padmin/source\padialog.src:RID_PADIALOG.RID_PA_TXT_LOCATION.text
-#: gtk/gtkprintoperation-unix.c:482 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
 #, fuzzy
 msgid "Application"
 msgstr "Intaho:"
@@ -3510,34 +3524,35 @@ msgstr "%s(%s)"
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kuri Gushaka Gushyiramo IDOSIYE"
 
-#: gtk/gtkspinner.c:454
+#: gtk/gtkspinner.c:458
+msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr ""
 
-#: gtk/gtkspinner.c:455
-msgid "Provides visual status"
+#: gtk/gtkspinner.c:459
+msgid "Provides visual indication of progress"
 msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:289
+#: gtk/gtkstock.c:314
 #, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "amakuru"
 
-#: gtk/gtkstock.c:290
+#: gtk/gtkstock.c:315
 #, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Iburira"
 
-#: gtk/gtkstock.c:291
+#: gtk/gtkstock.c:316
 #, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "ikosa"
 
-#: gtk/gtkstock.c:292
+#: gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "Question"
 msgstr ""
@@ -3545,20 +3560,20 @@ msgstr ""
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:322
 #, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "Bigyanye"
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:323
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "Kongeramo"
 
 # offmgr/source\offapp\dialog\fontsubs.src:RID_SVX_FONT_SUBSTITUTION.TBX_SUBSTNEWDEL.BT_SUBSTAPPLY.text
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:324
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
@@ -3568,25 +3583,25 @@ msgstr "Gukurikiza"
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.UnderLine..12.text
 # #-#-#-#-#  officecfg.pot (Gnome 2.12)  #-#-#-#-#
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.Strikeout..4.text
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:325
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "UTSINDAGIYE"
 
 # crashrep/source\all\crashrep.lng:%CANCEL_BUTTON%.text
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:326
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "Kureka"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr ""
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:328
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
@@ -3600,35 +3615,35 @@ msgstr "Gusiba"
 # basctl/source\basicide\moduldlg.src:RID_TP_MODULS.RID_PB_CLOSE.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\moduldlg.src:RID_TP_LIBS.RID_PB_CLOSE.text
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:329
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "Gufunga"
 
 # scaddins/source\analysis\analysis_funcnames.src:RID_ANALYSIS_FUNCTION_NAMES.ANALYSIS_FUNCNAME_Convert.text
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:330
 #, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "GUHINDURA"
 
 # scaddins/source\analysis\analysis_funcnames.src:RID_ANALYSIS_FUNCTION_NAMES.ANALYSIS_FUNCNAME_Convert.text
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:331
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "GUHINDURA"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_COPY.text
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:332
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "Gukoporora"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_CUT.text
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:333
 #, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
@@ -3638,26 +3653,26 @@ msgstr "Gukata"
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:334
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "Gusiba"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:335
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "Yahagaritswe"
 
 # scaddins/source\analysis\analysis_funcnames.src:RID_ANALYSIS_FUNCTION_NAMES.ANALYSIS_FUNCNAME_Convert.text
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:336
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "GUHINDURA"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:337
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
@@ -3673,14 +3688,14 @@ msgstr "Gukora"
 # basctl/source\basicide\moduldlg.src:RID_TP_MODULS.RID_PB_EDIT.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\moduldlg.src:RID_TP_LIBS.RID_PB_EDIT.text
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:338
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "Guhindura"
 
 # offmgr/source\offapp\dialog\hyprlink.src:RID_SVXDLG_HYPERLINK.BTN_INET_SEARCH.text
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:339
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
@@ -3724,38 +3739,38 @@ msgstr "Gushaka"
 # -
 # - ***** END LICENSE BLOCK *****
 # extracted from EdReplace.xul
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:340
 #, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Gushaka no Gusimbura"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_COPY.text
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:341
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "Gukoporora"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr ""
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr ""
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr ""
 
 # scp/source\office\dir.lng:STR_DIR_DATEIEN.text
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:347
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
@@ -3763,7 +3778,7 @@ msgstr "Idosiye"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:349
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
@@ -3771,86 +3786,86 @@ msgstr "Komeka"
 
 # basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:351
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "Guhagarara"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr ""
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:355
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "Oya"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr ""
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr ""
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr ""
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Ifashayobora"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:362
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "Home"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:363
 #, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "kongera"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:364
 #, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "kugabanya umwanya w'urupapuro"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:365
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "Umubarendanga"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:366
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "amakuru"
 
 # officecfg/registry\schema\org\openoffice\Office\Common.xcs:....Font.Slant..2.text
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "IBERAMYE"
 
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:368
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
@@ -3858,7 +3873,7 @@ msgstr "Kuri"
 
 # scaddins/source\analysis\analysis_funcnames.src:RID_ANALYSIS_FUNCTION_NAMES.ANALYSIS_FUNCNAME_Convert.text
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
@@ -3866,35 +3881,35 @@ msgstr "GUHINDURA"
 
 # scp/source\office\dir.lng:STR_DIR_DATEIEN.text
 #. This is about text justification
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Idosiye"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr ""
 
 # svtools/source\dialogs\colrdlg.src:DLG_COLOR.FT_HUE.text
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "Ibara"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr ""
 
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_NEW.text
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:381
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
@@ -3902,7 +3917,7 @@ msgstr "Gishya"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:383
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
@@ -3910,21 +3925,21 @@ msgstr "Komeka"
 
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_RENAMECURRENT.text
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:385
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "Guhindura izina"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr ""
 
 # sw/source\ui\utlui\attrdesc.src:STR_CHANNELR.text
 #. Media label
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:389
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
@@ -3932,7 +3947,7 @@ msgstr "Umutuku:"
 
 # offmgr/source\offapp\dialog\hyprlink.src:RID_SVXDLG_HYPERLINK.BTN_INET_SEARCH.text
 #. Media label
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:391
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
@@ -3940,34 +3955,34 @@ msgstr "Gushaka"
 
 # basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
 #. Media label
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:393
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "Guhagarara"
 
 # 4032
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:394
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "urusobe"
 
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_NEW.text
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:395
 #, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "Gishya"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:396
 #, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "Oya"
 
 # crashrep/source\all\crashrep.lng:%OK_BUTTON%.text
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:397
 #, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
@@ -3979,14 +3994,14 @@ msgstr "YEGO"
 # sfx2/source\dialog\cfg.src:STR_OPEN.text
 # #-#-#-#-#  sfx2.pot (Gnome 2.12)  #-#-#-#-#
 # sfx2/source\dialog\versdlg.src:DLG_VERSIONS.PB_OPEN.text
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:398
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "Gufungura"
 
 #. Page orientation
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr ""
@@ -3994,20 +4009,20 @@ msgstr ""
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 #. Page orientation
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:402
 #, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Gucapa"
 
 #. Page orientation
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr ""
 
 #. Page orientation
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr ""
@@ -4016,20 +4031,20 @@ msgstr ""
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_CELLS.SID_FORMATPAGE.text
 # #-#-#-#-#  sc.pot (Gnome 2.12)  #-#-#-#-#
 # sc/source\ui\src\menue.src:RID_OBJECTMENU_EDIT.SID_FORMATPAGE.text
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:407
 #, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Ipaji..."
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_PASTE.text
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:408
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "Komeka"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:409
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
@@ -4037,14 +4052,14 @@ msgstr "Ibyahiswemo"
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:410
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "Gucapa"
 
 # sc/source\ui\src\scstring.src:SCSTR_PREVIEWSHELL.text
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:411
 #, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
@@ -4054,13 +4069,13 @@ msgstr "Igaragazambere ryo Gucapa"
 # basctl/source\basicide\basidesh.src:RID_POPUP_BRKPROPS.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\tbxctl.src:RID_TOOLBOX.SID_SHOW_PROPERTYBROWSER.text
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:412
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "indangakintu"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:413
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
@@ -4071,34 +4086,34 @@ msgstr "Kuvamo"
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:414
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "Isubiramo"
 
 # dbaccess/source/ui/inc/toolbox.hrc:MID_SBA_QRY_REFRESH.text
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:415
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "Kugira gishya"
 
 # sc/source\ui\dbgui\pivot.src:RID_SCDLG_PIVOT_LAYOUT.BTN_REMOVE.text
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:416
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "Gukuraho"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:417
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "Kugaruza"
 
 # basctl/source\basicide\basidesh.src:RID_STR_SAVE.text
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:418
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
@@ -4106,7 +4121,7 @@ msgstr "Kubika"
 
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:419
 #, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
@@ -4116,20 +4131,20 @@ msgstr "Kubika nka"
 # padmin/source\padialog.src:RID_FONTIMPORT_DIALOG.RID_FIMP_BTN_SELECTALL.text
 # #-#-#-#-#  padmin.pot (Gnome 2.12)  #-#-#-#-#
 # padmin/source\padialog.src:RID_ADDP_PAGE_OLDPRINTERS.RID_ADDP_OLD_BTN_SELECTALL.text
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:420
 #, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Hitamo byose"
 
 # goodies/source\filter.vcl\eps\dlgeps.src:DLG_EXPORT_EPS.RB_COLOR.text
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:421
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "Ibara"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:422
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
@@ -4138,7 +4153,7 @@ msgstr "Intego- nyuguti"
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 #. Sorting direction
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:424
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
@@ -4147,26 +4162,26 @@ msgstr "Ubujyejuru"
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 #. Sorting direction
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:426
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "Ubujyesi"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr ""
 
 # basctl/source\basicide\basidesh.src:RID_BASICIDE_OBJECTBAR.SID_BASICSTOP.text
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:428
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "Guhagarara"
 
 #. Font variant
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:430
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
@@ -4176,7 +4191,7 @@ msgstr "Icishamokarongo"
 # basctl/source\basicide\basidesh.src:RID_POPUP_TABBAR.SID_BASICIDE_DELETECURRENT.text
 # #-#-#-#-#  basctl.pot (Gnome 2.12)  #-#-#-#-#
 # basctl/source\basicide\brkdlg.src:RID_BASICIDE_BREAKPOINTDLG.RID_PB_DEL.text
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:431
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
@@ -4187,7 +4202,7 @@ msgstr "Gusiba"
 # #-#-#-#-#  officecfg.pot (Gnome 2.12)  #-#-#-#-#
 # officecfg/registry\schema\org\openoffice\Office\Writer.xcs:....Revision.TextDisplay.ChangedAttribute.Attribute..3.text
 #. Font variant
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:433
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
@@ -4198,39 +4213,39 @@ msgstr "Gucaho umurongo"
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
 # #-#-#-#-#  dbaccess.pot (Gnome 2.12)  #-#-#-#-#
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:434
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "Isubiranyuma"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:435
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "Yego"
 
 #. Zoom
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr ""
 
 #. Zoom
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr ""
 
 # sc/sdi\scslots.src:SID_PREVIEW_ZOOMIN.text
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:440
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Ihindurangano wongera"
 
 # sc/sdi\scslots.src:SID_PREVIEW_ZOOMOUT.text
-#: gtk/gtkstock.c:416
+#: gtk/gtkstock.c:441
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
@@ -4410,17 +4425,17 @@ msgstr "Kuri in"
 msgid "--- No Tip ---"
 msgstr "---"
 
-#: gtk/gtkuimanager.c:1463
+#: gtk/gtkuimanager.c:1504
 #, fuzzy, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Gutangira Itagi: ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:1553
+#: gtk/gtkuimanager.c:1594
 #, fuzzy, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Inyuguti Ibyatanzwe ku Umurongo INYUGUTI"
 
-#: gtk/gtkuimanager.c:2385
+#: gtk/gtkuimanager.c:2426
 msgid "Empty"
 msgstr "kirimo ubusa"
 

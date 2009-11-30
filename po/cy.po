@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-01 18:54-0500\n"
+"POT-Creation-Date: 2009-11-30 16:38-0500\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -378,12 +378,12 @@ msgstr "Methwyd agor ffeil dros dro"
 msgid "Failed to read from temporary file"
 msgstr "Methwyd darllen o ffeil dros dro"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2025
+#: gdk-pixbuf/gdk-pixbuf-io.c:2029
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Methu agor '%s' er mwyn ysgrifennu: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2050
+#: gdk-pixbuf/gdk-pixbuf-io.c:2054
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -391,11 +391,11 @@ msgid ""
 msgstr ""
 "Methu cau '%s' wrth ysgrifennu delwedd, efallai ni arbedwyd yr holl ddata: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2270 gdk-pixbuf/gdk-pixbuf-io.c:2321
+#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Dim digon o gof er mwyn cadw delwedd at fyffer"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2367
+#: gdk-pixbuf/gdk-pixbuf-io.c:2371
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Gwall wrth ysgrifennu at ffeil delwedd: %s"
@@ -682,8 +682,8 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Gofod lliw JPEG ni chynhelir (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
-#: gdk-pixbuf/io-jpeg.c:1185
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Methu canfod digon o gof er mwyn llwytho'r ffeil JPEG"
 
@@ -691,7 +691,7 @@ msgstr "Methu canfod digon o gof er mwyn llwytho'r ffeil JPEG"
 msgid "Transformed JPEG has zero width or height."
 msgstr "Mae gan y ddelwedd JPEG drawsffurfedig hyd neu led o sero."
 
-#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -700,7 +700,7 @@ msgstr ""
 "Mae'n rhaid i'r ansawdd JPEG fod yn rhif rhwng 0 a 100; methu adnabod y "
 "gwerth '%s'."
 
-#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -708,7 +708,7 @@ msgstr ""
 "Mae'n rhaid i ansawdd delweddau JPEG fod yn werth rhwng 0 a 100; ni "
 "chaniateir y gwerth '%d'."
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Y fformat delwedd JPEG"
 
@@ -982,55 +982,59 @@ msgstr "Gormodedd o ddata mewn ffeil"
 msgid "The Targa image format"
 msgstr "Y fformat delwedd Targa"
 
-#: gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:161
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Methu canfod lled y ddelwedd (ffeil TIFF ddrwg)"
 
-#: gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:168
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Methu canfod hyd y ddelwedd (ffeil TIFF ddrwg)"
 
-#: gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:176
 msgid "Width or height of TIFF image is zero"
 msgstr "Mae hyd neu led y ddelwedd TIFF yn sero"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
 msgid "Dimensions of TIFF image too large"
 msgstr "Mae dimensiynau'r ddelwedd TIFF yn rhy fawr"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
 msgid "Insufficient memory to open TIFF file"
 msgstr "Dim digon o gof er mwyn agor ffeil delwedd TIFF"
 
-#: gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:283
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Methu llwytho data RGB o ffeil TIFF"
 
-#: gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:339
 msgid "Failed to open TIFF image"
 msgstr "Methu agor delwedd TIFF"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
 msgid "TIFFClose operation failed"
 msgstr "Methodd y weithred TIFFClose"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
 msgid "Failed to load TIFF image"
 msgstr "Methu llwytho delwedd TIFF"
 
-#: gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:678
 msgid "Failed to save TIFF image"
 msgstr "Methu cadw'r ddelwedd TIFF"
 
-#: gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:713
+msgid "TIFF compression doesn't refer to a valid codec."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:741
 msgid "Failed to write TIFF data"
 msgstr "Methu ysgrifennu'r data TIFF"
 
-#: gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:793
 msgid "Couldn't write to TIFF file"
 msgstr "Methu ysgrifennu i'r ffeil TIFF"
 
-#: gdk-pixbuf/io-tiff.c:815
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "Y fformat delwedd TIFF"
 
@@ -1218,7 +1222,7 @@ msgstr[1] ""
 msgid "Could not show link"
 msgstr "Methu clirio'r rhestr"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2235
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr "Trwydded"
 
@@ -1227,37 +1231,37 @@ msgid "The license of the program"
 msgstr "Trwydded y rhaglen"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:604
+#: gtk/gtkaboutdialog.c:625
 msgid "C_redits"
 msgstr "_Diolchiadau"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:618
+#: gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr "_Trwydded"
 
-#: gtk/gtkaboutdialog.c:886
+#: gtk/gtkaboutdialog.c:917
 #, c-format
 msgid "About %s"
 msgstr "Ynglyn â %s"
 
-#: gtk/gtkaboutdialog.c:2158
+#: gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr "Diolchiadau"
 
-#: gtk/gtkaboutdialog.c:2187
+#: gtk/gtkaboutdialog.c:2215
 msgid "Written by"
 msgstr "Ysgrifennwyd gan"
 
-#: gtk/gtkaboutdialog.c:2190
+#: gtk/gtkaboutdialog.c:2218
 msgid "Documented by"
 msgstr "Dogfennwyd gan"
 
-#: gtk/gtkaboutdialog.c:2202
+#: gtk/gtkaboutdialog.c:2230
 msgid "Translated by"
 msgstr "Cyfieithwyd gan"
 
-#: gtk/gtkaboutdialog.c:2206
+#: gtk/gtkaboutdialog.c:2234
 msgid "Artwork by"
 msgstr "Graffeg gan"
 
@@ -1570,7 +1574,7 @@ msgstr "_Palet:"
 msgid "Color Wheel"
 msgstr "Olwyn Lliw"
 
-#: gtk/gtkcolorsel.c:976
+#: gtk/gtkcolorsel.c:958
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1580,7 +1584,7 @@ msgstr ""
 "ddewis nawr. Fe allwch lusgo'r lliw yma at gofnod palet, neu dewis y lliw "
 "yma gan ei lusgo at y sampl arall ar ei bwys."
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:961
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1588,11 +1592,21 @@ msgstr ""
 "Y lliw rydych chi wedi ei ddewis. Fe allwch lusgo'r lliw yma at gofnod palet "
 "er mwyn ei gadw fel y gallwch ei ddefnyddio yn y dyfodol."
 
-#: gtk/gtkcolorsel.c:1363
+#: gtk/gtkcolorsel.c:966
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:969
+msgid "The color you've chosen."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1382
 msgid "_Save color here"
 msgstr "_Cadw'r lliw fan hyn"
 
-#: gtk/gtkcolorsel.c:1568
+#: gtk/gtkcolorsel.c:1587
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1686,7 +1700,7 @@ msgstr "Copïo _Lleoliad"
 msgid "Select A File"
 msgstr "Dewiswch Ffeil"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1850
 msgid "Desktop"
 msgstr "Penbwrdd"
 
@@ -1702,23 +1716,23 @@ msgstr "Arall..."
 msgid "Type name of new folder"
 msgstr "Teipiwch enw'r plygell newydd"
 
-#: gtk/gtkfilechooserdefault.c:975
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not retrieve information about the file"
 msgstr "Methwyd cyrchu gwybodaeth ynghylch y ffeil"
 
-#: gtk/gtkfilechooserdefault.c:986
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not add a bookmark"
 msgstr "Methwyd ychwanegu llyfrnod"
 
-#: gtk/gtkfilechooserdefault.c:997
+#: gtk/gtkfilechooserdefault.c:998
 msgid "Could not remove bookmark"
 msgstr "Methwyd dileu'r llyfrnod"
 
-#: gtk/gtkfilechooserdefault.c:1008
+#: gtk/gtkfilechooserdefault.c:1009
 msgid "The folder could not be created"
 msgstr "Methu creu'r blygell"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1022
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1726,11 +1740,11 @@ msgstr ""
 "Methu creu'r blygell, am fod ffeil â'r un enw yn bodoli eisoes. Ceisiwch roi "
 "enw gwahanol i'r blygell, neu ail-enwi'r ffeil yn gyntaf."
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1033
 msgid "Invalid file name"
 msgstr "Enw ffeil annilys"
 
-#: gtk/gtkfilechooserdefault.c:1042
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "The folder contents could not be displayed"
 msgstr "Ni fedrwyd dangos cynnwys y blygell"
 
@@ -1738,188 +1752,188 @@ msgstr "Ni fedrwyd dangos cynnwys y blygell"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1592
+#: gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s ar %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1768
+#: gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
 msgstr "Chwilio"
 
-#: gtk/gtkfilechooserdefault.c:1792 gtk/gtkfilechooserdefault.c:9456
+#: gtk/gtkfilechooserdefault.c:1793 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr "Defnyddiwyd yn Ddiweddar"
 
-#: gtk/gtkfilechooserdefault.c:2428
+#: gtk/gtkfilechooserdefault.c:2429
 msgid "Select which types of files are shown"
 msgstr "Dewis pa fathau o ffeiliau a ddangosir"
 
-#: gtk/gtkfilechooserdefault.c:2787
+#: gtk/gtkfilechooserdefault.c:2788
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Ychwanegu'r blygell '%s' at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2832
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Ychwanegu'r blygell bresennol at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2834
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Ychwanegu'r plygellau sydd wedi eu dewis at y llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:2871
+#: gtk/gtkfilechooserdefault.c:2872
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Tynnu'r llyfrnod '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2874
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:2881 gtk/gtkfilechooserdefault.c:3907
 msgid "Remove the selected bookmark"
 msgstr "Dileu'r llyfrnod sydd wedi ei ddewis"
 
-#: gtk/gtkfilechooserdefault.c:3602
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Remove"
 msgstr "Tynnu"
 
-#: gtk/gtkfilechooserdefault.c:3611
+#: gtk/gtkfilechooserdefault.c:3612
 msgid "Rename..."
 msgstr "Ailenwi..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3775
 msgid "Places"
 msgstr "Llefydd"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3831
+#: gtk/gtkfilechooserdefault.c:3832
 msgid "_Places"
 msgstr "_Llefydd"
 
-#: gtk/gtkfilechooserdefault.c:3887
+#: gtk/gtkfilechooserdefault.c:3888
 msgid "_Add"
 msgstr "_Ychwanegu"
 
-#: gtk/gtkfilechooserdefault.c:3894
+#: gtk/gtkfilechooserdefault.c:3895
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Ychwanegu'r blygell sydd wedi ei dewis at y Llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:3899
+#: gtk/gtkfilechooserdefault.c:3900
 msgid "_Remove"
 msgstr "_Tynnu"
 
-#: gtk/gtkfilechooserdefault.c:4034
+#: gtk/gtkfilechooserdefault.c:4035
 msgid "Could not select file"
 msgstr "Methu dewis ffeil"
 
-#: gtk/gtkfilechooserdefault.c:4209
+#: gtk/gtkfilechooserdefault.c:4210
 msgid "_Add to Bookmarks"
 msgstr "_Ychwanegu at y Llyfrnodau"
 
-#: gtk/gtkfilechooserdefault.c:4222
+#: gtk/gtkfilechooserdefault.c:4223
 msgid "Show _Hidden Files"
 msgstr "Dangos Ffeiliau _Cudd"
 
-#: gtk/gtkfilechooserdefault.c:4229
+#: gtk/gtkfilechooserdefault.c:4230
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4449 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4450 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Ffeiliau"
 
-#: gtk/gtkfilechooserdefault.c:4500
+#: gtk/gtkfilechooserdefault.c:4501
 msgid "Name"
 msgstr "Enw"
 
-#: gtk/gtkfilechooserdefault.c:4523
+#: gtk/gtkfilechooserdefault.c:4524
 msgid "Size"
 msgstr "Maint"
 
-#: gtk/gtkfilechooserdefault.c:4537
+#: gtk/gtkfilechooserdefault.c:4538
 msgid "Modified"
 msgstr "Wedi newid"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4792 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "_Enw:"
 
-#: gtk/gtkfilechooserdefault.c:4835
+#: gtk/gtkfilechooserdefault.c:4836
 msgid "_Browse for other folders"
 msgstr "_Pori am blygellau eraill"
 
-#: gtk/gtkfilechooserdefault.c:5107
+#: gtk/gtkfilechooserdefault.c:5108
 msgid "Type a file name"
 msgstr "Teipiwch enw ffeil"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5148
+#: gtk/gtkfilechooserdefault.c:5149
 msgid "Create Fo_lder"
 msgstr "Creu _Plygell"
 
-#: gtk/gtkfilechooserdefault.c:5158
+#: gtk/gtkfilechooserdefault.c:5159
 msgid "_Location:"
 msgstr "_Lleoliad:"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Save in _folder:"
 msgstr "Cadw mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Create in _folder:"
 msgstr "Creu mewn _plygell:"
 
-#: gtk/gtkfilechooserdefault.c:6430
+#: gtk/gtkfilechooserdefault.c:6431
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "Methu creu cyfeiriadur: %s"
 
-#: gtk/gtkfilechooserdefault.c:6434
+#: gtk/gtkfilechooserdefault.c:6435
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "Methwyd cyrchu'r blygell wraidd"
 
-#: gtk/gtkfilechooserdefault.c:6525 gtk/gtkfilechooserdefault.c:6593
-#: gtk/gtkfilechooserdefault.c:6738
+#: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
+#: gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "Anhysbys"
 
-#: gtk/gtkfilechooserdefault.c:6540
+#: gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6542
+#: gtk/gtkfilechooserdefault.c:6545
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Ddoe"
 
-#: gtk/gtkfilechooserdefault.c:7209
+#: gtk/gtkfilechooserdefault.c:7211
 msgid "Cannot change to folder because it is not local"
 msgstr "Methwyd newid i'r blygell am nad yw'n lleol"
 
-#: gtk/gtkfilechooserdefault.c:7806 gtk/gtkfilechooserdefault.c:7827
+#: gtk/gtkfilechooserdefault.c:7808 gtk/gtkfilechooserdefault.c:7829
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Byrlwybr %s yn bodoli'n barod"
 
-#: gtk/gtkfilechooserdefault.c:7917
+#: gtk/gtkfilechooserdefault.c:7919
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nid yw'r byrlwybr %s yn bodoli"
 
-#: gtk/gtkfilechooserdefault.c:8172 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Mae ffeil o'r enw \"%s\" eisoes yn bodoli. Ydych chi am ei hamnewid?"
 
-#: gtk/gtkfilechooserdefault.c:8175 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1927,15 +1941,15 @@ msgstr ""
 "Mae'r ffeil eisoes yn bodoli yn \"%s\". Bydd amnewid y ffeil yn "
 "trosysgrifo'i chynnwys."
 
-#: gtk/gtkfilechooserdefault.c:8180 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Amnewid"
 
-#: gtk/gtkfilechooserdefault.c:8824
+#: gtk/gtkfilechooserdefault.c:8826
 msgid "Could not start the search process"
 msgstr "Methu cychwyn y broses chwilio"
 
-#: gtk/gtkfilechooserdefault.c:8825
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1943,16 +1957,16 @@ msgstr ""
 "Methodd y rhaglen a chreu cysylltiad â'r ellyll mynegai.  Gwnewch yn siŵr ei "
 "fod yn rhedeg."
 
-#: gtk/gtkfilechooserdefault.c:8839
+#: gtk/gtkfilechooserdefault.c:8841
 msgid "Could not send the search request"
 msgstr "Methu anfon y cais chwilio"
 
-#: gtk/gtkfilechooserdefault.c:9028
+#: gtk/gtkfilechooserdefault.c:9030
 #, fuzzy
 msgid "Search:"
 msgstr "Chwilio"
 
-#: gtk/gtkfilechooserdefault.c:9632
+#: gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "Methu â gosod %s"
@@ -2148,11 +2162,11 @@ msgstr ""
 msgid "Invalid UTF-8"
 msgstr "UTF-8 Annilys"
 
-#: gtk/gtkfilesel.c:3933
+#: gtk/gtkfilesel.c:3935
 msgid "Name too long"
 msgstr "Mae'r enw yn rhy hir"
 
-#: gtk/gtkfilesel.c:3935
+#: gtk/gtkfilesel.c:3937
 msgid "Couldn't convert filename"
 msgstr "Methu trawsnewid enw y ffeil"
 
@@ -2493,7 +2507,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
+#: gtk/gtknotebook.c:4698 gtk/gtknotebook.c:7249
 #, c-format
 msgid "Page %u"
 msgstr "Tudalen %u"
@@ -2658,17 +2672,17 @@ msgstr "Gwall wrth lansio rhagolwg"
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:302
+#: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
 #, c-format
 msgid "Error launching preview"
 msgstr "Gwall wrth lansio rhagolwg"
 
-#: gtk/gtkprintoperation-unix.c:346
+#: gtk/gtkprintoperation-unix.c:359
 #, c-format
 msgid "Error printing"
 msgstr "Gwall wrth argraffu"
 
-#: gtk/gtkprintoperation-unix.c:482 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
 msgid "Application"
 msgstr "Rhaglen"
 
@@ -3174,35 +3188,36 @@ msgstr "%s (%s)"
 msgid "Unable to find an item with URI '%s'"
 msgstr "Methu canfod eitem gyda'r URI '%s'"
 
-#: gtk/gtkspinner.c:454
+#: gtk/gtkspinner.c:458
 #, fuzzy
+msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Super A"
 
-#: gtk/gtkspinner.c:455
-msgid "Provides visual status"
+#: gtk/gtkspinner.c:459
+msgid "Provides visual indication of progress"
 msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:289
+#: gtk/gtkstock.c:314
 #, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Gwybodaeth"
 
-#: gtk/gtkstock.c:290
+#: gtk/gtkstock.c:315
 #, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Rhybudd"
 
-#: gtk/gtkstock.c:291
+#: gtk/gtkstock.c:316
 #, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Gwall"
 
-#: gtk/gtkstock.c:292
+#: gtk/gtkstock.c:317
 #, fuzzy
 msgctxt "Stock label"
 msgid "Question"
@@ -3211,568 +3226,568 @@ msgstr "Cwestiwn"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:322
 #, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Ynghylch"
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:323
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Ychwanegu"
 
 # EFALLAI
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:324
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Gosod"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:325
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Bras"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:326
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Diddymu"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:327
 #, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-Rom"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:328
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Clirio"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:329
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cau"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:330
 #, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Cysylltu"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:331
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Trosi"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:332
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Copïo"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:333
 #, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Torri"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:334
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Dileu"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:335
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "Analluogwyd"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:336
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Datgysylltu"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:337
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Gweithredu"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:338
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Golygu"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:339
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Chwilio"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:340
 #, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Chwilio ac _Ailosod"
 
 # EFALLAI (cyd-destun?)
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:341
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disgen Feddal"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:342
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Sgrin Lawn"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:343
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Gadael modd sgrin Lawn"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:345
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Gwaelod:"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:347
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Cyntaf"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:349
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Diwethaf"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:351
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Top:"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:353
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Yn Ãl"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:355
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "I _Lawr"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:357
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Ymlaen"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:359
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "I _Fyny"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:360
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Disgen Galed"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "C_ymorth"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:362
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Cartref"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:363
 #, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Cynyddu Mewnoliad"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:364
 #, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Lleihau Mewnoliad"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:365
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Mynegai"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:366
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Gwybodaeth"
 
 #
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Italig"
 
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:368
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Neidio i"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Trosi"
 
 #. This is about text justification
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Llenwi"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Chwith:"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_De:"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:379
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Ymlaen"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:381
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Newydd"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:383
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "Wedi seibio"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:385
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Llefydd"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:387
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Blaenorol"
 
 #. Media label
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:389
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Recordio"
 
 #. Media label
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:391
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Ail_ddirwyn"
 
 #. Media label
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:393
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Aros"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:394
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "Rh_wydwaith"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:395
 #, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Newydd"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:396
 #, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Na"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:397
 #, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Iawn"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:398
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Agor"
 
 #. Page orientation
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:400
 #, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Tirlun"
 
 #. Page orientation
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:402
 #, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Portread"
 
 #. Page orientation
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:404
 #, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Tirlun, Gwrthdro"
 
 #. Page orientation
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:406
 #, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Portread, Gwrthdro"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:407
 #, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Gosodiad Tudalen"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:408
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Gludo"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:409
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Hoffterau"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:410
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Argraffu"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:411
 #, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_Rhagolwg Argraffu"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:412
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Priodweddau"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:413
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Gadael"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:414
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Ail-wneud"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:415
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Diweddaru"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:416
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Tynnu"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:417
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Dychwelyd"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:418
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Cadw"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:419
 #, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Cadw _Fel"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:420
 #, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Dewis _Popeth"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:421
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Lliw"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:422
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Ffont"
 
 #. Sorting direction
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:424
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Cynyddol"
 
 #. Sorting direction
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:426
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Disgynnol"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:427
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Cywiro _Sillafu"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:428
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Aros"
 
 #. Font variant
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:430
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Taro drwodd"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:431
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Datddileu"
 
 #. Font variant
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:433
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Tanlinellu"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:434
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Dadwneud"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:435
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ie"
 
 #. Zoom
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:437
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Maint Arferol"
 
 #. Zoom
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:439
 #, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Ffit Gorau"
 
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:440
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Chwyddo"
 
-#: gtk/gtkstock.c:416
+#: gtk/gtkstock.c:441
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
@@ -3947,17 +3962,17 @@ msgstr "Methu canfod peiriant thema yn module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Dim Cyngor ---"
 
-#: gtk/gtkuimanager.c:1463
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tag cychwyn '%s' annisgwyl ar linell %d nod %d"
 
-#: gtk/gtkuimanager.c:1553
+#: gtk/gtkuimanager.c:1594
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Data nod annisgwyl ar linell %d nod %d"
 
-#: gtk/gtkuimanager.c:2385
+#: gtk/gtkuimanager.c:2426
 msgid "Empty"
 msgstr "Gwag"
 

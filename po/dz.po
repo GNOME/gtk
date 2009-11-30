@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-01 18:54-0500\n"
+"POT-Creation-Date: 2009-11-30 16:38-0500\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -378,12 +378,12 @@ msgstr "གནས་སྐབས་ཀྱི་ཡིག་སྣོད་ ཁ�
 msgid "Failed to read from temporary file"
 msgstr "གནས་སྐབས་ཀྱི་ཡིག་སྣོད་ནང་ལས་ ལྷག་མ་ཚུགས།"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2025
+#: gdk-pixbuf/gdk-pixbuf-io.c:2029
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr " '%s' ཁ་ཕྱེ་མ་ཚུགས་ %sའབྲི་ནིའི་དོན་ལུ།"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2050
+#: gdk-pixbuf/gdk-pixbuf-io.c:2054
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -391,11 +391,11 @@ msgid ""
 msgstr ""
 "གཟུགས་བརྙན་འབྲི་བའི་སྐབས་ ’%s’ དེ་ ཁ་བསྡམས་མ་ཚུགས། གནད་སྡུད་ཆ་མཉམ་ སྲུང་བཞག་མ་འབདཝ་འོང༌། %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2270 gdk-pixbuf/gdk-pixbuf-io.c:2321
+#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
 msgid "Insufficient memory to save image into a buffer"
 msgstr "གནད་ཁོངས་ནང་ལུ་ གཟུགས་བརྙན་བསྲུང་ནིའི་ དྲན་ཚད་ལངམ་མིན་འདུག"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2367
+#: gdk-pixbuf/gdk-pixbuf-io.c:2371
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "གཟུགས་བརྙན་ཡིག་སྣོད་ %s ལུ་ འབྲི་ནི་ལུ་འཛོལ་བ།"
@@ -681,8 +681,8 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ཇེ་པི་ཨི་ཇི་ ཚོས་གཞིའི་བར་སྟོང་ (%s) དེ་ལུ་ རྒྱབ་སྐྱོར་མིན་འདུག"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:943 gdk-pixbuf/io-jpeg.c:1176
-#: gdk-pixbuf/io-jpeg.c:1185
+#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "ཇེ་པི་ཨི་ཇི་ཡིག་སྣོད་ མངོན་གསལ་འབད་ནིའི་དོན་ལུ་ དྲན་ཚད་སྤྲོད་མ་ཚུགས།"
 
@@ -691,7 +691,7 @@ msgstr "ཇེ་པི་ཨི་ཇི་ཡིག་སྣོད་ མང�
 msgid "Transformed JPEG has zero width or height."
 msgstr "བཟོ་བསྒྱུར་ཅན་གྱི་ པི་ཨེན་ཇི་ལུ་ རྒྱ་ཚད་དམ་མཐོ་ཚད་ ཀླད་ཀོར་འདུག"
 
-#: gdk-pixbuf/io-jpeg.c:1132 gdk-pixbuf/io-gdip-jpeg.c:53
+#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -700,13 +700,13 @@ msgstr ""
 "ཇེ་པི་ཨི་ཇི་གི་ སྤུས་ཚད་དེ་ བེ་ལུ་ ༠ ལས་ ༡༠༠ གི་བར་ན་འོང་དགོ  བེ་ལུ་ ’%s’ དེ་ མིང་དཔྱད་འབད་མ་"
 "ཚུགས།"
 
-#: gdk-pixbuf/io-jpeg.c:1147 gdk-pixbuf/io-gdip-jpeg.c:68
+#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr "ཇེ་པི་ཨི་ཇི་གི་ སྤུས་ཚད་དེ་ བེ་ལུ་ ༠ ལས་ ༡༠༠ གི་བར་ན་འོང་དགོ བེ་ལུ་ ’%d’ དེ་མི་ཆོག"
 
-#: gdk-pixbuf/io-jpeg.c:1309 gdk-pixbuf/io-gdip-jpeg.c:136
+#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "ཇེ་པི་ཨི་ཇི་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག"
 
@@ -980,55 +980,59 @@ msgstr "ཡིག་སྣོད་ནང་ གནད་སྡུད་ཐེ�
 msgid "The Targa image format"
 msgstr "ཊར་ག་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག་།"
 
-#: gdk-pixbuf/io-tiff.c:160
+#: gdk-pixbuf/io-tiff.c:161
 msgid "Could not get image width (bad TIFF file)"
 msgstr "གཟུགས་བརྙན་གྱི་རྒྱ་ཚད་ཐོབ་མ་ཚུགས།(ཊི་ཨའི་ཨེཕ་ཨེཕ་ཡིག་སྣོད་བྱང་ཉེས)"
 
-#: gdk-pixbuf/io-tiff.c:167
+#: gdk-pixbuf/io-tiff.c:168
 msgid "Could not get image height (bad TIFF file)"
 msgstr "གཟུགས་བརྙན་གྱི་མཐོ་ཚད་ཐོབ་མ་ཚུགས།(ཊི་ཨའི་ཨེཕ་ཨེཕ་ཡིག་སྣོད་བྱང་ཉེས)"
 
-#: gdk-pixbuf/io-tiff.c:175
+#: gdk-pixbuf/io-tiff.c:176
 msgid "Width or height of TIFF image is zero"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་གི་ གཟུགས་བརྙན་གྱི་རྒྱ་ཚད་དམ་ མཐོ་ཚད་ཀླད་ཀོར་ཨིན་པས།"
 
-#: gdk-pixbuf/io-tiff.c:184 gdk-pixbuf/io-tiff.c:193
+#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
 msgid "Dimensions of TIFF image too large"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་གྱི་ རྒྱ་ཁྱོན་ཚུ་ སྦོམ་དྲགས་པས།"
 
-#: gdk-pixbuf/io-tiff.c:217 gdk-pixbuf/io-tiff.c:229 gdk-pixbuf/io-tiff.c:541
+#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
 msgid "Insufficient memory to open TIFF file"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ཡིག་སྣོད་ ཁ་ཕྱེ་ནི་ལུ་ དྲན་ཚད་ལངམ་མིན་འདུག"
 
-#: gdk-pixbuf/io-tiff.c:275
+#: gdk-pixbuf/io-tiff.c:283
 msgid "Failed to load RGB data from TIFF file"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ཡིག་སྣོད་ནང་ལས་ ཨར་ཇི་བི་ གནད་སྡུད་མངོན་གསལ་འབད་མ་ཚུགས།།"
 
-#: gdk-pixbuf/io-tiff.c:331
+#: gdk-pixbuf/io-tiff.c:339
 msgid "Failed to open TIFF image"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་ཁ་ཕྱེ་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-tiff.c:343 gdk-pixbuf/io-tiff.c:722
+#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
 msgid "TIFFClose operation failed"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ཁ་བསྡམ་ བཀོལ་སྤྱོད་འབད་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-tiff.c:473 gdk-pixbuf/io-tiff.c:486
+#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
 msgid "Failed to load TIFF image"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་མངོན་གསལ་འབད་མ་ཚུགས།།"
 
-#: gdk-pixbuf/io-tiff.c:670
+#: gdk-pixbuf/io-tiff.c:678
 msgid "Failed to save TIFF image"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་བསྲུང་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-tiff.c:708
+#: gdk-pixbuf/io-tiff.c:713
+msgid "TIFF compression doesn't refer to a valid codec."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:741
 msgid "Failed to write TIFF data"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་གནད་སྡུད་འབྲི་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-tiff.c:760
+#: gdk-pixbuf/io-tiff.c:793
 msgid "Couldn't write to TIFF file"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ཡིག་སྣོད་ལུ་ འབྲི་མ་ཚུགས།"
 
-#: gdk-pixbuf/io-tiff.c:815
+#: gdk-pixbuf/io-tiff.c:848
 msgid "The TIFF image format"
 msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བརྙན་རྩ་སྒྲིག་།"
 
@@ -1216,7 +1220,7 @@ msgstr[1] ""
 msgid "Could not show link"
 msgstr "ཐོ་ཡིག་བསལ་མ་ཚུགས། "
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2235
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr "ཆོག་ཐམ།"
 
@@ -1225,39 +1229,39 @@ msgid "The license of the program"
 msgstr "ལས་རིམ་གྱི་ཆོག་ཐམ།"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:604
+#: gtk/gtkaboutdialog.c:625
 msgid "C_redits"
 msgstr ""
 "\"ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་"
 "གྱི་དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>\""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:618
+#: gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr "ཆོག་ཐམ།(_L)"
 
-#: gtk/gtkaboutdialog.c:886
+#: gtk/gtkaboutdialog.c:917
 #, c-format
 msgid "About %s"
 msgstr "%s གི་སྐོར། "
 
-#: gtk/gtkaboutdialog.c:2158
+#: gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr "ངོ་བསྟོད་ཚུ།"
 
-#: gtk/gtkaboutdialog.c:2187
+#: gtk/gtkaboutdialog.c:2215
 msgid "Written by"
 msgstr "འབྲི་མི།"
 
-#: gtk/gtkaboutdialog.c:2190
+#: gtk/gtkaboutdialog.c:2218
 msgid "Documented by"
 msgstr "ཡིག་ཐོག་ལུ་བཀོད་མི།"
 
-#: gtk/gtkaboutdialog.c:2202
+#: gtk/gtkaboutdialog.c:2230
 msgid "Translated by"
 msgstr "སྐད་བསྒྱུར་རྐྱབ་མི།"
 
-#: gtk/gtkaboutdialog.c:2206
+#: gtk/gtkaboutdialog.c:2234
 msgid "Artwork by"
 msgstr "རི་མོ་བཀོད་མི།"
 
@@ -1570,7 +1574,7 @@ msgstr "པེ་ལེཊི་:(_P)"
 msgid "Color Wheel"
 msgstr "ཚོས་གཞིའི་འཁོར་ལོ།"
 
-#: gtk/gtkcolorsel.c:976
+#: gtk/gtkcolorsel.c:958
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1580,7 +1584,7 @@ msgstr ""
 "དེ། ཁྱོད་ཀྱིས་ཚོས་གཞི་འདི་ པེ་ལེཊི་ཐོ་བཀོད་ཅིག་ལུ་འདྲུད་བཏུབ། ཡང་ཅིན་ ཚོས་གཞི་འདི་ ཟུར་ཁ་ཡོད་མི་ ཚོས་"
 "དཔེ་གཞན་ཅིག་ལུ་ འདྲུད་པའི་ཐོག་ལས་ ད་ལྟོའི་ཚོས་གཞི་སྦེ སེལ་འཐུ་འབད་བཏུབ།"
 
-#: gtk/gtkcolorsel.c:980
+#: gtk/gtkcolorsel.c:961
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1588,11 +1592,21 @@ msgstr ""
 "ཁྱོད་ཀྱིས་ཚོས་གཞི་སེལ་འཐུ་འབད་མི་དེ་ པེ་ལེཊི་ཐོ་བཀོད་ཅིག་ནང་ འདྲུད་ཞིནམ་ལས་ ཤུལ་ལས་ལག་ལེན་འཐབ་ནིའི་"
 "དོན་ལུ་ བསྲུང་སྟེ་བཞག་བཏུབ།"
 
-#: gtk/gtkcolorsel.c:1363
+#: gtk/gtkcolorsel.c:966
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:969
+msgid "The color you've chosen."
+msgstr ""
+
+#: gtk/gtkcolorsel.c:1382
 msgid "_Save color here"
 msgstr "ཚོས་གཞི་ནཱ་ལུ་སྲུངས།(_S)"
 
-#: gtk/gtkcolorsel.c:1568
+#: gtk/gtkcolorsel.c:1587
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1686,7 +1700,7 @@ msgstr "གནས་ཁོངས་འདྲ་བཤུས་རྐྱབས།
 msgid "Select A File"
 msgstr "ཡིག་སྣོད་ཅིག་སེལ་འཐུ་འབད།"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1849
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1850
 msgid "Desktop"
 msgstr "ཌེཀསི་ཊོཔ། "
 
@@ -1702,23 +1716,23 @@ msgstr "གཞན་..."
 msgid "Type name of new folder"
 msgstr "སྣོད་འཛིན་གསར་པའི་མིང་ ཡིག་དཔར་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:975
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not retrieve information about the file"
 msgstr "ཡིག་སྣོད་དེ་གི་སྐོར་ལས་ བརྡ་དོན་སླར་འདྲེན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:986
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not add a bookmark"
 msgstr "དེབ་རྟགས་ཅིག་ ཁ་སྐོང་བརྐྱབས་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:997
+#: gtk/gtkfilechooserdefault.c:998
 msgid "Could not remove bookmark"
 msgstr "དེབ་རྟགས་རྩ་བསྐྲད་བཏང་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:1008
+#: gtk/gtkfilechooserdefault.c:1009
 msgid "The folder could not be created"
 msgstr "སྣོད་འཛིན་དེ་ གསར་བསྐྲུན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1022
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1726,11 +1740,11 @@ msgstr ""
 "མིང་ཅོག་གཅིགཔ་འབད་མི་ ཡིག་སྣོད་ཅིག་ ཧེ་མ་ལས་ར་ཡོདཔ་ལས་ སྣོད་འཛིན་འདི་ གསར་བསྐྲུན་འབད་མ་ཚུགས། "
 "སྣོད་འཛིན་གྱི་དོན་ལུ་ མིང་གཞན་ཅིག་ ལག་ལེན་འཐབ་ ཡང་ན་ དང་པ་ཡིག་སྣོད་དེ་ལུ་ བསྐྱར་མིང་བཏགས།"
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1033
 msgid "Invalid file name"
 msgstr "ནུས་མེད་ཡིག་སྣོད་ཀྱི་མིང་།"
 
-#: gtk/gtkfilechooserdefault.c:1042
+#: gtk/gtkfilechooserdefault.c:1043
 msgid "The folder contents could not be displayed"
 msgstr "སྣོད་འཛིན་ནང་གི་ནང་དོན་ཚུ་ བཀྲམ་སྟོན་འབད་མ་ཚུགས།"
 
@@ -1738,188 +1752,188 @@ msgstr "སྣོད་འཛིན་ནང་གི་ནང་དོན་ཚ
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1592
+#: gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s གུ"
 
-#: gtk/gtkfilechooserdefault.c:1768
+#: gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1792 gtk/gtkfilechooserdefault.c:9456
+#: gtk/gtkfilechooserdefault.c:1793 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2428
+#: gtk/gtkfilechooserdefault.c:2429
 msgid "Select which types of files are shown"
 msgstr "སྟོན་ཏེ་ཡོད་མི་ ཡིག་སྣོད་ཀྱི་དབྱེ་བ་ཚུ་ སེལ་འཐུ་འབད།"
 
-#: gtk/gtkfilechooserdefault.c:2787
+#: gtk/gtkfilechooserdefault.c:2788
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "སྣོད་འཛིན་ ’%s’ དེ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2831
+#: gtk/gtkfilechooserdefault.c:2832
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ད་ལྟོའི་སྣོད་འཛིན་དེ་ དེབ་རྟགས་ཚུ་ལུ་ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2833
+#: gtk/gtkfilechooserdefault.c:2834
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "སེལ་འཐུ་འབད་མི་སྣོད་འཛིན་ཚུ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2871
+#: gtk/gtkfilechooserdefault.c:2872
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "དེབ་རྟགས་ ’%s’ དེ་ རྩ་བསྐྲད་གཏང༌།"
 
-#: gtk/gtkfilechooserdefault.c:2873
+#: gtk/gtkfilechooserdefault.c:2874
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2880 gtk/gtkfilechooserdefault.c:3906
+#: gtk/gtkfilechooserdefault.c:2881 gtk/gtkfilechooserdefault.c:3907
 msgid "Remove the selected bookmark"
 msgstr "སེལ་འཐུ་འབད་མི་ དེབ་རྟགས་དེ་ རྩ་བསྐྲད་གཏང༌།"
 
-#: gtk/gtkfilechooserdefault.c:3602
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Remove"
 msgstr "རྩ་བསྐྲད་གཏང་།"
 
-#: gtk/gtkfilechooserdefault.c:3611
+#: gtk/gtkfilechooserdefault.c:3612
 msgid "Rename..."
 msgstr "བསྐྱར་མིང་བཏགས་..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3774
+#: gtk/gtkfilechooserdefault.c:3775
 msgid "Places"
 msgstr "ས་གནས།"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3831
+#: gtk/gtkfilechooserdefault.c:3832
 msgid "_Places"
 msgstr "ས་གནས་ཚུ།(_p)"
 
-#: gtk/gtkfilechooserdefault.c:3887
+#: gtk/gtkfilechooserdefault.c:3888
 msgid "_Add"
 msgstr "ཁ་སྐོང་།(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3894
+#: gtk/gtkfilechooserdefault.c:3895
 msgid "Add the selected folder to the Bookmarks"
 msgstr "སེལ་འཐུ་འབད་མི་སྣོད་འཛིན་དེ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:3899
+#: gtk/gtkfilechooserdefault.c:3900
 msgid "_Remove"
 msgstr "རྩ་བསྐྲད་གཏང་།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4034
+#: gtk/gtkfilechooserdefault.c:4035
 msgid "Could not select file"
 msgstr "ཡིག་སྣོད་སེལ་འཐུ་འབད་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:4209
+#: gtk/gtkfilechooserdefault.c:4210
 msgid "_Add to Bookmarks"
 msgstr "དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4222
+#: gtk/gtkfilechooserdefault.c:4223
 msgid "Show _Hidden Files"
 msgstr "སྦ་སྟེ་ཡོད་པའི་ཡིག་སྣོད་ཚུ་སྟོན།(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4229
+#: gtk/gtkfilechooserdefault.c:4230
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4449 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4450 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ཡིག་སྣོད་ཚུ།"
 
-#: gtk/gtkfilechooserdefault.c:4500
+#: gtk/gtkfilechooserdefault.c:4501
 msgid "Name"
 msgstr "མིང༌། "
 
-#: gtk/gtkfilechooserdefault.c:4523
+#: gtk/gtkfilechooserdefault.c:4524
 msgid "Size"
 msgstr "ཚད།"
 
-#: gtk/gtkfilechooserdefault.c:4537
+#: gtk/gtkfilechooserdefault.c:4538
 msgid "Modified"
 msgstr "ལེགས་བཅོས་འབད་ཡོདཔ།"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4792 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
 msgid "_Name:"
 msgstr "མིང་:(_N)"
 
-#: gtk/gtkfilechooserdefault.c:4835
+#: gtk/gtkfilechooserdefault.c:4836
 msgid "_Browse for other folders"
 msgstr "སྣོད་འཛིན་གཞན་གྱི་དོན་ལུ་བརྡ་འཚོལ།(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5107
+#: gtk/gtkfilechooserdefault.c:5108
 msgid "Type a file name"
 msgstr "་ཡིག་སྣོད་ཀྱི་མིང་ཅིག་ཡིག་དཔར་རྐྱབས།"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5148
+#: gtk/gtkfilechooserdefault.c:5149
 msgid "Create Fo_lder"
 msgstr "སྣོད་འཛིན་གསར་བསྐྲུན་འབད།(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5158
+#: gtk/gtkfilechooserdefault.c:5159
 msgid "_Location:"
 msgstr "གནས་ཁོངས་:(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5363
 msgid "Save in _folder:"
 msgstr "སྣོད་འཛིན་ནང༌སྲུངས།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5365
 msgid "Create in _folder:"
 msgstr "སྣོད་འཛིན་ནང་གསར་བསྐྲུན་འབད།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:6430
+#: gtk/gtkfilechooserdefault.c:6431
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "སྣོད་ཐོ་ %s གསར་བསྐྲུན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:6434
+#: gtk/gtkfilechooserdefault.c:6435
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "རྩ་བའི་སྣོད་འཛིན་འཐོབ་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:6525 gtk/gtkfilechooserdefault.c:6593
-#: gtk/gtkfilechooserdefault.c:6738
+#: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
+#: gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "མ་ཤེསཔ།"
 
-#: gtk/gtkfilechooserdefault.c:6540
+#: gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6542
+#: gtk/gtkfilechooserdefault.c:6545
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "ཁ་རྩང༌།"
 
-#: gtk/gtkfilechooserdefault.c:7209
+#: gtk/gtkfilechooserdefault.c:7211
 msgid "Cannot change to folder because it is not local"
 msgstr "ཉེ་གནས་མེནམ་ལས་ སྣོད་འཛིན་ལུ་ བསྒྱུར་བཅོས་འབད་མི་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:7806 gtk/gtkfilechooserdefault.c:7827
+#: gtk/gtkfilechooserdefault.c:7808 gtk/gtkfilechooserdefault.c:7829
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "མགྱོགས་ཐབས་ %s ཧེ་མ་ལས་ར་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:7917
+#: gtk/gtkfilechooserdefault.c:7919
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "མགྱོགས་ཐབས་ %s མིན་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:8172 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ཡིག་སྣོད་མིང་\"%s\" འབད་མི་ཅིག་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་ནི་ཨིན་ན?"
 
-#: gtk/gtkfilechooserdefault.c:8175 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1927,31 +1941,31 @@ msgstr ""
 "\"%s\" ནང་ལུ་ ཡིག་སྣོད་དེ་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་པ་ཅིན་ དེ་ནང་ཡོད་པའི་ནང་དོན་ཚུ་ ཚབ་"
 "སྲུང་འབད་འོང་།"
 
-#: gtk/gtkfilechooserdefault.c:8180 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8824
+#: gtk/gtkfilechooserdefault.c:8826
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:8825
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8839
+#: gtk/gtkfilechooserdefault.c:8841
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:9028
+#: gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9632
+#: gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "
@@ -2144,11 +2158,11 @@ msgstr ""
 msgid "Invalid UTF-8"
 msgstr "ནུས་མེད་ཡུ་ཊི་ཨེཕ་-༨།"
 
-#: gtk/gtkfilesel.c:3933
+#: gtk/gtkfilesel.c:3935
 msgid "Name too long"
 msgstr "མིང་རིང་དྲགས་པས།"
 
-#: gtk/gtkfilesel.c:3935
+#: gtk/gtkfilesel.c:3937
 msgid "Couldn't convert filename"
 msgstr "ཡིག་སྣོད་ཀྱི་མིང་ གཞི་བསྒྱུར་འབད་མ་ཚུགས།"
 
@@ -2488,7 +2502,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4430 gtk/gtknotebook.c:6957
+#: gtk/gtknotebook.c:4698 gtk/gtknotebook.c:7249
 #, c-format
 msgid "Page %u"
 msgstr "ཤོག་ལེབ་ %u "
@@ -2654,17 +2668,17 @@ msgstr "སྔོན་ལྟ་གསར་བཙུགས་འབད་ནི
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:302
+#: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
 #, c-format
 msgid "Error launching preview"
 msgstr "སྔོན་ལྟ་གསར་བཙུགས་འབད་ནི་ལུ་འཛོལ་བ།"
 
-#: gtk/gtkprintoperation-unix.c:346
+#: gtk/gtkprintoperation-unix.c:359
 #, c-format
 msgid "Error printing"
 msgstr "དཔར་བསྐྲུན་ལུ་འཛོལ་བ།"
 
-#: gtk/gtkprintoperation-unix.c:482 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
 msgid "Application"
 msgstr "གློག་རིམ།"
 
@@ -3169,35 +3183,36 @@ msgstr "%s (%s)"
 msgid "Unable to find an item with URI '%s'"
 msgstr "ཡུ་ཨར་ཨའི་'%s'དང་གཅིག་ཁར་ རྣམ་གྲངས་ཅིག་འཚོལ་མ་ཐོབ།"
 
-#: gtk/gtkspinner.c:454
+#: gtk/gtkspinner.c:458
 #, fuzzy
+msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "སུ་པར་ཨེ།"
 
-#: gtk/gtkspinner.c:455
-msgid "Provides visual status"
+#: gtk/gtkspinner.c:459
+msgid "Provides visual indication of progress"
 msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:289
+#: gtk/gtkstock.c:314
 #, fuzzy
 msgctxt "Stock label"
 msgid "Information"
 msgstr "བརྡ་དོན།"
 
-#: gtk/gtkstock.c:290
+#: gtk/gtkstock.c:315
 #, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "ཉེན་བརྡ།"
 
-#: gtk/gtkstock.c:291
+#: gtk/gtkstock.c:316
 #, fuzzy
 msgctxt "Stock label"
 msgid "Error"
 msgstr "འཛོལ་བ།"
 
-#: gtk/gtkstock.c:292
+#: gtk/gtkstock.c:317
 #, fuzzy
 msgctxt "Stock label"
 msgid "Question"
@@ -3206,565 +3221,565 @@ msgstr "དྲི་བ།"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:297
+#: gtk/gtkstock.c:322
 #, fuzzy
 msgctxt "Stock label"
 msgid "_About"
 msgstr "སྐོར་ལས།(_A)"
 
-#: gtk/gtkstock.c:298
+#: gtk/gtkstock.c:323
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "ཁ་སྐོང་།(_A)"
 
-#: gtk/gtkstock.c:299
+#: gtk/gtkstock.c:324
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "འཇུག་སྤྱོད་འབད།(_A)"
 
-#: gtk/gtkstock.c:300
+#: gtk/gtkstock.c:325
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "རྒྱགས་པ།(_B)"
 
-#: gtk/gtkstock.c:301
+#: gtk/gtkstock.c:326
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "ཆ་མེད་གཏང༌།(_C)"
 
-#: gtk/gtkstock.c:302
+#: gtk/gtkstock.c:327
 #, fuzzy
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "སི་ཌི་-རཱོམ།(_C)"
 
-#: gtk/gtkstock.c:303
+#: gtk/gtkstock.c:328
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "བསལ།(_C)"
 
-#: gtk/gtkstock.c:304
+#: gtk/gtkstock.c:329
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "ཁ་བསྡམས།(_C)"
 
-#: gtk/gtkstock.c:305
+#: gtk/gtkstock.c:330
 #, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "མཐུད།(_o)"
 
-#: gtk/gtkstock.c:306
+#: gtk/gtkstock.c:331
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "གཞི་བསྒྱུར་འབད།(_C)"
 
-#: gtk/gtkstock.c:307
+#: gtk/gtkstock.c:332
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "འདྲ་བཤུས།(_C)"
 
-#: gtk/gtkstock.c:308
+#: gtk/gtkstock.c:333
 #, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "བཏོག(_C)"
 
-#: gtk/gtkstock.c:309
+#: gtk/gtkstock.c:334
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "བཏོན་གཏང༌།(_D)"
 
-#: gtk/gtkstock.c:310
+#: gtk/gtkstock.c:335
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "ལྕོགས་མིན་བཟོ་ཡི།"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:336
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "མཐུན་ལམ་བཏོག(_D)"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:337
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "ལག་ལེན་འཐབ།(_E)"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:338
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "ཞུན་དག(_E)"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:339
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "འཚོལ།(_F)"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:340
 #, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "འཚོལ་ཞིནམ་ལས་ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:341
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "ཕོལོ་པི།(_F)"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:342
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "གསལ་གཞི་གངམ།(_F)"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:343
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "གསལ་གཞི་གངམ་སྦེ་བཞག(_L)"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:345
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "གཤམ་:(_B)"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:347
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "དང་པ།(_F)"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:349
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "མཐའ་མཇུག(_L)"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:351
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "མགོ་:(_T)"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:353
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "རྒྱབ།(_B)"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:355
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "མར།(_D)"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:357
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "གདོང་བསྐྱོད།(_F)"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:359
 #, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "ཡར།(_U)"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:360
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "ཧརཌི་ཌིཀསི།(_H)"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:361
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "གྲོགས་རམ།(_H)"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:362
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "ཁྱིམ།(_H)"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:363
 #, fuzzy
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "འགོ་མཚམས་སེང་།"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:364
 #, fuzzy
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "འགོ་མཚམས་ཕབ།"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:365
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "ཟུར་ཐོ།(_I)"
 
-#: gtk/gtkstock.c:341
+#: gtk/gtkstock.c:366
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "བརྡ་དོན།(_I)"
 
-#: gtk/gtkstock.c:342
+#: gtk/gtkstock.c:367
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "ཨི་ཊ་ལིཀ(_I)"
 
-#: gtk/gtkstock.c:343
+#: gtk/gtkstock.c:368
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "ལུ་མཆོངས།(_J)"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:345
+#: gtk/gtkstock.c:370
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "གཞི་བསྒྱུར་འབད།(_C)"
 
 #. This is about text justification
-#: gtk/gtkstock.c:347
+#: gtk/gtkstock.c:372
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "ཡིག་སྣོད་ཚུ།(_F)"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:349
+#: gtk/gtkstock.c:374
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "གཡོན་:(_L)"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:351
+#: gtk/gtkstock.c:376
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "གཡས་:(_R)"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:354
+#: gtk/gtkstock.c:379
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "གདོང་བསྐྱོད།(_F)"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:356
+#: gtk/gtkstock.c:381
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "གསརཔ།(_S)"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:358
+#: gtk/gtkstock.c:383
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "ཐེམས་ཡོད།"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:360
+#: gtk/gtkstock.c:385
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "ས་གནས་ཚུ།(_p)"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:362
+#: gtk/gtkstock.c:387
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "ཧེ་མམ།(_v)"
 
 #. Media label
-#: gtk/gtkstock.c:364
+#: gtk/gtkstock.c:389
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "སྒྲ་བཟུང་།(_R)"
 
 #. Media label
-#: gtk/gtkstock.c:366
+#: gtk/gtkstock.c:391
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "ལོག་བསྒྱིར།(_e)"
 
 #. Media label
-#: gtk/gtkstock.c:368
+#: gtk/gtkstock.c:393
 #, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "བཀག(_S)"
 
-#: gtk/gtkstock.c:369
+#: gtk/gtkstock.c:394
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "ཡོངས་འབྲེལ།(_N)"
 
-#: gtk/gtkstock.c:370
+#: gtk/gtkstock.c:395
 #, fuzzy
 msgctxt "Stock label"
 msgid "_New"
 msgstr "གསརཔ།(_S)"
 
-#: gtk/gtkstock.c:371
+#: gtk/gtkstock.c:396
 #, fuzzy
 msgctxt "Stock label"
 msgid "_No"
 msgstr "མེན།(_N)"
 
-#: gtk/gtkstock.c:372
+#: gtk/gtkstock.c:397
 #, fuzzy
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "བཏུབ།(_O)"
 
-#: gtk/gtkstock.c:373
+#: gtk/gtkstock.c:398
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "ཁ་ཕྱེ།(_O)"
 
 #. Page orientation
-#: gtk/gtkstock.c:375
+#: gtk/gtkstock.c:400
 #, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "ཀེ་ཀེ།"
 
 #. Page orientation
-#: gtk/gtkstock.c:377
+#: gtk/gtkstock.c:402
 #, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "ཡར་ཕྲང་།"
 
 #. Page orientation
-#: gtk/gtkstock.c:379
+#: gtk/gtkstock.c:404
 #, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "ཀེ་ཀེ་ལོག་པ།"
 
 #. Page orientation
-#: gtk/gtkstock.c:381
+#: gtk/gtkstock.c:406
 #, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "ཡར་ཕྲང་ལོག་པ།"
 
-#: gtk/gtkstock.c:382
+#: gtk/gtkstock.c:407
 #, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "ཤོག་ལེབ་གཞི་སྒྲིག"
 
-#: gtk/gtkstock.c:383
+#: gtk/gtkstock.c:408
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "སྦྱར།(_p)"
 
-#: gtk/gtkstock.c:384
+#: gtk/gtkstock.c:409
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "དགའ་གདམ་ཚུ།(_P)"
 
-#: gtk/gtkstock.c:385
+#: gtk/gtkstock.c:410
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "དཔར་བསྐྲུན།(_P)"
 
-#: gtk/gtkstock.c:386
+#: gtk/gtkstock.c:411
 #, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "དཔར་བསྐྲུན་སྔོན་ལྟ།(_v)"
 
-#: gtk/gtkstock.c:387
+#: gtk/gtkstock.c:412
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "རྒྱུ་དངོས།(_P)"
 
-#: gtk/gtkstock.c:388
+#: gtk/gtkstock.c:413
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "སྤངས།(_Q)"
 
-#: gtk/gtkstock.c:389
+#: gtk/gtkstock.c:414
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "ལོག་འབད།(_R)"
 
-#: gtk/gtkstock.c:390
+#: gtk/gtkstock.c:415
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "ཡང་སེལ།(_R)"
 
-#: gtk/gtkstock.c:391
+#: gtk/gtkstock.c:416
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "རྩ་བསྐྲད་གཏང་།(_R)"
 
-#: gtk/gtkstock.c:392
+#: gtk/gtkstock.c:417
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "རྒྱབ་ལོག(_R)"
 
-#: gtk/gtkstock.c:393
+#: gtk/gtkstock.c:418
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "སྲུངས།(_S)"
 
-#: gtk/gtkstock.c:394
+#: gtk/gtkstock.c:419
 #, fuzzy
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "དེ་སྦེ་སྲུངས།(_A)"
 
-#: gtk/gtkstock.c:395
+#: gtk/gtkstock.c:420
 #, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "ཆ་མཉམ་སེལ་འཐུ་འབད།(_A)"
 
-#: gtk/gtkstock.c:396
+#: gtk/gtkstock.c:421
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "ཚོས་གཞི།(_C)"
 
-#: gtk/gtkstock.c:397
+#: gtk/gtkstock.c:422
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "ཡིག་གཟུགས།(_F)"
 
 #. Sorting direction
-#: gtk/gtkstock.c:399
+#: gtk/gtkstock.c:424
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "ཡར་འཛེགས།(_A)"
 
 #. Sorting direction
-#: gtk/gtkstock.c:401
+#: gtk/gtkstock.c:426
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "མར་འབབ།(_D)"
 
-#: gtk/gtkstock.c:402
+#: gtk/gtkstock.c:427
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "སྡེབ་དཔྱད།(_S)"
 
-#: gtk/gtkstock.c:403
+#: gtk/gtkstock.c:428
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "བཀག(_S)"
 
 #. Font variant
-#: gtk/gtkstock.c:405
+#: gtk/gtkstock.c:430
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "སྦུག་འབྲེག(_S)"
 
-#: gtk/gtkstock.c:406
+#: gtk/gtkstock.c:431
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "བཏོན་བཤོལ།(_U)"
 
 #. Font variant
-#: gtk/gtkstock.c:408
+#: gtk/gtkstock.c:433
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "འོག་ཐིག(_U)"
 
-#: gtk/gtkstock.c:409
+#: gtk/gtkstock.c:434
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "འབད་བཤོལ།(_U)"
 
-#: gtk/gtkstock.c:410
+#: gtk/gtkstock.c:435
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "ཨིན།(_Y)"
 
 #. Zoom
-#: gtk/gtkstock.c:412
+#: gtk/gtkstock.c:437
 #, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "སྤྱིར་བཏང་གི་ཚད།(_N)"
 
 #. Zoom
-#: gtk/gtkstock.c:414
+#: gtk/gtkstock.c:439
 #, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "ལེགས་སྒྲིག(_F)"
 
-#: gtk/gtkstock.c:415
+#: gtk/gtkstock.c:440
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "ཕྱིར་རྒྱས།(_I)"
 
-#: gtk/gtkstock.c:416
+#: gtk/gtkstock.c:441
 #, fuzzy
 msgctxt "Stock label"
 msgid "Zoom _Out"
@@ -3935,17 +3950,17 @@ msgstr "ཚད་གཞི་འགྲུལ་ལམ་\"%s\"ནང་ བར�
 msgid "--- No Tip ---"
 msgstr "---ཕན་བསླབ་མིན་འདུག ---"
 
-#: gtk/gtkuimanager.c:1463
+#: gtk/gtkuimanager.c:1504
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "རེ་བ་མེད་པའི་འགོ་བཙུགས་རྟགས་ %s' གྱལ་རིམ་ %d ཡིག་འབྲུ་%d གུ།"
 
-#: gtk/gtkuimanager.c:1553
+#: gtk/gtkuimanager.c:1594
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "འབྲེལ་ལམ་ %d ལུ་ ཡིག་འབྲུ་ %d གི་ རེ་བ་མེད་པའི་ ཡིག་འབྲུའི་གནད་སྡུད།"
 
-#: gtk/gtkuimanager.c:2385
+#: gtk/gtkuimanager.c:2426
 msgid "Empty"
 msgstr "སྟོངམ།"
 

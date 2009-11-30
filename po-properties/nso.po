@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-01 18:55-0500\n"
+"POT-Creation-Date: 2009-11-30 16:38-0500\n"
 "PO-Revision-Date: 2004-11-30 15:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -131,7 +131,7 @@ msgstr "Dintlha tša fonto"
 msgid "The resolution for fonts on the screen"
 msgstr "Kamoo mehuta e swanetšego go dirwa gore e be nakong sekirining"
 
-#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
+#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
 #, fuzzy
 msgid "Cursor"
 msgstr "Go Ponya ga Leswao leo le Bontšhago mo o lego"
@@ -181,75 +181,75 @@ msgstr ""
 msgid "The URL for the link to the website of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:397
 #, fuzzy
 msgid "Website label"
 msgstr "Diriša bogolo leswaong"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:398
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:415
+#: gtk/gtkaboutdialog.c:414
 msgid "Authors"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:416
+#: gtk/gtkaboutdialog.c:415
 msgid "List of authors of the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:432
+#: gtk/gtkaboutdialog.c:431
 msgid "Documenters"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:433
+#: gtk/gtkaboutdialog.c:432
 msgid "List of people documenting the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:449
+#: gtk/gtkaboutdialog.c:448
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:450
+#: gtk/gtkaboutdialog.c:449
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:467
+#: gtk/gtkaboutdialog.c:466
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:468
+#: gtk/gtkaboutdialog.c:467
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:483
+#: gtk/gtkaboutdialog.c:482
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:484
+#: gtk/gtkaboutdialog.c:483
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:499
+#: gtk/gtkaboutdialog.c:498
 #, fuzzy
 msgid "Logo Icon Name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtkaboutdialog.c:500
+#: gtk/gtkaboutdialog.c:499
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:513
+#: gtk/gtkaboutdialog.c:512
 #, fuzzy
 msgid "Wrap license"
 msgstr "Peakanyo ya mokgwa wa go phuthela"
 
-#: gtk/gtkaboutdialog.c:514
+#: gtk/gtkaboutdialog.c:513
 #, fuzzy
 msgid "Whether to wrap the license text."
 msgstr "Ge eba o swanetše go kgabaganya sengwalwa"
@@ -270,82 +270,82 @@ msgstr "Sedirišwa sa Seakgofiši"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Sedirišwa seo se tla bewago leihlo bakeng sa diphetogo tša seakgofiši"
 
-#: gtk/gtkaction.c:179 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
+#: gtk/gtkaction.c:181 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "Leina"
 
-#: gtk/gtkaction.c:180
+#: gtk/gtkaction.c:182
 msgid "A unique name for the action."
 msgstr "Leina la moswana-noši bakeng sa mogato."
 
-#: gtk/gtkaction.c:198 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
+#: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:496 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:202
+#: gtk/gtktoolbutton.c:204
 msgid "Label"
 msgstr "Leswao"
 
-#: gtk/gtkaction.c:199
+#: gtk/gtkaction.c:201
 msgid "The label used for menu items and buttons that activate this action."
 msgstr ""
 "Leswao leo le dirišetšwago dilo tša lelokelelo la dikagare le dikonope tšeo "
 "di diragatšago mogato wo."
 
-#: gtk/gtkaction.c:215
+#: gtk/gtkaction.c:217
 msgid "Short label"
 msgstr "Leswao le lekopana"
 
-#: gtk/gtkaction.c:216
+#: gtk/gtkaction.c:218
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr ""
 "Leswao le lekopana kudu leo le ka dirišwago go dikonope tša bara ya "
 "sedirišwa."
 
-#: gtk/gtkaction.c:224
+#: gtk/gtkaction.c:226
 msgid "Tooltip"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtkaction.c:225
+#: gtk/gtkaction.c:227
 msgid "A tooltip for this action."
 msgstr "Maele a sedirišwa bakeng sa mogato wo."
 
-#: gtk/gtkaction.c:240
+#: gtk/gtkaction.c:242
 msgid "Stock Icon"
 msgstr "Leswao la Setoko"
 
-#: gtk/gtkaction.c:241
+#: gtk/gtkaction.c:243
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 "Leswao la setoko leo le bonagaditšwego didirišweng tšeo di emelago mogato wo."
 
-#: gtk/gtkaction.c:261 gtk/gtkstatusicon.c:253
+#: gtk/gtkaction.c:263 gtk/gtkstatusicon.c:253
 #, fuzzy
 msgid "GIcon"
 msgstr "Leswao"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
+#: gtk/gtkaction.c:264 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 #, fuzzy
 msgid "The GIcon being displayed"
 msgstr "Peakanyo ya leswao yeo e swanetšego go bontšhwa"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:284 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 #, fuzzy
 msgid "Icon Name"
 msgstr "Leina la Fonto"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
+#: gtk/gtkaction.c:285 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 #, fuzzy
 msgid "The name of the icon from the icon theme"
 msgstr "Leina la fonto e kgethilwego"
 
-#: gtk/gtkaction.c:290 gtk/gtktoolitem.c:192
+#: gtk/gtkaction.c:292 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "E bonagala ge e rapame"
 
-#: gtk/gtkaction.c:291 gtk/gtktoolitem.c:193
+#: gtk/gtkaction.c:293 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -353,12 +353,12 @@ msgstr ""
 "Ge eba selo sa bara ya sedirišwa se a bonagala ge bara ya sedirišwa e le "
 "thulaganyong e rapamego."
 
-#: gtk/gtkaction.c:306
+#: gtk/gtkaction.c:308
 #, fuzzy
 msgid "Visible when overflown"
 msgstr "E bonagala ge e tsepame"
 
-#: gtk/gtkaction.c:307
+#: gtk/gtkaction.c:309
 #, fuzzy
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
@@ -367,11 +367,11 @@ msgstr ""
 "Ge eba e le THEREŠO, dikemedi tše se nago selo tša lelokelelo la dikagare "
 "bakeng sa mogato wo di utilwe."
 
-#: gtk/gtkaction.c:314 gtk/gtktoolitem.c:199
+#: gtk/gtkaction.c:316 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "E bonagala ge e tsepame"
 
-#: gtk/gtkaction.c:315 gtk/gtktoolitem.c:200
+#: gtk/gtkaction.c:317 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -379,11 +379,11 @@ msgstr ""
 "Ge eba selo sa bara ya sedirišwa se a bonagala ge bara ya sedirišwa e le "
 "thulaganyong e tsepamego."
 
-#: gtk/gtkaction.c:322 gtk/gtktoolitem.c:206
+#: gtk/gtkaction.c:324 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "Go bohlokwa"
 
-#: gtk/gtkaction.c:323
+#: gtk/gtkaction.c:325
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -392,45 +392,54 @@ msgstr ""
 "sa sedirišwa bakeng sa mogato wo di bontšha sengwalwa go mokgwa wa "
 "GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:331
+#: gtk/gtkaction.c:333
 msgid "Hide if empty"
 msgstr "Uta ge eba go se na selo"
 
-#: gtk/gtkaction.c:332
+#: gtk/gtkaction.c:334
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr ""
 "Ge eba e le THEREŠO, dikemedi tše se nago selo tša lelokelelo la dikagare "
 "bakeng sa mogato wo di utilwe."
 
-#: gtk/gtkaction.c:338 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:525
+#: gtk/gtkaction.c:340 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
+#: gtk/gtkwidget.c:593
 msgid "Sensitive"
 msgstr "E kgomegago gabonolo"
 
-#: gtk/gtkaction.c:339
+#: gtk/gtkaction.c:341
 msgid "Whether the action is enabled."
 msgstr "Ge eba mogato o kgontšhitšwe."
 
-#: gtk/gtkaction.c:345 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
-#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:518
+#: gtk/gtkaction.c:347 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:586
 msgid "Visible"
 msgstr "Bonagala"
 
-#: gtk/gtkaction.c:346
+#: gtk/gtkaction.c:348
 msgid "Whether the action is visible."
 msgstr "Ge eba mogato o a bonagala."
 
-#: gtk/gtkaction.c:352
+#: gtk/gtkaction.c:354
 msgid "Action Group"
 msgstr "Sehlopha sa Mogato"
 
-#: gtk/gtkaction.c:353
+#: gtk/gtkaction.c:355
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
 "Sehlopha sa Mogato sa Gtk seo Mogato wo wa Gtk o tswalanego le sona, goba "
 "NULL (bakeng sa tirišo ya ka gare)."
+
+#: gtk/gtkaction.c:373 gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkaction.c:374 gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Ge eba sedirišwa se a bonagala"
 
 #: gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
@@ -783,7 +792,7 @@ msgstr "Go dira sekgoba"
 msgid "The amount of space between children"
 msgstr "Tekanyo ya sekgoba magareng ga bana"
 
-#: gtk/gtkbox.c:140 gtk/gtknotebook.c:649 gtk/gtktable.c:165
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
 #: gtk/gtktoolbar.c:573
 msgid "Homogeneous"
 msgstr "Mohuta o swanago"
@@ -829,7 +838,7 @@ msgstr ""
 msgid "Pack type"
 msgstr "Mohuta wa ngatana"
 
-#: gtk/gtkbox.c:170 gtk/gtknotebook.c:716
+#: gtk/gtkbox.c:170 gtk/gtknotebook.c:724
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -837,12 +846,12 @@ msgstr ""
 "Mohuta wa Ngatana wa Gtk o bontšhago ge eba ngwana a pakilwe ka tšhupetšo go "
 "mathomo goba mafelelo a motswadi"
 
-#: gtk/gtkbox.c:176 gtk/gtknotebook.c:694 gtk/gtkpaned.c:241
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
 #: gtk/gtkruler.c:148
 msgid "Position"
 msgstr "Boemo"
 
-#: gtk/gtkbox.c:177 gtk/gtknotebook.c:695
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:703
 msgid "The index of the child in the parent"
 msgstr "Tlhatlamano ya ngwana motswading"
 
@@ -863,7 +872,7 @@ msgstr ""
 "sedirišwa sa leswao"
 
 #: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:517
-#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:209
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:211
 msgid "Use underline"
 msgstr "Diriša go thalela"
 
@@ -932,85 +941,87 @@ msgstr "Boemo bja go swara"
 msgid "The position of the image relative to the text"
 msgstr "Boemo bja go swara bjo tswalanego le sedirišwa sa ngwana"
 
-#: gtk/gtkbutton.c:433
+#: gtk/gtkbutton.c:441
 msgid "Default Spacing"
 msgstr "Go Dira Sekgoba ga Tlhaelelo"
 
-#: gtk/gtkbutton.c:434
-msgid "Extra space to add for CAN_DEFAULT buttons"
+#: gtk/gtkbutton.c:442
+#, fuzzy
+msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
 msgstr ""
 "Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikonope tša "
 "CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:440
+#: gtk/gtkbutton.c:456
 msgid "Default Outside Spacing"
 msgstr "Go Dira Sekgoba ga ka Ntle ga Tlhaelelo"
 
-#: gtk/gtkbutton.c:441
+#: gtk/gtkbutton.c:457
+#, fuzzy
 msgid ""
-"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
-"border"
+"Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
+"the border"
 msgstr ""
 "Sekgoba se oketšegilego seo se swanetšego go oketšwa bakeng sa dikonope tša "
 "CAN_DEFAULT seo ka mehla se thalwago ka ntle ga mollwane"
 
-#: gtk/gtkbutton.c:446
+#: gtk/gtkbutton.c:462
 msgid "Child X Displacement"
 msgstr "Go Hudušwa ga Ngwana wa X"
 
-#: gtk/gtkbutton.c:447
+#: gtk/gtkbutton.c:463
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Ke go fihla bokgoleng bofe ka thokong ya x mo o swanetšego go šuthiša ngwana "
 "ge konope e gateletšegile"
 
-#: gtk/gtkbutton.c:454
+#: gtk/gtkbutton.c:470
 msgid "Child Y Displacement"
 msgstr "Go Hudušwa ga Ngwana wa Y"
 
-#: gtk/gtkbutton.c:455
+#: gtk/gtkbutton.c:471
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 "Ke go fihla bokgoleng bofe ka thokong ya y mo o swanetšego go šuthiša ngwana "
 "ge konope e gateletšegile"
 
-#: gtk/gtkbutton.c:471
+#: gtk/gtkbutton.c:487
 #, fuzzy
 msgid "Displace focus"
 msgstr "Ke go lebiša hlokomelo"
 
-#: gtk/gtkbutton.c:472
+#: gtk/gtkbutton.c:488
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
 
-#: gtk/gtkbutton.c:485 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
+#: gtk/gtkbutton.c:501 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
 #, fuzzy
 msgid "Inner Border"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtkbutton.c:486
+#: gtk/gtkbutton.c:502
 msgid "Border between button edges and child."
 msgstr ""
 
-#: gtk/gtkbutton.c:499
+#: gtk/gtkbutton.c:515
 #, fuzzy
 msgid "Image spacing"
 msgstr "Go dira sekgoba ga boleng"
 
-#: gtk/gtkbutton.c:500
+#: gtk/gtkbutton.c:516
 #, fuzzy
 msgid "Spacing in pixels between the image and label"
 msgstr "Sekgoba seo se swanetšego go bewa magareng ga leswao le ngwana"
 
-#: gtk/gtkbutton.c:514
+#: gtk/gtkbutton.c:530
 msgid "Show button images"
 msgstr "Bontšha diswantšho tša konope"
 
-#: gtk/gtkbutton.c:515
+#: gtk/gtkbutton.c:531
 #, fuzzy
 msgid "Whether images should be shown on buttons"
 msgstr "Ge eba diswantšho di swanetše go bontšhwa malokelelong a dikagare"
@@ -2089,7 +2100,7 @@ msgstr "Selo seo se šomago"
 msgid "The item which is currently active"
 msgstr "Selo seo gona bjale se šomago"
 
-#: gtk/gtkcombobox.c:772 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:772 gtk/gtkuimanager.c:226
 msgid "Add tearoffs to menus"
 msgstr "Oketša tše kgeitšwego lelokelelong la dikagare"
 
@@ -2166,7 +2177,7 @@ msgid "The minimum size of the arrow in the combo box"
 msgstr "Mohlala wa lepokisi la kopanyo"
 
 #: gtk/gtkcombobox.c:888 gtk/gtkentry.c:786 gtk/gtkhandlebox.c:174
-#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:623
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:193 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
 msgstr "Mohuta wa moriti"
@@ -2841,7 +2852,7 @@ msgstr ""
 msgid "Space to put between the label and the child"
 msgstr "Sekgoba seo se swanetšego go bewa magareng ga leswao le ngwana"
 
-#: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:216
+#: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
 msgid "Label widget"
 msgstr "Sedirišwa sa leswao"
 
@@ -2850,11 +2861,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "Sedirišwa sa go bontšha legatong la leswao le tlwaelegilego la sekatološi"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:774
+#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Bogolo bja Sekatološi"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:775
+#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Bogolo bja lerungwana la sekatološi"
 
@@ -3273,15 +3284,15 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
-#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:609 gtk/gtktreeviewcolumn.c:308
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "E laelwago gape"
 
-#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:610
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "Pono e ka laelwa gape"
 
-#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:760
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:763
 #, fuzzy
 msgid "Tooltip Column"
 msgstr "Kholomo ya Sengwalwa"
@@ -3421,15 +3432,6 @@ msgstr ""
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Ge eba sengwalwa sa leswao se ka kgethwa ka legotlwana"
-
-#: gtk/gtkimagemenuitem.c:169
-msgid "Always show image"
-msgstr ""
-
-#: gtk/gtkimagemenuitem.c:170
-#, fuzzy
-msgid "Whether the image will always be shown"
-msgstr "Ge eba sedirišwa se a bonagala"
 
 #: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:516
 #, fuzzy
@@ -4083,77 +4085,77 @@ msgstr ""
 msgid "The screen where this window will be displayed."
 msgstr "Sekirini seo lefesetere le le tla bontšhwago"
 
-#: gtk/gtknotebook.c:577
+#: gtk/gtknotebook.c:585
 msgid "Page"
 msgstr "Letlakala"
 
-#: gtk/gtknotebook.c:578
+#: gtk/gtknotebook.c:586
 msgid "The index of the current page"
 msgstr "Tlhatlamano ya letlakala la gona bjale"
 
-#: gtk/gtknotebook.c:586
+#: gtk/gtknotebook.c:594
 msgid "Tab Position"
 msgstr "Boemo bja Tab"
 
-#: gtk/gtknotebook.c:587
+#: gtk/gtknotebook.c:595
 msgid "Which side of the notebook holds the tabs"
 msgstr "Ke lehlakore lefe la puku ya go ngwalela dintlha leo le swerego di-tab"
 
-#: gtk/gtknotebook.c:594
+#: gtk/gtknotebook.c:602
 msgid "Tab Border"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtknotebook.c:595
+#: gtk/gtknotebook.c:603
 msgid "Width of the border around the tab labels"
 msgstr "Bophara bja mollwane go dikologa maswao a tab"
 
-#: gtk/gtknotebook.c:603
+#: gtk/gtknotebook.c:611
 msgid "Horizontal Tab Border"
 msgstr "Mollwane wa Tab o Rapamego"
 
-#: gtk/gtknotebook.c:604
+#: gtk/gtknotebook.c:612
 msgid "Width of the horizontal border of tab labels"
 msgstr "Bophara bja mollwane o rapamego bja maswao a tab"
 
-#: gtk/gtknotebook.c:612
+#: gtk/gtknotebook.c:620
 msgid "Vertical Tab Border"
 msgstr "Mollwane wa Tab o Tsepamego"
 
-#: gtk/gtknotebook.c:613
+#: gtk/gtknotebook.c:621
 msgid "Width of the vertical border of tab labels"
 msgstr "Bophara bja mollwane o tsepamego bja maswao a tab"
 
-#: gtk/gtknotebook.c:621
+#: gtk/gtknotebook.c:629
 msgid "Show Tabs"
 msgstr "Bontšha Di-tab"
 
-#: gtk/gtknotebook.c:622
+#: gtk/gtknotebook.c:630
 msgid "Whether tabs should be shown or not"
 msgstr "Ge eba di-tab di swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:628
+#: gtk/gtknotebook.c:636
 msgid "Show Border"
 msgstr "Bontšha Mollwane"
 
-#: gtk/gtknotebook.c:629
+#: gtk/gtknotebook.c:637
 msgid "Whether the border should be shown or not"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:635
+#: gtk/gtknotebook.c:643
 msgid "Scrollable"
 msgstr "E išegago godimo le tlase"
 
-#: gtk/gtknotebook.c:636
+#: gtk/gtknotebook.c:644
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ge eba e le THEREŠO, marungwana a go iša godimo le tlase a oketšwa ge eba go "
 "na le di-taba tše dintši kudu tšeo di swanetšego go lekanywa"
 
-#: gtk/gtknotebook.c:642
+#: gtk/gtknotebook.c:650
 msgid "Enable Popup"
 msgstr "Kgontšha tšeo di tšwelelago di sa letelwa"
 
-#: gtk/gtknotebook.c:643
+#: gtk/gtknotebook.c:651
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -4162,151 +4164,151 @@ msgstr ""
 "dintlha go tšweletša lelokelelo la dikagare leo o ka le dirišetšago go ya "
 "letlakaleng"
 
-#: gtk/gtknotebook.c:650
+#: gtk/gtknotebook.c:658
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Ge eba di-tab di swanetše go ba le bogolo bja mohuta o swanago"
 
-#: gtk/gtknotebook.c:656
+#: gtk/gtknotebook.c:664
 #, fuzzy
 msgid "Group ID"
 msgstr "Sehlopha"
 
-#: gtk/gtknotebook.c:657
+#: gtk/gtknotebook.c:665
 msgid "Group ID for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:673 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtknotebook.c:681 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
 #: gtk/gtkradiomenuitem.c:343 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Sehlopha"
 
-#: gtk/gtknotebook.c:674
+#: gtk/gtknotebook.c:682
 msgid "Group for tabs drag and drop"
 msgstr ""
 
-#: gtk/gtknotebook.c:680
+#: gtk/gtknotebook.c:688
 msgid "Tab label"
 msgstr "Leswao la tab"
 
-#: gtk/gtknotebook.c:681
+#: gtk/gtknotebook.c:689
 #, fuzzy
 msgid "The string displayed on the child's tab label"
 msgstr "Mothaladi o bontšhitšwego leswaong la tab la ngwana"
 
-#: gtk/gtknotebook.c:687
+#: gtk/gtknotebook.c:695
 msgid "Menu label"
 msgstr "Leswao la lelokelelo la dikagare"
 
-#: gtk/gtknotebook.c:688
+#: gtk/gtknotebook.c:696
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
 msgstr "Mothaladi o bontšhitšwego tsenong ya lelokelelo la dikagare la ngwana"
 
-#: gtk/gtknotebook.c:701
+#: gtk/gtknotebook.c:709
 msgid "Tab expand"
 msgstr "Go katologa ga tab"
 
-#: gtk/gtknotebook.c:702
+#: gtk/gtknotebook.c:710
 #, fuzzy
 msgid "Whether to expand the child's tab or not"
 msgstr "Ge eba go swanetše go katološwe tab ya ngwana goba aowa"
 
-#: gtk/gtknotebook.c:708
+#: gtk/gtknotebook.c:716
 msgid "Tab fill"
 msgstr "Tlatša tab"
 
-#: gtk/gtknotebook.c:709
+#: gtk/gtknotebook.c:717
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "Ge eba tab ya ngwana e swanetše go tlatša lefelo le abilwego goba aowa"
 
-#: gtk/gtknotebook.c:715
+#: gtk/gtknotebook.c:723
 msgid "Tab pack type"
 msgstr "Mohuta wa ngatana ya tab"
 
-#: gtk/gtknotebook.c:722
+#: gtk/gtknotebook.c:730
 #, fuzzy
 msgid "Tab reorderable"
 msgstr "E laelwago gape"
 
-#: gtk/gtknotebook.c:723
+#: gtk/gtknotebook.c:731
 #, fuzzy
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtknotebook.c:729
+#: gtk/gtknotebook.c:737
 #, fuzzy
 msgid "Tab detachable"
 msgstr "Leswao la tab"
 
-#: gtk/gtknotebook.c:730
+#: gtk/gtknotebook.c:738
 #, fuzzy
 msgid "Whether the tab is detachable"
 msgstr "Ge eba mogato o kgontšhitšwe."
 
-#: gtk/gtknotebook.c:745 gtk/gtkscrollbar.c:81
+#: gtk/gtknotebook.c:753 gtk/gtkscrollbar.c:81
 msgid "Secondary backward stepper"
 msgstr "Mogato o boelago morago wa motheo"
 
-#: gtk/gtknotebook.c:746
+#: gtk/gtknotebook.c:754
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Bontšha konope ya lerungwana la bobedi la go boela morago lehlakoreng le "
 "fapanego la lefelo la tab"
 
-#: gtk/gtknotebook.c:761 gtk/gtkscrollbar.c:88
+#: gtk/gtknotebook.c:769 gtk/gtkscrollbar.c:88
 msgid "Secondary forward stepper"
 msgstr "Mogato wa go ya pele wa motheo"
 
-#: gtk/gtknotebook.c:762
+#: gtk/gtknotebook.c:770
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Bontšha konope ya lerungwana la bobedi la go ya pele ka lehlakoreng le "
 "fapanego la lefelo la tab"
 
-#: gtk/gtknotebook.c:776 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:784 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "Mogato o boelago morago"
 
-#: gtk/gtknotebook.c:777 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:785 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "Bontšha konope ya lerungwana la go boela morago la motheo"
 
-#: gtk/gtknotebook.c:791 gtk/gtkscrollbar.c:74
+#: gtk/gtknotebook.c:799 gtk/gtkscrollbar.c:74
 msgid "Forward stepper"
 msgstr "Mogato o yago pele"
 
-#: gtk/gtknotebook.c:792 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:800 gtk/gtkscrollbar.c:75
 msgid "Display the standard forward arrow button"
 msgstr "Bontšha konope ya lerungwana la go ya pele la motheo"
 
-#: gtk/gtknotebook.c:806
+#: gtk/gtknotebook.c:814
 #, fuzzy
 msgid "Tab overlap"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtknotebook.c:807
+#: gtk/gtknotebook.c:815
 #, fuzzy
 msgid "Size of tab overlap area"
 msgstr "Bogolo bja lerungwana la sekatološi"
 
-#: gtk/gtknotebook.c:822
+#: gtk/gtknotebook.c:830
 msgid "Tab curvature"
 msgstr ""
 
-#: gtk/gtknotebook.c:823
+#: gtk/gtknotebook.c:831
 #, fuzzy
 msgid "Size of tab curvature"
 msgstr "Bogolo bja sediri sa sekgoba"
 
-#: gtk/gtknotebook.c:839
+#: gtk/gtknotebook.c:847
 #, fuzzy
 msgid "Arrow spacing"
 msgstr "Go dira sekgoba mothalong"
 
-#: gtk/gtknotebook.c:840
+#: gtk/gtknotebook.c:848
 #, fuzzy
 msgid "Scroll arrow spacing"
 msgstr "Go dira sekgoba ga bara ya go ya godimo le tlase"
@@ -5364,11 +5366,11 @@ msgstr ""
 "Bontšha konope ya lerungwana la bobedi la go ya pele ka lehlakoreng le "
 "fapanego la mafelelo la bara ya go ya godimo le tlase"
 
-#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:569
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:572
 msgid "Horizontal Adjustment"
 msgstr "Tokišo e Rapamego"
 
-#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:577
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:580
 msgid "Vertical Adjustment"
 msgstr "Tokišo e Tsepamego"
 
@@ -5461,11 +5463,11 @@ msgstr "Thala"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Ge eba searodi se thadilwe, goba ga go na selo"
 
-#: gtk/gtksettings.c:221
+#: gtk/gtksettings.c:223
 msgid "Double Click Time"
 msgstr "Kgotla Nako Gabedi"
 
-#: gtk/gtksettings.c:222
+#: gtk/gtksettings.c:224
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5473,11 +5475,11 @@ msgstr ""
 "Nako e kgolo e dumeletšwego magareng ga go kgotla gabedi gore go tšewe gore "
 "di kgotlilwe gabedi (go metsotswana e ka tlase ga motsotswana)"
 
-#: gtk/gtksettings.c:229
+#: gtk/gtksettings.c:231
 msgid "Double Click Distance"
 msgstr "Kgotla Monabo Gabedi"
 
-#: gtk/gtksettings.c:230
+#: gtk/gtksettings.c:232
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5485,42 +5487,42 @@ msgstr ""
 "Monabo o mogolo o dumeletšwego magareng ga go kgotla gabedi bakeng sa gore "
 "go tšewe gore go kgotlilwe gabedi (dikarolwaneng tša go bopa diswantšho)"
 
-#: gtk/gtksettings.c:246
+#: gtk/gtksettings.c:248
 msgid "Cursor Blink"
 msgstr "Go Ponya ga Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:247
+#: gtk/gtksettings.c:249
 msgid "Whether the cursor should blink"
 msgstr "Ge eba leswao la go šupa mo o lego le swanetše go ponya"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:256
 msgid "Cursor Blink Time"
 msgstr "Nako ya go Ponya ga Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:255
+#: gtk/gtksettings.c:257
 #, fuzzy
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr ""
 "Botelele bja modikologo wa go ponya ga leswao leo le bontšhago mo o lego, ka "
 "metsotswana yeo e lego ka tlase ga motsotswana"
 
-#: gtk/gtksettings.c:274
+#: gtk/gtksettings.c:276
 #, fuzzy
 msgid "Cursor Blink Timeout"
 msgstr "Nako ya go Ponya ga Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:275
+#: gtk/gtksettings.c:277
 #, fuzzy
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr ""
 "Botelele bja modikologo wa go ponya ga leswao leo le bontšhago mo o lego, ka "
 "metsotswana yeo e lego ka tlase ga motsotswana"
 
-#: gtk/gtksettings.c:282
+#: gtk/gtksettings.c:284
 msgid "Split Cursor"
 msgstr "Arola Leswao leo le Bontšhago mo o lego"
 
-#: gtk/gtksettings.c:283
+#: gtk/gtksettings.c:285
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5529,109 +5531,109 @@ msgstr ""
 "bakeng sa sengwalwa se tswakilwego sa lanngele go ya go lagoja le lagoja go "
 "ya go lanngele"
 
-#: gtk/gtksettings.c:290
+#: gtk/gtksettings.c:292
 msgid "Theme Name"
 msgstr "Leina la Sehlogo"
 
-#: gtk/gtksettings.c:291
+#: gtk/gtksettings.c:293
 msgid "Name of theme RC file to load"
 msgstr "Leina la faele ya sehlogo sa RC yeo e swanetšego go laišwa"
 
-#: gtk/gtksettings.c:299
+#: gtk/gtksettings.c:301
 msgid "Icon Theme Name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:300
+#: gtk/gtksettings.c:302
 msgid "Name of icon theme to use"
 msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:308
+#: gtk/gtksettings.c:310
 #, fuzzy
 msgid "Fallback Icon Theme Name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:309
+#: gtk/gtksettings.c:311
 #, fuzzy
 msgid "Name of a icon theme to fall back to"
 msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:317
+#: gtk/gtksettings.c:319
 msgid "Key Theme Name"
 msgstr "Leina la Sehlogo sa Bohlokwa"
 
-#: gtk/gtksettings.c:318
+#: gtk/gtksettings.c:320
 msgid "Name of key theme RC file to load"
 msgstr "Leina la faele ya sehlogo sa bohlokwa sa RC yeo e swanetšego go laišwa"
 
-#: gtk/gtksettings.c:326
+#: gtk/gtksettings.c:328
 msgid "Menu bar accelerator"
 msgstr "Seakgofiši sa bara ya lelokelelo la dikagare"
 
-#: gtk/gtksettings.c:327
+#: gtk/gtksettings.c:329
 msgid "Keybinding to activate the menu bar"
 msgstr ""
 "Go kopanywa ga senotlelo bakeng sa go diragatša bara ya lelokelelo la "
 "dikagare"
 
-#: gtk/gtksettings.c:335
+#: gtk/gtksettings.c:337
 msgid "Drag threshold"
 msgstr "Goga mojako"
 
-#: gtk/gtksettings.c:336
+#: gtk/gtksettings.c:338
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Palo ya dikarolwana tše bopago seswantšho tšeo leswao leo le bontšhago mo go "
 "lego le ka di šuthišago pele ga go goga"
 
-#: gtk/gtksettings.c:344
+#: gtk/gtksettings.c:346
 msgid "Font Name"
 msgstr "Leina la Fonto"
 
-#: gtk/gtksettings.c:345
+#: gtk/gtksettings.c:347
 msgid "Name of default font to use"
 msgstr "Leina la fonto ya tlhaelelo yeo e swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:367
+#: gtk/gtksettings.c:369
 msgid "Icon Sizes"
 msgstr "Bogolo bja Leswao"
 
-#: gtk/gtksettings.c:368
+#: gtk/gtksettings.c:370
 #, fuzzy
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Lelokelelo la bogolo bja leswao (gtk-menu=16,16;gtk-button=20,20..."
 
-#: gtk/gtksettings.c:376
+#: gtk/gtksettings.c:378
 msgid "GTK Modules"
 msgstr ""
 
-#: gtk/gtksettings.c:377
+#: gtk/gtksettings.c:379
 msgid "List of currently active GTK modules"
 msgstr ""
 
-#: gtk/gtksettings.c:386
+#: gtk/gtksettings.c:388
 msgid "Xft Antialias"
 msgstr "Selwantšhi sa leina le lengwe sa Xft"
 
-#: gtk/gtksettings.c:387
+#: gtk/gtksettings.c:389
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Ge eba go swanetše go lwantšhwe leina le lengwe la difonto tša Xft; 0=aowa, "
 "1=ee, -1=tlhaelelo"
 
-#: gtk/gtksettings.c:396
+#: gtk/gtksettings.c:398
 msgid "Xft Hinting"
 msgstr "Go eletša ga Xft"
 
-#: gtk/gtksettings.c:397
+#: gtk/gtksettings.c:399
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Ge eba go swanetše go eletšwe difonto tša Xft; 0=aowa, 1=ee, -1=tlhaelelo"
 
-#: gtk/gtksettings.c:406
+#: gtk/gtksettings.c:408
 msgid "Xft Hint Style"
 msgstr "Setaele sa Keletšo ya Xft"
 
-#: gtk/gtksettings.c:407
+#: gtk/gtksettings.c:409
 #, fuzzy
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
@@ -5639,322 +5641,343 @@ msgstr ""
 "Ke bokgoleng bofe bja go eletša bjo bo swanetšego go dirišwa; ga bo gona, "
 "ganyenyane, magareng, goba ka mo go tletšego"
 
-#: gtk/gtksettings.c:416
+#: gtk/gtksettings.c:418
 msgid "Xft RGBA"
 msgstr "RGBA ya Xft"
 
-#: gtk/gtksettings.c:417
+#: gtk/gtksettings.c:419
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Mohuta wa seka-dikarolwana tše bopago seswantšho tše lwantšhago leina le "
 "lengwe: ga e gona, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:426
+#: gtk/gtksettings.c:428
 msgid "Xft DPI"
 msgstr "DPI ya Xft"
 
-#: gtk/gtksettings.c:427
+#: gtk/gtksettings.c:429
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Tiišetšo bakeng sa Xft, go 1024 * dikhutlo/noko. -1 go diriša boleng bja "
 "tlhaelelo"
 
-#: gtk/gtksettings.c:436
+#: gtk/gtksettings.c:438
 #, fuzzy
 msgid "Cursor theme name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:437
+#: gtk/gtksettings.c:439
 #, fuzzy
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "Leina la sehlogo sa leswao leo le swanetšego go dirišwa"
 
-#: gtk/gtksettings.c:445
+#: gtk/gtksettings.c:447
 #, fuzzy
 msgid "Cursor theme size"
 msgstr "Go Bonagala ga Leswao leo le bontšhago mo o lego"
 
-#: gtk/gtksettings.c:446
+#: gtk/gtksettings.c:448
 #, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Mmala wo o swanetšego go dirišetšwa methalo e sa lekanelago"
 
-#: gtk/gtksettings.c:456
+#: gtk/gtksettings.c:458
 msgid "Alternative button order"
 msgstr ""
 
-#: gtk/gtksettings.c:457
+#: gtk/gtksettings.c:459
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Ge eba maswao a setoko a swanetše go bontšhwa ka dikonopeng"
 
-#: gtk/gtksettings.c:474
+#: gtk/gtksettings.c:476
 msgid "Alternative sort indicator direction"
 msgstr ""
 
-#: gtk/gtksettings.c:475
+#: gtk/gtksettings.c:477
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr ""
 
-#: gtk/gtksettings.c:483
+#: gtk/gtksettings.c:485
 msgid "Show the 'Input Methods' menu"
 msgstr ""
 
-#: gtk/gtksettings.c:484
+#: gtk/gtksettings.c:486
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
 
-#: gtk/gtksettings.c:492
+#: gtk/gtksettings.c:494
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr ""
 
-#: gtk/gtksettings.c:493
+#: gtk/gtksettings.c:495
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr ""
 
-#: gtk/gtksettings.c:501
+#: gtk/gtksettings.c:503
 msgid "Start timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:502
+#: gtk/gtksettings.c:504
 msgid "Starting value for timeouts, when button is pressed"
 msgstr ""
 
-#: gtk/gtksettings.c:511
+#: gtk/gtksettings.c:513
 msgid "Repeat timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:512
+#: gtk/gtksettings.c:514
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr ""
 
-#: gtk/gtksettings.c:521
+#: gtk/gtksettings.c:523
 #, fuzzy
 msgid "Expand timeout"
 msgstr "Bogolo bja Sekatološi"
 
-#: gtk/gtksettings.c:522
+#: gtk/gtksettings.c:524
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr ""
 
-#: gtk/gtksettings.c:557
+#: gtk/gtksettings.c:559
 #, fuzzy
 msgid "Color scheme"
 msgstr "Sekgoba sa mmala"
 
-#: gtk/gtksettings.c:558
+#: gtk/gtksettings.c:560
 #, fuzzy
 msgid "A palette of named colors for use in themes"
 msgstr "Leina la fonto e kgethilwego"
 
-#: gtk/gtksettings.c:567
+#: gtk/gtksettings.c:569
 #, fuzzy
 msgid "Enable Animations"
 msgstr "Tsošološo"
 
-#: gtk/gtksettings.c:568
+#: gtk/gtksettings.c:570
 msgid "Whether to enable toolkit-wide animations."
 msgstr ""
 
-#: gtk/gtksettings.c:586
+#: gtk/gtksettings.c:588
 msgid "Enable Touchscreen Mode"
 msgstr ""
 
-#: gtk/gtksettings.c:587
+#: gtk/gtksettings.c:589
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr ""
 
-#: gtk/gtksettings.c:604
+#: gtk/gtksettings.c:606
 #, fuzzy
 msgid "Tooltip timeout"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtksettings.c:605
+#: gtk/gtksettings.c:607
 msgid "Timeout before tooltip is shown"
 msgstr ""
 
-#: gtk/gtksettings.c:630
+#: gtk/gtksettings.c:632
 msgid "Tooltip browse timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:631
+#: gtk/gtksettings.c:633
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 
-#: gtk/gtksettings.c:652
+#: gtk/gtksettings.c:654
 msgid "Tooltip browse mode timeout"
 msgstr ""
 
-#: gtk/gtksettings.c:653
+#: gtk/gtksettings.c:655
 #, fuzzy
 msgid "Timeout after which browse mode is disabled"
 msgstr "Sešireletši seo se bontšhitšwego"
 
-#: gtk/gtksettings.c:672
+#: gtk/gtksettings.c:674
 msgid "Keynav Cursor Only"
 msgstr ""
 
-#: gtk/gtksettings.c:673
+#: gtk/gtksettings.c:675
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr ""
 
-#: gtk/gtksettings.c:690
+#: gtk/gtksettings.c:692
 msgid "Keynav Wrap Around"
 msgstr ""
 
-#: gtk/gtksettings.c:691
+#: gtk/gtksettings.c:693
 #, fuzzy
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr ""
 "Ge eba go swanetše go thalwe selaetši sa go bontšha hlokomelo ka gare ga "
 "didirišwa"
 
-#: gtk/gtksettings.c:711
+#: gtk/gtksettings.c:713
 msgid "Error Bell"
 msgstr ""
 
-#: gtk/gtksettings.c:712
+#: gtk/gtksettings.c:714
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 
-#: gtk/gtksettings.c:729
+#: gtk/gtksettings.c:731
 #, fuzzy
 msgid "Color Hash"
 msgstr "Sekgoba sa mmala"
 
-#: gtk/gtksettings.c:730
+#: gtk/gtksettings.c:732
 msgid "A hash table representation of the color scheme."
 msgstr ""
 
-#: gtk/gtksettings.c:738
+#: gtk/gtksettings.c:740
 msgid "Default file chooser backend"
 msgstr "Dira gore mafelelo a sekgethi sa faele a hlaelele"
 
-#: gtk/gtksettings.c:739
+#: gtk/gtksettings.c:741
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Leina la mafelelo la GtkFileChooser leo le tla dirišwago ke tlhaelelo"
 
-#: gtk/gtksettings.c:756
+#: gtk/gtksettings.c:758
 #, fuzzy
 msgid "Default print backend"
 msgstr "Dira gore mafelelo a sekgethi sa faele a hlaelele"
 
-#: gtk/gtksettings.c:757
+#: gtk/gtksettings.c:759
 #, fuzzy
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Leina la mafelelo la GtkFileChooser leo le tla dirišwago ke tlhaelelo"
 
-#: gtk/gtksettings.c:780
+#: gtk/gtksettings.c:782
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtksettings.c:781
+#: gtk/gtksettings.c:783
 msgid "Command to run when displaying a print preview"
 msgstr ""
 
-#: gtk/gtksettings.c:797
+#: gtk/gtksettings.c:799
 #, fuzzy
 msgid "Enable Mnemonics"
 msgstr "Tsošološo"
 
-#: gtk/gtksettings.c:798
+#: gtk/gtksettings.c:800
 #, fuzzy
 msgid "Whether labels should have mnemonics"
 msgstr "Ge eba di-tab di swanetše go ba le bogolo bja mohuta o swanago"
 
-#: gtk/gtksettings.c:814
+#: gtk/gtksettings.c:816
 #, fuzzy
 msgid "Enable Accelerators"
 msgstr "E ka fetola diakgofiši"
 
-#: gtk/gtksettings.c:815
+#: gtk/gtksettings.c:817
 #, fuzzy
 msgid "Whether menu items should have accelerators"
 msgstr ""
 "Ge eba dilo tša lelokelelo la dikagare la tše kgeitšwego le swanetše go "
 "oketšwa malokelelong a dikagare"
 
-#: gtk/gtksettings.c:832
+#: gtk/gtksettings.c:834
 msgid "Recent Files Limit"
 msgstr ""
 
-#: gtk/gtksettings.c:833
+#: gtk/gtksettings.c:835
 #, fuzzy
 msgid "Number of recently used files"
 msgstr "Palo ya Dikanale"
 
-#: gtk/gtksettings.c:851
+#: gtk/gtksettings.c:853
 #, fuzzy
 msgid "Default IM module"
 msgstr "Bophara bja Tlhaelelo"
 
-#: gtk/gtksettings.c:852
+#: gtk/gtksettings.c:854
 #, fuzzy
 msgid "Which IM module should be used by default"
 msgstr "Ge eba go swanetše go dirišwa kgetho ya mebala e lego gona"
 
-#: gtk/gtksettings.c:870
+#: gtk/gtksettings.c:872
 msgid "Recent Files Max Age"
 msgstr ""
 
-#: gtk/gtksettings.c:871
+#: gtk/gtksettings.c:873
 #, fuzzy
 msgid "Maximum age of recently used files, in days"
 msgstr "Palo ya Dikanale"
 
-#: gtk/gtksettings.c:880
+#: gtk/gtksettings.c:882
 msgid "Fontconfig configuration timestamp"
 msgstr ""
 
-#: gtk/gtksettings.c:881
+#: gtk/gtksettings.c:883
 msgid "Timestamp of current fontconfig configuration"
 msgstr ""
 
-#: gtk/gtksettings.c:903
+#: gtk/gtksettings.c:905
 #, fuzzy
 msgid "Sound Theme Name"
 msgstr "Leina la Sehlogo sa Leswao"
 
-#: gtk/gtksettings.c:904
+#: gtk/gtksettings.c:906
 #, fuzzy
 msgid "XDG sound theme name"
 msgstr "Leina la Sehlogo sa Leswao"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:926
+#: gtk/gtksettings.c:928
 msgid "Audible Input Feedback"
 msgstr ""
 
-#: gtk/gtksettings.c:927
+#: gtk/gtksettings.c:929
 #, fuzzy
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "Ge eba sedirišwa se arabela go tsebišo"
 
-#: gtk/gtksettings.c:948
+#: gtk/gtksettings.c:950
 #, fuzzy
 msgid "Enable Event Sounds"
 msgstr "Tsošološo"
 
-#: gtk/gtksettings.c:949
+#: gtk/gtksettings.c:951
 #, fuzzy
 msgid "Whether to play any event sounds at all"
 msgstr "Ge eba e swanetše go bontšha boemo bja \"go se kwane\""
 
-#: gtk/gtksettings.c:964
+#: gtk/gtksettings.c:966
 #, fuzzy
 msgid "Enable Tooltips"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtksettings.c:965
+#: gtk/gtksettings.c:967
 #, fuzzy
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Ge eba di-tab di swanetše go bontšhwa goba aowa"
+
+#: gtk/gtksettings.c:980
+msgid "Toolbar style"
+msgstr "Setaele sa bara ya sedirišwa"
+
+#: gtk/gtksettings.c:981
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"Ge eba dibara tša didirišwa tša tlhaelelo di na le sengwalwa feela, "
+"sengwalwa le maswao, maswao feela, bj.bj."
+
+#: gtk/gtksettings.c:995
+#, fuzzy
+msgid "Toolbar Icon Size"
+msgstr "Bogolo bja leswao la bara ya sedirišwa"
+
+#: gtk/gtksettings.c:996
+#, fuzzy
+msgid "The size of icons in default toolbars."
+msgstr "Bogolo bja maswao ao a lego dibareng tša didirišwa tša tlhaelelo"
 
 #: gtk/gtksizegroup.c:301
 msgid "Mode"
@@ -6035,17 +6058,17 @@ msgstr "E bala boleng bja gona bjale, goba e beakanya boleng bjo boswa"
 msgid "Style of bevel around the spin button"
 msgstr "Setaele sa sethadi sa diswantšho go dikologa konope ya go dikologa"
 
-#: gtk/gtkstatusbar.c:141
+#: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "E na le Tshwaro ya go Lokiša Bogolo"
 
-#: gtk/gtkstatusbar.c:142
+#: gtk/gtkstatusbar.c:149
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr ""
 "Ge eba bara e bontšhago boemo e na le tshwaro ya go lokiša bogolo bja mogato "
 "wa ka godimo"
 
-#: gtk/gtkstatusbar.c:187
+#: gtk/gtkstatusbar.c:194
 msgid "Style of bevel around the statusbar text"
 msgstr ""
 "Setaele sa sethadi sa diswantšho go dikologa sengwala sa bara e bontšhago "
@@ -6085,7 +6108,7 @@ msgstr "Ge eba mogato o a bonagala."
 msgid "The orientation of the tray"
 msgstr "Thulaganyo ya bara ya sedirišwa"
 
-#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:634
+#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:702
 #, fuzzy
 msgid "Has tooltip"
 msgstr "Maele a sedirišwa"
@@ -6095,17 +6118,17 @@ msgstr "Maele a sedirišwa"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Ge eba sedirišwa se na le go lebiša hlokomelo ga tsebišo"
 
-#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:655
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:723
 #, fuzzy
 msgid "Tooltip Text"
 msgstr "Maele a sedirišwa"
 
-#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:656 gtk/gtkwidget.c:677
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:724 gtk/gtkwidget.c:745
 #, fuzzy
 msgid "The contents of the tooltip for this widget"
 msgstr "Dikagare tša tseno"
 
-#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:676
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:744
 #, fuzzy
 msgid "Tooltip markup"
 msgstr "Maele a sedirišwa"
@@ -6862,30 +6885,11 @@ msgstr ""
 msgid "Style of bevel around the toolbar"
 msgstr "Setaele sa sethadi sa diswantšho go dikologa bara ya sedirišwa"
 
-#: gtk/gtktoolbar.c:630
-msgid "Toolbar style"
-msgstr "Setaele sa bara ya sedirišwa"
-
-#: gtk/gtktoolbar.c:631
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"Ge eba dibara tša didirišwa tša tlhaelelo di na le sengwalwa feela, "
-"sengwalwa le maswao, maswao feela, bj.bj."
-
-#: gtk/gtktoolbar.c:637
-msgid "Toolbar icon size"
-msgstr "Bogolo bja leswao la bara ya sedirišwa"
-
-#: gtk/gtktoolbar.c:638
-msgid "Size of icons in default toolbars"
-msgstr "Bogolo bja maswao ao a lego dibareng tša didirišwa tša tlhaelelo"
-
-#: gtk/gtktoolbutton.c:203
+#: gtk/gtktoolbutton.c:205
 msgid "Text to show in the item."
 msgstr "Sengwalwa seo se swanetšego go bontšha selong."
 
-#: gtk/gtktoolbutton.c:210
+#: gtk/gtktoolbutton.c:212
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
@@ -6894,42 +6898,42 @@ msgstr ""
 "latelago e swanetše go ba senotlelo sa seakgofiši sa kgopolo lelokelelong la "
 "dikagare leo le elelago"
 
-#: gtk/gtktoolbutton.c:217
+#: gtk/gtktoolbutton.c:219
 msgid "Widget to use as the item label"
 msgstr "Sedirišwa seo se swanetšego go dirišwa bjalo ka leswao la selo"
 
-#: gtk/gtktoolbutton.c:223
+#: gtk/gtktoolbutton.c:225
 msgid "Stock Id"
 msgstr "Boitsebišo bja setoko"
 
-#: gtk/gtktoolbutton.c:224
+#: gtk/gtktoolbutton.c:226
 msgid "The stock icon displayed on the item"
 msgstr "Leswao la setoko leo le bontšhitšwego selong"
 
-#: gtk/gtktoolbutton.c:240
+#: gtk/gtktoolbutton.c:242
 #, fuzzy
 msgid "Icon name"
 msgstr "Leina la Fonto"
 
-#: gtk/gtktoolbutton.c:241
+#: gtk/gtktoolbutton.c:243
 #, fuzzy
 msgid "The name of the themed icon displayed on the item"
 msgstr "Leswao la setoko leo le bontšhitšwego selong"
 
-#: gtk/gtktoolbutton.c:247
+#: gtk/gtktoolbutton.c:249
 msgid "Icon widget"
 msgstr "Sedirišwa sa leswao"
 
-#: gtk/gtktoolbutton.c:248
+#: gtk/gtktoolbutton.c:250
 msgid "Icon widget to display in the item"
 msgstr "Sedirišwa sa leswao seo se swanetšego go bontšhwa selong"
 
-#: gtk/gtktoolbutton.c:261
+#: gtk/gtktoolbutton.c:263
 #, fuzzy
 msgid "Icon spacing"
 msgstr "Go dira sekgoba mothalong"
 
-#: gtk/gtktoolbutton.c:262
+#: gtk/gtktoolbutton.c:264
 #, fuzzy
 msgid "Spacing in pixels between the icon and label"
 msgstr "Go dira sekgoba magareng ga dikonope le taolo"
@@ -6951,131 +6955,131 @@ msgstr "Mohlala wa TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Mohlala wo o swanetšego go hlaolwa wa TreeModelSort"
 
-#: gtk/gtktreeview.c:561
+#: gtk/gtktreeview.c:564
 msgid "TreeView Model"
 msgstr "Mohlala wa TreeView"
 
-#: gtk/gtktreeview.c:562
+#: gtk/gtktreeview.c:565
 msgid "The model for the tree view"
 msgstr "Mohlala wa go lebelela mohlare"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:573
 msgid "Horizontal Adjustment for the widget"
 msgstr "Tokišo e Rapamego bakeng sa sedirišwa"
 
-#: gtk/gtktreeview.c:578
+#: gtk/gtktreeview.c:581
 msgid "Vertical Adjustment for the widget"
 msgstr "Tokišo e Tsepamego bakeng sa sedirišwa"
 
-#: gtk/gtktreeview.c:585
+#: gtk/gtktreeview.c:588
 #, fuzzy
 msgid "Headers Visible"
 msgstr "Dihlogwana tšeo di Kgotlegago"
 
-#: gtk/gtktreeview.c:586
+#: gtk/gtktreeview.c:589
 msgid "Show the column header buttons"
 msgstr "Bontšha dikonopo tša hlogwana ya kholomo"
 
-#: gtk/gtktreeview.c:593
+#: gtk/gtktreeview.c:596
 msgid "Headers Clickable"
 msgstr "Dihlogwana tšeo di Kgotlegago"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:597
 msgid "Column headers respond to click events"
 msgstr "Dihlogwana tša kholomo di arabela go ditiragalo tša go kgotla"
 
-#: gtk/gtktreeview.c:601
+#: gtk/gtktreeview.c:604
 msgid "Expander Column"
 msgstr "Kholomo ya Sekatološi"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:605
 msgid "Set the column for the expander column"
 msgstr "Beakanya kholomo bakeng sa kholomo ya sekatološi"
 
-#: gtk/gtktreeview.c:617
+#: gtk/gtktreeview.c:620
 msgid "Rules Hint"
 msgstr "Keletšo ya Melao"
 
-#: gtk/gtktreeview.c:618
+#: gtk/gtktreeview.c:621
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Beakanya keletšo entšeneng ya sehlogo bakeng sa go thala methalo mebaleng e "
 "šielanago"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Enable Search"
 msgstr "Kgontšha Nyako"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:629
 msgid "View allows user to search through columns interactively"
 msgstr "Pono e dumelela modiriši go nyakišiša dikholomong ka poledišano"
 
-#: gtk/gtktreeview.c:633
+#: gtk/gtktreeview.c:636
 msgid "Search Column"
 msgstr "Nyakišiša Kholomo"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:637
 #, fuzzy
 msgid "Model column to search through during interactive search"
 msgstr ""
 "Kholomo ya mohlala yeo go ka nyakwago go yona ge go nyakišišwa ka khoutu"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:657
 msgid "Fixed Height Mode"
 msgstr "Mokgwa wa Bophagamo bjo Beilwego"
 
-#: gtk/gtktreeview.c:655
+#: gtk/gtktreeview.c:658
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "E akgofiša GtkTreeView ka go gopola gore methalo ka moka e na le bophagamo "
 "bjo swanago"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:678
 #, fuzzy
 msgid "Hover Selection"
 msgstr "Mmotwana wa Kgetho"
 
-#: gtk/gtktreeview.c:676
+#: gtk/gtktreeview.c:679
 #, fuzzy
 msgid "Whether the selection should follow the pointer"
 msgstr ""
 "Ge eba sekgethi sa mmala se swanetše go dumelela go beakanya ponagalo ya "
 "seetša"
 
-#: gtk/gtktreeview.c:695
+#: gtk/gtktreeview.c:698
 #, fuzzy
 msgid "Hover Expand"
 msgstr "Katološa"
 
-#: gtk/gtktreeview.c:696
+#: gtk/gtktreeview.c:699
 #, fuzzy
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "Ge eba lefesetere le swanetše go kgabišwa ke molaodi wa lefesetere"
 
-#: gtk/gtktreeview.c:710
+#: gtk/gtktreeview.c:713
 #, fuzzy
 msgid "Show Expanders"
 msgstr "Ke Sekatološi"
 
-#: gtk/gtktreeview.c:711
+#: gtk/gtktreeview.c:714
 #, fuzzy
 msgid "View has expanders"
 msgstr "Ke Sekatološi"
 
-#: gtk/gtktreeview.c:725
+#: gtk/gtktreeview.c:728
 msgid "Level Indentation"
 msgstr ""
 
-#: gtk/gtktreeview.c:726
+#: gtk/gtktreeview.c:729
 msgid "Extra indentation for each level"
 msgstr ""
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:738
 msgid "Rubber Banding"
 msgstr ""
 
-#: gtk/gtktreeview.c:736
+#: gtk/gtktreeview.c:739
 #, fuzzy
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
@@ -7083,133 +7087,133 @@ msgstr ""
 "Ge eba o swanetše go dumelela difaele tše dintši tšeo di swanetšego go "
 "kgethwa"
 
-#: gtk/gtktreeview.c:743
+#: gtk/gtktreeview.c:746
 #, fuzzy
 msgid "Enable Grid Lines"
 msgstr "E kgontšha dinotlelo tša lerungwana"
 
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:747
 #, fuzzy
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:755
 #, fuzzy
 msgid "Enable Tree Lines"
 msgstr "E kgontšha dinotlelo tša lerungwana"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:756
 #, fuzzy
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Ge eba mollwane o swanetše go bontšhwa goba aowa"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:764
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr ""
 "Kholomo yeo e lego go mohlala wa mothopo wa tsebišo yeo o ka hwetšago "
 "methaladi go yona"
 
-#: gtk/gtktreeview.c:783
+#: gtk/gtktreeview.c:786
 msgid "Vertical Separator Width"
 msgstr "Bophara bja Searodi se Tsepamego"
 
-#: gtk/gtktreeview.c:784
+#: gtk/gtktreeview.c:787
 msgid "Vertical space between cells.  Must be an even number"
 msgstr ""
 "Sekgoba se tsepamego magareng ga disele.  E swanetše go ba nomoro e "
 "lekanetšego"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:795
 msgid "Horizontal Separator Width"
 msgstr "Bophara bjo Searodi se Rapamego"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:796
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr ""
 "Sekgoba se rapamego magareng ga disele. E swanetše go ba nomoro e lekanetšego"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:804
 msgid "Allow Rules"
 msgstr "Dumelela Melao"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:805
 msgid "Allow drawing of alternating color rows"
 msgstr "Dumelela go thala ga methalo ya mmala e šielanago"
 
-#: gtk/gtktreeview.c:808
+#: gtk/gtktreeview.c:811
 msgid "Indent Expanders"
 msgstr "Dikatološi tša go Ngwala magareng ga Mela"
 
-#: gtk/gtktreeview.c:809
+#: gtk/gtktreeview.c:812
 msgid "Make the expanders indented"
 msgstr "Dira gore dikatološi di ngwalwe magareng ga mela"
 
-#: gtk/gtktreeview.c:815
+#: gtk/gtktreeview.c:818
 msgid "Even Row Color"
 msgstr "Mmala wa Mothalo o Lekanetšego"
 
-#: gtk/gtktreeview.c:816
+#: gtk/gtktreeview.c:819
 msgid "Color to use for even rows"
 msgstr "Mmala wo o swanetšego go dirišetšwa methalo e lekanetšego"
 
-#: gtk/gtktreeview.c:822
+#: gtk/gtktreeview.c:825
 msgid "Odd Row Color"
 msgstr "Mmala wa Mothalo o sa Lekanelago"
 
-#: gtk/gtktreeview.c:823
+#: gtk/gtktreeview.c:826
 msgid "Color to use for odd rows"
 msgstr "Mmala wo o swanetšego go dirišetšwa methalo e sa lekanelago"
 
-#: gtk/gtktreeview.c:829
+#: gtk/gtktreeview.c:832
 msgid "Row Ending details"
 msgstr ""
 
-#: gtk/gtktreeview.c:830
+#: gtk/gtktreeview.c:833
 msgid "Enable extended row background theming"
 msgstr ""
 
-#: gtk/gtktreeview.c:836
+#: gtk/gtktreeview.c:839
 #, fuzzy
 msgid "Grid line width"
 msgstr "Bophara bja mothaladi bja go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:837
+#: gtk/gtktreeview.c:840
 #, fuzzy
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr ""
 "Bophara, dikarolwaneng tše bopago seswantšho, bja mothaladi wa selaetši sa "
 "go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:843
+#: gtk/gtktreeview.c:846
 #, fuzzy
 msgid "Tree line width"
 msgstr "Bophara bjo beilwego"
 
-#: gtk/gtktreeview.c:844
+#: gtk/gtktreeview.c:847
 #, fuzzy
 msgid "Width, in pixels, of the tree view lines"
 msgstr ""
 "Bophara, dikarolwaneng tše bopago seswantšho, bja mothaladi wa selaetši sa "
 "go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:850
+#: gtk/gtktreeview.c:853
 #, fuzzy
 msgid "Grid line pattern"
 msgstr "Mohlala wa go thula wa mothaladi wa go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:851
+#: gtk/gtktreeview.c:854
 #, fuzzy
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr ""
 "Mohlala wa go thula o dirišetšwago go thala selaetši sa go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:857
+#: gtk/gtktreeview.c:860
 #, fuzzy
 msgid "Tree line pattern"
 msgstr "Mohlala wa go thula wa mothaladi wa go lebiša hlokomelo"
 
-#: gtk/gtktreeview.c:858
+#: gtk/gtktreeview.c:861
 #, fuzzy
 msgid "Dash pattern used to draw the tree view lines"
 msgstr ""
@@ -7328,17 +7332,17 @@ msgstr "Kholomo ya Sengwalwa"
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr ""
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:227
 msgid "Whether tearoff menu items should be added to menus"
 msgstr ""
 "Ge eba dilo tša lelokelelo la dikagare la tše kgeitšwego le swanetše go "
 "oketšwa malokelelong a dikagare"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:234
 msgid "Merged UI definition"
 msgstr "Tlhaloso ya UI e kopantšwego"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:235
 msgid "An XML string describing the merged UI"
 msgstr "Mothaladi wa XML o hlalosago UI e kopantšwego"
 
@@ -7364,29 +7368,29 @@ msgstr ""
 "E hwetša kamoo lepokisi le fsifaditšwego go dikologa lefelo la go lebelela "
 "le thalwago ka gona"
 
-#: gtk/gtkwidget.c:485
+#: gtk/gtkwidget.c:553
 msgid "Widget name"
 msgstr "Leina la sedirišwa"
 
-#: gtk/gtkwidget.c:486
+#: gtk/gtkwidget.c:554
 msgid "The name of the widget"
 msgstr "Tleina la sedirišwa"
 
-#: gtk/gtkwidget.c:492
+#: gtk/gtkwidget.c:560
 msgid "Parent widget"
 msgstr "Sedirišwa seo e lego motswadi"
 
-#: gtk/gtkwidget.c:493
+#: gtk/gtkwidget.c:561
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr ""
 "Sedirišwa seo e lego motswadi sa sedirišwa se. E swanetše go ba sedirišwa sa "
 "Seswaro"
 
-#: gtk/gtkwidget.c:500
+#: gtk/gtkwidget.c:568
 msgid "Width request"
 msgstr "Kgopelo ya Bophara"
 
-#: gtk/gtkwidget.c:501
+#: gtk/gtkwidget.c:569
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7394,11 +7398,11 @@ msgstr ""
 "Go beela ka thoko ga kgopelo ya bophara bja sedirišwa, goba -1 ge eba "
 "kgopelo ya tlhago e swanetše go dirišwa"
 
-#: gtk/gtkwidget.c:509
+#: gtk/gtkwidget.c:577
 msgid "Height request"
 msgstr "Kgopelo ya bophagamo"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:578
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7406,87 +7410,87 @@ msgstr ""
 "Go beela thoko ga kgopelo ya bophagamo bja sedirišwa, goba -1 ge eba kgopelo "
 "ya tlhago e swanetše go dirišwa"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:587
 msgid "Whether the widget is visible"
 msgstr "Ge eba sedirišwa se a bonagala"
 
-#: gtk/gtkwidget.c:526
+#: gtk/gtkwidget.c:594
 msgid "Whether the widget responds to input"
 msgstr "Ge eba sedirišwa se arabela go tsebišo"
 
-#: gtk/gtkwidget.c:532
+#: gtk/gtkwidget.c:600
 msgid "Application paintable"
 msgstr "Tirišo e pentegago"
 
-#: gtk/gtkwidget.c:533
+#: gtk/gtkwidget.c:601
 msgid "Whether the application will paint directly on the widget"
 msgstr "Ge eba tirišo e tla penta ka go lebanya sedirišweng"
 
-#: gtk/gtkwidget.c:539
+#: gtk/gtkwidget.c:607
 msgid "Can focus"
 msgstr "E ka lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:540
+#: gtk/gtkwidget.c:608
 msgid "Whether the widget can accept the input focus"
 msgstr "Ge eba sedirišwa se ka amogela go lebiša hlokomelo ga tsebišo"
 
-#: gtk/gtkwidget.c:546
+#: gtk/gtkwidget.c:614
 msgid "Has focus"
 msgstr "E na le go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:547
+#: gtk/gtkwidget.c:615
 msgid "Whether the widget has the input focus"
 msgstr "Ge eba sedirišwa se na le go lebiša hlokomelo ga tsebišo"
 
-#: gtk/gtkwidget.c:553
+#: gtk/gtkwidget.c:621
 msgid "Is focus"
 msgstr "Ke go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:554
+#: gtk/gtkwidget.c:622
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr ""
 "Ge eba sedirišwa ke sedirišwa se lebišago hlokomelo ka gare ga mogato o "
 "phagamego"
 
-#: gtk/gtkwidget.c:560
+#: gtk/gtkwidget.c:628
 msgid "Can default"
 msgstr "E ka tlhaelela"
 
-#: gtk/gtkwidget.c:561
+#: gtk/gtkwidget.c:629
 msgid "Whether the widget can be the default widget"
 msgstr "Ge eba sedirišwa e ka ba sedirišwa sa tlhaelelo"
 
-#: gtk/gtkwidget.c:567
+#: gtk/gtkwidget.c:635
 msgid "Has default"
 msgstr "E na le tlhaelelo"
 
-#: gtk/gtkwidget.c:568
+#: gtk/gtkwidget.c:636
 msgid "Whether the widget is the default widget"
 msgstr "Ge eba sedirišwa ke sedirišwa sa tlhaelelo"
 
-#: gtk/gtkwidget.c:574
+#: gtk/gtkwidget.c:642
 msgid "Receives default"
 msgstr "E amogela tlhaelelo"
 
-#: gtk/gtkwidget.c:575
+#: gtk/gtkwidget.c:643
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ge eba e le THEREŠO, sedirišwa se tla amogela mogato wa tlhaelelo ge se "
 "lebišitše hlokomelo"
 
-#: gtk/gtkwidget.c:581
+#: gtk/gtkwidget.c:649
 msgid "Composite child"
 msgstr "Ngwana yo a kopanego"
 
-#: gtk/gtkwidget.c:582
+#: gtk/gtkwidget.c:650
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ge eba sedirišwa ke karolo ya sedirišwa se kopanego"
 
-#: gtk/gtkwidget.c:588
+#: gtk/gtkwidget.c:656
 msgid "Style"
 msgstr "Setaele"
 
-#: gtk/gtkwidget.c:589
+#: gtk/gtkwidget.c:657
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -7494,112 +7498,112 @@ msgstr ""
 "Setaele sa sedirišwa se na le tshedimošo ka kamoo se tla bonagalago ka gona "
 "(mebala, bj.bj)"
 
-#: gtk/gtkwidget.c:595
+#: gtk/gtkwidget.c:663
 msgid "Events"
 msgstr "Ditiragalo"
 
-#: gtk/gtkwidget.c:596
+#: gtk/gtkwidget.c:664
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Seširo sa tiragalo seo se phethago gore ke Ditiragalo tša mohuta ofe tša Gdk "
 "tšeo sedirišwa se se di hwetšago"
 
-#: gtk/gtkwidget.c:603
+#: gtk/gtkwidget.c:671
 msgid "Extension events"
 msgstr "Ditiragalo tša koketšo"
 
-#: gtk/gtkwidget.c:604
+#: gtk/gtkwidget.c:672
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Seširo seo se phethago gore ke mohuta ofe wa ditiragalo tša koketšo tšeo "
 "sedirišwa se se di hwetšago"
 
-#: gtk/gtkwidget.c:611
+#: gtk/gtkwidget.c:679
 msgid "No show all"
 msgstr "Ga go na bontšha ka moka"
 
-#: gtk/gtkwidget.c:612
+#: gtk/gtkwidget.c:680
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Ge eba gtk_widget_show_all() ga e a swanela go kgoma sedirišwa se"
 
-#: gtk/gtkwidget.c:635
+#: gtk/gtkwidget.c:703
 #, fuzzy
 msgid "Whether this widget has a tooltip"
 msgstr "Ge eba sedirišwa se na le go lebiša hlokomelo ga tsebišo"
 
-#: gtk/gtkwidget.c:691
+#: gtk/gtkwidget.c:759
 #, fuzzy
 msgid "Window"
 msgstr "Mohuta wa Lefesetere"
 
-#: gtk/gtkwidget.c:692
+#: gtk/gtkwidget.c:760
 msgid "The widget's window if it is realized"
 msgstr ""
 
-#: gtk/gtkwidget.c:706
+#: gtk/gtkwidget.c:774
 #, fuzzy
 msgid "Double Buffered"
 msgstr "Sešireletši"
 
-#: gtk/gtkwidget.c:707
+#: gtk/gtkwidget.c:775
 #, fuzzy
 msgid "Whether or not the widget is double buffered"
 msgstr "Ge eba mogato o a bonagala."
 
-#: gtk/gtkwidget.c:2229
+#: gtk/gtkwidget.c:2400
 msgid "Interior Focus"
 msgstr "Go Lebiša hlokomelo ga ka Gare"
 
-#: gtk/gtkwidget.c:2230
+#: gtk/gtkwidget.c:2401
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 "Ge eba go swanetše go thalwe selaetši sa go bontšha hlokomelo ka gare ga "
 "didirišwa"
 
-#: gtk/gtkwidget.c:2236
+#: gtk/gtkwidget.c:2407
 msgid "Focus linewidth"
 msgstr "Bophara bja mothaladi bja go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:2237
+#: gtk/gtkwidget.c:2408
 msgid "Width, in pixels, of the focus indicator line"
 msgstr ""
 "Bophara, dikarolwaneng tše bopago seswantšho, bja mothaladi wa selaetši sa "
 "go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:2243
+#: gtk/gtkwidget.c:2414
 msgid "Focus line dash pattern"
 msgstr "Mohlala wa go thula wa mothaladi wa go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:2244
+#: gtk/gtkwidget.c:2415
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 "Mohlala wa go thula o dirišetšwago go thala selaetši sa go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:2249
+#: gtk/gtkwidget.c:2420
 msgid "Focus padding"
 msgstr "Go aletša ga go lebiša hlokomelo"
 
-#: gtk/gtkwidget.c:2250
+#: gtk/gtkwidget.c:2421
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Bophara, dikarolwaneng tše bopago seswantšho, magareng ga selaetši sa go "
 "lebiša hlokomelo le 'lepokisi' la sedirišwa"
 
-#: gtk/gtkwidget.c:2255
+#: gtk/gtkwidget.c:2426
 msgid "Cursor color"
 msgstr "Mmala wa leswao la go bontšha mo o lego"
 
-#: gtk/gtkwidget.c:2256
+#: gtk/gtkwidget.c:2427
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 "Mmala woo go swanetšego go thalwa go tsenywa ga leswao la go bontšha mo o "
 "lego"
 
-#: gtk/gtkwidget.c:2261
+#: gtk/gtkwidget.c:2432
 msgid "Secondary cursor color"
 msgstr "Mmala wa bobedi wa leswao la go bontšha mo o lego"
 
-#: gtk/gtkwidget.c:2262
+#: gtk/gtkwidget.c:2433
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7608,90 +7612,90 @@ msgstr ""
 "bontšha mo o lego ge go lokiša go tswakilwe go tloga go lagoja go ya go "
 "lanngele le lanngele go ya go lagoja"
 
-#: gtk/gtkwidget.c:2267
+#: gtk/gtkwidget.c:2438
 msgid "Cursor line aspect ratio"
 msgstr "Tekanyo ya karolo ya mothaladi wa leswao leo le bontšhago mo o lego"
 
-#: gtk/gtkwidget.c:2268
+#: gtk/gtkwidget.c:2439
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 "Tekanyo ya karolo yeo go ka thalwago ka yona tsenyo ya leswao leo le "
 "bontšhago mo o lego"
 
-#: gtk/gtkwidget.c:2282
+#: gtk/gtkwidget.c:2453
 #, fuzzy
 msgid "Draw Border"
 msgstr "Mollwane wa Tab"
 
-#: gtk/gtkwidget.c:2283
+#: gtk/gtkwidget.c:2454
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr ""
 
-#: gtk/gtkwidget.c:2296
+#: gtk/gtkwidget.c:2467
 #, fuzzy
 msgid "Unvisited Link Color"
 msgstr "Mmala wa Gona bjale"
 
-#: gtk/gtkwidget.c:2297
+#: gtk/gtkwidget.c:2468
 #, fuzzy
 msgid "Color of unvisited links"
 msgstr "Sehlogo sa poledišano ka kgetho ya fonto"
 
-#: gtk/gtkwidget.c:2310
+#: gtk/gtkwidget.c:2481
 #, fuzzy
 msgid "Visited Link Color"
 msgstr "Mmala wa Gona bjale"
 
-#: gtk/gtkwidget.c:2311
+#: gtk/gtkwidget.c:2482
 #, fuzzy
 msgid "Color of visited links"
 msgstr "Sehlogo sa poledišano ka kgetho ya fonto"
 
-#: gtk/gtkwidget.c:2325
+#: gtk/gtkwidget.c:2496
 #, fuzzy
 msgid "Wide Separators"
 msgstr "Diriša searodi"
 
-#: gtk/gtkwidget.c:2326
+#: gtk/gtkwidget.c:2497
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 
-#: gtk/gtkwidget.c:2340
+#: gtk/gtkwidget.c:2511
 #, fuzzy
 msgid "Separator Width"
 msgstr "Bophara bja Searodi se Tsepamego"
 
-#: gtk/gtkwidget.c:2341
+#: gtk/gtkwidget.c:2512
 msgid "The width of separators if wide-separators is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2355
+#: gtk/gtkwidget.c:2526
 #, fuzzy
 msgid "Separator Height"
 msgstr "Bophagamo bja Tlhaelelo"
 
-#: gtk/gtkwidget.c:2356
+#: gtk/gtkwidget.c:2527
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr ""
 
-#: gtk/gtkwidget.c:2370
+#: gtk/gtkwidget.c:2541
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Pholisi ya Bara ya go ya godimo le tlase e Rapamego"
 
-#: gtk/gtkwidget.c:2371
+#: gtk/gtkwidget.c:2542
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
 msgstr "Ge bara ya go ya godimo le tlase e rapamego e bontšhitšwe"
 
-#: gtk/gtkwidget.c:2385
+#: gtk/gtkwidget.c:2556
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
 msgstr "Pholisi ya Bara ya go ya godimo le tlase e Tsepamego"
 
-#: gtk/gtkwidget.c:2386
+#: gtk/gtkwidget.c:2557
 #, fuzzy
 msgid "The length of vertical scroll arrows"
 msgstr "Ge bara ya go ya godimo le tlase e tsepamego e bontšhitšwe"
