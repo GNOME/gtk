@@ -184,6 +184,8 @@ dfb_events_dispatch (void)
   GdkDisplay *display = gdk_display_get_default ();
   GdkEvent   *event;
 
+  GDK_THREADS_ENTER ();
+
   while ((event = _gdk_event_unqueue (display)) != NULL)
     {
       if (_gdk_event_func)
@@ -191,6 +193,8 @@ dfb_events_dispatch (void)
 
       gdk_event_free (event);
     }
+
+  GDK_THREADS_LEAVE ();
 }
 
 static gboolean
