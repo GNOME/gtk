@@ -4466,6 +4466,7 @@ gtk_tool_item_group_get_item_position
 gtk_tool_item_group_get_n_items
 gtk_tool_item_group_get_nth_item
 gtk_tool_item_group_get_drop_item
+gtk_tool_item_group_get_collapsed
 #endif
 #endif
 

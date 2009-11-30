@@ -310,8 +310,8 @@ gtk_public_h_sources =          \
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
-	gtktoolitemgroup.h		\	
-	gtktoolpalette.h		\
+	gtktoolitemgroup.h	\
+	gtktoolpalette.h	\
 	gtktoolshell.h		\
 	gtktooltip.h		\
 	gtktreednd.h		\
