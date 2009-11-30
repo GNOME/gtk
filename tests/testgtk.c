@@ -11719,7 +11719,6 @@ struct {
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
   { "layout", create_layout },
-  { "list", create_list },
   { "menus", create_menus },
   { "message dialog", create_message_dialog },
   { "modal window", create_modal_window, TRUE },
