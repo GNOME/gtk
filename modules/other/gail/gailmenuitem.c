@@ -527,13 +527,17 @@ gail_menu_item_get_keybinding (AtkAction *action,
               if (GTK_IS_ACCEL_LABEL (child))
                 {
                   GtkAccelLabel *accel_label;
+                  GClosure      *accel_closure;
 
                   accel_label = GTK_ACCEL_LABEL (child);
-                  if (accel_label->accel_closure)
+                  g_object_get (accel_label,
+                                "accel-closure", &accel_closure,
+                                NULL);
+                  if (accel_closure)
                     {
-                      key = gtk_accel_group_find (accel_label->accel_group,
+                      key = gtk_accel_group_find (gtk_accel_group_from_accel_closure (accel_closure),
                                                   find_accel_new,
-                                                  accel_label->accel_closure);
+                                                  accel_closure);
                     }
                
                 }
