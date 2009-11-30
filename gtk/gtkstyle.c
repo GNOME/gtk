@@ -6737,6 +6737,8 @@ gtk_paint_resize_grip (GtkStyle           *style,
  * @height: the height of the rectangle in which to draw the spinner
  *
  * Draws a spinner on @window using the given parameters.
+ *
+ * Since: 2.20
  */
 void
 gtk_paint_spinner (GtkStyle           *style,

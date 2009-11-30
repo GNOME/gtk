@@ -27,6 +27,16 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 2.20
+======================
+
+* GtkStatusbar now has a message area (see gtk_status_bar_get_message_area)
+  which makes it easy to place additional widgets inside the statusbar
+  frame or to replace the label widgets. Previously, this was only possible
+  by accessing the innards of the statusbar widget directly. Applications
+  which are doing so may need some adjustments, since the addition of the
+  message area changed the internal widget hierarchy.
+
 Release notes for 2.18
 ======================
 

@@ -3611,6 +3611,7 @@ gtk_statusbar_pop
 gtk_statusbar_remove
 gtk_statusbar_set_has_resize_grip
 gtk_statusbar_get_has_resize_grip
+gtk_statusbar_get_message_area
 <SUBSECTION Standard>
 GTK_STATUSBAR
 GTK_IS_STATUSBAR
@@ -4295,6 +4296,7 @@ gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_set_proxy_menu_item
 gtk_tool_item_rebuild_menu
 gtk_tool_item_toolbar_reconfigured
+gtk_tool_item_get_text_size_group
 
 <SUBSECTION Standard>
 GTK_TYPE_TOOL_ITEM
