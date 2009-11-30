@@ -166,6 +166,7 @@ gtk_public_h_sources =          \
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkaccelgroupprivate.h	\
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\

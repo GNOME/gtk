@@ -35,6 +35,8 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 
+#include "gtk/gtkaccelgroupprivate.h"
+
 
 G_BEGIN_DECLS
 

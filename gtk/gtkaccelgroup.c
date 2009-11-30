@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gtkaccelgroup.h"
+#include "gtkaccelgroupprivate.h"
 #include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
@@ -63,15 +64,6 @@
  */
 
 #define GTK_ACCEL_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupPrivate))
-
-struct _GtkAccelGroupPrivate
-{
-  guint               lock_count;
-  GdkModifierType     modifier_mask;
-  GSList             *acceleratables;
-  guint               n_accels;
-  GtkAccelGroupEntry *priv_accels;
-};
 
 /* --- prototypes --- */
 static void gtk_accel_group_finalize     (GObject    *object);

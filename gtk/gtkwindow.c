@@ -8167,9 +8167,9 @@ _gtk_window_keys_foreach (GtkWindow                *window,
       GtkAccelGroup *group = groups->data;
       gint i;
 
-      for (i = 0; i < group->n_accels; i++)
+      for (i = 0; i < group->priv->n_accels; i++)
 	{
-	  GtkAccelKey *key = &group->priv_accels[i].key;
+	  GtkAccelKey *key = &group->priv->priv_accels[i].key;
 	  
 	  if (key->accel_key)
 	    (*func) (window, key->accel_key, key->accel_mods, FALSE, func_data);
