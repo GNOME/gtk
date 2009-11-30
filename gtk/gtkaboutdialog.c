@@ -141,7 +141,6 @@ struct _GtkAboutDialogPrivate
   GtkWidget *name_label;
   GtkWidget *comments_label;
   GtkWidget *copyright_label;
-  GtkWidget *website_button;
   GtkWidget *website_label;
 
   GtkWidget *credits_button;
@@ -519,6 +518,30 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   g_type_class_add_private (object_class, sizeof (GtkAboutDialogPrivate));
 }
 
+static gboolean
+website_clicked (GtkLabel       *label,
+                 const gchar    *uri,
+                 GtkAboutDialog *about)
+{
+  GtkAboutDialogActivateLinkFunc url_hook;
+  gpointer url_hook_data;
+
+  if (activate_url_hook_set)
+    {
+      url_hook = activate_url_hook;
+      url_hook_data = activate_url_hook_data;
+    }
+  else
+    {
+      url_hook = default_url_hook;
+      url_hook_data = NULL;
+    }
+
+  url_hook (about, uri, url_hook_data);
+
+  return TRUE;
+}
+
 static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
@@ -581,15 +604,13 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   hbox = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0); 
 
-  priv->website_button = button = gtk_link_button_new (""); 
-  gtk_widget_set_no_show_all (button, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  
   priv->website_label = button = gtk_label_new ("");
   gtk_widget_set_no_show_all (button, TRUE);
   gtk_label_set_selectable (GTK_LABEL (button), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
-  
+  g_signal_connect (button, "activate-link",
+                    G_CALLBACK (website_clicked), about);
+
   gtk_widget_show (vbox);
   gtk_widget_show (priv->logo_image);
   gtk_widget_show (priv->name_label);
@@ -800,22 +821,32 @@ update_website (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = (GtkAboutDialogPrivate *)about->private_data;
 
+  gtk_widget_show (priv->website_label);
+
   if (priv->website_url && (!activate_url_hook_set || activate_url_hook != NULL))
     {
-      gtk_widget_show (priv->website_button);
-      gtk_widget_hide (priv->website_label);
+      gchar *markup;
 
-      gtk_link_button_set_uri (GTK_LINK_BUTTON (priv->website_button), priv->website_url);
       if (priv->website_text)
-        gtk_button_set_label (GTK_BUTTON (priv->website_button), priv->website_text);
-      else 
-        gtk_button_set_label (GTK_BUTTON (priv->website_button), priv->website_url);
+        {
+          gchar *escaped;
+
+          escaped = g_markup_escape_text (priv->website_text, -1);
+          markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
+                                    priv->website_url, escaped);
+          g_free (escaped);
+        }
+      else
+        {
+          markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
+                                    priv->website_url, priv->website_url);
+        }
+
+      gtk_label_set_markup (priv->website_label, markup);
+      g_free (markup);
     }
   else
     {
-      gtk_widget_show (priv->website_label);
-      gtk_widget_hide (priv->website_button);
-
       if (priv->website_url)
         gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_url);
       else if (priv->website_text)
