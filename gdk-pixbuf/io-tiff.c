@@ -149,6 +149,7 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 	GdkPixbuf *pixbuf;
 	uint16 orientation = 0;
 	uint16 transform = 0;
+        uint16 codec;
 
         /* We're called with the lock held. */
         
@@ -265,6 +266,13 @@ tiff_image_parse (TIFF *tiff, TiffContext *context, GError **error)
 		g_snprintf (str, sizeof (str), "%d", transform);
 		gdk_pixbuf_set_option (pixbuf, "orientation", str);
 	}
+
+        TIFFGetField (tiff, TIFFTAG_COMPRESSION, &codec);
+        if (codec > 0) {
+          gchar str[5];
+          g_snprintf (str, sizeof (str), "%d", codec);
+          gdk_pixbuf_set_option (pixbuf, "compression", str);
+        }
 
 	if (context && context->prepare_func)
 		(* context->prepare_func) (pixbuf, NULL, context->user_data);
@@ -688,6 +696,31 @@ gdk_pixbuf__tiff_image_save_to_callback (GdkPixbufSaveFunc   save_func,
         TIFFSetField (tiff, TIFFTAG_BITSPERSAMPLE, 8);
         TIFFSetField (tiff, TIFFTAG_SAMPLESPERPIXEL, has_alpha ? 4 : 3);
         TIFFSetField (tiff, TIFFTAG_ROWSPERSTRIP, height);
+
+        /* libtiff supports a number of 'codecs' such as:
+           1 None, 2 Huffman, 5 LZW, 7 JPEG, 8 Deflate, see tiff.h */
+        if (keys && *keys && values && *values) {
+            guint i = 0;
+
+            while (keys[i]) {
+                if (g_str_equal (keys[i], "compression")) {
+                    guint16 codec = strtol (values[i], NULL, 0);
+                    if (TIFFIsCODECConfigured (codec))
+                        TIFFSetField (tiff, TIFFTAG_COMPRESSION, codec);
+                    else {
+                        tiff_set_error (error,
+                                        GDK_PIXBUF_ERROR_FAILED,
+                            _("TIFF compression doesn't refer to a valid codec."));
+
+                        tiff_pop_handlers ();
+
+                        free_save_context (context);
+                        return FALSE;
+                    }
+                }
+                i++;
+            }
+        }
 
         if (has_alpha)
                 TIFFSetField (tiff, TIFFTAG_EXTRASAMPLES, 1, alpha_samples);

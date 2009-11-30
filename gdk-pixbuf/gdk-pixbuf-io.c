@@ -1902,6 +1902,10 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  * be specified using the "compression" parameter; it's value is in an
  * integer in the range of [0,9].
  *
+ * TIFF images recognize a "compression" option which acceps an integer value.
+ * Among the codecs are 1 None, 2 Huffman, 5 LZW, 7 JPEG and 8 Deflate, see
+ * the libtiff documentation and tiff.h for all supported codec values.
+ *
  * ICO images can be saved in depth 16, 24, or 32, by using the "depth"
  * parameter. When the ICO saver is given "x_hot" and "y_hot" parameters,
  * it produces a CUR instead of an ICO.
