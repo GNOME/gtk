@@ -1225,7 +1225,7 @@ gtk_action_get_is_important (GtkAction *action)
 
 /**
  * gtk_action_set_always_show_image:
- * @action: the action object
+ * @action: a #GtkAction
  * @always_show: %TRUE if menuitem proxies should always show their image
  *
  * Sets whether @action<!-- -->'s menu item proxies will ignore the
@@ -1258,10 +1258,11 @@ gtk_action_set_always_show_image (GtkAction *action,
 
 /**
  * gtk_action_get_always_show_image:
- * @action:
+ * @action: a #GtkAction
  *
  * Returns whether @action<!-- -->'s menu item proxies will ignore the
- * #GtkSettings:gtk-menu-images setting and always show their image, if available.
+ * #GtkSettings:gtk-menu-images setting and always show their image,
+ * if available.
  *
  * Returns: %TRUE if the menu item proxies will always show their image
  *
