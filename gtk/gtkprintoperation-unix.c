@@ -538,15 +538,11 @@ finish_print (PrintResponseData *rdata,
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintJob *job;
-  gdouble top, bottom, left, right;
   
   if (rdata->do_print)
     {
       gtk_print_operation_set_print_settings (op, settings);
       priv->print_context = _gtk_print_context_new (op);
-
-      if (gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
-        _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
 
       if (page_setup != NULL &&
           (gtk_print_operation_get_default_page_setup (op) == NULL ||
