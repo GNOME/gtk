@@ -436,22 +436,6 @@ get_default_printer (void)
   return printer_name;
 }
 
-static void
-set_hard_margins (GtkPrintOperation *op)
-{
-  double top, bottom, left, right;
-  GtkPrintOperationWin32 *op_win32 = op->priv->platform_data;
-
-  top = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETY);
-  bottom = GetDeviceCaps (op_win32->hdc, PHYSICALHEIGHT)
-      - GetDeviceCaps (op_win32->hdc, VERTRES) - top;
-  left = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETX);
-  right = GetDeviceCaps (op_win32->hdc, PHYSICALWIDTH)
-      - GetDeviceCaps (op_win32->hdc, HORZRES) - left;
-
-  _gtk_print_context_set_hard_margins (op->priv->print_context, top, bottom, left, right);
-}
-
 void
 win32_start_page (GtkPrintOperation *op,
 		  GtkPrintContext *print_context,
@@ -486,7 +470,6 @@ win32_start_page (GtkPrintOperation *op,
   
   GlobalUnlock (op_win32->devmode);
 
-  set_hard_margins (op);
   x_off = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETX);
   y_off = GetDeviceCaps (op_win32->hdc, PHYSICALOFFSETY);
   cairo_surface_set_device_offset (op_win32->surface, -x_off, -y_off);
@@ -1582,8 +1565,6 @@ gtk_print_operation_run_without_dialog (GtkPrintOperation *op,
   gtk_print_context_set_cairo_context (priv->print_context, cr, dpi_x, dpi_y);
   cairo_destroy (cr);
 
-  set_hard_margins (op);
-
   memset (&docinfo, 0, sizeof (DOCINFOW));
   docinfo.cbSize = sizeof (DOCINFOW); 
   docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name, -1, NULL, NULL, NULL); 
@@ -1808,9 +1789,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
       cr = cairo_create (op_win32->surface);
       gtk_print_context_set_cairo_context (priv->print_context, cr, dpi_x, dpi_y);
       cairo_destroy (cr);
-
-      set_hard_margins (op);
-
+      
       memset ( &docinfo, 0, sizeof (DOCINFOW));
       docinfo.cbSize = sizeof (DOCINFOW); 
       docinfo.lpszDocName = g_utf8_to_utf16 (op->priv->job_name, -1, NULL, NULL, NULL); 
