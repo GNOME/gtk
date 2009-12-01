@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-17 00:20-0400\n"
+"POT-Creation-Date: 2009-11-30 23:36-0500\n"
 "PO-Revision-Date: 2009-08-22 07:33+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -126,102 +126,102 @@ msgstr "ਫੋਂਟ ਰੈਜ਼ੋਲੂਸ਼ਨ"
 msgid "The resolution for fonts on the screen"
 msgstr "ਸਕਰੀਨ ਉੱਤੇ ਫੋਂਟਾਂ ਲਈ ਰੈਜ਼ੋਲੂਸ਼ਨ ਹੈ"
 
-#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
+#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
 msgid "Cursor"
 msgstr "ਕਰਸਰ"
 
-#: gtk/gtkaboutdialog.c:239
+#: gtk/gtkaboutdialog.c:238
 msgid "Program name"
 msgstr "ਪਰੋਗਰਾਮ ਨਾਂ"
 
-#: gtk/gtkaboutdialog.c:240
+#: gtk/gtkaboutdialog.c:239
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "ਪਰੋਗਰਾਮ ਦਾ ਨਾਂ ਹੈ। ਜੇਕਰ ਇਹ ਨਾ ਦਿੱਤਾ ਗਿਆ ਤਾਂ, ਡਿਫਾਲਟ g_get_application_name() ਹੋਵੇਗਾ।"
 
-#: gtk/gtkaboutdialog.c:254
+#: gtk/gtkaboutdialog.c:253
 msgid "Program version"
 msgstr "ਪਰੋਗਰਾਮ ਵਰਜਨ"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "The version of the program"
 msgstr "ਪਰੋਗਰਾਮ ਦਾ ਵਰਜਨ ਹੈ"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:268
 msgid "Copyright string"
 msgstr "ਕਾਪੀਰਾਈਟ ਲਾਈਨ"
 
-#: gtk/gtkaboutdialog.c:270
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright information for the program"
 msgstr "ਪਰੋਗਰਾਮ ਬਾਰੇ ਕਾਪੀਰਾਈਟ ਜਾਣਕਾਰੀ ਹੈ"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:286
 msgid "Comments string"
 msgstr "ਟਿੱਪਣੀ ਲਾਈਨ"
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments about the program"
 msgstr "ਪਰੋਗਰਾਮ ਬਾਰੇ ਟਿੱਪਣੀ ਹੈ।"
 
-#: gtk/gtkaboutdialog.c:322
+#: gtk/gtkaboutdialog.c:321
 msgid "Website URL"
 msgstr "ਵੈਬਸਾਇਟ URL"
 
-#: gtk/gtkaboutdialog.c:323
+#: gtk/gtkaboutdialog.c:322
 msgid "The URL for the link to the website of the program"
 msgstr "ਪਰੋਗਰਾਮ ਦੀ ਵੈੱਬ ਸਾਇਟ ਨਾਲ ਸਬੰਧਤ URL ਹੈ"
 
-#: gtk/gtkaboutdialog.c:339
+#: gtk/gtkaboutdialog.c:338
 msgid "Website label"
 msgstr "ਵੈਬਸਾਇਟ ਲੇਬਲ"
 
-#: gtk/gtkaboutdialog.c:340
+#: gtk/gtkaboutdialog.c:339
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 "ਪਰੋਗਰਾਮ ਦੀ ਵੈਬਸਾਇਟ ਨਾਲ ਲਿੰਕ ਦਾ ਲੇਬਲ ਹੈ। ਜੇਕਰ ਇਹ ਨਾਂ ਦਿੱਤਾ ਗਿਆ ਤਾਂ, ਇਹ ਮੂਲ URL ਹੋਵੇਗਾ।"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:355
 msgid "Authors"
 msgstr "ਲੇਖਕ"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:356
 msgid "List of authors of the program"
 msgstr "ਪਰੋਗਰਾਮ ਦੇ ਲੇਖਕਾਂ ਦੀ ਲਿਸਟ"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:372
 msgid "Documenters"
 msgstr "ਦਸਤਾਵੇਜ਼ ਲੇਖਕ"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:373
 msgid "List of people documenting the program"
 msgstr "ਪਰੋਗਰਾਮ ਦੇ ਦਸਤਾਵੇਜ਼ ਲਿਖਣ ਵਾਲੇ ਲੇਖਕਾਂ ਦੀ ਲਿਸਟ"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:389
 msgid "Artists"
 msgstr "ਕਲਾਕਾਰ"
 
-#: gtk/gtkaboutdialog.c:391
+#: gtk/gtkaboutdialog.c:390
 msgid "List of people who have contributed artwork to the program"
 msgstr "ਪਰੋਗਰਾਮ ਵਿੱਚ ਕਲਾਕਾਰੀ ਕਰਨ ਵਾਲੇ ਲੋਕਾਂ ਦੀ ਲਿਸਟ"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Translator credits"
 msgstr "ਅਨੁਵਾਦ ਮਾਣ"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "ਅਨੁਵਾਦ ਕਰਨ ਵਾਲਿਆਂ ਦਾ ਨਾਂ ਹੈ। ਇਹ ਅਨੁਵਾਦ ਯੋਗ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ।"
 
-#: gtk/gtkaboutdialog.c:424
+#: gtk/gtkaboutdialog.c:423
 msgid "Logo"
 msgstr "ਲੋਗੋ"
 
-#: gtk/gtkaboutdialog.c:425
+#: gtk/gtkaboutdialog.c:424
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -229,19 +229,19 @@ msgstr ""
 "ਇਸ ਬਾਰੇ ਬਕਸੇ ਲਈ ਇੱਕ ਲੋਗੋ ਹੈ। ਜੇਕਰ ਇਹ ਨਾ ਦਿੱਤਾ ਗਿਆ ਤਾਂ, ਮੂਲ "
 "gtk_window_get_default_icon_list() ਵਰਤਿਆ ਜਾਵੇਗਾ।"
 
-#: gtk/gtkaboutdialog.c:440
+#: gtk/gtkaboutdialog.c:439
 msgid "Logo Icon Name"
 msgstr "ਲੋਗੋ ਆਈਕਾਨ ਨਾਂ"
 
-#: gtk/gtkaboutdialog.c:441
+#: gtk/gtkaboutdialog.c:440
 msgid "A named icon to use as the logo for the about box."
 msgstr "ਇਸ ਬਾਰੇ ਲੋਗੋ ਵਿੱਚ ਵਰਤਣ ਲਈ ਆਈਕਾਨ ਲੋਗੋ ਹੈ।"
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:453
 msgid "Wrap license"
 msgstr "ਲਾਈਸੈਂਸ ਸਮੇਟਣਾ"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:454
 msgid "Whether to wrap the license text."
 msgstr "ਕੀ ਲਾਈਸੈਂਸ ਟੈਕਸਟ ਨੂੰ ਸਮੇਟਣਾ ਹੈ।"
 
@@ -308,17 +308,17 @@ msgstr "ਸਟਾਕ ਆਈਕਾਨ ਇਸ ਕਾਰਵਾਈ ਲਈ ਵਿਦ�
 msgid "GIcon"
 msgstr "ਗਲਕੋਨ"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "ਗਲਕੋਨ ਵੇਖਾਇਆ ਜਾ ਰਿਹਾ ਹੈ"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "ਆਈਕਾਨ ਨਾਂ"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "ਆਈਕਾਨ ਸਰੂਪ ਤੋਂ ਆਈਕਾਨ ਦਾ ਨਾਂ"
@@ -1210,7 +1210,7 @@ msgstr "ਪਿਕਬੱਪ ਐਕਸਪੈਡਰ ਬੰਦ"
 msgid "Pixbuf for closed expander"
 msgstr "ਬੰਦ ਐਕਸਪੈਡਰ ਲਈ ਪਿਕਬੱਪ"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "ਸਟਾਕ ID"
 
@@ -1243,7 +1243,7 @@ msgstr "ਅੱਗੇ ਹਾਲਤ"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "ਕੀ ਪੇਸ਼ਕਾਰੀ ਪਿਕਬਫ਼ਰ ਨੂੰ ਹਾਲਤ ਦੇ ਅਨੁਸਾਰ ਰੰਗਦਾਰ ਬਣਾਉਣਾ ਹੈ"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "ਆਈਕਾਨ"
 
@@ -1929,7 +1929,7 @@ msgstr "ਸਰਗਰਮ ਆਈਟਮ"
 msgid "The item which is currently active"
 msgstr "ਆਈਟਮ, ਜੋ ਹੁਣ ਸਰਗਰਮ ਹੈ"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:223
 msgid "Add tearoffs to menus"
 msgstr "ਵੱਖ-ਕਰਨ ਨੂੰ ਸੂਚੀ ਵਿੱਚ ਜੋੜੋ"
 
@@ -2718,7 +2718,7 @@ msgstr "ਫਾਇਲ ਚੋਣਕਾਰ ਡਾਈਲਾਗ ਦਾ ਨਾਂ ਹ�
 msgid "The desired width of the button widget, in characters."
 msgstr "ਬਟਨ ਵਿਦਗਿਟ ਦੀ ਲੋੜੀਦੀ ਚੌਰਾਈ ਅੱਖਰਾਂ ਵਿੱਚ ਹੈ।"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "ਫਾਇਲ-ਨਾਂ"
@@ -3018,83 +3018,83 @@ msgstr "ਚੋਣ ਬਕਸਾ ਐਲਫ਼ਾ"
 msgid "Opacity of the selection box"
 msgstr "ਚੋਣ ਬਕਸੇ ਦਾ ਬਲੌਰੀਪਨ"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "ਪਿਕਬਫ"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "ਵੇਖਾਉਣ ਲਈ GdkPixbuf"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:140
 msgid "Pixmap"
 msgstr "ਪਿਕਪੈਮ"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:141
 msgid "A GdkPixmap to display"
 msgstr "ਵੇਖਾਉਣ ਲਈ GdkPixmap"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "ਚਿੱਤਰ"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:149
 msgid "A GdkImage to display"
 msgstr "ਵੇਖਾਉਣ ਲਈ GdkImage"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:156
 msgid "Mask"
 msgstr "ਮਖੌਟਾ"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:157
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage ਜਾਂ GdkPixmap ਨਾਲ ਵਰਤਣ ਲਈ ਬਿੱਟਮੈਪ ਕੱਜ ਦਿਉ"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "ਲੋਡ ਕਰਨ ਅਤੇ ਵੇਖਾਉਣ ਲਈ ਫਾਇਲ-ਨਾਂ"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ਸਟਾਕ ਚਿੱਤਰ ਵੇਖਾਉਣ ਲਈ ਸਟਾਕ ID"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:181
 msgid "Icon set"
 msgstr "ਆਈਕਾਨ ਸੈੱਟ"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:182
 msgid "Icon set to display"
 msgstr "ਵੇਖਾਉਣ ਲਈ ਆਈਕਾਨ ਸੈੱਟ"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "ਆਈਕਾਨ ਆਕਾਰ"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:190
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "ਸਟਾਕ ਆਈਕਾਨ, ਆਈਕਾਨ ਸੈਟ ਜਾਂ ਨਾਂ ਆਈਕਾਨ ਲਈ ਲਿੰਕ ਅਕਾਰ"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:206
 msgid "Pixel size"
 msgstr "ਪਿਕਸਲ ਅਕਾਰ"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:207
 msgid "Pixel size to use for named icon"
 msgstr "ਨਾਮੀ ਆਈਕਾਨ ਲਈ ਪਿਕਸਲ ਅਕਾਰ"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:215
 msgid "Animation"
 msgstr "ਸਜੀਵਤਾ"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:216
 msgid "GdkPixbufAnimation to display"
 msgstr "ਵੇਖਾਉਣ ਲਈ GdkPixbufAnimation"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "ਸੰਭਾਲਣ ਦੀ ਕਿਸਮ"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "ਚਿੱਤਰ ਡੈਟਾ ਲਈ ਪੇਸ਼ਕਾਰੀ"
 
@@ -6534,15 +6534,15 @@ msgstr "ਲੜੀਬੱਧ ਕਾਲਮ ID"
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr "ਜਦੋਂ ਲੜੀਬੱਧ ਦੀ ਚੋਣ ਕੀਤੀ ਜਾਵੇ ਤਾਂ ਕਾਲਮ ਲੜੀਬੱਧ ਕਰਨ ਲਈ ਲਾਜ਼ੀਕਲ ਕਾਲਮ ID"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:224
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "ਮੇਨੂ ਆਈਟਮ ਨੂੰ ਵੱਖ-ਕਰਨ ਵਾਲਾ ਨੂੰ ਮੇਨੂ ਵਿੱਚ ਜੋੜਨਾ ਹੈ"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:231
 msgid "Merged UI definition"
 msgstr "ਰੱਲਗੱਡ UI ਪਰਿਭਾਸ਼ਾ"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:232
 msgid "An XML string describing the merged UI"
 msgstr "ਰੱਲਗੱਡ UI ਪਰੀਭਾਸ਼ਾ ਨੂੰ ਦਰਸਾਉਣ ਲਈ XML ਦੀ ਸਤਰ"
 

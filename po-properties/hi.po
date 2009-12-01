@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-17 00:20-0400\n"
+"POT-Creation-Date: 2009-11-30 23:36-0500\n"
 "PO-Revision-Date: 2009-08-26 11:47+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -131,102 +131,102 @@ msgstr "फ़ॉन्ट रिजॉल्यूशन"
 msgid "The resolution for fonts on the screen"
 msgstr "स्क्रीन पर फंट के लिये रिजॉल्यूशन"
 
-#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
+#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
 msgid "Cursor"
 msgstr "कर्सर"
 
-#: gtk/gtkaboutdialog.c:239
+#: gtk/gtkaboutdialog.c:238
 msgid "Program name"
 msgstr "प्रोग्राम नाम"
 
-#: gtk/gtkaboutdialog.c:240
+#: gtk/gtkaboutdialog.c:239
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "प्रोग्राम का नाम. अगर यह सेट नहीं होता है तो यह g_get_application_name() में मूलभूत है"
 
-#: gtk/gtkaboutdialog.c:254
+#: gtk/gtkaboutdialog.c:253
 msgid "Program version"
 msgstr "प्रोग्राम संस्करण"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "The version of the program"
 msgstr "प्रोग्राम का संस्करण"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:268
 msgid "Copyright string"
 msgstr "कॉपीराइट स्ट्रिंग"
 
-#: gtk/gtkaboutdialog.c:270
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright information for the program"
 msgstr "प्रोग्राम के लिये कॉपीराइट सूचना"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:286
 msgid "Comments string"
 msgstr "टिप्पणी स्ट्रिंग"
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments about the program"
 msgstr "प्रोग्राम के बारे में टिप्पणी"
 
-#: gtk/gtkaboutdialog.c:322
+#: gtk/gtkaboutdialog.c:321
 msgid "Website URL"
 msgstr "वेबसाइट URL"
 
-#: gtk/gtkaboutdialog.c:323
+#: gtk/gtkaboutdialog.c:322
 msgid "The URL for the link to the website of the program"
 msgstr "प्रोग्राम के वेबसाइट में लिंक का URL"
 
-#: gtk/gtkaboutdialog.c:339
+#: gtk/gtkaboutdialog.c:338
 msgid "Website label"
 msgstr "वेबसाइट लेबल"
 
-#: gtk/gtkaboutdialog.c:340
+#: gtk/gtkaboutdialog.c:339
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 "प्रोग्राम के वेबसाइट के लिंक के लिये लेबल. अगर यह सेट नहीं है तो यह URL के लिये मूलभूत है"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:355
 msgid "Authors"
 msgstr "लेखक"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:356
 msgid "List of authors of the program"
 msgstr "प्रोग्राम के लेखक की सूची"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:372
 msgid "Documenters"
 msgstr "दस्तावेज"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:373
 msgid "List of people documenting the program"
 msgstr "प्रोग्राम का दस्तावेजन करने वाले लोगों की सूची"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:389
 msgid "Artists"
 msgstr "कलाकार"
 
-#: gtk/gtkaboutdialog.c:391
+#: gtk/gtkaboutdialog.c:390
 msgid "List of people who have contributed artwork to the program"
 msgstr "प्रोग्राम में आर्टवर्क देने वाले लोगों की सूच"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Translator credits"
 msgstr "राजेश रंजन (rranjan@redhat.com, rajeshkajha@yahoo.com)"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "अनुवादक श्रेय. इस स्ट्रिंग को अनुवाद करने योग्य चिह्नित किया जाना चाहिये"
 
-#: gtk/gtkaboutdialog.c:424
+#: gtk/gtkaboutdialog.c:423
 msgid "Logo"
 msgstr "लोगो"
 
-#: gtk/gtkaboutdialog.c:425
+#: gtk/gtkaboutdialog.c:424
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -234,19 +234,19 @@ msgstr ""
 "बॉक्स के लिये लोगो. अगर यह सेट नहीं होता है, यह gtk_window_get_default_icon_list() "
 "में मूलभूत है"
 
-#: gtk/gtkaboutdialog.c:440
+#: gtk/gtkaboutdialog.c:439
 msgid "Logo Icon Name"
 msgstr "लोगो आइकन नाम"
 
-#: gtk/gtkaboutdialog.c:441
+#: gtk/gtkaboutdialog.c:440
 msgid "A named icon to use as the logo for the about box."
 msgstr "बॉक्स के बारे में लोगो के लिये प्रयोग के लिये नामित प्रतीक"
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:453
 msgid "Wrap license"
 msgstr "रैप मसौदा"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:454
 msgid "Whether to wrap the license text."
 msgstr "क्या मसौदा पाठ को रैप करना है."
 
@@ -313,17 +313,17 @@ msgstr "स्टॉक आइकन जो इस क्रिया को द
 msgid "GIcon"
 msgstr "जीप्रतीक"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "प्रदर्शित किया जाने वाला जीप्रतीक"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "प्रतीक नाम"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "प्रतीक थीम से प्रतीक का नाम"
@@ -1221,7 +1221,7 @@ msgstr "Pixbuf विस्तारक बंद"
 msgid "Pixbuf for closed expander"
 msgstr "बद विस्तारक के लिये Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "स्टॉक ID"
 
@@ -1254,7 +1254,7 @@ msgstr "स्टेट अनुसरण करें"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "क्या रेंडर किये गये pixbuf को स्थिति के अनुसार रंग किया जाना है"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "चिह्न"
 
@@ -1946,7 +1946,7 @@ msgstr "सक्रिय वस्तु"
 msgid "The item which is currently active"
 msgstr "मद जो मौजूदा रूप से सक्रिय है"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:223
 msgid "Add tearoffs to menus"
 msgstr "मेनू में टीयरऑफ जोड़ें"
 
@@ -2740,7 +2740,7 @@ msgstr "फाइल चयनक संवाद का शीर्षक"
 msgid "The desired width of the button widget, in characters."
 msgstr "वर्ण में बटन विजेट की इच्छित चौडाई"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "फ़ाइलनाम"
@@ -3041,83 +3041,83 @@ msgstr "चयन बक्सा अल्फ़ा"
 msgid "Opacity of the selection box"
 msgstr "चयन बक्से की अपारदर्शिता"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "प्रदर्शित किए जाने वाला GdkPixbuf"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:140
 msgid "Pixmap"
 msgstr "पिक्समैप"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:141
 msgid "A GdkPixmap to display"
 msgstr "प्रदर्शित की जाने वाली GdkPixmap"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "छवि"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:149
 msgid "A GdkImage to display"
 msgstr "प्रदर्शित की जाने वाली GdkImage"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:156
 msgid "Mask"
 msgstr "मास्क"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:157
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage या Gdk pixmap के साथ प्रयुक्त होने वाला बिटमैप मास्क"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "लोड एवं प्रदर्शित की जाने वाली फ़ाइल का नाम"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "प्रदर्शित की जाने वाली भंडार इमेज का stock ID"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:181
 msgid "Icon set"
 msgstr "चिह्न समूह"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:182
 msgid "Icon set to display"
 msgstr "प्रदर्शित किया जाने वाला चिह्न समूह"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "चिह्न आकार"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:190
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "स्टॉक प्रतीक के लिये सांकेतिक आकार, आइकन सेट या नामित आइकन"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:206
 msgid "Pixel size"
 msgstr "पिक्सेल आकार"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:207
 msgid "Pixel size to use for named icon"
 msgstr "नामित प्रतीक के लिये पिक्सेल आकार"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:215
 msgid "Animation"
 msgstr "एनीमेशन"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:216
 msgid "GdkPixbufAnimation to display"
 msgstr "प्रदर्शित किए जाने वाला Gdk Pixbuf Animation"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "भंडारण प्रकार"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "इमेज डेटा हेतु प्रयुक्त प्रस्तुतिकरण"
 
@@ -6597,15 +6597,15 @@ msgstr "स्तंभ आईडी छाँटें"
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr "तार्किक छाँट स्तंभ आईडी जो यह स्तंभ छाँटता है जब छाँटने के लिए चुना जाता है"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:224
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "क्या टीयरऑफ मेनू मद मेनू में जोड़े जाने चाहिये"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:231
 msgid "Merged UI definition"
 msgstr "UI परिभाषा को मिलाया"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:232
 msgid "An XML string describing the merged UI"
 msgstr "एक XML स्ट्रिग मिले हुये UI को वर्णन करता"
 

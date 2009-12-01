@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2009-11-26 22:29+0900\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-11-30 23:35-0500\n"
 "PO-Revision-Date: 2009-11-26 22:50+0900\n"
 "Last-Translator: Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -1174,50 +1174,50 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d 個のアイテムを開いています"
 
-#: gtk/gtkaboutdialog.c:183
+#: gtk/gtkaboutdialog.c:182
 msgid "Could not show link"
 msgstr "リンクを表示できませんでした"
 
-#: gtk/gtkaboutdialog.c:306 gtk/gtkaboutdialog.c:2200
+#: gtk/gtkaboutdialog.c:305 gtk/gtkaboutdialog.c:2231
 msgid "License"
 msgstr "ライセンス"
 
-#: gtk/gtkaboutdialog.c:307
+#: gtk/gtkaboutdialog.c:306
 msgid "The license of the program"
 msgstr "プログラムのライセンス"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:545
+#: gtk/gtkaboutdialog.c:566
 msgid "C_redits"
 msgstr "クレジット(_R)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:559
+#: gtk/gtkaboutdialog.c:580
 msgid "_License"
 msgstr "ライセンス(_L)"
 
-#: gtk/gtkaboutdialog.c:827
+#: gtk/gtkaboutdialog.c:858
 #, c-format
 msgid "About %s"
 msgstr "%s について"
 
-#: gtk/gtkaboutdialog.c:2123
+#: gtk/gtkaboutdialog.c:2154
 msgid "Credits"
 msgstr "クレジット"
 
-#: gtk/gtkaboutdialog.c:2152
+#: gtk/gtkaboutdialog.c:2183
 msgid "Written by"
 msgstr "開発担当"
 
-#: gtk/gtkaboutdialog.c:2155
+#: gtk/gtkaboutdialog.c:2186
 msgid "Documented by"
 msgstr "ドキュメント担当"
 
-#: gtk/gtkaboutdialog.c:2167
+#: gtk/gtkaboutdialog.c:2198
 msgid "Translated by"
 msgstr "翻訳担当"
 
-#: gtk/gtkaboutdialog.c:2171
+#: gtk/gtkaboutdialog.c:2202
 msgid "Artwork by"
 msgstr "アートワーク担当"
 
@@ -3742,17 +3742,17 @@ msgstr "module_path にはテーマ・エンジンがありません: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Tip なし ---"
 
-#: gtk/gtkuimanager.c:1463
+#: gtk/gtkuimanager.c:1491
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "%2$d 行目 %3$d 文字目の予想外の開始タグ '%1$s'"
 
-#: gtk/gtkuimanager.c:1553
+#: gtk/gtkuimanager.c:1581
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d 行の %d 文字目の文字データは予想外です"
 
-#: gtk/gtkuimanager.c:2385
+#: gtk/gtkuimanager.c:2413
 msgid "Empty"
 msgstr "空"
 

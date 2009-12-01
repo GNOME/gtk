@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-17 00:20-0400\n"
+"POT-Creation-Date: 2009-11-30 23:36-0500\n"
 "PO-Revision-Date: 2009-09-17 22:14+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -132,15 +132,15 @@ msgstr "ଅକ୍ଷରରୂପ ବିଭେଦନ"
 msgid "The resolution for fonts on the screen"
 msgstr "ପରଦାରେ ଅକ୍ଷରରୂପ ପାଇଁ ବିଭେଦନ"
 
-#: gdk/gdkwindow.c:472 gdk/gdkwindow.c:473
+#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
 msgid "Cursor"
 msgstr "ଦର୍ଶିକା"
 
-#: gtk/gtkaboutdialog.c:239
+#: gtk/gtkaboutdialog.c:238
 msgid "Program name"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ନାମ"
 
-#: gtk/gtkaboutdialog.c:240
+#: gtk/gtkaboutdialog.c:239
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -148,43 +148,43 @@ msgstr ""
 "ପ୍ରୋଗ୍ରାମର ନାମ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, g_get_application_name() ପୂର୍ବନିର୍ଦ୍ଧାରିତ "
 "ନାମ ହୋଇଥାଏ।"
 
-#: gtk/gtkaboutdialog.c:254
+#: gtk/gtkaboutdialog.c:253
 msgid "Program version"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
 
-#: gtk/gtkaboutdialog.c:255
+#: gtk/gtkaboutdialog.c:254
 msgid "The version of the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ର ସଂସ୍କରଣ"
 
-#: gtk/gtkaboutdialog.c:269
+#: gtk/gtkaboutdialog.c:268
 msgid "Copyright string"
 msgstr "ସ୍ବତ୍ତ୍ବାଧୀକାର ବାକ୍ଯଖଣ୍ଡ"
 
-#: gtk/gtkaboutdialog.c:270
+#: gtk/gtkaboutdialog.c:269
 msgid "Copyright information for the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ପାଇଁ ସ୍ବତ୍ତ୍ବାଧୀକାର ସୂଚନା"
 
-#: gtk/gtkaboutdialog.c:287
+#: gtk/gtkaboutdialog.c:286
 msgid "Comments string"
 msgstr "ଟିପ୍ପଣୀ ବାକ୍ଯଖଣ୍ଡ"
 
-#: gtk/gtkaboutdialog.c:288
+#: gtk/gtkaboutdialog.c:287
 msgid "Comments about the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ବିଷୟରେ ଟିପ୍ପଣୀ"
 
-#: gtk/gtkaboutdialog.c:322
+#: gtk/gtkaboutdialog.c:321
 msgid "Website URL"
 msgstr "ୱେବସାଇଟ URL"
 
-#: gtk/gtkaboutdialog.c:323
+#: gtk/gtkaboutdialog.c:322
 msgid "The URL for the link to the website of the program"
 msgstr "ପ୍ରୋଗ୍ରାମର ୱେବସାଇଟ ସଂଯୋଗ ପାଇଁ URL"
 
-#: gtk/gtkaboutdialog.c:339
+#: gtk/gtkaboutdialog.c:338
 msgid "Website label"
 msgstr "ୱେବସାଇଟ ସୂଚକ"
 
-#: gtk/gtkaboutdialog.c:340
+#: gtk/gtkaboutdialog.c:339
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -192,45 +192,45 @@ msgstr ""
 "ପ୍ରୋଗ୍ରାମର ୱେବସାଇଟ ସଂଯୋଗ ପାଇଁ ସୂଚକ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, ୟୁ.ଆର.ଏଲ. ପୂର୍ବନିର୍ଦ୍ଧାରିତ "
 "ସୂଚକ ହୋଇଥାଏ"
 
-#: gtk/gtkaboutdialog.c:356
+#: gtk/gtkaboutdialog.c:355
 msgid "Authors"
 msgstr "ଲେଖକ ମାନେ"
 
-#: gtk/gtkaboutdialog.c:357
+#: gtk/gtkaboutdialog.c:356
 msgid "List of authors of the program"
 msgstr "ପ୍ରୋଗ୍ରାମ ଲେଖକ ମାନଙ୍କର ତାଲିକା"
 
-#: gtk/gtkaboutdialog.c:373
+#: gtk/gtkaboutdialog.c:372
 msgid "Documenters"
 msgstr "ଦସ୍ତାବେଜକର୍ତା"
 
-#: gtk/gtkaboutdialog.c:374
+#: gtk/gtkaboutdialog.c:373
 msgid "List of people documenting the program"
 msgstr "ଏହି ପ୍ରୋଗ୍ରାମର ଦସ୍ତାବେଜୀକରଣ କରୁଥିବା ବ୍ଯକ୍ତି ମାନଙ୍କ ସୂଚୀ"
 
-#: gtk/gtkaboutdialog.c:390
+#: gtk/gtkaboutdialog.c:389
 msgid "Artists"
 msgstr "ଚିତ୍ରକାର"
 
-#: gtk/gtkaboutdialog.c:391
+#: gtk/gtkaboutdialog.c:390
 msgid "List of people who have contributed artwork to the program"
 msgstr "ପ୍ରୋଗ୍ରାମର ଚତ୍ରକଳା ପାଇଁ ଅଂଶଦାନ କରିଥିବା ବ୍ଯକ୍ତି ମାନଙ୍କ ନାମ"
 
-#: gtk/gtkaboutdialog.c:408
+#: gtk/gtkaboutdialog.c:407
 msgid "Translator credits"
 msgstr ""
 "ଶୁଭ୍ରାଂଶୁ ବେହେରା <arya_subhransu@yahoo.co.in>ମନୋଜ କୁମାର ଗିରି <mgiri@redhat.com>"
 
-#: gtk/gtkaboutdialog.c:409
+#: gtk/gtkaboutdialog.c:408
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "ଅନୁବାଦକ ମାନଙ୍କୁ ଶ୍ରେୟ। ଏହି ବାକ୍ଯଖଣ୍ଡକୁ ଅନୁବାଦ ଯୋଗ୍ଯ ବୋଲି ଚିହ୍ନିତ କରାଯିବା ଉଚିତ"
 
-#: gtk/gtkaboutdialog.c:424
+#: gtk/gtkaboutdialog.c:423
 msgid "Logo"
 msgstr "ପ୍ରତୀକ"
 
-#: gtk/gtkaboutdialog.c:425
+#: gtk/gtkaboutdialog.c:424
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -238,19 +238,19 @@ msgstr ""
 "ବିବରଣୀ ବାକ୍ସ ପାଇଁ ଗୋଟିଏ ପ୍ରତୀକ। ଏହାକୁ ବିନ୍ଯାସ କରାଯାଇ ନ ଥିଲେ, "
 "gtk_window_get_default_icon_list() ପୂର୍ବନିର୍ଦ୍ଧାରିତ ହୋଇଥାଏ।"
 
-#: gtk/gtkaboutdialog.c:440
+#: gtk/gtkaboutdialog.c:439
 msgid "Logo Icon Name"
 msgstr "ପ୍ରତୀକ ଚିତ୍ରସଙ୍କେତ ନାମ"
 
-#: gtk/gtkaboutdialog.c:441
+#: gtk/gtkaboutdialog.c:440
 msgid "A named icon to use as the logo for the about box."
 msgstr "ବିବରଣୀ ବାକ୍ସରେ ପ୍ରତୀକ ଭାବରେ ବ୍ଯବହାର କରିବା ପାଇଁ ଗୋଟିଏ ନାମିତ ଚିତ୍ରସଙ୍କେତ"
 
-#: gtk/gtkaboutdialog.c:454
+#: gtk/gtkaboutdialog.c:453
 msgid "Wrap license"
 msgstr "ଲାଇସେନ୍ସକୁ ପରିବେଷ୍ଟିତ କରନ୍ତୁ"
 
-#: gtk/gtkaboutdialog.c:455
+#: gtk/gtkaboutdialog.c:454
 msgid "Whether to wrap the license text."
 msgstr "ଲାଇସେନ୍ସ ପାଠ୍ଯକୁ ପରିବେଷ୍ଟିତ କରାଯିବ କି ନାହିଁ"
 
@@ -317,17 +317,17 @@ msgstr "ୱିଜେଟଗୁଡ଼ିକରେ ଦର୍ଶାଯାଇଥି�
 msgid "GIcon"
 msgstr "G ଚିତ୍ରସଙ୍କେତ"
 
-#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248
+#: gtk/gtkaction.c:262 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
 #: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "G ଚିତ୍ରସଙ୍କେତକୁ ଦର୍ଶାଯାଉଅଛି"
 
-#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
+#: gtk/gtkaction.c:282 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
 #: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
 msgid "Icon Name"
 msgstr "ଚିତ୍ରସଙ୍କେତ ନାମ"
 
-#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
+#: gtk/gtkaction.c:283 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "ଚିତ୍ରସଙ୍କେତ ପ୍ରସଙ୍ଗରୁ ଚିତ୍ରସଙ୍କେତ ନାମ"
@@ -1234,7 +1234,7 @@ msgstr "Pixbuf ବିସ୍ତାରକାରୀ ବନ୍ଦ ହୋଇଛି"
 msgid "Pixbuf for closed expander"
 msgstr "ବନ୍ଦ ହୋଇଥିବା ବିସ୍ତାରକାରୀ ପାଇଁ Pixbuf"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "ପୁଞ୍ଜି ପରିଚୟ"
 
@@ -1267,7 +1267,7 @@ msgstr "ଅବସ୍ଥା ଅନୁସରଣ କରନ୍ତୁ"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "ଚିତ୍ରଣ କରାଯାଇଥିବା pixbuf କୁ ଅବସ୍ଥା ଅନୁସାରେ ରଙ୍ଗାଇବା ଉଚିତ କି"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
 msgid "Icon"
 msgstr "ଚିତ୍ରସଙ୍କେତ"
 
@@ -1957,7 +1957,7 @@ msgstr "ସକ୍ରିୟ ବସ୍ତୁ"
 msgid "The item which is currently active"
 msgstr "ବର୍ତ୍ତମାନ ସକ୍ରିୟ ଥିବା ବସ୍ତୁ"
 
-#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:222
+#: gtk/gtkcombobox.c:767 gtk/gtkuimanager.c:223
 msgid "Add tearoffs to menus"
 msgstr "ତାଲିକାରେ tearoffଗୁଡ଼ିକୁ ଯୋଗ କରନ୍ତୁ"
 
@@ -2750,7 +2750,7 @@ msgstr "ଫାଇଲ ଚୟନକର୍ତ୍ତା ସଂଳାପର ଶୀର
 msgid "The desired width of the button widget, in characters."
 msgstr "ବଟନ ୱିଜେଟରୁ ଆଶାକରାଯାଉଥିବା ଓସାର, ଅକ୍ଷରରେ।"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "ଫାଇଲ ନାମ"
@@ -3053,85 +3053,85 @@ msgstr "ମନୋନଯନ ବକ୍ସ ଆଲ୍ଫା"
 msgid "Opacity of the selection box"
 msgstr "ମନୋନଯନ ବକ୍ସର ଅସ୍ପଷ୍ଟତା"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "ପିକ୍ସବଫ୍"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "ପ୍ରଦର୍ଶନ କରିବାକୁ ଥିବା ଏକ Gdkପିକ୍ସବଫ୍"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:140
 msgid "Pixmap"
 msgstr "ପିକ୍ସମ୍ଯାପ"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:141
 msgid "A GdkPixmap to display"
 msgstr "ଦର୍ଶାଇବା ପାଇଁ GdkPixmap"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "ପ୍ରତିଛବି"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:149
 msgid "A GdkImage to display"
 msgstr "ଦର୍ଶାଇବା ପାଇଁ ଗୋଟିଏ GdkImage"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:156
 msgid "Mask"
 msgstr "ମୁଖା"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:157
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage ଅଥବା GdkPixmap ସହିତ ବ୍ୟବହାର କରିବା ପାଇଁ ଥିବା ବିଟମ୍ୟାପ ମୁଖା"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "ଲୋଡ ଏବଂ ପ୍ରଦର୍ଶନ କରିବାକୁ ଥିବା ଫାଇଲ୍ ନାମ"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ଏକ ଷ୍ଟକ୍ ଚିତ୍ର ପାଇଁ ପ୍ରଦର୍ଶନ କରିବାକୁ ଥିବା ଷ୍ଟକ୍ ID"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:181
 msgid "Icon set"
 msgstr "ଚିତ୍ରସଂକେତ ସେଟ"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:182
 msgid "Icon set to display"
 msgstr "ଦର୍ଶାଇବା ପାଇଁ ସେଟ କରାଯାଇଥିବା ଚିତ୍ରସଂକେତ"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "ଆଇକନ ଆକାର"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:190
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "ଭଣ୍ଡାର ଚିତ୍ର ସଂକେତରେ ବ୍ୟବହାର କରିବା ପାଇଁ ସାଙ୍କେତିକ ଆକାର, ଚିତ୍ର ସଂକେତ ସେଟ କରାଯାଇଛି ଅଥବା "
 "ନାମକରଣ ହୋଇଥିବା ଚିତ୍ରସଂକେତ"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:206
 msgid "Pixel size"
 msgstr "ପିକସେଲ ଆକାର"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:207
 msgid "Pixel size to use for named icon"
 msgstr "ନାମକରଣ କରାଯାଇଥିବା ଚିତ୍ରସଂକେତ ପାଇଁ ବ୍ୟବହୃତ ପିକସେଲ ଆକାର"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:215
 msgid "Animation"
 msgstr "ଜୀବନାୟନ"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:216
 msgid "GdkPixbufAnimation to display"
 msgstr "ପ୍ରଦର୍ଶନ କରିବାକୁ ଥିବା ଏକ Gdkପିକ୍ସବଫ୍ ଜୀବନଚିତ୍ର"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "ସଂଚିତସ୍ଥାନ ପ୍ରକାର"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "ଚିତ୍ର ତଥ୍ଯପାଇଁ ବ୍ଯବହୃତ ହେଉଥିବା ପ୍ରଦର୍ଶନ"
 
@@ -6618,15 +6618,15 @@ msgstr "ସ୍ତମ୍ଭ ID କୁ ସଜାଡନ୍ତୁ"
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr "ଏହି ସ୍ତମ୍ଭ ସଜାଡ଼ୁଥିବା ତାର୍କିକ କ୍ରମର ସ୍ତମ୍ଭ ID ଯାହାକି କ୍ରମରେ ସଜାଡିବା ପାଇଁ ବଛାହୋଇଥାଏ"
 
-#: gtk/gtkuimanager.c:223
+#: gtk/gtkuimanager.c:224
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "ଟିଅର-ଅଫ ତାଲିକା ବସ୍ତୁକୁ ତାଲିକାରେ ଯୋଗ କରାଯିବ କି ନାହିଁ"
 
-#: gtk/gtkuimanager.c:230
+#: gtk/gtkuimanager.c:231
 msgid "Merged UI definition"
 msgstr "ମିଶ୍ରିତ ୟୁ.ଆଇ. ବ୍ଯାଖ୍ଯା"
 
-#: gtk/gtkuimanager.c:231
+#: gtk/gtkuimanager.c:232
 msgid "An XML string describing the merged UI"
 msgstr "ମିଶ୍ରିତ ୟୁ.ଆଇ. କୁ ବର୍ଣ୍ଣନା କରୁଥିବା ଗୋଟିଏ XML ବାକ୍ଯଖଣ୍ଡ"
 
