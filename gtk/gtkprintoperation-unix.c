@@ -545,12 +545,8 @@ finish_print (PrintResponseData *rdata,
       gtk_print_operation_set_print_settings (op, settings);
       priv->print_context = _gtk_print_context_new (op);
 
-      if (gtk_print_settings_get_number_up (settings) < 2) {
-	if (gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
-	  _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
-      } else {
-	_gtk_print_context_set_hard_margins (priv->print_context, 0, 0, 0, 0);
-      }
+      if (gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+        _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
 
       if (page_setup != NULL &&
           (gtk_print_operation_get_default_page_setup (op) == NULL ||
