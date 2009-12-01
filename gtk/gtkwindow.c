@@ -128,7 +128,8 @@ typedef enum
   GTK_WINDOW_REGION_EDGE_SE,
   GTK_WINDOW_REGION_INNER,
   GTK_WINDOW_REGION_TITLE,
-  GTK_WINDOW_REGION_EDGE
+  GTK_WINDOW_REGION_EDGE,
+  GTK_WINDOW_REGION_SHADOW
 } GtkWindowRegion;
 
 typedef struct
@@ -5993,45 +5994,58 @@ get_region_type (GtkWindow *window, gint x, gint y)
   gint title_height = get_title_height (window);
   gint frame_width = 0;
   gint resize_handle = 0;
+  gint extents_left, extents_right, extents_top, extents_bottom;
 
   frame_width = get_decoration_frame_width (window);
 
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &resize_handle,
+                        "extents-left",             &extents_left,
+                        "extents-right",            &extents_right,
+                        "extents-top",              &extents_top,
+                        "extents-bottom",           &extents_bottom,
                         NULL);
 
-  if (x < frame_width)
+  if (x < extents_left || x > widget->allocation.width - extents_right ||
+      y < extents_top || y > widget->allocation.height - extents_bottom)
+    return GTK_WINDOW_REGION_SHADOW;
+
+  if (x > extents_left && x < frame_width + extents_left)
     {
-      if (y < frame_width + MAX (title_height, resize_handle))
+      if (y < frame_width + extents_top + MAX (title_height, resize_handle))
         return GTK_WINDOW_REGION_EDGE_NW;
-      else if (y > widget->allocation.height - frame_width - resize_handle)
+      else if (y > widget->allocation.height - frame_width - resize_handle - extents_bottom)
         return GTK_WINDOW_REGION_EDGE_SW;
       else
         return GTK_WINDOW_REGION_EDGE_W;
     }
-  else if (x > widget->allocation.width - frame_width)
+  else if (x > widget->allocation.width - extents_right - frame_width &&
+           x < widget->allocation.width - extents_right)
     {
-      if (y < frame_width + MAX (title_height, resize_handle))
+      if (y < frame_width + extents_top + MAX (title_height, resize_handle))
         return GTK_WINDOW_REGION_EDGE_NE;
-      else if (y > widget->allocation.height - frame_width - resize_handle)
+      else if (y > widget->allocation.height - frame_width - resize_handle - extents_bottom)
         return GTK_WINDOW_REGION_EDGE_SE;
       else
         return GTK_WINDOW_REGION_EDGE_E;
     }
-  else if (y < frame_width)
+  else if (y > extents_top && y < frame_width + extents_top)
     {
-      if (x < frame_width + resize_handle)
+      if (x < frame_width + resize_handle && x > extents_left)
         return GTK_WINDOW_REGION_EDGE_NW;
-      else if (x > widget->allocation.width - frame_width - resize_handle)
+      else if (x > widget->allocation.width - frame_width - resize_handle &&
+               x < widget->allocation.width - extents_right)
         return GTK_WINDOW_REGION_EDGE_NE;
       else
         return GTK_WINDOW_REGION_EDGE_N;
     }
-  else if (y > widget->allocation.height - frame_width)
+  else if (y > widget->allocation.height - extents_bottom - frame_width &&
+           y < widget->allocation.height - extents_bottom)
     {
-      if (x < frame_width + resize_handle)
+      if (x < frame_width + resize_handle && x > extents_left)
         return GTK_WINDOW_REGION_EDGE_SW;
-      else if (x > widget->allocation.width - frame_width - resize_handle)
+      else if (x > widget->allocation.width - frame_width - resize_handle &&
+               x < widget->allocation.width - extents_right)
         return GTK_WINDOW_REGION_EDGE_SE;
       else
         return GTK_WINDOW_REGION_EDGE_S;
