@@ -1929,7 +1929,7 @@ msgstr "Ukjent"
 #
 #: gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
-msgstr "H:%M"
+msgstr "%H:%M"
 
 #
 #: gtk/gtkfilechooserdefault.c:6545
