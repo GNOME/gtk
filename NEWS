@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.18.3 to 2.18.4
+==============================================
+
+* Client-side windows:
+ - Avoid some unnecessary exposes
+ - Avoid unnecessary redraws related to clearing windows
+
+* Bugs fixed:
+ 563010 Fix clearing the selection in GtkFileChooserButton
+ 581150 GtkIconView tries to paint items with invalid sizes
+ 601869 GtkUIManager assumes too much about popup menus
+ 581145 Wrong positioning for fullscreen gedit toolbar animation
+ 599118 Translators comment for "Finishing" labels
+ 599321 gtk_selection_data_get_uris is broken on Windows
+ 381371 Print margins not correct in WIN32 - not allowing...
+ 599446 atk_object_set_name () assertion in gtk_tool_button_set_label
+ 602725 fix setting icon-size on GICON images
+ 588740 JPEG images open with blur effect?
+ 602724 gailimage doesn't handle GTK_IMAGE_{GICON,ICON_NAME}...
+ 561130 get_monitor_geometry segfaults if called with non-existant...
+ 585383 Segfault in gdk_pixbuf__ico_image_save
+ 123569 Catch contents being reparented out of socket
+ 601611 gtk_selection_data_get_targets() reads X Atom data as GdkAtoms
+ 601959 must release compose key before continuing compose sequence
+ 603201 gtk_about_dialog_set_url_hook has no effect anymore
+ 591438 dfb_events_dispatch is not thread safe
+ 603128 Adding new UI that was recently removed may cause wrong order
+
+
+* Updated translations:
+ Low German
+ Romanian
+ Russian
+ Slovenian
+
+
 Overview of Changes from GTK+ 2.18.2 to 2.18.3
 ==============================================
 
