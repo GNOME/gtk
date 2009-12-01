@@ -186,8 +186,8 @@
 <Multi_key> <greater> <a> 			: "â" U00E2
 <Multi_key> <a> <greater> 			: "â" U00E2
 <Multi_key> <a> <asciicircum> 			: "â" U00E2
-<Multi_key> <minus> <a> 			: "ã" U00E3
-<Multi_key> <a> <minus> 			: "ã" U00E3
+<Multi_key> <minus> <a> 			: "ā" U0101
+<Multi_key> <a> <minus> 			: "ā" U0101
 <Multi_key> <a> <asciitilde> 			: "ã" U00E3
 <Multi_key> <a> <quotedbl> 			: "ä" U00E4
 <Multi_key> <a> <diaeresis> 			: "ä" U00E4
@@ -223,8 +223,8 @@
 <Multi_key> <greater> <o> 			: "ô" U00F4
 <Multi_key> <o> <greater> 			: "ô" U00F4
 <Multi_key> <o> <asciicircum> 			: "ô" U00F4
-<Multi_key> <minus> <o> 			: "õ" U00F5
-<Multi_key> <o> <minus> 			: "õ" U00F5
+<Multi_key> <minus> <o> 			: "ō" U014D
+<Multi_key> <o> <minus> 			: "ō" U014D
 <Multi_key> <o> <asciitilde> 			: "õ" U00F5
 <Multi_key> <o> <quotedbl> 			: "ö" U00F6
 <Multi_key> <o> <diaeresis> 			: "ö" U00F6
