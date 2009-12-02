@@ -3196,7 +3196,7 @@ msgstr "సరికూర్చు (_E)"
 #: gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "వెతుకు (_F)"
+msgstr "కనుగొనుము (_F)"
 
 #: gtk/gtkstock.c:340
 msgctxt "Stock label"
