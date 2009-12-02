@@ -3772,11 +3772,20 @@ paint_decorated_window (GtkStyle *style,
     }
   else
     {
-      paint_window_shadow (cr,
-                           width,
-                           height,
-                           x / 2 + 2.5,
-                           radius);
+      gboolean paint_shadows;
+
+      gtk_widget_style_get (widget,
+                            "client-side-drop-shadows", &paint_shadows,
+                            NULL);
+
+      if (paint_shadows)
+        {
+          paint_window_shadow (cr,
+                               width,
+                               height,
+                               x / 2 + 2.5,
+                               radius);
+        }
 
       cairo_move_to (cr, hmargin, vmargin + radius);
 

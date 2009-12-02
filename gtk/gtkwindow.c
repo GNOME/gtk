@@ -909,8 +909,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0, G_MAXINT,
                                                              20, GTK_PARAM_READWRITE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("client-side-drop-shadows",
+                                                                 P_("Client-side drop shadows"),
+                                                                 P_("Whether to draw client-side drop shadows"),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READWRITE));
+
   /**
-   * GtkWindow:decoration-extents:
+   * GtkWindow:extents-left:
    *
    * Specifies the size of the client-side window extents, which can be
    * used for client-side window drop-shadows or window glow.
@@ -920,7 +927,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Left extents"),
                                                              P_("Left extents area"),
                                                              0, G_MAXINT,
-                                                             40,
+                                                             0,
                                                              GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -928,7 +935,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Top extents"),
                                                              P_("Top extents area"),
                                                              0, G_MAXINT,
-                                                             40,
+                                                             0,
                                                              GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -936,7 +943,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Right extents"),
                                                              P_("Right extents area"),
                                                              0, G_MAXINT,
-                                                             40,
+                                                             0,
                                                              GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -944,7 +951,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              P_("Bottom extents"),
                                                              P_("Bottom extents area"),
                                                              0, G_MAXINT,
-                                                             40,
+                                                             0,
                                                              GTK_PARAM_READWRITE));
 
 
