@@ -102,8 +102,9 @@ GSList *         gtk_size_group_get_widgets   (GtkSizeGroup     *size_group);
 
 void _gtk_size_group_get_child_requisition (GtkWidget      *widget,
 					    GtkRequisition *requisition);
-void _gtk_size_group_compute_requisition   (GtkWidget      *widget,
-					    GtkRequisition *requisition);
+void _gtk_size_group_compute_desired_size  (GtkWidget      *widget,
+                                            GtkRequisition *minimum_size,
+                                            GtkRequisition *natural_size);
 void _gtk_size_group_queue_resize          (GtkWidget      *widget);
 
 G_END_DECLS

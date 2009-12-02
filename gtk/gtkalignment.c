@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "gtkalignment.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -458,7 +459,9 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (bin->child);
+
+      gtk_extended_layout_get_desired_size (layout, NULL, &child_requisition);
 
       border_width = GTK_CONTAINER (alignment)->border_width;
 
@@ -468,14 +471,21 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 
       width  = MAX (1, allocation->width - padding_horizontal - 2 * border_width);
       height = MAX (1, allocation->height - padding_vertical - 2 * border_width);
-    
+
+      if (child_requisition.width > width)
+        gtk_extended_layout_get_height_for_width (layout, width, NULL,
+                                                  &child_requisition.height);
+      else if (child_requisition.height > height)
+        gtk_extended_layout_get_width_for_height (layout, height, NULL,
+                                                  &child_requisition.width);
+
       if (width > child_requisition.width)
 	child_allocation.width = (child_requisition.width *
 				  (1.0 - alignment->xscale) +
 				  width * alignment->xscale);
       else
 	child_allocation.width = width;
-      
+
       if (height > child_requisition.height)
 	child_allocation.height = (child_requisition.height *
 				   (1.0 - alignment->yscale) +

@@ -25,7 +25,17 @@
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
 #include "gtkbuildable.h"
+#include "gtkextendedlayout.h"
 #include "gtkalias.h"
+
+#define GTK_SIZE_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_SIZE_GROUP, GtkSizeGroupPrivate))
+
+typedef struct _GtkSizeGroupPrivate GtkSizeGroupPrivate;
+
+struct _GtkSizeGroupPrivate
+{
+  GtkRequisition natural_size;
+};
 
 enum {
   PROP_0,
@@ -322,6 +332,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 							 GTK_PARAM_READWRITE));
   
   initialize_size_group_quarks ();
+  g_type_class_add_private (klass, sizeof (GtkSizeGroupPrivate));
 }
 
 static void
@@ -596,25 +607,49 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
   return size_group->widgets;
 }
 
-static gint
-get_base_dimension (GtkWidget        *widget,
-		    GtkSizeGroupMode  mode)
+static void
+get_base_dimensions (GtkWidget        *widget,
+                     GtkSizeGroupMode  mode,
+                     gint             *minimum_size,
+                     gint             *natural_size)
 {
   GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 
   if (mode == GTK_SIZE_GROUP_HORIZONTAL)
     {
-      if (aux_info && aux_info->width > 0)
-	return aux_info->width;
-      else
-	return widget->requisition.width;
+      if (minimum_size)
+        {
+          if (aux_info && aux_info->width > 0)
+            *minimum_size = aux_info->width;
+          else
+            *minimum_size = widget->requisition.width;
+        }
+
+      if (natural_size)
+        {
+          if (aux_info)
+            *natural_size = aux_info->natural_size.width;
+          else
+            *natural_size = widget->requisition.width;
+        }
     }
   else
     {
-      if (aux_info && aux_info->height > 0)
-	return aux_info->height;
-      else
-	return widget->requisition.height;
+      if (minimum_size)
+        {
+          if (aux_info && aux_info->height > 0)
+            *minimum_size = aux_info->height;
+          else
+            *minimum_size = widget->requisition.height;
+        }
+
+      if (natural_size)
+        {
+          if (aux_info)
+            *natural_size = aux_info->natural_size.height;
+          else
+            *natural_size = widget->requisition.height;
+        }
     }
 }
 
@@ -623,26 +658,35 @@ do_size_request (GtkWidget *widget)
 {
   if (GTK_WIDGET_REQUEST_NEEDED (widget))
     {
+      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+
       gtk_widget_ensure_style (widget);      
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
-      g_signal_emit_by_name (widget,
-			     "size-request",
-			     &widget->requisition);
+
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget),
+                                            &widget->requisition,
+                                            &aux_info->natural_size);
+
+      g_assert (widget->requisition.width <= aux_info->natural_size.width);
+      g_assert (widget->requisition.height <= aux_info->natural_size.height);
     }
 }
 
-static gint
-compute_base_dimension (GtkWidget        *widget,
-			GtkSizeGroupMode  mode)
+static void
+compute_base_dimensions (GtkWidget        *widget,
+		 	 GtkSizeGroupMode  mode,
+                         gint             *minimum_size,
+                         gint             *natural_size)
 {
   do_size_request (widget);
-
-  return get_base_dimension (widget, mode);
+  get_base_dimensions (widget, mode, minimum_size, natural_size);
 }
 
 static gint
 compute_dimension (GtkWidget        *widget,
-		   GtkSizeGroupMode  mode)
+		   GtkSizeGroupMode  mode,
+                   gint             *minimum_size,
+                   gint             *natural_size)
 {
   GSList *widgets = NULL;
   GSList *groups = NULL;
@@ -658,16 +702,26 @@ compute_dimension (GtkWidget        *widget,
   
   if (!groups)
     {
-      result = compute_base_dimension (widget, mode);
+      compute_base_dimensions (widget, mode, minimum_size, natural_size);
     }
   else
     {
       GtkSizeGroup *group = groups->data;
+      GtkSizeGroupPrivate *priv = GTK_SIZE_GROUP_GET_PRIVATE (group);
+
+      gint result_minimum_size = 0;
+      gint result_natural_size = 0;
 
       if (mode == GTK_SIZE_GROUP_HORIZONTAL && group->have_width)
-	result = group->requisition.width;
+        {
+          result_minimum_size = group->requisition.width;
+          result_natural_size = priv->natural_size.width;
+        }
       else if (mode == GTK_SIZE_GROUP_VERTICAL && group->have_height)
-	result = group->requisition.height;
+        {
+          result_minimum_size = group->requisition.height;
+          result_natural_size = priv->natural_size.height;
+        }
       else
 	{
 	  tmp_list = widgets;
@@ -675,13 +729,20 @@ compute_dimension (GtkWidget        *widget,
 	    {
 	      GtkWidget *tmp_widget = tmp_list->data;
 
-	      gint dimension = compute_base_dimension (tmp_widget, mode);
+              gint tmp_widget_minimum_size;
+              gint tmp_widget_natural_size;
 
-	      if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
-		{
-		  if (dimension > result)
-		    result = dimension;
-		}
+              compute_base_dimensions (tmp_widget, mode,
+                                       &tmp_widget_minimum_size,
+                                       &tmp_widget_natural_size);
+
+              if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
+                {
+                  if (result_minimum_size < tmp_widget_minimum_size)
+                    result_minimum_size = tmp_widget_minimum_size;
+                  if (result_natural_size < tmp_widget_natural_size)
+                    result_natural_size = tmp_widget_natural_size;
+                }
 
 	      tmp_list = tmp_list->next;
 	    }
@@ -690,38 +751,45 @@ compute_dimension (GtkWidget        *widget,
 	  while (tmp_list)
 	    {
 	      GtkSizeGroup *tmp_group = tmp_list->data;
+              GtkSizeGroupPrivate *tmp_priv = GTK_SIZE_GROUP_GET_PRIVATE (tmp_group);
 
 	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
 		{
 		  tmp_group->have_width = TRUE;
-		  tmp_group->requisition.width = result;
+                  tmp_group->requisition.width = result_minimum_size;
+                  tmp_priv->natural_size.width = result_natural_size;
 		}
 	      else
 		{
 		  tmp_group->have_height = TRUE;
-		  tmp_group->requisition.height = result;
+                  tmp_group->requisition.height = result_minimum_size;
+                  tmp_priv->natural_size.height = result_natural_size;
 		}
 	      
 	      tmp_list = tmp_list->next;
 	    }
 	}
+
+      if (minimum_size)
+        *minimum_size = result_minimum_size;
+      if (natural_size)
+        *natural_size = result_natural_size;
     }
 
   g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
 
   g_slist_free (widgets);
   g_slist_free (groups);
-
-  return result;
 }
 
-static gint
-get_dimension (GtkWidget        *widget,
-	       GtkSizeGroupMode  mode)
+static void
+get_dimensions (GtkWidget        *widget,
+                GtkSizeGroupMode  mode,
+                gint             *minimum_size,
+                gint             *natural_size)
 {
   GSList *widgets = NULL;
   GSList *groups = NULL;
-  gint result = 0;
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
 
@@ -730,22 +798,31 @@ get_dimension (GtkWidget        *widget,
 
   if (!groups)
     {
-      result = get_base_dimension (widget, mode);
+      get_base_dimensions (widget, mode, minimum_size, natural_size);
     }
   else
     {
       GtkSizeGroup *group = groups->data;
+      GtkSizeGroupPrivate *priv = GTK_SIZE_GROUP_GET_PRIVATE (group);
 
       if (mode == GTK_SIZE_GROUP_HORIZONTAL && group->have_width)
-	result = group->requisition.width;
+        {
+          if (minimum_size)
+            *minimum_size = group->requisition.width;
+          if (natural_size)
+            *natural_size = priv->natural_size.width;
+        }
       else if (mode == GTK_SIZE_GROUP_VERTICAL && group->have_height)
-	result = group->requisition.height;
+        {
+          if (minimum_size)
+            *minimum_size = group->requisition.height;
+          if (natural_size)
+            *natural_size = priv->natural_size.height;
+        }
     }
 
   g_slist_free (widgets);
   g_slist_free (groups);
-
-  return result;
 }
 
 static void
@@ -760,9 +837,21 @@ get_fast_child_requisition (GtkWidget      *widget,
     {
       if (aux_info->width > 0)
 	requisition->width = aux_info->width;
-      if (aux_info && aux_info->height > 0)
+      if (aux_info->height > 0)
 	requisition->height = aux_info->height;
     }
+}
+
+static void
+get_fast_natural_size (GtkWidget      *widget,
+                       GtkRequisition *requisition)
+{
+  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+
+  if (aux_info)
+    *requisition = aux_info->natural_size;
+  else
+    *requisition = widget->requisition;
 }
 
 /**
@@ -783,8 +872,8 @@ _gtk_size_group_get_child_requisition (GtkWidget      *widget,
     {
       if (get_size_groups (widget))
 	{
-	  requisition->width = get_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL);
-	  requisition->height = get_dimension (widget, GTK_SIZE_GROUP_VERTICAL);
+	  get_dimensions (widget, GTK_SIZE_GROUP_HORIZONTAL, &requisition->width, NULL);
+	  get_dimensions (widget, GTK_SIZE_GROUP_VERTICAL, &requisition->height, NULL);
 
 	  /* Only do the full computation if we actually have size groups */
 	}
@@ -794,41 +883,40 @@ _gtk_size_group_get_child_requisition (GtkWidget      *widget,
 }
 
 /**
- * _gtk_size_group_compute_requisition:
+ * _gtk_size_group_compute_desired_size:
  * @widget: a #GtkWidget
- * @requisition: location to store computed requisition.
+ * @minimum_size: location to store computed minimum size
+ * @natural_size: location to store computed natural size
  * 
- * Compute the requisition of a widget taking into account grouping of
+ * Compute the desired size of a widget taking into account grouping of
  * the widget's requisition with other widgets.
  **/
 void
-_gtk_size_group_compute_requisition (GtkWidget      *widget,
-				     GtkRequisition *requisition)
+_gtk_size_group_compute_desired_size (GtkWidget      *widget,
+                                      GtkRequisition *minimum_size,
+                                      GtkRequisition *natural_size)
 {
-  gint width;
-  gint height;
-
   initialize_size_group_quarks ();
 
   if (get_size_groups (widget))
     {
       /* Only do the full computation if we actually have size groups */
-      
-      width = compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL);
-      height = compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL);
 
-      if (requisition)
-	{
-	  requisition->width = width;
-	  requisition->height = height;
-	}
+      compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL,
+                         minimum_size ? &minimum_size->width : NULL,
+                         natural_size ? &natural_size->width : NULL);
+      compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL,
+                         minimum_size ? &minimum_size->height : NULL,
+                         natural_size ? &natural_size->height : NULL);
     }
   else
     {
       do_size_request (widget);
-      
-      if (requisition)
-	get_fast_child_requisition (widget, requisition);
+
+      if (minimum_size)
+        get_fast_child_requisition (widget, minimum_size);
+      if (natural_size)
+        get_fast_natural_size (widget, natural_size);
     }
 }
 

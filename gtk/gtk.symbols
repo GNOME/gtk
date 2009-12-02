@@ -1500,6 +1500,24 @@ gtk_expander_set_use_underline
 #endif
 #endif
 
+#if IN_HEADER(__GTK_EXTENDED_LAYOUT_H__)
+#if IN_FILE(__GTK_EXTENDED_LAYOUT_C__)
+gtk_extended_layout_get_type G_GNUC_CONST
+gtk_extended_layout_get_desired_size
+gtk_extended_layout_get_height_for_width
+gtk_extended_layout_get_width_for_height
+#endif
+#endif
+
+#if IN_HEADER(__GTK_EXTENDED_LAYOUT_H__)
+#if IN_FILE(__GTK_EXTENDED_LAYOUT_C__)
+gtk_extended_layout_get_type G_GNUC_CONST
+gtk_extended_layout_get_desired_size
+gtk_extended_layout_get_height_for_width
+gtk_extended_layout_get_width_for_height
+#endif
+#endif
+
 #if IN_HEADER(__GTK_FILE_CHOOSER_H__)
 #if IN_FILE(__GTK_FILE_CHOOSER_C__)
 gtk_file_chooser_add_filter
@@ -2248,6 +2266,7 @@ gtk_label_get_type G_GNUC_CONST
 gtk_label_get_use_markup
 gtk_label_get_use_underline
 gtk_label_get_width_chars
+gtk_label_get_full_size
 gtk_label_new
 gtk_label_new_with_mnemonic
 gtk_label_select_region
@@ -2271,6 +2290,7 @@ gtk_label_set_use_markup
 gtk_label_set_use_underline
 gtk_label_set_width_chars
 gtk_label_get_current_uri
+gtk_label_set_full_size
 gtk_label_set_track_visited_links
 gtk_label_get_track_visited_links
 #endif
@@ -5200,6 +5220,9 @@ gtk_widget_show_all
 gtk_widget_show_now
 gtk_widget_size_allocate
 gtk_widget_size_request
+gtk_widget_get_desired_size
+gtk_widget_get_height_for_width
+gtk_widget_get_width_for_height
 gtk_widget_style_get G_GNUC_NULL_TERMINATED
 gtk_widget_style_get_property
 gtk_widget_style_get_valist

@@ -42,6 +42,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testellipsise			\
 	testentrycompletion 		\
 	testentryicons			\
+	testextendedlayout		\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testframe			\
@@ -127,6 +128,7 @@ testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
 testentryicons_DEPENDENCIES = $(TEST_DEPS)
+testextendedlayout_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -188,6 +190,7 @@ testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
 testentryicons_LDADD = $(LDADDS)
+testextendedlayout_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
