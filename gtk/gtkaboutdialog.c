@@ -842,7 +842,7 @@ update_website (GtkAboutDialog *about)
                                     priv->website_url, priv->website_url);
         }
 
-      gtk_label_set_markup (priv->website_label, markup);
+      gtk_label_set_markup (GTK_LABEL (priv->website_label), markup);
       g_free (markup);
     }
   else
