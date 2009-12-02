@@ -658,7 +658,9 @@ gtk_public_h_sources += \
 	gtkprogress.h		\
 	gtksignal.h		\
 	gtktipsquery.h		\
-	gtktooltips.h
+	gtktooltips.h		\
+	gtkwindow-decorate.h
+
 gtk_base_c_sources += \
 	gtkclist.c		\
 	gtkcombo.c		\
@@ -676,7 +678,8 @@ gtk_base_c_sources += \
 	gtkprogress.c		\
 	gtksignal.c		\
 	gtktipsquery.c		\
-	gtktooltips.c
+	gtktooltips.c		\
+	gtkwindow-decorate.c
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

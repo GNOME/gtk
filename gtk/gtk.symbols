@@ -1130,10 +1130,12 @@ gtk_curve_set_vector
 
 #if IN_HEADER(__GTK_WINDOW_DECORATE_H__)
 #if IN_FILE(__GTK_WINDOW_DECORATE_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_decorated_window_calculate_frame_size
 gtk_decorated_window_init
 gtk_decorated_window_move_resize_window
 gtk_decorated_window_set_title
+#endif
 #endif
 #endif
 
