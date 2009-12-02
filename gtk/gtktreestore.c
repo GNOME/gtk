@@ -3274,8 +3274,6 @@ tree_model_end_element (GMarkupParseContext *context,
 
       g_free (types);
     }
-  else if (strcmp (element_name, "column") == 0)
-    ;
 }
 
 static const GMarkupParser tree_model_parser =
