@@ -868,7 +868,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Normally client-side decorations should be controlled through
    * GtkWindow's 'client-side-decorated' style property.
    *
-   * Since: 2.18
+   * Since: 2.20
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DISABLE_CLIENT_SIDE_DECORATIONS,
@@ -886,7 +886,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Specifies that the window should draw its own decorations ratherthan
    * relying upon a window manager to do so.
    *
-   * Since: 2.18
+   * Since: 2.20
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("client-side-decorated",
