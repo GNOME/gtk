@@ -909,6 +909,15 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0, G_MAXINT,
                                                              20, GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:client-side-drop-shadows:
+   *
+   * Indicates that GTK+ should render drop-shadows to the window frame.
+   * This is ignored if the 'client-side-decorated' style property is not
+   * set to %TRUE.
+   *
+   * Since: 2.20
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("client-side-drop-shadows",
                                                                  P_("Client-side drop shadows"),
@@ -919,8 +928,10 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow:extents-left:
    *
-   * Specifies the size of the client-side window extents, which can be
-   * used for client-side window drop-shadows or window glow.
+   * Specifies the size of the client-side window extents on the left edge of
+   * the window, which can be used for drop-shadows or glow effects.
+   *
+   * Since: 2.20
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("extents-left",
@@ -930,6 +941,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0,
                                                              GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:extents-top:
+   *
+   * Specifies the size of the client-side window extents on the top edge of
+   * the window, which can be used for drop-shadows or glow effects.
+   *
+   * Since: 2.20
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("extents-top",
                                                              P_("Top extents"),
@@ -938,6 +957,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0,
                                                              GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:extents-right:
+   *
+   * Specifies the size of the client-side window extents to the right of the window,
+   * which can be used for drop-shadows or glow effects.
+   *
+   * Since: 2.20
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("extents-right",
                                                              P_("Right extents"),
@@ -946,6 +973,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0,
                                                              GTK_PARAM_READWRITE));
 
+  /**
+   * GtkWindow:extents-right:
+   *
+   * Specifies the size of the client-side window extents to the right of the window,
+   * which can be used for drop-shadows or glow effects.
+   *
+   * Since: 2.20
+   */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("extents-bottom",
                                                              P_("Bottom extents"),
