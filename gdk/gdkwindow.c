@@ -1181,14 +1181,12 @@ get_native_event_mask (GdkWindowObject *private)
 
       /* Do whatever the app asks to, since the app
        * may be asking for weird things for native windows,
-       * but filter out things that override the special
-       * requests below. */
-      mask = private->event_mask &
-	~(GDK_POINTER_MOTION_HINT_MASK |
-	  GDK_BUTTON_MOTION_MASK |
-	  GDK_BUTTON1_MOTION_MASK |
-	  GDK_BUTTON2_MOTION_MASK |
-	  GDK_BUTTON3_MOTION_MASK);
+       * but don't use motion hints as that may affect non-native
+       * child windows that don't want it. Also, we need to
+       * set all the app-specified masks since they will be picked
+       * up by any implicit grabs (i.e. if they were not set as
+       * native we would not get the events we need). */
+      mask = private->event_mask & ~GDK_POINTER_MOTION_HINT_MASK;
 
       /* We need thse for all native windows so we can
 	 emulate events on children: */
@@ -1228,11 +1226,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
     GDK_SCROLL_MASK |
     (grab_mask &
-     ~(GDK_POINTER_MOTION_HINT_MASK |
-       GDK_BUTTON_MOTION_MASK |
-       GDK_BUTTON1_MOTION_MASK |
-       GDK_BUTTON2_MOTION_MASK |
-       GDK_BUTTON3_MOTION_MASK));
+     ~GDK_POINTER_MOTION_HINT_MASK);
 }
 
 /* Puts the native window in the right order wrt the other native windows
