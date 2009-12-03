@@ -10055,6 +10055,7 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
 static GQuark		 quark_builder_has_default = 0;
 static GQuark		 quark_builder_has_focus = 0;
 static GQuark		 quark_builder_atk_relations = 0;
+static GQuark            quark_builder_set_name = 0;
 
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
@@ -10062,6 +10063,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
   quark_builder_has_focus = g_quark_from_static_string ("gtk-builder-has-focus");
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
+  quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
 
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
@@ -10076,13 +10078,14 @@ static void
 gtk_widget_buildable_set_name (GtkBuildable *buildable,
 			       const gchar  *name)
 {
-  gtk_widget_set_name (GTK_WIDGET (buildable), name);
+  g_object_set_qdata_full (G_OBJECT (buildable), quark_builder_set_name,
+                           g_strdup (name), g_free);
 }
 
 static const gchar *
 gtk_widget_buildable_get_name (GtkBuildable *buildable)
 {
-  return gtk_widget_get_name (GTK_WIDGET (buildable));
+  return g_object_get_qdata (G_OBJECT (buildable), quark_builder_set_name);
 }
 
 static GObject *
