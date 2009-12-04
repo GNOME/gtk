@@ -362,6 +362,9 @@ static void        window_cursor_changed       (GdkWindow  *window,
                                                 GParamSpec *pspec,
                                                 GtkWidget  *widget);
 
+static void        gtk_window_set_client_side_decorations (GtkWindow       *window,
+                                                           GdkWMDecoration  setting);
+
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 static GList       *default_icon_list = NULL;
