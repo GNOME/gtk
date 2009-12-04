@@ -3402,7 +3402,7 @@ gtk_window_get_decorated (GtkWindow *window)
   return window->decorated;
 }
 
-void
+static void
 gtk_window_set_client_side_decorations (GtkWindow       *window,
                                         GdkWMDecoration  setting)
 {
