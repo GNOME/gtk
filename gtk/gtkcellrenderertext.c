@@ -1701,6 +1701,7 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 {
   const gchar *path;
   const gchar *new_text;
+  gboolean canceled;
   GtkCellRendererTextPrivate *priv;
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (data);
@@ -1725,9 +1726,12 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
       priv->entry_menu_popdown_timeout = 0;
     }
 
-  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), 
-				  GTK_ENTRY (entry)->editing_canceled);
-  if (GTK_ENTRY (entry)->editing_canceled)
+  g_object_get (entry,
+                "editing-canceled", &canceled,
+                NULL);
+  gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
+
+  if (canceled)
     return;
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
@@ -1801,7 +1805,9 @@ gtk_cell_renderer_text_focus_out_event (GtkWidget *entry,
   if (priv->in_entry_menu)
     return FALSE;
 
-  GTK_ENTRY (entry)->editing_canceled = TRUE;
+  g_object_set (entry,
+                "editing-canceled", TRUE,
+                NULL);
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 

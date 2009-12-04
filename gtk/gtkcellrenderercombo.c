@@ -331,8 +331,10 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
       g_signal_handler_disconnect (combo, cell->focus_out_id);
       cell->focus_out_id = 0;
     }
-  
-  canceled = _gtk_combo_box_editing_canceled (GTK_COMBO_BOX (combo));
+
+  g_object_get (combo,
+                "editing-canceled", &canceled,
+                NULL);
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
   if (canceled)
     {

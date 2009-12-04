@@ -3198,7 +3198,9 @@ gtk_combo_box_menu_item_activate (GtkWidget *item,
 
   gtk_tree_path_free (path);
 
-  combo_box->priv->editing_canceled = FALSE;
+  g_object_set (combo_box,
+                "editing-canceled", FALSE,
+                NULL);
 }
 
 static void
@@ -5510,8 +5512,9 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
 
   if (event->keyval == GDK_Escape)
     {
-      combo_box->priv->editing_canceled = TRUE;
-
+      g_object_set (combo_box,
+                    "editing-canceled", TRUE,
+                    NULL);
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
       
@@ -5566,7 +5569,9 @@ popup_idle (gpointer data)
 			     combo_box, 0);
   
   /* we unset this if a menu item is activated */
-  combo_box->priv->editing_canceled = TRUE;
+  g_object_set (combo_box,
+                "editing-canceled", TRUE,
+                NULL);
   gtk_combo_box_popup (combo_box);
 
   combo_box->priv->popup_idle_id = 0;
@@ -5725,14 +5730,6 @@ gtk_combo_box_set_title (GtkComboBox *combo_box,
 
       g_object_notify (G_OBJECT (combo_box), "tearoff-title");
     }
-}
-
-gboolean
-_gtk_combo_box_editing_canceled (GtkComboBox *combo_box)
-{
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), TRUE);
-
-  return combo_box->priv->editing_canceled;
 }
 
 /**
