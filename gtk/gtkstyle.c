@@ -3493,7 +3493,7 @@ option_menu_get_props (GtkWidget      *widget,
 }
 
 /* gaussian blur kernel */
-pixman_fixed_t *
+static pixman_fixed_t *
 create_blur_kernel (gint     radius,
                     gint    *length)
 {
