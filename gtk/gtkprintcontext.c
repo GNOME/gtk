@@ -44,6 +44,13 @@ struct _GtkPrintContext
   
   gdouble pixels_per_unit_x;
   gdouble pixels_per_unit_y;
+
+  gboolean has_hard_margins;
+  gdouble hard_margin_top;
+  gdouble hard_margin_bottom;
+  gdouble hard_margin_left;
+  gdouble hard_margin_right;
+
 };
 
 struct _GtkPrintContextClass
@@ -90,6 +97,7 @@ _gtk_print_context_new (GtkPrintOperation *op)
 
   context->op = op;
   context->cr = NULL;
+  context->has_hard_margins = FALSE;
   
   return context;
 }
@@ -371,6 +379,62 @@ gtk_print_context_get_dpi_y (GtkPrintContext *context)
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), 0);
 
   return context->surface_dpi_y;
+}
+
+/**
+ * gtk_print_context_get_hard_margins:
+ * @context: a #GtkPrintContext
+ * @top: top hardware printer margin
+ * @bottom: bottom hardware printer margin
+ * @left: left hardware printer margin
+ * @right: right hardware printer margin
+ *
+ * Obtains the hardware printer margins of the #GtkPrintContext, in units.
+ *
+ * Return value: %TRUE if the hard margins were retrieved
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_print_context_get_hard_margins (GtkPrintContext *context,
+				    gdouble         *top,
+				    gdouble         *bottom,
+				    gdouble         *left,
+				    gdouble         *right)
+{
+  if (context->has_hard_margins)
+    {
+      *top    = context->hard_margin_top / context->pixels_per_unit_y;
+      *bottom = context->hard_margin_bottom / context->pixels_per_unit_y;
+      *left   = context->hard_margin_left / context->pixels_per_unit_x;
+      *right  = context->hard_margin_right / context->pixels_per_unit_x;
+    }
+
+  return context->has_hard_margins;
+}
+
+/**
+ * gtk_print_context_set_hard_margins:
+ * @context: a #GtkPrintContext
+ * @top: top hardware printer margin
+ * @bottom: bottom hardware printer margin
+ * @left: left hardware printer margin
+ * @right: right hardware printer margin
+ *
+ * set the hard margins in pixel coordinates
+ */
+void
+_gtk_print_context_set_hard_margins (GtkPrintContext *context,
+				     gdouble          top,
+				     gdouble          bottom,
+				     gdouble          left,
+				     gdouble          right)
+{
+  context->hard_margin_top    = top;
+  context->hard_margin_bottom = bottom;
+  context->hard_margin_left   = left;
+  context->hard_margin_right  = right;
+  context->has_hard_margins   = TRUE;
 }
 
 /**
