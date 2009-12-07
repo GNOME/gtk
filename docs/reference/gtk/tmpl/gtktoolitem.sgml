@@ -108,17 +108,6 @@ GtkToolItem
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tool_item_set_tooltip ##### -->
-<para>
-
-</para>
-
-@tool_item: 
-@tooltips: 
-@tip_text: 
-@tip_private: 
-
-
 <!-- ##### FUNCTION gtk_tool_item_set_tooltip_text ##### -->
 <para>
 

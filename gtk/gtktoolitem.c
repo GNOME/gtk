@@ -137,10 +137,6 @@ static void gtk_tool_item_size_request  (GtkWidget      *widget,
 					 GtkRequisition *requisition);
 static void gtk_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
-static gboolean gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
-						GtkTooltips *tooltips,
-						const gchar *tip_text,
-						const gchar *tip_private);
 
 static void gtk_tool_item_activatable_interface_init (GtkActivatableIface  *iface);
 static void gtk_tool_item_update                     (GtkActivatable       *activatable,
@@ -183,7 +179,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
   klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
-  klass->set_tooltip       = gtk_tool_item_real_set_tooltip;
   
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_HORIZONTAL,
@@ -1047,22 +1042,6 @@ gtk_tool_item_set_is_important (GtkToolItem *tool_item, gboolean is_important)
 
       g_object_notify (G_OBJECT (tool_item), "is-important");
     }
-}
-
-static gboolean
-gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
-				GtkTooltips *tooltips,
-				const gchar *tip_text,
-				const gchar *tip_private)
-{
-  GtkWidget *child = GTK_BIN (tool_item)->child;
-
-  if (!child)
-    return FALSE;
-
-  gtk_widget_set_tooltip_text (child, tip_text);
-
-  return TRUE;
 }
 
 /**

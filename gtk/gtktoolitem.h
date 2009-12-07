@@ -60,14 +60,6 @@ struct _GtkToolItemClass
   /* signals */
   gboolean   (* create_menu_proxy)    (GtkToolItem *tool_item);
   void       (* toolbar_reconfigured) (GtkToolItem *tool_item);
-#ifndef GTK_DISABLE_DEPRECATED
-  gboolean   (* set_tooltip)	      (GtkToolItem *tool_item,
-				       GtkTooltips *tooltips,
-				       const gchar *tip_text,
-				       const gchar *tip_private);
-#else
-  gpointer _set_tooltip;
-#endif
 
   /* Padding for future expansion */
   void (* _gtk_reserved1) (void);
