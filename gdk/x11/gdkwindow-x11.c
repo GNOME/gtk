@@ -3256,7 +3256,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
 	  xwindow_last = xwindow;
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
-	  if (get_toplevel &&
+	  if (get_toplevel && xwindow_last != root &&
 	      (window = gdk_window_lookup_for_display (display, xwindow_last)) != NULL &&
 	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	    {
@@ -3326,7 +3326,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
 	  gdk_flush ();
 	  if (gdk_error_trap_pop ())
 	    break;
-	  if (get_toplevel &&
+	  if (get_toplevel && xwindow_last != root &&
 	      (window = gdk_window_lookup_for_display (display, xwindow_last)) != NULL &&
 	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	    break;
