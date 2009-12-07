@@ -257,7 +257,8 @@ gdk_offscreen_window_get_visual (GdkDrawable    *drawable)
 static void
 add_damage (GdkOffscreenWindow *offscreen,
 	    int x, int y,
-	    int w, int h)
+	    int w, int h,
+	    gboolean is_line)
 {
   GdkRectangle rect;
   GdkRegion *damage;
@@ -266,6 +267,26 @@ add_damage (GdkOffscreenWindow *offscreen,
   rect.y = y;
   rect.width = w;
   rect.height = h;
+
+  if (is_line)
+    {
+      /* This should really take into account line width, line
+       * joins (and miter) and line caps. But these are hard
+       * to compute, rarely used and generally a pain. And in
+       * the end a snug damage rectangle is not that important
+       * as multiple damages are generally created anyway.
+       *
+       * So, we just add some padding around the rect.
+       * We use a padding of 3 pixels, plus an extra row
+       * below and on the right for the normal line size. I.E.
+       * line from (0,0) to (2,0) gets h=0 but is really
+       * at least one pixel tall.
+       */
+      rect.x -= 3;
+      rect.y -= 3;
+      rect.width += 7;
+      rect.height += 7;
+    }
 
   damage = gdk_region_rectangle (&rect);
   _gdk_window_add_damage (offscreen->wrapper, damage);
@@ -300,7 +321,7 @@ gdk_offscreen_window_draw_drawable (GdkDrawable *drawable,
 		     xdest, ydest,
 		     width, height);
 
-  add_damage (offscreen, xdest, ydest, width, height);
+  add_damage (offscreen, xdest, ydest, width, height, FALSE);
 }
 
 static void
@@ -318,7 +339,7 @@ gdk_offscreen_window_draw_rectangle (GdkDrawable  *drawable,
   gdk_draw_rectangle (real_drawable,
 		      gc, filled, x, y, width, height);
 
-  add_damage (offscreen, x, y, width, height);
+  add_damage (offscreen, x, y, width, height, !filled);
 
 }
 
@@ -345,7 +366,7 @@ gdk_offscreen_window_draw_arc (GdkDrawable  *drawable,
 		height,
 		angle1,
 		angle2);
-  add_damage (offscreen, x, y, width, height);
+  add_damage (offscreen, x, y, width, height, !filled);
 }
 
 static void
@@ -381,7 +402,7 @@ gdk_offscreen_window_draw_polygon (GdkDrawable  *drawable,
 
 	add_damage (offscreen, min_x, min_y,
 		    max_x - min_x,
-		    max_y - min_y);
+		    max_y - min_y, !filled);
     }
 }
 
@@ -407,7 +428,7 @@ gdk_offscreen_window_draw_text (GdkDrawable  *drawable,
 		 text_length);
 
   /* Hard to compute the minimal size, not that often used anyway. */
-  add_damage (offscreen, 0, 0, private->width, private->height);
+  add_damage (offscreen, 0, 0, private->width, private->height, FALSE);
 }
 
 static void
@@ -432,7 +453,7 @@ gdk_offscreen_window_draw_text_wc (GdkDrawable	 *drawable,
 		    text_length);
 
   /* Hard to compute the minimal size, not that often used anyway. */
-  add_damage (offscreen, 0, 0, private->width, private->height);
+  add_damage (offscreen, 0, 0, private->width, private->height, FALSE);
 }
 
 static void
@@ -466,8 +487,9 @@ gdk_offscreen_window_draw_points (GdkDrawable  *drawable,
 	  }
 
 	add_damage (offscreen, min_x, min_y,
-		    max_x - min_x,
-		    max_y - min_y);
+		    max_x - min_x + 1,
+		    max_y - min_y + 1,
+		    FALSE);
     }
 }
 
@@ -506,7 +528,7 @@ gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
 
 	add_damage (offscreen, min_x, min_y,
 		    max_x - min_x,
-		    max_y - min_y);
+		    max_y - min_y, TRUE);
     }
 
 }
@@ -529,7 +551,7 @@ gdk_offscreen_window_draw_lines (GdkDrawable  *drawable,
   /* Hard to compute the minimal size, as we don't know the line
      width, and since joins are hard to calculate.
      Its not that often used anyway, damage it all */
-  add_damage (offscreen, 0, 0, private->width, private->height);
+  add_damage (offscreen, 0, 0, private->width, private->height, TRUE);
 }
 
 static void
@@ -556,7 +578,7 @@ gdk_offscreen_window_draw_image (GdkDrawable *drawable,
 		  width,
 		  height);
 
-  add_damage (offscreen, xdest, ydest, width, height);
+  add_damage (offscreen, xdest, ydest, width, height, FALSE);
 }
 
 
@@ -590,7 +612,7 @@ gdk_offscreen_window_draw_pixbuf (GdkDrawable *drawable,
 		   x_dither,
 		   y_dither);
 
-  add_damage (offscreen, dest_x, dest_y, width, height);
+  add_damage (offscreen, dest_x, dest_y, width, height, FALSE);
 
 }
 
