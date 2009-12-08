@@ -1900,7 +1900,7 @@ gdk_window_ensure_native (GdkWindow *window)
     impl_iface->show (window, FALSE);
 
   if (disabled_extension_events)
-    temporary_enable_extension_events (private);
+    reenable_extension_events (private);
 
   return TRUE;
 }
