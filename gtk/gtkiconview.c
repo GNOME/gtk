@@ -5794,7 +5794,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  *
  * To free the return value, use:
  * |[
- * g_list_foreach (list, gtk_tree_path_free, NULL);
+ * g_list_foreach (list, (GFunc)gtk_tree_path_free, NULL);
  * g_list_free (list);
  * ]|
  *
