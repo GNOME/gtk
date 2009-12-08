@@ -355,6 +355,31 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
 }
 
 /**
+ * gdk_screen_get_primary_monitor:
+ * @screen: a #GdkScreen.
+ *
+ * Gets the primary monitor for @screen.  The primary monitor
+ * is considered the monitor where the 'main desktop' lives.
+ * While normal application windows typically allow the window
+ * manager to place the windows, specialized desktop applications
+ * such as panels should place themselves on the primary monitor.
+ *
+ * If no primary monitor is configured by the user, the return value
+ * will be 0, defaulting to the first monitor.
+ *
+ * Returns: An integer index for the primary monitor, or 0 if none is configured.
+ *
+ * Since: 2.20
+ */
+gint
+gdk_screen_get_primary_monitor (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return GDK_SCREEN_X11 (screen)->primary_monitor;
+}
+
+/**
  * gdk_screen_get_monitor_width_mm:
  * @screen: a #GdkScreen
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
@@ -722,6 +747,7 @@ init_randr13 (GdkScreen *screen)
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   Display *dpy = GDK_SCREEN_XDISPLAY (screen);
   XRRScreenResources *resources;
+  RROutput primary_output;
   int i;
   GArray *monitors;
   gboolean randr12_compat = FALSE;
@@ -733,14 +759,22 @@ init_randr13 (GdkScreen *screen)
 				            screen_x11->xroot_window);
   if (!resources)
     return FALSE;
-  
+
   monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
                                 resources->noutput);
+
+  primary_output = XRRGetOutputPrimary (screen_x11->xdisplay,
+                                        screen_x11->xroot_window);
 
   for (i = 0; i < resources->noutput; ++i)
     {
       XRROutputInfo *output =
 	XRRGetOutputInfo (dpy, resources, resources->outputs[i]);
+
+      if (resources->outputs[i] == primary_output)
+        {
+          screen_x11->primary_monitor = i;
+        }
 
       /* Non RandR1.2 X driver have output name "default" */
       randr12_compat |= !g_strcmp0(output->name, "default");
@@ -1110,7 +1144,10 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
   display_x11 = GDK_DISPLAY_X11 (gdk_screen_get_display (screen));
 
   if (display_x11->have_randr13 && event->type == ConfigureNotify)
-    return;
+    {
+      g_signal_emit_by_name (screen, "monitors-changed");
+      return;
+    }
 
   XRRUpdateConfiguration (event);
 #else

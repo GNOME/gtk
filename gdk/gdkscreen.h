@@ -91,6 +91,7 @@ GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 gint          gdk_screen_get_n_monitors        (GdkScreen *screen);
+gint          gdk_screen_get_primary_monitor   (GdkScreen *screen);
 void          gdk_screen_get_monitor_geometry  (GdkScreen *screen,
 						gint       monitor_num,
 						GdkRectangle *dest);

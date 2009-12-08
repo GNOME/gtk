@@ -93,6 +93,7 @@ struct _GdkScreenX11
   /* Xinerama/RandR 1.2 */
   gint		 n_monitors;
   GdkX11Monitor	*monitors;
+  gint           primary_monitor;
 
   /* Pango renderer object singleton */
   PangoRenderer *renderer;
