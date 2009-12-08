@@ -2611,6 +2611,14 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
       private->implicit_paint != NULL)
     return FALSE; /* Don't stack implicit paints */
 
+  /* Never do implicit paints for foreign windows, they don't need
+   * double buffer combination since they have no client side children,
+   * and creating pixmaps for them is risky since they could disappear
+   * at any time
+   */
+  if (private->window_type == GDK_WINDOW_FOREIGN)
+    return FALSE;
+
   paint = g_new (GdkWindowPaint, 1);
   paint->region = gdk_region_new (); /* Empty */
   paint->x_offset = rect->x;
