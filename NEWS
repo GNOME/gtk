@@ -1,3 +1,15 @@
+Overview of Changes from GTK+ 2.18.4 to 2.18.5
+==============================================
+
+* Bugs fixed:
+ 603652	Sporadic crashes with GtkSocket
+ 598476	gnome-screensaver crashes when entering password...
+ 601473 GDK_BUTTON?_MOTION_MASK appears to be broken
+ 597386 Cannot click buttons more than once without...
+ 603619 the colormap of offscreen's pixmap doesn't...
+ 603904 gdk_draw_line doesn't have expose area.
+
+
 Overview of Changes from GTK+ 2.18.3 to 2.18.4
 ==============================================
 
