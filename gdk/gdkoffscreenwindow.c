@@ -659,6 +659,7 @@ _gdk_offscreen_window_new (GdkWindow     *window,
 				      private->width,
 				      private->height,
 				      private->depth);
+  gdk_drawable_set_colormap (offscreen->pixmap, offscreen->colormap);
 }
 
 static gboolean
