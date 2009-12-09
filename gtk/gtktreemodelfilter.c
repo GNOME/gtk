@@ -234,6 +234,14 @@ static GtkTreePath *gtk_tree_model_filter_remove_root                     (GtkTr
 
 static void         gtk_tree_model_filter_increment_stamp                 (GtkTreeModelFilter     *filter);
 
+static void         gtk_tree_model_filter_real_modify                     (GtkTreeModelFilter     *self,
+                                                                           GtkTreeModel           *child_model,
+                                                                           GtkTreeIter            *iter,
+                                                                           GValue                 *value,
+                                                                           gint                    column);
+static gboolean     gtk_tree_model_filter_real_visible                    (GtkTreeModelFilter     *filter,
+                                                                           GtkTreeModel           *child_model,
+                                                                           GtkTreeIter            *child_iter);
 static gboolean     gtk_tree_model_filter_visible                         (GtkTreeModelFilter     *filter,
                                                                            GtkTreeIter            *child_iter);
 static void         gtk_tree_model_filter_clear_cache_helper              (GtkTreeModelFilter     *filter,
@@ -310,6 +318,9 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
   object_class->get_property = gtk_tree_model_filter_get_property;
 
   object_class->finalize = gtk_tree_model_filter_finalize;
+
+  filter_class->visible = gtk_tree_model_filter_real_visible;
+  filter_class->modify  = gtk_tree_model_filter_real_modify;
 
   /* Properties -- FIXME: disabled translations for now, until I can come up with a
    * better description
@@ -756,12 +767,13 @@ gtk_tree_model_filter_increment_stamp (GtkTreeModelFilter *filter)
 }
 
 static gboolean
-gtk_tree_model_filter_visible (GtkTreeModelFilter *filter,
-                               GtkTreeIter        *child_iter)
+gtk_tree_model_filter_real_visible (GtkTreeModelFilter *filter,
+                                    GtkTreeModel       *child_model,
+                                    GtkTreeIter        *child_iter)
 {
   if (filter->priv->visible_func)
     {
-      return filter->priv->visible_func (filter->priv->child_model,
+      return filter->priv->visible_func (child_model,
 					 child_iter,
 					 filter->priv->visible_data)
 	? TRUE : FALSE;
@@ -770,7 +782,7 @@ gtk_tree_model_filter_visible (GtkTreeModelFilter *filter,
    {
      GValue val = {0, };
 
-     gtk_tree_model_get_value (filter->priv->child_model, child_iter,
+     gtk_tree_model_get_value (child_model, child_iter,
                                filter->priv->visible_column, &val);
 
      if (g_value_get_boolean (&val))
@@ -785,6 +797,14 @@ gtk_tree_model_filter_visible (GtkTreeModelFilter *filter,
 
   /* no visible function set, so always visible */
   return TRUE;
+}
+
+static gboolean
+gtk_tree_model_filter_visible (GtkTreeModelFilter *self,
+                               GtkTreeIter        *child_iter)
+{
+  return GTK_TREE_MODEL_FILTER_GET_CLASS (self)->visible (self,
+      self->priv->child_model, child_iter);
 }
 
 static void
@@ -2384,35 +2404,48 @@ gtk_tree_model_filter_get_path (GtkTreeModel *model,
 }
 
 static void
+gtk_tree_model_filter_real_modify (GtkTreeModelFilter *self,
+                                   GtkTreeModel       *child_model,
+                                   GtkTreeIter        *iter,
+                                   GValue             *value,
+                                   gint                column)
+{
+  if (self->priv->modify_func)
+    {
+      g_return_if_fail (column < self->priv->modify_n_columns);
+
+      g_value_init (value, self->priv->modify_types[column]);
+      self->priv->modify_func (GTK_TREE_MODEL (self),
+                           iter,
+                           value,
+                           column,
+                           self->priv->modify_data);
+    }
+  else
+    {
+      GtkTreeIter child_iter;
+
+      gtk_tree_model_filter_convert_iter_to_child_iter (
+          GTK_TREE_MODEL_FILTER (self), &child_iter, iter);
+      gtk_tree_model_get_value (child_model,
+          &child_iter, column, value);
+    }
+}
+
+static void
 gtk_tree_model_filter_get_value (GtkTreeModel *model,
                                  GtkTreeIter  *iter,
                                  gint          column,
                                  GValue       *value)
 {
-  GtkTreeIter child_iter;
   GtkTreeModelFilter *filter = GTK_TREE_MODEL_FILTER (model);
 
   g_return_if_fail (GTK_IS_TREE_MODEL_FILTER (model));
   g_return_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL);
   g_return_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp);
 
-  if (filter->priv->modify_func)
-    {
-      g_return_if_fail (column < filter->priv->modify_n_columns);
-
-      g_value_init (value, filter->priv->modify_types[column]);
-      filter->priv->modify_func (model,
-                           iter,
-                           value,
-                           column,
-                           filter->priv->modify_data);
-
-      return;
-    }
-
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, iter);
-  gtk_tree_model_get_value (GTK_TREE_MODEL_FILTER (model)->priv->child_model,
-                            &child_iter, column, value);
+  GTK_TREE_MODEL_FILTER_GET_CLASS (model)->modify (filter,
+      filter->priv->child_model, iter, value, column);
 }
 
 static gboolean
