@@ -513,10 +513,6 @@ gail_label_ref_relation_set (AtkObject *obj)
                           temp_widget = GTK_WIDGET (list->data);
                           g_list_free (list);
                           list = gtk_container_get_children (GTK_CONTAINER (temp_widget));
-                          if (GTK_IS_COMBO (list->data))
-                            {
-                              mnemonic_widget = GTK_WIDGET (list->data);
-                            }
                         }
                     }
                   g_list_free (list);

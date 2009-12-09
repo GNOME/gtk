@@ -360,8 +360,7 @@ gail_entry_get_index_in_parent (AtkObject *accessible)
    * otherwise do the normal thing.
    */
   if (accessible->accessible_parent)
-    if (GAIL_IS_COMBO (accessible->accessible_parent) ||
-        GAIL_IS_COMBO_BOX (accessible->accessible_parent))
+    if (GAIL_IS_COMBO_BOX (accessible->accessible_parent))
       return 1;
 
   return ATK_OBJECT_CLASS (gail_entry_parent_class)->get_index_in_parent (accessible);

@@ -382,7 +382,7 @@ gail_widget_ref_relation_set (AtkObject *obj)
 
   relation_set = ATK_OBJECT_CLASS (gail_widget_parent_class)->ref_relation_set (obj);
 
-  if (GTK_IS_BOX (widget) && !GTK_IS_COMBO (widget))
+  if (GTK_IS_BOX (widget))
       /*
        * Do not report labelled-by for a GtkBox which could be a 
        * GnomeFileEntry.
@@ -414,26 +414,6 @@ gail_widget_ref_relation_set (AtkObject *obj)
                  
                       if (!label)
                         label = find_label (gtk_widget_get_parent (temp_widget));
-                    }
-                }
-            }
-          else if (GTK_IS_COMBO (widget))
-            /*
-             * Handle the case when GnomeFileEntry is the mnemonic widget.
-             * The GnomeEntry which is a grandchild of the GnomeFileEntry
-             * should be the mnemonic widget. See bug #137584.
-             */
-            {
-              GtkWidget *temp_widget;
-
-              temp_widget = gtk_widget_get_parent (widget);
-
-              if (GTK_IS_HBOX (temp_widget))
-                {
-                  temp_widget = gtk_widget_get_parent (temp_widget);
-                  if (GTK_IS_BOX (temp_widget))
-                    {
-                      label = find_label (temp_widget);
                     }
                 }
             }
@@ -791,14 +771,14 @@ gail_widget_set_extents (AtkComponent   *component,
             return FALSE;
           else
             {
-              gtk_widget_set_uposition (widget, x_current, y_current);
+              gtk_window_move (GTK_WINDOW (widget), x_current, y_current);
               gtk_widget_set_size_request (widget, width, height);
               return TRUE;
             }
         }
       else if (coord_type == ATK_XY_SCREEN)
-        {  
-          gtk_widget_set_uposition (widget, x, y);
+        {
+          gtk_window_move (GTK_WINDOW (widget), x, y);
           gtk_widget_set_size_request (widget, width, height);
           return TRUE;
         }
@@ -835,13 +815,13 @@ gail_widget_set_position (AtkComponent   *component,
             return FALSE;
           else
             {
-              gtk_widget_set_uposition (widget, x_current, y_current);
+              gtk_window_move (GTK_WINDOW (widget), x_current, y_current);
               return TRUE;
             }
         }
       else if (coord_type == ATK_XY_SCREEN)
-        {  
-          gtk_widget_set_uposition (widget, x, y);
+        {
+          gtk_window_move (GTK_WINDOW (widget), x, y);
           return TRUE;
         }
     }
