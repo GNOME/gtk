@@ -102,6 +102,11 @@ gdk_built_public_sources =			\
 gdk_built_private_headers =			\
 	gdkalias.h
 
+gdk_private_headers =   \
+	gdkinternals.h \
+	gdkpoly-generic.h	\
+	gdkregion-generic.h
+
 gdk_c_sources =                 \
 	$(medialib_sources)     \
 	gdk.c			\
@@ -118,8 +123,6 @@ gdk_c_sources =                 \
 	gdkgc.c			\
 	gdkglobals.c		\
 	gdkimage.c		\
-	gdkinternals.h  	\
-	gdkintl.h		\
 	gdkkeys.c		\
 	gdkkeyuni.c		\
 	gdkoffscreenwindow.c	\
@@ -127,11 +130,9 @@ gdk_c_sources =                 \
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
-	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\
 	gdkrectangle.c		\
 	gdkregion-generic.c	\
-	gdkregion-generic.h	\
 	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
@@ -155,7 +156,8 @@ gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
 common_sources =                \
-	$(gdk_c_sources)	\
+	$(gdk_private_headers)      \
+    $(gdk_c_sources)	\
 	gdkenumtypes.c		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
