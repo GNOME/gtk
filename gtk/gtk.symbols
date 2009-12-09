@@ -836,22 +836,6 @@ gtk_combo_box_entry_set_text_column
 #endif
 #endif
 
-#if IN_HEADER(__GTK_SMART_COMBO_H__)
-#if IN_FILE(__GTK_SMART_COMBO_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_combo_disable_activate
-gtk_combo_get_type G_GNUC_CONST
-gtk_combo_new
-gtk_combo_set_case_sensitive
-gtk_combo_set_item_string
-gtk_combo_set_popdown_strings
-gtk_combo_set_use_arrows
-gtk_combo_set_use_arrows_always
-gtk_combo_set_value_in_list
-#endif
-#endif
-#endif
-
 #if IN_HEADER(__GTK_CONTAINER_H__)
 #if IN_FILE(__GTK_CONTAINER_C__)
 gtk_container_add
@@ -1394,38 +1378,6 @@ gtk_file_filter_get_needed
 gtk_file_filter_get_type G_GNUC_CONST
 gtk_file_filter_new
 gtk_file_filter_set_name
-#endif
-#endif
-
-#if IN_HEADER(__GTK_FILESEL_H__)
-#if IN_FILE(__GTK_FILESEL_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_file_selection_complete
-#ifndef _WIN64
-gtk_file_selection_get_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_selection_get_filename_utf8
-#endif
-#ifndef _WIN64
-gtk_file_selection_get_selections PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_selection_get_selections_utf8
-#endif
-gtk_file_selection_get_select_multiple
-gtk_file_selection_get_type G_GNUC_CONST
-gtk_file_selection_hide_fileop_buttons
-gtk_file_selection_new
-#ifndef _WIN64
-gtk_file_selection_set_filename PRIVATE
-#endif
-#ifdef G_OS_WIN32
-gtk_file_selection_set_filename_utf8
-#endif
-gtk_file_selection_set_select_multiple
-gtk_file_selection_show_fileop_buttons
-#endif
 #endif
 #endif
 
@@ -1974,51 +1926,6 @@ gtk_link_button_set_visited
 #endif
 #endif
 
-#if IN_HEADER(__GTK_LIST_H__)
-#if IN_FILE(__GTK_LIST_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_list_append_items
-gtk_list_child_position
-gtk_list_clear_items
-gtk_list_end_drag_selection
-gtk_list_end_selection
-gtk_list_extend_selection
-gtk_list_get_type G_GNUC_CONST
-gtk_list_insert_items
-gtk_list_new
-gtk_list_prepend_items
-gtk_list_remove_items
-gtk_list_remove_items_no_unref
-gtk_list_scroll_horizontal
-gtk_list_scroll_vertical
-gtk_list_select_all
-gtk_list_select_child
-gtk_list_select_item
-gtk_list_set_selection_mode
-gtk_list_start_selection
-gtk_list_toggle_add_mode
-gtk_list_toggle_focus_row
-gtk_list_toggle_row
-gtk_list_undo_selection
-gtk_list_unselect_all
-gtk_list_unselect_child
-gtk_list_unselect_item
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GTK_LIST_ITEM_H__)
-#if IN_FILE(__GTK_LIST_ITEM_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_list_item_deselect
-gtk_list_item_get_type G_GNUC_CONST
-gtk_list_item_new
-gtk_list_item_new_with_label
-gtk_list_item_select
-#endif
-#endif
-#endif
-
 #if IN_HEADER(__GTK_LIST_STORE_H__)
 #if IN_FILE(__GTK_LIST_STORE_C__)
 gtk_list_store_append
@@ -2407,29 +2314,6 @@ gtk_plug_get_socket_window
 gtk_plug_get_type G_GNUC_CONST
 gtk_plug_new
 gtk_plug_new_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GTK_PREVIEW_H__)
-#if IN_FILE(__GTK_PREVIEW_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_preview_draw_row
-gtk_preview_get_cmap
-gtk_preview_get_info
-gtk_preview_get_type G_GNUC_CONST
-gtk_preview_get_visual
-gtk_preview_new
-gtk_preview_put
-gtk_preview_reset
-gtk_preview_set_color_cube
-gtk_preview_set_dither
-gtk_preview_set_expand
-gtk_preview_set_gamma
-gtk_preview_set_install_cmap
-gtk_preview_set_reserved
-gtk_preview_size
-gtk_preview_uninit
-#endif
 #endif
 #endif
 
