@@ -1330,8 +1330,6 @@ gdk_x11_get_xatom_name_for_display
 gdk_display
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
-gdk_iswalnum
-gdk_iswspace
 </SECTION>
 
 <SECTION>
