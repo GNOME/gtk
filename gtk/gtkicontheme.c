@@ -744,7 +744,7 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: location to store a list of icon theme path directories or %NULL
+ * @path: (array length=n_elements) (out): location to store a list of icon theme path directories or %NULL
  *        The stored value should be freed with g_strfreev().
  * @n_elements: location to store number of elements
  *              in @path, or %NULL
@@ -3192,7 +3192,7 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_get_attach_points:
  * @icon_info: a #GtkIconInfo
- * @points: location to store pointer to an array of points, or %NULL
+ * @points: (array length=n_points) (out): location to store pointer to an array of points, or %NULL
  *          free the array of points with g_free().
  * @n_points: location to store the number of points in @points, or %NULL
  * 
