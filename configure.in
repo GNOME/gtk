@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 # require autoconf 2.54
-AC_PREREQ(2.54)
+AC_PREREQ(2.62)
 
 # Making releases:
 #   GTK_MICRO_VERSION += 1;
