@@ -6,6 +6,7 @@ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.7
+ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST +=			\
 	HACKING			\
