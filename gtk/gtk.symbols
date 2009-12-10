@@ -294,7 +294,6 @@ gtk_spin_button_update_policy_get_type G_GNUC_CONST
 gtk_notebook_tab_get_type G_GNUC_CONST
 gtk_number_up_layout_get_type G_GNUC_CONST
 gtk_anchor_type_get_type G_GNUC_CONST
-gtk_arg_flags_get_type G_GNUC_CONST
 gtk_arrow_type_get_type G_GNUC_CONST
 gtk_arrow_placement_get_type G_GNUC_CONST
 gtk_assistant_page_type_get_type G_GNUC_CONST
@@ -2218,29 +2217,6 @@ gtk_notebook_set_action_widget
 
 #if IN_HEADER(__GTK_OBJECT_H__)
 #if IN_FILE(__GTK_OBJECT_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_object_add_arg_type
-gtk_object_get G_GNUC_NULL_TERMINATED
-gtk_object_set G_GNUC_NULL_TERMINATED
-gtk_object_get_data
-gtk_object_get_data_by_id
-gtk_object_get_user_data
-gtk_object_new
-gtk_object_remove_data
-gtk_object_remove_data_by_id
-gtk_object_remove_no_notify
-gtk_object_remove_no_notify_by_id
-gtk_object_ref
-gtk_object_unref
-gtk_object_weakref
-gtk_object_weakunref
-gtk_object_set_data
-gtk_object_set_data_by_id
-gtk_object_set_data_by_id_full
-gtk_object_set_data_full
-gtk_object_set_user_data
-gtk_object_sink
-#endif
 gtk_object_destroy
 gtk_object_get_type G_GNUC_CONST
 #endif

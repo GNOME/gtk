@@ -32,28 +32,16 @@ floating_tests (void)
   GtkWidget *widget = g_object_new (GTK_TYPE_LABEL, NULL);
   g_object_connect (widget, "signal::destroy", destroy, NULL, NULL);
 
-  g_assert (GTK_OBJECT_FLOATING (widget));
-  g_assert (g_object_is_floating (widget));
-
-  GTK_OBJECT_UNSET_FLAGS (widget, GTK_FLOATING);
-  g_assert (!GTK_OBJECT_FLOATING (widget));
-  g_assert (!g_object_is_floating (widget));
-
-  GTK_OBJECT_SET_FLAGS (widget, GTK_FLOATING);
-  g_assert (GTK_OBJECT_FLOATING (widget));
   g_assert (g_object_is_floating (widget));
 
   g_object_ref_sink (widget);
-  g_assert (!GTK_OBJECT_FLOATING (widget));
   g_assert (!g_object_is_floating (widget));
 
   g_object_force_floating (G_OBJECT (widget));
-  g_assert (GTK_OBJECT_FLOATING (widget));
   g_assert (g_object_is_floating (widget));
 
   g_object_ref (widget);
-  gtk_object_sink (GTK_OBJECT (widget));
-  g_assert (!GTK_OBJECT_FLOATING (widget));
+  g_object_ref_sink (widget);
   g_assert (!g_object_is_floating (widget));
 
   g_assert (!destroyed);
