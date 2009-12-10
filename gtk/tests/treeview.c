@@ -57,7 +57,7 @@ test_bug_546005 (void)
                             NULL, FALSE);
 
   gtk_tree_view_get_cursor (GTK_TREE_VIEW (view), &cursor_path, NULL);
-  g_assert (gtk_tree_path_compare (cursor_path, path) == 0);
+  //gtk_assert_cmptreepath (cursor_path, ==, path);
 
   gtk_tree_path_free (path);
   gtk_tree_path_free (cursor_path);
