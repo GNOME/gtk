@@ -187,6 +187,12 @@ libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 if HAVE_INTROSPECTION
 BUILT_GIRSOURCES =
 
+introspection_files = \
+		$(gdk_public_h_sources) \
+		$(gdk_c_sources) \
+        gdkenumtypes.c \
+        gdkenumtypes.h
+
 Gdk-2.0.gir: $(INTROSPECTION_SCANNER) $(gdktargetlib) Makefile
 	$(INTROSPECTION_SCANNER) -v \
 		--namespace Gdk --nsversion=2.0 --strip-prefix=Gdk \
@@ -198,8 +204,7 @@ Gdk-2.0.gir: $(INTROSPECTION_SCANNER) $(gdktargetlib) Makefile
 		--library=$(gdktargetlib) \
 		--libtool="$(LIBTOOL)" \
 	        --output $@ \
-		$(gdk_public_h_sources) \
-		$(gdk_c_sources) gdkenumtypes.c gdkenumtypes.h
+		$(addprefix $(srcdir)/,$(introspection_files))
 BUILT_GIRSOURCES += Gdk-2.0.gir
 
 girdir = $(datadir)/gir-1.0
