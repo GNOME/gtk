@@ -698,8 +698,8 @@ GdkPixbuf-2.0.gir: $(INTROSPECTION_SCANNER) libgdk_pixbuf-2.0.la Makefile
 		--library=libgdk_pixbuf-2.0.la \
 		--libtool="$(LIBTOOL)" \
 	        --output $@ \
-		$(libgdk_pixbufinclude_HEADERS) \
-		$(libgdk_pixbuf_2_0_la_SOURCES)
+		$(addprefix $(srcdir)/,$(libgdk_pixbufinclude_HEADERS)) \
+		$(addprefix $(srcdir)/,$(libgdk_pixbuf_2_0_la_SOURCES))
 BUILT_GIRSOURCES += GdkPixbuf-2.0.gir
 
 girdir = $(datadir)/gir-1.0

@@ -964,6 +964,12 @@ LDADDS =								\
 if HAVE_INTROSPECTION
 BUILT_GIRSOURCES =
 
+introspection_files = \
+    $(gtkinclude_HEADERS) \
+    $(gtk_all_c_sources) \
+    gtktypebuiltins.h \
+    gtktypebuiltins.c
+
 Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) Makefile
 	$(INTROSPECTION_SCANNER) -v \
 		--namespace Gtk --nsversion=2.0 --strip-prefix=Gtk \
@@ -978,8 +984,7 @@ Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) Makefile
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API \
-		$(gtkinclude_HEADERS) \
-		$(gtk_all_c_sources) gtktypebuiltins.h gtktypebuiltins.c
+		$(addprefix $(srcdir)/, $(introspection_files))
 BUILT_GIRSOURCES += Gtk-2.0.gir
 
 girdir = $(datadir)/gir-1.0
