@@ -1875,9 +1875,9 @@ gtk_status_icon_set_image (GtkStatusIcon *status_icon,
 /**
  * gtk_status_icon_set_from_pixbuf:
  * @status_icon: a #GtkStatusIcon
- * @pixbuf: a #GdkPixbuf or %NULL
- * 
- * Makes @status_icon display @pixbuf. 
+ * @pixbuf: (allow-none): a #GdkPixbuf or %NULL
+ *
+ * Makes @status_icon display @pixbuf.
  * See gtk_status_icon_new_from_pixbuf() for details.
  *
  * Since: 2.10
@@ -2212,7 +2212,7 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_set_tooltip:
  * @status_icon: a #GtkStatusIcon
- * @tooltip_text: the tooltip text, or %NULL
+ * @tooltip_text: (allow-none): the tooltip text, or %NULL
  *
  * Sets the tooltip of the status icon.
  *
@@ -2561,13 +2561,13 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 /**
  * gtk_status_icon_get_geometry:
  * @status_icon: a #GtkStatusIcon
- * @screen: return location for the screen, or %NULL if the
- *          information is not needed 
- * @area: return location for the area occupied by the status 
+ * @screen: (out) (transfer none) (allow-none): return location for the screen, or %NULL if the
+ *          information is not needed
+ * @area: (out) (allow-none): return location for the area occupied by the status
  *        icon, or %NULL
- * @orientation: return location for the orientation of the panel 
- *    in which the status icon is embedded, or %NULL. A panel 
- *    at the top or bottom of the screen is horizontal, a panel 
+ * @orientation: (out) (allow-none): return location for the orientation of the panel
+ *    in which the status icon is embedded, or %NULL. A panel
+ *    at the top or bottom of the screen is horizontal, a panel
  *    at the left or right is vertical.
  *
  * Obtains information about the location of the status icon

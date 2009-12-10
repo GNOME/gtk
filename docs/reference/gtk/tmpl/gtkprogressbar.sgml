@@ -264,12 +264,6 @@ directions for the visible progress bar.
 
 
 <!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
-<para>
-Creates a new #GtkProgressBar with an associated #GtkAdjustment.
-</para>
-
-@adjustment: a #GtkAdjustment.
-@Returns: a #GtkProgressBar.
 
 
 <!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->

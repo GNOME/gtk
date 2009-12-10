@@ -246,13 +246,12 @@ GTK_SPIN_END</entry>
 
 <!-- ##### FUNCTION gtk_spin_button_configure ##### -->
 <para>
-Changes the properties of an existing spin button. The adjustment, climb rate, and number of decimal places are all changed accordingly, after this function call.
+
 </para>
 
-@spin_button: a #GtkSpinButton.
-@adjustment: a #GtkAdjustment.
-@climb_rate: the new climb rate.
-@digits: the number of decimal places to display in the spin button.
+
+@adjustment:
+
 
 
 <!-- ##### FUNCTION gtk_spin_button_new ##### -->

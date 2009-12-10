@@ -5020,9 +5020,9 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
 /**
  * gtk_combo_box_set_model:
  * @combo_box: A #GtkComboBox
- * @model: A #GtkTreeModel
+ * @model: (allow-none): A #GtkTreeModel
  *
- * Sets the model used by @combo_box to be @model. Will unset a previously set 
+ * Sets the model used by @combo_box to be @model. Will unset a previously set
  * model (if applicable). If model is %NULL, then it will unset the model.
  *
  * Note that this function does not clear the cell renderers, you have to 
@@ -5104,7 +5104,7 @@ out:
  *
  * Returns the #GtkTreeModel which is acting as data source for @combo_box.
  *
- * Return value: A #GtkTreeModel which was passed during construction.
+ * Return value: (transfer none): A #GtkTreeModel which was passed during construction.
  *
  * Since: 2.4
  */
@@ -5129,7 +5129,7 @@ gtk_combo_box_get_model (GtkComboBox *combo_box)
  * gtk_combo_box_insert_text(), gtk_combo_box_prepend_text() and
  * gtk_combo_box_remove_text().
  *
- * Return value: A new text combo box.
+ * Return value: (transfer none): A new text combo box.
  *
  * Since: 2.4
  */

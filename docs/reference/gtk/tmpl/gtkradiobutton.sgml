@@ -197,13 +197,6 @@ gtk_radio_button_get_group().
 
 
 <!-- ##### FUNCTION gtk_radio_button_get_group ##### -->
-<para>
-Retrieves the group assigned to a radio button.
-</para>
 
-@radio_button: a #GtkRadioButton.
-@Returns: a linked list containing all the radio buttons in the same group
-as @radio_button. The returned list is owned by the radio button
-and must not be modified or freed.
 
 

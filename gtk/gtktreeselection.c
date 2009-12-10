@@ -327,8 +327,8 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
- * @model: A pointer to set to the #GtkTreeModel, or NULL.
- * @iter: The #GtkTreeIter, or NULL.
+ * @model: (out) (allow-none): A pointer to set to the #GtkTreeModel, or NULL.
+ * @iter: (allow-none): The #GtkTreeIter, or NULL.
  *
  * Sets @iter to the currently selected node if @selection is set to
  * #GTK_SELECTION_SINGLE or #GTK_SELECTION_BROWSE.  @iter may be NULL if you
@@ -402,7 +402,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 /**
  * gtk_tree_selection_get_selected_rows:
  * @selection: A #GtkTreeSelection.
- * @model: A pointer to set to the #GtkTreeModel, or NULL.
+ * @model: (allow-none): A pointer to set to the #GtkTreeModel, or NULL.
  *
  * Creates a list of path of all selected rows. Additionally, if you are
  * planning on modifying the model after calling this function, you may
@@ -415,7 +415,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * g_list_free (list);
  * ]|
  *
- * Return value: A #GList containing a #GtkTreePath for each selected row.
+ * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
  *
  * Since: 2.2
  **/

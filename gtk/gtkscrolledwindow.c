@@ -383,12 +383,12 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
 /**
  * gtk_scrolled_window_new:
- * @hadjustment: horizontal adjustment
- * @vadjustment: vertical adjustment
- * 
- * Creates a new scrolled window. 
+ * @hadjustment: (allow-none): horizontal adjustment
+ * @vadjustment: (allow-none): vertical adjustment
  *
- * The two arguments are the scrolled window's adjustments; these will be 
+ * Creates a new scrolled window.
+ *
+ * The two arguments are the scrolled window's adjustments; these will be
  * shared with the scrollbars and the child widget to keep the bars in sync 
  * with the child. Usually you want to pass %NULL for the adjustments, which 
  * will cause the scrolled window to create them for you.

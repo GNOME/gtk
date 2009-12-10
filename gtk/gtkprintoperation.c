@@ -1361,8 +1361,8 @@ gtk_print_operation_new (void)
 /**
  * gtk_print_operation_set_default_page_setup:
  * @op: a #GtkPrintOperation
- * @default_page_setup: a #GtkPageSetup, or %NULL
- * 
+ * @default_page_setup: (allow-none): a #GtkPageSetup, or %NULL
+ *
  * Makes @default_page_setup the default page setup for @op.
  *
  * This page setup will be used by gtk_print_operation_run(),
@@ -1420,8 +1420,8 @@ gtk_print_operation_get_default_page_setup (GtkPrintOperation *op)
 /**
  * gtk_print_operation_set_print_settings:
  * @op: a #GtkPrintOperation
- * @print_settings: #GtkPrintSettings, or %NULL
- * 
+ * @print_settings: (allow-none): #GtkPrintSettings
+ *
  * Sets the print settings for @op. This is typically used to
  * re-establish print settings from a previous print operation,
  * see gtk_print_operation_run().
@@ -2992,9 +2992,9 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * gtk_print_operation_run:
  * @op: a #GtkPrintOperation
  * @action: the action to start
- * @parent: Transient parent of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog
  * @error: Return location for errors, or %NULL
- * 
+ *
  * Runs the print operation, by first letting the user modify
  * print settings in the print dialog, and then print the document.
  *

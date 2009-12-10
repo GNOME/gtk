@@ -1747,6 +1747,11 @@ gtk_menu_set_active (GtkMenu *menu,
     }
 }
 
+
+/**
+ * gtk_menu_set_accel_group:
+ * @accel_group: (allow-none):
+ */
 void
 gtk_menu_set_accel_group (GtkMenu	*menu,
 			  GtkAccelGroup *accel_group)
@@ -1793,7 +1798,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
 /**
  * gtk_menu_set_accel_path
  * @menu:       a valid #GtkMenu
- * @accel_path: a valid accelerator path
+ * @accel_path: (allow-none): a valid accelerator path
  *
  * Sets an accelerator path for this menu from which accelerator paths
  * for its immediate children, its menu items, can be constructed.
@@ -4810,11 +4815,11 @@ gtk_menu_hide_all (GtkWidget *widget)
 /**
  * gtk_menu_set_screen:
  * @menu: a #GtkMenu.
- * @screen: a #GdkScreen, or %NULL if the screen should be
+ * @screen: (allow-none): a #GdkScreen, or %NULL if the screen should be
  *          determined by the widget the menu is attached to.
  *
  * Sets the #GdkScreen on which the menu will be displayed.
- * 
+ *
  * Since: 2.2
  **/
 void
@@ -5282,7 +5287,7 @@ gtk_menu_get_monitor (GtkMenu *menu)
  * Returns a list of the menus which are attached to this widget.
  * This list is owned by GTK+ and must not be modified.
  *
- * Return value: the list of menus attached to his widget.
+ * Return value: (element-type GtkWidget) (transfer none): the list of menus attached to his widget.
  *
  * Since: 2.6
  **/

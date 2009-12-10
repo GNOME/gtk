@@ -894,10 +894,10 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
 /**
  * gtk_cell_view_set_model:
  * @cell_view: a #GtkCellView
- * @model: a #GtkTreeModel
+ * @model: (allow-none): a #GtkTreeModel
  *
  * Sets the model for @cell_view.  If @cell_view already has a model
- * set, it will remove it before setting the new model.  If @model is 
+ * set, it will remove it before setting the new model.  If @model is
  * %NULL, then it will unset the old model.
  *
  * Since: 2.6
@@ -947,8 +947,8 @@ gtk_cell_view_get_model (GtkCellView *cell_view)
 /**
  * gtk_cell_view_set_displayed_row:
  * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath or %NULL to unset.
- * 
+ * @path: (allow-none): a #GtkTreePath or %NULL to unset.
+ *
  * Sets the row of the model that is currently displayed
  * by the #GtkCellView. If the path is unset, then the
  * contents of the cellview "stick" at their last value;

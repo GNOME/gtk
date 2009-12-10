@@ -786,7 +786,8 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *self,
  * 
  * Returns the list of action groups associated with @self.
  *
- * Return value: a #GList of action groups. The list is owned by GTK+ 
+ * Return value:  (element-type GtkActionGroup) (transfer none): a #GList of
+ *   action groups. The list is owned by GTK+
  *   and should not be modified.
  *
  * Since: 2.4
@@ -805,7 +806,7 @@ gtk_ui_manager_get_action_groups (GtkUIManager *self)
  * 
  * Returns the #GtkAccelGroup associated with @self.
  *
- * Return value: the #GtkAccelGroup.
+ * Return value: (transfer none): the #GtkAccelGroup.
  *
  * Since: 2.4
  **/
@@ -835,8 +836,8 @@ gtk_ui_manager_get_accel_group (GtkUIManager *self)
  * the lifecycle of the ui manager. If you add the widgets returned by this 
  * function to some container or explicitly ref them, they will survive the
  * destruction of the ui manager.
- * 
- * Return value: the widget found by following the path, or %NULL if no widget
+ *
+ * Return value: (transfer none): the widget found by following the path, or %NULL if no widget
  *   was found.
  *
  * Since: 2.4
@@ -891,9 +892,9 @@ collect_toplevels (GNode   *node,
  *   #GTK_UI_MANAGER_POPUP.
  * 
  * Obtains a list of all toplevel widgets of the requested types.
- * 
- * Return value: a newly-allocated #GSList of all toplevel widgets of the
- * requested types.  Free the returned list with g_slist_free().
+ *
+ * Return value: (element-type GtkWidget) (transfer container): a newly-allocated #GSList of
+ * all toplevel widgets of the requested types.  Free the returned list with g_slist_free().
  *
  * Since: 2.4
  **/
@@ -1736,11 +1737,11 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *self,
  * @merge_id: the merge id for the merged UI, see gtk_ui_manager_new_merge_id()
  * @path: a path
  * @name: the name for the added UI element
- * @action: the name of the action to be proxied, or %NULL to add a separator
+ * @action: (allow-none): the name of the action to be proxied, or %NULL to add a separator
  * @type: the type of UI element to add.
- * @top: if %TRUE, the UI element is added before its siblings, otherwise it 
+ * @top: if %TRUE, the UI element is added before its siblings, otherwise it
  *   is added after its siblings.
- * 
+ *
  * Adds a UI element to the current contents of @self. 
  *
  * If @type is %GTK_UI_MANAGER_AUTO, GTK+ inserts a menuitem, toolitem or 

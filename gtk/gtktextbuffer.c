@@ -805,7 +805,7 @@ _gtk_text_buffer_get_btree (GtkTextBuffer *buffer)
  *
  * Get the #GtkTextTagTable associated with this buffer.
  *
- * Return value: the buffer's tag table
+ * Return value: (transfer none): the buffer's tag table
  **/
 GtkTextTagTable*
 gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
@@ -2061,7 +2061,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_create_mark:
  * @buffer: a #GtkTextBuffer
- * @mark_name: name for mark, or %NULL
+ * @mark_name: (allow-none): name for mark, or %NULL
  * @where: location to place mark
  * @left_gravity: whether the mark has left gravity
  *
@@ -2224,7 +2224,7 @@ gtk_text_buffer_delete_mark (GtkTextBuffer *buffer,
  * Returns the mark named @name in buffer @buffer, or %NULL if no such
  * mark exists in the buffer.
  *
- * Return value: a #GtkTextMark, or %NULL
+ * Return value: (transfer none): a #GtkTextMark, or %NULL
  **/
 GtkTextMark*
 gtk_text_buffer_get_mark (GtkTextBuffer *buffer,
@@ -2307,7 +2307,7 @@ gtk_text_buffer_delete_mark_by_name (GtkTextBuffer *buffer,
  * named "insert", but very slightly more efficient, and involves less
  * typing.
  *
- * Return value: insertion point mark
+ * Return value: (transfer none): insertion point mark
  **/
 GtkTextMark*
 gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
@@ -2333,7 +2333,7 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  * for handling the selection, if you just want to know whether there's a
  * selection and what its bounds are.
  *
- * Return value: selection bound mark
+ * Return value: (transfer none): selection bound mark
  **/
 GtkTextMark*
 gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer)
@@ -3732,11 +3732,11 @@ remove_all_selection_clipboards (GtkTextBuffer *buffer)
  * gtk_text_buffer_paste_clipboard:
  * @buffer: a #GtkTextBuffer
  * @clipboard: the #GtkClipboard to paste from
- * @override_location: location to insert pasted text, or %NULL for 
+ * @override_location: (allow-none): location to insert pasted text, or %NULL for
  *                     at the cursor
  * @default_editable: whether the buffer is editable by default
  *
- * Pastes the contents of a clipboard at the insertion point, or at 
+ * Pastes the contents of a clipboard at the insertion point, or at
  * @override_location. (Note: pasting is asynchronous, that is, we'll 
  * ask for the paste data and return, and at some point later after 
  * the main loop runs, the paste data will be inserted.)

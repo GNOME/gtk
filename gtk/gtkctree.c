@@ -3626,9 +3626,17 @@ real_insert_row (GtkCList *clist,
   return row;
 }
 
-GtkCTreeNode * 
+
+/**
+ * gtk_ctree_insert_node:
+ * @pixmap_closed: (allow-none):
+ * @mask_closed: (allow-none):
+ * @pixmap_opened: (allow-none):
+ * @mask_opened: (allow-none):
+ */
+GtkCTreeNode *
 gtk_ctree_insert_node (GtkCTree     *ctree,
-		       GtkCTreeNode *parent, 
+		       GtkCTreeNode *parent,
 		       GtkCTreeNode *sibling,
 		       gchar        *text[],
 		       guint8        spacing,
@@ -4286,10 +4294,15 @@ gtk_ctree_is_hot_spot (GtkCTree *ctree,
  ***********************************************************/
 
 
+/**
+ * gtk_ctree_move:
+ * @new_parent: (allow-none):
+ * @new_sibling: (allow-none):
+ */
 void
 gtk_ctree_move (GtkCTree     *ctree,
 		GtkCTreeNode *node,
-		GtkCTreeNode *new_parent, 
+		GtkCTreeNode *new_parent,
 		GtkCTreeNode *new_sibling)
 {
   g_return_if_fail (GTK_IS_CTREE (ctree));
@@ -4599,7 +4612,12 @@ gtk_ctree_node_set_text (GtkCTree     *ctree,
   tree_draw_node (ctree, node);
 }
 
-void 
+
+/**
+ * gtk_ctree_node_set_pixmap:
+ * @mask: (allow-none):
+ */
+void
 gtk_ctree_node_set_pixmap (GtkCTree     *ctree,
 			   GtkCTreeNode *node,
 			   gint          column,
@@ -4628,7 +4646,12 @@ gtk_ctree_node_set_pixmap (GtkCTree     *ctree,
   tree_draw_node (ctree, node);
 }
 
-void 
+
+/**
+ * gtk_ctree_node_set_pixtext:
+ * @mask: (allow-none):
+ */
+void
 gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
 			    GtkCTreeNode *node,
 			    gint          column,
@@ -4662,7 +4685,15 @@ gtk_ctree_node_set_pixtext (GtkCTree     *ctree,
   tree_draw_node (ctree, node);
 }
 
-void 
+
+/**
+ * gtk_ctree_set_node_info:
+ * @pixmap_closed: (allow-none):
+ * @mask_closed: (allow-none):
+ * @pixmap_opened: (allow-none):
+ * @mask_opened: (allow-none):
+ */
+void
 gtk_ctree_set_node_info (GtkCTree     *ctree,
 			 GtkCTreeNode *node,
 			 const gchar  *text,

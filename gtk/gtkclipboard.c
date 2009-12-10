@@ -1526,12 +1526,13 @@ clipboard_uris_received_func (GtkClipboard *clipboard,
  * Requests the contents of the clipboard as URIs. This function waits
  * for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
- * 
- * Return value: a newly-allocated %NULL-terminated array of strings which must
+ *
+ * Return value: (array zero-terminated=1) (element-type utf8) (transfer full): a newly-allocated
+ * 		 %NULL-terminated array of strings which must
  *               be freed with g_strfreev(), or %NULL if
- *               retrieving the selection data failed. (This 
- *               could happen for various reasons, in particular 
- *               if the clipboard was empty or if the contents of 
+ *               retrieving the selection data failed. (This
+ *               could happen for various reasons, in particular
+ *               if the clipboard was empty or if the contents of
  *               the clipboard could not be converted into URI form.)
  *
  * Since: 2.14

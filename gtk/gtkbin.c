@@ -140,8 +140,8 @@ gtk_bin_forall (GtkContainer *container,
  * Gets the child of the #GtkBin, or %NULL if the bin contains
  * no child widget. The returned widget does not have a reference
  * added, so you do not need to unref it.
- * 
- * Return value: pointer to child of the #GtkBin
+ *
+ * Return value: (transfer none): pointer to child of the #GtkBin
  **/
 GtkWidget*
 gtk_bin_get_child (GtkBin *bin)

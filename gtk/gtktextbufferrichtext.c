@@ -104,7 +104,7 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
 /**
  * gtk_text_buffer_register_serialize_tagset:
  * @buffer: a #GtkTextBuffer
- * @tagset_name: an optional tagset name, on %NULL
+ * @tagset_name: (allow-none): an optional tagset name, on %NULL
  *
  * This function registers GTK+'s internal rich text serialization
  * format with the passed @buffer. The internal format does not comply
@@ -202,7 +202,7 @@ gtk_text_buffer_register_deserialize_format (GtkTextBuffer                *buffe
 /**
  * gtk_text_buffer_register_deserialize_tagset:
  * @buffer: a #GtkTextBuffer
- * @tagset_name: an optional tagset name, on %NULL
+ * @tagset_name: (allow-none): an optional tagset name, on %NULL
  *
  * This function registers GTK+'s internal rich text serialization
  * format with the passed @buffer. See

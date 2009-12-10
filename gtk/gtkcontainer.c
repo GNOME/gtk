@@ -1586,7 +1586,7 @@ gtk_container_foreach_full (GtkContainer       *container,
 /**
  * gtk_container_set_focus_child:
  * @container: a #GtkContainer
- * @child: a #GtkWidget, or %NULL
+ * @child: (allow-none): a #GtkWidget, or %NULL
  *
  * Sets, or unsets if @child is %NULL, the focused child of @container.
  *
@@ -1629,9 +1629,9 @@ gtk_container_get_focus_child (GtkContainer *container)
  * @container: a #GtkContainer
  * 
  * Returns the container's non-internal children. See
- * gtk_container_forall() for details on what constitutes an "internal" child. 
+ * gtk_container_forall() for details on what constitutes an "internal" child.
  *
- * Return value: a newly-allocated list of the container's non-internal children.
+ * Return value: (element-type GtkWidget) (transfer container): a newly-allocated list of the container's non-internal children.
  **/
 GList*
 gtk_container_get_children (GtkContainer *container)
@@ -2403,7 +2403,8 @@ gtk_container_set_focus_chain (GtkContainer *container,
 /**
  * gtk_container_get_focus_chain:
  * @container:         a #GtkContainer
- * @focusable_widgets: location to store the focus chain of the
+ * @focusable_widgets: (element-type GtkWidget) (out) (transfer container): location
+ *                     to store the focus chain of the
  *                     container, or %NULL. You should free this list
  *                     using g_list_free() when you are done with it, however
  *                     no additional reference count is added to the
@@ -2513,7 +2514,7 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
  * Retrieves the vertical focus adjustment for the container. See
  * gtk_container_set_focus_vadjustment().
  *
- * Return value: the vertical focus adjustment, or %NULL if
+ * Return value: (transfer none): the vertical focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *
@@ -2568,7 +2569,7 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
  * Retrieves the horizontal focus adjustment for the container. See
  * gtk_container_set_focus_hadjustment ().
  *
- * Return value: the horizontal focus adjustment, or %NULL if
+ * Return value: (transfer none): the horizontal focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *

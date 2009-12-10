@@ -69,6 +69,10 @@ gtk_pixmap_init (GtkPixmap *pixmap)
   pixmap->mask = NULL;
 }
 
+/**
+ * gtk_pixmap_new:
+ * @mask: (allow-none):
+ */
 GtkWidget*
 gtk_pixmap_new (GdkPixmap *val,
 		GdkBitmap *mask)

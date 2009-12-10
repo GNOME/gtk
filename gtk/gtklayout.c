@@ -285,7 +285,7 @@ gtk_layout_finalize (GObject *object)
 /**
  * gtk_layout_set_hadjustment:
  * @layout: a #GtkLayout
- * @adjustment: new scroll adjustment
+ * @adjustment: (allow-none): new scroll adjustment
  *
  * Sets the horizontal scroll adjustment for the layout.
  *
@@ -305,7 +305,7 @@ gtk_layout_set_hadjustment (GtkLayout     *layout,
 /**
  * gtk_layout_set_vadjustment:
  * @layout: a #GtkLayout
- * @adjustment: new scroll adjustment
+ * @adjustment: (allow-none): new scroll adjustment
  *
  * Sets the vertical scroll adjustment for the layout.
  *

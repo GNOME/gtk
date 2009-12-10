@@ -1657,7 +1657,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 /**
  * gtk_label_set_mnemonic_widget:
  * @label: a #GtkLabel
- * @widget: the target #GtkWidget 
+ * @widget: (allow-none): the target #GtkWidget
  *
  * If the label has been set so that it has an mnemonic key (using
  * i.e. gtk_label_set_markup_with_mnemonic(),
@@ -5004,8 +5004,8 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
  * pixel positions, in combination with gtk_label_get_layout_offsets().
  * The returned layout is owned by the label so need not be
  * freed by the caller.
- * 
- * Return value: the #PangoLayout for this label
+ *
+ * Return value: (transfer none): the #PangoLayout for this label
  **/
 PangoLayout*
 gtk_label_get_layout (GtkLabel *label)

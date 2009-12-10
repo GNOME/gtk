@@ -898,7 +898,8 @@ gtk_recent_chooser_unselect_all (GtkRecentChooser *chooser)
  * The return value of this function is affected by the "sort-type" and
  * "limit" properties of @chooser.
  *
- * Return value: A newly allocated list of #GtkRecentInfo objects.  You should
+ * Return value:  (element-type GtkRecentInfo) (transfer full): A newly allocated
+ *   list of #GtkRecentInfo objects.  You should
  *   use gtk_recent_info_unref() on every item of the list, and then free
  *   the list itself using g_list_free().
  *
@@ -1014,7 +1015,8 @@ gtk_recent_chooser_remove_filter (GtkRecentChooser *chooser,
  *
  * Gets the #GtkRecentFilter objects held by @chooser.
  *
- * Return value: A singly linked list of #GtkRecentFilter objects.  You
+ * Return value: (element-type GtkRecentFilter) (transfer container): A singly linked list
+ *   of #GtkRecentFilter objects.  You
  *   should just free the returned list using g_slist_free().
  *
  * Since: 2.10

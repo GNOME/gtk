@@ -731,7 +731,7 @@ gtk_action_group_set_visible (GtkActionGroup *action_group,
  *
  * Looks up an action in the action group by name.
  *
- * Returns: the action, or %NULL if no action by that name exists
+ * Returns: (transfer-none): the action, or %NULL if no action by that name exists
  *
  * Since: 2.4
  */
@@ -805,11 +805,11 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 
 /**
  * gtk_action_group_add_action_with_accel:
- * @action_group: the action group 
- * @action: the action to add 
- * @accelerator: the accelerator for the action, in
- *   the format understood by gtk_accelerator_parse(), or "" for no accelerator, or 
- *   %NULL to use the stock accelerator 
+ * @action_group: the action group
+ * @action: the action to add
+ * @accelerator: (allow-none): the accelerator for the action, in
+ *   the format understood by gtk_accelerator_parse(), or "" for no accelerator, or
+ *   %NULL to use the stock accelerator
  *
  * Adds an action object to the action group and sets up the accelerator.
  *
@@ -920,8 +920,8 @@ add_single_action (gpointer key,
  *
  * Lists the actions in the action group.
  *
- * Returns: an allocated list of the action objects in the action group
- * 
+ * Returns: (element-type GtkAction) (transfer container): an allocated list of the action objects in the action group
+ *
  * Since: 2.4
  */
 GList *

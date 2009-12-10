@@ -155,11 +155,11 @@ gtk_print_settings_get (GtkPrintSettings *settings,
  * gtk_print_settings_set:
  * @settings: a #GtkPrintSettings
  * @key: a key
- * @value: a string value, or %NULL
- * 
+ * @value: (allow-none): a string value, or %NULL
+ *
  * Associates @value with @key.
  *
- * Since: 2.10 
+ * Since: 2.10
  */
 void
 gtk_print_settings_set (GtkPrintSettings *settings,
@@ -473,9 +473,9 @@ gtk_print_settings_set_int (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_foreach:
  * @settings: a #GtkPrintSettings
- * @func: the function to call
+ * @func: (scope call) the function to call
  * @user_data: user data for @func
- * 
+ *
  * Calls @func for each key-value pair of @settings.
  *
  * Since: 2.10

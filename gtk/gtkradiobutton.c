@@ -341,6 +341,18 @@ gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_memb
   return gtk_radio_button_new_with_mnemonic (l, label);
 }
 
+
+/**
+ * gtk_radio_button_get_group:
+ * @radio_button: a #GtkRadioButton.
+ *
+ * Retrieves the group assigned to a radio button.
+ *
+ * Return value: (element-type GtkRadioButton) (transfer none): a linked list
+ * containing all the radio buttons in the same group
+ * as @radio_button. The returned list is owned by the radio button
+ * and must not be modified or freed.
+ */
 GSList*
 gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {

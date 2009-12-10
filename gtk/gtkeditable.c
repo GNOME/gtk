@@ -149,10 +149,10 @@ gtk_editable_base_init (gpointer g_class)
  * @editable: a #GtkEditable
  * @new_text: the text to append
  * @new_text_length: the length of the text in bytes, or -1
- * @position: location of the position text will be inserted at
+ * @position: (in-out): location of the position text will be inserted at
  *
- * Inserts @new_text_length bytes of @new_text into the contents of the 
- * widget, at position @position. 
+ * Inserts @new_text_length bytes of @new_text into the contents of the
+ * widget, at position @position.
  *
  * Note that the position is in characters, not in bytes. 
  * The function updates @position to point after the newly inserted text.
@@ -266,12 +266,12 @@ gtk_editable_get_position (GtkEditable *editable)
 /**
  * gtk_editable_get_selection_bounds:
  * @editable: a #GtkEditable
- * @start_pos: location to store the starting position, or %NULL 
- * @end_pos: location to store the end position, or %NULL 
+ * @start_pos: (out) (allow-none): location to store the starting position, or %NULL
+ * @end_pos: (out) (allow-none): location to store the end position, or %NULL
  *
  * Retrieves the selection bound of the editable. start_pos will be filled
- * with the start of the selection and @end_pos with end. If no text was 
- * selected both will be identical and %FALSE will be returned. 
+ * with the start of the selection and @end_pos with end. If no text was
+ * selected both will be identical and %FALSE will be returned.
  *
  * Note that positions are specified in characters, not bytes.
  *

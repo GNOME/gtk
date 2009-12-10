@@ -398,6 +398,14 @@ gtk_progress_bar_new (void)
   return pbar;
 }
 
+/**
+ * gtk_progress_bar_new_with_adjustment:
+ * @adjustment: (allow-none):
+ *
+ * Creates a new #GtkProgressBar with an associated #GtkAdjustment.
+ *
+ * Returns: (transfer none): a #GtkProgressBar.
+ */
 GtkWidget*
 gtk_progress_bar_new_with_adjustment (GtkAdjustment *adjustment)
 {

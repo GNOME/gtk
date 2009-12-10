@@ -2690,7 +2690,7 @@ free_paths_and_out:
  * gtk_tree_store_move_before:
  * @tree_store: A #GtkTreeStore.
  * @iter: A #GtkTreeIter.
- * @position: A #GtkTreeIter or %NULL.
+ * @position: (allow-none): A #GtkTreeIter or %NULL.
  *
  * Moves @iter in @tree_store to the position before @position. @iter and
  * @position should be in the same level. Note that this function only
@@ -2711,7 +2711,7 @@ gtk_tree_store_move_before (GtkTreeStore *tree_store,
  * gtk_tree_store_move_after:
  * @tree_store: A #GtkTreeStore.
  * @iter: A #GtkTreeIter.
- * @position: A #GtkTreeIter.
+ * @position: (allow-none): A #GtkTreeIter.
  *
  * Moves @iter in @tree_store to the position after @position. @iter and
  * @position should be in the same level. Note that this function only

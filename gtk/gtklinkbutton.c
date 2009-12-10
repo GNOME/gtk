@@ -600,11 +600,11 @@ gtk_link_button_new (const gchar *uri)
 /**
  * gtk_link_button_new_with_label:
  * @uri: a valid URI
- * @label: the text of the button
+ * @label: (allow-none): the text of the button
  *
  * Creates a new #GtkLinkButton containing a label.
  *
- * Return value: a new link button widget.
+ * Return value: (transfer none): a new link button widget.
  *
  * Since: 2.10
  */

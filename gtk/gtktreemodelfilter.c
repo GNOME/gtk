@@ -2956,7 +2956,7 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
 /**
  * gtk_tree_model_filter_new:
  * @child_model: A #GtkTreeModel.
- * @root: A #GtkTreePath or %NULL.
+ * @root: (allow-none): A #GtkTreePath or %NULL.
  *
  * Creates a new #GtkTreeModel, with @child_model as the child_model
  * and @root as the virtual root.

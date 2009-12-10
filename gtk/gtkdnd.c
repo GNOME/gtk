@@ -2831,10 +2831,10 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
  * @widget: a #GtkWidget
  * @colormap: the colormap of the icon
  * @pixmap: the image data for the icon
- * @mask: the transparency mask for an image.
- * 
+ * @mask: (allow-none): the transparency mask for an image.
+ *
  * Sets the icon that will be used for drags from a particular widget
- * from a pixmap/mask. GTK+ retains references for the arguments, and 
+ * from a pixmap/mask. GTK+ retains references for the arguments, and
  * will release them when they are no longer needed.
  * Use gtk_drag_source_set_icon_pixbuf() instead.
  **/

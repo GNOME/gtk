@@ -155,6 +155,11 @@ safe_strcmp (const char *a, const char *b)
   return strcmp (a, b);
 }
 
+/**
+ * gtk_printer_option_set_get_groups:
+ *
+ * Return value: (element-type utf8) (transfer full):
+ */
 GList *
 gtk_printer_option_set_get_groups (GtkPrinterOptionSet *set)
 {

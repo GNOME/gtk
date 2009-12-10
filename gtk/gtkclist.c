@@ -2274,6 +2274,10 @@ gtk_clist_get_text (GtkCList  *clist,
   return 1;
 }
 
+/**
+ * gtk_clist_set_pixmap:
+ * @mask: (allow-none):
+ */
 void
 gtk_clist_set_pixmap (GtkCList  *clist,
 		      gint       row,

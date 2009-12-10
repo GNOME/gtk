@@ -147,12 +147,12 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * gtk_item_factory_new:
  * @container_type: the kind of menu to create; can be
  *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
- * @path: the factory path of the new item factory, a string of the form 
+ * @path: the factory path of the new item factory, a string of the form
  *    <literal>"&lt;name&gt;"</literal>
- * @accel_group: a #GtkAccelGroup to which the accelerators for the
+ * @accel_group: (allow-none): a #GtkAccelGroup to which the accelerators for the
  *    menu items will be added, or %NULL to create a new one
  * @returns: a new #GtkItemFactory
- * 
+ *
  * Creates a new #GtkItemFactory.
  *
  * Beware that the returned object does not have a floating reference.

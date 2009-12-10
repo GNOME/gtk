@@ -267,11 +267,11 @@ gtk_list_store_new (gint n_columns,
 /**
  * gtk_list_store_newv:
  * @n_columns: number of columns in the list store
- * @types: an array of #GType types for the columns, from first to last
+ * @types: (array length=n_columns): an array of #GType types for the columns, from first to last
  *
  * Non-vararg creation function.  Used primarily by language bindings.
  *
- * Return value: a new #GtkListStore
+ * Return value: (transfer none): a new #GtkListStore
  **/
 GtkListStore *
 gtk_list_store_newv (gint   n_columns,
@@ -304,8 +304,8 @@ gtk_list_store_newv (gint   n_columns,
  * gtk_list_store_set_column_types:
  * @list_store: A #GtkListStore
  * @n_columns: Number of columns for the list store
- * @types: An array length n of #GTypes
- * 
+ * @types: (array length=n_columns): An array length n of #GTypes
+ *
  * This function is meant primarily for #GObjects that inherit from #GtkListStore,
  * and should only be used when constructing a new #GtkListStore.  It will not
  * function after a row has been added, or a method on the #GtkTreeModel
@@ -832,10 +832,10 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * gtk_list_store_set_valuesv:
  * @list_store: A #GtkListStore
  * @iter: A valid #GtkTreeIter for the row being modified
- * @columns: an array of column numbers
- * @values: an array of GValues 
+ * @columns: (array length=n_values): an array of column numbers
+ * @values: (array length=n_values): an array of GValues
  * @n_values: the length of the @columns and @values arrays
- * 
+ *
  * A variant of gtk_list_store_set_valist() which
  * takes the columns and values as two arrays, instead of
  * varargs. This function is mainly intended for 
@@ -1579,7 +1579,7 @@ gtk_list_store_move_to (GtkListStore *store,
  * gtk_list_store_move_before:
  * @store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
- * @position: A #GtkTreeIter, or %NULL.
+ * @position: (allow-none): A #GtkTreeIter, or %NULL.
  *
  * Moves @iter in @store to the position before @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter
@@ -1612,7 +1612,7 @@ gtk_list_store_move_before (GtkListStore *store,
  * gtk_list_store_move_after:
  * @store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
- * @position: A #GtkTreeIter or %NULL.
+ * @position: (allow-none): A #GtkTreeIter or %NULL.
  *
  * Moves @iter in @store to the position after @position. Note that this
  * function only works with unsorted stores. If @position is %NULL, @iter

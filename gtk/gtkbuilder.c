@@ -888,7 +888,7 @@ object_add_to_list (gchar    *object_id,
  * this function does not increment the reference counts of the returned
  * objects.
  *
- * Return value: a newly-allocated #GSList containing all the objects
+ * Return value: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
  *   constructed by the #GtkBuilder instance. It should be freed by
  *   g_slist_free()
  *

@@ -635,8 +635,8 @@ gtk_target_table_free (GtkTargetEntry *targets,
 
 /**
  * gtk_selection_owner_set_for_display:
- * @display: the #Gdkdisplay where the selection is set 
- * @widget: new selection owner (a #GdkWidget), or %NULL.
+ * @display: the #Gdkdisplay where the selection is set
+ * @widget: (allow-none): new selection owner (a #GdkWidget), or %NULL.
  * @selection: an interned atom representing the selection to claim.
  * @time_: timestamp with which to claim the selection
  *
@@ -1756,10 +1756,11 @@ gtk_selection_data_set_uris (GtkSelectionData  *selection_data,
  * @selection_data: a #GtkSelectionData
  * 
  * Gets the contents of the selection data as array of URIs.
- * 
- * Return value: if the selection data contains a list of
+ *
+ * Return value:  (array zero-terminated=1) (element-type utf8) (transfer full): if
+ *   the selection data contains a list of
  *   URIs, a newly allocated %NULL-terminated string array
- *   containing the URIs, otherwise %NULL. If the result is 
+ *   containing the URIs, otherwise %NULL. If the result is
  *   non-%NULL it must be freed with g_strfreev().
  *
  * Since: 2.6

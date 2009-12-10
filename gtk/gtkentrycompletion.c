@@ -1013,7 +1013,7 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
 /**
  * gtk_entry_completion_set_model:
  * @completion: A #GtkEntryCompletion.
- * @model: The #GtkTreeModel.
+ * @model: (allow-none): The #GtkTreeModel.
  *
  * Sets the model for a #GtkEntryCompletion. If @completion already has
  * a model set, it will remove it before setting the new model.

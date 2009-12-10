@@ -306,8 +306,8 @@ gtk_frame_forall (GtkContainer *container,
 /**
  * gtk_frame_set_label:
  * @frame: a #GtkFrame
- * @label: the text to use as the label of the frame
- * 
+ * @label: (allow-none): the text to use as the label of the frame
+ *
  * Sets the text of the label. If @label is %NULL,
  * the current label is removed.
  **/

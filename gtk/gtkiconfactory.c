@@ -1620,7 +1620,7 @@ render_fallback_image (GtkStyle          *style,
 /**
  * gtk_icon_set_render_icon:
  * @icon_set: a #GtkIconSet
- * @style: a #GtkStyle associated with @widget, or %NULL
+ * @style: (allow-none): a #GtkStyle associated with @widget, or %NULL
  * @direction: text direction
  * @state: widget state
  * @size: icon size. A size of (GtkIconSize)-1
@@ -1762,7 +1762,7 @@ gtk_icon_set_add_source (GtkIconSet          *icon_set,
 /**
  * gtk_icon_set_get_sizes:
  * @icon_set: a #GtkIconSet
- * @sizes: return location for array of sizes
+ * @sizes: (array length=n_sizes) (out): return location for array of sizes
  * @n_sizes: location to store number of elements in returned array
  *
  * Obtains a list of icon sizes this icon set can render. The returned
@@ -2033,7 +2033,7 @@ gtk_icon_source_set_filename (GtkIconSource *source,
 /**
  * gtk_icon_source_set_icon_name
  * @source: a #GtkIconSource
- * @icon_name: name of icon to use
+ * @icon_name: (allow-none): name of icon to use
  *
  * Sets the name of an icon to look up in the current icon theme
  * to use as a base image when creating icon variants for #GtkIconSet.
