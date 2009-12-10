@@ -48,7 +48,7 @@ AC_CONFIG_MACRO_DIR([m4])
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-AM_INIT_AUTOMAKE(no-define)
+AM_INIT_AUTOMAKE([no-define -Wno-portability])
 AM_CONFIG_HEADER(config.h)
 
 # Support silent build rules, requires at least automake-1.11. Enable
