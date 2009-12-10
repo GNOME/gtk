@@ -213,7 +213,6 @@ create_generous_assistant (GtkWidget *widget)
   if (!assistant)
     {
       GtkWidget *page, *next, *check;
-      PageData  *pdata;
 
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
@@ -260,21 +259,12 @@ create_generous_assistant (GtkWidget *widget)
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Progress");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_PROGRESS);
 
-      page = gtk_check_button_new_with_label ("Summary complete");
+      page = get_test_page ("Summary");
       gtk_widget_show (page);
       gtk_assistant_append_page (GTK_ASSISTANT (assistant), page);
       gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), page, "Summary");
       gtk_assistant_set_page_type  (GTK_ASSISTANT (assistant), page, GTK_ASSISTANT_PAGE_SUMMARY);
-
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (page),
-                                    gtk_assistant_get_page_complete (GTK_ASSISTANT (assistant),
-                                                                     page));
-
-      pdata = g_new (PageData, 1);
-      pdata->assistant = GTK_ASSISTANT (assistant);
-      pdata->page = page;
-      g_signal_connect (page, "toggled",
-                      G_CALLBACK (complete_cb), pdata);
+      gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
     }
 
   if (!GTK_WIDGET_VISIBLE (assistant))

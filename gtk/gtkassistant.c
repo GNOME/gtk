@@ -55,8 +55,7 @@ struct _GtkAssistantPage
 {
   GtkWidget *page;
   GtkAssistantPageType type;
-  guint      complete : 1;
-  guint      complete_set : 1;
+  gboolean   complete;
 
   GtkWidget *title;
   GdkPixbuf *header_image;
@@ -137,8 +136,6 @@ static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *bui
                                                               const gchar   *tagname,
                                                               gpointer       user_data);
 
-static GList*     find_page                                  (GtkAssistant  *assistant,
-                                                              GtkWidget     *page);
 
 enum
 {
@@ -519,7 +516,7 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       compute_last_button_state (assistant);
       break;
     case GTK_ASSISTANT_PAGE_SUMMARY:
-      gtk_widget_set_sensitive (assistant->close, priv->current_page->complete);
+      gtk_widget_set_sensitive (assistant->close, TRUE);
       gtk_widget_grab_default (assistant->close);
       gtk_widget_show (assistant->close);
       gtk_widget_hide (assistant->cancel);
@@ -1931,13 +1928,6 @@ gtk_assistant_set_page_type (GtkAssistant         *assistant,
     {
       page_info->type = type;
 
-      /* backwards compatibility to the era before fixing bug 604289 */
-      if (type == GTK_ASSISTANT_PAGE_SUMMARY && !page_info->complete_set)
-        {
-          gtk_assistant_set_page_complete (assistant, page, TRUE);
-          page_info->complete_set = FALSE;
-        }
-
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
       set_assistant_buttons_state (assistant);
@@ -2169,7 +2159,6 @@ gtk_assistant_set_page_complete (GtkAssistant *assistant,
   if (complete != page_info->complete)
     {
       page_info->complete = complete;
-      page_info->complete_set = TRUE;
 
       /* Always set buttons state, a change in a future page
 	 might change current page buttons */
