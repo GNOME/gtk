@@ -1976,7 +1976,7 @@ fi
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.6.4])
+GOBJECT_INTROSPECTION_CHECK([0.6.6])
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
