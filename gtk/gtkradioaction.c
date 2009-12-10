@@ -395,7 +395,7 @@ create_menu_item (GtkAction *action)
  *     }
  * ]|
  *
- * Returns: the list representing the radio group for this object
+ * Returns:  (element-type GtkAction) (transfer none): the list representing the radio group for this object
  *
  * Since: 2.4
  */

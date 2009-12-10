@@ -275,8 +275,8 @@ gtk_icon_theme_new (void)
  * 
  * Gets the icon theme for the default screen. See
  * gtk_icon_theme_get_for_screen().
- * 
- * Return value: A unique #GtkIconTheme associated with
+ *
+ * Return value: (transfer none): A unique #GtkIconTheme associated with
  *  the default screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open. Do not ref or unref it.
@@ -301,8 +301,8 @@ gtk_icon_theme_get_default (void)
  * is usually a better choice than calling than gtk_icon_theme_new()
  * and setting the screen yourself; by using this function
  * a single icon theme object will be shared between users.
- * 
- * Return value: A unique #GtkIconTheme associated with
+ *
+ * Return value: (transfer none): A unique #GtkIconTheme associated with
  *  the given screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open. Do not ref or unref it.
@@ -1738,8 +1738,8 @@ add_key_to_list (gpointer  key,
  * The set of values for the context string is system dependent,
  * but will typically include such values as "Applications" and
  * "MimeTypes".
- * 
- * Return value: a #GList list holding the names of all the
+ *
+ * Return value: (element-type utf8) (transfer none): a #GList list holding the names of all the
  *  icons in the theme. You must first free each element
  *  in the list with g_free(), then free the list itself
  *  with g_list_free().
@@ -1801,7 +1801,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
  * Gets the list of contexts available within the current
  * hierarchy of icon themes
  *
- * Return value: a #GList list holding the names of all the
+ * Return value: (element-type utf8) (transfer full): a #GList list holding the names of all the
  *  contexts in the theme. You must first free each element
  *  in the list with g_free(), then free the list itself
  *  with g_list_free().
@@ -2749,8 +2749,8 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
  * GTK+ to use built in icon images, you must pass the
  * %GTK_ICON_LOOKUP_USE_BUILTIN to
  * gtk_icon_theme_lookup_icon().
- * 
- * Return value: the built-in image pixbuf, or %NULL. No
+ *
+ * Return value: (transfer none): the built-in image pixbuf, or %NULL. No
  *  extra reference is added to the returned pixbuf, so if
  *  you want to keep it around, you must use g_object_ref().
  *  The returned image must not be modified.

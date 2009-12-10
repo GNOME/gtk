@@ -351,10 +351,11 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
 
 /**
  * gtk_accel_groups_from_object:
- * @object:        a #GObject, usually a #GtkWindow 
- * @returns: a list of all accel groups which are attached to @object
+ * @object:        a #GObject, usually a #GtkWindow
  *
  * Gets a list of all accel groups which are attached to @object.
+ *
+ * Returns: (element-type GtkAccelGroup) (transfer none): a list of all accel groups which are attached to @object
  */
 GSList*
 gtk_accel_groups_from_object (GObject *object)

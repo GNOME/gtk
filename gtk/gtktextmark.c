@@ -283,8 +283,8 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
  * 
  * Gets the buffer this mark is located inside,
  * or %NULL if the mark is deleted.
- * 
- * Return value: the mark's #GtkTextBuffer
+ *
+ * Return value: (transfer none): the mark's #GtkTextBuffer
  **/
 GtkTextBuffer*
 gtk_text_mark_get_buffer (GtkTextMark *mark)

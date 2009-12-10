@@ -882,9 +882,9 @@ gtk_init_with_args (int            *argc,
 
 /**
  * gtk_parse_args:
- * @argc: a pointer to the number of command line arguments.
- * @argv: a pointer to the array of command line arguments.
- * 
+ * @argc: (inout): a pointer to the number of command line arguments.
+ * @argv: (array) (inout): a pointer to the array of command line arguments.
+ *
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
  * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
@@ -935,13 +935,13 @@ gtk_parse_args (int    *argc,
 
 /**
  * gtk_init_check:
- * @argc: Address of the <parameter>argc</parameter> parameter of your 
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of your
  *   main() function. Changed if any arguments were handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
+ * @argv: (array length=argc) (inout) (allow-none): Address of the <parameter>argv</parameter> parameter of main().
  *   Any parameters understood by gtk_init() are stripped before return.
- * 
- * This function does the same work as gtk_init() with only 
- * a single change: It does not terminate the program if the GUI can't be 
+ *
+ * This function does the same work as gtk_init() with only
+ * a single change: It does not terminate the program if the GUI can't be
  * initialized. Instead it returns %FALSE on failure.
  *
  * This way the application can fall back to some other means of communication 
@@ -966,13 +966,13 @@ gtk_init_check (int	 *argc,
 
 /**
  * gtk_init:
- * @argc: Address of the <parameter>argc</parameter> parameter of your 
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of your
  *   main() function. Changed if any arguments were handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
+ * @argv: (array length=argc) (inout) (allow-none): Address of the <parameter>argv</parameter> parameter of main().
  *   Any parameters understood by gtk_init() are stripped before return.
- * 
+ *
  * Call this function before using any other GTK+ functions in your GUI
- * applications.  It will initialize everything needed to operate the 
+ * applications.  It will initialize everything needed to operate the
  * toolkit and parses some standard command line options. @argc and 
  * @argv are adjusted accordingly so your own code will 
  * never see those standard arguments. 

@@ -967,12 +967,12 @@ get_page_setup_dialog (GtkWindow        *parent,
 
 /**
  * gtk_print_run_page_setup_dialog:
- * @parent: transient parent, or %NULL
- * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @parent: (allow-none): transient parent
+ * @page_setup: (allow-none): an existing #GtkPageSetup
  * @settings: a #GtkPrintSettings
- * 
- * Runs a page setup dialog, letting the user modify the values from 
- * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup 
+ *
+ * Runs a page setup dialog, letting the user modify the values from
+ * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup
  * is identical to the passed in @page_setup, otherwise it contains the 
  * modifications done in the dialog.
  *

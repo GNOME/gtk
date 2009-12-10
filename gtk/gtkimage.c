@@ -492,9 +492,9 @@ gtk_image_get_property (GObject     *object,
 
 /**
  * gtk_image_new_from_pixmap:
- * @pixmap: a #GdkPixmap, or %NULL
- * @mask: a #GdkBitmap, or %NULL
- * 
+ * @pixmap: (allow-none): a #GdkPixmap, or %NULL
+ * @mask: (allow-none): a #GdkBitmap, or %NULL
+ *
  * Creates a #GtkImage widget displaying @pixmap with a @mask.
  * A #GdkPixmap is a server-side image buffer in the pixel format of the
  * current display. The #GtkImage does not assume a reference to the
@@ -518,9 +518,9 @@ gtk_image_new_from_pixmap (GdkPixmap *pixmap,
 
 /**
  * gtk_image_new_from_image:
- * @image: a #GdkImage, or %NULL
- * @mask: a #GdkBitmap, or %NULL 
- * 
+ * @image: (allow-none): a #GdkImage, or %NULL
+ * @mask: (allow-none): a #GdkBitmap, or %NULL
+ *
  * Creates a #GtkImage widget displaying a @image with a @mask.
  * A #GdkImage is a client-side image buffer in the pixel format of the
  * current display. The #GtkImage does not assume a reference to the
@@ -579,8 +579,8 @@ gtk_image_new_from_file   (const gchar *filename)
 
 /**
  * gtk_image_new_from_pixbuf:
- * @pixbuf: a #GdkPixbuf, or %NULL
- * 
+ * @pixbuf: (allow-none): a #GdkPixbuf, or %NULL
+ *
  * Creates a new #GtkImage displaying @pixbuf.
  * The #GtkImage does not assume a reference to the
  * pixbuf; you still need to unref it if you own references.
@@ -750,8 +750,8 @@ gtk_image_new_from_gicon (GIcon *icon,
 /**
  * gtk_image_set_from_pixmap:
  * @image: a #GtkImage
- * @pixmap: a #GdkPixmap or %NULL
- * @mask: a #GdkBitmap or %NULL
+ * @pixmap: (allow-none): a #GdkPixmap or %NULL
+ * @mask: (allow-none): a #GdkBitmap or %NULL
  *
  * See gtk_image_new_from_pixmap() for details.
  **/
@@ -801,8 +801,8 @@ gtk_image_set_from_pixmap (GtkImage  *image,
 /**
  * gtk_image_set_from_image:
  * @image: a #GtkImage
- * @gdk_image: a #GdkImage or %NULL
- * @mask: a #GdkBitmap or %NULL
+ * @gdk_image: (allow-none): a #GdkImage or %NULL
+ * @mask:  (allow-none): a #GdkBitmap or %NULL
  *
  * See gtk_image_new_from_image() for details.
  **/
@@ -852,7 +852,7 @@ gtk_image_set_from_image  (GtkImage  *image,
 /**
  * gtk_image_set_from_file:
  * @image: a #GtkImage
- * @filename: a filename or %NULL
+ * @filename: (allow-none): a filename or %NULL
  *
  * See gtk_image_new_from_file() for details.
  **/
@@ -908,9 +908,9 @@ gtk_image_set_from_file   (GtkImage    *image,
 /**
  * gtk_image_set_from_pixbuf:
  * @image: a #GtkImage
- * @pixbuf: a #GdkPixbuf or %NULL
+ * @pixbuf: (allow-none): a #GdkPixbuf or %NULL
  *
- * See gtk_image_new_from_pixbuf() for details. 
+ * See gtk_image_new_from_pixbuf() for details.
  **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,

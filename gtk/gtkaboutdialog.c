@@ -933,7 +933,7 @@ update_name_version (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_name:
  * @about: a #GtkAboutDialog
- * @name: the program name
+ * @name: (allow-none): the program name
  *
  * Sets the name to display in the about dialog.
  * If this is not set, it defaults to g_get_application_name().
@@ -1005,7 +1005,7 @@ gtk_about_dialog_get_version (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_version:
  * @about: a #GtkAboutDialog
- * @version: the version string
+ * @version: (allow-none): the version string
  *
  * Sets the version string to display in the about dialog.
  *
@@ -1057,7 +1057,7 @@ gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_copyright:
  * @about: a #GtkAboutDialog
- * @copyright: the copyright string
+ * @copyright: (allow-none) the copyright string
  *
  * Sets the copyright string to display in the about dialog.
  * This should be a short string of one or two lines.
@@ -1120,7 +1120,7 @@ gtk_about_dialog_get_comments (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_comments:
  * @about: a #GtkAboutDialog
- * @comments: a comments string
+ * @comments: (allow-none): a comments string
  *
  * Sets the comments string to display in the about dialog.
  * This should be a short string of one or two lines.
@@ -1181,7 +1181,7 @@ gtk_about_dialog_get_license (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_license:
  * @about: a #GtkAboutDialog
- * @license: the license information or %NULL
+ * @license: (allow-none): the license information or %NULL
  *
  * Sets the license information to be displayed in the secondary
  * license dialog. If @license is %NULL, the license button is
@@ -1295,7 +1295,7 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_website:
  * @about: a #GtkAboutDialog
- * @website: a URL string starting with "http://"
+ * @website: (allow-none): a URL string starting with "http://"
  *
  * Sets the URL to use for the website link.
  *
@@ -1587,7 +1587,7 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_translator_credits:
  * @about: a #GtkAboutDialog
- * @translator_credits: the translator credits
+ * @translator_credits: (allow-none): the translator credits
  *
  * Sets the translator credits string which is displayed in
  * the translators tab of the secondary credits dialog.
@@ -1674,7 +1674,7 @@ icon_set_new_from_pixbufs (GList *pixbufs)
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
- * @logo: a #GdkPixbuf, or %NULL
+ * @logo: (allow-none): a #GdkPixbuf, or %NULL
  *
  * Sets the pixbuf to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with
@@ -1751,7 +1751,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_logo_icon_name:
  * @about: a #GtkAboutDialog
- * @icon_name: an icon name, or %NULL
+ * @icon_name: (allow-none): an icon name, or %NULL
  *
  * Sets the pixbuf to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with

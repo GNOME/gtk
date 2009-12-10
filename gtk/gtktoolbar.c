@@ -2253,11 +2253,11 @@ logical_to_physical (GtkToolbar *toolbar,
 /**
  * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
- * @tool_item: a #GtkToolItem, or %NULL to turn of highlighting
+ * @tool_item: (allow-none): a #GtkToolItem, or %NULL to turn of highlighting
  * @index_: a position on @toolbar
- * 
+ *
  * Highlights @toolbar to give an idea of what it would look like
- * if @item was added to @toolbar at the position indicated by @index_. 
+ * if @item was added to @toolbar at the position indicated by @index_.
  * If @item is %NULL, highlighting is turned off. In that case @index_ 
  * is ignored.
  *
@@ -3518,9 +3518,9 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
 /**
  * gtk_toolbar_append_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
  *
  * Adds a widget to the end of the given toolbar.
  *
@@ -3542,9 +3542,9 @@ gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 /**
  * gtk_toolbar_prepend_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
  *
  * Adds a widget to the beginning of the given toolbar.
  *
@@ -3566,11 +3566,11 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 /**
  * gtk_toolbar_insert_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
  * @position: the number of widgets to insert this widget after.
- * 
+ *
  * Inserts a widget in the toolbar at the given position.
  *
  * Deprecated: 2.4: Use gtk_toolbar_insert() instead.

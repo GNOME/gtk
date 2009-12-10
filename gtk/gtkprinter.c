@@ -932,8 +932,8 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * Lists all the paper sizes @printer supports.
  * This will return and empty list unless the printer's details are 
  * available, see gtk_printer_has_details() and gtk_printer_request_details().
- * 
- * Return value: a newly allocated list of newly allocated #GtkPageSetup s.
+ *
+ * Return value: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
  *
  * Since: 2.12
  */

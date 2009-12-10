@@ -466,8 +466,8 @@ viewport_set_adjustment (GtkViewport    *viewport,
 /**
  * gtk_viewport_set_hadjustment:
  * @viewport: a #GtkViewport.
- * @adjustment: a #GtkAdjustment.
- * 
+ * @adjustment: (allow-none): a #GtkAdjustment.
+ *
  * Sets the horizontal adjustment of the viewport.
  **/
 void
@@ -486,8 +486,8 @@ gtk_viewport_set_hadjustment (GtkViewport   *viewport,
 /**
  * gtk_viewport_set_vadjustment:
  * @viewport: a #GtkViewport.
- * @adjustment: a #GtkAdjustment.
- * 
+ * @adjustment: (allow-none): a #GtkAdjustment.
+ *
  * Sets the vertical adjustment of the viewport.
  **/
 void

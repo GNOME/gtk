@@ -180,6 +180,16 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
   g_object_unref (radio_menu_item);
 }
 
+
+/**
+ * gtk_radio_menu_item_new_with_label:
+ * @group: (element-type GtkRadioMenuItem) (transfer full):
+ * @label: the text for the label
+ *
+ * Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
+ *
+ * Returns: (transfer none): A new #GtkRadioMenuItem
+ */
 GtkWidget*
 gtk_radio_menu_item_new_with_label (GSList *group,
 				    const gchar *label)

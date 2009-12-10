@@ -215,8 +215,8 @@ gtk_stock_lookup (const gchar  *stock_id,
  * Retrieves a list of all known stock IDs added to a #GtkIconFactory
  * or registered with gtk_stock_add(). The list must be freed with g_slist_free(),
  * and each string in the list must be freed with g_free().
- * 
- * Return value: a list of known stock IDs
+ *
+ * Return value: (element-type utf8) (transfer full): a list of known stock IDs
  **/
 GSList*
 gtk_stock_list_ids (void)

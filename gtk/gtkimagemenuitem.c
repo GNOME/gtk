@@ -916,8 +916,8 @@ gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,
 /** 
  * gtk_image_menu_item_set_image:
  * @image_menu_item: a #GtkImageMenuItem.
- * @image: a widget to set as the image for the menu item.
- * 
+ * @image: (allow-none): a widget to set as the image for the menu item.
+ *
  * Sets the image of @image_menu_item to the given widget.
  * Note that it depends on the show-menu-images setting whether
  * the image will be displayed or not.

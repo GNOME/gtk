@@ -660,8 +660,8 @@ files_to_strings (GSList  *files,
  * @chooser. The returned names are full absolute paths. If files in the current
  * folder cannot be represented as local filenames they will be ignored. (See
  * gtk_file_chooser_get_uris())
- * 
- * Return value: a #GSList containing the filenames of all selected
+ *
+ * Return value: (element-type utf8) (transfer full): a #GSList containing the filenames of all selected
  *   files and subfolders in the current folder. Free the returned list
  *   with g_slist_free(), and the filenames with g_free().
  *
@@ -964,8 +964,8 @@ gtk_file_chooser_unselect_all (GtkFileChooser *chooser)
  * 
  * Lists all the selected files and subfolders in the current folder of
  * @chooser. The returned names are full absolute URIs.
- * 
- * Return value: a #GSList containing the URIs of all selected
+ *
+ * Return value: (element-type utf8) (transfer full): a #GSList containing the URIs of all selected
  *   files and subfolders in the current folder. Free the returned list
  *   with g_slist_free(), and the filenames with g_free().
  *
@@ -1155,8 +1155,8 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
  * 
  * Lists all the selected files and subfolders in the current folder of @chooser
  * as #GFile. An internal function, see gtk_file_chooser_get_uris().
- * 
- * Return value: a #GSList containing a #GFile for each selected
+ *
+ * Return value: (element-type utf8) (transfer full): a #GSList containing a #GFile for each selected
  *   file and subfolder in the current folder.  Free the returned list
  *   with g_slist_free(), and the files with g_object_unref().
  *
@@ -1665,8 +1665,8 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
  * 
  * Lists the current set of user-selectable filters; see
  * gtk_file_chooser_add_filter(), gtk_file_chooser_remove_filter().
- * 
- * Return value: a #GSList containing the current set of
+ *
+ * Return value: (element-type utf8) (transfer container): a #GSList containing the current set of
  *  user selectable filters. The contents of the list are
  *  owned by GTK+, but you must free the list itself with
  *  g_slist_free() when you are done with it.
@@ -1806,8 +1806,8 @@ gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
  * 
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder().
- * 
- * Return value: A list of folder filenames, or %NULL if there are no shortcut
+ *
+ * Return value: (element-type utf8) (transfer full): A list of folder filenames, or %NULL if there are no shortcut
  * folders.  Free the returned list with g_slist_free(), and the filenames with
  * g_free().
  *
@@ -1903,8 +1903,8 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
  * 
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder_uri().
- * 
- * Return value: A list of folder URIs, or %NULL if there are no shortcut
+ *
+ * Return value: (element-type utf8) (transfer full): A list of folder URIs, or %NULL if there are no shortcut
  * folders.  Free the returned list with g_slist_free(), and the URIs with
  * g_free().
  *

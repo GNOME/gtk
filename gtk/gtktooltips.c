@@ -210,6 +210,17 @@ gtk_tooltips_data_get (GtkWidget       *widget)
   return g_object_get_data (G_OBJECT (widget), tooltips_data_key);
 }
 
+
+/**
+ * gtk_tooltips_set_tip:
+ * @tooltips: a #GtkTooltips.
+ * @widget: the #GtkWidget you wish to associate the tip with.
+ * @tip_text: (allow-none): a string containing the tip itself.
+ * @tip_private: (allow-none): a string of any further information that may be useful if the user gets stuck.
+ *
+ * Adds a tooltip containing the message @tip_text to the specified #GtkWidget.
+ * Deprecated: 2.12:
+ */
 void
 gtk_tooltips_set_tip (GtkTooltips *tooltips,
 		      GtkWidget   *widget,

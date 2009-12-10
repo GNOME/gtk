@@ -1363,7 +1363,7 @@ gtk_text_view_new_with_buffer (GtkTextBuffer *buffer)
 /**
  * gtk_text_view_set_buffer:
  * @text_view: a #GtkTextView
- * @buffer: a #GtkTextBuffer
+ * @buffer: (allow-none): a #GtkTextBuffer
  *
  * Sets @buffer as the buffer being displayed by @text_view. The previous
  * buffer displayed by the text view is unreferenced, and a reference is
@@ -1504,7 +1504,7 @@ get_buffer (GtkTextView *text_view)
  * The reference count on the buffer is not incremented; the caller
  * of this function won't own a new reference.
  *
- * Return value: a #GtkTextBuffer
+ * Return value: (transfer none): a #GtkTextBuffer
  **/
 GtkTextBuffer*
 gtk_text_view_get_buffer (GtkTextView *text_view)
@@ -8199,7 +8199,7 @@ text_window_get_height (GtkTextWindow *win)
  * height is 0, and are nonexistent before the widget has been
  * realized.
  *
- * Return value: a #GdkWindow, or %NULL
+ * Return value: (transfer none): a #GdkWindow, or %NULL
  **/
 GdkWindow*
 gtk_text_view_get_window (GtkTextView *text_view,

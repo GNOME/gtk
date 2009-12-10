@@ -10585,10 +10585,10 @@ gtk_tree_view_get_model (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_model:
  * @tree_view: A #GtkTreeNode.
- * @model: The model.
+ * @model: (allow-none): The model.
  *
  * Sets the model for a #GtkTreeView.  If the @tree_view already has a model
- * set, it will remove it before setting the new model.  If @model is %NULL, 
+ * set, it will remove it before setting the new model.  If @model is %NULL,
  * then it will unset the old model.
  **/
 void
@@ -11322,7 +11322,7 @@ gtk_tree_view_get_column (GtkTreeView *tree_view,
  * Returns a #GList of all the #GtkTreeViewColumn s currently in @tree_view.
  * The returned list must be freed with g_list_free ().
  *
- * Return value: A list of #GtkTreeViewColumn s
+ * Return value: (element-type GtkTreeViewColumn) (transfer container): A list of #GtkTreeViewColumn s
  **/
 GList *
 gtk_tree_view_get_columns (GtkTreeView *tree_view)
@@ -11336,7 +11336,7 @@ gtk_tree_view_get_columns (GtkTreeView *tree_view)
  * gtk_tree_view_move_column_after:
  * @tree_view: A #GtkTreeView
  * @column: The #GtkTreeViewColumn to be moved.
- * @base_column: The #GtkTreeViewColumn to be moved relative to, or %NULL.
+ * @base_column: (allow-none): The #GtkTreeViewColumn to be moved relative to, or %NULL.
  *
  * Moves @column to be after to @base_column.  If @base_column is %NULL, then
  * @column is placed in the first position.
@@ -11519,8 +11519,8 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
 /**
  * gtk_tree_view_scroll_to_cell:
  * @tree_view: A #GtkTreeView.
- * @path: The path of the row to move to, or %NULL.
- * @column: The #GtkTreeViewColumn to move horizontally to, or %NULL.
+ * @path: (allow-none): The path of the row to move to, or %NULL.
+ * @column: (allow-none): The #GtkTreeViewColumn to move horizontally to, or %NULL.
  * @use_align: whether to use alignment arguments, or %FALSE.
  * @row_align: The vertical alignment of the row specified by @path.
  * @col_align: The horizontal alignment of the column specified by @column.
@@ -12512,7 +12512,7 @@ gtk_tree_view_get_cursor (GtkTreeView        *tree_view,
  * gtk_tree_view_set_cursor:
  * @tree_view: A #GtkTreeView
  * @path: A #GtkTreePath
- * @focus_column: A #GtkTreeViewColumn, or %NULL
+ * @focus_column: (allow-none): A #GtkTreeViewColumn, or %NULL
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
@@ -12541,8 +12541,8 @@ gtk_tree_view_set_cursor (GtkTreeView       *tree_view,
  * gtk_tree_view_set_cursor_on_cell:
  * @tree_view: A #GtkTreeView
  * @path: A #GtkTreePath
- * @focus_column: A #GtkTreeViewColumn, or %NULL
- * @focus_cell: A #GtkCellRenderer, or %NULL
+ * @focus_column: (allow-none): A #GtkTreeViewColumn, or %NULL
+ * @focus_cell: (allow-none): A #GtkCellRenderer, or %NULL
  * @start_editing: %TRUE if the specified cell should start being edited.
  *
  * Sets the current keyboard focus to be at @path, and selects it.  This is
@@ -12764,8 +12764,8 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
 /**
  * gtk_tree_view_get_cell_area:
  * @tree_view: a #GtkTreeView
- * @path: a #GtkTreePath for the row, or %NULL to get only horizontal coordinates
- * @column: a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordinates
+ * @path: (allow-none): a #GtkTreePath for the row, or %NULL to get only horizontal coordinates
+ * @column: (allow-none): a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordinates
  * @rect: rectangle to fill with cell rect
  *
  * Fills the bounding rectangle in bin_window coordinates for the cell at the
@@ -13948,7 +13948,7 @@ gtk_tree_view_get_search_entry (GtkTreeView *tree_view)
 /**
  * gtk_tree_view_set_search_entry:
  * @tree_view: A #GtkTreeView
- * @entry: the entry the interactive search code of @tree_view should use or %NULL
+ * @entry: (allow-none): the entry the interactive search code of @tree_view should use or %NULL
  *
  * Sets the entry which the interactive search code will use for this
  * @tree_view.  This is useful when you want to provide a search entry

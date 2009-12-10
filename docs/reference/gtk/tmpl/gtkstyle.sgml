@@ -136,15 +136,6 @@ Returns whether the style is attached to a window.
 
 </para>
 
-@style: 
-@window: 
-@set_bg: 
-@state_type: 
-@area: 
-@x: 
-@y: 
-@width: 
-@height: 
 
 
 <!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->

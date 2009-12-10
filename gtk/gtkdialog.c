@@ -529,12 +529,12 @@ gtk_dialog_new_empty (const gchar     *title,
 
 /**
  * gtk_dialog_new_with_buttons:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @flags: from #GtkDialogFlags
- * @first_button_text: stock ID or text to go in first button, or %NULL
+ * @first_button_text: (allow-none): stock ID or text to go in first button, or %NULL
  * @Varargs: response ID for first button, then additional buttons, ending with %NULL
- * 
+ *
  * Creates a new #GtkDialog with title @title (or %NULL for the default
  * title; see gtk_window_set_title()) and transient parent @parent (or
  * %NULL for none; see gtk_window_set_transient_for()). The @flags
@@ -1191,10 +1191,10 @@ gtk_dialog_get_response_for_widget (GtkDialog *dialog,
 
 /**
  * gtk_alternative_dialog_button_order:
- * @screen: a #GdkScreen, or %NULL to use the default screen
+ * @screen: (allow-none): a #GdkScreen, or %NULL to use the default screen
  *
  * Returns %TRUE if dialogs are expected to use an alternative
- * button order on the screen @screen. See 
+ * button order on the screen @screen. See
  * gtk_dialog_set_alternative_button_order() for more details
  * about alternative button order. 
  *
@@ -1519,7 +1519,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
  *
  * Returns the action area of @dialog.
  *
- * Returns: the action area.
+ * Returns: (transfer none): the action area.
  *
  * Since: 2.14
  **/
@@ -1537,7 +1537,7 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  *
  * Returns the content area of @dialog.
  *
- * Returns: the content area #GtkVBox.
+ * Returns: (transfer none): the content area #GtkVBox.
  *
  * Since: 2.14
  **/

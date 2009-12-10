@@ -299,6 +299,10 @@ gtk_text_layout_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize (object);
 }
 
+/**
+ * gtk_text_layout_set_buffer:
+ * @buffer: (allow-none):
+ */
 void
 gtk_text_layout_set_buffer (GtkTextLayout *layout,
                             GtkTextBuffer *buffer)
@@ -703,6 +707,12 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
   return GTK_TEXT_LAYOUT_GET_CLASS (layout)->wrap (layout, line, line_data);
 }
 
+
+/**
+ * gtk_text_layout_get_lines:
+ *
+ * Return value: (element-type GtkTextLine) (transfer container):
+ */
 GSList*
 gtk_text_layout_get_lines (GtkTextLayout *layout,
                            /* [top_y, bottom_y) */

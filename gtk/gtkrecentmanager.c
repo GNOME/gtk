@@ -627,7 +627,7 @@ gtk_recent_manager_new (void)
  * in your application without caring about memory management. The
  * returned instance will be freed when you application terminates.
  *
- * Return value: A unique #GtkRecentManager. Do not ref or unref it.
+ * Return value: (transfer none): A unique #GtkRecentManager. Do not ref or unref it.
  *
  * Since: 2.10
  */
@@ -1273,7 +1273,8 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
  *
  * Gets the list of recently used resources.
  *
- * Return value: a list of newly allocated #GtkRecentInfo objects. Use
+ * Return value:  (element-type GtkRecentInfo) (transfer full): a list of
+ *   newly allocated #GtkRecentInfo objects. Use
  *   gtk_recent_info_unref() on each item inside the list, and then
  *   free the list itself using g_list_free().
  *
@@ -1723,9 +1724,9 @@ recent_app_info_free (RecentAppInfo *app_info)
  * gtk_recent_info_get_application_info:
  * @info: a #GtkRecentInfo
  * @app_name: the name of the application that has registered this item
- * @app_exec: return location for the string containing the command line
- * @count: return location for the number of times this item was registered
- * @time_: return location for the timestamp this item was last registered
+ * @app_exec: (transfer none) (out): return location for the string containing the command line
+ * @count: (out): return location for the number of times this item was registered
+ * @time_: (out): return location for the timestamp this item was last registered
  *    for this application
  *
  * Gets the data regarding the application that has registered the resource
@@ -1779,15 +1780,15 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 /**
  * gtk_recent_info_get_applications:
  * @info: a #GtkRecentInfo
- * @length: return location for the length of the returned list, or %NULL
+ * @length: (out) (allow-none): return location for the length of the returned list
  *
  * Retrieves the list of applications that have registered this resource.
  *
- * Return value: a newly allocated %NULL-terminated array of strings.
- *   Use g_strfreev() to free it.
+ * Return value: (array length=length zero-terminated=1): a newly allocated
+ *  %NULL-terminated array of strings. Use g_strfreev() to free it.
  *
  * Since: 2.10
- */ 			      
+ */
 gchar **
 gtk_recent_info_get_applications (GtkRecentInfo *info,
 				  gsize         *length)
@@ -2274,14 +2275,14 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
 /**
  * gtk_recent_info_get_groups:
  * @info: a #GtkRecentInfo
- * @length: return location for the number of groups returned, or %NULL
+ * @length: (out) (allow-none): return location for the number of groups returned
  *
  * Returns all groups registered for the recently used item @info.  The
  * array of returned group names will be %NULL terminated, so length might
  * optionally be %NULL.
  *
- * Return value: a newly allocated %NULL terminated array of strings.  Use
- *   g_strfreev() to free it.
+ * Return value:  (array length=length zero-terminated=1): a newly allocated
+ * %NULL terminated array of strings.  Use g_strfreev() to free it.
  *
  * Since: 2.10
  */

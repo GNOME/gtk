@@ -1980,8 +1980,8 @@ gtk_assistant_get_page_type (GtkAssistant *assistant,
  * gtk_assistant_set_page_header_image:
  * @assistant: a #GtkAssistant
  * @page: a page of @assistant
- * @pixbuf: the new header image @page
- * 
+ * @pixbuf: (allow-none): the new header image @page
+ *
  * Sets a header image for @page. This image is displayed in the header
  * area of the assistant when @page is the current page.
  *
@@ -2060,8 +2060,8 @@ gtk_assistant_get_page_header_image (GtkAssistant *assistant,
  * gtk_assistant_set_page_side_image:
  * @assistant: a #GtkAssistant
  * @page: a page of @assistant
- * @pixbuf: the new header image @page
- * 
+ * @pixbuf: (allow-none): the new header image @page
+ *
  * Sets a header image for @page. This image is displayed in the side
  * area of the assistant when @page is the current page.
  *
