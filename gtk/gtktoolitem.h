@@ -28,7 +28,6 @@
 #define __GTK_TOOL_ITEM_H__
 
 #include <gtk/gtkbin.h>
-#include <gtk/gtktooltips.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtksizegroup.h>
 

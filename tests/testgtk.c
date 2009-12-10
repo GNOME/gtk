@@ -138,15 +138,6 @@ build_option_menu (gchar           *items[],
   return omenu;
 }
 
-static void
-destroy_tooltips (GtkWidget *widget, GtkWindow **window)
-{
-  GtkTooltips *tt = g_object_get_data (G_OBJECT (*window), "tooltips");
-  g_object_unref (tt);
-  *window = NULL;
-}
-
-
 /*
  * Windows with an alpha channel
  */
@@ -3922,7 +3913,6 @@ create_tooltips (GtkWidget *widget)
   GtkWidget *frame;
   GtkWidget *tips_query;
   GtkWidget *separator;
-  GtkTooltips *tooltips;
 
   if (!window)
     {
@@ -3942,11 +3932,6 @@ create_tooltips (GtkWidget *widget)
                         G_CALLBACK (destroy_tooltips),
                         &window);
 
-      tooltips=gtk_tooltips_new();
-      g_object_ref (tooltips);
-      gtk_object_sink (GTK_OBJECT (tooltips));
-      g_object_set_data (G_OBJECT (window), "tooltips", tooltips);
-      
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
 
@@ -3957,26 +3942,20 @@ create_tooltips (GtkWidget *widget)
       button = gtk_toggle_button_new_with_label ("button1");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
-      gtk_tooltips_set_tip (tooltips,
-			    button,
-			    "This is button 1",
-			    "ContextHelp/buttons/1");
+      gtk_widget_set_tooltip_text (button, "This is button 1");
 
       button = gtk_toggle_button_new_with_label ("button2");
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
-      gtk_tooltips_set_tip (tooltips,
-			    button,
-			    "This is button 2. This is also a really long tooltip which probably won't fit on a single line and will therefore need to be wrapped. Hopefully the wrapping will work correctly.",
-			    "ContextHelp/buttons/2_long");
+      gtk_widget_set_tooltip_text (button,
+        "This is button 2. This is also a really long tooltip which probably "
+        "won't fit on a single line and will therefore need to be wrapped. "
+        "Hopefully the wrapping will work correctly.");
 
       toggle = gtk_toggle_button_new_with_label ("Override TipsQuery Label");
       gtk_box_pack_start (GTK_BOX (box2), toggle, TRUE, TRUE, 0);
 
-      gtk_tooltips_set_tip (tooltips,
-			    toggle,
-			    "Toggle TipsQuery view.",
-			    "Hi msw! ;)");
+      gtk_widget_set_tooltip_text (toggle, "Toggle TipsQuery view.");
 
       box3 =
 	g_object_new (gtk_vbox_get_type (),
@@ -3998,11 +3977,7 @@ create_tooltips (GtkWidget *widget)
 			"swapped_signal::clicked", gtk_tips_query_start_query, tips_query,
 			NULL);
       gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
-      gtk_tooltips_set_tip (tooltips,
-			    button,
-			    "Start the Tooltips Inspector",
-			    "ContextHelp/buttons/?");
-      
+      gtk_widget_set_tooltip_text (button "Start the Tooltips Inspector");
       
       g_object_set (g_object_connect (tips_query,
 				      "signal::widget_entered", tips_query_widget_entered, toggle,
@@ -4038,7 +4013,7 @@ create_tooltips (GtkWidget *widget)
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
 
-      gtk_tooltips_set_tip (tooltips, button, "Push this button to close window", "ContextHelp/buttons/Close");
+      gtk_widget_set_tooltip_text (button, "Push this button to close window");
     }
 
   if (!gtk_widget_get_visible (window))
@@ -4697,8 +4672,7 @@ create_item_factory (GtkWidget *widget)
       GtkWidget *button;
       GtkAccelGroup *accel_group;
       GtkItemFactory *item_factory;
-      GtkTooltips *tooltips;
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -4745,20 +4719,14 @@ create_item_factory (GtkWidget *widget)
        
       /* Test how tooltips (ugh) work on menu items
        */
-      tooltips = gtk_tooltips_new ();
-      g_object_ref (tooltips);
-      gtk_object_sink (GTK_OBJECT (tooltips));
-      g_object_set_data_full (G_OBJECT (window), "testgtk-tooltips",
-			      tooltips, (GDestroyNotify)g_object_unref);
-      
-      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/New"),
-			    "Create a new file", NULL);
-      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Open"),
-			    "Open a file", NULL);
-      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/File/Save"),
-			    "Safe file", NULL);
-      gtk_tooltips_set_tip (tooltips, gtk_item_factory_get_item (item_factory, "/Preferences/Color"),
-			    "Modify color", NULL);
+      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/New"),
+                                   "Create a new file");
+      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/Open"),
+                                   "Open a file");
+      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/Save"),
+                                   "Safe file");
+      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/Preferences/Color"),
+                                   "Modify color");
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);

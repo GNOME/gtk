@@ -38,7 +38,6 @@
 
 
 #include <gtk/gtkcontainer.h>
-#include <gtk/gtktooltips.h>
 #include <gtk/gtktoolitem.h>
 
 G_BEGIN_DECLS
@@ -93,12 +92,6 @@ struct _GtkToolbar
   GtkOrientation   GSEAL (orientation);
   GtkToolbarStyle  GSEAL (style);
   GtkIconSize      GSEAL (icon_size);
-
-#ifndef GTK_DISABLE_DEPRECATED
-  GtkTooltips     *GSEAL (tooltips);
-#else
-  gpointer         GSEAL (_tooltips);
-#endif
 
   /*< private >*/
   gint             GSEAL (button_maxw);		/* maximum width of homogeneous children */

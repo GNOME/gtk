@@ -21,8 +21,6 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED /* GtkTooltips */
-
 #include "gtkmenutoolbutton.h"
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"

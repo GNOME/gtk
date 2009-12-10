@@ -24,8 +24,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED /* GtkTooltips */
-
 #include "gtktoolitem.h"
 #include "gtkmarshalers.h"
 #include "gtktoolshell.h"

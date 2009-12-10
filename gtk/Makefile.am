@@ -634,11 +634,9 @@ gtk_base_c_sources =            \
 
 # Deprecated
 gtk_public_h_sources += \
-	gtkprogress.h		\
-	gtktooltips.h
+	gtkprogress.h
 gtk_base_c_sources += \
-	gtkprogress.c		\
-	gtktooltips.c
+	gtkprogress.c
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
