@@ -104,7 +104,8 @@ gdk_built_private_headers =			\
 
 gdk_private_headers =   \
 	gdkinternals.h \
-	gdkpoly-generic.h	\
+	gdkintl.h \
+    gdkpoly-generic.h	\
 	gdkregion-generic.h
 
 gdk_c_sources =                 \
