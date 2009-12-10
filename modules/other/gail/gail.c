@@ -148,7 +148,7 @@ gail_get_accessible_for_widget (GtkWidget *widget,
           g_object_unref (obj);
         }
     }
-  else if (GTK_CHECK_TYPE ((widget), gnome_canvas))
+  else if (G_TYPE_CHECK_INSTANCE_TYPE ((widget), gnome_canvas))
     {
       GObject *focused_item;
       GValue value = {0, };
