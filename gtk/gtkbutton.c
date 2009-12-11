@@ -2137,11 +2137,22 @@ static void
 gtk_button_screen_changed (GtkWidget *widget,
 			   GdkScreen *previous_screen)
 {
+  GtkButton *button;
   GtkSettings *settings;
   guint show_image_connection;
 
   if (!gtk_widget_has_screen (widget))
     return;
+
+  button = GTK_BUTTON (widget);
+
+  /* If the button is being pressed while the screen changes the
+    release might never occur, so we reset the state. */
+  if (button->button_down)
+    {
+      button->button_down = FALSE;
+      gtk_button_update_state (button);
+    }
 
   settings = gtk_widget_get_settings (widget);
 
@@ -2159,7 +2170,7 @@ gtk_button_screen_changed (GtkWidget *widget,
 		     I_("gtk-button-connection"),
 		     GUINT_TO_POINTER (show_image_connection));
 
-  show_image_change_notify (GTK_BUTTON (widget));
+  show_image_change_notify (button);
 }
 
 static void
