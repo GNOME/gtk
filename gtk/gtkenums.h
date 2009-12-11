@@ -148,17 +148,6 @@ typedef enum
   GTK_SENSITIVITY_OFF
 } GtkSensitivityType;
 
-#ifndef GTK_DISABLE_DEPRECATED
-/* side types */
-typedef enum
-{
-  GTK_SIDE_TOP,
-  GTK_SIDE_BOTTOM,
-  GTK_SIDE_LEFT,
-  GTK_SIDE_RIGHT
-} GtkSideType;
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Reading directions for text */
 typedef enum
 {
@@ -175,19 +164,6 @@ typedef enum
   GTK_JUSTIFY_CENTER,
   GTK_JUSTIFY_FILL
 } GtkJustification;
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* GtkPatternSpec match types */
-typedef enum
-{
-  GTK_MATCH_ALL,       /* "*A?A*" */
-  GTK_MATCH_ALL_TAIL,  /* "*A?AA" */
-  GTK_MATCH_HEAD,      /* "AAAA*" */
-  GTK_MATCH_TAIL,      /* "*AAAA" */
-  GTK_MATCH_EXACT,     /* "AAAAA" */
-  GTK_MATCH_LAST
-} GtkMatchType;
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Menu keyboard movement types */
 typedef enum
@@ -307,14 +283,6 @@ typedef enum
   GTK_POS_BOTTOM
 } GtkPositionType;
 
-#ifndef GTK_DISABLE_DEPRECATED
-typedef enum
-{
-  GTK_PREVIEW_COLOR,
-  GTK_PREVIEW_GRAYSCALE
-} GtkPreviewType;
-#endif /* GTK_DISABLE_DEPRECATED */
-
 /* Style for buttons */
 typedef enum
 {
@@ -330,19 +298,6 @@ typedef enum
   GTK_RESIZE_QUEUE,		/* Queue resizes on this widget */
   GTK_RESIZE_IMMEDIATE		/* Perform the resizes now */
 } GtkResizeMode;
-
-#ifndef GTK_DISABLE_DEPRECATED
-/* signal run types */
-typedef enum			/*< flags >*/
-{
-  GTK_RUN_FIRST      = G_SIGNAL_RUN_FIRST,
-  GTK_RUN_LAST       = G_SIGNAL_RUN_LAST,
-  GTK_RUN_BOTH       = (GTK_RUN_FIRST | GTK_RUN_LAST),
-  GTK_RUN_NO_RECURSE = G_SIGNAL_NO_RECURSE,
-  GTK_RUN_ACTION     = G_SIGNAL_ACTION,
-  GTK_RUN_NO_HOOKS   = G_SIGNAL_NO_HOOKS
-} GtkSignalRunType;
-#endif /* GTK_DISABLE_DEPRECATED */
 
 /* scrolling types */
 typedef enum

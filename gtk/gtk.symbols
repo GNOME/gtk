@@ -331,7 +331,6 @@ gtk_image_type_get_type G_GNUC_CONST
 gtk_im_preedit_style_get_type G_GNUC_CONST
 gtk_im_status_style_get_type G_GNUC_CONST
 gtk_justification_get_type G_GNUC_CONST
-gtk_match_type_get_type G_GNUC_CONST
 gtk_menu_direction_type_get_type G_GNUC_CONST
 gtk_message_type_get_type G_GNUC_CONST
 gtk_metric_type_get_type G_GNUC_CONST
@@ -348,7 +347,6 @@ gtk_path_priority_type_get_type G_GNUC_CONST
 gtk_path_type_get_type G_GNUC_CONST
 gtk_policy_type_get_type G_GNUC_CONST
 gtk_position_type_get_type G_GNUC_CONST
-gtk_preview_type_get_type G_GNUC_CONST
 gtk_print_duplex_get_type G_GNUC_CONST
 gtk_print_error_get_type G_GNUC_CONST
 gtk_recent_filter_flags_get_type G_GNUC_CONST
@@ -369,7 +367,6 @@ gtk_scroll_step_get_type G_GNUC_CONST
 gtk_scroll_type_get_type G_GNUC_CONST
 gtk_selection_mode_get_type G_GNUC_CONST
 gtk_shadow_type_get_type G_GNUC_CONST
-gtk_side_type_get_type G_GNUC_CONST
 gtk_size_group_mode_get_type G_GNUC_CONST
 gtk_sort_type_get_type G_GNUC_CONST
 gtk_spin_type_get_type G_GNUC_CONST
