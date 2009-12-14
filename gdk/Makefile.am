@@ -1,5 +1,13 @@
 ## Makefile.am for gtk+/gdk
 include $(top_srcdir)/Makefile.decl
+include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = \
+   --add-include-path=../gdk-pixbuf
+INTROSPECTION_COMPILER_ARGS = \
+   --includedir=$(srcdir) \
+   --includedir=. \
+   --includedir=../gdk-pixbuf
 
 SUBDIRS = $(gdktarget) . tests
 DIST_SUBDIRS = win32 x11 quartz directfb tests
@@ -185,7 +193,6 @@ libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.
 libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
 
 if HAVE_INTROSPECTION
-BUILT_GIRSOURCES =
 
 introspection_files = \
 		$(gdk_public_h_sources) \
@@ -193,31 +200,20 @@ introspection_files = \
         gdkenumtypes.c \
         gdkenumtypes.h
 
-Gdk-2.0.gir: $(INTROSPECTION_SCANNER) $(gdktargetlib) Makefile
-	$(INTROSPECTION_SCANNER) -v \
-		--namespace Gdk --nsversion=2.0 --strip-prefix=Gdk \
-		$(INCLUDES) \
-		--include=Gio-2.0 \
-		--add-include-path=../gdk-pixbuf \
-		--include=GdkPixbuf-2.0 \
-		--include=Pango-1.0 \
-		--library=$(gdktargetlib) \
-		--libtool="$(LIBTOOL)" \
-	        --output $@ \
-		$(addprefix $(srcdir)/,$(introspection_files))
-BUILT_GIRSOURCES += Gdk-2.0.gir
+Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
+Gdk_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
+Gdk_2_0_gir_LIBS = $(gdktargetlib)
+Gdk_2_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
+Gdk_2_0_gir_CFLAGS = $(INCLUDES)
+INTROSPECTION_GIRS += Gdk-2.0.gir
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(BUILT_GIRSOURCES)
+girdir = $(INTROSPECTION_GIRDIR)
+dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(libdir)/girepository-1.0/
-
+typelibsdir = $(INTROSPECTION_TYPELIBDIR)
 typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
 
-%.typelib: %.gir $(INTROSPECTION_COMPILER)
-	$(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. --includedir=../gdk-pixbuf $(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
-
-CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 endif
 
 if OS_WIN32

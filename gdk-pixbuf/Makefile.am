@@ -1,4 +1,7 @@
 include $(top_srcdir)/Makefile.decl
+include $(INTROSPECTION_MAKEFILE)
+
+INTROSPECTION_GIRS =
 
 SUBDIRS = pixops
 
@@ -687,32 +690,23 @@ EXTRA_DIST +=					\
 	gen-color-table.pl
 
 if HAVE_INTROSPECTION
-BUILT_GIRSOURCES =
 
-GdkPixbuf-2.0.gir: $(INTROSPECTION_SCANNER) libgdk_pixbuf-2.0.la Makefile
-	$(INTROSPECTION_SCANNER) -v \
-		--namespace GdkPixbuf --nsversion=2.0 --strip-prefix=Gdk \
-		$(INCLUDES) \
-		--include=Gio-2.0 \
-		--include=GModule-2.0 \
-		--library=libgdk_pixbuf-2.0.la \
-		--libtool="$(LIBTOOL)" \
-	        --output $@ \
-		$(addprefix $(srcdir)/,$(libgdk_pixbufinclude_HEADERS)) \
-		$(addprefix $(srcdir)/,$(libgdk_pixbuf_2_0_la_SOURCES))
-BUILT_GIRSOURCES += GdkPixbuf-2.0.gir
+GdkPixbuf_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
+GdkPixbuf_2_0_gir_INCLUDES = GModule-2.0 Gio-2.0
+GdkPixbuf_2_0_gir_LIBS = libgdk_pixbuf-2.0.la
+GdkPixbuf_2_0_gir_CFLAGS = $(INCLUDES)
+GdkPixbuf_2_0_gir_FILES = \
+    $(addprefix $(srcdir)/,$(libgdk_pixbufinclude_HEADERS)) \
+    $(addprefix $(srcdir)/,$(libgdk_pixbuf_2_0_la_SOURCES))
+INTROSPECTION_GIRS += GdkPixbuf-2.0.gir
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(BUILT_GIRSOURCES)
+girdir = $(INTROSPECTION_GIRDIR)
+dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(libdir)/girepository-1.0/
+typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
-typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
-
-%.typelib: %.gir $(INTROSPECTION_COMPILER)
-	$(DEBUG) $(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. $(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
-
-CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 endif
 
 if CROSS_COMPILING

@@ -1,5 +1,15 @@
 # Makefile.am for gtk+/gtk
 include $(top_srcdir)/Makefile.decl
+include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = \
+	--add-include-path=../gdk-pixbuf \
+	--add-include-path=../gdk
+INTROSPECTION_COMPILER_ARGS = \
+	--includedir=$(srcdir) \
+    --includedir=. \
+    --includedir=../gdk-pixbuf \
+    --includedir=../gdk
 
 if USE_QUARTZ
 GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
@@ -962,8 +972,6 @@ LDADDS =								\
 	$(top_builddir)/gdk/$(gdktargetlib)
 
 if HAVE_INTROSPECTION
-BUILT_GIRSOURCES =
-
 introspection_files = \
     $(gtkinclude_HEADERS) \
     $(gtk_all_c_sources) \
@@ -971,33 +979,24 @@ introspection_files = \
     gtktypebuiltins.c
 
 Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) Makefile
-	$(INTROSPECTION_SCANNER) -v \
-		--namespace Gtk --nsversion=2.0 --strip-prefix=Gtk \
+Gtk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
+Gtk_2_0_gir_INCLUDES = Atk-1.0 Gdk-2.0
+Gtk_2_0_gir_CFLAGS = \
 		$(INCLUDES) \
-		--add-include-path=../gdk \
-		--add-include-path=../gdk-pixbuf \
-		--include=Gdk-2.0 \
-		--include=Atk-1.0 \
-		--library=$(gtktargetlib) \
-		--libtool="$(LIBTOOL)" \
-	        --output $@ \
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
-		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API \
-		$(addprefix $(srcdir)/, $(introspection_files))
-BUILT_GIRSOURCES += Gtk-2.0.gir
+		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+Gtk_2_0_gir_LIBS = $(gtktargetlib)
+Gtk_2_0_gir_FILES = $(addprefix $(srcdir)/, $(introspection_files))
+INTROSPECTION_GIRS += Gtk-2.0.gir
 
-girdir = $(datadir)/gir-1.0
-gir_DATA = $(BUILT_GIRSOURCES)
+girdir = $(INTROSPECTION_GIRDIR)
+dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(libdir)/girepository-1.0/
+typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
-typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
-
-%.typelib: %.gir $(INTROSPECTION_COMPILER)
-	$(INTROSPECTION_COMPILER) --includedir=$(srcdir) --includedir=. --includedir=../gdk-pixbuf --includedir=../gdk $(INTROSPECTION_COMPILER_OPTS) $< -o $(@F)
-
-CLEANFILES += $(BUILT_GIRSOURCES) $(typelibs_DATA)
+CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
 endif
 
 #
