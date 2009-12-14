@@ -63,7 +63,7 @@ main (int   argc,
 
       for (x = 0; x < G_N_ELEMENTS (groups); ++x)
         {
-          gchar *text = g_strdup_printf ("Label #%.0f.%d", pow(10, y), x + 1);
+          gchar *text = g_strdup_printf ("Label #%.0f.%.0f", pow(10, y), pow(10,x));
           GtkWidget *label = gtk_label_new (text);
           g_free (text);
 
