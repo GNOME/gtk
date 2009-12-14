@@ -482,15 +482,15 @@ gtk_box_size_allocate (GtkWidget     *widget,
               if (GTK_WIDGET_VISIBLE (child->widget))
                 {
                   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-                    gtk_widget_get_width_for_height (child->widget,
-                                                     allocation->height,
-                                                     &sizes[i].minimum_size,
-                                                     &sizes[i].natural_size);
+                    gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child->widget),
+                                                              allocation->height,
+                                                              &sizes[i].minimum_size,
+                                                              &sizes[i].natural_size);
                   else
-                    gtk_widget_get_height_for_width (child->widget,
-                                                     allocation->width,
-                                                     &sizes[i].minimum_size,
-                                                     &sizes[i].natural_size);
+                    gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child->widget),
+                                                                                   allocation->width,
+                                                                                   &sizes[i].minimum_size,
+                                                                                   &sizes[i].natural_size);
 
                   size -= sizes[i].minimum_size;
 
