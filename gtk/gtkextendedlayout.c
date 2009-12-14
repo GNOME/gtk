@@ -48,7 +48,7 @@ gtk_extended_layout_get_type (void)
  *
  * Retreives an extended layout item's desired size.
  *
- * Since: 2.16
+ * Since: 2.20
  */
 void
 gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
@@ -74,7 +74,7 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
  * Retreives an extended layout item's desired width if it would given
  * the size specified in @height.
  *
- * Since: 2.16
+ * Since: 2.20
  */
 void
 gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
@@ -113,7 +113,7 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
  * Retreives an extended layout item's desired height if it would given
  * the size specified in @width.
  *
- * Since: 2.16
+ * Since: 2.20
  */
 void
 gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
