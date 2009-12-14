@@ -487,7 +487,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
                                                               &sizes[i].minimum_size,
                                                               &sizes[i].natural_size);
                   else
-                    gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child->widget),
+                    gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (child->widget),
                                                                                    allocation->width,
                                                                                    &sizes[i].minimum_size,
                                                                                    &sizes[i].natural_size);
