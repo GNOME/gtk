@@ -41,10 +41,8 @@ a GtkBuilder UI definition.
 
 @g_iface: the parent class
 @set_name: Stores the name attribute given in the GtkBuilder UI definition.
-  #GtkWidget maps this to the #GtkWidget:name property, and 
-  gtk_buildable_set_name() has a fallback implementation that stores
-  the name as object data. Implement this method if your object
-  has some notion of "name" and it makes sense to map the XML name
+  #GtkWidget stores the name as object data. Implement this method if your
+  object has some notion of "name" and it makes sense to map the XML name
   attribute to it.
 @get_name: The getter corresponding to @set_name. Implement this
   if you implement @set_name.

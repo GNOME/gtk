@@ -1181,14 +1181,12 @@ get_native_event_mask (GdkWindowObject *private)
 
       /* Do whatever the app asks to, since the app
        * may be asking for weird things for native windows,
-       * but filter out things that override the special
-       * requests below. */
-      mask = private->event_mask &
-	~(GDK_POINTER_MOTION_HINT_MASK |
-	  GDK_BUTTON_MOTION_MASK |
-	  GDK_BUTTON1_MOTION_MASK |
-	  GDK_BUTTON2_MOTION_MASK |
-	  GDK_BUTTON3_MOTION_MASK);
+       * but don't use motion hints as that may affect non-native
+       * child windows that don't want it. Also, we need to
+       * set all the app-specified masks since they will be picked
+       * up by any implicit grabs (i.e. if they were not set as
+       * native we would not get the events we need). */
+      mask = private->event_mask & ~GDK_POINTER_MOTION_HINT_MASK;
 
       /* We need thse for all native windows so we can
 	 emulate events on children: */
@@ -1228,11 +1226,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
     GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK |
     GDK_SCROLL_MASK |
     (grab_mask &
-     ~(GDK_POINTER_MOTION_HINT_MASK |
-       GDK_BUTTON_MOTION_MASK |
-       GDK_BUTTON1_MOTION_MASK |
-       GDK_BUTTON2_MOTION_MASK |
-       GDK_BUTTON3_MOTION_MASK));
+     ~GDK_POINTER_MOTION_HINT_MASK);
 }
 
 /* Puts the native window in the right order wrt the other native windows
@@ -1737,6 +1731,67 @@ gdk_window_reparent (GdkWindow *window,
     _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
+static gboolean
+temporary_disable_extension_events (GdkWindowObject *window)
+{
+  GdkWindowObject *child;
+  GList *l;
+  gboolean res;
+
+  if (window->extension_events != 0)
+    {
+      g_object_set_data (G_OBJECT (window),
+			 "gdk-window-extension-events",
+			 GINT_TO_POINTER (window->extension_events));
+      gdk_input_set_extension_events ((GdkWindow *)window, 0,
+				      GDK_EXTENSION_EVENTS_NONE);
+    }
+  else
+    res = FALSE;
+
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (window->impl_window == child->impl_window)
+	res |= temporary_disable_extension_events (window);
+    }
+
+  return res;
+}
+
+static void
+reenable_extension_events (GdkWindowObject *window)
+{
+  GdkWindowObject *child;
+  GList *l;
+  int mask;
+
+  mask = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (window),
+					      "gdk-window-extension-events"));
+
+  if (mask != 0)
+    {
+      /* We don't have the mode here, so we pass in cursor.
+	 This works with the current code since mode is not
+	 stored except as part of the mask, and cursor doesn't
+	 change the mask. */
+      gdk_input_set_extension_events ((GdkWindow *)window, mask,
+				      GDK_EXTENSION_EVENTS_CURSOR);
+      g_object_set_data (G_OBJECT (window),
+			 "gdk-window-extension-events",
+			 NULL);
+    }
+
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (window->impl_window == child->impl_window)
+	reenable_extension_events (window);
+    }
+}
+
 /**
  * gdk_window_ensure_native:
  * @window: a #GdkWindow
@@ -1764,6 +1819,7 @@ gdk_window_ensure_native (GdkWindow *window)
   GdkWindowObject *above;
   GList listhead;
   GdkWindowImplIface *impl_iface;
+  gboolean disabled_extension_events;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
@@ -1783,6 +1839,12 @@ gdk_window_ensure_native (GdkWindow *window)
     return TRUE;
 
   /* Need to create a native window */
+
+  /* First we disable any extension events on the window or its
+     descendants to handle the native input window moving */
+  disabled_extension_events = FALSE;
+  if (impl_window->input_window)
+    disabled_extension_events = temporary_disable_extension_events (private);
 
   screen = gdk_drawable_get_screen (window);
   visual = gdk_drawable_get_visual (window);
@@ -1836,6 +1898,9 @@ gdk_window_ensure_native (GdkWindow *window)
 
   if (gdk_window_is_viewable (window))
     impl_iface->show (window, FALSE);
+
+  if (disabled_extension_events)
+    reenable_extension_events (private);
 
   return TRUE;
 }
@@ -2545,6 +2610,14 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   if (private->paint_stack != NULL ||
       private->implicit_paint != NULL)
     return FALSE; /* Don't stack implicit paints */
+
+  /* Never do implicit paints for foreign windows, they don't need
+   * double buffer combination since they have no client side children,
+   * and creating pixmaps for them is risky since they could disappear
+   * at any time
+   */
+  if (private->window_type == GDK_WINDOW_FOREIGN)
+    return FALSE;
 
   paint = g_new (GdkWindowPaint, 1);
   paint->region = gdk_region_new (); /* Empty */

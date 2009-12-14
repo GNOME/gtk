@@ -67,6 +67,14 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
 }
 
 gint
+gdk_screen_get_primary_monitor (GdkScreen *screen)
+{
+  g_return_val_if_fail (screen == _gdk_screen, 0);
+
+  return 0;
+}
+
+gint
 gdk_screen_get_monitor_width_mm (GdkScreen *screen,
                                  gint       num_monitor)
 {

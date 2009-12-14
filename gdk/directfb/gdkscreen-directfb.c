@@ -86,6 +86,14 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
   return 1;
 }
 
+gint
+gdk_screen_get_primary_monitor (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return 0;
+}
+
 void
 gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 gint          num_monitor,

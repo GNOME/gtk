@@ -924,7 +924,7 @@ gtk_tool_item_get_text_size_group (GtkToolItem *tool_item)
 {
   GtkWidget *parent;
   
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), GTK_ORIENTATION_HORIZONTAL);
+  g_return_val_if_fail (GTK_IS_TOOL_ITEM (tool_item), NULL);
 
   parent = GTK_WIDGET (tool_item)->parent;
   if (!parent || !GTK_IS_TOOL_SHELL (parent))

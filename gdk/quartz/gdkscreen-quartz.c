@@ -404,12 +404,20 @@ gdk_screen_get_height_mm (GdkScreen *screen)
                              GDK_SCREEN_QUARTZ (screen)->height);
 }
 
-int
+gint
 gdk_screen_get_n_monitors (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return GDK_SCREEN_QUARTZ (screen)->n_screens;
+}
+
+gint
+gdk_screen_get_primary_monitor (GdkScreen *screen)
+{
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
+
+  return 0;
 }
 
 gint

@@ -985,7 +985,7 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
  *
  * Return value: %TRUE iff the hard margins were retrieved
  *
- * Since: 2.18
+ * Since: 2.20
  */
 gboolean
 gtk_printer_get_hard_margins (GtkPrinter *printer,

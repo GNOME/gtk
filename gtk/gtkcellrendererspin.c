@@ -230,7 +230,9 @@ gtk_cell_renderer_spin_focus_out_event (GtkWidget *widget,
   const gchar *new_text;
   gboolean canceled;
 
-  canceled = GTK_ENTRY (widget)->editing_canceled;
+  g_object_get (widget,
+                "editing-canceled", &canceled,
+                NULL);
 
   g_signal_handlers_disconnect_by_func (widget,
 					gtk_cell_renderer_spin_focus_out_event,

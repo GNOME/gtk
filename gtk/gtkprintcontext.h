@@ -49,6 +49,11 @@ gdouble       gtk_print_context_get_width            (GtkPrintContext *context);
 gdouble       gtk_print_context_get_height           (GtkPrintContext *context);
 gdouble       gtk_print_context_get_dpi_x            (GtkPrintContext *context);
 gdouble       gtk_print_context_get_dpi_y            (GtkPrintContext *context);
+gboolean      gtk_print_context_get_hard_margins     (GtkPrintContext *context,
+						      gdouble         *top,
+						      gdouble         *bottom,
+						      gdouble         *left,
+						      gdouble         *right);
 
 /* Fonts */
 PangoFontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);

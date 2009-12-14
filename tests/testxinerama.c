@@ -23,13 +23,15 @@
 #include <gtk/gtk.h>
 
 static gint num_monitors;
+static gint primary_monitor;
 
 static void
 request (GtkWidget      *widget,
 	 gpointer        user_data)
 {
   gchar *str;
-  gint i = gdk_screen_get_monitor_at_window (gtk_widget_get_screen (widget),
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  gint i = gdk_screen_get_monitor_at_window (screen,
 					     widget->window);
 
   if (i < 0)
@@ -37,16 +39,33 @@ request (GtkWidget      *widget,
   else
     {
       GdkRectangle monitor;
-      gdk_screen_get_monitor_geometry (gtk_widget_get_screen (widget), i, &monitor);
+
+      gdk_screen_get_monitor_geometry (screen,
+                                       i, &monitor);
+      primary_monitor = gdk_screen_get_primary_monitor (screen);
+
       str = g_strdup_printf ("<big><span foreground='white' background='black'>"
 			     "Monitor %d of %d</span></big>\n"
 			     "<i>Width - Height       </i>: (%d,%d)\n"
-			     "<i>Top left coordinate </i>: (%d,%d)",i+1, num_monitors,
-			     monitor.width, monitor.height, monitor.x, monitor.y);
+			     "<i>Top left coordinate </i>: (%d,%d)\n"
+                             "<i>Primary monitor: %d</i>",
+                             i + 1, num_monitors,
+			     monitor.width, monitor.height,
+                             monitor.x, monitor.y,
+                             primary_monitor);
     }
-  
+
   gtk_label_set_markup (GTK_LABEL (user_data), str);
   g_free (str);
+}
+
+static void
+monitors_changed_cb (GdkScreen *screen,
+                     gpointer   data)
+{
+  GtkWidget *label = (GtkWidget *)data;
+
+  request (label, label);
 }
 
 int
@@ -63,8 +82,10 @@ main (int argc, char *argv[])
   num_monitors = gdk_screen_get_n_monitors (screen);
   if (num_monitors == 1)
     g_warning ("The default screen of the current display only has one monitor.");
-  
-  for (i=0; i<num_monitors; i++)
+
+  primary_monitor = gdk_screen_get_primary_monitor (screen);
+
+  for (i = 0; i < num_monitors; i++)
     {
       GdkRectangle monitor; 
       gchar *str;
@@ -80,8 +101,12 @@ main (int argc, char *argv[])
       str = g_strdup_printf ("<big><span foreground='white' background='black'>"
 			     "Monitor %d of %d</span></big>\n"
 			     "<i>Width - Height       </i>: (%d,%d)\n"
-			     "<i>Top left coordinate </i>: (%d,%d)",i+1, num_monitors,
-			     monitor.width, monitor.height, monitor.x, monitor.y);
+			     "<i>Top left coordinate </i>: (%d,%d)\n"
+                             "<i>Primary monitor: %d</i>",
+                             i + 1, num_monitors,
+			     monitor.width, monitor.height,
+                             monitor.x, monitor.y,
+                             primary_monitor);
       gtk_label_set_markup (GTK_LABEL (label), str);
       g_free (str);
       vbox = gtk_vbox_new (TRUE, 1);
@@ -94,8 +119,11 @@ main (int argc, char *argv[])
       g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
       gtk_container_add (GTK_CONTAINER (vbox), button);
       gtk_widget_show_all (window);
+
+      g_signal_connect (screen, "monitors-changed",
+                        G_CALLBACK (monitors_changed_cb), label);
     }
-  
+
   gtk_main ();
 
   return 0;

@@ -1865,9 +1865,13 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
     }
   
   if (retval)
-    DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
+    {
+      DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
+    }
   else
-    DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
+    {
+      DV(g_print (">Didn't end up scrolling ("G_STRLOC")\n"));
+    }
   
   return retval;
 }
