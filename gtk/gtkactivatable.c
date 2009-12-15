@@ -276,12 +276,15 @@ gtk_activatable_get_type (void)
 {
   static GType activatable_type = 0;
 
-  if (!activatable_type)
+  if (!activatable_type) {
     activatable_type =
       g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkActivatable"),
 				     sizeof (GtkActivatableIface),
 				     (GClassInitFunc) gtk_activatable_class_init,
 				     0, NULL, 0);
+
+    g_type_interface_add_prerequisite (activatable_type, G_TYPE_OBJECT);
+  }
 
   return activatable_type;
 }
@@ -445,7 +448,9 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
 	{
 	  g_signal_handlers_disconnect_by_func (prev_action, gtk_activatable_action_notify, activatable);
 	  
-	  _gtk_action_remove_from_proxy_list (prev_action, GTK_WIDGET (activatable));
+          /* Check the type so that actions can be activatable too. */
+          if (GTK_IS_WIDGET (activatable))
+            _gtk_action_remove_from_proxy_list (prev_action, GTK_WIDGET (activatable));
 	  
           /* Some apps are using the object data directly...
            * so continue to set it for a bit longer
@@ -477,7 +482,8 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
 
 	  g_signal_connect (G_OBJECT (action), "notify", G_CALLBACK (gtk_activatable_action_notify), activatable);
 
-	  _gtk_action_add_to_proxy_list (action, GTK_WIDGET (activatable));
+          if (GTK_IS_WIDGET (activatable))
+            _gtk_action_add_to_proxy_list (action, GTK_WIDGET (activatable));
 
           g_object_set_data (G_OBJECT (activatable), "gtk-action", action);
 	}
