@@ -55,11 +55,6 @@ static GdkSelProp *dropfiles_prop = NULL;
  */
 static GHashTable *sel_owner_table = NULL;
 
-/* Well-known registered clipboard image formats */
-static UINT cf_png;
-static UINT cf_jfif;
-static UINT cf_gif;
-
 /* GdkAtoms for well-known image formats */
 static GdkAtom *known_pixbuf_formats;
 static int n_known_pixbuf_formats;
@@ -78,15 +73,6 @@ _gdk_win32_selection_init (void)
   sel_prop_table = g_hash_table_new (NULL, NULL);
   sel_owner_table = g_hash_table_new (NULL, NULL);
   _format_atom_table = g_hash_table_new (NULL, NULL);
-
-  /* MS Office 2007, at least, offers images in common file formats
-   * using clipboard format names like "PNG" and "JFIF". So we follow
-   * the lead and map the GDK target name "image/png" to the clipboard
-   * format name "PNG" etc.
-   */
-  cf_png = RegisterClipboardFormat ("PNG");
-  cf_jfif = RegisterClipboardFormat ("JFIF");
-  cf_gif = RegisterClipboardFormat ("GIF");
 
   pixbuf_formats = gdk_pixbuf_get_formats ();
 
@@ -123,7 +109,7 @@ _gdk_win32_selection_init (void)
   text_plain_charset_CP1252 = gdk_atom_intern ("text/plain;charset=CP1252", FALSE);
 
   g_hash_table_replace (_format_atom_table,
-			GINT_TO_POINTER (cf_png),
+			GINT_TO_POINTER (_cf_png),
 			_image_png);
 
   g_hash_table_replace (_format_atom_table,
@@ -442,7 +428,7 @@ gdk_selection_convert (GdkWindow *requestor,
 
       for (fmt = 0; 0 != (fmt = EnumClipboardFormats (fmt)); )
 	{
-	  if (fmt == cf_png)
+	  if (fmt == _cf_png)
 	    {
 	      targets[ntargets++] = _image_png;
 	      has_png = TRUE;
@@ -460,7 +446,7 @@ gdk_selection_convert (GdkWindow *requestor,
 		targets[ntargets++] = _utf8_string;
 	      has_text = TRUE;
 	    }
-	  else if (fmt == cf_png)
+	  else if (fmt == _cf_png)
 	    {
 	      /* Already handled above */
 	    }
@@ -475,13 +461,13 @@ gdk_selection_convert (GdkWindow *requestor,
 		targets[ntargets++] = _image_bmp;
 	      has_bmp = TRUE;
 	    }
-	  else if (fmt == cf_jfif)
+	  else if (fmt == _cf_jfif)
 	    {
 	      /* Ditto for JPEG */
 	      if (!has_png)
 		targets[ntargets++] = _image_jpeg;
 	    }
-	  else if (fmt == cf_gif)
+	  else if (fmt == _cf_gif)
 	    {
 	      /* Ditto for GIF.
 	       */
@@ -1215,7 +1201,7 @@ gdk_win32_selection_add_targets (GdkWindow  *owner,
 	    if (!has_image)
 	      {
 		GDK_NOTE (DND, g_print ("... SetClipboardData(PNG,NULL)\n"));
-		SetClipboardData (cf_png, NULL);
+		SetClipboardData (_cf_png, NULL);
 
 		GDK_NOTE (DND, g_print ("... SetClipboardData(CF_DIB,NULL)\n"));
 		SetClipboardData (CF_DIB, NULL);

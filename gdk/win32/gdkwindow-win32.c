@@ -1835,7 +1835,7 @@ _gdk_remove_modal_window (GdkWindow *window)
 }
 
 GdkWindow *
-_gdk_modal_current ()
+_gdk_modal_current (void)
 {
   if (modal_window_stack != NULL)
     {

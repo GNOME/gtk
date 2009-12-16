@@ -825,7 +825,7 @@ _gdk_win32_print_event (const GdkEvent *event)
     default: g_assert_not_reached ();
     }
 
-  g_print (" %p ", GDK_WINDOW_HWND (event->any.window));
+  g_print (" %p ", event->any.window ? GDK_WINDOW_HWND (event->any.window) : NULL);
 
   switch (event->any.type)
     {
@@ -889,9 +889,14 @@ _gdk_win32_print_event (const GdkEvent *event)
     case GDK_FOCUS_CHANGE:
       g_print ("%s", (event->focus_change.in ? "IN" : "OUT"));
       break;
+    case GDK_CONFIGURE:
+      g_print ("x:%d y:%d w:%d h:%d",
+	       event->configure.x, event->configure.y,
+	       event->configure.width, event->configure.height);
+      break;
+    case GDK_SELECTION_CLEAR:
     case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
-    case GDK_SELECTION_CLEAR:
       selection_name = gdk_atom_name (event->selection.selection);
       target_name = gdk_atom_name (event->selection.target);
       property_name = gdk_atom_name (event->selection.property);
@@ -901,10 +906,19 @@ _gdk_win32_print_event (const GdkEvent *event)
       g_free (target_name);
       g_free (property_name);
       break;
-    case GDK_CONFIGURE:
-      g_print ("x:%d y:%d w:%d h:%d",
-	       event->configure.x, event->configure.y,
-	       event->configure.width, event->configure.height);
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+      if (event->dnd.context != NULL)
+	g_print ("ctx:%p: %s %s src:%p dest:%p",
+		 event->dnd.context,
+		 _gdk_win32_drag_protocol_to_string (event->dnd.context->protocol),
+		 event->dnd.context->is_source ? "SOURCE" : "DEST",
+		 event->dnd.context->source_window == NULL ? NULL : GDK_WINDOW_HWND (event->dnd.context->source_window),
+		 event->dnd.context->dest_window == NULL ? NULL : GDK_WINDOW_HWND (event->dnd.context->dest_window));
       break;
     case GDK_CLIENT_EVENT:
       g_print ("%s %d %ld %ld %ld %ld %ld",
@@ -1628,22 +1642,44 @@ handle_wm_paint (MSG        *msg,
   DeleteObject (hrgn);
 }
 
-static void
-handle_stuff_while_moving_or_resizing (void)
-{
-  int arbitrary_limit = 1;
-  while (g_main_context_pending (NULL) && arbitrary_limit--)
-    g_main_context_iteration (NULL, FALSE);
-}
-
-static VOID CALLBACK
+static VOID CALLBACK 
 modal_timer_proc (HWND     hwnd,
 		  UINT     msg,
 		  UINT_PTR id,
 		  DWORD    time)
 {
-  if (_sizemove_in_progress)
-    handle_stuff_while_moving_or_resizing ();
+  int arbitrary_limit = 1;
+
+  while (_modal_operation_in_progress &&
+	 g_main_context_pending (NULL) &&
+	 arbitrary_limit--)
+    g_main_context_iteration (NULL, FALSE);
+}
+
+void
+_gdk_win32_begin_modal_call (void)
+{
+  g_assert (!_modal_operation_in_progress);
+
+  _modal_operation_in_progress = TRUE;
+
+  modal_timer = SetTimer (NULL, 0, 10, modal_timer_proc);
+  if (modal_timer == 0)
+    WIN32_API_FAILED ("SetTimer");
+}
+
+void
+_gdk_win32_end_modal_call (void)
+{
+  g_assert (_modal_operation_in_progress);
+
+  _modal_operation_in_progress = FALSE;
+
+  if (modal_timer != 0)
+    {
+      API_CALL (KillTimer, (NULL, modal_timer));
+      modal_timer = 0;
+   }
 }
 
 static VOID CALLBACK
@@ -2702,23 +2738,13 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_ENTERSIZEMOVE:
-      _sizemove_in_progress = TRUE;
-      modal_timer = SetTimer (NULL, 0, 20, modal_timer_proc);
+    case WM_ENTERMENULOOP:
+      _gdk_win32_begin_modal_call ();
       break;
 
     case WM_EXITSIZEMOVE:
-      _sizemove_in_progress = FALSE;
-      KillTimer (NULL, modal_timer);
-      break;
-
-    case WM_ENTERMENULOOP:
-      _sizemove_in_progress = TRUE;
-      modal_timer = SetTimer (NULL, 0, 20, modal_timer_proc);
-      break;
-
     case WM_EXITMENULOOP:
-      _sizemove_in_progress = FALSE;
-      KillTimer (NULL, modal_timer);
+      _gdk_win32_end_modal_call ();
       break;
 
     case WM_WINDOWPOSCHANGING:
@@ -2751,7 +2777,7 @@ gdk_event_translate (MSG  *msg,
 				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y));
 
       /* If position and size haven't changed, don't do anything */
-      if (_sizemove_in_progress &&
+      if (_modal_operation_in_progress &&
 	  (windowpos->flags & SWP_NOMOVE) &&
 	  (windowpos->flags & SWP_NOSIZE))
 	break;
@@ -2759,7 +2785,7 @@ gdk_event_translate (MSG  *msg,
       /* Once we've entered the moving or sizing modal loop, we won't
        * return to the main loop until we're done sizing or moving.
        */
-      if (_sizemove_in_progress &&
+      if (_modal_operation_in_progress &&
 	 GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	 !GDK_WINDOW_DESTROYED (window))
 	{
@@ -2768,13 +2794,13 @@ gdk_event_translate (MSG  *msg,
 	      GDK_NOTE (EVENTS, g_print (" do magic"));
 	      if (((GdkWindowObject *) window)->resize_count > 1)
 		((GdkWindowObject *) window)->resize_count -= 1;
-	      
+
 	      handle_configure_event (msg, window);
 	      g_main_context_iteration (NULL, FALSE);
-
+#if 0
 	      /* Dispatch main loop - to realize resizes... */
-	      handle_stuff_while_moving_or_resizing ();
-	      
+	      modal_timer_proc (msg->hwnd, msg->message, 0, msg->time);
+#endif
 	      /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
 	      return_val = TRUE;
 	      *ret_valp = 1;
@@ -3352,6 +3378,14 @@ gdk_event_dispatch (GSource     *source,
 	(*_gdk_event_func) (event, _gdk_event_data);
       
       gdk_event_free (event);
+
+      /* Do drag & drop if it is still pending */
+      if (_dnd_source_state == GDK_WIN32_DND_PENDING) 
+	{
+	  _dnd_source_state = GDK_WIN32_DND_DRAGGING;
+	  _gdk_win32_dnd_do_dragdrop ();
+	  _dnd_source_state = GDK_WIN32_DND_NONE;
+	}
     }
   
   GDK_THREADS_LEAVE ();

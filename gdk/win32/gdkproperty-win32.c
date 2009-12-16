@@ -258,6 +258,11 @@ gdk_property_change (GdkWindow    *window,
 	  _delayed_rendering_data = hdata;
 	}
     }
+  else if (property == _gdk_ole2_dnd)
+    {
+      /* Will happen only if gdkdnd-win32.c has OLE2 dnd support compiled in */
+      _gdk_win32_ole2_dnd_property_change (type, format, data, nelements);
+    }
   else
     g_warning ("gdk_property_change: General case not implemented");
 }
