@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1999 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 2001 Archaeopteryx Software Inc.
  * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
@@ -33,6 +34,44 @@
 
 /* #define OLE2_DND */
 
+/*
+ * Comment from the old OLE2 DND code that is being merged in (behind
+ * #ifdef OLE2_DND). Note that this comment might not fully reflect
+ * reality as the code obviously will have to be modified in this
+ * merge. Especially the talk about supporting other than UTF-8 text
+ * is bogus, that will not happen.
+ *
+ * Support for OLE-2 drag and drop added at Archaeopteryx Software, 2001
+ * For more information, contact Stephan R.A. Deibel (sdeibel@archaeopteryx.com)
+ *
+ * Notes on implementation:
+ *
+ * This is a first pass at OLE2 support. It only supports text and unicode text
+ * data types, and file list dnd (which is handled seperately as it predates OLE2
+ * both in this implementation and on Windows in general).
+ *
+ * As such, the data type conversion from gdk selection targets to OLE2 CF_* data
+ * type specifiers is partially hardwired. Fixing this is complicated by (a) the
+ * fact that the widget's declared selection types aren't accessible in calls here
+ * that need to declare the corresponding OLE2 data types, and (b) there isn't a
+ * 1-1 correspondence between gdk target types and OLE2 types. The former needs
+ * some redesign in gtk dnd (something a gdk/gtk expert should do; I have tried
+ * and failed!). As an example of the latter: gdk STRING, TEXT, COMPOUND_TEXT map
+ * to CF_TEXT, CF_OEMTEXT, and CF_UNICODETEXT but as a group and with conversions
+ * necessary for various combinations. Currently, the code here (and in
+ * gdkdnd-win32.c) can handle gdk STRING and TEXT but not COMPOUND_TEXT, and OLE2
+ * CF_TEXT and CF_UNICODETEXT but not CF_OEMTEXT. The necessary conversions are
+ * supplied by the implementation here.
+ *
+ * Note that in combination with another hack originated by Archaeopteryx
+ * Software, the text conversions here may go to utf-8 unicode as the standard
+ * within-gtk target or to single-byte ascii when the USE_ACP_TEXT compilation
+ * flag is TRUE. This mode was added to support applications that aren't using
+ * utf-8 across the gtk/gdk API but instead use single-byte ascii according to
+ * the current Windows code page. See gdkim-win32.c for more info on that.
+ *
+ */
+ 
 #define INITGUID
 
 #include "gdkdnd.h"
