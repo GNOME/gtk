@@ -304,7 +304,7 @@ void    _gdk_wchar_text_handle    (GdkFont       *font,
 
 void       _gdk_push_modal_window   (GdkWindow *window);
 void       _gdk_remove_modal_window (GdkWindow *window);
-GdkWindow *_gdk_modal_current       ();
+GdkWindow *_gdk_modal_current       (void);
 
 
 #ifdef G_ENABLE_DEBUG
@@ -411,11 +411,13 @@ extern guint		 _scancode_rshift;
 extern GdkAtom		 _gdk_selection;
 extern GdkAtom		 _wm_transient_for;
 extern GdkAtom		 _targets;
+extern GdkAtom		 _delete;
 extern GdkAtom		 _save_targets;
 extern GdkAtom           _utf8_string;
 extern GdkAtom		 _text;
 extern GdkAtom		 _compound_text;
 extern GdkAtom		 _text_uri_list;
+extern GdkAtom		 _text_html;
 extern GdkAtom		 _image_png;
 extern GdkAtom		 _image_jpeg;
 extern GdkAtom		 _image_bmp;
@@ -426,14 +428,44 @@ extern GdkAtom           _local_dnd;
 extern GdkAtom		 _gdk_win32_dropfiles;
 extern GdkAtom		 _gdk_ole2_dnd;
 
+/* Clipboard formats */
+extern UINT		 _cf_png;
+extern UINT		 _cf_jfif;
+extern UINT		 _cf_gif;
+extern UINT		 _cf_url;
+extern UINT		 _cf_html_format;
+extern UINT		 _cf_text_html;
+
+/* OLE-based DND state */
+typedef enum {
+  GDK_WIN32_DND_NONE,
+  GDK_WIN32_DND_PENDING,
+  GDK_WIN32_DND_DROPPED,
+  GDK_WIN32_DND_FAILED,
+  GDK_WIN32_DND_DRAGGING,
+} GdkWin32DndState;
+
+extern GdkWin32DndState  _dnd_target_state;
+extern GdkWin32DndState  _dnd_source_state;
+
+void _gdk_win32_dnd_do_dragdrop (void);
+void _gdk_win32_ole2_dnd_property_change (GdkAtom       type,
+					  gint          format,
+					  const guchar *data,
+					  gint          nelements);
+
+void  _gdk_win32_begin_modal_call (void);
+void  _gdk_win32_end_modal_call (void);
+
+
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
 
-/* TRUE while a user-initiated window move or resize operation is in progress */
-extern gboolean		 _sizemove_in_progress;
+/* TRUE while a modal sizing, moving, or dnd operation is in progress */
+extern gboolean		_modal_operation_in_progress;
 
 /* TRUE when we are emptying the clipboard ourselves */
 extern gboolean		_ignore_destroy_clipboard;
