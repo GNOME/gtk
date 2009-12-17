@@ -243,7 +243,6 @@ gail_widget_get_description (AtkObject *accessible)
     {
       /* Get the tooltip from the widget */
       GtkAccessible *obj = GTK_ACCESSIBLE (accessible);
-      GtkTooltipsData *data;
 
       gail_return_val_if_fail (obj, NULL);
 
@@ -254,12 +253,8 @@ gail_widget_get_description (AtkObject *accessible)
         return NULL;
  
       gail_return_val_if_fail (GTK_WIDGET (obj->widget), NULL);
-    
-      data = gtk_tooltips_data_get (obj->widget);
-      if (data == NULL)
-        return NULL;
 
-      return data->tip_text;
+      return gtk_widget_get_tooltip_text (obj->widget);
     }
 }
 
