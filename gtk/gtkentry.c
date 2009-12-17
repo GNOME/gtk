@@ -1985,7 +1985,7 @@ gtk_entry_set_property (GObject         *object,
 
     case PROP_IM_MODULE:
       g_free (priv->im_module);
-      priv->im_module = g_strdup (g_value_get_string (value));
+      priv->im_module = g_value_dup_string (value);
       if (GTK_IS_IM_MULTICONTEXT (entry->im_context))
         gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (entry->im_context), priv->im_module);
       break;

@@ -1029,7 +1029,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           priv->markup_set = FALSE;
         }
 
-      celltext->text = g_strdup (g_value_get_string (value));
+      celltext->text = g_value_dup_string (value);
       g_object_notify (object, "text");
       break;
 
