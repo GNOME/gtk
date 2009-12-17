@@ -2220,6 +2220,8 @@ gdk_window_get_window_type (GdkWindow *window)
  * Check to see if a window is destroyed..
  *
  * Return value: %TRUE if the window is destroyed
+ *
+ * Since: 2.18
  **/
 gboolean
 gdk_window_is_destroyed (GdkWindow *window)
@@ -8020,6 +8022,8 @@ gdk_window_get_origin (GdkWindow *window,
  * window coordinates. This is similar to
  * gdk_window_get_origin() but allows you go pass
  * in any position in the window, not just the origin.
+ *
+ * Since: 2.18
  */
 void
 gdk_window_get_root_coords (GdkWindow *window,
