@@ -1177,8 +1177,10 @@ gtk_image_get_storage_type (GtkImage *image)
 /**
  * gtk_image_get_pixmap:
  * @image: a #GtkImage
- * @pixmap: location to store the pixmap, or %NULL
- * @mask: location to store the mask, or %NULL
+ * @pixmap: (out) (transfer none) (allow-none): location to store the
+ *     pixmap, or %NULL
+ * @mask: (out) (transfer none) (allow-none): location to store the
+ *     mask, or %NULL
  *
  * Gets the pixmap and mask being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1205,8 +1207,10 @@ gtk_image_get_pixmap (GtkImage   *image,
 /**
  * gtk_image_get_image:
  * @image: a #GtkImage
- * @gdk_image: return location for a #GtkImage, or %NULL
- * @mask: return location for a #GdkBitmap, or %NULL
+ * @gdk_image: (out) (transfer none) (allow-none): return location for
+ *     a #GtkImage, or %NULL
+ * @mask: (out) (transfer none) (allow-none): return location for a
+ *     #GdkBitmap, or %NULL
  * 
  * Gets the #GdkImage and mask being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1240,7 +1244,8 @@ gtk_image_get_image  (GtkImage   *image,
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Return value: the displayed pixbuf, or %NULL if the image is empty
+ * Return value: (transfer none): the displayed pixbuf, or %NULL if
+ * the image is empty
  **/
 GdkPixbuf*
 gtk_image_get_pixbuf (GtkImage *image)
@@ -1258,8 +1263,9 @@ gtk_image_get_pixbuf (GtkImage *image)
 /**
  * gtk_image_get_stock:
  * @image: a #GtkImage
- * @stock_id: place to store a stock icon name, or %NULL
- * @size: place to store a stock icon size, or %NULL
+ * @stock_id: (out) (transfer none) (allow-none): place to store a
+ *     stock icon name, or %NULL
+ * @size: (out) (allow-none): place to store a stock icon size, or %NULL
  *
  * Gets the stock icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1289,8 +1295,9 @@ gtk_image_get_stock  (GtkImage        *image,
 /**
  * gtk_image_get_icon_set:
  * @image: a #GtkImage
- * @icon_set: location to store a #GtkIconSet, or %NULL
- * @size: location to store a stock icon size, or %NULL
+ * @icon_set: (out) (transfer none) (allow-none): location to store a
+ *     #GtkIconSet, or %NULL
+ * @size: (out) (allow-none): location to store a stock icon size, or %NULL
  *
  * Gets the icon set and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1322,7 +1329,8 @@ gtk_image_get_icon_set  (GtkImage        *image,
  * The caller of this function does not own a reference to the
  * returned animation.
  * 
- * Return value: the displayed animation, or %NULL if the image is empty
+ * Return value: (transfer none): the displayed animation, or %NULL if
+ * the image is empty
  **/
 GdkPixbufAnimation*
 gtk_image_get_animation (GtkImage *image)
@@ -1341,8 +1349,9 @@ gtk_image_get_animation (GtkImage *image)
 /**
  * gtk_image_get_icon_name:
  * @image: a #GtkImage
- * @icon_name: place to store an icon name, or %NULL
- * @size: place to store an icon size, or %NULL
+ * @icon_name: (out) (transfer none) (allow-none): place to store an
+ *     icon name, or %NULL
+ * @size: (out) (allow-none): place to store an icon size, or %NULL
  *
  * Gets the icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1374,8 +1383,9 @@ gtk_image_get_icon_name  (GtkImage              *image,
 /**
  * gtk_image_get_gicon:
  * @image: a #GtkImage
- * @gicon: place to store a #GIcon, or %NULL
- * @size: place to store an icon size, or %NULL
+ * @gicon: (out) (transfer none) (allow-none): place to store a
+ *     #GIcon, or %NULL
+ * @size: (out) (allow-none): place to store an icon size, or %NULL
  *
  * Gets the #GIcon and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
