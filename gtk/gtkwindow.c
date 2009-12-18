@@ -3791,11 +3791,10 @@ ensure_title_icon (GtkWindow *window)
                         "button-press-event",
                         G_CALLBACK (icon_button_press),
                         window);
+
+      gtk_widget_set_parent (priv->icon_event_box, GTK_WIDGET (window));
+      gtk_widget_show_all (priv->icon_event_box);
     }
-
-  gtk_widget_set_parent (priv->icon_event_box, GTK_WIDGET (window));
-
-  gtk_widget_show_all (priv->icon_event_box);
 
   if (GTK_WIDGET_VISIBLE (window))
     {
