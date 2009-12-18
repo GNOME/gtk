@@ -4569,7 +4569,7 @@ gdk_window_clear_area_internal (GdkWindow *window,
   region = gdk_region_rectangle (&rect);
   gdk_window_clear_region_internal (window,
 				    region,
-				    FALSE);
+				    send_expose);
   gdk_region_destroy (region);
 
 }
