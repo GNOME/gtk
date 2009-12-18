@@ -11,7 +11,7 @@ da_expose (GtkWidget *widget,
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      pixmap = gdk_offscreen_window_get_pixmap (GTK_WIDGET (offscreen)->window);
+      pixmap = gtk_offscreen_window_get_pixmap (offscreen);
 
       cr = gdk_cairo_create (widget->window);
       gdk_cairo_set_source_pixmap (cr, pixmap, 50, 50);
