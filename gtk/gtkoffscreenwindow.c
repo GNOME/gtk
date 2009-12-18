@@ -1,4 +1,5 @@
 #include "gtkoffscreenwindow.h"
+#include "gtkalias.h"
 
 G_DEFINE_TYPE (GtkOffscreenWindow, gtk_offscreen_window, GTK_TYPE_WINDOW);
 
