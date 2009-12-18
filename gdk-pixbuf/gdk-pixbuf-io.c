@@ -1902,6 +1902,21 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  * be specified using the "compression" parameter; it's value is in an
  * integer in the range of [0,9].
  *
+ * ICC color profiles can also be embedded into PNG images.
+ * The "icc-profile" value should be the complete ICC profile encoded
+ * into base64.
+ *
+ * <informalexample><programlisting>
+ * gchar *contents;
+ * gchar *contents_encode;
+ * gsize length;
+ * g_file_get_contents ("/home/hughsie/.color/icc/L225W.icm", &contents, &length, NULL);
+ * contents_encode = g_base64_encode ((const guchar *) contents, length);
+ * gdk_pixbuf_save (pixbuf, handle, "png", &amp;error,
+ *                  "icc-profile", contents_encode,
+ *                  NULL);
+ * </programlisting></informalexample>
+ *
  * TIFF images recognize a "compression" option which acceps an integer value.
  * Among the codecs are 1 None, 2 Huffman, 5 LZW, 7 JPEG and 8 Deflate, see
  * the libtiff documentation and tiff.h for all supported codec values.
