@@ -40,6 +40,53 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkmessagedialog
+ * @Short_description: A convenient message window
+ * @Title: GtkMessageDialog
+ * @See_also:#GtkDialog
+ *
+ * #GtkMessageDialog presents a dialog with an image representing the type of
+ * message (Error, Question, etc.) alongside some message text. It's simply a
+ * convenience widget; you could construct the equivalent of #GtkMessageDialog
+ * from #GtkDialog without too much effort, but #GtkMessageDialog saves typing.
+ *
+ * The easiest way to do a modal message dialog is to use gtk_dialog_run(), though
+ * you can also pass in the %GTK_DIALOG_MODAL flag, gtk_dialog_run() automatically
+ * makes the dialog modal and waits for the user to respond to it. gtk_dialog_run()
+ * returns when any dialog button is clicked.
+ * <example>
+ * <title>A modal dialog.</title>
+ * <programlisting>
+ *  dialog = gtk_message_dialog_new (main_application_window,
+ *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *                                   GTK_MESSAGE_ERROR,
+ *                                   GTK_BUTTONS_CLOSE,
+ *                                   "Error loading file '&percnt;s': &percnt;s",
+ *                                   filename, g_strerror (errno));
+ *  gtk_dialog_run (GTK_DIALOG (dialog));
+ *  gtk_widget_destroy (dialog);
+ * </programlisting>
+ * </example>
+ * You might do a non-modal #GtkMessageDialog as follows:
+ * <example>
+ * <title>A non-modal dialog.</title>
+ * <programlisting>
+ *  dialog = gtk_message_dialog_new (main_application_window,
+ *                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+ *                                   GTK_MESSAGE_ERROR,
+ *                                   GTK_BUTTONS_CLOSE,
+ *                                   "Error loading file '&percnt;s': &percnt;s",
+ *                                   filename, g_strerror (errno));
+ *
+ *  /&ast; Destroy the dialog when the user responds to it (e.g. clicks a button) &ast;/
+ *  g_signal_connect_swapped (dialog, "response",
+ *                            G_CALLBACK (gtk_widget_destroy),
+ *                            dialog);
+ * </programlisting>
+ * </example>
+ */
+
 #define GTK_MESSAGE_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogPrivate))
 
 typedef struct _GtkMessageDialogPrivate GtkMessageDialogPrivate;
