@@ -2723,6 +2723,13 @@ gtk_object_get_type G_GNUC_CONST
 #endif
 #endif
 
+#if IN_HEADER(__GTK_OFFSCREEN_WINDOW_H__)
+#if IN_FILE(__GTK_OFFSCREEN_WINDOW_C__)
+gtk_offscreen_window_get_type G_GNUC_CONST
+gtk_offscreen_window_new
+#endif
+#endif
+
 #if IN_HEADER(__GTK_ORIENTABLE_H__)
 #if IN_FILE(__GTK_ORIENTABLE_C__)
 gtk_orientable_get_orientation
