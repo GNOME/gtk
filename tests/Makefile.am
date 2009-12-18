@@ -60,6 +60,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testnotebookdnd			\
 	testnouiprint			\
 	testoffscreen			\
+	testoffscreenwindow		\
 	testorientable			\
 	testprint			\
 	testrgb				\
@@ -143,6 +144,7 @@ testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
+testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -207,6 +209,7 @@ testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
+testoffscreenwindow_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
@@ -342,6 +345,9 @@ testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.c	\
 	gtkoffscreenbox.h	\
 	testoffscreen.c
+
+testoffscreenwindnow_SOURCES =	\
+	testoffscreenwindow.c
 
 testwindow_SOURCES = 	\
 	testwindows.c
