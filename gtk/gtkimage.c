@@ -37,6 +37,96 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkimage
+ * @Short_description: A widget displaying an image
+ * @Title: GtkImage
+ * @See_also:#GdkPixbuf
+ *
+ * The #GtkImage widget displays an image. Various kinds of object
+ * can be displayed as an image; most typically, you would load a
+ * #GdkPixbuf ("pixel buffer") from a file, and then display that.
+ * There's a convenience function to do this, gtk_image_new_from_file(),
+ * used as follows:
+ * <informalexample><programlisting>
+ *   GtkWidget *image;
+ *   image = gtk_image_new_from_file ("myfile.png");
+ * </programlisting></informalexample>
+ * If the file isn't loaded successfully, the image will contain a
+ * "broken image" icon similar to that used in many web browsers.
+ * If you want to handle errors in loading the file yourself,
+ * for example by displaying an error message, then load the image with
+ * gdk_pixbuf_new_from_file(), then create the #GtkImage with
+ * gtk_image_new_from_pixbuf().
+ *
+ * The image file may contain an animation, if so the #GtkImage will
+ * display an animation (#GdkPixbufAnimation) instead of a static image.
+ *
+ * #GtkImage is a subclass of #GtkMisc, which implies that you can
+ * align it (center, left, right) and add padding to it, using
+ * #GtkMisc methods.
+ *
+ * #GtkImage is a "no window" widget (has no #GdkWindow of its own),
+ * so by default does not receive events. If you want to receive events
+ * on the image, such as button clicks, place the image inside a
+ * #GtkEventBox, then connect to the event signals on the event box.
+ * <example>
+ * <title>Handling button press events on a
+ * <structname>GtkImage</structname>.</title>
+ * <programlisting>
+ *   static gboolean
+ *   button_press_callback (GtkWidget      *event_box,
+ *                          GdkEventButton *event,
+ *                          gpointer        data)
+ *   {
+ *     g_print ("Event box clicked at coordinates &percnt;f,&percnt;f\n",
+ *              event->x, event->y);
+ *
+ *     /<!---->* Returning TRUE means we handled the event, so the signal
+ *      * emission should be stopped (don't call any further
+ *      * callbacks that may be connected). Return FALSE
+ *      * to continue invoking callbacks.
+ *      *<!---->/
+ *     return TRUE;
+ *   }
+ *
+ *   static GtkWidget*
+ *   create_image (void)
+ *   {
+ *     GtkWidget *image;
+ *     GtkWidget *event_box;
+ *
+ *     image = gtk_image_new_from_file ("myfile.png");
+ *
+ *     event_box = gtk_event_box_new (<!-- -->);
+ *
+ *     gtk_container_add (GTK_CONTAINER (event_box), image);
+ *
+ *     g_signal_connect (G_OBJECT (event_box),
+ *                       "button_press_event",
+ *                       G_CALLBACK (button_press_callback),
+ *                       image);
+ *
+ *     return image;
+ *   }
+ * </programlisting>
+ * </example>
+ *
+ * When handling events on the event box, keep in mind that coordinates
+ * in the image may be different from event box coordinates due to
+ * the alignment and padding settings on the image (see #GtkMisc).
+ * The simplest way to solve this is to set the alignment to 0.0
+ * (left/top), and set the padding to zero. Then the origin of
+ * the image will be the same as the origin of the event box.
+ *
+ * Sometimes an application will want to avoid depending on external data
+ * files, such as image files. GTK+ comes with a program to avoid this,
+ * called <application>gdk-pixbuf-csource</application>. This program
+ * allows you to convert an image into a C variable declaration, which
+ * can then be loaded into a #GdkPixbuf using
+ * gdk_pixbuf_new_from_inline().
+ */
+
 typedef struct _GtkImagePrivate GtkImagePrivate;
 
 struct _GtkImagePrivate
@@ -1431,6 +1521,16 @@ gtk_image_new (void)
   return g_object_new (GTK_TYPE_IMAGE, NULL);
 }
 
+/**
+ * gtk_image_set:
+ * @image: a #GtkImage
+ * @val: a #GdkImage
+ * @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+ *
+ * Sets the #GtkImage.
+ *
+ * Deprecated: 2.0: Use gtk_image_set_from_image() instead.
+ */
 void
 gtk_image_set (GtkImage  *image,
 	       GdkImage  *val,
@@ -1441,6 +1541,16 @@ gtk_image_set (GtkImage  *image,
   gtk_image_set_from_image (image, val, mask);
 }
 
+/**
+ * gtk_image_get:
+ * @image: a #GtkImage
+ * @val: return location for a #GdkImage
+ * @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
+ *
+ * Gets the #GtkImage.
+ *
+ * Deprecated: 2.0: Use gtk_image_get_image() instead.
+ */
 void
 gtk_image_get (GtkImage   *image,
 	       GdkImage  **val,
