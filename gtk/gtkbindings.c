@@ -1334,6 +1334,8 @@ gtk_bindings_activate (GtkObject       *object,
  * @event, and if one was found, activate it.
  * 
  * Return value: %TRUE if a matching key binding was found
+ *
+ * Since: 2.4
  */
 gboolean
 gtk_bindings_activate_event (GtkObject   *object,
