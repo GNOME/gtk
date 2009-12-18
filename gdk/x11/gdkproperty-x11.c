@@ -701,8 +701,9 @@ gdk_property_change (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  gdk_window_ensure_native (window);
+
   display = gdk_drawable_get_display (window);
-  
   xproperty = gdk_x11_atom_to_xatom_for_display (display, property);
   xtype = gdk_x11_atom_to_xatom_for_display (display, type);
   xwindow = GDK_WINDOW_XID (window);
