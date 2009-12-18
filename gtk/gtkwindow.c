@@ -5119,7 +5119,9 @@ _gtk_window_query_nonaccels (GtkWindow      *window,
  * overriding the standard key handling for a toplevel window.
  *
  * Return value: %TRUE if a widget in the focus chain handled the event.
- **/
+ *
+ * Since: 2.4
+ */
 gboolean
 gtk_window_propagate_key_event (GtkWindow        *window,
                                 GdkEventKey      *event)
@@ -8204,7 +8206,9 @@ gtk_window_free_key_hash (GtkWindow *window)
  * overriding the standard key handling for a toplevel window.
  *
  * Return value: %TRUE if a mnemonic or accelerator was found and activated.
- **/
+ *
+ * Since: 2.4
+ */
 gboolean
 gtk_window_activate_key (GtkWindow   *window,
 			 GdkEventKey *event)
