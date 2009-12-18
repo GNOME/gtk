@@ -738,7 +738,8 @@ gtk_tool_item_get_ellipsize_mode (GtkToolItem *tool_item)
  * #GtkToolItem should call this function to find out what size icons
  * they should use.
  * 
- * Return value: a #GtkIconSize indicating the icon size used for @tool_item
+ * Return value: (type int): a #GtkIconSize indicating the icon size
+ * used for @tool_item
  * 
  * Since: 2.4
  **/

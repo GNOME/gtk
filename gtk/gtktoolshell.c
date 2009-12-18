@@ -66,7 +66,7 @@ gtk_tool_shell_get_type (void)
  * Retrieves the icon size for the tool shell. Tool items must not call this
  * function directly, but rely on gtk_tool_item_get_icon_size() instead.
  *
- * Return value: the current size for icons of @shell
+ * Return value: (type int): the current size for icons of @shell
  *
  * Since: 2.14
  **/
