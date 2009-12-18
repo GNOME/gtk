@@ -1,0 +1,49 @@
+<!-- ##### SECTION Title ##### -->
+GtkOffscreenWindow
+
+<!-- ##### SECTION Short_Description ##### -->
+A toplevel container widget for doing offscreen rendering of children
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+The #GtkOffscreenWindow container is a top-level container that is used
+to manage offscreen rendering and snapshot retrieval of the widget that
+is contained inside it.
+
+</para>
+<para>
+GtkOffscreenWindow was introduced in GTK+ 2.20.
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GtkOffscreenWindow ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_offscreen_window_get_pixmap ##### -->
+<para>
+
+</para>
+
+@offscreen:
+@Returns:
+
+
+<!-- ##### FUNCTION gtk_offscreen_window_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@offscreen:
+@Returns:
+
+
