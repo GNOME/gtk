@@ -258,6 +258,12 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         gint    num_texts;
         gchar *key;
         gchar *value;
+        gchar *icc_profile_base64;
+        const gchar *icc_profile_title;
+        const gchar *icc_profile;
+        guint icc_profile_size;
+        guint32 retval;
+        gint compression_type;
 
 #ifdef PNG_USER_MEM_SUPPORTED
 	png_ptr = png_create_read_struct_2 (PNG_LIBPNG_VER_STRING,
@@ -331,6 +337,18 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                         g_free (value);
                 }
         }
+
+#if defined(PNG_cHRM_SUPPORTED)
+        /* Extract embedded ICC profile */
+        retval = png_get_iCCP (png_ptr, info_ptr,
+                               (png_charpp) &icc_profile_title, &compression_type,
+                               (png_charpp) &icc_profile, (png_uint_32*) &icc_profile_size);
+        if (retval != 0) {
+                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, icc_profile_size);
+                gdk_pixbuf_set_option (pixbuf, "icc-profile", icc_profile_base64);
+                g_free (icc_profile_base64);
+        }
+#endif
 
 	g_free (rows);
 	png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
@@ -586,7 +604,13 @@ png_info_callback   (png_structp png_read_ptr,
         int i, num_texts;
         int color_type;
         gboolean have_alpha = FALSE;
-        
+        gchar *icc_profile_base64;
+        const gchar *icc_profile_title;
+        const gchar *icc_profile;
+        guint icc_profile_size;
+        guint32 retval;
+        gint compression_type;
+
         lc = png_get_progressive_ptr(png_read_ptr);
 
         if (lc->fatal_error_occurred)
@@ -651,11 +675,23 @@ png_info_callback   (png_structp png_read_ptr,
                 }
         }
 
+#if defined(PNG_cHRM_SUPPORTED)
+        /* Extract embedded ICC profile */
+        retval = png_get_iCCP (png_read_ptr, png_info_ptr,
+                               (png_charpp) &icc_profile_title, &compression_type,
+                               (png_charpp) &icc_profile, (png_uint_32*) &icc_profile_size);
+        if (retval != 0) {
+                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, icc_profile_size);
+                gdk_pixbuf_set_option (lc->pixbuf, "icc-profile", icc_profile_base64);
+                g_free (icc_profile_base64);
+        }
+#endif
+
         /* Notify the client that we are ready to go */
 
         if (lc->prepare_func)
                 (* lc->prepare_func) (lc->pixbuf, NULL, lc->notify_user_data);
-        
+
         return;
 }
 
@@ -791,7 +827,7 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                GdkPixbufSaveFunc save_func,
                                gpointer          user_data)
 {
-       png_structp png_ptr;
+       png_structp png_ptr = NULL;
        png_infop info_ptr;
        png_textp text_ptr = NULL;
        guchar *ptr;
@@ -806,6 +842,8 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
        int num_keys;
        int compression = -1;
        gboolean success = TRUE;
+       guchar *icc_profile = NULL;
+       gsize icc_profile_size = 0;
        SaveToFunctionIoPtr to_callback_ioptr;
 
        num_keys = 0;
@@ -823,7 +861,8 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                                             GDK_PIXBUF_ERROR,
                                                             GDK_PIXBUF_ERROR_BAD_OPTION,
                                                             _("Keys for PNG text chunks must have at least 1 and at most 79 characters."));
-                                       return FALSE;
+                                       success = FALSE;
+                                       goto cleanup;
                                }
                                for (i = 0; i < len; i++) {
                                        if ((guchar) key[i] > 127) {
@@ -831,10 +870,24 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                                                     GDK_PIXBUF_ERROR,
                                                                     GDK_PIXBUF_ERROR_BAD_OPTION,
                                                                     _("Keys for PNG text chunks must be ASCII characters."));
-                                               return FALSE;
+                                               success = FALSE;
+                                               goto cleanup;
                                        }
                                }
                                num_keys++;
+                       } else if (strcmp (*kiter, "icc-profile") == 0) {
+                               /* decode from base64 */
+                               icc_profile = g_base64_decode (*viter, &icc_profile_size);
+                               if (icc_profile_size < 127) {
+                                       /* This is a user-visible error */
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
+                                                    _("Color profile has invalid length '%d'."),
+                                                    icc_profile_size);
+                                       success = FALSE;
+                                       goto cleanup;
+                               }
                        } else if (strcmp (*kiter, "compression") == 0) {
                                char *endptr = NULL;
                                compression = strtol (*viter, &endptr, 10);
@@ -845,7 +898,8 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                                     GDK_PIXBUF_ERROR_BAD_OPTION,
                                                     _("PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."),
                                                     *viter);
-                                       return FALSE;
+                                       success = FALSE;
+                                       goto cleanup;
                                }
                                if (compression < 0 || compression > 9) {
                                        /* This is a user-visible error;
@@ -857,7 +911,8 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
                                                     GDK_PIXBUF_ERROR_BAD_OPTION,
                                                     _("PNG compression level must be a value between 0 and 9; value '%d' is not allowed."),
                                                     compression);
-                                       return FALSE;
+                                       success = FALSE;
+                                       goto cleanup;
                                }
                        } else {
                                g_warning ("Unrecognized parameter (%s) passed to PNG saver.", *kiter);
@@ -947,6 +1002,15 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
        if (compression >= 0)
                png_set_compression_level (png_ptr, compression);
 
+#if defined(PNG_iCCP_SUPPORTED)
+        /* the proper ICC profile title is encoded in the profile */
+        if (icc_profile != NULL) {
+                png_set_iCCP (png_ptr, info_ptr,
+                              "ICC profile", PNG_COMPRESSION_TYPE_BASE,
+                              (gchar*) icc_profile, icc_profile_size);
+        }
+#endif
+
        if (has_alpha) {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
                              PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
@@ -975,13 +1039,16 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
        png_write_end (png_ptr, info_ptr);
 
 cleanup:
-       png_destroy_write_struct (&png_ptr, &info_ptr);
+        if (png_ptr != NULL)
+                png_destroy_write_struct (&png_ptr, &info_ptr);
 
-       if (num_keys > 0) {
-               for (i = 0; i < num_keys; i++)
-                       g_free (text_ptr[i].text);
-               g_free (text_ptr);
-       }
+        g_free (icc_profile);
+
+        if (text_ptr != NULL) {
+                for (i = 0; i < num_keys; i++)
+                        g_free (text_ptr[i].text);
+                g_free (text_ptr);
+        }
 
        return success;
 }
