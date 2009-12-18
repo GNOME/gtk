@@ -29,7 +29,9 @@ struct _GtkOffscreenWindowClass
   GtkWindowClass parent_class;
 };
 
-GType   gtk_offscreen_window_get_type () G_GNUC_CONST;
+GType      gtk_offscreen_window_get_type () G_GNUC_CONST;
+
+GtkWidget *gtk_offscreen_window_new ();
 
 G_END_DECLS
 
