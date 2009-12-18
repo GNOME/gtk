@@ -1074,7 +1074,8 @@ gtk_tool_palette_new (void)
 /**
  * gtk_tool_palette_set_icon_size:
  * @palette: a #GtkToolPalette
- * @icon_size: the #GtkIconSize that icons in the tool palette shall have
+ * @icon_size: (type int): the #GtkIconSize that icons in the tool
+ *     palette shall have
  *
  * Sets the size of icons in the tool palette.
  *
@@ -1240,7 +1241,7 @@ gtk_tool_palette_unset_style (GtkToolPalette *palette)
  * Gets the size of icons in the tool palette.
  * See gtk_tool_palette_set_icon_size().
  *
- * Returns: the #GtkIconSize of icons in the tool palette
+ * Returns: (type int): the #GtkIconSize of icons in the tool palette
  *
  * Since: 2.20
  */

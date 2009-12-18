@@ -607,7 +607,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 /**
  * gtk_image_new_from_stock:
  * @stock_id: a stock icon name
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying a stock icon. Sample stock icon
  * names are #GTK_STOCK_OPEN, #GTK_STOCK_QUIT. Sample stock sizes
@@ -634,7 +634,7 @@ gtk_image_new_from_stock (const gchar    *stock_id,
 /**
  * gtk_image_new_from_icon_set:
  * @icon_set: a #GtkIconSet
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  *
  * Creates a #GtkImage displaying an icon set. Sample stock sizes are
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_SMALL_TOOLBAR. Instead of using
@@ -696,7 +696,7 @@ gtk_image_new_from_animation (GdkPixbufAnimation *animation)
 /**
  * gtk_image_new_from_icon_name:
  * @icon_name: an icon name
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
  * If the icon name isn't known, a "broken image" icon will be
@@ -723,7 +723,7 @@ gtk_image_new_from_icon_name (const gchar    *icon_name,
 /**
  * gtk_image_new_from_gicon:
  * @icon: an icon
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  * 
  * Creates a #GtkImage displaying an icon from the current icon theme.
  * If the icon name isn't known, a "broken image" icon will be
@@ -947,7 +947,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  * gtk_image_set_from_stock:
  * @image: a #GtkImage
  * @stock_id: a stock icon name
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  *
  * See gtk_image_new_from_stock() for details.
  **/
@@ -990,7 +990,7 @@ gtk_image_set_from_stock  (GtkImage       *image,
  * gtk_image_set_from_icon_set:
  * @image: a #GtkImage
  * @icon_set: a #GtkIconSet
- * @size: a stock icon size
+ * @size: (type int): a stock icon size
  *
  * See gtk_image_new_from_icon_set() for details.
  **/
@@ -1071,7 +1071,7 @@ gtk_image_set_from_animation (GtkImage           *image,
  * gtk_image_set_from_icon_name:
  * @image: a #GtkImage
  * @icon_name: an icon name
- * @size: an icon size
+ * @size: (type int): an icon size
  *
  * See gtk_image_new_from_icon_name() for details.
  * 
@@ -1116,7 +1116,7 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
  * gtk_image_set_from_gicon:
  * @image: a #GtkImage
  * @icon: an icon
- * @size: an icon size
+ * @size: (type int): an icon size
  *
  * See gtk_image_new_from_gicon() for details.
  * 
@@ -1265,7 +1265,8 @@ gtk_image_get_pixbuf (GtkImage *image)
  * @image: a #GtkImage
  * @stock_id: (out) (transfer none) (allow-none): place to store a
  *     stock icon name, or %NULL
- * @size: (out) (allow-none): place to store a stock icon size, or %NULL
+ * @size: (out) (allow-none) (type int): place to store a stock icon
+ *     size, or %NULL
  *
  * Gets the stock icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1297,7 +1298,8 @@ gtk_image_get_stock  (GtkImage        *image,
  * @image: a #GtkImage
  * @icon_set: (out) (transfer none) (allow-none): location to store a
  *     #GtkIconSet, or %NULL
- * @size: (out) (allow-none): location to store a stock icon size, or %NULL
+ * @size: (out) (allow-none) (type int): location to store a stock
+ *     icon size, or %NULL
  *
  * Gets the icon set and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1351,7 +1353,8 @@ gtk_image_get_animation (GtkImage *image)
  * @image: a #GtkImage
  * @icon_name: (out) (transfer none) (allow-none): place to store an
  *     icon name, or %NULL
- * @size: (out) (allow-none): place to store an icon size, or %NULL
+ * @size: (out) (allow-none) (type int): place to store an icon size,
+ *     or %NULL
  *
  * Gets the icon name and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
@@ -1385,7 +1388,8 @@ gtk_image_get_icon_name  (GtkImage              *image,
  * @image: a #GtkImage
  * @gicon: (out) (transfer none) (allow-none): place to store a
  *     #GIcon, or %NULL
- * @size: (out) (allow-none): place to store an icon size, or %NULL
+ * @size: (out) (allow-none) (type int): place to store an icon size,
+ *     or %NULL
  *
  * Gets the #GIcon and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or

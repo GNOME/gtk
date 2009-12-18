@@ -3037,7 +3037,8 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  *
  * Retrieves the icon size for the toolbar. See gtk_toolbar_set_icon_size().
  *
- * Return value: the current icon size for the icons on the toolbar.
+ * Return value: (type int): the current icon size for the icons on
+ * the toolbar.
  **/
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
@@ -3194,7 +3195,8 @@ gtk_toolbar_finalize (GObject *object)
 /**
  * gtk_toolbar_set_icon_size:
  * @toolbar: A #GtkToolbar
- * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
+ * @icon_size: (type int): The #GtkIconSize that stock icons in the
+ *     toolbar shall have.
  *
  * This function sets the size of stock icons in the toolbar. You
  * can call it both before you add the icons and after they've been
