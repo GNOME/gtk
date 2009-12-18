@@ -411,7 +411,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  *
  * To free the return value, use:
  * |[
- * g_list_foreach (list, gtk_tree_path_free, NULL);
+ * g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
  * g_list_free (list);
  * ]|
  *
