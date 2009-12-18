@@ -64,9 +64,11 @@ main (int argc, char **argv)
    * changes, also track damage on the offscreen
    * as done above.
    */
-  gtk_widget_draw (offscreen, NULL);
+  gtk_widget_queue_draw (offscreen);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "delete-event",
+                    G_CALLBACK (gtk_main_quit), window);
   da = gtk_drawing_area_new ();
   gtk_container_add (GTK_CONTAINER (window), da);
 
