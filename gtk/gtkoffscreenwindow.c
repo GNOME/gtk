@@ -210,12 +210,72 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
 {
 }
 
+/**
+ * gtk_offscreen_window_new:
+ *
+ * Creates a toplevel container widget that is used to retrieve
+ * snapshots of widgets without showing them on the screen.  For
+ * widgets that are on the screen and part of a normal widget
+ * hierarchy, gtk_widget_get_snapshot() can be used instead.
+ *
+ * Return value: A pointer to a #GtkWidget
+ **/
 GtkWidget *
 gtk_offscreen_window_new (void)
 {
   return g_object_new (gtk_offscreen_window_get_type (), NULL);
 }
 
+/**
+ * gtk_offscreen_window_get_pixmap:
+ *
+ * Retrieves a snapshot of the contained widget in the form of
+ * a #GdkPixmap.  If you need to keep this around over window
+ * resizes then you should add a reference to it.
+ *
+ * Returns: A #GdkPixmap pointer to the offscreen pixmap, or %NULL.
+ **/
+GdkPixmap *
+gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
+{
+  g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
+
+  return gdk_offscreen_window_get_pixmap (GTK_WIDGET (offscreen)->window);
+}
+
+/**
+ * gtk_offscreen_window_get_pixbuf:
+ *
+ * Retrieves a snapshot of the contained widget in the form of
+ * a #GdkPixbuf.  This is a new pixbuf with a reference count of 1,
+ * and the application should unreference it once it is no longer
+ * needed.
+ *
+ * Returns: A #GdkPixbuf pointer, or %NULL.
+ **/
+GdkPixbuf *
+gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
+{
+  GdkPixmap *pixmap = NULL;
+  GdkPixbuf *pixbuf = NULL;
+
+  g_return_val_if_fail (GTK_IS_OFFSCREEN_WINDOW (offscreen), NULL);
+
+  pixmap = gdk_offscreen_window_get_pixmap (GTK_WIDGET (offscreen)->window);
+
+  if (pixmap != NULL)
+    {
+      gint width, height;
+
+      gdk_drawable_get_size (pixmap, &width, &height);
+
+      pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL,
+                                             0, 0, 0, 0,
+                                             width, height);
+    }
+
+  return pixbuf;
+}
 
 #define __GTK_OFFSCREEN_WINDOW_C__
 #include "gtkaliasdef.c"
