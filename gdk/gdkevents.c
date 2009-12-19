@@ -471,6 +471,7 @@ gdk_event_copy (const GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
+    case GDK_DAMAGE:
       if (event->expose.region)
 	new_event->expose.region = gdk_region_copy (event->expose.region);
       break;
@@ -548,6 +549,7 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
+    case GDK_DAMAGE:
       if (event->expose.region)
 	gdk_region_destroy (event->expose.region);
       break;
