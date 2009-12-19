@@ -858,6 +858,9 @@ gtk_scrolled_window_destroy (GtkObject *object)
 
   if (scrolled_window->hscrollbar)
     {
+      g_signal_handlers_disconnect_by_func (gtk_range_get_adjustment (GTK_RANGE (scrolled_window->hscrollbar)),
+					    gtk_scrolled_window_adjustment_changed,
+					    scrolled_window);
       gtk_widget_unparent (scrolled_window->hscrollbar);
       gtk_widget_destroy (scrolled_window->hscrollbar);
       g_object_unref (scrolled_window->hscrollbar);
@@ -865,6 +868,9 @@ gtk_scrolled_window_destroy (GtkObject *object)
     }
   if (scrolled_window->vscrollbar)
     {
+      g_signal_handlers_disconnect_by_func (gtk_range_get_adjustment (GTK_RANGE (scrolled_window->vscrollbar)),
+					    gtk_scrolled_window_adjustment_changed,
+					    scrolled_window);
       gtk_widget_unparent (scrolled_window->vscrollbar);
       gtk_widget_destroy (scrolled_window->vscrollbar);
       g_object_unref (scrolled_window->vscrollbar);
