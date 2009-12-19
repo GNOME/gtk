@@ -867,9 +867,9 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Disable the use of client-side window decorations for this window.
    * This is intended to be used by subclasses of GtkWindow that need to
-   * always disable client-side window decorations, for example GtkPlug.
+   * always disable client-side window decorations, for example #GtkPlug.
    * Normally client-side decorations should be controlled through
-   * GtkWindow's 'client-side-decorated' style property.
+   * the #GtkWindow::client-side-decorated style property.
    *
    * Since: 2.20
    */
@@ -886,7 +886,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow:client-side-decorated:
    *
-   * Specifies that the window should draw its own decorations ratherthan
+   * Specifies that the window should draw its own decorations rather than
    * relying upon a window manager to do so.
    *
    * Since: 2.20
@@ -916,7 +916,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:client-side-drop-shadows:
    *
    * Indicates that GTK+ should render drop-shadows to the window frame.
-   * This is ignored if the 'client-side-decorated' style property is not
+   * This is ignored if the #GtkWindow:client-side-decorated style property is not
    * set to %TRUE.
    *
    * Since: 2.20
@@ -961,9 +961,9 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              GTK_PARAM_READWRITE));
 
   /**
-   * GtkWindow:extents-right:
+   * GtkWindow:extents-bottom:
    *
-   * Specifies the size of the client-side window extents to the right of the window,
+   * Specifies the size of the client-side window extents at the bottom of the window,
    * which can be used for drop-shadows or glow effects.
    *
    * Since: 2.20
