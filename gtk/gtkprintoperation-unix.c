@@ -547,7 +547,7 @@ finish_print (PrintResponseData *rdata,
 
       if (gtk_print_settings_get_number_up (settings) < 2)
         {
-	  if (gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+	  if (printer && gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
 	    _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
 	}
       else
