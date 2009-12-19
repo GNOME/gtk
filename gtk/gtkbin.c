@@ -182,7 +182,7 @@ static void
 gtk_bin_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
                                               gint               width,
                                               gint              *minimum_height,
-                                              gint               natural_height)
+                                              gint              *natural_height)
 {
   GtkBin *bin = GTK_BIN (layout);
 
