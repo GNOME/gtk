@@ -1014,6 +1014,10 @@ gtk_combo_box_set_property (GObject      *object,
                                             g_value_get_enum (value));
       break;
 
+    case PROP_EDITING_CANCELED:
+      combo_box->priv->editing_canceled = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;

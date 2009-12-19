@@ -1990,6 +1990,10 @@ gtk_entry_set_property (GObject         *object,
         gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (entry->im_context), priv->im_module);
       break;
 
+    case PROP_EDITING_CANCELED:
+      entry->editing_canceled = g_value_get_boolean (value);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
