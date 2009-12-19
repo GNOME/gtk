@@ -51,6 +51,7 @@ typedef enum
 
 typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
 typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
 
 typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkCellRenderer   *cell,
