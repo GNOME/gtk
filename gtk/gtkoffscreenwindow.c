@@ -43,6 +43,9 @@
  * detail.  Applications should not use any API specific to #GtkWindow
  * to operate on this object.  It should be treated as a #GtkBin that
  * has no parent widget.
+ *
+ * When contained offscreen widgets are redrawn, #GtkOffscreenWindow
+ * will emit a "damage-event" signal.
  */
 
 G_DEFINE_TYPE (GtkOffscreenWindow, gtk_offscreen_window, GTK_TYPE_WINDOW);
