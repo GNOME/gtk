@@ -28,6 +28,7 @@
 #include <math.h>
 #include <gdk/gdkkeysyms.h>
 #include "gtkbindings.h"
+#include "gtkextendedlayout.h"
 #include "gtkmarshalers.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
@@ -142,9 +143,14 @@ static void     gtk_scrolled_window_adjustment_changed (GtkAdjustment     *adjus
 
 static void  gtk_scrolled_window_update_real_placement (GtkScrolledWindow *scrolled_window);
 
+static void  gtk_scrolled_window_extended_layout_init  (GtkExtendedLayoutIface *iface);
+
 static guint signals[LAST_SIGNAL] = {0};
 
-G_DEFINE_TYPE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_CODE (GtkScrolledWindow, gtk_scrolled_window, GTK_TYPE_BIN,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+                                                gtk_scrolled_window_extended_layout_init))
+
 
 static void
 add_scroll_binding (GtkBindingSet  *binding_set,
@@ -1223,8 +1229,9 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-gtk_scrolled_window_size_request (GtkWidget      *widget,
-				  GtkRequisition *requisition)
+gtk_scrolled_window_real_size_request (GtkWidget      *widget,
+				       GtkRequisition *min_requisition,
+				       GtkRequisition *nat_requisition)
 {
   GtkScrolledWindow *scrolled_window;
   GtkBin *bin;
@@ -1233,10 +1240,10 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   gint scrollbar_spacing;
   GtkRequisition hscrollbar_requisition;
   GtkRequisition vscrollbar_requisition;
-  GtkRequisition child_requisition;
+  GtkRequisition min_child_requisition;
+  GtkRequisition nat_child_requisition;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
-  g_return_if_fail (requisition != NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   bin = GTK_BIN (scrolled_window);
@@ -1245,8 +1252,10 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 
   extra_width = 0;
   extra_height = 0;
-  requisition->width = 0;
-  requisition->height = 0;
+  min_requisition->width = 0;
+  min_requisition->height = 0;
+  nat_requisition->width = 0;
+  nat_requisition->height = 0;
   
   gtk_widget_size_request (scrolled_window->hscrollbar,
 			   &hscrollbar_requisition);
@@ -1255,43 +1264,60 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      gtk_widget_size_request (bin->child, &child_requisition);
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
+                                            &min_child_requisition,
+                                            &nat_child_requisition);
 
       if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER)
-	requisition->width += child_requisition.width;
+        {
+	  min_requisition->width += min_child_requisition.width;
+	  nat_requisition->width += nat_child_requisition.width;
+        }
       else
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
 
 	  if (aux_info && aux_info->width > 0)
 	    {
-	      requisition->width += aux_info->width;
+	      min_requisition->width += aux_info->width;
+	      nat_requisition->width += aux_info->width;
 	      extra_width = -1;
 	    }
 	  else
-	    requisition->width += vscrollbar_requisition.width;
+            {
+	      min_requisition->width += vscrollbar_requisition.width;
+	      nat_requisition->width += vscrollbar_requisition.width;
+            }
 	}
 
       if (scrolled_window->vscrollbar_policy == GTK_POLICY_NEVER)
-	requisition->height += child_requisition.height;
+        {
+	  min_requisition->height += min_child_requisition.height;
+	  nat_requisition->height += nat_child_requisition.height;
+        }
       else
 	{
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
 
 	  if (aux_info && aux_info->height > 0)
 	    {
-	      requisition->height += aux_info->height;
+	      min_requisition->height += aux_info->height;
+	      nat_requisition->height += aux_info->height;
 	      extra_height = -1;
 	    }
 	  else
-	    requisition->height += hscrollbar_requisition.height;
+            {
+	      min_requisition->height += hscrollbar_requisition.height;
+	      nat_requisition->height += hscrollbar_requisition.height;
+            }
 	}
     }
 
   if (scrolled_window->hscrollbar_policy == GTK_POLICY_AUTOMATIC ||
       scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
     {
-      requisition->width = MAX (requisition->width, hscrollbar_requisition.width);
+      min_requisition->width = MAX (min_requisition->width, hscrollbar_requisition.width);
+      nat_requisition->width = MAX (nat_requisition->width, hscrollbar_requisition.width);
       if (!extra_height || scrolled_window->hscrollbar_policy == GTK_POLICY_ALWAYS)
 	extra_height = scrollbar_spacing + hscrollbar_requisition.height;
     }
@@ -1299,19 +1325,33 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   if (scrolled_window->vscrollbar_policy == GTK_POLICY_AUTOMATIC ||
       scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS)
     {
-      requisition->height = MAX (requisition->height, vscrollbar_requisition.height);
+      min_requisition->height = MAX (min_requisition->height, vscrollbar_requisition.height);
+      nat_requisition->height = MAX (nat_requisition->height, vscrollbar_requisition.height);
       if (!extra_height || scrolled_window->vscrollbar_policy == GTK_POLICY_ALWAYS)
 	extra_width = scrollbar_spacing + vscrollbar_requisition.width;
     }
 
-  requisition->width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
-  requisition->height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
+  min_requisition->width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
+  min_requisition->height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
+  nat_requisition->width += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_width);
+  nat_requisition->height += GTK_CONTAINER (widget)->border_width * 2 + MAX (0, extra_height);
 
   if (scrolled_window->shadow_type != GTK_SHADOW_NONE)
     {
-      requisition->width += 2 * widget->style->xthickness;
-      requisition->height += 2 * widget->style->ythickness;
+      min_requisition->width += 2 * widget->style->xthickness;
+      min_requisition->height += 2 * widget->style->ythickness;
+      nat_requisition->width += 2 * widget->style->xthickness;
+      nat_requisition->height += 2 * widget->style->ythickness;
     }
+}
+
+static void
+gtk_scrolled_window_size_request (GtkWidget      *widget,
+                                 GtkRequisition *requisition)
+{
+  GtkRequisition nat_req;
+
+  gtk_scrolled_window_real_size_request (widget, requisition, &nat_req);
 }
 
 static void
@@ -1786,6 +1826,28 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 
       return scrollbar_spacing;
     }
+}
+
+static void
+gtk_scrolled_window_extended_layout_get_desired_size (GtkExtendedLayout *layout,
+                                                      GtkRequisition    *minimal_size,
+                                                      GtkRequisition    *natural_size)
+{
+  GtkRequisition min_req, nat_req;
+
+  gtk_scrolled_window_real_size_request (GTK_WIDGET (layout), &min_req, &nat_req);
+
+  if (minimal_size)
+    *minimal_size = min_req;
+
+  if (natural_size)
+    *natural_size = nat_req;
+}
+
+static void
+gtk_scrolled_window_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_size = gtk_scrolled_window_extended_layout_get_desired_size;
 }
 
 #define __GTK_SCROLLED_WINDOW_C__
