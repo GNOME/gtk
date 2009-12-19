@@ -2727,6 +2727,8 @@ gtk_object_get_type G_GNUC_CONST
 #if IN_FILE(__GTK_OFFSCREEN_WINDOW_C__)
 gtk_offscreen_window_get_type G_GNUC_CONST
 gtk_offscreen_window_new
+gtk_offscreen_window_get_pixmap
+gtk_offscreen_window_get_pixbuf
 #endif
 #endif
 
