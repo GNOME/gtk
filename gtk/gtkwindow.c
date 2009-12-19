@@ -666,7 +666,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          GTK_PARAM_READWRITE));  
 
   /**
-   * GtkWindow:accept-focus-hint:
+   * GtkWindow:accept-focus:
    *
    * Whether the window should receive the input focus.
    *
@@ -681,7 +681,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          GTK_PARAM_READWRITE));  
 
   /**
-   * GtkWindow:focus-on-map-hint:
+   * GtkWindow:focus-on-map:
    *
    * Whether the window should receive the input focus when mapped.
    *
