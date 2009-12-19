@@ -21,6 +21,30 @@
 #include "gtkoffscreenwindow.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:offscreen_windows
+ * @short description: A toplevel container widget used to manage offscreen
+ *    rendering of child widgets.
+ * @title: Offscreen windows
+ *
+ * #GtkOffscreenWindow is strictly intended to be used for obtaining
+ * snapshots of widgets that are not part of a normal widget hierarchy.
+ * It differs from gtk_widget_get_snapshot() in that the widget you
+ * want to get a snapshot of need not be displayed on the user's screen
+ * as a part of a widget hierarchy.  However, since #GtkOffscreenWindow
+ * is a toplevel widget you cannot obtain snapshots of a full window
+ * with it since you cannot pack a toplevel widget in another toplevel.
+ *
+ * The idea is to take a widget and manually set the size and state of
+ * it, add it to a #GtkOffscreenWindow and then retrieve the snapshot
+ * as a #GdkPixmap or #GdkPixbuf.
+ *
+ * #GtkOffscreenWindow derives from #GtkWindow only as an implementation
+ * detail.  Applications should not use any API specific to #GtkWindow
+ * to operate on this object.  It should be treated as a #GtkBin that
+ * has no parent widget.
+ */
+
 G_DEFINE_TYPE (GtkOffscreenWindow, gtk_offscreen_window, GTK_TYPE_WINDOW);
 
 static void
@@ -210,6 +234,7 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
 {
 }
 
+/* --- functions --- */
 /**
  * gtk_offscreen_window_new:
  *
