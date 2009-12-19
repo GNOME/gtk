@@ -580,6 +580,7 @@ case $host in
   ;;
 esac
 
+AC_SUBST(MATH_LIB)
 #
 # see bug 162979
 #
