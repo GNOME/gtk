@@ -17,7 +17,8 @@ DEPS = \
 progs_ldadd = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(GTK_DEP_LIBS)
 
 noinst_PROGRAMS = $(TEST_PROGS)
 
