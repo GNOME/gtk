@@ -24,6 +24,7 @@
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
@@ -35,6 +36,7 @@ struct _GtkCellViewCellInfo
   GtkCellRenderer *cell;
 
   gint requested_width;
+  gint natural_width;
   gint real_width;
   guint expand : 1;
   guint pack : 1;
@@ -120,6 +122,8 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								const gchar   	      *tagname,
 								gpointer      	      *data);
 
+static void       gtk_cell_view_extended_layout_init           (GtkExtendedLayoutIface *iface);
+
 static GtkBuildableIface *parent_buildable_iface;
 
 #define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
@@ -137,7 +141,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_cell_view_buildable_init))
+						gtk_cell_view_buildable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_cell_view_extended_layout_init))
+
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
@@ -340,6 +347,18 @@ gtk_cell_view_size_request (GtkWidget      *widget,
                                   &width, &height);
 
       info->requested_width = width;
+
+      if (GTK_IS_EXTENDED_LAYOUT (info->cell))
+       {
+         GtkRequisition nat_rec;
+
+         gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (info->cell),
+                                               NULL, &nat_rec);
+         info->natural_width = nat_rec.width;
+       }
+     else
+       info->natural_width = info->requested_width;
+
       requisition->width += width;
       requisition->height = MAX (requisition->height, height);
 
@@ -351,11 +370,12 @@ static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  GList *i;
-  gint expand_cell_count = 0;
-  gint full_requested_width = 0;
-  gint extra_space;
   GtkCellView *cellview;
+  GList *i;
+  gint nexpand_cells = 0;
+  gint requested_width = 0;
+  gint natural_width = 0;
+  gint available, natural, extra;
 
   widget->allocation = *allocation;
 
@@ -370,16 +390,20 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
         continue;
 
       if (info->expand)
-        expand_cell_count++;
+        nexpand_cells++;
 
-      full_requested_width += info->requested_width;
+      requested_width += info->requested_width;
+      natural_width += info->natural_width - info->requested_width;
     }
 
-  extra_space = widget->allocation.width - full_requested_width;
-  if (extra_space < 0)
-    extra_space = 0;
-  else if (extra_space > 0 && expand_cell_count > 0)
-    extra_space /= expand_cell_count;
+  available = MAX (0, widget->allocation.width - requested_width);
+  natural = MIN (available, natural_width);
+  available -= natural;
+
+  if (nexpand_cells > 0)
+    extra = available / nexpand_cells;
+  else
+    extra = 0;
 
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
@@ -388,8 +412,21 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width +
-        (info->expand ? extra_space : 0);
+      info->real_width = info->requested_width;
+
+      if (natural_width > 0)
+          info->real_width += natural * (info->natural_width - info->requested_width) / natural_width;
+
+      if (info->expand)
+        {
+          if (nexpand_cells == 1)
+            info->real_width += available;
+          else
+            info->real_width += extra;
+
+         nexpand_cells -= 1;
+         available -= extra;
+       }
     }
 }
 
@@ -1114,6 +1151,46 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
   else if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
+}
+
+static void
+gtk_cell_view_extended_layout_get_desired_size (GtkExtendedLayout *layout,
+                                                GtkRequisition    *minimal_size,
+                                                GtkRequisition    *desired_size)
+{
+  GList *i;
+  gint min_width, nat_width;
+
+  min_width = 0;
+  nat_width = 0;
+
+  for (i = GTK_CELL_VIEW (layout)->priv->cell_list; i; i = i->next)
+    {
+      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
+
+      if (info->cell->visible)
+        {
+          min_width += info->requested_width;
+          nat_width += info->natural_width;
+        }
+    }
+
+  if (minimal_size)
+    {
+      minimal_size->width = min_width;
+      minimal_size->height = GTK_WIDGET (layout)->requisition.height;
+    }
+  if (desired_size)
+    {
+      desired_size->width = nat_width;
+      desired_size->height = GTK_WIDGET (layout)->requisition.height;
+    }
+}
+
+static void
+gtk_cell_view_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_size = gtk_cell_view_extended_layout_get_desired_size;
 }
 
 
