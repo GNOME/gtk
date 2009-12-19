@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2009-12-11 08:16+0000\n"
-"PO-Revision-Date: 2009-12-13 09:52+0100\n"
+"POT-Creation-Date: 2009-12-19 01:10+0000\n"
+"PO-Revision-Date: 2009-12-19 13:28+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -364,12 +364,12 @@ msgstr "No se ha podido abrir el archivo temporal"
 msgid "Failed to read from temporary file"
 msgstr "No se ha podido leer del archivo temporal"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "No se ha podido abrir «%s» para escritura: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -378,11 +378,11 @@ msgstr ""
 "No se ha podido cerrar «%s» mientras se escribía la imagen, puede que no se "
 "hayan guardado todos los datos: %s"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2274 ../gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2289 ../gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "No hay memoria suficiente para guardar la imagen en un búfer"
 
-#: ../gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "Error al escribir en el flujo de la imagen"
 
@@ -737,7 +737,7 @@ msgstr "El formato de imagen PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Los bits por canal de la imagen PNG son inválidos."
 
-#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
+#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "El PNG transformado tiene anchura o altura cero."
 
@@ -760,11 +760,11 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "Error fatal en el archivo gráfico PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:310
+#: ../gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "No hay memoria suficiente para cargar el archivo PNG"
 
-#: ../gdk-pixbuf/io-png.c:633
+#: ../gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -773,27 +773,32 @@ msgstr ""
 "No hay memoria suficiente para almacenar una imagen de %ld por %ld; intente "
 "cerrar algunas aplicaciones para reducir la utilización de memoria"
 
-#: ../gdk-pixbuf/io-png.c:684
+#: ../gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "Error fatal leyendo el archivo gráfico PNG"
 
-#: ../gdk-pixbuf/io-png.c:733
+#: ../gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Error fatal leyendo el archivo gráfico PNG: %s"
 
-#: ../gdk-pixbuf/io-png.c:825
+#: ../gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Las claves para las porciones de texto PNG deben tener al menos entre 1 y un "
 "máximo de 79 caracteres."
 
-#: ../gdk-pixbuf/io-png.c:833
+#: ../gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Las claves para las porciones de texto PNG deben ser caracteres ASCII."
 
-#: ../gdk-pixbuf/io-png.c:846 ../gdk-pixbuf/io-gdip-png.c:56
+#: ../gdk-pixbuf/io-png.c:886
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr "El perfil de color tiene una longitud «%d» no válida."
+
+#: ../gdk-pixbuf/io-png.c:899 ../gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -802,7 +807,7 @@ msgstr ""
 "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no se "
 "puede interpretar."
 
-#: ../gdk-pixbuf/io-png.c:858 ../gdk-pixbuf/io-gdip-png.c:68
+#: ../gdk-pixbuf/io-png.c:912 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -811,14 +816,14 @@ msgstr ""
 "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» no "
 "está permitido."
 
-#: ../gdk-pixbuf/io-png.c:896
+#: ../gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "El valor la porción de texto PNG %s no puede convertirse a la codificación "
 "ISO-8859-1."
 
-#: ../gdk-pixbuf/io-png.c:1045 ../gdk-pixbuf/io-gdip-png.c:133
+#: ../gdk-pixbuf/io-png.c:1112 ../gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "El formato de imagen PNG"
 
@@ -1652,15 +1657,15 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:8600 ../gtk/gtktextview.c:7796
+#: ../gtk/gtkentry.c:8604 ../gtk/gtktextview.c:7796
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8614 ../gtk/gtktextview.c:7810
+#: ../gtk/gtkentry.c:8618 ../gtk/gtktextview.c:7810
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:9985
+#: ../gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2531,7 +2536,7 @@ msgstr "Ruta inferior"
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
-#: ../gtk/gtkprintbackend.c:740
+#: ../gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "Autenticación"
 
@@ -3797,17 +3802,17 @@ msgstr "Imposible encontrar el motor de temas en la ruta al _modulo: «%s»,"
 msgid "--- No Tip ---"
 msgstr "-- Sin consejo --"
 
-#: ../gtk/gtkuimanager.c:1504
+#: ../gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Etiqueta de inicio «%s» inesperada en la línea %d, carácter %d"
 
-#: ../gtk/gtkuimanager.c:1594
+#: ../gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Dato carácter inesperado en la línea %d, carácter %d"
 
-#: ../gtk/gtkuimanager.c:2426
+#: ../gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Vacío"
 
