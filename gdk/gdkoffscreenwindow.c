@@ -514,7 +514,7 @@ gdk_offscreen_window_draw_segments (GdkDrawable  *drawable,
       min_x = max_x = segs[0].x1;
       min_y = max_y = segs[0].y1;
 
-	for (i = 1; i < nsegs; i++)
+	for (i = 0; i < nsegs; i++)
 	  {
 	    min_x = MIN (min_x, segs[i].x1);
 	    max_x = MAX (max_x, segs[i].x1);
