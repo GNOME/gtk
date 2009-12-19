@@ -32,6 +32,7 @@
 #include "gtkplugprivate.h"
 
 #include "x11/gdkx.h"
+#include <X11/Xatom.h>
 
 #include "gtkxembed.h"
 #include "gtkalias.h"
@@ -330,3 +331,29 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 
   return return_val;
 }
+
+void
+_gtk_plug_windowing_publish_natural_size (GtkPlug        *plug,
+					  GtkRequisition *requisition)
+{
+  GtkWidget *widget = GTK_WIDGET (plug);
+  GdkDisplay *display;
+  GdkWindow *window;
+  gint32 data[2];
+  Atom property;
+
+  gtk_widget_realize (widget);
+
+  window = GTK_WIDGET (plug)->window;
+  display = gdk_drawable_get_display (window);
+  property = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_NATURAL_SIZE");
+
+  data[0] = requisition->width;
+  data[1] = requisition->height;
+
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+		   GDK_WINDOW_XWINDOW (window), property,
+                   XA_CARDINAL, 32, PropModeReplace,
+                   (unsigned char*)data, 2);
+}
+
