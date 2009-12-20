@@ -831,8 +831,12 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
        * not in the entire window.
        */
       if (GTK_IS_MENU_BAR (target))
-        _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (target),
-                                                        mnemonics_visible);
+        {
+          gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (target)),
+                                            FALSE);
+          _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (target),
+                                                          mnemonics_visible);
+        }
       else
         gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (target))),
                                           mnemonics_visible);
