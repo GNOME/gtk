@@ -42,6 +42,7 @@
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
 #include "gtkmnemonichash.h"
+#include "gtkmenubar.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
@@ -235,8 +236,6 @@ static gint gtk_window_client_event	  (GtkWidget	     *widget,
 static void gtk_window_check_resize       (GtkContainer      *container);
 static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
-static void gtk_window_grab_notify        (GtkWidget         *widget,
-                                           gboolean           was_grabbed);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 
@@ -464,7 +463,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
   widget_class->expose_event = gtk_window_expose;
-  widget_class->grab_notify = gtk_window_grab_notify;
 
   container_class->check_resize = gtk_window_check_resize;
 
@@ -5332,7 +5330,6 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   if (auto_mnemonics)
     gtk_window_set_mnemonics_visible (window, FALSE);
 
-
   return FALSE;
 }
 
@@ -8504,22 +8501,6 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
     }
 
   priv->mnemonics_visible_set = TRUE;
-}
-
-static void
-gtk_window_grab_notify (GtkWidget *widget,
-                        gboolean   was_grabbed)
-{
-  gboolean auto_mnemonics;
-
-  if (was_grabbed)
-    return;
-
-  g_object_get (gtk_widget_get_settings (widget), "gtk-auto-mnemonics",
-                &auto_mnemonics, NULL);
-
- if (auto_mnemonics)
-   gtk_window_set_mnemonics_visible (GTK_WINDOW (widget), FALSE);
 }
 
 #if defined (G_OS_WIN32) && !defined (_WIN64)
