@@ -687,12 +687,14 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   
   deconstruct_widgets (widget);
   
+  gtk_widget_set_sensitive (widget, TRUE);
+
   if (source == NULL)
     {
       priv->combo = combo_box_new ();
       combo_box_append (priv->combo,_("Not available"), "None");
       gtk_combo_box_set_active (GTK_COMBO_BOX (priv->combo), 0);
-      gtk_widget_set_sensitive (priv->combo, FALSE);
+      gtk_widget_set_sensitive (widget, FALSE);
       gtk_widget_show (priv->combo);
       gtk_box_pack_start (GTK_BOX (widget), priv->combo, TRUE, TRUE, 0);
     }
