@@ -1628,9 +1628,6 @@ mnemonics_visible_apply (GtkWidget *widget,
 
   label = GTK_LABEL (widget);
 
-  if (!label->use_underline)
-    return;
-
   priv = GTK_LABEL_GET_PRIVATE (label);
 
   mnemonics_visible = mnemonics_visible != FALSE;
@@ -2537,6 +2534,7 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (label);
   PangoAttrList *attrs;
   gboolean enable_mnemonics;
+  gboolean auto_mnemonics;
 
   g_return_if_fail (GTK_IS_LABEL (label));
 
@@ -2545,10 +2543,14 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
 		"gtk-enable-mnemonics", &enable_mnemonics,
+		"gtk-auto-mnemonics", &auto_mnemonics,
 		NULL);
 
   if (enable_mnemonics && priv->mnemonics_visible && pattern &&
-      GTK_WIDGET_IS_SENSITIVE (label))
+      (!auto_mnemonics ||
+       (GTK_WIDGET_IS_SENSITIVE (label) &&
+        (!label->mnemonic_widget ||
+         GTK_WIDGET_IS_SENSITIVE (label->mnemonic_widget)))))
     attrs = gtk_label_pattern_to_attrs (label, pattern);
   else
     attrs = NULL;
