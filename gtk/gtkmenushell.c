@@ -825,7 +825,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
                           ((target->active_menu_item && !found) ||
                            (target == menu_shell &&
                             !target->parent_menu_shell &&
-                            gtk_widget_has_grab (target)));
+                            gtk_widget_has_grab (GTK_WIDGET (target))));
 
       /* While menus are up, only show underlines inside the menubar,
        * not in the entire window.
@@ -834,7 +834,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
         _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (target),
                                                         mnemonics_visible);
       else
-        gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (target)),
+        gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (target))),
                                           mnemonics_visible);
 
       if (target->active_menu_item)
