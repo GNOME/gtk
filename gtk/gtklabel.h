@@ -197,6 +197,11 @@ guint gtk_label_parse_uline            (GtkLabel    *label,
 
 #endif /* GTK_DISABLE_DEPRECATED */
 
+/* private */
+
+void _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
+                                                     gboolean   mnemonics_visible);
+
 G_END_DECLS
 
 #endif /* __GTK_LABEL_H__ */

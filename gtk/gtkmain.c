@@ -63,6 +63,8 @@
 #include "gtktooltip.h"
 #include "gtkdebug.h"
 #include "gtkalias.h"
+#include "gtkmenu.h"
+#include "gdk/gdkkeysyms.h"
 
 #include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
 
@@ -1613,6 +1615,27 @@ gtk_main_do_event (GdkEvent *event)
 	  if (gtk_invoke_key_snoopers (grab_widget, event))
 	    break;
 	}
+      /* catch alt press to enable auto-mnemonics */
+      if (event->key.keyval == GDK_Alt_L || event->key.keyval == GDK_Alt_R)
+        {
+          gboolean auto_mnemonics;
+
+          g_object_get (gtk_widget_get_settings (grab_widget),
+                        "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+
+          if (auto_mnemonics)
+            {
+              gboolean mnemonics_visible;
+              GtkWidget *window;
+
+              mnemonics_visible = (event->type == GDK_KEY_PRESS);
+
+              window = gtk_widget_get_toplevel (grab_widget);
+
+              if (GTK_IS_WINDOW (window))
+                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), mnemonics_visible);
+            }
+        }
       /* else fall through */
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_RELEASE:

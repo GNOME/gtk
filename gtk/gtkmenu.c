@@ -1616,6 +1616,18 @@ gtk_menu_popup (GtkMenu		    *menu,
   if (xgrab_shell == widget)
     popup_grab_on_window (widget->window, activate_time, grab_keyboard); /* Should always succeed */
   gtk_grab_add (GTK_WIDGET (menu));
+
+  if (parent_menu_shell)
+    {
+      gboolean keyboard_mode;
+
+      keyboard_mode = _gtk_menu_shell_get_keyboard_mode (GTK_MENU_SHELL (parent_menu_shell));
+      _gtk_menu_shell_set_keyboard_mode (menu_shell, keyboard_mode);
+    }
+  else if (menu_shell->button == 0) /* a keynav-activated context menu */
+    _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
+
+  _gtk_menu_shell_update_mnemonics (menu_shell);
 }
 
 void

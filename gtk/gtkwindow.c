@@ -101,6 +101,8 @@ enum {
   /* Writeonly properties */
   PROP_STARTUP_ID,
   
+  PROP_MNEMONICS_VISIBLE,
+
   LAST_ARG
 };
 
@@ -185,6 +187,9 @@ struct _GtkWindowPrivate
   guint opacity_set : 1;
   guint builder_visible : 1;
 
+  guint mnemonics_visible : 1;
+  guint mnemonics_visible_set : 1;
+
   GdkWindowTypeHint type_hint;
 
   gdouble opacity;
@@ -230,6 +235,8 @@ static gint gtk_window_client_event	  (GtkWidget	     *widget,
 static void gtk_window_check_resize       (GtkContainer      *container);
 static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
+static void gtk_window_grab_notify        (GtkWidget         *widget,
+                                           gboolean           was_grabbed);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 
@@ -456,9 +463,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
-  
   widget_class->expose_event = gtk_window_expose;
-   
+  widget_class->grab_notify = gtk_window_grab_notify;
+
   container_class->check_resize = gtk_window_check_resize;
 
   klass->set_focus = gtk_window_real_set_focus;
@@ -591,6 +598,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         P_("Icon for this window"),
                                                         GDK_TYPE_PIXBUF,
                                                         GTK_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+                                   PROP_MNEMONICS_VISIBLE,
+                                   g_param_spec_boolean ("mnemonics-visible",
+                                                         P_("Mnemonics Visible"),
+                                                         P_("Whether mnemonics are currently visible in this window"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
   
   /**
    * GtkWindow:icon-name:
@@ -929,6 +943,7 @@ gtk_window_init (GtkWindow *window)
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   priv->opacity = 1.0;
   priv->startup_id = NULL;
+  priv->mnemonics_visible = TRUE;
 
   colormap = _gtk_widget_peek_colormap ();
   if (colormap)
@@ -951,8 +966,11 @@ gtk_window_set_property (GObject      *object,
 			 GParamSpec   *pspec)
 {
   GtkWindow  *window;
+  GtkWindowPrivate *priv;
   
   window = GTK_WINDOW (object);
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
 
   switch (prop_id)
     {
@@ -1049,6 +1067,9 @@ gtk_window_set_property (GObject      *object,
       break;
     case PROP_OPACITY:
       gtk_window_set_opacity (window, g_value_get_double (value));
+      break;
+    case PROP_MNEMONICS_VISIBLE:
+      gtk_window_set_mnemonics_visible (window, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1164,6 +1185,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_window_get_opacity (window));
+      break;
+    case PROP_MNEMONICS_VISIBLE:
+      g_value_set_boolean (value, priv->mnemonics_visible);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4537,6 +4561,7 @@ gtk_window_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GdkWindow *toplevel;
+  gboolean auto_mnemonics;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -4612,6 +4637,14 @@ gtk_window_map (GtkWidget *widget)
           gdk_notify_startup_complete ();
         }
     }
+
+  /* if auto-mnemonics is enabled and mnemonics visible is not already set
+   * (as in the case of popup menus), then hide mnemonics initially
+   */
+  g_object_get (gtk_widget_get_settings (widget), "gtk-auto-mnemonics",
+                &auto_mnemonics, NULL);
+  if (auto_mnemonics && !priv->mnemonics_visible_set)
+    gtk_window_set_mnemonics_visible (window, FALSE);
 }
 
 static gboolean
@@ -5288,9 +5321,17 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 			    GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  gboolean auto_mnemonics;
 
   _gtk_window_set_has_toplevel_focus (window, FALSE);
   _gtk_window_set_is_active (window, FALSE);
+
+  /* set the mnemonic-visible property to false */
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+  if (auto_mnemonics)
+    gtk_window_set_mnemonics_visible (window, FALSE);
+
 
   return FALSE;
 }
@@ -8430,6 +8471,55 @@ gtk_window_get_window_type (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), GTK_WINDOW_TOPLEVEL);
 
   return window->type;
+}
+
+gboolean
+gtk_window_get_mnemonics_visible (GtkWindow *window)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  return priv->mnemonics_visible;
+}
+
+void
+gtk_window_set_mnemonics_visible (GtkWindow *window,
+                                  gboolean   setting)
+{
+  GtkWindowPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  setting = setting != FALSE;
+
+  if (priv->mnemonics_visible != setting)
+    {
+      priv->mnemonics_visible = setting;
+      g_object_notify (G_OBJECT (window), "mnemonics-visible");
+    }
+
+  priv->mnemonics_visible_set = TRUE;
+}
+
+static void
+gtk_window_grab_notify (GtkWidget *widget,
+                        gboolean   was_grabbed)
+{
+  gboolean auto_mnemonics;
+
+  if (was_grabbed)
+    return;
+
+  g_object_get (gtk_widget_get_settings (widget), "gtk-auto-mnemonics",
+                &auto_mnemonics, NULL);
+
+ if (auto_mnemonics)
+   gtk_window_set_mnemonics_visible (GTK_WINDOW (widget), FALSE);
 }
 
 #if defined (G_OS_WIN32) && !defined (_WIN64)
