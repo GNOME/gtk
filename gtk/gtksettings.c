@@ -124,7 +124,8 @@ enum {
   PROP_ENABLE_EVENT_SOUNDS,
   PROP_ENABLE_TOOLTIPS,
   PROP_TOOLBAR_STYLE,
-  PROP_TOOLBAR_ICON_SIZE
+  PROP_TOOLBAR_ICON_SIZE,
+  PROP_AUTO_MNEMONICS
 };
 
 
@@ -999,6 +1000,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_TOOLBAR_ICON_SIZE);
+
+  /**
+   * GtkSettings:gtk-auto-mnemonics:
+   *
+   * Whether mnemonics should be automatically shown and hidden when the user
+   * presses the mnemonic activator.
+   *
+   * Since: 2.20
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-auto-mnemonics",
+                                                                   P_("Auto Mnemonics"),
+                                                                   P_("Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_AUTO_MNEMONICS);
 }
 
 static void

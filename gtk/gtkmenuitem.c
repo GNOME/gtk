@@ -1374,6 +1374,9 @@ static gboolean
 gtk_menu_item_mnemonic_activate (GtkWidget *widget,
 				 gboolean   group_cycling)
 {
+  if (GTK_IS_MENU_SHELL (widget->parent))
+    _gtk_menu_shell_set_keyboard_mode (GTK_MENU_SHELL (widget->parent), TRUE);
+
   if (group_cycling &&
       widget->parent &&
       GTK_IS_MENU_SHELL (widget->parent) &&

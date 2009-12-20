@@ -30,6 +30,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
+#include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
@@ -773,6 +774,76 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   return TRUE;
 }
 
+void
+_gtk_menu_shell_set_keyboard_mode (GtkMenuShell *menu_shell,
+                                   gboolean      keyboard_mode)
+{
+  menu_shell->keyboard_mode = keyboard_mode;
+}
+
+gboolean
+_gtk_menu_shell_get_keyboard_mode (GtkMenuShell *menu_shell)
+{
+  return menu_shell->keyboard_mode;
+}
+
+void
+_gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
+{
+  GtkMenuShell *target;
+  gboolean auto_mnemonics;
+  gboolean found;
+  gboolean mnemonics_visible;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
+                "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+
+  if (!auto_mnemonics)
+    return;
+
+  target = menu_shell;
+  found = FALSE;
+  while (target)
+    {
+      /* The idea with keyboard mode is that once you start using
+       * the keyboard to navigate the menus, we show mnemonics
+       * until the menu navigation is over. To that end, we spread
+       * the keyboard mode upwards in the menu hierarchy here.
+       * Also see gtk_menu_popup, where we inherit it downwards.
+       */
+      if (menu_shell->keyboard_mode)
+        target->keyboard_mode = TRUE;
+
+      /* While navigating menus, the first parent menu with an active
+       * item is the one where mnemonics are effective, as can be seen
+       * in gtk_menu_shell_key_press below.
+       * We also show mnemonics in context menus. The grab condition is
+       * necessary to ensure we remove underlines from menu bars when
+       * dismissing menus.
+       */
+      mnemonics_visible = target->keyboard_mode &&
+                          ((target->active_menu_item && !found) ||
+                           (target == menu_shell &&
+                            !target->parent_menu_shell &&
+                            gtk_widget_has_grab (target)));
+
+      /* While menus are up, only show underlines inside the menubar,
+       * not in the entire window.
+       */
+      if (GTK_IS_MENU_BAR (target))
+        _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (target),
+                                                        mnemonics_visible);
+      else
+        gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (target)),
+                                          mnemonics_visible);
+
+      if (target->active_menu_item)
+        found = TRUE;
+
+      target = GTK_MENU_SHELL (target->parent_menu_shell);
+    }
+}
+
 static gint
 gtk_menu_shell_key_press (GtkWidget   *widget,
 			  GdkEventKey *event)
@@ -780,9 +851,11 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   gboolean enable_mnemonics;
 
+  menu_shell->keyboard_mode = TRUE;
+
   if (!menu_shell->active_menu_item && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
-  
+
   if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
     return TRUE;
 
@@ -992,11 +1065,15 @@ gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
       if (menu_shell->have_xgrab)
 	{
 	  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (menu_shell));
-	  
+
 	  menu_shell->have_xgrab = FALSE;
 	  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
 	  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
 	}
+
+      menu_shell->keyboard_mode = FALSE;
+
+      _gtk_menu_shell_update_mnemonics (menu_shell);
     }
 }
 
@@ -1079,6 +1156,8 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 				  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
   gtk_menu_item_select (GTK_MENU_ITEM (menu_shell->active_menu_item));
 
+  _gtk_menu_shell_update_mnemonics (menu_shell);
+
   /* This allows the bizarre radio buttons-with-submenus-display-history
    * behavior
    */
@@ -1095,6 +1174,7 @@ gtk_menu_shell_deselect (GtkMenuShell *menu_shell)
     {
       gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
       menu_shell->active_menu_item = NULL;
+      _gtk_menu_shell_update_mnemonics (menu_shell);
     }
 }
 
@@ -1340,6 +1420,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
            * menu.
            */
           _gtk_menu_item_popdown_submenu (menu_shell->active_menu_item);
+          _gtk_menu_shell_update_mnemonics (menu_shell);
         }
       else if (parent_menu_shell)
 	{
@@ -1347,6 +1428,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
             {
               /* close menu when returning from submenu. */
               _gtk_menu_item_popdown_submenu (GTK_MENU (menu_shell)->parent_menu_item);
+              _gtk_menu_shell_update_mnemonics (parent_menu_shell);
               break;
             }
 
