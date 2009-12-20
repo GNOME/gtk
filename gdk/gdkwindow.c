@@ -480,6 +480,15 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
 
   /* Properties */
+
+  /**
+   * GdkWindow:cursor:
+   *
+   * The mouse pointer for a #GdkWindow. See gdk_window_set_cursor() and
+   * gdk_window_get_cursor() for details.
+   *
+   * Since: 2.18
+   */
   g_object_class_install_property (object_class,
                                    PROP_CURSOR,
                                    g_param_spec_boxed ("cursor",
