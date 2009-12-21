@@ -5250,6 +5250,7 @@ gtk_window_get_icon
 gtk_window_get_icon_list
 gtk_window_get_icon_name
 gtk_window_get_mnemonic_modifier
+gtk_window_get_mnemonics_visible
 gtk_window_get_modal
 gtk_window_get_position
 gtk_window_get_resizable
@@ -5321,6 +5322,7 @@ gtk_window_set_icon_name
 gtk_window_set_keep_above
 gtk_window_set_keep_below
 gtk_window_set_mnemonic_modifier
+gtk_window_set_mnemonics_visible
 gtk_window_set_modal
 gtk_window_set_opacity
 gtk_window_get_opacity
