@@ -1382,6 +1382,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->last_button_x = -1;
   tree_view->priv->last_button_y = -1;
+
+  tree_view->priv->event_last_x = -10000;
+  tree_view->priv->event_last_y = -10000;
 }
 
 
@@ -2056,6 +2059,25 @@ gtk_tree_view_size_request (GtkWidget      *widget,
     }
 }
 
+static int
+gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
+{
+  int width = 0;
+  GList *list;
+  gboolean rtl;
+
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
+       list->data != tree_view->priv->expander_column;
+       list = (rtl ? list->prev : list->next))
+    {
+      GtkTreeViewColumn *column = list->data;
+
+      width += column->width;
+    }
+
+  return width;
+}
 
 static void
 invalidate_column (GtkTreeView       *tree_view,
@@ -2473,14 +2495,30 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 	    }
 	}
 
+      if (width_changed && tree_view->priv->expander_column)
+        {
+          /* Might seem awkward, but is the best heuristic I could come up
+           * with.  Only if the width of the columns before the expander
+           * changes, we will update the prelight status.  It is this
+           * width that makes the expander move vertically.  Always updating
+           * prelight status causes trouble with hover selections.
+           */
+          gint width_before_expander;
+
+          width_before_expander = gtk_tree_view_calculate_width_before_expander (tree_view);
+
+          if (tree_view->priv->prev_width_before_expander
+              != width_before_expander)
+              update_prelight (tree_view,
+                               -tree_view->priv->event_last_x,
+                               -tree_view->priv->event_last_y);
+
+          tree_view->priv->prev_width_before_expander = width_before_expander;
+        }
+
       /* This little hack only works if we have an LTR locale, and no column has the  */
       if (width_changed)
 	{
-          if (tree_view->priv->tree)
-            update_prelight (tree_view,
-                             tree_view->priv->event_last_x,
-                             tree_view->priv->event_last_y);
-
 	  if (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_LTR &&
 	      ! has_expand_column)
 	    invalidate_last_column (tree_view);
@@ -3300,6 +3338,16 @@ prelight_or_select (GtkTreeView *tree_view,
 }
 
 static void
+ensure_unprelighted (GtkTreeView *tree_view)
+{
+  do_prelight (tree_view,
+	       NULL, NULL,
+	       -1000, -1000); /* coords not possibly over an arrow */
+
+  g_assert (tree_view->priv->prelight_node == NULL);
+}
+
+static void
 update_prelight (GtkTreeView *tree_view,
                  gint         x,
                  gint         y)
@@ -3307,6 +3355,12 @@ update_prelight (GtkTreeView *tree_view,
   int new_y;
   GtkRBTree *tree;
   GtkRBNode *node;
+
+  if (x == -10000)
+    {
+      ensure_unprelighted (tree_view);
+      return;
+    }
 
   new_y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y);
   if (new_y < 0)
@@ -3317,16 +3371,6 @@ update_prelight (GtkTreeView *tree_view,
 
   if (node)
     prelight_or_select (tree_view, tree, node, x, y);
-}
-
-static void
-ensure_unprelighted (GtkTreeView *tree_view)
-{
-  do_prelight (tree_view,
-	       NULL, NULL,
-	       -1000, -1000); /* coords not possibly over an arrow */
-
-  g_assert (tree_view->priv->prelight_node == NULL);
 }
 
 
@@ -5542,6 +5586,9 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
     new_y = 0;
   _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
+  tree_view->priv->event_last_x = event->x;
+  tree_view->priv->event_last_y = event->y;
+
   if ((tree_view->priv->button_pressed_node == NULL) ||
       (tree_view->priv->button_pressed_node == node))
     prelight_or_select (tree_view, tree, node, event->x, event->y);
@@ -5565,6 +5612,9 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
                                    tree_view->priv->prelight_tree,
                                    tree_view->priv->prelight_node,
                                    NULL);
+
+  tree_view->priv->event_last_x = -10000;
+  tree_view->priv->event_last_y = -10000;
 
   prelight_or_select (tree_view,
 		      NULL, NULL,

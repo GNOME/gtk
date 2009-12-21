@@ -177,6 +177,8 @@ struct _GtkTreeViewPrivate
   GList *column_drag_info;
   GtkTreeViewColumnReorder *cur_reorder;
 
+  gint prev_width_before_expander;
+
   /* Interactive Header reordering */
   GdkWindow *drag_window;
   GdkWindow *drag_highlight_window;
