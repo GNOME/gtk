@@ -1902,7 +1902,7 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  * be specified using the "compression" parameter; it's value is in an
  * integer in the range of [0,9].
  *
- * ICC color profiles can also be embedded into PNG images.
+ * ICC color profiles can also be embedded into PNG and TIFF images.
  * The "icc-profile" value should be the complete ICC profile encoded
  * into base64.
  *
