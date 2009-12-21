@@ -1754,7 +1754,7 @@ temporary_disable_extension_events (GdkWindowObject *window)
       child = l->data;
 
       if (window->impl_window == child->impl_window)
-	res |= temporary_disable_extension_events (window);
+	res |= temporary_disable_extension_events (child);
     }
 
   return res;
