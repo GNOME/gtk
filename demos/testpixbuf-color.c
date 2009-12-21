@@ -84,7 +84,9 @@ save_image_verify (const gchar *filename, GError **error)
 	/* decode base64 */
 	icc_profile = (gchar *) g_base64_decode (option, &len);
 	if (len != ICC_PROFILE_SIZE) {
-		*error = g_error_new (1, 0, "profile length invalid, got %i", len);
+		*error = g_error_new (1, 0,
+		                      "profile length invalid, got %" G_GSIZE_FORMAT,
+		                      len);
 		g_file_set_contents ("error.icc", icc_profile, len, NULL);
 		goto out;
 	}
