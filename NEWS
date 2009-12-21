@@ -1,3 +1,70 @@
+Overview of Changes from GTK+ 2.19.1 to 2.19.2
+==============================================
+
+* Introspection:
+ - Introspection data for gdk-pixbuf, gdk and gtk is now
+   included in GTK+ itself. As a consequence, the atk dependency
+   has been bumped to 2.29.2, and a gobject-introspection dependency
+   has been added. configure with --disable-introspection in order
+   to not build introspection data.
+
+* Client-side windows:
+ - Fix some issues with handling of button and motion events
+ - Fix damage reporting for drawing on offscreen windows
+ - Fix problems with handling of input extension events
+
+* Printing:
+ - Add api to handle printer hard margins
+
+* Simple IM Context:
+ - Sync with Xorg compose file
+ - Make Compose-vowel-minus combinations consistent
+
+* GDK:
+ - gdk_screen_get_primary_monitor: New function to get the
+   'primary' monitor in a multi-monitor setup
+
+* gdk-pixbuf has gained the ability to store and retrieve embedded
+  ICC color profiles in png and tiff images
+
+* Bugs fixed:
+ 603652 Sporadic crashes with GtkSocket
+ 605008 the region of damage event doesn't be copied in gdk_event_copy
+ 588554 only show the accelerator when pressing alt
+ 601473 GDK_BUTTON?_MOTION_MASK appears to be broken
+ 601712 Add API for determining primary monitor
+  50942 selection/arrow key improvement
+ 427409 editing shortcut always fails with super key
+ 468989 need a way to get the printer's hard margins
+ 502266 gtk_tree_selection_get_selected_rows free example produces...
+ 592279 Introspection support
+ 597386 Cannot click buttons more than once without moving the mouse...
+ 599213 Use GtkCellEditable:editing_canceled property instead...
+ 599397 Button stuck at pressed look after screen rotation
+ 601383 gtk_icon_view_get_selected_items: example code gives...
+ 602099 Actions can be activatable too
+ 603619 the colormap of offscreen's pixmap doesn't inherit...
+ 603904 gdk_draw_line doesn't have expose area.
+ 604117 Add info about single includes when compiling GTK+ apps
+ 604289 Please permit progress pages to be final in a dialog
+ 604462 gtktoolitem.c: return-value is different type
+ 604747 Using gdk_draw_line, the expose area of damage event is wrong
+ 604787 property-notify-event is not delivered to a non-toplevel...
+ 604881 GtkCellEditable::editing-cancelled should be writable
+ 591085 GtkBuilder object ID bounded to GtkWidget "name" property
+
+* Updated translations:
+ Arabic
+ Estonian
+ Hebrew
+ Low German
+ Norwegian bokmål
+ Slovenian
+ Spanish
+ Telugu
+ Vietnamese
+
+
 Overview of Changes from GTK+ 2.19.0 to 2.19.1
 ==============================================
 
