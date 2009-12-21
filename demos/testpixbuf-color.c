@@ -36,6 +36,31 @@ out:
 }
 
 static gboolean
+save_image_tiff (const gchar *filename, GdkPixbuf *pixbuf, GError **error)
+{
+	gchar *contents = NULL;
+	gchar *contents_encode = NULL;
+	gsize length;
+	gboolean ret;
+	gint len;
+
+	/* get icc file */
+	ret = g_file_get_contents (ICC_PROFILE, &contents, &length, error);
+	if (!ret)
+		goto out;
+	contents_encode = g_base64_encode ((const guchar *) contents, length);
+	ret = gdk_pixbuf_save (pixbuf, filename, "tiff", error,
+			       "icc-profile", contents_encode,
+			       NULL);
+	len = strlen (contents_encode);
+	g_debug ("ICC profile was %i bytes", len);
+out:
+	g_free (contents);
+	g_free (contents_encode);
+	return ret;
+}
+
+static gboolean
 save_image_verify (const gchar *filename, GError **error)
 {
 	gboolean ret = FALSE;
@@ -100,8 +125,26 @@ main (int argc, char **argv)
 	}
 
 	/* PASS */
+	g_debug ("try to save TIFF with a profile");
+	ret = save_image_tiff ("icc-profile.tiff", pixbuf, &error);
+	if (!ret) {
+		g_warning ("FAILED: did not save image: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* PASS */
 	g_debug ("try to load PNG and get color attributes");
 	ret = save_image_verify ("icc-profile.png", &error);
+	if (!ret) {
+		g_warning ("FAILED: did not load image: %s", error->message);
+		g_error_free (error);
+		goto out;
+	}
+
+	/* PASS */
+	g_debug ("try to load TIFF and get color attributes");
+	ret = save_image_verify ("icc-profile.tiff", &error);
 	if (!ret) {
 		g_warning ("FAILED: did not load image: %s", error->message);
 		g_error_free (error);
