@@ -1672,11 +1672,11 @@ _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
         {
 	  if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
 	    *modifiers |= GDK_MOD1_MASK;
-	  else if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+	  if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
 	    *modifiers |= GDK_SUPER_MASK;
-	  else if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
+	  if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
 	    *modifiers |= GDK_HYPER_MASK;
-	  else if (keymap_x11->modmap[i] & GDK_META_MASK)
+	  if (keymap_x11->modmap[i] & GDK_META_MASK)
 	    *modifiers |= GDK_META_MASK;
         }
     }
@@ -1715,6 +1715,61 @@ _gdk_keymap_key_is_modifier (GdkKeymap *keymap,
     }
 
   return FALSE;
+}
+
+/*
+ * gdk_keymap_map_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @state: pointer to the modifier state to map
+ *
+ * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @state.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Returns: %TRUE if no virtual modifiers were mapped to the
+ *     same non-virtual modifier. Note that %FALSE is also returned
+ *     if a virtual modifier is mapped to a non-virtual modifier that
+ *     was already set in @state.
+ *
+ * Since: 2.20
+ */
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  GdkKeymapX11 *keymap_x11;
+  const guint vmods[] = {
+    GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK
+  };
+  int i, j;
+  gboolean retval;
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  retval = TRUE;
+
+  for (j = 0; j < 3; j++)
+    {
+      if (*state & vmods[j])
+        {
+          for (i = 3; i < 8; i++)
+            {
+              if (keymap_x11->modmap[i] & vmods[j])
+                {
+                  if (*state & (1 << i))
+                    retval = FALSE;
+                  else
+                    *state |= 1 << i;
+                }
+            }
+        }
+    }
+
+  return retval;
 }
 
 
