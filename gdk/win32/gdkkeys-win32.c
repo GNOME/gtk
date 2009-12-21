@@ -871,3 +871,11 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   return tmp_keyval != GDK_VoidSymbol;
 }
+
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  /* FIXME: Is this the right thing to do? */
+  return TRUE;
+}
