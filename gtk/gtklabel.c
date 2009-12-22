@@ -1750,17 +1750,20 @@ gtk_label_compose_effective_attrs (GtkLabel *label)
       if (label->effective_attrs)
 	{
 	  if ((iter = pango_attr_list_get_iterator (label->attrs)))
-	    do 
-	      {
-		iter_attrs = pango_attr_iterator_get_attrs (iter);
-		for (l = iter_attrs; l; l = l->next)
-		  {
-		    attr = l->data;
-		    pango_attr_list_insert (label->effective_attrs, attr);
-		  }
-		g_slist_free (iter_attrs);
-	      }
-	    while (pango_attr_iterator_next (iter));
+	    {
+	      do
+		{
+		  iter_attrs = pango_attr_iterator_get_attrs (iter);
+		  for (l = iter_attrs; l; l = l->next)
+		    {
+		      attr = l->data;
+		      pango_attr_list_insert (label->effective_attrs, attr);
+		    }
+		  g_slist_free (iter_attrs);
+	        }
+	      while (pango_attr_iterator_next (iter));
+	      pango_attr_iterator_destroy (iter);
+	    }
 	}
       else
 	label->effective_attrs = 
