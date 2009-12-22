@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-11-07 16:02+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -78,7 +78,7 @@ msgstr "ਸੈੱਟ ਕਰਨ ਲਈ Gdk ਡੀਬੱਗ ਫਲੈਗ"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "ਫਲੈਗ"
 
@@ -356,23 +356,23 @@ msgstr "ਆਰਜ਼ੀ ਫਾਇਲ ਖੋਲ੍ਹਣ ਵਿੱਚ ਫੇਲ�
 msgid "Failed to read from temporary file"
 msgstr "ਆਰਜ਼ੀ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਫੇਲ੍ਹ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "ਲਿਖਣ ਲਈ '%s' ਨੂੰ ਖੋਲ੍ਹਣ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਲਿਖਣ ਸਮੇ, '%s' ਨੂੰ ਬੰਦ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ, ਸਾਰਾ ਡਾਟਾ ਸੰਭਾਲਣ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ਚਿੱਤਰ ਨੂੰ ਬਫਰ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "ਚਿੱਤਰ ਧਾਰਾ ਲਿਖਣ ਦੌਰਾਨ ਗਲਤੀ"
 
@@ -718,7 +718,7 @@ msgstr "PCX ਚਿੱਤਰ ਫਾਰਮੈਟ"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ਚਿੱਤਰ ਵਿੱਚ ਬਿੱਟ ਪ੍ਰਤੀ ਚੈਨਲ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "ਤਬਦੀਲ PNG ਦੀ ਸਿਫ਼ਰ ਚੌੜਾਈ ਜਾਂ ਉਚਾਈ ਹੈ"
 
@@ -739,11 +739,11 @@ msgstr "ਤਬਦੀਲ PNG ਵਿੱਚ ਬਿਨ-ਮੱਦਦ ਪ੍ਰਾਪ�
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG ਫਾਇਲ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -752,25 +752,29 @@ msgstr ""
 "%ld X %ld ਚਿੱਤਰ ਨੂੰ ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ ਕੁਝ ਕਾਰਜ ਬੰਦ ਕਰਕੇ ਮੈਮੋਰੀ ਦੀ ਵਰਤੋਂ ਨੂੰ ਘੱਟ "
 "ਕਰੋ।"
 
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ"
 
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ਚਿੱਤਰ ਫਾਇਲ ਪੜ੍ਹਨ ਵਿੱਚ ਘਾਤਕ ਗਲਤੀ: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ਵਿੱਚ ਪਾਠ ਹੋਣ ਲਈ ਅੱਖਰਾਂ ਦੀ ਗਿਣਤੀ ਘੱਟੋ-ਘੱਟੋ ੧ ਅਤੇ ਵੱਧੋ-ਵੱਧ ੭੯ ਹੋ ਸਕਦੀ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ਪਾਠ ਲਈ ਅੱਖਰ ASCII ਅੱਖਰ ਹੋਣੇ ਜ਼ਰੂਰੀ ਹਨ"
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -779,19 +783,19 @@ msgstr ""
 "PNG ਨਪੀੜਨ ਪੱਧਰ ਦਾ ਮੁੱਲ 0 ਤੋਂ 9 ਦੇ ਵਿੱਚ ਹੀ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੁੱਲ '%s' ਨੂੰ ਪਾਰਸ ਨਹੀਂ ਕੀਤਾ ਜਾ "
 "ਸਕਿਆ।"
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "PNG ਨਪੀੜਨ ਪੱਧਰ ਦਾ ਮੁੱਲ 0 ਤੋਂ 9 ਦੇ ਵਿੱਚ ਹੀ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਮੁੱਲ '%d' ਮਨਜ਼ੂਰ ਨਹੀਂ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "PNG ਟੈਕਸਟ %s ਦਾ ਮੁੱਲ ਨੂੰ ISO-੮੮੫੯-੧ ਇੰਕੋਡਿੰਗ ਵਿੱਚ ਤਬਦੀਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG ਫਾਇਲ ਫਾਰਮੈਟ"
 
@@ -932,59 +936,64 @@ msgstr "ਫਾਇਲ ਵਿੱਚ ਵੱਧ ਡਾਟਾ ਹੈ"
 msgid "The Targa image format"
 msgstr "ਟਾਰਗ ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "ਚਿੱਤਰ ਦੀ ਚੌੜਾਈ ਮਿਲ ਨਹੀਂ (ਗਲਤ TIFF ਫਾਇਲ)"
 
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "ਚਿੱਤਰ ਦੀ ਉਚਾਈ ਮਿਲ ਨਹੀਂ (ਗਲਤ TIFF ਫਾਇਲ)"
 
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF ਚਿੱਤਰ ਦੀ ਉਚਾਈ ਜਾਂ ਚੌੜਾਈ ਸਿਫ਼ਰ ਹੈ"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF ਚਿੱਤਰ ਦਾ ਮਾਪ ਬਹੁਤ ਵੱਡਾ ਹੈ"
 
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF ਫਾਇਲ ਖੋਲ੍ਹਣ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF ਫਾਇਲ ਤੋਂ RGB ਡਾਟਾ ਲੋਡ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "TIFF ਫਾਇਲ ਨੂੰ ਖੋਲ੍ਹਣ ਵਿੱਚ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "TIFF ਬੰਦ ਕਰਨ ਦੀ ਕਾਰਵਾਈ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "TIFF ਚਿੱਤਰ ਲੋਡ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "TIFF ਚਿੱਤਰ ਸੰਭਾਲਣ ਲਈ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "TIFF ਡਾਟਾ ਲਿਖਣ ਲਈ ਅਸਫ਼ਲ"
 
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF ਫਾਇਲ ਵਿੱਚ ਲਿਖਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF ਚਿੱਤਰ ਫਾਰਮੈਟ"
 
@@ -1581,47 +1590,47 @@ msgstr "ਪਰਿੰਟਰ ਤੋਂ ਹਾਸ਼ੀਆ..."
 msgid "Custom Size %d"
 msgstr "ਕਸਟਮ ਅਕਾਰ %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr "ਚੌੜਾਈ(_W):"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 msgid "_Height:"
 msgstr "ਉਚਾਈ(_H):"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 msgid "Paper Size"
 msgstr "ਸਫ਼ਾ ਅਕਾਰ"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 msgid "_Top:"
 msgstr "ਉੱਤੇ(_T):"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 msgid "_Bottom:"
 msgstr "ਹੇਠਾਂ(_B):"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Left:"
 msgstr "ਖੱਬੇ(_L):"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Right:"
 msgstr "ਸੱਜੇ(_R):"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr "ਸਫ਼ਾ ਹਾਸ਼ੀਆ"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "ਇੰਪੁੱਟ ਢੰਗ(_M)"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "ਯੂਨੀਕੋਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "ਕੈਪਸ ਤਾਲਾ ਚਾਲੂ ਹੈ"
 
@@ -1637,7 +1646,7 @@ msgstr "ਡੈਸਕਟਾਪ"
 msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "ਹੋਰ..."
 
@@ -1790,7 +1799,7 @@ msgid "Modified"
 msgstr "ਸੋਧੀਆਂ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "ਨਾਂ(_N):"
 
@@ -2147,7 +2156,7 @@ msgstr "ਗਾਮਾ ਮੁੱਲ(_G)"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ਆਈਕਾਨ ਲੋਡ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: %s"
@@ -2269,12 +2278,12 @@ msgid "Cl_ear"
 msgstr "ਸਾਫ਼ ਕਰੋ(_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 msgid "_Open Link"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹੋ(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr "ਲਿੰਕ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_L)"
 
@@ -2287,27 +2296,27 @@ msgid "Invalid URI"
 msgstr "ਗਲਤ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "ਵਾਧੂ GTK+ ਮੋਡੀਊਲ ਲੋਡ ਕਰੋ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "ਮੋਡੀਊਲ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "ਸਭ ਚੇਤਾਵਨੀਆਂ ਨੂੰ ਘਾਤਕ ਬਣਾਓ"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨਿਸ਼ਾਨ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "ਅਣ-ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨਿਸ਼ਾਨ"
 
@@ -2316,20 +2325,20 @@ msgstr "ਅਣ-ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ਦਿੱਖ ਖੋਲ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ: %s"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "GTK+ ਚੋਣ"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "GTK+ ਚੋਣ ਵੇਖੋ"
 
@@ -2478,15 +2487,15 @@ msgstr "ਹੇਠਾਂ ਮਾਰਗ"
 msgid "File System Root"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ ਰੂਟ"
 
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "ਪਰਮਾਣਕਿਤਾ"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "ਉਪਲੱਬਧ ਨਹੀਂ"
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਸੰਭਾਲੋ(_S):"
 
@@ -2579,62 +2588,62 @@ msgstr "ਝਲਕ ਵੇਖਾਉਣ ਦੌਰਾਨ ਗਲਤੀ"
 msgid "Error printing"
 msgstr "ਪਰਿੰਟਿੰਗ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "ਪਰਿੰਟਰ ਬੰਦ ਹੈ"
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "ਪੇਪਰ ਖਤਮ ਹੋ ਗਏ"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "ਵਿਰਾਮ"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "ਯੂਜ਼ਰ ਦੇ ਦਖਲ ਦੀ ਲੋੜ ਹੈ"
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "ਕਸਟਮ ਅਕਾਰ"
 
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "ਕੋਈ ਪਰਿੰਟਰ ਨਹੀਂ ਲੱਭਿਆ"
 
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC ਲਈ ਗਲਤ ਆਰਗੂਮੈਂਟ"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "StartDoc ਤੋਂ ਗਲਤੀ"
 
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਖਾਲੀ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx ਲਈ ਗਲਤ ਮੁੱਲ"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx ਲਈ ਗਲਤ ਸੰਕੇਤਕ"
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx ਲਈ ਗਲਤ ਹੈਂਡਲ"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "ਨਾ-ਦੱਸੀ ਗਲਤੀ"
 
@@ -3743,17 +3752,17 @@ msgstr "ਮੋਡੀਊਲ ਮਾਰਗ ਵਿੱਚ ਸਰੂਪ ਇੰਜਣ �
 msgid "--- No Tip ---"
 msgstr "--- ਸੰਕੇਤ ਨਹੀਂ ---"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ਲਾਈਨ %2$d ਅੱਖਰ %3$d ਉੱਤੇ ਬੇ-ਲੋੜੀਦਾ ਸ਼ੁਰੂਆਤੀ ਟੈਗ '%1$s'"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ਲਾਈਨ %d ਅੱਖਰ %d ਉੱਤੇ  ਬੇ-ਲੋੜੀਦਾ ਅੱਖਰ ਡਾਟਾ"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "ਖਾਲੀ"
 

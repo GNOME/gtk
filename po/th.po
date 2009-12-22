@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-08-22 23:02+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -76,7 +76,7 @@ msgstr "แฟล็กการดีบักของ GDK ที่จะเ�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -350,23 +350,23 @@ msgstr "เปิดแฟ้มชั่วคราวไม่สำเร็
 msgid "Failed to read from temporary file"
 msgstr "อ่านแฟ้มชั่วคราวไม่สำเร็จ"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "เปิดเขียน '%s' ไม่สำเร็จ: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr "ไม่สามารถปิดแฟ้ม '%s' ขณะเขียนรูป ข้อมูลอาจจะไม่ถูกบันทึก: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "หน่วยความจำไม่พอที่จะอ่านรูปลงในบัฟเฟอร์"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "เกิดข้อผิดพลาดขณะเขียนสตรีมรูป"
 
@@ -708,7 +708,7 @@ msgstr "แฟ้มรูปชนิด PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "รูป PNG มีค่าบิตต่อช่องที่ใช้ไม่ได้"
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "รูป PNG ที่แปลงมามีความกว้างหรือความสูงเป็นศูนย์"
 
@@ -729,11 +729,11 @@ msgstr "PNG ที่แปลงมามีจำนวนช่องที�
 msgid "Fatal error in PNG image file: %s"
 msgstr "มีข้อผิดพลาดในแฟ้มรูป PNG: %s"
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "หน่วยความจำไม่พอที่จะอ่านแฟ้ม PNG"
 
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -742,44 +742,48 @@ msgstr ""
 "หน่วยความจำไม่พอที่จะโหลดรูปขนาด %ldx%ld โปรดปิดโปรแกรมที่ไม่ใช้แล้ว "
 "เพื่อจะได้มีหน่วยความจำว่างเพิ่มขึ้น"
 
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "เกิดข้อผิดพลาดขณะอ่านแฟ้มรูป PNG"
 
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "มีข้อผิดพลาดขณะอ่านแฟ้มรูป PNG: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "คีย์ของชิ้นข้อความใน PNG ต้องมีระหว่าง 1 ถึง 79 ตัวอักษร"
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "คีย์ของชิ้นข้อความใน PNG ต้องใช้ตัวอักษร ASCII"
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr "ระดับการบีบอัดข้อมูล PNG ต้องอยู่ระหว่าง 0 ถึง 9  ค่า '%s' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "ระดับการบีบอัดข้อมูล PNG ต้องอยู่ระหว่าง 0 ถึง 9  ค่า '%d' ที่ตั้งใช้ไม่ได้"
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "แปลงค่าของชิ้นข้อความใน PNG (%s) ไปเป็น ISO-8859-1 ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "แฟ้มรูปชนิด PNG"
 
@@ -921,59 +925,64 @@ msgstr "แฟ้มมีข้อมูลเกิน"
 msgid "The Targa image format"
 msgstr "แฟ้มรูปชนิด Targa"
 
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "อ่านค่าความกว้างรูปไม่สำเร็จ (แฟ้ม TIFF เสีย)"
 
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "อ่านค่าความสูงรูปไม่สำเร็จ (แฟ้ม TIFF เสีย)"
 
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "ความกว้างหรือสูงของรูปชนิด TIFF นี้เป็นศูนย์"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "รูป TIFF มีขนาดกว้างยาวที่ใหญ่เกินไป"
 
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "หน่วยความจำไม่พอจะเปิดแฟ้ม TIFF"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "อ่านค่า RGB จากแฟ้ม TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "เปิดรูป TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "คำสั่ง TIFFClose ทำงานไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "โหลดรูป TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "บันทึกรูป TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "เขียนข้อมูล TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "เขียนแฟ้ม TIFF ไม่สำเร็จ"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "แฟ้มรูปชนิด TIFF"
 
@@ -1563,47 +1572,47 @@ msgstr "ขอบกระดาษตามเครื่องพิมพ์
 msgid "Custom Size %d"
 msgstr "ขนาดกำหนดเองชุดที่ %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr "_กว้าง:"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 msgid "_Height:"
 msgstr "_สูง:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 msgid "Paper Size"
 msgstr "ขนาดกระดาษ"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 msgid "_Top:"
 msgstr "_บน:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 msgid "_Bottom:"
 msgstr "ล่า_ง:"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Left:"
 msgstr "ซ้า_ย:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Right:"
 msgstr "_ขวา:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr "ขอบกระดาษ"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
@@ -1619,7 +1628,7 @@ msgstr "พื้นโต๊ะ"
 msgid "(None)"
 msgstr "(ไม่มี)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "อื่นๆ ..."
 
@@ -1772,7 +1781,7 @@ msgid "Modified"
 msgstr "แก้ไขเมื่อ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_ชื่อ:"
 
@@ -2128,7 +2137,7 @@ msgstr "ค่าแ_กมมา"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ไม่สามารถโหลดไอคอน: %s"
@@ -2249,12 +2258,12 @@ msgid "Cl_ear"
 msgstr "_ล้าง"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr "คัดลอกที่อยู่_ลิงก์"
 
@@ -2267,27 +2276,27 @@ msgid "Invalid URI"
 msgstr "URI ไม่ถูกต้อง"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "โหลดมอดูล GTK+ เพิ่มเติม"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "ให้ความสำคัญกับคำเตือนประหนึ่งความล้มเหลว"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "แฟล็กการดีบักของ GTK+ ที่จะเปิดใช้"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "แฟล็กการดีบักของ GTK+ ที่จะปิด"
 
@@ -2296,20 +2305,20 @@ msgstr "แฟล็กการดีบักของ GTK+ ที่จะป
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ไม่สามารถเปิดดิสเพลย์: %s"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "ตัวเลือกของ GTK+"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "แสดงตัวเลือกของ GTK+"
 
@@ -2458,15 +2467,15 @@ msgstr "เดินลงในพาธ"
 msgid "File System Root"
 msgstr "รากของระบบแฟ้ม"
 
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "การยืนยันตัวบุคคล"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "ไม่มี"
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "บันทึกในโ_ฟลเดอร์:"
 
@@ -2559,62 +2568,62 @@ msgstr "เกิดข้อผิดพลาดขณะเรียกแส
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "โปรแกรม"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "เครื่องพิมพ์ไม่ได้เชื่อมต่อ"
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "กระดาษหมด"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "หยุดพัก"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "ต้องการความช่วยเหลือจากผู้ใช้"
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "ขนาดกำหนดเอง"
 
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "ไม่พบเครื่องพิมพ์"
 
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "อาร์กิวเมนต์ของ CreateDC ผิดพลาด"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "ข้อผิดพลาดจาก StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "หน่วยความจำที่ว่างไม่พอ"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "อาร์กิวเมนต์ของ PrintDlgEx ผิดพลาด"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "พอยน์เตอร์ไปยัง PrintDlgEx ผิดพลาด"
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "แฮนเดิลไปยัง PrintDlgEx ผิดพลาด"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
@@ -3726,17 +3735,17 @@ msgstr "ไม่พบเครื่องจัดการชุดตกแ
 msgid "--- No Tip ---"
 msgstr "--- ไม่มีข้อแนะนำ ---"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "ไม่ควรจะพบแท็กเริ่มต้น '%s' ที่บรรทัดที่ %d ตัวอักษรที่ %d"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "ไม่ควรจะพบข้อมูลตัวอักษร ที่บรรทัดที่ %d ตัวอักษรที่ %d"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "ว่าง"
 

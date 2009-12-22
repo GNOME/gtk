@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-08-15 15:49+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -104,7 +104,7 @@ msgstr "GDK-fejlretningsflag der skal angives"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "FLAG"
 
@@ -384,12 +384,12 @@ msgstr "Kunne ikke åbne midlertidig fil"
 msgid "Failed to read from temporary file"
 msgstr "Kunne ikke læse fra midlertidig fil"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Kunne ikke åbne \"%s\" til skrivning: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -398,11 +398,11 @@ msgstr ""
 "Kunne ikke lukke \"%s\" ved skrivning af billede, formentlig er ikke alle "
 "data blevet gemt: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Ikke tilstrækkelig hukommelse til at gemme billede i et mellemlager"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "Fejl ved skrivning til billedstrøm"
 
@@ -756,7 +756,7 @@ msgstr "PCX-billedformatet"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Antal bit pr. kanal i PNG-billede er ugyldig."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "Transformeret PNG har bredde eller højde på nul."
 
@@ -779,11 +779,11 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "Uoprettelig fejl i PNG-billedfil: %s"
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNG-fil"
 
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -792,25 +792,29 @@ msgstr ""
 "Utilstrækkelig hukommelse til opbevaring af et %ld gange %ld billede; prøv "
 "at afslutte nogle programmer for at frigøre hukommelse"
 
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "Uoprettelig fejl ved læsning af PNG-billedfil"
 
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Uoprettelig fejl ved læsning af PNG-billedfil: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "Nøgler til PNG-tekstblokke skal bestå af mindst 1 og højst 79 tegn."
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Nøgler til PNG-tekstblokke skal være ASCII-tegn."
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -819,7 +823,7 @@ msgstr ""
 "PNG-komprimeringsniveau skal være en værdi mellem 0 og 9; værdien \"%s\" "
 "kunne ikke fortolkes."
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -828,13 +832,13 @@ msgstr ""
 "PNG-komprimeringsniveau skal være en værdi mellem 0 og 9; værdien \"%d\" er "
 "ikke gyldig."
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Værdi for PNG-tekstblokken %s kan ikke konverteres til ISO-8859-1-kodningen."
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG-billedformatet"
 
@@ -975,59 +979,64 @@ msgstr "For mange data i fil"
 msgid "The Targa image format"
 msgstr "Targe-billedformatet"
 
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Kunne ikke finde billedbredde (ugyldig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Kunne ikke finde billedhøjde (ugyldig TIFF-fil)"
 
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "Bredde eller højde på TIFF-billede er nul"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensionerne af TIFF-billede er for store"
 
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikke tilstrækkelig hukommelse til åbning af TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Fejl under indlæsning af RGB-data fra TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "Kunne ikke åbne TIFF-billede"
 
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose-operationen mislykkedes"
 
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "Fejl under indlæsning af TIFF-billede"
 
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "Kunne ikke gemme TIFF-billede"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "Kunne ikke skrive TIFF-data"
 
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "Kunne ikke skrive til TIFF-filen"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF-billedformatet"
 
@@ -1630,47 +1639,47 @@ msgstr "Margener fra printer..."
 msgid "Custom Size %d"
 msgstr "Brugertilpasset størrelse %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr "_Bredde:"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 msgid "_Height:"
 msgstr "_Højde:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 msgid "Paper Size"
 msgstr "Papirstørrelse"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 msgid "_Top:"
 msgstr "_Top:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 msgid "_Bottom:"
 msgstr "_Bund:"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Left:"
 msgstr "_Venstre:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Right:"
 msgstr "_Højre:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -1686,7 +1695,7 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(ingen)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Anden..."
 
@@ -1839,7 +1848,7 @@ msgid "Modified"
 msgstr "Ændret"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Navn:"
 
@@ -2201,7 +2210,7 @@ msgstr "_Gammaværdi"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
@@ -2323,12 +2332,12 @@ msgid "Cl_ear"
 msgstr "_Ryd"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 msgid "_Open Link"
 msgstr "_Åbn link"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr "Kopiér _linkadresse"
 
@@ -2341,27 +2350,27 @@ msgid "Invalid URI"
 msgstr "Ugyldig URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "Indlæs yderligere GTK+-moduler"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "Gør alle advarsler fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+-fejlretningsflag der skal angives"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+-fejlretningsflag der skal fjernes"
 
@@ -2370,20 +2379,20 @@ msgstr "GTK+-fejlretningsflag der skal fjernes"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åbne terminal: %s"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "GTK+-tilvalg"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "Vis GTK+-tilvalg"
 
@@ -2537,15 +2546,15 @@ msgstr "Ned ad stien"
 msgid "File System Root"
 msgstr "Filsystemets rod"
 
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "Godkendelse"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Ikke tilgængelig"
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "_Gem i mappe:"
 
@@ -2639,62 +2648,62 @@ msgstr "Fejl ved opstart af forhåndsvisning"
 msgid "Error printing"
 msgstr "Udskriftsfejl"
 
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Program"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "Printeren afkoblet"
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "Løbet tør for papir"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "Holder pause"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "Brugerindblanding påkrævet"
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "Brugertilpasset størrelse"
 
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "Ingen printer fundet"
 
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "Ugyldigt argument til CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Fejl fra StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "Utilstrækkelig fri hukommelse"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ugyldigt argument til PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ugyldig pointer til PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Ugyldigt håndtag til PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Uspecificeret fejl"
 
@@ -3810,17 +3819,17 @@ msgstr "Kunne ikke finde temamotor i module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Uventet startmærke \"%s\" på linje %d tegn %d"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Uventede tegndata på linje %d tegn %d"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Tom"
 

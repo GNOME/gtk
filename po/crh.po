@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ TRUNK\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-04-09 03:07-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -77,7 +77,7 @@ msgstr "Tesbit etilecek Gdk arızasızlandıruv bayraqları"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "BAYRAQLAR"
 
@@ -381,13 +381,13 @@ msgid "Failed to read from temporary file"
 msgstr "Muvaqqat dosyeden oquyamadım"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:790
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s' dosyesi yazmaq içün açılamadı: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:811
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -398,12 +398,12 @@ msgstr ""
 
 # tüklü
 # gdk-pixbuf/io-xbm.c:295
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Suretni buferge saqlamaq içün yetersiz hafiza"
 
 # gdk-pixbuf/io-jpeg.c:125
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "Suret aqımına yazğanda hata"
 
@@ -816,7 +816,7 @@ msgstr "PCX suret formatı"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG dosyesiniñ kanal başına bit qıymeti keçersiz."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "Dönüştirilgen PNG suretiniñ kenişligi yaki yüksekligi sıfırdır."
 
@@ -839,12 +839,12 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG suret dosyesinde ölümcil hata: %s"
 
 # gdk-pixbuf/io-png.c:245
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG dosyesini yüklemek içün yetersiz hafiza"
 
 # gdk-pixbuf/io-png.c:536
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -854,29 +854,33 @@ msgstr ""
 "azlaştırmaq içün bazı uyğulamalardan çıquvnı deñeñiz"
 
 # gdk-pixbuf/io-png.c:610
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "PNG dosyesini oquğanda ölümcil hata"
 
 # gdk-pixbuf/io-png.c:610
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG dosyesini oquğanda ölümcil hata: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNG metin tomarları içün anahtarlar eñ az 1 ve eñ çoq 79 remizden ibaret "
 "olmalı."
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG metin tomarları içün anahtarlar ASCII remizleri olmalı."
 
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
 # gdk-pixbuf/io-jpeg.c:655
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -886,7 +890,7 @@ msgstr ""
 "ayrıştırılamadı."
 
 # gdk-pixbuf/io-jpeg.c:670
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -895,13 +899,13 @@ msgstr ""
 "PNG sıqıştırma seviyesi 0 ile 9 arasında bir qıymet olmalı; '%d' qıymeti "
 "caiz degildir."
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "%s PNG metin tomarınıñ qıymeti ISO-8859-1 kodlandırmasına çevirilamay."
 
 # gdk-pixbuf/io-pnm.c:543 gdk-pixbuf/io-pnm.c:585
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG suret formatı"
 
@@ -1069,69 +1073,74 @@ msgid "The Targa image format"
 msgstr "Targa suret formatı"
 
 # gdk-pixbuf/io-tiff.c:152
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Suret kenişligi alınamadı (fena TIFF dosyesi)"
 
 # gdk-pixbuf/io-tiff.c:159
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Suret yüksekligi alınamadı (fena TIFF dosyesi)"
 
 # gdk-pixbuf/io-tiff.c:169
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF suretiniñ kenişligi yaki yüksekligi sıfırdır"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF suretiniñ boyutları fazla büyük"
 
 # gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:471
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF dosyesini açmaq içün yetersiz hafiza"
 
 # gdk-pixbuf/io-tiff.c:201
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF dosyesinden RGB verileri yüklenamadı"
 
 # gdk-pixbuf/io-tiff.c:264
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "TIFF sureti açılamadı"
 
 # gdk-pixbuf/io-tiff.c:277
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose ameliyatı muvafaqiyetsiz"
 
 # gdk-pixbuf/io-tiff.c:411
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "TIFF sureti yüklenamadı"
 
 # gdk-pixbuf/io-tiff.c:264
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "TIFF sureti saqlanamadı"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
 # gdk-pixbuf/io-tiff.c:264
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "TIFF verileri yazılamadı"
 
 # gtk/gtkfilesel.c:3277
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF dosyesine yazılamadı"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF suret formatı"
 
@@ -1792,51 +1801,51 @@ msgstr "Bastırıcıdan Kenarlar..."
 msgid "Custom Size %d"
 msgstr "Şahsiyleştirilgen Ölçü %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr "_Kenişlik:"
 
 # gtk/gtkcolorsel.c:1796
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 msgid "_Height:"
 msgstr "_Yükseklik:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 msgid "Paper Size"
 msgstr "Kağıt Ölçüsi"
 
 # gtk/gtkstock.c:280
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 msgid "_Top:"
 msgstr "_Üst:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 msgid "_Bottom:"
 msgstr "_Alt:"
 
 # gtk/gtkstock.c:291
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Left:"
 msgstr "_Sol:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Right:"
 msgstr "S_ağ:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr "Kağıt Kenarları"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "Kirdi _Usulları"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "_Unikod Kontrol Remzini Qıstır"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "Büyük Arif Kiliti (Caps Lock) faaldir"
 
@@ -1854,7 +1863,7 @@ msgstr "Masaüstü"
 msgid "(None)"
 msgstr "(İç biri)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Diger..."
 
@@ -2018,7 +2027,7 @@ msgstr "Deñiştirilgen"
 
 # gtk/gtkcolorsel.c:1833
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_İsim:"
 
@@ -2428,7 +2437,7 @@ msgstr "_Gamma qıymeti"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "İşaretçik yüklengende hata: %s"
@@ -2571,13 +2580,13 @@ msgid "Cl_ear"
 msgstr "_Temizle"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Aç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2592,27 +2601,27 @@ msgid "Invalid URI"
 msgstr "Keçersiz URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "İlâve GTK+ modüllerini yükle"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MODÜLLER"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "İhtarlarnıñ episini ölümcil yap"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "Tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "Ğayrı tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 
@@ -2622,20 +2631,20 @@ msgstr "Ğayrı tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kösterim açılamay: %s"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "GTK+ İhtiyariyatı"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "GTK+ İhtiyariyatını Köster"
 
@@ -2803,16 +2812,16 @@ msgid "File System Root"
 msgstr "Dosye Sistemi Tamırı"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 #, fuzzy
 msgid "Authentication"
 msgstr "Uyğulama"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Namevcut"
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "_Fihristte saqla:"
 
@@ -2910,70 +2919,70 @@ msgid "Error printing"
 msgstr "Bastırğanda hata"
 
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Uyğulama"
 
 # tüklü
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "Bastırıcı devre-tışı"
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "Kağıt bitken"
 
 # gtk/gtkstock.c:297
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "Tınışlandı"
 
 # tüklü
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "Qullanıcı qarışması kerek"
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "Şahsiyleştirilgen ölçü"
 
 # gdk-pixbuf/io-xpm.c:1257
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "İç bir bastırıcı tapılmadı"
 
 # tüklü
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC içün keçersiz delil"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "StartDoc'tan hata"
 
 # gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
 # gdk-pixbuf/io-gif.c:1499
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "Serbest hafiza yeterli degil"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx'ke keçersiz delil"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx'ke keçersiz noqtacı"
 
 # tüklü
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx içün keçersiz qollaq"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Belirtilmegen hata"
 
@@ -4178,17 +4187,17 @@ msgstr "Tema motorı module_path \"%s\" içinde tapılamay,"
 msgid "--- No Tip ---"
 msgstr "--- Qarane Yoq ---"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Beklenmegen başlama nişanı '%s': satır %d, remiz %d"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Beklenmegen remiz verileri: satır %d, remiz %d"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Boş"
 

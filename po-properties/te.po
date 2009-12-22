@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-08-31 19:24+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -110,7 +110,7 @@ msgid "The default display for GDK"
 msgstr "GDK కొరకు అప్రమేయ ప్రదర్శన"
 
 #: gdk/gdkpango.c:538 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
-#: gtk/gtkstatusicon.c:280 gtk/gtkwindow.c:614
+#: gtk/gtkstatusicon.c:280 gtk/gtkwindow.c:626
 msgid "Screen"
 msgstr "తెర"
 
@@ -279,7 +279,7 @@ msgid "A unique name for the action."
 msgstr "క్రియ కొరకు ఒక ఏక నామము."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:496 gtk/gtkmenuitem.c:305
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:501 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:204
 msgid "Label"
 msgstr "లేబుల్"
@@ -316,17 +316,17 @@ msgstr "విడ్జెట్లలో ప్రదర్శించిన �
 msgid "GIcon"
 msgstr "GIcon"
 
-#: gtk/gtkaction.c:264 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:249
+#: gtk/gtkaction.c:264 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:339
 #: gtk/gtkstatusicon.c:254
 msgid "The GIcon being displayed"
 msgstr "Gప్రతిమ ప్రదర్శించబడుతోంది"
 
-#: gtk/gtkaction.c:284 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:231
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:606
+#: gtk/gtkaction.c:284 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:321
+#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
 msgid "Icon Name"
 msgstr "ప్రతిమ నామము"
 
-#: gtk/gtkaction.c:285 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:232
+#: gtk/gtkaction.c:285 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:322
 #: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "ప్రతిమ వైవిధ్యాంశమునుంచి ప్రతిమ నామము"
@@ -430,19 +430,19 @@ msgstr "క్రియా సమూహము ఉపయోగించబడు�
 msgid "Whether the action group is visible."
 msgstr "క్రియా సమూహము దృగ్గోచరమవుచున్నదో లేదో."
 
-#: gtk/gtkactivatable.c:305
+#: gtk/gtkactivatable.c:308
 msgid "Related Action"
 msgstr "సంభందిత చర్య"
 
-#: gtk/gtkactivatable.c:306
+#: gtk/gtkactivatable.c:309
 msgid "The action this activatable will activate and receive updates from"
 msgstr "ఇది క్రియాశీలం చేయగలిగిన చర్య క్రియాశీలం చేయబడుతుంది మరియు నవీకరణలను పొందుతుంది"
 
-#: gtk/gtkactivatable.c:328
+#: gtk/gtkactivatable.c:331
 msgid "Use Action Appearance"
 msgstr "చర్యా అప్పియరెన్సును వుపయోగించుము"
 
-#: gtk/gtkactivatable.c:329
+#: gtk/gtkactivatable.c:332
 msgid "Whether to use the related actions appearance properties"
 msgstr "సంభందిత చర్యల అప్పియరెన్సు లక్షణములను వుపయోగించాలా"
 
@@ -631,59 +631,59 @@ msgstr "శిశువును పాటించు"
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "చట్ర శిశువు యొక్క బల దృశ్య నిష్పత్తికి సమఉజ్జీయైన బల దృశ్య నిష్పత్తి"
 
-#: gtk/gtkassistant.c:281
+#: gtk/gtkassistant.c:284
 msgid "Header Padding"
 msgstr "పీఠిక పాడింగ్"
 
-#: gtk/gtkassistant.c:282
+#: gtk/gtkassistant.c:285
 msgid "Number of pixels around the header."
 msgstr "పీఠికచుట్టూ పిగ్జెల్స్‍ సంఖ్య."
 
-#: gtk/gtkassistant.c:289
+#: gtk/gtkassistant.c:292
 msgid "Content Padding"
 msgstr "సారము పాడింగ్"
 
-#: gtk/gtkassistant.c:290
+#: gtk/gtkassistant.c:293
 msgid "Number of pixels around the content pages."
 msgstr "సారము పుటలచుట్టూ పిగ్జెల్స్‍‌యొక్క సంఖ్య."
 
-#: gtk/gtkassistant.c:306
+#: gtk/gtkassistant.c:309
 msgid "Page type"
 msgstr "పుట రకము"
 
-#: gtk/gtkassistant.c:307
+#: gtk/gtkassistant.c:310
 msgid "The type of the assistant page"
 msgstr "సహాయక పుటయొక్క రకము"
 
-#: gtk/gtkassistant.c:324
+#: gtk/gtkassistant.c:327
 msgid "Page title"
 msgstr "పుట శీర్షిక"
 
-#: gtk/gtkassistant.c:325
+#: gtk/gtkassistant.c:328
 msgid "The title of the assistant page"
 msgstr "సహాయక పుటయొక్క శీర్షిక"
 
-#: gtk/gtkassistant.c:341
+#: gtk/gtkassistant.c:344
 msgid "Header image"
 msgstr "పీఠిక ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:342
+#: gtk/gtkassistant.c:345
 msgid "Header image for the assistant page"
 msgstr "సహాయక పుటకొరకు పీఠిక ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:358
+#: gtk/gtkassistant.c:361
 msgid "Sidebar image"
 msgstr "ప్రక్కపట్టీ ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:359
+#: gtk/gtkassistant.c:362
 msgid "Sidebar image for the assistant page"
 msgstr "సహాయక పేజీకొరకు ప్రక్కపట్టీ ప్రతిబింబము"
 
-#: gtk/gtkassistant.c:374
+#: gtk/gtkassistant.c:377
 msgid "Page complete"
 msgstr "పుట పూర్తైనది"
 
-#: gtk/gtkassistant.c:375
+#: gtk/gtkassistant.c:378
 msgid "Whether all required fields on the page have been filled out"
 msgstr "పుటనందు అన్ని అవసరమైన క్షేత్రములు నింపబడినవా"
 
@@ -821,12 +821,12 @@ msgid ""
 "widget"
 msgstr "బొత్తము లోపల లేబుల్ విడ్జెట్ యొక్క పాఠము, ఒకవేళ బొత్తము ఒక లేబుల్ విడ్జెట్ ను కలిగి ఉంటే"
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:517
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:522
 #: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:211
 msgid "Use underline"
 msgstr "కిందగీతనుపయోగించుము"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:518
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:523
 #: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1244,7 +1244,7 @@ msgstr "పిక్సెల్ బఫర్ ను వ్యాపించు
 msgid "Pixbuf for closed expander"
 msgstr "మూసిఉన్న వ్యాపించుదాని కొరకు పిక్సెల్ బఫర్"
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:173 gtk/gtkstatusicon.c:229
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:263 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "స్టాక్ ID"
 
@@ -1277,7 +1277,7 @@ msgstr "అనుసరణ స్థితి"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "సమర్పించుదాని పిక్సెల్ బఫర్ స్థితిననుసరించి తప్పక వర్ణరంజితము కావలెనా"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:248 gtk/gtkwindow.c:590
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:338 gtk/gtkwindow.c:595
 msgid "Icon"
 msgstr "ప్రతిమ"
 
@@ -1373,7 +1373,7 @@ msgstr "గుర్తించు"
 msgid "Marked up text to render"
 msgstr "సమర్పించుదానికి గుర్తించిన పాఠము"
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:503
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:508
 msgid "Attributes"
 msgstr "ఆపాదింపులు"
 
@@ -1422,11 +1422,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "ఒక Gdk రంగు వలె ఫోర్‌గ్రౌండ్ రంగు"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:661 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "మార్చదగిన"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "పాఠము వినియోగదారుచే మార్చదగినదా"
 
@@ -1530,7 +1530,7 @@ msgstr ""
 "ఈ పాఠములోని భాష ఒక ISO కోడ్ వలె ఉన్నది. పాఠమును సమర్పించునపుడు పాంగో దీనిని ఒక సూచన వలె "
 "ఉపయోగించుకొనగలదు.మీకు ఈ పరామితి అర్థము కానిచో, మీకు బహుశా దీని అవసరం ఉండదు"
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:628 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:633 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "ఎలిప్సైజ్"
 
@@ -1543,11 +1543,11 @@ msgstr ""
 "బహుళ వరుసలలోనికి ఎలా విడగొట్టాలి"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:648
+#: gtk/gtklabel.c:653
 msgid "Width In Characters"
 msgstr "అక్షరాలలో వెడల్పు"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:649
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:654
 msgid "The desired width of the label, in characters"
 msgstr "అక్షరాలాలో లేబుల్ యొక్క ఆశించిన వెడల్పు"
 
@@ -2151,19 +2151,19 @@ msgstr "పాఠ్యపు బఫర్"
 msgid "Text buffer object which actually stores entry text"
 msgstr "పాఠ్యపు బఫర్ ఆబ్జక్టు ఏదైతే యధార్ధంగా ప్రవేశపు పాఠ్యమును నిల్వవుంచుతుందో"
 
-#: gtk/gtkentry.c:641 gtk/gtklabel.c:591
+#: gtk/gtkentry.c:641 gtk/gtklabel.c:596
 msgid "Cursor Position"
 msgstr "ములుకు స్థానము"
 
-#: gtk/gtkentry.c:642 gtk/gtklabel.c:592
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:597
 msgid "The current position of the insertion cursor in chars"
 msgstr "అక్షరాలలో ప్రవేశపెట్టు ములుకు యొక్క ప్రస్తుత స్థానము"
 
-#: gtk/gtkentry.c:651 gtk/gtklabel.c:601
+#: gtk/gtkentry.c:651 gtk/gtklabel.c:606
 msgid "Selection Bound"
 msgstr "ఎన్నిక హద్దు"
 
-#: gtk/gtkentry.c:652 gtk/gtklabel.c:602
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:607
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "అక్షరాలలో ములుకు నుంచి ఎన్నిక యొక్క వ్యతిరేక అంతపు స్థానము"
@@ -2260,7 +2260,7 @@ msgstr "బహుళవరుస అతికింపులను వొకే 
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "has-frame అమర్చినప్పుడు ప్రవేశంచుట్టూ యెటువంటి నీడను చిత్రించాలి"
 
-#: gtk/gtkentry.c:802 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:802 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "అతిక్రమించివ్రాయు రీతి"
 
@@ -2448,11 +2448,11 @@ msgstr "ప్రాధమిక ప్రతిమ టూల్‌టిప్ 
 msgid "Secondary icon tooltip markup"
 msgstr "రెండవ ప్రతిమ టూల్‌టిప్ గుర్తు"
 
-#: gtk/gtkentry.c:1218 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1218 gtk/gtktextview.c:683
 msgid "IM module"
 msgstr "IM మాడ్యూల్"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
 msgid "Which IM module should be used"
 msgstr "ఏ IM మాడ్యూల్ వుపయోగించాలి"
 
@@ -2484,7 +2484,7 @@ msgstr "స్థితి జాడ"
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "ఛాయను లేదా బ్యాక్‌గ్రౌండును లేఖిస్తున్నప్పుడు సరైన స్థితిని పంపవలెనా"
 
-#: gtk/gtkentry.c:1739 gtk/gtklabel.c:848
+#: gtk/gtkentry.c:1739 gtk/gtklabel.c:853
 msgid "Select on focus"
 msgstr "కేంద్రము మీద ఎన్నుకొనబడింది"
 
@@ -2604,11 +2604,11 @@ msgstr "శిశువు విడ్జట్‌ను బయల్పరు�
 msgid "Text of the expander's label"
 msgstr "విస్తరింపుకారి యొక్క పాఠ్యము"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:510
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:515
 msgid "Use markup"
 msgstr "మార్కప్‌ను వుపయోగించుము"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:511
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:516
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "లేబుల్ యొక్క పాఠ్యము XML మార్కప్‌ను చేర్చుతుంది. pango_parse_markup()ను చూడండి"
 
@@ -2636,103 +2636,103 @@ msgstr "విస్తరింపుకారి బాణముయొక్�
 msgid "Spacing around expander arrow"
 msgstr "విస్తరింపుకారి బాణము చుట్టూ క్రమాంతరీకరణం"
 
-#: gtk/gtkfilechooser.c:194
+#: gtk/gtkfilechooser.c:758
 msgid "Action"
 msgstr "చర్య"
 
-#: gtk/gtkfilechooser.c:195
+#: gtk/gtkfilechooser.c:759
 msgid "The type of operation that the file selector is performing"
 msgstr "దస్త్ర యెంపికదారి జరుపుతున్న ఆపరేషన్ యొక్క రకము"
 
-#: gtk/gtkfilechooser.c:201
+#: gtk/gtkfilechooser.c:765
 msgid "File System Backend"
 msgstr "దస్త్ర వ్యవస్థ బ్యాక్ఎండ్"
 
-#: gtk/gtkfilechooser.c:202
+#: gtk/gtkfilechooser.c:766
 msgid "Name of file system backend to use"
 msgstr "దస్త్రవ్యవస్థ బ్యాక్‌యెండ్‌కు వుపయోగించుటకు నామము"
 
-#: gtk/gtkfilechooser.c:207 gtk/gtkrecentchooser.c:264
+#: gtk/gtkfilechooser.c:771 gtk/gtkrecentchooser.c:264
 msgid "Filter"
 msgstr "వడపోత"
 
-#: gtk/gtkfilechooser.c:208
+#: gtk/gtkfilechooser.c:772
 msgid "The current filter for selecting which files are displayed"
 msgstr "ఏ దస్త్రములు ప్రదర్శించబడాలో యెంపికచేయుటకు ప్రస్తుత వడపోత"
 
-#: gtk/gtkfilechooser.c:213
+#: gtk/gtkfilechooser.c:777
 msgid "Local Only"
 msgstr "స్థానికం మాత్రమే"
 
-#: gtk/gtkfilechooser.c:214
+#: gtk/gtkfilechooser.c:778
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "ఎంపికకాబడిన దస్త్రము(లు) స్థానిక దస్త్రము:URLs మాత్రమే పరిమితమై వుండాలా"
 
-#: gtk/gtkfilechooser.c:219
+#: gtk/gtkfilechooser.c:783
 msgid "Preview widget"
 msgstr "ఉపదర్శనం విడ్జట్"
 
-#: gtk/gtkfilechooser.c:220
+#: gtk/gtkfilechooser.c:784
 msgid "Application supplied widget for custom previews."
 msgstr "మలచిన వుపదర్శనముల కొరకు అనువర్తనం పంపిణీచేసిన విడ్జట్."
 
-#: gtk/gtkfilechooser.c:225
+#: gtk/gtkfilechooser.c:789
 msgid "Preview Widget Active"
 msgstr "ఉపదర్శనం విడ్జట్ క్రియాశీలం"
 
-#: gtk/gtkfilechooser.c:226
+#: gtk/gtkfilechooser.c:790
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "మలిచిన వుపదర్శనములకొరకు అనువర్తనం పంపిణీచేసిన విడ్జట్ చూపించబడాలా."
 
-#: gtk/gtkfilechooser.c:231
+#: gtk/gtkfilechooser.c:795
 msgid "Use Preview Label"
 msgstr "ఉపదర్శనం లేబుల్‌ను వుపయోగించుము"
 
-#: gtk/gtkfilechooser.c:232
+#: gtk/gtkfilechooser.c:796
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "ఉపదర్శనం దస్త్రమునామముతో స్టాక్ లేబుల్ ప్రదర్శించబడాలా."
 
-#: gtk/gtkfilechooser.c:237
+#: gtk/gtkfilechooser.c:801
 msgid "Extra widget"
 msgstr "అదనపు విడ్జట్"
 
-#: gtk/gtkfilechooser.c:238
+#: gtk/gtkfilechooser.c:802
 msgid "Application supplied widget for extra options."
 msgstr "అదనపు ఐచ్చికములకొరకు అనువర్తనం పంపిణీచేసిన విడ్జట్."
 
-#: gtk/gtkfilechooser.c:243 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:203
+#: gtk/gtkfilechooser.c:807 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:203
 msgid "Select Multiple"
 msgstr "ఒకటికన్నా ఎక్కువవాటిని ఎంపికచేయుము"
 
-#: gtk/gtkfilechooser.c:244 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:808 gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
 msgstr "ఒకటికన్నా ఎక్కువ దస్త్రములను ఎంపికచేయుటను అనుమతించాలా"
 
-#: gtk/gtkfilechooser.c:250
+#: gtk/gtkfilechooser.c:814
 msgid "Show Hidden"
 msgstr "మరుగుపరచినవాటిని చూపుము"
 
-#: gtk/gtkfilechooser.c:251
+#: gtk/gtkfilechooser.c:815
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "మరుగుపరచిన దస్త్రములను మరియు సంచయాలను ప్రదర్శించాలా"
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:830
 msgid "Do overwrite confirmation"
 msgstr "నిర్ధారణను తిరిగివ్రాయుము"
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:831
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
 msgstr ""
 "దస్త్రములను యెంపికచేయునది భద్రపరచు రీతినందు అవసరమైతే తిరిగివ్రాయుటకు నిర్ధారణ డైలాగ్‌ను చూయించాలా."
 
-#: gtk/gtkfilechooser.c:283
+#: gtk/gtkfilechooser.c:847
 msgid "Allow folders creation"
 msgstr "సంచయముల సృష్టీకరణను అనుమతిస్తుంది"
 
-#: gtk/gtkfilechooser.c:284
+#: gtk/gtkfilechooser.c:848
 msgid ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
@@ -2756,7 +2756,7 @@ msgstr "దస్త్రము యెంపికచేయుదాని డ�
 msgid "The desired width of the button widget, in characters."
 msgstr "బటన్ విడ్జట్ యొక్క కావలిసిన వెడల్పు, అక్షరములలో."
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:164 gtk/gtkrecentmanager.c:214
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:254 gtk/gtkrecentmanager.c:214
 #: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "దస్త్రమునామము"
@@ -3056,83 +3056,83 @@ msgstr "ఎంపికపెట్టె ఆల్ఫా"
 msgid "Opacity of the selection box"
 msgstr "ఎంపిక పెట్టెయొక్క ఒపాసిటి"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:213
+#: gtk/gtkimage.c:222 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "పిక్స్‍‌బఫ్"
 
-#: gtk/gtkimage.c:133 gtk/gtkstatusicon.c:214
+#: gtk/gtkimage.c:223 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "ప్రదర్శించుటకు జిడికెఫిక్స్‍‌బఫ్"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:230
 msgid "Pixmap"
 msgstr "పిక్స్‍‌మాప్"
 
-#: gtk/gtkimage.c:141
+#: gtk/gtkimage.c:231
 msgid "A GdkPixmap to display"
 msgstr "ప్రదర్శించుటకు జిడికెపిక్స్‍‌మాప్"
 
-#: gtk/gtkimage.c:148 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:238 gtk/gtkmessagedialog.c:215
 msgid "Image"
 msgstr "ప్రతిబింబము"
 
-#: gtk/gtkimage.c:149
+#: gtk/gtkimage.c:239
 msgid "A GdkImage to display"
 msgstr "ప్రదర్శించుటకు జిడికెప్రతిబింబము"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:246
 msgid "Mask"
 msgstr "తొడుగు"
 
-#: gtk/gtkimage.c:157
+#: gtk/gtkimage.c:247
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "జిడికెప్రతిబింబము లేదా జిడికెపిక్స్‍‌మాప్‌తో వుపయోగించుటకు తొడుగు బిట్‌మాప్"
 
-#: gtk/gtkimage.c:165 gtk/gtkstatusicon.c:222
+#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "లోడుచేయుటకు మరియు ప్రదర్శించుటకు దస్త్రమునామము"
 
-#: gtk/gtkimage.c:174 gtk/gtkstatusicon.c:230
+#: gtk/gtkimage.c:264 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "ప్రదర్శించుటకు స్టాక్ ప్రతిబింబము స్టాక్ ఐడి"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:271
 msgid "Icon set"
 msgstr "ప్రతిమ సమితి"
 
-#: gtk/gtkimage.c:182
+#: gtk/gtkimage.c:272
 msgid "Icon set to display"
 msgstr "ప్రదర్శించుటకు ప్రతిమ సమితి"
 
-#: gtk/gtkimage.c:189 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
 msgid "Icon size"
 msgstr "ప్రతిమ పరిమాణం"
 
-#: gtk/gtkimage.c:190
+#: gtk/gtkimage.c:280
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "స్టాక్ ప్రతిమకు, ప్రతిమ సమితికి లేదా నామపు ప్రతిమకు వుపయోగించటానికి చిహ్నరూప పరిమాణము"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:296
 msgid "Pixel size"
 msgstr "పిక్సెల్ పరిమాణము"
 
-#: gtk/gtkimage.c:207
+#: gtk/gtkimage.c:297
 msgid "Pixel size to use for named icon"
 msgstr "నామపు ప్రతిమకు వుపయోగించటానికి పిక్సెల్ పరిమాణం"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:305
 msgid "Animation"
 msgstr "యానిమేషన్"
 
-#: gtk/gtkimage.c:216
+#: gtk/gtkimage.c:306
 msgid "GdkPixbufAnimation to display"
 msgstr "ప్రదర్శించుటకు జిడికెపిక్స్‍‌బఫ్‌యానిమేషన్"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:261
+#: gtk/gtkimage.c:346 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "నిల్వ రకము"
 
-#: gtk/gtkimage.c:257 gtk/gtkstatusicon.c:262
+#: gtk/gtkimage.c:347 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "ప్రతిబింబము డాటాకొరకు వుపయోగించబడు ప్రతిక్షేపణ"
 
@@ -3180,23 +3180,23 @@ msgstr "ప్రాంతముయొక్క మూలకాల మధ్య�
 msgid "Width of border around the action area"
 msgstr "చర్యా ప్రాంతము చుట్టూరా హద్దుయొక్క వెడల్పు"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:615
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:627
 msgid "The screen where this window will be displayed"
 msgstr "ఈ విండో ప్రదర్శించబడు తెర"
 
-#: gtk/gtklabel.c:497
+#: gtk/gtklabel.c:502
 msgid "The text of the label"
 msgstr "లేబుల్ యొక్క పాఠ్యము"
 
-#: gtk/gtklabel.c:504
+#: gtk/gtklabel.c:509
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "లేబుల్ యొక్క పాఠ్యముకు ఆపాదించుటకు శైలి యాట్రిబ్యూట్ల జాబితా"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:530 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "ఔచిత్యము"
 
-#: gtk/gtklabel.c:526
+#: gtk/gtklabel.c:531
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3205,57 +3205,57 @@ msgstr ""
 "ఒకదానికొకటి సారూప్యంగావున్న లేబుల్‌యొక్క పాఠ్యమునందలి వరుసలయొక్క సర్దుబాటు. ఇది లేబుల్‌యొక్క సర్దుబాటుపై "
 "దానికి కేటాయించినదానిలో యెటువంటి ప్రభావాన్ని చూపదు. దానికొరకు GtkMisc::xalign చూడండి."
 
-#: gtk/gtklabel.c:534
+#: gtk/gtklabel.c:539
 msgid "Pattern"
 msgstr "మాదిరి"
 
-#: gtk/gtklabel.c:535
+#: gtk/gtklabel.c:540
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "స్ట్రింగ్‌ నందువున్న _ అక్షరములు ఆయాస్థానములలోవున్న సంభదిత అక్షరముల క్రిందగీతను వుంచుతాయి"
 
-#: gtk/gtklabel.c:542
+#: gtk/gtklabel.c:547
 msgid "Line wrap"
 msgstr "వరుస మడత"
 
-#: gtk/gtklabel.c:543
+#: gtk/gtklabel.c:548
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "అమర్చివున్నట్లైతే, పాఠ్యము మరీ వెడల్పైనప్పుడు వరుసలను మడుచుము"
 
-#: gtk/gtklabel.c:558
+#: gtk/gtklabel.c:563
 msgid "Line wrap mode"
 msgstr "వరుస మడుచు రీతి"
 
-#: gtk/gtklabel.c:559
+#: gtk/gtklabel.c:564
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "మడుచుట అమర్చివున్నట్లైతే, వరుసమడుచుట యెలాజరగాలో నియంత్రిస్తుంది"
 
-#: gtk/gtklabel.c:566
+#: gtk/gtklabel.c:571
 msgid "Selectable"
 msgstr "ఎంపికచేయదగిన"
 
-#: gtk/gtklabel.c:567
+#: gtk/gtklabel.c:572
 msgid "Whether the label text can be selected with the mouse"
 msgstr "లేబుల్ పాఠ్యము మౌస్‌తో యెంపికచేయబడాలా"
 
-#: gtk/gtklabel.c:573
+#: gtk/gtklabel.c:578
 msgid "Mnemonic key"
 msgstr "మెన్‌మోనిక్ కీ"
 
-#: gtk/gtklabel.c:574
+#: gtk/gtklabel.c:579
 msgid "The mnemonic accelerator key for this label"
 msgstr "ఈ లేబుల్‌కొరకు మెన్‌మోనిక్ త్వరుణి కీ"
 
-#: gtk/gtklabel.c:582
+#: gtk/gtklabel.c:587
 msgid "Mnemonic widget"
 msgstr "మెన్‌మోనిక్ విడ్జట్"
 
-#: gtk/gtklabel.c:583
+#: gtk/gtklabel.c:588
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "లేబుల్‌యొక్క మెన్‌మోనిక్ కీ వత్తబడినప్పుడు ఈ విడ్జట్ క్రియాశీలపర్చవలెను"
 
-#: gtk/gtklabel.c:629
+#: gtk/gtklabel.c:634
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3263,39 +3263,39 @@ msgstr ""
 "ఒకవేళ పూర్తి పదబంధమును ప్రదర్శించుటకు అరను సమర్పించుదానివద్ద తగిన స్థలము లేనిచో, పదబంధమును "
 "బహుళ వరుసలలోనికి విడగొట్టుటకు అభీష్ట స్థలము."
 
-#: gtk/gtklabel.c:669
+#: gtk/gtklabel.c:674
 msgid "Single Line Mode"
 msgstr "ఏక వరుస రీతి"
 
-#: gtk/gtklabel.c:670
+#: gtk/gtklabel.c:675
 msgid "Whether the label is in single line mode"
 msgstr "లేబుల్ ఏక వరుస రీతినందు వుండాలా"
 
-#: gtk/gtklabel.c:687
+#: gtk/gtklabel.c:692
 msgid "Angle"
 msgstr "కోణము"
 
-#: gtk/gtklabel.c:688
+#: gtk/gtklabel.c:693
 msgid "Angle at which the label is rotated"
 msgstr "లేబుల్ భ్రమించే కోణము"
 
-#: gtk/gtklabel.c:708
+#: gtk/gtklabel.c:713
 msgid "Maximum Width In Characters"
 msgstr "అక్షరములమధ్య గరిష్ఠ వెడల్పు"
 
-#: gtk/gtklabel.c:709
+#: gtk/gtklabel.c:714
 msgid "The desired maximum width of the label, in characters"
 msgstr "లేబుల్‌కు కావలిసిన గరిష్ఠ వెడల్పు, అక్షరములలో"
 
-#: gtk/gtklabel.c:727
+#: gtk/gtklabel.c:732
 msgid "Track visited links"
 msgstr "దర్శించిన లింకుల ఆరావుంచుము"
 
-#: gtk/gtklabel.c:728
+#: gtk/gtklabel.c:733
 msgid "Whether visited links should be tracked"
 msgstr "దర్శించిన లింకుల ఆరా వుంచాలా"
 
-#: gtk/gtklabel.c:849
+#: gtk/gtklabel.c:854
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "ఎంపికచేయదగిన లేబుల్‌పై దృష్టిసారించినప్పుడు దాని సారములను యెంపికచేయవలెనా"
 
@@ -3584,11 +3584,11 @@ msgstr "అక్షరాలలో వెడల్పు"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "అక్షరాలాలో లేబుల్ యొక్క ఆశించిన వెడల్పు"
 
-#: gtk/gtkmenushell.c:374
+#: gtk/gtkmenushell.c:375
 msgid "Take Focus"
 msgstr "దృష్టిని తీసుకొనుము"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:376
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "కీబోర్డు దృష్టిని మెనూ లాక్కొనవలెనో లేదో నిర్ణయించే బూలియన్"
 
@@ -3792,7 +3792,7 @@ msgid "Group ID for tabs drag and drop"
 msgstr "టాబ్‌లను లాగివుదులుటకు సమూహం ID"
 
 #: gtk/gtknotebook.c:681 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:343 gtk/gtkradiotoolbutton.c:65
+#: gtk/gtkradiomenuitem.c:353 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "సమూహం"
 
@@ -4475,7 +4475,7 @@ msgstr "ఈ చర్యకు సంభందించిన సమూహంయ
 msgid "The radio button whose group this widget belongs to."
 msgstr "ఈ విడ్జట్‌కు సంబందించిన సమూహపు రేడియో బటన్."
 
-#: gtk/gtkradiomenuitem.c:344
+#: gtk/gtkradiomenuitem.c:354
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "ఈ విడ్జట్‌కు సంభందిచిన సమూహపు రేడియో మెనూ అంశము."
 
@@ -4939,11 +4939,11 @@ msgstr "గీయుము"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "విచ్ఛేదని గీయాలా, లేక ఖాళీ వదలాలా"
 
-#: gtk/gtksettings.c:223
+#: gtk/gtksettings.c:224
 msgid "Double Click Time"
 msgstr "రెండు నొక్కులకు సమయం"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:225
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -4951,193 +4951,193 @@ msgstr ""
 "రెండు వరుసనొక్కులను రెండు నొక్కులుగా పరిగణించుటకు వాటిమద్య అనుమతించదగు గరిష్ఠ సమయం "
 "(మిల్లీసెకనులలో)"
 
-#: gtk/gtksettings.c:231
+#: gtk/gtksettings.c:232
 msgid "Double Click Distance"
 msgstr "రెండు నొక్కుల దూరము"
 
-#: gtk/gtksettings.c:232
+#: gtk/gtksettings.c:233
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
 "రెండు వరుసనొక్కులను రెండు నొక్కులగా పరిగణించుటకు వాటిమద్య అనుమతించదగిన గరిష్ఠ దూరము (పిగ్జెల్స్‍‌లో)"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:249
 msgid "Cursor Blink"
 msgstr "కర్సర్ బ్లింక్"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:250
 msgid "Whether the cursor should blink"
 msgstr "కర్సర్ బ్లింక్ అవ్వాలా"
 
-#: gtk/gtksettings.c:256
+#: gtk/gtksettings.c:257
 msgid "Cursor Blink Time"
 msgstr "కర్సర్ బ్లింక్ సమయం"
 
-#: gtk/gtksettings.c:257
+#: gtk/gtksettings.c:258
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "కర్సర్ బ్లింక్ చక్రము యొక్క పొడవు, మిల్లీసెకనులలో"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink Timeout"
 msgstr "కర్సర్ బ్లింక్ సమయముగింపు"
 
-#: gtk/gtksettings.c:277
+#: gtk/gtksettings.c:278
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "కర్సర్ బ్లింకింగ్ యెంత సమయంలో ఆగును, సెకనులలో"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:285
 msgid "Split Cursor"
 msgstr "కర్సర్‌ను విభజించుము"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:286
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "ఎడమ-కుడి మరియు కుడి-ఎడమ మిశ్రమ పాఠ్యమునకు రెండు కర్సర్‌లు ప్రదర్శించవలెనా"
 
-#: gtk/gtksettings.c:292
+#: gtk/gtksettings.c:293
 msgid "Theme Name"
 msgstr "థీమ్ నామము"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:294
 msgid "Name of theme RC file to load"
 msgstr "నింపబడు థీమ్ RC దస్త్రము నామము"
 
-#: gtk/gtksettings.c:301
+#: gtk/gtksettings.c:302
 msgid "Icon Theme Name"
 msgstr "ప్రతిమ థీమ్ నామము"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:303
 msgid "Name of icon theme to use"
 msgstr "ఉపయోగించుటకు ప్రతిమ థీమ్‌యొక్క నామము"
 
-#: gtk/gtksettings.c:310
+#: gtk/gtksettings.c:311
 msgid "Fallback Icon Theme Name"
 msgstr "ఫాల్‌బ్యాక్ ప్రతిమ థీమ్ నామము"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:312
 msgid "Name of a icon theme to fall back to"
 msgstr "ఫాల్‌ బ్యాక్‌కు ప్రతిమ థీమ్‌యొక్క నామము"
 
-#: gtk/gtksettings.c:319
+#: gtk/gtksettings.c:320
 msgid "Key Theme Name"
 msgstr "కీ థీమ్ నామము"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:321
 msgid "Name of key theme RC file to load"
 msgstr "నింపుటకు కీ థీమ్ RC దస్త్రముయొక్క నామము"
 
-#: gtk/gtksettings.c:328
+#: gtk/gtksettings.c:329
 msgid "Menu bar accelerator"
 msgstr "మెను పట్టీ త్వరుణి"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:330
 msgid "Keybinding to activate the menu bar"
 msgstr "మెనూ పట్టీని క్రియాశీలపర్చుటకు కీబందనము"
 
-#: gtk/gtksettings.c:337
+#: gtk/gtksettings.c:338
 msgid "Drag threshold"
 msgstr "త్రెష్‌హోల్డ్‍‌ను లాగుము"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:339
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "లాగుటకు ముందుగా కర్సర్ కదలగల పిగ్జెల్స్‍ సంఖ్య"
 
-#: gtk/gtksettings.c:346
+#: gtk/gtksettings.c:347
 msgid "Font Name"
 msgstr "ఫాంట్ నామము"
 
-#: gtk/gtksettings.c:347
+#: gtk/gtksettings.c:348
 msgid "Name of default font to use"
 msgstr "అప్రమేయంగా వుపయోగించు ఫాంట్ నామము"
 
-#: gtk/gtksettings.c:369
+#: gtk/gtksettings.c:370
 msgid "Icon Sizes"
 msgstr "ప్రతిమ పరిమాణములు"
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:371
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "ప్రతిమ పరిమాణముల జాబితా (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:378
+#: gtk/gtksettings.c:379
 msgid "GTK Modules"
 msgstr "GTK మాడ్యూల్స్‍"
 
-#: gtk/gtksettings.c:379
+#: gtk/gtksettings.c:380
 msgid "List of currently active GTK modules"
 msgstr "ప్రస్తుతం క్రియాశీలముగావున్న GTK మాడ్యూళ్ళ జాబితా"
 
-#: gtk/gtksettings.c:388
+#: gtk/gtksettings.c:389
 msgid "Xft Antialias"
 msgstr "Xft ఏంటీయెలియాస్"
 
-#: gtk/gtksettings.c:389
+#: gtk/gtksettings.c:390
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "ఏంటీయెలియాస్ Xft ఫాంట్సా; 0=కాదు 1=అవును -1=అప్రమేయం"
 
-#: gtk/gtksettings.c:398
+#: gtk/gtksettings.c:399
 msgid "Xft Hinting"
 msgstr "Xft హింటింగ్"
 
-#: gtk/gtksettings.c:399
+#: gtk/gtksettings.c:400
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Xft ఫాంట్లకు హింట్ యివ్వాలా; 0=కాదు, 1=అవును, -1=అప్రమేయ"
 
-#: gtk/gtksettings.c:408
+#: gtk/gtksettings.c:409
 msgid "Xft Hint Style"
 msgstr "Xft హింట్ శైలి"
 
-#: gtk/gtksettings.c:409
+#: gtk/gtksettings.c:410
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "ఏ తరగతిలో హింటింగ్ వుపయోగించాలి; హింట్‌నన్, హింట్‌లైట్, హింట్‌మీడియం లేదా హింట్‌ఫుల్"
 
-#: gtk/gtksettings.c:418
+#: gtk/gtksettings.c:419
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:419
+#: gtk/gtksettings.c:420
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "ఉపపిగ్జెల్స్‍ ఏంటీయెలియాసింగ్ యొక్క రకము; ఏదీకాదు, rgb, bgr, vrgb, vbgr"
 
-#: gtk/gtksettings.c:428
+#: gtk/gtksettings.c:429
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:429
+#: gtk/gtksettings.c:430
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Xft కు తీవ్రత, 1024 * చుక్కలు/అంగుళం లో. అప్రమేయ విలువను వుపయోగించుటకు -1"
 
-#: gtk/gtksettings.c:438
+#: gtk/gtksettings.c:439
 msgid "Cursor theme name"
 msgstr "కర్సర్ థీమ్ నామము"
 
-#: gtk/gtksettings.c:439
+#: gtk/gtksettings.c:440
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "కర్సర్ థీమ్‌యొక్క నామము, లేదా అప్రమేయ థీమ్‌ను వుపయోగించుటకు NULL"
 
-#: gtk/gtksettings.c:447
+#: gtk/gtksettings.c:448
 msgid "Cursor theme size"
 msgstr "కర్సర్ థీమ్ పరిమాణము"
 
-#: gtk/gtksettings.c:448
+#: gtk/gtksettings.c:449
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "కర్సర్‌లకు వుపయోగించుటకు పరిమాణము, లేదా అప్రమేయ పరిమాణంను వుపయోగించుటకు 0"
 
-#: gtk/gtksettings.c:458
+#: gtk/gtksettings.c:459
 msgid "Alternative button order"
 msgstr "ప్రత్యామ్నాయ బటన్ క్రమము"
 
-#: gtk/gtksettings.c:459
+#: gtk/gtksettings.c:460
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "డెలాగ్స్‍‌నందలి బటన్‌లు ప్రత్యామ్నాయ బటన్ క్రమమును వుపయోగించాలా"
 
-#: gtk/gtksettings.c:476
+#: gtk/gtksettings.c:477
 msgid "Alternative sort indicator direction"
 msgstr "ప్రత్యామ్నాయ వరుసక్రమ సూచకి దిశ"
 
-#: gtk/gtksettings.c:477
+#: gtk/gtksettings.c:478
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5145,255 +5145,266 @@ msgstr ""
 "అప్రమేయంతో పోల్చినప్పుడు వరుసక్రమ సూచికల దిశ జాబితా మరియు ట్రీ దర్శనంనందు విలోమంగా వుండాలా (ఇక్కడ "
 "క్రిందికి అంటే ఆరోహణము అని)"
 
-#: gtk/gtksettings.c:485
+#: gtk/gtksettings.c:486
 msgid "Show the 'Input Methods' menu"
 msgstr "'ఇన్‌పుట్ పద్దతుల' మెనూను చూపుము"
 
-#: gtk/gtksettings.c:486
+#: gtk/gtksettings.c:487
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr "ప్రవేశాల మరియు పాఠ్య దర్శనాల సందర్భ మెనూలు ఇన్‌పుట్ పద్దతిని మార్చుటకు అవకాశమివ్వాలా"
 
-#: gtk/gtksettings.c:494
+#: gtk/gtksettings.c:495
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "'యూనికోడ్ నియంత్రణ అక్షరము చేర్చుము' మెనూను చూపుము"
 
-#: gtk/gtksettings.c:495
+#: gtk/gtksettings.c:496
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
 msgstr "ప్రవేశముల మరియు పాఠపు దర్శనముల సందర్భ మెనూలు నియంత్రణ అక్షరములను చేర్చనివ్వాలా"
 
-#: gtk/gtksettings.c:503
+#: gtk/gtksettings.c:504
 msgid "Start timeout"
 msgstr "కాలముగింపును ప్రారంభించుము"
 
-#: gtk/gtksettings.c:504
+#: gtk/gtksettings.c:505
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "బటన్ వత్తినప్పుడు, కాలముగింపునకు ప్రారంభవిలువ"
 
-#: gtk/gtksettings.c:513
+#: gtk/gtksettings.c:514
 msgid "Repeat timeout"
 msgstr "కాలముగింపును పునరావృతముచేయి"
 
-#: gtk/gtksettings.c:514
+#: gtk/gtksettings.c:515
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "బటన్ వత్తినప్పుడు, కాలముగింపు కొరకు విలువను పునరావృతముచేయి"
 
-#: gtk/gtksettings.c:523
+#: gtk/gtksettings.c:524
 msgid "Expand timeout"
 msgstr "సమయముగింపును విస్తరించుము"
 
-#: gtk/gtksettings.c:524
+#: gtk/gtksettings.c:525
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "విడ్జట్ కొత్త ప్రాంతమును విస్తరించునప్పుడు, కాలముగింపు సమయంను పెంచుము"
 
-#: gtk/gtksettings.c:559
+#: gtk/gtksettings.c:560
 msgid "Color scheme"
 msgstr "రంగు పధకం"
 
-#: gtk/gtksettings.c:560
+#: gtk/gtksettings.c:561
 msgid "A palette of named colors for use in themes"
 msgstr "థీమ్స్‍‌నందు వుపయోగించుటకు నామపు రంగులపలక"
 
-#: gtk/gtksettings.c:569
+#: gtk/gtksettings.c:570
 msgid "Enable Animations"
 msgstr "యానిమేషన్లను చేతనపరుచుము"
 
-#: gtk/gtksettings.c:570
+#: gtk/gtksettings.c:571
 msgid "Whether to enable toolkit-wide animations."
 msgstr "పనిముట్లపట్టీ-తీరు యానిమేషన్లను చెతనము చేయవలెనా"
 
-#: gtk/gtksettings.c:588
+#: gtk/gtksettings.c:589
 msgid "Enable Touchscreen Mode"
 msgstr "టచ్‌స్క్రీన్ రీతిని చేతనముచేయి"
 
-#: gtk/gtksettings.c:589
+#: gtk/gtksettings.c:590
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "నిజమైనప్పుడు, ఈ తెరపైన కదలిక గుర్తించగలిగిన ఘటనలు ప్రసారం కాలేదు"
 
-#: gtk/gtksettings.c:606
+#: gtk/gtksettings.c:607
 msgid "Tooltip timeout"
 msgstr "సాధనచిట్కా సమయముగింపు"
 
-#: gtk/gtksettings.c:607
+#: gtk/gtksettings.c:608
 msgid "Timeout before tooltip is shown"
 msgstr "సాధనముచిట్కా చూపుటకు ముందుగా సమయంముగిసింది"
 
-#: gtk/gtksettings.c:632
+#: gtk/gtksettings.c:633
 msgid "Tooltip browse timeout"
 msgstr "టూల్‌టిప్ బ్రౌజ్ సమయం ముగిసింది"
 
-#: gtk/gtksettings.c:633
+#: gtk/gtksettings.c:634
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "బ్రౌజింగ్ రీతినందు టూల్‌టిప్ చూపుటకు ముందు సమయం ముగింపు"
 
-#: gtk/gtksettings.c:654
+#: gtk/gtksettings.c:655
 msgid "Tooltip browse mode timeout"
 msgstr "సాధనచిట్కా బ్రౌజ్ రీతి కాలముగింపు"
 
-#: gtk/gtksettings.c:655
+#: gtk/gtksettings.c:656
 msgid "Timeout after which browse mode is disabled"
 msgstr "అన్వేష రీతి అచేతనమైన తర్వాత సమయముగింపు"
 
-#: gtk/gtksettings.c:674
+#: gtk/gtksettings.c:675
 msgid "Keynav Cursor Only"
 msgstr "Keynav కర్సర్ మాత్రమే"
 
-#: gtk/gtksettings.c:675
+#: gtk/gtksettings.c:676
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "నిజమైతే, విడ్జట్సును నావిగేట్ చేయుటకు అక్కడ కర్సర్ కీలు లేవు"
 
-#: gtk/gtksettings.c:692
+#: gtk/gtksettings.c:693
 msgid "Keynav Wrap Around"
 msgstr "Keynav మడత చుట్టుము"
 
-#: gtk/gtksettings.c:693
+#: gtk/gtksettings.c:694
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "కీబోర్డు-నావిగేటింగ్ విడ్జట్సునందు చుట్టవలెనా"
 
-#: gtk/gtksettings.c:713
+#: gtk/gtksettings.c:714
 msgid "Error Bell"
 msgstr "దోషం బెల్"
 
-#: gtk/gtksettings.c:714
+#: gtk/gtksettings.c:715
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "నిజమైతే, కీబోర్డు నావిగేషన్ మరియు యితర దోషములు బీప్ చేస్తాయి"
 
-#: gtk/gtksettings.c:731
+#: gtk/gtksettings.c:732
 msgid "Color Hash"
 msgstr "రంగుఖాళీ"
 
-#: gtk/gtksettings.c:732
+#: gtk/gtksettings.c:733
 msgid "A hash table representation of the color scheme."
 msgstr "వర్ణవిధానం యొక్క హాష్ పట్టిక ప్రస్పుటీకరణ"
 
-#: gtk/gtksettings.c:740
+#: gtk/gtksettings.c:741
 msgid "Default file chooser backend"
 msgstr "అప్రమేయ ఫైల్ చూజర్ బ్యాకెండ్"
 
-#: gtk/gtksettings.c:741
+#: gtk/gtksettings.c:742
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "అప్రమేయంగా వుపయోగించుటకుGtkFileChooser బ్యాకెండ్ నామము"
 
-#: gtk/gtksettings.c:758
+#: gtk/gtksettings.c:759
 msgid "Default print backend"
 msgstr "అప్రమేయ ముద్రణ బ్యాకెండ్"
 
-#: gtk/gtksettings.c:759
+#: gtk/gtksettings.c:760
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "అప్రమేయంగా వుపయోగించుటకు GtkPrintBackend బ్యాకెండ్సు జాబితా"
 
-#: gtk/gtksettings.c:782
+#: gtk/gtksettings.c:783
 msgid "Default command to run when displaying a print preview"
 msgstr "ముద్రణ దర్శనం ప్రదర్శించునప్పుడు అప్రమే ఆదేశము"
 
-#: gtk/gtksettings.c:783
+#: gtk/gtksettings.c:784
 msgid "Command to run when displaying a print preview"
 msgstr "ముద్రణ వుపదర్శనంను ప్రదర్శించునప్పుడు ఆదేశము"
 
-#: gtk/gtksettings.c:799
+#: gtk/gtksettings.c:800
 msgid "Enable Mnemonics"
 msgstr "బండగుర్తులను చేతనపరుచుము"
 
-#: gtk/gtksettings.c:800
+#: gtk/gtksettings.c:801
 msgid "Whether labels should have mnemonics"
 msgstr "లేబుల్స్‍ బండగుర్తులను కలిగివుండాలా"
 
-#: gtk/gtksettings.c:816
+#: gtk/gtksettings.c:817
 msgid "Enable Accelerators"
 msgstr "త్వరుణిలను చేతనపర్చుము"
 
-#: gtk/gtksettings.c:817
+#: gtk/gtksettings.c:818
 msgid "Whether menu items should have accelerators"
 msgstr "మెనూ అంశములు త్వరుణిలను కలిగివుండాలా"
 
-#: gtk/gtksettings.c:834
+#: gtk/gtksettings.c:835
 msgid "Recent Files Limit"
 msgstr "ఇటీవలి ఫైళ్ళు పరిమితి"
 
-#: gtk/gtksettings.c:835
+#: gtk/gtksettings.c:836
 msgid "Number of recently used files"
 msgstr "ఇటీవల వుపయోగించిన ఫైళ్ళ సంఖ్య"
 
-#: gtk/gtksettings.c:853
+#: gtk/gtksettings.c:854
 msgid "Default IM module"
 msgstr "అప్రమేయం IM మాడ్యూల్"
 
-#: gtk/gtksettings.c:854
+#: gtk/gtksettings.c:855
 msgid "Which IM module should be used by default"
 msgstr "అప్రమేయంగా ఏ IM మాడ్యూల్ వుపయోగించాలి"
 
-#: gtk/gtksettings.c:872
+#: gtk/gtksettings.c:873
 msgid "Recent Files Max Age"
 msgstr "ఇటీవలి దస్త్రముల గరిష్ట వయస్సు"
 
-#: gtk/gtksettings.c:873
+#: gtk/gtksettings.c:874
 msgid "Maximum age of recently used files, in days"
 msgstr "ఇటీవల వుపయోగించిన దస్త్రముల వయస్సు, రోజులలో"
 
-#: gtk/gtksettings.c:882
+#: gtk/gtksettings.c:883
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig ఆకృతీకరణ టైమ్‌స్టాంప్"
 
-#: gtk/gtksettings.c:883
+#: gtk/gtksettings.c:884
 msgid "Timestamp of current fontconfig configuration"
 msgstr "ప్రస్తుత fontconfig ఆకృతీకరణ యొక్క టైమ్‌స్టాంప్"
 
-#: gtk/gtksettings.c:905
+#: gtk/gtksettings.c:906
 msgid "Sound Theme Name"
 msgstr "సౌండ్ థీమ్ నామము"
 
-#: gtk/gtksettings.c:906
+#: gtk/gtksettings.c:907
 msgid "XDG sound theme name"
 msgstr "XDG సౌండ్ థీమ్ నామము"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:928
+#: gtk/gtksettings.c:929
 msgid "Audible Input Feedback"
 msgstr "వినగల్గు యిన్పుట్ ఫీడ్‌బ్యాక్"
 
-#: gtk/gtksettings.c:929
+#: gtk/gtksettings.c:930
 msgid "Whether to play event sounds as feedback to user input"
 msgstr "వినియోగదారి యిన్పుట్‌కు ఫీడ్‌బ్యాక్ వలె ఘటనా శబ్దములను వినిపించాలా"
 
-#: gtk/gtksettings.c:950
+#: gtk/gtksettings.c:951
 msgid "Enable Event Sounds"
 msgstr "ఘటనా శబ్దములను చేతనపరచుము"
 
-#: gtk/gtksettings.c:951
+#: gtk/gtksettings.c:952
 msgid "Whether to play any event sounds at all"
 msgstr "అన్నిటివద్దా యెటువంటి ఘటనా శబ్దమునైనా చేయాలా"
 
-#: gtk/gtksettings.c:966
+#: gtk/gtksettings.c:967
 msgid "Enable Tooltips"
 msgstr "సాధనచిట్కాలను చెతనపరచుము"
 
-#: gtk/gtksettings.c:967
+#: gtk/gtksettings.c:968
 msgid "Whether tooltips should be shown on widgets"
 msgstr "సాధనచిట్కాలు విడ్జట్స్‍‌ నందు చూపాలా"
 
-#: gtk/gtksettings.c:980
+#: gtk/gtksettings.c:981
 msgid "Toolbar style"
 msgstr "పనిముట్ల పట్టీలు"
 
-#: gtk/gtksettings.c:981
+#: gtk/gtksettings.c:982
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "అప్రమేయ సాధనపట్టీలు పాఠ్యమును మాత్రమే కలిగివుండాలా, పాఠ్యము మరియు ప్రతిమలను కలిగివుండాలా, ప్రతిమలు "
 "మాత్రమేనా."
 
-#: gtk/gtksettings.c:995
+#: gtk/gtksettings.c:996
 #, fuzzy
 msgid "Toolbar Icon Size"
 msgstr "సాధనపట్టీ ప్రతిమ పరిమాణము"
 
-#: gtk/gtksettings.c:996
+#: gtk/gtksettings.c:997
 #, fuzzy
 msgid "The size of icons in default toolbars."
 msgstr "అప్రమేయ సాధనపట్టీలనందు ప్రతిమల పరిమాణము"
+
+#: gtk/gtksettings.c:1014
+#, fuzzy
+msgid "Auto Mnemonics"
+msgstr "బండగుర్తులను చేతనపరుచుము"
+
+#: gtk/gtksettings.c:1015
+msgid ""
+"Whether mnemonics should be automatically shown and hidden when the user "
+"presses the mnemonic activator."
+msgstr ""
 
 #: gtk/gtksizegroup.c:301
 msgid "Mode"
@@ -5796,7 +5807,7 @@ msgstr ""
 "అప్రమేయ ఫాంటు పరిమాణంకు సారూప్యంగా ఫాంటు పరిమాణము. ఈ లక్షణం థీమ్ మార్పులు మొదలగు. వాటికి వుంటుంది "
 "కనుక సిఫార్సుచేయబడింది. పాంగో PANGO_SCALE_X_LARGE వంటి స్కేల్సును ముందుగా నిర్వచించుతుంది"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "ఎడమ, కుడి, లేదా మద్య సర్దుబాటు"
 
@@ -5812,7 +5823,7 @@ msgstr ""
 msgid "Left margin"
 msgstr " ఎడమ  అంచు"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "వెడల్పు ఆఫ్ పిక్సెల్స్"
 
@@ -5820,15 +5831,15 @@ msgstr "వెడల్పు ఆఫ్ పిక్సెల్స్"
 msgid "Right margin"
 msgstr "కుడివైపు  అంచు"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "కుడి మార్జిన్ యొక్క వెడల్పు పిగ్జెల్సునందు"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "క్రమము"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "పరిచ్ఛేదము గంటు లెక్క, పిగ్జెల్సులో"
 
@@ -5842,7 +5853,7 @@ msgstr "పాంగో యూనిట్లలో అధారవరుసప�
 msgid "Pixels above lines"
 msgstr "వరుసలపైన పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "పరిచ్చేదములపైన ఖాళీ జాగాల పిగ్జెల్సు"
 
@@ -5850,7 +5861,7 @@ msgstr "పరిచ్చేదములపైన ఖాళీ జాగాల 
 msgid "Pixels below lines"
 msgstr "క్రింది వరుసల పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "పరిచ్ఛదముల క్రిందన ఖాళీ స్థలం పిగ్జెల్సు"
 
@@ -5858,20 +5869,20 @@ msgstr "పరిచ్ఛదముల క్రిందన ఖాళీ స్
 msgid "Pixels inside wrap"
 msgstr "లోపలి మడత పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "పరిచ్ఛదమునందు మడిచిన వరుసల మధ్యని ఖాళీ స్థలము పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "వసులను మడవకూడనిది, పదము హద్దులవద్దా లేక అక్షరపు హద్దులవద్దా"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "టాబ్ లు"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "ఈ పాఠముకొరకు మలచుకొనిన టాబ్స్"
 
@@ -6015,63 +6026,63 @@ msgstr "పరిచ్చేదం బ్యాక్‌గ్రౌండ్ �
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ఈ టాగ్ పరిచ్చేదము బ్యాక్‌గ్రౌండ్ వర్ణమును ప్రభావితం చేయాలా"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "గీతల పైన పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "గీతల క్రింది పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "మలుపు లోపలి పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "మలుపు రీతి"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "ఎడమ మార్జిను"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "కుడి మార్జిను"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "కనపడే కర్సర్"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "చేర్పిక కర్సర్ చూపించబడితే"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "బఫర్"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "ప్రదర్శించబడే బఫర్"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "ప్రవేశపెట్టిన పాఠము వున్న సారములను తిరిగివ్రాయాలా"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "టాబ్‌ను ఆమోదించుతుంది"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ప్రవేశపెట్టిన టాబ్ అక్షరమునందు టాబ్ ఫలించాలా"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "దోషము క్రిందిగీత వర్ణము"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "ఏ వర్ణముతో దోషపు-సూచిక క్రిందిగీతలు గీయాలి"
 
@@ -6477,7 +6488,7 @@ msgstr "ట్రీ దర్శనం వరుసలను లేఖించ
 msgid "Whether to display the column"
 msgstr "నిలువువరుసను ప్రదర్శించవలెనా"
 
-#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:537
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:542
 msgid "Resizable"
 msgstr "పునఃపరిమాణం చేయదగు"
 
@@ -6898,215 +6909,225 @@ msgstr "నిలువు స్క్రాల్ బాణము పొడవ
 msgid "The length of vertical scroll arrows"
 msgstr "నిలువు స్క్రాల్ బాణముల పొడవు"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:483
 msgid "Window Type"
 msgstr "విండో రకం"
 
-#: gtk/gtkwindow.c:479
+#: gtk/gtkwindow.c:484
 msgid "The type of the window"
 msgstr "విండోయొక్క రకము"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:492
 msgid "Window Title"
 msgstr "విండో శీర్షిక"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:493
 msgid "The title of the window"
 msgstr "విండో యొక్క శీర్షిక"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:500
 msgid "Window Role"
 msgstr "విండో పాత్ర"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:501
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "సెషన్‌ను తిరిగివుంచుచున్నప్పుడు వుపయోగించుటకు విండో కొరకు ప్రత్యేక గుర్తింపుకారి"
 
-#: gtk/gtkwindow.c:512
+#: gtk/gtkwindow.c:517
 msgid "Startup ID"
 msgstr "ప్రారంభపు ID"
 
-#: gtk/gtkwindow.c:513
+#: gtk/gtkwindow.c:518
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "ప్రారంభపు-నోటీసు ద్వారా వుపయోగించబడే విండో కొరకు ప్రారంభ గుర్తింపుకారి"
 
-#: gtk/gtkwindow.c:520
+#: gtk/gtkwindow.c:525
 msgid "Allow Shrink"
 msgstr "కుచింపు అనుమతించుము"
 
-#: gtk/gtkwindow.c:522
+#: gtk/gtkwindow.c:527
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea"
 msgstr "TRUE అయితే, విండో కనిష్ఠ పరిమాణంను కలిగివుండదు. దీనిని TRUE అమర్చుట 99% చెడ్డ ఆలోచన"
 
-#: gtk/gtkwindow.c:529
+#: gtk/gtkwindow.c:534
 msgid "Allow Grow"
 msgstr "పెరుగుదల అనుమతించుము"
 
-#: gtk/gtkwindow.c:530
+#: gtk/gtkwindow.c:535
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "TRUE అయితే, వినియోగదారులు విండోను దానిని కనిష్ట పరిమాణందాటి విస్తరించగలరు"
 
-#: gtk/gtkwindow.c:538
+#: gtk/gtkwindow.c:543
 msgid "If TRUE, users can resize the window"
 msgstr "TRUE అయితే, వినియోగదారులు విండోను పునఃపరిమాణం చేయగలరు"
 
-#: gtk/gtkwindow.c:545
+#: gtk/gtkwindow.c:550
 msgid "Modal"
 msgstr "రకము,మాదిరి"
 
-#: gtk/gtkwindow.c:546
+#: gtk/gtkwindow.c:551
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
 msgstr "TRUE అయితే, ఈ విండో ప్రతేకం కానుండి(యిది తెరిచినప్పుడు యితరవిండోలు వుపయోగించబడలేవు)"
 
-#: gtk/gtkwindow.c:553
+#: gtk/gtkwindow.c:558
 msgid "Window Position"
 msgstr "విండో స్థానం"
 
-#: gtk/gtkwindow.c:554
+#: gtk/gtkwindow.c:559
 msgid "The initial position of the window"
 msgstr "విండోయొక్క ప్రారంభ స్థానము"
 
-#: gtk/gtkwindow.c:562
+#: gtk/gtkwindow.c:567
 msgid "Default Width"
 msgstr "అప్రమేయం వెడల్పు"
 
-#: gtk/gtkwindow.c:563
+#: gtk/gtkwindow.c:568
 msgid "The default width of the window, used when initially showing the window"
 msgstr "విండో యొక్క అప్రమేయ వెడల్పు, విండో ప్రాధమికంగా చూయించబడినప్పుడు వుపయోగించబడుతుంది"
 
-#: gtk/gtkwindow.c:572
+#: gtk/gtkwindow.c:577
 msgid "Default Height"
 msgstr "అప్రమేయం ఎత్తు"
 
-#: gtk/gtkwindow.c:573
+#: gtk/gtkwindow.c:578
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "విండో యొక్క అప్రమేయ ఎత్తు, విండో ప్రాధమికంగా చూయించబడినప్పుడు వుపయోగించబడుతుంది"
 
-#: gtk/gtkwindow.c:582
+#: gtk/gtkwindow.c:587
 msgid "Destroy with Parent"
 msgstr "మాతృకతో నాశనంచేయి"
 
-#: gtk/gtkwindow.c:583
+#: gtk/gtkwindow.c:588
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "మాత్రుక నాశనమైనప్పుడు ఈ విండో నాశనం కావాలా"
 
-#: gtk/gtkwindow.c:591
+#: gtk/gtkwindow.c:596
 msgid "Icon for this window"
 msgstr "ఈ విండోకొరకు ప్రతిమ"
 
-#: gtk/gtkwindow.c:607
+#: gtk/gtkwindow.c:602
+#, fuzzy
+msgid "Mnemonics Visible"
+msgstr "మెన్‌మోనిక్ కీ"
+
+#: gtk/gtkwindow.c:603
+#, fuzzy
+msgid "Whether mnemonics are currently visible in this window"
+msgstr "పైస్థాయి అనునది ప్రస్తుత క్రియాశీల విండో కావాలా"
+
+#: gtk/gtkwindow.c:619
 msgid "Name of the themed icon for this window"
 msgstr "ఈ విండో కొరకు థీమ్డు ప్రతిమయొక్క నామము"
 
-#: gtk/gtkwindow.c:622
+#: gtk/gtkwindow.c:634
 msgid "Is Active"
 msgstr "క్రియాశీలమైవుంది"
 
-#: gtk/gtkwindow.c:623
+#: gtk/gtkwindow.c:635
 msgid "Whether the toplevel is the current active window"
 msgstr "పైస్థాయి అనునది ప్రస్తుత క్రియాశీల విండో కావాలా"
 
-#: gtk/gtkwindow.c:630
+#: gtk/gtkwindow.c:642
 msgid "Focus in Toplevel"
 msgstr "పైస్థాయినందు దృష్టి"
 
-#: gtk/gtkwindow.c:631
+#: gtk/gtkwindow.c:643
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "ఇన్పుట్ దృష్టి GtkWindow లోపల వుండాలా"
 
-#: gtk/gtkwindow.c:638
+#: gtk/gtkwindow.c:650
 msgid "Type hint"
 msgstr "టైపు జాడ"
 
-#: gtk/gtkwindow.c:639
+#: gtk/gtkwindow.c:651
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "ఈ విండో యెటువంటది దానిని యెలా చూసుకోవాలి అనేది అర్దంచేసుకొనుటకు డెస్కుటాపు యెన్విరాన్మెంటుకు సలహా"
 
-#: gtk/gtkwindow.c:647
+#: gtk/gtkwindow.c:659
 msgid "Skip taskbar"
 msgstr "కార్యపుపట్టీ వదిలివేయి"
 
-#: gtk/gtkwindow.c:648
+#: gtk/gtkwindow.c:660
 msgid "TRUE if the window should not be in the task bar."
 msgstr "విండో కార్యపుపట్టీ నందు వుండకూడదు అంటే TRUE."
 
-#: gtk/gtkwindow.c:655
+#: gtk/gtkwindow.c:667
 msgid "Skip pager"
 msgstr "పేజర్ వదిలివేయి"
 
-#: gtk/gtkwindow.c:656
+#: gtk/gtkwindow.c:668
 msgid "TRUE if the window should not be in the pager."
 msgstr "విండో పేజర్ నందు వుండకూడదు అంటే TRUE."
 
-#: gtk/gtkwindow.c:663
+#: gtk/gtkwindow.c:675
 msgid "Urgent"
 msgstr "అత్యవసరం"
 
-#: gtk/gtkwindow.c:664
+#: gtk/gtkwindow.c:676
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "విండో వినియోగదారి అప్రమత్తతకు తేవలెనంటే TRUE."
 
-#: gtk/gtkwindow.c:678
+#: gtk/gtkwindow.c:690
 msgid "Accept focus"
 msgstr "దృష్టి ఆమోదించు"
 
-#: gtk/gtkwindow.c:679
+#: gtk/gtkwindow.c:691
 msgid "TRUE if the window should receive the input focus."
 msgstr "విండో ఇన్పుట్ దృష్టిని తీసుకోవాలంటే TRUE."
 
-#: gtk/gtkwindow.c:693
+#: gtk/gtkwindow.c:705
 msgid "Focus on map"
 msgstr "పటం పైన దృష్టి"
 
-#: gtk/gtkwindow.c:694
+#: gtk/gtkwindow.c:706
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "మేప్ కాబడినప్పుడు విండో ఇన్పుట్ దృష్టిని పొందాలంటే TRUE."
 
-#: gtk/gtkwindow.c:708
+#: gtk/gtkwindow.c:720
 msgid "Decorated"
 msgstr "అలంకరించిన"
 
-#: gtk/gtkwindow.c:709
+#: gtk/gtkwindow.c:721
 msgid "Whether the window should be decorated by the window manager"
 msgstr "విండో విండో నిర్వాహికచేత అలంకరించ వలెనా"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:735
 msgid "Deletable"
 msgstr "తొలగించదగిన"
 
-#: gtk/gtkwindow.c:724
+#: gtk/gtkwindow.c:736
 msgid "Whether the window frame should have a close button"
 msgstr "విండో చట్రము మూయు బటన్‌ను కలిగివుండ వలెనా"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:752
 msgid "Gravity"
 msgstr "ద్రవ్యరాశి"
 
-#: gtk/gtkwindow.c:741
+#: gtk/gtkwindow.c:753
 msgid "The window gravity of the window"
 msgstr "విండోయొక్క విండో ద్రవ్యత"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:770
 msgid "Transient for Window"
 msgstr "విండో కొరకు అస్థిరత"
 
-#: gtk/gtkwindow.c:759
+#: gtk/gtkwindow.c:771
 msgid "The transient parent of the dialog"
 msgstr "డైలాగ్ యొక్క అస్థిర మాత్రుక"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:786
 msgid "Opacity for Window"
 msgstr "విం‍డో కొరకు సాంద్రత (ఒపాసిటి)"
 
-#: gtk/gtkwindow.c:775
+#: gtk/gtkwindow.c:787
 msgid "The opacity of the window, from 0 to 1"
 msgstr "విండోయొక్క సాంద్రత(ఒపాసిటి), 0 నుండి 1"
 
