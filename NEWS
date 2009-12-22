@@ -27,6 +27,12 @@ Overview of Changes from GTK+ 2.19.1 to 2.19.2
 * gdk-pixbuf has gained the ability to store and retrieve embedded
   ICC color profiles in png and tiff images
 
+* Keyboard handling:
+ - Mnemonic underlines can now optionally be hidden until the Alt key
+   is pressed, this can be turned on with the gtk-auto-mnemonics setting
+ - Using the Super, Meta and Hyper modifiers in accelerators is working
+   more reliably
+
 * Bugs fixed:
  603652 Sporadic crashes with GtkSocket
  605008 the region of damage event doesn't be copied in gdk_event_copy
