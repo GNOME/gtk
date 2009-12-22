@@ -1998,6 +1998,14 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
 	return 0;
 }
 
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  g_warning ("gdk_keymap_map_virtual_modifiers unimplemented \n");
+
+  return TRUE;
+}
 
 #define __GDK_KEYS_DIRECTFB_C__
 #include "gdkaliasdef.c"
