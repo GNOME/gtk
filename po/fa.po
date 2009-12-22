@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2005-02-14 18:03+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@farsiweb.info>\n"
 "Language-Team: Persian <farsi@lists.sharif.edu>\n"
@@ -75,7 +75,7 @@ msgstr "پرچم‌های اشکال‌زدایی Gdk که باید یک شون�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "پرچم‌ها"
 
@@ -373,12 +373,12 @@ msgstr "باز کردن پرونده‌ی موقت شکست خورد"
 msgid "Failed to read from temporary file"
 msgstr "خواندن از پرونده‌ی موقت شکست خورد"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "نمی‌توان «%s» را برای نوشتن باز کرد: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -387,11 +387,11 @@ msgstr ""
 "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: "
 "%s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "حافظه برای ذخیره کردن تصویر در میان‌گیر کافی نیست"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "خطا در نوشتن در پرونده‌ی تصویر: %s"
@@ -755,7 +755,7 @@ msgstr "قالب تصویر PCX"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "بیت بر کانال تصویر PNG نامعتبر است."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "عرض یا ارتفاع PNG تبدیل‌شده صفر است."
 
@@ -776,11 +776,11 @@ msgstr "تعداد کانالهای PNG تبدیل‌شده پشتیبانی ن�
 msgid "Fatal error in PNG image file: %s"
 msgstr "خطای مهلک در پرونده‌ی تصویر PNG‏: %s"
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "حافظه برای بار کردن پرونده‌ی PNG کافی نیست"
 
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -789,44 +789,48 @@ msgstr ""
 "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج "
 "از بعضی برنامه‌ها را امتحان کنید"
 
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG"
 
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG‏: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "کلیدهای تکه‌متنهای PNG باید حداقل یک و حداکثر ۷۹ نویسه داشته باشند."
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "کلیدهای تکه‌متنهای PNG باید نویسه‌های اَسکی باشند."
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
 msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr "مقدار تکه‌متن PNG «%s» را نمی‌توان به کدگذاری ISO-8859-1 تبدیل کرد."
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "قالب تصویر PNG"
 
@@ -968,62 +972,67 @@ msgstr "داده‌های اضافی در پرونده"
 msgid "The Targa image format"
 msgstr "قالب تصویر تارگا"
 
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "نمی‌توان عرض تصویر را گرفت (پرونده‌ی TIFF خراب)"
 
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "نمی‌توان ارتفاع تصویر را گرفت (پرونده‌ی TIFF خراب)"
 
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "عرض یا ارتفاع تصویر TIFF صفر است"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "ابعاد تصویر TIFF خیلی بزرگ است"
 
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "حافظه برای بار کردن پرونده‌ی TIFF کافی نیست"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "نمی‌توان داده‌های RGB را از پرونده‌ی TIFF بار کرد"
 
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "باز کردن پرونده‌ی TIFF شکست خورد"
 
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "عملیات TIFFClose شکست خورد"
 
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "بار کردن پرونده‌ی TIFF شکست خورد"
 
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 #, fuzzy
 msgid "Failed to save TIFF image"
 msgstr "باز کردن پرونده‌ی TIFF شکست خورد"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:767
 #, fuzzy
 msgid "Failed to write TIFF data"
 msgstr "باز کردن پرونده‌ی TIFF شکست خورد"
 
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 #, fuzzy
 msgid "Couldn't write to TIFF file"
 msgstr "نمی‌توان نام پرونده را تبدیل کرد"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "قالب تصویر TIFF"
 
@@ -1643,53 +1652,53 @@ msgstr ""
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 #, fuzzy
 msgid "_Height:"
 msgstr "_پرده:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 #, fuzzy
 msgid "Paper Size"
 msgstr "_ویژگی‌ها"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 #, fuzzy
 msgid "_Top:"
 msgstr "_بالا"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 #, fuzzy
 msgid "_Bottom:"
 msgstr "_پایین"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 #, fuzzy
 msgid "_Left:"
 msgstr "_چپ"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 #, fuzzy
 msgid "_Right:"
 msgstr "_پرده:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "روش‌های ورودی"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "_درج نویسه‌ی کنترلی یونی‌کد"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "باز کردن _مکان"
@@ -1707,7 +1716,7 @@ msgstr "رومیزی"
 msgid "(None)"
 msgstr "(هیچ‌کدام)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "غیره..."
 
@@ -1864,7 +1873,7 @@ msgid "Modified"
 msgstr "تغییریافته"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_نام:"
 
@@ -2237,7 +2246,7 @@ msgstr "مقدار _گاما"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "خطا در بار کردن شمایل: %s"
@@ -2370,13 +2379,13 @@ msgid "Cl_ear"
 msgstr "_پاک کردن"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 #, fuzzy
 msgid "_Open Link"
 msgstr "باز کردن مکان"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2391,27 +2400,27 @@ msgid "Invalid URI"
 msgstr "‏UTF-8 نامعتبر"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "پیمانه‌های GTK+ بیشتری بار شود"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "پیمانه‌ها"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "همه‌ی اخطارها مهلک شوند"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "پرچمهای اشکال‌زدایی GTK+ که باید یک شوند"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "پرچمهای اشکال‌زدایی GTK+ که باید صفر شوند"
 
@@ -2420,20 +2429,20 @@ msgstr "پرچمهای اشکال‌زدایی GTK+ که باید صفر شون�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "گزینه‌های GTK+"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "نشان دادن گزینه‌های GTK+"
 
@@ -2587,16 +2596,16 @@ msgstr ""
 msgid "File System Root"
 msgstr "سیستم پرونده‌ها"
 
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 #, fuzzy
 msgid "Authentication"
 msgstr "_مکان:"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr ""
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 #, fuzzy
 msgid "_Save in folder:"
 msgstr "ذخیره در پو_شه‌ی:"
@@ -2694,68 +2703,68 @@ msgstr ""
 msgid "Error printing"
 msgstr ""
 
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 #, fuzzy
 msgid "Application"
 msgstr "_مکان:"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 #, fuzzy
 msgid "Paused"
 msgstr "_چسباندن"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 #, fuzzy
 msgid "No printer found"
 msgstr "سرصفحه‌ی XPM یافت نشد"
 
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 #, fuzzy
 msgid "Invalid argument to CreateDC"
 msgstr "سرصفحه‌ی نامعتبر در شمایل"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 #, fuzzy
 msgid "Not enough free memory"
 msgstr "حافظه برای بار کردن شمایل کافی نیست"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 #, fuzzy
 msgid "Invalid handle to PrintDlgEx"
 msgstr "سرصفحه‌ی نامعتبر در شمایل"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr ""
 
@@ -3975,17 +3984,17 @@ msgstr "نمی‌توان موتور تم را در module_path یافت: «%s»
 msgid "--- No Tip ---"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "برچسب شروع غیرمنتظره «%s» در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "داده‌ی نویسه‌ای غیرمنتظره در سطر %Id نویسه‌ی %Id"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "خالی"
 

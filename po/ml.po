@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -78,7 +78,7 @@ msgstr "ക്രമീകരിക്കാനുള്ള Gdk ഡീബഗ്�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -353,12 +353,12 @@ msgstr "താല്‍ക്കാലിക ഫയല്‍ തുറക്ക�
 msgid "Failed to read from temporary file"
 msgstr "താല്‍ക്കാലിക ഫയലില്‍ നിന്നും വായിക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "'%s'-ലേക്ക് സൂക്കഷിക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -367,11 +367,11 @@ msgstr ""
 "ഇമേജ് സൂക്ഷിക്കുമ്പോള്‍ '%s' അടയ്ക്കുന്നതില്‍ പരാജയം, ഡേറ്റാ പൂറ്‍ണ്ണമായി സൂക്ഷിക്കുവാന്‍ സാധ്യമായി "
 "കാണില്ല: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്കുന്നതിനാവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 msgid "Error writing to image stream"
 msgstr "ഇമേജ് സ്റ്റ്രീമിലേക്കു്‌ സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
 
@@ -721,7 +721,7 @@ msgstr "PCX ഇമേജ് രീതി"
 msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG ഇമേജിന്റെ ഒരോ ചാനലിലും ഉള്ള ബിറ്റുകള്‍ തെറ്റാണ്."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "മാറ്റം വരുത്തിയ PNG-യുടെ വീതിയും ഉയരവും പൂജ്യമാണ്."
 
@@ -743,11 +743,11 @@ msgstr ""
 msgid "Fatal error in PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയലില്‍ സാരമായ പിശക്: %s"
 
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമുള്ള മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -756,25 +756,29 @@ msgstr ""
 "%ld ഇമേജ് ഉപയോഗിച്ച് ഒരു %ld സൂക്ഷിക്കുന്നതിനുള്ള മെമ്മറി ലഭ്യമല്ല; ചില പ്രയോഗങ്ങള്‍ നിറ്‍ത്തി "
 "മെമ്മറിയുടെ ഉപയോഗം കുറയ്ക്കുക"
 
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്"
 
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG ഇമേജ് ഫയല്‍ തുറക്കുന്നതില്‍ സാരമായ പിശക്: %s"
 
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്‍ കുറഞ്ഞത് 1 അക്ഷരം ഉണ്ടായിരിക്കണം, 79-ല്‍ കൂടുതല്‍ പാടില്ല."
 
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകള്‍ ASCII അക്ഷരങ്ങളായിരിക്കണം"
 
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -783,20 +787,20 @@ msgstr ""
 "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%s' എന്ന മൂല്ല്യം പാഴ്സ് "
 "ചെയ്യുവാന്‍ സാധ്യമായില്ല."
 
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
 "allowed."
 msgstr "PNG കംപ്രഷന്‍ ലവല്‍ 0-ത്തിനും 9-നും മദ്ധ്യത്തിലുള്ള മൂല്ല്യമായിരിക്കണം; '%d' അനുവദനീയമല്ല"
 
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG ടെക്സ്റ്റ് ചങ്ക് %s-നുള്ള മൂല്ല്യം ISO-8859-1 എന്‍കോഡിങിലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യല്ല."
 
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG ഇമേജ് രീതി"
 
@@ -937,59 +941,64 @@ msgstr "ഫയലില്‍ കൂടുതല്‍ ഡേറ്റാ"
 msgid "The Targa image format"
 msgstr "Targa ഇമേജ് രീതി"
 
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "ഇമേജിന്റെ വീതി ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
 
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "ഇമേജിന്റെ ഉയരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല (തെറ്റായ TIFF ഫയല്‍)"
 
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF ഇമേജിന്റെ വീതി അല്ലെങ്കില്‍ ഉയരം പൂജ്യമാണ്"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF ഇമേജിന്റെ അളവുകള്‍ വളരെ കൂടുതലാണ്"
 
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF ഫയല്‍ തുറക്കുന്നതിന് ആവശ്യമായ മെമ്മറി ലഭ്യമല്ല"
 
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF ഫയലില്‍ നിന്നും RGB ഡേറ്റാ ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "TIFF ഇമേജ് തുറക്കുവാന്‍ സാധ്യമല്ല"
 
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose പ്രക്രിയ പരാജയപ്പെട്ടു"
 
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "TIFF ഇമേജ് ലഭ്യമാക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "TIFF ഇമേജ് സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
+#: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "TIFF ഇമേജ് എഴുതുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "TIFF ഫയലിലേക്ക് എഴുതുവാന്‍ സാധ്യമായില്ല"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF ഇമേഡ് രീതി"
 
@@ -1590,47 +1599,47 @@ msgstr "പ്രിന്ററില്‍ നിന്നുള്ള മാ�
 msgid "Custom Size %d"
 msgstr "നിങ്ങള്‍ സജ്ജമാക്കിയ വലിപ്പം %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr "_വീതി:"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 msgid "_Height:"
 msgstr "_ഉയരം:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 msgid "Paper Size"
 msgstr "പേപ്പറിന്റെ വലിപ്പം"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 msgid "_Top:"
 msgstr "_മുകളില്‍:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 msgid "_Bottom:"
 msgstr "_താഴെ:"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Left:"
 msgstr "_ഇടത്ത്:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 msgid "_Right:"
 msgstr "_വലത്ത്:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 msgid "Caps Lock is on"
 msgstr "Caps Lock ഓണ്‍ ആണു്"
 
@@ -1646,7 +1655,7 @@ msgstr "പണിയിടം"
 msgid "(None)"
 msgstr "(ഒന്നുമില്ല)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "മറ്റുള്ളവ..."
 
@@ -1799,7 +1808,7 @@ msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയവ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_പേരു്:"
 
@@ -2161,7 +2170,7 @@ msgstr "_ഗാമായുടെ മൂല്ല്യം"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ചിഹ്നം ലഭ്യമാക്കുന്നതില്‍ പിശക്: %s"
@@ -2283,12 +2292,12 @@ msgid "Cl_ear"
 msgstr "വെ_ടിപ്പാക്കുക"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 
@@ -2301,27 +2310,27 @@ msgid "Invalid URI"
 msgstr "തെറ്റായ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "കൂടുതല്‍ GTK+ ഘടകങ്ങള്‍ ലഭ്യമാക്കുക"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ്രധാനമാക്കുക"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr "ക്രമീകരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ "
 
@@ -2330,20 +2339,20 @@ msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GT
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ഡിസ്പ്ലെ തുറക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍"
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
@@ -2492,15 +2501,15 @@ msgstr "താഴേക്കുള്ള വഴി"
 msgid "File System Root"
 msgstr "ഫയല്‍ സിസ്റ്റം റൂട്ട്"
 
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "ആധികാരികത ഉറപ്പാക്കല്‍"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "ലഭ്യമല്ല"
 
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "അറയില്‍ _സൂക്ഷിക്കുക:"
 
@@ -2593,62 +2602,62 @@ msgstr "തിരനോട്ടം ലഭ്യമാക്കുന്നത�
 msgid "Error printing"
 msgstr "പ്രിന്റ് ചെയ്യുന്നതില്‍ പിശക്"
 
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "പ്രയോഗം"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "പ്രിന്ററ്‍ നെറ്റ്‌വറ്‍ക്കിലില്ല"
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "പേപ്പറ്‍ തീറ്‍ന്നിരിക്കുന്നു"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "തല്‍ക്കാലികമായി നിറ്‍ത്തിയിരിക്കുന്നു"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "ഉപയോക്താവ് ഇടപടേണ്ടതുണ്ട്"
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "നിങ്ങള്‍ വലിപ്പം സജ്ജമാക്കുക"
 
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "പ്രിന്റര്‍ കണ്ടെത്താനായില്ല"
 
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "CreateDC-നുള്ള തെറ്റായ ആറ്‍ഗ്യുമെന്റ്"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "StartDoc-ല്‍ നിന്നും പിശക്"
 
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "ഉപയോഗിത്തിലില്ലാത്ത മെമ്മറി ലഭ്യമല്ല"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx-നുള്ള തെറ്റായ ആറ്‍ഗ്യുമെന്റ്"
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx-നുള്ള തെറ്റായ പോയിന്ററ്‍"
 
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx-നുള്ള തെറ്റായ ഹാന്‍ഡില്‍"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "വ്യക്തമാക്കാത്ത പിശക്"
 
@@ -3759,17 +3768,17 @@ msgstr "module_path-ലുള്ള ഥീം എഞ്ചിന്‍ ലഭ്
 msgid "--- No Tip ---"
 msgstr "--- സൂചനയില്ല ---"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "അപ്രതീക്ഷിതമായ ആരംഭ റ്റാഗ് '%s', വരി %d അക്ഷരം %d "
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "%d വരിയില്‍ അപ്രതീക്ഷിതമായ അക്ഷരം %d"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "ശൂന്യം"
 

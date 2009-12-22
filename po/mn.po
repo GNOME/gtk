@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-30 16:38-0500\n"
+"POT-Creation-Date: 2009-12-21 19:14-0500\n"
 "PO-Revision-Date: 2004-03-17 17:16+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -81,7 +81,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:457 gtk/gtkmain.c:460
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr ""
 
@@ -415,13 +415,13 @@ msgid "Failed to read from temporary file"
 msgstr "Түр зуурын файлаас уншигдсангүй"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:859
-#: gdk-pixbuf/gdk-pixbuf-io.c:2029
+#: gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "\"%s\" бичихээр нээхэд онгойсонгүй: %s"
 
 # gdk-pixbuf/gdk-pixbuf-io.c:880
-#: gdk-pixbuf/gdk-pixbuf-io.c:2054
+#: gdk-pixbuf/gdk-pixbuf-io.c:2069
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -431,12 +431,12 @@ msgstr ""
 "хадгалагдаагүй байж болно: %s"
 
 # gdk-pixbuf/io-xbm.c:293
-#: gdk-pixbuf/gdk-pixbuf-io.c:2274 gdk-pixbuf/gdk-pixbuf-io.c:2325
+#: gdk-pixbuf/gdk-pixbuf-io.c:2289 gdk-pixbuf/gdk-pixbuf-io.c:2340
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Буфер рүү зураг хадгалах хангалттай санах ой алга"
 
 # gdk-pixbuf/io-jpeg.c:125
-#: gdk-pixbuf/gdk-pixbuf-io.c:2371
+#: gdk-pixbuf/gdk-pixbuf-io.c:2386
 #, fuzzy
 msgid "Error writing to image stream"
 msgstr "Зургийн файл руу бичиж байхад алдаа (%s)"
@@ -875,7 +875,7 @@ msgid "Bits per channel of PNG image is invalid."
 msgstr "PNG зургийн суваг тус бүрийн битүүд хүчингүй байна."
 
 # gdk-pixbuf/io-png.c:136
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:618
+#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr "Хөрвөсөн PNG тэг өргөн ба өндөртэй болов."
 
@@ -899,12 +899,12 @@ msgid "Fatal error in PNG image file: %s"
 msgstr "PNG зургийн файлд хүнд алдаа : %s"
 
 # gdk-pixbuf/io-png.c:310
-#: gdk-pixbuf/io-png.c:310
+#: gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "PNG зургийн файлыг ачаалахад санах ой хүрэхгүй байна"
 
 # gdk-pixbuf/io-png.c:634
-#: gdk-pixbuf/io-png.c:633
+#: gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -914,31 +914,35 @@ msgstr ""
 "багасгахын тулд ашиглаж байгаа зарим программаа хаах хэрэгтэй."
 
 # gdk-pixbuf/io-png.c:685
-#: gdk-pixbuf/io-png.c:684
+#: gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "PNG зургийн файлыг уншихад ноцтой алдаа"
 
 # gdk-pixbuf/io-png.c:734
-#: gdk-pixbuf/io-png.c:733
+#: gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "PNG зургийн файлыг уншихад ноцтой алдаа %s "
 
 # gdk-pixbuf/io-png.c:800
-#: gdk-pixbuf/io-png.c:825
+#: gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNG хэсэг текстийн түлхүүр нь 1 ба 79 хүртэл тэмдэгтүүдээр байвал зүгээр."
 
 # gdk-pixbuf/io-png.c:808
-#: gdk-pixbuf/io-png.c:833
+#: gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 "PNG хэсэг текстэд түлхүүр нь ASCII тэмдэгтүүд байвал зүгээр набора ASCII."
 
+#: gdk-pixbuf/io-png.c:886
+msgid "Color profile has invalid length '%"
+msgstr ""
+
 # gdk-pixbuf/io-jpeg.c:664
-#: gdk-pixbuf/io-png.c:846 gdk-pixbuf/io-gdip-png.c:56
+#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -948,7 +952,7 @@ msgstr ""
 "ялгал хийж чадсангүй"
 
 # gdk-pixbuf/io-jpeg.c:679
-#: gdk-pixbuf/io-png.c:858 gdk-pixbuf/io-gdip-png.c:68
+#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
 #, fuzzy, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -958,14 +962,14 @@ msgstr ""
 "зөвшөөрөгдөөгүй."
 
 # gdk-pixbuf/io-png.c:829
-#: gdk-pixbuf/io-png.c:896
+#: gdk-pixbuf/io-png.c:951
 #, fuzzy, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "PNG хэсэг текстэд утга нь %s -г ISO-8859-1 хувиргагч руу хөрвүүлж чадсангүй."
 
 # gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
-#: gdk-pixbuf/io-png.c:1045 gdk-pixbuf/io-gdip-png.c:133
+#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "PNG төрлийн зураг."
 
@@ -1146,72 +1150,77 @@ msgid "The Targa image format"
 msgstr "Targa зургийн төрөл "
 
 # gdk-pixbuf/io-tiff.c:152
-#: gdk-pixbuf/io-tiff.c:161
+#: gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Зургийн өргөнийг авч чадахгүй байна (TIFF файл алдаатай)"
 
 # gdk-pixbuf/io-tiff.c:159
-#: gdk-pixbuf/io-tiff.c:168
+#: gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Зургийн өндөрийг авч чадахгүй байна (TIFF файл алдаатай)"
 
 # gdk-pixbuf/io-tiff.c:169
-#: gdk-pixbuf/io-tiff.c:176
+#: gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF зургийн өргөн эсвэл өндөр нь '' 0 '' байна"
 
-#: gdk-pixbuf/io-tiff.c:185 gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF зургийн багтаамж нь хэт их байна"
 
 # gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:485
-#: gdk-pixbuf/io-tiff.c:218 gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:549
+#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF төрлийн файлыг ачаалахад санах хүрэхгүй байна"
 
 # gdk-pixbuf/io-tiff.c:203
-#: gdk-pixbuf/io-tiff.c:283
+#: gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF файлаас RGB өгөгдлийг ачаалахгүй байна"
 
 # gdk-pixbuf/io-tiff.c:273
-#: gdk-pixbuf/io-tiff.c:339
+#: gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "TIFF зураг онгойсонгүй "
 
 # gdk-pixbuf/io-tiff.c:286
-#: gdk-pixbuf/io-tiff.c:351 gdk-pixbuf/io-tiff.c:755
+#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose функцийн биелэлтийн алдаа "
 
 # gdk-pixbuf/io-tiff.c:419 gdk-pixbuf/io-tiff.c:433
-#: gdk-pixbuf/io-tiff.c:481 gdk-pixbuf/io-tiff.c:494
+#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "TIFF зураг ачаалагдсангүй"
 
 # gdk-pixbuf/io-tiff.c:273
-#: gdk-pixbuf/io-tiff.c:678
+#: gdk-pixbuf/io-tiff.c:692
 #, fuzzy
 msgid "Failed to save TIFF image"
 msgstr "TIFF зураг онгойсонгүй "
 
-#: gdk-pixbuf/io-tiff.c:713
+#: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr ""
 
+#: gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length '%d'."
+msgstr ""
+
 # gdk-pixbuf/io-tiff.c:273
-#: gdk-pixbuf/io-tiff.c:741
+#: gdk-pixbuf/io-tiff.c:767
 #, fuzzy
 msgid "Failed to write TIFF data"
 msgstr "TIFF зураг онгойсонгүй "
 
 # gtk/gtkfilesel.c:3854
-#: gdk-pixbuf/io-tiff.c:793
+#: gdk-pixbuf/io-tiff.c:814
 #, fuzzy
 msgid "Couldn't write to TIFF file"
 msgstr "Файлын нэр өөрчлөгдсөнгүй"
 
-#: gdk-pixbuf/io-tiff.c:848
+#: gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "TIFF зургийн төрөл "
 
@@ -1896,61 +1905,61 @@ msgstr ""
 msgid "Custom Size %d"
 msgstr ""
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1055
 msgid "_Width:"
 msgstr ""
 
 # gtk/gtkcolorsel.c:1821
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1067
 #, fuzzy
 msgid "_Height:"
 msgstr "_Өнгө:"
 
 # gtk/gtkstock.c:315
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1079
 #, fuzzy
 msgid "Paper Size"
 msgstr "_Гар тохируулга"
 
 # gtk/gtkstock.c:293
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1088
 #, fuzzy
 msgid "_Top:"
 msgstr "_Дээд"
 
 # gtk/gtkstock.c:290
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1100
 #, fuzzy
 msgid "_Bottom:"
 msgstr "_Доод"
 
 # gtk/gtkstock.c:305
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1112
 #, fuzzy
 msgid "_Left:"
 msgstr " _Зүүн"
 
 # gtk/gtkcolorsel.c:1821
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1124
 #, fuzzy
 msgid "_Right:"
 msgstr "_Өнгө:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1165
 msgid "Paper Margins"
 msgstr ""
 
 # gtk/gtktextview.c:6366
-#: gtk/gtkentry.c:8600 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
 msgid "Input _Methods"
 msgstr "Оролт_Арга"
 
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
-#: gtk/gtkentry.c:8614 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
 msgid "_Insert Unicode Control Character"
 msgstr "Удирдлагын Unicode тэмдэгт _оруулах"
 
-#: gtk/gtkentry.c:9985
+#: gtk/gtkentry.c:9989
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Байршил нээх"
@@ -1971,7 +1980,7 @@ msgstr "Ажлын тавцан"
 msgid "(None)"
 msgstr "байхгүй"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr ""
 
@@ -2147,7 +2156,7 @@ msgstr "Өөрчлөгдсөн"
 
 # gtk/gtkcolorsel.c:1858
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:800
+#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Нэр:"
 
@@ -2573,7 +2582,7 @@ msgstr "_Гамма утга"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1399
+#: gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Дүрслэл дуудахад алдаа гарлаа: %s"
@@ -2726,13 +2735,13 @@ msgid "Cl_ear"
 msgstr "_Цэвэрлэх"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5631
 #, fuzzy
 msgid "_Open Link"
 msgstr "Байршил нээх"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5643
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2749,27 +2758,27 @@ msgid "Invalid URI"
 msgstr "Хүчингүй UTF-8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:450
+#: gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:451
+#: gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:456
+#: gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:459
+#: gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2779,20 +2788,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:711
+#: gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:813
+#: gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2957,17 +2966,17 @@ msgid "File System Root"
 msgstr "Файл систем"
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkprintbackend.c:743
+#: gtk/gtkprintbackend.c:750
 #, fuzzy
 msgid "Authentication"
 msgstr "_Байршил:"
 
-#: gtk/gtkprinteroptionwidget.c:693
+#: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr ""
 
 # gtk/gtkfilesel.c:1403
-#: gtk/gtkprinteroptionwidget.c:812
+#: gtk/gtkprinteroptionwidget.c:814
 #, fuzzy
 msgid "_Save in folder:"
 msgstr "_Хавтас дотор хадгалах:"
@@ -3072,74 +3081,74 @@ msgid "Error printing"
 msgstr ""
 
 # gtk/gtkfilesel.c:2103
-#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1430
+#: gtk/gtkprintoperation-unix.c:495 gtk/gtkprintoperation-win32.c:1447
 #, fuzzy
 msgid "Application"
 msgstr "_Байршил:"
 
-#: gtk/gtkprintoperation-win32.c:595
+#: gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:597
+#: gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr ""
 
 # gtk/gtkstock.c:311
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:599
+#: gtk/gtkprintoperation-win32.c:616
 #: modules/printbackends/cups/gtkprintbackendcups.c:1963
 #, fuzzy
 msgid "Paused"
 msgstr "_Буулгах"
 
-#: gtk/gtkprintoperation-win32.c:601
+#: gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:701
+#: gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr ""
 
 # gdk-pixbuf/io-xpm.c:1235
-#: gtk/gtkprintoperation-win32.c:1522
+#: gtk/gtkprintoperation-win32.c:1539
 #, fuzzy
 msgid "No printer found"
 msgstr "XPM биш толгой олдлоо"
 
 # gdk-pixbuf/io-ico.c:303
-#: gtk/gtkprintoperation-win32.c:1549
+#: gtk/gtkprintoperation-win32.c:1566
 #, fuzzy
 msgid "Invalid argument to CreateDC"
 msgstr "Дүрсний толгой нь буруу"
 
-#: gtk/gtkprintoperation-win32.c:1583 gtk/gtkprintoperation-win32.c:1808
+#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr ""
 
 # gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
 # gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#: gtk/gtkprintoperation-win32.c:1665 gtk/gtkprintoperation-win32.c:1688
-#: gtk/gtkprintoperation-win32.c:1736
+#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
+#: gtk/gtkprintoperation-win32.c:1755
 #, fuzzy
 msgid "Not enough free memory"
 msgstr "Дүрс ачаалахад санах ой хүрэлцэхгүй байна"
 
-#: gtk/gtkprintoperation-win32.c:1741
+#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr ""
 
-#: gtk/gtkprintoperation-win32.c:1746
+#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr ""
 
 # gdk-pixbuf/io-ico.c:303
-#: gtk/gtkprintoperation-win32.c:1751
+#: gtk/gtkprintoperation-win32.c:1770
 #, fuzzy
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Дүрсний толгой нь буруу"
 
-#: gtk/gtkprintoperation-win32.c:1756
+#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr ""
 
@@ -4467,17 +4476,17 @@ msgstr "module_path: \"%s\" д сэдэв үүсгэх байрлал зөвшө
 msgid "--- No Tip ---"
 msgstr "-Тайлбарлалтгүй-"
 
-#: gtk/gtkuimanager.c:1504
+#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "'%s' хүлээгдээгүй эхлэл таг %d мөрний %d тэмдэгтэнд"
 
-#: gtk/gtkuimanager.c:1594
+#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Хүлээгдээгүй тэмдэгтийн өгөгдөл %d мөрний %d тэмдэгтэнд"
 
-#: gtk/gtkuimanager.c:2426
+#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Хоосон"
 
