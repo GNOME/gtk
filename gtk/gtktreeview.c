@@ -2510,8 +2510,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
           if (tree_view->priv->prev_width_before_expander
               != width_before_expander)
               update_prelight (tree_view,
-                               -tree_view->priv->event_last_x,
-                               -tree_view->priv->event_last_y);
+                               tree_view->priv->event_last_x,
+                               tree_view->priv->event_last_y);
 
           tree_view->priv->prev_width_before_expander = width_before_expander;
         }
