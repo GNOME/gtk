@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-21 19:14-0500\n"
-"PO-Revision-Date: 2009-08-22 23:02+0700\n"
+"PO-Revision-Date: 2009-12-23 07:57+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -967,12 +967,12 @@ msgstr "บันทึกรูป TIFF ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
+msgstr "การบีบอัด TIFF ไม่ได้อ้างอิงถึงตัวอ่านและลงรหัสที่ใช้การได้"
 
 #: gdk-pixbuf/io-tiff.c:738
 #, c-format
 msgid "Color profile has invalid length '%d'."
-msgstr ""
+msgstr "โพรไฟล์สีมีความยาว '%d' ซึ่งไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
@@ -1518,11 +1518,11 @@ msgstr "สีที่เลือกอยู่ คุณสามารถ�
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
-msgstr ""
+msgstr "สีที่เลือกไว้ก่อนหน้านี้ เพื่อเปรียบเทียบกับสีที่คุณกำลังเลือกอยู่"
 
 #: gtk/gtkcolorsel.c:969
 msgid "The color you've chosen."
-msgstr ""
+msgstr "สีที่คุณเลือก"
 
 #: gtk/gtkcolorsel.c:1382
 msgid "_Save color here"
@@ -1811,14 +1811,13 @@ msgid "Create in _folder:"
 msgstr "สร้างในโ_ฟลเดอร์:"
 
 #: gtk/gtkfilechooserdefault.c:6431
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "ไม่สามารถสร้างสตรีม: %s"
+msgstr "ไม่สามารถอ่านเนื้อหาของ %s"
 
 #: gtk/gtkfilechooserdefault.c:6435
-#, fuzzy
 msgid "Could not read the contents of the folder"
-msgstr "ไม่สามารถเข้าใช้โฟลเดอร์ราก"
+msgstr "ไม่สามารถอ่านเนื้อหาของโฟลเดอร์"
 
 #: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
 #: gtk/gtkfilechooserdefault.c:6741
@@ -2628,9 +2627,8 @@ msgid "Unspecified error"
 msgstr "ข้อผิดพลาดไม่ปรากฏสาเหตุ"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "กำลังอ่านข้อมูลเครื่องพิมพ์..."
+msgstr "อ่านข้อมูลเครื่องพิมพ์ไม่สำเร็จ"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -3061,14 +3059,13 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "ไม่พบรายการที่ URI '%s'"
 
 #: gtk/gtkspinner.c:458
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr "ไอคอนหมุน"
 
 #: gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
-msgstr ""
+msgstr "แสดงภาพบ่งบอกการอยู่ระหว่างดำเนินการ"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:314
@@ -4834,24 +4831,22 @@ msgid "Authentication is required on %s"
 msgstr "ต้องมีการยืนยันตัวบุคคลที่ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "โ_ดเมน:"
+msgstr "โดเมน:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารที่ %s"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสาร '%s' ที่เครื่องพิมพ์ %s"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารนี้ที่เครื่องพิมพ์ %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารที่ %s"
+msgstr "ต้องมีการยืนยันตัวบุคคลเพื่อจะพิมพ์เอกสารนี้"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
