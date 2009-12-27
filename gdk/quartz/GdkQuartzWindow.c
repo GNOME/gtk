@@ -181,7 +181,7 @@
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
 
--(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
+-(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
 {
   self = [super initWithContentRect:contentRect
 	                  styleMask:styleMask
