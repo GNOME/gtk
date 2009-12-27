@@ -84,7 +84,7 @@ create_builtin_cursor (GdkCursorType cursor_type)
 {
   GdkCursor *cursor;
   NSBitmapImageRep *bitmap_rep;
-  gint mask_width, mask_height;
+  NSInteger mask_width, mask_height;
   gint src_width, src_height;
   gint dst_stride;
   const guchar *mask_start, *src_start;
@@ -249,7 +249,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   NSImage *image;
   NSCursor *nscursor;
   GdkCursor *cursor;
-  gint width, height;
+  NSInteger width, height;
   gint tmp_x, tmp_y;
   guchar *dst_data, *mask_data, *src_data;
   guchar *mask_start, *src_start;
