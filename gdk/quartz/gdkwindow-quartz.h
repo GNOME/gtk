@@ -32,6 +32,8 @@
 #ifndef NSINTEGER_DEFINED
 typedef int NSInteger;
 typedef unsigned int NSUInteger;
+
+typedef float CGFloat;
 #endif
 
 G_BEGIN_DECLS
