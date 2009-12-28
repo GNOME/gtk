@@ -32,7 +32,9 @@
 #ifndef NSINTEGER_DEFINED
 typedef int NSInteger;
 typedef unsigned int NSUInteger;
+#endif
 
+#ifndef CGFLOAT_DEFINED
 typedef float CGFloat;
 #endif
 
