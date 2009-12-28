@@ -247,6 +247,8 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
  * hierarchy, gtk_widget_get_snapshot() can be used instead.
  *
  * Return value: A pointer to a #GtkWidget
+ *
+ * Since: 2.20
  **/
 GtkWidget *
 gtk_offscreen_window_new (void)
@@ -262,6 +264,8 @@ gtk_offscreen_window_new (void)
  * resizes then you should add a reference to it.
  *
  * Returns: A #GdkPixmap pointer to the offscreen pixmap, or %NULL.
+ *
+ * Since: 2.20
  **/
 GdkPixmap *
 gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
@@ -280,6 +284,8 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
  * needed.
  *
  * Returns: A #GdkPixbuf pointer, or %NULL.
+ *
+ * Since: 2.20
  **/
 GdkPixbuf *
 gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
