@@ -66,9 +66,9 @@ struct _GdkGCQuartz
   GdkCapStyle       cap_style;
   GdkJoinStyle      join_style;
 
-  gfloat           *dash_lengths;
+  CGFloat          *dash_lengths;
   gint              dash_count;
-  gfloat            dash_phase;
+  CGFloat           dash_phase;
 
   CGPatternRef      ts_pattern;
 
@@ -131,10 +131,10 @@ void   _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 /* Colormap */
 void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
 					       guint32      pixel,
-					       gfloat      *red,
-					       gfloat      *green,
-					       gfloat      *blue,
-					       gfloat      *alpha);
+					       CGFloat     *red,
+					       CGFloat     *green,
+					       CGFloat     *blue,
+					       CGFloat     *alpha);
 
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,

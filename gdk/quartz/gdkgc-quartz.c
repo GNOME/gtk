@@ -118,10 +118,10 @@ gdk_quartz_gc_set_dashes (GdkGC *gc,
 
   private->dash_count = n;
   g_free (private->dash_lengths);
-  private->dash_lengths = g_new (gfloat, n);
+  private->dash_lengths = g_new (CGFloat, n);
   for (i = 0; i < n; i++)
-    private->dash_lengths[i] = (gfloat) dash_list[i];
-  private->dash_phase = (gfloat) dash_offset;
+    private->dash_lengths[i] = (CGFloat) dash_list[i];
+  private->dash_phase = (CGFloat) dash_offset;
 }
 
 static void
@@ -269,7 +269,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 
   g_free (dst_quartz_gc->dash_lengths);
   dst_quartz_gc->dash_lengths = g_memdup (src_quartz_gc->dash_lengths,
-					  sizeof (float) * src_quartz_gc->dash_count);
+					  sizeof (CGFloat) * src_quartz_gc->dash_count);
   dst_quartz_gc->dash_count = src_quartz_gc->dash_count;
   dst_quartz_gc->dash_phase = src_quartz_gc->dash_phase;
 }
@@ -305,7 +305,7 @@ gdk_quartz_draw_stippled_pattern (void         *info,
   GdkGC      *gc = GDK_GC (info);
   CGImageRef  pattern_image;
   CGRect      rect;
-  gfloat      r, g, b, a;
+  CGFloat     r, g, b, a;
 
   pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
   rect = CGRectMake (0, 0,
@@ -327,7 +327,7 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
   GdkGC      *gc = GDK_GC (info);
   CGImageRef  pattern_image;
   CGRect      rect;
-  gfloat      r, g, b, a;
+  CGFloat     r, g, b, a;
 
   pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
   rect = CGRectMake (0, 0,
@@ -453,7 +453,7 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
     {
       CGLineCap  line_cap  = kCGLineCapButt;
       CGLineJoin line_join = kCGLineJoinMiter;
-      gfloat     r, g, b, a;
+      CGFloat    r, g, b, a;
 
       _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
 						fg_pixel,
@@ -515,9 +515,9 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
       GdkFill         fill = _gdk_gc_get_fill (gc);
       CGColorSpaceRef baseSpace;
       CGColorSpaceRef patternSpace;
-      gfloat          alpha     = 1.0;
-      gfloat          colors[4] = { 0.0, 0.0, 0.0, 0.0 };
-      gfloat          r, g, b, a;
+      CGFloat         alpha     = 1.0;
+      CGFloat         colors[4] = { 0.0, 0.0, 0.0, 0.0 };
+      CGFloat         r, g, b, a;
 
       if (fill == GDK_SOLID)
 	{

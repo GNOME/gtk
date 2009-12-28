@@ -255,7 +255,7 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
   if (bg_pixmap == NULL)
     {
       CGContextRef cg_context;
-      gfloat r, g, b, a;
+      CGFloat r, g, b, a;
       gint i;
 
       cg_context = gdk_quartz_drawable_get_context (GDK_DRAWABLE (impl), FALSE);
