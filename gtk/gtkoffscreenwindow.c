@@ -35,8 +35,8 @@
  * is a toplevel widget you cannot obtain snapshots of a full window
  * with it since you cannot pack a toplevel widget in another toplevel.
  *
- * The idea is to take a widget and manually set the size and state of
- * it, add it to a #GtkOffscreenWindow and then retrieve the snapshot
+ * The idea is to take a widget and manually set the state of it,
+ * add it to a #GtkOffscreenWindow and then retrieve the snapshot
  * as a #GdkPixmap or #GdkPixbuf.
  *
  * #GtkOffscreenWindow derives from #GtkWindow only as an implementation
