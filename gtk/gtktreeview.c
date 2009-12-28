@@ -11223,6 +11223,9 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
       tree_view->priv->edited_column = NULL;
     }
 
+  if (tree_view->priv->expander_column == column)
+    tree_view->priv->expander_column = NULL;
+
   g_signal_handlers_disconnect_by_func (column,
                                         G_CALLBACK (column_sizing_notify),
                                         tree_view);
