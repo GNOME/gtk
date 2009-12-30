@@ -455,7 +455,9 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
       pool = [[NSAutoreleasePool alloc] init];
       types = _gtk_quartz_target_list_to_pasteboard_types (site->target_list);
 
-      [nswindow registerForDraggedTypes:types];
+      [nswindow registerForDraggedTypes:[types copy]];
+
+      [types release];
       [pool release];
     }
 }
@@ -1063,6 +1065,7 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 static gboolean
 gtk_drag_begin_idle (gpointer arg)
 {
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   GdkDragContext* context = (GdkDragContext*) arg;
   GtkDragSourceInfo* info = gtk_drag_get_source_info (context, FALSE);
   NSWindow *nswindow;
@@ -1095,6 +1098,8 @@ gtk_drag_begin_idle (gpointer arg)
             slideBack:YES];
 
   [info->nsevent release];
+
+  [pool release];
 
   return FALSE;
 }
