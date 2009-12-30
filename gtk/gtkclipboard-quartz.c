@@ -370,7 +370,7 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   clipboard->target_list = gtk_target_list_new (targets, n_targets);
 
   [clipboard->pasteboard declareTypes:types owner:owner];
-
+  [types release];
   [pool release];
 
   return TRUE;
