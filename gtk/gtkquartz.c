@@ -270,7 +270,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
   GdkDisplay *display;
   gint format;
   const guchar *data;
-  gint length;
+  NSUInteger length;
 
   target = gdk_atom_name (gtk_selection_data_get_target (selection_data));
   display = gtk_selection_data_get_display (selection_data);
@@ -326,8 +326,8 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
       g_strfreev (list);
     }
   else
-    [pasteboard setData:[NSData dataWithBytesNoCopy:data
-	    	                             length:length
-			               freeWhenDone:NO]
-                forType:type];
+    [pasteboard setData:[NSData dataWithBytesNoCopy:(void *)data
+                                             length:length
+                                       freeWhenDone:NO]
+                                            forType:type];
 }
