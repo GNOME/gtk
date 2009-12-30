@@ -1058,6 +1058,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 	impl->view = [[GdkQuartzView alloc] initWithFrame:content_rect];
 	[impl->view setGdkWindow:window];
 	[impl->toplevel setContentView:impl->view];
+	[impl->view release];
       }
       break;
 
@@ -1079,6 +1080,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 	    /* GdkWindows should be hidden by default */
 	    [impl->view setHidden:YES];
 	    [parent_impl->view addSubview:impl->view];
+	    [impl->view release];
 	  }
       }
       break;
