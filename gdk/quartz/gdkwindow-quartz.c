@@ -890,6 +890,7 @@ get_nsscreen_for_point (gint x, gint y)
 {
   int i;
   NSArray *screens;
+  NSScreen *screen = NULL;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -901,12 +902,15 @@ get_nsscreen_for_point (gint x, gint y)
 
       if (x >= rect.origin.x && x <= rect.origin.x + rect.size.width &&
           y >= rect.origin.y && y <= rect.origin.y + rect.size.height)
-        return [screens objectAtIndex:i];
+        {
+          screen = [screens objectAtIndex:i];
+          break;
+        }
     }
 
   GDK_QUARTZ_RELEASE_POOL;
 
-  return NULL;
+  return screen;
 }
 
 void
