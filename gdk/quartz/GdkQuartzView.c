@@ -25,6 +25,17 @@
 
 @implementation GdkQuartzView
 
+-(void)dealloc
+{
+  if (trackingRect)
+    {
+      [self removeTrackingRect:trackingRect];
+      trackingRect = 0;
+    }
+
+  [super dealloc];
+}
+
 -(void)setGdkWindow:(GdkWindow *)window
 {
   gdk_window = window;
