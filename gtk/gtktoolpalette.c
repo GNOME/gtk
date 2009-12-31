@@ -43,12 +43,12 @@
  * @Short_description: A tool palette with categories
  * @Title: GtkToolPalette
  *
- * A #GtkToolPalette allows it to add #GtkToolItem<!-- -->s to a palette-like
+ * A #GtkToolPalette allows you to add #GtkToolItem<!-- -->s to a palette-like
  * container with different categories and drag and drop support.
  *
  * A #GtkToolPalette is created with a call to gtk_tool_palette_new().
  *
- * #GtkToolItem<!-- -->s cannot be added directly to a #GtkToolPalette,
+ * #GtkToolItem<!-- -->s cannot be added directly to a #GtkToolPalette - 
  * instead they are added to a #GtkToolItemGroup which can than be added
  * to a #GtkToolPalette. To add a #GtkToolItemGroup to a #GtkToolPalette,
  * use gtk_container_add().
