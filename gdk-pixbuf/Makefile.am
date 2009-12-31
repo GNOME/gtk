@@ -700,10 +700,10 @@ GdkPixbuf_2_0_gir_FILES = \
     $(addprefix $(srcdir)/,$(libgdk_pixbuf_2_0_la_SOURCES))
 INTROSPECTION_GIRS += GdkPixbuf-2.0.gir
 
-girdir = $(INTROSPECTION_GIRDIR)
+girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
