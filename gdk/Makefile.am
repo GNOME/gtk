@@ -207,10 +207,10 @@ Gdk_2_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
 Gdk_2_0_gir_CFLAGS = $(INCLUDES)
 INTROSPECTION_GIRS += Gdk-2.0.gir
 
-girdir = $(INTROSPECTION_GIRDIR)
+girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
 
-typelibsdir = $(INTROSPECTION_TYPELIBDIR)
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(BUILT_GIRSOURCES:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)

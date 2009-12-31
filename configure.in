@@ -1979,12 +1979,6 @@ fi
 
 GOBJECT_INTROSPECTION_CHECK([0.6.7])
 
-# Hack around introspection installing into an absolute path breaking distcheck
-tmp=`pkg-config --variable=datadir gobject-introspection-1.0`
-INTROSPECTION_GIRDIR=${INTROSPECTION_GIRDIR/$tmp/\$(datadir)}
-tmp=`pkg-config --variable=libdir gobject-introspection-1.0`
-INTROSPECTION_TYPELIBDIR=${INTROSPECTION_TYPELIBDIR/$tmp/\$(libdir)}
-
 ##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
