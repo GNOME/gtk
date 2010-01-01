@@ -83,11 +83,10 @@ target_to_pasteboard_type (const char *target)
     return [NSString stringWithUTF8String:target];
 }
 
-NSArray *
+NSSet *
 _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
 {
   NSMutableSet *set = [[NSMutableSet alloc] init];
-  NSArray *ret;
   GList *list;
 
   for (list = target_list->list; list; list = list->next)
@@ -98,19 +97,14 @@ _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
       g_free (target);
     }
 
-  ret = [set allObjects];
-
-  [set release];
-
-  return ret;
+  return set;
 }
 
-NSArray *
+NSSet *
 _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 						guint                 n_targets)
 {
   NSMutableSet *set = [[NSMutableSet alloc] init];
-  NSArray *ret;
   int i;
 
   for (i = 0; i < n_targets; i++)
@@ -118,11 +112,7 @@ _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
       [set addObject:target_to_pasteboard_type (targets[i].target)];
     }
 
-  ret = [set allObjects];
-
-  [set release];
-
-  return ret;
+  return set;
 }
 
 GdkAtom 
