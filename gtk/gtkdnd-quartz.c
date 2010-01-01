@@ -1073,6 +1073,7 @@ gtk_drag_begin_idle (gpointer arg)
   GtkDragSourceOwner *owner;
   NSPoint point;
   NSSet *types;
+  NSImage *drag_image;
 
   g_assert (info != NULL);
 
@@ -1083,6 +1084,7 @@ gtk_drag_begin_idle (gpointer arg)
 
   [pasteboard declareTypes:[types allObjects] owner:owner];
 
+  [owner release];
   [types release];
 
   if ((nswindow = get_toplevel_nswindow (info->source_widget)) == NULL)
@@ -1094,7 +1096,9 @@ gtk_drag_begin_idle (gpointer arg)
   /* FIXME: If the event isn't a mouse event, use the global cursor position instead */
   point = [info->nsevent locationInWindow];
 
-  [nswindow dragImage:_gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf)
+  drag_image = _gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf);
+
+  [nswindow dragImage:drag_image
                    at:point
                offset:NSMakeSize(0, 0)
                 event:info->nsevent
@@ -1103,6 +1107,7 @@ gtk_drag_begin_idle (gpointer arg)
             slideBack:YES];
 
   [info->nsevent release];
+  [drag_image release];
 
   [pool release];
 
