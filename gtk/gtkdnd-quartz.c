@@ -446,7 +446,7 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
   if (site->target_list)
     {
       NSWindow *nswindow = get_toplevel_nswindow (widget);
-      NSArray *types;
+      NSSet *types;
       NSAutoreleasePool *pool;
 
       if (!nswindow)
@@ -455,7 +455,7 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
       pool = [[NSAutoreleasePool alloc] init];
       types = _gtk_quartz_target_list_to_pasteboard_types (site->target_list);
 
-      [nswindow registerForDraggedTypes:[types copy]];
+      [nswindow registerForDraggedTypes:[types allObjects]];
 
       [types release];
       [pool release];
@@ -1072,13 +1072,18 @@ gtk_drag_begin_idle (gpointer arg)
   NSPasteboard *pasteboard;
   GtkDragSourceOwner *owner;
   NSPoint point;
+  NSSet *types;
 
   g_assert (info != NULL);
 
   pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
   owner = [[GtkDragSourceOwner alloc] initWithInfo:info];
 
-  [pasteboard declareTypes:_gtk_quartz_target_list_to_pasteboard_types (info->target_list) owner:owner];
+  types = _gtk_quartz_target_list_to_pasteboard_types (info->target_list);
+
+  [pasteboard declareTypes:[types allObjects] owner:owner];
+
+  [types release];
 
   if ((nswindow = get_toplevel_nswindow (info->source_widget)) == NULL)
      return FALSE;

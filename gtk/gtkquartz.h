@@ -26,8 +26,8 @@
 
 G_BEGIN_DECLS
 
-NSArray *_gtk_quartz_target_list_to_pasteboard_types    (GtkTargetList *target_list);
-NSArray *_gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
+NSSet   *_gtk_quartz_target_list_to_pasteboard_types    (GtkTargetList *target_list);
+NSSet   *_gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 							 guint                 n_targets);
 
 GList   *_gtk_quartz_pasteboard_types_to_atom_list (NSArray  *array);
