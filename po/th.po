@@ -1,15 +1,16 @@
 # Thai translation for gtk+.
-# Copyright (C) 2003-2009 Free Software Foundation, Inc.
+# Copyright (C) 2003-2010 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 # Paisa Seeluangsawat <paisa@users.sf.net>, 2003, 2004.
-# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2009.
+# Theppitak Karoonboonyanan <thep@linux.thai.net>, 2005-2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
-"PO-Revision-Date: 2009-12-23 07:57+0700\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"+&component=general\n"
+"POT-Creation-Date: 2010-01-03 01:14+0000\n"
+"PO-Revision-Date: 2010-01-03 22:23+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -394,12 +395,6 @@ msgstr "ไม่รู้จักชนิดของรูป"
 msgid "Image pixel data corrupt"
 msgstr "ข้อมูลพิกเซลในแฟ้มเสีย"
 
-#: gdk-pixbuf/gdk-pixdata.c:432
-#, c-format
-msgid "failed to allocate image buffer of %u byte"
-msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
-
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "พบชิ้นไอคอนเกินมาในภาพเคลื่อนไหว"
@@ -760,9 +755,10 @@ msgstr "คีย์ของชิ้นข้อความใน PNG ต้�
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "คีย์ของชิ้นข้อความใน PNG ต้องใช้ตัวอักษร ASCII"
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
-msgstr ""
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
+msgstr "โพรไฟล์สีมีความยาว %d ซึ่งไม่ถูกต้อง"
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
 #, c-format
@@ -969,11 +965,6 @@ msgstr "บันทึกรูป TIFF ไม่สำเร็จ"
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr "การบีบอัด TIFF ไม่ได้อ้างอิงถึงตัวอ่านและลงรหัสที่ใช้การได้"
 
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
-msgstr "โพรไฟล์สีมีความยาว '%d' ซึ่งไม่ถูกต้อง"
-
 #: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "เขียนข้อมูล TIFF ไม่สำเร็จ"
@@ -1151,12 +1142,6 @@ msgstr "กำลังเริ่ม %s"
 #, c-format
 msgid "Opening %s"
 msgstr "กำลังเปิด %s"
-
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
-#, c-format
-msgid "Opening %d Item"
-msgid_plural "Opening %d Items"
-msgstr[0] "กำลังเปิด %d รายการ"
 
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
@@ -2257,12 +2242,12 @@ msgid "Cl_ear"
 msgstr "_ล้าง"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5634
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5646
 msgid "Copy _Link Address"
 msgstr "คัดลอกที่อยู่_ลิงก์"
 
@@ -2363,7 +2348,6 @@ msgid "Unknown Application (pid %d)"
 msgstr "โปรแกรมไม่ทราบชื่อ (pid %d)"
 
 #: gtk/gtkmountoperation.c:1064
-#, c-format
 msgid "Unable to end process"
 msgstr "ไม่สามารถจบโพรเซสได้"
 
@@ -2538,7 +2522,6 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
-#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2548,22 +2531,18 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2905
-#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2908
-#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
-#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:359
-#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -5204,6 +5183,14 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
+
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgid_plural "failed to allocate image buffer of %u bytes"
+#~ msgstr[0] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
+
+#~ msgid "Opening %d Item"
+#~ msgid_plural "Opening %d Items"
+#~ msgstr[0] "กำลังเปิด %d รายการ"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ว่าง)"
