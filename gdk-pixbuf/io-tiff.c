@@ -735,8 +735,8 @@ gdk_pixbuf__tiff_image_save_to_callback (GdkPixbufSaveFunc   save_func,
                             g_set_error (error,
                                          GDK_PIXBUF_ERROR,
                                          GDK_PIXBUF_ERROR_BAD_OPTION,
-                                         _("Color profile has invalid length '%d'."),
-                                         icc_profile_size);
+                                         _("Color profile has invalid length %d."),
+                                         (gint)icc_profile_size);
                             retval = FALSE;
                             goto cleanup;
                         }
