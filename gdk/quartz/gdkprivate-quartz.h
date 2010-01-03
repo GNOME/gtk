@@ -175,6 +175,8 @@ void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
 void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
 
+void         _gdk_quartz_events_send_enter_notify_event (GdkWindow *window);
+
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
 NSEvent *  _gdk_quartz_event_loop_get_pending   (void);

@@ -782,74 +782,13 @@ _gdk_quartz_window_find_child (GdkWindow *window,
 }
 
 
-static void
-generate_motion_event (GdkWindow *window)
-{
-  NSPoint point;
-  NSPoint screen_point;
-  NSWindow *nswindow;
-  GdkQuartzView *view;
-  GdkWindowObject *private;
-  GdkEvent *event;
-  gint x, y, x_root, y_root;
-  gdouble xx, yy;
-  GList *node;
-  GdkWindow *pointer_window;
-
-  event = gdk_event_new (GDK_MOTION_NOTIFY);
-  event->any.window = NULL;
-  event->any.send_event = TRUE;
-
-  private = (GdkWindowObject *)window;
-  nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
-  view = (GdkQuartzView *)[nswindow contentView];
-
-  screen_point = [NSEvent mouseLocation];
-
-  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &x_root, &y_root);
-
-  point = [nswindow convertScreenToBase:screen_point];
-
-  x = point.x;
-  y = private->height - point.y;
-
-  pointer_window = _gdk_window_find_descendant_at (window, x, y,
-                                                   &xx, &yy);
-
-  event->any.type = GDK_MOTION_NOTIFY;
-  event->motion.window = window;
-  event->motion.time = GDK_CURRENT_TIME;
-  event->motion.x = x;
-  event->motion.y = y;
-  event->motion.x_root = x_root;
-  event->motion.y_root = y_root;
-  /* FIXME event->axes */
-  event->motion.state = 0;
-  event->motion.is_hint = FALSE;
-  event->motion.device = _gdk_display->core_pointer;
-
-  if (event->any.window)
-    g_object_ref (event->any.window);
-
-  node = _gdk_event_queue_append (gdk_display_get_default (), event);
-  _gdk_windowing_got_event (gdk_display_get_default (), node, event, 0);
-}
-
 void
 _gdk_quartz_window_did_become_main (GdkWindow *window)
 {
   main_window_stack = g_slist_remove (main_window_stack, window);
 
   if (GDK_WINDOW_OBJECT (window)->window_type != GDK_WINDOW_TEMP)
-    {
-      main_window_stack = g_slist_prepend (main_window_stack, window);
-
-      /* We just became the active window, send a motion-notify
-       * event so things like highlights get set up correctly.
-       * This motion-notify is sent to the key window.
-       */
-      generate_motion_event (window);
-    }
+    main_window_stack = g_slist_prepend (main_window_stack, window);
 
   clear_toplevel_order ();
 }
