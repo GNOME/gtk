@@ -43,7 +43,8 @@ static GdkWindow   *current_keyboard_window;
 static GdkEventMask current_event_mask;
 static int          current_button_state;
 
-static void append_event                        (GdkEvent  *event);
+static void append_event                        (GdkEvent  *event,
+                                                 gboolean   windowing);
 
 NSEvent *
 gdk_quartz_event_get_nsevent (GdkEvent *event)
@@ -173,10 +174,16 @@ fixup_event (GdkEvent *event)
 }
 
 static void
-append_event (GdkEvent *event)
+append_event (GdkEvent *event,
+              gboolean  windowing)
 {
+  GList *node;
+
   fixup_event (event);
-  _gdk_event_queue_append (_gdk_display, event);
+  node = _gdk_event_queue_append (_gdk_display, event);
+
+  if (windowing)
+    _gdk_windowing_got_event (_gdk_display, node, event, 0);
 }
 
 static gint
@@ -352,6 +359,53 @@ create_focus_event (GdkWindow *window,
   return event;
 }
 
+
+static void
+generate_motion_event (GdkWindow *window)
+{
+  NSPoint point;
+  NSPoint screen_point;
+  NSWindow *nswindow;
+  GdkQuartzView *view;
+  GdkWindowObject *private;
+  GdkEvent *event;
+  gint x, y, x_root, y_root;
+  GdkDisplay *display;
+
+  event = gdk_event_new (GDK_MOTION_NOTIFY);
+  event->any.window = NULL;
+  event->any.send_event = TRUE;
+
+  private = (GdkWindowObject *)window;
+  nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
+  view = (GdkQuartzView *)[nswindow contentView];
+
+  display = gdk_drawable_get_display (window);
+
+  screen_point = [NSEvent mouseLocation];
+
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &x_root, &y_root);
+
+  point = [nswindow convertScreenToBase:screen_point];
+
+  x = point.x;
+  y = private->height - point.y;
+
+  event->any.type = GDK_MOTION_NOTIFY;
+  event->motion.window = window;
+  event->motion.time = GDK_CURRENT_TIME;
+  event->motion.x = x;
+  event->motion.y = y;
+  event->motion.x_root = x_root;
+  event->motion.y_root = y_root;
+  /* FIXME event->axes */
+  event->motion.state = 0;
+  event->motion.is_hint = FALSE;
+  event->motion.device = _gdk_display->core_pointer;
+
+  append_event (event, TRUE);
+}
+
 /* Note: Used to both set a new focus window and to unset the old one. */
 void
 _gdk_quartz_events_update_focus_window (GdkWindow *window,
@@ -369,7 +423,7 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
   if (!got_focus && window == current_keyboard_window)
     {
       event = create_focus_event (current_keyboard_window, FALSE);
-      append_event (event);
+      append_event (event, FALSE);
       g_object_unref (current_keyboard_window);
       current_keyboard_window = NULL;
     }
@@ -379,15 +433,62 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
       if (current_keyboard_window)
 	{
 	  event = create_focus_event (current_keyboard_window, FALSE);
-	  append_event (event);
+	  append_event (event, FALSE);
 	  g_object_unref (current_keyboard_window);
 	  current_keyboard_window = NULL;
 	}
       
       event = create_focus_event (window, TRUE);
-      append_event (event);
+      append_event (event, FALSE);
       current_keyboard_window = g_object_ref (window);
+
+      /* We just became the active window.  Unlike X11, Mac OS X does
+       * not send us motion events while the window does not have focus
+       * ("is not key").  We send a dummy motion notify event now, so that
+       * everything in the window is set to correct state.
+       */
+      generate_motion_event (window);
     }
+}
+
+void
+_gdk_quartz_events_send_enter_notify_event (GdkWindow *window)
+{
+  NSPoint point;
+  NSPoint screen_point;
+  NSWindow *nswindow;
+  GdkWindowObject *private;
+  GdkEvent *event;
+  gint x, y, x_root, y_root;
+
+  event = gdk_event_new (GDK_ENTER_NOTIFY);
+  event->any.window = NULL;
+  event->any.send_event = FALSE;
+
+  private = (GdkWindowObject *)window;
+  nswindow = ((GdkWindowImplQuartz *)private->impl)->toplevel;
+
+  screen_point = [NSEvent mouseLocation];
+
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &x_root, &y_root);
+
+  point = [nswindow convertScreenToBase:screen_point];
+
+  x = point.x;
+  y = private->height - point.y;
+
+  event->crossing.window = window;
+  event->crossing.subwindow = NULL;
+  event->crossing.time = GDK_CURRENT_TIME;
+  event->crossing.x = x;
+  event->crossing.y = y;
+  event->crossing.x_root = x_root;
+  event->crossing.y_root = y_root;
+  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  event->crossing.state = 0;
+
+  append_event (event, TRUE);
 }
 
 void
