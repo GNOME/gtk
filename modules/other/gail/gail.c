@@ -263,7 +263,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
 		    {
 		      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
 
-		      if (GTK_IS_WIDGET (child) && GTK_WIDGET_HAS_GRAB (child))
+		      if (GTK_IS_WIDGET (child) && gtk_widget_has_grab (child))
 			{
 			  if (GTK_IS_MENU_SHELL (child))
 			    {

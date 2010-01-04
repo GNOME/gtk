@@ -507,7 +507,7 @@ static gint
 gtk_window_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+  if (!gtk_widget_get_app_paintable (widget))
     gtk_paint_flat_box (widget->style, widget->window, GTK_STATE_NORMAL, 
                         GTK_SHADOW_NONE, event->area, widget, "base", 0, 0, -1, -1);
 

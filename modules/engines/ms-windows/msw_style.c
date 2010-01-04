@@ -2057,7 +2057,7 @@ draw_box (GtkStyle *style,
 	}
       else
 	{
-	  gboolean is_default = GTK_WIDGET_HAS_DEFAULT (widget);
+	  gboolean is_default = gtk_widget_has_default (widget);
 	  if (xp_theme_draw
 	      (window,
 	       is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :

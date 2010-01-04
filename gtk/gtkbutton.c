@@ -1354,7 +1354,7 @@ gtk_button_size_request (GtkWidget      *widget,
                           GTK_WIDGET (widget)->style->ythickness) * 2 +
                          inner_border.top + inner_border.bottom);
 
-  if (GTK_WIDGET_CAN_DEFAULT (widget))
+  if (gtk_widget_get_can_default (widget))
     {
       requisition->width += default_border.left + default_border.right;
       requisition->height += default_border.top + default_border.bottom;
@@ -1421,7 +1421,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
                                      inner_border.bottom -
 				     border_width * 2);
 
-      if (GTK_WIDGET_CAN_DEFAULT (button))
+      if (gtk_widget_get_can_default (GTK_WIDGET (button)))
 	{
 	  child_allocation.x += default_border.left;
 	  child_allocation.y += default_border.top;
@@ -1488,7 +1488,7 @@ _gtk_button_paint (GtkButton          *button,
       width = widget->allocation.width - border_width * 2;
       height = widget->allocation.height - border_width * 2;
 
-      if (GTK_WIDGET_HAS_DEFAULT (widget) &&
+      if (gtk_widget_has_default (widget) &&
 	  GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
 	{
 	  gtk_paint_box (widget->style, widget->window,
@@ -1501,7 +1501,7 @@ _gtk_button_paint (GtkButton          *button,
 	  width -= default_border.left + default_border.right;
 	  height -= default_border.top + default_border.bottom;
 	}
-      else if (GTK_WIDGET_CAN_DEFAULT (widget))
+      else if (gtk_widget_get_can_default (widget))
 	{
 	  x += default_outside_border.left;
 	  y += default_outside_border.top;

@@ -1133,7 +1133,7 @@ gtk_scale_button_grab_notify (GtkScaleButton *button,
 
   priv = button->priv;
 
-  if (!GTK_WIDGET_HAS_GRAB (priv->dock))
+  if (!gtk_widget_has_grab (priv->dock))
     return;
 
   if (gtk_widget_is_ancestor (gtk_grab_get_current (), priv->dock))

@@ -289,31 +289,43 @@ typedef enum
  */
 #define GTK_WIDGET_HAS_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_FOCUS) != 0)
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_CAN_DEFAULT:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is allowed to receive the default action
  * via gtk_widget_grab_default().
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_can_default() instead.
  */
 #define GTK_WIDGET_CAN_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_DEFAULT) != 0)
+#endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_HAS_DEFAULT:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget currently is receiving the default action.
+ *
+ * Deprecated: 2.20: Use gtk_widget_has_default() instead.
  */
 #define GTK_WIDGET_HAS_DEFAULT(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_DEFAULT) != 0)
+#endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_HAS_GRAB:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is in the grab_widgets stack, and will be
  * the preferred one for receiving events other than ones of cosmetic value.
+ *
+ * Deprecated: 2.20: Use gtk_widget_has_grab() instead.
  */
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
+#endif
 
 /**
  * GTK_WIDGET_RC_STYLE:
@@ -335,30 +347,42 @@ typedef enum
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_APP_PAINTABLE:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the #GTK_APP_PAINTABLE flag has been set on the widget.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_app_paintable() instead.
  */
 #define GTK_WIDGET_APP_PAINTABLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_APP_PAINTABLE) != 0)
+#endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_RECEIVES_DEFAULT:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget when focused will receive the default action
  * even if there is a different widget set as default.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_receives_default() instead.
  */
 #define GTK_WIDGET_RECEIVES_DEFAULT(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_RECEIVES_DEFAULT) != 0)
+#endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_DOUBLE_BUFFERED:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the #GTK_DOUBLE_BUFFERED flag has been set on the widget.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_double_buffered() instead.
  */
 #define GTK_WIDGET_DOUBLE_BUFFERED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_DOUBLE_BUFFERED) != 0)
+#endif
 
 
 /* Macros for setting and clearing widget flags.

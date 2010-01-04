@@ -1566,7 +1566,7 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
-      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
+      if (event->any.window && gtk_widget_get_double_buffered (event_widget))
 	{
 	  gdk_window_begin_paint_region (event->any.window, event->expose.region);
 	  gtk_widget_send_expose (event_widget, event);
@@ -1827,7 +1827,7 @@ gtk_grab_add (GtkWidget *widget)
   
   g_return_if_fail (widget != NULL);
   
-  if (!GTK_WIDGET_HAS_GRAB (widget) && GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_has_grab (widget) && GTK_WIDGET_IS_SENSITIVE (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
       
@@ -1865,7 +1865,7 @@ gtk_grab_remove (GtkWidget *widget)
   
   g_return_if_fail (widget != NULL);
   
-  if (GTK_WIDGET_HAS_GRAB (widget))
+  if (gtk_widget_has_grab (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
 
@@ -2404,7 +2404,7 @@ gtk_propagate_event (GtkWidget *widget,
 	  /* If there is a grab within the window, give the grab widget
 	   * a first crack at the key event
 	   */
-	  if (widget != window && GTK_WIDGET_HAS_GRAB (widget))
+	  if (widget != window && gtk_widget_has_grab (widget))
 	    handled_event = gtk_widget_event (widget, event);
 	  
 	  if (!handled_event)

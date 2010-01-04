@@ -1624,7 +1624,7 @@ test_widget (void)
   builder = builder_new_from_string (buffer2, -1, NULL);
   button1 = gtk_builder_get_object (builder, "button1");
 
-  g_assert (GTK_WIDGET_RECEIVES_DEFAULT (GTK_WIDGET (button1)));
+  g_assert (gtk_widget_get_receives_default (GTK_WIDGET (button1)));
   
   g_object_unref (builder);
   

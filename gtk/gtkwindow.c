@@ -1646,7 +1646,7 @@ gtk_window_set_default (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if (default_widget)
-    g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (default_widget));
+    g_return_if_fail (gtk_widget_get_can_default (default_widget));
   
   if (window->default_widget != default_widget)
     {
@@ -1660,7 +1660,7 @@ gtk_window_set_default (GtkWindow *window,
 	  old_default_widget = window->default_widget;
 	  
 	  if (window->focus_widget != window->default_widget ||
-	      !GTK_WIDGET_RECEIVES_DEFAULT (window->default_widget))
+	      !gtk_widget_get_receives_default (window->default_widget))
 	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	  gtk_widget_queue_draw (window->default_widget);
 	}
@@ -1670,7 +1670,7 @@ gtk_window_set_default (GtkWindow *window,
       if (window->default_widget)
 	{
 	  if (window->focus_widget == NULL ||
-	      !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget))
+	      !gtk_widget_get_receives_default (window->focus_widget))
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	  gtk_widget_queue_draw (window->default_widget);
 	}
@@ -2000,7 +2000,7 @@ gtk_window_get_focus (GtkWindow *window)
  * 
  * Activates the default widget for the window, unless the current 
  * focused widget has been configured to receive the default action 
- * (see #GTK_RECEIVES_DEFAULT in #GtkWidgetFlags), in which case the
+ * (see gtk_widget_set_receives_default()), in which case the
  * focused widget is activated. 
  * 
  * Return value: %TRUE if a widget got activated.
@@ -2011,7 +2011,7 @@ gtk_window_activate_default (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
-      (!window->focus_widget || !GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget)))
+      (!window->focus_widget || !gtk_widget_get_receives_default (window->focus_widget)))
     return gtk_widget_activate (window->default_widget);
   else if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
     return gtk_widget_activate (window->focus_widget);
@@ -5468,21 +5468,21 @@ gtk_window_real_set_focus (GtkWindow *window,
     {
       g_object_ref (old_focus);
       g_object_freeze_notify (G_OBJECT (old_focus));
-      old_focus_had_default = GTK_WIDGET_HAS_DEFAULT (old_focus);
+      old_focus_had_default = gtk_widget_has_default (old_focus);
     }
   if (focus)
     {
       g_object_ref (focus);
       g_object_freeze_notify (G_OBJECT (focus));
-      focus_had_default = GTK_WIDGET_HAS_DEFAULT (focus);
+      focus_had_default = gtk_widget_has_default (focus);
     }
   
   if (window->default_widget)
-    had_default = GTK_WIDGET_HAS_DEFAULT (window->default_widget);
+    had_default = gtk_widget_has_default (window->default_widget);
   
   if (window->focus_widget)
     {
-      if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
+      if (gtk_widget_get_receives_default (window->focus_widget) &&
 	  (window->focus_widget != window->default_widget))
         {
 	  GTK_WIDGET_UNSET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
@@ -5507,10 +5507,10 @@ gtk_window_real_set_focus (GtkWindow *window,
     {
       window->focus_widget = focus;
   
-      if (GTK_WIDGET_RECEIVES_DEFAULT (window->focus_widget) &&
+      if (gtk_widget_get_receives_default (window->focus_widget) &&
 	  (window->focus_widget != window->default_widget))
 	{
-	  if (GTK_WIDGET_CAN_DEFAULT (window->focus_widget))
+	  if (gtk_widget_get_can_default (window->focus_widget))
 	    GTK_WIDGET_SET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
 
 	  if (window->default_widget)
@@ -5530,12 +5530,12 @@ gtk_window_real_set_focus (GtkWindow *window,
    * is harmless.
    */
   if (window->default_widget &&
-      (had_default != GTK_WIDGET_HAS_DEFAULT (window->default_widget)))
+      (had_default != gtk_widget_has_default (window->default_widget)))
     gtk_widget_queue_draw (window->default_widget);
   
   if (old_focus)
     {
-      if (old_focus_had_default != GTK_WIDGET_HAS_DEFAULT (old_focus))
+      if (old_focus_had_default != gtk_widget_has_default (old_focus))
 	gtk_widget_queue_draw (old_focus);
 	
       g_object_thaw_notify (G_OBJECT (old_focus));
@@ -5543,7 +5543,7 @@ gtk_window_real_set_focus (GtkWindow *window,
     }
   if (focus)
     {
-      if (focus_had_default != GTK_WIDGET_HAS_DEFAULT (focus))
+      if (focus_had_default != gtk_widget_has_default (focus))
 	gtk_widget_queue_draw (focus);
 
       g_object_thaw_notify (G_OBJECT (focus));
@@ -6619,7 +6619,7 @@ static gint
 gtk_window_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+  if (!gtk_widget_get_app_paintable (widget))
     gtk_window_paint (widget, &event->area);
   
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->expose_event)
