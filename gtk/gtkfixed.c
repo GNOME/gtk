@@ -114,8 +114,8 @@ gtk_fixed_child_type (GtkContainer     *container)
 static void
 gtk_fixed_init (GtkFixed *fixed)
 {
-  GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
- 
+  gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
+
   fixed->children = NULL;
 }
 
@@ -272,7 +272,7 @@ gtk_fixed_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     GTK_WIDGET_CLASS (gtk_fixed_parent_class)->realize (widget);
   else
     {
@@ -351,7 +351,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  if (!GTK_WIDGET_NO_WINDOW (widget))
+  if (gtk_widget_get_has_window (widget))
     {
       if (GTK_WIDGET_REALIZED (widget))
 	gdk_window_move_resize (widget->window,
@@ -375,7 +375,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 	  child_allocation.x = child->x + border_width;
 	  child_allocation.y = child->y + border_width;
 
-	  if (GTK_WIDGET_NO_WINDOW (widget))
+	  if (!gtk_widget_get_has_window (widget))
 	    {
 	      child_allocation.x += widget->allocation.x;
 	      child_allocation.y += widget->allocation.y;
@@ -463,6 +463,8 @@ gtk_fixed_forall (GtkContainer *container,
  * 
  * This function was added to provide an easy migration path for
  * older applications which may expect #GtkFixed to have a separate window.
+ *
+ * Deprecated: 2.20: Use gtk_widget_set_has_window() instead.
  **/
 void
 gtk_fixed_set_has_window (GtkFixed *fixed,
@@ -471,12 +473,9 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (!GTK_WIDGET_REALIZED (fixed));
 
-  if (!has_window != GTK_WIDGET_NO_WINDOW (fixed))
+  if (has_window != gtk_widget_get_has_window (GTK_WIDGET (fixed)))
     {
-      if (has_window)
-	GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
-      else
-	GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
+      gtk_widget_set_has_window (GTK_WIDGET (fixed), has_window);
     }
 }
 
@@ -488,13 +487,15 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
  * See gtk_fixed_set_has_window().
  * 
  * Return value: %TRUE if @fixed has its own window.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_has_window() instead.
  **/
 gboolean
 gtk_fixed_get_has_window (GtkFixed *fixed)
 {
   g_return_val_if_fail (GTK_IS_FIXED (fixed), FALSE);
 
-  return !GTK_WIDGET_NO_WINDOW (fixed);
+  return gtk_widget_get_has_window (GTK_WIDGET (fixed));
 }
 
 #define __GTK_FIXED_C__

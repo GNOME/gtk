@@ -79,9 +79,11 @@ void       gtk_fixed_move              (GtkFixed       *fixed,
                                         GtkWidget      *widget,
                                         gint            x,
                                         gint            y);
+#ifndef GTK_DISABLE_DEPRECATED
 void       gtk_fixed_set_has_window    (GtkFixed       *fixed,
 					gboolean        has_window);
 gboolean   gtk_fixed_get_has_window    (GtkFixed       *fixed);
+#endif
 
 G_END_DECLS
 
