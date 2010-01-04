@@ -6453,11 +6453,6 @@ gtk_window_enter_notify_event (GtkWidget        *widget,
     {
       update_cursor_at_position (widget, x, y);
     }
-  else
-    {
-      GdkCursor *cursor = gdk_cursor_new (GDK_ARROW);
-      gdk_window_set_cursor (widget->window, cursor);
-    }
 
   return FALSE;
 }
