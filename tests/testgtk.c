@@ -5301,12 +5301,12 @@ entry_toggle_pulse (GtkWidget *checkbutton,
 }
 
 static void
-entry_props_clicked (GtkWidget *button,
-		     GObject   *entry)
+props_clicked (GtkWidget *button,
+               GObject   *object)
 {
-  GtkWidget *window = create_prop_editor (entry, 0);
+  GtkWidget *window = create_prop_editor (object, 0);
 
-  gtk_window_set_title (GTK_WINDOW (window), "Entry Properties");
+  gtk_window_set_title (GTK_WINDOW (window), "Object Properties");
 }
 
 static void
@@ -5368,7 +5368,7 @@ create_entry (GtkWidget *widget)
       button = gtk_button_new_with_mnemonic ("_Props");
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
       g_signal_connect (button, "clicked",
-			G_CALLBACK (entry_props_clicked),
+			G_CALLBACK (props_clicked),
 			entry);
 
       cb = gtk_combo_new ();
@@ -8195,6 +8195,7 @@ create_color_selection (GtkWidget *widget)
       GtkWidget *picker;
       GtkWidget *hbox;
       GtkWidget *label;
+      GtkWidget *button;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window), 
@@ -8217,6 +8218,12 @@ create_color_selection (GtkWidget *widget)
       picker = gtk_color_button_new ();
       gtk_color_button_set_use_alpha (GTK_COLOR_BUTTON (picker), TRUE);
       gtk_container_add (GTK_CONTAINER (hbox), picker);
+
+      button = gtk_button_new_with_mnemonic ("_Props");
+      gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+      g_signal_connect (button, "clicked",
+			G_CALLBACK (props_clicked),
+			picker);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

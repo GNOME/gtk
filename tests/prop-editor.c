@@ -593,13 +593,15 @@ pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_free (str);
 }
 
-gchar *
-object_label (GObject *obj)
+static gchar *
+object_label (GObject *obj, GParamSpec *pspec)
 {
   const gchar *name;
 
   if (obj)
     name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  else if (pspec)
+    name = g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec));
   else
     name = "unknown";
   return g_strdup_printf ("Object: %p (%s)", obj, name);
@@ -618,7 +620,7 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_object_get (object, pspec->name, &obj, NULL);
   g_list_free (children);
 
-  str = object_label (obj);
+  str = object_label (obj, pspec);
   
   gtk_label_set_text (GTK_LABEL (label), str);
   gtk_widget_set_sensitive (button, G_IS_OBJECT (obj));
@@ -655,6 +657,50 @@ object_properties (GtkWidget *button,
     create_prop_editor (obj, 0);
 }
  
+static void
+color_modified (GtkColorButton *cb, gpointer data)
+{
+  ObjectProperty *p = data;
+  GdkColor color;
+
+  gtk_color_button_get_color (cb, &color);
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_set (GTK_CONTAINER (parent),
+			       widget, p->spec->name, &color, NULL);
+    }
+  else
+    g_object_set (p->obj, p->spec->name, &color, NULL);
+}
+
+static void
+color_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkColorButton *cb = GTK_COLOR_BUTTON (data);
+  GValue val = { 0, };
+  GdkColor *color;
+  GdkColor cb_color;
+
+  g_value_init (&val, GDK_TYPE_COLOR);
+  get_property_value (object, pspec, &val);
+
+  color = g_value_get_boxed (&val);
+  gtk_color_button_get_color (cb, &cb_color);
+
+  if (color != NULL && !gdk_color_equal (color, &cb_color))
+    {
+      block_controller (G_OBJECT (cb));
+      gtk_color_button_set_color (cb, color);
+      unblock_controller (G_OBJECT (cb));
+    }
+
+  g_value_unset (&val);
+}
+
 static GtkWidget *
 property_widget (GObject    *object, 
 		 GParamSpec *spec, 
@@ -882,6 +928,19 @@ property_widget (GObject    *object,
 				 G_CALLBACK (object_changed),
 				 prop_edit, G_OBJECT (label));
     }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_COLOR)
+    {
+      prop_edit = gtk_color_button_new ();
+
+      g_object_connect_property (object, spec,
+				 G_CALLBACK (color_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+
+      if (can_modify)
+	connect_controller (G_OBJECT (prop_edit), "color-set",
+			    object, spec, G_CALLBACK (color_modified));
+    }
   else
     {  
       msg = g_strdup_printf ("uneditable property type: %s",
@@ -1105,7 +1164,7 @@ children_from_object (GObject *object)
 
       prop_edit = gtk_hbox_new (FALSE, 5);
 
-      str = object_label (object);
+      str = object_label (object, NULL);
       label = gtk_label_new (str);
       g_free (str);
       button = gtk_button_new_with_label ("Properties");
@@ -1160,7 +1219,7 @@ cells_from_object (GObject *object)
 
       prop_edit = gtk_hbox_new (FALSE, 5);
 
-      str = object_label (object);
+      str = object_label (object, NULL);
       label = gtk_label_new (str);
       g_free (str);
       button = gtk_button_new_with_label ("Properties");
