@@ -805,6 +805,8 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
   found = FALSE;
   while (target)
     {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (target));
+
       /* The idea with keyboard mode is that once you start using
        * the keyboard to navigate the menus, we show mnemonics
        * until the menu navigation is over. To that end, we spread
@@ -832,14 +834,12 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
        */
       if (GTK_IS_MENU_BAR (target))
         {
-          gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (target)),
-                                            FALSE);
+          gtk_window_set_mnemonics_visible (GTK_WINDOW (toplevel), FALSE);
           _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (target),
                                                           mnemonics_visible);
         }
       else
-        gtk_window_set_mnemonics_visible (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (target))),
-                                          mnemonics_visible);
+        gtk_window_set_mnemonics_visible (GTK_WINDOW (toplevel), mnemonics_visible);
 
       if (target->active_menu_item)
         found = TRUE;
