@@ -1715,12 +1715,14 @@ gtk_file_selection_show_fileop_buttons
 
 #if IN_HEADER(__GTK_FIXED_H__)
 #if IN_FILE(__GTK_FIXED_C__)
-gtk_fixed_get_has_window
 gtk_fixed_get_type G_GNUC_CONST
 gtk_fixed_move
 gtk_fixed_new
 gtk_fixed_put
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_fixed_set_has_window
+gtk_fixed_get_has_window
+#endif
 #endif
 #endif
 
