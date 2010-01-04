@@ -272,13 +272,18 @@ typedef enum
  */
 #define GTK_WIDGET_IS_SENSITIVE(wid)	  (GTK_WIDGET_SENSITIVE (wid) && \
 					   GTK_WIDGET_PARENT_SENSITIVE (wid))
+
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_CAN_FOCUS:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is able to handle focus grabs.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_can_focus() instead.
  */
 #define GTK_WIDGET_CAN_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_FOCUS) != 0)
+#endif
 
 /**
  * GTK_WIDGET_HAS_FOCUS:

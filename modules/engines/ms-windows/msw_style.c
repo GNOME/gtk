@@ -3479,7 +3479,7 @@ draw_focus (GtkStyle *style,
   HDC dc;
   RECT rect;
 
-  if (!GTK_WIDGET_CAN_FOCUS (widget))
+  if (!gtk_widget_get_can_focus (widget))
     {
       return;
     }

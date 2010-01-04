@@ -2746,7 +2746,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (gtk_widget_get_app_paintable (widget) != FALSE));
       break;
     case PROP_CAN_FOCUS:
-      g_value_set_boolean (value, (GTK_WIDGET_CAN_FOCUS (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_get_can_focus (widget) != FALSE));
       break;
     case PROP_HAS_FOCUS:
       g_value_set_boolean (value, (GTK_WIDGET_HAS_FOCUS (widget) != FALSE));
@@ -4654,7 +4654,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
 {
   if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
     gtk_widget_activate (widget);
-  else if (GTK_WIDGET_CAN_FOCUS (widget))
+  else if (gtk_widget_get_can_focus (widget))
     gtk_widget_grab_focus (widget);
   else
     {
@@ -5279,7 +5279,7 @@ reset_focus_recurse (GtkWidget *widget,
 static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
-  if (GTK_WIDGET_CAN_FOCUS (focus_widget))
+  if (gtk_widget_get_can_focus (focus_widget))
     {
       GtkWidget *toplevel;
       GtkWidget *widget;
@@ -5379,7 +5379,7 @@ static gboolean
 gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
 {
-  if (!GTK_WIDGET_CAN_FOCUS (widget))
+  if (!gtk_widget_get_can_focus (widget))
     return FALSE;
   
   if (!gtk_widget_is_focus (widget))
@@ -5451,7 +5451,7 @@ gtk_widget_set_can_focus (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (can_focus != GTK_WIDGET_CAN_FOCUS (widget))
+  if (can_focus != gtk_widget_get_can_focus (widget))
     {
       if (can_focus)
         GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
@@ -5479,7 +5479,7 @@ gtk_widget_get_can_focus (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_CAN_FOCUS (widget);
+  return (GTK_WIDGET_FLAGS (widget) & GTK_CAN_FOCUS) != 0;
 }
 
 /**
@@ -7518,7 +7518,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
    * don't have to though.
    */
   if (!GTK_IS_CONTAINER (widget) &&
-      !GTK_WIDGET_CAN_FOCUS (widget))
+      !gtk_widget_get_can_focus (widget))
     return FALSE;
   
   g_signal_emit (widget,

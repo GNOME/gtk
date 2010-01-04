@@ -1454,7 +1454,7 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
   
   while (parent)
     {
-      if (GTK_WIDGET_CAN_FOCUS (parent) ||
+      if (gtk_widget_get_can_focus (parent) ||
 	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
           GTK_IS_NOTEBOOK (parent->parent) ||
 	  GTK_IS_MENU_ITEM (parent))

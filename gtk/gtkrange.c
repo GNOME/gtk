@@ -1574,7 +1574,7 @@ gtk_range_expose (GtkWidget      *widget,
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
-  if (GTK_WIDGET_CAN_FOCUS (range))
+  if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     gtk_widget_style_get (GTK_WIDGET (range),
                           "focus-line-width", &focus_line_width,
                           "focus-padding", &focus_padding,
@@ -2766,7 +2766,7 @@ gtk_range_get_props (GtkRange  *range,
   if (tmp_stepper_spacing > 0)
     tmp_trough_under_steppers = FALSE;
 
-  if (GTK_WIDGET_CAN_FOCUS (range))
+  if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
     {
       gint focus_line_width;
       gint focus_padding;
