@@ -312,7 +312,7 @@ gtk_misc_realize (GtkWidget *widget)
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     {
       widget->window = gtk_widget_get_parent_window (widget);
       g_object_ref (widget->window);

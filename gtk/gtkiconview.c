@@ -8487,7 +8487,7 @@ gtk_icon_view_item_accessible_grab_focus (AtkComponent *component)
   gtk_widget_grab_focus (item->widget);
   gtk_icon_view_set_cursor_item (GTK_ICON_VIEW (item->widget), item->item, -1);
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (item->widget));
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     gtk_window_present (GTK_WINDOW (toplevel));
 
   return TRUE;

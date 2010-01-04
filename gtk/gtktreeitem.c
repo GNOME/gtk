@@ -682,7 +682,7 @@ gtk_tree_item_expose_child (GtkWidget *child,
   } *data = client_data;
 
   if (GTK_WIDGET_DRAWABLE (child) &&
-      GTK_WIDGET_NO_WINDOW (child) &&
+      !gtk_widget_get_has_window (child) &&
       (child->window == data->event->window))
     {
       GdkEvent *child_event = gdk_event_new (GDK_EXPOSE);

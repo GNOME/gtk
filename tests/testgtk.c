@@ -12106,7 +12106,7 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
    * but within the allocation are not counted. This is consistent
    * with the way we highlight drag targets.
    */
-  if (!GTK_WIDGET_NO_WINDOW (widget))
+  if (gtk_widget_get_has_window (widget))
     {
       new_allocation.x = 0;
       new_allocation.y = 0;

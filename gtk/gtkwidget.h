@@ -140,22 +140,30 @@ typedef enum
 
 /* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_TYPE:
  * @wid: a #GtkWidget.
  *
  * Gets the type of a widget.
+ *
+ * Deprecated: 2.20: Use G_OBJECT_TYPE() instead.
  */
 #define GTK_WIDGET_TYPE(wid)		  (GTK_OBJECT_TYPE (wid))
+#endif
 
 /**
  * GTK_WIDGET_STATE:
  * @wid: a #GtkWidget.
  *
  * Returns the current state of the widget, as a #GtkStateType.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_state() instead.
  */
 #define GTK_WIDGET_STATE(wid)		  (GTK_WIDGET (wid)->state)
+/* FIXME: Deprecating GTK_WIDGET_STATE requires fixing GTK internals. */
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_SAVED_STATE:
  * @wid: a #GtkWidget.
@@ -165,8 +173,11 @@ typedef enum
  * The saved state will be restored when a widget gets sensitive
  * again, after it has been made insensitive with gtk_widget_set_state()
  * or gtk_widget_set_sensitive().
+ *
+ * Deprecated: 2.20: Do not used it.
  */
 #define GTK_WIDGET_SAVED_STATE(wid)	  (GTK_WIDGET (wid)->saved_state)
+#endif
 
 
 /* Macros for extracting the widget flags from GtkWidget.
@@ -176,24 +187,34 @@ typedef enum
  * @wid: a #GtkWidget.
  *
  * Returns the widget flags from @wid.
+ *
+ * Deprecated: 2.20: Do not use it.
  */
 #define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
+/* FIXME: Deprecating GTK_WIDGET_FLAGS requires fixing GTK internals. */
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_TOPLEVEL:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is a toplevel widget.
+ *
+ * Deprecated: 2.20: Use gtk_widget_is_toplevel() instead.
  */
 #define GTK_WIDGET_TOPLEVEL(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL) != 0)
+#endif
 
 /**
  * GTK_WIDGET_NO_WINDOW:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget doesn't have an own #GdkWindow.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_has_window() instead.
  */
 #define GTK_WIDGET_NO_WINDOW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW) != 0)
+/* FIXME: Deprecating GTK_WIDGET_NO_WINDOW requires fixing GTK internals. */
 
 /**
  * GTK_WIDGET_REALIZED:
@@ -302,14 +323,17 @@ typedef enum
  * mechanism.
  */
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
-
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_COMPOSITE_CHILD:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is a composite child of its parent.
+ *
+ * Deprecated: 2.20: Use the "composite-child" property instead.
  */
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
+#endif
 
 /**
  * GTK_WIDGET_APP_PAINTABLE:

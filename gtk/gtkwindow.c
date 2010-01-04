@@ -8385,12 +8385,12 @@ void
 _gtk_window_set_is_toplevel (GtkWindow *window,
 			     gboolean   is_toplevel)
 {
-  if (GTK_WIDGET_TOPLEVEL (window))
+  if (gtk_widget_is_toplevel (GTK_WIDGET (window)))
     g_assert (g_slist_find (toplevel_list, window) != NULL);
   else
     g_assert (g_slist_find (toplevel_list, window) == NULL);
 
-  if (is_toplevel == GTK_WIDGET_TOPLEVEL (window))
+  if (is_toplevel == gtk_widget_is_toplevel (GTK_WIDGET (window)))
     return;
 
   if (is_toplevel)

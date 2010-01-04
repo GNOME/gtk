@@ -619,7 +619,7 @@ window_to_alloc (GtkWidget *dest_widget,
 		 gint      *dest_y)
 {
   /* Translate from window relative to allocation relative */
-  if (!GTK_WIDGET_NO_WINDOW (dest_widget) && dest_widget->parent)
+  if (gtk_widget_get_has_window (dest_widget) && dest_widget->parent)
     {
       gint wx, wy;
       gdk_window_get_position (dest_widget->window, &wx, &wy);
@@ -874,7 +874,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   if (tooltip->keyboard_mode_enabled)
     {
       gdk_window_get_origin (new_tooltip_widget->window, &x, &y);
-      if (GTK_WIDGET_NO_WINDOW (new_tooltip_widget))
+      if (!gtk_widget_get_has_window (new_tooltip_widget))
         {
 	  x += new_tooltip_widget->allocation.x;
 	  y += new_tooltip_widget->allocation.y;

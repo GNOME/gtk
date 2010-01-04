@@ -250,7 +250,7 @@ ensure_and_get_toplevel (GtkWidget *widget)
 	GtkWidget *window;
 
 	toplevel = gtk_widget_get_toplevel (widget);
-	if (GTK_WIDGET_TOPLEVEL (toplevel))
+	if (gtk_widget_is_toplevel (toplevel))
 		return toplevel;
 
 	g_assert (toplevel == widget); /* we don't want extraneous ancestors */

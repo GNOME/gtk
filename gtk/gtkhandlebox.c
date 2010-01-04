@@ -478,7 +478,7 @@ gtk_handle_box_style_set (GtkWidget *widget,
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
 
   if (GTK_WIDGET_REALIZED (widget) &&
-      !GTK_WIDGET_NO_WINDOW (widget))
+      gtk_widget_get_has_window (widget))
     {
       gtk_style_set_background (widget->style, widget->window,
 				widget->state);
