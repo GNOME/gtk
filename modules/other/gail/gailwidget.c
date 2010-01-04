@@ -488,7 +488,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
           atk_state_set_add_state (state_set, ATK_STATE_ENABLED);
         }
   
-      if (GTK_WIDGET_CAN_FOCUS (widget))
+      if (gtk_widget_get_can_focus (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
         }
@@ -735,7 +735,7 @@ gail_widget_grab_focus (AtkComponent   *component)
   GtkWidget *toplevel;
 
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  if (GTK_WIDGET_CAN_FOCUS (widget))
+  if (gtk_widget_get_can_focus (widget))
     {
       gtk_widget_grab_focus (widget);
       toplevel = gtk_widget_get_toplevel (widget);

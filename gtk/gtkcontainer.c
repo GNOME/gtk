@@ -1811,7 +1811,7 @@ gtk_container_focus (GtkWidget        *widget,
 
   return_val = FALSE;
 
-  if (GTK_WIDGET_CAN_FOCUS (container))
+  if (gtk_widget_get_can_focus (GTK_WIDGET (container)))
     {
       if (!GTK_WIDGET_HAS_FOCUS (container))
 	{

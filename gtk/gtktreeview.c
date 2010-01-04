@@ -1330,8 +1330,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 {
   tree_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (tree_view, GTK_TYPE_TREE_VIEW, GtkTreeViewPrivate);
 
-  GTK_WIDGET_SET_FLAGS (tree_view, GTK_CAN_FOCUS);
-
+  gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
 
   tree_view->priv->flags =  GTK_TREE_VIEW_SHOW_EXPANDERS
@@ -2532,7 +2531,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 static void
 grab_focus_and_unset_draw_keyfocus (GtkTreeView *tree_view)
 {
-  if (GTK_WIDGET_CAN_FOCUS (tree_view) && !GTK_WIDGET_HAS_FOCUS (tree_view))
+  if (gtk_widget_get_can_focus (GTK_WIDGET (tree_view)) && !GTK_WIDGET_HAS_FOCUS (tree_view))
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
   GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 }
@@ -7813,7 +7812,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   first_column = tree_view->priv->columns;
   while (first_column)
     {
-      if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (first_column->data)->button) &&
+      if (gtk_widget_get_can_focus (GTK_TREE_VIEW_COLUMN (first_column->data)->button) &&
 	  GTK_TREE_VIEW_COLUMN (first_column->data)->visible &&
 	  (GTK_TREE_VIEW_COLUMN (first_column->data)->clickable ||
 	   GTK_TREE_VIEW_COLUMN (first_column->data)->reorderable))
@@ -7829,7 +7828,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
   last_column = g_list_last (tree_view->priv->columns);
   while (last_column)
     {
-      if (GTK_WIDGET_CAN_FOCUS (GTK_TREE_VIEW_COLUMN (last_column->data)->button) &&
+      if (gtk_widget_get_can_focus (GTK_TREE_VIEW_COLUMN (last_column->data)->button) &&
 	  GTK_TREE_VIEW_COLUMN (last_column->data)->visible &&
 	  (GTK_TREE_VIEW_COLUMN (last_column->data)->clickable ||
 	   GTK_TREE_VIEW_COLUMN (last_column->data)->reorderable))
@@ -7848,7 +7847,8 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
     case GTK_DIR_DOWN:
       if (focus_child == NULL)
 	{
-	  if (tree_view->priv->focus_column != NULL && GTK_WIDGET_CAN_FOCUS (tree_view->priv->focus_column->button))
+	  if (tree_view->priv->focus_column != NULL &&
+              gtk_widget_get_can_focus (tree_view->priv->focus_column->button))
 	    focus_child = tree_view->priv->focus_column->button;
 	  else
 	    focus_child = GTK_TREE_VIEW_COLUMN (first_column->data)->button;
@@ -7907,7 +7907,7 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 	  column = tmp_list->data;
 	  if (column->button &&
 	      column->visible &&
-	      GTK_WIDGET_CAN_FOCUS (column->button))
+	      gtk_widget_get_can_focus (column->button))
 	    {
 	      focus_child = column->button;
 	      gtk_widget_grab_focus (column->button);
@@ -7996,7 +7996,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkWidget *focus_child;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (container) || !GTK_WIDGET_CAN_FOCUS (widget))
+  if (!GTK_WIDGET_IS_SENSITIVE (container) || !gtk_widget_get_can_focus (widget))
     return FALSE;
 
   focus_child = container->focus_child;

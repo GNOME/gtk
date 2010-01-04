@@ -1660,7 +1660,7 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
 	return TRUE;
     }
 
-  if (!had_focus_child && GTK_WIDGET_CAN_FOCUS (widget))
+  if (!had_focus_child && gtk_widget_get_can_focus (widget))
     {
       gtk_widget_grab_focus (widget);
       return TRUE;

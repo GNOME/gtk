@@ -1146,7 +1146,7 @@ gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
   GTK_TREE_VIEW (column->tree_view)->priv->focus_column = column;
   if (column->clickable)
     gtk_button_clicked (GTK_BUTTON (column->button));
-  else if (GTK_WIDGET_CAN_FOCUS (column->button))
+  else if (gtk_widget_get_can_focus (column->button))
     gtk_widget_grab_focus (column->button);
   else
     gtk_widget_grab_focus (column->tree_view);

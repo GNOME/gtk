@@ -464,7 +464,7 @@ gail_label_ref_relation_set (AtkObject *obj)
           AtkObject *accessible_array[1];
           AtkRelation* relation;
 
-          if (!GTK_WIDGET_CAN_FOCUS (mnemonic_widget))
+          if (!gtk_widget_get_can_focus (mnemonic_widget))
             {
             /*
              * Handle the case where a GtkFileChooserButton is specified as the 

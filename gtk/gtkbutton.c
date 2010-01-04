@@ -1429,7 +1429,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = MAX (1, child_allocation.height - default_border.top - default_border.bottom);
 	}
 
-      if (GTK_WIDGET_CAN_FOCUS (button))
+      if (gtk_widget_get_can_focus (GTK_WIDGET (button)))
 	{
 	  child_allocation.x += focus_width + focus_pad;
 	  child_allocation.y += focus_width + focus_pad;

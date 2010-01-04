@@ -1590,7 +1590,7 @@ gtk_window_set_focus (GtkWindow *window,
   if (focus)
     {
       g_return_if_fail (GTK_IS_WIDGET (focus));
-      g_return_if_fail (GTK_WIDGET_CAN_FOCUS (focus));
+      g_return_if_fail (gtk_widget_get_can_focus (focus));
     }
 
   if (focus)
