@@ -3697,7 +3697,7 @@ separate_uline_pattern (const gchar  *str,
                         gchar       **pattern)
 {
   gboolean underscore;
-  gchar *src;
+  const gchar *src;
   gchar *dest;
   gchar *pattern_dest;
 
@@ -3714,7 +3714,7 @@ separate_uline_pattern (const gchar  *str,
   while (*src)
     {
       gunichar c;
-      gchar *next_src;
+      const gchar *next_src;
 
       c = g_utf8_get_char (src);
       if (c == (gunichar)-1)
