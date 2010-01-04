@@ -549,7 +549,7 @@ static void
 gtk_event_box_paint (GtkWidget    *widget,
 		     GdkRectangle *area)
 {
-  if (!GTK_WIDGET_APP_PAINTABLE (widget))
+  if (!gtk_widget_get_app_paintable (widget))
     gtk_paint_flat_box (widget->style, widget->window,
 			widget->state, GTK_SHADOW_NONE,
 			area, widget, "eventbox",

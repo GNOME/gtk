@@ -2743,7 +2743,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (GTK_WIDGET_SENSITIVE (widget) != FALSE));
       break;
     case PROP_APP_PAINTABLE:
-      g_value_set_boolean (value, (GTK_WIDGET_APP_PAINTABLE (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_get_app_paintable (widget) != FALSE));
       break;
     case PROP_CAN_FOCUS:
       g_value_set_boolean (value, (GTK_WIDGET_CAN_FOCUS (widget) != FALSE));
@@ -2755,13 +2755,13 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (gtk_widget_is_focus (widget)));
       break;
     case PROP_CAN_DEFAULT:
-      g_value_set_boolean (value, (GTK_WIDGET_CAN_DEFAULT (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_get_can_default (widget) != FALSE));
       break;
     case PROP_HAS_DEFAULT:
-      g_value_set_boolean (value, (GTK_WIDGET_HAS_DEFAULT (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_has_default (widget) != FALSE));
       break;
     case PROP_RECEIVES_DEFAULT:
-      g_value_set_boolean (value, (GTK_WIDGET_RECEIVES_DEFAULT (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_get_receives_default (widget) != FALSE));
       break;
     case PROP_COMPOSITE_CHILD:
       g_value_set_boolean (value, (GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0 );
@@ -5545,7 +5545,7 @@ gtk_widget_set_can_default (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (can_default != GTK_WIDGET_CAN_DEFAULT (widget))
+  if (can_default != gtk_widget_get_can_default (widget))
     {
       if (can_default)
         GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
@@ -5573,7 +5573,7 @@ gtk_widget_get_can_default (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_CAN_DEFAULT (widget);
+  return (GTK_WIDGET_FLAGS (widget) & GTK_CAN_DEFAULT) != 0;
 }
 
 /**
@@ -5593,7 +5593,7 @@ gtk_widget_has_default (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_HAS_DEFAULT (widget);
+  return (GTK_WIDGET_FLAGS (widget) & GTK_HAS_DEFAULT) != 0;
 }
 
 /**
@@ -5613,7 +5613,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   GtkWidget *window;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
+  g_return_if_fail (gtk_widget_get_can_default (widget));
   
   window = gtk_widget_get_toplevel (widget);
   
@@ -5979,7 +5979,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 
   app_paintable = (app_paintable != FALSE);
 
-  if (GTK_WIDGET_APP_PAINTABLE (widget) != app_paintable)
+  if (gtk_widget_get_app_paintable (widget) != app_paintable)
     {
       if (app_paintable)
 	GTK_WIDGET_SET_FLAGS (widget, GTK_APP_PAINTABLE);
@@ -6044,7 +6044,7 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (double_buffered != GTK_WIDGET_DOUBLE_BUFFERED (widget))
+  if (double_buffered != gtk_widget_get_double_buffered (widget))
     {
       if (double_buffered)
         GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
@@ -9067,7 +9067,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       g_object_ref (widget);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_HAS_GRAB (widget))
+      if (!GTK_WIDGET_IS_SENSITIVE (widget) && gtk_widget_has_grab (widget))
 	gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
@@ -9338,7 +9338,7 @@ expose_window (GdkWindow *window)
   gdk_window_get_user_data (window, &user_data);
 
   if (user_data)
-    is_double_buffered = GTK_WIDGET_DOUBLE_BUFFERED (GTK_WIDGET (user_data));
+    is_double_buffered = gtk_widget_get_double_buffered (GTK_WIDGET (user_data));
   else
     is_double_buffered = FALSE;
   

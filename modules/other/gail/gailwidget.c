@@ -529,7 +529,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
           if (focus_obj == NULL)
             atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
         }
-      if (GTK_WIDGET_HAS_DEFAULT(widget))
+      if (gtk_widget_has_default (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
         }
