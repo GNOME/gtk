@@ -1549,7 +1549,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     {
       GtkWidget *menu_shell;
       

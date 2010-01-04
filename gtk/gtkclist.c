@@ -6149,7 +6149,7 @@ typedef struct
 
 /* The window to which widget->window is relative */
 #define ALLOCATION_WINDOW(widget)		\
-   (GTK_WIDGET_NO_WINDOW (widget) ?		\
+   (!gtk_widget_get_has_window (widget) ?		\
     (widget)->window :                          \
      gdk_window_get_parent ((widget)->window))
 

@@ -1489,7 +1489,7 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
 
   sx = sy = 0;
 
-  if (GTK_WIDGET_NO_WINDOW (child))
+  if (!gtk_widget_get_has_window (child))
     {
       sx += child->allocation.x;
       sy += child->allocation.y;
@@ -1652,7 +1652,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 
   *x = *y = 0;
 
-  if (GTK_WIDGET_NO_WINDOW (sample))
+  if (!gtk_widget_get_has_window (sample))
     {
       *x += sample->allocation.x;
       *y += sample->allocation.y;

@@ -705,7 +705,7 @@ gtk_font_button_clicked (GtkButton *button)
       
       font_dialog = GTK_FONT_SELECTION_DIALOG (font_button->priv->font_dialog);
       
-      if (GTK_WIDGET_TOPLEVEL (parent) && GTK_IS_WINDOW (parent))
+      if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
         {
           if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
  	    gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));

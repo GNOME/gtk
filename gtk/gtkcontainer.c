@@ -1261,7 +1261,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
   
-  if (GTK_WIDGET_TOPLEVEL (container) &&
+  if (gtk_widget_is_toplevel (GTK_WIDGET (container)) &&
       resize_mode == GTK_RESIZE_PARENT)
     {
       resize_mode = GTK_RESIZE_QUEUE;
@@ -1380,7 +1380,7 @@ _gtk_container_queue_resize (GtkContainer *container)
   if (resize_container)
     {
       if (GTK_WIDGET_VISIBLE (resize_container) &&
- 	  (GTK_WIDGET_TOPLEVEL (resize_container) || GTK_WIDGET_REALIZED (resize_container)))
+ 	  (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) || GTK_WIDGET_REALIZED (resize_container)))
 	{
 	  switch (resize_container->resize_mode)
 	    {
@@ -1690,11 +1690,14 @@ gchar*
 _gtk_container_child_composite_name (GtkContainer *container,
 				    GtkWidget    *child)
 {
+  gboolean composite_child;
+
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
   g_return_val_if_fail (child->parent == GTK_WIDGET (container), NULL);
 
-  if (GTK_WIDGET_COMPOSITE_CHILD (child))
+  g_object_get (child, "composite-child", &composite_child, NULL);
+  if (composite_child)
     {
       static GQuark quark_composite_name = 0;
       gchar *name;

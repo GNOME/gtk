@@ -605,7 +605,7 @@ gtk_plug_realize (GtkWidget *widget)
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
@@ -652,7 +652,7 @@ gtk_plug_realize (GtkWidget *widget)
 static void
 gtk_plug_show (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->show (widget);
   else
     GTK_WIDGET_CLASS (bin_class)->show (widget);
@@ -661,7 +661,7 @@ gtk_plug_show (GtkWidget *widget)
 static void
 gtk_plug_hide (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->hide (widget);
   else
     GTK_WIDGET_CLASS (bin_class)->hide (widget);
@@ -675,7 +675,7 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 static void
 gtk_plug_map (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
@@ -700,7 +700,7 @@ gtk_plug_map (GtkWidget *widget)
 static void
 gtk_plug_unmap (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       GtkPlug *plug = GTK_PLUG (widget);
 
@@ -724,8 +724,7 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkRequisition natural_size;
-
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
   else
     {
@@ -762,7 +761,7 @@ static gboolean
 gtk_plug_key_press_event (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     return GTK_WIDGET_CLASS (gtk_plug_parent_class)->key_press_event (widget, event);
   else
     return FALSE;
@@ -967,7 +966,7 @@ gtk_plug_focus (GtkWidget        *widget,
 static void
 gtk_plug_check_resize (GtkContainer *container)
 {
-  if (GTK_WIDGET_TOPLEVEL (container))
+  if (gtk_widget_is_toplevel (GTK_WIDGET (container)))
     GTK_CONTAINER_CLASS (gtk_plug_parent_class)->check_resize (container);
   else
     GTK_CONTAINER_CLASS (bin_class)->check_resize (container);

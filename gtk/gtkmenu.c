@@ -1986,7 +1986,7 @@ gtk_menu_get_toplevel (GtkWidget *menu)
   else if (GTK_IS_WIDGET (attach))
     {
       toplevel = gtk_widget_get_toplevel (attach);
-      if (GTK_WIDGET_TOPLEVEL (toplevel)) 
+      if (gtk_widget_is_toplevel (toplevel)) 
 	return toplevel;
     }
 

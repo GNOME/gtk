@@ -58,7 +58,7 @@ static void _print_type (AtkObject *obj)
     GtkWidget* widget = NULL;
 
     widget = GTK_ACCESSIBLE (obj)->widget;
-    typename = g_type_name (GTK_OBJECT_TYPE (widget));
+    typename = g_type_name (G_OBJECT_TYPE (widget));
     g_print ("Widget type name: %s\n", typename ? typename : "NULL");
   }
   typename = g_type_name (G_OBJECT_TYPE (obj));

@@ -2778,7 +2778,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (GTK_WIDGET_RECEIVES_DEFAULT (widget) != FALSE));
       break;
     case PROP_COMPOSITE_CHILD:
-      g_value_set_boolean (value, (GTK_WIDGET_COMPOSITE_CHILD (widget) != FALSE));
+      g_value_set_boolean (value, (GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0 );
       break;
     case PROP_STYLE:
       g_value_set_object (value, gtk_widget_get_style (widget));
@@ -3060,7 +3060,7 @@ gtk_widget_unparent (GtkWidget *widget)
   nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
   if (GTK_CONTAINER (widget->parent)->focus_child == widget)
@@ -3192,7 +3192,7 @@ gtk_widget_show (GtkWidget *widget)
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       g_object_ref (widget);
-      if (!GTK_WIDGET_TOPLEVEL (widget))
+      if (!gtk_widget_is_toplevel (widget))
 	gtk_widget_queue_resize (widget);
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify (G_OBJECT (widget), "visible");
@@ -3243,7 +3243,7 @@ gtk_widget_show_now (GtkWidget *widget)
 
   /* make sure we will get event */
   if (!GTK_WIDGET_MAPPED (widget) &&
-      GTK_WIDGET_TOPLEVEL (widget))
+      gtk_widget_is_toplevel (widget))
     {
       gtk_widget_show (widget);
 
@@ -3275,11 +3275,11 @@ gtk_widget_hide (GtkWidget *widget)
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
       
       g_object_ref (widget);
-      if (toplevel != widget && GTK_WIDGET_TOPLEVEL (toplevel))
+      if (toplevel != widget && gtk_widget_is_toplevel (toplevel))
 	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
-      if (!GTK_WIDGET_TOPLEVEL (widget))
+      if (!gtk_widget_is_toplevel (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
       g_object_unref (widget);
@@ -3496,11 +3496,11 @@ gtk_widget_realize (GtkWidget *widget)
     {
       /*
 	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	  g_message ("gtk_widget_realize(%s)", g_type_name (GTK_WIDGET_TYPE (widget)));
+	  g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
       */
 
       if (widget->parent == NULL &&
-          !GTK_WIDGET_TOPLEVEL (widget))
+          !gtk_widget_is_toplevel (widget))
         g_warning ("Calling gtk_widget_realize() on a widget that isn't "
                    "inside a toplevel window is not going to work very well. "
                    "Widgets must be inside a toplevel container before realizing them.");
@@ -5304,7 +5304,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
        * be set by the next loop.
        */
       toplevel = gtk_widget_get_toplevel (focus_widget);
-      if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_IS_WINDOW (toplevel))
+      if (gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
 	{
 	  widget = GTK_WINDOW (toplevel)->focus_widget;
 	  
@@ -5632,7 +5632,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   
   window = gtk_widget_get_toplevel (widget);
   
-  if (window && GTK_WIDGET_TOPLEVEL (window))
+  if (window && gtk_widget_is_toplevel (window))
     gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
@@ -5761,7 +5761,7 @@ gtk_widget_get_name (GtkWidget *widget)
   
   if (widget->name)
     return widget->name;
-  return g_type_name (GTK_WIDGET_TYPE (widget));
+  return G_OBJECT_TYPE_NAME (widget);
 }
 
 /**
@@ -6150,7 +6150,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   if (sensitive)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE);
-      data.state = GTK_WIDGET_SAVED_STATE (widget);
+      data.state = widget->saved_state;
     }
   else
     {
@@ -6239,7 +6239,7 @@ gtk_widget_set_parent (GtkWidget *widget,
       g_warning ("Can't set a parent on widget which has a parent\n");
       return;
     }
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       g_warning ("Can't set a parent on a toplevel widget\n");
       return;
@@ -6819,7 +6819,7 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 						gpointer   client_data)
 {
   HierarchyChangedInfo *info = client_data;
-  gboolean new_anchored = GTK_WIDGET_TOPLEVEL (widget) ||
+  gboolean new_anchored = gtk_widget_is_toplevel (widget) ||
                  (widget->parent && GTK_WIDGET_ANCHORED (widget->parent));
 
   if (GTK_WIDGET_ANCHORED (widget) != new_anchored)
@@ -6861,7 +6861,7 @@ _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
   info.previous_toplevel = previous_toplevel;
   info.previous_screen = previous_toplevel ? gtk_widget_get_screen (previous_toplevel) : NULL;
 
-  if (GTK_WIDGET_TOPLEVEL (widget) ||
+  if (gtk_widget_is_toplevel (widget) ||
       (widget->parent && GTK_WIDGET_ANCHORED (widget->parent)))
     info.new_screen = gtk_widget_get_screen (widget);
   else
@@ -7303,7 +7303,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
 			      gboolean   is_visible)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_TOPLEVEL (widget));
+  g_return_if_fail (!gtk_widget_is_toplevel (widget));
 
   g_object_ref (widget);
 
@@ -7316,7 +7316,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
 
       toplevel = gtk_widget_get_toplevel (widget);
-      if (toplevel != widget && GTK_WIDGET_TOPLEVEL (toplevel))
+      if (toplevel != widget && gtk_widget_is_toplevel (toplevel))
 	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
     }
 
@@ -7361,7 +7361,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
   
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     {
       if (GTK_IS_WINDOW (toplevel))
 	return GTK_WINDOW (toplevel)->screen;
@@ -7994,7 +7994,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * is set on the result.
  * |[
  *  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
- *  if (GTK_WIDGET_TOPLEVEL (toplevel))
+ *  if (gtk_widget_is_toplevel (toplevel))
  *    {
  *      /&ast; Perform action on toplevel. &ast;/
  *    }
@@ -8037,10 +8037,10 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
-  while (widget && !g_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
+  while (widget && !g_type_is_a (G_OBJECT_TYPE (widget), widget_type))
     widget = widget->parent;
   
-  if (!(widget && g_type_is_a (GTK_WIDGET_TYPE (widget), widget_type)))
+  if (!(widget && g_type_is_a (G_OBJECT_TYPE (widget), widget_type)))
     return NULL;
   
   return widget;
@@ -8263,7 +8263,7 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
 			       const gchar *name)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_COMPOSITE_CHILD (widget));
+  g_return_if_fail ((GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0);
   g_return_if_fail (name != NULL);
 
   if (!quark_composite_name)
@@ -8290,7 +8290,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (GTK_WIDGET_COMPOSITE_CHILD (widget) && widget->parent)
+  if (((GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0) && widget->parent)
     return _gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
 					       widget);
   else
@@ -9037,7 +9037,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
   guint8 old_state = GTK_WIDGET_STATE (widget);
-  guint8 old_saved_state = GTK_WIDGET_SAVED_STATE (widget);
+  guint8 old_saved_state = widget->saved_state;
 
   /* don't call this function with state==GTK_STATE_INSENSITIVE,
    * parent_sensitive==TRUE on a sensitive widget
@@ -9052,7 +9052,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   if (GTK_WIDGET_IS_SENSITIVE (widget))
     {
       if (data->state_restoration)
-        GTK_WIDGET_STATE (widget) = GTK_WIDGET_SAVED_STATE (widget);
+        GTK_WIDGET_STATE (widget) = widget->saved_state;
       else
         GTK_WIDGET_STATE (widget) = data->state;
     }
@@ -9061,10 +9061,10 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       if (!data->state_restoration)
 	{
 	  if (data->state != GTK_STATE_INSENSITIVE)
-	    GTK_WIDGET_SAVED_STATE (widget) = data->state;
+	    widget->saved_state = data->state;
 	}
       else if (GTK_WIDGET_STATE (widget) != GTK_STATE_INSENSITIVE)
-	GTK_WIDGET_SAVED_STATE (widget) = GTK_WIDGET_STATE (widget);
+	widget->saved_state = GTK_WIDGET_STATE (widget);
       GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
     }
 
@@ -9073,12 +9073,12 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       GtkWidget *window;
 
       window = gtk_widget_get_toplevel (widget);
-      if (window && GTK_WIDGET_TOPLEVEL (window))
+      if (window && gtk_widget_is_toplevel (window))
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
   if (old_state != GTK_WIDGET_STATE (widget) ||
-      old_saved_state != GTK_WIDGET_SAVED_STATE (widget))
+      old_saved_state != widget->saved_state)
     {
       g_object_ref (widget);
 
@@ -9911,7 +9911,7 @@ gtk_widget_class_path (GtkWidget *widget,
       gchar *d;
       guint l;
       
-      string = g_type_name (GTK_WIDGET_TYPE (widget));
+      string = g_type_name (G_OBJECT_TYPE (widget));
       l = strlen (string);
       while (tmp_path_len <= len + l + 1)
 	{

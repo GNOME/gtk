@@ -111,21 +111,6 @@ if all references are released.
 
 </para>
 
-<!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
-<para>
-Gets the type of an object.
-</para>
-
-@object: a #GtkObject.
-
-
-<!-- ##### MACRO GTK_OBJECT_TYPE_NAME ##### -->
-<para>
-Gets the name of an objects type.
-</para>
-
-@object: a #GtkObject.
-
 
 <!-- ##### ENUM GtkObjectFlags ##### -->
 <para>

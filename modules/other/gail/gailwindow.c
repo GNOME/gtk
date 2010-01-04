@@ -563,7 +563,7 @@ gail_window_get_extents (AtkComponent  *component,
 
   gail_return_if_fail (GTK_IS_WINDOW (widget));
 
-  if (!GTK_WIDGET_TOPLEVEL (widget))
+  if (!gtk_widget_is_toplevel (widget))
     {
       AtkComponentIface *parent_iface;
 
@@ -608,7 +608,7 @@ gail_window_get_size (AtkComponent *component,
 
   gail_return_if_fail (GTK_IS_WINDOW (widget));
 
-  if (!GTK_WIDGET_TOPLEVEL (widget))
+  if (!gtk_widget_is_toplevel (widget))
     {
       AtkComponentIface *parent_iface;
 

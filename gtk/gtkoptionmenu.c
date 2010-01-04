@@ -608,7 +608,7 @@ gtk_option_menu_expose (GtkWidget      *widget,
 
       child_event = *event;
 
-      if (GTK_WIDGET_NO_WINDOW (child) &&
+      if (!gtk_widget_get_has_window (child) &&
 	  gtk_widget_intersect (child, &event->area, &child_event.area))
 	gtk_widget_event (child, (GdkEvent*) &child_event);
 

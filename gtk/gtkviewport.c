@@ -840,7 +840,7 @@ gtk_viewport_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
    if (GTK_WIDGET_REALIZED (widget) &&
-       !GTK_WIDGET_NO_WINDOW (widget))
+       gtk_widget_get_has_window (widget))
      {
 	GtkViewport *viewport = GTK_VIEWPORT (widget);
 

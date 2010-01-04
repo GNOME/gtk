@@ -357,7 +357,7 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
     {
       cairo_t *cr;
       
-      if (GTK_WIDGET_NO_WINDOW (widget))
+      if (!gtk_widget_get_has_window (widget))
 	{
 	  x = widget->allocation.x;
 	  y = widget->allocation.y;
@@ -434,7 +434,7 @@ get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
   
-  if (GTK_WIDGET_TOPLEVEL (toplevel) && toplevel->window)
+  if (gtk_widget_is_toplevel (toplevel) && toplevel->window)
     return [gdk_quartz_window_get_nsview (toplevel->window) window];
   else
     return NULL;
@@ -697,7 +697,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
       allocation_to_window_x = widget->allocation.x;
       allocation_to_window_y = widget->allocation.y;
 
-      if (!GTK_WIDGET_NO_WINDOW (widget))
+      if (gtk_widget_get_has_window (widget))
 	{
 	  /* The allocation is relative to the parent window for
 	   * window widgets, not to widget->window.

@@ -739,7 +739,7 @@ gail_widget_grab_focus (AtkComponent   *component)
     {
       gtk_widget_grab_focus (widget);
       toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_WIDGET_TOPLEVEL (toplevel))
+      if (gtk_widget_is_toplevel (toplevel))
 	{
 #ifdef GDK_WINDOWING_X11
 	  gtk_window_present_with_time (GTK_WINDOW (toplevel), gdk_x11_get_server_time (widget->window));
@@ -777,7 +777,7 @@ gail_widget_set_extents (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       if (coord_type == ATK_XY_WINDOW)
         {
@@ -821,7 +821,7 @@ gail_widget_set_position (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       if (coord_type == ATK_XY_WINDOW)
         {
@@ -862,7 +862,7 @@ gail_widget_set_size (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       gtk_widget_set_size_request (widget, width, height);
       return TRUE;

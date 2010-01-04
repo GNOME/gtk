@@ -124,11 +124,10 @@
 	However, in practice it is convenient to have widgets which do
 	not have a <classname>GdkWindow</classname> of their own, but
 	rather share the one from their parent widget.  Such widgets
-	have the <constant>GTK_NO_WINDOW</constant> <link
-	linkend="GtkWidgetFlags">widget flag</link> turned on; this
-	can be tested easily with the <link
-	linkend="GTK-WIDGET-NO-WINDOW-CAPS"><function>GTK_WIDGET_NO_WINDOW()</function></link>
-	macro.  As such, these are called <firstterm>no-window
+	have called <function>gtk_widget_set_has_window</function> to
+	disable it; this can be tested easily with the <link
+	linkend="gtk-widget-get-has-window"><function>gtk_widget_get_has_window()</function></link>
+	function.  As such, these are called <firstterm>no-window
 	widgets</firstterm>.
       </para>
 

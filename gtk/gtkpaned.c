@@ -1707,7 +1707,7 @@ paned_get_focus_widget (GtkPaned *paned)
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (paned));
-  if (GTK_WIDGET_TOPLEVEL (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     return GTK_WINDOW (toplevel)->focus_widget;
 
   return NULL;

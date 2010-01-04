@@ -906,7 +906,7 @@ gail_tree_view_ref_child (AtkObject *obj,
     fake_renderer = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT, NULL);
     default_registry = atk_get_default_registry ();
     factory = atk_registry_get_factory (default_registry,
-                                        GTK_OBJECT_TYPE (fake_renderer));
+                                        G_OBJECT_TYPE (fake_renderer));
     child = atk_object_factory_create_accessible (factory,
                                                   G_OBJECT (fake_renderer));
     gail_return_val_if_fail (GAIL_IS_RENDERER_CELL (child), NULL);
@@ -942,7 +942,7 @@ gail_tree_view_ref_child (AtkObject *obj,
 
         default_registry = atk_get_default_registry ();
         factory = atk_registry_get_factory (default_registry,
-                                            GTK_OBJECT_TYPE (renderer));
+                                            G_OBJECT_TYPE (renderer));
         child = atk_object_factory_create_accessible (factory,
                                                       G_OBJECT (renderer));
         gail_return_val_if_fail (GAIL_IS_RENDERER_CELL (child), NULL);
@@ -2200,7 +2200,7 @@ gail_tree_view_grab_cell_focus  (GailCellParent *parent,
       gtk_tree_path_free (path);
       gtk_widget_grab_focus (widget);
       toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_WIDGET_TOPLEVEL (toplevel))
+      if (gtk_widget_is_toplevel (toplevel))
 	{
 #ifdef GDK_WINDOWING_X11
 	  gtk_window_present_with_time (GTK_WINDOW (toplevel), gdk_x11_get_server_time (widget->window));

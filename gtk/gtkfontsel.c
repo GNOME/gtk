@@ -273,7 +273,7 @@ list_row_activated (GtkWidget *widget)
   GtkWindow *window;
   
   window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
-  if (!GTK_WIDGET_TOPLEVEL (window))
+  if (!gtk_widget_is_toplevel (GTK_WIDGET (window)))
     window = NULL;
   
   if (window

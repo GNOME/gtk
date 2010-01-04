@@ -167,7 +167,7 @@ real_queue_resize (GtkWidget *widget)
   
   if (widget->parent)
     _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-  else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
+  else if (gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     _gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 

@@ -1695,7 +1695,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (page), 0);
   g_return_val_if_fail (page->parent == NULL, 0);
-  g_return_val_if_fail (!GTK_WIDGET_TOPLEVEL (page), 0);
+  g_return_val_if_fail (!gtk_widget_is_toplevel (page), 0);
 
   priv = assistant->priv;
 
