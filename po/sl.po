@@ -1,16 +1,17 @@
+# Slovenian translation of GTK+.
 # Copyright (C) 2006-2007 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Martin Srebotnjak <miles@filmsi.net>, 2007.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2009.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2010-01-01 20:31+0000\n"
-"PO-Revision-Date: 2010-01-02 09:51+0100\n"
+"POT-Creation-Date: 2010-01-04 10:49+0000\n"
+"PO-Revision-Date: 2010-01-05 12:15+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -506,7 +507,7 @@ msgstr "Naletel sem na neveljavno kodo"
 
 #: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
-msgstr "Krožni vnost razpredelnice v GIF datoteki"
+msgstr "Krožni vnos preglednice v GIF datoteki"
 
 #: ../gdk-pixbuf/io-gif.c:866
 #: ../gdk-pixbuf/io-gif.c:1468
@@ -789,8 +790,10 @@ msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ključi za sklope besedila PNG morajo biti znaki ASCII."
 
 #: ../gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
-msgstr "Barvni profil je neveljavne dolžine '%"
+#: ../gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
+msgstr "Barvni profil je neveljavne dolžine %d."
 
 #: ../gdk-pixbuf/io-png.c:899
 #: ../gdk-pixbuf/io-gdip-png.c:56
@@ -855,7 +858,7 @@ msgstr "Nalagalnik slik PNM ne podpira te podvrste zapisa PNM"
 #: ../gdk-pixbuf/io-pnm.c:741
 #: ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr "Surove vrste zapisa PNM zahtevajo natančno en presledek pred podatki"
+msgstr "Surove vrste zapisa PNM zahtevajo natančno en presledni znak pred podatki"
 
 #: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
@@ -1006,11 +1009,6 @@ msgstr "Shranjevanje slike TIFF ni bilo uspešno"
 #: ../gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr "Skrčenje TIFF ne sledi veljavnemu kodeku."
-
-#: ../gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
-msgstr "Barvni profil je neveljavne dolžine '%d'."
 
 #: ../gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
@@ -2293,12 +2291,12 @@ msgid "Cl_ear"
 msgstr "P_očisti"
 
 #. Open Link
-#: ../gtk/gtklabel.c:5634
+#: ../gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5646
+#: ../gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
@@ -4676,7 +4674,7 @@ msgstr "Pisanje glave ni bilo uspešno\n"
 #: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "Zapisovanje razpredelnice razpršila (hash table) ni bilo uspešno\n"
+msgstr "Zapisovanje preglednice razpršila (hash table) ni bilo uspešno\n"
 
 #: ../gtk/updateiconcache.c:1386
 #, c-format
@@ -5260,6 +5258,8 @@ msgstr "Natisni na preizkusnem tiskalniku"
 msgid "Could not get information for file '%s': %s"
 msgstr "Ni mogoče dobiti podatkov o datoteki '%s': %s"
 
+#~ msgid "Color profile has invalid length '%"
+#~ msgstr "Barvni profil je neveljavne dolžine '%"
 #~ msgid "(Empty)"
 #~ msgstr "(Prazno)"
 #~ msgid "failed to allocate image buffer of %u byte"
