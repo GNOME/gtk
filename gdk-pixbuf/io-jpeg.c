@@ -656,6 +656,13 @@ gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 	context->src_initialized = FALSE;
 	context->in_output = FALSE;
 
+        /* From jpeglib.h: "NB: you must set up the error-manager
+         * BEFORE calling jpeg_create_xxx". */
+	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
+	context->jerr.pub.error_exit = fatal_error_handler;
+        context->jerr.pub.output_message = output_message_handler;
+        context->jerr.error = error;
+
 	/* create libjpeg structures */
 	jpeg_create_decompress (&context->cinfo);
 
@@ -668,14 +675,7 @@ gdk_pixbuf__jpeg_image_begin_load (GdkPixbufModuleSizeFunc size_func,
 		return NULL;
 	}
 	memset (context->cinfo.src, 0, sizeof (my_source_mgr));
-       
-	src = (my_src_ptr) context->cinfo.src;
 
-	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
-	context->jerr.pub.error_exit = fatal_error_handler;
-        context->jerr.pub.output_message = output_message_handler;
-        context->jerr.error = error;
-        
 	src = (my_src_ptr) context->cinfo.src;
 	src->pub.init_source = init_source;
 	src->pub.fill_input_buffer = fill_input_buffer;
