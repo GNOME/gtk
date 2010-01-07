@@ -212,7 +212,7 @@ gtk_tree_item_subtree_button_changed_state (GtkWidget *widget)
       else
 	gdk_window_set_background (widget->window, &widget->style->bg[widget->state]);
       
-      if (GTK_WIDGET_DRAWABLE (widget))
+      if (gtk_widget_is_drawable (widget))
 	gdk_window_clear_area (widget->window, 0, 0, 
 			       widget->allocation.width, widget->allocation.height);
     }
@@ -603,7 +603,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
    * line. (Like the way that the tree in Windows Explorer
    * works).
    */
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       tree_item = GTK_TREE_ITEM(widget);
 
@@ -681,7 +681,7 @@ gtk_tree_item_expose_child (GtkWidget *child,
     GdkEventExpose *event;
   } *data = client_data;
 
-  if (GTK_WIDGET_DRAWABLE (child) &&
+  if (gtk_widget_is_drawable (child) &&
       !gtk_widget_get_has_window (child) &&
       (child->window == data->event->window))
     {
@@ -709,7 +709,7 @@ gtk_tree_item_expose (GtkWidget      *widget,
     GdkEventExpose *event;
   } data;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_tree_item_paint (widget, &event->area);
 

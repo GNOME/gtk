@@ -666,7 +666,7 @@ gail_widget_get_extents (AtkComponent   *component,
 
   *width = widget->allocation.width;
   *height = widget->allocation.height;
-  if (!gail_widget_on_screen (widget) || (!GTK_WIDGET_DRAWABLE (widget)))
+  if (!gail_widget_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
     {
       *x = G_MININT;
       *y = G_MININT;

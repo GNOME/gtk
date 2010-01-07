@@ -466,7 +466,7 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
   gdouble s, c;
   gdouble w, h;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (event->window == widget->window)
         {

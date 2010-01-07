@@ -105,7 +105,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
   GtkArrowType arrow_type;
   GtkTextDirection direction;
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
 

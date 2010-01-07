@@ -9,7 +9,7 @@ da_expose (GtkWidget *widget,
   GdkPixmap *pixmap;
   cairo_t *cr;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       pixmap = gtk_offscreen_window_get_pixmap (offscreen);
 

@@ -182,6 +182,8 @@ gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
 			gfloat   yalign)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_MISC (misc));
 
   if (xalign < 0.0)
@@ -208,13 +210,9 @@ gtk_misc_set_alignment (GtkMisc *misc,
       
       /* clear the area that was allocated before the change
        */
-      if (GTK_WIDGET_DRAWABLE (misc))
-        {
-          GtkWidget *widget;
-	  
-          widget = GTK_WIDGET (misc);
-          gtk_widget_queue_draw (widget);
-        }
+      widget = GTK_WIDGET (misc);
+      if (gtk_widget_is_drawable (widget))
+        gtk_widget_queue_draw (widget);
 
       g_object_thaw_notify (G_OBJECT (misc));
     }
@@ -275,7 +273,7 @@ gtk_misc_set_padding (GtkMisc *misc,
       requisition->width += misc->xpad * 2;
       requisition->height += misc->ypad * 2;
       
-      if (GTK_WIDGET_DRAWABLE (misc))
+      if (gtk_widget_is_drawable (GTK_WIDGET (misc)))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
 
       g_object_thaw_notify (G_OBJECT (misc));

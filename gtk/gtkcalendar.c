@@ -2666,7 +2666,7 @@ gtk_calendar_expose (GtkWidget	    *widget,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   int i;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (event->window == priv->main_win)
 	calendar_paint_main (calendar);
@@ -3728,7 +3728,7 @@ gtk_calendar_select_day (GtkCalendar *calendar,
       
       selected_day = calendar->selected_day;
       calendar->selected_day = 0;
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (calendar)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
 	calendar_invalidate_day_num (calendar, selected_day);
     }
   
@@ -3737,7 +3737,7 @@ gtk_calendar_select_day (GtkCalendar *calendar,
   /* Select the new day */
   if (day != 0)
     {
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (calendar)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (calendar)))
 	calendar_invalidate_day_num (calendar, day);
     }
   

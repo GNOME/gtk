@@ -897,7 +897,7 @@ static gboolean
 gtk_expander_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkExpander *expander = GTK_EXPANDER (widget);
 

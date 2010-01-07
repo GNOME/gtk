@@ -3449,13 +3449,15 @@ get_cursor_direction (GtkLabel *label)
 static void
 gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 {
+  GtkWidget *widget;
+
   if (label->select_info == NULL)
     return;
-  
-  if (GTK_WIDGET_DRAWABLE (label))
-    {
-      GtkWidget *widget = GTK_WIDGET (label);
 
+  widget = GTK_WIDGET (label);
+  
+  if (gtk_widget_is_drawable (widget))
+    {
       PangoDirection keymap_direction;
       PangoDirection cursor_direction;
       PangoRectangle strong_pos, weak_pos;

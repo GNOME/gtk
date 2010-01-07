@@ -531,7 +531,7 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 			  && impl->save_folder_label == NULL
 			  && impl->save_folder_combo == NULL
 			  && impl->save_expander == NULL
-			  && GTK_IS_CONTAINER (impl->browse_widgets) && GTK_WIDGET_DRAWABLE (impl->browse_widgets));
+			  && GTK_IS_CONTAINER (impl->browse_widgets) && gtk_widget_is_drawable (impl->browse_widgets));
     }
   else if (has_action (save_actions, G_N_ELEMENTS (save_actions), impl->action))
     {
@@ -539,11 +539,11 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
        * _gtk_file_chooser_entry_get_type(), which is a non-exported symbol.
        * So, we just test impl->location_entry for being non-NULL
        */
-      passed = passed && (GTK_IS_CONTAINER (impl->save_widgets) && GTK_WIDGET_DRAWABLE (impl->save_widgets)
-			  && impl->location_entry != NULL && GTK_WIDGET_DRAWABLE (impl->location_entry)
-			  && GTK_IS_LABEL (impl->save_folder_label) && GTK_WIDGET_DRAWABLE (impl->save_folder_label)
-			  && GTK_IS_COMBO_BOX (impl->save_folder_combo) && GTK_WIDGET_DRAWABLE (impl->save_folder_combo)
-			  && GTK_IS_EXPANDER (impl->save_expander) && GTK_WIDGET_DRAWABLE (impl->save_expander)
+      passed = passed && (GTK_IS_CONTAINER (impl->save_widgets) && gtk_widget_is_drawable (impl->save_widgets)
+			  && impl->location_entry != NULL && gtk_widget_is_drawable (impl->location_entry)
+			  && GTK_IS_LABEL (impl->save_folder_label) && gtk_widget_is_drawable (impl->save_folder_label)
+			  && GTK_IS_COMBO_BOX (impl->save_folder_combo) && gtk_widget_is_drawable (impl->save_folder_combo)
+			  && GTK_IS_EXPANDER (impl->save_expander) && gtk_widget_is_drawable (impl->save_expander)
 			  && GTK_IS_CONTAINER (impl->browse_widgets));
 
       /* FIXME: we are in a SAVE mode; test the visibility and sensitivity of

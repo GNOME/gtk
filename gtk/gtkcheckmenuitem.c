@@ -441,7 +441,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   GtkShadowType shadow_type;
   gint x, y;
 
-  if (GTK_WIDGET_DRAWABLE (check_menu_item))
+  if (gtk_widget_is_drawable (GTK_WIDGET (check_menu_item)))
     {
       guint offset;
       guint toggle_size;

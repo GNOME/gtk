@@ -2512,7 +2512,7 @@ gtk_combo_box_expose_event (GtkWidget      *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  if (GTK_WIDGET_DRAWABLE (widget) &&
+  if (gtk_widget_is_drawable (widget) &&
       GTK_SHADOW_NONE != priv->shadow_type)
     {
       gtk_paint_shadow (widget->style, widget->window,

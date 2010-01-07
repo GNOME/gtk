@@ -572,7 +572,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 {
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (widget);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (event->window == widget->window)
 	{

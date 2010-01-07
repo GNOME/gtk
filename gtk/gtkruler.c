@@ -306,7 +306,7 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 
   ruler->metric = (GtkRulerMetric *) &ruler_metrics[metric];
 
-  if (GTK_WIDGET_DRAWABLE (ruler))
+  if (gtk_widget_is_drawable (GTK_WIDGET (ruler)))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
 
   g_object_notify (G_OBJECT (ruler), "metric");
@@ -379,7 +379,7 @@ gtk_ruler_set_range (GtkRuler *ruler,
     }
   g_object_thaw_notify (G_OBJECT (ruler));
 
-  if (GTK_WIDGET_DRAWABLE (ruler))
+  if (gtk_widget_is_drawable (GTK_WIDGET (ruler)))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
 }
 
@@ -554,7 +554,7 @@ static gboolean
 gtk_ruler_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkRuler *ruler = GTK_RULER (widget);
 
@@ -632,7 +632,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
   PangoLayout *layout;
   PangoRectangle logical_rect, ink_rect;
 
-  if (!GTK_WIDGET_DRAWABLE (ruler))
+  if (!gtk_widget_is_drawable (widget))
     return;
 
   xthickness = widget->style->xthickness;
@@ -833,7 +833,7 @@ gtk_ruler_real_draw_pos (GtkRuler *ruler)
   gint ythickness;
   gdouble increment;
 
-  if (GTK_WIDGET_DRAWABLE (ruler))
+  if (gtk_widget_is_drawable (widget))
     {
       xthickness = widget->style->xthickness;
       ythickness = widget->style->ythickness;

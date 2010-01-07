@@ -133,7 +133,7 @@ gtk_check_button_paint (GtkWidget    *widget,
 {
   GtkCheckButton *check_button = GTK_CHECK_BUTTON (widget);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gint border_width;
       gint interior_focus;
@@ -307,7 +307,7 @@ gtk_check_button_expose (GtkWidget      *widget,
   toggle_button = GTK_TOGGLE_BUTTON (widget);
   bin = GTK_BIN (widget);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (toggle_button->draw_indicator)
 	{
@@ -356,10 +356,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_width;
   gint focus_pad;
   gboolean interior_focus;
-  
-  if (GTK_WIDGET_DRAWABLE (check_button))
+
+  widget = GTK_WIDGET (check_button);
+
+  if (gtk_widget_is_drawable (widget))
     {
-      widget = GTK_WIDGET (check_button);
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
   

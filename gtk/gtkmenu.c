@@ -1905,7 +1905,7 @@ gtk_menu_reposition (GtkMenu *menu)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
 
-  if (GTK_WIDGET_DRAWABLE (menu) && !menu->torn_off)
+  if (!menu->torn_off && gtk_widget_is_drawable (GTK_WIDGET (menu)))
     gtk_menu_position (menu);
 }
 
@@ -2867,7 +2867,7 @@ gtk_menu_expose (GtkWidget	*widget,
   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_menu_paint (widget, event);
 

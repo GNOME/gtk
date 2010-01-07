@@ -731,7 +731,7 @@ gtk_spin_button_expose (GtkWidget      *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (event->window == spin->panel)
 	{
@@ -804,7 +804,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 
   widget = GTK_WIDGET (spin_button);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       width = spin_button_get_arrow_size (spin_button) + 2 * widget->style->xthickness;
 

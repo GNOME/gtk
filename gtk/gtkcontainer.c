@@ -2301,7 +2301,7 @@ gtk_container_focus_move (GtkContainer     *container,
 		  return TRUE;
             }
         }
-      else if (GTK_WIDGET_DRAWABLE (child) &&
+      else if (gtk_widget_is_drawable (child) &&
                gtk_widget_is_ancestor (child, GTK_WIDGET (container)))
         {
           if (gtk_widget_child_focus (child, direction))
@@ -2638,7 +2638,7 @@ gtk_container_expose (GtkWidget      *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   
-  if (GTK_WIDGET_DRAWABLE (widget)) 
+  if (gtk_widget_is_drawable (widget))
     {
       data.container = widget;
       data.event = event;
@@ -2720,7 +2720,7 @@ gtk_container_propagate_expose (GtkContainer   *container,
 
   g_assert (child->parent == GTK_WIDGET (container));
   
-  if (GTK_WIDGET_DRAWABLE (child) &&
+  if (gtk_widget_is_drawable (child) &&
       !gtk_widget_get_has_window (child) &&
       (child->window == event->window))
     {

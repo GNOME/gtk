@@ -240,13 +240,17 @@ typedef enum
  */
 #define GTK_WIDGET_VISIBLE(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_VISIBLE) != 0)
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_DRAWABLE:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is mapped and visible.
+ *
+ * Deprecated: 2.20: Use gtk_widget_is_drawable() instead.
  */
 #define GTK_WIDGET_DRAWABLE(wid)	  (GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid))
+#endif
 
 /**
  * GTK_WIDGET_SENSITIVE:

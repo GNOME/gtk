@@ -867,7 +867,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
   
   border_width = GTK_CONTAINER (widget)->border_width;
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_paint_box (widget->style,
 		     widget->window,
