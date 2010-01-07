@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 
 #include "prop-editor.h"
@@ -396,16 +395,16 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
 
 static void
-enum_modified (GtkOptionMenu *om, gpointer data)
+enum_modified (GtkComboBox *cb, gpointer data)
 {
   ObjectProperty *p = data;
   gint i;
   GEnumClass *eclass;
   
   eclass = G_ENUM_CLASS (g_type_class_peek (p->spec->value_type));
-  
-  i = gtk_option_menu_get_history (om);
-  
+
+  i = gtk_combo_box_get_active (cb);
+
   if (is_child_property (p->spec))
     {
       GtkWidget *widget = GTK_WIDGET (p->obj);
@@ -421,7 +420,7 @@ enum_modified (GtkOptionMenu *om, gpointer data)
 static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkOptionMenu *om = GTK_OPTION_MENU (data);
+  GtkComboBox *cb = GTK_COMBO_BOX (data);
   GValue val = { 0, };  
   GEnumClass *eclass;
   gint i;
@@ -439,11 +438,11 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
       ++i;
     }
   
-  if (gtk_option_menu_get_history (om) != i)
+  if (gtk_combo_box_get_active (cb) != i)
     {
-      block_controller (G_OBJECT (om));
-      gtk_option_menu_set_history (om, i);
-      unblock_controller (G_OBJECT (om));
+      block_controller (G_OBJECT (cb));
+      gtk_combo_box_set_active (cb, i);
+      unblock_controller (G_OBJECT (cb));
     }
   
   g_value_unset (&val);
@@ -820,33 +819,22 @@ property_widget (GObject    *object,
   else if (type == G_TYPE_PARAM_ENUM)
     {
       {
-	GtkWidget *menu;
 	GEnumClass *eclass;
 	gint j;
 	
-	prop_edit = gtk_option_menu_new ();
-	
-	menu = gtk_menu_new ();
+	prop_edit = gtk_combo_box_new_text ();
 	
 	eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 	
 	j = 0;
 	while (j < eclass->n_values)
 	  {
-	    GtkWidget *mi;
-	    
-	    mi = gtk_menu_item_new_with_label (eclass->values[j].value_name);
-	    
-	    gtk_widget_show (mi);
-	    
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-	    
+	    gtk_combo_box_append_text (GTK_COMBO_BOX (prop_edit),
+	                               eclass->values[j].value_name);
 	    ++j;
 	  }
 	
 	g_type_class_unref (eclass);
-	
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (prop_edit), menu);
 	
 	g_object_connect_property (object, spec,
 				   G_CALLBACK (enum_changed),
