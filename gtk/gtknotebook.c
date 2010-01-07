@@ -2311,7 +2311,7 @@ gtk_notebook_expose (GtkWidget      *widget,
       gtk_container_propagate_expose (GTK_CONTAINER (notebook),
 				      notebook->cur_page->tab_label, event);
     }
-  else if (GTK_WIDGET_DRAWABLE (widget))
+  else if (gtk_widget_is_drawable (widget))
     {
       gtk_notebook_paint (widget, &event->area);
       if (notebook->show_tabs)
@@ -2328,7 +2328,7 @@ gtk_notebook_expose (GtkWidget      *widget,
 	      pages = pages->next;
 
 	      if (page->tab_label->window == event->window &&
-		  GTK_WIDGET_DRAWABLE (page->tab_label))
+		  gtk_widget_is_drawable (page->tab_label))
 		gtk_container_propagate_expose (GTK_CONTAINER (notebook),
 						page->tab_label, event);
 	    }
@@ -2343,7 +2343,7 @@ gtk_notebook_expose (GtkWidget      *widget,
         for (i = 0; i < N_ACTION_WIDGETS; i++)
         {
           if (priv->action_widget[i] &&
-              GTK_WIDGET_DRAWABLE (priv->action_widget[i]))
+              gtk_widget_is_drawable (priv->action_widget[i]))
             gtk_container_propagate_expose (GTK_CONTAINER (notebook),
                                             priv->action_widget[i], event);
         }
@@ -3272,7 +3272,7 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && GTK_WIDGET_DRAWABLE (widget) &&
+  if (GTK_WIDGET_HAS_FOCUS (widget) && gtk_widget_is_drawable (widget) &&
       notebook->show_tabs && notebook->cur_page &&
       notebook->cur_page->tab_label->window == event->window)
     {
@@ -4837,7 +4837,7 @@ gtk_notebook_paint (GtkWidget    *widget,
   gboolean is_rtl;
   gint tab_pos;
    
-  if (!GTK_WIDGET_DRAWABLE (widget))
+  if (!gtk_widget_is_drawable (widget))
     return;
 
   notebook = GTK_NOTEBOOK (widget);
@@ -5014,15 +5014,15 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
   GtkArrowType arrow;
   gboolean is_rtl, left;
 
-  if (GTK_WIDGET_DRAWABLE (notebook))
+  widget = GTK_WIDGET (notebook);
+
+  if (gtk_widget_is_drawable (widget))
     {
       gint scroll_arrow_hlength;
       gint scroll_arrow_vlength;
       gint arrow_size;
 
       gtk_notebook_get_arrow_rect (notebook, &arrow_rect, nbarrow);
-
-      widget = GTK_WIDGET (notebook);
 
       is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
       left = (ARROW_IS_LEFT (nbarrow) && !is_rtl) ||

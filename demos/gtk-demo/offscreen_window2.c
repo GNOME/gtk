@@ -369,7 +369,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   gint width, height;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (event->window == widget->window)
         {

@@ -5579,7 +5579,7 @@ gtk_entry_draw_text (GtkEntry *entry)
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
     return;
   
-  if (GTK_WIDGET_DRAWABLE (entry))
+  if (gtk_widget_is_drawable (widget))
     {
       GdkColor text_color, bar_text_color;
       gint pos_x, pos_y;
@@ -5664,12 +5664,12 @@ static void
 gtk_entry_draw_cursor (GtkEntry  *entry,
 		       CursorType type)
 {
+  GtkWidget *widget = GTK_WIDGET (entry);
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
   PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   
-  if (GTK_WIDGET_DRAWABLE (entry))
+  if (gtk_widget_is_drawable (widget))
     {
-      GtkWidget *widget = GTK_WIDGET (entry);
       GdkRectangle cursor_location;
       gboolean split_cursor;
       PangoRectangle cursor_rect;
@@ -5786,7 +5786,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 static void
 gtk_entry_queue_draw (GtkEntry *entry)
 {
-  if (GTK_WIDGET_DRAWABLE (entry))
+  if (gtk_widget_is_drawable (GTK_WIDGET (entry)))
     gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
 }
 
@@ -9856,6 +9856,7 @@ void
 gtk_entry_set_progress_fraction (GtkEntry *entry,
                                  gdouble   fraction)
 {
+  GtkWidget       *widget;
   GtkEntryPrivate *private;
   gdouble          old_fraction;
   gint x, y, width, height;
@@ -9863,6 +9864,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
+  widget = GTK_WIDGET (entry);
   private = GTK_ENTRY_GET_PRIVATE (entry);
 
   if (private->progress_pulse_mode)
@@ -9870,8 +9872,8 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
   else
     old_fraction = private->progress_fraction;
 
-  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (entry)))
-    get_progress_area (GTK_WIDGET(entry), &old_x, &old_y, &old_width, &old_height);
+  if (gtk_widget_is_drawable (widget))
+    get_progress_area (widget, &old_x, &old_y, &old_width, &old_height);
 
   fraction = CLAMP (fraction, 0.0, 1.0);
 
@@ -9879,12 +9881,12 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
   private->progress_pulse_mode = FALSE;
   private->progress_pulse_current = 0.0;
 
-  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (entry)))
+  if (gtk_widget_is_drawable (widget))
     {
-      get_progress_area (GTK_WIDGET(entry), &x, &y, &width, &height);
+      get_progress_area (widget, &x, &y, &width, &height);
 
       if ((x != old_x) || (y != old_y) || (width != old_width) || (height != old_height))
-        gtk_widget_queue_draw (GTK_WIDGET (entry));
+        gtk_widget_queue_draw (widget);
     }
 
   if (fraction != old_fraction)

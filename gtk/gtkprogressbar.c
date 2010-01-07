@@ -531,7 +531,7 @@ gtk_progress_bar_expose (GtkWidget      *widget,
 
   pbar = GTK_PROGRESS_BAR (widget);
 
-  if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+  if (pbar->dirty && gtk_widget_is_drawable (widget))
     gtk_progress_bar_paint (GTK_PROGRESS (pbar));
 
   return GTK_WIDGET_CLASS (gtk_progress_bar_parent_class)->expose_event (widget, event);
@@ -1048,7 +1048,7 @@ gtk_progress_bar_set_bar_style_internal (GtkProgressBar     *pbar,
     {
       pbar->bar_style = bar_style;
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
       g_object_notify (G_OBJECT (pbar), "bar-style");
@@ -1066,7 +1066,7 @@ gtk_progress_bar_set_discrete_blocks_internal (GtkProgressBar *pbar,
     {
       pbar->blocks = blocks;
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
       g_object_notify (G_OBJECT (pbar), "discrete-blocks");
@@ -1227,7 +1227,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
     {
       pbar->orientation = orientation;
 
-      if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+      if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
 	gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
       g_object_notify (G_OBJECT (pbar), "orientation");

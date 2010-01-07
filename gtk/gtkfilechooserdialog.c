@@ -187,7 +187,7 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   /* Unset any previously set size */
   gtk_widget_set_size_request (GTK_WIDGET (dialog), -1, -1);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       /* Force a size request of everything before we start.  This will make sure
        * that widget->requisition is meaningful. */

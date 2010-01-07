@@ -3029,7 +3029,7 @@ gtk_widget_queue_draw_child (GtkWidget *widget)
   GtkWidget *parent;
 
   parent = widget->parent;
-  if (parent && GTK_WIDGET_DRAWABLE (parent))
+  if (parent && gtk_widget_is_drawable (parent))
     gtk_widget_queue_draw_area (parent,
 				widget->allocation.x,
 				widget->allocation.y,
@@ -3845,7 +3845,7 @@ gtk_widget_draw (GtkWidget          *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (area)
         gtk_widget_queue_draw_area (widget,
@@ -4299,7 +4299,7 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
                                     guint      signal_id)
 {
   /* widgets must be onscreen for accels to take effect */
-  return GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_DRAWABLE (widget) && gdk_window_is_viewable (widget->window);
+  return GTK_WIDGET_IS_SENSITIVE (widget) && gtk_widget_is_drawable (widget) && gdk_window_is_viewable (widget->window);
 }
 
 /**
@@ -5801,7 +5801,7 @@ gtk_widget_set_state (GtkWidget           *widget,
 
       gtk_widget_propagate_state (widget, &data);
   
-      if (GTK_WIDGET_DRAWABLE (widget))
+      if (gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
     }
 }
@@ -6088,7 +6088,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
       else
 	GTK_WIDGET_UNSET_FLAGS (widget, GTK_APP_PAINTABLE);
 
-      if (GTK_WIDGET_DRAWABLE (widget))
+      if (gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
 
       g_object_notify (G_OBJECT (widget), "app-paintable");
@@ -6255,7 +6255,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     data.parent_sensitive = TRUE;
 
   gtk_widget_propagate_state (widget, &data);
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     gtk_widget_queue_draw (widget);
 
   g_object_notify (G_OBJECT (widget), "sensitive");

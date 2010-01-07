@@ -11720,7 +11720,7 @@ progressbar_toggle_ellipsize (GtkWidget *widget,
                               gpointer   data)
 {
   ProgressData *pdata = data;
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gint i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
       gtk_progress_bar_set_ellipsize (GTK_PROGRESS_BAR (pdata->pbar), i);
@@ -12954,7 +12954,7 @@ scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
   dy = scroll_test_pos - (int)adj->value;
   scroll_test_pos = adj->value;
 
-  if (!GTK_WIDGET_DRAWABLE (widget))
+  if (!gtk_widget_is_drawable (widget))
     return;
   gdk_window_scroll (widget->window, 0, dy);
   gdk_window_process_updates (widget->window, FALSE);

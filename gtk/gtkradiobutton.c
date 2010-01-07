@@ -686,9 +686,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gint focus_pad;
   gboolean interior_focus;
 
-  if (GTK_WIDGET_DRAWABLE (check_button))
+  widget = GTK_WIDGET (check_button);
+
+  if (gtk_widget_is_drawable (widget))
     {
-      widget = GTK_WIDGET (check_button);
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
 

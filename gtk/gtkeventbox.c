@@ -560,7 +560,7 @@ static gboolean
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (gtk_widget_get_has_window (widget))
 	gtk_event_box_paint (widget, &event->area);

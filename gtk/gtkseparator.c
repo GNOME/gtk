@@ -184,7 +184,7 @@ gtk_separator_expose (GtkWidget      *widget,
   gint     separator_width;
   gint     separator_height;
 
-  if (!GTK_WIDGET_DRAWABLE (widget))
+  if (!gtk_widget_is_drawable (widget))
     return FALSE;
 
   gtk_widget_style_get (widget,

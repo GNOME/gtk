@@ -1471,14 +1471,15 @@ _gtk_button_paint (GtkButton          *button,
   gboolean interior_focus;
   gint focus_width;
   gint focus_pad;
-   
-  if (GTK_WIDGET_DRAWABLE (button))
+
+  widget = GTK_WIDGET (button);
+
+  if (gtk_widget_is_drawable (widget))
     {
-      widget = GTK_WIDGET (button);
       border_width = GTK_CONTAINER (widget)->border_width;
 
       gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
-      gtk_widget_style_get (GTK_WIDGET (widget),
+      gtk_widget_style_get (widget,
 			    "focus-line-width", &focus_width,
 			    "focus-padding", &focus_pad,
 			    NULL); 
@@ -1530,7 +1531,7 @@ _gtk_button_paint (GtkButton          *button,
 	  gint child_displacement_y;
 	  gboolean displace_focus;
 	  
-	  gtk_widget_style_get (GTK_WIDGET (widget),
+	  gtk_widget_style_get (widget,
 				"child-displacement-y", &child_displacement_y,
 				"child-displacement-x", &child_displacement_x,
 				"displace-focus", &displace_focus,
@@ -1568,7 +1569,7 @@ static gboolean
 gtk_button_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkButton *button = GTK_BUTTON (widget);
       

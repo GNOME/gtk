@@ -549,7 +549,7 @@ gtk_list_item_expose (GtkWidget      *widget,
 {
   g_return_val_if_fail (widget != NULL, FALSE);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (widget->state == GTK_STATE_NORMAL)
         {

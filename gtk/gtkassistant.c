@@ -558,7 +558,7 @@ set_current_page (GtkAssistant     *assistant,
   GtkAssistantPage *old_page;
 
   if (priv->current_page &&
-      GTK_WIDGET_DRAWABLE (priv->current_page->page))
+      gtk_widget_is_drawable (priv->current_page->page))
     old_page = priv->current_page;
   else
     old_page = NULL;
@@ -1276,11 +1276,11 @@ gtk_assistant_unmap (GtkWidget *widget)
   gtk_widget_unmap (priv->header_image);
   gtk_widget_unmap (priv->action_area);
 
-  if (GTK_WIDGET_DRAWABLE (priv->sidebar_image))
+  if (gtk_widget_is_drawable (priv->sidebar_image))
     gtk_widget_unmap (priv->sidebar_image);
 
   if (priv->current_page &&
-      GTK_WIDGET_DRAWABLE (priv->current_page->page))
+      gtk_widget_is_drawable (priv->current_page->page))
     gtk_widget_unmap (priv->current_page->page);
 
   g_slist_free (priv->visited_pages);
@@ -1366,7 +1366,7 @@ gtk_assistant_expose (GtkWidget      *widget,
   GtkAssistantPrivate *priv = assistant->priv;
   GtkContainer *container;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       container = GTK_CONTAINER (widget);
 

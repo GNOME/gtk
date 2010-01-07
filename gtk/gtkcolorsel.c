@@ -814,7 +814,7 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
   priv = colorsel->private_data;
   
   g_return_if_fail (priv->sample_area != NULL);
-  if (!GTK_WIDGET_DRAWABLE (priv->sample_area))
+  if (!gtk_widget_is_drawable (priv->sample_area))
     return;
 
   if (which == 0)

@@ -553,7 +553,7 @@ child_location_foreach (GtkWidget *child,
   struct ChildLocation *child_loc = data;
 
   /* Ignore invisible widgets */
-  if (!GTK_WIDGET_DRAWABLE (child))
+  if (!gtk_widget_is_drawable (child))
     return;
 
   x = 0;

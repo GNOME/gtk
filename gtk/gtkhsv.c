@@ -1271,7 +1271,7 @@ gtk_hsv_expose (GtkWidget      *widget,
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
   
-  if (!(GTK_WIDGET_DRAWABLE (widget) && event->window == widget->window))
+  if (!(event->window == widget->window && gtk_widget_is_drawable (widget)))
     return FALSE;
 
   rect.x = widget->allocation.x;

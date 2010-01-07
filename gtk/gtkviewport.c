@@ -671,7 +671,7 @@ static void
 gtk_viewport_paint (GtkWidget    *widget,
 		    GdkRectangle *area)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkViewport *viewport = GTK_VIEWPORT (widget);
 
@@ -688,7 +688,7 @@ gtk_viewport_expose (GtkWidget      *widget,
 {
   GtkViewport *viewport;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       viewport = GTK_VIEWPORT (widget);
 

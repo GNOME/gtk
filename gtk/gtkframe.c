@@ -492,19 +492,22 @@ void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   if ((GtkShadowType) frame->shadow_type != type)
     {
+      widget = GTK_WIDGET (frame);
       frame->shadow_type = type;
       g_object_notify (G_OBJECT (frame), "shadow-type");
 
-      if (GTK_WIDGET_DRAWABLE (frame))
+      if (gtk_widget_is_drawable (widget))
 	{
-	  gtk_widget_queue_draw (GTK_WIDGET (frame));
+	  gtk_widget_queue_draw (widget);
 	}
       
-      gtk_widget_queue_resize (GTK_WIDGET (frame));
+      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -532,7 +535,7 @@ gtk_frame_paint (GtkWidget    *widget,
   GtkFrame *frame;
   gint x, y, width, height;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       frame = GTK_FRAME (widget);
 
@@ -588,7 +591,7 @@ static gboolean
 gtk_frame_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_frame_paint (widget, &event->area);
 

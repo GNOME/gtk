@@ -961,7 +961,7 @@ gtk_handle_box_expose (GtkWidget      *widget,
 {
   GtkHandleBox *hb;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       hb = GTK_HANDLE_BOX (widget);
 

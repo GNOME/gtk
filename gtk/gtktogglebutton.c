@@ -419,7 +419,7 @@ static gint
 gtk_toggle_button_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkWidget *child = GTK_BIN (widget)->child;
       GtkButton *button = GTK_BUTTON (widget);

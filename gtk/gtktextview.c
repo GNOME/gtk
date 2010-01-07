@@ -4679,7 +4679,7 @@ gtk_text_view_draw_focus (GtkWidget *widget)
 			"interior-focus", &interior_focus,
 			NULL);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
         {          

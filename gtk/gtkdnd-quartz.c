@@ -353,7 +353,7 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 {
   gint x, y, width, height;
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       cairo_t *cr;
       
@@ -757,7 +757,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  gtk_container_forall (GTK_CONTAINER (widget), prepend_and_ref_widget, &children);
 	  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
 	    {
-	      if (!new_data.found && GTK_WIDGET_DRAWABLE (tmp_list->data))
+	      if (!new_data.found && gtk_widget_is_drawable (tmp_list->data))
 		gtk_drag_find_widget (tmp_list->data, &new_data);
 	      g_object_unref (tmp_list->data);
 	    }

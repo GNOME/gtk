@@ -1197,7 +1197,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
   gint x, y;
   gint border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
 
@@ -1318,7 +1318,7 @@ gtk_menu_item_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_MENU_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_menu_item_paint (widget, &event->area);
 

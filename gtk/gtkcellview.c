@@ -442,7 +442,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
 
   cellview = GTK_CELL_VIEW (widget);
 
-  if (! GTK_WIDGET_DRAWABLE (widget))
+  if (!gtk_widget_is_drawable (widget))
     return FALSE;
 
   /* "blank" background */

@@ -2599,9 +2599,11 @@ static gboolean
 force_repaint (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
+
   range->layout->repaint_id = 0;
-  if (GTK_WIDGET_DRAWABLE (range))
+  if (gtk_widget_is_drawable (GTK_WIDGET (range)))
     gdk_window_process_updates (GTK_WIDGET (range)->window, FALSE);
+
   return FALSE;
 }
 

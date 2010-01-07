@@ -825,7 +825,7 @@ gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
     {
       scrolled_window->shadow_type = type;
 
-      if (GTK_WIDGET_DRAWABLE (scrolled_window))
+      if (gtk_widget_is_drawable (GTK_WIDGET (scrolled_window)))
 	gtk_widget_queue_draw (GTK_WIDGET (scrolled_window));
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
@@ -1069,7 +1069,7 @@ static gboolean
 gtk_scrolled_window_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_scrolled_window_paint (widget, &event->area);
 
