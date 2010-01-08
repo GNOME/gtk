@@ -144,17 +144,6 @@ gtk_printer_option_set_clear_conflicts (GtkPrinterOptionSet *set)
 				  NULL);
 }
 
-static int
-safe_strcmp (const char *a, const char *b)
-{
-  if (a == NULL)
-    a = "";
-  if (b == NULL)
-    b = "";
-
-  return strcmp (a, b);
-}
-
 /**
  * gtk_printer_option_set_get_groups:
  *
@@ -171,7 +160,7 @@ gtk_printer_option_set_get_groups (GtkPrinterOptionSet *set)
     {
       option = g_ptr_array_index (set->array, i);
 
-      if (g_list_find_custom (list, option->group, (GCompareFunc)safe_strcmp) == NULL)
+      if (g_list_find_custom (list, option->group, (GCompareFunc)g_strcmp0) == NULL)
 	list = g_list_prepend (list, g_strdup (option->group));
     }
 

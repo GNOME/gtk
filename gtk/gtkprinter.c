@@ -92,18 +92,6 @@ static void gtk_printer_get_property (GObject      *object,
 
 G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT)
 
-static int
-safe_strcmp (const char *a, const char *b)
-{
-  if (a == b)
-    return 0;
-  if (a == NULL)
-    return -1;
-  if (b == NULL)
-    return 1;
-  return strcmp (a, b);
-}
-
 static void
 gtk_printer_class_init (GtkPrinterClass *class)
 {
@@ -468,7 +456,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->description, description) == 0)
+  if (g_strcmp0 (priv->description, description) == 0)
     return FALSE;
 
   g_free (priv->description);
@@ -506,7 +494,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->state_message, message) == 0)
+  if (g_strcmp0 (priv->state_message, message) == 0)
     return FALSE;
 
   g_free (priv->state_message);
@@ -544,7 +532,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->location, location) == 0)
+  if (g_strcmp0 (priv->location, location) == 0)
     return FALSE;
 
   g_free (priv->location);
