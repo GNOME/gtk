@@ -45,7 +45,7 @@ bilinear_gradient (GdkPixbuf    *src,
 
   if (src_x == 0 || src_y == 0)
     {
-      g_warning ("invalid source position for bilinear gradient\n");
+      g_warning ("invalid source position for bilinear gradient");
       return NULL;
     }
 
@@ -56,6 +56,13 @@ bilinear_gradient (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -104,12 +111,19 @@ horizontal_gradient (GdkPixbuf    *src,
 
   if (src_x == 0)
     {
-      g_warning ("invalid source position for horizontal gradient\n");
+      g_warning ("invalid source position for horizontal gradient");
       return NULL;
     }
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -159,7 +173,7 @@ vertical_gradient (GdkPixbuf    *src,
 
   if (src_y == 0)
     {
-      g_warning ("invalid source position for vertical gradient\n");
+      g_warning ("invalid source position for vertical gradient");
       return NULL;
     }
 
@@ -168,6 +182,13 @@ vertical_gradient (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -209,6 +230,13 @@ replicate_single (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
   
@@ -247,6 +275,13 @@ replicate_rows (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -273,6 +308,13 @@ replicate_cols (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
