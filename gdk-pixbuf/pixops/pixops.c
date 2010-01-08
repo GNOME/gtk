@@ -1251,11 +1251,20 @@ pixops_process (guchar         *dest_buf,
   int i, j;
   int x, y;			/* X and Y position in source (fixed_point) */
   
-  guchar **line_bufs = g_new (guchar *, filter->y.n);
-  int *filter_weights = make_filter_table (filter);
+  guchar **line_bufs;
+  int *filter_weights;
 
-  int x_step = (1 << SCALE_SHIFT) / scale_x; /* X step in source (fixed point) */
-  int y_step = (1 << SCALE_SHIFT) / scale_y; /* Y step in source (fixed point) */
+  int x_step;
+  int y_step;
+
+  x_step = (1 << SCALE_SHIFT) / scale_x; /* X step in source (fixed point) */
+  y_step = (1 << SCALE_SHIFT) / scale_y; /* Y step in source (fixed point) */
+
+  if (x_step == 0 || y_step == 0)
+    return; /* overflow, bail out */
+
+  line_bufs = g_new (guchar *, filter->y.n);
+  filter_weights = make_filter_table (filter);
 
   int check_shift = check_size ? get_check_shift (check_size) : 0;
 
