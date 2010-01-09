@@ -232,7 +232,7 @@ gtk_print_settings_get_bool (GtkPrintSettings *settings,
   const gchar *val;
 
   val = gtk_print_settings_get (settings, key);
-  if (val != NULL && strcmp (val, "true") == 0)
+  if (g_strcmp0 (val, "true") == 0)
     return TRUE;
   
   return FALSE;
@@ -263,10 +263,10 @@ gtk_print_settings_get_bool_with_default (GtkPrintSettings *settings,
   const gchar *val;
 
   val = gtk_print_settings_get (settings, key);
-  if (val != NULL && strcmp (val, "true") == 0)
+  if (g_strcmp0 (val, "true") == 0)
     return TRUE;
 
-  if (val != NULL && strcmp (val, "false") == 0)
+  if (g_strcmp0 (val, "false") == 0)
     return FALSE;
   
   return default_val;
