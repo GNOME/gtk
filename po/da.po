@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-08-15 15:49+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -677,7 +677,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "JPEG-farverum understøttes ikke (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Kunne ikke tildele hukommelse til indlæsning af JPEG-fil"
@@ -1648,11 +1648,11 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -1672,7 +1672,7 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(ingen)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Anden..."
 
@@ -2307,12 +2307,12 @@ msgid "Cl_ear"
 msgstr "_Ryd"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "_Åbn link"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Kopiér _linkadresse"
 

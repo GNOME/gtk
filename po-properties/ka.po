@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2008-03-19 16:31+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -1417,11 +1417,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "ტექსტის ფერი GdkColor ფორმატში"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "რედაქტირებადი"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "მომხმარებლისთვის ტექსტის შეცვლის ნებართვა"
 
@@ -2283,7 +2283,7 @@ msgstr "მრავლხაზიანი ტექსტის ერთ ხ
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "გადაწერის რეჟიმი"
 
@@ -2505,12 +2505,12 @@ msgstr "ლოგოს ხატულას სახელი"
 msgid "Secondary icon tooltip markup"
 msgstr "მეორადი ტექსტი"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 #, fuzzy
 msgid "IM module"
 msgstr "ნაგულისხმები სიგანე"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "პალიტრის გამოყენება"
@@ -3282,7 +3282,7 @@ msgstr "წარწერის ტექსტი"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "წარწერის ტექსტის სტილის ატრიბუტების სია"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "მორგება"
 
@@ -6001,7 +6001,7 @@ msgstr ""
 "რეკომენდებულია.  Pango–ს გააჩნია რამდენიმე წინასწარ განსაზღვრული მასშტაბი, "
 "მაგალითად PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "განთავსება მარცხნივ, მარჯვნივ ან ცენტრში"
 
@@ -6018,7 +6018,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "მარცხენა ველი"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "მარცხენა ველი რასტრულ პიქსელებში"
 
@@ -6026,15 +6026,15 @@ msgstr "მარცხენა ველი რასტრულ პიქს
 msgid "Right margin"
 msgstr "მარჯვენა ველი"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "მარჯვენა ველი რასტრულ პიქსელებში"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "აბზაცი"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "აბზაცის ზომა რასტრულ პიქსელებში"
 
@@ -6050,7 +6050,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "პიქსელები სტრიქონს ზემოთ"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "ცარიელი არე პიქსელებში აბზაცს ზემოთ"
 
@@ -6058,7 +6058,7 @@ msgstr "ცარიელი არე პიქსელებში აბზ
 msgid "Pixels below lines"
 msgstr "პიქსელები სტრიქონს ქვემოთ"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "ცარიელი არე პიქსელებში აბზაცს ქვემოთ"
 
@@ -6066,20 +6066,20 @@ msgstr "ცარიელი არე პიქსელებში აბზ
 msgid "Pixels inside wrap"
 msgstr "პიქსელები სტრიქონების გადატანაში"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "ცარიელი არე პიქსელებში გადატანილ სტრიქონებს შორის"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "სტრიქონების არ გადატანა, გადატანა სიტყვების ან სიმბოლოების მიხედვით"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "ტაბულაცია"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "ტექსტის მითითებული ტაბულაცია"
 
@@ -6223,63 +6223,63 @@ msgstr "პარაგრაფის ფონები"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ჭდის გავლენა პარაგრაფის ფონის ფერზე"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "პიქსელები სტრიქონს ზემოთ"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "პიქსელები სტრიქონს ქვემოთ"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "პიქსელები გადატანილ სტრიქონებს შორის"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "გადატანის რეჯიმი"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "მარცხენა ველი"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "მარჯვენა ველი"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "ხილული კურსორი"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "კურსორის ჩვენება"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "ბუფერი"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "ბუფერის ჩვენება"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "მითითებული ტექსტის არსებულ ტექსტზე ზემოდან გადაწერა"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "ტაბულაციის მიღება"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ტაბულაციის სიმბოლოს მიღება შეტანისას"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "შეცდომის ხაზგასმის ფერი"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "შეცდომის ხაზგასასმელად და საჩვენებლად გამოყენებული ფერი"
 

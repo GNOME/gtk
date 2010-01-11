@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uz@cyrillic\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2008-12-28 09:44+0500\n"
 "Last-Translator: Nurali Abdurahmonov <mavnur@gmail.com>\n"
 "Language-Team: Uzbek\n"
@@ -635,7 +635,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
@@ -1579,11 +1579,11 @@ msgstr "_Oʻng:"
 msgid "Paper Margins"
 msgstr "Qogʻoz maydonlari"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1603,7 +1603,7 @@ msgstr "Ish stoli"
 msgid "(None)"
 msgstr "(Yoʻq)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Boshqa..."
 
@@ -2226,13 +2226,13 @@ msgid "Cl_ear"
 msgstr "_Tozalash"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Ochish"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

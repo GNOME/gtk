@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-02-24 01:08+0200\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: http;//pckurd.net\n"
@@ -661,7 +661,7 @@ msgstr "Bîr têra tomarkirinê nake, hin gavan jêbibin da cih di bîrê de ç�
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Asoya rengên JPEG (%s)nayê destekirin"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nikare bîrekê bo barkirina dosya JPEG veqetîne"
@@ -1632,11 +1632,11 @@ msgstr "_Rast:"
 msgid "Paper Margins"
 msgstr "Valehiyên rûpel"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Riyên_Têketinê"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Şifreya kontrola sembolê derbas bike"
 
@@ -1656,7 +1656,7 @@ msgstr "Sermasê"
 msgid "(None)"
 msgstr "(Ne yek jî)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Yên din..."
 
@@ -2295,13 +2295,13 @@ msgid "Cl_ear"
 msgstr "Jê_bibe"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Vekirin"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

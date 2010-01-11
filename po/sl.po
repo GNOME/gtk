@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-10-21 13:53+0100\n"
 "Last-Translator: Matej Urbančič <matej.urban@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -656,7 +656,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepodprta vrsta barvnega prostora JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ni mogoče rezervirati pomnilnika za nalaganje datoteke JPEG"
@@ -1623,11 +1623,11 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "_Načini vnosa"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Vstavi nadzorni znak Unicode"
 
@@ -1647,7 +1647,7 @@ msgstr "Namizje"
 msgid "(None)"
 msgstr "(Noben)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Drugo ..."
 
@@ -2282,12 +2282,12 @@ msgid "Cl_ear"
 msgstr "P_očisti"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 

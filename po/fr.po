@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-09-29 12:02+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -662,7 +662,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espace de couleur JPEG non pris en charge (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Impossible d'allouer de la mémoire pour le chargement du fichier JPEG"
@@ -1645,11 +1645,11 @@ msgstr "_Droite :"
 msgid "Paper Margins"
 msgstr "Marges du papier"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "_Méthodes de saisie"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
@@ -1669,7 +1669,7 @@ msgstr "Bureau"
 msgid "(None)"
 msgstr "(Aucun)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Autre..."
 
@@ -2308,12 +2308,12 @@ msgid "Cl_ear"
 msgstr "_Effacer"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "_Ouvrir le lien"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Copier l'_adresse du lien"
 

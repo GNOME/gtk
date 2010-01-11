@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-09-10 13:36+0300\n"
 "Last-Translator: Gintautas Miliauskas <gintautas@miliauskas.lt>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
@@ -658,7 +658,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Nepalaikoma JPEG spalvų gama (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nepakako atminties įkelti JPEG failą"
@@ -1626,11 +1626,11 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
@@ -1650,7 +1650,7 @@ msgstr "Darbastalis"
 msgid "(None)"
 msgstr "(Joks)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Kita..."
 
@@ -2284,12 +2284,12 @@ msgid "Cl_ear"
 msgstr "Iš_valyti"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Kopijuoti _nuorodos adresą"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -644,7 +644,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "പിന്തുണ ഇല്ലാത്ത JPEG കളര്‍ സ്പെയിസ് (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ഫയല്‍ ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
@@ -1608,11 +1608,11 @@ msgstr "_വലത്ത്:"
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
@@ -1632,7 +1632,7 @@ msgstr "പണിയിടം"
 msgid "(None)"
 msgstr "(ഒന്നുമില്ല)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "മറ്റുള്ളവ..."
 
@@ -2267,12 +2267,12 @@ msgid "Cl_ear"
 msgstr "വെ_ടിപ്പാക്കുക"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 

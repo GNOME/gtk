@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2009-08-31 19:24+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -1403,11 +1403,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "ఒక Gdk రంగు వలె ఫోర్‌గ్రౌండ్ రంగు"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "మార్చదగిన"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "పాఠము వినియోగదారుచే మార్చదగినదా"
 
@@ -2241,7 +2241,7 @@ msgstr "బహుళవరుస అతికింపులను వొకే 
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "has-frame అమర్చినప్పుడు ప్రవేశంచుట్టూ యెటువంటి నీడను చిత్రించాలి"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "అతిక్రమించివ్రాయు రీతి"
 
@@ -2429,11 +2429,11 @@ msgstr "ప్రాధమిక ప్రతిమ టూల్‌టిప్ 
 msgid "Secondary icon tooltip markup"
 msgstr "రెండవ ప్రతిమ టూల్‌టిప్ గుర్తు"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 msgid "IM module"
 msgstr "IM మాడ్యూల్"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 msgid "Which IM module should be used"
 msgstr "ఏ IM మాడ్యూల్ వుపయోగించాలి"
 
@@ -3181,7 +3181,7 @@ msgstr "లేబుల్ యొక్క పాఠ్యము"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "లేబుల్ యొక్క పాఠ్యముకు ఆపాదించుటకు శైలి యాట్రిబ్యూట్ల జాబితా"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "ఔచిత్యము"
 
@@ -5764,7 +5764,7 @@ msgstr ""
 "అప్రమేయ ఫాంటు పరిమాణంకు సారూప్యంగా ఫాంటు పరిమాణము. ఈ లక్షణం థీమ్ మార్పులు మొదలగు. వాటికి వుంటుంది "
 "కనుక సిఫార్సుచేయబడింది. పాంగో PANGO_SCALE_X_LARGE వంటి స్కేల్సును ముందుగా నిర్వచించుతుంది"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "ఎడమ, కుడి, లేదా మద్య సర్దుబాటు"
 
@@ -5780,7 +5780,7 @@ msgstr ""
 msgid "Left margin"
 msgstr " ఎడమ  అంచు"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "వెడల్పు ఆఫ్ పిక్సెల్స్"
 
@@ -5788,15 +5788,15 @@ msgstr "వెడల్పు ఆఫ్ పిక్సెల్స్"
 msgid "Right margin"
 msgstr "కుడివైపు  అంచు"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "కుడి మార్జిన్ యొక్క వెడల్పు పిగ్జెల్సునందు"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "క్రమము"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "పరిచ్ఛేదము గంటు లెక్క, పిగ్జెల్సులో"
 
@@ -5810,7 +5810,7 @@ msgstr "పాంగో యూనిట్లలో అధారవరుసప�
 msgid "Pixels above lines"
 msgstr "వరుసలపైన పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "పరిచ్చేదములపైన ఖాళీ జాగాల పిగ్జెల్సు"
 
@@ -5818,7 +5818,7 @@ msgstr "పరిచ్చేదములపైన ఖాళీ జాగాల 
 msgid "Pixels below lines"
 msgstr "క్రింది వరుసల పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "పరిచ్ఛదముల క్రిందన ఖాళీ స్థలం పిగ్జెల్సు"
 
@@ -5826,20 +5826,20 @@ msgstr "పరిచ్ఛదముల క్రిందన ఖాళీ స్
 msgid "Pixels inside wrap"
 msgstr "లోపలి మడత పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "పరిచ్ఛదమునందు మడిచిన వరుసల మధ్యని ఖాళీ స్థలము పిగ్జెల్సు"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "వసులను మడవకూడనిది, పదము హద్దులవద్దా లేక అక్షరపు హద్దులవద్దా"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "టాబ్ లు"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "ఈ పాఠముకొరకు మలచుకొనిన టాబ్స్"
 
@@ -5983,63 +5983,63 @@ msgstr "పరిచ్చేదం బ్యాక్‌గ్రౌండ్ �
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ఈ టాగ్ పరిచ్చేదము బ్యాక్‌గ్రౌండ్ వర్ణమును ప్రభావితం చేయాలా"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "గీతల పైన పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "గీతల క్రింది పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "మలుపు లోపలి పిగ్జెల్స్‍"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "మలుపు రీతి"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "ఎడమ మార్జిను"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "కుడి మార్జిను"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "కనపడే కర్సర్"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "చేర్పిక కర్సర్ చూపించబడితే"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "బఫర్"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "ప్రదర్శించబడే బఫర్"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "ప్రవేశపెట్టిన పాఠము వున్న సారములను తిరిగివ్రాయాలా"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "టాబ్‌ను ఆమోదించుతుంది"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ప్రవేశపెట్టిన టాబ్ అక్షరమునందు టాబ్ ఫలించాలా"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "దోషము క్రిందిగీత వర్ణము"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "ఏ వర్ణముతో దోషపు-సూచిక క్రిందిగీతలు గీయాలి"
 

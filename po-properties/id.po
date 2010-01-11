@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2006-03-24 15:19+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <kontak@id.gnome.org>\n"
@@ -1471,11 +1471,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Warna latar depan dalam GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "Bisa diedit"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "Menentukan apakah teks bisa diganti-ganti oleh user"
 
@@ -2353,7 +2353,7 @@ msgstr "Menentukan apakah bisa memilih banyak file sekaligus atau tidak"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "Modus Timpa"
 
@@ -2575,12 +2575,12 @@ msgstr "Nama Ikon Lambang"
 msgid "Secondary icon tooltip markup"
 msgstr "Sekunder"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 #, fuzzy
 msgid "IM module"
 msgstr "Lebar awal"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Menentukan apakah palet digunakan atau tidak"
@@ -3376,7 +3376,7 @@ msgstr "Label teks"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Daftar gaya atribut yang hendak ditempelkan pada label teks"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "Rata"
 
@@ -6201,7 +6201,7 @@ msgstr ""
 "diset.  Pango memiliki konstanta untuk beberapa ukuran, sebagai misal "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "Rataan kiri, kanan, atau tengah"
 
@@ -6218,7 +6218,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Margin kiri"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "Lebar margin kiri dalam satuan piksel"
 
@@ -6226,15 +6226,15 @@ msgstr "Lebar margin kiri dalam satuan piksel"
 msgid "Right margin"
 msgstr "Margin kanan"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "Lebar margin kanan dalam satuan piksel"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "Indentasi"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Jumlah piksel untuk membuat indentasi paragraf"
 
@@ -6248,7 +6248,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksel di atas tulisan"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "Jumlah piksel ruang kosong di atas paragraf"
 
@@ -6256,7 +6256,7 @@ msgstr "Jumlah piksel ruang kosong di atas paragraf"
 msgid "Pixels below lines"
 msgstr "Piksel di bawah tulisan"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 
@@ -6264,22 +6264,22 @@ msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 msgid "Pixels inside wrap"
 msgstr "Piksel dalam potongan"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Banyaknya piksel kosong antara baris yang dipotong dalam paragraf"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Menentukan apakah baris tidak pernah dipotong, atau dipotong pada batas "
 "kata, atau dipotong pada batas karakter"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "Tab"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "Tab sendiri untuk teks ini"
 
@@ -6426,63 +6426,63 @@ msgstr "Ketentuan latar belakang paragraf"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Tentukan apakah tag ini berpengaruh pada warna latar belakang paragraf"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "Piksel di atas garis"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "Piksel di bawah garis"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "Piksel dalam wrap"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "Potong Kalimat"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "Margin kiri"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "Margin Kanan"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "Kursor kelihatan"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "Menentukan apakah kursor untuk menulis kelihatan atau tidak"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "Buffer"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "Buffer yang ditampilkan"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "Menentukan apakah teks yang dimasukkan menimpa isi yang ada sebelumnya"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "Perbolehkan tab"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Menentukan apakah bila Tab ditekan maka akan menyisipkan karakter Tab"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "Warna garis bawah error"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "Warna untuk menggambar garis bawah kesalahan"
 

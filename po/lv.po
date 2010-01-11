@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-02-13 10:13+0200\n"
 "Last-Translator: Raivis Dejus <orvils@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -646,7 +646,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Neatbalstīta JPEG krāsu telpa (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Nevar piešķirt atmiņu, lai ielādētu JPEG failu"
@@ -1615,11 +1615,11 @@ msgstr "_Labējais:"
 msgid "Paper Margins"
 msgstr "Papīra apmales"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Ievades _Metodes"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Ievietot unicode kontroles simbolu"
 
@@ -1639,7 +1639,7 @@ msgstr "Darbavirsma"
 msgid "(None)"
 msgstr "(Nekas)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Cita vieta..."
 
@@ -2273,13 +2273,13 @@ msgid "Cl_ear"
 msgstr "N_otīrīt"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Atvērt"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

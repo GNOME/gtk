@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2009-08-27 22:12+0300\n"
 "Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -1406,11 +1406,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Edustaväri GdkColor:na"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "Muokattava"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "Voiko käyttäjä muuttaa tekstiä"
 
@@ -2257,7 +2257,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Minkä tyyppinen varjo piirretään kentän ympärille, kun has-frame on asetettu"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "Ylikirjoitustila"
 
@@ -2445,11 +2445,11 @@ msgstr "Ensisijaisen kuvakkeen vihjeen merkintäteksti"
 msgid "Secondary icon tooltip markup"
 msgstr "Toissijaisen kuvakkeen vihjeen merkintäteksti"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 msgid "IM module"
 msgstr "IM-moduuli"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 msgid "Which IM module should be used"
 msgstr "Mitä IM-moduulia käytetään oletuksena"
 
@@ -3208,7 +3208,7 @@ msgstr "Nimiön teksti"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Luettelo nimiön tekstiin sovellettavista tyylimääreistä"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "Reunojen tasaus"
 
@@ -5863,7 +5863,7 @@ msgstr ""
 "sopeutuu hyvin teemojen muutoksiin yms., joten tämän käyttö on suositeltua. "
 "Pango esimäärittelee joitakin kokoja, kuten PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "Vasen-, oikea- tai keskikohdistus"
 
@@ -5879,7 +5879,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Vasen reunus"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "Vasemman reunuksen leveys kuvapisteinä"
 
@@ -5887,15 +5887,15 @@ msgstr "Vasemman reunuksen leveys kuvapisteinä"
 msgid "Right margin"
 msgstr "Oikea reunus"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "Oikean reunuksen leveys kuvapisteinä"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "Sisennys"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kappaleen sisennys kuvapisteinä"
 
@@ -5911,7 +5911,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Kuvapisteitä rivien yllä"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "Kappaleiden yllä olevan tyhjän tilan määrä kuvapisteinä"
 
@@ -5919,7 +5919,7 @@ msgstr "Kappaleiden yllä olevan tyhjän tilan määrä kuvapisteinä"
 msgid "Pixels below lines"
 msgstr "Kuvapisteitä rivien alla"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "Kappaleiden alla olevan tyhjän tilan määrä kuvapisteinä"
 
@@ -5927,20 +5927,20 @@ msgstr "Kappaleiden alla olevan tyhjän tilan määrä kuvapisteinä"
 msgid "Pixels inside wrap"
 msgstr "Kuvapisteitä rivityksessä"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Tyhjien kuvapisteiden määrä kappaleen rivittyneiden rivien välissä"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Rivittyvätkö rivit ollenkaan, sanojen välistä vai merkkien välistä"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "Sarkaimet"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "Muokkaa tämän tekstin sarkaimia"
 
@@ -6085,63 +6085,63 @@ msgstr "Kappaleen taustaväri asetettu"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Vaikuttaako tämä merkkaus kappaleen taustaväriin"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "Kuvapisteitä rivien yllä"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "Kuvapisteitä rivien alla"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "Kuvapisteitä rivityksessä"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "Rivitystapa"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "Vasen reunus"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "Oikea reunus"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "Kohdistin näkyy"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "Näkyykö tekstikohdistin"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "Puskuri"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "Näkyvä puskuri"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "Ylikirjoittaako syötetty teksti olemassa olevan sisällön"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "Hyväksyy sarkainnäppäimen"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Tuleeko sarkainnäppäimen painalluksesta sarkainmerkki"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "Virheen alleviivausväri"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "Väri, jolla piirretään virhettä ilmaisevat alleviivaukset"
 

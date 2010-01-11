@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -1496,11 +1496,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Umbala wokuvela ngaphambili njenge-GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "Iyahleleka"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "Nokuba ngaba umbhalo ungalungiswa na ngumsebenzisi"
 
@@ -2405,7 +2405,7 @@ msgstr "Nokuba ngaba iifayili eziphindiweyo zingakhethwa na"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "Imo yokubhala phezu kokubhaliweyo"
 
@@ -2625,12 +2625,12 @@ msgstr "Igama Lelogo Yomfanekiso Ongumqondiso"
 msgid "Secondary icon tooltip markup"
 msgstr "Udidi lwesibini"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 #, fuzzy
 msgid "IM module"
 msgstr "Ububanzi Obumiselweyo"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Nokuba ngaba ingqokelela yezixhobo imele isetyenziswe"
@@ -3439,7 +3439,7 @@ msgstr "Umbhalo welebhile"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Uluhlu lwesimbo seempawu emazisetyenziswe kumbhalo welebhile"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "Ulungelelwaniso"
 
@@ -6333,7 +6333,7 @@ msgstr ""
 "zezihloko njalo njalo, ngoko ke iyakhuthazwa. I-Pango ichaza kwangaphambili "
 "eminye imilinganiselo efana ne PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "Ulungelelaniso lwangasekhohlo, ekunene okanye phakathi"
 
@@ -6350,7 +6350,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Umda wephepha osekhohlo"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "Ububanzi bomda wephepha osekhohlo ngokwee-pixels"
 
@@ -6358,15 +6358,15 @@ msgstr "Ububanzi bomda wephepha osekhohlo ngokwee-pixels"
 msgid "Right margin"
 msgstr "Umda wephepha osekunene"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "Ububanzi bomda wephepha osekunene ngokwee-pixels"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "Qalisa nganeno"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Ubungakanani boqaliso nganeno komhlathi, ngokwee-pixels"
 
@@ -6383,7 +6383,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Ii-pixels ezingentla kwemigca"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "Ii-pixels zesithuba esingenanto emantla kwemihlathi"
 
@@ -6391,7 +6391,7 @@ msgstr "Ii-pixels zesithuba esingenanto emantla kwemihlathi"
 msgid "Pixels below lines"
 msgstr "Ii-pixels ngezantsi kwemigca"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "Ii-pixels zesithuba esingenanto emazantsi kwemihlathi"
 
@@ -6399,24 +6399,24 @@ msgstr "Ii-pixels zesithuba esingenanto emazantsi kwemihlathi"
 msgid "Pixels inside wrap"
 msgstr "Ii-pixels ezingaphakathi kuqhubeko-magama"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Ii-pixels zesithuba esingenanto phakathi kwemigca enoqhubeko-magama "
 "kwimihlathi"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Nokuba ngaba uqhubeko-magama kwimigca lungaze lwenzeke, lwenzeke kwimida "
 "yamagama, okanye kwimida yeempawu"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "Oo-tab"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "Oo-tab abaqhelekileyo balo mbhalo"
 
@@ -6574,63 +6574,63 @@ msgstr "Ukumisela okuvela ngasemva kwi-cell"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Nokuba ngaba esi siphawuli sinegalelo na kumbala wokuvela ngasemva"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "Ii-pixels Ezisemantla Kwemigca"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "Ii-pixelsa Ezisemazantsi Kwemigca"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "Ii-pixels Ezingaphakathi Kuqhubekeko-magama"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "Imo Yoqhubeko-magama"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "Umda Wephepha Osekhohlo"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "Umda Wephepha Osekunene"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "Ikhesha Ebonakalayo"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "Ukuba ngaba ikhesa yokufakela iyabonakala"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "Isigcini sethutyana"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "Isigcini sethutyana esibonakalisiweyo"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "Nokuba ngaba umbhalo ofakiweyo uyazicima na iziqulatho ebesele zikho"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "Iyabamkela oo-tab"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Nokuba ngaba u-Tab uza kwenza ukuba kufakeke uphawu luka-tab na"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 msgid "Error underline color"
 msgstr "Impazamo kumbala wokukrwela ngaphantsi"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Color with which to draw error-indication underlines"
 msgstr "Umbala wokuzoba imigca yokukrwela ngaphantsi"
 

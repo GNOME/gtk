@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2004-03-12 15:42-0000\n"
 "Last-Translator: Richard Allen <ra@ra.is>\n"
 "Language-Team: is <kde-isl@molar.is>\n"
@@ -678,7 +678,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Óþekkt JPEG litabil (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Gat ekki tekið frá minni fyrir JPEG skrána"
@@ -1690,11 +1690,11 @@ msgstr "_Hægri"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1716,7 +1716,7 @@ msgstr "Skjáborð"
 msgid "(None)"
 msgstr "(Ekkert)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr ""
 
@@ -2380,13 +2380,13 @@ msgid "Cl_ear"
 msgstr "_Hreinsa"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Opna"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

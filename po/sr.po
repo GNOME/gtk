@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-10-01 01:19+0000\n"
 "Last-Translator: Милош Поповић <gpopac@gmail.com>\n"
 "Language-Team: Serbian <gnome@prevod.org>\n"
@@ -660,7 +660,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподржан JPEG простор боја (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не могу обезбедити меморију за учитавање JPEG датотеке"
@@ -1647,11 +1647,11 @@ msgstr "Д_есно:"
 msgid "Paper Margins"
 msgstr "Маргине"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "_Начини уноса"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Убаци контролни Уникод знак"
 
@@ -1671,7 +1671,7 @@ msgstr "Радна површ"
 msgid "(None)"
 msgstr "(ништа)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Нека друга..."
 
@@ -2307,12 +2307,12 @@ msgid "Cl_ear"
 msgstr "О_чисти"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "Отвори _везу"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Умножи _адресу везе"
 

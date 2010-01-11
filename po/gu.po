@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-09-10 14:19+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
@@ -670,7 +670,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "બિનઆધારભૂત JPEG રંગની જગ્યા %s"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ફાઈલને લાવવા માટે કોઈ મેમરી ફાળવી શકાતી નથી"
@@ -1632,11 +1632,11 @@ msgstr "જમણું (_R):"
 msgid "Paper Margins"
 msgstr "કાગળ હાંસિયાઓ"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "ઈનપુટ પધ્ધતિઓ (_M)"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "યૂનિકોડ નિયંત્રણ અક્ષર ઉમેરો (_I)"
 
@@ -1656,7 +1656,7 @@ msgstr "ડેસ્કટોપ"
 msgid "(None)"
 msgstr "(કંઈ નહિ)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "અન્ય..."
 
@@ -2289,12 +2289,12 @@ msgid "Cl_ear"
 msgstr "સાફ કરો (_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "કડીને ખોલો (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "કડી સરનામાંની નકલ કરો (_L)"
 

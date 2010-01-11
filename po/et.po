@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-09-24 20:43+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -651,7 +651,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Toetamata JPEG värviruum (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG-faili laadimiseks pole võimalik mälu eraldada"
@@ -1620,11 +1620,11 @@ msgstr "_Parem:"
 msgid "Paper Margins"
 msgstr "Paberi veerised"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Sisestus_meetodid"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
@@ -1644,7 +1644,7 @@ msgstr "Töölaud"
 msgid "(None)"
 msgstr "(puudub)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Muu..."
 
@@ -2278,12 +2278,12 @@ msgid "Cl_ear"
 msgstr "_Tühjenda"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "_Ava link"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "Kopeeri _lingi aadress"
 

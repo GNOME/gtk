@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:20-0500\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -1492,11 +1492,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Framgrunnsfarge, som ein GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:574
+#: gtk/gtktextview.c:575
 msgid "Editable"
 msgstr "Kan redigerast"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
 msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan endrast av brukaren"
 
@@ -2379,7 +2379,7 @@ msgstr "Om det kan veljast fleire filer om gongen"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:654
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
 msgid "Overwrite mode"
 msgstr "Overskrivingsmodus"
 
@@ -2601,12 +2601,12 @@ msgstr "Skriftnamn"
 msgid "Secondary icon tooltip markup"
 msgstr "Sekundær"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:682
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
 #, fuzzy
 msgid "IM module"
 msgstr "Standardbreidde"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Om ein palett skal brukast"
@@ -3411,7 +3411,7 @@ msgstr "Tekst på merkelappen"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Ei liste med stilattributtar som teksten i merkelappen skal påførast"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:591
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
 msgid "Justification"
 msgstr "Justering"
 
@@ -6239,7 +6239,7 @@ msgstr ""
 "Dette er den tilrådde måten, sidan det tilpassar seg endringar i drakt o.a. "
 "Pango omdefinerer somme skaleringar slik som PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:592
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
 msgid "Left, right, or center justification"
 msgstr "Venstre-, høgre- eller senterjustering"
 
@@ -6257,7 +6257,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Venstremarg"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:601
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
 msgid "Width of the left margin in pixels"
 msgstr "Breidda på venstremargen, i pikslar"
 
@@ -6265,15 +6265,15 @@ msgstr "Breidda på venstremargen, i pikslar"
 msgid "Right margin"
 msgstr "Høgremarg"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:611
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
 msgid "Width of the right margin in pixels"
 msgstr "Breidda på høgremargen, i pikslar"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:620
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
 msgid "Indent"
 msgstr "Innrykk"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kor mykje avsnittet skal rykkast inn, i pikslar"
 
@@ -6290,7 +6290,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pikslar over linjer"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:545
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pikslar med tomrom over avsnitt"
 
@@ -6298,7 +6298,7 @@ msgstr "Pikslar med tomrom over avsnitt"
 msgid "Pixels below lines"
 msgstr "Pikslar under linjer"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:555
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pikslar med tomrom under avsnitt"
 
@@ -6306,20 +6306,20 @@ msgstr "Pikslar med tomrom under avsnitt"
 msgid "Pixels inside wrap"
 msgstr "Pikslar inni bryting"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:565
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pikslar med tomrom mellom brotne linjer i eit avsnitt"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:583
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Om linjer skal brytast aldri, mellom ord, eller mellom teikn."
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:630
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
 msgid "Tabs"
 msgstr "Tabulatorar"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
 msgid "Custom tabs for this text"
 msgstr "Eigendefinerte tabulatorar for denne teksten"
 
@@ -6471,64 +6471,64 @@ msgstr "Bakgrunnsfargen til cella er satt"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Om denne merkinga påvirkar bakgrunnsfargen"
 
-#: gtk/gtktextview.c:544
+#: gtk/gtktextview.c:545
 msgid "Pixels Above Lines"
 msgstr "Pikslar over linjer"
 
-#: gtk/gtktextview.c:554
+#: gtk/gtktextview.c:555
 msgid "Pixels Below Lines"
 msgstr "Pikslar under linjer"
 
-#: gtk/gtktextview.c:564
+#: gtk/gtktextview.c:565
 msgid "Pixels Inside Wrap"
 msgstr "Pikslar inni tekstbrot"
 
-#: gtk/gtktextview.c:582
+#: gtk/gtktextview.c:583
 msgid "Wrap Mode"
 msgstr "Tekstbrytingsmåte"
 
-#: gtk/gtktextview.c:600
+#: gtk/gtktextview.c:601
 msgid "Left Margin"
 msgstr "Venstremarg"
 
-#: gtk/gtktextview.c:610
+#: gtk/gtktextview.c:611
 msgid "Right Margin"
 msgstr "Høgremarg"
 
-#: gtk/gtktextview.c:638
+#: gtk/gtktextview.c:639
 msgid "Cursor Visible"
 msgstr "Skrivemerke synleg"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "If the insertion cursor is shown"
 msgstr "Om innsetjingsmarkøren vert vist eller ikkje"
 
-#: gtk/gtktextview.c:646
+#: gtk/gtktextview.c:647
 msgid "Buffer"
 msgstr "Buffer"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "The buffer which is displayed"
 msgstr "Bufferet som vert vist"
 
-#: gtk/gtktextview.c:655
+#: gtk/gtktextview.c:656
 msgid "Whether entered text overwrites existing contents"
 msgstr "Om tekst som vert skriven inn skriv over teksten som er der frå før"
 
-#: gtk/gtktextview.c:662
+#: gtk/gtktextview.c:663
 msgid "Accepts tab"
 msgstr "Tek imot tabulator"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Om eit tabulatorteikn vert vist når Tab vert trykt"
 
-#: gtk/gtktextview.c:692
+#: gtk/gtktextview.c:693
 #, fuzzy
 msgid "Error underline color"
 msgstr "Framgrunnsfarge"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 #, fuzzy
 msgid "Color with which to draw error-indication underlines"
 msgstr "Fargen som innsetjingsmarkøren skal teiknast med"

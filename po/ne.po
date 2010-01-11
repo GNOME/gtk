@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -669,7 +669,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "असमर्थित JPEG रङ खाली स्थान (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG फाइल लोड गर्नका लागि स्मृति निर्धारण गर्न सकेन"
@@ -1650,11 +1650,11 @@ msgstr "ह्यु:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "आगत विधिहरू"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
@@ -1675,7 +1675,7 @@ msgstr "डेस्कटप"
 msgid "(None)"
 msgstr "(कुनै पनि होइन)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "अन्य..."
 
@@ -2331,13 +2331,13 @@ msgid "Cl_ear"
 msgstr "खाली गर्नुहोस्"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "स्थान खोल्नुहोस्"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -686,7 +686,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ניט געשטיצטע JPEG פֿאַרב־שטח (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "ניט געקענט געפֿינען זכּרון אַרײַנצושטעלן JPEG טעקע"
@@ -1712,11 +1712,11 @@ msgstr "שאַטירונג"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "אַרײַנשרײַב־מיטלען"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "לײג אַרײַן אוניקאָד קאָנטראָל־שריפֿטצײכן"
@@ -1740,7 +1740,7 @@ msgstr ""
 msgid "(None)"
 msgstr "קײנע"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr ""
 
@@ -2410,13 +2410,13 @@ msgid "Cl_ear"
 msgstr "מעק אָפּ"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "עפֿן"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

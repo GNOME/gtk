@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2004-11-30 16:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Northern Sotho <translate-discuss-nso@lists.sourceforge.net>\n"
@@ -688,7 +688,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Sekgoba sa mmala sa JPEG seo se sa thekgwego (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "E ka se kgone go bea kgopolo bakeng sa go laiša faele ya JPEG"
@@ -1722,11 +1722,11 @@ msgstr "_Metswako ya mebala:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Mekgwa _ya Tsebišo"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Tsenya Tlhaka ya Taolo ya Unicode"
 
@@ -1748,7 +1748,7 @@ msgstr "Teseke"
 msgid "(None)"
 msgstr "(Ga e gona)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr ""
 
@@ -2428,13 +2428,13 @@ msgid "Cl_ear"
 msgstr "_Phumola"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "Bula Lefelo"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

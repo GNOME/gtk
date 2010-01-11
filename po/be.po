@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2005-11-16 11:17+0200\n"
 "Last-Translator: Vital Khilko <vk@altlinux.ru>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -678,7 +678,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Непадтрымвальная колеравая прастора JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Немагчыма разьмеркаваць памяць для загрузкі JPEG файла"
@@ -1674,11 +1674,11 @@ msgstr "_Адценьне:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Мэтады _ўводу"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Уставіць кіруючы знак Unicode"
 
@@ -1699,7 +1699,7 @@ msgstr "Сталец"
 msgid "(None)"
 msgstr "(Няма)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Іншае..."
 
@@ -2356,13 +2356,13 @@ msgid "Cl_ear"
 msgstr "А_чысьціць"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "Адкрыць разьмяшчэньне"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

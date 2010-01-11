@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.te\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2009-08-31 18:31+0530\n"
 "Last-Translator: Krishna Babu K <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <en@li.org>\n"
@@ -648,7 +648,7 @@ msgstr "ప్రతిబింబమును నింపుటకు జ్�
 msgid "Unsupported JPEG color space (%s)"
 msgstr " సహకారం లేనిJPEG వర్ణప్రదేశము (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG దస్త్రంను నింపుటకుస్థాననిర్దేశకం చేయలేము."
@@ -1602,11 +1602,11 @@ msgstr "కుడి(_R):"
 msgid "Paper Margins"
 msgstr "పుట అంచులు"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "ఎగుబడి విధానములు(_M)"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "యునికోడ్ నియంత్రణ అక్షరాన్ని ప్రవేశపెట్టుము(_I)"
 
@@ -1626,7 +1626,7 @@ msgstr "రంగస్థలం"
 msgid "(None)"
 msgstr "(ఏమీలేదు)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "ఇతరములు"
 
@@ -2256,12 +2256,12 @@ msgid "Cl_ear"
 msgstr "శుభ్రం(_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 msgid "_Open Link"
 msgstr "లింకును తెరచుము(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr "లింకు చిరునామాను నకలుతీయుము (_L)"
 

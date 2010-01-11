@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2007-05-14 21:28-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
@@ -682,7 +682,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Gofod lliw JPEG ni chynhelir (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Methu canfod digon o gof er mwyn llwytho'r ffeil JPEG"
@@ -1669,11 +1669,11 @@ msgstr "_De:"
 msgid "Paper Margins"
 msgstr "Ymylon Papur"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr "Moddau _Mewnbwn"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr "_Mewnosod Nod Rheoli Unicode"
 
@@ -1694,7 +1694,7 @@ msgstr "Penbwrdd"
 msgid "(None)"
 msgstr "(Dim)"
 
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Arall..."
 
@@ -2339,13 +2339,13 @@ msgid "Cl_ear"
 msgstr "_Clirio"
 
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "Agor Lleoliad"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 

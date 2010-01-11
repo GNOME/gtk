@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-08 10:37-0500\n"
+"POT-Creation-Date: 2010-01-11 17:19-0500\n"
 "PO-Revision-Date: 2004-11-16 14:57-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -734,7 +734,7 @@ msgstr "Ububiko Kuri Ibirimo Ishusho Porogaramu Kuri Kigenga Ububiko"
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Ibara Umwanya"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 #, fuzzy
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -1847,11 +1847,11 @@ msgstr "Ibara"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7792
+#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
 msgid "Input _Methods"
 msgstr ""
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7806
+#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
@@ -1876,7 +1876,7 @@ msgid "(None)"
 msgstr "(ntacyo)"
 
 # sw/source\ui\ribbar\workctrl.src:RID_INSERT_FIELD_CTRL.FN_INSERT_FIELD.text
-#: gtk/gtkfilechooserbutton.c:2015
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Ikindi..."
 
@@ -2594,13 +2594,13 @@ msgstr "Gusiba"
 # #-#-#-#-#  sfx2.pot (Gnome 2.12)  #-#-#-#-#
 # sfx2/source\dialog\versdlg.src:DLG_VERSIONS.PB_OPEN.text
 #. Open Link
-#: gtk/gtklabel.c:5527
+#: gtk/gtklabel.c:5530
 #, fuzzy
 msgid "_Open Link"
 msgstr "Gufungura"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5539
+#: gtk/gtklabel.c:5542
 msgid "Copy _Link Address"
 msgstr ""
 
