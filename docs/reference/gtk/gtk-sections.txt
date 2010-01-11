@@ -5861,6 +5861,8 @@ gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification
 gtk_window_get_opacity
 gtk_window_set_opacity
+gtk_window_get_mnemonics_visible
+gtk_window_set_mnemonics_visible
 <SUBSECTION Standard>
 GTK_WINDOW
 GTK_IS_WINDOW
@@ -7130,6 +7132,7 @@ gtk_print_context_get_dpi_y
 gtk_print_context_get_pango_fontmap
 gtk_print_context_create_pango_context
 gtk_print_context_create_pango_layout
+gtk_print_context_get_hard_margins
 
 <SUBSECTION Standard>
 GTK_TYPE_PRINT_CONTEXT
