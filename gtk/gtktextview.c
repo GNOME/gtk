@@ -138,6 +138,7 @@ enum
   MOVE_VIEWPORT,
   SELECT_ALL,
   TOGGLE_CURSOR_VISIBLE,
+  PREEDIT_CHANGED,
   LAST_SIGNAL
 };
 
@@ -1046,6 +1047,30 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 NULL, NULL,
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
+
+  /**
+   * GtkTextView::preedit-changed:
+   * @text_view: the object which received the signal
+   * @preedit: the current preedit string
+   *
+   * If an input method is used, the typed text will not immediately
+   * be committed to the buffer. So if you are interested in the text,
+   * connect to this signal.
+   *
+   * This signal is only emitted if the text at the given position
+   * is actually editable.
+   *
+   * Since: 2.20
+   */
+  signals[PREEDIT_CHANGED] =
+    g_signal_new_class_handler (I_("preedit-changed"),
+                                G_OBJECT_CLASS_TYPE (object_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                NULL,
+                                NULL, NULL,
+                                _gtk_marshal_VOID__STRING,
+                                G_TYPE_NONE, 1,
+                                G_TYPE_STRING);
 
   /*
    * Key bindings
@@ -7372,6 +7397,8 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
       gtk_widget_error_bell (GTK_WIDGET (text_view));
       goto out;
     }
+
+  g_signal_emit (text_view, signals[PREEDIT_CHANGED], 0, str);
 
   if (text_view->layout)
     gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
