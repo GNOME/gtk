@@ -1,3 +1,56 @@
+Overview of Changes from GTK+ 2.19.2 to 2.19.3
+==============================================
+
+* GSeal:
+ - Deprecate widget flag macros
+   GTK_WIDGET_STATE
+   GTK_WIDGET_SAVED_STATE
+   GTK_WIDGET_FLAGS
+   GTK_WIDGET_TOPLEVEL
+   GTK_WIDGET_NO_WINDOW
+   GTK_WIDGET_COMPOSITE_CHILD
+   GTK_WIDGET_APP_PAINTABLE
+   GTK_WIDGET_CAN_DEFAULT
+   GTK_WIDGET_CAN_FOCUS
+   GTK_WIDGET_DOUBLE_BUFFERED
+   GTK_WIDGET_HAS_DEFAULT
+   GTK_WIDGET_HAS_GRAB
+   GTK_WIDGET_RECEIVES_DEFAULT
+ - Also deprecate the type macros
+   GTK_WIDGET_TYPE
+   GTK_OBJECT_TYPE_NAME
+   GTK_OBJECT_TYPE
+
+* GtkOffscreenWindow: A new toplevel container widget to manage
+  offscreen rendering of child widgets
+
+* OS X:
+ - Memory leak fixes and other improvements
+
+* Bugs:
+ 604901 Provide generic offscreen rendering container
+ 597100 There is a misprint in the documentation...
+ 598383 GtkWidget::state-changed signal should be documented
+ 602284 Need a way to retrieve the preedit string in a GtkTextView
+ 605090 Fix some compilation warnings
+ 605199 Contradiction in the description of function...
+ 606068 Setup libjpeg error handling earlier...
+ 606230 gtk_combo_box_set_active_iter & unsetting the active item
+ 606291 Fix some issues in "Migrating from GtkOptionMenu...
+ 606434 prop-editor should support GdkColor
+
+* Translations:
+ Asturian
+ Basque
+ Kannada
+ Norwegian bokmål
+ Slovenian
+ Spanish
+ Swedish
+ Thai
+ Ukrainian
+
+
 Overview of Changes from GTK+ 2.19.1 to 2.19.2
 ==============================================
 
