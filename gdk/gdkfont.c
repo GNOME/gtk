@@ -116,7 +116,7 @@ gdk_string_width (GdkFont     *font,
  * 
  * Return value: the width of the character in pixels.
  *
- * Deprecated: Use gdk_text_extents() instead.
+ * Deprecated: 2.2: Use gdk_text_extents() instead.
  **/
 gint
 gdk_char_width (GdkFont *font,
@@ -308,7 +308,7 @@ gdk_text_height (GdkFont     *font,
  * 
  * Return value: the height of the character in pixels.
  *
- * Deprecated: Use gdk_text_extents() instead.
+ * Deprecated: 2.2: Use gdk_text_extents() instead.
  **/
 gint
 gdk_char_height (GdkFont *font,

@@ -1098,7 +1098,7 @@ void        gtk_widget_modify_font        (GtkWidget            *widget,
  *
  * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
  *
- * Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
+ * Deprecated: 2.0: Use gtk_widget_set_style() with a %NULL @style argument instead.
  */
 #define gtk_widget_set_rc_style(widget)          (gtk_widget_set_style (widget, NULL))
 
@@ -1108,7 +1108,7 @@ void        gtk_widget_modify_font        (GtkWidget            *widget,
  *
  * Equivalent to <literal>gtk_widget_set_style (widget, NULL)</literal>.
  *
- * Deprecated: Use gtk_widget_set_style() with a %NULL @style argument instead.
+ * Deprecated: 2.0: Use gtk_widget_set_style() with a %NULL @style argument instead.
  */
 #define gtk_widget_restore_default_style(widget) (gtk_widget_set_style (widget, NULL))
 #endif

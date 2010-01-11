@@ -1099,7 +1099,7 @@ gdk_io_invoke (GIOChannel   *source,
  * Returns: a tag that can later be used as an argument to
  * gdk_input_remove().
  *
- * Deprecated: Use g_io_add_watch_full() on a #GIOChannel
+ * Deprecated: 2.14: Use g_io_add_watch_full() on a #GIOChannel
  */
 gint
 gdk_input_add_full (gint	      source,
@@ -1147,7 +1147,7 @@ gdk_input_add_full (gint	      source,
  * Returns: a tag that can later be used as an argument to
  * gdk_input_remove().
  *
- * Deprecated: Use g_io_add_watch() on a #GIOChannel
+ * Deprecated: 2.14: Use g_io_add_watch() on a #GIOChannel
  */
 gint
 gdk_input_add (gint		 source,
