@@ -246,7 +246,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       P_("Border width"),
                                                       P_("The width of the empty border outside the containers children"),
 						      0,
-						      G_MAXINT,
+						      65535,
 						      0,
                                                       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
