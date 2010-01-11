@@ -1277,25 +1277,25 @@ gtk_tool_item_get_proxy_menu_item (GtkToolItem *tool_item,
 }
 
 /**
- * gtk_tool_item_rebuild_menu()
+ * gtk_tool_item_rebuild_menu:
  * @tool_item: a #GtkToolItem
- * 
+ *
  * Calling this function signals to the toolbar that the
  * overflow menu item for @tool_item has changed. If the
  * overflow menu is visible when this function it called,
  * the menu will be rebuilt.
  *
  * The function must be called when the tool item
- * changes what it will do in response to the "create_menu_proxy"
- * signal.
- * 
+ * changes what it will do in response to the
+ * #GtkToolItem::create-menu-proxy signal.
+ *
  * Since: 2.6
- **/
+ */
 void
 gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
 {
   GtkWidget *widget;
-  
+
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   widget = GTK_WIDGET (tool_item);
@@ -1309,13 +1309,13 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
  * @tool_item: a #GtkToolItem
  * @menu_item_id: a string used to identify @menu_item
  * @menu_item: a #GtkMenuItem to be used in the overflow menu
- * 
+ *
  * Sets the #GtkMenuItem used in the toolbar overflow menu. The
  * @menu_item_id is used to identify the caller of this function and
  * should also be used with gtk_tool_item_get_proxy_menu_item().
- * 
+ *
  * Since: 2.4
- **/
+ */
 void
 gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 				   const gchar *menu_item_id,

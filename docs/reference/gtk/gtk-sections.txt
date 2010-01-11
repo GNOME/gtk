@@ -2633,7 +2633,6 @@ gtk_message_dialog_get_type
 GtkInfoBar
 gtk_info_bar_new
 gtk_info_bar_new_with_buttons
-gtk_info_bar_set_contents
 gtk_info_bar_add_action_widget
 gtk_info_bar_add_button
 gtk_info_bar_add_buttons
