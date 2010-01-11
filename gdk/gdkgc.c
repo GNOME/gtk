@@ -682,6 +682,7 @@ _gdk_gc_add_drawable_clip (GdkGC     *gc,
 			      -1, -1);
 	  gdk_gc_set_clip_region (tmp_gc, NULL);
 	  gdk_gc_set_clip_mask (gc, new_mask);
+	  g_object_unref (new_mask);
 	}
       else if (overlap == GDK_OVERLAP_RECTANGLE_OUT)
 	{
