@@ -887,7 +887,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::state-changed:
    * @widget: the object which received the signal.
-   * @state:
+   * @state: the previous state
+   *
+   * The ::state-changed signal is emitted when the widget state changes.
+   * See gtk_widget_get_state().
    */
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state-changed"),
