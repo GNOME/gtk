@@ -7,9 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"+&component=general\n"
-"POT-Creation-Date: 2010-01-03 01:14+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2010-01-03 22:23+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -395,6 +394,12 @@ msgstr "ไม่รู้จักชนิดของรูป"
 msgid "Image pixel data corrupt"
 msgstr "ข้อมูลพิกเซลในแฟ้มเสีย"
 
+#: gdk-pixbuf/gdk-pixdata.c:432
+#, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
+
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "พบชิ้นไอคอนเกินมาในภาพเคลื่อนไหว"
@@ -628,7 +633,7 @@ msgstr "หน่วยความจำไม่พอสำหรับอ่
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ไม่รองรับห้วงสีนี้สำหรับ JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "หน่วยความจำไม่พอสำหรับอ่านรูป JPEG นี้"
@@ -1143,6 +1148,12 @@ msgstr "กำลังเริ่ม %s"
 msgid "Opening %s"
 msgstr "กำลังเปิด %s"
 
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "กำลังเปิด %d รายการ"
+
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
 msgstr "ไม่สามารถแสดงลิงก์ได้"
@@ -1589,15 +1600,15 @@ msgstr "_ขวา:"
 msgid "Paper Margins"
 msgstr "ขอบกระดาษ"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "_วิธีป้อนข้อความ"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "แ_ทรกอักขระควบคุมของยูนิโค้ด"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "ปุ่ม Caps Lock ติดอยู่"
 
@@ -2242,12 +2253,12 @@ msgid "Cl_ear"
 msgstr "_ล้าง"
 
 #. Open Link
-#: gtk/gtklabel.c:5634
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5646
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "คัดลอกที่อยู่_ลิงก์"
 
@@ -2348,6 +2359,7 @@ msgid "Unknown Application (pid %d)"
 msgstr "โปรแกรมไม่ทราบชื่อ (pid %d)"
 
 #: gtk/gtkmountoperation.c:1064
+#, c-format
 msgid "Unable to end process"
 msgstr "ไม่สามารถจบโพรเซสได้"
 
@@ -2522,6 +2534,7 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2531,18 +2544,22 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2905
+#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2908
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:298 gtk/gtkprintoperation-unix.c:315
+#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:359
+#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -5183,14 +5200,6 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "ไม่สามารถจัดสรรบัฟเฟอร์รูปขนาด %u ไบต์"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "กำลังเปิด %d รายการ"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ว่าง)"

@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-10-01 20:58+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -675,7 +675,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Espai de color JPEG no implementat (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "No es pot obtenir memòria per a carregar el fitxer JPEG"
@@ -807,8 +807,9 @@ msgstr ""
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Les claus per als blocs text de PNG han de ser caràcters ASCII."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -1021,11 +1022,6 @@ msgstr "No s'ha pogut desar la imatge TIFF"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1674,15 +1670,15 @@ msgstr "_Dret:"
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
@@ -2338,12 +2334,12 @@ msgid "Cl_ear"
 msgstr "_Neteja"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "Obre l'_enllaç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 

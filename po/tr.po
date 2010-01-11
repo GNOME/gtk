@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-02-22 18:57+0200\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -724,7 +724,7 @@ msgid "Unsupported JPEG color space (%s)"
 msgstr "Desteklenmeyen JPEG renk uzayı (%s)"
 
 # gdk-pixbuf/io-jpeg.c:529
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG dosyasını yüklemek için bellek ayrılamadı"
@@ -869,8 +869,9 @@ msgstr "PNG metin yığın anahtarları en az 1 en çok 79 karakter olabilirler.
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG metin yığın anahtarları ASCII karakter olmalıdır."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 # gdk-pixbuf/io-jpeg.c:655
@@ -1113,11 +1114,6 @@ msgstr "TIFF resmi kaydedilemedi"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 # gdk-pixbuf/io-tiff.c:264
@@ -1820,15 +1816,15 @@ msgid "Paper Margins"
 msgstr "Kağıt Boşlukları"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "Girdi _Yöntemleri"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Unikod Kontrol Karakteri Ekle"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Caps Lock tuşu açık"
 
@@ -2560,13 +2556,13 @@ msgstr "_Temizle"
 
 # gtk/gtkstock.c:296
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Aç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr ""
 

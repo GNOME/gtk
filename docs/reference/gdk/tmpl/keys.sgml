@@ -234,6 +234,16 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_keymap_map_virtual_modifiers ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@state: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keyval_name ##### -->
 <para>
 Converts a key value into a symbolic name.

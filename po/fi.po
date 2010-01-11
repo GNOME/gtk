@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2010-01-06 11:28+0200\n"
 "Last-Translator: Timo Jyrinki <timo.jyrinki@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -653,7 +653,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Tukematon JPEG-väriavaruus (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Muistia ei voitu varata JPEG-kuvan lataamiseksi"
@@ -783,8 +783,9 @@ msgstr ""
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG text -lohkojen avainten täytyy olla ASCII-merkkejä."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -993,11 +994,6 @@ msgstr "TIFF-kuvan tallennus epäonnistui"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1646,15 +1642,15 @@ msgstr "_Oikea:"
 msgid "Paper Margins"
 msgstr "Paperin marginaalit"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Lisää Unicode-säätömerkki"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "CapsLock on päällä"
 
@@ -1899,8 +1895,8 @@ msgstr "Tiedosto \"%s\" on jo olemassa. Haluatko korvata sen?"
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Tiedosto on jo olemassa kansiossa ”%s”. Tiedoston korvaus ylikirjoittaa "
-"sen sisällön."
+"Tiedosto on jo olemassa kansiossa ”%s”. Tiedoston korvaus ylikirjoittaa sen "
+"sisällön."
 
 #: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
@@ -2308,12 +2304,12 @@ msgid "Cl_ear"
 msgstr "_Tyhjennä"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "Kopioi _linkin osoite"
 

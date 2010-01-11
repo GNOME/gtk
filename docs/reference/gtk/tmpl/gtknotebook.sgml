@@ -755,6 +755,26 @@ Deprecated compatibility macro.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_notebook_set_action_widget ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@widget: 
+@pack_type: 
+
+
+<!-- ##### FUNCTION gtk_notebook_get_action_widget ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@pack_type: 
+@Returns: 
+
+
 <!-- ##### USER_FUNCTION GtkNotebookWindowCreationFunc ##### -->
 <para>
 A function used by GtkNotebook when a detachable tab is dropped

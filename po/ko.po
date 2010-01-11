@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-08-23 01:17+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -642,7 +642,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "지원하지 않는 JPEG 색 공간 (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG파일을 읽는 중 메모리 할당을 할 수 없습니다"
@@ -771,8 +771,9 @@ msgstr "PNG 텍스트 부분의 키에서는 최소 1 최대 79 문자까지 쓸
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG 텍스트 부분의 키는 아스키 문자로 되어 있어야 합니다."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -980,11 +981,6 @@ msgstr "TIFF 그림을 저장하는 데 실패"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1626,15 +1622,15 @@ msgstr "오른쪽(_R):"
 msgid "Paper Margins"
 msgstr "용지 여백"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Caps Lock이 켜져 있습니다"
 
@@ -2287,12 +2283,12 @@ msgid "Cl_ear"
 msgstr "지우기(_E)"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "링크 주소 복사(_L)"
 

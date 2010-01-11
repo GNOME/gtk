@@ -81,6 +81,12 @@ Creates a new #GtkRadioMenuItem.
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
 
+
+@group: 
+@label: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic ##### -->
 <para>
 

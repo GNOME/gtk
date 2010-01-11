@@ -79,13 +79,43 @@ for the new pixmap. Can be %NULL, if the depth is given.
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm ##### -->
 
 
+@drawable: 
+@mask: 
+@transparent_color: 
+@filename: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm ##### -->
+
+
+@drawable: 
+@colormap: 
+@mask: 
+@transparent_color: 
+@filename: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pixmap_create_from_xpm_d ##### -->
 
 
+@drawable: 
+@mask: 
+@transparent_color: 
+@data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_pixmap_colormap_create_from_xpm_d ##### -->
+
+
+@drawable: 
+@colormap: 
+@mask: 
+@transparent_color: 
+@data: 
+@Returns: 
 
 
 <!-- ##### MACRO gdk_pixmap_ref ##### -->

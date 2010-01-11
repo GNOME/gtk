@@ -249,9 +249,10 @@ GTK_SPIN_END</entry>
 
 </para>
 
-
-@adjustment:
-
+@spin_button: 
+@adjustment: 
+@climb_rate: 
+@digits: 
 
 
 <!-- ##### FUNCTION gtk_spin_button_new ##### -->

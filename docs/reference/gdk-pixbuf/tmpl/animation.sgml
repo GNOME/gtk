@@ -152,6 +152,11 @@ An opaque struct representing a simple animation.
 </para>
 
 
+<!-- ##### ARG GdkPixbufSimpleAnim:loop ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gdk_pixbuf_simple_anim_new ##### -->
 <para>
 

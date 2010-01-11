@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-08-24 17:09+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -646,7 +646,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "असमर्थित JPEG रंग स्थान (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG फ़ाइल लोड करने के लिए स्मृति आबंटित नहीं की जा सकी"
@@ -774,8 +774,9 @@ msgstr "PNG पाठ चंक्स की कुंजियों में 
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG पाठ चंक्स की कुंजियाँ सिर्फ आस्की अक्षर ही हो सकते हैं"
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -982,11 +983,6 @@ msgstr "TIFF छवि सहेजने में असफल"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1639,15 +1635,15 @@ msgstr "दाहिना (_R):"
 msgid "Paper Margins"
 msgstr "कागज हाशिया"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "इनपुट विधियाँ"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "यूनिकोड कन्ट्रोल कैरेक्टर प्रविष्ट करें (_I)"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "कैप्स लॉक ऑन है"
 
@@ -2308,12 +2304,12 @@ msgid "Cl_ear"
 msgstr "साफ करें (_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "कड़ी खोलें (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "कड़ी पता की नक़ल लें (_L)"
 

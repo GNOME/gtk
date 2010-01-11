@@ -111,6 +111,19 @@ if all references are released.
 
 </para>
 
+<!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GTK_OBJECT_TYPE_NAME ##### -->
+<para>
+
+</para>
+
+
 
 <!-- ##### ENUM GtkObjectFlags ##### -->
 <para>

@@ -161,6 +161,14 @@ The #GtkEntry-struct struct contains only private data.
 @entry: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkEntry::preedit-changed ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
 <para>
 

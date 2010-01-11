@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-10-07 07:45+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -665,7 +665,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподдържано цветово пространство за JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Недостатъчно памет за зареждане на файл във формат JPEG"
@@ -805,8 +805,9 @@ msgstr ""
 "Ключовете за откъсите текст в PNG трябва да се състоят само от знаци от "
 "ASCII."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -1018,11 +1019,6 @@ msgstr "Неуспех при запазване на изображение в�
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1677,15 +1673,15 @@ msgstr "_Отдясно:"
 msgid "Paper Margins"
 msgstr "Бели полета"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на контролен знак за Уникод"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Клавишът „Caps Lock“ е натиснат"
 
@@ -2339,12 +2335,12 @@ msgid "Cl_ear"
 msgstr "_Изчистване"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "Копиране на _адреса на връзка"
 

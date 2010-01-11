@@ -70,6 +70,11 @@ and should not be accessed directly.
 
 </para>
 
+<!-- ##### ARG GtkAction:always-show-image ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAction:gicon ##### -->
 <para>
 
@@ -335,6 +340,24 @@ and should not be accessed directly.
 
 @action: 
 @proxy: 
+
+
+<!-- ##### FUNCTION gtk_action_get_always_show_image ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_set_always_show_image ##### -->
+<para>
+
+</para>
+
+@action: 
+@always_show: 
 
 
 <!-- ##### FUNCTION gtk_action_get_accel_path ##### -->
