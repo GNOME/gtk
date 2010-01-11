@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -681,7 +681,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ཇེ་པི་ཨི་ཇི་ ཚོས་གཞིའི་བར་སྟོང་ (%s) དེ་ལུ་ རྒྱབ་སྐྱོར་མིན་འདུག"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "ཇེ་པི་ཨི་ཇི་ཡིག་སྣོད་ མངོན་གསལ་འབད་ནིའི་དོན་ལུ་ དྲན་ཚད་སྤྲོད་མ་ཚུགས།"
@@ -812,8 +812,9 @@ msgstr ""
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "པི་ཨེན་ཇི་གི་ ཚིག་ཡིག་དུམ་བུའི་ལྡེ་མིག་ཚུ་ ཡིག་འབྲུ་ ཨེ་ཨེསི་སི་ཨའི་ཨའི་ ཨིན་དགོ"
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -1026,11 +1027,6 @@ msgstr "ཊི་ཨའི་ཨེཕ་ཨེཕ་ གཟུགས་བར�
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1692,15 +1688,15 @@ msgstr "གཡས་:(_R)"
 msgid "Paper Margins"
 msgstr "ཤོག་ཀུའི་ས་སྟོང་།"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "ཨིན་པུཊི་ཐབས་ཤེས།(_M)"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "ཡུ་ནི་ཀོཌི་ ཚད་འཛིན་གྱི་ ཡིག་འབྲུ་བཙུགས།(_I)"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "གནས་ཁོངས་འདྲ་བཤུས་རྐྱབས།(_L)"
@@ -2359,13 +2355,13 @@ msgid "Cl_ear"
 msgstr "བསལ།(_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 #, fuzzy
 msgid "_Open Link"
 msgstr "གནས་ཁོངས་སྒོ་ཕྱེ།"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr ""
 

@@ -147,6 +147,13 @@ Sets the time between the user moving the mouse over a widget and the widget's t
 
 <!-- ##### FUNCTION gtk_tooltips_set_tip ##### -->
 
+
+@tooltips: 
+@widget: 
+@tip_text: 
+@tip_private: 
+
+
 <!-- ##### FUNCTION gtk_tooltips_data_get ##### -->
 <para>
 Retrieves any #GtkTooltipsData previously associated with the given widget.

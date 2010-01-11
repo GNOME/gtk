@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-10-06 11:18+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -660,7 +660,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "ଅସହାୟକ JPEG ରଙ୍ଗ କ୍ଷେତ୍ର (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ଫାଇଲ ଧାରଣ କରିବା ପାଇଁ ସ୍ମୃତି ଯୋଗାଇ ହେଲା ନାହିଁ"
@@ -787,8 +787,9 @@ msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ୧ ଓ ୭୯ ଅକ�
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ପାଠ୍ଯ ଖଣ୍ଡର ଚାବି ଆସ୍କି ଅକ୍ଷରରୁ ହୋଇଥିବା ଆବଶ୍ଯକ."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -993,11 +994,6 @@ msgstr "TIFF ଚିତ୍ରକୁ ସଂରକ୍ଷଣ କରିବାରେ �
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1637,15 +1633,15 @@ msgstr "ଡାହାଣ (_R):"
 msgid "Paper Margins"
 msgstr "କାଗଜ ମାର୍ଜିନ"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "ନିବେଶ ପ୍ରଣାଳୀ (_M)"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "ୟୁନିକୋଡ ନିୟନ୍ତ୍ରଣ ଅକ୍ଷର ଭର୍ତ୍ତି କରନ୍ତୁ (_I)"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Caps Lock ଅନ ଅଛି"
 
@@ -2295,12 +2291,12 @@ msgid "Cl_ear"
 msgstr "ସଫା କରନ୍ତୁ (_e)"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "ସଂଯୋଗ ଖୋଲନ୍ତୁ (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "ସଂଯୋଗ ଠିକଣାକୁ ନକଲ କରନ୍ତୁ (_L)"
 

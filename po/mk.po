@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2007-09-08 18:58+0200\n"
 "Last-Translator: Arangel Angov <arangel@linux.net.mk>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
@@ -682,7 +682,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподдржан простор помеѓу бојата во JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не можам да алоцирам меморија за вчитување на JPEG датотеката"
@@ -815,8 +815,9 @@ msgstr ""
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Копчињата за текстот за PNG мораат да бидат во ASCII букви или броеви."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -1027,11 +1028,6 @@ msgstr "Не успеав да ја зачувам TIFF сликата"
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1690,15 +1686,15 @@ msgstr "Д_есно:"
 msgid "Paper Margins"
 msgstr "Маргини на хартијата"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "Методи за запис"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Внесете уникод знаци за контрола"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Копирај _локација"
@@ -2360,13 +2356,13 @@ msgid "Cl_ear"
 msgstr "Исч_исти"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Отвори"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr ""
 

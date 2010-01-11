@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-09-16 10:31+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <fedora-trans-mr@redhat.com>\n"
@@ -124,7 +124,7 @@ msgstr "फोन्ट(अक्षर रचना)"
 msgid "The resolution for fonts on the screen"
 msgstr "पडद्यावरील क्षेत्राचे समशोधन कसे करावे"
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
 msgid "Cursor"
 msgstr "कर्सर"
 
@@ -264,7 +264,7 @@ msgstr "वेगनियंत्रक बटण असणारी चौक
 msgid "The widget to be monitored for accelerator changes"
 msgstr "वेगक्रमात बदल करताना चौकटीवर (विंडो) लक्ष ठेवा"
 
-#: gtk/gtkaction.c:181 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
+#: gtk/gtkaction.c:181 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:111
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "नाव"
@@ -274,7 +274,7 @@ msgid "A unique name for the action."
 msgstr "कृतीसाठी विशेष नाव."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:501 gtk/gtkmenuitem.c:305
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:204
 msgid "Label"
 msgstr "लेबल"
@@ -317,7 +317,7 @@ msgid "The GIcon being displayed"
 msgstr "दर्शविले गेलेले GIcon"
 
 #: gtk/gtkaction.c:284 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:321
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
+#: gtk/gtkprinter.c:160 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
 msgid "Icon Name"
 msgstr "चिन्ह  नाव"
 
@@ -813,12 +813,12 @@ msgid ""
 "widget"
 msgstr "जर बटणांमधे लेबल widget असेल तर, बटणांमधील लेबल विजेटची वाक्यरचना"
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:522
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:527
 #: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:211
 msgid "Use underline"
 msgstr "अधोरेखीत करा "
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:523
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:528
 #: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -925,7 +925,7 @@ msgstr ""
 "child_displacement_x/_y गुणधर्ममुळे केंदीत काटकोन चौकानवर सुध्दा प्रभाव पडायला पाहिजे "
 "का"
 
-#: gtk/gtkbutton.c:501 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
+#: gtk/gtkbutton.c:501 gtk/gtkentry.c:695 gtk/gtkentry.c:1740
 msgid "Inner Border"
 msgstr "आतंरीक सीमा"
 
@@ -1278,7 +1278,7 @@ msgid "Value of the progress bar"
 msgstr "मूल्य"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:737 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkentry.c:738 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
 #: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "लिखाण"
@@ -1364,7 +1364,7 @@ msgstr "(हवे ते लिखाण) चिन्हांकित कर
 msgid "Marked up text to render"
 msgstr "दाखवण्यासाठी चिन्हांकित केलेले लिखाण "
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:508
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:513
 msgid "Attributes"
 msgstr "गुणविशेष"
 
@@ -1412,12 +1412,12 @@ msgstr "पृष्ठभागावरील रंग"
 msgid "Foreground color as a GdkColor"
 msgstr "Gdk रंगाप्रमाणे पार्श्वरंग"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:661 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "संपादनयोग्य"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "उपयोगकर्त्याद्वारे लिखाणात सुधारणा करता येईल काय"
 
@@ -1521,7 +1521,7 @@ msgstr ""
 "या पाठ्याची भाषा ISO कोड आहे. पाठ्य म्हणून दर्शवितेवेळी Pango यास ओळखखूण म्हणून वापरू "
 "शकतो. तुम्हाला हे समझत नसल्यास, याची गरज नाही"
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:633 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:638 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "अर्धगोलाकार करा"
 
@@ -1534,11 +1534,11 @@ msgstr ""
 "करण्यासाठीचे सूचविलेले स्थान"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:653
+#: gtk/gtklabel.c:658
 msgid "Width In Characters"
 msgstr "रुंदी"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:654
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:659
 msgid "The desired width of the label, in characters"
 msgstr "रुंदी "
 
@@ -1966,7 +1966,7 @@ msgstr "मेन्युमध्ये टिअरऑफ जोडा"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "सर्व खाली ओढा पध्दतीत टिअरऑफ मेन्यु घटक असायला हवे का"
 
-#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:686
+#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:687
 msgid "Has Frame"
 msgstr "चौकट आहे"
 
@@ -2020,7 +2020,7 @@ msgstr "बाणाचा आकार"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "कॉम्बो बॉक्स मध्ये दर्शविण्याजोगी बाणाचे कीमान आकार"
 
-#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:786 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:787 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:193 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2134,48 +2134,48 @@ msgstr "वापरण्यायोग्य क्षेत्राची �
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ह्या मजकुराच्या तळभागातील बटणाभोवती असणाऱ्या जागेची रुंदी"
 
-#: gtk/gtkentry.c:633
+#: gtk/gtkentry.c:634
 msgid "Text Buffer"
 msgstr "मजकूर बफर"
 
-#: gtk/gtkentry.c:634
+#: gtk/gtkentry.c:635
 msgid "Text buffer object which actually stores entry text"
 msgstr "मजकूर बफर घटक जे सहसा नोंदणी मजकूर साठवतात"
 
-#: gtk/gtkentry.c:641 gtk/gtklabel.c:596
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:601
 msgid "Cursor Position"
 msgstr "कर्सरचे स्थान"
 
-#: gtk/gtkentry.c:642 gtk/gtklabel.c:597
+#: gtk/gtkentry.c:643 gtk/gtklabel.c:602
 msgid "The current position of the insertion cursor in chars"
 msgstr "अक्षरामध्ये असणारी कर्सरची वर्तमान स्थिती"
 
-#: gtk/gtkentry.c:651 gtk/gtklabel.c:606
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:611
 msgid "Selection Bound"
 msgstr "निर्बंधित निवड"
 
-#: gtk/gtkentry.c:652 gtk/gtklabel.c:607
+#: gtk/gtkentry.c:653 gtk/gtklabel.c:612
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "अक्षरांमधिल कर्सर पासून निवडकाच्या विरूध्द बाजुची स्थिती"
 
-#: gtk/gtkentry.c:662
+#: gtk/gtkentry.c:663
 msgid "Whether the entry contents can be edited"
 msgstr "मजकुरातील नोंदी संपादित किंवा सुधारणा करता येतील का"
 
-#: gtk/gtkentry.c:669 gtk/gtkentrybuffer.c:383
+#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "कमाल लांबी"
 
-#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:384
+#: gtk/gtkentry.c:671 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "ह्या नोंदणी करीता कमाल अक्षर संख्या. कमाल नसल्यास शुन्य"
 
-#: gtk/gtkentry.c:678
+#: gtk/gtkentry.c:679
 msgid "Visibility"
 msgstr "दर्शनियता"
 
-#: gtk/gtkentry.c:679
+#: gtk/gtkentry.c:680
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -2183,121 +2183,121 @@ msgstr ""
 "FALSE चा प्रयोग केल्यावर वास्तविक मजकुराऐवजी (पासवर्ड मोड) \"अद्रुश्य\" रुपात अक्षर "
 "प्रदर्शित होते "
 
-#: gtk/gtkentry.c:687
+#: gtk/gtkentry.c:688
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE नोंदणीपासूनचे बाहेरील bevel काढूण टाकतो"
 
-#: gtk/gtkentry.c:695
+#: gtk/gtkentry.c:696
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "पाठ्य व फ्रेम मधिल सीमा. आंतरीक-सीमा गुणविशेष प्रकार खोडून पुन्हा लिहीतो"
 
-#: gtk/gtkentry.c:702 gtk/gtkentry.c:1268
+#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
 msgid "Invisible character"
 msgstr "अद्रुश्य अक्षर"
 
-#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
+#: gtk/gtkentry.c:704 gtk/gtkentry.c:1270
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "मजकुर झाकण्यासाठी वापरण्याचे अक्षर (\"पासवर्ड मोड\")"
 
-#: gtk/gtkentry.c:710
+#: gtk/gtkentry.c:711
 msgid "Activates default"
 msgstr "सर्वसाधारण हा भाग कार्यान्वित होतो"
 
-#: gtk/gtkentry.c:711
+#: gtk/gtkentry.c:712
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 "Enter बटण दाबून मुलभूत नियंत्रण कार्यक्रम (संवाद मधिल मुलभूत बटण) कार्यान्वित करायचे का"
 
-#: gtk/gtkentry.c:717
+#: gtk/gtkentry.c:718
 msgid "Width in chars"
 msgstr "अक्षरमालेची लांबी"
 
-#: gtk/gtkentry.c:718
+#: gtk/gtkentry.c:719
 msgid "Number of characters to leave space for in the entry"
 msgstr "ह्या नोंदणी मधील किती अक्षरांसाठी रिकामी जागा सोडायला हवी"
 
-#: gtk/gtkentry.c:727
+#: gtk/gtkentry.c:728
 msgid "Scroll offset"
 msgstr "स्क्रोल ओफसेट"
 
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:729
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "ह्या नोंदी मध्ये किती  पिक्सल्स पडद्याच्या डावीकडे स्क्रोल करतो "
 
-#: gtk/gtkentry.c:738
+#: gtk/gtkentry.c:739
 msgid "The contents of the entry"
 msgstr "नोंदीचा मजकूर"
 
-#: gtk/gtkentry.c:753 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:754 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "Xची दिशा"
 
-#: gtk/gtkentry.c:754 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:755 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "क्षितिज ओळींची दिशा 0 (डावीकडून) 1 (उजवीकडे). RTL मांडणी करीता आरक्षीत."
 
-#: gtk/gtkentry.c:770
+#: gtk/gtkentry.c:771
 msgid "Truncate multiline"
 msgstr "बहुओळी ट्रंकेट करा"
 
-#: gtk/gtkentry.c:771
+#: gtk/gtkentry.c:772
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "एकाच ओळी वरील बहुओळी चिकटविण्याचे पर्याय ट्रंकेट करायचे का."
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:788
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "नोंदणीच्या भोवती कोणत्याप्रकारचे छटा काढायची जेव्हा पटल असते निश्चित केले असते"
 
-#: gtk/gtkentry.c:802 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "रीत"
 
-#: gtk/gtkentry.c:803
+#: gtk/gtkentry.c:804
 msgid "Whether new text overwrites existing text"
 msgstr "नविन पाठ्य वर्तमान पाठ्य खोडून पुन्हा लिहीतो का"
 
-#: gtk/gtkentry.c:817 gtk/gtkentrybuffer.c:368
+#: gtk/gtkentry.c:818 gtk/gtkentrybuffer.c:368
 msgid "Text length"
 msgstr "पाठ्य लांबी"
 
-#: gtk/gtkentry.c:818
+#: gtk/gtkentry.c:819
 msgid "Length of the text currently in the entry"
 msgstr "नोंदणी अंतर्गत वर्तमान पाठ्याची लांबी"
 
-#: gtk/gtkentry.c:833
+#: gtk/gtkentry.c:834
 msgid "Invisible char set"
 msgstr "अदृष्य अक्षर संच"
 
-#: gtk/gtkentry.c:834
+#: gtk/gtkentry.c:835
 msgid "Whether the invisible char has been set"
 msgstr "अदृष्य अक्षर निश्चित केले आहे का"
 
-#: gtk/gtkentry.c:852
+#: gtk/gtkentry.c:853
 msgid "Caps Lock warning"
 msgstr "Caps Lock सावधानता"
 
-#: gtk/gtkentry.c:853
+#: gtk/gtkentry.c:854
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "Caps Lock सुरू असल्यावर परवलीचा शब्द नोंदणीने सावधानता दर्शवायचे का"
 
-#: gtk/gtkentry.c:867
+#: gtk/gtkentry.c:868
 msgid "Progress Fraction"
 msgstr "प्रगती भाग"
 
-#: gtk/gtkentry.c:868
+#: gtk/gtkentry.c:869
 msgid "The current fraction of the task that's been completed"
 msgstr "पूर्ण न झालेल्या कार्यचे वर्तमान भाग"
 
-#: gtk/gtkentry.c:885
+#: gtk/gtkentry.c:886
 msgid "Progress Pulse Step"
 msgstr "प्रगती पल्स स्टेप"
 
-#: gtk/gtkentry.c:886
+#: gtk/gtkentry.c:887
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2305,191 +2305,191 @@ msgstr ""
 "gtk_entry_progress_pulse() करीता प्रत्येक कॉलसाठी प्रगती बाऊन्सींग ब्लॉक "
 "हलविण्याकरीता आवश्यक नोंदणी रूंदीचे भाग"
 
-#: gtk/gtkentry.c:902
+#: gtk/gtkentry.c:903
 msgid "Primary pixbuf"
 msgstr "प्राथमिक pixbuf"
 
-#: gtk/gtkentry.c:903
+#: gtk/gtkentry.c:904
 msgid "Primary pixbuf for the entry"
 msgstr "नोंदणी करीता प्राथमिक pixbuf"
 
-#: gtk/gtkentry.c:917
+#: gtk/gtkentry.c:918
 msgid "Secondary pixbuf"
 msgstr "द्वितीय pixbuf"
 
-#: gtk/gtkentry.c:918
+#: gtk/gtkentry.c:919
 msgid "Secondary pixbuf for the entry"
 msgstr "नोंदणी करीता द्वितीय pixbuf"
 
-#: gtk/gtkentry.c:932
+#: gtk/gtkentry.c:933
 msgid "Primary stock ID"
 msgstr "प्राथमिक स्टॉक ID"
 
-#: gtk/gtkentry.c:933
+#: gtk/gtkentry.c:934
 msgid "Stock ID for primary icon"
 msgstr "प्राथमिक चिन्ह करीता स्टॉक ID"
 
-#: gtk/gtkentry.c:947
+#: gtk/gtkentry.c:948
 msgid "Secondary stock ID"
 msgstr "द्वितीय स्टॉक ID"
 
-#: gtk/gtkentry.c:948
+#: gtk/gtkentry.c:949
 msgid "Stock ID for secondary icon"
 msgstr "द्वितीय चिन्ह करीता स्टॉक ID"
 
-#: gtk/gtkentry.c:962
+#: gtk/gtkentry.c:963
 msgid "Primary icon name"
 msgstr "प्राथमिक चिन्हाचे नाव"
 
-#: gtk/gtkentry.c:963
+#: gtk/gtkentry.c:964
 msgid "Icon name for primary icon"
 msgstr "प्राथमिक चिन्ह करीता चिन्हाचे नाव"
 
-#: gtk/gtkentry.c:977
+#: gtk/gtkentry.c:978
 msgid "Secondary icon name"
 msgstr "द्वितीय चिन्हाचे नाव"
 
-#: gtk/gtkentry.c:978
+#: gtk/gtkentry.c:979
 msgid "Icon name for secondary icon"
 msgstr "द्वितीय चिन्ह करीता चिन्हाचे नाव"
 
-#: gtk/gtkentry.c:992
+#: gtk/gtkentry.c:993
 msgid "Primary GIcon"
 msgstr "प्राथमिक GIcon"
 
-#: gtk/gtkentry.c:993
+#: gtk/gtkentry.c:994
 msgid "GIcon for primary icon"
 msgstr "प्राथमिक चिन्ह करीता GIcon"
 
-#: gtk/gtkentry.c:1007
+#: gtk/gtkentry.c:1008
 msgid "Secondary GIcon"
 msgstr "द्वितीय GIcon"
 
-#: gtk/gtkentry.c:1008
+#: gtk/gtkentry.c:1009
 msgid "GIcon for secondary icon"
 msgstr "द्वितीय चिन्ह करीता GIcon"
 
-#: gtk/gtkentry.c:1022
+#: gtk/gtkentry.c:1023
 msgid "Primary storage type"
 msgstr "प्राथमिक साठा प्रकार"
 
-#: gtk/gtkentry.c:1023
+#: gtk/gtkentry.c:1024
 msgid "The representation being used for primary icon"
 msgstr "प्राथमिक चिन्ह करीता वापरण्याजोगी प्रस्तुति"
 
-#: gtk/gtkentry.c:1038
+#: gtk/gtkentry.c:1039
 msgid "Secondary storage type"
 msgstr "द्वितीय साठा प्रकार"
 
-#: gtk/gtkentry.c:1039
+#: gtk/gtkentry.c:1040
 msgid "The representation being used for secondary icon"
 msgstr "द्वितीय चिन्ह करीता वापरण्याजोगी प्रस्तुति"
 
-#: gtk/gtkentry.c:1060
+#: gtk/gtkentry.c:1061
 msgid "Primary icon activatable"
 msgstr "प्राथमिक चिन्ह सक्रीयजोगी"
 
-#: gtk/gtkentry.c:1061
+#: gtk/gtkentry.c:1062
 msgid "Whether the primary icon is activatable"
 msgstr "प्राथमिक चिन्ह सक्रीयजोगी आहे का"
 
-#: gtk/gtkentry.c:1081
+#: gtk/gtkentry.c:1082
 msgid "Secondary icon activatable"
 msgstr "द्वितीय चिन्ह सक्रीयजोगी"
 
-#: gtk/gtkentry.c:1082
+#: gtk/gtkentry.c:1083
 msgid "Whether the secondary icon is activatable"
 msgstr "द्वितीय चिन्ह सक्रीयजोगी आहे का"
 
-#: gtk/gtkentry.c:1104
+#: gtk/gtkentry.c:1105
 msgid "Primary icon sensitive"
 msgstr "प्राथमिक चिन्ह संवेदनशील"
 
-#: gtk/gtkentry.c:1105
+#: gtk/gtkentry.c:1106
 msgid "Whether the primary icon is sensitive"
 msgstr "प्राथमिक चिन्ह संवेदनशील आहे का"
 
-#: gtk/gtkentry.c:1126
+#: gtk/gtkentry.c:1127
 msgid "Secondary icon sensitive"
 msgstr "द्वितीय चिन्ह संवेदनशील"
 
-#: gtk/gtkentry.c:1127
+#: gtk/gtkentry.c:1128
 msgid "Whether the secondary icon is sensitive"
 msgstr "द्वितीय चिन्ह संवेदनशील आहे का"
 
-#: gtk/gtkentry.c:1143
+#: gtk/gtkentry.c:1144
 msgid "Primary icon tooltip text"
 msgstr "प्राथमिक चिन्ह टूलटीप पाठ्य"
 
-#: gtk/gtkentry.c:1144 gtk/gtkentry.c:1180
+#: gtk/gtkentry.c:1145 gtk/gtkentry.c:1181
 msgid "The contents of the tooltip on the primary icon"
 msgstr "प्राथमिक चिन्ह वरील टूलटीपची अंतर्भूत माहिती"
 
-#: gtk/gtkentry.c:1160
+#: gtk/gtkentry.c:1161
 msgid "Secondary icon tooltip text"
 msgstr "द्वितीय चिन्ह टूलटीप पाठ्य"
 
-#: gtk/gtkentry.c:1161 gtk/gtkentry.c:1199
+#: gtk/gtkentry.c:1162 gtk/gtkentry.c:1200
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "द्वितीय चिन्ह वरील टूलटीपची अंतर्भूत माहिती"
 
-#: gtk/gtkentry.c:1179
+#: gtk/gtkentry.c:1180
 msgid "Primary icon tooltip markup"
 msgstr "प्राथमिक चिन्ह टूलटीप मार्कअप"
 
-#: gtk/gtkentry.c:1198
+#: gtk/gtkentry.c:1199
 msgid "Secondary icon tooltip markup"
 msgstr "द्वितीय चिन्ह टूलटीप मार्कअप"
 
-#: gtk/gtkentry.c:1218 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "IM विभाग"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "कुठले IM विभाग वापरायचे"
 
-#: gtk/gtkentry.c:1233
+#: gtk/gtkentry.c:1234
 msgid "Icon Prelight"
 msgstr "चिन्ह पूर्वप्रकाशीत करा"
 
-#: gtk/gtkentry.c:1234
+#: gtk/gtkentry.c:1235
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "ताटकळतेवेळी सक्रीयजोगी चिन्ह पूर्व प्रकाशीत करायचे का"
 
-#: gtk/gtkentry.c:1247
+#: gtk/gtkentry.c:1248
 msgid "Progress Border"
 msgstr "प्रगती सीमा"
 
-#: gtk/gtkentry.c:1248
+#: gtk/gtkentry.c:1249
 msgid "Border around the progress bar"
 msgstr "प्रगती पट्टी भोवती सीमा"
 
-#: gtk/gtkentry.c:1719
+#: gtk/gtkentry.c:1741
 msgid "Border between text and frame."
 msgstr "पाठ्य व फेम मधिल सीमा."
 
-#: gtk/gtkentry.c:1733
+#: gtk/gtkentry.c:1755
 msgid "State Hint"
 msgstr "हिन्ट स्तर"
 
-#: gtk/gtkentry.c:1734
+#: gtk/gtkentry.c:1756
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "सावली किंवा पार्श्वभूमीचे रेखाटण करतेवेळी योग्य स्तर पुरवायचे का"
 
-#: gtk/gtkentry.c:1739 gtk/gtklabel.c:853
+#: gtk/gtkentry.c:1761 gtk/gtklabel.c:858
 msgid "Select on focus"
 msgstr "दृश्यमान करा"
 
-#: gtk/gtkentry.c:1740
+#: gtk/gtkentry.c:1762
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "केंद्रीत केल्यावर नोंदणी मधिल अनुक्रम निवडायचे का"
 
-#: gtk/gtkentry.c:1754
+#: gtk/gtkentry.c:1776
 msgid "Password Hint Timeout"
 msgstr "गुप्तशब्द ओळखण्याची वेळ संपली"
 
-#: gtk/gtkentry.c:1755
+#: gtk/gtkentry.c:1777
 msgid "How long to show the last input character in hidden entries"
 msgstr "लपविलेल्या नोंदणी मध्ये इंपुट अक्षर किती दर्शवायचे"
 
@@ -2599,11 +2599,11 @@ msgstr "उपघटक नियंत्रण साधन दर्शवि
 msgid "Text of the expander's label"
 msgstr "लिखाण"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:515
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:520
 msgid "Use markup"
 msgstr "मार्कअप चा प्रयोग करा"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:516
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:521
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "लेबलच्या पाठ्य मध्ये XML मार्कअप संयुक्त आहे. pango_parse_markup() पहा"
 
@@ -3183,19 +3183,19 @@ msgstr "कृती क्षेत्रच्या सीमाची रू
 msgid "The screen where this window will be displayed"
 msgstr "ही चौकट जेथे दर्शविले पाहिजे ती पडदा"
 
-#: gtk/gtklabel.c:502
+#: gtk/gtklabel.c:507
 msgid "The text of the label"
 msgstr "लेबलचे पाठ्य"
 
-#: gtk/gtklabel.c:509
+#: gtk/gtklabel.c:514
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "लेबलमधिल पाठ्यकरीता वापरण्याजोगी स्टाईल गुणधर्माची यादी"
 
-#: gtk/gtklabel.c:530 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "समर्थण"
 
-#: gtk/gtklabel.c:531
+#: gtk/gtklabel.c:536
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3204,58 +3204,58 @@ msgstr ""
 "लेबल मधिल पाठ्यतील परस्पर संबंधी ओळींची रचना. यामुळे लेबलची रचना मध्ये फरक पडत नाही. "
 "त्याकरीता GtkMisc::xalign पहा"
 
-#: gtk/gtklabel.c:539
+#: gtk/gtklabel.c:544
 msgid "Pattern"
 msgstr "स्वरुप"
 
-#: gtk/gtklabel.c:540
+#: gtk/gtklabel.c:545
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr ""
 "अक्षर मालिकेतील _ अक्षरे व मजकुरातील अक्षरे स्थिती परस्पर अधोरेखीत करण्याजोगी पाठ्यशी जुळते"
 
-#: gtk/gtklabel.c:547
+#: gtk/gtklabel.c:552
 msgid "Line wrap"
 msgstr "ओळ कव्हर करा"
 
-#: gtk/gtklabel.c:548
+#: gtk/gtklabel.c:553
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "निश्चित केल्यास, पाठ्य खूप मोठे होत असेल तर ओळी गुंडाळा"
 
-#: gtk/gtklabel.c:563
+#: gtk/gtklabel.c:568
 msgid "Line wrap mode"
 msgstr "रीत"
 
-#: gtk/gtklabel.c:564
+#: gtk/gtklabel.c:569
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "गुंडाळा निश्चित केल्यास, ओळी कशाप्रकारे गुंडाळायचे त्याचे नियंत्रण केले जाऊ शकते"
 
-#: gtk/gtklabel.c:571
+#: gtk/gtklabel.c:576
 msgid "Selectable"
 msgstr "निवडण्याजोगे"
 
-#: gtk/gtklabel.c:572
+#: gtk/gtklabel.c:577
 msgid "Whether the label text can be selected with the mouse"
 msgstr "माउस द्वारे लेबलचे पाठ्य निवडायचे का"
 
-#: gtk/gtklabel.c:578
+#: gtk/gtklabel.c:583
 msgid "Mnemonic key"
 msgstr "निमोनिक बटण"
 
-#: gtk/gtklabel.c:579
+#: gtk/gtklabel.c:584
 msgid "The mnemonic accelerator key for this label"
 msgstr "या लेबलकरीताचे नेमॉनीक प्रवर्गक किल्ली"
 
-#: gtk/gtklabel.c:587
+#: gtk/gtklabel.c:592
 msgid "Mnemonic widget"
 msgstr "निमोनिक विजेट"
 
-#: gtk/gtklabel.c:588
+#: gtk/gtklabel.c:593
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "लेबलचे नेमॉनीक प्रवर्गक किल्ली दाबल्यावर कार्यान्वित करण्याजोगी विजेट"
 
-#: gtk/gtklabel.c:634
+#: gtk/gtklabel.c:639
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3263,39 +3263,39 @@ msgstr ""
 "पूर्णत्व अक्षरमाळा दर्शविण्याकरीता परियुक्त जागा नसल्यास, अक्षरमाळा लंबवृत करण्यासाठीचे "
 "सूचविलेले स्थान"
 
-#: gtk/gtklabel.c:674
+#: gtk/gtklabel.c:679
 msgid "Single Line Mode"
 msgstr "मोड (रूप)"
 
-#: gtk/gtklabel.c:675
+#: gtk/gtklabel.c:680
 msgid "Whether the label is in single line mode"
 msgstr "लेबल एक ओळी पध्दती मध्ये आहे का"
 
-#: gtk/gtklabel.c:692
+#: gtk/gtklabel.c:697
 msgid "Angle"
 msgstr "कोन"
 
-#: gtk/gtklabel.c:693
+#: gtk/gtklabel.c:698
 msgid "Angle at which the label is rotated"
 msgstr "लेबल फिरविण्याचा कोन"
 
-#: gtk/gtklabel.c:713
+#: gtk/gtklabel.c:718
 msgid "Maximum Width In Characters"
 msgstr "रुंदी"
 
-#: gtk/gtklabel.c:714
+#: gtk/gtklabel.c:719
 msgid "The desired maximum width of the label, in characters"
 msgstr "रुंदी "
 
-#: gtk/gtklabel.c:732
+#: gtk/gtklabel.c:737
 msgid "Track visited links"
 msgstr "भेट दिलेल्या दुव्यांच नियंत्रण करा"
 
-#: gtk/gtklabel.c:733
+#: gtk/gtklabel.c:738
 msgid "Whether visited links should be tracked"
 msgstr "भेट दिलेल्या दुव्यांचे नियंत्रण करायचे"
 
-#: gtk/gtklabel.c:854
+#: gtk/gtklabel.c:859
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "लक्ष्यकेंद्रीत केल्यावर निवडलेल्या लेबलचे अनुक्रम निवडायचे का"
 
@@ -4011,83 +4011,83 @@ msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "अवलोकनासाठी उपलब्ध असणारी सर्व जागा विजेट वापरणार का"
 
-#: gtk/gtkprinter.c:124
+#: gtk/gtkprinter.c:112
 msgid "Name of the printer"
 msgstr "छपाईयंत्राचे नाव"
 
-#: gtk/gtkprinter.c:130
+#: gtk/gtkprinter.c:118
 msgid "Backend"
 msgstr "प्रतिकृती"
 
-#: gtk/gtkprinter.c:131
+#: gtk/gtkprinter.c:119
 msgid "Backend for the printer"
 msgstr "छपाईयंत्र करीता प्रतिकृती"
 
-#: gtk/gtkprinter.c:137
+#: gtk/gtkprinter.c:125
 msgid "Is Virtual"
 msgstr "आभासी आहे"
 
-#: gtk/gtkprinter.c:138
+#: gtk/gtkprinter.c:126
 msgid "FALSE if this represents a real hardware printer"
 msgstr "हार्डवेअर छपाईयंत्र दर्शवित असल्यास हे खोटे आहे"
 
-#: gtk/gtkprinter.c:144
+#: gtk/gtkprinter.c:132
 msgid "Accepts PDF"
 msgstr "PDF स्वीकारतो"
 
-#: gtk/gtkprinter.c:145
+#: gtk/gtkprinter.c:133
 msgid "TRUE if this printer can accept PDF"
 msgstr "हे छपाईयंत्र PDF स्वीकारत असल्यास खरे आहे"
 
-#: gtk/gtkprinter.c:151
+#: gtk/gtkprinter.c:139
 msgid "Accepts PostScript"
 msgstr "PostScript स्वीकारतो"
 
-#: gtk/gtkprinter.c:152
+#: gtk/gtkprinter.c:140
 msgid "TRUE if this printer can accept PostScript"
 msgstr "हे छपाईयंत्र PostScript स्विकारत असल्यास हे खरे आहे"
 
-#: gtk/gtkprinter.c:158
+#: gtk/gtkprinter.c:146
 msgid "State Message"
 msgstr "संदेश दर्शवा"
 
-#: gtk/gtkprinter.c:159
+#: gtk/gtkprinter.c:147
 msgid "String giving the current state of the printer"
 msgstr "छपाईयंत्राची सद्य स्थिती दर्शविणारी अक्षरमाळा"
 
-#: gtk/gtkprinter.c:165
+#: gtk/gtkprinter.c:153
 msgid "Location"
 msgstr "ठिकाण"
 
-#: gtk/gtkprinter.c:166
+#: gtk/gtkprinter.c:154
 msgid "The location of the printer"
 msgstr "छपाईयंत्राचे स्थान"
 
-#: gtk/gtkprinter.c:173
+#: gtk/gtkprinter.c:161
 msgid "The icon name to use for the printer"
 msgstr "छपाईयंत्र करीता वापरण्याजोगी चिन्हाचे नाव"
 
-#: gtk/gtkprinter.c:179
+#: gtk/gtkprinter.c:167
 msgid "Job Count"
 msgstr "कार्य प्रमाण"
 
-#: gtk/gtkprinter.c:180
+#: gtk/gtkprinter.c:168
 msgid "Number of jobs queued in the printer"
 msgstr "छपाईयंत्र करीता रांगेतील स्थित एकूण कार्यांची संख्या"
 
-#: gtk/gtkprinter.c:198
+#: gtk/gtkprinter.c:186
 msgid "Paused Printer"
 msgstr "स्तब्ध छपाईयंत्र"
 
-#: gtk/gtkprinter.c:199
+#: gtk/gtkprinter.c:187
 msgid "TRUE if this printer is paused"
 msgstr "छपाईयंत्र स्तब्ध केल्यास TRUE असते"
 
-#: gtk/gtkprinter.c:212
+#: gtk/gtkprinter.c:200
 msgid "Accepting Jobs"
 msgstr "कार्य स्वीकारत आहे"
 
-#: gtk/gtkprinter.c:213
+#: gtk/gtkprinter.c:201
 msgid "TRUE if this printer is accepting new jobs"
 msgstr "छपाईयंत्र नविन कार्य स्वीकारत असल्यास TRUE असते"
 
@@ -5829,7 +5829,7 @@ msgstr ""
 "करीता इत्यादी करीता सोय प्राप्त होते. Pango काहीक प्रमाण सूचवितो जसे की "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "डावीकडील, उजवीकडील, किंवा केंद्रभागातील माडंणी"
 
@@ -5845,7 +5845,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "डावीकडील समास"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "डावीकडील समासाची अक्षररूपातील (pixels) रुंदी"
 
@@ -5853,15 +5853,15 @@ msgstr "डावीकडील समासाची अक्षररूप�
 msgid "Right margin"
 msgstr "उजवीकडील समास"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "उजवीकडील समासाची अक्षररूपातील (pixels) रुंदी"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "परिच्छेदासाठी जागा"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "परिच्छेदासाठी अक्षररुपात लागणारी (pixels) जागा"
 
@@ -5875,7 +5875,7 @@ msgstr "बेसलाईनच्या वरील (खालील जर �
 msgid "Pixels above lines"
 msgstr "रेषांवरील अक्षरे"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "परिच्छेदावरील रिक्त स्थानांसाठी अक्षरे"
 
@@ -5883,7 +5883,7 @@ msgstr "परिच्छेदावरील रिक्त स्थान�
 msgid "Pixels below lines"
 msgstr "रेषांखालील अक्षरे"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "परिच्छेदाखालील रिक्त स्थानांसाठी अक्षरे"
 
@@ -5891,20 +5891,20 @@ msgstr "परिच्छेदाखालील रिक्त स्था�
 msgid "Pixels inside wrap"
 msgstr "आच्छादनातील अक्षरे"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "परिच्छेदातील आच्छादित रेषांमधल्या रिक्त स्थानांसाठी अक्षरे"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "शब्दांच्या किंवा अक्षरांच्या सीमेवरील रेषा कधीच आच्छादीत करु नयेत का"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "टॅब"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "ह्या मजकुरासाठी लागणारा नेहेमीचा साधारण टॅब"
 
@@ -6048,63 +6048,63 @@ msgstr "परिच्छेद पार्श्वभूमी संच"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "हा टॅग परिच्छेद पार्श्वभूमीतील रंगाला प्रभावी ठरतो का"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "रेषांवरील अक्षरे"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "रेषांखालील अक्षरे"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "आच्छादनातील अक्षरे"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "रूप आच्छादित करा"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "डावीकडील समास"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "उजवीकडील समास"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "कर्सरची दर्शनियता"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "कर्सर दाखवलेला असेल तर"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "बफर"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "दर्शविण्याजोगी बफर"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "आता अस्तित्वात असलेली माहिती नवीन घातलेली वाक्यरचना पुसूत आहे"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "हा टॅब स्वीकारतो"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Tab परिणाम टॅबरचना अंतर्भूत करण्यास होईल का"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "त्रुटी रेखांकीत रंग"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "ज्या रंगाने त्रुटी-दर्शविण्याकरीताचे रेखांकीत ओळी बनविण्याकरीताचे रंग"
 
@@ -6814,51 +6814,51 @@ msgstr "डबल बफर्ड्"
 msgid "Whether or not the widget is double buffered"
 msgstr "विजेट डबल बफर्ड् आहे की नाही"
 
-#: gtk/gtkwidget.c:2400
+#: gtk/gtkwidget.c:2403
 msgid "Interior Focus"
 msgstr "प्रकाशित अंतर्भाग"
 
-#: gtk/gtkwidget.c:2401
+#: gtk/gtkwidget.c:2404
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "विजेटचे आंतरीक भाग प्रकाशमय करायचा आहे का"
 
-#: gtk/gtkwidget.c:2407
+#: gtk/gtkwidget.c:2410
 msgid "Focus linewidth"
 msgstr "ओळींची रुंदी प्रकाशित करा"
 
-#: gtk/gtkwidget.c:2408
+#: gtk/gtkwidget.c:2411
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "रुंदी"
 
-#: gtk/gtkwidget.c:2414
+#: gtk/gtkwidget.c:2417
 msgid "Focus line dash pattern"
 msgstr "प्रकाशित करणारी ओळ तुटक रेषेच्या कोणत्या स्वरुपात दाखवावी"
 
-#: gtk/gtkwidget.c:2415
+#: gtk/gtkwidget.c:2418
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "लक्ष्यकेंद्रीत सूचक बनविण्यासाठी वापरायची तुटक रेष पध्दती"
 
-#: gtk/gtkwidget.c:2420
+#: gtk/gtkwidget.c:2423
 msgid "Focus padding"
 msgstr "मोकळी जागावर लक्ष्य केंद्रीत करा"
 
-#: gtk/gtkwidget.c:2421
+#: gtk/gtkwidget.c:2424
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "लक्ष्यकेंद्रीत सूचक आणि विजेट 'चौकट' यांच्या मधील रुंदी, पिक्सेल मध्ये"
 
-#: gtk/gtkwidget.c:2426
+#: gtk/gtkwidget.c:2429
 msgid "Cursor color"
 msgstr "कर्सरचा रंग"
 
-#: gtk/gtkwidget.c:2427
+#: gtk/gtkwidget.c:2430
 msgid "Color with which to draw insertion cursor"
 msgstr "ज्या रंगाने कर्सर बनवायचा आहे तो रंग"
 
-#: gtk/gtkwidget.c:2432
+#: gtk/gtkwidget.c:2435
 msgid "Secondary cursor color"
 msgstr "कर्सरचा दुय्यम रंग"
 
-#: gtk/gtkwidget.c:2433
+#: gtk/gtkwidget.c:2436
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6866,78 +6866,78 @@ msgstr ""
 "सरमिसळ झालेला मजकुर संपादित करताना दुय्यम कर्सरसाठी वापरण्याकरीताचे रंगउजवीकडून-डावीकडे "
 "आणि डावीकडून-उजवीकडे असा मजकुर"
 
-#: gtk/gtkwidget.c:2438
+#: gtk/gtkwidget.c:2441
 msgid "Cursor line aspect ratio"
 msgstr "कर्सर ओळीचा प्रमाण"
 
-#: gtk/gtkwidget.c:2439
+#: gtk/gtkwidget.c:2442
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "इनसर्शन कर्सर काढण्यास असलेले aspect प्रमाण"
 
-#: gtk/gtkwidget.c:2453
+#: gtk/gtkwidget.c:2456
 msgid "Draw Border"
 msgstr "टॅबची सीमा"
 
-#: gtk/gtkwidget.c:2454
+#: gtk/gtkwidget.c:2457
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "नियंत्रण घटकाच्या बाहेरील कक्षाचे आकार"
 
-#: gtk/gtkwidget.c:2467
+#: gtk/gtkwidget.c:2470
 msgid "Unvisited Link Color"
 msgstr "भेट न दिलेल्या लिंकचा रंग"
 
-#: gtk/gtkwidget.c:2468
+#: gtk/gtkwidget.c:2471
 msgid "Color of unvisited links"
 msgstr "भेट न दिलेल्या लिंकचे रंग"
 
-#: gtk/gtkwidget.c:2481
+#: gtk/gtkwidget.c:2484
 msgid "Visited Link Color"
 msgstr "भेट दिलेल्या लिंकचा रंग"
 
-#: gtk/gtkwidget.c:2482
+#: gtk/gtkwidget.c:2485
 msgid "Color of visited links"
 msgstr "भेट दिलेल्या लिंकचे रंग"
 
-#: gtk/gtkwidget.c:2496
+#: gtk/gtkwidget.c:2499
 msgid "Wide Separators"
 msgstr "जास्त रूंदीचे विभाजक"
 
-#: gtk/gtkwidget.c:2497
+#: gtk/gtkwidget.c:2500
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr ""
 "विभाजकाची रूंदी संयोजनजोगी आहे का व त्यास रेष ऐवजी चौकन द्वारा रेखांकीत केले पाहिजे"
 
-#: gtk/gtkwidget.c:2511
+#: gtk/gtkwidget.c:2514
 msgid "Separator Width"
 msgstr "रुंदी"
 
-#: gtk/gtkwidget.c:2512
+#: gtk/gtkwidget.c:2515
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "रुंदी "
 
-#: gtk/gtkwidget.c:2526
+#: gtk/gtkwidget.c:2529
 msgid "Separator Height"
 msgstr "ऊंची"
 
-#: gtk/gtkwidget.c:2527
+#: gtk/gtkwidget.c:2530
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "\"wide-separators\" खरे असल्यास विभाजकाची ऊंची"
 
-#: gtk/gtkwidget.c:2541
+#: gtk/gtkwidget.c:2544
 msgid "Horizontal Scroll Arrow Length"
 msgstr "आडवे सरकाव बाणाची लांबी"
 
-#: gtk/gtkwidget.c:2542
+#: gtk/gtkwidget.c:2545
 msgid "The length of horizontal scroll arrows"
 msgstr "आडवे सरकाव बाणांची लांबी"
 
-#: gtk/gtkwidget.c:2556
+#: gtk/gtkwidget.c:2559
 msgid "Vertical Scroll Arrow Length"
 msgstr "उभे सरकाव बाणाची लांबी"
 
-#: gtk/gtkwidget.c:2557
+#: gtk/gtkwidget.c:2560
 msgid "The length of vertical scroll arrows"
 msgstr "उभे सरकाव बाणांची लांबी"
 

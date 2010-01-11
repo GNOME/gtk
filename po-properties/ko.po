@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-08-23 01:32+0900\n"
 "Last-Translator: Eunju Kim <eukim@redhat.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -124,7 +124,7 @@ msgstr "글꼴 해상도"
 msgid "The resolution for fonts on the screen"
 msgstr "스크린의 글꼴 해상도"
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
 msgid "Cursor"
 msgstr "커서"
 
@@ -259,7 +259,7 @@ msgstr "바로 가기 위젯"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "바로 가기 키의 변화를 감시할 위젯"
 
-#: gtk/gtkaction.c:181 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
+#: gtk/gtkaction.c:181 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:111
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "이름"
@@ -269,7 +269,7 @@ msgid "A unique name for the action."
 msgstr "이 동작의 고유한 이름."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:501 gtk/gtkmenuitem.c:305
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
 #: gtk/gtktoolbutton.c:204
 msgid "Label"
 msgstr "레이블"
@@ -312,7 +312,7 @@ msgid "The GIcon being displayed"
 msgstr "표시하고 있는 GIcon"
 
 #: gtk/gtkaction.c:284 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:321
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
+#: gtk/gtkprinter.c:160 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
 msgid "Icon Name"
 msgstr "아이콘 이름"
 
@@ -817,12 +817,12 @@ msgid ""
 "widget"
 msgstr "단추 내의 레이블의 텍스트 (단추 내에 레이블 위젯이 들어 있는 경우)"
 
-#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:522
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:527
 #: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:211
 msgid "Use underline"
 msgstr "밑줄 사용"
 
-#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:523
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:528
 #: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -930,7 +930,7 @@ msgid ""
 "rectangle"
 msgstr "child_displacement_x/_y 속성이 포커스 사각형에 영향을 미칠지 여부"
 
-#: gtk/gtkbutton.c:501 gtk/gtkentry.c:694 gtk/gtkentry.c:1718
+#: gtk/gtkbutton.c:501 gtk/gtkentry.c:695 gtk/gtkentry.c:1740
 msgid "Inner Border"
 msgstr "내부 테두리"
 
@@ -1283,7 +1283,7 @@ msgid "Value of the progress bar"
 msgstr "진행률 표시줄의 값"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:737 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
+#: gtk/gtkentry.c:738 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:153
 #: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "텍스트"
@@ -1370,7 +1370,7 @@ msgstr "마크업"
 msgid "Marked up text to render"
 msgstr "표시할 마크업 텍스트"
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:508
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:513
 msgid "Attributes"
 msgstr "특성"
 
@@ -1418,12 +1418,12 @@ msgstr "글자색"
 msgid "Foreground color as a GdkColor"
 msgstr "글자색 GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:661 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "편집 가능"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "텍스트를 사용자가 수정할 수 있는지 여부"
 
@@ -1527,7 +1527,7 @@ msgstr ""
 "ISO 코드로서의 이 텍스트 언어. 판고는 텍스트를 표시할 때 이 값에서 힌트를 얻"
 "습니다. 이해하지 못하신다면 아마도 당신에게는 필요없을 것입니다."
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:633 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:638 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "말줄임표"
 
@@ -1540,11 +1540,11 @@ msgstr ""
 "우)"
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:653
+#: gtk/gtklabel.c:658
 msgid "Width In Characters"
 msgstr "너비 (문자 개수 단위)"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:654
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:659
 msgid "The desired width of the label, in characters"
 msgstr "레이블의 폭, 문자 개수 단위"
 
@@ -1972,7 +1972,7 @@ msgstr "메뉴에 떼어내기 더하기"
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "드롭다운 메뉴의 항목이 떼어내가 메뉴 항목인지 여부"
 
-#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:686
+#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:687
 msgid "Has Frame"
 msgstr "프레임 사용"
 
@@ -2026,7 +2026,7 @@ msgstr "화살표 크기"
 msgid "The minimum size of the arrow in the combo box"
 msgstr "콤보 상자에 있는 화살표의 최소 크기"
 
-#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:786 gtk/gtkhandlebox.c:174
+#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:787 gtk/gtkhandlebox.c:174
 #: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:193 gtk/gtktoolbar.c:623
 #: gtk/gtkviewport.c:122
 msgid "Shadow type"
@@ -2141,76 +2141,76 @@ msgstr "동작 영역 테두리"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "대화 상자 아래의 단추 영역 주위의 테두리 두께"
 
-#: gtk/gtkentry.c:633
+#: gtk/gtkentry.c:634
 msgid "Text Buffer"
 msgstr "텍스트 버퍼"
 
-#: gtk/gtkentry.c:634
+#: gtk/gtkentry.c:635
 msgid "Text buffer object which actually stores entry text"
 msgstr "입력 창의 텍스트를 저장하는 텍스트 버퍼 오브젝트"
 
-#: gtk/gtkentry.c:641 gtk/gtklabel.c:596
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:601
 msgid "Cursor Position"
 msgstr "커서 위치"
 
-#: gtk/gtkentry.c:642 gtk/gtklabel.c:597
+#: gtk/gtkentry.c:643 gtk/gtklabel.c:602
 msgid "The current position of the insertion cursor in chars"
 msgstr "입력 커서의 현재 위치, 문자 단위"
 
-#: gtk/gtkentry.c:651 gtk/gtklabel.c:606
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:611
 msgid "Selection Bound"
 msgstr "선택 경계"
 
-#: gtk/gtkentry.c:652 gtk/gtklabel.c:607
+#: gtk/gtkentry.c:653 gtk/gtklabel.c:612
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "커서에서 선택한 영역의 문자 단위의 반대쪽 위치"
 
-#: gtk/gtkentry.c:662
+#: gtk/gtkentry.c:663
 msgid "Whether the entry contents can be edited"
 msgstr "항목 내용을 편집할 수 있는지 여부"
 
-#: gtk/gtkentry.c:669 gtk/gtkentrybuffer.c:383
+#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "최대 길이"
 
-#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:384
+#: gtk/gtkentry.c:671 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "이 항목에 쓸 수 있는 최대의 문자 수. 최대값이 없는 경우 0."
 
-#: gtk/gtkentry.c:678
+#: gtk/gtkentry.c:679
 msgid "Visibility"
 msgstr "보여주기"
 
-#: gtk/gtkentry.c:679
+#: gtk/gtkentry.c:680
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "거짓이면 실제 텍스트 대신에 \"보이지 않는 문자\"를 표시합니다 (암호 모드)"
 
-#: gtk/gtkentry.c:687
+#: gtk/gtkentry.c:688
 msgid "FALSE removes outside bevel from entry"
 msgstr "거짓이면 항목에서 외부 경사를 없앱니다"
 
-#: gtk/gtkentry.c:695
+#: gtk/gtkentry.c:696
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "텍스트와 프레임 사이의 테두리. inner-border 스타일 속성을 무시합니다"
 
-#: gtk/gtkentry.c:702 gtk/gtkentry.c:1268
+#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
 msgid "Invisible character"
 msgstr "보이지 않는 글자"
 
-#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
+#: gtk/gtkentry.c:704 gtk/gtkentry.c:1270
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "항목 내용 대신 표시하는 데 쓸 문자 (\"암호 모드\"에서)"
 
-#: gtk/gtkentry.c:710
+#: gtk/gtkentry.c:711
 msgid "Activates default"
 msgstr "기본 활성화"
 
-#: gtk/gtkentry.c:711
+#: gtk/gtkentry.c:712
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2218,93 +2218,93 @@ msgstr ""
 "엔터를 눌렀을 때 기본 위젯을 활성화할 것인지 여부  (대화 상자의 기본 단추와 "
 "같이)"
 
-#: gtk/gtkentry.c:717
+#: gtk/gtkentry.c:718
 msgid "Width in chars"
 msgstr "너비 문자 개수"
 
-#: gtk/gtkentry.c:718
+#: gtk/gtkentry.c:719
 msgid "Number of characters to leave space for in the entry"
 msgstr "항목에 공간을 확보할 문자 개수"
 
-#: gtk/gtkentry.c:727
+#: gtk/gtkentry.c:728
 msgid "Scroll offset"
 msgstr "스크롤 오프셋"
 
-#: gtk/gtkentry.c:728
+#: gtk/gtkentry.c:729
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "화면 좌측으로 스크롤할 항목의 픽셀 개수"
 
-#: gtk/gtkentry.c:738
+#: gtk/gtkentry.c:739
 msgid "The contents of the entry"
 msgstr "항목의 내용"
 
-#: gtk/gtkentry.c:753 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:754 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "가로 맞춤"
 
-#: gtk/gtkentry.c:754 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:755 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "가로 맞춤, 0(왼쪽)에서 1(오른쪽)까지. RTL 레이아웃의 경우에는 그 반대."
 
-#: gtk/gtkentry.c:770
+#: gtk/gtkentry.c:771
 msgid "Truncate multiline"
 msgstr "여러 줄 잘라내기"
 
-#: gtk/gtkentry.c:771
+#: gtk/gtkentry.c:772
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "여러 줄을 붙여 넣으면 한 줄로 잘라낼지 여부."
 
-#: gtk/gtkentry.c:787
+#: gtk/gtkentry.c:788
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "프레임 사용이 설정되었을 때 항목 주위에 그릴 그림자의 종류"
 
-#: gtk/gtkentry.c:802 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "덮어 쓰기 모드"
 
-#: gtk/gtkentry.c:803
+#: gtk/gtkentry.c:804
 msgid "Whether new text overwrites existing text"
 msgstr "새 텍스트가 기존 내용을 덮어 쓰는지 여부"
 
-#: gtk/gtkentry.c:817 gtk/gtkentrybuffer.c:368
+#: gtk/gtkentry.c:818 gtk/gtkentrybuffer.c:368
 msgid "Text length"
 msgstr "텍스트 길이"
 
-#: gtk/gtkentry.c:818
+#: gtk/gtkentry.c:819
 msgid "Length of the text currently in the entry"
 msgstr "입력창에 현재 들어 있는 텍스트의 길이"
 
-#: gtk/gtkentry.c:833
+#: gtk/gtkentry.c:834
 msgid "Invisible char set"
 msgstr "보이지 않는 문자 설정"
 
-#: gtk/gtkentry.c:834
+#: gtk/gtkentry.c:835
 msgid "Whether the invisible char has been set"
 msgstr "보이지 않는 문자를 설정했는지 여부"
 
-#: gtk/gtkentry.c:852
+#: gtk/gtkentry.c:853
 msgid "Caps Lock warning"
 msgstr "Caps Lock 경고"
 
-#: gtk/gtkentry.c:853
+#: gtk/gtkentry.c:854
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr "암호 입력 창에서 Caps Lock 키가 켜져 있는 경우 경고를 표시할지 여부"
 
-#: gtk/gtkentry.c:867
+#: gtk/gtkentry.c:868
 msgid "Progress Fraction"
 msgstr "진행 비율"
 
-#: gtk/gtkentry.c:868
+#: gtk/gtkentry.c:869
 msgid "The current fraction of the task that's been completed"
 msgstr "완료한 작업의 현재 비율"
 
-#: gtk/gtkentry.c:885
+#: gtk/gtkentry.c:886
 msgid "Progress Pulse Step"
 msgstr "진행 박자 단계"
 
-#: gtk/gtkentry.c:886
+#: gtk/gtkentry.c:887
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2312,191 +2312,191 @@ msgstr ""
 "매번 gtk_entry_progress_pulse() 함수를 호출할 때마다 진행률 블럭을 튈 크기의 "
 "입력 창 너비에 대한 비율."
 
-#: gtk/gtkentry.c:902
+#: gtk/gtkentry.c:903
 msgid "Primary pixbuf"
 msgstr "주요 픽스버퍼"
 
-#: gtk/gtkentry.c:903
+#: gtk/gtkentry.c:904
 msgid "Primary pixbuf for the entry"
 msgstr "입력 창의 주요 픽스버퍼"
 
-#: gtk/gtkentry.c:917
+#: gtk/gtkentry.c:918
 msgid "Secondary pixbuf"
 msgstr "보조 픽스버퍼"
 
-#: gtk/gtkentry.c:918
+#: gtk/gtkentry.c:919
 msgid "Secondary pixbuf for the entry"
 msgstr "입력 창의 보조 픽스버퍼"
 
-#: gtk/gtkentry.c:932
+#: gtk/gtkentry.c:933
 msgid "Primary stock ID"
 msgstr "주요 스톡 ID"
 
-#: gtk/gtkentry.c:933
+#: gtk/gtkentry.c:934
 msgid "Stock ID for primary icon"
 msgstr "주요 아이콘의 스톡 ID"
 
-#: gtk/gtkentry.c:947
+#: gtk/gtkentry.c:948
 msgid "Secondary stock ID"
 msgstr "보조 스톡 ID"
 
-#: gtk/gtkentry.c:948
+#: gtk/gtkentry.c:949
 msgid "Stock ID for secondary icon"
 msgstr "보조 아이콘의 스톡 ID"
 
-#: gtk/gtkentry.c:962
+#: gtk/gtkentry.c:963
 msgid "Primary icon name"
 msgstr "주요 아이콘 이름"
 
-#: gtk/gtkentry.c:963
+#: gtk/gtkentry.c:964
 msgid "Icon name for primary icon"
 msgstr "주요 아이콘의 아이콘 이름"
 
-#: gtk/gtkentry.c:977
+#: gtk/gtkentry.c:978
 msgid "Secondary icon name"
 msgstr "보조 아이콘 이름"
 
-#: gtk/gtkentry.c:978
+#: gtk/gtkentry.c:979
 msgid "Icon name for secondary icon"
 msgstr "보조 아이콘의 아이콘 이름"
 
-#: gtk/gtkentry.c:992
+#: gtk/gtkentry.c:993
 msgid "Primary GIcon"
 msgstr "주요 GIcon"
 
-#: gtk/gtkentry.c:993
+#: gtk/gtkentry.c:994
 msgid "GIcon for primary icon"
 msgstr "주요 아이콘의 GIcon"
 
-#: gtk/gtkentry.c:1007
+#: gtk/gtkentry.c:1008
 msgid "Secondary GIcon"
 msgstr "보조 GIcon"
 
-#: gtk/gtkentry.c:1008
+#: gtk/gtkentry.c:1009
 msgid "GIcon for secondary icon"
 msgstr "보조 아이콘의 GIcon"
 
-#: gtk/gtkentry.c:1022
+#: gtk/gtkentry.c:1023
 msgid "Primary storage type"
 msgstr "주요 저장 형식"
 
-#: gtk/gtkentry.c:1023
+#: gtk/gtkentry.c:1024
 msgid "The representation being used for primary icon"
 msgstr "주요 아이콘에 사용할 표현 방법"
 
-#: gtk/gtkentry.c:1038
+#: gtk/gtkentry.c:1039
 msgid "Secondary storage type"
 msgstr "보조 저장 형식"
 
-#: gtk/gtkentry.c:1039
+#: gtk/gtkentry.c:1040
 msgid "The representation being used for secondary icon"
 msgstr "보조 아이콘에 사용할 표현 방법"
 
-#: gtk/gtkentry.c:1060
+#: gtk/gtkentry.c:1061
 msgid "Primary icon activatable"
 msgstr "주요 아이콘 활성화 가능"
 
-#: gtk/gtkentry.c:1061
+#: gtk/gtkentry.c:1062
 msgid "Whether the primary icon is activatable"
 msgstr "주요 아이콘을 활성화 가능한지 여부"
 
-#: gtk/gtkentry.c:1081
+#: gtk/gtkentry.c:1082
 msgid "Secondary icon activatable"
 msgstr "보조 아이콘 활성화 가능"
 
-#: gtk/gtkentry.c:1082
+#: gtk/gtkentry.c:1083
 msgid "Whether the secondary icon is activatable"
 msgstr "보조 아이콘을 활성화 가능한지 여부"
 
-#: gtk/gtkentry.c:1104
+#: gtk/gtkentry.c:1105
 msgid "Primary icon sensitive"
 msgstr "주요 아이콘 반응"
 
-#: gtk/gtkentry.c:1105
+#: gtk/gtkentry.c:1106
 msgid "Whether the primary icon is sensitive"
 msgstr "주요 아이콘이 반응하는지 여부"
 
-#: gtk/gtkentry.c:1126
+#: gtk/gtkentry.c:1127
 msgid "Secondary icon sensitive"
 msgstr "보조 아이콘 반응"
 
-#: gtk/gtkentry.c:1127
+#: gtk/gtkentry.c:1128
 msgid "Whether the secondary icon is sensitive"
 msgstr "보조 아이콘이 반응하는지 여부"
 
-#: gtk/gtkentry.c:1143
+#: gtk/gtkentry.c:1144
 msgid "Primary icon tooltip text"
 msgstr "주요 아이콘 도구 설명 텍스트"
 
-#: gtk/gtkentry.c:1144 gtk/gtkentry.c:1180
+#: gtk/gtkentry.c:1145 gtk/gtkentry.c:1181
 msgid "The contents of the tooltip on the primary icon"
 msgstr "주요 아이콘에 있는 도구 설명의 내용"
 
-#: gtk/gtkentry.c:1160
+#: gtk/gtkentry.c:1161
 msgid "Secondary icon tooltip text"
 msgstr "보조 아이콘 도구 설명 텍스트"
 
-#: gtk/gtkentry.c:1161 gtk/gtkentry.c:1199
+#: gtk/gtkentry.c:1162 gtk/gtkentry.c:1200
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "보조 아이콘에 있는 도구 설명의 내용"
 
-#: gtk/gtkentry.c:1179
+#: gtk/gtkentry.c:1180
 msgid "Primary icon tooltip markup"
 msgstr "주요 아이콘 도구 설명 마크업"
 
-#: gtk/gtkentry.c:1198
+#: gtk/gtkentry.c:1199
 msgid "Secondary icon tooltip markup"
 msgstr "보조 아이콘 도구 설명 마크업"
 
-#: gtk/gtkentry.c:1218 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "입력기 모듈"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "사용할 입력기 모듈"
 
-#: gtk/gtkentry.c:1233
+#: gtk/gtkentry.c:1234
 msgid "Icon Prelight"
 msgstr "아이콘 미리 밝게"
 
-#: gtk/gtkentry.c:1234
+#: gtk/gtkentry.c:1235
 msgid "Whether activatable icons should prelight when hovered"
 msgstr "활성화 가능한 아이콘 위에 포인터를 올리면 미리 밝게 할지 여부"
 
-#: gtk/gtkentry.c:1247
+#: gtk/gtkentry.c:1248
 msgid "Progress Border"
 msgstr "진행률 표시줄 테두리"
 
-#: gtk/gtkentry.c:1248
+#: gtk/gtkentry.c:1249
 msgid "Border around the progress bar"
 msgstr "진행률 표시줄을 둘러 싼 테두리"
 
-#: gtk/gtkentry.c:1719
+#: gtk/gtkentry.c:1741
 msgid "Border between text and frame."
 msgstr "텍스트와 프레임 사이의 테두리."
 
-#: gtk/gtkentry.c:1733
+#: gtk/gtkentry.c:1755
 msgid "State Hint"
 msgstr "상태 힌트"
 
-#: gtk/gtkentry.c:1734
+#: gtk/gtkentry.c:1756
 msgid "Whether to pass a proper state when drawing shadow or background"
 msgstr "그림자나 배경을 그릴 때 상태를 넘길지 여부"
 
-#: gtk/gtkentry.c:1739 gtk/gtklabel.c:853
+#: gtk/gtkentry.c:1761 gtk/gtklabel.c:858
 msgid "Select on focus"
 msgstr "포커스시 선택"
 
-#: gtk/gtkentry.c:1740
+#: gtk/gtkentry.c:1762
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentry.c:1754
+#: gtk/gtkentry.c:1776
 msgid "Password Hint Timeout"
 msgstr "암호 힌트 제한 시간"
 
-#: gtk/gtkentry.c:1755
+#: gtk/gtkentry.c:1777
 msgid "How long to show the last input character in hidden entries"
 msgstr "숨김 입력창에 마지막으로 입력한 문자를 얼마나 오래 표시할지 지정"
 
@@ -2608,11 +2608,11 @@ msgstr "하위 위젯을 보여주는 데 쓰이는 확장 단추가 열려 있�
 msgid "Text of the expander's label"
 msgstr "확장 단추의 레이블에 들어갈 텍스트"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:515
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:520
 msgid "Use markup"
 msgstr "마크업 사용"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:516
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:521
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "레이블의 텍스트에 XML 마크업 포함.  pango_parse_markup() 참고"
 
@@ -3193,19 +3193,19 @@ msgstr "액션 영역 주위의 테두리 두께."
 msgid "The screen where this window will be displayed"
 msgstr "이 창이 표시될 화면"
 
-#: gtk/gtklabel.c:502
+#: gtk/gtklabel.c:507
 msgid "The text of the label"
 msgstr "레이블에 쓸 텍스트"
 
-#: gtk/gtklabel.c:509
+#: gtk/gtklabel.c:514
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "레이블의 텍스트에 적용할 유형 특성의 리스트"
 
-#: gtk/gtklabel.c:530 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "행 맞춤"
 
-#: gtk/gtklabel.c:531
+#: gtk/gtklabel.c:536
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3215,57 +3215,57 @@ msgstr ""
 "에 영향을 미치지 않습니다. 레이블의 정렬 상태에 대해서는 GtkMisc::xalign을 참"
 "고하십시오."
 
-#: gtk/gtklabel.c:539
+#: gtk/gtklabel.c:544
 msgid "Pattern"
 msgstr "패턴"
 
-#: gtk/gtklabel.c:540
+#: gtk/gtklabel.c:545
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "밑줄 칠 위치 앞에 _ 문자가 들어 있는 문자열"
 
-#: gtk/gtklabel.c:547
+#: gtk/gtklabel.c:552
 msgid "Line wrap"
 msgstr "줄 바꿈"
 
-#: gtk/gtklabel.c:548
+#: gtk/gtklabel.c:553
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "참인 경우, 텍스트가 너무 길면 줄을 바꿉니다."
 
-#: gtk/gtklabel.c:563
+#: gtk/gtklabel.c:568
 msgid "Line wrap mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtklabel.c:564
+#: gtk/gtklabel.c:569
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "줄바꿈을 하는 경우 어떻게 줄바꿈을 할지 설정합니다"
 
-#: gtk/gtklabel.c:571
+#: gtk/gtklabel.c:576
 msgid "Selectable"
 msgstr "선택가능"
 
-#: gtk/gtklabel.c:572
+#: gtk/gtklabel.c:577
 msgid "Whether the label text can be selected with the mouse"
 msgstr "레이블 텍스트를 마우스로 선택 가능한지 여부"
 
-#: gtk/gtklabel.c:578
+#: gtk/gtklabel.c:583
 msgid "Mnemonic key"
 msgstr "단축 키"
 
-#: gtk/gtklabel.c:579
+#: gtk/gtklabel.c:584
 msgid "The mnemonic accelerator key for this label"
 msgstr "레이블에 대한 단축 키"
 
-#: gtk/gtklabel.c:587
+#: gtk/gtklabel.c:592
 msgid "Mnemonic widget"
 msgstr "단축 위젯"
 
-#: gtk/gtklabel.c:588
+#: gtk/gtklabel.c:593
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "이 레이블의 단축 키가 눌렸을 경우 활성화할 위젯"
 
-#: gtk/gtklabel.c:634
+#: gtk/gtklabel.c:639
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3273,39 +3273,39 @@ msgstr ""
 "문자열에 말줄임표를 붙이려는 위치, 레이블에 전체 문자열을 표시할 공간이 부족"
 "한 경우"
 
-#: gtk/gtklabel.c:674
+#: gtk/gtklabel.c:679
 msgid "Single Line Mode"
 msgstr "한 줄 모드"
 
-#: gtk/gtklabel.c:675
+#: gtk/gtklabel.c:680
 msgid "Whether the label is in single line mode"
 msgstr "레이블을 한 줄 모드로 할지 여부"
 
-#: gtk/gtklabel.c:692
+#: gtk/gtklabel.c:697
 msgid "Angle"
 msgstr "각도"
 
-#: gtk/gtklabel.c:693
+#: gtk/gtklabel.c:698
 msgid "Angle at which the label is rotated"
 msgstr "레이블을 회전할 각도"
 
-#: gtk/gtklabel.c:713
+#: gtk/gtklabel.c:718
 msgid "Maximum Width In Characters"
 msgstr "최대 너비 (문자 개수 단위)"
 
-#: gtk/gtklabel.c:714
+#: gtk/gtklabel.c:719
 msgid "The desired maximum width of the label, in characters"
 msgstr "레이블의 최대 너비, 문자 개수 단위"
 
-#: gtk/gtklabel.c:732
+#: gtk/gtklabel.c:737
 msgid "Track visited links"
 msgstr "방문한 링크 추적"
 
-#: gtk/gtklabel.c:733
+#: gtk/gtklabel.c:738
 msgid "Whether visited links should be tracked"
 msgstr "방문한 링크를 추적할지 여부"
 
-#: gtk/gtklabel.c:854
+#: gtk/gtklabel.c:859
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "선택한 레이블을 포커스하면 그 내용을 선택할 것인지 여부"
 
@@ -4024,83 +4024,83 @@ msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "미리보기 위젯이 할당된 전체 공간을 차지해야 하는지 여부"
 
-#: gtk/gtkprinter.c:124
+#: gtk/gtkprinter.c:112
 msgid "Name of the printer"
 msgstr "프린터의 이름"
 
-#: gtk/gtkprinter.c:130
+#: gtk/gtkprinter.c:118
 msgid "Backend"
 msgstr "백엔드"
 
-#: gtk/gtkprinter.c:131
+#: gtk/gtkprinter.c:119
 msgid "Backend for the printer"
 msgstr "프린터 백엔드"
 
-#: gtk/gtkprinter.c:137
+#: gtk/gtkprinter.c:125
 msgid "Is Virtual"
 msgstr "가상"
 
-#: gtk/gtkprinter.c:138
+#: gtk/gtkprinter.c:126
 msgid "FALSE if this represents a real hardware printer"
 msgstr "거짓이면 실제 하드웨어 프린터"
 
-#: gtk/gtkprinter.c:144
+#: gtk/gtkprinter.c:132
 msgid "Accepts PDF"
 msgstr "PDF 받음"
 
-#: gtk/gtkprinter.c:145
+#: gtk/gtkprinter.c:133
 msgid "TRUE if this printer can accept PDF"
 msgstr "참이면 프린터가 PDF 입력을 받습니다"
 
-#: gtk/gtkprinter.c:151
+#: gtk/gtkprinter.c:139
 msgid "Accepts PostScript"
 msgstr "PostScript 받음"
 
-#: gtk/gtkprinter.c:152
+#: gtk/gtkprinter.c:140
 msgid "TRUE if this printer can accept PostScript"
 msgstr "참이면 프린터가 PostScript 입력을 받습니다"
 
-#: gtk/gtkprinter.c:158
+#: gtk/gtkprinter.c:146
 msgid "State Message"
 msgstr "상태 메시지"
 
-#: gtk/gtkprinter.c:159
+#: gtk/gtkprinter.c:147
 msgid "String giving the current state of the printer"
 msgstr "프린터의 현재 상태를 나타내는 문자열"
 
-#: gtk/gtkprinter.c:165
+#: gtk/gtkprinter.c:153
 msgid "Location"
 msgstr "위치"
 
-#: gtk/gtkprinter.c:166
+#: gtk/gtkprinter.c:154
 msgid "The location of the printer"
 msgstr "프린터의 위치"
 
-#: gtk/gtkprinter.c:173
+#: gtk/gtkprinter.c:161
 msgid "The icon name to use for the printer"
 msgstr "프린터에 사용할 아이콘 이름"
 
-#: gtk/gtkprinter.c:179
+#: gtk/gtkprinter.c:167
 msgid "Job Count"
 msgstr "작업 개수"
 
-#: gtk/gtkprinter.c:180
+#: gtk/gtkprinter.c:168
 msgid "Number of jobs queued in the printer"
 msgstr "프린터에 쌓인 인쇄 작업 개수"
 
-#: gtk/gtkprinter.c:198
+#: gtk/gtkprinter.c:186
 msgid "Paused Printer"
 msgstr "일시 정지 프린터"
 
-#: gtk/gtkprinter.c:199
+#: gtk/gtkprinter.c:187
 msgid "TRUE if this printer is paused"
 msgstr "참이면 프린터가 일시 정지 상태입니다"
 
-#: gtk/gtkprinter.c:212
+#: gtk/gtkprinter.c:200
 msgid "Accepting Jobs"
 msgstr "작업 받아들이는 중"
 
-#: gtk/gtkprinter.c:213
+#: gtk/gtkprinter.c:201
 msgid "TRUE if this printer is accepting new jobs"
 msgstr "참이면 이 프린터가 새 작업을 받아들입니다"
 
@@ -5837,7 +5837,7 @@ msgstr ""
 "게 적용하게 됩니다. 그러므로 추천합니다. 판고는 PANGO_SCALE_X_LARGE과 같은 몇"
 "몇 비율을 미리 정의하고 있습니다."
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "좌, 우, 혹은 가운데 정렬"
 
@@ -5853,7 +5853,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 
@@ -5861,15 +5861,15 @@ msgstr "왼쪽 여백의 너비 (픽셀 단위)"
 msgid "Right margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "오른쪽 여백의 너비 (픽셀 단위)"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "들여쓰기"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "문장 들여 쓰기할 크기 (픽셀 단위)"
 
@@ -5883,7 +5883,7 @@ msgstr "기준선 위로 텍스트 오프셋 (음수이면 기준선 밑으로),
 msgid "Pixels above lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "문단 위의 빈 공간의 픽셀수"
 
@@ -5891,7 +5891,7 @@ msgstr "문단 위의 빈 공간의 픽셀수"
 msgid "Pixels below lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "문단 아래 빈 공간의 픽셀수"
 
@@ -5899,20 +5899,20 @@ msgstr "문단 아래 빈 공간의 픽셀수"
 msgid "Pixels inside wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "문단 내에서 줄 바꿈한 사이 빈 공간의 픽셀수"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "절대 단어 경계나, 문자 경계에서 줄을 바꾸지 않을 것인지 여부"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "탭"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "이 텍스트에 쓸 사용자 정의 탭"
 
@@ -6056,63 +6056,63 @@ msgstr "문단 배경 설정"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "이 태그가 배경색에 영향을 미칠지 여부"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "줄 위 픽셀"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "줄 아래 픽셀"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "바꿔쓴 줄 픽셀수"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "줄바꿈 모드"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "왼쪽 여백"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "오른쪽 여백"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "커서 보여주기"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "입력 커서를 표시할지 여부"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "버퍼"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "표시할 내용이 들어 있는 버퍼."
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "입력한 텍스트가 기존 내용을 덮어 쓰는지 여부"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "탭 입력"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "탭을 누르면 탭 문자가 입력할지 여부"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "오류 밑줄의 색"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "오류를 나타내는 밑줄을 그릴 때 사용할 색"
 
@@ -6819,51 +6819,51 @@ msgstr "더블 버퍼링"
 msgid "Whether or not the widget is double buffered"
 msgstr "위젯이 더블 버퍼링을 할지 여부"
 
-#: gtk/gtkwidget.c:2400
+#: gtk/gtkwidget.c:2403
 msgid "Interior Focus"
 msgstr "내부 포커스"
 
-#: gtk/gtkwidget.c:2401
+#: gtk/gtkwidget.c:2404
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "위젯 내에 포커스 표시기를 그릴지 여부"
 
-#: gtk/gtkwidget.c:2407
+#: gtk/gtkwidget.c:2410
 msgid "Focus linewidth"
 msgstr "포커스 라인 두께"
 
-#: gtk/gtkwidget.c:2408
+#: gtk/gtkwidget.c:2411
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "포커스 표시기 라인의 너비 (픽셀 단위)."
 
-#: gtk/gtkwidget.c:2414
+#: gtk/gtkwidget.c:2417
 msgid "Focus line dash pattern"
 msgstr "포커스 라인의 점선 패턴"
 
-#: gtk/gtkwidget.c:2415
+#: gtk/gtkwidget.c:2418
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "포커스 표시기를 그릴 때 쓸 점선 패턴"
 
-#: gtk/gtkwidget.c:2420
+#: gtk/gtkwidget.c:2423
 msgid "Focus padding"
 msgstr "포커스 여백"
 
-#: gtk/gtkwidget.c:2421
+#: gtk/gtkwidget.c:2424
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "포커스 표시기와 위젯 '상자' 사이의 거리 (픽셀 단위)"
 
-#: gtk/gtkwidget.c:2426
+#: gtk/gtkwidget.c:2429
 msgid "Cursor color"
 msgstr "커서 색"
 
-#: gtk/gtkwidget.c:2427
+#: gtk/gtkwidget.c:2430
 msgid "Color with which to draw insertion cursor"
 msgstr "입력 커서를 그릴때 사용할 색"
 
-#: gtk/gtkwidget.c:2432
+#: gtk/gtkwidget.c:2435
 msgid "Secondary cursor color"
 msgstr "보조 커서 색"
 
-#: gtk/gtkwidget.c:2433
+#: gtk/gtkwidget.c:2436
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6871,77 +6871,77 @@ msgstr ""
 "오른쪽에서 왼쪽으로 쓰는 텍스트와 왼쪽에서 오른쪽으로 쓰는 텍스트가 섞인 텍스"
 "트를 편집하는 경우 보조 입력 커서를 그릴 때 쓰는 색"
 
-#: gtk/gtkwidget.c:2438
+#: gtk/gtkwidget.c:2441
 msgid "Cursor line aspect ratio"
 msgstr "커서 선 가로 세로 비율"
 
-#: gtk/gtkwidget.c:2439
+#: gtk/gtkwidget.c:2442
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "입력 커서를 그릴때 사용할 가로 세로 비율"
 
-#: gtk/gtkwidget.c:2453
+#: gtk/gtkwidget.c:2456
 msgid "Draw Border"
 msgstr "테두리 그리기"
 
-#: gtk/gtkwidget.c:2454
+#: gtk/gtkwidget.c:2457
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "위젯에 할당된 부분 밖의 영역의 크기"
 
-#: gtk/gtkwidget.c:2467
+#: gtk/gtkwidget.c:2470
 msgid "Unvisited Link Color"
 msgstr "방문하지 않은 링크 색"
 
-#: gtk/gtkwidget.c:2468
+#: gtk/gtkwidget.c:2471
 msgid "Color of unvisited links"
 msgstr "방문하지 않은 링크의 색"
 
-#: gtk/gtkwidget.c:2481
+#: gtk/gtkwidget.c:2484
 msgid "Visited Link Color"
 msgstr "방문한 링크 색"
 
-#: gtk/gtkwidget.c:2482
+#: gtk/gtkwidget.c:2485
 msgid "Color of visited links"
 msgstr "방문한 링크의 색"
 
-#: gtk/gtkwidget.c:2496
+#: gtk/gtkwidget.c:2499
 msgid "Wide Separators"
 msgstr "넓은 구분선"
 
-#: gtk/gtkwidget.c:2497
+#: gtk/gtkwidget.c:2500
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr "구분선의 너비를 설정 가능하게 하고, 선 대신에 상자로 그릴지 여부"
 
-#: gtk/gtkwidget.c:2511
+#: gtk/gtkwidget.c:2514
 msgid "Separator Width"
 msgstr "구분선 너비"
 
-#: gtk/gtkwidget.c:2512
+#: gtk/gtkwidget.c:2515
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators가 참일 때 구분선의 너비"
 
-#: gtk/gtkwidget.c:2526
+#: gtk/gtkwidget.c:2529
 msgid "Separator Height"
 msgstr "구분선 높이"
 
-#: gtk/gtkwidget.c:2527
+#: gtk/gtkwidget.c:2530
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "wide-separators가 참일 때 구분선의 높이"
 
-#: gtk/gtkwidget.c:2541
+#: gtk/gtkwidget.c:2544
 msgid "Horizontal Scroll Arrow Length"
 msgstr "가로 스크롤 화살표 길이"
 
-#: gtk/gtkwidget.c:2542
+#: gtk/gtkwidget.c:2545
 msgid "The length of horizontal scroll arrows"
 msgstr "가로 스크롤 화살표의 길이"
 
-#: gtk/gtkwidget.c:2556
+#: gtk/gtkwidget.c:2559
 msgid "Vertical Scroll Arrow Length"
 msgstr "세로 스크롤 화살표 길이"
 
-#: gtk/gtkwidget.c:2557
+#: gtk/gtkwidget.c:2560
 msgid "The length of vertical scroll arrows"
 msgstr "세로 스크롤 화살표의 길이"
 

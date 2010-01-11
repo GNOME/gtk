@@ -66,6 +66,11 @@ GtkSettings instance for the default screen.
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-auto-mnemonics ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-button-images ##### -->
 <para>
 

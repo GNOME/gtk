@@ -199,4 +199,7 @@ gtk_radio_button_get_group().
 <!-- ##### FUNCTION gtk_radio_button_get_group ##### -->
 
 
+@radio_button: 
+@Returns: 
+
 

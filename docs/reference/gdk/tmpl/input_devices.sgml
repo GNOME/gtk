@@ -229,10 +229,11 @@ Specifies how an axis of a device is used.
 
 <!-- ##### FUNCTION gdk_device_get_state ##### -->
 
-@device:
-@window:
-@axes:
-@mask:
+
+@device: 
+@window: 
+@axes: 
+@mask: 
 
 
 <!-- ##### FUNCTION gdk_device_get_history ##### -->

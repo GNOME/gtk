@@ -184,3 +184,16 @@ Printing support was added in GTK+ 2.10.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_print_context_get_hard_margins ##### -->
+<para>
+
+</para>
+
+@context: 
+@top: 
+@bottom: 
+@left: 
+@right: 
+@Returns: 
+
+

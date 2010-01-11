@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -644,7 +644,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "പിന്തുണ ഇല്ലാത്ത JPEG കളര്‍ സ്പെയിസ് (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG ഫയല്‍ ലഭ്യമാക്കുന്നതിനുള്ള മെമ്മറി അനുവദിക്കുവാന്‍ സാധ്യമായില്ല"
@@ -774,8 +774,9 @@ msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകളില്�
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "PNG ടെക്സ്റ്റുകളുടെ കീകള്‍ ASCII അക്ഷരങ്ങളായിരിക്കണം"
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -983,11 +984,6 @@ msgstr "TIFF ഇമേജ് സൂക്ഷിക്കുന്നതില്
 
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
-msgstr ""
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
 msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
@@ -1631,15 +1627,15 @@ msgstr "_വലത്ത്:"
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Caps Lock ഓണ്‍ ആണു്"
 
@@ -2292,12 +2288,12 @@ msgid "Cl_ear"
 msgstr "വെ_ടിപ്പാക്കുക"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 

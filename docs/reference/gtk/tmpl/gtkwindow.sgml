@@ -154,6 +154,11 @@ window (synonymous with gtk_window_add_accel_group().
 
 </para>
 
+<!-- ##### ARG GtkWindow:mnemonics-visible ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:modal ##### -->
 <para>
 
@@ -1073,6 +1078,15 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_get_window_type ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_move ##### -->
 <para>
 
@@ -1207,5 +1221,23 @@ Deprecated alias for gtk_window_set_position().
 
 @window: 
 @opacity: 
+
+
+<!-- ##### FUNCTION gtk_window_get_mnemonics_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_mnemonics_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
 
 

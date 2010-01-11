@@ -266,6 +266,10 @@ directions for the visible progress bar.
 <!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
 
 
+@adjustment: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->
 <para>
 Sets the style of the #GtkProgressBar.  The default style is

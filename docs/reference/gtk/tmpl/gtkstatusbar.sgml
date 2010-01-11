@@ -150,3 +150,12 @@ below.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_statusbar_get_message_area ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@Returns: 
+
+

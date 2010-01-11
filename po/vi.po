@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-21 19:14-0500\n"
+"POT-Creation-Date: 2010-01-11 13:23-0500\n"
 "PO-Revision-Date: 2009-12-18 16:06+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -645,7 +645,7 @@ msgstr ""
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Không hỗ trợ vùng màu JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:667 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
+#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
 #: gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Không thể cấp phát bộ nhớ để tải tập tin JPEG"
@@ -777,8 +777,9 @@ msgstr "Các khóa cho các đoạn PNG text phải có độ dài từ 1 đến
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Các khóa cho các đoạn PNG text phải là ký tự ASCII."
 
-#: gdk-pixbuf/io-png.c:886
-msgid "Color profile has invalid length '%"
+#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#, c-format
+msgid "Color profile has invalid length %d."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
@@ -990,11 +991,6 @@ msgstr "Lỗi mở ảnh TIFF"
 #: gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr "Nén YIGG không trỏ đến bộ nén hợp lệ."
-
-#: gdk-pixbuf/io-tiff.c:738
-#, c-format
-msgid "Color profile has invalid length '%d'."
-msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
@@ -1636,15 +1632,15 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7832
+#: gtk/gtkentry.c:8627 gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "_Phương pháp nhập"
 
-#: gtk/gtkentry.c:8618 gtk/gtktextview.c:7846
+#: gtk/gtkentry.c:8641 gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "Chèn ký tự đ_iều khiển Unicode"
 
-#: gtk/gtkentry.c:9989
+#: gtk/gtkentry.c:10012
 msgid "Caps Lock is on"
 msgstr "Caps Lock đã bật"
 
@@ -2295,12 +2291,12 @@ msgid "Cl_ear"
 msgstr "_Dọn"
 
 #. Open Link
-#: gtk/gtklabel.c:5631
+#: gtk/gtklabel.c:5682
 msgid "_Open Link"
 msgstr "_Mở liên kết"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5643
+#: gtk/gtklabel.c:5694
 msgid "Copy _Link Address"
 msgstr "Chép địa chỉ _liên kết"
 

@@ -253,6 +253,15 @@ when GDK gets multihead support.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_screen_get_primary_monitor ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_screen_get_monitor_geometry ##### -->
 <para>
 
