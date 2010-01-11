@@ -3561,7 +3561,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
  *
  * Since: 2.6
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_window_get_icon_name (GtkWindow *window)
 {
   GtkWindowIconInfo *info;
