@@ -2525,7 +2525,7 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
  *
- * Deprecated: Use gtk_color_selection_get_current_color() instead.
+ * Deprecated: 2.0: Use gtk_color_selection_get_current_color() instead.
  **/
 void
 gtk_color_selection_get_color (GtkColorSelection *colorsel,

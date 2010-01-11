@@ -191,7 +191,7 @@ gdk_pixbuf_finalize (GObject *object)
  *
  * Return value: The same as the @pixbuf argument.
  *
- * Deprecated: Use g_object_ref().
+ * Deprecated: 2.0: Use g_object_ref().
  **/
 GdkPixbuf *
 gdk_pixbuf_ref (GdkPixbuf *pixbuf)
@@ -205,7 +205,7 @@ gdk_pixbuf_ref (GdkPixbuf *pixbuf)
  *
  * Removes a reference from a pixbuf. 
  *
- * Deprecated: Use g_object_unref().
+ * Deprecated: 2.0: Use g_object_unref().
  **/
 void
 gdk_pixbuf_unref (GdkPixbuf *pixbuf)

@@ -6568,7 +6568,7 @@ gtk_entry_new_with_buffer (GtkEntryBuffer *buffer)
  * 
  * Return value: a new #GtkEntry
  *
- * Deprecated: Use gtk_entry_set_max_length() instead.
+ * Deprecated: 2.0: Use gtk_entry_set_max_length() instead.
  **/
 GtkWidget*
 gtk_entry_new_with_max_length (gint max)
