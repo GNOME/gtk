@@ -1,3 +1,28 @@
+Overview of Changes from GTK+ 2.18.5 to 2.18.6
+==============================================
+
+* Client-side windows:
+ - Send expose events from gdk_window_clear_area_e
+ - Ensure native windows in gdk_property_change
+ - Properly compute damage when drawing line segments
+ - Fix an infinite recursion causing stack overflows
+
+* Bugs fixed:
+  50942 selection/arrow key improvement
+ 604747 Using gdk_draw_line, the expose area of damage...
+ 604787	property-notify-event is not delivered...
+ 605008 the region of damage event doens't be copied...
+ 605036 commit adds not-yet-built libgtk-x11-2.0.la...
+ 606068 Setup libjpeg error handling earlier...
+ 606143 aisleriot grows X server without bounds
+
+* Translation update:
+ Assamese
+ Basque
+ British English
+ Kannada
+
+
 Overview of Changes from GTK+ 2.18.4 to 2.18.5
 ==============================================
 
