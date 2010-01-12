@@ -347,7 +347,7 @@ typedef enum
  *
  * Evaluates to %TRUE if the widget is a composite child of its parent.
  *
- * Deprecated: 2.20: Use the "composite-child" property instead.
+ * Deprecated: 2.20: Use the #GtkWidget:composite-child property instead.
  */
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
 #endif
