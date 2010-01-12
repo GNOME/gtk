@@ -7491,8 +7491,8 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
  * containing @child. See gtk_box_pack_start() for the exact meaning
  * of the parameters.
  *
- * Deprecated: 2.20: Modify the "tab-expand" and "tab-fill" child
- *   properties instead.
+ * Deprecated: 2.20: Modify the #GtkNotebook:tab-expand and
+ *   #GtkNotebook:tab-fill child properties instead.
  **/
 void
 gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
@@ -7545,8 +7545,8 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
  * Query the packing attributes for the tab label of the page
  * containing @child.
  *
- * Deprecated: 2.20: Modify the "tab-expand" and "tab-fill" child
- *   properties instead.
+ * Deprecated: 2.20: Modify the #GtkNotebook:tab-expand and
+ *   #GtkNotebook:tab-fill child properties instead.
  **/
 void
 gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
