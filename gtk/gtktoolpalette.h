@@ -89,21 +89,21 @@ GType                          gtk_tool_palette_get_type              (void) G_G
 GtkWidget*                     gtk_tool_palette_new                   (void);
 
 void                           gtk_tool_palette_set_group_position    (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group,
+                                                                       GtkToolItemGroup          *group,
                                                                        gint                       position);
 void                           gtk_tool_palette_set_exclusive         (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group,
+                                                                       GtkToolItemGroup          *group,
                                                                        gboolean                   exclusive);
 void                           gtk_tool_palette_set_expand            (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group,
+                                                                       GtkToolItemGroup          *group,
                                                                        gboolean                   expand);
 
 gint                           gtk_tool_palette_get_group_position    (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group);
+                                                                       GtkToolItemGroup          *group);
 gboolean                       gtk_tool_palette_get_exclusive         (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group);
+                                                                       GtkToolItemGroup          *group);
 gboolean                       gtk_tool_palette_get_expand            (GtkToolPalette            *palette,
-                                                                       GtkWidget                 *group);
+                                                                       GtkToolItemGroup          *group);
 
 void                           gtk_tool_palette_set_icon_size         (GtkToolPalette            *palette,
                                                                        GtkIconSize                icon_size);
