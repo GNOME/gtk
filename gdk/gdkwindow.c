@@ -2679,7 +2679,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
   gdk_region_offset (region, private->abs_x, private->abs_y);
   gdk_region_intersect (region, paint->region);
 
-  if (!gdk_region_empty (region))
+  if (!GDK_WINDOW_DESTROYED (window) && !gdk_region_empty (region))
     {
       /* Remove flushed region from the implicit paint */
       gdk_region_subtract (paint->region, region);
@@ -2712,7 +2712,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
 
   private->implicit_paint = NULL;
 
-  if (!gdk_region_empty (paint->region))
+  if (!GDK_WINDOW_DESTROYED (window) && !gdk_region_empty (paint->region))
     {
       /* Some regions are valid, push these to window now */
       tmp_gc = _gdk_drawable_get_scratch_gc ((GdkDrawable *)window, FALSE);
