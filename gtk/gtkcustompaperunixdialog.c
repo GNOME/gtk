@@ -39,7 +39,6 @@
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprintutils.h"
-#include "gtkprinter-private.h"
 #include "gtkalias.h"
 
 #define CUSTOM_PAPER_FILENAME ".gtk-custom-papers"

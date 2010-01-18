@@ -28,7 +28,6 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprintbackend.h"
-#include "gtkprinter-private.h"
 #include "gtkalias.h"
 
 #define GTK_PRINT_BACKEND_GET_PRIVATE(o)  \
