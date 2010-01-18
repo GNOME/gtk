@@ -2820,27 +2820,25 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* Test if a double click happened on the same row. */
       if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
         {
-          if (tree_view->priv->last_button_x != -1)
+          int double_click_time, double_click_distance;
+
+          g_object_get (gtk_settings_get_default (),
+                        "gtk-double-click-time", &double_click_time,
+                        "gtk-double-click-distance", &double_click_distance,
+                        NULL);
+
+          /* Same conditions as _gdk_event_button_generate */
+          if (tree_view->priv->last_button_x != -1 &&
+              (event->time < tree_view->priv->last_button_time + double_click_time) &&
+              (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
+              (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
             {
-              int double_click_time, double_click_distance;
-
-              g_object_get (gtk_settings_get_default (),
-                            "gtk-double-click-time", &double_click_time,
-                            "gtk-double-click-distance", &double_click_distance,
-                            NULL);
-
-              /* Same conditions as _gdk_event_button_generate */
-              if ((event->time < tree_view->priv->last_button_time + double_click_time) &&
-                  (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
-                  (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
-                {
-                  /* We do no longer compare paths of this row and the
-                   * row clicked previously.  We use the double click
-                   * distance to decide whether this is a valid click,
-                   * allowing the mouse to slightly move over another row.
-                   */
-                  row_double_click = TRUE;
-                }
+              /* We do no longer compare paths of this row and the
+               * row clicked previously.  We use the double click
+               * distance to decide whether this is a valid click,
+               * allowing the mouse to slightly move over another row.
+               */
+              row_double_click = TRUE;
 
               tree_view->priv->last_button_time = 0;
               tree_view->priv->last_button_x = -1;
