@@ -5276,7 +5276,7 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 				  remaining_space, STEP_NEXT);
 	}
 
-      if (tab_space <= 0 || *remaining_space < 0)
+      if (tab_space <= 0 || *remaining_space <= 0)
 	{
 	  /* show 1 tab */
 	  notebook->first_tab = notebook->focus_tab;
