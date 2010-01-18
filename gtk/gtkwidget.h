@@ -332,14 +332,19 @@ typedef enum
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_RC_STYLE:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget's style has been looked up through the rc
  * mechanism.
+ *
+ * Deprecated: 2.20: Use gtk_widget_has_rc_style() instead.
  */
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
+#endif
+
 #ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_COMPOSITE_CHILD:
@@ -1058,6 +1063,7 @@ gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 /* Widget styles.
  */
+gboolean    gtk_widget_has_rc_style       (GtkWidget           *widget);
 void	   gtk_widget_set_style		(GtkWidget	*widget,
 					 GtkStyle	*style);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);

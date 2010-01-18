@@ -5726,7 +5726,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (widget->name);
   widget->name = new_name;
 
-  if (GTK_WIDGET_RC_STYLE (widget))
+  if (gtk_widget_has_rc_style (widget))
     gtk_widget_reset_rc_style (widget);
 
   g_object_notify (G_OBJECT (widget), "name");
@@ -6294,6 +6294,25 @@ gtk_widget_get_parent (GtkWidget *widget)
  *****************************************/
 
 /**
+ * gtk_widget_has_rc_style:
+ * @widget: a #GtkWidget
+ *
+ * Determines if the widget style has been looked up through the rc mechanism.
+ *
+ * Returns: %TRUE if the widget has been looked up through the rc
+ *   mechanism, %FALSE otherwise.
+ *
+ * Since: 2.20
+ **/
+gboolean
+gtk_widget_has_rc_style (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_RC_STYLE) != 0;
+}
+
+/**
  * gtk_widget_set_style:
  * @widget: a #GtkWidget
  * @style: (allow-none): a #GtkStyle, or %NULL to remove the effect of a previous
@@ -6314,7 +6333,7 @@ gtk_widget_set_style (GtkWidget *widget,
     {
       gboolean initial_emission;
 
-      initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
+      initial_emission = !gtk_widget_has_rc_style (widget) && !GTK_WIDGET_USER_STYLE (widget);
       
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
       GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
@@ -6343,7 +6362,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (!GTK_WIDGET_USER_STYLE (widget) &&
-      !GTK_WIDGET_RC_STYLE (widget))
+      !gtk_widget_has_rc_style (widget))
     gtk_widget_reset_rc_style (widget);
 }
 
@@ -6356,7 +6375,7 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
   GtkStyle *new_style = NULL;
   gboolean initial_emission;
   
-  initial_emission = !GTK_WIDGET_RC_STYLE (widget) && !GTK_WIDGET_USER_STYLE (widget);
+  initial_emission = !gtk_widget_has_rc_style (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
@@ -6425,7 +6444,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
    * modifier style and the only reference was our own.
    */
   
-  if (GTK_WIDGET_RC_STYLE (widget))
+  if (gtk_widget_has_rc_style (widget))
     gtk_widget_reset_rc_style (widget);
 }
 
@@ -6964,7 +6983,7 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_rc_styles_recurse (GtkWidget *widget, gpointer data)
 {
-  if (GTK_WIDGET_RC_STYLE (widget))
+  if (gtk_widget_has_rc_style (widget))
     gtk_widget_reset_rc_style (widget);
   
   if (GTK_IS_CONTAINER (widget))

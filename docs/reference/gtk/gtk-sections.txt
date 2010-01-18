@@ -5733,6 +5733,7 @@ gtk_widget_set_visible
 gtk_widget_has_default
 gtk_widget_has_focus
 gtk_widget_has_grab
+gtk_widget_has_rc_style
 gtk_widget_is_drawable
 gtk_widget_is_toplevel
 gtk_widget_set_window
