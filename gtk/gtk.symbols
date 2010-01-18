@@ -5143,6 +5143,7 @@ gtk_widget_grab_focus
 gtk_widget_has_default
 gtk_widget_has_focus
 gtk_widget_has_grab
+gtk_widget_has_rc_style
 gtk_widget_has_screen
 gtk_widget_hide
 gtk_widget_hide_all
