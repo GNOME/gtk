@@ -1250,12 +1250,18 @@ pixops_process (guchar         *dest_buf,
 {
   int i, j;
   int x, y;			/* X and Y position in source (fixed_point) */
-  
+
   guchar **line_bufs;
   int *filter_weights;
 
   int x_step;
   int y_step;
+
+  int check_shift;
+  int scaled_x_offset;
+
+  int run_end_x;
+  int run_end_index;
 
   x_step = (1 << SCALE_SHIFT) / scale_x; /* X step in source (fixed point) */
   y_step = (1 << SCALE_SHIFT) / scale_y; /* Y step in source (fixed point) */
@@ -1266,9 +1272,9 @@ pixops_process (guchar         *dest_buf,
   line_bufs = g_new (guchar *, filter->y.n);
   filter_weights = make_filter_table (filter);
 
-  int check_shift = check_size ? get_check_shift (check_size) : 0;
+  check_shift = check_size ? get_check_shift (check_size) : 0;
 
-  int scaled_x_offset = floor (filter->x.offset * (1 << SCALE_SHIFT));
+  scaled_x_offset = floor (filter->x.offset * (1 << SCALE_SHIFT));
 
   /* Compute the index where we run off the end of the source buffer. The
    * furthest source pixel we access at index i is:
@@ -1282,9 +1288,9 @@ pixops_process (guchar         *dest_buf,
    *
    */
 #define MYDIV(a,b) ((a) > 0 ? (a) / (b) : ((a) - (b) + 1) / (b))    /* Division so that -1/5 = -1 */
-  
-  int run_end_x = (((src_width - filter->x.n + 1) << SCALE_SHIFT) - scaled_x_offset);
-  int run_end_index = MYDIV (run_end_x + x_step - 1, x_step) - render_x0;
+
+  run_end_x = (((src_width - filter->x.n + 1) << SCALE_SHIFT) - scaled_x_offset);
+  run_end_index = MYDIV (run_end_x + x_step - 1, x_step) - render_x0;
   run_end_index = MIN (run_end_index, render_x1 - render_x0);
 
   y = render_y0 * y_step + floor (filter->y.offset * (1 << SCALE_SHIFT));
@@ -1298,7 +1304,7 @@ pixops_process (guchar         *dest_buf,
                          filter->x.n * filter->y.n * SUBSAMPLE;
       guchar *new_outbuf;
       guint32 tcolor1, tcolor2;
-      
+
       guchar *outbuf = dest_buf + dest_rowstride * i;
       guchar *outbuf_end = outbuf + dest_channels * (render_x1 - render_x0);
 
@@ -1336,7 +1342,7 @@ pixops_process (guchar         *dest_buf,
 			 line_bufs, src_channels, src_has_alpha,
 			 x >> SCALE_SHIFT, src_width,
 			 check_size, tcolor1, tcolor2, pixel_func);
-	  
+
 	  x += x_step;
 	  x_start = x >> SCALE_SHIFT;
 	  dest_x++;
@@ -1363,7 +1369,7 @@ pixops_process (guchar         *dest_buf,
 			 line_bufs, src_channels, src_has_alpha,
 			 x >> SCALE_SHIFT, src_width,
 			 check_size, tcolor1, tcolor2, pixel_func);
-	  
+
 	  x += x_step;
 	  dest_x++;
 	  outbuf += dest_channels;
