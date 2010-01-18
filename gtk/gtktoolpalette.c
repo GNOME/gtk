@@ -1572,7 +1572,7 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
  *
  * Since: 2.20
  */
-GtkWidget*
+GtkToolItemGroup*
 gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
                                  gint            x,
                                  gint            y)
@@ -1603,7 +1603,7 @@ gtk_tool_palette_get_drop_group (GtkToolPalette *palette,
 
       if (x0 >= 0 && x0 < widget->allocation.width &&
           y0 >= 0 && y0 < widget->allocation.height)
-        return widget;
+        return GTK_TOOL_ITEM_GROUP (widget);
     }
 
   return NULL;

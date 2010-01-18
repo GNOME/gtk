@@ -118,7 +118,7 @@ GtkToolbarStyle                gtk_tool_palette_get_style             (GtkToolPa
 GtkToolItem*                   gtk_tool_palette_get_drop_item         (GtkToolPalette            *palette,
                                                                        gint                       x,
                                                                        gint                       y);
-GtkWidget*                     gtk_tool_palette_get_drop_group        (GtkToolPalette            *palette,
+GtkToolItemGroup*              gtk_tool_palette_get_drop_group        (GtkToolPalette            *palette,
                                                                        gint                       x,
                                                                        gint                       y);
 GtkWidget*                     gtk_tool_palette_get_drag_item         (GtkToolPalette            *palette,
