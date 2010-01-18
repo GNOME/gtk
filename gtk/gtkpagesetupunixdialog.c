@@ -52,7 +52,6 @@
 #include "gtkpagesetupunixdialog.h"
 #include "gtkcustompaperunixdialog.h"
 #include "gtkprintbackend.h"
-#include "gtkprinter-private.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
 #include "gtkalias.h"

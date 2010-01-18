@@ -3055,12 +3055,19 @@ gtk_print_job_get_settings
 gtk_print_job_get_printer
 gtk_print_job_get_title
 gtk_print_job_get_status
-gtk_print_job_set_status
 gtk_print_job_set_source_file
 gtk_print_job_get_surface
 gtk_print_job_send
 gtk_print_job_set_track_print_status
 gtk_print_job_get_track_print_status
+#endif
+#endif
+#endif
+
+#if IN_HEADER(__GTK_PRINTER_PRIVATE_H__)
+#if IN_FILE(__GTK_PRINT_JOB_C__)
+#ifdef G_OS_UNIX
+gtk_print_job_set_status
 #endif
 #endif
 #endif
