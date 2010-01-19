@@ -276,6 +276,7 @@ static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
 							 int height);
+static void             gdk_window_drop_cairo_surface (GdkWindowObject *private);
 static void             gdk_window_set_cairo_clip    (GdkDrawable *drawable,
 						      cairo_t *cr);
 
@@ -1587,14 +1588,9 @@ gdk_window_reparent (GdkWindow *window,
   if (is_parent_of (window, new_parent))
     return;
 
-  if (private->cairo_surface)
-    {
-      /* This might be wrong in the new parent, e.g. for non-native surfaces.
-	 To make sure we're ok, just wipe it. */
-      cairo_surface_finish (private->cairo_surface);
-      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
-				   NULL, NULL);
-    }
+  /* This might be wrong in the new parent, e.g. for non-native surfaces.
+     To make sure we're ok, just wipe it. */
+  gdk_window_drop_cairo_surface (private);
 
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
   old_parent = private->parent;
@@ -2054,13 +2050,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
 	  _gdk_window_clear_update_area (window);
 
-	  if (private->cairo_surface)
-	    {
-	      cairo_surface_finish (private->cairo_surface);
-	      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
-					   NULL, NULL);
-	    }
-
+	  gdk_window_drop_cairo_surface (private);
 
 	  impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
 
@@ -4832,6 +4822,17 @@ gdk_window_copy_to_image (GdkDrawable     *drawable,
 				     src_y - y_offset,
 				     dest_x, dest_y,
 				     width, height);
+}
+
+static void
+gdk_window_drop_cairo_surface (GdkWindowObject *private)
+{
+  if (private->cairo_surface)
+    {
+      cairo_surface_finish (private->cairo_surface);
+      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
+				   NULL, NULL);
+    }
 }
 
 static void
