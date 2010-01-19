@@ -151,9 +151,9 @@ palette_drop_item (GtkToolItem      *drag_item,
 }
 
 static void
-palette_drop_group (GtkToolPalette *palette,
-                    GtkWidget      *drag_group,
-                    GtkWidget      *drop_group)
+palette_drop_group (GtkToolPalette   *palette,
+                    GtkToolItemGroup *drag_group,
+                    GtkToolItemGroup *drop_group)
 {
   gint drop_position = -1;
 
@@ -173,8 +173,9 @@ palette_drag_data_received (GtkWidget        *widget,
                             guint             time,
                             gpointer          data)
 {
-  GtkWidget *drag_palette = gtk_drag_get_source_widget (context);
-  GtkWidget *drag_item = NULL, *drop_group = NULL;
+  GtkToolItemGroup *drop_group = NULL;
+  GtkWidget        *drag_palette = gtk_drag_get_source_widget (context);
+  GtkWidget        *drag_item = NULL;
 
   while (drag_palette && !GTK_IS_TOOL_PALETTE (drag_palette))
     drag_palette = gtk_widget_get_parent (drag_palette);
@@ -188,10 +189,12 @@ palette_drag_data_received (GtkWidget        *widget,
     }
 
   if (GTK_IS_TOOL_ITEM_GROUP (drag_item))
-    palette_drop_group (GTK_TOOL_PALETTE (drag_palette), drag_item, drop_group);
+    palette_drop_group (GTK_TOOL_PALETTE (drag_palette),
+                        GTK_TOOL_ITEM_GROUP (drag_item),
+                        drop_group);
   else if (GTK_IS_TOOL_ITEM (drag_item) && drop_group)
     palette_drop_item (GTK_TOOL_ITEM (drag_item),
-                       GTK_TOOL_ITEM_GROUP (drop_group),
+                       drop_group,
                        x - GTK_WIDGET (drop_group)->allocation.x,
                        y - GTK_WIDGET (drop_group)->allocation.y);
 }
