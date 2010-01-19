@@ -3674,6 +3674,7 @@ gtk_status_icon_set_has_tooltip
 gtk_status_icon_get_has_tooltip
 gtk_status_icon_set_title
 gtk_status_icon_get_title
+gtk_status_icon_set_name
 gtk_status_icon_set_visible
 gtk_status_icon_get_visible
 gtk_status_icon_set_blinking

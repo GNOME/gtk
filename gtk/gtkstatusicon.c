@@ -2969,5 +2969,35 @@ gtk_status_icon_get_title (GtkStatusIcon *status_icon)
 }
 
 
+/**
+ * gtk_status_icon_set_name:
+ * @status_icon: a #GtkStatusIcon
+ * @name: the name
+ *
+ * Sets the name of this tray icon.
+ * This should be a string identifying this icon. It is may be
+ * used for sorting the icons in the tray and will not be shown to
+ * the user.
+ *
+ * Since: 2.20
+ */
+void
+gtk_status_icon_set_name (GtkStatusIcon *status_icon,
+                          const gchar   *name)
+{
+  GtkStatusIconPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
+
+  priv = status_icon->priv;
+
+#ifdef GDK_WINDOWING_X11
+  gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
+#endif
+
+  g_object_notify (G_OBJECT (status_icon), "name");
+}
+
+
 #define __GTK_STATUS_ICON_C__
 #include "gtkaliasdef.c"

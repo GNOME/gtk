@@ -123,6 +123,8 @@ void                  gtk_status_icon_set_tooltip_markup (GtkStatusIcon      *st
 void                  gtk_status_icon_set_title          (GtkStatusIcon      *status_icon,
                                                           const gchar        *title);
 G_CONST_RETURN gchar *gtk_status_icon_get_title          (GtkStatusIcon      *status_icon);
+void                  gtk_status_icon_set_name           (GtkStatusIcon      *status_icon,
+                                                          const gchar        *name);
 void                  gtk_status_icon_set_visible        (GtkStatusIcon      *status_icon,
 							  gboolean            visible);
 gboolean              gtk_status_icon_get_visible        (GtkStatusIcon      *status_icon);
