@@ -1842,6 +1842,8 @@ gdk_window_ensure_native (GdkWindow *window)
   if (impl_window->input_window)
     disabled_extension_events = temporary_disable_extension_events (private);
 
+  gdk_window_drop_cairo_surface (private);
+
   screen = gdk_drawable_get_screen (window);
   visual = gdk_drawable_get_visual (window);
 
