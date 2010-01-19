@@ -1549,12 +1549,13 @@ gtk_tool_palette_get_drop_item (GtkToolPalette *palette,
                                 gint            x,
                                 gint            y)
 {
-  GtkWidget *group = gtk_tool_palette_get_drop_group (palette, x, y);
+  GtkToolItemGroup *group = gtk_tool_palette_get_drop_group (palette, x, y);
+  GtkWidget *widget = GTK_WIDGET (group);
 
   if (group)
-    return gtk_tool_item_group_get_drop_item (GTK_TOOL_ITEM_GROUP (group),
-                                              x - group->allocation.x,
-                                              y - group->allocation.y);
+    return gtk_tool_item_group_get_drop_item (group,
+                                              x - widget->allocation.x,
+                                              y - widget->allocation.y);
 
   return NULL;
 }
