@@ -1244,6 +1244,7 @@ gtk_status_icon_get_geometry
 gtk_status_icon_get_x11_window_id
 gtk_status_icon_get_title
 gtk_status_icon_set_title
+gtk_status_icon_set_name
 #endif
 #endif
 
