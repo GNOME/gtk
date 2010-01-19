@@ -6,13 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-19 15:54+0200\n"
-"PO-Revision-Date: 2010-01-19 16:13+0200\n"
+"POT-Creation-Date: 2010-01-19 16:28+0200\n"
+"PO-Revision-Date: 2010-01-19 16:30+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../gdk/gdk.c:103
 #, c-format
@@ -4333,35 +4334,51 @@ msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "စာအိတ်"
 
-#: ../gtk/paper_names_offsets.c:92
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:181
+msgctxt "paper size"
 msgid "10x11"
 msgstr "၁၀x၁၁"
 
-#: ../gtk/paper_names_offsets.c:93
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:183
+msgctxt "paper size"
 msgid "10x13"
 msgstr "10x13"
 
-#: ../gtk/paper_names_offsets.c:94
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:185
+msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+msgctxt "paper size"
 msgid "10x15"
 msgstr "၁၀x၁၅"
 
-#: ../gtk/paper_names_offsets.c:97
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:191
+msgctxt "paper size"
 msgid "11x12"
 msgstr "၁၁x၁၂"
 
-#: ../gtk/paper_names_offsets.c:98
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:193
+msgctxt "paper size"
 msgid "11x15"
 msgstr "၁၁x၁၅"
 
-#: ../gtk/paper_names_offsets.c:99
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:195
+msgctxt "paper size"
 msgid "12x19"
 msgstr "၁၂x၁၉"
 
-#: ../gtk/paper_names_offsets.c:100
+#. translators, strip everything up to the first |
+#: ../gtk/paper_names_offsets.c:197
+msgctxt "paper size"
 msgid "5x7"
 msgstr "၅x၇"
 
