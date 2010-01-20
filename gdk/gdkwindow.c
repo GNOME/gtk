@@ -1215,8 +1215,15 @@ get_native_event_mask (GdkWindowObject *private)
        * important thing, because in X only one client can do
        * so, and we don't want to unexpectedly prevent another
        * client from doing it.
+       *
+       * We also need to do the same if the app selects for button presses
+       * because then we will get implicit grabs for this window, and the
+       * event mask used for that grab is based on the rest of the mask
+       * for the window, but we might need more events than this window
+       * lists due to some non-native child window.
        */
-      if (gdk_window_is_toplevel (private))
+      if (gdk_window_is_toplevel (private) ||
+	  mask & GDK_BUTTON_PRESS_MASK)
 	mask |=
 	  GDK_POINTER_MOTION_MASK |
 	  GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
