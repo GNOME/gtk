@@ -6703,6 +6703,29 @@ gtk_entry_set_buffer (GtkEntry       *entry,
   g_object_thaw_notify (obj);
 }
 
+/**
+ * gtk_entry_get_text_window:
+ * @entry: a #GtkEntry
+ *
+ * Returns the #GdkWindow which contains the text. This function is
+ * useful when drawing something to the entry in an expose-event
+ * callback because it enables the callback to distinguish between
+ * the text window and entry's icon windows.
+ *
+ * See also gtk_entry_get_icon_window().
+ *
+ * Return value: the entry's text window.
+ *
+ * Since: 2.20
+ **/
+GdkWindow *
+gtk_entry_get_text_window (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  return entry->text_area;
+}
+
 
 /**
  * gtk_entry_set_text:
@@ -8216,6 +8239,41 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
     }
 
   return -1;
+}
+
+/**
+ * gtk_entry_get_icon_window:
+ * @entry: A #GtkEntry
+ * @icon_pos: Icon position
+ *
+ * Returns the #GdkWindow which contains the entry's icon at
+ * @icon_pos. This function is useful when drawing something to the
+ * entry in an expose-event callback because it enables the callback
+ * to distinguish between the text window and entry's icon windows.
+ *
+ * See also gtk_entry_get_text_window().
+ *
+ * Return value: the entry's icon window at @icon_pos.
+ *
+ * Since: 2.20
+ */
+GdkWindow  *
+gtk_entry_get_icon_window (GtkEntry             *entry,
+                           GtkEntryIconPosition  icon_pos)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  icon_info = priv->icons[icon_pos];
+
+  if (icon_info)
+    return icon_info->window;
+
+  return NULL;
 }
 
 static void

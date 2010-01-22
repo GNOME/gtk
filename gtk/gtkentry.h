@@ -166,30 +166,40 @@ struct _GtkEntryClass
 GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 GtkWidget* gtk_entry_new_with_buffer            (GtkEntryBuffer *buffer);
+
 GtkEntryBuffer* gtk_entry_get_buffer            (GtkEntry       *entry);
 void       gtk_entry_set_buffer                 (GtkEntry       *entry,
                                                  GtkEntryBuffer *buffer);
+
+GdkWindow *gtk_entry_get_text_window            (GtkEntry      *entry);
+
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
 gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
+
 void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
 gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
 void       gtk_entry_unset_invisible_char       (GtkEntry      *entry);
+
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
+
 void       gtk_entry_set_inner_border                (GtkEntry        *entry,
                                                       const GtkBorder *border);
 G_CONST_RETURN GtkBorder* gtk_entry_get_inner_border (GtkEntry        *entry);
+
 void       gtk_entry_set_overwrite_mode         (GtkEntry      *entry,
                                                  gboolean       overwrite);
 gboolean   gtk_entry_get_overwrite_mode         (GtkEntry      *entry);
+
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);
 gint       gtk_entry_get_max_length             (GtkEntry      *entry);
 guint16    gtk_entry_get_text_length            (GtkEntry      *entry);
+
 void       gtk_entry_set_activates_default      (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
@@ -292,6 +302,9 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GtkTargetList        *target_list,
 							  GdkDragAction         actions);
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
+
+GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
 
 
 /* Deprecated compatibility functions
