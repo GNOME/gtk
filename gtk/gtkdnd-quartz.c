@@ -505,8 +505,6 @@ gtk_drag_dest_set (GtkWidget            *widget,
 
   old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
-  gtk_drag_dest_unset (widget);
-
   site = g_new (GtkDragDestSite, 1);
   site->flags = flags;
   site->have_drag = FALSE;
@@ -520,6 +518,8 @@ gtk_drag_dest_set (GtkWidget            *widget,
     site->track_motion = old_site->track_motion;
   else
     site->track_motion = FALSE;
+
+  gtk_drag_dest_unset (widget);
 
   if (GTK_WIDGET_REALIZED (widget))
     gtk_drag_dest_realized (widget, site);
