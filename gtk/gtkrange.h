@@ -151,6 +151,20 @@ void               gtk_range_set_flippable                 (GtkRange      *range
                                                             gboolean       flippable);
 gboolean           gtk_range_get_flippable                 (GtkRange      *range);
 
+void               gtk_range_set_slider_size_fixed         (GtkRange      *range,
+                                                            gboolean       size_fixed);
+gboolean           gtk_range_get_slider_size_fixed         (GtkRange      *range);
+
+void               gtk_range_set_min_slider_size           (GtkRange      *range,
+                                                            gboolean       min_size);
+gint               gtk_range_get_min_slider_size           (GtkRange      *range);
+
+void               gtk_range_get_range_rect                (GtkRange      *range,
+                                                            GdkRectangle  *range_rect);
+void               gtk_range_get_slider_range              (GtkRange      *range,
+                                                            gint          *slider_start,
+                                                            gint          *slider_end);
+
 void               gtk_range_set_lower_stepper_sensitivity (GtkRange      *range,
                                                             GtkSensitivityType sensitivity);
 GtkSensitivityType gtk_range_get_lower_stepper_sensitivity (GtkRange      *range);
