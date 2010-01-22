@@ -6479,8 +6479,7 @@ gtk_tree_view_dy_to_top_row (GtkTreeView *tree_view)
 
       if (tree == NULL)
         {
-	  tree_view->priv->top_row = NULL;
-	  tree_view->priv->top_row_dy = 0;
+	  gtk_tree_view_set_top_row (tree_view, NULL, 0);
 	}
       else
         {
