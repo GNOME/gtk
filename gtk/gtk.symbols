@@ -1368,6 +1368,7 @@ gtk_entry_get_icon_stock
 gtk_entry_get_icon_storage_type
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_text
+gtk_entry_get_icon_window
 gtk_entry_get_inner_border
 gtk_entry_get_invisible_char
 gtk_entry_get_layout
@@ -1381,6 +1382,7 @@ gtk_entry_get_text_length
 gtk_entry_get_type G_GNUC_CONST
 gtk_entry_get_visibility
 gtk_entry_get_width_chars
+gtk_entry_get_text_window
 gtk_entry_layout_index_to_text_index
 gtk_entry_new
 gtk_entry_new_with_buffer
