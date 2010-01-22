@@ -890,6 +890,155 @@ gtk_range_get_flippable (GtkRange *range)
 }
 
 /**
+ * gtk_range_set_slider_size_fixed:
+ * @range: a #GtkRange
+ * @size_fixed: %TRUE to make the slider size constant
+ *
+ * Sets whether the range's slider has a fixed size, or a size that
+ * depends on it's adjustment's page size.
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * Since: 2.20
+ **/
+void
+gtk_range_set_slider_size_fixed (GtkRange *range,
+                                 gboolean  size_fixed)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  if (size_fixed != range->slider_size_fixed)
+    {
+      range->slider_size_fixed = size_fixed ? TRUE : FALSE;
+
+      range->need_recalc = TRUE;
+      gtk_range_calc_layout (range, range->adjustment->value);
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+    }
+}
+
+/**
+ * gtk_range_get_slider_size_fixed:
+ * @range: a #GtkRange
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * See gtk_range_set_slider_size_fixed().
+ *
+ * Return value: whether the range's slider has a fixed size.
+ *
+ * Since: 2.20
+ **/
+gboolean
+gtk_range_get_slider_size_fixed (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+
+  return range->slider_size_fixed;
+}
+
+/**
+ * gtk_range_set_min_slider_size:
+ * @range: a #GtkRange
+ * @min_size: The slider's minimum size
+ *
+ * Sets the minimum size of the range's slider.
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * Since: 2.20
+ **/
+void
+gtk_range_set_min_slider_size (GtkRange *range,
+                               gboolean  min_size)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (min_size > 0);
+
+  if (min_size != range->min_slider_size)
+    {
+      range->min_slider_size = min_size;
+
+      range->need_recalc = TRUE;
+      gtk_range_calc_layout (range, range->adjustment->value);
+      gtk_widget_queue_draw (GTK_WIDGET (range));
+    }
+}
+
+/**
+ * gtk_range_get_min_slider_size:
+ * @range: a #GtkRange
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * See gtk_range_set_min_slider_size().
+ *
+ * Return value: The minimum size of the range's slider.
+ *
+ * Since: 2.20
+ **/
+gint
+gtk_range_get_min_slider_size (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
+
+  return range->min_slider_size;
+}
+
+/**
+ * gtk_range_get_range_rect:
+ * @range: a #GtkRange
+ * @range_rect: return location for the range rectangle
+ *
+ * This function returns the area that contains the range's trough
+ * and its steppers, in widget->window coordinates.
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * Since: 2.20
+ **/
+void
+gtk_range_get_range_rect (GtkRange     *range,
+                          GdkRectangle *range_rect)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (range_rect != NULL);
+
+  gtk_range_calc_layout (range, range->adjustment->value);
+
+  *range_rect = range->range_rect;
+}
+
+/**
+ * gtk_range_get_slider_range:
+ * @range: a #GtkRange
+ * @slider_start: return location for the slider's start, or %NULL
+ * @slider_end: return location for the slider's end, or %NULL
+ *
+ * This function returns sliders range along the long dimension,
+ * in widget->window coordinates.
+ *
+ * This function is useful mainly for #GtkRange subclasses.
+ *
+ * Since: 2.20
+ **/
+void
+gtk_range_get_slider_range (GtkRange *range,
+                            gint     *slider_start,
+                            gint     *slider_end)
+{
+  g_return_if_fail (GTK_IS_RANGE (range));
+
+  gtk_range_calc_layout (range, range->adjustment->value);
+
+  if (slider_start)
+    *slider_start = range->slider_start;
+
+  if (slider_end)
+    *slider_end = range->slider_end;
+}
+
+/**
  * gtk_range_set_lower_stepper_sensitivity:
  * @range:       a #GtkRange
  * @sensitivity: the lower stepper's sensitivity policy.
