@@ -343,10 +343,10 @@ testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.h	\
 	testoffscreen.c
 
-testoffscreenwindnow_SOURCES =	\
+testoffscreenwindow_SOURCES =	\
 	testoffscreenwindow.c
 
-testwindow_SOURCES = 	\
+testwindows_SOURCES = 	\
 	testwindows.c
 
 EXTRA_DIST += 			\
