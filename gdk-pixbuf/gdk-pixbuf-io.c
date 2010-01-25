@@ -2057,6 +2057,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        if (!result) {
                g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
                fclose (f);
+               g_unlink (filename);
                return FALSE;
        }
 
