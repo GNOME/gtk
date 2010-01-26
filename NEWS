@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.19.3 to 2.19.4
+==============================================
+
+* GSeal:
+ - New accessors for GtkEntry windows
+ - New accessors for GtkRange members
+
+* Bugs fixed:
+ 607082 Add accessors for sealed GtkRange members
+ 567729 Add GtkToolPalette
+ 591102 gdk_pixbuf_save() creates a zero-size file...
+ 600865 gnome-panel crashed with "BadPixmap...
+ 601412 action area presence makes gnome-terminal window grow...
+ 603144 Suspected wrong builtin page size: Chinese PRC6 and...
+ 606009 weirdness with clipping in abiword - csw
+ 606698 Misplaced declaration of gtk_print_job_set_status
+ 606761 pixops.c: variables are declared at middle of block
+ 607217 Mixing calls to _set_markup and _set_text causes...
+ 607269 gtk_label_set_attributes with empty list no longer...
+ 607322 Double-click doesn't work if the item is selected...
+ 607687 f-spot crashes when using themes using the pixmap...
+ 607778 Add accessors for GtkEntry's windows
+ 607770 Leak in GtkTreeView with HildonPannableArea
+ 603245 drawing artifacts with action widgets and long tab...
+
+* Updated translations:
+ Arabic
+ Asturian
+ Basque
+ Bengali
+ Bulgarian
+ Burmese
+ Norwegian bokmål
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes from GTK+ 2.19.2 to 2.19.3
 ==============================================
 
