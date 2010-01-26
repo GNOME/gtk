@@ -1717,7 +1717,7 @@ _gdk_keymap_key_is_modifier (GdkKeymap *keymap,
   return FALSE;
 }
 
-/*
+/**
  * gdk_keymap_map_virtual_modifiers:
  * @keymap: a #GdkKeymap
  * @state: pointer to the modifier state to map
