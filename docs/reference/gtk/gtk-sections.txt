@@ -1336,6 +1336,8 @@ gtk_entry_set_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_set_icon_drag_source
 gtk_entry_get_current_icon_drag_source
+gtk_entry_get_icon_window
+gtk_entry_get_text_window
 
 <SUBSECTION Standard>
 GTK_ENTRY
@@ -3098,6 +3100,13 @@ gtk_range_set_upper_stepper_sensitivity
 gtk_range_get_upper_stepper_sensitivity
 gtk_range_get_flippable
 gtk_range_set_flippable
+gtk_range_get_min_slider_size
+gtk_range_get_range_rect
+gtk_range_get_slider_range
+gtk_range_get_slider_size_fixed
+gtk_range_set_min_slider_size
+gtk_range_set_slider_size_fixed
+
 <SUBSECTION Standard>
 GTK_RANGE
 GTK_IS_RANGE
