@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -130,7 +130,7 @@ msgstr "Fontpunte"
 msgid "The resolution for fonts on the screen"
 msgstr "Hoe die strekking op die skerm moet bygewerk word"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 #, fuzzy
 msgid "Cursor"
 msgstr "Wyserflonker"

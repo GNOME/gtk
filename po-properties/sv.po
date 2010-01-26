@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2010-01-09 16:59+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -128,7 +128,7 @@ msgstr "Typsnittsupplösning"
 msgid "The resolution for fonts on the screen"
 msgstr "Upplösningen för typsnitt på skärmen"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 msgid "Cursor"
 msgstr "Markör"
 

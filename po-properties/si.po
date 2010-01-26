@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2008-02-12 15:03+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
@@ -126,7 +126,7 @@ msgstr "අක්‍ෂර විභේදනය"
 msgid "The resolution for fonts on the screen"
 msgstr "තිරය මත අක්‍ෂර සඳහා විභේදනය"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 #, fuzzy
 msgid "Cursor"
 msgstr "කර්සරයේ වර්‍ණය"

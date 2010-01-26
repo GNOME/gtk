@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2005-02-08 08:59+0200\n"
 "Last-Translator: Canonical Ltd <translations@canonical.com>\n"
 "Language-Team: Xhosa <xh-translate@ubuntu.com>\n"
@@ -130,7 +130,7 @@ msgstr "Iipoyinti zefonti"
 msgid "The resolution for fonts on the screen"
 msgstr "Indlela emaluhlaziywe ngayo uluhlu eskrinini"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 #, fuzzy
 msgid "Cursor"
 msgstr "Udanyazo Lwekhesa"

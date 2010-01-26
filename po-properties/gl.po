@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2009-11-02 12:39+0100\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@g11n.net>\n"
@@ -140,7 +140,7 @@ msgstr "Resolución do tipo de letra"
 msgid "The resolution for fonts on the screen"
 msgstr "A resolución para os tipos de letra na pantalla"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 msgid "Cursor"
 msgstr "Cursor"
 

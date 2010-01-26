@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -126,7 +126,7 @@ msgstr "ཡིག་གཟུགས་ཧུམ་ཆ།"
 msgid "The resolution for fonts on the screen"
 msgstr "གསལ་གཞི་གུ་ཡིག་གཟུགས་ཀྱི་ཧུམ་ཆ།"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 #, fuzzy
 msgid "Cursor"
 msgstr "འོད་རྟགས་འགུལ་བསྐྱོད།"

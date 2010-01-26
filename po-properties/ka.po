@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2008-03-19 16:31+0100\n"
 "Last-Translator: Vladimer Sichinava ვლადიმერ სიჭინავა <vsichi@gnome.org>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
@@ -126,7 +126,7 @@ msgstr "შრიფტის გარჩევადობა"
 msgid "The resolution for fonts on the screen"
 msgstr "ეკრანის შრიფტების გარჩევადობა"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 #, fuzzy
 msgid "Cursor"
 msgstr "კურსორის ციმციმი"
