@@ -715,6 +715,11 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Video");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+  image = gtk_image_new_from_icon_name ("utility-terminal", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  item = gtk_tool_button_new (image, "Terminal");
+  add_item_to_list (store, item, "Terminal");
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
   hbox = gtk_hbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_table_attach (GTK_TABLE (table), hbox,
