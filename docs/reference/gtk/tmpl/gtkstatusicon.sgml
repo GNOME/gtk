@@ -443,6 +443,15 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_status_icon_set_name ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@name: 
+
+
 <!-- ##### FUNCTION gtk_status_icon_set_visible ##### -->
 <para>
 

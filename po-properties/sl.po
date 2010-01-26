@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 13:23-0500\n"
+"POT-Creation-Date: 2010-01-25 22:42-0500\n"
 "PO-Revision-Date: 2010-01-02 09:58+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -129,7 +129,7 @@ msgstr "Ločljivost pisave"
 msgid "The resolution for fonts on the screen"
 msgstr "Ločljivost pisav na zaslonu"
 
-#: gdk/gdkwindow.c:495 gdk/gdkwindow.c:496
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
 msgid "Cursor"
 msgstr "Kazalec"
 
