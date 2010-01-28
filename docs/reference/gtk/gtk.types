@@ -104,6 +104,7 @@ gtk_misc_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_object_get_type
+gtk_offscreen_window_get_type
 gtk_old_editable_get_type
 gtk_option_menu_get_type
 gtk_orientable_get_type
