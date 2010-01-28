@@ -22,10 +22,10 @@
 #include "gtkalias.h"
 
 /**
- * SECTION:offscreen_windows
- * @short description: A toplevel container widget used to manage offscreen
+ * SECTION:gtkoffscreenwindow
+ * @short_description: A toplevel container widget used to manage offscreen
  *    rendering of child widgets.
- * @title: Offscreen windows
+ * @title: GtkOffscreenWindow
  *
  * #GtkOffscreenWindow is strictly intended to be used for obtaining
  * snapshots of widgets that are not part of a normal widget hierarchy.
@@ -45,7 +45,7 @@
  * has no parent widget.
  *
  * When contained offscreen widgets are redrawn, #GtkOffscreenWindow
- * will emit a "damage-event" signal.
+ * will emit a #GtkWidget::damage-event signal.
  */
 
 G_DEFINE_TYPE (GtkOffscreenWindow, gtk_offscreen_window, GTK_TYPE_WINDOW);
@@ -249,7 +249,7 @@ gtk_offscreen_window_init (GtkOffscreenWindow *window)
  * Return value: A pointer to a #GtkWidget
  *
  * Since: 2.20
- **/
+ */
 GtkWidget *
 gtk_offscreen_window_new (void)
 {
@@ -258,6 +258,7 @@ gtk_offscreen_window_new (void)
 
 /**
  * gtk_offscreen_window_get_pixmap:
+ * @offscreen: the #GtkOffscreenWindow contained widget.
  *
  * Retrieves a snapshot of the contained widget in the form of
  * a #GdkPixmap.  If you need to keep this around over window
@@ -266,7 +267,7 @@ gtk_offscreen_window_new (void)
  * Returns: A #GdkPixmap pointer to the offscreen pixmap, or %NULL.
  *
  * Since: 2.20
- **/
+ */
 GdkPixmap *
 gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
 {
@@ -277,6 +278,7 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
 
 /**
  * gtk_offscreen_window_get_pixbuf:
+ * @offscreen: the #GtkOffscreenWindow contained widget.
  *
  * Retrieves a snapshot of the contained widget in the form of
  * a #GdkPixbuf.  This is a new pixbuf with a reference count of 1,
@@ -286,7 +288,7 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
  * Returns: A #GdkPixbuf pointer, or %NULL.
  *
  * Since: 2.20
- **/
+ */
 GdkPixbuf *
 gtk_offscreen_window_get_pixbuf (GtkOffscreenWindow *offscreen)
 {

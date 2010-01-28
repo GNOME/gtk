@@ -150,6 +150,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkwindowgroup.xml" />
       <xi:include href="xml/gtkaboutdialog.xml" />
       <xi:include href="xml/gtkassistant.xml" />
+      <xi:include href="xml/gtkoffscreenwindow.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
