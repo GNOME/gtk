@@ -1495,6 +1495,9 @@ gtk_paned_set_position (GtkPaned *paned,
   
   g_return_if_fail (GTK_IS_PANED (paned));
 
+  if (paned->child1_size == position)
+    return;
+
   object = G_OBJECT (paned);
   
   if (position >= 0)
