@@ -2771,6 +2771,7 @@ gtk_paned_add1
 gtk_paned_add2
 gtk_paned_get_child1
 gtk_paned_get_child2
+gtk_paned_get_handle_window
 gtk_paned_get_position
 gtk_paned_get_type G_GNUC_CONST
 gtk_paned_pack1

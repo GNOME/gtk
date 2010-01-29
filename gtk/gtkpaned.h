@@ -127,6 +127,8 @@ void        gtk_paned_set_position (GtkPaned       *paned,
 GtkWidget * gtk_paned_get_child1   (GtkPaned       *paned);
 GtkWidget * gtk_paned_get_child2   (GtkPaned       *paned);
 
+GdkWindow * gtk_paned_get_handle_window (GtkPaned  *paned);
+
 #ifndef GTK_DISABLE_DEPRECATED
 /* Internal function */
 void    gtk_paned_compute_position (GtkPaned  *paned,
