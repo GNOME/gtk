@@ -24,6 +24,7 @@ gdk-pixbuf/io-jpeg.c
 gdk-pixbuf/io-pcx.c
 gdk-pixbuf/io-png.c
 gdk-pixbuf/io-pnm.c
+gdk-pixbuf/io-qtif.c
 gdk-pixbuf/io-ras.c
 gdk-pixbuf/io-tga.c
 gdk-pixbuf/io-tiff.c
@@ -234,6 +235,8 @@ gtk/gtktoggletoolbutton.c
 gtk/gtktoolbar.c
 gtk/gtktoolbutton.c
 gtk/gtktoolitem.c
+gtk/gtktoolitemgroup.c
+gtk/gtktoolpalette.c
 gtk/gtktoolshell.c
 gtk/gtktooltips.c
 gtk/gtktrayicon-x11.c
