@@ -888,6 +888,7 @@ gail_entry_insert_text (AtkEditableText *text,
     return;
 
   gtk_editable_insert_text (editable, string, length, position);
+  gtk_editable_set_position (editable, *position);
 }
 
 static void
