@@ -2230,5 +2230,26 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
   return FALSE;
 }
 
+/**
+ * gtk_paned_get_handle_window:
+ * @panede: a #GtkPaned
+ *
+ * Returns the #GdkWindow of the handle. This function is
+ * useful when handling button or motion events because it
+ * enables the callback to distinguish between the window
+ * of the paned, a child and the handle.
+ *
+ * Return value: the paned's handle window.
+ *
+ * Since: 2.20
+ **/
+GdkWindow *
+gtk_paned_get_handle_window (GtkPaned *paned)
+{
+  g_return_val_if_fail (GTK_IS_PANED (paned), NULL);
+
+  return paned->handle;
+}
+
 #define __GTK_PANED_C__
 #include "gtkaliasdef.c"
