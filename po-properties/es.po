@@ -10,14 +10,14 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
-# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
+# Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2010-01-29 21:30+0000\n"
-"PO-Revision-Date: 2010-01-30 16:16+0100\n"
+"POT-Creation-Date: 2010-01-30 15:18+0000\n"
+"PO-Revision-Date: 2010-01-30 20:03+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -5783,7 +5783,6 @@ msgid "Whether the spinner is active"
 msgstr "Indica si el icono primario es activable"
 
 #: ../gtk/gtkspinner.c:143
-#| msgid "Number of Pages"
 msgid "Number of steps"
 msgstr "Número de pasos"
 
@@ -5795,10 +5794,9 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtkspinner.c:159
-#, fuzzy
 #| msgid "Animation"
 msgid "Animation duration"
-msgstr "Animación"
+msgstr "Duración de la animación"
 
 #: ../gtk/gtkspinner.c:160
 msgid ""
@@ -6630,28 +6628,24 @@ msgstr ""
 "en modo GTK_TOOLBAR_BOTH_HORIZ"
 
 #: ../gtk/gtktoolitemgroup.c:1534
-#| msgid "A human-readable description of the status"
 msgid "The human-readable title of this item group"
 msgstr "El título leíble por humanos de este grupo de elementos"
 
 #: ../gtk/gtktoolitemgroup.c:1541
-#, fuzzy
 #| msgid "A widget to display in place of the usual frame label"
 msgid "A widget to display in place of the usual label"
-msgstr "Un widget a mostrar en lugar de la usual etiqueta del marco"
+msgstr "Un widget para mostrar en lugar de la usual etiqueta"
 
 #: ../gtk/gtktoolitemgroup.c:1547
 msgid "Collapsed"
 msgstr "Contraído"
 
 #: ../gtk/gtktoolitemgroup.c:1548
-#, fuzzy
 #| msgid "Whether the expander has been opened to reveal the child widget"
 msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Indica si el expansor ha sido abierto para revelar el widget hijo"
+msgstr "Indica si el grupo se ha colapsado y sus elementos están ocultos"
 
 #: ../gtk/gtktoolitemgroup.c:1554
-#| msgid "Ellipsize"
 msgid "ellipsize"
 msgstr "elipsis"
 
@@ -6672,12 +6666,10 @@ msgid "Relief of the group header button"
 msgstr "Mostrar botones en los encabezados de columna"
 
 #: ../gtk/gtktoolitemgroup.c:1577
-#| msgid "Header Padding"
 msgid "Header Spacing"
 msgstr "Espaciado de la cabecera"
 
 #: ../gtk/gtktoolitemgroup.c:1578
-#| msgid "Spacing around expander arrow"
 msgid "Spacing between expander arrow and caption"
 msgstr "Espaciado entre la flecha del expansor y la descripción"
 
@@ -6689,34 +6681,29 @@ msgstr ""
 "Indica si el elemento debe recibir espacio extra cuando la barra crezca"
 
 #: ../gtk/gtktoolitemgroup.c:1601
-#, fuzzy
 #| msgid "Whether the children should all be the same size"
 msgid "Whether the item should fill the available space"
-msgstr "Indica si todos los hijos deben ser del mismo tamaño"
+msgstr "Indica si el elemento debería llenar todo el espacio disponible"
 
 #: ../gtk/gtktoolitemgroup.c:1607
 msgid "New Row"
 msgstr "Fila nueva"
 
 #: ../gtk/gtktoolitemgroup.c:1608
-#, fuzzy
 #| msgid "Whether the items should be displayed with a number"
 msgid "Whether the item should start a new row"
-msgstr "Indica si los elementos deben mostrarse con un número"
+msgstr "Indica si el elemento debería iniciar una fila nueva"
 
 #: ../gtk/gtktoolitemgroup.c:1615
-#, fuzzy
 #| msgid "Position of mark on the ruler"
 msgid "Position of the item within this group"
-msgstr "Posición de la etiqueta en la regla"
+msgstr "Posición del elemento en su grupo"
 
 #: ../gtk/gtktoolpalette.c:991
-#| msgid "Size of icons in this toolbar"
 msgid "Size of icons in this tool palette"
 msgstr "Tamaño de los iconos en esta paleta de herramientas"
 
 #: ../gtk/gtktoolpalette.c:1021
-#| msgid "Style of bevel around the toolbar"
 msgid "Style of items in the tool palette"
 msgstr "Estilo de los elementos en la paleta de herramientas"
 
