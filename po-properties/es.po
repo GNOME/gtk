@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
 "POT-Creation-Date: 2010-01-30 15:18+0000\n"
-"PO-Revision-Date: 2010-01-30 20:03+0100\n"
+"PO-Revision-Date: 2010-01-31 13:30+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1415,22 +1415,22 @@ msgid "Active"
 msgstr "Activo"
 
 #: ../gtk/gtkcellrendererspinner.c:125
-#, fuzzy
 #| msgid "Whether the selected font style is shown in the label"
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Indica si estilo de tipografía seleccionado se muestra en la etiqueta"
+msgstr ""
+"Indica si el marcador incrementable está activo (ej. mostrado) en la celda"
 
 #: ../gtk/gtkcellrendererspinner.c:145
-#, fuzzy
 #| msgid "Name of the printer"
 msgid "Pulse of the spinner"
-msgstr "Nombre de la impresora"
+msgstr "Pulso del marcador incrementable"
 
 #: ../gtk/gtkcellrendererspinner.c:159
-#, fuzzy
 #| msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "El valor de GTKIconSize que especifica el tamaño del icono renderizado"
+msgstr ""
+"El valor de GTKIconSize que especifica el tamaño del marcador incrementable "
+"renderizado"
 
 #: ../gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -5777,10 +5777,9 @@ msgid "Style of bevel around the spin button"
 msgstr "Estilo de bisel alrededor del botón giratorio"
 
 #: ../gtk/gtkspinner.c:129
-#, fuzzy
 #| msgid "Whether the primary icon is activatable"
 msgid "Whether the spinner is active"
-msgstr "Indica si el icono primario es activable"
+msgstr "Indica si el marcador incrementable está activo"
 
 #: ../gtk/gtkspinner.c:143
 msgid "Number of steps"
@@ -5792,6 +5791,9 @@ msgid ""
 "will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
 "duration)."
 msgstr ""
+"El número de pasos para que el marcador incrementable complete una vuelta "
+"completa. La animación completará de forma predeterminada un ciclo completo "
+"en un segundo (consulte #GtkSpinner:cycle-duration)."
 
 #: ../gtk/gtkspinner.c:159
 #| msgid "Animation"
@@ -5802,6 +5804,8 @@ msgstr "Duración de la animación"
 msgid ""
 "The length of time in milliseconds for the spinner to complete a full loop"
 msgstr ""
+"El tiempo en milisegundos para que el marcador incrementable complete una "
+"vuelta completa"
 
 #: ../gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -6651,19 +6655,17 @@ msgstr "elipsis"
 
 #: ../gtk/gtktoolitemgroup.c:1555
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "Elipsis para las cabeceras de grupo de los elementos"
 
 #: ../gtk/gtktoolitemgroup.c:1561
-#, fuzzy
 #| msgid "Header image"
 msgid "Header Relief"
-msgstr "Imagen de la cabecera"
+msgstr "Relieve de la cabecera"
 
 #: ../gtk/gtktoolitemgroup.c:1562
-#, fuzzy
 #| msgid "Show the column header buttons"
 msgid "Relief of the group header button"
-msgstr "Mostrar botones en los encabezados de columna"
+msgstr "Relieve del botón de cabecera del grupo"
 
 #: ../gtk/gtktoolitemgroup.c:1577
 msgid "Header Spacing"
@@ -6674,11 +6676,9 @@ msgid "Spacing between expander arrow and caption"
 msgstr "Espaciado entre la flecha del expansor y la descripción"
 
 #: ../gtk/gtktoolitemgroup.c:1594
-#, fuzzy
 #| msgid "Whether the item should receive extra space when the toolbar grows"
 msgid "Whether the item should receive extra space when the group grows"
-msgstr ""
-"Indica si el elemento debe recibir espacio extra cuando la barra crezca"
+msgstr "Indica si el elemento debe recibir espacio extra cuando el grupo crece"
 
 #: ../gtk/gtktoolitemgroup.c:1601
 #| msgid "Whether the children should all be the same size"
@@ -6712,17 +6712,19 @@ msgid "Exclusive"
 msgstr "Exclusivo"
 
 #: ../gtk/gtktoolpalette.c:1038
-#, fuzzy
 #| msgid "Whether the items should be displayed with a number"
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Indica si los elementos deben mostrarse con un número"
+msgstr ""
+"Indica si el elemento del grupo deben ser el único expandido en un "
+"determinado momento"
 
 #: ../gtk/gtktoolpalette.c:1053
-#, fuzzy
 #| msgid "Whether the child should receive extra space when the parent grows"
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr "Indica si el hijo debe recibir espacio extra cuando el padre crece"
+msgstr ""
+"Indica si el elemento del grupo debe recibir espacio extra cuando la paleta "
+"crece"
 
 #: ../gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
