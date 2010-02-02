@@ -358,6 +358,8 @@ static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
 static int shortcut_find_position (GtkFileChooserDefault *impl,
 				   GFile                 *file);
+static void switch_to_shortcut (GtkFileChooserDefault *impl,
+                                int                    pos);
 
 static void bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl);
 
@@ -398,6 +400,8 @@ static void location_switch_to_path_bar (GtkFileChooserDefault *impl);
 
 static void stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
                                                gboolean remove_from_treeview);
+static void stop_operation (GtkFileChooserDefault *impl,
+                            OperationMode          mode);
 static void     search_stop_searching        (GtkFileChooserDefault *impl,
                                               gboolean               remove_query);
 static void     search_clear_model           (GtkFileChooserDefault *impl, 
@@ -1310,17 +1314,14 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 }
 
 static void 
-shortcuts_find_folder (GtkFileChooserDefault *impl,
-		       GFile                 *folder)
+shortcuts_find_pos (GtkFileChooserDefault *impl,
+		    int                    pos)
 {
   GtkTreeSelection *selection;
-  int pos;
   GtkTreePath *path;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
 
-  g_assert (folder != NULL);
-  pos = shortcut_find_position (impl, folder);
   if (pos == -1)
     {
       gtk_tree_selection_unselect_all (selection);
@@ -1330,6 +1331,17 @@ shortcuts_find_folder (GtkFileChooserDefault *impl,
   path = gtk_tree_path_new_from_indices (pos, -1);
   gtk_tree_selection_select_path (selection, path);
   gtk_tree_path_free (path);
+}
+
+static void 
+shortcuts_find_folder (GtkFileChooserDefault *impl,
+		       GFile                 *folder)
+{
+  int pos;
+  g_assert (folder != NULL);
+  pos = shortcut_find_position (impl, folder);
+
+  shortcuts_find_pos (impl, pos);
 }
 
 /* If a shortcut corresponds to the current folder, selects it */
@@ -5359,6 +5371,10 @@ set_root_uri (GtkFileChooserDefault *impl,
 
   if (g_strcmp0 (root_uri, impl->root_uri))
     {
+      GtkTreeIter iter;
+      GFile *list_selected = NULL;
+      ShortcutType shortcut_type = -1;
+
       g_free (impl->root_uri);
       impl->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
 
@@ -5367,6 +5383,26 @@ set_root_uri (GtkFileChooserDefault *impl,
           _gtk_file_chooser_entry_set_root_uri (
             GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
             impl->root_uri);
+        }
+
+      /* Attempt to preserve the sidebar selection if possible. */
+      if (shortcuts_get_selected (impl, &iter))
+        {
+          gpointer col_data = NULL;
+
+          gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model),
+                              &iter,
+                              SHORTCUTS_COL_DATA, &col_data,
+                              SHORTCUTS_COL_TYPE, &shortcut_type,
+                              -1);
+
+          if (col_data != NULL)
+            {
+              if (shortcut_type == SHORTCUT_TYPE_FILE)
+                list_selected = g_object_ref (col_data);
+              else if (shortcut_type == SHORTCUT_TYPE_VOLUME)
+                list_selected = col_data;
+            }
         }
 
       if (impl->shortcuts_model && impl->file_system)
@@ -5386,6 +5422,39 @@ set_root_uri (GtkFileChooserDefault *impl,
            */
           gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
                                                    impl->root_uri);
+        }
+
+      if (shortcut_type != -1)
+        {
+          if (list_selected != NULL)
+            {
+              shortcuts_find_folder (impl, list_selected);
+
+              if (shortcut_type == SHORTCUT_TYPE_FILE)
+                g_object_unref (list_selected);
+            }
+          else
+            {
+              int pos = -1;
+
+              /*
+               * Switch the operation mode to browse, a good default.
+               * We'll go back to Search or Recent if that's what was
+               * selected. The advantage is that we'll reload the results
+               * as well.
+               */
+              stop_operation (impl, impl->operation_mode);
+
+              impl->operation_mode = OPERATION_MODE_BROWSE;
+
+              if (shortcut_type == SHORTCUT_TYPE_SEARCH)
+                pos = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
+              else if (shortcut_type == SHORTCUT_TYPE_RECENT)
+                pos = shortcuts_get_index (impl, SHORTCUTS_RECENT);
+
+              if (pos != -1)
+                shortcuts_find_pos (impl, pos);
+            }
         }
     }
 }
@@ -9439,7 +9508,19 @@ recent_idle_load (gpointer data)
   /* first iteration: load all the items */
   if (!load_data->items)
     {
-      load_data->items = gtk_recent_manager_get_items (impl->recent_manager);
+      for (walk = gtk_recent_manager_get_items (impl->recent_manager);
+           walk != NULL;
+           walk = walk->next)
+        {
+          GtkRecentInfo *info = walk->data;
+
+          if (is_uri_in_root (impl, gtk_recent_info_get_uri (info)))
+            {
+              // We'll sort this later, so prepend for efficiency.
+              load_data->items = g_list_prepend(load_data->items, info);
+            }
+        }
+
       if (!load_data->items)
         return FALSE;
 
