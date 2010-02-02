@@ -1747,25 +1747,37 @@ shortcuts_insert_file (GtkFileChooserDefault *impl,
 static void
 shortcuts_append_search (GtkFileChooserDefault *impl)
 {
-  GdkPixbuf *pixbuf;
-  GtkTreeIter iter;
+  gboolean old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
+  int start_row = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
 
-  pixbuf = render_search_icon (impl);
+  if (impl->has_search)
+      shortcuts_remove_rows (impl, start_row, 1);
 
-  gtk_list_store_append (impl->shortcuts_model, &iter);
-  gtk_list_store_set (impl->shortcuts_model, &iter,
-		      SHORTCUTS_COL_PIXBUF, pixbuf,
-		      SHORTCUTS_COL_PIXBUF_VISIBLE, TRUE,
-		      SHORTCUTS_COL_NAME, _("Search"),
-		      SHORTCUTS_COL_DATA, NULL,
-		      SHORTCUTS_COL_TYPE, SHORTCUT_TYPE_SEARCH,
-		      SHORTCUTS_COL_REMOVABLE, FALSE,
-		      -1);
+  if (impl->root_uri == NULL || g_str_has_prefix (impl->root_uri, "file:"))
+    {
+      GtkTreeIter iter;
+      GdkPixbuf *pixbuf = render_search_icon (impl);
 
-  if (pixbuf)
-    g_object_unref (pixbuf);
+      gtk_list_store_insert (impl->shortcuts_model, &iter, start_row);
+      gtk_list_store_set (impl->shortcuts_model, &iter,
+                          SHORTCUTS_COL_PIXBUF, pixbuf,
+                          SHORTCUTS_COL_PIXBUF_VISIBLE, TRUE,
+                          SHORTCUTS_COL_NAME, _("Search"),
+                          SHORTCUTS_COL_DATA, NULL,
+                          SHORTCUTS_COL_TYPE, SHORTCUT_TYPE_SEARCH,
+                          SHORTCUTS_COL_REMOVABLE, FALSE,
+                          -1);
 
-  impl->has_search = TRUE;
+      if (pixbuf)
+        g_object_unref (pixbuf);
+
+      impl->has_search = TRUE;
+    }
+  else
+    impl->has_search = FALSE;
+
+  impl->changing_folder = old_changing_folders;
 }
 
 static void
@@ -1773,10 +1785,21 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
 {
   GdkPixbuf *pixbuf;
   GtkTreeIter iter;
+  gboolean old_changing_folders = impl->changing_folder;
+  int start_row = shortcuts_get_index (impl, SHORTCUTS_RECENT);
+
+  impl->changing_folder = TRUE;
+
+  if (impl->has_recent)
+    {
+      shortcuts_remove_rows (impl,
+        shortcuts_get_index (impl, SHORTCUTS_RECENT_SEPARATOR), 1);
+      shortcuts_remove_rows (impl, start_row, 1);
+    }
 
   pixbuf = render_recent_icon (impl);
 
-  gtk_list_store_append (impl->shortcuts_model, &iter);
+  gtk_list_store_insert (impl->shortcuts_model, &iter, start_row);
   gtk_list_store_set (impl->shortcuts_model, &iter,
                       SHORTCUTS_COL_PIXBUF, pixbuf,
                       SHORTCUTS_COL_PIXBUF_VISIBLE, TRUE,
@@ -1785,11 +1808,13 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
                       SHORTCUTS_COL_TYPE, SHORTCUT_TYPE_RECENT,
                       SHORTCUTS_COL_REMOVABLE, FALSE,
                       -1);
-  
+
   if (pixbuf)
     g_object_unref (pixbuf);
 
   impl->has_recent = TRUE;
+
+  impl->changing_folder = old_changing_folders;
 }
 
 /* Appends an item for the user's home directory to the shortcuts model */
@@ -1798,12 +1823,24 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 {
   const char *home_path;
   GFile *home;
+  gboolean old_changing_folders;
+  int start_row;
 
   profile_start ("start", NULL);
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
+
+  start_row = shortcuts_get_index (impl, SHORTCUTS_HOME);
+
+  if (impl->has_home)
+    shortcuts_remove_rows (impl, start_row, 1);
 
   home_path = g_get_home_dir ();
   if (home_path == NULL)
     {
+      impl->has_home = FALSE;
+      impl->changing_folder = old_changing_folders;
       profile_end ("end - no home directory!?", NULL);
       return;
     }
@@ -1812,7 +1849,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
 
   if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), home))
     {
-      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, home,
+      shortcuts_insert_file (impl, start_row, SHORTCUT_TYPE_FILE, NULL, home,
                              NULL, FALSE, SHORTCUTS_HOME);
       impl->has_home = TRUE;
     }
@@ -1820,6 +1857,8 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
     impl->has_home = FALSE;
 
   g_object_unref (home);
+
+  impl->changing_folder = old_changing_folders;
 
   profile_end ("end", NULL);
 }
@@ -1830,8 +1869,18 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 {
   const char *name;
   GFile *file;
+  gboolean old_changing_folders;
+  int start_row;
 
   profile_start ("start", NULL);
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
+
+  start_row = shortcuts_get_index (impl, SHORTCUTS_DESKTOP);
+
+  if (impl->has_desktop)
+    shortcuts_remove_rows (impl, start_row, 1);
 
   name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
   /* "To disable a directory, point it to the homedir."
@@ -1839,6 +1888,8 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
    **/
   if (!g_strcmp0 (name, g_get_home_dir ()))
     {
+      impl->has_desktop = FALSE;
+      impl->changing_folder = old_changing_folders;
       profile_end ("end", NULL);
       return;
     }
@@ -1847,7 +1898,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
 
   if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
     {
-      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL,
+      shortcuts_insert_file (impl, start_row, SHORTCUT_TYPE_FILE, NULL,
                              file, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
       impl->has_desktop = TRUE;
     }
@@ -1859,6 +1910,8 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
    */
 
   g_object_unref (file);
+
+  impl->changing_folder = old_changing_folders;
 
   profile_end ("end", NULL);
 }
@@ -2001,34 +2054,24 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
     {
       GtkFileSystemVolume *volume;
       gboolean skip = FALSE;
+      GFile *base_file;
 
       volume = l->data;
 
-      if (impl->local_only)
-	{
-	  if (_gtk_file_system_volume_is_mounted (volume))
-	    {
-	      GFile *base_file;
+      base_file = _gtk_file_system_volume_get_root (volume);
 
-	      base_file = _gtk_file_system_volume_get_root (volume);
-              if (base_file != NULL)
-                {
-                  skip = !g_file_is_native (base_file);
-                  g_object_unref (base_file);
-                }
-	    }
-	}
-      else if (impl->root_uri != NULL)
-        {
-          GFile *base_file = _gtk_file_system_volume_get_root (volume);
+      if (impl->local_only &&
+          _gtk_file_system_volume_is_mounted (volume) &&
+          !g_file_is_native (base_file))
+        skip = TRUE;
+      else if (impl->root_uri != NULL &&
+               (base_file == NULL ||
+                !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                                    base_file)))
+        skip = TRUE;
 
-          if (base_file != NULL)
-            {
-              skip = !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
-                                                         base_file);
-              g_object_unref (base_file);
-            }
-        }
+      if (base_file != NULL)
+        g_object_unref (base_file);
 
       if (skip)
         continue;
@@ -2276,39 +2319,45 @@ shortcuts_pane_filter_cb (GtkTreeModel *model,
 static void
 shortcuts_model_create (GtkFileChooserDefault *impl)
 {
-  /* Keep this order in sync with the SHORCUTS_COL_* enum values */
-  impl->shortcuts_model = gtk_list_store_new (SHORTCUTS_COL_NUM_COLUMNS,
-					      GDK_TYPE_PIXBUF,	/* pixbuf */
-					      G_TYPE_STRING,	/* name */
-					      G_TYPE_POINTER,	/* path or volume */
-					      G_TYPE_INT,       /* ShortcutType */
-					      G_TYPE_BOOLEAN,   /* removable */
-					      G_TYPE_BOOLEAN,   /* pixbuf cell visibility */
-					      G_TYPE_POINTER);  /* GCancellable */
+  if (impl->shortcuts_model == NULL)
+    {
+      /* Keep this order in sync with the SHORCUTS_COL_* enum values */
+      impl->shortcuts_model = gtk_list_store_new (SHORTCUTS_COL_NUM_COLUMNS,
+                              GDK_TYPE_PIXBUF,	/* pixbuf */
+                              G_TYPE_STRING,	/* name */
+                              G_TYPE_POINTER,	/* path or volume */
+                              G_TYPE_INT,       /* ShortcutType */
+                              G_TYPE_BOOLEAN,   /* removable */
+                              G_TYPE_BOOLEAN,   /* pixbuf cell visibility */
+                              G_TYPE_POINTER);  /* GCancellable */
+    }
 
   shortcuts_append_search (impl);
 
   if (impl->recent_manager)
-	{
-	  shortcuts_append_recent (impl);
-	  shortcuts_insert_separator (impl, SHORTCUTS_RECENT_SEPARATOR);
-	}
+    {
+      shortcuts_append_recent (impl);
+      shortcuts_insert_separator (impl, SHORTCUTS_RECENT_SEPARATOR);
+    }
 
   if (impl->file_system)
-	{
-	  shortcuts_append_home (impl);
-	  shortcuts_append_desktop (impl);
+    {
+      shortcuts_append_home (impl);
+      shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
-	}
+    }
 
-  impl->shortcuts_pane_filter_model = shortcuts_pane_model_filter_new (impl,
-							               GTK_TREE_MODEL (impl->shortcuts_model),
-								       NULL);
+  if (impl->shortcuts_pane_filter_model == NULL)
+    {
+      impl->shortcuts_pane_filter_model = shortcuts_pane_model_filter_new (impl,
+                                               GTK_TREE_MODEL (impl->shortcuts_model),
+                                               NULL);
 
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model),
-					  shortcuts_pane_filter_cb,
-					  impl,
-					  NULL);
+      gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model),
+                          shortcuts_pane_filter_cb,
+                          impl,
+                          NULL);
+  }
 }
 
 /* Callback used when the "New Folder" button is clicked */
@@ -5275,7 +5324,7 @@ set_local_only (GtkFileChooserDefault *impl,
 
       if (impl->shortcuts_model && impl->file_system)
 	{
-	  shortcuts_add_volumes (impl);
+	  shortcuts_model_create (impl);
 	  shortcuts_add_bookmarks (impl);
 	}
 
@@ -5323,7 +5372,7 @@ set_root_uri (GtkFileChooserDefault *impl,
       if (impl->shortcuts_model && impl->file_system)
         {
           /* Update all the sidebar entries to filter the root URI. */
-          shortcuts_add_volumes (impl);
+          shortcuts_model_create (impl);
           shortcuts_add_bookmarks (impl);
         }
 
