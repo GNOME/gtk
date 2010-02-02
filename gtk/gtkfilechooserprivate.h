@@ -297,7 +297,6 @@ struct _GtkFileChooserDefault
 
   /* Flags */
 
-  guint local_only : 1;
   guint preview_widget_active : 1;
   guint use_preview_label : 1;
   guint select_multiple : 1;

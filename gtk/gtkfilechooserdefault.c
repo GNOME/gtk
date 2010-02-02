@@ -705,8 +705,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-  impl->local_only = TRUE;
-  impl->root_uri = NULL;
+  impl->root_uri = g_strdup ("file://");
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
@@ -1936,11 +1935,14 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
   int start_row;
   int num_inserted;
   gchar *label;
+  gboolean local_only;
 
   profile_start ("start", NULL);
 
   start_row = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR) + 1;
   num_inserted = 0;
+
+  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
 
   for (; bookmarks; bookmarks = bookmarks->next)
     {
@@ -1948,8 +1950,8 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
 
       file = bookmarks->data;
 
-      if (impl->local_only && !g_file_is_native (file))
-	continue;
+      if (local_only && !g_file_is_native (file))
+        continue;
 
       if (!_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
         continue;
@@ -2048,6 +2050,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   GSList *list, *l;
   int n;
   gboolean old_changing_folders;
+  gboolean local_only;
 
   profile_start ("start", NULL);
 
@@ -2059,6 +2062,8 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   impl->num_volumes = 0;
 
   list = _gtk_file_system_list_volumes (impl->file_system);
+
+  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
 
   n = 0;
 
@@ -2072,7 +2077,8 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
       base_file = _gtk_file_system_volume_get_root (volume);
 
-      if (impl->local_only &&
+      if (local_only &&
+          base_file != NULL &&
           _gtk_file_system_volume_is_mounted (volume) &&
           !g_file_is_native (base_file))
         skip = TRUE;
@@ -4884,7 +4890,9 @@ save_widgets_create (GtkFileChooserDefault *impl)
   impl->location_entry = _gtk_file_chooser_entry_new (TRUE);
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
 					   impl->file_system);
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
+  _gtk_file_chooser_entry_set_local_only (
+     GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+     gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)));
   _gtk_file_chooser_entry_set_root_uri (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->root_uri);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
@@ -5324,45 +5332,6 @@ set_extra_widget (GtkFileChooserDefault *impl,
 }
 
 static void
-set_local_only (GtkFileChooserDefault *impl,
-		gboolean               local_only)
-{
-  if (local_only != impl->local_only)
-    {
-      impl->local_only = local_only;
-
-      if (impl->location_entry)
-	_gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), local_only);
-
-      if (impl->shortcuts_model && impl->file_system)
-	{
-	  shortcuts_model_create (impl);
-	  shortcuts_add_bookmarks (impl);
-	}
-
-      if (local_only && impl->current_folder &&
-           !g_file_is_native (impl->current_folder))
-	{
-	  /* If we are pointing to a non-local folder, make an effort to change
-	   * back to a local folder, but it's really up to the app to not cause
-	   * such a situation, so we ignore errors.
-	   */
-	  const gchar *home = g_get_home_dir ();
-	  GFile *home_file;
-
-	  if (home == NULL)
-	    return;
-
-	  home_file = g_file_new_for_path (home);
-
-	  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL);
-
-	  g_object_unref (home_file);
-	}
-    }
-}
-
-static void
 set_root_uri (GtkFileChooserDefault *impl,
               const gchar           *root_uri)
 {
@@ -5374,15 +5343,21 @@ set_root_uri (GtkFileChooserDefault *impl,
       GtkTreeIter iter;
       GFile *list_selected = NULL;
       ShortcutType shortcut_type = -1;
+      gboolean local_only;
 
       g_free (impl->root_uri);
       impl->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
+
+      local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
 
       if (impl->location_entry)
         {
           _gtk_file_chooser_entry_set_root_uri (
             GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
             impl->root_uri);
+          _gtk_file_chooser_entry_set_local_only (
+            GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+            local_only);
         }
 
       /* Attempt to preserve the sidebar selection if possible. */
@@ -5412,16 +5387,53 @@ set_root_uri (GtkFileChooserDefault *impl,
           shortcuts_add_bookmarks (impl);
         }
 
-      if (impl->current_folder &&
-          _gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
-                                             impl->current_folder))
+      if (impl->current_folder != NULL)
         {
-          /*
-           * If we are pointing to a folder outside of the root URI, set the
-           * folder to the root URI.
-           */
-          gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
-                                                   impl->root_uri);
+          if (local_only && !g_file_is_native (impl->current_folder))
+            {
+              /* If we are pointing to a non-local folder, make an effort to
+               * change back to a local folder, but it's really up to the app
+               * to not cause such a situation, so we ignore errors.
+               */
+              const gchar *home = g_get_home_dir ();
+              GFile *home_file;
+
+              if (home != NULL)
+                {
+                  home_file = g_file_new_for_path (home);
+                  gtk_file_chooser_set_current_folder_file (
+                    GTK_FILE_CHOOSER (impl),
+                    home_file, NULL);
+
+                  g_object_unref (home_file);
+                }
+            }
+          else if (impl->root_uri != NULL &&
+                   !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                                       impl->current_folder))
+            {
+              /*
+               * If we are pointing to a folder outside of the root URI,
+               * set the folder to the root URI.
+               */
+
+              /*
+               * Clear the list first, in case we can't load this path.
+               * We don't want to show files they shouldn't be able to access.
+               */
+              if (impl->operation_mode == OPERATION_MODE_BROWSE)
+                stop_operation (impl, impl->operation_mode);
+
+              gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
+                                                       impl->root_uri);
+            }
+          else
+            {
+              /* Re-set the current folder so we'll display it properly. */
+              gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl),
+                                                        impl->current_folder,
+                                                        NULL);
+            }
         }
 
       if (shortcut_type != -1)
@@ -5637,7 +5649,7 @@ gtk_file_chooser_default_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      set_local_only (impl, g_value_get_boolean (value));
+      set_root_uri (impl, g_value_get_boolean (value) ? "file://" : NULL);
       break;
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
@@ -5732,7 +5744,9 @@ gtk_file_chooser_default_get_property (GObject    *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      g_value_set_boolean (value, impl->local_only);
+      g_value_set_boolean (value,
+                           impl->root_uri != NULL &&
+                           g_str_has_prefix (impl->root_uri, "file://"));
       break;
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
@@ -7396,7 +7410,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
       break;
     }
 
-  if (impl->local_only && !g_file_is_native (file))
+  if (gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)) &&
+      !g_file_is_native (file))
     {
       g_set_error_literal (error,
                            GTK_FILE_CHOOSER_ERROR,
