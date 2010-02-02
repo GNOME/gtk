@@ -156,6 +156,7 @@ a #GtkBindingEntry.
 @signals: 	action signals of this entry
 
 <!-- ##### STRUCT GtkBindingSignal ##### -->
+<anchor id="keybinding-signals"/>
 <para>
 A #GtkBindingSignal stores the necessary information to activate a widget
 in response to a key press via a signal emission.
