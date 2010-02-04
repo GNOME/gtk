@@ -1063,11 +1063,13 @@ gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 /* Widget styles.
  */
-gboolean    gtk_widget_has_rc_style       (GtkWidget           *widget);
-void	   gtk_widget_set_style		(GtkWidget	*widget,
-					 GtkStyle	*style);
-void	   gtk_widget_ensure_style	(GtkWidget	*widget);
-GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
+void        gtk_widget_style_attach       (GtkWidget            *style);
+
+gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
+void	    gtk_widget_set_style          (GtkWidget            *widget,
+                                           GtkStyle             *style);
+void        gtk_widget_ensure_style       (GtkWidget            *widget);
+GtkStyle *  gtk_widget_get_style          (GtkWidget            *widget);
 
 void        gtk_widget_modify_style       (GtkWidget            *widget,
 					   GtkRcStyle           *style);
