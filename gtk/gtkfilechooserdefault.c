@@ -358,6 +358,8 @@ static int shortcuts_get_index (GtkFileChooserDefault *impl,
 				ShortcutsIndex         where);
 static int shortcut_find_position (GtkFileChooserDefault *impl,
 				   GFile                 *file);
+static int shortcuts_get_pos_for_shortcut_folder (GtkFileChooserDefault *impl,
+                                                  int                    pos);
 static void switch_to_shortcut (GtkFileChooserDefault *impl,
                                 int                    pos);
 
@@ -2236,6 +2238,46 @@ shortcuts_add_bookmarks (GtkFileChooserDefault *impl)
       g_object_unref (combo_selected);
     }
   
+  impl->changing_folder = old_changing_folders;
+
+  profile_end ("end", NULL);
+}
+
+/* Update the list of custom shortcut folders. */
+static void
+shortcuts_add_custom_folders (GtkFileChooserDefault *impl)
+{
+  gboolean old_changing_folders;
+  GSList *l;
+
+  profile_start ("start", NULL);
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
+
+  if (impl->num_shortcuts > 0)
+    {
+      shortcuts_remove_rows (impl,
+                             shortcuts_get_index (impl, SHORTCUTS_SHORTCUTS),
+                             impl->num_shortcuts);
+    }
+
+  impl->num_shortcuts = 0;
+
+  for (l = impl->shortcuts; l != NULL; l = l->next)
+    {
+      GFile *file = (GFile *)l->data;
+
+      if (impl->root_uri != NULL &&
+          _gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
+        {
+          int pos = shortcuts_get_pos_for_shortcut_folder (impl,
+                                                           impl->num_shortcuts);
+          shortcuts_insert_file (impl, pos, SHORTCUT_TYPE_FILE, NULL,
+                                 file, NULL, FALSE, SHORTCUTS_SHORTCUTS);
+        }
+    }
+
   impl->changing_folder = old_changing_folders;
 
   profile_end ("end", NULL);
@@ -5385,6 +5427,7 @@ set_root_uri (GtkFileChooserDefault *impl,
           /* Update all the sidebar entries to filter the root URI. */
           shortcuts_model_create (impl);
           shortcuts_add_bookmarks (impl);
+          shortcuts_add_custom_folders (impl);
         }
 
       if (impl->current_folder != NULL)
@@ -5856,6 +5899,13 @@ gtk_file_chooser_default_dispose (GObject *object)
         }
       g_slist_free (impl->loading_shortcuts);
       impl->loading_shortcuts = NULL;
+    }
+
+  if (impl->shortcuts)
+    {
+      g_slist_foreach (impl->shortcuts, (GFunc)g_object_unref, NULL);
+      g_slist_free (impl->shortcuts);
+      impl->shortcuts = NULL;
     }
 
   if (impl->file_list_drag_data_received_cancellable)
@@ -7981,7 +8031,15 @@ add_shortcut_get_info_cb (GCancellable *cancellable,
 
   pos = shortcuts_get_pos_for_shortcut_folder (data->impl, data->impl->num_shortcuts);
 
-  shortcuts_insert_file (data->impl, pos, SHORTCUT_TYPE_FILE, NULL, data->file, NULL, FALSE, SHORTCUTS_SHORTCUTS);
+  g_object_ref (data->file);
+  data->impl->shortcuts = g_slist_append (data->impl->shortcuts, data->file);
+
+  if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (data->impl),
+                                         data->file))
+    {
+      shortcuts_insert_file (data->impl, pos, SHORTCUT_TYPE_FILE, NULL,
+                             data->file, NULL, FALSE, SHORTCUTS_SHORTCUTS);
+    }
 
 out:
   g_object_unref (data->impl);
@@ -8110,11 +8168,23 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser  *chooser,
 	{
 	  shortcuts_remove_rows (impl, pos + i, 1);
 	  impl->num_shortcuts--;
-	  return TRUE;
+	  break;
 	}
 
       if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
 	g_assert_not_reached ();
+    }
+
+  for (l = impl->shortcuts; l != NULL; l = l->next)
+    {
+      GFile *shortcut = (GFile *)l->data;
+
+      if (g_file_equal (shortcut, file))
+        {
+          g_object_unref (shortcut);
+          impl->shortcuts = g_slist_remove_link (impl->shortcuts, l);
+          return TRUE;
+        }
     }
 
  out:
@@ -8135,44 +8205,8 @@ static GSList *
 gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  int pos;
-  GtkTreeIter iter;
-  int i;
-  GSList *list;
 
-  if (impl->num_shortcuts == 0)
-    return NULL;
-
-  pos = shortcuts_get_pos_for_shortcut_folder (impl, 0);
-  if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
-    g_assert_not_reached ();
-
-  list = NULL;
-
-  for (i = 0; i < impl->num_shortcuts; i++)
-    {
-      gpointer col_data;
-      ShortcutType shortcut_type;
-      GFile *shortcut;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
-			  SHORTCUTS_COL_DATA, &col_data,
-			  SHORTCUTS_COL_TYPE, &shortcut_type,
-			  -1);
-      g_assert (col_data != NULL);
-      g_assert (shortcut_type == SHORTCUT_TYPE_FILE);
-
-      shortcut = col_data;
-      list = g_slist_prepend (list, g_object_ref (shortcut));
-
-      if (i != impl->num_shortcuts - 1)
-	{
-	  if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-	    g_assert_not_reached ();
-	}
-    }
-
-  return g_slist_reverse (list);
+  return impl->shortcuts;
 }
 
 /* Guesses a size based upon font sizes */
@@ -9528,8 +9562,9 @@ recent_idle_load (gpointer data)
            walk = walk->next)
         {
           GtkRecentInfo *info = walk->data;
+          const char *uri = gtk_recent_info_get_uri (info);
 
-          if (is_uri_in_root (impl, gtk_recent_info_get_uri (info)))
+          if (_gtk_file_chooser_is_uri_in_root (GTK_FILE_CHOOSER (impl), uri))
             {
               // We'll sort this later, so prepend for efficiency.
               load_data->items = g_list_prepend(load_data->items, info);

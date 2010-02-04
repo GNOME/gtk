@@ -241,6 +241,7 @@ struct _GtkFileChooserDefault
 
   /* Handles */
   GSList *loading_shortcuts;
+  GSList *shortcuts;
   GSList *reload_icon_cancellables;
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
