@@ -6309,6 +6309,32 @@ gtk_widget_get_parent (GtkWidget *widget)
  *****************************************/
 
 /**
+ * gtk_widget_style_attach:
+ * @widget: a #GtkWidget
+ *
+ * This function attaches the widget's #GtkStyle to the widget's
+ * #GdkWindow. It is a replacement for
+ *
+ * <programlisting>
+ * widget->style = gtk_style_attach (widget->style, widget->window);
+ * </programlisting>
+ *
+ * and should only ever be called in a derived widget's "realize"
+ * implementation which does not chain up to its parent class'
+ * "realize" implementation, because one of the parent classes
+ * (finally #GtkWidget) would attach the style itself.
+ *
+ * Since: 2.20
+ **/
+void
+gtk_widget_style_attach (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  widget->style = gtk_style_attach (widget->style, widget->window);
+}
+
+/**
  * gtk_widget_has_rc_style:
  * @widget: a #GtkWidget
  *
