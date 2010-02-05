@@ -280,10 +280,10 @@ gdk_display_open (const gchar *display_name)
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
 
-  if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &ignore, &ignore))
+  if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &display_x11->shape_event_base, &ignore))
     {
       display_x11->have_shapes = TRUE;
-#ifdef ShapeInput	      
+#ifdef ShapeInput
       if (XShapeQueryVersion (GDK_DISPLAY_XDISPLAY (display), &maj, &min))
 	display_x11->have_input_shapes = (maj == 1 && min >= 1);
 #endif

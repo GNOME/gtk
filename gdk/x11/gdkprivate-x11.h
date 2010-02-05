@@ -138,6 +138,10 @@ void     _gdk_x11_window_queue_translation (GdkWindow *window,
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 
+GdkRegion* _xwindow_get_shape              (Display *xdisplay,
+                                            Window window,
+                                            gint shape_type);
+
 void     _gdk_region_get_xrectangles       (const GdkRegion      *region,
                                             gint                  x_offset,
                                             gint                  y_offset,

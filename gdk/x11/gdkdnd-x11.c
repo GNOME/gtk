@@ -27,6 +27,8 @@
 #include "config.h"
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <X11/extensions/shape.h>
+
 #include <string.h>
 
 #include "gdk.h"          /* For gdk_flush() */
@@ -53,6 +55,9 @@ typedef struct {
   guint32 xid;
   gint x, y, width, height;
   gboolean mapped;
+  gboolean shape_selected;
+  gboolean shape_valid;
+  GdkRegion *shape;
 } GdkCacheChild;
 
 typedef struct {
@@ -309,6 +314,23 @@ precache_target_list (GdkDragContext *context)
 /* Utility functions */
 
 static void
+free_cache_child (GdkCacheChild *child,
+                  GdkDisplay    *display)
+{
+  if (child->shape)
+    gdk_region_destroy (child->shape);
+
+  if (child->shape_selected && display)
+    {
+      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+      XShapeSelectInput (display_x11->xdisplay, child->xid, 0);
+    }
+
+  g_free (child);
+}
+
+static void
 gdk_window_cache_add (GdkWindowCache *cache,
 		      guint32 xid,
 		      gint x, gint y, gint width, gint height, 
@@ -322,10 +344,48 @@ gdk_window_cache_add (GdkWindowCache *cache,
   child->width = width;
   child->height = height;
   child->mapped = mapped;
+  child->shape_selected = FALSE;
+  child->shape_valid = FALSE;
+  child->shape = NULL;
 
   cache->children = g_list_prepend (cache->children, child);
   g_hash_table_insert (cache->child_hash, GUINT_TO_POINTER (xid), 
 		       cache->children);
+}
+
+static GdkFilterReturn
+gdk_window_cache_shape_filter (GdkXEvent *xev,
+                               GdkEvent  *event,
+                               gpointer   data)
+{
+  XEvent *xevent = (XEvent *)xev;
+  GdkWindowCache *cache = data;
+
+  GdkDisplayX11 *display = GDK_DISPLAY_X11 (gdk_screen_get_display (cache->screen));
+
+  if (display->have_shapes &&
+      xevent->type == display->shape_event_base + ShapeNotify)
+    {
+      XShapeEvent *xse = (XShapeEvent*)xevent;
+      GList *node;
+
+      node = g_hash_table_lookup (cache->child_hash,
+                                  GUINT_TO_POINTER (xse->window));
+      if (node)
+        {
+          GdkCacheChild *child = node->data;
+          child->shape_valid = FALSE;
+          if (child->shape)
+            {
+              gdk_region_destroy (child->shape);
+              child->shape = NULL;
+            }
+        }
+
+      return GDK_FILTER_REMOVE;
+    }
+
+  return GDK_FILTER_CONTINUE;
 }
 
 static GdkFilterReturn
@@ -403,10 +463,13 @@ gdk_window_cache_filter (GdkXEvent *xev,
 				    GUINT_TO_POINTER (xdwe->window));
 	if (node) 
 	  {
+	    GdkCacheChild *child = node->data;
+
 	    g_hash_table_remove (cache->child_hash,
 				 GUINT_TO_POINTER (xdwe->window));
 	    cache->children = g_list_remove_link (cache->children, node);
-	    g_free (node->data);
+	    /* window is destroyed, no need to disable ShapeNotify */
+	    free_cache_child (child, NULL);
 	    g_list_free_1 (node);
 	  }
 	break;
@@ -434,7 +497,7 @@ gdk_window_cache_filter (GdkXEvent *xev,
 
 	node = g_hash_table_lookup (cache->child_hash, 
 				    GUINT_TO_POINTER (xume->window));
-	if (node) 
+	if (node)
 	  {
 	    GdkCacheChild *child = node->data;
 	    child->mapped = FALSE;
@@ -486,6 +549,7 @@ gdk_window_cache_new (GdkScreen *screen)
   XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
+  gdk_window_add_filter (NULL, gdk_window_cache_shape_filter, result);
 
   if (!_gdk_x11_get_window_child_info (gdk_screen_get_display (screen),
 				       GDK_WINDOW_XWINDOW (root_window),
@@ -514,12 +578,55 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
 		GDK_WINDOW_XWINDOW (root_window),
 		cache->old_event_mask);
   gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
+  gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
 
-  g_list_foreach (cache->children, (GFunc)g_free, NULL);
+  g_list_foreach (cache->children, (GFunc)free_cache_child, 
+      gdk_screen_get_display (cache->screen));
   g_list_free (cache->children);
   g_hash_table_destroy (cache->child_hash);
 
   g_free (cache);
+}
+
+static gboolean
+is_pointer_within_shape (GdkDisplay    *display,
+                         GdkCacheChild *child,
+                         gint           x_pos,
+                         gint           y_pos)
+{
+  if (!child->shape_selected)
+    {
+      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+      XShapeSelectInput (display_x11->xdisplay, child->xid, ShapeNotifyMask);
+      child->shape_selected = TRUE;
+    }
+  if (!child->shape_valid)
+    {
+      GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+      GdkRegion *input_shape;
+
+      child->shape = _xwindow_get_shape (display_x11->xdisplay,
+                                         child->xid, ShapeBounding);
+#ifdef ShapeInput
+      input_shape = _xwindow_get_shape (display_x11->xdisplay,
+                                        child->xid, ShapeInput);
+      if (child->shape && input_shape)
+        {
+          gdk_region_intersect (child->shape, input_shape);
+          gdk_region_destroy (input_shape);
+        }
+      else if (input_shape)
+        {
+          child->shape = input_shape;
+        }
+#endif
+
+      child->shape_valid = TRUE;
+    }
+
+  return child->shape == NULL ||
+         gdk_region_point_in (child->shape, x_pos, y_pos);
 }
 
 static Window
@@ -594,19 +701,28 @@ get_client_window_at_coords (GdkWindowCache *cache,
       GdkCacheChild *child = tmp_list->data;
 
       if ((child->xid != ignore) && (child->mapped))
-	{
-	  if ((x_root >= child->x) && (x_root < child->x + child->width) &&
-	      (y_root >= child->y) && (y_root < child->y + child->height))
-	    {
-	      retval = get_client_window_at_coords_recurse (gdk_screen_get_display (cache->screen),
-							    child->xid, TRUE,
-							    x_root - child->x,
-							    y_root - child->y);
-	      if (!retval)
-		retval = child->xid;
-	    }
-	  
-	}
+        {
+          if ((x_root >= child->x) && (x_root < child->x + child->width) &&
+              (y_root >= child->y) && (y_root < child->y + child->height))
+            {
+              GdkDisplay *display = gdk_screen_get_display (cache->screen);
+
+              if (!is_pointer_within_shape (display, child,
+                                            x_root - child->x,
+                                            y_root - child->y))
+                {
+                  tmp_list = tmp_list->next;
+                  continue;
+                }
+
+              retval = get_client_window_at_coords_recurse (display,
+                  child->xid, TRUE,
+                  x_root - child->x,
+                  y_root - child->y);
+              if (!retval)
+                retval = child->xid;
+            }
+        }
       tmp_list = tmp_list->next;
     }
 
