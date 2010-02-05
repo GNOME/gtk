@@ -4593,10 +4593,10 @@ gdk_window_set_functions (GdkWindow    *window,
   gdk_window_set_mwm_hints (window, &hints);
 }
 
-static GdkRegion *
-xwindow_get_shape (Display *xdisplay,
-		   Window window,
-		   gint shape_type)
+GdkRegion *
+_xwindow_get_shape (Display *xdisplay,
+		    Window window,
+		    gint shape_type)
 {
   GdkRegion *shape;
   GdkRectangle *rl;
@@ -4658,7 +4658,7 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
 		     GDK_PIXMAP_XID (mask),
 		     ShapeSet);
   
-  region = xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
+  region = _xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
 			      window, ShapeBounding);
 
   XDestroyWindow (GDK_DISPLAY_XDISPLAY (display),
@@ -4672,7 +4672,7 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+    return _xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
 			      GDK_WINDOW_XID (window), ShapeBounding);
 
   return NULL;
@@ -4684,7 +4684,7 @@ _gdk_windowing_window_get_input_shape (GdkWindow *window)
 #if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    return xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+    return _xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
 			      GDK_WINDOW_XID (window),
 			      ShapeInput);
 #endif

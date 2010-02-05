@@ -147,6 +147,7 @@ struct _GdkDisplayX11
 
   guint have_shapes : 1;
   guint have_input_shapes : 1;
+  gint shape_event_base;
 
   /* Alpha mask picture format */
   XRenderPictFormat *mask_format;
