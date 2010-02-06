@@ -140,6 +140,8 @@ struct _GtkFileChooserButtonPrivate
   GtkFileSystem *fs;
   GFile *old_file;
 
+  GSList *shortcuts;
+
   gulong combo_box_changed_id;
   gulong dialog_file_activated_id;
   gulong dialog_folder_changed_id;
@@ -439,6 +441,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   priv->icon_size = FALLBACK_ICON_SIZE;
   priv->focus_on_click = TRUE;
+  priv->shortcuts = NULL;
+  priv->n_shortcuts = 0;
 
   gtk_widget_push_composite_child ();
 
@@ -531,6 +535,57 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
   iface->remove_shortcut_folder = gtk_file_chooser_button_remove_shortcut_folder;
 }
 
+static void
+add_shortcut_to_list (GtkFileChooserButton *button,
+                      GFile                *shortcut)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  gint pos = model_get_type_position (button, ROW_TYPE_SHORTCUT) +
+             priv->n_shortcuts;
+  GtkTreeIter iter;
+
+  gtk_list_store_insert (GTK_LIST_STORE (priv->model), &iter, pos);
+  gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
+                      ICON_COLUMN, NULL,
+                      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+                      TYPE_COLUMN, ROW_TYPE_SHORTCUT,
+                      DATA_COLUMN, g_object_ref (shortcut),
+                      IS_FOLDER_COLUMN, FALSE,
+                      -1);
+  set_info_for_file_at_iter (button, shortcut, &iter);
+  priv->n_shortcuts++;
+}
+
+static void
+reload_shortcuts (GtkFileChooserButton *button)
+{
+  GtkFileChooser *filechooser;
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GSList *l;
+
+  model_remove_rows (button,
+                     model_get_type_position (button, ROW_TYPE_SHORTCUT),
+                     priv->n_shortcuts);
+  priv->n_shortcuts = 0;
+
+  filechooser = GTK_FILE_CHOOSER (button->priv->dialog);
+
+  for (l = priv->shortcuts; l != NULL; l = l->next)
+    {
+      GFile *shortcut = (GFile *)l->data;
+
+      if (_gtk_file_chooser_is_file_in_root (filechooser, shortcut))
+        {
+          add_shortcut_to_list (button, shortcut);
+        }
+    }
+
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+
+  update_label_and_image (button);
+  update_combo_box (button);
+}
+
 static gboolean
 gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser  *chooser,
 					     GFile           *file,
@@ -547,24 +602,16 @@ gtk_file_chooser_button_add_shortcut_folder (GtkFileChooser  *chooser,
     {
       GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
       GtkFileChooserButtonPrivate *priv = button->priv;
-      GtkTreeIter iter;
-      gint pos;
 
-      pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
-      pos += priv->n_shortcuts;
+      g_object_ref (G_OBJECT (file));
+      priv->shortcuts = g_slist_append (priv->shortcuts, file);
 
-      gtk_list_store_insert (GTK_LIST_STORE (priv->model), &iter, pos);
-      gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
-			  ICON_COLUMN, NULL,
-			  DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
-			  TYPE_COLUMN, ROW_TYPE_SHORTCUT,
-			  DATA_COLUMN, g_object_ref (file),
-			  IS_FOLDER_COLUMN, FALSE,
-			  -1);
-      set_info_for_file_at_iter (button, file, &iter);
-      priv->n_shortcuts++;
-
-      gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+      if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (priv->dialog),
+                                             file))
+        {
+          add_shortcut_to_list (button, file);
+          gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+        }
     }
 
   return retval;
@@ -590,6 +637,7 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
       GtkTreeIter iter;
       gint pos;
       gchar type;
+      GSList *l;
 
       pos = model_get_type_position (button, ROW_TYPE_SHORTCUT);
       gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
@@ -616,6 +664,18 @@ gtk_file_chooser_button_remove_shortcut_folder (GtkFileChooser  *chooser,
 	}
       while (type == ROW_TYPE_SHORTCUT &&
 	     gtk_tree_model_iter_next (priv->model, &iter));
+
+      for (l = priv->shortcuts; l != NULL; l = l->next)
+        {
+          GFile *shortcut = (GFile *)l->data;
+
+          if (g_file_equal (shortcut, file))
+            {
+              g_object_unref (G_OBJECT (shortcut));
+              priv->shortcuts = g_slist_remove_link (priv->shortcuts, l);
+              break;
+            }
+        }
     }
 
   return retval;
@@ -749,6 +809,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *filechooser = GTK_FILE_CHOOSER (priv->dialog);
 
   switch (param_id)
     {
@@ -817,8 +878,22 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
     case GTK_FILE_CHOOSER_PROP_ROOT_URI:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
+
+      if (!_gtk_file_chooser_is_file_in_root (filechooser,
+            gtk_file_chooser_get_current_folder_file (filechooser)))
+        {
+          GFile *file = g_file_new_for_uri (
+            gtk_file_chooser_get_root_uri (filechooser));
+
+          gtk_file_chooser_set_current_folder_file (filechooser, file, NULL);
+          model_update_current_folder (button, file);
+          g_object_unref (G_OBJECT (file));
+        }
+
       fs_volumes_changed_cb (priv->fs, button);
       fs_bookmarks_changed_cb (priv->fs, button);
+      reload_shortcuts (button);
+
       break;
 
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
@@ -868,6 +943,7 @@ gtk_file_chooser_button_get_property (GObject    *object,
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
     case GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS:
+    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
       g_object_get_property (G_OBJECT (priv->dialog), pspec->name, value);
       break;
 
@@ -885,6 +961,13 @@ gtk_file_chooser_button_finalize (GObject *object)
 
   if (priv->old_file)
     g_object_unref (priv->old_file);
+
+  if (priv->shortcuts)
+    {
+      g_slist_foreach (priv->shortcuts, (GFunc)g_object_unref, NULL);
+      g_slist_free (priv->shortcuts);
+      priv->shortcuts = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
@@ -1751,7 +1834,9 @@ model_add_volumes (GtkFileChooserButton *button,
   GtkListStore *store;
   gint pos;
   gboolean local_only;
+  const char *root_uri;
   GtkFileSystem *file_system;
+  GtkFileChooser *filechooser;
   GSList *l;
   
   if (!volumes)
@@ -1759,7 +1844,9 @@ model_add_volumes (GtkFileChooserButton *button,
 
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
-  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
+  filechooser = GTK_FILE_CHOOSER (button->priv->dialog);
+  local_only = gtk_file_chooser_get_local_only (filechooser);
+  root_uri = gtk_file_chooser_get_root_uri (filechooser);
   file_system = button->priv->fs;
 
   for (l = volumes; l; l = l->next)
@@ -1768,28 +1855,31 @@ model_add_volumes (GtkFileChooserButton *button,
       GtkTreeIter iter;
       GdkPixbuf *pixbuf;
       gchar *display_name;
+      GFile *base_file;
+      gboolean skip = FALSE;
 
       volume = l->data;
 
-      if (local_only)
-	{
-	  if (_gtk_file_system_volume_is_mounted (volume))
-	    {
-	      GFile *base_file;
+      base_file = _gtk_file_system_volume_get_root (volume);
 
-	      base_file = _gtk_file_system_volume_get_root (volume);
-	      if (base_file != NULL)
-                {
-                  if (!g_file_is_native (base_file))
-                    {
-                      g_object_unref (base_file);
-                      continue;
-                    }
-                  else
-                    g_object_unref (base_file);
-                }
-	    }
-	}
+      if (local_only &&
+          base_file != NULL &&
+          _gtk_file_system_volume_is_mounted (volume) &&
+          !g_file_is_native (base_file))
+        skip = TRUE;
+      else if (root_uri != NULL &&
+               (base_file == NULL ||
+                !_gtk_file_chooser_is_file_in_root (filechooser, base_file)))
+        skip = TRUE;
+
+      if (base_file != NULL)
+        g_object_unref (base_file);
+
+      if (skip)
+        {
+          _gtk_file_system_volume_unref (volume);
+          continue;
+        }
 
       pixbuf = _gtk_file_system_volume_render_icon (volume,
 						    GTK_WIDGET (button),
@@ -1826,19 +1916,24 @@ model_add_bookmarks (GtkFileChooserButton *button,
   gint pos;
   gboolean local_only;
   GSList *l;
+  GtkFileChooser *filechooser;
 
   if (!bookmarks)
     return;
 
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_BOOKMARK);
-  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
+  filechooser = GTK_FILE_CHOOSER (button->priv->dialog);
+  local_only = gtk_file_chooser_get_local_only (filechooser);
 
   for (l = bookmarks; l; l = l->next)
     {
       GFile *file;
 
       file = l->data;
+
+      if (!_gtk_file_chooser_is_file_in_root (filechooser, file))
+        continue;
 
       if (g_file_is_native (file))
 	{
@@ -2057,12 +2152,24 @@ static inline gboolean
 test_if_file_is_visible (GtkFileSystem *fs,
 			 GFile         *file,
 			 gboolean       local_only,
+			 const char    *root_uri,
 			 gboolean       is_folder)
 {
+  char *uri;
+  gboolean result;
+
   if (!file)
     return FALSE;
 
   if (local_only && !g_file_is_native (file))
+    return FALSE;
+
+  uri = g_file_get_uri (file);
+  result = (root_uri == NULL ||
+			_gtk_file_chooser_uri_has_prefix (uri, root_uri));
+  g_free (uri);
+
+  if (!result)
     return FALSE;
 
   if (!is_folder)
@@ -2081,10 +2188,12 @@ filter_model_visible_func (GtkTreeModel *model,
   gchar type;
   gpointer data;
   gboolean local_only, retval, is_folder;
+  const char *root_uri;
 
   type = ROW_TYPE_INVALID;
   data = NULL;
   local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->dialog));
+  root_uri = gtk_file_chooser_get_root_uri (GTK_FILE_CHOOSER (priv->dialog));
 
   gtk_tree_model_get (model, iter,
 		      TYPE_COLUMN, &type,
@@ -2100,7 +2209,8 @@ filter_model_visible_func (GtkTreeModel *model,
     case ROW_TYPE_SPECIAL:
     case ROW_TYPE_SHORTCUT:
     case ROW_TYPE_BOOKMARK:
-      retval = test_if_file_is_visible (priv->fs, data, local_only, is_folder);
+      retval = test_if_file_is_visible (priv->fs, data, local_only, root_uri,
+										is_folder);
       break;
     case ROW_TYPE_VOLUME:
       {
@@ -2926,3 +3036,5 @@ gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
 
 #define __GTK_FILE_CHOOSER_BUTTON_C__
 #include "gtkaliasdef.c"
+
+// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
