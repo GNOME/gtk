@@ -698,8 +698,8 @@ setup_msw_rc_style (void)
   GdkColor text_prelight;
 
   /* Prelight */
-  sys_color_to_gtk_color (XP_THEME_CLASS_TEXT,
-			  get_windows_version () == VISTA_VERSION ? COLOR_MENUTEXT : COLOR_HIGHLIGHTTEXT,
+  sys_color_to_gtk_color (get_windows_version () >= VISTA_VERSION ? XP_THEME_CLASS_MENU : XP_THEME_CLASS_TEXT,
+			  get_windows_version () >= VISTA_VERSION ? COLOR_MENUTEXT : COLOR_HIGHLIGHTTEXT,
 			  &fg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &bg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT,
