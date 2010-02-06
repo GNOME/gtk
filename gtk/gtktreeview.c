@@ -3353,6 +3353,9 @@ update_prelight (GtkTreeView *tree_view,
   GtkRBTree *tree;
   GtkRBNode *node;
 
+  if (tree_view->priv->tree == NULL)
+    return;
+
   if (x == -10000)
     {
       ensure_unprelighted (tree_view);
@@ -10618,10 +10621,9 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
       dy = tree_view->priv->dy - (int) tree_view->priv->vadjustment->value;
       if (dy)
 	{
-          if (tree_view->priv->tree)
-            update_prelight (tree_view,
-                             tree_view->priv->event_last_x,
-                             tree_view->priv->event_last_y - dy);
+          update_prelight (tree_view,
+                           tree_view->priv->event_last_x,
+                           tree_view->priv->event_last_y - dy);
 
 	  if (tree_view->priv->edited_column &&
               GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
