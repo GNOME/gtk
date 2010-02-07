@@ -94,6 +94,7 @@ typedef enum
   GTK_BUTTONBOX_CENTER
 } GtkButtonBoxStyle;
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* Curve types */
 typedef enum
 {
@@ -101,6 +102,7 @@ typedef enum
   GTK_CURVE_TYPE_SPLINE,       /* spline interpolation */
   GTK_CURVE_TYPE_FREE          /* free form curve */
 } GtkCurveType;
+#endif
 
 typedef enum
 {
