@@ -30,6 +30,8 @@
 #include "gtkprivate.h" /* To get redefinition of GTK_LOCALE_DIR on Win32 */
 #include "gtkalias.h"
 
+#define NONE_ID "gtk-im-context-none"
+
 struct _GtkIMMulticontextPrivate
 {
   GdkWindow *client_window;
@@ -242,6 +244,10 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
       g_free (multicontext->context_id);
 
       multicontext->context_id = g_strdup (get_effective_context_id (multicontext));
+
+      if (g_strcmp0 (multicontext->context_id, NONE_ID) == 0)
+        return NULL;
+
       slave = _gtk_im_module_create (multicontext->context_id);
       gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
       g_object_unref (slave);
@@ -323,8 +329,27 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
 
   if (slave)
     return gtk_im_context_filter_keypress (slave, event);
-  else
-    return FALSE;
+  else if (event->type == GDK_KEY_PRESS &&
+           (event->state & (GDK_MOD1_MASK | GDK_CONTROL_MASK)) == 0)
+    {
+      gunichar ch;
+
+      ch = gdk_keyval_to_unicode (event->keyval);
+      if (ch != 0)
+        {
+          gint len;
+          gchar buf[10];
+
+          len = g_unichar_to_utf8 (ch, buf);
+          buf[len] = '\0';
+
+          g_signal_emit_by_name (multicontext, "commit", buf);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static void
@@ -455,7 +480,7 @@ gtk_im_multicontext_commit_cb (GtkIMContext      *slave,
 			       const gchar       *str,
 			       GtkIMMulticontext *multicontext)
 {
-  g_signal_emit_by_name (multicontext, "commit", str);;
+  g_signal_emit_by_name (multicontext, "commit", str);
 }
 
 static gboolean
@@ -545,6 +570,15 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (menushell, menuitem);
 
+  menuitem = gtk_radio_menu_item_new_with_label (group, C_("input method menu", "None"));
+  if (g_strcmp0 (context->priv->context_id, NONE_ID) == 0)
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
+  g_object_set_data (G_OBJECT (menuitem), I_("gtk-context-id"), NONE_ID);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (activate_cb), context);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (menushell, menuitem);
+  group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
+  
   menuitem = gtk_separator_menu_item_new ();
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (menushell, menuitem);
