@@ -1029,7 +1029,7 @@ gtk-update-icon-cache.exe.manifest:
 	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
-	 echo '     processorArchitecture="'$(LIB_EXE_MACHINE_FLAG)'"' ; \
+	 echo '     processorArchitecture="'$(EXE_MANIFEST_ARCHITECTURE)'"' ; \
 	 echo '     name="gtk-update-icon-cache.exe"' ; \
 	 echo '     type="win32"/>' ; \
 	 echo '  <!-- Identify the application security requirements. -->' ; \
