@@ -1,3 +1,46 @@
+Overview of Changes from GTK+ 2.19.4 to 2.19.5
+==============================================
+
+* GSEAL work:
+ - Add accessors for GtkPaned members
+ - Add gtk_widget_style_attach
+ - Seal GtkTextTag
+ - Deprecate GtkCurveType
+ - More GtkWidget flags accessors
+
+* Bugs fixed:
+ 403485 Move docs from tmpl/* to the source files
+ 556263 Deprecate GtkCurve
+ 554420 Seal GtkTextTag
+ 561816 Optimize gtk_paned_set_position notifications
+ 606288 Not using GtkOptionMenu deprecated symbols in test file
+ 607061 GtkPlug socket window is sometimes incorrectly unref'd
+ 607344 GtkCalendar: crash when using tooltips via glade
+ 607885 GtkPaned::handle lack accessor
+ 608162 gtktoolbutton doesn't create right proxy menu item...
+ 608345 wrong reference on gdk_keymap_translate_keyboard_state
+ 608370 dnd drag-dest signal handlers don't get correctly disconn...
+ 608410 GOK types backwards in text entry fields
+ 608615 DnD events sent to wrong window
+ 608807 Marks on GtkScale widgets can overlap
+ 609188 gdk/directfb: compiler warning in _gdk_windowing_pointer_grab()
+ 609191 gdk/directfb: use G_DEFINE_TYPE in gdkcolor-directfb
+ 609199 gdk/directfb: use G_DEFINE_TYPE in gdkgc-directfb
+ 609201 gdk/directfb: max cursor size is artificially limited
+ 591186 GTK Menu Bar is unreadable under Windows 7
+
+* Updated translations
+ Bengali
+ Brazilian Portuguese
+ Czech
+ Estonian
+ French
+ Norwegian bokmål
+ Slovak
+ Spanish
+ Thai
+
+
 Overview of Changes from GTK+ 2.19.3 to 2.19.4
 ==============================================
 
