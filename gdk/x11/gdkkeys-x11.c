@@ -1422,7 +1422,7 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that affected the translation and
  * are thus unavailable for application use are returned in
- * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * @consumed_modifiers.  See <xref linkend="key-group-explanation"/> for an explanation of
  * groups and levels.  The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
