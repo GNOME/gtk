@@ -364,3 +364,58 @@ at the end of range widgets.
 @flippable: 
 
 
+<!-- ##### FUNCTION gtk_range_get_min_slider_size ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_range_rect ##### -->
+<para>
+
+</para>
+
+@range: 
+@range_rect: 
+
+
+<!-- ##### FUNCTION gtk_range_get_slider_range ##### -->
+<para>
+
+</para>
+
+@range: 
+@slider_start: 
+@slider_end: 
+
+
+<!-- ##### FUNCTION gtk_range_get_slider_size_fixed ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_min_slider_size ##### -->
+<para>
+
+</para>
+
+@range: 
+@min_size: 
+
+
+<!-- ##### FUNCTION gtk_range_set_slider_size_fixed ##### -->
+<para>
+
+</para>
+
+@range: 
+@size_fixed: 
+
+

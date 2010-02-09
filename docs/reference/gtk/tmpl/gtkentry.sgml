@@ -1019,3 +1019,22 @@ Specifies the side of the entry at which an icon is placed.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_entry_get_icon_window ##### -->
+<para>
+
+</para>
+
+@entry: 
+@icon_pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_get_text_window ##### -->
+<para>
+
+</para>
+
+@entry: 
+@Returns: 
+
+

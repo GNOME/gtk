@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2004-01-20 00:57+0730\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -251,19 +251,19 @@ msgstr "Set mod balut"
 msgid "Whether to wrap the license text."
 msgstr "Samada coret menembusi teks"
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Penutupan Pemecut"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Penutupan untuk monitor perubahan pemecut"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Wiget Pemecut"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Wiget akan diperhati untuk perubahan pemecut"
 
@@ -278,7 +278,7 @@ msgstr "Nama unik bagi aksi."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Label"
 
@@ -783,7 +783,7 @@ msgid "The amount of space between children"
 msgstr "Jumlah ruang di antara anak"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Seragam"
 
@@ -792,6 +792,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Samada anak patut semuanya pada saiz sama"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Kembang"
@@ -800,7 +801,7 @@ msgstr "Kembang"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Samada anak patut menerima ruang tambahan bila ibubapa membesar"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Isi"
 
@@ -831,7 +832,7 @@ msgstr ""
 "akhir bagi ibubapa"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Posisi"
 
@@ -1313,8 +1314,8 @@ msgstr "ID Stok"
 msgid "The stock ID of the stock icon to render"
 msgstr ""
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Saiz"
 
@@ -1360,7 +1361,7 @@ msgstr "Teks"
 msgid "Text on the progress bar"
 msgstr "teks untuk dipaparkan pada bar progres"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 #, fuzzy
 msgid "Pulse"
 msgstr "Langkah denyutan"
@@ -1427,6 +1428,27 @@ msgstr "Digit"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Bilangan titik perpuluhan untuk dipaparkan"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Aktif"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Samada gaya font yg dipilih dipaparkan pada label"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Nama bagi tema ikon untuk digunakan"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Saiz bagi ikon dirender"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1842,11 +1864,6 @@ msgstr "Jarak Ruang Penunjuk"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Jarak Ruang sekeliling penunjuk check atau radio"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Aktif"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2773,6 +2790,7 @@ msgid "Space to put between the label and the child"
 msgstr "Runga  untuk diletakkan diantara label dan anaknya"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Wiget label"
 
@@ -2780,11 +2798,11 @@ msgstr "Wiget label"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget untuk memaparkan pada tempat label pengembang"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Saiz Pengembang"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Saiz bagi panah pegembang"
 
@@ -3285,6 +3303,7 @@ msgid "Icon set to display"
 msgstr "Set ikon untuk dipaparkan"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Saiz ikon"
 
@@ -5856,6 +5875,33 @@ msgstr "Baca nilai semasa, atau tetapkan nilai baru"
 msgid "Style of bevel around the spin button"
 msgstr "Gaya bevel sekeliling butang pusing"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Samada aksi dihidupkan."
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Bilangan Saluran"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animasi"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Mempunyai Grip Ubahsaiz"
@@ -6538,7 +6584,7 @@ msgstr "Penunjuk Lukisan"
 msgid "If the toggle part of the button is displayed"
 msgstr "Jika bahagian toggle butang dipaparkan"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Gaya Toolbar"
 
@@ -6569,12 +6615,12 @@ msgstr "Jika butang  toggle patut ditekan atau tidak"
 msgid "Size of icons in this toolbar"
 msgstr "Saiz ikon pada toolbar default"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 #, fuzzy
 msgid "Icon size set"
 msgstr "Set saiz font"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 #, fuzzy
 msgid "Whether the icon-size property has been set"
 msgstr "Samada kumpulan aksi dihidupkan."
@@ -6583,7 +6629,7 @@ msgstr "Samada kumpulan aksi dihidupkan."
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Samada item patut menerima ruang tambahan bila toolbar membesar"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Samada item  patut semuanya pada saiz sama seperti item seragam lain"
 
@@ -6688,6 +6734,103 @@ msgid ""
 msgstr ""
 "Samada item  toolbar dianggap penting. Bila TRUE, butang toolbar memapar "
 "teks dlm mod GTK_TOOLBAR_BOTH_HORIZ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Tajuk kepada tetingkap"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "Widget untuk memaparkan label kerangka biasa"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Samada pengembang dibuka untuk menampakkan  wiget anak"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Set Angkat"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Pengepala boleh diklik"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Papar butang pengepala kolum"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Padding Kiri"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Jarak ruang sekeliling panah pengembang"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "Samada item patut menerima ruang tambahan bila toolbar membesar"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Samada anak patut semuanya pada saiz sama"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Samada item menu pengoyak patut ditambah kepada menu"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Posisi tanda pada pembaris"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Saiz ikon pada toolbar default"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Gaya bevel sekeliling toolbar"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Samada item menu pengoyak patut ditambah kepada menu"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Samada anak patut menerima ruang tambahan bila ibubapa membesar"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

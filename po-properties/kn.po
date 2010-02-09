@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-08-30 21:46+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -245,19 +245,19 @@ msgstr "ಪರವಾನಗಿಯನ್ನು ಆವೃತ್ತಗೊಳಿಸ�
 msgid "Whether to wrap the license text."
 msgstr "ಪರವಾನಗಿ ಪಠ್ಯವನ್ನು ಆವೃತಗೊಳಿಸಬೇಕೆ."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "ವೇಗವರ್ಧಕ ಮುಚ್ಚಿಗೆ(Closure)"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "ವೇಗವರ್ಧಕ ಬದಲಾವಣೆಗಳಿಗೆ ಮುಚ್ಚಿಗೆಯು ಮೇಲ್ವಿಚಾರಿತಗೊಳ್ಳಬೇಕೆ"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "ವೇಗವರ್ಧಕ ವಿಜೆಟ್"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "ವೇಗವರ್ಧಕ ಬದಲಾವಣೆಗಳಿಗಾಗಿ ವಿಜೆಟ್ ಮೇಲ್ವಿಚಾರಿತಗೊಳ್ಳಬೇಕೆ"
 
@@ -272,7 +272,7 @@ msgstr "ಕಾರ್ಯಕ್ಕೆ ಒಂದು ವಿಶಿಷ್ಟ ಹೆಸ
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "ಶೀರ್ಷಿಕೆ"
 
@@ -752,7 +752,7 @@ msgid "The amount of space between children"
 msgstr "ಚಿಲ್ಡ್ರನ್‌ ನಡುವಿನ ಜಾಗ"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "ಏಕರೂಪವಾಗಿ"
 
@@ -761,6 +761,7 @@ msgid "Whether the children should all be the same size"
 msgstr "ಎಲ್ಲಾ ಚಿಲ್ಡ್ರನ್ ಒಂದೇ ಬಗೆಯ ಗಾತ್ರವನ್ನು ಹೊಂದಿರಬೇಕೆ"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "ವಿಸ್ತೃತಗೊಳಿಸು"
@@ -769,7 +770,7 @@ msgstr "ವಿಸ್ತೃತಗೊಳಿಸು"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "ಮೂಲವು ಬೆಳೆದಾಗ ಚೈಲ್ಡ್‌ ಹೆಚ್ಚಿನ ಜಾಗವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "ತುಂಬಿಸು"
 
@@ -801,7 +802,7 @@ msgstr ""
 "GtkPackType"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "ಸ್ಥಳ"
 
@@ -1262,8 +1263,8 @@ msgstr "ಶೇಖರಣಾ ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "ರೆಂಡರ್ ಮಾಡಲು ಶೇಖರಣಾ(ಸ್ಟಾಕ್) ಚಿಹ್ನೆಯ ಶೇಖರಣಾ ID"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "ಗಾತ್ರ"
 
@@ -1306,7 +1307,7 @@ msgstr "ಪಠ್ಯ"
 msgid "Text on the progress bar"
 msgstr "ಪ್ರಗತಿ ಪಟ್ಟಿಯ ಪಠ್ಯ"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "ನಾಡಿ(ಪಲ್ಸ್)"
 
@@ -1371,6 +1372,27 @@ msgstr "ಅಂಕಿಗಳು"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "ತೋರಿಸಲು ದಶಾಂಶ ಸ್ಥಾನಗಳ ಸಂಖ್ಯೆ"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "ಸಕ್ರಿಯ"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "ಆಯ್ದ ಅಕ್ಷರಶೈಲಿಯನ್ನು ಲೇಬಲ್‌ನಲ್ಲಿ ತೋರಿಸಬೇಕೆ"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "ಮುದ್ರಕದ ಹೆಸರು"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "ರೆಂಡರ್ ಮಾಡಲಾದ ಚಿಹ್ನೆಯ ಗಾತ್ರವನ್ನು ಸೂಚಿಸುವ GtkIconSize ಮೌಲ್ಯ"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1779,11 +1801,6 @@ msgstr "ಸೂಚಕದ(Indicator) ಅಂತರ"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "ಗುರುತುಹಾಕುವ ಅಥವ ರೇಡಿಯೋ ಸೂಚಕದ ಸುತ್ತಲಿನ ಜಾಗ"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "ಸಕ್ರಿಯ"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2646,6 +2663,7 @@ msgid "Space to put between the label and the child"
 msgstr "ಲೇಬಲ್ ಹಾಗು ಚೈಲ್ಡಿನ ನಡುವಿನ ಸ್ಥಳ"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "ನಿಯಂತ್ರಣಾ ವಿಜೆಟ್‌ (ವಿಡ್ಗೆಟ್)"
 
@@ -2653,11 +2671,11 @@ msgstr "ನಿಯಂತ್ರಣಾ ವಿಜೆಟ್‌ (ವಿಡ್ಗೆಟ
 msgid "A widget to display in place of the usual expander label"
 msgstr "ಸಾಮಾನ್ಯವಾದ ವಿಸ್ತಾರಕದ ಬದಲಿಗೆ ತೋರಿಸಬೇಕಿರುವ ಒಂದು ವಿಜೆಟ್"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "ವಿಸ್ತಾರಕದ ಗಾತ್ರ"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "ವಿಸ್ತಾರಕ ಬಾಣದ ಗಾತ್ರ"
 
@@ -3143,6 +3161,7 @@ msgid "Icon set to display"
 msgstr "ಪ್ರದರ್ಶಿಸಲು ಚಿಹ್ನೆಯ ಸೆಟ್"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "ಚಿಹ್ನೆ ಗಾತ್ರ"
 
@@ -5567,6 +5586,33 @@ msgstr "ಪ್ರಸಕ್ತ ಮೌಲ್ಯವನ್ನು ಓದುತ್ತ�
 msgid "Style of bevel around the spin button"
 msgstr "ಸುತ್ತುಗುಂಡಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "ಪ್ರಾಥಮಿಕ ಚಿಹ್ನೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಬಹುದೆ"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "ಪುಟಗಳ ಸಂಖ್ಯೆ"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "ಸಜೀವನಗಳು (ಆನಿಮೇಶನ್)"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "ಗಾತ್ರಬದಲಾವಣೆ ಹಿಡಿತವನ್ನು ಹೊಂದಿದೆ"
@@ -6218,7 +6264,7 @@ msgstr "ಸೂಚಕವನ್ನು ಚಿತ್ರಿಸು"
 msgid "If the toggle part of the button is displayed"
 msgstr "ಗುಂಡಿಯ ಟಾಗಲ್ ಭಾಗವನ್ನು ತೋರಿಸಬೇಕೆ"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "ಉಪಕರಣ ಪಟ್ಟಿಕೆಯ ಶೈಲಿ"
 
@@ -6246,11 +6292,11 @@ msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಉಪಕರಣ-ಸಲಹೆಗಳು 
 msgid "Size of icons in this toolbar"
 msgstr "ಈ ಉಪಕರಣ ಪಟ್ಟಿಕೆಯಲ್ಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "ಹೊಂದಿಸಲಾದ ಚಿಹ್ನೆ ಗಾತ್ರ"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "ಚಿಹ್ನೆ-ಗಾತ್ರದ ಗುಣವನ್ನು ಹೊಂದಿಸಲಾಗಿದೆಯೆ"
 
@@ -6258,7 +6304,7 @@ msgstr "ಚಿಹ್ನೆ-ಗಾತ್ರದ ಗುಣವನ್ನು ಹೊಂ
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "ಉಪಕರಣಪಟ್ಟಿಯು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶವು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "ಅಂಶಗಳು ಏಕರೀತಿಯ ಅಂಶಗಳಂತಹ ಗಾತ್ರದ್ದೇ ಆಗಿರಬೇಕೆ"
 
@@ -6357,6 +6403,103 @@ msgid ""
 msgstr ""
 "ಉಪಕರಣಪಟ್ಟಿ ಅಂಶವನ್ನು ಪ್ರಮುಖವಾದದ್ದು ಎಂದು ಪರಿಗಣಿಸಬೇಕೆ. TRUE ಆದಲ್ಲಿ, ಉಪಕರಣಪಟ್ಟಿ "
 "ಗುಂಡಿಗಳುGTK_TOOLBAR_BOTH_HORIZ ಕ್ರಮದಲ್ಲಿ ಪಠ್ಯವನ್ನು ತೋರಿಸುತ್ತದೆ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "ಮಾನವ ಓದಬಹುದಾದ ಸ್ಥಿತಿಗತಿಯ ವಿವರಣೆ"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "ಸಾಮಾನ್ಯವಾದ ವಿಜೆಟ್‌ನ ಸ್ಥಳದಲ್ಲಿ ತೋರಿಸಬೇಕಿರುವ ಚೌಕಟ್ಟಿನ ಲೇಬಲ್"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "ಚೈಲ್ಡ್‍ ವಿಜೆಟ್‌ ಅನ್ನು ತೋರಿಸಲು ವಿಸ್ತಾರಕವನ್ನು ತೆರೆಯಲಾಗಿದೆಯೆ"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "ದೀರ್ಘವೃತ್ತ"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "ಶೀರ್ಷಿಕಾ ಚಿತ್ರ"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "ಲಂಬಸಾಲಿನ ಹೆಡರ್ ಗುಂಡಿಗಳನ್ನು ತೋರಿಸು"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "ಹೆಡರ್ ಪ್ಯಾಡಿಂಗ್"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "ವಿಸ್ತಾರಕ ಬಾಣದ ಸುತ್ತಲಿನ ಜಾಗ"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯು ಬೆಳದಂತೆಲ್ಲಾ ಅಂಶವು ಹೆಚ್ಚಿನ ಸ್ಥಳವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "ಎಲ್ಲಾ ಚಿಲ್ಡ್ರನ್ ಒಂದೇ ಬಗೆಯ ಗಾತ್ರವನ್ನು ಹೊಂದಿರಬೇಕೆ"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "ಅಂಶಗಳನ್ನು ಒಂದು ಸಂಖ್ಯೆಯೊಂದಿಗೆ ತೋರಿಸಬೇಕೆ"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "ರೂಲರಿನಲ್ಲಿನ ಗುರುತಿನ ಸ್ಥಳ"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "ಈ ಉಪಕರಣ ಪಟ್ಟಿಕೆಯಲ್ಲ್ಲಿನ ಚಿಹ್ನೆಗಳ ಗಾತ್ರ"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "ಉಪಕರಣಪಟ್ಟಿಯ ಸುತ್ತಲಿನ ಇಳಿಜಾರಿನ ಶೈಲಿ"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "ಅಂಶಗಳನ್ನು ಒಂದು ಸಂಖ್ಯೆಯೊಂದಿಗೆ ತೋರಿಸಬೇಕೆ"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "ಮೂಲವು ಬೆಳೆದಾಗ ಚೈಲ್ಡ್‌ ಹೆಚ್ಚಿನ ಜಾಗವನ್ನು ಪಡೆದುಕೊಳ್ಳಬೇಕೆ"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
