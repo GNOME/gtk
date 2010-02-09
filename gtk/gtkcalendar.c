@@ -1679,6 +1679,9 @@ gtk_calendar_get_detail (GtkCalendar *calendar,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (calendar);
   gint year, month;
 
+  if (priv->detail_func == NULL)
+    return NULL;
+
   year = calendar->year;
   month = calendar->month + calendar->day_month[row][column] - MONTH_CURRENT;
 
@@ -2494,10 +2497,7 @@ calendar_paint_day (GtkCalendar *calendar,
 
   /* Get extra information to show, if any: */
 
-  if (priv->detail_func)
-    detail = gtk_calendar_get_detail (calendar, row, col);
-  else
-    detail = NULL;
+  detail = gtk_calendar_get_detail (calendar, row, col);
 
   layout = gtk_widget_create_pango_layout (widget, buffer);
   pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
