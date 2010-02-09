@@ -34,7 +34,7 @@ When it makes sense, key values can be converted to and from
 Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
 </para>
 
-<para>
+<para id="key-group-explanation">
 One #GdkKeymap object exists for each user display. gdk_keymap_get_default() 
 returns the #GdkKeymap for the default display; to obtain keymaps for other 
 displays, use gdk_keymap_get_for_display(). A keymap
