@@ -7,9 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"+&component=general\n"
-"POT-Creation-Date: 2010-02-07 19:01+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2010-02-08 11:11+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -396,6 +395,12 @@ msgstr "ไม่รู้จักชนิดของรูปภาพ"
 #: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "ข้อมูลพิกเซลในแฟ้มเสีย"
+
+#: gdk-pixbuf/gdk-pixdata.c:432
+#, fuzzy, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "จัดสรรเนื้อที่ %d ไบต์เพื่อเป็นบัฟเฟอร์สำหรับอ่านแฟ้มไม่สำเร็จ"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1189,6 +1194,12 @@ msgstr "กำลังเริ่ม %s"
 msgid "Opening %s"
 msgstr "กำลังเปิด %s"
 
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "กำลังเปิด %d รายการ"
+
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
 msgstr "ไม่สามารถแสดงลิงก์ได้"
@@ -1241,7 +1252,7 @@ msgstr "งานศิลป์โดย"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:91
+#: gtk/gtkaccellabel.c:146
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1251,7 +1262,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:97
+#: gtk/gtkaccellabel.c:152
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1261,7 +1272,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:103
+#: gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1271,7 +1282,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:671
+#: gtk/gtkaccellabel.c:743
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1281,7 +1292,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:684
+#: gtk/gtkaccellabel.c:756
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1291,17 +1302,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:698
+#: gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:715
+#: gtk/gtkaccellabel.c:787
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: gtk/gtkaccellabel.c:718
+#: gtk/gtkaccellabel.c:790
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1353,7 +1364,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1804
+#: gtk/gtkcalendar.c:1807
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1368,7 +1379,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1835 gtk/gtkcalendar.c:2493
+#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1384,7 +1395,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1867 gtk/gtkcalendar.c:2356
+#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1400,7 +1411,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2147
+#: gtk/gtkcalendar.c:2150
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Ey"
@@ -2197,12 +2208,18 @@ msgstr "โหลดไอคอนไม่สำเร็จ"
 msgid "Simple"
 msgstr "อย่างง่าย"
 
-#: gtk/gtkimmulticontext.c:538
+#: gtk/gtkimmulticontext.c:563
 msgctxt "input method menu"
 msgid "System"
 msgstr "ระบบ"
 
-#: gtk/gtkimmulticontext.c:622
+#: gtk/gtkimmulticontext.c:573
+#, fuzzy
+msgctxt "input method menu"
+msgid "None"
+msgstr "ไม่มี"
+
+#: gtk/gtkimmulticontext.c:656
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2394,6 +2411,7 @@ msgid "Unknown Application (pid %d)"
 msgstr "โปรแกรมไม่ทราบชื่อ (pid %d)"
 
 #: gtk/gtkmountoperation.c:1064
+#, c-format
 msgid "Unable to end process"
 msgstr "ไม่สามารถจบโพรเซสได้"
 
@@ -2568,6 +2586,7 @@ msgid "Preparing %d"
 msgstr "กำลังเตรียมพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
+#, c-format
 msgid "Preparing"
 msgstr "กำลังเตรียมพิมพ์"
 
@@ -2577,18 +2596,22 @@ msgid "Printing %d"
 msgstr "กำลังพิมพ์ %d"
 
 #: gtk/gtkprintoperation.c:2905
+#, c-format
 msgid "Error creating print preview"
 msgstr "เกิดข้อผิดพลาดขณะสร้างตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation.c:2908
+#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "สาเหตุที่น่าจะเป็นไปได้มากที่สุด คือไม่สามารถสร้างแฟ้มชั่วคราวได้"
 
 #: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
+#, c-format
 msgid "Error launching preview"
 msgstr "เกิดข้อผิดพลาดขณะเรียกแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtkprintoperation-unix.c:358
+#, c-format
 msgid "Error printing"
 msgstr "เกิดข้อผิดพลาดขณะพิมพ์"
 
@@ -5398,10 +5421,6 @@ msgstr "พิมพ์ออกยังเครื่องพิมพ์ท
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ไม่สามารถเรียกข้อมูลสำหรับแฟ้ม '%s': %s"
-
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "กำลังเปิด %d รายการ"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ว่าง)"

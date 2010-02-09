@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2008-08-19 10:51+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -256,19 +256,19 @@ msgstr "Pozicioni i autorizimit"
 msgid "Whether to wrap the license text."
 msgstr "Nëse duhet ndërprerë teksti i liçencës"
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Mbyllja e Përshpejtuesit"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Mbyllja që duhet mbikqyrur për ndryshime përshpejtuesi"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Instrumenti Përshpejtuesi"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Instrumenti për t'u mbikqyrur për ndryshime përshpejtuesi"
 
@@ -283,7 +283,7 @@ msgstr "Një emër të veçantë për aksionin."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etiketa"
 
@@ -780,7 +780,7 @@ msgid "The amount of space between children"
 msgstr "Sasia e hapësirës ndërmjet bijve"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Homogjene"
 
@@ -789,6 +789,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Nëse bijtë duhet të jenë të tërë të një madhësie"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Shpalos"
@@ -798,7 +799,7 @@ msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Nëse biri duhet të marrë hapësirë shtesë kur prindi zmadhohet"
 
 # (pofilter) brackets: translation has extra '(', ')'
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Mbush"
 
@@ -833,7 +834,7 @@ msgstr ""
 "të instrumentit prind"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Pozicioni"
 
@@ -1299,8 +1300,8 @@ msgstr "Id e objektit në stock"
 msgid "The stock ID of the stock icon to render"
 msgstr "ID e rezervës së ikonës rezervë për t'u vizatuar"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Madhësia"
 
@@ -1342,7 +1343,7 @@ msgstr "Teksti"
 msgid "Text on the progress bar"
 msgstr "Teksti në shtyllën e përparimit"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Pulsimi"
 
@@ -1409,6 +1410,27 @@ msgstr "Shifrat"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Numri i vendeve dhjetore që të shfaqen"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Aktiv"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Nëse stili i zgjedhur i gërmave tregohet në etiketë"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Emri i printerit"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Vlera GtkIconSize që specifikon madhësinë e ikonës së vizatuar"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1821,11 +1843,6 @@ msgstr "Hapësira e treguesit"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Hapësira përreth treguesit kontroll ose radio"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Aktiv"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2763,6 +2780,7 @@ msgid "Space to put between the label and the child"
 msgstr "Hapësira që duhet lënë midis etiketës dhe birit"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Instrumenti etiketë"
 
@@ -2772,11 +2790,11 @@ msgstr ""
 "Një instrument që do të shfaqet në vend të etiketës së zakonshme të "
 "shpalosësit"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Madhësia e zgjeruesit"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Madhësia e shigjetës së zgjeruesit"
 
@@ -3278,6 +3296,7 @@ msgid "Icon set to display"
 msgstr "Bashkësia e ikonave që duhen shfaqur"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Madhësia e ikonës"
 
@@ -5852,6 +5871,33 @@ msgstr "Lexon vlerën e çastit, ose cakton një vlerë të re"
 msgid "Style of bevel around the spin button"
 msgstr "Stili i rilievit rreth butonit rrotullues"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Tregon nëse veprimi është aktiv."
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Numri i faqeve"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animacioni"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Afron kapje për ridimensionim"
@@ -6528,7 +6574,7 @@ msgstr "Shfaq treguesin"
 msgid "If the toggle part of the button is displayed"
 msgstr "Tregon nëse shfaqet pjesa interaktive e pulsantit"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Stili i panelit të instrumentëve"
 
@@ -6559,12 +6605,12 @@ msgstr ""
 msgid "Size of icons in this toolbar"
 msgstr "Madhësia e ikonave tek pllaka aktuale e instrumentëve"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "Madhësia e ikonës së përcaktuar"
 
 # (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "Tregon nëse pronësia «icon-size» është përcaktuar"
 
@@ -6574,7 +6620,7 @@ msgstr ""
 "Tregon nëse elementit i caktohet një hapësirë shtesë kur pllaka e "
 "instrumentëve bëhet më e madhe"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Tregon nëse ky element duhet të ketë të njëjtën madhësi sikurse elementët e "
@@ -6678,6 +6724,107 @@ msgstr ""
 "Tregon nëse elementi i pllakës së instrumentëve konsiderohet i rendësishëm. "
 "Nëse TRUE, pulsantët e pllakës së istrumentëve shfaqin tekstin në "
 "modalitetin GTK_TOOLBAR_BOTH_HORIZ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Përshkrim njerzisht i kuptueshëm i gjendjes së printimit"
+
+# (pofilter) doublequoting: checks whether doublequoting is consistent between the two strings
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr ""
+"Një \"widget\" që do të shfaqet në vend të frame të zakonshme të etiketës"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Kur zgjeruesi hapet për marrë widget bir"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Sfazimi"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Figura e kreut"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Shfaq pulsantët e titujve të kollonave"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Mbushja e kreut"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Hapësira rreth kutisë së shpalosësit"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr ""
+"Tregon nëse elementit i caktohet një hapësirë shtesë kur pllaka e "
+"instrumentëve bëhet më e madhe"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Nëse bijtë duhet të jenë të tërë të një madhësie"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Nëse elementët duhet të shfaqen me një numër"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Pozicioni i shenjës në vizore"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Madhësia e ikonave tek pllaka aktuale e instrumentëve"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Stili i bordit rreth panelit të instrumentëve"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Nëse elementët duhet të shfaqen me një numër"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Nëse biri duhet të marrë hapësirë shtesë kur prindi zmadhohet"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

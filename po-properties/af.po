@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.6-branch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2004-03-30 17:02+0200\n"
 "Last-Translator: Zuza Software Foundation <info@translate.org.za>\n"
 "Language-Team: Afrikaans <translate-discuss-af@lists.sourceforge.net>\n"
@@ -254,19 +254,19 @@ msgstr "Omvoumodusstel"
 msgid "Whether to wrap the license text."
 msgstr "Of die teks deurgehaal moet word"
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Versnellerafsluiting"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Die afsluiting wat vir versnellerveranderinge gemonitor word"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Versnellerdingesie"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Die dingesie wat vir versnellerveranderinge gemonitor moet word"
 
@@ -281,7 +281,7 @@ msgstr "n  Unieke naam vir die aksie."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etiket"
 
@@ -780,7 +780,7 @@ msgid "The amount of space between children"
 msgstr "Die hoeveelheid ruimte tussen kinders"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Homogeen"
 
@@ -789,6 +789,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Of die kinders almal dieselfde grootte moet wees"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Uitvou"
@@ -797,7 +798,7 @@ msgstr "Uitvou"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Of die kind ekstra ruimte moet kry wanneer die ouer groei"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Vul"
 
@@ -830,7 +831,7 @@ msgstr ""
 "einde van die ouer gepak moet word"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Posisie"
 
@@ -1317,8 +1318,8 @@ msgstr "Stapel-ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "Die stapel-ID van die stapelikon om weer te gee"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Grootte"
 
@@ -1363,7 +1364,7 @@ msgstr "Teks"
 msgid "Text on the progress bar"
 msgstr "Teks wat in die vorderingstaaf vertoon moet word"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 #, fuzzy
 msgid "Pulse"
 msgstr "Polsstap"
@@ -1430,6 +1431,27 @@ msgstr "Syfers"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Die getal desimale plekke om te vertoon"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Aktief"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Of die geselekteerde fontstyl op die etiket vertoon word"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Naam van ikontema om te gebruik"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Die GtkIconSize-waarde wat die grootte van die verbeelde ikon weergee"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1848,11 +1870,6 @@ msgstr "Aanduierspasiëring"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Spasiëring rondom merkie- of klinkaanduier"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Aktief"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2795,6 +2812,7 @@ msgid "Space to put between the label and the child"
 msgstr "Ruimte wat tussen die etiket en die kind moet kom"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Etiketdingesie"
 
@@ -2803,11 +2821,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "'n Dingesie wat in die plek van die gewone uitvoueretiket vertoon moet word"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Uitvouergrootte"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Grootte van die uitvouerpyltjie"
 
@@ -3311,6 +3329,7 @@ msgid "Icon set to display"
 msgstr "Ikonstel wat vertoon moet word"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Ikongrootte"
 
@@ -5927,6 +5946,33 @@ msgstr "Lees die huidige waarde of stel 'n nuwe waarde op"
 msgid "Style of bevel around the spin button"
 msgstr "Styl van skuinskant rondom die tolknoppie"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Of die aksie in werking gestel is."
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Getal kanale"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animasie"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Het herskaleergreep"
@@ -6615,7 +6661,7 @@ msgstr "Tekenaanduier"
 msgid "If the toggle part of the button is displayed"
 msgstr "Of die swikdeel van die knoppie vertoon word"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Nutsbalkstyl"
 
@@ -6646,12 +6692,12 @@ msgstr "Of die swikknoppie gedruk moet word of nie"
 msgid "Size of icons in this toolbar"
 msgstr "Grootte van  ikons in versteknutsbalke"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 #, fuzzy
 msgid "Icon size set"
 msgstr "Fontgroottestel"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 #, fuzzy
 msgid "Whether the icon-size property has been set"
 msgstr "Of die aksiegroep in werking gestel is."
@@ -6660,7 +6706,7 @@ msgstr "Of die aksiegroep in werking gestel is."
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Of die item ekstra ruimte moet kry wanneer die nutsbalk groei"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Of die item dieselfde grootte as ander eenvormige items moet wees"
 
@@ -6765,6 +6811,104 @@ msgid ""
 msgstr ""
 "Of die nutsbalkitem as belangrik beskou word. Wanneer WAAR, wys "
 "nutsbalkknoppies teks vir hierdie aksie in GTK_TOOLBAR_BOTH_HORIZ-modus"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Die titel van die venster"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr ""
+"'n Dingesie wat in die plek van die gewone raametiket vertoon moet word"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Of die uitvouer oopgemaak is om die kinddingesie te vertoon"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Stygingstel"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Koppe kliekbaar"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Vertoon die kolomkopknoppies"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Linkeropvulling"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Spasiëring rondom uitvouerpyltjie"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "Of die item ekstra ruimte moet kry wanneer die nutsbalk groei"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Of die kinders almal dieselfde grootte moet wees"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Of afskeurkieslysitems by kieslyste gevoeg moet word"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Posisie van merk op die liniaal"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Grootte van  ikons in versteknutsbalke"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Styl van skuinskant rondom die nutsbalk"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Of afskeurkieslysitems by kieslyste gevoeg moet word"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Of die kind ekstra ruimte moet kry wanneer die ouer groei"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-04-09 04:32-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -278,23 +278,23 @@ msgid "Whether to wrap the license text."
 msgstr "Litsenziya metniniñ sarılıp sarılmaycağı."
 
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Tezleştirici Qapanması"
 
 # gtk/gtkaccellabel.c:116
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Tezleştirici deñişiklikleri içün közetilecek qapanma"
 
 # tüklü
 # gtk/gtkaccellabel.c:115
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Tezleştirici Pencereçigi"
 
 # gtk/gtkaccellabel.c:116
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Tezleştirici deñişiklikleri içün közetilecek pencereçik"
 
@@ -311,7 +311,7 @@ msgstr "Amel içün emsalsiz bir isim."
 # gtk/gtkbutton.c:179 gtk/gtkframe.c:124 gtk/gtklabel.c:198
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etiket"
 
@@ -868,7 +868,7 @@ msgstr "Balalar arasındaki boşluq miqdarı"
 
 # gtk/gtkbox.c:136 gtk/gtknotebook.c:396
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Soydaş"
 
@@ -880,6 +880,7 @@ msgstr "Balalarnıñ episiniñ aynı ölçüde olıp olmaycağı"
 # tüklü
 # gtk/gtkpreview.c:134
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Kenişlet"
@@ -891,7 +892,7 @@ msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Ebeveyn öskende, balalarğa ilâve feza berilip berilmeycegi"
 
 # gtk/gtkstock.c:290
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Toldur"
 
@@ -926,7 +927,7 @@ msgstr ""
 
 # gtk/gtkpaned.c:116 gtk/gtkruler.c:138
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Mevam"
 
@@ -1469,8 +1470,8 @@ msgid "The stock ID of the stock icon to render"
 msgstr "Qılınacaq depodan işaretçikniñ depo kimligi"
 
 # gtk/gtkfontsel.c:310
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Ölçü"
 
@@ -1520,7 +1521,7 @@ msgid "Text on the progress bar"
 msgstr "Teraqqiyat çubuğınıñ metni"
 
 # gtk/gtkprogressbar.c:197
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Nabız"
 
@@ -1600,6 +1601,30 @@ msgstr "Raqamlar"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Kösterilecek ondalıq raqam sayısı"
+
+# gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Faal"
+
+# gtk/gtkprogress.c:131
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Saylanğan urufat uslûbınıñ etikette kösterilip kösterilmeycegi"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Bastırıcınıñ ismi"
+
+# gtk/gtkwindow.c:333
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Qılınğan işaretçikniñ ölçüsini belirtken GtkIconSize qıymeti"
 
 # gtk/gtkcellrenderertext.c:155
 #: gtk/gtkcellrenderertext.c:196
@@ -2110,12 +2135,6 @@ msgstr "Köstergiç Boşluqlaması"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Çavke ya da radio köstergiçiniñ etrafındaki boşluqlama"
-
-# gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Faal"
 
 # gtk/gtkcheckmenuitem.c:115
 #: gtk/gtkcheckmenuitem.c:99
@@ -3140,6 +3159,7 @@ msgstr "Etiket ve bala arasında qoyulacaq boşluq"
 
 # gtk/gtkframe.c:161
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Etiket pencereçigi"
 
@@ -3149,11 +3169,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "Adetiy kenişletici etiketiniñ yerinde kösterilecek pencereçik"
 
 # gtk/gtktreeview.c:526
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Kenişletici Ölçüsi"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Kenişletici oqunıñ ölçüsi"
 
@@ -3721,6 +3741,7 @@ msgstr "Kösterilecek işaretçik kümesi"
 # gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
 # gtk/gtktexttag.c:347 gtk/gtktexttag.c:348
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "İşaretçik ölçüsi"
 
@@ -6569,6 +6590,35 @@ msgstr "Ya ağımdaki qıymetni oqur ya da yañı qıymetni tesbit eter"
 msgid "Style of bevel around the spin button"
 msgstr "Aylanma dögmesiniñ etrafındaki şev uslûbı"
 
+# gtk/gtkwidget.c:443
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Birlemci işaretçikniñ faalleştirile bilip bilmegeni"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Saife Sayısı"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+# gtk/gtkstock.c:267
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Canlandırma"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 # tüklü
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -7356,7 +7406,7 @@ msgid "If the toggle part of the button is displayed"
 msgstr "Dögmeniñ döndürme qısmınıñ kösterilgen olıp olmağanı"
 
 # gtk/gtktoolbar.c:232
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Alet Çubuğı Uslûbı"
 
@@ -7389,12 +7439,12 @@ msgid "Size of icons in this toolbar"
 msgstr "Bu alet çubuğındaki işaretçiklerniñ ölçüsi"
 
 # gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:555
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "İşaretçik ölçüsi tesbitli"
 
 # gtk/gtkwidget.c:443
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "İşaretçik ölçüsi (icon-size) hasiyetiniñ tesbitli olıp olmağanı"
 
@@ -7404,7 +7454,7 @@ msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Alet çubuğı büyügeni zaman unsurnıñ ziyade feza alıp almaycağı"
 
 # gtk/gtkbox.c:137
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Unsurnıñ diger soydaş unsurlar ile aynı ölçüde olıp olmaycağı"
 
@@ -7520,6 +7570,118 @@ msgid ""
 msgstr ""
 "Alet çubuğı unsurınıñ önemli mulâaza etilip etilmegeni. DOĞRU olğanda, alet "
 "çubuğı dögmeleri metinni GTK_TOOLBAR_BOTH_HORIZ tarzında kösterir"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Durumnıñ insanca oqula bilgen tasviri"
+
+# gtk/gtkframe.c:162
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "Adetiy çerçive etiketiniñ yerinde kösterilecek bir pencereçik"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+# gtk/gtkwidget.c:478
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr ""
+"Bala pencereçigini ortağa çıqarmaq içün kenişleticiniñ açılğan olıp olmağanı"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Hazıflaştır"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+# gtk/gtktreeview.c:489
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Başlıq sureti"
+
+# gtk/gtktreeview.c:482
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Sutun başlığı dögmelerini köster"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Başlıq Şilteleme"
+
+# gtk/gtkoptionmenu.c:164
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Kenişletici oqunıñ etrafındaki boşluq"
+
+# gtk/gtkbox.c:137
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "Alet çubuğı büyügeni zaman unsurnıñ ziyade feza alıp almaycağı"
+
+# gtk/gtkbox.c:137
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Balalarnıñ episiniñ aynı ölçüde olıp olmaycağı"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+# gtk/gtkcheckmenuitem.c:115
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Unsurlarnıñ bir numara ile beraber kösterilip kösterilmeycegi"
+
+# gtk/gtkruler.c:139
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Cedvel üzerindeki tamğanıñ mevamı"
+
+# gtk/gtktoolbar.c:291
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Bu alet çubuğındaki işaretçiklerniñ ölçüsi"
+
+# gtk/gtktoolbar.c:277
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Alet çubuğınıñ etrafındaki şevniñ uslûbı"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+# gtk/gtkcheckmenuitem.c:115
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Unsurlarnıñ bir numara ile beraber kösterilip kösterilmeycegi"
+
+# tüklü
+# gtk/gtkbox.c:137
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Ebeveyn öskende, balalarğa ilâve feza berilip berilmeycegi"
 
 # gtk/gtktreeview.c:457
 #: gtk/gtktreemodelsort.c:278

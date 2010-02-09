@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-08-23 23:30+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -247,19 +247,19 @@ msgstr "Quebra de linha na licença"
 msgid "Whether to wrap the license text."
 msgstr "Se quebrar ou não o texto da licença."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Área de Atalho"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "A área a ser monitorizada para alterações de atalho"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Widget Atalho"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "O widget a ser monitorizado para alterações de atalho"
 
@@ -274,7 +274,7 @@ msgstr "Um nome único para a acção."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -760,7 +760,7 @@ msgid "The amount of space between children"
 msgstr "A quantidade de espaço entre filhos"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
@@ -769,6 +769,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Se os filhos deverão ou não ter todos o mesmo tamanho"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Expandir"
@@ -777,7 +778,7 @@ msgstr "Expandir"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Se o filho deverá ou não receber espaço extra quando o pai cresce"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Preencher"
 
@@ -810,7 +811,7 @@ msgstr ""
 "fim do pai"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Posição"
 
@@ -1274,8 +1275,8 @@ msgstr "ID Base"
 msgid "The stock ID of the stock icon to render"
 msgstr "O ID base do ícone base a renderizar"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Tamanho"
 
@@ -1317,7 +1318,7 @@ msgstr "Texto"
 msgid "Text on the progress bar"
 msgstr "Texto na barra de progresso"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Impulso"
 
@@ -1383,6 +1384,27 @@ msgstr "Dígitos"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "O número de casas decimais a apresentar"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Activo"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Se o estilo de fonte seleccionado é ou não apresentado na etiqueta"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Nome da impressora"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "O valor GtkIconSize que especifica o tamanho do ícone renderizado"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1793,11 +1815,6 @@ msgstr "Espaçamento do Indicador"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Espaçamento à volta do indicador de selecção ou exclusivo"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Activo"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2674,6 +2691,7 @@ msgid "Space to put between the label and the child"
 msgstr "Espaço a colocar entre a etiqueta e o filho"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Etiqueta de widget"
 
@@ -2681,11 +2699,11 @@ msgstr "Etiqueta de widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Um widget a apresentar em vez da etiqueta de moldura comum"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Tamanho do Expansor"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Tamanho da seta do expansor"
 
@@ -3176,6 +3194,7 @@ msgid "Icon set to display"
 msgstr "Conjunto de ícones a apresentar"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Tamanho de ícone"
 
@@ -5668,6 +5687,33 @@ msgstr "Lê o valor actual, ou define um novo valor"
 msgid "Style of bevel around the spin button"
 msgstr "Estilo de relevo em torno do botão giratório"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Se o ícone primário é ou não activável"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Número de Páginas"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animação"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Tem Manípulo de Redimensionamento"
@@ -6333,7 +6379,7 @@ msgstr "Indicador de Desenho"
 msgid "If the toggle part of the button is displayed"
 msgstr "Se a parte de alternar do botão é apresentada"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Estilo da Barra de Ferramentas"
 
@@ -6362,11 +6408,11 @@ msgstr "Se as dicas da barra de ferramentas deverão ou não estar activas"
 msgid "Size of icons in this toolbar"
 msgstr "O tamanho dos ícones nesta barra de ferramentas"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "Definição do tamanho de ícone"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "Se a propriedade de tamanho de ícone foi ou não definida"
 
@@ -6375,7 +6421,7 @@ msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Se o item deverá receber espaço extra quando a barra de ferramentas cresce"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Se o item deverá ter o mesmo tamanho que outros itens homogéneos"
 
@@ -6477,6 +6523,104 @@ msgstr ""
 "Se o item da barra de ferramentas é considerado importante. Quando "
 "VERDADEIRO, os botões da barra de ferramentas apresentam o texto em modo "
 "GTK_TOOLBAR_BOTH_HORIZ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Uma descrição do estado interpretável pelo utilizador"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "Um widget a apresentar em vez da etiqueta de moldura comum"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Se o expansor foi ou não aberto para revelar o widget filho"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Reticências"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Imagem de cabeçalho"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Apresentar os botões de cabeçalho de coluna"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Espaçamento do Cabeçalho"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Espaçamento à volta da seta do expansor"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr ""
+"Se o item deverá receber espaço extra quando a barra de ferramentas cresce"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Se os filhos deverão ou não ter todos o mesmo tamanho"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Se os itens deverão ou não ser apresentados com um número"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Posição da marca na régua"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "O tamanho dos ícones nesta barra de ferramentas"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Estilo de relevo em torno da barra de ferramentas"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Se os itens deverão ou não ser apresentados com um número"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Se o filho deverá ou não receber espaço extra quando o pai cresce"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

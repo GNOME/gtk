@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-10-08 21:14+0200\n"
 "Last-Translator: Branko Kokanović <branko.kokanovic@gmail.com>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -254,19 +254,19 @@ msgstr "Prelomi licencu"
 msgid "Whether to wrap the license text."
 msgstr "Da li prelomiti tekst licence."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Ostvarivanje prečice"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Koji skup tastera pratiti za izmene prečica"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Element za prečicu"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Element koji treba pratiti radi izmena prečica"
 
@@ -281,7 +281,7 @@ msgstr "Jedinstveno ime za akciju."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Oznaka"
 
@@ -766,7 +766,7 @@ msgid "The amount of space between children"
 msgstr "Količina razmaka među sadržanim elementima"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Jednoobrazno"
 
@@ -775,6 +775,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Da li svi sadržani elementi treba da budu iste veličine"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Raširi"
@@ -783,7 +784,7 @@ msgstr "Raširi"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Da li sadržani element dobija dodatni prostor kada mu sadržalac raste"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Ispuni"
 
@@ -816,7 +817,7 @@ msgid ""
 msgstr "Određuje da li je sadržani element vezan za početak ili kraj sadržaoca"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Položaj"
 
@@ -1276,8 +1277,8 @@ msgstr "ID pripremljene"
 msgid "The stock ID of the stock icon to render"
 msgstr "ID pripremljene sličice koja se iscrtava"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Veličina"
 
@@ -1319,7 +1320,7 @@ msgstr "Tekst"
 msgid "Text on the progress bar"
 msgstr "Tekst u elementu napretka"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Impuls"
 
@@ -1385,6 +1386,27 @@ msgstr "Cifara"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Broj decimalnih mesta koje želite da prikažete"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Aktivan"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Da li se prikazuje izabrani stil pisma u oznaci"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Ime štampača"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "GtkIconSize vrednost koja određuje veličinu iscrtane ikone"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1798,11 +1820,6 @@ msgstr "Razmaci pokazatelja"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Razmaci oko pokazatelja štikliranja ili radio dela dugmeta"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Aktivan"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2671,6 +2688,7 @@ msgid "Space to put between the label and the child"
 msgstr "Razmak koji se stavlja između oznake i sadržanog elementa"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Element oznake"
 
@@ -2679,11 +2697,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "Element koji se prikazuje namesto uobičajene oznake razgranika"
 
 # Ovo je LOSE!
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Veličina razgranika"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Veličina strelice za grananje"
 
@@ -3166,6 +3184,7 @@ msgid "Icon set to display"
 msgstr "Skup ikona za prikaz"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Veličina ikona"
 
@@ -5605,6 +5624,33 @@ msgstr "Čitanje trenutne vrednosti, ili postavljanje nove"
 msgid "Style of bevel around the spin button"
 msgstr "Stil udubljenja oko vrtećeg dugmeta"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Da li se glavna ikonica može aktivirati"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Broj strana"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animacija"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Hvataljka za promenu veličine"
@@ -6260,7 +6306,7 @@ msgstr "Prikaz pokazatelja"
 msgid "If the toggle part of the button is displayed"
 msgstr "Da li se prikazuje prekidački deo dugmeta"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Stil linije sa alatkama"
 
@@ -6288,11 +6334,11 @@ msgstr "Da li se oblačići za alatke prikazuju ili ne"
 msgid "Size of icons in this toolbar"
 msgstr "Veličina ikonica u ovoj traci alata"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "Postavljena veličina ikonica"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "Da li je svojstvo veličine ikonica postavljeno"
 
@@ -6301,7 +6347,7 @@ msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Da li stavka treba da dobije dodatni prostor kada raste linija sa alatkama"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Da li stavka treba da bude iste veličine kao i ostale jednoobrazne stavke"
@@ -6401,6 +6447,104 @@ msgid ""
 msgstr ""
 "Da li se stavka alatki smatra važnom. Ako je postavljeno, dugmad alatke "
 "prikazuju i tekst u režimu GTK_TOOLBAR_BOTH_HORIZ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "Opis stanja u "
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "Element koji se prikazuje namesto uobičajene oznake okvira"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Da li je otvoren razgranik radi prikaza sadržanih elemenata"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Skrati"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Slika u zaglavlju"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Prikaži dugmiće za zaglavlje kolona"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Popuna zaglavlja"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Razmaci oko strelica za grananje"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr ""
+"Da li stavka treba da dobije dodatni prostor kada raste linija sa alatkama"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Da li svi sadržani elementi treba da budu iste veličine"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Da li stavke prikazivati kao brojeve"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Mesto oznake na lenjiru"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Veličina ikonica u ovoj traci alata"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Vrsta udubljenja oko linije sa alatkama"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Da li stavke prikazivati kao brojeve"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Da li sadržani element dobija dodatni prostor kada mu sadržalac raste"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

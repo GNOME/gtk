@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-08-26 11:47+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -250,19 +250,19 @@ msgstr "रैप मसौदा"
 msgid "Whether to wrap the license text."
 msgstr "क्या मसौदा पाठ को रैप करना है."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "त्वरक समाप्ति"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "त्वरित बदलाव के लिये निरीक्षण किये जाने वाली परिसमाप्ति"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "त्वरक विज़ेट"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "त्वरित बदलाव के लिये निरीक्षण किया जा रहा विजेट"
 
@@ -277,7 +277,7 @@ msgstr "क्रिया के लिये अद्वितीय ना�
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "लेबल "
 
@@ -745,7 +745,7 @@ msgid "The amount of space between children"
 msgstr "शिशु के बीच स्थान की मात्रा"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "समरूप"
 
@@ -754,6 +754,7 @@ msgid "Whether the children should all be the same size"
 msgstr "क्या सारे चाइल्ड को समान आकार का होना चाहिये"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "विस्तार"
@@ -762,7 +763,7 @@ msgstr "विस्तार"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "क्या चाइल्ड को अतिरिक्त स्थान चाहिये जब जनक बढ़ता है"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "भरें"
 
@@ -793,7 +794,7 @@ msgid ""
 msgstr "GtkPackType दिखाता कि क्या संतति संदर्भ से पैक है जनक के आरंभ या अंत में"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "स्थिति"
 
@@ -1248,8 +1249,8 @@ msgstr "स्टॉक ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "रेंडर करने के लिये स्टॉक प्रतीक का स्टॉक ID"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "आकार"
 
@@ -1291,7 +1292,7 @@ msgstr "पाठ"
 msgid "Text on the progress bar"
 msgstr "प्रगति बार पर पाठ"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "नब्ज"
 
@@ -1355,6 +1356,27 @@ msgstr "अंक"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "दशमलव के बाद प्रदर्शित किए जाने वाले अंकों की संख्या"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "क्रियाशील"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "क्या लेबल में चयनित फ़ॉन्ट आकार में दर्शाया गया है?"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "मुद्रक का नाम"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "GtkIconSize मान जो रेंडर किये गये प्रतीक के आकार को निर्दिष्ट करता है"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1765,11 +1787,6 @@ msgstr "सूचकों के बीच का स्थान"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "चेक या रेडियो सूचकों के आस पास का स्थान"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "क्रियाशील"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2623,6 +2640,7 @@ msgid "Space to put between the label and the child"
 msgstr "लेबल और संतति के बीच दी जाने वाली जगह"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "लेबल विज़ेट"
 
@@ -2630,11 +2648,11 @@ msgstr "लेबल विज़ेट"
 msgid "A widget to display in place of the usual expander label"
 msgstr "सामान्य विस्तारक लेबल के स्थान पर प्रदर्शित करने के लिए एक विज़ेट"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "विस्तारक आकार"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "विस्तारक तीर का आकार "
 
@@ -3109,6 +3127,7 @@ msgid "Icon set to display"
 msgstr "प्रदर्शित किया जाने वाला चिह्न समूह"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "चिह्न आकार"
 
@@ -5494,6 +5513,33 @@ msgstr "वर्तमान मान को पढ़े या एक नय
 msgid "Style of bevel around the spin button"
 msgstr "विषय वस्तु के चारों ओर के उठाव का प्रकार"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "क्या प्राथमिक प्रतीक सक्रिय करने योग्य है"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "पृष्ठों की संख्या"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "एनीमेशन"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "ग्रिप का फिर आकार किया हुआ रखता हैे"
@@ -6142,7 +6188,7 @@ msgstr "सूचक बनाएँ"
 msgid "If the toggle part of the button is displayed"
 msgstr "बटन का टागल हिस्सा प्रदर्शित किया जा रहा है"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "उपकरण-पट्टी की स्टाइल"
 
@@ -6170,11 +6216,11 @@ msgstr "क्या औजारपट्टी का टूलटिप स�
 msgid "Size of icons in this toolbar"
 msgstr "इस उपकरण पट्टी में आइकन का आकार"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "प्रतीक आकार सेट"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "क्या आइकन आकार गुण सेट किया गया है"
 
@@ -6182,7 +6228,7 @@ msgstr "क्या आइकन आकार गुण सेट किया 
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "क्या मद को अतिरिक्त स्थान पाना चाहिये जब टूलबार बढ़ता है"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "क्या मद को समान आकार का होना चाहिये जैसा अन्य समांग मद का होता है"
 
@@ -6282,6 +6328,103 @@ msgid ""
 msgstr ""
 "क्या टूलबार मद महत्वपूर्ण माना जाता है. जब सही हो, टूलबार बटन "
 "GTK_TOOLBAR_BOTH_HORIZ मोड में पाठ दिखाता है"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "स्थिति का मानव पठनीय विवरण"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "सामान्य फ्रेम लेबल के स्थान पर एक विज़ेट को प्रदर्शित करें"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "क्या विस्तारक को शिशु विजेट को खोलने के लिये खोला जाना चाहिये"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Ellipsize"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "शीर्षक छवि"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "कालम हैडर बटन को दर्शाएँ"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "बायाँ पैडिंग"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "विस्तारक तीर के गिर्द स्थान"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "क्या मद को अतिरिक्त स्थान पाना चाहिये जब टूलबार बढ़ता है"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "क्या सारे चाइल्ड को समान आकार का होना चाहिये"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "क्या मद को संख्या के साथ दिखाया जाना है"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "रुलर पर स्थिति का चिन्ह"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "इस उपकरण पट्टी में आइकन का आकार"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "उपकरण-पट्टी के चारों ओर के उठाव का प्रकार"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "क्या मद को संख्या के साथ दिखाया जाना है"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "क्या चाइल्ड को अतिरिक्त स्थान चाहिये जब जनक बढ़ता है"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2000-10-27 02:02+0100\n"
 "Last-Translator: Robert Brady <rwb197@zepler.org>\n"
 "Language-Team: Interlingua\n"
@@ -860,6 +860,53 @@ msgstr ""
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr ""
 
+#: gdk-pixbuf/io-qtif.c:128
+msgid "Input file descriptor is NULL."
+msgstr ""
+
+#: gdk-pixbuf/io-qtif.c:143
+#, fuzzy
+msgid "Failed to read QTIF header"
+msgstr "Incapabile de cargaration de archivo '%s' : %s"
+
+#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
+#, c-format
+msgid "QTIF atom size too large (%d bytes)"
+msgstr ""
+
+#: gdk-pixbuf/io-qtif.c:172
+#, fuzzy, c-format
+msgid "Failed to allocate %d bytes for file read buffer"
+msgstr "Incapabile de cargaration de archivo '%s' : %s"
+
+#: gdk-pixbuf/io-qtif.c:196
+#, fuzzy, c-format
+msgid "File error when reading QTIF atom: %s"
+msgstr "Renominar Archivo"
+
+#: gdk-pixbuf/io-qtif.c:233
+#, c-format
+msgid "Failed to skip the next %d bytes with seek()."
+msgstr ""
+
+#: gdk-pixbuf/io-qtif.c:257
+msgid "Failed to QTIF context structure."
+msgstr ""
+
+#: gdk-pixbuf/io-qtif.c:317
+#, fuzzy
+msgid "Failed to create GdkPixbufLoader object."
+msgstr "Incapabile de cargaration de archivo '%s' : %s"
+
+#: gdk-pixbuf/io-qtif.c:421
+#, fuzzy
+msgid "Failed to find an image data atom."
+msgstr "Incapabile de cargaration de archivo '%s' : %s"
+
+#: gdk-pixbuf/io-qtif.c:602
+msgid "The QTIF image format"
+msgstr ""
+
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr ""
@@ -1230,7 +1277,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:91
+#: gtk/gtkaccellabel.c:146
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr ""
@@ -1240,7 +1287,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:97
+#: gtk/gtkaccellabel.c:152
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr ""
@@ -1250,7 +1297,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:103
+#: gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr ""
@@ -1260,7 +1307,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:671
+#: gtk/gtkaccellabel.c:743
 msgctxt "keyboard label"
 msgid "Super"
 msgstr ""
@@ -1270,7 +1317,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:684
+#: gtk/gtkaccellabel.c:756
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr ""
@@ -1280,18 +1327,18 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:698
+#: gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:715
+#: gtk/gtkaccellabel.c:787
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Renominar"
 
-#: gtk/gtkaccellabel.c:718
+#: gtk/gtkaccellabel.c:790
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr ""
@@ -1344,7 +1391,7 @@ msgstr ""
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1804
+#: gtk/gtkcalendar.c:1807
 msgctxt "year measurement template"
 msgid "2000"
 msgstr ""
@@ -1359,7 +1406,7 @@ msgstr ""
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1835 gtk/gtkcalendar.c:2493
+#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1375,7 +1422,7 @@ msgstr ""
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1867 gtk/gtkcalendar.c:2356
+#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1391,7 +1438,7 @@ msgstr ""
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2147
+#: gtk/gtkcalendar.c:2150
 #, fuzzy
 msgctxt "calendar year format"
 msgid "%Y"
@@ -2238,13 +2285,19 @@ msgstr "Incapabile de cargaration de archivo '%s' : %s"
 msgid "Simple"
 msgstr "Dimension:"
 
-#: gtk/gtkimmulticontext.c:538
+#: gtk/gtkimmulticontext.c:563
 #, fuzzy
 msgctxt "input method menu"
 msgid "System"
 msgstr "Archivos"
 
-#: gtk/gtkimmulticontext.c:622
+#: gtk/gtkimmulticontext.c:573
+#, fuzzy
+msgctxt "input method menu"
+msgid "None"
+msgstr "necun"
+
+#: gtk/gtkimmulticontext.c:656
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"

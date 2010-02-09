@@ -47,7 +47,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-09-13 02:50+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -284,19 +284,19 @@ msgstr "Ombryd licensen"
 msgid "Whether to wrap the license text."
 msgstr "Om licensteksten skal ombrydes."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Acceleratorobjekt"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Objektet som skal overvåges for acceleratorændringer"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Acceleratorkontrol"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Kontrollen som skal overvåges for acceleratorændringer"
 
@@ -311,7 +311,7 @@ msgstr "Et unikt navn for handlingen."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etiket"
 
@@ -809,7 +809,7 @@ msgid "The amount of space between children"
 msgstr "Hvor meget mellemrum der er mellem børnene"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -818,6 +818,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Om alle børnene skal have den samme størrelse"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Udvid"
@@ -827,7 +828,7 @@ msgid "Whether the child should receive extra space when the parent grows"
 msgstr ""
 "Om underelementet skal tildeles ekstra plads når ophavselementet vokser"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Udfyld"
 
@@ -860,7 +861,7 @@ msgstr ""
 "begyndelsen eller slutningen af ophavselementet"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Position"
 
@@ -1331,8 +1332,8 @@ msgstr "Lager-id"
 msgid "The stock ID of the stock icon to render"
 msgstr "Lager-id for det standardikon der skal vises"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Størrelse"
 
@@ -1375,7 +1376,7 @@ msgstr "Tekst"
 msgid "Text on the progress bar"
 msgstr "Statuslinjens tekst"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Puls"
 
@@ -1441,6 +1442,27 @@ msgstr "Cifre"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Antallet af decimale pladser at vise"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Aktiv"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Om den valgte skrifttypestil vises i etiketten"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Printerens navn"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Den GtkIconSize-værdi der angiver størrelsen af det viste ikon"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1851,11 +1873,6 @@ msgstr "Indikatormellemrum"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Mellemrum omkring afkrydsnings- eller radioindikator"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Aktiv"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2735,6 +2752,7 @@ msgid "Space to put between the label and the child"
 msgstr "Mellemrum mellem etiketten og underelementet"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Etiketkontrol"
 
@@ -2742,11 +2760,11 @@ msgstr "Etiketkontrol"
 msgid "A widget to display in place of the usual expander label"
 msgstr "En kontrol som vises i stedet for den sædvanlige udvideretiket"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Udviderstørrelse"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Størrelse af udviderpilen"
 
@@ -3234,6 +3252,7 @@ msgid "Icon set to display"
 msgstr "Ikonsæt der skal vises"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Ikonstørrelse"
 
@@ -5725,6 +5744,33 @@ msgstr "Læser den aktuelle værdi eller sætter en ny"
 msgid "Style of bevel around the spin button"
 msgstr "Kantstil omkring rulleknappen"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Om det primære ikon kan aktiveres"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Antal sider"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animation"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Har udvidelsesgreb"
@@ -6383,7 +6429,7 @@ msgstr "Vis indikator"
 msgid "If the toggle part of the button is displayed"
 msgstr "Vis afkrydsningsdelen af knappen"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Værktøjslinjestil"
 
@@ -6411,11 +6457,11 @@ msgstr "Om værktøjstippene skal være aktiverede eller ej"
 msgid "Size of icons in this toolbar"
 msgstr "Ikonernes størrelse i denne værktøjslinje"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "Ikonstørrelsessæt"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "Om egenskaben ikonstørrelse er blevet sat"
 
@@ -6423,7 +6469,7 @@ msgstr "Om egenskaben ikonstørrelse er blevet sat"
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Om element skal modtage ekstra mellemrum når værktøjslinjen vokser"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Om elementet skal have den samme størrelse som andre homogene elementer"
@@ -6523,6 +6569,116 @@ msgid ""
 msgstr ""
 "Om værktøjslinjeelementet anses for at være vigtigt. Hvis TRUE vises tekst i "
 "GTK_TOOLBAR_BOTH_HORIZ-tilstand"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "En menneske-læselig beskrivelse af status"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "En kontrol som vises i stedet for den normale rammeetiket"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Om udvideren er blevet åbnet for at afsløre underkontrollen"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Ellipsegør"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+# Tvetydighed omkring hoved/overskrift afgjort ved flertals afstemning blandt de af de andre oversættelser jeg kan forstå. Jeg har fejlmeldt den for forhåbentligt at få den afgjort
+#
+# Fejlrapport afgjorde at det er sidehoved.
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Sidehoved-billede"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Vis kolonneoverskriftsknapperne"
+
+# Tvetydighed omkring hoved/overskrift afgjort ved flertals afstemning blandt de af de andre oversættelser jeg kan forstå. Jeg har fejlmeldt den for forhåbentligt at få den afgjort
+#
+# Fejlrapport afgjorde at det er sidehoved.
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Sidehoved-udfyldning"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Mellemrum omkring udviderpil"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "Om element skal modtage ekstra mellemrum når værktøjslinjen vokser"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Om alle børnene skal have den samme størrelse"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+# Ordet "sammen" er en fortolkning men idet jeg regner med at hvis det der menes er at objekterne vises "som" et nummer ville der have stået "as a number" derfor regner jeg med at det det betyder er at visningen af objektet inkluderer et nummer.
+#
+# Antagelsen synes at være rigtig ifølge API-doc
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Om objekterne skal vises sammen med et nummer"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Position af mærke på linealen"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Ikonernes størrelse i denne værktøjslinje"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Afrundingstypen omkring værktøjslinjen"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+# Ordet "sammen" er en fortolkning men idet jeg regner med at hvis det der menes er at objekterne vises "som" et nummer ville der have stået "as a number" derfor regner jeg med at det det betyder er at visningen af objektet inkluderer et nummer.
+#
+# Antagelsen synes at være rigtig ifølge API-doc
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Om objekterne skal vises sammen med et nummer"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr ""
+"Om underelementet skal tildeles ekstra plads når ophavselementet vokser"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

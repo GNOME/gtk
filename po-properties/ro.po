@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-09-18 22:33+0300\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -244,19 +244,19 @@ msgstr "Rupere rânduri licență"
 msgid "Whether to wrap the license text."
 msgstr "Specifică dacă textul licenței să aibă rândurile rupte."
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "Închidere accelerator"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Închiderea de monitorizat pentru schimbări ale acceleratorului"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "Widget accelerator"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget de monitorizat pentru schimbări ale acceleratorului"
 
@@ -271,7 +271,7 @@ msgstr "Un nume unic pentru acțiune."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "Etichetă"
 
@@ -759,7 +759,7 @@ msgid "The amount of space between children"
 msgstr "Cantitatea de spațiu între copii"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "Omogen"
 
@@ -768,6 +768,7 @@ msgid "Whether the children should all be the same size"
 msgstr "Dacă copiii ar trebui să fie toți de aceeași mărime"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Extinde"
@@ -778,7 +779,7 @@ msgstr ""
 "Specifică dacă un copil ar trebui să primească spațiu în plus când părintele "
 "crește"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "Umplere"
 
@@ -811,7 +812,7 @@ msgstr ""
 "începutul sau sfârșitul părintelui"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "Poziție"
 
@@ -1275,8 +1276,8 @@ msgstr "ID standard"
 msgid "The stock ID of the stock icon to render"
 msgstr "ID-ul standard al iconiței implicite de afișat"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "Mărime"
 
@@ -1320,7 +1321,7 @@ msgstr "Text"
 msgid "Text on the progress bar"
 msgstr "Text în bara de progres"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Puls"
 
@@ -1386,6 +1387,27 @@ msgstr "Cifre"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "Numărul de zecimale de afișat"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "Activ"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Specifică dacă stilul fontului selectat apare în etichetă"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "Nume imprimantă"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "Valoarea GtkIconSize ce specifică mărimea iconiței afișate"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1798,11 +1820,6 @@ msgstr "Spațiere indicator"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "Spațierea în jurul indicatorului radio sau de bifare"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "Activ"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2679,6 +2696,7 @@ msgid "Space to put between the label and the child"
 msgstr "Spațiu între etichetă și copil"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "Widget etichetă"
 
@@ -2687,11 +2705,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr ""
 "Un widget pentru a fi afișat în locul etichetei obișnuite a desfășurătorului"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Mărime desfășurător"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Mărimea săgeții de desfășurare"
 
@@ -3187,6 +3205,7 @@ msgid "Icon set to display"
 msgstr "Set de iconițe pentru afișare"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "Mărime iconițe"
 
@@ -5664,6 +5683,33 @@ msgstr "Citește valoarea curentă sau setează una nouă"
 msgid "Style of bevel around the spin button"
 msgstr "Stilul dungilor din jurul butonului de incrementare"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Specifică dacă iconița primară este activabilă"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "Număr de pagini"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "Animație"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "Are colț de redimensionare"
@@ -6327,7 +6373,7 @@ msgstr "Indicator de afișare"
 msgid "If the toggle part of the button is displayed"
 msgstr "Dacă partea de comutare a butonului este afișată"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "Stil bară cu unelte"
 
@@ -6355,11 +6401,11 @@ msgstr "Dacă indiciile barei de unelte ar trebui să fie active sau nu"
 msgid "Size of icons in this toolbar"
 msgstr "Mărimea iconițelor în această bară cu unelte"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "Setare mărime iconiță"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "Specifică dacă este setată proprietatea icon-size"
 
@@ -6369,7 +6415,7 @@ msgstr ""
 "Specifică dacă acest element ar trebui să primească spațiu în plus când bara "
 "cu unelte crește"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Specifică dacă acest element ar trebui să fie de aceeași mărime ca celelalte "
@@ -6470,6 +6516,107 @@ msgid ""
 msgstr ""
 "Specifică dacă elementul din bara cu unelte e considerat important. La "
 "activare, butoanele barei cu unelte au text în modul GTK_TOOLBAR_BOTH_HORIZ"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "O descriere ușor de înțeles a stării"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "Un widget pentru a fi afișat în locul etichetei obișnuite a cadrului"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "Specifică dacă desfășurătorul e deschis și e vizibil un widget copil"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "Prescurtare"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "Imagine antet"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "Arată butoanele antetelor de coloană"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "Umplere antet"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "Spațiere în jurul săgeții desfășurătorului"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr ""
+"Specifică dacă acest element ar trebui să primească spațiu în plus când bara "
+"cu unelte crește"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "Dacă copiii ar trebui să fie toți de aceeași mărime"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "Specifică dacă elementele ar trebui afișate numerotat"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "Poziția marcajului pe riglă"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "Mărimea iconițelor în această bară cu unelte"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "Stilul cadrului din jurul barei cu unelte"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Specifică dacă elementele ar trebui afișate numerotat"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr ""
+"Specifică dacă un copil ar trebui să primească spațiu în plus când părintele "
+"crește"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"

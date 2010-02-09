@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 22:42-0500\n"
+"POT-Creation-Date: 2010-02-09 15:19-0500\n"
 "PO-Revision-Date: 2009-09-06 18:05+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -249,19 +249,19 @@ msgstr "ライセンスのラッピング"
 msgid "Whether to wrap the license text."
 msgstr "ライセンスの条文を折り返すかどうか。"
 
-#: gtk/gtkaccellabel.c:123
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "アクセラレータ・クロージャ"
 
-#: gtk/gtkaccellabel.c:124
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "アクセラレータの変化を監視するためのクロージャです"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "アクセラレータ・ウィジェット"
 
-#: gtk/gtkaccellabel.c:131
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "アクセラレータの変化を監視するためのウィジェットです"
 
@@ -276,7 +276,7 @@ msgstr "アクションに固有の名称です"
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
 msgid "Label"
 msgstr "ラベル"
 
@@ -750,7 +750,7 @@ msgid "The amount of space between children"
 msgstr "子ウィジェットと子ウィジェットの間に入れる空白の大きさを指定します"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
 msgid "Homogeneous"
 msgstr "均等に配置する"
 
@@ -759,6 +759,7 @@ msgid "Whether the children should all be the same size"
 msgstr "子ウィジェットの全てを同じ大きさにするかどうか"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "展張"
@@ -769,7 +770,7 @@ msgstr ""
 "親ウィジェットが大きくなった際に子ウィジェットも余白のスペースを占めるかどう"
 "か"
 
-#: gtk/gtkbox.c:155
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
 msgid "Fill"
 msgstr "フィル"
 
@@ -804,7 +805,7 @@ msgstr ""
 "(GtkPackType で指定する)"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
 msgid "Position"
 msgstr "位置"
 
@@ -1261,8 +1262,8 @@ msgstr "ストック ID"
 msgid "The stock ID of the stock icon to render"
 msgstr "描画するストック・アイコンのストック ID"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "サイズ"
 
@@ -1304,7 +1305,7 @@ msgstr "ラベル"
 msgid "Text on the progress bar"
 msgstr "プログレス・バーに表示するラベルです"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "パルス"
 
@@ -1370,6 +1371,27 @@ msgstr "桁数"
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "表示する小数点以下の桁数です"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "有効"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "ラベルに選択したフォントのスタイルを表示するかどうか"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "プリンタの名前"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "描画したアイコンのサイズを示す GtkIconSize の値です"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1778,11 +1800,6 @@ msgstr "表示部の間隔"
 #: gtk/gtkcheckbutton.c:78
 msgid "Spacing around check or radio indicator"
 msgstr "チェック・ボタンまたはラジオ・ボタンの表示部の間隔"
-
-#: gtk/gtkcheckmenuitem.c:98 gtk/gtkmenu.c:501 gtk/gtktoggleaction.c:119
-#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
-msgid "Active"
-msgstr "有効"
 
 #: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
@@ -2645,6 +2662,7 @@ msgid "Space to put between the label and the child"
 msgstr "ラベルと子ウィジェットとの間に置くスペースを指定します"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1540
 msgid "Label widget"
 msgstr "ラベル・ウィジェット"
 
@@ -2652,11 +2670,11 @@ msgstr "ラベル・ウィジェット"
 msgid "A widget to display in place of the usual expander label"
 msgstr "通常の展張ラベルとして表示するウィジェット"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "展張サイズ"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "展張矢印の大きさ"
 
@@ -3140,6 +3158,7 @@ msgid "Icon set to display"
 msgstr "表示するアイコン・セット"
 
 #: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:990
 msgid "Icon size"
 msgstr "アイコンのサイズ"
 
@@ -5546,6 +5565,33 @@ msgstr "現在の値を読み込むか、新しい値をセットするか"
 msgid "Style of bevel around the spin button"
 msgstr "スピン・ボタンの周囲に配置するベベルのスタイル"
 
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "一番目のアイコンを有効にできるかどうか"
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "ページ数"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "アニメーション"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "リサイズ用のグリップあり"
@@ -6198,7 +6244,7 @@ msgstr "表示部の描画"
 msgid "If the toggle part of the button is displayed"
 msgstr "ボタンのトグル部分を表示するかどうか"
 
-#: gtk/gtktoolbar.c:494
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1020
 msgid "Toolbar Style"
 msgstr "ツールバーのスタイル"
 
@@ -6226,11 +6272,11 @@ msgstr "ツールバーで表示するツールチップを有効にするかど
 msgid "Size of icons in this toolbar"
 msgstr "ツールバーに配置するアイコンの大きさ"
 
-#: gtk/gtktoolbar.c:556
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1006
 msgid "Icon size set"
 msgstr "アイコン・サイズのプロパティ"
 
-#: gtk/gtktoolbar.c:557
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1007
 msgid "Whether the icon-size property has been set"
 msgstr "プロパティ icon-size をセットするかどうか"
 
@@ -6240,7 +6286,7 @@ msgstr ""
 "ツールバーが大きくなった際にアイテムも余白のスペースを受け取るべきかどうかで"
 "す"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "全ての同種のアイテムを同じ大きさにするかどうか"
 
@@ -6339,6 +6385,107 @@ msgid ""
 msgstr ""
 "ツールバーの項目を重要と見なすかどうか。TRUE の場合、ツールバーのボタンは "
 "GTK_TOOLBAR_BOTH_HORIZ モードで表示されます。"
+
+#: gtk/gtktoolitemgroup.c:1534
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "プリンタを状態を表す説明です"
+
+#: gtk/gtktoolitemgroup.c:1541
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "通常のフレーム付きラベルとして表示するウィジェット"
+
+#: gtk/gtktoolitemgroup.c:1547
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1548
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "子ウィジェットを表示するために展張されているかどうか"
+
+#: gtk/gtktoolitemgroup.c:1554
+#, fuzzy
+msgid "ellipsize"
+msgstr "省略記号で置き換える"
+
+#: gtk/gtktoolitemgroup.c:1555
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1561
+#, fuzzy
+msgid "Header Relief"
+msgstr "ヘッダの画像"
+
+#: gtk/gtktoolitemgroup.c:1562
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "列のヘッダ・ボタンを表示する"
+
+#: gtk/gtktoolitemgroup.c:1577
+#, fuzzy
+msgid "Header Spacing"
+msgstr "ヘッダのパディング"
+
+#: gtk/gtktoolitemgroup.c:1578
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "展張矢印の周りの間隔"
+
+#: gtk/gtktoolitemgroup.c:1594
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr ""
+"ツールバーが大きくなった際にアイテムも余白のスペースを受け取るべきかどうかで"
+"す"
+
+#: gtk/gtktoolitemgroup.c:1601
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "子ウィジェットの全てを同じ大きさにするかどうか"
+
+#: gtk/gtktoolitemgroup.c:1607
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1608
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "番号を付けてアイテムを表示するかどうか"
+
+#: gtk/gtktoolitemgroup.c:1615
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "ルーラでマークを付ける位置"
+
+#: gtk/gtktoolpalette.c:991
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "ツールバーに配置するアイコンの大きさ"
+
+#: gtk/gtktoolpalette.c:1021
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "ツールバー周りのに縁取りのスタイル"
+
+#: gtk/gtktoolpalette.c:1037
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1038
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "番号を付けてアイテムを表示するかどうか"
+
+#: gtk/gtktoolpalette.c:1053
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr ""
+"親ウィジェットが大きくなった際に子ウィジェットも余白のスペースを占めるかどう"
+"か"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
