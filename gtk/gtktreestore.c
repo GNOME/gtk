@@ -325,7 +325,7 @@ gtk_tree_store_newv (gint   n_columns,
  * gtk_tree_store_set_column_types:
  * @tree_store: A #GtkTreeStore
  * @n_columns: Number of columns for the tree store
- * @types: An array of #GType types, one for each column
+ * @types: (array length=n_columns): An array of #GType types, one for each column
  * 
  * This function is meant primarily for #GObjects that inherit from 
  * #GtkTreeStore, and should only be used when constructing a new 
