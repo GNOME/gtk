@@ -5951,6 +5951,100 @@ gtk_widget_is_drawable (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_get_realized:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether @widget is realized.
+ *
+ * Return value: %TRUE if @widget is realized, %FALSE otherwise
+ *
+ * Since: 2.20
+ **/
+gboolean
+gtk_widget_get_realized (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_REALIZED) != 0;
+}
+
+/**
+ * gtk_widget_set_realized:
+ * @widget: a #GtkWidget
+ * @realized: %TRUE to mark the widget as realized
+ *
+ * Marks the widget as being realized.
+ *
+ * This function should only ever be called in a derived widget's
+ * "realize" or "unrealize" implementation.
+ *
+ * Since: 2.20
+ */
+void
+gtk_widget_set_realized (GtkWidget *widget,
+                         gboolean   realized)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  realized = realized != FALSE;
+
+  if (realized != gtk_widget_get_realized (widget))
+    {
+      if (realized)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+    }
+}
+
+/**
+ * gtk_widget_get_mapped:
+ * @widget: a #GtkWidget
+ *
+ * Whether the widget is mapped.
+ *
+ * Return value: %TRUE if the widget is mapped, %FALSE otherwise.
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_widget_get_mapped (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return (GTK_WIDGET_FLAGS (widget) & GTK_MAPPED) != 0;
+}
+
+/**
+ * gtk_widget_set_mapped:
+ * @widget: a #GtkWidget
+ * @mapped: %TRUE to mark the widget as mapped
+ *
+ * Marks the widget as being realized.
+ *
+ * This function should only ever be called in a derived widget's
+ * "map" or "unmap" implementation.
+ *
+ * Since: 2.20
+ */
+void
+gtk_widget_set_mapped (GtkWidget *widget,
+                       gboolean   mapped)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  mapped = mapped != FALSE;
+
+  if (mapped != gtk_widget_get_mapped (widget))
+    {
+      if (mapped)
+        GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+      else
+        GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+    }
+}
+
+/**
  * gtk_widget_set_app_paintable:
  * @widget: a #GtkWidget
  * @app_paintable: %TRUE if the application will paint on the widget

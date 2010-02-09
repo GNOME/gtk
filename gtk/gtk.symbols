@@ -5247,6 +5247,10 @@ gtk_widget_set_can_default
 gtk_widget_get_can_default
 gtk_widget_set_can_focus
 gtk_widget_get_can_focus
+gtk_widget_set_realized
+gtk_widget_get_realized
+gtk_widget_set_mapped
+gtk_widget_get_mapped
 #endif
 #endif
 

@@ -5749,6 +5749,10 @@ gtk_widget_is_toplevel
 gtk_widget_set_window
 gtk_widget_set_receives_default
 gtk_widget_get_receives_default
+gtk_widget_set_realized
+gtk_widget_get_realized
+gtk_widget_set_mapped
+gtk_widget_set_mapped
 
 <SUBSECTION>
 gtk_requisition_copy
