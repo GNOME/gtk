@@ -326,6 +326,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   socket_->plug_widget = widget;
 
   plug->socket_window = GTK_WIDGET (socket_)->window;
+  g_object_ref (plug->socket_window);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
@@ -411,10 +412,13 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   socket_->same_app = FALSE;
 
   plug->same_app = FALSE;
-  plug->socket_window = NULL;
-
+  if (plug->socket_window != NULL)
+    {
+      g_object_unref (plug->socket_window);
+      plug->socket_window = NULL;
+    }
   gtk_plug_set_is_child (plug, FALSE);
-		    
+
   g_signal_emit_by_name (socket_, "plug-removed", &result);
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket_));
@@ -468,22 +472,25 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
       gpointer user_data = NULL;
 
       plug->socket_window = gdk_window_lookup_for_display (display, socket_id);
-      
       if (plug->socket_window)
-	gdk_window_get_user_data (plug->socket_window, &user_data);
+	{
+	  gdk_window_get_user_data (plug->socket_window, &user_data);
+
+	  if (user_data)
+	    {
+	      if (GTK_IS_SOCKET (user_data))
+		_gtk_plug_add_to_socket (plug, user_data);
+	      else
+		{
+		  g_warning (G_STRLOC "Can't create GtkPlug as child of non-GtkSocket");
+		  plug->socket_window = NULL;
+		}
+	    }
+	  else
+	    g_object_ref (plug->socket_window);
+	}
       else
 	plug->socket_window = gdk_window_foreign_new_for_display (display, socket_id);
-	  
-      if (user_data)
-	{
-	  if (GTK_IS_SOCKET (user_data))
-	    _gtk_plug_add_to_socket (plug, user_data);
-	  else
-	    {
-	      g_warning (G_STRLOC "Can't create GtkPlug as child of non-GtkSocket");
-	      plug->socket_window = NULL;
-	    }
-	}
 
       if (plug->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
