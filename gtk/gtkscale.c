@@ -1426,7 +1426,8 @@ gtk_scale_add_mark (GtkScale        *scale,
   mark->markup = g_strdup (markup);
   mark->position = position;
  
-  priv->marks = g_slist_insert_sorted (priv->marks, mark, compare_marks);
+  priv->marks = g_slist_insert_sorted (priv->marks, mark,
+                                       (GCompareFunc) compare_marks);
 
   n = g_slist_length (priv->marks);
   values = g_new (gdouble, n);
