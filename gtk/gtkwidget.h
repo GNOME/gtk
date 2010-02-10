@@ -922,13 +922,6 @@ gboolean              gtk_widget_get_has_window         (GtkWidget    *widget);
 
 gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
 gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
-void                  gtk_widget_set_realized           (GtkWidget    *widget,
-                                                         gboolean      realized);
-gboolean              gtk_widget_get_realized           (GtkWidget    *widget);
-void                  gtk_widget_set_mapped             (GtkWidget    *widget,
-                                                         gboolean      mapped);
-gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);
-
 void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
 							 gboolean      app_paintable);
 gboolean              gtk_widget_get_app_paintable      (GtkWidget    *widget);
