@@ -6025,7 +6025,7 @@ gtk_widget_set_realized (GtkWidget *widget,
 gboolean
 gtk_widget_get_mapped (GtkWidget *widget)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return (GTK_WIDGET_FLAGS (widget) & GTK_MAPPED) != 0;
 }
