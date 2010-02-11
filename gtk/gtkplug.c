@@ -327,6 +327,8 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   plug->socket_window = GTK_WIDGET (socket_)->window;
   g_object_ref (plug->socket_window);
+  g_signal_emit (plug, plug_signals[EMBEDDED], 0);
+  g_object_notify (G_OBJECT (plug), "embedded");
 
   if (GTK_WIDGET_REALIZED (widget))
     {
