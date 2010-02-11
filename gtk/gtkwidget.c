@@ -6424,6 +6424,7 @@ void
 gtk_widget_style_attach (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 }
