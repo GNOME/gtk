@@ -6146,6 +6146,8 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  double_buffered = (double_buffered != FALSE);
+
   if (double_buffered != gtk_widget_get_double_buffered (widget))
     {
       if (double_buffered)
