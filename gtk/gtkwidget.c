@@ -6001,15 +6001,10 @@ gtk_widget_set_realized (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  realized = realized != FALSE;
-
-  if (realized != gtk_widget_get_realized (widget))
-    {
-      if (realized)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-      else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
-    }
+  if (realized)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
 }
 
 /**
@@ -6048,15 +6043,10 @@ gtk_widget_set_mapped (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  mapped = mapped != FALSE;
-
-  if (mapped != gtk_widget_get_mapped (widget))
-    {
-      if (mapped)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-      else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-    }
+  if (mapped)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 }
 
 /**
