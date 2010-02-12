@@ -652,6 +652,13 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   return TRUE;
 }
 
+void
+gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  /* FIXME: For now, we've mimiced the Windows backend. */
+}
+
 gboolean
 gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                   GdkModifierType *state)

@@ -404,6 +404,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   gdk_keymap_translate_keyboard_state (key_hash->keymap,
 				       hardware_keycode, state, group,
 				       &keyval, &effective_group, &level, &consumed_modifiers);
+  gdk_keymap_add_virtual_modifiers (key_hash->keymap, &state);
 
   GTK_NOTE (KEYBINDINGS,
 	    g_message ("Looking up keycode = %u, modifiers = 0x%04x,\n"
