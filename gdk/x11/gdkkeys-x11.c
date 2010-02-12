@@ -1657,12 +1657,57 @@ _gdk_x11_get_group_for_state (GdkDisplay      *display,
 }
 
 void
-_gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-				   GdkModifierType *modifiers)
+_gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
+				          GdkModifierType *modifiers)
 {
   GdkKeymapX11 *keymap_x11;
   int i;
   
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  for (i = 3; i < 8; i++)
+    {
+      if ((1 << i) & *modifiers)
+        {
+	  if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
+	    *modifiers |= GDK_MOD1_MASK;
+	  else if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+	    *modifiers |= GDK_SUPER_MASK;
+	  else if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
+	    *modifiers |= GDK_HYPER_MASK;
+	  else if (keymap_x11->modmap[i] & GDK_META_MASK)
+	    *modifiers |= GDK_META_MASK;
+        }
+    }
+}
+
+/**
+ * gdk_keymap_add_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @modifiers: pointer to the modifier mask to change
+ *
+ * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
+ * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @modifiers.
+ *
+ * GDK already does this before delivering key events, but for
+ * compatibility reasons, it only sets the first virtual modifier
+ * it finds, whereas this function sets all matching virtual modifiers.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Since: 2.20
+ */
+void
+gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+			          GdkModifierType *modifiers)
+{
+  GdkKeymapX11 *keymap_x11;
+  int i;
+
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
