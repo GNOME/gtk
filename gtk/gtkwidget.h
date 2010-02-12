@@ -880,12 +880,6 @@ void	gtk_widget_child_notify		  (GtkWidget	       *widget,
 					   const gchar	       *child_property);
 void	gtk_widget_thaw_child_notify	  (GtkWidget	       *widget);
 
-void       gtk_widget_set_realized        (GtkWidget           *widget,
-                                           gboolean             realized);
-gboolean   gtk_widget_get_realized        (GtkWidget           *widget);
-void       gtk_widget_set_mapped          (GtkWidget           *widget,
-                                           gboolean             mapped);
-gboolean   gtk_widget_get_mapped          (GtkWidget           *widget);
 void       gtk_widget_set_can_focus       (GtkWidget           *widget,
                                            gboolean             can_focus);
 gboolean   gtk_widget_get_can_focus       (GtkWidget           *widget);
