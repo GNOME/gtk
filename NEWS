@@ -1,3 +1,35 @@
+Overview of Changes from GTK+ 2.18.6 to 2.18.7
+==============================================
+
+* Bugs fixed:
+ 600865 gnome-panel crashed with "BadPixmap (invalid Pixmap...
+ 606698 Misplaced declaration of gtk_print_job_set_status
+ 606009 weirdness with clipping in abiword - csw
+ 607770 Leak in GtkTreeView with HildonPannableArea
+ 603144 Suspected wrong builtin page size: Chinese PRC6 and PRC9...
+ 607687 f-spot crashes when using themes using the pixmap engine
+ 608807 Marks on GtkScale widgets can overlap
+ 607508 Cannot drag windows around in pager applet any more
+ 608615 DnD events sent to wrong window
+ 599511 gtk_selection_owner_set causes graphical corruption...
+ 607344 GtkCalendar: crash when using tooltips via glade
+ 608410 GOK types backwards in text entry fields
+ 591186 GTK Menu Bar is unreadable under Windows 7
+ 607061 GtkPlug socket window is sometimes incorrectly unref'd...
+ 608370 dnd drag-dest signal handlers don't get correctly dis...
+ 608162 gtktoolbutton doesn't create right proxy menu item...
+ 561816 Optimize gtk_paned_set_position notifications
+
+* Translation updates:
+ Brazilian Portuguese
+ Burmese
+ Catalan
+ German
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes from GTK+ 2.18.5 to 2.18.6
 ==============================================
 
