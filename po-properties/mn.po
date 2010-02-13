@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -151,7 +151,7 @@ msgid "The resolution for fonts on the screen"
 msgstr "Дэлгэцэнд хэрхэн шинэчлэгдэх дараалал"
 
 # gtk/gtksettings.c:156
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 #, fuzzy
 msgid "Cursor"
 msgstr "Түүчээ анивчилт"

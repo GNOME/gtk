@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2009-04-09 04:32-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -146,7 +146,7 @@ msgid "The resolution for fonts on the screen"
 msgstr "Ekran üzerindeki urufatlarnıñ çezinirligi"
 
 # gtk/gtksettings.c:151
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 #, fuzzy
 msgid "Cursor"
 msgstr "İmleç Qıpması"

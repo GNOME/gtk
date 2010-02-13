@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2005-07-22 22:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -125,7 +125,7 @@ msgstr "Font resolution"
 msgid "The resolution for fonts on the screen"
 msgstr "The resolution for fonts on the screen"
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 #, fuzzy
 msgid "Cursor"
 msgstr "Cursor Blink"

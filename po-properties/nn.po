@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -139,7 +139,7 @@ msgstr "Skrift punkt"
 msgid "The resolution for fonts on the screen"
 msgstr "Korleis området skal oppdaterast på skjermen"
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 #, fuzzy
 msgid "Cursor"
 msgstr "Markørblinking"

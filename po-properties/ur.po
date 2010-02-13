@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-2-4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2006-06-20 15:32-0500\n"
 "Last-Translator: Zack Ajmal <urdu@zackvision.com>\n"
 "Language-Team: UrduWeb Localization Team <l10n@urduweb.org>\n"
@@ -119,7 +119,7 @@ msgstr ""
 msgid "The resolution for fonts on the screen"
 msgstr ""
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 msgid "Cursor"
 msgstr ""
 

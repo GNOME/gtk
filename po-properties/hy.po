@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 17:20-0500\n"
+"POT-Creation-Date: 2010-02-12 20:50-0500\n"
 "PO-Revision-Date: 2005-07-19 17:50+0500\n"
 "Last-Translator: Norayr Chilingaryan\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -126,7 +126,7 @@ msgstr "Տառատեսակի Ընտրություն"
 msgid "The resolution for fonts on the screen"
 msgstr ""
 
-#: gdk/gdkwindow.c:486 gdk/gdkwindow.c:487
+#: gdk/gdkwindow.c:487 gdk/gdkwindow.c:488
 msgid "Cursor"
 msgstr ""
 
