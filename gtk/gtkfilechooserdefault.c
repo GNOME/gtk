@@ -7487,6 +7487,19 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
       return FALSE;
     }
 
+  if (!_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
+    {
+      g_set_error_literal (error,
+                           GTK_FILE_CHOOSER_ERROR,
+                           GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
+                           _("Cannot change to folder because it is not "
+                             "accessible from this file chooser"));
+
+      g_object_unref (file);
+      profile_end ("end - not accessible within root URI", NULL);
+      return FALSE;
+    }
+
   if (impl->update_current_folder_cancellable)
     g_cancellable_cancel (impl->update_current_folder_cancellable);
 
