@@ -44,6 +44,7 @@ enum {
 typedef enum {
   NORMAL_BUTTON,
   ROOT_BUTTON,
+  VIRTUAL_ROOT_BUTTON,
   HOME_BUTTON,
   DESKTOP_BUTTON
 } ButtonType;
@@ -1225,6 +1226,13 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 
   switch (data->button_data->type)
     {
+      case VIRTUAL_ROOT_BUTTON:
+        if (data->path_bar->root_icon != NULL)
+          g_object_unref (data->path_bar->root_icon);
+        else
+          data->path_bar->root_icon = pixbuf;
+        break;
+
       case HOME_BUTTON:
 	if (data->path_bar->home_icon)
 	  g_object_unref (pixbuf);
@@ -1278,6 +1286,38 @@ set_button_image (GtkPathBar *path_bar,
       gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->root_icon);
       break;
 
+    case VIRTUAL_ROOT_BUTTON:
+      /*
+       * This is the first button, meaning that it's the root of the
+       * file chooser. Give it a special icon.
+       *
+       * We're reusing the root_icon variable, which in this particular
+       * case will actually represent this root. This is reset every time
+       * the icon theme or root URI changes.
+       */
+      if (path_bar->root_icon != NULL)
+        {
+          gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image),
+                                     path_bar->root_icon);
+        }
+      else
+        {
+          data = g_new0 (struct SetButtonImageData, 1);
+          data->path_bar = path_bar;
+          data->button_data = button_data;
+
+          if (button_data->cancellable)
+            g_cancellable_cancel (button_data->cancellable);
+
+          button_data->cancellable =
+            _gtk_file_system_get_info (path_bar->file_system,
+                                       button_data->file,
+                                       "standard::icon",
+                                       set_button_image_get_info_cb,
+                                       data);
+        }
+      break;
+
     case HOME_BUTTON:
       if (path_bar->home_icon != NULL)
         {
@@ -1321,6 +1361,7 @@ set_button_image (GtkPathBar *path_bar,
 				   set_button_image_get_info_cb,
 				   data);
       break;
+
     default:
       break;
     }
@@ -1426,6 +1467,20 @@ find_button_type (GtkPathBar  *path_bar,
       g_file_equal (file, path_bar->desktop_file))
     return DESKTOP_BUTTON;
 
+  if (path_bar->root_uri != NULL)
+    {
+      char *uri = g_file_get_uri (file);
+      int root_uri_len = strlen (path_bar->root_uri);
+
+      if (!strcmp (uri, path_bar->root_uri) ||
+          (path_bar->root_uri[root_uri_len - 1] == '/' &&
+           root_uri_len == strlen (uri) + 1 &&
+           !strncmp (uri, path_bar->root_uri, root_uri_len - 1)))
+        {
+          return VIRTUAL_ROOT_BUTTON;
+        }
+    }
+
  return NORMAL_BUTTON;
 }
 
@@ -1482,6 +1537,7 @@ make_directory_button (GtkPathBar  *path_bar,
       break;
     case HOME_BUTTON:
     case DESKTOP_BUTTON:
+    case VIRTUAL_ROOT_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       label_alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
@@ -1815,6 +1871,13 @@ _gtk_path_bar_set_root_uri    (GtkPathBar         *path_bar,
    * URI and break things.
    */
   gtk_path_bar_clear_buttons (path_bar);
+
+  // Also clear the root icon, as we'll be using this for the root URI button.
+  if (path_bar->root_icon)
+    {
+      g_object_unref (path_bar->root_icon);
+      path_bar->root_icon = NULL;
+    }
 }
 
 /**
