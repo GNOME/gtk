@@ -157,8 +157,8 @@ void _gdk_keymap_state_changed    (GdkDisplay      *display,
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
 				   GdkModifierType  state);
-void _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-					GdkModifierType *modifiers);
+void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
+                                               GdkModifierType *modifiers);
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
 
