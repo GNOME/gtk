@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GTK+ 1.4.0\n"
+"Project-Id-Version: GTK+-properties\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2010-02-13 03:55+0000\n"
-"PO-Revision-Date: 2010-02-15 09:04+0100\n"
+"POT-Creation-Date: 2010-02-17 15:53+0000\n"
+"PO-Revision-Date: 2010-02-18 09:57+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1384,19 +1384,16 @@ msgid "Active"
 msgstr "Dejavno"
 
 #: ../gtk/gtkcellrendererspinner.c:125
-#, fuzzy
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Ali naj bo izbrani slog pisave prikazan v oznaki"
+msgstr "Ali naj bo animirani vrtilnik kazalnika dejaven (prikazan) v celici"
 
 #: ../gtk/gtkcellrendererspinner.c:145
-#, fuzzy
 msgid "Pulse of the spinner"
-msgstr "Stolpec pulza"
+msgstr "Pulza animiranega vrtilnika kazalnika dejanja"
 
 #: ../gtk/gtkcellrendererspinner.c:159
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "Vrednost velikosti GtkIconSize izrisane ikone"
+msgstr "Vrednost GtkIconSize, ki določa velikost izrisanja animiranega vrtilnika dejanja"
 
 #: ../gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -5527,27 +5524,24 @@ msgid "Style of bevel around the spin button"
 msgstr "Slog vogalnice okoli krožnih gumbov"
 
 #: ../gtk/gtkspinner.c:129
-#, fuzzy
 msgid "Whether the spinner is active"
-msgstr "Ali je osnovna ikona dejavna ali ne."
+msgstr "Ali je animirani vrtilnik kazalnika dejanja dejaven."
 
 #: ../gtk/gtkspinner.c:143
 msgid "Number of steps"
 msgstr "Število korakov"
 
 #: ../gtk/gtkspinner.c:144
-#, fuzzy
 msgid "The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner:cycle-duration)."
-msgstr "Število korakov"
+msgstr "Število korakov, da animirani vrtilnik kazalnika dejanja konča celotno pot kroženja. Animacija bo privzeto zaključila krog v eni sekundi. (več v priročniku za #GtkSpinner:cycle-duration)."
 
 #: ../gtk/gtkspinner.c:159
 msgid "Animation duration"
 msgstr "Trajanje animacije"
 
 #: ../gtk/gtkspinner.c:160
-#, fuzzy
 msgid "The length of time in milliseconds for the spinner to complete a full loop"
-msgstr "Časovna dolžina v milisekundah za "
+msgstr "Čas v milisekundah, da animirani vrtilnik kazalnika dejanja konča celotno pot kroženja"
 
 #: ../gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -6341,23 +6335,20 @@ msgid "Ellipsize for item group headers"
 msgstr "Okrajšaj za glave skupin predmetov"
 
 #: ../gtk/gtktoolitemgroup.c:1561
-#, fuzzy
 msgid "Header Relief"
-msgstr "glava-stolpca"
+msgstr "Sproščanje glave"
 
 #: ../gtk/gtktoolitemgroup.c:1562
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "Pokaži gumbe glave stolpca"
+msgstr "Sproščanje gumba glave skupine"
 
 #: ../gtk/gtktoolitemgroup.c:1577
 msgid "Header Spacing"
 msgstr "Prostor med glavo"
 
 #: ../gtk/gtktoolitemgroup.c:1578
-#, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "Razmik okoli puščice razširitvenega gumba"
+msgstr "Razmik med nazivom in puščice razširitvenega gumba"
 
 #: ../gtk/gtktoolitemgroup.c:1594
 msgid "Whether the item should receive extra space when the group grows"
@@ -6388,9 +6379,8 @@ msgid "Style of items in the tool palette"
 msgstr "Slog predmetov te palete orodij"
 
 #: ../gtk/gtktoolpalette.c:1037
-#, fuzzy
 msgid "Exclusive"
-msgstr "Ekskluzivno"
+msgstr "Posebno"
 
 #: ../gtk/gtktoolpalette.c:1038
 msgid "Whether the item group should be the only expanded at a given time"
