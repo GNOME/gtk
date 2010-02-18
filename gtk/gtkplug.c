@@ -171,8 +171,7 @@ gtk_plug_class_init (GtkPlugClass *class)
    * GtkPlug::embedded:
    * @plug: the object on which the signal was emitted
    *
-   * Gets emitted when the plug becomes embedded in a socket
-   * and when the embedding ends.
+   * Gets emitted when the plug becomes embedded in a socket.
    */ 
   plug_signals[EMBEDDED] =
     g_signal_new (I_("embedded"),
