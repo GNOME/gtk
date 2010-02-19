@@ -288,7 +288,7 @@ gtk_tree_store_new (gint n_columns,
 /**
  * gtk_tree_store_newv:
  * @n_columns: number of columns in the tree store
- * @types: an array of #GType types for the columns, from first to last
+ * @types: (array length=n_columns): an array of #GType types for the columns, from first to last
  *
  * Non vararg creation function.  Used primarily by language bindings.
  *
@@ -980,8 +980,8 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
  * gtk_tree_store_set_valuesv:
  * @tree_store: A #GtkTreeStore
  * @iter: A valid #GtkTreeIter for the row being modified
- * @columns: an array of column numbers
- * @values: an array of GValues
+ * @columns: (array length=n_values): an array of column numbers
+ * @values: (array length=n_values): an array of GValues
  * @n_values: the length of the @columns and @values arrays
  *
  * A variant of gtk_tree_store_set_valist() which takes
