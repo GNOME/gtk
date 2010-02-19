@@ -5123,6 +5123,7 @@ gtk_widget_get_parent_window
 gtk_widget_get_pointer
 gtk_widget_get_receives_default
 gtk_widget_get_root_window
+gtk_widget_get_requisition
 gtk_widget_get_screen
 gtk_widget_get_sensitive
 gtk_widget_get_settings

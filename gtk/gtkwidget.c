@@ -11196,6 +11196,32 @@ gtk_widget_set_allocation (GtkWidget           *widget,
 }
 
 /**
+ * gtk_widget_get_requisition:
+ * @widget: a #GtkWidget
+ * @requisition: (out): a pointer to a #GtkRequisition to copy to
+ *
+ * Retrieves the widget's requisition.
+ *
+ * This function should only be used by widget implementations in
+ * order to figure whether the widget's requisition has actually
+ * changed after some internal state change (so that they can call
+ * gtk_widget_queue_resize() instead of gtk_widget_queue_draw()).
+ *
+ * Normally, gtk_widget_size_request() should be used.
+ *
+ * Since: 2.20
+ */
+void
+gtk_widget_get_requisition (GtkWidget      *widget,
+                            GtkRequisition *requisition)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (requisition != NULL);
+
+  *requisition = widget->requisition;
+}
+
+/**
  * gtk_widget_set_window:
  * @widget: a #GtkWidget
  * @window: a #GdkWindow
