@@ -484,7 +484,7 @@ gtk_test_text_get (GtkWidget *widget)
 /**
  * gtk_test_create_widget
  * @widget_type: a valid widget type.
- * @first_property_name: Name of first property to set or %NULL
+ * @first_property_name: (allow-none): Name of first property to set or %NULL
  * @Varargs: value to set the first property to, followed by more
  *    name-value pairs, terminated by %NULL
  *

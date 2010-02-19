@@ -882,7 +882,7 @@ gtk_info_bar_new (void)
 
 /**
  * gtk_info_bar_new_with_buttons:
- * @first_button_text: stock ID or text to go in first button, or %NULL
+ * @first_button_text: (allow-none): stock ID or text to go in first button, or %NULL
  * @...: response ID for first button, then additional buttons, ending
  *    with %NULL
  *

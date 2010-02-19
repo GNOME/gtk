@@ -1627,10 +1627,10 @@ render_fallback_image (GtkStyle          *style,
  * @state: widget state
  * @size: (type int): icon size. A size of (GtkIconSize)-1
  *        means render at the size of the source and don't scale.
- * @widget: widget that will display the icon, or %NULL.
+ * @widget: (allow-none): widget that will display the icon, or %NULL.
  *          The only use that is typically made of this
  *          is to determine the appropriate #GdkScreen.
- * @detail: detail to pass to the theme engine, or %NULL.
+ * @detail: (allow-none): detail to pass to the theme engine, or %NULL.
  *          Note that passing a detail of anything but %NULL
  *          will disable caching.
  *

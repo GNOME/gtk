@@ -442,8 +442,8 @@ gtk_menu_tool_button_destroy (GtkObject *object)
 
 /**
  * gtk_menu_tool_button_new:
- * @icon_widget: a widget that will be used as icon widget, or %NULL
- * @label: a string that will be used as label, or %NULL
+ * @icon_widget: (allow-none): a widget that will be used as icon widget, or %NULL
+ * @label: (allow-none): a string that will be used as label, or %NULL
  *
  * Creates a new #GtkMenuToolButton using @icon_widget as icon and
  * @label as label.

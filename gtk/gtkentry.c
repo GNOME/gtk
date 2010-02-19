@@ -7438,8 +7438,8 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: location to store X offset of layout, or %NULL
- * @y: location to store Y offset of layout, or %NULL
+ * @x: (allow-none): location to store X offset of layout, or %NULL
+ * @y: (allow-none): location to store Y offset of layout, or %NULL
  *
  *
  * Obtains the position of the #PangoLayout used to render text
@@ -7547,7 +7547,7 @@ gtk_entry_get_alignment (GtkEntry *entry)
  * gtk_entry_set_icon_from_pixbuf:
  * @entry: a #GtkEntry
  * @icon_pos: Icon position
- * @pixbuf: A #GdkPixbuf, or %NULL
+ * @pixbuf: (allow-none): A #GdkPixbuf, or %NULL
  *
  * Sets the icon shown in the specified position using a pixbuf.
  *
@@ -7610,7 +7610,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
  * gtk_entry_set_icon_from_stock:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
- * @stock_id: The name of the stock item, or %NULL
+ * @stock_id: (allow-none): The name of the stock item, or %NULL
  *
  * Sets the icon shown in the entry at the specified position from
  * a stock image.
@@ -7677,7 +7677,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
  * gtk_entry_set_icon_from_icon_name:
  * @entry: A #GtkEntry
  * @icon_pos: The position at which to set the icon
- * @icon_name: An icon name, or %NULL
+ * @icon_name: (allow-none): An icon name, or %NULL
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -7747,7 +7747,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
  * gtk_entry_set_icon_from_gicon:
  * @entry: A #GtkEntry
  * @icon_pos: The position at which to set the icon
- * @icon: The icon to set, or %NULL
+ * @icon: (allow-none): The icon to set, or %NULL
  *
  * Sets the icon shown in the entry at the specified position
  * from the current icon theme.
@@ -8342,7 +8342,7 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_text:
  * @entry: a #GtkEntry
  * @icon_pos: the icon position
- * @tooltip: the contents of the tooltip for the icon, or %NULL
+ * @tooltip: (allow-none): the contents of the tooltip for the icon, or %NULL
  *
  * Sets @tooltip as the contents of the tooltip for the icon
  * at the specified position.
@@ -8420,7 +8420,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * gtk_entry_set_icon_tooltip_markup:
  * @entry: a #GtkEntry
  * @icon_pos: the icon position
- * @tooltip: the contents of the tooltip for the icon, or %NULL
+ * @tooltip: (allow-none): the contents of the tooltip for the icon, or %NULL
  *
  * Sets @tooltip as the contents of the tooltip for the icon at
  * the specified position. @tooltip is assumed to be marked up with

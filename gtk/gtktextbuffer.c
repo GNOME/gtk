@@ -735,7 +735,7 @@ gtk_text_buffer_notify (GObject    *object,
 
 /**
  * gtk_text_buffer_new:
- * @table: a tag table, or %NULL to create a new one
+ * @table: (allow-none): a tag table, or %NULL to create a new one
  *
  * Creates a new text buffer.
  *
@@ -2429,8 +2429,8 @@ gtk_text_buffer_select_range (GtkTextBuffer     *buffer,
 /**
  * gtk_text_buffer_create_tag:
  * @buffer: a #GtkTextBuffer
- * @tag_name: name of the new tag, or %NULL
- * @first_property_name: name of first property to set, or %NULL
+ * @tag_name: (allow-none): name of the new tag, or %NULL
+ * @first_property_name: (allow-none): name of first property to set, or %NULL
  * @Varargs: %NULL-terminated list of property names and values
  *
  *

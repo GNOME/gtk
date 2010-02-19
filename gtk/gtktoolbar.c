@@ -3595,7 +3595,7 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
  * gtk_toolbar_append_element:
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: a #GtkWidget, or %NULL.
+ * @widget: (allow-none): a #GtkWidget, or %NULL.
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -3638,7 +3638,7 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * gtk_toolbar_prepend_element:
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: a #GtkWidget, or %NULL
+ * @widget: (allow-none): a #GtkWidget, or %NULL
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -3681,7 +3681,7 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget
  *   will be.
- * @widget: a #GtkWidget, or %NULL. 
+ * @widget: (allow-none): a #GtkWidget, or %NULL. 
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.

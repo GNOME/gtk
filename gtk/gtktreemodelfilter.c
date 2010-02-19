@@ -3011,8 +3011,8 @@ gtk_tree_model_filter_get_model (GtkTreeModelFilter *filter)
  * gtk_tree_model_filter_set_visible_func:
  * @filter: A #GtkTreeModelFilter.
  * @func: A #GtkTreeModelFilterVisibleFunc, the visible function.
- * @data: User data to pass to the visible function, or %NULL.
- * @destroy: Destroy notifier of @data, or %NULL.
+ * @data: (allow-none): User data to pass to the visible function, or %NULL.
+ * @destroy: (allow-none): Destroy notifier of @data, or %NULL.
  *
  * Sets the visible function used when filtering the @filter to be @func. The
  * function should return %TRUE if the given row should be visible and
@@ -3071,8 +3071,8 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * @n_columns: The number of columns in the filter model.
  * @types: The #GType<!-- -->s of the columns.
  * @func: A #GtkTreeModelFilterModifyFunc
- * @data: User data to pass to the modify function, or %NULL.
- * @destroy: Destroy notifier of @data, or %NULL.
+ * @data: (allow-none): User data to pass to the modify function, or %NULL.
+ * @destroy: (allow-none): Destroy notifier of @data, or %NULL.
  *
  * With the @n_columns and @types parameters, you give an array of column
  * types for this model (which will be exposed to the parent model/view).

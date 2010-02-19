@@ -2057,8 +2057,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_cursor:
  * @icon_view: A #GtkIconView
- * @path: Return location for the current cursor path, or %NULL
- * @cell: Return location the current focus cell, or %NULL
+ * @path: (allow-none): Return location for the current cursor path, or %NULL
+ * @cell: (allow-none): Return location the current focus cell, or %NULL
  *
  * Fills in @path and @cell with the current cursor path and cell. 
  * If the cursor isn't currently set, then *@path will be %NULL.  
@@ -4826,7 +4826,7 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @icon_view: A #GtkIconView.
  * @x: The x position to be identified
  * @y: The y position to be identified
- * @path: Return location for the path, or %NULL
+ * @path: (allow-none): Return location for the path, or %NULL
  * @cell: Return location for the renderer responsible for the cell
  *   at (@x, @y), or %NULL
  * 
@@ -4902,7 +4902,7 @@ gtk_icon_view_set_tooltip_item (GtkIconView     *icon_view,
  * @icon_view: a #GtkIconView
  * @tooltip: a #GtkTooltip
  * @path: a #GtkTreePath
- * @cell: a #GtkCellRenderer or %NULL
+ * @cell: (allow-none): a #GtkCellRenderer or %NULL
  *
  * Sets the tip area of @tooltip to the area which @cell occupies in
  * the item pointed to by @path. See also gtk_tooltip_set_tip_area().
@@ -4963,9 +4963,9 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * @x: the x coordinate (relative to widget coordinates)
  * @y: the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
- * @model: a pointer to receive a #GtkTreeModel or %NULL
- * @path: a pointer to receive a #GtkTreePath or %NULL
- * @iter: a pointer to receive a #GtkTreeIter or %NULL
+ * @model: (allow-none): a pointer to receive a #GtkTreeModel or %NULL
+ * @path: (allow-none): a pointer to receive a #GtkTreePath or %NULL
+ * @iter: (allow-none): a pointer to receive a #GtkTreeIter or %NULL
  *
  * This function is supposed to be used in a #GtkWidget::query-tooltip
  * signal handler for #GtkIconView.  The @x, @y and @keyboard_tip values
@@ -5135,8 +5135,8 @@ gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
 /**
  * gtk_icon_view_get_visible_range:
  * @icon_view: A #GtkIconView
- * @start_path: Return location for start of region, or %NULL
- * @end_path: Return location for end of region, or %NULL
+ * @start_path: (allow-none): Return location for start of region, or %NULL
+ * @end_path: (allow-none): Return location for end of region, or %NULL
  * 
  * Sets @start_path and @end_path to be the first and last visible path. 
  * Note that there may be invisible paths in between.
@@ -7258,8 +7258,8 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
 /**
  * gtk_icon_view_get_drag_dest_item:
  * @icon_view: a #GtkIconView
- * @path: Return location for the path of the highlighted item, or %NULL.
- * @pos: Return location for the drop position, or %NULL
+ * @path: (allow-none): Return location for the path of the highlighted item, or %NULL.
+ * @pos: (allow-none): Return location for the drop position, or %NULL
  * 
  * Gets information about the item that is highlighted for feedback.
  *
@@ -7289,8 +7289,8 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @drag_x: the position to determine the destination item for
  * @drag_y: the position to determine the destination item for
- * @path: Return location for the path of the item, or %NULL.
- * @pos: Return location for the drop position, or %NULL
+ * @path: (allow-none): Return location for the path of the item, or %NULL.
+ * @pos: (allow-none): Return location for the drop position, or %NULL
  * 
  * Determines the destination item for a given position.
  * 

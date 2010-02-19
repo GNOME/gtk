@@ -1861,7 +1861,7 @@ gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
  * @pixbuf: a #GdkPixbuf.
  * @filename: name of file to save.
  * @type: name of file format.
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a file in format @type. By default, "jpeg", "png", "ico" 
@@ -2009,7 +2009,7 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
  * @type: name of file format.
  * @option_keys: name of options to set, %NULL-terminated
  * @option_values: values for named options
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  *
  * Saves pixbuf to a file in @type, which is currently "jpeg", "png", "tiff", "ico" or "bmp".
  * If @error is set, %FALSE will be returned. 
@@ -2116,7 +2116,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
  *   the save routine generates.
  * @user_data: user data to pass to the save function.
  * @type: name of file format.
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf in format @type by feeding the produced data to a 
@@ -2172,7 +2172,7 @@ gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
  * @type: name of file format.
  * @option_keys: name of options to set, %NULL-terminated
  * @option_values: values for named options
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  *
  * Saves pixbuf to a callback in format @type, which is currently "jpeg",
  * "png", "tiff", "ico" or "bmp".  If @error is set, %FALSE will be returned. See
@@ -2217,7 +2217,7 @@ gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf,
  * @buffer: location to receive a pointer to the new buffer.
  * @buffer_size: location to receive the size of the new buffer.
  * @type: name of file format.
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
  * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
@@ -2306,7 +2306,7 @@ save_to_buffer_callback (const gchar *data,
  * @type: name of file format.
  * @option_keys: name of options to set, %NULL-terminated
  * @option_values: values for named options
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  *
  * Saves pixbuf to a new buffer in format @type, which is currently "jpeg",
  * "tiff", "png", "ico" or "bmp".  See gdk_pixbuf_save_to_buffer() 
@@ -2402,7 +2402,7 @@ save_to_stream (const gchar  *buffer,
  * @stream: a #GOutputStream to save the pixbuf to
  * @type: name of file format
  * @cancellable: optional #GCancellable object, %NULL to ignore
- * @error: return location for error, or %NULL
+ * @error: (allow-none): return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
  * Saves @pixbuf to an output stream.

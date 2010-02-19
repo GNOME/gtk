@@ -49,7 +49,7 @@ gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
 
 /**
  * gtk_hscrollbar_new:
- * @adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment
+ * @adjustment: (allow-none): the #GtkAdjustment to use, or %NULL to create a new adjustment
  *
  * Creates a new horizontal scrollbar.
  *

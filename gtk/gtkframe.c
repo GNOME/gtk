@@ -462,8 +462,8 @@ gtk_frame_set_label_align (GtkFrame *frame,
 /**
  * gtk_frame_get_label_align:
  * @frame: a #GtkFrame
- * @xalign: location to store X alignment of frame's label, or %NULL
- * @yalign: location to store X alignment of frame's label, or %NULL
+ * @xalign: (allow-none): location to store X alignment of frame's label, or %NULL
+ * @yalign: (allow-none): location to store X alignment of frame's label, or %NULL
  * 
  * Retrieves the X and Y alignment of the frame's label. See
  * gtk_frame_set_label_align().

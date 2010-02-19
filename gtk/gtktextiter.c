@@ -1175,7 +1175,7 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_ends_tag:
  * @iter: an iterator
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Returns %TRUE if @tag is toggled off at exactly this point. If @tag
  * is %NULL, returns %TRUE if any tag is toggled off at this point. Note
@@ -4308,7 +4308,7 @@ matches_pred (GtkTextIter *iter,
  * @iter: a #GtkTextIter
  * @pred: a function to be called on each character
  * @user_data: user data for @pred
- * @limit: search limit, or %NULL for none 
+ * @limit: (allow-none): search limit, or %NULL for none 
  * 
  * Advances @iter, calling @pred on each character. If
  * @pred returns %TRUE, returns %TRUE and stops scanning.
@@ -4346,7 +4346,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
  * @iter: a #GtkTextIter
  * @pred: function to be called on each character
  * @user_data: user data for @pred
- * @limit: search limit, or %NULL for none
+ * @limit: (allow-none): search limit, or %NULL for none
  * 
  * Same as gtk_text_iter_forward_find_char(), but goes backward from @iter.
  * 

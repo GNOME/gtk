@@ -3627,7 +3627,7 @@ load_pixbuf_verbosely (const char *filename,
  * gtk_window_set_icon_from_file:
  * @window: a #GtkWindow
  * @filename: location of icon file
- * @err: location to store error, or %NULL.
+ * @err: (allow-none): location to store error, or %NULL.
  *
  * Sets the icon for @window.  
  * Warns on failure if @err is %NULL.
@@ -3805,7 +3805,7 @@ gtk_window_get_default_icon_name (void)
 /**
  * gtk_window_set_default_icon_from_file:
  * @filename: location of icon file
- * @err: location to store error, or %NULL.
+ * @err: (allow-none): location to store error, or %NULL.
  *
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them from a file
@@ -3948,8 +3948,8 @@ gtk_window_set_default_size (GtkWindow   *window,
 /**
  * gtk_window_get_default_size:
  * @window: a #GtkWindow
- * @width: location to store the default width, or %NULL
- * @height: location to store the default height, or %NULL
+ * @width: (allow-none): location to store the default width, or %NULL
+ * @height: (allow-none): location to store the default height, or %NULL
  *
  * Gets the default size of the window. A value of -1 for the width or
  * height indicates that a default size has not been explicitly set
@@ -4016,8 +4016,8 @@ gtk_window_resize (GtkWindow *window,
 /**
  * gtk_window_get_size:
  * @window: a #GtkWindow
- * @width: (out): return location for width, or %NULL
- * @height: (out): return location for height, or %NULL
+ * @width: (allow-none): (out): return location for width, or %NULL
+ * @height: (allow-none): (out): return location for height, or %NULL
  *
  * Obtains the current size of @window. If @window is not onscreen,
  * it returns the size GTK+ will suggest to the <link
@@ -7351,10 +7351,10 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 /**
  * gtk_window_get_frame_dimensions:
  * @window: a #GtkWindow
- * @left: location to store the width of the frame at the left, or %NULL
- * @top: location to store the height of the frame at the top, or %NULL
- * @right: location to store the width of the frame at the returns, or %NULL
- * @bottom: location to store the height of the frame at the bottom, or %NULL
+ * @left: (allow-none): location to store the width of the frame at the left, or %NULL
+ * @top: (allow-none): location to store the height of the frame at the top, or %NULL
+ * @right: (allow-none): location to store the width of the frame at the returns, or %NULL
+ * @bottom: (allow-none): location to store the height of the frame at the bottom, or %NULL
  *
  * (Note: this is a special-purpose function intended for the
  *  framebuffer port; see gtk_window_set_has_frame(). It will not
@@ -7723,7 +7723,7 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
 
 /**
  * gtk_window_get_group:
- * @window: a #GtkWindow, or %NULL
+ * @window: (allow-none): a #GtkWindow, or %NULL
  *
  * Returns the group for @window or the default group, if
  * @window is %NULL or if @window does not have an explicit

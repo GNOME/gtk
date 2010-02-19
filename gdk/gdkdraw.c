@@ -99,7 +99,7 @@ gdk_drawable_init (GdkDrawable *drawable)
  * @drawable: a #GdkDrawable
  * @key: name to store the data under
  * @data: arbitrary data
- * @destroy_func: function to free @data, or %NULL
+ * @destroy_func: (allow-none): function to free @data, or %NULL
  *
  * This function is equivalent to g_object_set_data(),
  * the #GObject variant should be used instead.
@@ -142,8 +142,8 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
 /**
  * gdk_drawable_get_size:
  * @drawable: a #GdkDrawable
- * @width: (out): location to store drawable's width, or %NULL
- * @height: (out): location to store drawable's height, or %NULL
+ * @width: (allow-none): (out): location to store drawable's width, or %NULL
+ * @height: (allow-none): (out): location to store drawable's height, or %NULL
  *
  * Fills *@width and *@height with the size of @drawable.
  * @width or @height can be %NULL if you only want the other one.
@@ -733,7 +733,7 @@ gdk_draw_image (GdkDrawable *drawable,
 /**
  * gdk_draw_pixbuf:
  * @drawable: Destination drawable.
- * @gc: a #GdkGC, used for clipping, or %NULL
+ * @gc: (allow-none): a #GdkGC, used for clipping, or %NULL
  * @pixbuf: a #GdkPixbuf
  * @src_x: Source X coordinate within pixbuf.
  * @src_y: Source Y coordinates within pixbuf.
@@ -955,7 +955,7 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
  * gdk_draw_glyphs_transformed:
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC
- * @matrix: a #PangoMatrix, or %NULL to use an identity transformation
+ * @matrix: (allow-none): a #PangoMatrix, or %NULL to use an identity transformation
  * @font: the font in which to draw the string
  * @x:       the x position of the start of the string (in Pango
  *           units in user space coordinates)
@@ -1038,7 +1038,7 @@ gdk_draw_trapezoids (GdkDrawable        *drawable,
 /**
  * gdk_drawable_copy_to_image:
  * @drawable: a #GdkDrawable
- * @image: a #GdkDrawable, or %NULL if a new @image should be created.
+ * @image: (allow-none): a #GdkDrawable, or %NULL if a new @image should be created.
  * @src_x: x coordinate on @drawable
  * @src_y: y coordinate on @drawable
  * @dest_x: x coordinate within @image. Must be 0 if @image is %NULL

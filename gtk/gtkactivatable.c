@@ -356,7 +356,7 @@ gtk_activatable_update (GtkActivatable *activatable,
 /**
  * gtk_activatable_sync_action_properties:
  * @activatable: a #GtkActivatable
- * @action: the related #GtkAction or %NULL
+ * @action: (allow-none): the related #GtkAction or %NULL
  *
  * This is called to update the activatable completely, this is called
  * internally when the #GtkActivatable::related-action property is set

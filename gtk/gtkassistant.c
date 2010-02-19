@@ -1736,7 +1736,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 /**
  * gtk_assistant_set_forward_page_func:
  * @assistant: a #GtkAssistant
- * @page_func: the #GtkAssistantPageFunc, or %NULL to use the default one
+ * @page_func: (allow-none): the #GtkAssistantPageFunc, or %NULL to use the default one
  * @data: user data for @page_func
  * @destroy: destroy notifier for @data
  *

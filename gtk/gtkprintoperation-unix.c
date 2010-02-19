@@ -1011,8 +1011,8 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 
 /**
  * gtk_print_run_page_setup_dialog_async:
- * @parent: transient parent, or %NULL
- * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @parent: (allow-none): transient parent, or %NULL
+ * @page_setup: (allow-none): an existing #GtkPageSetup, or %NULL
  * @settings: a #GtkPrintSettings
  * @done_cb: a function to call when the user saves the modified page setup
  * @data: user data to pass to @done_cb

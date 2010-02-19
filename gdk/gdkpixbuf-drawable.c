@@ -1135,7 +1135,7 @@ rgbconvert (GdkImage    *image,
 
 /**
  * gdk_pixbuf_get_from_drawable:
- * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source drawable.
  * @cmap: A colormap if @src doesn't have one set.
  * @src_x: Source X coordinate within drawable.
@@ -1312,9 +1312,9 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
         
 /**
  * gdk_pixbuf_get_from_image:
- * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source #GdkImage.
- * @cmap: A colormap, or %NULL to use the one for @src
+ * @cmap: (allow-none): A colormap, or %NULL to use the one for @src
  * @src_x: Source X coordinate within drawable.
  * @src_y: Source Y coordinate within drawable.
  * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.

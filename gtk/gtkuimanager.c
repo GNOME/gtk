@@ -2107,7 +2107,7 @@ find_toolbar_position (GNode      *node,
 
 /**
  * _gtk_menu_is_empty:
- * @menu: a #GtkMenu or %NULL
+ * @menu: (allow-none): a #GtkMenu or %NULL
  * 
  * Determines whether @menu is empty. A menu is considered empty if it
  * the only visible children are tearoff menu items or "filler" menu 

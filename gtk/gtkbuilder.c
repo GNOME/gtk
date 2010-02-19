@@ -638,7 +638,7 @@ gtk_builder_new (void)
  * gtk_builder_add_from_file:
  * @builder: a #GtkBuilder
  * @filename: the name of the file to parse
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
@@ -692,7 +692,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @filename: the name of the file to parse
  * @object_ids: nul-terminated array of objects to build
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> building only the requested objects and merges
@@ -755,7 +755,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
@@ -800,7 +800,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @object_ids: nul-terminated array of objects to build
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> building only the requested objects and merges
@@ -909,7 +909,7 @@ gtk_builder_get_objects (GtkBuilder *builder)
 /**
  * gtk_builder_set_translation_domain:
  * @builder: a #GtkBuilder
- * @domain: the translation domain or %NULL
+ * @domain: (allow-none): the translation domain or %NULL
  *
  * Sets the translation domain of @builder. 
  * See #GtkBuilder:translation-domain.
@@ -1110,7 +1110,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * @pspec: the #GParamSpec for the property
  * @string: the string representation of the value
  * @value: the #GValue to store the result in
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * This function demarshals a value from a string. This function
  * calls g_value_init() on the @value argument, so it need not be
@@ -1163,7 +1163,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
  * @type: the #GType of the value
  * @string: the string representation of the value
  * @value: the #GValue to store the result in
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Like gtk_builder_value_from_string(), this function demarshals 
  * a value from a string, but takes a #GType instead of #GParamSpec.

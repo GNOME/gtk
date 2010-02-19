@@ -1359,7 +1359,7 @@ gtk_mount_operation_aborted (GMountOperation *op)
 
 /**
  * gtk_mount_operation_new:
- * @parent: transient parent of the window, or %NULL
+ * @parent: (allow-none): transient parent of the window, or %NULL
  *
  * Creates a new #GtkMountOperation
  *
@@ -1400,7 +1400,7 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
 /**
  * gtk_mount_operation_set_parent:
  * @op: a #GtkMountOperation
- * @parent: transient parent of the window, or %NULL
+ * @parent: (allow-none): transient parent of the window, or %NULL
  *
  * Sets the transient parent for windows shown by the
  * #GtkMountOperation.

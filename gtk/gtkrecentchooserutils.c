@@ -402,8 +402,8 @@ get_is_recent_filtered (GtkRecentFilter *filter,
  * _gtk_recent_chooser_get_items:
  * @chooser: a #GtkRecentChooser
  * @filter: a #GtkRecentFilter
- * @sort_func: sorting function, or %NULL
- * @sort_data: sorting function data, or %NULL
+ * @sort_func: (allow-none): sorting function, or %NULL
+ * @sort_data: (allow-none): sorting function data, or %NULL
  *
  * Default implementation for getting the filtered, sorted and
  * clamped list of recently used resources from a #GtkRecentChooser.

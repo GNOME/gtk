@@ -5172,8 +5172,8 @@ gtk_label_get_layout (GtkLabel *label)
 /**
  * gtk_label_get_layout_offsets:
  * @label: a #GtkLabel
- * @x: location to store X offset of layout, or %NULL
- * @y: location to store Y offset of layout, or %NULL
+ * @x: (allow-none): location to store X offset of layout, or %NULL
+ * @y: (allow-none): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events

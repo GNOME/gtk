@@ -738,7 +738,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
 
 /**
  * gtk_selection_owner_set:
- * @widget:  a #GtkWidget, or %NULL.
+ * @widget: (allow-none):  a #GtkWidget, or %NULL.
  * @selection:  an interned atom representing the selection to claim
  * @time_: timestamp with which to claim the selection
  * 

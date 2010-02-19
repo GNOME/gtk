@@ -386,9 +386,9 @@ gtk_ruler_set_range (GtkRuler *ruler,
 /**
  * gtk_ruler_get_range:
  * @ruler: a #GtkRuler
- * @lower: location to store lower limit of the ruler, or %NULL
- * @upper: location to store upper limit of the ruler, or %NULL
- * @position: location to store the current position of the mark on the ruler, or %NULL
+ * @lower: (allow-none): location to store lower limit of the ruler, or %NULL
+ * @upper: (allow-none): location to store upper limit of the ruler, or %NULL
+ * @position: (allow-none): location to store the current position of the mark on the ruler, or %NULL
  * @max_size: location to store the maximum size of the ruler used when calculating
  *            the space to leave for the text, or %NULL.
  *

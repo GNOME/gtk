@@ -1297,8 +1297,8 @@ gtk_scale_get_layout (GtkScale *scale)
 /**
  * gtk_scale_get_layout_offsets:
  * @scale: a #GtkScale
- * @x: location to store X offset of layout, or %NULL
- * @y: location to store Y offset of layout, or %NULL
+ * @x: (allow-none): location to store X offset of layout, or %NULL
+ * @y: (allow-none): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the scale will draw the 
  * #PangoLayout representing the text in the scale. Remember
@@ -1394,7 +1394,7 @@ compare_marks (gpointer a, gpointer b)
  *   is drawn above the scale, anything else below. For a vertical scale,
  *   #GTK_POS_LEFT is drawn to the left of the scale, anything else to the
  *   right.
- * @markup: Text to be shown at the mark, using <link linkend="PangoMarkupFormat">Pango markup</link>, or %NULL
+ * @markup: (allow-none): Text to be shown at the mark, using <link linkend="PangoMarkupFormat">Pango markup</link>, or %NULL
  *
  *
  * Adds a mark at @value. 

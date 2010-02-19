@@ -5573,7 +5573,7 @@ gdk_window_invalidate_rect_full (GdkWindow          *window,
 /**
  * gdk_window_invalidate_rect:
  * @window: a #GdkWindow
- * @rect: rectangle to invalidate or %NULL to invalidate the whole
+ * @rect: (allow-none): rectangle to invalidate or %NULL to invalidate the whole
  *      window
  * @invalidate_children: whether to also invalidate child windows
  *
@@ -6777,7 +6777,7 @@ gdk_window_lower (GdkWindow *window)
 /**
  * gdk_window_restack:
  * @window: a #GdkWindow
- * @sibling: a #GdkWindow that is a sibling of @window, or %NULL
+ * @sibling: (allow-none): a #GdkWindow that is a sibling of @window, or %NULL
  * @above: a boolean
  *
  * Changes the position of  @window in the Z-order (stacking order), so that
@@ -7761,7 +7761,7 @@ gdk_window_set_background (GdkWindow      *window,
 /**
  * gdk_window_set_back_pixmap:
  * @window: a #GdkWindow
- * @pixmap: a #GdkPixmap, or %NULL
+ * @pixmap: (allow-none): a #GdkPixmap, or %NULL
  * @parent_relative: whether the tiling origin is at the origin of
  *   @window's parent
  *
@@ -8331,7 +8331,7 @@ gdk_window_merge_child_shapes (GdkWindow *window)
 /**
  * gdk_window_input_shape_combine_mask:
  * @window: a #GdkWindow
- * @mask: shape mask, or %NULL
+ * @mask: (allow-none): shape mask, or %NULL
  * @x: X position of shape mask with respect to @window
  * @y: Y position of shape mask with respect to @window
  *

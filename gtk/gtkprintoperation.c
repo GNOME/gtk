@@ -944,7 +944,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * @operation: the #GtkPrintOperation on which the signal was emitted
    * @preview: the #GtkPrintPreviewOperation for the current operation
    * @context: the #GtkPrintContext that will be used
-   * @parent: the #GtkWindow to use as window parent, or %NULL
+   * @parent: (allow-none): the #GtkWindow to use as window parent, or %NULL
    *
    * Gets emitted when a preview is requested from the native dialog.
    *
@@ -1854,7 +1854,7 @@ gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 /**
  * gtk_print_operation_set_custom_tab_label:
  * @op: a #GtkPrintOperation
- * @label: the label to use, or %NULL to use the default label
+ * @label: (allow-none): the label to use, or %NULL to use the default label
  *
  * Sets the label for the tab holding custom widgets.
  *
@@ -2993,7 +2993,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * @op: a #GtkPrintOperation
  * @action: the action to start
  * @parent: (allow-none): Transient parent of the dialog
- * @error: Return location for errors, or %NULL
+ * @error: (allow-none): Return location for errors, or %NULL
  *
  * Runs the print operation, by first letting the user modify
  * print settings in the print dialog, and then print the document.

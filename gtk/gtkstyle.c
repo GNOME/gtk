@@ -6740,10 +6740,10 @@ gtk_paint_resize_grip (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget (may be %NULL)
+ * @detail: (allow-none): a style detail (may be %NULL)
  * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
  * @x: the x origin of the rectangle in which to draw the spinner
  * @y: the y origin of the rectangle in which to draw the spinner
@@ -6908,7 +6908,7 @@ gtk_style_get_font (GtkStyle *style)
 /**
  * gtk_style_set_font:
  * @style: a #GtkStyle.
- * @font: a #GdkFont, or %NULL to use the #GdkFont corresponding
+ * @font: (allow-none): a #GdkFont, or %NULL to use the #GdkFont corresponding
  *   to style->font_desc.
  * 
  * Sets the #GdkFont to use for a given style. This is
