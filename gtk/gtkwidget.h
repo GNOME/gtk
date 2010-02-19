@@ -961,6 +961,9 @@ void                  gtk_widget_get_allocation         (GtkWidget     *widget,
 void                  gtk_widget_set_allocation         (GtkWidget     *widget,
                                                          const GtkAllocation *allocation);
 
+void                  gtk_widget_get_requisition        (GtkWidget     *widget,
+                                                         GtkRequisition *requisition);
+
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
                                            GtkDirectionType     direction);
 gboolean   gtk_widget_keynav_failed       (GtkWidget           *widget,
