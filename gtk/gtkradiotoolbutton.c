@@ -109,7 +109,7 @@ gtk_radio_tool_button_set_property (GObject         *object,
 
 /**
  * gtk_radio_tool_button_new:
- * @group: An existing radio button group, or %NULL if you are creating a new group
+ * @group: (allow-none): An existing radio button group, or %NULL if you are creating a new group
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group.
  * 
@@ -132,7 +132,7 @@ gtk_radio_tool_button_new (GSList *group)
 
 /**
  * gtk_radio_tool_button_new_from_stock:
- * @group: an existing radio button group, or %NULL if you are creating a new group
+ * @group: (allow-none): an existing radio button group, or %NULL if you are creating a new group
  * @stock_id: the name of a stock item
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group. 

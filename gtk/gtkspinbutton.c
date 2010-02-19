@@ -1849,8 +1849,8 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_increments:
  * @spin_button: a #GtkSpinButton
- * @step: location to store step increment, or %NULL
- * @page: location to store page increment, or %NULL
+ * @step: (allow-none): location to store step increment, or %NULL
+ * @page: (allow-none): location to store page increment, or %NULL
  *
  * Gets the current step and page the increments used by @spin_button. See
  * gtk_spin_button_set_increments().
@@ -1901,8 +1901,8 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_range:
  * @spin_button: a #GtkSpinButton
- * @min: location to store minimum allowed value, or %NULL
- * @max: location to store maximum allowed value, or %NULL
+ * @min: (allow-none): location to store minimum allowed value, or %NULL
+ * @max: (allow-none): location to store maximum allowed value, or %NULL
  *
  * Gets the range allowed for @spin_button. See
  * gtk_spin_button_set_range().

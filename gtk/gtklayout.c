@@ -118,8 +118,8 @@ G_DEFINE_TYPE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER)
  */
 /**
  * gtk_layout_new:
- * @hadjustment: horizontal scroll adjustment, or %NULL
- * @vadjustment: vertical scroll adjustment, or %NULL
+ * @hadjustment: (allow-none): horizontal scroll adjustment, or %NULL
+ * @vadjustment: (allow-none): vertical scroll adjustment, or %NULL
  * 
  * Creates a new #GtkLayout. Unless you have a specific adjustment
  * you'd like the layout to use for scrolling, pass %NULL for
@@ -513,8 +513,8 @@ gtk_layout_set_size (GtkLayout     *layout,
 /**
  * gtk_layout_get_size:
  * @layout: a #GtkLayout
- * @width: location to store the width set on @layout, or %NULL
- * @height: location to store the height set on @layout, or %NULL
+ * @width: (allow-none): location to store the width set on @layout, or %NULL
+ * @height: (allow-none): location to store the height set on @layout, or %NULL
  *
  * Gets the size that has been set on the layout, and that determines
  * the total extents of the layout's scrollbar area. See

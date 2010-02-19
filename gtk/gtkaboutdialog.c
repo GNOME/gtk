@@ -2416,7 +2416,7 @@ close_cb (GtkAboutDialog *about)
 
 /**
  * gtk_show_about_dialog:
- * @parent: transient parent, or %NULL for none
+ * @parent: (allow-none): transient parent, or %NULL for none
  * @first_property_name: the name of the first property
  * @Varargs: value of first property, followed by more properties, %NULL-terminated
  *

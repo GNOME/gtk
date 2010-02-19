@@ -441,7 +441,7 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
 /**
  * gtk_print_job_get_surface:
  * @job: a #GtkPrintJob
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * Gets a cairo surface onto which the pages of
  * the print job should be rendered.

@@ -130,7 +130,7 @@ gtk_cell_editable_base_init (GtkCellEditableIface *iface)
 /**
  * gtk_cell_editable_start_editing:
  * @cell_editable: A #GtkCellEditable
- * @event: A #GdkEvent, or %NULL
+ * @event: (allow-none): A #GdkEvent, or %NULL
  * 
  * Begins editing on a @cell_editable. @event is the #GdkEvent that began 
  * the editing process. It may be %NULL, in the instance that editing was 

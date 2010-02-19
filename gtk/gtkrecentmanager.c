@@ -986,7 +986,7 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
  * gtk_recent_manager_remove_item:
  * @manager: a #GtkRecentManager
  * @uri: the URI of the item you wish to remove
- * @error: return location for a #GError, or %NULL
+ * @error: (allow-none): return location for a #GError, or %NULL
  *
  * Removes a resource pointed by @uri from the recently used resources
  * list handled by a recent manager.
@@ -1135,7 +1135,7 @@ build_recent_info (GBookmarkFile  *bookmarks,
  * gtk_recent_manager_lookup_item:
  * @manager: a #GtkRecentManager
  * @uri: a URI
- * @error: a return location for a #GError, or %NULL
+ * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Searches for a URI inside the recently used resources list, and
  * returns a structure containing informations about the resource
@@ -1198,9 +1198,9 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
  * gtk_recent_manager_move_item:
  * @manager: a #GtkRecentManager
  * @uri: the URI of a recently used resource
- * @new_uri: the new URI of the recently used resource, or %NULL to
+ * @new_uri: (allow-none): the new URI of the recently used resource, or %NULL to
  *    remove the item pointed by @uri in the list
- * @error: a return location for a #GError, or %NULL
+ * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Changes the location of a recently used resource from @uri to @new_uri.
  * 
@@ -1339,7 +1339,7 @@ purge_recent_items_list (GtkRecentManager  *manager,
 /**
  * gtk_recent_manager_purge_items:
  * @manager: a #GtkRecentManager
- * @error: a return location for a #GError, or %NULL
+ * @error: (allow-none): a return location for a #GError, or %NULL
  *
  * Purges every item from the recently used resources list.
  *

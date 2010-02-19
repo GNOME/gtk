@@ -905,7 +905,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::parent-set:
    * @widget: the object on which the signal is emitted
-   * @old_parent: the previous parent, or %NULL if the widget 
+   * @old_parent: (allow-none): the previous parent, or %NULL if the widget
    *   just got its initial parent.
    *
    * The ::parent-set signal is emitted when a new parent 
@@ -924,7 +924,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::hierarchy-changed:
    * @widget: the object on which the signal is emitted
-   * @previous_toplevel: the previous toplevel ancestor, or %NULL
+   * @previous_toplevel: (allow-none): the previous toplevel ancestor, or %NULL
    *   if the widget was previously unanchored
    *
    * The ::hierarchy-changed signal is emitted when the
@@ -946,7 +946,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::style-set:
    * @widget: the object on which the signal is emitted
-   * @previous_style: the previous style, or %NULL if the widget 
+   * @previous_style: (allow-none): the previous style, or %NULL if the widget
    *   just got its initial style 
    *
    * The ::style-set signal is emitted when a new style has been set 
@@ -2337,7 +2337,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::screen-changed:
    * @widget: the object on which the signal is emitted
-   * @previous_screen: the previous screen, or %NULL if the
+   * @previous_screen: (allow-none): the previous screen, or %NULL if the
    *   widget was not associated with a screen before
    *
    * The ::screen-changed signal gets emitted when the
@@ -7949,8 +7949,8 @@ gtk_widget_set_size_request (GtkWidget *widget,
 /**
  * gtk_widget_get_size_request:
  * @widget: a #GtkWidget
- * @width: (out): return location for width, or %NULL
- * @height: (out): return location for height, or %NULL
+ * @width: (allow-none): (out): return location for width, or %NULL
+ * @height: (allow-none): (out): return location for height, or %NULL
  *
  * Gets the size request that was explicitly set for the widget using
  * gtk_widget_set_size_request(). A value of -1 stored in @width or
@@ -9290,7 +9290,7 @@ gtk_widget_shape_info_destroy (GtkWidgetShapeInfo *info)
 /**
  * gtk_widget_shape_combine_mask: 
  * @widget: a #GtkWidget
- * @shape_mask: shape to be added, or %NULL to remove an existing shape
+ * @shape_mask: (allow-none): shape to be added, or %NULL to remove an existing shape
  * @offset_x: X position of shape mask with respect to @window
  * @offset_y: Y position of shape mask with respect to @window
  * 
@@ -9514,7 +9514,7 @@ expose_window (GdkWindow *window)
 /**
  * gtk_widget_get_snapshot:
  * @widget:    a #GtkWidget
- * @clip_rect: a #GdkRectangle or %NULL
+ * @clip_rect: (allow-none): a #GdkRectangle or %NULL
  *
  * Create a #GdkPixmap of the contents of the widget and its children.
  *
@@ -9745,7 +9745,7 @@ gtk_widget_class_install_style_property (GtkWidgetClass *klass,
  * gtk_widget_class_find_style_property:
  * @klass: a #GtkWidgetClass
  * @property_name: the name of the style property to find
- * @returns: the #GParamSpec of the style property or %NULL if @class has no
+ * @returns: (allow-none): the #GParamSpec of the style property or %NULL if @class has no
  *   style property with that name.
  *
  * Finds a style property of a widget class by name.
@@ -10917,7 +10917,7 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 /**
  * gtk_widget_set_tooltip_window:
  * @widget: a #GtkWidget
- * @custom_window: a #GtkWindow, or %NULL
+ * @custom_window: (allow-none): a #GtkWindow, or %NULL
  *
  * Replaces the default, usually yellow, window used for displaying
  * tooltips with @custom_window. GTK+ will take care of showing and
@@ -11069,7 +11069,7 @@ gtk_widget_get_tooltip_text (GtkWidget *widget)
 /**
  * gtk_widget_set_tooltip_markup:
  * @widget: a #GtkWidget
- * @markup: the contents of the tooltip for @widget, or %NULL
+ * @markup: (allow-none): the contents of the tooltip for @widget, or %NULL
  *
  * Sets @markup as the contents of the tooltip, which is marked up with
  *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.

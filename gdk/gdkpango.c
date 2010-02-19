@@ -623,7 +623,7 @@ gdk_pango_renderer_get_default (GdkScreen *screen)
 /**
  * gdk_pango_renderer_set_drawable:
  * @gdk_renderer: a #GdkPangoRenderer
- * @drawable: the new target drawable, or %NULL
+ * @drawable: (allow-none): the new target drawable, or %NULL
  * 
  * Sets the drawable the renderer draws to.
  *
@@ -653,7 +653,7 @@ gdk_pango_renderer_set_drawable (GdkPangoRenderer *gdk_renderer,
 /**
  * gdk_pango_renderer_set_gc:
  * @gdk_renderer: a #GdkPangoRenderer
- * @gc: the new GC to use for drawing, or %NULL
+ * @gc: (allow-none): the new GC to use for drawing, or %NULL
  * 
  * Sets the GC the renderer draws with. Note that the GC must not be
  * modified until it is unset by calling the function again with
@@ -730,7 +730,7 @@ gdk_pango_renderer_set_stipple (GdkPangoRenderer *gdk_renderer,
  * gdk_pango_renderer_set_override_color:
  * @gdk_renderer: a #GdkPangoRenderer
  * @part: the part to render to set the color of
- * @color: the color to use, or %NULL to unset a previously
+ * @color: (allow-none): the color to use, or %NULL to unset a previously
  *         set override color.
  * 
  * Sets the color for a particular render part (foreground,
@@ -851,8 +851,8 @@ release_renderer (PangoRenderer *renderer)
  * @x:         the x position of start of string (in pixels)
  * @y:         the y position of baseline (in pixels)
  * @line:      a #PangoLayoutLine
- * @foreground: foreground override color, or %NULL for none
- * @background: background override color, or %NULL for none
+ * @foreground: (allow-none): foreground override color, or %NULL for none
+ * @background: (allow-none): background override color, or %NULL for none
  *
  * Render a #PangoLayoutLine onto a #GdkDrawable, overriding the
  * layout's normal colors with @foreground and/or @background.
@@ -928,8 +928,8 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
  * @x:         the X position of the left of the layout (in pixels)
  * @y:         the Y position of the top of the layout (in pixels)
  * @layout:    a #PangoLayout
- * @foreground: foreground override color, or %NULL for none
- * @background: background override color, or %NULL for none
+ * @foreground: (allow-none): foreground override color, or %NULL for none
+ * @background: (allow-none): background override color, or %NULL for none
  *
  * Render a #PangoLayout onto a #GdkDrawable, overriding the
  * layout's normal colors with @foreground and/or @background.

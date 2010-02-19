@@ -7653,9 +7653,9 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
 /**
  * gtk_notebook_set_window_creation_hook:
- * @func: the #GtkNotebookWindowCreationFunc, or %NULL
+ * @func: (allow-none): the #GtkNotebookWindowCreationFunc, or %NULL
  * @data: user data for @func
- * @destroy: Destroy notifier for @data, or %NULL
+ * @destroy: (allow-none): Destroy notifier for @data, or %NULL
  *
  * Installs a global function used to create a window
  * when a detached tab is dropped in an empty area.
@@ -7704,7 +7704,7 @@ gtk_notebook_set_group_id (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_group:
  * @notebook: a #GtkNotebook
- * @group: a pointer to identify the notebook group, or %NULL to unset it
+ * @group: (allow-none): a pointer to identify the notebook group, or %NULL to unset it
  *
  * Sets a group identificator pointer for @notebook, notebooks sharing
  * the same group identificator pointer will be able to exchange tabs

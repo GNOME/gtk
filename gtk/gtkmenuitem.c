@@ -754,7 +754,7 @@ gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
 /**
  * gtk_menu_item_set_submenu:
  * @menu_item: a #GtkMenuItem
- * @submenu: the submenu, or %NULL
+ * @submenu: (allow-none): the submenu, or %NULL
  *
  * Sets or replaces the menu item's submenu, or removes it when a %NULL
  * submenu is passed.

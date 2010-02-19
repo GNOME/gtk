@@ -3819,8 +3819,8 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
 
 /**
  * gtk_print_unix_dialog_new:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL
  *
  * Creates a new #GtkPrintUnixDialog.
  *
@@ -4029,7 +4029,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
 /**
  * gtk_print_unix_dialog_set_settings:
  * @dialog: a #GtkPrintUnixDialog
- * @settings: a #GtkPrintSettings, or %NULL
+ * @settings: (allow-none): a #GtkPrintSettings, or %NULL
  *
  * Sets the #GtkPrintSettings for the #GtkPrintUnixDialog. Typically,
  * this is used to restore saved print settings from a previous print

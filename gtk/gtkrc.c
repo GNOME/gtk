@@ -3868,7 +3868,7 @@ gtk_rc_parse_color (GScanner *scanner,
 /**
  * gtk_rc_parse_color_full:
  * @scanner: a #GScanner
- * @style: a #GtkRcStyle, or %NULL
+ * @style: (allow-none): a #GtkRcStyle, or %NULL
  * @color: a pointer to a #GdkColor structure in which to store the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected

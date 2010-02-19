@@ -1333,7 +1333,7 @@ _gtk_file_system_model_new (GtkFileSystemModelGetValue get_func,
 /**
  * _gtk_file_system_model_new_for_directory:
  * @directory: the directory to show.
- * @attributes: attributes to immediately load or %NULL for all
+ * @attributes: (allow-none): attributes to immediately load or %NULL for all
  * @get_func: function that the model should call to query data about a file
  * @get_data: user data to pass to the @get_func
  * @n_columns: number of columns
@@ -1800,7 +1800,7 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 /**
  * _gtk_file_system_model_set_filter:
  * @mode: a #GtkFileSystemModel
- * @filter: %NULL or filter to use
+ * @filter: (allow-none): %NULL or filter to use
  * 
  * Sets a filter to be used for deciding if a row should be visible or not.
  * Directories are always visible.

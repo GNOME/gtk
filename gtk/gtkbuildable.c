@@ -103,7 +103,7 @@ gtk_buildable_get_name (GtkBuildable *buildable)
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @child: child to add
- * @type: kind of child or %NULL
+ * @type: (allow-none): kind of child or %NULL
  *
  * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.
@@ -221,7 +221,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * gtk_buildable_custom_tag_start:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder used to construct this object
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @parser: a #GMarkupParser structure to fill in
  * @data: return location for user data that will be passed in 
@@ -259,7 +259,7 @@ gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
  * gtk_buildable_custom_tag_end:
  * @buildable: A #GtkBuildable
  * @builder: #GtkBuilder used to construct this object
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
  * @data: user data that will be passed in to parser functions
  *
@@ -290,7 +290,7 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
  * gtk_buildable_custom_finished:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: the name of the tag
  * @data: user data created in custom_tag_start
  *

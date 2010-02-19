@@ -156,7 +156,7 @@ gtk_file_filter_new (void)
 /**
  * gtk_file_filter_set_name:
  * @filter: a #GtkFileFilter
- * @name: the human-readable-name for the filter, or %NULL
+ * @name: (allow-none): the human-readable-name for the filter, or %NULL
  *   to remove any existing name.
  * 
  * Sets the human-readable name of the filter; this is the string

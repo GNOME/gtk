@@ -980,7 +980,7 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  * gtk_container_class_find_child_property:
  * @cclass: a #GtkContainerClass
  * @property_name: the name of the child property to find
- * @returns: the #GParamSpec of the child property or %NULL if @class has no
+ * @returns: (allow-none): the #GParamSpec of the child property or %NULL if @class has no
  *   child property with that name.
  *
  * Finds a child property of a container class by name.
@@ -2227,7 +2227,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  * @children:  a list of descendents of @container (they don't
  *             have to be direct children)
  * @direction: focus direction
- * @old_focus: widget to use for the starting position, or %NULL
+ * @old_focus: (allow-none): widget to use for the starting position, or %NULL
  *             to determine this automatically.
  *             (Note, this argument isn't used for GTK_DIR_TAB_*,
  *              which is the only @direction we use currently,

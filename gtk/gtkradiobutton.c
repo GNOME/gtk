@@ -322,7 +322,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
 
 /**
  * gtk_radio_button_new_with_mnemonic_from_widget:
- * @radio_group_member: widget to get radio group from or %NULL
+ * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
  * @returns: a new #GtkRadioButton

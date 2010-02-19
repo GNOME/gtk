@@ -463,8 +463,8 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
 /**
  * gtk_action_new:
  * @name: A unique name for the action
- * @label: the label displayed in menu items and on buttons, or %NULL
- * @tooltip: a tooltip for the action, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: (allow-none): a tooltip for the action, or %NULL
  * @stock_id: the stock icon to display in widgets representing the
  *   action, or %NULL
  *
@@ -698,7 +698,7 @@ disconnect_proxy (GtkAction *action,
 
 /**
  * _gtk_action_sync_menu_visible:
- * @action: a #GtkAction, or %NULL to determine the action from @proxy
+ * @action: (allow-none): a #GtkAction, or %NULL to determine the action from @proxy
  * @proxy: a proxy menu item
  * @empty: whether the submenu attached to @proxy is empty
  * 

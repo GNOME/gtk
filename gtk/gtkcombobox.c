@@ -5001,7 +5001,7 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
 /**
  * gtk_combo_box_set_active_iter:
  * @combo_box: A #GtkComboBox
- * @iter: The #GtkTreeIter, or %NULL
+ * @iter: (allow-none): The #GtkTreeIter, or %NULL
  * 
  * Sets the current active item to be the one referenced by @iter, or
  * unsets the active item if @iter is %NULL.
@@ -5791,8 +5791,8 @@ gtk_combo_box_get_row_separator_func (GtkComboBox *combo_box)
  * gtk_combo_box_set_row_separator_func:
  * @combo_box: a #GtkComboBox
  * @func: a #GtkTreeViewRowSeparatorFunc
- * @data: user data to pass to @func, or %NULL
- * @destroy: destroy notifier for @data, or %NULL
+ * @data: (allow-none): user data to pass to @func, or %NULL
+ * @destroy: (allow-none): destroy notifier for @data, or %NULL
  * 
  * Sets the row separator function, which is used to determine
  * whether a row should be drawn as a separator. If the row separator

@@ -703,9 +703,9 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
 
 /**
  * gtk_link_button_set_uri_hook:
- * @func: a function called each time a #GtkLinkButton is clicked, or %NULL
- * @data: user data to be passed to @func, or %NULL
- * @destroy: a #GDestroyNotify that gets called when @data is no longer needed, or %NULL
+ * @func: (allow-none): a function called each time a #GtkLinkButton is clicked, or %NULL
+ * @data: (allow-none): user data to be passed to @func, or %NULL
+ * @destroy: (allow-none): a #GDestroyNotify that gets called when @data is no longer needed, or %NULL
  *
  * Sets @func as the function that should be invoked every time a user clicks
  * a #GtkLinkButton. This function is called before every callback registered

@@ -49,7 +49,7 @@ gtk_vscrollbar_init (GtkVScrollbar *vscrollbar)
 
 /**
  * gtk_vscrollbar_new:
- * @adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment
+ * @adjustment: (allow-none): the #GtkAdjustment to use, or %NULL to create a new adjustment
  *
  * Creates a new vertical scrollbar.
  *

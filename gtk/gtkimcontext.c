@@ -396,7 +396,7 @@ gtk_im_context_real_get_surrounding (GtkIMContext *context,
 /**
  * gtk_im_context_set_client_window:
  * @context: a #GtkIMContext
- * @window:  the client window. This may be %NULL to indicate
+ * @window: (allow-none):  the client window. This may be %NULL to indicate
  *           that the previous client window no longer exists.
  * 
  * Set the client window for the input context; this is the

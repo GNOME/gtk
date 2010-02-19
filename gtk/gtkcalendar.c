@@ -3823,9 +3823,9 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
 /**
  * gtk_calendar_get_date:
  * @calendar: a #GtkCalendar
- * @year: location to store the year number, or %NULL
- * @month: location to store the month number (between 0 and 11), or %NULL
- * @day: location to store the day number (between 1 and 31), or %NULL
+ * @year: (allow-none): location to store the year number, or %NULL
+ * @month: (allow-none): location to store the month number (between 0 and 11), or %NULL
+ * @day: (allow-none): location to store the day number (between 1 and 31), or %NULL
  * 
  * Obtains the selected date from a #GtkCalendar.
  **/

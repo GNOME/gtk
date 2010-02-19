@@ -434,7 +434,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
 
 /**
  * gtk_entry_buffer_new:
- * @initial_chars: initial buffer text, or %NULL
+ * @initial_chars: (allow-none): initial buffer text, or %NULL
  * @n_initial_chars: number of characters in @initial_chars, or -1
  *
  * Create a new GtkEntryBuffer object.

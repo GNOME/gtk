@@ -31,7 +31,7 @@
 
 /**
  * gtk_show_uri:
- * @screen: screen to show the uri on or %NULL for the default screen
+ * @screen: (allow-none): screen to show the uri on or %NULL for the default screen
  * @uri: the uri to show
  * @timestamp: a timestamp to prevent focus stealing.
  * @error: a #GError that is returned in case of errors

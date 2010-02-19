@@ -707,7 +707,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
 
 /**
  * gtk_text_tag_new:
- * @name: tag name, or %NULL
+ * @name: (allow-none): tag name, or %NULL
  * 
  * Creates a #GtkTextTag. Configure the tag using object arguments,
  * i.e. using g_object_set().

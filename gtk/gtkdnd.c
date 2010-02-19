@@ -1384,7 +1384,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
 /**
  * gtk_drag_dest_set_target_list:
  * @widget: a #GtkWidget that's a drag destination
- * @target_list: list of droppable targets, or %NULL for none
+ * @target_list: (allow-none): list of droppable targets, or %NULL for none
  * 
  * Sets the target types that this widget can accept from drag-and-drop.
  * The widget must first be made into a drag destination with
@@ -1666,7 +1666,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * gtk_drag_dest_find_target:
  * @widget: drag destination widget
  * @context: drag context
- * @target_list: list of droppable targets, or %NULL to use
+ * @target_list: (allow-none): list of droppable targets, or %NULL to use
  *    gtk_drag_dest_get_target_list (@widget).
  * 
  * Looks for a match between @context->targets and the
@@ -2693,7 +2693,7 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
 /**
  * gtk_drag_source_set_target_list:
  * @widget: a #GtkWidget that's a drag source
- * @target_list: list of draggable targets, or %NULL for none
+ * @target_list: (allow-none): list of draggable targets, or %NULL for none
  *
  * Changes the target types that this widget offers for drag-and-drop.
  * The widget must first be made into a drag source with
@@ -3271,7 +3271,7 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
  *            with a  context for the source side of a drag)
  * @colormap: the colormap of the icon 
  * @pixmap: the image data for the icon 
- * @mask: the transparency mask for the icon or %NULL for none.
+ * @mask: (allow-none): the transparency mask for the icon or %NULL for none.
  * @hot_x: the X offset within @pixmap of the hotspot.
  * @hot_y: the Y offset within @pixmap of the hotspot.
  * 

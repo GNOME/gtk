@@ -2791,7 +2791,7 @@ gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_set_tooltip_markup:
  * @status_icon: a #GtkStatusIcon
- * @markup: the contents of the tooltip for @status_icon, or %NULL
+ * @markup: (allow-none): the contents of the tooltip for @status_icon, or %NULL
  *
  * Sets @markup as the contents of the tooltip, which is marked up with
  *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.

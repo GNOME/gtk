@@ -205,7 +205,7 @@ gtk_tooltip_dispose (GObject *object)
 /**
  * gtk_tooltip_set_markup:
  * @tooltip: a #GtkTooltip
- * @markup: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>) or %NULL
+ * @markup: (allow-none): a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>) or %NULL
  *
  * Sets the text of the tooltip to be @markup, which is marked up
  * with the <link
@@ -231,7 +231,7 @@ gtk_tooltip_set_markup (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_text:
  * @tooltip: a #GtkTooltip
- * @text: a text string or %NULL
+ * @text: (allow-none): a text string or %NULL
  *
  * Sets the text of the tooltip to be @text. If @text is %NULL, the label
  * will be hidden. See also gtk_tooltip_set_markup().
@@ -255,7 +255,7 @@ gtk_tooltip_set_text (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon:
  * @tooltip: a #GtkTooltip
- * @pixbuf: a #GdkPixbuf, or %NULL
+ * @pixbuf: (allow-none): a #GdkPixbuf, or %NULL
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
  * @pixbuf.  If @pixbuf is %NULL, the image will be hidden.
@@ -281,7 +281,7 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
 /**
  * gtk_tooltip_set_icon_from_stock:
  * @tooltip: a #GtkTooltip
- * @stock_id: a stock id, or %NULL
+ * @stock_id: (allow-none): a stock id, or %NULL
  * @size: (type int): a stock icon size
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
@@ -308,7 +308,7 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon_from_icon_name:
  * @tooltip: a #GtkTooltip
- * @icon_name: an icon name, or %NULL
+ * @icon_name: (allow-none): an icon name, or %NULL
  * @size: (type int): a stock icon size
  *
  * Sets the icon of the tooltip (which is in front of the text) to be
@@ -335,7 +335,7 @@ gtk_tooltip_set_icon_from_icon_name (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_icon_from_gicon:
  * @tooltip: a #GtkTooltip
- * @gicon: a #GIcon representing the icon, or %NULL
+ * @gicon: (allow-none): a #GIcon representing the icon, or %NULL
  * @size: (type int): a stock icon size
  *
  * Sets the icon of the tooltip (which is in front of the text)
@@ -362,7 +362,7 @@ gtk_tooltip_set_icon_from_gicon (GtkTooltip  *tooltip,
 /**
  * gtk_tooltip_set_custom:
  * @tooltip: a #GtkTooltip
- * @custom_widget: a #GtkWidget, or %NULL to unset the old custom widget.
+ * @custom_widget: (allow-none): a #GtkWidget, or %NULL to unset the old custom widget.
  *
  * Replaces the widget packed into the tooltip with
  * @custom_widget. @custom_widget does not get destroyed when the tooltip goes

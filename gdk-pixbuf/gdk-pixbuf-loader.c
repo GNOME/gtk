@@ -500,7 +500,7 @@ gdk_pixbuf_loader_new (void)
 /**
  * gdk_pixbuf_loader_new_with_type:
  * @image_type: name of the image format to be loaded with the image
- * @error: return location for an allocated #GError, or %NULL to ignore errors
+ * @error: (allow-none): return location for an allocated #GError, or %NULL to ignore errors
  *
  * Creates a new pixbuf loader object that always attempts to parse
  * image data as if it were an image of type @image_type, instead of
@@ -543,7 +543,7 @@ gdk_pixbuf_loader_new_with_type (const char *image_type,
 /**
  * gdk_pixbuf_loader_new_with_mime_type:
  * @mime_type: the mime type to be loaded 
- * @error: return location for an allocated #GError, or %NULL to ignore errors
+ * @error: (allow-none): return location for an allocated #GError, or %NULL to ignore errors
  *
  * Creates a new pixbuf loader object that always attempts to parse
  * image data as if it were an image of mime type @mime_type, instead of
@@ -669,7 +669,7 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
 /**
  * gdk_pixbuf_loader_close:
  * @loader: A pixbuf loader.
- * @error: return location for a #GError, or %NULL to ignore errors
+ * @error: (allow-none): return location for a #GError, or %NULL to ignore errors
  *
  * Informs a pixbuf loader that no further writes with
  * gdk_pixbuf_loader_write() will occur, so that it can free its

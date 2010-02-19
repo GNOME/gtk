@@ -2034,7 +2034,7 @@ gtk_tree_row_reference_get_model (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_valid:
- * @reference: A #GtkTreeRowReference, or %NULL
+ * @reference: (allow-none): A #GtkTreeRowReference, or %NULL
  * 
  * Returns %TRUE if the @reference is non-%NULL and refers to a current valid
  * path.
@@ -2071,7 +2071,7 @@ gtk_tree_row_reference_copy (GtkTreeRowReference *reference)
 
 /**
  * gtk_tree_row_reference_free:
- * @reference: A #GtkTreeRowReference, or %NULL
+ * @reference: (allow-none): A #GtkTreeRowReference, or %NULL
  * 
  * Free's @reference. @reference may be %NULL.
  **/

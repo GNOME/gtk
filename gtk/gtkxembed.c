@@ -123,7 +123,7 @@ gtk_xembed_get_time (void)
 
 /**
  * _gtk_xembed_send_message:
- * @recipient: window to which to send the window, or %NULL
+ * @recipient: (allow-none): window to which to send the window, or %NULL
  *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message
@@ -172,7 +172,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 
 /**
  * _gtk_xembed_send_focus_message:
- * @recipient: window to which to send the window, or %NULL
+ * @recipient: (allow-none): window to which to send the window, or %NULL
  *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message

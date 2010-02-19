@@ -1674,7 +1674,7 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
  * gtk_print_settings_load_file:
  * @settings: a #GtkPrintSettings
  * @file_name: the filename to read the settings from
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  *
  * Reads the print settings from @file_name. If the file could not be loaded
  * then error is set to either a #GFileError or #GKeyFileError.
@@ -1709,7 +1709,7 @@ gtk_print_settings_load_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_file:
  * @file_name: the filename to read the settings from
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * Reads the print settings from @file_name. Returns a new #GtkPrintSettings
  * object with the restored settings, or %NULL if an error occurred. If the
@@ -1739,9 +1739,9 @@ gtk_print_settings_new_from_file (const gchar  *file_name,
  * gtk_print_settings_load_key_file:
  * @settings: a #GtkPrintSettings
  * @key_file: the #GKeyFile to retrieve the settings from
- * @group_name: the name of the group to use, or %NULL to use the default
+ * @group_name: (allow-none): the name of the group to use, or %NULL to use the default
  *     "Print Settings"
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * Reads the print settings from the group @group_name in @key_file. If the
  * file could not be loaded then error is set to either a #GFileError or
@@ -1800,9 +1800,9 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the settings from
- * @group_name: the name of the group to use, or %NULL to use
+ * @group_name: (allow-none): the name of the group to use, or %NULL to use
  *     the default "Print Settings"
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  *
  * Reads the print settings from the group @group_name in @key_file.  Returns a
  * new #GtkPrintSettings object with the restored settings, or %NULL if an
@@ -1834,7 +1834,7 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
  * gtk_print_settings_to_file:
  * @settings: a #GtkPrintSettings
  * @file_name: the file to save to
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * This function saves the print settings from @settings to @file_name. If the
  * file could not be loaded then error is set to either a #GFileError or
