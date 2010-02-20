@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2010-02-09 21:01+0000\n"
-"PO-Revision-Date: 2010-02-10 07:52+0100\n"
+"POT-Creation-Date: 2010-02-19 16:05+0000\n"
+"PO-Revision-Date: 2010-02-20 16:39+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2085,7 +2085,7 @@ msgstr "Carpeta _nueva"
 
 #: ../gtk/gtkfilesel.c:1031
 msgid "De_lete File"
-msgstr "_Borrar archivo"
+msgstr "_Eliminar archivo"
 
 #: ../gtk/gtkfilesel.c:1042
 msgid "_Rename File"
@@ -3270,7 +3270,7 @@ msgstr "Cor_tar"
 #: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Delete"
-msgstr "_Borrar"
+msgstr "_Eliminar"
 
 #: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
