@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
-"PO-Revision-Date: 2010-01-25 11:35+0200\n"
+"POT-Creation-Date: 2010-02-22 08:21+0200\n"
+"PO-Revision-Date: 2010-02-22 08:20+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,62 +19,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: gdk/gdk.c:103
+#: ../gdk/gdk.c:103
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Грешка при анализа на флага за „--gdk-debug“"
 
-#: gdk/gdk.c:123
+#: ../gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Грешка при анализа на флага за „--gdk-no-debug“"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:151
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr ""
 "Класът на програмата, както се използва от\n"
 "                                        мениджъра на прозорци"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:152
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "КЛАС"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:154
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr ""
 "Името на програмата, както се използва от\n"
 "                                        мениджъра на прозорци"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:155
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "ИМЕ"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:157
+#: ../gdk/gdk.c:157
 msgid "X display to use"
 msgstr "Дисплеят на Х, който да се използва"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:158
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "ДИСПЛЕЙ"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:160
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "Екранът на Х, който да се използва"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:161
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "ЕКРАН"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:164
+#: ../gdk/gdk.c:164
 msgid "Gdk debugging flags to set"
 msgstr ""
 "Флаговете за изчистване на грешки на gdk,\n"
@@ -84,215 +84,215 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:459 ../gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "ФЛАГОВЕ"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:167
+#: ../gdk/gdk.c:167
 msgid "Gdk debugging flags to unset"
 msgstr ""
 "Флаговете за изчистване на грешки на gdk,\n"
 "                                        които да не бъдат зададени"
 
-#: gdk/keyname-table.h:3940
+#: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: gdk/keyname-table.h:3941
+#: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: gdk/keyname-table.h:3942
+#: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Return"
 
-#: gdk/keyname-table.h:3943
+#: ../gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "На пауза"
 
-#: gdk/keyname-table.h:3944
+#: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll Lock"
 
-#: gdk/keyname-table.h:3945
+#: ../gdk/keyname-table.h:3945
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "SysRq"
 
-#: gdk/keyname-table.h:3946
+#: ../gdk/keyname-table.h:3946
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: gdk/keyname-table.h:3947
+#: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi key"
 
-#: gdk/keyname-table.h:3948
+#: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: gdk/keyname-table.h:3949
+#: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Left"
 
-#: gdk/keyname-table.h:3950
+#: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Up"
 
-#: gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Right"
 
-#: gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Down"
 
-#: gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
 
-#: gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num Lock"
 
-#: gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP Space"
 
-#: gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP Tab"
 
-#: gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP Enter"
 
-#: gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP Home"
 
-#: gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP Left"
 
-#: gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP Up"
 
-#: gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP Right"
 
-#: gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP Down"
 
-#: gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP Page Up"
 
-#: gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP Prior"
 
-#: gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP Page Down"
 
-#: gdk/keyname-table.h:3971
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP Next"
 
-#: gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP End"
 
-#: gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP Begin"
 
-#: gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP Insert"
 
-#: gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP Delete"
 
-#: gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
-#: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:133 ../gdk-pixbuf/gdk-pixbuf-io.c:982
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1242 ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Неуспех при отваряне на файла „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:994
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:146 ../gdk-pixbuf/gdk-pixbuf-io.c:994
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Графичният файл „%s“ не съдържа данни"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
-#: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:188 ../gdk-pixbuf/gdk-pixbuf-io.c:1030
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1294 ../tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -300,7 +300,7 @@ msgstr ""
 "Неуспех при зареждане на изображението „%s“: неизвестна причина, вероятно "
 "повреден файл"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:221
+#: ../gdk-pixbuf/gdk-pixbuf-animation.c:221
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -309,12 +309,12 @@ msgstr ""
 "Неуспех при зареждане на анимацията „%s“: неизвестна причина, вероятно "
 "повреден анимационен файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:715
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:715
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Модулът за зареждане на изображения %s не може да бъде зареден: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:730
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:730
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -323,54 +323,54 @@ msgstr ""
 "Модулът за зареждане на изображения %s не поддържа правилния интерфейс: "
 "вероятно е от различна версия на GTK."
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:739 gdk-pixbuf/gdk-pixbuf-io.c:790
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:739 ../gdk-pixbuf/gdk-pixbuf-io.c:790
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Изображения от вид „%s“ не се поддържат"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:863
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Форматът на графичния файл „%s“ не може да бъде разпознат"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:871
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:871
 msgid "Unrecognized image file format"
 msgstr "Неразпознат графичен формат"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1039
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1039
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Неуспех при зареждане на изображението „%s“: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1673 gdk-pixbuf/io-gdip-utils.c:961
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1673 ../gdk-pixbuf/io-gdip-utils.c:961
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Грешка при запазването на изображението: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1718 ../gdk-pixbuf/gdk-pixbuf-io.c:1848
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Този компилат на „gdk-pixbuf“ не поддържа запазване в графичния формат — %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1752
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1752
 msgid "Insufficient memory to save image to callback"
 msgstr "Недостатъчно памет, за да се запази изображението към функцията"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1765
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1765
 msgid "Failed to open temporary file"
 msgstr "Неуспех при отварянето на временния файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1791
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:1791
 msgid "Failed to read from temporary file"
 msgstr "Неуспех при четенето на временния файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2044
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2044
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Неуспех при отваряне на „%s“ за запис: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2070
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2070
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -379,15 +379,15 @@ msgstr ""
 "Неуспех при затваряне на „%s“ по време на запис на изображение, възможно е "
 "да не са запазени всички данни: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2290 gdk-pixbuf/gdk-pixbuf-io.c:2341
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2290 ../gdk-pixbuf/gdk-pixbuf-io.c:2341
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недостатъчно памет за запазването на изображението в буфер"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:2387
+#: ../gdk-pixbuf/gdk-pixbuf-io.c:2387
 msgid "Error writing to image stream"
 msgstr "Грешка при запазването към поток с изображение"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -396,149 +396,154 @@ msgstr ""
 "Вътрешна грешка: модулът за зареждане на изображение „%s“ не успя да завърши "
 "някое действие, но не указа причина за това"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Не се поддържа постепенно зареждане на изображение от вида „%s“"
 
-#: gdk-pixbuf/gdk-pixdata.c:147
+#: ../gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
 msgstr "Повредена е заглавната част на изображението"
 
-#: gdk-pixbuf/gdk-pixdata.c:152
+#: ../gdk-pixbuf/gdk-pixdata.c:152
 msgid "Image format unknown"
 msgstr "Неизвестен формат на изображението"
 
-#: gdk-pixbuf/gdk-pixdata.c:157 gdk-pixbuf/gdk-pixdata.c:488
+#: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "Повредени данни за пикселите на изображението"
 
-#: gdk-pixbuf/gdk-pixdata.c:432
+#: ../gdk-pixbuf/gdk-pixdata.c:432
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
 msgstr[0] "неуспех при заделяне на буфер от %u байт за изображение"
 msgstr[1] "неуспех при заделяне на буфер от %u байта за изображение"
 
-#: gdk-pixbuf/io-ani.c:244
+#: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr "Неочакван откъс за икона в анимация"
 
-#: gdk-pixbuf/io-ani.c:337
+#: ../gdk-pixbuf/io-ani.c:337
 msgid "Unsupported animation type"
 msgstr "Неподдържан вид анимация"
 
-#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:406 gdk-pixbuf/io-ani.c:432
-#: gdk-pixbuf/io-ani.c:455 gdk-pixbuf/io-ani.c:482 gdk-pixbuf/io-ani.c:569
+#: ../gdk-pixbuf/io-ani.c:348 ../gdk-pixbuf/io-ani.c:406
+#: ../gdk-pixbuf/io-ani.c:432 ../gdk-pixbuf/io-ani.c:455
+#: ../gdk-pixbuf/io-ani.c:482 ../gdk-pixbuf/io-ani.c:569
 msgid "Invalid header in animation"
 msgstr "Грешна заглавна част в анимацията"
 
-#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:380 gdk-pixbuf/io-ani.c:464
-#: gdk-pixbuf/io-ani.c:491 gdk-pixbuf/io-ani.c:542 gdk-pixbuf/io-ani.c:614
+#: ../gdk-pixbuf/io-ani.c:358 ../gdk-pixbuf/io-ani.c:380
+#: ../gdk-pixbuf/io-ani.c:464 ../gdk-pixbuf/io-ani.c:491
+#: ../gdk-pixbuf/io-ani.c:542 ../gdk-pixbuf/io-ani.c:614
 msgid "Not enough memory to load animation"
 msgstr "Недостатъчно памет за зареждане на анимацията"
 
-#: gdk-pixbuf/io-ani.c:398 gdk-pixbuf/io-ani.c:424 gdk-pixbuf/io-ani.c:443
+#: ../gdk-pixbuf/io-ani.c:398 ../gdk-pixbuf/io-ani.c:424
+#: ../gdk-pixbuf/io-ani.c:443
 msgid "Malformed chunk in animation"
 msgstr "Грешно форматиран откъс в анимацията"
 
-#: gdk-pixbuf/io-ani.c:711
+#: ../gdk-pixbuf/io-ani.c:711
 msgid "The ANI image format"
 msgstr "Форматът за изображения ANI"
 
-#: gdk-pixbuf/io-bmp.c:230 gdk-pixbuf/io-bmp.c:267 gdk-pixbuf/io-bmp.c:338
-#: gdk-pixbuf/io-bmp.c:370 gdk-pixbuf/io-bmp.c:393 gdk-pixbuf/io-bmp.c:496
+#: ../gdk-pixbuf/io-bmp.c:230 ../gdk-pixbuf/io-bmp.c:267
+#: ../gdk-pixbuf/io-bmp.c:338 ../gdk-pixbuf/io-bmp.c:370
+#: ../gdk-pixbuf/io-bmp.c:393 ../gdk-pixbuf/io-bmp.c:496
 msgid "BMP image has bogus header data"
 msgstr "Изображението във формат BMP е с неправилна заглавна част"
 
-#: gdk-pixbuf/io-bmp.c:241 gdk-pixbuf/io-bmp.c:433
+#: ../gdk-pixbuf/io-bmp.c:241 ../gdk-pixbuf/io-bmp.c:433
 msgid "Not enough memory to load bitmap image"
 msgstr "Недостатъчно памет, за да се зареди изображение формат „bitmap“"
 
-#: gdk-pixbuf/io-bmp.c:319
+#: ../gdk-pixbuf/io-bmp.c:319
 msgid "BMP image has unsupported header size"
 msgstr ""
 "Такъв размер на заглавната част на изображението във формат BMP не се "
 "поддържа"
 
-#: gdk-pixbuf/io-bmp.c:357
+#: ../gdk-pixbuf/io-bmp.c:357
 msgid "Topdown BMP images cannot be compressed"
 msgstr ""
 "Изображения във формат BMP с обратен запис (отгоре-надолу, а не обратно) не "
 "могат да бъдат компресирани"
 
-#: gdk-pixbuf/io-bmp.c:717 gdk-pixbuf/io-pnm.c:709
+#: ../gdk-pixbuf/io-bmp.c:717 ../gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "Преждевременно се стигна до знак „край на файл“"
 
-#: gdk-pixbuf/io-bmp.c:1329
+#: ../gdk-pixbuf/io-bmp.c:1329
 msgid "Couldn't allocate memory for saving BMP file"
 msgstr "Недостатъчно памет за зареждане на файл във формат BMP"
 
-#: gdk-pixbuf/io-bmp.c:1370
+#: ../gdk-pixbuf/io-bmp.c:1370
 msgid "Couldn't write to BMP file"
 msgstr "Неуспех при запис на файл във формат BMP"
 
-#: gdk-pixbuf/io-bmp.c:1423 gdk-pixbuf/io-gdip-bmp.c:82
+#: ../gdk-pixbuf/io-bmp.c:1423 ../gdk-pixbuf/io-gdip-bmp.c:82
 msgid "The BMP image format"
 msgstr "Форматът за изображения BMP"
 
-#: gdk-pixbuf/io-gif.c:222
+#: ../gdk-pixbuf/io-gif.c:222
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Неуспех при четене на GIF: %s "
 
-#: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
+#: ../gdk-pixbuf/io-gif.c:496 ../gdk-pixbuf/io-gif.c:1481
+#: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Липсват част от данните на файла във формат GIF (може би файлът не е цял)."
 
-#: gdk-pixbuf/io-gif.c:505
+#: ../gdk-pixbuf/io-gif.c:505
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Вътрешна грешка в модула за зареждане на GIF (%s)"
 
-#: gdk-pixbuf/io-gif.c:579
+#: ../gdk-pixbuf/io-gif.c:579
 msgid "Stack overflow"
 msgstr "Препълване на стека"
 
-#: gdk-pixbuf/io-gif.c:639
+#: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
 msgstr ""
 "Модулът за зареждане на изображения във формат GIF, не може да анализира "
 "това изображение."
 
-#: gdk-pixbuf/io-gif.c:668
+#: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
 msgstr "Срещнат е лош код"
 
-#: gdk-pixbuf/io-gif.c:678
+#: ../gdk-pixbuf/io-gif.c:678
 msgid "Circular table entry in GIF file"
 msgstr "Цикличен табличен запис във файла във формат GIF"
 
-#: gdk-pixbuf/io-gif.c:866 gdk-pixbuf/io-gif.c:1468 gdk-pixbuf/io-gif.c:1515
-#: gdk-pixbuf/io-gif.c:1630
+#: ../gdk-pixbuf/io-gif.c:866 ../gdk-pixbuf/io-gif.c:1468
+#: ../gdk-pixbuf/io-gif.c:1515 ../gdk-pixbuf/io-gif.c:1630
 msgid "Not enough memory to load GIF file"
 msgstr "Недостатъчно памет за зареждане на файла във формат GIF"
 
-#: gdk-pixbuf/io-gif.c:960
+#: ../gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
 msgstr "Недостатъчно памет за създаване на кадър от файла във формат GIF"
 
-#: gdk-pixbuf/io-gif.c:1132
+#: ../gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Файлът във формат GIF е повреден (грешна компресия на LZW)"
 
-#: gdk-pixbuf/io-gif.c:1182
+#: ../gdk-pixbuf/io-gif.c:1182
 msgid "File does not appear to be a GIF file"
 msgstr "Файлът не изглежда да е във формат GIF"
 
-#: gdk-pixbuf/io-gif.c:1194
+#: ../gdk-pixbuf/io-gif.c:1194
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Не се поддържа версията %s на формата за файлове GIF"
 
-#: gdk-pixbuf/io-gif.c:1303
+#: ../gdk-pixbuf/io-gif.c:1303
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -546,114 +551,116 @@ msgstr ""
 "Липсва глобална цветова палитра в изображението във формат GIF, както и "
 "локална цветова палитра за някой от кадрите в него."
 
-#: gdk-pixbuf/io-gif.c:1537
+#: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF изображението е орязано или непълно."
 
-#: gdk-pixbuf/io-gif.c:1693 gdk-pixbuf/io-gdip-gif.c:80
+#: ../gdk-pixbuf/io-gif.c:1693 ../gdk-pixbuf/io-gdip-gif.c:80
 msgid "The GIF image format"
 msgstr "Форматът за изображения GIF"
 
-#: gdk-pixbuf/io-ico.c:211 gdk-pixbuf/io-ico.c:225 gdk-pixbuf/io-ico.c:277
-#: gdk-pixbuf/io-ico.c:290 gdk-pixbuf/io-ico.c:359
+#: ../gdk-pixbuf/io-ico.c:211 ../gdk-pixbuf/io-ico.c:225
+#: ../gdk-pixbuf/io-ico.c:277 ../gdk-pixbuf/io-ico.c:290
+#: ../gdk-pixbuf/io-ico.c:359
 msgid "Invalid header in icon"
 msgstr "Грешна заглавна част в иконата"
 
-#: gdk-pixbuf/io-ico.c:240 gdk-pixbuf/io-ico.c:300 gdk-pixbuf/io-ico.c:369
-#: gdk-pixbuf/io-ico.c:432 gdk-pixbuf/io-ico.c:462
+#: ../gdk-pixbuf/io-ico.c:240 ../gdk-pixbuf/io-ico.c:300
+#: ../gdk-pixbuf/io-ico.c:369 ../gdk-pixbuf/io-ico.c:432
+#: ../gdk-pixbuf/io-ico.c:462
 msgid "Not enough memory to load icon"
 msgstr "Недостатъчно памет за зареждане на иконата"
 
-#: gdk-pixbuf/io-ico.c:322
+#: ../gdk-pixbuf/io-ico.c:322
 msgid "Icon has zero width"
 msgstr "Иконата има нулева широчина"
 
-#: gdk-pixbuf/io-ico.c:332
+#: ../gdk-pixbuf/io-ico.c:332
 msgid "Icon has zero height"
 msgstr "Иконата има нулева височина"
 
-#: gdk-pixbuf/io-ico.c:384
+#: ../gdk-pixbuf/io-ico.c:384
 msgid "Compressed icons are not supported"
 msgstr "Не се поддържат компресирани икони"
 
-#: gdk-pixbuf/io-ico.c:417
+#: ../gdk-pixbuf/io-ico.c:417
 msgid "Unsupported icon type"
 msgstr "Неподдържан вид икона"
 
-#: gdk-pixbuf/io-ico.c:511
+#: ../gdk-pixbuf/io-ico.c:511
 msgid "Not enough memory to load ICO file"
 msgstr "Недостатъчно памет за зареждане на файл във формат ICO"
 
-#: gdk-pixbuf/io-ico.c:976
+#: ../gdk-pixbuf/io-ico.c:976
 msgid "Image too large to be saved as ICO"
 msgstr "Изображението е твърде голямо, за да бъде запазено във формат ICO"
 
-#: gdk-pixbuf/io-ico.c:987
+#: ../gdk-pixbuf/io-ico.c:987
 msgid "Cursor hotspot outside image"
 msgstr "Горещата точка на курсора е извън изображението"
 
-#: gdk-pixbuf/io-ico.c:1010
+#: ../gdk-pixbuf/io-ico.c:1010
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
 msgstr "Неподдържана дълбочина на цвета за файла във формат ICO: %d"
 
-#: gdk-pixbuf/io-ico.c:1245 gdk-pixbuf/io-gdip-ico.c:59
+#: ../gdk-pixbuf/io-ico.c:1245 ../gdk-pixbuf/io-gdip-ico.c:59
 msgid "The ICO image format"
 msgstr "Форматът за изображения ICO"
 
-#: gdk-pixbuf/io-icns.c:347
+#: ../gdk-pixbuf/io-icns.c:347
 #, c-format
 msgid "Error reading ICNS image: %s"
 msgstr "Грешка при четене на изображение във формат ICNS: %s"
 
-#: gdk-pixbuf/io-icns.c:364
+#: ../gdk-pixbuf/io-icns.c:364
 msgid "Could not decode ICNS file"
 msgstr "Изображението във формат ICNS не може да бъде декодирано"
 
-#: gdk-pixbuf/io-icns.c:397
+#: ../gdk-pixbuf/io-icns.c:397
 msgid "The ICNS image format"
 msgstr "Форматът за изображения ICNS"
 
-#: gdk-pixbuf/io-jasper.c:75
+#: ../gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
 msgstr "Недостатъчно памет за потока"
 
-#: gdk-pixbuf/io-jasper.c:105
+#: ../gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
 msgstr "Изображението не може да бъде декодирано"
 
-#: gdk-pixbuf/io-jasper.c:123
+#: ../gdk-pixbuf/io-jasper.c:123
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr ""
 "Трансформираното изображение във формат JPEG2000 е с нулева широчина или "
 "височина."
 
-#: gdk-pixbuf/io-jasper.c:137
+#: ../gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
 msgstr "В момента изображения от този вид не се поддържат"
 
-#: gdk-pixbuf/io-jasper.c:149 gdk-pixbuf/io-jasper.c:157
+#: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr "Недостатъчно памет за зареждане на цветови профил"
 
-#: gdk-pixbuf/io-jasper.c:183
+#: ../gdk-pixbuf/io-jasper.c:183
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "Недостатъчно памет за отваряне на файл във формат JPEG 2000"
 
-#: gdk-pixbuf/io-jasper.c:262
+#: ../gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "Недостатъчно памет за буфера с данните на изображението"
 
-#: gdk-pixbuf/io-jasper.c:306
+#: ../gdk-pixbuf/io-jasper.c:306
 msgid "The JPEG 2000 image format"
 msgstr "Форматът за изображения JPEG 2000"
 
-#: gdk-pixbuf/io-jpeg.c:117
+#: ../gdk-pixbuf/io-jpeg.c:117
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Грешка при интерпретацията на изображението във формат JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:528
+#: ../gdk-pixbuf/io-jpeg.c:528
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -661,23 +668,23 @@ msgstr ""
 "Недостатъчно памет за зареждане на изображението. Спрете някои програми, за "
 "да освободите памет."
 
-#: gdk-pixbuf/io-jpeg.c:569 gdk-pixbuf/io-jpeg.c:775
+#: ../gdk-pixbuf/io-jpeg.c:569 ../gdk-pixbuf/io-jpeg.c:775
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr "Неподдържано цветово пространство за JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:674 gdk-pixbuf/io-jpeg.c:944 gdk-pixbuf/io-jpeg.c:1177
-#: gdk-pixbuf/io-jpeg.c:1186
+#: ../gdk-pixbuf/io-jpeg.c:674 ../gdk-pixbuf/io-jpeg.c:944
+#: ../gdk-pixbuf/io-jpeg.c:1177 ../gdk-pixbuf/io-jpeg.c:1186
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Недостатъчно памет за зареждане на файл във формат JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:919
+#: ../gdk-pixbuf/io-jpeg.c:919
 msgid "Transformed JPEG has zero width or height."
 msgstr ""
 "Трансформираното изображение във формат JPEG е с нулева широчина или "
 "височина."
 
-#: gdk-pixbuf/io-jpeg.c:1133 gdk-pixbuf/io-gdip-jpeg.c:53
+#: ../gdk-pixbuf/io-jpeg.c:1133 ../gdk-pixbuf/io-gdip-jpeg.c:53
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -686,7 +693,7 @@ msgstr ""
 "Качеството за JPEG трябва да бъде между 0 и 100. Стойността „%s“ не може да "
 "бъде анализирана."
 
-#: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
+#: ../gdk-pixbuf/io-jpeg.c:1148 ../gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -694,89 +701,89 @@ msgstr ""
 "Качеството за JPEG трябва да бъде между 0 и 100. Стойността „%d“ не е "
 "позволена"
 
-#: gdk-pixbuf/io-jpeg.c:1310 gdk-pixbuf/io-gdip-jpeg.c:136
+#: ../gdk-pixbuf/io-jpeg.c:1310 ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
 msgstr "Форматът за изображения JPEG"
 
-#: gdk-pixbuf/io-pcx.c:187
+#: ../gdk-pixbuf/io-pcx.c:187
 msgid "Couldn't allocate memory for header"
 msgstr "Недостатъчно памет за заглавна част"
 
-#: gdk-pixbuf/io-pcx.c:202 gdk-pixbuf/io-pcx.c:560
+#: ../gdk-pixbuf/io-pcx.c:202 ../gdk-pixbuf/io-pcx.c:560
 msgid "Couldn't allocate memory for context buffer"
 msgstr "Недостатъчно памет за контекстния буфер"
 
-#: gdk-pixbuf/io-pcx.c:601
+#: ../gdk-pixbuf/io-pcx.c:601
 msgid "Image has invalid width and/or height"
 msgstr "Изображението е с нулева височина и/или височина"
 
-#: gdk-pixbuf/io-pcx.c:613 gdk-pixbuf/io-pcx.c:674
+#: ../gdk-pixbuf/io-pcx.c:613 ../gdk-pixbuf/io-pcx.c:674
 msgid "Image has unsupported bpp"
 msgstr "Изображението е с неподдържана стойност на битове за пиксел"
 
-#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:626
+#: ../gdk-pixbuf/io-pcx.c:618 ../gdk-pixbuf/io-pcx.c:626
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr "Изображението е с неподдържан брой %d-битови цветови равнини"
 
-#: gdk-pixbuf/io-pcx.c:642
+#: ../gdk-pixbuf/io-pcx.c:642
 msgid "Couldn't create new pixbuf"
 msgstr "Невъзможно е да създаде нов буфер за пиксели"
 
-#: gdk-pixbuf/io-pcx.c:650
+#: ../gdk-pixbuf/io-pcx.c:650
 msgid "Couldn't allocate memory for line data"
 msgstr "Недостатъчно памет за данните за линия"
 
-#: gdk-pixbuf/io-pcx.c:657
+#: ../gdk-pixbuf/io-pcx.c:657
 msgid "Couldn't allocate memory for paletted data"
 msgstr "Недостатъчно памет за данните за цветова палитра"
 
-#: gdk-pixbuf/io-pcx.c:704
+#: ../gdk-pixbuf/io-pcx.c:704
 msgid "Didn't get all lines of PCX image"
 msgstr "Не са получени всички линии в изображението във формат PCX"
 
-#: gdk-pixbuf/io-pcx.c:711
+#: ../gdk-pixbuf/io-pcx.c:711
 msgid "No palette found at end of PCX data"
 msgstr "Не е открита палитра в края на данните за PCX"
 
-#: gdk-pixbuf/io-pcx.c:756
+#: ../gdk-pixbuf/io-pcx.c:756
 msgid "The PCX image format"
 msgstr "Форматът за изображения PCX"
 
-#: gdk-pixbuf/io-png.c:55
+#: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
 msgstr "Броят битове за канал за изображението във формат PNG е грешен."
 
-#: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
+#: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
 msgstr ""
 "Трансформираното изображение във формат PNG е с нулева широчина или височина."
 
-#: gdk-pixbuf/io-png.c:144
+#: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
 msgstr ""
 "Броят битове за канал в трансформираното изображение във формат PNG не е 8."
 
-#: gdk-pixbuf/io-png.c:153
+#: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
 msgstr "Трансформираното изображение във формат PNG не е RGB или RGBA."
 
-#: gdk-pixbuf/io-png.c:162
+#: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
 "Трансформираното изображение във формат PNG е с неподдържан брой канали, той "
 "трябва да е 3 или 4."
 
-#: gdk-pixbuf/io-png.c:183
+#: ../gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
 msgstr "Фатална грешка в изображение във формат PNG: %s"
 
-#: gdk-pixbuf/io-png.c:316
+#: ../gdk-pixbuf/io-png.c:316
 msgid "Insufficient memory to load PNG file"
 msgstr "Недостатъчно памет за зареждане на файл във формат PNG"
 
-#: gdk-pixbuf/io-png.c:657
+#: ../gdk-pixbuf/io-png.c:657
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -785,33 +792,33 @@ msgstr ""
 "Недостатъчно памет за запазване на изображение %ld×%ld. Спрете някоя "
 "програма, за да освободите памет."
 
-#: gdk-pixbuf/io-png.c:720
+#: ../gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
 msgstr "Фатална грешка при четене на изображение във формат PNG"
 
-#: gdk-pixbuf/io-png.c:769
+#: ../gdk-pixbuf/io-png.c:769
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Фатална грешка при четене на изображение във формат PNG: %s"
 
-#: gdk-pixbuf/io-png.c:863
+#: ../gdk-pixbuf/io-png.c:863
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Ключовете за откъсите текст в PNG трябва да са с дължина от 1 до 79 знака."
 
-#: gdk-pixbuf/io-png.c:872
+#: ../gdk-pixbuf/io-png.c:872
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr ""
 "Ключовете за откъсите текст в PNG трябва да се състоят само от знаци от "
 "ASCII."
 
-#: gdk-pixbuf/io-png.c:886 gdk-pixbuf/io-tiff.c:738
+#: ../gdk-pixbuf/io-png.c:886 ../gdk-pixbuf/io-tiff.c:738
 #, c-format
 msgid "Color profile has invalid length %d."
 msgstr "Цветовият профил е с неправилна дължина %d."
 
-#: gdk-pixbuf/io-png.c:899 gdk-pixbuf/io-gdip-png.c:56
+#: ../gdk-pixbuf/io-png.c:899 ../gdk-pixbuf/io-gdip-png.c:56
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
@@ -820,7 +827,7 @@ msgstr ""
 "Нивото на компресията на PNG трябва да бъде между 0 и 9. Стойността „%s“ не "
 "може да бъде анализирана."
 
-#: gdk-pixbuf/io-png.c:912 gdk-pixbuf/io-gdip-png.c:68
+#: ../gdk-pixbuf/io-png.c:912 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%d' is not "
@@ -829,486 +836,492 @@ msgstr ""
 "Нивото на компресията на PNG трябва да бъде между 0 и 9. Стойността „%d“ не "
 "е позволена."
 
-#: gdk-pixbuf/io-png.c:951
+#: ../gdk-pixbuf/io-png.c:951
 #, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Откъсът текст в PNG — „%s“, не може да бъде преобразуван до кодиране ISO-"
 "8859-1."
 
-#: gdk-pixbuf/io-png.c:1112 gdk-pixbuf/io-gdip-png.c:133
+#: ../gdk-pixbuf/io-png.c:1112 ../gdk-pixbuf/io-gdip-png.c:133
 msgid "The PNG image format"
 msgstr "Форматът за изображения PNG"
 
-#: gdk-pixbuf/io-pnm.c:250
+#: ../gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Модулът за зареждането на PNM очакваше целочислена стойност, но получи друга"
 
-#: gdk-pixbuf/io-pnm.c:282
+#: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
 msgstr "Файлът във формат PNM е с некоректен начален байт"
 
-#: gdk-pixbuf/io-pnm.c:312
+#: ../gdk-pixbuf/io-pnm.c:312
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Файлът във формат PNM не е от познатите подформати на PNM"
 
-#: gdk-pixbuf/io-pnm.c:337
+#: ../gdk-pixbuf/io-pnm.c:337
 msgid "PNM file has an image width of 0"
 msgstr "Файлът във формат PNM съдържа изображение с широчина 0"
 
-#: gdk-pixbuf/io-pnm.c:358
+#: ../gdk-pixbuf/io-pnm.c:358
 msgid "PNM file has an image height of 0"
 msgstr "Файлът във формат PNM съдържа изображение с височина 0"
 
-#: gdk-pixbuf/io-pnm.c:381
+#: ../gdk-pixbuf/io-pnm.c:381
 msgid "Maximum color value in PNM file is 0"
 msgstr "Максималната стойност на цвят във файла във формат PNM е 0"
 
-#: gdk-pixbuf/io-pnm.c:389
+#: ../gdk-pixbuf/io-pnm.c:389
 msgid "Maximum color value in PNM file is too large"
 msgstr "Максималната стойност на цвят във файла във формат PNM е твърде голяма"
 
-#: gdk-pixbuf/io-pnm.c:429 gdk-pixbuf/io-pnm.c:459 gdk-pixbuf/io-pnm.c:504
+#: ../gdk-pixbuf/io-pnm.c:429 ../gdk-pixbuf/io-pnm.c:459
+#: ../gdk-pixbuf/io-pnm.c:504
 msgid "Raw PNM image type is invalid"
 msgstr "Видът изображение „суров“ (raw) PNM е неправилен"
 
-#: gdk-pixbuf/io-pnm.c:654
+#: ../gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Модулът за зареждане на PNM не поддържа този подформат на PNM"
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
+#: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Форматът за „суров“ PNM изисква точно един интервал преди самите данни"
 
-#: gdk-pixbuf/io-pnm.c:768
+#: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Недостатъчно памет за зареждане на изображение във формат PNM"
 
-#: gdk-pixbuf/io-pnm.c:818
+#: ../gdk-pixbuf/io-pnm.c:818
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Недостатъчно памет за зареждане структурата на контекста за PNM"
 
-#: gdk-pixbuf/io-pnm.c:869
+#: ../gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "Неочакван край на данните за изображението във формат PNM"
 
-#: gdk-pixbuf/io-pnm.c:997
+#: ../gdk-pixbuf/io-pnm.c:997
 msgid "Insufficient memory to load PNM file"
 msgstr "Недостатъчно памет за зареждане на файл във формат PNM"
 
-#: gdk-pixbuf/io-pnm.c:1081
+#: ../gdk-pixbuf/io-pnm.c:1081
 msgid "The PNM/PBM/PGM/PPM image format family"
 msgstr "Фамилията формати за изображения PNM/PBG/PGM/PPM"
 
-#: gdk-pixbuf/io-qtif.c:128
+#: ../gdk-pixbuf/io-qtif.c:128
 msgid "Input file descriptor is NULL."
-msgstr ""
+msgstr "Указателят към входния файл е NULL."
 
-#: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:143
 msgid "Failed to read QTIF header"
-msgstr "Неуспех при запазване на заглавната част\n"
+msgstr ""
+"Неуспех при прочитане на заглавната част от изображение във формат QTIF"
 
-#: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
+#: ../gdk-pixbuf/io-qtif.c:152 ../gdk-pixbuf/io-qtif.c:182
+#: ../gdk-pixbuf/io-qtif.c:446
 #, c-format
 msgid "QTIF atom size too large (%d bytes)"
 msgstr ""
+"Размерът на атом от изображение във формат QTIF е прекалено голям (%d байта)"
 
-#: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-qtif.c:172
+#, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "неуспех при заделяне на буфер от %u байт за изображение"
+msgstr "Неуспех при заделяне на буфер от %d байта за прочитане на файл"
 
-#: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
+#: ../gdk-pixbuf/io-qtif.c:196
+#, c-format
 msgid "File error when reading QTIF atom: %s"
-msgstr "Неуспех при четене на GIF: %s "
+msgstr ""
+"Файлова грешка при прочитането на атом от изображение във формат QTIF: %s "
 
-#: gdk-pixbuf/io-qtif.c:233
+#: ../gdk-pixbuf/io-qtif.c:233
 #, c-format
 msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
+msgstr "Следващите %d байта не бяха прескочени чрез seek()."
 
-#: gdk-pixbuf/io-qtif.c:257
+#: ../gdk-pixbuf/io-qtif.c:257
 msgid "Failed to QTIF context structure."
 msgstr ""
+"Неуспех при прочитане на структурата за контекста на изображение във формат "
+"QTIF."
 
-#: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "Неуспех при записването на индекса на папка\n"
+msgstr "Неуспех при създаването на обект GdkPixbufLoader."
 
-#: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:421
 msgid "Failed to find an image data atom."
-msgstr "Неуспех при отваряне на изображение във формат TIFF"
+msgstr "Неуспех при откриването на атом за данни в изображение."
 
-#: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
+#: ../gdk-pixbuf/io-qtif.c:602
 msgid "The QTIF image format"
-msgstr "Форматът за изображения TIFF"
+msgstr "Форматът за изображения QTIF"
 
-#: gdk-pixbuf/io-ras.c:126
+#: ../gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
 msgstr "Изображението във формат RAS е с „фалшиви“ заглавни данни"
 
-#: gdk-pixbuf/io-ras.c:148
+#: ../gdk-pixbuf/io-ras.c:148
 msgid "RAS image has unknown type"
 msgstr "Изображението във формат RAS е от неизвестен вид"
 
-#: gdk-pixbuf/io-ras.c:156
+#: ../gdk-pixbuf/io-ras.c:156
 msgid "unsupported RAS image variation"
 msgstr "неподдържана разновидност на изображение във формат RAS"
 
-#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
+#: ../gdk-pixbuf/io-ras.c:171 ../gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Недостатъчно памет, за да се зареди изображението във формат RAS"
 
-#: gdk-pixbuf/io-ras.c:545
+#: ../gdk-pixbuf/io-ras.c:545
 msgid "The Sun raster image format"
 msgstr "Форматът за растерни изображения на Sun"
 
-#: gdk-pixbuf/io-tga.c:154
+#: ../gdk-pixbuf/io-tga.c:154
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Недостатъчно памет за структура на IOBuffer "
 
-#: gdk-pixbuf/io-tga.c:173
+#: ../gdk-pixbuf/io-tga.c:173
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Недостатъчно памет за данни на IOBuffer "
 
-#: gdk-pixbuf/io-tga.c:184
+#: ../gdk-pixbuf/io-tga.c:184
 msgid "Cannot realloc IOBuffer data"
 msgstr "Не може да се преразпределят данни от IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:214
+#: ../gdk-pixbuf/io-tga.c:214
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Не може да се заделят временни данни в IOBuffer"
 
-#: gdk-pixbuf/io-tga.c:347
+#: ../gdk-pixbuf/io-tga.c:347
 msgid "Cannot allocate new pixbuf"
 msgstr "Недостатъчно памет за нов буфер за изображение"
 
-#: gdk-pixbuf/io-tga.c:687
+#: ../gdk-pixbuf/io-tga.c:687
 msgid "Cannot allocate colormap structure"
 msgstr "Недостатъчно памет за нова структура за палитра за цветове"
 
-#: gdk-pixbuf/io-tga.c:694
+#: ../gdk-pixbuf/io-tga.c:694
 msgid "Cannot allocate colormap entries"
 msgstr "Недостатъчно памет за нови елементи в палитра за цветове"
 
-#: gdk-pixbuf/io-tga.c:716
+#: ../gdk-pixbuf/io-tga.c:716
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Неочаквана дълбочина на цвят за елементите на палитрата на цветовете"
 
-#: gdk-pixbuf/io-tga.c:734
+#: ../gdk-pixbuf/io-tga.c:734
 msgid "Cannot allocate TGA header memory"
 msgstr "Недостатъчно памет за заглавната част на формата TGA "
 
-#: gdk-pixbuf/io-tga.c:767
+#: ../gdk-pixbuf/io-tga.c:767
 msgid "TGA image has invalid dimensions"
 msgstr "Изображението във формат TGA е с грешни размери"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
+#: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
+#: ../gdk-pixbuf/io-tga.c:809
 msgid "TGA image type not supported"
 msgstr "Видът изображение TGA не се поддържа"
 
-#: gdk-pixbuf/io-tga.c:856
+#: ../gdk-pixbuf/io-tga.c:856
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Недостатъчно памет за зареждане структурата на контекста за TGA "
 
-#: gdk-pixbuf/io-tga.c:921
+#: ../gdk-pixbuf/io-tga.c:921
 msgid "Excess data in file"
 msgstr "Излишък от данни във файл"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: ../gdk-pixbuf/io-tga.c:1002
 msgid "The Targa image format"
 msgstr "Форматът за изображения Targa"
 
-#: gdk-pixbuf/io-tiff.c:165
+#: ../gdk-pixbuf/io-tiff.c:165
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Широчината на изображението не може да се получи (счупен TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:172
+#: ../gdk-pixbuf/io-tiff.c:172
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Височината на изображението не може да се получи (счупен TIFF)"
 
-#: gdk-pixbuf/io-tiff.c:180
+#: ../gdk-pixbuf/io-tiff.c:180
 msgid "Width or height of TIFF image is zero"
 msgstr "Височината или широчината на изображението във формат TIFF е нулева"
 
-#: gdk-pixbuf/io-tiff.c:189 gdk-pixbuf/io-tiff.c:198
+#: ../gdk-pixbuf/io-tiff.c:189 ../gdk-pixbuf/io-tiff.c:198
 msgid "Dimensions of TIFF image too large"
 msgstr "Размерите на изображението във формат TIFF са твърде големи"
 
-#: gdk-pixbuf/io-tiff.c:222 gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:561
+#: ../gdk-pixbuf/io-tiff.c:222 ../gdk-pixbuf/io-tiff.c:234
+#: ../gdk-pixbuf/io-tiff.c:561
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недостатъчно памет за отваряне на файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:295
+#: ../gdk-pixbuf/io-tiff.c:295
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Неуспех при зареждане на данни за каналите RGB от файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:351
+#: ../gdk-pixbuf/io-tiff.c:351
 msgid "Failed to open TIFF image"
 msgstr "Неуспех при отваряне на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:363 gdk-pixbuf/io-tiff.c:778
+#: ../gdk-pixbuf/io-tiff.c:363 ../gdk-pixbuf/io-tiff.c:778
 msgid "TIFFClose operation failed"
 msgstr "Неуспех при изпълнението на TIFFClose"
 
-#: gdk-pixbuf/io-tiff.c:493 gdk-pixbuf/io-tiff.c:506
+#: ../gdk-pixbuf/io-tiff.c:493 ../gdk-pixbuf/io-tiff.c:506
 msgid "Failed to load TIFF image"
 msgstr "Неуспех при зареждане на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:692
+#: ../gdk-pixbuf/io-tiff.c:692
 msgid "Failed to save TIFF image"
 msgstr "Неуспех при запазване на изображение във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:727
+#: ../gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr "Компресията в TIFF не указва правилен кодер."
 
-#: gdk-pixbuf/io-tiff.c:767
+#: ../gdk-pixbuf/io-tiff.c:767
 msgid "Failed to write TIFF data"
 msgstr "Неуспех при запазване на данните в TIFF"
 
-#: gdk-pixbuf/io-tiff.c:814
+#: ../gdk-pixbuf/io-tiff.c:814
 msgid "Couldn't write to TIFF file"
 msgstr "Неуспех при запазване на файл във формат TIFF"
 
-#: gdk-pixbuf/io-tiff.c:869
+#: ../gdk-pixbuf/io-tiff.c:869
 msgid "The TIFF image format"
 msgstr "Форматът за изображения TIFF"
 
-#: gdk-pixbuf/io-wbmp.c:246
+#: ../gdk-pixbuf/io-wbmp.c:246
 msgid "Image has zero width"
 msgstr "Изображението е с нулева широчина"
 
-#: gdk-pixbuf/io-wbmp.c:264
+#: ../gdk-pixbuf/io-wbmp.c:264
 msgid "Image has zero height"
 msgstr "Изображението е с нулева височина"
 
-#: gdk-pixbuf/io-wbmp.c:275
+#: ../gdk-pixbuf/io-wbmp.c:275
 msgid "Not enough memory to load image"
 msgstr "Недостатъчно памет за зареждане на изображението"
 
-#: gdk-pixbuf/io-wbmp.c:334
+#: ../gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
 msgstr "Останалото не беше запазено"
 
-#: gdk-pixbuf/io-wbmp.c:375
+#: ../gdk-pixbuf/io-wbmp.c:375
 msgid "The WBMP image format"
 msgstr "Форматът за изображения WBMP"
 
-#: gdk-pixbuf/io-xbm.c:295
+#: ../gdk-pixbuf/io-xbm.c:295
 msgid "Invalid XBM file"
 msgstr "Грешен файл във формат XBM"
 
-#: gdk-pixbuf/io-xbm.c:305
+#: ../gdk-pixbuf/io-xbm.c:305
 msgid "Insufficient memory to load XBM image file"
 msgstr "Недостатъчно памет за зареждане на изображение във формат XBM"
 
-#: gdk-pixbuf/io-xbm.c:453
+#: ../gdk-pixbuf/io-xbm.c:453
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "Неуспех при запис на временния файл при зареждане на изображението във "
 "формат XBM"
 
-#: gdk-pixbuf/io-xbm.c:492
+#: ../gdk-pixbuf/io-xbm.c:492
 msgid "The XBM image format"
 msgstr "Форматът за изображения XBM"
 
-#: gdk-pixbuf/io-xpm.c:468
+#: ../gdk-pixbuf/io-xpm.c:468
 msgid "No XPM header found"
 msgstr "Липсва заглавната част на XPM"
 
-#: gdk-pixbuf/io-xpm.c:477
+#: ../gdk-pixbuf/io-xpm.c:477
 msgid "Invalid XPM header"
 msgstr "Заглавната част на XPM е неправилна"
 
-#: gdk-pixbuf/io-xpm.c:485
+#: ../gdk-pixbuf/io-xpm.c:485
 msgid "XPM file has image width <= 0"
 msgstr "Файлът във формат XPM е с широчина ≤ 0"
 
-#: gdk-pixbuf/io-xpm.c:493
+#: ../gdk-pixbuf/io-xpm.c:493
 msgid "XPM file has image height <= 0"
 msgstr "Файлът във формат XPM е с височина ≤ 0"
 
-#: gdk-pixbuf/io-xpm.c:501
+#: ../gdk-pixbuf/io-xpm.c:501
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Броят знаци за пиксел във файла във формат XPM е неправилен"
 
-#: gdk-pixbuf/io-xpm.c:510
+#: ../gdk-pixbuf/io-xpm.c:510
 msgid "XPM file has invalid number of colors"
 msgstr "Броят цветове във файла във формат XPM е неправилен"
 
-#: gdk-pixbuf/io-xpm.c:522 gdk-pixbuf/io-xpm.c:531 gdk-pixbuf/io-xpm.c:583
+#: ../gdk-pixbuf/io-xpm.c:522 ../gdk-pixbuf/io-xpm.c:531
+#: ../gdk-pixbuf/io-xpm.c:583
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Недостатъчно памет за зареждане на изображение във формат XPM"
 
-#: gdk-pixbuf/io-xpm.c:545
+#: ../gdk-pixbuf/io-xpm.c:545
 msgid "Cannot read XPM colormap"
 msgstr "Палитрата от цветове за XPM не може да бъде прочетена"
 
-#: gdk-pixbuf/io-xpm.c:777
+#: ../gdk-pixbuf/io-xpm.c:777
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "Неуспех при запис на временен файл при зареждането на изображение във формат "
 "XPM"
 
-#: gdk-pixbuf/io-xpm.c:816
+#: ../gdk-pixbuf/io-xpm.c:816
 msgid "The XPM image format"
 msgstr "Форматът за изображения XPM"
 
-#: gdk-pixbuf/io-gdip-emf.c:59
+#: ../gdk-pixbuf/io-gdip-emf.c:59
 msgid "The EMF image format"
 msgstr "Форматът за изображения EMF"
 
-#: gdk-pixbuf/io-gdip-utils.c:232
+#: ../gdk-pixbuf/io-gdip-utils.c:232
 #, c-format
 msgid "Could not allocate memory: %s"
 msgstr "Недостатъчно памет за заглавна част: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:257 gdk-pixbuf/io-gdip-utils.c:371
-#: gdk-pixbuf/io-gdip-utils.c:411
+#: ../gdk-pixbuf/io-gdip-utils.c:257 ../gdk-pixbuf/io-gdip-utils.c:371
+#: ../gdk-pixbuf/io-gdip-utils.c:411
 #, c-format
 msgid "Could not create stream: %s"
 msgstr "Не може да се създаде поток: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:271
+#: ../gdk-pixbuf/io-gdip-utils.c:271
 #, c-format
 msgid "Could not seek stream: %s"
 msgstr "Не може да се търси в потока: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:283
+#: ../gdk-pixbuf/io-gdip-utils.c:283
 #, c-format
 msgid "Could not read from stream: %s"
 msgstr "Не може да се чете от потока: %s"
 
-#: gdk-pixbuf/io-gdip-utils.c:694 gdk-pixbuf/io-gdip-utils.c:825
+#: ../gdk-pixbuf/io-gdip-utils.c:694 ../gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
 msgstr "Изображението във формат „bitmap“ не може да бъде заредено"
 
-#: gdk-pixbuf/io-gdip-utils.c:847
+#: ../gdk-pixbuf/io-gdip-utils.c:847
 msgid "Couldn't load metafile"
 msgstr "Мета-файлът не може да бъде зареден"
 
-#: gdk-pixbuf/io-gdip-utils.c:1006
+#: ../gdk-pixbuf/io-gdip-utils.c:1006
 msgid "Unsupported image format for GDI+"
 msgstr "Форматът на изображението не се поддържа от GDI+"
 
-#: gdk-pixbuf/io-gdip-utils.c:1013
+#: ../gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
 msgstr "Грешка при запазване"
 
-#: gdk-pixbuf/io-gdip-wmf.c:58
+#: ../gdk-pixbuf/io-gdip-wmf.c:58
 msgid "The WMF image format"
 msgstr "Форматът за изображения WMF"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:54
+#: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "Да не се групират заявките към GDI"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:56
+#: ../gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr ""
 "Да не се ползва Wintab API за под-\n"
 "                                        дръжката на таблети"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
+#: ../gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "Същото като --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
+#: ../gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr ""
 "Да не се ползва Wintab API [това е\n"
 "                                        стандартно]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr ""
 "Размер на палитрата при 8 битов ре-\n"
 "                                        жим"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "ЦВЕТОВЕ"
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:93
+#: ../gdk/x11/gdkmain-x11.c:93
 msgid "Make X calls synchronous"
 msgstr "Заявките към Х да са синхронни"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:311
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Starting %s"
 msgstr "Стартиране на %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Opening %s"
 msgstr "Отваряне на %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Отваряне на %d елемент"
 msgstr[1] "Отваряне на %d елемента"
 
-#: gtk/gtkaboutdialog.c:242
+#: ../gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
 msgstr "Връзката не може да бъде показана"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: ../gtk/gtkaboutdialog.c:365 ../gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr "Лиценз"
 
-#: gtk/gtkaboutdialog.c:366
+#: ../gtk/gtkaboutdialog.c:366
 msgid "The license of the program"
 msgstr "Лицензът на програмата"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: ../gtk/gtkaboutdialog.c:625
 msgid "C_redits"
 msgstr "_Заслуги"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: ../gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr "_Лиценз"
 
-#: gtk/gtkaboutdialog.c:917
+#: ../gtk/gtkaboutdialog.c:917
 #, c-format
 msgid "About %s"
 msgstr "Относно %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: ../gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr "Заслуги"
 
-#: gtk/gtkaboutdialog.c:2215
+#: ../gtk/gtkaboutdialog.c:2215
 msgid "Written by"
 msgstr "Създадено от"
 
-#: gtk/gtkaboutdialog.c:2218
+#: ../gtk/gtkaboutdialog.c:2218
 msgid "Documented by"
 msgstr "Документирано от"
 
-#: gtk/gtkaboutdialog.c:2230
+#: ../gtk/gtkaboutdialog.c:2230
 msgid "Translated by"
 msgstr "Преведено от"
 
-#: gtk/gtkaboutdialog.c:2234
+#: ../gtk/gtkaboutdialog.c:2234
 msgid "Artwork by"
 msgstr "Дизайн"
 
@@ -1317,7 +1330,7 @@ msgstr "Дизайн"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: ../gtk/gtkaccellabel.c:146
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1327,7 +1340,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: ../gtk/gtkaccellabel.c:152
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1337,7 +1350,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: ../gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1347,7 +1360,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: ../gtk/gtkaccellabel.c:743
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1357,7 +1370,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: ../gtk/gtkaccellabel.c:756
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1367,38 +1380,38 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: ../gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: ../gtk/gtkaccellabel.c:787
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: gtk/gtkaccellabel.c:790
+#: ../gtk/gtkaccellabel.c:790
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
 
-#: gtk/gtkbuilderparser.c:343
+#: ../gtk/gtkbuilderparser.c:343
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Функция от неправилен вид на ред %d: „%s“"
 
-#: gtk/gtkbuilderparser.c:407
+#: ../gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr ""
 "Повтарящ се обект с идентификатор „%s“ на ред %d (с предишна поява на ред %d)"
 
-#: gtk/gtkbuilderparser.c:859
+#: ../gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Неправилен коренов елемент: „%s“"
 
-#: gtk/gtkbuilderparser.c:898
+#: ../gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Необработен етикет: „%s“"
@@ -1413,7 +1426,7 @@ msgstr "Необработен етикет: „%s“"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:759
+#: ../gtk/gtkcalendar.c:759
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1421,7 +1434,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:797
+#: ../gtk/gtkcalendar.c:797
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1430,7 +1443,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1807
+#: ../gtk/gtkcalendar.c:1807
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1445,7 +1458,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
+#: ../gtk/gtkcalendar.c:1838 ../gtk/gtkcalendar.c:2496
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1461,7 +1474,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
+#: ../gtk/gtkcalendar.c:1870 ../gtk/gtkcalendar.c:2359
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1477,7 +1490,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
+#: ../gtk/gtkcalendar.c:2150
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1485,7 +1498,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:244
+#: ../gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Изключен"
@@ -1494,7 +1507,7 @@ msgstr "Изключен"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:254
+#: ../gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Неправилен"
@@ -1503,25 +1516,25 @@ msgstr "Неправилен"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
+#: ../gtk/gtkcellrendereraccel.c:389 ../gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Нова клавишна комбинация…"
 
-#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
+#: ../gtk/gtkcellrendererprogress.c:361 ../gtk/gtkcellrendererprogress.c:448
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
 msgstr "Избор на цвят"
 
-#: gtk/gtkcolorbutton.c:448
+#: ../gtk/gtkcolorbutton.c:448
 msgid "Received invalid color data\n"
 msgstr "Получени са неправилни данни за цвета\n"
 
-#: gtk/gtkcolorsel.c:354
+#: ../gtk/gtkcolorsel.c:354
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1529,7 +1542,7 @@ msgstr ""
 "Изберете цвета, който ви трябва, от външния пръстен. Изберете светлостта му "
 "чрез вътрешния триъгълник."
 
-#: gtk/gtkcolorsel.c:378
+#: ../gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1537,67 +1550,67 @@ msgstr ""
 "Натиснете върху пипетката, а след това на цвят върху вашия екран, за да го "
 "изберете."
 
-#: gtk/gtkcolorsel.c:387
+#: ../gtk/gtkcolorsel.c:387
 msgid "_Hue:"
 msgstr "Н_юанс:"
 
-#: gtk/gtkcolorsel.c:388
+#: ../gtk/gtkcolorsel.c:388
 msgid "Position on the color wheel."
 msgstr "Позиция върху цветното колело."
 
-#: gtk/gtkcolorsel.c:390
+#: ../gtk/gtkcolorsel.c:390
 msgid "_Saturation:"
 msgstr "_Наситеност:"
 
-#: gtk/gtkcolorsel.c:391
+#: ../gtk/gtkcolorsel.c:391
 msgid "\"Deepness\" of the color."
 msgstr "„Дълбочина“ на цвят."
 
-#: gtk/gtkcolorsel.c:392
+#: ../gtk/gtkcolorsel.c:392
 msgid "_Value:"
 msgstr "С_тойност:"
 
-#: gtk/gtkcolorsel.c:393
+#: ../gtk/gtkcolorsel.c:393
 msgid "Brightness of the color."
 msgstr "Яркост на цвета."
 
-#: gtk/gtkcolorsel.c:394
+#: ../gtk/gtkcolorsel.c:394
 msgid "_Red:"
 msgstr "_Червено:"
 
-#: gtk/gtkcolorsel.c:395
+#: ../gtk/gtkcolorsel.c:395
 msgid "Amount of red light in the color."
 msgstr "Количеството червена светлина в цвета."
 
-#: gtk/gtkcolorsel.c:396
+#: ../gtk/gtkcolorsel.c:396
 msgid "_Green:"
 msgstr "_Зелено:"
 
-#: gtk/gtkcolorsel.c:397
+#: ../gtk/gtkcolorsel.c:397
 msgid "Amount of green light in the color."
 msgstr "Количеството зелена светлина в цвета."
 
-#: gtk/gtkcolorsel.c:398
+#: ../gtk/gtkcolorsel.c:398
 msgid "_Blue:"
 msgstr "_Синьо:"
 
-#: gtk/gtkcolorsel.c:399
+#: ../gtk/gtkcolorsel.c:399
 msgid "Amount of blue light in the color."
 msgstr "Количеството синя светлина в цвета."
 
-#: gtk/gtkcolorsel.c:402
+#: ../gtk/gtkcolorsel.c:402
 msgid "Op_acity:"
 msgstr "Н_епрозрачност:"
 
-#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+#: ../gtk/gtkcolorsel.c:409 ../gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
 msgstr "Прозрачност на цвета."
 
-#: gtk/gtkcolorsel.c:426
+#: ../gtk/gtkcolorsel.c:426
 msgid "Color _name:"
 msgstr "Име на _цвят:"
 
-#: gtk/gtkcolorsel.c:440
+#: ../gtk/gtkcolorsel.c:440
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1605,15 +1618,15 @@ msgstr ""
 "Може да въведете цвят като шестнадесетична стойност за HTML или просто да "
 "посочите името му."
 
-#: gtk/gtkcolorsel.c:470
+#: ../gtk/gtkcolorsel.c:470
 msgid "_Palette:"
 msgstr "_Палитра:"
 
-#: gtk/gtkcolorsel.c:499
+#: ../gtk/gtkcolorsel.c:499
 msgid "Color Wheel"
 msgstr "Цветова палитра"
 
-#: gtk/gtkcolorsel.c:958
+#: ../gtk/gtkcolorsel.c:958
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1623,7 +1636,7 @@ msgstr ""
 "да изтеглите този цвят върху палитрата или да зададете този цвят като текущ "
 "като го издърпате върху цвета за избор."
 
-#: gtk/gtkcolorsel.c:961
+#: ../gtk/gtkcolorsel.c:961
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1631,21 +1644,21 @@ msgstr ""
 "Цветът, който сте избрали. Може да го изтеглите върху палитрата, за да го "
 "запазите за бъдеща употреба."
 
-#: gtk/gtkcolorsel.c:966
+#: ../gtk/gtkcolorsel.c:966
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Предишно избраният цвят за сравнение с текущия."
 
-#: gtk/gtkcolorsel.c:969
+#: ../gtk/gtkcolorsel.c:969
 msgid "The color you've chosen."
 msgstr "Цветът, който сте избрали."
 
-#: gtk/gtkcolorsel.c:1382
+#: ../gtk/gtkcolorsel.c:1382
 msgid "_Save color here"
 msgstr "_Запазване на цвета тук"
 
-#: gtk/gtkcolorsel.c:1587
+#: ../gtk/gtkcolorsel.c:1587
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1654,7 +1667,7 @@ msgstr ""
 "смените цвета, изтеглете примерен цвят тук или натиснете десния клавиш и "
 "изберете „Запазване на цвета тук“."
 
-#: gtk/gtkcolorseldialog.c:170
+#: ../gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Избор на цвят"
 
@@ -1664,113 +1677,113 @@ msgstr "Избор на цвят"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:118
+#: ../gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226
+#: ../gtk/gtkcustompaperunixdialog.c:373 ../gtk/gtkprintunixdialog.c:3226
 msgid "Manage Custom Sizes"
 msgstr "Управление на другите размери"
 
-#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "инч"
 
-#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:580
+#: ../gtk/gtkcustompaperunixdialog.c:580
 msgid "Margins from Printer..."
 msgstr "Полета от принтера…"
 
-#: gtk/gtkcustompaperunixdialog.c:746
+#: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
 msgstr "Друг размер: %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: ../gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr "_Широчина"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: ../gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
 msgstr "_Височина:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: ../gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
 msgstr "Размер на листите"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: ../gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
 msgstr "От_горе:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: ../gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr "От_долу:"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: ../gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr "От_ляво:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: ../gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
 msgstr "_Отдясно:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: ../gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr "Бели полета"
 
-#: gtk/gtkentry.c:8685 gtk/gtktextview.c:7859
+#: ../gtk/gtkentry.c:8685 ../gtk/gtktextview.c:7859
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: gtk/gtkentry.c:8699 gtk/gtktextview.c:7873
+#: ../gtk/gtkentry.c:8699 ../gtk/gtktextview.c:7873
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на контролен знак за Уникод"
 
-#: gtk/gtkentry.c:10070
+#: ../gtk/gtkentry.c:10070
 msgid "Caps Lock is on"
 msgstr "Клавишът „Caps Lock“ е натиснат"
 
-#: gtk/gtkfilechooserbutton.c:64
+#: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "Избор на файл"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1850
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1850
 msgid "Desktop"
 msgstr "Работен плот"
 
-#: gtk/gtkfilechooserbutton.c:66
+#: ../gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
 msgstr "(без)"
 
-#: gtk/gtkfilechooserbutton.c:2016
+#: ../gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Друго място…"
 
-#: gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "Напишете името на новата папка"
 
-#: gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not retrieve information about the file"
 msgstr "Информацията за файла не може да бъде получена"
 
-#: gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:987
 msgid "Could not add a bookmark"
 msgstr "Не може да бъде добавена отметка"
 
-#: gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:998
 msgid "Could not remove bookmark"
 msgstr "Не може да бъде премахната отметка"
 
-#: gtk/gtkfilechooserdefault.c:1009
+#: ../gtk/gtkfilechooserdefault.c:1009
 msgid "The folder could not be created"
 msgstr "Папката не може да бъде създадена"
 
-#: gtk/gtkfilechooserdefault.c:1022
+#: ../gtk/gtkfilechooserdefault.c:1022
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1778,11 +1791,11 @@ msgstr ""
 "Папката не може да бъде създадена, понеже вече съществува файл със същото "
 "име. Опитайте с друго име на папката или преименувайте файла."
 
-#: gtk/gtkfilechooserdefault.c:1033
+#: ../gtk/gtkfilechooserdefault.c:1033
 msgid "Invalid file name"
 msgstr "Неправилно име на файл"
 
-#: gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1043
 msgid "The folder contents could not be displayed"
 msgstr "Съдържанието на папката не може да бъде показано"
 
@@ -1790,186 +1803,186 @@ msgstr "Съдържанието на папката не може да бъде
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1593
+#: ../gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s на %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1769
+#: ../gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
 msgstr "Търсене"
 
-#: gtk/gtkfilechooserdefault.c:1793 gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1793 ../gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr "Скоро отваряни"
 
-#: gtk/gtkfilechooserdefault.c:2429
+#: ../gtk/gtkfilechooserdefault.c:2429
 msgid "Select which types of files are shown"
 msgstr "Избор на видовете файлове, които се показват"
 
-#: gtk/gtkfilechooserdefault.c:2788
+#: ../gtk/gtkfilechooserdefault.c:2788
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Добавяне на папката „%s“ към отметките"
 
-#: gtk/gtkfilechooserdefault.c:2832
+#: ../gtk/gtkfilechooserdefault.c:2832
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Добавяне на текущата папка към отметките"
 
-#: gtk/gtkfilechooserdefault.c:2834
+#: ../gtk/gtkfilechooserdefault.c:2834
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Добавяне на избраните папки към отметките"
 
-#: gtk/gtkfilechooserdefault.c:2872
+#: ../gtk/gtkfilechooserdefault.c:2872
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Премахване на отметката „%s“"
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: ../gtk/gtkfilechooserdefault.c:2874
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Отметката „%s“ не може да бъде премахната"
 
-#: gtk/gtkfilechooserdefault.c:2881 gtk/gtkfilechooserdefault.c:3907
+#: ../gtk/gtkfilechooserdefault.c:2881 ../gtk/gtkfilechooserdefault.c:3907
 msgid "Remove the selected bookmark"
 msgstr "Премахване на избраната отметка"
 
-#: gtk/gtkfilechooserdefault.c:3603
+#: ../gtk/gtkfilechooserdefault.c:3603
 msgid "Remove"
 msgstr "Премахване"
 
-#: gtk/gtkfilechooserdefault.c:3612
+#: ../gtk/gtkfilechooserdefault.c:3612
 msgid "Rename..."
 msgstr "Преименуване…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3775
+#: ../gtk/gtkfilechooserdefault.c:3775
 msgid "Places"
 msgstr "Места"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3832
+#: ../gtk/gtkfilechooserdefault.c:3832
 msgid "_Places"
 msgstr "_Места"
 
-#: gtk/gtkfilechooserdefault.c:3888
+#: ../gtk/gtkfilechooserdefault.c:3888
 msgid "_Add"
 msgstr "_Добавяне"
 
-#: gtk/gtkfilechooserdefault.c:3895
+#: ../gtk/gtkfilechooserdefault.c:3895
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Добавяне на избраната папка към отметките"
 
-#: gtk/gtkfilechooserdefault.c:3900
+#: ../gtk/gtkfilechooserdefault.c:3900
 msgid "_Remove"
 msgstr "_Премахване"
 
-#: gtk/gtkfilechooserdefault.c:4035
+#: ../gtk/gtkfilechooserdefault.c:4035
 msgid "Could not select file"
 msgstr "Не може да бъде избран файл"
 
-#: gtk/gtkfilechooserdefault.c:4210
+#: ../gtk/gtkfilechooserdefault.c:4210
 msgid "_Add to Bookmarks"
 msgstr "_Добавяне към отметките"
 
-#: gtk/gtkfilechooserdefault.c:4223
+#: ../gtk/gtkfilechooserdefault.c:4223
 msgid "Show _Hidden Files"
 msgstr "Показване на _скритите файлове"
 
-#: gtk/gtkfilechooserdefault.c:4230
+#: ../gtk/gtkfilechooserdefault.c:4230
 msgid "Show _Size Column"
 msgstr "Показване на колоната за _размера"
 
-#: gtk/gtkfilechooserdefault.c:4450 gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4450 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Файлове"
 
-#: gtk/gtkfilechooserdefault.c:4501
+#: ../gtk/gtkfilechooserdefault.c:4501
 msgid "Name"
 msgstr "Име"
 
-#: gtk/gtkfilechooserdefault.c:4524
+#: ../gtk/gtkfilechooserdefault.c:4524
 msgid "Size"
 msgstr "Размер"
 
-#: gtk/gtkfilechooserdefault.c:4538
+#: ../gtk/gtkfilechooserdefault.c:4538
 msgid "Modified"
 msgstr "Променян на"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4793 gtk/gtkprinteroptionwidget.c:802
+#: ../gtk/gtkfilechooserdefault.c:4793 ../gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Име:"
 
-#: gtk/gtkfilechooserdefault.c:4836
+#: ../gtk/gtkfilechooserdefault.c:4836
 msgid "_Browse for other folders"
 msgstr "_Отваряне на други папки"
 
-#: gtk/gtkfilechooserdefault.c:5108
+#: ../gtk/gtkfilechooserdefault.c:5108
 msgid "Type a file name"
 msgstr "Въведете име на файл"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5149
+#: ../gtk/gtkfilechooserdefault.c:5149
 msgid "Create Fo_lder"
 msgstr "Създаване на _папка"
 
-#: gtk/gtkfilechooserdefault.c:5159
+#: ../gtk/gtkfilechooserdefault.c:5159
 msgid "_Location:"
 msgstr "_Местоположение:"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: ../gtk/gtkfilechooserdefault.c:5363
 msgid "Save in _folder:"
 msgstr "Запазване в п_апка:"
 
-#: gtk/gtkfilechooserdefault.c:5365
+#: ../gtk/gtkfilechooserdefault.c:5365
 msgid "Create in _folder:"
 msgstr "Създаване в _папка:"
 
-#: gtk/gtkfilechooserdefault.c:6431
+#: ../gtk/gtkfilechooserdefault.c:6431
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не може да се прочете съдържанието на %s"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: ../gtk/gtkfilechooserdefault.c:6435
 msgid "Could not read the contents of the folder"
 msgstr "Съдържанието на папката не може да се прочете"
 
-#: gtk/gtkfilechooserdefault.c:6528 gtk/gtkfilechooserdefault.c:6596
-#: gtk/gtkfilechooserdefault.c:6741
+#: ../gtk/gtkfilechooserdefault.c:6528 ../gtk/gtkfilechooserdefault.c:6596
+#: ../gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/gtkfilechooserdefault.c:6543
+#: ../gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6545
+#: ../gtk/gtkfilechooserdefault.c:6545
 msgid "Yesterday at %H:%M"
 msgstr "Вчера в %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7211
+#: ../gtk/gtkfilechooserdefault.c:7211
 msgid "Cannot change to folder because it is not local"
 msgstr "Не може да е тази папка, защото тя не е локална"
 
-#: gtk/gtkfilechooserdefault.c:7808 gtk/gtkfilechooserdefault.c:7829
+#: ../gtk/gtkfilechooserdefault.c:7808 ../gtk/gtkfilechooserdefault.c:7829
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Клавишната комбинация „%s“ вече съществува"
 
-#: gtk/gtkfilechooserdefault.c:7919
+#: ../gtk/gtkfilechooserdefault.c:7919
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Клавишната комбинация „%s“ не съществува"
 
-#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Вече съществува файл с име „%s“. Искате ли да го замените?"
 
-#: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8177 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1977,15 +1990,15 @@ msgstr ""
 "Вече съществува файл с такова име в „%s“. Замяната му ще унищожи старото му "
 "съдържание."
 
-#: gtk/gtkfilechooserdefault.c:8182 gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Замяна"
 
-#: gtk/gtkfilechooserdefault.c:8826
+#: ../gtk/gtkfilechooserdefault.c:8826
 msgid "Could not start the search process"
 msgstr "Търсещият процес не беше стартиран"
 
-#: gtk/gtkfilechooserdefault.c:8827
+#: ../gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1993,36 +2006,36 @@ msgstr ""
 "Програмата не успя да създаде връзка към индексиращия демон. Проверете дали "
 "той работи."
 
-#: gtk/gtkfilechooserdefault.c:8841
+#: ../gtk/gtkfilechooserdefault.c:8841
 msgid "Could not send the search request"
 msgstr "Заявката за търсене не беше изпратена"
 
-#: gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr "Търсене:"
 
-#: gtk/gtkfilechooserdefault.c:9634
+#: ../gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "„%s“ не може да се монтира"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
+#: ../gtk/gtkfilechooserentry.c:698 ../gtk/gtkfilechooserentry.c:1163
 msgid "Invalid path"
 msgstr "Грешен път"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1095
+#: ../gtk/gtkfilechooserentry.c:1095
 msgid "No match"
 msgstr "Няма съвпадащи"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1106
+#: ../gtk/gtkfilechooserentry.c:1106
 msgid "Sole completion"
 msgstr "Единствено дописване"
 
@@ -2030,13 +2043,13 @@ msgstr "Единствено дописване"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1122
+#: ../gtk/gtkfilechooserentry.c:1122
 msgid "Complete, but not unique"
 msgstr "Дописано, но не е уникално"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1154
+#: ../gtk/gtkfilechooserentry.c:1154
 msgid "Completing..."
 msgstr "Дописване…"
 
@@ -2044,7 +2057,7 @@ msgstr "Дописване…"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
+#: ../gtk/gtkfilechooserentry.c:1176 ../gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
 msgstr "Могат да се избират само локални файлове"
 
@@ -2052,41 +2065,41 @@ msgstr "Могат да се избират само локални файлов
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1185
+#: ../gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Непълно име на машина. Завършете го с „/“"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1196
+#: ../gtk/gtkfilechooserentry.c:1196
 msgid "Path does not exist"
 msgstr "Пътят не съществува"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Грешка при създаването на папка „%s“: %s"
 
-#: gtk/gtkfilesel.c:694
+#: ../gtk/gtkfilesel.c:694
 msgid "Folders"
 msgstr "Папки"
 
-#: gtk/gtkfilesel.c:698
+#: ../gtk/gtkfilesel.c:698
 msgid "Fol_ders"
 msgstr "_Папки"
 
-#: gtk/gtkfilesel.c:734
+#: ../gtk/gtkfilesel.c:734
 msgid "_Files"
 msgstr "_Файлове"
 
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
+#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Папката не може да се прочете: %s"
 
-#: gtk/gtkfilesel.c:905
+#: ../gtk/gtkfilesel.c:905
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -2097,90 +2110,90 @@ msgstr ""
 "наличен за тази програма.\n"
 "Сигурни ли сте, че искате да го изберете?"
 
-#: gtk/gtkfilesel.c:1020
+#: ../gtk/gtkfilesel.c:1020
 msgid "_New Folder"
 msgstr "_Нова папка"
 
-#: gtk/gtkfilesel.c:1031
+#: ../gtk/gtkfilesel.c:1031
 msgid "De_lete File"
 msgstr "Из_триване на файл"
 
-#: gtk/gtkfilesel.c:1042
+#: ../gtk/gtkfilesel.c:1042
 msgid "_Rename File"
 msgstr "_Преименуване на файл"
 
-#: gtk/gtkfilesel.c:1347
+#: ../gtk/gtkfilesel.c:1347
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Името на папката „%s“ съдържа знаци, които не са позволени в имена на файлове"
 
-#: gtk/gtkfilesel.c:1394
+#: ../gtk/gtkfilesel.c:1394
 msgid "New Folder"
 msgstr "Нова папка"
 
-#: gtk/gtkfilesel.c:1409
+#: ../gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
 msgstr "_Име на папката:"
 
-#: gtk/gtkfilesel.c:1433
+#: ../gtk/gtkfilesel.c:1433
 msgid "C_reate"
 msgstr "_Създаване"
 
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
+#: ../gtk/gtkfilesel.c:1476 ../gtk/gtkfilesel.c:1585 ../gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Името на файла „%s“ съдържа знаци, които не са позволени в имена на файлове"
 
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
+#: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
 #, c-format
 msgid "Error deleting file '%s': %s"
 msgstr "Грешка при изтриването на файла „%s“: %s"
 
-#: gtk/gtkfilesel.c:1534
+#: ../gtk/gtkfilesel.c:1534
 #, c-format
 msgid "Really delete file \"%s\"?"
 msgstr "Действително ли искате файлът „%s“ да бъде изтрит?"
 
-#: gtk/gtkfilesel.c:1539
+#: ../gtk/gtkfilesel.c:1539
 msgid "Delete File"
 msgstr "Изтриване на файл"
 
-#: gtk/gtkfilesel.c:1587
+#: ../gtk/gtkfilesel.c:1587
 #, c-format
 msgid "Error renaming file to \"%s\": %s"
 msgstr "Грешка при преименуването на файла на „%s“: %s"
 
-#: gtk/gtkfilesel.c:1600
+#: ../gtk/gtkfilesel.c:1600
 #, c-format
 msgid "Error renaming file \"%s\": %s"
 msgstr "Грешка при преименуването на файла „%s“: %s"
 
-#: gtk/gtkfilesel.c:1611
+#: ../gtk/gtkfilesel.c:1611
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Грешка при преименуването на файла „%s“ на „%s“: %s"
 
-#: gtk/gtkfilesel.c:1658
+#: ../gtk/gtkfilesel.c:1658
 msgid "Rename File"
 msgstr "Преименуване на файл"
 
-#: gtk/gtkfilesel.c:1673
+#: ../gtk/gtkfilesel.c:1673
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Преименуване на файла „%s“ на:"
 
-#: gtk/gtkfilesel.c:1702
+#: ../gtk/gtkfilesel.c:1702
 msgid "_Rename"
 msgstr "_Преименуване"
 
-#: gtk/gtkfilesel.c:2134
+#: ../gtk/gtkfilesel.c:2134
 msgid "_Selection: "
 msgstr "_Избор: "
 
-#: gtk/gtkfilesel.c:3056
+#: ../gtk/gtkfilesel.c:3056
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
@@ -2189,15 +2202,15 @@ msgstr ""
 "Името на файла „%s“ не може да бъде конвертирано към UTF-8 (опитайте се да "
 "зададете променливата на средата G_FILENAME_ENCODING): %s"
 
-#: gtk/gtkfilesel.c:3059
+#: ../gtk/gtkfilesel.c:3059
 msgid "Invalid UTF-8"
 msgstr "Грешен UTF-8"
 
-#: gtk/gtkfilesel.c:3935
+#: ../gtk/gtkfilesel.c:3935
 msgid "Name too long"
 msgstr "Името е твърде дълго"
 
-#: gtk/gtkfilesel.c:3937
+#: ../gtk/gtkfilesel.c:3937
 msgid "Couldn't convert filename"
 msgstr "Името на файла не може да бъде конвертирано"
 
@@ -2206,67 +2219,67 @@ msgstr "Името на файла не може да бъде конверти�
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:52
+#: ../gtk/gtkfilesystem.c:52
 msgid "File System"
 msgstr "Файлова система"
 
-#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
+#: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Избор на шрифт"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:260
+#: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:785
+#: ../gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Шрифт"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:75
+#: ../gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "абвгде АБВГДЕ abcde ABCDE"
 
-#: gtk/gtkfontsel.c:343
+#: ../gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "_Фамилия:"
 
-#: gtk/gtkfontsel.c:349
+#: ../gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "_Стил:"
 
-#: gtk/gtkfontsel.c:355
+#: ../gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "Раз_мер:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:532
+#: ../gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "_Преглед:"
 
-#: gtk/gtkfontsel.c:1649
+#: ../gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "Избор на шрифт"
 
-#: gtk/gtkgamma.c:410
+#: ../gtk/gtkgamma.c:410
 msgid "Gamma"
 msgstr "Гама"
 
-#: gtk/gtkgamma.c:420
+#: ../gtk/gtkgamma.c:420
 msgid "_Gamma value"
 msgstr "_Стойност на гама"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1401
+#: ../gtk/gtkiconfactory.c:1401
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Грешка при зареждането на икона: %s"
 
-#: gtk/gtkicontheme.c:1363
+#: ../gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -2279,157 +2292,156 @@ msgstr ""
 "Можете да я получите от:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1543
+#: ../gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Иконата „%s“ не е включена в темата"
 
-#: gtk/gtkicontheme.c:3074
+#: ../gtk/gtkicontheme.c:3074
 msgid "Failed to load icon"
 msgstr "Неуспех при зареждане на икона"
 
-#: gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:527
 msgid "Simple"
 msgstr "Прост"
 
-#: gtk/gtkimmulticontext.c:563
+#: ../gtk/gtkimmulticontext.c:563
 msgctxt "input method menu"
 msgid "System"
 msgstr "Системен"
 
-#: gtk/gtkimmulticontext.c:573
-#, fuzzy
+#: ../gtk/gtkimmulticontext.c:573
 msgctxt "input method menu"
 msgid "None"
 msgstr "(Без)"
 
-#: gtk/gtkimmulticontext.c:656
+#: ../gtk/gtkimmulticontext.c:656
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Системен (%s)"
 
-#: gtk/gtkinputdialog.c:192
+#: ../gtk/gtkinputdialog.c:192
 msgid "Input"
 msgstr "Вход"
 
-#: gtk/gtkinputdialog.c:207
+#: ../gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
 msgstr "Няма разширено входно устройство"
 
-#: gtk/gtkinputdialog.c:220
+#: ../gtk/gtkinputdialog.c:220
 msgid "_Device:"
 msgstr "_Устройство:"
 
-#: gtk/gtkinputdialog.c:237
+#: ../gtk/gtkinputdialog.c:237
 msgid "Disabled"
 msgstr "Забранено"
 
-#: gtk/gtkinputdialog.c:244
+#: ../gtk/gtkinputdialog.c:244
 msgid "Screen"
 msgstr "Екран"
 
-#: gtk/gtkinputdialog.c:251
+#: ../gtk/gtkinputdialog.c:251
 msgid "Window"
 msgstr "Прозорец"
 
-#: gtk/gtkinputdialog.c:258
+#: ../gtk/gtkinputdialog.c:258
 msgid "_Mode:"
 msgstr "_Режим:"
 
 #. The axis listbox
-#: gtk/gtkinputdialog.c:279
+#: ../gtk/gtkinputdialog.c:279
 msgid "Axes"
 msgstr "Оси"
 
 #. Keys listbox
-#: gtk/gtkinputdialog.c:297
+#: ../gtk/gtkinputdialog.c:297
 msgid "Keys"
 msgstr "Клавиши"
 
-#: gtk/gtkinputdialog.c:524
+#: ../gtk/gtkinputdialog.c:524
 msgid "_X:"
 msgstr "_X:"
 
-#: gtk/gtkinputdialog.c:525
+#: ../gtk/gtkinputdialog.c:525
 msgid "_Y:"
 msgstr "_Y:"
 
-#: gtk/gtkinputdialog.c:526
+#: ../gtk/gtkinputdialog.c:526
 msgid "_Pressure:"
 msgstr "_Натиск:"
 
-#: gtk/gtkinputdialog.c:527
+#: ../gtk/gtkinputdialog.c:527
 msgid "X _tilt:"
 msgstr "Наклон по _X:"
 
-#: gtk/gtkinputdialog.c:528
+#: ../gtk/gtkinputdialog.c:528
 msgid "Y t_ilt:"
 msgstr "Наклон по _Y:"
 
-#: gtk/gtkinputdialog.c:529
+#: ../gtk/gtkinputdialog.c:529
 msgid "_Wheel:"
 msgstr "_Колелце:"
 
-#: gtk/gtkinputdialog.c:581
+#: ../gtk/gtkinputdialog.c:581
 msgid "none"
 msgstr "без"
 
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
+#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
 msgid "(disabled)"
 msgstr "(забранен)"
 
-#: gtk/gtkinputdialog.c:647
+#: ../gtk/gtkinputdialog.c:647
 msgid "(unknown)"
 msgstr "(неизвестен)"
 
 #. and clear button
-#: gtk/gtkinputdialog.c:751
+#: ../gtk/gtkinputdialog.c:751
 msgid "Cl_ear"
 msgstr "_Изчистване"
 
 #. Open Link
-#: gtk/gtklabel.c:5680
+#: ../gtk/gtklabel.c:5680
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5692
+#: ../gtk/gtklabel.c:5692
 msgid "Copy _Link Address"
 msgstr "Копиране на _адреса на връзка"
 
-#: gtk/gtklinkbutton.c:428
+#: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Копиране на адрес"
 
-#: gtk/gtklinkbutton.c:586
+#: ../gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
 msgstr "Грешен адрес"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "Зареждане на допълнителни модули на GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "МОДУЛИ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "Всички предупреждения да са фатални"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
 msgstr ""
 "Флаговете за изчистване на грешки на GTK+,\n"
 "                                        които да бъдат зададени"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: ../gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 "Флаговете за изчистване на грешки на GTK+,\n"
@@ -2440,123 +2452,123 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: ../gtk/gtkmain.c:713
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: ../gtk/gtkmain.c:778
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Дисплеят не може да се отвори: %s"
 
-#: gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:815
 msgid "GTK+ Options"
 msgstr "Опции за GTK+"
 
-#: gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:815
 msgid "Show GTK+ Options"
 msgstr "Показване на опциите за GTK+"
 
-#: gtk/gtkmountoperation.c:489
+#: ../gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
 msgstr "_Свързване"
 
-#: gtk/gtkmountoperation.c:556
+#: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
 msgstr "_Анонимно свързване"
 
-#: gtk/gtkmountoperation.c:565
+#: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
 msgstr "Свързване като п_отребител:"
 
-#: gtk/gtkmountoperation.c:603
+#: ../gtk/gtkmountoperation.c:603
 msgid "_Username:"
 msgstr "_Потребител:"
 
-#: gtk/gtkmountoperation.c:608
+#: ../gtk/gtkmountoperation.c:608
 msgid "_Domain:"
 msgstr "_Домейн:"
 
-#: gtk/gtkmountoperation.c:614
+#: ../gtk/gtkmountoperation.c:614
 msgid "_Password:"
 msgstr "Па_рола:"
 
-#: gtk/gtkmountoperation.c:632
+#: ../gtk/gtkmountoperation.c:632
 msgid "Forget password _immediately"
 msgstr "_Незабавно забравяне на паролата"
 
-#: gtk/gtkmountoperation.c:642
+#: ../gtk/gtkmountoperation.c:642
 msgid "Remember password until you _logout"
 msgstr "Запомняне на паролите до _изход от системата"
 
-#: gtk/gtkmountoperation.c:652
+#: ../gtk/gtkmountoperation.c:652
 msgid "Remember _forever"
 msgstr "_Запомняне завинаги"
 
-#: gtk/gtkmountoperation.c:881
+#: ../gtk/gtkmountoperation.c:881
 #, c-format
 msgid "Unknown Application (pid %d)"
 msgstr "Непозната програма (ид. пр. %d)"
 
-#: gtk/gtkmountoperation.c:1064
-#, c-format
+#: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
 msgstr "Неуспех при приключването на процес"
 
-#: gtk/gtkmountoperation.c:1101
+#: ../gtk/gtkmountoperation.c:1101
 msgid "_End Process"
 msgstr "_Приключване на процес"
 
-#: gtk/gtkmountoperation-stub.c:64
+#: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr ""
 "Процесът с ид. пр. %d не може да бъде убит — операцията не е реализирана."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:865
+#: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr "Странициране в терминал"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
 msgstr "Командата top"
 
-#: gtk/gtkmountoperation-x11.c:867
+#: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr "Обвивка bash"
 
-#: gtk/gtkmountoperation-x11.c:868
+#: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr "Обвивка bash"
 
-#: gtk/gtkmountoperation-x11.c:869
+#: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr "Обвивка zsh"
 
-#: gtk/gtkmountoperation-x11.c:966
+#: ../gtk/gtkmountoperation-x11.c:966
 #, c-format
 msgid "Cannot end process with pid %d: %s"
 msgstr "Процесът с ид. пр. %d не може да бъде приключен: %s"
 
-#: gtk/gtknotebook.c:4698 gtk/gtknotebook.c:7260
+#: ../gtk/gtknotebook.c:4698 ../gtk/gtknotebook.c:7260
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
+#: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:825
+#: ../gtk/gtkpapersize.c:867
 msgid "Not a valid page setup file"
 msgstr "Неправилен файл за настройка на страница"
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "Any Printer"
 msgstr "Произволен принтер"
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "For portable documents"
 msgstr "За преносими документи"
 
-#: gtk/gtkpagesetupunixdialog.c:797
+#: ../gtk/gtkpagesetupunixdialog.c:797
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2571,47 +2583,47 @@ msgstr ""
 " Отгоре: %s %s\n"
 " Отдолу: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:846 gtk/gtkprintunixdialog.c:3277
+#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "Управление на другите размери…"
 
-#: gtk/gtkpagesetupunixdialog.c:894
+#: ../gtk/gtkpagesetupunixdialog.c:894
 msgid "_Format for:"
 msgstr "_Формат за:"
 
-#: gtk/gtkpagesetupunixdialog.c:916 gtk/gtkprintunixdialog.c:3449
+#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "_Размер на листите:"
 
-#: gtk/gtkpagesetupunixdialog.c:947
+#: ../gtk/gtkpagesetupunixdialog.c:947
 msgid "_Orientation:"
 msgstr "_Ориентация:"
 
-#: gtk/gtkpagesetupunixdialog.c:1011 gtk/gtkprintunixdialog.c:3511
+#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "Настройки на листите"
 
-#: gtk/gtkpathbar.c:151
+#: ../gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr "Нагоре"
 
-#: gtk/gtkpathbar.c:153
+#: ../gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr "Надолу"
 
-#: gtk/gtkpathbar.c:1469
+#: ../gtk/gtkpathbar.c:1469
 msgid "File System Root"
 msgstr "Корен на файловата система"
 
-#: gtk/gtkprintbackend.c:749
+#: ../gtk/gtkprintbackend.c:749
 msgid "Authentication"
 msgstr "Идентификация"
 
-#: gtk/gtkprinteroptionwidget.c:695
+#: ../gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Не е достъпен"
 
-#: gtk/gtkprinteroptionwidget.c:814
+#: ../gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
 msgstr "Запазване в п_апка:"
 
@@ -2619,193 +2631,188 @@ msgstr "Запазване в п_апка:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:190
+#: ../gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
 msgstr "%s, задача № %d"
 
-#: gtk/gtkprintoperation.c:1687
+#: ../gtk/gtkprintoperation.c:1687
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Първоначално състояние"
 
-#: gtk/gtkprintoperation.c:1688
+#: ../gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Подготовка за печат"
 
-#: gtk/gtkprintoperation.c:1689
+#: ../gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Генериране на данни"
 
-#: gtk/gtkprintoperation.c:1690
+#: ../gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Изпращане на данни"
 
-#: gtk/gtkprintoperation.c:1691
+#: ../gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Изчакване"
 
-#: gtk/gtkprintoperation.c:1692
+#: ../gtk/gtkprintoperation.c:1692
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Блокиране поради проблем"
 
-#: gtk/gtkprintoperation.c:1693
+#: ../gtk/gtkprintoperation.c:1693
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Отпечатване"
 
-#: gtk/gtkprintoperation.c:1694
+#: ../gtk/gtkprintoperation.c:1694
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Завършено"
 
-#: gtk/gtkprintoperation.c:1695
+#: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Завършено с грешка"
 
-#: gtk/gtkprintoperation.c:2254
+#: ../gtk/gtkprintoperation.c:2254
 #, c-format
 msgid "Preparing %d"
 msgstr "Подготвяне на %d"
 
-#: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
-#, c-format
+#: ../gtk/gtkprintoperation.c:2256 ../gtk/gtkprintoperation.c:2875
 msgid "Preparing"
 msgstr "Подготвяне"
 
-#: gtk/gtkprintoperation.c:2259
+#: ../gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Printing %d"
 msgstr "Печат на %d"
 
-#: gtk/gtkprintoperation.c:2905
-#, c-format
+#: ../gtk/gtkprintoperation.c:2905
 msgid "Error creating print preview"
 msgstr "Грешка при стартирането на прегледа"
 
-#: gtk/gtkprintoperation.c:2908
-#, c-format
+#: ../gtk/gtkprintoperation.c:2908
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Най-вероятната причина е, че не може да се създаде временен файл."
 
-#: gtk/gtkprintoperation-unix.c:297 gtk/gtkprintoperation-unix.c:314
-#, c-format
+#: ../gtk/gtkprintoperation-unix.c:297 ../gtk/gtkprintoperation-unix.c:314
 msgid "Error launching preview"
 msgstr "Грешка при стартирането на прегледа"
 
-#: gtk/gtkprintoperation-unix.c:358
-#, c-format
+#: ../gtk/gtkprintoperation-unix.c:358
 msgid "Error printing"
 msgstr "Грешка при печат"
 
-#: gtk/gtkprintoperation-unix.c:494 gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkprintoperation-unix.c:494 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Програма"
 
-#: gtk/gtkprintoperation-win32.c:612
+#: ../gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "Принтерът не е на линия"
 
-#: gtk/gtkprintoperation-win32.c:614
+#: ../gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "Хартията свърши"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: ../gtk/gtkprintoperation-win32.c:616
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1963
 msgid "Paused"
 msgstr "На пауза"
 
-#: gtk/gtkprintoperation-win32.c:618
+#: ../gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "Нужда от намеса на потребителя"
 
-#: gtk/gtkprintoperation-win32.c:718
+#: ../gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "Друг размер"
 
-#: gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "Няма принтер"
 
-#: gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "Неправилен аргумент за CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Грешка от StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
-#: gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "Недостатъчно памет"
 
-#: gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Неправилен аргумент за PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Неправилен указател към PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Неправилен указател за работа с PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Неуказана грешка"
 
-#: gtk/gtkprintunixdialog.c:614
+#: ../gtk/gtkprintunixdialog.c:614
 msgid "Getting printer information failed"
 msgstr "Неуспешно получаване на информацията за принтера"
 
-#: gtk/gtkprintunixdialog.c:1862
+#: ../gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "Получаване на информацията за принтера…"
 
-#: gtk/gtkprintunixdialog.c:2132
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "Принтер"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2142
+#: ../gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "Местоположение"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2153
+#: ../gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "Състояние"
 
-#: gtk/gtkprintunixdialog.c:2179
+#: ../gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "Обхват"
 
-#: gtk/gtkprintunixdialog.c:2183
+#: ../gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "_Всички страници"
 
-#: gtk/gtkprintunixdialog.c:2190
+#: ../gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "_Текущата страница"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: ../gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "_Избор"
 
-#: gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "_Страници:"
 
-#: gtk/gtkprintunixdialog.c:2210
+#: ../gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -2813,28 +2820,28 @@ msgstr ""
 "Въведете един или повече обхвати,\n"
 "напр. 1-3,7,11,22-28"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "Страници:"
 
-#: gtk/gtkprintunixdialog.c:2233
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "Разпечатки"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2238
+#: ../gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "Раз_печатки:"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: ../gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "По_следователно подреждане"
 
-#: gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "_Обратен ред"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "Общи"
 
@@ -2844,168 +2851,168 @@ msgstr "Общи"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, top to bottom"
 msgstr "Отляво надясно, отгоре надолу"
 
-#: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3471
 msgid "Left to right, bottom to top"
 msgstr "Отляво надясно, отдолу нагоре"
 
-#: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, top to bottom"
 msgstr "Отдясно наляво, отгоре надолу"
 
-#: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3472
 msgid "Right to left, bottom to top"
 msgstr "Отдясно наляво, отдолу нагоре"
 
-#: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, left to right"
 msgstr "Отгоре надолу, отляво надясно"
 
-#: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3473
 msgid "Top to bottom, right to left"
 msgstr "Отгоре надолу, отдясно наляво"
 
-#: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, left to right"
 msgstr "Отгоре надолу, отляво надясно"
 
-#: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3474
 msgid "Bottom to top, right to left"
 msgstr "Отдолу нагоре, отдясно наляво"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: ../gtk/gtkprintunixdialog.c:3017 ../gtk/gtkprintunixdialog.c:3030
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Page Ordering"
 msgstr "Ред на страниците"
 
-#: gtk/gtkprintunixdialog.c:3046
+#: ../gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "Отляво надясно"
 
-#: gtk/gtkprintunixdialog.c:3047
+#: ../gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "Отдясно наляво"
 
-#: gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "Отгоре надолу"
 
-#: gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "Отдолу нагоре"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: ../gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
 msgstr "Наместване"
 
-#: gtk/gtkprintunixdialog.c:3304
+#: ../gtk/gtkprintunixdialog.c:3304
 msgid "T_wo-sided:"
 msgstr "_Двустранен печат:"
 
-#: gtk/gtkprintunixdialog.c:3319
+#: ../gtk/gtkprintunixdialog.c:3319
 msgid "Pages per _side:"
 msgstr "Страници на _страна:"
 
-#: gtk/gtkprintunixdialog.c:3336
+#: ../gtk/gtkprintunixdialog.c:3336
 msgid "Page or_dering:"
 msgstr "_Подредба на страниците:"
 
-#: gtk/gtkprintunixdialog.c:3352
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "_Only print:"
 msgstr "_Обхват на печата:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3367
+#: ../gtk/gtkprintunixdialog.c:3367
 msgid "All sheets"
 msgstr "Всички страници"
 
-#: gtk/gtkprintunixdialog.c:3368
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Even sheets"
 msgstr "Четните страници"
 
-#: gtk/gtkprintunixdialog.c:3369
+#: ../gtk/gtkprintunixdialog.c:3369
 msgid "Odd sheets"
 msgstr "Нечетните страници"
 
-#: gtk/gtkprintunixdialog.c:3372
+#: ../gtk/gtkprintunixdialog.c:3372
 msgid "Sc_ale:"
 msgstr "_Мащабиране:"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: ../gtk/gtkprintunixdialog.c:3399
 msgid "Paper"
 msgstr "Хартия"
 
-#: gtk/gtkprintunixdialog.c:3403
+#: ../gtk/gtkprintunixdialog.c:3403
 msgid "Paper _type:"
 msgstr "_Вид хартия:"
 
-#: gtk/gtkprintunixdialog.c:3418
+#: ../gtk/gtkprintunixdialog.c:3418
 msgid "Paper _source:"
 msgstr "_Източник на листите:"
 
-#: gtk/gtkprintunixdialog.c:3433
+#: ../gtk/gtkprintunixdialog.c:3433
 msgid "Output t_ray:"
 msgstr "_Изходна касета:"
 
-#: gtk/gtkprintunixdialog.c:3473
+#: ../gtk/gtkprintunixdialog.c:3473
 msgid "Or_ientation:"
 msgstr "_Ориентация:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3488
+#: ../gtk/gtkprintunixdialog.c:3488
 msgid "Portrait"
 msgstr "Вертикална"
 
-#: gtk/gtkprintunixdialog.c:3489
+#: ../gtk/gtkprintunixdialog.c:3489
 msgid "Landscape"
 msgstr "Хоризонтална"
 
-#: gtk/gtkprintunixdialog.c:3490
+#: ../gtk/gtkprintunixdialog.c:3490
 msgid "Reverse portrait"
 msgstr "Хоризонтална, обърната"
 
-#: gtk/gtkprintunixdialog.c:3491
+#: ../gtk/gtkprintunixdialog.c:3491
 msgid "Reverse landscape"
 msgstr "Вертикална, обърната"
 
-#: gtk/gtkprintunixdialog.c:3536
+#: ../gtk/gtkprintunixdialog.c:3536
 msgid "Job Details"
 msgstr "Информация а задачата"
 
-#: gtk/gtkprintunixdialog.c:3542
+#: ../gtk/gtkprintunixdialog.c:3542
 msgid "Pri_ority:"
 msgstr "П_риоритет:"
 
-#: gtk/gtkprintunixdialog.c:3557
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "_Billing info:"
 msgstr "Информация за _осчетоводяване:"
 
-#: gtk/gtkprintunixdialog.c:3575
+#: ../gtk/gtkprintunixdialog.c:3575
 msgid "Print Document"
 msgstr "Отпечатване на документ"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3584
+#: ../gtk/gtkprintunixdialog.c:3584
 msgid "_Now"
 msgstr "_Сега"
 
-#: gtk/gtkprintunixdialog.c:3595
+#: ../gtk/gtkprintunixdialog.c:3595
 msgid "A_t:"
 msgstr "_Точно в:"
 
@@ -3013,7 +3020,7 @@ msgstr "_Точно в:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3601
+#: ../gtk/gtkprintunixdialog.c:3601
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -3021,121 +3028,121 @@ msgstr ""
 "Укажете времето на печат, напр.:\n"
 "9:30, 17:50, 14:15:20, 11:46:30, 4"
 
-#: gtk/gtkprintunixdialog.c:3611
+#: ../gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
 msgstr "Време на отпечатване"
 
-#: gtk/gtkprintunixdialog.c:3627
+#: ../gtk/gtkprintunixdialog.c:3627
 msgid "On _hold"
 msgstr "_На пауза"
 
-#: gtk/gtkprintunixdialog.c:3628
+#: ../gtk/gtkprintunixdialog.c:3628
 msgid "Hold the job until it is explicitly released"
 msgstr "Задържане на печата до изричното му стартиране"
 
-#: gtk/gtkprintunixdialog.c:3648
+#: ../gtk/gtkprintunixdialog.c:3648
 msgid "Add Cover Page"
 msgstr "Със заглавна страница"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3657
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "_Преди:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3675
+#: ../gtk/gtkprintunixdialog.c:3675
 msgid "_After:"
 msgstr "_След:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3693
+#: ../gtk/gtkprintunixdialog.c:3693
 msgid "Job"
 msgstr "Задача"
 
-#: gtk/gtkprintunixdialog.c:3759
+#: ../gtk/gtkprintunixdialog.c:3759
 msgid "Advanced"
 msgstr "Допълнителни"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3794
+#: ../gtk/gtkprintunixdialog.c:3794
 msgid "Image Quality"
 msgstr "Качество на изображенията"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3798
+#: ../gtk/gtkprintunixdialog.c:3798
 msgid "Color"
 msgstr "Цвят"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/gtkprintunixdialog.c:3803
+#: ../gtk/gtkprintunixdialog.c:3803
 msgid "Finishing"
 msgstr "Гланц"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: ../gtk/gtkprintunixdialog.c:3813
 msgid "Some of the settings in the dialog conflict"
 msgstr "Някои от настройките в прозореца взаимно си противоречат"
 
-#: gtk/gtkprintunixdialog.c:3836
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "Печат"
 
-#: gtk/gtkrc.c:2878
+#: ../gtk/gtkrc.c:2878
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Файлът за включване „%s“ не може да бъде намерен"
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: ../gtk/gtkrc.c:3508 ../gtk/gtkrc.c:3511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Графичният файл не може да бъде открит в пътя за изображения: „%s“"
 
-#: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
-#: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
+#: ../gtk/gtkrecentaction.c:154 ../gtk/gtkrecentaction.c:162
+#: ../gtk/gtkrecentchoosermenu.c:588 ../gtk/gtkrecentchoosermenu.c:596
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Тази функция не е реализирана за графичните обекти от клас „%s“"
 
-#: gtk/gtkrecentchooserdefault.c:481
+#: ../gtk/gtkrecentchooserdefault.c:481
 msgid "Select which type of documents are shown"
 msgstr "Избор на видовете документи, които се показват"
 
-#: gtk/gtkrecentchooserdefault.c:1134 gtk/gtkrecentchooserdefault.c:1171
+#: ../gtk/gtkrecentchooserdefault.c:1134 ../gtk/gtkrecentchooserdefault.c:1171
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Не е открит елемент за адреса „%s“"
 
-#: gtk/gtkrecentchooserdefault.c:1298
+#: ../gtk/gtkrecentchooserdefault.c:1298
 msgid "Untitled filter"
 msgstr "Неозаглавен филтър"
 
-#: gtk/gtkrecentchooserdefault.c:1651
+#: ../gtk/gtkrecentchooserdefault.c:1651
 msgid "Could not remove item"
 msgstr "Елементът не може да бъде премахнат"
 
-#: gtk/gtkrecentchooserdefault.c:1695
+#: ../gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
 msgstr "Списъкът не може да бъде изчистен"
 
-#: gtk/gtkrecentchooserdefault.c:1779
+#: ../gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
 msgstr "Копиране на _местоположение"
 
-#: gtk/gtkrecentchooserdefault.c:1792
+#: ../gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
 msgstr "_Премахване от списък"
 
-#: gtk/gtkrecentchooserdefault.c:1801
+#: ../gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
 msgstr "_Изчистване на списък"
 
-#: gtk/gtkrecentchooserdefault.c:1815
+#: ../gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
 msgstr "Показване на _частните ресурси"
 
@@ -3149,21 +3156,21 @@ msgstr "Показване на _частните ресурси"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:342
+#: ../gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
 msgstr "Не са открити елементи"
 
-#: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
+#: ../gtk/gtkrecentchoosermenu.c:508 ../gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Не е открит скоро използван ресурс с адрес „%s“"
 
-#: gtk/gtkrecentchoosermenu.c:775
+#: ../gtk/gtkrecentchoosermenu.c:775
 #, c-format
 msgid "Open '%s'"
 msgstr "Отваряне на „%s“"
 
-#: gtk/gtkrecentchoosermenu.c:805
+#: ../gtk/gtkrecentchoosermenu.c:805
 msgid "Unknown item"
 msgstr "Неизвестен елемент"
 
@@ -3172,7 +3179,7 @@ msgstr "Неизвестен елемент"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:816
+#: ../gtk/gtkrecentchoosermenu.c:816
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3181,46 +3188,46 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:821
+#: ../gtk/gtkrecentchoosermenu.c:821
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: ../gtk/gtkrecentmanager.c:1020 ../gtk/gtkrecentmanager.c:1033
+#: ../gtk/gtkrecentmanager.c:1171 ../gtk/gtkrecentmanager.c:1181
+#: ../gtk/gtkrecentmanager.c:1234 ../gtk/gtkrecentmanager.c:1243
+#: ../gtk/gtkrecentmanager.c:1258
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "На адреса „%s“ не може да се открие елемент"
 
-#: gtk/gtkspinner.c:458
+#: ../gtk/gtkspinner.c:458
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Индикатор за прогрес"
 
-#: gtk/gtkspinner.c:459
+#: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
 msgstr "Визуално показва напредъка"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:314
+#: ../gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Информация"
 
-#: gtk/gtkstock.c:315
+#: ../gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Грешка"
 
-#: gtk/gtkstock.c:317
+#: ../gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Въпрос"
@@ -3228,695 +3235,695 @@ msgstr "Въпрос"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Относно"
 
-#: gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Добавяне"
 
-#: gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "П_рилагане"
 
-#: gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Получерно"
 
-#: gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Отказване"
 
-#: gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-Rom"
 
-#: gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Изчистване"
 
-#: gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "Зат_варяне"
 
-#: gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Свързване"
 
-#: gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "Кон_вертиране"
 
-#: gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "От_рязване"
 
-#: gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Изтриване"
 
-#: gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "От_хвърляне"
 
-#: gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Разкачване"
 
-#: gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Изпълняване"
 
-#: gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Търсене"
 
-#: gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Търсене и _замяна"
 
-#: gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Дискета"
 
-#: gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "На _цял екран"
 
-#: gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Изход от цял екран"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "О_тдолу"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Първо"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "По_следно"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Отгоре"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "На_зад"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "На_долу"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "Нап_ред"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "На_горе"
 
-#: gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Твърд диск"
 
-#: gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "Помо_щ"
 
-#: gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Домашна папка"
 
-#: gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Увеличаване на отместването"
 
-#: gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Намаляване на отместването"
 
-#: gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Индекс"
 
-#: gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Информация"
 
-#: gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Курсив"
 
-#: gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Избор"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Центриране"
 
 #. This is about text justification
-#: gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "Д_вустранно"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Ляво"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Дясно"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Напред"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Следващ"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "П_ауза"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Изпълнение"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Пре_дишен"
 
 #. Media label
-#: gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Запис"
 
 #. Media label
-#: gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Пр_евъртане"
 
 #. Media label
-#: gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Спиране"
 
-#: gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Мрежа"
 
-#: gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Нов"
 
-#: gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Не"
 
-#: gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Добре"
 
-#: gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Отваряне"
 
 #. Page orientation
-#: gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Хоризонтална"
 
 #. Page orientation
-#: gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Вертикална"
 
 #. Page orientation
-#: gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Вертикална, обърната"
 
 #. Page orientation
-#: gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Хоризонтална, обърната"
 
-#: gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Настройки на _листите"
 
-#: gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Предпочитания"
 
-#: gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Печат"
 
-#: gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "_Мостра на печата"
 
-#: gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Настройки"
 
-#: gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Спиране на програмата"
 
-#: gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "Пов_торение"
 
-#: gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Обновяване"
 
-#: gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Премахване"
 
-#: gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Връщане"
 
-#: gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Запазване"
 
-#: gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Запазване _като"
 
-#: gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Цвят"
 
-#: gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Шрифт"
 
 #. Sorting direction
-#: gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Възходящ"
 
 #. Sorting direction
-#: gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Низходящ"
 
-#: gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Проверка на правописа"
 
-#: gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Спиране"
 
 #. Font variant
-#: gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Зачертаване"
 
-#: gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Възстановяване на _изтритото"
 
 #. Font variant
-#: gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Подчертаване"
 
-#: gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Отмяна"
 
-#: gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Да"
 
 #. Zoom
-#: gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Нормален размер"
 
 #. Zoom
-#: gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Най-добро _пасване"
 
-#: gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Увеличаване"
 
-#: gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Намаляване"
 
-#: gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Неизвестна грешка при опит за десериализиране на %s"
 
-#: gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Не е открита функция за десериализирането на формата %s"
 
-#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
+#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "В елемента <%s> са открити както атрибута „id“, така и „name“"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Атрибутът „%s“ е открит двукратно в елемента <%s>"
 
-#: gtk/gtktextbufferserialize.c:846
+#: ../gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has invalid id \"%s\""
 msgstr "Елементът <%s> е с невалиден идентификатор „%s“"
 
-#: gtk/gtktextbufferserialize.c:856
+#: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Елементът <%s> няма нито атрибут „name“, нито „id“"
 
-#: gtk/gtktextbufferserialize.c:943
+#: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Атрибутът „%s“е повторен двукратно в един и същ елемент <%s>"
 
-#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
+#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Атрибутът „%s“ не е валиден за елемента <%s> в този контекст"
 
-#: gtk/gtktextbufferserialize.c:1022
+#: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Етикетът „%s“ не е дефиниран."
 
-#: gtk/gtktextbufferserialize.c:1034
+#: ../gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Открит е анонимен етикет и не могат да се създават етикети."
 
-#: gtk/gtktextbufferserialize.c:1045
+#: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Етикетът „%s“ не е съществува в буфера и не могат да се създават етикети."
 
-#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
+#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Елементът <%s> е забранен под <%s>"
 
-#: gtk/gtktextbufferserialize.c:1175
+#: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "„%s“ не е валиден вид на атрибут"
 
-#: gtk/gtktextbufferserialize.c:1183
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "„%s“ не е валидно име на атрибут"
 
-#: gtk/gtktextbufferserialize.c:1193
+#: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "„%s“ не може да бъде преобразуван към стойност от вида „%s“ за атрибута „%s“"
 
-#: gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "„%s“ не е валидна стойност за атрибута „%s“"
 
-#: gtk/gtktextbufferserialize.c:1285
+#: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Етикетът „%s“ вече е дефиниран"
 
-#: gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Етикетът „%s“ е с невалиден приоритет „%s“"
 
-#: gtk/gtktextbufferserialize.c:1349
+#: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Най-външният елемент в текст трябва да е <text_view_markup>, а не <%s>"
 
-#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
+#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Вече е указан елемент <%s>"
 
-#: gtk/gtktextbufferserialize.c:1380
+#: ../gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Елемент <text> не може да се появява преди елемент <tags>"
 
-#: gtk/gtktextbufferserialize.c:1779
+#: ../gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
 msgstr "Сериализираните данни са неправилни"
 
-#: gtk/gtktextbufferserialize.c:1857
+#: ../gtk/gtktextbufferserialize.c:1857
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Сериализираните данни са неправилни. Първата част не е GTKTEXTBUFFERCONTENTS-"
 "0001"
 
-#: gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "Маркер за от_ляво-надясно — LRM"
 
-#: gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "Маркер за от_дясно-наляво — RLM"
 
-#: gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "_Вмъкване отляво-надясно — LRE"
 
-#: gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "В_мъкване отдясно-наляво — RLE"
 
-#: gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "_Задаване отляво-надясно — LRO"
 
-#: gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "З_адаване отдясно-наляво — RLO"
 
-#: gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "Връ_щане на предишната посока — PDF"
 
-#: gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "_Интервал с нулева широчина — ZWS"
 
-#: gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "_Свръзка с нулева широчина — ZWJ"
 
-#: gtk/gtktextutil.c:70
+#: ../gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_Развръзка с нулева широчина — ZWNJ"
 
-#: gtk/gtkthemes.c:71
+#: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Темата не може да бъде открита в пътя с модули: „%s“,"
 
-#: gtk/gtktipsquery.c:188
+#: ../gtk/gtktipsquery.c:188
 msgid "--- No Tip ---"
 msgstr "--- Няма подсказка ---"
 
-#: gtk/gtkuimanager.c:1505
+#: ../gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Неочакван начален етикет „%s“ на ред %d, знак %d"
 
-#: gtk/gtkuimanager.c:1595
+#: ../gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Неочаквани знакови данни на ред %d, знак %d"
 
-#: gtk/gtkuimanager.c:2427
+#: ../gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Празно"
 
-#: gtk/gtkvolumebutton.c:73
+#: ../gtk/gtkvolumebutton.c:73
 msgid "Volume"
 msgstr "Сила на звука"
 
-#: gtk/gtkvolumebutton.c:75
+#: ../gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
 msgstr "Увеличаване или намаляване на звука"
 
-#: gtk/gtkvolumebutton.c:78
+#: ../gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
 msgstr "Промяна на силата на звука"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: ../gtk/gtkvolumebutton.c:81 ../gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
 msgstr "Намаляване на звука"
 
-#: gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
 msgstr "Намаляване на звука"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: ../gtk/gtkvolumebutton.c:87 ../gtk/gtkvolumebutton.c:90
 msgid "Volume Up"
 msgstr "Увеличаване на звука"
 
-#: gtk/gtkvolumebutton.c:89
+#: ../gtk/gtkvolumebutton.c:89
 msgid "Increases the volume"
 msgstr "Увеличаване на звука"
 
-#: gtk/gtkvolumebutton.c:147
+#: ../gtk/gtkvolumebutton.c:147
 msgid "Muted"
 msgstr "Заглушаване"
 
-#: gtk/gtkvolumebutton.c:151
+#: ../gtk/gtkvolumebutton.c:151
 msgid "Full Volume"
 msgstr "Максимална сила"
 
@@ -3925,1071 +3932,1071 @@ msgstr "Максимална сила"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:164
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:5
+#: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "asme_f"
 msgstr "asme_f"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:7
+#: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x2"
 msgstr "A0x2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:9
+#: ../gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A0"
 msgstr "A0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:11
+#: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A0x3"
 msgstr "A0x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:13
+#: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A1"
 msgstr "A1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:15
+#: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A10"
 msgstr "A10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:17
+#: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A1x3"
 msgstr "A1x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:19
+#: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A1x4"
 msgstr "A1x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:21
+#: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A2"
 msgstr "A2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:23
+#: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A2x3"
 msgstr "A2x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:25
+#: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A2x4"
 msgstr "A2x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:27
+#: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A2x5"
 msgstr "A2x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:29
+#: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A3"
 msgstr "A3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:31
+#: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A3 Extra"
 msgstr "A3 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:33
+#: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A3x3"
 msgstr "A3x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:35
+#: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A3x4"
 msgstr "A3x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:37
+#: ../gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A3x5"
 msgstr "A3x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:39
+#: ../gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "A3x6"
 msgstr "A3x6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:41
+#: ../gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "A3x7"
 msgstr "A3x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:43
+#: ../gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "A4"
 msgstr "A4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:45
+#: ../gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "A4 Extra"
 msgstr "A4 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:47
+#: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "A4 Tab"
 msgstr "A4 Tab"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:49
+#: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "A4x3"
 msgstr "A4x3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:51
+#: ../gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "A4x4"
 msgstr "A4x4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:53
+#: ../gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "A4x5"
 msgstr "A4x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:55
+#: ../gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "A4x6"
 msgstr "A4x6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:57
+#: ../gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "A4x7"
 msgstr "A4x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:59
+#: ../gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "A4x8"
 msgstr "A4x8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:61
+#: ../gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "A4x9"
 msgstr "A4x9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:63
+#: ../gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "A5"
 msgstr "A5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:65
+#: ../gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "A5 Extra"
 msgstr "A5 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:67
+#: ../gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "A6"
 msgstr "A6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:69
+#: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "A7"
 msgstr "A7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "A8"
 msgstr "A8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "A9"
 msgstr "A9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "B0"
 msgstr "B0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "B1"
 msgstr "B1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "B10"
 msgstr "B10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "B2"
 msgstr "B2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "B3"
 msgstr "B3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "B4"
 msgstr "B4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "B5"
 msgstr "B5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "B5 Extra"
 msgstr "B5 Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "B6"
 msgstr "B6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:93
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "B6/C4"
 msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:95
+#: ../gtk/paper_names_offsets.c:95
 msgctxt "paper size"
 msgid "B7"
 msgstr "B7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:97
+#: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "B8"
 msgstr "B8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:99
+#: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "B9"
 msgstr "B9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:101
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "C0"
 msgstr "C0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:103
+#: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "C1"
 msgstr "C1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "C10"
 msgstr "C10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "C2"
 msgstr "C2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "C3"
 msgstr "C3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "C4"
 msgstr "C4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "C5"
 msgstr "C5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "C6"
 msgstr "C6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "C6/C5"
 msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "C7"
 msgstr "C7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "C7/C6"
 msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "C8"
 msgstr "C8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "C9"
 msgstr "C9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "Плик DL"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "RA0"
 msgstr "RA0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "RA1"
 msgstr "RA1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "RA2"
 msgstr "RA2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "JIS Exec"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Плик Choukei 2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Плик Choukei 3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:169
+#: ../gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Плик Choukei 4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:171
+#: ../gtk/paper_names_offsets.c:171
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "Пощенска картичка Hagaki"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:173
+#: ../gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "Плик Kahu"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:175
+#: ../gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "Плик Kaku2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:177
+#: ../gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "Пощенска картичка за отговор Oufuku"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:179
+#: ../gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "Плик You4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:181
+#: ../gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "10x11"
 msgstr "10x11"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:183
+#: ../gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "10x13"
 msgstr "10x13"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:185
+#: ../gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
+#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:191
+#: ../gtk/paper_names_offsets.c:191
 msgctxt "paper size"
 msgid "11x12"
 msgstr "11x12"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:193
+#: ../gtk/paper_names_offsets.c:193
 msgctxt "paper size"
 msgid "11x15"
 msgstr "11x15"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:195
+#: ../gtk/paper_names_offsets.c:195
 msgctxt "paper size"
 msgid "12x19"
 msgstr "12x19"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:197
+#: ../gtk/paper_names_offsets.c:197
 msgctxt "paper size"
 msgid "5x7"
 msgstr "5x7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:199
+#: ../gtk/paper_names_offsets.c:199
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "Плик 6x9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:201
+#: ../gtk/paper_names_offsets.c:201
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "Плик 7x9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:203
+#: ../gtk/paper_names_offsets.c:203
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "Плик 9x11"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:205
+#: ../gtk/paper_names_offsets.c:205
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "Плик A2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:207
+#: ../gtk/paper_names_offsets.c:207
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:209
+#: ../gtk/paper_names_offsets.c:209
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:211
+#: ../gtk/paper_names_offsets.c:211
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:213
+#: ../gtk/paper_names_offsets.c:213
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:215
+#: ../gtk/paper_names_offsets.c:215
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:217
+#: ../gtk/paper_names_offsets.c:217
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "B-plus"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:219
+#: ../gtk/paper_names_offsets.c:219
 msgctxt "paper size"
 msgid "c"
 msgstr "C"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:221
+#: ../gtk/paper_names_offsets.c:221
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "Плик C5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:223
+#: ../gtk/paper_names_offsets.c:223
 msgctxt "paper size"
 msgid "d"
 msgstr "D"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:225
+#: ../gtk/paper_names_offsets.c:225
 msgctxt "paper size"
 msgid "e"
 msgstr "E"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:227
+#: ../gtk/paper_names_offsets.c:227
 msgctxt "paper size"
 msgid "edp"
 msgstr "Edp"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:229
+#: ../gtk/paper_names_offsets.c:229
 msgctxt "paper size"
 msgid "European edp"
 msgstr "Европейски Edp"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:231
+#: ../gtk/paper_names_offsets.c:231
 msgctxt "paper size"
 msgid "Executive"
 msgstr "Executive"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:233
+#: ../gtk/paper_names_offsets.c:233
 msgctxt "paper size"
 msgid "f"
 msgstr "F"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:235
+#: ../gtk/paper_names_offsets.c:235
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "Европейски FanFold"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:237
+#: ../gtk/paper_names_offsets.c:237
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "Американски FanFold"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:239
+#: ../gtk/paper_names_offsets.c:239
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "Германски FanFold Legal"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:241
+#: ../gtk/paper_names_offsets.c:241
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Държавен юридически"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:243
+#: ../gtk/paper_names_offsets.c:243
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Държавни писма"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:245
+#: ../gtk/paper_names_offsets.c:245
 msgctxt "paper size"
 msgid "Index 3x5"
 msgstr "Индекс 3x5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:247
+#: ../gtk/paper_names_offsets.c:247
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "Пощенска картичка Индекс 4x6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:249
+#: ../gtk/paper_names_offsets.c:249
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Индекс 4x6 удължен"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:251
+#: ../gtk/paper_names_offsets.c:251
 msgctxt "paper size"
 msgid "Index 5x8"
 msgstr "Индекс 5x8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:253
+#: ../gtk/paper_names_offsets.c:253
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "Фактура"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:255
+#: ../gtk/paper_names_offsets.c:255
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "Таблоид"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:257
+#: ../gtk/paper_names_offsets.c:257
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "Американски Legal"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:259
+#: ../gtk/paper_names_offsets.c:259
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "Американски Legal Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:261
+#: ../gtk/paper_names_offsets.c:261
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "Американски Letter"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:263
+#: ../gtk/paper_names_offsets.c:263
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "Американски Letter Extra"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:265
+#: ../gtk/paper_names_offsets.c:265
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "Американски Letter Plus"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:267
+#: ../gtk/paper_names_offsets.c:267
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Плик Monarch"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:269
+#: ../gtk/paper_names_offsets.c:269
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "Плик #10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:271
+#: ../gtk/paper_names_offsets.c:271
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "Плик #11"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:273
+#: ../gtk/paper_names_offsets.c:273
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "Плик #12"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:275
+#: ../gtk/paper_names_offsets.c:275
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "Плик #14"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:277
+#: ../gtk/paper_names_offsets.c:277
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "Плик #9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:279
+#: ../gtk/paper_names_offsets.c:279
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Личен плик"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:281
+#: ../gtk/paper_names_offsets.c:281
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "Кварто"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:283
+#: ../gtk/paper_names_offsets.c:283
 msgctxt "paper size"
 msgid "Super A"
 msgstr "Super A"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:285
+#: ../gtk/paper_names_offsets.c:285
 msgctxt "paper size"
 msgid "Super B"
 msgstr "Super B"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:287
+#: ../gtk/paper_names_offsets.c:287
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Широк формат"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:289
+#: ../gtk/paper_names_offsets.c:289
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:291
+#: ../gtk/paper_names_offsets.c:291
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Фолио"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:293
+#: ../gtk/paper_names_offsets.c:293
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Фолио sp"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:295
+#: ../gtk/paper_names_offsets.c:295
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Плик за покана"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:297
+#: ../gtk/paper_names_offsets.c:297
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Италиански плик"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:299
+#: ../gtk/paper_names_offsets.c:299
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "Juuro-ku-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:301
+#: ../gtk/paper_names_offsets.c:301
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "Pa-kai"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:303
+#: ../gtk/paper_names_offsets.c:303
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Плик Postfix"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:305
+#: ../gtk/paper_names_offsets.c:305
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Малка снимка"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:307
+#: ../gtk/paper_names_offsets.c:307
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "Плик Prc1"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:309
+#: ../gtk/paper_names_offsets.c:309
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "Плик Prc10"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:311
+#: ../gtk/paper_names_offsets.c:311
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "Prc 16k"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:313
+#: ../gtk/paper_names_offsets.c:313
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "Плик Prc2"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:315
+#: ../gtk/paper_names_offsets.c:315
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "Плик Prc3"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:317
+#: ../gtk/paper_names_offsets.c:317
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "Prc 32k"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:319
+#: ../gtk/paper_names_offsets.c:319
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "Плик Prc4"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:321
+#: ../gtk/paper_names_offsets.c:321
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "Плик Prc5"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:323
+#: ../gtk/paper_names_offsets.c:323
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "Плик Prc6"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:325
+#: ../gtk/paper_names_offsets.c:325
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "Плик Prc7"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:327
+#: ../gtk/paper_names_offsets.c:327
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "Плик Prc8"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:329
+#: ../gtk/paper_names_offsets.c:329
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "Плик Prc9"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:331
+#: ../gtk/paper_names_offsets.c:331
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
-#: gtk/paper_names_offsets.c:333
+#: ../gtk/paper_names_offsets.c:333
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
+#: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "открити са различни данни idatas за символните връзки „%s“ и „%s“\n"
 
-#: gtk/updateiconcache.c:1374
+#: ../gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Неуспех при запазване на заглавната част\n"
 
-#: gtk/updateiconcache.c:1380
+#: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Неуспех при запазване на таблицата с извадките\n"
 
-#: gtk/updateiconcache.c:1386
+#: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Неуспех при записването на индекса на папка\n"
 
-#: gtk/updateiconcache.c:1394
+#: ../gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Неуспех при замяната на заглавната част\n"
 
-#: gtk/updateiconcache.c:1463
+#: ../gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Неуспех при отваряне на файла „%s“: %s\n"
 
-#: gtk/updateiconcache.c:1471
+#: ../gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Неуспех при запазване на файла за временно съхранение на икони: %s\n"
 
-#: gtk/updateiconcache.c:1507
+#: ../gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Генерираният файл за временно съхранение на икони е неправилен.\n"
 
-#: gtk/updateiconcache.c:1521
+#: ../gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 "Грешка при преименуването на „%s“ към „%s“: %s, затова „%s“ ще се изтрие.\n"
 
-#: gtk/updateiconcache.c:1535
+#: ../gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Грешка при преименуването на „%s“ към „%s“: %s\n"
 
-#: gtk/updateiconcache.c:1545
+#: ../gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Грешка при преименуването на „%s“ обратно към „%s“: %s\n"
 
-#: gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Файлът за временно съхранение на икони е създаден успешно.\n"
 
-#: gtk/updateiconcache.c:1611
+#: ../gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr ""
 "Презаписване на файла за временно\n"
 "                                        съхранение на икони дори и да е "
 "актуален"
 
-#: gtk/updateiconcache.c:1612
+#: ../gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr ""
 "Да не се проверява за съществуването\n"
 "                                        на файл „index.theme“"
 
-#: gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr ""
 "Данните за изображения да не се за-\n"
@@ -4997,36 +5004,36 @@ msgstr ""
 "съхранение на\n"
 "                                        икони"
 
-#: gtk/updateiconcache.c:1614
+#: ../gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "Генериране на заглавен файл на C"
 
-#: gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "Изключване на подробния изход"
 
-#: gtk/updateiconcache.c:1616
+#: ../gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr ""
 "Проверка на съществуващия файл за\n"
 "                                        временно съхранение на икони"
 
-#: gtk/updateiconcache.c:1683
+#: ../gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Файлът не е открит: %s\n"
 
-#: gtk/updateiconcache.c:1689
+#: ../gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Неправилен файл за временно съхранение на икони: %s\n"
 
-#: gtk/updateiconcache.c:1702
+#: ../gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Няма файл с индекс за темите.\n"
 
-#: gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -5038,319 +5045,319 @@ msgstr ""
 "„--ignore-theme-index“.\n"
 
 #. ID
-#: modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Амхарски (EZ+)"
 
 #. ID
-#: modules/input/imcedilla.c:92
+#: ../modules/input/imcedilla.c:92
 msgid "Cedilla"
 msgstr "Седила"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:217
+#: ../modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Кирилица (транслитерация)"
 
 #. ID
-#: modules/input/iminuktitut.c:127
+#: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
 msgstr "Ескимоски (транслитерация)"
 
 #. ID
-#: modules/input/imipa.c:145
+#: ../modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/immultipress.c:31
+#: ../modules/input/immultipress.c:31
 msgid "Multipress"
 msgstr "Множество натискания"
 
 #. ID
-#: modules/input/imthai.c:35
+#: ../modules/input/imthai.c:35
 msgid "Thai-Lao"
 msgstr "Тайски — Лаос"
 
 #. ID
-#: modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Тигрина — Еритрея (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Тигрина — Етиопия (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Виетнамски (VIQR)"
 
 #. ID
-#: modules/input/imxim.c:28
+#: ../modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "Метод за въвеждане към X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:775
-#: modules/printbackends/cups/gtkprintbackendcups.c:984
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:984
 msgid "Username:"
 msgstr "Потребител:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:776
-#: modules/printbackends/cups/gtkprintbackendcups.c:993
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:776
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:993
 msgid "Password:"
 msgstr "Парола:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:814
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "За получаването на файл от %s се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:818
-#: modules/printbackends/cups/gtkprintbackendcups.c:1006
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:818
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "За отпечатването на файла „%s“ на принтера %s се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:820
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "За отпечатването на принтера %s се изисква идентификация<"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:824
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
 "За получаването на атрибутите на задачата за печат „%s“ се изисква "
 "идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:826
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 "За получаването на атрибутите на задачата за печат се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:830
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 "За получаването на атрибутите на принтера „%s“ се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:832
 msgid "Authentication is required to get attributes of a printer"
 msgstr "За получаването на атрибутите на принтер се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:835
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "За получаването на стандартния принтер на %s се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:838
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "За получаването на принтерите от %s се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:841
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:978
 msgid "Domain:"
 msgstr "Домейн:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1008
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "За отпечатването на документа „%s“ се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1013
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 "За отпечатването на този документ на принтера %s се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1015
 msgid "Authentication is required to print this document"
 msgstr "За отпечатването на този документ се изисква идентификация"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1636
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Тонерът на принтер „%s“ е на привършване."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1637
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1637
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Тонерът на принтер „%s“ свърши."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1639
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1639
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Проявителят на принтер „%s“ е на привършване."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1641
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1641
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Проявителят на принтер „%s“ свърши."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1643
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1643
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 "Поне един от консумативите за маркери на принтер „%s“ е на привършване."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1645
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1645
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Поне един от консумативите за маркери на принтер „%s“ свърши."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1646
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1646
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Капакът на принтера „%s“ е отворен."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1647
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1647
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Вратичката на принтера „%s“ е отворена."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1648
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1648
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Хартията в принтер „%s“ е на привършване."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1649
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1649
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Хартията в принтер „%s“ е на привършване."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1650
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1650
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Принтер „%s“ не е на линия."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1651
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1651
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Принтер „%s“ може да не е свързан."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1652
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1652
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Имаше проблем с принтер „%s“."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
 msgid "Paused ; Rejecting Jobs"
 msgstr "На пауза. Отхвърля задачите"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1966
 msgid "Rejecting Jobs"
 msgstr "Отхвърля задачите"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2740
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2740
 msgid "Two Sided"
 msgstr "Двустранно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2741
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2741
 msgid "Paper Type"
 msgstr "Вид хартия"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
 msgid "Paper Source"
 msgstr "Източник на хартията"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2743
 msgid "Output Tray"
 msgstr "Изходяща тава"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2744
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2744
 msgid "Resolution"
 msgstr "Разделителна способност"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2745
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2745
 msgid "GhostScript pre-filtering"
 msgstr "Предварителен филтър на GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2754
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2754
 msgid "One Sided"
 msgstr "Едностранно"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2756
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2756
 msgid "Long Edge (Standard)"
 msgstr "По дългата страна (стандартно)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2758
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2758
 msgid "Short Edge (Flip)"
 msgstr "По късата страна (завъртане)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2760
-#: modules/printbackends/cups/gtkprintbackendcups.c:2762
-#: modules/printbackends/cups/gtkprintbackendcups.c:2770
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2760
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2762
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2770
 msgid "Auto Select"
 msgstr "Автоматичен избор"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2764
-#: modules/printbackends/cups/gtkprintbackendcups.c:2766
-#: modules/printbackends/cups/gtkprintbackendcups.c:2768
-#: modules/printbackends/cups/gtkprintbackendcups.c:2772
-#: modules/printbackends/cups/gtkprintbackendcups.c:3258
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2764
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2766
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2768
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2772
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3258
 msgid "Printer Default"
 msgstr "Стандартните настройки на принтера"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Embed GhostScript fonts only"
 msgstr "Вграждане само на шрифтовете на GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
 msgstr "Преобразуване към PostScript, ниво 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
 msgstr "Преобразуване към PostScript, ниво 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "No pre-filtering"
 msgstr "Без предварителен филтър"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2789
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2789
 msgid "Miscellaneous"
 msgstr "Допълнителни"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Urgent"
 msgstr "Спешен"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
 msgstr "Висок"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
 msgstr "Среден"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Low"
 msgstr "Нисък"
 
@@ -5358,66 +5365,66 @@ msgstr "Нисък"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3490
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3490
 msgid "Pages per Sheet"
 msgstr "Страници на лист"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3527
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Job Priority"
 msgstr "Приоритет"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3538
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Billing Info"
 msgstr "Информация за осчетоводяване"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "None"
 msgstr "(Без)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Classified"
 msgstr "Класифицирано"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Confidential"
 msgstr "Конфиденциално"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Secret"
 msgstr "Секретно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Standard"
 msgstr "Стандартно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Top Secret"
 msgstr "Строго секретно"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
 msgid "Unclassified"
 msgstr "Некласифицирано"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
 msgid "Before"
 msgstr "Преди"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3603
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3603
 msgid "After"
 msgstr "След"
 
@@ -5425,14 +5432,14 @@ msgstr "След"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
 msgid "Print at"
 msgstr "Време на печат"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3634
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3634
 msgid "Print at time"
 msgstr "Време на печат"
 
@@ -5440,94 +5447,94 @@ msgstr "Време на печат"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3669
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3669
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Потребителски %s×%s"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:250
+#: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
 msgstr "разпечатка.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:493
+#: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Печат към файл"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:582
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: ../modules/printbackends/file/gtkprintbackendfile.c:582
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Страници на _лист:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:641
+#: ../modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Файл"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:651
+#: ../modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "_Изходен формат"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "Печат към LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Страници на лист"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Команден ред"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:811
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
 msgstr "принтерът не е на линия"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:829
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
 msgstr "готовност за печат"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:832
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr "обработка на задача"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:836
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
 msgid "paused"
 msgstr "На пауза"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:839
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
 msgid "unknown"
 msgstr "(неизвестно)"
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:234
+#: ../modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr "пробна-разпечатка.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Печат към тестов принтер"
 
-#: tests/testfilechooser.c:207
+#: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Информацията за файла „%s“ не може да бъде получена: %s"
