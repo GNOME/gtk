@@ -234,7 +234,7 @@ gdk_screen_get_root_window (GdkScreen *screen)
  *
  * Gets the default colormap for @screen.
  * 
- * Returns: the default #GdkColormap.
+ * Returns: (transfer none): the default #GdkColormap.
  *
  * Since: 2.2
  **/
