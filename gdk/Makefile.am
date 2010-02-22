@@ -198,7 +198,8 @@ introspection_files = \
 		$(gdk_public_h_sources) \
 		$(gdk_c_sources) \
         gdkenumtypes.c \
-        gdkenumtypes.h
+        gdkenumtypes.h \
+        $(wildcard $(srcdir)/$(gdktarget)/*.c)
 
 Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
 Gdk_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0
