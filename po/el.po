@@ -29,7 +29,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-HEAD-po-el-3920.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
+"POT-Creation-Date: 2010-02-23 15:16-0500\n"
 "PO-Revision-Date: 2009-10-17 17:25+0300\n"
 "Last-Translator: Simos Xenitellis <simos@gnome.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
@@ -937,8 +937,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr ""
+#, fuzzy
+msgid "Failed to allocate QTIF context structure."
+msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του TGA"
 
 #: gdk-pixbuf/io-qtif.c:317
 #, fuzzy
@@ -995,40 +996,45 @@ msgstr "Αδυναμία διάθεσης μνήμης για τα προσωρ�
 msgid "Cannot allocate new pixbuf"
 msgstr "Αδυναμία διάθεσης μνήμης για το νέο pixbuf"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "Η εικόνα GIF είτε ήταν ημιτελής είτε είχε αποκοπεί κάποιο κομμάτι της."
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "Αδυναμία διάθεσης μνήμης για τη δομή του χάρτη χρωμάτων"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "Αδυναμία διάθεσης μνήμης για τις εγγραφές του χάρτη χρωμάτων"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Μη αναμενόμενο βάθος χρωμάτων στις εγγραφές του χάρτη χρωμάτων"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "Αδυναμία διάθεσης μνήμης για την κεφαλίδα του TGA"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "Η εικόνα TGA δεν έχει έγκυρες διαστάσεις"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "Ο τύπος εικόνας TGA δεν υποστηρίζεται"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Αδυναμία διάθεσης μνήμης για τη δομή περιεχομένων του TGA"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Περίσσεια δεδομένων στο αρχείο"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Ο τύπος εικόνας Targa"
 

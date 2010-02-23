@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ku\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
+"POT-Creation-Date: 2010-02-23 15:16-0500\n"
 "PO-Revision-Date: 2009-02-24 01:08+0200\n"
 "Last-Translator: Erdal Ronahi <erdal dot ronahi at gmail dot com>\n"
 "Language-Team: http;//pckurd.net\n"
@@ -914,8 +914,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr ""
+#, fuzzy
+msgid "Failed to allocate QTIF context structure."
+msgstr "Nikare bîrekê ji TGA re veqetîne"
 
 #: gdk-pixbuf/io-qtif.c:317
 #, fuzzy
@@ -972,40 +973,45 @@ msgstr "Ji bo daneya derbasdar ya IOBuffer di bîrê de cih nayê veqetandin"
 msgid "Cannot allocate new pixbuf"
 msgstr "Ji bo pixbufa nû bîr nayê veqetandin"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "Wêneyê GIF kême an perçekiriye."
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "Nikare bingehekê ji nexşeya rengan re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "Malik ji bo nexşiya rengan nikarin werin veqetandin"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Kûrahiyek ne di hesêb de ya malikên nexşeya rengan"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "Nikare bîrekê ji serikê TGA re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "pîvanên wêneyê TGA ne rastin"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "Cureyê wêneyê TGA ne destekirî ye"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Nikare bîrekê ji TGA re veqetîne"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Daneyên zêde di dosya de hene"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Formata wêneya Targa"
 

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
+"POT-Creation-Date: 2010-02-23 15:16-0500\n"
 "PO-Revision-Date: 2009-11-03 11:00+0100\n"
 "Last-Translator: Antón Méixome <meixome@mancomun.org>\n"
 "Language-Team: Galician <gnome@g11n.net>\n"
@@ -922,8 +922,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr ""
+#, fuzzy
+msgid "Failed to allocate QTIF context structure."
+msgstr "Non se pode asignar memoria para a estrutura de contexto de TGA"
 
 #: gdk-pixbuf/io-qtif.c:317
 #, fuzzy
@@ -980,40 +981,45 @@ msgstr "Non se poden asignar datos temporais de IOBuffer"
 msgid "Cannot allocate new pixbuf"
 msgstr "Non se pode asignar un novo pixbuf"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "A imaxe GIF está truncada ou incompleta."
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "Non se pode asignar a estrutura do mapa de cores"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "Non se poden asignar as entradas do mapa de cores"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidade de cor inesperada para as entradas do mapa de cor"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "Non se pode asignar memoria para a cabeceira TGA"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "A imaxe TGA ten dimensións incorrectas"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "O tipo de imaxe TGA non é compatíbel"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Non se pode asignar memoria para a estrutura de contexto de TGA"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Datos en exceso no ficheiro"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "O formato de imaxe Targa"
 
