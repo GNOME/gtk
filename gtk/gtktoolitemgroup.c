@@ -1723,7 +1723,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
 }
 
 /**
- * gtk_tool_item_group_header_relief:
+ * gtk_tool_item_group_set_header_relief:
  * @group: a #GtkToolItemGroup
  * @style: the #GtkReliefStyle
  *
