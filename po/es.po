@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2010-02-19 16:05+0000\n"
-"PO-Revision-Date: 2010-02-20 16:39+0100\n"
+"POT-Creation-Date: 2010-02-23 16:52+0000\n"
+"PO-Revision-Date: 2010-02-23 19:59+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -921,8 +921,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr "Falló al saltar a los siguientes %d bytes con la búsqueda."
 
 #: ../gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr "Falló en la estructura de contexto de QTIF."
+#| msgid "Failed to QTIF context structure."
+msgid "Failed to allocate QTIF context structure."
+msgstr "Falló al reservar la estructura de contexto de QTIF."
 
 #: ../gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
@@ -976,41 +977,46 @@ msgstr "No se pueden asignar los datos temporales de IOBuffer"
 msgid "Cannot allocate new pixbuf"
 msgstr "No se puede asignar un nuevo pixbuf"
 
-#: ../gdk-pixbuf/io-tga.c:687
+#: ../gdk-pixbuf/io-tga.c:686
+#| msgid "GIF image was truncated or incomplete."
+msgid "Image is corrupted or truncated"
+msgstr "La imagen está corrupta o truncada"
+
+#: ../gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "No se puede asignar la estructura del mapa de colores"
 
-#: ../gdk-pixbuf/io-tga.c:694
+#: ../gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "No se puede asignar las entradas del mapa de colores"
 
-#: ../gdk-pixbuf/io-tga.c:716
+#: ../gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Profundidad de color inesperada para las entradas del mapa de color"
 
-#: ../gdk-pixbuf/io-tga.c:734
+#: ../gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "No se puede asignar memoria para la cabecera TGA"
 
-#: ../gdk-pixbuf/io-tga.c:767
+#: ../gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "La imagen TGA tiene dimensiones inválidas"
 
-#: ../gdk-pixbuf/io-tga.c:773 ../gdk-pixbuf/io-tga.c:782
-#: ../gdk-pixbuf/io-tga.c:792 ../gdk-pixbuf/io-tga.c:802
-#: ../gdk-pixbuf/io-tga.c:809
+#: ../gdk-pixbuf/io-tga.c:779 ../gdk-pixbuf/io-tga.c:788
+#: ../gdk-pixbuf/io-tga.c:798 ../gdk-pixbuf/io-tga.c:808
+#: ../gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "El tipo de imagen TGA no está soportado"
 
-#: ../gdk-pixbuf/io-tga.c:856
+#: ../gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "No se puede asignar memoria para la estructura «context» de TGA"
 
-#: ../gdk-pixbuf/io-tga.c:921
+#: ../gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Exceso de datos en el archivo"
 
-#: ../gdk-pixbuf/io-tga.c:1002
+#: ../gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "El formato de imagen Targa"
 
