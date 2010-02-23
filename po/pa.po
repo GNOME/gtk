@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
+"POT-Creation-Date: 2010-02-23 15:16-0500\n"
 "PO-Revision-Date: 2009-11-07 16:02+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -890,8 +890,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr ""
+#, fuzzy
+msgid "Failed to allocate QTIF context structure."
+msgstr "TGA context struct ਲਈ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
 #: gdk-pixbuf/io-qtif.c:317
 #, fuzzy
@@ -948,40 +949,45 @@ msgstr "IOBuffer ਡਾਟਾ ਲਈ ਆਰਜ਼ੀ ਜਾਰੀ ਨਹੀਂ �
 msgid "Cannot allocate new pixbuf"
 msgstr "ਨਵਾਂ ਪਿਕਬਫ਼ ਜਾਰੀ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "GIF ਚਿੱਤਰ ਦੀ ਕੱਟ-ਵੱਢ ਕੀਤੀ ਗਈ ਹੈ ਜਾਂ ਪੂਰਾ ਨਹੀਂ ਹੈ।"
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਢਾਂਚਾ ਜਾਰੀ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਐਂਟਰੀ ਜਾਰੀ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "ਰੰਗ-ਨਕਸ਼ਾ ਐਂਟਰੀ ਲਈ ਗਲਤ ਬਿੱਟ-ਡੂੰਘਾਈ"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA ਹੈਂਡਰ ਮੈਮੋਰੀ ਜਾਰੀ ਨਹੀਂ ਹੋ ਸਕੀ"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "TGA ਚਿੱਤਰ ਦਾ ਮਾਪ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "TGA ਚਿੱਤਰ ਟਾਈਪ ਮੱਦਦ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA context struct ਲਈ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀਂ ਹੈ"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "ਫਾਇਲ ਵਿੱਚ ਵੱਧ ਡਾਟਾ ਹੈ"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "ਟਾਰਗ ਚਿੱਤਰ ਫਾਰਮੈਟ"
 

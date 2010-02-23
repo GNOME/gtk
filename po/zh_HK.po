@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.17.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-09 15:19-0500\n"
+"POT-Creation-Date: 2010-02-23 15:16-0500\n"
 "PO-Revision-Date: 2009-09-19 20:59+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
@@ -881,8 +881,9 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr ""
+#, fuzzy
+msgid "Failed to allocate QTIF context structure."
+msgstr "無法分配記憶體來載入 TGA 內容結構"
 
 #: gdk-pixbuf/io-qtif.c:317
 #, fuzzy
@@ -939,41 +940,46 @@ msgstr "無法分配暫時性的 IOBuffer 資料"
 msgid "Cannot allocate new pixbuf"
 msgstr "無法分配新的 pixbuf"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "GIF 檔案被截斷或是不完整。"
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "無法分配色盤結構所需的記憶體"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "無法分配色盤項目所需的記憶體"
 
 # (Abel) 英文不能完全盡信，只能解讀 source code
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "不支援這個色盤的色彩深度"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "無法分配 TGA 標頭所需的記憶體"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "TGA 圖片的尺寸無效"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "不支援此類型的 TGA 圖片"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "無法分配記憶體來載入 TGA 內容結構"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "檔案內有冗餘的資料"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Targa 圖片格式"
 
