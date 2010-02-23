@@ -679,7 +679,13 @@ static gboolean try_colormap(TGAContext *ctx, GError **err)
 	static guint n;
 
 	g_return_val_if_fail(ctx != NULL, FALSE);
-	g_return_val_if_fail(ctx->cmap_size > 0, TRUE);
+
+        if (ctx->cmap_size == 0) {
+		g_set_error_literal(err, GDK_PIXBUF_ERROR,
+                                    GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                                    _("Image is corrupted or truncated"));
+			return FALSE;
+        }
 
 	ctx->cmap = g_try_malloc(sizeof(TGAColormap));
 	if (!ctx->cmap) {
