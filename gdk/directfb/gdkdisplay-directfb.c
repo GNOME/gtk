@@ -93,17 +93,19 @@ GdkDisplay * gdk_display_open (const gchar *display_name)
     {
       DirectFBError ("gdk_display_open: GetDisplayLayer", ret);
       directfb->Release (directfb);
-	  directfb = NULL;
+      _gdk_display->directfb = NULL;
       return NULL;
     }
 
 
-  ret=directfb->GetInputDevice (directfb, DIDID_KEYBOARD, &keyboard);
-
-  if (ret != DFB_OK){
+  ret = directfb->GetInputDevice (directfb, DIDID_KEYBOARD, &keyboard);
+  if (ret != DFB_OK)
+    {
       DirectFBError ("gdk_display_open: GetInputDevice", ret);
-   	return NULL;
-  }
+      directfb->Release (directfb);
+      _gdk_display->directfb = NULL;
+      return NULL;
+    }
 
   _gdk_display->layer=layer;
   _gdk_display->keyboard=keyboard;
