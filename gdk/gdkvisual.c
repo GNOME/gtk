@@ -48,11 +48,11 @@ gdk_list_visuals (void)
 /**
  * gdk_visual_get_system:
  * 
- * Get the system'sdefault visual for the default GDK screen.
+ * Get the system's default visual for the default GDK screen.
  * This is the visual for the root window of the display.
  * The return value should not be freed.
  * 
- * Return value: system visual
+ * Return value: (transfer none): system visual
  **/
 GdkVisual*
 gdk_visual_get_system (void)

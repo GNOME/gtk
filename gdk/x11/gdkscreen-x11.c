@@ -527,8 +527,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  * For setting an overall opacity for a top-level window, see
  * gdk_window_set_opacity().
 
- * Return value: a colormap to use for windows with an alpha channel
- *   or %NULL if the capability is not available.
+ * Return value: (transfer none): a colormap to use for windows with
+ *     an alpha channel or %NULL if the capability is not available.
  *
  * Since: 2.8
  **/
@@ -559,8 +559,8 @@ gdk_screen_get_rgba_colormap (GdkScreen *screen)
  * alpha channel. See the docs for gdk_screen_get_rgba_colormap()
  * for caveats.
  * 
- * Return value: a visual to use for windows with an alpha channel
- *   or %NULL if the capability is not available.
+ * Return value: (transfer none): a visual to use for windows with an
+ *     alpha channel or %NULL if the capability is not available.
  *
  * Since: 2.8
  **/
@@ -579,7 +579,7 @@ gdk_screen_get_rgba_visual (GdkScreen *screen)
 /**
  * gdk_x11_screen_get_xscreen:
  * @screen: a #GdkScreen.
- * @returns: an Xlib <type>Screen*</type>
+ * @returns: (transfer none): an Xlib <type>Screen*</type>
  *
  * Returns the screen of a #GdkScreen.
  *
