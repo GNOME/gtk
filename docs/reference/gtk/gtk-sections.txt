@@ -2855,6 +2855,7 @@ gtk_paned_get_child2
 gtk_paned_set_gutter_size
 gtk_paned_set_position
 gtk_paned_get_position
+gtk_paned_get_handle_window
 <SUBSECTION Standard>
 GTK_PANED
 GTK_IS_PANED
@@ -5685,6 +5686,7 @@ gtk_widget_send_expose
 gtk_widget_style_get
 gtk_widget_style_get_property
 gtk_widget_style_get_valist
+gtk_widget_style_attach
 gtk_widget_get_accessible
 gtk_widget_child_focus
 gtk_widget_child_notify
@@ -5752,7 +5754,8 @@ gtk_widget_get_receives_default
 gtk_widget_set_realized
 gtk_widget_get_realized
 gtk_widget_set_mapped
-gtk_widget_set_mapped
+gtk_widget_get_mapped
+gtk_widget_get_requisition
 
 <SUBSECTION>
 gtk_requisition_copy
