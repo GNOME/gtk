@@ -306,8 +306,11 @@ _gdk_windowing_window_init (void)
   _gdk_display->layer->GetConfiguration (_gdk_display->layer, &dlc);
 
   _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+
   private = GDK_WINDOW_OBJECT (_gdk_parent_root);
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl_window = private;
+
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
   private->window_type = GDK_WINDOW_ROOT;
@@ -344,6 +347,9 @@ _gdk_windowing_window_init (void)
   }
   impl->drawable.surface->GetPixelFormat(impl->drawable.surface,&impl->drawable.format);
   private->depth = DFB_BITS_PER_PIXEL(impl->drawable.format);
+
+  _gdk_window_update_size (_gdk_parent_root);
+
   /*
 	Now we can set up the system colormap
   */
@@ -583,7 +589,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   private->x = (attributes_mask & GDK_WA_X) ? attributes->x : 0;
   private->y = (attributes_mask & GDK_WA_Y) ? attributes->y : 0;
 
-  parent_private = private->parent;
+  parent_private = GDK_WINDOW_OBJECT (real_parent);
   parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
 
   private->parent = parent_private;
