@@ -8470,6 +8470,16 @@ gtk_window_get_window_type (GtkWindow *window)
   return window->type;
 }
 
+/* gtk_window_get_mnemonics_visible:
+ * @window: a #GtkWindow
+ *
+ * Gets the value of the #GtkWindow:mnemonics-visible property.
+ *
+ * Returns: %TRUE if mnemonics are supposed to be visible
+ * in this window.
+ *
+ * Since: 2.20
+ */
 gboolean
 gtk_window_get_mnemonics_visible (GtkWindow *window)
 {
@@ -8482,6 +8492,15 @@ gtk_window_get_mnemonics_visible (GtkWindow *window)
   return priv->mnemonics_visible;
 }
 
+/**
+ * gtk_window_set_mnemonics_visible:
+ * @window: a #GtkWindow
+ * @setting: the new value
+ *
+ * Sets the #GtkWindow:mnemonics-visible property.
+ *
+ * Since: 2.20
+ */
 void
 gtk_window_set_mnemonics_visible (GtkWindow *window,
                                   gboolean   setting)
