@@ -119,8 +119,15 @@ gdk_colormap_new (GdkVisual *visual,
     {
     case GDK_VISUAL_PSEUDO_COLOR:
       {
+        IDirectFB                  *dfb = _gdk_display->directfb;
+        IDirectFBPalette           *palette;
         GdkColormapPrivateDirectFB *private;
         DFBPaletteDescription       dsc;
+
+        dsc.flags = DPDESC_SIZE;
+        dsc.size  = colormap->size;
+        if (!dfb->CreatePalette (dfb, &dsc, &palette))
+          return NULL;
 
         colormap->colors = g_new0 (GdkColor, colormap->size);
 
@@ -133,10 +140,7 @@ gdk_colormap_new (GdkVisual *visual,
             private->info[0].ref_count++;
           }
 
-        dsc.flags = DPDESC_SIZE;
-        dsc.size  = colormap->size;
-        _gdk_display->directfb->CreatePalette (
-		_gdk_display->directfb, &dsc, &private->palette);
+        private->palette = palette;
 
         colormap->windowing_data = private;
 
