@@ -1615,10 +1615,14 @@ gtk_assistant_get_nth_page (GtkAssistant *assistant,
   GList *elem;
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), NULL);
+  g_return_val_if_fail (page_num >= -1, NULL);
 
   priv = assistant->priv;
 
-  elem = g_list_nth (priv->pages, page_num);
+  if (page_num == -1)
+    elem = g_list_last (priv->pages);
+  else
+    elem = g_list_nth (priv->pages, page_num);
 
   if (!elem)
     return NULL;
