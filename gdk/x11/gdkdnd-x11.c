@@ -569,15 +569,21 @@ static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
   GdkWindow *root_window = gdk_screen_get_root_window (cache->screen);
-  
-  XSelectInput (GDK_WINDOW_XDISPLAY (root_window), 
+
+  XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
 		GDK_WINDOW_XWINDOW (root_window),
 		cache->old_event_mask);
   gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
   gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
 
-  g_list_foreach (cache->children, (GFunc)free_cache_child, 
+  gdk_error_trap_push ();
+
+  g_list_foreach (cache->children, (GFunc)free_cache_child,
       gdk_screen_get_display (cache->screen));
+
+  gdk_flush ();
+  gdk_error_trap_pop ();
+
   g_list_free (cache->children);
   g_hash_table_destroy (cache->child_hash);
 
