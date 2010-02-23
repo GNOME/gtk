@@ -254,7 +254,7 @@ static gpointer gdk_pixbuf__qtif_image_begin_load (GdkPixbufModuleSizeFunc size_
     {
         g_set_error_literal (error, GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-                             _("Failed to QTIF context structure."));
+                             _("Failed to allocate QTIF context structure."));
         return NULL;
     }
 
