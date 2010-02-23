@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk+&component=general\n"
-"POT-Creation-Date: 2010-02-13 03:55+0000\n"
-"PO-Revision-Date: 2010-02-15 08:57+0100\n"
+"POT-Creation-Date: 2010-02-23 04:52+0000\n"
+"PO-Revision-Date: 2010-02-23 10:04+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -911,8 +911,8 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr "Napaka med preskakovanjem naslednjih %d bajtov med iskanjem seek()."
 
 #: ../gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr "Napaka zgradbe QTIF vsebine."
+msgid "Failed to allocate QTIF context structure."
+msgstr "Napaka dodelitve zgradbe QTIF vsebine."
 
 #: ../gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
