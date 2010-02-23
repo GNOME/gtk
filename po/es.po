@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2010-02-23 16:52+0000\n"
-"PO-Revision-Date: 2010-02-23 19:59+0100\n"
+"POT-Creation-Date: 2010-02-23 19:01+0000\n"
+"PO-Revision-Date: 2010-02-23 21:50+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -921,7 +921,6 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr "Falló al saltar a los siguientes %d bytes con la búsqueda."
 
 #: ../gdk-pixbuf/io-qtif.c:257
-#| msgid "Failed to QTIF context structure."
 msgid "Failed to allocate QTIF context structure."
 msgstr "Falló al reservar la estructura de contexto de QTIF."
 
@@ -978,7 +977,6 @@ msgid "Cannot allocate new pixbuf"
 msgstr "No se puede asignar un nuevo pixbuf"
 
 #: ../gdk-pixbuf/io-tga.c:686
-#| msgid "GIF image was truncated or incomplete."
 msgid "Image is corrupted or truncated"
 msgstr "La imagen está corrupta o truncada"
 
@@ -1735,7 +1733,7 @@ msgstr "(Ninguno)"
 
 #: ../gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
-msgstr "Otro…"
+msgstr "Otra…"
 
 #: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
