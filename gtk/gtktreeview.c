@@ -12767,10 +12767,10 @@ gtk_tree_view_get_bin_window (GtkTreeView *tree_view)
  * @tree_view: A #GtkTreeView.
  * @x: The x position to be identified (relative to bin_window).
  * @y: The y position to be identified (relative to bin_window).
- * @path: (allow-none): A pointer to a #GtkTreePath pointer to be filled in, or %NULL
- * @column: (allow-none): A pointer to a #GtkTreeViewColumn pointer to be filled in, or %NULL
- * @cell_x: (allow-none): A pointer where the X coordinate relative to the cell can be placed, or %NULL
- * @cell_y: (allow-none): A pointer where the Y coordinate relative to the cell can be placed, or %NULL
+ * @path: (out) (allow-none): A pointer to a #GtkTreePath pointer to be filled in, or %NULL
+ * @column: (out) (allow-none): A pointer to a #GtkTreeViewColumn pointer to be filled in, or %NULL
+ * @cell_x: (out) (allow-none): A pointer where the X coordinate relative to the cell can be placed, or %NULL
+ * @cell_y: (out) (allow-none): A pointer where the Y coordinate relative to the cell can be placed, or %NULL
  *
  * Finds the path at the point (@x, @y), relative to bin_window coordinates
  * (please see gtk_tree_view_get_bin_window()).
