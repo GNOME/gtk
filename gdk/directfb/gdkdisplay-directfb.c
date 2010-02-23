@@ -66,15 +66,12 @@ GdkDisplay * gdk_display_open (const gchar *display_name)
   IDirectFBInputDevice   *keyboard;
   DFBResult               ret;
 
-  int    argc = 0;
-  char **argv = NULL;
-
   if (_gdk_display)
     {
       return GDK_DISPLAY_OBJECT(_gdk_display); /* single display only */
     }
 
-  ret = DirectFBInit (&argc,&argv);
+  ret = DirectFBInit (NULL, NULL);
   if (ret != DFB_OK)
     {
       DirectFBError ("gdk_display_open: DirectFBInit", ret);
