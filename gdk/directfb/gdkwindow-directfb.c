@@ -2084,14 +2084,7 @@ _gdk_windowing_window_at_pointer (GdkDisplay *display,
   GdkWindow *retval;
   gint       wx, wy;
 
-  if (!win_x || !win_y)
   gdk_directfb_mouse_get_info (&wx, &wy, NULL);
-
-  if (win_x)
-    wx = *win_x;
-
-  if (win_y)
-    wy = *win_y;
 
   retval = gdk_directfb_child_at (_gdk_parent_root, &wx, &wy);
 
