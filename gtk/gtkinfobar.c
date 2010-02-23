@@ -951,6 +951,9 @@ gtk_info_bar_set_response_sensitive (GtkInfoBar *info_bar,
  * the given response_id as the default widget for the dialog.
  * Pressing "Enter" normally activates the default widget.
  *
+ * Note that this function currently requires @info_bar to
+ * be added to a widget hierarchy. 
+ *
  * Since: 2.18
  */
 void
