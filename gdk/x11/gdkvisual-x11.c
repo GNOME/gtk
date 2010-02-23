@@ -349,7 +349,7 @@ gdk_visual_get_best_type (void)
  * This is the visual for the root window of the display.
  * The return value should not be freed.
  * 
- * Return value: the system visual
+ * Return value: (transfer none): the system visual
  *
  * Since: 2.2
  **/
@@ -367,7 +367,7 @@ gdk_screen_get_system_visual (GdkScreen * screen)
  * Get the visual with the most available colors for the default
  * GDK screen. The return value should not be freed.
  * 
- * Return value: best visual
+ * Return value: (transfer none): best visual
  **/
 GdkVisual*
 gdk_visual_get_best (void)
@@ -386,7 +386,7 @@ gdk_visual_get_best (void)
  * over grayscale or fixed-colormap visuals. The return value should not
  * be freed. %NULL may be returned if no visual supports @depth.
  * 
- * Return value: best visual for the given depth
+ * Return value: (transfer none): best visual for the given depth
  **/
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
@@ -415,7 +415,7 @@ gdk_visual_get_best_with_depth (gint depth)
  * should not be freed. %NULL may be returned if no visual has type
  * @visual_type.
  * 
- * Return value: best visual of the given type
+ * Return value: (transfer none): best visual of the given type
  **/
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
@@ -442,7 +442,8 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
  *
  * Combines gdk_visual_get_best_with_depth() and gdk_visual_get_best_with_type().
  * 
- * Return value: best visual with both @depth and @visual_type, or %NULL if none
+ * Return value: (transfer none): best visual with both @depth and
+ *     @visual_type, or %NULL if none
  **/
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
@@ -660,7 +661,7 @@ gdk_x11_visual_get_xvisual (GdkVisual *visual)
  * 
  * Gets the screen to which this visual belongs
  * 
- * Return value: the screen to which this visual belongs.
+ * Return value: (transfer none): the screen to which this visual belongs.
  *
  * Since: 2.2
  **/
