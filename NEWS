@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.19.5 to 2.19.6
+==============================================
+
+* Bugs fixed:
+ 610701 gnome-shell crashes frequently
+ 604799 Crash when button is pressed.
+ 609744 crash at parse_data_for_row_pseudocolor
+ 600789 gdk/gdkwindow.c "find_native_sibling_above" will crash
+ 610141 gtk_assistant_get_nth_page() function fails to deliver...
+ 609952 destroying a notebook window when the last tab got dragged...
+ 603923 [annotations] gtk_tree_store_newv/set_column_types
+ 610474 [annotations] Add allow-none
+ 609650 GtkPlug Embedded signal is not emitted when plug...
+ 610381 More space between toolbar icon and label
+ 548026 No accessor for GtkWidget.requisition
+ 609514 fix introspection comments for gtk_tree_view_get_path_at_pos
+ 610235 msgid in bad English
+ 607697 GDK_META_MASK always set on Alt-Enter with gtk+ 2.19.x
+ 610632 gtk_info_bar_set_default_response problem
+ 609172 gdk/directfb: little cleanups
+ 610184 gtk_assistant_set_current_page() segfaults...
+
+* Updated translations
+ Bulgarian
+ Czech
+ Estonian
+ German
+ Japanese
+ Korean
+ Lithuanian
+ Norwegian bokmål
+ Oriya
+ Polish
+ Romanian
+ Slovenian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.19.4 to 2.19.5
 ==============================================
 
