@@ -264,7 +264,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							     P_("Spacing in pixels between the icon and label"),
 							     0,
 							     G_MAXINT,
-							     0,
+							     3,
 							     GTK_PARAM_READWRITE));
 
 /**
