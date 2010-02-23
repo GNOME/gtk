@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "+&component=general\n"
-"POT-Creation-Date: 2010-02-16 20:00+0000\n"
+"POT-Creation-Date: 2010-02-23 04:52+0000\n"
 "PO-Revision-Date: 2010-02-16 21:03+0100\n"
 "Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
@@ -923,10 +923,9 @@ msgstr "Fehler beim Lesen des QTIF-Elements: %s"
 msgid "Failed to skip the next %d bytes with seek()."
 msgstr "Überspringen der nächsten %d Bytes mit seek() ist fehlgeschlagen."
 
-#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:257
-msgid "Failed to QTIF context structure."
-msgstr "Strukturieren des QTIF-Kontexts ist fehlgeschlagen."
+msgid "Failed to allocate QTIF context structure."
+msgstr "Zuweisen der QTIF-Kontextstruktur ist fehlgeschlagen."
 
 #: ../gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
