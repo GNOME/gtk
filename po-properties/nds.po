@@ -23,7 +23,7 @@ msgstr "Endlosschleife"
 #: ../gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
 #, fuzzy
 msgid "Whether the animation should loop when it reaches the end"
-msgstr "Soll die Animation stÃ¤ndig wiederholt werden?"
+msgstr "Soll die Animation ständig wiederholt werden?"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -90,7 +90,7 @@ msgstr "Zeilenschritt"
 #: ../gdk-pixbuf/gdk-pixbuf.c:160
 #, fuzzy
 msgid "The number of bytes between the start of a row and the start of the next row"
-msgstr "Die Anzahl der Byte zwischen dem Anfang einer Zeile und dem Anfang der nÃ¤chsten Zeile"
+msgstr "Die Anzahl der Byte zwischen dem Anfang einer Zeile und dem Anfang der nächsten Zeile"
 
 #: ../gdk-pixbuf/gdk-pixbuf.c:169
 msgid "Pixels"
@@ -175,7 +175,7 @@ msgstr "Kommentare als Zeichenkette"
 #: ../gtk/gtkaboutdialog.c:347
 #, fuzzy
 msgid "Comments about the program"
-msgstr "Kommentare Ã¼ber dieses Programme"
+msgstr "Kommentare über dieses Programme"
 
 #: ../gtk/gtkaboutdialog.c:381
 msgid "Website URL"
@@ -193,7 +193,7 @@ msgstr "Netsiettitel"
 #: ../gtk/gtkaboutdialog.c:398
 #, fuzzy
 msgid "The label for the link to the website of the program. If this is not set, it defaults to the URL"
-msgstr "Die Beschriftung fÃ¼r die Webseite des Programms. Wird dies leer gelassen, so hat es den Wert der URL"
+msgstr "Die Beschriftung für die Webseite des Programms. Wird dies leer gelassen, so hat es den Wert der URL"
 
 #: ../gtk/gtkaboutdialog.c:414
 msgid "Authors"
@@ -219,7 +219,7 @@ msgstr "Grafiken vun"
 #: ../gtk/gtkaboutdialog.c:449
 #, fuzzy
 msgid "List of people who have contributed artwork to the program"
-msgstr "Personen, die Grafiken fÃ¼r das Programm erstellt haben"
+msgstr "Personen, die Grafiken für das Programm erstellt haben"
 
 #: ../gtk/gtkaboutdialog.c:466
 msgid "Translator credits"
@@ -236,7 +236,7 @@ msgstr "Logo"
 #: ../gtk/gtkaboutdialog.c:483
 #, fuzzy
 msgid "A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"
-msgstr "Ein Logo fÃ¼r das Info-Fenster. Wird dies leer gelassen, so hat es den Wert von gtk_window_get_default_icon_list()"
+msgstr "Ein Logo für das Info-Fenster. Wird dies leer gelassen, so hat es den Wert von gtk_window_get_default_icon_list()"
 
 #: ../gtk/gtkaboutdialog.c:498
 msgid "Logo Icon Name"
@@ -245,7 +245,7 @@ msgstr "Logosymbolnaam"
 #: ../gtk/gtkaboutdialog.c:499
 #, fuzzy
 msgid "A named icon to use as the logo for the about box."
-msgstr "Symbol, das fÃ¼r das Info-Fenster verwendet werden soll."
+msgstr "Symbol, das für das Info-Fenster verwendet werden soll."
 
 #: ../gtk/gtkaboutdialog.c:512
 msgid "Wrap license"
@@ -263,7 +263,7 @@ msgstr "Körtelutdruck"
 #: ../gtk/gtkaccellabel.c:179
 #, fuzzy
 msgid "The closure to be monitored for accelerator changes"
-msgstr "Der auf KÃ¼rzelÃ¤nderungen hin zu Ã¼berwachende Ausdruck"
+msgstr "Der auf Kürzeländerungen hin zu überwachende Ausdruck"
 
 #: ../gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
@@ -272,7 +272,7 @@ msgstr "Körtel-Widget"
 #: ../gtk/gtkaccellabel.c:186
 #, fuzzy
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Das auf KÃ¼rzelÃ¤nderungen hin zu Ã¼berwachende Widget"
+msgstr "Das auf Kürzeländerungen hin zu überwachende Widget"
 
 #: ../gtk/gtkaction.c:181
 #: ../gtk/gtkactiongroup.c:170
@@ -299,7 +299,7 @@ msgstr "Beschriften"
 #: ../gtk/gtkaction.c:201
 #, fuzzy
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Die fÃ¼r MenÃ¼eintrÃ¤ge und -knÃ¶pfe zu verwendende Beschriftung, die diese Aktion auslÃ¶sen."
+msgstr "Die für Menüeinträge und -knöpfe zu verwendende Beschriftung, die diese Aktion auslösen."
 
 #: ../gtk/gtkaction.c:217
 msgid "Short label"
@@ -308,7 +308,7 @@ msgstr "Koortbeschriften"
 #: ../gtk/gtkaction.c:218
 #, fuzzy
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr "Eine kÃ¼rzere Beschriftung, die auf WerkzeugleistenknÃ¶pfen verwendet werden darf."
+msgstr "Eine kürzere Beschriftung, die auf Werkzeugleistenknöpfen verwendet werden darf."
 
 #: ../gtk/gtkaction.c:226
 msgid "Tooltip"
@@ -326,7 +326,7 @@ msgstr "Repertoire-Symbol"
 #: ../gtk/gtkaction.c:243
 #, fuzzy
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "Das in Widgets, die diese Aktion reprÃ¤sentieren, angezeigte Repertoire-Symbol."
+msgstr "Das in Widgets, die diese Aktion repräsentieren, angezeigte Repertoire-Symbol."
 
 #: ../gtk/gtkaction.c:263
 #: ../gtk/gtkstatusicon.c:253
@@ -374,7 +374,7 @@ msgstr "Sichtbar wenn to grot"
 #: ../gtk/gtkaction.c:309
 #, fuzzy
 msgid "When TRUE, toolitem proxies for this action are represented in the toolbar overflow menu."
-msgstr "Sollen leere MenÃ¼proxys fÃ¼r diese Aktion in der Werkzeugleiste angezeigt werden?"
+msgstr "Sollen leere Menüproxys für diese Aktion in der Werkzeugleiste angezeigt werden?"
 
 #: ../gtk/gtkaction.c:316
 #: ../gtk/gtktoolitem.c:199
@@ -404,7 +404,7 @@ msgstr "Verbargen falls leer"
 #: ../gtk/gtkaction.c:334
 #, fuzzy
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "Sollen leere MenÃ¼proxys fÃ¼r diese Aktion verborgen werden?"
+msgstr "Sollen leere Menüproxys für diese Aktion verborgen werden?"
 
 #: ../gtk/gtkaction.c:340
 #: ../gtk/gtkactiongroup.c:177
@@ -436,7 +436,7 @@ msgstr "Aktschoonsgrupp"
 #: ../gtk/gtkaction.c:355
 #, fuzzy
 msgid "The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."
-msgstr "Die GtkActionGroup, mit der diese GtkAction verknÃ¼pft ist, oder NULL (fÃ¼r internen Gebrauch)."
+msgstr "Die GtkActionGroup, mit der diese GtkAction verknüpft ist, oder NULL (für internen Gebrauch)."
 
 #: ../gtk/gtkaction.c:373
 #: ../gtk/gtkimagemenuitem.c:169
@@ -468,7 +468,7 @@ msgstr "Towiesen Aktschoon"
 #: ../gtk/gtkactivatable.c:309
 #, fuzzy
 msgid "The action this activatable will activate and receive updates from"
-msgstr "Die Aktion, die dieses aktivierbare Objekt aktiviert und davon Aktualisierungen erhÃ¤lt"
+msgstr "Die Aktion, die dieses aktivierbare Objekt aktiviert und davon Aktualisierungen erhält"
 
 #: ../gtk/gtkactivatable.c:331
 #, fuzzy
@@ -498,7 +498,7 @@ msgstr "Minnstwert"
 #: ../gtk/gtkadjustment.c:111
 #, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "Der Mindestwert der StellgrÃ¶ÃŸe"
+msgstr "Der Mindestwert der Stellgröße"
 
 #: ../gtk/gtkadjustment.c:130
 msgid "Maximum Value"
@@ -507,7 +507,7 @@ msgstr "Höchstwert"
 #: ../gtk/gtkadjustment.c:131
 #, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "Der HÃ¶chstwert der StellgrÃ¶ÃŸe"
+msgstr "Der Höchstwert der Stellgröße"
 
 #: ../gtk/gtkadjustment.c:147
 #, fuzzy
@@ -517,7 +517,7 @@ msgstr "Schrittweite"
 #: ../gtk/gtkadjustment.c:148
 #, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Die Schrittweite der StellgrÃ¶ÃŸe"
+msgstr "Die Schrittweite der Stellgröße"
 
 #: ../gtk/gtkadjustment.c:164
 msgid "Page Increment"
@@ -526,7 +526,7 @@ msgstr "Sietenwiete"
 #: ../gtk/gtkadjustment.c:165
 #, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "Die Seitenweite der StellgrÃ¶ÃŸe"
+msgstr "Die Seitenweite der Stellgröße"
 
 #: ../gtk/gtkadjustment.c:184
 msgid "Page Size"
@@ -535,7 +535,7 @@ msgstr "Sietengröte"
 #: ../gtk/gtkadjustment.c:185
 #, fuzzy
 msgid "The page size of the adjustment"
-msgstr "Die SeitengrÃ¶ÃŸe der StellgrÃ¶ÃŸe"
+msgstr "Die Seitengröße der Stellgröße"
 
 #: ../gtk/gtkalignment.c:90
 msgid "Horizontal alignment"
@@ -545,7 +545,7 @@ msgstr "Horizontale Utrichten"
 #: ../gtk/gtkbutton.c:270
 #, fuzzy
 msgid "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is right aligned"
-msgstr "Die vertikale Position des Kindes in der verfÃ¼gbaren FlÃ¤che. Bei 0.0 wird es links-, bei 1.0 rechtsbÃ¼ndig ausgerichtet"
+msgstr "Die vertikale Position des Kindes in der verfügbaren Fläche. Bei 0.0 wird es links-, bei 1.0 rechtsbündig ausgerichtet"
 
 #: ../gtk/gtkalignment.c:100
 msgid "Vertical alignment"
@@ -555,57 +555,57 @@ msgstr "Vertikale Utrichten"
 #: ../gtk/gtkbutton.c:289
 #, fuzzy
 msgid "Vertical position of child in available space. 0.0 is top aligned, 1.0 is bottom aligned"
-msgstr "Die vertikale Position des Kindes in der verfÃ¼gbaren FlÃ¤che. Bei 0.0 wird es am oberen, bei 1.0 am unteren Rand ausgerichtet"
+msgstr "Die vertikale Position des Kindes in der verfügbaren Fläche. Bei 0.0 wird es am oberen, bei 1.0 am unteren Rand ausgerichtet"
 
 #: ../gtk/gtkalignment.c:109
 #, fuzzy
 msgid "Horizontal scale"
-msgstr "Horizontaler MaÃŸstab"
+msgstr "Horizontaler Maßstab"
 
 #: ../gtk/gtkalignment.c:110
 #, fuzzy
 msgid "If available horizontal space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Welcher Anteil der verfÃ¼gbaren horizontalen FlÃ¤che soll fÃ¼r das Kind verwendet werden, falls sie grÃ¶ÃŸer als die fÃ¼r das Kind angeforderte ist? 0.0 heiÃŸt: keine, 1.0 heiÃŸt: die gesamte FlÃ¤che"
+msgstr "Welcher Anteil der verfügbaren horizontalen Fläche soll für das Kind verwendet werden, falls sie größer als die für das Kind angeforderte ist? 0.0 heißt: keine, 1.0 heißt: die gesamte Fläche"
 
 #: ../gtk/gtkalignment.c:118
 #, fuzzy
 msgid "Vertical scale"
-msgstr "Vertikaler MaÃŸstab"
+msgstr "Vertikaler Maßstab"
 
 #: ../gtk/gtkalignment.c:119
 #, fuzzy
 msgid "If available vertical space is bigger than needed for the child, how much of it to use for the child. 0.0 means none, 1.0 means all"
-msgstr "Welcher Anteil der verfÃ¼gbaren vertikalen FlÃ¤che soll fÃ¼r das Kind verwendet werden, falls sie grÃ¶ÃŸer als die fÃ¼r das Kind angeforderte ist? 0.0 heiÃŸt: keine, 1.0 heiÃŸt: die gesamte FlÃ¤che"
+msgstr "Welcher Anteil der verfügbaren vertikalen Fläche soll für das Kind verwendet werden, falls sie größer als die für das Kind angeforderte ist? 0.0 heißt: keine, 1.0 heißt: die gesamte Fläche"
 
 #: ../gtk/gtkalignment.c:136
 #, fuzzy
 msgid "Top Padding"
-msgstr "AuffÃ¼llung oben"
+msgstr "Auffüllung oben"
 
 #: ../gtk/gtkalignment.c:137
 #, fuzzy
 msgid "The padding to insert at the top of the widget."
-msgstr "Die oben am Widget anzufÃ¼gende AuffÃ¼llung."
+msgstr "Die oben am Widget anzufügende Auffüllung."
 
 #: ../gtk/gtkalignment.c:153
 #, fuzzy
 msgid "Bottom Padding"
-msgstr "AuffÃ¼llung unten"
+msgstr "Auffüllung unten"
 
 #: ../gtk/gtkalignment.c:154
 #, fuzzy
 msgid "The padding to insert at the bottom of the widget."
-msgstr "Die unten am Widget anzufÃ¼gende AuffÃ¼llung."
+msgstr "Die unten am Widget anzufügende Auffüllung."
 
 #: ../gtk/gtkalignment.c:170
 #, fuzzy
 msgid "Left Padding"
-msgstr "AuffÃ¼llung links"
+msgstr "Auffüllung links"
 
 #: ../gtk/gtkalignment.c:171
 #, fuzzy
 msgid "The padding to insert at the left of the widget."
-msgstr "Die links am Widget anzufÃ¼gende AuffÃ¼llung."
+msgstr "Die links am Widget anzufügende Auffüllung."
 
 #: ../gtk/gtkalignment.c:187
 msgid "Right Padding"
@@ -614,7 +614,7 @@ msgstr "Rechte Opfüllen"
 #: ../gtk/gtkalignment.c:188
 #, fuzzy
 msgid "The padding to insert at the right of the widget."
-msgstr "Die rechts am Widget anzufÃ¼gende AuffÃ¼llung."
+msgstr "Die rechts am Widget anzufügende Auffüllung."
 
 #: ../gtk/gtkarrow.c:75
 msgid "Arrow direction"
@@ -665,12 +665,12 @@ msgstr "Y-Utrichten vu'm Kinn"
 #: ../gtk/gtkaspectframe.c:93
 #, fuzzy
 msgid "Ratio"
-msgstr "SeitenverhÃ¤ltnis"
+msgstr "Seitenverhältnis"
 
 #: ../gtk/gtkaspectframe.c:94
 #, fuzzy
 msgid "Aspect ratio if obey_child is FALSE"
-msgstr "Das SeitenverhÃ¤ltnis, falls obey_child FALSCH ist"
+msgstr "Das Seitenverhältnis, falls obey_child FALSCH ist"
 
 #: ../gtk/gtkaspectframe.c:100
 #, fuzzy
@@ -680,12 +680,12 @@ msgstr "Kind gehorchen"
 #: ../gtk/gtkaspectframe.c:101
 #, fuzzy
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr "Erzwingen, dass das SeitenverhÃ¤ltnis des Rahmens dem des Kindes entspricht"
+msgstr "Erzwingen, dass das Seitenverhältnis des Rahmens dem des Kindes entspricht"
 
 #: ../gtk/gtkassistant.c:284
 #, fuzzy
 msgid "Header Padding"
-msgstr "AuffÃ¼llung um Kopf"
+msgstr "Auffüllung um Kopf"
 
 #: ../gtk/gtkassistant.c:285
 #, fuzzy
@@ -695,7 +695,7 @@ msgstr "Anzahl der Pixel um den Kopf."
 #: ../gtk/gtkassistant.c:292
 #, fuzzy
 msgid "Content Padding"
-msgstr "AuffÃ¼llung um Inhalt"
+msgstr "Auffüllung um Inhalt"
 
 #: ../gtk/gtkassistant.c:293
 #, fuzzy
@@ -750,7 +750,7 @@ msgstr "Seite abgeschlossen"
 #: ../gtk/gtkassistant.c:378
 #, fuzzy
 msgid "Whether all required fields on the page have been filled out"
-msgstr "Legt fest, ob alle benÃ¶tigten Felder dieser Seite ausgefÃ¼llt wurden"
+msgstr "Legt fest, ob alle benötigten Felder dieser Seite ausgefüllt wurden"
 
 #: ../gtk/gtkbbox.c:101
 #, fuzzy
@@ -760,37 +760,37 @@ msgstr "Minimale Breite des Kindes"
 #: ../gtk/gtkbbox.c:102
 #, fuzzy
 msgid "Minimum width of buttons inside the box"
-msgstr "Die minimale Breite von KnÃ¶pfen im Kasten"
+msgstr "Die minimale Breite von Knöpfen im Kasten"
 
 #: ../gtk/gtkbbox.c:110
 #, fuzzy
 msgid "Minimum child height"
-msgstr "Minimale HÃ¶he des Kindes"
+msgstr "Minimale Höhe des Kindes"
 
 #: ../gtk/gtkbbox.c:111
 #, fuzzy
 msgid "Minimum height of buttons inside the box"
-msgstr "Die minimale HÃ¶he von KnÃ¶pfen im Kasten"
+msgstr "Die minimale Höhe von Knöpfen im Kasten"
 
 #: ../gtk/gtkbbox.c:119
 #, fuzzy
 msgid "Child internal width padding"
-msgstr "Interne BreitenauffÃ¼llung des Kindes"
+msgstr "Interne Breitenauffüllung des Kindes"
 
 #: ../gtk/gtkbbox.c:120
 #, fuzzy
 msgid "Amount to increase child's size on either side"
-msgstr "AusmaÃŸ, um das das Kind nach beiden Seiten vergrÃ¶ÃŸert werden soll"
+msgstr "Ausmaß, um das das Kind nach beiden Seiten vergrößert werden soll"
 
 #: ../gtk/gtkbbox.c:128
 #, fuzzy
 msgid "Child internal height padding"
-msgstr "Interne HÃ¶henauffÃ¼llung des Kindes"
+msgstr "Interne Höhenauffüllung des Kindes"
 
 #: ../gtk/gtkbbox.c:129
 #, fuzzy
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "AusmaÃŸ, um das das Kind nach oben und unten vergrÃ¶ÃŸert werden soll"
+msgstr "Ausmaß, um das das Kind nach oben und unten vergrößert werden soll"
 
 #: ../gtk/gtkbbox.c:137
 #, fuzzy
@@ -800,7 +800,7 @@ msgstr "Anordnungsstil"
 #: ../gtk/gtkbbox.c:138
 #, fuzzy
 msgid "How to layout the buttons in the box. Possible values are default, spread, edge, start and end"
-msgstr "Die Anordnung der KnÃ¶pfe im Kasten. MÃ¶gliche Werte sind default, spread, edge, start und end"
+msgstr "Die Anordnung der Knöpfe im Kasten. Mögliche Werte sind default, spread, edge, start und end"
 
 #: ../gtk/gtkbbox.c:146
 #, fuzzy
@@ -810,7 +810,7 @@ msgstr "Untergeordnet"
 #: ../gtk/gtkbbox.c:147
 #, fuzzy
 msgid "If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"
-msgstr "Falls WAHR, erscheint das Kind in einer Untergruppe von Kindern, geeignet bspw. fÃ¼r HilfeknÃ¶pfe"
+msgstr "Falls WAHR, erscheint das Kind in einer Untergruppe von Kindern, geeignet bspw. für Hilfeknöpfe"
 
 #: ../gtk/gtkbox.c:130
 #: ../gtk/gtkexpander.c:219
@@ -832,12 +832,12 @@ msgstr "Der Abstand zwischen den Kindern"
 #: ../gtk/gtktoolitemgroup.c:1586
 #, fuzzy
 msgid "Homogeneous"
-msgstr "GleichmÃ¤ÃŸig"
+msgstr "Gleichmäßig"
 
 #: ../gtk/gtkbox.c:141
 #, fuzzy
 msgid "Whether the children should all be the same size"
-msgstr "Sollen die Kinder alle gleich groÃŸ sein?"
+msgstr "Sollen die Kinder alle gleich groß sein?"
 
 #: ../gtk/gtkbox.c:148
 #: ../gtk/gtkpreview.c:101
@@ -852,28 +852,28 @@ msgstr "Ausdehnen"
 #: ../gtk/gtkbox.c:149
 #, fuzzy
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Soll dem Kind zusÃ¤tzlicher Platz zugewiesen werden, wenn das Eltern-Widget wÃ¤chst?"
+msgstr "Soll dem Kind zusätzlicher Platz zugewiesen werden, wenn das Eltern-Widget wächst?"
 
 #: ../gtk/gtkbox.c:155
 #: ../gtk/gtktoolitemgroup.c:1600
 #, fuzzy
 msgid "Fill"
-msgstr "FÃ¼llen"
+msgstr "Füllen"
 
 #: ../gtk/gtkbox.c:156
 #, fuzzy
 msgid "Whether extra space given to the child should be allocated to the child or used as padding"
-msgstr "Soll zusÃ¤tzlicher, an das Kind Ã¼bergebener Platz, diesem zugewiesen oder als AuffÃ¼llung verwendet werden?"
+msgstr "Soll zusätzlicher, an das Kind übergebener Platz, diesem zugewiesen oder als Auffüllung verwendet werden?"
 
 #: ../gtk/gtkbox.c:162
 #, fuzzy
 msgid "Padding"
-msgstr "AuffÃ¼llung"
+msgstr "Auffüllung"
 
 #: ../gtk/gtkbox.c:163
 #, fuzzy
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr "Die zwischen dem Kind und dessen Nachbarn einzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die zwischen dem Kind und dessen Nachbarn einzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkbox.c:169
 #, fuzzy
@@ -884,7 +884,7 @@ msgstr "Packtyp"
 #: ../gtk/gtknotebook.c:724
 #, fuzzy
 msgid "A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"
-msgstr "Der GtkPackType zeigt an, ob das Kind bezÃ¼glich des Anfangs oder des Endes des Eltern-Widgets gepackt werden soll"
+msgstr "Der GtkPackType zeigt an, ob das Kind bezüglich des Anfangs oder des Endes des Eltern-Widgets gepackt werden soll"
 
 #: ../gtk/gtkbox.c:176
 #: ../gtk/gtknotebook.c:702
@@ -904,17 +904,17 @@ msgstr "Der Index des Kinds im Eltern-Widget"
 #: ../gtk/gtkbuilder.c:96
 #, fuzzy
 msgid "Translation Domain"
-msgstr "ÃœbersetzungsdomÃ¤ne"
+msgstr "Übersetzungsdomäne"
 
 #: ../gtk/gtkbuilder.c:97
 #, fuzzy
 msgid "The translation domain used by gettext"
-msgstr "Die von gettext zu verwendende ÃœbersetzungsdomÃ¤ne"
+msgstr "Die von gettext zu verwendende Übersetzungsdomäne"
 
 #: ../gtk/gtkbutton.c:220
 #, fuzzy
 msgid "Text of the label widget inside the button, if the button contains a label widget"
-msgstr "Text des Beschriftungs-Widgets im Knopf, falls der Knopf ein solches enthÃ¤lt"
+msgstr "Text des Beschriftungs-Widgets im Knopf, falls der Knopf ein solches enthält"
 
 #: ../gtk/gtkbutton.c:227
 #: ../gtk/gtkexpander.c:203
@@ -931,7 +931,7 @@ msgstr "Unterstrich verwenden"
 #: ../gtk/gtkmenuitem.c:321
 #, fuzzy
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
-msgstr "Falls eingeschaltet, bedeutet ein Unterstrich im Text, dass das nÃ¤chste Zeichen als TastaturkÃ¼rzel verwendet werden soll"
+msgstr "Falls eingeschaltet, bedeutet ein Unterstrich im Text, dass das nächste Zeichen als Tastaturkürzel verwendet werden soll"
 
 #: ../gtk/gtkbutton.c:235
 #: ../gtk/gtkimagemenuitem.c:150
@@ -942,7 +942,7 @@ msgstr "Repertoire verwenden"
 #: ../gtk/gtkbutton.c:236
 #, fuzzy
 msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr "Falls aktiv, wird die Beschriftung nicht angezeigt, sondern verwendet, um ein Symbol aus dem Repertoire zu wÃ¤hlen"
+msgstr "Falls aktiv, wird die Beschriftung nicht angezeigt, sondern verwendet, um ein Symbol aus dem Repertoire zu wählen"
 
 #: ../gtk/gtkbutton.c:243
 #: ../gtk/gtkcombobox.c:796
@@ -996,7 +996,7 @@ msgstr "Bildposition"
 #: ../gtk/gtkbutton.c:321
 #, fuzzy
 msgid "The position of the image relative to the text"
-msgstr "Position des Bildes bezÃ¼glich des Textes"
+msgstr "Position des Bildes bezüglich des Textes"
 
 #: ../gtk/gtkbutton.c:441
 #, fuzzy
@@ -1006,17 +1006,17 @@ msgstr "Abstandsvorgabe"
 #: ../gtk/gtkbutton.c:442
 #, fuzzy
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
-msgstr "Der zusÃ¤tzliche Raum fÃ¼r CAN_DEFAULT-KnÃ¶pfe"
+msgstr "Der zusätzliche Raum für CAN_DEFAULT-Knöpfe"
 
 #: ../gtk/gtkbutton.c:456
 #, fuzzy
 msgid "Default Outside Spacing"
-msgstr "Vorgabeabstand auÃŸen"
+msgstr "Vorgabeabstand außen"
 
 #: ../gtk/gtkbutton.c:457
 #, fuzzy
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside the border"
-msgstr "Der zusÃ¤tzliche Raum fÃ¼r CAN_DEFAULT-KnÃ¶pfe, der immer auÃŸerhalb des Rands zugegeben werden soll"
+msgstr "Der zusätzliche Raum für CAN_DEFAULT-Knöpfe, der immer außerhalb des Rands zugegeben werden soll"
 
 #: ../gtk/gtkbutton.c:462
 #, fuzzy
@@ -1026,7 +1026,7 @@ msgstr "X-Versatz des Kindes"
 #: ../gtk/gtkbutton.c:463
 #, fuzzy
 msgid "How far in the x direction to move the child when the button is depressed"
-msgstr "Wie weit soll das Kind in horizontaler Richtung versetzt werden, wenn der Knopf gedrÃ¼ckt wird?"
+msgstr "Wie weit soll das Kind in horizontaler Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: ../gtk/gtkbutton.c:470
 #, fuzzy
@@ -1036,7 +1036,7 @@ msgstr "Y-Versatz des Kindes"
 #: ../gtk/gtkbutton.c:471
 #, fuzzy
 msgid "How far in the y direction to move the child when the button is depressed"
-msgstr "Wie weit soll das Kind in vertikaler Richtung versetzt werden, wenn der Knopf gedrÃ¼ckt wird?"
+msgstr "Wie weit soll das Kind in vertikaler Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: ../gtk/gtkbutton.c:487
 #, fuzzy
@@ -1078,7 +1078,7 @@ msgstr "Knopfbilder anzeigen"
 #: ../gtk/gtkbutton.c:531
 #, fuzzy
 msgid "Whether images should be shown on buttons"
-msgstr "Sollen auf KnÃ¶pfen Bilder angezeigt werden?"
+msgstr "Sollen auf Knöpfen Bilder angezeigt werden?"
 
 #: ../gtk/gtkcalendar.c:440
 #, fuzzy
@@ -1088,7 +1088,7 @@ msgstr "Jahr"
 #: ../gtk/gtkcalendar.c:441
 #, fuzzy
 msgid "The selected year"
-msgstr "Das gewÃ¤hlte Jahr"
+msgstr "Das gewählte Jahr"
 
 #: ../gtk/gtkcalendar.c:454
 #, fuzzy
@@ -1098,7 +1098,7 @@ msgstr "Monat"
 #: ../gtk/gtkcalendar.c:455
 #, fuzzy
 msgid "The selected month (as a number between 0 and 11)"
-msgstr "Der gewÃ¤hlte Monat (als Zahl zwischen 0 und 11)"
+msgstr "Der gewählte Monat (als Zahl zwischen 0 und 11)"
 
 #: ../gtk/gtkcalendar.c:469
 #, fuzzy
@@ -1108,7 +1108,7 @@ msgstr "Tag"
 #: ../gtk/gtkcalendar.c:470
 #, fuzzy
 msgid "The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"
-msgstr "Der gewÃ¤hlte Tag (als Zahl zwischen 1 und 31, oder 0, um den momentan gewÃ¤hlten Tag abzuwÃ¤hlen)"
+msgstr "Der gewählte Tag (als Zahl zwischen 1 und 31, oder 0, um den momentan gewählten Tag abzuwählen)"
 
 #: ../gtk/gtkcalendar.c:484
 #, fuzzy
@@ -1138,7 +1138,7 @@ msgstr "Kein Monatswechsel"
 #: ../gtk/gtkcalendar.c:514
 #, fuzzy
 msgid "If TRUE, the selected month cannot be changed"
-msgstr "Soll der gewÃ¤hlte Monat unverÃ¤nderlich sein?"
+msgstr "Soll der gewählte Monat unveränderlich sein?"
 
 #: ../gtk/gtkcalendar.c:528
 #, fuzzy
@@ -1163,12 +1163,12 @@ msgstr "Maximale Breite der Details in Zeichen"
 #: ../gtk/gtkcalendar.c:560
 #, fuzzy
 msgid "Details Height"
-msgstr "VorgabehÃ¶he der Details"
+msgstr "Vorgabehöhe der Details"
 
 #: ../gtk/gtkcalendar.c:561
 #, fuzzy
 msgid "Details height in rows"
-msgstr "VorgabehÃ¶he der Details in Zeilen"
+msgstr "Vorgabehöhe der Details in Zeilen"
 
 #: ../gtk/gtkcalendar.c:577
 #, fuzzy
@@ -1239,22 +1239,22 @@ msgstr "Die vertikale Ausrichtung"
 #: ../gtk/gtkcellrenderer.c:221
 #, fuzzy
 msgid "xpad"
-msgstr "X-AuffÃ¼llung"
+msgstr "X-Auffüllung"
 
 #: ../gtk/gtkcellrenderer.c:222
 #, fuzzy
 msgid "The xpad"
-msgstr "Die horizontale AuffÃ¼llung"
+msgstr "Die horizontale Auffüllung"
 
 #: ../gtk/gtkcellrenderer.c:231
 #, fuzzy
 msgid "ypad"
-msgstr "Y-AuffÃ¼llung"
+msgstr "Y-Auffüllung"
 
 #: ../gtk/gtkcellrenderer.c:232
 #, fuzzy
 msgid "The ypad"
-msgstr "Die vertikale AuffÃ¼llung"
+msgstr "Die vertikale Auffüllung"
 
 #: ../gtk/gtkcellrenderer.c:241
 #, fuzzy
@@ -1269,12 +1269,12 @@ msgstr "Die feste Breite"
 #: ../gtk/gtkcellrenderer.c:251
 #, fuzzy
 msgid "height"
-msgstr "HÃ¶he"
+msgstr "Höhe"
 
 #: ../gtk/gtkcellrenderer.c:252
 #, fuzzy
 msgid "The fixed height"
-msgstr "Die feste HÃ¶he"
+msgstr "Die feste Höhe"
 
 #: ../gtk/gtkcellrenderer.c:261
 #, fuzzy
@@ -1339,42 +1339,42 @@ msgstr "Soll dieses Tag die Hintergrundfarbe der Zelle beeinflussen?"
 #: ../gtk/gtkcellrendereraccel.c:114
 #, fuzzy
 msgid "Accelerator key"
-msgstr "TastaturkÃ¼rzel"
+msgstr "Tastaturkürzel"
 
 #: ../gtk/gtkcellrendereraccel.c:115
 #, fuzzy
 msgid "The keyval of the accelerator"
-msgstr "Das Zeichen des KÃ¼rzels"
+msgstr "Das Zeichen des Kürzels"
 
 #: ../gtk/gtkcellrendereraccel.c:131
 #, fuzzy
 msgid "Accelerator modifiers"
-msgstr "KÃ¼rzel-Modifikator"
+msgstr "Kürzel-Modifikator"
 
 #: ../gtk/gtkcellrendereraccel.c:132
 #, fuzzy
 msgid "The modifier mask of the accelerator"
-msgstr "Die Modifikator-Maske des KÃ¼rzels"
+msgstr "Die Modifikator-Maske des Kürzels"
 
 #: ../gtk/gtkcellrendereraccel.c:149
 #, fuzzy
 msgid "Accelerator keycode"
-msgstr "KÃ¼rzel-Zeichencode"
+msgstr "Kürzel-Zeichencode"
 
 #: ../gtk/gtkcellrendereraccel.c:150
 #, fuzzy
 msgid "The hardware keycode of the accelerator"
-msgstr "Der Hardware-Zeichencode des KÃ¼rzels"
+msgstr "Der Hardware-Zeichencode des Kürzels"
 
 #: ../gtk/gtkcellrendereraccel.c:169
 #, fuzzy
 msgid "Accelerator Mode"
-msgstr "KÃ¼rzel-Modus"
+msgstr "Kürzel-Modus"
 
 #: ../gtk/gtkcellrendereraccel.c:170
 #, fuzzy
 msgid "The type of accelerators"
-msgstr "Der Typ des KÃ¼rzels"
+msgstr "Der Typ des Kürzels"
 
 #: ../gtk/gtkcellrenderercombo.c:107
 #, fuzzy
@@ -1384,7 +1384,7 @@ msgstr "Modell"
 #: ../gtk/gtkcellrenderercombo.c:108
 #, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "Das Modell fÃ¼r das Auswahlfeld, das die mÃ¶glichen Werte enthÃ¤lt"
+msgstr "Das Modell für das Auswahlfeld, das die möglichen Werte enthält"
 
 #: ../gtk/gtkcellrenderercombo.c:130
 #: ../gtk/gtkcomboboxentry.c:106
@@ -1406,7 +1406,7 @@ msgstr "Hat Eintrag"
 #: ../gtk/gtkcellrenderercombo.c:149
 #, fuzzy
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "DÃ¼rfen andere Zeichenkette als die ausgewÃ¤hlten eingegeben werden?"
+msgstr "Dürfen andere Zeichenkette als die ausgewählten eingegeben werden?"
 
 #: ../gtk/gtkcellrendererpixbuf.c:111
 #, fuzzy
@@ -1426,7 +1426,7 @@ msgstr "Pixbuf-Ausklapper offen"
 #: ../gtk/gtkcellrendererpixbuf.c:120
 #, fuzzy
 msgid "Pixbuf for open expander"
-msgstr "Der Pixbuf fÃ¼r den offenen Ausklapper"
+msgstr "Der Pixbuf für den offenen Ausklapper"
 
 #: ../gtk/gtkcellrendererpixbuf.c:127
 #, fuzzy
@@ -1436,7 +1436,7 @@ msgstr "Pixbuf-Ausklapper geschlossen"
 #: ../gtk/gtkcellrendererpixbuf.c:128
 #, fuzzy
 msgid "Pixbuf for closed expander"
-msgstr "Der Pixbuf fÃ¼r den geschlossenen Ausklapper"
+msgstr "Der Pixbuf für den geschlossenen Ausklapper"
 
 #: ../gtk/gtkcellrendererpixbuf.c:135
 #: ../gtk/gtkimage.c:263
@@ -1456,12 +1456,12 @@ msgstr "Die Reportoire-Kennung des darzustellenden Repertoire-Symbols"
 #: ../gtk/gtkstatusicon.c:270
 #, fuzzy
 msgid "Size"
-msgstr "GrÃ¶ÃŸe"
+msgstr "Größe"
 
 #: ../gtk/gtkcellrendererpixbuf.c:144
 #, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "Der GtkIconSize-Wert, der die GrÃ¶ÃŸe des dargestellten Symbols festlegt"
+msgstr "Der GtkIconSize-Wert, der die Größe des dargestellten Symbols festlegt"
 
 #: ../gtk/gtkcellrendererpixbuf.c:153
 #, fuzzy
@@ -1471,7 +1471,7 @@ msgstr "Detailtreue"
 #: ../gtk/gtkcellrendererpixbuf.c:154
 #, fuzzy
 msgid "Render detail to pass to the theme engine"
-msgstr "Die an die Themen-Engine Ã¼bergebende Detailtreue der Darstellung"
+msgstr "Die an die Themen-Engine übergebende Detailtreue der Darstellung"
 
 #: ../gtk/gtkcellrendererpixbuf.c:187
 #, fuzzy
@@ -1481,7 +1481,7 @@ msgstr "Folgestatus"
 #: ../gtk/gtkcellrendererpixbuf.c:188
 #, fuzzy
 msgid "Whether the rendered pixbuf should be colorized according to the state"
-msgstr "Legt fest, ob der gerenderte Pixbuf je nach Status eingefÃ¤rbt werden soll"
+msgstr "Legt fest, ob der gerenderte Pixbuf je nach Status eingefärbt werden soll"
 
 #: ../gtk/gtkcellrendererpixbuf.c:205
 #: ../gtk/gtkimage.c:338
@@ -1520,7 +1520,7 @@ msgstr "Puls"
 #: ../gtk/gtkcellrendererprogress.c:171
 #, fuzzy
 msgid "Set this to positive values to indicate that some progress is made, but you don't know how much."
-msgstr "Ein positiver Wert bedeutet, dass ein Fortschritt gemacht wurde, dessen GrÃ¶ÃŸe unbekannt ist."
+msgstr "Ein positiver Wert bedeutet, dass ein Fortschritt gemacht wurde, dessen Größe unbekannt ist."
 
 #: ../gtk/gtkcellrendererprogress.c:187
 #: ../gtk/gtkprogress.c:118
@@ -1569,12 +1569,12 @@ msgstr "Die Ausrichtung und Wachstumsrichtung des Fortschrittsbalkens"
 #: ../gtk/gtkspinbutton.c:208
 #, fuzzy
 msgid "Adjustment"
-msgstr "StellgrÃ¶ÃŸe"
+msgstr "Stellgröße"
 
 #: ../gtk/gtkcellrendererspin.c:94
 #, fuzzy
 msgid "The adjustment that holds the value of the spinbutton."
-msgstr "Die StellgrÃ¶ÃŸe, die den Wert des Spinnbuttons enthÃ¤lt"
+msgstr "Die Stellgröße, die den Wert des Spinnbuttons enthält"
 
 #: ../gtk/gtkcellrendererspin.c:109
 #, fuzzy
@@ -1585,7 +1585,7 @@ msgstr "Steigrate"
 #: ../gtk/gtkspinbutton.c:217
 #, fuzzy
 msgid "The acceleration rate when you hold down a button"
-msgstr "Die Beschleunigungsrate beim GedrÃ¼ckthalten eines Knopfes"
+msgstr "Die Beschleunigungsrate beim Gedrückthalten eines Knopfes"
 
 #: ../gtk/gtkcellrendererspin.c:123
 #: ../gtk/gtkscale.c:218
@@ -1614,7 +1614,7 @@ msgstr "Aktiv"
 #: ../gtk/gtkcellrendererspinner.c:125
 #, fuzzy
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Soll der Beschriftungstext im gewÃ¤hlten Schriftstil dargestellt werden?"
+msgstr "Soll der Beschriftungstext im gewählten Schriftstil dargestellt werden?"
 
 #: ../gtk/gtkcellrendererspinner.c:145
 #, fuzzy
@@ -1624,7 +1624,7 @@ msgstr "Der Name des zu verwendenden Druckers"
 #: ../gtk/gtkcellrendererspinner.c:159
 #, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "Der GtkIconSize-Wert, der die GrÃ¶ÃŸe des dargestellten Symbols festlegt"
+msgstr "Der GtkIconSize-Wert, der die Größe des dargestellten Symbols festlegt"
 
 #: ../gtk/gtkcellrenderertext.c:196
 #, fuzzy
@@ -1724,7 +1724,7 @@ msgstr "Bewarkbar"
 #: ../gtk/gtktextview.c:577
 #, fuzzy
 msgid "Whether the text can be modified by the user"
-msgstr "Soll der Text durch den Benutzer Ã¤nderbar sein?"
+msgstr "Soll der Text durch den Benutzer änderbar sein?"
 
 #: ../gtk/gtkcellrenderertext.c:269
 #: ../gtk/gtkcellrenderertext.c:277
@@ -1790,19 +1790,19 @@ msgstr "Schriftdehnung"
 #: ../gtk/gtktexttag.c:329
 #, fuzzy
 msgid "Font size"
-msgstr "SchriftgrÃ¶ÃŸe"
+msgstr "Schriftgröße"
 
 #: ../gtk/gtkcellrenderertext.c:341
 #: ../gtk/gtktexttag.c:349
 #, fuzzy
 msgid "Font points"
-msgstr "PunktgrÃ¶ÃŸe"
+msgstr "Punktgröße"
 
 #: ../gtk/gtkcellrenderertext.c:342
 #: ../gtk/gtktexttag.c:350
 #, fuzzy
 msgid "Font size in points"
-msgstr "Die SchriftgrÃ¶ÃŸe in Punkt"
+msgstr "Die Schriftgröße in Punkt"
 
 #: ../gtk/gtkcellrenderertext.c:351
 #: ../gtk/gtktexttag.c:339
@@ -1823,7 +1823,7 @@ msgstr "Hochstellen"
 #: ../gtk/gtkcellrenderertext.c:362
 #, fuzzy
 msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr "Hochstellen des Texts Ã¼ber der Grundlinie (Tiefstellen, wenn der Wert negativ ist)"
+msgstr "Hochstellen des Texts über der Grundlinie (Tiefstellen, wenn der Wert negativ ist)"
 
 #: ../gtk/gtkcellrenderertext.c:373
 #: ../gtk/gtktexttag.c:458
@@ -1845,7 +1845,7 @@ msgstr "Unnerstrieken"
 #: ../gtk/gtktexttag.c:467
 #, fuzzy
 msgid "Style of underline for this text"
-msgstr "Stil der Unterstreichung fÃ¼r diesen Text"
+msgstr "Stil der Unterstreichung für diesen Text"
 
 #: ../gtk/gtkcellrenderertext.c:390
 #: ../gtk/gtktexttag.c:378
@@ -1855,7 +1855,7 @@ msgstr "Sprak"
 #: ../gtk/gtkcellrenderertext.c:391
 #, fuzzy
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
-msgstr "Die ISO-Kennung der Sprache, in der dieser Text angezeigt wird. Pango kann dies bei der Textdarstellung als Wink verwenden. Falls Sie diesen Parameter nicht verstehen, benÃ¶tigen Sie ihn wahrscheinlich nicht."
+msgstr "Die ISO-Kennung der Sprache, in der dieser Text angezeigt wird. Pango kann dies bei der Textdarstellung als Wink verwenden. Falls Sie diesen Parameter nicht verstehen, benötigen Sie ihn wahrscheinlich nicht."
 
 #: ../gtk/gtkcellrenderertext.c:411
 #: ../gtk/gtklabel.c:638
@@ -1878,7 +1878,7 @@ msgstr "Brede in Teken"
 #: ../gtk/gtklabel.c:659
 #, fuzzy
 msgid "The desired width of the label, in characters"
-msgstr "Die gewÃ¼nschte Breite der Beschriftung, in Zeichen"
+msgstr "Die gewünschte Breite der Beschriftung, in Zeichen"
 
 #: ../gtk/gtkcellrenderertext.c:450
 #: ../gtk/gtktexttag.c:475
@@ -1888,7 +1888,7 @@ msgstr "Umbrekmodus"
 #: ../gtk/gtkcellrenderertext.c:451
 #, fuzzy
 msgid "How to break the string into multiple lines, if the cell renderer does not have enough room to display the entire string"
-msgstr "Legt fest, wie die Zeichenkette auf mehrere Zeilen verteilt wird, falls der Zellen-Renderer nicht genÃ¼gend Platz hat, um die gesamte Zeichenkette in einer Zeile anzuzeigen"
+msgstr "Legt fest, wie die Zeichenkette auf mehrere Zeilen verteilt wird, falls der Zellen-Renderer nicht genügend Platz hat, um die gesamte Zeichenkette in einer Zeile anzuzeigen"
 
 #: ../gtk/gtkcellrenderertext.c:470
 #: ../gtk/gtkcombobox.c:685
@@ -2001,13 +2001,13 @@ msgstr "Soll dieses Tag die Schriftdehnung beeinflussen?"
 #: ../gtk/gtktexttag.c:608
 #, fuzzy
 msgid "Font size set"
-msgstr "SchriftgrÃ¶ÃŸe einstellen"
+msgstr "Schriftgröße einstellen"
 
 #: ../gtk/gtkcellrenderertext.c:535
 #: ../gtk/gtktexttag.c:609
 #, fuzzy
 msgid "Whether this tag affects the font size"
-msgstr "Soll dieses Tag die SchriftgrÃ¶ÃŸe beeinflussen?"
+msgstr "Soll dieses Tag die Schriftgröße beeinflussen?"
 
 #: ../gtk/gtkcellrenderertext.c:538
 #: ../gtk/gtktexttag.c:612
@@ -2019,7 +2019,7 @@ msgstr "Schriftskalierung einstellen"
 #: ../gtk/gtktexttag.c:613
 #, fuzzy
 msgid "Whether this tag scales the font size by a factor"
-msgstr "Soll dieses Tag die SchriftgrÃ¶ÃŸe um einen Faktor skalieren?"
+msgstr "Soll dieses Tag die Schriftgröße um einen Faktor skalieren?"
 
 #: ../gtk/gtkcellrenderertext.c:542
 #: ../gtk/gtktexttag.c:632
@@ -2129,14 +2129,14 @@ msgstr "Den Umschaltknopf als Radioknopf darstellen"
 #: ../gtk/gtkcellrenderertoggle.c:158
 #, fuzzy
 msgid "Indicator size"
-msgstr "IndikatorgrÃ¶ÃŸe"
+msgstr "Indikatorgröße"
 
 #: ../gtk/gtkcellrenderertoggle.c:159
 #: ../gtk/gtkcheckbutton.c:70
 #: ../gtk/gtkcheckmenuitem.c:122
 #, fuzzy
 msgid "Size of check or radio indicator"
-msgstr "Die GrÃ¶ÃŸe des Ankreuz- oder Radioindikators"
+msgstr "Die Größe des Ankreuz- oder Radioindikators"
 
 #: ../gtk/gtkcellview.c:182
 #, fuzzy
@@ -2146,14 +2146,14 @@ msgstr "Cell-View-Modell"
 #: ../gtk/gtkcellview.c:183
 #, fuzzy
 msgid "The model for cell view"
-msgstr "Das Modell fÃ¼r die Cell-View"
+msgstr "Das Modell für die Cell-View"
 
 #: ../gtk/gtkcheckbutton.c:69
 #: ../gtk/gtkcheckmenuitem.c:121
 #: ../gtk/gtkoptionmenu.c:168
 #, fuzzy
 msgid "Indicator Size"
-msgstr "IndikatorgrÃ¶ÃŸe"
+msgstr "Indikatorgröße"
 
 #: ../gtk/gtkcheckbutton.c:77
 #: ../gtk/gtkexpander.c:245
@@ -2165,12 +2165,12 @@ msgstr "Indikatorabstand"
 #: ../gtk/gtkcheckbutton.c:78
 #, fuzzy
 msgid "Spacing around check or radio indicator"
-msgstr "Die AuffÃ¼llung um den Ankreuz- oder Radioindikator"
+msgstr "Die Auffüllung um den Ankreuz- oder Radioindikator"
 
 #: ../gtk/gtkcheckmenuitem.c:99
 #, fuzzy
 msgid "Whether the menu item is checked"
-msgstr "Soll der MenÃ¼eintrag angekreuzt sein?"
+msgstr "Soll der Menüeintrag angekreuzt sein?"
 
 #: ../gtk/gtkcheckmenuitem.c:106
 #: ../gtk/gtktogglebutton.c:123
@@ -2186,12 +2186,12 @@ msgstr "Soll der Zustand Â»inkonsistentÂ« angezeigt werden?"
 #: ../gtk/gtkcheckmenuitem.c:114
 #, fuzzy
 msgid "Draw as radio menu item"
-msgstr "Als Radio-MenÃ¼eintrag zeichnen"
+msgstr "Als Radio-Menüeintrag zeichnen"
 
 #: ../gtk/gtkcheckmenuitem.c:115
 #, fuzzy
 msgid "Whether the menu item looks like a radio menu item"
-msgstr "Soll der MenÃ¼eintrag wie ein Radio-MenÃ¼eintrag aussehen?"
+msgstr "Soll der Menüeintrag wie ein Radio-Menüeintrag aussehen?"
 
 #: ../gtk/gtkcolorbutton.c:171
 msgid "Use alpha"
@@ -2234,7 +2234,7 @@ msgstr "Aktuelles Alpha"
 #: ../gtk/gtkcolorbutton.c:217
 #, fuzzy
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Die gewÃ¤hlte Deckkraft (0 ist vÃ¶llig transparent, 65535 vÃ¶llig undurchsichtig)"
+msgstr "Die gewählte Deckkraft (0 ist völlig transparent, 65535 völlig undurchsichtig)"
 
 #: ../gtk/gtkcolorsel.c:279
 #, fuzzy
@@ -2244,7 +2244,7 @@ msgstr "Hat Deckkraftregler"
 #: ../gtk/gtkcolorsel.c:280
 #, fuzzy
 msgid "Whether the color selector should allow setting opacity"
-msgstr "Soll der FarbwÃ¤hler eine Regelung der Deckkraft zulassen?"
+msgstr "Soll der Farbwähler eine Regelung der Deckkraft zulassen?"
 
 #: ../gtk/gtkcolorsel.c:286
 #, fuzzy
@@ -2263,7 +2263,7 @@ msgstr "De aktuelle Klöör"
 #: ../gtk/gtkcolorsel.c:301
 #, fuzzy
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Die aktuelle Deckkraft (0 ist vÃ¶llig transparent, 65535 vÃ¶llig undurchsichtig)"
+msgstr "Die aktuelle Deckkraft (0 ist völlig transparent, 65535 völlig undurchsichtig)"
 
 #: ../gtk/gtkcolorsel.c:315
 msgid "Custom palette"
@@ -2272,7 +2272,7 @@ msgstr "Eegen Paledde"
 #: ../gtk/gtkcolorsel.c:316
 #, fuzzy
 msgid "Palette to use in the color selector"
-msgstr "Im FarbwÃ¤hler zu verwendende Palette"
+msgstr "Im Farbwähler zu verwendende Palette"
 
 #: ../gtk/gtkcolorseldialog.c:102
 msgid "Color Selection"
@@ -2316,7 +2316,7 @@ msgstr "Peilknöppe aktiveren"
 #: ../gtk/gtkcombo.c:146
 #, fuzzy
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Sollen die Pfeiltasten durch die Eintragsliste fÃ¼hren?"
+msgstr "Sollen die Pfeiltasten durch die Eintragsliste führen?"
 
 #: ../gtk/gtkcombo.c:152
 msgid "Always enable arrows"
@@ -2325,17 +2325,17 @@ msgstr "Peile jümmers aktiveren"
 #: ../gtk/gtkcombo.c:153
 #, fuzzy
 msgid "Obsolete property, ignored"
-msgstr "ÃœberflÃ¼ssige Eigenschaft, ignoriert"
+msgstr "Überflüssige Eigenschaft, ignoriert"
 
 #: ../gtk/gtkcombo.c:159
 #, fuzzy
 msgid "Case sensitive"
-msgstr "GroÃŸ-/Kleinschreibung berÃ¼cksichtigen"
+msgstr "Groß-/Kleinschreibung berücksichtigen"
 
 #: ../gtk/gtkcombo.c:160
 #, fuzzy
 msgid "Whether list item matching is case sensitive"
-msgstr "Soll die Erkennung von ListeneintrÃ¤gen unter BerÃ¼cksichtigung der GroÃŸ-/Kleinschreibung erfolgen?"
+msgstr "Soll die Erkennung von Listeneinträgen unter Berücksichtigung der Groß-/Kleinschreibung erfolgen?"
 
 #: ../gtk/gtkcombo.c:167
 msgid "Allow empty"
@@ -2353,7 +2353,7 @@ msgstr "Wert in List"
 #: ../gtk/gtkcombo.c:176
 #, fuzzy
 msgid "Whether entered values must already be present in the list"
-msgstr "MÃ¼ssen eingetragene Werte bereits in der Liste vorhanden sein?"
+msgstr "Müssen eingetragene Werte bereits in der Liste vorhanden sein?"
 
 #: ../gtk/gtkcombobox.c:668
 #, fuzzy
@@ -2363,7 +2363,7 @@ msgstr "Modell des Auswahlfeldes"
 #: ../gtk/gtkcombobox.c:669
 #, fuzzy
 msgid "The model for the combo box"
-msgstr "Das Modell fÃ¼r das Auswahlfeld"
+msgstr "Das Modell für das Auswahlfeld"
 
 #: ../gtk/gtkcombobox.c:686
 #, fuzzy
@@ -2374,23 +2374,23 @@ msgstr "Umbruchbreite zum Anordnen der Objekte in einem Gitter"
 #: ../gtk/gtkcombobox.c:708
 #, fuzzy
 msgid "Row span column"
-msgstr "Spalte zur ZeilenÃ¼berbrÃ¼ckung"
+msgstr "Spalte zur Zeilenüberbrückung"
 
 #: ../gtk/gtkcombobox.c:709
 #, fuzzy
 msgid "TreeModel column containing the row span values"
-msgstr "TreeModel-Spalte, die die ZeilenÃ¼berbrÃ¼ckungswerte enthÃ¤lt"
+msgstr "TreeModel-Spalte, die die Zeilenüberbrückungswerte enthält"
 
 # CHECK
 #: ../gtk/gtkcombobox.c:730
 #, fuzzy
 msgid "Column span column"
-msgstr "Spalte zur SpaltenÃ¼berbrÃ¼ckung"
+msgstr "Spalte zur Spaltenüberbrückung"
 
 #: ../gtk/gtkcombobox.c:731
 #, fuzzy
 msgid "TreeModel column containing the column span values"
-msgstr "TreeModel-Spalte, die die SpaltenÃ¼berbrÃ¼ckungswerte enthÃ¤lt"
+msgstr "TreeModel-Spalte, die die Spaltenüberbrückungswerte enthält"
 
 #: ../gtk/gtkcombobox.c:752
 #, fuzzy
@@ -2406,12 +2406,12 @@ msgstr "Das momentan aktive Objekt"
 #: ../gtk/gtkuimanager.c:226
 #, fuzzy
 msgid "Add tearoffs to menus"
-msgstr "AbreiÃŸ-EintrÃ¤ge zu MenÃ¼s hinzufÃ¼gen"
+msgstr "Abreiß-Einträge zu Menüs hinzufügen"
 
 #: ../gtk/gtkcombobox.c:773
 #, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "Sollen Herabklapper AbreiÃŸ-EintrÃ¤ge haben?"
+msgstr "Sollen Herabklapper Abreiß-Einträge haben?"
 
 #: ../gtk/gtkcombobox.c:788
 #: ../gtk/gtkentry.c:687
@@ -2455,7 +2455,7 @@ msgstr "Knopf-Empfindlichkeit"
 #: ../gtk/gtkcombobox.c:848
 #, fuzzy
 msgid "Whether the dropdown button is sensitive when the model is empty"
-msgstr "Soll das AusklappmenÃ¼ aktivierbar sein, wenn das Modell leer ist?"
+msgstr "Soll das Ausklappmenü aktivierbar sein, wenn das Modell leer ist?"
 
 #: ../gtk/gtkcombobox.c:855
 msgid "Appears as list"
@@ -2464,7 +2464,7 @@ msgstr "As List opwiesen"
 #: ../gtk/gtkcombobox.c:856
 #, fuzzy
 msgid "Whether dropdowns should look like lists rather than menus"
-msgstr "Sollen Herabklapper wie Listen statt wie MenÃ¼s aussehen?"
+msgstr "Sollen Herabklapper wie Listen statt wie Menüs aussehen?"
 
 #: ../gtk/gtkcombobox.c:872
 msgid "Arrow Size"
@@ -2473,7 +2473,7 @@ msgstr "Peilgröte"
 #: ../gtk/gtkcombobox.c:873
 #, fuzzy
 msgid "The minimum size of the arrow in the combo box"
-msgstr "Die Minimale GrÃ¶ÃŸe des Pfeils im Auswahlfeld"
+msgstr "Die Minimale Größe des Pfeils im Auswahlfeld"
 
 #: ../gtk/gtkcombobox.c:888
 #: ../gtk/gtkentry.c:787
@@ -2494,12 +2494,12 @@ msgstr "Die Art des Schattens, der um das Auswahlfeld gezeichnet wird"
 #: ../gtk/gtkcontainer.c:238
 #, fuzzy
 msgid "Resize mode"
-msgstr "GrÃ¶ÃŸenÃ¤nderungsmodus"
+msgstr "Größenänderungsmodus"
 
 #: ../gtk/gtkcontainer.c:239
 #, fuzzy
 msgid "Specify how resize events are handled"
-msgstr "Die Art und Weise, auf die mit GrÃ¶ÃŸenÃ¤nderungsereignissen umgegangen werden soll"
+msgstr "Die Art und Weise, auf die mit Größenänderungsereignissen umgegangen werden soll"
 
 #: ../gtk/gtkcontainer.c:246
 #, fuzzy
@@ -2518,7 +2518,7 @@ msgstr "Kinn"
 #: ../gtk/gtkcontainer.c:256
 #, fuzzy
 msgid "Can be used to add a new child to the container"
-msgstr "Kann verwendet werden, um ein neues Kind zum Container hinzuzufÃ¼gen"
+msgstr "Kann verwendet werden, um ein neues Kind zum Container hinzuzufügen"
 
 #: ../gtk/gtkcurve.c:126
 #, fuzzy
@@ -2528,7 +2528,7 @@ msgstr "Kurventyp"
 #: ../gtk/gtkcurve.c:127
 #, fuzzy
 msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr "Ist diese Kurve e-linear, spline-interpoliert oder unregelmÃ¤ÃŸig?"
+msgstr "Ist diese Kurve e-linear, spline-interpoliert oder unregelmäßig?"
 
 #: ../gtk/gtkcurve.c:134
 msgid "Minimum X"
@@ -2537,7 +2537,7 @@ msgstr "Minimales X"
 #: ../gtk/gtkcurve.c:135
 #, fuzzy
 msgid "Minimum possible value for X"
-msgstr "Der minimale fÃ¼r X zugelassene Wert"
+msgstr "Der minimale für X zugelassene Wert"
 
 #: ../gtk/gtkcurve.c:143
 msgid "Maximum X"
@@ -2546,7 +2546,7 @@ msgstr "Maximales X"
 #: ../gtk/gtkcurve.c:144
 #, fuzzy
 msgid "Maximum possible X value"
-msgstr "Der maximale fÃ¼r X zugelassene Wert"
+msgstr "Der maximale für X zugelassene Wert"
 
 #: ../gtk/gtkcurve.c:152
 msgid "Minimum Y"
@@ -2555,7 +2555,7 @@ msgstr "Minimales Y"
 #: ../gtk/gtkcurve.c:153
 #, fuzzy
 msgid "Minimum possible value for Y"
-msgstr "Der minimale fÃ¼r Y zugelassene Wert"
+msgstr "Der minimale für Y zugelassene Wert"
 
 #: ../gtk/gtkcurve.c:161
 msgid "Maximum Y"
@@ -2564,7 +2564,7 @@ msgstr "Maximales Y"
 #: ../gtk/gtkcurve.c:162
 #, fuzzy
 msgid "Maximum possible value for Y"
-msgstr "Der maximale fÃ¼r Y zugelassene Wert"
+msgstr "Der maximale für Y zugelassene Wert"
 
 #: ../gtk/gtkdialog.c:145
 msgid "Has separator"
@@ -2573,7 +2573,7 @@ msgstr "Het Deelbalken"
 #: ../gtk/gtkdialog.c:146
 #, fuzzy
 msgid "The dialog has a separator bar above its buttons"
-msgstr "Der Dialog hat einen Trennbalken Ã¼ber seinen KnÃ¶pfen"
+msgstr "Der Dialog hat einen Trennbalken über seinen Knöpfen"
 
 #: ../gtk/gtkdialog.c:191
 #: ../gtk/gtkinfobar.c:439
@@ -2589,7 +2589,7 @@ msgstr "Die Breite des Rands um den Hauptbereich des Dialoges"
 #: ../gtk/gtkinfobar.c:456
 #, fuzzy
 msgid "Content area spacing"
-msgstr "AuffÃ¼llung um InhaltsflÃ¤che"
+msgstr "Auffüllung um Inhaltsfläche"
 
 #: ../gtk/gtkdialog.c:210
 #, fuzzy
@@ -2605,7 +2605,7 @@ msgstr "Knoppavstand"
 #: ../gtk/gtkinfobar.c:473
 #, fuzzy
 msgid "Spacing between buttons"
-msgstr "Abstand zwischen KnÃ¶pfen"
+msgstr "Abstand zwischen Knöpfen"
 
 #: ../gtk/gtkdialog.c:226
 #: ../gtk/gtkinfobar.c:488
@@ -2624,7 +2624,7 @@ msgstr "Textpuffer"
 #: ../gtk/gtkentry.c:635
 #, fuzzy
 msgid "Text buffer object which actually stores entry text"
-msgstr "Das Textpufferobjekt, das tatsÃ¤chlich den eingetragenen Text speichert"
+msgstr "Das Textpufferobjekt, das tatsächlich den eingetragenen Text speichert"
 
 #: ../gtk/gtkentry.c:642
 #: ../gtk/gtklabel.c:601
@@ -2635,7 +2635,7 @@ msgstr "Wieserpositschoon"
 #: ../gtk/gtklabel.c:602
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
-msgstr "Die momentane Position des EinfÃ¼gezeigers, in Zeichen"
+msgstr "Die momentane Position des Einfügezeigers, in Zeichen"
 
 #: ../gtk/gtkentry.c:652
 #: ../gtk/gtklabel.c:611
@@ -2647,12 +2647,12 @@ msgstr "Markierungsgrenze"
 #: ../gtk/gtklabel.c:612
 #, fuzzy
 msgid "The position of the opposite end of the selection from the cursor in chars"
-msgstr "Der Abstand des gegenÃ¼berliegenden Endes der Markierung vom Zeiger in Zeichen"
+msgstr "Der Abstand des gegenüberliegenden Endes der Markierung vom Zeiger in Zeichen"
 
 #: ../gtk/gtkentry.c:663
 #, fuzzy
 msgid "Whether the entry contents can be edited"
-msgstr "Sollen die Feldinhalte bearbeitet werden kÃ¶nnen?"
+msgstr "Sollen die Feldinhalte bearbeitet werden können?"
 
 #: ../gtk/gtkentry.c:670
 #: ../gtk/gtkentrybuffer.c:383
@@ -2663,7 +2663,7 @@ msgstr "Maximale Länge"
 #: ../gtk/gtkentrybuffer.c:384
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Die Maximale Anzahl der Zeichen fÃ¼r diesen Eintrag. Null, wenn unbegrenzt"
+msgstr "Die Maximale Anzahl der Zeichen für diesen Eintrag. Null, wenn unbegrenzt"
 
 #: ../gtk/gtkentry.c:679
 msgid "Visibility"
@@ -2677,12 +2677,12 @@ msgstr "Falls FALSCH, das Â»unsichtbare ZeichenÂ« statt des eigentlichen Texts a
 #: ../gtk/gtkentry.c:688
 #, fuzzy
 msgid "FALSE removes outside bevel from entry"
-msgstr "FALSCH entfernt die Ã¤uÃŸere Fase des Eintrags"
+msgstr "FALSCH entfernt die äußere Fase des Eintrags"
 
 #: ../gtk/gtkentry.c:696
 #, fuzzy
 msgid "Border between text and frame. Overrides the inner-border style property"
-msgstr "Rand zwischen Text und Rahmen. Ãœberschreibt die Eigenschaft Â»inner-borderÂ«."
+msgstr "Rand zwischen Text und Rahmen. Überschreibt die Eigenschaft Â»inner-borderÂ«."
 
 #: ../gtk/gtkentry.c:703
 #: ../gtk/gtkentry.c:1269
@@ -2702,7 +2702,7 @@ msgstr "Vorgave aktiveren"
 #: ../gtk/gtkentry.c:712
 #, fuzzy
 msgid "Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"
-msgstr "Soll das Vorgabe-Widget (z.B. der Vorgabeknopf in einem Dialogfenster) aktiviert werden, wenn die Eingabetaste gedrÃ¼ckt wird?"
+msgstr "Soll das Vorgabe-Widget (z.B. der Vorgabeknopf in einem Dialogfenster) aktiviert werden, wenn die Eingabetaste gedrückt wird?"
 
 #: ../gtk/gtkentry.c:718
 msgid "Width in chars"
@@ -2711,7 +2711,7 @@ msgstr "Brede in Teken"
 #: ../gtk/gtkentry.c:719
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
-msgstr "Die Anzahl der Zeichen, fÃ¼r die in diesem Feld Platz gelassen werden soll"
+msgstr "Die Anzahl der Zeichen, für die in diesem Feld Platz gelassen werden soll"
 
 #: ../gtk/gtkentry.c:728
 msgid "Scroll offset"
@@ -2744,7 +2744,7 @@ msgstr "Mehrreegige avbreken"
 #: ../gtk/gtkentry.c:772
 #, fuzzy
 msgid "Whether to truncate multiline pastes to one line."
-msgstr "Sollen mehrzeilige eingefÃ¼gte Texte nach der ersten Zeile abgebrochen werden?"
+msgstr "Sollen mehrzeilige eingefügte Texte nach der ersten Zeile abgebrochen werden?"
 
 #: ../gtk/gtkentry.c:788
 #, fuzzy
@@ -2759,7 +2759,7 @@ msgstr "Överschrievensmodus"
 #: ../gtk/gtkentry.c:804
 #, fuzzy
 msgid "Whether new text overwrites existing text"
-msgstr "Soll eingegebener Text vorhandenen Inhalt Ã¼berschreiben?"
+msgstr "Soll eingegebener Text vorhandenen Inhalt überschreiben?"
 
 #: ../gtk/gtkentry.c:818
 #: ../gtk/gtkentrybuffer.c:368
@@ -2769,7 +2769,7 @@ msgstr "Textlänge"
 #: ../gtk/gtkentry.c:819
 #, fuzzy
 msgid "Length of the text currently in the entry"
-msgstr "LÃ¤nge des Inhalts des Feldes"
+msgstr "Länge des Inhalts des Feldes"
 
 #: ../gtk/gtkentry.c:834
 #, fuzzy
@@ -2808,181 +2808,181 @@ msgstr "Fortschrittspuls-Schrittweite"
 #: ../gtk/gtkentry.c:887
 #, fuzzy
 msgid "The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()"
-msgstr "Der Anteil an der gesamten Breite, um die sich der hÃ¼pfende Balken bei jedem Aufruf von gtk_entry_progress_pulse() bewegt"
+msgstr "Der Anteil an der gesamten Breite, um die sich der hüpfende Balken bei jedem Aufruf von gtk_entry_progress_pulse() bewegt"
 
 #: ../gtk/gtkentry.c:903
 #, fuzzy
 msgid "Primary pixbuf"
-msgstr "PrimÃ¤rer Pixbuf"
+msgstr "Primärer Pixbuf"
 
 #: ../gtk/gtkentry.c:904
 #, fuzzy
 msgid "Primary pixbuf for the entry"
-msgstr "Der primÃ¤re Pixbuf des Textfeldes"
+msgstr "Der primäre Pixbuf des Textfeldes"
 
 #: ../gtk/gtkentry.c:918
 #, fuzzy
 msgid "Secondary pixbuf"
-msgstr "SekundÃ¤rer Pixbux"
+msgstr "Sekundärer Pixbux"
 
 #: ../gtk/gtkentry.c:919
 #, fuzzy
 msgid "Secondary pixbuf for the entry"
-msgstr "SekundÃ¤rer Pixbux des Textfeldes"
+msgstr "Sekundärer Pixbux des Textfeldes"
 
 #: ../gtk/gtkentry.c:933
 #, fuzzy
 msgid "Primary stock ID"
-msgstr "PrimÃ¤re Repertoire-ID"
+msgstr "Primäre Repertoire-ID"
 
 #: ../gtk/gtkentry.c:934
 #, fuzzy
 msgid "Stock ID for primary icon"
-msgstr "Repertoire-ID des primÃ¤ren Symbols"
+msgstr "Repertoire-ID des primären Symbols"
 
 #: ../gtk/gtkentry.c:948
 #, fuzzy
 msgid "Secondary stock ID"
-msgstr "SekundÃ¤re Repertoire-ID"
+msgstr "Sekundäre Repertoire-ID"
 
 #: ../gtk/gtkentry.c:949
 #, fuzzy
 msgid "Stock ID for secondary icon"
-msgstr "Repertoire-ID des sekundÃ¤ren Symbols"
+msgstr "Repertoire-ID des sekundären Symbols"
 
 #: ../gtk/gtkentry.c:963
 #, fuzzy
 msgid "Primary icon name"
-msgstr "PrimÃ¤rer der Symbolnamen"
+msgstr "Primärer der Symbolnamen"
 
 #: ../gtk/gtkentry.c:964
 #, fuzzy
 msgid "Icon name for primary icon"
-msgstr "Symbolname des primÃ¤ren Symbols"
+msgstr "Symbolname des primären Symbols"
 
 #: ../gtk/gtkentry.c:978
 #, fuzzy
 msgid "Secondary icon name"
-msgstr "SekundÃ¤rer Symbolname"
+msgstr "Sekundärer Symbolname"
 
 #: ../gtk/gtkentry.c:979
 #, fuzzy
 msgid "Icon name for secondary icon"
-msgstr "Symbolname des sekundÃ¤ren Symbols"
+msgstr "Symbolname des sekundären Symbols"
 
 #: ../gtk/gtkentry.c:993
 #, fuzzy
 msgid "Primary GIcon"
-msgstr "PrimÃ¤res GIcon"
+msgstr "Primäres GIcon"
 
 #: ../gtk/gtkentry.c:994
 #, fuzzy
 msgid "GIcon for primary icon"
-msgstr "GIcon des primÃ¤ren Symbols"
+msgstr "GIcon des primären Symbols"
 
 #: ../gtk/gtkentry.c:1008
 #, fuzzy
 msgid "Secondary GIcon"
-msgstr "SekundÃ¤res GIcon"
+msgstr "Sekundäres GIcon"
 
 #: ../gtk/gtkentry.c:1009
 #, fuzzy
 msgid "GIcon for secondary icon"
-msgstr "GIcon fÃ¼r sekundÃ¤res Symbol"
+msgstr "GIcon für sekundäres Symbol"
 
 #: ../gtk/gtkentry.c:1023
 #, fuzzy
 msgid "Primary storage type"
-msgstr "PrimÃ¤re Speicherform"
+msgstr "Primäre Speicherform"
 
 #: ../gtk/gtkentry.c:1024
 #, fuzzy
 msgid "The representation being used for primary icon"
-msgstr "Die fÃ¼r das primÃ¤re Symbol verwendete Speicherform"
+msgstr "Die für das primäre Symbol verwendete Speicherform"
 
 #: ../gtk/gtkentry.c:1039
 #, fuzzy
 msgid "Secondary storage type"
-msgstr "SekundÃ¤re Speicherform"
+msgstr "Sekundäre Speicherform"
 
 #: ../gtk/gtkentry.c:1040
 #, fuzzy
 msgid "The representation being used for secondary icon"
-msgstr "Die fÃ¼r das sekundÃ¤re Symbol verwendete Speicherform"
+msgstr "Die für das sekundäre Symbol verwendete Speicherform"
 
 #: ../gtk/gtkentry.c:1061
 #, fuzzy
 msgid "Primary icon activatable"
-msgstr "PrimÃ¤res Symbol aktivierbar"
+msgstr "Primäres Symbol aktivierbar"
 
 #: ../gtk/gtkentry.c:1062
 #, fuzzy
 msgid "Whether the primary icon is activatable"
-msgstr "Legt fest, ob das primÃ¤re Symbol aktivierbar ist"
+msgstr "Legt fest, ob das primäre Symbol aktivierbar ist"
 
 #: ../gtk/gtkentry.c:1082
 #, fuzzy
 msgid "Secondary icon activatable"
-msgstr "SekundÃ¤res Symbl aktivierbar"
+msgstr "Sekundäres Symbl aktivierbar"
 
 #: ../gtk/gtkentry.c:1083
 #, fuzzy
 msgid "Whether the secondary icon is activatable"
-msgstr "Legt fest, ob das sekundÃ¤re Symbol aktivierbar ist"
+msgstr "Legt fest, ob das sekundäre Symbol aktivierbar ist"
 
 # CHECK - leicht reagierend? sensibel?
 #: ../gtk/gtkentry.c:1105
 #, fuzzy
 msgid "Primary icon sensitive"
-msgstr "PrimÃ¤res Symbol sensibel darstellen"
+msgstr "Primäres Symbol sensibel darstellen"
 
 #: ../gtk/gtkentry.c:1106
 #, fuzzy
 msgid "Whether the primary icon is sensitive"
-msgstr "Legt fest, ob das primÃ¤re Symbol sensibel ist"
+msgstr "Legt fest, ob das primäre Symbol sensibel ist"
 
 #: ../gtk/gtkentry.c:1127
 #, fuzzy
 msgid "Secondary icon sensitive"
-msgstr "SekundÃ¤res Symbol sensibel darstellen"
+msgstr "Sekundäres Symbol sensibel darstellen"
 
 #: ../gtk/gtkentry.c:1128
 #, fuzzy
 msgid "Whether the secondary icon is sensitive"
-msgstr "Legt fest, ob das sekundÃ¤re Symbol sensibel ist"
+msgstr "Legt fest, ob das sekundäre Symbol sensibel ist"
 
 # CHECK - leicht reagierend? sensibel?
 #: ../gtk/gtkentry.c:1144
 #, fuzzy
 msgid "Primary icon tooltip text"
-msgstr "Minihilfentext fÃ¼r primÃ¤res Symbol"
+msgstr "Minihilfentext für primäres Symbol"
 
 #: ../gtk/gtkentry.c:1145
 #: ../gtk/gtkentry.c:1181
 #, fuzzy
 msgid "The contents of the tooltip on the primary icon"
-msgstr "Der Inhalt der Minihilfe des primÃ¤ren Symbols"
+msgstr "Der Inhalt der Minihilfe des primären Symbols"
 
 #: ../gtk/gtkentry.c:1161
 #, fuzzy
 msgid "Secondary icon tooltip text"
-msgstr "Minihilfentext fÃ¼r sekundÃ¤res Symbol"
+msgstr "Minihilfentext für sekundäres Symbol"
 
 #: ../gtk/gtkentry.c:1162
 #: ../gtk/gtkentry.c:1200
 #, fuzzy
 msgid "The contents of the tooltip on the secondary icon"
-msgstr "Der Inhalt der Minihilfe des sekundÃ¤ren Symbols"
+msgstr "Der Inhalt der Minihilfe des sekundären Symbols"
 
 #: ../gtk/gtkentry.c:1180
 #, fuzzy
 msgid "Primary icon tooltip markup"
-msgstr "Minihilfen-Markup fÃ¼r primÃ¤res Symbol"
+msgstr "Minihilfen-Markup für primäres Symbol"
 
 #: ../gtk/gtkentry.c:1199
 #, fuzzy
 msgid "Secondary icon tooltip markup"
-msgstr "Minihilfen-Markup fÃ¼r sekundÃ¤res Symbol"
+msgstr "Minihilfen-Markup für sekundäres Symbol"
 
 #: ../gtk/gtkentry.c:1219
 #: ../gtk/gtktextview.c:684
@@ -3004,7 +3004,7 @@ msgstr "Symbol-Hervorhebung"
 #: ../gtk/gtkentry.c:1235
 #, fuzzy
 msgid "Whether activatable icons should prelight when hovered"
-msgstr "Legt fest, ob aktivierbare Symbole beim BerÃ¼hren hervorgehoben werden sollen"
+msgstr "Legt fest, ob aktivierbare Symbole beim Berühren hervorgehoben werden sollen"
 
 #: ../gtk/gtkentry.c:1248
 #, fuzzy
@@ -3058,12 +3058,12 @@ msgstr "Pufferinholl"
 #: ../gtk/gtkentrybuffer.c:369
 #, fuzzy
 msgid "Length of the text currently in the buffer"
-msgstr "LÃ¤nge des aktuellen Textes im Puffer"
+msgstr "Länge des aktuellen Textes im Puffer"
 
 #: ../gtk/gtkentrycompletion.c:279
 #, fuzzy
 msgid "Completion Model"
-msgstr "VervollstÃ¤ndigungsmodell"
+msgstr "Vervollständigungsmodell"
 
 #: ../gtk/gtkentrycompletion.c:280
 #, fuzzy
@@ -3073,12 +3073,12 @@ msgstr "Das Modell, in dem nach Treffern gesucht werden soll"
 #: ../gtk/gtkentrycompletion.c:286
 #, fuzzy
 msgid "Minimum Key Length"
-msgstr "Minimale SchlÃ¼ssellÃ¤nge"
+msgstr "Minimale Schlüssellänge"
 
 #: ../gtk/gtkentrycompletion.c:287
 #, fuzzy
 msgid "Minimum length of the search key in order to look up matches"
-msgstr "Die minimale LÃ¤nge des SuchschlÃ¼ssels, damit nach Treffern gesucht wird"
+msgstr "Die minimale Länge des Suchschlüssels, damit nach Treffern gesucht wird"
 
 #: ../gtk/gtkentrycompletion.c:303
 #: ../gtk/gtkiconview.c:586
@@ -3086,32 +3086,32 @@ msgstr "Die minimale LÃ¤nge des SuchschlÃ¼ssels, damit nach Treffern gesucht wir
 msgid "Text column"
 msgstr "Textspalte"
 
-# CHECK - Spalte oder Modell, wer Â»enthÃ¤ltÂ«?
+# CHECK - Spalte oder Modell, wer Â»enthältÂ«?
 #: ../gtk/gtkentrycompletion.c:304
 #, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "Die Spalte des Modells, das die Zeichenketten enthÃ¤lt."
+msgstr "Die Spalte des Modells, das die Zeichenketten enthält."
 
 # CHECK
 #: ../gtk/gtkentrycompletion.c:323
 #, fuzzy
 msgid "Inline completion"
-msgstr "Auto-VervollstÃ¤ndigung"
+msgstr "Auto-Vervollständigung"
 
 #: ../gtk/gtkentrycompletion.c:324
 #, fuzzy
 msgid "Whether the common prefix should be inserted automatically"
-msgstr "Soll der Ã¼bliche PrÃ¤fix automatisch eingefÃ¼gt werden?"
+msgstr "Soll der übliche Präfix automatisch eingefügt werden?"
 
 #: ../gtk/gtkentrycompletion.c:338
 #, fuzzy
 msgid "Popup completion"
-msgstr "Popup-VervollstÃ¤ndigung"
+msgstr "Popup-Vervollständigung"
 
 #: ../gtk/gtkentrycompletion.c:339
 #, fuzzy
 msgid "Whether the completions should be shown in a popup window"
-msgstr "Sollen die VervollstÃ¤ndigungen in einem Popup-Fenster gezeigt werden?"
+msgstr "Sollen die Vervollständigungen in einem Popup-Fenster gezeigt werden?"
 
 #: ../gtk/gtkentrycompletion.c:354
 #, fuzzy
@@ -3121,7 +3121,7 @@ msgstr "Breite des Popups"
 #: ../gtk/gtkentrycompletion.c:355
 #, fuzzy
 msgid "If TRUE, the popup window will have the same size as the entry"
-msgstr "Falls WAHR, wird das Popup-Fenster die gleiche GrÃ¶ÃŸe haben wie der Eintrag"
+msgstr "Falls WAHR, wird das Popup-Fenster die gleiche Größe haben wie der Eintrag"
 
 #: ../gtk/gtkentrycompletion.c:373
 #, fuzzy
@@ -3131,7 +3131,7 @@ msgstr "Einfache Popup-Aktion"
 #: ../gtk/gtkentrycompletion.c:374
 #, fuzzy
 msgid "If TRUE, the popup window will appear for a single match."
-msgstr "Wenn WAHR, wird das Popup-Fenster fÃ¼r eine einfache Aktion erscheinen."
+msgstr "Wenn WAHR, wird das Popup-Fenster für eine einfache Aktion erscheinen."
 
 # CHECK
 #: ../gtk/gtkentrycompletion.c:388
@@ -3167,7 +3167,7 @@ msgstr "Utklavt"
 #: ../gtk/gtkexpander.c:188
 #, fuzzy
 msgid "Whether the expander has been opened to reveal the child widget"
-msgstr "Wurde der Ausklapper geÃ¶ffnet, um das Kind-Widget anzuzeigen?"
+msgstr "Wurde der Ausklapper geöffnet, um das Kind-Widget anzuzeigen?"
 
 #: ../gtk/gtkexpander.c:196
 #, fuzzy
@@ -3183,12 +3183,12 @@ msgstr "Markup bruken"
 #: ../gtk/gtklabel.c:521
 #, fuzzy
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr "Der Text der Beschriftung enthÃ¤lt XML-Markup. Siehe pango_parse_markup()"
+msgstr "Der Text der Beschriftung enthält XML-Markup. Siehe pango_parse_markup()"
 
 #: ../gtk/gtkexpander.c:220
 #, fuzzy
 msgid "Space to put between the label and the child"
-msgstr "Zwischen dem Kind und dessen Nachbarn einzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Zwischen dem Kind und dessen Nachbarn einzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkexpander.c:229
 #: ../gtk/gtkframe.c:147
@@ -3200,26 +3200,26 @@ msgstr "Beschriftens-Widget"
 #: ../gtk/gtkexpander.c:230
 #, fuzzy
 msgid "A widget to display in place of the usual expander label"
-msgstr "Ein Widget, das anstatt der Ã¼blichen Ausklapperbeschriftung angezeigt werden soll"
+msgstr "Ein Widget, das anstatt der üblichen Ausklapperbeschriftung angezeigt werden soll"
 
 #: ../gtk/gtkexpander.c:236
 #: ../gtk/gtktoolitemgroup.c:1568
 #: ../gtk/gtktreeview.c:777
 #, fuzzy
 msgid "Expander Size"
-msgstr "AusklappergrÃ¶ÃŸe"
+msgstr "Ausklappergröße"
 
 #: ../gtk/gtkexpander.c:237
 #: ../gtk/gtktoolitemgroup.c:1569
 #: ../gtk/gtktreeview.c:778
 #, fuzzy
 msgid "Size of the expander arrow"
-msgstr "GrÃ¶ÃŸe des Ausklapppfeils"
+msgstr "Größe des Ausklapppfeils"
 
 #: ../gtk/gtkexpander.c:246
 #, fuzzy
 msgid "Spacing around expander arrow"
-msgstr "AuffÃ¼llung um Ausklapppfeil"
+msgstr "Auffüllung um Ausklapppfeil"
 
 #: ../gtk/gtkfilechooser.c:758
 #, fuzzy
@@ -3229,7 +3229,7 @@ msgstr "Aktion"
 #: ../gtk/gtkfilechooser.c:759
 #, fuzzy
 msgid "The type of operation that the file selector is performing"
-msgstr "Der Typ der Aktion, die der DateiwÃ¤hler ausfÃ¼hrt"
+msgstr "Der Typ der Aktion, die der Dateiwähler ausführt"
 
 #: ../gtk/gtkfilechooser.c:765
 #, fuzzy
@@ -3250,7 +3250,7 @@ msgstr "Filter"
 #: ../gtk/gtkfilechooser.c:772
 #, fuzzy
 msgid "The current filter for selecting which files are displayed"
-msgstr "Der momentan zum AuswÃ¤hlen der anzuzeigenden Dateien zu verwendende Filter"
+msgstr "Der momentan zum Auswählen der anzuzeigenden Dateien zu verwendende Filter"
 
 #: ../gtk/gtkfilechooser.c:777
 #, fuzzy
@@ -3260,7 +3260,7 @@ msgstr "Nur lokal"
 #: ../gtk/gtkfilechooser.c:778
 #, fuzzy
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Sollen die auswÃ¤hlbaren Dateien auf lokale file:-URLs begrenzt werden?"
+msgstr "Sollen die auswählbaren Dateien auf lokale file:-URLs begrenzt werden?"
 
 #: ../gtk/gtkfilechooser.c:783
 #, fuzzy
@@ -3295,7 +3295,7 @@ msgstr "Soll eine Repertoire-Beschriftung mit dem Namen der Vorschau-Datei angez
 #: ../gtk/gtkfilechooser.c:801
 #, fuzzy
 msgid "Extra widget"
-msgstr "ZusÃ¤tzliches Widget"
+msgstr "Zusätzliches Widget"
 
 #: ../gtk/gtkfilechooser.c:802
 #, fuzzy
@@ -3313,7 +3313,7 @@ msgstr "Mehrfachauswahl"
 #: ../gtk/gtkfilesel.c:541
 #, fuzzy
 msgid "Whether to allow multiple files to be selected"
-msgstr "Sollen mehrere Dateien ausgewÃ¤hlt werden kÃ¶nnen?"
+msgstr "Sollen mehrere Dateien ausgewählt werden können?"
 
 #: ../gtk/gtkfilechooser.c:814
 #, fuzzy
@@ -3328,12 +3328,12 @@ msgstr "Sollen verborgene Dateien und Ordner angezeigt werden?"
 #: ../gtk/gtkfilechooser.c:830
 #, fuzzy
 msgid "Do overwrite confirmation"
-msgstr "Ãœberschreiben bestÃ¤tigen"
+msgstr "Überschreiben bestätigen"
 
 #: ../gtk/gtkfilechooser.c:831
 #, fuzzy
 msgid "Whether a file chooser in save mode will present an overwrite confirmation dialog if necessary."
-msgstr "Legt fest, ob der Dateiauswahldialog im Speichern-Modus vor dem Ãœberschreiben einer bestehenden Datei nachfragt."
+msgstr "Legt fest, ob der Dateiauswahldialog im Speichern-Modus vor dem Überschreiben einer bestehenden Datei nachfragt."
 
 #: ../gtk/gtkfilechooser.c:847
 #, fuzzy
@@ -3352,17 +3352,17 @@ msgstr "Dialog"
 #: ../gtk/gtkfilechooserbutton.c:377
 #, fuzzy
 msgid "The file chooser dialog to use."
-msgstr "Der DateiwÃ¤hler, der verwendet werden soll."
+msgstr "Der Dateiwähler, der verwendet werden soll."
 
 #: ../gtk/gtkfilechooserbutton.c:408
 #, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "Der Titel des DateiwÃ¤hlers."
+msgstr "Der Titel des Dateiwählers."
 
 #: ../gtk/gtkfilechooserbutton.c:422
 #, fuzzy
 msgid "The desired width of the button widget, in characters."
-msgstr "Die gewÃ¼nschte Breite des Knopfes in Zeichen"
+msgstr "Die gewünschte Breite des Knopfes in Zeichen"
 
 #: ../gtk/gtkfilesel.c:526
 #: ../gtk/gtkimage.c:254
@@ -3374,7 +3374,7 @@ msgstr "Dateinaam"
 #: ../gtk/gtkfilesel.c:527
 #, fuzzy
 msgid "The currently selected filename"
-msgstr "Der momentan gewÃ¤hlte Dateiname"
+msgstr "Der momentan gewählte Dateiname"
 
 #: ../gtk/gtkfilesel.c:533
 #, fuzzy
@@ -3384,7 +3384,7 @@ msgstr "Dateiaktionen anzeigen"
 #: ../gtk/gtkfilesel.c:534
 #, fuzzy
 msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr "Sollen KnÃ¶pfe zum Erstellen und Verwalten von Dateien angezeigt werden?"
+msgstr "Sollen Knöpfe zum Erstellen und Verwalten von Dateien angezeigt werden?"
 
 #: ../gtk/gtkfixed.c:90
 #: ../gtk/gtklayout.c:596
@@ -3421,7 +3421,7 @@ msgstr "Schriftnaam"
 #: ../gtk/gtkfontbutton.c:159
 #, fuzzy
 msgid "The name of the selected font"
-msgstr "Der Name der gewÃ¤hlten Schrift"
+msgstr "Der Name der gewählten Schrift"
 
 #: ../gtk/gtkfontbutton.c:160
 msgid "Sans 12"
@@ -3435,17 +3435,17 @@ msgstr "Schrift in Beschriftung verwenden"
 #: ../gtk/gtkfontbutton.c:176
 #, fuzzy
 msgid "Whether the label is drawn in the selected font"
-msgstr "Soll der Beschriftungstext in der gewÃ¤hlten Schrift dargestellt werden?"
+msgstr "Soll der Beschriftungstext in der gewählten Schrift dargestellt werden?"
 
 #: ../gtk/gtkfontbutton.c:191
 #, fuzzy
 msgid "Use size in label"
-msgstr "GrÃ¶ÃŸe in Beschriftung verwenden"
+msgstr "Größe in Beschriftung verwenden"
 
 #: ../gtk/gtkfontbutton.c:192
 #, fuzzy
 msgid "Whether the label is drawn with the selected font size"
-msgstr "Soll der Beschriftungstext in der gewÃ¤hlten SchriftgrÃ¶ÃŸe dargestellt werden?"
+msgstr "Soll der Beschriftungstext in der gewählten Schriftgröße dargestellt werden?"
 
 #: ../gtk/gtkfontbutton.c:208
 msgid "Show style"
@@ -3454,7 +3454,7 @@ msgstr "Stil opwiesen"
 #: ../gtk/gtkfontbutton.c:209
 #, fuzzy
 msgid "Whether the selected font style is shown in the label"
-msgstr "Soll der Beschriftungstext im gewÃ¤hlten Schriftstil dargestellt werden?"
+msgstr "Soll der Beschriftungstext im gewählten Schriftstil dargestellt werden?"
 
 #: ../gtk/gtkfontbutton.c:224
 msgid "Show size"
@@ -3463,7 +3463,7 @@ msgstr "Gröte opwiesen"
 #: ../gtk/gtkfontbutton.c:225
 #, fuzzy
 msgid "Whether selected font size is shown in the label"
-msgstr "Soll die gewÃ¤hlte SchriftgrÃ¶ÃŸe in der Beschriftung angezeigt werden?"
+msgstr "Soll die gewählte Schriftgröße in der Beschriftung angezeigt werden?"
 
 #: ../gtk/gtkfontsel.c:197
 #, fuzzy
@@ -3473,7 +3473,7 @@ msgstr "Die Zeichenkette, die diese Schrift bezeichnet"
 #: ../gtk/gtkfontsel.c:204
 #, fuzzy
 msgid "The GdkFont that is currently selected"
-msgstr "Die momentan gewÃ¤hlte GdkFont"
+msgstr "Die momentan gewählte GdkFont"
 
 #: ../gtk/gtkfontsel.c:210
 msgid "Preview text"
@@ -3482,7 +3482,7 @@ msgstr "Utblicktext"
 #: ../gtk/gtkfontsel.c:211
 #, fuzzy
 msgid "The text to display in order to demonstrate the selected font"
-msgstr "Der Text, der zur Demonstration der gewÃ¤hlten Schrift angezeigt werden soll"
+msgstr "Der Text, der zur Demonstration der gewählten Schrift angezeigt werden soll"
 
 #: ../gtk/gtkframe.c:106
 #, fuzzy
@@ -3526,7 +3526,7 @@ msgstr "Das Aussehen des Rahmenrandes"
 #: ../gtk/gtkframe.c:148
 #, fuzzy
 msgid "A widget to display in place of the usual frame label"
-msgstr "Ein Widget, das anstatt der Ã¼blichen Rahmenbeschriftung angezeigt werden soll"
+msgstr "Ein Widget, das anstatt der üblichen Rahmenbeschriftung angezeigt werden soll"
 
 #: ../gtk/gtkhandlebox.c:175
 #, fuzzy
@@ -3540,7 +3540,7 @@ msgstr "Grippositschoon"
 #: ../gtk/gtkhandlebox.c:184
 #, fuzzy
 msgid "Position of the handle relative to the child widget"
-msgstr "Position des Griffs bezÃ¼glich des Kind-Widgets"
+msgstr "Position des Griffs bezüglich des Kind-Widgets"
 
 #: ../gtk/gtkhandlebox.c:192
 #, fuzzy
@@ -3550,7 +3550,7 @@ msgstr "Einrastende Seite"
 #: ../gtk/gtkhandlebox.c:193
 #, fuzzy
 msgid "Side of the handlebox that's lined up with the docking point to dock the handlebox"
-msgstr "Die Seite der Griffbox, die in den Rastpunkt eingefÃ¤delt wird, um die Griffbox einzurasten"
+msgstr "Die Seite der Griffbox, die in den Rastpunkt eingefädelt wird, um die Griffbox einzurasten"
 
 #: ../gtk/gtkhandlebox.c:201
 #, fuzzy
@@ -3612,7 +3612,7 @@ msgstr "Icon View-Modell"
 #: ../gtk/gtkiconview.c:615
 #, fuzzy
 msgid "The model for the icon view"
-msgstr "Das Modell fÃ¼r die Icon View"
+msgstr "Das Modell für die Icon View"
 
 #: ../gtk/gtkiconview.c:631
 #, fuzzy
@@ -3627,17 +3627,17 @@ msgstr "Die Anzahl der anzuzeigenden Spalten"
 #: ../gtk/gtkiconview.c:649
 #, fuzzy
 msgid "Width for each item"
-msgstr "Die Breite fÃ¼r jeden Eintrag"
+msgstr "Die Breite für jeden Eintrag"
 
 #: ../gtk/gtkiconview.c:650
 #, fuzzy
 msgid "The width used for each item"
-msgstr "Die verwendete Breite fÃ¼r jeden Eintrag"
+msgstr "Die verwendete Breite für jeden Eintrag"
 
 #: ../gtk/gtkiconview.c:666
 #, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Der Platz der zwischen den Zellen eines Eintrags eingefÃ¼gt wird"
+msgstr "Der Platz der zwischen den Zellen eines Eintrags eingefügt wird"
 
 #: ../gtk/gtkiconview.c:681
 msgid "Row Spacing"
@@ -3646,7 +3646,7 @@ msgstr "Reegenavstand"
 #: ../gtk/gtkiconview.c:682
 #, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Zwischen den Gitterzeilen eingefÃ¼gter Platz"
+msgstr "Zwischen den Gitterzeilen eingefügter Platz"
 
 #: ../gtk/gtkiconview.c:697
 #, fuzzy
@@ -3656,7 +3656,7 @@ msgstr "Spaltenabstand"
 #: ../gtk/gtkiconview.c:698
 #, fuzzy
 msgid "Space which is inserted between grid columns"
-msgstr "Zwischen den Gitterspalten eingefÃ¼gter Platz"
+msgstr "Zwischen den Gitterspalten eingefügter Platz"
 
 #: ../gtk/gtkiconview.c:713
 msgid "Margin"
@@ -3665,7 +3665,7 @@ msgstr "Kanten"
 #: ../gtk/gtkiconview.c:714
 #, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Der Platz der an den RÃ¤ndern der Symbolansicht eingefÃ¼gt wird"
+msgstr "Der Platz der an den Rändern der Symbolansicht eingefügt wird"
 
 #: ../gtk/gtkiconview.c:730
 #, fuzzy
@@ -3691,22 +3691,22 @@ msgstr "Die Ansicht kann umsortiert werden"
 msgid "Tooltip Column"
 msgstr "Minihilfe-Spalte"
 
-# CHECK - Spalte oder Modell, wer Â»enthÃ¤ltÂ«?
+# CHECK - Spalte oder Modell, wer Â»enthältÂ«?
 #: ../gtk/gtkiconview.c:755
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the items"
-msgstr "Die Spalte des Modells, das die Minihilfentexte der Objekte enthÃ¤lt."
+msgstr "Die Spalte des Modells, das die Minihilfentexte der Objekte enthält."
 
-# Padding â†’ AuffÃ¼llung ist ein Begriff aus der Audioverarbeitung (mp3)
+# Padding â†’ Auffüllung ist ein Begriff aus der Audioverarbeitung (mp3)
 #: ../gtk/gtkiconview.c:772
 #, fuzzy
 msgid "Item Padding"
-msgstr "ObjektauffÃ¼llung"
+msgstr "Objektauffüllung"
 
 #: ../gtk/gtkiconview.c:773
 #, fuzzy
 msgid "Padding around icon view items"
-msgstr "AuffÃ¼llung um Objekte in der Symbolansicht"
+msgstr "Auffüllung um Objekte in der Symbolansicht"
 
 #: ../gtk/gtkiconview.c:782
 msgid "Selection Box Color"
@@ -3762,7 +3762,7 @@ msgstr "Mask"
 #: ../gtk/gtkimage.c:247
 #, fuzzy
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr "Das Maskenbitmap fÃ¼r GdkImage bzw. GdkPixmap"
+msgstr "Das Maskenbitmap für GdkImage bzw. GdkPixmap"
 
 #: ../gtk/gtkimage.c:255
 #: ../gtk/gtkstatusicon.c:222
@@ -3794,7 +3794,7 @@ msgstr "Symbolgröte"
 #: ../gtk/gtkimage.c:280
 #, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
-msgstr "Die fÃ¼r ein Repertoire-Symbol, Symbolsatz oder Symbolnamen zu verwendende GrÃ¶ÃŸe"
+msgstr "Die für ein Repertoire-Symbol, Symbolsatz oder Symbolnamen zu verwendende Größe"
 
 #: ../gtk/gtkimage.c:296
 msgid "Pixel size"
@@ -3803,7 +3803,7 @@ msgstr "Pixel-Gröte"
 #: ../gtk/gtkimage.c:297
 #, fuzzy
 msgid "Pixel size to use for named icon"
-msgstr "Die fÃ¼r einen Symbolnamen zu verwendende GrÃ¶ÃŸe"
+msgstr "Die für einen Symbolnamen zu verwendende Größe"
 
 #: ../gtk/gtkimage.c:305
 msgid "Animation"
@@ -3823,38 +3823,38 @@ msgstr "Spiekerform"
 #: ../gtk/gtkstatusicon.c:262
 #, fuzzy
 msgid "The representation being used for image data"
-msgstr "Die fÃ¼r die Bilddaten verwendete Darstellung"
+msgstr "Die für die Bilddaten verwendete Darstellung"
 
 #: ../gtk/gtkimagemenuitem.c:136
 #, fuzzy
 msgid "Child widget to appear next to the menu text"
-msgstr "Das Kind-Widget, das neben dem MenÃ¼text erscheint"
+msgstr "Das Kind-Widget, das neben dem Menütext erscheint"
 
 #: ../gtk/gtkimagemenuitem.c:151
 #, fuzzy
 msgid "Whether to use the label text to create a stock menu item"
-msgstr "Legt fest, ob der Beschriftungstext verwendet werden soll, um einen Stock-MenÃ¼eintrag zu erstellen"
+msgstr "Legt fest, ob der Beschriftungstext verwendet werden soll, um einen Stock-Menüeintrag zu erstellen"
 
 #: ../gtk/gtkimagemenuitem.c:184
 #: ../gtk/gtkmenu.c:516
 #, fuzzy
 msgid "Accel Group"
-msgstr "TastenkÃ¼rzelgruppe"
+msgstr "Tastenkürzelgruppe"
 
 #: ../gtk/gtkimagemenuitem.c:185
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr "Die TastenkÃ¼rzelgruppe, die fÃ¼r Stock-TastenkÃ¼rzel verwendet wird"
+msgstr "Die Tastenkürzelgruppe, die für Stock-Tastenkürzel verwendet wird"
 
 #: ../gtk/gtkimagemenuitem.c:190
 #, fuzzy
 msgid "Show menu images"
-msgstr "MenÃ¼bilder anzeigen"
+msgstr "Menübilder anzeigen"
 
 #: ../gtk/gtkimagemenuitem.c:191
 #, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "Sollen in MenÃ¼s Bilder angezeigt werden?"
+msgstr "Sollen in Menüs Bilder angezeigt werden?"
 
 #: ../gtk/gtkinfobar.c:384
 #: ../gtk/gtkmessagedialog.c:128
@@ -3916,7 +3916,7 @@ msgstr "Muster"
 #: ../gtk/gtklabel.c:545
 #, fuzzy
 msgid "A string with _ characters in positions correspond to characters in the text to underline"
-msgstr "Ein Â»_Â«-Zeichen in einer Zeichenkette fÃ¼hrt dazu, dass das nachfolgende Zeichen im Text unterstrichen wird"
+msgstr "Ein Â»_Â«-Zeichen in einer Zeichenkette führt dazu, dass das nachfolgende Zeichen im Text unterstrichen wird"
 
 #: ../gtk/gtklabel.c:552
 #, fuzzy
@@ -3953,7 +3953,7 @@ msgstr "Knöppboordkörtel"
 #: ../gtk/gtklabel.c:584
 #, fuzzy
 msgid "The mnemonic accelerator key for this label"
-msgstr "Das TastaturkÃ¼rzel fÃ¼r diese Beschriftung"
+msgstr "Das Tastaturkürzel für diese Beschriftung"
 
 #: ../gtk/gtklabel.c:592
 msgid "Mnemonic widget"
@@ -3962,7 +3962,7 @@ msgstr "Körtel-Widget"
 #: ../gtk/gtklabel.c:593
 #, fuzzy
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "Das Widget, das aktiviert werden soll, wenn das TastaturkÃ¼rzel der Beschriftung gedrÃ¼ckt wird"
+msgstr "Das Widget, das aktiviert werden soll, wenn das Tastaturkürzel der Beschriftung gedrückt wird"
 
 #: ../gtk/gtklabel.c:639
 #, fuzzy
@@ -3995,7 +3995,7 @@ msgstr "Maximale Brede in Teken"
 #: ../gtk/gtklabel.c:719
 #, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "Die gewÃ¼nschte maximale Breite der Beschriftung, in Zeichen"
+msgstr "Die gewünschte maximale Breite der Beschriftung, in Zeichen"
 
 #: ../gtk/gtklabel.c:737
 #, fuzzy
@@ -4010,31 +4010,31 @@ msgstr "Sollen besuchte Verweise mitverfolgt werden?"
 #: ../gtk/gtklabel.c:859
 #, fuzzy
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr "Soll der Inhalt einer auswÃ¤hlbaren Beschriftung markiert werden, wenn sie fokussiert wird?"
+msgstr "Soll der Inhalt einer auswählbaren Beschriftung markiert werden, wenn sie fokussiert wird?"
 
 #: ../gtk/gtklayout.c:616
 #: ../gtk/gtkviewport.c:106
 #, fuzzy
 msgid "Horizontal adjustment"
-msgstr "Horizontale StellgrÃ¶ÃŸe"
+msgstr "Horizontale Stellgröße"
 
 #: ../gtk/gtklayout.c:617
 #: ../gtk/gtkscrolledwindow.c:219
 #, fuzzy
 msgid "The GtkAdjustment for the horizontal position"
-msgstr "Das GtkAdjustment fÃ¼r die horizontale Position"
+msgstr "Das GtkAdjustment für die horizontale Position"
 
 #: ../gtk/gtklayout.c:624
 #: ../gtk/gtkviewport.c:114
 #, fuzzy
 msgid "Vertical adjustment"
-msgstr "Vertikale StellgrÃ¶ÃŸe"
+msgstr "Vertikale Stellgröße"
 
 #: ../gtk/gtklayout.c:625
 #: ../gtk/gtkscrolledwindow.c:226
 #, fuzzy
 msgid "The GtkAdjustment for the vertical position"
-msgstr "Das GtkAdjustment fÃ¼r die vertikale Position"
+msgstr "Das GtkAdjustment für die vertikale Position"
 
 #: ../gtk/gtklayout.c:633
 #, fuzzy
@@ -4044,7 +4044,7 @@ msgstr "Die Breite des Layouts"
 #: ../gtk/gtklayout.c:642
 #, fuzzy
 msgid "The height of the layout"
-msgstr "Die HÃ¶he des Layouts"
+msgstr "Die Höhe des Layouts"
 
 #: ../gtk/gtklinkbutton.c:145
 msgid "URI"
@@ -4067,23 +4067,23 @@ msgstr "Wurde dieser Link besucht?"
 #: ../gtk/gtkmenu.c:502
 #, fuzzy
 msgid "The currently selected menu item"
-msgstr "Der momentan gewÃ¤hlte MenÃ¼eintrag"
+msgstr "Der momentan gewählte Menüeintrag"
 
 #: ../gtk/gtkmenu.c:517
 #, fuzzy
 msgid "The accel group holding accelerators for the menu"
-msgstr "Die TastenkÃ¼rzelgruppe fÃ¼r dieses MenÃ¼"
+msgstr "Die Tastenkürzelgruppe für dieses Menü"
 
 #: ../gtk/gtkmenu.c:531
 #: ../gtk/gtkmenuitem.c:290
 #, fuzzy
 msgid "Accel Path"
-msgstr "TastenkÃ¼rzelpfad"
+msgstr "Tastenkürzelpfad"
 
 #: ../gtk/gtkmenu.c:532
 #, fuzzy
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr "Ein TastenkÃ¼rzelpfad um einfach TastenkÃ¼rzelpfade fÃ¼r Kinderelemente zu erstellen"
+msgstr "Ein Tastenkürzelpfad um einfach Tastenkürzelpfade für Kinderelemente zu erstellen"
 
 #: ../gtk/gtkmenu.c:548
 #, fuzzy
@@ -4093,22 +4093,22 @@ msgstr "Widget anheften"
 #: ../gtk/gtkmenu.c:549
 #, fuzzy
 msgid "The widget the menu is attached to"
-msgstr "Das Widget, dem das MenÃ¼ angeheftet ist"
+msgstr "Das Widget, dem das Menü angeheftet ist"
 
 #: ../gtk/gtkmenu.c:557
 #, fuzzy
 msgid "A title that may be displayed by the window manager when this menu is torn-off"
-msgstr "Ein Titel, der evtl. vom Fenstermanager angezeigt wird, wenn dieses MenÃ¼ abgerissen wurde"
+msgstr "Ein Titel, der evtl. vom Fenstermanager angezeigt wird, wenn dieses Menü abgerissen wurde"
 
 #: ../gtk/gtkmenu.c:571
 #, fuzzy
 msgid "Tearoff State"
-msgstr "AbreiÃŸstatus"
+msgstr "Abreißstatus"
 
 #: ../gtk/gtkmenu.c:572
 #, fuzzy
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "Ein Boolscher Wert der anzeigt, ob das MenÃ¼ abgerissen wurde"
+msgstr "Ein Boolscher Wert der anzeigt, ob das Menü abgerissen wurde"
 
 #: ../gtk/gtkmenu.c:586
 #, fuzzy
@@ -4118,38 +4118,38 @@ msgstr "Bildschirm"
 #: ../gtk/gtkmenu.c:587
 #, fuzzy
 msgid "The monitor the menu will be popped up on"
-msgstr "Der Bildschirm, auf dem das MenÃ¼ aufklappen wird"
+msgstr "Der Bildschirm, auf dem das Menü aufklappen wird"
 
 #: ../gtk/gtkmenu.c:593
 #, fuzzy
 msgid "Vertical Padding"
-msgstr "Vertikale AuffÃ¼llung"
+msgstr "Vertikale Auffüllung"
 
 #: ../gtk/gtkmenu.c:594
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
-msgstr "Die oben und unten am MenÃ¼ hinzuzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die oben und unten am Menü hinzuzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkmenu.c:616
 #, fuzzy
 msgid "Reserve Toggle Size"
-msgstr "Platz fÃ¼r Umschalter reservieren"
+msgstr "Platz für Umschalter reservieren"
 
-# Â»boolescher WertÂ« wird tatsÃ¤chlich so geschrieben, auch wenn es komisch aussieht
+# Â»boolescher WertÂ« wird tatsächlich so geschrieben, auch wenn es komisch aussieht
 #: ../gtk/gtkmenu.c:617
 #, fuzzy
 msgid "A boolean that indicates whether the menu reserves space for toggles and icons"
-msgstr "Ein boolescher Wert, der anzeigt, ob das MenÃ¼ Abstand fÃ¼r Umschalter und Symbole reserviert"
+msgstr "Ein boolescher Wert, der anzeigt, ob das Menü Abstand für Umschalter und Symbole reserviert"
 
 #: ../gtk/gtkmenu.c:623
 #, fuzzy
 msgid "Horizontal Padding"
-msgstr "Horizontale AuffÃ¼llung"
+msgstr "Horizontale Auffüllung"
 
 #: ../gtk/gtkmenu.c:624
 #, fuzzy
 msgid "Extra space at the left and right edges of the menu"
-msgstr "Die an den linken und rechten Ecken des MenÃ¼s hinzuzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die an den linken und rechten Ecken des Menüs hinzuzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkmenu.c:632
 #, fuzzy
@@ -4159,7 +4159,7 @@ msgstr "Vertikaler Versatz"
 #: ../gtk/gtkmenu.c:633
 #, fuzzy
 msgid "When the menu is a submenu, position it this number of pixels offset vertically"
-msgstr "Wenn das MenÃ¼ ein UntermenÃ¼ ist, wird es vertikal um so viele Pixel versetzt"
+msgstr "Wenn das Menü ein Untermenü ist, wird es vertikal um so viele Pixel versetzt"
 
 #: ../gtk/gtkmenu.c:641
 #, fuzzy
@@ -4169,7 +4169,7 @@ msgstr "Horizontaler Versatz"
 #: ../gtk/gtkmenu.c:642
 #, fuzzy
 msgid "When the menu is a submenu, position it this number of pixels offset horizontally"
-msgstr "Wenn das MenÃ¼ ein UntermenÃ¼ ist, wird es horizontal um so viele Pixel versetzt"
+msgstr "Wenn das Menü ein Untermenü ist, wird es horizontal um so viele Pixel versetzt"
 
 #: ../gtk/gtkmenu.c:650
 #, fuzzy
@@ -4199,73 +4199,73 @@ msgstr "Links anhangen"
 #: ../gtk/gtktable.c:174
 #, fuzzy
 msgid "The column number to attach the left side of the child to"
-msgstr "Die Spaltennummer, an die die linke Seite des Kinds angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die linke Seite des Kinds angehängt werden soll"
 
 #: ../gtk/gtkmenu.c:681
 #, fuzzy
 msgid "Right Attach"
-msgstr "Rechts anhÃ¤ngen"
+msgstr "Rechts anhängen"
 
 #: ../gtk/gtkmenu.c:682
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
-msgstr "Die Spaltennummer, an die die rechte Seite des Kinds angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die rechte Seite des Kinds angehängt werden soll"
 
 #: ../gtk/gtkmenu.c:689
 #, fuzzy
 msgid "Top Attach"
-msgstr "Oben anhÃ¤ngen"
+msgstr "Oben anhängen"
 
 #: ../gtk/gtkmenu.c:690
 #, fuzzy
 msgid "The row number to attach the top of the child to"
-msgstr "Die Spaltennummer, an die die obere Seite des Kinds angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die obere Seite des Kinds angehängt werden soll"
 
 #: ../gtk/gtkmenu.c:697
 #, fuzzy
 msgid "Bottom Attach"
-msgstr "Unten anhÃ¤ngen"
+msgstr "Unten anhängen"
 
 #: ../gtk/gtkmenu.c:698
 #: ../gtk/gtktable.c:195
 #, fuzzy
 msgid "The row number to attach the bottom of the child to"
-msgstr "Die Spaltennummer, an die die untere Seite des Kinds angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die untere Seite des Kinds angehängt werden soll"
 
 #: ../gtk/gtkmenu.c:712
 #, fuzzy
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
-msgstr "Beliebige Konstant, mit der die GrÃ¶ÃŸe des Rollpfleils nach unten skaliert wird"
+msgstr "Beliebige Konstant, mit der die Größe des Rollpfleils nach unten skaliert wird"
 
 #: ../gtk/gtkmenu.c:799
 #, fuzzy
 msgid "Can change accelerators"
-msgstr "KÃ¼rzel kÃ¶nnen geÃ¤ndert werden"
+msgstr "Kürzel können geändert werden"
 
 #: ../gtk/gtkmenu.c:800
 #, fuzzy
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr "Sollen MenÃ¼kÃ¼rzel geÃ¤ndert werden kÃ¶nnen, indem man eine Taste drÃ¼ckt, wenn der MenÃ¼eintrag markiert ist?"
+msgstr "Sollen Menükürzel geändert werden können, indem man eine Taste drückt, wenn der Menüeintrag markiert ist?"
 
 #: ../gtk/gtkmenu.c:805
 #, fuzzy
 msgid "Delay before submenus appear"
-msgstr "VerzÃ¶gerung bis zum Erscheinen der UntermenÃ¼s"
+msgstr "Verzögerung bis zum Erscheinen der Untermenüs"
 
 #: ../gtk/gtkmenu.c:806
 #, fuzzy
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr "Die Zeit, die sich der Mauszeiger Ã¼ber einem MenÃ¼eintrag befinden muss, bevor das UntermenÃ¼ erscheint"
+msgstr "Die Zeit, die sich der Mauszeiger über einem Menüeintrag befinden muss, bevor das Untermenü erscheint"
 
 #: ../gtk/gtkmenu.c:813
 #, fuzzy
 msgid "Delay before hiding a submenu"
-msgstr "VerzÃ¶gerung bis zum Verbergen eines UntermenÃ¼s"
+msgstr "Verzögerung bis zum Verbergen eines Untermenüs"
 
 #: ../gtk/gtkmenu.c:814
 #, fuzzy
 msgid "The time before hiding a submenu when the pointer is moving towards the submenu"
-msgstr "Die Zeit, bis ein UntermenÃ¼ verborgen wird, wenn sich der Mauszeiger in dessen Richtung bewegt"
+msgstr "Die Zeit, bis ein Untermenü verborgen wird, wenn sich der Mauszeiger in dessen Richtung bewegt"
 
 #: ../gtk/gtkmenubar.c:168
 msgid "Pack direction"
@@ -4284,43 +4284,43 @@ msgstr "Kindergruppenausrichtung"
 #: ../gtk/gtkmenubar.c:186
 #, fuzzy
 msgid "The child pack direction of the menubar"
-msgstr "Die Ausrichtung einer Gruppe von Widget-Kindern in der MenÃ¼leiste"
+msgstr "Die Ausrichtung einer Gruppe von Widget-Kindern in der Menüleiste"
 
 #: ../gtk/gtkmenubar.c:195
 #, fuzzy
 msgid "Style of bevel around the menubar"
-msgstr "Der Stil der Fase um die MenÃ¼leiste"
+msgstr "Der Stil der Fase um die Menüleiste"
 
 #: ../gtk/gtkmenubar.c:202
 #: ../gtk/gtktoolbar.c:590
 #, fuzzy
 msgid "Internal padding"
-msgstr "Interne AuffÃ¼llung"
+msgstr "Interne Auffüllung"
 
 #: ../gtk/gtkmenubar.c:203
 #, fuzzy
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Der Rand zwischen dem Schatten der MenÃ¼leiste und den MenÃ¼eintrÃ¤gen"
+msgstr "Der Rand zwischen dem Schatten der Menüleiste und den Menüeinträgen"
 
 #: ../gtk/gtkmenubar.c:210
 #, fuzzy
 msgid "Delay before drop down menus appear"
-msgstr "Die VerzÃ¶gerung bis zum Erscheinen der Herabklapp-MenÃ¼s"
+msgstr "Die Verzögerung bis zum Erscheinen der Herabklapp-Menüs"
 
 #: ../gtk/gtkmenubar.c:211
 #, fuzzy
 msgid "Delay before the submenus of a menu bar appear"
-msgstr "Die VerzÃ¶gerung bis zum Erscheinen der UntermenÃ¼s in einer MenÃ¼leiste"
+msgstr "Die Verzögerung bis zum Erscheinen der Untermenüs in einer Menüleiste"
 
 #: ../gtk/gtkmenuitem.c:257
 #, fuzzy
 msgid "Right Justified"
-msgstr "RechtsbÃ¼ndig"
+msgstr "Rechtsbündig"
 
 #: ../gtk/gtkmenuitem.c:258
 #, fuzzy
 msgid "Sets whether the menu item appears justified at the right side of a menu bar"
-msgstr "Sollen die MenÃ¼eintrÃ¤ge rechtsbÃ¼ndig im MenÃ¼ ausgerichtet werden?"
+msgstr "Sollen die Menüeinträge rechtsbündig im Menü ausgerichtet werden?"
 
 #: ../gtk/gtkmenuitem.c:272
 msgid "Submenu"
@@ -4329,12 +4329,12 @@ msgstr "Unnermenü"
 #: ../gtk/gtkmenuitem.c:273
 #, fuzzy
 msgid "The submenu attached to the menu item, or NULL if it has none"
-msgstr "Das zum MenÃ¼ gehÃ¶rende UntermenÃ¼, oder NULL falls keins vorhanden"
+msgstr "Das zum Menü gehörende Untermenü, oder NULL falls keins vorhanden"
 
 #: ../gtk/gtkmenuitem.c:291
 #, fuzzy
 msgid "Sets the accelerator path of the menu item"
-msgstr "Den TastenkÃ¼rzelpfad fÃ¼r den MenÃ¼eintrag setzen"
+msgstr "Den Tastenkürzelpfad für den Menüeintrag setzen"
 
 #: ../gtk/gtkmenuitem.c:306
 #, fuzzy
@@ -4344,7 +4344,7 @@ msgstr "Der Text der Kind-Beschriftung"
 #: ../gtk/gtkmenuitem.c:369
 #, fuzzy
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
-msgstr "Der vom Pfeil belegte Platz, relativ zur SchriftgrÃ¶ÃŸe des MenÃ¼s"
+msgstr "Der vom Pfeil belegte Platz, relativ zur Schriftgröße des Menüs"
 
 #: ../gtk/gtkmenuitem.c:382
 #, fuzzy
@@ -4354,17 +4354,17 @@ msgstr "Breite in Zeichen"
 #: ../gtk/gtkmenuitem.c:383
 #, fuzzy
 msgid "The minimum desired width of the menu item in characters"
-msgstr "Die minimale gewÃ¼nschte Breite des MenÃ¼eintrags, in Zeichen"
+msgstr "Die minimale gewünschte Breite des Menüeintrags, in Zeichen"
 
 #: ../gtk/gtkmenushell.c:375
 #, fuzzy
 msgid "Take Focus"
-msgstr "Fokus Ã¼bernehmen"
+msgstr "Fokus übernehmen"
 
 #: ../gtk/gtkmenushell.c:376
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
-msgstr "Ein Boolscher Wert der anzeigt, ob das MenÃ¼ den Tastaturfokus an sich nimmt"
+msgstr "Ein Boolscher Wert der anzeigt, ob das Menü den Tastaturfokus an sich nimmt"
 
 #: ../gtk/gtkmenutoolbutton.c:245
 #: ../gtk/gtkoptionmenu.c:161
@@ -4374,7 +4374,7 @@ msgstr "Menü"
 #: ../gtk/gtkmenutoolbutton.c:246
 #, fuzzy
 msgid "The dropdown menu"
-msgstr "Herabklapper-MenÃ¼"
+msgstr "Herabklapper-Menü"
 
 #: ../gtk/gtkmessagedialog.c:98
 #, fuzzy
@@ -4394,7 +4394,7 @@ msgstr "Trennbalken verwenden"
 #: ../gtk/gtkmessagedialog.c:115
 #, fuzzy
 msgid "Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Soll eine Trennlinie zwischen dem Text des Nachrichtendialog und den KnÃ¶pfen eingefÃ¼gt werden?"
+msgstr "Soll eine Trennlinie zwischen dem Text des Nachrichtendialog und den Knöpfen eingefügt werden?"
 
 #: ../gtk/gtkmessagedialog.c:136
 msgid "Message Buttons"
@@ -4403,12 +4403,12 @@ msgstr "Nahrichtenknöppe"
 #: ../gtk/gtkmessagedialog.c:137
 #, fuzzy
 msgid "The buttons shown in the message dialog"
-msgstr "Die im Nachrichtendialogfenster angezeigten KnÃ¶pfe"
+msgstr "Die im Nachrichtendialogfenster angezeigten Knöpfe"
 
 #: ../gtk/gtkmessagedialog.c:154
 #, fuzzy
 msgid "The primary text of the message dialog"
-msgstr "Der primÃ¤re Text des Nachrichtendialogfensters"
+msgstr "Der primäre Text des Nachrichtendialogfensters"
 
 #: ../gtk/gtkmessagedialog.c:169
 #, fuzzy
@@ -4418,27 +4418,27 @@ msgstr "Markup verwenden"
 #: ../gtk/gtkmessagedialog.c:170
 #, fuzzy
 msgid "The primary text of the title includes Pango markup."
-msgstr "Der primÃ¤re Text des Titel enthÃ¤lt Pango-Markup."
+msgstr "Der primäre Text des Titel enthält Pango-Markup."
 
 #: ../gtk/gtkmessagedialog.c:184
 #, fuzzy
 msgid "Secondary Text"
-msgstr "SekundÃ¤rer Text"
+msgstr "Sekundärer Text"
 
 #: ../gtk/gtkmessagedialog.c:185
 #, fuzzy
 msgid "The secondary text of the message dialog"
-msgstr "Die sekundÃ¤re Text des Nachrichtendialogfensters"
+msgstr "Die sekundäre Text des Nachrichtendialogfensters"
 
 #: ../gtk/gtkmessagedialog.c:200
 #, fuzzy
 msgid "Use Markup in secondary"
-msgstr "Markum im SekundÃ¤ren verwenden"
+msgstr "Markum im Sekundären verwenden"
 
 #: ../gtk/gtkmessagedialog.c:201
 #, fuzzy
 msgid "The secondary text includes Pango markup."
-msgstr "Der sekundÃ¤re Text enthÃ¤lt Pango-Markup."
+msgstr "Der sekundäre Text enthält Pango-Markup."
 
 #: ../gtk/gtkmessagedialog.c:216
 msgid "The image"
@@ -4460,7 +4460,7 @@ msgstr "X-Opfüllen"
 #: ../gtk/gtkmisc.c:94
 #, fuzzy
 msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr "Die links und rechts am Widget hinzuzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die links und rechts am Widget hinzuzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkmisc.c:103
 msgid "Y pad"
@@ -4469,7 +4469,7 @@ msgstr "Y-Opfüllen"
 #: ../gtk/gtkmisc.c:104
 #, fuzzy
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr "Die oben und unten am Widget hinzuzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die oben und unten am Widget hinzuzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtkmountoperation.c:160
 msgid "Parent"
@@ -4562,7 +4562,7 @@ msgstr "Rollbar"
 #: ../gtk/gtknotebook.c:644
 #, fuzzy
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr "Falls WAHR, werden Rollpfeile hinzugefÃ¼gt, falls nicht alle Reiter Platz finden"
+msgstr "Falls WAHR, werden Rollpfeile hinzugefügt, falls nicht alle Reiter Platz finden"
 
 #: ../gtk/gtknotebook.c:650
 msgid "Enable Popup"
@@ -4571,12 +4571,12 @@ msgstr "Popup aktiveren"
 #: ../gtk/gtknotebook.c:651
 #, fuzzy
 msgid "If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"
-msgstr "Falls WAHR, Ã¶ffnet ein Rechtsklick auf das Notizbuch ein MenÃ¼, mit dem man die Seiten ansteuern kann"
+msgstr "Falls WAHR, öffnet ein Rechtsklick auf das Notizbuch ein Menü, mit dem man die Seiten ansteuern kann"
 
 #: ../gtk/gtknotebook.c:658
 #, fuzzy
 msgid "Whether tabs should have homogeneous sizes"
-msgstr "Sollen alle Reiter gleich groÃŸ sein?"
+msgstr "Sollen alle Reiter gleich groß sein?"
 
 #: ../gtk/gtknotebook.c:664
 msgid "Group ID"
@@ -4597,7 +4597,7 @@ msgstr "Grupp"
 #: ../gtk/gtknotebook.c:682
 #, fuzzy
 msgid "Group for tabs drag and drop"
-msgstr "Gruppen fÃ¼r Reiter beim Drag&Drop"
+msgstr "Gruppen für Reiter beim Drag&Drop"
 
 #: ../gtk/gtknotebook.c:688
 msgid "Tab label"
@@ -4615,7 +4615,7 @@ msgstr "Menübeschriften"
 #: ../gtk/gtknotebook.c:696
 #, fuzzy
 msgid "The string displayed in the child's menu entry"
-msgstr "Die im MenÃ¼ des Kinds angezeigte Zeichenkette"
+msgstr "Die im Menü des Kinds angezeigte Zeichenkette"
 
 #: ../gtk/gtknotebook.c:709
 msgid "Tab expand"
@@ -4633,7 +4633,7 @@ msgstr "Registerkoorten füllen"
 #: ../gtk/gtknotebook.c:717
 #, fuzzy
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr "Soll der Reiter des Kinds den zugewiesenen Bereich ausfÃ¼llen?"
+msgstr "Soll der Reiter des Kinds den zugewiesenen Bereich ausfüllen?"
 
 #: ../gtk/gtknotebook.c:723
 #, fuzzy
@@ -4663,47 +4663,47 @@ msgstr "Legt fest, ob der Reiter abtrennbar ist"
 #: ../gtk/gtkscrollbar.c:81
 #, fuzzy
 msgid "Secondary backward stepper"
-msgstr "Zweiter Schrittschalter rÃ¼ckwÃ¤rts"
+msgstr "Zweiter Schrittschalter rückwärts"
 
 #: ../gtk/gtknotebook.c:754
 #, fuzzy
 msgid "Display a second backward arrow button on the opposite end of the tab area"
-msgstr "Einen zweiten RÃ¼ckwÃ¤rtspfeil am gegenÃ¼berliegenden Ende des Reiterbereichs anzeigen"
+msgstr "Einen zweiten Rückwärtspfeil am gegenüberliegenden Ende des Reiterbereichs anzeigen"
 
 #: ../gtk/gtknotebook.c:769
 #: ../gtk/gtkscrollbar.c:88
 #, fuzzy
 msgid "Secondary forward stepper"
-msgstr "Zweiter Schrittschalter vorwÃ¤rts"
+msgstr "Zweiter Schrittschalter vorwärts"
 
 #: ../gtk/gtknotebook.c:770
 #, fuzzy
 msgid "Display a second forward arrow button on the opposite end of the tab area"
-msgstr "Einen zweiten VorwÃ¤rtspfeil am gegenÃ¼berliegenden Ende des Reiterbereichs anzeigen"
+msgstr "Einen zweiten Vorwärtspfeil am gegenüberliegenden Ende des Reiterbereichs anzeigen"
 
 #: ../gtk/gtknotebook.c:784
 #: ../gtk/gtkscrollbar.c:67
 #, fuzzy
 msgid "Backward stepper"
-msgstr "Schrittschalter rÃ¼ckwÃ¤rts"
+msgstr "Schrittschalter rückwärts"
 
 #: ../gtk/gtknotebook.c:785
 #: ../gtk/gtkscrollbar.c:68
 #, fuzzy
 msgid "Display the standard backward arrow button"
-msgstr "Den normalen RÃ¼ckwÃ¤rtspfeil anzeigen"
+msgstr "Den normalen Rückwärtspfeil anzeigen"
 
 #: ../gtk/gtknotebook.c:799
 #: ../gtk/gtkscrollbar.c:74
 #, fuzzy
 msgid "Forward stepper"
-msgstr "Schrittschalter vorwÃ¤rts"
+msgstr "Schrittschalter vorwärts"
 
 #: ../gtk/gtknotebook.c:800
 #: ../gtk/gtkscrollbar.c:75
 #, fuzzy
 msgid "Display the standard forward arrow button"
-msgstr "Den normalen VorwÃ¤rtspfeil anzeigen"
+msgstr "Den normalen Vorwärtspfeil anzeigen"
 
 #: ../gtk/gtknotebook.c:814
 msgid "Tab overlap"
@@ -4712,17 +4712,17 @@ msgstr "Registerkoortenöverlappen"
 #: ../gtk/gtknotebook.c:815
 #, fuzzy
 msgid "Size of tab overlap area"
-msgstr "GrÃ¶ÃŸe der Ã¼berlappenden Reiterregion"
+msgstr "Größe der überlappenden Reiterregion"
 
 #: ../gtk/gtknotebook.c:830
 #, fuzzy
 msgid "Tab curvature"
-msgstr "ReiterkrÃ¼mmung"
+msgstr "Reiterkrümmung"
 
 #: ../gtk/gtknotebook.c:831
 #, fuzzy
 msgid "Size of tab curvature"
-msgstr "Die GrÃ¶ÃŸe der ReiterkrÃ¼mmung"
+msgstr "Die Größe der Reiterkrümmung"
 
 #: ../gtk/gtknotebook.c:847
 msgid "Arrow spacing"
@@ -4745,17 +4745,17 @@ msgstr "Zeiger auf anonyme Benutzerdaten"
 #: ../gtk/gtkoptionmenu.c:162
 #, fuzzy
 msgid "The menu of options"
-msgstr "Das OptionsmenÃ¼"
+msgstr "Das Optionsmenü"
 
 #: ../gtk/gtkoptionmenu.c:169
 #, fuzzy
 msgid "Size of dropdown indicator"
-msgstr "Die GrÃ¶ÃŸe des Herabklapp-Indikators"
+msgstr "Die Größe des Herabklapp-Indikators"
 
 #: ../gtk/gtkoptionmenu.c:175
 #, fuzzy
 msgid "Spacing around indicator"
-msgstr "AuffÃ¼llung um Indikator"
+msgstr "Auffüllung um Indikator"
 
 #: ../gtk/gtkorientable.c:75
 #, fuzzy
@@ -4765,7 +4765,7 @@ msgstr "Die Ausrichtung des Orientable-Widgets"
 #: ../gtk/gtkpaned.c:242
 #, fuzzy
 msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr "Die Position des Feldtrennbalkens in Pixel (0 heiÃŸt ganz links/oben)"
+msgstr "Die Position des Feldtrennbalkens in Pixel (0 heißt ganz links/oben)"
 
 #: ../gtk/gtkpaned.c:251
 #, fuzzy
@@ -4780,7 +4780,7 @@ msgstr "WAHR, falls die Eigenschaft Position verwendet werden soll"
 #: ../gtk/gtkpaned.c:258
 #, fuzzy
 msgid "Handle Size"
-msgstr "GriffgrÃ¶ÃŸe"
+msgstr "Griffgröße"
 
 #: ../gtk/gtkpaned.c:259
 #, fuzzy
@@ -4795,7 +4795,7 @@ msgstr "Minimale Position"
 #: ../gtk/gtkpaned.c:276
 #, fuzzy
 msgid "Smallest possible value for the \"position\" property"
-msgstr "Kleinster zulÃ¤ssiger Wert der Eigenschaft Â»positionÂ«"
+msgstr "Kleinster zulässiger Wert der Eigenschaft Â»positionÂ«"
 
 #: ../gtk/gtkpaned.c:293
 #, fuzzy
@@ -4805,17 +4805,17 @@ msgstr "Maximale Position"
 #: ../gtk/gtkpaned.c:294
 #, fuzzy
 msgid "Largest possible value for the \"position\" property"
-msgstr "GrÃ¶ÃŸter zulÃ¤ssiger Wert der Eigenschaft Â»positionÂ«"
+msgstr "Größter zulässiger Wert der Eigenschaft Â»positionÂ«"
 
 #: ../gtk/gtkpaned.c:311
 #, fuzzy
 msgid "Resize"
-msgstr "GrÃ¶ÃŸe Ã¤ndern"
+msgstr "Größe ändern"
 
 #: ../gtk/gtkpaned.c:312
 #, fuzzy
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr "Soll das Kind zusammen mit dem FeldgrÃ¶ÃŸe-Widget ausgedehnt und geschrumpft werden?"
+msgstr "Soll das Kind zusammen mit dem Feldgröße-Widget ausgedehnt und geschrumpft werden?"
 
 #: ../gtk/gtkpaned.c:327
 msgid "Shrink"
@@ -4824,7 +4824,7 @@ msgstr "Lütter maken"
 #: ../gtk/gtkpaned.c:328
 #, fuzzy
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr "Soll das Kind kleiner als der angeforderte Raum gemacht werden kÃ¶nnen?"
+msgstr "Soll das Kind kleiner als der angeforderte Raum gemacht werden können?"
 
 #: ../gtk/gtkplug.c:150
 #: ../gtk/gtkstatusicon.c:312
@@ -4864,7 +4864,7 @@ msgstr "Backend"
 #: ../gtk/gtkprinter.c:119
 #, fuzzy
 msgid "Backend for the printer"
-msgstr "Backend fÃ¼r den Druckerr"
+msgstr "Backend für den Druckerr"
 
 #: ../gtk/gtkprinter.c:125
 msgid "Is Virtual"
@@ -4921,7 +4921,7 @@ msgstr "Opdräge"
 #: ../gtk/gtkprinter.c:168
 #, fuzzy
 msgid "Number of jobs queued in the printer"
-msgstr "Anzahl der eingereihten AufdrÃ¤ge dieses Druckers"
+msgstr "Anzahl der eingereihten Aufdräge dieses Druckers"
 
 #: ../gtk/gtkprinter.c:186
 #, fuzzy
@@ -4936,12 +4936,12 @@ msgstr "WAHR, falls dieser Drucker angehalten ist"
 #: ../gtk/gtkprinter.c:200
 #, fuzzy
 msgid "Accepting Jobs"
-msgstr "AuftrÃ¤ge annehmen"
+msgstr "Aufträge annehmen"
 
 #: ../gtk/gtkprinter.c:201
 #, fuzzy
 msgid "TRUE if this printer is accepting new jobs"
-msgstr "WAHR, falls dieser Drucker AuftrÃ¤ge annimmt"
+msgstr "WAHR, falls dieser Drucker Aufträge annimmt"
 
 #: ../gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
@@ -4950,7 +4950,7 @@ msgstr "Well-Optschoon"
 #: ../gtk/gtkprinteroptionwidget.c:124
 #, fuzzy
 msgid "The PrinterOption backing this widget"
-msgstr "Die PrinterOption fÃ¼r dieses Widget"
+msgstr "Die PrinterOption für dieses Widget"
 
 #: ../gtk/gtkprintjob.c:117
 #, fuzzy
@@ -4964,7 +4964,7 @@ msgstr "Drucker"
 #: ../gtk/gtkprintjob.c:126
 #, fuzzy
 msgid "Printer to print the job to"
-msgstr "Der fÃ¼r diesen Druckauftrag zu verwendene Drucker"
+msgstr "Der für diesen Druckauftrag zu verwendene Drucker"
 
 #: ../gtk/gtkprintjob.c:134
 msgid "Settings"
@@ -4988,7 +4988,7 @@ msgstr "Drucktostand oppassen"
 #: ../gtk/gtkprintjob.c:153
 #, fuzzy
 msgid "TRUE if the print job will continue to emit status-changed signals after the print data has been sent to the printer or print server."
-msgstr "WAHR, falls der Druckauftrag StatusÃ¤nderungs-Signale emittieren soll nachdem die Druckdaten an den Drucker oder den Drucker-Server gesendet wurden."
+msgstr "WAHR, falls der Druckauftrag Statusänderungs-Signale emittieren soll nachdem die Druckdaten an den Drucker oder den Drucker-Server gesendet wurden."
 
 #: ../gtk/gtkprintoperation.c:997
 #, fuzzy
@@ -5063,7 +5063,7 @@ msgstr "Einheit"
 #: ../gtk/gtkprintoperation.c:1144
 #, fuzzy
 msgid "The unit in which distances can be measured in the context"
-msgstr "Die Einheit, mit der AbstÃ¤nde in diesem Kontext gemessen werden"
+msgstr "Die Einheit, mit der Abstände in diesem Kontext gemessen werden"
 
 #: ../gtk/gtkprintoperation.c:1161
 msgid "Show Dialog"
@@ -5072,7 +5072,7 @@ msgstr "Dialog opwiesen"
 #: ../gtk/gtkprintoperation.c:1162
 #, fuzzy
 msgid "TRUE if a progress dialog is shown while printing."
-msgstr "WAHR, falls ein Fortschrittsanzeige-Dialog wÃ¤hrend des Druckens angezeigt wird."
+msgstr "WAHR, falls ein Fortschrittsanzeige-Dialog während des Druckens angezeigt wird."
 
 #: ../gtk/gtkprintoperation.c:1185
 #, fuzzy
@@ -5107,7 +5107,7 @@ msgstr "Status-Zeichenkette"
 #: ../gtk/gtkprintoperation.c:1245
 #, fuzzy
 msgid "A human-readable description of the status"
-msgstr "Eine verstÃ¤ndliche Beschreibung des Status"
+msgstr "Eine verständliche Beschreibung des Status"
 
 #: ../gtk/gtkprintoperation.c:1263
 #, fuzzy
@@ -5117,18 +5117,18 @@ msgstr "Eigene Reiterbeschriftung"
 #: ../gtk/gtkprintoperation.c:1264
 #, fuzzy
 msgid "Label for the tab containing custom widgets."
-msgstr "Beschriftung fÃ¼r den Reiter mit benutzerdefinierten Widgets."
+msgstr "Beschriftung für den Reiter mit benutzerdefinierten Widgets."
 
 #: ../gtk/gtkprintoperation.c:1279
 #: ../gtk/gtkprintunixdialog.c:345
 #, fuzzy
 msgid "Support Selection"
-msgstr "Auswahl unterstÃ¼tzen"
+msgstr "Auswahl unterstützen"
 
 #: ../gtk/gtkprintoperation.c:1280
 #, fuzzy
 msgid "TRUE if the print operation will support print of selection."
-msgstr "WAHR, falls der Druckvorgang den Ausdruck einer Auswahl unterstÃ¼tzt."
+msgstr "WAHR, falls der Druckvorgang den Ausdruck einer Auswahl unterstützt."
 
 #: ../gtk/gtkprintoperation.c:1296
 #: ../gtk/gtkprintunixdialog.c:353
@@ -5138,7 +5138,7 @@ msgstr "Het eene Utwahl"
 #: ../gtk/gtkprintoperation.c:1297
 #, fuzzy
 msgid "TRUE if a selecion exists."
-msgstr "WAHR, falls eine Auswahl getÃ¤tigt wurde."
+msgstr "WAHR, falls eine Auswahl getätigt wurde."
 
 #: ../gtk/gtkprintoperation.c:1312
 #: ../gtk/gtkprintunixdialog.c:361
@@ -5169,27 +5169,27 @@ msgstr "Das zu verwendende GtkPageSetup"
 #: ../gtk/gtkprintunixdialog.c:328
 #, fuzzy
 msgid "Selected Printer"
-msgstr "AusgewÃ¤hlter Drucker"
+msgstr "Ausgewählter Drucker"
 
 #: ../gtk/gtkprintunixdialog.c:329
 #, fuzzy
 msgid "The GtkPrinter which is selected"
-msgstr "Der ausgewÃ¤hlte GtkPrinter"
+msgstr "Der ausgewählte GtkPrinter"
 
 #: ../gtk/gtkprintunixdialog.c:336
 #, fuzzy
 msgid "Manual Capabilites"
-msgstr "Manuelle FÃ¤higkeiten"
+msgstr "Manuelle Fähigkeiten"
 
 #: ../gtk/gtkprintunixdialog.c:337
 #, fuzzy
 msgid "Capabilities the application can handle"
-msgstr "FÃ¤higkeiten, die die Anwendung beherrschen kann"
+msgstr "Fähigkeiten, die die Anwendung beherrschen kann"
 
 #: ../gtk/gtkprintunixdialog.c:346
 #, fuzzy
 msgid "Whether the dialog supports selection"
-msgstr "Soll der Dialog eine Auswahl unterstÃ¼tzen?"
+msgstr "Soll der Dialog eine Auswahl unterstützen?"
 
 #: ../gtk/gtkprintunixdialog.c:354
 #, fuzzy
@@ -5204,12 +5204,12 @@ msgstr "WAHR, falls die Seiteneinrichtung Auswahlfelder im GtkPrintUnixDialog ei
 #: ../gtk/gtkprogress.c:102
 #, fuzzy
 msgid "Activity mode"
-msgstr "AktivitÃ¤tsmodus"
+msgstr "Aktivitätsmodus"
 
 #: ../gtk/gtkprogress.c:103
 #, fuzzy
 msgid "If TRUE, the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something but don't know how long it will take."
-msgstr "Falls WAHR, ist GtkProgress im AktivitÃ¤tsmodus, was bedeutet, dass eine AktivitÃ¤t zwar dargestellt wird, nicht aber ihr Fortschritt. Dies wird verwendet, wenn die Anwendung etwas durchfÃ¼hrt, von dem Sie nicht wissen, wie lang es dauert."
+msgstr "Falls WAHR, ist GtkProgress im Aktivitätsmodus, was bedeutet, dass eine Aktivität zwar dargestellt wird, nicht aber ihr Fortschritt. Dies wird verwendet, wenn die Anwendung etwas durchführt, von dem Sie nicht wissen, wie lang es dauert."
 
 #: ../gtk/gtkprogress.c:111
 msgid "Show text"
@@ -5223,7 +5223,7 @@ msgstr "Legt fest, ob der Arbeitsfortschritt als Text angezeigt wird."
 #: ../gtk/gtkprogressbar.c:119
 #, fuzzy
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr "Die mit dem Fortschrittsbalken verbundene StellgrÃ¶ÃŸe (veraltet)"
+msgstr "Die mit dem Fortschrittsbalken verbundene Stellgröße (veraltet)"
 
 #: ../gtk/gtkprogressbar.c:135
 msgid "Bar style"
@@ -5237,32 +5237,32 @@ msgstr "Gibt das Aussehen des Balkens im Prozentmodus an (veraltet)"
 #: ../gtk/gtkprogressbar.c:144
 #, fuzzy
 msgid "Activity Step"
-msgstr "AktivitÃ¤ts-Schrittweite"
+msgstr "Aktivitäts-Schrittweite"
 
 #: ../gtk/gtkprogressbar.c:145
 #, fuzzy
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "Die Schrittweite jedes Durchlaufs im AktivitÃ¤tsmodus (veraltet)"
+msgstr "Die Schrittweite jedes Durchlaufs im Aktivitätsmodus (veraltet)"
 
 #: ../gtk/gtkprogressbar.c:152
 #, fuzzy
 msgid "Activity Blocks"
-msgstr "AktivitÃ¤tsblÃ¶cke"
+msgstr "Aktivitätsblöcke"
 
 #: ../gtk/gtkprogressbar.c:153
 #, fuzzy
 msgid "The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"
-msgstr "Die Anzahl der BlÃ¶cke, die im AktivitÃ¤tsmodus in die FlÃ¤che des Fortschrittsbalkens passen (veraltet)"
+msgstr "Die Anzahl der Blöcke, die im Aktivitätsmodus in die Fläche des Fortschrittsbalkens passen (veraltet)"
 
 #: ../gtk/gtkprogressbar.c:160
 #, fuzzy
 msgid "Discrete Blocks"
-msgstr "Getrennte BlÃ¶cke"
+msgstr "Getrennte Blöcke"
 
 #: ../gtk/gtkprogressbar.c:161
 #, fuzzy
 msgid "The number of discrete blocks in a progress bar (when shown in the discrete style)"
-msgstr "Die Anzahl getrennter BlÃ¶cke in einem Fortschrittsbalken (wenn im Blockmodus dargestellt)"
+msgstr "Die Anzahl getrennter Blöcke in einem Fortschrittsbalken (wenn im Blockmodus dargestellt)"
 
 #: ../gtk/gtkprogressbar.c:168
 msgid "Fraction"
@@ -5281,7 +5281,7 @@ msgstr "Puls-Schrittweite"
 #: ../gtk/gtkprogressbar.c:177
 #, fuzzy
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr "Der Anteil an der gesamten Breite, um die sich der hÃ¼pfende Balken bei jedem AktivitÃ¤tspuls bewegt"
+msgstr "Der Anteil an der gesamten Breite, um die sich der hüpfende Balken bei jedem Aktivitätspuls bewegt"
 
 #: ../gtk/gtkprogressbar.c:185
 #, fuzzy
@@ -5300,7 +5300,7 @@ msgstr "X-Avstand"
 #: ../gtk/gtkprogressbar.c:215
 #, fuzzy
 msgid "Extra spacing applied to the width of a progress bar."
-msgstr "Extra Platz, der zur Breite der Fortschrittsanzeige hinzugefÃ¼gt wird."
+msgstr "Extra Platz, der zur Breite der Fortschrittsanzeige hinzugefügt wird."
 
 #: ../gtk/gtkprogressbar.c:220
 msgid "YSpacing"
@@ -5309,7 +5309,7 @@ msgstr "Y-Avstand"
 #: ../gtk/gtkprogressbar.c:221
 #, fuzzy
 msgid "Extra spacing applied to the height of a progress bar."
-msgstr "Extra Platz, der zur HÃ¶he der Fortschrittsanzeige hinzugefÃ¼gt wird."
+msgstr "Extra Platz, der zur Höhe der Fortschrittsanzeige hinzugefügt wird."
 
 #: ../gtk/gtkprogressbar.c:234
 #, fuzzy
@@ -5324,12 +5324,12 @@ msgstr "Die minimale Breite der horizontalen Fortschrittsanzeige"
 #: ../gtk/gtkprogressbar.c:247
 #, fuzzy
 msgid "Min horizontal bar height"
-msgstr "Minimale HÃ¶he der horizontalen Fortschrittsanzeige"
+msgstr "Minimale Höhe der horizontalen Fortschrittsanzeige"
 
 #: ../gtk/gtkprogressbar.c:248
 #, fuzzy
 msgid "Minimum horizontal height of the progress bar"
-msgstr "Minimale HÃ¶he der horizontalen Fortschrittsanzeige"
+msgstr "Minimale Höhe der horizontalen Fortschrittsanzeige"
 
 #: ../gtk/gtkprogressbar.c:260
 #, fuzzy
@@ -5344,12 +5344,12 @@ msgstr "Die minimale Breite der vertikalen Fortschrittsanzeige"
 #: ../gtk/gtkprogressbar.c:273
 #, fuzzy
 msgid "Min vertical bar height"
-msgstr "Minimale HÃ¶he der vertikalen Fortschrittsanzeige"
+msgstr "Minimale Höhe der vertikalen Fortschrittsanzeige"
 
 #: ../gtk/gtkprogressbar.c:274
 #, fuzzy
 msgid "The minimum vertical height of the progress bar"
-msgstr "Die minimale HÃ¶he der vertikalen Fortschrittsanzeige"
+msgstr "Die minimale Höhe der vertikalen Fortschrittsanzeige"
 
 #: ../gtk/gtkradioaction.c:111
 msgid "The value"
@@ -5363,7 +5363,7 @@ msgstr "Der von Â»gtk_radio_action_get_current_value()Â« gelieferte wert, wenn d
 #: ../gtk/gtkradioaction.c:129
 #, fuzzy
 msgid "The radio action whose group this action belongs to."
-msgstr "Die Radioaktion, zu dessen Gruppe diese Aktion gehÃ¶rt."
+msgstr "Die Radioaktion, zu dessen Gruppe diese Aktion gehört."
 
 #: ../gtk/gtkradioaction.c:144
 msgid "The current value"
@@ -5372,22 +5372,22 @@ msgstr "De aktuelle Wert"
 #: ../gtk/gtkradioaction.c:145
 #, fuzzy
 msgid "The value property of the currently active member of the group to which this action belongs."
-msgstr "Der Wert des momentan aktiven Mitglieds der Gruppe, zu der diese Aktion gehÃ¶rt."
+msgstr "Der Wert des momentan aktiven Mitglieds der Gruppe, zu der diese Aktion gehört."
 
 #: ../gtk/gtkradiobutton.c:83
 #, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehÃ¶rt."
+msgstr "Der Radioknopf, zu dessen Gruppe dieses Widget gehört."
 
 #: ../gtk/gtkradiomenuitem.c:354
 #, fuzzy
 msgid "The radio menu item whose group this widget belongs to."
-msgstr "Das Radio-MenÃ¼eintrag, zu dessen Gruppe dieses Widget gehÃ¶rt."
+msgstr "Das Radio-Menüeintrag, zu dessen Gruppe dieses Widget gehört."
 
 #: ../gtk/gtkradiotoolbutton.c:66
 #, fuzzy
 msgid "The radio tool button whose group this button belongs to."
-msgstr "Der Radiowerkzeug-Knopf, zu dessen Gruppe dieser Knopf gehÃ¶rt."
+msgstr "Der Radiowerkzeug-Knopf, zu dessen Gruppe dieser Knopf gehört."
 
 #: ../gtk/gtkrange.c:358
 msgid "Update policy"
@@ -5401,7 +5401,7 @@ msgstr "Die Art und Weise, auf die der Bereich auf dem Bildschirm aktualisiert w
 #: ../gtk/gtkrange.c:368
 #, fuzzy
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr "Das GtkAdjustment, das den aktuellen Wert dieses Bereichsobjekts enthÃ¤lt"
+msgstr "Das GtkAdjustment, das den aktuellen Wert dieses Bereichsobjekts enthält"
 
 #: ../gtk/gtkrange.c:375
 msgid "Inverted"
@@ -5410,7 +5410,7 @@ msgstr "Umdreiht"
 #: ../gtk/gtkrange.c:376
 #, fuzzy
 msgid "Invert direction slider moves to increase range value"
-msgstr "Die Richtung der Schieberbewegung umkehren, um den Bereichswert zu vergrÃ¶ÃŸern"
+msgstr "Die Richtung der Schieberbewegung umkehren, um den Bereichswert zu vergrößern"
 
 #: ../gtk/gtkrange.c:383
 #, fuzzy
@@ -5420,7 +5420,7 @@ msgstr "Untere Empfindlichkeit des Schrittschalters"
 #: ../gtk/gtkrange.c:384
 #, fuzzy
 msgid "The sensitivity policy for the stepper that points to the adjustment's lower side"
-msgstr "Die Empfindlichkeit des Schrittschalters am unteren Ende der MÃ¶glichkeiten"
+msgstr "Die Empfindlichkeit des Schrittschalters am unteren Ende der Möglichkeiten"
 
 #: ../gtk/gtkrange.c:392
 #, fuzzy
@@ -5430,7 +5430,7 @@ msgstr "Obere Empfindlichkeit des Schrittschaltes"
 #: ../gtk/gtkrange.c:393
 #, fuzzy
 msgid "The sensitivity policy for the stepper that points to the adjustment's upper side"
-msgstr "Die Empfindlichkeit des Schrittschalters am oberen Ende der MÃ¶glichkeiten"
+msgstr "Die Empfindlichkeit des Schrittschalters am oberen Ende der Möglichkeiten"
 
 #: ../gtk/gtkrange.c:410
 msgid "Show Fill Level"
@@ -5439,7 +5439,7 @@ msgstr "Füllstand opwiesen"
 #: ../gtk/gtkrange.c:411
 #, fuzzy
 msgid "Whether to display a fill level indicator graphics on trough."
-msgstr "Legt fest, ob der FÃ¼llstand im Trog angezeigt wird."
+msgstr "Legt fest, ob der Füllstand im Trog angezeigt wird."
 
 #: ../gtk/gtkrange.c:427
 msgid "Restrict to Fill Level"
@@ -5448,7 +5448,7 @@ msgstr "Op Füllstand beschränken"
 #: ../gtk/gtkrange.c:428
 #, fuzzy
 msgid "Whether to restrict the upper boundary to the fill level."
-msgstr "Legt fest, ob der obere Rand auf den FÃ¼llstand beschrÃ¤nkt ist."
+msgstr "Legt fest, ob der obere Rand auf den Füllstand beschränkt ist."
 
 #: ../gtk/gtkrange.c:443
 msgid "Fill Level"
@@ -5473,17 +5473,17 @@ msgstr "Trogkant"
 #: ../gtk/gtkrange.c:461
 #, fuzzy
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr "Der Abstand zwischen den Schiebern bzw. den Schrittschaltern und der Ã¤uÃŸeren Trogfase"
+msgstr "Der Abstand zwischen den Schiebern bzw. den Schrittschaltern und der äußeren Trogfase"
 
 #: ../gtk/gtkrange.c:468
 #, fuzzy
 msgid "Stepper Size"
-msgstr "Schrittschalter-GrÃ¶ÃŸe"
+msgstr "Schrittschalter-Größe"
 
 #: ../gtk/gtkrange.c:469
 #, fuzzy
 msgid "Length of step buttons at ends"
-msgstr "Die LÃ¤nge der Schrittschalter an den Enden"
+msgstr "Die Länge der Schrittschalter an den Enden"
 
 #: ../gtk/gtkrange.c:484
 #, fuzzy
@@ -5503,7 +5503,7 @@ msgstr "Horizontaler Versatz des Pfeiles"
 #: ../gtk/gtkrange.c:493
 #, fuzzy
 msgid "How far in the x direction to move the arrow when the button is depressed"
-msgstr "Wie weit soll der Pfeil in der horizontaler Richtung versetzt werden, wenn der Knopf gedrÃ¼ckt wird?"
+msgstr "Wie weit soll der Pfeil in der horizontaler Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: ../gtk/gtkrange.c:500
 msgid "Arrow Y Displacement"
@@ -5512,7 +5512,7 @@ msgstr "Y-Versatt vun de Peil"
 #: ../gtk/gtkrange.c:501
 #, fuzzy
 msgid "How far in the y direction to move the arrow when the button is depressed"
-msgstr "Wie weit soll der Pfeil in der Y-Richtung versetzt werden, wenn der Knopf gedrÃ¼ckt wird?"
+msgstr "Wie weit soll der Pfeil in der Y-Richtung versetzt werden, wenn der Knopf gedrückt wird?"
 
 #: ../gtk/gtkrange.c:509
 #, fuzzy
@@ -5537,12 +5537,12 @@ msgstr "Falls diese Option WAHR ist, werden die Teile des Trogs auf den beiden S
 #: ../gtk/gtkrange.c:541
 #, fuzzy
 msgid "Trough Under Steppers"
-msgstr "Trog unter SchrittzÃ¤hlern"
+msgstr "Trog unter Schrittzählern"
 
 #: ../gtk/gtkrange.c:542
 #, fuzzy
 msgid "Whether to draw trough for full length of range or exclude the steppers and spacing"
-msgstr "Legt fest, ob der Trog Ã¼ber die gesamte LÃ¤nge gezeichnet wird oder ob SchrittzÃ¤hler und AbstÃ¤nde ausgenommen werden"
+msgstr "Legt fest, ob der Trog über die gesamte Länge gezeichnet wird oder ob Schrittzähler und Abstände ausgenommen werden"
 
 #: ../gtk/gtkrange.c:555
 msgid "Arrow scaling"
@@ -5551,7 +5551,7 @@ msgstr "Peilgröte"
 #: ../gtk/gtkrange.c:556
 #, fuzzy
 msgid "Arrow scaling with regard to scroll button size"
-msgstr "Pfeilskalierung bezogen zur GrÃ¶ÃŸe der Bildlaufleiste"
+msgstr "Pfeilskalierung bezogen zur Größe der Bildlaufleiste"
 
 #: ../gtk/gtkrecentaction.c:616
 #: ../gtk/gtkrecentchoosermenu.c:227
@@ -5562,12 +5562,12 @@ msgstr "Taalen opwiesen"
 #: ../gtk/gtkrecentchoosermenu.c:228
 #, fuzzy
 msgid "Whether the items should be displayed with a number"
-msgstr "Sollen die EintrÃ¤ge nummeriert werden?"
+msgstr "Sollen die Einträge nummeriert werden?"
 
 #: ../gtk/gtkrecentchooser.c:132
 #, fuzzy
 msgid "Recent Manager"
-msgstr "Â»Zuletzt geÃ¶ffnetÂ«-Verwaltung"
+msgstr "Â»Zuletzt geöffnetÂ«-Verwaltung"
 
 #: ../gtk/gtkrecentchooser.c:133
 #, fuzzy
@@ -5581,7 +5581,7 @@ msgstr "Private opwiesen"
 #: ../gtk/gtkrecentchooser.c:148
 #, fuzzy
 msgid "Whether the private items should be displayed"
-msgstr "Sollen private EintrÃ¤ge angezeigt werden?"
+msgstr "Sollen private Einträge angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:161
 msgid "Show Tooltips"
@@ -5590,7 +5590,7 @@ msgstr "Lütte Hölp opwiesen"
 #: ../gtk/gtkrecentchooser.c:162
 #, fuzzy
 msgid "Whether there should be a tooltip on the item"
-msgstr "Soll bei EintrÃ¤gen eine Minihilfe angezeigt werden?"
+msgstr "Soll bei Einträgen eine Minihilfe angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:174
 msgid "Show Icons"
@@ -5599,7 +5599,7 @@ msgstr "Symbole opwiesen"
 #: ../gtk/gtkrecentchooser.c:175
 #, fuzzy
 msgid "Whether there should be an icon near the item"
-msgstr "Soll bei EintrÃ¤gen ein Symbol angezeigt werden?"
+msgstr "Soll bei Einträgen ein Symbol angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:190
 #, fuzzy
@@ -5609,12 +5609,12 @@ msgstr "Nicht gefundene Dateien anzeigen"
 #: ../gtk/gtkrecentchooser.c:191
 #, fuzzy
 msgid "Whether the items pointing to unavailable resources should be displayed"
-msgstr "Sollen EintrÃ¤ge, die auf nicht verfÃ¼gbare Ressourcen zeigen, angezeigt werden?"
+msgstr "Sollen Einträge, die auf nicht verfügbare Ressourcen zeigen, angezeigt werden?"
 
 #: ../gtk/gtkrecentchooser.c:204
 #, fuzzy
 msgid "Whether to allow multiple items to be selected"
-msgstr "Sollen mehrere EintrÃ¤ge ausgewÃ¤hlt werden kÃ¶nnen?"
+msgstr "Sollen mehrere Einträge ausgewählt werden können?"
 
 #: ../gtk/gtkrecentchooser.c:217
 msgid "Local only"
@@ -5623,7 +5623,7 @@ msgstr "Jüst lokal"
 #: ../gtk/gtkrecentchooser.c:218
 #, fuzzy
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
-msgstr "Sollen die auswÃ¤hlbaren Ressourcen auf lokale file:-URIs begrenzt werden?"
+msgstr "Sollen die auswählbaren Ressourcen auf lokale file:-URIs begrenzt werden?"
 
 #: ../gtk/gtkrecentchooser.c:234
 #: ../gtk/gtkrecentmanager.c:229
@@ -5634,7 +5634,7 @@ msgstr "Limit"
 #: ../gtk/gtkrecentchooser.c:235
 #, fuzzy
 msgid "The maximum number of items to be displayed"
-msgstr "Die Anzahl der anzuzeigenden EintrÃ¤ge"
+msgstr "Die Anzahl der anzuzeigenden Einträge"
 
 #: ../gtk/gtkrecentchooser.c:249
 #, fuzzy
@@ -5644,12 +5644,12 @@ msgstr "Sortierreihenfolge"
 #: ../gtk/gtkrecentchooser.c:250
 #, fuzzy
 msgid "The sorting order of the items displayed"
-msgstr "Die Sortierreihenfolge der angezeigten EintrÃ¤ge"
+msgstr "Die Sortierreihenfolge der angezeigten Einträge"
 
 #: ../gtk/gtkrecentchooser.c:265
 #, fuzzy
 msgid "The current filter for selecting which resources are displayed"
-msgstr "Der momentan zum AuswÃ¤hlen der anzuzeigenden Ressourcen zu verwendende Filter"
+msgstr "Der momentan zum Auswählen der anzuzeigenden Ressourcen zu verwendende Filter"
 
 #: ../gtk/gtkrecentmanager.c:215
 #, fuzzy
@@ -5659,12 +5659,12 @@ msgstr "Der gesamte Pfad zur Datei, der zum Speichern und Lesen der Liste verwen
 #: ../gtk/gtkrecentmanager.c:230
 #, fuzzy
 msgid "The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr "Die maximale Anzahl an EintrÃ¤gen, die von gtk_recent_manager_get_items() zurÃ¼ck gegeben wird"
+msgstr "Die maximale Anzahl an Einträgen, die von gtk_recent_manager_get_items() zurück gegeben wird"
 
 #: ../gtk/gtkrecentmanager.c:246
 #, fuzzy
 msgid "The size of the recently used resources list"
-msgstr "Die GrÃ¶ÃŸe der Â»Zuletzt verwendetÂ«-Liste"
+msgstr "Die Größe der Â»Zuletzt verwendetÂ«-Liste"
 
 #: ../gtk/gtkruler.c:128
 #, fuzzy
@@ -5694,12 +5694,12 @@ msgstr "Die Position der Markierung auf dem Lineal"
 #: ../gtk/gtkruler.c:158
 #, fuzzy
 msgid "Max Size"
-msgstr "Max. LÃ¤nge"
+msgstr "Max. Länge"
 
 #: ../gtk/gtkruler.c:159
 #, fuzzy
 msgid "Maximum size of the ruler"
-msgstr "Die maximale LÃ¤nge des Lineals"
+msgstr "Die maximale Länge des Lineals"
 
 #: ../gtk/gtkruler.c:174
 msgid "Metric"
@@ -5713,7 +5713,7 @@ msgstr "Die metrische Einheit des Lineals"
 #: ../gtk/gtkscale.c:219
 #, fuzzy
 msgid "The number of decimal places that are displayed in the value"
-msgstr "Die Anzahl der Nachkommastellen, die fÃ¼r den Wert dargestellt werden"
+msgstr "Die Anzahl der Nachkommastellen, die für den Wert dargestellt werden"
 
 #: ../gtk/gtkscale.c:228
 #, fuzzy
@@ -5738,12 +5738,12 @@ msgstr "Die Position, an der der aktuelle Wert angezeigt wird"
 #: ../gtk/gtkscale.c:244
 #, fuzzy
 msgid "Slider Length"
-msgstr "SchieberlÃ¤nge"
+msgstr "Schieberlänge"
 
 #: ../gtk/gtkscale.c:245
 #, fuzzy
 msgid "Length of scale's slider"
-msgstr "Die LÃ¤nge des Schiebers der Skala"
+msgstr "Die Länge des Schiebers der Skala"
 
 #: ../gtk/gtkscale.c:253
 msgid "Value spacing"
@@ -5762,12 +5762,12 @@ msgstr "Der eingestellte Skalenwert"
 #: ../gtk/gtkscalebutton.c:217
 #, fuzzy
 msgid "The icon size"
-msgstr "Die SymbolgrÃ¶ÃŸe"
+msgstr "Die Symbolgröße"
 
 #: ../gtk/gtkscalebutton.c:226
 #, fuzzy
 msgid "The GtkAdjustment that contains the current value of this scale button object"
-msgstr "Das GtkAdjustment, das den aktuellen Wert dieses Skalenobjekts enthÃ¤lt"
+msgstr "Das GtkAdjustment, das den aktuellen Wert dieses Skalenobjekts enthält"
 
 #: ../gtk/gtkscalebutton.c:254
 msgid "Icons"
@@ -5780,46 +5780,46 @@ msgstr "Symbolnamenlist"
 #: ../gtk/gtkscrollbar.c:51
 #, fuzzy
 msgid "Minimum Slider Length"
-msgstr "Die minimale LÃ¤nge des Schiebers"
+msgstr "Die minimale Länge des Schiebers"
 
 #: ../gtk/gtkscrollbar.c:52
 #, fuzzy
 msgid "Minimum length of scrollbar slider"
-msgstr "Die minimale LÃ¤nge des Rollbalken-Schiebers"
+msgstr "Die minimale Länge des Rollbalken-Schiebers"
 
 #: ../gtk/gtkscrollbar.c:60
 #, fuzzy
 msgid "Fixed slider size"
-msgstr "Feste SchiebergrÃ¶ÃŸe"
+msgstr "Feste Schiebergröße"
 
 #: ../gtk/gtkscrollbar.c:61
 #, fuzzy
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr "Die SchiebergrÃ¶ÃŸe nicht Ã¤ndern, sondern lediglich auf der minimalen LÃ¤nge festsperren"
+msgstr "Die Schiebergröße nicht ändern, sondern lediglich auf der minimalen Länge festsperren"
 
 #: ../gtk/gtkscrollbar.c:82
 #, fuzzy
 msgid "Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr "Einen zweiten RÃ¼ckwÃ¤rtspfeil am gegenÃ¼berliegenden Ende des Rollbalkens anzeigen"
+msgstr "Einen zweiten Rückwärtspfeil am gegenüberliegenden Ende des Rollbalkens anzeigen"
 
 #: ../gtk/gtkscrollbar.c:89
 #, fuzzy
 msgid "Display a second forward arrow button on the opposite end of the scrollbar"
-msgstr "Einen zweiten VorwÃ¤rtspfeil am gegenÃ¼berliegenden Ende des Rollbalkens anzeigen"
+msgstr "Einen zweiten Vorwärtspfeil am gegenüberliegenden Ende des Rollbalkens anzeigen"
 
 #: ../gtk/gtkscrolledwindow.c:218
 #: ../gtk/gtktext.c:545
 #: ../gtk/gtktreeview.c:572
 #, fuzzy
 msgid "Horizontal Adjustment"
-msgstr "Horizontale StellgrÃ¶ÃŸe"
+msgstr "Horizontale Stellgröße"
 
 #: ../gtk/gtkscrolledwindow.c:225
 #: ../gtk/gtktext.c:553
 #: ../gtk/gtktreeview.c:580
 #, fuzzy
 msgid "Vertical Adjustment"
-msgstr "Vertikale StellgrÃ¶ÃŸe"
+msgstr "Vertikale Stellgröße"
 
 #: ../gtk/gtkscrolledwindow.c:232
 #, fuzzy
@@ -5849,7 +5849,7 @@ msgstr "Fensterplatzierung"
 #: ../gtk/gtkscrolledwindow.c:250
 #, fuzzy
 msgid "Where the contents are located with respect to the scrollbars. This property only takes effect if \"window-placement-set\" is TRUE."
-msgstr "Wo soll der Inhalt im VerhÃ¤ltnis zu den Rollbalken liegen? Diese Eigenschaft tritt nur in Kraft, falls Â»window-placement-setÂ« WAHR ist."
+msgstr "Wo soll der Inhalt im Verhältnis zu den Rollbalken liegen? Diese Eigenschaft tritt nur in Kraft, falls Â»window-placement-setÂ« WAHR ist."
 
 #: ../gtk/gtkscrolledwindow.c:267
 #, fuzzy
@@ -5859,7 +5859,7 @@ msgstr "Fensterplatzierung aktiviert"
 #: ../gtk/gtkscrolledwindow.c:268
 #, fuzzy
 msgid "Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."
-msgstr "Legt fest, ob Â»window-placementÂ« verwendet wird um die Position des Inhalts im VerhÃ¤ltnis zu den Rollbalken zu bestimmen."
+msgstr "Legt fest, ob Â»window-placementÂ« verwendet wird um die Position des Inhalts im Verhältnis zu den Rollbalken zu bestimmen."
 
 #: ../gtk/gtkscrolledwindow.c:274
 #, fuzzy
@@ -5899,7 +5899,7 @@ msgstr "Platzierung gerollter Fenster"
 #: ../gtk/gtkscrolledwindow.c:313
 #, fuzzy
 msgid "Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."
-msgstr "Wo soll der Inhalt gerollter Fenster im VerhÃ¤ltnis zu den Rollbalken liegen, falls der Wert nicht durch die eigene Position des gerollten Fensters Ã¼berschrieben wird?"
+msgstr "Wo soll der Inhalt gerollter Fenster im Verhältnis zu den Rollbalken liegen, falls der Wert nicht durch die eigene Position des gerollten Fensters überschrieben wird?"
 
 #: ../gtk/gtkseparatortoolitem.c:105
 #, fuzzy
@@ -5949,7 +5949,7 @@ msgstr "Zeigerblinkdauer"
 #: ../gtk/gtksettings.c:258
 #, fuzzy
 msgid "Length of the cursor blink cycle, in milliseconds"
-msgstr "Die LÃ¤nge der Cursor-Blinkperiode in Millisekunden"
+msgstr "Die Länge der Cursor-Blinkperiode in Millisekunden"
 
 #: ../gtk/gtksettings.c:277
 #, fuzzy
@@ -5959,7 +5959,7 @@ msgstr "Cursor-Blinkdauer"
 #: ../gtk/gtksettings.c:278
 #, fuzzy
 msgid "Time after which the cursor stops blinking, in seconds"
-msgstr "Die Zeit nach der der Cursor aufhÃ¶rt zu blinken, in Millisekunden"
+msgstr "Die Zeit nach der der Cursor aufhört zu blinken, in Millisekunden"
 
 #: ../gtk/gtksettings.c:285
 #, fuzzy
@@ -5969,7 +5969,7 @@ msgstr "Zeiger aufteilen"
 #: ../gtk/gtksettings.c:286
 #, fuzzy
 msgid "Whether two cursors should be displayed for mixed left-to-right and right-to-left text"
-msgstr "Sollen fÃ¼r gemischt linkslÃ¤ufigen und rechtslÃ¤ufigen Text zwei Zeiger angezeigt werden?"
+msgstr "Sollen für gemischt linksläufigen und rechtsläufigen Text zwei Zeiger angezeigt werden?"
 
 #: ../gtk/gtksettings.c:293
 msgid "Theme Name"
@@ -6012,12 +6012,12 @@ msgstr "Name der zu ladenden Tastenbelegungs-RC-Datei"
 #: ../gtk/gtksettings.c:329
 #, fuzzy
 msgid "Menu bar accelerator"
-msgstr "MenÃ¼leisten-KÃ¼rzel"
+msgstr "Menüleisten-Kürzel"
 
 #: ../gtk/gtksettings.c:330
 #, fuzzy
 msgid "Keybinding to activate the menu bar"
-msgstr "TastaturkÃ¼rzel, das die MenÃ¼leiste aktiviert"
+msgstr "Tastaturkürzel, das die Menüleiste aktiviert"
 
 #: ../gtk/gtksettings.c:338
 #, fuzzy
@@ -6042,12 +6042,12 @@ msgstr "Der Name der zu verwendenden Vorgabeschrift"
 #: ../gtk/gtksettings.c:370
 #, fuzzy
 msgid "Icon Sizes"
-msgstr "SymbolgrÃ¶ÃŸe"
+msgstr "Symbolgröße"
 
 #: ../gtk/gtksettings.c:371
 #, fuzzy
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Die Liste der SymbolgrÃ¶ÃŸen (gtk-menu=16,16;gtk-button=20,20 usw.)"
+msgstr "Die Liste der Symbolgrößen (gtk-menu=16,16;gtk-button=20,20 usw.)"
 
 #: ../gtk/gtksettings.c:379
 msgid "GTK Modules"
@@ -6061,12 +6061,12 @@ msgstr "Liste der aktiven GTK-Module"
 #: ../gtk/gtksettings.c:389
 #, fuzzy
 msgid "Xft Antialias"
-msgstr "Xft-KantenglÃ¤ttung"
+msgstr "Xft-Kantenglättung"
 
 #: ../gtk/gtksettings.c:390
 #, fuzzy
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Sollen die Kanten von Xft-Schriften geglÃ¤ttet werden? 0: nein, 1: ja, -1: Vorgabe"
+msgstr "Sollen die Kanten von Xft-Schriften geglättet werden? 0: nein, 1: ja, -1: Vorgabe"
 
 #: ../gtk/gtksettings.c:399
 #, fuzzy
@@ -6076,7 +6076,7 @@ msgstr "Xft-Hinting"
 #: ../gtk/gtksettings.c:400
 #, fuzzy
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Soll fÃ¼r Xft-Schriften Hinting verwendet werden? 0: nein, 1: ja, -1: Vorgabe"
+msgstr "Soll für Xft-Schriften Hinting verwendet werden? 0: nein, 1: ja, -1: Vorgabe"
 
 #: ../gtk/gtksettings.c:409
 #, fuzzy
@@ -6095,7 +6095,7 @@ msgstr "Xft-RGBA"
 #: ../gtk/gtksettings.c:420
 #, fuzzy
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr "Typ der Subpixel-KantenglÃ¤ttung; none (keine), rgb, bgr, vrgb, vbgr"
+msgstr "Typ der Subpixel-Kantenglättung; none (keine), rgb, bgr, vrgb, vbgr"
 
 #: ../gtk/gtksettings.c:429
 msgid "Xft DPI"
@@ -6104,7 +6104,7 @@ msgstr "Xft-DPI"
 #: ../gtk/gtksettings.c:430
 #, fuzzy
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr "Xft-AuflÃ¶sung in 1024 * Punkt/Zoll. -1: Vorgabewert"
+msgstr "Xft-Auflösung in 1024 * Punkt/Zoll. -1: Vorgabewert"
 
 #: ../gtk/gtksettings.c:439
 msgid "Cursor theme name"
@@ -6122,47 +6122,47 @@ msgstr "Gröte vu'm Wieserthema"
 #: ../gtk/gtksettings.c:449
 #, fuzzy
 msgid "Size to use for cursors, or 0 to use the default size"
-msgstr "Zu verwendende ZeigergrÃ¶ÃŸe, oder 0, um die VorgabegrÃ¶ÃŸe zu verwenden."
+msgstr "Zu verwendende Zeigergröße, oder 0, um die Vorgabegröße zu verwenden."
 
 #: ../gtk/gtksettings.c:459
 #, fuzzy
 msgid "Alternative button order"
-msgstr "Alternative Reihenfolge fÃ¼r KnÃ¶pfe"
+msgstr "Alternative Reihenfolge für Knöpfe"
 
 #: ../gtk/gtksettings.c:460
 #, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Sollen KnÃ¶pfe in Dialogen die alternative Reihenfolge verwenden?"
+msgstr "Sollen Knöpfe in Dialogen die alternative Reihenfolge verwenden?"
 
 #: ../gtk/gtksettings.c:477
 #, fuzzy
 msgid "Alternative sort indicator direction"
-msgstr "Vertauschte SortierknÃ¶pfe"
+msgstr "Vertauschte Sortierknöpfe"
 
 #: ../gtk/gtksettings.c:478
 #, fuzzy
 msgid "Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"
-msgstr "Legt fest, ob die Aktion der SortierknÃ¶pfe gegenÃ¼ber der Vorgabe, bei der runter Â»aufsteigendÂ« bedeutet, vertauscht sein soll. "
+msgstr "Legt fest, ob die Aktion der Sortierknöpfe gegenüber der Vorgabe, bei der runter Â»aufsteigendÂ« bedeutet, vertauscht sein soll. "
 
 #: ../gtk/gtksettings.c:486
 #, fuzzy
 msgid "Show the 'Input Methods' menu"
-msgstr "MenÃ¼ Â»EingabemethodenÂ« anzeigen"
+msgstr "Menü Â»EingabemethodenÂ« anzeigen"
 
 #: ../gtk/gtksettings.c:487
 #, fuzzy
 msgid "Whether the context menus of entries and text views should offer to change the input method"
-msgstr "Sollen die KontextmenÃ¼s von Eingabe- und Textfeldern die MÃ¶glichkeit zum Ã„ndern der Eingabemethode bieten?"
+msgstr "Sollen die Kontextmenüs von Eingabe- und Textfeldern die Möglichkeit zum Ã„ndern der Eingabemethode bieten?"
 
 #: ../gtk/gtksettings.c:495
 #, fuzzy
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr "MenÃ¼ Â»Unicode-Steuerzeichen einfÃ¼genÂ« anzeigen"
+msgstr "Menü Â»Unicode-Steuerzeichen einfügenÂ« anzeigen"
 
 #: ../gtk/gtksettings.c:496
 #, fuzzy
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
-msgstr "Sollen die KontextmenÃ¼s von Eingabe- und Textfeldern die MÃ¶glichkeit zum EinfÃ¼gen von Steuerzeichen bieten?"
+msgstr "Sollen die Kontextmenüs von Eingabe- und Textfeldern die Möglichkeit zum Einfügen von Steuerzeichen bieten?"
 
 #: ../gtk/gtksettings.c:504
 #, fuzzy
@@ -6172,7 +6172,7 @@ msgstr "Anfangs-Timeout"
 #: ../gtk/gtksettings.c:505
 #, fuzzy
 msgid "Starting value for timeouts, when button is pressed"
-msgstr "Anfangswert fÃ¼r Timeouts, wenn der Knopf gedrÃ¼ckt wird"
+msgstr "Anfangswert für Timeouts, wenn der Knopf gedrückt wird"
 
 #: ../gtk/gtksettings.c:514
 #, fuzzy
@@ -6182,7 +6182,7 @@ msgstr "Wiederholungs-Timeout"
 #: ../gtk/gtksettings.c:515
 #, fuzzy
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr "Widerholungswert fÃ¼r Timeouts, wenn der Knopf gedrÃ¼ckt wird"
+msgstr "Widerholungswert für Timeouts, wenn der Knopf gedrückt wird"
 
 #: ../gtk/gtksettings.c:524
 #, fuzzy
@@ -6192,7 +6192,7 @@ msgstr "Erweiterungs-Timeout"
 #: ../gtk/gtksettings.c:525
 #, fuzzy
 msgid "Expand value for timeouts, when a widget is expanding a new region"
-msgstr "Erweiterungswert fÃ¼r Timeouts, wenn ein Widget in eine neue Region expandiert"
+msgstr "Erweiterungswert für Timeouts, wenn ein Widget in eine neue Region expandiert"
 
 #: ../gtk/gtksettings.c:560
 msgid "Color scheme"
@@ -6295,7 +6295,7 @@ msgstr "Eine Hash-Tabelle des Farbschemas"
 #: ../gtk/gtksettings.c:741
 #, fuzzy
 msgid "Default file chooser backend"
-msgstr "Vorgabe-Backend des DateiwÃ¤hlers"
+msgstr "Vorgabe-Backend des Dateiwählers"
 
 #: ../gtk/gtksettings.c:742
 #, fuzzy
@@ -6315,12 +6315,12 @@ msgstr "Liste der Namen von per Vorgabe zu verwendenden GtkPrintBackend-Backends
 #: ../gtk/gtksettings.c:783
 #, fuzzy
 msgid "Default command to run when displaying a print preview"
-msgstr "Vorgabebefehl, der beim Anzeigen der Druckvorschau ausgefÃ¼hrt werden soll"
+msgstr "Vorgabebefehl, der beim Anzeigen der Druckvorschau ausgeführt werden soll"
 
 #: ../gtk/gtksettings.c:784
 #, fuzzy
 msgid "Command to run when displaying a print preview"
-msgstr "Befehl, der beim Anzeigen der Druckvorschau ausgefÃ¼hrt werden soll"
+msgstr "Befehl, der beim Anzeigen der Druckvorschau ausgeführt werden soll"
 
 #: ../gtk/gtksettings.c:800
 #, fuzzy
@@ -6339,7 +6339,7 @@ msgstr "Körtel aktiveren"
 #: ../gtk/gtksettings.c:818
 #, fuzzy
 msgid "Whether menu items should have accelerators"
-msgstr "Legt fest, ob MenÃ¼eintrÃ¤ge KÃ¼rzel haben sollen"
+msgstr "Legt fest, ob Menüeinträge Kürzel haben sollen"
 
 #: ../gtk/gtksettings.c:835
 #, fuzzy
@@ -6393,22 +6393,22 @@ msgstr "XDG-Tonthemennaam"
 #: ../gtk/gtksettings.c:929
 #, fuzzy
 msgid "Audible Input Feedback"
-msgstr "RÃ¼ckmeldung mit KlÃ¤ngen"
+msgstr "Rückmeldung mit Klängen"
 
 #: ../gtk/gtksettings.c:930
 #, fuzzy
 msgid "Whether to play event sounds as feedback to user input"
-msgstr "Soll auf Ereignisse eine RÃ¼ckmeldung durch KlÃ¤nge erfolgen?"
+msgstr "Soll auf Ereignisse eine Rückmeldung durch Klänge erfolgen?"
 
 #: ../gtk/gtksettings.c:951
 #, fuzzy
 msgid "Enable Event Sounds"
-msgstr "Ereignis-KlÃ¤nge aktivieren"
+msgstr "Ereignis-Klänge aktivieren"
 
 #: ../gtk/gtksettings.c:952
 #, fuzzy
 msgid "Whether to play any event sounds at all"
-msgstr "Sollen Ereignis-KlÃ¤nge gespielt werden?"
+msgstr "Sollen Ereignis-Klänge gespielt werden?"
 
 #: ../gtk/gtksettings.c:967
 msgid "Enable Tooltips"
@@ -6431,12 +6431,12 @@ msgstr "Sollen normale Werkzeugleisten nur Text, Text und Symbole, nur Symbole, 
 #: ../gtk/gtksettings.c:996
 #, fuzzy
 msgid "Toolbar Icon Size"
-msgstr "SymbolgrÃ¶ÃŸe in Werkzeugleiste"
+msgstr "Symbolgröße in Werkzeugleiste"
 
 #: ../gtk/gtksettings.c:997
 #, fuzzy
 msgid "The size of icons in default toolbars."
-msgstr "Die GrÃ¶ÃŸe der Symbole in normalen Werkzeugleisten"
+msgstr "Die Größe der Symbole in normalen Werkzeugleisten"
 
 #: ../gtk/gtksettings.c:1014
 #, fuzzy
@@ -6455,7 +6455,7 @@ msgstr "Modus"
 #: ../gtk/gtksizegroup.c:302
 #, fuzzy
 msgid "The directions in which the size group affects the requested sizes of its component widgets"
-msgstr "Die Richtungen, in denen die GrÃ¶ÃŸengruppe die angeforderten GrÃ¶ÃŸen ihrer Komponenten-Widgets beeinflusst"
+msgstr "Die Richtungen, in denen die Größengruppe die angeforderten Größen ihrer Komponenten-Widgets beeinflusst"
 
 #: ../gtk/gtksizegroup.c:318
 #, fuzzy
@@ -6465,12 +6465,12 @@ msgstr "Versteckte ignorieren"
 #: ../gtk/gtksizegroup.c:319
 #, fuzzy
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr "Wenn WAHR, werden alle nicht zugewiesenen Widgets beim Berechnen der GruppengrÃ¶ÃŸe ignoriert"
+msgstr "Wenn WAHR, werden alle nicht zugewiesenen Widgets beim Berechnen der Gruppengröße ignoriert"
 
 #: ../gtk/gtkspinbutton.c:209
 #, fuzzy
 msgid "The adjustment that holds the value of the spinbutton"
-msgstr "Die StellgrÃ¶ÃŸe, die den Wert des Zahlenfeldes enthÃ¤lt"
+msgstr "Die Stellgröße, die den Wert des Zahlenfeldes enthält"
 
 #: ../gtk/gtkspinbutton.c:216
 #, fuzzy
@@ -6485,7 +6485,7 @@ msgstr "Auf Teilstriche einrasten"
 #: ../gtk/gtkspinbutton.c:237
 #, fuzzy
 msgid "Whether erroneous values are automatically changed to a spin button's nearest step increment"
-msgstr "Sollen abseits liegende Werte automatisch auf das nÃ¤chste Schrittweitenvielfache des Spinbuttons gerundet werden?"
+msgstr "Sollen abseits liegende Werte automatisch auf das nächste Schrittweitenvielfache des Spinbuttons gerundet werden?"
 
 #: ../gtk/gtkspinbutton.c:244
 msgid "Numeric"
@@ -6512,7 +6512,7 @@ msgstr "Opfrischensmethode"
 #: ../gtk/gtkspinbutton.c:261
 #, fuzzy
 msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr "Soll der Spinbutton immer aktualisieren, oder nur wenn der Wert zulÃ¤ssig ist?"
+msgstr "Soll der Spinbutton immer aktualisieren, oder nur wenn der Wert zulässig ist?"
 
 #: ../gtk/gtkspinbutton.c:270
 #, fuzzy
@@ -6527,7 +6527,7 @@ msgstr "Der Stil der Fase um den Spinbutton"
 #: ../gtk/gtkspinner.c:129
 #, fuzzy
 msgid "Whether the spinner is active"
-msgstr "Legt fest, ob das primÃ¤re Symbol aktivierbar ist"
+msgstr "Legt fest, ob das primäre Symbol aktivierbar ist"
 
 #: ../gtk/gtkspinner.c:143
 msgid "Number of steps"
@@ -6550,13 +6550,13 @@ msgstr ""
 #: ../gtk/gtkstatusbar.c:148
 #, fuzzy
 msgid "Has Resize Grip"
-msgstr "Hat Anfasser zur GrÃ¶ÃŸenÃ¤nderung"
+msgstr "Hat Anfasser zur Größenänderung"
 
-# CHECK - toplevel unÃ¼bersetzt
+# CHECK - toplevel unübersetzt
 #: ../gtk/gtkstatusbar.c:149
 #, fuzzy
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "Soll die Statusleiste einen Anfasser zur GrÃ¶ÃŸenÃ¤nderung haben?"
+msgstr "Soll die Statusleiste einen Anfasser zur Größenänderung haben?"
 
 #: ../gtk/gtkstatusbar.c:194
 #, fuzzy
@@ -6566,7 +6566,7 @@ msgstr "Stil der Fase um den Text der Statusleiste"
 #: ../gtk/gtkstatusicon.c:271
 #, fuzzy
 msgid "The size of the icon"
-msgstr "Die GrÃ¶ÃŸe des Symbols"
+msgstr "Die Größe des Symbols"
 
 #: ../gtk/gtkstatusicon.c:281
 #, fuzzy
@@ -6637,7 +6637,7 @@ msgstr "Der Inhalt der Minihilfe dieses Benachrichtigungssymbols"
 #: ../gtk/gtkstatusicon.c:425
 #, fuzzy
 msgid "The title of this tray icon"
-msgstr "Die GrÃ¶ÃŸe des Benachrichtigungssymbols"
+msgstr "Die Größe des Benachrichtigungssymbols"
 
 #: ../gtk/gtktable.c:129
 #, fuzzy
@@ -6687,32 +6687,32 @@ msgstr "Falls WAHR, sind die Tabellenzellen alle gleich breit/hoch"
 #: ../gtk/gtktable.c:173
 #, fuzzy
 msgid "Left attachment"
-msgstr "Links anhÃ¤ngen"
+msgstr "Links anhängen"
 
 #: ../gtk/gtktable.c:180
 #, fuzzy
 msgid "Right attachment"
-msgstr "Rechts anhÃ¤ngen"
+msgstr "Rechts anhängen"
 
 #: ../gtk/gtktable.c:181
 #, fuzzy
 msgid "The column number to attach the right side of a child widget to"
-msgstr "Die Spaltennummer, an die die rechte Seite eines Kind-Widgets angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die rechte Seite eines Kind-Widgets angehängt werden soll"
 
 #: ../gtk/gtktable.c:187
 #, fuzzy
 msgid "Top attachment"
-msgstr "Oben anhÃ¤ngen"
+msgstr "Oben anhängen"
 
 #: ../gtk/gtktable.c:188
 #, fuzzy
 msgid "The row number to attach the top of a child widget to"
-msgstr "Die Spaltennummer, an die die obere Seite eines Kind-Widgets angehÃ¤ngt werden soll"
+msgstr "Die Spaltennummer, an die die obere Seite eines Kind-Widgets angehängt werden soll"
 
 #: ../gtk/gtktable.c:194
 #, fuzzy
 msgid "Bottom attachment"
-msgstr "Unten anhÃ¤ngen"
+msgstr "Unten anhängen"
 
 #: ../gtk/gtktable.c:201
 #, fuzzy
@@ -6737,32 +6737,32 @@ msgstr "Diese Optionen geben das vertikale Verhalten des Kindes an"
 #: ../gtk/gtktable.c:215
 #, fuzzy
 msgid "Horizontal padding"
-msgstr "Horizontale AuffÃ¼llung"
+msgstr "Horizontale Auffüllung"
 
 #: ../gtk/gtktable.c:216
 #, fuzzy
 msgid "Extra space to put between the child and its left and right neighbors, in pixels"
-msgstr "Die zwischen dem Kind und dessen oberen und unteren Nachbarn einzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die zwischen dem Kind und dessen oberen und unteren Nachbarn einzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtktable.c:222
 #, fuzzy
 msgid "Vertical padding"
-msgstr "Vertikale AuffÃ¼llung"
+msgstr "Vertikale Auffüllung"
 
 #: ../gtk/gtktable.c:223
 #, fuzzy
 msgid "Extra space to put between the child and its upper and lower neighbors, in pixels"
-msgstr "Die zwischen dem Kind und dessen linken und rechten Nachbarn einzufÃ¼gende AuffÃ¼llung in Pixel"
+msgstr "Die zwischen dem Kind und dessen linken und rechten Nachbarn einzufügende Auffüllung in Pixel"
 
 #: ../gtk/gtktext.c:546
 #, fuzzy
 msgid "Horizontal adjustment for the text widget"
-msgstr "Die horizontale StellgrÃ¶ÃŸe fÃ¼r das Text-Widget"
+msgstr "Die horizontale Stellgröße für das Text-Widget"
 
 #: ../gtk/gtktext.c:554
 #, fuzzy
 msgid "Vertical adjustment for the text widget"
-msgstr "Die vertikale StellgrÃ¶ÃŸe fÃ¼r das Text-Widget"
+msgstr "Die vertikale Stellgröße für das Text-Widget"
 
 #: ../gtk/gtktext.c:561
 #, fuzzy
@@ -6781,7 +6781,7 @@ msgstr "Woordumbrek"
 #: ../gtk/gtktext.c:570
 #, fuzzy
 msgid "Whether words are wrapped at widget edges"
-msgstr "Sollen WÃ¶rter an den Widget-Kanten umbrochen werden?"
+msgstr "Sollen Wörter an den Widget-Kanten umbrochen werden?"
 
 #: ../gtk/gtktextbuffer.c:180
 msgid "Tag Table"
@@ -6804,7 +6804,7 @@ msgstr "Het Utwahl"
 #: ../gtk/gtktextbuffer.c:214
 #, fuzzy
 msgid "Whether the buffer has some text currently selected"
-msgstr "Ob der Puffer einen momentan ausgewÃ¤hlten Text hat"
+msgstr "Ob der Puffer einen momentan ausgewählten Text hat"
 
 #: ../gtk/gtktextbuffer.c:230
 msgid "Cursor position"
@@ -6813,27 +6813,27 @@ msgstr "Wieserpositschoon"
 #: ../gtk/gtktextbuffer.c:231
 #, fuzzy
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr "Die Position des EinfÃ¼gezeigers (Versatz zum Beginn des Puffers)"
+msgstr "Die Position des Einfügezeigers (Versatz zum Beginn des Puffers)"
 
 #: ../gtk/gtktextbuffer.c:246
 #, fuzzy
 msgid "Copy target list"
-msgstr "Ziele fÃ¼r Â»KopierenÂ«"
+msgstr "Ziele für Â»KopierenÂ«"
 
 #: ../gtk/gtktextbuffer.c:247
 #, fuzzy
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr "Die Liste der Ziele, die dieser Puffer fÃ¼r das Kopieren aus der Zwischenablage und Drag&Drop-Quellen unterstÃ¼tzt."
+msgstr "Die Liste der Ziele, die dieser Puffer für das Kopieren aus der Zwischenablage und Drag&Drop-Quellen unterstützt."
 
 #: ../gtk/gtktextbuffer.c:262
 #, fuzzy
 msgid "Paste target list"
-msgstr "Ziele fÃ¼r Â»EinfÃ¼genÂ«"
+msgstr "Ziele für Â»EinfügenÂ«"
 
 #: ../gtk/gtktextbuffer.c:263
 #, fuzzy
 msgid "The list of targets this buffer supports for clipboard pasting and DND destination"
-msgstr "Die Liste der Ziele, die dieser Puffer fÃ¼r das EinfÃ¼gen aus der Zwischenablage und durch Drag&Drop-Zielen unterstÃ¼tzt."
+msgstr "Die Liste der Ziele, die dieser Puffer für das Einfügen aus der Zwischenablage und durch Drag&Drop-Zielen unterstützt."
 
 #: ../gtk/gtktextmark.c:90
 msgid "Mark name"
@@ -6862,17 +6862,17 @@ msgstr "Dieser Name wird verwendet, um auf das Text-Tag Bezug zu nehmen. NULL be
 #: ../gtk/gtktexttag.c:192
 #, fuzzy
 msgid "Background color as a (possibly unallocated) GdkColor"
-msgstr "Hintergrundfarbe als (mÃ¶glicherweise nicht zugewiesene) GdkColor"
+msgstr "Hintergrundfarbe als (möglicherweise nicht zugewiesene) GdkColor"
 
 #: ../gtk/gtktexttag.c:199
 #, fuzzy
 msgid "Background full height"
-msgstr "Hintergrund Ã¼ber volle HÃ¶he"
+msgstr "Hintergrund über volle Höhe"
 
 #: ../gtk/gtktexttag.c:200
 #, fuzzy
 msgid "Whether the background color fills the entire line height or only the height of the tagged characters"
-msgstr "Soll die Hintergrundfarbe die gesamte ZeilenhÃ¶he oder nur die HÃ¶he der markierten Zeichen ausfÃ¼llen?"
+msgstr "Soll die Hintergrundfarbe die gesamte Zeilenhöhe oder nur die Höhe der markierten Zeichen ausfüllen?"
 
 #: ../gtk/gtktexttag.c:208
 msgid "Background stipple mask"
@@ -6886,7 +6886,7 @@ msgstr "Die als Maske beim Zeichnen des Texthintergrundes zu verwendende Bitmap"
 #: ../gtk/gtktexttag.c:226
 #, fuzzy
 msgid "Foreground color as a (possibly unallocated) GdkColor"
-msgstr "Die Vordergrundfarbe als (mÃ¶glicherweise nicht zugewiesene) GdkColor"
+msgstr "Die Vordergrundfarbe als (möglicherweise nicht zugewiesene) GdkColor"
 
 #: ../gtk/gtktexttag.c:234
 msgid "Foreground stipple mask"
@@ -6929,23 +6929,23 @@ msgstr "Die Schriftdehnung als PangoStrech, z.B. PANGO_STRECH_CONDENSED"
 #: ../gtk/gtktexttag.c:330
 #, fuzzy
 msgid "Font size in Pango units"
-msgstr "SchriftgrÃ¶ÃŸe in Pango-Einheiten"
+msgstr "Schriftgröße in Pango-Einheiten"
 
 #: ../gtk/gtktexttag.c:340
 #, fuzzy
 msgid "Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE"
-msgstr "Die SchriftgrÃ¶ÃŸe als Skalierungsfaktor relativ zur vorgegebenen SchriftgrÃ¶ÃŸe. Dies wird bei ThemenÃ¤nderungen o.Ã¤. dynamisch angepasst und ist daher empfehlenswert. Pango stellt einige vordefinierte Skalierungen zur VerfÃ¼gung, so z.B. PANGO_SCALE_X_LARGE"
+msgstr "Die Schriftgröße als Skalierungsfaktor relativ zur vorgegebenen Schriftgröße. Dies wird bei Themenänderungen o.ä. dynamisch angepasst und ist daher empfehlenswert. Pango stellt einige vordefinierte Skalierungen zur Verfügung, so z.B. PANGO_SCALE_X_LARGE"
 
 #: ../gtk/gtktexttag.c:360
 #: ../gtk/gtktextview.c:594
 #, fuzzy
 msgid "Left, right, or center justification"
-msgstr "Den Text linksbÃ¼ndig, rechtsbÃ¼ndig oder zentriert ausrichten"
+msgstr "Den Text linksbündig, rechtsbündig oder zentriert ausrichten"
 
 #: ../gtk/gtktexttag.c:379
 #, fuzzy
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If not set, an appropriate default will be used."
-msgstr "Die ISO-Kennung der Sprache, in der dieser Text angezeigt wird. Pango kann dies bei der Textdarstellung als Wink verwenden. Falls Sie diesen Parameter nicht verstehen, benÃ¶tigen Sie ihn wahrscheinlich nicht."
+msgstr "Die ISO-Kennung der Sprache, in der dieser Text angezeigt wird. Pango kann dies bei der Textdarstellung als Wink verwenden. Falls Sie diesen Parameter nicht verstehen, benötigen Sie ihn wahrscheinlich nicht."
 
 #: ../gtk/gtktexttag.c:386
 msgid "Left margin"
@@ -6976,12 +6976,12 @@ msgstr "Inschuv"
 #: ../gtk/gtktextview.c:623
 #, fuzzy
 msgid "Amount to indent the paragraph, in pixels"
-msgstr "Die EinrÃ¼ckungstiefe des Absatzes in Pixel"
+msgstr "Die Einrückungstiefe des Absatzes in Pixel"
 
 #: ../gtk/gtktexttag.c:419
 #, fuzzy
 msgid "Offset of text above the baseline (below the baseline if rise is negative) in Pango units"
-msgstr "Das Hochstellen des Texts Ã¼ber der Grundlinie (Tiefstellen, wenn der Wert negativ ist) in Pango-Einheiten"
+msgstr "Das Hochstellen des Texts über der Grundlinie (Tiefstellen, wenn der Wert negativ ist) in Pango-Einheiten"
 
 #: ../gtk/gtktexttag.c:428
 msgid "Pixels above lines"
@@ -6991,7 +6991,7 @@ msgstr "Pixel över Reegen"
 #: ../gtk/gtktextview.c:547
 #, fuzzy
 msgid "Pixels of blank space above paragraphs"
-msgstr "Der Leerraum Ã¼ber AbsÃ¤tzen in Pixel"
+msgstr "Der Leerraum über Absätzen in Pixel"
 
 #: ../gtk/gtktexttag.c:438
 msgid "Pixels below lines"
@@ -7001,7 +7001,7 @@ msgstr "Pixel unner Reegen"
 #: ../gtk/gtktextview.c:557
 #, fuzzy
 msgid "Pixels of blank space below paragraphs"
-msgstr "Der Leerraum unter AbsÃ¤tzen in Pixel"
+msgstr "Der Leerraum unter Absätzen in Pixel"
 
 #: ../gtk/gtktexttag.c:448
 #, fuzzy
@@ -7058,7 +7058,7 @@ msgstr "Absatzhintergrundfarbe"
 #: ../gtk/gtktexttag.c:536
 #, fuzzy
 msgid "Paragraph background color as a (possibly unallocated) GdkColor"
-msgstr "Absatzhintergrundfarbe als (mÃ¶glicherweise nicht zugewiesene) GdkColor"
+msgstr "Absatzhintergrundfarbe als (möglicherweise nicht zugewiesene) GdkColor"
 
 #: ../gtk/gtktexttag.c:554
 msgid "Margin Accumulates"
@@ -7067,7 +7067,7 @@ msgstr "Kanten oplööpen"
 #: ../gtk/gtktexttag.c:555
 #, fuzzy
 msgid "Whether left and right margins accumulate."
-msgstr "Legt fest, ob linke und rechte RÃ¤nder aufeinander auflaufen."
+msgstr "Legt fest, ob linke und rechte Ränder aufeinander auflaufen."
 
 #: ../gtk/gtktexttag.c:568
 msgid "Background full height set"
@@ -7076,7 +7076,7 @@ msgstr "Heele Achtergrundhöhe instellen"
 #: ../gtk/gtktexttag.c:569
 #, fuzzy
 msgid "Whether this tag affects background height"
-msgstr "Soll dieses Tag die HÃ¶he des Hintergrunds beeinflussen?"
+msgstr "Soll dieses Tag die Höhe des Hintergrunds beeinflussen?"
 
 #: ../gtk/gtktexttag.c:572
 #, fuzzy
@@ -7122,7 +7122,7 @@ msgstr "Inschuv instellen"
 #: ../gtk/gtktexttag.c:629
 #, fuzzy
 msgid "Whether this tag affects indentation"
-msgstr "Soll dieses Tag die EinrÃ¼ckung beeinflussen?"
+msgstr "Soll dieses Tag die Einrückung beeinflussen?"
 
 #: ../gtk/gtktexttag.c:636
 msgid "Pixels above lines set"
@@ -7132,7 +7132,7 @@ msgstr "Pixel över Reegen instellen"
 #: ../gtk/gtktexttag.c:641
 #, fuzzy
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr "Soll dieses Tag den Leerraum Ã¼ber Zeilen beeinflussen?"
+msgstr "Soll dieses Tag den Leerraum über Zeilen beeinflussen?"
 
 #: ../gtk/gtktexttag.c:640
 #, fuzzy
@@ -7202,7 +7202,7 @@ msgstr "Legt fest, ob dieses Tag die Absatzhintergrundfarbe beeinflusst"
 #: ../gtk/gtktextview.c:546
 #, fuzzy
 msgid "Pixels Above Lines"
-msgstr "Pixel Ã¼ber Zeilen"
+msgstr "Pixel über Zeilen"
 
 #: ../gtk/gtktextview.c:556
 #, fuzzy
@@ -7233,7 +7233,7 @@ msgstr "Wieser sichtbar"
 #: ../gtk/gtktextview.c:641
 #, fuzzy
 msgid "If the insertion cursor is shown"
-msgstr "Soll der EinfÃ¼gezeiger gezeigt werden?"
+msgstr "Soll der Einfügezeiger gezeigt werden?"
 
 #: ../gtk/gtktextview.c:648
 msgid "Buffer"
@@ -7246,7 +7246,7 @@ msgstr "De optowiesende Puffer"
 #: ../gtk/gtktextview.c:657
 #, fuzzy
 msgid "Whether entered text overwrites existing contents"
-msgstr "Soll eingegebener Text vorhandenen Inhalt Ã¼berschreiben?"
+msgstr "Soll eingegebener Text vorhandenen Inhalt überschreiben?"
 
 #: ../gtk/gtktextview.c:664
 #, fuzzy
@@ -7256,7 +7256,7 @@ msgstr "Akzeptiert Tabulator"
 #: ../gtk/gtktextview.c:665
 #, fuzzy
 msgid "Whether Tab will result in a tab character being entered"
-msgstr "Soll das DrÃ¼cken der Tab-Taste dazu fÃ¼hren, dass ein Tabulatorzeichen eingegeben wird?"
+msgstr "Soll das Drücken der Tab-Taste dazu führen, dass ein Tabulatorzeichen eingegeben wird?"
 
 #: ../gtk/gtktextview.c:694
 #, fuzzy
@@ -7287,7 +7287,7 @@ msgstr "Soll der Umschaltaktion aktiv sein oder nicht?"
 #: ../gtk/gtktoggletoolbutton.c:115
 #, fuzzy
 msgid "If the toggle button should be pressed in or not"
-msgstr "Soll der Umschaltknopf eingedrÃ¼ckt sein oder nicht?"
+msgstr "Soll der Umschaltknopf eingedrückt sein oder nicht?"
 
 #: ../gtk/gtktogglebutton.c:124
 #, fuzzy
@@ -7338,13 +7338,13 @@ msgstr "Legt fest, ob die Minihilfen der Werkzeugleiste angezeigt werden"
 #: ../gtk/gtktoolbar.c:541
 #, fuzzy
 msgid "Size of icons in this toolbar"
-msgstr "Die GrÃ¶ÃŸe der Symbole in dieser Werkzeugleiste"
+msgstr "Die Größe der Symbole in dieser Werkzeugleiste"
 
 #: ../gtk/gtktoolbar.c:556
 #: ../gtk/gtktoolpalette.c:1006
 #, fuzzy
 msgid "Icon size set"
-msgstr "SymbolgrÃ¶ÃŸe gesetzt"
+msgstr "Symbolgröße gesetzt"
 
 #: ../gtk/gtktoolbar.c:557
 #: ../gtk/gtktoolpalette.c:1007
@@ -7355,13 +7355,13 @@ msgstr "Legt fest, ob die Eigenschaft Â»icon-sizeÂ« gesetzt ist"
 #: ../gtk/gtktoolbar.c:566
 #, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "Soll dem Kind zusÃ¤tzlicher Platz zugewiesen werden, wenn das Werkzeugleisten-Widget wÃ¤chst?"
+msgstr "Soll dem Kind zusätzlicher Platz zugewiesen werden, wenn das Werkzeugleisten-Widget wächst?"
 
 #: ../gtk/gtktoolbar.c:574
 #: ../gtk/gtktoolitemgroup.c:1587
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "Soll das Objekt gleich groÃŸ wie andere homogene Objekte sein?"
+msgstr "Soll das Objekt gleich groß wie andere homogene Objekte sein?"
 
 #: ../gtk/gtktoolbar.c:581
 msgid "Spacer size"
@@ -7374,7 +7374,7 @@ msgstr "Deelergröte"
 #: ../gtk/gtktoolbar.c:591
 #, fuzzy
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "Der Abstand zwischen dem Schatten der Werkzeugleiste und den KnÃ¶pfen"
+msgstr "Der Abstand zwischen dem Schatten der Werkzeugleiste und den Knöpfen"
 
 #: ../gtk/gtktoolbar.c:599
 #, fuzzy
@@ -7384,7 +7384,7 @@ msgstr "Maximale Breite des Kindes"
 #: ../gtk/gtktoolbar.c:600
 #, fuzzy
 msgid "Maximum amount of space an expandable item will be given"
-msgstr "Der maximale Platz, den ein ausgeklapptes Objet erhÃ¤lt"
+msgstr "Der maximale Platz, den ein ausgeklapptes Objet erhält"
 
 #: ../gtk/gtktoolbar.c:608
 msgid "Space style"
@@ -7402,7 +7402,7 @@ msgstr "Knopprelief"
 #: ../gtk/gtktoolbar.c:617
 #, fuzzy
 msgid "Type of bevel around toolbar buttons"
-msgstr "Die Art der Fase um die KnÃ¶pfe der Werkzeugleiste"
+msgstr "Die Art der Fase um die Knöpfe der Werkzeugleiste"
 
 #: ../gtk/gtktoolbar.c:624
 #, fuzzy
@@ -7418,7 +7418,7 @@ msgstr "Im Objekt anzuzeigender Text."
 #: ../gtk/gtktoolbutton.c:212
 #, fuzzy
 msgid "If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"
-msgstr "Falls eingeschaltet, bedeutet ein Unterstrich im Beschriftungstext, dass das nÃ¤chste Zeichen als TastaturkÃ¼rzel im ÃœberlaufmenÃ¼ verwendet werden soll"
+msgstr "Falls eingeschaltet, bedeutet ein Unterstrich im Beschriftungstext, dass das nächste Zeichen als Tastaturkürzel im Überlaufmenü verwendet werden soll"
 
 #: ../gtk/gtktoolbutton.c:219
 #, fuzzy
@@ -7466,17 +7466,17 @@ msgstr "Der Abstand zwischen dem Symbol und der Beschriftung"
 #: ../gtk/gtktoolitem.c:207
 #, fuzzy
 msgid "Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr "Wird das Werkzeugleistenobjekt als wichtig angesehen? Falls dem so ist, zeigen KnÃ¶pfe Text im Modus Â»GTK_TOOLBAR_BOTH_HORIZÂ« an"
+msgstr "Wird das Werkzeugleistenobjekt als wichtig angesehen? Falls dem so ist, zeigen Knöpfe Text im Modus Â»GTK_TOOLBAR_BOTH_HORIZÂ« an"
 
 #: ../gtk/gtktoolitemgroup.c:1534
 #, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "Eine verstÃ¤ndliche Beschreibung des Status"
+msgstr "Eine verständliche Beschreibung des Status"
 
 #: ../gtk/gtktoolitemgroup.c:1541
 #, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "Ein Widget, das anstatt der Ã¼blichen Rahmenbeschriftung angezeigt werden soll"
+msgstr "Ein Widget, das anstatt der üblichen Rahmenbeschriftung angezeigt werden soll"
 
 #: ../gtk/gtktoolitemgroup.c:1547
 #, fuzzy
@@ -7486,7 +7486,7 @@ msgstr ""
 #: ../gtk/gtktoolitemgroup.c:1548
 #, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Wurde der Ausklapper geÃ¶ffnet, um das Kind-Widget anzuzeigen?"
+msgstr "Wurde der Ausklapper geöffnet, um das Kind-Widget anzuzeigen?"
 
 #: ../gtk/gtktoolitemgroup.c:1554
 msgid "ellipsize"
@@ -7504,27 +7504,27 @@ msgstr "Koppbill"
 #: ../gtk/gtktoolitemgroup.c:1562
 #, fuzzy
 msgid "Relief of the group header button"
-msgstr "Die Spaltenkopf-KnÃ¶pfe anzeigen"
+msgstr "Die Spaltenkopf-Knöpfe anzeigen"
 
 #: ../gtk/gtktoolitemgroup.c:1577
 #, fuzzy
 msgid "Header Spacing"
-msgstr "AuffÃ¼llung um Kopf"
+msgstr "Auffüllung um Kopf"
 
 #: ../gtk/gtktoolitemgroup.c:1578
 #, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "AuffÃ¼llung um Ausklapppfeil"
+msgstr "Auffüllung um Ausklapppfeil"
 
 #: ../gtk/gtktoolitemgroup.c:1594
 #, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "Soll dem Kind zusÃ¤tzlicher Platz zugewiesen werden, wenn das Werkzeugleisten-Widget wÃ¤chst?"
+msgstr "Soll dem Kind zusätzlicher Platz zugewiesen werden, wenn das Werkzeugleisten-Widget wächst?"
 
 #: ../gtk/gtktoolitemgroup.c:1601
 #, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "Sollen die Kinder alle gleich groÃŸ sein?"
+msgstr "Sollen die Kinder alle gleich groß sein?"
 
 #: ../gtk/gtktoolitemgroup.c:1607
 msgid "New Row"
@@ -7533,7 +7533,7 @@ msgstr "Neje Reeg"
 #: ../gtk/gtktoolitemgroup.c:1608
 #, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "Sollen die EintrÃ¤ge nummeriert werden?"
+msgstr "Sollen die Einträge nummeriert werden?"
 
 #: ../gtk/gtktoolitemgroup.c:1615
 #, fuzzy
@@ -7543,7 +7543,7 @@ msgstr "Die Position der Markierung auf dem Lineal"
 #: ../gtk/gtktoolpalette.c:991
 #, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "Die GrÃ¶ÃŸe der Symbole in dieser Werkzeugleiste"
+msgstr "Die Größe der Symbole in dieser Werkzeugleiste"
 
 #: ../gtk/gtktoolpalette.c:1021
 #, fuzzy
@@ -7557,12 +7557,12 @@ msgstr "Exklusiv"
 #: ../gtk/gtktoolpalette.c:1038
 #, fuzzy
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Sollen die EintrÃ¤ge nummeriert werden?"
+msgstr "Sollen die Einträge nummeriert werden?"
 
 #: ../gtk/gtktoolpalette.c:1053
 #, fuzzy
 msgid "Whether the item group should receive extra space when the palette grows"
-msgstr "Soll dem Kind zusÃ¤tzlicher Platz zugewiesen werden, wenn das Eltern-Widget wÃ¤chst?"
+msgstr "Soll dem Kind zusätzlicher Platz zugewiesen werden, wenn das Eltern-Widget wächst?"
 
 #: ../gtk/gtktreemodelsort.c:278
 #, fuzzy
@@ -7582,37 +7582,37 @@ msgstr "Baumansichtsmodell"
 #: ../gtk/gtktreeview.c:565
 #, fuzzy
 msgid "The model for the tree view"
-msgstr "Das Modell fÃ¼r die Baumansicht"
+msgstr "Das Modell für die Baumansicht"
 
 #: ../gtk/gtktreeview.c:573
 #, fuzzy
 msgid "Horizontal Adjustment for the widget"
-msgstr "Die horizontale StellgrÃ¶ÃŸe fÃ¼r das Widget"
+msgstr "Die horizontale Stellgröße für das Widget"
 
 #: ../gtk/gtktreeview.c:581
 #, fuzzy
 msgid "Vertical Adjustment for the widget"
-msgstr "Die vertikale StellgrÃ¶ÃŸe fÃ¼r das Widget"
+msgstr "Die vertikale Stellgröße für das Widget"
 
 #: ../gtk/gtktreeview.c:588
 #, fuzzy
 msgid "Headers Visible"
-msgstr "Sichtbare KÃ¶pfe"
+msgstr "Sichtbare Köpfe"
 
 #: ../gtk/gtktreeview.c:589
 #, fuzzy
 msgid "Show the column header buttons"
-msgstr "Die Spaltenkopf-KnÃ¶pfe anzeigen"
+msgstr "Die Spaltenkopf-Knöpfe anzeigen"
 
 #: ../gtk/gtktreeview.c:596
 #, fuzzy
 msgid "Headers Clickable"
-msgstr "Klickbare KÃ¶pfe"
+msgstr "Klickbare Köpfe"
 
 #: ../gtk/gtktreeview.c:597
 #, fuzzy
 msgid "Column headers respond to click events"
-msgstr "Die SpaltenkÃ¶pfe sollen auf Klick-Ereignisse reagieren"
+msgstr "Die Spaltenköpfe sollen auf Klick-Ereignisse reagieren"
 
 #: ../gtk/gtktreeview.c:604
 #, fuzzy
@@ -7622,7 +7622,7 @@ msgstr "Ausklapper-Spalte"
 #: ../gtk/gtktreeview.c:605
 #, fuzzy
 msgid "Set the column for the expander column"
-msgstr "Die Spalte fÃ¼r die Ausklapper einstellen"
+msgstr "Die Spalte für die Ausklapper einstellen"
 
 #: ../gtk/gtktreeview.c:620
 #, fuzzy
@@ -7632,7 +7632,7 @@ msgstr "Streifenwink"
 #: ../gtk/gtktreeview.c:621
 #, fuzzy
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr "Einen Wink an die Themen-Engine Ã¼bergeben, dass Zeilen in wechselnden Farben gezeichnet werden sollen"
+msgstr "Einen Wink an die Themen-Engine übergeben, dass Zeilen in wechselnden Farben gezeichnet werden sollen"
 
 #: ../gtk/gtktreeview.c:628
 msgid "Enable Search"
@@ -7656,7 +7656,7 @@ msgstr "Die Modellspalte, die bei der interaktiven Suche durchsucht werden soll"
 #: ../gtk/gtktreeview.c:657
 #, fuzzy
 msgid "Fixed Height Mode"
-msgstr "Feste HÃ¶he-Modus"
+msgstr "Feste Höhe-Modus"
 
 #: ../gtk/gtktreeview.c:658
 #, fuzzy
@@ -7682,7 +7682,7 @@ msgstr "Schwebendes Ausdehnen"
 #: ../gtk/gtktreeview.c:699
 #, fuzzy
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr "Legt fest, ob Zeilen aus-/eingeklappt werden, wenn der Zeiger sich Ã¼ber sie bewegt"
+msgstr "Legt fest, ob Zeilen aus-/eingeklappt werden, wenn der Zeiger sich über sie bewegt"
 
 #: ../gtk/gtktreeview.c:713
 #, fuzzy
@@ -7697,12 +7697,12 @@ msgstr "Ansicht hat Ausklapper"
 #: ../gtk/gtktreeview.c:728
 #, fuzzy
 msgid "Level Indentation"
-msgstr "EinrÃ¼ckung von Ebenen"
+msgstr "Einrückung von Ebenen"
 
 #: ../gtk/gtktreeview.c:729
 #, fuzzy
 msgid "Extra indentation for each level"
-msgstr "ZusÃ¤tzliche EinrÃ¼ckung fÃ¼r jede Ebene"
+msgstr "Zusätzliche Einrückung für jede Ebene"
 
 #: ../gtk/gtktreeview.c:738
 msgid "Rubber Banding"
@@ -7711,7 +7711,7 @@ msgstr "Gummiband"
 #: ../gtk/gtktreeview.c:739
 #, fuzzy
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr "Sollen mehrere EintrÃ¤ge durch Ziehen des Mauszeigers ausgewÃ¤hlt werden kÃ¶nnen?"
+msgstr "Sollen mehrere Einträge durch Ziehen des Mauszeigers ausgewählt werden können?"
 
 #: ../gtk/gtktreeview.c:746
 #, fuzzy
@@ -7732,11 +7732,11 @@ msgstr "Boomlinien aktiveren"
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Sollen Baumlinien in der Baumansicht angezeigt werden?"
 
-# CHECK - Spalte oder Modell, wer Â»enthÃ¤ltÂ«?
+# CHECK - Spalte oder Modell, wer Â»enthältÂ«?
 #: ../gtk/gtktreeview.c:764
 #, fuzzy
 msgid "The column in the model containing the tooltip texts for the rows"
-msgstr "Die Spalte des Modells, das die Minihilfentexte der Zeilen enthÃ¤lt."
+msgstr "Die Spalte des Modells, das die Minihilfentexte der Zeilen enthält."
 
 #: ../gtk/gtktreeview.c:786
 #, fuzzy
@@ -7783,7 +7783,7 @@ msgstr "Farbe der geraden Spalten"
 #: ../gtk/gtktreeview.c:819
 #, fuzzy
 msgid "Color to use for even rows"
-msgstr "Die fÃ¼r ungerade Zeilen zu verwendende Farbe"
+msgstr "Die für ungerade Zeilen zu verwendende Farbe"
 
 #: ../gtk/gtktreeview.c:825
 #, fuzzy
@@ -7793,7 +7793,7 @@ msgstr "Farbe der ungeraden Spalten"
 #: ../gtk/gtktreeview.c:826
 #, fuzzy
 msgid "Color to use for odd rows"
-msgstr "Die fÃ¼r gerade Zeilen zu verwendende Farbe"
+msgstr "Die für gerade Zeilen zu verwendende Farbe"
 
 #: ../gtk/gtktreeview.c:832
 #, fuzzy
@@ -7854,12 +7854,12 @@ msgstr "Soll die Spalte angezeigt werden?"
 #: ../gtk/gtkwindow.c:542
 #, fuzzy
 msgid "Resizable"
-msgstr "GrÃ¶ÃŸe verÃ¤nderlich"
+msgstr "Größe veränderlich"
 
 #: ../gtk/gtktreeviewcolumn.c:201
 #, fuzzy
 msgid "Column is user-resizable"
-msgstr "Ist die GrÃ¶ÃŸe der Spalte vom Benutzer verÃ¤nderbar?"
+msgstr "Ist die Größe der Spalte vom Benutzer veränderbar?"
 
 #: ../gtk/gtktreeviewcolumn.c:209
 #, fuzzy
@@ -7869,17 +7869,17 @@ msgstr "Die momentane Breite der Spalte"
 #: ../gtk/gtktreeviewcolumn.c:218
 #, fuzzy
 msgid "Space which is inserted between cells"
-msgstr "Zwischen Zellen eingefÃ¼gter Platz"
+msgstr "Zwischen Zellen eingefügter Platz"
 
 #: ../gtk/gtktreeviewcolumn.c:226
 #, fuzzy
 msgid "Sizing"
-msgstr "GrÃ¶ÃŸenÃ¤nderung"
+msgstr "Größenänderung"
 
 #: ../gtk/gtktreeviewcolumn.c:227
 #, fuzzy
 msgid "Resize mode of the column"
-msgstr "Der GrÃ¶ÃŸenÃ¤nderungs-Modus der Spalte"
+msgstr "Der Größenänderungs-Modus der Spalte"
 
 #: ../gtk/gtktreeviewcolumn.c:235
 #, fuzzy
@@ -7909,7 +7909,7 @@ msgstr "Maximale Breite"
 #: ../gtk/gtktreeviewcolumn.c:256
 #, fuzzy
 msgid "Maximum allowed width of the column"
-msgstr "Die maximal zulÃ¤ssige Spaltenbreite"
+msgstr "Die maximal zulässige Spaltenbreite"
 
 #: ../gtk/gtktreeviewcolumn.c:266
 #, fuzzy
@@ -7919,7 +7919,7 @@ msgstr "Der Titel, der im Spaltenkopf erscheinen soll"
 #: ../gtk/gtktreeviewcolumn.c:274
 #, fuzzy
 msgid "Column gets share of extra width allocated to the widget"
-msgstr "Spalte erhÃ¤lt Anteil der dem Widget zugewiesenen, zusÃ¤tzlichen Breite"
+msgstr "Spalte erhält Anteil der dem Widget zugewiesenen, zusätzlichen Breite"
 
 #: ../gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
@@ -7928,7 +7928,7 @@ msgstr "Klickbar"
 #: ../gtk/gtktreeviewcolumn.c:282
 #, fuzzy
 msgid "Whether the header can be clicked"
-msgstr "Soll der Kopf angeklickt werden kÃ¶nnen?"
+msgstr "Soll der Kopf angeklickt werden können?"
 
 #: ../gtk/gtktreeviewcolumn.c:290
 msgid "Widget"
@@ -7947,7 +7947,7 @@ msgstr "Die horizontale Ausrichtung des Spaltenkopftextes oder -widgets"
 #: ../gtk/gtktreeviewcolumn.c:309
 #, fuzzy
 msgid "Whether the column can be reordered around the headers"
-msgstr "Kann die Spalte um die KÃ¶pfe umsortiert werden?"
+msgstr "Kann die Spalte um die Köpfe umsortiert werden?"
 
 #: ../gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
@@ -7981,17 +7981,17 @@ msgstr "Logische Sortierspaltenkennung, nach der diese Spalte bei Auswahl sortie
 #: ../gtk/gtkuimanager.c:227
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "Sollen AbreiÃŸ-MenÃ¼eintrÃ¤ge zu MenÃ¼s hinzugefÃ¼gt werden?"
+msgstr "Sollen Abreiß-Menüeinträge zu Menüs hinzugefügt werden?"
 
 #: ../gtk/gtkuimanager.c:234
 #, fuzzy
 msgid "Merged UI definition"
-msgstr "ZusammengefÃ¼hrte UI-Definition"
+msgstr "Zusammengeführte UI-Definition"
 
 #: ../gtk/gtkuimanager.c:235
 #, fuzzy
 msgid "An XML string describing the merged UI"
-msgstr "Eine XML-Zeichenkette, die die zusammengefÃ¼hrte UI beschreibt"
+msgstr "Eine XML-Zeichenkette, die die zusammengeführte UI beschreibt"
 
 #: ../gtk/gtkviewport.c:107
 #, fuzzy
@@ -8033,17 +8033,17 @@ msgstr "Breitenanforderung"
 #: ../gtk/gtkwidget.c:569
 #, fuzzy
 msgid "Override for width request of the widget, or -1 if natural request should be used"
-msgstr "Direkte Angabe fÃ¼r die Breitenanforderung des Widgets; -1, falls die natÃ¼rliche Anforderung verwendet werden soll"
+msgstr "Direkte Angabe für die Breitenanforderung des Widgets; -1, falls die natürliche Anforderung verwendet werden soll"
 
 #: ../gtk/gtkwidget.c:577
 #, fuzzy
 msgid "Height request"
-msgstr "HÃ¶henanforderung"
+msgstr "Höhenanforderung"
 
 #: ../gtk/gtkwidget.c:578
 #, fuzzy
 msgid "Override for height request of the widget, or -1 if natural request should be used"
-msgstr "Direkte Angabe fÃ¼r die HÃ¶henanforderung des Widgets; -1, falls die natÃ¼rliche Anforderung verwendet werden soll"
+msgstr "Direkte Angabe für die Höhenanforderung des Widgets; -1, falls die natürliche Anforderung verwendet werden soll"
 
 #: ../gtk/gtkwidget.c:587
 #, fuzzy
@@ -8073,7 +8073,7 @@ msgstr "Fokussierbar"
 #: ../gtk/gtkwidget.c:608
 #, fuzzy
 msgid "Whether the widget can accept the input focus"
-msgstr "Soll das Widget den Eingabefokus akzeptieren kÃ¶nnen?"
+msgstr "Soll das Widget den Eingabefokus akzeptieren können?"
 
 #: ../gtk/gtkwidget.c:614
 msgid "Has focus"
@@ -8100,7 +8100,7 @@ msgstr "Künn Vorgav"
 #: ../gtk/gtkwidget.c:629
 #, fuzzy
 msgid "Whether the widget can be the default widget"
-msgstr "Soll das Widget das Vorgabe-Widget sein kÃ¶nnen?"
+msgstr "Soll das Widget das Vorgabe-Widget sein können?"
 
 #: ../gtk/gtkwidget.c:635
 msgid "Has default"
@@ -8119,7 +8119,7 @@ msgstr "Vorgabe erhalten"
 #: ../gtk/gtkwidget.c:643
 #, fuzzy
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr "Falls WAHR, erhÃ¤lt das Widget die Vorgabe-Aktion, wenn es fokussiert ist"
+msgstr "Falls WAHR, erhält das Widget die Vorgabe-Aktion, wenn es fokussiert ist"
 
 #: ../gtk/gtkwidget.c:649
 #, fuzzy
@@ -8138,7 +8138,7 @@ msgstr "Art"
 #: ../gtk/gtkwidget.c:657
 #, fuzzy
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
-msgstr "Der Stil des Widgets, der Informationen zu seinem Aussehen enthÃ¤lt (Farben etc.)"
+msgstr "Der Stil des Widgets, der Informationen zu seinem Aussehen enthält (Farben etc.)"
 
 #: ../gtk/gtkwidget.c:663
 #, fuzzy
@@ -8148,7 +8148,7 @@ msgstr "Ereignisse"
 #: ../gtk/gtkwidget.c:664
 #, fuzzy
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "Die Ereignismaske, die entscheidet, welche GdkEvents dieses Widget erhÃ¤lt"
+msgstr "Die Ereignismaske, die entscheidet, welche GdkEvents dieses Widget erhält"
 
 #: ../gtk/gtkwidget.c:671
 #, fuzzy
@@ -8158,7 +8158,7 @@ msgstr "Erweiterungsereignisse"
 #: ../gtk/gtkwidget.c:672
 #, fuzzy
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr "Die Maske, die festlegt, welche Erweiterungsereignisse dieses Widget erhÃ¤lt"
+msgstr "Die Maske, die festlegt, welche Erweiterungsereignisse dieses Widget erhält"
 
 #: ../gtk/gtkwidget.c:679
 #, fuzzy
@@ -8206,7 +8206,7 @@ msgstr "Soll der Fokusanzeiger in Widgets dargestellt werden?"
 #: ../gtk/gtkwidget.c:2410
 #, fuzzy
 msgid "Focus linewidth"
-msgstr "LÃ¤nge der Fokuszeile"
+msgstr "Länge der Fokuszeile"
 
 #: ../gtk/gtkwidget.c:2411
 #, fuzzy
@@ -8226,7 +8226,7 @@ msgstr "Das zum Zeichnen des Fokusanzeigers zu verwendende Strichelmuster"
 #: ../gtk/gtkwidget.c:2423
 #, fuzzy
 msgid "Focus padding"
-msgstr "Fokus-AuffÃ¼llung"
+msgstr "Fokus-Auffüllung"
 
 #: ../gtk/gtkwidget.c:2424
 #, fuzzy
@@ -8241,7 +8241,7 @@ msgstr "Zeigerfarbe"
 #: ../gtk/gtkwidget.c:2430
 #, fuzzy
 msgid "Color with which to draw insertion cursor"
-msgstr "Die Farbe, in der der EinfÃ¼gezeiger gezeichnet werden soll"
+msgstr "Die Farbe, in der der Einfügezeiger gezeichnet werden soll"
 
 #: ../gtk/gtkwidget.c:2435
 #, fuzzy
@@ -8251,17 +8251,17 @@ msgstr "Zweite Zeigerfarbe"
 #: ../gtk/gtkwidget.c:2436
 #, fuzzy
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
-msgstr "Die Farbe des zweiten EinfÃ¼gezeigers, wenn rechts- und linkslÃ¤ufiger Text gemischt bearbeitet werden."
+msgstr "Die Farbe des zweiten Einfügezeigers, wenn rechts- und linksläufiger Text gemischt bearbeitet werden."
 
 #: ../gtk/gtkwidget.c:2441
 #, fuzzy
 msgid "Cursor line aspect ratio"
-msgstr "SeitenverhÃ¤ltnis der Zeigerzeile"
+msgstr "Seitenverhältnis der Zeigerzeile"
 
 #: ../gtk/gtkwidget.c:2442
 #, fuzzy
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Das SeitenverhÃ¤ltnis, in dem der EinfÃ¼gezeigers gezeichnet werden soll"
+msgstr "Das Seitenverhältnis, in dem der Einfügezeigers gezeichnet werden soll"
 
 #: ../gtk/gtkwidget.c:2456
 #, fuzzy
@@ -8271,27 +8271,27 @@ msgstr "Rand zeichnen"
 #: ../gtk/gtkwidget.c:2457
 #, fuzzy
 msgid "Size of areas outside the widget's allocation to draw"
-msgstr "GrÃ¶ÃŸe der Zonen auÃŸerhalb des Widget-Belegung die gezeichnet wird"
+msgstr "Größe der Zonen außerhalb des Widget-Belegung die gezeichnet wird"
 
 #: ../gtk/gtkwidget.c:2470
 #, fuzzy
 msgid "Unvisited Link Color"
-msgstr "Farbe fÃ¼r unbesuchte Links"
+msgstr "Farbe für unbesuchte Links"
 
 #: ../gtk/gtkwidget.c:2471
 #, fuzzy
 msgid "Color of unvisited links"
-msgstr "Farbe fÃ¼r unbesuchte Hyperlinks"
+msgstr "Farbe für unbesuchte Hyperlinks"
 
 #: ../gtk/gtkwidget.c:2484
 #, fuzzy
 msgid "Visited Link Color"
-msgstr "Farbe fÃ¼r besuchte Links"
+msgstr "Farbe für besuchte Links"
 
 #: ../gtk/gtkwidget.c:2485
 #, fuzzy
 msgid "Color of visited links"
-msgstr "Farbe fÃ¼r besuchte Hyperlinks"
+msgstr "Farbe für besuchte Hyperlinks"
 
 #: ../gtk/gtkwidget.c:2499
 msgid "Wide Separators"
@@ -8300,7 +8300,7 @@ msgstr "Brede Deelbalken"
 #: ../gtk/gtkwidget.c:2500
 #, fuzzy
 msgid "Whether separators have configurable width and should be drawn using a box instead of a line"
-msgstr "Sollen Trennbalken eine festlegbare Breite haben und als FlÃ¤che anstatt einer Linie dargestellt werden?"
+msgstr "Sollen Trennbalken eine festlegbare Breite haben und als Fläche anstatt einer Linie dargestellt werden?"
 
 #: ../gtk/gtkwidget.c:2514
 msgid "Separator Width"
@@ -8314,32 +8314,32 @@ msgstr "Die Breite der Trennbalken falls Â»wide-separatorsÂ« WAHR ist"
 #: ../gtk/gtkwidget.c:2529
 #, fuzzy
 msgid "Separator Height"
-msgstr "HÃ¶he der Trennbalken"
+msgstr "Höhe der Trennbalken"
 
 #: ../gtk/gtkwidget.c:2530
 #, fuzzy
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr "Die HÃ¶he der Trennbalken falls Â»wide-separatorsÂ« WAHR ist"
+msgstr "Die Höhe der Trennbalken falls Â»wide-separatorsÂ« WAHR ist"
 
 #: ../gtk/gtkwidget.c:2544
 #, fuzzy
 msgid "Horizontal Scroll Arrow Length"
-msgstr "LÃ¤nge horizontaler Rollpfeile"
+msgstr "Länge horizontaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:2545
 #, fuzzy
 msgid "The length of horizontal scroll arrows"
-msgstr "Die LÃ¤nge horizontaler Rollpfeile"
+msgstr "Die Länge horizontaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:2559
 #, fuzzy
 msgid "Vertical Scroll Arrow Length"
-msgstr "LÃ¤nge vertikaler Rollpfeile"
+msgstr "Länge vertikaler Rollpfeile"
 
 #: ../gtk/gtkwidget.c:2560
 #, fuzzy
 msgid "The length of vertical scroll arrows"
-msgstr "Die LÃ¤nge vertikaler Rollpfeile"
+msgstr "Die Länge vertikaler Rollpfeile"
 
 #: ../gtk/gtkwindow.c:483
 msgid "Window Type"
@@ -8383,7 +8383,7 @@ msgstr "Schrumpfen erlauben"
 #: ../gtk/gtkwindow.c:527
 #, fuzzy, no-c-format
 msgid "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"
-msgstr "Falls WAHR, hat das Fenster keine MindestgrÃ¶ÃŸe. Dies auf WAHR zu setzen, ist in 99% aller FÃ¤lle keine gute Idee"
+msgstr "Falls WAHR, hat das Fenster keine Mindestgröße. Dies auf WAHR zu setzen, ist in 99% aller Fälle keine gute Idee"
 
 #: ../gtk/gtkwindow.c:534
 #, fuzzy
@@ -8393,12 +8393,12 @@ msgstr "Wachstum erlauben"
 #: ../gtk/gtkwindow.c:535
 #, fuzzy
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr "Falls WAHR, kÃ¶nnen Benutzer das Fenster Ã¼ber seine MindestgrÃ¶ÃŸe hinaus vergrÃ¶ÃŸern"
+msgstr "Falls WAHR, können Benutzer das Fenster über seine Mindestgröße hinaus vergrößern"
 
 #: ../gtk/gtkwindow.c:543
 #, fuzzy
 msgid "If TRUE, users can resize the window"
-msgstr "Falls WAHR, kÃ¶nnen Benutzer die FenstergrÃ¶ÃŸe verÃ¤ndern"
+msgstr "Falls WAHR, können Benutzer die Fenstergröße verändern"
 
 #: ../gtk/gtkwindow.c:550
 msgid "Modal"
@@ -8407,7 +8407,7 @@ msgstr "Modal"
 #: ../gtk/gtkwindow.c:551
 #, fuzzy
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
-msgstr "Falls WAHR, ist das Fenster modal (alle anderen Fenster sind nicht verwendbar, wÃ¤hrend dieses geÃ¶ffnet ist)"
+msgstr "Falls WAHR, ist das Fenster modal (alle anderen Fenster sind nicht verwendbar, während dieses geöffnet ist)"
 
 #: ../gtk/gtkwindow.c:558
 #, fuzzy
@@ -8432,7 +8432,7 @@ msgstr "Die Vorgabebreite des Fensters. Sie wird beim ersten Anzeigen des Fenste
 #: ../gtk/gtkwindow.c:577
 #, fuzzy
 msgid "Default Height"
-msgstr "VorgabehÃ¶he"
+msgstr "Vorgabehöhe"
 
 #: ../gtk/gtkwindow.c:578
 #, fuzzy
@@ -8442,22 +8442,22 @@ msgstr "Die Vorgabebreite des Fensters. Sie wird beim ersten Anzeigen des Fenste
 #: ../gtk/gtkwindow.c:587
 #, fuzzy
 msgid "Destroy with Parent"
-msgstr "Mit Eltern-Widget zerstÃ¶ren"
+msgstr "Mit Eltern-Widget zerstören"
 
 #: ../gtk/gtkwindow.c:588
 #, fuzzy
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr "Soll dieses Fenster zerstÃ¶rt werden, wenn das Eltern-Widget zerstÃ¶rt wird?"
+msgstr "Soll dieses Fenster zerstört werden, wenn das Eltern-Widget zerstört wird?"
 
 #: ../gtk/gtkwindow.c:596
 #, fuzzy
 msgid "Icon for this window"
-msgstr "Symbol fÃ¼r dieses Fenster"
+msgstr "Symbol für dieses Fenster"
 
 #: ../gtk/gtkwindow.c:602
 #, fuzzy
 msgid "Mnemonics Visible"
-msgstr "TastaturkÃ¼rzel"
+msgstr "Tastaturkürzel"
 
 #: ../gtk/gtkwindow.c:603
 #, fuzzy
@@ -8467,7 +8467,7 @@ msgstr "Ist das momentan aktive Fenster die oberste Ebene?"
 #: ../gtk/gtkwindow.c:619
 #, fuzzy
 msgid "Name of the themed icon for this window"
-msgstr "Name des Themen-Symbols fÃ¼r dieses Fenster"
+msgstr "Name des Themen-Symbols für dieses Fenster"
 
 #: ../gtk/gtkwindow.c:634
 msgid "Is Active"
@@ -8504,17 +8504,17 @@ msgstr "Finsterlist övergahn"
 #: ../gtk/gtkwindow.c:660
 #, fuzzy
 msgid "TRUE if the window should not be in the task bar."
-msgstr "WAHR, falls das Fenster nicht in der Fensterliste aufgefÃ¼hrt werden soll."
+msgstr "WAHR, falls das Fenster nicht in der Fensterliste aufgeführt werden soll."
 
 #: ../gtk/gtkwindow.c:667
 #, fuzzy
 msgid "Skip pager"
-msgstr "ArbeitsflÃ¤chen-Umschalter Ã¼bergehen"
+msgstr "Arbeitsflächen-Umschalter übergehen"
 
 #: ../gtk/gtkwindow.c:668
 #, fuzzy
 msgid "TRUE if the window should not be in the pager."
-msgstr "WAHR, falls das Fenster nicht im ArbeitsflÃ¤chen-Umschalter aufgefÃ¼hrt werden soll."
+msgstr "WAHR, falls das Fenster nicht im Arbeitsflächen-Umschalter aufgeführt werden soll."
 
 #: ../gtk/gtkwindow.c:675
 #, fuzzy
@@ -8566,7 +8566,7 @@ msgstr "Entfernbar"
 #: ../gtk/gtkwindow.c:736
 #, fuzzy
 msgid "Whether the window frame should have a close button"
-msgstr "Soll der Fensterrahmen einen Â»SchlieÃŸenÂ«-Knopf haben?"
+msgstr "Soll der Fensterrahmen einen Â»SchließenÂ«-Knopf haben?"
 
 # CHECK
 #: ../gtk/gtkwindow.c:752
@@ -8584,12 +8584,12 @@ msgstr "Die Fensterschwere des Fensters"
 #: ../gtk/gtkwindow.c:770
 #, fuzzy
 msgid "Transient for Window"
-msgstr "FlÃ¼chtig fÃ¼r Fenster"
+msgstr "Flüchtig für Fenster"
 
 #: ../gtk/gtkwindow.c:771
 #, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "Das vorrÃ¼bergehende Eltern-Widget des Dialogs"
+msgstr "Das vorrübergehende Eltern-Widget des Dialogs"
 
 # CHECK
 #: ../gtk/gtkwindow.c:786
