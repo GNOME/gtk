@@ -13,13 +13,13 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 15:16-0500\n"
-"PO-Revision-Date: 2010-02-22 14:03+0300\n"
+"PO-Revision-Date: 2010-02-24 21:18+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Virtaal 0.5.2\n"
@@ -869,52 +869,47 @@ msgstr "عائلة صيغ صور PNM/PBM/PGM/PPM"
 
 #: gdk-pixbuf/io-qtif.c:128
 msgid "Input file descriptor is NULL."
-msgstr ""
+msgstr "واصف ملف الدخل صفري."
 
 #: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
 msgid "Failed to read QTIF header"
-msgstr "فشلت كتابة الترويسة\n"
+msgstr "فشلت قراءة ترويسة QTIF"
 
 #: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
 #, c-format
 msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
+msgstr "حجم ذرة QTIF كبير جدا (%d بايت)"
 
 #: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "فشل تحصيص براح للصورة بحجم صفر بايت"
+msgstr "فشل تحصيص  %d بايت لبراح قراءة الملف"
 
 #: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
+#, c-format
 msgid "File error when reading QTIF atom: %s"
-msgstr "خطأ أثناء قراءة GIF: %s"
+msgstr "خطأ أثناء قراءة ذرة QTIF:‏ %s"
 
 #: gdk-pixbuf/io-qtif.c:233
 #, c-format
 msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
+msgstr "فشل التخطي إلى %d بايت التالية باستخدام ‪seek()‬."
 
 #: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
 msgid "Failed to allocate QTIF context structure."
-msgstr "تعذّر تحصيص ذاكرة لبنية سياق TGA"
+msgstr "تعذّر تحصيص ذاكرة لبنية سياق QTIF."
 
 #: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "فشلت كتابة فهرس المجلدات\n"
+msgstr "فشلت إنشاء كائن GdkPixbufLoader."
 
 #: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
 msgid "Failed to find an image data atom."
-msgstr "فشل فتح صورة TIFF"
+msgstr "فشل العثور على ذرة بيانات صورة."
 
 #: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
 msgid "The QTIF image format"
-msgstr "صيغة صور TIFF"
+msgstr "صيغة صور QTIF"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
@@ -957,9 +952,8 @@ msgid "Cannot allocate new pixbuf"
 msgstr "تعذّر تحصيص pixbuf جديد"
 
 #: gdk-pixbuf/io-tga.c:686
-#, fuzzy
 msgid "Image is corrupted or truncated"
-msgstr "صورة GIF مقطّعة أو غير كاملة."
+msgstr "الصورة تالفة أو ناقصة"
 
 #: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
