@@ -857,8 +857,8 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  * Gets the object named @name. Note that this function does not
  * increment the reference count of the returned object. 
  *
- * Return value: the object named @name or %NULL if it could not be 
- *    found in the object tree. 
+ * Return value: (transfer none): the object named @name or %NULL if
+ *    it could not be found in the object tree.
  *
  * Since: 2.12
  **/
