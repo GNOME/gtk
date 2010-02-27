@@ -267,13 +267,17 @@ typedef enum
 #define GTK_WIDGET_SENSITIVE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_PARENT_SENSITIVE:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the #GTK_PARENT_SENSITIVE flag has be set on the widget.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_sensitive() on the parent widget instead.
  */
 #define GTK_WIDGET_PARENT_SENSITIVE(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_PARENT_SENSITIVE) != 0)
+#endif
 
 #ifndef GTK_DISABLE_DEPRECATED
 /**
