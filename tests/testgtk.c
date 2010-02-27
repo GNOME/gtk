@@ -2896,7 +2896,7 @@ create_sensitivity_control (GtkWidget *widget)
   button = gtk_toggle_button_new_with_label ("Sensitive");  
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button),
-                                GTK_WIDGET_IS_SENSITIVE (widget));
+                                gtk_widget_is_sensitive (widget));
   
   g_signal_connect (button,
                     "toggled",

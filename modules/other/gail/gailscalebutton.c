@@ -115,7 +115,7 @@ gail_scale_button_do_action(AtkAction *action,
   if (widget == NULL)
     return FALSE;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_is_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   switch (i) {

@@ -729,8 +729,8 @@ gtk_option_menu_item_state_changed_cb (GtkWidget      *widget,
 {
   GtkWidget *child = GTK_BIN (option_menu)->child;
 
-  if (child && GTK_WIDGET_SENSITIVE (child) != GTK_WIDGET_IS_SENSITIVE (widget))
-    gtk_widget_set_sensitive (child, GTK_WIDGET_IS_SENSITIVE (widget));
+  if (child && GTK_WIDGET_SENSITIVE (child) != gtk_widget_is_sensitive (widget))
+    gtk_widget_set_sensitive (child, gtk_widget_is_sensitive (widget));
 }
 
 static void
@@ -771,7 +771,7 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  child = GTK_BIN (option_menu->menu_item)->child;
 	  if (child)
 	    {
-	      if (!GTK_WIDGET_IS_SENSITIVE (option_menu->menu_item))
+	      if (!gtk_widget_is_sensitive (option_menu->menu_item))
 		gtk_widget_set_sensitive (child, FALSE);
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
 	    }
@@ -1014,7 +1014,7 @@ gtk_option_menu_scroll_event (GtkWidget          *widget,
 
 	  l = g_list_nth (GTK_MENU_SHELL (option_menu->menu)->children, index);
 	  item = GTK_MENU_ITEM (l->data);
-	  if (GTK_WIDGET_VISIBLE (item) && GTK_WIDGET_IS_SENSITIVE (item))
+	  if (GTK_WIDGET_VISIBLE (item) && gtk_widget_is_sensitive (GTK_WIDGET (item)))
 	    {
 	      gtk_option_menu_set_history (option_menu, index);
 	      gtk_menu_item_activate (GTK_MENU_ITEM (item));

@@ -1489,7 +1489,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
 
-  if (GTK_WIDGET_IS_SENSITIVE (menu_item->submenu) && widget->parent)
+  if (gtk_widget_is_sensitive (menu_item->submenu) && widget->parent)
     {
       gboolean take_focus;
       GtkMenuPositionFunc menu_position_func;
@@ -1912,7 +1912,7 @@ gtk_menu_item_can_activate_accel (GtkWidget *widget,
 				  guint      signal_id)
 {
   /* Chain to the parent GtkMenu for further checks */
-  return (GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_VISIBLE (widget) &&
+  return (gtk_widget_is_sensitive (widget) && GTK_WIDGET_VISIBLE (widget) &&
           widget->parent && gtk_widget_can_activate_accel (widget->parent, signal_id));
 }
 
@@ -2101,7 +2101,7 @@ _gtk_menu_item_is_selectable (GtkWidget *menu_item)
   if ((!GTK_BIN (menu_item)->child &&
        G_OBJECT_TYPE (menu_item) == GTK_TYPE_MENU_ITEM) ||
       GTK_IS_SEPARATOR_MENU_ITEM (menu_item) ||
-      !GTK_WIDGET_IS_SENSITIVE (menu_item) ||
+      !gtk_widget_is_sensitive (menu_item) ||
       !GTK_WIDGET_VISIBLE (menu_item))
     return FALSE;
 

@@ -1433,7 +1433,7 @@ calendar_realize_arrows (GtkCalendar *calendar)
 	  priv->arrow_win[i] = gdk_window_new (priv->header_win,
 					       &attributes, 
 					       attributes_mask);
-	  if (GTK_WIDGET_IS_SENSITIVE (widget))
+	  if (gtk_widget_is_sensitive (widget))
 	    priv->arrow_state[i] = GTK_STATE_NORMAL;
 	  else 
 	    priv->arrow_state[i] = GTK_STATE_INSENSITIVE;
@@ -3261,14 +3261,14 @@ gtk_calendar_state_changed (GtkWidget	   *widget,
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   int i;
   
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     {
       priv->in_drag = 0;
       calendar_stop_spinning (calendar);    
     }
 
   for (i = 0; i < 4; i++)
-    if (GTK_WIDGET_IS_SENSITIVE (widget))
+    if (gtk_widget_is_sensitive (widget))
       priv->arrow_state[i] = GTK_STATE_NORMAL;
     else 
       priv->arrow_state[i] = GTK_STATE_INSENSITIVE;

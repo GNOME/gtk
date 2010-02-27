@@ -374,7 +374,7 @@ gail_expander_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_is_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   expander = GAIL_EXPANDER (action);
@@ -404,7 +404,7 @@ idle_do_action (gpointer data)
 
   widget = GTK_ACCESSIBLE (gail_expander)->widget;
   if (widget == NULL /* State is defunct */ ||
-      !GTK_WIDGET_IS_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_is_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   gtk_widget_activate (widget);

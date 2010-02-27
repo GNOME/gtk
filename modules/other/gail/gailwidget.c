@@ -482,7 +482,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
     }
   else
     {
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
           atk_state_set_add_state (state_set, ATK_STATE_ENABLED);

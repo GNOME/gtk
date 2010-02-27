@@ -7950,7 +7950,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
   GtkContainer *container = GTK_CONTAINER (widget);
   GtkWidget *focus_child;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (container) || !gtk_widget_get_can_focus (widget))
+  if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_can_focus (widget))
     return FALSE;
 
   focus_child = container->focus_child;

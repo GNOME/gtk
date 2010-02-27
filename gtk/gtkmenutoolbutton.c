@@ -152,7 +152,7 @@ gtk_menu_tool_button_state_changed (GtkWidget    *widget,
   GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (widget);
   GtkMenuToolButtonPrivate *priv = button->priv;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget) && priv->menu)
+  if (!gtk_widget_is_sensitive (widget) && priv->menu)
     {
       gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }

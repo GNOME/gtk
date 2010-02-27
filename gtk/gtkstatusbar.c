@@ -647,7 +647,7 @@ set_grip_cursor (GtkStatusbar *statusbar)
       GdkCursorType cursor_type;
       GdkCursor *cursor;
       
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         {
           if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	    cursor_type = GDK_BOTTOM_RIGHT_CORNER;

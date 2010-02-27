@@ -997,7 +997,7 @@ gtk_paned_realize (GtkWidget *widget)
 			    GDK_POINTER_MOTION_MASK |
 			    GDK_POINTER_MOTION_HINT_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y;
-  if (GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 						      paned->cursor_type);
@@ -1280,7 +1280,7 @@ gtk_paned_state_changed (GtkWidget    *widget,
 
   if (GTK_WIDGET_REALIZED (paned))
     {
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
                                              paned->cursor_type); 
       else

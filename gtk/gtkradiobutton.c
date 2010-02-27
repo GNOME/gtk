@@ -498,7 +498,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    {
 	      GtkWidget *child = tmp_list->data;
 	      
-	      if (GTK_WIDGET_MAPPED (child) && GTK_WIDGET_IS_SENSITIVE (child))
+	      if (GTK_WIDGET_MAPPED (child) && gtk_widget_is_sensitive (child))
 		{
 		  new_focus = child;
 		  break;
@@ -534,7 +534,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    {
 	      GtkWidget *child = tmp_list->data;
 	      
-	      if (GTK_WIDGET_MAPPED (child) && GTK_WIDGET_IS_SENSITIVE (child))
+	      if (GTK_WIDGET_MAPPED (child) && gtk_widget_is_sensitive (child))
 		{
 		  new_focus = child;
 		  break;
@@ -719,7 +719,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	state_type = GTK_STATE_ACTIVE;
       else if (button->in_button)
 	state_type = GTK_STATE_PRELIGHT;
-      else if (!GTK_WIDGET_IS_SENSITIVE (widget))
+      else if (!gtk_widget_is_sensitive (widget))
 	state_type = GTK_STATE_INSENSITIVE;
       else
 	state_type = GTK_STATE_NORMAL;
