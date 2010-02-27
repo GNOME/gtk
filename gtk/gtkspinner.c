@@ -231,7 +231,7 @@ gtk_spinner_expose (GtkWidget      *widget,
     gtk_widget_set_size_request (widget, 12, 12);
 
   state_type = GTK_STATE_NORMAL;
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
    state_type = GTK_STATE_INSENSITIVE;
 
   gtk_paint_spinner (widget->style,

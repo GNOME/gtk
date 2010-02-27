@@ -966,7 +966,7 @@ gtk_spin_button_state_changed (GtkWidget    *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     {
       gtk_spin_button_stop_spinning (spin);    
       gtk_widget_queue_draw (GTK_WIDGET (spin));

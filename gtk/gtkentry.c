@@ -2619,7 +2619,7 @@ update_cursors (GtkWidget *widget)
            * here is that for the entry, insensitive => arrow cursor, but for 
            * an icon in a sensitive entry, insensitive => xterm cursor.
            */
-          if (GTK_WIDGET_IS_SENSITIVE (widget) && 
+          if (gtk_widget_is_sensitive (widget) &&
               (icon_info->insensitive || 
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
@@ -2779,7 +2779,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
  
-  if (GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       attributes_mask |= GDK_WA_CURSOR;
@@ -3236,7 +3236,7 @@ draw_icon (GtkWidget            *widget,
   x = (width  - gdk_pixbuf_get_width (pixbuf)) / 2;
   y = (height - gdk_pixbuf_get_height (pixbuf)) / 2;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget) ||
+  if (!gtk_widget_is_sensitive (widget) ||
       icon_info->insensitive)
     {
       GdkPixbuf *temp_pixbuf;
@@ -4250,7 +4250,7 @@ gtk_entry_state_changed (GtkWidget      *widget,
             gdk_window_set_background (icon_info->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
         }
 
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       else 
         cursor = NULL;
@@ -4265,7 +4265,7 @@ gtk_entry_state_changed (GtkWidget      *widget,
       update_cursors (widget);
     }
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     {
       /* Clear any selection */
       gtk_editable_select_region (GTK_EDITABLE (entry), entry->current_pos, entry->current_pos);      

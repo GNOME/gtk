@@ -955,7 +955,7 @@ static void
 gtk_expander_state_changed (GtkWidget    *widget,
 			    GtkStateType  previous_state)
 {
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     GTK_EXPANDER (widget)->priv->button_down = FALSE;
 }
 

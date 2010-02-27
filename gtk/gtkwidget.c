@@ -4299,7 +4299,9 @@ gtk_widget_real_can_activate_accel (GtkWidget *widget,
                                     guint      signal_id)
 {
   /* widgets must be onscreen for accels to take effect */
-  return GTK_WIDGET_IS_SENSITIVE (widget) && gtk_widget_is_drawable (widget) && gdk_window_is_viewable (widget->window);
+  return gtk_widget_is_sensitive (widget) &&
+         gtk_widget_is_drawable (widget) &&
+         gdk_window_is_viewable (widget->window);
 }
 
 /**
@@ -4655,7 +4657,7 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   group_cycling = group_cycling != FALSE;
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     handled = TRUE;
   else
     g_signal_emit (widget,
@@ -5268,7 +5270,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     return;
   
   g_object_ref (widget);
@@ -5795,7 +5797,7 @@ gtk_widget_set_state (GtkWidget           *widget,
       data.state_restoration = FALSE;
       data.use_forall = FALSE;
       if (widget->parent)
-	data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
+	data.parent_sensitive = (gtk_widget_is_sensitive (widget->parent) != FALSE);
       else
 	data.parent_sensitive = TRUE;
 
@@ -6250,7 +6252,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   data.use_forall = TRUE;
 
   if (widget->parent)
-    data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget->parent) != FALSE);
+    data.parent_sensitive = (gtk_widget_is_sensitive (widget->parent) != FALSE);
   else
     data.parent_sensitive = TRUE;
 
@@ -6299,7 +6301,7 @@ gtk_widget_is_sensitive (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_IS_SENSITIVE (widget);
+  return gtk_widget_is_sensitive (widget);
 }
 
 /**
@@ -6345,8 +6347,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   else
     data.state = GTK_WIDGET_STATE (widget);
   data.state_restoration = FALSE;
-  data.parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (parent) != FALSE);
-  data.use_forall = GTK_WIDGET_IS_SENSITIVE (parent) != GTK_WIDGET_IS_SENSITIVE (widget);
+  data.parent_sensitive = (gtk_widget_is_sensitive (parent) != FALSE);
+  data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
 
   gtk_widget_propagate_state (widget, &data);
   
@@ -7661,7 +7663,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!GTK_WIDGET_VISIBLE (widget) ||
-      !GTK_WIDGET_IS_SENSITIVE (widget))
+      !gtk_widget_is_sensitive (widget))
     return FALSE;
 
   /* child widgets must set CAN_FOCUS, containers
@@ -9184,7 +9186,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   else
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
 
-  if (GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
       if (data->state_restoration)
         GTK_WIDGET_STATE (widget) = widget->saved_state;
@@ -9203,7 +9205,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
     }
 
-  if (gtk_widget_is_focus (widget) && !GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
     {
       GtkWidget *window;
 
@@ -9217,14 +9219,14 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       g_object_ref (widget);
 
-      if (!GTK_WIDGET_IS_SENSITIVE (widget) && gtk_widget_has_grab (widget))
+      if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
 	gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
 
       if (GTK_WIDGET_HAS_POINTER (widget) && !GTK_WIDGET_SHADOWED (widget))
 	{
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	  if (!gtk_widget_is_sensitive (widget))
 	    _gtk_widget_synthesize_crossing (widget, NULL, 
 					     GDK_CROSSING_STATE_CHANGED);
 	  else if (old_state == GTK_STATE_INSENSITIVE)
@@ -9234,7 +9236,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
       if (GTK_IS_CONTAINER (widget))
 	{
-	  data->parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget) != FALSE);
+	  data->parent_sensitive = (gtk_widget_is_sensitive (widget) != FALSE);
 	  if (data->use_forall)
 	    gtk_container_forall (GTK_CONTAINER (widget),
 				  (GtkCallback) gtk_widget_propagate_state,

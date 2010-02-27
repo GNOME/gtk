@@ -2180,7 +2180,7 @@ gtk_button_state_changed (GtkWidget    *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     {
       button->in_button = FALSE;
       gtk_real_button_released (button);

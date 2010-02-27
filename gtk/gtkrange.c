@@ -1652,7 +1652,7 @@ draw_stepper (GtkRange     *range,
       arrow_sensitive = range->layout->lower_sensitive;
     }
 
-  if (!GTK_WIDGET_IS_SENSITIVE (range) || !arrow_sensitive)
+  if (!gtk_widget_is_sensitive (GTK_WIDGET (range)) || !arrow_sensitive)
     state_type = GTK_STATE_INSENSITIVE;
   else if (clicked)
     state_type = GTK_STATE_ACTIVE;
@@ -1741,7 +1741,7 @@ gtk_range_expose (GtkWidget      *widget,
   gtk_range_calc_marks (range);
   gtk_range_calc_layout (range, range->adjustment->value);
 
-  sensitive = GTK_WIDGET_IS_SENSITIVE (widget);
+  sensitive = gtk_widget_is_sensitive (widget);
 
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
@@ -2541,7 +2541,7 @@ static void
 gtk_range_state_changed (GtkWidget    *widget,
 			 GtkStateType  previous_state)
 {
-  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+  if (!gtk_widget_is_sensitive (widget))
     stop_scrolling (GTK_RANGE (widget));
 }
 

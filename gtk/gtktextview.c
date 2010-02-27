@@ -4012,7 +4012,7 @@ gtk_text_view_state_changed (GtkWidget      *widget,
     {
       gtk_text_view_set_background (text_view);
 
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       else
         cursor = NULL;
@@ -4025,7 +4025,7 @@ gtk_text_view_state_changed (GtkWidget      *widget,
       text_view->mouse_cursor_obscured = FALSE;
     }
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     {
       /* Clear any selection */
       gtk_text_view_unselect (text_view);
@@ -8030,7 +8030,7 @@ text_window_realize (GtkTextWindow *win,
 
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         {
           /* I-beam cursor */
           cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (widget->window),

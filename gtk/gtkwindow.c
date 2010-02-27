@@ -1968,7 +1968,7 @@ gtk_window_activate_focus (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+  if (window->focus_widget && gtk_widget_is_sensitive (window->focus_widget))
     return gtk_widget_activate (window->focus_widget);
 
   return FALSE;
@@ -2010,10 +2010,10 @@ gtk_window_activate_default (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (window->default_widget && GTK_WIDGET_IS_SENSITIVE (window->default_widget) &&
+  if (window->default_widget && gtk_widget_is_sensitive (window->default_widget) &&
       (!window->focus_widget || !gtk_widget_get_receives_default (window->focus_widget)))
     return gtk_widget_activate (window->default_widget);
-  else if (window->focus_widget && GTK_WIDGET_IS_SENSITIVE (window->focus_widget))
+  else if (window->focus_widget && gtk_widget_is_sensitive (window->focus_widget))
     return gtk_widget_activate (window->focus_widget);
 
   return FALSE;
@@ -5173,7 +5173,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
     {
       GtkWidget *parent;
       
-      if (GTK_WIDGET_IS_SENSITIVE (focus))
+      if (gtk_widget_is_sensitive (focus))
         handled = gtk_widget_event (focus, (GdkEvent*) event);
       
       parent = focus->parent;

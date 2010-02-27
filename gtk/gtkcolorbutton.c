@@ -319,7 +319,7 @@ render (GtkColorButton *color_button)
       
     for (i = 0; i < width; i++) 
       {
-        if (!GTK_WIDGET_IS_SENSITIVE (GTK_WIDGET (color_button)) && (i+j)%2) 
+        if (!gtk_widget_is_sensitive (GTK_WIDGET (color_button)) && (i+j)%2)
           {
             *(pixels + j * rowstride + i * 3) = insensitive_r;
             *(pixels + j * rowstride + i * 3 + 1) = insensitive_g;

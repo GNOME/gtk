@@ -2434,7 +2434,7 @@ dialog_set_print_pages (GtkPrintUnixDialog *dialog,
 static gdouble
 dialog_get_scale (GtkPrintUnixDialog *dialog)
 {
-  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->scale_spin))
+  if (gtk_widget_is_sensitive (dialog->priv->scale_spin))
     return gtk_spin_button_get_value (GTK_SPIN_BUTTON (dialog->priv->scale_spin));
   else
     return 100.0;
@@ -2450,7 +2450,7 @@ dialog_set_scale (GtkPrintUnixDialog *dialog,
 static GtkPageSet
 dialog_get_page_set (GtkPrintUnixDialog *dialog)
 {
-  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->page_set_combo))
+  if (gtk_widget_is_sensitive (dialog->priv->page_set_combo))
     return (GtkPageSet)gtk_combo_box_get_active (GTK_COMBO_BOX (dialog->priv->page_set_combo));
   else
     return GTK_PAGE_SET_ALL;
@@ -2467,7 +2467,7 @@ dialog_set_page_set (GtkPrintUnixDialog *dialog,
 static gint
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
-  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->copies_spin))
+  if (gtk_widget_is_sensitive (dialog->priv->copies_spin))
     return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dialog->priv->copies_spin));
   return 1;
 }
@@ -2483,7 +2483,7 @@ dialog_set_n_copies (GtkPrintUnixDialog *dialog,
 static gboolean
 dialog_get_collate (GtkPrintUnixDialog *dialog)
 {
-  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->collate_check))
+  if (gtk_widget_is_sensitive (dialog->priv->collate_check))
     return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->collate_check));
   return FALSE;
 }
@@ -2499,7 +2499,7 @@ dialog_set_collate (GtkPrintUnixDialog *dialog,
 static gboolean
 dialog_get_reverse (GtkPrintUnixDialog *dialog)
 {
-  if (GTK_WIDGET_IS_SENSITIVE (dialog->priv->reverse_check))
+  if (gtk_widget_is_sensitive (dialog->priv->reverse_check))
     return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->priv->reverse_check));
   return FALSE;
 }

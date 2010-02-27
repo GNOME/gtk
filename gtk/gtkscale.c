@@ -973,7 +973,7 @@ gtk_scale_expose (GtkWidget      *widget,
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->expose_event (widget, event);
 
   state_type = GTK_STATE_NORMAL;
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     state_type = GTK_STATE_INSENSITIVE;
 
   if (priv->marks)

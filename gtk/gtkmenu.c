@@ -1804,7 +1804,7 @@ gtk_menu_real_can_activate_accel (GtkWidget *widget,
   if (awidget)
     return gtk_widget_can_activate_accel (awidget, signal_id);
   else
-    return GTK_WIDGET_IS_SENSITIVE (widget);
+    return gtk_widget_is_sensitive (widget);
 }
 
 /**

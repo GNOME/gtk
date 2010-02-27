@@ -2385,9 +2385,9 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
       if (!(enable_mnemonics && priv->mnemonics_visible &&
             (!auto_mnemonics ||
-             (GTK_WIDGET_IS_SENSITIVE (label) &&
+             (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
               (!label->mnemonic_widget ||
-               GTK_WIDGET_IS_SENSITIVE (label->mnemonic_widget))))))
+               gtk_widget_is_sensitive (label->mnemonic_widget))))))
         {
           gchar *tmp;
           gchar *pattern;
@@ -2583,9 +2583,9 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 
       if (enable_mnemonics && priv->mnemonics_visible && pattern &&
           (!auto_mnemonics ||
-           (GTK_WIDGET_IS_SENSITIVE (label) &&
+           (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
             (!label->mnemonic_widget ||
-             GTK_WIDGET_IS_SENSITIVE (label->mnemonic_widget)))))
+             gtk_widget_is_sensitive (label->mnemonic_widget)))))
         attrs = gtk_label_pattern_to_attrs (label, pattern);
       else
         attrs = NULL;
@@ -3418,7 +3418,7 @@ gtk_label_update_cursor (GtkLabel *label)
       GdkDisplay *display;
       GdkCursor *cursor;
 
-      if (GTK_WIDGET_IS_SENSITIVE (label))
+      if (gtk_widget_is_sensitive (GTK_WIDGET (label)))
         {
           display = gtk_widget_get_display (GTK_WIDGET (label));
 
@@ -4721,7 +4721,7 @@ gtk_label_create_window (GtkLabel *label)
     GDK_POINTER_MOTION_MASK      |
     GDK_POINTER_MOTION_HINT_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
-  if (GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 						      GDK_XTERM);
@@ -6041,7 +6041,7 @@ gtk_label_activate_current_link (GtkLabel *label)
           if (window &&
               window->default_widget != widget &&
               !(widget == window->focus_widget &&
-                (!window->default_widget || !GTK_WIDGET_IS_SENSITIVE (window->default_widget))))
+                (!window->default_widget || !gtk_widget_is_sensitive (window->default_widget))))
             gtk_window_activate_default (window);
         }
     }

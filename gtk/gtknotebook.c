@@ -3244,7 +3244,7 @@ static void
 gtk_notebook_state_changed (GtkWidget    *widget,
 			    GtkStateType  previous_state)
 {
-  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+  if (!gtk_widget_is_sensitive (widget))
     stop_scrolling (GTK_NOTEBOOK (widget));
 }
 

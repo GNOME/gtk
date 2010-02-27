@@ -936,7 +936,7 @@ gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
     }
 
   /* don't let the focus vanish */
-  if ((!GTK_WIDGET_IS_SENSITIVE (path_bar->up_slider_button)) || 
+  if ((!gtk_widget_is_sensitive (path_bar->up_slider_button)) ||
       (!gtk_widget_get_child_visible (path_bar->up_slider_button)))
     gtk_widget_grab_focus (BUTTON_DATA (up_button->data)->button);
 
@@ -964,7 +964,7 @@ gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
     }
 
   /* don't let the focus vanish */
-  if ((!GTK_WIDGET_IS_SENSITIVE (path_bar->down_slider_button)) || 
+  if ((!gtk_widget_is_sensitive (path_bar->down_slider_button)) ||
       (!gtk_widget_get_child_visible (path_bar->down_slider_button)))
     gtk_widget_grab_focus (BUTTON_DATA (down_button->data)->button);
 
@@ -1036,7 +1036,7 @@ static void
 gtk_path_bar_state_changed (GtkWidget    *widget,
 			    GtkStateType  previous_state)
 {
-  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+  if (!gtk_widget_is_sensitive (widget))
     gtk_path_bar_stop_scrolling (GTK_PATH_BAR (widget));
 }
 

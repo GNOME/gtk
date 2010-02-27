@@ -1519,7 +1519,7 @@ gtk_main_do_event (GdkEvent *event)
        *  then we send the event to the original event widget.
        *  This is the key to implementing modality.
        */
-      if (GTK_WIDGET_IS_SENSITIVE (event_widget) &&
+      if (gtk_widget_is_sensitive (event_widget) &&
 	  gtk_widget_is_ancestor (event_widget, grab_widget))
 	grab_widget = event_widget;
     }
@@ -1650,13 +1650,13 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
       GTK_PRIVATE_SET_FLAG (event_widget, GTK_HAS_POINTER);
       _gtk_widget_set_pointer_window (event_widget, event->any.window);
-      if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
+      if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
     case GDK_LEAVE_NOTIFY:
       GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_HAS_POINTER);
-      if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
+      if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
@@ -1759,7 +1759,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     {
       GTK_PRIVATE_SET_FLAG (child, GTK_SHADOWED);
       if (!was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && GTK_WIDGET_IS_SENSITIVE (child))
+	  && gtk_widget_is_sensitive (child))
 	_gtk_widget_synthesize_crossing (child, info->new_grab_widget,
 					 GDK_CROSSING_GTK_GRAB);
     }
@@ -1767,7 +1767,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     {
       GTK_PRIVATE_UNSET_FLAG (child, GTK_SHADOWED);
       if (was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && GTK_WIDGET_IS_SENSITIVE (child))
+	  && gtk_widget_is_sensitive (child))
 	_gtk_widget_synthesize_crossing (info->old_grab_widget, child,
 					 info->from_grab ? GDK_CROSSING_GTK_GRAB
 					 : GDK_CROSSING_GTK_UNGRAB);
@@ -1827,7 +1827,7 @@ gtk_grab_add (GtkWidget *widget)
   
   g_return_if_fail (widget != NULL);
   
-  if (!gtk_widget_has_grab (widget) && GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_has_grab (widget) && gtk_widget_is_sensitive (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
       
@@ -2412,7 +2412,7 @@ gtk_propagate_event (GtkWidget *widget,
 	      window = gtk_widget_get_toplevel (widget);
 	      if (GTK_IS_WINDOW (window))
 		{
-		  if (GTK_WIDGET_IS_SENSITIVE (window))
+		  if (gtk_widget_is_sensitive (window))
 		    gtk_widget_event (window, event);
 		}
 	    }
@@ -2436,7 +2436,7 @@ gtk_propagate_event (GtkWidget *widget,
 	   * to have children of the viewport eat the scroll
 	   * event
 	   */
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	  if (!gtk_widget_is_sensitive (widget))
 	    handled_event = event->type != GDK_SCROLL;
 	  else
 	    handled_event = gtk_widget_event (widget, event);

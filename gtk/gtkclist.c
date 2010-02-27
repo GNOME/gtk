@@ -6447,7 +6447,7 @@ gtk_clist_focus (GtkWidget        *widget,
   GtkWidget *focus_child;
   gboolean is_current_focus;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_is_sensitive (widget))
     return FALSE;
 
   focus_child = GTK_CONTAINER (widget)->focus_child;

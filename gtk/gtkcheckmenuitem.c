@@ -488,7 +488,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	  else 
 	    shadow_type = GTK_SHADOW_OUT;
 	  
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	  if (!gtk_widget_is_sensitive (widget))
 	    state_type = GTK_STATE_INSENSITIVE;
 
 	  if (check_menu_item->draw_as_radio)
