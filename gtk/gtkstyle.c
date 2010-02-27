@@ -3548,7 +3548,7 @@ gtk_default_draw_box (GtkStyle      *style,
     }
   else
     gtk_style_apply_default_background (style, window,
-                                        widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                        widget && gtk_widget_get_has_window (widget),
                                         state_type, area, x, y, width, height);
 
   if (is_spinbutton_box)
@@ -3824,7 +3824,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     }
   else
     gtk_style_apply_default_background (style, window,
-                                        widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                        widget && gtk_widget_get_has_window (widget),
                                         state_type, area, x, y, width, height);
 
 
@@ -4360,7 +4360,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   GdkGC *gc4 = NULL;
   
   gtk_style_apply_default_background (style, window,
-                                      widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                      widget && gtk_widget_get_has_window (widget),
                                       state_type, area, x, y, width, height);
   
   sanitize_size (window, &width, &height);
@@ -4576,7 +4576,7 @@ gtk_default_draw_extension (GtkStyle       *style,
   GdkGC *gc4 = NULL;
   
   gtk_style_apply_default_background (style, window,
-                                      widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                      widget && gtk_widget_get_has_window (widget),
                                       GTK_STATE_NORMAL, area, x, y, width, height);
   
   sanitize_size (window, &width, &height);
@@ -4630,7 +4630,7 @@ gtk_default_draw_extension (GtkStyle       *style,
         {
         case GTK_POS_TOP:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y, 
@@ -4652,7 +4652,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_BOTTOM:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y + style->ythickness, 
@@ -4674,7 +4674,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_LEFT:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x, 
                                               y + style->ythickness, 
@@ -4696,7 +4696,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_RIGHT:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y + style->ythickness, 
