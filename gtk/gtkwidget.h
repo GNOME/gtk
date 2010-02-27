@@ -205,6 +205,7 @@ typedef enum
 #define GTK_WIDGET_TOPLEVEL(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_TOPLEVEL) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_NO_WINDOW:
  * @wid: a #GtkWidget.
@@ -214,7 +215,7 @@ typedef enum
  * Deprecated: 2.20: Use gtk_widget_get_has_window() instead.
  */
 #define GTK_WIDGET_NO_WINDOW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW) != 0)
-/* FIXME: Deprecating GTK_WIDGET_NO_WINDOW requires fixing GTK internals. */
+#endif
 
 /**
  * GTK_WIDGET_REALIZED:
