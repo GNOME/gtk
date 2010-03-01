@@ -187,7 +187,8 @@ static void
 gtk_option_menu_init (GtkOptionMenu *option_menu)
 {
   GTK_WIDGET_SET_FLAGS (option_menu, GTK_CAN_FOCUS);
-  GTK_WIDGET_UNSET_FLAGS (option_menu, GTK_CAN_DEFAULT | GTK_RECEIVES_DEFAULT);
+  GTK_WIDGET_UNSET_FLAGS (option_menu, GTK_CAN_DEFAULT);
+  gtk_widget_set_receives_default (GTK_WIDGET (option_menu), FALSE);
 
   option_menu->menu = NULL;
   option_menu->menu_item = NULL;
