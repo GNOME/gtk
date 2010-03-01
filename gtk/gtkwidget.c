@@ -6240,12 +6240,12 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   if (sensitive)
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_SENSITIVE);
+      GTK_OBJECT_FLAGS (widget) |= GTK_SENSITIVE;
       data.state = widget->saved_state;
     }
   else
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_SENSITIVE);
+      GTK_OBJECT_FLAGS (widget) &= ~(GTK_SENSITIVE);
       data.state = GTK_WIDGET_STATE (widget);
     }
   data.state_restoration = TRUE;
