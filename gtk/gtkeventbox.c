@@ -246,7 +246,7 @@ gtk_event_box_set_visible_window (GtkEventBox *event_box,
     {
       if (GTK_WIDGET_REALIZED (widget))
 	{
-	  gboolean visible = GTK_WIDGET_VISIBLE (widget);
+	  gboolean visible = gtk_widget_get_visible (widget);
 
 	  if (visible)
 	    gtk_widget_hide (widget);
@@ -265,7 +265,7 @@ gtk_event_box_set_visible_window (GtkEventBox *event_box,
           gtk_widget_set_has_window (widget, visible_window);
 	}
 
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
 	gtk_widget_queue_resize (widget);
       
       g_object_notify (G_OBJECT (event_box), "visible-window");
@@ -341,7 +341,7 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 	    }
 	  else
 	    {
-	      gboolean visible = GTK_WIDGET_VISIBLE (widget);
+	      gboolean visible = gtk_widget_get_visible (widget);
 
 	      if (visible)
 		gtk_widget_hide (widget);
@@ -355,7 +355,7 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
 	    }
 	}
 
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
 	gtk_widget_queue_resize (widget);
       
       g_object_notify (G_OBJECT (event_box), "above-child");
@@ -487,7 +487,7 @@ gtk_event_box_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (widget)->border_width * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       

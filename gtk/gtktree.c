@@ -521,7 +521,7 @@ gtk_tree_map (GtkWidget *widget)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child) &&
+      if (gtk_widget_get_visible (child) &&
 	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
       
@@ -529,7 +529,7 @@ gtk_tree_map (GtkWidget *widget)
 	{
 	  child = GTK_WIDGET (GTK_TREE_ITEM (child)->subtree);
 	  
-	  if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
+	  if (gtk_widget_get_visible (child) && !GTK_WIDGET_MAPPED (child))
 	    gtk_widget_map (child);
 	}
     }
@@ -800,7 +800,7 @@ gtk_tree_remove_items (GtkTree *tree,
       gtk_tree_select_child (root_tree, widget);
     }
   
-  if (GTK_WIDGET_VISIBLE (root_tree))
+  if (gtk_widget_get_visible (GTK_WIDGET (root_tree)))
     {
 #ifdef TREE_DEBUG
       g_message("* query queue resizing for root_tree\n");
@@ -867,7 +867,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 	  
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
 	      GtkRequisition child_requisition;
 	      gtk_widget_get_child_requisition (child, &child_requisition);
@@ -879,7 +879,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
 	      child_allocation.y += child_allocation.height;
 	      
 	      if((subtree = GTK_TREE_ITEM(child)->subtree))
-		if(GTK_WIDGET_VISIBLE (subtree))
+		if(gtk_widget_get_visible (subtree))
 		  {
 		    child_allocation.height = subtree->requisition.height;
 		    gtk_widget_size_allocate (subtree, &child_allocation);
@@ -914,7 +914,7 @@ gtk_tree_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child))
+      if (gtk_widget_get_visible (child))
 	{
 	  gtk_widget_size_request (child, &child_requisition);
 	  
@@ -922,7 +922,7 @@ gtk_tree_size_request (GtkWidget      *widget,
 	  requisition->height += child_requisition.height;
 	  
 	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
-	     GTK_WIDGET_VISIBLE (subtree))
+	     gtk_widget_get_visible (subtree))
 	    {
 	      gtk_widget_size_request (subtree, &child_requisition);
 	      

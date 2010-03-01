@@ -1568,7 +1568,7 @@ gtk_menu_popup (GtkMenu		    *menu,
 
   /* We need to show the menu here rather in the init function because
    * code expects to be able to tell if the menu is onscreen by
-   * looking at the GTK_WIDGET_VISIBLE (menu)
+   * looking at the gtk_widget_get_visible (menu)
    */
   gtk_widget_show (GTK_WIDGET (menu));
 
@@ -1928,7 +1928,7 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
   if (!menu->tearoff_window)
     return;
 
-  if (GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
+  if (gtk_widget_get_visible (menu->tearoff_scrollbar))
     {
       gtk_widget_size_request (menu->tearoff_scrollbar, NULL);
       width += menu->tearoff_scrollbar->requisition.width;
@@ -2015,7 +2015,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
       
       if (menu->torn_off)
 	{
-	  if (GTK_WIDGET_VISIBLE (menu))
+	  if (gtk_widget_get_visible (GTK_WIDGET (menu)))
 	    gtk_menu_popdown (menu);
 
 	  if (!menu->tearoff_window)
@@ -2450,7 +2450,7 @@ gtk_menu_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
       
-      if (! GTK_WIDGET_VISIBLE (child))
+      if (! gtk_widget_get_visible (child))
         continue;
 
       get_effective_child_attach (child, &l, &r, &t, &b);
@@ -2597,7 +2597,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
               gint i;
 	      gint l, r, t, b;
@@ -2651,7 +2651,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	{
 	  if (allocation->height >= widget->requisition.height)
 	    {
-	      if (GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
+	      if (gtk_widget_get_visible (menu->tearoff_scrollbar))
 		{
 		  gtk_widget_hide (menu->tearoff_scrollbar);
 		  gtk_menu_set_tearoff_hints (menu, allocation->width);
@@ -2676,7 +2676,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	      
 	      gtk_adjustment_changed (menu->tearoff_adjustment);
 	      
-	      if (!GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
+	      if (!gtk_widget_get_visible (menu->tearoff_scrollbar))
 		{
 		  gtk_widget_show (menu->tearoff_scrollbar);
 		  gtk_menu_set_tearoff_hints (menu, allocation->width);
@@ -4232,7 +4232,7 @@ gtk_menu_position (GtkMenu *menu)
   private->initially_pushed_in = FALSE;
 
   /* Set the type hint here to allow custom position functions to set a different hint */
-  if (!GTK_WIDGET_VISIBLE (menu->toplevel))
+  if (!gtk_widget_get_visible (menu->toplevel))
     gtk_window_set_type_hint (GTK_WINDOW (menu->toplevel), GDK_WINDOW_TYPE_HINT_POPUP_MENU);
   
   if (menu->position_func)
@@ -5115,7 +5115,7 @@ child_at (GtkMenu *menu,
   
   for (children = menu_shell->children; children; children = children->next)
     {
-      if (GTK_WIDGET_VISIBLE (children->data))
+      if (gtk_widget_get_visible (children->data))
 	{
 	  GtkRequisition child_requisition;
 

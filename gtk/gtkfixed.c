@@ -201,7 +201,8 @@ gtk_fixed_move_internal (GtkFixed       *fixed,
 
   gtk_widget_thaw_child_notify (widget);
   
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (fixed))
+  if (gtk_widget_get_visible (widget) &&
+      gtk_widget_get_visible (GTK_WIDGET (fixed)))
     gtk_widget_queue_resize (GTK_WIDGET (fixed));
 }
 
@@ -319,7 +320,7 @@ gtk_fixed_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
           gtk_widget_size_request (child->widget, &child_requisition);
 
@@ -369,7 +370,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
 	  child_allocation.x = child->x + border_width;
@@ -401,9 +402,11 @@ gtk_fixed_remove (GtkContainer *container,
 {
   GtkFixed *fixed;
   GtkFixedChild *child;
+  GtkWidget *widget_container;
   GList *children;
 
   fixed = GTK_FIXED (container);
+  widget_container = GTK_WIDGET (container);
 
   children = fixed->children;
   while (children)
@@ -412,7 +415,7 @@ gtk_fixed_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
-	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  gboolean was_visible = gtk_widget_get_visible (widget);
 	  
 	  gtk_widget_unparent (widget);
 
@@ -420,8 +423,8 @@ gtk_fixed_remove (GtkContainer *container,
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (was_visible && GTK_WIDGET_VISIBLE (container))
-	    gtk_widget_queue_resize (GTK_WIDGET (container));
+	  if (was_visible && gtk_widget_get_visible (widget_container))
+	    gtk_widget_queue_resize (widget_container);
 
 	  break;
 	}

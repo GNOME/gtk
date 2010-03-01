@@ -184,7 +184,7 @@ create_simple_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {
@@ -277,7 +277,7 @@ create_generous_assistant (GtkWidget *widget)
                       G_CALLBACK (complete_cb), pdata);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {
@@ -374,7 +374,7 @@ create_nonlinear_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {
@@ -471,7 +471,7 @@ create_looping_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {
@@ -535,7 +535,7 @@ create_full_featured_assistant (GtkWidget *widget)
 	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {

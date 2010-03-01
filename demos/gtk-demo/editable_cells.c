@@ -381,7 +381,7 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 320, 200);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

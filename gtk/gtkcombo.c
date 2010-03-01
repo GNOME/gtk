@@ -705,7 +705,7 @@ static void
 gtk_combo_selection_changed (GtkList  *list,
 			     GtkCombo *combo)
 {
-  if (!GTK_WIDGET_VISIBLE (combo->popwin))
+  if (!gtk_widget_get_visible (combo->popwin))
     gtk_combo_update_entry (combo);
 }
 

@@ -1379,7 +1379,7 @@ _gtk_container_queue_resize (GtkContainer *container)
       
   if (resize_container)
     {
-      if (GTK_WIDGET_VISIBLE (resize_container) &&
+      if (gtk_widget_get_visible (GTK_WIDGET (resize_container)) &&
  	  (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) || GTK_WIDGET_REALIZED (resize_container)))
 	{
 	  switch (resize_container->resize_mode)
@@ -2655,7 +2655,7 @@ static void
 gtk_container_map_child (GtkWidget *child,
 			 gpointer   client_data)
 {
-  if (GTK_WIDGET_VISIBLE (child) &&
+  if (gtk_widget_get_visible (child) &&
       GTK_WIDGET_CHILD_VISIBLE (child) &&
       !GTK_WIDGET_MAPPED (child))
     gtk_widget_map (child);

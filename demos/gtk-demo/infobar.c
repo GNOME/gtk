@@ -90,7 +90,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, FALSE, 0);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

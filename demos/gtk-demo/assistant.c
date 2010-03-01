@@ -153,7 +153,7 @@ do_assistant (GtkWidget *do_widget)
 			G_CALLBACK (on_assistant_prepare), NULL);
     }
 
-  if (!GTK_WIDGET_VISIBLE (assistant))
+  if (!gtk_widget_get_visible (assistant))
     gtk_widget_show (assistant);
   else
     {

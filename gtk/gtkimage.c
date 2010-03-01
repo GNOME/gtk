@@ -2395,11 +2395,13 @@ gtk_image_update_size (GtkImage *image,
                        gint      image_width,
                        gint      image_height)
 {
-  GTK_WIDGET (image)->requisition.width = image_width + GTK_MISC (image)->xpad * 2;
-  GTK_WIDGET (image)->requisition.height = image_height + GTK_MISC (image)->ypad * 2;
+  GtkWidget *widget = GTK_WIDGET (image);
 
-  if (GTK_WIDGET_VISIBLE (image))
-    gtk_widget_queue_resize (GTK_WIDGET (image));
+  widget->requisition.width = image_width + GTK_MISC (image)->xpad * 2;
+  widget->requisition.height = image_height + GTK_MISC (image)->ypad * 2;
+
+  if (gtk_widget_get_visible (widget))
+    gtk_widget_queue_resize (widget);
 }
 
 

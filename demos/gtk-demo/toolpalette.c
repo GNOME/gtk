@@ -616,7 +616,7 @@ do_toolpalette (GtkWidget *do_widget)
                                 gtk_label_new ("Interactive DnD Mode"));
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

@@ -393,7 +393,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   g_object_ref (plug);
   g_object_ref (socket_);
 
-  widget_was_visible = GTK_WIDGET_VISIBLE (plug);
+  widget_was_visible = gtk_widget_get_visible (widget);
   
   gdk_window_hide (widget->window);
   GTK_PRIVATE_SET_FLAG (plug, GTK_IN_REPARENT);
@@ -429,7 +429,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   g_object_unref (plug);
 
-  if (widget_was_visible && GTK_WIDGET_VISIBLE (socket_))
+  if (widget_was_visible && gtk_widget_get_visible (GTK_WIDGET (socket_)))
     gtk_widget_queue_resize (GTK_WIDGET (socket_));
 
   g_object_unref (socket_);
@@ -691,7 +691,7 @@ gtk_plug_map (GtkWidget *widget)
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
       if (bin->child &&
-	  GTK_WIDGET_VISIBLE (bin->child) &&
+	  gtk_widget_get_visible (bin->child) &&
 	  !GTK_WIDGET_MAPPED (bin->child))
 	gtk_widget_map (bin->child);
 
@@ -745,7 +745,7 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
-      if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+      if (bin->child && gtk_widget_get_visible (bin->child))
 	{
 	  GtkAllocation child_allocation;
 	  

@@ -83,7 +83,7 @@ do_spinner (GtkWidget *do_widget)
     on_play_clicked (NULL, NULL);
   }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);

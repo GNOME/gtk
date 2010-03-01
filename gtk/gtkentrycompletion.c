@@ -1051,7 +1051,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
 
   g_object_notify (G_OBJECT (completion), "model");
 
-  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+  if (gtk_widget_get_visible (completion->priv->popup_window))
     _gtk_entry_completion_resize_popup (completion);
 }
 
@@ -1180,7 +1180,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
 
   gtk_tree_model_filter_refilter (completion->priv->filter_model);
 
-  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+  if (gtk_widget_get_visible (completion->priv->popup_window))
     _gtk_entry_completion_resize_popup (completion);
 }
 

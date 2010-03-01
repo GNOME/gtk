@@ -167,7 +167,7 @@ do_dialog (GtkWidget *do_widget)
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry2);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

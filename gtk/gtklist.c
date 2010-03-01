@@ -382,7 +382,7 @@ gtk_list_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child))
+      if (gtk_widget_get_visible (child))
 	{
 	  GtkRequisition child_requisition;
 	  
@@ -430,7 +430,7 @@ gtk_list_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
 	      GtkRequisition child_requisition;
 	      gtk_widget_get_child_requisition (child, &child_requisition);
@@ -1204,7 +1204,7 @@ gtk_list_clear_items (GtkList *list,
 	}
     }
 
-  if (GTK_WIDGET_VISIBLE (list))
+  if (gtk_widget_get_visible (GTK_WIDGET (list)))
     gtk_widget_queue_resize (GTK_WIDGET (list));
 }
 
@@ -1337,7 +1337,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
 	}
     }
 
-  if (GTK_WIDGET_VISIBLE (list))
+  if (gtk_widget_get_visible (GTK_WIDGET (list)))
     gtk_widget_queue_resize (GTK_WIDGET (list));
 }
 

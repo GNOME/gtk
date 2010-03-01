@@ -511,7 +511,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
        * GailWidget data structure so we can determine whether the value has 
        * changed.
        */
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
           if (gail_widget_on_screen (widget) && GTK_WIDGET_MAPPED (widget) &&
@@ -986,7 +986,7 @@ gail_widget_real_notify_gtk (GObject     *obj,
   else if (strcmp (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
-      value = GTK_WIDGET_VISIBLE (widget);
+      value = gtk_widget_get_visible (widget);
     }
   else if (strcmp (pspec->name, "sensitive") == 0)
     {
@@ -1093,7 +1093,7 @@ static gboolean gail_widget_all_parents_visible (GtkWidget *widget)
   for (iter_parent = gtk_widget_get_parent (widget); iter_parent;
        iter_parent = gtk_widget_get_parent (iter_parent))
     {
-      if (!GTK_WIDGET_VISIBLE (iter_parent))
+      if (!gtk_widget_get_visible (iter_parent))
         {
           result = FALSE;
           break;

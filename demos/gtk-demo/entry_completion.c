@@ -86,7 +86,7 @@ do_entry_completion (GtkWidget *do_widget)
     gtk_entry_completion_set_text_column (completion, 0);
   }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);

@@ -3710,7 +3710,7 @@ gtk_label_expose (GtkWidget      *widget,
 
   gtk_label_ensure_layout (label);
   
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_visible (widget) && GTK_WIDGET_MAPPED (widget) &&
       label->text && (*label->text != '\0'))
     {
       get_layout_location (label, &x, &y);

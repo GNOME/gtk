@@ -2443,7 +2443,7 @@ open_dialog (GtkFileChooserButton *button)
 
   /* Setup the dialog parent to be chooser button's toplevel, and be modal
      as needed. */
-  if (!GTK_WIDGET_VISIBLE (priv->dialog))
+  if (!gtk_widget_get_visible (priv->dialog))
     {
       GtkWidget *toplevel;
 

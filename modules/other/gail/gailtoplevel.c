@@ -94,7 +94,7 @@ gail_toplevel_init (GailToplevel *toplevel)
       window = GTK_WINDOW (l->data);
       widget = GTK_WIDGET (window);
       if (!window || 
-          !GTK_WIDGET_VISIBLE (widget) ||
+          !gtk_widget_get_visible (widget) ||
           is_attached_menu_window (widget) ||
           GTK_WIDGET (window)->parent ||
           GTK_IS_PLUG (window))

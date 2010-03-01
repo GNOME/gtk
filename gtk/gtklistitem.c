@@ -484,7 +484,7 @@ gtk_list_item_size_request (GtkWidget      *widget,
   requisition->height = 2 * (GTK_CONTAINER (widget)->border_width +
 			     focus_width + focus_pad - 1);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
 

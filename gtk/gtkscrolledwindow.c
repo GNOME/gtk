@@ -1268,7 +1268,7 @@ gtk_scrolled_window_real_size_request (GtkWidget      *widget,
   gtk_widget_size_request (scrolled_window->vscrollbar,
 			   &vscrollbar_requisition);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
                                             &min_child_requisition,
@@ -1455,7 +1455,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   else if (scrolled_window->vscrollbar_policy == GTK_POLICY_NEVER)
     scrolled_window->vscrollbar_visible = FALSE;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gboolean previous_hvis;
       gboolean previous_vvis;
@@ -1509,7 +1509,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (scrolled_window->hscrollbar,
 					&hscrollbar_requisition);
   
-      if (!GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
+      if (!gtk_widget_get_visible (scrolled_window->hscrollbar))
 	gtk_widget_show (scrolled_window->hscrollbar);
 
       child_allocation.x = relative_allocation.x;
@@ -1548,13 +1548,13 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (scrolled_window->hscrollbar, &child_allocation);
     }
-  else if (GTK_WIDGET_VISIBLE (scrolled_window->hscrollbar))
+  else if (gtk_widget_get_visible (scrolled_window->hscrollbar))
     gtk_widget_hide (scrolled_window->hscrollbar);
 
   if (scrolled_window->vscrollbar_visible)
     {
       GtkRequisition vscrollbar_requisition;
-      if (!GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
+      if (!gtk_widget_get_visible (scrolled_window->vscrollbar))
 	gtk_widget_show (scrolled_window->vscrollbar);
 
       gtk_widget_get_child_requisition (scrolled_window->vscrollbar,
@@ -1600,7 +1600,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (scrolled_window->vscrollbar, &child_allocation);
     }
-  else if (GTK_WIDGET_VISIBLE (scrolled_window->vscrollbar))
+  else if (gtk_widget_get_visible (scrolled_window->vscrollbar))
     gtk_widget_hide (scrolled_window->vscrollbar);
 }
 
@@ -1618,7 +1618,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   else
     range = GTK_SCROLLED_WINDOW (widget)->hscrollbar;
 
-  if (range && GTK_WIDGET_VISIBLE (range))
+  if (range && gtk_widget_get_visible (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
       gdouble delta, new_value;

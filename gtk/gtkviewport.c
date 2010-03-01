@@ -378,7 +378,7 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
   
   hadjustment->lower = 0;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -415,7 +415,7 @@ viewport_set_vadjustment_values (GtkViewport *viewport,
   
   vadjustment->lower = 0;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -529,7 +529,7 @@ gtk_viewport_set_shadow_type (GtkViewport   *viewport,
     {
       viewport->shadow_type = type;
 
-      if (GTK_WIDGET_VISIBLE (viewport))
+      if (gtk_widget_get_visible (GTK_WIDGET (viewport)))
 	{
 	  gtk_widget_size_allocate (GTK_WIDGET (viewport), &(GTK_WIDGET (viewport)->allocation));
 	  gtk_widget_queue_draw (GTK_WIDGET (viewport));
@@ -738,7 +738,7 @@ gtk_viewport_size_request (GtkWidget      *widget,
       requisition->height += 2 * widget->style->ythickness;
     }
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
       requisition->width += child_requisition.width;
@@ -797,7 +797,7 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
                               child_allocation.width,
                               child_allocation.height);
     }
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     gtk_widget_size_allocate (bin->child, &child_allocation);
 
   gtk_adjustment_changed (hadjustment);
@@ -815,7 +815,7 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkViewport *viewport = GTK_VIEWPORT (data);
   GtkBin *bin = GTK_BIN (data);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child)  &&
+  if (bin->child && gtk_widget_get_visible (bin->child)  &&
       GTK_WIDGET_REALIZED (viewport))
     {
       GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);

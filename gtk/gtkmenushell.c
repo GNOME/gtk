@@ -612,7 +612,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
   if (menu_item && _gtk_menu_item_is_selectable (menu_item) &&
       GTK_MENU_ITEM (menu_item)->submenu != NULL &&
-      !GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_item)->submenu))
+      !gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->submenu))
     {
       GtkMenuShellPrivate *priv;
 
@@ -922,7 +922,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
                   priv = GTK_MENU_SHELL_GET_PRIVATE (menu_item->parent);
                   priv->activated_submenu = TRUE;
 
-                  if (!GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_item)->submenu))
+                  if (!gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->submenu))
                     {
                       gboolean touchscreen_mode;
 
@@ -954,7 +954,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
 
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
       GtkWidget *event_widget = gtk_get_event_widget ((GdkEvent*) event);
@@ -1007,7 +1007,7 @@ gtk_menu_shell_remove (GtkContainer *container,
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (container);
   gint was_visible;
 
-  was_visible = GTK_WIDGET_VISIBLE (widget);
+  was_visible = gtk_widget_get_visible (widget);
   menu_shell->children = g_list_remove (menu_shell->children, widget);
   
   if (widget == menu_shell->active_menu_item)
@@ -1018,7 +1018,7 @@ gtk_menu_shell_remove (GtkContainer *container,
 
   gtk_widget_unparent (widget);
   
-  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+  /* queue resize regardless of gtk_widget_get_visible (container),
    * since that's what is needed by toplevels.
    */
   if (was_visible)
@@ -1329,7 +1329,7 @@ gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
     {
       GtkWidget *child = tmp_list->data;
       
-      if ((!search_sensitive && GTK_WIDGET_VISIBLE (child)) ||
+      if ((!search_sensitive && gtk_widget_get_visible (child)) ||
 	  _gtk_menu_item_is_selectable (child))
 	{
 	  to_select = child;
@@ -1356,7 +1356,7 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
     {
       GtkWidget *child = tmp_list->data;
       
-      if ((!search_sensitive && GTK_WIDGET_VISIBLE (child)) ||
+      if ((!search_sensitive && gtk_widget_get_visible (child)) ||
 	  _gtk_menu_item_is_selectable (child))
 	{
 	  to_select = child;
@@ -1415,7 +1415,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
       if (touchscreen_mode &&
           menu_shell->active_menu_item &&
           GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu &&
-          GTK_WIDGET_VISIBLE (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu))
+          gtk_widget_get_visible (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu))
         {
           /* if we are on a menu item that has an open submenu but the
            * focus is not in that submenu (e.g. because it's empty or

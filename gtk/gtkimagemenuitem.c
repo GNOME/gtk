@@ -326,7 +326,7 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 
   *requisition = 0;
 
-  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
+  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
     {
       GtkRequisition image_requisition;
       guint toggle_spacing;
@@ -420,7 +420,7 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
 
-  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
+  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
     {
       GtkRequisition child_requisition;
       
@@ -464,7 +464,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->size_allocate (widget, allocation);
 
-  if (image_menu_item->image && GTK_WIDGET_VISIBLE (image_menu_item->image))
+  if (image_menu_item->image && gtk_widget_get_visible (image_menu_item->image))
     {
       gint x, y, offset;
       GtkRequisition child_requisition;
@@ -977,12 +977,13 @@ gtk_image_menu_item_remove (GtkContainer *container,
     {
       gboolean widget_was_visible;
       
-      widget_was_visible = GTK_WIDGET_VISIBLE (child);
+      widget_was_visible = gtk_widget_get_visible (child);
       
       gtk_widget_unparent (child);
       image_menu_item->image = NULL;
       
-      if (GTK_WIDGET_VISIBLE (container) && widget_was_visible)
+      if (widget_was_visible &&
+          gtk_widget_get_visible (GTK_WIDGET (container)))
         gtk_widget_queue_resize (GTK_WIDGET (container));
 
       g_object_notify (G_OBJECT (image_menu_item), "image");

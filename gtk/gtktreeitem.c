@@ -204,7 +204,7 @@ gtk_tree_item_subtree_button_changed_state (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
   
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     {
       
       if (widget->state == GTK_STATE_NORMAL)
@@ -462,7 +462,7 @@ gtk_tree_item_size_request (GtkWidget      *widget,
 			widget->style->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition pix_requisition;
       
@@ -640,7 +640,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	  gtk_tree_item_draw_lines(widget);
 
 	  if (tree_item->pixmaps_box && 
-	      GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
+	      gtk_widget_get_visible(tree_item->pixmaps_box) &&
 	      gtk_widget_intersect (tree_item->pixmaps_box, area, &child_area))
             {
               gtk_widget_queue_draw_area (tree_item->pixmaps_box,
@@ -946,12 +946,12 @@ gtk_tree_item_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
   if(item->pixmaps_box &&
-     GTK_WIDGET_VISIBLE (item->pixmaps_box) &&
+     gtk_widget_get_visible (item->pixmaps_box) &&
      !GTK_WIDGET_MAPPED (item->pixmaps_box))
     gtk_widget_map (item->pixmaps_box);
 
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_get_visible (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
 
@@ -969,12 +969,12 @@ gtk_tree_item_unmap (GtkWidget *widget)
   gdk_window_hide (widget->window);
 
   if(item->pixmaps_box &&
-     GTK_WIDGET_VISIBLE (item->pixmaps_box) &&
+     gtk_widget_get_visible (item->pixmaps_box) &&
      GTK_WIDGET_MAPPED (item->pixmaps_box))
     gtk_widget_unmap (bin->child);
 
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_get_visible (bin->child) &&
       GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_unmap (bin->child);
 }

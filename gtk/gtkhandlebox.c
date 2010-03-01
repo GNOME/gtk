@@ -354,7 +354,7 @@ gtk_handle_box_map (GtkWidget *widget)
   hb = GTK_HANDLE_BOX (widget);
 
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_get_visible (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
 
@@ -620,7 +620,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 			    widget->allocation.height);
 
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkAllocation child_allocation;
       guint border_width;
@@ -951,7 +951,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			 event ? &event->area : area,
 			 handle_orientation);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event (widget, event);
 }
 

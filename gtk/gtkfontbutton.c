@@ -722,7 +722,7 @@ gtk_font_button_clicked (GtkButton *button)
                         G_CALLBACK (dialog_destroy), font_button);
     }
   
-  if (!GTK_WIDGET_VISIBLE (font_button->priv->font_dialog)) 
+  if (!gtk_widget_get_visible (font_button->priv->font_dialog))
     {
       font_dialog = GTK_FONT_SELECTION_DIALOG (font_button->priv->font_dialog);
       

@@ -1501,7 +1501,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
   g_object_notify (G_OBJECT (text_view), "buffer");
   
-  if (GTK_WIDGET_VISIBLE (text_view))
+  if (gtk_widget_get_visible (GTK_WIDGET (text_view)))
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
 
   DV(g_print ("Invalidating due to set_buffer\n"));
@@ -7124,7 +7124,7 @@ adjust_allocation_recurse (GtkWidget *widget,
    */
   if (!GTK_WIDGET_REALIZED (widget))
     {
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
 	{
 	  GdkRectangle tmp_rectangle = widget->allocation;
 	  tmp_rectangle.x += scroll_data->dx;
@@ -9025,7 +9025,8 @@ gtk_text_view_move_child (GtkTextView *text_view,
   vc->x = xpos;
   vc->y = ypos;
 
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (text_view))
+  if (gtk_widget_get_visible (child) &&
+      gtk_widget_get_visible (GTK_WIDGET (text_view)))
     gtk_widget_queue_resize (child);
 }
 

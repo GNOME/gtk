@@ -2564,7 +2564,7 @@ gtk_print (gchar *str)
   gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, str, -1);
   level -= 1;
   
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
 }
 #endif

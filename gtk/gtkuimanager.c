@@ -2133,7 +2133,7 @@ _gtk_menu_is_empty (GtkWidget *menu)
   cur = children;
   while (cur) 
     {
-      if (GTK_WIDGET_VISIBLE (cur->data))
+      if (gtk_widget_get_visible (cur->data))
 	{
 	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
 	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
@@ -2214,7 +2214,7 @@ update_smart_separators (GtkWidget *proxy)
 		  break;
 		}
 	    }
-	  else if (GTK_WIDGET_VISIBLE (cur->data))
+	  else if (gtk_widget_get_visible (cur->data))
 	    {
 	      last = NULL;
 	      if (GTK_IS_TEAROFF_MENU_ITEM (cur->data) || cur->data == filler)

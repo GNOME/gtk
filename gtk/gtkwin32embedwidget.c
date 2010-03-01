@@ -270,7 +270,7 @@ gtk_win32_embed_widget_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
+      gtk_widget_get_visible (bin->child) &&
       !GTK_WIDGET_MAPPED (bin->child))
     gtk_widget_map (bin->child);
 
@@ -297,7 +297,7 @@ gtk_win32_embed_widget_size_allocate (GtkWidget     *widget,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkAllocation child_allocation;
       

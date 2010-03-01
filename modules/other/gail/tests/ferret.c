@@ -1710,7 +1710,7 @@ _create_window (void)
         gtk_container_add (GTK_CONTAINER (vbox1), GTK_WIDGET (notebook));
         gtk_widget_show (GTK_WIDGET (notebook));
     }
-    if (!GTK_WIDGET_VISIBLE (window))
+    if (!gtk_widget_get_visible (window))
         gtk_widget_show (window);
 
     mainWindow = GTK_WIDGET (window);

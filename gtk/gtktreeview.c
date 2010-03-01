@@ -1715,7 +1715,7 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
 	  column = list->data;
-          if (GTK_WIDGET_VISIBLE (column->button) &&
+          if (gtk_widget_get_visible (column->button) &&
               !GTK_WIDGET_MAPPED (column->button))
             gtk_widget_map (column->button);
 	}
@@ -1750,7 +1750,7 @@ gtk_tree_view_map (GtkWidget *widget)
       GtkTreeViewChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  if (!GTK_WIDGET_MAPPED (child->widget))
 	    gtk_widget_map (child->widget);
@@ -2053,7 +2053,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
       tmp_list = tmp_list->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
         gtk_widget_size_request (child->widget, &child_requisition);
     }
 }
@@ -10429,7 +10429,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     return FALSE;
 
   if (tree_view->priv->search_window != NULL &&
-      GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
+      gtk_widget_get_visible (tree_view->priv->search_window))
     return TRUE;
 
   for (list = tree_view->priv->columns; list; list = list->next)
@@ -10563,7 +10563,7 @@ adjust_allocation_recurse (GtkWidget *widget,
    */
   if (!GTK_WIDGET_REALIZED (widget))
     {
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
 	{
 	  GdkRectangle tmp_rectangle = widget->allocation;
 	  tmp_rectangle.x += scroll_data->dx;
@@ -11706,7 +11706,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
    * scrolling code, we short-circuit validate_visible_area's immplementation as
    * it is much slower than just going to the point.
    */
-  if (! GTK_WIDGET_VISIBLE (tree_view) ||
+  if (! gtk_widget_get_visible (GTK_WIDGET (tree_view)) ||
       ! GTK_WIDGET_REALIZED (tree_view) ||
       GTK_WIDGET_ALLOC_NEEDED (tree_view) || 
       GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
@@ -14217,7 +14217,7 @@ gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
       tree_view->priv->typeselect_flush_timeout = 0;
     }
 	
-  if (GTK_WIDGET_VISIBLE (search_dialog))
+  if (gtk_widget_get_visible (search_dialog))
     {
       /* send focus-in event */
       send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), FALSE);

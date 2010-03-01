@@ -1360,7 +1360,7 @@ gtk_button_size_request (GtkWidget      *widget,
       requisition->height += default_border.top + default_border.bottom;
     }
 
-  if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
+  if (GTK_BIN (button)->child && gtk_widget_get_visible (GTK_BIN (button)->child))
     {
       GtkRequisition child_requisition;
 
@@ -1405,7 +1405,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
 			    widget->allocation.width - border_width * 2,
 			    widget->allocation.height - border_width * 2);
 
-  if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
+  if (GTK_BIN (button)->child && gtk_widget_get_visible (GTK_BIN (button)->child))
     {
       child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
       child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;

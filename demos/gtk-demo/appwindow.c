@@ -595,7 +595,7 @@ do_appwindow (GtkWidget *do_widget)
       update_statusbar (buffer, GTK_STATUSBAR (statusbar));
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

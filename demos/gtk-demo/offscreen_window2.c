@@ -122,7 +122,7 @@ pick_offscreen_child (GdkWindow     *offscreen_window,
  GtkAllocation child_area;
  double x, y;
 
- if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+ if (bin->child && gtk_widget_get_visible (bin->child))
     {
       to_child (bin, widget_x, widget_y, &x, &y);
 
@@ -200,7 +200,7 @@ gtk_mirror_bin_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_OFFSCREEN;
 
   child_requisition.width = child_requisition.height = 0;
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       attributes.width = bin->child->allocation.width;
       attributes.height = bin->child->allocation.height;
@@ -269,7 +269,7 @@ gtk_mirror_bin_remove (GtkContainer *container,
   GtkMirrorBin *bin = GTK_MIRROR_BIN (container);
   gboolean was_visible;
 
-  was_visible = GTK_WIDGET_VISIBLE (widget);
+  was_visible = gtk_widget_get_visible (widget);
 
   if (bin->child == widget)
     {
@@ -277,7 +277,7 @@ gtk_mirror_bin_remove (GtkContainer *container,
 
       bin->child = NULL;
 
-      if (was_visible && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
         gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
@@ -306,7 +306,7 @@ gtk_mirror_bin_size_request (GtkWidget      *widget,
   child_requisition.width = 0;
   child_requisition.height = 0;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     gtk_widget_size_request (bin->child, &child_requisition);
 
   requisition->width = GTK_CONTAINER (widget)->border_width * 2 + child_requisition.width + 10;
@@ -333,7 +333,7 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
                             allocation->y + border_width,
                             w, h);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
@@ -378,7 +378,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
           cairo_matrix_t matrix;
           cairo_pattern_t *mask;
 
-          if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+          if (bin->child && gtk_widget_get_visible (bin->child))
             {
               pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
               gdk_drawable_get_size (pixmap, &width, &height);
@@ -487,7 +487,7 @@ do_offscreen_window2 (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (hbox), applybutton, FALSE, FALSE, 0);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {
