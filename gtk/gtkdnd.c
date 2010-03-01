@@ -3049,7 +3049,7 @@ gtk_drag_update_icon (GtkDragSourceInfo *info)
 		       info->cur_x - hot_x, 
 		       info->cur_y - hot_y);
 
-      if (GTK_WIDGET_VISIBLE (icon_window))
+      if (gtk_widget_get_visible (icon_window))
 	gdk_window_raise (icon_window->window);
       else
 	gtk_widget_show (icon_window);

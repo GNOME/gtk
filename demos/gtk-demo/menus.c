@@ -196,7 +196,7 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (button);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show (window);
     }

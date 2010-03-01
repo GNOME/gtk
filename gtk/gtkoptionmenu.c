@@ -420,7 +420,7 @@ gtk_option_menu_size_request (GtkWidget      *widget,
       
   gtk_option_menu_get_props (option_menu, &props);
  
-  if (GTK_BIN (option_menu)->child && GTK_WIDGET_VISIBLE (GTK_BIN (option_menu)->child))
+  if (GTK_BIN (option_menu)->child && gtk_widget_get_visible (GTK_BIN (option_menu)->child))
     {
       gtk_widget_size_request (GTK_BIN (option_menu)->child, &child_requisition);
 
@@ -464,7 +464,7 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 			    allocation->width - border_width * 2, allocation->height - border_width * 2);
 
   child = GTK_BIN (widget)->child;
-  if (child && GTK_WIDGET_VISIBLE (child))
+  if (child && gtk_widget_get_visible (child))
     {
       gint xthickness = GTK_WIDGET (widget)->style->xthickness;
       gint ythickness = GTK_WIDGET (widget)->style->ythickness;
@@ -846,7 +846,7 @@ gtk_option_menu_calc_size (GtkOptionMenu *option_menu)
 	  child = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
 	      GtkWidget *inner = GTK_BIN (child)->child;
 
@@ -915,7 +915,7 @@ gtk_option_menu_position (GtkMenu  *menu,
       if (active == child)
 	break;
 
-      if (GTK_WIDGET_VISIBLE (child))
+      if (gtk_widget_get_visible (child))
 	{
 	  gtk_widget_get_child_requisition (child, &requisition);
 	  menu_ypos -= requisition.height;
@@ -1014,7 +1014,8 @@ gtk_option_menu_scroll_event (GtkWidget          *widget,
 
 	  l = g_list_nth (GTK_MENU_SHELL (option_menu->menu)->children, index);
 	  item = GTK_MENU_ITEM (l->data);
-	  if (GTK_WIDGET_VISIBLE (item) && gtk_widget_is_sensitive (GTK_WIDGET (item)))
+	  if (gtk_widget_get_visible (GTK_WIDGET (item)) &&
+              gtk_widget_is_sensitive (GTK_WIDGET (item)))
 	    {
 	      gtk_option_menu_set_history (option_menu, index);
 	      gtk_menu_item_activate (GTK_MENU_ITEM (item));

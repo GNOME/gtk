@@ -272,7 +272,7 @@ do_list_store (GtkWidget *do_widget)
                         G_CALLBACK (window_closed), NULL);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
       if (timeout == 0) {

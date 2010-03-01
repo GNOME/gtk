@@ -894,7 +894,7 @@ has_extra_children (GtkStatusbar *statusbar)
     {
       child = l->data;
 
-      if (!GTK_WIDGET_VISIBLE (child->widget))
+      if (!gtk_widget_get_visible (child->widget))
 	continue;
 
       if (frame->pack == GTK_PACK_START || child->pack == GTK_PACK_END)

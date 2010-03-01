@@ -1573,7 +1573,7 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
       if (active == child)
 	break;
 
-      if (GTK_WIDGET_VISIBLE (child))
+      if (gtk_widget_get_visible (child))
 	{
 	  gtk_widget_get_child_requisition (child, &requisition);
 	  menu_ypos -= requisition.height;
@@ -1627,7 +1627,7 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
       gtk_combo_box_menu_position_over (menu, x, y, push_in, user_data);
     }
 
-  if (!GTK_WIDGET_VISIBLE (GTK_MENU (priv->popup_widget)->toplevel))
+  if (!gtk_widget_get_visible (GTK_MENU (priv->popup_widget)->toplevel))
     gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->toplevel),
                               GDK_WINDOW_TYPE_HINT_COMBO);
 }
@@ -2318,7 +2318,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
               child.width -= child.x;
             }
 
-          if (GTK_WIDGET_VISIBLE (priv->popup_widget))
+          if (gtk_widget_get_visible (priv->popup_widget))
             {
               gint width;
               GtkRequisition requisition;
@@ -2405,7 +2405,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.height -= delta_y * 2;
         }
 
-      if (GTK_WIDGET_VISIBLE (priv->popup_window))
+      if (gtk_widget_get_visible (priv->popup_window))
         {
           gint x, y, width, height;
           gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);

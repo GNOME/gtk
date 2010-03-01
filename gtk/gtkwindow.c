@@ -2037,6 +2037,8 @@ void
 gtk_window_set_modal (GtkWindow *window,
 		      gboolean   modal)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   modal = modal != FALSE;
@@ -2044,24 +2046,23 @@ gtk_window_set_modal (GtkWindow *window,
     return;
   
   window->modal = modal;
+  widget = GTK_WIDGET (window);
   
   /* adjust desired modality state */
   if (GTK_WIDGET_REALIZED (window))
     {
-      GtkWidget *widget = GTK_WIDGET (window);
-      
       if (window->modal)
 	gdk_window_set_modal_hint (widget->window, TRUE);
       else
 	gdk_window_set_modal_hint (widget->window, FALSE);
     }
 
-  if (GTK_WIDGET_VISIBLE (window))
+  if (gtk_widget_get_visible (widget))
     {
       if (window->modal)
-	gtk_grab_add (GTK_WIDGET (window));
+	gtk_grab_add (widget);
       else
-	gtk_grab_remove (GTK_WIDGET (window));
+	gtk_grab_remove (widget);
     }
 
   g_object_notify (G_OBJECT (window), "modal");
@@ -4564,7 +4565,7 @@ gtk_window_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
   if (window->bin.child &&
-      GTK_WIDGET_VISIBLE (window->bin.child) &&
+      gtk_widget_get_visible (window->bin.child) &&
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
 
@@ -4939,7 +4940,7 @@ gtk_window_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (window)->border_width * 2;
   requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -4960,7 +4961,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   window = GTK_WINDOW (widget);
   widget->allocation = *allocation;
 
-  if (window->bin.child && GTK_WIDGET_VISIBLE (window->bin.child))
+  if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
       child_allocation.x = GTK_CONTAINER (window)->border_width;
       child_allocation.y = GTK_CONTAINER (window)->border_width;
@@ -5305,7 +5306,7 @@ gtk_window_focus_in_event (GtkWidget     *widget,
    *  the window is visible before actually handling the
    *  event
    */
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     {
       _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
@@ -5392,10 +5393,8 @@ gtk_window_client_event (GtkWidget	*widget,
 static void
 gtk_window_check_resize (GtkContainer *container)
 {
-  GtkWindow *window = GTK_WINDOW (container);
-
-  if (GTK_WIDGET_VISIBLE (container))
-    gtk_window_move_resize (window);
+  if (gtk_widget_get_visible (GTK_WIDGET (container)))
+    gtk_window_move_resize (GTK_WINDOW (container));
 }
 
 static gboolean
@@ -6778,7 +6777,7 @@ gtk_window_present_with_time (GtkWindow *window,
 
   widget = GTK_WIDGET (window);
 
-  if (GTK_WIDGET_VISIBLE (window))
+  if (gtk_widget_get_visible (widget))
     {
       g_assert (widget->window != NULL);
       
@@ -7333,9 +7332,8 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
   GdkWindow *toplevel;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_WIDGET_VISIBLE (window));
-  
   widget = GTK_WIDGET (window);
+  g_return_if_fail (gtk_widget_get_visible (widget));
   
   if (window->frame)
     toplevel = window->frame;
@@ -7413,9 +7411,8 @@ gtk_window_begin_move_drag  (GtkWindow *window,
   GdkWindow *toplevel;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_WIDGET_VISIBLE (window));
-  
   widget = GTK_WIDGET (window);
+  g_return_if_fail (gtk_widget_get_visible (widget));
   
   if (window->frame)
     toplevel = window->frame;

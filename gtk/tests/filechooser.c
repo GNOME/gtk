@@ -517,9 +517,9 @@ test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 
   /* OPEN implies that the "new folder" button is hidden; otherwise it is shown */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    passed = passed && !GTK_WIDGET_VISIBLE (impl->browse_new_folder_button);
+    passed = passed && !gtk_widget_get_visible (impl->browse_new_folder_button);
   else
-    passed = passed && GTK_WIDGET_VISIBLE (impl->browse_new_folder_button);
+    passed = passed && gtk_widget_get_visible (impl->browse_new_folder_button);
 
   /* Check that the widgets are present/visible or not */
   if (has_action (open_actions, G_N_ELEMENTS (open_actions), impl->action))

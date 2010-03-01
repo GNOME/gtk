@@ -291,7 +291,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   requisition->width = 0;
   requisition->height = 0;
   
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     {
       menu_bar = GTK_MENU_BAR (widget);
       menu_shell = GTK_MENU_SHELL (widget);
@@ -305,7 +305,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
               gint toggle_size;
 
@@ -432,7 +432,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 		  ltr_x = allocation->width -
 		    child_requisition.width - offset;
 		}
-	      if (GTK_WIDGET_VISIBLE (child))
+	      if (gtk_widget_get_visible (child))
 		{
 		  if ((direction == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR))
 		    child_allocation.x = ltr_x;
@@ -482,7 +482,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 		  ltr_y = allocation->height -
 		    child_requisition.height - offset;
 		}
-	      if (GTK_WIDGET_VISIBLE (child))
+	      if (gtk_widget_get_visible (child))
 		{
 		  if ((direction == GTK_TEXT_DIR_LTR) ==
 		      (priv->pack_direction == GTK_PACK_DIRECTION_TTB))

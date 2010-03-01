@@ -409,7 +409,7 @@ gtk_expander_realize (GtkWidget *widget)
 
   get_expander_bounds (GTK_EXPANDER (widget), &expander_rect);
   
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkRequisition label_requisition;
 
@@ -490,7 +490,7 @@ gtk_expander_size_request (GtkWidget      *widget,
 		       2 * focus_width + 2 * focus_pad;
   requisition->height = interior_focus ? (2 * focus_width + 2 * focus_pad) : 0;
 
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkRequisition label_requisition;
 
@@ -557,7 +557,7 @@ get_expander_bounds (GtkExpander  *expander,
     rect->x += widget->allocation.width - 2 * border_width -
                expander_spacing - expander_size;
 
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkAllocation label_allocation;
 
@@ -626,7 +626,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     {
       GtkAllocation label_allocation;
       GtkRequisition label_requisition;
@@ -765,7 +765,7 @@ gtk_expander_paint_prelight (GtkExpander *expander)
   area.y = widget->allocation.y + container->border_width;
   area.width = widget->allocation.width - (2 * container->border_width);
 
-  if (priv->label_widget && GTK_WIDGET_VISIBLE (priv->label_widget))
+  if (priv->label_widget && gtk_widget_get_visible (priv->label_widget))
     area.height = priv->label_widget->allocation.height;
   else
     area.height = 0;
@@ -847,7 +847,7 @@ gtk_expander_paint_focus (GtkExpander  *expander,
 
   if (priv->label_widget)
     {
-      if (GTK_WIDGET_VISIBLE (priv->label_widget))
+      if (gtk_widget_get_visible (priv->label_widget))
 	{
 	  GtkAllocation label_allocation = priv->label_widget->allocation;
 
@@ -1686,6 +1686,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 			       GtkWidget   *label_widget)
 {
   GtkExpanderPrivate *priv;
+  GtkWidget          *widget;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
@@ -1703,19 +1704,20 @@ gtk_expander_set_label_widget (GtkExpander *expander,
     }
 
   priv->label_widget = label_widget;
+  widget = GTK_WIDGET (expander);
 
   if (label_widget)
     {
       priv->label_widget = label_widget;
 
-      gtk_widget_set_parent (label_widget, GTK_WIDGET (expander));
+      gtk_widget_set_parent (label_widget, widget);
 
       if (priv->prelight)
 	gtk_widget_set_state (label_widget, GTK_STATE_PRELIGHT);
     }
 
-  if (GTK_WIDGET_VISIBLE (expander))
-    gtk_widget_queue_resize (GTK_WIDGET (expander));
+  if (gtk_widget_get_visible (widget))
+    gtk_widget_queue_resize (widget);
 
   g_object_freeze_notify (G_OBJECT (expander));
   g_object_notify (G_OBJECT (expander), "label-widget");

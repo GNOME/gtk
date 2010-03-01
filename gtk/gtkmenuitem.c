@@ -982,7 +982,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       (child_pack_dir == GTK_PACK_DIRECTION_TTB || child_pack_dir == GTK_PACK_DIRECTION_BTT))
     requisition->height += 2 * horizontal_padding;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -1820,7 +1820,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   gtk_menu_set_monitor (menu, monitor_num);
 
-  if (!GTK_WIDGET_VISIBLE (menu->toplevel))
+  if (!gtk_widget_get_visible (menu->toplevel))
     {
       gtk_window_set_type_hint (GTK_WINDOW (menu->toplevel), menu_item->from_menubar?
 				GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU : GDK_WINDOW_TYPE_HINT_POPUP_MENU);
@@ -1912,7 +1912,7 @@ gtk_menu_item_can_activate_accel (GtkWidget *widget,
 				  guint      signal_id)
 {
   /* Chain to the parent GtkMenu for further checks */
-  return (gtk_widget_is_sensitive (widget) && GTK_WIDGET_VISIBLE (widget) &&
+  return (gtk_widget_is_sensitive (widget) && gtk_widget_get_visible (widget) &&
           widget->parent && gtk_widget_can_activate_accel (widget->parent, signal_id));
 }
 
@@ -2102,7 +2102,7 @@ _gtk_menu_item_is_selectable (GtkWidget *menu_item)
        G_OBJECT_TYPE (menu_item) == GTK_TYPE_MENU_ITEM) ||
       GTK_IS_SEPARATOR_MENU_ITEM (menu_item) ||
       !gtk_widget_is_sensitive (menu_item) ||
-      !GTK_WIDGET_VISIBLE (menu_item))
+      !gtk_widget_get_visible (menu_item))
     return FALSE;
 
   return TRUE;

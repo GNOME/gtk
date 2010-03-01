@@ -421,7 +421,7 @@ gtk_alignment_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (widget)->border_width * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -456,7 +456,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_get_child_requisition (bin->child, &child_requisition);
 

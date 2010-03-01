@@ -400,7 +400,7 @@ default_forward_function (gint current_page, gpointer data)
 
   page_info = (GtkAssistantPage *) page_node->data;
 
-  while (page_node && !GTK_WIDGET_VISIBLE (page_info->page))
+  while (page_node && !gtk_widget_get_visible (page_info->page))
     {
       page_node = page_node->next;
       current_page++;
@@ -571,7 +571,7 @@ set_current_page (GtkAssistant     *assistant,
 
   g_signal_emit (assistant, signals [PREPARE], 0, priv->current_page->page);
 
-  if (GTK_WIDGET_VISIBLE (priv->current_page->page) && GTK_WIDGET_MAPPED (assistant))
+  if (gtk_widget_get_visible (priv->current_page->page) && GTK_WIDGET_MAPPED (assistant))
     {
       gtk_widget_set_child_visible (priv->current_page->page, TRUE);
       gtk_widget_map (priv->current_page->page);
@@ -599,7 +599,7 @@ set_current_page (GtkAssistant     *assistant,
       button[5] = assistant->last;
       for (i = 0; i < 6; i++)
         {
-          if (GTK_WIDGET_VISIBLE (button[i]) && gtk_widget_get_sensitive (button[i]))
+          if (gtk_widget_get_visible (button[i]) && gtk_widget_get_sensitive (button[i]))
             {
               gtk_widget_grab_focus (button[i]);
               break;
@@ -688,7 +688,7 @@ on_assistant_back (GtkWidget    *widget,
       g_slist_free_1 (page_node);
     }
   while (page_info->type == GTK_ASSISTANT_PAGE_PROGRESS ||
-	 !GTK_WIDGET_VISIBLE (page_info->page));
+	 !gtk_widget_get_visible (page_info->page));
 
   set_current_page (assistant, page_info);
 }
@@ -923,7 +923,7 @@ remove_page (GtkAssistant *assistant,
 	   */
 	  page_node = priv->pages;
 
-	  while (page_node && !GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
+	  while (page_node && !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
 	    page_node = page_node->next;
 
           if (page_node == element)
@@ -1209,7 +1209,7 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   child_allocation.height = allocation->height - 2 * GTK_CONTAINER (widget)->border_width -
     priv->header_image->allocation.height - 2 * header_padding - ACTION_AREA_SPACING - priv->action_area->allocation.height - 2 * content_padding;
 
-  if (GTK_WIDGET_VISIBLE (priv->sidebar_image))
+  if (gtk_widget_get_visible (priv->sidebar_image))
     {
       if (!rtl)
 	child_allocation.x += priv->sidebar_image->allocation.width;
@@ -1240,7 +1240,7 @@ gtk_assistant_map (GtkWidget *widget)
   gtk_widget_map (priv->header_image);
   gtk_widget_map (priv->action_area);
 
-  if (GTK_WIDGET_VISIBLE (priv->sidebar_image) &&
+  if (gtk_widget_get_visible (priv->sidebar_image) &&
       !GTK_WIDGET_MAPPED (priv->sidebar_image))
     gtk_widget_map (priv->sidebar_image);
 
@@ -1250,7 +1250,7 @@ gtk_assistant_map (GtkWidget *widget)
     {
       page_node = priv->pages;
 
-      while (page_node && !GTK_WIDGET_VISIBLE (((GtkAssistantPage *) page_node->data)->page))
+      while (page_node && !gtk_widget_get_visible (((GtkAssistantPage *) page_node->data)->page))
 	page_node = page_node->next;
 
       if (page_node)
@@ -1258,7 +1258,7 @@ gtk_assistant_map (GtkWidget *widget)
     }
 
   if (page &&
-      GTK_WIDGET_VISIBLE (page->page) &&
+      gtk_widget_get_visible (page->page) &&
       !GTK_WIDGET_MAPPED (page->page))
     set_current_page (assistant, page);
 
@@ -1338,7 +1338,7 @@ assistant_paint_colored_box (GtkWidget *widget)
   content_x = content_padding + border_width;
   content_width = widget->allocation.width - 2 * content_padding - 2 * border_width;
 
-  if (GTK_WIDGET_VISIBLE (priv->sidebar_image))
+  if (gtk_widget_get_visible (priv->sidebar_image))
     {
       if (!rtl)
 	content_x += priv->sidebar_image->allocation.width;

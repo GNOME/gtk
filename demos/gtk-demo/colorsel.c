@@ -125,7 +125,7 @@ do_colorsel (GtkWidget *do_widget)
 			G_CALLBACK (change_color_callback), NULL);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

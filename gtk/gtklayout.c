@@ -409,8 +409,9 @@ gtk_layout_move_internal (GtkLayout       *layout,
 
   gtk_widget_thaw_child_notify (widget);
   
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (layout))
-    gtk_widget_queue_resize (GTK_WIDGET (widget));
+  if (gtk_widget_get_visible (widget) &&
+      gtk_widget_get_visible (GTK_WIDGET (layout)))
+    gtk_widget_queue_resize (widget);
 }
 
 /**
@@ -915,7 +916,7 @@ gtk_layout_map (GtkWidget *widget)
       GtkLayoutChild *child = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  if (!GTK_WIDGET_MAPPED (child->widget))
 	    gtk_widget_map (child->widget);

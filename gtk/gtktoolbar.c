@@ -1802,7 +1802,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_hide (GTK_WIDGET (priv->arrow_button));
 
-      if (priv->menu && GTK_WIDGET_VISIBLE (priv->menu))
+      if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
 	gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
 
@@ -2673,7 +2673,7 @@ gtk_toolbar_arrow_button_clicked (GtkWidget  *button,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);  
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)) &&
-      (!priv->menu || !GTK_WIDGET_VISIBLE (priv->menu)))
+      (!priv->menu || !gtk_widget_get_visible (GTK_WIDGET (priv->menu))))
     {
       /* We only get here when the button is clicked with the keyboard,
        * because mouse button presses result in the menu being shown so
@@ -4117,7 +4117,7 @@ toolbar_content_visible (ToolbarContent *content,
     case TOOL_ITEM:
       item = content->u.tool_item.item;
       
-      if (!GTK_WIDGET_VISIBLE (item))
+      if (!gtk_widget_get_visible (GTK_WIDGET (item)))
 	return FALSE;
       
       if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -4133,7 +4133,7 @@ toolbar_content_visible (ToolbarContent *content,
       
     case COMPATIBILITY:
       if (content->u.compatibility.child.type != GTK_TOOLBAR_CHILD_SPACE)
-	return GTK_WIDGET_VISIBLE (content->u.compatibility.child.widget);
+	return gtk_widget_get_visible (content->u.compatibility.child.widget);
       else
 	return TRUE;
       break;

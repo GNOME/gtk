@@ -59,7 +59,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_table_attach_defaults (GTK_TABLE (table), picker, 1, 2, 3, 4);
   }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

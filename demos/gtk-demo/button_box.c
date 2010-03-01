@@ -113,7 +113,7 @@ do_button_box (GtkWidget *do_widget)
 			TRUE, TRUE, 5);
   }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

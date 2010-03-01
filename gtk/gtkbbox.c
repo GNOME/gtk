@@ -390,7 +390,8 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
 
   gtk_widget_child_notify (child, "secondary");
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (child))
+  if (gtk_widget_get_visible (GTK_WIDGET (widget))
+      && gtk_widget_get_visible (child))
     gtk_widget_queue_resize (child);
 }
 
@@ -457,7 +458,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  nchildren += 1;
 	  gtk_widget_size_request (child->widget, &child_requisition);
@@ -773,7 +774,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
         {
           child_allocation.width = child_width;
           child_allocation.height = child_height;

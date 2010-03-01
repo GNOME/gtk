@@ -47,7 +47,7 @@ to_child_2 (GtkOffscreenBox *offscreen_box,
   x = widget_x;
   y = widget_y;
 
-  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     y -= offscreen_box->child1->allocation.height;
 
   child_area = offscreen_box->child2->allocation;
@@ -98,7 +98,7 @@ to_parent_2 (GtkOffscreenBox *offscreen_box,
   x += child_area.width / 2;
   y += child_area.height / 2;
 
-  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     y += offscreen_box->child1->allocation.height;
 
   *x_out = x;
@@ -150,7 +150,7 @@ pick_offscreen_child (GdkWindow *offscreen_window,
 
  /* First check for child 2 */
  if (offscreen_box->child2 &&
-     GTK_WIDGET_VISIBLE (offscreen_box->child2))
+     gtk_widget_get_visible (offscreen_box->child2))
     {
       to_child_2 (offscreen_box,
 		  widget_x, widget_y,
@@ -163,7 +163,7 @@ pick_offscreen_child (GdkWindow *offscreen_window,
 	return offscreen_box->offscreen_window2;
     }
 
- if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+ if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
    {
      x = widget_x;
      y = widget_y;
@@ -273,7 +273,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
 
   /* Child 1 */
   attributes.x = attributes.y = 0;
-  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     {
       attributes.width = offscreen_box->child1->allocation.width;
       attributes.height = offscreen_box->child1->allocation.height;
@@ -296,7 +296,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   /* Child 2 */
   attributes.y = start_y;
   child_requisition.width = child_requisition.height = 0;
-  if (offscreen_box->child2 && GTK_WIDGET_VISIBLE (offscreen_box->child2))
+  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
     {
       attributes.width = offscreen_box->child2->allocation.width;
       attributes.height = offscreen_box->child2->allocation.height;
@@ -401,7 +401,7 @@ gtk_offscreen_box_remove (GtkContainer *container,
   GtkOffscreenBox *offscreen_box = GTK_OFFSCREEN_BOX (container);
   gboolean was_visible;
 
-  was_visible = GTK_WIDGET_VISIBLE (widget);
+  was_visible = gtk_widget_get_visible (widget);
 
   if (offscreen_box->child1 == widget)
     {
@@ -409,7 +409,7 @@ gtk_offscreen_box_remove (GtkContainer *container,
 
       offscreen_box->child1 = NULL;
 
-      if (was_visible && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
   else if (offscreen_box->child2 == widget)
@@ -418,7 +418,7 @@ gtk_offscreen_box_remove (GtkContainer *container,
 
       offscreen_box->child2 = NULL;
 
-      if (was_visible && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
@@ -462,7 +462,7 @@ gtk_offscreen_box_size_request (GtkWidget      *widget,
   w = 0;
   h = 0;
 
-  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     {
       GtkRequisition child_requisition;
 
@@ -472,7 +472,7 @@ gtk_offscreen_box_size_request (GtkWidget      *widget,
       h += CHILD1_SIZE_SCALE * child_requisition.height;
     }
 
-  if (offscreen_box->child2 && GTK_WIDGET_VISIBLE (offscreen_box->child2))
+  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
     {
       GtkRequisition child_requisition;
 
@@ -508,7 +508,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
 
   start_y = 0;
 
-  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
     {
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
@@ -532,7 +532,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (offscreen_box->child1, &child_allocation);
     }
 
-  if (offscreen_box->child2 && GTK_WIDGET_VISIBLE (offscreen_box->child2))
+  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
     {
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
@@ -581,7 +581,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
           cairo_t *cr;
 	  int start_y = 0;
 
-	  if (offscreen_box->child1 && GTK_WIDGET_VISIBLE (offscreen_box->child1))
+	  if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
 	    {
 	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window1);
               child_area = offscreen_box->child1->allocation;
@@ -596,7 +596,7 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
               start_y += child_area.height;
 	    }
 
-	  if (offscreen_box->child2 && GTK_WIDGET_VISIBLE (offscreen_box->child2))
+	  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
 	    {
               gint w, h;
 

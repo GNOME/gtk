@@ -379,7 +379,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
   
   if (frame->label_widget)
     {
-      need_resize = GTK_WIDGET_VISIBLE (frame->label_widget);
+      need_resize = gtk_widget_get_visible (frame->label_widget);
       gtk_widget_unparent (frame->label_widget);
     }
 
@@ -389,10 +389,10 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     {
       frame->label_widget = label_widget;
       gtk_widget_set_parent (label_widget, GTK_WIDGET (frame));
-      need_resize |= GTK_WIDGET_VISIBLE (label_widget);
+      need_resize |= gtk_widget_get_visible (label_widget);
     }
   
-  if (GTK_WIDGET_VISIBLE (frame) && need_resize)
+  if (gtk_widget_get_visible (GTK_WIDGET (frame)) && need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (frame));
 
   g_object_freeze_notify (G_OBJECT (frame));
@@ -609,7 +609,7 @@ gtk_frame_size_request (GtkWidget      *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkRequisition child_requisition;
   
-  if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
+  if (frame->label_widget && gtk_widget_get_visible (frame->label_widget))
     {
       gtk_widget_size_request (frame->label_widget, &child_requisition);
 
@@ -623,7 +623,7 @@ gtk_frame_size_request (GtkWidget      *widget,
       requisition->height = 0;
     }
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
 
@@ -659,12 +659,12 @@ gtk_frame_size_allocate (GtkWidget     *widget,
        new_allocation.height != frame->child_allocation.height))
     gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     gtk_widget_size_allocate (bin->child, &new_allocation);
   
   frame->child_allocation = new_allocation;
   
-  if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
+  if (frame->label_widget && gtk_widget_get_visible (frame->label_widget))
     {
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;

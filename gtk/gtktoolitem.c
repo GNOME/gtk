@@ -524,7 +524,7 @@ gtk_tool_item_size_request (GtkWidget      *widget,
 {
   GtkWidget *child = GTK_BIN (widget)->child;
 
-  if (child && GTK_WIDGET_VISIBLE (child))
+  if (child && gtk_widget_get_visible (child))
     {
       gtk_widget_size_request (child, requisition);
     }
@@ -557,7 +557,7 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
                             widget->allocation.width - border_width * 2,
                             widget->allocation.height - border_width * 2);
   
-  if (child && GTK_WIDGET_VISIBLE (child))
+  if (child && gtk_widget_get_visible (child))
     {
       child_allocation.x = allocation->x + border_width;
       child_allocation.y = allocation->y + border_width;

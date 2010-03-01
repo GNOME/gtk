@@ -223,7 +223,7 @@ do_rotated_text (GtkWidget *do_widget)
       pango_attr_list_unref (attrs);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

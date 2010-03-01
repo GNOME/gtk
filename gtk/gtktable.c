@@ -372,7 +372,8 @@ gtk_table_set_child_property (GtkContainer    *container,
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
     }
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
+  if (gtk_widget_get_visible (child) &&
+      gtk_widget_get_visible (GTK_WIDGET (table)))
     gtk_widget_queue_resize (child);
 }
 
@@ -626,7 +627,7 @@ gtk_table_set_row_spacing (GtkTable *table,
     {
       table->rows[row].spacing = spacing;
       
-      if (GTK_WIDGET_VISIBLE (table))
+      if (gtk_widget_get_visible (GTK_WIDGET (table)))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
     }
 }
@@ -663,7 +664,7 @@ gtk_table_set_col_spacing (GtkTable *table,
     {
       table->cols[column].spacing = spacing;
       
-      if (GTK_WIDGET_VISIBLE (table))
+      if (gtk_widget_get_visible (GTK_WIDGET (table)))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
     }
 }
@@ -700,7 +701,7 @@ gtk_table_set_row_spacings (GtkTable *table,
   for (row = 0; row < table->nrows; row++)
     table->rows[row].spacing = spacing;
   
-  if (GTK_WIDGET_VISIBLE (table))
+  if (gtk_widget_get_visible (GTK_WIDGET (table)))
     gtk_widget_queue_resize (GTK_WIDGET (table));
 
   g_object_notify (G_OBJECT (table), "row-spacing");
@@ -736,7 +737,7 @@ gtk_table_set_col_spacings (GtkTable *table,
   for (col = 0; col < table->ncols; col++)
     table->cols[col].spacing = spacing;
   
-  if (GTK_WIDGET_VISIBLE (table))
+  if (gtk_widget_get_visible (GTK_WIDGET (table)))
     gtk_widget_queue_resize (GTK_WIDGET (table));
 
   g_object_notify (G_OBJECT (table), "column-spacing");
@@ -771,7 +772,7 @@ gtk_table_set_homogeneous (GtkTable *table,
     {
       table->homogeneous = homogeneous;
       
-      if (GTK_WIDGET_VISIBLE (table))
+      if (gtk_widget_get_visible (GTK_WIDGET (table)))
 	gtk_widget_queue_resize (GTK_WIDGET (table));
 
       g_object_notify (G_OBJECT (table), "homogeneous");
@@ -862,6 +863,7 @@ gtk_table_remove (GtkContainer *container,
 {
   GtkTable *table = GTK_TABLE (container);
   GtkTableChild *child;
+  GtkWidget *widget_container = GTK_WIDGET (container);
   GList *children;
 
   children = table->children;
@@ -873,15 +875,15 @@ gtk_table_remove (GtkContainer *container,
       
       if (child->widget == widget)
 	{
-	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  gboolean was_visible = gtk_widget_get_visible (widget);
 	  
 	  gtk_widget_unparent (widget);
 	  
 	  table->children = g_list_remove (table->children, child);
 	  g_free (child);
 	  
-	  if (was_visible && GTK_WIDGET_VISIBLE (container))
-	    gtk_widget_queue_resize (GTK_WIDGET (container));
+	  if (was_visible && gtk_widget_get_visible (widget_container))
+	    gtk_widget_queue_resize (widget_container);
 	  break;
 	}
     }
@@ -932,7 +934,7 @@ gtk_table_size_request_init (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	gtk_widget_size_request (child->widget, NULL);
 
       if (child->left_attach == (child->right_attach - 1) && child->xexpand)
@@ -957,7 +959,7 @@ gtk_table_size_request_pass1 (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  GtkRequisition child_requisition;
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
@@ -1020,7 +1022,7 @@ gtk_table_size_request_pass3 (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  /* Child spans multiple columns.
 	   */
@@ -1173,7 +1175,7 @@ gtk_table_size_allocate_init (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  if (child->left_attach == (child->right_attach - 1))
 	    {
@@ -1208,7 +1210,7 @@ gtk_table_size_allocate_init (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  if (child->left_attach != (child->right_attach - 1))
 	    {
@@ -1545,7 +1547,7 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  GtkRequisition child_requisition;
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);

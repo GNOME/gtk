@@ -63,7 +63,7 @@ gtk_offscreen_window_size_request (GtkWidget *widget,
   requisition->width = border_width * 2;
   requisition->height = border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_req;
 
@@ -100,7 +100,7 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
                             allocation->width,
                             allocation->height);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkAllocation  child_alloc;
 
@@ -210,7 +210,7 @@ gtk_offscreen_window_check_resize (GtkContainer *container)
 {
   GtkWidget *widget = GTK_WIDGET (container);
 
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     gtk_offscreen_window_resize (widget);
 }
 

@@ -314,7 +314,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_clipboard_set_can_store (clipboard, NULL, 0);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

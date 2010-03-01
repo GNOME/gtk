@@ -7603,7 +7603,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
   
-  if (GTK_WIDGET_VISIBLE (entry))
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
@@ -7670,7 +7670,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
 
-  if (GTK_WIDGET_VISIBLE (entry))
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
@@ -7740,7 +7740,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
 
-  if (GTK_WIDGET_VISIBLE (entry))
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
@@ -7807,7 +7807,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
 
   gtk_entry_ensure_pixbuf (entry, icon_pos);
 
-  if (GTK_WIDGET_VISIBLE (entry))
+  if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
 
   g_object_thaw_notify (G_OBJECT (entry));
@@ -9261,7 +9261,7 @@ gtk_entry_completion_timeout (gpointer data)
       g_object_get (completion, "popup-single-match", &popup_single, NULL);
       if ((matches > (popup_single ? 0: 1)) || actions > 0)
 	{ 
-	  if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+	  if (gtk_widget_get_visible (completion->priv->popup_window))
 	    _gtk_entry_completion_resize_popup (completion);
           else
 	    _gtk_entry_completion_popup (completion);
@@ -9269,7 +9269,7 @@ gtk_entry_completion_timeout (gpointer data)
       else 
 	_gtk_entry_completion_popdown (completion);
     }
-  else if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+  else if (gtk_widget_get_visible (completion->priv->popup_window))
     _gtk_entry_completion_popdown (completion);
 
   return FALSE;
@@ -9578,7 +9578,7 @@ gtk_entry_completion_changed (GtkWidget *entry,
   if (completion->priv->minimum_key_length > 0 &&
       strcmp ("", gtk_entry_get_text (GTK_ENTRY (entry))) == 0)
     {
-      if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
+      if (gtk_widget_get_visible (completion->priv->popup_window))
         _gtk_entry_completion_popdown (completion);
       return;
     }

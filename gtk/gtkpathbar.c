@@ -714,7 +714,7 @@ static void
 gtk_path_bar_remove_1 (GtkContainer *container,
 		       GtkWidget    *widget)
 {
-  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+  gboolean was_visible = gtk_widget_get_visible (widget);
   gtk_widget_unparent (widget);
   if (was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (container));

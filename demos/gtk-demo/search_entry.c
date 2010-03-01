@@ -268,7 +268,7 @@ do_search_entry (GtkWidget *do_widget)
       gtk_widget_show_all (menu);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

@@ -158,7 +158,7 @@ do_sizegroup (GtkWidget *do_widget)
 			G_CALLBACK (toggle_grouping), size_group);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);

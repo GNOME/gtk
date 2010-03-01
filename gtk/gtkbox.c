@@ -273,7 +273,7 @@ gtk_box_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  GtkRequisition child_requisition;
 
@@ -354,7 +354,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
     {
       child = children->data;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  nvis_children += 1;
 	  if (child->expand)
@@ -414,7 +414,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if ((child->pack == GTK_PACK_START) && GTK_WIDGET_VISIBLE (child->widget))
+	  if ((child->pack == GTK_PACK_START) && gtk_widget_get_visible (child->widget))
 	    {
 	      if (box->homogeneous)
 		{
@@ -513,7 +513,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 
-	  if ((child->pack == GTK_PACK_END) && GTK_WIDGET_VISIBLE (child->widget))
+	  if ((child->pack == GTK_PACK_END) && gtk_widget_get_visible (child->widget))
 	    {
 	      GtkRequisition child_requisition;
 
@@ -1060,7 +1060,8 @@ gtk_box_reorder_child (GtkBox    *box,
   box->children = g_list_insert_before (box->children, new_link, child_info);
 
   gtk_widget_child_notify (child, "position");
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+  if (gtk_widget_get_visible (child)
+      && gtk_widget_get_visible (GTK_WIDGET (box)))
     gtk_widget_queue_resize (child);
 }
 
@@ -1162,7 +1163,8 @@ gtk_box_set_child_packing (GtkBox      *box,
 	child_info->pack = GTK_PACK_START;
       gtk_widget_child_notify (child, "pack-type");
 
-      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+      if (gtk_widget_get_visible (child)
+          && gtk_widget_get_visible (GTK_WIDGET (box)))
 	gtk_widget_queue_resize (child);
     }
   gtk_widget_thaw_child_notify (child);
@@ -1209,14 +1211,14 @@ gtk_box_remove (GtkContainer *container,
 	{
 	  gboolean was_visible;
 
-	  was_visible = GTK_WIDGET_VISIBLE (widget);
+	  was_visible = gtk_widget_get_visible (widget);
 	  gtk_widget_unparent (widget);
 
 	  box->children = g_list_remove_link (box->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+	  /* queue resize regardless of gtk_widget_get_visible (container),
 	   * since that's what is needed by toplevels.
 	   */
 	  if (was_visible)

@@ -418,7 +418,7 @@ gail_window_ref_relation_set (AtkObject *obj)
         {
           atk_relation_set_remove (relation_set, relation);
         }
-      if (GTK_WIDGET_VISIBLE(widget) && gtk_tooltips_get_info_from_tip_window (GTK_WINDOW (widget), NULL, &current_widget))
+      if (gtk_widget_get_visible(widget) && gtk_tooltips_get_info_from_tip_window (GTK_WINDOW (widget), NULL, &current_widget))
         {
           array [0] = gtk_widget_get_accessible (current_widget);
 

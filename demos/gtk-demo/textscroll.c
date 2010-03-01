@@ -191,7 +191,7 @@ do_textscroll (GtkWidget *do_widget)
       create_text_view (hbox, FALSE);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
       gtk_widget_show_all (window);
   else
       gtk_widget_destroy (window);

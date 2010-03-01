@@ -1057,7 +1057,7 @@ gtk_dialog_run (GtkDialog *dialog)
   if (!was_modal)
     gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
 
-  if (!GTK_WIDGET_VISIBLE (dialog))
+  if (!gtk_widget_get_visible (GTK_WIDGET (dialog)))
     gtk_widget_show (GTK_WIDGET (dialog));
   
   response_handler =

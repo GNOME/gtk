@@ -762,7 +762,7 @@ gtk_paned_size_request (GtkWidget      *widget,
   requisition->width = 0;
   requisition->height = 0;
 
-  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
+  if (paned->child1 && gtk_widget_get_visible (paned->child1))
     {
       gtk_widget_size_request (paned->child1, &child_requisition);
 
@@ -770,7 +770,7 @@ gtk_paned_size_request (GtkWidget      *widget,
       requisition->width = child_requisition.width;
     }
 
-  if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+  if (paned->child2 && gtk_widget_get_visible (paned->child2))
     {
       gtk_widget_size_request (paned->child2, &child_requisition);
 
@@ -791,8 +791,8 @@ gtk_paned_size_request (GtkWidget      *widget,
   requisition->width += GTK_CONTAINER (paned)->border_width * 2;
   requisition->height += GTK_CONTAINER (paned)->border_width * 2;
 
-  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
-      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+  if (paned->child1 && gtk_widget_get_visible (paned->child1) &&
+      paned->child2 && gtk_widget_get_visible (paned->child2))
     {
       gint handle_size;
 
@@ -824,8 +824,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
-      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+  if (paned->child1 && gtk_widget_get_visible (paned->child1) &&
+      paned->child2 && gtk_widget_get_visible (paned->child2))
     {
       GtkRequisition child1_requisition;
       GtkRequisition child2_requisition;
@@ -963,9 +963,9 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       child_allocation.width = MAX (1, allocation->width - 2 * border_width);
       child_allocation.height = MAX (1, allocation->height - 2 * border_width);
 
-      if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
+      if (paned->child1 && gtk_widget_get_visible (paned->child1))
 	gtk_widget_size_allocate (paned->child1, &child_allocation);
-      else if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+      else if (paned->child2 && gtk_widget_get_visible (paned->child2))
 	gtk_widget_size_allocate (paned->child2, &child_allocation);
     }
 }
@@ -1012,8 +1012,8 @@ gtk_paned_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
-  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
-      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+  if (paned->child1 && gtk_widget_get_visible (paned->child1) &&
+      paned->child2 && gtk_widget_get_visible (paned->child2))
     gdk_window_show (paned->handle);
 }
 
@@ -1069,9 +1069,9 @@ gtk_paned_expose (GtkWidget      *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget) &&
-      paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
-      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+  if (gtk_widget_get_visible (widget) && GTK_WIDGET_MAPPED (widget) &&
+      paned->child1 && gtk_widget_get_visible (paned->child1) &&
+      paned->child2 && gtk_widget_get_visible (paned->child2))
     {
       GtkStateType state;
       
@@ -1423,7 +1423,7 @@ gtk_paned_remove (GtkContainer *container,
   gboolean was_visible;
 
   paned = GTK_PANED (container);
-  was_visible = GTK_WIDGET_VISIBLE (widget);
+  was_visible = gtk_widget_get_visible (widget);
 
   if (paned->child1 == widget)
     {
@@ -1431,7 +1431,7 @@ gtk_paned_remove (GtkContainer *container,
 
       paned->child1 = NULL;
 
-      if (was_visible && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
 	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
   else if (paned->child2 == widget)
@@ -1440,7 +1440,7 @@ gtk_paned_remove (GtkContainer *container,
 
       paned->child2 = NULL;
 
-      if (was_visible && GTK_WIDGET_VISIBLE (container))
+      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
 	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
 }

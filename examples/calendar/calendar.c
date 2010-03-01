@@ -224,7 +224,7 @@ static void calendar_select_font( GtkWidget    *button,
 			     calendar->font_dialog);
   }
   window = calendar->font_dialog;
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);

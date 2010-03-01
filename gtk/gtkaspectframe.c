@@ -261,7 +261,7 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
   GtkBin *bin = GTK_BIN (frame);
   gdouble ratio;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkAllocation full_allocation;
       

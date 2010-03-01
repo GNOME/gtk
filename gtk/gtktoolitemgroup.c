@@ -589,7 +589,7 @@ gtk_tool_item_group_is_item_visible (GtkToolItemGroup      *group,
     return FALSE;
 
   return
-    (GTK_WIDGET_VISIBLE (child->item)) &&
+    (gtk_widget_get_visible (GTK_WIDGET (child->item))) &&
     (GTK_ORIENTATION_VERTICAL == orientation ?
      gtk_tool_item_get_visible_vertical (child->item) :
      gtk_tool_item_get_visible_horizontal (child->item));
@@ -819,7 +819,7 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   inquery->height = 0;
 
   /* figure out header widget size */
-  if (GTK_WIDGET_VISIBLE (priv->header))
+  if (gtk_widget_get_visible (priv->header))
     {
       GtkRequisition child_requisition;
 
@@ -869,7 +869,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   child_allocation.y = border_width;
 
   /* place the header widget */
-  if (GTK_WIDGET_VISIBLE (priv->header))
+  if (gtk_widget_get_visible (priv->header))
     {
       gtk_widget_size_request (priv->header, &child_requisition);
 
@@ -1390,7 +1390,9 @@ gtk_tool_item_group_set_item_packing (GtkToolItemGroup *group,
 
   gtk_widget_thaw_child_notify (GTK_WIDGET (item));
 
-  if (changed && GTK_WIDGET_VISIBLE (group) && GTK_WIDGET_VISIBLE (item))
+  if (changed
+      && gtk_widget_get_visible (GTK_WIDGET (group))
+      && gtk_widget_get_visible (GTK_WIDGET (item)))
     gtk_widget_queue_resize (GTK_WIDGET (group));
 }
 
@@ -1707,7 +1709,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
 
   priv->label_widget = label_widget;
 
-  if (GTK_WIDGET_VISIBLE (group))
+  if (gtk_widget_get_visible (GTK_WIDGET (group)))
     gtk_widget_queue_resize (GTK_WIDGET (group));
 
   /* Only show the header widget if the group has children: */
@@ -1782,7 +1784,7 @@ gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
 
       gtk_widget_translate_coordinates (widget, parent, 0, 0, &x, &y);
 
-      if (GTK_WIDGET_VISIBLE (priv->header))
+      if (gtk_widget_get_visible (priv->header))
         {
           height -= priv->header->allocation.height;
           y += priv->header->allocation.height;
@@ -2097,7 +2099,8 @@ gtk_tool_item_group_set_item_position (GtkToolItemGroup *group,
   priv->children = g_list_insert (priv->children, child, position);
 
   gtk_widget_child_notify (GTK_WIDGET (item), "position");
-  if (GTK_WIDGET_VISIBLE (group) && GTK_WIDGET_VISIBLE (item))
+  if (gtk_widget_get_visible (GTK_WIDGET (group)) &&
+      gtk_widget_get_visible (GTK_WIDGET (item)))
     gtk_widget_queue_resize (GTK_WIDGET (group));
 }
 
@@ -2292,7 +2295,7 @@ _gtk_tool_item_group_paint (GtkToolItemGroup *group,
 
       v0 = v1 - 256;
 
-      if (!GTK_WIDGET_VISIBLE (priv->header))
+      if (!gtk_widget_get_visible (priv->header))
         v0 = MAX (v0, 0);
       else if (GTK_ORIENTATION_VERTICAL == orientation)
         v0 = MAX (v0, priv->header->allocation.height);

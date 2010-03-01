@@ -1255,7 +1255,7 @@ gtk_clist_set_shadow_type (GtkCList      *clist,
 
   clist->shadow_type = type;
 
-  if (GTK_WIDGET_VISIBLE (clist))
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     gtk_widget_queue_resize (GTK_WIDGET (clist));
 }
 
@@ -1379,7 +1379,7 @@ gtk_clist_column_title_active (GtkCList *clist,
 				 NULL);
 
   GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
-  if (GTK_WIDGET_VISIBLE (clist))
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     gtk_widget_queue_draw (clist->column[column].button);
 }
 
@@ -1410,7 +1410,7 @@ gtk_clist_column_title_passive (GtkCList *clist,
                       NULL);
 
   GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
-  if (GTK_WIDGET_VISIBLE (clist))
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     gtk_widget_queue_draw (clist->column[column].button);
 }
 
@@ -1496,7 +1496,7 @@ gtk_clist_set_column_title (GtkCList    *clist,
 
   /* if this button didn't previously exist, then the
    * column button positions have to be re-computed */
-  if (GTK_WIDGET_VISIBLE (clist) && new_button)
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)) && new_button)
     size_allocate_title_buttons (clist);
 }
 
@@ -1550,7 +1550,7 @@ gtk_clist_set_column_widget (GtkCList  *clist,
 
   /* if this button didn't previously exist, then the
    * column button positions have to be re-computed */
-  if (GTK_WIDGET_VISIBLE (clist) && new_button)
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)) && new_button)
     size_allocate_title_buttons (clist);
 }
 
@@ -1671,7 +1671,7 @@ gtk_clist_set_column_resizeable (GtkCList *clist,
   if (resizeable)
     clist->column[column].auto_resize = FALSE;
 
-  if (GTK_WIDGET_VISIBLE (clist))
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     size_allocate_title_buttons (clist);
 }
 
@@ -1700,7 +1700,7 @@ gtk_clist_set_column_auto_resize (GtkCList *clist,
 	}
     }
 
-  if (GTK_WIDGET_VISIBLE (clist))
+  if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     size_allocate_title_buttons (clist);
 }
 
@@ -4692,7 +4692,7 @@ gtk_clist_map (GtkWidget *widget)
       for (i = 0; i < clist->columns; i++)
 	{
 	  if (clist->column[i].button &&
-	      GTK_WIDGET_VISIBLE (clist->column[i].button) &&
+	      gtk_widget_get_visible (clist->column[i].button) &&
 	      !GTK_WIDGET_MAPPED (clist->column[i].button))
 	    gtk_widget_map (clist->column[i].button);
 	}
@@ -6161,7 +6161,7 @@ adjust_allocation_recurse (GtkWidget *widget,
   
   if (!GTK_WIDGET_REALIZED (widget))
     {
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
 	{
 	  GdkRectangle tmp_rectangle = widget->allocation;
 	  tmp_rectangle.x += scroll_data->dx;
@@ -6693,7 +6693,7 @@ title_focus_move (GtkCList *clist,
   while (!return_val && j >= 0 && j < clist->columns)
     {
       if (clist->column[j].button &&
-	  GTK_WIDGET_VISIBLE (clist->column[j].button))
+	  gtk_widget_get_visible (clist->column[j].button))
 	{
 	  if (focus_column (clist, j, dir))
 	    {
@@ -6713,7 +6713,7 @@ title_focus_move (GtkCList *clist,
       while (!return_val && j != i)
 	{
 	  if (clist->column[j].button &&
-	      GTK_WIDGET_VISIBLE (clist->column[j].button))
+	      gtk_widget_get_visible (clist->column[j].button))
 	    {
 	      if (focus_column (clist, j, dir))
 		{
