@@ -1510,7 +1510,7 @@ _gtk_button_paint (GtkButton          *button,
 	  height -= default_outside_border.top + default_outside_border.bottom;
 	}
        
-      if (!interior_focus && GTK_WIDGET_HAS_FOCUS (widget))
+      if (!interior_focus && gtk_widget_has_focus (widget))
 	{
 	  x += focus_width + focus_pad;
 	  y += focus_width + focus_pad;
@@ -1525,7 +1525,7 @@ _gtk_button_paint (GtkButton          *button,
 		       shadow_type, area, widget, "button",
 		       x, y, width, height);
        
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	{
 	  gint child_displacement_x;
 	  gint child_displacement_y;
@@ -1594,7 +1594,7 @@ gtk_button_button_press (GtkWidget      *widget,
     {
       button = GTK_BUTTON (widget);
 
-      if (button->focus_on_click && !GTK_WIDGET_HAS_FOCUS (widget))
+      if (button->focus_on_click && !gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
 
       if (event->button == 1)

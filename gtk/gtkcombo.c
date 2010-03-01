@@ -637,7 +637,7 @@ gtk_combo_activate (GtkWidget        *widget,
   popup_grab_on_window (combo->popwin->window,
 			gtk_get_current_event_time ());
 
-  if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
+  if (!gtk_widget_has_focus (combo->entry))
     gtk_widget_grab_focus (combo->entry);
 
   gtk_grab_add (combo->popwin);
@@ -648,7 +648,7 @@ gtk_combo_popup_button_press (GtkWidget        *button,
 			      GdkEventButton   *event,
 			      GtkCombo         *combo)
 {
-  if (!GTK_WIDGET_HAS_FOCUS (combo->entry))
+  if (!gtk_widget_has_focus (combo->entry))
     gtk_widget_grab_focus (combo->entry);
 
   if (event->button != 1)

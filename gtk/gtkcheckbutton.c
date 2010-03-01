@@ -149,7 +149,7 @@ gtk_check_button_paint (GtkWidget    *widget,
       gtk_check_button_draw_indicator (check_button, area);
       
       border_width = GTK_CONTAINER (widget)->border_width;
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	{
 	  GtkWidget *child = GTK_BIN (widget)->child;
 	  

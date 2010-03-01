@@ -2002,7 +2002,7 @@ draw_row (GtkCList     *clist,
 
   /* draw focus rectangle */
   if (clist->focus_row == row &&
-      GTK_WIDGET_CAN_FOCUS (widget) && GTK_WIDGET_HAS_FOCUS (widget))
+      GTK_WIDGET_CAN_FOCUS (widget) && gtk_widget_has_focus (widget))
     {
       if (!area)
 	gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE,
@@ -5760,7 +5760,7 @@ real_undo_selection (GtkCList *clist)
     if (GTK_CTREE_ROW (work->data)->row.selectable)
       gtk_ctree_unselect (ctree, GTK_CTREE_NODE (work->data));
 
-  if (GTK_WIDGET_HAS_FOCUS (clist) && clist->focus_row != clist->undo_anchor)
+  if (gtk_widget_has_focus (GTK_WIDGET (clist)) && clist->focus_row != clist->undo_anchor)
     {
       clist->focus_row = clist->undo_anchor;
       gtk_widget_queue_draw (GTK_WIDGET (clist));

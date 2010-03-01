@@ -1811,11 +1811,11 @@ gtk_container_focus (GtkWidget        *widget,
 
   return_val = FALSE;
 
-  if (gtk_widget_get_can_focus (GTK_WIDGET (container)))
+  if (gtk_widget_get_can_focus (widget))
     {
-      if (!GTK_WIDGET_HAS_FOCUS (container))
+      if (!gtk_widget_has_focus (widget))
 	{
-	  gtk_widget_grab_focus (GTK_WIDGET (container));
+	  gtk_widget_grab_focus (widget);
 	  return_val = TRUE;
 	}
     }

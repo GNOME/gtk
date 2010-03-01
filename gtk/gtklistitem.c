@@ -537,7 +537,7 @@ static gint
 gtk_list_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
-  if (event->type == GDK_BUTTON_PRESS && !GTK_WIDGET_HAS_FOCUS (widget))
+  if (event->type == GDK_BUTTON_PRESS && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   return FALSE;
@@ -567,7 +567,7 @@ gtk_list_item_expose (GtkWidget      *widget,
 
       GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
         {
           if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
             gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),

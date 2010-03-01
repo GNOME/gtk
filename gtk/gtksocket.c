@@ -703,7 +703,7 @@ gtk_socket_key_event (GtkWidget   *widget,
 {
   GtkSocket *socket = GTK_SOCKET (widget);
   
-  if (GTK_WIDGET_HAS_FOCUS (socket) && socket->plug_window && !socket->plug_widget)
+  if (gtk_widget_has_focus (widget) && socket->plug_window && !socket->plug_widget)
     {
       _gtk_socket_windowing_send_key_event (socket, (GdkEvent *) event, FALSE);
 

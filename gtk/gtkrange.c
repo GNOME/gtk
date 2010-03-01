@@ -1928,8 +1928,7 @@ gtk_range_expose (GtkWidget      *widget,
                          fill_width, fill_height);
 	}
 
-      if (sensitive &&
-          GTK_WIDGET_HAS_FOCUS (range))
+      if (sensitive && gtk_widget_has_focus (widget))
         gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
                          &area, widget, "trough",
                          widget->allocation.x + range->range_rect.x,
@@ -2182,7 +2181,7 @@ gtk_range_button_press (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   /* ignore presses when we're already doing something else. */

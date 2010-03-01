@@ -296,14 +296,18 @@ typedef enum
 #define GTK_WIDGET_CAN_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_CAN_FOCUS) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_HAS_FOCUS:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget has grabbed the focus and no other
  * widget has done so more recently.
+ *
+ * Deprecated: 2.20: Use gtk_widget_has_focus() instead.
  */
 #define GTK_WIDGET_HAS_FOCUS(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_FOCUS) != 0)
+#endif
 
 #ifndef GTK_DISABLE_DEPRECATED
 /**

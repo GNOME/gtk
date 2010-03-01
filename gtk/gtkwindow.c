@@ -1621,7 +1621,7 @@ _gtk_window_internal_set_focus (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   if ((window->focus_widget != focus) ||
-      (focus && !GTK_WIDGET_HAS_FOCUS (focus)))
+      (focus && !gtk_widget_has_focus (focus)))
     g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
 }
 
@@ -1981,7 +1981,7 @@ gtk_window_activate_focus (GtkWindow *window)
  * Retrieves the current focused widget within the window.
  * Note that this is the widget that would have the focus
  * if the toplevel window focused; if the toplevel window
- * is not focused then  <literal>GTK_WIDGET_HAS_FOCUS (widget)</literal> will
+ * is not focused then  <literal>gtk_widget_has_focus (widget)</literal> will
  * not be %TRUE for the widget.
  *
  * Return value: (transfer none): the currently focused widget, or %NULL if there is none.
@@ -8331,14 +8331,14 @@ window_update_has_focus (GtkWindow *window)
 	{
 	  if (window->focus_widget &&
 	      window->focus_widget != widget &&
-	      !GTK_WIDGET_HAS_FOCUS (window->focus_widget))
+	      !gtk_widget_has_focus (window->focus_widget))
 	    do_focus_change (window->focus_widget, TRUE);	
 	}
       else
 	{
 	  if (window->focus_widget &&
 	      window->focus_widget != widget &&
-	      GTK_WIDGET_HAS_FOCUS (window->focus_widget))
+	      gtk_widget_has_focus (window->focus_widget))
 	    do_focus_change (window->focus_widget, FALSE);
 	}
     }

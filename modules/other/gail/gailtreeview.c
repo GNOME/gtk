@@ -2644,7 +2644,7 @@ idle_cursor_changed (gpointer data)
             }
           gail_tree_view->focus_cell = cell;
 
-          if (GTK_WIDGET_HAS_FOCUS (widget))
+          if (gtk_widget_has_focus (widget))
             {
               gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_ACTIVE, FALSE);
               gail_cell_add_state (GAIL_CELL (cell), ATK_STATE_FOCUSED, FALSE);

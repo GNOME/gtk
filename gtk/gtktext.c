@@ -1433,7 +1433,7 @@ gtk_text_draw_focus (GtkWidget *widget)
       width = widget->allocation.width;
       height = widget->allocation.height;
       
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	{
 	  x += 1;
 	  y += 1;
@@ -1587,7 +1587,7 @@ gtk_text_button_press (GtkWidget      *widget,
   
   text->button = event->button;
   
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
   
   if (event->button == 1)
@@ -5117,7 +5117,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	    draw_line_wrap (text, pixels + CACHE_DATA(cache).font_ascent);
 	}
       
-      if (cursor && GTK_WIDGET_HAS_FOCUS (text))
+      if (cursor && gtk_widget_has_focus (GTK_WIDGET (text)))
 	{
 	  if (CACHE_DATA(cache).start.index <= text->cursor_mark.index &&
 	      CACHE_DATA(cache).end.index >= text->cursor_mark.index)

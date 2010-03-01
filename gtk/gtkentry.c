@@ -1809,6 +1809,7 @@ gtk_entry_set_property (GObject         *object,
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (object);
   GtkEntry *entry = GTK_ENTRY (object);
+  GtkWidget *widget;
 
   switch (prop_id)
     {
@@ -1822,10 +1823,11 @@ gtk_entry_set_property (GObject         *object,
 
       	if (new_value != entry->editable)
 	  {
+            widget = GTK_WIDGET (entry);
 	    if (!new_value)
 	      {
 		_gtk_entry_reset_im_context (entry);
-		if (GTK_WIDGET_HAS_FOCUS (entry))
+		if (gtk_widget_has_focus (widget))
 		  gtk_im_context_focus_out (entry->im_context);
 
 		entry->preedit_length = 0;
@@ -1834,7 +1836,7 @@ gtk_entry_set_property (GObject         *object,
 
 	    entry->editable = new_value;
 
-	    if (new_value && GTK_WIDGET_HAS_FOCUS (entry))
+	    if (new_value && gtk_widget_has_focus (widget))
 	      gtk_im_context_focus_in (entry->im_context);
 	    
 	    gtk_entry_queue_draw (entry);
@@ -2365,7 +2367,7 @@ get_icon_allocations (GtkEntry      *entry,
 
   get_text_area_size (entry, &x, &y, &width, &height);
 
-  if (GTK_WIDGET_HAS_FOCUS (entry) && !priv->interior_focus)
+  if (gtk_widget_has_focus (GTK_WIDGET (entry)) && !priv->interior_focus)
     y += priv->focus_width;
 
   primary->y = y;
@@ -2944,6 +2946,7 @@ gtk_entry_size_request (GtkWidget      *widget,
 static void
 place_windows (GtkEntry *entry)
 {
+  GtkWidget *widget = GTK_WIDGET (entry);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint x, y, width, height;
   GtkAllocation primary;
@@ -2953,10 +2956,10 @@ place_windows (GtkEntry *entry)
   get_text_area_size (entry, &x, &y, &width, &height);
   get_icon_allocations (entry, &primary, &secondary);
 
-  if (GTK_WIDGET_HAS_FOCUS (entry) && !priv->interior_focus)
+  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     y += priv->focus_width;
 
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x += secondary.width;
   else
     x += primary.width;
@@ -2972,7 +2975,7 @@ place_windows (GtkEntry *entry)
                             secondary.x, secondary.y,
                             secondary.width, secondary.height);
 
-  gdk_window_move_resize (GTK_ENTRY (entry)->text_area, x, y, width, height);
+  gdk_window_move_resize (entry->text_area, x, y, width, height);
 }
 
 static void
@@ -2996,7 +2999,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   else
     frame_height = requisition.height;
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
+  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     frame_height -= 2 * priv->focus_width;
 
   if (x)
@@ -3291,7 +3294,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       width += xborder * 2;
     }
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
+  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     {
       x += priv->focus_width;
       y += priv->focus_width;
@@ -3301,7 +3304,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
 
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
   if (state_hint)
-      state = GTK_WIDGET_HAS_FOCUS (widget) ?
+      state = gtk_widget_has_focus (widget) ?
         GTK_STATE_ACTIVE : GTK_WIDGET_STATE (widget);
   else
       state = GTK_STATE_NORMAL;
@@ -3313,7 +3316,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
 
   gtk_entry_draw_progress (widget, event);
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !priv->interior_focus)
+  if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     {
       x -= priv->focus_width;
       y -= priv->focus_width;
@@ -3368,7 +3371,7 @@ get_progress_area (GtkWidget *widget,
   *width -= progress_border.left + progress_border.right;
   *height -= progress_border.top + progress_border.bottom;
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && !private->interior_focus)
+  if (gtk_widget_has_focus (widget) && !private->interior_focus)
     {
       *x += private->focus_width;
       *y += private->focus_width;
@@ -3451,7 +3454,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
   if (state_hint)
-    state = GTK_WIDGET_HAS_FOCUS (widget) ?
+    state = gtk_widget_has_focus (widget) ?
       GTK_STATE_ACTIVE : GTK_WIDGET_STATE (widget);
   else
     state = GTK_WIDGET_STATE(widget);
@@ -3480,7 +3483,7 @@ gtk_entry_expose (GtkWidget      *widget,
 
       /* When no text is being displayed at all, don't show the cursor */
       if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
-	  GTK_WIDGET_HAS_FOCUS (widget) &&
+	  gtk_widget_has_focus (widget) &&
 	  entry->selection_bound == entry->current_pos && entry->cursor_visible) 
         gtk_entry_draw_cursor (GTK_ENTRY (widget), CURSOR_STANDARD);
     }
@@ -3682,7 +3685,7 @@ gtk_entry_button_press (GtkWidget      *widget,
 
   entry->button = event->button;
   
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     {
       entry->in_click = TRUE;
       gtk_widget_grab_focus (widget);
@@ -5407,7 +5410,7 @@ gtk_entry_create_layout (GtkEntry *entry,
 
       if (pango_dir == PANGO_DIRECTION_NEUTRAL)
         {
-          if (GTK_WIDGET_HAS_FOCUS (widget))
+          if (gtk_widget_has_focus (widget))
 	    {
 	      GdkDisplay *display = gtk_widget_get_display (widget);
 	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
@@ -5535,7 +5538,7 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-      if (GTK_WIDGET_HAS_FOCUS (entry))
+      if (gtk_widget_has_focus (widget))
         {
           selection_color = &widget->style->base [GTK_STATE_SELECTED];
           text_color = &widget->style->text [GTK_STATE_SELECTED];
@@ -9049,7 +9052,7 @@ gtk_entry_drag_data_delete (GtkWidget      *widget,
 static gboolean
 cursor_blinks (GtkEntry *entry)
 {
-  if (GTK_WIDGET_HAS_FOCUS (entry) &&
+  if (gtk_widget_has_focus (GTK_WIDGET (entry)) &&
       entry->editable &&
       entry->selection_bound == entry->current_pos)
     {
@@ -9090,24 +9093,30 @@ get_cursor_blink_timeout (GtkEntry *entry)
 static void
 show_cursor (GtkEntry *entry)
 {
+  GtkWidget *widget;
+
   if (!entry->cursor_visible)
     {
       entry->cursor_visible = TRUE;
 
-      if (GTK_WIDGET_HAS_FOCUS (entry) && entry->selection_bound == entry->current_pos)
-	gtk_widget_queue_draw (GTK_WIDGET (entry));
+      widget = GTK_WIDGET (entry);
+      if (gtk_widget_has_focus (widget) && entry->selection_bound == entry->current_pos)
+	gtk_widget_queue_draw (widget);
     }
 }
 
 static void
 hide_cursor (GtkEntry *entry)
 {
+  GtkWidget *widget;
+
   if (entry->cursor_visible)
     {
       entry->cursor_visible = FALSE;
 
-      if (GTK_WIDGET_HAS_FOCUS (entry) && entry->selection_bound == entry->current_pos)
-	gtk_widget_queue_draw (GTK_WIDGET (entry));
+      widget = GTK_WIDGET (entry);
+      if (gtk_widget_has_focus (widget) && entry->selection_bound == entry->current_pos)
+	gtk_widget_queue_draw (widget);
     }
 }
 
@@ -9124,7 +9133,7 @@ blink_cb (gpointer data)
   entry = GTK_ENTRY (data);
   priv = GTK_ENTRY_GET_PRIVATE (entry);
  
-  if (!GTK_WIDGET_HAS_FOCUS (entry))
+  if (!gtk_widget_has_focus (GTK_WIDGET (entry)))
     {
       g_warning ("GtkEntry - did not receive focus-out-event. If you\n"
 		 "connect a handler to this signal, it must return\n"

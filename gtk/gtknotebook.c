@@ -2508,7 +2508,7 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
   gboolean left = (ARROW_IS_LEFT (arrow) && !is_rtl) || 
                   (!ARROW_IS_LEFT (arrow) && is_rtl);
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
   
   notebook->button = button;
@@ -3272,7 +3272,7 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-  if (GTK_WIDGET_HAS_FOCUS (widget) && gtk_widget_is_drawable (widget) &&
+  if (gtk_widget_has_focus (widget) && gtk_widget_is_drawable (widget) &&
       notebook->show_tabs && notebook->cur_page &&
       notebook->cur_page->tab_label->window == event->window)
     {
