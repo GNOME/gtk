@@ -291,7 +291,7 @@ gail_menu_item_do_action (AtkAction *action,
         /* State is defunct */
         return FALSE;
 
-      if (!GTK_WIDGET_SENSITIVE (item) || !GTK_WIDGET_VISIBLE (item))
+      if (!gtk_widget_get_sensitive (item) || !GTK_WIDGET_VISIBLE (item))
         return FALSE;
 
       gail_menu_item = GAIL_MENU_ITEM (action);
@@ -347,7 +347,7 @@ idle_do_action (gpointer data)
   menu_item->action_idle_handler = 0;
   item = GTK_ACCESSIBLE (menu_item)->widget;
   if (item == NULL /* State is defunct */ ||
-      !GTK_WIDGET_SENSITIVE (item) || !GTK_WIDGET_VISIBLE (item))
+      !gtk_widget_get_sensitive (item) || !GTK_WIDGET_VISIBLE (item))
     return FALSE;
 
   item_parent = gtk_widget_get_parent (item);

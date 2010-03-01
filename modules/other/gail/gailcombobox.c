@@ -284,7 +284,7 @@ gail_combo_box_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   combo_box = GAIL_COMBO_BOX (action);
@@ -313,7 +313,7 @@ idle_do_action (gpointer data)
   gail_combo_box->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_combo_box)->widget;
   if (widget == NULL || /* State is defunct */
-      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   combo_box = GTK_COMBO_BOX (widget);

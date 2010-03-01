@@ -710,7 +710,7 @@ gtk_option_menu_select_first_sensitive (GtkOptionMenu *option_menu)
 
       while (children)
 	{
-	  if (GTK_WIDGET_SENSITIVE (children->data))
+	  if (gtk_widget_get_sensitive (children->data))
 	    {
 	      gtk_option_menu_set_history (option_menu, index);
 	      return;
@@ -729,7 +729,7 @@ gtk_option_menu_item_state_changed_cb (GtkWidget      *widget,
 {
   GtkWidget *child = GTK_BIN (option_menu)->child;
 
-  if (child && GTK_WIDGET_SENSITIVE (child) != gtk_widget_is_sensitive (widget))
+  if (child && gtk_widget_get_sensitive (child) != gtk_widget_is_sensitive (widget))
     gtk_widget_set_sensitive (child, gtk_widget_is_sensitive (widget));
 }
 

@@ -253,6 +253,7 @@ typedef enum
 #define GTK_WIDGET_DRAWABLE(wid)	  (GTK_WIDGET_VISIBLE (wid) && GTK_WIDGET_MAPPED (wid))
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_SENSITIVE:
  * @wid: a #GtkWidget.
@@ -260,6 +261,7 @@ typedef enum
  * Evaluates to %TRUE if the #GTK_SENSITIVE flag has be set on the widget.
  */
 #define GTK_WIDGET_SENSITIVE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE) != 0)
+#endif
 
 /**
  * GTK_WIDGET_PARENT_SENSITIVE:

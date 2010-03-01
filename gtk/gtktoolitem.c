@@ -425,7 +425,7 @@ gtk_tool_item_property_notify (GObject    *object,
 
   if (tool_item->priv->menu_item && strcmp (pspec->name, "sensitive") == 0)
     gtk_widget_set_sensitive (tool_item->priv->menu_item,
-			      GTK_WIDGET_SENSITIVE (tool_item));
+			      gtk_widget_get_sensitive (GTK_WIDGET (tool_item)));
 }
 
 static void
@@ -1445,7 +1445,7 @@ gtk_tool_item_set_proxy_menu_item (GtkToolItem *tool_item,
 	  g_object_ref_sink (menu_item);
 
 	  gtk_widget_set_sensitive (menu_item,
-				    GTK_WIDGET_SENSITIVE (tool_item));
+				    gtk_widget_get_sensitive (GTK_WIDGET (tool_item)));
 	}
       
       tool_item->priv->menu_item = menu_item;

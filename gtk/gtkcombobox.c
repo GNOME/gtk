@@ -1120,7 +1120,7 @@ gtk_combo_box_button_state_changed (GtkWidget    *widget,
 	{
 	  if ((GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE) !=
 	      (GTK_WIDGET_STATE (priv->cell_view) == GTK_STATE_INSENSITIVE))
-	    gtk_widget_set_sensitive (priv->cell_view, GTK_WIDGET_SENSITIVE (widget));
+	    gtk_widget_set_sensitive (priv->cell_view, gtk_widget_get_sensitive (widget));
 	  
 	  gtk_widget_set_state (priv->cell_view, 
 				GTK_WIDGET_STATE (widget));

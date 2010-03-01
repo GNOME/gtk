@@ -212,7 +212,7 @@ gail_option_menu_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   switch (i)
@@ -243,7 +243,7 @@ idle_do_action (gpointer data)
 
   widget = GTK_ACCESSIBLE (gail_button)->widget;
   if (widget == NULL /* State is defunct */ ||
-      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
   button = GTK_BUTTON (widget); 

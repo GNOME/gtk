@@ -3430,7 +3430,7 @@ gtk_entry_draw_progress (GtkWidget      *widget,
     }
 
   state = GTK_STATE_SELECTED;
-  if (!GTK_WIDGET_SENSITIVE (widget))
+  if (!gtk_widget_get_sensitive (widget))
     state = GTK_STATE_INSENSITIVE;
 
   gtk_paint_box (widget->style, event->window,
@@ -5139,7 +5139,7 @@ gtk_entry_real_activate (GtkEntry *entry)
 	  if (window &&
 	      widget != window->default_widget &&
 	      !(widget == window->focus_widget &&
-		(!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+		(!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
 	    gtk_window_activate_default (window);
 	}
     }
@@ -5588,7 +5588,7 @@ gtk_entry_draw_text (GtkEntry *entry)
       GtkStateType state;
 
       state = GTK_STATE_SELECTED;
-      if (!GTK_WIDGET_SENSITIVE (widget))
+      if (!gtk_widget_get_sensitive (widget))
         state = GTK_STATE_INSENSITIVE;
       text_color = widget->style->text[widget->state];
       bar_text_color = widget->style->fg[state];

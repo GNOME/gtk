@@ -991,7 +991,7 @@ gail_widget_real_notify_gtk (GObject     *obj,
   else if (strcmp (pspec->name, "sensitive") == 0)
     {
       state = ATK_STATE_SENSITIVE;
-      value = GTK_WIDGET_SENSITIVE (widget);
+      value = gtk_widget_get_sensitive (widget);
     }
   else
     return;
