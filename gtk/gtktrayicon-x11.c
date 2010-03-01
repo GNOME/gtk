@@ -248,7 +248,7 @@ gtk_tray_icon_expose (GtkWidget      *widget,
     retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->expose_event (widget, event);
 
   focus_child = GTK_CONTAINER (widget)->focus_child;
-  if (focus_child && GTK_WIDGET_HAS_FOCUS (focus_child))
+  if (focus_child && gtk_widget_has_focus (focus_child))
     {
       border_width = GTK_CONTAINER (widget)->border_width;
 

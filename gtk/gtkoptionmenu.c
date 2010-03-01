@@ -506,7 +506,7 @@ gtk_option_menu_paint (GtkWidget    *widget,
       button_area.width = widget->allocation.width - 2 * border_width;
       button_area.height = widget->allocation.height - 2 * border_width;
 
-      if (!props.interior_focus && GTK_WIDGET_HAS_FOCUS (widget))
+      if (!props.interior_focus && gtk_widget_has_focus (widget))
 	{
 	  button_area.x += props.focus_width + props.focus_pad;
 	  button_area.y += props.focus_width + props.focus_pad;
@@ -535,7 +535,7 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		     button_area.y + (button_area.height - props.indicator_size.height) / 2,
 		     props.indicator_size.width, props.indicator_size.height);
       
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	{
 	  if (props.interior_focus)
 	    {

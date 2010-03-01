@@ -637,7 +637,7 @@ gtk_list_button_press (GtkWidget      *widget,
       else if (list_has_grab (list))
 	gtk_list_end_drag_selection (list);
 	  
-      if (!GTK_WIDGET_HAS_FOCUS(item))
+      if (!gtk_widget_has_focus(item))
 	gtk_widget_grab_focus (item);
 
       if (list->add_mode)
@@ -920,7 +920,7 @@ gtk_list_focus (GtkWidget        *widget,
   container = GTK_CONTAINER (widget);
   
   if (container->focus_child == NULL ||
-      !GTK_WIDGET_HAS_FOCUS (container->focus_child))
+      !gtk_widget_has_focus (container->focus_child))
     {
       if (GTK_LIST (container)->last_focus_child)
 	gtk_container_set_focus_child
@@ -1160,7 +1160,7 @@ gtk_list_clear_items (GtkList *list,
 	  else if (list->children)
 	    new_focus_child = list->children->data;
 
-	  if (GTK_WIDGET_HAS_FOCUS (container->focus_child))
+	  if (gtk_widget_has_focus (container->focus_child))
 	    grab_focus = TRUE;
 	}
     }
@@ -1280,7 +1280,7 @@ gtk_list_remove_items_internal (GtkList	 *list,
   if (container->focus_child)
     {
       old_focus_child = new_focus_child = container->focus_child;
-      if (GTK_WIDGET_HAS_FOCUS (container->focus_child))
+      if (gtk_widget_has_focus (container->focus_child))
 	grab_focus = TRUE;
     }
   else
@@ -1814,7 +1814,7 @@ gtk_list_undo_selection (GtkList *list)
       container = GTK_CONTAINER (list);
 
       if (container->focus_child &&
-	  GTK_WIDGET_HAS_FOCUS (container->focus_child))
+	  gtk_widget_has_focus (container->focus_child))
 	gtk_widget_grab_focus (list->undo_focus_child);
       else
 	gtk_container_set_focus_child (container, list->undo_focus_child);

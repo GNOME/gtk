@@ -1962,7 +1962,7 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 TRUE);
 
-  if (!GTK_WIDGET_HAS_FOCUS (priv->tree_view))
+  if (!gtk_widget_has_focus (priv->tree_view))
     gtk_widget_grab_focus (priv->tree_view);
 
   if (!popup_grab_on_window (priv->popup_window->window,
@@ -3168,7 +3168,7 @@ gtk_combo_box_menu_button_press (GtkWidget      *widget,
       event->type == GDK_BUTTON_PRESS && event->button == 1)
     {
       if (priv->focus_on_click && 
-	  !GTK_WIDGET_HAS_FOCUS (priv->button))
+	  !gtk_widget_has_focus (priv->button))
 	gtk_widget_grab_focus (priv->button);
 
       gtk_combo_box_menu_popup (combo_box, event->button, event->time);
@@ -3890,7 +3890,7 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
     return FALSE;
 
   if (priv->focus_on_click && 
-      !GTK_WIDGET_HAS_FOCUS (priv->button))
+      !gtk_widget_has_focus (priv->button))
     gtk_widget_grab_focus (priv->button);
 
   gtk_combo_box_popup (combo_box);

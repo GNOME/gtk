@@ -2371,13 +2371,13 @@ gtk_text_view_set_editable (GtkTextView *text_view,
       if (!setting)
 	{
 	  gtk_text_view_reset_im_context(text_view);
-	  if (GTK_WIDGET_HAS_FOCUS (text_view))
+	  if (gtk_widget_has_focus (GTK_WIDGET (text_view)))
 	    gtk_im_context_focus_out (text_view->im_context);
 	}
 
       text_view->editable = setting;
 
-      if (setting && GTK_WIDGET_HAS_FOCUS (text_view))
+      if (setting && gtk_widget_has_focus (GTK_WIDGET (text_view)))
 	gtk_im_context_focus_in (text_view->im_context);
 
       if (text_view->layout)
@@ -2806,7 +2806,7 @@ gtk_text_view_set_cursor_visible (GtkTextView *text_view,
     {
       text_view->cursor_visible = setting;
 
-      if (GTK_WIDGET_HAS_FOCUS (text_view))
+      if (gtk_widget_has_focus (GTK_WIDGET (text_view)))
         {
           if (text_view->layout)
             {
@@ -4681,7 +4681,7 @@ gtk_text_view_draw_focus (GtkWidget *widget)
   
   if (gtk_widget_is_drawable (widget))
     {
-      if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+      if (gtk_widget_has_focus (widget) && !interior_focus)
         {          
           gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
                            NULL, widget, "textview",
@@ -4888,7 +4888,7 @@ blink_cb (gpointer data)
   text_view = GTK_TEXT_VIEW (data);
   priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
-  if (!GTK_WIDGET_HAS_FOCUS (text_view))
+  if (!gtk_widget_has_focus (GTK_WIDGET (text_view)))
     {
       g_warning ("GtkTextView - did not receive focus-out-event. If you\n"
                  "connect a handler to this signal, it must return\n"
@@ -4958,7 +4958,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
-      GTK_WIDGET_HAS_FOCUS (text_view))
+      gtk_widget_has_focus (GTK_WIDGET (text_view)))
     {
       if (cursor_blinks (text_view))
 	{
@@ -4989,7 +4989,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
-      GTK_WIDGET_HAS_FOCUS (text_view) &&
+      gtk_widget_has_focus (GTK_WIDGET (text_view)) &&
       cursor_blinks (text_view))
     {
       gtk_text_view_stop_cursor_blink (text_view);
@@ -6425,7 +6425,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       if (get_buffer (text_view))
         gtk_text_layout_set_buffer (text_view->layout, get_buffer (text_view));
 
-      if ((GTK_WIDGET_HAS_FOCUS (text_view) && text_view->cursor_visible))
+      if ((gtk_widget_has_focus (widget) && text_view->cursor_visible))
         gtk_text_view_pend_cursor_blink (text_view);
       else
         gtk_text_layout_set_cursor_visible (text_view->layout, FALSE);
@@ -7402,7 +7402,7 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
 
   if (text_view->layout)
     gtk_text_layout_set_preedit_string (text_view->layout, str, attrs, cursor_pos);
-  if (GTK_WIDGET_HAS_FOCUS (text_view))
+  if (gtk_widget_has_focus (GTK_WIDGET (text_view)))
     gtk_text_view_scroll_mark_onscreen (text_view,
 					gtk_text_buffer_get_insert (get_buffer (text_view)));
 

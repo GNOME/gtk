@@ -521,7 +521,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
             }
         }
   
-      if (GTK_WIDGET_HAS_FOCUS (widget) && (widget == focus_widget))
+      if (gtk_widget_has_focus (widget) && (widget == focus_widget))
         {
           AtkObject *focus_obj;
 

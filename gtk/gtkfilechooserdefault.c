@@ -5051,7 +5051,7 @@ location_toggle_popup_handler (GtkFileChooserDefault *impl)
     }
   else if (impl->location_mode == LOCATION_MODE_FILENAME_ENTRY)
     {
-      if (GTK_WIDGET_HAS_FOCUS (impl->location_entry))
+      if (gtk_widget_has_focus (impl->location_entry))
         {
           location_mode_set (impl, LOCATION_MODE_PATH_BAR, TRUE);
         }

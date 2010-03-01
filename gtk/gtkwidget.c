@@ -2752,7 +2752,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (gtk_widget_get_can_focus (widget) != FALSE));
       break;
     case PROP_HAS_FOCUS:
-      g_value_set_boolean (value, (GTK_WIDGET_HAS_FOCUS (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_has_focus (widget) != FALSE));
       break;
     case PROP_IS_FOCUS:
       g_value_set_boolean (value, (gtk_widget_is_focus (widget)));
@@ -5304,7 +5304,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	       * toplevel window can request the focus if necessary.
 	       * This is needed when the toplevel is a GtkPlug
 	       */
-	      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	      if (!gtk_widget_has_focus (widget))
 		_gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
 
 	      return;
@@ -5504,7 +5504,7 @@ gtk_widget_has_focus (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_HAS_FOCUS (widget);
+  return (GTK_OBJECT_FLAGS (widget) & GTK_HAS_FOCUS) != 0;
 }
 
 /**

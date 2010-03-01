@@ -188,8 +188,8 @@ dates_difference(guint year1, guint mm1, guint dd1,
 /* Color usage */
 #define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
 #define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[GTK_WIDGET_STATE (widget)])
-#define SELECTED_BG_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
-#define SELECTED_FG_COLOR(widget)	 (& (widget)->style->text[GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
+#define SELECTED_BG_COLOR(widget)	 (& (widget)->style->base[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
+#define SELECTED_FG_COLOR(widget)	 (& (widget)->style->text[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
 #define NORMAL_DAY_COLOR(widget)	 (& (widget)->style->text[GTK_WIDGET_STATE (widget)])
 #define PREV_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
 #define NEXT_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
@@ -2573,13 +2573,13 @@ calendar_paint_day (GtkCalendar *calendar,
       pango_cairo_show_layout (cr, layout);
     }
 
-  if (GTK_WIDGET_HAS_FOCUS (calendar) 
+  if (gtk_widget_has_focus (widget)
       && calendar->focus_row == row && calendar->focus_col == col)
     {
       GtkStateType state;
 
       if (calendar->selected_day == day)
-	state = GTK_WIDGET_HAS_FOCUS (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
+	state = gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE;
       else
 	state = GTK_STATE_NORMAL;
       
@@ -2823,7 +2823,7 @@ calendar_main_button_press (GtkCalendar	   *calendar,
       else if (day_month == MONTH_NEXT)
 	calendar_set_month_next (calendar);
       
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
 	  
       if (event->button == 1) 
@@ -2856,7 +2856,7 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   if (event->window == priv->main_win)
     calendar_main_button_press (calendar, event);
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   for (arrow = ARROW_YEAR_LEFT; arrow <= ARROW_MONTH_RIGHT; arrow++)
@@ -3048,13 +3048,13 @@ gtk_calendar_scroll (GtkWidget      *widget,
 
   if (event->direction == GDK_SCROLL_UP) 
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
       calendar_set_month_prev (calendar);
     }
   else if (event->direction == GDK_SCROLL_DOWN) 
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
       calendar_set_month_next (calendar);
     }

@@ -994,13 +994,13 @@ gtk_spin_button_scroll (GtkWidget      *widget,
 
   if (event->direction == GDK_SCROLL_UP)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
       gtk_spin_button_real_spin (spin, spin->adjustment->step_increment);
     }
   else if (event->direction == GDK_SCROLL_DOWN)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	gtk_widget_grab_focus (widget);
       gtk_spin_button_real_spin (spin, -spin->adjustment->step_increment); 
     }
@@ -1067,7 +1067,7 @@ gtk_spin_button_button_press (GtkWidget      *widget,
     {
       if (event->window == spin->panel)
 	{
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  if (!gtk_widget_has_focus (widget))
 	    gtk_widget_grab_focus (widget);
 	  spin->button = event->button;
 	  

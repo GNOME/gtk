@@ -1223,7 +1223,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Draw focus outline */
 
-  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
+  if (gtk_widget_has_focus (widget) &&
       !priv->focus_on_ring)
     {
       gint focus_width;
@@ -1291,7 +1291,7 @@ gtk_hsv_expose (GtkWidget      *widget,
 	 dest.width, dest.height);
   cairo_destroy (cr);
 
-  if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
+  if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
     gtk_paint_focus (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget),
 		     &event->area, widget, NULL,
@@ -1313,7 +1313,7 @@ gtk_hsv_focus (GtkWidget       *widget,
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
 
-  if (!GTK_WIDGET_HAS_FOCUS (hsv))
+  if (!gtk_widget_has_focus (widget))
     {
       if (dir == GTK_DIR_TAB_BACKWARD)
         priv->focus_on_ring = FALSE;

@@ -3603,7 +3603,7 @@ gtk_label_expose (GtkWidget      *widget,
 
 
 	  state = GTK_STATE_SELECTED;
-	  if (!GTK_WIDGET_HAS_FOCUS (widget))
+	  if (!gtk_widget_has_focus (widget))
 	    state = GTK_STATE_ACTIVE;
 
           gdk_draw_layout_with_colors (widget->window,
@@ -3628,7 +3628,7 @@ gtk_label_expose (GtkWidget      *widget,
           GdkColor *link_color;
           GdkColor *visited_link_color;
 
-          if (info->selectable && GTK_WIDGET_HAS_FOCUS (widget))
+          if (info->selectable && gtk_widget_has_focus (widget))
 	    gtk_label_draw_cursor (label, x, y);
 
           focus_link = gtk_label_get_focus_link (label);
@@ -3667,7 +3667,7 @@ gtk_label_expose (GtkWidget      *widget,
               gdk_region_destroy (clip);
             }
 
-          if (focus_link && GTK_WIDGET_HAS_FOCUS (widget))
+          if (focus_link && gtk_widget_has_focus (widget))
             {
               range[0] = focus_link->start;
               range[1] = focus_link->end;
@@ -4190,7 +4190,7 @@ gtk_label_button_press (GtkWidget      *widget,
 
   if (event->button == 1)
     {
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
+      if (!gtk_widget_has_focus (widget))
 	{
 	  label->in_click = TRUE;
 	  gtk_widget_grab_focus (widget);

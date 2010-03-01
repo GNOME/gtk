@@ -1636,7 +1636,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
     }
   else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
     {
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	state = GTK_STATE_SELECTED;
       else
 	state = GTK_STATE_ACTIVE;
@@ -1749,7 +1749,7 @@ popdown_timeout (gpointer data)
 
   priv->entry_menu_popdown_timeout = 0;
 
-  if (!GTK_WIDGET_HAS_FOCUS (priv->entry))
+  if (!gtk_widget_has_focus (priv->entry))
     gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (priv->entry), data);
 
   return FALSE;

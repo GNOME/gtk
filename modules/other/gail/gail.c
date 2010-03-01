@@ -307,7 +307,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
     }
   else
     {
-      if (event->type == GDK_MOTION_NOTIFY && GTK_WIDGET_HAS_FOCUS (widget))
+      if (event->type == GDK_MOTION_NOTIFY && gtk_widget_has_focus (widget))
         {
           if (widget == focus_widget)
             {

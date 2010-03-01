@@ -650,7 +650,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
             }
 	}
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			 NULL, widget, "treeitem",
 			 0, 0,
@@ -665,9 +665,9 @@ gtk_tree_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
   if (event->type == GDK_BUTTON_PRESS
-	&& gtk_widget_is_sensitive(widget)
-     	&& !GTK_WIDGET_HAS_FOCUS (widget))
-      gtk_widget_grab_focus (widget);
+      && gtk_widget_is_sensitive(widget)
+      && !gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
 
   return (event->type == GDK_BUTTON_PRESS && gtk_widget_is_sensitive(widget));
 }

@@ -452,7 +452,7 @@ static gboolean
 gtk_link_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   if ((event->button == 3) && (event->type == GDK_BUTTON_PRESS))

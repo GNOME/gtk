@@ -3937,7 +3937,7 @@ real_undo_selection (GtkCList *clist)
 		       GPOINTER_TO_INT (work->data), -1, NULL);
     }
 
-  if (GTK_WIDGET_HAS_FOCUS(clist) && clist->focus_row != clist->undo_anchor)
+  if (gtk_widget_has_focus (GTK_WIDGET (clist)) && clist->focus_row != clist->undo_anchor)
     {
       gtk_clist_draw_focus (GTK_WIDGET (clist));
       clist->focus_row = clist->undo_anchor;
@@ -4279,7 +4279,7 @@ end_selection (GtkCList *clist)
   g_return_if_fail (GTK_IS_CLIST (clist));
 
   if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (clist))) &&
-      GTK_WIDGET_HAS_FOCUS (clist))
+      gtk_widget_has_focus (GTK_WIDGET (clist)))
     return;
 
   GTK_CLIST_GET_CLASS (clist)->resync_selection (clist, NULL);
@@ -4923,7 +4923,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 	      if (GTK_CLIST_ADD_MODE(clist))
 		{
 		  GTK_CLIST_UNSET_FLAG (clist, CLIST_ADD_MODE);
-		  if (GTK_WIDGET_HAS_FOCUS(widget))
+		  if (gtk_widget_has_focus (widget))
 		    {
 		      gtk_clist_draw_focus (widget);
 		      gdk_gc_set_line_attributes (clist->xor_gc, 1,
@@ -4940,7 +4940,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 		}
 	      else if (row != clist->focus_row)
 		{
-		  if (GTK_WIDGET_HAS_FOCUS(widget))
+		  if (gtk_widget_has_focus (widget))
 		    {
 		      gtk_clist_draw_focus (widget);
 		      clist->focus_row = row;
@@ -4951,7 +4951,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 		}
 	    }
 
-	  if (!GTK_WIDGET_HAS_FOCUS(widget))
+	  if (!gtk_widget_has_focus (widget))
 	    gtk_widget_grab_focus (widget);
 
 	  if (button_actions & GTK_BUTTON_SELECTS)
@@ -5058,7 +5058,7 @@ gtk_clist_button_press (GtkWidget      *widget,
 	if (drag_data)
 	  gtk_signal_handler_block_by_data (GTK_OBJECT (clist), drag_data);
 
-	if (!GTK_WIDGET_HAS_FOCUS(widget))
+	if (!gtk_widget_has_focus (widget))
 	  gtk_widget_grab_focus (widget);
 
 	clist->drag_pos = i;
@@ -5867,7 +5867,7 @@ draw_row (GtkCList     *clist,
 
   /* draw focus rectangle */
   if (clist->focus_row == row &&
-      GTK_WIDGET_CAN_FOCUS (widget) && GTK_WIDGET_HAS_FOCUS(widget))
+      GTK_WIDGET_CAN_FOCUS (widget) && gtk_widget_has_focus (widget))
     {
       if (!area)
 	gdk_draw_rectangle (clist->clist_window, clist->xor_gc, FALSE,
@@ -6236,7 +6236,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 
   if (GTK_WIDGET_DRAWABLE (clist))
     {
-      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+      if (GTK_WIDGET_CAN_FOCUS(clist) && gtk_widget_has_focus (GTK_WIDGET (clist)) &&
           !container->focus_child && GTK_CLIST_ADD_MODE(clist))
         {
           y = ROW_TOP_YPIXEL (clist, clist->focus_row);
@@ -6249,7 +6249,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
       gdk_window_scroll (clist->clist_window, dx, 0);
       gdk_window_process_updates (clist->clist_window, FALSE);
 
-      if (GTK_WIDGET_CAN_FOCUS(clist) && GTK_WIDGET_HAS_FOCUS(clist) &&
+      if (GTK_WIDGET_CAN_FOCUS(clist) && gtk_widget_has_focus (GTK_WIDGET (clist)) &&
           !container->focus_child)
         {
           if (GTK_CLIST_ADD_MODE(clist))

@@ -1875,7 +1875,7 @@ gtk_icon_view_remove_widget (GtkCellEditable *editable,
       info->editing = FALSE;
     }
 
-  if (GTK_WIDGET_HAS_FOCUS (editable))
+  if (gtk_widget_has_focus (GTK_WIDGET (editable)))
     gtk_widget_grab_focus (GTK_WIDGET (icon_view));
   
   g_signal_handlers_disconnect_by_func (editable,
@@ -2122,7 +2122,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   if (event->window != icon_view->priv->bin_window)
     return FALSE;
 
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
@@ -3162,7 +3162,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   if (item->selected)
     {
       flags = GTK_CELL_RENDERER_SELECTED;
-      if (GTK_WIDGET_HAS_FOCUS (icon_view))
+      if (gtk_widget_has_focus (GTK_WIDGET (icon_view)))
 	state = GTK_STATE_SELECTED;
       else
 	state = GTK_STATE_ACTIVE;
@@ -3231,7 +3231,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     }
 
   if (draw_focus &&
-      GTK_WIDGET_HAS_FOCUS (icon_view) &&
+      gtk_widget_has_focus (GTK_WIDGET (icon_view)) &&
       item == icon_view->priv->cursor_item)
     {
       for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
@@ -3826,7 +3826,7 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
 			step == GTK_MOVEMENT_PAGES ||
 			step == GTK_MOVEMENT_BUFFER_ENDS, FALSE);
 
-  if (!GTK_WIDGET_HAS_FOCUS (GTK_WIDGET (icon_view)))
+  if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return FALSE;
 
   gtk_icon_view_stop_editing (icon_view, FALSE);
@@ -4081,7 +4081,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
   gboolean dirty = FALSE;
   gint step;
   
-  if (!GTK_WIDGET_HAS_FOCUS (icon_view))
+  if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
   
   if (!icon_view->priv->cursor_item)
@@ -4150,7 +4150,7 @@ gtk_icon_view_move_cursor_page_up_down (GtkIconView *icon_view,
   GtkIconViewItem *item;
   gboolean dirty = FALSE;
   
-  if (!GTK_WIDGET_HAS_FOCUS (icon_view))
+  if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
   
   if (!icon_view->priv->cursor_item)
@@ -4207,7 +4207,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
   gboolean dirty = FALSE;
   gint step;
   
-  if (!GTK_WIDGET_HAS_FOCUS (icon_view))
+  if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
   
   if (!icon_view->priv->cursor_item)
@@ -4276,7 +4276,7 @@ gtk_icon_view_move_cursor_start_end (GtkIconView *icon_view,
   GList *list;
   gboolean dirty = FALSE;
   
-  if (!GTK_WIDGET_HAS_FOCUS (icon_view))
+  if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
   
   if (count < 0)

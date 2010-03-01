@@ -903,7 +903,7 @@ gtk_expander_expose (GtkWidget      *widget,
 
       gtk_expander_paint (expander);
 
-      if (GTK_WIDGET_HAS_FOCUS (expander))
+      if (gtk_widget_has_focus (widget))
 	gtk_expander_paint_focus (expander, &event->area);
 
       GTK_WIDGET_CLASS (gtk_expander_parent_class)->expose_event (widget, event);
