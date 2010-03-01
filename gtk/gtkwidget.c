@@ -5666,9 +5666,9 @@ gtk_widget_set_receives_default (GtkWidget *widget,
   if (receives_default != gtk_widget_get_receives_default (widget))
     {
       if (receives_default)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+        GTK_OBJECT_FLAGS (widget) |= GTK_RECEIVES_DEFAULT;
       else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_RECEIVES_DEFAULT);
+        GTK_OBJECT_FLAGS (widget) &= ~(GTK_RECEIVES_DEFAULT);
 
       g_object_notify (G_OBJECT (widget), "receives-default");
     }
