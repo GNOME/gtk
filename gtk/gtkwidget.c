@@ -2743,7 +2743,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (GTK_WIDGET_VISIBLE (widget) != FALSE));
       break;
     case PROP_SENSITIVE:
-      g_value_set_boolean (value, (GTK_WIDGET_SENSITIVE (widget) != FALSE));
+      g_value_set_boolean (value, (gtk_widget_get_sensitive (widget) != FALSE));
       break;
     case PROP_APP_PAINTABLE:
       g_value_set_boolean (value, (gtk_widget_get_app_paintable (widget) != FALSE));
@@ -6220,7 +6220,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 
   sensitive = (sensitive != FALSE);
 
-  if (sensitive == (GTK_WIDGET_SENSITIVE (widget) != FALSE))
+  if (sensitive == (gtk_widget_get_sensitive (widget) != FALSE))
     return;
 
   if (sensitive)
@@ -6267,7 +6267,7 @@ gtk_widget_get_sensitive (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_WIDGET_SENSITIVE (widget);
+  return (GTK_OBJECT_FLAGS (widget) & GTK_SENSITIVE) != 0;
 }
 
 /**

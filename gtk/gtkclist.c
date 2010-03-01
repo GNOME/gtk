@@ -986,7 +986,7 @@ gtk_clist_get_arg (GtkObject      *object,
       GTK_VALUE_BOOL (*arg) = TRUE;
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].button &&
-	    !GTK_WIDGET_SENSITIVE (clist->column[i].button))
+	    !gtk_widget_get_sensitive (clist->column[i].button))
 	  {
 	    GTK_VALUE_BOOL (*arg) = FALSE;
 	    break;

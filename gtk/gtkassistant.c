@@ -599,7 +599,7 @@ set_current_page (GtkAssistant     *assistant,
       button[5] = assistant->last;
       for (i = 0; i < 6; i++)
         {
-          if (GTK_WIDGET_VISIBLE (button[i]) && GTK_WIDGET_SENSITIVE (button[i]))
+          if (GTK_WIDGET_VISIBLE (button[i]) && gtk_widget_get_sensitive (button[i]))
             {
               gtk_widget_grab_focus (button[i]);
               break;

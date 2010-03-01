@@ -346,7 +346,7 @@ gail_range_do_action (AtkAction *action,
      * State is defunct
      */
     return FALSE;
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
   if(i==0)
    {
@@ -370,7 +370,7 @@ idle_do_action (gpointer data)
   range->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (range)->widget;
   if (widget == NULL /* State is defunct */ ||
-     !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+     !gtk_widget_get_sensitive (widget) || !GTK_WIDGET_VISIBLE (widget))
     return FALSE;
 
    gtk_widget_activate (widget);

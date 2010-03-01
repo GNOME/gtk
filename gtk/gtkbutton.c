@@ -1691,7 +1691,7 @@ gtk_button_leave_notify (GtkWidget        *widget,
 
   if ((event_widget == widget) &&
       (event->detail != GDK_NOTIFY_INFERIOR) &&
-      (GTK_WIDGET_SENSITIVE (event_widget)))
+      (gtk_widget_get_sensitive (event_widget)))
     {
       button->in_button = FALSE;
       gtk_button_leave (button);

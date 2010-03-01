@@ -2040,7 +2040,7 @@ gtk_paned_restore_focus (GtkPaned *paned)
   if (gtk_widget_is_focus (GTK_WIDGET (paned)))
     {
       if (paned->priv->saved_focus &&
-	  GTK_WIDGET_SENSITIVE (paned->priv->saved_focus))
+	  gtk_widget_get_sensitive (paned->priv->saved_focus))
 	{
 	  gtk_widget_grab_focus (paned->priv->saved_focus);
 	}

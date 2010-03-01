@@ -279,7 +279,7 @@ list_row_activated (GtkWidget *widget)
   if (window
       && widget != window->default_widget
       && !(widget == window->focus_widget &&
-	   (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+	   (!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
     {
       gtk_window_activate_default (window);
     }
