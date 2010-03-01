@@ -443,7 +443,7 @@ my_widget_init (MyWidget *widget)
 {
   ...
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+  gtk_widget_set_double_buffered (widget, FALSE);
 
   ...
 }

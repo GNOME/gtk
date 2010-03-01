@@ -6138,9 +6138,9 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
   if (double_buffered != gtk_widget_get_double_buffered (widget))
     {
       if (double_buffered)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+        GTK_OBJECT_FLAGS (widget) |= GTK_DOUBLE_BUFFERED;
       else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+        GTK_OBJECT_FLAGS (widget) &= ~(GTK_DOUBLE_BUFFERED);
 
       g_object_notify (G_OBJECT (widget), "double-buffered");
     }
