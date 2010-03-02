@@ -366,7 +366,7 @@ gtk_hsv_size_allocate (GtkWidget     *widget,
   
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->window,
 			    allocation->x,
 			    allocation->y,

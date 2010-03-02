@@ -2024,7 +2024,7 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
       priv->week_width = 0;
     }
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -3219,7 +3219,7 @@ calendar_set_background (GtkWidget *widget)
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   gint i;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       for (i = 0; i < 4; i++)
 	{
@@ -3249,7 +3249,7 @@ static void
 gtk_calendar_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
+  if (previous_style && gtk_widget_get_realized (widget))
     calendar_set_background (widget);
 }
 
@@ -3557,7 +3557,7 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
   
   old_flags = calendar->display_flags;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       if ((flags ^ calendar->display_flags) & GTK_CALENDAR_NO_MONTH_CHANGE)
 	{

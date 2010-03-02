@@ -197,7 +197,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
       
       _gtk_container_queue_resize (GTK_CONTAINER (widget));
 
-      g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+      g_return_if_fail (!gtk_widget_get_realized (widget));
     }
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -292,7 +292,7 @@ gtk_win32_embed_widget_size_allocate (GtkWidget     *widget,
   
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);

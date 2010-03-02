@@ -256,7 +256,7 @@ gtk_plug_get_id (GtkPlug *plug)
 {
   g_return_val_if_fail (GTK_IS_PLUG (plug), 0);
 
-  if (!GTK_WIDGET_REALIZED (plug))
+  if (!gtk_widget_get_realized (GTK_WIDGET (plug)))
     gtk_widget_realize (GTK_WIDGET (plug));
 
   return _gtk_plug_windowing_get_id (plug);
@@ -314,7 +314,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   
   g_return_if_fail (GTK_IS_PLUG (plug));
   g_return_if_fail (GTK_IS_SOCKET (socket_));
-  g_return_if_fail (GTK_WIDGET_REALIZED (socket_));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (socket_)));
 
   widget = GTK_WIDGET (plug);
 
@@ -328,7 +328,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   g_signal_emit (plug, plug_signals[EMBEDDED], 0);
   g_object_notify (G_OBJECT (plug), "embedded");
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_drawable_get_size (GDK_DRAWABLE (widget->window), &w, &h);
       gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
@@ -382,7 +382,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   g_return_if_fail (GTK_IS_PLUG (plug));
   g_return_if_fail (GTK_IS_SOCKET (socket_));
-  g_return_if_fail (GTK_WIDGET_REALIZED (plug));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (plug)));
 
   widget = GTK_WIDGET (plug);
 
@@ -737,7 +737,7 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 
       widget->allocation = *allocation;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);

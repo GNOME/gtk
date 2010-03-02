@@ -2442,7 +2442,7 @@ gail_tree_view_changed_gtk (GtkTreeSelection *selection,
 	  gtk_tree_path_free (path);
       }
     }
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     g_signal_emit_by_name (gailview, "selection_changed");
 }
 
@@ -3049,7 +3049,7 @@ set_cell_visibility (GtkTreeView       *tree_view,
   GdkRectangle cell_rect;
 
   /* Get these three values in tree coords */
-  if (GTK_WIDGET_REALIZED (GTK_WIDGET (tree_view)))
+  if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     gtk_tree_view_get_cell_area (tree_view, tree_path, tv_col, &cell_rect);
   else
     cell_rect.height = 0;

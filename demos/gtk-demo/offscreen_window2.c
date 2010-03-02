@@ -327,7 +327,7 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
   w = allocation->width - border_width * 2;
   h = allocation->height - border_width * 2;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
                             allocation->x + border_width,
                             allocation->y + border_width,
@@ -344,7 +344,7 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
       child_allocation.height = child_requisition.height;
       child_allocation.width = child_requisition.width;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
         gdk_window_move_resize (bin->offscreen_window,
                                 allocation->x + border_width,
                                 allocation->y + border_width,

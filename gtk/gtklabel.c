@@ -3257,17 +3257,21 @@ gtk_label_size_allocate (GtkWidget     *widget,
 static void
 gtk_label_update_cursor (GtkLabel *label)
 {
+  GtkWidget *widget;
+
   if (!label->select_info)
     return;
 
-  if (GTK_WIDGET_REALIZED (label))
+  widget = GTK_WIDGET (label);
+
+  if (gtk_widget_get_realized (widget))
     {
       GdkDisplay *display;
       GdkCursor *cursor;
 
-      if (gtk_widget_is_sensitive (GTK_WIDGET (label)))
+      if (gtk_widget_is_sensitive (widget))
         {
-          display = gtk_widget_get_display (GTK_WIDGET (label));
+          display = gtk_widget_get_display (widget);
 
           if (label->select_info->active_link)
             cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
@@ -4546,12 +4550,11 @@ gtk_label_create_window (GtkLabel *label)
   gint attributes_mask;
   
   g_assert (label->select_info);
-  g_assert (GTK_WIDGET_REALIZED (label));
+  widget = GTK_WIDGET (label);
+  g_assert (gtk_widget_get_realized (widget));
   
   if (label->select_info->window)
     return;
-  
-  widget = GTK_WIDGET (label);
 
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
@@ -4606,7 +4609,7 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
-      if (GTK_WIDGET_REALIZED (label))
+      if (gtk_widget_get_realized (GTK_WIDGET (label)))
 	gtk_label_create_window (label);
 
       if (gtk_widget_get_mapped (GTK_WIDGET (label)))
@@ -5591,7 +5594,7 @@ popup_position_func (GtkMenu   *menu,
   label = GTK_LABEL (user_data);
   widget = GTK_WIDGET (label);
 
-  g_return_if_fail (GTK_WIDGET_REALIZED (label));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   screen = gtk_widget_get_screen (widget);
   gdk_window_get_origin (widget->window, x, y);

@@ -461,7 +461,7 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
   border_width = GTK_CONTAINER (widget)->border_width;
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (button->event_window,
 			    allocation->x + border_width, allocation->y + border_width,
 			    allocation->width - border_width * 2, allocation->height - border_width * 2);

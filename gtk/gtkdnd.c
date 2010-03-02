@@ -1200,7 +1200,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
       site->track_motion = old_site->track_motion;
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_drag_dest_realized (widget);
 
   g_signal_connect (widget, "realize",
@@ -2089,7 +2089,7 @@ gtk_drag_dest_hierarchy_changed (GtkWidget *widget,
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
-  if (gtk_widget_is_toplevel (toplevel) && GTK_WIDGET_REALIZED (toplevel))
+  if (gtk_widget_is_toplevel (toplevel) && gtk_widget_get_realized (toplevel))
     gdk_window_register_dnd (toplevel->window);
 }
 
@@ -2571,7 +2571,7 @@ gtk_drag_begin (GtkWidget         *widget,
 		GdkEvent          *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
   g_return_val_if_fail (targets != NULL, NULL);
 
   return gtk_drag_begin_internal (widget, NULL, targets,

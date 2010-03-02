@@ -267,7 +267,7 @@ create_child_plug (guint32  xid,
 
   gtk_widget_show_all (window);
 
-  if (GTK_WIDGET_REALIZED (window))
+  if (gtk_widget_get_realized (window))
 #if defined (GDK_WINDOWING_X11)
     return GDK_WINDOW_XID (window->window);
 #elif defined (GDK_WINDOWING_WIN32)

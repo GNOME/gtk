@@ -1331,7 +1331,7 @@ popup_position_func (GtkMenu   *menu,
   
   widget = GTK_WIDGET (user_data);
   
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (widget->window, &root_x, &root_y);
   

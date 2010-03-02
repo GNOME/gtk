@@ -505,7 +505,7 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       gtk_tray_icon_get_orientation_property (icon);
       gtk_tray_icon_get_visual_property (icon);
 
-      if (GTK_WIDGET_REALIZED (icon))
+      if (gtk_widget_get_realized (GTK_WIDGET (icon)))
 	{
 	  if ((icon->priv->manager_visual == NULL &&
 	       gtk_widget_get_visual (widget) == gdk_screen_get_system_visual (screen)) ||

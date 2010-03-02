@@ -4279,7 +4279,7 @@ popup_position_func (GtkMenu   *menu,
   gint monitor_num;
   GdkRectangle monitor;
 
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (widget->window, x, y);
 
@@ -6182,7 +6182,7 @@ set_busy_cursor (GtkFileChooserDefault *impl,
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
-  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
     return;
 
   display = gtk_widget_get_display (GTK_WIDGET (toplevel));

@@ -903,7 +903,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   if (tree_column->visible &&
       tree_column->button == NULL &&
       tree_column->tree_view &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     gtk_tree_view_column_create_button (tree_column);
   
   if (! tree_column->button)
@@ -1010,7 +1010,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
    * if you show it before it's realized, it'll get the wrong window. */
   if (tree_column->button &&
       tree_column->tree_view != NULL &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     {
       if (tree_column->visible)
 	{
@@ -1055,7 +1055,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   /* Queue a resize on the assumption that we always want to catch all changes
    * and columns don't change all that often.
    */
-  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+  if (gtk_widget_get_realized (tree_column->tree_view))
      gtk_widget_queue_resize (tree_column->tree_view);
 
 }
@@ -1273,7 +1273,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (tree_view)));
   g_return_if_fail (tree_view->priv->header_window != NULL);
   g_return_if_fail (column->button != NULL);
 
@@ -1942,7 +1942,7 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
   tree_column->use_resized_width = FALSE;
 
   if (tree_column->tree_view &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view) &&
+      gtk_widget_get_realized (tree_column->tree_view) &&
       tree_column->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
     {
       gtk_widget_queue_resize (tree_column->tree_view);
@@ -1988,7 +1988,7 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
 
   if (tree_column->visible &&
       tree_column->tree_view != NULL &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     {
       if (min_width > tree_column->width)
 	gtk_widget_queue_resize (tree_column->tree_view);
@@ -2048,7 +2048,7 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
 
   if (tree_column->visible &&
       tree_column->tree_view != NULL &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     {
       if (max_width != -1 && max_width < tree_column->width)
 	gtk_widget_queue_resize (tree_column->tree_view);
@@ -2170,7 +2170,7 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
 
   if (tree_column->visible &&
       tree_column->tree_view != NULL &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     {
       /* We want to continue using the original width of the
        * column that includes additional space added by the user
@@ -3618,7 +3618,7 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
   tree_column->width = 0;
 
   if (tree_column->tree_view &&
-      GTK_WIDGET_REALIZED (tree_column->tree_view))
+      gtk_widget_get_realized (tree_column->tree_view))
     {
       if (install_handler)
 	_gtk_tree_view_install_mark_rows_col_dirty (GTK_TREE_VIEW (tree_column->tree_view));

@@ -410,7 +410,7 @@ gtk_rotated_bin_size_allocate (GtkWidget     *widget,
   w = allocation->width - border_width * 2;
   h = allocation->height - border_width * 2;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
                             allocation->x + border_width,
                             allocation->y + border_width,
@@ -436,7 +436,7 @@ gtk_rotated_bin_size_allocate (GtkWidget     *widget,
         child_allocation.width = MIN ((w - s * child_allocation.height) / c,
                                       (h - c * child_allocation.height) / s);
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
         gdk_window_move_resize (bin->offscreen_window,
                                 child_allocation.x,
                                 child_allocation.y,

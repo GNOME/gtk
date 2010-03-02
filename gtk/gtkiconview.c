@@ -1382,7 +1382,7 @@ gtk_icon_view_state_changed (GtkWidget      *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
       gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
@@ -1397,7 +1397,7 @@ gtk_icon_view_style_set (GtkWidget *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[widget->state]);
       gdk_window_set_background (icon_view->priv->bin_window, &widget->style->base[widget->state]);
@@ -1472,7 +1472,7 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -1507,7 +1507,7 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   if (vadjustment->value > vadjustment->upper - vadjustment->page_size)
     gtk_adjustment_set_value (vadjustment, MAX (0, vadjustment->upper - vadjustment->page_size));
 
-  if (GTK_WIDGET_REALIZED (widget) &&
+  if (gtk_widget_get_realized (widget) &&
       icon_view->priv->scroll_to_path)
     {
       GtkTreePath *path;
@@ -1849,7 +1849,7 @@ gtk_icon_view_put (GtkIconView     *icon_view,
 
   icon_view->priv->children = g_list_append (icon_view->priv->children, child);
 
-  if (GTK_WIDGET_REALIZED (icon_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     gtk_widget_set_parent_window (child->widget, icon_view->priv->bin_window);
   
   gtk_widget_set_parent (widget, GTK_WIDGET (icon_view));
@@ -2652,7 +2652,7 @@ static void
 gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 				  GtkIconView   *icon_view)
 {
-  if (GTK_WIDGET_REALIZED (icon_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     {
       gdk_window_move (icon_view->priv->bin_window,
 		       - icon_view->priv->hadjustment->value,
@@ -2854,7 +2854,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
       icon_view->priv->height != widget->requisition.height)
     gtk_widget_queue_resize_no_redraw (widget);
 
-  if (GTK_WIDGET_REALIZED (icon_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     gdk_window_resize (icon_view->priv->bin_window,
 		       MAX (icon_view->priv->width, widget->allocation.width),
 		       MAX (icon_view->priv->height, widget->allocation.height));
@@ -4358,7 +4358,8 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
     item = g_list_nth_data (icon_view->priv->items,
 			    gtk_tree_path_get_indices(path)[0]);
   
-  if (!GTK_WIDGET_REALIZED (icon_view) || !item || item->width < 0)
+  if (!item || item->width < 0 ||
+      !gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     {
       if (icon_view->priv->scroll_to_path)
 	gtk_tree_row_reference_free (icon_view->priv->scroll_to_path);
@@ -5381,7 +5382,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 
   g_object_notify (G_OBJECT (icon_view), "model");  
 
-  if (GTK_WIDGET_REALIZED (icon_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
@@ -7376,7 +7377,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 
   widget = GTK_WIDGET (icon_view);
 
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     return NULL;
 
   index = gtk_tree_path_get_indices (path)[0];

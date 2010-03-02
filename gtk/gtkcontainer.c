@@ -1143,7 +1143,7 @@ gtk_container_set_border_width (GtkContainer *container,
       container->border_width = border_width;
       g_object_notify (G_OBJECT (container), "border-width");
       
-      if (GTK_WIDGET_REALIZED (container))
+      if (gtk_widget_get_realized (GTK_WIDGET (container)))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
@@ -1380,7 +1380,8 @@ _gtk_container_queue_resize (GtkContainer *container)
   if (resize_container)
     {
       if (gtk_widget_get_visible (GTK_WIDGET (resize_container)) &&
- 	  (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) || GTK_WIDGET_REALIZED (resize_container)))
+          (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) ||
+           gtk_widget_get_realized (GTK_WIDGET (resize_container))))
 	{
 	  switch (resize_container->resize_mode)
 	    {
@@ -2250,7 +2251,7 @@ _gtk_container_focus_sort (GtkContainer     *container,
 
   while (children)
     {
-      if (GTK_WIDGET_REALIZED (children->data))
+      if (gtk_widget_get_realized (children->data))
 	visible_children = g_list_prepend (visible_children, children->data);
       children = children->next;
     }

@@ -373,7 +373,7 @@ gtk_layout_put (GtkLayout     *layout,
 
   layout->children = g_list_append (layout->children, child);
   
-  if (GTK_WIDGET_REALIZED (layout))
+  if (gtk_widget_get_realized (GTK_WIDGET (layout)))
     gtk_widget_set_parent_window (child->widget, layout->bin_window);
 
   gtk_widget_set_parent (child_widget, GTK_WIDGET (layout));
@@ -503,7 +503,7 @@ gtk_layout_set_size (GtkLayout     *layout,
   if (layout->vadjustment)
     gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
 
-  if (GTK_WIDGET_REALIZED (layout))
+  if (gtk_widget_get_realized (widget))
     {
       width = MAX (width, widget->allocation.width);
       height = MAX (height, widget->allocation.height);
@@ -896,7 +896,7 @@ gtk_layout_style_set (GtkWidget *widget,
 {
   GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set (widget, old_style);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gtk_style_set_background (widget->style, GTK_LAYOUT (widget)->bin_window, GTK_STATE_NORMAL);
     }
@@ -981,7 +981,7 @@ gtk_layout_size_allocate (GtkWidget     *widget,
       gtk_layout_allocate_child (layout, child);
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -1103,7 +1103,7 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
   if (layout->freeze_count)
     return;
 
-  if (GTK_WIDGET_REALIZED (layout))
+  if (gtk_widget_get_realized (GTK_WIDGET (layout)))
     {
       gdk_window_move (layout->bin_window,
 		       - layout->hadjustment->value,

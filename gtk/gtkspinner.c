@@ -379,7 +379,7 @@ gtk_spinner_set_active (GtkSpinner *spinner, gboolean active)
       priv->active = active;
       g_object_notify (G_OBJECT (spinner), "active");
 
-      if (active && GTK_WIDGET_REALIZED (GTK_WIDGET (spinner)) && priv->timeout == 0)
+      if (active && gtk_widget_get_realized (GTK_WIDGET (spinner)) && priv->timeout == 0)
         {
           gtk_spinner_add_timeout (spinner);
         }

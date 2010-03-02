@@ -517,7 +517,7 @@ gtk_spin_button_destroy (GtkObject *object)
 static void
 gtk_spin_button_map (GtkWidget *widget)
 {
-  if (GTK_WIDGET_REALIZED (widget) && !gtk_widget_get_mapped (widget))
+  if (gtk_widget_get_realized (widget) && !gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->map (widget);
       gdk_window_show (GTK_SPIN_BUTTON (widget)->panel);
@@ -713,7 +713,7 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_allocate (widget, allocation);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (GTK_SPIN_BUTTON (widget)->panel, 
 			      panel_allocation.x,
@@ -979,7 +979,7 @@ gtk_spin_button_style_set (GtkWidget *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
+  if (previous_style && gtk_widget_get_realized (widget))
     gtk_style_set_background (widget->style, spin->panel, GTK_STATE_NORMAL);
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->style_set (widget, previous_style);

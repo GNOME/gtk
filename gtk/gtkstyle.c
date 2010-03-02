@@ -7057,7 +7057,7 @@ GdkGC *
 _gtk_widget_get_cursor_gc (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
   return get_insertion_cursor_gc (widget, TRUE);
 }
 

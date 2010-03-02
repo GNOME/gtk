@@ -1470,7 +1470,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   
   border_width = GTK_CONTAINER (toolbar)->border_width;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (priv->event_window,
                               allocation->x + border_width,
@@ -1834,7 +1834,7 @@ gtk_toolbar_style_set (GtkWidget *widget,
   
   priv->max_homogeneous_pixels = -1;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
   
   if (prev_style)

@@ -320,7 +320,7 @@ gtk_tips_query_start_query (GtkTipsQuery *tips_query)
 {
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (tips_query->in_query == FALSE);
-  g_return_if_fail (GTK_WIDGET_REALIZED (tips_query));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (tips_query)));
 
   tips_query->in_query = TRUE;
   gtk_signal_emit (GTK_OBJECT (tips_query), tips_query_signals[SIGNAL_START_QUERY]);

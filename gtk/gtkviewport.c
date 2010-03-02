@@ -776,7 +776,7 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   child_allocation.y = 0;
   child_allocation.width = hadjustment->upper;
   child_allocation.height = vadjustment->upper;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GtkAllocation view_allocation;
       gdk_window_move_resize (widget->window,
@@ -815,8 +815,8 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkViewport *viewport = GTK_VIEWPORT (data);
   GtkBin *bin = GTK_BIN (data);
 
-  if (bin->child && gtk_widget_get_visible (bin->child)  &&
-      GTK_WIDGET_REALIZED (viewport))
+  if (bin->child && gtk_widget_get_visible (bin->child) &&
+      gtk_widget_get_realized (GTK_WIDGET (viewport)))
     {
       GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
       GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
@@ -839,7 +839,7 @@ static void
 gtk_viewport_style_set (GtkWidget *widget,
 			GtkStyle  *previous_style)
 {
-   if (GTK_WIDGET_REALIZED (widget) &&
+   if (gtk_widget_get_realized (widget) &&
        gtk_widget_get_has_window (widget))
      {
 	GtkViewport *viewport = GTK_VIEWPORT (widget);

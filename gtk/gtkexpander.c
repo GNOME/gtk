@@ -669,7 +669,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
       label_height = 0;
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GdkRectangle rect;
 
@@ -966,7 +966,7 @@ gtk_expander_redraw_expander (GtkExpander *expander)
 
   widget = GTK_WIDGET (expander);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
 }
 
@@ -1318,7 +1318,7 @@ gtk_expander_animation_timeout (GtkExpander *expander)
   GdkRectangle area;
   gboolean finish = FALSE;
 
-  if (GTK_WIDGET_REALIZED (expander))
+  if (gtk_widget_get_realized (GTK_WIDGET (expander)))
     {
       get_expander_bounds (expander, &area);
       gdk_window_invalidate_rect (GTK_WIDGET (expander)->window, &area, TRUE);
@@ -1406,7 +1406,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
       g_object_get (settings, "gtk-enable-animations", &enable_animations, NULL);
 
-      if (enable_animations && GTK_WIDGET_REALIZED (expander))
+      if (enable_animations && gtk_widget_get_realized (GTK_WIDGET (expander)))
 	{
 	  gtk_expander_start_animation (expander);
 	}
