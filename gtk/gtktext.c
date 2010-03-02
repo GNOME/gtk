@@ -654,7 +654,7 @@ gtk_text_editable_init (GtkEditableClass *iface)
 static void
 gtk_text_init (GtkText *text)
 {
-  GTK_WIDGET_SET_FLAGS (text, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (text), TRUE);
 
   text->text_area = NULL;
   text->hadj = NULL;

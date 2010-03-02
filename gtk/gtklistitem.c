@@ -382,7 +382,7 @@ gtk_list_item_class_init (GtkListItemClass *class)
 static void
 gtk_list_item_init (GtkListItem *list_item)
 {
-  GTK_WIDGET_SET_FLAGS (list_item, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (list_item), TRUE);
 }
 
 GtkWidget*

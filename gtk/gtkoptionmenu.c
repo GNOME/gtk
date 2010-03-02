@@ -186,7 +186,7 @@ gtk_option_menu_child_type (GtkContainer       *container)
 static void
 gtk_option_menu_init (GtkOptionMenu *option_menu)
 {
-  GTK_WIDGET_SET_FLAGS (option_menu, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (option_menu), TRUE);
   GTK_WIDGET_UNSET_FLAGS (option_menu, GTK_CAN_DEFAULT);
   gtk_widget_set_receives_default (GTK_WIDGET (option_menu), FALSE);
 

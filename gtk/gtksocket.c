@@ -724,14 +724,16 @@ void
 _gtk_socket_claim_focus (GtkSocket *socket,
 			 gboolean   send_event)
 {
+  GtkWidget *widget = GTK_WIDGET (socket);
+
   if (!send_event)
     socket->focus_in = TRUE;	/* Otherwise, our notify handler will send FOCUS_IN  */
       
   /* Oh, the trickery... */
   
-  GTK_WIDGET_SET_FLAGS (socket, GTK_CAN_FOCUS);
-  gtk_widget_grab_focus (GTK_WIDGET (socket));
-  GTK_WIDGET_UNSET_FLAGS (socket, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (widget, TRUE);
+  gtk_widget_grab_focus (widget);
+  gtk_widget_set_can_focus (widget, FALSE);
 }
 
 static gboolean

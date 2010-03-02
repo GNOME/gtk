@@ -667,7 +667,7 @@ gtk_calendar_init (GtkCalendar *calendar)
 						       GTK_TYPE_CALENDAR,
 						       GtkCalendarPrivate);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (widget, TRUE);
   
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)

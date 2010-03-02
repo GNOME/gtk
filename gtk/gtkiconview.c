@@ -1106,7 +1106,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->pixbuf_cell = -1;  
   icon_view->priv->tooltip_column = -1;  
 
-  GTK_WIDGET_SET_FLAGS (icon_view, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
   
   gtk_icon_view_set_adjustments (icon_view, NULL, NULL);
 

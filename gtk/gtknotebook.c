@@ -1071,7 +1071,7 @@ gtk_notebook_init (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv;
 
-  GTK_WIDGET_SET_FLAGS (notebook, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   GTK_WIDGET_SET_FLAGS (notebook, GTK_NO_WINDOW);
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
@@ -6904,7 +6904,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 
   if (!show_tabs)
     {
-      GTK_WIDGET_UNSET_FLAGS (notebook, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (GTK_WIDGET (notebook), FALSE);
 
       while (children)
 	{
@@ -6921,7 +6921,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
   else
     {
-      GTK_WIDGET_SET_FLAGS (notebook, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
       gtk_notebook_update_labels (notebook);
     }
 

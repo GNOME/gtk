@@ -5459,9 +5459,9 @@ gtk_widget_set_can_focus (GtkWidget *widget,
   if (can_focus != gtk_widget_get_can_focus (widget))
     {
       if (can_focus)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+        GTK_OBJECT_FLAGS (widget) |= GTK_CAN_FOCUS;
       else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS);
+        GTK_OBJECT_FLAGS (widget) &= ~(GTK_CAN_FOCUS);
 
       gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "can-focus");

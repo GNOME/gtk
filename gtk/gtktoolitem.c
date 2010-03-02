@@ -308,7 +308,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 static void
 gtk_tool_item_init (GtkToolItem *toolitem)
 {
-  GTK_WIDGET_UNSET_FLAGS (toolitem, GTK_CAN_FOCUS);  
+  gtk_widget_set_can_focus (GTK_WIDGET (toolitem), FALSE);
 
   toolitem->priv = GTK_TOOL_ITEM_GET_PRIVATE (toolitem);
 

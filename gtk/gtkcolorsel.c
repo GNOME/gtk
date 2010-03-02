@@ -1547,7 +1547,7 @@ palette_new (GtkColorSelection *colorsel)
   
   retval = gtk_drawing_area_new ();
 
-  GTK_WIDGET_SET_FLAGS (retval, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (retval, TRUE);
   
   g_object_set_data (G_OBJECT (retval), I_("color_set"), GINT_TO_POINTER (0)); 
   gtk_widget_set_events (retval, GDK_BUTTON_PRESS_MASK

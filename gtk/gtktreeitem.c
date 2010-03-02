@@ -225,7 +225,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
 
   tree_item->expanded = FALSE;
   tree_item->subtree = NULL;
-  GTK_WIDGET_SET_FLAGS (tree_item, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (tree_item), TRUE);
   
   /* create an event box containing one pixmaps */
   eventbox = gtk_event_box_new();

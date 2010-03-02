@@ -1038,11 +1038,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   
   if (tree_column->reorderable || tree_column->clickable)
     {
-      GTK_WIDGET_SET_FLAGS (tree_column->button, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (tree_column->button, TRUE);
     }
   else
     {
-      GTK_WIDGET_UNSET_FLAGS (tree_column->button, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (tree_column->button, FALSE);
       if (gtk_widget_has_focus (tree_column->button))
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (tree_column->tree_view);

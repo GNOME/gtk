@@ -4604,7 +4604,7 @@ gtk_label_ensure_select_info (GtkLabel *label)
     {
       label->select_info = g_new0 (GtkLabelSelectionInfo, 1);
 
-      GTK_WIDGET_SET_FLAGS (label, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
       if (GTK_WIDGET_REALIZED (label))
 	gtk_label_create_window (label);
@@ -4627,7 +4627,7 @@ gtk_label_clear_select_info (GtkLabel *label)
       g_free (label->select_info);
       label->select_info = NULL;
 
-      GTK_WIDGET_UNSET_FLAGS (label, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (GTK_WIDGET (label), FALSE);
     }
 }
 
