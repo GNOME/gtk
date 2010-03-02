@@ -1908,7 +1908,7 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
       if (GTK_CONTAINER (toolbar)->focus_child == child)
 	break;
       
-      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	break;
     }
   
@@ -1942,7 +1942,7 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
     {
       GtkWidget *child = list->data;
       
-      if (try_focus && GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (try_focus && gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	break;
       
       if (child == GTK_CONTAINER (toolbar)->focus_child)
@@ -1977,7 +1977,7 @@ gtk_toolbar_focus (GtkWidget        *widget,
     {
       GtkWidget *child = list->data;
       
-      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	{
 	  result = TRUE;
 	  break;

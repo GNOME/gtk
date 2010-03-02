@@ -355,7 +355,7 @@ gtk_handle_box_map (GtkWidget *widget)
 
   if (bin->child &&
       gtk_widget_get_visible (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
+      !gtk_widget_get_mapped (bin->child))
     gtk_widget_map (bin->child);
 
   if (hb->child_detached && !hb->float_window_mapped)

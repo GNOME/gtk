@@ -6494,7 +6494,7 @@ list_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   list = GTK_LIST (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -6950,7 +6950,7 @@ clist_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   clist = GTK_CLIST (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -7581,7 +7581,7 @@ ctree_toggle_line_style (GtkWidget *widget, gpointer data)
 
   ctree = GTK_CTREE (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -7603,7 +7603,7 @@ ctree_toggle_expander_style (GtkWidget *widget, gpointer data)
 
   ctree = GTK_CTREE (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
   
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -7619,7 +7619,7 @@ ctree_toggle_justify (GtkWidget *widget, gpointer data)
 
   ctree = GTK_CTREE (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -7636,7 +7636,7 @@ ctree_toggle_sel_mode (GtkWidget *widget, gpointer data)
 
   ctree = GTK_CTREE (data);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -11694,7 +11694,7 @@ progressbar_toggle_orientation (GtkWidget *widget, gpointer data)
 
   pdata = (ProgressData *) data;
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -11735,7 +11735,7 @@ progressbar_toggle_bar_style (GtkWidget *widget, gpointer data)
 
   pdata = (ProgressData *) data;
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
@@ -12104,7 +12104,7 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 
   new_allocation = widget->allocation;
 
-  if (data->found || !GTK_WIDGET_MAPPED (widget))
+  if (data->found || !gtk_widget_get_mapped (widget))
     return;
 
   /* Note that in the following code, we only count the

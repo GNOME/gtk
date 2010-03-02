@@ -217,7 +217,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
        * here, but don't bother remapping -- we will get mapped
        * by gtk_widget_set_parent ().
        */
-      if (GTK_WIDGET_MAPPED (plug))
+      if (gtk_widget_get_mapped (GTK_WIDGET (plug)))
 	gtk_widget_unmap (GTK_WIDGET (plug));
       
       _gtk_window_set_is_toplevel (GTK_WINDOW (plug), FALSE);
@@ -692,7 +692,7 @@ gtk_plug_map (GtkWidget *widget)
 
       if (bin->child &&
 	  gtk_widget_get_visible (bin->child) &&
-	  !GTK_WIDGET_MAPPED (bin->child))
+	  !gtk_widget_get_mapped (bin->child))
 	gtk_widget_map (bin->child);
 
       _gtk_plug_windowing_map_toplevel (plug);

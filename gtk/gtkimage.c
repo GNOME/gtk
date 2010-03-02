@@ -1834,7 +1834,7 @@ gtk_image_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
-  if (GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_mapped (widget) &&
       GTK_IMAGE (widget)->storage_type != GTK_IMAGE_EMPTY)
     {
       GtkImage *image;

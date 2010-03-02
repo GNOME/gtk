@@ -1344,7 +1344,7 @@ gtk_real_menu_item_select (GtkItem *item)
 
   if (!touchscreen_mode &&
       menu_item->submenu &&
-      (!GTK_WIDGET_MAPPED (menu_item->submenu) ||
+      (!gtk_widget_get_mapped (menu_item->submenu) ||
        GTK_MENU (menu_item->submenu)->tearoff_active))
     {
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item), TRUE);

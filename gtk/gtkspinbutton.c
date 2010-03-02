@@ -517,7 +517,7 @@ gtk_spin_button_destroy (GtkObject *object)
 static void
 gtk_spin_button_map (GtkWidget *widget)
 {
-  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_REALIZED (widget) && !gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->map (widget);
       gdk_window_show (GTK_SPIN_BUTTON (widget)->panel);
@@ -527,7 +527,7 @@ gtk_spin_button_map (GtkWidget *widget)
 static void
 gtk_spin_button_unmap (GtkWidget *widget)
 {
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
 

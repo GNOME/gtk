@@ -240,7 +240,7 @@ gail_window_real_initialize (AtkObject *obj,
    * Notify that tooltip is showing
    */
   if (obj->role == ATK_ROLE_TOOL_TIP &&
-      GTK_WIDGET_MAPPED (widget))
+      gtk_widget_get_mapped (widget))
     atk_object_notify_state_change (obj, ATK_STATE_SHOWING, 1);
 }
 

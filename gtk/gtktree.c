@@ -522,14 +522,14 @@ gtk_tree_map (GtkWidget *widget)
       children = children->next;
       
       if (gtk_widget_get_visible (child) &&
-	  !GTK_WIDGET_MAPPED (child))
+	  !gtk_widget_get_mapped (child))
 	gtk_widget_map (child);
       
       if (GTK_TREE_ITEM (child)->subtree)
 	{
 	  child = GTK_WIDGET (GTK_TREE_ITEM (child)->subtree);
 	  
-	  if (gtk_widget_get_visible (child) && !GTK_WIDGET_MAPPED (child))
+	  if (gtk_widget_get_visible (child) && !gtk_widget_get_mapped (child))
 	    gtk_widget_map (child);
 	}
     }
@@ -725,7 +725,7 @@ gtk_tree_remove_items (GtkTree *tree,
 	  g_message("* remove subtree associate at this item [%#x]\n",
 		    (int) GTK_TREE_ITEM(widget)->subtree);
 #endif /* TREE_DEBUG */
-	  if (GTK_WIDGET_MAPPED (GTK_TREE_ITEM(widget)->subtree))
+	  if (gtk_widget_get_mapped (GTK_TREE_ITEM(widget)->subtree))
 	    gtk_widget_unmap (GTK_TREE_ITEM(widget)->subtree);
 	  
 	  gtk_widget_unparent (GTK_TREE_ITEM(widget)->subtree);
@@ -736,7 +736,7 @@ gtk_tree_remove_items (GtkTree *tree,
 #ifdef TREE_DEBUG
       g_message("* unmap and unparent widget [%#x]\n", (int)widget);
 #endif /* TREE_DEBUG */
-      if (GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
       
       gtk_widget_unparent (widget);

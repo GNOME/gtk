@@ -736,7 +736,7 @@ compute_dimension (GtkWidget        *widget,
                                        &tmp_widget_minimum_size,
                                        &tmp_widget_natural_size);
 
-              if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
+              if (gtk_widget_get_mapped (tmp_widget) || !group->ignore_hidden)
                 {
                   if (result_minimum_size < tmp_widget_minimum_size)
                     result_minimum_size = tmp_widget_minimum_size;

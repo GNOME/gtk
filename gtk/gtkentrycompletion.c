@@ -834,7 +834,7 @@ gtk_entry_completion_popup_key_event (GtkWidget   *widget,
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
   /* propagate event to the entry */
@@ -850,7 +850,7 @@ gtk_entry_completion_popup_button_press (GtkWidget      *widget,
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
   /* if we come here, it's usually time to popdown */
@@ -867,7 +867,7 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkTreePath *path = NULL;
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
   if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
@@ -905,7 +905,7 @@ gtk_entry_completion_action_button_press (GtkWidget      *widget,
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkTreePath *path = NULL;
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
   _gtk_entry_reset_im_context (GTK_ENTRY (completion->priv->entry));
@@ -1474,10 +1474,10 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
   GList *renderers;
   GtkWidget *toplevel;
 
-  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (gtk_widget_get_mapped (completion->priv->popup_window))
     return;
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->entry))
+  if (!gtk_widget_get_mapped (completion->priv->entry))
     return;
 
   if (!gtk_widget_has_focus (completion->priv->entry))
@@ -1527,7 +1527,7 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 void
 _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
 {
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return;
 
   completion->priv->ignore_enter = FALSE;

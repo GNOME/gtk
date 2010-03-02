@@ -652,7 +652,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
   /* If the child allocation changed, that means that the frame is drawn
    * in a new place, so we must redraw the entire widget.
    */
-  if (GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_mapped (widget) &&
       (new_allocation.x != frame->child_allocation.x ||
        new_allocation.y != frame->child_allocation.y ||
        new_allocation.width != frame->child_allocation.width ||

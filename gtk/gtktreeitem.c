@@ -914,7 +914,7 @@ gtk_tree_item_remove_subtree (GtkTreeItem* item)
       return;
     }
 
-  if (GTK_WIDGET_MAPPED (item->subtree))
+  if (gtk_widget_get_mapped (item->subtree))
     gtk_widget_unmap (item->subtree);
       
   gtk_widget_unparent (item->subtree);
@@ -947,12 +947,12 @@ gtk_tree_item_map (GtkWidget *widget)
 
   if(item->pixmaps_box &&
      gtk_widget_get_visible (item->pixmaps_box) &&
-     !GTK_WIDGET_MAPPED (item->pixmaps_box))
+     !gtk_widget_get_mapped (item->pixmaps_box))
     gtk_widget_map (item->pixmaps_box);
 
   if (bin->child &&
       gtk_widget_get_visible (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
+      !gtk_widget_get_mapped (bin->child))
     gtk_widget_map (bin->child);
 
   gdk_window_show (widget->window);
@@ -970,12 +970,12 @@ gtk_tree_item_unmap (GtkWidget *widget)
 
   if(item->pixmaps_box &&
      gtk_widget_get_visible (item->pixmaps_box) &&
-     GTK_WIDGET_MAPPED (item->pixmaps_box))
+     gtk_widget_get_mapped (item->pixmaps_box))
     gtk_widget_unmap (bin->child);
 
   if (bin->child &&
       gtk_widget_get_visible (bin->child) &&
-      GTK_WIDGET_MAPPED (bin->child))
+      gtk_widget_get_mapped (bin->child))
     gtk_widget_unmap (bin->child);
 }
 

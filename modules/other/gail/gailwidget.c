@@ -514,7 +514,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
       if (gtk_widget_get_visible (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
-          if (gail_widget_on_screen (widget) && GTK_WIDGET_MAPPED (widget) &&
+          if (gail_widget_on_screen (widget) && gtk_widget_get_mapped (widget) &&
               gail_widget_all_parents_visible (widget))
             {
               atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
@@ -937,7 +937,7 @@ gail_widget_map_gtk (GtkWidget     *widget)
 
   accessible = gtk_widget_get_accessible (widget);
   atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
-                                  GTK_WIDGET_MAPPED (widget));
+                                  gtk_widget_get_mapped (widget));
   return 1;
 }
 

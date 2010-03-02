@@ -1914,7 +1914,7 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
   if (!GTK_WIDGET_REALIZED (combo_box))
     return;
 
-  if (GTK_WIDGET_MAPPED (priv->popup_widget))
+  if (gtk_widget_get_mapped (priv->popup_widget))
     return;
 
   if (GTK_IS_MENU (priv->popup_widget))
@@ -3328,7 +3328,7 @@ list_popup_resize_idle (gpointer user_data)
   GtkComboBoxPrivate *priv = combo_box->priv;
   gint x, y, width, height;
 
-  if (priv->tree_view && GTK_WIDGET_MAPPED (priv->popup_window))
+  if (priv->tree_view && gtk_widget_get_mapped (priv->popup_window))
     {
       gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
   

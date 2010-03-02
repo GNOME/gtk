@@ -271,7 +271,7 @@ gtk_win32_embed_widget_map (GtkWidget *widget)
   
   if (bin->child &&
       gtk_widget_get_visible (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
+      !gtk_widget_get_mapped (bin->child))
     gtk_widget_map (bin->child);
 
   gdk_window_show (widget->window);

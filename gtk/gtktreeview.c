@@ -1706,7 +1706,7 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
 {
   GList *list;
 
-  g_return_if_fail (GTK_WIDGET_MAPPED (tree_view));
+  g_return_if_fail (gtk_widget_get_mapped (GTK_WIDGET (tree_view)));
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
     {
@@ -1716,7 +1716,7 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
 	{
 	  column = list->data;
           if (gtk_widget_get_visible (column->button) &&
-              !GTK_WIDGET_MAPPED (column->button))
+              !gtk_widget_get_mapped (column->button))
             gtk_widget_map (column->button);
 	}
       for (list = tree_view->priv->columns; list; list = list->next)
@@ -1752,7 +1752,7 @@ gtk_tree_view_map (GtkWidget *widget)
 
       if (gtk_widget_get_visible (child->widget))
 	{
-	  if (!GTK_WIDGET_MAPPED (child->widget))
+	  if (!gtk_widget_get_mapped (child->widget))
 	    gtk_widget_map (child->widget);
 	}
     }
@@ -11016,7 +11016,7 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 	{
 	  gdk_window_move_resize (tree_view->priv->bin_window, x, y  + TREE_VIEW_HEADER_HEIGHT (tree_view), tree_view->priv->width, GTK_WIDGET (tree_view)->allocation.height -  + TREE_VIEW_HEADER_HEIGHT (tree_view));
 
-          if (GTK_WIDGET_MAPPED (tree_view))
+          if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
             gtk_tree_view_map_buttons (tree_view);
  	}
       else
@@ -12306,14 +12306,14 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   if (animate)
     add_expand_collapse_timeout (tree_view, tree, node, FALSE);
   
-  if (GTK_WIDGET_MAPPED (tree_view))
+  if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 
   g_signal_emit (tree_view, tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
 
-  if (GTK_WIDGET_MAPPED (tree_view))
+  if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {
       /* now that we've collapsed all rows, we want to try to set the prelight
        * again. To do this, we fake a motion event and send it to ourselves. */

@@ -2704,7 +2704,7 @@ gtk_entry_map (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
-  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_REALIZED (widget) && !gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
 
@@ -2728,7 +2728,7 @@ gtk_entry_unmap (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       for (i = 0; i < MAX_ICONS; i++)
         {
@@ -3118,7 +3118,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       gtk_entry_recompute (entry);
 
       completion = gtk_entry_get_completion (entry);
-      if (completion && GTK_WIDGET_MAPPED (completion->priv->popup_window))
+      if (completion && gtk_widget_get_mapped (completion->priv->popup_window))
         _gtk_entry_completion_resize_popup (completion);
     }
 }
@@ -6279,7 +6279,7 @@ paste_received (GtkClipboard *clipboard,
 
       if (completion)
 	{
-	  if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
+	  if (gtk_widget_get_mapped (completion->priv->popup_window))
 	    _gtk_entry_completion_popdown (completion);
 
           if (!popup_completion && completion->priv->changed_id > 0)
@@ -7597,7 +7597,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
 
-      if (GTK_WIDGET_MAPPED (entry))
+      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
     }
 
@@ -7664,7 +7664,7 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
 
-      if (GTK_WIDGET_MAPPED (entry))
+      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
     }
 
@@ -7734,7 +7734,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
 
-      if (GTK_WIDGET_MAPPED (entry))
+      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
     }
 
@@ -7801,7 +7801,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
           g_object_notify (G_OBJECT (entry), "secondary-icon-storage-type");
         }
 
-      if (GTK_WIDGET_MAPPED (entry))
+      if (gtk_widget_get_mapped (GTK_WIDGET (entry)))
           gdk_window_show_unraised (icon_info->window);
     }
 
@@ -9301,7 +9301,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
 
-  if (!GTK_WIDGET_MAPPED (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
@@ -9751,7 +9751,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
           old->priv->completion_timeout = 0;
         }
 
-      if (GTK_WIDGET_MAPPED (old->priv->popup_window))
+      if (gtk_widget_get_mapped (old->priv->popup_window))
         _gtk_entry_completion_popdown (old);
 
       disconnect_completion_signals (entry, old);

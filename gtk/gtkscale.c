@@ -664,7 +664,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       widget = GTK_WIDGET (scale);
 
       _gtk_scale_clear_layout (scale);
-      if (gtk_widget_get_visible (widget) && GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget))
 	gtk_widget_queue_resize (widget);
 
       g_object_notify (G_OBJECT (scale), "value-pos");

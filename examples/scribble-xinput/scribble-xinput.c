@@ -169,7 +169,7 @@ create_input_dialog ()
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED (inputd))
+      if (!gtk_widget_get_mapped (inputd))
         gtk_widget_show (inputd);
       else
         gdk_window_raise (inputd->window);

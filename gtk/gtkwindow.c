@@ -1516,9 +1516,11 @@ void
 gtk_window_set_startup_id (GtkWindow   *window,
                            const gchar *startup_id)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = GTK_WINDOW_GET_PRIVATE (window);
   
   g_free (priv->startup_id);
   priv->startup_id = g_strdup (startup_id);
@@ -1543,7 +1545,8 @@ gtk_window_set_startup_id (GtkWindow   *window,
                                      priv->startup_id);
           
           /* If window is mapped, terminate the startup-notification too */
-          if (GTK_WIDGET_MAPPED (window) && !disable_startup_notification)
+          if (gtk_widget_get_mapped (GTK_WIDGET (window)) &&
+              !disable_startup_notification)
             gdk_notify_startup_complete_with_id (priv->startup_id);
         }
     }
@@ -2437,7 +2440,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
   GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!GTK_WIDGET_MAPPED (window));
+  g_return_if_fail (!gtk_widget_get_mapped (GTK_WIDGET (window)));
 
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
@@ -4078,7 +4081,7 @@ gtk_window_get_size (GtkWindow *window,
   if (width == NULL && height == NULL)
     return;
 
-  if (GTK_WIDGET_MAPPED (window))
+  if (gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       gdk_drawable_get_size (GTK_WIDGET (window)->window,
                              &w, &h);
@@ -4157,7 +4160,7 @@ gtk_window_move (GtkWindow *window,
 
   info = gtk_window_get_geometry_info (window, TRUE);  
   
-  if (GTK_WIDGET_MAPPED (window))
+  if (gtk_widget_get_mapped (widget))
     {
       /* we have now sent a request with this position
        * with currently-active constraints, so toggle flag.
@@ -4264,7 +4267,7 @@ gtk_window_get_position (GtkWindow *window,
   
   if (window->gravity == GDK_GRAVITY_STATIC)
     {
-      if (GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_mapped (widget))
         {
           /* This does a server round-trip, which is sort of wrong;
            * but a server round-trip is inevitable for
@@ -4294,7 +4297,7 @@ gtk_window_get_position (GtkWindow *window,
       gint x, y;
       gint w, h;
       
-      if (GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_mapped (widget))
         {
 	  if (window->frame)
 	    gdk_window_get_frame_extents (window->frame, &frame_extents);
@@ -4566,7 +4569,7 @@ gtk_window_map (GtkWidget *widget)
 
   if (window->bin.child &&
       gtk_widget_get_visible (window->bin.child) &&
-      !GTK_WIDGET_MAPPED (window->bin.child))
+      !gtk_widget_get_mapped (window->bin.child))
     gtk_widget_map (window->bin.child);
 
   if (window->frame)
@@ -4650,7 +4653,7 @@ static gboolean
 gtk_window_map_event (GtkWidget   *widget,
                       GdkEventAny *event)
 {
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     {
       /* we should be be unmapped, but are getting a MapEvent, this may happen
        * to toplevel XWindows if mapping was intercepted by a window manager
@@ -5700,9 +5703,10 @@ static GtkWindowPosition
 get_effective_position (GtkWindow *window)
 {
   GtkWindowPosition pos = window->position;
+
   if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
       (window->transient_parent == NULL ||
-       !GTK_WIDGET_MAPPED (window->transient_parent)))
+       !gtk_widget_get_mapped (GTK_WIDGET (window->transient_parent))))
     pos = GTK_WIN_POS_NONE;
 
   return pos;
@@ -5880,7 +5884,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             GdkRectangle monitor;
             gint ox, oy;
             
-            g_assert (GTK_WIDGET_MAPPED (parent_widget)); /* established earlier */
+            g_assert (gtk_widget_get_mapped (parent_widget)); /* established earlier */
 
             if (parent_widget->window != NULL)
               monitor_num = gdk_screen_get_monitor_at_window (screen,
@@ -7453,7 +7457,7 @@ gtk_window_set_screen (GtkWindow *window,
   widget = GTK_WIDGET (window);
 
   previous_screen = window->screen;
-  was_mapped = GTK_WIDGET_MAPPED (widget);
+  was_mapped = gtk_widget_get_mapped (widget);
 
   if (was_mapped)
     gtk_widget_unmap (widget);

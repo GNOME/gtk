@@ -203,7 +203,7 @@ gail_notebook_page_new (GtkNotebook *notebook,
   label = get_label_from_notebook_page (page);
   if (GTK_IS_LABEL (label))
     {
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (label))
         gail_notebook_page_init_textutil (page, label);
       else
         g_signal_connect (label,

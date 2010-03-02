@@ -564,7 +564,7 @@ get_viewable_menu_bars (GtkWindow *window)
       
       while (widget)
 	{
-	  if (!GTK_WIDGET_MAPPED (widget))
+	  if (!gtk_widget_get_mapped (widget))
 	    viewable = FALSE;
 	  
 	  widget = widget->parent;

@@ -3710,7 +3710,7 @@ gtk_label_expose (GtkWidget      *widget,
 
   gtk_label_ensure_layout (label);
   
-  if (gtk_widget_get_visible (widget) && GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget) &&
       label->text && (*label->text != '\0'))
     {
       get_layout_location (label, &x, &y);
@@ -4762,7 +4762,7 @@ gtk_label_ensure_select_info (GtkLabel *label)
       if (GTK_WIDGET_REALIZED (label))
 	gtk_label_create_window (label);
 
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (GTK_WIDGET (label)))
         gdk_window_show (label->select_info->window);
     }
 }

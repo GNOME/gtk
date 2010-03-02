@@ -487,7 +487,7 @@ gtk_list_unmap (GtkWidget *widget)
 {
   GtkList *list = GTK_LIST (widget);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);

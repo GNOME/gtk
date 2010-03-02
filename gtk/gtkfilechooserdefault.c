@@ -1109,7 +1109,7 @@ update_preview_widget_visibility (GtkFileChooserDefault *impl)
   else
     gtk_widget_hide (impl->preview_box);
 
-  if (!GTK_WIDGET_MAPPED (impl))
+  if (!gtk_widget_get_mapped (GTK_WIDGET (impl)))
     emit_default_size_changed (impl);
 }
 
@@ -6408,7 +6408,8 @@ pending_select_files_process (GtkFileChooserDefault *impl)
        * that case, the chooser's selection should be what the caller expects,
        * as the user can't see that something else got selected.  See bug #165264.
        */
-      if (GTK_WIDGET_MAPPED (impl) && impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+      if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN &&
+          gtk_widget_get_mapped (GTK_WIDGET (impl)))
 	browse_files_select_first_row (impl);
     }
 

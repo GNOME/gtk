@@ -257,7 +257,7 @@ gail_expander_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gail_expander_parent_class)->initialize (obj, data);
 
   expander = GTK_WIDGET (data);
-  if (GTK_WIDGET_MAPPED (expander))
+  if (gtk_widget_get_mapped (expander))
     gail_expander_init_textutil (gail_expander, GTK_EXPANDER (expander));
   else 
     g_signal_connect (expander,

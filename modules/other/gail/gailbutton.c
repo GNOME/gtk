@@ -289,7 +289,7 @@ gail_button_real_initialize (AtkObject *obj,
   label = get_label_from_button (widget, 0, FALSE);
   if (GTK_IS_LABEL (label))
     {
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (label))
         gail_button_init_textutil (button, label);
       else 
         g_signal_connect (label,

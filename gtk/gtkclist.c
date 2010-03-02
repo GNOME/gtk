@@ -4615,7 +4615,7 @@ gtk_clist_unrealize (GtkWidget *widget)
   /* freeze the list */
   clist->freeze_count++;
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     gtk_clist_unmap (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
@@ -4684,7 +4684,7 @@ gtk_clist_map (GtkWidget *widget)
 
   clist = GTK_CLIST (widget);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -4693,7 +4693,7 @@ gtk_clist_map (GtkWidget *widget)
 	{
 	  if (clist->column[i].button &&
 	      gtk_widget_get_visible (clist->column[i].button) &&
-	      !GTK_WIDGET_MAPPED (clist->column[i].button))
+	      !gtk_widget_get_mapped (clist->column[i].button))
 	    gtk_widget_map (clist->column[i].button);
 	}
       
@@ -4723,7 +4723,7 @@ gtk_clist_unmap (GtkWidget *widget)
 
   clist = GTK_CLIST (widget);
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
@@ -4761,7 +4761,7 @@ gtk_clist_unmap (GtkWidget *widget)
       /* unmap column buttons */
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].button &&
-	    GTK_WIDGET_MAPPED (clist->column[i].button))
+	    gtk_widget_get_mapped (clist->column[i].button))
 	  gtk_widget_unmap (clist->column[i].button);
 
       /* freeze the list */
