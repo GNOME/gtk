@@ -1416,7 +1416,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (fs->fileop_entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   
@@ -1681,7 +1681,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (fs->fileop_entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   

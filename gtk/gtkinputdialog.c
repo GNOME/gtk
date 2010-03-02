@@ -310,13 +310,13 @@ gtk_input_dialog_init (GtkInputDialog *inputd)
   inputd->keys_list = NULL;
 
   inputd->save_button = gtk_button_new_from_stock (GTK_STOCK_SAVE);
-  GTK_WIDGET_SET_FLAGS (inputd->save_button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (inputd->save_button, TRUE);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->save_button, TRUE, TRUE, 0);
   gtk_widget_show (inputd->save_button);
 
   inputd->close_button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-  GTK_WIDGET_SET_FLAGS (inputd->close_button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (inputd->close_button, TRUE);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG(inputd)->action_area),
 		      inputd->close_button, TRUE, TRUE, 0);
 

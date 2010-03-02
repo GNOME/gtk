@@ -909,7 +909,7 @@ create_buttons (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button[9], TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button[9], GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button[9], TRUE);
       gtk_widget_grab_default (button[9]);
     }
 
@@ -977,7 +977,7 @@ create_toggle_buttons (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -1792,7 +1792,7 @@ create_statusbar (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -3494,7 +3494,7 @@ create_reparent (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 			        G_CALLBACK (gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -3782,7 +3782,7 @@ create_saved_position (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       
       gtk_widget_show_all (window);
@@ -3867,7 +3867,7 @@ create_pixmap (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -4032,7 +4032,7 @@ create_tooltips (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
 
       gtk_tooltips_set_tip (tooltips, button, "Push this button to close window", "ContextHelp/buttons/Close");
@@ -4517,7 +4517,7 @@ create_menus (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -4788,7 +4788,7 @@ create_item_factory (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
 
       gtk_item_factory_delete_item (item_factory, "/Preferences/ShouldNotAppear");
@@ -5197,7 +5197,7 @@ create_scrolled_windows (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -5207,7 +5207,7 @@ create_scrolled_windows (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (scrolled_windows_remove),
 			scrolled_window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -5412,7 +5412,7 @@ create_entry (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -5580,7 +5580,7 @@ create_event_box (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -6623,7 +6623,7 @@ create_list (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
 
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -7174,7 +7174,7 @@ create_clist (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
 
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -8705,7 +8705,7 @@ create_dialog (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (dialog_window), 0);
 
       button = gtk_button_new_with_label ("OK");
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -8715,7 +8715,7 @@ create_dialog (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (label_toggle),
 			&label);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -8724,7 +8724,7 @@ create_dialog (GtkWidget *widget)
       
       button = gtk_button_new_with_label ("Separator");
 
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
 
       gtk_dialog_add_action_widget (GTK_DIALOG (dialog_window),
                                     button,
@@ -8986,7 +8986,7 @@ create_event_watcher (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 			        G_CALLBACK (gtk_widget_destroy),
 				dialog_window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog_window)->action_area),
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -9121,7 +9121,7 @@ create_range_controls (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -9398,7 +9398,7 @@ create_text (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -9769,7 +9769,7 @@ create_notebook (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box1), button, FALSE, FALSE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
     }
 
@@ -10638,7 +10638,7 @@ create_wmhints (GtkWidget *widget)
 				window);
 
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -12071,7 +12071,7 @@ create_progress_bar (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				pdata->window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (pdata->window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -13130,7 +13130,7 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -13140,7 +13140,7 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK(start_timeout_test),
 			label);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -13149,7 +13149,7 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (stop_timeout_test),
 			NULL);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -13306,7 +13306,7 @@ create_idle_test (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -13316,7 +13316,7 @@ create_idle_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (start_idle_test),
 			label);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -13325,7 +13325,7 @@ create_idle_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (stop_idle_test),
 			NULL);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -13405,7 +13405,7 @@ create_rc_file (GtkWidget *widget)
       button = gtk_button_new_with_label ("Reload");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (gtk_rc_reparse_all), NULL);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -13413,7 +13413,7 @@ create_rc_file (GtkWidget *widget)
       button = gtk_button_new_with_label ("Reload All");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (reload_all_rc_files), NULL);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
 
@@ -13421,7 +13421,7 @@ create_rc_file (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
     }
@@ -13478,7 +13478,7 @@ create_mainloop (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
 
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
 
       gtk_widget_show (button);
@@ -13638,7 +13638,7 @@ create_styles (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
 			  button, TRUE, TRUE, 0);
       gtk_widget_show (button);
@@ -13917,7 +13917,7 @@ create_main_window (void)
 		    G_CALLBACK (do_exit),
 		    window);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
 
   gtk_widget_show_all (window);

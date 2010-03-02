@@ -709,7 +709,7 @@ gtk_dialog_add_button (GtkDialog   *dialog,
 
   button = gtk_button_new_from_stock (button_text);
 
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   
   gtk_widget_show (button);
   

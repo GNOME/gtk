@@ -272,7 +272,7 @@ static void create_range_controls( void )
                               G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
 
