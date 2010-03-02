@@ -362,7 +362,7 @@ gtk_old_editable_init (GtkOldEditable *old_editable)
     { "COMPOUND_TEXT", 0, 0 }
   };
 
-  GTK_WIDGET_SET_FLAGS (old_editable, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (old_editable), TRUE);
 
   old_editable->selection_start_pos = 0;
   old_editable->selection_end_pos = 0;

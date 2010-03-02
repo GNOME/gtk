@@ -5612,7 +5612,7 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
 			       cell_editable, 0);  
 
       gtk_widget_grab_focus (GTK_WIDGET (GTK_BIN (combo_box)->child));
-      GTK_WIDGET_UNSET_FLAGS (combo_box->priv->button, GTK_CAN_FOCUS);
+      gtk_widget_set_can_focus (combo_box->priv->button, FALSE);
     }
 
   /* we do the immediate popup only for the optionmenu-like 

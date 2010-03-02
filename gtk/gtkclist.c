@@ -1010,7 +1010,7 @@ gtk_clist_init (GtkCList *clist)
   clist->flags = 0;
 
   GTK_WIDGET_UNSET_FLAGS (clist, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (clist, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (clist), TRUE);
   GTK_CLIST_SET_FLAG (clist, CLIST_DRAW_DRAG_LINE);
   GTK_CLIST_SET_FLAG (clist, CLIST_USE_DRAG_ICONS);
 
@@ -1378,7 +1378,7 @@ gtk_clist_column_title_active (GtkCList *clist,
 				 G_CALLBACK (column_title_passive_func),
 				 NULL);
 
-  GTK_WIDGET_SET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (clist->column[column].button, TRUE);
   if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     gtk_widget_queue_draw (clist->column[column].button);
 }
@@ -1409,7 +1409,7 @@ gtk_clist_column_title_passive (GtkCList *clist,
 		      G_CALLBACK (column_title_passive_func),
                       NULL);
 
-  GTK_WIDGET_UNSET_FLAGS (clist->column[column].button, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (clist->column[column].button, FALSE);
   if (gtk_widget_get_visible (GTK_WIDGET (clist)))
     gtk_widget_queue_draw (clist->column[column].button);
 }

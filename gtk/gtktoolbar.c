@@ -667,7 +667,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
   
-  GTK_WIDGET_UNSET_FLAGS (toolbar, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (toolbar), FALSE);
   GTK_WIDGET_SET_FLAGS (toolbar, GTK_NO_WINDOW);
   
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);

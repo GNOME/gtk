@@ -2294,7 +2294,7 @@ gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
-  GTK_WIDGET_SET_FLAGS (entry, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);
 
   entry->editable = TRUE;
   entry->visible = TRUE;

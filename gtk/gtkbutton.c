@@ -540,7 +540,7 @@ gtk_button_init (GtkButton *button)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
 
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
   GTK_WIDGET_SET_FLAGS (button, GTK_NO_WINDOW);
 

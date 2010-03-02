@@ -390,7 +390,7 @@ gtk_scale_init (GtkScale *scale)
 {
   GtkRange *range = GTK_RANGE (scale);
 
-  GTK_WIDGET_SET_FLAGS (scale, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (scale), TRUE);
 
   range->slider_size_fixed = TRUE;
   range->has_stepper_a = FALSE;

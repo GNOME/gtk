@@ -1291,7 +1291,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTargetList *target_list;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (widget, TRUE);
 
   /* Set up default style */
   text_view->wrap_mode = GTK_WRAP_NONE;
@@ -4717,9 +4717,9 @@ gtk_text_view_focus (GtkWidget        *widget,
        * Unset CAN_FOCUS flag so that gtk_container_focus() allows
        * children to get the focus
        */
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_FOCUS); 
+      gtk_widget_set_can_focus (widget, FALSE);
       result = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->focus (widget, direction);
-      GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS); 
+      gtk_widget_set_can_focus (widget, TRUE);
 
       return result;
     }

@@ -861,7 +861,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   g_signal_connect_swapped (priv->tray_icon, "screen-changed",
 		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
   priv->image = gtk_image_new ();
-  GTK_WIDGET_SET_FLAGS (priv->image, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (priv->image, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
   gtk_widget_show (priv->image);
 
