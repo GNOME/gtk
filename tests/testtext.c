@@ -285,7 +285,7 @@ msgbox_run (GtkWindow  *parent,
   if (yes_button)
     {
       button = gtk_button_new_with_label (yes_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
 
       if (default_index == 0)
@@ -301,7 +301,7 @@ msgbox_run (GtkWindow  *parent,
   if (no_button)
     {
       button = gtk_button_new_with_label (no_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
 
       if (default_index == 0)
@@ -316,7 +316,7 @@ msgbox_run (GtkWindow  *parent,
   if (cancel_button)
     {
       button = gtk_button_new_with_label (cancel_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
       
       if (default_index == 1)

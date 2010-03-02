@@ -623,7 +623,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   /* Add the credits button */
   button = gtk_button_new_with_mnemonic (_("C_redits"));
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   image = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON);
   gtk_button_set_image (GTK_BUTTON (button), image);
   gtk_widget_set_no_show_all (button, TRUE);
@@ -637,7 +637,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   /* Add the license button */
   button = gtk_button_new_from_stock (_("_License"));
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_widget_set_no_show_all (button, TRUE);
   gtk_box_pack_end (GTK_BOX (GTK_DIALOG (about)->action_area),
                     button, FALSE, TRUE, 0);

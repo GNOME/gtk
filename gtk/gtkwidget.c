@@ -5553,9 +5553,9 @@ gtk_widget_set_can_default (GtkWidget *widget,
   if (can_default != gtk_widget_get_can_default (widget))
     {
       if (can_default)
-        GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_DEFAULT);
+        GTK_OBJECT_FLAGS (widget) |= GTK_CAN_DEFAULT;
       else
-        GTK_WIDGET_UNSET_FLAGS (widget, GTK_CAN_DEFAULT);
+        GTK_OBJECT_FLAGS (widget) &= ~(GTK_CAN_DEFAULT);
 
       gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "can-default");

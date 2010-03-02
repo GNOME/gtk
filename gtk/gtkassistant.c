@@ -760,9 +760,9 @@ gtk_assistant_init (GtkAssistant *assistant)
   assistant->back    = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
   assistant->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   assistant->last    = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
-  GTK_WIDGET_SET_FLAGS (assistant->close, GTK_CAN_DEFAULT);
-  GTK_WIDGET_SET_FLAGS (assistant->apply, GTK_CAN_DEFAULT);
-  GTK_WIDGET_SET_FLAGS (assistant->forward, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (assistant->close, TRUE);
+  gtk_widget_set_can_default (assistant->apply, TRUE);
+  gtk_widget_set_can_default (assistant->forward, TRUE);
 
   priv->size_group   = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (priv->size_group, assistant->close);

@@ -2520,7 +2520,7 @@ int main( int   argc,
                               G_CALLBACK (close_application),
                               G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
     gtk_widget_show (window);
@@ -3338,7 +3338,7 @@ static void create_range_controls( void )
                               G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
 
@@ -4078,7 +4078,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
 
     /* This grabs this button to be the default button. Simply hitting
      * the "Enter" key will cause this button to activate. */
@@ -4694,7 +4694,7 @@ int main( int   argc,
 			      G_CALLBACK (gtk_widget_destroy),
 			      G_OBJECT (window));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
     
@@ -5913,7 +5913,7 @@ static void create_calendar( void )
 		    G_CALLBACK (gtk_main_quit), 
 		    NULL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
 
   gtk_widget_show_all (window);
@@ -7243,7 +7243,7 @@ int main( int   argc,
     
     /* this makes it so the button is the default. */
     
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)-&gt;action_area), button, TRUE, TRUE, 0);
     
     /* This grabs this button to be the default button. Simply hitting

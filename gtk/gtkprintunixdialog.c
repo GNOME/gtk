@@ -414,7 +414,7 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
   GtkWidget *button = NULL;
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_button_set_image (GTK_BUTTON (button),
                         gtk_image_new_from_stock (stock_id,
                                                   GTK_ICON_SIZE_BUTTON));
