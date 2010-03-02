@@ -378,7 +378,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   direction = gtk_widget_get_direction (widget);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);

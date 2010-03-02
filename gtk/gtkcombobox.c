@@ -1096,7 +1096,7 @@ gtk_combo_box_state_changed (GtkWidget    *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       if (priv->tree_view && priv->cell_view)
 	gtk_cell_view_set_background_color (GTK_CELL_VIEW (priv->cell_view), 
@@ -1114,7 +1114,7 @@ gtk_combo_box_button_state_changed (GtkWidget    *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       if (!priv->tree_view && priv->cell_view)
 	{
@@ -1911,7 +1911,7 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
   GtkTreePath *path = NULL, *ppath;
   GtkWidget *toplevel;
 
-  if (!GTK_WIDGET_REALIZED (combo_box))
+  if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
 
   if (gtk_widget_get_mapped (priv->popup_widget))
@@ -2011,7 +2011,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
       return;
     }
 
-  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (combo_box)))
+  if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
 
   gtk_grab_remove (priv->popup_window);

@@ -403,7 +403,7 @@ gtk_color_button_style_set (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_color_button_parent_class)->style_set (widget, previous_style);
 
-  if (GTK_WIDGET_REALIZED (widget)) 
+  if (gtk_widget_get_realized (widget))
     {
       if (color_button->priv->pixbuf != NULL)
 	g_object_unref (color_button->priv->pixbuf);

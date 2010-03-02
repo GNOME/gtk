@@ -1440,7 +1440,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
                                             gtk_text_view_paste_done_handler,
                                             text_view);
 
-      if (GTK_WIDGET_REALIZED (text_view))
+      if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
 	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
@@ -1491,7 +1491,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       gtk_text_view_target_list_notify (text_view->buffer, NULL, text_view);
 
-      if (GTK_WIDGET_REALIZED (text_view))
+      if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	{
 	  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (text_view),
 							      GDK_SELECTION_PRIMARY);
@@ -3364,7 +3364,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   
   widget->allocation = *allocation;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
                               allocation->x, allocation->y,
@@ -3516,7 +3516,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
    * be invalidated
    */
-  if (size_changed && GTK_WIDGET_REALIZED (widget))
+  if (size_changed && gtk_widget_get_realized (widget))
     gdk_window_invalidate_rect (widget->window, NULL, FALSE);
 }
 
@@ -3702,7 +3702,7 @@ changed_handler (GtkTextLayout     *layout,
   
   DV(g_print(">Lines Validated ("G_STRLOC")\n"));
 
-  if (GTK_WIDGET_REALIZED (text_view))
+  if (gtk_widget_get_realized (widget))
     {      
       gtk_text_view_get_visible_rect (text_view, &visible_rect);
 
@@ -3963,7 +3963,7 @@ gtk_text_view_style_set (GtkWidget *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   PangoContext *ltr_context, *rtl_context;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gtk_text_view_set_background (text_view);
     }
@@ -4008,7 +4008,7 @@ gtk_text_view_state_changed (GtkWidget      *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GdkCursor *cursor;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gtk_text_view_set_background (text_view);
 
@@ -7122,7 +7122,7 @@ adjust_allocation_recurse (GtkWidget *widget,
    * into widget->allocation if the widget is not realized.
    * FIXME someone figure out why this was.
    */
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     {
       if (gtk_widget_get_visible (widget))
 	{
@@ -7155,7 +7155,7 @@ adjust_allocation (GtkWidget *widget,
 {
   ScrollData scroll_data;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     scroll_data.window = ALLOCATION_WINDOW (widget);
   else
     scroll_data.window = NULL;
@@ -7196,7 +7196,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
        */
       if (text_view->width_changed)
 	{
-	  if (GTK_WIDGET_REALIZED (text_view))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
 	    gdk_window_invalidate_rect (text_view->text_window->bin_window, NULL, FALSE);
 	  
 	  text_view->width_changed = FALSE;
@@ -7221,7 +7221,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
     {
       GSList *tmp_list;
 
-      if (GTK_WIDGET_REALIZED (text_view))
+      if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
         {
           if (dy != 0)
             {
@@ -7282,7 +7282,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   gtk_text_view_validate_onscreen (text_view);
   
   /* process exposes */
-  if (GTK_WIDGET_REALIZED (text_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
     {
       DV (g_print ("Processing updates (%s)\n", G_STRLOC));
       
@@ -7683,7 +7683,7 @@ popup_position_func (GtkMenu   *menu,
   text_view = GTK_TEXT_VIEW (user_data);
   widget = GTK_WIDGET (text_view);
   
-  g_return_if_fail (GTK_WIDGET_REALIZED (text_view));
+  g_return_if_fail (gtk_widget_get_realized (widget));
   
   screen = gtk_widget_get_screen (widget);
 
@@ -7778,7 +7778,7 @@ popup_targets_received (GtkClipboard     *clipboard,
   PopupInfo *info = user_data;
   GtkTextView *text_view = info->text_view;
   
-  if (GTK_WIDGET_REALIZED (text_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
     {
       /* We implicitely rely here on the fact that if we are pasting ourself, we'll
        * have text targets as well as the private GTK_TEXT_BUFFER_CONTENTS target.
@@ -8654,7 +8654,7 @@ set_window_width (GtkTextView      *text_view,
                                    GTK_WIDGET (text_view),
                                    width, 0);
           /* if the widget is already realized we need to realize the child manually */
-          if (GTK_WIDGET_REALIZED (text_view))
+          if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
         }
       else
@@ -8694,7 +8694,7 @@ set_window_height (GtkTextView      *text_view,
                                    0, height);
 
           /* if the widget is already realized we need to realize the child manually */
-          if (GTK_WIDGET_REALIZED (text_view))
+          if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
             text_window_realize (*winp, GTK_WIDGET (text_view));
         }
       else
@@ -8908,7 +8908,7 @@ add_child (GtkTextView      *text_view,
   text_view->children = g_slist_prepend (text_view->children,
                                          vc);
 
-  if (GTK_WIDGET_REALIZED (text_view))
+  if (gtk_widget_get_realized (GTK_WIDGET (text_view)))
     text_view_child_set_parent_window (text_view, vc);
   
   gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));

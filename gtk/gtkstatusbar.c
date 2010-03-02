@@ -484,7 +484,7 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
       gtk_widget_queue_resize (statusbar->label);
       gtk_widget_queue_draw (GTK_WIDGET (statusbar));
 
-      if (GTK_WIDGET_REALIZED (statusbar))
+      if (gtk_widget_get_realized (GTK_WIDGET (statusbar)))
         {
           if (statusbar->has_resize_grip && statusbar->grip_window == NULL)
 	    {
@@ -671,10 +671,10 @@ gtk_statusbar_create_window (GtkStatusbar *statusbar)
   gint attributes_mask;
   GdkRectangle rect;
 
-  g_return_if_fail (GTK_WIDGET_REALIZED (statusbar));
-  g_return_if_fail (statusbar->has_resize_grip);
-
   widget = GTK_WIDGET (statusbar);
+
+  g_return_if_fail (gtk_widget_get_realized (widget));
+  g_return_if_fail (statusbar->has_resize_grip);
 
   get_grip_rect (statusbar, &rect);
 

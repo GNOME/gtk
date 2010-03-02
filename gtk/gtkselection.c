@@ -660,7 +660,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
-  g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
+  g_return_val_if_fail (widget == NULL || gtk_widget_get_realized (widget), FALSE);
   g_return_val_if_fail (widget == NULL || gtk_widget_get_display (widget) == display, FALSE);
   
   if (widget == NULL)
@@ -754,7 +754,7 @@ gtk_selection_owner_set (GtkWidget *widget,
 {
   GdkDisplay *display;
   
-  g_return_val_if_fail (widget == NULL || GTK_WIDGET_REALIZED (widget), FALSE);
+  g_return_val_if_fail (widget == NULL || gtk_widget_get_realized (widget), FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
   if (widget)
@@ -1032,7 +1032,7 @@ gtk_selection_convert (GtkWidget *widget,
   if (initialize)
     gtk_selection_init ();
   
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
   
   /* Check to see if there are already any retrievals in progress for

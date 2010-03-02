@@ -248,7 +248,7 @@ gtk_socket_steal (GtkSocket      *socket,
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
 
-  if (!GTK_WIDGET_REALIZED (socket))
+  if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));
 
   _gtk_socket_add_window (socket, wid, TRUE);
@@ -279,7 +279,7 @@ gtk_socket_add_id (GtkSocket      *socket,
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
 
-  if (!GTK_WIDGET_REALIZED (socket))
+  if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));
 
   _gtk_socket_add_window (socket, window_id, TRUE);
@@ -304,7 +304,7 @@ gtk_socket_get_id (GtkSocket *socket)
   g_return_val_if_fail (GTK_IS_SOCKET (socket), 0);
   g_return_val_if_fail (GTK_WIDGET_ANCHORED (socket), 0);
 
-  if (!GTK_WIDGET_REALIZED (socket))
+  if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));
 
   return _gtk_socket_windowing_get_id (socket);
@@ -449,7 +449,7 @@ gtk_socket_size_allocate (GtkWidget     *widget,
   GtkSocket *socket = GTK_SOCKET (widget);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,

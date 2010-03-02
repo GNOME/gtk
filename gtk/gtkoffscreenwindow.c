@@ -93,7 +93,7 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
                             allocation->x,
                             allocation->y,
@@ -185,7 +185,7 @@ gtk_offscreen_window_show (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
   container = GTK_CONTAINER (widget);
-  need_resize = container->need_resize || !GTK_WIDGET_REALIZED (widget);
+  need_resize = container->need_resize || !gtk_widget_get_realized (widget);
   container->need_resize = FALSE;
 
   if (need_resize)

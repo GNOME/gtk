@@ -904,7 +904,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gdk_window_invalidate_rect (widget->window, &paned->handle_pos, FALSE);
         }
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	{
 	  if (gtk_widget_get_mapped (widget))
 	    gdk_window_show (paned->handle);
@@ -951,7 +951,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
     {
       GtkAllocation child_allocation;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_hide (paned->handle);
 
       if (paned->child1)
@@ -1279,7 +1279,7 @@ gtk_paned_state_changed (GtkWidget    *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GdkCursor *cursor;
 
-  if (GTK_WIDGET_REALIZED (paned))
+  if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
@@ -1894,7 +1894,7 @@ static void
 get_child_panes (GtkWidget  *widget,
 		 GList     **panes)
 {
-  if (!widget || !GTK_WIDGET_REALIZED (widget))
+  if (!widget || !gtk_widget_get_realized (widget))
     return;
 
   if (GTK_IS_PANED (widget))

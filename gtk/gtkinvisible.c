@@ -179,7 +179,7 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
   widget = GTK_WIDGET (invisible);
 
   previous_screen = invisible->screen;
-  was_realized = GTK_WIDGET_REALIZED (invisible);
+  was_realized = gtk_widget_get_realized (widget);
 
   if (was_realized)
     gtk_widget_unrealize (widget);

@@ -725,7 +725,7 @@ gtk_text_set_word_wrap (GtkText *text,
   
   text->word_wrap = (word_wrap != FALSE);
   
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -742,7 +742,7 @@ gtk_text_set_line_wrap (GtkText *text,
   
   text->line_wrap = (line_wrap != FALSE);
   
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -886,7 +886,7 @@ gtk_text_thaw (GtkText *text)
   g_return_if_fail (GTK_IS_TEXT (text));
   
   if (text->freeze_count)
-    if (!(--text->freeze_count) && GTK_WIDGET_REALIZED (text))
+    if (!(--text->freeze_count) && gtk_widget_get_realized (GTK_WIDGET (text)))
       {
 	recompute_geometry (text);
 	gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -1314,7 +1314,7 @@ gtk_text_style_set (GtkWidget *widget,
 {
   GtkText *text = GTK_TEXT (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
@@ -1342,7 +1342,7 @@ gtk_text_state_changed (GtkWidget   *widget,
 {
   GtkText *text = GTK_TEXT (widget);
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
@@ -1510,7 +1510,7 @@ gtk_text_size_allocate (GtkWidget     *widget,
   GtkText *text = GTK_TEXT (widget);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -2930,7 +2930,7 @@ new_text_property (GtkText *text, GdkFont *font, const GdkColor* fore,
 
   prop->length = length;
 
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     realize_property (text, prop);
 
   return prop;
@@ -3061,7 +3061,7 @@ insert_text_property (GtkText* text, GdkFont* font,
 	{
 	  /* Next property just has last position, take it over */
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    unrealize_property (text, forward_prop);
 
 	  forward_prop->flags = 0;
@@ -3085,7 +3085,7 @@ insert_text_property (GtkText* text, GdkFont* font,
 	    }
 	  forward_prop->length += len;
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    realize_property (text, forward_prop);
 	}
       else
@@ -3222,7 +3222,7 @@ delete_text_property (GtkText* text, guint nchars)
 	  MARK_LIST_PTR (&text->point) = g_list_remove_link (tmp, tmp);
 	  text->point.offset = 0;
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    unrealize_property (text, prop);
 
 	  destroy_text_property (prop);
@@ -3258,7 +3258,7 @@ delete_text_property (GtkText* text, guint nchars)
       
       text->point.offset = MARK_CURRENT_PROPERTY(&text->point)->length - 1;
       
-      if (GTK_WIDGET_REALIZED (text))
+      if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	unrealize_property (text, prop);
 
       destroy_text_property (prop);
@@ -3599,7 +3599,7 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
 static void
 find_cursor (GtkText* text, gboolean scroll)
 {
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       find_line_containing_point (text, text->cursor_mark.index, scroll);
       

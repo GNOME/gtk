@@ -499,7 +499,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
 
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
                             allocation->x + border_width,
                             allocation->y + border_width,
@@ -521,7 +521,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
 
       start_y += CHILD1_SIZE_SCALE * child_requisition.height;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (offscreen_box->offscreen_window1,
 				child_allocation.x,
                                 child_allocation.y,
@@ -545,7 +545,7 @@ gtk_offscreen_box_size_allocate (GtkWidget     *widget,
 
       start_y += CHILD2_SIZE_SCALE * child_requisition.height;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (offscreen_box->offscreen_window2,
 				child_allocation.x,
                                 child_allocation.y,

@@ -1756,8 +1756,9 @@ static void
 gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
 {
   GtkToolItemGroupPrivate* priv = group->priv;
+  GtkWidget *widget = GTK_WIDGET (group);
 
-  if (GTK_WIDGET_REALIZED (priv->header))
+  if (gtk_widget_get_realized (priv->header))
     {
       GtkWidget *alignment = gtk_tool_item_group_get_alignment (group);
       GdkRectangle area;
@@ -1772,9 +1773,8 @@ gtk_tool_item_group_force_expose (GtkToolItemGroup *group)
       gdk_window_invalidate_rect (priv->header->window, &area, TRUE);
     }
 
-  if (GTK_WIDGET_REALIZED (group))
+  if (gtk_widget_get_realized (widget))
     {
-      GtkWidget *widget = GTK_WIDGET (group);
       GtkWidget *parent = gtk_widget_get_parent (widget);
       int x, y, width, height;
 

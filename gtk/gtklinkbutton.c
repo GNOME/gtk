@@ -363,7 +363,7 @@ popup_position_func (GtkMenu  *menu,
   gint monitor_num;
   GdkRectangle monitor;
   
-  g_return_if_fail (GTK_WIDGET_REALIZED (link_button));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (widget->window, x, y);
 
@@ -412,7 +412,7 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
       time = gtk_get_current_event_time ();
     }
 
-  if (GTK_WIDGET_REALIZED (link_button))
+  if (gtk_widget_get_realized (GTK_WIDGET (link_button)))
     {
       GtkWidget *menu_item;
       

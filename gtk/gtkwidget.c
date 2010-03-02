@@ -2653,7 +2653,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_style (widget, g_value_get_object (value));
       break;
     case PROP_EVENTS:
-      if (!GTK_WIDGET_REALIZED (widget) && gtk_widget_get_has_window (widget))
+      if (!gtk_widget_get_realized (widget) && gtk_widget_get_has_window (widget))
 	gtk_widget_set_events (widget, g_value_get_flags (value));
       break;
     case PROP_EXTENSION_EVENTS:
@@ -3087,7 +3087,7 @@ gtk_widget_unparent (GtkWidget *widget)
   widget->allocation.width = 1;
   widget->allocation.height = 1;
   
-  if (GTK_WIDGET_REALIZED (widget)) 
+  if (gtk_widget_get_realized (widget))
     {
       if (GTK_WIDGET_IN_REPARENT (widget))
 	gtk_widget_unmap (widget);
@@ -3386,7 +3386,7 @@ gtk_widget_map (GtkWidget *widget)
   
   if (!gtk_widget_get_mapped (widget))
     {
-      if (!GTK_WIDGET_REALIZED (widget))
+      if (!gtk_widget_get_realized (widget))
 	gtk_widget_realize (widget);
 
       g_signal_emit (widget, widget_signals[MAP], 0);
@@ -3495,7 +3495,7 @@ gtk_widget_realize (GtkWidget *widget)
   g_return_if_fail (GTK_WIDGET_ANCHORED (widget) ||
 		    GTK_IS_INVISIBLE (widget));
   
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     {
       /*
 	if (GTK_IS_CONTAINER (widget) && gtk_widget_get_has_window (widget))
@@ -3508,7 +3508,7 @@ gtk_widget_realize (GtkWidget *widget)
                    "inside a toplevel window is not going to work very well. "
                    "Widgets must be inside a toplevel container before realizing them.");
       
-      if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
+      if (widget->parent && !gtk_widget_get_realized (widget->parent))
 	gtk_widget_realize (widget->parent);
 
       gtk_widget_ensure_style (widget);
@@ -3560,7 +3560,7 @@ gtk_widget_unrealize (GtkWidget *widget)
   if (g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info))
     gtk_widget_input_shape_combine_mask (widget, NULL, 0, 0);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       g_object_ref (widget);
       _gtk_tooltip_hide (widget);
@@ -3615,7 +3615,7 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     return;
   
   /* Just return if the widget or one of its ancestors isn't mapped */
@@ -3802,7 +3802,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_widget_queue_shallow_draw (widget);
       
   _gtk_size_group_queue_resize (widget);
@@ -3944,7 +3944,7 @@ static void
 gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 				      GdkRegion *region)
 {
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     return;
   
   if (gtk_widget_get_has_window (widget) && widget->parent)
@@ -3972,7 +3972,7 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
   GdkRectangle rect;
   GdkRegion *region;
   
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     return;
 
   gtk_widget_get_draw_rectangle (widget, &rect);
@@ -4104,7 +4104,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if ((size_changed || position_changed) && widget->parent &&
-      GTK_WIDGET_REALIZED (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+      gtk_widget_get_realized (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
     {
       GdkRegion *invalidate = gdk_region_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
@@ -4204,7 +4204,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
 
   ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
-  if (!ancestor || !GTK_WIDGET_REALIZED (src_widget) || !GTK_WIDGET_REALIZED (dest_widget))
+  if (!ancestor || !gtk_widget_get_realized (src_widget) || !gtk_widget_get_realized (dest_widget))
     return FALSE;
 
   /* Translate from allocation relative to window relative */
@@ -4285,7 +4285,7 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 {
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget) &&
+  if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
      {
 	gdk_window_move_resize (widget->window,
@@ -4718,7 +4718,7 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
-     (event->type == GDK_FOCUS_CHANGE || GTK_WIDGET_REALIZED(widget))
+     (event->type == GDK_FOCUS_CHANGE || gtk_widget_get_realized(widget))
 
 /**
  * gtk_widget_event:
@@ -4780,7 +4780,7 @@ gtk_widget_send_expose (GtkWidget *widget,
 			GdkEvent  *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), TRUE);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
   g_return_val_if_fail (event != NULL, TRUE);
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
@@ -5140,7 +5140,7 @@ gtk_widget_reparent (GtkWidget *widget,
        * the widget as we reparent it. if so we set a flag so
        * that gtk_widget_unparent doesn't unrealize widget
        */
-      if (GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
+      if (gtk_widget_get_realized (widget) && gtk_widget_get_realized (new_parent))
 	GTK_PRIVATE_SET_FLAG (widget, GTK_IN_REPARENT);
       
       g_object_ref (widget);
@@ -5982,7 +5982,7 @@ gtk_widget_get_realized (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_REALIZED) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_REALIZED) != 0;
 }
 
 /**
@@ -6362,7 +6362,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   /* Enforce realized/mapped invariants
    */
-  if (GTK_WIDGET_REALIZED (widget->parent))
+  if (gtk_widget_get_realized (widget->parent))
     gtk_widget_realize (widget);
 
   if (gtk_widget_get_visible (widget->parent) &&
@@ -6419,7 +6419,7 @@ void
 gtk_widget_style_attach (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 }
@@ -6874,7 +6874,7 @@ static void
 gtk_widget_real_style_set (GtkWidget *widget,
                            GtkStyle  *previous_style)
 {
-  if (GTK_WIDGET_REALIZED (widget) &&
+  if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
 }
@@ -6891,7 +6891,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
     {
       GtkStyle *previous_style;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	{
 	  gtk_widget_reset_shapes (widget);
 	  gtk_style_detach (widget->style);
@@ -6901,7 +6901,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       widget->style = style;
       g_object_ref (widget->style);
       
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
 
       gtk_widget_update_pango_context (widget);
@@ -7458,7 +7458,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
 	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
     }
 
-  if (widget->parent && GTK_WIDGET_REALIZED (widget->parent))
+  if (widget->parent && gtk_widget_get_realized (widget->parent))
     {
       if (gtk_widget_get_mapped (widget->parent) &&
 	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
@@ -8017,7 +8017,7 @@ gtk_widget_set_events (GtkWidget *widget,
 		       gint	  events)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (!gtk_widget_get_realized (widget));
   
   g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
                       GINT_TO_POINTER (events));
@@ -8070,7 +8070,7 @@ gtk_widget_add_events (GtkWidget *widget,
   g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
                       GINT_TO_POINTER (old_events | events));
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GList *window_list;
 
@@ -8101,7 +8101,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_widget_set_extension_events_internal (widget, mode, NULL);
 
   g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode,
@@ -8274,7 +8274,7 @@ gtk_widget_set_colormap (GtkWidget   *widget,
                          GdkColormap *colormap)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (!gtk_widget_get_realized (widget));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
   g_object_ref (colormap);
@@ -8344,7 +8344,7 @@ gtk_widget_get_pointer (GtkWidget *widget,
   if (y)
     *y = -1;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_get_pointer (widget->window, x, y, NULL);
       
@@ -8700,7 +8700,7 @@ gtk_widget_dispose (GObject *object)
     gtk_widget_hide (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
   
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
@@ -8764,7 +8764,7 @@ gtk_widget_finalize (GObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  g_assert (GTK_WIDGET_REALIZED (widget));
+  g_assert (gtk_widget_get_realized (widget));
   
   if (!gtk_widget_get_mapped (widget))
     {
@@ -8902,7 +8902,7 @@ _gtk_widget_set_pointer_window (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GdkScreen *screen = gdk_drawable_get_screen (widget->window);
 
@@ -8923,7 +8923,7 @@ _gtk_widget_get_pointer_window (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GdkScreen *screen = gdk_drawable_get_screen (widget->window);
 
@@ -9434,7 +9434,7 @@ void
 gtk_widget_reset_shapes (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   if (!GTK_WIDGET_HAS_SHAPE_MASK (widget))
     gtk_reset_shapes_recurse (widget, widget->window);
@@ -9576,9 +9576,9 @@ gtk_widget_get_snapshot (GtkWidget    *widget,
     return NULL;
 
   /* the widget (and parent_window) must be realized to be drawable */
-  if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
+  if (widget->parent && !gtk_widget_get_realized (widget->parent))
     gtk_widget_realize (widget->parent);
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     gtk_widget_realize (widget);
 
   /* determine snapshot rectangle */
@@ -11007,7 +11007,7 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 
       if (priv_has_tooltip)
         {
-	  if (GTK_WIDGET_REALIZED (widget) && !gtk_widget_get_has_window (widget))
+	  if (gtk_widget_get_realized (widget) && !gtk_widget_get_has_window (widget))
 	    gdk_window_set_events (widget->window,
 				   gdk_window_get_events (widget->window) |
 				   GDK_LEAVE_NOTIFY_MASK |

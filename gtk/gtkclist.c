@@ -1940,7 +1940,7 @@ size_allocate_title_buttons (GtkCList *clist)
   gint last_button = 0;
   gint i;
 
-  if (!GTK_WIDGET_REALIZED (clist))
+  if (!gtk_widget_get_realized (GTK_WIDGET (clist)))
     return;
 
   button_allocation.x = clist->hoffset;
@@ -2135,7 +2135,7 @@ column_button_create (GtkCList *clist,
   button = clist->column[column].button = gtk_button_new ();
   gtk_widget_pop_composite_child ();
 
-  if (GTK_WIDGET_REALIZED (clist) && clist->title_window)
+  if (gtk_widget_get_realized (GTK_WIDGET (clist)) && clist->title_window)
     gtk_widget_set_parent_window (clist->column[column].button,
 				  clist->title_window);
   gtk_widget_set_parent (button, GTK_WIDGET (clist));
@@ -3221,7 +3221,7 @@ gtk_clist_set_foreground (GtkCList       *clist,
     {
       clist_row->foreground = *color;
       clist_row->fg_set = TRUE;
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
 	gdk_colormap_alloc_color (gtk_widget_get_colormap (GTK_WIDGET (clist)),
                                   &clist_row->foreground, FALSE, TRUE);
     }
@@ -3250,7 +3250,7 @@ gtk_clist_set_background (GtkCList       *clist,
     {
       clist_row->background = *color;
       clist_row->bg_set = TRUE;
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
 	gdk_colormap_alloc_color (gtk_widget_get_colormap (GTK_WIDGET (clist)),
                                   &clist_row->background, FALSE, TRUE);
     }
@@ -3296,7 +3296,7 @@ gtk_clist_set_cell_style (GtkCList *clist,
 
   if (clist_row->cell[column].style)
     {
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
         gtk_style_detach (clist_row->cell[column].style);
       g_object_unref (clist_row->cell[column].style);
     }
@@ -3307,7 +3307,7 @@ gtk_clist_set_cell_style (GtkCList *clist,
     {
       g_object_ref (clist_row->cell[column].style);
       
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
         clist_row->cell[column].style =
 	  gtk_style_attach (clist_row->cell[column].style,
 			    clist->clist_window);
@@ -3375,7 +3375,7 @@ gtk_clist_set_row_style (GtkCList *clist,
 
   if (clist_row->style)
     {
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
         gtk_style_detach (clist_row->style);
       g_object_unref (clist_row->style);
     }
@@ -3386,7 +3386,7 @@ gtk_clist_set_row_style (GtkCList *clist,
     {
       g_object_ref (clist_row->style);
       
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
         clist_row->style = gtk_style_attach (clist_row->style,
 					     clist->clist_window);
     }
@@ -4621,7 +4621,7 @@ gtk_clist_unrealize (GtkWidget *widget)
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
   /* detach optional row/cell styles */
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GtkCListRow *clist_row;
       GList *list;
@@ -4829,7 +4829,7 @@ gtk_clist_style_set (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gtk_style_set_background (widget->style, widget->window, widget->state);
       gtk_style_set_background (widget->style, clist->title_window, GTK_STATE_SELECTED);
@@ -5406,7 +5406,7 @@ gtk_clist_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   border_width = GTK_CONTAINER (widget)->border_width;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x + border_width,
@@ -5440,7 +5440,7 @@ gtk_clist_size_allocate (GtkWidget     *widget,
   clist->clist_window_width = clist_allocation.width;
   clist->clist_window_height = clist_allocation.height;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (clist->clist_window,
 			      clist_allocation.x,
@@ -5454,7 +5454,7 @@ gtk_clist_size_allocate (GtkWidget     *widget,
   clist->column_title_area.y = widget->style->ythickness;
   clist->column_title_area.width = clist_allocation.width;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (clist->title_window,
 			      clist->column_title_area.x,
@@ -6159,7 +6159,7 @@ adjust_allocation_recurse (GtkWidget *widget,
 {
   ScrollData *scroll_data = data;
   
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!gtk_widget_get_realized (widget))
     {
       if (gtk_widget_get_visible (widget))
 	{
@@ -6189,7 +6189,7 @@ adjust_allocation (GtkWidget *widget,
 {
   ScrollData scroll_data;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     scroll_data.window = ALLOCATION_WINDOW (widget);
   else
     scroll_data.window = NULL;
@@ -6224,7 +6224,7 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
 
   dx = -value - clist->hoffset;
 
-  if (GTK_WIDGET_REALIZED (clist))
+  if (gtk_widget_get_realized (GTK_WIDGET (clist)))
     gdk_window_scroll (clist->title_window, dx, 0);
 
   /* adjust the column button's allocations */
@@ -6394,7 +6394,7 @@ row_delete (GtkCList    *clist,
 	(clist, clist_row, i, GTK_CELL_EMPTY, NULL, 0, NULL, NULL);
       if (clist_row->cell[i].style)
 	{
-	  if (GTK_WIDGET_REALIZED (clist))
+	  if (gtk_widget_get_realized (GTK_WIDGET (clist)))
 	    gtk_style_detach (clist_row->cell[i].style);
 	  g_object_unref (clist_row->cell[i].style);
 	}
@@ -6402,7 +6402,7 @@ row_delete (GtkCList    *clist,
 
   if (clist_row->style)
     {
-      if (GTK_WIDGET_REALIZED (clist))
+      if (gtk_widget_get_realized (GTK_WIDGET (clist)))
         gtk_style_detach (clist_row->style);
       g_object_unref (clist_row->style);
     }

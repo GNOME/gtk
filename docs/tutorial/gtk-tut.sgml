@@ -11997,7 +11997,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       dial = GTK_DIAL (widget);
 
@@ -15160,7 +15160,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   widget-&gt;allocation = *allocation;
   dial = GTK_DIAL (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
 
       gdk_window_move_resize (widget-&gt;window,

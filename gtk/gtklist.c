@@ -411,7 +411,7 @@ gtk_list_size_allocate (GtkWidget     *widget,
   GList *children;
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
@@ -785,7 +785,7 @@ static void
 gtk_list_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
+  if (previous_style && gtk_widget_get_realized (widget))
     gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
 }
 

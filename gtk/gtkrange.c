@@ -1476,7 +1476,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
   range->need_recalc = TRUE;
   gtk_range_calc_layout (range, range->adjustment->value);
 
-  if (GTK_WIDGET_REALIZED (range))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (range->event_window,
 			    widget->allocation.x,
 			    widget->allocation.y,
@@ -2452,7 +2452,7 @@ gtk_range_scroll_event (GtkWidget      *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
 
-  if (GTK_WIDGET_REALIZED (range))
+  if (gtk_widget_get_realized (widget))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
       gdouble delta;

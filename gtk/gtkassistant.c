@@ -1726,7 +1726,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   gtk_widget_set_parent (page_info->page,  GTK_WIDGET (assistant));
   gtk_widget_set_parent (page_info->title, GTK_WIDGET (assistant));
 
-  if (GTK_WIDGET_REALIZED (GTK_WIDGET (assistant)))
+  if (gtk_widget_get_realized (GTK_WIDGET (assistant)))
     {
       gtk_widget_realize (page_info->page);
       gtk_widget_realize (page_info->title);

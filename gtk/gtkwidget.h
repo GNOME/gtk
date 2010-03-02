@@ -217,13 +217,17 @@ typedef enum
 #define GTK_WIDGET_NO_WINDOW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_NO_WINDOW) != 0)
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_REALIZED:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is realized.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_realized() instead.
  */
 #define GTK_WIDGET_REALIZED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_REALIZED) != 0)
+#endif
 
 #ifndef GTK_DISABLE_DEPRECATED
 /**

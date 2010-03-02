@@ -2691,7 +2691,7 @@ construct_icon_info (GtkWidget            *widget,
   icon_info = g_slice_new0 (EntryIconInfo);
   priv->icons[icon_pos] = icon_info;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
 
   return icon_info;
@@ -2704,7 +2704,7 @@ gtk_entry_map (GtkWidget *widget)
   EntryIconInfo *icon_info = NULL;
   gint i;
 
-  if (GTK_WIDGET_REALIZED (widget) && !gtk_widget_get_mapped (widget))
+  if (gtk_widget_get_realized (widget) && !gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
 
@@ -2994,7 +2994,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   gtk_widget_get_child_requisition (widget, &requisition);
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_drawable_get_size (widget->window, NULL, &frame_height);
   else
     frame_height = requisition.height;
@@ -3102,7 +3102,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       /* We call gtk_widget_get_child_requisition, since we want (for
        * backwards compatibility reasons) the realization here to
@@ -4242,7 +4242,7 @@ gtk_entry_state_changed (GtkWidget      *widget,
   GdkCursor *cursor;
   gint i;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
@@ -4460,7 +4460,7 @@ gtk_entry_style_set (GtkWidget *widget,
 
   gtk_entry_recompute (entry);
 
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
+  if (previous_style && gtk_widget_get_realized (widget))
     {
       gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
       gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
@@ -5907,7 +5907,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   PangoLayoutLine *line;
   PangoRectangle logical_rect;
 
-  if (!GTK_WIDGET_REALIZED (entry))
+  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
   _gtk_entry_effective_inner_border (entry, &inner_border);
@@ -6349,7 +6349,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
   gint start, end;
   gint n_targets;
 
-  if (!GTK_WIDGET_REALIZED (entry))
+  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     return;
 
   list = gtk_target_list_new (NULL, 0);
@@ -7845,7 +7845,7 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
     {
       icon_info->nonactivatable = !activatable;
 
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (entry)))
+      if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
 
       g_object_notify (G_OBJECT (entry),
@@ -8049,7 +8049,7 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
       icon_info->pressed = FALSE;
       icon_info->prelight = FALSE;
 
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (entry)))
+      if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
 
       gtk_widget_queue_draw (GTK_WIDGET (entry));
@@ -8566,7 +8566,7 @@ popup_position_func (GtkMenu   *menu,
   GtkBorder inner_border;
   gint monitor_num, strong_x, height;
  
-  g_return_if_fail (GTK_WIDGET_REALIZED (entry));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (entry->text_area, x, y);
 
@@ -8623,7 +8623,7 @@ popup_targets_received (GtkClipboard     *clipboard,
   PopupInfo *info = user_data;
   GtkEntry *entry = info->entry;
   
-  if (GTK_WIDGET_REALIZED (entry))
+  if (gtk_widget_get_realized (GTK_WIDGET (entry)))
     {
       DisplayMode mode;
       gboolean clipboard_contains_text;

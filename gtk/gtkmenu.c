@@ -1266,7 +1266,7 @@ gtk_menu_detach (GtkMenu *menu)
   else
     g_object_set_data (G_OBJECT (data->attach_widget), I_(ATTACHED_MENUS), NULL);
   
-  if (GTK_WIDGET_REALIZED (menu))
+  if (gtk_widget_get_realized (GTK_WIDGET (menu)))
     gtk_widget_unrealize (GTK_WIDGET (menu));
   
   g_slice_free (GtkMenuAttachData, data);
@@ -1318,7 +1318,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   ai->top_attach = -1;
   ai->bottom_attach = -1;
 
-  if (GTK_WIDGET_REALIZED (menu_shell))
+  if (gtk_widget_get_realized (GTK_WIDGET (menu_shell)))
     gtk_widget_set_parent_window (child, menu->bin_window);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
@@ -2201,7 +2201,7 @@ static void
 gtk_menu_style_set (GtkWidget *widget,
 		    GtkStyle  *previous_style)
 {
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GtkMenu *menu = GTK_MENU (widget);
       
@@ -2574,7 +2574,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
       height -= arrow_border.bottom;
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -2634,7 +2634,7 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	}
       
       /* Resize the item window */
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	{
           gint i;
           gint width, height;
@@ -3969,7 +3969,7 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 
   gtk_menu_stop_navigating_submenu (menu);
   
-  if (GTK_WIDGET_REALIZED (menu))
+  if (gtk_widget_get_realized (GTK_WIDGET (menu)))
     {
       child_window = gdk_window_get_pointer (menu->bin_window, NULL, NULL, NULL);
 
@@ -4613,10 +4613,10 @@ gtk_menu_scroll_to (GtkMenu *menu,
     }
 
   /* Scroll the menu: */
-  if (GTK_WIDGET_REALIZED (menu))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move (menu->bin_window, 0, -offset);
 
-  if (GTK_WIDGET_REALIZED (menu))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (menu->view_window,
 			    x,
 			    y,
@@ -4745,7 +4745,7 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
 
-  if (GTK_WIDGET_REALIZED (GTK_WIDGET (menu)))
+  if (gtk_widget_get_realized (GTK_WIDGET (menu)))
     gtk_menu_scroll_item_visible (menu_shell, menu_item);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);

@@ -292,7 +292,7 @@ gtk_progress_size_allocate (GtkWidget     *widget,
 {
   widget->allocation = *allocation;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -309,10 +309,10 @@ gtk_progress_create_pixmap (GtkProgress *progress)
 
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
-  if (GTK_WIDGET_REALIZED (progress))
-    {
-      widget = GTK_WIDGET (progress);
+  widget = GTK_WIDGET (progress);
 
+  if (gtk_widget_get_realized (widget))
+    {
       if (progress->offscreen_pixmap)
 	g_object_unref (progress->offscreen_pixmap);
 

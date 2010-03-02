@@ -1559,7 +1559,7 @@ gtk_main_do_event (GdkEvent *event)
 	{
 	  g_object_ref (event_widget);
 	  if (!gtk_widget_event (event_widget, event) &&
-	      GTK_WIDGET_REALIZED (event_widget))
+	      gtk_widget_get_realized (event_widget))
 	    gtk_widget_destroy (event_widget);
 	  g_object_unref (event_widget);
 	}

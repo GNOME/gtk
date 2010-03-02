@@ -2151,7 +2151,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
   gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
   
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       GdkRectangle position;
 

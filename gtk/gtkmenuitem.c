@@ -1113,7 +1113,7 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (bin->child, &child_allocation);
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (menu_item->event_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);

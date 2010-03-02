@@ -354,7 +354,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_has_window (widget))
     {
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, 
 				allocation->y,
@@ -474,7 +474,7 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
 			  gboolean  has_window)
 {
   g_return_if_fail (GTK_IS_FIXED (fixed));
-  g_return_if_fail (!GTK_WIDGET_REALIZED (fixed));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (fixed)));
 
   if (has_window != gtk_widget_get_has_window (GTK_WIDGET (fixed)))
     {

@@ -388,7 +388,7 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (dialog));
-  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
     return;
 
   display = gtk_widget_get_display (GTK_WIDGET (toplevel));

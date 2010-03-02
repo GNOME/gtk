@@ -670,7 +670,7 @@ pattern_hadj_changed (GtkAdjustment *adj,
   gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
   gint new_value = adj->value;
 
-  if (GTK_WIDGET_REALIZED (darea))
+  if (gtk_widget_get_realized (darea))
     {
       gdk_window_scroll (darea->window, *old_value - new_value, 0);
       *old_value = new_value;
@@ -684,7 +684,7 @@ pattern_vadj_changed (GtkAdjustment *adj,
   gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
   gint new_value = adj->value;
 
-  if (GTK_WIDGET_REALIZED (darea))
+  if (gtk_widget_get_realized (darea))
     {
       gdk_window_scroll (darea->window, 0, *old_value - new_value);
       *old_value = new_value;
@@ -1555,7 +1555,7 @@ make_toolbar (GtkWidget *window)
 {
   GtkWidget *toolbar;
 
-  if (!GTK_WIDGET_REALIZED (window))
+  if (!gtk_widget_get_realized (window))
     gtk_widget_realize (window);
 
   toolbar = gtk_toolbar_new ();

@@ -1196,7 +1196,8 @@ gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
       
       if (use_drag_window)
 	{
-	  if (!toolitem->priv->drag_window && GTK_WIDGET_REALIZED (toolitem))
+	  if (!toolitem->priv->drag_window &&
+              gtk_widget_get_realized (GTK_WIDGET (toolitem)))
 	    {
 	      create_drag_window(toolitem);
 	      if (gtk_widget_get_mapped (GTK_WIDGET (toolitem)))
