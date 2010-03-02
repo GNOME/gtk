@@ -571,14 +571,14 @@ set_current_page (GtkAssistant     *assistant,
 
   g_signal_emit (assistant, signals [PREPARE], 0, priv->current_page->page);
 
-  if (gtk_widget_get_visible (priv->current_page->page) && GTK_WIDGET_MAPPED (assistant))
+  if (gtk_widget_get_visible (priv->current_page->page) && gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     {
       gtk_widget_set_child_visible (priv->current_page->page, TRUE);
       gtk_widget_map (priv->current_page->page);
       gtk_widget_map (priv->current_page->title);
     }
   
-  if (old_page && GTK_WIDGET_MAPPED (old_page->page))
+  if (old_page && gtk_widget_get_mapped (old_page->page))
     {
       gtk_widget_set_child_visible (old_page->page, FALSE);
       gtk_widget_unmap (old_page->page);
@@ -899,7 +899,7 @@ on_page_notify_visibility (GtkWidget  *widget,
   GtkAssistant *assistant = GTK_ASSISTANT (data);
 
   /* update buttons state, flow may have changed */
-  if (GTK_WIDGET_MAPPED (assistant))
+  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     set_assistant_buttons_state (assistant);
 }
 
@@ -1241,7 +1241,7 @@ gtk_assistant_map (GtkWidget *widget)
   gtk_widget_map (priv->action_area);
 
   if (gtk_widget_get_visible (priv->sidebar_image) &&
-      !GTK_WIDGET_MAPPED (priv->sidebar_image))
+      !gtk_widget_get_mapped (priv->sidebar_image))
     gtk_widget_map (priv->sidebar_image);
 
   /* if there's no default page, pick the first one */
@@ -1259,7 +1259,7 @@ gtk_assistant_map (GtkWidget *widget)
 
   if (page &&
       gtk_widget_get_visible (page->page) &&
-      !GTK_WIDGET_MAPPED (page->page))
+      !gtk_widget_get_mapped (page->page))
     set_current_page (assistant, page);
 
   GTK_WIDGET_CLASS (gtk_assistant_parent_class)->map (widget);
@@ -1566,7 +1566,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
    * initial page setting, for the cases where the
    * initial page is != to 0
    */
-  if (GTK_WIDGET_MAPPED (assistant))
+  if (gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     priv->visited_pages = g_slist_prepend (priv->visited_pages,
 					   priv->current_page);
 

@@ -2657,7 +2657,7 @@ gtk_container_map_child (GtkWidget *child,
 {
   if (gtk_widget_get_visible (child) &&
       GTK_WIDGET_CHILD_VISIBLE (child) &&
-      !GTK_WIDGET_MAPPED (child))
+      !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 }
 

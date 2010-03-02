@@ -153,7 +153,7 @@ gail_label_real_initialize (AtkObject *obj,
   
   widget = GTK_WIDGET (data);
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     gail_label_init_text_util (gail_label, widget);
   else
     g_signal_connect (widget,

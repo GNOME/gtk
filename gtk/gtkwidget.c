@@ -3197,9 +3197,9 @@ gtk_widget_real_show (GtkWidget *widget)
       GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
       if (widget->parent &&
-	  GTK_WIDGET_MAPPED (widget->parent) &&
+	  gtk_widget_get_mapped (widget->parent) &&
 	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
-	  !GTK_WIDGET_MAPPED (widget))
+	  !gtk_widget_get_mapped (widget))
 	gtk_widget_map (widget);
     }
 }
@@ -3231,7 +3231,7 @@ gtk_widget_show_now (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   /* make sure we will get event */
-  if (!GTK_WIDGET_MAPPED (widget) &&
+  if (!gtk_widget_get_mapped (widget) &&
       gtk_widget_is_toplevel (widget))
     {
       gtk_widget_show (widget);
@@ -3282,7 +3282,7 @@ gtk_widget_real_hide (GtkWidget *widget)
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
       
-      if (GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
     }
 }
@@ -3370,7 +3370,7 @@ gtk_widget_map (GtkWidget *widget)
   g_return_if_fail (gtk_widget_get_visible (widget));
   g_return_if_fail (GTK_WIDGET_CHILD_VISIBLE (widget));
   
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     {
       if (!GTK_WIDGET_REALIZED (widget))
 	gtk_widget_realize (widget);
@@ -3394,7 +3394,7 @@ gtk_widget_unmap (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
@@ -3606,7 +3606,7 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   
   /* Just return if the widget or one of its ancestors isn't mapped */
   for (w = widget; w != NULL; w = w->parent)
-    if (!GTK_WIDGET_MAPPED (w))
+    if (!gtk_widget_get_mapped (w))
       return;
 
   /* Find the correct widget */
@@ -3658,7 +3658,7 @@ widget_add_child_draw_rectangle (GtkWidget    *widget,
 {
   GdkRectangle child_rect;
   
-  if (!GTK_WIDGET_MAPPED (widget) ||
+  if (!gtk_widget_get_mapped (widget) ||
       widget->window != widget->parent->window)
     return;
 
@@ -4060,7 +4060,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       if (!gtk_widget_get_has_window (widget) && GTK_WIDGET_REDRAW_ON_ALLOC (widget) && position_changed)
 	{
@@ -6009,7 +6009,7 @@ gtk_widget_get_mapped (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_MAPPED) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_MAPPED) != 0;
 }
 
 /**
@@ -6354,7 +6354,7 @@ gtk_widget_set_parent (GtkWidget *widget,
       gtk_widget_get_visible (widget))
     {
       if (GTK_WIDGET_CHILD_VISIBLE (widget) &&
-	  GTK_WIDGET_MAPPED (widget->parent))
+	  gtk_widget_get_mapped (widget->parent))
 	gtk_widget_map (widget);
 
       gtk_widget_queue_resize (widget);
@@ -7445,7 +7445,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
 
   if (widget->parent && GTK_WIDGET_REALIZED (widget->parent))
     {
-      if (GTK_WIDGET_MAPPED (widget->parent) &&
+      if (gtk_widget_get_mapped (widget->parent) &&
 	  GTK_WIDGET_CHILD_VISIBLE (widget) &&
 	  gtk_widget_get_visible (widget))
 	gtk_widget_map (widget);
@@ -8751,7 +8751,7 @@ gtk_widget_real_map (GtkWidget *widget)
 {
   g_assert (GTK_WIDGET_REALIZED (widget));
   
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
       
@@ -8771,7 +8771,7 @@ gtk_widget_real_map (GtkWidget *widget)
 static void
 gtk_widget_real_unmap (GtkWidget *widget)
 {
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
@@ -8813,7 +8813,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 static void
 gtk_widget_real_unrealize (GtkWidget *widget)
 {
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     gtk_widget_real_unmap (widget);
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);

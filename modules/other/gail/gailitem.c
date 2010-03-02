@@ -134,7 +134,7 @@ gail_item_real_initialize (AtkObject *obj,
   label = get_label_from_container (GTK_WIDGET (data));
   if (GTK_IS_LABEL (label))
     {
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (label))
         gail_item_init_textutil (item, label);
       else
         g_signal_connect (label,

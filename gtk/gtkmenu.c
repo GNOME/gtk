@@ -1461,7 +1461,7 @@ gtk_menu_popup (GtkMenu		    *menu,
       
       while (tmp)
 	{
-	  if (!GTK_WIDGET_MAPPED (tmp))
+	  if (!gtk_widget_get_mapped (tmp))
 	    {
 	      viewable = FALSE;
 	      break;
@@ -2918,7 +2918,7 @@ pointer_in_menu_window (GtkWidget *widget,
 {
   GtkMenu *menu = GTK_MENU (widget);
 
-  if (GTK_WIDGET_MAPPED (menu->toplevel))
+  if (gtk_widget_get_mapped (menu->toplevel))
     {
       GtkMenuShell *menu_shell;
       gint          window_x, window_y;

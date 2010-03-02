@@ -225,13 +225,17 @@ typedef enum
  */
 #define GTK_WIDGET_REALIZED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_REALIZED) != 0)
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_MAPPED:
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the widget is mapped.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_mapped() instead.
  */
 #define GTK_WIDGET_MAPPED(wid)		  ((GTK_WIDGET_FLAGS (wid) & GTK_MAPPED) != 0)
+#endif
 
 #ifndef GTK_DISABLE_DEPRECATED
 /**

@@ -310,7 +310,7 @@ idle_do_action (gpointer data)
 
   combo = GTK_COMBO (widget);
 
-  do_popup = !GTK_WIDGET_MAPPED (combo->popwin);
+  do_popup = !gtk_widget_get_mapped (combo->popwin);
 
   tmp_event.button.type = GDK_BUTTON_PRESS; 
   tmp_event.button.window = widget->window;

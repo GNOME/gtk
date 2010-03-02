@@ -230,7 +230,7 @@ gtk_recent_chooser_dialog_map (GtkWidget *widget)
   GtkRecentChooserDialog *dialog = GTK_RECENT_CHOOSER_DIALOG (widget);
   GtkRecentChooserDialogPrivate *priv = dialog->priv;
   
-  if (!GTK_WIDGET_MAPPED (priv->chooser))
+  if (!gtk_widget_get_mapped (priv->chooser))
     gtk_widget_map (priv->chooser);
 
   GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->map (widget);

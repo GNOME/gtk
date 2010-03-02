@@ -894,7 +894,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           child2_allocation.height = MAX (1, widget->allocation.y + widget->allocation.height - child2_allocation.y - border_width);
         }
 
-      if (GTK_WIDGET_MAPPED (widget) &&
+      if (gtk_widget_get_mapped (widget) &&
           (old_handle_pos.x != paned->handle_pos.x ||
            old_handle_pos.y != paned->handle_pos.y ||
            old_handle_pos.width != paned->handle_pos.width ||
@@ -906,7 +906,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
 
       if (GTK_WIDGET_REALIZED (widget))
 	{
-	  if (GTK_WIDGET_MAPPED (widget))
+	  if (gtk_widget_get_mapped (widget))
 	    gdk_window_show (paned->handle);
 
           if (paned->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -930,7 +930,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       /* Now allocate the childen, making sure, when resizing not to
        * overlap the windows
        */
-      if (GTK_WIDGET_MAPPED (widget) &&
+      if (gtk_widget_get_mapped (widget) &&
 
           ((paned->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
             paned->child1->allocation.width < child1_allocation.width) ||
@@ -1070,7 +1070,7 @@ gtk_paned_expose (GtkWidget      *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
 
-  if (gtk_widget_get_visible (widget) && GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget) &&
       paned->child1 && gtk_widget_get_visible (paned->child1) &&
       paned->child2 && gtk_widget_get_visible (paned->child2))
     {

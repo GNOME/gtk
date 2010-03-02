@@ -168,7 +168,7 @@ create_widget_via_emission (GtkWidgetProfiler *profiler)
   if (!widget)
     g_error ("The profiler emitted the \"create-widget\" signal but the signal handler returned no widget!");
 
-  if (gtk_widget_get_visible (widget) || GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_visible (widget) || gtk_widget_get_mapped (widget))
     g_error ("The handler for \"create-widget\" must return an unmapped and unshown widget");
 
   return widget;

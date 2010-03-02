@@ -1036,7 +1036,7 @@ gtk_tool_item_group_size_allocate (GtkWidget     *widget,
 {
   gtk_tool_item_group_real_size_allocate (widget, allocation);
 
-  if (GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_mapped (widget))
     gdk_window_invalidate_rect (widget->window, NULL, FALSE);
 }
 

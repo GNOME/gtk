@@ -325,7 +325,7 @@ ensure_menus_unposted (GailMenuItem *menu_item)
           widget = GTK_ACCESSIBLE (parent)->widget;
           if (GTK_IS_MENU (widget))
             {
-              if (GTK_WIDGET_MAPPED (widget))
+              if (gtk_widget_get_mapped (widget))
                 gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
 
               return;
@@ -352,7 +352,7 @@ idle_do_action (gpointer data)
 
   item_parent = gtk_widget_get_parent (item);
   gtk_menu_shell_select_item (GTK_MENU_SHELL (item_parent), item);
-  item_mapped = GTK_WIDGET_MAPPED (item);
+  item_mapped = gtk_widget_get_mapped (item);
   /*
    * This is what is called when <Return> is pressed for a menu item
    */

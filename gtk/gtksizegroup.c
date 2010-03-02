@@ -677,7 +677,7 @@ compute_dimension (GtkWidget        *widget,
 
 	      gint dimension = compute_base_dimension (tmp_widget, mode);
 
-	      if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
+	      if (gtk_widget_get_mapped (tmp_widget) || !group->ignore_hidden)
 		{
 		  if (dimension > result)
 		    result = dimension;

@@ -319,7 +319,7 @@ idle_do_action (gpointer data)
   combo_box = GTK_COMBO_BOX (widget);
 
   popup = gtk_combo_box_get_popup_accessible (combo_box);
-  do_popup = !GTK_WIDGET_MAPPED (GTK_ACCESSIBLE (popup)->widget);
+  do_popup = !gtk_widget_get_mapped (GTK_ACCESSIBLE (popup)->widget);
   if (do_popup)
       gtk_combo_box_popup (combo_box);
   else
