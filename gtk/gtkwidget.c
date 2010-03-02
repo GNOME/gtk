@@ -6301,7 +6301,8 @@ gtk_widget_is_sensitive (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return gtk_widget_is_sensitive (widget);
+  return (gtk_widget_get_sensitive (widget) &&
+          gtk_widget_get_sensitive (widget->parent));
 }
 
 /**
