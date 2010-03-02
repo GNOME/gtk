@@ -3325,7 +3325,7 @@ gtk_widget_show_all (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0)
+  if (gtk_widget_get_no_show_all (widget))
     return;
 
   class = GTK_WIDGET_GET_CLASS (widget);
@@ -3347,7 +3347,7 @@ gtk_widget_hide_all (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0)
+  if (gtk_widget_get_no_show_all (widget))
     return;
 
   class = GTK_WIDGET_GET_CLASS (widget);
@@ -10845,7 +10845,7 @@ gtk_widget_get_no_show_all (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
-  return (GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0;
 }
 
 /**
@@ -10870,13 +10870,13 @@ gtk_widget_set_no_show_all (GtkWidget *widget,
 
   no_show_all = (no_show_all != FALSE);
 
-  if (no_show_all == ((GTK_WIDGET_FLAGS (widget) & GTK_NO_SHOW_ALL) != 0))
+  if (no_show_all == gtk_widget_get_no_show_all (widget))
     return;
 
   if (no_show_all)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_NO_SHOW_ALL);
+    GTK_OBJECT_FLAGS (widget) |= GTK_NO_SHOW_ALL;
   else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_SHOW_ALL);
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_NO_SHOW_ALL);
   
   g_object_notify (G_OBJECT (widget), "no-show-all");
 }
