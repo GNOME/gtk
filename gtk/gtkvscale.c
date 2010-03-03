@@ -33,6 +33,17 @@
 #include "gtkorientable.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvscale
+ * @Short_description: A vertical slider widget for selecting a value from a range
+ * @Title: GtkVScale
+ *
+ * The #GtkVScale widget is used to allow the user to select a value using
+ * a vertical slider. To create one, use gtk_hscale_new_with_range().
+ *
+ * The position to show the current value, and the number of decimal places
+ * shown can be set using the parent #GtkScale class's functions.
+ */
 
 G_DEFINE_TYPE (GtkVScale, gtk_vscale, GTK_TYPE_SCALE)
 
@@ -50,7 +61,14 @@ gtk_vscale_init (GtkVScale *vscale)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (vscale),
                                   GTK_ORIENTATION_VERTICAL);
 }
-
+/**
+ * gtk_vscale_new:
+ * @adjustment: the #GtkAdjustment which sets the range of the scale.
+ *
+ * Creates a new #GtkVScale.
+ *
+ * Returns: a new #GtkVScale.
+ */
 GtkWidget *
 gtk_vscale_new (GtkAdjustment *adjustment)
 {

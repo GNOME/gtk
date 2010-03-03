@@ -49,6 +49,12 @@ G_BEGIN_DECLS
 typedef struct _GtkVScale       GtkVScale;
 typedef struct _GtkVScaleClass  GtkVScaleClass;
 
+/**
+ * GtkVScale:
+ *
+ * The #GtkVScale struct contains private data only, and
+ * should be accessed using the functions below.
+ */
 struct _GtkVScale
 {
   GtkScale scale;
