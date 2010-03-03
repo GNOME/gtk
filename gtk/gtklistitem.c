@@ -527,10 +527,16 @@ static void
 gtk_list_item_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
+  GtkStyle *style;
+
   g_return_if_fail (widget != NULL);
 
   if (previous_style && gtk_widget_get_realized (widget))
-    gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+    {
+      style = gtk_widget_get_style (widget);
+      gdk_window_set_background (gtk_widget_get_window (widget),
+                                 &style->base[gtk_widget_get_state (widget)]);
+    }
 }
 
 static gint
@@ -570,11 +576,11 @@ gtk_list_item_expose (GtkWidget      *widget,
       if (gtk_widget_has_focus (widget))
         {
           if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
-            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+            gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                              NULL, widget, "add-mode",
                              0, 0, widget->allocation.width, widget->allocation.height);
           else
-            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+            gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                              NULL, widget, NULL,
                              0, 0, widget->allocation.width, widget->allocation.height);
         }

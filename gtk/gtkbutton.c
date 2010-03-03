@@ -1520,7 +1520,7 @@ _gtk_button_paint (GtkButton          *button,
 	}
 
       if (button->relief != GTK_RELIEF_NONE || button->depressed ||
-	  GTK_WIDGET_STATE(widget) == GTK_STATE_PRELIGHT)
+	  gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
 	gtk_paint_box (widget->style, widget->window,
 		       state_type,
 		       shadow_type, area, widget, "button",
@@ -1559,7 +1559,7 @@ _gtk_button_paint (GtkButton          *button,
 	      y += child_displacement_y;
 	    }
 
-	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	  gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			   area, widget, "button",
 			   x, y, width, height);
 	}
@@ -1575,7 +1575,7 @@ gtk_button_expose (GtkWidget      *widget,
       GtkButton *button = GTK_BUTTON (widget);
       
       _gtk_button_paint (button, &event->area,
-			 GTK_WIDGET_STATE (widget),
+			 gtk_widget_get_state (widget),
 			 button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
 			 "button", "buttondefault");
 

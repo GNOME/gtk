@@ -5784,7 +5784,7 @@ gtk_widget_set_state (GtkWidget           *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (state == GTK_WIDGET_STATE (widget))
+  if (state == gtk_widget_get_state (widget))
     return;
 
   if (state == GTK_STATE_INSENSITIVE)
@@ -6246,7 +6246,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   else
     {
       GTK_OBJECT_FLAGS (widget) &= ~(GTK_SENSITIVE);
-      data.state = GTK_WIDGET_STATE (widget);
+      data.state = gtk_widget_get_state (widget);
     }
   data.state_restoration = TRUE;
   data.use_forall = TRUE;
@@ -6343,10 +6343,10 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_object_ref_sink (widget);
   widget->parent = parent;
 
-  if (GTK_WIDGET_STATE (parent) != GTK_STATE_NORMAL)
-    data.state = GTK_WIDGET_STATE (parent);
+  if (gtk_widget_get_state (parent) != GTK_STATE_NORMAL)
+    data.state = gtk_widget_get_state (parent);
   else
-    data.state = GTK_WIDGET_STATE (widget);
+    data.state = gtk_widget_get_state (widget);
   data.state_restoration = FALSE;
   data.parent_sensitive = (gtk_widget_is_sensitive (parent) != FALSE);
   data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
@@ -7354,7 +7354,7 @@ gtk_widget_render_icon (GtkWidget      *widget,
   retval = gtk_icon_set_render_icon (icon_set,
                                      widget->style,
                                      gtk_widget_get_direction (widget),
-                                     GTK_WIDGET_STATE (widget),
+                                     gtk_widget_get_state (widget),
                                      size,
                                      widget,
                                      detail);
@@ -9174,7 +9174,7 @@ static void
 gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
-  guint8 old_state = GTK_WIDGET_STATE (widget);
+  guint8 old_state = gtk_widget_get_state (widget);
   guint8 old_saved_state = widget->saved_state;
 
   /* don't call this function with state==GTK_STATE_INSENSITIVE,
@@ -9190,9 +9190,9 @@ gtk_widget_propagate_state (GtkWidget           *widget,
   if (gtk_widget_is_sensitive (widget))
     {
       if (data->state_restoration)
-        GTK_WIDGET_STATE (widget) = widget->saved_state;
+        widget->state = widget->saved_state;
       else
-        GTK_WIDGET_STATE (widget) = data->state;
+        widget->state = data->state;
     }
   else
     {
@@ -9201,9 +9201,9 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	  if (data->state != GTK_STATE_INSENSITIVE)
 	    widget->saved_state = data->state;
 	}
-      else if (GTK_WIDGET_STATE (widget) != GTK_STATE_INSENSITIVE)
-	widget->saved_state = GTK_WIDGET_STATE (widget);
-      GTK_WIDGET_STATE (widget) = GTK_STATE_INSENSITIVE;
+      else if (gtk_widget_get_state (widget) != GTK_STATE_INSENSITIVE)
+	widget->saved_state = gtk_widget_get_state (widget);
+      widget->state = GTK_STATE_INSENSITIVE;
     }
 
   if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
@@ -9215,7 +9215,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
-  if (old_state != GTK_WIDGET_STATE (widget) ||
+  if (old_state != gtk_widget_get_state (widget) ||
       old_saved_state != widget->saved_state)
     {
       g_object_ref (widget);

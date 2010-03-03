@@ -56,7 +56,7 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 			     x != cursor_x || y != cursor_y))
 	{
 	  gdk_draw_drawable (widget->window,
-			     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+			     widget->style->fg_gc[gtk_widget_get_state (widget)],
 			     pixmap,
 			     cursor_x - 5, cursor_y - 5,
 			     cursor_x - 5, cursor_y - 5,
@@ -103,7 +103,7 @@ static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget->window,
-		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		     widget->style->fg_gc[gtk_widget_get_state (widget)],
 		     pixmap,
 		     event->area.x, event->area.y,
 		     event->area.x, event->area.y,
@@ -124,7 +124,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget->style->black_gc;
@@ -133,7 +133,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget->style->white_gc;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;

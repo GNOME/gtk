@@ -56,7 +56,7 @@ gboolean
 expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   gdk_draw_arc (widget->window,
-                widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                widget->style->fg_gc[gtk_widget_get_state (widget)],
                 TRUE,
                 0, 0, widget->allocation.width, widget->allocation.height,
                 0, 64 * 360);

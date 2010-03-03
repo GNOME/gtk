@@ -785,8 +785,14 @@ static void
 gtk_list_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
+  GtkStyle *style;
+
   if (previous_style && gtk_widget_get_realized (widget))
-    gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+    {
+      style = gtk_widget_get_style (widget);
+      gdk_window_set_background (gtk_widget_get_window (widget),
+                                 &style->base[gtk_widget_get_state (widget)]);
+    }
 }
 
 /* GtkContainer Methods :
@@ -1456,7 +1462,7 @@ gtk_list_select_all (GtkList *list)
       list->undo_unselection = NULL;
 
       if (list->children &&
-	  GTK_WIDGET_STATE (list->children->data) != GTK_STATE_SELECTED)
+	  gtk_widget_get_state (list->children->data) != GTK_STATE_SELECTED)
 	gtk_list_fake_toggle_row (list, GTK_WIDGET (list->children->data));
 
       list->anchor_state =  GTK_STATE_SELECTED;

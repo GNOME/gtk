@@ -517,7 +517,7 @@ gtk_menu_bar_paint (GtkWidget    *widget,
       
       gtk_paint_box (widget->style,
 		     widget->window,
-                     GTK_WIDGET_STATE (widget),
+                     gtk_widget_get_state (widget),
                      get_shadow_type (GTK_MENU_BAR (widget)),
 		     area, widget, "menubar",
 		     border, border,

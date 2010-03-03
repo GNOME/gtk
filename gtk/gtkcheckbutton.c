@@ -154,14 +154,14 @@ gtk_check_button_paint (GtkWidget    *widget,
 	  GtkWidget *child = GTK_BIN (widget)->child;
 	  
 	  if (interior_focus && child && gtk_widget_get_visible (child))
-	    gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	    gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			     area, widget, "checkbutton",
 			     child->allocation.x - focus_width - focus_pad,
 			     child->allocation.y - focus_width - focus_pad,
 			     child->allocation.width + 2 * (focus_width + focus_pad),
 			     child->allocation.height + 2 * (focus_width + focus_pad));
 	  else
-	    gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
+	    gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			     area, widget, "checkbutton",
 			     border_width + widget->allocation.x,
 			     border_width + widget->allocation.y,
@@ -398,7 +398,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
 
-      if (GTK_WIDGET_STATE (toggle_button) == GTK_STATE_PRELIGHT)
+      if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
 	{
 	  GdkRectangle restrict_area;
 	  GdkRectangle new_area;

@@ -4230,9 +4230,10 @@ invalidate_empty_focus (GtkTreeView *tree_view)
 static void
 draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
 {
+  GtkWidget *widget = GTK_WIDGET (tree_view);
   gint w, h;
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
+  if (!gtk_widget_has_focus (widget))
     return;
 
   gdk_drawable_get_size (tree_view->priv->bin_window, &w, &h);
@@ -4241,11 +4242,11 @@ draw_empty_focus (GtkTreeView *tree_view, GdkRectangle *clip_area)
   h -= 2;
 
   if (w > 0 && h > 0)
-    gtk_paint_focus (GTK_WIDGET (tree_view)->style,
+    gtk_paint_focus (gtk_widget_get_style (widget),
 		     tree_view->priv->bin_window,
-		     GTK_WIDGET_STATE (tree_view),
+		     gtk_widget_get_state (widget),
 		     clip_area,
-		     GTK_WIDGET (tree_view),
+		     widget,
 		     NULL,
 		     1, 1, w, h);
 }
@@ -4869,7 +4870,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      if (row_ending_details)
 		gtk_paint_focus (widget->style,
 			         tree_view->priv->bin_window,
-				 GTK_WIDGET_STATE (widget),
+				 gtk_widget_get_state (widget),
 				 &event->area,
 				 widget,
 				 (is_first
@@ -4882,7 +4883,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      else
 		gtk_paint_focus (widget->style,
 			         tree_view->priv->bin_window,
-				 GTK_WIDGET_STATE (widget),
+				 gtk_widget_get_state (widget),
 				 &event->area,
 				 widget,
 				 "treeview-drop-indicator",
@@ -4896,7 +4897,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
           if (highlight_y >= 0)
             {
               gdk_draw_line (event->window,
-                             widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                             widget->style->fg_gc[gtk_widget_get_state (widget)],
                              rtl ? highlight_x + expander_cell_width : highlight_x,
                              highlight_y,
                              rtl ? 0 : bin_window_width,
@@ -9513,15 +9514,15 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gint expander_size;
   GtkExpanderStyle expander_style;
 
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
+  widget = GTK_WIDGET (tree_view);
+
+  gtk_widget_style_get (widget,
 			"vertical-separator", &vertical_separator,
 			NULL);
   expander_size = tree_view->priv->expander_size - EXPANDER_EXTRA_PADDING;
 
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
-
-  widget = GTK_WIDGET (tree_view);
 
   gtk_tree_view_get_arrow_xrange (tree_view, tree, &x_offset, &x2);
 
@@ -9530,7 +9531,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   area.width = expander_size + 2;
   area.height = MAX (CELL_HEIGHT (node, vertical_separator), (expander_size - vertical_separator));
 
-  if (GTK_WIDGET_STATE (tree_view) == GTK_STATE_INSENSITIVE)
+  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE)
     {
       state = GTK_STATE_INSENSITIVE;
     }
@@ -13809,7 +13810,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   expose_area.height = background_area.height + 2;
 
   gdk_draw_rectangle (drawable,
-                      widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+                      widget->style->base_gc [gtk_widget_get_state (widget)],
                       TRUE,
                       0, 0,
                       bin_window_width + 2,

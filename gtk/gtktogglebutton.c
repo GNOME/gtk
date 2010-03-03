@@ -426,7 +426,7 @@ gtk_toggle_button_expose (GtkWidget      *widget,
       GtkStateType state_type;
       GtkShadowType shadow_type;
 
-      state_type = GTK_WIDGET_STATE (widget);
+      state_type = gtk_widget_get_state (widget);
       
       if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
         {

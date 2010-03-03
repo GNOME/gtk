@@ -3294,7 +3294,7 @@ gtk_notebook_draw_focus (GtkWidget      *widget,
           area.height = page->tab_label->allocation.height + 2 * focus_width;
 
 	  gtk_paint_focus (widget->style, event->window, 
-                           GTK_WIDGET_STATE (widget), NULL, widget, "tab",
+                           gtk_widget_get_state (widget), NULL, widget, "tab",
 			   area.x, area.y, area.width, area.height);
         }
     }
@@ -5044,7 +5044,7 @@ gtk_notebook_draw_arrow (GtkNotebook      *notebook,
             state_type = GTK_STATE_PRELIGHT;
         }
       else
-        state_type = GTK_WIDGET_STATE (widget);
+        state_type = gtk_widget_get_state (widget);
 
       if (notebook->click_child == nbarrow)
         shadow_type = GTK_SHADOW_IN;

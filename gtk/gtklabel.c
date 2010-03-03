@@ -3721,7 +3721,7 @@ gtk_label_expose (GtkWidget      *widget,
 
       gtk_paint_layout (widget->style,
                         widget->window,
-                        GTK_WIDGET_STATE (widget),
+                        gtk_widget_get_state (widget),
 			FALSE,
                         &event->area,
                         widget,
@@ -3835,7 +3835,7 @@ gtk_label_expose (GtkWidget      *widget,
                                                        1);
               gdk_region_get_clipbox (clip, &rect);
 
-              gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+              gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                                &event->area, widget, "label",
                                rect.x, rect.y, rect.width, rect.height);
 

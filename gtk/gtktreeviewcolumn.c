@@ -3519,7 +3519,7 @@ _gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn  *tree_column,
 #if 0
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
-		       GTK_WIDGET_STATE (tree_column->tree_view),
+		       gtk_widget_get_state (tree_column->tree_view),
 		       NULL,
 		       tree_column->tree_view,
 		       "treeview",

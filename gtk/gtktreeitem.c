@@ -651,7 +651,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	}
 
       if (gtk_widget_has_focus (widget))
-	gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			 NULL, widget, "treeitem",
 			 0, 0,
 			 widget->allocation.width,

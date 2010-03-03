@@ -1235,7 +1235,7 @@ paint_triangle (GtkHSV      *hsv,
 			    NULL);
   
       gtk_paint_focus (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget),
+		       gtk_widget_get_state (widget),
 		       NULL, widget, detail,
 		       widget->allocation.x + xx - FOCUS_RADIUS - focus_width - focus_pad, 
 		       widget->allocation.y + yy - FOCUS_RADIUS - focus_width - focus_pad, 
@@ -1293,7 +1293,7 @@ gtk_hsv_expose (GtkWidget      *widget,
 
   if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
     gtk_paint_focus (widget->style, widget->window,
-		     GTK_WIDGET_STATE (widget),
+		     gtk_widget_get_state (widget),
 		     &event->area, widget, NULL,
 		     widget->allocation.x,
 		     widget->allocation.y, 

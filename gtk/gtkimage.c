@@ -1883,7 +1883,7 @@ gtk_image_expose (GtkWidget      *widget,
 
       mask = NULL;
       pixbuf = NULL;
-      needs_state_transform = GTK_WIDGET_STATE (widget) != GTK_STATE_NORMAL;
+      needs_state_transform = gtk_widget_get_state (widget) != GTK_STATE_NORMAL;
       
       switch (image->storage_type)
         {
@@ -1971,7 +1971,7 @@ gtk_image_expose (GtkWidget      *widget,
             gtk_icon_set_render_icon (image->data.icon_set.icon_set,
                                       widget->style,
                                       gtk_widget_get_direction (widget),
-                                      GTK_WIDGET_STATE (widget),
+                                      gtk_widget_get_state (widget),
                                       image->icon_size,
                                       widget,
                                       NULL);
@@ -2066,7 +2066,7 @@ gtk_image_expose (GtkWidget      *widget,
                   rendered = gtk_style_render_icon (widget->style,
                                                     source,
                                                     gtk_widget_get_direction (widget),
-                                                    GTK_WIDGET_STATE (widget),
+                                                    gtk_widget_get_state (widget),
                                                     /* arbitrary */
                                                     (GtkIconSize)-1,
                                                     widget,
@@ -2319,7 +2319,7 @@ gtk_image_calc_size (GtkImage *image)
       pixbuf = gtk_icon_set_render_icon (image->data.icon_set.icon_set,
                                          widget->style,
                                          gtk_widget_get_direction (widget),
-                                         GTK_WIDGET_STATE (widget),
+                                         gtk_widget_get_state (widget),
                                          image->icon_size,
                                          widget,
                                          NULL);
