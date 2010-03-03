@@ -1278,8 +1278,8 @@ gtk_text_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   
   /* Can't call gtk_style_set_background here because it's handled specially */
-  gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-  gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+  gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
 
   if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     text->bg_gc = create_bg_gc (text);
@@ -1316,8 +1316,8 @@ gtk_text_style_set (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
       
       if (text->bg_gc)
 	{
@@ -1344,8 +1344,8 @@ gtk_text_state_changed (GtkWidget   *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
     }
 }
 
@@ -1442,7 +1442,7 @@ gtk_text_draw_focus (GtkWidget *widget)
 	  xextra -= 1;
 	  yextra -= 1;
 
-	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	  gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			   NULL, widget, "text",
 			   0, 0,
 			   widget->allocation.width,
@@ -4695,7 +4695,7 @@ draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
 			 x, y, width, height);
     }
   else if (!gdk_color_equal(MARK_CURRENT_BACK (text, mark),
-			    &GTK_WIDGET(text)->style->base[GTK_WIDGET_STATE (text)]))
+			    &GTK_WIDGET(text)->style->base[gtk_widget_get_state (GTK_WIDGET (text))]))
     {
       gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (text, mark));
 

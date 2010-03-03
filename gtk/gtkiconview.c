@@ -1592,7 +1592,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 	case GTK_ICON_VIEW_DROP_INTO:
 	  gtk_paint_focus (widget->style,
 			   icon_view->priv->bin_window,
-			   GTK_WIDGET_STATE (widget),
+			   gtk_widget_get_state (widget),
 			   NULL,
 			   widget,
 			   "iconview-drop-indicator",
@@ -1602,7 +1602,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 	case GTK_ICON_VIEW_DROP_ABOVE:
 	  gtk_paint_focus (widget->style,
 			   icon_view->priv->bin_window,
-			   GTK_WIDGET_STATE (widget),
+			   gtk_widget_get_state (widget),
 			   NULL,
 			   widget,
 			   "iconview-drop-indicator",
@@ -1612,7 +1612,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 	case GTK_ICON_VIEW_DROP_LEFT:
 	  gtk_paint_focus (widget->style,
 			   icon_view->priv->bin_window,
-			   GTK_WIDGET_STATE (widget),
+			   gtk_widget_get_state (widget),
 			   NULL,
 			   widget,
 			   "iconview-drop-indicator",
@@ -1622,7 +1622,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 	case GTK_ICON_VIEW_DROP_BELOW:
 	  gtk_paint_focus (widget->style,
 			   icon_view->priv->bin_window,
-			   GTK_WIDGET_STATE (widget),
+			   gtk_widget_get_state (widget),
 			   NULL,
 			   widget,
 			   "iconview-drop-indicator",
@@ -1632,7 +1632,7 @@ gtk_icon_view_expose (GtkWidget *widget,
 	case GTK_ICON_VIEW_DROP_RIGHT:
 	  gtk_paint_focus (widget->style,
 			   icon_view->priv->bin_window,
-			   GTK_WIDGET_STATE (widget),
+			   gtk_widget_get_state (widget),
 			   NULL,
 			   widget,
 			   "iconview-drop-indicator",
@@ -7397,7 +7397,7 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	  cairo_set_line_width (cr, 1.);
 
 	  gdk_cairo_set_source_color
-	    (cr, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+	    (cr, &widget->style->base[gtk_widget_get_state (widget)]);
 	  cairo_rectangle (cr, 0, 0, item->width + 2, item->height + 2);
 	  cairo_fill (cr);
 

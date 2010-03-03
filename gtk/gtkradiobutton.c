@@ -653,7 +653,7 @@ gtk_radio_button_clicked (GtkButton *button)
   else
     depressed = toggle_button->active;
 
-  if (GTK_WIDGET_STATE (button) != new_state)
+  if (gtk_widget_get_state (GTK_WIDGET (button)) != new_state)
     gtk_widget_set_state (GTK_WIDGET (button), new_state);
 
   if (toggled)
@@ -727,7 +727,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	x = widget->allocation.x + widget->allocation.width - (indicator_size + x - widget->allocation.x);
 
-      if (GTK_WIDGET_STATE (toggle_button) == GTK_STATE_PRELIGHT)
+      if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
 	{
 	  GdkRectangle restrict_area;
 	  GdkRectangle new_area;

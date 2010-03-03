@@ -871,7 +871,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
     {
       gtk_paint_box (widget->style,
 		     widget->window,
-                     GTK_WIDGET_STATE (widget),
+                     gtk_widget_get_state (widget),
                      get_shadow_type (toolbar),
 		     &event->area, widget, "toolbar",
 		     border_width + widget->allocation.x,
@@ -4884,7 +4884,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
       if (wide_separators)
         gtk_paint_box (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        area, widget, "vseparator",
                        allocation->x + (allocation->width - separator_width) / 2,
                        allocation->y + allocation->height * start_fraction,
@@ -4892,7 +4892,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        allocation->height * (end_fraction - start_fraction));
       else
         gtk_paint_vline (widget->style, widget->window,
-                         GTK_WIDGET_STATE (widget), area, widget,
+                         gtk_widget_get_state (widget), area, widget,
                          "toolbar",
                          allocation->y + allocation->height * start_fraction,
                          allocation->y + allocation->height * end_fraction,
@@ -4910,7 +4910,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
       if (wide_separators)
         gtk_paint_box (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        area, widget, "hseparator",
                        allocation->x + allocation->width * start_fraction,
                        allocation->y + (allocation->height - separator_height) / 2,
@@ -4918,7 +4918,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        separator_height);
       else
         gtk_paint_hline (widget->style, widget->window,
-                         GTK_WIDGET_STATE (widget), area, widget,
+                         gtk_widget_get_state (widget), area, widget,
                          "toolbar",
                          allocation->x + allocation->width * start_fraction,
                          allocation->x + allocation->width * end_fraction,

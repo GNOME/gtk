@@ -186,16 +186,16 @@ dates_difference(guint year1, guint mm1, guint dd1,
 #define SCROLL_DELAY_FACTOR      5
 
 /* Color usage */
-#define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[GTK_WIDGET_STATE (widget)])
-#define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[GTK_WIDGET_STATE (widget)])
+#define HEADER_FG_COLOR(widget)		 (& (widget)->style->fg[gtk_widget_get_state (widget)])
+#define HEADER_BG_COLOR(widget)		 (& (widget)->style->bg[gtk_widget_get_state (widget)])
 #define SELECTED_BG_COLOR(widget)	 (& (widget)->style->base[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
 #define SELECTED_FG_COLOR(widget)	 (& (widget)->style->text[gtk_widget_has_focus (widget) ? GTK_STATE_SELECTED : GTK_STATE_ACTIVE])
-#define NORMAL_DAY_COLOR(widget)	 (& (widget)->style->text[GTK_WIDGET_STATE (widget)])
-#define PREV_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
-#define NEXT_MONTH_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
-#define MARKED_COLOR(widget)		 (& (widget)->style->text[GTK_WIDGET_STATE (widget)])
-#define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[GTK_WIDGET_STATE (widget)])
-#define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[GTK_WIDGET_STATE (widget)])
+#define NORMAL_DAY_COLOR(widget)	 (& (widget)->style->text[gtk_widget_get_state (widget)])
+#define PREV_MONTH_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
+#define NEXT_MONTH_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
+#define MARKED_COLOR(widget)		 (& (widget)->style->text[gtk_widget_get_state (widget)])
+#define BACKGROUND_COLOR(widget)	 (& (widget)->style->base[gtk_widget_get_state (widget)])
+#define HIGHLIGHT_BACK_COLOR(widget)	 (& (widget)->style->mid[gtk_widget_get_state (widget)])
 
 enum {
   ARROW_YEAR_LEFT,
@@ -2685,7 +2685,7 @@ gtk_calendar_expose (GtkWidget	    *widget,
 	calendar_paint_week_numbers (calendar);
       if (event->window == widget->window)
 	{
-	  gtk_paint_shadow (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	  gtk_paint_shadow (widget->style, widget->window, gtk_widget_get_state (widget),
 			    GTK_SHADOW_IN, NULL, widget, "calendar",
 			    0, 0, widget->allocation.width, widget->allocation.height);
 	}

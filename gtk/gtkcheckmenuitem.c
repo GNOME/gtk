@@ -441,17 +441,17 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   GtkShadowType shadow_type;
   gint x, y;
 
-  if (gtk_widget_is_drawable (GTK_WIDGET (check_menu_item)))
+  widget = GTK_WIDGET (check_menu_item);
+
+  if (gtk_widget_is_drawable (widget))
     {
       guint offset;
       guint toggle_size;
       guint toggle_spacing;
       guint horizontal_padding;
       guint indicator_size;
-      
-      widget = GTK_WIDGET (check_menu_item);
 
-      gtk_widget_style_get (GTK_WIDGET (check_menu_item),
+      gtk_widget_style_get (widget,
  			    "toggle-spacing", &toggle_spacing,
  			    "horizontal-padding", &horizontal_padding,
 			    "indicator-size", &indicator_size,
@@ -477,9 +477,9 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (check_menu_item->active ||
 	  check_menu_item->always_show_toggle ||
-	  (GTK_WIDGET_STATE (check_menu_item) == GTK_STATE_PRELIGHT))
+	  (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT))
 	{
-	  state_type = GTK_WIDGET_STATE (widget);
+	  state_type = gtk_widget_get_state (widget);
 	  
 	  if (check_menu_item->inconsistent)
 	    shadow_type = GTK_SHADOW_ETCHED_IN;

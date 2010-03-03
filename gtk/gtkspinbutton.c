@@ -844,7 +844,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 		}
 	      else
 		{
-		  state_type = GTK_WIDGET_STATE (widget);
+		  state_type = gtk_widget_get_state (widget);
 		}
 	      
 	      shadow_type = GTK_SHADOW_OUT;

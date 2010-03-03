@@ -450,9 +450,9 @@ gtk_handle_box_realize (GtkWidget *widget)
   gdk_window_set_type_hint (hb->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_WIDGET_STATE (hb));
-  gtk_style_set_background (widget->style, hb->bin_window, GTK_WIDGET_STATE (hb));
-  gtk_style_set_background (widget->style, hb->float_window, GTK_WIDGET_STATE (hb));
+  gtk_style_set_background (widget->style, widget->window, gtk_widget_get_state (widget));
+  gtk_style_set_background (widget->style, hb->bin_window, gtk_widget_get_state (widget));
+  gtk_style_set_background (widget->style, hb->float_window, gtk_widget_get_state (widget));
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 }
 
@@ -716,7 +716,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
     }
   gtk_paint_shadow (widget->style,
 		    widget->window,
-		    GTK_WIDGET_STATE (widget),
+		    gtk_widget_get_state (widget),
 		    GTK_SHADOW_ETCHED_IN,
 		    NULL, widget, "handle",
 		    x,
@@ -727,7 +727,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
        handle_position == GTK_POS_RIGHT)
      gtk_paint_hline (widget->style,
 		      widget->window,
-		      GTK_WIDGET_STATE (widget),
+		      gtk_widget_get_state (widget),
 		      NULL, widget, "handlebox",
 		      handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
 		      handle_position == GTK_POS_LEFT ? widget->allocation.width : widget->allocation.width - DRAG_HANDLE_SIZE,
@@ -735,7 +735,7 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb)
    else
      gtk_paint_vline (widget->style,
 		      widget->window,
-		      GTK_WIDGET_STATE (widget),
+		      gtk_widget_get_state (widget),
 		      NULL, widget, "handlebox",
 		      handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
 		      handle_position == GTK_POS_TOP ? widget->allocation.height : widget->allocation.height - DRAG_HANDLE_SIZE,
@@ -890,14 +890,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
   if (!event)
     gtk_paint_box (widget->style,
 		   hb->bin_window,
-		   GTK_WIDGET_STATE (widget),
+		   gtk_widget_get_state (widget),
 		   hb->shadow_type,
 		   area, widget, "handlebox_bin",
 		   0, 0, -1, -1);
   else
    gtk_paint_box (widget->style,
 		  hb->bin_window,
-		  GTK_WIDGET_STATE (widget),
+		  gtk_widget_get_state (widget),
 		  hb->shadow_type,
 		  &event->area, widget, "handlebox_bin",
 		  0, 0, -1, -1);

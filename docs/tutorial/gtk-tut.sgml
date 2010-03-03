@@ -12777,7 +12777,7 @@ static gboolean
 expose_event( GtkWidget *widget, GdkEventExpose *event )
 {
   gdk_draw_drawable(widget->window,
-		    widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		    widget->style->fg_gc[gtk_widget_get_state (widget)],
 		    pixmap,
 		    event->area.x, event->area.y,
 		    event->area.x, event->area.y,
@@ -12837,7 +12837,7 @@ contexts are:</para>
 widget->style->white_gc
 widget->style->black_gc
 widget->style->fg_gc[GTK_STATE_NORMAL]
-widget->style->bg_gc[GTK_WIDGET_STATE(widget)]
+widget->style->bg_gc[gtk_widget_get_state(widget)]
 </programlisting>
 
 <para>The fields <literal>fg_gc</literal>, <literal>bg_gc</literal>, <literal>dark_gc</literal>, and
@@ -13139,7 +13139,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget->style->black_gc;
@@ -13148,7 +13148,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget->style->white_gc;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -15706,7 +15706,7 @@ static gboolean expose_event( GtkWidget      *widget,
                               GdkEventExpose *event )
 {
   gdk_draw_drawable (widget-&gt;window,
-		     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
+		     widget-&gt;style-&gt;fg_gc[gtk_widget_get_state (widget)],
 		     pixmap,
 		     event-&gt;area.x, event-&gt;area.y,
 		     event-&gt;area.x, event-&gt;area.y,
@@ -15897,7 +15897,7 @@ static gboolean
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget-&gt;window,
-                     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
+                     widget-&gt;style-&gt;fg_gc[gtk_widget_get_state (widget)],
                      pixmap,
                      event-&gt;area.x, event-&gt;area.y,
                      event-&gt;area.x, event-&gt;area.y,
@@ -15918,7 +15918,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget-&gt;style-&gt;dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget-&gt;style-&gt;black_gc;
@@ -15927,7 +15927,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget-&gt;style-&gt;white_gc;
       break;
     default:
-      gc = widget-&gt;style-&gt;light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;

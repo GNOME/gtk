@@ -3529,7 +3529,7 @@ grippy_expose (GtkWidget *area, GdkEventExpose *event, GdkWindowEdge edge)
 {
   gtk_paint_resize_grip (area->style,
 			 area->window,
-			 GTK_WIDGET_STATE (area),
+			 gtk_widget_get_state (area),
 			 &event->area,
 			 area,
 			 "statusbar",

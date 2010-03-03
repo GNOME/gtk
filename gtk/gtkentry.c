@@ -2674,7 +2674,7 @@ realize_icon_info (GtkWidget            *widget,
                                       attributes_mask);
   gdk_window_set_user_data (icon_info->window, widget);
   gdk_window_set_background (icon_info->window,
-                             &widget->style->base[GTK_WIDGET_STATE (widget)]);
+                             &widget->style->base[gtk_widget_get_state (widget)]);
 
   gtk_widget_queue_resize (widget);
 }
@@ -2796,8 +2796,8 @@ gtk_entry_realize (GtkWidget *widget)
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 
-  gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-  gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+  gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
 
   gdk_window_show (entry->text_area);
 
@@ -3305,7 +3305,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
   if (state_hint)
       state = gtk_widget_has_focus (widget) ?
-        GTK_STATE_ACTIVE : GTK_WIDGET_STATE (widget);
+        GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
   else
       state = GTK_STATE_NORMAL;
 
@@ -3323,7 +3323,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       width += 2 * priv->focus_width;
       height += 2 * priv->focus_width;
       
-      gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
+      gtk_paint_focus (widget->style, widget->window,
+                       gtk_widget_get_state (widget),
 		       &event->area, widget, "entry",
 		       0, 0, width, height);
     }
@@ -3455,9 +3456,9 @@ gtk_entry_expose (GtkWidget      *widget,
   gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
   if (state_hint)
     state = gtk_widget_has_focus (widget) ?
-      GTK_STATE_ACTIVE : GTK_WIDGET_STATE (widget);
+      GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
   else
-    state = GTK_WIDGET_STATE(widget);
+    state = gtk_widget_get_state(widget);
 
   if (widget->window == event->window)
     {
@@ -3502,7 +3503,7 @@ gtk_entry_expose (GtkWidget      *widget,
               gdk_drawable_get_size (icon_info->window, &width, &height);
 
               gtk_paint_flat_box (widget->style, icon_info->window,
-                                  GTK_WIDGET_STATE (widget), GTK_SHADOW_NONE,
+                                  gtk_widget_get_state (widget), GTK_SHADOW_NONE,
                                   NULL, widget, "entry_bg",
                                   0, 0, width, height);
 
@@ -4244,13 +4245,13 @@ gtk_entry_state_changed (GtkWidget      *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
       for (i = 0; i < MAX_ICONS; i++) 
         {
           EntryIconInfo *icon_info = priv->icons[i];
           if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+            gdk_window_set_background (icon_info->window, &widget->style->base[gtk_widget_get_state (widget)]);
         }
 
       if (gtk_widget_is_sensitive (widget))
@@ -4462,13 +4463,13 @@ gtk_entry_style_set (GtkWidget *widget,
 
   if (previous_style && gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (entry->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
       for (i = 0; i < MAX_ICONS; i++) 
         {
           EntryIconInfo *icon_info = priv->icons[i];
           if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+            gdk_window_set_background (icon_info->window, &widget->style->base[gtk_widget_get_state (widget)]);
         }
     }
 
@@ -6448,15 +6449,18 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GdkScreen *screen;
+  GtkIconInfo *info;
   GtkIconTheme *icon_theme;
   GtkSettings *settings;
+  GtkStateType state;
+  GtkWidget *widget;
+  GdkScreen *screen;
   gint width, height;
-  GtkIconInfo *info;
-  gint state;
 
   if (!icon_info || icon_info->pixbuf)
     return;
+
+  widget = GTK_WIDGET (entry);
 
   switch (icon_info->storage_type)
     {
@@ -6464,22 +6468,22 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
     case GTK_IMAGE_PIXBUF:
       break;
     case GTK_IMAGE_STOCK:
-      state = GTK_WIDGET_STATE (entry);
-      GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
-      icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+      state = gtk_widget_get_state (widget);
+      gtk_widget_set_state (widget, GTK_STATE_NORMAL);
+      icon_info->pixbuf = gtk_widget_render_icon (widget,
                                                   icon_info->stock_id,
                                                   GTK_ICON_SIZE_MENU,
                                                   NULL);
       if (!icon_info->pixbuf)
-        icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+        icon_info->pixbuf = gtk_widget_render_icon (widget,
                                                     GTK_STOCK_MISSING_IMAGE,
                                                     GTK_ICON_SIZE_MENU,
                                                     NULL);
-      GTK_WIDGET_STATE (entry) = state;
+      gtk_widget_set_state (widget, state);
       break;
 
     case GTK_IMAGE_ICON_NAME:
-      screen = gtk_widget_get_screen (GTK_WIDGET (entry));
+      screen = gtk_widget_get_screen (widget);
       if (screen)
         {
           icon_theme = gtk_icon_theme_get_for_screen (screen);
@@ -6496,19 +6500,19 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 
           if (icon_info->pixbuf == NULL)
             {
-              state = GTK_WIDGET_STATE (entry);
-              GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
-              icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+              state = gtk_widget_get_state (widget);
+              gtk_widget_set_state (widget, GTK_STATE_NORMAL);
+              icon_info->pixbuf = gtk_widget_render_icon (widget,
                                                           GTK_STOCK_MISSING_IMAGE,
                                                           GTK_ICON_SIZE_MENU,
                                                           NULL);
-              GTK_WIDGET_STATE (entry) = state;
+              gtk_widget_set_state (widget, state);
             }
         }
       break;
 
     case GTK_IMAGE_GICON:
-      screen = gtk_widget_get_screen (GTK_WIDGET (entry));
+      screen = gtk_widget_get_screen (widget);
       if (screen)
         {
           icon_theme = gtk_icon_theme_get_for_screen (screen);
@@ -6530,13 +6534,13 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
 
           if (icon_info->pixbuf == NULL)
             {
-              state = GTK_WIDGET_STATE (entry);
-              GTK_WIDGET_STATE (entry) = GTK_STATE_NORMAL;
-              icon_info->pixbuf = gtk_widget_render_icon (GTK_WIDGET (entry),
+              state = gtk_widget_get_state (widget);
+              gtk_widget_set_state (widget, GTK_STATE_NORMAL);
+              icon_info->pixbuf = gtk_widget_render_icon (widget,
                                                           GTK_STOCK_MISSING_IMAGE,
                                                           GTK_ICON_SIZE_MENU,
                                                           NULL);
-              GTK_WIDGET_STATE (entry) = state;
+              gtk_widget_set_state (widget, state);
             }
         }
       break;

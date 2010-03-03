@@ -259,7 +259,7 @@ gtk_tray_icon_expose (GtkWidget      *widget,
       height = widget->allocation.height - 2 * border_width;
 
       gtk_paint_focus (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget),
+                       gtk_widget_get_state (widget),
                        &event->area, widget, "tray_icon",
                        x, y, width, height);
     }

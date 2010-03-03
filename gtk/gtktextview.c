@@ -3856,7 +3856,7 @@ gtk_text_view_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
 
   gdk_window_set_background (widget->window,
-                             &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+                             &widget->style->bg[gtk_widget_get_state (widget)]);
 
   text_window_realize (text_view->text_window, widget);
 
@@ -3942,25 +3942,25 @@ gtk_text_view_set_background (GtkTextView *text_view)
   GtkWidget *widget = GTK_WIDGET (text_view);
 
   gdk_window_set_background (widget->window,
-			     &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+			     &widget->style->bg[gtk_widget_get_state (widget)]);
   
   gdk_window_set_background (text_view->text_window->bin_window,
-			     &widget->style->base[GTK_WIDGET_STATE (widget)]);
+			     &widget->style->base[gtk_widget_get_state (widget)]);
   
   if (text_view->left_window)
     gdk_window_set_background (text_view->left_window->bin_window,
-			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+			       &widget->style->bg[gtk_widget_get_state (widget)]);
   if (text_view->right_window)
     gdk_window_set_background (text_view->right_window->bin_window,
-			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+			       &widget->style->bg[gtk_widget_get_state (widget)]);
   
   if (text_view->top_window)
     gdk_window_set_background (text_view->top_window->bin_window,
-			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+			       &widget->style->bg[gtk_widget_get_state (widget)]);
   
   if (text_view->bottom_window)
     gdk_window_set_background (text_view->bottom_window->bin_window,
-			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+			       &widget->style->bg[gtk_widget_get_state (widget)]);
 }
 
 static void
@@ -4696,7 +4696,7 @@ gtk_text_view_draw_focus (GtkWidget *widget)
     {
       if (gtk_widget_has_focus (widget) && !interior_focus)
         {          
-          gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
+          gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                            NULL, widget, "textview",
                            0, 0,
                            widget->allocation.width,
@@ -8066,12 +8066,12 @@ text_window_realize (GtkTextWindow *win,
 
 
       gdk_window_set_background (win->bin_window,
-                                 &widget->style->base[GTK_WIDGET_STATE (widget)]);
+                                 &widget->style->base[gtk_widget_get_state (widget)]);
     }
   else
     {
       gdk_window_set_background (win->bin_window,
-                                 &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+                                 &widget->style->bg[gtk_widget_get_state (widget)]);
     }
 
   g_object_set_qdata (G_OBJECT (win->window),

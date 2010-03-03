@@ -2864,7 +2864,7 @@ line_numbers_expose (GtkWidget      *widget,
 
       gtk_paint_layout (widget->style,
                         target,
-                        GTK_WIDGET_STATE (widget),
+                        gtk_widget_get_state (widget),
                         FALSE,
                         NULL,
                         widget,

@@ -1100,7 +1100,7 @@ gtk_combo_box_state_changed (GtkWidget    *widget,
     {
       if (priv->tree_view && priv->cell_view)
 	gtk_cell_view_set_background_color (GTK_CELL_VIEW (priv->cell_view), 
-					    &widget->style->base[GTK_WIDGET_STATE (widget)]);
+					    &widget->style->base[gtk_widget_get_state (widget)]);
     }
 
   gtk_widget_queue_draw (widget);
@@ -1118,12 +1118,12 @@ gtk_combo_box_button_state_changed (GtkWidget    *widget,
     {
       if (!priv->tree_view && priv->cell_view)
 	{
-	  if ((GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE) !=
-	      (GTK_WIDGET_STATE (priv->cell_view) == GTK_STATE_INSENSITIVE))
+	  if ((gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE) !=
+	      (gtk_widget_get_state (priv->cell_view) == GTK_STATE_INSENSITIVE))
 	    gtk_widget_set_sensitive (priv->cell_view, gtk_widget_get_sensitive (widget));
 	  
 	  gtk_widget_set_state (priv->cell_view, 
-				GTK_WIDGET_STATE (widget));
+				gtk_widget_get_state (widget));
 	}
     }
 
@@ -1183,7 +1183,7 @@ gtk_combo_box_style_set (GtkWidget *widget,
 
   if (priv->tree_view && priv->cell_view)
     gtk_cell_view_set_background_color (GTK_CELL_VIEW (priv->cell_view), 
-					&widget->style->base[GTK_WIDGET_STATE (widget)]);
+					&widget->style->base[gtk_widget_get_state (widget)]);
 
   if (GTK_IS_ENTRY (GTK_BIN (combo_box)->child))
     g_object_set (GTK_BIN (combo_box)->child, "shadow-type",
@@ -3675,6 +3675,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeSelection *sel;
+  GtkStyle *style;
+  GtkWidget *widget = GTK_WIDGET (combo_box);
 
   priv->button = gtk_toggle_button_new ();
   gtk_widget_set_parent (priv->button,
@@ -3691,8 +3693,9 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   if (priv->cell_view)
     {
-      gtk_cell_view_set_background_color (GTK_CELL_VIEW (priv->cell_view), 
-					  &GTK_WIDGET (combo_box)->style->base[GTK_WIDGET_STATE (combo_box)]);
+      style = gtk_widget_get_style (widget);
+      gtk_cell_view_set_background_color (GTK_CELL_VIEW (priv->cell_view),
+                                          &style->base[gtk_widget_get_state (widget)]);
 
       priv->box = gtk_event_box_new ();
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->box), 

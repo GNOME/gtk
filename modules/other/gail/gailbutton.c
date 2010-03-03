@@ -881,7 +881,7 @@ gail_button_ref_state_set (AtkObject *obj)
   if (widget == NULL)
     return state_set;
 
-  if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
+  if (gtk_widget_get_state (widget) == GTK_STATE_ACTIVE)
     atk_state_set_add_state (state_set, ATK_STATE_ARMED);
 
   if (!gtk_widget_get_can_focus (widget))
@@ -902,7 +902,7 @@ gail_button_pressed_enter_handler (GtkWidget       *widget)
 {
   AtkObject *accessible;
 
-  if (GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE)
+  if (gtk_widget_get_state (widget) == GTK_STATE_ACTIVE)
     {
       accessible = gtk_widget_get_accessible (widget);
       atk_object_notify_state_change (accessible, ATK_STATE_ARMED, TRUE);

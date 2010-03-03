@@ -1081,7 +1081,7 @@ gtk_paned_expose (GtkWidget      *widget,
       else if (paned->handle_prelit)
 	state = GTK_STATE_PRELIGHT;
       else
-	state = GTK_WIDGET_STATE (widget);
+	state = gtk_widget_get_state (widget);
       
       gtk_paint_handle (widget->style, widget->window,
 			state, GTK_SHADOW_NONE,

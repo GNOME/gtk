@@ -242,14 +242,14 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
                              -1);
 
   gdk_draw_rectangle (drawable,
-                      widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+                      widget->style->base_gc [gtk_widget_get_state (widget)],
                       TRUE,
                       0, 0,
                       pixmap_width + 1,
                       pixmap_height + 1);
 
   gdk_draw_layout (drawable,
-                   widget->style->text_gc [GTK_WIDGET_STATE (widget)],
+                   widget->style->text_gc [gtk_widget_get_state (widget)],
                    1 + DRAG_ICON_LAYOUT_BORDER,
                    1 + DRAG_ICON_LAYOUT_BORDER,
                    layout);
@@ -357,14 +357,14 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                               pixmap_width  + 2, pixmap_height + 2, -1);
 
    gdk_draw_rectangle (drawable,
-                       widget->style->base_gc [GTK_WIDGET_STATE (widget)],
+                       widget->style->base_gc [gtk_widget_get_state (widget)],
                        TRUE,
                        0, 0,
                        pixmap_width + 1,
                        pixmap_height + 1);
 
    gtk_text_layout_draw (layout, widget, drawable,
-                         widget->style->text_gc [GTK_WIDGET_STATE (widget)],
+                         widget->style->text_gc [gtk_widget_get_state (widget)],
                          - (1 + DRAG_ICON_LAYOUT_BORDER),
                          - (1 + DRAG_ICON_LAYOUT_BORDER),
                          0, 0,

@@ -784,7 +784,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 
                   gtk_paint_layout (widget->style,
                                     ruler->backing_store,
-                                    GTK_WIDGET_STATE (widget),
+                                    gtk_widget_get_state (widget),
                                     FALSE,
                                     NULL,
                                     widget,
@@ -801,7 +801,7 @@ gtk_ruler_real_draw_ticks (GtkRuler *ruler)
 
                       gtk_paint_layout (widget->style,
                                         ruler->backing_store,
-                                        GTK_WIDGET_STATE (widget),
+                                        gtk_widget_get_state (widget),
                                         FALSE,
                                         NULL,
                                         widget,

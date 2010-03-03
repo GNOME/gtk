@@ -152,6 +152,7 @@ typedef enum
 #define GTK_WIDGET_TYPE(wid)		  (GTK_OBJECT_TYPE (wid))
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
 /**
  * GTK_WIDGET_STATE:
  * @wid: a #GtkWidget.
@@ -161,7 +162,7 @@ typedef enum
  * Deprecated: 2.20: Use gtk_widget_get_state() instead.
  */
 #define GTK_WIDGET_STATE(wid)		  (GTK_WIDGET (wid)->state)
-/* FIXME: Deprecating GTK_WIDGET_STATE requires fixing GTK internals. */
+#endif
 
 #ifndef GTK_DISABLE_DEPRECATED
 /**

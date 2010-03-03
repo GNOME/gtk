@@ -888,7 +888,7 @@ gtk_expander_paint_focus (GtkExpander  *expander,
       height = rect.height + 2 * focus_pad;
     }
       
-  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+  gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 		   area, widget, "expander",
 		   x, y, width, height);
 }

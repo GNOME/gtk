@@ -837,7 +837,7 @@ gtk_statusbar_expose_event (GtkWidget      *widget,
 
       gtk_paint_resize_grip (widget->style,
                              widget->window,
-                             GTK_WIDGET_STATE (widget),
+                             gtk_widget_get_state (widget),
                              &event->area,
                              widget,
                              "statusbar",

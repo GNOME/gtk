@@ -201,7 +201,7 @@ gtk_pixmap_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, x, y);
 	}
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE
+      if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE
           && pixmap->build_insensitive)
         {
 	  if (!pixmap->pixmap_insensitive)

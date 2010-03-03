@@ -903,7 +903,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
 	  if (event->detail != GDK_NOTIFY_INFERIOR)
             {
-	      if (GTK_WIDGET_STATE (menu_item) != GTK_STATE_PRELIGHT)
+	      if (gtk_widget_get_state (menu_item) != GTK_STATE_PRELIGHT)
                 gtk_menu_shell_select_item (menu_shell, menu_item);
 
               /* If any mouse button is down, and there is a submenu
@@ -972,7 +972,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
 	  (menu_item->submenu == NULL))
 	{
 	  if ((event->detail != GDK_NOTIFY_INFERIOR) &&
-	      (GTK_WIDGET_STATE (menu_item) != GTK_STATE_NORMAL))
+	      (gtk_widget_get_state (GTK_WIDGET (menu_item)) != GTK_STATE_NORMAL))
 	    {
 	      gtk_menu_shell_deselect (menu_shell);
 	    }
