@@ -3027,7 +3027,7 @@ msgstr "Feladat"
 
 #: ../gtk/gtkprintunixdialog.c:3759
 msgid "Advanced"
-msgstr "Haladó"
+msgstr "Speciális"
 
 #. Translators: this will appear as tab label in print dialog.
 #: ../gtk/gtkprintunixdialog.c:3794
