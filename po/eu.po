@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 15:16-0500\n"
-"PO-Revision-Date: 2010-01-05 12:54+0100\n"
+"PO-Revision-Date: 2010-03-03 23:19+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -87,103 +87,91 @@ msgid "Gdk debugging flags to unset"
 msgstr "Ezarpenetik kendu beharreko Gdk arazketa-banderak"
 
 #: gdk/keyname-table.h:3940
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "_Ordeztu"
+msgstr "Atzera-tekla"
 
 #: gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
-msgstr ""
+msgstr "Tabulazioa"
 
 #: gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
-msgstr ""
+msgstr "Itzuli"
 
 #: gdk/keyname-table.h:3943
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Pausarazita"
+msgstr "Pausatu"
 
 #: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr ""
+msgstr "Blok. _Korr."
 
 #: gdk/keyname-table.h:3945
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Fitxategi-sistema"
+msgstr "Sist. _Esk."
 
 #: gdk/keyname-table.h:3946
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Escape"
-msgstr "Horizontala"
+msgstr "Ihes"
 
 #: gdk/keyname-table.h:3947
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Hainbat pultsazio"
+msgstr "Hainbat _tekla"
 
 #: gdk/keyname-table.h:3948
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Home"
-msgstr "Bolumena"
+msgstr "Hasiera"
 
 #: gdk/keyname-table.h:3949
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "E_zkerrean:"
+msgstr "Ezkerrera"
 
 #: gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr ""
+msgstr "Gora"
 
 #: gdk/keyname-table.h:3951
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "E_skuinean:"
+msgstr "Eskuinera"
 
 #: gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Azpìko bidea"
+msgstr "Behera"
 
 #: gdk/keyname-table.h:3953
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Orrialdeak"
+msgstr "Orri-_gora"
 
 #: gdk/keyname-table.h:3954
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "_Orain"
+msgstr "Orri-_behera"
 
 #: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr ""
+msgstr "Amaiera"
 
 #: gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr ""
+msgstr "Hasiera"
 
 #: gdk/keyname-table.h:3957
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Inprimatu"
@@ -191,110 +179,97 @@ msgstr "Inprimatu"
 #: gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr ""
+msgstr "Txertatu"
 
 #: gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr ""
+msgstr "_Blok. zenb."
 
 #: gdk/keyname-table.h:3960
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "_Ordeztu"
+msgstr "TNum. _Zuriunea"
 
 #: gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr ""
+msgstr "TNum. _Tabulazioa"
 
 #: gdk/keyname-table.h:3962
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Inprimagailua"
+msgstr "TNum. _Sartu"
 
 #: gdk/keyname-table.h:3963
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "_Ñabardura:"
+msgstr "TNum. _Hasiera"
 
 #: gdk/keyname-table.h:3964
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "E_zkerrean:"
+msgstr "TNum. E_zkerrera"
 
 #: gdk/keyname-table.h:3965
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Orrialdeak"
+msgstr "TNum. _Gora"
 
 #: gdk/keyname-table.h:3966
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "E_skuinean:"
+msgstr "TNum. E_skuinera"
 
 #: gdk/keyname-table.h:3967
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "_Orain"
+msgstr "TNum. _Behera"
 
 #: gdk/keyname-table.h:3968
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Orrialdeak"
+msgstr "TNum. Orri-_gora"
 
 #: gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "TNum. _Aurrekoa"
 
 #: gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr ""
+msgstr "TNum. Orri-_behera"
 
 #: gdk/keyname-table.h:3971
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "E_zkerrean:"
+msgstr "TNum. H_urrengoa"
 
 #: gdk/keyname-table.h:3972
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "Inprimagailua"
+msgstr "TNum. _Amaiera"
 
 #: gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "TNum. _Hasiera"
 
 #: gdk/keyname-table.h:3974
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "Inprimagailua"
+msgstr "TNum. _Txertatu"
 
 #: gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "Ezabatu fitxategia"
+msgstr "TNum. _Ezabatu"
 
 #: gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "Ezabatu fitxategia"
+msgstr "Ezabatu"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:133 gdk-pixbuf/gdk-pixbuf-io.c:982
 #: gdk-pixbuf/gdk-pixbuf-io.c:1242 tests/testfilechooser.c:222
@@ -310,8 +285,7 @@ msgstr "'%s' irudi-fitxategiak ez du daturik"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
 #: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Ezin izan da '%s' irudia kargatu: arrazoia ez dakigu, beharbada hondatutako "
 "irudi-fitxategia izango da"
@@ -366,8 +340,7 @@ msgstr "Errorea irudi-fitxategia idaztean: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
+msgstr "gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1752
 msgid "Insufficient memory to save image to callback"
@@ -433,8 +406,8 @@ msgstr "Irudiko pixelen datuak hondatuta"
 #, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "huts egin du irudiaren bufferra byte %u-ekin esleitzean"
+msgstr[1] "huts egin du irudiaren bufferra %u byte-rekin esleitzean"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -502,8 +475,7 @@ msgstr "Ezin izan da GIF irakurri: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
+msgstr "GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
 
 #: gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -694,8 +666,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG kalitatearen balioak 0 eta 100 artean egon behar du; '%d' balioa ez da "
 "onartzen."
@@ -767,8 +738,7 @@ msgstr "Bihurtutako PNG ez da RGB edo RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
+msgstr "Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -798,8 +768,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Errore larria PNG irudi-fitxategia irakurtzean: %s"
 
 #: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNGren testu-zatiek gutxienez karaktere 1 eta gehienez 79 eduki behar "
 "dituzte."
@@ -878,8 +847,7 @@ msgstr "PNM irudi-kargatzaileak ez du PNM azpiformatu hau onartzen"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
+msgstr "PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
@@ -903,52 +871,47 @@ msgstr "PNM/PBM/PGM/PPM irudi-formatuen familia"
 
 #: gdk-pixbuf/io-qtif.c:128
 msgid "Input file descriptor is NULL."
-msgstr ""
+msgstr "Sarrerako fitxategiaren deskriptorea NULL da."
 
 #: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
 msgid "Failed to read QTIF header"
-msgstr "Huts egin du goiburukoa idaztean\n"
+msgstr "Huts egin du QTIF goiburukoa irakurtzean"
 
 #: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
 #, c-format
 msgid "QTIF atom size too large (%d bytes)"
-msgstr ""
+msgstr "QTIF elementuaren tamaina handiegia da (%d byte)"
 
 #: gdk-pixbuf/io-qtif.c:172
 #, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
+msgstr "Huts egin du %d byte esleitzean fitxategia irakurtzeko bufferrarentzako"
 
 #: gdk-pixbuf/io-qtif.c:196
-#, fuzzy, c-format
+#, c-format
 msgid "File error when reading QTIF atom: %s"
-msgstr "Ezin izan da GIF irakurri: %s"
+msgstr "Fitxategiaren errorea QTIF elementua irakurtzean: %s"
 
 #: gdk-pixbuf/io-qtif.c:233
 #, c-format
 msgid "Failed to skip the next %d bytes with seek()."
-msgstr ""
+msgstr "Huts egin du hurrengo %d byte saltatzean seek() funtzioarekin."
 
 #: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
 msgid "Failed to allocate QTIF context structure."
-msgstr "Ezin da TGAren testuinguru-egiturarako memoria esleitu"
+msgstr "Huts egin du QTIFen testuinguru-egitura esleitzean."
 
 #: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "Huts egin du karpetaren indizea idaztean\n"
+msgstr "Huts egin du GdkPixbufLoader objektua sortzean."
 
 #: gdk-pixbuf/io-qtif.c:421
-#, fuzzy
 msgid "Failed to find an image data atom."
-msgstr "Ezin izan da TIFF irudia ireki"
+msgstr "Huts egin du irudiaren datuen elementu bat bilatzean."
 
 #: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
 msgid "The QTIF image format"
-msgstr "TIFF irudi-formatua"
+msgstr "QTIF irudi-formatua"
 
 #: gdk-pixbuf/io-ras.c:126
 msgid "RAS image has bogus header data"
@@ -991,9 +954,8 @@ msgid "Cannot allocate new pixbuf"
 msgstr "Ezin da pixbuf berria esleitu"
 
 #: gdk-pixbuf/io-tga.c:686
-#, fuzzy
 msgid "Image is corrupted or truncated"
-msgstr "GIF irudia trunkatuta edo osatu gabe zegoen."
+msgstr "Irudia trunkatuta edo hondatuta dago"
 
 #: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
@@ -1255,11 +1217,11 @@ msgid "Opening %s"
 msgstr "'%s' irekitzen"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:316
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "'%s' irekitzen"
-msgstr[1] "'%s' irekitzen"
+msgstr[0] "Elementu %d irekitzen"
+msgstr[1] "%d elementu irekitzen"
 
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
@@ -1316,7 +1278,7 @@ msgstr "Marrazki lanak"
 #: gtk/gtkaccellabel.c:146
 msgctxt "keyboard label"
 msgid "Shift"
-msgstr ""
+msgstr "Maius"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -1326,7 +1288,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:152
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr ""
+msgstr "Ktrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -1336,7 +1298,7 @@ msgstr ""
 #: gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
@@ -1344,10 +1306,9 @@ msgstr ""
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:743
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Super"
-msgstr "Papera"
+msgstr "Super"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the hyper key. If the text on this key isn't typically
@@ -1355,10 +1316,9 @@ msgstr "Papera"
 #. * this.
 #.
 #: gtk/gtkaccellabel.c:756
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Papera"
+msgstr "Hiper"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -1368,18 +1328,17 @@ msgstr "Papera"
 #: gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 #: gtk/gtkaccellabel.c:787
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "_Ordeztu"
+msgstr "Zuriunea"
 
 #: gtk/gtkaccellabel.c:790
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Alderantzizko barra"
 
 #: gtk/gtkbuilderparser.c:343
 #, c-format
@@ -1431,7 +1390,7 @@ msgstr "calendar:week_start:1"
 #: gtk/gtkcalendar.c:1807
 msgctxt "year measurement template"
 msgid "2000"
-msgstr ""
+msgstr "2000"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1447,7 +1406,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1463,7 +1422,7 @@ msgstr ""
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
-msgstr ""
+msgstr "%d"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1478,13 +1437,12 @@ msgstr ""
 #: gtk/gtkcalendar.c:2150
 msgctxt "calendar year format"
 msgid "%Y"
-msgstr ""
+msgstr "%Y"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
 #: gtk/gtkcellrendereraccel.c:244
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Desgaituta"
@@ -1494,10 +1452,9 @@ msgstr "Desgaituta"
 #. * to gtk_accelerator_valid().
 #.
 #: gtk/gtkcellrendereraccel.c:254
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "URI baliogabea"
+msgstr "Baliogabea"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1511,7 +1468,7 @@ msgstr "Bizkortzaile berria..."
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%% %d"
 
 #: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
 msgid "Pick a Color"
@@ -1974,8 +1931,7 @@ msgstr " \"%s\" izeneko fitxategia badago lehendik. Ordeztea nahi duzu?"
 
 #: gtk/gtkfilechooserdefault.c:8177 gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"(e)n badago fitxategia lehendik. Hau ordeztean bere eduki guztia "
 "gainidatziko da."
@@ -2114,10 +2070,8 @@ msgstr "_Aldatu fitxategi-izena"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1394
 msgid "New Folder"
@@ -2134,8 +2088,7 @@ msgstr "S_ortu"
 #: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgstr "\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
@@ -2296,22 +2249,20 @@ msgid "Simple"
 msgstr "Bakuna"
 
 #: gtk/gtkimmulticontext.c:563
-#, fuzzy
 msgctxt "input method menu"
 msgid "System"
-msgstr "Fitxategi-sistema"
+msgstr "Sistema"
 
 #: gtk/gtkimmulticontext.c:573
-#, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "Bat ere ez"
 
 #: gtk/gtkimmulticontext.c:656
-#, fuzzy, c-format
+#, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "Fitxategi-sistema"
+msgstr "Sistema (%s)"
 
 #: gtk/gtkinputdialog.c:192
 msgid "Input"
@@ -2626,51 +2577,47 @@ msgstr "%s ataza (%d)"
 #: gtk/gtkprintoperation.c:1687
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "Hasierako egoera"
 
 #: gtk/gtkprintoperation.c:1688
-#, fuzzy
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "inprimatzeko prest"
+msgstr "inprimatzeko prestatzen"
 
 #: gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "Datuak sortzen"
 
 #: gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Datuak bidaltzen"
 
 #: gtk/gtkprintoperation.c:1691
-#, fuzzy
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr "Prestatzen"
+msgstr "Zain"
 
 #: gtk/gtkprintoperation.c:1692
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Jaulkipenean bloketatuta"
 
 #: gtk/gtkprintoperation.c:1693
-#, fuzzy
 msgctxt "print operation status"
 msgid "Printing"
-msgstr "%d inprimatzen"
+msgstr "Inprimatzen"
 
 #: gtk/gtkprintoperation.c:1694
-#, fuzzy
 msgctxt "print operation status"
 msgid "Finished"
-msgstr "Amaitzen"
+msgstr "Amaituta"
 
 #: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Finished with error"
-msgstr ""
+msgstr "Errorearekin amaituta"
 
 #: gtk/gtkprintoperation.c:2254
 #, c-format
@@ -3179,7 +3126,7 @@ msgstr "Elementu ezezaguna"
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -3188,7 +3135,7 @@ msgstr ""
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
 #: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
@@ -3199,10 +3146,9 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "Ezin izan da '%s' URIa duen elementua aurkitu"
 
 #: gtk/gtkspinner.c:458
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Papera"
+msgstr "Birakaria"
 
 #: gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
@@ -3210,39 +3156,34 @@ msgstr "Aurrerapenaren adierazle bisuala eskaintzen du"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgctxt "Stock label"
 msgid "Information"
-msgstr "Kokalekua"
+msgstr "Informazioa"
 
 #: gtk/gtkstock.c:315
-#, fuzzy
 msgctxt "Stock label"
 msgid "Warning"
-msgstr "Prestatzen"
+msgstr "Abisua"
 
 #: gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Error"
-msgstr ""
+msgstr "Errorea"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgctxt "Stock label"
 msgid "Question"
-msgstr "Bereizmena"
+msgstr "Galdera"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:322
-#, fuzzy
 msgctxt "Stock label"
 msgid "_About"
-msgstr "%s buruz"
+msgstr "Honi _buruz"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Gehitu"
@@ -3250,527 +3191,467 @@ msgstr "_Gehitu"
 #: gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Apply"
-msgstr ""
+msgstr "_Aplikatu"
 
 #: gtk/gtkstock.c:325
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Bold"
-msgstr "_Itxaron"
+msgstr "_Lodia"
 
 #: gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr ""
+msgstr "_Utzi"
 
 #: gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_CD-Rom"
-msgstr ""
+msgstr "_CD-ROMa"
 
 #: gtk/gtkstock.c:328
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Garbitu"
 
 #: gtk/gtkstock.c:329
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Close"
-msgstr "_Garbitu"
+msgstr "It_xi"
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "_Konektatu"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Convert"
-msgstr "_Konektatu"
+msgstr "_Bihurtu"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Copy"
-msgstr "Kopiatu URLa"
+msgstr "_Kopiatu"
 
 #: gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Cu_t"
-msgstr ""
+msgstr "_Ebaki"
 
 #: gtk/gtkstock.c:334
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Delete"
-msgstr "Ezabatu fitxategia"
+msgstr "_Ezabatu"
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
-msgstr "Desgaituta"
+msgstr "_Baztertu"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Disconnect"
-msgstr "_Konektatu"
+msgstr "_Deskonektatu"
 
 #: gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Execute"
-msgstr ""
+msgstr "_Exekutatu"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "K_redituak"
+msgstr "_Editatu"
 
 #: gtk/gtkstock.c:339
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "Amaitzen"
+msgstr "_Bilatu"
 
 #: gtk/gtkstock.c:340
-#, fuzzy
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "_Ordeztu"
+msgstr "Bilatu eta _ordeztu"
 
 #: gtk/gtkstock.c:341
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Floppy"
-msgstr "Kopiatu URLa"
+msgstr "_Disketea"
 
 #: gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
-msgstr ""
+msgstr "_Pantaila osoa"
 
 #: gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr ""
+msgstr "_Irten pantaila osotik"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: gtk/gtkstock.c:345
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Behean:"
+msgstr "_Behean"
 
 #. This is a navigation label as in "go to the first page"
 #: gtk/gtkstock.c:347
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "_Fitxategiak"
+msgstr "_Aurrenekora"
 
 #. This is a navigation label as in "go to the last page"
 #: gtk/gtkstock.c:349
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "_Paleta:"
+msgstr "_Azkenera"
 
 #. This is a navigation label as in "go to the top of the page"
 #: gtk/gtkstock.c:351
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Goian:"
+msgstr "_Goian"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
-msgstr ""
+msgstr "_Atzera"
 
 #. This is a navigation label as in "go down"
 #: gtk/gtkstock.c:355
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "_Orain"
+msgstr "_Behera"
 
 #. This is a navigation label as in "go forward"
 #: gtk/gtkstock.c:357
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Formatua:"
+msgstr "A_urrera"
 
 #. This is a navigation label as in "go up"
 #: gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
-msgstr ""
+msgstr "_Gora"
 
 #: gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Disko gogorra"
 
 #: gtk/gtkstock.c:361
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Help"
-msgstr "_Ñabardura:"
+msgstr "_Laguntza"
 
 #: gtk/gtkstock.c:362
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_Ñabardura:"
+msgstr "_Karpeta nagusia"
 
 #: gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
-msgstr ""
+msgstr "Handitu koska"
 
 #: gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Txikitu koska"
 
 #: gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
-msgstr ""
+msgstr "_Indizea"
 
 #: gtk/gtkstock.c:366
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Information"
-msgstr "_Kokalekua:"
+msgstr "_Informazioa"
 
 #: gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr ""
+msgstr "_Etzana"
 
 #: gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr ""
+msgstr "_Jauzi hona"
 
 #. This is about text justification, "centered text"
 #: gtk/gtkstock.c:370
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "_Konektatu"
+msgstr "_Zentratuta"
 
 #. This is about text justification
 #: gtk/gtkstock.c:372
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Fitxategiak"
+msgstr "_Bete"
 
 #. This is about text justification, "left-justified text"
 #: gtk/gtkstock.c:374
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "E_zkerrean:"
+msgstr "E_zkerrean"
 
 #. This is about text justification, "right-justified text"
 #: gtk/gtkstock.c:376
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "E_skuinean:"
+msgstr "E_skuinean"
 
 #. Media label, as in "fast forward"
 #: gtk/gtkstock.c:379
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "_Formatua:"
+msgstr "A_urrera"
 
 #. Media label, as in "next song"
 #: gtk/gtkstock.c:381
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "_Orain"
+msgstr "_Hurrengoa"
 
 #. Media label, as in "pause music"
 #: gtk/gtkstock.c:383
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "P_ause"
-msgstr "Pausarazita"
+msgstr "_Pausatu"
 
 #. Media label, as in "play music"
 #: gtk/gtkstock.c:385
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "_Lekuak"
+msgstr "_Erreproduzitu"
 
 #. Media label, as in  "previous song"
 #: gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
-msgstr ""
+msgstr "_Aurrekoa"
 
 #. Media label
 #: gtk/gtkstock.c:389
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr "_Gorria:"
+msgstr "_Grabatu"
 
 #. Media label
 #: gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
-msgstr ""
+msgstr "_Birbobinatu"
 
 #. Media label
 #: gtk/gtkstock.c:393
-#, fuzzy
 msgctxt "Stock label, media"
 msgid "_Stop"
-msgstr "_Goian:"
+msgstr "_Gelditu"
 
 #: gtk/gtkstock.c:394
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Network"
-msgstr "Kar_peta berria"
+msgstr "_Sarea"
 
 #: gtk/gtkstock.c:395
-#, fuzzy
 msgctxt "Stock label"
 msgid "_New"
-msgstr "_Orain"
+msgstr "_Berria"
 
 #: gtk/gtkstock.c:396
-#, fuzzy
 msgctxt "Stock label"
 msgid "_No"
-msgstr "_Orain"
+msgstr "_Ez"
 
 #: gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
-msgstr ""
+msgstr "_Ados"
 
 #: gtk/gtkstock.c:398
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Open"
-msgstr "_Ireki esteka"
+msgstr "_Ireki"
 
 #. Page orientation
 #: gtk/gtkstock.c:400
-#, fuzzy
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Horizontala"
 
 #. Page orientation
 #: gtk/gtkstock.c:402
-#, fuzzy
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Bertikala"
 
 #. Page orientation
 #: gtk/gtkstock.c:404
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Alderantzizko horizontala"
 
 #. Page orientation
 #: gtk/gtkstock.c:406
-#, fuzzy
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Alderantzizko bertikala"
 
 #: gtk/gtkstock.c:407
-#, fuzzy
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "Prestatu orrialdea"
+msgstr "Prestatu _orrialdea"
 
 #: gtk/gtkstock.c:408
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Paste"
-msgstr "_Paleta:"
+msgstr "_Itsatsi"
 
 #: gtk/gtkstock.c:409
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Preferences"
-msgstr "_Paper-tamaina:"
+msgstr "_Hobespenak"
 
 #: gtk/gtkstock.c:410
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Print"
-msgstr "Inprimatu"
+msgstr "I_nprimatu"
 
 #: gtk/gtkstock.c:411
-#, fuzzy
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr "_Aurrebista:"
+msgstr "Inprimatzeko _aurrebista"
 
 #: gtk/gtkstock.c:412
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Properties"
-msgstr "_Paper-tamaina:"
+msgstr "_Propietateak"
 
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
-msgstr "K_redituak"
+msgstr "Irte_n"
 
 #: gtk/gtkstock.c:414
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "_Gorria:"
+msgstr "_Berregin"
 
 #: gtk/gtkstock.c:415
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Refresh"
-msgstr "_Alderantzikatu"
+msgstr "_Freskatu"
 
 #: gtk/gtkstock.c:416
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Kendu"
 
 #: gtk/gtkstock.c:417
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Revert"
-msgstr "_Alderantzikatu"
+msgstr "_Leheneratu"
 
 #: gtk/gtkstock.c:418
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Save"
-msgstr "_Ordeztu"
+msgstr "_Gorde"
 
 #: gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr ""
+msgstr "Gorde _honela"
 
 #: gtk/gtkstock.c:420
-#, fuzzy
 msgctxt "Stock label"
 msgid "Select _All"
-msgstr "Hautatu fitxategia"
+msgstr "Hautatu _denak"
 
 #: gtk/gtkstock.c:421
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Color"
-msgstr "Kolorea"
+msgstr "_Kolorea"
 
 #: gtk/gtkstock.c:422
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Font"
-msgstr "Letra-tipoa"
+msgstr "_Letra-tipoa"
 
 #. Sorting direction
 #: gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
-msgstr ""
+msgstr "Go_rantz"
 
 #. Sorting direction
 #: gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
-msgstr ""
+msgstr "Be_herantz"
 
 #: gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr ""
+msgstr "Ortogra_fia-egiaztapena"
 
 #: gtk/gtkstock.c:428
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Stop"
-msgstr "_Goian:"
+msgstr "_Gelditu"
 
 #. Font variant
 #: gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Marratua"
 
 #: gtk/gtkstock.c:431
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undelete"
-msgstr "Ezabatu fitxategia"
+msgstr "_Desezabatu"
 
 #. Font variant
 #: gtk/gtkstock.c:433
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Underline"
-msgstr "_Erabiltzaile-izena:"
+msgstr "_Azpimarratua"
 
 #: gtk/gtkstock.c:434
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "_Gorria:"
+msgstr "_Desegin"
 
 #: gtk/gtkstock.c:435
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Yes"
-msgstr "_Fitxategiak"
+msgstr "_Bai"
 
 #. Zoom
 #: gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
-msgstr ""
+msgstr "Tamaina _normala"
 
 #. Zoom
 #: gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
-msgstr ""
+msgstr "_Egokiena"
 
 #: gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Zooma handiagotu"
 
 #: gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
-msgstr ""
+msgstr "Zooma _txikiagotu"
 
 #: gtk/gtktextbufferrichtext.c:651
 #, c-format
@@ -3824,8 +3705,7 @@ msgstr "Etiketa anonimoa aurkitu da eta etiketak ezin dira sortu."
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"\"%s\" etiketa ez da existitzen bufferrean eta etiketak ezin dira sortu."
+msgstr "\"%s\" etiketa ez da existitzen bufferrean eta etiketak ezin dira sortu."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3845,8 +3725,7 @@ msgstr "\"%s\" ez da baliozko atributu-izena"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "Ezin izan da \"%s\" bihurtu \"%s\" atributuaren \"%s\" motara"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3883,8 +3762,7 @@ msgid "Serialized data is malformed"
 msgstr "Serieko datuak formatu okerra du"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Serieko datuak formatu okerra du. Aurreneko atala ez da "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -3997,996 +3875,991 @@ msgstr "Bolumen osoa"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr ""
+msgstr "%% %d"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:5
-#, fuzzy
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "Izena"
+msgstr "asme_f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x2"
-msgstr ""
+msgstr "A0x2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A0x3"
-msgstr ""
+msgstr "A0x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A1x3"
-msgstr ""
+msgstr "A1x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A1x4"
-msgstr ""
+msgstr "A1x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A2x3"
-msgstr ""
+msgstr "A2x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A2x4"
-msgstr ""
+msgstr "A2x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A2x5"
-msgstr ""
+msgstr "A2x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A3x3"
-msgstr ""
+msgstr "A3x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A3x4"
-msgstr ""
+msgstr "A3x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A3x5"
-msgstr ""
+msgstr "A3x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "A3x6"
-msgstr ""
+msgstr "A3x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "A3x7"
-msgstr ""
+msgstr "A3x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 fitxa"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "A4x3"
-msgstr ""
+msgstr "A4x3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "A4x4"
-msgstr ""
+msgstr "A4x4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "A4x5"
-msgstr ""
+msgstr "A4x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "A4x6"
-msgstr ""
+msgstr "A4x6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "A4x7"
-msgstr ""
+msgstr "A4x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "A4x8"
-msgstr ""
+msgstr "A4x8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "A4x9"
-msgstr ""
+msgstr "A4x9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:95
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "DL Envelope"
-msgstr ""
+msgstr "DL gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr ""
+msgstr "Choukei 2 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr ""
+msgstr "Choukei 3 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr ""
+msgstr "Choukei 4 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:171
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (posta-txartela)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr ""
+msgstr "Kahu gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr ""
+msgstr "Kaku2 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (erantzuteko posta-txartela)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr ""
+msgstr "you4 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "10x11"
-msgstr ""
+msgstr "10x11"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "10x13"
-msgstr ""
+msgstr "10x13"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "10x14"
-msgstr ""
+msgstr "10x14"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:187 gtk/paper_names_offsets.c:189
 msgctxt "paper size"
 msgid "10x15"
-msgstr ""
+msgstr "10x15"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:191
 msgctxt "paper size"
 msgid "11x12"
-msgstr ""
+msgstr "11x12"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:193
 msgctxt "paper size"
 msgid "11x15"
-msgstr ""
+msgstr "11x15"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:195
 msgctxt "paper size"
 msgid "12x19"
-msgstr ""
+msgstr "12x19"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:197
 msgctxt "paper size"
 msgid "5x7"
-msgstr ""
+msgstr "5x7"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:199
 msgctxt "paper size"
 msgid "6x9 Envelope"
-msgstr ""
+msgstr "6x9 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:201
 msgctxt "paper size"
 msgid "7x9 Envelope"
-msgstr ""
+msgstr "7x9 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:203
 msgctxt "paper size"
 msgid "9x11 Envelope"
-msgstr ""
+msgstr "9x11 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:205
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr ""
+msgstr "a2 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:207
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:209
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:211
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:213
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:215
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:217
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:219
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:221
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr ""
+msgstr "c5 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:223
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:225
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:227
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:229
 msgctxt "paper size"
 msgid "European edp"
-msgstr ""
+msgstr "Europako edp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:231
 msgctxt "paper size"
 msgid "Executive"
-msgstr ""
+msgstr "Exekutiboa"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:233
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:235
 msgctxt "paper size"
 msgid "FanFold European"
-msgstr ""
+msgstr "Europako FanFold"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:237
 msgctxt "paper size"
 msgid "FanFold US"
-msgstr ""
+msgstr "AEBko FanFold"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:239
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr ""
+msgstr "Alemaniako FanFold legala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:241
 msgctxt "paper size"
 msgid "Government Legal"
-msgstr ""
+msgstr "Gobernuaren legala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:243
 msgctxt "paper size"
 msgid "Government Letter"
-msgstr ""
+msgstr "Gobernuaren gutuna"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:245
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr ""
+msgstr "Indizea 3x5"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:247
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr ""
+msgstr "Indizea 4x6 (posta-txartela)"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:249
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr ""
+msgstr "Indizea 4x6 est."
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:251
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr ""
+msgstr "Indizea 5x8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:253
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Faktura"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:255
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloidea"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:257
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US legala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:259
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr ""
+msgstr "US legala estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:261
 msgctxt "paper size"
 msgid "US Letter"
-msgstr ""
+msgstr "US gutuna"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:263
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr ""
+msgstr "US gutuna estra"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:265
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr ""
+msgstr "US gutuna plus"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:267
 msgctxt "paper size"
 msgid "Monarch Envelope"
-msgstr ""
+msgstr "Monarka gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:269
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr ""
+msgstr "#10 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:271
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr ""
+msgstr "#11 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:273
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr ""
+msgstr "#12 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:275
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr ""
+msgstr "#14 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:277
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr ""
+msgstr "#9 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:279
 msgctxt "paper size"
 msgid "Personal Envelope"
-msgstr ""
+msgstr "Gutun-azal pertsonala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:281
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Laurdena"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:283
-#, fuzzy
 msgctxt "paper size"
 msgid "Super A"
-msgstr "Papera"
+msgstr "Super A"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:285
-#, fuzzy
 msgctxt "paper size"
 msgid "Super B"
-msgstr "Papera"
+msgstr "Super B"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:287
 msgctxt "paper size"
 msgid "Wide Format"
-msgstr ""
+msgstr "Formatu zabala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:289
 msgctxt "paper size"
 msgid "Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:291
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio"
-msgstr "Kolorea"
+msgstr "Folioa"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:293
-#, fuzzy
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr "Kolorea"
+msgstr "Folioa sp"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:295
 msgctxt "paper size"
 msgid "Invite Envelope"
-msgstr ""
+msgstr "Gonbidapen gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:297
 msgctxt "paper size"
 msgid "Italian Envelope"
-msgstr ""
+msgstr "Italiako gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:299
 msgctxt "paper size"
 msgid "juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:301
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:303
 msgctxt "paper size"
 msgid "Postfix Envelope"
-msgstr ""
+msgstr "Postfix gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:305
 msgctxt "paper size"
 msgid "Small Photo"
-msgstr ""
+msgstr "Argazki txikia"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:307
 msgctxt "paper size"
 msgid "prc1 Envelope"
-msgstr ""
+msgstr "prc1 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:309
 msgctxt "paper size"
 msgid "prc10 Envelope"
-msgstr ""
+msgstr "prc10 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:311
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:313
 msgctxt "paper size"
 msgid "prc2 Envelope"
-msgstr ""
+msgstr "prc2 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:315
 msgctxt "paper size"
 msgid "prc3 Envelope"
-msgstr ""
+msgstr "prc3 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:317
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:319
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr ""
+msgstr "prc4 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:321
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr ""
+msgstr "prc5 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:323
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr ""
+msgstr "prc6 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:325
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr ""
+msgstr "prc7 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:327
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr ""
+msgstr "prc8 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:329
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr ""
+msgstr "prc9 gutun-azala"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:331
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:333
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
@@ -5170,8 +5043,7 @@ msgstr "Autentifikazioa behar da fitxategia %s(e)tik lortzeko"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
-"Autentifikazioa behar da '%s' dokumentua '%s' inprimagailuan inprimatzeko"
+msgstr "Autentifikazioa behar da '%s' dokumentua '%s' inprimagailuan inprimatzeko"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
@@ -5223,8 +5095,7 @@ msgstr "Autentifikazioa behar da '%s' dokumentua inprimatzeko"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
-"Autentifikazioa behar da dokumentu hau '%s' inprimagailuan inprimatzeko"
+msgstr "Autentifikazioa behar da dokumentu hau '%s' inprimagailuan inprimatzeko"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
 msgid "Authentication is required to print this document"
@@ -5586,3 +5457,4 @@ msgstr "Inprimatu probako inprimagailuan"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ezin izan da %s fitxategirako informaziorik lortu: %s"
+
