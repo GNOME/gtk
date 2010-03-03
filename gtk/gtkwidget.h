@@ -271,6 +271,8 @@ typedef enum
  * @wid: a #GtkWidget.
  *
  * Evaluates to %TRUE if the #GTK_SENSITIVE flag has be set on the widget.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_sensitive() instead.
  */
 #define GTK_WIDGET_SENSITIVE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_SENSITIVE) != 0)
 #endif
