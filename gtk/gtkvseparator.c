@@ -30,6 +30,17 @@
 #include "gtkvseparator.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvseparator
+ * @Short_description: A vertical separator
+ * @Title: GtkVSeparator
+ * @See_also: #GtkHSeparator
+ *
+ * The #GtkVSeparator widget is a vertical separator, used to group the
+ * widgets within a window. It displays a vertical line with a shadow to
+ * make it appear sunken into the interface.
+ */
+
 G_DEFINE_TYPE (GtkVSeparator, gtk_vseparator, GTK_TYPE_SEPARATOR)
 
 static void
@@ -44,6 +55,13 @@ gtk_vseparator_init (GtkVSeparator *vseparator)
                                   GTK_ORIENTATION_VERTICAL);
 }
 
+/**
+ * gtk_vseparator_new:
+ *
+ * Creates a new #GtkVSeparator.
+ *
+ * Returns: a new #GtkVSeparator.
+ */
 GtkWidget *
 gtk_vseparator_new (void)
 {

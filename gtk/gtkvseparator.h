@@ -49,6 +49,12 @@ G_BEGIN_DECLS
 typedef struct _GtkVSeparator       GtkVSeparator;
 typedef struct _GtkVSeparatorClass  GtkVSeparatorClass;
 
+/**
+ * GtkVSeparator:
+ *
+ * The #GtkVSeparator struct contains private data only, and
+ * should be accessed using the functions below.
+ */
 struct _GtkVSeparator
 {
   GtkSeparator separator;
