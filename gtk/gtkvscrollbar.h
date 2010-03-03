@@ -49,6 +49,12 @@ G_BEGIN_DECLS
 typedef struct _GtkVScrollbar       GtkVScrollbar;
 typedef struct _GtkVScrollbarClass  GtkVScrollbarClass;
 
+/**
+ * GtkVScrollbar:
+ *
+ * The #GtkVScrollbar struct contains private data and should be accessed
+ * using the functions below.
+ */
 struct _GtkVScrollbar
 {
   GtkScrollbar scrollbar;
