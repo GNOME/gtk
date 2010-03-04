@@ -193,8 +193,8 @@ static void             gail_tree_view_changed_gtk      (GtkTreeSelection       
 static void             columns_changed                 (GtkTreeView            *tree_view);
 static void             cursor_changed                  (GtkTreeView            *tree_view);
 static gint             idle_cursor_changed             (gpointer               data);
-static void             focus_in                        (GtkWidget		*widget);
-static void             focus_out                       (GtkWidget              *widget);
+static gboolean         focus_in                        (GtkWidget		*widget);
+static gboolean         focus_out                       (GtkWidget              *widget);
 
 static void             model_row_changed               (GtkTreeModel           *tree_model,
                                                          GtkTreePath            *path,
@@ -2660,7 +2660,7 @@ idle_cursor_changed (gpointer data)
   return FALSE;
 }
 
-static void
+static gboolean
 focus_in (GtkWidget *widget)
 {
   GtkTreeView *tree_view;
@@ -2692,9 +2692,10 @@ focus_in (GtkWidget *widget)
             }
         }
     }
+  return FALSE;
 }
 
-static void
+static gboolean
 focus_out (GtkWidget *widget)
 {
   GailTreeView *gail_tree_view;
@@ -2707,6 +2708,7 @@ focus_out (GtkWidget *widget)
     g_object_unref (gail_tree_view->focus_cell);
     gail_tree_view->focus_cell = NULL;
   }
+  return FALSE;
 }
 
 static void
