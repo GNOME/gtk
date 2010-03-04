@@ -30,6 +30,20 @@
 #include "gtkvbox.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvbox
+ * @Short_description: A vertical container box
+ * @Title: GtkVBox
+ * @See_also: #GtkHBox
+ *
+ * A #GtkVBox is a container that organizes child widgets into a single column.
+ *
+ * Use the #GtkBox packing interface to determine the arrangement,
+ * spacing, height, and alignment of #GtkVBox children.
+ *
+ * All children are allocated the same width.
+ */
+
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
 
 static void
@@ -46,6 +60,15 @@ gtk_vbox_init (GtkVBox *vbox)
   _gtk_box_set_old_defaults (GTK_BOX (vbox));
 }
 
+/**
+ * gtk_vbox_new:
+ * @homogeneous: %TRUE if all children are to be given equal space allotments.
+ * @spacing: the number of pixels to place by default between children.
+ *
+ * Creates a new #GtkVBox.
+ *
+ * Returns: a new #GtkVBox.
+ */
 GtkWidget *
 gtk_vbox_new (gboolean homogeneous,
 	      gint     spacing)
