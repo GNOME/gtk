@@ -65,6 +65,10 @@ void     gtk_style_set_unset_property (GtkStyleSet  *set,
 
 void     gtk_style_set_clear          (GtkStyleSet  *set);
 
+void     gtk_style_set_merge          (GtkStyleSet       *set,
+                                       const GtkStyleSet *set_to_merge,
+                                       gboolean           replace);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROPERTY_SET_H__ */
