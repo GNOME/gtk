@@ -174,6 +174,7 @@
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkstyleset.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkswitch.h>
