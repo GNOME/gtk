@@ -18,6 +18,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkbuildable
+ * @Short_description: Interface for objects that can be built by GtkBuilder
+ * @Title: GtkBuildable
+ *
+ * In order to allow construction from a <link linkend="BUILDER-UI">GtkBuilder
+ * UI description</link>, an object class must implement the
+ * GtkBuildable interface. The interface includes methods for setting
+ * names and properties of objects, parsing custom tags, constructing
+ * child objects.
+ *
+ * The GtkBuildable interface is implemented by all widgets and
+ * many of the non-widget objects that are provided by GTK+. The
+ * main user of this interface is #GtkBuilder, there should be
+ * very little need for applications to call any
+ * <function>gtk_buildable_...</function> functions.
+ */
 
 #include "config.h"
 #include "gtkbuildable.h"
