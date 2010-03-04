@@ -36,6 +36,16 @@
 
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvolumebutton
+ * @Short_description: A button which pops up a volume control
+ * @Title: GtkVolumeButton
+ *
+ * #GtkVolumeButton is a subclass of #GtkScaleButton that has
+ * been tailored for use as a volume control widget with suitable
+ * icons, tooltips and accessible labels.
+ */
+
 #define EPSILON (1e-10)
 
 
