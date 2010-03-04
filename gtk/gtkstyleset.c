@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "gtkstyleprovider.h"
 #include "gtkstyleset.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -40,10 +41,13 @@ struct GtkStyleSetPrivate
 
 #define GTK_STYLE_SET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_STYLE_SET, GtkStyleSetPrivate))
 
-static void gtk_style_set_finalize     (GObject      *object);
+static void gtk_style_set_provider_init (GtkStyleProviderIface *iface);
+static void gtk_style_set_finalize      (GObject      *object);
 
 
-G_DEFINE_TYPE (GtkStyleSet, gtk_style_set, G_TYPE_OBJECT)
+G_DEFINE_TYPE_EXTENDED (GtkStyleSet, gtk_style_set, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
+                                               gtk_style_set_provider_init));
 
 static void
 gtk_style_set_class_init (GtkStyleSetClass *klass)
@@ -71,7 +75,10 @@ property_data_free (PropertyData *data)
   gint i;
 
   for (i = 0; i <= GTK_STATE_INSENSITIVE; i++)
-    g_value_unset (&data->values[i]);
+    {
+      if (G_IS_VALUE (&data->values[i]))
+        g_value_unset (&data->values[i]);
+    }
 
   g_slice_free (PropertyData, data);
 }
@@ -99,6 +106,20 @@ gtk_style_set_finalize (GObject *object)
 
   G_OBJECT_CLASS (gtk_style_set_parent_class)->finalize (object);
 }
+
+GtkStyleSet *
+gtk_style_set_get_style (GtkStyleProvider *provider)
+{
+  /* Return style set itself */
+  return g_object_ref (provider);
+}
+
+static void
+gtk_style_set_provider_init (GtkStyleProviderIface *iface)
+{
+  iface->get_style = gtk_style_set_get_style;
+}
+
 
 GtkStyleSet *
 gtk_style_set_new (void)
