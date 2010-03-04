@@ -291,6 +291,7 @@ gtk_public_h_sources =          \
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
+	gtkstyleset.h		\
 	gtkstyle.h		\
 	gtkswitch.h		\
 	gtktable.h		\
@@ -587,6 +588,7 @@ gtk_base_c_sources =            \
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\
+	gtkstyleset.c		\
 	gtkstyle.c		\
 	gtkswitch.c		\
 	gtktable.c		\
