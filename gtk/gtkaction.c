@@ -28,6 +28,45 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkaction
+ * @Short_description: An action which can be triggered by a menu or toolbar item
+ * @Title: GtkAction
+ * @See_also: #GtkActionGroup, #GtkUIManager
+ *
+ * Actions represent operations that the user can be perform, along with
+ * some information how it should be presented in the interface. Each action
+ * provides methods to create icons, menu items and toolbar items
+ * representing itself.
+ *
+ * As well as the callback that is called when the action gets activated,
+ * the following also gets associated with the action:
+ * <itemizedlist>
+ *   <listitem><para>a name (not translated, for path lookup)</para></listitem>
+ *   <listitem><para>a label (translated, for display)</para></listitem>
+ *   <listitem><para>an accelerator</para></listitem>
+ *   <listitem><para>whether label indicates a stock id</para></listitem>
+ *   <listitem><para>a tooltip (optional, translated)</para></listitem>
+ *   <listitem><para>a toolbar label (optional, shorter than label)</para></listitem>
+ * </itemizedlist>
+ * The action will also have some state information:
+ * <itemizedlist>
+ *   <listitem><para>visible (shown/hidden)</para></listitem>
+ *   <listitem><para>sensitive (enabled/disabled)</para></listitem>
+ * </itemizedlist>
+ * Apart from regular actions, there are <link linkend="GtkToggleAction">toggle
+ * actions</link>, which can be toggled between two states and <link
+ * linkend="GtkRadioAction">radio actions</link>, of which only one in a group
+ * can be in the "active" state. Other actions can be implemented as #GtkAction
+ * subclasses.
+ *
+ * Each action can have one or more proxy menu item, toolbar button or
+ * other proxy widgets.  Proxies mirror the state of the action (text
+ * label, tooltip, icon, visible, sensitive, etc), and should change when
+ * the action's state changes. When the proxy is activated, it should
+ * activate its action.
+ */
+
 #include "config.h"
 
 #include "gtkaction.h"
