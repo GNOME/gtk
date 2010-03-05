@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <stdlib.h>
+
 #include "gtkstyleprovider.h"
 #include "gtkstyleset.h"
 #include "gtkprivate.h"
@@ -28,6 +30,14 @@
 
 typedef struct GtkStyleSetPrivate GtkStyleSetPrivate;
 typedef struct PropertyData PropertyData;
+typedef struct PropertyNode PropertyNode;
+
+struct PropertyNode
+{
+  GQuark property_quark;
+  GType property_type;
+  GValue default_value;
+};
 
 struct PropertyData
 {
@@ -38,6 +48,8 @@ struct GtkStyleSetPrivate
 {
   GHashTable *properties;
 };
+
+static GArray *properties = NULL;
 
 #define GTK_STYLE_SET_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_STYLE_SET, GtkStyleSetPrivate))
 
@@ -53,8 +65,16 @@ static void
 gtk_style_set_class_init (GtkStyleSetClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkColor black = { 0, 0, 0, 0 };
+  GdkColor white = { 0, 65535, 65535, 65535 };
 
   object_class->finalize = gtk_style_set_finalize;
+
+  /* Initialize default property set */
+  gtk_style_set_register_property_color ("foreground-color", &white);
+  gtk_style_set_register_property_color ("background-color", &black);
+  gtk_style_set_register_property_color ("text-color", &white);
+  gtk_style_set_register_property_color ("base-color", &white);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
 }
@@ -120,6 +140,144 @@ gtk_style_set_provider_init (GtkStyleProviderIface *iface)
   iface->get_style = gtk_style_set_get_style;
 }
 
+static int
+compare_property (gconstpointer p1,
+                  gconstpointer p2)
+{
+  PropertyNode *key = (PropertyNode *) p1;
+  PropertyNode *node = (PropertyNode *) p2;
+
+  return (int) key->property_quark - node->property_quark;
+}
+
+static PropertyNode *
+property_node_lookup (GQuark quark)
+{
+  PropertyNode key = { 0 };
+
+  if (!quark)
+    return NULL;
+
+  if (!properties)
+    return NULL;
+
+  key.property_quark = quark;
+
+  return bsearch (&key, properties->data, properties->len,
+                  sizeof (PropertyNode), compare_property);
+}
+
+/* Property registration functions */
+void
+gtk_style_set_register_property (const gchar *property_name,
+                                 GType        type,
+                                 GValue      *default_value)
+{
+  PropertyNode *node, new = { 0 };
+  GQuark quark;
+  gint i;
+
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (default_value != NULL);
+  g_return_if_fail (type == G_VALUE_TYPE (default_value));
+
+  if (G_UNLIKELY (!properties))
+    properties = g_array_new (FALSE, TRUE, sizeof (PropertyNode));
+
+  quark = g_quark_try_string (property_name);
+
+  if ((node = property_node_lookup (quark)) != NULL)
+    {
+      g_warning ("Property \"%s\" was already registered with type %s",
+                 property_name, g_type_name (node->property_type));
+      return;
+    }
+
+  quark = g_quark_from_string (property_name);
+
+  new.property_quark = quark;
+  new.property_type = type;
+
+  g_value_init (&new.default_value, type);
+  g_value_copy (default_value, &new.default_value);
+
+  for (i = 0; i < properties->len; i++)
+    {
+      node = &g_array_index (properties, PropertyNode, i);
+
+      if (node->property_quark > quark)
+        break;
+    }
+
+  g_array_insert_val (properties, i, new);
+}
+
+void
+gtk_style_set_register_property_color (const gchar *property_name,
+                                       GdkColor    *initial_value)
+{
+  GValue value = { 0 };
+
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (initial_value != NULL);
+
+  g_value_init (&value, GDK_TYPE_COLOR);
+  g_value_set_boxed (&value, initial_value);
+
+  gtk_style_set_register_property (property_name, GDK_TYPE_COLOR, &value);
+
+  g_value_unset (&value);
+}
+
+void
+gtk_style_set_register_property_int (const gchar *property_name,
+                                     gint         initial_value)
+{
+  GValue value = { 0 };
+
+  g_return_if_fail (property_name != NULL);
+
+  g_value_init (&value, G_TYPE_INT);
+  g_value_set_int (&value, initial_value);
+
+  gtk_style_set_register_property (property_name, G_TYPE_INT, &value);
+
+  g_value_unset (&value);
+}
+
+void
+gtk_style_set_register_property_uint (const gchar *property_name,
+                                      guint        initial_value)
+{
+  GValue value = { 0 };
+
+  g_return_if_fail (property_name != NULL);
+
+  g_value_init (&value, G_TYPE_UINT);
+  g_value_set_uint (&value, initial_value);
+
+  gtk_style_set_register_property (property_name, G_TYPE_UINT, &value);
+
+  g_value_unset (&value);
+}
+
+void
+gtk_style_set_register_property_double (const gchar *property_name,
+                                        gdouble      initial_value)
+{
+  GValue value = { 0 };
+
+  g_return_if_fail (property_name != NULL);
+
+  g_value_init (&value, G_TYPE_DOUBLE);
+  g_value_set_double (&value, initial_value);
+
+  gtk_style_set_register_property (property_name, G_TYPE_DOUBLE, &value);
+
+  g_value_unset (&value);
+}
+
+/* GtkStyleSet methods */
 
 GtkStyleSet *
 gtk_style_set_new (void)
