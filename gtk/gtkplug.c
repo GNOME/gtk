@@ -36,6 +36,27 @@
 
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkplug
+ * @Short_description: Toplevel for embedding into other processes
+ * @Title: GtkPlug
+ * @See_also: #GtkSocket
+ *
+ * Together with #GtkSocket, #GtkPlug provides the ability
+ * to embed widgets from one process into another process
+ * in a fashion that is transparent to the user. One
+ * process creates a #GtkSocket widget and passes the
+ * ID of that widget's window to the other process,
+ * which then creates a #GtkPlug with that window ID.
+ * Any widgets contained in the #GtkPlug then will appear
+ * inside the first application's window.
+ *
+ * <note>
+ * The #GtkPlug and #GtkSocket widgets are currently not available
+ * on all platforms supported by GTK+.
+ * </note>
+ */
+
 static void            gtk_plug_get_property          (GObject     *object,
 						       guint        prop_id,
 						       GValue      *value,
