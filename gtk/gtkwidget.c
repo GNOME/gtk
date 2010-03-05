@@ -2781,7 +2781,7 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, (gtk_widget_get_receives_default (widget) != FALSE));
       break;
     case PROP_COMPOSITE_CHILD:
-      g_value_set_boolean (value, (GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0 );
+      g_value_set_boolean (value, (GTK_OBJECT_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0 );
       break;
     case PROP_STYLE:
       g_value_set_object (value, gtk_widget_get_style (widget));
@@ -5499,7 +5499,7 @@ gtk_widget_get_can_focus (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_CAN_FOCUS) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_CAN_FOCUS) != 0;
 }
 
 /**
@@ -5593,7 +5593,7 @@ gtk_widget_get_can_default (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_CAN_DEFAULT) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_CAN_DEFAULT) != 0;
 }
 
 /**
@@ -5613,7 +5613,7 @@ gtk_widget_has_default (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_HAS_DEFAULT) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_HAS_DEFAULT) != 0;
 }
 
 /**
@@ -5694,7 +5694,7 @@ gtk_widget_get_receives_default (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_RECEIVES_DEFAULT) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_RECEIVES_DEFAULT) != 0;
 }
 
 /**
@@ -5715,7 +5715,7 @@ gtk_widget_has_grab (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_HAS_GRAB) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_HAS_GRAB) != 0;
 }
 
 /**
@@ -5944,7 +5944,7 @@ gtk_widget_is_toplevel (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_TOPLEVEL) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_TOPLEVEL) != 0;
 }
 
 /**
@@ -5963,8 +5963,8 @@ gtk_widget_is_drawable (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return ((GTK_WIDGET_FLAGS (widget) & GTK_VISIBLE) != 0 &&
-          (GTK_WIDGET_FLAGS (widget) & GTK_MAPPED) != 0);
+  return (gtk_widget_get_visible (widget) &&
+          gtk_widget_get_mapped (widget));
 }
 
 /**
@@ -6115,7 +6115,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_APP_PAINTABLE) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_APP_PAINTABLE) != 0;
 }
 
 /**
@@ -6178,7 +6178,7 @@ gtk_widget_get_double_buffered (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_DOUBLE_BUFFERED) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_DOUBLE_BUFFERED) != 0;
 }
 
 /**
@@ -6440,7 +6440,7 @@ gtk_widget_has_rc_style (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return (GTK_WIDGET_FLAGS (widget) & GTK_RC_STYLE) != 0;
+  return (GTK_OBJECT_FLAGS (widget) & GTK_RC_STYLE) != 0;
 }
 
 /**
@@ -8401,7 +8401,7 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
 			       const gchar *name)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail ((GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0);
+  g_return_if_fail ((GTK_OBJECT_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0);
   g_return_if_fail (name != NULL);
 
   if (!quark_composite_name)
@@ -8428,7 +8428,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (((GTK_WIDGET_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0) && widget->parent)
+  if (((GTK_OBJECT_FLAGS (widget) & GTK_COMPOSITE_CHILD) != 0) && widget->parent)
     return _gtk_container_child_composite_name (GTK_CONTAINER (widget->parent),
 					       widget);
   else

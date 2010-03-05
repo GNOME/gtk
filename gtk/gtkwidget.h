@@ -189,7 +189,15 @@ typedef enum
  *
  * Returns the widget flags from @wid.
  *
- * Deprecated: 2.20: Do not use it.
+ * Deprecated: 2.20: Use the proper function to test individual states:
+ * gtk_widget_get_app_paintable(), gtk_widget_get_can_default(),
+ * gtk_widget_get_can_focus(), gtk_widget_get_double_buffered(),
+ * gtk_widget_has_default(), gtk_widget_is_drawable(),
+ * gtk_widget_has_focus(), gtk_widget_has_grab(), gtk_widget_get_mapped(),
+ * gtk_widget_get_has_window(), gtk_widget_has_rc_style(),
+ * gtk_widget_get_realized(), gtk_widget_get_receives_default(),
+ * gtk_widget_get_sensitive(), gtk_widget_is_sensitive(),
+ * gtk_widget_is_toplevel() or gtk_widget_get_visible().
  */
 #define GTK_WIDGET_FLAGS(wid)		  (GTK_OBJECT_FLAGS (wid))
 /* FIXME: Deprecating GTK_WIDGET_FLAGS requires fixing GTK internals. */
