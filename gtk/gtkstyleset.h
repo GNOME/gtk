@@ -69,11 +69,23 @@ void     gtk_style_set_set_property (GtkStyleSet  *set,
                                      const gchar  *property,
                                      GtkStateType  state,
                                      const GValue *value);
+void     gtk_style_set_set_valist   (GtkStyleSet  *set,
+                                     GtkStateType  state,
+                                     va_list       args);
+void     gtk_style_set_set          (GtkStyleSet  *set,
+                                     GtkStateType  state,
+                                     ...) G_GNUC_NULL_TERMINATED;
 
 gboolean gtk_style_set_get_property (GtkStyleSet  *set,
                                      const gchar  *property,
                                      GtkStateType  state,
                                      GValue       *value);
+void     gtk_style_set_get_valist   (GtkStyleSet  *set,
+                                     GtkStateType  state,
+                                     va_list       args);
+void     gtk_style_set_get          (GtkStyleSet  *set,
+                                     GtkStateType  state,
+                                     ...) G_GNUC_NULL_TERMINATED;
 
 void     gtk_style_set_unset_property (GtkStyleSet  *set,
                                        const gchar  *property,

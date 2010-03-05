@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <stdlib.h>
+#include <gobject/gvaluecollector.h>
 
 #include "gtkstyleprovider.h"
 #include "gtkstyleset.h"
@@ -327,6 +328,76 @@ gtk_style_set_set_property (GtkStyleSet  *set,
   g_value_copy (value, &prop->values[state]);
 }
 
+
+void
+gtk_style_set_set_valist (GtkStyleSet  *set,
+                          GtkStateType  state,
+                          va_list       args)
+{
+  GtkStyleSetPrivate *priv;
+  const gchar *property_name;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  property_name = va_arg (args, const gchar *);
+
+  while (property_name)
+    {
+      PropertyNode *node;
+      PropertyData *prop;
+      gchar *error = NULL;
+
+      node = property_node_lookup (g_quark_try_string (property_name));
+
+      if (!node)
+        {
+          g_warning ("Style property \"%s\" is not registered", property_name);
+          break;
+        }
+
+      prop = g_hash_table_lookup (priv->properties,
+                                  GINT_TO_POINTER (node->property_quark));
+
+      if (!prop)
+        {
+          prop = property_data_new ();
+          g_hash_table_insert (priv->properties,
+                               GINT_TO_POINTER (node->property_quark),
+                               prop);
+        }
+
+      g_value_init (&prop->values[state], node->property_type);
+      G_VALUE_COLLECT (&prop->values[state], args, 0, &error);
+
+      if (error)
+        {
+          g_warning ("Could not set style property \"%s\": %s", property_name, error);
+          g_value_unset (&prop->values[state]);
+	  g_free (error);
+          break;
+        }
+
+      property_name = va_arg (args, const gchar *);
+    }
+}
+
+void
+gtk_style_set_set (GtkStyleSet  *set,
+                   GtkStateType  state,
+                   ...)
+{
+  va_list args;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  va_start (args, state);
+  gtk_style_set_set_valist (set, state, args);
+  va_end (args);
+}
+
 gboolean
 gtk_style_set_get_property (GtkStyleSet  *set,
                             const gchar  *property,
@@ -361,6 +432,71 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   g_value_copy (&prop->values[state], value);
 
   return TRUE;
+}
+
+void
+gtk_style_set_get_valist (GtkStyleSet  *set,
+                          GtkStateType  state,
+                          va_list       args)
+{
+  GtkStyleSetPrivate *priv;
+  const gchar *property_name;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  priv = GTK_STYLE_SET_GET_PRIVATE (set);
+  property_name = va_arg (args, const gchar *);
+
+  while (property_name)
+    {
+      PropertyNode *node;
+      PropertyData *prop;
+      gchar *error = NULL;
+
+      node = property_node_lookup (g_quark_try_string (property_name));
+
+      if (!node)
+        {
+          g_warning ("Style property \"%s\" is not registered", property_name);
+          break;
+        }
+
+      prop = g_hash_table_lookup (priv->properties,
+                                  GINT_TO_POINTER (node->property_quark));
+
+      if (!prop)
+        {
+          /* FIXME: Fill in default */
+          break;
+        }
+
+      G_VALUE_LCOPY (&prop->values[state], args, 0, &error);
+
+      if (error)
+        {
+          g_warning ("Could not get style property \"%s\": %s", property_name, error);
+	  g_free (error);
+          break;
+        }
+
+      property_name = va_arg (args, const gchar *);
+    }
+}
+
+void
+gtk_style_set_get (GtkStyleSet  *set,
+                   GtkStateType  state,
+                   ...)
+{
+  va_list args;
+
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  va_start (args, state);
+  gtk_style_set_get_valist (set, state, args);
+  va_end (args);
 }
 
 void
@@ -454,7 +590,6 @@ gtk_style_set_merge (GtkStyleSet       *set,
         }
     }
 }
-
 
 #define __GTK_STYLE_SET_C__
 #include "gtkaliasdef.c"
