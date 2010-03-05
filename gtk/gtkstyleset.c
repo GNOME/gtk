@@ -109,10 +109,7 @@ gtk_style_set_init (GtkStyleSet *set)
   GtkStyleSetPrivate *priv;
 
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
-
-  priv->properties = g_hash_table_new_full (g_str_hash,
-                                            g_str_equal,
-                                            (GDestroyNotify) g_free,
+  priv->properties = g_hash_table_new_full (NULL, NULL, NULL,
                                             (GDestroyNotify) property_data_free);
 }
 
@@ -292,6 +289,7 @@ gtk_style_set_set_property (GtkStyleSet  *set,
                             const GValue *value)
 {
   GtkStyleSetPrivate *priv;
+  PropertyNode *node;
   PropertyData *prop;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
@@ -299,21 +297,33 @@ gtk_style_set_set_property (GtkStyleSet  *set,
   g_return_if_fail (state < GTK_STATE_LAST);
   g_return_if_fail (value != NULL);
 
+  node = property_node_lookup (g_quark_try_string (property));
+
+  if (!node)
+    {
+      g_warning ("Style property \"%s\" is not registered", property);
+      return;
+    }
+
+  g_return_if_fail (node->property_type == G_VALUE_TYPE (value));
+
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
-  prop = g_hash_table_lookup (priv->properties, property);
+  prop = g_hash_table_lookup (priv->properties,
+                              GINT_TO_POINTER (node->property_quark));
 
   if (!prop)
     {
       prop = property_data_new ();
       g_hash_table_insert (priv->properties,
-                           g_strdup (property),
+                           GINT_TO_POINTER (node->property_quark),
                            prop);
     }
 
-  if (G_VALUE_TYPE (&prop->values[state]) != G_TYPE_INVALID)
-    g_value_unset (&prop->values[state]);
+  if (G_IS_VALUE (&prop->values[state]))
+    g_value_reset (&prop->values[state]);
+  else
+    g_value_init (&prop->values[state], node->property_type);
 
-  g_value_init (&prop->values[state], G_VALUE_TYPE (value));
   g_value_copy (value, &prop->values[state]);
 }
 
@@ -324,6 +334,7 @@ gtk_style_set_get_property (GtkStyleSet  *set,
                             GValue       *value)
 {
   GtkStyleSetPrivate *priv;
+  PropertyNode *node;
   PropertyData *prop;
 
   g_return_val_if_fail (GTK_IS_STYLE_SET (set), FALSE);
@@ -331,8 +342,17 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   g_return_val_if_fail (state < GTK_STATE_LAST, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
+  node = property_node_lookup (g_quark_try_string (property));
+
+  if (!node)
+    {
+      g_warning ("Style property \"%s\" is not registered", property);
+      return FALSE;
+    }
+
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
-  prop = g_hash_table_lookup (priv->properties, property);
+  prop = g_hash_table_lookup (priv->properties,
+                              GINT_TO_POINTER (node->property_quark));
 
   if (!prop)
     return FALSE;
@@ -349,14 +369,24 @@ gtk_style_set_unset_property (GtkStyleSet  *set,
                               GtkStateType  state)
 {
   GtkStyleSetPrivate *priv;
+  PropertyNode *node;
   PropertyData *prop;
 
   g_return_if_fail (GTK_IS_STYLE_SET (set));
   g_return_if_fail (property != NULL);
   g_return_if_fail (state < GTK_STATE_LAST);
 
+  node = property_node_lookup (g_quark_try_string (property));
+
+  if (!node)
+    {
+      g_warning ("Style property \"%s\" is not registered", property);
+      return;
+    }
+
   priv = GTK_STYLE_SET_GET_PRIVATE (set);
-  prop = g_hash_table_lookup (priv->properties, property);
+  prop = g_hash_table_lookup (priv->properties,
+                              GINT_TO_POINTER (node->property_quark));
 
   if (!prop)
     return;
@@ -394,7 +424,6 @@ gtk_style_set_merge (GtkStyleSet       *set,
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      const gchar *name_to_merge = key;
       PropertyData *prop_to_merge = value;
       PropertyData *prop = NULL;
       GtkStateType i;
@@ -405,14 +434,12 @@ gtk_style_set_merge (GtkStyleSet       *set,
             continue;
 
           if (!prop)
-            prop = g_hash_table_lookup (priv->properties, name_to_merge);
+            prop = g_hash_table_lookup (priv->properties, key);
 
           if (!prop)
             {
               prop = property_data_new ();
-              g_hash_table_insert (priv->properties,
-                                   g_strdup (name_to_merge),
-                                   prop);
+              g_hash_table_insert (priv->properties, key, prop);
             }
 
           if (replace ||
