@@ -23,6 +23,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkassistant
+ * @Short_description: A widget used to guide users through multi-step operations
+ * @Title: GtkAssistant
+ *
+ * A #GtkAssistant is a widget used to represent a generally complex
+ * operation splitted in several steps, guiding the user through its pages
+ * and controlling the page flow to collect the necessary data.
+ *
+ * <refsect2 id="GtkAssistant-BUILDER-UI">
+ * <title>GtkAssistant as GtkBuildable</title>
+ * <para>
+ * The GtkAssistant implementation of the GtkBuildable interface exposes the
+ * @action_area as internal children with the name "action_area".
+ *
+ * To add pages to an assistant in GtkBuilder, simply add it as a
+ * &lt;child&gt; to the GtkAssistant object, and set its child properties
+ * as necessary.
+ * </para>
+ * </refsect2>
+ */
+
 #include "config.h"
 
 #include <atk/atk.h>
@@ -237,7 +259,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   /**
    * GtkAssistant::apply:
-   * @assistant: the @GtkAssistant
+   * @assistant: the #GtkAssistant
    *
    * The ::apply signal is emitted when the apply button is clicked. The default
    * behavior of the #GtkAssistant is to switch to the page after the current
