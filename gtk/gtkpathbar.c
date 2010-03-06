@@ -408,7 +408,7 @@ gtk_path_bar_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   path_bar = GTK_PATH_BAR (widget);
   widget->window = gtk_widget_get_parent_window (widget);

@@ -308,7 +308,7 @@ gtk_misc_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   if (!gtk_widget_get_has_window (widget))
     {

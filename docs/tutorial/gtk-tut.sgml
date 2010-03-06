@@ -11925,7 +11925,7 @@ gtk_dial_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   dial = GTK_DIAL (widget);
 
   attributes.x = widget->allocation.x;
@@ -15113,7 +15113,7 @@ gtk_dial_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   dial = GTK_DIAL (widget);
 
   attributes.x = widget-&gt;allocation.x;

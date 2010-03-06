@@ -2263,7 +2263,7 @@ gtk_menu_realize (GtkWidget *widget)
 
   menu = GTK_MENU (widget);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;

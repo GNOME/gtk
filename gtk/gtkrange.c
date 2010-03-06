@@ -1495,7 +1495,7 @@ gtk_range_realize (GtkWidget *widget)
 
   gtk_range_calc_layout (range, range->adjustment->value);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   widget->window = gtk_widget_get_parent_window (widget);
   g_object_ref (widget->window);

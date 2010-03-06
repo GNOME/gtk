@@ -672,7 +672,7 @@ gtk_tool_palette_realize (GtkWidget *widget)
   gdk_window_set_user_data (widget->window, widget);
   widget->style = gtk_style_attach (widget->style, widget->window);
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,

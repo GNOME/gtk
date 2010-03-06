@@ -200,7 +200,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
       g_return_if_fail (!gtk_widget_get_realized (widget));
     }
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.title = window->title;

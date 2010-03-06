@@ -3827,7 +3827,8 @@ gtk_text_view_realize (GtkWidget *widget)
   GSList *tmp_list;
   
   text_view = GTK_TEXT_VIEW (widget);
-  GTK_WIDGET_SET_FLAGS (text_view, GTK_REALIZED);
+
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;

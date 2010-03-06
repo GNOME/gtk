@@ -1318,7 +1318,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   
   icon_view = GTK_ICON_VIEW (widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   /* Make the main, clipping window */
   attributes.window_type = GDK_WINDOW_CHILD;
