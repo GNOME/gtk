@@ -9184,9 +9184,9 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
 
   if (data->parent_sensitive)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_PARENT_SENSITIVE);
+    GTK_OBJECT_FLAGS (widget) |= GTK_PARENT_SENSITIVE;
   else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_PARENT_SENSITIVE);
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_PARENT_SENSITIVE);
 
   if (gtk_widget_is_sensitive (widget))
     {
