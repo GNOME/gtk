@@ -6467,7 +6467,7 @@ gtk_widget_set_style (GtkWidget *widget,
 
       initial_emission = !gtk_widget_has_rc_style (widget) && !GTK_WIDGET_USER_STYLE (widget);
       
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_RC_STYLE);
+      GTK_OBJECT_FLAGS (widget) &= ~(GTK_RC_STYLE);
       GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
       
       gtk_widget_set_style_internal (widget, style, initial_emission);
@@ -6510,7 +6510,7 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
   initial_emission = !gtk_widget_has_rc_style (widget) && !GTK_WIDGET_USER_STYLE (widget);
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
+  GTK_OBJECT_FLAGS (widget) |= GTK_RC_STYLE;
   
   if (gtk_widget_has_screen (widget))
     new_style = gtk_rc_get_style (widget);
