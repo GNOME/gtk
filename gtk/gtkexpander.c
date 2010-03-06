@@ -267,7 +267,7 @@ gtk_expander_init (GtkExpander *expander)
   expander->priv = priv = GTK_EXPANDER_GET_PRIVATE (expander);
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
-  GTK_WIDGET_SET_FLAGS (expander, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (expander), FALSE);
 
   priv->label_widget = NULL;
   priv->event_window = NULL;

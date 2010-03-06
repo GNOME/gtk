@@ -5903,9 +5903,9 @@ gtk_widget_set_has_window (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (has_window)
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_NO_WINDOW);
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_NO_WINDOW);
   else
-    GTK_WIDGET_SET_FLAGS (widget, GTK_NO_WINDOW);
+    GTK_OBJECT_FLAGS (widget) |= GTK_NO_WINDOW;
 }
 
 /**

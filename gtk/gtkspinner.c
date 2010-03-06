@@ -211,7 +211,7 @@ gtk_spinner_init (GtkSpinner *spinner)
 
   spinner->priv = priv;
 
-  GTK_WIDGET_SET_FLAGS (GTK_WIDGET (spinner), GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 }
 
 static gboolean

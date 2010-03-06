@@ -63,7 +63,7 @@ gtk_pixmap_class_init (GtkPixmapClass *class)
 static void
 gtk_pixmap_init (GtkPixmap *pixmap)
 {
-  GTK_WIDGET_SET_FLAGS (pixmap, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (pixmap), FALSE);
 
   pixmap->pixmap = NULL;
   pixmap->mask = NULL;

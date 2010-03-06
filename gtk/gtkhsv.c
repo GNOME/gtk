@@ -213,7 +213,7 @@ gtk_hsv_init (GtkHSV *hsv)
   
   hsv->priv = priv;
 
-  GTK_WIDGET_SET_FLAGS (hsv, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (hsv), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (hsv), TRUE);
   
   priv->h = 0.0;

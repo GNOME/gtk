@@ -295,7 +295,7 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  GTK_WIDGET_SET_FLAGS (cellview, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
 
   cellview->priv = GTK_CELL_VIEW_GET_PRIVATE (cellview);
 }

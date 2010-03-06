@@ -559,7 +559,7 @@ gtk_paned_child_type (GtkContainer *container)
 static void
 gtk_paned_init (GtkPaned *paned)
 {
-  GTK_WIDGET_SET_FLAGS (paned, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
 
   /* We only need to redraw when the handle position moves, which is

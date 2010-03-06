@@ -654,7 +654,7 @@ gtk_range_get_property (GObject      *object,
 static void
 gtk_range_init (GtkRange *range)
 {
-  GTK_WIDGET_SET_FLAGS (range, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (range), FALSE);
 
   range->orientation = GTK_ORIENTATION_HORIZONTAL;
   range->adjustment = NULL;

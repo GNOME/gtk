@@ -94,7 +94,7 @@ gtk_invisible_init (GtkInvisible *invisible)
 {
   GdkColormap *colormap;
   
-  GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);
   GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
   g_object_ref_sink (invisible);

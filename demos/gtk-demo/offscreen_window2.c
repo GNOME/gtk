@@ -104,7 +104,7 @@ gtk_mirror_bin_class_init (GtkMirrorBinClass *klass)
 static void
 gtk_mirror_bin_init (GtkMirrorBin *bin)
 {
-  GTK_WIDGET_UNSET_FLAGS (bin, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (bin), TRUE);
 }
 
 GtkWidget *

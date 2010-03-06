@@ -97,7 +97,7 @@ gtk_item_class_init (GtkItemClass *class)
 static void
 gtk_item_init (GtkItem *item)
 {
-  GTK_WIDGET_UNSET_FLAGS (item, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (item), TRUE);
 }
 
 void

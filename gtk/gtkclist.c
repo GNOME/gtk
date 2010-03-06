@@ -1009,7 +1009,7 @@ gtk_clist_init (GtkCList *clist)
 {
   clist->flags = 0;
 
-  GTK_WIDGET_UNSET_FLAGS (clist, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (clist), TRUE);
   gtk_widget_set_can_focus (GTK_WIDGET (clist), TRUE);
   GTK_CLIST_SET_FLAG (clist, CLIST_DRAW_DRAG_LINE);
   GTK_CLIST_SET_FLAG (clist, CLIST_USE_DRAG_ICONS);

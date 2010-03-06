@@ -63,7 +63,7 @@ gtk_bin_class_init (GtkBinClass *class)
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  GTK_WIDGET_SET_FLAGS (bin, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
 
   bin->child = NULL;
 }
