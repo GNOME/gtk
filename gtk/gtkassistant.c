@@ -1235,7 +1235,7 @@ gtk_assistant_map (GtkWidget *widget)
   GList *page_node;
   GtkAssistantPage *page;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   gtk_widget_map (priv->header_image);
   gtk_widget_map (priv->action_area);
@@ -1271,7 +1271,7 @@ gtk_assistant_unmap (GtkWidget *widget)
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   gtk_widget_unmap (priv->header_image);
   gtk_widget_unmap (priv->action_area);

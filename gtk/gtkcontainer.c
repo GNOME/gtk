@@ -2665,7 +2665,7 @@ gtk_container_map_child (GtkWidget *child,
 static void
 gtk_container_map (GtkWidget *widget)
 {
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   gtk_container_forall (GTK_CONTAINER (widget),
 			gtk_container_map_child,
@@ -2678,7 +2678,7 @@ gtk_container_map (GtkWidget *widget)
 static void
 gtk_container_unmap (GtkWidget *widget)
 {
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   if (gtk_widget_get_has_window (widget))
     gdk_window_hide (widget->window);

@@ -943,7 +943,7 @@ gtk_tree_item_map (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   if(item->pixmaps_box &&
      gtk_widget_get_visible (item->pixmaps_box) &&
@@ -964,7 +964,7 @@ gtk_tree_item_unmap (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   gdk_window_hide (widget->window);
 

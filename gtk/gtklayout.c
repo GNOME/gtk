@@ -908,7 +908,7 @@ gtk_layout_map (GtkWidget *widget)
   GtkLayout *layout = GTK_LAYOUT (widget);
   GList *tmp_list;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   tmp_list = layout->children;
   while (tmp_list)

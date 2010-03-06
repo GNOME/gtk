@@ -513,7 +513,7 @@ gtk_tree_map (GtkWidget *widget)
   GtkWidget *child;
   GList *children;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
   
   children = tree->children;
   while (children)
@@ -948,7 +948,7 @@ gtk_tree_unmap (GtkWidget *widget)
   
   g_return_if_fail (GTK_IS_TREE (widget));
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
   gdk_window_hide (widget->window);
   
 }

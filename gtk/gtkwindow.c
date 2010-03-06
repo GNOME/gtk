@@ -4567,7 +4567,7 @@ gtk_window_map (GtkWidget *widget)
   GdkWindow *toplevel;
   gboolean auto_mnemonics;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   if (window->bin.child &&
       gtk_widget_get_visible (window->bin.child) &&
@@ -4677,7 +4677,7 @@ gtk_window_unmap (GtkWidget *widget)
   GtkWindowGeometryInfo *info;    
   GdkWindowState state;
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
   if (window->frame)
     gdk_window_withdraw (window->frame);
   else 

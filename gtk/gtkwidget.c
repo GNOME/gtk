@@ -3551,7 +3551,8 @@ gtk_widget_unrealize (GtkWidget *widget)
       g_object_ref (widget);
       _gtk_tooltip_hide (widget);
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
+      gtk_widget_set_realized (widget, FALSE);
+      gtk_widget_set_mapped (widget, FALSE);
       g_object_unref (widget);
     }
 }
@@ -6031,9 +6032,9 @@ gtk_widget_set_mapped (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (mapped)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+    GTK_OBJECT_FLAGS (widget) |= GTK_MAPPED;
   else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_MAPPED);
 }
 
 /**
@@ -8753,7 +8754,7 @@ gtk_widget_real_map (GtkWidget *widget)
   
   if (!gtk_widget_get_mapped (widget))
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, TRUE);
       
       if (gtk_widget_get_has_window (widget))
 	gdk_window_show (widget->window);
@@ -8773,7 +8774,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
 {
   if (gtk_widget_get_mapped (widget))
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, FALSE);
 
       if (gtk_widget_get_has_window (widget))
 	gdk_window_hide (widget->window);
@@ -8816,7 +8817,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   if (gtk_widget_get_mapped (widget))
     gtk_widget_real_unmap (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   /* printf ("unrealizing %s\n", g_type_name (G_TYPE_FROM_INSTANCE (widget)));
    */

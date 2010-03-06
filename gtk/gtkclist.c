@@ -4618,7 +4618,7 @@ gtk_clist_unrealize (GtkWidget *widget)
   if (gtk_widget_get_mapped (widget))
     gtk_clist_unmap (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   /* detach optional row/cell styles */
   if (gtk_widget_get_realized (widget))
@@ -4686,7 +4686,7 @@ gtk_clist_map (GtkWidget *widget)
 
   if (!gtk_widget_get_mapped (widget))
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, TRUE);
 
       /* map column buttons */
       for (i = 0; i < clist->columns; i++)
@@ -4725,7 +4725,7 @@ gtk_clist_unmap (GtkWidget *widget)
 
   if (gtk_widget_get_mapped (widget))
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, FALSE);
 
       if (clist_has_grab (clist))
 	{

@@ -708,7 +708,7 @@ gtk_plug_map (GtkWidget *widget)
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
       
-      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, TRUE);
 
       if (bin->child &&
 	  gtk_widget_get_visible (bin->child) &&
@@ -732,7 +732,7 @@ gtk_plug_unmap (GtkWidget *widget)
     {
       GtkPlug *plug = GTK_PLUG (widget);
 
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, FALSE);
 
       gdk_window_hide (widget->window);
 

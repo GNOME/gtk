@@ -348,7 +348,7 @@ gtk_handle_box_map (GtkWidget *widget)
   GtkBin *bin;
   GtkHandleBox *hb;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
@@ -373,7 +373,7 @@ gtk_handle_box_unmap (GtkWidget *widget)
 {
   GtkHandleBox *hb;
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   hb = GTK_HANDLE_BOX (widget);
 
