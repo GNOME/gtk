@@ -2829,11 +2829,10 @@ gtk_widget_init (GtkWidget *widget)
   widget->window = NULL;
   widget->parent = NULL;
 
-  GTK_WIDGET_SET_FLAGS (widget,
-			GTK_SENSITIVE |
-			GTK_PARENT_SENSITIVE |
-			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
-			GTK_DOUBLE_BUFFERED);
+  GTK_OBJECT_FLAGS (widget) |= GTK_SENSITIVE;
+  GTK_OBJECT_FLAGS (widget) |= GTK_PARENT_SENSITIVE;
+  GTK_OBJECT_FLAGS (widget) |= composite_child_stack ? GTK_COMPOSITE_CHILD : 0;
+  gtk_widget_set_double_buffered (widget, TRUE);
 
   GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
   GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
