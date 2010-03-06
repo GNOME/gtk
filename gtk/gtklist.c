@@ -490,7 +490,7 @@ gtk_list_unmap (GtkWidget *widget)
   if (!gtk_widget_get_mapped (widget))
     return;
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   if (list_has_grab (list))
     {

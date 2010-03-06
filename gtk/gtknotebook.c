@@ -1736,7 +1736,7 @@ gtk_notebook_map (GtkWidget *widget)
   GList *children;
   gint i;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   notebook = GTK_NOTEBOOK (widget);
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
@@ -1782,7 +1782,7 @@ gtk_notebook_unmap (GtkWidget *widget)
 {
   stop_scrolling (GTK_NOTEBOOK (widget));
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   gdk_window_hide (GTK_NOTEBOOK (widget)->event_window);
 
