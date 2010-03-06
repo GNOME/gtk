@@ -6087,9 +6087,9 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
   if (gtk_widget_get_app_paintable (widget) != app_paintable)
     {
       if (app_paintable)
-	GTK_WIDGET_SET_FLAGS (widget, GTK_APP_PAINTABLE);
+        GTK_OBJECT_FLAGS (widget) |= GTK_APP_PAINTABLE;
       else
-	GTK_WIDGET_UNSET_FLAGS (widget, GTK_APP_PAINTABLE);
+        GTK_OBJECT_FLAGS (widget) &= ~(GTK_APP_PAINTABLE);
 
       if (gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
