@@ -4742,7 +4742,7 @@ gtk_window_realize (GtkWidget *widget)
       g_return_if_fail (!gtk_widget_get_realized (widget));
     }
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   switch (window->type)
     {

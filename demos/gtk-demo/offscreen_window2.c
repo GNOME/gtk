@@ -167,7 +167,7 @@ gtk_mirror_bin_realize (GtkWidget *widget)
   gint border_width;
   GtkRequisition child_requisition;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = GTK_CONTAINER (widget)->border_width;
 

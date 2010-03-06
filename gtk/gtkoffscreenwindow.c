@@ -125,7 +125,7 @@ gtk_offscreen_window_realize (GtkWidget *widget)
 
   bin = GTK_BIN (widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 

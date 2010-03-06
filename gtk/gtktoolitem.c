@@ -462,7 +462,7 @@ gtk_tool_item_realize (GtkWidget *widget)
   GtkToolItem *toolitem;
 
   toolitem = GTK_TOOL_ITEM (widget);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   widget->window = gtk_widget_get_parent_window (widget);
   g_object_ref (widget->window);

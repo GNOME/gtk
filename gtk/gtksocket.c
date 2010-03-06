@@ -326,7 +326,7 @@ gtk_socket_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
@@ -390,7 +390,7 @@ gtk_socket_unrealize (GtkWidget *widget)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, FALSE);
 
   if (socket->plug_widget)
     {

@@ -1798,7 +1798,8 @@ gtk_notebook_realize (GtkWidget *widget)
   GdkRectangle event_window_pos;
 
   notebook = GTK_NOTEBOOK (widget);
-  GTK_WIDGET_SET_FLAGS (notebook, GTK_REALIZED);
+
+  gtk_widget_set_realized (widget, TRUE);
 
   gtk_notebook_get_event_window_position (notebook, &event_window_pos);
   

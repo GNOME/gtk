@@ -279,7 +279,7 @@ gtk_hsv_realize (GtkWidget *widget)
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   /* Create window */
   

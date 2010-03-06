@@ -2753,7 +2753,7 @@ gtk_entry_realize (GtkWidget *widget)
   gint attributes_mask;
   int i;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   entry = GTK_ENTRY (widget);
   priv = GTK_ENTRY_GET_PRIVATE (entry);
 

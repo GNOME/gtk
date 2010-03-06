@@ -441,7 +441,8 @@ gtk_ruler_realize (GtkWidget *widget)
   gint attributes_mask;
 
   ruler = GTK_RULER (widget);
-  GTK_WIDGET_SET_FLAGS (ruler, GTK_REALIZED);
+
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;

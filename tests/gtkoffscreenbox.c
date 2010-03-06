@@ -238,7 +238,7 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   GtkRequisition child_requisition;
   int start_y = 0;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = GTK_CONTAINER (widget)->border_width;
 

@@ -5989,9 +5989,9 @@ gtk_widget_set_realized (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (realized)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+    GTK_OBJECT_FLAGS (widget) |= GTK_REALIZED;
   else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_REALIZED);
 }
 
 /**
@@ -8793,7 +8793,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   g_assert (!gtk_widget_get_has_window (widget));
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   if (widget->parent)
     {
       widget->window = gtk_widget_get_parent_window (widget);
@@ -8847,7 +8847,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   gtk_selection_remove_all (widget);
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, FALSE);
 }
 
 static void

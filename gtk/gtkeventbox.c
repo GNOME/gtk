@@ -372,7 +372,7 @@ gtk_event_box_realize (GtkWidget *widget)
   GtkEventBoxPrivate *priv;
   gboolean visible_window;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = GTK_CONTAINER (widget)->border_width;
   

@@ -1129,7 +1129,7 @@ gtk_menu_item_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   widget->window = gtk_widget_get_parent_window (widget);
   g_object_ref (widget->window);

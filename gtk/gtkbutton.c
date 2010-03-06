@@ -1175,7 +1175,7 @@ gtk_button_realize (GtkWidget *widget)
   gint border_width;
 
   button = GTK_BUTTON (widget);
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   border_width = GTK_CONTAINER (widget)->border_width;
 

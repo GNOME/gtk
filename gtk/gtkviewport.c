@@ -588,7 +588,7 @@ gtk_viewport_realize (GtkWidget *widget)
   gint attributes_mask;
   gint event_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.x = widget->allocation.x + border_width;
   attributes.y = widget->allocation.y + border_width;

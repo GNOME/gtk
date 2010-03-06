@@ -394,7 +394,7 @@ gtk_handle_box_realize (GtkWidget *widget)
 
   hb = GTK_HANDLE_BOX (widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
