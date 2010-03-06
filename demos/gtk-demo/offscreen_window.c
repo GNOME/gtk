@@ -166,7 +166,7 @@ gtk_rotated_bin_class_init (GtkRotatedBinClass *klass)
 static void
 gtk_rotated_bin_init (GtkRotatedBin *bin)
 {
-  GTK_WIDGET_UNSET_FLAGS (bin, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (bin), TRUE);
 }
 
 GtkWidget *

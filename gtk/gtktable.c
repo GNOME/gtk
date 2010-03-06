@@ -441,7 +441,7 @@ gtk_table_get_child_property (GtkContainer    *container,
 static void
 gtk_table_init (GtkTable *table)
 {
-  GTK_WIDGET_SET_FLAGS (table, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (table), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (table), FALSE);
   
   table->children = NULL;

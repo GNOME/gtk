@@ -1072,7 +1072,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkNotebookPrivate *priv;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
-  GTK_WIDGET_SET_FLAGS (notebook, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
 
   priv = GTK_NOTEBOOK_GET_PRIVATE (notebook);
 

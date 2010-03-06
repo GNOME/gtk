@@ -357,7 +357,7 @@ gtk_image_init (GtkImage *image)
 {
   GtkImagePrivate *priv = GTK_IMAGE_GET_PRIVATE (image);
 
-  GTK_WIDGET_SET_FLAGS (image, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
 
   image->storage_type = GTK_IMAGE_EMPTY;
   image->icon_size = DEFAULT_ICON_SIZE;

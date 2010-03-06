@@ -94,7 +94,7 @@ gtk_separator_init (GtkSeparator *separator)
   GtkWidget *widget = GTK_WIDGET (separator);
   GtkSeparatorPrivate *private = GTK_SEPARATOR_GET_PRIVATE (separator);
 
-  GTK_WIDGET_SET_FLAGS (separator, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
   private->orientation = GTK_ORIENTATION_HORIZONTAL;
 

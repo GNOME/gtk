@@ -146,7 +146,7 @@ gtk_arrow_get_property (GObject         *object,
 static void
 gtk_arrow_init (GtkArrow *arrow)
 {
-  GTK_WIDGET_SET_FLAGS (arrow, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (arrow), FALSE);
 
   GTK_WIDGET (arrow)->requisition.width = MIN_ARROW_SIZE + GTK_MISC (arrow)->xpad * 2;
   GTK_WIDGET (arrow)->requisition.height = MIN_ARROW_SIZE + GTK_MISC (arrow)->ypad * 2;

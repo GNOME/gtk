@@ -259,7 +259,7 @@ gtk_handle_box_get_private (GtkHandleBox *hb)
 static void
 gtk_handle_box_init (GtkHandleBox *handle_box)
 {
-  GTK_WIDGET_UNSET_FLAGS (handle_box, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (handle_box), TRUE);
 
   handle_box->bin_window = NULL;
   handle_box->float_window = NULL;

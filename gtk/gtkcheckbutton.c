@@ -85,7 +85,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
-  GTK_WIDGET_SET_FLAGS (check_button, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (check_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
   GTK_TOGGLE_BUTTON (check_button)->draw_indicator = TRUE;
   GTK_BUTTON (check_button)->depress_on_activate = FALSE;

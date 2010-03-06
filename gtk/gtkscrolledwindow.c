@@ -362,7 +362,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 static void
 gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
-  GTK_WIDGET_SET_FLAGS (scrolled_window, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (scrolled_window), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (scrolled_window), TRUE);
 
   scrolled_window->hscrollbar = NULL;

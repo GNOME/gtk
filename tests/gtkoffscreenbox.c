@@ -131,7 +131,7 @@ gtk_offscreen_box_class_init (GtkOffscreenBoxClass *klass)
 static void
 gtk_offscreen_box_init (GtkOffscreenBox *offscreen_box)
 {
-  GTK_WIDGET_UNSET_FLAGS (offscreen_box, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (offscreen_box), TRUE);
 }
 
 GtkWidget *

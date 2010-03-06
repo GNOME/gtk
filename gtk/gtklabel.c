@@ -1021,7 +1021,7 @@ gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv;
 
-  GTK_WIDGET_SET_FLAGS (label, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (label), FALSE);
 
   priv = GTK_LABEL_GET_PRIVATE (label);
   priv->width_chars = -1;

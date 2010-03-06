@@ -186,7 +186,7 @@ gtk_box_init (GtkBox *box)
 {
   GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
 
-  GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
 
   box->children = NULL;

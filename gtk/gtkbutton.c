@@ -542,7 +542,7 @@ gtk_button_init (GtkButton *button)
 
   gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
-  GTK_WIDGET_SET_FLAGS (button, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (button), FALSE);
 
   button->label_text = NULL;
   

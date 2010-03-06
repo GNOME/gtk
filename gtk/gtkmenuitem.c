@@ -392,7 +392,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
 
-  GTK_WIDGET_SET_FLAGS (menu_item, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (menu_item), FALSE);
 
   priv->action = NULL;
   priv->use_action_appearance = TRUE;

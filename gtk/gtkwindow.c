@@ -900,7 +900,7 @@ gtk_window_init (GtkWindow *window)
   GdkColormap *colormap;
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   
-  GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
   GTK_PRIVATE_SET_FLAG (window, GTK_ANCHORED);

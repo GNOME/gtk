@@ -203,7 +203,7 @@ gtk_viewport_get_property (GObject         *object,
 static void
 gtk_viewport_init (GtkViewport *viewport)
 {
-  GTK_WIDGET_UNSET_FLAGS (viewport, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (viewport), FALSE);
   gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);

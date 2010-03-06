@@ -2270,7 +2270,7 @@ create_main_page (GtkPrintUnixDialog *dialog)
                     0, 0);
 
   image = gtk_drawing_area_new ();
-  GTK_WIDGET_SET_FLAGS (image, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (image, FALSE);
 
   priv->collate_image = image;
   gtk_widget_show (image);
@@ -3500,7 +3500,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox2, TRUE, TRUE, 0);
 
   draw = gtk_drawing_area_new ();
-  GTK_WIDGET_SET_FLAGS (draw, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (draw, FALSE);
   priv->page_layout_preview = draw;
   gtk_widget_set_size_request (draw, 350, 200);
   g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);

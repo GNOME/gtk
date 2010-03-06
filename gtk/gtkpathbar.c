@@ -169,7 +169,7 @@ get_slider_button (GtkPathBar  *path_bar,
 static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
-  GTK_WIDGET_SET_FLAGS (path_bar, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (path_bar), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
   path_bar->get_info_cancellable = NULL;
