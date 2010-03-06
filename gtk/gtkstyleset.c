@@ -425,11 +425,13 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
-  if (!prop)
-    return FALSE;
+  g_value_init (value, node->property_type);
 
-  g_value_init (value, G_VALUE_TYPE (&prop->values[state]));
-  g_value_copy (&prop->values[state], value);
+  if (!prop ||
+      !G_IS_VALUE (&prop->values[state]))
+    g_value_copy (&node->default_value, value);
+  else
+    g_value_copy (&prop->values[state], value);
 
   return TRUE;
 }
@@ -465,13 +467,11 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
       prop = g_hash_table_lookup (priv->properties,
                                   GINT_TO_POINTER (node->property_quark));
 
-      if (!prop)
-        {
-          /* FIXME: Fill in default */
-          break;
-        }
-
-      G_VALUE_LCOPY (&prop->values[state], args, 0, &error);
+      if (!prop ||
+          !G_IS_VALUE (&prop->values[state]))
+        G_VALUE_LCOPY (&node->default_value, args, 0, &error);
+      else
+        G_VALUE_LCOPY (&prop->values[state], args, 0, &error);
 
       if (error)
         {
