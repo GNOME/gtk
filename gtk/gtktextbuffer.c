@@ -4016,9 +4016,7 @@ void
 gtk_text_buffer_copy_clipboard (GtkTextBuffer *buffer,
 				GtkClipboard  *clipboard)
 {
-  gtk_text_buffer_begin_user_action (buffer);
   cut_or_copy (buffer, clipboard, FALSE, TRUE, TRUE);
-  gtk_text_buffer_end_user_action (buffer);
 }
 
 /**
