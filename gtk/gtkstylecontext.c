@@ -266,7 +266,7 @@ gtk_style_context_get (GtkStyleContext *context,
   priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
 
   va_start (args, state);
-  gtk_style_context_get_valist (priv->store, state, args);
+  gtk_style_set_get_valist (priv->store, state, args);
   va_end (args);
 }
 
