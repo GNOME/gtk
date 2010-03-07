@@ -24,6 +24,9 @@
 #include <gdk/gdk.h>
 #include "gtkenums.h"
 
+/* GtkBorder is defined there */
+#include "gtkstyle.h"
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_STYLE_SET         (gtk_style_set_get_type ())
@@ -57,6 +60,8 @@ void gtk_style_set_register_property_color  (const gchar *property_name,
                                              GdkColor    *default_value);
 void gtk_style_set_register_property_font   (const gchar          *property_name,
                                              PangoFontDescription *initial_value);
+void gtk_style_set_register_property_border (const gchar *property_name,
+                                             GtkBorder   *initial_value);
 void gtk_style_set_register_property_int    (const gchar *property_name,
                                              gint         default_value);
 void gtk_style_set_register_property_uint   (const gchar *property_name,
