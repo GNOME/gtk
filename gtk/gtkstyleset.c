@@ -68,6 +68,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkColor black = { 0, 0, 0, 0 };
   GdkColor white = { 0, 65535, 65535, 65535 };
+  PangoFontDescription *font_desc;
 
   object_class->finalize = gtk_style_set_finalize;
 
@@ -76,6 +77,10 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property_color ("background-color", &black);
   gtk_style_set_register_property_color ("text-color", &white);
   gtk_style_set_register_property_color ("base-color", &white);
+
+  font_desc = pango_font_description_from_string ("Sans 10");
+  gtk_style_set_register_property_font ("font", font_desc);
+  pango_font_description_free (font_desc);
 
   g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
 }
@@ -223,6 +228,23 @@ gtk_style_set_register_property_color (const gchar *property_name,
   g_value_set_boxed (&value, initial_value);
 
   gtk_style_set_register_property (property_name, GDK_TYPE_COLOR, &value);
+
+  g_value_unset (&value);
+}
+
+void
+gtk_style_set_register_property_font (const gchar          *property_name,
+                                      PangoFontDescription *initial_value)
+{
+  GValue value = { 0 };
+
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (initial_value != NULL);
+
+  g_value_init (&value, PANGO_TYPE_FONT_DESCRIPTION);
+  g_value_set_boxed (&value, initial_value);
+
+  gtk_style_set_register_property (property_name, PANGO_TYPE_FONT_DESCRIPTION, &value);
 
   g_value_unset (&value);
 }

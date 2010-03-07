@@ -55,6 +55,8 @@ void gtk_style_set_register_property (const gchar *property_name,
 
 void gtk_style_set_register_property_color  (const gchar *property_name,
                                              GdkColor    *default_value);
+void gtk_style_set_register_property_font   (const gchar          *property_name,
+                                             PangoFontDescription *initial_value);
 void gtk_style_set_register_property_int    (const gchar *property_name,
                                              gint         default_value);
 void gtk_style_set_register_property_uint   (const gchar *property_name,
