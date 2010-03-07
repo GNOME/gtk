@@ -54,6 +54,17 @@ void gtk_style_context_add_provider    (GtkStyleContext  *context,
 void gtk_style_context_remove_provider (GtkStyleContext  *context,
                                         GtkStyleProvider *provider);
 
+void gtk_style_context_get_property (GtkStyleContext *context,
+                                     const gchar     *property,
+                                     GtkStateType     state,
+                                     GValue          *value);
+void gtk_style_context_get_valist   (GtkStyleContext *context,
+                                     GtkStateType     state,
+                                     va_list          args);
+void gtk_style_context_get          (GtkStyleContext *context,
+                                     GtkStateType     state,
+                                     ...) G_GNUC_NULL_TERMINATED;
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

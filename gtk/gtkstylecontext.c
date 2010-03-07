@@ -221,5 +221,54 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
     rebuild_properties (context);
 }
 
+void
+gtk_style_context_get_property (GtkStyleContext *context,
+                                const gchar     *property,
+                                GtkStateType     state,
+                                GValue          *value)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (state < GTK_STATE_LAST);
+  g_return_if_fail (value != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  gtk_style_set_get_property (priv->store, property, state, value);
+}
+
+void
+gtk_style_context_get_valist (GtkStyleContext *context,
+                              GtkStateType     state,
+                              va_list          args)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  gtk_style_set_get_valist (priv->store, state, args);
+}
+
+void
+gtk_style_context_get (GtkStyleContext *context,
+                       GtkStateType     state,
+                       ...)
+{
+  GtkStyleContextPrivate *priv;
+  va_list args;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (state < GTK_STATE_LAST);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  va_start (args, state);
+  gtk_style_context_get_valist (priv->store, state, args);
+  va_end (args);
+}
+
 #define __GTK_STYLE_CONTEXT_C__
 #include "gtkaliasdef.c"
