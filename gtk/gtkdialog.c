@@ -414,12 +414,11 @@ gtk_dialog_map (GtkWidget *widget)
 	  if (first_focus == NULL)
 	    first_focus = window->focus_widget;
 	  else if (first_focus == window->focus_widget)
-	    break;
-
+            break;
 	  if (!GTK_IS_LABEL (window->focus_widget))
 	    break;
-	  else
-	    gtk_label_select_region (GTK_LABEL (window->focus_widget), 0, 0);
+          if (!gtk_label_get_current_uri (GTK_LABEL (window->focus_widget)))
+            gtk_label_select_region (GTK_LABEL (window->focus_widget), 0, 0);
 	}
       while (TRUE);
 
