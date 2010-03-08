@@ -109,6 +109,7 @@ struct _GtkTextViewPrivate
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
   gchar *im_module;
+  guint scroll_after_paste : 1;
 };
 
 
@@ -1290,6 +1291,9 @@ gtk_text_view_init (GtkTextView *text_view)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTargetList *target_list;
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
 
   gtk_widget_set_can_focus (widget, TRUE);
 
@@ -1304,6 +1308,8 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->indent = 0;
   text_view->tabs = NULL;
   text_view->editable = TRUE;
+
+  priv->scroll_after_paste = TRUE;
 
   gtk_drag_dest_set (widget, 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
@@ -4378,6 +4384,12 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
       else if (event->button == 2)
         {
           GtkTextIter iter;
+          GtkTextViewPrivate *priv;
+
+          /* We do not want to scroll back to the insert iter when we paste
+             with the middle button */
+          priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+          priv->scroll_after_paste = FALSE;
 
           gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                              &iter,
@@ -5811,8 +5823,17 @@ gtk_text_view_paste_done_handler (GtkTextBuffer *buffer,
                                   gpointer       data)
 {
   GtkTextView *text_view = data;
-  DV(g_print (G_STRLOC": scrolling onscreen\n"));
-  gtk_text_view_scroll_mark_onscreen (text_view, gtk_text_buffer_get_insert (buffer));
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+
+  if (priv->scroll_after_paste)
+    {
+      DV(g_print (G_STRLOC": scrolling onscreen\n"));
+      gtk_text_view_scroll_mark_onscreen (text_view, gtk_text_buffer_get_insert (buffer));
+    }
+
+  priv->scroll_after_paste = TRUE;
 }
 
 static void
