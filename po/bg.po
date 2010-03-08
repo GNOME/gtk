@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-24 07:18+0200\n"
-"PO-Revision-Date: 2010-02-24 07:18+0200\n"
+"POT-Creation-Date: 2010-03-08 07:01+0200\n"
+"PO-Revision-Date: 2010-03-08 07:01+0200\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -1739,15 +1739,15 @@ msgstr "_Отдясно:"
 msgid "Paper Margins"
 msgstr "Бели полета"
 
-#: ../gtk/gtkentry.c:8685 ../gtk/gtktextview.c:7859
+#: ../gtk/gtkentry.c:8688 ../gtk/gtktextview.c:7860
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: ../gtk/gtkentry.c:8699 ../gtk/gtktextview.c:7873
+#: ../gtk/gtkentry.c:8702 ../gtk/gtktextview.c:7874
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на контролен знак за Уникод"
 
-#: ../gtk/gtkentry.c:10070
+#: ../gtk/gtkentry.c:10081
 msgid "Caps Lock is on"
 msgstr "Клавишът „Caps Lock“ е натиснат"
 
@@ -1816,7 +1816,7 @@ msgstr "%1$s на %2$s"
 msgid "Search"
 msgstr "Търсене"
 
-#: ../gtk/gtkfilechooserdefault.c:1793 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1793 ../gtk/gtkfilechooserdefault.c:9459
 msgid "Recently Used"
 msgstr "Скоро отваряни"
 
@@ -1945,48 +1945,48 @@ msgstr "Запазване в п_апка:"
 msgid "Create in _folder:"
 msgstr "Създаване в _папка:"
 
-#: ../gtk/gtkfilechooserdefault.c:6431
+#: ../gtk/gtkfilechooserdefault.c:6432
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не може да се прочете съдържанието на %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6435
+#: ../gtk/gtkfilechooserdefault.c:6436
 msgid "Could not read the contents of the folder"
 msgstr "Съдържанието на папката не може да се прочете"
 
-#: ../gtk/gtkfilechooserdefault.c:6528 ../gtk/gtkfilechooserdefault.c:6596
-#: ../gtk/gtkfilechooserdefault.c:6741
+#: ../gtk/gtkfilechooserdefault.c:6529 ../gtk/gtkfilechooserdefault.c:6597
+#: ../gtk/gtkfilechooserdefault.c:6742
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: ../gtk/gtkfilechooserdefault.c:6543
+#: ../gtk/gtkfilechooserdefault.c:6544
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6545
+#: ../gtk/gtkfilechooserdefault.c:6546
 msgid "Yesterday at %H:%M"
 msgstr "Вчера в %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7211
+#: ../gtk/gtkfilechooserdefault.c:7212
 msgid "Cannot change to folder because it is not local"
 msgstr "Не може да е тази папка, защото тя не е локална"
 
-#: ../gtk/gtkfilechooserdefault.c:7808 ../gtk/gtkfilechooserdefault.c:7829
+#: ../gtk/gtkfilechooserdefault.c:7809 ../gtk/gtkfilechooserdefault.c:7830
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Клавишната комбинация „%s“ вече съществува"
 
-#: ../gtk/gtkfilechooserdefault.c:7919
+#: ../gtk/gtkfilechooserdefault.c:7920
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Клавишната комбинация „%s“ не съществува"
 
-#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8175 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Вече съществува файл с име „%s“. Искате ли да го замените?"
 
-#: ../gtk/gtkfilechooserdefault.c:8177 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8178 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1994,15 +1994,15 @@ msgstr ""
 "Вече съществува файл с такова име в „%s“. Замяната му ще унищожи старото му "
 "съдържание."
 
-#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8183 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Замяна"
 
-#: ../gtk/gtkfilechooserdefault.c:8826
+#: ../gtk/gtkfilechooserdefault.c:8827
 msgid "Could not start the search process"
 msgstr "Търсещият процес не беше стартиран"
 
-#: ../gtk/gtkfilechooserdefault.c:8827
+#: ../gtk/gtkfilechooserdefault.c:8828
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2010,15 +2010,15 @@ msgstr ""
 "Програмата не успя да създаде връзка към индексиращия демон. Проверете дали "
 "той работи."
 
-#: ../gtk/gtkfilechooserdefault.c:8841
+#: ../gtk/gtkfilechooserdefault.c:8842
 msgid "Could not send the search request"
 msgstr "Заявката за търсене не беше изпратена"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9031
 msgid "Search:"
 msgstr "Търсене:"
 
-#: ../gtk/gtkfilechooserdefault.c:9634
+#: ../gtk/gtkfilechooserdefault.c:9635
 #, c-format
 msgid "Could not mount %s"
 msgstr "„%s“ не може да се монтира"
@@ -2405,12 +2405,12 @@ msgid "Cl_ear"
 msgstr "_Изчистване"
 
 #. Open Link
-#: ../gtk/gtklabel.c:5680
+#: ../gtk/gtklabel.c:5685
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5692
+#: ../gtk/gtklabel.c:5697
 msgid "Copy _Link Address"
 msgstr "Копиране на _адреса на връзка"
 
@@ -2554,7 +2554,7 @@ msgstr "Обвивка zsh"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Процесът с ид. пр. %d не може да бъде приключен: %s"
 
-#: ../gtk/gtknotebook.c:4698 ../gtk/gtknotebook.c:7260
+#: ../gtk/gtknotebook.c:4701 ../gtk/gtknotebook.c:7266
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -5127,7 +5127,7 @@ msgstr "За отпечатването на файла „%s“ на принт
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "За отпечатването на принтера %s се изисква идентификация<"
+msgstr "За отпечатването на принтера %s се изисква идентификация"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:824
 #, c-format
