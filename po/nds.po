@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-23 15:16-0500\n"
-"PO-Revision-Date: 2010-02-25 12:43+0100\n"
+"PO-Revision-Date: 2010-03-08 11:11+0100\n"
 "Last-Translator: Nils-Christoph Fiedler <fiedler@medienkompanie.de>\n"
 "Language-Team: German, Low <nds-lowgerman@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1233,7 +1233,7 @@ msgstr "COLORS"
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:93
 msgid "Make X calls synchronous"
-msgstr ""
+msgstr "Makt X synchron"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
@@ -1249,12 +1249,12 @@ msgstr "Mak %s op"
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mak %d Element op."
+msgstr[1] "Mak %d Elemente op"
 
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
-msgstr ""
+msgstr "Kann Link nicht anzeigen"
 
 #: gtk/gtkaboutdialog.c:365
 #: gtk/gtkaboutdialog.c:2263
@@ -1477,7 +1477,7 @@ msgstr "%Y"
 #: gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
-msgstr ""
+msgstr "Deaktivert"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
@@ -1502,7 +1502,7 @@ msgstr ""
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:188
 #: gtk/gtkcolorbutton.c:559
@@ -1531,7 +1531,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:390
 msgid "_Saturation:"
-msgstr ""
+msgstr "_Sattheit:"
 
 #: gtk/gtkcolorsel.c:391
 msgid "\"Deepness\" of the color."
@@ -1539,7 +1539,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:392
 msgid "_Value:"
-msgstr ""
+msgstr "_Wert:"
 
 #: gtk/gtkcolorsel.c:393
 msgid "Brightness of the color."
@@ -1555,7 +1555,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:396
 msgid "_Green:"
-msgstr ""
+msgstr "_Greun:"
 
 #: gtk/gtkcolorsel.c:397
 msgid "Amount of green light in the color."
@@ -1563,7 +1563,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:398
 msgid "_Blue:"
-msgstr ""
+msgstr "_Blau:"
 
 #: gtk/gtkcolorsel.c:399
 msgid "Amount of blue light in the color."
@@ -1576,7 +1576,7 @@ msgstr "Döörsichtigk_eit:"
 #: gtk/gtkcolorsel.c:409
 #: gtk/gtkcolorsel.c:419
 msgid "Transparency of the color."
-msgstr ""
+msgstr "Döörschienenklöör."
 
 #: gtk/gtkcolorsel.c:426
 msgid "Color _name:"
@@ -1620,7 +1620,7 @@ msgstr ""
 
 #: gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
-msgstr ""
+msgstr "Klöörutwahl"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -1655,7 +1655,7 @@ msgstr ""
 #: gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Eegene Gröte %d"
 
 #: gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
@@ -1759,7 +1759,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1593
 #, c-format
 msgid "%1$s on %2$s"
-msgstr ""
+msgstr "%1$s an %2$s"
 
 #: gtk/gtkfilechooserdefault.c:1769
 msgid "Search"
@@ -1792,7 +1792,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:2872
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr ""
+msgstr "Leseteken '%s' löschen"
 
 #: gtk/gtkfilechooserdefault.c:2874
 #, c-format
@@ -3546,7 +3546,7 @@ msgstr "_Drucken"
 #: gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr ""
+msgstr "Druckut_blick"
 
 #: gtk/gtkstock.c:412
 msgctxt "Stock label"
@@ -3629,7 +3629,7 @@ msgstr "_Stop"
 #: gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
-msgstr ""
+msgstr "_Döörstrieken"
 
 #: gtk/gtkstock.c:431
 msgctxt "Stock label"
@@ -4918,7 +4918,7 @@ msgstr ""
 #: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr ""
+msgstr "Künn de Datei '%s' nich opmaken: %s"
 
 #: gtk/updateiconcache.c:1471
 #, c-format
@@ -4977,7 +4977,7 @@ msgstr ""
 #: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
-msgstr ""
+msgstr "Datei nich funnen: %s\n"
 
 #: gtk/updateiconcache.c:1689
 #, c-format
@@ -5443,12 +5443,12 @@ msgstr ""
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
-msgstr ""
+msgstr "Orderreeg"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
-msgstr ""
+msgstr "de Drucker is ut or hett keen Strom"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:829
