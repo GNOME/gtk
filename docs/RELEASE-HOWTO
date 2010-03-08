@@ -101,7 +101,7 @@ Without those packages make distcheck will *not* pass.
     summary of changes.
 
 18) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
-    gtk-devel-list. Set reply-to to gnome-hackers.
+    gtk-devel-list. Set reply-to to desktop-devel-list.
 
 19) Add a link to the release announcement to www.gtk.org which lives
-    in the gtk-web cvs module.
+    in the gtk-web git module.
