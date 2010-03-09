@@ -363,6 +363,17 @@ def process_keysymstxt():
 	""" Allows to import Multi_key sequences """
 	keysymdb['Multi_key'] = 0xff20
 
+        keysymdb['zerosubscript'] = 0x2080
+        keysymdb['onesubscript'] = 0x2081
+        keysymdb['twosubscript'] = 0x2082
+        keysymdb['threesubscript'] = 0x2083
+        keysymdb['foursubscript'] = 0x2084
+        keysymdb['fivesubscript'] = 0x2085
+        keysymdb['sixsubscript'] = 0x2086
+        keysymdb['sevensubscript'] = 0x2087
+        keysymdb['eightsubscript'] = 0x2088
+        keysymdb['ninesubscript'] = 0x2089
+
 	return keysymdb
 
 def keysymvalue(keysym, file = "n/a", linenum = 0):
