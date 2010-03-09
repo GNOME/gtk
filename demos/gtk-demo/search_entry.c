@@ -316,11 +316,11 @@ do_search_entry (GtkWidget *do_widget)
       /* Create the menu */
       menu = create_search_menu (entry);
       gtk_menu_attach_to_widget (GTK_MENU (menu), entry, NULL);
-    }
 
-  /* add accessible alternatives for icon functionality */
-  g_signal_connect (entry, "populate-popup",
-                    G_CALLBACK (entry_populate_popup), NULL);
+      /* add accessible alternatives for icon functionality */
+      g_signal_connect (entry, "populate-popup",
+                        G_CALLBACK (entry_populate_popup), NULL);
+    }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
