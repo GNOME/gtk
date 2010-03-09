@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-23 15:16-0500\n"
+"POT-Creation-Date: 2010-03-09 12:36-0500\n"
 "PO-Revision-Date: 2006-07-18 17:40+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -60,7 +60,7 @@ msgstr "དཔེ་ཚད་རེའི་ བིཊིསི།"
 msgid "The number of bits per sample"
 msgstr "དཔེ་ཚད་རེའི་ བིཊིསི་གི་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "རྒྱ་ཚད།"
 
@@ -68,7 +68,7 @@ msgstr "རྒྱ་ཚད།"
 msgid "The number of columns of the pixbuf"
 msgstr "པར་ཁོངས་ཀྱི་ ཀེར་ཐིག་གྱངས་ཁ།"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:641
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:642
 msgid "Height"
 msgstr "མཐོ་ཚད།"
 
@@ -279,7 +279,7 @@ msgstr "བྱ་བའི་དོན་ལུ་ མཐུན་མིང་�
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1535
 msgid "Label"
 msgstr "ཁ་ཡིག"
 
@@ -772,7 +772,7 @@ msgid "The amount of space between children"
 msgstr "ཆ་ལག་གི་བར་ན་ བར་སྟོང་གི་ཚད།"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1588
 msgid "Homogeneous"
 msgstr "རིགས་མཐུན་པའི།"
 
@@ -781,7 +781,7 @@ msgid "Whether the children should all be the same size"
 msgstr "ཆ་ལག་ཆ་མཉམ་རང་ ཆེ་ཆུང་འདྲན་འདྲ་ འོང་དགོཔ་ཨིན་ན་མེན།"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
+#: gtk/gtktoolitemgroup.c:1595 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "རྒྱ་འཕར།"
@@ -790,7 +790,7 @@ msgstr "རྒྱ་འཕར།"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "རྩ་ལག་སྦོམ་འགྱོཝ་ད་ ཆ་ལག་དེ་ལུ་ཡང་ བར་སྟོང་ཐེབས་འཐོབ་དགོ་ག་མིན་དགོ"
 
-#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1602
 msgid "Fill"
 msgstr "བཀང༌།"
 
@@ -823,7 +823,7 @@ msgstr ""
 "བརྐྱབས་མ་བརྐྱབས་ཀྱི་ སྤུས་ཚད་ལེགས་བཅོས་སྟོནམ་ཨིན།"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1616
 msgid "Position"
 msgstr "གནས་ས།"
 
@@ -1486,11 +1486,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "གདོང་གཞིའི་ཚོས་གཞི་ ཇི་ཌི་ཀེ་ཚོས་གཞི་ བཟུམ་ཅིག་སྦེ།"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "ཞུན་དག་འབད་བཏུབ།"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "ཚིག་ཡིག་དེ་ ལག་ལེན་པ་གིས་ ལེགས་བཅོས་འབད་བཏུབ་ག་མི་བཏུབ།"
 
@@ -2340,7 +2340,7 @@ msgstr "སྣ་མང་གྱལ་རིམ་གྱི་སྦྱར་བ
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:657
 msgid "Overwrite mode"
 msgstr "ཚབ་སྲུང་འབད་ནིའི་ཐབས་ལམ།"
 
@@ -2560,12 +2560,12 @@ msgstr "ལས་རྟགས་ངོས་དཔར་གྱི་མིང༌
 msgid "Secondary icon tooltip markup"
 msgstr "གནད་གལ་ཆུང་བའི་ཚིག་ཡིག"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:685
 #, fuzzy
 msgid "IM module"
 msgstr "སྔོན་སྒྲིག་རྒྱ་ཚད།"
 
-#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:686
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "པེ་ལེཊི་ཅིག་ ལག་ལེན་འཐབ་དགོཔ་ཨིན་ན་མེན།"
@@ -2745,7 +2745,7 @@ msgid "Space to put between the label and the child"
 msgstr "ཁ་ཡིག་དང་ ཆ་ལག་གི་་བར་ན་ བཙུགས་ནིའི་བར་སྟོང༌།"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
-#: gtk/gtktoolitemgroup.c:1540
+#: gtk/gtktoolitemgroup.c:1542
 msgid "Label widget"
 msgstr "ཁ་ཡིག་གི་ ཝིཌ་གེཊི།"
 
@@ -2753,11 +2753,11 @@ msgstr "ཁ་ཡིག་གི་ ཝིཌ་གེཊི།"
 msgid "A widget to display in place of the usual expander label"
 msgstr "ཨ་རྟག་གི་འཕར་བྱེད་ ཁ་ཡིག་ཚབ་ལུ་ བཀྲམ་སྟོན་འབད་ནིའི་ ཝིཌ་གེཊི་ཅིག"
 
-#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1570 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "འཕར་བྱེད་ཀྱི་ཚད།"
 
-#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1571 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "འཕར་བྱེད་མདའ་རྟགས་ཀྱི་ཚད།"
 
@@ -2907,19 +2907,19 @@ msgstr "ཡིག་སྣོད་བཀོལ་སྤྱོད་ཚུ་ས
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "ཡིག་སྣོད་གསར་བསྐྲུན་འབད་ནིའམ་སྤྱོད་ནིའི་ ཨེབ་རྟ་ཚུ་ བཀྲམ་སྟོན་འབད་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkfixed.c:90 gtk/gtklayout.c:596
+#: gtk/gtkfixed.c:90 gtk/gtklayout.c:597
 msgid "X position"
 msgstr "ཨེགསི་གནས་ས།"
 
-#: gtk/gtkfixed.c:91 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:91 gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr "ཆ་ལག་ཝིཌི་གེཊི་གི་ ཨེགསི་གནས་ས།"
 
-#: gtk/gtkfixed.c:100 gtk/gtklayout.c:606
+#: gtk/gtkfixed.c:100 gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "ཝའི་གནས་ས།"
 
-#: gtk/gtkfixed.c:101 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:101 gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "ཆ་ལག་ཝིཌི་གེཊི་གི་ ཝའི་གནས་ས།"
 
@@ -3344,7 +3344,7 @@ msgstr "ཁ་ཡིག་གི་ཚིག་ཡིག་དེ།"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "ཁ་ཡིག་གི་ཚིག་ཡིག་ལུ་ འཇུག་སྤྱོད་འབད་ནིའི་ བཟོ་རྣམ་ཁྱད་ཆོས་ཀྱི་ ཐོ་ཡིག་ཅིག"
 
-#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "ལྟེམས་བཅོས།"
 
@@ -3456,27 +3456,27 @@ msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "ཆེད་དམིགས་འབད་བའི་སྐབས་ སེལ་འཐུ་འབད་བཏུབ་པའི་ཁ་ཡིག་དེ་གི་ནང་དོན་ཚུ་ སེལ་འཐུ་འབད་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtklayout.c:616 gtk/gtkviewport.c:106
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
 msgstr "ཐད་སྙོམས་་བདེ་སྒྲིག"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "ཐད་སྙོམས་གནས་ལུགས་ཀྱི་དོན་ལུ་ GtkAdjustment"
 
-#: gtk/gtklayout.c:624 gtk/gtkviewport.c:114
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:114
 msgid "Vertical adjustment"
 msgstr "ཀེར་ཕྲང་བདེ་སྒྲིག"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "ཀེར་ཕྲང་གནས་སའི་དོན་ལས་ GtkAdjustment།"
 
-#: gtk/gtklayout.c:633
+#: gtk/gtklayout.c:634
 msgid "The width of the layout"
 msgstr "སྒྲིག་བཀོད་ཀྱི་རྒྱ་ཚད།"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:643
 msgid "The height of the layout"
 msgstr "སྒྲིག་བཀོད་ཀྱི་མཐོ་ཚད།"
 
@@ -4175,20 +4175,20 @@ msgstr "བསྐུམས།"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "བདེན་པ་ཨིན་པ་ཅིན་ ཆ་ལག་དེ་ དགོས་ཚད་དེ་ལས་ ཆུང་ཀུ་བཟོ་བཏུབ།"
 
-#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:312
+#: gtk/gtkplug.c:171 gtk/gtkstatusicon.c:312
 msgid "Embedded"
 msgstr ""
 
-#: gtk/gtkplug.c:151
+#: gtk/gtkplug.c:172
 #, fuzzy
 msgid "Whether or not the plug is embedded"
 msgstr "གནས་ཚད་ངོས་དཔར་དེ་ མཐོང་ཚུགསཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtkplug.c:165
+#: gtk/gtkplug.c:186
 msgid "Socket Window"
 msgstr ""
 
-#: gtk/gtkplug.c:166
+#: gtk/gtkplug.c:187
 #, fuzzy
 msgid "The window of the socket the plug is embedded in"
 msgstr "གནས་ཚད་ངོས་དཔར་དེ་ མཐོང་ཚུགསཔ་ཨིན་ན་མེན།"
@@ -6133,7 +6133,7 @@ msgstr ""
 "མཐུན་འགྱུར་་ཚུལ་བཞིན་འབདཝ་ལས་ འོས་སྦྱོར་ཡོད། པང་གོ་གིས་ PANGO_SCALE_X_LARGE བཟུམ་མའི་ཆ་ཚད་"
 "ལ་ལོ་ཅིག་ སྔོན་འཛིན་འབདཝ་ཨིན།"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:595
 msgid "Left, right, or center justification"
 msgstr "གཡོན་ཕྲང་ གཡས་ཕྲང་ ཡང་ཅིན་ དབུས་ཕྲང༌།"
 
@@ -6150,7 +6150,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "གཡོན་མཐའི་ས་སྟོང༌། "
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:604
 msgid "Width of the left margin in pixels"
 msgstr "གཡོན་མཐའི་ས་སྟོང་གི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
@@ -6158,15 +6158,15 @@ msgstr "གཡོན་མཐའི་ས་སྟོང་གི་རྒྱ་
 msgid "Right margin"
 msgstr "གཡས་མཐའི་ས་སྟོང༌།"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:614
 msgid "Width of the right margin in pixels"
 msgstr "གཡས་མཐའི་ས་སྟོང་གི་རྒྱ་ཚད་ པིག་སེལསི་ནང༌།"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:623
 msgid "Indent"
 msgstr "འགོ་མཚམས༌།"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:624
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "དོན་མཚམས་ཀྱི་ འགོ་མཚམས་ཆེ་ཆུང་ པིག་སེལསི་ནང༌།"
 
@@ -6182,7 +6182,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "གྱལ་རིམ་ཚུ་གི་ལྟག་གི་ པིག་སེལསི།"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:548
 msgid "Pixels of blank space above paragraphs"
 msgstr "དོན་མཚམས་ཚུ་གི་ལྟག་ལུ་ བར་སྟོང་གི་པིག་སེལསི།"
 
@@ -6190,7 +6190,7 @@ msgstr "དོན་མཚམས་ཚུ་གི་ལྟག་ལུ་ བ�
 msgid "Pixels below lines"
 msgstr "གྱལ་རིམ་ཚུ་གི་འོག་ལུ་ པིག་སེལསི།"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:558
 msgid "Pixels of blank space below paragraphs"
 msgstr "དོན་མཚམས་ཚུ་གི་འོག་ལུ་ བར་སྟོང་གི་པིག་སེལསི།"
 
@@ -6198,22 +6198,22 @@ msgstr "དོན་མཚམས་ཚུ་གི་འོག་ལུ་ བ�
 msgid "Pixels inside wrap"
 msgstr "ལོག་མཚམས་ནང་འཁོད་ལུ་ པིག་སེལསི།"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:568
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "དོན་མཚམས་ནང་ ལོག་མཚམས་བཟོ་སྟེ་ཡོད་མི་ གྱལ་རིམ་ཚུ་གི་བར་ན་ བར་སྟོང་གི་པིག་སེལསི།"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:586
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "གྱལ་རིམ་ཚུ་ རྩ་ལས་རང་ མ་ལོག་པར་བཞག་ནི་ཨིན་ན་ མིང་ཚིག་གི་མཐའ་མཚམས་ལུ་ ལོག་མཚམས་བཟོ་ནི་ཨིན་ན་ "
 "ཡིག་འབྲུའི་མཐའ་མཚམས་ལུ་ ལོག་མཚམས་བཟོ་ནི་ཨིན་ན་མེན།"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:633
 msgid "Tabs"
 msgstr "མཆོང་ལྡེ།"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:634
 msgid "Custom tabs for this text"
 msgstr "ཚིག་ཡིག་འདི་གི་དོན་ལུ་ སྲོལ་སྒྲིག་གི་མཆོང་ལྡེ།"
 
@@ -6359,63 +6359,63 @@ msgstr "དོན་མཚམས་རྒྱབ་གཞིའི་ཆ་ཚན
 msgid "Whether this tag affects the paragraph background color"
 msgstr "ངོ་རྟགས་འདི་གིས་ དོན་མཚམས་རྒྱབ་གཞི་ཚོས་གཞི་ལུ་ ཕན་གནོད་ཡོད་ག་མེད།"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:547
 msgid "Pixels Above Lines"
 msgstr "གྱལ་རིམ་ལྟག་གི་ པིག་སེལསི།"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Pixels Below Lines"
 msgstr "གྱལ་རིམ་འོག་གི་ པིག་སེལསི།"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:567
 msgid "Pixels Inside Wrap"
 msgstr "ལོག་མཚམས་ནང་གི་ པིག་སེལསི།"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:585
 msgid "Wrap Mode"
 msgstr "ལོག་མཚམས་ཐབས་ལམ།"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:603
 msgid "Left Margin"
 msgstr "གཡོན་གྱི་ས་སྟོང༌།"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Right Margin"
 msgstr "གཡས་ཀྱི་ས་སྟོང༌།"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "Cursor Visible"
 msgstr "འོད་རྟགས་མཐོང་ཚུགསཔ།"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:642
 msgid "If the insertion cursor is shown"
 msgstr "བར་བཙུགས་འོད་རྟགས་དེ་ སྟོན་པ་ཅིན།"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "Buffer"
 msgstr "གནད་ཁོངས།"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:650
 msgid "The buffer which is displayed"
 msgstr "བཀྲམ་སྟོན་འབད་ཡོད་མི་ གནད་ཁོངས་དེ།"
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:658
 msgid "Whether entered text overwrites existing contents"
 msgstr "ཐོ་བཀོད་འབད་མི་ ཚིག་ཡིག་གིས་ ད་ལྟོ་ཡོད་མི་ནང་དོན་ཚུ་ ཚབ་སྲུང་འབདཝ་ཨིན་ན་མེན།"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Accepts tab"
 msgstr "ཨེབ་ལྡེ་དང་ལེན་འབདཝ་ཨིན།"
 
-#: gtk/gtktextview.c:665
+#: gtk/gtktextview.c:666
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ཨེབ་ལྡེ་གིས་ད་ལྟོ་ཐོ་བཀོད་འབད་བའི་བསྒང་ཡོད་མི་ མཆོང་ལྡེ་ཡིག་འབྲུ་ཅིག་ལུ་ འགྱུར་ག་མི་འགྱུར།"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Error underline color"
 msgstr "འོག་ཐིག་ཚོས་གཞི་ལུ་འཛོལ་བ།"
 
-#: gtk/gtktextview.c:695
+#: gtk/gtktextview.c:696
 msgid "Color with which to draw error-indication underlines"
 msgstr "འཛོལ་བའི་བརྡ་སྟོན་གྱི་ འོག་ཐིག་བརྐྱབ་ནིའི་ཚོས་གཞི།"
 
@@ -6487,7 +6487,7 @@ msgstr "ངོས་དཔར་ཚད་ཀྱི་རྒྱུ་དངོས
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "ལག་ཆས་རིང་དེ་སྦོམ་འགྱོཝ་ད་ རྣམ་གྲངས་དེ་ལུ་ བར་སྟོང་ཐེབས་འཐོབ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1589
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "རྣམ་གྲངས་དེ་གི་ཚད་ཡང་ རིགས་མཐུན་པའི་ རྣམ་གྲངས་གཞན་གྱི་ ཚད་དང་འདྲ་མཉམ་ དགོཔ་ཨིན་ན་མེན།"
 
@@ -6587,74 +6587,74 @@ msgstr ""
 "ལག་ཆས་ཕྲ་རིང་གི་རྣམ་གྲངས་དེ་ གལ་ཅན་སྦེ་བརྩིཝ་ཨིན་ན་མེན། ངེས་བདེན་གྱི་སྐབས་ ལག་ཆས་ཕྲ་རིང་གི་ ཨེབ་རྟ་"
 "ཚུ་གིས་ ཚིག་ཡིག་ཚུ་ GTK_TOOLBAR_BOTH_HORIZ ཐབས་ལམ་ནང་སྟོནམ་ཨིན།"
 
-#: gtk/gtktoolitemgroup.c:1534
+#: gtk/gtktoolitemgroup.c:1536
 #, fuzzy
 msgid "The human-readable title of this item group"
 msgstr "གནས་ལུགས་དེ་གི་ མི་གིས་ལྷག་ཚུགས་པའི་འགྲེལ་བཤད་ཅིག"
 
-#: gtk/gtktoolitemgroup.c:1541
+#: gtk/gtktoolitemgroup.c:1543
 #, fuzzy
 msgid "A widget to display in place of the usual label"
 msgstr "ཨ་རྟག་གི་་གཞི་ཁྲམ་ཁ་ཡིག་གི་ཚབ་ལུ་ བཀྲམ་སྟོན་འབད་ནིའི་ ཝིཌི་གེཊི།"
 
-#: gtk/gtktoolitemgroup.c:1547
+#: gtk/gtktoolitemgroup.c:1549
 msgid "Collapsed"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1548
+#: gtk/gtktoolitemgroup.c:1550
 #, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
 msgstr "འཕར་བྱེད་ཆ་ལག་གི་ ཝིཌ་གེཊི་ ཕྱིར་གསལ་གྱི་དོན་ལུ་ ཁ་ཕྱེ་སྟེ་ཡོད་ག་མེད།"
 
-#: gtk/gtktoolitemgroup.c:1554
+#: gtk/gtktoolitemgroup.c:1556
 #, fuzzy
 msgid "ellipsize"
 msgstr "ཚིག་ཚབ་བཟོ།"
 
-#: gtk/gtktoolitemgroup.c:1555
+#: gtk/gtktoolitemgroup.c:1557
 msgid "Ellipsize for item group headers"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1561
+#: gtk/gtktoolitemgroup.c:1563
 #, fuzzy
 msgid "Header Relief"
 msgstr "མགོ་ཡིག་ཚུ་ ཨེབ་གཏང་འབད་བཏུབ།"
 
-#: gtk/gtktoolitemgroup.c:1562
+#: gtk/gtktoolitemgroup.c:1564
 #, fuzzy
 msgid "Relief of the group header button"
 msgstr "ཀེར་ཐིག་མགོ་ཡིག་ཨེབ་རྟ་ཚུ་སྟོན།"
 
-#: gtk/gtktoolitemgroup.c:1577
+#: gtk/gtktoolitemgroup.c:1579
 #, fuzzy
 msgid "Header Spacing"
 msgstr "གཡོན་གྱི་བར་ཤབས།"
 
-#: gtk/gtktoolitemgroup.c:1578
+#: gtk/gtktoolitemgroup.c:1580
 #, fuzzy
 msgid "Spacing between expander arrow and caption"
 msgstr "འཕར་བྱེད་མདའ་རྟགས་ཀྱི་མཐའ་སྐོར་ལུ་ བར་སྟོང་བཞག་ཐངས།"
 
-#: gtk/gtktoolitemgroup.c:1594
+#: gtk/gtktoolitemgroup.c:1596
 #, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
 msgstr "ལག་ཆས་རིང་དེ་སྦོམ་འགྱོཝ་ད་ རྣམ་གྲངས་དེ་ལུ་ བར་སྟོང་ཐེབས་འཐོབ་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktoolitemgroup.c:1601
+#: gtk/gtktoolitemgroup.c:1603
 #, fuzzy
 msgid "Whether the item should fill the available space"
 msgstr "ཆ་ལག་ཆ་མཉམ་རང་ ཆེ་ཆུང་འདྲན་འདྲ་ འོང་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktoolitemgroup.c:1607
+#: gtk/gtktoolitemgroup.c:1609
 msgid "New Row"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1608
+#: gtk/gtktoolitemgroup.c:1610
 #, fuzzy
 msgid "Whether the item should start a new row"
 msgstr "རྣམ་གྲངས་ཚུ་ཨང་གྲངས་དང་བཅསཔ་སྦེ་ བཀྲམ་སྟོན་འབད་དགོཔ་ཨིན་ན་མེན།"
 
-#: gtk/gtktoolitemgroup.c:1615
+#: gtk/gtktoolitemgroup.c:1617
 #, fuzzy
 msgid "Position of the item within this group"
 msgstr "ཐིག་ཤིང་གུ་ རྟགས་ཀྱི་གནས་ས།"

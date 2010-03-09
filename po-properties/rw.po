@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 317\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-23 15:16-0500\n"
+"POT-Creation-Date: 2010-03-09 12:36-0500\n"
 "PO-Revision-Date: 2004-11-17 21:21-0700\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <en@li.org>\n"
@@ -69,7 +69,7 @@ msgstr ""
 msgid "The number of bits per sample"
 msgstr "Umubare Bya Urugero"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "Akarambararo"
 
@@ -78,7 +78,7 @@ msgstr "Akarambararo"
 msgid "The number of columns of the pixbuf"
 msgstr "Umubare Bya Inkingi Bya i"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:641
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:642
 msgid "Height"
 msgstr "uburebure"
 
@@ -317,7 +317,7 @@ msgstr "A Cyo nyine Izina: kugirango i Igikorwa"
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1535
 msgid "Label"
 msgstr "Akayobozi"
 
@@ -866,7 +866,7 @@ msgid "The amount of space between children"
 msgstr "Igiteranyo Bya Umwanya hagati"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1588
 msgid "Homogeneous"
 msgstr ""
 
@@ -876,7 +876,7 @@ msgid "Whether the children should all be the same size"
 msgstr "i Byose i Ingano"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
+#: gtk/gtktoolitemgroup.c:1595 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Agura"
@@ -886,7 +886,7 @@ msgstr "Agura"
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "i Akira Birenga Umwanya Ryari: i"
 
-#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1602
 msgid "Fill"
 msgstr "uzuza/shyiramo"
 
@@ -920,7 +920,7 @@ msgid ""
 msgstr "A i ni Na: Indango Kuri i Gutangira Cyangwa Impera Bya i"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1616
 msgid "Position"
 msgstr "umwanya"
 
@@ -1649,11 +1649,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Ibara Nka a"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:577
 msgid "Editable"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:578
 #, fuzzy
 msgid "Whether the text can be modified by the user"
 msgstr "i Umwandiko Byahinduwe ku i Ukoresha:"
@@ -2655,7 +2655,7 @@ msgstr "Kuri Kwemerera Igikubo Idosiye Kuri Byahiswemo"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
-#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:657
 #, fuzzy
 msgid "Overwrite mode"
 msgstr "Gusimbuza Ubwoko"
@@ -2879,12 +2879,12 @@ msgstr "Izina ry'Umukono"
 msgid "Secondary icon tooltip markup"
 msgstr "indanga Ibara"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:685
 #, fuzzy
 msgid "IM module"
 msgstr "uburyo"
 
-#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:686
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "a Urwunge rw'ibara:"
@@ -3073,7 +3073,7 @@ msgid "Space to put between the label and the child"
 msgstr "Kuri Gushyira hagati i Akarango Na i"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
-#: gtk/gtktoolitemgroup.c:1540
+#: gtk/gtktoolitemgroup.c:1542
 msgid "Label widget"
 msgstr ""
 
@@ -3082,11 +3082,11 @@ msgstr ""
 msgid "A widget to display in place of the usual expander label"
 msgstr "A Kuri Kugaragaza in Bya i Akarango"
 
-#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1570 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1571 gtk/gtktreeview.c:778
 #, fuzzy
 msgid "Size of the expander arrow"
 msgstr "Bya i Akambi"
@@ -3248,20 +3248,20 @@ msgstr "IDOSIYE Ibikorwa:"
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Utubuto kugirango Idosiye"
 
-#: gtk/gtkfixed.c:90 gtk/gtklayout.c:596
+#: gtk/gtkfixed.c:90 gtk/gtklayout.c:597
 msgid "X position"
 msgstr "X-Imiterere"
 
-#: gtk/gtkfixed.c:91 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:91 gtk/gtklayout.c:598
 #, fuzzy
 msgid "X position of child widget"
 msgstr "Ibirindiro Bya"
 
-#: gtk/gtkfixed.c:100 gtk/gtklayout.c:606
+#: gtk/gtkfixed.c:100 gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "Y-Imiterere"
 
-#: gtk/gtkfixed.c:101 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:101 gtk/gtklayout.c:608
 #, fuzzy
 msgid "Y position of child widget"
 msgstr "Ibirindiro Bya"
@@ -3761,7 +3761,7 @@ msgstr ""
 "A Urutonde Bya IMISUSIRE Ibiranga Kuri Gukurikiza Kuri i Umwandiko Bya i "
 "Akarango"
 
-#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr ""
 
@@ -3887,30 +3887,30 @@ msgstr "i gihishwe Idosiye Na"
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Kuri Guhitamo i Ibigize Bya Icyinjijwe Ryari: ni"
 
-#: gtk/gtklayout.c:616 gtk/gtkviewport.c:106
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:219
 #, fuzzy
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "kugirango i Gitambitse Ibirindiro"
 
-#: gtk/gtklayout.c:624 gtk/gtkviewport.c:114
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:114
 msgid "Vertical adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:226
 #, fuzzy
 msgid "The GtkAdjustment for the vertical position"
 msgstr "kugirango i Bihagaritse Ibirindiro"
 
-#: gtk/gtklayout.c:633
+#: gtk/gtklayout.c:634
 #, fuzzy
 msgid "The width of the layout"
 msgstr "Ubugari Bya i Imigaragarire"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:643
 #, fuzzy
 msgid "The height of the layout"
 msgstr "Ubuhagarike Bya i Imigaragarire"
@@ -4693,20 +4693,20 @@ msgstr "Kugabanuka"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "i Gitoya"
 
-#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:312
+#: gtk/gtkplug.c:171 gtk/gtkstatusicon.c:312
 msgid "Embedded"
 msgstr ""
 
-#: gtk/gtkplug.c:151
+#: gtk/gtkplug.c:172
 #, fuzzy
 msgid "Whether or not the plug is embedded"
 msgstr "i Igikorwa ni Kigaragara"
 
-#: gtk/gtkplug.c:165
+#: gtk/gtkplug.c:186
 msgid "Socket Window"
 msgstr ""
 
-#: gtk/gtkplug.c:166
+#: gtk/gtkplug.c:187
 #, fuzzy
 msgid "The window of the socket the plug is embedded in"
 msgstr "i Igikorwa ni Kigaragara"
@@ -6782,7 +6782,7 @@ msgstr ""
 "Ingano Nka a Gupima Umubarwa Bifitanye isano Kuri i Mburabuzi Intego- "
 "nyuguti Ingano Kuri Amahinduka ni Nka"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:595
 #, fuzzy
 msgid "Left, right, or center justification"
 msgstr "Iburyo: Cyangwa hagati"
@@ -6800,7 +6800,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marije-Ibumoso"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:604
 #, fuzzy
 msgid "Width of the left margin in pixels"
 msgstr "Bya i Ibumoso: Marije in Pigiseli"
@@ -6809,16 +6809,16 @@ msgstr "Bya i Ibumoso: Marije in Pigiseli"
 msgid "Right margin"
 msgstr "Marije y'Iburyo"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:614
 #, fuzzy
 msgid "Width of the right margin in pixels"
 msgstr "Bya i Iburyo: Marije in Pigiseli"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:623
 msgid "Indent"
 msgstr "siga marije"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:624
 #, fuzzy
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Kuri Ikurura i Igika in Pigiseli"
@@ -6835,7 +6835,7 @@ msgstr "Bya Umwandiko hejuru i munsi i NIBA ni in Pigiseli"
 msgid "Pixels above lines"
 msgstr "hejuru Imirongo"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:548
 #, fuzzy
 msgid "Pixels of blank space above paragraphs"
 msgstr "Bya Ahatanditseho Umwanya hejuru Ibika"
@@ -6845,7 +6845,7 @@ msgstr "Bya Ahatanditseho Umwanya hejuru Ibika"
 msgid "Pixels below lines"
 msgstr "munsi Imirongo"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:558
 #, fuzzy
 msgid "Pixels of blank space below paragraphs"
 msgstr "Bya Ahatanditseho Umwanya munsi Ibika"
@@ -6855,22 +6855,22 @@ msgstr "Bya Ahatanditseho Umwanya munsi Ibika"
 msgid "Pixels inside wrap"
 msgstr "Mo Imbere Gufunika"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:568
 #, fuzzy
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Bya Ahatanditseho Umwanya hagati Imirongo in a Igika"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:586
 #, fuzzy
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Kuri Gufunika Imirongo Nta narimwe ku ijambo Cyangwa ku Inyuguti"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:633
 msgid "Tabs"
 msgstr "isimbuka"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:634
 #, fuzzy
 msgid "Custom tabs for this text"
 msgstr "Kugena Amasimbuka kugirango iyi Umwandiko"
@@ -7047,70 +7047,70 @@ msgstr "Mbuganyuma Gushyiraho"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "iyi Itagi: i Mbuganyuma Ibara"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:547
 msgid "Pixels Above Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Pixels Below Lines"
 msgstr ""
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:567
 msgid "Pixels Inside Wrap"
 msgstr ""
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:585
 #, fuzzy
 msgid "Wrap Mode"
 msgstr "Uburyo bwo Gufunika:"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:603
 msgid "Left Margin"
 msgstr "Marije-Ibumoso"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Right Margin"
 msgstr "Marije y'Iburyo"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "Cursor Visible"
 msgstr ""
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:642
 #, fuzzy
 msgid "If the insertion cursor is shown"
 msgstr "i Iyinjizamo indanga ni"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "Buffer"
 msgstr ""
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:650
 #, fuzzy
 msgid "The buffer which is displayed"
 msgstr "ni"
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:658
 #, fuzzy
 msgid "Whether entered text overwrites existing contents"
 msgstr "Umwandiko Ibigize"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 #, fuzzy
 msgid "Accepts tab"
 msgstr "Isunika"
 
-#: gtk/gtktextview.c:665
+#: gtk/gtktextview.c:666
 #, fuzzy
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Igisubizo in a Isunika Inyuguti"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 #, fuzzy
 msgid "Error underline color"
 msgstr "Gucaho umurongo Ibara"
 
-#: gtk/gtktextview.c:695
+#: gtk/gtktextview.c:696
 #, fuzzy
 msgid "Color with which to draw error-indication underlines"
 msgstr "Na: Kuri Gushushanya Ikosa"
@@ -7197,7 +7197,7 @@ msgstr "i Igikorwa Itsinda ni Bikora"
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "i Ikintu Akira Birenga Umwanya Ryari: i Umwanyabikoresho"
 
-#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1589
 #, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "i Ikintu i Ingano Nka Ikindi"
@@ -7318,74 +7318,74 @@ msgstr ""
 "i Umwanyabikoresho Ikintu ni By'ingirakamaro Umwanyabikoresho Utubuto "
 "Garagaza Umwandiko in Ubwoko"
 
-#: gtk/gtktoolitemgroup.c:1534
+#: gtk/gtktoolitemgroup.c:1536
 #, fuzzy
 msgid "The human-readable title of this item group"
 msgstr "Umutwe Bya i Idirishya"
 
-#: gtk/gtktoolitemgroup.c:1541
+#: gtk/gtktoolitemgroup.c:1543
 #, fuzzy
 msgid "A widget to display in place of the usual label"
 msgstr "A Kuri Kugaragaza in Bya i Ikadiri Akarango"
 
-#: gtk/gtktoolitemgroup.c:1547
+#: gtk/gtktoolitemgroup.c:1549
 msgid "Collapsed"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1548
+#: gtk/gtktoolitemgroup.c:1550
 #, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
 msgstr "i Kuri i"
 
-#: gtk/gtktoolitemgroup.c:1554
+#: gtk/gtktoolitemgroup.c:1556
 #, fuzzy
 msgid "ellipsize"
 msgstr "Gushyiraho"
 
-#: gtk/gtktoolitemgroup.c:1555
+#: gtk/gtktoolitemgroup.c:1557
 msgid "Ellipsize for item group headers"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1561
+#: gtk/gtktoolitemgroup.c:1563
 #, fuzzy
 msgid "Header Relief"
 msgstr "Agaciro"
 
-#: gtk/gtktoolitemgroup.c:1562
+#: gtk/gtktoolitemgroup.c:1564
 #, fuzzy
 msgid "Relief of the group header button"
 msgstr "i Inkingi Umutwempangano Utubuto"
 
-#: gtk/gtktoolitemgroup.c:1577
+#: gtk/gtktoolitemgroup.c:1579
 #, fuzzy
 msgid "Header Spacing"
 msgstr "Wuzuza:"
 
-#: gtk/gtktoolitemgroup.c:1578
+#: gtk/gtktoolitemgroup.c:1580
 #, fuzzy
 msgid "Spacing between expander arrow and caption"
 msgstr "Akambi"
 
-#: gtk/gtktoolitemgroup.c:1594
+#: gtk/gtktoolitemgroup.c:1596
 #, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
 msgstr "i Ikintu Akira Birenga Umwanya Ryari: i Umwanyabikoresho"
 
-#: gtk/gtktoolitemgroup.c:1601
+#: gtk/gtktoolitemgroup.c:1603
 #, fuzzy
 msgid "Whether the item should fill the available space"
 msgstr "i Byose i Ingano"
 
-#: gtk/gtktoolitemgroup.c:1607
+#: gtk/gtktoolitemgroup.c:1609
 msgid "New Row"
 msgstr ""
 
-#: gtk/gtktoolitemgroup.c:1608
+#: gtk/gtktoolitemgroup.c:1610
 #, fuzzy
 msgid "Whether the item should start a new row"
 msgstr "Ibikubiyemo Kyongewe Kuri Ibikubiyemo"
 
-#: gtk/gtktoolitemgroup.c:1615
+#: gtk/gtktoolitemgroup.c:1617
 #, fuzzy
 msgid "Position of the item within this group"
 msgstr "Bya Ikimenyetso ku i Itegeko"
