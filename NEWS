@@ -1,3 +1,47 @@
+Overview of Changes from GTK+ 2.19.6 to 2.19.7
+==============================================
+
+* Bug fixes:
+ 611707 Move documentation from templates to inline comments
+  69872 GTK_WIDGET_SET_FLAGS should be deprecated
+ 612066 empathy hangs when clicked on information about contact...
+ 557420 Some compose sequences don't work anymore...
+ 569042 gailbooleancell does not seem to attend to changes...
+ 600992 File chooser reference counting issues
+ 610905 gtk_drag_source_set need instrospection hint
+ 611051 Search Entry Clear Icon not accessible
+ 611217 Incorrect translator comment
+ 611317 Document targets in drag and drop
+ 611319 gtk_window_set_transient_for undocumented NULL value for parent
+ 611658 Update documentation for gtkvscrollbar
+ 611662 Update documentation for gtkvseparator
+ 611686 focus_in/focus_out in gailtreeview.c should return FALSE...
+ 611831 Move documentation to inline comments: GtkVBox
+ 612119 Do not scroll when middle pasting
+
+* Translation updates:
+ Afrikaans
+ Arabic
+ Basque
+ British English
+ Bulgarian
+ Czech
+ Danish
+ French
+ Galician
+ German
+ Greek
+ Hungarian
+ Lithuanian
+ Low German
+ Norwegian bokmål
+ Polish
+ Portuguese
+ Russian
+ Slovenian
+ Swedish
+
+
 Overview of Changes from GTK+ 2.19.5 to 2.19.6
 ==============================================
 
