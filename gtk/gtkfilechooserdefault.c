@@ -762,13 +762,11 @@ shortcuts_free_row_data (GtkFileChooserDefault *impl,
       GtkFileSystemVolume *volume;
 
       volume = col_data;
-      _gtk_file_system_volume_free (volume);
+      _gtk_file_system_volume_unref (volume);
     }
-  else
+  if (shortcut_type == SHORTCUT_TYPE_FILE)
     {
       GFile *file;
-
-      g_assert (shortcut_type == SHORTCUT_TYPE_FILE);
 
       file = col_data;
       g_object_unref (file);
@@ -2015,7 +2013,14 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	    }
 	}
 
-      shortcuts_insert_file (impl, start_row + n, SHORTCUT_TYPE_VOLUME, volume, NULL, NULL, FALSE, SHORTCUTS_VOLUMES);
+      shortcuts_insert_file (impl,
+                             start_row + n,
+                             SHORTCUT_TYPE_VOLUME,
+                             _gtk_file_system_volume_ref (volume),
+                             NULL,
+                             NULL,
+                             FALSE,
+                             SHORTCUTS_VOLUMES);
       n++;
     }
 
@@ -3437,9 +3442,7 @@ shortcuts_query_tooltip_cb (GtkWidget             *widget,
       if (shortcut_type == SHORTCUT_TYPE_SEPARATOR)
 	return FALSE;
       else if (shortcut_type == SHORTCUT_TYPE_VOLUME)
-	{
-	  return FALSE;
-	}
+        return FALSE;
       else if (shortcut_type == SHORTCUT_TYPE_FILE)
 	{
 	  GFile *file;
@@ -9770,6 +9773,9 @@ shortcuts_activate_mount_enclosing_volume (GCancellable        *cancellable,
     _gtk_file_system_get_info (data->impl->file_system, data->file,
 			       "standard::type",
 			       shortcuts_activate_get_info_cb, data);
+
+  if (volume)
+    _gtk_file_system_volume_unref (volume);
 }
 
 static void

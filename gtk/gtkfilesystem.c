@@ -468,6 +468,8 @@ get_volumes_list (GtkFileSystem *file_system)
 
 	  priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (drive));
 	}
+
+      g_object_unref (drive);
     }
 
   g_list_free (drives);
@@ -499,6 +501,8 @@ get_volumes_list (GtkFileSystem *file_system)
           /* see comment above in why we add an icon for a volume */
           priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (volume));
         }
+
+      g_object_unref (volume);
     }
 
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
@@ -520,11 +524,13 @@ get_volumes_list (GtkFileSystem *file_system)
        */
       if (mount_referenced_by_volume_activation_root (volumes, mount))
         {
+          g_object_unref (mount);
           continue;
         }
 
       /* show this mount */
       priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (mount));
+      g_object_unref (mount);
     }
 
   g_list_free (volumes);
@@ -1025,6 +1031,8 @@ enclosing_volume_mount_cb (GObject      *source_object,
 
   if (error)
     g_error_free (error);
+
+  _gtk_file_system_volume_unref (volume);
 }
 
 GCancellable *
@@ -1802,8 +1810,22 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   return pixbuf;
 }
 
+GtkFileSystemVolume *
+_gtk_file_system_volume_ref (GtkFileSystemVolume *volume)
+{
+  if (IS_ROOT_VOLUME (volume))
+    return volume;
+
+  if (G_IS_MOUNT (volume)  ||
+      G_IS_VOLUME (volume) ||
+      G_IS_DRIVE (volume))
+    g_object_ref (volume);
+
+  return volume;
+}
+
 void
-_gtk_file_system_volume_free (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 {
   /* Root volume doesn't need to be freed */
   if (IS_ROOT_VOLUME (volume))
