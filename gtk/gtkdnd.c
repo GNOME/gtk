@@ -1216,9 +1216,10 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * gtk_drag_dest_set:
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
- * @targets: a pointer to an array of #GtkTargetEntry<!-- -->s indicating
- * the drop types that this @widget will accept. Later you can access the list
- * with gtk_drag_dest_get_target_list() and gtk_drag_dest_find_target().
+ * @targets (allow-none): a pointer to an array of #GtkTargetEntry<!-- -->s
+ *     indicating the drop types that this @widget will accept, or %NULL.
+ *     Later you can access the list with gtk_drag_dest_get_target_list()
+ *     and gtk_drag_dest_find_target().
  * @n_targets: the number of entries in @targets.
  * @actions: a bitmask of possible actions for a drop onto this @widget.
  *
@@ -2578,19 +2579,19 @@ gtk_drag_begin (GtkWidget         *widget,
 				  actions, button, event);
 }
 
-/*************************************************************
+/**
  * gtk_drag_source_set:
- *     Register a drop site, and possibly add default behaviors.
- *   arguments:
- *     widget:
- *     start_button_mask: Mask of allowed buttons to start drag
- *     targets:           Table of targets for this source
- *     n_targets:
- *     actions:           Actions allowed for this source
- *   results:
- *************************************************************/
-
-void 
+ * @widget: a #GtkWidget
+ * @start_button_mask: the bitmask of buttons that can start the drag
+ * @targets (allow-none): the table of targets that the drag will support,
+ *     may be %NULL
+ * @n_targets: the number of items in @targets
+ * @actions: the bitmask of possible actions for a drag from this widget
+ *
+ * Sets up a widget so that GTK+ will start a drag operation when the user
+ * clicks and drags on the widget. The widget must have a window.
+ */
+void
 gtk_drag_source_set (GtkWidget            *widget,
 		     GdkModifierType       start_button_mask,
 		     const GtkTargetEntry *targets,
