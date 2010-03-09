@@ -1216,11 +1216,11 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * gtk_drag_dest_set:
  * @widget: a #GtkWidget
  * @flags: which types of default drag behavior to use
- * @targets: (allow-none): a pointer to an array of #GtkTargetEntry<!-- -->s
+ * @targets: (allow-none) (array length=n_targets): a pointer to an array of #GtkTargetEntry<!-- -->s
  *     indicating the drop types that this @widget will accept, or %NULL.
  *     Later you can access the list with gtk_drag_dest_get_target_list()
  *     and gtk_drag_dest_find_target().
- * @n_targets: the number of entries in @targets.
+ * @n_targets: the number of entries in @targets
  * @actions: a bitmask of possible actions for a drop onto this @widget.
  *
  * Sets a widget as a potential drop destination, and adds default behaviors.
@@ -2583,7 +2583,7 @@ gtk_drag_begin (GtkWidget         *widget,
  * gtk_drag_source_set:
  * @widget: a #GtkWidget
  * @start_button_mask: the bitmask of buttons that can start the drag
- * @targets: (allow-none): the table of targets that the drag will support,
+ * @targets: (allow-none) (array length=n_targets): the table of targets that the drag will support,
  *     may be %NULL
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag from this widget
@@ -3410,7 +3410,7 @@ gtk_drag_set_icon_default (GdkDragContext *context)
  * gtk_drag_set_default_icon:
  * @colormap: the colormap of the icon
  * @pixmap: the image data for the icon
- * @mask: the transparency mask for an image.
+ * @mask: (allow-none): the transparency mask for an image, or %NULL
  * @hot_x: The X offset within @widget of the hotspot.
  * @hot_y: The Y offset within @widget of the hotspot.
  * 
