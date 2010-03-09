@@ -24,12 +24,9 @@
 <Multi_key> <T> <period> 			: "Ṫ" U1E6A
 <Multi_key> <t> <period> 			: "ṫ" U1E6B
 <Multi_key> <e> <period> 			: "ė" U0117
-<Multi_key> <slash> <C> 			: "¢" U00A2
-<Multi_key> <C> <slash> 			: "¢" U00A2
 <Multi_key> <C> <bar> 			: "¢" U00A2
 <Multi_key> <bar> <C> 			: "¢" U00A2
 <Multi_key> <minus> <l> 			: "£" U00A3
-<Multi_key> <equal> <L> 			: "£" U00A3
 <Multi_key> <equal> <l> 			: "£" U00A3
 <Multi_key> <L> <equal> 			: "£" U00A3
 <Multi_key> <l> <minus> 			: "£" U00A3
@@ -50,8 +47,6 @@
 <Multi_key> <Y> <minus> 			: "¥" U00A5
 <Multi_key> <y> <minus> 			: "¥" U00A5
 <Multi_key> <y> <equal> 			: "¥" U00A5
-<Multi_key> <exclam> <S> 			: "§" U00A7
-<Multi_key> <exclam> <s> 			: "§" U00A7
 <Multi_key> <0> <S> 			: "§" U00A7
 <Multi_key> <0> <s> 			: "§" U00A7
 <Multi_key> <O> <S> 			: "§" U00A7
@@ -68,11 +63,7 @@
 <Multi_key> <C> <O> 			: "©" U00A9
 <Multi_key> <C> <o> 			: "©" U00A9
 <Multi_key> <c> <0> 			: "©" U00A9
-<Multi_key> <c> <O> 			: "©" U00A9
-<Multi_key> <c> <o> 			: "©" U00A9
 <Multi_key> <A> <underscore> 			: "ª" U00AA
-<Multi_key> <underscore> <A> 			: "ª" U00AA
-<Multi_key> <underscore> <a> 			: "ª" U00AA
 <Multi_key> <a> <underscore> 			: "ª" U00AA
 <Multi_key> <C> <comma> 			: "Ç" U00C7
 <Multi_key> <minus> <minus> <space> 			: "­" U00AD
@@ -86,7 +77,6 @@
 <Multi_key> <asterisk> <0> 			: "°" U00B0
 <Multi_key> <0> <asterisk> 			: "°" U00B0
 <Multi_key> <0> <asciicircum> 			: "°" U00B0
-<Multi_key> <asciicircum> <0> 			: "°" U00B0
 <Multi_key> <minus> <plus> 			: "±" U00B1
 <Multi_key> <2> <S> 			: "²" U00B2
 <Multi_key> <2> <asciicircum> 			: "²" U00B2
@@ -114,8 +104,6 @@
 <Multi_key> <S> <1> 			: "¹" U00B9
 <Multi_key> <s> <1> 			: "¹" U00B9
 <Multi_key> <O> <underscore> 			: "º" U00BA
-<Multi_key> <underscore> <O> 			: "º" U00BA
-<Multi_key> <underscore> <o> 			: "º" U00BA
 <Multi_key> <o> <underscore> 			: "º" U00BA
 <Multi_key> <A> <grave> 			: "À" U00C0
 <Multi_key> <A> <apostrophe> 			: "Á" U00C1
@@ -267,7 +255,6 @@
 <Multi_key> <minus> <D> 			: "Đ" U0110
 <Multi_key> <D> <minus> 			: "Đ" U0110
 <Multi_key> <minus> <d> 			: "đ" U0111
-<Multi_key> <d> <minus> 			: "đ" U0111
 <Multi_key> <minus> <E> 			: "Ē" U0112
 <Multi_key> <E> <minus> 			: "Ē" U0112
 <Multi_key> <E> <underscore> 			: "Ē" U0112
@@ -275,10 +262,7 @@
 <Multi_key> <e> <minus> 			: "ē" U0113
 <Multi_key> <e> <underscore> 			: "ē" U0113
 <Multi_key> <E> <period> 			: "Ė" U0116
-<Multi_key> <period> <period> 			: "˙" U02D9
-<Multi_key> <comma> <E> 			: "Ę" U0118
 <Multi_key> <E> <comma> 			: "Ę" U0118
-<Multi_key> <comma> <e> 			: "ę" U0119
 <Multi_key> <e> <comma> 			: "ę" U0119
 <Multi_key> <less> <E> 			: "Ě" U011A
 <Multi_key> <E> <less> 			: "Ě" U011A
@@ -330,8 +314,6 @@
 <Multi_key> <N> <less> 			: "Ň" U0147
 <Multi_key> <less> <n> 			: "ň" U0148
 <Multi_key> <n> <less> 			: "ň" U0148
-<Multi_key> <O> <E> 			: "Œ" U0152
-<Multi_key> <o> <e> 			: "œ" U0153
 <Multi_key> <R> <apostrophe> 			: "Ŕ" U0154
 <Multi_key> <r> <apostrophe> 			: "ŕ" U0155
 <Multi_key> <R> <comma> 			: "Ŗ" U0156
