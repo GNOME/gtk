@@ -24,6 +24,60 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:gtkbox
+ * @Short_description: Base class for box containers
+ * @Title: GtkBox
+ * @See_also:i #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
+ *
+ * GtkBox is an abstract widget which encapsulates functionality for a
+ * particular kind of container, one that organizes a variable number of
+ * widgets into a rectangular area.  GtkBox has a number of derived
+ * classes, e.g. #GtkHBox and #GtkVBox.
+ *
+ * The rectangular area of a GtkBox is organized into either a single row
+ * or a single column of child widgets depending upon whether the box is
+ * of type #GtkHBox or #GtkVBox, respectively.  Thus, all children of a
+ * GtkBox are allocated one dimension in common, which is the height of a
+ * row, or the width of a column.
+ *
+ * GtkBox uses a notion of <emphasis>packing</emphasis>.  Packing refers to
+ * adding widgets with reference to a particular position in a
+ * #GtkContainer.  For a GtkBox, there are two reference positions: the
+ * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
+ * For a #GtkVBox, the start is defined as the top of the box and the end is
+ * defined as the bottom.  For a #GtkHBox the start is defined as the
+ * left side and the end is defined as the right side.
+ *
+ * Use repeated calls to gtk_box_pack_start() to pack widgets into a
+ * GtkBox from start to end.  Use gtk_box_pack_end() to add widgets from
+ * end to start.  You may intersperse these calls and add widgets from
+ * both ends of the same GtkBox.
+ *
+ * Use gtk_box_pack_start_defaults() or gtk_box_pack_end_defaults()
+ * to pack widgets into a GtkBox if you do not need to specify the
+ * #GtkBox:expand, #GtkBox:fill, or #GtkBox:padding child properties
+ * for the child to be added.
+ *
+ * Because GtkBox is a #GtkContainer, you may also use
+ * gtk_container_add() to insert widgets into the box, and they will be
+ * packed as if with gtk_box_pack_start_defaults().  Use
+ * gtk_container_remove() to remove widgets from the GtkBox.
+ *
+ * Use gtk_box_set_homogeneous() to specify whether or not all children
+ * of the GtkBox are forced to get the same amount of space.
+ *
+ * Use gtk_box_set_spacing() to determine how much space will be
+ * minimally placed between all children in the GtkBox.
+ *
+ * Use gtk_box_reorder_child() to move a GtkBox child to a different
+ * place in the box.
+ *
+ * Use gtk_box_set_child_packing() to reset the #GtkBox:expand,
+ * #GtkBox:fill and #GtkBox:padding child properties.
+ * Use gtk_box_query_child_packing() to query these fields.
+ */
+
 #include "config.h"
 
 #include "gtkbox.h"
