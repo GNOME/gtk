@@ -2268,7 +2268,7 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 /**
  * gtk_window_set_transient_for:
  * @window: a #GtkWindow
- * @parent: (allow-none): parent window
+ * @parent: (allow-none): parent window, or %NULL
  *
  * Dialog windows should be set transient for the main application
  * window they were spawned from. This allows <link
@@ -2278,12 +2278,13 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * functions in GTK+ will sometimes call
  * gtk_window_set_transient_for() on your behalf.
  *
- * On Windows, this function puts the child window on top of the parent, 
+ * Passing %NULL for @parent unsets the current transient window.
+ *
+ * On Windows, this function puts the child window on top of the parent,
  * much as the window manager would have done on X.
- * 
- **/
-void       
-gtk_window_set_transient_for  (GtkWindow *window, 
+ */
+void
+gtk_window_set_transient_for  (GtkWindow *window,
 			       GtkWindow *parent)
 {
   GtkWindowPrivate *priv;
