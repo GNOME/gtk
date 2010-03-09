@@ -3103,7 +3103,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 /**
  * gdk_drag_begin:
  * @window: the source window for this drag.
- * @targets: the list of offered targets.
+ * @targets: the offered targets, as list of #GdkAtom<!-- -->s
  * 
  * Starts a drag and creates a new drag context for it.
  *
