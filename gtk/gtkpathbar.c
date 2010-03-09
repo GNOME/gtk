@@ -1261,7 +1261,7 @@ set_button_image (GtkPathBar *path_bar,
 								 GTK_WIDGET (path_bar),
 								 path_bar->icon_size,
 								 NULL);
-      _gtk_file_system_volume_free (volume);
+      _gtk_file_system_volume_unref (volume);
 
       gtk_image_set_from_pixbuf (GTK_IMAGE (button_data->image), path_bar->root_icon);
       break;

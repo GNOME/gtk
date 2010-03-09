@@ -162,7 +162,8 @@ GdkPixbuf *           _gtk_file_system_volume_render_icon      (GtkFileSystemVol
 							        gint                  icon_size,
 							        GError              **error);
 
-void                  _gtk_file_system_volume_free             (GtkFileSystemVolume *volume);
+GtkFileSystemVolume  *_gtk_file_system_volume_ref              (GtkFileSystemVolume *volume);
+void                  _gtk_file_system_volume_unref            (GtkFileSystemVolume *volume);
 
 /* GtkFileSystemBookmark methods */
 void                   _gtk_file_system_bookmark_free          (GtkFileSystemBookmark *bookmark);

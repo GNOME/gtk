@@ -1586,7 +1586,7 @@ model_free_row_data (GtkFileChooserButton *button,
       g_object_unref (data);
       break;
     case ROW_TYPE_VOLUME:
-      _gtk_file_system_volume_free (data);
+      _gtk_file_system_volume_unref (data);
       break;
     default:
       break;
@@ -1777,11 +1777,16 @@ model_add_volumes (GtkFileChooserButton *button,
 	      GFile *base_file;
 
 	      base_file = _gtk_file_system_volume_get_root (volume);
-	      if (base_file != NULL && !g_file_is_native (base_file))
-		{
-		  _gtk_file_system_volume_free (volume);
-		  continue;
-		}
+	      if (base_file != NULL)
+                {
+                  if (!g_file_is_native (base_file))
+                    {
+                      g_object_unref (base_file);
+                      continue;
+                    }
+                  else
+                    g_object_unref (base_file);
+                }
 	    }
 	}
 
@@ -1796,7 +1801,7 @@ model_add_volumes (GtkFileChooserButton *button,
 			  ICON_COLUMN, pixbuf,
 			  DISPLAY_NAME_COLUMN, display_name,
 			  TYPE_COLUMN, ROW_TYPE_VOLUME,
-			  DATA_COLUMN, volume,
+			  DATA_COLUMN, _gtk_file_system_volume_ref (volume),
 			  IS_FOLDER_COLUMN, TRUE,
 			  -1);
 
@@ -2334,7 +2339,7 @@ update_label_and_image (GtkFileChooserButton *button)
 	  if (base_file)
 	    g_object_unref (base_file);
 
-	  _gtk_file_system_volume_free (volume);
+	  _gtk_file_system_volume_unref (volume);
 
 	  if (label_text)
 	    goto out;
