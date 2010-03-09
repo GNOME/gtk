@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-23 15:16-0500\n"
+"POT-Creation-Date: 2010-03-09 12:36-0500\n"
 "PO-Revision-Date: 2010-02-20 23:00+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -61,7 +61,7 @@ msgstr "Bitów na próbkę"
 msgid "The number of bits per sample"
 msgstr "Liczba bitów na próbkę"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:208
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "Szerokość"
 
@@ -69,7 +69,7 @@ msgstr "Szerokość"
 msgid "The number of columns of the pixbuf"
 msgstr "Liczba kolumn bufora piksmapy"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:641
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:642
 msgid "Height"
 msgstr "Wysokość"
 
@@ -280,7 +280,7 @@ msgstr "Unikalna nazwa dla czynności."
 
 #: gtk/gtkaction.c:200 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
 #: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
-#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1533
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1535
 msgid "Label"
 msgstr "Etykieta"
 
@@ -772,7 +772,7 @@ msgid "The amount of space between children"
 msgstr "Ilość miejsca pomiędzy elementami potomnymi"
 
 #: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1586
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1588
 msgid "Homogeneous"
 msgstr "Jednorodny"
 
@@ -782,7 +782,7 @@ msgstr ""
 "Określa, czy wszystkie elementy potomne powinny być tego samego rozmiaru"
 
 #: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
-#: gtk/gtktoolitemgroup.c:1593 gtk/gtktoolpalette.c:1052
+#: gtk/gtktoolitemgroup.c:1595 gtk/gtktoolpalette.c:1052
 #: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "Rozszerzanie"
@@ -793,7 +793,7 @@ msgstr ""
 "Określa, czy element potomny powinien otrzymywać dodatkową przestrzeń przy "
 "zwiększaniu elementu nadrzędnego"
 
-#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1600
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1602
 msgid "Fill"
 msgstr "Wypełnianie"
 
@@ -827,7 +827,7 @@ msgstr ""
 "wraz z odwołaniem do początku lub końca kontrolki nadrzędnej"
 
 #: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
-#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1614
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1616
 msgid "Position"
 msgstr "Pozycja"
 
@@ -1482,11 +1482,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Kolor elementu jako GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:577
 msgid "Editable"
 msgstr "Modyfikowalny"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
 msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
@@ -2354,7 +2354,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Rodzaj cienia rysowany wokół elementu, gdy opcja posiada-ramkę jest ustawiona"
 
-#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:657
 msgid "Overwrite mode"
 msgstr "Tryb nadpisywania"
 
@@ -2544,11 +2544,11 @@ msgstr "Znacznik podpowiedzi ikony podstawowej"
 msgid "Secondary icon tooltip markup"
 msgstr "Znacznik podpowiedzi ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:685
 msgid "IM module"
 msgstr "Moduł trybu wprowadzania"
 
-#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:686
 msgid "Which IM module should be used"
 msgstr "Określa, który moduł IM powinien być używany domyślnie"
 
@@ -2727,7 +2727,7 @@ msgid "Space to put between the label and the child"
 msgstr "Przestrzeń pomiędzy etykietą a elementem potomnym"
 
 #: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
-#: gtk/gtktoolitemgroup.c:1540
+#: gtk/gtktoolitemgroup.c:1542
 msgid "Label widget"
 msgstr "Widget etykiety"
 
@@ -2735,11 +2735,11 @@ msgstr "Widget etykiety"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Widget wyświetlany w miejscu zwykłej etykiety elementu rozwijającego"
 
-#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1568 gtk/gtktreeview.c:777
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1570 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "Rozmiar elementu rozwijającego"
 
-#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1569 gtk/gtktreeview.c:778
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1571 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "Rozmiar strzałki rozwijającej drzewo"
 
@@ -2889,19 +2889,19 @@ msgstr ""
 "Określa, czy powinny być wyświetlane przyciski, pozwalające na wykonywanie "
 "operacji na plikach lub na ich tworzenie"
 
-#: gtk/gtkfixed.c:90 gtk/gtklayout.c:596
+#: gtk/gtkfixed.c:90 gtk/gtklayout.c:597
 msgid "X position"
 msgstr "Położenie X"
 
-#: gtk/gtkfixed.c:91 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:91 gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr "Poziome położenie widgetu potomnego"
 
-#: gtk/gtkfixed.c:100 gtk/gtklayout.c:606
+#: gtk/gtkfixed.c:100 gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "Położenie Y"
 
-#: gtk/gtkfixed.c:101 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:101 gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "Pionowe położenie widgetu potomnego"
 
@@ -3318,7 +3318,7 @@ msgstr "Tekst etykiety"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Lista atrybutów stylu stosowanych do tekstu etykiety"
 
-#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Wyrównanie"
 
@@ -3433,27 +3433,27 @@ msgstr ""
 "Określa, czy zawartość etykiety powinna być zaznaczana przy otrzymaniu "
 "zaznaczenia"
 
-#: gtk/gtklayout.c:616 gtk/gtkviewport.c:106
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:106
 msgid "Horizontal adjustment"
 msgstr "Dopasowanie poziome"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:219
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Obiekt GtkAdjustment określający położenie poziome"
 
-#: gtk/gtklayout.c:624 gtk/gtkviewport.c:114
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:114
 msgid "Vertical adjustment"
 msgstr "Dopasowanie pionowe"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:226
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Obiekt GtkAdjustment, określający wartość położenia pionowego"
 
-#: gtk/gtklayout.c:633
+#: gtk/gtklayout.c:634
 msgid "The width of the layout"
 msgstr "Szerokość układu"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:643
 msgid "The height of the layout"
 msgstr "Wysokość układu"
 
@@ -4150,19 +4150,19 @@ msgstr ""
 "Po ustawieniu wartości TRUE element potomny może być mniejszy od swoich "
 "wymagań"
 
-#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:312
+#: gtk/gtkplug.c:171 gtk/gtkstatusicon.c:312
 msgid "Embedded"
 msgstr "Zagnieżdżona"
 
-#: gtk/gtkplug.c:151
+#: gtk/gtkplug.c:172
 msgid "Whether or not the plug is embedded"
 msgstr "Określa, czy wtyczka jest jest osadzona"
 
-#: gtk/gtkplug.c:165
+#: gtk/gtkplug.c:186
 msgid "Socket Window"
 msgstr "Okno gniazda"
 
-#: gtk/gtkplug.c:166
+#: gtk/gtkplug.c:187
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno gniazda, w którym osadzona jest wtyczka"
 
@@ -6091,7 +6091,7 @@ msgstr ""
 "definiuje standardowo kilka wartości skalujących, takich jak "
 "PANGO_SCALE_X_LARGE."
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:595
 msgid "Left, right, or center justification"
 msgstr "Wyrównanie do lewej, prawej, lub do środka"
 
@@ -6108,7 +6108,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:604
 msgid "Width of the left margin in pixels"
 msgstr "Szerokość lewego marginesu w pikselach"
 
@@ -6116,15 +6116,15 @@ msgstr "Szerokość lewego marginesu w pikselach"
 msgid "Right margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:614
 msgid "Width of the right margin in pixels"
 msgstr "Szerokość prawego marginesu w pikselach"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:623
 msgid "Indent"
 msgstr "Wcięcie"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:624
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Rozmiar wcięcia akapitu w pikselach"
 
@@ -6140,7 +6140,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:548
 msgid "Pixels of blank space above paragraphs"
 msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 
@@ -6148,7 +6148,7 @@ msgstr "Ilość wolnego miejsca nad akapitami w pikselach"
 msgid "Pixels below lines"
 msgstr "Pikseli nad wierszami"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:558
 msgid "Pixels of blank space below paragraphs"
 msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 
@@ -6156,23 +6156,23 @@ msgstr "Ilość wolnego miejsca pod akapitami w pikselach"
 msgid "Pixels inside wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:568
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr ""
 "Ilość wolnego miejsca pomiędzy zawiniętymi wierszami akapitu w pikselach"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:586
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Określa sposób zawijania wierszy: nigdy, na granicach słów lub na granicach "
 "znaków"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:633
 msgid "Tabs"
 msgstr "Tabulatory"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:634
 msgid "Custom tabs for this text"
 msgstr "Dowolne tabulatory powiązane z tekstem"
 
@@ -6318,63 +6318,63 @@ msgstr "Ustawienie tła akapitu"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Określa, czy ten znacznik wpływa na kolor tła akapitu"
 
-#: gtk/gtktextview.c:546
+#: gtk/gtktextview.c:547
 msgid "Pixels Above Lines"
 msgstr "Miejsce nad wierszami"
 
-#: gtk/gtktextview.c:556
+#: gtk/gtktextview.c:557
 msgid "Pixels Below Lines"
 msgstr "Miejsce pod wierszami"
 
-#: gtk/gtktextview.c:566
+#: gtk/gtktextview.c:567
 msgid "Pixels Inside Wrap"
 msgstr "Piksele w zawinięciu"
 
-#: gtk/gtktextview.c:584
+#: gtk/gtktextview.c:585
 msgid "Wrap Mode"
 msgstr "Tryb zawijania"
 
-#: gtk/gtktextview.c:602
+#: gtk/gtktextview.c:603
 msgid "Left Margin"
 msgstr "Lewy margines"
 
-#: gtk/gtktextview.c:612
+#: gtk/gtktextview.c:613
 msgid "Right Margin"
 msgstr "Prawy margines"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "Cursor Visible"
 msgstr "Widoczność kursora"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:642
 msgid "If the insertion cursor is shown"
 msgstr "Określa, czy kursor wstawiania jest wyświetlany"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "Buffer"
 msgstr "Bufor"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:650
 msgid "The buffer which is displayed"
 msgstr "Wyświetlany bufor"
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:658
 msgid "Whether entered text overwrites existing contents"
 msgstr "Określa, czy wprowadzony tekst nadpisuje istniejącą zawartość"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Accepts tab"
 msgstr "Akceptowanie tabulacji"
 
-#: gtk/gtktextview.c:665
+#: gtk/gtktextview.c:666
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Określa, czy tabulacja powinna być uwzględniana jako wprowadzany znak"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Error underline color"
 msgstr "Kolor podkreślenia błędu"
 
-#: gtk/gtktextview.c:695
+#: gtk/gtktextview.c:696
 msgid "Color with which to draw error-indication underlines"
 msgstr "Kolor, przy użyciu którego będą rysowane podkreślenia błędów"
 
@@ -6452,7 +6452,7 @@ msgstr ""
 "Określa, czy element powinien otrzymywać dodatkową przestrzeń po zwiększeniu "
 "rozmiaru paska narzędziowego"
 
-#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1587
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1589
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Określa, czy element powinien posiadać ten sam rozmiar co inne elementy "
@@ -6560,65 +6560,65 @@ msgstr ""
 "ustawieniu wartości PRAWDA, przyciski paska narzędziowego wyświetlają napisy "
 "w trybie GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktoolitemgroup.c:1534
+#: gtk/gtktoolitemgroup.c:1536
 msgid "The human-readable title of this item group"
 msgstr "Czytelny dla człowieka tytuł tej grupy elementów"
 
-#: gtk/gtktoolitemgroup.c:1541
+#: gtk/gtktoolitemgroup.c:1543
 msgid "A widget to display in place of the usual label"
 msgstr "Widget wyświetlany w miejscu zwykłej etykiety"
 
-#: gtk/gtktoolitemgroup.c:1547
+#: gtk/gtktoolitemgroup.c:1549
 msgid "Collapsed"
 msgstr "Zwinięte"
 
-#: gtk/gtktoolitemgroup.c:1548
+#: gtk/gtktoolitemgroup.c:1550
 msgid "Wether the group has been collapsed and items are hidden"
 msgstr "Określa, czy grupa została zwinięta, a elementy ukryte"
 
-#: gtk/gtktoolitemgroup.c:1554
+#: gtk/gtktoolitemgroup.c:1556
 msgid "ellipsize"
 msgstr "przycięcie"
 
-#: gtk/gtktoolitemgroup.c:1555
+#: gtk/gtktoolitemgroup.c:1557
 msgid "Ellipsize for item group headers"
 msgstr "Przycięcie nagłówków grupy elementów"
 
-#: gtk/gtktoolitemgroup.c:1561
+#: gtk/gtktoolitemgroup.c:1563
 msgid "Header Relief"
 msgstr "Uwypuklenie nagłówka"
 
-#: gtk/gtktoolitemgroup.c:1562
+#: gtk/gtktoolitemgroup.c:1564
 msgid "Relief of the group header button"
 msgstr "Uwypuklenie przycisku nagłówka grupy"
 
-#: gtk/gtktoolitemgroup.c:1577
+#: gtk/gtktoolitemgroup.c:1579
 msgid "Header Spacing"
 msgstr "Odstępy nagłówków"
 
-#: gtk/gtktoolitemgroup.c:1578
+#: gtk/gtktoolitemgroup.c:1580
 msgid "Spacing between expander arrow and caption"
 msgstr "Odstępy między strzałką rozwijającą a napisem"
 
-#: gtk/gtktoolitemgroup.c:1594
+#: gtk/gtktoolitemgroup.c:1596
 msgid "Whether the item should receive extra space when the group grows"
 msgstr ""
 "Określa, czy element powinien otrzymywać dodatkową przestrzeń po zwiększeniu "
 "grupy"
 
-#: gtk/gtktoolitemgroup.c:1601
+#: gtk/gtktoolitemgroup.c:1603
 msgid "Whether the item should fill the available space"
 msgstr "Określa, czy element powinien wypełniać dostępną przestrzeń"
 
-#: gtk/gtktoolitemgroup.c:1607
+#: gtk/gtktoolitemgroup.c:1609
 msgid "New Row"
 msgstr "Nowy rząd"
 
-#: gtk/gtktoolitemgroup.c:1608
+#: gtk/gtktoolitemgroup.c:1610
 msgid "Whether the item should start a new row"
 msgstr "Określa, czy element powinien rozpoczynać nowy rząd"
 
-#: gtk/gtktoolitemgroup.c:1615
+#: gtk/gtktoolitemgroup.c:1617
 msgid "Position of the item within this group"
 msgstr "Położenie elementu w tej grupie"
 
