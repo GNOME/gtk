@@ -302,6 +302,8 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GtkTargetList        *target_list,
 							  GdkDragAction         actions);
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
+GdkWindow*   gtk_entry_get_icon_window                   (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
 
 G_END_DECLS
 
