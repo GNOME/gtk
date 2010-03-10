@@ -65,6 +65,13 @@ void gtk_style_context_get          (GtkStyleContext *context,
                                      GtkStateType     state,
                                      ...) G_GNUC_NULL_TERMINATED;
 
+void          gtk_style_context_set_state    (GtkStyleContext *context,
+                                              GtkStateFlags    flags);
+GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
+
+gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
+                                              GtkStateType     state);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

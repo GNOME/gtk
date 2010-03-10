@@ -40,6 +40,7 @@ struct GtkStyleContextPrivate
 {
   GList *providers;
   GtkStyleSet *store;
+  GtkStateFlags state_flags;
 };
 
 #define GTK_STYLE_CONTEXT_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextPrivate))
@@ -268,6 +269,60 @@ gtk_style_context_get (GtkStyleContext *context,
   va_start (args, state);
   gtk_style_set_get_valist (priv->store, state, args);
   va_end (args);
+}
+
+void
+gtk_style_context_set_state (GtkStyleContext *context,
+                             GtkStateFlags    flags)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv->state_flags = flags;
+}
+
+GtkStateFlags
+gtk_style_context_get_state (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  return priv->state_flags;
+}
+
+gboolean
+gtk_style_context_is_state_set (GtkStyleContext *context,
+                                GtkStateType     state)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  switch (state)
+    {
+    case GTK_STATE_NORMAL:
+      return priv->state_flags == 0;
+    case GTK_STATE_ACTIVE:
+      return priv->state_flags & GTK_STATE_FLAG_ACTIVE;
+    case GTK_STATE_PRELIGHT:
+      return priv->state_flags & GTK_STATE_FLAG_PRELIGHT;
+    case GTK_STATE_SELECTED:
+      return priv->state_flags & GTK_STATE_FLAG_SELECTED;
+    case GTK_STATE_INSENSITIVE:
+      return priv->state_flags & GTK_STATE_FLAG_INSENSITIVE;
+    case GTK_STATE_INCONSISTENT:
+      return priv->state_flags & GTK_STATE_FLAG_INCONSISTENT;
+    case GTK_STATE_FOCUSED:
+      return priv->state_flags & GTK_STATE_FLAG_FOCUSED;
+    default:
+      return FALSE;
+    }
 }
 
 #define __GTK_STYLE_CONTEXT_C__
