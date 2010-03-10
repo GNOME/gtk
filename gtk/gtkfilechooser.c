@@ -1815,9 +1815,21 @@ gtk_file_chooser_unselect_file (GtkFileChooser *chooser,
 GSList *
 gtk_file_chooser_get_files (GtkFileChooser *chooser)
 {
+  GSList *files, *l;
+
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_files (chooser);
+  files = GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_files (chooser);
+
+  for (l = files; l != NULL; l = l->next)
+    {
+      GFile *file = (GFile *)l->data;
+
+      g_return_val_if_fail (_gtk_file_chooser_is_file_in_root (chooser, file),
+                            NULL);
+    }
+
+  return files;
 }
 
 /**
