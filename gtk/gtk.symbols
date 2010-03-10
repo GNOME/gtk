@@ -138,6 +138,7 @@ gtk_accel_map_unlock_path
 #if IN_FILE(__GTK_ACCESSIBLE_C__)
 gtk_accessible_connect_widget_destroyed
 gtk_accessible_get_type G_GNUC_CONST
+gtk_accessible_get_widget
 #endif
 #endif
 
