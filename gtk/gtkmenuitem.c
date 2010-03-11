@@ -636,7 +636,7 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
       const gchar *label;
 
       label = gtk_action_get_label (action);
-      gtk_label_set_label (GTK_LABEL (child), label ? label : "");
+      gtk_menu_item_set_label (menu_item, label);
     }
 }
 
@@ -669,6 +669,16 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
   GtkMenuItem *menu_item = GTK_MENU_ITEM (activatable);
   GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
 
+  if (!priv->use_action_appearance || !action)
+    {
+      GtkWidget *label = GTK_BIN (menu_item)->child;
+
+      label = GTK_BIN (menu_item)->child;
+
+      if (GTK_IS_ACCEL_LABEL (label))
+        gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), GTK_WIDGET (menu_item));
+    }
+
   if (!action)
     return;
 
@@ -688,18 +698,17 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
 	  label = NULL;
 	}
 
-      if (!label)
-	label = g_object_new (GTK_TYPE_ACCEL_LABEL,
-			      "use-underline", TRUE,
-			      "xalign", 0.0,
-			      "visible", TRUE,
-			      "parent", menu_item,
-			      NULL);
+      gtk_menu_item_ensure_label (menu_item);
+      gtk_menu_item_set_use_underline (menu_item, TRUE);
+
+      label = GTK_BIN (menu_item)->child;
 
       if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
-	g_object_set (label,
-		      "accel-closure", gtk_action_get_accel_closure (action),
-		      NULL);
+        {
+          gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), NULL);
+          gtk_accel_label_set_accel_closure (GTK_ACCEL_LABEL (label),
+                                             gtk_action_get_accel_closure (action));
+        }
 
       activatable_update_label (menu_item, action);
     }
@@ -2115,7 +2124,7 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
 
   if (!GTK_BIN (menu_item)->child)
     {
-      accel_label = (GtkWidget *)g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
+      accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
       gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
       gtk_container_add (GTK_CONTAINER (menu_item), accel_label);

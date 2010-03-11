@@ -91,4 +91,8 @@ TEST_PROGS			+= expander
 expander_SOURCES		 = expander.c
 expander_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS			+= action
+action_SOURCES			 = action.c
+action_LDADD			 = $(progs_ldadd)
+
 -include $(top_srcdir)/git.mk
