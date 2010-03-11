@@ -1210,24 +1210,6 @@ gtk_editable_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkoldeditable</FILE>
-<TITLE>GtkOldEditable</TITLE>
-GtkOldEditable
-GtkTextFunction
-gtk_old_editable_claim_selection
-gtk_old_editable_changed
-<SUBSECTION Standard>
-GTK_OLD_EDITABLE
-GTK_IS_OLD_EDITABLE
-GTK_TYPE_OLD_EDITABLE
-GTK_OLD_EDITABLE_CLASS
-GTK_IS_OLD_EDITABLE_CLASS
-GTK_OLD_EDITABLE_GET_CLASS
-<SUBSECTION Private>
-gtk_old_editable_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkentry</FILE>
 <TITLE>GtkEntry</TITLE>
 GtkEntry
