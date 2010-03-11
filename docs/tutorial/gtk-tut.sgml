@@ -6471,15 +6471,15 @@ the position specified by <literal>x</literal> and <literal>y</literal>.</para>
 position.</para>
 
 <programlisting role="C">
-void gtk_fixed_set_has_window( GtkFixed  *fixed,
-                               gboolean   has_window );
+void gtk_widget_set_has_window( GtkWidget  *widget,
+                                gboolean    has_window );
 
-gboolean gtk_fixed_get_has_window( GtkFixed *fixed );
+gboolean gtk_widget_get_has_window( GtkWidget *widget );
 </programlisting>
 
 <para>Normally, Fixed widgets don't have their own X window. Since this is
 different from the behaviour of Fixed widgets in earlier releases of GTK, 
-the function gtk_fixed_set_has_window() allows the creation of Fixed widgets 
+the function gtk_widget_set_has_window() allows the creation of Fixed widgets
 <emphasis>with</emphasis> their own window. It has to be called before
 realizing the widget.</para>
 

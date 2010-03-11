@@ -125,23 +125,3 @@ Moves a child of a #GtkFixed container to the given position.
 @widget: the child widget.
 @x: the horizontal position to move the widget to.
 @y: the vertical position to move the widget to.
-
-
-<!-- ##### FUNCTION gtk_fixed_get_has_window ##### -->
-<para>
-
-</para>
-
-@fixed: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_fixed_set_has_window ##### -->
-<para>
-
-</para>
-
-@fixed: 
-@has_window: 
-
-
