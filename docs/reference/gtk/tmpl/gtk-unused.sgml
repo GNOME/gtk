@@ -2464,16 +2464,6 @@ is enabled.
 @nargs: 
 @Returns: 
 
-<!-- ##### FUNCTION gtk_ctree_construct ##### -->
-<para>
-This function is not usually used by users.
-</para>
-
-@ctree: 
-@columns: 
-@tree_column: 
-@titles: 
-
 <!-- ##### FUNCTION gtk_decorated_window_calculate_frame_size ##### -->
 <para>
 
