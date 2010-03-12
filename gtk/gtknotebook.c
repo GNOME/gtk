@@ -7119,7 +7119,7 @@ gtk_notebook_get_scrollable (GtkNotebook *notebook)
  * @notebook: a #GtkNotebook
  * 
  * Enables the popup menu: if the user clicks with the right mouse button on
- * the bookmarks, a menu with all the pages will be popped up.
+ * the tab labels, a menu with all the pages will be popped up.
  **/
 void
 gtk_notebook_popup_enable (GtkNotebook *notebook)
@@ -7500,9 +7500,9 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
  * gtk_notebook_set_tab_label_packing:
  * @notebook: a #GtkNotebook
  * @child: the child widget
- * @expand: whether to expand the bookmark or not
- * @fill: whether the bookmark should fill the allocated area or not
- * @pack_type: the position of the bookmark
+ * @expand: whether to expand the tab label or not
+ * @fill: whether the tab label should fill the allocated area or not
+ * @pack_type: the position of the tab label
  *
  * Sets the packing parameters for the tab label of the page
  * containing @child. See gtk_box_pack_start() for the exact meaning
@@ -7510,6 +7510,8 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
  *
  * Deprecated: 2.20: Modify the #GtkNotebook:tab-expand and
  *   #GtkNotebook:tab-fill child properties instead.
+ *   Modifying the packing of the tab label is a deprecated feature and
+ *   shouldn't be done anymore.
  **/
 void
 gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
