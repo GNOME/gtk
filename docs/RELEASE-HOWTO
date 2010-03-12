@@ -7,6 +7,7 @@ dependencies:
 * gtk-doc
 * docbook-utils
 Without those packages make distcheck will *not* pass.
+Make sure that gtk-doc is the latest released version.
 
 
  0) Go back to a pristine working directory. With git, this works:
