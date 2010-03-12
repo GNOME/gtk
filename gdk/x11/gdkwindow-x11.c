@@ -3909,7 +3909,7 @@ gdk_window_set_icon_name (GdkWindow   *window,
   GdkDisplay *display;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_drawable_get_display (window);
