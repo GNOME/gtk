@@ -822,11 +822,11 @@ until we call gtk_widget_show(window) near the end of our program.</para>
 </programlisting>
 
 <para>Here are two examples of connecting a signal handler to an object, in
-this case, the window. Here, the "delete_event" and "destroy" signals
+this case, the window. Here, the "delete-event" and "destroy" signals
 are caught. The first is emitted when we use the window manager to
-kill the window, or when we use the gtk_widget_destroy() call passing
-in the window widget as the object to destroy. The second is emitted
-when, in the "delete_event" handler, we return FALSE.
+kill the window. The second is emitted when we use the gtk_widget_destroy() call
+passing in the window widget as the object to destroy, or when, in the
+"delete-event" handler, we return FALSE.
  
 The <literal>G_CALLBACK</literal> is a macro
 that performs type casting and checking for us, as well as aid the readability of
