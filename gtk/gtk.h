@@ -221,6 +221,7 @@
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 
 #undef __GTK_H_INSIDE__
