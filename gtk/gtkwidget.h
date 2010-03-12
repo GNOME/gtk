@@ -37,6 +37,7 @@
 #include <gtk/gtkstyle.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkstylecontext.h>
+#include <gtk/gtkwidgetpath.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -943,6 +944,8 @@ void         _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 gboolean     gtk_widget_in_destruction (GtkWidget *widget);
 
 GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
+
+GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 
 
 G_END_DECLS
