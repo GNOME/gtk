@@ -40,6 +40,8 @@ struct GtkStyleContextPrivate
 {
   GList *providers;
   GtkStyleSet *store;
+  GtkWidgetPath *widget_path;
+
   GtkStateFlags state_flags;
 };
 
@@ -323,6 +325,36 @@ gtk_style_context_is_state_set (GtkStyleContext *context,
     default:
       return FALSE;
     }
+}
+
+void
+gtk_style_context_set_path (GtkStyleContext *context,
+                            GtkWidgetPath   *path)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (path != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  if (priv->widget_path)
+    {
+      gtk_widget_path_free (priv->widget_path);
+      priv->widget_path = NULL;
+    }
+
+  if (path)
+    priv->widget_path = gtk_widget_path_copy (path);
+}
+
+G_CONST_RETURN GtkWidgetPath *
+gtk_style_context_get_path (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  return priv->widget_path;
 }
 
 #define __GTK_STYLE_CONTEXT_C__

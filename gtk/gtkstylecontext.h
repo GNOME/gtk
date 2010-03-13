@@ -21,7 +21,8 @@
 #define __GTK_STYLE_CONTEXT_H__
 
 #include <glib-object.h>
-#include "gtkstyleprovider.h"
+#include <gtk/gtkstyleprovider.h>
+#include <gtk/gtkwidgetpath.h>
 
 G_BEGIN_DECLS
 
@@ -71,6 +72,11 @@ GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
 gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
                                               GtkStateType     state);
+
+void          gtk_style_context_set_path     (GtkStyleContext *context,
+                                              GtkWidgetPath   *path);
+G_CONST_RETURN GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
+
 
 G_END_DECLS
 
