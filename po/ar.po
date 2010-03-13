@@ -7,22 +7,22 @@
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Seba Barto <nanoosaamar@yahoo.com>, 2006.
 # Anas Afif Emad <anas.e87@gmail.com>, 2008.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-12 20:50-0500\n"
-"PO-Revision-Date: 2009-08-08 21:31+0300\n"
+"PO-Revision-Date: 2010-03-13 23:39+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.4.0\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: gdk/gdk.c:103
 #, c-format
@@ -2634,9 +2634,8 @@ msgid "Unspecified error"
 msgstr "خطأ غير محدد"
 
 #: gtk/gtkprintunixdialog.c:614
-#, fuzzy
 msgid "Getting printer information failed"
-msgstr "يجلب معلومات الطابعة..."
+msgstr "فشل جلب معلومات الطابعة"
 
 #: gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
@@ -4757,10 +4756,9 @@ msgstr "مظروف prc8"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:329
-#, fuzzy
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr "مظروف prc1"
+msgstr "مظروف prc9"
 
 #. translators, strip everything up to the first |
 #: gtk/paper_names_offsets.c:331
@@ -4997,24 +4995,22 @@ msgid "Authentication is required on %s"
 msgstr "الاستيثاق مطلوب على %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:978
-#, fuzzy
 msgid "Domain:"
-msgstr "الن_طاق:"
+msgstr "النطاق:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1008
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "الاستيثاق مطلوب لطبع مستند على %s"
+msgstr "الاستيثاق مطلوب لطبع المستند '%s'"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "الاستيثاق مطلوب لطبع المستند '%s' على الطابعة %s"
+msgstr "الاستيثاق مطلوب لطبع هذا المستند على الطابعة %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
-#, fuzzy
 msgid "Authentication is required to print this document"
-msgstr "الاستيثاق مطلوب لطبع مستند على %s"
+msgstr "الاستيثاق مطلوب لطبع هذا المستند"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1636
 #, c-format
