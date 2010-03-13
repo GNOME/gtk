@@ -38,6 +38,29 @@ struct GtkThemingEnginePrivate
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
+
+typedef struct GtkThemingModule GtkThemingModule;
+typedef struct GtkThemingModuleClass GtkThemingModuleClass;
+
+struct GtkThemingModule
+{
+  GTypeModule parent_instance;
+  gchar *name;
+
+  GtkThemingEngine * (*create_engine) (void);
+};
+
+struct GtkThemingModuleClass
+{
+  GTypeModuleClass parent_class;
+};
+
+#define GTK_TYPE_THEMING_MODULE  (gtk_theming_module_get_type ())
+#define GTK_THEMING_MODULE(o)    (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_THEMING_MODULE, GtkThemingModule))
+#define GTK_IS_THEMING_MODULE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_THEMING_MODULE))
+
+G_DEFINE_TYPE (GtkThemingModule, gtk_theming_module, G_TYPE_TYPE_MODULE);
+
 static void
 gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
 {
@@ -146,6 +169,104 @@ gtk_theming_engine_get_path (GtkThemingEngine *engine)
 
   priv = engine->priv;
   return gtk_style_context_get_path (priv->context);
+}
+
+/* GtkThemingModule */
+
+static gboolean
+gtk_theming_module_load (GTypeModule *type_module)
+{
+  GtkThemingModule *theming_module;
+  GModule *module;
+  gchar *name, *module_path;
+
+  theming_module = GTK_THEMING_MODULE (type_module);
+  name = theming_module->name;
+  module_path = _gtk_find_module (name, "theming-engines");
+
+  if (!module_path)
+    {
+      g_warning (_("Unable to locate theme engine in module path: \"%s\","), name);
+      return FALSE;
+    }
+
+  module = g_module_open (module_path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+  g_free (module_path);
+
+  if (!module)
+    {
+      g_warning ("%s", g_module_error ());
+      return FALSE;
+    }
+
+  if (!g_module_symbol (module, "create_engine",
+                        (gpointer *) &theming_module->create_engine))
+    {
+      g_warning ("%s", g_module_error());
+      g_module_close (module);
+
+      return FALSE;
+    }
+
+  g_module_make_resident (module);
+
+  return TRUE;
+}
+
+static void
+gtk_theming_module_class_init (GtkThemingModuleClass *klass)
+{
+  GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (klass);
+
+  module_class->load = gtk_theming_module_load;
+}
+
+static void
+gtk_theming_module_init (GtkThemingModule *module)
+{
+}
+
+G_CONST_RETURN GtkThemingEngine *
+gtk_theming_engine_load (const gchar *name)
+{
+  static GHashTable *engines = NULL;
+  static GtkThemingEngine *default_engine;
+  GtkThemingEngine *engine = NULL;
+
+  if (name)
+    {
+      if (!engines)
+        engines = g_hash_table_new (g_str_hash, g_str_equal);
+
+      engine = g_hash_table_lookup (engines, name);
+
+      if (!engine)
+        {
+          GtkThemingModule *module;
+
+          module = g_object_new (GTK_TYPE_THEMING_MODULE, NULL);
+          g_type_module_set_name (G_TYPE_MODULE (module), name);
+          module->name = g_strdup (name);
+
+          if (module && g_type_module_use (G_TYPE_MODULE (module)))
+            {
+              engine = (module->create_engine) ();
+
+              if (engine)
+                g_hash_table_insert (engines, module->name, engine);
+            }
+        }
+    }
+
+  if (!engine)
+    {
+      if (!default_engine)
+        default_engine = g_object_new (GTK_TYPE_THEMING_ENGINE, NULL);
+
+      engine = default_engine;
+    }
+
+  return engine;
 }
 
 #define __GTK_THEMING_ENGINE_C__

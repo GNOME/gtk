@@ -72,6 +72,9 @@ GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
 gboolean      gtk__theming_engine_is_state_set (GtkThemingEngine *engine,
                                                 GtkStateType      state);
 
+G_CONST_RETURN GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
+
+
 G_END_DECLS
 
 #endif /* __GTK_THEMING_ENGINE_H__ */
