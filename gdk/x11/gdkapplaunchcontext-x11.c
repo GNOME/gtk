@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <gio/gdesktopappinfo.h>
 
 #include "gdkx.h"
 #include "gdkapplaunchcontext.h"
@@ -282,6 +283,7 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   char *description;
   char *icon_name;
   const char *binary_name;
+  const char *application_id;
   char *screen_str;
   char *workspace_str;
   GIcon *icon;
@@ -353,6 +355,10 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   else
     workspace_str = NULL;
 
+  if (G_IS_DESKTOP_APP_INFO (info))
+    application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
+  else
+    application_id = NULL;
 
   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
 				g_get_prgname (),
@@ -372,6 +378,7 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 					     "DESKTOP", workspace_str,
 					     "DESCRIPTION", description,
 					     "WMCLASS", NULL, /* FIXME */
+					     "APPLICATION_ID", application_id,
 					     NULL);
 
   g_free (description);
