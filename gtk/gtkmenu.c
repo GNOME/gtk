@@ -3262,7 +3262,10 @@ gtk_menu_motion_notify (GtkWidget      *widget,
    */
   if (!_gtk_menu_item_is_selectable (menu_item))
     {
-      gtk_menu_shell_deselect (menu_shell);
+      /* We really want to deselect, but this gives the menushell code
+       * a chance to do some bookkeeping about the menuitem.
+       */
+      gtk_menu_shell_select_item (menu_shell, menu_item);
       return FALSE;
     }
 
@@ -3916,7 +3919,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
     return TRUE;
   
   menu_item = GTK_MENU_ITEM (event_widget); 
-  
+
   /* Here we check to see if we're leaving an active menu item with a submenu, 
    * in which case we enter submenu navigation mode. 
    */

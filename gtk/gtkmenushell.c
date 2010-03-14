@@ -137,6 +137,10 @@ struct _GtkMenuShellPrivate
 
   guint take_focus : 1;
   guint activated_submenu : 1;
+  /* This flag is a crutch to keep mnemonics in the same menu
+   * if the user moves the mouse over an unselectable menuitem.
+   */
+  guint in_unselectable_item : 1;
 };
 
 static void gtk_menu_shell_set_property      (GObject           *object,
@@ -805,6 +809,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
   found = FALSE;
   while (target)
     {
+      GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (target);
       GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (target));
 
       /* The idea with keyboard mode is that once you start using
@@ -824,7 +829,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
        * dismissing menus.
        */
       mnemonics_visible = target->keyboard_mode &&
-                          ((target->active_menu_item && !found) ||
+                          (((target->active_menu_item || priv->in_unselectable_item) && !found) ||
                            (target == menu_shell &&
                             !target->parent_menu_shell &&
                             gtk_widget_has_grab (GTK_WIDGET (target))));
@@ -841,7 +846,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
       else
         gtk_window_set_mnemonics_visible (GTK_WINDOW (toplevel), mnemonics_visible);
 
-      if (target->active_menu_item)
+      if (target->active_menu_item || priv->in_unselectable_item)
         found = TRUE;
 
       target = GTK_MENU_SHELL (target->parent_menu_shell);
@@ -853,11 +858,12 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
   gboolean enable_mnemonics;
 
   menu_shell->keyboard_mode = TRUE;
 
-  if (!menu_shell->active_menu_item && menu_shell->parent_menu_shell)
+  if (!(menu_shell->active_menu_item || priv->in_unselectable_item) && menu_shell->parent_menu_shell)
     return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent *)event);
 
   if (gtk_bindings_activate_event (GTK_OBJECT (widget), event))
@@ -890,10 +896,19 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-      if (!menu_item ||
-	  (GTK_IS_MENU_ITEM (menu_item) && 
-	   !_gtk_menu_item_is_selectable (menu_item)))
-	return TRUE;
+      if (!menu_item)
+        return TRUE;
+
+      if (GTK_IS_MENU_ITEM (menu_item) &&
+          !_gtk_menu_item_is_selectable (menu_item))
+        {
+          GtkMenuShellPrivate *priv;
+
+          priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+          priv->in_unselectable_item = TRUE;
+
+          return TRUE;
+        }
 
       if (menu_item->parent == widget &&
 	  GTK_IS_MENU_ITEM (menu_item))
@@ -966,7 +981,14 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
       menu_item = GTK_MENU_ITEM (event_widget);
 
       if (!_gtk_menu_item_is_selectable (event_widget))
-	return TRUE;
+        {
+          GtkMenuShellPrivate *priv;
+
+          priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+          priv->in_unselectable_item = TRUE;
+
+          return TRUE;
+        }
 
       if ((menu_shell->active_menu_item == event_widget) &&
 	  (menu_item->submenu == NULL))
@@ -1149,7 +1171,14 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
   gtk_menu_shell_deselect (menu_shell);
 
   if (!_gtk_menu_item_is_selectable (menu_item))
-    return;
+    {
+      GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+      priv->in_unselectable_item = TRUE;
+      _gtk_menu_shell_update_mnemonics (menu_shell);
+
+      return;
+    }
 
   menu_shell->active_menu_item = menu_item;
   if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
@@ -1396,9 +1425,12 @@ static void
 gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
 				  GtkMenuDirectionType  direction)
 {
+  GtkMenuShellPrivate *priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
   GtkMenuShell *parent_menu_shell = NULL;
   gboolean had_selection;
   gboolean touchscreen_mode;
+
+  priv->in_unselectable_item = FALSE;
 
   had_selection = menu_shell->active_menu_item != NULL;
 
