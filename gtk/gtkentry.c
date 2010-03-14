@@ -2468,6 +2468,7 @@ gtk_entry_dispose (GObject *object)
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+  gtk_entry_set_buffer (entry, NULL);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
@@ -2509,11 +2510,6 @@ gtk_entry_finalize (GObject *object)
     g_source_remove (entry->recompute_idle);
 
   g_free (priv->im_module);
-
-  /* COMPAT: entry->text is a deprecated field, and the allocation 
-     is owned by the buffer. */
-
-  gtk_entry_set_buffer (entry, NULL);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
@@ -6692,9 +6688,6 @@ gtk_entry_set_buffer (GtkEntry       *entry,
     {
        buffer_connect_signals (entry);
 
-       gtk_editable_set_position (GTK_EDITABLE (entry), 0);
-       gtk_entry_recompute (entry);
-
       /* COMPAT: Deprecated. Not used. Setting these fields no longer necessary in GTK 3.x */
       entry->text = (char*)gtk_entry_buffer_get_text (priv->buffer);
       entry->text_length = gtk_entry_buffer_get_length (priv->buffer);
@@ -6711,6 +6704,9 @@ gtk_entry_set_buffer (GtkEntry       *entry,
   g_object_notify (obj, "invisible-char");
   g_object_notify (obj, "invisible-char-set");
   g_object_thaw_notify (obj);
+
+  gtk_editable_set_position (GTK_EDITABLE (entry), 0);
+  gtk_entry_recompute (entry);
 }
 
 /**
