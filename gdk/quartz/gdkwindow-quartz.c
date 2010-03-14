@@ -704,7 +704,7 @@ find_child_window_helper (GdkWindow *window,
         {
           NSRect frame = NSMakeRect (0, 0, 100, 100);
           NSRect content;
-          int mask;
+          NSUInteger mask;
           int titlebar_height;
 
           mask = [child_impl->toplevel styleMask];
@@ -945,7 +945,7 @@ _gdk_window_impl_new (GdkWindow     *window,
     case GDK_WINDOW_TEMP:
       {
         NSRect content_rect;
-        int style_mask;
+        NSUInteger style_mask;
         const char *title;
 
         content_rect = NSMakeRect (private->x,
@@ -2536,7 +2536,7 @@ gdk_window_set_decorations (GdkWindow       *window,
 			    GdkWMDecoration  decorations)
 {
   GdkWindowImplQuartz *impl;
-  int old_mask, new_mask;
+  NSUInteger old_mask, new_mask;
   NSView *old_view;
 
   if (GDK_WINDOW_DESTROYED (window) ||

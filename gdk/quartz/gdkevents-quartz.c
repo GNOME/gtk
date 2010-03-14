@@ -213,7 +213,7 @@ get_time_from_ns_event (NSEvent *event)
 static int
 get_mouse_button_from_ns_event (NSEvent *event)
 {
-  int button;
+  NSInteger button;
 
   button = [event buttonNumber];
 
