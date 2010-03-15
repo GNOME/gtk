@@ -1,3 +1,30 @@
+Overview of Changes from GTK+ 2.18.7 to 2.18.8
+==============================================
+
+* Bugs fixed:
+ 612066 empathy hangs when clicked on information about contact...
+ 569042 gailbooleancell does not seem to attend to changes...
+ 609650 GtkPlug Embedded signal is not emitted when plug/socket...
+ 609744 crash at parse_data_for_row_pseudocolor
+ 609952 destroying a notebook window when the last tab got dragged...
+ 610141 gtk_assistant_get_nth_page() function fails to deliver...
+ 610184 gtk_assistant_set_current_page() segfaults...
+ 610381 More space between toolbar icon and label
+ 610632 gtk_info_bar_set_default_response problem
+ 611686 focus_in/focus_out in gailtreeview.c should return FALSE...
+ 612119 Do not scroll when middle pasting
+ 612308 GTK+ Build error: redefinition of 'struct IPrintDialogCallback'
+ 612346 gdk_window_set_icon_name doesn't work
+ 612505 Entry layout not updated when underlying buffer changes
+ 598881 Unimplemented GdkWindowImplIface methods crash gimp on OSX
+
+* Updated translations:
+ Bengali India
+ Low German
+ Oriya
+ Polish
+
+
 Overview of Changes from GTK+ 2.18.6 to 2.18.7
 ==============================================
 
