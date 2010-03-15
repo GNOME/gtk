@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:18-0400\n"
 "PO-Revision-Date: 2009-09-24 20:43+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -912,40 +912,45 @@ msgstr "IOBuffer andmetele pole võimalik mälu eraldada"
 msgid "Cannot allocate new pixbuf"
 msgstr "Uut pixbuf'i pole võimalik eraldada"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "GIF-pilt pole täielik või on seda tükeldatud."
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "Värvikaardi struktuurile pole võimalik mälu eraldada"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "Värvikaardi kirjetele pole võimalik mälu eraldada"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Ootamatu bitisügavus värvikaardi kirjetele"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "TGA päisele pole võimalik mälu eraldada"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "TGA-pildil on vigane suurus"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "TGA-pilditüüp pole toetatud"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "TGA kontekstistruktuuri jaoks pole võimalik mälu eraldada"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Failis on liigsed andmed"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Targa pildivorming"
 
@@ -1620,15 +1625,15 @@ msgstr "_Parem:"
 msgid "Paper Margins"
 msgstr "Paberi veerised"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
+#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "Sisestus_meetodid"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
-#: gtk/gtkentry.c:9975
+#: gtk/gtkentry.c:9981
 msgid "Caps Lock is on"
 msgstr "Tõstelukk on sisse lülitatud"
 

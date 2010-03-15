@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2009-08-30 18:26+0200\n"
 "Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -1417,11 +1417,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Barva popředí jako GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "Upravitelné"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "Jestli uživatel může měnit text"
 
@@ -2265,7 +2265,7 @@ msgstr "Jestli víceřádkové zkrácení vloží na jeden řádek."
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Který druh stínu kreslit kolem vstupu, pokud je nastaveno has-frame"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "Režim přepisování"
 
@@ -2454,11 +2454,11 @@ msgstr "Místní nápovědné značky primární ikony"
 msgid "Secondary icon tooltip markup"
 msgstr "Místní nápovědné značky sekundární ikony"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "Modul IM"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "Který modul IM by měl být použit"
 
@@ -3223,7 +3223,7 @@ msgstr "Text popisu"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Seznam atributů stylu, které použít na text popisu"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "Zarovnání"
 
@@ -5874,7 +5874,7 @@ msgstr ""
 "Řádně se přizpůsobuje změnám motivu atd., takže je doporučená. Pango "
 "předdefinovává některé hodnoty, například PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "Zarovnání vlevo, vpravo nebo na střed"
 
@@ -5891,7 +5891,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Levý okraj"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "Šířka levého okraje v pixelech"
 
@@ -5899,15 +5899,15 @@ msgstr "Šířka levého okraje v pixelech"
 msgid "Right margin"
 msgstr "Pravý okraj"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "Šířka pravého okraje v pixelech"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "Odsazení"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Velikost odsazení odstavce v pixelech"
 
@@ -5923,7 +5923,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixely nad řádky"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixely prázdného prostoru nad odstavci"
 
@@ -5931,7 +5931,7 @@ msgstr "Pixely prázdného prostoru nad odstavci"
 msgid "Pixels below lines"
 msgstr "Pixely pod řádky"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixely prázdného prostoru pod odstavci"
 
@@ -5939,20 +5939,20 @@ msgstr "Pixely prázdného prostoru pod odstavci"
 msgid "Pixels inside wrap"
 msgstr "Pixely v zalomení"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixely prázdného prostoru mezi zalomenými řádky v odstavci"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Jestli jsou řádky zalamovány na hranicích slov, znaků, nebo vůbec ne"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "Tabelátory"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "Vlastní tabelátory pro tento text"
 
@@ -6096,63 +6096,63 @@ msgstr "Pozadí odstavce nastaveno"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Jestli tato značka ovlivňuje barvu pozadí odstavce"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "Pixely nad řádky"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "Pixely pod řádky"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "Pixely v zalomení"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "Režim zalamování"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "Levý okraj"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "Pravý okraj"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "Viditelný kurzor"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "Jestli se zobrazuje kurzor pro vkládání"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "Vyrovnávací paměť"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "Zobrazovaná vyrovnávací paměť"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "Jestli zadávaný text přepisuje existující obsah"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "Přijímá tabelátor"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Jestli Tab způsobí zadání znaku tab"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "Barva podtržení chyby"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "Barva, kterou kreslit podtržení indikující chybu"
 

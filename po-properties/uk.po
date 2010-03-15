@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2009-07-09 15:39+0300\n"
 "Last-Translator: Wanderlust <wanderlust@ukr.net>\n"
 "Language-Team: ukrainian <Ukrainian <uk@li.org>>\n"
@@ -1430,11 +1430,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Колір переднього плану у вигляді GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "Редагується"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "Чи може текст змінюватись користувачем"
 
@@ -2291,7 +2291,7 @@ msgstr "Чи обрізати багаторядні вставки у один 
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Тип тіні, що виводиться навколо поля з рамкою"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "Режим заміщення"
 
@@ -2481,11 +2481,11 @@ msgstr "Розмітка контекстної підказки головно�
 msgid "Secondary icon tooltip markup"
 msgstr "Розмітка контекстної підказки додаткового значка"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "Модуль вводу"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "Модуль вводу, що використовується"
 
@@ -3256,7 +3256,7 @@ msgstr "Текст позначки"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Список стильових ознак для застосування до тексту позначки"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "Вирівнювання"
 
@@ -5948,7 +5948,7 @@ msgstr ""
 "шрифту. Ця властивість до змін у темі, і тому є рекомендованою. Pango "
 "визначає декілька масштабів, наприклад, PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "Ліве, праве чи центральне вирівнювання"
 
@@ -5965,7 +5965,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Лівий відступ"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "Ширина лівого відступу в точках"
 
@@ -5973,15 +5973,15 @@ msgstr "Ширина лівого відступу в точках"
 msgid "Right margin"
 msgstr "Правий відступ"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "Ширина правого відступу в точках"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "Відступ"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Величина відступу абзацу в точках"
 
@@ -5997,7 +5997,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Інтервал над рядками"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "Інтервал, в точках растру, в просторі над абзацами"
 
@@ -6005,7 +6005,7 @@ msgstr "Інтервал, в точках растру, в просторі на
 msgid "Pixels below lines"
 msgstr "Інтервал під рядками"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "Інтервал, в точках растру, в просторі під абзацами"
 
@@ -6013,20 +6013,20 @@ msgstr "Інтервал, в точках растру, в просторі пі
 msgid "Pixels inside wrap"
 msgstr "Інтервал в абзаці"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Інтервал, в точках растру, між перенесеними рядками у абзаці"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Ніколи не переносити рядки, чи переносити по межі слів чи по символам"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "Табуляції"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "Нетипові табуляції для цього тексту"
 
@@ -6171,63 +6171,63 @@ msgstr "Встановлення тла абзацу"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Чи впливає цей тег на колір тла абзацу"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "Точок над рядками"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "Точок під рядками"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "Точок в переносі"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "Режим переносу"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "Лівий відступ"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "Правий відступ"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "Видимий курсор"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "Чи показується курсор вставляння"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "Буфер"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "Буфер, що відображується"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "Чи текст, що вводиться заміщує наявний"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "Допускаються табулятори"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Чи натискання Tab призводить до вводу символу табуляції"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "Колір підкреслення помилок"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "Колір яким підкреслюються слова з помилками"
 

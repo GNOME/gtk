@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -1634,12 +1634,12 @@ msgstr "GdkColor шиг тэмдэгтийн өнгө "
 # gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 # gtk/gtktextview.c:568
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "Засварлах"
 
 # gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "Текстийг хэрэглэгч өөрчилж болох эсэх"
 
@@ -2641,7 +2641,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 
 # gtk/gtkcontainer.c:200
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "Дарж бичих горим"
 
@@ -2885,13 +2885,13 @@ msgid "Secondary icon tooltip markup"
 msgstr "Хоёрдогч "
 
 # gtk/gtkwindow.c:466
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 #, fuzzy
 msgid "IM module"
 msgstr "Стандарт өргөн"
 
 # gtk/gtkcolorsel.c:1712
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 #, fuzzy
 msgid "Which IM module should be used"
 msgstr "Ашигласан өнгөний нийлүүлэг үү, эсвэл "
@@ -3778,7 +3778,7 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr "бичээс -ийн текстэнд хэрэглэгдэх загварын жагсаалтын аттрибутууд."
 
 # gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "Тэнцүүлэх"
 
@@ -6816,7 +6816,7 @@ msgstr ""
 "PANGO_SCALE_X_LARGE"
 
 # gtk/gtktexttag.c:379 gtk/gtktextview.c:586
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "Зүүн баруун эсвэл төв зэрэгцүүлэлт"
 
@@ -6836,7 +6836,7 @@ msgid "Left margin"
 msgstr "Зүүн хязгаар "
 
 # gtk/gtktexttag.c:396 gtk/gtktextview.c:595
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "Цэгүүдийн зүүн хязгаарын өргөн "
 
@@ -6846,17 +6846,17 @@ msgid "Right margin"
 msgstr "Баруун хязгаар "
 
 # gtk/gtktexttag.c:406 gtk/gtktextview.c:605
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "Цэгүүдийн баруун хязгаарын өргөн"
 
 # gtk/gtktexttag.c:416 gtk/gtktextview.c:614
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "Шүд "
 
 # gtk/gtktexttag.c:417 gtk/gtktextview.c:615
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Догол мөрийн шүднүүдийн нийлбэрийг цэгээр"
 
@@ -6874,7 +6874,7 @@ msgid "Pixels above lines"
 msgstr "Шугамуудын дээрх цэгүүд"
 
 # gtk/gtktexttag.c:438 gtk/gtktextview.c:539
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "Догол мөрийн дээрх хоосон зайн цэгүүд"
 
@@ -6884,7 +6884,7 @@ msgid "Pixels below lines"
 msgstr "Шугамуудын доорх цэгүүд"
 
 # gtk/gtktexttag.c:448 gtk/gtktextview.c:549
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "Догол мөрийн доорхи хоосон зайн цэгүүд"
 
@@ -6894,20 +6894,20 @@ msgid "Pixels inside wrap"
 msgstr "Мөр таслалтын цэгүүд "
 
 # gtk/gtktexttag.c:458 gtk/gtktextview.c:559
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Догол мөрийн доторхи мөр таслалт хоорондын хоосон зай (цэгээр)"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Мөрүүдийг үг эсвэл тэмдэгтийн хязгаараар таслахгүй юу?"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "ТАВ"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "Энэхүү текстэнд зориулсан хэрэглэгчийн ТАВ"
 
@@ -7067,70 +7067,70 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Дэвсгэр өнгөнд энэ тэг нөлөөлөх үү, эсвэл "
 
 # gtk/gtktextview.c:538
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "Шугамуудын дээрхи цэгүүд "
 
 # gtk/gtktextview.c:548
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "Шугамуудын доорхи цэгүүд "
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "Нэг мөрөн дахь цэг"
 
 # gtk/gtktextview.c:576
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "Мөр таслах горим"
 
 # gtk/gtktextview.c:594
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "Зүүн хязгаар "
 
 # gtk/gtktextview.c:604
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "Баруун хязгаар "
 
 # gtk/gtktextview.c:632
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "Түүчээын харагдах байдал"
 
 # gtk/gtktextview.c:633
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "Хэрэв оруулагч түүчээ үзэгдэж байвал"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "Буфер"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "Харагдах буфер"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "Оруулсан текст өмнө байсан агуулгыг дарах эсэх"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "Зөвшөөх ТАВ"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "таб товчилуураар ТАВ тэмдэгт оруулах эсэх"
 
 # gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "Алдаа тэмдэглэх өнгө"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "Алдаа зааж доогуур нь зурж тэмдэглэхэд хэрэглэх өнгө"
 

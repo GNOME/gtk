@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-4.bs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:18-0400\n"
 "PO-Revision-Date: 2004-07-31 01:30+0200\n"
 "Last-Translator: Kenan Hadžiavdić <kenan@bgnett.no>\n"
 "Language-Team: Bosnian <lokal@linux.org.ba>\n"
@@ -959,44 +959,49 @@ msgstr "Ne mogu dodijeliti privremene podatke IOBuffer-a"
 msgid "Cannot allocate new pixbuf"
 msgstr "Ne mogu dodijeliti novi pixbuf"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "GIF slika je odsječena ili nekompletna"
+
+#: gdk-pixbuf/io-tga.c:693
 #, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "Ne mogu dodijeliti strukturu mape boja"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 #, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "Ne mogu dodijeliti unose mape boja"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Neočekivan broj boja za unose mape boja"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 #, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "Ne mogu dodijeliti memoriju za TGA zaglavlje"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "TGA slika je nevažeće veličine"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "TGA tip slike nije podržan"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 #, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Ne mogu dodijeliti memoriju za TGA context struct"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Višak podataka u datoteci"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Targa oblik slike"
 
@@ -1707,15 +1712,15 @@ msgstr "_Nijansa:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
+#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "_Metode unosa"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaci kontrolni unicode znak"
 
-#: gtk/gtkentry.c:9975
+#: gtk/gtkentry.c:9981
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Otvori lokaciju"

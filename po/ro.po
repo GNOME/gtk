@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:18-0400\n"
 "PO-Revision-Date: 2009-10-26 22:37+0200\n"
 "Last-Translator: Mișu Moldovan <dumol@gnome.ro>\n"
 "Language-Team: Română <gnomero-list@lists.sourceforge.net>\n"
@@ -916,40 +916,45 @@ msgstr "Nu se pot aloca datele temporare IOBuffer"
 msgid "Cannot allocate new pixbuf"
 msgstr "Nu se poate aloca un nou buffer de pixeli"
 
-#: gdk-pixbuf/io-tga.c:687
+#: gdk-pixbuf/io-tga.c:686
+#, fuzzy
+msgid "Image is corrupted or truncated"
+msgstr "Imaginea GIF era trunchiată sau incompletă."
+
+#: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
 msgstr "Nu se poate aloca structura hărții de culoare"
 
-#: gdk-pixbuf/io-tga.c:694
+#: gdk-pixbuf/io-tga.c:700
 msgid "Cannot allocate colormap entries"
 msgstr "Nu se pot aloca intrările hărții de culoare"
 
-#: gdk-pixbuf/io-tga.c:716
+#: gdk-pixbuf/io-tga.c:722
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Adâncime de biți neașteptată pentru intrările hărții de culoare"
 
-#: gdk-pixbuf/io-tga.c:734
+#: gdk-pixbuf/io-tga.c:740
 msgid "Cannot allocate TGA header memory"
 msgstr "Nu se poate aloca memorie pentru antetul TGA"
 
-#: gdk-pixbuf/io-tga.c:767
+#: gdk-pixbuf/io-tga.c:773
 msgid "TGA image has invalid dimensions"
 msgstr "Imaginea TGA are dimensiuni incorecte"
 
-#: gdk-pixbuf/io-tga.c:773 gdk-pixbuf/io-tga.c:782 gdk-pixbuf/io-tga.c:792
-#: gdk-pixbuf/io-tga.c:802 gdk-pixbuf/io-tga.c:809
+#: gdk-pixbuf/io-tga.c:779 gdk-pixbuf/io-tga.c:788 gdk-pixbuf/io-tga.c:798
+#: gdk-pixbuf/io-tga.c:808 gdk-pixbuf/io-tga.c:815
 msgid "TGA image type not supported"
 msgstr "Tip de imagine TGA nesuportat"
 
-#: gdk-pixbuf/io-tga.c:856
+#: gdk-pixbuf/io-tga.c:862
 msgid "Cannot allocate memory for TGA context struct"
 msgstr "Nu se poate aloca memorie pentru structura contextului TGA"
 
-#: gdk-pixbuf/io-tga.c:921
+#: gdk-pixbuf/io-tga.c:927
 msgid "Excess data in file"
 msgstr "Date în exces în fișier"
 
-#: gdk-pixbuf/io-tga.c:1002
+#: gdk-pixbuf/io-tga.c:1008
 msgid "The Targa image format"
 msgstr "Formatul de imagine TGA"
 
@@ -1625,15 +1630,15 @@ msgstr "_Dreapta:"
 msgid "Paper Margins"
 msgstr "Margini hârtie"
 
-#: gtk/gtkentry.c:8590 gtk/gtktextview.c:7828
+#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "_Metode de input"
 
-#: gtk/gtkentry.c:8604 gtk/gtktextview.c:7842
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserare control Unicode"
 
-#: gtk/gtkentry.c:9975
+#: gtk/gtkentry.c:9981
 msgid "Caps Lock is on"
 msgstr "Caps Lock apăsat"
 

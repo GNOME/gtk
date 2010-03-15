@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bn_IN\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2009-09-16 16:05+0530\n"
 "Last-Translator: Runa Bhattacharjee <runab@redhat.com>\n"
 "Language-Team: Bengali INDIA <anubad@lists.ankur.org.in>\n"
@@ -1428,11 +1428,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "GdkColor হিসেবে পুরোভূমির রং"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "সম্পাদনযোগ্য"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "ব্যবহারকারি এই টেক্সকে বদলাতে পারবেন কিনা"
 
@@ -2293,7 +2293,7 @@ msgstr ""
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "has-frame নির্ধারিত হলে এনট্রির চতুর্দিকে কী ধরনের ছায়া প্রদর্শন করা হবে"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "ওপর দিয়ে লেখার মোড"
 
@@ -2485,11 +2485,11 @@ msgstr "প্রধান আইকনের টুল-টিপের markup"
 msgid "Secondary icon tooltip markup"
 msgstr "দ্বিতীয় আইকনের টুল-টিপের markup"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "IM মডিউল"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "কোন IM ব্যবহার করা হবে"
 
@@ -3260,7 +3260,7 @@ msgstr "লেবেলের টেক্সট"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "লেবেলের টেক্সটে প্রয়োগ করার মত কিছু বৈশিষ্ট্যের একটি তালিকা"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "জাস্টিফিকেশন"
 
@@ -5928,7 +5928,7 @@ msgstr ""
 "খাপখাইয়ে নেয় বিধায় এটি ব্যবহারের পরামর্শ দেওয়া গেল।  প্যানগো কিছু গুণিতক, যেমন "
 "PANGO_SCALE_X_LARGE-এর মান পূর্ব থেকে নির্ধারণ করে থাকে।"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "বাম, ডান অথবা কেন্দ্রীয় জাস্টিফিকেশন (Justification)"
 
@@ -5945,7 +5945,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "বাঁ দিকের মার্জিন"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "বাঁ দিকের মার্জিনের প্রস্থ (পিক্সেলে)"
 
@@ -5953,16 +5953,16 @@ msgstr "বাঁ দিকের মার্জিনের প্রস্থ
 msgid "Right margin"
 msgstr "ডান দিকের মার্জিন"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "ডান দিকের মার্জিনের প্রস্থ (পিক্সেলে)"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "অবচ্ছেদ"
 
 # msgstr "ছাড়"
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "অনুচ্ছেদের ক্ষেত্রে ব্যবহৃত অবচ্ছেদের পরিমাণ, পিক্সেলে ধার্য"
 
@@ -5978,7 +5978,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "লাইনের উপরে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "অনুচ্ছেদের ওপর যত পিক্সেল ফাঁকা স্থান থাকবে"
 
@@ -5986,7 +5986,7 @@ msgstr "অনুচ্ছেদের ওপর যত পিক্সেল �
 msgid "Pixels below lines"
 msgstr "লাইনের নিচে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "অনুচ্ছেদের নিচে যত পিক্সেল ফাঁকা স্থান থাকবে"
 
@@ -5994,22 +5994,22 @@ msgstr "অনুচ্ছেদের নিচে যত পিক্সেল
 msgid "Pixels inside wrap"
 msgstr "গুটিয়ে নেয়ার ক্ষেত্রে পিক্সেল সংখ্যা"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "কোন অনুচ্ছেদের গুটিয়ে যাওয়া দুটি লাইনের মাঝে যত পিক্সেল ফাঁক থাকবে"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "লাইন কখনোই গুটিয়ে নেয়া হবে না, শব্দ শেষ হলে গুটিয়ে নেয়া হবে নাকি অক্ষর শেষ হলে "
 "গুটিয়ে নেয়া হবে"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "ট্যাব"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "এই টেক্সটের জন্য ইচ্ছামাফিক আকারের ট্যাব"
 
@@ -6157,63 +6157,63 @@ msgstr "অনুচ্ছেদের পটভূমির সেট"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "এই ট্যাগটি অনুচ্ছেদের পটভূমির রঙকে প্রভাবিত করে কিনা"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "লাইনের উপরে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "লাইনের নিচে পিক্সেলের সংখ্যা"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "জড়ানোর মধ্যেকার পিক্সেলের সংখ্যা"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "জড়ানো (wrap) অবস্থা"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "বাঁদিকের মার্জিন"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "ডানদিকের মার্জিন"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "কার্সার দৃশ্যমান"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "যদি লেখা ঢোকানোর (Insetion) কার্সার প্রদর্শন করা হয়"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "বাফার"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "যে বাফারটি প্রদর্শন করা হয়"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "যে টেক্সট লেখা হবে তা বিদ্যমান টেক্সটের ওপর দিয়ে লেখা হবে কিনা"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "ট্যাব-এর ব্যবহার অনুমোদন করে"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "ট্যাব চাপলে যে অক্ষরটি লেখা হবে তা ট্যাব-ই হবে কিনা"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "ভুল নির্দেশক নিম্নরেখার রং"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "ভুল নির্দেশক নিম্নরেখা আঁকতে যে রং ব্যবহৃত হবে"
 

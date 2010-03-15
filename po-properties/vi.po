@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2009-02-09 18:47+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -1423,11 +1423,11 @@ msgid "Foreground color as a GdkColor"
 msgstr "Màu cảnh gần theo GdkColor"
 
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "Có thể hiệu chỉnh"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "Người dùng có thể hiệu chỉnh văn bản hay không"
 
@@ -2276,7 +2276,7 @@ msgstr "Có nên cắt ngắn việc dán đoạn đa dòng thành một dòng h
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Kiểu bóng nào cần vẽ chung quanh mục nhập khi « có khung » được đặt"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "Chế độ ghi đè"
 
@@ -2466,11 +2466,11 @@ msgstr "Mã định dạng chú giải biểu tượng chính"
 msgid "Secondary icon tooltip markup"
 msgstr "Mã định dạng chú giải biểu tượng phụ"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "Mô-đun IM"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "Có nên dùng mô-đun IM (tin nhắn) nào"
 
@@ -3247,7 +3247,7 @@ msgstr "Văn bản trong nhãn"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Danh sách các thuộc tính kiểu dáng cần áp dụng vào văn bản của nhãn đó"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "Canh đều"
 
@@ -5952,7 +5952,7 @@ msgstr ""
 "thái v.v. thì đề nghị bạn sử dụng nó. Pango định sẵn vài hằng số như « "
 "PANGO_SCALE_X_LARGE » (pango tỷ lệ lớn lắm)"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "Canh trái, phải, giữa"
 
@@ -5969,7 +5969,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Lề trái"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "Độ rộng của lề trái (theo điểm ảnh))"
 
@@ -5977,15 +5977,15 @@ msgstr "Độ rộng của lề trái (theo điểm ảnh))"
 msgid "Right margin"
 msgstr "Lề phải"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "Độ rộng lề phải (theo điểm ảnh)"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "Thụt lề"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Lượng cần thụt lề đoạn văn, theo điểm ảnh"
 
@@ -6001,7 +6001,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Điểm ảnh trên dòng"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "Khoảng cách trắng trên đoạn văn, theo điểm ảnh"
 
@@ -6009,7 +6009,7 @@ msgstr "Khoảng cách trắng trên đoạn văn, theo điểm ảnh"
 msgid "Pixels below lines"
 msgstr "Điểm ảnh dưới dòng"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "Khoảng cách trắng dưới đoạn văn, theo điểm ảnh"
 
@@ -6017,20 +6017,20 @@ msgstr "Khoảng cách trắng dưới đoạn văn, theo điểm ảnh"
 msgid "Pixels inside wrap"
 msgstr "Điểm ảnh ở trong cuộn"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Khoảng cách trắng giữa hai dòng bị ngắt trong đoạn văn, theo điểm ảnh"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Không ngắt dòng, ngắt theo từ, hoặc ngắt theo ký tự"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "Thanh"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "Tab riêng cho văn bản này"
 
@@ -6175,63 +6175,63 @@ msgstr "Nền đoạn văn được đặt"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Thẻ này có nên tác động tới màu nền đoạn văn hay không"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "Điểm ảnh trên dòng"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "Điểm ảnh dưới dòng"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "Điểm ảnh ở trong cuộn"
 
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "Chế độ ngắt dòng"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "Lề trái"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "Lề phải"
 
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "Hiện con trỏ"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "Có nên hiển thị con trỏ hay không"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "Bộ đệm"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "Bộ đệm cần hiển thị"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "Văn bản được gõ có ghi đè nội dung tồn tại hay không"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "Chấp nhận Tab"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Bấm phím Tab có nên gõ ký tự tab hay không"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "Màu gạch dưới lỗi"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "Màu cần dùng khi vẽ gạch dưới để ngụ ý lỗi"
 

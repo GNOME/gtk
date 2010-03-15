@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-12 20:50-0500\n"
+"POT-Creation-Date: 2010-03-15 19:19-0400\n"
 "PO-Revision-Date: 2009-08-26 10:14+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
@@ -1463,11 +1463,11 @@ msgstr "Aurreko planoaren kolorea GdkColor gisa"
 
 #
 #: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:656 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:575
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "Editagarria"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:576
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "Erabiltzaileak testua alda dezakeen ala ez adierazten du"
 
@@ -2367,7 +2367,7 @@ msgstr "Lerro-anitzeko itsatsiak lerro bakarrean trunkatu edo ez"
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Sarreraren inguruan marraztuko den itzal mota 'markoa du' ezartean"
 
-#: gtk/gtkentry.c:797 gtk/gtktextview.c:655
+#: gtk/gtkentry.c:797 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "Gainidazteko modua"
 
@@ -2560,11 +2560,11 @@ msgstr "Ikono nagusiaren argibidearen markaketa"
 msgid "Secondary icon tooltip markup"
 msgstr "Bigarren mailako ikonoaren argibidearen markaketa"
 
-#: gtk/gtkentry.c:1213 gtk/gtktextview.c:683
+#: gtk/gtkentry.c:1213 gtk/gtktextview.c:684
 msgid "IM module"
 msgstr "BM modulua"
 
-#: gtk/gtkentry.c:1214 gtk/gtktextview.c:684
+#: gtk/gtkentry.c:1214 gtk/gtktextview.c:685
 msgid "Which IM module should be used"
 msgstr "Zein BM modulu erabiliko den"
 
@@ -3374,7 +3374,7 @@ msgstr "Etiketako testua"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiketako testuari aplikatu beharreko estilo-atributuen zerrenda"
 
-#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:592
+#: gtk/gtklabel.c:525 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "Justifikazioa"
 
@@ -6144,7 +6144,7 @@ msgstr ""
 "denez, gomendagarria da. Pango-k zenbait eskala aurrez definitzen ditu; "
 "adibidez, PANGO_SCALE_X_LARGE."
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:593
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "Ezkerreko, eskuineko edo erdiko justifikazioa"
 
@@ -6160,7 +6160,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Ezkerreko marjina"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:602
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "Ezkerreko marjinaren zabalera pixeletan"
 
@@ -6168,15 +6168,15 @@ msgstr "Ezkerreko marjinaren zabalera pixeletan"
 msgid "Right margin"
 msgstr "Eskuineko marjina"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:612
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "Eskuineko marjinaren zabalera pixeletan"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:621
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "Koska"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:622
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Paragrafoa koskatzeko pixel-kopurua"
 
@@ -6192,7 +6192,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Lerroen gaineko pixelak"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:546
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "Paragrafoen gaineko zuriuneen pixelak"
 
@@ -6200,7 +6200,7 @@ msgstr "Paragrafoen gaineko zuriuneen pixelak"
 msgid "Pixels below lines"
 msgstr "Lerroen azpiko pixelak"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:556
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "Paragrafoen azpiko zuriuneen pixelak"
 
@@ -6208,22 +6208,22 @@ msgstr "Paragrafoen azpiko zuriuneen pixelak"
 msgid "Pixels inside wrap"
 msgstr "Itzulbiratearen barruko pixelak"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:566
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Paragrafoko itzulbiratzeen arteko zuriuneen pixelak"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:584
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Lerroak noiz itzulbiratu behar diren adierazten du: inoiz ez, hitzen mugetan "
 "edo karaktereen mugetan"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:631
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "Tabuladoreak"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:632
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "Pertsonalizatu testu honen tabuladoreak"
 
@@ -6382,67 +6382,67 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr ""
 "Etiketa honek paragrafoaren atzeko planoaren koloreari eragiten dion ala ez"
 
-#: gtk/gtktextview.c:545
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "Lerroen gaineko pixelak"
 
-#: gtk/gtktextview.c:555
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "Lerroen azpiko pixelak"
 
-#: gtk/gtktextview.c:565
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "Itzulbiratzearen barruko pixelak"
 
 #
-#: gtk/gtktextview.c:583
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "Itzulbiratze-modua"
 
-#: gtk/gtktextview.c:601
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "Ezkerreko marjina"
 
-#: gtk/gtktextview.c:611
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "Eskuineko marjina"
 
 #
-#: gtk/gtktextview.c:639
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "Kurtsorea ikusgai"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "Txertatze-kurtsorea agertzen bada"
 
-#: gtk/gtktextview.c:647
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "Bufferra"
 
-#: gtk/gtktextview.c:648
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "Bistaratutako bufferra"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr ""
 "Sartutako testuak lehendik dauden edukiak gainidazten dituen ala ez "
 "adierazten du"
 
-#: gtk/gtktextview.c:663
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "Tabulazio-marka onartzen du"
 
-#: gtk/gtktextview.c:664
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Tabuladoreak tabulazio-marka sartzea eragiten duen adierazten du"
 
-#: gtk/gtktextview.c:693
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "Errore-azpimarren kolorea"
 
-#: gtk/gtktextview.c:694
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "Errorea adierazteko azpimarrak zein koloretakoa izan behar duen"
 
