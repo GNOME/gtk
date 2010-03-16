@@ -4604,14 +4604,18 @@ _xwindow_get_shape (Display *xdisplay,
   gint rn, ord, i;
 
   shape = NULL;
-  
+  rn = 0;
+
   xrl = XShapeGetRectangles (xdisplay,
 			     window,
 			     shape_type, &rn, &ord);
-  
+
+  if (xrl == NULL)
+    return NULL; /* XShape not supported */
+
   if (rn == 0)
     return gdk_region_new (); /* Empty */
-  
+
   if (ord != YXBanded)
     {
       /* This really shouldn't happen with any xserver, as they
@@ -4648,21 +4652,20 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
   display = gdk_drawable_get_display (GDK_DRAWABLE (mask));
 
   window = XCreateSimpleWindow (GDK_DISPLAY_XDISPLAY (display),
-				GDK_SCREEN_XROOTWIN (gdk_display_get_default_screen (display)),
-				-1, -1, 1, 1, 0,
-				0, 0);
+                                GDK_SCREEN_XROOTWIN (gdk_display_get_default_screen (display)),
+                                -1, -1, 1, 1, 0,
+                                0, 0);
   XShapeCombineMask (GDK_DISPLAY_XDISPLAY (display),
-		     window,
-		     ShapeBounding,
-		     0, 0,
-		     GDK_PIXMAP_XID (mask),
-		     ShapeSet);
-  
-  region = _xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
-			      window, ShapeBounding);
+                     window,
+                     ShapeBounding,
+                     0, 0,
+                     GDK_PIXMAP_XID (mask),
+                     ShapeSet);
 
-  XDestroyWindow (GDK_DISPLAY_XDISPLAY (display),
-		  window);
+  region = _xwindow_get_shape (GDK_DISPLAY_XDISPLAY (display),
+                               window, ShapeBounding);
+
+  XDestroyWindow (GDK_DISPLAY_XDISPLAY (display), window);
 
   return region;
 }
