@@ -180,8 +180,7 @@ gtk_printer_option_set_foreach_in_group (GtkPrinterOptionSet     *set,
     {
       option = g_ptr_array_index (set->array, i);
 
-      if (group == NULL ||
-	  (option->group != NULL && strcmp (group, option->group) == 0))
+      if (group == NULL || g_strcmp0 (group, option->group) == 0)
 	func (option, user_data);
     }
 }
