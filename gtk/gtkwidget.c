@@ -7622,7 +7622,7 @@ gtk_widget_get_root_window (GtkWidget *widget)
  * around the window using keyboard shortcuts. @direction indicates
  * what kind of motion is taking place (up, down, left, right, tab
  * forward, tab backward). gtk_widget_child_focus() emits the
- * #GtkWidget::focus" signal; widgets override the default handler
+ * #GtkWidget::focus signal; widgets override the default handler
  * for this signal in order to implement appropriate focus behavior.
  *
  * The default ::focus handler for a widget should return %TRUE if
