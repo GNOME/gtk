@@ -2296,31 +2296,15 @@ scale_or_ref (GdkPixbuf *src,
     }
 }
 
-static GdkPixbuf *
-gtk_default_render_icon (GtkStyle            *style,
-                         const GtkIconSource *source,
-                         GtkTextDirection     direction,
-                         GtkStateType         state,
-                         GtkIconSize          size,
-                         GtkWidget           *widget,
-                         const gchar         *detail)
+static gboolean
+lookup_icon_size (GtkStyle    *style,
+		  GtkWidget   *widget,
+		  GtkIconSize  size,
+		  gint        *width,
+		  gint        *height)
 {
-  gint width = 1;
-  gint height = 1;
-  GdkPixbuf *scaled;
-  GdkPixbuf *stated;
-  GdkPixbuf *base_pixbuf;
   GdkScreen *screen;
   GtkSettings *settings;
-
-  /* Oddly, style can be NULL in this function, because
-   * GtkIconSet can be used without a style and if so
-   * it uses this function.
-   */
-
-  base_pixbuf = gtk_icon_source_get_pixbuf (source);
-
-  g_return_val_if_fail (base_pixbuf != NULL, NULL);
 
   if (widget && gtk_widget_has_screen (widget))
     {
@@ -2339,8 +2323,34 @@ gtk_default_render_icon (GtkStyle            *style,
 		g_warning ("Using the default screen for gtk_default_render_icon()"));
     }
 
-  
-  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
+  return gtk_icon_size_lookup_for_settings (settings, size, width, height);
+}
+
+static GdkPixbuf *
+gtk_default_render_icon (GtkStyle            *style,
+                         const GtkIconSource *source,
+                         GtkTextDirection     direction,
+                         GtkStateType         state,
+                         GtkIconSize          size,
+                         GtkWidget           *widget,
+                         const gchar         *detail)
+{
+  gint width = 1;
+  gint height = 1;
+  GdkPixbuf *scaled;
+  GdkPixbuf *stated;
+  GdkPixbuf *base_pixbuf;
+
+  /* Oddly, style can be NULL in this function, because
+   * GtkIconSet can be used without a style and if so
+   * it uses this function.
+   */
+
+  base_pixbuf = gtk_icon_source_get_pixbuf (source);
+
+  g_return_val_if_fail (base_pixbuf != NULL, NULL);
+
+  if (size != (GtkIconSize) -1 && !lookup_icon_size(style, widget, size, &width, &height))
     {
       g_warning (G_STRLOC ": invalid icon size '%d'", size);
       return NULL;
