@@ -663,6 +663,40 @@ is_address_local (const gchar *address)
     return FALSE;
 }
 
+#ifndef HAVE_CUPS_API_1_2
+/* Included from CUPS library because of backward compatibility */
+const char *
+httpGetHostname(http_t *http,
+                char   *s,
+                int    slen)
+{
+  struct hostent *host;
+
+  if (!s || slen <= 1)
+    return (NULL);
+
+  if (http)
+    {
+      if (http->hostname[0] == '/')
+        g_strlcpy (s, "localhost", slen);
+      else
+        g_strlcpy (s, http->hostname, slen);
+    }
+  else
+    {
+      if (gethostname (s, slen) < 0)
+        g_strlcpy (s, "localhost", slen);
+
+      if (!strchr (s, '.'))
+        {
+          if ((host = gethostbyname (s)) != NULL && host->h_name)
+            g_strlcpy (s, host->h_name, slen);
+        }
+    }
+  return (s);
+}
+#endif
+
 static void
 gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
                                      gchar           **auth_info_required,
