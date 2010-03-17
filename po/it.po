@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.17.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2009-10-21 21:35+0200\n"
 "Last-Translator: Luca Ferretti <elle.uca@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -1688,15 +1688,15 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "M_etodi di input"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "Inserisci carattere di controllo _Unicode"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc è attivo"
 

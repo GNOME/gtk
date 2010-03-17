@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -1613,15 +1613,15 @@ msgstr "_വലത്ത്:"
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "Caps Lock ഓണ്‍ ആണു്"
 

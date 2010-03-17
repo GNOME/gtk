@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2009-08-25 13:24+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
@@ -1621,15 +1621,15 @@ msgstr "வலது: (_R)"
 msgid "Paper Margins"
 msgstr "தாள் ஓரங்கள்"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "உள்ளீட்பு _முறைகள்"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "யூனிகோட் கட்டுப்பாட்டு வரியுரு _சொருகவும்"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "Caps Lock செயலிலுள்ளது"
 

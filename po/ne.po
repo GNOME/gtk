@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk.gnome-2-14.ne\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2006-07-07 14:33+0545\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -1655,15 +1655,15 @@ msgstr "ह्यु:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "आगत विधिहरू"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "स्थान खोल्नुहोस्"

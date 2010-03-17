@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2010-01-06 17:00+0530\n"
 "Last-Translator: Amitakhya Phukan <aphukan@redhat.com>\n"
 "Language-Team: American English <>\n"
@@ -1611,15 +1611,15 @@ msgstr "সোঁ ফালৰ (_R):"
 msgid "Paper Margins"
 msgstr "কাগজৰ প্ৰান্তিক অংশ"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আখৰ ভৰাওক (_I)"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "কেপ্স-লক চাবি সক্ৰিয় আছে"
 

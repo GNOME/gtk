@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2005-11-16 11:17+0200\n"
 "Last-Translator: Vital Khilko <vk@altlinux.ru>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1679,15 +1679,15 @@ msgstr "_Адценьне:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "Мэтады _ўводу"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Уставіць кіруючы знак Unicode"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Адкрыць _разьмяшчэньне"

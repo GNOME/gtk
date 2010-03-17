@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ TRUNK\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2009-04-09 03:07-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -1820,15 +1820,15 @@ msgid "Paper Margins"
 msgstr "Kağıt Kenarları"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "Kirdi _Usulları"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Unikod Kontrol Remzini Qıstır"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "Büyük Arif Kiliti (Caps Lock) faaldir"
 

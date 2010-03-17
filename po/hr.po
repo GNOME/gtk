@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2008-05-08 00:30+0000\n"
 "Last-Translator: Launchpad Translations Administrators <rosetta@launchpad."
 "net>\n"
@@ -1685,15 +1685,15 @@ msgstr "_Nijansa:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "_Ulazne metode"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "_Ubaciti Unicode kontrolni znak"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Otvori mjesto"

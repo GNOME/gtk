@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2010-01-19 16:30+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
@@ -1617,15 +1617,15 @@ msgstr "ညာဖက် -"
 msgid "Paper Margins"
 msgstr "စာရွတ် ဘေးမျဉ်းများ"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "ရေးသွင်းချက် နည်းလမ်းများ"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "ယူနီကုဒ် အထိန်း အက္ခရာကို ထည့်သွင်းပါ"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 msgid "Caps Lock is on"
 msgstr "စာလုံးကြီး ခလုတ် ဖွင့်နေတယ်"
 

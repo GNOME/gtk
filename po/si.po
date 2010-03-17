@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2007-12-28 13:32+0530\n"
 "Last-Translator: Danishka Navin <danishka@gmail.com>\n"
 "Language-Team: Sinhala <en@li.org>\n"
@@ -1631,15 +1631,15 @@ msgstr "දකුණ (_R):"
 msgid "Paper Margins"
 msgstr "කොලයේ මායිම"
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "ප්‍රධාන ක්‍රම (_M)"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 msgid "_Insert Unicode Control Character"
 msgstr "යුනිකේත පාලන අක්‍ෂර ඇතුලත් කතන්න (_I)"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "පිහිටීම පිටපත් කරන්න (_L)"

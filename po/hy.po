@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.hy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-15 19:18-0400\n"
+"POT-Creation-Date: 2010-03-17 10:53-0400\n"
 "PO-Revision-Date: 2006-09-04 13:36+0200\n"
 "Last-Translator: Norayr Chilingaryan <norik@freenet.am>\n"
 "Language-Team:  <norik@freenet.am>\n"
@@ -1679,16 +1679,16 @@ msgstr "_Երանգ."
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8596 gtk/gtktextview.c:7849
+#: gtk/gtkentry.c:8589 gtk/gtktextview.c:7849
 msgid "Input _Methods"
 msgstr "Ներմուծման _Ձևեր"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7863
+#: gtk/gtkentry.c:8603 gtk/gtktextview.c:7863
 #, fuzzy
 msgid "_Insert Unicode Control Character"
 msgstr "_Ներմուծել Unicode Control Նիշ"
 
-#: gtk/gtkentry.c:9981
+#: gtk/gtkentry.c:9974
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Բացել _տեղադրությունը"
