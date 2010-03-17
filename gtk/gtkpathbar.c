@@ -261,8 +261,6 @@ gtk_path_bar_finalize (GObject *object)
   g_list_free (path_bar->button_list);
   if (path_bar->root_file)
     g_object_unref (path_bar->root_file);
-  if (path_bar->root_uri)
-    g_free (path_bar->root_uri);
   if (path_bar->home_file)
     g_object_unref (path_bar->home_file);
   if (path_bar->desktop_file)
@@ -1457,6 +1455,8 @@ static ButtonType
 find_button_type (GtkPathBar  *path_bar,
 		  GFile       *file)
 {
+  const GSList *l;
+
   if (path_bar->root_file != NULL &&
       g_file_equal (file, path_bar->root_file))
     return ROOT_BUTTON;
@@ -1467,15 +1467,16 @@ find_button_type (GtkPathBar  *path_bar,
       g_file_equal (file, path_bar->desktop_file))
     return DESKTOP_BUTTON;
 
-  if (path_bar->root_uri != NULL)
+  for (l = path_bar->root_uris; l != NULL; l = l->next)
     {
+      char *root_uri = (char *)l->data;
       char *uri = g_file_get_uri (file);
-      int root_uri_len = strlen (path_bar->root_uri);
+      int root_uri_len = strlen (root_uri);
 
-      if (!strcmp (uri, path_bar->root_uri) ||
-          (path_bar->root_uri[root_uri_len - 1] == '/' &&
+      if (!strcmp (uri, root_uri) ||
+          (root_uri[root_uri_len - 1] == '/' &&
            root_uri_len == strlen (uri) + 1 &&
-           !strncmp (uri, path_bar->root_uri, root_uri_len - 1)))
+           !strncmp (uri, root_uri, root_uri_len - 1)))
         {
           return VIRTUAL_ROOT_BUTTON;
         }
@@ -1665,8 +1666,8 @@ is_file_in_root (GtkPathBar *path_bar,
                  GFile      *file)
 {
   char *uri = g_file_get_uri (file);
-  gboolean result = path_bar->root_uri == NULL ||
-                    _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uri);
+  gboolean result = path_bar->root_uris == NULL ||
+                    _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uris);
   g_free(uri);
 
   return result;
@@ -1857,13 +1858,12 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
 }
 
 void
-_gtk_path_bar_set_root_uri    (GtkPathBar         *path_bar,
-                               const char         *root_uri)
+_gtk_path_bar_set_root_uris   (GtkPathBar         *path_bar,
+                               const GSList       *root_uris)
 {
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
 
-  g_free (path_bar->root_uri);
-  path_bar->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
+  path_bar->root_uris = root_uris;
 
   /*
    * We don't know if we can even query this URI, so clear the buttons as

@@ -111,8 +111,8 @@ gboolean       _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
 gboolean       _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
                                                   GFile          *file);
 
-gboolean       _gtk_file_chooser_uri_has_prefix (const char *uri,
-                                                 const char *prefix);
+gboolean       _gtk_file_chooser_uri_has_prefix (const char   *uri,
+                                                 const GSList *prefixes);
 
 /* GtkFileChooserDialog private */
 
@@ -170,7 +170,7 @@ struct _GtkFileChooserDefault
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
-  char *root_uri;
+  GSList *root_uris;
 
   /* Save mode widgets */
   GtkWidget *save_widgets;

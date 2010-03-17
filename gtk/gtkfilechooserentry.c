@@ -67,7 +67,7 @@ struct _GtkFileChooserEntry
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
-  char *root_uri;
+  const GSList *root_uris;
   GFile *base_folder;
   GFile *current_folder_file;
   gchar *file_part;
@@ -208,7 +208,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   chooser_entry->local_only = TRUE;
-  chooser_entry->root_uri = NULL;
+  chooser_entry->root_uris = NULL;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -296,9 +296,6 @@ gtk_file_chooser_entry_dispose (GObject *object)
   remove_completion_feedback (chooser_entry);
   discard_current_folder (chooser_entry);
   discard_loading_and_current_folder_file (chooser_entry);
-
-  g_free (chooser_entry->root_uri);
-  chooser_entry->root_uri = NULL;
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
     {
@@ -457,9 +454,9 @@ is_file_in_root (GtkFileChooserEntry *chooser_entry,
                  GFile               *file)
 {
   char *uri = g_file_get_uri (file);
-  gboolean result = chooser_entry->root_uri == NULL ||
-                    _gtk_file_chooser_uri_has_prefix (uri,
-                                                      chooser_entry->root_uri);
+  gboolean result =
+    chooser_entry->root_uris == NULL ||
+    _gtk_file_chooser_uri_has_prefix (uri, chooser_entry->root_uris);
   g_free (uri);
 
   return result;
@@ -1488,7 +1485,7 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
 
   if ((chooser_entry->local_only
        && !g_file_is_native (chooser_entry->current_folder_file)) ||
-      (chooser_entry->root_uri != NULL
+      (chooser_entry->root_uris != NULL
        && !is_file_in_root (chooser_entry,
                             chooser_entry->current_folder_file)))
     {
@@ -2028,19 +2025,18 @@ _gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
 }
 
 void
-_gtk_file_chooser_entry_set_root_uri (GtkFileChooserEntry *chooser_entry,
-                                      const char          *root_uri)
+_gtk_file_chooser_entry_set_root_uris (GtkFileChooserEntry *chooser_entry,
+                                       const GSList        *root_uris)
 {
-  g_free (chooser_entry->root_uri);
-
-  chooser_entry->root_uri = (root_uri == NULL ? NULL : g_strdup(root_uri));
+  /* This doesn't need its own copy. */
+  chooser_entry->root_uris = root_uris;
   clear_completions (chooser_entry);
 }
 
-const char *
-_gtk_file_chooser_entry_get_root_uri (GtkFileChooserEntry *chooser_entry)
+const GSList *
+_gtk_file_chooser_entry_get_root_uris (GtkFileChooserEntry *chooser_entry)
 {
-  return chooser_entry->root_uri;
+  return chooser_entry->root_uris;
 }
 
 // vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
