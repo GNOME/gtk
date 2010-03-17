@@ -45,7 +45,7 @@ struct _GtkPathBar
   GFile *home_file;
   GFile *desktop_file;
 
-  char *root_uri;
+  const GSList *root_uris;
 
   GCancellable *get_info_cancellable;
 
@@ -90,8 +90,8 @@ gboolean _gtk_path_bar_set_file        (GtkPathBar         *path_bar,
 					GFile              *file,
 					gboolean            keep_trail,
 					GError            **error);
-void     _gtk_path_bar_set_root_uri    (GtkPathBar         *path_bar,
-										const char         *root_uri);
+void     _gtk_path_bar_set_root_uris   (GtkPathBar         *path_bar,
+										const GSList       *root_uris);
 void     _gtk_path_bar_up              (GtkPathBar *path_bar);
 void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 

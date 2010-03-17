@@ -709,7 +709,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-  impl->root_uri = g_strdup ("file://");
+  impl->root_uris = g_slist_append (NULL, g_strdup ("file://"));
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
@@ -1751,11 +1751,26 @@ shortcuts_append_search (GtkFileChooserDefault *impl)
   gboolean old_changing_folders = impl->changing_folder;
   impl->changing_folder = TRUE;
   int start_row = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
+  gboolean can_search = (impl->root_uris == NULL);
 
   if (impl->has_search)
       shortcuts_remove_rows (impl, start_row, 1);
 
-  if (impl->root_uri == NULL || g_str_has_prefix (impl->root_uri, "file:"))
+  if (!can_search)
+    {
+      GSList *l;
+
+      for (l = impl->root_uris; l != NULL; l = l->next)
+        {
+          if (g_str_has_prefix ((char *)l->data, "file:"))
+            {
+              can_search = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (can_search)
     {
       GtkTreeIter iter;
       GdkPixbuf *pixbuf = render_search_icon (impl);
@@ -2072,7 +2087,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
           _gtk_file_system_volume_is_mounted (volume) &&
           !g_file_is_native (base_file))
         skip = TRUE;
-      else if (impl->root_uri != NULL &&
+      else if (impl->root_uris != NULL &&
                (base_file == NULL ||
                 !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
                                                     base_file)))
@@ -2256,7 +2271,7 @@ shortcuts_add_custom_folders (GtkFileChooserDefault *impl)
     {
       GFile *file = (GFile *)l->data;
 
-      if (impl->root_uri != NULL &&
+      if (impl->root_uris != NULL &&
           _gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
         {
           int pos = shortcuts_get_pos_for_shortcut_folder (impl,
@@ -4790,10 +4805,11 @@ save_widgets_create (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_local_only (
      GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)));
-  _gtk_file_chooser_entry_set_root_uri (
+  _gtk_file_chooser_entry_set_root_uris (
      GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-     impl->root_uri);
-  _gtk_path_bar_set_root_uri (GTK_PATH_BAR (impl->browse_path_bar), impl->root_uri);
+     impl->root_uris);
+  _gtk_path_bar_set_root_uris (GTK_PATH_BAR (impl->browse_path_bar),
+                               impl->root_uris);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->location_entry,
@@ -4951,9 +4967,9 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_local_only (
      GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)));
-  _gtk_file_chooser_entry_set_root_uri (
+  _gtk_file_chooser_entry_set_root_uris (
      GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-     impl->root_uri);
+     impl->root_uris);
 
   /* Done */
 
@@ -5238,145 +5254,143 @@ set_extra_widget (GtkFileChooserDefault *impl,
 }
 
 static void
-set_root_uri (GtkFileChooserDefault *impl,
-              const gchar           *root_uri)
+set_root_uris (GtkFileChooserDefault *impl,
+               GSList                *root_uris)
 {
-  if (root_uri == NULL || *root_uri == '\0')
-    root_uri = NULL;
+  GtkTreeIter iter;
+  GFile *list_selected = NULL;
+  ShortcutType shortcut_type = -1;
+  gboolean local_only;
 
-  if (g_strcmp0 (root_uri, impl->root_uri))
+  if (root_uris == impl->root_uris)
+    return;
+
+  g_slist_foreach (impl->root_uris, (GFunc)g_free, NULL);
+  g_slist_free (impl->root_uris);
+
+  impl->root_uris = root_uris;
+
+  local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
+
+  if (impl->location_entry)
     {
-      GtkTreeIter iter;
-      GFile *list_selected = NULL;
-      ShortcutType shortcut_type = -1;
-      gboolean local_only;
+      _gtk_file_chooser_entry_set_root_uris (
+        GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+       impl->root_uris);
+      _gtk_file_chooser_entry_set_local_only (
+        GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+        local_only);
+    }
 
-      g_free (impl->root_uri);
-      impl->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
+  _gtk_path_bar_set_root_uris (GTK_PATH_BAR (impl->browse_path_bar),
+                               impl->root_uris);
 
-      local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl));
+  /* Attempt to preserve the sidebar selection if possible. */
+  if (shortcuts_get_selected (impl, &iter))
+    {
+      gpointer col_data = NULL;
 
-      if (impl->location_entry)
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model),
+                          &iter,
+                          SHORTCUTS_COL_DATA, &col_data,
+                          SHORTCUTS_COL_TYPE, &shortcut_type,
+                          -1);
+
+      if (col_data != NULL)
         {
-          _gtk_file_chooser_entry_set_root_uri (
-            GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-            impl->root_uri);
-          _gtk_file_chooser_entry_set_local_only (
-            GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
-            local_only);
+          if (shortcut_type == SHORTCUT_TYPE_FILE)
+            list_selected = g_object_ref (col_data);
+          else if (shortcut_type == SHORTCUT_TYPE_VOLUME)
+            list_selected = col_data;
         }
+    }
 
-      _gtk_path_bar_set_root_uri (GTK_PATH_BAR (impl->browse_path_bar),
-                                  impl->root_uri);
+  if (impl->shortcuts_model && impl->file_system)
+    {
+      /* Update all the sidebar entries to filter the root URI. */
+      shortcuts_model_create (impl);
+      shortcuts_add_bookmarks (impl);
+      shortcuts_add_custom_folders (impl);
+    }
 
-      /* Attempt to preserve the sidebar selection if possible. */
-      if (shortcuts_get_selected (impl, &iter))
+  if (impl->current_folder != NULL)
+    {
+      if (local_only && !g_file_is_native (impl->current_folder))
         {
-          gpointer col_data = NULL;
+          /* If we are pointing to a non-local folder, make an effort to
+           * change back to a local folder, but it's really up to the app
+           * to not cause such a situation, so we ignore errors.
+           */
+          const gchar *home = g_get_home_dir ();
+          GFile *home_file;
 
-          gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model),
-                              &iter,
-                              SHORTCUTS_COL_DATA, &col_data,
-                              SHORTCUTS_COL_TYPE, &shortcut_type,
-                              -1);
-
-          if (col_data != NULL)
+          if (home != NULL)
             {
-              if (shortcut_type == SHORTCUT_TYPE_FILE)
-                list_selected = g_object_ref (col_data);
-              else if (shortcut_type == SHORTCUT_TYPE_VOLUME)
-                list_selected = col_data;
-            }
-        }
+              home_file = g_file_new_for_path (home);
+              gtk_file_chooser_set_current_folder_file (
+                GTK_FILE_CHOOSER (impl),
+                home_file, NULL);
 
-      if (impl->shortcuts_model && impl->file_system)
-        {
-          /* Update all the sidebar entries to filter the root URI. */
-          shortcuts_model_create (impl);
-          shortcuts_add_bookmarks (impl);
-          shortcuts_add_custom_folders (impl);
-        }
-
-      if (impl->current_folder != NULL)
-        {
-          if (local_only && !g_file_is_native (impl->current_folder))
-            {
-              /* If we are pointing to a non-local folder, make an effort to
-               * change back to a local folder, but it's really up to the app
-               * to not cause such a situation, so we ignore errors.
-               */
-              const gchar *home = g_get_home_dir ();
-              GFile *home_file;
-
-              if (home != NULL)
-                {
-                  home_file = g_file_new_for_path (home);
-                  gtk_file_chooser_set_current_folder_file (
-                    GTK_FILE_CHOOSER (impl),
-                    home_file, NULL);
-
-                  g_object_unref (home_file);
-                }
-            }
-          else if (impl->root_uri != NULL &&
-                   !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
-                                                       impl->current_folder))
-            {
-              /*
-               * If we are pointing to a folder outside of the root URI,
-               * set the folder to the root URI.
-               */
-
-              /*
-               * Clear the list first, in case we can't load this path.
-               * We don't want to show files they shouldn't be able to access.
-               */
-              if (impl->operation_mode == OPERATION_MODE_BROWSE)
-                stop_operation (impl, impl->operation_mode);
-
-              gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
-                                                       impl->root_uri);
-            }
-          else
-            {
-              /* Re-set the current folder so we'll display it properly. */
-              gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl),
-                                                        impl->current_folder,
-                                                        NULL);
+              g_object_unref (home_file);
             }
         }
-
-      if (shortcut_type != -1)
+      else if (impl->root_uris != NULL &&
+               !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                                   impl->current_folder))
         {
-          if (list_selected != NULL)
-            {
-              shortcuts_find_folder (impl, list_selected);
+          /*
+           * If we are pointing to a folder outside of the root URI,
+           * set the folder to the root URI.
+           */
 
-              if (shortcut_type == SHORTCUT_TYPE_FILE)
-                g_object_unref (list_selected);
-            }
-          else
-            {
-              int pos = -1;
+          /*
+           * Clear the list first, in case we can't load this path.
+           * We don't want to show files they shouldn't be able to access.
+           */
+          if (impl->operation_mode == OPERATION_MODE_BROWSE)
+            stop_operation (impl, impl->operation_mode);
 
-              /*
-               * Switch the operation mode to browse, a good default.
-               * We'll go back to Search or Recent if that's what was
-               * selected. The advantage is that we'll reload the results
-               * as well.
-               */
-              stop_operation (impl, impl->operation_mode);
+          gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
+                                                   (char *)impl->root_uris->data);
+        }
+      else
+        {
+          /* Re-set the current folder so we'll display it properly. */
+          gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl),
+                                                    impl->current_folder,
+                                                    NULL);
+        }
+    }
 
-              impl->operation_mode = OPERATION_MODE_BROWSE;
+  if (shortcut_type != -1)
+    {
+      if (list_selected != NULL)
+        {
+          shortcuts_find_folder (impl, list_selected);
 
-              if (shortcut_type == SHORTCUT_TYPE_SEARCH)
-                pos = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
-              else if (shortcut_type == SHORTCUT_TYPE_RECENT)
-                pos = shortcuts_get_index (impl, SHORTCUTS_RECENT);
+          if (shortcut_type == SHORTCUT_TYPE_FILE)
+            g_object_unref (list_selected);
+        }
+      else
+        {
+          int pos = -1;
 
-              if (pos != -1)
-                shortcuts_find_pos (impl, pos);
-            }
+          /*
+           * Switch the operation mode to browse, a good default.
+           * We'll go back to Search or Recent if that's what was
+           * selected. The advantage is that we'll reload the results
+           * as well.
+           */
+          stop_operation (impl, impl->operation_mode);
+          impl->operation_mode = OPERATION_MODE_BROWSE;
+
+          if (shortcut_type == SHORTCUT_TYPE_SEARCH)
+            pos = shortcuts_get_index (impl, SHORTCUTS_SEARCH);
+          else if (shortcut_type == SHORTCUT_TYPE_RECENT)
+            pos = shortcuts_get_index (impl, SHORTCUTS_RECENT);
+
+          if (pos != -1)
+            shortcuts_find_pos (impl, pos);
         }
     }
 }
@@ -5555,7 +5569,10 @@ gtk_file_chooser_default_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      set_root_uri (impl, g_value_get_boolean (value) ? "file://" : NULL);
+      set_root_uris (impl,
+                     g_value_get_boolean (value)
+                     ? g_slist_append (NULL, g_strdup ("file://"))
+                     : NULL);
       break;
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
@@ -5621,8 +5638,8 @@ gtk_file_chooser_default_set_property (GObject      *object,
       }
       break;
 
-    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
-      set_root_uri (impl, g_value_get_string (value));
+    case GTK_FILE_CHOOSER_PROP_ROOT_URIS:
+      set_root_uris (impl, (GSList *)g_value_get_pointer (value));
       break;
 
     default:
@@ -5650,10 +5667,26 @@ gtk_file_chooser_default_get_property (GObject    *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
-      g_value_set_boolean (value,
-                           impl->root_uri != NULL &&
-                           g_str_has_prefix (impl->root_uri, "file://"));
-      break;
+      {
+        gboolean local_only = (impl->root_uris != NULL);
+
+        if (local_only)
+          {
+            GSList *l;
+
+            for (l = impl->root_uris; l != NULL; l = l->next)
+              {
+                if (!g_str_has_prefix ((char *)l->data, "file://"))
+                  {
+                    local_only = FALSE;
+                    break;
+                  }
+              }
+          }
+
+        g_value_set_boolean (value, local_only);
+        break;
+      }
 
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
       g_value_set_object (value, impl->preview_widget);
@@ -5687,8 +5720,8 @@ gtk_file_chooser_default_get_property (GObject    *object,
       g_value_set_boolean (value, impl->create_folders);
       break;
 
-    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
-      g_value_set_string (value, impl->root_uri);
+    case GTK_FILE_CHOOSER_PROP_ROOT_URIS:
+      g_value_set_pointer (value, impl->root_uris);
       break;
 
     default:
@@ -5725,8 +5758,9 @@ gtk_file_chooser_default_dispose (GObject *object)
       impl->extra_widget = NULL;
     }
 
-  g_free (impl->root_uri);
-  impl->root_uri = NULL;
+  g_slist_foreach (impl->root_uris, (GFunc)g_free, NULL);
+  g_slist_free (impl->root_uris);
+  impl->root_uris = NULL;
 
   pending_select_files_free (impl);
 

@@ -827,23 +827,22 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 							     GTK_PARAM_READWRITE));
 
   /**
-   * GtkFileChooser:root-uri:
+   * GtkFileChooser:root-uris:
    *
-   * The absolute root URI that can be accessed in the file chooser.
+   * The absolute root URIs that can be accessed in the file chooser.
    * Any shortcuts (special or user-defined) or volumes not within
-   * this URI will be filtered out for this dialog.
+   * these URIs will be filtered out for this dialog.
    *
-   * The default is an empty string or NULL, which provides the
-   * default level of access for the file chooser.
+   * The default is NULL, which provides the default level of access
+   * for the file chooser.
    *
    * Since: 2.18
    */
   g_object_interface_install_property (g_iface,
-				       g_param_spec_string ("root-uri",
-							     P_("Root URI"),
-							     P_("The URI, if any, to use as the root for all access in the file chooser."),
-							     NULL,
-							     GTK_PARAM_READWRITE));
+				       g_param_spec_pointer ("root-uris",
+							   P_("Root URIs"),
+							   P_("The URIs, if any, to use as the root for all access in the file chooser."),
+							   GTK_PARAM_READWRITE));
 }
 
 /**
@@ -921,8 +920,8 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
  * rather than the URI functions like
  * gtk_file_chooser_get_uri(),
  *
- * This implies a root URI of "file://". See
- * gtk_file_chooser_set_root_uri().
+ * This implies a single root URI of "file://". See
+ * gtk_file_chooser_set_root_uris().
  *
  * Since: 2.4
  **/
@@ -943,7 +942,7 @@ gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
  * file selector. See gtk_file_chooser_set_local_only()
  *
  * This is %TRUE when the root URI of the file chooser is
- * "file://". See gtk_file_chooser_get_root_uri().
+ * "file://". See gtk_file_chooser_get_root_uris().
  * 
  * Return value: %TRUE if only local files can be selected.
  *
@@ -962,12 +961,12 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_set_root_uri:
+ * gtk_file_chooser_set_root_uris:
  * @chooser: a #GtkFileChooser
  * @root_uri: The root URI, or %NULL to allow access to everything.
  *
- * Sets the URI that will be the root of the file chooser. The file
- * chooser will not display or allow access to files outside of this URI.
+ * Sets the URIs that will be the roots of the file chooser. The file
+ * chooser will not display or allow access to files outside of these URIs.
  *
  * If this is set to %NULL, then the file chooser will have access to all
  * local and remote volumes and files.
@@ -976,25 +975,29 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
  * directory and its subdirectories, to a particular storage device, or to a
  * remote server.
  *
- * See gtk_file_chooser_get_root_uri()
+ * If more than one root URI is provided for the same filesystem or protocol
+ * (for example, "file:///home" and "file:///"), then the most permissive will
+ * be used (in this case, "file:///").
+ *
+ * See gtk_file_chooser_get_root_uris()
  *
  * Since: 2.18
  **/
 void
-gtk_file_chooser_set_root_uri (GtkFileChooser *chooser,
-			       const gchar    *root_uri)
+gtk_file_chooser_set_root_uris (GtkFileChooser *chooser,
+			        GSList         *root_uris)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
 
-  g_object_set (chooser, "root-uri", root_uri, NULL);
+  g_object_set (chooser, "root-uris", root_uris, NULL);
 }
 
 /**
- * gtk_file_chooser_get_root_uri:
+ * gtk_file_chooser_get_root_uris:
  * @chooser: a #GtkFileChooser
  *
- * Gets the URI that is the root of the file chooser. The file chooser
- * will not display or allow access to files outside of this URI.
+ * Gets the URIs that are the roots of the file chooser. The file chooser
+ * will not display or allow access to files outside of these URIs.
  *
  * If this is %NULL, then the file chooser has access to all local and
  * remote volumes and files.
@@ -1003,22 +1006,26 @@ gtk_file_chooser_set_root_uri (GtkFileChooser *chooser,
  * directory and its subdirectories, to a particular storage device, or to a
  * remote server.
  *
- * See gtk_file_chooser_set_root_uri()
+ * If more than one root URI is provided for the same filesystem or protocol
+ * (for example, "file:///home" and "file:///"), then the most permissive will
+ * be used (in this case, "file:///").
  *
- * Return value: The root URI, or %NULL.
+ * See gtk_file_chooser_set_root_uris()
+ *
+ * Return value: The root URIs, or %NULL.
  *
  * Since: 2.18
  **/
-const gchar *
-gtk_file_chooser_get_root_uri (GtkFileChooser *chooser)
+GSList *
+gtk_file_chooser_get_root_uris (GtkFileChooser *chooser)
 {
-  const gchar *root_uri;
+  GSList *root_uris;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  g_object_get (chooser, "root-uri", &root_uri, NULL);
+  g_object_get (chooser, "root-uris", &root_uris, NULL);
 
-  return root_uri;
+  return root_uris;
 }
 
 /**
@@ -2835,40 +2842,45 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
 #endif
 
 gboolean
-_gtk_file_chooser_uri_has_prefix (const char *uri,
-                                  const char *prefix)
+_gtk_file_chooser_uri_has_prefix (const char   *uri,
+                                  const GSList *prefixes)
 {
   int uri_len;
-  int prefix_len;
-  gboolean result;
-  char *new_prefix = NULL;
+  gboolean result = FALSE;
+  const GSList *l;
 
   g_return_val_if_fail (uri != NULL, FALSE);
-  g_return_val_if_fail (prefix != NULL, FALSE);
+  g_return_val_if_fail (prefixes != NULL, FALSE);
 
   uri_len = strlen (uri);
-  prefix_len = strlen (prefix);
 
-  if (prefix[prefix_len - 1] != '/')
+  for (l = prefixes; l != NULL && !result; l = l->next)
     {
-      new_prefix = g_strdup_printf ("%s/", prefix);
-      prefix = new_prefix;
-      prefix_len++;
-    }
+      char *new_prefix = NULL;
+      char *prefix = (char *)l->data;
+      int prefix_len = strlen (prefix);
 
-  if (prefix_len == uri_len + 1)
-    {
-      /*
-       * Special case. The prefix URI may contain a trailing slash while the
-       * URI we're comparing against may not (or vice-versa), despite the
-       * URIs being equal.
-       */
-      result = !strncmp (prefix, uri, uri_len);
-    }
-  else
-    result = (uri_len >= prefix_len && g_str_has_prefix (uri, prefix));
+      if (prefix[prefix_len - 1] != '/')
+        {
+          new_prefix = g_strdup_printf ("%s/", prefix);
+          prefix = new_prefix;
+          prefix_len++;
+        }
 
-  g_free (new_prefix);
+      if (prefix_len == uri_len + 1)
+        {
+          /*
+           * Special case. The prefix URI may contain a trailing slash while the
+           * URI we're comparing against may not (or vice-versa), despite the
+           * URIs being equal.
+           */
+          result = !strncmp (prefix, uri, uri_len);
+        }
+      else
+        result = (uri_len >= prefix_len && g_str_has_prefix (uri, prefix));
+
+      g_free (new_prefix);
+    }
 
   return result;
 }
@@ -2877,14 +2889,15 @@ gboolean
 _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
                                   const char     *uri)
 {
-  const char *root_uri;
+  GSList *root_uris;
 
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  root_uri = gtk_file_chooser_get_root_uri (chooser);
+  root_uris = gtk_file_chooser_get_root_uris (chooser);
 
-  return root_uri == NULL || _gtk_file_chooser_uri_has_prefix (uri, root_uri);
+  return root_uris == NULL ||
+         _gtk_file_chooser_uri_has_prefix (uri, root_uris);
 }
 
 gboolean
