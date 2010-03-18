@@ -1168,7 +1168,11 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 {
   GtkPackDirection pack_dir = PACK_DIRECTION (menu_shell);
 
-  gtk_menu_shell_deselect (menu_shell);
+  if (menu_shell->active_menu_item)
+    {
+      gtk_menu_item_deselect (GTK_MENU_ITEM (menu_shell->active_menu_item));
+      menu_shell->active_menu_item = NULL;
+    }
 
   if (!_gtk_menu_item_is_selectable (menu_item))
     {
