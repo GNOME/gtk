@@ -68,6 +68,12 @@ void gtk_theming_engine_get          (GtkThemingEngine *engine,
 
 G_CONST_RETURN GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
 
+gboolean gtk_theming_engine_has_class        (GtkThemingEngine *engine,
+                                              const gchar      *style_class);
+gboolean gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
+                                             const gchar        *style_class,
+                                             GtkChildClassFlags *flags);
+
 GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
 gboolean      gtk__theming_engine_is_state_set (GtkThemingEngine *engine,
                                                 GtkStateType      state);

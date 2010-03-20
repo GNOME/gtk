@@ -171,6 +171,34 @@ gtk_theming_engine_get_path (GtkThemingEngine *engine)
   return gtk_style_context_get_path (priv->context);
 }
 
+gboolean
+gtk_theming_engine_has_class (GtkThemingEngine *engine,
+                              const gchar      *style_class)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
+
+  priv = engine->priv;
+  return gtk_style_context_has_class (priv->context, style_class);
+}
+
+gboolean
+gtk_theming_engine_has_child_class (GtkThemingEngine   *engine,
+                                    const gchar        *style_class,
+                                    GtkChildClassFlags *flags)
+{
+  GtkThemingEnginePrivate *priv;
+
+  if (flags)
+    *flags = 0;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
+
+  priv = engine->priv;
+  return gtk_style_context_has_child_class (priv->context, style_class, flags);
+}
+
 /* GtkThemingModule */
 
 static gboolean
