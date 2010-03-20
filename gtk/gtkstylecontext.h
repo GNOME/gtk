@@ -102,6 +102,14 @@ gboolean gtk_style_context_has_child_class   (GtkStyleContext    *context,
                                               const gchar        *class_name,
                                               GtkChildClassFlags *flags_return);
 
+/* Paint methods */
+void gtk_render_check (GtkStyleContext *context,
+                       cairo_t         *cr,
+                       gdouble          x,
+                       gdouble          y,
+                       gdouble          width,
+                       gdouble          height);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */
