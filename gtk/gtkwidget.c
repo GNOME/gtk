@@ -4146,6 +4146,7 @@ gtk_widget_realize (GtkWidget *widget)
   GtkWidgetPrivate *priv;
   GdkExtensionMode mode;
   cairo_region_t *region;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
@@ -4195,6 +4196,17 @@ gtk_widget_realize (GtkWidget *widget)
         gdk_window_set_support_multidevice (priv->window, TRUE);
 
       _gtk_widget_enable_device_events (widget);
+
+      context = g_object_get_qdata (G_OBJECT (widget),
+                                    quark_style_context);
+      if (context)
+        {
+          GtkWidgetPath *path;
+
+          path = gtk_widget_get_path (widget);
+          gtk_style_context_set_path (context, path);
+          gtk_widget_path_free (path);
+        }
     }
 }
 
@@ -13202,6 +13214,15 @@ gtk_widget_get_style_context (GtkWidget *widget)
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_style_context, context,
                                (GDestroyNotify) g_object_unref);
+    }
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      GtkWidgetPath *path;
+
+      path = gtk_widget_get_path (widget);
+      gtk_style_context_set_path (context, path);
+      gtk_widget_path_free (path);
     }
 
   return context;
