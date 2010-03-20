@@ -48,6 +48,13 @@ struct GtkThemingEngine
 struct GtkThemingEngineClass
 {
   GObjectClass parent_class;
+
+  void (* render_check) (GtkThemingEngine *engine,
+                         cairo_t          *cr,
+                         gdouble           x,
+                         gdouble           y,
+                         gdouble           width,
+                         gdouble           height);
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;

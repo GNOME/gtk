@@ -36,6 +36,13 @@ struct GtkThemingEnginePrivate
 
 #define GTK_THEMING_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_THEMING_ENGINE, GtkThemingEnginePrivate))
 
+static void gtk_theming_engine_render_check (GtkThemingEngine *engine,
+                                             cairo_t          *cr,
+                                             gdouble           x,
+                                             gdouble           y,
+                                             gdouble           width,
+                                             gdouble           height);
+
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
 
@@ -65,6 +72,8 @@ static void
 gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  klass->render_check = gtk_theming_engine_render_check;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -295,6 +304,78 @@ gtk_theming_engine_load (const gchar *name)
     }
 
   return engine;
+}
+
+/* Paint method implementations */
+static void
+gtk_theming_engine_render_check (GtkThemingEngine *engine,
+                                 cairo_t          *cr,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           width,
+                                 gdouble           height)
+{
+  GdkColor *fg_color, *base_color, *text_color;
+  const GtkWidgetPath *path;
+  GtkStateFlags flags;
+  GtkStateType state;
+
+  flags = gtk_theming_engine_get_state (engine);
+  path = gtk_theming_engine_get_path (engine);
+  cairo_save (cr);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "foreground-color", &fg_color,
+                          "base-color", &base_color,
+                          "text-color", &text_color,
+                          NULL);
+
+  if (!gtk_widget_path_has_parent (path, GTK_TYPE_MENU))
+    {
+      cairo_set_line_width (cr, 1);
+
+      cairo_rectangle (cr,
+                       x + 0.5, y + 0.5,
+                       width - 1, height - 1);
+
+      gdk_cairo_set_source_color (cr, base_color);
+      cairo_fill_preserve (cr);
+
+      if (gtk_widget_path_has_parent (path, GTK_TYPE_TREE_VIEW))
+        gdk_cairo_set_source_color (cr, text_color);
+      else
+        gdk_cairo_set_source_color (cr, fg_color);
+
+      cairo_stroke (cr);
+    }
+
+  cairo_set_line_width (cr, 1.5);
+  gdk_cairo_set_source_color (cr, text_color);
+
+  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT))
+    {
+      cairo_move_to (cr, x + (width * 0.2), y + (height / 2));
+      cairo_line_to (cr, x + (width * 0.8), y + (height / 2));
+    }
+  else if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE))
+    {
+      cairo_move_to (cr, x + (width * 0.2), y + (height / 2));
+      cairo_line_to (cr, x + (width * 0.4), y + (height * 0.8));
+      cairo_line_to (cr, x + (width * 0.8), y + (height * 0.2));
+    }
+
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (fg_color);
+  gdk_color_free (base_color);
+  gdk_color_free (text_color);
 }
 
 #define __GTK_THEMING_ENGINE_C__
