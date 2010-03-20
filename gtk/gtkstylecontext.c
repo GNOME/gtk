@@ -30,6 +30,13 @@
 
 typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
+typedef struct GtkChildClass GtkChildClass;
+
+struct GtkChildClass
+{
+  GQuark class_quark;
+  GtkChildClassFlags flags;
+};
 
 struct GtkStyleProviderData
 {
@@ -45,6 +52,7 @@ struct GtkStyleContextPrivate
 
   GtkStateFlags state_flags;
   GList *style_classes;
+  GList *child_style_classes;
 
   GtkThemingEngine *theming_engine;
 };
@@ -440,6 +448,137 @@ gtk_style_context_has_class (GtkStyleContext *context,
   if (g_list_find (priv->style_classes,
                    GUINT_TO_POINTER (class_quark)))
     return TRUE;
+
+  return FALSE;
+}
+
+static gint
+child_style_class_compare (gconstpointer p1,
+                           gconstpointer p2)
+{
+  const GtkChildClass *c1, *c2;
+
+  c1 = p1;
+  c2 = p2;
+
+  return (gint) c1->class_quark - c2->class_quark;
+}
+
+void
+gtk_style_context_set_child_class (GtkStyleContext    *context,
+                                   const gchar        *class_name,
+                                   GtkChildClassFlags  flags)
+{
+  GtkStyleContextPrivate *priv;
+  GtkChildClass *child_class;
+  GQuark class_quark;
+  GList *link;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (class_name != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  class_quark = g_quark_from_string (class_name);
+  link = priv->style_classes;
+
+  while (link)
+    {
+      GtkChildClass *link_class;
+
+      link_class = link->data;
+
+      if (link_class->class_quark == class_quark)
+        {
+          link_class->flags = flags;
+          return;
+        }
+      else if (link_class->class_quark > class_quark)
+        break;
+
+      link = link->next;
+    }
+
+  child_class = g_slice_new0 (GtkChildClass);
+  child_class->class_quark = class_quark;
+  child_class->flags = flags;
+
+  if (link)
+    priv->style_classes = g_list_insert_before (priv->style_classes,
+                                                link, child_class);
+  else
+    priv->style_classes = g_list_append (priv->style_classes, child_class);
+}
+
+void
+gtk_style_context_unset_child_class (GtkStyleContext    *context,
+                                     const gchar        *class_name)
+{
+  GtkStyleContextPrivate *priv;
+  GtkChildClass child_class;
+  GQuark class_quark;
+  GList *link;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (class_name != NULL);
+
+  class_quark = g_quark_try_string (class_name);
+
+  if (!class_quark)
+    return;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  child_class.class_quark = class_quark;
+
+  link = g_list_find_custom (priv->child_style_classes,
+                             &child_class, child_style_class_compare);
+
+  if (link)
+    {
+      priv->child_style_classes = g_list_remove_link (priv->child_style_classes, link);
+      g_slice_free (GtkChildClass, link->data);
+      g_list_free1 (link);
+    }
+}
+
+gboolean
+gtk_style_context_has_child_class (GtkStyleContext    *context,
+                                   const gchar        *class_name,
+                                   GtkChildClassFlags *flags_return)
+{
+  GtkStyleContextPrivate *priv;
+  GtkChildClass child_class;
+  GQuark class_quark;
+  GList *link;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (class_name != NULL, FALSE);
+
+  if (flags_return)
+    *flags_return = 0;
+
+  class_quark = g_quark_try_string (class_name);
+
+  if (!class_quark)
+    return FALSE;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  child_class.class_quark = class_quark;
+
+  link = g_list_find_custom (priv->child_style_classes,
+                             &child_class, child_style_class_compare);
+
+  if (link)
+    {
+      if (*flags_return)
+        {
+          GtkChildClass *found_class;
+
+          found_class = link->data;
+          *flags_return = found_class->flags;
+        }
+
+      return TRUE;
+    }
 
   return FALSE;
 }

@@ -36,6 +36,15 @@ G_BEGIN_DECLS
 typedef struct GtkStyleContext GtkStyleContext;
 typedef struct GtkStyleContextClass GtkStyleContextClass;
 
+typedef enum {
+  GTK_CHILD_CLASS_EVEN    = 1 << 0,
+  GTK_CHILD_CLASS_ODD     = 1 << 1,
+  GTK_CHILD_CLASS_FIRST   = 1 << 2,
+  GTK_CHILD_CLASS_LAST    = 1 << 3,
+  GTK_CHILD_CLASS_DEFAULT = 1 << 4,
+  GTK_CHILD_CLASS_SORTED  = 1 << 5
+} GtkChildClassFlags;
+
 struct GtkStyleContext
 {
   GObject parent_object;
@@ -84,6 +93,14 @@ void     gtk_style_context_unset_class (GtkStyleContext *context,
 gboolean gtk_style_context_has_class   (GtkStyleContext *context,
                                         const gchar     *class_name);
 
+void     gtk_style_context_set_child_class   (GtkStyleContext    *context,
+                                              const gchar        *class_name,
+                                              GtkChildClassFlags  flags);
+void     gtk_style_context_unset_child_class (GtkStyleContext    *context,
+                                              const gchar        *class_name);
+gboolean gtk_style_context_has_child_class   (GtkStyleContext    *context,
+                                              const gchar        *class_name,
+                                              GtkChildClassFlags *flags_return);
 
 G_END_DECLS
 
