@@ -44,6 +44,7 @@ struct GtkStyleContextPrivate
   GtkWidgetPath *widget_path;
 
   GtkStateFlags state_flags;
+  GList *style_classes;
 
   GtkThemingEngine *theming_engine;
 };
@@ -359,6 +360,88 @@ gtk_style_context_get_path (GtkStyleContext *context)
 
   priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
   return priv->widget_path;
+}
+
+void
+gtk_style_context_set_class (GtkStyleContext *context,
+                             const gchar     *class_name)
+{
+  GtkStyleContextPrivate *priv;
+  GQuark class_quark;
+  GList *link;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (class_name != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  class_quark = g_quark_from_string (class_name);
+
+  link = priv->style_classes;
+
+  while (link)
+    {
+      GQuark link_quark;
+
+      link_quark = GUINT_TO_POINTER (link->data);
+
+      if (link_quark == class_quark)
+        return;
+      else if (link_quark > class_quark)
+        {
+          priv->style_classes = g_list_insert_before (priv->style_classes,
+                                                      link, GUINT_TO_POINTER (class_quark));
+          return;
+        }
+
+      link = link->next;
+    }
+
+  priv->style_classes = g_list_append (priv->style_classes,
+                                       GUINT_TO_POINTER (class_quark));
+}
+
+void
+gtk_style_context_unset_class (GtkStyleContext *context,
+                               const gchar     *class_name)
+{
+  GtkStyleContextPrivate *priv;
+  GQuark class_quark;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (class_name != NULL);
+
+  class_quark = g_quark_try_string (class_name);
+
+  if (!class_quark)
+    return;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  priv->style_classes = g_list_remove (priv->style_classes,
+                                       GUINT_TO_POINTER (class_quark));
+}
+
+gboolean
+gtk_style_context_has_class (GtkStyleContext *context,
+                             const gchar     *class_name)
+{
+  GtkStyleContextPrivate *priv;
+  GQuark class_quark;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (class_name != NULL, FALSE);
+
+  class_quark = g_quark_try_string (class_name);
+
+  if (!class_quark)
+    return FALSE;
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+
+  if (g_list_find (priv->style_classes,
+                   GUINT_TO_POINTER (class_quark)))
+    return TRUE;
+
+  return FALSE;
 }
 
 #define __GTK_STYLE_CONTEXT_C__
