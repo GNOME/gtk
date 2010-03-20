@@ -109,6 +109,12 @@ void gtk_render_check (GtkStyleContext *context,
                        gdouble          y,
                        gdouble          width,
                        gdouble          height);
+void gtk_render_option (GtkStyleContext *context,
+                        cairo_t         *cr,
+                        gdouble          x,
+                        gdouble          y,
+                        gdouble          width,
+                        gdouble          height);
 
 G_END_DECLS
 
