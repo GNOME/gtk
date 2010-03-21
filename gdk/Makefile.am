@@ -323,6 +323,18 @@ stamp-gc-h: $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
 	echo timestamp > stamp-gc-h
 
+dist-hook: ../build/win32/vs9/gdk.vcproj
+
+../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
+	for F in $(libgdk_win32_2_0_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgdk.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gdk.vcprojin >$@
+	rm libgdk.sourcefiles
+
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
 install-data-local: install-ms-lib install-def-file

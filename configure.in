@@ -2137,6 +2137,9 @@ docs/reference/libgail-util/Makefile
 docs/faq/Makefile
 docs/tools/Makefile
 docs/tutorial/Makefile
+build/Makefile
+build/win32/Makefile
+build/win32/vs9/Makefile
 gdk-pixbuf/Makefile
 gdk-pixbuf/gdk_pixbuf.rc
 gdk-pixbuf/gdk-pixbuf-features.h

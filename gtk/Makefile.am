@@ -646,9 +646,9 @@ gtk_public_h_sources += \
 	gtkclist.h		\
 	gtkcombo.h		\
 	gtkctree.h		\
- 	gtkcurve.h		\
+	gtkcurve.h		\
 	gtkfilesel.h		\
- 	gtkgamma.h		\
+	gtkgamma.h		\
 	gtkinputdialog.h	\
 	gtkitemfactory.h	\
 	gtklist.h		\
@@ -942,6 +942,18 @@ else
 install-mac-key-theme:
 uninstall-mac-key-theme:
 endif
+
+dist-hook: ../build/win32/vs9/gtk.vcproj
+
+../build/win32/vs9/gtk.vcproj: ../build/win32/vs9/gtk.vcprojin
+	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gtk\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >libgtk.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk.vcprojin >$@
+	rm libgtk.sourcefiles
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
