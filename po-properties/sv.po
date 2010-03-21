@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-20 09:13+0100\n"
-"PO-Revision-Date: 2010-03-20 20:32+0100\n"
+"PO-Revision-Date: 2010-03-21 21:12+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -1390,19 +1390,16 @@ msgid "Active"
 msgstr "Aktiv"
 
 #: ../gtk/gtkcellrendererspinner.c:125
-#, fuzzy
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Huruvida den valda typsnittsstilen visas i etiketten"
+msgstr "Huruvida snurrväljaren är aktiv (alltså visas) i cellen"
 
 #: ../gtk/gtkcellrendererspinner.c:145
-#, fuzzy
 msgid "Pulse of the spinner"
-msgstr "Namn på skrivaren"
+msgstr "Puls för snurrväljaren"
 
 #: ../gtk/gtkcellrendererspinner.c:159
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "Det GtkIconSize-värde som anger storleken på den renderade ikonen"
+msgstr "Det GtkIconSize-värde som anger storleken på den renderade snurrväljaren"
 
 #: ../gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1795,7 +1792,7 @@ msgstr "Huruvida denna tagg påverkar språket texten renderas som"
 
 #: ../gtk/gtkcellrenderertext.c:558
 msgid "Ellipsize set"
-msgstr "Elliptisera samling"
+msgstr "Elliptisering inställd"
 
 #: ../gtk/gtkcellrenderertext.c:559
 msgid "Whether this tag affects the ellipsize mode"
@@ -5548,7 +5545,7 @@ msgstr "Antal steg"
 
 #: ../gtk/gtkspinner.c:144
 msgid "The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner:cycle-duration)."
-msgstr ""
+msgstr "Antalet steg för att snurrväljaren ska fullföra ett helt varv. Animationen kommer att fullgöra ett fullt varv på en sekund som standard (se #GtkSpinner:cycle-duration)."
 
 #: ../gtk/gtkspinner.c:159
 msgid "Animation duration"
@@ -5556,7 +5553,7 @@ msgstr "Animeringslängd"
 
 #: ../gtk/gtkspinner.c:160
 msgid "The length of time in milliseconds for the spinner to complete a full loop"
-msgstr ""
+msgstr "Tidslängden i millisekunder för att snurrväljaren ska fullgöra ett varv"
 
 #: ../gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -6326,23 +6323,20 @@ msgid "Whether the toolbar item is considered important. When TRUE, toolbar butt
 msgstr "Huruvida verktygsradsobjektet är viktigt. Då detta är SANT visar verktygsradsknappar text i GTK_TOOLBAR_BOTH_HORIZ-läge"
 
 #: ../gtk/gtktoolitemgroup.c:1536
-#, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "En läsbar beskrivning av statusen"
+msgstr "En läsbar titel för denna objektgrupp"
 
 #: ../gtk/gtktoolitemgroup.c:1543
-#, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "En widget att visa istället för den vanliga rametiketten"
+msgstr "En widget att visa istället för den vanliga etiketten"
 
 #: ../gtk/gtktoolitemgroup.c:1549
 msgid "Collapsed"
-msgstr ""
+msgstr "Utfälld"
 
 #: ../gtk/gtktoolitemgroup.c:1550
-#, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Huruvida expanderaren har öppnats för att avslöja barnwidgeten"
+msgstr "Huruvida gruppen har fällts ut och objekten är dolda"
 
 #: ../gtk/gtktoolitemgroup.c:1556
 msgid "ellipsize"
@@ -6350,50 +6344,43 @@ msgstr "elliptisera"
 
 #: ../gtk/gtktoolitemgroup.c:1557
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "Elliptisera för objektgruppens rubriker"
 
 #: ../gtk/gtktoolitemgroup.c:1563
-#, fuzzy
 msgid "Header Relief"
-msgstr "Huvudbild"
+msgstr "Rubrikrelief"
 
 #: ../gtk/gtktoolitemgroup.c:1564
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "Visa knappar i kolumnhuvuden"
+msgstr "Relief för gruppens rubrikknapp"
 
 #: ../gtk/gtktoolitemgroup.c:1579
-#, fuzzy
 msgid "Header Spacing"
-msgstr "Huvudutfyllnad"
+msgstr "Rubrikutfyllnad"
 
 #: ../gtk/gtktoolitemgroup.c:1580
 msgid "Spacing between expander arrow and caption"
 msgstr "Utrymme mellan expanderarpil och text"
 
 #: ../gtk/gtktoolitemgroup.c:1596
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "Huruvida objektet ska få extra utrymme när verktygsraden växer"
+msgstr "Huruvida objektet ska få extra utrymme när gruppen växer"
 
 #: ../gtk/gtktoolitemgroup.c:1603
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "Huruvida barnen allihop ska vara av samma storlek"
+msgstr "Huruvida objektet ska fylla upp tillgängligt utrymme"
 
 #: ../gtk/gtktoolitemgroup.c:1609
 msgid "New Row"
 msgstr "Ny rad"
 
 #: ../gtk/gtktoolitemgroup.c:1610
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "Huruvida objekten ska visas med ett nummer"
+msgstr "Huruvida objektet ska påbörja en ny rad"
 
 #: ../gtk/gtktoolitemgroup.c:1617
-#, fuzzy
 msgid "Position of the item within this group"
-msgstr "Position för märket på linjalen"
+msgstr "Position för objektet inom denna grupp"
 
 #: ../gtk/gtktoolpalette.c:991
 msgid "Size of icons in this tool palette"
@@ -6408,14 +6395,12 @@ msgid "Exclusive"
 msgstr "Exklusiv"
 
 #: ../gtk/gtktoolpalette.c:1038
-#, fuzzy
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Huruvida objekten ska visas med ett nummer"
+msgstr "Huruvida objektgruppen ska vara den enda utfällda på angiven tid"
 
 #: ../gtk/gtktoolpalette.c:1053
-#, fuzzy
 msgid "Whether the item group should receive extra space when the palette grows"
-msgstr "Huruvida barnet ska få extra utrymme när föräldern växer"
+msgstr "Huruvida objektgruppen ska få extra utrymme när paletten växer"
 
 #: ../gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
