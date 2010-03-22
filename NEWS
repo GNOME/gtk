@@ -1,3 +1,41 @@
+Overview of Changes from GTK+ 2.19.7 to 2.20.0
+==============================================
+
+* Support the tracker 0.8 api in the file chooser search code
+
+* Bug fixes:
+ 609929 Dragging between two windows cause the menu widget...
+ 613241 entry sends extra notify::text with "" on destroy
+ 610946 error during gtk+ build + nonsense error messages
+ 610176 Some cups1.2 feature use not shielded by API version-check
+ 612574 GtkMenuItem does not emit notify::label when label...
+ 612505 Entry layout not updated when underlying buffer changes
+ 612346 gdk_window_set_icon_name doesn't work
+ 612308 GTK+ Build error: redefinition of 'struct IPrintDialogCallback'
+ 611118 Set APPLICATION_ID when launching desktop app
+ 612768 DND cause crash in VNC environment
+ 612575 Improve docs of gtk_notebook_set_tab_label_packing
+ 605333 Confusing error in documentation
+ 613028 Do not get a GtkSettings for size lookup if...
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Dutch
+ Estonian
+ Finnish
+ Galician
+ Gujarati
+ Italian
+ Punjabi
+ Romanian
+ Spanish
+ Swedish
+ Traditional Chinese
+ Vietnamese
+
+
 Overview of Changes from GTK+ 2.19.6 to 2.19.7
 ==============================================
 
