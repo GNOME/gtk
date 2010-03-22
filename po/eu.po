@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-05 13:22+0100\n"
-"PO-Revision-Date: 2010-01-05 13:24+0100\n"
+"PO-Revision-Date: 2010-03-22 14:42+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -197,7 +197,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Barne-errorea: '%s' irudi-kargatzailearen moduluak ezin izan du eragiketa "
+"Barne-errorea: '%s' irudi kargatzailearen moduluak ezin izan du eragiketa "
 "burutu, baina ez du hutsegitearen arrazoirik eman"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
@@ -308,7 +308,7 @@ msgstr "Pila-gainezkatzea"
 
 #: ../gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF irudi-kargatzaileak ezin du irudi hau ulertu."
+msgstr "GIF irudi kargatzaileak ezin du irudi hau ulertu."
 
 #: ../gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
@@ -544,7 +544,7 @@ msgstr "PCX irudi-formatua"
 
 #: ../gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG irudiaren kanal bakoitzeko biteak baliogabeak dira."
+msgstr "PNG irudiaren kanal bakoitzeko bitak baliogabeak dira."
 
 #: ../gdk-pixbuf/io-png.c:136 ../gdk-pixbuf/io-png.c:618
 msgid "Transformed PNG has zero width or height."
@@ -552,7 +552,7 @@ msgstr "Bihurtutako PNGren zabalera edo altuera zero da."
 
 #: ../gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bihurtutako PNGren kanal bakoitzeko biteak ez dira 8."
+msgstr "Bihurtutako PNGren kanal bakoitzeko bitak ez dira 8."
 
 #: ../gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -1324,7 +1324,7 @@ msgstr "Kendu '%s' laster-marka"
 #: ../gtk/gtkfilechooserdefault.c:3022
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr "'%s' lastermarka ezin da kendu"
+msgstr "'%s' laster-marka ezin da kendu"
 
 #: ../gtk/gtkfilechooserdefault.c:3029 ../gtk/gtkfilechooserdefault.c:4055
 msgid "Remove the selected bookmark"
@@ -2078,7 +2078,7 @@ msgstr "Goiko bidea"
 
 #: ../gtk/gtkpathbar.c:153
 msgid "Down Path"
-msgstr "Azpìko bidea"
+msgstr "Azpiko bidea"
 
 #: ../gtk/gtkpathbar.c:1472
 msgid "File System Root"
@@ -2519,7 +2519,7 @@ msgstr "Errore ezezaguna %s serietik kentzen saiatzean"
 #: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr "Ez da %s formtatuaren serietik kentzeko funtziorik aurkitu"
+msgstr "Ez da %s formatuaren serietik kentzeko funtziorik aurkitu"
 
 #: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
 #, c-format
@@ -2694,7 +2694,7 @@ msgstr "Bolumena"
 
 #: ../gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
-msgstr "Bolumena igo edo jeisten du"
+msgstr "Bolumena igo edo jaisten du"
 
 #: ../gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
@@ -2702,7 +2702,7 @@ msgstr "Bolumena doitzen du"
 
 #: ../gtk/gtkvolumebutton.c:81 ../gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
-msgstr "Jeitsi bolumena"
+msgstr "Jaitsi bolumena"
 
 #: ../gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
@@ -2816,7 +2816,7 @@ msgstr "Ezin da fitxategia aurkitu: %s\n"
 #: ../gtk/updateiconcache.c:1685
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Ez da baliozko inonoen cache-a: %s\n"
+msgstr "Ez da baliozko ikonoen cache-a: %s\n"
 
 #: ../gtk/updateiconcache.c:1698
 #, c-format
@@ -3029,12 +3029,12 @@ msgstr "Kapsulatutako GhostScript letra-tipoak soilik"
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2181
 msgid "Convert to PS level 1"
-msgstr "BIhurtu PS 1. mailara"
+msgstr "Bihurtu PS 1. mailara"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2183
 msgid "Convert to PS level 2"
-msgstr "BIhurtu PS 2. mailara"
+msgstr "Bihurtu PS 2. mailara"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2185
@@ -3056,7 +3056,7 @@ msgstr "Presazkoa"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "High"
-msgstr "Hndia"
+msgstr "Handia"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2871
 msgid "Medium"
