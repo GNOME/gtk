@@ -691,6 +691,7 @@ EXTRA_DIST +=					\
 
 if HAVE_INTROSPECTION
 
+GdkPixbuf-2.0.gir: libgdk_pixbuf-2.0.la Makefile
 GdkPixbuf_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
 GdkPixbuf_2_0_gir_INCLUDES = GModule-2.0 Gio-2.0
 GdkPixbuf_2_0_gir_LIBS = libgdk_pixbuf-2.0.la
