@@ -4656,17 +4656,20 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       if (destroying)
         gtk_widget_destroy (tab_label);
       g_object_unref (tab_label);
-    } 
+    }
 
   if (notebook->menu)
     {
-      gtk_container_remove (GTK_CONTAINER (notebook->menu), 
-			    page->menu_label->parent);
+      GtkWidget *parent = page->menu_label->parent;
+
+      gtk_notebook_menu_label_unparent (parent, NULL);
+      gtk_container_remove (GTK_CONTAINER (notebook->menu), parent);
+
       gtk_widget_queue_resize (notebook->menu);
     }
   if (!page->default_menu)
     g_object_unref (page->menu_label);
-  
+
   g_list_free (list);
 
   if (page->last_focus_child)
