@@ -981,7 +981,7 @@ introspection_files = \
     gtktypebuiltins.h \
     gtktypebuiltins.c
 
-Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) Makefile
+Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) $(top_builddir)/gdk/Gdk-2.0.gir Makefile
 Gtk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
 Gtk_2_0_gir_INCLUDES = Atk-1.0 Gdk-2.0
 Gtk_2_0_gir_CFLAGS = \
