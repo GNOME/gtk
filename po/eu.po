@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-09 12:36-0500\n"
-"PO-Revision-Date: 2010-03-03 23:19+0100\n"
+"PO-Revision-Date: 2010-03-22 13:08+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -285,8 +285,7 @@ msgstr "'%s' irudi-fitxategiak ez du daturik"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:188 gdk-pixbuf/gdk-pixbuf-io.c:1030
 #: gdk-pixbuf/gdk-pixbuf-io.c:1294 tests/testfilechooser.c:267
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Ezin izan da '%s' irudia kargatu: arrazoia ez dakigu, beharbada hondatutako "
 "irudi-fitxategia izango da"
@@ -341,8 +340,7 @@ msgstr "Errorea irudi-fitxategia idaztean: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1718 gdk-pixbuf/gdk-pixbuf-io.c:1848
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
+msgstr "gdk-pixbuf-en bertsio honek ez du irudi-formatu hau gordetzea onartzen: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1752
 msgid "Insufficient memory to save image to callback"
@@ -384,7 +382,7 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"Barne-errorea: '%s' irudi-kargatzailearen moduluak ezin izan du eragiketa "
+"Barne-errorea: '%s' irudi kargatzailearen moduluak ezin izan du eragiketa "
 "burutu, baina ez du hutsegitearen arrazoirik eman"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:372
@@ -477,8 +475,7 @@ msgstr "Ezin izan da GIF irakurri: %s"
 
 #: gdk-pixbuf/io-gif.c:496 gdk-pixbuf/io-gif.c:1481 gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
+msgstr "GIF fitxategian datu batzuk falta dira (agian nolabait trunkatuta zegoen?)"
 
 #: gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -491,7 +488,7 @@ msgstr "Pila-gainezkatzea"
 
 #: gdk-pixbuf/io-gif.c:639
 msgid "GIF image loader cannot understand this image."
-msgstr "GIF irudi-kargatzaileak ezin du irudi hau ulertu."
+msgstr "GIF irudi kargatzaileak ezin du irudi hau ulertu."
 
 #: gdk-pixbuf/io-gif.c:668
 msgid "Bad code encountered"
@@ -669,8 +666,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:1148 gdk-pixbuf/io-gdip-jpeg.c:68
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "JPEG kalitatearen balioak 0 eta 100 artean egon behar du; '%d' balioa ez da "
 "onartzen."
@@ -726,7 +722,7 @@ msgstr "PCX irudi-formatua"
 
 #: gdk-pixbuf/io-png.c:55
 msgid "Bits per channel of PNG image is invalid."
-msgstr "PNG irudiaren kanal bakoitzeko biteak baliogabeak dira."
+msgstr "PNG irudiaren kanal bakoitzeko bitak baliogabeak dira."
 
 #: gdk-pixbuf/io-png.c:136 gdk-pixbuf/io-png.c:642
 msgid "Transformed PNG has zero width or height."
@@ -734,7 +730,7 @@ msgstr "Bihurtutako PNGren zabalera edo altuera zero da."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr "Bihurtutako PNGren kanal bakoitzeko biteak ez dira 8."
+msgstr "Bihurtutako PNGren kanal bakoitzeko bitak ez dira 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -742,8 +738,7 @@ msgstr "Bihurtutako PNG ez da RGB edo RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-msgstr ""
-"Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
+msgstr "Bihurtutako PNGk duen kanal-kopurua ez da onartzen; 3 edo 4 izan behar ditu."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -773,8 +768,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Errore larria PNG irudi-fitxategia irakurtzean: %s"
 
 #: gdk-pixbuf/io-png.c:863
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "PNGren testu-zatiek gutxienez karaktere 1 eta gehienez 79 eduki behar "
 "dituzte."
@@ -849,12 +843,11 @@ msgstr "PNM irudi-mota gordina baliogabea da"
 
 #: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
-msgstr "PNM irudi-kargatzaileak ez du PNM azpiformatu hau onartzen"
+msgstr "PNM irudi kargatzaileak ez du PNM azpiformatu hau onartzen"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
+msgstr "PNM formatu gordinek zuriune bat behar dute lagin-informazioaren aurretik"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
@@ -892,8 +885,7 @@ msgstr "QTIF elementuaren tamaina handiegia da (%d byte)"
 #: gdk-pixbuf/io-qtif.c:172
 #, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr ""
-"Huts egin du %d byte esleitzean fitxategia irakurtzeko bufferrarentzako"
+msgstr "Huts egin du %d byte esleitzean fitxategia irakurtzeko bufferrarentzako"
 
 #: gdk-pixbuf/io-qtif.c:196
 #, c-format
@@ -1802,7 +1794,7 @@ msgstr "'%s' laster-marka ezin da kendu"
 
 #: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
 msgid "Remove the selected bookmark"
-msgstr "Kendu hautatutako lastermarka"
+msgstr "Kendu hautatutako laster-marka"
 
 #: gtk/gtkfilechooserdefault.c:3606
 msgid "Remove"
@@ -1939,8 +1931,7 @@ msgstr " \"%s\" izeneko fitxategia badago lehendik. Ordeztea nahi duzu?"
 
 #: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
 #, c-format
-msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"(e)n badago fitxategia lehendik. Hau ordeztean bere eduki guztia "
 "gainidatziko da."
@@ -2079,10 +2070,8 @@ msgstr "_Aldatu fitxategi-izena"
 
 #: gtk/gtkfilesel.c:1347
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr "\"%s\" izeneko karpetak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1394
 msgid "New Folder"
@@ -2099,8 +2088,7 @@ msgstr "S_ortu"
 #: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
+msgstr "\"%s\" fitxategi-izenak fitxategi-izenetan onartzen ez diren ikurrak ditu"
 
 #: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
 #, c-format
@@ -2559,7 +2547,7 @@ msgstr "Goiko bidea"
 
 #: gtk/gtkpathbar.c:153
 msgid "Down Path"
-msgstr "Azpìko bidea"
+msgstr "Azpiko bidea"
 
 #: gtk/gtkpathbar.c:1469
 msgid "File System Root"
@@ -3673,7 +3661,7 @@ msgstr "Errore ezezaguna %s serietik kentzen saiatzean"
 #: gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr "Ez da %s formtatuaren serietik kentzeko funtziorik aurkitu"
+msgstr "Ez da %s formatuaren serietik kentzeko funtziorik aurkitu"
 
 #: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
@@ -3717,8 +3705,7 @@ msgstr "Etiketa anonimoa aurkitu da eta etiketak ezin dira sortu."
 #: gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr ""
-"\"%s\" etiketa ez da existitzen bufferrean eta etiketak ezin dira sortu."
+msgstr "\"%s\" etiketa ez da existitzen bufferrean eta etiketak ezin dira sortu."
 
 #: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
 #: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
@@ -3738,8 +3725,7 @@ msgstr "\"%s\" ez da baliozko atributu-izena"
 
 #: gtk/gtktextbufferserialize.c:1193
 #, c-format
-msgid ""
-"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "Ezin izan da \"%s\" bihurtu \"%s\" atributuaren \"%s\" motara"
 
 #: gtk/gtktextbufferserialize.c:1202
@@ -3776,8 +3762,7 @@ msgid "Serialized data is malformed"
 msgstr "Serieko datuak formatu okerra du"
 
 #: gtk/gtktextbufferserialize.c:1857
-msgid ""
-"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Serieko datuak formatu okerra du. Aurreneko atala ez da "
 "GTKTEXTBUFFERCONTENTS-0001"
@@ -3851,7 +3836,7 @@ msgstr "Bolumena"
 
 #: gtk/gtkvolumebutton.c:75
 msgid "Turns volume down or up"
-msgstr "Bolumena igo edo jeisten du"
+msgstr "Bolumena igo edo jaisten du"
 
 #: gtk/gtkvolumebutton.c:78
 msgid "Adjusts the volume"
@@ -3859,7 +3844,7 @@ msgstr "Bolumena doitzen du"
 
 #: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
 msgid "Volume Down"
-msgstr "Jeitsi bolumena"
+msgstr "Jaitsi bolumena"
 
 #: gtk/gtkvolumebutton.c:83
 msgid "Decreases the volume"
@@ -4804,7 +4789,7 @@ msgstr "Ezin da fitxategia aurkitu: %s\n"
 #: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr "Ez da baliozko inonoen cache-a: %s\n"
+msgstr "Ez da baliozko ikonoen cache-a: %s\n"
 
 #: gtk/updateiconcache.c:1702
 #, c-format
@@ -4894,8 +4879,7 @@ msgstr "Autentifikazioa behar da fitxategia %s(e)tik lortzeko"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1006
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr ""
-"Autentifikazioa behar da '%s' dokumentua '%s' inprimagailuan inprimatzeko"
+msgstr "Autentifikazioa behar da '%s' dokumentua '%s' inprimagailuan inprimatzeko"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:820
 #, c-format
@@ -4947,8 +4931,7 @@ msgstr "Autentifikazioa behar da '%s' dokumentua inprimatzeko"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1013
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
-"Autentifikazioa behar da dokumentu hau '%s' inprimagailuan inprimatzeko"
+msgstr "Autentifikazioa behar da dokumentu hau '%s' inprimagailuan inprimatzeko"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1015
 msgid "Authentication is required to print this document"
@@ -5096,12 +5079,12 @@ msgstr "Kapsulatutako GhostScript letra-tipoak soilik"
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Convert to PS level 1"
-msgstr "BIhurtu PS 1. mailara"
+msgstr "Bihurtu PS 1. mailara"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Convert to PS level 2"
-msgstr "BIhurtu PS 2. mailara"
+msgstr "Bihurtu PS 2. mailara"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2780
@@ -5123,7 +5106,7 @@ msgstr "Presazkoa"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "High"
-msgstr "Hndia"
+msgstr "Handia"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:3466
 msgid "Medium"
@@ -5310,3 +5293,4 @@ msgstr "Inprimatu probako inprimagailuan"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ezin izan da %s fitxategirako informaziorik lortu: %s"
+
