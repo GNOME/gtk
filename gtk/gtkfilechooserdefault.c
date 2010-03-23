@@ -350,6 +350,8 @@ static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
 					 GtkTreePath           *path,
 					 gboolean               path_currently_selected,
 					 gpointer               data);
+static void shortcuts_find_folder (GtkFileChooserDefault *impl,
+                                   GFile                 *folder);
 static gboolean shortcuts_get_selected  (GtkFileChooserDefault *impl,
 					 GtkTreeIter           *iter);
 static void shortcuts_activate_iter (GtkFileChooserDefault *impl,
@@ -4788,7 +4790,10 @@ save_widgets_create (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_local_only (
      GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)));
-  _gtk_file_chooser_entry_set_root_uri (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->root_uri);
+  _gtk_file_chooser_entry_set_root_uri (
+     GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+     impl->root_uri);
+  _gtk_path_bar_set_root_uri (GTK_PATH_BAR (impl->browse_path_bar), impl->root_uri);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->location_entry,
@@ -4943,6 +4948,12 @@ location_switch_to_filename_entry (GtkFileChooserDefault *impl)
   /* Configure the entry */
 
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->current_folder);
+  _gtk_file_chooser_entry_set_local_only (
+     GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+     gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (impl)));
+  _gtk_file_chooser_entry_set_root_uri (
+     GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+     impl->root_uri);
 
   /* Done */
 
@@ -5254,6 +5265,9 @@ set_root_uri (GtkFileChooserDefault *impl,
             GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
             local_only);
         }
+
+      _gtk_path_bar_set_root_uri (GTK_PATH_BAR (impl->browse_path_bar),
+                                  impl->root_uri);
 
       /* Attempt to preserve the sidebar selection if possible. */
       if (shortcuts_get_selected (impl, &iter))
