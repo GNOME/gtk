@@ -825,6 +825,25 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 								"will offer the user to create new folders."),
 							     TRUE,
 							     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkFileChooser:root-uri:
+   *
+   * The absolute root URI that can be accessed in the file chooser.
+   * Any shortcuts (special or user-defined) or volumes not within
+   * this URI will be filtered out for this dialog.
+   *
+   * The default is an empty string or NULL, which provides the
+   * default level of access for the file chooser.
+   *
+   * Since: 2.18
+   */
+  g_object_interface_install_property (g_iface,
+				       g_param_spec_string ("root-uri",
+							     P_("Root URI"),
+							     P_("The URI, if any, to use as the root for all access in the file chooser."),
+							     NULL,
+							     GTK_PARAM_READWRITE));
 }
 
 /**
@@ -902,6 +921,9 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
  * rather than the URI functions like
  * gtk_file_chooser_get_uri(),
  *
+ * This implies a root URI of "file://". See
+ * gtk_file_chooser_set_root_uri().
+ *
  * Since: 2.4
  **/
 void
@@ -915,10 +937,13 @@ gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
 
 /**
  * gtk_file_chooser_get_local_only:
- * @chooser: a #GtkFileChoosre
+ * @chooser: a #GtkFileChooser
  * 
  * Gets whether only local files can be selected in the
  * file selector. See gtk_file_chooser_set_local_only()
+ *
+ * This is %TRUE when the root URI of the file chooser is
+ * "file://". See gtk_file_chooser_get_root_uri().
  * 
  * Return value: %TRUE if only local files can be selected.
  *
@@ -934,6 +959,66 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
   g_object_get (chooser, "local-only", &local_only, NULL);
 
   return local_only;
+}
+
+/**
+ * gtk_file_chooser_set_root_uri:
+ * @chooser: a #GtkFileChooser
+ * @root_uri: The root URI, or %NULL to allow access to everything.
+ *
+ * Sets the URI that will be the root of the file chooser. The file
+ * chooser will not display or allow access to files outside of this URI.
+ *
+ * If this is set to %NULL, then the file chooser will have access to all
+ * local and remote volumes and files.
+ *
+ * This is useful when needing to restrict the file chooser to a particular
+ * directory and its subdirectories, to a particular storage device, or to a
+ * remote server.
+ *
+ * See gtk_file_chooser_get_root_uri()
+ *
+ * Since: 2.18
+ **/
+void
+gtk_file_chooser_set_root_uri (GtkFileChooser *chooser,
+			       const gchar    *root_uri)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  g_object_set (chooser, "root-uri", root_uri, NULL);
+}
+
+/**
+ * gtk_file_chooser_get_root_uri:
+ * @chooser: a #GtkFileChooser
+ *
+ * Gets the URI that is the root of the file chooser. The file chooser
+ * will not display or allow access to files outside of this URI.
+ *
+ * If this is %NULL, then the file chooser has access to all local and
+ * remote volumes and files.
+ *
+ * This is useful when needing to restrict the file chooser to a particular
+ * directory and its subdirectories, to a particular storage device, or to a
+ * remote server.
+ *
+ * See gtk_file_chooser_set_root_uri()
+ *
+ * Return value: The root URI, or %NULL.
+ *
+ * Since: 2.18
+ **/
+const gchar *
+gtk_file_chooser_get_root_uri (GtkFileChooser *chooser)
+{
+  const gchar *root_uri;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
+
+  g_object_get (chooser, "root-uri", &root_uri, NULL);
+
+  return root_uri;
 }
 
 /**
@@ -2567,3 +2652,247 @@ gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
 
   return do_overwrite_confirmation;
 }
+
+#if defined (G_OS_WIN32) && !defined (_WIN64)
+
+/* DLL ABI stability backward compatibility versions */
+
+#undef gtk_file_chooser_get_filename
+
+gchar *
+gtk_file_chooser_get_filename (GtkFileChooser *chooser)
+{
+  gchar *utf8_filename = gtk_file_chooser_get_filename_utf8 (chooser);
+  gchar *retval = g_locale_from_utf8 (utf8_filename, -1, NULL, NULL, NULL);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_set_filename
+
+gboolean
+gtk_file_chooser_set_filename (GtkFileChooser *chooser,
+			       const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_set_filename_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_select_filename
+
+gboolean
+gtk_file_chooser_select_filename (GtkFileChooser *chooser,
+				  const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_select_filename_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_unselect_filename
+
+void
+gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
+				    const char     *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+  gtk_file_chooser_unselect_filename_utf8 (chooser, utf8_filename);
+  g_free (utf8_filename);
+}
+
+#undef gtk_file_chooser_get_filenames
+
+GSList *
+gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
+{
+  GSList *list = gtk_file_chooser_get_filenames_utf8 (chooser);
+  GSList *rover = list;
+  
+  while (rover)
+    {
+      gchar *tem = (gchar *) rover->data;
+      rover->data = g_locale_from_utf8 ((gchar *) rover->data, -1, NULL, NULL, NULL);
+      g_free (tem);
+      rover = rover->next;
+    }
+
+  return list;
+}
+
+#undef gtk_file_chooser_set_current_folder
+
+gboolean
+gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
+				     const gchar    *filename)
+{
+  gchar *utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, NULL);
+  gboolean retval = gtk_file_chooser_set_current_folder_utf8 (chooser, utf8_filename);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_get_current_folder
+
+gchar *
+gtk_file_chooser_get_current_folder (GtkFileChooser *chooser)
+{
+  gchar *utf8_folder = gtk_file_chooser_get_current_folder_utf8 (chooser);
+  gchar *retval = g_locale_from_utf8 (utf8_folder, -1, NULL, NULL, NULL);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_get_preview_filename
+
+char *
+gtk_file_chooser_get_preview_filename (GtkFileChooser *chooser)
+{
+  char *utf8_filename = gtk_file_chooser_get_preview_filename_utf8 (chooser);
+  char *retval = g_locale_from_utf8 (utf8_filename, -1, NULL, NULL, NULL);
+
+  g_free (utf8_filename);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_add_shortcut_folder
+
+gboolean
+gtk_file_chooser_add_shortcut_folder (GtkFileChooser    *chooser,
+				      const char        *folder,
+				      GError           **error)
+{
+  char *utf8_folder = g_locale_to_utf8 (folder, -1, NULL, NULL, NULL);
+  gboolean retval =
+    gtk_file_chooser_add_shortcut_folder_utf8 (chooser, utf8_folder, error);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_remove_shortcut_folder
+
+gboolean
+gtk_file_chooser_remove_shortcut_folder (GtkFileChooser    *chooser,
+					 const char        *folder,
+					 GError           **error)
+{
+  char *utf8_folder = g_locale_to_utf8 (folder, -1, NULL, NULL, NULL);
+  gboolean retval =
+    gtk_file_chooser_remove_shortcut_folder_utf8 (chooser, utf8_folder, error);
+
+  g_free (utf8_folder);
+
+  return retval;
+}
+
+#undef gtk_file_chooser_list_shortcut_folders
+
+GSList *
+gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
+{
+  GSList *list = gtk_file_chooser_list_shortcut_folders_utf8 (chooser);
+  GSList *rover = list;
+  
+  while (rover)
+    {
+      gchar *tem = (gchar *) rover->data;
+      rover->data = g_locale_from_utf8 ((gchar *) rover->data, -1, NULL, NULL, NULL);
+      g_free (tem);
+      rover = rover->next;
+    }
+
+  return list;
+}
+
+#endif
+
+gboolean
+_gtk_file_chooser_uri_has_prefix (const char *uri,
+                                  const char *prefix)
+{
+  int uri_len;
+  int prefix_len;
+  gboolean result;
+  char *new_prefix = NULL;
+
+  g_return_val_if_fail (uri != NULL, FALSE);
+  g_return_val_if_fail (prefix != NULL, FALSE);
+
+  uri_len = strlen (uri);
+  prefix_len = strlen (prefix);
+
+  if (prefix[prefix_len - 1] != '/')
+    {
+      new_prefix = g_strdup_printf ("%s/", prefix);
+      prefix = new_prefix;
+      prefix_len++;
+    }
+
+  if (prefix_len == uri_len + 1)
+    {
+      /*
+       * Special case. The prefix URI may contain a trailing slash while the
+       * URI we're comparing against may not (or vice-versa), despite the
+       * URIs being equal.
+       */
+      result = !strncmp (prefix, uri, uri_len);
+    }
+  else
+    result = (uri_len >= prefix_len && g_str_has_prefix (uri, prefix));
+
+  g_free (new_prefix);
+
+  return result;
+}
+
+gboolean
+_gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
+                                  const char     *uri)
+{
+  const char *root_uri;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
+
+  root_uri = gtk_file_chooser_get_root_uri (chooser);
+
+  return root_uri == NULL || _gtk_file_chooser_uri_has_prefix (uri, root_uri);
+}
+
+gboolean
+_gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
+                                   GFile          *file)
+{
+  char *uri;
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (file != NULL, FALSE);
+
+  uri = g_file_get_uri (file);
+  result = _gtk_file_chooser_is_uri_in_root (chooser, uri);
+  g_free (uri);
+
+  return result;
+}
+
+#define __GTK_FILE_CHOOSER_C__
+#include "gtkaliasdef.c"
+
+// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s

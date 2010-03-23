@@ -123,6 +123,9 @@ GtkFileChooserAction gtk_file_chooser_get_action          (GtkFileChooser       
 void                 gtk_file_chooser_set_local_only      (GtkFileChooser       *chooser,
 							   gboolean              local_only);
 gboolean             gtk_file_chooser_get_local_only      (GtkFileChooser       *chooser);
+void                 gtk_file_chooser_set_root_uri        (GtkFileChooser       *chooser,
+							   const gchar          *root_uri);
+const gchar         *gtk_file_chooser_get_root_uri        (GtkFileChooser       *chooser);
 void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       *chooser,
 							   gboolean              select_multiple);
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
