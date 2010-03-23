@@ -244,15 +244,22 @@ How to compile GTK+ itself
 	<para>
 	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
 	  library provides Pango with a standard way of locating
-	  fonts and matching them against font names. 
+	  fonts and matching them against font names.
 	</para>
       </listitem>
       <listitem>
 	<para>
 	  <ulink url="http://www.cairographics.org">Cairo</ulink>
-          is a graphics library that supports vector graphics and image 
+          is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for much of their
           drawing.
+        </para>
+      </listitem>
+      <listitem>
+	<para>
+	  <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
+          is a framework for making introspection data available to
+          language bindings.
         </para>
       </listitem>
       <listitem>
@@ -368,6 +375,9 @@ How to compile GTK+ itself
 	  <group>
 	    <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
 	  </group>
+          <group>
+	    <arg>--disable-introspection</arg>
+          </group>
 	</cmdsynopsis>
       </para>
 
@@ -580,7 +590,13 @@ How to compile GTK+ itself
           for the Linux framebuffer.
 	</para>
       </formalpara>
+      <formalpara>
+        <title><systemitem>--disable-introspection</systemitem></title>
 
+        <para>
+          Build without introspection support.
+        </para>
+      </formalpara>
     </refsect1>
 
 </refentry>
