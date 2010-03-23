@@ -104,6 +104,16 @@ gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *cho
 							  GError           **error);
 GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
+GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
+
+gboolean       _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
+                                                 const char     *uri);
+gboolean       _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
+                                                  GFile          *file);
+
+gboolean       _gtk_file_chooser_uri_has_prefix (const char *uri,
+                                                 const char *prefix);
+
 /* GtkFileChooserDialog private */
 
 struct _GtkFileChooserDialogPrivate
@@ -160,6 +170,7 @@ struct _GtkFileChooserDefault
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
+  char *root_uri;
 
   /* Save mode widgets */
   GtkWidget *save_widgets;

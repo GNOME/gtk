@@ -51,6 +51,9 @@ void               _gtk_file_chooser_entry_select_filename    (GtkFileChooserEnt
 void               _gtk_file_chooser_entry_set_local_only     (GtkFileChooserEntry *chooser_entry,
                                                                gboolean             local_only);
 gboolean           _gtk_file_chooser_entry_get_local_only     (GtkFileChooserEntry *chooser_entry);
+void               _gtk_file_chooser_entry_set_root_uri     (GtkFileChooserEntry *chooser_entry,
+                                                             const char          *root_uri);
+const char        *_gtk_file_chooser_entry_get_root_uri     (GtkFileChooserEntry *chooser_entry);
 
 G_END_DECLS
 

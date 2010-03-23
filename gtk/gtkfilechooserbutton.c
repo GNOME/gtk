@@ -815,6 +815,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
+    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
       fs_volumes_changed_cb (priv->fs, button);
       fs_bookmarks_changed_cb (priv->fs, button);

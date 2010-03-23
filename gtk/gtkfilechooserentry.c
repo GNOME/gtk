@@ -26,6 +26,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
 #include "gtkfilechooserentry.h"
+#include "gtkfilechooserprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkwindow.h"
@@ -66,6 +67,7 @@ struct _GtkFileChooserEntry
   GtkFileChooserAction action;
 
   GtkFileSystem *file_system;
+  char *root_uri;
   GFile *base_folder;
   GFile *current_folder_file;
   gchar *file_part;
@@ -206,6 +208,7 @@ _gtk_file_chooser_entry_init (GtkFileChooserEntry *chooser_entry)
   GtkCellRenderer *cell;
 
   chooser_entry->local_only = TRUE;
+  chooser_entry->root_uri = NULL;
 
   g_object_set (chooser_entry, "truncate-multiline", TRUE, NULL);
 
@@ -293,6 +296,9 @@ gtk_file_chooser_entry_dispose (GObject *object)
   remove_completion_feedback (chooser_entry);
   discard_current_folder (chooser_entry);
   discard_loading_and_current_folder_file (chooser_entry);
+
+  g_free (chooser_entry->root_uri);
+  chooser_entry->root_uri = NULL;
 
   if (chooser_entry->start_autocompletion_idle_id != 0)
     {
@@ -444,6 +450,19 @@ static void
 beep (GtkFileChooserEntry *chooser_entry)
 {
   gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
+}
+
+static gboolean
+is_file_in_root (GtkFileChooserEntry *chooser_entry,
+                 GFile               *file)
+{
+  char *uri = g_file_get_uri (file);
+  gboolean result = chooser_entry->root_uri == NULL ||
+                    _gtk_file_chooser_uri_has_prefix (uri,
+                                                      chooser_entry->root_uri);
+  g_free (uri);
+
+  return result;
 }
 
 /* This function will append a directory separator to paths to
@@ -1464,8 +1483,11 @@ start_loading_current_folder (GtkFileChooserEntry *chooser_entry)
   g_assert (chooser_entry->current_folder == NULL);
   g_assert (chooser_entry->load_folder_cancellable == NULL);
 
-  if (chooser_entry->local_only
-      && !g_file_is_native (chooser_entry->current_folder_file))
+  if ((chooser_entry->local_only
+       && !g_file_is_native (chooser_entry->current_folder_file)) ||
+      (chooser_entry->root_uri != NULL
+       && !is_file_in_root (chooser_entry,
+                            chooser_entry->current_folder_file)))
     {
       g_object_unref (chooser_entry->current_folder_file);
       chooser_entry->current_folder_file = NULL;
@@ -2000,4 +2022,20 @@ gboolean
 _gtk_file_chooser_entry_get_local_only (GtkFileChooserEntry *chooser_entry)
 {
   return chooser_entry->local_only;
+}
+
+void
+_gtk_file_chooser_entry_set_root_uri (GtkFileChooserEntry *chooser_entry,
+                                      const char          *root_uri)
+{
+  g_free (chooser_entry->root_uri);
+
+  chooser_entry->root_uri = (root_uri == NULL ? NULL : g_strdup(root_uri));
+  clear_completions (chooser_entry);
+}
+
+const char *
+_gtk_file_chooser_entry_get_root_uri (GtkFileChooserEntry *chooser_entry)
+{
+  return chooser_entry->root_uri;
 }

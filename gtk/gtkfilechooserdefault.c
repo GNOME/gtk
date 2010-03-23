@@ -702,6 +702,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
   impl->local_only = TRUE;
+  impl->root_uri = NULL;
   impl->preview_widget_active = TRUE;
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
@@ -1808,8 +1809,15 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
     }
 
   home = g_file_new_for_path (home_path);
-  shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, home, NULL, FALSE, SHORTCUTS_HOME);
-  impl->has_home = TRUE;
+
+  if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), home))
+    {
+      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, home,
+                             NULL, FALSE, SHORTCUTS_HOME);
+      impl->has_home = TRUE;
+    }
+  else
+    impl->has_home = FALSE;
 
   g_object_unref (home);
 
@@ -1836,8 +1844,15 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
     }
 
   file = g_file_new_for_path (name);
-  shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, file, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
-  impl->has_desktop = TRUE;
+
+  if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
+    {
+      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL,
+                             file, _("Desktop"), FALSE, SHORTCUTS_DESKTOP);
+      impl->has_desktop = TRUE;
+    }
+  else
+    impl->has_desktop = FALSE;
 
   /* We do not actually pop up an error dialog if there is no desktop directory
    * because some people may really not want to have one.
@@ -1870,6 +1885,9 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
 
       if (impl->local_only && !g_file_is_native (file))
 	continue;
+
+      if (!_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
+        continue;
 
       if (shortcut_find_position (impl, file) != -1)
         continue;
@@ -1982,6 +2000,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
   for (l = list; l; l = l->next)
     {
       GtkFileSystemVolume *volume;
+      gboolean skip = FALSE;
 
       volume = l->data;
 
@@ -1990,19 +2009,29 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	  if (_gtk_file_system_volume_is_mounted (volume))
 	    {
 	      GFile *base_file;
-              gboolean base_is_native = TRUE;
 
 	      base_file = _gtk_file_system_volume_get_root (volume);
               if (base_file != NULL)
                 {
-                  base_is_native = g_file_is_native (base_file);
+                  skip = !g_file_is_native (base_file);
                   g_object_unref (base_file);
                 }
-
-              if (!base_is_native)
-                continue;
 	    }
 	}
+      else if (impl->root_uri != NULL)
+        {
+          GFile *base_file = _gtk_file_system_volume_get_root (volume);
+
+          if (base_file != NULL)
+            {
+              skip = !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                                         base_file);
+              g_object_unref (base_file);
+            }
+        }
+
+      if (skip)
+        continue;
 
       shortcuts_insert_file (impl,
                              start_row + n,
@@ -2260,17 +2289,17 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
   shortcuts_append_search (impl);
 
   if (impl->recent_manager)
-    {
-      shortcuts_append_recent (impl);
-      shortcuts_insert_separator (impl, SHORTCUTS_RECENT_SEPARATOR);
-    }
-  
+	{
+	  shortcuts_append_recent (impl);
+	  shortcuts_insert_separator (impl, SHORTCUTS_RECENT_SEPARATOR);
+	}
+
   if (impl->file_system)
-    {
-      shortcuts_append_home (impl);
-      shortcuts_append_desktop (impl);
+	{
+	  shortcuts_append_home (impl);
+	  shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
-    }
+	}
 
   impl->shortcuts_pane_filter_model = shortcuts_pane_model_filter_new (impl,
 							               GTK_TREE_MODEL (impl->shortcuts_model),
@@ -4795,6 +4824,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
 					   impl->file_system);
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->local_only);
+  _gtk_file_chooser_entry_set_root_uri (GTK_FILE_CHOOSER_ENTRY (impl->location_entry), impl->root_uri);
   gtk_entry_set_width_chars (GTK_ENTRY (impl->location_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->location_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->location_entry,
@@ -5272,6 +5302,46 @@ set_local_only (GtkFileChooserDefault *impl,
 }
 
 static void
+set_root_uri (GtkFileChooserDefault *impl,
+              const gchar           *root_uri)
+{
+  if (root_uri == NULL || *root_uri == '\0')
+    root_uri = NULL;
+
+  if (g_strcmp0 (root_uri, impl->root_uri))
+    {
+      g_free (impl->root_uri);
+      impl->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
+
+      if (impl->location_entry)
+        {
+          _gtk_file_chooser_entry_set_root_uri (
+            GTK_FILE_CHOOSER_ENTRY (impl->location_entry),
+            impl->root_uri);
+        }
+
+      if (impl->shortcuts_model && impl->file_system)
+        {
+          /* Update all the sidebar entries to filter the root URI. */
+          shortcuts_add_volumes (impl);
+          shortcuts_add_bookmarks (impl);
+        }
+
+      if (impl->current_folder &&
+          _gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                             impl->current_folder))
+        {
+          /*
+           * If we are pointing to a folder outside of the root URI, set the
+           * folder to the root URI.
+           */
+          gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl),
+                                                   impl->root_uri);
+        }
+    }
+}
+
+static void
 volumes_bookmarks_changed_cb (GtkFileSystem         *file_system,
 			      GtkFileChooserDefault *impl)
 {
@@ -5515,6 +5585,10 @@ gtk_file_chooser_default_set_property (GObject      *object,
       }
       break;
 
+    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
+      set_root_uri (impl, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5575,6 +5649,10 @@ gtk_file_chooser_default_get_property (GObject    *object,
       g_value_set_boolean (value, impl->create_folders);
       break;
 
+    case GTK_FILE_CHOOSER_PROP_ROOT_URI:
+      g_value_set_string (value, impl->root_uri);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5608,6 +5686,9 @@ gtk_file_chooser_default_dispose (GObject *object)
       g_object_unref (impl->extra_widget);
       impl->extra_widget = NULL;
     }
+
+  g_free (impl->root_uri);
+  impl->root_uri = NULL;
 
   pending_select_files_free (impl);
 
@@ -7058,7 +7139,9 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
       parent_file = g_file_get_parent (data->file);
 
       /* get parent path and try to change the folder to that */
-      if (parent_file)
+      if (parent_file &&
+          _gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl),
+                                             parent_file))
         {
 	  g_object_unref (data->file);
 	  data->file = parent_file;
@@ -8766,7 +8849,8 @@ search_add_hit (GtkFileChooserDefault *impl,
   if (!file)
     return;
 
-  if (!g_file_is_native (file))
+  if (!g_file_is_native (file) ||
+      !_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (impl), file))
     {
       g_object_unref (file);
       return;
@@ -10353,3 +10437,4 @@ shortcuts_pane_model_filter_new (GtkFileChooserDefault *impl,
   return GTK_TREE_MODEL (model);
 }
 
+// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
