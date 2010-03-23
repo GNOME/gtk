@@ -41,6 +41,11 @@ Release notes for 2.20
   attribute of the <object>. Use gtk_buildable_get_name() instead of
   gtk_widget_get_name() to obtain the ID.
 
+* GTK+ now includes introspection data, as a consequence, it gained a
+  dependency on gobject-introspection. It is possible to build without
+  introspection by passing --disable-introspection to configure.
+
+
 Release notes for 2.18
 ======================
 
