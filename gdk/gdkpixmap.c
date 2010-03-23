@@ -747,26 +747,28 @@ gdk_pixmap_create_from_xpm (GdkDrawable    *drawable,
 /**
  * gdk_pixmap_colormap_create_from_xpm_d:
  * @drawable: a #GdkDrawable, used to determine default values
- * for the new pixmap. Can be %NULL if @colormap is given.
+ *     for the new pixmap. Can be %NULL if @colormap is given.
  * @colormap: the #GdkColormap that the new pixmap will be use.
- * If omitted, the colormap for @window will be used.
+ *     If omitted, the colormap for @window will be used.
  * @mask: a pointer to a place to store a bitmap representing
- * the transparency mask of the XPM file. Can be %NULL,
- * in which case transparency will be ignored.
+ *     the transparency mask of the XPM file. Can be %NULL,
+ *     in which case transparency will be ignored.
  * @transparent_color: the color to be used for the pixels
- * that are transparent in the input file. Can be %NULL,
- * in which case a default color will be used.
+ *     that are transparent in the input file. Can be %NULL,
+ *     in which case a default color will be used.
  * @data: Pointer to a string containing the XPM data.
  *
  * Create a pixmap from data in XPM format using a particular
  * colormap.
+ *
+ * Returns: (transfer none): the #GdkPixmap.
  */
 GdkPixmap*
-gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
-				       GdkColormap    *colormap,
-				       GdkBitmap     **mask,
-				       const GdkColor *transparent_color,
-				       gchar         **data)
+gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable     *drawable,
+				       GdkColormap     *colormap,
+				       GdkBitmap      **mask,
+				       const GdkColor  *transparent_color,
+				       gchar          **data)
 {
   GdkPixbuf *pixbuf;
   GdkPixmap *pixmap;
@@ -792,13 +794,13 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
 /**
  * gdk_pixmap_create_from_xpm_d:
  * @drawable: a #GdkDrawable, used to determine default values
- * for the new pixmap.
+ *     for the new pixmap.
  * @mask: (out): Pointer to a place to store a bitmap representing
- * the transparency mask of the XPM file. Can be %NULL,
- * in which case transparency will be ignored.
+ *     the transparency mask of the XPM file. Can be %NULL,
+ *     in which case transparency will be ignored.
  * @transparent_color: This color will be used for the pixels
- * that are transparent in the input file. Can be %NULL
- * in which case a default color will be used.
+ *     that are transparent in the input file. Can be %NULL
+ *     in which case a default color will be used.
  * @data: Pointer to a string containing the XPM data.
  *
  * Create a pixmap from data in XPM format.
