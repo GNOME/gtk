@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2009-08-26 11:47+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Hindi <hindi.sf.net>\n"
@@ -3609,11 +3609,11 @@ msgstr "वर्ण में चौड़ाई"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "वर्ण में मेन्यू मद की न्यूनतम वांछित चौड़ाई"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "फोकस लें"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "एक बुलियन जो निश्चित करता है कि क्या मेनू कुंजीपटल फोकस पकड़ता है"
 

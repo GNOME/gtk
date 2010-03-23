@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2004-03-09 12:13+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-core@lists.sf.net>\n"
@@ -4264,12 +4264,12 @@ msgid "The minimum desired width of the menu item in characters"
 msgstr ""
 
 # gtk/gtkwidget.c:451
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 #, fuzzy
 msgid "Take Focus"
 msgstr "Төвтэй байна"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Энэ цэс буусан үед цонхны удирдагчаар харуулагдах боломтой гарчиг"

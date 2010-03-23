@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.kn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2009-08-30 21:46+0530\n"
 "Last-Translator: Shankar Prasad <svenkate@redhat.com>\n"
 "Language-Team: Kannada <en@li.org>\n"
@@ -3654,11 +3654,11 @@ msgstr "ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "ಮೆನು ಅಂಶಗಳ ಇಚ್ಛೆಯ ಕನಿಷ್ಟ ಅಗಲ, ಅಕ್ಷರಗಳಲ್ಲಿ"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "ಗಮನವನ್ನು ಕೇಂದ್ರೀಕರಿಸು"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "ಮೆನು ಕೀಲಿಮಣೆಯ ಗಮನವನ್ನು ಪಡೆದುಕೊಳ್ಳುತ್ತದೆ ಎಂದು ನಿರ್ಧರಿಸುವ ಒಂದು ಬೂಲಿಯನ್"
 
