@@ -1343,6 +1343,9 @@ populate_completion_store (GtkFileChooserEntry *chooser_entry)
 
       file = tmp_list->data;
 
+      if (!is_file_in_root (chooser_entry, file))
+        continue;
+
       info = _gtk_folder_get_info (chooser_entry->current_folder, file);
 
       if (info)
@@ -2039,3 +2042,5 @@ _gtk_file_chooser_entry_get_root_uri (GtkFileChooserEntry *chooser_entry)
 {
   return chooser_entry->root_uri;
 }
+
+// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s

@@ -25,6 +25,7 @@
 #include "gtkalignment.h"
 #include "gtkarrow.h"
 #include "gtkdnd.h"
+#include "gtkfilechooserprivate.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkicontheme.h"
@@ -259,6 +260,8 @@ gtk_path_bar_finalize (GObject *object)
   g_list_free (path_bar->button_list);
   if (path_bar->root_file)
     g_object_unref (path_bar->root_file);
+  if (path_bar->root_uri)
+    g_free (path_bar->root_uri);
   if (path_bar->home_file)
     g_object_unref (path_bar->home_file);
   if (path_bar->desktop_file)
@@ -455,7 +458,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   GtkPathBar *path_bar = GTK_PATH_BAR (widget);
   GtkTextDirection direction;
   GtkAllocation child_allocation;
-  GList *list, *first_button;
+  GList *list, *first_button, *root_button;
   gint width;
   gint allocation_width;
   gint border_width;
@@ -471,7 +474,11 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
   /* No path is set; we don't have to allocate anything. */
   if (path_bar->button_list == NULL)
-    return;
+    {
+      gtk_widget_set_child_visible (path_bar->up_slider_button, FALSE);
+      gtk_widget_set_child_visible (path_bar->down_slider_button, FALSE);
+      return;
+    }
 
   direction = gtk_widget_get_direction (widget);
   border_width = (gint) GTK_CONTAINER (path_bar)->border_width;
@@ -489,15 +496,17 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 
       width += child->requisition.width + path_bar->spacing;
       if (list == path_bar->fake_root)
-	break;
+        break;
     }
+
+  root_button = g_list_last (path_bar->button_list);
 
   if (width <= allocation_width)
     {
       if (path_bar->fake_root)
 	first_button = path_bar->fake_root;
       else
-	first_button = g_list_last (path_bar->button_list);
+	first_button = root_button;
     }
   else
     {
@@ -559,7 +568,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   if (direction == GTK_TEXT_DIR_RTL)
     {
       child_allocation.x = allocation->x + allocation->width - border_width;
-      if (need_sliders || path_bar->fake_root)
+      if (need_sliders ||
+          (path_bar->fake_root && path_bar->fake_root != root_button))
 	{
 	  child_allocation.x -= (path_bar->spacing + path_bar->slider_width);
 	  up_slider_offset = allocation->width - border_width - path_bar->slider_width;
@@ -568,7 +578,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   else
     {
       child_allocation.x = allocation->x + border_width;
-      if (need_sliders || path_bar->fake_root)
+      if (need_sliders ||
+          (path_bar->fake_root && path_bar->fake_root != root_button))
 	{
 	  up_slider_offset = border_width;
 	  child_allocation.x += (path_bar->spacing + path_bar->slider_width);
@@ -628,7 +639,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_set_child_visible (BUTTON_DATA (list->data)->button, FALSE);
     }
 
-  if (need_sliders || path_bar->fake_root)
+  if (need_sliders ||
+      (path_bar->fake_root && path_bar->fake_root != root_button))
     {
       child_allocation.width = path_bar->slider_width;
       child_allocation.x = up_slider_offset + allocation->x;
@@ -1592,6 +1604,18 @@ struct SetFileInfo
   gboolean first_directory;
 };
 
+static gboolean
+is_file_in_root (GtkPathBar *path_bar,
+                 GFile      *file)
+{
+  char *uri = g_file_get_uri (file);
+  gboolean result = path_bar->root_uri == NULL ||
+                    _gtk_file_chooser_uri_has_prefix (uri, path_bar->root_uri);
+  g_free(uri);
+
+  return result;
+}
+
 static void
 gtk_path_bar_set_file_finish (struct SetFileInfo *info,
                               gboolean            result)
@@ -1662,6 +1686,12 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 
   display_name = g_file_info_get_display_name (info);
   is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
+
+  if (!is_file_in_root (file_info->path_bar, file_info->file))
+    {
+      gtk_path_bar_set_file_finish (file_info, TRUE);
+      return;
+    }
 
   gtk_widget_push_composite_child ();
   button_data = make_directory_button (file_info->path_bar, display_name,
@@ -1770,6 +1800,23 @@ _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
   path_bar->root_file = g_file_new_for_path ("/");
 }
 
+void
+_gtk_path_bar_set_root_uri    (GtkPathBar         *path_bar,
+                               const char         *root_uri)
+{
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+
+  g_free (path_bar->root_uri);
+  path_bar->root_uri = (root_uri == NULL ? NULL : g_strdup (root_uri));
+
+  /*
+   * We don't know if we can even query this URI, so clear the buttons as
+   * a precaution. Otherwise the user could jump to folders outside the root
+   * URI and break things.
+   */
+  gtk_path_bar_clear_buttons (path_bar);
+}
+
 /**
  * _gtk_path_bar_up:
  * @path_bar: a #GtkPathBar
@@ -1826,3 +1873,5 @@ _gtk_path_bar_down (GtkPathBar *path_bar)
 
 #define __GTK_PATH_BAR_C__
 #include "gtkaliasdef.c"
+
+// vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s
