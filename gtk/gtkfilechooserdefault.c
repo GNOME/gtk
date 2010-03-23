@@ -235,6 +235,7 @@ typedef enum {
   SHORTCUTS_RECENT_SEPARATOR,
   SHORTCUTS_HOME,
   SHORTCUTS_DESKTOP,
+  SHORTCUTS_ROOTS,
   SHORTCUTS_VOLUMES,
   SHORTCUTS_SHORTCUTS,
   SHORTCUTS_BOOKMARKS_SEPARATOR,
@@ -1385,6 +1386,10 @@ shortcuts_update_count (GtkFileChooserDefault *impl,
 	  impl->has_desktop = TRUE;
 	break;
 
+      case SHORTCUTS_ROOTS:
+	impl->num_roots += value;
+	break;
+
       case SHORTCUTS_VOLUMES:
 	impl->num_volumes += value;
 	break;
@@ -1932,6 +1937,49 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   profile_end ("end", NULL);
 }
 
+static void
+shortcuts_append_roots (GtkFileChooserDefault *impl)
+{
+  GSList *l, *roots;
+  gboolean old_changing_folders;
+  int start_row;
+  int n = 0;
+
+  profile_start ("start", NULL);
+
+  old_changing_folders = impl->changing_folder;
+  impl->changing_folder = TRUE;
+
+  start_row = shortcuts_get_index (impl, SHORTCUTS_ROOTS);
+  shortcuts_remove_rows (impl, start_row, impl->num_roots);
+  impl->num_roots = 0;
+
+  roots = _gtk_file_chooser_get_visible_roots (GTK_FILE_CHOOSER (impl));
+
+  for (l = roots; l != NULL; l = l->next)
+    {
+      GFile *file = (GFile *)l->data;
+
+      shortcuts_insert_file (impl, start_row + n, SHORTCUT_TYPE_FILE,
+                             NULL, file, NULL, FALSE, SHORTCUTS_ROOTS);
+      n++;
+    }
+
+  g_slist_free (roots);
+
+  impl->num_roots = n;
+
+  if (impl->shortcuts_pane_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model));
+
+  if (impl->shortcuts_combo_filter_model)
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (impl->shortcuts_combo_filter_model));
+
+  impl->changing_folder = old_changing_folders;
+
+  profile_end ("end", NULL);
+}
+
 /* Appends a list of GFile to the shortcuts model; returns how many were inserted */
 static int
 shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
@@ -2010,6 +2058,11 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
     goto out;
 
   n += impl->has_desktop ? 1 : 0;
+
+  if (where == SHORTCUTS_ROOTS)
+    goto out;
+
+  n += impl->num_roots;
 
   if (where == SHORTCUTS_VOLUMES)
     goto out;
@@ -2407,6 +2460,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
     {
       shortcuts_append_home (impl);
       shortcuts_append_desktop (impl);
+      shortcuts_append_roots (impl);
       shortcuts_add_volumes (impl);
     }
 
@@ -5399,6 +5453,7 @@ static void
 volumes_bookmarks_changed_cb (GtkFileSystem         *file_system,
 			      GtkFileChooserDefault *impl)
 {
+  shortcuts_append_roots (impl);
   shortcuts_add_volumes (impl);
   shortcuts_add_bookmarks (impl);
 
