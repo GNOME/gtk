@@ -106,6 +106,7 @@ enum
 typedef enum
 {
   ROW_TYPE_SPECIAL,
+  ROW_TYPE_ROOT,
   ROW_TYPE_VOLUME,
   ROW_TYPE_SHORTCUT,
   ROW_TYPE_BOOKMARK_SEPARATOR,
@@ -156,6 +157,7 @@ struct _GtkFileChooserButtonPrivate
   gint icon_size;
 
   guint8 n_special;
+  guint8 n_roots;
   guint8 n_volumes;
   guint8 n_shortcuts;
   guint8 n_bookmarks;
@@ -536,6 +538,47 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
 }
 
 static void
+reload_roots (GtkFileChooserButton *button)
+{
+  GtkFileChooser *filechooser;
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GSList *l, *roots;
+  gint start_pos;
+
+  start_pos = model_get_type_position (button, ROW_TYPE_ROOT);
+  model_remove_rows (button, start_pos, priv->n_roots);
+  priv->n_roots = 0;
+
+  filechooser = GTK_FILE_CHOOSER (button->priv->dialog);
+  roots = _gtk_file_chooser_get_visible_roots (GTK_FILE_CHOOSER (filechooser));
+
+  for (l = roots; l != NULL; l = l->next)
+    {
+      GFile *file = (GFile *)l->data;
+      gint pos = start_pos + priv->n_roots;
+      GtkTreeIter iter;
+
+      gtk_list_store_insert (GTK_LIST_STORE (priv->model), &iter, pos);
+      gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter,
+                          ICON_COLUMN, NULL,
+                          DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+                          TYPE_COLUMN, ROW_TYPE_ROOT,
+                          DATA_COLUMN, file,
+                          IS_FOLDER_COLUMN, FALSE,
+                          -1);
+      set_info_for_file_at_iter (button, file, &iter);
+      priv->n_roots++;
+    }
+
+  g_slist_free (roots);
+
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+
+  update_label_and_image (button);
+  update_combo_box (button);
+}
+
+static void
 add_shortcut_to_list (GtkFileChooserButton *button,
                       GFile                *shortcut)
 {
@@ -895,6 +938,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
 
       fs_volumes_changed_cb (priv->fs, button);
       fs_bookmarks_changed_cb (priv->fs, button);
+      reload_roots (button);
       reload_shortcuts (button);
 
       break;
@@ -1604,6 +1648,11 @@ model_get_type_position (GtkFileChooserButton *button,
     return retval;
 
   retval += button->priv->n_special;
+
+  if (row_type == ROW_TYPE_ROOT)
+    return retval;
+
+  retval += button->priv->n_roots;
 
   if (row_type == ROW_TYPE_VOLUME)
     return retval;
@@ -2631,6 +2680,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
       switch (type)
 	{
 	case ROW_TYPE_SPECIAL:
+	case ROW_TYPE_ROOT:
 	case ROW_TYPE_SHORTCUT:
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:

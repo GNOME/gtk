@@ -2942,6 +2942,84 @@ _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
   return result;
 }
 
+GSList *
+_gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
+{
+  GSList *l, *results = NULL;
+  GtkFileSystem *file_system = _gtk_file_chooser_get_file_system (chooser);
+
+  for (l = gtk_file_chooser_get_root_uris (chooser); l != NULL; l = l->next)
+    {
+      GFile *file = g_file_new_for_uri ((char *)l->data);
+      gboolean skip = FALSE;
+      GtkFileSystemVolume *volume;
+      GFileInfo *file_info;
+      char *file_path;
+
+      if (file == NULL)
+        continue;
+
+      file_path = g_file_get_path (file);
+
+      /*
+       * See if this is the Desktop directory or Home directory, which will
+       * already be listed.
+       */
+      if (!g_strcmp0 (file_path,
+                      g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP)) ||
+          !g_strcmp0 (file_path, g_get_home_dir()))
+        {
+          g_object_unref (file);
+          g_free (file_path);
+          continue;
+        }
+
+      /* Make sure the file exists in some form. */
+      file_info = g_file_query_info (file,
+                                     G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                     G_FILE_QUERY_INFO_NONE,
+                                     NULL,
+                                     NULL);
+
+      if (file_info == NULL)
+        {
+          g_object_unref (file_info);
+          g_object_unref (file);
+          continue;
+        }
+
+      volume = _gtk_file_system_get_volume_for_file (file_system, file);
+
+      if (volume != NULL)
+        {
+          GFile *fs_root = _gtk_file_system_volume_get_root (volume);
+
+          if (fs_root != NULL)
+            {
+              if (_gtk_file_chooser_is_file_in_root (GTK_FILE_CHOOSER (chooser),
+                                                     fs_root))
+                {
+                  // This is going to be listed already. Ignore it for now.
+                  skip = TRUE;
+                }
+
+              g_object_unref (fs_root);
+            }
+        }
+
+      if (skip)
+        {
+          g_object_unref (file);
+          continue;
+        }
+
+      results = g_slist_append (results, file);
+    }
+
+  return results;
+}
+
+
 #define __GTK_FILE_CHOOSER_C__
 #include "gtkaliasdef.c"
 

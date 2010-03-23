@@ -110,6 +110,7 @@ gboolean       _gtk_file_chooser_is_uri_in_root (GtkFileChooser *chooser,
                                                  const char     *uri);
 gboolean       _gtk_file_chooser_is_file_in_root (GtkFileChooser *chooser,
                                                   GFile          *file);
+GSList *       _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser);
 
 gboolean       _gtk_file_chooser_uri_has_prefix (const char   *uri,
                                                  const GSList *prefixes);
@@ -262,6 +263,7 @@ struct _GtkFileChooserDefault
   GtkFileFilter *current_filter;
   GSList *filters;
 
+  int num_roots;
   int num_volumes;
   int num_shortcuts;
   int num_bookmarks;
