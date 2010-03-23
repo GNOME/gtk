@@ -1685,12 +1685,12 @@ _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
 /**
  * gdk_keymap_add_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @modifiers: pointer to the modifier mask to change
+ * @state: pointer to the modifier mask to change
  *
  * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
  * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
  * are set in @state to their non-virtual counterparts (i.e. Mod2,
- * Mod3,...) and set the corresponding bits in @modifiers.
+ * Mod3,...) and set the corresponding bits in @state.
  *
  * GDK already does this before delivering key events, but for
  * compatibility reasons, it only sets the first virtual modifier
@@ -1703,7 +1703,7 @@ _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
  */
 void
 gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-			          GdkModifierType *modifiers)
+			          GdkModifierType *state)
 {
   GdkKeymapX11 *keymap_x11;
   int i;
@@ -1713,16 +1713,16 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 
   for (i = 3; i < 8; i++)
     {
-      if ((1 << i) & *modifiers)
+      if ((1 << i) & *state)
         {
 	  if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
-	    *modifiers |= GDK_MOD1_MASK;
+	    *state |= GDK_MOD1_MASK;
 	  if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
-	    *modifiers |= GDK_SUPER_MASK;
+	    *state |= GDK_SUPER_MASK;
 	  if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
-	    *modifiers |= GDK_HYPER_MASK;
+	    *state |= GDK_HYPER_MASK;
 	  if (keymap_x11->modmap[i] & GDK_META_MASK)
-	    *modifiers |= GDK_META_MASK;
+	    *state |= GDK_META_MASK;
         }
     }
 }
