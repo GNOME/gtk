@@ -2590,7 +2590,8 @@ gtk_notebook_scroll (GtkWidget      *widget,
   for (i = 0; i < 2; i++)
     {
       if (event_widget == priv->action_widget[i] ||
-          gtk_widget_is_ancestor (event_widget, priv->action_widget[i]))
+          (priv->action_widget[i] &&
+           gtk_widget_is_ancestor (event_widget, priv->action_widget[i])))
         return FALSE;
     }
 
