@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2010-02-06 22:44+0100\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -3763,11 +3763,11 @@ msgstr "Largeur en caractères"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "La largeur minimum désirée de l'élément de menu, en caractères"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "Prend le focus"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Un booléen qui indique si le menu capture le focus du clavier"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2010-01-19 16:26+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
@@ -3659,11 +3659,11 @@ msgstr "အက္ခရာများ အလိုက် အကျယ်"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "အက္ခရာများ အလိုက် စာရင်းမှတ် အချက်ရဲ့ နှစ်လိုဖွယ် အနည်းဆုံး အကျယ်"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "ဗဟိုပြုထားပါ"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "​ကီးဘုတ် ဗဟိုကို စာရင်းမှတ်က ဖမ်းကိုင်၊ မကိုင် ဆုံးဖြတ်ပေးတဲ့ boolean တခု"
 

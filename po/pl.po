@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:34-0400\n"
 "PO-Revision-Date: 2010-02-25 14:32+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
@@ -1223,17 +1223,17 @@ msgstr "KOLORY"
 msgid "Make X calls synchronous"
 msgstr "Synchroniczna wywołania X"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:311
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Starting %s"
 msgstr "Uruchamianie %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %s"
 msgstr "Otwieranie %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#: gdk/x11/gdkapplaunchcontext-x11.c:318
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -1698,15 +1698,15 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:8692 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
 msgid "Input _Methods"
 msgstr "_Metoda wprowadzania danych"
 
-#: gtk/gtkentry.c:8706 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: gtk/gtkentry.c:10085
+#: gtk/gtkentry.c:10091
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -2512,7 +2512,7 @@ msgstr "Powłoka Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Nie można zakończyć procesu o PID %d: %s"
 
-#: gtk/gtknotebook.c:4701 gtk/gtknotebook.c:7266
+#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
 #, c-format
 msgid "Page %u"
 msgstr "Strona %u"
@@ -2691,7 +2691,7 @@ msgstr "Brak papieru"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paused"
 msgstr "Wstrzymane"
 
@@ -2818,42 +2818,42 @@ msgstr "Ogólne"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, top to bottom"
 msgstr "Od lewej do prawej, z góry do dołu"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, bottom to top"
 msgstr "Od lewej do prawej, z dołu na górę"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, top to bottom"
 msgstr "Od prawej do lewej, z góry na dół"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, bottom to top"
 msgstr "Od prawej do lewej, z dołu na górę"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, left to right"
 msgstr "Z góry do dołu, od lewej do prawej"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, right to left"
 msgstr "Z góry do dołu, od prawej do lewej"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, left to right"
 msgstr "Z dołu do góry, od lewej do prawej"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, right to left"
 msgstr "Z dołu do góry, od prawej do lewej"
 
@@ -2861,7 +2861,7 @@ msgstr "Z dołu do góry, od prawej do lewej"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Page Ordering"
 msgstr "Kolejność stron"
 
@@ -4886,261 +4886,261 @@ msgstr "wietnamska (VIQR)"
 msgid "X Input Method"
 msgstr "metoda wprowadzania danych X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:775
-#: modules/printbackends/cups/gtkprintbackendcups.c:984
+#: modules/printbackends/cups/gtkprintbackendcups.c:809
+#: modules/printbackends/cups/gtkprintbackendcups.c:1018
 msgid "Username:"
 msgstr "Nazwa użytkownika:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:776
-#: modules/printbackends/cups/gtkprintbackendcups.c:993
+#: modules/printbackends/cups/gtkprintbackendcups.c:810
+#: modules/printbackends/cups/gtkprintbackendcups.c:1027
 msgid "Password:"
 msgstr "Hasło:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:814
+#: modules/printbackends/cups/gtkprintbackendcups.c:848
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać plik z %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:818
-#: modules/printbackends/cups/gtkprintbackendcups.c:1006
+#: modules/printbackends/cups/gtkprintbackendcups.c:852
+#: modules/printbackends/cups/gtkprintbackendcups.c:1040
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 "Uwierzytelnienie jest wymagane, aby wydrukować dokument \"%s\" na drukarce %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:820
+#: modules/printbackends/cups/gtkprintbackendcups.c:854
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Uwierzytelnienie jest wymagane, aby wydrukować dokument na %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:824
+#: modules/printbackends/cups/gtkprintbackendcups.c:858
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać atrybuty zadania \"%s\""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:826
+#: modules/printbackends/cups/gtkprintbackendcups.c:860
 msgid "Authentication is required to get attributes of a job"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać atrybuty zadania"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:830
+#: modules/printbackends/cups/gtkprintbackendcups.c:864
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać atrybuty drukarki %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:832
+#: modules/printbackends/cups/gtkprintbackendcups.c:866
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać atrybuty drukarki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:835
+#: modules/printbackends/cups/gtkprintbackendcups.c:869
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać domyślną drukarkę z %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:838
+#: modules/printbackends/cups/gtkprintbackendcups.c:872
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Uwierzytelnienie jest wymagane, aby pobrać drukarki od %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:841
+#: modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Uwierzytelnienie jest wymagane na %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#: modules/printbackends/cups/gtkprintbackendcups.c:1012
 msgid "Domain:"
 msgstr "Domena:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#: modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Uwierzytelnienie jest wymagane, aby wydrukować dokument \"%s\""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#: modules/printbackends/cups/gtkprintbackendcups.c:1047
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 "Uwierzytelnienie jest wymagane, aby wydrukować ten dokument na drukarce %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#: modules/printbackends/cups/gtkprintbackendcups.c:1049
 msgid "Authentication is required to print this document"
 msgstr "Uwierzytelnienie jest wymagane, aby wydrukować dokument"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1636
+#: modules/printbackends/cups/gtkprintbackendcups.c:1670
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "W drukarce \"%s\" kończy się toner."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1637
+#: modules/printbackends/cups/gtkprintbackendcups.c:1671
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "W drukarce \"%s\" skończył się toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1639
+#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Niski poziom wywoływacza w drukarce \"%s\"."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1641
+#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Brak wywoływacza w drukarce \"%s\"."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1643
+#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "W drukarce \"%s\" kończy się co najmniej jedna składowa kolorów."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1645
+#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "W drukarce \"%s\" skończyła się co najmniej jedna składowa kolorów."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1646
+#: modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Pokrywa drukarki \"%s\" jest otwarta."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1647
+#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Drzwi drukarki \"%s\" są otwarte."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1648
+#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "W podajniku drukarki \"%s\" kończy się papier."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1649
+#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "W podajniku drukarki \"%s\" skończył się papier."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1650
+#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "Drukarka \"%s\" jest obecnie w trybie offline."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1651
+#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "Drukarka \"%s\" może nie być podłączona."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1652
+#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Wystąpił problem z drukarką \"%s\"."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: modules/printbackends/cups/gtkprintbackendcups.c:1994
 msgid "Paused ; Rejecting Jobs"
 msgstr "Wstrzymana ; Odrzuca zadania"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Rejecting Jobs"
 msgstr "Odrzuca zadania"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2740
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Two Sided"
 msgstr "Dwustronne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2741
+#: modules/printbackends/cups/gtkprintbackendcups.c:2775
 msgid "Paper Type"
 msgstr "Rodzaj papieru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2742
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Paper Source"
 msgstr "Źródło papieru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2743
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Output Tray"
 msgstr "Tacka wyjściowa"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2744
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Resolution"
 msgstr "Rozdzielczość"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2745
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "GhostScript pre-filtering"
 msgstr "Wstępne filtrowanie GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2754
+#: modules/printbackends/cups/gtkprintbackendcups.c:2788
 msgid "One Sided"
 msgstr "Jednostronne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2756
+#: modules/printbackends/cups/gtkprintbackendcups.c:2790
 msgid "Long Edge (Standard)"
 msgstr "Grzbiet wzdłuż dłuższej krawędzi (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2758
+#: modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "Short Edge (Flip)"
 msgstr "Grzbiet wzdłuż krótszej krawędzi (obrót)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2760
-#: modules/printbackends/cups/gtkprintbackendcups.c:2762
-#: modules/printbackends/cups/gtkprintbackendcups.c:2770
+#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2804
 msgid "Auto Select"
 msgstr "Wybór automatyczny"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2764
-#: modules/printbackends/cups/gtkprintbackendcups.c:2766
-#: modules/printbackends/cups/gtkprintbackendcups.c:2768
-#: modules/printbackends/cups/gtkprintbackendcups.c:2772
-#: modules/printbackends/cups/gtkprintbackendcups.c:3258
+#: modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: modules/printbackends/cups/gtkprintbackendcups.c:2806
+#: modules/printbackends/cups/gtkprintbackendcups.c:3292
 msgid "Printer Default"
 msgstr "Domyślne drukarki"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2808
 msgid "Embed GhostScript fonts only"
 msgstr "Osadzanie tylko czcionek GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: modules/printbackends/cups/gtkprintbackendcups.c:2810
 msgid "Convert to PS level 1"
 msgstr "Konwertowanie do PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Convert to PS level 2"
 msgstr "Konwertowanie do PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "No pre-filtering"
 msgstr "Bez wstępnego filtrowania"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2789
+#: modules/printbackends/cups/gtkprintbackendcups.c:2823
 msgid "Miscellaneous"
 msgstr "Różne"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Urgent"
 msgstr "Ważne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "High"
 msgstr "Wysoki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Medium"
 msgstr "Średni"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Low"
 msgstr "Niski"
 
@@ -5148,66 +5148,66 @@ msgstr "Niski"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3490
+#: modules/printbackends/cups/gtkprintbackendcups.c:3524
 msgid "Pages per Sheet"
 msgstr "Stron na kartkę"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3527
+#: modules/printbackends/cups/gtkprintbackendcups.c:3561
 msgid "Job Priority"
 msgstr "Priorytet"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3538
+#: modules/printbackends/cups/gtkprintbackendcups.c:3572
 msgid "Billing Info"
 msgstr "Informacje o opłatach"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "None"
 msgstr "Brak"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Classified"
 msgstr "Sklasyfikowane"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Confidential"
 msgstr "Poufne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Secret"
 msgstr "Tajne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Standard"
 msgstr "Standardowe"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Top Secret"
 msgstr "Ściśle tajne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Unclassified"
 msgstr "Niesklasyfikowane"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: modules/printbackends/cups/gtkprintbackendcups.c:3622
 msgid "Before"
 msgstr "Przed"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3603
+#: modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "After"
 msgstr "Po"
 
@@ -5215,14 +5215,14 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: modules/printbackends/cups/gtkprintbackendcups.c:3657
 msgid "Print at"
 msgstr "Wydruk o"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3634
+#: modules/printbackends/cups/gtkprintbackendcups.c:3668
 msgid "Print at time"
 msgstr "Wydruk o czasie"
 
@@ -5230,7 +5230,7 @@ msgstr "Wydruk o czasie"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3669
+#: modules/printbackends/cups/gtkprintbackendcups.c:3703
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Własny %sx%s"

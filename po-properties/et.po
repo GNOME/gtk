@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2010-02-01 09:03+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -3651,11 +3651,11 @@ msgstr "Laius märkides"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Sildi soovitud laius märkides"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr ""
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
 

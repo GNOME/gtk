@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2009-04-19 23:12+0800\n"
 "Last-Translator: Tino Meinen <tino.meinen@gmail.com>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
@@ -3817,11 +3817,11 @@ msgstr "Breedte in lettertekens"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "De gewenste minimumbreedte van het menu-item, in lettertekens"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "Aandacht pakken"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Een boolese die aangeeft of het menu toetsenbordaandacht neemt"
 

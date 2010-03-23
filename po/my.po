@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:34-0400\n"
 "PO-Revision-Date: 2010-01-19 16:30+0200\n"
 "Last-Translator: Russell Kyaw <rkyaw@yahoo.com>\n"
 "Language-Team: Burmese <my@li.org>\n"
@@ -1212,17 +1212,17 @@ msgstr "အရောင်များ"
 msgid "Make X calls synchronous"
 msgstr "X ခေါ်​ဆိုချက်များ တပြိုင်နက် ဆောင်ရွတ်ပါ"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:311
+#: gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Starting %s"
 msgstr "အစပြုနေတယ် %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %s"
 msgstr "ဖွင့်နေတယ် %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#: gdk/x11/gdkapplaunchcontext-x11.c:318
 #, fuzzy, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -1685,15 +1685,15 @@ msgstr "ညာဖက် -"
 msgid "Paper Margins"
 msgstr "စာရွတ် ဘေးမျဉ်းများ"
 
-#: gtk/gtkentry.c:8692 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
 msgid "Input _Methods"
 msgstr "ရေးသွင်းချက် နည်းလမ်းများ"
 
-#: gtk/gtkentry.c:8706 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
 msgid "_Insert Unicode Control Character"
 msgstr "ယူနီကုဒ် အထိန်း အက္ခရာကို ထည့်သွင်းပါ"
 
-#: gtk/gtkentry.c:10085
+#: gtk/gtkentry.c:10091
 msgid "Caps Lock is on"
 msgstr "စာလုံးကြီး ခလုတ် ဖွင့်နေတယ်"
 
@@ -2495,7 +2495,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4701 gtk/gtknotebook.c:7266
+#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
 #, c-format
 msgid "Page %u"
 msgstr "စာမျက်နှာ %u"
@@ -2677,7 +2677,7 @@ msgstr "စာရွက် ကုန်သွားပြီ"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paused"
 msgstr "ခေတ္တရပ်နားတယ်"
 
@@ -2804,42 +2804,42 @@ msgstr "အထွေထွေ"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, top to bottom"
 msgstr "ဘယ်မှ ညာ၊ ထိပ်မှ အောက်ခြေ"
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, bottom to top"
 msgstr "ဘယ်မှ ညာ၊ အောက်ခြေမှ ထိပ်"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, top to bottom"
 msgstr "ညာမှ ဘယ်၊ ထိပ်မှ အောက်ခြေ"
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, bottom to top"
 msgstr "ညာမှ ဘယ်၊ အောက်ခြေမှ ထိပ်"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, left to right"
 msgstr "ထိပ်မှ အောက်ခြေ၊ ဘယ်မှ ညာ"
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, right to left"
 msgstr "ထိပ်မှ အောက်ခြေ၊ ညာမှ ဘယ်"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, left to right"
 msgstr "ောက်ခြေမှ ထိပ်၊ ဘယ်မှ ညာ"
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, right to left"
 msgstr "ောက်ခြေမှ ထိပ်၊ ညာမှ ဘယ်"
 
@@ -2847,7 +2847,7 @@ msgstr "ောက်ခြေမှ ထိပ်၊ ညာမှ ဘယ်"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Page Ordering"
 msgstr "စာမျက်နှာ အစဉ်လိုက်"
 
@@ -4877,262 +4877,262 @@ msgstr "ဗီယက်နမ် (VIQR)"
 msgid "X Input Method"
 msgstr "X ဖြည့်သွင်းချက် နည်းလမ်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:775
-#: modules/printbackends/cups/gtkprintbackendcups.c:984
+#: modules/printbackends/cups/gtkprintbackendcups.c:809
+#: modules/printbackends/cups/gtkprintbackendcups.c:1018
 msgid "Username:"
 msgstr "သုံးစွဲသူအမည် -"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:776
-#: modules/printbackends/cups/gtkprintbackendcups.c:993
+#: modules/printbackends/cups/gtkprintbackendcups.c:810
+#: modules/printbackends/cups/gtkprintbackendcups.c:1027
 msgid "Password:"
 msgstr "စကားဝှက် -"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:814
+#: modules/printbackends/cups/gtkprintbackendcups.c:848
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s မှ ဖိုင်တခုကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:818
-#: modules/printbackends/cups/gtkprintbackendcups.c:1006
+#: modules/printbackends/cups/gtkprintbackendcups.c:852
+#: modules/printbackends/cups/gtkprintbackendcups.c:1040
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "%s ပုံနှိုပ်စက်ပေါ်မှာ %s စာတမ်းကို ပုံနှိုပ်ဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:820
+#: modules/printbackends/cups/gtkprintbackendcups.c:854
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s ပေါ်မှာ စာတမ်း တခုကို ပုံနှိုပ်ဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:824
+#: modules/printbackends/cups/gtkprintbackendcups.c:858
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "%s အလုပ်ရဲ့ အရည်အသွေးများကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:826
+#: modules/printbackends/cups/gtkprintbackendcups.c:860
 #, fuzzy
 msgid "Authentication is required to get attributes of a job"
 msgstr "%s အလုပ်တခုရဲ့ အရည်အသွေးများကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:830
+#: modules/printbackends/cups/gtkprintbackendcups.c:864
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "%s ပုံနှိုပ်စက်ရဲ့ အရည်အသွေးများကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:832
+#: modules/printbackends/cups/gtkprintbackendcups.c:866
 #, fuzzy
 msgid "Authentication is required to get attributes of a printer"
 msgstr "%s ပုံနှိုပ်စက် တလုံးရဲ့ အရည်အသွေးများကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:835
+#: modules/printbackends/cups/gtkprintbackendcups.c:869
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s စံထားချက် ပုံနှိုပ်စက်ကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:838
+#: modules/printbackends/cups/gtkprintbackendcups.c:872
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s မှ ပုံနှိုပ်များကို ရရှိဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:841
+#: modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s ပေါ်မှာ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:978
+#: modules/printbackends/cups/gtkprintbackendcups.c:1012
 msgid "Domain:"
 msgstr "ဒိုမိန်း -"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1008
+#: modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, fuzzy, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "%s ပေါ်မှာ စာတမ်း တခုကို ပုံနှိုပ်ဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1013
+#: modules/printbackends/cups/gtkprintbackendcups.c:1047
 #, fuzzy, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "%s ပုံနှိုပ်စက်ပေါ်မှာ %s စာတမ်းကို ပုံနှိုပ်ဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1015
+#: modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, fuzzy
 msgid "Authentication is required to print this document"
 msgstr "%s ပေါ်မှာ စာတမ်း တခုကို ပုံနှိုပ်ဖို့ စစ်မှန်မှု လိုအပ်တယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1636
+#: modules/printbackends/cups/gtkprintbackendcups.c:1670
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ တွန်နာ နည်းနေတယ်။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1637
+#: modules/printbackends/cups/gtkprintbackendcups.c:1671
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ တွန်နာ မရှိတော့ဘူး။"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1639
+#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "ပုံနှိုပ်စက် '%s' ပုံဖေါ်သူ နည်းနေတယ်။"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1641
+#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ ပုံဖေါ်သူ မရှိတော့ဘူး။"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1643
+#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ အနည်းဆုံး ရေးမှတ်ကိရိယာ တခု ပံ့ပိုးချက် နည်းနေတယ်။"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1645
+#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ အနည်းဆုံး ရေးမှတ်ကိရိယာ တခု ပံ့ပိုးချက် မရှိတော့ဘူး။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1646
+#: modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "အဖုံးဟာ ပုံနှိုပ်စက် '%s' ပေါ် ဖွင့်နေတယ်။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1647
+#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "တံခါးဟာ ပုံနှိုပ်စက် '%s' ပေါ် ဖွင့်နေတယ်။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1648
+#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ စာရွတ် နည်းနေတယ်။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1649
+#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "ပုံနှိုပ်စက် '%s' မှာ စာရွတ်မရှိတော့ဘူး။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1650
+#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "ပုံနှိုပ်စက် '%s' ဟာ လောလောဆယ် ချိတ်ဆက်မဲ့မှာ ရှိနေတယ်။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1651
+#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "ပုံနှိုပ်စက် '%s' ကို ချိတ်ဆက်မထားနိုင်ဘူး။"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1652
+#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "ပုံနှိုပ်စက် '%s' ပေါ်မှာ ပြဿနာ တရပ် ရှိနေတယ်။"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: modules/printbackends/cups/gtkprintbackendcups.c:1994
 msgid "Paused ; Rejecting Jobs"
 msgstr "ခေတ္တရပ်နားထားတယ်၊ လုပ်ငန်းများကို ပယ်ချနေတယ်"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Rejecting Jobs"
 msgstr "လုပ်ငန်းများကို ငြင်းပယ်နေတယ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2740
+#: modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Two Sided"
 msgstr "အနား နှစ်ဖက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2741
+#: modules/printbackends/cups/gtkprintbackendcups.c:2775
 msgid "Paper Type"
 msgstr "စာရွတ် အမျိုးအစား"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2742
+#: modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Paper Source"
 msgstr "စာရွတ် အရင်းအမြစ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2743
+#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Output Tray"
 msgstr "ရလဒ် လင်ဗန်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2744
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Resolution"
 msgstr "ရှင်းလင်းပြတ်သားမှု"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2745
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "GhostScript pre-filtering"
 msgstr "သရဲစခရစ် ကြို-စစ်ထုတ်ခြင်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2754
+#: modules/printbackends/cups/gtkprintbackendcups.c:2788
 msgid "One Sided"
 msgstr "အနားတဖက်"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2756
+#: modules/printbackends/cups/gtkprintbackendcups.c:2790
 msgid "Long Edge (Standard)"
 msgstr "ရှည်​လျားတဲ့ အစွန် (စံညွှန်း)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2758
+#: modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "Short Edge (Flip)"
 msgstr "တိုတောင်းတဲ့ အစွန် (အဖွင့်)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2760
-#: modules/printbackends/cups/gtkprintbackendcups.c:2762
-#: modules/printbackends/cups/gtkprintbackendcups.c:2770
+#: modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: modules/printbackends/cups/gtkprintbackendcups.c:2804
 msgid "Auto Select"
 msgstr "အလိုအလျှောက် ရွေးချယ်မှု"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2764
-#: modules/printbackends/cups/gtkprintbackendcups.c:2766
-#: modules/printbackends/cups/gtkprintbackendcups.c:2768
-#: modules/printbackends/cups/gtkprintbackendcups.c:2772
-#: modules/printbackends/cups/gtkprintbackendcups.c:3258
+#: modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: modules/printbackends/cups/gtkprintbackendcups.c:2806
+#: modules/printbackends/cups/gtkprintbackendcups.c:3292
 msgid "Printer Default"
 msgstr "ပုံနှိုပ်စက် စံထားချက်"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2808
 msgid "Embed GhostScript fonts only"
 msgstr "ထည့်မြှပ်ထားတဲ့ သရဲစခရစ် ဖောင့်များသာ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: modules/printbackends/cups/gtkprintbackendcups.c:2810
 msgid "Convert to PS level 1"
 msgstr "PS အဆင့် ၁ အဖြစ် အသွင်ပြောင်းပါ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Convert to PS level 2"
 msgstr "PS အဆင့် ၂ အဖြစ် အသွင်ပြောင်းပါ"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "No pre-filtering"
 msgstr "ကြို-စစ်ထုတ်ခြင်း မရှိ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2789
+#: modules/printbackends/cups/gtkprintbackendcups.c:2823
 msgid "Miscellaneous"
 msgstr "သောင်းပြောင်းထွေလာ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Urgent"
 msgstr "​အရေးပေါ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "High"
 msgstr "အမြင့်​"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Medium"
 msgstr "အလယ်အလတ်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Low"
 msgstr "အနိမ့်"
 
@@ -5140,66 +5140,66 @@ msgstr "အနိမ့်"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3490
+#: modules/printbackends/cups/gtkprintbackendcups.c:3524
 msgid "Pages per Sheet"
 msgstr "အချပ်အလိုက် စာမျက်နှာများ"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3527
+#: modules/printbackends/cups/gtkprintbackendcups.c:3561
 msgid "Job Priority"
 msgstr "အလုပ် ဦး​စားပေးချက်"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3538
+#: modules/printbackends/cups/gtkprintbackendcups.c:3572
 msgid "Billing Info"
 msgstr "ငွေတောင်းလွှာ အချက်အလက်"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "None"
 msgstr "ဘာမျှမရှိ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Classified"
 msgstr "မျိုးတူခွဲထားချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Confidential"
 msgstr "အတွင်းရေးကိစ္စ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Secret"
 msgstr "လျှို့ဝှက်ချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Standard"
 msgstr "စံညွှန်း"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Top Secret"
 msgstr "ထိပ်တန်း လျှို့ဝှက်ချက်"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Unclassified"
 msgstr "မျိုးတူခွဲမထားသော"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: modules/printbackends/cups/gtkprintbackendcups.c:3622
 msgid "Before"
 msgstr "အလျင်"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3603
+#: modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "After"
 msgstr "ပြီးနောက်"
 
@@ -5207,14 +5207,14 @@ msgstr "ပြီးနောက်"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: modules/printbackends/cups/gtkprintbackendcups.c:3657
 msgid "Print at"
 msgstr "ပုံနှိုပ်တဲ့ နေရာ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3634
+#: modules/printbackends/cups/gtkprintbackendcups.c:3668
 msgid "Print at time"
 msgstr "အချိန်နဲ့ ပုံနှိုပ်တယ်"
 
@@ -5222,7 +5222,7 @@ msgstr "အချိန်နဲ့ ပုံနှိုပ်တယ်"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3669
+#: modules/printbackends/cups/gtkprintbackendcups.c:3703
 #, c-format
 msgid "Custom %sx%s"
 msgstr "စိတ်ကြိုက် ဖန်တီးချက် %sx%s"

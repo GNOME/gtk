@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Nils-Christoph Fiedler <fiedler@medienkompanie.de>\n"
 "Language-Team: Low German <nds-lowgerman@lists.sourceforge.net>\n"
@@ -4274,12 +4274,12 @@ msgstr "Breite in Zeichen"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Die minimale gewünschte Breite des Menüeintrags, in Zeichen"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 #, fuzzy
 msgid "Take Focus"
 msgstr "Fokus übernehmen"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 #, fuzzy
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""

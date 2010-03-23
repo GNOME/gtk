@@ -28,7 +28,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-2-16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2009-08-10 08:39+0200\n"
 "Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
 "Language-Team: catalan <tradgnome@softcatala.org>\n"
@@ -3744,11 +3744,11 @@ msgstr "Amplada en caràcters"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "L'amplada desitjada mínima de l'element de menú, en caràcters"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "Agafa el focus"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Un booleà que indica si el menú agafa el focus del teclat"
 

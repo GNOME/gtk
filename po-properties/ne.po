@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2005-05-15 15:47+0545\n"
 "Last-Translator: Ganesh Ghimire <gghimire@gmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -3741,11 +3741,11 @@ msgstr "क्यारेक्टरहरूमा चौडाई"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "क्यारेक्टरहरूमा चाहिएको लेबलको चौडाई"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "केन्द्र लिनुहोस्"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "यो मेनुले कुञ्जीपाटी केन्द्र समाउँदाँदा बुलियनले निर्धारण गर्छ"
 

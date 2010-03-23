@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-09 12:36-0500\n"
+"POT-Creation-Date: 2010-03-22 23:35-0400\n"
 "PO-Revision-Date: 2010-02-12 00:11+0300\n"
 "Last-Translator: Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
 "Language-Team: Romanian GNOME Team <gnomero-list@lists.sourceforge.net>\n"
@@ -3710,11 +3710,11 @@ msgstr "Lățime în caractere"
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Lățimea minimă dorită a elementului de meniu, în caractere"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "Preluare focus"
 
-#: gtk/gtkmenushell.c:376
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "Valoare booleană ce indică dacă meniul preia focusul tastaturii"
 
