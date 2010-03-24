@@ -199,7 +199,7 @@ introspection_files = \
 		$(gdk_c_sources) \
         gdkenumtypes.c \
         gdkenumtypes.h \
-        $(srcdir)/x11/*.c
+        x11/*.c
 
 Gdk-2.0.gir: $(gdktargetlib) Makefile
 Gdk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
