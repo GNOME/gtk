@@ -382,29 +382,25 @@ FreeStorage (ScanLineListBlock *pSLLBlock)
  *     stack by the calling procedure.
  *
  */
-static int
+static cairo_region_t *
 PtsToRegion (int         numFullPtBlocks,
              int         iCurPtBlock,
-             POINTBLOCK *FirstPtBlock,
-             GdkRegion  *reg)
+             POINTBLOCK *FirstPtBlock)
 {
-    GdkRegionBox *rects;
+    GdkRectangle *rects, *allRects;
     GdkPoint *pts;
     POINTBLOCK *CurPtBlock;
     int i;
-    GdkRegionBox *extents;
     int numRects;
+    cairo_region_t *region;
 
-    extents = &reg->extents;
- 
     numRects = ((numFullPtBlocks * NUMPTSTOBUFFER) + iCurPtBlock) >> 1;
  
-    GROWREGION(reg, numRects);
+    allRects = g_new (GdkRectangle, numRects);
 
     CurPtBlock = FirstPtBlock;
-    rects = reg->rects - 1;
+    rects = allRects - 1;
     numRects = 0;
-    extents->x1 = G_MAXSHORT,  extents->x2 = G_MINSHORT;
  
     for ( ; numFullPtBlocks >= 0; numFullPtBlocks--) {
 	/* the loop uses 2 points per iteration */
@@ -414,37 +410,24 @@ PtsToRegion (int         numFullPtBlocks,
 	for (pts = CurPtBlock->pts; i--; pts += 2) {
 	    if (pts->x == pts[1].x)
 		continue;
-	    if (numRects && pts->x == rects->x1 && pts->y == rects->y2 &&
-		pts[1].x == rects->x2 &&
-		(numRects == 1 || rects[-1].y1 != rects->y1) &&
+	    if (numRects && pts->x == rects->x && pts->y == rects->y + rects->height &&
+		pts[1].x == rects->x + rects->width &&
+		(numRects == 1 || rects[-1].y != rects->y) &&
 		(i && pts[2].y > pts[1].y)) {
-		rects->y2 = pts[1].y + 1;
+		rects->height = pts[1].y + 1 - rects->y;
 		continue;
 	    }
 	    numRects++;
 	    rects++;
-	    rects->x1 = pts->x;  rects->y1 = pts->y;
-	    rects->x2 = pts[1].x;  rects->y2 = pts[1].y + 1;
-	    if (rects->x1 < extents->x1)
-		extents->x1 = rects->x1;
-	    if (rects->x2 > extents->x2)
-		extents->x2 = rects->x2;
+	    rects->x = pts->x;  rects->y = pts->y;
+	    rects->width = pts[1].x - rects->x;  rects->height = pts[1].y + 1 - rects->y;
         }
 	CurPtBlock = CurPtBlock->next;
     }
 
-    if (numRects) {
-	extents->y1 = reg->rects->y1;
-	extents->y2 = rects->y2;
-    } else {
-	extents->x1 = 0;
-	extents->y1 = 0;
-	extents->x2 = 0;
-	extents->y2 = 0;
-    }
-    reg->numRects = numRects;
- 
-    return(TRUE);
+    region = cairo_region_create_rectangles ((cairo_rectangle_int_t *) allRects, numRects);
+    g_free (allRects);
+    return region;
 }
 
 /**
@@ -481,8 +464,6 @@ gdk_region_polygon (const GdkPoint *points,
     POINTBLOCK *tmpPtBlock;
     int numFullPtBlocks = 0;
  
-    region = gdk_region_new ();
-
     /* special case a rectangle */
     if (((n_points == 4) ||
 	 ((n_points == 5) && (points[4].x == points[0].x) && (points[4].y == points[0].y))) &&
@@ -494,16 +475,13 @@ gdk_region_polygon (const GdkPoint *points,
 	  (points[1].y == points[2].y) &&
 	  (points[2].x == points[3].x) &&
 	  (points[3].y == points[0].y)))) {
-	region->extents.x1 = MIN(points[0].x, points[2].x);
-	region->extents.y1 = MIN(points[0].y, points[2].y);
-	region->extents.x2 = MAX(points[0].x, points[2].x);
-	region->extents.y2 = MAX(points[0].y, points[2].y);
-	if ((region->extents.x1 != region->extents.x2) &&
-	    (region->extents.y1 != region->extents.y2)) {
-	    region->numRects = 1;
-	    *(region->rects) = region->extents;
-	}
-	return(region);
+        GdkRectangle extents;
+
+	extents.x = MIN(points[0].x, points[2].x);
+	extents.y = MIN(points[0].y, points[2].y);
+	extents.width = MAX(points[0].x, points[2].x) - extents.x;
+	extents.height = MAX(points[0].y, points[2].y) - extents.y;
+	return gdk_region_rectangle (&extents);
     }
 
     pETEs = g_new (EdgeTableEntry, n_points);
@@ -610,7 +588,7 @@ gdk_region_polygon (const GdkPoint *points,
         }
     }
     FreeStorage(SLLBlock.next);	
-    (void) PtsToRegion(numFullPtBlocks, iPts, &FirstPtBlock, region);
+    region = PtsToRegion(numFullPtBlocks, iPts, &FirstPtBlock);
     for (curPtBlock = FirstPtBlock.next; --numFullPtBlocks >= 0;) {
 	tmpPtBlock = curPtBlock->next;
 	g_free (curPtBlock);

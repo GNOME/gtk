@@ -48,7 +48,6 @@
 #include "gdkdisplay-x11.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkregion-generic.h"
 #include "gdkinputprivate.h"
 #include "gdkalias.h"
 
@@ -648,20 +647,24 @@ _gdk_region_get_xrectangles (const GdkRegion *region,
                              XRectangle     **rects,
                              gint            *n_rects)
 {
-  XRectangle *rectangles = g_new (XRectangle, region->numRects);
-  GdkRegionBox *boxes = region->rects;
-  gint i;
+  XRectangle *rectangles;
+  cairo_rectangle_int_t box;
+  gint i, n;
   
-  for (i = 0; i < region->numRects; i++)
+  n = cairo_region_num_rectangles (region);
+  rectangles = g_new (XRectangle, n);
+
+  for (i = 0; i < n; i++)
     {
-      rectangles[i].x = CLAMP (boxes[i].x1 + x_offset, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].y = CLAMP (boxes[i].y1 + y_offset, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].width = CLAMP (boxes[i].x2 + x_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
-      rectangles[i].height = CLAMP (boxes[i].y2 + y_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
+      cairo_region_get_rectangle (region, i, &box);
+      rectangles[i].x = CLAMP (box.x + x_offset, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].y = CLAMP (box.y + y_offset, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].width = CLAMP (box.width, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].height = CLAMP (box.height, G_MINSHORT, G_MAXSHORT);
     }
 
+  *n_rects = n;
   *rects = rectangles;
-  *n_rects = region->numRects;
 }
 
 /**

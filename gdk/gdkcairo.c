@@ -20,7 +20,6 @@
 #include "gdkcairo.h"
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
-#include "gdkregion-generic.h"
 #include "gdkalias.h"
 
 /**
@@ -143,21 +142,19 @@ void
 gdk_cairo_region (cairo_t         *cr,
 		  const GdkRegion *region)
 {
-  GdkRegionBox *boxes;
+  cairo_rectangle_int_t box;
   gint n_boxes, i;
 
   g_return_if_fail (cr != NULL);
   g_return_if_fail (region != NULL);
 
-  boxes = region->rects;
-  n_boxes = region->numRects;
+  n_boxes = cairo_region_num_rectangles (region);
 
   for (i = 0; i < n_boxes; i++)
-    cairo_rectangle (cr,
-		     boxes[i].x1,
-		     boxes[i].y1,
-		     boxes[i].x2 - boxes[i].x1,
-		     boxes[i].y2 - boxes[i].y1);
+    {
+      cairo_region_get_rectangle (region, i, &box);
+      cairo_rectangle (cr, box.x, box.y, box.width, box.height);
+    }
 }
 
 /**
