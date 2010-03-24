@@ -5742,7 +5742,7 @@ static void calendar_select_font( GtkWidget    *button,
 			     calendar-&gt;font_dialog);
   }
   window = calendar-&gt;font_dialog;
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
@@ -9942,7 +9942,7 @@ protocols.</para>
 <para>An application capable of GTK+ drag-and-drop first defines and sets up
 the GTK+ widget(s) for drag-and-drop. Each widget can be a source
 and/or destination for drag-and-drop. Note that these GTK+ widgets must have
-an associated X Window, check using GTK_WIDGET_NO_WINDOW(widget)).</para>
+an associated X Window, check using gtk_widget_get_has_window (widget).</para>
 
 <para>Source widgets can send out drag data, thus allowing the user to drag
 things off of them, while destination widgets can receive drag data.

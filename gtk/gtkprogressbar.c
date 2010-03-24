@@ -1057,7 +1057,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   GTK_PROGRESS_GET_CLASS (pbar)->act_mode_enter (GTK_PROGRESS (pbar));
-  if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (pbar)))
+  if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
     gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   /* Sigh. */
