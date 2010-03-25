@@ -54,7 +54,7 @@ static void
 menu_item_label_notify_count (ActionTest    *fixture,
                               gconstpointer  test_data)
 {
-  GtkMenuItem *item = gtk_menu_item_new ();
+  GtkWidget *item = gtk_menu_item_new ();
   unsigned int emmisions = 0;
 
   g_signal_connect (item, "notify::label",
