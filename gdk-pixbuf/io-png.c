@@ -261,7 +261,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         gchar *icc_profile_base64;
         const gchar *icc_profile_title;
         const gchar *icc_profile;
-        guint icc_profile_size;
+        gulong icc_profile_size;
         guint32 retval;
         gint compression_type;
 
@@ -607,7 +607,7 @@ png_info_callback   (png_structp png_read_ptr,
         gchar *icc_profile_base64;
         const gchar *icc_profile_title;
         const gchar *icc_profile;
-        guint icc_profile_size;
+        gulong icc_profile_size;
         guint32 retval;
         gint compression_type;
 
