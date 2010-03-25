@@ -445,8 +445,17 @@ typedef enum
  * @flag: the flags to set.
  *
  * Turns on certain widget flags.
+ *
+ * Deprecated: 2.22: Use the proper function instead: gtk_widget_set_app_paintable(),
+ *   gtk_widget_set_can_default(), gtk_widget_set_can_focus(),
+ *   gtk_widget_set_double_buffered(), gtk_widget_set_has_window(),
+ *   gtk_widget_set_mapped(), gtk_widget_set_no_show_all(),
+ *   gtk_widget_set_realized(), gtk_widget_set_receives_default(),
+ *   gtk_widget_set_sensitive() or gtk_widget_set_visible().
+ *
  */
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
+/* FIXME: Deprecating GTK_WIDGET_SET_FLAGS requires fixing GTK internals. */
 
 /**
  * GTK_WIDGET_UNSET_FLAGS:
@@ -454,8 +463,11 @@ typedef enum
  * @flag: the flags to unset.
  *
  * Turns off certain widget flags.
+ *
+ * Deprecated: 2.22: Use the proper function instead. See GTK_WIDGET_SET_FLAGS().
  */
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
+/* FIXME: Deprecating GTK_WIDGET_UNSET_FLAGS requires fixing GTK internals. */
 
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
