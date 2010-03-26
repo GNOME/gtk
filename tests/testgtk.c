@@ -9792,21 +9792,26 @@ typedef struct _ProgressData {
   GtkWidget *omenu2;
   GtkWidget *entry;
   int timer;
+  gboolean activity;
 } ProgressData;
 
-gint
+gboolean
 progress_timeout (gpointer data)
 {
+  ProgressData *pdata = data;
   gdouble new_val;
-  GtkAdjustment *adj;
 
-  adj = GTK_PROGRESS (data)->adjustment;
+  if (pdata->activity)
+    {
+      gtk_progress_bar_pulse (GTK_PROGRESS_BAR (pdata->pbar));
+      return TRUE;
+    }
 
-  new_val = adj->value + 1;
-  if (new_val > adj->upper)
-    new_val = adj->lower;
+  new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (pdata->pbar)) + 0.01;
+  if (new_val > 1.00)
+    new_val = 0.00;
 
-  gtk_progress_set_value (GTK_PROGRESS (data), new_val);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (pdata->pbar), new_val);
 
   return TRUE;
 }
@@ -9845,10 +9850,6 @@ toggle_show_text (GtkWidget *widget, ProgressData *pdata)
   gtk_progress_set_show_text (GTK_PROGRESS (pdata->pbar),
 			      GTK_TOGGLE_BUTTON (widget)->active);
   gtk_widget_set_sensitive (pdata->entry, GTK_TOGGLE_BUTTON (widget)->active);
-  gtk_widget_set_sensitive (pdata->x_align_spin,
-			    GTK_TOGGLE_BUTTON (widget)->active);
-  gtk_widget_set_sensitive (pdata->y_align_spin,
-			    GTK_TOGGLE_BUTTON (widget)->active);
 }
 
 static void
@@ -9864,28 +9865,6 @@ progressbar_toggle_ellipsize (GtkWidget *widget,
 }
 
 static void
-progressbar_toggle_bar_style (GtkWidget *widget, gpointer data)
-{
-  ProgressData *pdata;
-  gint i;
-
-  pdata = (ProgressData *) data;
-
-  if (!gtk_widget_get_mapped (widget))
-    return;
-
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
-
-  if (i == 1)
-    gtk_widget_set_sensitive (pdata->block_spin, TRUE);
-  else
-    gtk_widget_set_sensitive (pdata->block_spin, FALSE);
-  
-  gtk_progress_bar_set_bar_style (GTK_PROGRESS_BAR (pdata->pbar),
-				  (GtkProgressBarStyle) i);
-}
-
-static void
 progress_value_changed (GtkAdjustment *adj, ProgressData *pdata)
 {
   char buf[20];
@@ -9894,31 +9873,8 @@ progress_value_changed (GtkAdjustment *adj, ProgressData *pdata)
     sprintf (buf, "???");
   else
     sprintf (buf, "%.0f%%", 100 *
-	     gtk_progress_get_current_percentage (GTK_PROGRESS (pdata->pbar)));
+      gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (pdata->pbar)));
   gtk_label_set_text (GTK_LABEL (pdata->label), buf);
-}
-
-static void
-adjust_blocks (GtkAdjustment *adj, ProgressData *pdata)
-{
-  gtk_progress_set_percentage (GTK_PROGRESS (pdata->pbar), 0);
-  gtk_progress_bar_set_discrete_blocks (GTK_PROGRESS_BAR (pdata->pbar),
-     gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->block_spin)));
-}
-
-static void
-adjust_step (GtkAdjustment *adj, ProgressData *pdata)
-{
-  gtk_progress_bar_set_activity_step (GTK_PROGRESS_BAR (pdata->pbar),
-     gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (pdata->step_spin)));
-}
-
-static void
-adjust_act_blocks (GtkAdjustment *adj, ProgressData *pdata)
-{
-  gtk_progress_bar_set_activity_blocks (GTK_PROGRESS_BAR (pdata->pbar),
-               gtk_spin_button_get_value_as_int 
-		      (GTK_SPIN_BUTTON (pdata->act_blocks_spin)));
 }
 
 static void
@@ -9932,18 +9888,13 @@ adjust_align (GtkAdjustment *adj, ProgressData *pdata)
 static void
 toggle_activity_mode (GtkWidget *widget, ProgressData *pdata)
 {
-  gtk_progress_set_activity_mode (GTK_PROGRESS (pdata->pbar),
-				  GTK_TOGGLE_BUTTON (widget)->active);
-  gtk_widget_set_sensitive (pdata->step_spin, 
-			    GTK_TOGGLE_BUTTON (widget)->active);
-  gtk_widget_set_sensitive (pdata->act_blocks_spin, 
-			    GTK_TOGGLE_BUTTON (widget)->active);
+  pdata->activity = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 }
 
 static void
 entry_changed (GtkWidget *widget, ProgressData *pdata)
 {
-  gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
+  gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar),
 			  gtk_entry_get_text (GTK_ENTRY (pdata->entry)));
 }
 
@@ -9970,13 +9921,7 @@ create_progress_bar (GtkWidget *widget)
     "Top-Bottom"
   };
 
-  static gchar *items2[] =
-  {
-    "Continuous",
-    "Discrete"
-  };
-
-  static char *ellipsize_items[] = {
+    static char *ellipsize_items[] = {
     "None",     // PANGO_ELLIPSIZE_NONE,
     "Start",    // PANGO_ELLIPSIZE_START,
     "Middle",   // PANGO_ELLIPSIZE_MIDDLE,
@@ -10026,10 +9971,10 @@ create_progress_bar (GtkWidget *widget)
 				    "adjustment", adj,
 				    "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
 				    NULL);
-      gtk_progress_set_format_string (GTK_PROGRESS (pdata->pbar),
+      gtk_progress_bar_set_text (GTK_PROGRESS_BAR (pdata->pbar),
 				      "%v from [%l,%u] (=%p%%)");
       gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-      pdata->timer = g_timeout_add (100, (GSourceFunc)progress_timeout, pdata->pbar);
+      pdata->timer = g_timeout_add (100, (GSourceFunc)progress_timeout, pdata);
 
       align = gtk_alignment_new (0.5, 0.5, 0, 0);
       gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
@@ -10137,71 +10082,12 @@ create_progress_bar (GtkWidget *widget)
 			5, 5);
       gtk_box_pack_start (GTK_BOX (hbox), pdata->elmenu, TRUE, TRUE, 0);
 
-      label = gtk_label_new ("Bar Style :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 13, 14,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-
-      pdata->omenu2 = build_option_menu	(items2, 2, 0,
-					 progressbar_toggle_bar_style,
-					 pdata);
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 13, 14,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->omenu2, TRUE, TRUE, 0);
-
-      label = gtk_label_new ("Block count :");
-      gtk_table_attach (GTK_TABLE (tab), label, 0, 1, 14, 15,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
-
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 14, 15,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      adj = (GtkAdjustment *) gtk_adjustment_new (10, 2, 20, 1, 5, 0);
-      pdata->block_spin = gtk_spin_button_new (adj, 0, 0);
-      g_signal_connect (adj, "value_changed",
-			G_CALLBACK (adjust_blocks), pdata);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->block_spin, FALSE, TRUE, 0);
-      gtk_widget_set_sensitive (pdata->block_spin, FALSE);
-
       check = gtk_check_button_new_with_label ("Activity mode");
       g_signal_connect (check, "clicked",
 			G_CALLBACK (toggle_activity_mode), pdata);
       gtk_table_attach (GTK_TABLE (tab), check, 0, 1, 15, 16,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 			5, 5);
-
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 15, 16,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      label = gtk_label_new ("Step size : ");
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-      adj = (GtkAdjustment *) gtk_adjustment_new (3, 1, 20, 1, 5, 0);
-      pdata->step_spin = gtk_spin_button_new (adj, 0, 0);
-      g_signal_connect (adj, "value_changed",
-			G_CALLBACK (adjust_step), pdata);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->step_spin, FALSE, TRUE, 0);
-      gtk_widget_set_sensitive (pdata->step_spin, FALSE);
-
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_table_attach (GTK_TABLE (tab), hbox, 1, 2, 16, 17,
-			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
-			5, 5);
-      label = gtk_label_new ("Blocks :     ");
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
-      adj = (GtkAdjustment *) gtk_adjustment_new (5, 2, 10, 1, 5, 0);
-      pdata->act_blocks_spin = gtk_spin_button_new (adj, 0, 0);
-      g_signal_connect (adj, "value_changed",
-			G_CALLBACK (adjust_act_blocks), pdata);
-      gtk_box_pack_start (GTK_BOX (hbox), pdata->act_blocks_spin, FALSE, TRUE,
-			  0);
-      gtk_widget_set_sensitive (pdata->act_blocks_spin, FALSE);
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
