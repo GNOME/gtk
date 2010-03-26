@@ -10667,11 +10667,12 @@ create_snapshot (GtkWidget *widget)
  */
 
 void
-selection_test_received (GtkWidget *list, GtkSelectionData *data)
+selection_test_received (GtkWidget        *tree_view,
+                         GtkSelectionData *data)
 {
+  GtkTreeModel *model;
+  GtkListStore *store;
   GdkAtom *atoms;
-  GtkWidget *list_item;
-  GList *item_list;
   int i, l;
 
   if (data->length < 0)
@@ -10687,44 +10688,42 @@ selection_test_received (GtkWidget *list, GtkSelectionData *data)
 
   /* Clear out any current list items */
 
-  gtk_list_clear_items (GTK_LIST(list), 0, -1);
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
+  store = GTK_LIST_STORE (model);
+  gtk_list_store_clear (store);
 
   /* Add new items to list */
 
   atoms = (GdkAtom *)data->data;
 
-  item_list = NULL;
   l = data->length / sizeof (GdkAtom);
   for (i = 0; i < l; i++)
     {
       char *name;
+      GtkTreeIter iter;
+
       name = gdk_atom_name (atoms[i]);
       if (name != NULL)
-	{
-	  list_item = gtk_list_item_new_with_label (name);
-	  g_free (name);
-	}
+        {
+          gtk_list_store_insert_with_values (store, &iter, i, 0, name, -1);
+          g_free (name);
+        }
       else
-	list_item = gtk_list_item_new_with_label ("(bad atom)");
-
-      gtk_widget_show (list_item);
-      item_list = g_list_append (item_list, list_item);
+       gtk_list_store_insert_with_values (store, &iter, i, 0,  "(bad atom)", -1);
     }
-
-  gtk_list_append_items (GTK_LIST (list), item_list);
 
   return;
 }
 
 void
-selection_test_get_targets (GtkWidget *widget, GtkWidget *list)
+selection_test_get_targets (GtkWidget *widget, GtkWidget *tree_view)
 {
   static GdkAtom targets_atom = GDK_NONE;
 
   if (targets_atom == GDK_NONE)
     targets_atom = gdk_atom_intern ("TARGETS", FALSE);
 
-  gtk_selection_convert (list, GDK_SELECTION_PRIMARY, targets_atom,
+  gtk_selection_convert (tree_view, GDK_SELECTION_PRIMARY, targets_atom,
 			 GDK_CURRENT_TIME);
 }
 
@@ -10735,7 +10734,10 @@ create_selection_test (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *vbox;
   GtkWidget *scrolled_win;
-  GtkWidget *list;
+  GtkListStore* store;
+  GtkWidget *tree_view;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
   GtkWidget *label;
 
   if (!window)
@@ -10769,10 +10771,16 @@ create_selection_test (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
       gtk_widget_set_size_request (scrolled_win, 100, 200);
 
-      list = gtk_list_new ();
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win), list);
+      store = gtk_list_store_new (1, G_TYPE_STRING);
+      tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_win), tree_view);
 
-      g_signal_connect (list, "selection_received",
+      renderer = gtk_cell_renderer_text_new ();
+      column = gtk_tree_view_column_new_with_attributes ("Target", renderer,
+                                                         "text", 0, NULL);
+      gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
+
+      g_signal_connect (tree_view, "selection_received",
 			G_CALLBACK (selection_test_received), NULL);
 
       /* .. And create some buttons */
@@ -10781,7 +10789,7 @@ create_selection_test (GtkWidget *widget)
 			  button, TRUE, TRUE, 0);
 
       g_signal_connect (button, "clicked",
-			G_CALLBACK (selection_test_get_targets), list);
+			G_CALLBACK (selection_test_get_targets), tree_view);
 
       button = gtk_button_new_with_label ("Quit");
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area),
