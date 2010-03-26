@@ -110,30 +110,16 @@ build_option_menu (gchar           *items[],
 		   gpointer         data)
 {
   GtkWidget *omenu;
-  GtkWidget *menu;
-  GtkWidget *menu_item;
-  GSList *group;
   gint i;
 
-  omenu = gtk_option_menu_new ();
+  omenu = gtk_combo_box_new_text ();
   g_signal_connect (omenu, "changed",
 		    G_CALLBACK (func), data);
       
-  menu = gtk_menu_new ();
-  group = NULL;
-  
   for (i = 0; i < num_items; i++)
-    {
-      menu_item = gtk_radio_menu_item_new_with_label (group, items[i]);
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-      if (i == history)
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_widget_show (menu_item);
-    }
+      gtk_combo_box_append_text (GTK_COMBO_BOX (omenu), items[i]);
 
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), history);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (omenu), history);
   
   return omenu;
 }
@@ -4470,9 +4456,8 @@ create_menus (GtkWidget *widget)
 				  0,
 				  GTK_ACCEL_VISIBLE);
       
-      optionmenu = gtk_option_menu_new ();
-      gtk_option_menu_set_menu (GTK_OPTION_MENU (optionmenu), menu);
-      gtk_option_menu_set_history (GTK_OPTION_MENU (optionmenu), 3);
+      optionmenu = gtk_combo_box_new_text ();
+      gtk_combo_box_set_active (GTK_COMBO_BOX (optionmenu), 3);
       gtk_box_pack_start (GTK_BOX (box2), optionmenu, TRUE, TRUE, 0);
       gtk_widget_show (optionmenu);
 
@@ -7730,7 +7715,7 @@ notebook_type_changed (GtkWidget *optionmenu,
 
   notebook = GTK_NOTEBOOK (data);
 
-  c = gtk_option_menu_get_history (GTK_OPTION_MENU (optionmenu));
+  c = gtk_combo_box_get_active (GTK_COMBO_BOX (optionmenu));
 
   switch (c)
     {
@@ -9250,7 +9235,7 @@ gravity_selected (GtkWidget *widget,
                   gpointer   data)
 {
   gtk_window_set_gravity (GTK_WINDOW (g_object_get_data (data, "target")),
-                          gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GDK_GRAVITY_NORTH_WEST);
+                          gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) + GDK_GRAVITY_NORTH_WEST);
 }
 
 static void
@@ -9258,7 +9243,7 @@ pos_selected (GtkWidget *widget,
               gpointer   data)
 {
   gtk_window_set_position (GTK_WINDOW (g_object_get_data (data, "target")),
-                           gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GTK_WIN_POS_NONE);
+                           gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) + GTK_WIN_POS_NONE);
 }
 
 static void
@@ -9489,7 +9474,6 @@ window_controls (GtkWidget *window)
   GtkAdjustment *adj;
   GtkWidget *entry;
   GtkWidget *om;
-  GtkWidget *menu;
   gint i;
   
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -9648,12 +9632,10 @@ window_controls (GtkWidget *window)
 			   G_CONNECT_SWAPPED);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   
-  menu = gtk_menu_new ();
-  
+  om = gtk_combo_box_new_text ();
   i = 0;
   while (i < 10)
     {
-      GtkWidget *mi;
       static gchar *names[] = {
         "GDK_GRAVITY_NORTH_WEST",
         "GDK_GRAVITY_NORTH",
@@ -9669,20 +9651,11 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      
-      mi = gtk_menu_item_new_with_label (names[i]);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+      gtk_combo_box_append_text (GTK_COMBO_BOX (om), names[i]);
 
       ++i;
     }
   
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
-
   g_signal_connect (om,
 		    "changed",
 		    G_CALLBACK (gravity_selected),
@@ -9691,12 +9664,10 @@ window_controls (GtkWidget *window)
   gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
 
 
-  menu = gtk_menu_new ();
-  
+  om = gtk_combo_box_new_text ();
   i = 0;
   while (i < 5)
     {
-      GtkWidget *mi;
       static gchar *names[] = {
         "GTK_WIN_POS_NONE",
         "GTK_WIN_POS_CENTER",
@@ -9707,19 +9678,10 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      
-      mi = gtk_menu_item_new_with_label (names[i]);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+      gtk_combo_box_append_text (GTK_COMBO_BOX (om), names[i]);
 
       ++i;
     }
-  
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
 
   g_signal_connect (om,
 		    "changed",
@@ -9838,7 +9800,7 @@ progressbar_toggle_orientation (GtkWidget *widget, gpointer data)
   if (!gtk_widget_get_mapped (widget))
     return;
 
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
 
   gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar),
 				    (GtkProgressBarOrientation) i);
@@ -9859,7 +9821,7 @@ progressbar_toggle_ellipsize (GtkWidget *widget,
   ProgressData *pdata = data;
   if (gtk_widget_is_drawable (widget))
     {
-      gint i = gtk_option_menu_get_history (GTK_OPTION_MENU (widget));
+      gint i = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
       gtk_progress_bar_set_ellipsize (GTK_PROGRESS_BAR (pdata->pbar), i);
     }
 }
