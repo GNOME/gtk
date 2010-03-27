@@ -3749,7 +3749,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
       label = gtk_notebook_get_tab_label (notebook, child);
 
       if (GTK_IS_LABEL (label))
-	g_value_set_string (value, GTK_LABEL (label)->label);
+	g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
       else
 	g_value_set_string (value, NULL);
       break;
@@ -3757,7 +3757,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
       label = gtk_notebook_get_menu_label (notebook, child);
 
       if (GTK_IS_LABEL (label))
-	g_value_set_string (value, GTK_LABEL (label)->label);
+	g_value_set_string (value, gtk_label_get_label (GTK_LABEL (label)));
       else
 	g_value_set_string (value, NULL);
       break;
@@ -4643,7 +4643,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
 	{
 	  if (GTK_IS_LABEL (page->tab_label))
 	    gtk_label_set_text (GTK_LABEL (page->menu_label),
-                                GTK_LABEL (page->tab_label)->label);
+                                gtk_label_get_label (GTK_LABEL (page->tab_label)));
 	  else
 	    gtk_label_set_text (GTK_LABEL (page->menu_label), string);
 	}
@@ -6189,7 +6189,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   if (page->default_menu)
     {
       if (GTK_IS_LABEL (page->tab_label))
-	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
+	page->menu_label = gtk_label_new (gtk_label_get_label (GTK_LABEL (page->tab_label)));
       else
 	page->menu_label = gtk_label_new ("");
       gtk_misc_set_alignment (GTK_MISC (page->menu_label), 0.0, 0.5);
