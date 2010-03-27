@@ -629,5 +629,27 @@ gtk_render_option (GtkStyleContext *context,
                                x, y, width, height);
 }
 
+void
+gtk_render_arrow (GtkStyleContext *context,
+                  cairo_t         *cr,
+                  gdouble          angle,
+                  gdouble          x,
+                  gdouble          y,
+                  gdouble          size)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_arrow (priv->theming_engine, cr,
+                              angle, x, y, size);
+}
+
 #define __GTK_STYLE_CONTEXT_C__
 #include "gtkaliasdef.c"

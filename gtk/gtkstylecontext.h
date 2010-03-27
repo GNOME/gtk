@@ -115,6 +115,12 @@ void gtk_render_option (GtkStyleContext *context,
                         gdouble          y,
                         gdouble          width,
                         gdouble          height);
+void gtk_render_arrow  (GtkStyleContext *context,
+                        cairo_t         *cr,
+                        gdouble          angle,
+                        gdouble          x,
+                        gdouble          y,
+                        gdouble          size);
 
 G_END_DECLS
 
