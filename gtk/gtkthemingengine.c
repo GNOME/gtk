@@ -112,6 +112,13 @@ static void gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                                                  GtkPositionType   gap_side,
                                                  gdouble           xy0_gap,
                                                  gdouble           xy1_gap);
+static void gtk_theming_engine_render_extension (GtkThemingEngine *engine,
+                                                 cairo_t          *cr,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 gdouble           width,
+                                                 gdouble           height,
+                                                 GtkPositionType   gap_side);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -154,6 +161,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_line = gtk_theming_engine_render_line;
   klass->render_slider = gtk_theming_engine_render_slider;
   klass->render_frame_gap = gtk_theming_engine_render_frame_gap;
+  klass->render_extension = gtk_theming_engine_render_extension;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -1244,6 +1252,86 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
     add_path_gap_side (cr, gap_side, 0,
                        x, y, width, height,
                        xy0_gap, xy1_gap);
+
+  add_path_rounded_rectangle (cr, 0, sides,
+                              x, y, width, height);
+
+  gdk_cairo_set_source_color (cr, &lighter);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (bg_color);
+}
+
+static void
+gtk_theming_engine_render_extension (GtkThemingEngine *engine,
+                                     cairo_t          *cr,
+                                     gdouble           x,
+                                     gdouble           y,
+                                     gdouble           width,
+                                     gdouble           height,
+                                     GtkPositionType   gap_side)
+{
+  GtkStateFlags flags;
+  GtkStateType state;
+  GdkColor *bg_color;
+  GdkColor lighter, darker;
+  guint sides;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    state = GTK_STATE_ACTIVE;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  cairo_set_line_width (cr, 1);
+
+  gtk_theming_engine_get (engine, state,
+                          "background-color", &bg_color,
+                          NULL);
+  color_shade (bg_color, 0.7, &darker);
+  color_shade (bg_color, 1.3, &lighter);
+
+  add_path_rounded_rectangle (cr, 0,
+                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
+                              x, y, width, height);
+  cairo_close_path (cr);
+
+  gdk_cairo_set_source_color (cr, bg_color);
+  cairo_fill (cr);
+
+  if (gap_side == GTK_POS_RIGHT)
+    sides = SIDE_BOTTOM;
+  else if (gap_side == GTK_POS_BOTTOM)
+    sides = SIDE_RIGHT;
+  else
+    sides = SIDE_BOTTOM | SIDE_RIGHT;
+
+  add_path_rounded_rectangle (cr, 0, sides,
+                              x, y, width, height);
+
+  cairo_set_source_rgb (cr, 0, 0, 0);
+  cairo_stroke (cr);
+
+  add_path_rounded_rectangle (cr, 0, sides,
+                              x, y, width - 1, height - 1);
+
+  gdk_cairo_set_source_color (cr, &darker);
+  cairo_stroke (cr);
+
+  if (gap_side == GTK_POS_LEFT)
+    sides = SIDE_TOP;
+  else if (gap_side == GTK_POS_TOP)
+    sides = SIDE_LEFT;
+  else
+    sides = SIDE_TOP | SIDE_LEFT;
 
   add_path_rounded_rectangle (cr, 0, sides,
                               x, y, width, height);

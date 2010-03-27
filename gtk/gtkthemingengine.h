@@ -76,6 +76,13 @@ struct GtkThemingEngineClass
                              GtkPositionType   gap_side,
                              gdouble           xy0_gap,
                              gdouble           xy1_gap);
+  void (* render_extension) (GtkThemingEngine *engine,
+                             cairo_t          *cr,
+                             gdouble           x,
+                             gdouble           y,
+                             gdouble           width,
+                             gdouble           height,
+                             GtkPositionType   gap_side);
   void (* render_check) (GtkThemingEngine *engine,
                          cairo_t          *cr,
                          gdouble           x,
