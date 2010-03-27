@@ -390,7 +390,7 @@ gtk_style_context_set_class (GtkStyleContext *context,
     {
       GQuark link_quark;
 
-      link_quark = GUINT_TO_POINTER (link->data);
+      link_quark = GPOINTER_TO_UINT (link->data);
 
       if (link_quark == class_quark)
         return;
