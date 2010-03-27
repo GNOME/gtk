@@ -127,6 +127,12 @@ void gtk_render_background (GtkStyleContext *context,
                             gdouble          y,
                             gdouble          width,
                             gdouble          height);
+void gtk_render_frame  (GtkStyleContext *context,
+                        cairo_t         *cr,
+                        gdouble          x,
+                        gdouble          y,
+                        gdouble          width,
+                        gdouble          height);
 
 G_END_DECLS
 
