@@ -90,6 +90,12 @@ static void gtk_theming_engine_render_layout   (GtkThemingEngine *engine,
                                                 gdouble           x,
                                                 gdouble           y,
                                                 PangoLayout      *layout);
+static void gtk_theming_engine_render_line     (GtkThemingEngine *engine,
+                                                cairo_t          *cr,
+                                                gdouble           x0,
+                                                gdouble           y0,
+                                                gdouble           x1,
+                                                gdouble           y1);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -129,6 +135,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_expander = gtk_theming_engine_render_expander;
   klass->render_focus = gtk_theming_engine_render_focus;
   klass->render_layout = gtk_theming_engine_render_layout;
+  klass->render_line = gtk_theming_engine_render_line;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -917,6 +924,120 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_color_free (base_color);
+}
+
+static void
+add_path_line (cairo_t        *cr,
+               gdouble         x1,
+               gdouble         y1,
+               gdouble         x2,
+               gdouble         y2)
+{
+  cairo_move_to (cr, x1 + 0.5, y1 + 0.5);
+  cairo_line_to (cr, x2 + 0.5, y2 + 0.5);
+}
+
+static void
+gtk_theming_engine_render_line (GtkThemingEngine *engine,
+                                cairo_t          *cr,
+                                gdouble           x0,
+                                gdouble           y0,
+                                gdouble           x1,
+                                gdouble           y1)
+{
+  GdkColor *bg_color, darker, lighter;
+  GtkStateFlags flags;
+  GtkStateType state;
+  gint thickness, thickness_dark, thickness_light;
+  gint i;
+
+  thickness = 2;
+  thickness_dark = thickness / 2;
+  thickness_light = thickness - thickness_dark;
+
+  flags = gtk_theming_engine_get_state (engine);
+  cairo_save (cr);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "background-color", &bg_color,
+                          NULL);
+  color_shade (bg_color, 0.7, &darker);
+  color_shade (bg_color, 1.3, &lighter);
+
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1);
+
+  if (y0 == y1)
+    {
+      /* Horizontal line */
+      for (i = 0; i < thickness_dark; i++)
+        {
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_line (cr, x0, y0, x1 - i - 1, y0);
+          cairo_stroke (cr);
+
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_line (cr, x1 - i, y0, x1, y0 + 1);
+          cairo_stroke (cr);
+          y0++;
+        }
+
+      for (i = 0; i < thickness_light; i++)
+        {
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_line (cr, x0, y0, x0 + thickness_light - i, y0);
+          cairo_stroke (cr);
+
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_line (cr, x0 + thickness_light - i, y0, x1, y0);
+          cairo_stroke (cr);
+          y0++;
+        }
+    }
+  else if (x0 == x1)
+    {
+      /* Vertical line */
+      for (i = 0; i < thickness_dark; i++)
+        {
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_line (cr, x0, y0, x0, y1 - i - 1);
+          cairo_stroke (cr);
+
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_line (cr, x0, y1 - i, x0, y1);
+          cairo_stroke (cr);
+          x0++;
+        }
+
+      for (i = 0; i < thickness_light; i++)
+        {
+          gdk_cairo_set_source_color (cr, &darker);
+          add_path_line (cr, x0, y0, x0, y0 + thickness_light - i - 1);
+          cairo_stroke (cr);
+
+          gdk_cairo_set_source_color (cr, &lighter);
+          add_path_line (cr, x0, y0 + thickness_light - i, x0, y1);
+          cairo_stroke (cr);
+          x0++;
+        }
+    }
+  else
+    {
+      /* Arbitrary line */
+      /* FIXME: implement thickness, etc */
+      gdk_cairo_set_source_color (cr, &darker);
+      add_path_line (cr, x0, y0, x1, y1);
+      cairo_stroke (cr);
+    }
+
+  cairo_restore (cr);
 }
 
 static void
