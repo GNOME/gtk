@@ -156,6 +156,13 @@ void gtk_render_line     (GtkStyleContext *context,
                           gdouble          y0,
                           gdouble          x1,
                           gdouble          y1);
+void gtk_render_slider   (GtkStyleContext *context,
+                          cairo_t         *cr,
+                          gdouble          x,
+                          gdouble          y,
+                          gdouble          width,
+                          gdouble          height,
+                          GtkOrientation   orientation);
 
 G_END_DECLS
 
