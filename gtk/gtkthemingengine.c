@@ -119,6 +119,13 @@ static void gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                                  gdouble           width,
                                                  gdouble           height,
                                                  GtkPositionType   gap_side);
+static void gtk_theming_engine_render_handle    (GtkThemingEngine *engine,
+                                                 cairo_t          *cr,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 gdouble           width,
+                                                 gdouble           height,
+                                                 GtkOrientation    orientation);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -162,6 +169,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_slider = gtk_theming_engine_render_slider;
   klass->render_frame_gap = gtk_theming_engine_render_frame_gap;
   klass->render_extension = gtk_theming_engine_render_extension;
+  klass->render_handle = gtk_theming_engine_render_handle;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -1338,6 +1346,81 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
 
   gdk_cairo_set_source_color (cr, &lighter);
   cairo_stroke (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (bg_color);
+}
+
+static void
+paint_point (cairo_t        *cr,
+             const GdkColor *lighter,
+             const GdkColor *darker,
+             gdouble         x,
+             gdouble         y)
+{
+  cairo_move_to (cr, x - 0.5, y + 1);
+  cairo_line_to (cr, x - 0.5, y - 0.5);
+  cairo_line_to (cr, x + 1, y - 0.5);
+  gdk_cairo_set_source_color (cr, lighter);
+  cairo_stroke (cr);
+
+  cairo_move_to (cr, x + 1.5, y);
+  cairo_line_to (cr, x + 1.5, y + 1.5);
+  cairo_line_to (cr, x, y + 1.5);
+  gdk_cairo_set_source_color (cr, darker);
+  cairo_stroke (cr);
+}
+
+static void
+gtk_theming_engine_render_handle (GtkThemingEngine *engine,
+                                  cairo_t          *cr,
+                                  gdouble           x,
+                                  gdouble           y,
+                                  gdouble           width,
+                                  gdouble           height,
+                                  GtkOrientation    orientation)
+{
+  GtkStateFlags flags;
+  GtkStateType state;
+  GdkColor *bg_color;
+  GdkColor lighter, darker;
+  gint xx, yy;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    state = GTK_STATE_ACTIVE;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  cairo_set_line_width (cr, 1);
+
+  gtk_theming_engine_get (engine, state,
+                          "background-color", &bg_color,
+                          NULL);
+  color_shade (bg_color, 0.7, &darker);
+  color_shade (bg_color, 1.3, &lighter);
+
+  add_path_rounded_rectangle (cr, 0,
+                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
+                              x, y, width, height);
+  cairo_close_path (cr);
+
+  gdk_cairo_set_source_color (cr, bg_color);
+  cairo_fill (cr);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
+      paint_point (cr, &lighter, &darker, xx, y + height / 2 - 1);
+  else
+    for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
+      paint_point (cr, &lighter, &darker, x + width / 2, yy);
 
   cairo_restore (cr);
 
