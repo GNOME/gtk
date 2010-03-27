@@ -179,6 +179,13 @@ void gtk_render_extension (GtkStyleContext *context,
                            gdouble          width,
                            gdouble          height,
                            GtkPositionType  gap_side);
+void gtk_render_handle    (GtkStyleContext *context,
+                           cairo_t         *cr,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height,
+                           GtkOrientation   orientation);
 
 G_END_DECLS
 
