@@ -81,7 +81,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   priv = GTK_STYLE_CONTEXT_GET_PRIVATE (style_context);
   priv->store = gtk_style_set_new ();
-  priv->theming_engine = gtk_theming_engine_load (NULL);
+  priv->theming_engine = (GtkThemingEngine *) gtk_theming_engine_load (NULL);
 }
 
 static GtkStyleProviderData *
