@@ -85,6 +85,11 @@ static void gtk_theming_engine_render_focus    (GtkThemingEngine *engine,
                                                 gdouble           y,
                                                 gdouble           width,
                                                 gdouble           height);
+static void gtk_theming_engine_render_layout   (GtkThemingEngine *engine,
+                                                cairo_t          *cr,
+                                                gdouble           x,
+                                                gdouble           y,
+                                                PangoLayout      *layout);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -123,6 +128,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_frame = gtk_theming_engine_render_frame;
   klass->render_expander = gtk_theming_engine_render_expander;
   klass->render_focus = gtk_theming_engine_render_focus;
+  klass->render_layout = gtk_theming_engine_render_layout;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -911,6 +917,40 @@ gtk_theming_engine_render_focus (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_color_free (base_color);
+}
+
+static void
+gtk_theming_engine_render_layout (GtkThemingEngine *engine,
+                                  cairo_t          *cr,
+                                  gdouble           x,
+                                  gdouble           y,
+                                  PangoLayout      *layout)
+{
+  GdkColor *fg_color;
+  GtkStateFlags flags;
+  GtkStateType state;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "foreground-color", &fg_color,
+                          NULL);
+
+  cairo_move_to (cr, x, y);
+  gdk_cairo_set_source_color (cr, fg_color);
+  pango_cairo_show_layout (cr, layout);
+
+  cairo_restore (cr);
+
+  gdk_color_free (fg_color);
 }
 
 #define __GTK_THEMING_ENGINE_C__
