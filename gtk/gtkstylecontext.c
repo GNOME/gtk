@@ -798,5 +798,31 @@ gtk_render_slider (GtkStyleContext *context,
   engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
 }
 
+void
+gtk_render_frame_gap (GtkStyleContext *context,
+                      cairo_t         *cr,
+                      gdouble          x,
+                      gdouble          y,
+                      gdouble          width,
+                      gdouble          height,
+                      GtkPositionType  gap_side,
+                      gdouble          xy0_gap,
+                      gdouble          xy1_gap)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_frame_gap (priv->theming_engine, cr,
+                                  x, y, width, height, gap_side,
+                                  xy0_gap, xy1_gap);
+}
+
 #define __GTK_STYLE_CONTEXT_C__
 #include "gtkaliasdef.c"

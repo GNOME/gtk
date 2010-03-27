@@ -163,6 +163,15 @@ void gtk_render_slider   (GtkStyleContext *context,
                           gdouble          width,
                           gdouble          height,
                           GtkOrientation   orientation);
+void gtk_render_frame_gap (GtkStyleContext *context,
+                           cairo_t         *cr,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height,
+                           GtkPositionType  gap_side,
+                           gdouble          xy0_gap,
+                           gdouble          xy1_gap);
 
 G_END_DECLS
 
