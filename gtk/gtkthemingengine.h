@@ -49,6 +49,12 @@ struct GtkThemingEngineClass
 {
   GObjectClass parent_class;
 
+  void (* render_background) (GtkThemingEngine *engine,
+                              cairo_t          *cr,
+                              gdouble           x,
+                              gdouble           y,
+                              gdouble           width,
+                              gdouble           height);
   void (* render_check) (GtkThemingEngine *engine,
                          cairo_t          *cr,
                          gdouble           x,

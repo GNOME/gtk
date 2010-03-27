@@ -29,6 +29,13 @@
 
 typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
 
+enum {
+  SIDE_LEFT   = 1,
+  SIDE_BOTTOM = 1 << 1,
+  SIDE_RIGHT  = 1 << 2,
+  SIDE_TOP    = 1 << 3
+};
+
 struct GtkThemingEnginePrivate
 {
   GtkStyleContext *context;
@@ -54,6 +61,12 @@ static void gtk_theming_engine_render_arrow  (GtkThemingEngine *engine,
                                               gdouble           x,
                                               gdouble           y,
                                               gdouble           size);
+static void gtk_theming_engine_render_background (GtkThemingEngine *engine,
+                                                  cairo_t          *cr,
+                                                  gdouble           x,
+                                                  gdouble           y,
+                                                  gdouble           width,
+                                                  gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -88,6 +101,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_check = gtk_theming_engine_render_check;
   klass->render_option = gtk_theming_engine_render_option;
   klass->render_arrow = gtk_theming_engine_render_arrow;
+  klass->render_background = gtk_theming_engine_render_background;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -529,6 +543,165 @@ gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_color_free (fg_color);
+}
+
+static void
+add_path_rounded_rectangle (cairo_t           *cr,
+                            gdouble            radius,
+                            guint              sides,
+                            gdouble            x,
+                            gdouble            y,
+                            gdouble            width,
+                            gdouble            height)
+{
+  gdouble r = 0;
+
+  if (sides & SIDE_BOTTOM)
+    {
+      /* Bottom left corner */
+      if (r == 0)
+        cairo_move_to (cr, x + 0.5, y + height - 0.5);
+      else
+        cairo_arc_negative (cr,
+                            x + r + 0.5,
+                            y + height - r - 0.5,
+                            r,
+                            135 * (G_PI / 180),
+                            90 * (G_PI / 180));
+
+      /* Bottom side */
+      cairo_line_to (cr, x + width - r - 0.5, y + height - 0.5);
+
+      /* Bottom right corner */
+      if (r > 0)
+        cairo_arc_negative (cr,
+                            x + width - r - 0.5,
+                            y + height - r - 0.5,
+                            r,
+                            90 * (G_PI / 180),
+                            45 * (G_PI / 180));
+    }
+
+  if (sides & SIDE_RIGHT)
+    {
+      /* Bottom right corner */
+      if (r == 0)
+        {
+          if ((sides & SIDE_BOTTOM) == 0)
+            cairo_move_to (cr, x + width - 0.5, y + height - 0.5);
+        }
+      else
+        cairo_arc_negative (cr,
+                            x + width - r - 0.5,
+                            y + height - r - 0.5,
+                            r,
+                            45 * (G_PI / 180), 0);
+
+      /* Right side */
+      cairo_line_to (cr, x + width - 0.5, y + r);
+
+      /* Top right corner */
+      if (r > 0)
+        cairo_arc_negative (cr,
+                            x + width - r - 0.5,
+                            y + r + 0.5,
+                            r,
+                            0, 315 * (G_PI / 180));
+    }
+
+  if (sides & SIDE_TOP)
+    {
+      /* Top right corner */
+      if (r == 0)
+        {
+          if ((sides & SIDE_RIGHT) == 0)
+            cairo_move_to (cr, x + width - 1, y + 0.5);
+        }
+      else
+        cairo_arc_negative (cr,
+                            x + width - r - 0.5,
+                            y + r + 0.5,
+                            r,
+                            315 * (G_PI / 180),
+                            270 * (G_PI / 180));
+
+      /* Top side */
+      cairo_line_to (cr, x + 0.5 + r, y + 0.5);
+
+      /* Top left corner */
+      if (r > 0)
+        cairo_arc_negative (cr,
+                            x + r + 0.5,
+                            y + r + 0.5,
+                            r,
+                            270 * (G_PI / 180),
+                            225 * (G_PI / 180));
+    }
+
+  if (sides & SIDE_LEFT)
+    {
+      /* Top left corner */
+      if (r == 0)
+        {
+          if ((sides & SIDE_TOP) == 0)
+            cairo_move_to (cr, x + 0.5, y + 0.5);
+        }
+      else
+        cairo_arc_negative (cr,
+                            x + + r + 0.5,
+                            y + r + 0.5,
+                            r,
+                            225 * (G_PI / 180),
+                            180 * (G_PI / 180));
+
+      /* Left side */
+      cairo_line_to (cr, x + 0.5, y + height - r);
+
+      if (r > 0)
+        cairo_arc_negative (cr,
+                            x + r + 0.5,
+                            y + height - r + 0.5,
+                            r,
+                            180 * (G_PI / 180),
+                            135 * (G_PI / 180));
+    }
+}
+
+static void
+gtk_theming_engine_render_background (GtkThemingEngine *engine,
+                                      cairo_t          *cr,
+                                      gdouble           x,
+                                      gdouble           y,
+                                      gdouble           width,
+                                      gdouble           height)
+{
+  GtkStateFlags flags;
+  GtkStateType state;
+  GdkColor *bg_color;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "background-color", &bg_color,
+                          NULL);
+
+  add_path_rounded_rectangle (cr, 0,
+                              SIDE_BOTTOM | SIDE_RIGHT | SIDE_TOP | SIDE_LEFT,
+                              x, y, width, height);
+  cairo_close_path (cr);
+
+  gdk_cairo_set_source_color (cr, bg_color);
+  cairo_fill (cr);
+
+  cairo_restore (cr);
 }
 
 #define __GTK_THEMING_ENGINE_C__
