@@ -755,5 +755,26 @@ gtk_render_layout (GtkStyleContext *context,
   engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
 }
 
+void
+gtk_render_line (GtkStyleContext *context,
+                 cairo_t         *cr,
+                 gdouble          x0,
+                 gdouble          y0,
+                 gdouble          x1,
+                 gdouble          y1)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_line (priv->theming_engine, cr, x0, y0, x1, y1);
+}
+
 #define __GTK_STYLE_CONTEXT_C__
 #include "gtkaliasdef.c"

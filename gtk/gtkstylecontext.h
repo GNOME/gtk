@@ -150,6 +150,12 @@ void gtk_render_layout   (GtkStyleContext *context,
                           gdouble          x,
                           gdouble          y,
                           PangoLayout     *layout);
+void gtk_render_line     (GtkStyleContext *context,
+                          cairo_t         *cr,
+                          gdouble          x0,
+                          gdouble          y0,
+                          gdouble          x1,
+                          gdouble          y1);
 
 G_END_DECLS
 
