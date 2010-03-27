@@ -96,6 +96,13 @@ static void gtk_theming_engine_render_line     (GtkThemingEngine *engine,
                                                 gdouble           y0,
                                                 gdouble           x1,
                                                 gdouble           y1);
+static void gtk_theming_engine_render_slider   (GtkThemingEngine *engine,
+                                                cairo_t          *cr,
+                                                gdouble           x,
+                                                gdouble           y,
+                                                gdouble           width,
+                                                gdouble           height,
+                                                GtkOrientation    orientation);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -136,6 +143,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_focus = gtk_theming_engine_render_focus;
   klass->render_layout = gtk_theming_engine_render_layout;
   klass->render_line = gtk_theming_engine_render_line;
+  klass->render_slider = gtk_theming_engine_render_slider;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -1072,6 +1080,35 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_color_free (fg_color);
+}
+
+static void
+gtk_theming_engine_render_slider (GtkThemingEngine *engine,
+                                  cairo_t          *cr,
+                                  gdouble           x,
+                                  gdouble           y,
+                                  gdouble           width,
+                                  gdouble           height,
+                                  GtkOrientation    orientation)
+{
+  const GtkWidgetPath *path;
+
+  path = gtk_theming_engine_get_path (engine);
+
+  gtk_theming_engine_render_background (engine, cr, x, y, width, height);
+  gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
+
+  if (gtk_widget_path_has_parent (path, GTK_TYPE_SCALE))
+    {
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        gtk_theming_engine_render_line (engine, cr,
+                                        x + 2, y + height / 2 - 1,
+                                        x + width - 4, y + height / 2 - 1);
+      else
+        gtk_theming_engine_render_line (engine, cr,
+                                        x + width / 2 - 1, y + 4,
+                                        x + width / 2 - 1, y + height - 4);
+    }
 }
 
 #define __GTK_THEMING_ENGINE_C__

@@ -102,6 +102,13 @@ struct GtkThemingEngineClass
                           gdouble           x,
                           gdouble           y,
                           PangoLayout      *layout);
+  void (* render_slider) (GtkThemingEngine *engine,
+                          cairo_t          *cr,
+                          gdouble           x,
+                          gdouble           y,
+                          gdouble           width,
+                          gdouble           height,
+                          GtkOrientation    orientation);
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
