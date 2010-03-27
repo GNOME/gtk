@@ -172,6 +172,13 @@ void gtk_render_frame_gap (GtkStyleContext *context,
                            GtkPositionType  gap_side,
                            gdouble          xy0_gap,
                            gdouble          xy1_gap);
+void gtk_render_extension (GtkStyleContext *context,
+                           cairo_t         *cr,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height,
+                           GtkPositionType  gap_side);
 
 G_END_DECLS
 
