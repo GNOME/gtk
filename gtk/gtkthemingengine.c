@@ -48,6 +48,12 @@ static void gtk_theming_engine_render_option (GtkThemingEngine *engine,
                                               gdouble           y,
                                               gdouble           width,
                                               gdouble           height);
+static void gtk_theming_engine_render_arrow  (GtkThemingEngine *engine,
+                                              cairo_t          *cr,
+                                              gdouble           angle,
+                                              gdouble           x,
+                                              gdouble           y,
+                                              gdouble           size);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -81,6 +87,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
 
   klass->render_check = gtk_theming_engine_render_check;
   klass->render_option = gtk_theming_engine_render_option;
+  klass->render_arrow = gtk_theming_engine_render_arrow;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -459,6 +466,69 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
     }
 
   cairo_restore (cr);
+}
+
+static void
+add_path_arrow (cairo_t *cr,
+                gdouble  angle,
+                gdouble  x,
+                gdouble  y,
+                gdouble  size)
+{
+  cairo_save (cr);
+
+  cairo_translate (cr, x + (size / 2), y + (size / 2));
+  cairo_rotate (cr, angle);
+
+  cairo_move_to (cr, 0, - (size / 4) + 0.5);
+  cairo_line_to (cr, - (size / 2), (size / 4) + 0.5);
+  cairo_line_to (cr, (size / 2), (size / 4) + 0.5);
+  cairo_close_path (cr);
+
+  cairo_restore (cr);
+}
+
+static void
+gtk_theming_engine_render_arrow (GtkThemingEngine *engine,
+                                 cairo_t          *cr,
+                                 gdouble           angle,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           size)
+{
+  GtkStateFlags flags;
+  GtkStateType state;
+  GdkColor *fg_color;
+
+  cairo_save (cr);
+
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "foreground-color", &fg_color,
+                          NULL);
+
+  if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    {
+      add_path_arrow (cr, angle, x + 1, y + 1, size);
+      cairo_set_source_rgb (cr, 1, 1, 1);
+      cairo_fill (cr);
+    }
+
+  add_path_arrow (cr, angle, x, y, size);
+  gdk_cairo_set_source_color (cr, fg_color);
+  cairo_fill (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (fg_color);
 }
 
 #define __GTK_THEMING_ENGINE_C__

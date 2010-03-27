@@ -61,6 +61,12 @@ struct GtkThemingEngineClass
                           gdouble           y,
                           gdouble           width,
                           gdouble           height);
+  void (* render_arrow) (GtkThemingEngine *engine,
+                         cairo_t          *cr,
+                         gdouble           angle,
+                         gdouble           x,
+                         gdouble           y,
+                         gdouble           size);
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
