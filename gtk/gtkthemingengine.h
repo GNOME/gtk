@@ -55,6 +55,12 @@ struct GtkThemingEngineClass
                               gdouble           y,
                               gdouble           width,
                               gdouble           height);
+  void (* render_frame) (GtkThemingEngine *engine,
+                         cairo_t          *cr,
+                         gdouble           x,
+                         gdouble           y,
+                         gdouble           width,
+                         gdouble           height);
   void (* render_check) (GtkThemingEngine *engine,
                          cairo_t          *cr,
                          gdouble           x,

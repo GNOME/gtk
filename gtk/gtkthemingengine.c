@@ -67,6 +67,12 @@ static void gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                                   gdouble           y,
                                                   gdouble           width,
                                                   gdouble           height);
+static void gtk_theming_engine_render_frame  (GtkThemingEngine *engine,
+                                              cairo_t          *cr,
+                                              gdouble           x,
+                                              gdouble           y,
+                                              gdouble           width,
+                                              gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -102,6 +108,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_option = gtk_theming_engine_render_option;
   klass->render_arrow = gtk_theming_engine_render_arrow;
   klass->render_background = gtk_theming_engine_render_background;
+  klass->render_frame = gtk_theming_engine_render_frame;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -668,6 +675,16 @@ add_path_rounded_rectangle (cairo_t           *cr,
 }
 
 static void
+color_shade (const GdkColor *color,
+             gdouble         factor,
+             GdkColor       *color_return)
+{
+  color_return->red = CLAMP (color->red * factor, 0, 65535);
+  color_return->green = CLAMP (color->green * factor, 0, 65535);
+  color_return->blue = CLAMP (color->blue * factor, 0, 65535);
+}
+
+static void
 gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       cairo_t          *cr,
                                       gdouble           x,
@@ -700,6 +717,85 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 
   gdk_cairo_set_source_color (cr, bg_color);
   cairo_fill (cr);
+
+  cairo_restore (cr);
+}
+
+static void
+gtk_theming_engine_render_frame (GtkThemingEngine *engine,
+                                 cairo_t          *cr,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           width,
+                                 gdouble           height)
+{
+  GtkStateFlags flags;
+  GtkStateType state;
+  GdkColor *bg_color;
+  GdkColor lighter, darker;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  cairo_set_line_width (cr, 1);
+
+  gtk_theming_engine_get (engine, state,
+                          "background-color", &bg_color,
+                          NULL);
+  color_shade (bg_color, 0.7, &darker);
+  color_shade (bg_color, 1.3, &lighter);
+
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    {
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_BOTTOM | SIDE_RIGHT,
+                                  x, y, width, height);
+
+      gdk_cairo_set_source_color (cr, &lighter);
+      cairo_stroke (cr);
+
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_TOP | SIDE_LEFT,
+                                  x + 1, y + 1, width - 2, height - 2);
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_stroke (cr);
+
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_TOP | SIDE_LEFT,
+                                  x, y, width, height);
+      gdk_cairo_set_source_color (cr, &darker);
+      cairo_stroke (cr);
+    }
+  else
+    {
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_BOTTOM | SIDE_RIGHT,
+                                  x, y, width, height);
+
+      cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_stroke (cr);
+
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_BOTTOM | SIDE_RIGHT,
+                                  x, y, width - 1, height - 1);
+
+      gdk_cairo_set_source_color (cr, &darker);
+      cairo_stroke (cr);
+
+      add_path_rounded_rectangle (cr, 0,
+                                  SIDE_TOP | SIDE_LEFT,
+                                  x, y, width, height);
+
+      gdk_cairo_set_source_color (cr, &lighter);
+      cairo_stroke (cr);
+    }
 
   cairo_restore (cr);
 }
