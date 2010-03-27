@@ -145,6 +145,11 @@ void gtk_render_focus    (GtkStyleContext *context,
                           gdouble          y,
                           gdouble          width,
                           gdouble          height);
+void gtk_render_layout   (GtkStyleContext *context,
+                          cairo_t         *cr,
+                          gdouble          x,
+                          gdouble          y,
+                          PangoLayout     *layout);
 
 G_END_DECLS
 
