@@ -73,6 +73,12 @@ static void gtk_theming_engine_render_frame  (GtkThemingEngine *engine,
                                               gdouble           y,
                                               gdouble           width,
                                               gdouble           height);
+static void gtk_theming_engine_render_expander (GtkThemingEngine *engine,
+                                                cairo_t          *cr,
+                                                gdouble           x,
+                                                gdouble           y,
+                                                gdouble           width,
+                                                gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -109,6 +115,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_arrow = gtk_theming_engine_render_arrow;
   klass->render_background = gtk_theming_engine_render_background;
   klass->render_frame = gtk_theming_engine_render_frame;
+  klass->render_expander = gtk_theming_engine_render_expander;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -798,6 +805,61 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
     }
 
   cairo_restore (cr);
+}
+
+static void
+gtk_theming_engine_render_expander (GtkThemingEngine *engine,
+                                    cairo_t          *cr,
+                                    gdouble           x,
+                                    gdouble           y,
+                                    gdouble           width,
+                                    gdouble           height)
+{
+  GtkStateFlags flags;
+  GdkColor *bg_color, *fg_color, *base_color;
+  GtkStateType state;
+  gdouble angle;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "foreground-color", &fg_color,
+                          "background-color", &bg_color,
+                          "base-color", &base_color,
+                          NULL);
+
+  if (flags & GTK_STATE_FLAG_ACTIVE)
+    angle = G_PI;
+  else
+    angle = G_PI / 2;
+
+  cairo_set_line_width (cr, 1);
+  add_path_arrow (cr, angle, x + 2, y + 2,
+                  MIN (width - 1, height - 1) - 4);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    gdk_cairo_set_source_color (cr, fg_color);
+  else
+    gdk_cairo_set_source_color (cr, base_color);
+
+  cairo_fill_preserve (cr);
+
+  gdk_cairo_set_source_color (cr, fg_color);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (base_color);
+  gdk_color_free (fg_color);
+  gdk_color_free (bg_color);
 }
 
 #define __GTK_THEMING_ENGINE_C__
