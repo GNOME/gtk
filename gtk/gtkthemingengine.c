@@ -79,6 +79,12 @@ static void gtk_theming_engine_render_expander (GtkThemingEngine *engine,
                                                 gdouble           y,
                                                 gdouble           width,
                                                 gdouble           height);
+static void gtk_theming_engine_render_focus    (GtkThemingEngine *engine,
+                                                cairo_t          *cr,
+                                                gdouble           x,
+                                                gdouble           y,
+                                                gdouble           width,
+                                                gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -116,6 +122,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_background = gtk_theming_engine_render_background;
   klass->render_frame = gtk_theming_engine_render_frame;
   klass->render_expander = gtk_theming_engine_render_expander;
+  klass->render_focus = gtk_theming_engine_render_focus;
 
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
@@ -860,6 +867,50 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gdk_color_free (base_color);
   gdk_color_free (fg_color);
   gdk_color_free (bg_color);
+}
+
+static void
+gtk_theming_engine_render_focus (GtkThemingEngine *engine,
+                                 cairo_t          *cr,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           width,
+                                 gdouble           height)
+{
+  const double dashes[] = { 0.5, 1.5 };
+  GdkColor *base_color;
+  GtkStateFlags flags;
+  GtkStateType state;
+
+  cairo_save (cr);
+  flags = gtk_theming_engine_get_state (engine);
+
+  if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else
+    state = GTK_STATE_NORMAL;
+
+  gtk_theming_engine_get (engine, state,
+                          "base-color", &base_color,
+                          NULL);
+
+  cairo_set_line_width (cr, 1.0);
+  cairo_set_dash (cr, dashes, 2, 0);
+
+  cairo_rectangle (cr,
+                   x + 0.5,
+                   y + 0.5,
+                   width - 1,
+                   height - 1);
+
+  gdk_cairo_set_source_color (cr, base_color);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+
+  gdk_color_free (base_color);
 }
 
 #define __GTK_THEMING_ENGINE_C__
