@@ -7,17 +7,17 @@
 # Runa Bhattacharjee <runabh@gmail.com>, 2007.
 # Runa Bhattacharjee <runab@redhat.com>, 2008, 2009.
 # Maruf Ovee <maruf@ankur.org.bd>, 2009.
+# Sadia Afroz <sadia@ankur.org.bd>, 2010
 # Israt Jahan <israt@ankur.org.bd>, 2010.
-# Sadia Afroz <sadia@ankur.org.bd>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: bn\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"+&component=general\n"
-"POT-Creation-Date: 2010-02-25 13:33+0000\n"
-"PO-Revision-Date: 2010-03-04 19:04+0600\n"
-"Last-Translator: Sadia Afroz <sadia@ankur.org.bd>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2010-03-27 12:10+0000\n"
+"PO-Revision-Date: 2010-03-28 19:04+0600\n"
+"Last-Translator: Israt Jahan <israt@ankur.org.bd>\n"
 "Language-Team: Bengali <ankur-bd-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -301,8 +301,7 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"'%s' অ্যানিমেশন লোড করতে ব্যর্থ: কারণ অজানা, সম্ভবত অ্যানিমেশন ফাইলটি "
-"ক্ষতিগ্রস্ত"
+"'%s' অ্যানিমেশন লোড করতে ব্যর্থ: কারণ অজানা, সম্ভবত অ্যানিমেশন ফাইলটি ক্ষতিগ্রস্ত"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:715
 #, c-format
@@ -315,8 +314,8 @@ msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
 msgstr ""
-"ছবি লোড করতে ব্যবহৃত %s নামক মডিউলটি সঠিক ইন্টারফেস এক্সপোর্ট করে না; সম্ভবত "
-"এটি ভিন্ন কোন GTK সংস্করণের অংশ?"
+"ছবি লোড করতে ব্যবহৃত %s নামক মডিউলটি সঠিক ইন্টারফেস এক্সপোর্ট করে না; সম্ভবত এটি "
+"ভিন্ন কোন GTK সংস্করণের অংশ?"
 
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:739 ../gdk-pixbuf/gdk-pixbuf-io.c:790
 #, c-format
@@ -385,8 +384,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
-"অভ্যন্তরীণ ত্রুটি: ছবি লোড করতে ব্যবহৃত মডিউল '%s' একটি অপারেশন সম্পন্ন করতে "
-"ব্যর্থ, কিন্তু ব্যর্থতার কারণ দর্শানো হয়নি"
+"অভ্যন্তরীণ ত্রুটি: ছবি লোড করতে ব্যবহৃত মডিউল '%s' একটি অপারেশন সম্পন্ন করতে ব্যর্থ, "
+"কিন্তু ব্যর্থতার কারণ দর্শানো হয়নি"
 
 #: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
 #, c-format
@@ -477,8 +476,7 @@ msgstr "GIF পড়তে ব্যর্থ: %s"
 #: ../gdk-pixbuf/io-gif.c:1642
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
-"GIF ফাইলের কিছু উপাত্ত অনুপস্থিত (সম্ভবত কোনো কারণে এর কিছু অংশ মুছে ফেলা "
-"হয়েছে?)"
+"GIF ফাইলের কিছু উপাত্ত অনুপস্থিত (সম্ভবত কোনো কারণে এর কিছু অংশ মুছে ফেলা হয়েছে?)"
 
 #: ../gdk-pixbuf/io-gif.c:505
 #, c-format
@@ -529,8 +527,8 @@ msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
-"GIF ছবিতে কোনো গ্লোবাল colormap নেই, এবং এর অন্তর্ভুক্ত ফ্রেমে স্থানীয় কোন "
-"colormap নেই।"
+"GIF ছবিতে কোনো গ্লোবাল colormap নেই, এবং এর অন্তর্ভুক্ত ফ্রেমে স্থানীয় কোন colormap "
+"নেই।"
 
 #: ../gdk-pixbuf/io-gif.c:1537
 msgid "GIF image was truncated or incomplete."
@@ -646,8 +644,8 @@ msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
-"ছবি লোড করার মত পর্যাপ্ত মেমরি নেই, মেমরি ফাঁকা করার জন্য কয়েকটি "
-"অ্যাপ্লিকেশন বন্ধ করার চেষ্টা করুন"
+"ছবি লোড করার মত পর্যাপ্ত মেমরি নেই, মেমরি ফাঁকা করার জন্য কয়েকটি অ্যাপ্লিকেশন বন্ধ "
+"করার চেষ্টা করুন"
 
 #: ../gdk-pixbuf/io-jpeg.c:569 ../gdk-pixbuf/io-jpeg.c:775
 #, c-format
@@ -675,8 +673,7 @@ msgstr ""
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"JPEG'র গুণগত মান ০ থেকে ১০০ এর মধ্যে হওয়া আবশ্যক; '%d' মান গ্রহণযোগ্য নয়।"
+msgstr "JPEG'র গুণগত মান ০ থেকে ১০০ এর মধ্যে হওয়া আবশ্যক; '%d' মান গ্রহণযোগ্য নয়।"
 
 #: ../gdk-pixbuf/io-jpeg.c:1310 ../gdk-pixbuf/io-gdip-jpeg.c:136
 msgid "The JPEG image format"
@@ -748,8 +745,7 @@ msgstr "রূপান্তরিত PNG, RGB অথবা RGBA নয়।"
 #: ../gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
-"রূপান্তরিত PNG-তে অসমর্থিত সংখ্যক চ্যানেল রয়েছে, এই সংখ্যা ৩ অথবা ৪ হওয়া "
-"আবশ্যক।"
+"রূপান্তরিত PNG-তে অসমর্থিত সংখ্যক চ্যানেল রয়েছে, এই সংখ্যা ৩ অথবা ৪ হওয়া আবশ্যক।"
 
 #: ../gdk-pixbuf/io-png.c:183
 #, c-format
@@ -766,8 +762,8 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
-"%1$ld গুণ %2$ld আকারের ছবি সংরক্ষণের জন্য পর্যাপ্ত মেমরি নেই;  কয়েকটি "
-"অ্যাপ্লিকেশন বন্ধ করে মেমরির ব্যবহার হ্রাস করার চেষ্টা করুন"
+"%1$ld গুণ %2$ld আকারের ছবি সংরক্ষণের জন্য পর্যাপ্ত মেমরি নেই;  কয়েকটি অ্যাপ্লিকেশন "
+"বন্ধ করে মেমরির ব্যবহার হ্রাস করার চেষ্টা করুন"
 
 #: ../gdk-pixbuf/io-png.c:720
 msgid "Fatal error reading PNG image file"
@@ -797,8 +793,7 @@ msgstr "রঙের প্রোফাইলে অকার্যকর দৈ
 msgid ""
 "PNG compression level must be a value between 0 and 9; value '%s' could not "
 "be parsed."
-msgstr ""
-"PNG কম্প্রেশনের মাত্রা ০ ও ৯ এর মধ্যে হওয়া আবশ্যক; '%s' মান পার্স করা যায়নি।"
+msgstr "PNG কম্প্রেশনের মাত্রা ০ ও ৯ এর মধ্যে হওয়া আবশ্যক; '%s' মান পার্স করা যায়নি।"
 
 #: ../gdk-pixbuf/io-png.c:912 ../gdk-pixbuf/io-gdip-png.c:68
 #, c-format
@@ -818,8 +813,7 @@ msgstr "PNG ফরম্যাটের ছবি"
 
 #: ../gdk-pixbuf/io-pnm.c:250
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
-"PNM লোডারের দ্বারা পূর্ণসংখ্যার মান পাওয়ার প্রত্যাশা ছিল, কিন্তু পাওয়া যায়নি"
+msgstr "PNM লোডারের দ্বারা পূর্ণসংখ্যার মান পাওয়ার প্রত্যাশা ছিল, কিন্তু পাওয়া যায়নি"
 
 #: ../gdk-pixbuf/io-pnm.c:282
 msgid "PNM file has an incorrect initial byte"
@@ -857,8 +851,7 @@ msgstr "PNM ছবি লোডার এই PNM সাব-ফরম্যাট
 #: ../gdk-pixbuf/io-pnm.c:741 ../gdk-pixbuf/io-pnm.c:968
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
-"অশোধিত PNM ফরম্যাটে নমুনা তথ্যের পূর্বে শুধুমাত্র একটি শূণ্যস্থান উপস্থিত "
-"থাকা আবশ্যক"
+"অশোধিত PNM ফরম্যাটে নমুনা তথ্যের পূর্বে শুধুমাত্র একটি শূণ্যস্থান উপস্থিত থাকা আবশ্যক"
 
 #: ../gdk-pixbuf/io-pnm.c:768
 msgid "Cannot allocate memory for loading PNM image"
@@ -1221,12 +1214,12 @@ msgstr "COLORS"
 msgid "Make X calls synchronous"
 msgstr "X-এর কল সুসংগত করা হবে"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:311
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Starting %s"
 msgstr "%s আরম্ভ করা হচ্ছে"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %s"
 msgstr "%s খোলা হচ্ছে"
@@ -1354,8 +1347,10 @@ msgid "Invalid type function on line %d: '%s'"
 msgstr "%d লাইনে অকার্যকর ধরনের ফাংশন রয়েছে: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:407
+#| msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-msgstr "%d লাইনে '%s' অবজেক্টের id পুনঃব্যবহৃত (পূর্বে %d লাইনে বিদ্যমান)"
+msgstr ""
+"%2$d লাইনে '%1$s' অবজেক্টের id পুনঃব্যবহৃত (পূর্বে %3$d লাইনে বিদ্যমান) "
 
 #: ../gtk/gtkbuilderparser.c:859
 #, c-format
@@ -1490,16 +1485,16 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"বহিঃস্থ বৃত্ত থেকে আপনি যে রং চান তা নির্বাচন করুন। অভ্যন্তরীণ ত্রিভুজ "
-"ব্যবহার করে সেই রঙের অন্ধকারাচ্ছন্নতা বা উজ্জলতা নির্বাচন করুন।"
+"বহিঃস্থ বৃত্ত থেকে আপনি যে রং চান তা নির্বাচন করুন। অভ্যন্তরীণ ত্রিভুজ ব্যবহার করে সেই "
+"রঙের অন্ধকারাচ্ছন্নতা বা উজ্জলতা নির্বাচন করুন।"
 
 #: ../gtk/gtkcolorsel.c:378
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"আইড্রপারে ক্লিক করুন, এরপর পর্দার যেকোনো পছন্দসই রঙের উপর ক্লিক করে সেটি "
-"ব্যবহারের জন্য নির্বাচন করুন।"
+"আইড্রপারে ক্লিক করুন, এরপর পর্দার যেকোনো পছন্দসই রঙের উপর ক্লিক করে সেটি ব্যবহারের "
+"জন্য নির্বাচন করুন।"
 
 #: ../gtk/gtkcolorsel.c:387
 msgid "_Hue:"
@@ -1566,8 +1561,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"এই এন্ট্রিতে আপনি HTML-শৈলীর রঙের হেক্সাডেসিমেল মান, অথবা শুধুমাত্র কোন রঙের "
-"নাম যেমন: 'orange' দিতে পারেন।"
+"এই এন্ট্রিতে আপনি HTML-শৈলীর রঙের হেক্সাডেসিমেল মান, অথবা শুধুমাত্র কোন রঙের নাম "
+"যেমন: 'orange' দিতে পারেন।"
 
 #: ../gtk/gtkcolorsel.c:470
 msgid "_Palette:"
@@ -1591,8 +1586,8 @@ msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"নির্বাচিত রং। ভবিষ্যতে ব্যবহারের জন্য সংরক্ষণের উদ্দেশ্যে এই রংটি টেনে এনে "
-"একটি প্যালেটে স্থাপন করতে পারেন।"
+"নির্বাচিত রং। ভবিষ্যতে ব্যবহারের জন্য সংরক্ষণের উদ্দেশ্যে এই রংটি টেনে এনে একটি "
+"প্যালেটে স্থাপন করতে পারেন।"
 
 #: ../gtk/gtkcolorsel.c:966
 msgid ""
@@ -1613,9 +1608,9 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"বর্তমানে ব্যবহৃত রং হিসাবে প্রয়োগের উদ্দেশ্যে এই প্যালেটের রঙে ক্লিক করুন। "
-"এই রঙটি পরিবর্তন করার জন্য, একটি রং টেনে আনুন অথবা সেটির উপর ডান-ক্লিক করে  "
-"\"এখানে রং সংরক্ষণ করুন\" নির্বাচন করুন।"
+"বর্তমানে ব্যবহৃত রং হিসাবে প্রয়োগের উদ্দেশ্যে এই প্যালেটের রঙে ক্লিক করুন। এই রঙটি "
+"পরিবর্তন করার জন্য, একটি রং টেনে আনুন অথবা সেটির উপর ডান-ক্লিক করে  \"এখানে রং "
+"সংরক্ষণ করুন\" নির্বাচন করুন।"
 
 #: ../gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
@@ -1685,15 +1680,15 @@ msgstr "ডান: (_R)"
 msgid "Paper Margins"
 msgstr "কাগজের প্রান্ত"
 
-#: ../gtk/gtkentry.c:8685 ../gtk/gtktextview.c:7859
+#: ../gtk/gtkentry.c:8698 ../gtk/gtktextview.c:7881
 msgid "Input _Methods"
 msgstr "ইনপুট পদ্ধতি (_M)"
 
-#: ../gtk/gtkentry.c:8699 ../gtk/gtktextview.c:7873
+#: ../gtk/gtkentry.c:8712 ../gtk/gtktextview.c:7895
 msgid "_Insert Unicode Control Character"
 msgstr "ইউনিকোডের কন্ট্রোল অক্ষর সন্নিবেশ (_I)"
 
-#: ../gtk/gtkentry.c:10070
+#: ../gtk/gtkentry.c:10091
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্স-লক সক্রিয়"
 
@@ -1701,7 +1696,7 @@ msgstr "ক্যাপ্স-লক সক্রিয়"
 msgid "Select A File"
 msgstr "একটি ফাইল নির্বাচন করুন"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1850
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1848
 msgid "Desktop"
 msgstr "ডেস্কটপ"
 
@@ -1709,7 +1704,7 @@ msgstr "ডেস্কটপ"
 msgid "(None)"
 msgstr "(কোনটি না)"
 
-#: ../gtk/gtkfilechooserbutton.c:2016
+#: ../gtk/gtkfilechooserbutton.c:2021
 msgid "Other..."
 msgstr "অন্যান্য..."
 
@@ -1717,35 +1712,35 @@ msgstr "অন্যান্য..."
 msgid "Type name of new folder"
 msgstr "নতুন ফোল্ডারের নাম লিখুন"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:974
 msgid "Could not retrieve information about the file"
 msgstr "ফাইল সম্পর্কিত তথ্য উদ্ধার করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:985
 msgid "Could not add a bookmark"
 msgstr "বুকমার্ক যোগ করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:996
 msgid "Could not remove bookmark"
 msgstr "বুকমার্ক অপসারণ করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:1009
+#: ../gtk/gtkfilechooserdefault.c:1007
 msgid "The folder could not be created"
 msgstr "ফোল্ডার তৈরি করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:1022
+#: ../gtk/gtkfilechooserdefault.c:1020
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"একই নামের একটি ফাইল ইতিমধ্যেই বিদ্যমান থাকায়, ফোল্ডার তৈরি করা যায়নি।  "
-"ফোল্ডারের জন্য পৃথক নাম ব্যবহার করুন অথবা ফাইলটি পুনরায় নামকরণ করুন।"
+"একই নামের একটি ফাইল ইতিমধ্যেই বিদ্যমান থাকায়, ফোল্ডার তৈরি করা যায়নি।  ফোল্ডারের "
+"জন্য পৃথক নাম ব্যবহার করুন অথবা ফাইলটি পুনরায় নামকরণ করুন।"
 
-#: ../gtk/gtkfilechooserdefault.c:1033
+#: ../gtk/gtkfilechooserdefault.c:1031
 msgid "Invalid file name"
 msgstr "ফাইলের নাম বৈধ নয়"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1041
 msgid "The folder contents could not be displayed"
 msgstr "ফোল্ডারের বিষয়বস্তু প্রদর্শন করা যায়নি"
 
@@ -1753,222 +1748,221 @@ msgstr "ফোল্ডারের বিষয়বস্তু প্রদর�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1593
+#: ../gtk/gtkfilechooserdefault.c:1591
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s'র উপর"
 
-#: ../gtk/gtkfilechooserdefault.c:1769
+#: ../gtk/gtkfilechooserdefault.c:1767
 msgid "Search"
 msgstr "অনুসন্ধান"
 
-#: ../gtk/gtkfilechooserdefault.c:1793 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1791 ../gtk/gtkfilechooserdefault.c:9462
 msgid "Recently Used"
 msgstr "সম্প্রতি ব্যবহৃত"
 
-#: ../gtk/gtkfilechooserdefault.c:2429
+#: ../gtk/gtkfilechooserdefault.c:2434
 msgid "Select which types of files are shown"
 msgstr "কোন ধরনের ফাইল প্রদর্শন করা হবে নির্বাচন করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2788
+#: ../gtk/gtkfilechooserdefault.c:2793
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2832
+#: ../gtk/gtkfilechooserdefault.c:2837
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "বর্তমান ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2834
+#: ../gtk/gtkfilechooserdefault.c:2839
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "নির্বাচিত ফোল্ডারগুলি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:2872
+#: ../gtk/gtkfilechooserdefault.c:2877
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' বুকমার্ক অপসারণ"
 
-#: ../gtk/gtkfilechooserdefault.c:2874
+#: ../gtk/gtkfilechooserdefault.c:2879
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "বুকমার্ক '%s' অপসারণ করা যাচ্ছে না"
 
-#: ../gtk/gtkfilechooserdefault.c:2881 ../gtk/gtkfilechooserdefault.c:3907
+#: ../gtk/gtkfilechooserdefault.c:2886 ../gtk/gtkfilechooserdefault.c:3910
 msgid "Remove the selected bookmark"
 msgstr "নির্বাচিত বুকমার্ক অপসারণ"
 
-#: ../gtk/gtkfilechooserdefault.c:3603
+#: ../gtk/gtkfilechooserdefault.c:3606
 msgid "Remove"
 msgstr "অপসারণ"
 
-#: ../gtk/gtkfilechooserdefault.c:3612
+#: ../gtk/gtkfilechooserdefault.c:3615
 msgid "Rename..."
 msgstr "পুনরায় নামকরণ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3775
+#: ../gtk/gtkfilechooserdefault.c:3778
 msgid "Places"
 msgstr "অবস্থান"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3832
+#: ../gtk/gtkfilechooserdefault.c:3835
 msgid "_Places"
 msgstr "অবস্থান (_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3888
+#: ../gtk/gtkfilechooserdefault.c:3891
 msgid "_Add"
 msgstr "যোগ করুন (_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:3895
+#: ../gtk/gtkfilechooserdefault.c:3898
 msgid "Add the selected folder to the Bookmarks"
 msgstr "নির্বাচিত ফোল্ডারটি বুকমার্কে যোগ করুন"
 
-#: ../gtk/gtkfilechooserdefault.c:3900
+#: ../gtk/gtkfilechooserdefault.c:3903
 msgid "_Remove"
 msgstr "অপসারণ (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:4035
+#: ../gtk/gtkfilechooserdefault.c:4038
 msgid "Could not select file"
 msgstr "ফাইল নির্বাচন করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:4210
+#: ../gtk/gtkfilechooserdefault.c:4213
 msgid "_Add to Bookmarks"
 msgstr "বুকমার্ক তালিকায় যোগ (_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4223
+#: ../gtk/gtkfilechooserdefault.c:4226
 msgid "Show _Hidden Files"
 msgstr "লুকানো ফাইল প্রদর্শন (_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4230
+#: ../gtk/gtkfilechooserdefault.c:4233
 msgid "Show _Size Column"
 msgstr "আকার শীর্ষক কলাম প্রদর্শন (_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4450 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4453 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ফাইল"
 
-#: ../gtk/gtkfilechooserdefault.c:4501
+#: ../gtk/gtkfilechooserdefault.c:4504
 msgid "Name"
 msgstr "নাম"
 
-#: ../gtk/gtkfilechooserdefault.c:4524
+#: ../gtk/gtkfilechooserdefault.c:4527
 msgid "Size"
 msgstr "আকার"
 
-#: ../gtk/gtkfilechooserdefault.c:4538
+#: ../gtk/gtkfilechooserdefault.c:4541
 msgid "Modified"
 msgstr "পরিবর্তিত"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4793 ../gtk/gtkprinteroptionwidget.c:802
+#: ../gtk/gtkfilechooserdefault.c:4796 ../gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "নাম: (_N)"
 
 # FIXME
-#: ../gtk/gtkfilechooserdefault.c:4836
+#: ../gtk/gtkfilechooserdefault.c:4839
 msgid "_Browse for other folders"
 msgstr "অন্যান্য ফোল্ডার অনুসন্ধানের জন্য ব্রাউজ করুন (_B)"
 
-#: ../gtk/gtkfilechooserdefault.c:5108
+#: ../gtk/gtkfilechooserdefault.c:5111
 msgid "Type a file name"
 msgstr "ফাইলের নাম টাইপ করুন"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5149
+#: ../gtk/gtkfilechooserdefault.c:5152
 msgid "Create Fo_lder"
 msgstr "ফোল্ডার তৈরি করুন (_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:5159
+#: ../gtk/gtkfilechooserdefault.c:5162
 msgid "_Location:"
 msgstr "অবস্থান: (_L)"
 
-#: ../gtk/gtkfilechooserdefault.c:5363
+#: ../gtk/gtkfilechooserdefault.c:5366
 msgid "Save in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে সংরক্ষণ করুন: (_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:5365
+#: ../gtk/gtkfilechooserdefault.c:5368
 msgid "Create in _folder:"
 msgstr "চিহ্নিত ফোল্ডারে তৈরি করুন: (_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:6431
+#: ../gtk/gtkfilechooserdefault.c:6435
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s-এর বিষয়বস্তু পড়া যায়নি"
 
 # FIXME
-#: ../gtk/gtkfilechooserdefault.c:6435
+#: ../gtk/gtkfilechooserdefault.c:6439
 msgid "Could not read the contents of the folder"
 msgstr "ফোল্ডারের বিষয়বস্তু পড়া যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:6528 ../gtk/gtkfilechooserdefault.c:6596
-#: ../gtk/gtkfilechooserdefault.c:6741
+#: ../gtk/gtkfilechooserdefault.c:6532 ../gtk/gtkfilechooserdefault.c:6600
+#: ../gtk/gtkfilechooserdefault.c:6745
 msgid "Unknown"
 msgstr "অজানা"
 
-#: ../gtk/gtkfilechooserdefault.c:6543
+#: ../gtk/gtkfilechooserdefault.c:6547
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6545
+#: ../gtk/gtkfilechooserdefault.c:6549
 msgid "Yesterday at %H:%M"
 msgstr "গতকাল %H:%M-তে"
 
-#: ../gtk/gtkfilechooserdefault.c:7211
+#: ../gtk/gtkfilechooserdefault.c:7215
 msgid "Cannot change to folder because it is not local"
 msgstr "স্থানীয় অবস্থানে না হওয়ায় ফোল্ডার পরিবর্তন করা যাচ্ছে না"
 
-#: ../gtk/gtkfilechooserdefault.c:7808 ../gtk/gtkfilechooserdefault.c:7829
+#: ../gtk/gtkfilechooserdefault.c:7812 ../gtk/gtkfilechooserdefault.c:7833
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s শর্টকাট ইতিমধ্যেই বিদ্যমান রয়েছে"
 
-#: ../gtk/gtkfilechooserdefault.c:7919
+#: ../gtk/gtkfilechooserdefault.c:7923
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s শর্টকাট বিদ্যমান নেই"
 
-#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8178 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
-"\"%s\" নামক একটি ফাইল ইতিমধ্যেই বিদ্যমান রয়েছে। আপনি কি এটি প্রতিস্থাপন করতে "
-"চান?"
+"\"%s\" নামক একটি ফাইল ইতিমধ্যেই বিদ্যমান রয়েছে। আপনি কি এটি প্রতিস্থাপন করতে চান?"
 
-#: ../gtk/gtkfilechooserdefault.c:8177 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8181 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"\"%s\"-এ ফাইলটি ইতিমধ্যেই বিদ্যমান। প্রতিস্থাপন করা হলে এর বিষয়বস্তুও "
-"প্রতিস্থাপিত হবে।"
+"\"%s\"-এ ফাইলটি ইতিমধ্যেই বিদ্যমান। প্রতিস্থাপন করা হলে এর বিষয়বস্তুও প্রতিস্থাপিত "
+"হবে।"
 
-#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8186 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "প্রতিস্থাপন (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:8826
+#: ../gtk/gtkfilechooserdefault.c:8830
 msgid "Could not start the search process"
 msgstr "অনুসন্ধান প্রক্রিয়া আরম্ভ করা যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:8827
+#: ../gtk/gtkfilechooserdefault.c:8831
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"প্রোগ্রামটি indexer ডিমনের সাথে সংযোগ স্থাপন করতে অসমর্থ। অনুগ্রহ করে "
-"নিশ্চিত করুন যে এটি সচল।"
+"প্রোগ্রামটি indexer ডিমনের সাথে সংযোগ স্থাপন করতে অসমর্থ। অনুগ্রহ করে নিশ্চিত করুন "
+"যে এটি সচল।"
 
-#: ../gtk/gtkfilechooserdefault.c:8841
+#: ../gtk/gtkfilechooserdefault.c:8845
 msgid "Could not send the search request"
 msgstr "অনুসন্ধানের অনুরোধ পাঠানো যায়নি"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9034
 msgid "Search:"
 msgstr "অনুসন্ধান:"
 
-#: ../gtk/gtkfilechooserdefault.c:9634
+#: ../gtk/gtkfilechooserdefault.c:9638
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s মাউন্ট করা যায়নি"
@@ -2061,7 +2055,8 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 "\"%1$s\" ফাইলটি একটি পৃথক মেশিনে (%2$s নামাঙ্কিত) উপস্থিত এবং সম্ভবত এই "
-"প্রোগ্রামের জন্য বিদ্যমান নয়।\nআপনি কি নিশ্চিত আপনি এটা নির্বাচন করতে চান?"
+"প্রোগ্রামের জন্য বিদ্যমান নয়।\n"
+"আপনি কি নিশ্চিত আপনি এটা নির্বাচন করতে চান?"
 
 #: ../gtk/gtkfilesel.c:1020
 msgid "_New Folder"
@@ -2080,8 +2075,7 @@ msgstr "ফাইলটি পুনরায় নামকরণ করুন (_
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"\"%s\" ফোল্ডারের নামে এমন কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলো ফাইলের নামে "
-"গ্রহণযোগ্য নয়"
+"\"%s\" ফোল্ডারের নামে এমন কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলো ফাইলের নামে গ্রহণযোগ্য নয়"
 
 #: ../gtk/gtkfilesel.c:1394
 msgid "New Folder"
@@ -2099,8 +2093,7 @@ msgstr "তৈরি করুন (_r)"
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"\"%s\" ফাইলের নামে এমন কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলো ফাইলের নামে গ্রহণযোগ্য "
-"নয়"
+"\"%s\" ফাইলের নামে এমন কিছু চিহ্ন ব্যবহৃত হয়েছে যেগুলো ফাইলের নামে গ্রহণযোগ্য নয়"
 
 #: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
 #, c-format
@@ -2242,8 +2235,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
-"'%s' আইকন খুঁজে পাওয়া যায়নি। '%s' থিমটিও\nপাওয়া যায়নি, সম্ভবত এটি ইনস্টল করা "
-"আবশ্যক।\nনিম্নলিখিত স্থান থেকে এটি পাওয়া যাবে:\n\t%s"
+"'%s' আইকন খুঁজে পাওয়া যায়নি। '%s' থিমটিও\n"
+"পাওয়া যায়নি, সম্ভবত এটি ইনস্টল করা আবশ্যক।\n"
+"নিম্নলিখিত স্থান থেকে এটি পাওয়া যাবে:\n"
+"\t%s"
 
 #: ../gtk/gtkicontheme.c:1543
 #, c-format
@@ -2356,12 +2351,12 @@ msgid "Cl_ear"
 msgstr "পরিস্কার (_e)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:5680
+#: ../gtk/gtklabel.c:5685
 msgid "_Open Link"
 msgstr "লিংক খুলুন (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5692
+#: ../gtk/gtklabel.c:5697
 msgid "Copy _Link Address"
 msgstr "লিংকের ঠিকানা অনুলিপি করুন (_L)"
 
@@ -2500,7 +2495,7 @@ msgstr "Z শেল"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %1$d সহ প্রক্রিয়া বন্ধ করা যাচ্ছে না: %2$s"
 
-#: ../gtk/gtknotebook.c:4698 ../gtk/gtknotebook.c:7260
+#: ../gtk/gtknotebook.c:4704 ../gtk/gtknotebook.c:7269
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
@@ -2527,8 +2522,11 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
-"মার্জিন:\n বাম: %1$s %2$s\n ডান: %3$s %4$s\n শীর্ষ: %5$s %6$s\n নিম্ন: %7$s "
-"%8$s"
+"মার্জিন:\n"
+" বাম: %1$s %2$s\n"
+" ডান: %3$s %4$s\n"
+" শীর্ষ: %5$s %6$s\n"
+" নিম্ন: %7$s %8$s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
@@ -2672,7 +2670,7 @@ msgstr "কাগজ ফুরিয়ে গেছে"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:616
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1963
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1997
 msgid "Paused"
 msgstr "স্থগিত"
 
@@ -2763,7 +2761,9 @@ msgstr "পৃষ্ঠা: (_e)"
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
-msgstr "এক অথবা একাধিক পৃষ্ঠার সীমা উল্লেখ করুন,\n উদাহরণস্বরূপ. 1-3,7,11"
+msgstr ""
+"এক অথবা একাধিক পৃষ্ঠার সীমা উল্লেখ করুন,\n"
+" উদাহরণস্বরূপ. 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
@@ -2797,42 +2797,42 @@ msgstr "সাধারণ"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, top to bottom"
 msgstr "বাম থেকে ডানে, উপর থেকে নীচে"
 
 #: ../gtk/gtkprintunixdialog.c:3010
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3471
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, bottom to top"
 msgstr "বাম থেকে ডানে, নীচে থেকে উপরে"
 
 #: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, top to bottom"
 msgstr "ডান থেকে বামে, উপর থেকে নীচে"
 
 #: ../gtk/gtkprintunixdialog.c:3011
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3472
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, bottom to top"
 msgstr "ডান থেকে বামে, নীচে থেকে উপরে"
 
 #: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, left to right"
 msgstr "উপর থেকে নীচে, বাম থেকে ডানে"
 
 #: ../gtk/gtkprintunixdialog.c:3012
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3473
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, right to left"
 msgstr "উপর থেকে নীচে, ডান থেকে বামে"
 
 #: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, left to right"
 msgstr "নীচে থেকে উপরে, বাম থেকে ডানে"
 
 #: ../gtk/gtkprintunixdialog.c:3013
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3474
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, right to left"
 msgstr "নীচে থেকে উপরে, ডান থেকে বামে"
 
@@ -2840,7 +2840,7 @@ msgstr "নীচে থেকে উপরে, ডান থেকে বাম
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3017 ../gtk/gtkprintunixdialog.c:3030
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Page Ordering"
 msgstr "পৃষ্ঠার অনুক্রম"
 
@@ -2970,8 +2970,8 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
-"মুদ্রণের সময় সুনির্দিষ্টভাবে উল্লেখ করুন,\n উদাহরণস্বরূপ ১৫:৩০, ২:৩৫ "
-"অপরাহ্ন, ১৪:১৫:২০, ১১:৪৬:৩০ পূর্বাহ্ন, ৪ অপরাহ্ন"
+"মুদ্রণের সময় সুনির্দিষ্টভাবে উল্লেখ করুন,\n"
+" উদাহরণস্বরূপ ১৫:৩০, ২:৩৫ অপরাহ্ন, ১৪:১৫:২০, ১১:৪৬:৩০ পূর্বাহ্ন, ৪ অপরাহ্ন"
 
 #: ../gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
@@ -3125,9 +3125,11 @@ msgstr "অজানা আইটেম"
 #. * of the number to give these menu items a mnemonic.
 #.
 #: ../gtk/gtkrecentchoosermenu.c:816
+#| msgctxt "recent menu label"
+#| msgid "_%d. %s"
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr "%d. %s (_%)"
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -3729,7 +3731,8 @@ msgstr "\"%s\" কোন বৈধ নামের বৈশিষ্ট্য �
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "\"%1$s\"-কে \"%3$s\" বৈশিষ্ট্যের জন্য \"%2$s\" ধরনের মানে পরিবর্তন করা যায়নি"
+msgstr ""
+"\"%1$s\"-কে \"%3$s\" বৈশিষ্ট্যের জন্য \"%2$s\" ধরনের মানে পরিবর্তন করা যায়নি"
 
 #: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
@@ -3881,986 +3884,822 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:5
+#: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
 msgstr "asme_f"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:7
+#: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
 msgstr "A0x2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:9
+#: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
 msgstr "A0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:11
+#: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
 msgstr "A0x3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:13
+#: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
 msgstr "A1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:15
+#: ../gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
 msgstr "A10"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:17
+#: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
 msgstr "A1x3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:19
+#: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
 msgstr "A1x4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:21
+#: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
 msgstr "A2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:23
+#: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
 msgstr "A2x3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:25
+#: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
 msgstr "A2x4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:27
+#: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
 msgstr "A2x5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:29
+#: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
 msgstr "A3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:31
+#: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
 msgstr "A3 এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:33
+#: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
 msgstr "A3x3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:35
+#: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
 msgstr "A3x4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:37
+#: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
 msgstr "A3x5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:39
+#: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
 msgstr "A3x6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:41
+#: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
 msgstr "A3x7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:43
+#: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
 msgstr "A4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:45
+#: ../gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
 msgstr "A4 এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:47
+#: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
 msgstr "A4 ট্যাব"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:49
+#: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
 msgstr "A4x3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:51
+#: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
 msgstr "A4x4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:53
+#: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
 msgstr "A4x5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:55
+#: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
 msgstr "A4x6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:57
+#: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
 msgstr "A4x7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:59
+#: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
 msgstr "A4x8"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:61
+#: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
 msgstr "A4x9"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:63
+#: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
 msgstr "A5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:65
+#: ../gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
 msgstr "A5 এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:67
+#: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
 msgstr "A6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:69
+#: ../gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
 msgstr "A7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
 msgstr "A8"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
 msgstr "A9"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
 msgstr "B0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
 msgstr "B1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
 msgstr "B10"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
 msgstr "B2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
 msgstr "B3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
 msgstr "B4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
 msgstr "B5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
 msgstr "B5 এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
 msgstr "B6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:93
+#: ../gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
 msgstr "B6/C4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:95
+#: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
 msgstr "B7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:97
+#: ../gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
 msgstr "B8"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:99
+#: ../gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
 msgstr "B9"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:101
+#: ../gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
 msgstr "C0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:103
+#: ../gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
 msgstr "C1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
 msgstr "C10"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
 msgstr "C2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
 msgstr "C3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
 msgstr "C4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
 msgstr "C5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
 msgstr "C6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
 msgstr "C6/C5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
 msgstr "C7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
 msgstr "C7/C6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
 msgstr "C8"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
 msgstr "C9"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
 msgstr "RA0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
 msgstr "RA1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
 msgstr "RA2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "jis এক্সেক"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:169
+#: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:171
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "হাগাকি (পোস্টকার্ড)"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:173
+#: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "kahu খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:175
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:177
+#: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "oufuku (প্রত্যুত্তর পোস্টকার্ড)"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:179
+#: ../gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "you4 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:181
+#: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
 msgstr "১০x১১"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:183
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
 msgstr "১০x১৩"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:185
+#: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
 msgstr "১০x১৪"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:187 ../gtk/paper_names_offsets.c:189
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "১০x১৫"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:191
+#: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
 msgstr "১১x১২"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:193
+#: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
 msgstr "১১x১৫"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:195
+#: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
 msgstr "১২x১৯"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:197
+#: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
 msgstr "৫x৭"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:199
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "৬x৯ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:201
+#: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "৭x৯ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:203
+#: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "৯x১১ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:205
+#: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:207
+#: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "আর্চ A"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:209
+#: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "আর্চ B"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:211
+#: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "আর্চ C"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:213
+#: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "আর্চ D"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:215
+#: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "আর্চ E"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:217
+#: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "b-প্লাস"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:219
+#: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
 msgstr "c"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:221
+#: ../gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:223
+#: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
 msgstr "d"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:225
+#: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
 msgstr "e"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:227
+#: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:229
+#: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "European edp"
 msgstr "ইউরোপিয়ান edp"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:231
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Executive"
 msgstr "কার্যনির্বাহী"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:233
+#: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
 msgstr "f"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:235
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "FanFold ইউরোপিয়ান"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:237
+#: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "FanFold মার্কিন"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:239
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "FanFold জার্মান লিগ্যাল"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:241
+#: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "গভর্নমেন্ট লিগ্যাল"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:243
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "গভর্নমেন্ট লেটার"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:245
+#: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
 msgstr "ইনডেক্স ৩x৫"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:247
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "ইনডেক্স ৪x৬ (পোস্টকার্ড)"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:249
+#: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "ইনডেক্স ৪x৬ ext"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:251
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
 msgstr "ইনডেক্স ৫x৮"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:253
+#: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "চালানপত্র"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:255
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "ট্যাবলয়েড"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:257
+#: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "মার্কিন লিগ্যাল"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:259
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "মার্কিন লিগ্যাল এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:261
+#: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "মার্কিন লেটার"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:263
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "মার্কিন লেটার এক্সট্রা"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:265
+#: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "মার্কিন লেটার প্লাস"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:267
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "মোনার্ক খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:269
+#: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#১০ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:271
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#১১ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:273
+#: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#১২ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:275
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#১৪ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:277
+#: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#৯ খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:279
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "ব্যক্তিগত খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:281
+#: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "কোয়ার্টো"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:283
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
 msgstr "সুপার A"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:285
+#: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
 msgstr "সুপার B"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:287
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "প্রসারিত বিন্যাস"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:289
+#: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:291
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Folio"
 msgstr "ফোলিও"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:293
+#: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "ফোলিও sp"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:295
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "নিমন্ত্রণপত্রের খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:297
+#: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "ইটালিয়ান খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:299
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:301
+#: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "pa-kai"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:303
+#: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "পোস্ট-ফিক্স খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:305
+#: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "ছোট আকারের ছবি"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:307
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "prc1 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:309
+#: ../gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "prc10 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:311
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:313
+#: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "prc2 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:315
+#: ../gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "prc3 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:317
+#: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:319
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "prc4 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:321
+#: ../gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "prc5 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:323
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "prc6 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:325
+#: ../gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "prc7 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:327
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "prc8 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:329
+#: ../gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "prc9 খাম"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:331
+#: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#. translators, strip everything up to the first |
-#: ../gtk/paper_names_offsets.c:333
+#: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
@@ -4970,8 +4809,9 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"'%s'-এ কোনো থীম ইনডেক্স ফাইল নেই।\nযদি আপনি সত্যিই এখানে একটি আইকন ক্যাশে "
-"তৈরি করতে চান, --ignore-theme-index ব্যবহার করুন।\n"
+"'%s'-এ কোনো থীম ইনডেক্স ফাইল নেই।\n"
+"যদি আপনি সত্যিই এখানে একটি আইকন ক্যাশে তৈরি করতে চান, --ignore-theme-index "
+"ব্যবহার করুন।\n"
 
 #. ID
 #: ../modules/input/imam-et.c:454
@@ -5029,260 +4869,259 @@ msgstr "ভিয়েতনামী (VIQR)"
 msgid "X Input Method"
 msgstr "X ইনপুট পদ্ধতি"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:775
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:984
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:809
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1018
 msgid "Username:"
 msgstr "ব্যবহারকারীর নাম:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:776
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:993
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:810
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1027
 msgid "Password:"
 msgstr "পাসওয়ার্ড:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:848
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s থেকে ফাইল পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:818
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1006
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:852
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1040
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "'%s' নথিটি %s মুদ্রণযন্ত্রে মুদ্রণের জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:820
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:854
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s-এ কোন নথি মুদ্রণের জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:824
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:858
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "'%s' কাজের বৈশিষ্ট্য পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:860
 msgid "Authentication is required to get attributes of a job"
 msgstr "কাজের বৈশিষ্ট্য পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:864
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "'%s' মুদ্রণযন্ত্রের বৈশিষ্ট্য পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:866
 msgid "Authentication is required to get attributes of a printer"
 msgstr "মুদ্রণযন্ত্রের বৈশিষ্ট্য পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:835
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s-এর পূর্বনির্ধারিত মুদ্রণযন্ত্র পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:838
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:872
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s থেকে মুদ্রণযন্ত্র পাওয়ার জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:841
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s-এ প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:978
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1012
 msgid "Domain:"
 msgstr "ডোমেইন:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1008
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "'%s' নথি মুদ্রণে প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "%s মুদ্রণযন্ত্রে এই নথিটি মুদ্রণের জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1015
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 msgid "Authentication is required to print this document"
 msgstr "এই নথিটি মুদ্রণের জন্য প্রমাণীকরণ আবশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1636
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1670
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "মুদ্রণযন্ত্র '%s'-এ টোনারের মাত্রা কম।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1637
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "'%s' মুদ্রণযন্ত্রে টোনার শেষ হয়ে গেছে।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1639
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "মুদ্রণযন্ত্র '%s'-এ ডেভেলপার সামগ্রীর মাত্রা কম।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1641
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "'%s' মুদ্রণযন্ত্রে ডেভেলপার সামগ্রী শেষ হয়ে গেছে।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1643
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr ""
-"মুদ্রণযন্ত্র '%s'-এ অন্তত একটি মার্কার ধারণস্থলের সামগ্রীর মাত্রা কমেছে।"
+msgstr "মুদ্রণযন্ত্র '%s'-এ অন্তত একটি মার্কার ধারণস্থলের সামগ্রীর মাত্রা কমেছে।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1645
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "'%s' মুদ্রণযন্ত্রে অন্তত একটি মার্কার ধারণস্থলের সামগ্রী শেষ হয়ে গেছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1646
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "'%s' মুদ্রণযন্ত্রের ঢাকনা খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1647
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "'%s' মুদ্রণযন্ত্রের দরজা খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1648
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "'%s' মুদ্রণযন্ত্রে কাগজের পরিমাণ হ্রাস পেয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1649
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "'%s' মুদ্রণযন্ত্রের কাগজ শেষ হয়ে গেছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1650
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "মুদ্রণযন্ত্র '%s' বর্তমানে অফলাইনে রয়েছে।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1651
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr "মুদ্রণযন্ত্র '%s' সম্ভবত সংযুক্ত নয়।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1652
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "'%s' মুদ্রণযন্ত্রে একটি সমস্যা দেখা দিয়েছে।"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1994
 msgid "Paused ; Rejecting Jobs"
 msgstr "স্থগিত ; কাজ প্রত্যাখ্যান করা হচ্ছে"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1966
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Rejecting Jobs"
 msgstr "কাজ প্রত্যাখ্যান করা হচ্ছে"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2740
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
 msgid "Two Sided"
 msgstr "উভয়পৃষ্ঠ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2741
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2775
 msgid "Paper Type"
 msgstr "কাগজের ধরন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2776
 msgid "Paper Source"
 msgstr "কাগজের উৎস"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Output Tray"
 msgstr "আউটপুট ট্রে"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2744
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Resolution"
 msgstr "রেজল্যুশন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2745
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript পূর্ব-পরিশোধক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2754
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2788
 msgid "One Sided"
 msgstr "এককপৃষ্ঠ"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2756
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2790
 msgid "Long Edge (Standard)"
 msgstr "দীর্ঘ প্রান্ত (আদর্শ)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2758
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "Short Edge (Flip)"
 msgstr "ক্ষুদ্র প্রান্ত (উল্টানো)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2760
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2762
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2770
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2794
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2804
 msgid "Auto Select"
 msgstr "স্বয়ংক্রিয় নির্বাচন"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2764
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2766
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2768
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2772
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3258
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2806
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3292
 msgid "Printer Default"
 msgstr "মুদ্রণযন্ত্রের পূর্বনির্ধারিত মান"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2808
 msgid "Embed GhostScript fonts only"
 msgstr "শুধুমাত্র GhostScript ফন্ট এমবেড করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2810
 msgid "Convert to PS level 1"
 msgstr "PS লেভেল ১-এ রূপান্তর করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Convert to PS level 2"
 msgstr "PS লেভেল ২-এ রূপান্তর করা হবে"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "No pre-filtering"
 msgstr "পূর্ব-পরিশোধক নেই"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2789
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2823
 msgid "Miscellaneous"
 msgstr "বিবিধ বৈশিষ্ট্য"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Urgent"
 msgstr "জরুরী"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "High"
 msgstr "উচ্চ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Medium"
 msgstr "মাঝারি"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3500
 msgid "Low"
 msgstr "নিম্ন"
 
@@ -5290,66 +5129,66 @@ msgstr "নিম্ন"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3490
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3524
 msgid "Pages per Sheet"
 msgstr "প্রতি পাতায় পৃষ্ঠার সংখ্যা"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3527
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3561
 msgid "Job Priority"
 msgstr "কাজের অগ্রাধিকার"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
 msgid "Billing Info"
 msgstr "বিল সংক্রান্ত তথ্য"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "None"
 msgstr "কোনটি না"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Classified"
 msgstr "শ্রেণীবদ্ধ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Confidential"
 msgstr "গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Secret"
 msgstr "গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Standard"
 msgstr "আদর্শ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Top Secret"
 msgstr "অতিমাত্রায় গোপনীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3553
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3587
 msgid "Unclassified"
 msgstr "শ্রেণীবিহীন"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3588
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3622
 msgid "Before"
 msgstr "পূর্বে"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3603
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "After"
 msgstr "পরে"
 
@@ -5357,14 +5196,14 @@ msgstr "পরে"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3623
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3657
 msgid "Print at"
 msgstr "মুদ্রণ করা হবে"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3634
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3668
 msgid "Print at time"
 msgstr "চিহ্নিত সময়ে মুদ্রণ করা হবে"
 
@@ -5372,7 +5211,7 @@ msgstr "চিহ্নিত সময়ে মুদ্রণ করা হব�
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3669
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3703
 #, c-format
 msgid "Custom %sx%s"
 msgstr "স্বনির্ধারিত %1$sx%2$s"
