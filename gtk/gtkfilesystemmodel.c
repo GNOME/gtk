@@ -1199,9 +1199,11 @@ gtk_file_system_model_got_enumerator (GObject *dir, GAsyncResult *res, gpointer 
   enumerator = g_file_enumerate_children_finish (G_FILE (dir), res, &error);
   if (enumerator == NULL)
     {
-      g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
-      g_object_unref (model);
-      g_error_free (error);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      {
+        g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
+        g_error_free (error);
+      }
     }
   else
     {
