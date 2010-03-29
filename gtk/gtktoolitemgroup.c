@@ -434,6 +434,7 @@ gtk_tool_item_group_set_property (GObject      *object,
 
       case PROP_LABEL_WIDGET:
         gtk_tool_item_group_set_label_widget (group, g_value_get_object (value));
+	break;
 
       case PROP_COLLAPSED:
         gtk_tool_item_group_set_collapsed (group, g_value_get_boolean (value));
