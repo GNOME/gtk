@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-29 09:15+0200\n"
-"PO-Revision-Date: 2010-03-29 09:21+0200\n"
+"PO-Revision-Date: 2010-03-29 20:27+0200\n"
 "Last-Translator: David Planella <david.planella@ubuntu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -2705,7 +2705,7 @@ msgstr ""
 
 #: ../gtk/gtkexpander.c:187
 msgid "Expanded"
-msgstr "Estès"
+msgstr "Expandit"
 
 #: ../gtk/gtkexpander.c:188
 msgid "Whether the expander has been opened to reveal the child widget"
@@ -3650,7 +3650,7 @@ msgstr ""
 
 #: ../gtk/gtkmenu.c:805
 msgid "Delay before submenus appear"
-msgstr "Retard abans de que apareguen els submenús"
+msgstr "Retard abans que apareguen els submenús"
 
 #: ../gtk/gtkmenu.c:806
 msgid ""
@@ -3811,7 +3811,7 @@ msgstr "Text secundari"
 
 #: ../gtk/gtkmessagedialog.c:185
 msgid "The secondary text of the message dialog"
-msgstr "Els text secundari del diàleg de missatge"
+msgstr "El text secundari del diàleg de missatge"
 
 #: ../gtk/gtkmessagedialog.c:200
 msgid "Use Markup in secondary"
@@ -3993,7 +3993,7 @@ msgstr "Expansió de pestanya"
 
 #: ../gtk/gtknotebook.c:710
 msgid "Whether to expand the child's tab or not"
-msgstr "Si s'ha d'expandir la pestanya dels fills o no"
+msgstr "Si s'ha d'ampliar la pestanya dels fills"
 
 #: ../gtk/gtknotebook.c:716
 msgid "Tab fill"
@@ -4539,7 +4539,7 @@ msgstr "Pas d'activitat"
 
 #: ../gtk/gtkprogressbar.c:145
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr "L'increment utilitzat per cada iteració en modalitat activa (Obsolet)"
+msgstr "L'increment utilitzat per cada iteració en mode actiu (Obsolet)"
 
 #: ../gtk/gtkprogressbar.c:152
 msgid "Activity Blocks"
@@ -7195,11 +7195,11 @@ msgstr "Si és CERT, el giny rebrà l'acció per defecte quan s'enfoqui"
 
 #: ../gtk/gtkwidget.c:649
 msgid "Composite child"
-msgstr "Fill composat"
+msgstr "Fill compost"
 
 #: ../gtk/gtkwidget.c:650
 msgid "Whether the widget is part of a composite widget"
-msgstr "Si el giny es part d'un giny compost o no"
+msgstr "Si el giny és part d'un giny compost o no"
 
 #: ../gtk/gtkwidget.c:656
 msgid "Style"
@@ -7357,7 +7357,7 @@ msgid ""
 "instead of a line"
 msgstr ""
 "Si els separadors tenen una amplada configurable, i s'haurien de dibuixar "
-"amb una caixa enlloc d'una línia"
+"amb una caixa en lloc d'una línia"
 
 #: ../gtk/gtkwidget.c:2514
 msgid "Separator Width"
@@ -7623,7 +7623,7 @@ msgstr "Opacitat de la finestra"
 
 #: ../gtk/gtkwindow.c:787
 msgid "The opacity of the window, from 0 to 1"
-msgstr "La opacitat de la finestra, de 0 a 1"
+msgstr "L'opacitat de la finestra, de 0 a 1"
 
 #  ID
 #: ../modules/input/gtkimcontextxim.c:334
