@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-29 09:15+0200\n"
-"PO-Revision-Date: 2010-03-17 22:27+0100\n"
+"PO-Revision-Date: 2010-03-29 09:21+0200\n"
 "Last-Translator: David Planella <david.planella@ubuntu.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -1992,7 +1992,7 @@ msgstr "Propietat obsoleta, ignorada"
 
 #: ../gtk/gtkcombo.c:159
 msgid "Case sensitive"
-msgstr "Diferencia majúscules"
+msgstr "Distingeix entre majúscules i minúscules"
 
 #: ../gtk/gtkcombo.c:160
 msgid "Whether list item matching is case sensitive"
@@ -2085,7 +2085,7 @@ msgstr ""
 
 #: ../gtk/gtkcombobox.c:830
 msgid "Popup shown"
-msgstr "Part desplegable mostrada"
+msgstr "Es mostra la part desplegable"
 
 #: ../gtk/gtkcombobox.c:831
 msgid "Whether the combo's dropdown is shown"
