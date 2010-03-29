@@ -631,6 +631,9 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   else
     item_size.height = MIN (item_size.height, allocation->height);
 
+  item_size.width  = MAX (item_size.width, 1);
+  item_size.height = MAX (item_size.height, 1);
+
   item_area.width = 0;
   item_area.height = 0;
 
@@ -902,6 +905,9 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 
   /* figure out the size of homogeneous items */
   gtk_tool_item_group_get_item_size (group, &item_size, TRUE, &min_rows);
+
+  item_size.width  = MAX (item_size.width, 1);
+  item_size.height = MAX (item_size.height, 1);
 
   /* figure out the available columns and size of item_area */
   if (GTK_ORIENTATION_VERTICAL == orientation)
