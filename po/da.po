@@ -37,7 +37,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-28 00:15+0100\n"
-"PO-Revision-Date: 2010-03-27 18:40+0100\n"
+"PO-Revision-Date: 2010-03-31 00:20+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -3201,7 +3201,7 @@ msgstr "Kun ikke finde et element med URI \"%s\""
 #: ../gtk/gtkspinner.c:458
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Rulleklods"
+msgstr "Venteanimation"
 
 #: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
