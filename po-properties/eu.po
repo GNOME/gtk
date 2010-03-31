@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 14:28+0100\n"
-"PO-Revision-Date: 2010-03-22 14:33+0100\n"
+"POT-Creation-Date: 2010-03-31 17:27+0200\n"
+"PO-Revision-Date: 2010-03-31 17:33+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -357,7 +357,7 @@ msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
-"TRUE (egia) denean, menuen proxiak tresna-barrako gainezkako menuan "
+"TRUE (egia) denean, menuen proxy-ak tresna-barrako gainezkako menuan "
 "adierazten dira."
 
 #: ../gtk/gtkaction.c:314 ../gtk/gtktoolitem.c:199
@@ -960,7 +960,7 @@ msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr ""
-"child_displacement_x/_y propietateak foko-laukian ere eragingo duen ala ez "
+"child_displacement_x/_y propietateak fokuaren laukizuzenean ere eragingo duen ala ez "
 "adierazten du"
 
 #: ../gtk/gtkbutton.c:485 ../gtk/gtkentry.c:689 ../gtk/gtkentry.c:1713
@@ -2070,7 +2070,7 @@ msgstr ""
 #: ../gtk/gtkcombobox.c:792
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr ""
-"Konbinazio-koadroko goitibeherako menuek fokoa hartzen duten (bertan "
+"Konbinazio-koadroko goitibeherako menuek fokua hartzen duten (bertan "
 "saguarekin klik egitean) ala ez adierazten du"
 
 #: ../gtk/gtkcombobox.c:807 ../gtk/gtkmenu.c:556
@@ -2877,7 +2877,7 @@ msgstr "Elkarrizketa-koadroa"
 
 #: ../gtk/gtkfilechooserbutton.c:377
 msgid "The file chooser dialog to use."
-msgstr "Fitxategiak aukeratzeko erabiliko den elkarrizketa-kuadroa."
+msgstr "Fitxategiak aukeratzeko erabiliko den elkarrizketa-koadroa."
 
 #: ../gtk/gtkfilechooserbutton.c:408
 msgid "The title of the file chooser dialog."
@@ -3683,8 +3683,8 @@ msgstr "Azpimenuak agertu aurreko atzerapena"
 #: ../gtk/gtkmenu.c:806
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Azpimenua agertzeko erakusleak menu-elementu baten gainean gutxienez "
-"zenbat denbora egon behar duen"
+"Azpimenua agertzeko erakusleak menu-elementu baten gainean gutxienez zenbat "
+"denbora egon behar duen"
 
 #: ../gtk/gtkmenu.c:813
 msgid "Delay before hiding a submenu"
@@ -6443,8 +6443,7 @@ msgstr "Ikono-tamainaren propietatea ezarri den edo ez"
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Tresna-barra haztean, elementuak beste tarte bat eduki behar duen ala ez "
-"adierazten duGurasoa handitzean, umeak beste tarte bat jaso behar duen ala "
-"ez adierazten du"
+"adierazten du"
 
 #: ../gtk/gtktoolbar.c:574
 msgid "Whether the item should be the same size as other homogeneous items"
@@ -7410,11 +7409,11 @@ msgstr "TRUE (egia) leihoak ataza-barran egon behar ez badu."
 
 #: ../gtk/gtkwindow.c:655
 msgid "Skip pager"
-msgstr "Saltatu orrialdekatzailea"
+msgstr "Saltatu orrikatzailea"
 
 #: ../gtk/gtkwindow.c:656
 msgid "TRUE if the window should not be in the pager."
-msgstr "TRUE (egia) leihoak orrialdekatzailean egon behar ez badu."
+msgstr "TRUE (egia) leihoak orrikatzailean egon behar ez badu."
 
 #: ../gtk/gtkwindow.c:663
 msgid "Urgent"
@@ -7471,7 +7470,7 @@ msgstr "Leihoaren trantsizioa"
 
 #: ../gtk/gtkwindow.c:759
 msgid "The transient parent of the dialog"
-msgstr "Elkarrizketa-koadroaren gurasoaren transizioa"
+msgstr "Elkarrizketa-koadroaren gurasoaren trantsizioa"
 
 #: ../gtk/gtkwindow.c:774
 msgid "Opacity for Window"
@@ -7479,7 +7478,7 @@ msgstr "Leihoaren opakutasuna"
 
 #: ../gtk/gtkwindow.c:775
 msgid "The opacity of the window, from 0 to 1"
-msgstr "Leihoaren opakotasuna, 0 eta 1 artekoa"
+msgstr "Leihoaren opakutasuna, 0 eta 1 artekoa"
 
 #: ../modules/input/gtkimcontextxim.c:334
 msgid "IM Preedit style"
