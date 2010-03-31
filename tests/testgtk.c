@@ -1361,14 +1361,14 @@ static void
 set_toolbar_horizontal (GtkWidget *widget,
 			gpointer   data)
 {
-  gtk_toolbar_set_orientation (GTK_TOOLBAR (data), GTK_ORIENTATION_HORIZONTAL);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (data), GTK_ORIENTATION_HORIZONTAL);
 }
 
 static void
 set_toolbar_vertical (GtkWidget *widget,
 		      gpointer   data)
 {
-  gtk_toolbar_set_orientation (GTK_TOOLBAR (data), GTK_ORIENTATION_VERTICAL);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (data), GTK_ORIENTATION_VERTICAL);
 }
 
 static void
@@ -1403,25 +1403,67 @@ static void
 set_toolbar_enable (GtkWidget *widget,
 		    gpointer   data)
 {
-  gtk_toolbar_set_tooltips (GTK_TOOLBAR (data), TRUE);
+  GtkSettings *settings = gtk_widget_get_settings (widget);
+  g_object_set (settings, "gtk-enable-tooltips", TRUE, NULL);
 }
 
 static void
 set_toolbar_disable (GtkWidget *widget,
 		     gpointer   data)
 {
-  gtk_toolbar_set_tooltips (GTK_TOOLBAR (data), FALSE);
+  GtkSettings *settings = gtk_widget_get_settings (widget);
+  g_object_set (settings, "gtk-enable-tooltips", FALSE, NULL);
 }
+
+static GtkActionEntry create_toolbar_items[] = {
+    { NULL, GTK_STOCK_NEW, NULL, NULL, "Stock icon: New",
+      G_CALLBACK (set_toolbar_small_stock) },
+    { NULL, GTK_STOCK_OPEN, NULL, NULL, "Stock icon: Open",
+      G_CALLBACK (set_toolbar_large_stock) },
+    { NULL, NULL, "Horizontal", NULL, "Horizontal toolbar layout",
+      G_CALLBACK (set_toolbar_horizontal) },
+    { NULL, NULL, "Vertical", NULL, "Vertical toolbar layout",
+      G_CALLBACK (set_toolbar_vertical) },
+    { NULL },
+    { NULL, NULL, "Icons", NULL, "Only show toolbar icons",
+      G_CALLBACK (set_toolbar_icons) },
+    { NULL, NULL, "Text", NULL, "Only show toolbar text",
+      G_CALLBACK (set_toolbar_text) },
+    { NULL, NULL, "Both", NULL, "Show toolbar icons and text",
+      G_CALLBACK (set_toolbar_both) },
+    { NULL, NULL, "Both (horizontal)", NULL, "Show toolbar icons and text in a horizontal fashion",
+      G_CALLBACK (set_toolbar_both_horiz) },
+    { NULL },
+    { "entry", NULL, NULL, "This is an unusable GtkEntry ;)",
+      NULL },
+    { NULL },
+    { NULL },
+    { NULL, NULL, "Enable", NULL, "Enable tooltips",
+      G_CALLBACK (set_toolbar_enable) },
+    { NULL, NULL, "Disable", NULL, "Disable tooltips",
+      G_CALLBACK (set_toolbar_disable) },
+    { NULL },
+    { NULL, NULL, "Frobate", NULL, "Frobate tooltip",
+      NULL },
+    { NULL, NULL, "Baz", NULL, "Baz tooltip",
+      NULL },
+    { NULL },
+    { NULL, NULL, "Blah", NULL, "Blash tooltip",
+      NULL },
+    { NULL, NULL, "Bar", NULL, "Bar tooltip",
+      NULL },
+};
 
 static void
 create_toolbar (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *toolbar;
-  GtkWidget *entry;
 
   if (!window)
     {
+      guint i;
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
@@ -1436,88 +1478,36 @@ create_toolbar (GtkWidget *widget)
       gtk_widget_realize (window);
 
       toolbar = gtk_toolbar_new ();
+      for (i = 0; i < G_N_ELEMENTS (create_toolbar_items); i++)
+        {
+          GtkToolItem *toolitem;
 
-      gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
-				GTK_STOCK_NEW,
-				"Stock icon: New", "Toolbar/New",
-				G_CALLBACK (set_toolbar_small_stock), toolbar, -1);
-      
-      gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
-				GTK_STOCK_OPEN,
-				"Stock icon: Open", "Toolbar/Open",
-				G_CALLBACK (set_toolbar_large_stock), toolbar, -1);
-      
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Horizontal", "Horizontal toolbar layout", "Toolbar/Horizontal",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_horizontal), toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Vertical", "Vertical toolbar layout", "Toolbar/Vertical",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_vertical), toolbar);
+          if (create_toolbar_items[i].tooltip == NULL)
+            toolitem = gtk_separator_tool_item_new ();
+          else if (g_strcmp0 (create_toolbar_items[i].name, "entry") == 0)
+            {
+              GtkWidget *entry;
 
-      gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
+              toolitem = gtk_tool_item_new ();
+              entry = gtk_entry_new ();
+              gtk_container_add (GTK_CONTAINER (toolitem), entry);
+            }
+          else if (create_toolbar_items[i].stock_id)
+            toolitem = gtk_tool_button_new_from_stock (create_toolbar_items[i].stock_id);
+          else
+            {
+              GtkWidget *icon;
 
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Icons", "Only show toolbar icons", "Toolbar/IconsOnly",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_icons), toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Text", "Only show toolbar text", "Toolbar/TextOnly",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_text), toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Both", "Show toolbar icons and text", "Toolbar/Both",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_both), toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Both (horizontal)",
-			       "Show toolbar icons and text in a horizontal fashion",
-			       "Toolbar/BothHoriz",
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_both_horiz), toolbar);
-			       
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-      entry = gtk_entry_new ();
-
-      gtk_toolbar_append_widget (GTK_TOOLBAR (toolbar), entry, "This is an unusable GtkEntry ;)", "Hey don't click me!!!");
-
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Enable", "Enable tooltips", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_enable), toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Disable", "Disable tooltips", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       G_CALLBACK (set_toolbar_disable), toolbar);
-
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Frobate", "Frobate tooltip", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       NULL, toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Baz", "Baz tooltip", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       NULL, toolbar);
-
-      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-      
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Blah", "Blah tooltip", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       NULL, toolbar);
-      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Bar", "Bar tooltip", NULL,
-			       new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			       NULL, toolbar);
+              icon = new_pixmap ("test.xpm", window->window,
+                                 &window->style->bg[GTK_STATE_NORMAL]);
+              toolitem = gtk_tool_button_new (icon, create_toolbar_items[i].label);
+            }
+          if (create_toolbar_items[i].callback)
+            g_signal_connect (toolitem, "clicked",
+                              create_toolbar_items[i].callback, toolbar);
+          gtk_tool_item_set_tooltip_text (toolitem, create_toolbar_items[i].tooltip);
+          gtk_toolbar_insert (GTK_TOOLBAR (toolbar), toolitem, -1);
+        }
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
 
@@ -1530,72 +1520,63 @@ create_toolbar (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+static GtkActionEntry make_toolbar_items[] = {
+    { NULL, NULL, "Horizontal", NULL, "Horizontal toolbar layout",
+      G_CALLBACK (set_toolbar_horizontal) },
+    { NULL, NULL, "Vertical", NULL, "Vertical toolbar layout",
+      G_CALLBACK (set_toolbar_vertical) },
+    { NULL },
+    { NULL, NULL, "Icons", NULL, "Only show toolbar icons",
+      G_CALLBACK (set_toolbar_icons) },
+    { NULL, NULL, "Text", NULL, "Only show toolbar text",
+      G_CALLBACK (set_toolbar_text) },
+    { NULL, NULL, "Both", NULL, "Show toolbar icons and text",
+      G_CALLBACK (set_toolbar_both) },
+    { NULL },
+    { NULL, NULL, "Woot", NULL, "Woot woot woot",
+      NULL },
+    { NULL, NULL, "Blah", NULL, "Blah blah blah",
+      NULL },
+    { NULL },
+    { NULL, NULL, "Enable", NULL, "Enable tooltips",
+      G_CALLBACK (set_toolbar_enable) },
+    { NULL, NULL, "Disable", NULL, "Disable tooltips",
+      G_CALLBACK (set_toolbar_disable) },
+    { NULL },
+    { NULL, NULL, "Hoo", NULL, "Hoo tooltip",
+      NULL },
+    { NULL, NULL, "Woo", NULL, "Woo tooltip",
+      NULL }
+};
+
 static GtkWidget*
 make_toolbar (GtkWidget *window)
 {
   GtkWidget *toolbar;
+  guint i;
 
   if (!gtk_widget_get_realized (window))
     gtk_widget_realize (window);
 
   toolbar = gtk_toolbar_new ();
+  for (i = 0; i < G_N_ELEMENTS (make_toolbar_items); i++)
+    {
+      GtkWidget *icon;
+      GtkToolItem *toolitem;
 
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Horizontal", "Horizontal toolbar layout", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_horizontal), toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Vertical", "Vertical toolbar layout", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_vertical), toolbar);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
-
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Icons", "Only show toolbar icons", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_icons), toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Text", "Only show toolbar text", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_text), toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Both", "Show toolbar icons and text", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_both), toolbar);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Woot", "Woot woot woot", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   NULL, toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Blah", "Blah blah blah", "Toolbar/Big",
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   NULL, toolbar);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Enable", "Enable tooltips", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_enable), toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Disable", "Disable tooltips", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   G_CALLBACK (set_toolbar_disable), toolbar);
-
-  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
-  
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Hoo", "Hoo tooltip", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   NULL, toolbar);
-  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			   "Woo", "Woo tooltip", NULL,
-			   new_pixmap ("test.xpm", window->window, &window->style->bg[GTK_STATE_NORMAL]),
-			   NULL, toolbar);
+      if (make_toolbar_items[i].label == NULL)
+        {
+          toolitem = gtk_separator_tool_item_new ();
+          continue;
+        }
+      icon  = new_pixmap ("test.xpm", window->window,
+                          &window->style->bg[GTK_STATE_NORMAL]);
+      toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
+      gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
+      if (make_toolbar_items[i].callback != NULL)
+        g_signal_connect (toolitem, "clicked",  make_toolbar_items[i].callback, toolbar);
+      gtk_toolbar_insert (GTK_TOOLBAR (toolbar), toolitem, -1);
+    }
 
   return toolbar;
 }
@@ -3913,10 +3894,6 @@ create_tooltips (GtkWidget *widget)
 
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (destroy_tooltips),
-                        &window);
 
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
