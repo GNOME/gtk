@@ -60,17 +60,6 @@ print_hello (GtkWidget *w,
     }
 }
 
-static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL,           0, "<Branch>" },
-  { "/File/_New",     "<control>N", print_hello,    ACTION_FILE_NEW, "<Item>" },
-  { "/File/_Open",    "<control>O", print_hello,    ACTION_FILE_OPEN, "<Item>" },
-  { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
-  { "/File/Quit",     "<control>Q", gtk_main_quit,  0, "<Item>" },
-  { "/O_K",            "<control>K",print_hello,    ACTION_OK, "<Item>" },
-  { "/_Help",         NULL,         NULL,           0, "<LastBranch>" },
-  { "/_Help/About",   NULL,         print_hello,    ACTION_HELP_ABOUT, "<Item>" },
-};
-
 static void
 remove_buttons (GtkWidget *widget, GtkWidget *other_button)
 {
@@ -171,19 +160,41 @@ create_combo (void)
 static GtkWidget *
 create_menubar (GtkWindow *window)
 {
-  GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group=NULL;
   GtkWidget *menubar;
-  
+  GtkWidget *menuitem;
+  GtkWidget *menu;
+
   accel_group = gtk_accel_group_new ();
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>",
-                                       accel_group);
-  gtk_item_factory_create_items (item_factory,
-				 G_N_ELEMENTS (menu_items),
-				 menu_items, NULL);
-  
   gtk_window_add_accel_group (window, accel_group);
-  menubar = gtk_item_factory_get_widget (item_factory, "<main>");
+
+  menubar = gtk_menu_bar_new ();
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("_File");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, NULL);
+  g_signal_connect (menuitem, "clicked", G_CALLBACK (print_hello), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
+  g_signal_connect (menuitem, "clicked", G_CALLBACK (gtk_main_quit), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("O_K");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Help");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
+  g_signal_connect (menuitem, "clicked", G_CALLBACK (print_hello), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   return menubar;
 }

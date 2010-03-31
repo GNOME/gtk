@@ -62,12 +62,6 @@ quit_cb (gpointer        callback_data,
   gtk_widget_destroy (message_dialog);
 }
 
-static GtkItemFactoryEntry menu_items[] =
-{
-  { "/_File",            NULL,         NULL,                  0, "<Branch>" },
-  { "/File/_Quit",       "<control>Q", quit_cb,               0 },
-};
-
 static void
 socket_destroyed (GtkWidget *widget,
 		  Socket    *socket)
@@ -312,10 +306,12 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *vbox;
+  GtkWidget *menubar;
+  GtkWidget *menuitem;
+  GtkWidget *menu;
   GtkWidget *entry;
   GtkWidget *checkbutton;
   GtkAccelGroup *accel_group;
-  GtkItemFactory *item_factory;
 
   gtk_init (&argc, &argv);
 
@@ -329,18 +325,18 @@ main (int argc, char *argv[])
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
+  menubar = gtk_menu_bar_new ();
+  menuitem = gtk_menu_item_new_with_mnemonic ("_File");
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
+  g_signal_connect (menuitem, "clicked", G_CALLBACK (quit_cb), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-
-  
-  gtk_item_factory_create_items (item_factory,
-				 G_N_ELEMENTS (menu_items), menu_items,
-				 NULL);
-      
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_item_factory_get_widget (item_factory, "<main>"),
-		      FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Add Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
