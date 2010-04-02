@@ -29,7 +29,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-22 23:34-0400\n"
-"PO-Revision-Date: 2010-03-08 23:26+0100\n"
+"PO-Revision-Date: 2010-04-02 18:26+0200\n"
 "Last-Translator: David Planella <david.planella@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -532,7 +532,7 @@ msgstr "No hi ha memòria suficient per carregar el fitxer GIF"
 
 #: gdk-pixbuf/io-gif.c:960
 msgid "Not enough memory to composite a frame in GIF file"
-msgstr "No hi ha memòria suficient per composar un marc al fitxer GIF"
+msgstr "No hi ha memòria suficient per compondre un marc al fitxer GIF"
 
 #: gdk-pixbuf/io-gif.c:1132
 msgid "GIF image is corrupt (incorrect LZW compression)"
@@ -2316,7 +2316,7 @@ msgstr "Entrada"
 
 #: gtk/gtkinputdialog.c:207
 msgid "No extended input devices"
-msgstr "No hi ha cap dispositiu d'entrada estès"
+msgstr "No hi ha cap dispositiu d'entrada ampliat"
 
 #: gtk/gtkinputdialog.c:220
 msgid "_Device:"
