@@ -1946,25 +1946,43 @@ gtk_cell_renderer_text_extended_layout_get_desired_size (GtkExtendedLayout *layo
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (layout);
 
-  if (minimal_size)
+  if (priv->owner)
     {
-      get_size (GTK_CELL_RENDERER (layout),
-                priv->owner, NULL, NULL, NULL, NULL,
-                &minimal_size->width, &minimal_size->height);
+
+      if (minimal_size)
+	{
+	  get_size (GTK_CELL_RENDERER (layout),
+		    priv->owner, NULL, NULL, NULL, NULL,
+		    &minimal_size->width, &minimal_size->height);
+	}
+      
+      if (desired_size)
+	{
+	  PangoEllipsizeMode ellipsize;
+	  
+	  ellipsize = priv->ellipsize;
+	  priv->ellipsize = PANGO_ELLIPSIZE_NONE;
+	  
+	  get_size (GTK_CELL_RENDERER (layout),
+		    priv->owner, NULL, NULL, NULL, NULL,
+		    &desired_size->width, &desired_size->height);
+	  
+	  priv->ellipsize = ellipsize;
+	}
     }
-
-  if (desired_size)
+  else
     {
-      PangoEllipsizeMode ellipsize;
-
-      ellipsize = priv->ellipsize;
-      priv->ellipsize = PANGO_ELLIPSIZE_NONE;
-
-      get_size (GTK_CELL_RENDERER (layout),
-                priv->owner, NULL, NULL, NULL, NULL,
-                &desired_size->width, &desired_size->height);
-
-      priv->ellipsize = ellipsize;
+      if (minimal_size)
+	{
+	  minimal_size->height = 0;
+	  minimal_size->width = 0;
+	}
+      
+      if (desired_size)
+	{
+	  desired_size->height = 0;
+	  desired_size->width = 0;
+	}
     }
 }
 
