@@ -10720,15 +10720,20 @@ gtk_widget_real_get_desired_size (GtkExtendedLayout *layout,
                                   GtkRequisition    *minimum_size,
                                   GtkRequisition    *natural_size)
 {
-  GtkWidget *widget = GTK_WIDGET (layout);
-  GtkRequisition requisition = widget->requisition;
-
-  g_signal_emit (widget, widget_signals[SIZE_REQUEST], 0, &requisition);
-
+  /* Set the initial values so that unimplemented classes will fall back
+   * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
+   */
   if (minimum_size)
-    *minimum_size = requisition;
+    {
+      minimum_size->width  = -1;
+      minimum_size->height = -1;
+    }
+
   if (natural_size)
-    *natural_size = requisition;
+    {
+      natural_size->width  = -1;
+      natural_size->height = -1;
+    }
 }
 
 static void

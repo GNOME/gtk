@@ -659,16 +659,47 @@ do_size_request (GtkWidget *widget)
   if (GTK_WIDGET_REQUEST_NEEDED (widget))
     {
       GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+      GtkRequisition extended_minimum;
 
       gtk_widget_ensure_style (widget);      
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
 
+      /* First, allow client code to; extended classes or signal connections; to 
+       * modify the initial size request. 
+       *
+       * Note here that there is no convention of filling the argument or widget->requisition,
+       * so we have no choice but to fire size request with this pointer.
+       */
+      g_signal_emit_by_name (widget,
+			     "size-request",
+			     &widget->requisition);
+
+      /* Now get the extended layout minimum and natural size
+       */
       gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget),
-                                            &widget->requisition,
+                                            &extended_minimum,
                                             &aux_info->natural_size);
 
+      /* Base the base widget requisition on both the size-requst and the extended layout size
+       */
+      widget->requisition.width  = MAX (widget->requisition.width,  extended_minimum.width);
+      widget->requisition.height = MAX (widget->requisition.height, extended_minimum.height);
+
+      /* Additionally allow a "size-request" to overflow the natural size.
+       */
+      aux_info->natural_size.width  = MAX (aux_info->natural_size.width,  widget->requisition.width);
+      aux_info->natural_size.height = MAX (aux_info->natural_size.height, widget->requisition.height);
+
+      /* Assert that pure extended layout cases return initial minimum sizes smaller or equal
+       * to their possible natural size.
+       *
+       * Note that this only determines the return of gtk_widget_get_desired_size() and caches
+       * the initial hints. Height for width cases will further be addressed in containers
+       * using gtk_extended_layout_get_height_for_width().
+       */
       g_assert (widget->requisition.width <= aux_info->natural_size.width);
       g_assert (widget->requisition.height <= aux_info->natural_size.height);
+
     }
 }
 
@@ -682,7 +713,7 @@ compute_base_dimensions (GtkWidget        *widget,
   get_base_dimensions (widget, mode, minimum_size, natural_size);
 }
 
-static gint
+static void
 compute_dimension (GtkWidget        *widget,
 		   GtkSizeGroupMode  mode,
                    gint             *minimum_size,
@@ -691,7 +722,6 @@ compute_dimension (GtkWidget        *widget,
   GSList *widgets = NULL;
   GSList *groups = NULL;
   GSList *tmp_list;
-  gint result = 0;
 
   add_widget_to_closure (widget, mode, &groups, &widgets);
 
