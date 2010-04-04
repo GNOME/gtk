@@ -418,23 +418,13 @@ viewport_set_vadjustment_values (GtkViewport *viewport,
 
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
-      if (GTK_IS_EXTENDED_LAYOUT (bin->child))
-        {
-          gint natural_height;
-
-          gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
-                                                    view_allocation.width,
-                                                    NULL,
-                                                    &natural_height);
-          vadjustment->upper = MAX (natural_height, view_allocation.height);
-        }
-      else
-        {
-          GtkRequisition child_requisition;
-
-          gtk_widget_get_child_requisition (bin->child, &child_requisition);
-          vadjustment->upper = MAX (child_requisition.height, view_allocation.height);
-        }
+      gint natural_height;
+      
+      gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
+						view_allocation.width,
+						NULL,
+						&natural_height);
+      vadjustment->upper = MAX (natural_height, view_allocation.height);
     }
   else
     vadjustment->upper = view_allocation.height;
