@@ -2603,25 +2603,13 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 
 }
 
-/**
- * gtk_tree_view_column_cell_get_size:
- * @tree_column: A #GtkTreeViewColumn.
- * @cell_area: (allow-none): The area a cell in the column will be allocated, or %NULL
- * @x_offset: (allow-none): location to return x offset of a cell relative to @cell_area, or %NULL
- * @y_offset: (allow-none): location to return y offset of a cell relative to @cell_area, or %NULL
- * @width: (allow-none): location to return width needed to render a cell, or %NULL
- * @height: (allow-none): location to return height needed to render a cell, or %NULL
- * 
- * Obtains the width and height needed to render the column.  This is used
- * primarily by the #GtkTreeView.
- **/
-void
+static void
 gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
-				    const GdkRectangle *cell_area,
-				    gint               *x_offset,
-				    gint               *y_offset,
-                                    GtkRequisition     *minimal_size,
-                                    GtkRequisition     *desired_size)
+					 const GdkRectangle *cell_area,
+					 gint               *x_offset,
+					 gint               *y_offset,
+					 GtkRequisition     *minimal_size,
+					 GtkRequisition     *desired_size)
 {
   GList *list;
   gboolean first_cell = TRUE;
@@ -2680,6 +2668,19 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
     }
 }
 
+
+/**
+ * gtk_tree_view_column_cell_get_size:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @cell_area: (allow-none): The area a cell in the column will be allocated, or %NULL
+ * @x_offset: (allow-none): location to return x offset of a cell relative to @cell_area, or %NULL
+ * @y_offset: (allow-none): location to return y offset of a cell relative to @cell_area, or %NULL
+ * @width: (allow-none): location to return width needed to render a cell, or %NULL
+ * @height: (allow-none): location to return height needed to render a cell, or %NULL
+ * 
+ * Obtains the width and height needed to render the column.  This is used
+ * primarily by the #GtkTreeView.
+ **/
 void
 gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
 				    const GdkRectangle *cell_area,
