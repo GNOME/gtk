@@ -478,7 +478,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
               child = children->data;
               children = children->next;
 
-              if (GTK_WIDGET_VISIBLE (child->widget))
+              if (gtk_widget_get_visible (child->widget))
                 {
                   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
                     gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child->widget),

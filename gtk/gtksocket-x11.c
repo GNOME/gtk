@@ -141,7 +141,7 @@ _gtk_socket_windowing_get_natural_size (GtkSocket *socket)
   priv->natural_width = 1;
   priv->natural_height = 1;
 
-  if (GTK_WIDGET_MAPPED (socket))
+  if (gtk_widget_get_mapped (GTK_WIDGET (socket)))
     {
       display = gdk_drawable_get_display (socket->plug_window);
       property = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_NATURAL_SIZE");
