@@ -2629,10 +2629,17 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  minimal_size->height = 0;
-  minimal_size->width = 0;
-  desired_size->height = 0;
-  desired_size->width = 0;
+  if (minimal_size)
+    {
+      minimal_size->height = 0;
+      minimal_size->width = 0;
+    }
+
+  if (desired_size)
+    {
+      desired_size->height = 0;
+      desired_size->width = 0;
+    }
 
   gtk_widget_style_get (tree_column->tree_view, "focus-line-width", &focus_line_width, NULL);
   
