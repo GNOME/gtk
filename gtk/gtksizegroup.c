@@ -670,9 +670,9 @@ do_size_request (GtkWidget *widget)
        * Note here that there is no convention of filling the argument or widget->requisition,
        * so we have no choice but to fire size request with this pointer.
        */
-      g_signal_emit_by_name (widget,
-			     "size-request",
-			     &widget->requisition);
+      widget->requisition.width  = 0;
+      widget->requisition.height = 0;
+      g_signal_emit_by_name (widget, "size-request", &widget->requisition);
 
       /* Now get the extended layout minimum and natural size
        */

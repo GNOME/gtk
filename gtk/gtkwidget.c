@@ -10724,16 +10724,10 @@ gtk_widget_real_get_desired_size (GtkExtendedLayout *layout,
    * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
    */
   if (minimum_size)
-    {
-      minimum_size->width  = -1;
-      minimum_size->height = -1;
-    }
+    memset (minimum_size, 0x0, sizeof (GtkRequisition));
 
   if (natural_size)
-    {
-      natural_size->width  = -1;
-      natural_size->height = -1;
-    }
+    memset (natural_size, 0x0, sizeof (GtkRequisition));
 }
 
 static void
