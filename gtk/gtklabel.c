@@ -3333,9 +3333,9 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
     {
       GtkRequisition minimum_size, natural_size;
 
-      gtk_extended_layout_get_desired_size (layout,
-                                            minimum_width ? &minimum_size : NULL,
-                                            natural_width ? &natural_size : NULL);
+      gtk_widget_get_desired_size (layout,
+				   minimum_width ? &minimum_size : NULL,
+				   natural_width ? &natural_size : NULL);
 
       if (minimum_width)
         *minimum_width = minimum_size.width;
@@ -3359,9 +3359,9 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
     {
       GtkRequisition minimum_size, natural_size;
 
-      gtk_extended_layout_get_desired_size (layout,
-                                            minimum_height ? &minimum_size : NULL,
-                                            natural_height ? &natural_size : NULL);
+      gtk_widget_get_desired_size (layout,
+				   minimum_height ? &minimum_size : NULL,
+				   natural_height ? &natural_size : NULL);
 
       if (minimum_height)
         *minimum_height = minimum_size.height;

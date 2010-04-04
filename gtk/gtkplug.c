@@ -781,9 +781,9 @@ gtk_plug_size_allocate (GtkWidget     *widget,
       
     }
 
-   gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
-                                         NULL, &natural_size);
-   _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &natural_size);
+  gtk_widget_get_desired_size (bin->child,
+			       NULL, &natural_size);
+  _gtk_plug_windowing_publish_natural_size (GTK_PLUG (widget), &natural_size);
 }
 
 static gboolean

@@ -1022,9 +1022,9 @@ gtk_socket_extended_layout_get_desired_size (GtkExtendedLayout *layout,
 
   if (socket->plug_widget)
     {
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (socket->plug_widget),
-                                                                 minimal_size,
-                                                                 desired_size); 
+      gtk_widget_get_desired_size (socket->plug_widget,
+				   minimal_size,
+				   desired_size); 
     }
   else
     {

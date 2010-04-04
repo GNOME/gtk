@@ -156,12 +156,11 @@ gtk_bin_extended_layout_get_desired_size (GtkExtendedLayout *layout,
                                           GtkRequisition    *minimum_size,
                                           GtkRequisition    *natural_size)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkWidget *child;
 
-  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
+  child = gtk_bin_get_child (GTK_BIN (layout));
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
-                                        minimum_size, natural_size);
+  gtk_widget_get_desired_size (child, minimum_size, natural_size);
 }
 
 static void
@@ -170,11 +169,11 @@ gtk_bin_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
                                               gint              *minimum_width,
                                               gint              *natural_width)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkWidget *child;
 
-  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
+  child = gtk_bin_get_child (GTK_BIN (layout));
 
-  gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (bin->child),
+  gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child),
                                             height, minimum_width, natural_width);
 }
 
@@ -184,11 +183,11 @@ gtk_bin_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
                                               gint              *minimum_height,
                                               gint              *natural_height)
 {
-  GtkBin *bin = GTK_BIN (layout);
+  GtkWidget *child;
 
-  g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (bin->child));
+  child = gtk_bin_get_child (GTK_BIN (layout));
 
-  gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
+  gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (child),
                                             width, minimum_height, natural_height);
 }
 

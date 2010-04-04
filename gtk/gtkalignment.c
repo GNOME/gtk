@@ -461,7 +461,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
     {
       GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (bin->child);
 
-      gtk_extended_layout_get_desired_size (layout, NULL, &child_requisition);
+      gtk_widget_get_desired_size (GTK_WIDGET (layout), NULL, &child_requisition);
 
       border_width = GTK_CONTAINER (alignment)->border_width;
 
