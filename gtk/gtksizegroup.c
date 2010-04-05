@@ -676,6 +676,8 @@ do_size_request (GtkWidget *widget)
 
       /* Now get the extended layout minimum and natural size
        */
+      extended_minimum.width  = 0;
+      extended_minimum.height = 0;
       gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget),
                                             &extended_minimum,
                                             &aux_info->natural_size);
