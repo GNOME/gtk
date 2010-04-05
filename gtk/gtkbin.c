@@ -21,12 +21,11 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
 #include "config.h"
 #include "gtkbin.h"
-#include "gtkextendedlayout.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -40,15 +39,8 @@ static void gtk_bin_forall      (GtkContainer   *container,
 				 gpointer        callback_data);
 static GType gtk_bin_child_type (GtkContainer   *container);
 
-static void gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface);
 
-
-static GtkExtendedLayoutIface *parent_extended_layout_iface;
-
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER,
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-						         gtk_bin_extended_layout_interface_init))
-
+G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -152,58 +144,6 @@ gtk_bin_get_child (GtkBin *bin)
   g_return_val_if_fail (GTK_IS_BIN (bin), NULL);
 
   return bin->child;
-}
-
-static void
-gtk_bin_extended_layout_get_desired_size (GtkExtendedLayout *layout,
-                                          GtkRequisition    *minimum_size,
-                                          GtkRequisition    *natural_size)
-{
-  GtkBin *bin = GTK_BIN (layout);
-
-  if (bin->child && gtk_widget_get_visible (bin->child))
-    gtk_widget_get_desired_size (bin->child, minimum_size, natural_size);
-  else
-    /* Just let GtkWidgetClass clear the values */
-    parent_extended_layout_iface->get_desired_size (layout, minimum_size, natural_size);
-}
-
-static void
-gtk_bin_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
-                                              gint               height,
-                                              gint              *minimum_width,
-                                              gint              *natural_width)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (layout));
-
-  gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (child),
-                                            height, minimum_width, natural_width);
-}
-
-static void
-gtk_bin_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
-                                              gint               width,
-                                              gint              *minimum_height,
-                                              gint              *natural_height)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (layout));
-
-  gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (child),
-                                            width, minimum_height, natural_height);
-}
-
-static void
-gtk_bin_extended_layout_interface_init (GtkExtendedLayoutIface *iface)
-{
-  parent_extended_layout_iface = g_type_interface_peek_parent (iface);
-
-  iface->get_desired_size     = gtk_bin_extended_layout_get_desired_size;
-  iface->get_height_for_width = gtk_bin_extended_layout_get_height_for_width;
-  iface->get_width_for_height = gtk_bin_extended_layout_get_width_for_height;
 }
 
 #define __GTK_BIN_C__
