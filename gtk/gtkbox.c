@@ -470,7 +470,6 @@ gtk_box_size_allocate (GtkWidget     *widget,
       else
 	{
           /* Retrieve desired size for visible children */
-
           i = 0;
           children = box->children;
           while (children)
@@ -492,6 +491,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
                                                                                    &sizes[i].natural_size);
 
                   size -= sizes[i].minimum_size;
+		  size -= child->padding * 2;
 
                   spreading[i].index = i;
                   spreading[i].child = child;
@@ -627,14 +627,20 @@ gtk_box_size_allocate (GtkWidget     *widget,
                               child_allocation.width = sizes[i].minimum_size;
                               child_allocation.x = x + (child_size - child_allocation.width) / 2;
 		            }
-
+			  
 	                  if (direction == GTK_TEXT_DIR_RTL)
                             child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
                           if (packing == GTK_PACK_START)
-	                    x += child_size + box->spacing;
+			    {
+			      x += child_size + box->spacing;
+			    }
                           else
-	                    x -= child_size + box->spacing;
+			    {
+			      x -= child_size + box->spacing;
+
+			      child_allocation.x -= child_allocation.width;
+			    }
                         }
                       else
                         {
@@ -650,9 +656,15 @@ gtk_box_size_allocate (GtkWidget     *widget,
 		            }
 
                          if (packing == GTK_PACK_START)
-	                   y += child_size + box->spacing;
+			   {
+			     y += child_size + box->spacing;
+			   }
                          else
-	                   y -= child_size + box->spacing;
+			   {
+			     y -= child_size + box->spacing;
+
+			     child_allocation.y -= child_allocation.height;
+			   }
                         }
 
 	              gtk_widget_size_allocate (child->widget, &child_allocation);
