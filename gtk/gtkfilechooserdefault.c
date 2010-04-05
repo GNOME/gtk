@@ -8594,8 +8594,16 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
       entry = GTK_FILE_CHOOSER_ENTRY (impl->location_entry);
       check_save_entry (impl, &file, &is_well_formed, &is_empty, &is_file_part_empty, &is_folder);
 
-      if (is_empty || !is_well_formed)
-	return FALSE;
+      if (!is_well_formed)
+        return FALSE;
+
+      if (is_empty)
+        {
+          if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+            return FALSE;
+
+          goto file_list;
+        }
 
       g_assert (file != NULL);
 
