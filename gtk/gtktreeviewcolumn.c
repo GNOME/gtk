@@ -26,7 +26,7 @@
 #include "gtkbutton.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
-#include "gtkextendedlayout.h"
+#include "gtkextendedcell.h"
 #include "gtkhbox.h"
 #include "gtkmarshalers.h"
 #include "gtkarrow.h"
@@ -156,17 +156,13 @@ static void gtk_tree_view_column_clear_attributes_by_info      (GtkTreeViewColum
 /* GtkBuildable implementation */
 static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
 
-static void gtk_tree_view_column_extended_layout_init          (GtkExtendedLayoutIface *iface);
-
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, GTK_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_tree_view_column_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_tree_view_column_buildable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_tree_view_column_extended_layout_init))
+						gtk_tree_view_column_buildable_init))
 
 
 
@@ -2648,8 +2644,9 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
 	  nat_req.width += tree_column->spacing;
         }
 
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (info->cell),
-                                            &min_req, &nat_req);
+      gtk_extended_cell_get_desired_size (GTK_EXTENDED_CELL (info->cell),
+					  tree_column->tree_view,
+					  &min_req, &nat_req);
 
       min_req.width += focus_line_width * 2;
       min_req.height += focus_line_width * 2;
@@ -3826,22 +3823,29 @@ gtk_tree_view_column_get_tree_view (GtkTreeViewColumn *tree_column)
   return tree_column->tree_view;
 }
 
-static void
-gtk_tree_view_column_extended_layout_get_desired_size (GtkExtendedLayout *layout,
-                                                       GtkRequisition    *minimal_size,
-                                                       GtkRequisition    *desired_size)
+
+/**
+ * gtk_tree_view_column_get_desired_size:
+ * @tree_column: A #GtkTreeViewColumn
+ * @minimum_size: location for storing the minimum size, or %NULL
+ * @natural_size: location for storing the preferred size, or %NULL
+ *
+ *
+ * Retreives @tree_column's minimum and natural size.
+ *
+ * Since: 3.0
+ */
+void
+gtk_tree_view_column_get_desired_size (GtkTreeViewColumn *column,
+				       GtkRequisition    *minimal_size,
+				       GtkRequisition    *desired_size)
 {
-  gtk_tree_view_column_cell_get_real_size (GTK_TREE_VIEW_COLUMN (layout),
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  gtk_tree_view_column_cell_get_real_size (column,
                                            NULL, NULL, NULL,
                                            minimal_size, desired_size);
 }
-
-static void
-gtk_tree_view_column_extended_layout_init (GtkExtendedLayoutIface *iface)
-{
-  iface->get_desired_size = gtk_tree_view_column_extended_layout_get_desired_size;
-}
-
 
 #define __GTK_TREE_VIEW_COLUMN_C__
 #include "gtkaliasdef.c"
