@@ -2145,8 +2145,8 @@ gtk_tree_view_get_real_natural_width_from_column (GtkTreeView       *tree_view,
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
     {
-      gtk_widget_get_desired_size (column->button,
-				   NULL, &button_natural_size);
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (column->button),
+					    NULL, &button_natural_size);
 
       column_natural_width = MAX (column_natural_width, button_natural_size.width);
     }
@@ -5727,12 +5727,8 @@ validate_row (GtkTreeView *tree_view,
       gtk_tree_view_column_cell_set_cell_data (column, tree_view->priv->model, iter,
 					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
 					       node->children?TRUE:FALSE);
-      gtk_tree_view_column_cell_get_size (column,
-					  NULL, NULL, NULL,
-					  &requested_size.width,
-                                          &requested_size.height);
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (column),
-                                            NULL, &natural_size);
+
+      gtk_tree_view_column_get_desired_size (column, &requested_size, &natural_size);
 
       if (!is_separator)
 	{
