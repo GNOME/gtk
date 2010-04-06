@@ -307,9 +307,9 @@ gtk_box_get_desired_size (GtkExtendedLayout *layout,
           GtkRequisition child_minimum_size;
           GtkRequisition child_natural_size;
 
-          gtk_widget_get_desired_size (child->widget,
-                                       &child_minimum_size,
-                                       &child_natural_size);
+          gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child->widget),
+						&child_minimum_size,
+						&child_natural_size);
 
           if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
