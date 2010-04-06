@@ -4609,24 +4609,14 @@ create_entry (GtkWidget *widget)
   GtkWidget *has_frame_check;
   GtkWidget *sensitive_check;
   GtkWidget *progress_check;
-  GtkWidget *entry, *cb;
+  GtkWidget *entry;
+  GtkComboBox *cb;
+  GtkWidget *cb_entry;
   GtkWidget *button;
   GtkWidget *separator;
-  GList *cbitems = NULL;
 
   if (!window)
     {
-      cbitems = g_list_append(cbitems, "item0");
-      cbitems = g_list_append(cbitems, "item1 item1");
-      cbitems = g_list_append(cbitems, "item2 item2 item2");
-      cbitems = g_list_append(cbitems, "item3 item3 item3 item3");
-      cbitems = g_list_append(cbitems, "item4 item4 item4 item4 item4");
-      cbitems = g_list_append(cbitems, "item5 item5 item5 item5 item5 item5");
-      cbitems = g_list_append(cbitems, "item6 item6 item6 item6 item6");
-      cbitems = g_list_append(cbitems, "item7 item7 item7 item7");
-      cbitems = g_list_append(cbitems, "item8 item8 item8");
-      cbitems = g_list_append(cbitems, "item9 item9");
-
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
@@ -4661,12 +4651,23 @@ create_entry (GtkWidget *widget)
 			G_CALLBACK (props_clicked),
 			entry);
 
-      cb = gtk_combo_new ();
-      gtk_combo_set_popdown_strings (GTK_COMBO (cb), cbitems);
-      gtk_entry_set_text (GTK_ENTRY (GTK_COMBO(cb)->entry), "hello world \n\n\n foo");
-      gtk_editable_select_region (GTK_EDITABLE (GTK_COMBO(cb)->entry),
-				  0, -1);
-      gtk_box_pack_start (GTK_BOX (box2), cb, TRUE, TRUE, 0);
+      cb = GTK_COMBO_BOX (gtk_combo_box_entry_new_text ());
+      gtk_combo_box_append_text (cb, "item0");
+      gtk_combo_box_append_text (cb, "item0");
+      gtk_combo_box_append_text (cb, "item1 item1");
+      gtk_combo_box_append_text (cb, "item2 item2 item2");
+      gtk_combo_box_append_text (cb, "item3 item3 item3 item3");
+      gtk_combo_box_append_text (cb, "item4 item4 item4 item4 item4");
+      gtk_combo_box_append_text (cb, "item5 item5 item5 item5 item5 item5");
+      gtk_combo_box_append_text (cb, "item6 item6 item6 item6 item6");
+      gtk_combo_box_append_text (cb, "item7 item7 item7 item7");
+      gtk_combo_box_append_text (cb, "item8 item8 item8");
+      gtk_combo_box_append_text (cb, "item9 item9");
+
+      cb_entry = gtk_bin_get_child (GTK_BIN (cb));
+      gtk_entry_set_text (GTK_ENTRY (cb_entry), "hello world \n\n\n foo");
+      gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
+      gtk_box_pack_start (GTK_BOX (box2), GTK_WIDGET (cb), TRUE, TRUE, 0);
 
       sensitive_check = gtk_check_button_new_with_label("Sensitive");
       gtk_box_pack_start (GTK_BOX (box2), sensitive_check, FALSE, TRUE, 0);
