@@ -4228,27 +4228,21 @@ cmw_file (GtkWidget *widget, GtkWidget *parent)
 {
     GtkWidget *fs;
 
-    fs = gtk_file_selection_new("This is a modal file selection dialog");
-
+    fs = gtk_file_chooser_dialog_new ("This is a modal file selection dialog",
+      GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
+      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      NULL);
     gtk_window_set_screen (GTK_WINDOW (fs), gtk_widget_get_screen (parent));
-
-    /* Set as modal */
-    gtk_window_set_modal (GTK_WINDOW(fs),TRUE);
-
-    /* And mark it as a transient dialog */
-    gtk_window_set_transient_for (GTK_WINDOW (fs), GTK_WINDOW (parent));
+    gtk_window_set_modal (GTK_WINDOW (fs), TRUE);
 
     g_signal_connect (fs, "destroy",
                       G_CALLBACK (cmw_destroy_cb), NULL);
+    g_signal_connect_swapped (fs, "response",
+                      G_CALLBACK (gtk_widget_destroy), fs);
 
-    g_signal_connect_swapped (GTK_FILE_SELECTION (fs)->ok_button,
-			      "clicked", G_CALLBACK (gtk_widget_destroy), fs);
-    g_signal_connect_swapped (GTK_FILE_SELECTION (fs)->cancel_button,
-			      "clicked", G_CALLBACK (gtk_widget_destroy), fs);
-    
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (fs);
-    
     gtk_main();
 }
 
