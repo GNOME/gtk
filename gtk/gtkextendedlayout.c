@@ -32,10 +32,14 @@ gtk_extended_layout_get_type (void)
   static GType extended_layout_type = 0;
 
   if (G_UNLIKELY(!extended_layout_type))
-    extended_layout_type =
-      g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkExtendedLayout"),
-                                     sizeof (GtkExtendedLayoutIface),
-                                     NULL, 0, NULL, 0);
+    {
+      extended_layout_type =
+	g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkExtendedLayout"),
+				       sizeof (GtkExtendedLayoutIface),
+				       NULL, 0, NULL, 0);
+
+      g_type_interface_add_prerequisite (extended_layout_type, GTK_TYPE_WIDGET);
+    }
 
   return extended_layout_type;
 }
@@ -46,22 +50,23 @@ gtk_extended_layout_get_type (void)
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the preferred size, or %NULL
  *
- * Retreives an extended layout item's desired size.
+ * Retreives a widget's minimum and natural size and caches the values.
  *
- * Since: 2.20
+ * <note><para>This api will consider any restrictions imposed by
+ * #GtkSizeGroup<!-- -->s or previous calls to gtk_widget_set_size_request().
+ * </para></note>
+ *
+ * Since: 3.0
  */
 void
 gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
                                       GtkRequisition    *minimum_size,
                                       GtkRequisition    *natural_size)
 {
-  GtkExtendedLayoutIface *iface;
-
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
   g_return_if_fail (NULL != minimum_size || NULL != natural_size);
 
-  iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
-  iface->get_desired_size (layout, minimum_size, natural_size);
+  _gtk_size_group_compute_desired_size (GTK_WIDGET (layout), minimum_size, natural_size);
 }
 
 /**
@@ -71,10 +76,10 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the preferred size, or %NULL
  *
- * Retreives an extended layout item's desired width if it would given
- * the size specified in @height.
+ * Retreives a widget's desired width if it would be given
+ * the specified @height.
  *
- * Since: 2.20
+ * Since: 3.0
  */
 void
 gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
@@ -85,22 +90,9 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
   GtkExtendedLayoutIface *iface;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
+
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
-
-  if (iface->get_width_for_height)
-    iface->get_width_for_height (layout, height, minimum_width, natural_width);
-  else
-    {
-      GtkRequisition minimum_size;
-      GtkRequisition natural_size;
-
-      iface->get_desired_size (layout, &minimum_size, &natural_size);
-
-      if (minimum_width)
-        *minimum_width = minimum_size.width;
-      if (natural_width)
-        *natural_width = natural_size.width;
-    }
+  iface->get_width_for_height (layout, height, minimum_width, natural_width);
 }
 
 /**
@@ -110,10 +102,10 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the preferred size, or %NULL
  *
- * Retreives an extended layout item's desired height if it would given
- * the size specified in @width.
+ * Retreives a widget's desired height if it would be given
+ * the specified @width.
  *
- * Since: 2.20
+ * Since: 3.0
  */
 void
 gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
@@ -124,22 +116,9 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
   GtkExtendedLayoutIface *iface;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
+
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
-
-  if (iface->get_height_for_width)
-    iface->get_height_for_width (layout, width, minimum_height, natural_height);
-  else
-    {
-      GtkRequisition minimum_size;
-      GtkRequisition natural_size;
-
-      iface->get_desired_size (layout, &minimum_size, &natural_size);
-
-      if (minimum_height)
-        *minimum_height = minimum_size.height;
-      if (natural_height)
-        *natural_height = natural_size.height;
-    }
+  iface->get_height_for_width (layout, width, minimum_height, natural_height);
 }
 
 #define __GTK_EXTENDED_LAYOUT_C__

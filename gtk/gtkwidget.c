@@ -10744,9 +10744,9 @@ gtk_widget_real_get_height_for_width (GtkExtendedLayout *layout,
 #if 0
   TODO: integrate height-for-width with size-groups
 #else
-  gtk_widget_get_desired_size (GTK_WIDGET(layout),
-                               minimum_height ? &minimum_size : NULL,
-                               natural_height ? &natural_size : NULL);
+  gtk_extended_layout_get_desired_size (layout,
+					minimum_height ? &minimum_size : NULL,
+					natural_height ? &natural_size : NULL);
 
   if (minimum_height)
     *minimum_height = minimum_size.height;
@@ -10769,35 +10769,15 @@ gtk_widget_real_get_width_for_height (GtkExtendedLayout *layout,
 #if 0
   TODO: integrate width-for-height with size-groups
 #else
-  gtk_widget_get_desired_size (GTK_WIDGET(layout),
-                               minimum_width ? &minimum_size : NULL,
-                               natural_width ? &natural_size : NULL);
+  gtk_extended_layout_get_desired_size (layout,
+					minimum_width ? &minimum_size : NULL,
+					natural_width ? &natural_size : NULL);
 
   if (minimum_width)
     *minimum_width = minimum_size.width;
   if (natural_width)
     *natural_width = natural_size.width;
 #endif
-}
-
-/**
- * gtk_widget_get_desired_size:
- * @widget: a #GtkWidget
- * @minimum_size: location for storing the @widget's minimum size, or %NULL
- * @natural_size: location for storing the @widget's preferred size, or %NULL
- *
- * Retreives a widget's desired size, considering restrictions imposed by
- * #GtkSizeGroup<!-- -->s. See also: gtk_extended_layout_get_desired_size().
- *
- * Since: 2.20
- */
-void
-gtk_widget_get_desired_size (GtkWidget      *widget,
-                             GtkRequisition *minimum_size,
-                             GtkRequisition *natural_size)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  _gtk_size_group_compute_desired_size (widget, minimum_size, natural_size);
 }
 
 static void
