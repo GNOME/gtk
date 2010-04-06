@@ -19,12 +19,15 @@
 
 #include "config.h"
 #include "gtkcellrenderer.h"
+#include "gtkextendedcell.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
+static void gtk_cell_renderer_init          (GtkCellRenderer      *cell);
+static void gtk_cell_renderer_class_init    (GtkCellRendererClass *class);
 static void gtk_cell_renderer_get_property  (GObject              *object,
 					     guint                 param_id,
 					     GValue               *value,
@@ -35,6 +38,8 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 					     GParamSpec           *pspec);
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
 					     GdkColor             *color);
+
+static void gtk_cell_renderer_extended_cell_init (GtkExtendedCellIface *iface);
 
 
 #define GTK_CELL_RENDERER_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER, GtkCellRendererPrivate))
@@ -72,9 +77,50 @@ enum {
   LAST_SIGNAL
 };
 
-static guint cell_renderer_signals[LAST_SIGNAL] = { 0 };
+static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_ABSTRACT_TYPE (GtkCellRenderer, gtk_cell_renderer, GTK_TYPE_OBJECT)
+
+/* Do a manual _get_type() here to avoid a deadlock implementing
+ * the interface which we are a prerequisite of.
+ */
+GType
+gtk_cell_renderer_get_type (void)
+{
+  static GType cell_renderer_type = 0;
+
+  if (G_UNLIKELY (cell_renderer_type == 0))
+    {
+      const GTypeInfo cell_renderer_info =
+      {
+	sizeof (GtkCellRendererClass),
+	NULL,		/* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_cell_renderer_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_init */
+	sizeof (GtkCellRenderer),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_cell_renderer_init,
+	NULL,		/* value_table */
+      };
+
+      const GInterfaceInfo extended_cell_info =
+      {
+	(GInterfaceInitFunc) gtk_cell_renderer_extended_cell_init,
+	(GInterfaceFinalizeFunc) NULL,
+	NULL /* interface data */
+      };
+
+      cell_renderer_type = g_type_register_static (GTK_TYPE_OBJECT, "GtkCellRenderer",
+						   &cell_renderer_info, G_TYPE_FLAG_ABSTRACT);
+
+      g_type_add_interface_static (cell_renderer_type, GTK_TYPE_EXTENDED_CELL,
+                                   &extended_cell_info) ;
+    }
+
+  return cell_renderer_type;
+}
+
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
@@ -988,6 +1034,43 @@ gtk_cell_renderer_stop_editing (GtkCellRenderer *cell,
       if (canceled)
 	g_signal_emit (cell, cell_renderer_signals[EDITING_CANCELED], 0);
     }
+}
+
+
+static void
+gtk_cell_renderer_extended_cell_get_desired_size (GtkExtendedCell   *cell,
+						  GtkWidget         *widget,
+						  GtkRequisition    *minimum_size,
+						  GtkRequisition    *natural_size)
+{
+  GtkRequisition min_req;
+
+  if (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size)
+    gtk_cell_renderer_get_size (GTK_CELL_RENDERER (cell), widget, NULL, NULL, NULL,
+				&min_req.width, &min_req.height);
+  else
+    {
+      min_req.width = 0;
+      min_req.height = 0;
+    }
+
+  if (minimum_size)
+    {
+      minimum_size->width  = min_req.width;
+      minimum_size->height = min_req.height;
+    }      
+
+  if (natural_size)
+    {
+      natural_size->width  = min_req.width;
+      natural_size->height = min_req.height;
+    }
+}
+
+static void
+gtk_cell_renderer_extended_cell_init (GtkExtendedCellIface *iface)
+{
+  iface->get_desired_size = gtk_cell_renderer_extended_cell_get_desired_size;
 }
 
 #define __GTK_CELL_RENDERER_C__

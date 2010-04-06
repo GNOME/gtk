@@ -1503,6 +1503,13 @@ gtk_expander_set_use_underline
 #endif
 #endif
 
+#if IN_HEADER(__GTK_EXTENDED_CELL_H__)
+#if IN_FILE(__GTK_EXTENDED_CELL_C__)
+gtk_extended_cell_get_type G_GNUC_CONST
+gtk_extended_cell_get_desired_size
+#endif
+#endif
+
 #if IN_HEADER(__GTK_EXTENDED_LAYOUT_H__)
 #if IN_FILE(__GTK_EXTENDED_LAYOUT_C__)
 gtk_extended_layout_get_type G_GNUC_CONST
@@ -4807,6 +4814,7 @@ gtk_tree_view_column_get_alignment
 gtk_tree_view_column_get_cell_renderers
 #endif
 gtk_tree_view_column_get_clickable
+gtk_tree_view_column_get_desired_size
 gtk_tree_view_column_get_expand
 gtk_tree_view_column_get_fixed_width
 gtk_tree_view_column_get_max_width
@@ -5242,7 +5250,6 @@ gtk_widget_show_all
 gtk_widget_show_now
 gtk_widget_size_allocate
 gtk_widget_size_request
-gtk_widget_get_desired_size
 gtk_widget_style_attach
 gtk_widget_style_get G_GNUC_NULL_TERMINATED
 gtk_widget_style_get_property
