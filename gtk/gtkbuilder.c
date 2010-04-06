@@ -1390,14 +1390,19 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         ret = FALSE;
       break;
     default:
-      g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_INVALID_VALUE,
-		   "Unsupported GType `%s'",
-		   g_type_name (type));
       ret = FALSE;
       break;
     }
+ 
+  /* Catch unassigned error for object types as well as any unsupported types.
+   * While parsing GtkBuilder; object types are deserialized
+   * without calling gtk_builder_value_from_string_type().
+   */
+  if (!ret && error && *error == NULL) 
+    g_set_error (error,
+		 GTK_BUILDER_ERROR,
+		 GTK_BUILDER_ERROR_INVALID_VALUE,
+		 "Unsupported GType `%s'", g_type_name (type));
 
   return ret;
 }
