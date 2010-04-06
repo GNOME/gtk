@@ -6202,26 +6202,19 @@ create_dialog (GtkWidget *widget)
 /* Display & Screen test 
  */
 
-typedef struct 
-{ 
-  GtkEntry *entry;
-  GtkWidget *radio_dpy;
-  GtkWidget *toplevel; 
-  GtkWidget *dialog_window;
-  GList *valid_display_list;
-} ScreenDisplaySelection;
-
-static gint
-display_name_cmp (gconstpointer a,
-		  gconstpointer b)
+typedef struct
 {
-  return g_ascii_strcasecmp (a,b);
-}
+  GtkWidget *combo;
+  GtkWidget *entry;
+  GtkWidget *radio_dpy;
+  GtkWidget *toplevel;
+  GtkWidget *dialog_window;
+} ScreenDisplaySelection;
 
 static void
 screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
 {
-  char *display_name;
+  const gchar *display_name;
   GdkDisplay *display = gtk_widget_get_display (widget);
   GtkWidget *dialog;
   GdkScreen *new_screen = NULL;
@@ -6229,7 +6222,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data->radio_dpy)))
     {
-      display_name = g_strdup (gtk_entry_get_text (data->entry));
+      display_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
       display = gdk_display_open (display_name);
       
       if (!display)
@@ -6247,15 +6240,25 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
 			    NULL);
 	}
       else
-	{
-	  if (!g_list_find_custom (data->valid_display_list, 
-				   display_name,
-				   display_name_cmp))
-	    data->valid_display_list = g_list_append (data->valid_display_list,
-						      display_name);
-	  
-	  new_screen = gdk_display_get_default_screen (display);
-	}
+        {
+          GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (data->combo));
+          gint i = 0;
+          GtkTreeIter iter;
+          gboolean found = FALSE;
+          while (gtk_tree_model_iter_nth_child (model, &iter, NULL, i++))
+            {
+              gchar *name;
+              gtk_tree_model_get (model, &iter, 0, &name, -1);
+              found = !g_ascii_strcasecmp (display_name, name);
+              g_free (name);
+
+              if (found)
+                break;
+            }
+          if (!found)
+            gtk_combo_box_append_text (GTK_COMBO_BOX (data->combo), display_name);
+          new_screen = gdk_display_get_default_screen (display);
+        }
     }
   else
     {
@@ -6288,8 +6291,6 @@ create_display_screen (GtkWidget *widget)
   GtkWidget *bbox;
   ScreenDisplaySelection *scr_dpy_data;
   GdkScreen *screen = gtk_widget_get_screen (widget);
-  static GList *valid_display_list = NULL;
-  
   GdkDisplay *display = gdk_screen_get_display (screen);
 
   window = g_object_new (gtk_window_get_type (),
@@ -6325,14 +6326,10 @@ create_display_screen (GtkWidget *widget)
 	 "only one screen on the current display");
       gtk_widget_set_sensitive (radio_scr, FALSE);
     }
-  combo_dpy = gtk_combo_new ();
-  if (!valid_display_list)
-    valid_display_list = g_list_append (valid_display_list, "diabolo:0.0");
-    
-  gtk_combo_set_popdown_strings (GTK_COMBO (combo_dpy), valid_display_list);
-    
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo_dpy)->entry), 
-		      "<hostname>:<X Server Num>.<Screen Num>");
+  combo_dpy = gtk_combo_box_new_text ();
+  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_dpy), "diabolo:0.0");
+  gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
+                      "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_table_attach_defaults (GTK_TABLE (table), radio_dpy, 0, 1, 0, 1);
   gtk_table_attach_defaults (GTK_TABLE (table), radio_scr, 0, 1, 1, 2);
@@ -6349,11 +6346,10 @@ create_display_screen (GtkWidget *widget)
 
   scr_dpy_data = g_new0 (ScreenDisplaySelection, 1);
 
-  scr_dpy_data->entry = GTK_ENTRY (GTK_COMBO (combo_dpy)->entry);
+  scr_dpy_data->entry = gtk_bin_get_child (GTK_BIN (combo_dpy));
   scr_dpy_data->radio_dpy = radio_dpy;
   scr_dpy_data->toplevel = gtk_widget_get_toplevel (widget);
   scr_dpy_data->dialog_window = window;
-  scr_dpy_data->valid_display_list = valid_display_list;
 
   g_signal_connect (cancelb, "clicked", 
 		    G_CALLBACK (screen_display_destroy_diag), window);
