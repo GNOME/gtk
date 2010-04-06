@@ -771,7 +771,7 @@ init_randr13 (GdkScreen *screen)
       XRROutputInfo *output =
 	XRRGetOutputInfo (dpy, resources, resources->outputs[i]);
 
-      if (primary_output != None && resources->outputs[i] == primary_output)
+      if (resources->outputs[i] == primary_output)
         {
           screen_x11->primary_monitor = i;
         }
@@ -786,7 +786,7 @@ init_randr13 (GdkScreen *screen)
         }
 
       /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
-      if (g_ascii_strncasecmp (output->name, "LVDS", 4) == 0)
+      if (primary_output == None && g_ascii_strncasecmp (output->name, "LVDS", 4) == 0)
         {
           screen_x11->primary_monitor = i;
         }
