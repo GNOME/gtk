@@ -3983,14 +3983,6 @@ create_menus (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-static void
-gtk_ifactory_cb (gpointer             callback_data,
-		 guint                callback_action,
-		 GtkWidget           *widget)
-{
-  g_message ("ItemFactory: activated \"%s\"", gtk_item_factory_path_from_widget (widget));
-}
-
 /* GdkPixbuf RGBA C-Source image dump */
 
 static const guint8 apple[] = 
@@ -4095,156 +4087,6 @@ dump_accels (gpointer             callback_data,
 	     GtkWidget           *widget)
 {
   gtk_accel_map_save_fd (1 /* stdout */);
-}
-    
-static GtkItemFactoryEntry menu_items[] =
-{
-  { "/_File",                  NULL,         NULL,                  0, "<Branch>" },
-  { "/File/tearoff1",          NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
-  { "/File/_New",              NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_NEW },
-  { "/File/_Open",             NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_OPEN },
-  { "/File/_Save",             NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
-  { "/File/Save _As...",       "<control>A", gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_SAVE },
-  { "/File/_Dump \"_Accels\"",  NULL,        dump_accels,           0 },
-  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly",
-                                NULL,        gtk_ifactory_cb,       0 },
-  { "/File/sep1",        NULL,               gtk_ifactory_cb,       0, "<Separator>" },
-  { "/File/_Quit",       NULL,               gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_QUIT },
-
-  { "/_Preferences",     		NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/_Color", 		NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/Color/_Red",      	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
-  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
-  { "/_Preferences/_Shape", 		NULL, 0,               0, "<Branch>" },
-  { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
-  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
-  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
-  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
-  { "/_Preferences/Shape/_Image",       NULL, gtk_ifactory_cb, 0, "<ImageItem>", apple },
-  { "/_Preferences/Coffee",                  NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
-  { "/_Preferences/Toast",                   NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
-  { "/_Preferences/Marshmallow Froot Loops", NULL, gtk_ifactory_cb, 0, "<CheckItem>" },
-
-  /* For testing deletion of menus */
-  { "/_Preferences/Should_NotAppear",          NULL, 0,               0, "<Branch>" },
-  { "/Preferences/ShouldNotAppear/SubItem1",   NULL, gtk_ifactory_cb, 0 },
-  { "/Preferences/ShouldNotAppear/SubItem2",   NULL, gtk_ifactory_cb, 0 },
-
-  { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
-  { "/Help/_Help",       NULL,         gtk_ifactory_cb,       0, "<StockItem>", GTK_STOCK_HELP},
-  { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
-};
-
-
-static int nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
-
-static void
-create_item_factory (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  
-  if (!window)
-    {
-      GtkWidget *box1;
-      GtkWidget *box2;
-      GtkWidget *separator;
-      GtkWidget *label;
-      GtkWidget *button;
-      GtkAccelGroup *accel_group;
-      GtkItemFactory *item_factory;
-
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-      
-      g_signal_connect (window, "destroy",
-			G_CALLBACK(gtk_widget_destroyed),
-			&window);
-      g_signal_connect (window, "delete-event",
-			G_CALLBACK (gtk_true),
-			NULL);
-      
-      accel_group = gtk_accel_group_new ();
-      item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-      g_object_set_data_full (G_OBJECT (window),
-			      "<main>",
-			      item_factory,
-			      g_object_unref);
-      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-      gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
-
-      /* preselect /Preferences/Shape/Oval over the other radios
-       */
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
-										      "/Preferences/Shape/Oval")),
-				      TRUE);
-
-      /* preselect /Preferences/Coffee
-       */
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
-										      "/Preferences/Coffee")),
-				      TRUE);
-
-      /* preselect /Preferences/Marshmallow Froot Loops and set it insensitive
-       */
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
-										      "/Preferences/Marshmallow Froot Loops")),
-				      TRUE);
-      gtk_widget_set_sensitive (GTK_WIDGET (gtk_item_factory_get_item (item_factory,
-								       "/Preferences/Marshmallow Froot Loops")),
-				FALSE);
-       
-      /* Test how tooltips (ugh) work on menu items
-       */
-      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/New"),
-                                   "Create a new file");
-      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/Open"),
-                                   "Open a file");
-      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/File/Save"),
-                                   "Safe file");
-      gtk_widget_set_tooltip_text (gtk_item_factory_get_item (item_factory, "/Preferences/Color"),
-                                   "Modify color");
-
-      box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-      
-      gtk_box_pack_start (GTK_BOX (box1),
-			  gtk_item_factory_get_widget (item_factory, "<main>"),
-			  FALSE, FALSE, 0);
-
-      label = gtk_label_new ("Type\n<alt>\nto start");
-      gtk_widget_set_size_request (label, 200, 200);
-      gtk_misc_set_alignment (GTK_MISC (label), 0.5, 0.5);
-      gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
-
-
-      separator = gtk_hseparator_new ();
-      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-
-
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-
-      gtk_item_factory_delete_item (item_factory, "/Preferences/ShouldNotAppear");
-      
-      gtk_widget_show_all (window);
-    }
-  else
-    gtk_widget_destroy (window);
 }
 
 static GtkWidget *
@@ -10859,7 +10701,6 @@ struct {
   { "handle box", create_handle_box },
   { "image from drawable", create_get_image },
   { "image", create_image },
-  { "item factory", create_item_factory },
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
   { "layout", create_layout },
