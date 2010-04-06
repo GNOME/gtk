@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
-#include "gtkextendedlayout.h"
+#include "gtkextendedcell.h"
 #include "gtkentry.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
@@ -62,7 +62,7 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
 
-static void       gtk_cell_renderer_text_extended_layout_init (GtkExtendedLayoutIface *iface);
+static void       gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface *iface);
 
 enum {
   EDITED,
@@ -151,12 +151,11 @@ struct _GtkCellRendererTextPrivate
   gint wrap_width;
   
   GtkWidget *entry;
-  GtkWidget *owner;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_cell_renderer_text_extended_layout_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_CELL,
+                                                gtk_cell_renderer_text_extended_cell_init))
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -1500,7 +1499,6 @@ get_size (GtkCellRenderer *cell,
   GtkCellRendererTextPrivate *priv;
 
   priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
-  priv->owner = widget;
 
   if (celltext->calc_fixed_height)
     {
@@ -1938,58 +1936,41 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 }
 
 static void
-gtk_cell_renderer_text_extended_layout_get_desired_size (GtkExtendedLayout *layout,
-                                                         GtkRequisition    *minimal_size,
-                                                         GtkRequisition    *desired_size)
+gtk_cell_renderer_text_extended_cell_get_desired_size (GtkExtendedCell   *cell,
+						       GtkWidget         *widget,
+						       GtkRequisition    *minimal_size,
+						       GtkRequisition    *desired_size)
 {
   GtkCellRendererTextPrivate *priv;
 
-  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (layout);
+  priv = GTK_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
 
-  if (priv->owner)
+  if (minimal_size)
     {
-
-      if (minimal_size)
-	{
-	  get_size (GTK_CELL_RENDERER (layout),
-		    priv->owner, NULL, NULL, NULL, NULL,
-		    &minimal_size->width, &minimal_size->height);
-	}
-      
-      if (desired_size)
-	{
-	  PangoEllipsizeMode ellipsize;
-	  
-	  ellipsize = priv->ellipsize;
-	  priv->ellipsize = PANGO_ELLIPSIZE_NONE;
-	  
-	  get_size (GTK_CELL_RENDERER (layout),
-		    priv->owner, NULL, NULL, NULL, NULL,
-		    &desired_size->width, &desired_size->height);
-	  
-	  priv->ellipsize = ellipsize;
-	}
+      get_size (GTK_CELL_RENDERER (cell),
+		widget, NULL, NULL, NULL, NULL,
+		&minimal_size->width, &minimal_size->height);
     }
-  else
+  
+  if (desired_size)
     {
-      if (minimal_size)
-	{
-	  minimal_size->height = 0;
-	  minimal_size->width = 0;
-	}
+      PangoEllipsizeMode ellipsize;
       
-      if (desired_size)
-	{
-	  desired_size->height = 0;
-	  desired_size->width = 0;
-	}
+      ellipsize = priv->ellipsize;
+      priv->ellipsize = PANGO_ELLIPSIZE_NONE;
+      
+      get_size (GTK_CELL_RENDERER (cell),
+		widget, NULL, NULL, NULL, NULL,
+		&desired_size->width, &desired_size->height);
+      
+      priv->ellipsize = ellipsize;
     }
 }
 
 static void
-gtk_cell_renderer_text_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface *iface)
 {
-  iface->get_desired_size = gtk_cell_renderer_text_extended_layout_get_desired_size;
+  iface->get_desired_size = gtk_cell_renderer_text_extended_cell_get_desired_size;
 }
 
 #define __GTK_CELL_RENDERER_TEXT_C__
