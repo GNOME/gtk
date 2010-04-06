@@ -874,9 +874,6 @@ void	   gtk_widget_size_request	  (GtkWidget	       *widget,
 					   GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
-void       gtk_widget_get_desired_size    (GtkWidget           *widget,
-					   GtkRequisition      *minimum_size,
-					   GtkRequisition      *natural_size);
 void       gtk_widget_get_child_requisition (GtkWidget	       *widget,
 					     GtkRequisition    *requisition);
 void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
