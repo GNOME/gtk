@@ -61,8 +61,6 @@ static gint gtk_viewport_expose                   (GtkWidget        *widget,
 						   GdkEventExpose   *event);
 static void gtk_viewport_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
-static void gtk_viewport_size_request             (GtkWidget        *widget,
-						   GtkRequisition   *requisition);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
@@ -70,7 +68,11 @@ static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 static void gtk_viewport_style_set                (GtkWidget *widget,
 			                           GtkStyle  *previous_style);
 
-G_DEFINE_TYPE (GtkViewport, gtk_viewport, GTK_TYPE_BIN)
+static void gtk_viewport_extended_layout_init     (GtkExtendedLayoutIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_viewport_extended_layout_init))
 
 static void
 gtk_viewport_class_init (GtkViewportClass *class)
@@ -93,7 +95,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->realize = gtk_viewport_realize;
   widget_class->unrealize = gtk_viewport_unrealize;
   widget_class->expose_event = gtk_viewport_expose;
-  widget_class->size_request = gtk_viewport_size_request;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_set = gtk_viewport_style_set;
   
@@ -726,31 +727,6 @@ gtk_viewport_add (GtkContainer *container,
 }
 
 static void
-gtk_viewport_size_request (GtkWidget      *widget,
-			   GtkRequisition *requisition)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkRequisition child_requisition;
-
-  requisition->width = GTK_CONTAINER (widget)->border_width;
-
-  requisition->height = GTK_CONTAINER (widget)->border_width;
-
-  if (GTK_VIEWPORT (widget)->shadow_type != GTK_SHADOW_NONE)
-    {
-      requisition->width += 2 * widget->style->xthickness;
-      requisition->height += 2 * widget->style->ythickness;
-    }
-
-  if (bin->child && gtk_widget_get_visible (bin->child))
-    {
-      gtk_widget_size_request (bin->child, &child_requisition);
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-    }
-}
-
-static void
 gtk_viewport_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
@@ -851,6 +827,46 @@ gtk_viewport_style_set (GtkWidget *widget,
 	gtk_style_set_background (widget->style, viewport->bin_window, GTK_STATE_NORMAL);
 	gtk_style_set_background (widget->style, widget->window, widget->state);
      }
+}
+
+static void
+gtk_viewport_get_desired_size (GtkExtendedLayout *layout,
+			       GtkRequisition    *minimum_size,
+			       GtkRequisition    *natural_size)
+{
+  GtkWidget     *child;
+  GtkRequisition child_min, child_nat;
+
+  child = gtk_bin_get_child (GTK_BIN (layout));
+
+  minimum_size->width  = GTK_CONTAINER (layout)->border_width;
+  minimum_size->height = GTK_CONTAINER (layout)->border_width;
+  natural_size->width  = GTK_CONTAINER (layout)->border_width;
+  natural_size->height = GTK_CONTAINER (layout)->border_width;
+
+  if (GTK_VIEWPORT (layout)->shadow_type != GTK_SHADOW_NONE)
+    {
+      minimum_size->width  += 2 * GTK_WIDGET (layout)->style->xthickness;
+      minimum_size->height += 2 * GTK_WIDGET (layout)->style->ythickness;
+      natural_size->width  += 2 * GTK_WIDGET (layout)->style->xthickness;
+      natural_size->height += 2 * GTK_WIDGET (layout)->style->ythickness;
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), &child_min, &child_nat);
+
+      minimum_size->width  += child_min.width;
+      minimum_size->height += child_min.height;
+      natural_size->width  += child_nat.width;
+      natural_size->height += child_nat.height;
+    }
+}
+
+static void
+gtk_viewport_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_size = gtk_viewport_get_desired_size;
 }
 
 #define __GTK_VIEWPORT_C__
