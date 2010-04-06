@@ -6944,6 +6944,8 @@ create_notebook (GtkWidget *widget)
   GtkWidget *separator;
   GtkWidget *omenu;
   GtkWidget *label;
+  GdkPixbuf *book_open_xpm;
+  GdkPixbuf *book_closed_xpm;
 
   static gchar *items[] =
   {
