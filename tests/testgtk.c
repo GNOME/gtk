@@ -6652,22 +6652,6 @@ create_rulers (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-static void
-text_toggle_editable (GtkWidget *checkbutton,
-		       GtkWidget *text)
-{
-   gtk_text_set_editable(GTK_TEXT(text),
-			  GTK_TOGGLE_BUTTON(checkbutton)->active);
-}
-
-static void
-text_toggle_word_wrap (GtkWidget *checkbutton,
-		       GtkWidget *text)
-{
-   gtk_text_set_word_wrap(GTK_TEXT(text),
-			  GTK_TOGGLE_BUTTON(checkbutton)->active);
-}
-
 struct {
   GdkColor color;
   gchar *name;
