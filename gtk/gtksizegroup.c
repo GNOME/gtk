@@ -678,10 +678,12 @@ do_size_request (GtkWidget *widget)
        */
       extended_minimum.width  = 0;
       extended_minimum.height = 0;
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget),
-                                            &extended_minimum,
-                                            &aux_info->natural_size);
 
+      GTK_EXTENDED_LAYOUT_GET_IFACE
+	(widget)->get_desired_size (GTK_EXTENDED_LAYOUT (widget),
+				    &extended_minimum,
+				    &aux_info->natural_size);
+      
       /* Base the base widget requisition on both the size-requst and the extended layout size
        */
       widget->requisition.width  = MAX (widget->requisition.width,  extended_minimum.width);
