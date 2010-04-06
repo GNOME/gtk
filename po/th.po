@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-22 23:34-0400\n"
-"PO-Revision-Date: 2010-02-08 11:11+0700\n"
+"PO-Revision-Date: 2010-04-06 15:08+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -397,10 +397,10 @@ msgid "Image pixel data corrupt"
 msgstr "ข้อมูลพิกเซลในแฟ้มเสีย"
 
 #: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] "จัดสรรเนื้อที่ %d ไบต์เพื่อเป็นบัฟเฟอร์สำหรับอ่านแฟ้มไม่สำเร็จ"
+msgstr[0] "จัดสรรเนื้อที่ %u ไบต์เพื่อเป็นบัฟเฟอร์รูปภาพไม่สำเร็จ"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -879,9 +879,8 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr "ข้าม %d ไบต์ถัดไปด้วย seek() ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-qtif.c:257
-#, fuzzy
 msgid "Failed to allocate QTIF context structure."
-msgstr "สร้างโครงสร้าง QTIF context ไม่สำเร็จ"
+msgstr "จัดสรรหน่วยความจำสำหรับโครงสร้าง QTIF context ไม่สำเร็จ"
 
 #: gdk-pixbuf/io-qtif.c:317
 msgid "Failed to create GdkPixbufLoader object."
@@ -937,9 +936,8 @@ msgid "Cannot allocate new pixbuf"
 msgstr "หน่วยความจำไม่พอสำหรับพิกซ์บัฟใหม่"
 
 #: gdk-pixbuf/io-tga.c:686
-#, fuzzy
 msgid "Image is corrupted or truncated"
-msgstr "แฟ้ม GIF ถูกตัดตอนหรือไม่สมบูรณ์"
+msgstr "รูปภาพเสียหายหรือถูกตัดตอน"
 
 #: gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
@@ -2220,7 +2218,6 @@ msgid "System"
 msgstr "ระบบ"
 
 #: gtk/gtkimmulticontext.c:573
-#, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "ไม่มี"
