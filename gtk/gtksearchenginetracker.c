@@ -107,12 +107,17 @@ open_libtracker (void)
       done = TRUE;
       flags = G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL;
 
-      tracker = g_module_open ("libtracker-client-0.7.so.0", flags);
-      version = TRACKER_0_7;
+      tracker = g_module_open ("libtracker-client-0.8.so.0", flags);
+      version = TRACKER_0_8;
 
-      if (tracker && g_module_symbol (tracker, "tracker_resources_sparql_query_async", &x))
+      if (!tracker)
         {
-            version = TRACKER_0_8;
+          tracker = g_module_open ("libtracker-client-0.7.so.0", flags);
+
+          if (tracker && !g_module_symbol (tracker, "tracker_resources_sparql_query_async", &x))
+            {
+              version = TRACKER_0_7;
+            }
         }
 
       if (!tracker)
