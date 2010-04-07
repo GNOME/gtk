@@ -37,6 +37,7 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkactivatable.h"
+#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -111,8 +112,6 @@ static void gtk_button_unrealize (GtkWidget * widget);
 static void gtk_button_map (GtkWidget * widget);
 static void gtk_button_unmap (GtkWidget * widget);
 static void gtk_button_style_set (GtkWidget * widget, GtkStyle * prev_style);
-static void gtk_button_size_request (GtkWidget * widget,
-				     GtkRequisition * requisition);
 static void gtk_button_size_allocate (GtkWidget * widget,
 				      GtkAllocation * allocation);
 static gint gtk_button_expose (GtkWidget * widget, GdkEventExpose * event);
@@ -148,7 +147,7 @@ static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
 
 
-static void gtk_button_activatable_interface_init         (GtkActivatableIface  *iface);
+static void gtk_button_activatable_interface_init(GtkActivatableIface  *iface);
 static void gtk_button_update                    (GtkActivatable       *activatable,
 				                  GtkAction            *action,
 			                          const gchar          *property_name);
@@ -159,11 +158,18 @@ static void gtk_button_set_related_action        (GtkButton            *button,
 static void gtk_button_set_use_action_appearance (GtkButton            *button,
 						  gboolean              use_appearance);
 
+static void gtk_button_extended_layout_init      (GtkExtendedLayoutIface *iface);
+static void gtk_button_get_desired_size          (GtkExtendedLayout      *layout,
+						  GtkRequisition         *minimum_size,
+						  GtkRequisition         *natural_size);
+  
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-						gtk_button_activatable_interface_init))
+						gtk_button_activatable_interface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_button_extended_layout_init))
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)
@@ -191,7 +197,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->map = gtk_button_map;
   widget_class->unmap = gtk_button_unmap;
   widget_class->style_set = gtk_button_style_set;
-  widget_class->size_request = gtk_button_size_request;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->expose_event = gtk_button_expose;
   widget_class->button_press_event = gtk_button_button_press;
@@ -1331,49 +1336,6 @@ gtk_button_get_props (GtkButton *button,
   if (interior_focus)
     gtk_widget_style_get (widget, "interior-focus", interior_focus, NULL);
 }
-	
-static void
-gtk_button_size_request (GtkWidget      *widget,
-			 GtkRequisition *requisition)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkBorder default_border;
-  GtkBorder inner_border;
-  gint focus_width;
-  gint focus_pad;
-
-  gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
-  gtk_widget_style_get (GTK_WIDGET (widget),
-			"focus-line-width", &focus_width,
-			"focus-padding", &focus_pad,
-			NULL);
- 
-  requisition->width = ((GTK_CONTAINER (widget)->border_width +
-                         GTK_WIDGET (widget)->style->xthickness) * 2 +
-                        inner_border.left + inner_border.right);
-  requisition->height = ((GTK_CONTAINER (widget)->border_width +
-                          GTK_WIDGET (widget)->style->ythickness) * 2 +
-                         inner_border.top + inner_border.bottom);
-
-  if (gtk_widget_get_can_default (widget))
-    {
-      requisition->width += default_border.left + default_border.right;
-      requisition->height += default_border.top + default_border.bottom;
-    }
-
-  if (GTK_BIN (button)->child && gtk_widget_get_visible (GTK_BIN (button)->child))
-    {
-      GtkRequisition child_requisition;
-
-      gtk_widget_size_request (GTK_BIN (button)->child, &child_requisition);
-
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-    }
-  
-  requisition->width += 2 * (focus_width + focus_pad);
-  requisition->height += 2 * (focus_width + focus_pad);
-}
 
 static void
 gtk_button_size_allocate (GtkWidget     *widget,
@@ -1802,6 +1764,66 @@ gtk_button_finish_activate (GtkButton *button,
   if (do_it)
     gtk_button_clicked (button);
 }
+
+
+static void
+gtk_button_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_size = gtk_button_get_desired_size;
+}
+
+static void
+gtk_button_get_desired_size (GtkExtendedLayout *layout,
+			     GtkRequisition    *minimum_size,
+			     GtkRequisition    *natural_size)
+{
+  GtkButton *button = GTK_BUTTON (layout);
+  GtkWidget *child;
+  GtkBorder default_border;
+  GtkBorder inner_border;
+  gint focus_width;
+  gint focus_pad;
+
+  gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
+  gtk_widget_style_get (GTK_WIDGET (layout),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
+ 
+  minimum_size->width = ((GTK_CONTAINER (layout)->border_width +
+			  GTK_WIDGET (layout)->style->xthickness) * 2 +
+			 inner_border.left + inner_border.right);
+  minimum_size->height = ((GTK_CONTAINER (layout)->border_width +
+			   GTK_WIDGET (layout)->style->ythickness) * 2 +
+			  inner_border.top + inner_border.bottom);
+
+  if (gtk_widget_get_can_default (GTK_WIDGET (layout)))
+    {
+      minimum_size->width += default_border.left + default_border.right;
+      minimum_size->height += default_border.top + default_border.bottom;
+    }
+
+  minimum_size->width += 2 * (focus_width + focus_pad);
+  minimum_size->height += 2 * (focus_width + focus_pad);
+
+  *natural_size = *minimum_size;
+
+  if ((child = gtk_bin_get_child (GTK_BIN (button))) && 
+      gtk_widget_get_visible (child))
+    {
+      GtkRequisition child_min;
+      GtkRequisition child_nat;
+
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), 
+					    &child_min, &child_nat);
+
+      minimum_size->width  += child_min.width;
+      minimum_size->height += child_min.height;
+      natural_size->width  += child_nat.width;
+      natural_size->height += child_nat.height;
+    }
+}
+
 
 /**
  * gtk_button_set_label:
