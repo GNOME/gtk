@@ -664,7 +664,6 @@ GdkWindow *_gdk_window_get_input_window_for_event (GdkWindow *native_window,
 						   GdkEventType event_type,
 						   int x, int y,
 						   gulong serial);
-GdkRegion  *_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects, int n_rects);
 
 /*****************************
  * offscreen window routines *

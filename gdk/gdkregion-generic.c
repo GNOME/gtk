@@ -17,14 +17,6 @@ gdk_region_new (void)
   return cairo_region_create ();
 }
 
-GdkRegion *
-_gdk_region_new_from_yxbanded_rects (GdkRectangle *rects,
-				     int num_rects)
-{
-  return cairo_region_create_rectangles ((cairo_rectangle_int_t *) rects, num_rects);
-}
-
-
 /**
  * gdk_region_rectangle:
  * @rectangle: a #GdkRectangle
