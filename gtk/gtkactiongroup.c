@@ -731,7 +731,7 @@ gtk_action_group_set_visible (GtkActionGroup *action_group,
  *
  * Looks up an action in the action group by name.
  *
- * Returns: (transfer-none): the action, or %NULL if no action by that name exists
+ * Returns: (transfer none): the action, or %NULL if no action by that name exists
  *
  * Since: 2.4
  */
