@@ -55,8 +55,6 @@ struct _GtkAlignmentPrivate
   guint padding_right;
 };
 
-static void gtk_alignment_size_request  (GtkWidget         *widget,
-					 GtkRequisition    *requisition);
 static void gtk_alignment_size_allocate (GtkWidget         *widget,
 					 GtkAllocation     *allocation);
 static void gtk_alignment_set_property (GObject         *object,
@@ -68,7 +66,14 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
+static void gtk_alignment_extended_layout_init      (GtkExtendedLayoutIface *iface);
+static void gtk_alignment_get_desired_size          (GtkExtendedLayout      *layout,
+						     GtkRequisition         *minimum_size,
+						     GtkRequisition         *natural_size);
+
+G_DEFINE_TYPE_WITH_CODE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_alignment_extended_layout_init))
 
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
@@ -82,7 +87,6 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
   gobject_class->set_property = gtk_alignment_set_property;
   gobject_class->get_property = gtk_alignment_get_property;
 
-  widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
 
   g_object_class_install_property (gobject_class,
@@ -410,34 +414,6 @@ gtk_alignment_set (GtkAlignment *alignment,
 
 
 static void
-gtk_alignment_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition)
-{
-  GtkBin *bin;
-  GtkAlignmentPrivate *priv;
-
-  bin = GTK_BIN (widget);
-  priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
-
-  requisition->width = GTK_CONTAINER (widget)->border_width * 2;
-  requisition->height = GTK_CONTAINER (widget)->border_width * 2;
-
-  if (bin->child && gtk_widget_get_visible (bin->child))
-    {
-      GtkRequisition child_requisition;
-      
-      gtk_widget_size_request (bin->child, &child_requisition);
-
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-
-      /* Request extra space for the padding: */
-      requisition->width += (priv->padding_left + priv->padding_right);
-      requisition->height += (priv->padding_top + priv->padding_bottom);
-    }
-}
-
-static void
 gtk_alignment_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
@@ -501,6 +477,48 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
 
       gtk_widget_size_allocate (bin->child, &child_allocation);
+    }
+}
+
+
+static void
+gtk_alignment_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_size = gtk_alignment_get_desired_size;
+}
+
+static void
+gtk_alignment_get_desired_size (GtkExtendedLayout *layout,
+				GtkRequisition    *minimum_size,
+				GtkRequisition    *natural_size)
+{
+  GtkWidget *child;
+  GtkAlignmentPrivate *priv;
+
+  priv = GTK_ALIGNMENT_GET_PRIVATE (layout);
+
+  minimum_size->width = GTK_CONTAINER (layout)->border_width * 2;
+  minimum_size->height = GTK_CONTAINER (layout)->border_width * 2;
+
+  *natural_size = *minimum_size;
+
+  if ((child = gtk_bin_get_child (GTK_BIN (layout))) && gtk_widget_get_visible (child))
+    {
+      GtkRequisition child_min, child_nat;
+
+      /* Request extra space for the padding: */
+      minimum_size->width  += (priv->padding_left + priv->padding_right);
+      minimum_size->height += (priv->padding_top + priv->padding_bottom);
+
+      *natural_size = *minimum_size;
+
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), 
+					    &child_min, &child_nat);
+
+      minimum_size->width  += child_min.width;
+      minimum_size->height += child_min.height;
+      natural_size->width  += child_nat.width;
+      natural_size->height += child_nat.height;
     }
 }
 
