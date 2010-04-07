@@ -4610,10 +4610,7 @@ _xwindow_get_shape (Display *xdisplay,
 			     window,
 			     shape_type, &rn, &ord);
 
-  if (xrl == NULL)
-    return NULL; /* XShape not supported */
-
-  if (rn == 0)
+  if (xrl == NULL || rn == 0)
     return gdk_region_new (); /* Empty */
 
   if (ord != YXBanded)
