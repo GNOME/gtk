@@ -228,15 +228,6 @@ enum {
   GTK_TREE_MODEL_ROW,
 };
 
-static gboolean
-search_is_possible (GtkFileChooserDefault *impl)
-{
-  if (impl->search_engine == NULL)
-    impl->search_engine = _gtk_search_engine_new ();
-  
-  return impl->search_engine != NULL;
-}
-
 /* Interesting places in the shortcuts bar */
 typedef enum {
   SHORTCUTS_SEARCH,
@@ -2266,10 +2257,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					      G_TYPE_BOOLEAN,   /* pixbuf cell visibility */
 					      G_TYPE_POINTER);  /* GCancellable */
 
-  if (search_is_possible (impl))
-    {
-      shortcuts_append_search (impl);
-    }
+  shortcuts_append_search (impl);
 
   if (impl->recent_manager)
     {
