@@ -23,6 +23,7 @@
 
 #include <config.h>
 #include "gtkextendedlayout.h"
+#include "gtksizegroup.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -93,6 +94,8 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
 
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
   iface->get_width_for_height (layout, height, minimum_width, natural_width);
+
+  g_assert (!minimum_width || !natural_width || *minimum_width <= *natural_width);
 }
 
 /**
@@ -119,6 +122,8 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
 
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
   iface->get_height_for_width (layout, width, minimum_height, natural_height);
+
+  g_assert (!minimum_height || !natural_height || *minimum_height <= *natural_height);
 }
 
 #define __GTK_EXTENDED_LAYOUT_C__
