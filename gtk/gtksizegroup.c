@@ -860,32 +860,42 @@ get_dimensions (GtkWidget        *widget,
 }
 
 static void
-get_fast_child_requisition (GtkWidget      *widget,
-			    GtkRequisition *requisition)
+get_fast_size (GtkWidget      *widget,
+	       GtkRequisition *minimum_size,
+	       GtkRequisition *natural_size)
 {
   GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
   
-  *requisition = widget->requisition;
-  
-  if (aux_info)
+  if (minimum_size)
     {
-      if (aux_info->width > 0)
-	requisition->width = aux_info->width;
-      if (aux_info->height > 0)
-	requisition->height = aux_info->height;
+      *minimum_size = widget->requisition;
+  
+      if (aux_info)
+	{
+	  if (aux_info->width > 0)
+	    minimum_size->width = aux_info->width;
+	  if (aux_info->height > 0)
+	    minimum_size->height = aux_info->height;
+	}
     }
-}
 
-static void
-get_fast_natural_size (GtkWidget      *widget,
-                       GtkRequisition *requisition)
-{
-  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+  if (natural_size)
+    {
+      if (aux_info)
+	{
+	  *natural_size = aux_info->natural_size;
 
-  if (aux_info)
-    *requisition = aux_info->natural_size;
-  else
-    *requisition = widget->requisition;
+	  /* Explicit size request sets the baseline for natural size 
+	   * as well as the minimum size 
+	   */
+	  if (aux_info->width > natural_size->width)
+	    natural_size->width = aux_info->width;
+	  if (aux_info->height > natural_size->height)
+	    natural_size->height = aux_info->height;
+	}
+      else
+	*natural_size = widget->requisition;
+    }
 }
 
 /**
@@ -895,6 +905,8 @@ get_fast_natural_size (GtkWidget      *widget,
  * 
  * Retrieve the "child requisition" of the widget, taking account grouping
  * of the widget's requisition with other widgets.
+ *
+ * Deprecated: 3.0: Use _gtk_size_group_compute_desired_size() instead
  **/
 void
 _gtk_size_group_get_child_requisition (GtkWidget      *widget,
@@ -912,7 +924,7 @@ _gtk_size_group_get_child_requisition (GtkWidget      *widget,
 	  /* Only do the full computation if we actually have size groups */
 	}
       else
-	get_fast_child_requisition (widget, requisition);
+	get_fast_size (widget, requisition, NULL);
     }
 }
 
@@ -947,10 +959,7 @@ _gtk_size_group_compute_desired_size (GtkWidget      *widget,
     {
       do_size_request (widget);
 
-      if (minimum_size)
-        get_fast_child_requisition (widget, minimum_size);
-      if (natural_size)
-        get_fast_natural_size (widget, natural_size);
+      get_fast_size (widget, minimum_size, natural_size);
     }
 }
 
