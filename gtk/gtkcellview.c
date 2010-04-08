@@ -121,7 +121,10 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								const gchar   	      *tagname,
 								gpointer      	      *data);
 
-static void       gtk_cell_view_extended_layout_init           (GtkExtendedLayoutIface *iface);
+static void       gtk_cell_view_extended_layout_init             (GtkExtendedLayoutIface *iface);
+static void       gtk_cell_view_extended_layout_get_desired_size (GtkExtendedLayout *layout,
+								  GtkRequisition    *minimal_size,
+								  GtkRequisition    *natural_size);
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -565,6 +568,8 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
   info->pack = GTK_PACK_START;
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
+
+  gtk_widget_queue_resize (cellview);
 }
 
 static void
@@ -585,6 +590,8 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
   info->pack = GTK_PACK_END;
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
+
+  gtk_widget_queue_resize (cellview);
 }
 
 static void
@@ -964,32 +971,61 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  * Return value: %TRUE
  *
  * Since: 2.6
+ * 
+ * Deprecated: 3.0: Use gtk_cell_view_get_desired_size_of_row() instead.
  */
 gboolean
 gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkTreePath    *path,
                                GtkRequisition *requisition)
 {
-  GtkTreeRowReference *tmp;
   GtkRequisition req;
 
-  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (requisition != NULL, FALSE);
+  gtk_cell_view_get_desired_size_of_row (cell_view, path, requisition, &req);
+
+  return TRUE;
+}
+
+
+/**
+ * gtk_cell_view_get_desired_size_of_row:
+ * @cell_view: a #GtkCellView
+ * @path: a #GtkTreePath 
+ * @minimum_size: return location for the minimum requested size 
+ * @natural_size: return location for the desired natural size 
+ *
+ * Sets @minimum_size and @natural_size to the size desired by @cell_view 
+ * to display the model row pointed to by @path.
+ * 
+ * Since: 3.0
+ */
+void
+gtk_cell_view_get_desired_size_of_row (GtkCellView     *cell_view,
+				       GtkTreePath     *path,
+				       GtkRequisition  *minimum_size,
+				       GtkRequisition  *natural_size)
+{
+  GtkTreeRowReference *tmp;
+  GtkRequisition req, nat_req;
+
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
 
   tmp = cell_view->priv->displayed_row;
   cell_view->priv->displayed_row =
     gtk_tree_row_reference_new (cell_view->priv->model, path);
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (cell_view), requisition, NULL);
+  gtk_cell_view_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (cell_view), 
+						  minimum_size ? minimum_size : &req,
+						  natural_size ? natural_size : &nat_req);
 
   gtk_tree_row_reference_free (cell_view->priv->displayed_row);
   cell_view->priv->displayed_row = tmp;
 
-  /* restore actual size info */
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (cell_view), &req, NULL);
-
-  return TRUE;
+  /* Restore active size */
+  gtk_cell_view_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (cell_view), 
+						  &req, &nat_req);
 }
 
 /**
@@ -1115,6 +1151,9 @@ gtk_cell_view_extended_layout_get_desired_size (GtkExtendedLayout *layout,
   minimal_size->height = 0;
   natural_size->width  = 0;
   natural_size->height = 0;
+
+  if (cellview->priv->displayed_row)
+    gtk_cell_view_set_cell_data (cellview);
 
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
