@@ -3875,7 +3875,7 @@ gtk_widget_draw (GtkWidget          *widget,
  * Also remember that the size request is not necessarily the size
  * a widget will actually be allocated.
  *
- * See also gtk_widget_get_child_requisition().
+ * Deprecated: 3.0: Use gtk_extended_layout_get_desired_size() instead.
  **/
 void
 gtk_widget_size_request (GtkWidget	*widget,
@@ -3915,6 +3915,9 @@ gtk_widget_size_request (GtkWidget	*widget,
  * since the last time a resize was queued. In general, only container
  * implementations have this information; applications should use
  * gtk_widget_size_request().
+ *
+ *
+ * Deprecated: 3.0: Use gtk_extended_layout_get_desired_size() instead.
  **/
 void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
