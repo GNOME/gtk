@@ -3671,7 +3671,7 @@ gdk_rgb_ditherable (void)
  * render to any colormap and visual. So there's no need to call this
  * function.
  * 
- * Return value: the preferred colormap
+ * Return value: (transfer none): the preferred colormap
  **/
 GdkColormap *
 gdk_rgb_get_colormap (void)
@@ -3696,7 +3696,7 @@ gdk_rgb_get_colormap (void)
  * it can render to any colormap and visual. So there's no need to
  * call this function.
  * 
- * Return value: the preferred colormap
+ * Return value: (transfer none): the preferred colormap
  *
  * Since: 2.2
  **/
@@ -3727,7 +3727,7 @@ gdk_screen_get_rgb_colormap (GdkScreen *screen)
  * the optimal one in those previous versions. GdkRGB can now render to 
  * drawables with any visual.
  * 
- * Return value: The #GdkVisual chosen by GdkRGB.
+ * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
  *
  * Since: 2.2
  **/
@@ -3748,7 +3748,7 @@ gdk_screen_get_rgb_visual (GdkScreen *screen)
  * in those previous versions. GdkRGB can now render to drawables with
  * any visual.
  * 
- * Return value: The #GdkVisual chosen by GdkRGB.
+ * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
  **/
 GdkVisual *
 gdk_rgb_get_visual (void)
