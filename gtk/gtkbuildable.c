@@ -25,18 +25,13 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-GType
-gtk_buildable_get_type (void)
+
+typedef GtkBuildableIface GtkBuildableInterface;
+G_DEFINE_INTERFACE (GtkBuildable, gtk_buildable, G_TYPE_OBJECT)
+
+static void
+gtk_buildable_default_init (GtkBuildableInterface *iface)
 {
-  static GType buildable_type = 0;
-
-  if (!buildable_type)
-    buildable_type =
-      g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkBuildable"),
-				     sizeof (GtkBuildableIface),
-				     NULL, 0, NULL, 0);
-
-  return buildable_type;
 }
 
 /**
