@@ -763,32 +763,18 @@ init_randr13 (GdkScreen *screen)
   monitors = g_array_sized_new (FALSE, TRUE, sizeof (GdkX11Monitor),
                                 resources->noutput);
 
-  primary_output = XRRGetOutputPrimary (screen_x11->xdisplay,
-                                        screen_x11->xroot_window);
-
   for (i = 0; i < resources->noutput; ++i)
     {
       XRROutputInfo *output =
 	XRRGetOutputInfo (dpy, resources, resources->outputs[i]);
 
-      if (resources->outputs[i] == primary_output)
-        {
-          screen_x11->primary_monitor = i;
-        }
-
       /* Non RandR1.2 X driver have output name "default" */
-      randr12_compat |= !g_strcmp0(output->name, "default");
+      randr12_compat |= !g_strcmp0 (output->name, "default");
 
       if (output->connection == RR_Disconnected)
         {
           XRRFreeOutputInfo (output);
           continue;
-        }
-
-      /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
-      if (primary_output == None && g_ascii_strncasecmp (output->name, "LVDS", 4) == 0)
-        {
-          screen_x11->primary_monitor = i;
         }
 
       if (output->crtc)
@@ -834,9 +820,25 @@ init_randr13 (GdkScreen *screen)
   screen_x11->n_monitors = monitors->len;
   screen_x11->monitors = (GdkX11Monitor *)g_array_free (monitors, FALSE);
 
+  screen_x11->primary_monitor = 0;
+
+  primary_output = XRRGetOutputPrimary (screen_x11->xdisplay,
+                                        screen_x11->xroot_window);
+
+  for (i = 0; i < screen_x11->n_monitors; ++i)
+    {
+      if (screen_x11->monitors[i].output == primary_output)
+        screen_x11->primary_monitor = i;
+
+      /* No RandR1.3+ available or no primary set, fall back to prefer LVDS as primary if present */
+      if (primary_output == None &&
+          g_ascii_strncasecmp (screen_x11->monitors[i].output_name, "LVDS", 4) == 0)
+        screen_x11->primary_monitor = i;
+    }
+
   return screen_x11->n_monitors > 0;
 #endif
-  
+
   return FALSE;
 }
 
@@ -875,7 +877,9 @@ init_solaris_xinerama (GdkScreen *screen)
 			     monitors[i].x, monitors[i].y,
 			     monitors[i].width, monitors[i].height);
     }
-  
+
+  screen_x11->primary_monitor = 0;
+
   return TRUE;
 #endif /* HAVE_SOLARIS_XINERAMA */
 
@@ -922,6 +926,8 @@ init_xfree_xinerama (GdkScreen *screen)
   
   XFree (monitors);
   
+  screen_x11->primary_monitor = 0;
+
   return TRUE;
 #endif /* HAVE_XFREE_XINERAMA */
   
@@ -1014,6 +1020,7 @@ init_multihead (GdkScreen *screen)
   /* No multihead support of any kind for this screen */
   screen_x11->n_monitors = 1;
   screen_x11->monitors = g_new0 (GdkX11Monitor, 1);
+  screen_x11->primary_monitor = 0;
 
   init_monitor_geometry (screen_x11->monitors, 0, 0,
 			 WidthOfScreen (screen_x11->xscreen),
