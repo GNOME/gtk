@@ -193,7 +193,7 @@ static void
 sparql_append_string_literal (GString     *sparql,
                               const gchar *str)
 {
-  char *s;
+  gchar *s;
 
   s = tracker_sparql_escape (str);
 
@@ -303,15 +303,15 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   if (tracker->priv->version == TRACKER_0_8 ||
       tracker->priv->version == TRACKER_0_9)
     {
-      sparql = g_string_new ("SELECT ?url WHERE { ?file a nfo:FileDataObject; nie:url ?url; fts:match ");
+      sparql = g_string_new ("SELECT nie:url(?urn) WHERE { ?urn a nfo:FileDataObject; fts:match ");
       sparql_append_string_literal (sparql, search_text);
       if (location)
         {
-          g_string_append (sparql, " . FILTER (fn:starts-with(?url,");
+          g_string_append (sparql, " . FILTER (fn:starts-with(nie:url(?urn),");
           sparql_append_string_literal (sparql, location);
           g_string_append (sparql, "))");
         }
-      g_string_append (sparql, " }");
+      g_string_append (sparql, " } ORDER BY DESC(fts:rank(?urn)) ASC(nie:url(?urn))");
 
       tracker_resources_sparql_query_async (tracker->priv->client,
                                             sparql->str,
