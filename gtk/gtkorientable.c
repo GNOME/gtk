@@ -29,39 +29,12 @@
 #include "gtkalias.h"
 
 
-static void   gtk_orientable_base_init (GtkOrientableIface *iface);
-
-
-GType
-gtk_orientable_get_type (void)
-{
-  static GType orientable_type = 0;
-
-  if (! orientable_type)
-    {
-      const GTypeInfo orientable_info =
-      {
-        sizeof (GtkOrientableIface),
-        (GBaseInitFunc)     gtk_orientable_base_init,
-        (GBaseFinalizeFunc) NULL,
-      };
-
-      orientable_type = g_type_register_static (G_TYPE_INTERFACE,
-                                                I_("GtkOrientable"),
-                                                &orientable_info, 0);
-    }
-
-  return orientable_type;
-}
+typedef GtkOrientableIface GtkOrientableInterface;
+G_DEFINE_INTERFACE (GtkOrientable, gtk_orientable, G_OBJECT_TYPE)
 
 static void
-gtk_orientable_base_init (GtkOrientableIface *iface)
+gtk_orientable_default_init (GtkOrientableInterface *iface)
 {
-  static gboolean initialized = FALSE;
-
-  if (initialized)
-    return;
-
   /**
    * GtkOrientable:orientation:
    *
@@ -76,8 +49,6 @@ gtk_orientable_base_init (GtkOrientableIface *iface)
                                                           GTK_TYPE_ORIENTATION,
                                                           GTK_ORIENTATION_HORIZONTAL,
                                                           GTK_PARAM_READWRITE));
-
-  initialized = TRUE;
 }
 
 /**
