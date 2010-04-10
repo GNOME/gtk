@@ -3104,15 +3104,19 @@ gtk_label_ensure_layout (GtkLabel *label)
                                 widget->allocation.width * PANGO_SCALE);
       else if (label->wrap)
 	{
-	  GtkWidgetAuxInfo *aux_info;
+	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 	  gint longest_paragraph;
 	  gint width, height;
 
-	  pango_layout_set_wrap (label->layout, label->wrap_mode);
-	  
-	  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-	  if (aux_info && aux_info->width > 0)
+ 	  if (aux_info && aux_info->width > 0)
 	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
+	  else if (widget->allocation.width > 1)
+ 	    {
+	      width = widget->allocation.width - label->misc.xpad * 2;
+
+	      pango_layout_set_wrap (label->layout, label->wrap_mode);
+	      pango_layout_set_width (label->layout, MAX (width, 1) * PANGO_SCALE);
+ 	    }
 	  else
 	    {
 	      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (label));
@@ -3122,7 +3126,6 @@ gtk_label_ensure_layout (GtkLabel *label)
 	      pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
 	      width = logical_rect.width;
-	      
 	      /* Try to guess a reasonable maximum width */
 	      longest_paragraph = width;
 
@@ -3203,6 +3206,8 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (layout);
   GtkLabel *label = GTK_LABEL (layout);
   PangoRectangle required_rect;
+  GtkWidgetAuxInfo *aux_info;
+  PangoLayout *natural_layout; 
 
   /*  
    * If word wrapping is on, then the height requisition can depend
@@ -3222,89 +3227,99 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 
   gtk_label_ensure_layout (label);
 
-  if (minimum_size)
+  aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
+
+  pango_layout_get_extents (label->layout, NULL, &required_rect);
+  required_rect.x = required_rect.y = 0;
+  
+  if (label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
-      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
-
-      pango_layout_get_extents (label->layout, NULL, &required_rect);
-      required_rect.x = required_rect.y = 0;
-
-      if (label->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
-        {
-          /* backup the Pango layout, as get_label_char_width() scrambles it */
-
-          PangoLayout *backup = label->layout;
-          label->layout = pango_layout_copy (label->layout);
-
-          required_rect.width = get_label_char_width (label);
-
-          g_object_unref (label->layout);
-          label->layout = backup;
-        }
-
-      if (label->single_line_mode)
+      /* backup the Pango layout, as get_label_char_width() scrambles it */
+      
+      PangoLayout *backup = label->layout;
+      label->layout = pango_layout_copy (label->layout);
+      
+      required_rect.width = get_label_char_width (label);
+      
+      g_object_unref (label->layout);
+      label->layout = backup;
+    }
+  
+  if (label->single_line_mode)
         required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
+  
+  if (label->have_transform)
+    {
+      PangoContext *context = pango_layout_get_context (label->layout);
+      const PangoMatrix *matrix = pango_context_get_matrix (context);
+      pango_matrix_transform_rectangle (matrix, &required_rect);
+    }
+  
+  required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
+  required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
+  
+  if ((label->wrap || label->ellipsize ||
+       priv->width_chars > 0 || priv->max_width_chars > 0) &&
+      aux_info && aux_info->width > 0)
+    required_rect.width = aux_info->width;
 
-      if (label->have_transform)
-        {
-          PangoContext *context = pango_layout_get_context (label->layout);
-          const PangoMatrix *matrix = pango_context_get_matrix (context);
-          pango_matrix_transform_rectangle (matrix, &required_rect);
-        }
+  minimum_size->width = required_rect.width + label->misc.xpad * 2;
+  minimum_size->height = required_rect.height + label->misc.ypad * 2;
 
-      required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
-      required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
+  /* Natural size */
+  natural_layout = pango_layout_copy (label->layout);
+  pango_layout_set_width (natural_layout, -1);
+  pango_layout_set_ellipsize (natural_layout, PANGO_ELLIPSIZE_NONE);
 
-      if ((label->wrap || label->ellipsize ||
-           priv->width_chars > 0 || priv->max_width_chars > 0) &&
-          aux_info && aux_info->width > 0)
-        required_rect.width = aux_info->width;
+  pango_layout_get_extents (natural_layout, NULL, &required_rect);
+  required_rect.x = required_rect.y = 0;
 
-      minimum_size->width = required_rect.width + label->misc.xpad * 2;
-      minimum_size->height = required_rect.height + label->misc.ypad * 2;
+  if (label->single_line_mode)
+    required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
+
+  if (label->have_transform)
+    {
+      PangoContext *context = pango_layout_get_context (natural_layout);
+      const PangoMatrix *matrix = pango_context_get_matrix (context);
+      pango_matrix_transform_rectangle (matrix, &required_rect);
     }
 
-  if (natural_size)
-    {
-      PangoLayout *natural_layout = pango_layout_copy (label->layout);
+  required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
+  required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
 
-      pango_layout_set_width (natural_layout, -1);
-      pango_layout_set_ellipsize (natural_layout, PANGO_ELLIPSIZE_NONE);
-
-      pango_layout_get_extents (natural_layout, NULL, &required_rect);
-      required_rect.x = required_rect.y = 0;
-
-      if (label->single_line_mode)
-        required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
-
-      if (label->have_transform)
-        {
-          PangoContext *context = pango_layout_get_context (natural_layout);
-          const PangoMatrix *matrix = pango_context_get_matrix (context);
-          pango_matrix_transform_rectangle (matrix, &required_rect);
-        }
-
-      required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
-      required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
-
-      natural_size->width = required_rect.width + label->misc.xpad * 2;
-      natural_size->height = required_rect.height + label->misc.ypad * 2;
-
-      g_object_unref (natural_layout);
-    }
+  natural_size->width = required_rect.width + label->misc.xpad * 2;
+  natural_size->height = required_rect.height + label->misc.ypad * 2;
+  
+  g_object_unref (natural_layout);
 }
 
 static void
-get_size_for_allocation (GtkLabel *label,
-                         gint      allocation,
-                         gint     *minimum_size,
-                         gint     *natural_size)
+get_size_for_allocation (GtkLabel        *label,
+			 GtkOrientation   orientation,
+                         gint             allocation,
+                         gint            *minimum_size,
+                         gint            *natural_size)
 {
   PangoLayout *layout;
+  GtkWidgetAuxInfo *aux_info = 
+    _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
+  gint aux_size;
+
+  if (label->wrap)
+    gtk_label_clear_layout (label);
 
   gtk_label_ensure_layout (label);
   layout = pango_layout_copy (label->layout);
-  pango_layout_set_width (layout, PANGO_SCALE * allocation);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    aux_size = aux_info->width;
+  else
+    aux_size = aux_info->height;
+
+  if (aux_size > 0)
+    pango_layout_set_width (layout, aux_size * PANGO_SCALE);
+  else
+    pango_layout_set_width (layout, allocation * PANGO_SCALE);
 
   if (minimum_size)
     pango_layout_get_pixel_size (layout, NULL, minimum_size);
@@ -3328,7 +3343,7 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
   gdouble angle = gtk_label_get_angle (label);
 
   if (90 == angle || 270 == angle)
-    get_size_for_allocation (label, height, minimum_width, natural_width);
+    get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, height, minimum_width, natural_width);
   else
     {
       GtkRequisition minimum_size, natural_size;
@@ -3354,7 +3369,7 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
   gdouble angle = gtk_label_get_angle (label);
 
   if (0 == angle || 180 == angle)
-    get_size_for_allocation (label, width, minimum_height, natural_height);
+    get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, width, minimum_height, natural_height);
   else
     {
       GtkRequisition minimum_size, natural_size;
@@ -3380,21 +3395,86 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
-  if (label->ellipsize)
+  /* The layout may have been recently cleared in get_size_for_allocation(), but the 
+   * width at that point may not be the same as the allocated width
+   */
+  if (label->wrap)
+    gtk_label_clear_layout (label);
+
+  gtk_label_ensure_layout (label);
+
+  if (label->ellipsize || GTK_LABEL_GET_PRIVATE (label)->full_size)
     {
       if (label->layout)
 	{
-	  gint width;
-	  PangoRectangle logical;
+          PangoRectangle logical;
+          PangoRectangle bounds;
 
-	  width = (allocation->width - label->misc.xpad * 2) * PANGO_SCALE;
+          bounds.x = bounds.y = 0;
+          bounds.width = allocation->width - label->misc.xpad * 2;
+          bounds.height = allocation->height - label->misc.ypad * 2;
 
-	  pango_layout_set_width (label->layout, -1);
-	  pango_layout_get_extents (label->layout, NULL, &logical);
+          pango_layout_set_width (label->layout, -1);
+          pango_layout_get_pixel_extents (label->layout, NULL, &logical);
 
-	  if (logical.width > width)
-	    pango_layout_set_width (label->layout, width);
-	}
+          if (label->have_transform)
+            {
+              PangoContext *context = gtk_widget_get_pango_context (widget);
+              const PangoMatrix *matrix = pango_context_get_matrix (context);
+
+              const gdouble dx = matrix->xx; /* cos (M_PI * angle / 180) */
+              const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
+              if (fabs (dy) < 0.01)
+                {
+                  if (logical.width > bounds.width)
+                    pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
+                }
+              else if (fabs (dx) < 0.01)
+                {
+                  if (logical.width > bounds.height)
+                    pango_layout_set_width (label->layout, bounds.height * PANGO_SCALE);
+                }
+              else
+                {
+                  gdouble x0, y0, x1, y1, length;
+                  gboolean vertical;
+                  gint cy;
+
+                  x0 = bounds.width / 2;
+                  y0 = dx ? x0 * dy / dx : dy * INFINITY;
+                  vertical = fabs (y0) > bounds.height / 2;
+
+                  if (vertical)
+                    {
+                      y0 = bounds.height/2;
+                      x0 = dy ? y0 * dx / dy : dx * INFINITY;
+                    }
+
+                  length = 2 * sqrt (x0 * x0 + y0 * y0);
+                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
+                  pango_layout_get_pixel_size (label->layout, NULL, &cy);
+
+                  x1 = +dy * cy/2;
+                  y1 = -dx * cy/2;
+
+                  if (vertical)
+                    {
+                      y0 = bounds.height/2 + y1 - y0;
+                      x0 = -y0 * dx/dy;
+                    }
+                  else
+                    {
+                      x0 = bounds.width/2 + x1 - x0;
+                      y0 = -x0 * dy/dx;
+                    }
+ 
+                  length = length - sqrt (x0 * x0 + y0 * y0) * 2;
+                  pango_layout_set_width (label->layout, rint (length * PANGO_SCALE));
+                }
+            }
+          else if (logical.width > bounds.width)
+            pango_layout_set_width (label->layout, bounds.width * PANGO_SCALE);
+        }
     }
 
   if (label->select_info && label->select_info->window)
@@ -3488,12 +3568,13 @@ get_layout_location (GtkLabel  *label,
                      gint      *yp)
 {
   GtkMisc *misc;
-  GtkWidget *widget; 
+  GtkWidget *widget;
   GtkLabelPrivate *priv;
   gfloat xalign;
   gint req_width, x, y;
+  gint req_height;
   PangoRectangle logical;
-  
+
   misc = GTK_MISC (label);
   widget = GTK_WIDGET (label);
   priv = GTK_LABEL_GET_PRIVATE (label);
@@ -3503,21 +3584,53 @@ get_layout_location (GtkLabel  *label,
   else
     xalign = 1.0 - misc->xalign;
 
-  pango_layout_get_pixel_extents (label->layout, NULL, &logical);
+  pango_layout_get_extents (label->layout, NULL, &logical);
 
-  if (label->ellipsize || priv->width_chars > 0)
+  if (label->have_transform)
+    {
+      PangoContext *context = gtk_widget_get_pango_context (widget);
+      const PangoMatrix *matrix = pango_context_get_matrix (context);
+      pango_matrix_transform_rectangle (matrix, &logical);
+    }
+
+  pango_extents_to_pixels (&logical, NULL);
+
+  if (label->ellipsize || priv->width_chars > 0 || priv->full_size)
     {
       int width;
 
       width = pango_layout_get_width (label->layout);
 
       req_width = logical.width;
+      req_height = logical.height;
+
       if (width != -1)
 	req_width = MIN(PANGO_PIXELS (width), req_width);
       req_width += 2 * misc->xpad;
+      req_height += 2 * misc->ypad;
+    }
+  else if (label->wrap)
+    {
+      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+
+      if (aux_info->width > 0)
+	req_width = aux_info->width;
+      else
+	req_width   = widget->allocation.width;
+
+      if (aux_info->height > 0)
+	req_height = aux_info->height;
+      else
+	req_height  = widget->allocation.height;
+
+      req_width  -= 2 * misc->xpad;
+      req_height -= 2 * misc->ypad;
     }
   else
-    req_width = widget->requisition.width;
+    {
+      req_width = widget->requisition.width;
+      req_height = widget->requisition.height;
+    }
 
   x = floor (widget->allocation.x + (gint)misc->xpad +
 	      xalign * (widget->allocation.width - req_width));
@@ -3526,7 +3639,6 @@ get_layout_location (GtkLabel  *label,
     x = MAX (x, widget->allocation.x + misc->xpad);
   else
     x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
-  x -= logical.x;
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
    * respect to the allocation, even if we are under-allocated.  For multi-line
@@ -3543,10 +3655,10 @@ get_layout_location (GtkLabel  *label,
    */
   if (pango_layout_get_line_count (label->layout) == 1)
     y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + (widget->allocation.height - widget->requisition.height) * misc->yalign);
+	       + (widget->allocation.height - req_height) * misc->yalign);
   else
     y = floor (widget->allocation.y + (gint)misc->ypad 
-	       + MAX (((widget->allocation.height - widget->requisition.height) * misc->yalign),
+	       + MAX (((widget->allocation.height - req_height) * misc->yalign),
 		      0));
 
   if (xp)
