@@ -1517,6 +1517,7 @@ gtk_extended_layout_get_type G_GNUC_CONST
 gtk_extended_layout_get_desired_size
 gtk_extended_layout_get_height_for_width
 gtk_extended_layout_get_width_for_height
+gtk_extended_layout_is_height_for_width
 #endif
 #endif
 

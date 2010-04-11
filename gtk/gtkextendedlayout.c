@@ -70,6 +70,37 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
   _gtk_size_group_compute_desired_size (GTK_WIDGET (layout), minimum_size, natural_size);
 }
 
+
+
+/**
+ * gtk_extended_layout_is_height_for_width:
+ * @layout: a #GtkExtendedLayout instance
+ *
+ * Gets whether the widget prefers a height-for-width layout
+ * or a width-for-height layout
+ *
+ * Returns: %TRUE if the widget prefers height-for-width, %FALSE if
+ * the widget should be treated with a width-for-height preference.
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_extended_layout_is_height_for_width (GtkExtendedLayout *layout)
+{
+  GtkExtendedLayoutIface *iface;
+
+  g_return_val_if_fail (GTK_IS_EXTENDED_LAYOUT (layout), FALSE);
+
+  iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
+  if (iface->is_height_for_width)
+    return iface->is_height_for_width (layout);
+
+  /* By default widgets are height-for-width. */
+  return TRUE;
+}
+
+
+
 /**
  * gtk_extended_layout_get_width_for_height:
  * @layout: a #GtkExtendedLayout instance
@@ -91,6 +122,12 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
   GtkExtendedLayoutIface *iface;
 
   g_return_if_fail (GTK_IS_EXTENDED_LAYOUT (layout));
+
+  /* XXX Maybe here we do _gtk_size_group_compute_width_for_height()
+   * and return hard coded minimum widths/heights for for widgets with
+   * explicit size requests as well as fetch the common minimum/natural
+   * widths/heights for size grouped widgets.
+   */
 
   iface = GTK_EXTENDED_LAYOUT_GET_IFACE (layout);
   iface->get_width_for_height (layout, height, minimum_width, natural_width);
