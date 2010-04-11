@@ -196,7 +196,8 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
   if (!added)
     priv->providers = g_list_append (priv->providers, new_data);
 
-  rebuild_properties (context);
+  if (priv->widget_path)
+    rebuild_properties (context);
 }
 
 void
@@ -233,7 +234,7 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
       list = list->next;
     }
 
-  if (removed)
+  if (removed && priv->widget_path)
     rebuild_properties (context);
 }
 
@@ -358,7 +359,10 @@ gtk_style_context_set_path (GtkStyleContext *context,
     }
 
   if (path)
-    priv->widget_path = gtk_widget_path_copy (path);
+    {
+      priv->widget_path = gtk_widget_path_copy (path);
+      rebuild_properties (context);
+    }
 }
 
 G_CONST_RETURN GtkWidgetPath *
