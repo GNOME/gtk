@@ -218,6 +218,56 @@ gtk_style_set_register_property (const gchar  *property_name,
   g_array_insert_val (properties, i, new);
 }
 
+gboolean
+gtk_style_set_lookup_property (const gchar *property_name,
+                               GType       *type,
+                               GValue      *default_value)
+{
+  PropertyNode *node;
+  GtkStyleSetClass *klass;
+  GQuark quark;
+  GType t;
+  gint i;
+
+  g_return_val_if_fail (property_name != NULL, FALSE);
+
+  klass = g_type_class_ref (GTK_TYPE_STYLE_SET);
+  quark = g_quark_try_string (property_name);
+
+  if (quark == 0)
+    {
+      g_type_class_unref (klass);
+      return FALSE;
+    }
+
+  for (i = 0; i < properties->len; i++)
+    {
+      node = &g_array_index (properties, PropertyNode, i);
+
+      if (node->property_quark == quark)
+        {
+          if (type)
+            *type = node->property_type;
+
+          if (default_value)
+            {
+              g_value_init (default_value, G_VALUE_TYPE (&node->default_value));
+              g_value_copy (&node->default_value, default_value);
+            }
+
+          g_type_class_unref (klass);
+
+          return TRUE;
+        }
+      else if (node->property_quark > quark)
+        break;
+    }
+
+  g_type_class_unref (klass);
+
+  return FALSE;
+}
+
 void
 gtk_style_set_register_property_color (const gchar *property_name,
                                        GdkColor    *initial_value)

@@ -55,6 +55,9 @@ GType gtk_style_set_get_type (void) G_GNUC_CONST;
 void     gtk_style_set_register_property (const gchar  *property_name,
                                           GType         type,
                                           const GValue *default_value);
+gboolean gtk_style_set_lookup_property   (const gchar  *property_name,
+                                          GType        *type,
+                                          GValue       *default_value);
 
 void gtk_style_set_register_property_color  (const gchar *property_name,
                                              GdkColor    *default_value);
