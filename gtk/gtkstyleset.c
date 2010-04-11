@@ -175,9 +175,9 @@ property_node_lookup (GQuark quark)
 
 /* Property registration functions */
 void
-gtk_style_set_register_property (const gchar *property_name,
-                                 GType        type,
-                                 GValue      *default_value)
+gtk_style_set_register_property (const gchar  *property_name,
+                                 GType         type,
+                                 const GValue *default_value)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
