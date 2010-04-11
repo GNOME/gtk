@@ -5714,6 +5714,16 @@ gtk_widget_has_grab (GtkWidget *widget)
   return (GTK_OBJECT_FLAGS (widget) & GTK_HAS_GRAB) != 0;
 }
 
+void
+_gtk_widget_set_has_grab (GtkWidget *widget,
+                          gboolean   has_grab)
+{
+  if (has_grab)
+    GTK_OBJECT_FLAGS (widget) |= GTK_HAS_GRAB;
+  else
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_HAS_GRAB);
+}
+
 /**
  * gtk_widget_set_name:
  * @widget: a #GtkWidget

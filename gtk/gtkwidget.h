@@ -1296,6 +1296,8 @@ void            gtk_requisition_free     (GtkRequisition       *requisition);
 #  define gtk_widget_unref g_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
+void              _gtk_widget_set_has_grab                (GtkWidget    *widget,
+                                                           gboolean      has_grab);
 void              _gtk_widget_grab_notify                 (GtkWidget    *widget,
 						           gboolean	was_grabbed);
 

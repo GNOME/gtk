@@ -1829,7 +1829,7 @@ gtk_grab_add (GtkWidget *widget)
   
   if (!gtk_widget_has_grab (widget) && gtk_widget_is_sensitive (widget))
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
+      _gtk_widget_set_has_grab (widget, TRUE);
       
       group = gtk_main_get_window_group (widget);
 
@@ -1867,7 +1867,7 @@ gtk_grab_remove (GtkWidget *widget)
   
   if (gtk_widget_has_grab (widget))
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
+      _gtk_widget_set_has_grab (widget, FALSE);
 
       group = gtk_main_get_window_group (widget);
       group->grabs = g_slist_remove (group->grabs, widget);
