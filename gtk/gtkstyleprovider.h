@@ -32,6 +32,11 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_PROVIDER(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_STYLE_PROVIDER))
 #define GTK_STYLE_PROVIDER_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_STYLE_PROVIDER, GtkStyleProviderIface))
 
+#define GTK_STYLE_PROVIDER_PRIORITY_FALLBACK      1
+#define GTK_STYLE_PROVIDER_PRIORITY_DEFAULT     200
+#define GTK_STYLE_PROVIDER_PRIORITY_APPLICATION 400
+#define GTK_STYLE_PROVIDER_PRIORITY_USER        600
+
 typedef struct GtkStyleProviderIface GtkStyleProviderIface;
 typedef struct GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 
