@@ -48,6 +48,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
+#include "gtkextendedlayout.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -4948,12 +4949,43 @@ gtk_window_size_request (GtkWidget      *widget,
 
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
-      GtkRequisition child_requisition;
+      GtkRequisition child_requisition, child_natural;
+      gint           wfh, hfw;
       
-      gtk_widget_size_request (bin->child, &child_requisition);
 
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
+      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
+					    &child_requisition,
+					    &child_natural);
+
+      /* TODO: Change wrapping label requisitions to desired a user intended wrap length,
+       * and make the minimum size out the minimum height for the natural-width, instead of 
+       * the minimum height for the minimum width, which is backwards */
+      if (window->type != GTK_WINDOW_POPUP)
+	{
+	  if (gtk_extended_layout_is_height_for_width (GTK_EXTENDED_LAYOUT (bin->child)))
+	    {
+	      gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
+							child_natural.width,
+							&hfw, NULL);
+	      
+	      requisition->width  += child_requisition.height;
+	      requisition->height += hfw;
+	    }
+	  else
+	    {
+	      gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (bin->child),
+							child_natural.height,
+							&wfh, NULL);
+	      
+	      requisition->width  += wfh;
+	      requisition->height += child_requisition.height;
+	    }
+	}
+      else
+	{
+	  requisition->width  += child_requisition.width;
+	  requisition->height += child_requisition.height;
+	}
     }
 }
 
