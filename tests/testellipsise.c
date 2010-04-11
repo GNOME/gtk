@@ -58,7 +58,7 @@ scale_changed_cb (GtkRange *range,
 {
   double angle = gtk_range_get_value (range);
   GtkWidget *label = GTK_WIDGET (data);
-
+  
   gtk_label_set_angle (GTK_LABEL (label), angle);
   redraw_event_box (label);
 }
@@ -72,15 +72,27 @@ ebox_expose_event_cb (GtkWidget      *widget,
   const double dashes[] = { 6, 18 };
   GtkRequisition natural_size;
   GtkWidget *label = data;
-  gint x, y, dx, dy;
-  gchar *markup;
   cairo_t *cr;
-
-  gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
+  gint x, y;
 
   cr = gdk_cairo_create (widget->window);
   cairo_translate (cr, -0.5, -0.5);
   cairo_set_line_width (cr, 1);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_rectangle (cr, 0, 0, widget->allocation.width, widget->allocation.height);
+  cairo_fill (cr);
+
+  gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
+  layout = gtk_widget_create_pango_layout (widget, "");
+
+  pango_layout_set_markup (layout,
+    "<span color='#c33'>\342\227\217 requisition</span>\n"
+    "<span color='#3c3'>\342\227\217 natural size</span>\n"
+    "<span color='#33c'>\342\227\217 allocation</span>", -1);
+
+  pango_cairo_show_layout (cr, layout);
+  g_object_unref (layout);
 
   cairo_rectangle (cr,
                    x + 0.5 * (label->allocation.width - label->requisition.width),
@@ -106,30 +118,6 @@ ebox_expose_event_cb (GtkWidget      *widget,
   cairo_set_dash (cr, dashes, 2, 12.5);
   cairo_stroke (cr);
 
-  markup = g_strdup_printf (
-    "<span color='#c33'>\342\200\242 requisition:\t%dx%d</span>\n"
-    "<span color='#3c3'>\342\200\242 natural size:\t%dx%d</span>\n"
-    "<span color='#33c'>\342\200\242 allocation:\t%dx%d</span>",
-    label->requisition.width, label->requisition.height,
-    natural_size.width, natural_size.height,
-    label->allocation.width, label->allocation.height);
-
-  layout = gtk_widget_create_pango_layout (widget, NULL);
-  pango_layout_set_markup (layout, markup, -1);
-  pango_layout_get_pixel_size (layout, &dx, &dy);
-
-  g_free (markup);
-
-  cairo_translate (cr, 0, widget->allocation.height - dy - 8);
-
-  cairo_set_source_rgba (cr, 1, 1, 1, 0.8);
-  cairo_rectangle (cr, 0, 0, dx + 12, dy + 8);
-  cairo_fill (cr);
-
-  cairo_translate (cr, 6, 4);
-  pango_cairo_show_layout (cr, layout);
-
-  g_object_unref (layout);
   cairo_destroy (cr);
 
   return FALSE;
@@ -176,7 +164,7 @@ main (int argc, char *argv[])
 
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed_cb), label);
   g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed_cb), label);
-  g_signal_connect_after (ebox, "expose-event", G_CALLBACK (ebox_expose_event_cb), label);
+  g_signal_connect (ebox, "expose-event", G_CALLBACK (ebox_expose_event_cb), label);
 
   gtk_widget_show_all (window);
 
