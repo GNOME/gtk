@@ -113,6 +113,7 @@ static void gtk_box_extended_layout_init  (GtkExtendedLayoutIface *iface);
 static void gtk_box_get_desired_size      (GtkExtendedLayout      *layout,
                                            GtkRequisition         *minimum_size,
                                            GtkRequisition         *natural_size);
+static gboolean gtk_box_is_height_for_width (GtkExtendedLayout      *layout);
 static void gtk_box_get_width_for_height  (GtkExtendedLayout      *layout,
 					   gint                    height,
 					   gint                   *minimum_width,
@@ -122,7 +123,7 @@ static void gtk_box_get_height_for_width  (GtkExtendedLayout      *layout,
 					   gint                   *minimum_height,
 					   gint                   *natural_height);
 
-GtkExtendedLayoutIface *parent_extended_layout_iface;
+static GtkExtendedLayoutIface *parent_extended_layout_iface;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
@@ -747,9 +748,18 @@ gtk_box_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
   parent_extended_layout_iface = g_type_interface_peek_parent (iface);
 
+  iface->is_height_for_width  = gtk_box_is_height_for_width;
   iface->get_desired_size     = gtk_box_get_desired_size;
   iface->get_height_for_width = gtk_box_get_height_for_width;
   iface->get_width_for_height = gtk_box_get_width_for_height;
+}
+
+static gboolean 
+gtk_box_is_height_for_width (GtkExtendedLayout      *layout)
+{
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (layout);
+
+  return (private->orientation == GTK_ORIENTATION_HORIZONTAL);
 }
 
 static void
@@ -949,23 +959,62 @@ size_fits_for_dimension (GtkBox  *box,
 
 
 static void 
-gtk_box_compute_size_for_awkward_orientation (GtkBox *box,
-					      gint    avail_size,
-					      gint   *minimum_size,
-					      gint   *natural_size)
+gtk_box_bisect_for_size_in_opposing_orientation (GtkBox   *box,
+						 gboolean  check_natural,
+						 gint      avail_size,
+						 gint      floor,
+						 gint      ceiling,
+						 gint     *size)
+{
+  if (ceiling - floor <= 1)
+    *size = ceiling;
+  else
+    {
+      gint check_size = floor + (ceiling - floor) / 2;
+
+      if (size_fits_for_dimension (box, avail_size, check_size, check_natural))
+
+	/* If check_size is large enough for box to fit into avail_size, we go on
+	 * to check between the given floor and check_size as the new ceiling
+	 */
+
+	gtk_box_bisect_for_size_in_opposing_orientation (box, check_natural, avail_size,
+							 floor, check_size, size);
+      else
+	gtk_box_bisect_for_size_in_opposing_orientation (box, check_natural, avail_size,
+							 check_size, ceiling, size);
+
+    }
+}
+
+static void 
+gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
+					       gint    avail_size,
+					       gint   *minimum_size,
+					       gint   *natural_size)
 {
   gint minimum, natural;
-  
-  /* Find the smallest possible fit in the orientation of 'box' where 'avail_size' is the available
-   * size in the opposing orientation
-   */
-  for (minimum = 1; !size_fits_for_dimension (box, avail_size, minimum, FALSE); minimum++);
+  gint min_ceiling, nat_ceiling;
+  gint step = 200;
 
-  /* Starting from the minimum available size, do the same to find the smallest allocation where
-   * all children receive their natural size 
+  /* First a large gap to search inside of
    */
-  for (natural = minimum; !size_fits_for_dimension (box, avail_size, natural, TRUE); natural++);
-  
+  for (min_ceiling = (step + 1); !size_fits_for_dimension (box, avail_size, min_ceiling, FALSE); min_ceiling += step);
+
+  /* This will find the minimum sizes by halfing the guesses until they are found
+   */
+  gtk_box_bisect_for_size_in_opposing_orientation (box, FALSE, avail_size,
+						   min_ceiling - step,
+						   min_ceiling,
+						   &minimum);
+
+  /* Basing the natural size on the found minimum, do the same operation for the natural size */
+  for (nat_ceiling = minimum + step; !size_fits_for_dimension (box, avail_size, nat_ceiling, TRUE); nat_ceiling += step);
+  gtk_box_bisect_for_size_in_opposing_orientation (box, TRUE, avail_size,
+						   nat_ceiling - step,
+						   nat_ceiling,
+						   &natural);
+
   if (minimum_size)
     *minimum_size = minimum;
 
@@ -1050,9 +1099,14 @@ gtk_box_get_width_for_height (GtkExtendedLayout *layout,
   GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (layout);
 
   if (private->orientation == GTK_ORIENTATION_VERTICAL)
-/*     gtk_box_compute_size_for_awkward_orientation (box, height, minimum_width, natural_width); */
-    /* Have the base class return the values previously computed by get_desired_size() */
+    {
+#if 0
+    gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width); 
+#else
+    /* Have the base class return the values previously computed by get_desired_size() */  
     parent_extended_layout_iface->get_width_for_height (layout, height, minimum_width, natural_width);
+#endif
+    }
   else
     gtk_box_compute_size_for_orientation (box, height, minimum_width, natural_width);
 }
@@ -1067,9 +1121,14 @@ gtk_box_get_height_for_width (GtkExtendedLayout *layout,
   GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (layout);
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-/*     gtk_box_compute_size_for_awkward_orientation (box, width, minimum_height, natural_height); */
-    /* Have the base class return the values previously computed by get_desired_size() */
-     parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height); 
+    {
+#if 0
+      gtk_box_compute_size_for_opposing_orientation (box, width, minimum_height, natural_height);
+#else
+      /* Have the base class return the values previously computed by get_desired_size() */
+      parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height);
+#endif
+    }
   else
     gtk_box_compute_size_for_orientation (box, width, minimum_height, natural_height);
 }
