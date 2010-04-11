@@ -52,7 +52,7 @@ static void gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
 					   gint                   *natural_height);
 
 
-GtkExtendedLayoutIface *parent_extended_layout_iface;
+static GtkExtendedLayoutIface *parent_extended_layout_iface;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
