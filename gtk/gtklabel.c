@@ -3246,7 +3246,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
     }
   
   if (label->single_line_mode)
-        required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
+    required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
   
   if (label->have_transform)
     {
@@ -3258,12 +3258,18 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
   required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
   
+
+  /* if a width-request is set, use that as the requested label width */
   if ((label->wrap || label->ellipsize ||
        priv->width_chars > 0 || priv->max_width_chars > 0) &&
       aux_info && aux_info->width > 0)
     required_rect.width = aux_info->width;
 
-  minimum_size->width = required_rect.width + label->misc.xpad * 2;
+  /* XXX TODO: Ideally for wrapping labels, the width should be one char or the length 
+   * of the longest word in the text depending on wrap mode.
+   */
+
+  minimum_size->width  = required_rect.width + label->misc.xpad * 2;
   minimum_size->height = required_rect.height + label->misc.ypad * 2;
 
   /* Natural size */
@@ -3296,9 +3302,9 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 static void
 get_size_for_allocation (GtkLabel        *label,
 			 GtkOrientation   orientation,
-                         gint             allocation,
-                         gint            *minimum_size,
-                         gint            *natural_size)
+			 gint             allocation,
+			 gint            *minimum_size,
+			 gint            *natural_size)
 {
   PangoLayout *layout;
   GtkWidgetAuxInfo *aux_info = 
@@ -3326,7 +3332,7 @@ get_size_for_allocation (GtkLabel        *label,
 
   if (natural_size)
     {
-//      pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
+      //pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
       pango_layout_get_pixel_size (layout, NULL, natural_size);
     }
 
@@ -3395,7 +3401,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
 
-  /* The layout may have been recently cleared in get_size_for_allocation(), but the 
+  /* The layout may have been recently cleared in get_size_for_orientation(), but the 
    * width at that point may not be the same as the allocated width
    */
   if (label->wrap)
@@ -3595,7 +3601,7 @@ get_layout_location (GtkLabel  *label,
 
   pango_extents_to_pixels (&logical, NULL);
 
-  if (label->ellipsize || priv->width_chars > 0 || priv->full_size)
+  if (label->wrap || label->ellipsize || priv->width_chars > 0 || priv->full_size)
     {
       int width;
 
@@ -3608,23 +3614,6 @@ get_layout_location (GtkLabel  *label,
 	req_width = MIN(PANGO_PIXELS (width), req_width);
       req_width += 2 * misc->xpad;
       req_height += 2 * misc->ypad;
-    }
-  else if (label->wrap)
-    {
-      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-
-      if (aux_info->width > 0)
-	req_width = aux_info->width;
-      else
-	req_width   = widget->allocation.width;
-
-      if (aux_info->height > 0)
-	req_height = aux_info->height;
-      else
-	req_height  = widget->allocation.height;
-
-      req_width  -= 2 * misc->xpad;
-      req_height -= 2 * misc->ypad;
     }
   else
     {
