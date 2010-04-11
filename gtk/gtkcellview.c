@@ -569,7 +569,7 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
 
-  gtk_widget_queue_resize (cellview);
+  gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
 
 static void
@@ -591,7 +591,7 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
 
-  gtk_widget_queue_resize (cellview);
+  gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
 
 static void
