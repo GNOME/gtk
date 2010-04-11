@@ -77,6 +77,7 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkcssprovider.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
