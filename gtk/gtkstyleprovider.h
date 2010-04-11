@@ -21,6 +21,7 @@
 #define __GTK_STYLE_PROVIDER_H__
 
 #include <glib-object.h>
+#include "gtkwidgetpath.h"
 #include "gtkstyleset.h"
 #include "gtkenums.h"
 
@@ -45,12 +46,14 @@ struct GtkStyleProviderIface
 {
   GTypeInterface g_iface;
 
-  GtkStyleSet * (* get_style) (GtkStyleProvider *provider);
+  GtkStyleSet * (* get_style) (GtkStyleProvider *provider,
+                               GtkWidgetPath    *path);
 };
 
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
-GtkStyleSet *gtk_style_provider_get_style (GtkStyleProvider *provider);
+GtkStyleSet *gtk_style_provider_get_style (GtkStyleProvider *provider,
+                                           GtkWidgetPath    *path);
 
 
 G_END_DECLS

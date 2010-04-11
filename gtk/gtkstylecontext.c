@@ -136,9 +136,14 @@ rebuild_properties (GtkStyleContext *context)
       data = list->data;
       list = list->next;
 
-      provider_style = gtk_style_provider_get_style (data->provider);
-      gtk_style_set_merge (priv->store, provider_style, TRUE);
-      g_object_unref (provider_style);
+      provider_style = gtk_style_provider_get_style (data->provider,
+                                                     priv->widget_path);
+
+      if (provider_style)
+        {
+          gtk_style_set_merge (priv->store, provider_style, TRUE);
+          g_object_unref (provider_style);
+        }
     }
 }
 

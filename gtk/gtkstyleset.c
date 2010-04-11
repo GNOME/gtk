@@ -134,7 +134,8 @@ gtk_style_set_finalize (GObject *object)
 }
 
 GtkStyleSet *
-gtk_style_set_get_style (GtkStyleProvider *provider)
+gtk_style_set_get_style (GtkStyleProvider *provider,
+                         GtkWidgetPath    *path)
 {
   /* Return style set itself */
   return g_object_ref (provider);

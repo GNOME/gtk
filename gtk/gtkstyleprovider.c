@@ -48,7 +48,8 @@ gtk_style_provider_iface_init (gpointer g_iface)
 }
 
 GtkStyleSet *
-gtk_style_provider_get_style (GtkStyleProvider *provider)
+gtk_style_provider_get_style (GtkStyleProvider *provider,
+                              GtkWidgetPath    *path)
 {
   GtkStyleProviderIface *iface;
 
@@ -59,7 +60,7 @@ gtk_style_provider_get_style (GtkStyleProvider *provider)
   if (!iface->get_style)
     return NULL;
 
-  return iface->get_style (provider);
+  return iface->get_style (provider, path);
 }
 
 #define __GTK_STYLE_PROVIDER_C__
