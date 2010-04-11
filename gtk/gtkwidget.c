@@ -59,6 +59,8 @@
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontext.h"
+#include "gtkcssprovider.h"
+#include "gtkversion.h"
 #include "gtkdebug.h"
 
 
@@ -13210,10 +13212,35 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (!context))
     {
+      static GtkCssProvider *css_provider = NULL;
+
       context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_style_context, context,
                                (GDestroyNotify) g_object_unref);
+
+      /* Add provider for user file */
+      if (G_UNLIKELY (!css_provider))
+        {
+          GFile *home_dir, *css_file;
+          gchar *filename;
+
+          css_provider = gtk_css_provider_new ();
+          home_dir = g_file_new_for_path (g_get_home_dir ());
+
+          filename = g_strdup_printf (".gtk-%d.0.css", GTK_MAJOR_VERSION);
+          css_file = g_file_get_child (home_dir, filename);
+          g_free (filename);
+
+          if (g_file_query_exists (css_file, NULL))
+            gtk_css_provider_load_from_file (css_provider, css_file, NULL);
+
+          g_object_unref (home_dir);
+          g_object_unref (css_file);
+        }
+
+      gtk_style_context_add_provider (context, css_provider,
+                                      GTK_STYLE_PROVIDER_PRIORITY_USER);
     }
 
   if (GTK_WIDGET_REALIZED (widget))
