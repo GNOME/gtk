@@ -1298,6 +1298,9 @@ void            gtk_requisition_free     (GtkRequisition       *requisition);
 
 void              _gtk_widget_set_has_grab                (GtkWidget    *widget,
                                                            gboolean      has_grab);
+void              _gtk_widget_set_is_toplevel             (GtkWidget    *widget,
+                                                           gboolean      is_toplevel);
+
 void              _gtk_widget_grab_notify                 (GtkWidget    *widget,
 						           gboolean	was_grabbed);
 

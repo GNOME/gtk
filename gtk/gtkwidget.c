@@ -5953,6 +5953,16 @@ gtk_widget_is_toplevel (GtkWidget *widget)
   return (GTK_OBJECT_FLAGS (widget) & GTK_TOPLEVEL) != 0;
 }
 
+void
+_gtk_widget_set_is_toplevel (GtkWidget *widget,
+                             gboolean   is_toplevel)
+{
+  if (is_toplevel)
+    GTK_OBJECT_FLAGS (widget) |= GTK_TOPLEVEL;
+  else
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_TOPLEVEL);
+}
+
 /**
  * gtk_widget_is_drawable:
  * @widget: a #GtkWidget

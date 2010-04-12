@@ -901,7 +901,7 @@ gtk_window_init (GtkWindow *window)
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
-  GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
+  _gtk_widget_set_is_toplevel (GTK_WIDGET (window), TRUE);
 
   GTK_PRIVATE_SET_FLAG (window, GTK_ANCHORED);
 
@@ -8379,22 +8379,26 @@ void
 _gtk_window_set_is_toplevel (GtkWindow *window,
 			     gboolean   is_toplevel)
 {
-  if (gtk_widget_is_toplevel (GTK_WIDGET (window)))
+  GtkWidget *widget;
+
+  widget = GTK_WIDGET (window);
+
+  if (gtk_widget_is_toplevel (widget))
     g_assert (g_slist_find (toplevel_list, window) != NULL);
   else
     g_assert (g_slist_find (toplevel_list, window) == NULL);
 
-  if (is_toplevel == gtk_widget_is_toplevel (GTK_WIDGET (window)))
+  if (is_toplevel == gtk_widget_is_toplevel (widget))
     return;
 
   if (is_toplevel)
     {
-      GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
+      _gtk_widget_set_is_toplevel (widget, TRUE);
       toplevel_list = g_slist_prepend (toplevel_list, window);
     }
   else
     {
-      GTK_WIDGET_UNSET_FLAGS (window, GTK_TOPLEVEL);
+      _gtk_widget_set_is_toplevel (widget, FALSE);
       toplevel_list = g_slist_remove (toplevel_list, window);
     }
 }

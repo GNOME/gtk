@@ -85,7 +85,7 @@ gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
 
   window->type = GTK_WINDOW_TOPLEVEL;
 
-  GTK_WIDGET_SET_FLAGS (embed_widget, GTK_TOPLEVEL);
+  _gtk_widget_set_is_toplevel (GTK_WIDGET (embed_widget), TRUE);
   gtk_container_set_resize_mode (GTK_CONTAINER (embed_widget), GTK_RESIZE_QUEUE);
 }
 
