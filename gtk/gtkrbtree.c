@@ -33,8 +33,6 @@ static void        _gtk_rbtree_insert_fixup       (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static void        _gtk_rbtree_remove_node_fixup  (GtkRBTree  *tree,
 						   GtkRBNode  *node);
-static gint        _count_nodes                   (GtkRBTree  *tree,
-						   GtkRBNode  *node);
 static inline void _fixup_validation              (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static inline void _fixup_parity                  (GtkRBTree  *tree,
@@ -1469,25 +1467,6 @@ _gtk_rbtree_traverse (GtkRBTree             *tree,
     }
 }
 
-static gint
-_count_nodes (GtkRBTree *tree,
-	      GtkRBNode *node)
-{
-  gint res;
-  if (node == tree->nil)
-    return 0;
-
-  g_assert (node->left);
-  g_assert (node->right);
-  
-  res = (_count_nodes (tree, node->left) +
-	 _count_nodes (tree, node->right) + 1);
-
-  if (res != node->count)
-    g_print ("Tree failed\n");
-  return res;
-}
-
 static inline
 void _fixup_validation (GtkRBTree *tree,
 			GtkRBNode *node)
@@ -1569,6 +1548,25 @@ count_parity (GtkRBTree *tree,
   if (get_parity (node) != 1)
     g_error ("Node has incorrect parity %u", get_parity (node));
   
+  return res;
+}
+
+static gint
+_count_nodes (GtkRBTree *tree,
+              GtkRBNode *node)
+{
+  gint res;
+  if (node == tree->nil)
+    return 0;
+
+  g_assert (node->left);
+  g_assert (node->right);
+
+  res = (_count_nodes (tree, node->left) +
+         _count_nodes (tree, node->right) + 1);
+
+  if (res != node->count)
+    g_print ("Tree failed\n");
   return res;
 }
 
@@ -1677,7 +1675,7 @@ _gtk_rbtree_test_structure (GtkRBTree *tree)
   g_assert (tree->root->parent == tree->nil);
   _gtk_rbtree_test_structure_helper (tree, tree->root);
 }
-			    
+
 void
 _gtk_rbtree_test (const gchar *where,
                   GtkRBTree   *tree)
