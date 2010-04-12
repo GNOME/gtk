@@ -11284,5 +11284,71 @@ gtk_widget_get_window (GtkWidget *widget)
   return widget->window;
 }
 
+static void
+_gtk_widget_set_has_focus (GtkWidget *widget,
+                           gboolean   has_focus)
+{
+  if (has_focus)
+    GTK_OBJECT_FLAGS (widget) |= GTK_HAS_FOCUS;
+  else
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_HAS_FOCUS);
+}
+
+/**
+ * gtk_widget_send_focus_change:
+ * @widget: a #GtkWidget
+ * @event: a #GdkEvent of type GDK_FOCUS_CHANGE
+ *
+ * Sends the focus change @event to @widget
+ *
+ * This function is not meant to be used by applications. The only time it
+ * should be used is when it is necessary for a #GtkWidget to assign focus
+ * to a widget that is semantically owned by the first widget even though
+ * it's not a direct child - for instance, a search entry in a floating
+ * window similar to the quick search in #GtkTreeView.
+ *
+ * An example of its usage is:
+ *
+ * |[
+ *   GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+ *
+ *   fevent->focus_change.type = GDK_FOCUS_CHANGE;
+ *   fevent->focus_change.in = TRUE;
+ *   fevent->focus_change.window = gtk_widget_get_window (widget);
+ *   if (fevent->focus_change.window != NULL)
+ *     g_object_ref (fevent->focus_change.window);
+ *
+ *   gtk_widget_send_focus_change (widget, fevent);
+ *
+ *   gdk_event_free (event);
+ * ]|
+ *
+ * Return value: the return value from the event signal emission: %TRUE
+ *   if the event was handled, and %FALSE otherwise
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_widget_send_focus_change (GtkWidget *widget,
+                              GdkEvent  *event)
+{
+  gboolean res;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (event != NULL && event->type == GDK_FOCUS_CHANGE, FALSE);
+
+  g_object_ref (widget);
+
+  _gtk_widget_set_has_focus (widget, event->focus_change.in);
+
+  res = gtk_widget_event (widget, event);
+
+  g_object_notify (G_OBJECT (widget), "has-focus");
+
+  g_object_unref (widget);
+
+  return res;
+}
+
 #define __GTK_WIDGET_C__
 #include "gtkaliasdef.c"

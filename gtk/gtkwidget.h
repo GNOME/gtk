@@ -897,6 +897,8 @@ gboolean   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 gint       gtk_widget_send_expose         (GtkWidget           *widget,
 					   GdkEvent            *event);
+gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
+                                           GdkEvent            *event);
 
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
 gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,

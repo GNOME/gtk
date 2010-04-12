@@ -5196,6 +5196,7 @@ gtk_widget_reparent
 gtk_widget_reset_rc_styles
 gtk_widget_reset_shapes
 gtk_widget_send_expose
+gtk_widget_send_focus_change
 gtk_widget_set_accel_path
 gtk_widget_set_allocation
 gtk_widget_set_app_paintable
