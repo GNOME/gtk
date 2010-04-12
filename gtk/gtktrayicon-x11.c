@@ -545,7 +545,9 @@ static gboolean
 gtk_tray_icon_delete (GtkWidget   *widget,
 		      GdkEventAny *event)
 {
+#ifdef G_ENABLE_DEBUG
   GtkTrayIcon *icon = GTK_TRAY_ICON (widget);
+#endif
 
   GTK_NOTE (PLUGSOCKET,
 	    g_print ("GtkStatusIcon %p: delete notify, tray manager window %lx\n",
