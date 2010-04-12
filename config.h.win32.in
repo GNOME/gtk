@@ -15,7 +15,7 @@
 #define GTK_COMPILED_WITH_DEBUGGING "yes"
 
 /* Define the location where the catalogs will be installed */
-#define GTK_LOCALEDIR "c:/devel/target/HEAD/share/locale"
+#define GTK_LOCALEDIR "NONE/share/locale"
 
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #define HAVE_BIND_TEXTDOMAIN_CODESET 1
