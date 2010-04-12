@@ -1,3 +1,5 @@
+include $(top_srcdir)/Makefile.decl
+
 EXTRA_DIST = \
 	README.txt \
 	gtk+.sln \
