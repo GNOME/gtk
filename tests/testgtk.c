@@ -6619,6 +6619,54 @@ int ntext_colors = sizeof(text_colors) / sizeof(text_colors[0]);
  * GtkNotebook
  */
 
+static char * book_open_xpm[] = {
+"16 16 4 1",
+"       c None s None",
+".      c black",
+"X      c #808080",
+"o      c white",
+"                ",
+"  ..            ",
+" .Xo.    ...    ",
+" .Xoo. ..oo.    ",
+" .Xooo.Xooo...  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+" .Xooo.Xooo.X.  ",
+" .Xooo.oooo.X.  ",
+"  .Xoo.Xoo..X.  ",
+"   .Xo.o..ooX.  ",
+"    .X..XXXXX.  ",
+"    ..X.......  ",
+"     ..         ",
+"                "};
+
+static char * book_closed_xpm[] = {
+"16 16 6 1",
+"       c None s None",
+".      c black",
+"X      c red",
+"o      c yellow",
+"O      c #808080",
+"#      c white",
+"                ",
+"       ..       ",
+"     ..XX.      ",
+"   ..XXXXX.     ",
+" ..XXXXXXXX.    ",
+".ooXXXXXXXXX.   ",
+"..ooXXXXXXXXX.  ",
+".X.ooXXXXXXXXX. ",
+".XX.ooXXXXXX..  ",
+" .XX.ooXXX..#O  ",
+"  .XX.oo..##OO. ",
+"   .XX..##OO..  ",
+"    .X.#OO..    ",
+"     ..O..      ",
+"      ..        ",
+"                "};
+
 GdkPixbuf *book_open;
 GdkPixbuf *book_closed;
 GtkWidget *sample_notebook;
@@ -6867,8 +6915,6 @@ create_notebook (GtkWidget *widget)
   GtkWidget *separator;
   GtkWidget *omenu;
   GtkWidget *label;
-  GdkPixbuf *book_open_xpm;
-  GdkPixbuf *book_closed_xpm;
 
   static gchar *items[] =
   {
