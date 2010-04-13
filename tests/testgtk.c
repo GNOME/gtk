@@ -3359,36 +3359,6 @@ create_pixmap (GtkWidget *widget)
 }
 
 static void
-tips_query_widget_entered (GtkTipsQuery   *tips_query,
-			   GtkWidget      *widget,
-			   const gchar    *tip_text,
-			   const gchar    *tip_private,
-			   GtkWidget	  *toggle)
-{
-  if (GTK_TOGGLE_BUTTON (toggle)->active)
-    {
-      gtk_label_set_text (GTK_LABEL (tips_query), tip_text ? "There is a Tip!" : "There is no Tip!");
-      /* don't let GtkTipsQuery reset its label */
-      g_signal_stop_emission_by_name (tips_query, "widget_entered");
-    }
-}
-
-static gint
-tips_query_widget_selected (GtkWidget      *tips_query,
-			    GtkWidget      *widget,
-			    const gchar    *tip_text,
-			    const gchar    *tip_private,
-			    GdkEventButton *event,
-			    gpointer        func_data)
-{
-  if (widget)
-    g_print ("Help \"%s\" requested for <%s>\n",
-	     tip_private ? tip_private : "None",
-	     g_type_name (G_OBJECT_TYPE (widget)));
-  return TRUE;
-}
-
-static void
 create_tooltips (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -3398,7 +3368,6 @@ create_tooltips (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *toggle;
   GtkWidget *frame;
-  GtkWidget *tips_query;
   GtkWidget *separator;
 
   if (!window)
@@ -3448,28 +3417,14 @@ create_tooltips (GtkWidget *widget)
 			"visible", TRUE,
 			NULL);
 
-      tips_query = gtk_tips_query_new ();
-
       button =
 	g_object_new (gtk_button_get_type (),
 			"label", "[?]",
 			"visible", TRUE,
 			"parent", box3,
 			NULL);
-      g_object_connect (button,
-			"swapped_signal::clicked", gtk_tips_query_start_query, tips_query,
-			NULL);
       gtk_box_set_child_packing (GTK_BOX (box3), button, FALSE, FALSE, 0, GTK_PACK_START);
-      gtk_widget_set_tooltip_text (button "Start the Tooltips Inspector");
-      
-      g_object_set (g_object_connect (tips_query,
-				      "signal::widget_entered", tips_query_widget_entered, toggle,
-				      "signal::widget_selected", tips_query_widget_selected, NULL,
-				      NULL),
-		    "visible", TRUE,
-		    "parent", box3,
-		    "caller", button,
-		    NULL);
+      gtk_widget_set_tooltip_text (button, "Start the Tooltips Inspector");
       
       frame = g_object_new (gtk_frame_get_type (),
 			      "label", "ToolTips Inspector",
