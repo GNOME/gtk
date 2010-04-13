@@ -30,7 +30,7 @@
 
 
 typedef GtkOrientableIface GtkOrientableInterface;
-G_DEFINE_INTERFACE (GtkOrientable, gtk_orientable, G_OBJECT_TYPE)
+G_DEFINE_INTERFACE (GtkOrientable, gtk_orientable, G_TYPE_OBJECT)
 
 static void
 gtk_orientable_default_init (GtkOrientableInterface *iface)
