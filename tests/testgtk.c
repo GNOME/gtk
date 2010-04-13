@@ -2701,7 +2701,7 @@ create_rotated_label (GtkWidget *widget)
 			G_CALLBACK (on_angle_scale_changed), label);
       
       gtk_range_set_value (GTK_RANGE (hscale), 45);
-      gtk_widget_set_usize (hscale, 200, -1);
+      gtk_widget_set_size_request (hscale, 200, -1);
       gtk_box_pack_start (GTK_BOX (scale_hbox), hscale, TRUE, TRUE, 0);
     }
   
@@ -7658,7 +7658,7 @@ shape_motion (GtkWidget      *widget,
    * because I need absolute coordinates.
    */
   gdk_window_get_pointer (NULL, &xp, &yp, &mask);
-  gtk_widget_set_uposition (widget, xp  - p->x, yp  - p->y);
+  gtk_window_move (GTK_WINDOW (widget), xp  - p->x, yp  - p->y);
 }
 
 GtkWidget *
@@ -7723,7 +7723,7 @@ shape_create_icon (GdkScreen *screen,
   icon_pos = g_new (CursorOffset, 1);
   g_object_set_data (G_OBJECT (window), "cursor_offset", icon_pos);
 
-  gtk_widget_set_uposition (window, x, y);
+  gtk_window_move (GTK_WINDOW (window), x, y);
   gtk_widget_show (window);
   
   return window;
@@ -10737,7 +10737,7 @@ create_main_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "main window");
-  gtk_widget_set_uposition (window, 50, 20);
+  gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
   geometry.min_width = -1;
