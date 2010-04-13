@@ -4036,14 +4036,6 @@ static const guint8 apple[] =
   "\0\0\5\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
 
 
-static void
-dump_accels (gpointer             callback_data,
-	     guint                callback_action,
-	     GtkWidget           *widget)
-{
-  gtk_accel_map_save_fd (1 /* stdout */);
-}
-
 static GtkWidget *
 accel_button_new (GtkAccelGroup *accel_group,
 		  const gchar   *text,
