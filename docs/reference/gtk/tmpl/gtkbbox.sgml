@@ -11,8 +11,7 @@ of #GtkHButtonBox and #GtkVButtonBox widgets.
 </para>
 <para>
 gtk_button_box_get_child_size() retrieves the minimum width and height 
-for widgets in a given button box. gtk_button_box_set_child_size() 
-allows those properties to be changed.
+for widgets in a given button box.
 </para>
 <para>
 The internal padding of buttons can be retrieved and changed per button box using
@@ -178,7 +177,8 @@ Sets a new default size for the children of a given button box.
 @widget: a #GtkButtonBox
 @min_width: a default width for buttons in @widget
 @min_height: a default height for buttons in @widget
-@Deprecated: Use the style properties
+@Deprecated: This is not supported anymore and can only be set through the theme
+  changing the style properties:
   "<link linkend="GtkButtonBox--s-child-min-width">child-min-width</link>"
   and
   "<link linkend="GtkButtonBox--s-child-min-height">child-min-height</link>"
