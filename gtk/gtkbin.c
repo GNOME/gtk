@@ -168,17 +168,16 @@ get_child_padding_delta (GtkBin         *bin,
 			 gint           *delta_h,
 			 gint           *delta_v)
 {
-  GtkRequisition min_req, child_min;
+  gint hmin, vmin, child_hmin, child_vmin;
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin), 
-					&min_req, NULL);
+  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin), &hmin, NULL);
+  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin), &vmin, NULL);
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child), 
-					&child_min, NULL);
+  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (bin->child), &child_hmin, NULL);
+  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin->child), &child_vmin, NULL);
 
-
-  *delta_h = min_req.width  - child_min.width;
-  *delta_v = min_req.height - child_min.height;
+  *delta_h = hmin - child_hmin;
+  *delta_v = vmin - child_vmin;
 }
 
 static void 
@@ -205,7 +204,8 @@ gtk_bin_get_width_for_height (GtkExtendedLayout      *layout,
 	*natural_width = child_nat + hdelta;
     }
   else
-    parent_extended_layout_iface->get_height_for_width (layout, height, minimum_width, natural_width);
+    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
+/*     parent_extended_layout_iface->get_height_for_width (layout, height, minimum_width, natural_width); */
 }
 
 static void
@@ -232,7 +232,8 @@ gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
 	*natural_height = child_nat + vdelta;
     }
   else
-    parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height);
+    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
+/*     parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height); */
 }
 
 

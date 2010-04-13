@@ -72,10 +72,14 @@ gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_v
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          GtkRequisition  *requisition);
-void              gtk_cell_view_get_desired_size_of_row (GtkCellView     *cell_view,
+void              gtk_cell_view_get_desired_width_of_row(GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
-                                                         GtkRequisition  *minimum_size,
-                                                         GtkRequisition  *natural_size);
+                                                         gint            *minimum_size,
+                                                         gint            *natural_size);
+void              gtk_cell_view_get_desired_height_of_row(GtkCellView     *cell_view,
+							  GtkTreePath     *path,
+							  gint            *minimum_size,
+							  gint            *natural_size);
 
 void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
                                                          const GdkColor  *color);

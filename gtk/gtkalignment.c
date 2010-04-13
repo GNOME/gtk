@@ -66,10 +66,13 @@ static void gtk_alignment_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 
-static void gtk_alignment_extended_layout_init      (GtkExtendedLayoutIface *iface);
-static void gtk_alignment_get_desired_size          (GtkExtendedLayout      *layout,
-						     GtkRequisition         *minimum_size,
-						     GtkRequisition         *natural_size);
+static void gtk_alignment_extended_layout_init  (GtkExtendedLayoutIface *iface);
+static void gtk_alignment_get_desired_width     (GtkExtendedLayout *layout,
+						 gint              *minimum_size,
+						 gint              *natural_size);
+static void gtk_alignment_get_desired_height    (GtkExtendedLayout *layout,
+						 gint              *minimum_size,
+						 gint              *natural_size);
 
 G_DEFINE_TYPE_WITH_CODE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
@@ -484,42 +487,69 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 static void
 gtk_alignment_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
-  iface->get_desired_size = gtk_alignment_get_desired_size;
+  iface->get_desired_width  = gtk_alignment_get_desired_width;
+  iface->get_desired_height = gtk_alignment_get_desired_height;
 }
 
 static void
 gtk_alignment_get_desired_size (GtkExtendedLayout *layout,
-				GtkRequisition    *minimum_size,
-				GtkRequisition    *natural_size)
+				GtkOrientation     orientation,
+				gint              *minimum_size,
+				gint              *natural_size)
 {
   GtkWidget *child;
   GtkAlignmentPrivate *priv;
+  gint minimum, natural;
 
   priv = GTK_ALIGNMENT_GET_PRIVATE (layout);
 
-  minimum_size->width = GTK_CONTAINER (layout)->border_width * 2;
-  minimum_size->height = GTK_CONTAINER (layout)->border_width * 2;
-
-  *natural_size = *minimum_size;
+  natural = minimum = GTK_CONTAINER (layout)->border_width * 2;
 
   if ((child = gtk_bin_get_child (GTK_BIN (layout))) && gtk_widget_get_visible (child))
     {
-      GtkRequisition child_min, child_nat;
+      gint child_min, child_nat;
 
       /* Request extra space for the padding: */
-      minimum_size->width  += (priv->padding_left + priv->padding_right);
-      minimum_size->height += (priv->padding_top + priv->padding_bottom);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  minimum += (priv->padding_left + priv->padding_right);
+	  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (child), 
+						 &child_min, &child_nat);
+	}
+      else
+	{
+	  minimum += (priv->padding_top + priv->padding_bottom);
+	  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (child), 
+						  &child_min, &child_nat);
+	}
 
-      *natural_size = *minimum_size;
+      natural = minimum;
 
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), 
-					    &child_min, &child_nat);
-
-      minimum_size->width  += child_min.width;
-      minimum_size->height += child_min.height;
-      natural_size->width  += child_nat.width;
-      natural_size->height += child_nat.height;
+      minimum += child_min;
+      natural += child_nat;
     }
+
+  if (minimum_size)
+    *minimum_size = minimum;
+
+  if (natural_size)
+    *natural_size = natural;
+}
+
+static void
+gtk_alignment_get_desired_width (GtkExtendedLayout *layout,
+				 gint              *minimum_size,
+				 gint              *natural_size)
+{
+  gtk_alignment_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+}
+
+static void
+gtk_alignment_get_desired_height (GtkExtendedLayout *layout,
+				  gint              *minimum_size,
+				  gint              *natural_size)
+{
+  gtk_alignment_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
 /**

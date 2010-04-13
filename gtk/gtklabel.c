@@ -303,9 +303,12 @@ static void          emit_activate_link         (GtkLabel     *label,
 
 static void gtk_label_layout_interface_init (GtkExtendedLayoutIface *iface);
 
-static void gtk_label_get_desired_size      (GtkExtendedLayout      *layout,
-                                             GtkRequisition         *minimum_size,
-                                             GtkRequisition         *natural_size);
+static void gtk_label_get_desired_width     (GtkExtendedLayout      *layout,
+                                             gint                   *minimum_size,
+                                             gint                   *natural_size);
+static void gtk_label_get_desired_height    (GtkExtendedLayout      *layout,
+                                             gint                   *minimum_size,
+                                             gint                   *natural_size);
 static void gtk_label_get_width_for_height  (GtkExtendedLayout      *layout,
                                              gint                    height,
                                              gint                   *minimum_width,
@@ -346,14 +349,6 @@ add_move_binding (GtkBindingSet  *binding_set,
 				G_TYPE_ENUM, step,
 				G_TYPE_INT, count,
 				G_TYPE_BOOLEAN, TRUE);
-}
-
-static void
-gtk_label_layout_interface_init (GtkExtendedLayoutIface *iface)
-{
-  iface->get_desired_size = gtk_label_get_desired_size;
-  iface->get_width_for_height = gtk_label_get_width_for_height;
-  iface->get_height_for_width = gtk_label_get_height_for_width;
 }
 
 static void
@@ -3198,16 +3193,29 @@ get_single_line_height (GtkWidget   *widget,
   return PANGO_PIXELS (ascent + descent);
 }
 
+
+
+static void
+gtk_label_layout_interface_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_width    = gtk_label_get_desired_width;
+  iface->get_desired_height    = gtk_label_get_desired_height;
+  iface->get_width_for_height = gtk_label_get_width_for_height;
+  iface->get_height_for_width = gtk_label_get_height_for_width;
+}
+
 static void
 gtk_label_get_desired_size (GtkExtendedLayout *layout,
-                            GtkRequisition    *minimum_size,
-                            GtkRequisition    *natural_size)
+			    GtkOrientation     orientation,
+                            gint              *minimum_size,
+                            gint              *natural_size)
 {
   GtkLabelPrivate *priv = GTK_LABEL_GET_PRIVATE (layout);
   GtkLabel *label = GTK_LABEL (layout);
   PangoRectangle required_rect;
   GtkWidgetAuxInfo *aux_info;
   PangoLayout *natural_layout; 
+  gint minimum = 0, natural = 0;
 
   /*  
    * If word wrapping is on, then the height requisition can depend
@@ -3268,9 +3276,10 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   /* XXX TODO: Ideally for wrapping labels, the width should be one char or the length 
    * of the longest word in the text depending on wrap mode.
    */
-
-  minimum_size->width  = required_rect.width + label->misc.xpad * 2;
-  minimum_size->height = required_rect.height + label->misc.ypad * 2;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    minimum = required_rect.width + label->misc.xpad * 2;
+  else
+    minimum = required_rect.height + label->misc.ypad * 2;
 
   /* Natural size */
   natural_layout = pango_layout_copy (label->layout);
@@ -3293,11 +3302,37 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   required_rect.width = PANGO_PIXELS_CEIL (required_rect.width);
   required_rect.height = PANGO_PIXELS_CEIL (required_rect.height);
 
-  natural_size->width = required_rect.width + label->misc.xpad * 2;
-  natural_size->height = required_rect.height + label->misc.ypad * 2;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    natural = required_rect.width + label->misc.xpad * 2;
+  else
+    natural = required_rect.height + label->misc.ypad * 2;
   
   g_object_unref (natural_layout);
+
+  if (minimum_size)
+    *minimum_size = minimum;
+  
+  if (natural_size)
+    *natural_size = natural;
 }
+
+
+static void
+gtk_label_get_desired_width (GtkExtendedLayout *layout,
+			     gint              *minimum_size,
+			     gint              *natural_size)
+{
+  gtk_label_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+}
+
+static void
+gtk_label_get_desired_height (GtkExtendedLayout *layout,
+			      gint              *minimum_size,
+			      gint              *natural_size)
+{
+  gtk_label_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+}
+
 
 static void
 get_size_for_allocation (GtkLabel        *label,
@@ -3351,18 +3386,7 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
   if (90 == angle || 270 == angle)
     get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, height, minimum_width, natural_width);
   else
-    {
-      GtkRequisition minimum_size, natural_size;
-
-      gtk_extended_layout_get_desired_size (layout,
-					    minimum_width ? &minimum_size : NULL,
-					    natural_width ? &natural_size : NULL);
-
-      if (minimum_width)
-        *minimum_width = minimum_size.width;
-      if (natural_width)
-        *natural_width = natural_size.width;
-    }
+    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
 }
 
 static void
@@ -3377,18 +3401,7 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
   if (0 == angle || 180 == angle)
     get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, width, minimum_height, natural_height);
   else
-    {
-      GtkRequisition minimum_size, natural_size;
-
-      gtk_extended_layout_get_desired_size (layout,
-					    minimum_height ? &minimum_size : NULL,
-					    natural_height ? &natural_size : NULL);
-
-      if (minimum_height)
-        *minimum_height = minimum_size.height;
-      if (natural_height)
-        *natural_height = natural_size.height;
-    }
+    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
 }
 
 static void
@@ -3617,8 +3630,10 @@ get_layout_location (GtkLabel  *label,
     }
   else
     {
-      req_width = widget->requisition.width;
-      req_height = widget->requisition.height;
+      req_width = logical.width;
+      req_height = logical.height;
+/*       req_width = widget->requisition.width; */
+/*       req_height = widget->requisition.height; */
     }
 
   x = floor (widget->allocation.x + (gint)misc->xpad +

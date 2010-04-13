@@ -4949,43 +4949,18 @@ gtk_window_size_request (GtkWidget      *widget,
 
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
-      GtkRequisition child_requisition, child_natural;
-      gint           wfh, hfw;
+      gint width, height;
       
+      /* XXX Use the minimum width for the natural height; even if its an hbox. 
+       *
+       * This doesnt need to be here; naturally it will use the preference of the child
+       * except for testing purposes its more interesting this way.
+       */
+      gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (bin->child), NULL, &height);
+      gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (bin->child), height, &width, NULL);
 
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (bin->child),
-					    &child_requisition,
-					    &child_natural);
-
-      /* TODO: Change wrapping label requisitions to desired a user intended wrap length,
-       * and make the minimum size out the minimum height for the natural-width, instead of 
-       * the minimum height for the minimum width, which is backwards */
-      if (window->type != GTK_WINDOW_POPUP)
-	{
-	  if (gtk_extended_layout_is_height_for_width (GTK_EXTENDED_LAYOUT (bin->child)))
-	    {
-	      gtk_extended_layout_get_height_for_width (GTK_EXTENDED_LAYOUT (bin->child),
-							child_natural.width,
-							&hfw, NULL);
-	      
-	      requisition->width  += child_requisition.height;
-	      requisition->height += hfw;
-	    }
-	  else
-	    {
-	      gtk_extended_layout_get_width_for_height (GTK_EXTENDED_LAYOUT (bin->child),
-							child_natural.height,
-							&wfh, NULL);
-	      
-	      requisition->width  += wfh;
-	      requisition->height += child_requisition.height;
-	    }
-	}
-      else
-	{
-	  requisition->width  += child_requisition.width;
-	  requisition->height += child_requisition.height;
-	}
+      requisition->width += width;
+      requisition->height += height;
     }
 }
 

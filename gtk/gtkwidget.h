@@ -459,16 +459,21 @@ typedef enum
 
 #define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
+/* Size of the width-for-height/height-for-width caches */
+#define GTK_N_CACHED_SIZES 3
+
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
 typedef struct _GtkRequisition	   GtkRequisition;
 typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
+typedef struct _GtkDesiredSize     GtkDesiredSize;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 typedef struct _GtkClipboard	   GtkClipboard;
 typedef struct _GtkTooltip         GtkTooltip;
 typedef struct _GtkWindow          GtkWindow;
+
 
 /**
  * GtkAllocation:
@@ -799,6 +804,14 @@ struct _GtkWidgetClass
   void (*_gtk_reserved7) (void);
 };
 
+struct _GtkDesiredSize
+{
+  guint  age;
+  gint   for_size;
+  gint   minimum_size;
+  gint   natural_size;
+};
+
 struct _GtkWidgetAuxInfo
 {
   gint x;
@@ -809,7 +822,10 @@ struct _GtkWidgetAuxInfo
   guint x_set : 1;
   guint y_set : 1;
 
-  GtkRequisition natural_size;
+  GtkDesiredSize desired_widths[GTK_N_CACHED_SIZES];
+  GtkDesiredSize desired_heights[GTK_N_CACHED_SIZES];
+  guint cached_width_age;
+  guint cached_height_age;
 };
 
 struct _GtkWidgetShapeInfo

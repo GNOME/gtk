@@ -467,9 +467,12 @@ static void     gtk_combo_box_start_editing                  (GtkCellEditable *c
 							      GdkEvent        *event);
 
 static void     gtk_combo_box_extended_layout_init           (GtkExtendedLayoutIface *iface);
-static void     gtk_combo_box_get_desired_size               (GtkExtendedLayout      *layout,
-							      GtkRequisition         *minimum_size,
-							      GtkRequisition         *natural_size);
+static void     gtk_combo_box_get_desired_width              (GtkExtendedLayout      *layout,
+							      gint                   *minimum_size,
+							      gint                   *natural_size);
+static void     gtk_combo_box_get_desired_height             (GtkExtendedLayout      *layout,
+							      gint                   *minimum_size,
+							      gint                   *natural_size);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
@@ -5815,12 +5818,11 @@ gtk_combo_box_buildable_custom_tag_end (GtkBuildable *buildable,
 }
 
 
-
-
 static void
 gtk_combo_box_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
-  iface->get_desired_size = gtk_combo_box_get_desired_size;
+  iface->get_desired_width = gtk_combo_box_get_desired_width;
+  iface->get_desired_height = gtk_combo_box_get_desired_height;
 }
 
 static void
@@ -5844,8 +5846,13 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
       GtkRequisition req, nat_req;
 
       if (priv->cell_view)
-	gtk_cell_view_get_desired_size_of_row (GTK_CELL_VIEW (priv->cell_view), 
-					       path, &req, &nat_req);
+	{
+	  /* XXX FIXME: Currently still not doing height-for-width in cell renderers here */
+	  gtk_cell_view_get_desired_width_of_row (GTK_CELL_VIEW (priv->cell_view), 
+						  path, &req.width, &nat_req.width);
+	  gtk_cell_view_get_desired_height_of_row (GTK_CELL_VIEW (priv->cell_view), 
+						   path, &req.height, &nat_req.height);
+	}
       else
         {
 	  memset (&req, 0x0, sizeof (GtkRequisition));
@@ -5865,6 +5872,11 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
   gtk_tree_path_free (path);
 }
 
+
+/* XXX TODO: Split this up into 2 orientations so as
+ * to properly support height-for-width/width-for-height here
+ *
+ */
 static void
 gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
 				GtkRequisition    *minimum_size,
@@ -6005,6 +6017,39 @@ gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
       natural_size->height += 2 * GTK_WIDGET (layout)->style->ythickness;
     }
 }
+
+static void     
+gtk_combo_box_get_desired_width (GtkExtendedLayout      *layout,
+				 gint                   *minimum_size,
+				 gint                   *natural_size)
+{
+  GtkRequisition minimum, natural;
+
+  gtk_combo_box_get_desired_size (layout, &minimum, &natural);
+
+  if (minimum_size)
+    *minimum_size = minimum.width;
+
+  if (natural_size)
+    *natural_size = natural.width;
+}
+
+static void
+gtk_combo_box_get_desired_height (GtkExtendedLayout      *layout,
+				  gint                   *minimum_size,
+				  gint                   *natural_size)
+{ 
+  GtkRequisition minimum, natural;
+
+  gtk_combo_box_get_desired_size (layout, &minimum, &natural);
+
+  if (minimum_size)
+    *minimum_size = minimum.height;
+
+  if (natural_size)
+    *natural_size = natural.height;
+}
+
 
 #define __GTK_COMBO_BOX_C__
 #include "gtkaliasdef.c"

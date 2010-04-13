@@ -62,7 +62,15 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
 
-static void       gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface *iface);
+static void       gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface  *iface);
+static void       gtk_cell_renderer_text_get_desired_width  (GtkExtendedCell       *cell,
+							     GtkWidget             *widget,
+							     gint                  *minimal_size,
+							     gint                  *desired_size);
+static void       gtk_cell_renderer_text_get_desired_height (GtkExtendedCell       *cell,
+							     GtkWidget             *widget,
+							     gint                  *minimal_size,
+							     gint                  *desired_size);
 
 enum {
   EDITED,
@@ -1936,10 +1944,22 @@ gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer
 }
 
 static void
-gtk_cell_renderer_text_extended_cell_get_desired_size (GtkExtendedCell   *cell,
-						       GtkWidget         *widget,
-						       GtkRequisition    *minimal_size,
-						       GtkRequisition    *desired_size)
+gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface *iface)
+{
+  /* Currently cell renderers do natural widths for ellipsizing text 
+   * but dont yet do height-for-width/width-for-height calculations for
+   * wordwrapping 
+   */
+  iface->get_desired_width  = gtk_cell_renderer_text_get_desired_width;
+  iface->get_desired_height = gtk_cell_renderer_text_get_desired_height;
+}
+
+static void
+gtk_cell_renderer_text_get_desired_size (GtkExtendedCell   *cell,
+					 GtkWidget         *widget,
+					 GtkOrientation     orientation,
+					 gint              *minimal_size,
+					 gint              *desired_size)
 {
   GtkCellRendererTextPrivate *priv;
 
@@ -1947,9 +1967,14 @@ gtk_cell_renderer_text_extended_cell_get_desired_size (GtkExtendedCell   *cell,
 
   if (minimal_size)
     {
-      get_size (GTK_CELL_RENDERER (cell),
-		widget, NULL, NULL, NULL, NULL,
-		&minimal_size->width, &minimal_size->height);
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	get_size (GTK_CELL_RENDERER (cell),
+		  widget, NULL, NULL, NULL, NULL,
+		  minimal_size, NULL);
+      else
+	get_size (GTK_CELL_RENDERER (cell),
+		  widget, NULL, NULL, NULL, NULL,
+		  NULL, minimal_size);
     }
   
   if (desired_size)
@@ -1959,19 +1984,39 @@ gtk_cell_renderer_text_extended_cell_get_desired_size (GtkExtendedCell   *cell,
       ellipsize = priv->ellipsize;
       priv->ellipsize = PANGO_ELLIPSIZE_NONE;
       
-      get_size (GTK_CELL_RENDERER (cell),
-		widget, NULL, NULL, NULL, NULL,
-		&desired_size->width, &desired_size->height);
-      
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	get_size (GTK_CELL_RENDERER (cell),
+		  widget, NULL, NULL, NULL, NULL,
+		  desired_size, NULL);
+      else
+	get_size (GTK_CELL_RENDERER (cell),
+		  widget, NULL, NULL, NULL, NULL,
+		  NULL, desired_size);
+
       priv->ellipsize = ellipsize;
     }
 }
 
 static void
-gtk_cell_renderer_text_extended_cell_init (GtkExtendedCellIface *iface)
+gtk_cell_renderer_text_get_desired_width (GtkExtendedCell   *cell,
+					  GtkWidget         *widget,
+					  gint              *minimum_size,
+					  gint              *desired_size)
 {
-  iface->get_desired_size = gtk_cell_renderer_text_extended_cell_get_desired_size;
+  gtk_cell_renderer_text_get_desired_size (cell, widget, GTK_ORIENTATION_HORIZONTAL, 
+					   minimum_size, desired_size);
 }
+
+static void
+gtk_cell_renderer_text_get_desired_height (GtkExtendedCell   *cell,
+					   GtkWidget         *widget,
+					   gint              *minimum_size,
+					   gint              *desired_size)
+{
+  gtk_cell_renderer_text_get_desired_size (cell, widget, GTK_ORIENTATION_VERTICAL, 
+					   minimum_size, desired_size);
+}
+
 
 #define __GTK_CELL_RENDERER_TEXT_C__
 #include "gtkaliasdef.c"

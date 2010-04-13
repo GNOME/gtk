@@ -109,19 +109,22 @@ static void gtk_box_get_child_property (GtkContainer   *container,
 static GType gtk_box_child_type        (GtkContainer   *container);
 
 
-static void gtk_box_extended_layout_init  (GtkExtendedLayoutIface *iface);
-static void gtk_box_get_desired_size      (GtkExtendedLayout      *layout,
-                                           GtkRequisition         *minimum_size,
-                                           GtkRequisition         *natural_size);
-static gboolean gtk_box_is_height_for_width (GtkExtendedLayout      *layout);
-static void gtk_box_get_width_for_height  (GtkExtendedLayout      *layout,
-					   gint                    height,
-					   gint                   *minimum_width,
-					   gint                   *natural_width);
-static void gtk_box_get_height_for_width  (GtkExtendedLayout      *layout,
-					   gint                    width,
-					   gint                   *minimum_height,
-					   gint                   *natural_height);
+static void     gtk_box_extended_layout_init (GtkExtendedLayoutIface *iface);
+static gboolean gtk_box_is_height_for_width  (GtkExtendedLayout      *layout);
+static void     gtk_box_get_desired_width    (GtkExtendedLayout      *layout,
+					      gint                   *minimum_size,
+					      gint                   *natural_size);
+static void     gtk_box_get_desired_height   (GtkExtendedLayout      *layout,
+					      gint                   *minimum_size,
+					      gint                   *natural_size);
+static void     gtk_box_get_width_for_height (GtkExtendedLayout      *layout,
+					      gint                    height,
+					      gint                   *minimum_width,
+					      gint                   *natural_width);
+static void     gtk_box_get_height_for_width (GtkExtendedLayout      *layout,
+					      gint                    width,
+					      gint                   *minimum_height,
+					      gint                   *natural_height);
 
 static GtkExtendedLayoutIface *parent_extended_layout_iface;
 
@@ -378,8 +381,22 @@ gtk_box_size_allocate (GtkWidget     *widget,
 	      
 	      
 	      /* Assert the api is working properly */
-	      g_assert (sizes[i].minimum_size >= 0);
-	      g_assert (sizes[i].natural_size >= sizes[i].minimum_size);
+	      if (sizes[i].minimum_size < 0)
+		g_error ("GtkBox child %s minimum %s: %d < 0 for %s %d",
+			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+			 sizes[i].minimum_size,
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
+
+	      if (sizes[i].natural_size < sizes[i].minimum_size)
+		g_error ("GtkBox child %s natural %s: %d < minimum %d for %s %d",
+			 gtk_widget_get_name (GTK_WIDGET (child->widget)),
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
+			 sizes[i].natural_size, 
+			 sizes[i].minimum_size,
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
+			 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
 	      
 	      size -= sizes[i].minimum_size;
 	      size -= child->padding * 2;
@@ -749,7 +766,8 @@ gtk_box_extended_layout_init (GtkExtendedLayoutIface *iface)
   parent_extended_layout_iface = g_type_interface_peek_parent (iface);
 
   iface->is_height_for_width  = gtk_box_is_height_for_width;
-  iface->get_desired_size     = gtk_box_get_desired_size;
+  iface->get_desired_width    = gtk_box_get_desired_width;
+  iface->get_desired_height   = gtk_box_get_desired_height;
   iface->get_height_for_width = gtk_box_get_height_for_width;
   iface->get_width_for_height = gtk_box_get_width_for_height;
 }
@@ -763,121 +781,106 @@ gtk_box_is_height_for_width (GtkExtendedLayout      *layout)
 }
 
 static void
-gtk_box_get_desired_size (GtkExtendedLayout *layout,
-                          GtkRequisition    *minimum_size,
-                          GtkRequisition    *natural_size)
+gtk_box_get_desired_size (GtkExtendedLayout      *layout,
+			  GtkOrientation          orientation,
+			  gint                   *minimum_size,
+			  gint                   *natural_size)
 {
   GtkBox *box;
   GtkBoxPrivate *private;
   GList *children;
   gint nvis_children;
   gint border_width;
+  gint minimum, natural;
 
   box = GTK_BOX (layout);
   private = GTK_BOX_GET_PRIVATE (box);
   border_width = GTK_CONTAINER (box)->border_width;
 
-  minimum_size->width = minimum_size->height = 0;
-  natural_size->width = natural_size->height = 0;
+  minimum = natural = 0;
 
   nvis_children = 0;
-  children = box->children;
-  while (children)
-    {
-      GtkBoxChild *child;
 
-      child = children->data;
-      children = children->next;
+  for (children = box->children; children; children = children->next)
+    {
+      GtkBoxChild *child = children->data;
 
       if (gtk_widget_get_visible (child->widget))
         {
-          GtkRequisition child_minimum_size;
-          GtkRequisition child_natural_size;
+          gint child_minimum, child_natural;
 
-          gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child->widget),
-						&child_minimum_size,
-						&child_natural_size);
+	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	    gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (child->widget),
+						   &child_minimum, &child_natural);
+	  else
+	    gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (child->widget),
+						    &child_minimum, &child_natural);
 
-          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
+          if (private->orientation == orientation)
+	    {
               if (box->homogeneous)
                 {
-                  gint width;
+                  gint largest;
 
-                  width = child_minimum_size.width + child->padding * 2;
-                  minimum_size->width = MAX (minimum_size->width, width);
+                  largest = child_minimum + child->padding * 2;
+                  minimum = MAX (minimum, largest);
 
-                  width = child_natural_size.width + child->padding * 2;
-                  natural_size->width = MAX (natural_size->width, width);
+                  largest = child_natural + child->padding * 2;
+                  natural = MAX (natural, largest);
                 }
               else
                 {
-                  minimum_size->width += child_minimum_size.width + child->padding * 2;
-                  natural_size->width += child_natural_size.width + child->padding * 2;
+                  minimum += child_minimum + child->padding * 2;
+                  natural += child_natural + child->padding * 2;
                 }
-
-              minimum_size->height = MAX (minimum_size->height, child_minimum_size.height);
-              natural_size->height = MAX (natural_size->height, child_natural_size.height);
-            }
-          else
-            {
-              if (box->homogeneous)
-                {
-                  gint height;
-
-                  height = child_minimum_size.height + child->padding * 2;
-                  minimum_size->height = MAX (minimum_size->height, height);
-
-                  height = child_natural_size.height + child->padding * 2;
-                  natural_size->height = MAX (natural_size->height, height);
-                }
-              else
-                {
-                  minimum_size->height += child_minimum_size.height + child->padding * 2;
-                  natural_size->height += child_natural_size.height + child->padding * 2;
-                }
-
-              minimum_size->width = MAX (minimum_size->width, child_minimum_size.width);
-              natural_size->width = MAX (natural_size->width, child_natural_size.width);
-            }
-
+	    }
+	  else
+	    {
+	      /* The biggest mins and naturals in the opposing orientation */
+              minimum = MAX (minimum, child_minimum);
+              natural = MAX (natural, child_natural);
+	    }
 
           nvis_children += 1;
         }
     }
-  if (nvis_children > 0)
+
+  if (nvis_children > 0 && private->orientation == orientation)
     {
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          if (box->homogeneous)
-            {
-             minimum_size->width *= nvis_children;
-             natural_size->width *= nvis_children;
-            }
-
-          minimum_size->width += (nvis_children - 1) * box->spacing;
-          natural_size->width += (nvis_children - 1) * box->spacing;
-        }
-      else
-        {
-          if (box->homogeneous)
-            {
-             minimum_size->height *= nvis_children;
-             natural_size->height *= nvis_children;
-            }
-
-          minimum_size->height += (nvis_children - 1) * box->spacing;
-          natural_size->height += (nvis_children - 1) * box->spacing;
-        }
+      if (box->homogeneous)
+	{
+	  minimum *= nvis_children;
+	  natural *= nvis_children;
+	}
+      minimum += (nvis_children - 1) * box->spacing;
+      natural += (nvis_children - 1) * box->spacing;
     }
 
-  minimum_size->width += border_width * 2;
-  minimum_size->height += border_width * 2;
+  minimum += border_width * 2;
+  natural += border_width * 2;
 
-  natural_size->width += border_width * 2;
-  natural_size->height += border_width * 2;
+  if (minimum_size)
+    *minimum_size = minimum;
+
+  if (natural_size)
+    *natural_size = natural;
 }
 
+static void
+gtk_box_get_desired_width (GtkExtendedLayout      *layout,
+			   gint                   *minimum_size,
+			   gint                   *natural_size)
+{
+  gtk_box_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+}
+
+static void
+gtk_box_get_desired_height (GtkExtendedLayout      *layout,
+			    gint                   *minimum_size,
+			    gint                   *natural_size)
+{
+  gtk_box_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+}
 
 /**
  * size_fits_for_dimension:
@@ -1101,10 +1104,10 @@ gtk_box_get_width_for_height (GtkExtendedLayout *layout,
   if (private->orientation == GTK_ORIENTATION_VERTICAL)
     {
 #if 0
-    gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width); 
+      gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width); 
 #else
-    /* Have the base class return the values previously computed by get_desired_size() */  
-    parent_extended_layout_iface->get_width_for_height (layout, height, minimum_width, natural_width);
+      /* Return the defaults instead of calculating in the opposing direction */  
+      gtk_extended_layout_get_desired_width (layout, minimum_width, natural_width);
 #endif
     }
   else
@@ -1125,8 +1128,8 @@ gtk_box_get_height_for_width (GtkExtendedLayout *layout,
 #if 0
       gtk_box_compute_size_for_opposing_orientation (box, width, minimum_height, natural_height);
 #else
-      /* Have the base class return the values previously computed by get_desired_size() */
-      parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height);
+      /* Return the defaults instead of calculating in the opposing direction */  
+      gtk_extended_layout_get_desired_height (layout, minimum_height, natural_height);
 #endif
     }
   else

@@ -344,10 +344,13 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
-static void             gtk_widget_layout_interface_init        (GtkExtendedLayoutIface *iface);
-static void             gtk_widget_real_get_desired_size        (GtkExtendedLayout *layout,
-                                                                 GtkRequisition    *minimum_size,
-                                                                 GtkRequisition    *natural_size);
+static void             gtk_widget_extended_layout_init         (GtkExtendedLayoutIface *iface);
+static void             gtk_widget_real_get_desired_width       (GtkExtendedLayout *layout,
+                                                                 gint              *minimum_size,
+                                                                 gint              *natural_size);
+static void             gtk_widget_real_get_desired_height      (GtkExtendedLayout *layout,
+                                                                 gint              *minimum_size,
+                                                                 gint              *natural_size);
 
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
      
@@ -426,7 +429,7 @@ gtk_widget_get_type (void)
 
       const GInterfaceInfo layout_info =
       {
-	(GInterfaceInitFunc) gtk_widget_layout_interface_init,
+	(GInterfaceInitFunc) gtk_widget_extended_layout_init,
 	(GInterfaceFinalizeFunc) NULL,
 	NULL /* interface data */
       };
@@ -2849,6 +2852,8 @@ gtk_widget_init (GtkWidget *widget)
 
   GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
   GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
 
   widget->style = gtk_widget_get_default_style ();
@@ -3889,7 +3894,7 @@ gtk_widget_size_request (GtkWidget	*widget,
                "to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 
-  _gtk_size_group_compute_desired_size (widget, requisition, NULL);
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), requisition, NULL);
 }
 
 /**
@@ -9277,11 +9282,15 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
       aux_info->width = -1;
       aux_info->height = -1;
 
+      aux_info->cached_width_age  = 1;
+      aux_info->cached_height_age = 1;
+
       g_object_set_qdata (G_OBJECT (widget), quark_aux_info, aux_info);
     }
   
   return aux_info;
 }
+
 
 /*****************************************
  * gtk_widget_aux_info_destroy:
@@ -10719,18 +10728,33 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
  * GtkExtendedLayout implementation
  */
 static void
-gtk_widget_real_get_desired_size (GtkExtendedLayout *layout,
-                                  GtkRequisition    *minimum_size,
-                                  GtkRequisition    *natural_size)
+gtk_widget_real_get_desired_width (GtkExtendedLayout *layout,
+				   gint              *minimum_size,
+				   gint              *natural_size)
 {
   /* Set the initial values so that unimplemented classes will fall back
    * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
    */
   if (minimum_size)
-    memset (minimum_size, 0x0, sizeof (GtkRequisition));
+    *minimum_size = GTK_WIDGET (layout)->requisition.width;
 
   if (natural_size)
-    memset (natural_size, 0x0, sizeof (GtkRequisition));
+    *natural_size = GTK_WIDGET (layout)->requisition.width;
+}
+
+static void
+gtk_widget_real_get_desired_height (GtkExtendedLayout *layout,
+				    gint              *minimum_size,
+				    gint              *natural_size)
+{
+  /* Set the initial values so that unimplemented classes will fall back
+   * on the "size-request" collected values (see gtksizegroup.c:do_size_request()).
+   */
+  if (minimum_size)
+    *minimum_size = GTK_WIDGET (layout)->requisition.height;
+
+  if (natural_size)
+    *natural_size = GTK_WIDGET (layout)->requisition.height;
 }
 
 static void
@@ -10739,23 +10763,7 @@ gtk_widget_real_get_height_for_width (GtkExtendedLayout *layout,
                                       gint      *minimum_height,
                                       gint      *natural_height)
 {
-  GtkRequisition minimum_size;
-  GtkRequisition natural_size;
-
-  g_return_if_fail (GTK_IS_WIDGET (layout));
-
-#if 0
-  TODO: integrate height-for-width with size-groups
-#else
-  gtk_extended_layout_get_desired_size (layout,
-					minimum_height ? &minimum_size : NULL,
-					natural_height ? &natural_size : NULL);
-
-  if (minimum_height)
-    *minimum_height = minimum_size.height;
-  if (natural_height)
-    *natural_height = natural_size.height;
-#endif
+  gtk_extended_layout_get_desired_height (layout, minimum_height, natural_height);
 }
 
 static void
@@ -10763,30 +10771,15 @@ gtk_widget_real_get_width_for_height (GtkExtendedLayout *layout,
                                       gint       height,
                                       gint      *minimum_width,
                                       gint      *natural_width)
-{
-  GtkRequisition minimum_size;
-  GtkRequisition natural_size;
- 
-  g_return_if_fail (GTK_IS_WIDGET (layout));
-
-#if 0
-  TODO: integrate width-for-height with size-groups
-#else
-  gtk_extended_layout_get_desired_size (layout,
-					minimum_width ? &minimum_size : NULL,
-					natural_width ? &natural_size : NULL);
-
-  if (minimum_width)
-    *minimum_width = minimum_size.width;
-  if (natural_width)
-    *natural_width = natural_size.width;
-#endif
+{ 
+  gtk_extended_layout_get_desired_width (layout, minimum_width, natural_width);
 }
 
 static void
-gtk_widget_layout_interface_init (GtkExtendedLayoutIface *iface)
+gtk_widget_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
-  iface->get_desired_size = gtk_widget_real_get_desired_size;
+  iface->get_desired_width    = gtk_widget_real_get_desired_width;
+  iface->get_desired_height   = gtk_widget_real_get_desired_height;
   iface->get_width_for_height = gtk_widget_real_get_width_for_height;
   iface->get_height_for_width = gtk_widget_real_get_height_for_width;  
 }

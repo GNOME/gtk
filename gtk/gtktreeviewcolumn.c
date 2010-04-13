@@ -2644,9 +2644,15 @@ gtk_tree_view_column_cell_get_real_size (GtkTreeViewColumn  *tree_column,
 	  nat_req.width += tree_column->spacing;
         }
 
-      gtk_extended_cell_get_desired_size (GTK_EXTENDED_CELL (info->cell),
-					  tree_column->tree_view,
-					  &min_req, &nat_req);
+      /* XXX TODO: Cell renderers are not really doing height-for-width yet.
+       */
+      gtk_extended_cell_get_desired_width (GTK_EXTENDED_CELL (info->cell),
+					   tree_column->tree_view,
+					   &min_req.width, &nat_req.width);
+      gtk_extended_cell_get_height_for_width (GTK_EXTENDED_CELL (info->cell),
+					      tree_column->tree_view,
+					      nat_req.width,
+					      &min_req.height, &nat_req.height);
 
       min_req.width += focus_line_width * 2;
       min_req.height += focus_line_width * 2;

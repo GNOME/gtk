@@ -469,6 +469,13 @@ static void gtk_tree_view_buildable_add_child (GtkBuildable *tree_view,
 					       const gchar *type);
 static void gtk_tree_view_buildable_init      (GtkBuildableIface *iface);
 static void gtk_tree_view_extended_layout_init (GtkExtendedLayoutIface *iface);
+static void gtk_tree_view_get_desired_width    (GtkExtendedLayout *layout,
+						gint              *minimum_size,
+						gint              *natural_size);
+static void gtk_tree_view_get_desired_height   (GtkExtendedLayout *layout,
+						gint              *minimum_size,
+						gint              *natural_size);
+
 
 static gboolean scroll_row_timeout                   (gpointer     data);
 static void     add_scroll_timeout                   (GtkTreeView *tree_view);
@@ -15733,9 +15740,17 @@ gtk_tree_view_get_minimum_size (GtkWidget      *widget,
 }
 
 static void
-gtk_tree_view_extended_layout_get_desired_size (GtkExtendedLayout *layout,
-                                                GtkRequisition    *minimal_size,
-                                                GtkRequisition    *desired_size)
+gtk_tree_view_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_width  = gtk_tree_view_get_desired_width;
+  iface->get_desired_height = gtk_tree_view_get_desired_height;
+}
+
+static void
+gtk_tree_view_get_desired_size (GtkExtendedLayout *layout,
+				GtkOrientation     orientation,
+				gint              *minimum_size,
+				gint              *natural_size)
 {
   GtkTreeView *tree_view;
   gint natural_width = 0;
@@ -15746,32 +15761,49 @@ gtk_tree_view_extended_layout_get_desired_size (GtkExtendedLayout *layout,
 
   gtk_tree_view_get_minimum_size (GTK_WIDGET (layout), &requisition);
 
-  for (column_iter = tree_view->priv->columns; column_iter; column_iter = column_iter->next)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      GtkTreeViewColumn *column = column_iter->data;
+      for (column_iter = tree_view->priv->columns; column_iter; column_iter = column_iter->next)
+	{
+	  GtkTreeViewColumn *column = column_iter->data;
+	  
+	  if (!column->visible)
+	    continue;
+	  
+	  natural_width += gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
+	}
 
-      if (!column->visible)
-        continue;
+      if (minimum_size)
+	*minimum_size = requisition.width;
 
-      natural_width += gtk_tree_view_get_real_natural_width_from_column (tree_view, column);
+      if (natural_size)
+	*natural_size = MAX (requisition.width, natural_width);
     }
-
-  if (minimal_size)
-    *minimal_size = requisition;
-
-  if (desired_size)
+  else
     {
-      desired_size->height = requisition.height;
-      desired_size->width = MAX (requisition.width, natural_width);
+      if (minimum_size)
+	*minimum_size = requisition.height;
+
+      if (natural_size)
+	*natural_size = requisition.height;
     }
 }
 
 static void
-gtk_tree_view_extended_layout_init (GtkExtendedLayoutIface *iface)
+gtk_tree_view_get_desired_width (GtkExtendedLayout *layout,
+				 gint              *minimum_size,
+				 gint              *natural_size)
 {
-  iface->get_desired_size = gtk_tree_view_extended_layout_get_desired_size;
+  gtk_tree_view_get_desired_size (layout, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
 }
 
+static void
+gtk_tree_view_get_desired_height (GtkExtendedLayout *layout,
+				 gint              *minimum_size,
+				 gint              *natural_size)
+{
+  gtk_tree_view_get_desired_size (layout, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+}
 
 #define __GTK_TREE_VIEW_C__
 #include "gtkaliasdef.c"
