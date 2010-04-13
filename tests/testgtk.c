@@ -1209,10 +1209,6 @@ create_bbox (gint  horizontal,
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
-  g_object_set (bbox,
-                "child-min-width", child_w,
-                "child-min-height", child_h,
-                NULL);
   
   button = gtk_button_new_with_label ("OK");
   gtk_container_add (GTK_CONTAINER (bbox), button);
