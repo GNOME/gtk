@@ -5612,6 +5612,16 @@ gtk_widget_has_default (GtkWidget *widget)
   return (GTK_OBJECT_FLAGS (widget) & GTK_HAS_DEFAULT) != 0;
 }
 
+void
+_gtk_widget_set_has_default (GtkWidget *widget,
+                             gboolean   has_default)
+{
+  if (has_default)
+    GTK_OBJECT_FLAGS (widget) |= GTK_HAS_DEFAULT;
+  else
+    GTK_OBJECT_FLAGS (widget) &= ~(GTK_HAS_DEFAULT);
+}
+
 /**
  * gtk_widget_grab_default:
  * @widget: a #GtkWidget

@@ -1664,7 +1664,7 @@ gtk_window_set_default (GtkWindow *window,
 	  
 	  if (window->focus_widget != window->default_widget ||
 	      !gtk_widget_get_receives_default (window->default_widget))
-	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+            _gtk_widget_set_has_default (window->default_widget, FALSE);
 	  gtk_widget_queue_draw (window->default_widget);
 	}
 
@@ -1674,7 +1674,7 @@ gtk_window_set_default (GtkWindow *window,
 	{
 	  if (window->focus_widget == NULL ||
 	      !gtk_widget_get_receives_default (window->focus_widget))
-	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+            _gtk_widget_set_has_default (window->default_widget, TRUE);
 	  gtk_widget_queue_draw (window->default_widget);
 	}
 
@@ -5480,11 +5480,11 @@ gtk_window_real_set_focus (GtkWindow *window,
       if (gtk_widget_get_receives_default (window->focus_widget) &&
 	  (window->focus_widget != window->default_widget))
         {
-	  GTK_WIDGET_UNSET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
+          _gtk_widget_set_has_default (window->focus_widget, FALSE);
 	  gtk_widget_queue_draw (window->focus_widget);
 	  
 	  if (window->default_widget)
-	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+            _gtk_widget_set_has_default (window->default_widget, TRUE);
 	}
 
       window->focus_widget = NULL;
@@ -5506,10 +5506,10 @@ gtk_window_real_set_focus (GtkWindow *window,
 	  (window->focus_widget != window->default_widget))
 	{
 	  if (gtk_widget_get_can_default (window->focus_widget))
-	    GTK_WIDGET_SET_FLAGS (window->focus_widget, GTK_HAS_DEFAULT);
+            _gtk_widget_set_has_default (window->focus_widget, TRUE);
 
 	  if (window->default_widget)
-	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
+            _gtk_widget_set_has_default (window->default_widget, FALSE);
 	}
 
       if (window->has_focus)
