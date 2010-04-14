@@ -3253,7 +3253,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
       label->layout = backup;
     }
   
-  if (label->single_line_mode)
+  if (label->single_line_mode || label->wrap)
     required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
   
   if (label->have_transform)
@@ -3279,7 +3279,9 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     minimum = required_rect.width + label->misc.xpad * 2;
   else
-    minimum = required_rect.height + label->misc.ypad * 2;
+    {
+      minimum = required_rect.height + label->misc.ypad * 2;
+    }
 
   /* Natural size */
   natural_layout = pango_layout_copy (label->layout);

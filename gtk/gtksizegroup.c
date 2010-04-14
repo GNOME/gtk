@@ -621,7 +621,7 @@ get_base_dimension (GtkWidget        *widget,
 }
 
 static void
-do_size_request (GtkWidget *widget)
+do_size_request (GtkWidget *widget, gint width, gint height)
 {
   if (GTK_WIDGET_REQUEST_NEEDED (widget))
     {
@@ -631,20 +631,35 @@ do_size_request (GtkWidget *widget)
 			     "size-request",
 			     &widget->requisition);
     }
+  
+  /* Also update size groups from _gtk_size_group_bump_requisition() */
+  widget->requisition.width  = MAX (widget->requisition.width, width);
+  widget->requisition.height = MAX (widget->requisition.height, height);
 }
 
+/* NOTE: This is only ever called for either mode horizontal or mode vertical
+ * but never as both.
+ */
 static gint
 compute_base_dimension (GtkWidget        *widget,
-			GtkSizeGroupMode  mode)
+			GtkSizeGroupMode  mode,
+			gint              minimum)
 {
-  do_size_request (widget);
+  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+    do_size_request (widget, minimum, -1);
+  else /*  (mode == GTK_SIZE_GROUP_VERTICAL) */
+    do_size_request (widget, -1, minimum);
 
   return get_base_dimension (widget, mode);
 }
 
+/* NOTE: This is only ever called for either mode horizontal or mode vertical
+ * but never as both.
+ */
 static gint
 compute_dimension (GtkWidget        *widget,
-		   GtkSizeGroupMode  mode)
+		   GtkSizeGroupMode  mode,
+		   gint              minimum)
 {
   GSList *widgets = NULL;
   GSList *groups = NULL;
@@ -660,7 +675,7 @@ compute_dimension (GtkWidget        *widget,
   
   if (!groups)
     {
-      result = compute_base_dimension (widget, mode);
+      result = compute_base_dimension (widget, mode, minimum);
     }
   else
     {
@@ -677,7 +692,7 @@ compute_dimension (GtkWidget        *widget,
 	    {
 	      GtkWidget *tmp_widget = tmp_list->data;
 
-	      gint dimension = compute_base_dimension (tmp_widget, mode);
+	      gint dimension = compute_base_dimension (tmp_widget, mode, minimum);
 
 	      if (gtk_widget_get_mapped (tmp_widget) || !group->ignore_hidden)
 		{
@@ -696,12 +711,12 @@ compute_dimension (GtkWidget        *widget,
 	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
 		{
 		  tmp_group->have_width = TRUE;
-		  tmp_group->requisition.width = result;
+		  tmp_group->requisition.width = MAX (result, minimum);
 		}
 	      else
 		{
 		  tmp_group->have_height = TRUE;
-		  tmp_group->requisition.height = result;
+		  tmp_group->requisition.height = MAX (result, minimum);
 		}
 	      
 	      tmp_list = tmp_list->next;
@@ -802,7 +817,12 @@ _gtk_size_group_get_child_requisition (GtkWidget      *widget,
  * 
  * Compute the requisition of a widget taking into account grouping of
  * the widget's requisition with other widgets.
- **/
+ *
+ * This is used by #GtkExtendedLayout to obtain minimum value
+ * caps for all values cached and returned to parent containers,
+ * then the extended layout while making its own sizes in multiple
+ * passes updates sizegroups with _gtk_size_group_bump_requisition().
+ */
 void
 _gtk_size_group_compute_requisition (GtkWidget      *widget,
 				     GtkRequisition *requisition)
@@ -815,9 +835,8 @@ _gtk_size_group_compute_requisition (GtkWidget      *widget,
   if (get_size_groups (widget))
     {
       /* Only do the full computation if we actually have size groups */
-      
-      width = compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL);
-      height = compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL);
+      width = compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL, -1);
+      height = compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL, -1);
 
       if (requisition)
 	{
@@ -827,12 +846,47 @@ _gtk_size_group_compute_requisition (GtkWidget      *widget,
     }
   else
     {
-      do_size_request (widget);
+      do_size_request (widget, -1, -1);
       
       if (requisition)
 	get_fast_child_requisition (widget, requisition);
     }
 }
+
+
+/**
+ * _gtk_size_group_bump_requisition:
+ * @widget: a #GtkWidget
+ * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
+ *        on the dimension in which to bump the size.
+ * @size: The new base size in @mode's dimension for the group.
+ *
+ * This function is used to update sizegroup minimum size information
+ * in multiple passes from the new #GtkExtendedLayout manager.
+ */
+void
+_gtk_size_group_bump_requisition (GtkWidget        *widget,
+				  GtkSizeGroupMode  mode,
+				  gint              size)
+{
+  initialize_size_group_quarks ();
+
+  if (get_size_groups (widget))
+    {
+      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+	compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL, size);
+      else
+	compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL, size);
+    }
+  else
+    {
+      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+	do_size_request (widget, size, -1);
+      else
+	do_size_request (widget, -1, size);
+    }
+}
+
 
 /**
  * _gtk_size_group_queue_resize:

@@ -157,9 +157,14 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
 								 &minimum_width, 
 								 &natural_width);
 
+      minimum_width = MAX (minimum_width, requisition.width);
+      natural_width = MAX (natural_width, requisition.width);
 
-      cached_size->minimum_size = MAX (minimum_width, requisition.width);
-      cached_size->natural_size = MAX (natural_width, requisition.width);
+      /* XXX Possibly we should update this with minimum values instead */
+      _gtk_size_group_bump_requisition (GTK_WIDGET (layout), GTK_SIZE_GROUP_HORIZONTAL, natural_width);
+
+      cached_size->minimum_size = minimum_width;
+      cached_size->natural_size = natural_width;
       cached_size->for_size     = -1;
       cached_size->age          = aux_info->cached_width_age;
 
@@ -173,6 +178,8 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
 
   if (natural_width)
     *natural_width = cached_size->natural_size;
+
+  g_assert (!minimum_width || !natural_width || *minimum_width <= *natural_width);
 
 #if DEBUG_EXTENDED_LAYOUT
   g_message ("%s returning minimum width: %d and natural width: %d",
@@ -228,8 +235,14 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
 								  &minimum_height, 
 								  &natural_height);
 
-      cached_size->minimum_size = MAX (minimum_height, requisition.height);
-      cached_size->natural_size = MAX (natural_height, requisition.height);
+      minimum_height = MAX (minimum_height, requisition.height);
+      natural_height = MAX (natural_height, requisition.height);
+
+      /* XXX Possibly we should update this with minimum values instead */
+      _gtk_size_group_bump_requisition (GTK_WIDGET (layout), GTK_SIZE_GROUP_VERTICAL, natural_height);
+
+      cached_size->minimum_size = minimum_height;
+      cached_size->natural_size = natural_height;
       cached_size->for_size     = -1;
       cached_size->age          = aux_info->cached_height_age;
 
@@ -244,6 +257,7 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
   if (natural_height)
     *natural_height = cached_size->natural_size;
 
+  g_assert (!minimum_height || !natural_height || *minimum_height <= *natural_height);
 
 #if DEBUG_EXTENDED_LAYOUT
   g_message ("%s returning minimum height: %d and natural height: %d",
@@ -301,9 +315,15 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
 								    height,
 								    &minimum_width, 
 								    &natural_width);
+
+      minimum_width = MAX (minimum_width, requisition.width);
+      natural_width = MAX (natural_width, requisition.width);
+
+      /* XXX Possibly we should update this with minimum values instead */
+      _gtk_size_group_bump_requisition (GTK_WIDGET (layout), GTK_SIZE_GROUP_HORIZONTAL, natural_width);
       
-      cached_size->minimum_size = MAX (minimum_width, requisition.width);
-      cached_size->natural_size = MAX (natural_width, requisition.width);
+      cached_size->minimum_size = minimum_width;
+      cached_size->natural_size = natural_width;
       cached_size->for_size     = height;
       cached_size->age          = aux_info->cached_width_age;
 
@@ -376,9 +396,15 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
 								    width,
 								    &minimum_height, 
 								    &natural_height);
-      
-      cached_size->minimum_size = MAX (minimum_height, requisition.height);
-      cached_size->natural_size = MAX (natural_height, requisition.height);
+
+      minimum_height = MAX (minimum_height, requisition.height);
+      natural_height = MAX (natural_height, requisition.height);
+
+      /* XXX Possibly we should update this with minimum values instead */
+      _gtk_size_group_bump_requisition (GTK_WIDGET (layout), GTK_SIZE_GROUP_VERTICAL, natural_height);
+
+      cached_size->minimum_size = minimum_height;
+      cached_size->natural_size = natural_height;
       cached_size->for_size     = width;
       cached_size->age          = aux_info->cached_height_age;
 
