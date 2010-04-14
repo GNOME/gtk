@@ -44,7 +44,6 @@ enum SelectorElementType {
 struct SelectorElement
 {
   SelectorElementType elem_type;
-  GtkStateType state;
 
   union
   {
@@ -56,6 +55,7 @@ struct SelectorElement
 struct SelectorPath
 {
   GSList *elements;
+  GtkStateType state;
   guint ref_count;
 };
 
@@ -78,6 +78,7 @@ struct GtkCssProviderPrivate
 
 enum ParserScope {
   SCOPE_SELECTOR,
+  SCOPE_PSEUDO_CLASS,
   SCOPE_DECLARATION,
   SCOPE_VALUE
 };
@@ -110,6 +111,7 @@ selector_path_new (void)
   SelectorPath *path;
 
   path = g_slice_new0 (SelectorPath);
+  path->state = GTK_STATE_NORMAL;
   path->ref_count = 1;
 
   return path;
@@ -208,6 +210,12 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
   scanner = g_scanner_new (NULL);
   /* scanner->input_name = path; */
+
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "active", GUINT_TO_POINTER (GTK_STATE_ACTIVE));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "prelight", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "hover", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "selected", GUINT_TO_POINTER (GTK_STATE_SELECTED));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "insensitive", GUINT_TO_POINTER (GTK_STATE_INSENSITIVE));
 
   priv->scanner = scanner;
   css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
@@ -330,6 +338,7 @@ struct StylePriorityInfo
 {
   guint64 score;
   GHashTable *style;
+  GtkStateType state;
 };
 
 static GtkStyleSet *
@@ -360,6 +369,7 @@ gtk_style_get_style (GtkStyleProvider *provider,
 
       new.score = score;
       new.style = info->style;
+      new.state = info->path->state;
 
       for (j = 0; j < priority_info->len; j++)
         {
@@ -389,7 +399,7 @@ gtk_style_get_style (GtkStyleProvider *provider,
       g_hash_table_iter_init (&iter, info->style);
 
       while (g_hash_table_iter_next (&iter, &key, &value))
-        gtk_style_set_set_property (set, key, GTK_STATE_NORMAL, value);
+        gtk_style_set_set_property (set, key, info->state, value);
     }
 
   g_array_free (priority_info, TRUE);
@@ -546,8 +556,9 @@ css_provider_commit (GtkCssProvider *css_provider)
 }
 
 static GTokenType
-parse_selector (GScanner      *scanner,
-                SelectorPath **selector_out)
+parse_selector (GtkCssProvider *css_provider,
+                GScanner       *scanner,
+                SelectorPath  **selector_out)
 {
   SelectorPath *path;
 
@@ -586,6 +597,24 @@ parse_selector (GScanner      *scanner,
     {
       selector_path_unref (path);
       return G_TOKEN_IDENTIFIER;
+    }
+
+  if (scanner->token == ':')
+    {
+      /* Pseudo-class scanning */
+      css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != G_TOKEN_SYMBOL)
+        {
+          selector_path_unref (path);
+          return G_TOKEN_SYMBOL;
+        }
+
+      path->state = GPOINTER_TO_INT (scanner->value.v_symbol);
+
+      g_scanner_get_next_token (scanner);
+      css_provider_pop_scope (css_provider);
     }
 
   *selector_out = path;
@@ -648,7 +677,7 @@ parse_rule (GtkCssProvider *css_provider,
   priv = GTK_CSS_PROVIDER_GET_PRIVATE (css_provider);
 
   css_provider_push_scope (css_provider, SCOPE_SELECTOR);
-  expected_token = parse_selector (scanner, &selector);
+  expected_token = parse_selector (css_provider, scanner, &selector);
 
   if (expected_token != G_TOKEN_NONE)
     return expected_token;
@@ -659,7 +688,7 @@ parse_rule (GtkCssProvider *css_provider,
     {
       g_scanner_get_next_token (scanner);
 
-      expected_token = parse_selector (scanner, &selector);
+      expected_token = parse_selector (css_provider, scanner, &selector);
 
       if (expected_token != G_TOKEN_NONE)
         return expected_token;
