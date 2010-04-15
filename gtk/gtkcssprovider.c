@@ -38,7 +38,8 @@ typedef enum ParserScope ParserScope;
 enum SelectorElementType {
   SELECTOR_TYPE_NAME,
   SELECTOR_NAME,
-  SELECTOR_GTYPE
+  SELECTOR_GTYPE,
+  SELECTOR_GLOB
 };
 
 struct SelectorElement
@@ -161,6 +162,17 @@ selector_path_prepend_type (SelectorPath *path,
       elem->elem_type = SELECTOR_GTYPE;
       elem->type = type;
     }
+
+  path->elements = g_slist_prepend (path->elements, elem);
+}
+
+static void
+selector_path_prepend_glob (SelectorPath *path)
+{
+  SelectorElement *elem;
+
+  elem = g_slice_new (SelectorElement);
+  elem->elem_type = SELECTOR_GLOB;
 
   path->elements = g_slist_prepend (path->elements, elem);
 }
@@ -294,6 +306,11 @@ compare_path_foreach (GType        type,
 
           data->score |= score;
         }
+    }
+  else if (elem->elem_type == SELECTOR_GLOB)
+    {
+      /* Treat as lowest matching type */
+      data->score++;
     }
 
   data->iter = data->iter->next;
@@ -460,11 +477,19 @@ css_provider_apply_scope (GtkCssProvider *css_provider,
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "#-_0123456789" G_CSET_A_2_Z;
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "#-_ 0123456789" G_CSET_A_2_Z;
+      priv->scanner->config->scan_identifier_1char = FALSE;
+    }
+  else if (scope == SCOPE_SELECTOR)
+    {
+      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*";
+      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      priv->scanner->config->scan_identifier_1char = TRUE;
     }
   else
     {
       priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z;
       priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      priv->scanner->config->scan_identifier_1char = FALSE;
     }
 
   priv->scanner->config->scan_float = FALSE;
@@ -556,9 +581,9 @@ css_provider_commit (GtkCssProvider *css_provider)
 }
 
 static GTokenType
-parse_selector (GtkCssProvider *css_provider,
-                GScanner       *scanner,
-                SelectorPath  **selector_out)
+parse_selector (GtkCssProvider  *css_provider,
+                GScanner        *scanner,
+                SelectorPath   **selector_out)
 {
   SelectorPath *path;
 
@@ -569,34 +594,19 @@ parse_selector (GtkCssProvider *css_provider,
 
   path = selector_path_new ();
 
-  if (g_ascii_isupper (scanner->value.v_identifier[0]))
+  while (scanner->token == G_TOKEN_IDENTIFIER)
     {
-      while (scanner->token == G_TOKEN_IDENTIFIER &&
-             g_ascii_isupper (scanner->value.v_identifier[0]))
+      if (g_ascii_isupper (scanner->value.v_identifier[0]))
+        selector_path_prepend_type (path, scanner->value.v_identifier);
+      else if (scanner->value.v_identifier[0] == '*')
+        selector_path_prepend_glob (path);
+      else
         {
-          selector_path_prepend_type (path, scanner->value.v_identifier);
-          g_scanner_get_next_token (scanner);
+          selector_path_unref (path);
+          return G_TOKEN_IDENTIFIER;
         }
 
-      if (scanner->token == '.')
-        {
-          /* style class scanning */
-          g_scanner_get_next_token (scanner);
-
-          if (scanner->token != G_TOKEN_IDENTIFIER)
-            {
-              selector_path_unref (path);
-              return G_TOKEN_IDENTIFIER;
-            }
-
-          g_print ("Style class: %s\n", scanner->value.v_identifier);
-          g_scanner_get_next_token (scanner);
-        }
-    }
-  else
-    {
-      selector_path_unref (path);
-      return G_TOKEN_IDENTIFIER;
+      g_scanner_get_next_token (scanner);
     }
 
   if (scanner->token == ':')
