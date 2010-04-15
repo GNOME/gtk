@@ -4649,7 +4649,7 @@ _gdk_windowing_get_shape_for_mask (GdkBitmap *mask)
   display = gdk_drawable_get_display (GDK_DRAWABLE (mask));
 
   window = XCreateSimpleWindow (GDK_DISPLAY_XDISPLAY (display),
-                                GDK_SCREEN_XROOTWIN (gdk_display_get_default_screen (display)),
+                                GDK_SCREEN_XROOTWIN (gdk_drawable_get_screen (mask)),
                                 -1, -1, 1, 1, 0,
                                 0, 0);
   XShapeCombineMask (GDK_DISPLAY_XDISPLAY (display),
