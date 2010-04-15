@@ -685,6 +685,8 @@ gdk_window_clear
 gdk_window_clear_area
 gdk_window_clear_area_e
 gdk_window_constrain_size
+gdk_window_coords_from_parent
+gdk_window_coords_to_parent
 gdk_window_destroy
 gdk_window_end_paint
 gdk_window_flush
@@ -694,10 +696,12 @@ gdk_window_freeze_updates
 gdk_window_get_children
 gdk_window_get_internal_paint_info
 gdk_window_get_parent
+gdk_window_get_effective_parent
 gdk_window_get_pointer
 gdk_window_get_position
 gdk_window_get_state
 gdk_window_get_toplevel
+gdk_window_get_effective_toplevel
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_window_get_toplevels
 #endif

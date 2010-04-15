@@ -2237,6 +2237,30 @@ gdk_window_is_destroyed (GdkWindow *window)
   return GDK_WINDOW_DESTROYED (window);
 }
 
+static void
+to_embedder (GdkWindowObject *window,
+             gdouble          offscreen_x,
+             gdouble          offscreen_y,
+             gdouble         *embedder_x,
+             gdouble         *embedder_y)
+{
+  g_signal_emit (window, signals[TO_EMBEDDER], 0,
+                 offscreen_x, offscreen_y,
+                 embedder_x, embedder_y);
+}
+
+static void
+from_embedder (GdkWindowObject *window,
+               gdouble          embedder_x,
+               gdouble          embedder_y,
+               gdouble         *offscreen_x,
+               gdouble         *offscreen_y)
+{
+  g_signal_emit (window, signals[FROM_EMBEDDER], 0,
+                 embedder_x, embedder_y,
+                 offscreen_x, offscreen_y);
+}
+
 /**
  * gdk_window_get_position:
  * @window: a #GdkWindow
@@ -2280,6 +2304,11 @@ gdk_window_get_position (GdkWindow *window,
  * matter for toplevel windows, because the window manager may choose
  * to reparent them.
  *
+ * Note that you should use gdk_window_get_effective_parent() when
+ * writing generic code that walks up a window hierarchy, because
+ * gdk_window_get_parent() will most likely not do what you expect if
+ * there are offscreen windows in the hierarchy.
+ *
  * Return value: parent of @window
  **/
 GdkWindow*
@@ -2288,6 +2317,35 @@ gdk_window_get_parent (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   return (GdkWindow*) ((GdkWindowObject*) window)->parent;
+}
+
+/**
+ * gdk_window_get_effective_parent:
+ * @window: a #GdkWindow
+ *
+ * Obtains the parent of @window, as known to GDK. Works like
+ * gdk_window_get_parent() for normal windows, but returns the
+ * window's embedder for offscreen windows.
+ *
+ * See also: gdk_offscreen_window_get_embedder()
+ *
+ * Return value: effective parent of @window
+ *
+ * Since: 2.22
+ **/
+GdkWindow *
+gdk_window_get_effective_parent (GdkWindow *window)
+{
+  GdkWindowObject *obj;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  obj = (GdkWindowObject *)window;
+
+  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+    return gdk_offscreen_window_get_embedder (window);
+  else
+    return (GdkWindow *) obj->parent;
 }
 
 /**
@@ -2300,9 +2358,14 @@ gdk_window_get_parent (GdkWindow *window)
  * toplevel window, as is a %GDK_WINDOW_CHILD window that
  * has a root window as parent.
  *
+ * Note that you should use gdk_window_get_effective_toplevel() when
+ * you want to get to a window's toplevel as seen on screen, because
+ * gdk_window_get_toplevel() will most likely not do what you expect
+ * if there are offscreen windows in the hierarchy.
+ *
  * Return value: the toplevel window containing @window
  **/
-GdkWindow*
+GdkWindow *
 gdk_window_get_toplevel (GdkWindow *window)
 {
   GdkWindowObject *obj;
@@ -2319,6 +2382,35 @@ gdk_window_get_toplevel (GdkWindow *window)
     }
 
   return GDK_WINDOW (obj);
+}
+
+/**
+ * gdk_window_get_effective_toplevel:
+ * @window: a #GdkWindow
+ *
+ * Gets the toplevel window that's an ancestor of @window.
+ *
+ * Works like gdk_window_get_toplevel(), but treats an offscreen window's
+ * embedder as its parent, using gdk_window_get_effective_parent().
+ *
+ * See also: gdk_offscreen_window_get_embedder()
+ *
+ * Return value: the effective toplevel window containing @window
+ *
+ * Since: 2.22
+ **/
+GdkWindow *
+gdk_window_get_effective_toplevel (GdkWindow *window)
+{
+  GdkWindow *parent;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  while ((parent = gdk_window_get_effective_parent (window)) != NULL &&
+	 (gdk_window_get_window_type (parent) != GDK_WINDOW_ROOT))
+    window = parent;
+
+  return window;
 }
 
 /**
@@ -7977,10 +8069,10 @@ gdk_window_get_geometry (GdkWindow *window,
 	}
       else
 	{
-	  if (x)
-	    *x = private->x;
-	  if (y)
-	    *y = private->y;
+          if (x)
+            *x = private->x;
+          if (y)
+            *y = private->y;
 	  if (width)
 	    *width = private->width;
 	  if (height)
@@ -8079,6 +8171,129 @@ gdk_window_get_root_coords (GdkWindow *window,
 			       root_x, root_y);
 }
 
+/**
+ * gdk_window_coords_to_parent:
+ * @window: a child window
+ * @x: X coordinate in child's coordinate system
+ * @y: Y coordinate in child's coordinate system
+ * @parent_x: return location for X coordinate in parent's coordinate system
+ * @parent_y: return location for Y coordinate in parent's coordinate system
+ *
+ * Transforms window coordinates from a child window to its parent
+ * window, where the parent window is the normal parent as returned by
+ * gdk_window_get_parent() for normal windows, and the window's
+ * embedder as returned by gdk_offscreen_window_get_embedder() for
+ * offscreen windows.
+ *
+ * For normal windows, calling this function is equivalent to adding
+ * the return values of gdk_window_get_position() to the child coordinates.
+ * For offscreen windows however (which can be arbitrarily transformed),
+ * this function calls the GdkWindow::to-embedder: signal to translate
+ * the coordinates.
+ *
+ * You should always use this function when writing generic code that
+ * walks up a window hierarchy.
+ *
+ * See also: gdk_window_coords_from_parent()
+ *
+ * Since: 2.22
+ **/
+void
+gdk_window_coords_to_parent (GdkWindow *window,
+                             gdouble    x,
+                             gdouble    y,
+                             gdouble   *parent_x,
+                             gdouble   *parent_y)
+{
+  GdkWindowObject *obj;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  obj = (GdkWindowObject *) window;
+
+  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+    {
+      gdouble px, py;
+
+      to_embedder (obj, x, y, &px, &py);
+
+      if (parent_x)
+        *parent_x = px;
+
+      if (parent_y)
+        *parent_y = py;
+    }
+  else
+    {
+      if (parent_x)
+        *parent_x = x + obj->x;
+
+      if (parent_y)
+        *parent_y = y + obj->y;
+    }
+}
+
+/**
+ * gdk_window_coords_from_parent:
+ * @window: a child window
+ * @parent_x: X coordinate in parent's coordinate system
+ * @parent_y: Y coordinate in parent's coordinate system
+ * @x: return location for X coordinate in child's coordinate system
+ * @y: return location for Y coordinate in child's coordinate system
+ *
+ * Transforms window coordinates from a parent window to a child
+ * window, where the parent window is the normal parent as returned by
+ * gdk_window_get_parent() for normal windows, and the window's
+ * embedder as returned by gdk_offscreen_window_get_embedder() for
+ * offscreen windows.
+ *
+ * For normal windows, calling this function is equivalent to subtracting
+ * the return values of gdk_window_get_position() from the parent coordinates.
+ * For offscreen windows however (which can be arbitrarily transformed),
+ * this function calls the GdkWindow::from-embedder: signal to translate
+ * the coordinates.
+ *
+ * You should always use this function when writing generic code that
+ * walks down a window hierarchy.
+ *
+ * See also: gdk_window_coords_to_parent()
+ *
+ * Since: 2.22
+ **/
+void
+gdk_window_coords_from_parent (GdkWindow *window,
+                               gdouble    parent_x,
+                               gdouble    parent_y,
+                               gdouble   *x,
+                               gdouble   *y)
+{
+  GdkWindowObject *obj;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  obj = (GdkWindowObject *) window;
+
+  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+    {
+      gdouble cx, cy;
+
+      from_embedder (obj, parent_x, parent_y, &cx, &cy);
+
+      if (x)
+        *x = cx;
+
+      if (y)
+        *y = cy;
+    }
+  else
+    {
+      if (x)
+        *x = parent_x - obj->x;
+
+      if (y)
+        *y = parent_y - obj->y;
+    }
+}
 
 /**
  * gdk_window_get_deskrelative_origin:
@@ -8967,20 +9182,6 @@ update_cursor (GdkDisplay *display)
   toplevel = (GdkWindowObject *)get_event_toplevel (pointer_window);
   impl_iface = GDK_WINDOW_IMPL_GET_IFACE (toplevel->impl);
   impl_iface->set_cursor ((GdkWindow *)toplevel, cursor_window->cursor);
-}
-
-static void
-from_embedder (GdkWindowObject *window,
-	       gdouble          embedder_x,
-               gdouble          embedder_y,
-	       gdouble         *offscreen_x,
-               gdouble         *offscreen_y)
-{
-  g_signal_emit (window,
-		 signals[FROM_EMBEDDER], 0,
-		 embedder_x, embedder_y,
-		 offscreen_x, offscreen_y,
-		 NULL);
 }
 
 static void

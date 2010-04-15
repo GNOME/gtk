@@ -546,6 +546,16 @@ void	      gdk_window_get_root_coords (GdkWindow	  *window,
 					  gint             y,
 					  gint		  *root_x,
 					  gint		  *root_y);
+void       gdk_window_coords_to_parent   (GdkWindow       *window,
+                                          gdouble          x,
+                                          gdouble          y,
+                                          gdouble         *parent_x,
+                                          gdouble         *parent_y);
+void       gdk_window_coords_from_parent (GdkWindow       *window,
+                                          gdouble          parent_x,
+                                          gdouble          parent_y,
+                                          gdouble         *x,
+                                          gdouble         *y);
 
 #if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
 /* Used by gtk_handle_box_button_changed () */
@@ -565,6 +575,9 @@ GdkWindow*    gdk_window_get_pointer	 (GdkWindow	  *window,
 					  GdkModifierType *mask);
 GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
 GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
+
+GdkWindow *   gdk_window_get_effective_parent   (GdkWindow *window);
+GdkWindow *   gdk_window_get_effective_toplevel (GdkWindow *window);
 
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GList *       gdk_window_peek_children   (GdkWindow       *window);
