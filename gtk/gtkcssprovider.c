@@ -177,6 +177,12 @@ selector_path_prepend_glob (SelectorPath *path)
   path->elements = g_slist_prepend (path->elements, elem);
 }
 
+static gint
+selector_path_depth (SelectorPath *path)
+{
+  return g_slist_length (path->elements);
+}
+
 static SelectorStyleInfo *
 selector_style_info_new (SelectorPath *path)
 {
@@ -589,7 +595,8 @@ parse_selector (GtkCssProvider  *css_provider,
 
   *selector_out = NULL;
 
-  if (scanner->token != G_TOKEN_IDENTIFIER)
+  if (scanner->token != ':' &&
+      scanner->token != G_TOKEN_IDENTIFIER)
     return G_TOKEN_IDENTIFIER;
 
   path = selector_path_new ();
@@ -611,6 +618,10 @@ parse_selector (GtkCssProvider  *css_provider,
 
   if (scanner->token == ':')
     {
+      /* Add glob selector if path is empty */
+      if (selector_path_depth (path) == 0)
+        selector_path_prepend_glob (path);
+
       /* Pseudo-class scanning */
       css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
       g_scanner_get_next_token (scanner);
