@@ -855,7 +855,7 @@ should_apply_clip_as_shape (GdkWindowObject *private)
   return
     gdk_window_has_impl (private) &&
     /* Not for offscreens */
-    private->window_type != GDK_WINDOW_OFFSCREEN &&
+    !gdk_window_is_offscreen (private) &&
     /* or for toplevels */
     !gdk_window_is_toplevel (private) &&
     /* or for foreign windows */
@@ -1438,7 +1438,7 @@ gdk_window_new (GdkWindow     *parent,
 	     attributes->visual != gdk_drawable_get_visual ((GdkDrawable *)private->parent))))
     native = TRUE; /* InputOutput window with different colormap or visual than parent, needs native window */
 
-  if (private->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (private))
     {
       _gdk_offscreen_window_new (window, screen, visual, attributes, attributes_mask);
       private->impl_window = private;
@@ -1843,7 +1843,7 @@ gdk_window_ensure_native (GdkWindow *window)
 
   impl_window = gdk_window_get_impl_window (private);
 
-  if (impl_window->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (impl_window))
     return FALSE; /* native in offscreens not supported */
 
   if (impl_window == private)
@@ -2342,7 +2342,7 @@ gdk_window_get_effective_parent (GdkWindow *window)
 
   obj = (GdkWindowObject *)window;
 
-  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (obj))
     return gdk_offscreen_window_get_embedder (window);
   else
     return (GdkWindow *) obj->parent;
@@ -8211,7 +8211,7 @@ gdk_window_coords_to_parent (GdkWindow *window,
 
   obj = (GdkWindowObject *) window;
 
-  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (obj))
     {
       gdouble px, py;
 
@@ -8273,7 +8273,7 @@ gdk_window_coords_from_parent (GdkWindow *window,
 
   obj = (GdkWindowObject *) window;
 
-  if (obj->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (obj))
     {
       gdouble cx, cy;
 
@@ -9107,7 +9107,7 @@ gdk_window_redirect_free (GdkWindowRedirect *redirect)
 static GdkWindowObject *
 get_event_parent (GdkWindowObject *window)
 {
-  if (window->window_type == GDK_WINDOW_OFFSCREEN)
+  if (gdk_window_is_offscreen (window))
     return (GdkWindowObject *)gdk_offscreen_window_get_embedder ((GdkWindow *)window);
   else
     return window->parent;
