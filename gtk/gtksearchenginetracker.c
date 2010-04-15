@@ -108,7 +108,6 @@ open_libtracker (void)
 {
   static gboolean done = FALSE;
   static TrackerVersion version = TRACKER_UNAVAILABLE;
-  gpointer x;
 
   if (!done)
     {
