@@ -4303,6 +4303,10 @@ toolbar_content_get_goal_allocation (ToolbarContent *content,
        */
       g_assert_not_reached ();
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -4311,7 +4315,7 @@ toolbar_content_get_allocation (ToolbarContent *content,
 				GtkAllocation  *allocation)
 {
   GtkToolbarChild *child;
-  
+
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -4325,6 +4329,10 @@ toolbar_content_get_allocation (ToolbarContent *content,
 	*allocation = content->u.compatibility.space_allocation;
       else
 	*allocation = child->widget->allocation;
+      break;
+
+    default:
+      g_assert_not_reached ();
       break;
     }
 }
