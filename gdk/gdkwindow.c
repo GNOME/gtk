@@ -9184,25 +9184,6 @@ update_cursor (GdkDisplay *display)
   impl_iface->set_cursor ((GdkWindow *)toplevel, cursor_window->cursor);
 }
 
-static void
-convert_coords_to_child (GdkWindowObject *child,
-			 gdouble          x,
-                         gdouble          y,
-			 gdouble         *child_x,
-                         gdouble         *child_y)
-{
-  if (gdk_window_is_offscreen (child))
-    {
-      from_embedder (child, x, y,
-		     child_x, child_y);
-    }
-  else
-    {
-      *child_x = x - child->x;
-      *child_y = y - child->y;
-    }
-}
-
 static gboolean
 point_in_window (GdkWindowObject *window,
 		 gdouble          x,
@@ -9271,7 +9252,7 @@ convert_toplevel_coords_to_window (GdkWindow *window,
     }
 
   for (l = children; l != NULL; l = l->next)
-    convert_coords_to_child (l->data, x, y, &x, &y);
+    gdk_window_coords_from_parent (l->data, x, y, &x, &y);
 
   g_list_free (children);
 
@@ -9315,9 +9296,9 @@ _gdk_window_find_child_at (GdkWindow *window,
 	  if (!GDK_WINDOW_IS_MAPPED (sub))
 	    continue;
 
-	  convert_coords_to_child (sub,
-				   x, y,
-				   &child_x, &child_y);
+	  gdk_window_coords_from_parent ((GdkWindow *)sub,
+                                         x, y,
+                                         &child_x, &child_y);
 	  if (point_in_window (sub, child_x, child_y))
 	    return (GdkWindow *)sub;
 	}
@@ -9361,9 +9342,9 @@ _gdk_window_find_descendant_at (GdkWindow *toplevel,
 	      if (!GDK_WINDOW_IS_MAPPED (sub))
 		continue;
 
-	      convert_coords_to_child (sub,
-				       x, y,
-				       &child_x, &child_y);
+	      gdk_window_coords_from_parent ((GdkWindow *)sub,
+                                             x, y,
+                                             &child_x, &child_y);
 	      if (point_in_window (sub, child_x, child_y))
 		{
 		  x = child_x;
