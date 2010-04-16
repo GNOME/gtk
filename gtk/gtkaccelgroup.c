@@ -1131,6 +1131,9 @@ is_hyper (const gchar *string)
  * "&lt;Release&gt;z" (the last one is for key release).
  * The parser is fairly liberal and allows lower or upper case,
  * and also abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
+ * Key names are parsed using gdk_keyval_from_name(). For character keys the
+ * name is not the symbol, but the lowercase name, e.g. one would use
+ * "&lt;Ctrl&gt;minus" instead of "&lt;Ctrl&gt;-".
  *
  * If the parse fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
