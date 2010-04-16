@@ -1846,7 +1846,7 @@ gtk_window_set_title (GtkWindow   *window,
       gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
 
-  if (GTK_WIDGET_VISIBLE (priv->title_label) && GTK_WIDGET_VISIBLE (GTK_WIDGET (window)))
+  if (gtk_widget_get_visible (priv->title_label) && gtk_widget_get_visible (GTK_WIDGET (window)))
     gtk_widget_queue_resize (GTK_WIDGET (window));
 
   if (gtk_widget_get_realized (window))
@@ -3796,7 +3796,7 @@ ensure_title_icon (GtkWindow *window)
       gtk_widget_show_all (priv->icon_event_box);
     }
 
-  if (GTK_WIDGET_VISIBLE (window))
+  if (gtk_widget_get_visible (window))
     {
       gtk_widget_queue_resize (GTK_WIDGET (window));
     }
@@ -5153,22 +5153,22 @@ gtk_window_map (GtkWidget *widget)
     gtk_widget_map (window->bin.child);
 
   if (priv->title_label &&
-      GTK_WIDGET_VISIBLE (priv->title_label) &&
-      !GTK_WIDGET_MAPPED (priv->title_label))
+      gtk_widget_get_visible (priv->title_label) &&
+      !gtk_widget_get_mapped (priv->title_label))
     {
       gtk_widget_map (priv->title_label);
     }
 
   if (priv->icon_event_box &&
-      GTK_WIDGET_VISIBLE (priv->icon_event_box) &&
-      !GTK_WIDGET_MAPPED (priv->icon_event_box))
+      gtk_widget_get_visible (priv->icon_event_box) &&
+      !gtk_widget_get_mapped (priv->icon_event_box))
     {
       gtk_widget_map (priv->icon_event_box);
     }
 
   if (priv->button_box &&
-      GTK_WIDGET_VISIBLE (priv->button_box) &&
-      !GTK_WIDGET_MAPPED (priv->button_box))
+      gtk_widget_get_visible (priv->button_box) &&
+      !gtk_widget_get_mapped (priv->button_box))
     {
       gtk_widget_map (priv->button_box);
     }
@@ -5432,7 +5432,7 @@ gtk_window_realize (GtkWidget *widget)
       attributes.event_mask |= GDK_BUTTON_PRESS_MASK;
       attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
-      if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+      if (priv->title_label && gtk_widget_get_visible (priv->title_label))
         {
           GtkRequisition label_requisition;
 
@@ -5623,19 +5623,19 @@ gtk_window_size_request (GtkWidget      *widget,
           GtkRequisition icon_requisition;
           gint child_height = 0;
 
-          if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+          if (priv->title_label && gtk_widget_get_visible (priv->title_label))
             {
               gtk_widget_size_request (priv->title_label, &child_requisition);
               child_height = child_requisition.height;
             }
 
-          if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
+          if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
             {
               gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
               child_height = MAX (child_height, icon_requisition.height);
             }
 
-          if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+          if (priv->button_box && gtk_widget_get_visible (priv->button_box))
             {
               gtk_widget_size_request (priv->button_box, &box_requisition);
 
@@ -5680,12 +5680,12 @@ get_available_size_for_label (GtkWindow *window)
 
   available_size -= border_width * 2;
 
-  if (priv->icon_event_box && GTK_WIDGET_VISIBLE (priv->icon_event_box))
+  if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
     {
       available_size -= priv->icon_event_box->allocation.width;
     }
 
-  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+  if (priv->button_box && gtk_widget_get_visible (priv->button_box))
     {
       available_size -= priv->button_box->allocation.width;
     }
@@ -6021,11 +6021,11 @@ get_title_height (GtkWindow *window)
   gint title;
 
   title = 0;
-  if (priv->title_icon && GTK_WIDGET_VISIBLE (priv->title_icon))
+  if (priv->title_icon && gtk_widget_get_visible (priv->title_icon))
     title = MAX (title, priv->title_icon->allocation.height);
-  if (priv->title_label && GTK_WIDGET_VISIBLE (priv->title_label))
+  if (priv->title_label && gtk_widget_get_visible (priv->title_label))
     title = MAX (title, priv->title_label->allocation.height);
-  if (priv->button_box && GTK_WIDGET_VISIBLE (priv->button_box))
+  if (priv->button_box && gtk_widget_get_visible (priv->button_box))
     title = MAX (title, priv->button_box->allocation.height);
 
   return title;

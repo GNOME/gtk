@@ -7944,30 +7944,6 @@ gdk_window_get_cursor (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_cursor:
- * @window: a #GdkWindow
- * @cursor: a cursor
- *
- * Retrieves a #GdkCursor pointer for the cursor currently set on the
- * specified #GdkWindow, or %NULL.  If the return value is %NULL then
- * there is no custom cursor set on the specified window, and it is
- * using the cursor for its parent window.
- *
- * Since: 2.18
- */
-GdkCursor *
-gdk_window_get_cursor (GdkWindow *window)
-{
-  GdkWindowObject *private;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  private = (GdkWindowObject *) window;
-
-  return private->cursor;
-}
-
-/**
  * gdk_window_set_cursor:
  * @window: a #GdkWindow
  * @cursor: a cursor
