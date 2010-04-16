@@ -33,6 +33,7 @@ typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
 typedef struct SelectorStyleInfo SelectorStyleInfo;
 typedef enum SelectorElementType SelectorElementType;
+typedef enum CombinatorType CombinatorType;
 typedef enum ParserScope ParserScope;
 
 enum SelectorElementType {
@@ -42,9 +43,15 @@ enum SelectorElementType {
   SELECTOR_GLOB
 };
 
+enum CombinatorType {
+  COMBINATOR_DESCENDANT, /* No direct relation needed */
+  COMBINATOR_CHILD       /* Direct child */
+};
+
 struct SelectorElement
 {
   SelectorElementType elem_type;
+  CombinatorType combinator;
 
   union
   {
@@ -150,6 +157,7 @@ selector_path_prepend_type (SelectorPath *path,
   GType type;
 
   elem = g_slice_new (SelectorElement);
+  elem->combinator = COMBINATOR_DESCENDANT;
   type = g_type_from_name (type_name);
 
   if (type == G_TYPE_INVALID)
@@ -173,8 +181,22 @@ selector_path_prepend_glob (SelectorPath *path)
 
   elem = g_slice_new (SelectorElement);
   elem->elem_type = SELECTOR_GLOB;
+  elem->combinator = COMBINATOR_DESCENDANT;
 
   path->elements = g_slist_prepend (path->elements, elem);
+}
+
+static void
+selector_path_prepend_combinator (SelectorPath   *path,
+                                  CombinatorType  combinator)
+{
+  SelectorElement *elem;
+
+  g_assert (path->elements != NULL);
+
+  /* It is actually stored in the last element */
+  elem = path->elements->data;
+  elem->combinator = combinator;
 }
 
 static gint
@@ -286,8 +308,16 @@ compare_path_foreach (GType        type,
       if (!g_type_is_a (type, elem->type))
         {
           /* Selector definitely doesn't match */
-          data->score = 0;
-          return TRUE;
+          if (elem->combinator == COMBINATOR_CHILD)
+            {
+              data->score = 0;
+              return TRUE;
+            }
+          else
+            {
+              /* Keep checking descendants for a match */
+              return FALSE;
+            }
         }
       else if (type == elem->type)
         data->score |= 0xF;
@@ -614,6 +644,12 @@ parse_selector (GtkCssProvider  *css_provider,
         }
 
       g_scanner_get_next_token (scanner);
+
+      if (scanner->token == '>')
+        {
+          selector_path_prepend_combinator (path, COMBINATOR_CHILD);
+          g_scanner_get_next_token (scanner);
+        }
     }
 
   if (scanner->token == ':')
