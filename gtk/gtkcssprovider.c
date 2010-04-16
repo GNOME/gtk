@@ -135,7 +135,7 @@ selector_path_unref (SelectorPath *path)
 
   while (path->elements)
     {
-      g_slice_free (SelectorPath, path->elements->data);
+      g_slice_free (SelectorElement, path->elements->data);
       path->elements = g_slist_delete_link (path->elements, path->elements);
     }
 
