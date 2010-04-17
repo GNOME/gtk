@@ -3928,7 +3928,7 @@ void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
 {
-  _gtk_size_group_get_child_requisition (widget, requisition);
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), requisition, NULL);
 }
 
 static gboolean
@@ -9281,9 +9281,6 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
 
       aux_info->width = -1;
       aux_info->height = -1;
-
-      aux_info->cached_width_age  = 1;
-      aux_info->cached_height_age = 1;
 
       g_object_set_qdata (G_OBJECT (widget), quark_aux_info, aux_info);
     }
