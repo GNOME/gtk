@@ -3253,7 +3253,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
       label->layout = backup;
     }
   
-  if (label->single_line_mode || label->wrap)
+  if (label->single_line_mode)
     required_rect.height = get_single_line_height (GTK_WIDGET (label), label->layout);
   
   if (label->have_transform)
@@ -3283,6 +3283,10 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
       minimum = required_rect.height + label->misc.ypad * 2;
     }
 
+
+  natural = minimum;
+
+#if 0
   /* Natural size */
   natural_layout = pango_layout_copy (label->layout);
   pango_layout_set_width (natural_layout, -1);
@@ -3310,6 +3314,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
     natural = required_rect.height + label->misc.ypad * 2;
   
   g_object_unref (natural_layout);
+#endif
 
   if (minimum_size)
     *minimum_size = minimum;
@@ -3347,6 +3352,7 @@ get_size_for_allocation (GtkLabel        *label,
   GtkWidgetAuxInfo *aux_info = 
     _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
   gint aux_size;
+  gint text_height;
 
   if (label->wrap)
     gtk_label_clear_layout (label);
@@ -3354,24 +3360,28 @@ get_size_for_allocation (GtkLabel        *label,
   gtk_label_ensure_layout (label);
   layout = pango_layout_copy (label->layout);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    aux_size = aux_info->width;
+  if (aux_info)
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	aux_size = aux_info->width;
+      else
+	aux_size = aux_info->height;
+    }
   else
-    aux_size = aux_info->height;
+    aux_size = 0;
 
   if (aux_size > 0)
     pango_layout_set_width (layout, aux_size * PANGO_SCALE);
   else
     pango_layout_set_width (layout, allocation * PANGO_SCALE);
 
+  pango_layout_get_pixel_size (layout, NULL, &text_height);
+
   if (minimum_size)
-    pango_layout_get_pixel_size (layout, NULL, minimum_size);
+    *minimum_size = text_height;
 
   if (natural_size)
-    {
-      //pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
-      pango_layout_get_pixel_size (layout, NULL, natural_size);
-    }
+    *natural_size = text_height;
 
   g_object_unref (layout);
 }
