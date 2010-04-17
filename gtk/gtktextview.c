@@ -7037,6 +7037,42 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
 }
 
+/**
+ * gtk_text_view_get_hadjustment:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the horizontal-scrolling #GtkAdjustment.
+ *
+ * Returns: (transfer none): pointer to the horizontal #GtkAdjustment
+ *
+ * Since: 2.22
+ **/
+GtkAdjustment*
+gtk_text_view_get_hadjustment (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+
+  return get_hadjustment (text_view);
+}
+
+/**
+ * gtk_text_view_get_vadjustment:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the vertical-scrolling #GtkAdjustment.
+ *
+ * Returns: (transfer none): pointer to the vertical #GtkAdjustment
+ *
+ * Since: 2.22
+ **/
+GtkAdjustment*
+gtk_text_view_get_vadjustment (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+
+  return get_vadjustment (text_view);
+}
+
 static GtkAdjustment*
 get_hadjustment (GtkTextView *text_view)
 {
