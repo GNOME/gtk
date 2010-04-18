@@ -126,9 +126,6 @@ gboolean              gtk_label_get_use_markup    (GtkLabel      *label);
 void                  gtk_label_set_use_underline (GtkLabel      *label,
 						   gboolean       setting);
 gboolean              gtk_label_get_use_underline (GtkLabel      *label);
-void                  gtk_label_set_full_size     (GtkLabel      *label,
-						   gboolean       setting);
-gboolean              gtk_label_get_full_size     (GtkLabel      *label);
 
 void     gtk_label_set_markup_with_mnemonic       (GtkLabel         *label,
 						   const gchar      *str);
