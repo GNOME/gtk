@@ -70,7 +70,7 @@ ebox_expose_event_cb (GtkWidget      *widget,
 {
   PangoLayout *layout;
   const double dashes[] = { 6, 18 };
-  GtkRequisition natural_size;
+  GtkRequisition minimum_size, natural_size;
   GtkWidget *label = data;
   cairo_t *cr;
   gint x, y;
@@ -86,6 +86,9 @@ ebox_expose_event_cb (GtkWidget      *widget,
   gtk_widget_translate_coordinates (label, widget, 0, 0, &x, &y);
   layout = gtk_widget_create_pango_layout (widget, "");
 
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (label), 
+					&minimum_size, &natural_size); 
+
   pango_layout_set_markup (layout,
     "<span color='#c33'>\342\227\217 requisition</span>\n"
     "<span color='#3c3'>\342\227\217 natural size</span>\n"
@@ -95,9 +98,9 @@ ebox_expose_event_cb (GtkWidget      *widget,
   g_object_unref (layout);
 
   cairo_rectangle (cr,
-                   x + 0.5 * (label->allocation.width - label->requisition.width),
-                   y + 0.5 * (label->allocation.height - label->requisition.height),
-                   label->requisition.width, label->requisition.height);
+                   x + 0.5 * (label->allocation.width - minimum_size.width),
+                   y + 0.5 * (label->allocation.height - minimum_size.height),
+                   minimum_size.width, minimum_size.height);
   cairo_set_source_rgb (cr, 0.8, 0.2, 0.2);
   cairo_set_dash (cr, NULL, 0, 0);
   cairo_stroke (cr);
@@ -106,9 +109,6 @@ ebox_expose_event_cb (GtkWidget      *widget,
   cairo_set_source_rgb (cr, 0.2, 0.2, 0.8);
   cairo_set_dash (cr, dashes, 2, 0.5);
   cairo_stroke (cr);
-
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (label),
-                                        NULL, &natural_size);
 
   cairo_rectangle (cr,
                    x + 0.5 * (label->allocation.width - natural_size.width),
