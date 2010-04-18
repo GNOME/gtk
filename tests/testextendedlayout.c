@@ -977,8 +977,8 @@ size_for_allocation_test_new (TestSuite *suite,
             gtk_table_attach (GTK_TABLE (container), child, i, i + 1, 0, 1, 
                               GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
 
-          if (i > 0)
-            gtk_label_set_full_size (GTK_LABEL (child), TRUE);
+/*           if (i > 0) */
+/*             gtk_label_set_full_size (GTK_LABEL (child), TRUE); */
 
           if (i > 2)
             gtk_label_set_angle (GTK_LABEL (child), vertical ? 180 : 270);
