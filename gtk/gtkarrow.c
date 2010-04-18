@@ -24,6 +24,26 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:gtkarrow
+ * @Short_description: Displays an arrow
+ * @Title: GtkArrow
+ * @See_also: gtk_paint_arrow()
+ *
+ * GtkArrow should be used to draw simple arrows that need to point in
+ * one of the four cardinal directions (up, down, left, or right).  The
+ * style of the arrow can be one of shadow in, shadow out, etched in, or
+ * etched out.  Note that these directions and style types may be
+ * ammended in versions of GTK+ to come.
+ *
+ * GtkArrow will fill any space alloted to it, but since it is inherited
+ * from #GtkMisc, it can be padded and/or aligned, to fill exactly the
+ * space the programmer desires.
+ *
+ * Arrows are created with a call to gtk_arrow_new().  The direction or
+ * style of an arrow can be changed after creation by using gtk_arrow_set().
+ */
+
 #include "config.h"
 #include <math.h>
 #include "gtkarrow.h"
@@ -155,6 +175,15 @@ gtk_arrow_init (GtkArrow *arrow)
   arrow->shadow_type = GTK_SHADOW_OUT;
 }
 
+/**
+ * gtk_arrow_new:
+ * @arrow_type: a valid #GtkArrowType.
+ * @shadow_type: a valid #GtkShadowType.
+ *
+ * Creates a new #GtkArrow widget.
+ *
+ * Returns: the new #GtkArrow widget.
+ */
 GtkWidget*
 gtk_arrow_new (GtkArrowType  arrow_type,
 	       GtkShadowType shadow_type)
@@ -169,6 +198,14 @@ gtk_arrow_new (GtkArrowType  arrow_type,
   return GTK_WIDGET (arrow);
 }
 
+/**
+ * gtk_arrow_set:
+ * @arrow: a widget of type #GtkArrow.
+ * @arrow_type: a valid #GtkArrowType.
+ * @shadow_type: a valid #GtkShadowType.
+ *
+ * Sets the direction and style of the #GtkArrow, @arrow.
+ */
 void
 gtk_arrow_set (GtkArrow      *arrow,
 	       GtkArrowType   arrow_type,
