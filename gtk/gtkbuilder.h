@@ -43,6 +43,29 @@ typedef struct _GtkBuilder        GtkBuilder;
 typedef struct _GtkBuilderClass   GtkBuilderClass;
 typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
 
+/**
+ * GtkBuilderError:
+ * @GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: A type-func attribute didn't name
+ *  a function that returns a #GType.
+ * @GTK_BUILDER_ERROR_UNHANDLED_TAG: The input contained a tag that #GtkBuilder
+ *  can't handle.
+ * @GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: An attribute that is required by
+ *  #GtkBuilder was missing.
+ * @GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: #GtkBuilder found an attribute that
+ *  it doesn't understand.
+ * @GTK_BUILDER_ERROR_INVALID_TAG: #GtkBuilder found a tag that
+ *  it doesn't understand.
+ * @GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE: A required property value was
+ *  missing.
+ * @GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn't parse
+ *  some attribute value.
+ * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
+ *  of GTK+.
+ * @GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
+ *
+ * Error codes that identify various errors that can occur while using
+ * #GtkBuilder.
+ */
 typedef enum
 {
   GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION,
@@ -135,6 +158,14 @@ gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
                                                   GValue       	*value,
 						  GError       **error);
 
+/**
+ * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:
+ * @object: the #GtkBuildable on which the warning ocurred
+ * @type: the unexpected type value
+ *
+ * This macro should be used to emit a warning about and unexpected @type value
+ * in a #GtkBuildable add_child implementation.
+ */
 #define GTK_BUILDER_WARN_INVALID_CHILD_TYPE(object, type) \
   g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (object)))
 
