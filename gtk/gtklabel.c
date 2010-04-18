@@ -2994,6 +2994,15 @@ get_label_char_width (GtkLabel *label,
 	  gint max_char_width = char_pixels * priv->max_width_chars;
 	  gint max_width      = MIN (text_width, max_char_width);
 
+	  /* With max-char-width specified, we let the minimum widths of 
+	   * ellipsized text crawl up to the max-char-width
+	   * (note that we dont want to limit the minimum width for wrapping text).
+	   */
+	  if (label->ellipsize)
+	    {
+	      *minimum = MIN (text_width, max_width);
+	    }
+
 	  *natural = MAX (rect.width, max_width);
 	}
    }
