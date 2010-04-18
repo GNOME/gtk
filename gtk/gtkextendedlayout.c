@@ -252,12 +252,14 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
   g_assert (cached_size->minimum_size <= cached_size->natural_size);
 
 #if DEBUG_EXTENDED_LAYOUT
-  g_message ("%s size for orientation %s: %d is minimum %d and natural: %d",
-	     G_OBJECT_TYPE_NAME (layout), 
-	     orientation == GTK_SIZE_GROUP_HORIZONTAL ? "horizontal" : "vertical",
+  g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
+	     layout, G_OBJECT_TYPE_NAME (layout), 
+	     orientation == GTK_SIZE_GROUP_HORIZONTAL ? 
+	     "width for height" : "height for width" ,
 	     for_size,
 	     cached_size->minimum_size,
-	     cached_size->natural_size);
+	     cached_size->natural_size,
+	     found_in_cache ? "yes" : "no");
 #endif
 
 }
@@ -406,34 +408,26 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
 	     G_OBJECT_TYPE_NAME (layout), 
 	     min_height, nat_width);
 #endif
-
-      /* The minimum size here is the minimum height for the natrual width */
-      if (minimum_size)
-	{
-	  minimum_size->width  = min_width; 
-	  minimum_size->height = min_height;
-	}
       
     }
   else
     {
       gtk_extended_layout_get_desired_height (layout, &min_height, &nat_height);
-      gtk_extended_layout_get_height_for_width (layout, min_height, &min_width, &nat_width);
+      gtk_extended_layout_get_width_for_height (layout, min_height, &min_width, &nat_width);
 
 #if DEBUG_EXTENDED_LAYOUT
   g_message ("%s get_desired_size min width: %d for natural height: %d",
 	     G_OBJECT_TYPE_NAME (layout), 
 	     min_width, nat_height);
 #endif
-
-      /* The minimum size here is the minimum width for the natrual height */
-      if (minimum_size)
-	{
-	  minimum_size->width  = min_width; 
-	  minimum_size->height = min_height;
-	}
     }
 
+  if (minimum_size)
+    {
+      minimum_size->width  = min_width; 
+      minimum_size->height = min_height;
+    }
+  
   if (natural_size)
     {
       natural_size->width  = nat_width; 
