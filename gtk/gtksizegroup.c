@@ -767,6 +767,8 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 	      else 
 		result = compute_dimension (widget, mode, MAX (aux_info->height, widget_requisition));
 	    }
+	  else
+	    result = compute_dimension (widget, mode, widget_requisition);
 	}
       else if (aux_info)
 	{
