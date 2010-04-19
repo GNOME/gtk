@@ -211,6 +211,8 @@ gtk_spinner_init (GtkSpinner *spinner)
 
   spinner->priv = priv;
 
+  gtk_widget_set_size_request (GTK_WIDGET (spinner), 12, 12);
+
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 }
 
@@ -220,15 +222,8 @@ gtk_spinner_expose (GtkWidget      *widget,
 {
   GtkStateType state_type;
   GtkSpinnerPrivate *priv;
-  int width, height;
 
   priv = GTK_SPINNER (widget)->priv;
-
-  width = widget->allocation.width;
-  height = widget->allocation.height;
-
-  if ((width < 12) || (height <12))
-    gtk_widget_set_size_request (widget, 12, 12);
 
   state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
