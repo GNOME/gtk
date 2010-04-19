@@ -230,6 +230,8 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
 
       /* Get size groups to compute the base requisition once one of the values have been cached,
        * then go ahead and update the cache with the sizegroup computed value.
+       *
+       * Note this is also where values from gtk_widget_set_size_request() are considered.
        */
       group_size = 
 	_gtk_size_group_bump_requisition (GTK_WIDGET (layout), 

@@ -750,13 +750,31 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
 {
   gint result = widget_requisition;
 
-  if (!is_bumping (widget) && get_size_groups (widget))
+  if (!is_bumping (widget))
     {
+      GtkWidgetAuxInfo *aux_info = 
+	_gtk_widget_get_aux_info (widget, FALSE);
+
       /* Avoid recursion here */
       mark_bumping (widget, TRUE);
 
-      result = compute_dimension (widget, mode, widget_requisition);
-
+      if (get_size_groups (widget))
+	{
+	  if (aux_info)
+	    {
+	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+		result = compute_dimension (widget, mode, MAX (aux_info->width, widget_requisition));
+	      else 
+		result = compute_dimension (widget, mode, MAX (aux_info->height, widget_requisition));
+	    }
+	}
+      else if (aux_info)
+	{
+	  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+	    result = MAX (aux_info->width, widget_requisition);
+	  else 
+	    result = MAX (aux_info->height, widget_requisition);
+	}
       mark_bumping (widget, FALSE);
     }
   return result;
