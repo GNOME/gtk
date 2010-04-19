@@ -3024,9 +3024,10 @@ get_label_width (GtkLabel *label,
 
 	  *natural = MAX (*minimum, max_width);
 	}
-   }
+    }
   else
     {
+      /* XXX Do something about width_chars/max_width_chars when no ellipsize/wrap is set */
       *minimum = text_width;
       *natural = *minimum;
     }
@@ -3424,9 +3425,9 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 				 (required_rect.width  + label->misc.xpad * 2), minimum_size, natural_size);
       else
 	{
-	  /* If there is no wrapping, the height is static */
+	  /* If there is no wrapping, the height is either static or rotated and ellipsized */
 	  *minimum_size = required_rect.height + label->misc.ypad * 2;
-	  *natural_size = *minimum_size;
+	  *natural_size = natural_rect.height + label->misc.ypad * 2;
 	}
     }
 }
