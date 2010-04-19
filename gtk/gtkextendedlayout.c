@@ -28,9 +28,6 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-
-#define DEBUG_EXTENDED_LAYOUT 0
-
 /* With extended layout, a widget may be requested
  * its width for 2 or maximum 3 heights in one resize
  */
@@ -251,16 +248,15 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
 
   g_assert (cached_size->minimum_size <= cached_size->natural_size);
 
-#if DEBUG_EXTENDED_LAYOUT
-  g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
-	     layout, G_OBJECT_TYPE_NAME (layout), 
-	     orientation == GTK_SIZE_GROUP_HORIZONTAL ? 
-	     "width for height" : "height for width" ,
-	     for_size,
-	     cached_size->minimum_size,
-	     cached_size->natural_size,
-	     found_in_cache ? "yes" : "no");
-#endif
+  GTK_NOTE (EXTENDED_LAYOUT, 
+	    g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
+		     layout, G_OBJECT_TYPE_NAME (layout), 
+		     orientation == GTK_SIZE_GROUP_HORIZONTAL ? 
+		     "width for height" : "height for width" ,
+		     for_size,
+		     cached_size->minimum_size,
+		     cached_size->natural_size,
+		     found_in_cache ? "yes" : "no"));
 
 }
 
@@ -402,24 +398,11 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
     {
       gtk_extended_layout_get_desired_width (layout, &min_width, &nat_width);
       gtk_extended_layout_get_height_for_width (layout, min_width, &min_height, &nat_height);
-
-#if DEBUG_EXTENDED_LAYOUT
-  g_message ("%s get_desired_size min height: %d for natural width: %d",
-	     G_OBJECT_TYPE_NAME (layout), 
-	     min_height, nat_width);
-#endif
-      
     }
   else
     {
       gtk_extended_layout_get_desired_height (layout, &min_height, &nat_height);
       gtk_extended_layout_get_width_for_height (layout, min_height, &min_width, &nat_width);
-
-#if DEBUG_EXTENDED_LAYOUT
-  g_message ("%s get_desired_size min width: %d for natural height: %d",
-	     G_OBJECT_TYPE_NAME (layout), 
-	     min_width, nat_height);
-#endif
     }
 
   if (minimum_size)
