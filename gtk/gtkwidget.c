@@ -3894,7 +3894,7 @@ gtk_widget_size_request (GtkWidget	*widget,
                "to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), requisition, NULL);
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), FALSE, requisition, NULL);
 }
 
 /**
@@ -3928,7 +3928,7 @@ void
 gtk_widget_get_child_requisition (GtkWidget	 *widget,
 				  GtkRequisition *requisition)
 {
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), requisition, NULL);
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (widget), FALSE, requisition, NULL);
 }
 
 static gboolean
@@ -7874,8 +7874,8 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
       aux_info->height = height;
       changed = TRUE;
     }
-  
-  if (gtk_widget_get_visible (widget) && changed)
+
+  if (changed && gtk_widget_get_visible (widget))
     gtk_widget_queue_resize (widget);
 
   g_object_thaw_notify (G_OBJECT (widget));

@@ -5895,7 +5895,7 @@ gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
   child = gtk_bin_get_child (GTK_BIN (layout));
  
   /* common */
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), &bin_req, &bin_nat_req);
+  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), FALSE, &bin_req, &bin_nat_req);
   gtk_combo_box_remeasure (combo_box);
 
   bin_req.width      = MAX (bin_req.width,      priv->minimum_size.width);
@@ -5958,6 +5958,7 @@ gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
           GtkRequisition but_req, but_nat_req;
 
           gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (priv->button), 
+						FALSE, 
 						&but_req, &but_nat_req);
 
           minimum_size->width  = bin_req.width + but_req.width;
@@ -5999,6 +6000,7 @@ gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
 
       /* the button */
       gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (priv->button), 
+					    FALSE, 
 					    &button_req, &button_nat_req);
 
       minimum_size->width += button_req.width;
