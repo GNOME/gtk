@@ -1,5 +1,26 @@
-#include <gtk/gtk.h>
+/* testextendedlayout2.c
+ * Copyright (C) 2010 Openismus GmbH
+ *
+ * Author:
+ *      Tristan Van Berkom <tristan.van.berkom@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
 
+#include <gtk/gtk.h>
 
 typedef struct {
   const gchar *name;
@@ -149,7 +170,8 @@ TestInterface interfaces[] = {
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label4\">"
     "            <property name=\"visible\">True</property>"
-    "            <property name=\"label\" translatable=\"yes\">This label can shrink.</property>"
+    "            <property name=\"label\" translatable=\"yes\">This static label\n"
+    "can shrink.</property>"
     "            <property name=\"justify\">center</property>"
     "            <attributes>"
     "              <attribute name=\"style\" value=\"normal\"/>"
@@ -213,7 +235,7 @@ TestInterface interfaces[] = {
     "                <child>"
     "                  <object class=\"GtkLabel\" id=\"label1\">"
     "                    <property name=\"visible\">True</property>"
-    "                    <property name=\"label\" translatable=\"yes\">Lets try to set some text start to wrap up in this hbox and see if the height-for-width is gonna work !</property>"
+    "                    <property name=\"label\" translatable=\"yes\">Lets try setting up some long text to wrap up in this hbox and see if the height-for-width is gonna work !</property>"
     "                    <property name=\"wrap\">True</property>"
     "                    <property name=\"width_chars\">30</property>"
     "                    <attributes>"
@@ -232,7 +254,7 @@ TestInterface interfaces[] = {
     "            </child>"
     "            <child>"
     "              <object class=\"GtkButton\" id=\"button2\">"
-    "                <property name=\"label\" translatable=\"yes\">A button that expands in the container</property>"
+    "                <property name=\"label\" translatable=\"yes\">A button that expands in the vbox</property>"
     "                <property name=\"visible\">True</property>"
     "                <property name=\"can_focus\">True</property>"
     "                <property name=\"receives_default\">True</property>"
@@ -251,7 +273,9 @@ TestInterface interfaces[] = {
     "        <child>"
     "          <object class=\"GtkLabel\" id=\"label4\">"
     "            <property name=\"visible\">True</property>"
-    "            <property name=\"label\" translatable=\"yes\">This label can shrink.</property>"
+    "            <property name=\"label\" translatable=\"yes\">This label is\n"
+    "set to shrink inside\n"
+    "the paned window.</property>"
     "            <property name=\"justify\">center</property>"
     "            <attributes>"
     "              <attribute name=\"style\" value=\"normal\"/>"
@@ -261,6 +285,129 @@ TestInterface interfaces[] = {
     "          <packing>"
     "            <property name=\"resize\">True</property>"
     "            <property name=\"shrink\">True</property>"
+    "          </packing>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "  </object>"
+    "</interface>",
+    NULL
+  },
+
+  {
+    "Vertical Labels",
+    "Demonstrates how a horizontal box will consider width-for-height when allocating children "
+    "even if the toplevel window is requested as height-for-width.",
+    "<interface>"
+    "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+    "  <!-- interface-naming-policy project-wide -->"
+    "  <object class=\"GtkWindow\" id=\"window\">"
+    "    <property name=\"default_width\">400</property>"
+    "    <property name=\"default_height\">300</property>"
+    "    <child>"
+    "      <object class=\"GtkVPaned\" id=\"vpaned1\">"
+    "        <property name=\"visible\">True</property>"
+    "        <property name=\"can_focus\">True</property>"
+    "        <child>"
+    "          <object class=\"GtkHBox\" id=\"hbox1\">"
+    "            <property name=\"visible\">True</property>"
+    "            <child>"
+    "              <object class=\"GtkLabel\" id=\"label1\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label\" translatable=\"yes\">Some long width-for-height text that wraps</property>"
+    "                <property name=\"justify\">center</property>"
+    "                <property name=\"wrap\">True</property>"
+    "                <property name=\"width_chars\">10</property>"
+    "                <property name=\"angle\">90</property>"
+    "                <attributes>"
+    "                  <attribute name=\"weight\" value=\"bold\"/>"
+    "                  <attribute name=\"foreground\" value=\"#03e307ddfb5f\"/>"
+    "                </attributes>"
+    "              </object>"
+    "              <packing>"
+    "                <property name=\"expand\">False</property>"
+    "                <property name=\"position\">0</property>"
+    "              </packing>"
+    "            </child>"
+    "            <child>"
+    "              <object class=\"GtkFrame\" id=\"frame1\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label_xalign\">0</property>"
+    "                <property name=\"shadow_type\">out</property>"
+    "                <child>"
+    "                  <object class=\"GtkLabel\" id=\"label5\">"
+    "                    <property name=\"visible\">True</property>"
+    "                    <property name=\"label\" translatable=\"yes\">Neither of the panes are\n"
+    "set to shrink.</property>"
+    "                    <property name=\"justify\">center</property>"
+    "                    <attributes>"
+    "                      <attribute name=\"foreground\" value=\"#ffff00000000\"/>"
+    "                    </attributes>"
+    "                  </object>"
+    "                </child>"
+    "                <child type=\"label_item\">"
+    "                  <placeholder/>"
+    "                </child>"
+    "              </object>"
+    "              <packing>"
+    "                <property name=\"position\">1</property>"
+    "              </packing>"
+    "            </child>"
+    "          </object>"
+    "          <packing>"
+    "            <property name=\"resize\">False</property>"
+    "            <property name=\"shrink\">False</property>"
+    "          </packing>"
+    "        </child>"
+    "        <child>"
+    "          <object class=\"GtkHBox\" id=\"hbox2\">"
+    "            <property name=\"visible\">True</property>"
+    "            <child>"
+    "              <object class=\"GtkFrame\" id=\"frame2\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label_xalign\">0</property>"
+    "                <property name=\"shadow_type\">out</property>"
+    "                <child>"
+    "                  <object class=\"GtkLabel\" id=\"label4\">"
+    "                    <property name=\"visible\">True</property>"
+    "                    <property name=\"label\" translatable=\"yes\">The interface is allocated as height\n"
+    "for width, but the horizontal boxes\n"
+    "allocate in width for height mode.</property>"
+    "                    <attributes>"
+    "                      <attribute name=\"foreground\" value=\"#000097970808\"/>"
+    "                    </attributes>"
+    "                  </object>"
+    "                </child>"
+    "                <child type=\"label_item\">"
+    "                  <placeholder/>"
+    "                </child>"
+    "              </object>"
+    "              <packing>"
+    "                <property name=\"position\">0</property>"
+    "              </packing>"
+    "            </child>"
+    "            <child>"
+    "              <object class=\"GtkLabel\" id=\"label3\">"
+    "                <property name=\"visible\">True</property>"
+    "                <property name=\"label\" translatable=\"yes\">Some long width-for-height text that wraps</property>"
+    "                <property name=\"justify\">center</property>"
+    "                <property name=\"wrap\">True</property>"
+    "                <property name=\"width_chars\">10</property>"
+    "                <property name=\"angle\">270</property>"
+    "                <attributes>"
+    "                  <attribute name=\"weight\" value=\"bold\"/>"
+    "                  <attribute name=\"foreground\" value=\"#03e307ddfb5f\"/>"
+    "                </attributes>"
+    "              </object>"
+    "              <packing>"
+    "                <property name=\"expand\">False</property>"
+    "                <property name=\"position\">1</property>"
+    "              </packing>"
+    "            </child>"
+    "          </object>"
+    "          <packing>"
+    "            <property name=\"resize\">False</property>"
+    "            <property name=\"shrink\">False</property>"
     "          </packing>"
     "        </child>"
     "      </object>"
