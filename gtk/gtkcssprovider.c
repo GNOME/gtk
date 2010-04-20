@@ -748,7 +748,8 @@ parse_selector (GtkCssProvider  *css_provider,
 {
   SelectorPath *path;
 
-  *selector_out = NULL;
+  path = selector_path_new ();
+  *selector_out = path;
 
   if (scanner->token != ':' &&
       scanner->token != G_TOKEN_IDENTIFIER)
@@ -774,10 +775,7 @@ parse_selector (GtkCssProvider  *css_provider,
               g_scanner_get_next_token (scanner);
 
               if ((token = parse_nth_child (css_provider, scanner, path, &flags)) != G_TOKEN_NONE)
-                {
-                  selector_path_unref (path);
-                  return token;
-                }
+                return token;
             }
 
           selector_path_prepend_region (path, region_name, flags);
@@ -786,10 +784,7 @@ parse_selector (GtkCssProvider  *css_provider,
       else if (scanner->value.v_identifier[0] == '*')
         selector_path_prepend_glob (path);
       else
-        {
-          selector_path_unref (path);
-          return G_TOKEN_IDENTIFIER;
-        }
+        return G_TOKEN_IDENTIFIER;
 
       g_scanner_get_next_token (scanner);
 
@@ -811,10 +806,7 @@ parse_selector (GtkCssProvider  *css_provider,
       g_scanner_get_next_token (scanner);
 
       if (scanner->token != G_TOKEN_SYMBOL)
-        {
-          selector_path_unref (path);
-          return G_TOKEN_SYMBOL;
-        }
+        return G_TOKEN_SYMBOL;
 
       path->state = GPOINTER_TO_INT (scanner->value.v_symbol);
 
@@ -883,7 +875,10 @@ parse_rule (GtkCssProvider *css_provider,
   expected_token = parse_selector (css_provider, scanner, &selector);
 
   if (expected_token != G_TOKEN_NONE)
-    return expected_token;
+    {
+      selector_path_unref (selector);
+      return expected_token;
+    }
 
   priv->cur_selectors = g_slist_prepend (priv->cur_selectors, selector);
 
@@ -894,7 +889,10 @@ parse_rule (GtkCssProvider *css_provider,
       expected_token = parse_selector (css_provider, scanner, &selector);
 
       if (expected_token != G_TOKEN_NONE)
-        return expected_token;
+        {
+          selector_path_unref (selector);
+          return expected_token;
+        }
 
       priv->cur_selectors = g_slist_prepend (priv->cur_selectors, selector);
     }
