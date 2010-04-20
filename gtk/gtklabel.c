@@ -3350,11 +3350,10 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
    *    - minimum size should be MAX (width-chars, 0)
    *    - natural size should be MIN (max-width-chars, strlen (label->text))
    *
-   *
-   *
    */
 
-  /* Refresh layout if needed */
+  /* When calculating ->wrap sometimes we need to invent a size; Ideally we should be doing
+   * that stuff here instead of inside gtk_label_ensure_layout() */
   if (label->wrap)
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, TRUE);
@@ -3430,6 +3429,16 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 	  *natural_size = natural_rect.height + label->misc.ypad * 2;
 	}
     }
+
+  /* Restore real allocated size of layout; sometimes size-requests
+   * are randomly called without a following allocation; for this case
+   * we need to make sure we dont have a mucked up layout because we
+   * went and guessed the wrap-size.
+   */
+  if (label->wrap)
+    gtk_label_clear_layout (label);
+  gtk_label_ensure_layout (label, FALSE);
+
 }
 
 
