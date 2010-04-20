@@ -129,6 +129,7 @@ get_cache (GtkExtendedLayout *layout, gboolean create)
   return cache;
 }
 
+
 static void
 do_size_request (GtkWidget *widget)
 {
@@ -166,6 +167,8 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       
       if (GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout) == FALSE)
 	found_in_cache = get_cached_desired_size (for_size, cache->desired_widths, &cached_size);
+      else
+	memset (cache->desired_widths, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
     }
   else
     {
@@ -173,6 +176,8 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       
       if (GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout) == FALSE)
 	found_in_cache = get_cached_desired_size (for_size, cache->desired_heights, &cached_size);
+      else
+	memset (cache->desired_heights, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
     }
     
   if (!found_in_cache)
