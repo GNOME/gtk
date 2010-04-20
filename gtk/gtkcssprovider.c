@@ -35,6 +35,7 @@ typedef struct SelectorStyleInfo SelectorStyleInfo;
 typedef enum SelectorElementType SelectorElementType;
 typedef enum CombinatorType CombinatorType;
 typedef enum ParserScope ParserScope;
+typedef enum ParserSymbol ParserSymbol;
 
 enum SelectorElementType {
   SELECTOR_TYPE_NAME,
@@ -87,8 +88,25 @@ struct GtkCssProviderPrivate
 enum ParserScope {
   SCOPE_SELECTOR,
   SCOPE_PSEUDO_CLASS,
+  SCOPE_NTH_CHILD,
   SCOPE_DECLARATION,
   SCOPE_VALUE
+};
+
+/* Extend GtkStateType, since these
+ * values are also used as symbols
+ */
+enum ParserSymbol {
+  /* Scope: pseudo-class */
+  SYMBOL_NTH_CHILD = GTK_STATE_LAST,
+  SYMBOL_FIRST_CHILD,
+  SYMBOL_LAST_CHILD,
+
+  /* Scope: nth-child */
+  SYMBOL_NTH_CHILD_EVEN,
+  SYMBOL_NTH_CHILD_ODD,
+  SYMBOL_NTH_CHILD_FIRST,
+  SYMBOL_NTH_CHILD_LAST
 };
 
 #define GTK_CSS_PROVIDER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProviderPrivate))
@@ -256,6 +274,15 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "hover", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "selected", GUINT_TO_POINTER (GTK_STATE_SELECTED));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "insensitive", GUINT_TO_POINTER (GTK_STATE_INSENSITIVE));
+
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "nth-child", GUINT_TO_POINTER (SYMBOL_NTH_CHILD));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "first-child", GUINT_TO_POINTER (SYMBOL_FIRST_CHILD));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "last-child", GUINT_TO_POINTER (SYMBOL_LAST_CHILD));
+
+  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "even", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_EVEN));
+  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "odd", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_ODD));
+  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "first", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_FIRST));
+  g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "last", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_LAST));
 
   priv->scanner = scanner;
   css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
@@ -624,6 +651,73 @@ css_provider_commit (GtkCssProvider *css_provider)
 }
 
 static GTokenType
+parse_nth_child (GtkCssProvider     *css_provider,
+                 GScanner           *scanner,
+                 SelectorPath       *selector,
+                 GtkChildClassFlags *flags)
+{
+  ParserSymbol symbol;
+
+  *flags = 0;
+
+  css_provider_push_scope (css_provider, SCOPE_PSEUDO_CLASS);
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != G_TOKEN_SYMBOL)
+    return G_TOKEN_SYMBOL;
+
+  symbol = GPOINTER_TO_INT (scanner->value.v_symbol);
+
+  if (symbol == SYMBOL_NTH_CHILD)
+    {
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != G_TOKEN_LEFT_PAREN)
+        return G_TOKEN_LEFT_PAREN;
+
+      css_provider_push_scope (css_provider, SCOPE_NTH_CHILD);
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != G_TOKEN_SYMBOL)
+        return G_TOKEN_SYMBOL;
+
+      symbol = GPOINTER_TO_INT (scanner->value.v_symbol);
+
+      switch (symbol)
+        {
+        case SYMBOL_NTH_CHILD_EVEN:
+          *flags = GTK_CHILD_CLASS_EVEN;
+          break;
+        case SYMBOL_NTH_CHILD_ODD:
+          *flags = GTK_CHILD_CLASS_ODD;
+          break;
+        case SYMBOL_NTH_CHILD_FIRST:
+          *flags = GTK_CHILD_CLASS_FIRST;
+          break;
+        case SYMBOL_NTH_CHILD_LAST:
+          *flags = GTK_CHILD_CLASS_LAST;
+          break;
+        default:
+          break;
+        }
+
+      g_scanner_get_next_token (scanner);
+
+      if (scanner->token != G_TOKEN_RIGHT_PAREN)
+        return G_TOKEN_RIGHT_PAREN;
+
+      css_provider_pop_scope (css_provider);
+    }
+  else if (symbol == SYMBOL_FIRST_CHILD)
+    *flags = GTK_CHILD_CLASS_FIRST;
+  else if (symbol == SYMBOL_LAST_CHILD)
+    *flags = GTK_CHILD_CLASS_LAST;
+
+  css_provider_pop_scope (css_provider);
+  return G_TOKEN_NONE;
+}
+
+static GTokenType
 parse_selector (GtkCssProvider  *css_provider,
                 GScanner        *scanner,
                 SelectorPath   **selector_out)
@@ -642,6 +736,23 @@ parse_selector (GtkCssProvider  *css_provider,
     {
       if (g_ascii_isupper (scanner->value.v_identifier[0]))
         selector_path_prepend_type (path, scanner->value.v_identifier);
+      else if (g_ascii_islower (scanner->value.v_identifier[0]))
+        {
+          GtkChildClassFlags flags = 0;
+
+          /* Parse nth-child type pseudo-class */
+          if (g_scanner_peek_next_token (scanner) == ':')
+            {
+              GTokenType token;
+              g_scanner_get_next_token (scanner);
+
+              if ((token = parse_nth_child (css_provider, scanner, path, &flags)) != G_TOKEN_NONE)
+                {
+                  selector_path_unref (path);
+                  return token;
+                }
+            }
+        }
       else if (scanner->value.v_identifier[0] == '*')
         selector_path_prepend_glob (path);
       else
@@ -723,9 +834,7 @@ parse_value (GType        type,
       return TRUE;
     }
   else
-    {
-      g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
-    }
+    g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
 
   return FALSE;
 }
