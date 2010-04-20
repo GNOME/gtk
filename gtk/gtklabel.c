@@ -156,7 +156,7 @@ enum {
 /* When rotating ellipsizable text we want the natural size to request 
  * more to ensure the label wont ever ellipsize in an allocation of full natural size.
  * */
-#define ROTATION_ELLIPSIZE_PADDING 12
+#define ROTATION_ELLIPSIZE_PADDING 2
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
