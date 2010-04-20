@@ -174,7 +174,7 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
     {
       cached_size = &cache->desired_heights[0];
       
-      if (GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout) == FALSE)
+      if (GTK_WIDGET_HEIGHT_REQUEST_NEEDED (layout) == FALSE)
 	found_in_cache = get_cached_desired_size (for_size, cache->desired_heights, &cached_size);
       else
 	memset (cache->desired_heights, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
