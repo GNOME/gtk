@@ -205,7 +205,6 @@ gtk_bin_get_width_for_height (GtkExtendedLayout      *layout,
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
-/*     parent_extended_layout_iface->get_height_for_width (layout, height, minimum_width, natural_width); */
 }
 
 static void
@@ -233,7 +232,6 @@ gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
-/*     parent_extended_layout_iface->get_height_for_width (layout, width, minimum_height, natural_height); */
 }
 
 
