@@ -304,7 +304,7 @@ static void          gtk_label_get_link_colors  (GtkWidget  *widget,
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
-static void gtk_label_layout_interface_init (GtkExtendedLayoutIface *iface);
+static void gtk_label_extended_layout_init  (GtkExtendedLayoutIface *iface);
 
 static void gtk_label_get_desired_width     (GtkExtendedLayout      *layout,
                                              gint                   *minimum_size,
@@ -329,7 +329,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_label_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                gtk_label_layout_interface_init));
+                                                gtk_label_extended_layout_init));
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -3280,14 +3280,13 @@ get_single_line_height (GtkWidget   *widget,
 
 
 static void
-gtk_label_layout_interface_init (GtkExtendedLayoutIface *iface)
+gtk_label_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
   iface->get_desired_width    = gtk_label_get_desired_width;
-  iface->get_desired_height    = gtk_label_get_desired_height;
+  iface->get_desired_height   = gtk_label_get_desired_height;
   iface->get_width_for_height = gtk_label_get_width_for_height;
   iface->get_height_for_width = gtk_label_get_height_for_width;
 }
-
 
 
 static void
@@ -3420,14 +3419,17 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 	{
 	  /* Doing a w4h request on a label here, return the required height for the minimum width. */
 	  get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
-				   (required_rect.width  + label->misc.xpad * 2), minimum_size, natural_size);
+				   required_rect.width, minimum_size, natural_size);
 	}
       else
 	{
 	  /* Rotated labels already setup the required height here */
-	  *minimum_size = required_rect.height + label->misc.ypad * 2;
-	  *natural_size = natural_rect.height + label->misc.ypad * 2;
+	  *minimum_size = required_rect.height;
+	  *natural_size = natural_rect.height;
 	}
+
+      *minimum_size += label->misc.ypad * 2;
+      *natural_size += label->misc.ypad * 2;
     }
 
   /* Restore real allocated size of layout; sometimes size-requests
@@ -3472,7 +3474,15 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
       if (label->wrap)
 	gtk_label_clear_layout (label);
 
-      get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, height, minimum_width, natural_width);
+      get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, 
+			       MAX (1, height - (label->misc.ypad * 2)), 
+			       minimum_width, natural_width);
+
+      if (minimum_width)
+	minimum_width += label->misc.xpad * 2;
+
+      if (natural_width)
+	natural_width += label->misc.xpad * 2;
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
@@ -3492,7 +3502,15 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
       if (label->wrap)
 	gtk_label_clear_layout (label);
 
-      get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, width, minimum_height, natural_height);
+      get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
+			       MAX (1, width - label->misc.xpad * 2), 
+			       minimum_height, natural_height);
+
+      if (minimum_height)
+	minimum_height += label->misc.ypad * 2;
+
+      if (natural_height)
+	natural_height += label->misc.ypad * 2;
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
