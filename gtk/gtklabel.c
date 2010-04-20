@@ -3185,13 +3185,22 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
 	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
 	  gint longest_paragraph;
 	  gint width, height;
+	  gint aux_width = 0;
 
- 	  if (aux_info && aux_info->width > 0)
-	    pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
+ 	  if ((angle == 90 || angle == 270) && aux_info && aux_info->height > 0)
+	    aux_width = aux_info->height;
+	  else if (aux_info && aux_info->width > 0)
+	    aux_width = aux_info->width;
+
+ 	  if (aux_width > 0)
+	    pango_layout_set_width (label->layout, aux_width * PANGO_SCALE);
 	  else if (guess_wrap_width == FALSE &&
 		   widget->allocation.width > 1)
  	    {
-	      width = widget->allocation.width - label->misc.xpad * 2;
+	      if (angle == 90 || angle == 270)
+		width = widget->allocation.height - label->misc.ypad * 2;
+	      else
+		width = widget->allocation.width  - label->misc.xpad * 2;
 
 	      pango_layout_set_wrap (label->layout, label->wrap_mode);
 	      pango_layout_set_width (label->layout, MAX (width, 1) * PANGO_SCALE);
@@ -3340,6 +3349,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   GtkLabel      *label = GTK_LABEL (layout);
   PangoRectangle required_rect;
   PangoRectangle natural_rect;
+  gdouble        angle;
 
   /* "width-chars" Hard-coded minimum width: 
    *    - minimum size should be MAX (width-chars, strlen ("..."));
@@ -3356,6 +3366,9 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
   if (label->wrap)
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, TRUE);
+
+
+  angle = gtk_label_get_angle (label);
 
   /* Start off with the pixel extents of the rendered layout */
   pango_layout_get_extents (label->layout, NULL, &required_rect);
@@ -3375,7 +3388,6 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
       PangoLayout       *layout  = pango_layout_copy (label->layout);
       PangoContext      *context = pango_layout_get_context (label->layout);
       const PangoMatrix *matrix  = pango_context_get_matrix (context);
-      gdouble           angle;
 
       pango_layout_set_width (layout, -1);
       pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
@@ -3390,9 +3402,7 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
        * (note, we could alternatively set the layout to not ellipsize when we know we have been
        * allocated our full natural size, or it may be that pango needs a fix here).
        */
-      angle = gtk_label_get_angle (label);
-      if (label->ellipsize && 
-	  angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
+      if (label->ellipsize && angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
 	{
 	  /* For some reason we only need this at about 110 degrees, and only
 	   * when gaining in height
@@ -3410,24 +3420,41 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      *minimum_size = required_rect.width + label->misc.xpad * 2;
-      *natural_size = natural_rect.width  + label->misc.xpad * 2;
-    }
-  else
+      /* Note, we cant use get_size_for_allocation() when rotating ellipsize labels.
+       */
+      if (!(label->ellipsize && label->have_transform) && (angle == 90 || angle == 270))
+	{
+	  /* Doing a h4w request on a rotated label here, return the required width for the minimum height. */
+	  get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, 
+				   required_rect.height, minimum_size, natural_size);
+
+	}
+      else
+	{
+	  /* Normal desired width */
+	  *minimum_size = required_rect.width;
+	  *natural_size = natural_rect.width;
+	}
+      
+      *minimum_size += label->misc.xpad * 2;
+      *natural_size += label->misc.xpad * 2;
+    } 
+  else /* GTK_ORIENTATION_VERTICAL */
     {
-      if (!label->have_transform)
+      /* Note, we cant use get_size_for_allocation() when rotating ellipsize labels.
+       */
+      if (angle == 90 || angle == 270 || (label->ellipsize && label->have_transform))
+	{
+	  /* A vertically rotated label does w4h, so return the base desired height (text length) */
+	  *minimum_size = required_rect.height;
+	  *natural_size = natural_rect.height;
+	}
+      else
 	{
 	  /* Doing a w4h request on a label here, return the required height for the minimum width. */
 	  get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
 				   required_rect.width, minimum_size, natural_size);
 	}
-      else
-	{
-	  /* Rotated labels already setup the required height here */
-	  *minimum_size = required_rect.height;
-	  *natural_size = natural_rect.height;
-	}
-
       *minimum_size += label->misc.ypad * 2;
       *natural_size += label->misc.ypad * 2;
     }
@@ -3469,7 +3496,7 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
   GtkLabel *label = GTK_LABEL (layout);
   gdouble angle = gtk_label_get_angle (label);
 
-  if (label->wrap && (90 == angle || 270 == angle))
+  if (label->wrap && (angle == 90 || angle == 270))
     {
       if (label->wrap)
 	gtk_label_clear_layout (label);
@@ -3497,7 +3524,7 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
   GtkLabel *label = GTK_LABEL (layout);
   gdouble angle = gtk_label_get_angle (label);
 
-  if (label->wrap && (0 == angle || 180 == angle))
+  if (label->wrap && (angle == 0 || angle == 180 || angle == 360))
     {
       if (label->wrap)
 	gtk_label_clear_layout (label);
@@ -3705,10 +3732,12 @@ get_layout_location (GtkLabel  *label,
   gint req_width, x, y;
   gint req_height;
   PangoRectangle logical;
+  gdouble angle;
 
-  misc = GTK_MISC (label);
+  misc   = GTK_MISC (label);
   widget = GTK_WIDGET (label);
-  priv = GTK_LABEL_GET_PRIVATE (label);
+  priv   = GTK_LABEL_GET_PRIVATE (label);
+  angle  = gtk_label_get_angle (label);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     xalign = misc->xalign;
@@ -3716,6 +3745,18 @@ get_layout_location (GtkLabel  *label,
     xalign = 1.0 - misc->xalign;
 
   pango_layout_get_extents (label->layout, NULL, &logical);
+
+  /* Do the wrap width delimiting before the transform
+   */
+  if (label->wrap || label->ellipsize || priv->width_chars > 0)
+    {
+      int width;
+
+      width = pango_layout_get_width (label->layout);
+
+      if (width != -1)
+	logical.width = MIN (width, logical.width);
+    }
 
   if (label->have_transform)
     {
@@ -3726,27 +3767,11 @@ get_layout_location (GtkLabel  *label,
 
   pango_extents_to_pixels (&logical, NULL);
 
-  if (label->wrap || label->ellipsize || priv->width_chars > 0)
-    {
-      int width;
+  req_width  = logical.width;
+  req_height = logical.height;
 
-      width = pango_layout_get_width (label->layout);
-
-      req_width = logical.width;
-      req_height = logical.height;
-
-      if (width != -1)
-	req_width = MIN(PANGO_PIXELS (width), req_width);
-      req_width += 2 * misc->xpad;
-      req_height += 2 * misc->ypad;
-    }
-  else
-    {
-      req_width = logical.width;
-      req_height = logical.height;
-/*       req_width = widget->requisition.width; */
-/*       req_height = widget->requisition.height; */
-    }
+  req_width  += 2 * misc->xpad;
+  req_height += 2 * misc->ypad;
 
   x = floor (widget->allocation.x + (gint)misc->xpad +
 	      xalign * (widget->allocation.width - req_width));
@@ -3755,6 +3780,9 @@ get_layout_location (GtkLabel  *label,
     x = MAX (x, widget->allocation.x + misc->xpad);
   else
     x = MIN (x, widget->allocation.x + widget->allocation.width - misc->xpad);
+
+
+
 
   /* bgo#315462 - For single-line labels, *do* align the requisition with
    * respect to the allocation, even if we are under-allocated.  For multi-line
