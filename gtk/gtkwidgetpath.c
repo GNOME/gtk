@@ -34,8 +34,7 @@ struct GtkPathElement
 
 struct GtkWidgetPath
 {
-  GSList *elems;
-  GSList *last; /* Last element contains the described widget */
+  GArray *elems; /* First element contains the described widget */
 };
 
 GtkWidgetPath *
@@ -44,78 +43,31 @@ gtk_widget_path_new (void)
   GtkWidgetPath *path;
 
   path = g_slice_new0 (GtkWidgetPath);
+  path->elems = g_array_new (FALSE, TRUE, sizeof (GtkPathElement));
 
   return path;
 }
 
-static GtkPathElement *
-path_element_new (GType        type,
-                  const gchar *name)
-{
-  GtkPathElement *elem;
-
-  elem = g_slice_new (GtkPathElement);
-  elem->type = type;
-  elem->name = g_strdup (name);
-
-  return elem;
-}
-
-static void
-path_element_free (GtkPathElement *elem)
-{
-  g_free (elem->name);
-  g_slice_free (GtkPathElement, elem);
-}
-
-void
-gtk_widget_path_prepend_widget_desc (GtkWidgetPath *path,
-                                     GType          type,
-                                     const gchar   *name)
-{
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
-
-  if (!path->elems)
-    {
-      path->elems = g_slist_prepend (NULL, path_element_new (type, name));
-      path->last = path->elems;
-    }
-  else
-    {
-      path->last->next = g_slist_alloc ();
-      path->last->next->data = path_element_new (type, name);
-      path->last = path->last->next;
-    }
-}
-
 GtkWidgetPath *
-gtk_widget_path_copy (GtkWidgetPath *path)
+gtk_widget_path_copy (const GtkWidgetPath *path)
 {
   GtkWidgetPath *new_path;
-  GSList *elems;
+  guint i;
+
+  g_return_val_if_fail (path != NULL, NULL);
 
   new_path = gtk_widget_path_new ();
-  elems = path->elems;
 
-  while (elems)
+  for (i = 0; i < path->elems->len; i++)
     {
-      GtkPathElement *elem;
-      GSList *link;
+      GtkPathElement *elem, new = { 0 };
 
-      elem = elems->data;
-      link = g_slist_alloc ();
-      link->data = path_element_new (elem->type, elem->name);
+      elem = &g_array_index (path->elems, GtkPathElement, i);
 
-      if (!new_path->elems)
-        new_path->last = new_path->elems = link;
-      else
-        {
-          new_path->last->next = link;
-          new_path->last = link;
-        }
+      new.type = elem->type;
+      new.name = g_strdup (elem->name);
 
-      elems = elems->next;
+      g_array_append_val (new_path->elems, new);
     }
 
   return new_path;
@@ -124,59 +76,124 @@ gtk_widget_path_copy (GtkWidgetPath *path)
 void
 gtk_widget_path_free (GtkWidgetPath *path)
 {
+  guint i;
+
   g_return_if_fail (path != NULL);
 
-  g_slist_foreach (path->elems, (GFunc) path_element_free, NULL);
-  g_slist_free (path->elems);
-
-  g_slice_free (GtkWidgetPath, path);
-}
-
-gboolean
-gtk_widget_path_has_parent (GtkWidgetPath *path,
-                            GType          type)
-{
-  g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
-
-  GSList *elems = path->elems;
-
-  while (elems)
+  for (i = 0; i < path->elems->len; i++)
     {
       GtkPathElement *elem;
 
-      elem = elems->data;
+      elem = &g_array_index (path->elems, GtkPathElement, i);
+      g_free (elem->name);
+    }
+
+  g_array_free (path->elems, TRUE);
+  g_slice_free (GtkWidgetPath, path);
+}
+
+guint
+gtk_widget_path_length (GtkWidgetPath *path)
+{
+  g_return_val_if_fail (path != NULL, 0);
+
+  return path->elems->len;
+}
+
+guint
+gtk_widget_path_prepend_type (GtkWidgetPath *path,
+                              GType          type)
+{
+  GtkPathElement new = { 0 };
+
+  g_return_val_if_fail (path != NULL, 0);
+  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), 0);
+
+  new.type = type;
+  g_array_append_val (path->elems, new);
+
+  return path->elems->len - 1;
+}
+
+GType
+gtk_widget_path_get_element_type (GtkWidgetPath *path,
+                                  guint          pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
+  g_return_val_if_fail (pos < path->elems->len, G_TYPE_INVALID);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->type;
+}
+
+void
+gtk_widget_path_set_element_type (GtkWidgetPath *path,
+                                  guint          pos,
+                                  GType          type)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  elem->type = type;
+}
+
+G_CONST_RETURN gchar *
+gtk_widget_path_get_element_name (GtkWidgetPath *path,
+                                  guint          pos)
+{
+  GtkPathElement *elem;
+
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (pos < path->elems->len, NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+  return elem->name;
+}
+
+void
+gtk_widget_path_set_element_name (GtkWidgetPath *path,
+                                  guint          pos,
+                                  const gchar   *name)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (name != NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (elem->name)
+    g_free (elem->name);
+
+  elem->name = g_strdup (name);
+}
+
+gboolean
+gtk_widget_path_has_parent (const GtkWidgetPath *path,
+                            GType                type)
+{
+  guint i;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
+
+  for (i = 1; i < path->elems->len; i++)
+    {
+      GtkPathElement *elem;
+
+      elem = &g_array_index (path->elems, GtkPathElement, i);
 
       if (elem->type == type ||
           g_type_is_a (elem->type, type))
         return TRUE;
-
-      elems = elems->next;
     }
 
   return FALSE;
-}
-
-void
-gtk_widget_path_foreach (GtkWidgetPath            *path,
-                         GtkWidgetPathForeachFunc  func,
-                         gpointer                  user_data)
-{
-  GSList *elems;
-
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (func != NULL);
-
-  elems = path->elems;
-
-  while (elems)
-    {
-      GtkPathElement *elem;
-
-      elem = elems->data;
-      elems = elems->next;
-
-      if ((func) (elem->type, elem->name, user_data))
-        return;
-    }
 }

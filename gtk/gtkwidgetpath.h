@@ -21,31 +21,37 @@
 #define __GTK_WIDGET_PATH_H__
 
 #include <glib-object.h>
+#include "gtkenums.h"
 
 G_BEGIN_DECLS
 
 typedef struct GtkWidgetPath GtkWidgetPath;
 
-typedef gboolean (* GtkWidgetPathForeachFunc) (GType        type,
-                                               const gchar *name,
-                                               gpointer     user_data);
 
 GtkWidgetPath * gtk_widget_path_new (void);
 
-void            gtk_widget_path_prepend_widget_desc (GtkWidgetPath *path,
-                                                     GType          type,
-                                                     const gchar   *name);
+GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
+void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
-GtkWidgetPath * gtk_widget_path_copy                (GtkWidgetPath *path);
-void            gtk_widget_path_free                (GtkWidgetPath *path);
+guint           gtk_widget_path_length              (GtkWidgetPath       *path);
 
-gboolean        gtk_widget_path_has_parent          (GtkWidgetPath *path,
-                                                     GType          type);
+guint           gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
+                                                     GType                type);
 
-void            gtk_widget_path_foreach             (GtkWidgetPath            *path,
-                                                     GtkWidgetPathForeachFunc  func,
-                                                     gpointer                  user_data);
+GType               gtk_widget_path_get_element_type (GtkWidgetPath      *path,
+                                                      guint               pos);
+void                gtk_widget_path_set_element_type (GtkWidgetPath      *path,
+                                                      guint               pos,
+                                                      GType               type);
 
+G_CONST_RETURN gchar * gtk_widget_path_get_element_name (GtkWidgetPath   *path,
+                                                         guint            pos);
+void                   gtk_widget_path_set_element_name (GtkWidgetPath   *path,
+                                                         guint            pos,
+                                                         const gchar     *name);
+
+gboolean        gtk_widget_path_has_parent          (const GtkWidgetPath *path,
+                                                     GType                type);
 
 G_END_DECLS
 

@@ -271,15 +271,12 @@ struct ComparePathData
 };
 
 static gboolean
-compare_path_foreach (GType        type,
-                      const gchar *name,
-                      gpointer     user_data)
+compare_selector_element (GtkWidgetPath   *path,
+                          guint            index,
+                          SelectorElement *elem,
+                          guint8          *score)
 {
-  ComparePathData *data;
-  SelectorElement *elem;
-
-  data = user_data;
-  elem = data->iter->data;
+  *score = 0;
 
   if (elem->elem_type == SELECTOR_TYPE_NAME)
     {
@@ -295,8 +292,7 @@ compare_path_foreach (GType        type,
           /* Type couldn't be resolved, so the selector
            * clearly doesn't affect the given widget path
            */
-          data->score = 0;
-          return TRUE;
+          return FALSE;
         }
 
       elem->elem_type = SELECTOR_GTYPE;
@@ -305,84 +301,95 @@ compare_path_foreach (GType        type,
 
   if (elem->elem_type == SELECTOR_GTYPE)
     {
+      GType type;
+
+      type = gtk_widget_path_get_element_type (path, index);
+
       if (!g_type_is_a (type, elem->type))
-        {
-          /* Selector definitely doesn't match */
-          if (elem->combinator == COMBINATOR_CHILD)
-            {
-              data->score = 0;
-              return TRUE;
-            }
-          else
-            {
-              /* Keep checking descendants for a match */
-              return FALSE;
-            }
-        }
-      else if (type == elem->type)
-        data->score |= 0xF;
+        return FALSE;
+
+      if (type == elem->type)
+        *score |= 0xF;
       else
         {
           GType parent = type;
-          guint8 score = 0xE;
+
+          *score = 0xE;
 
           while ((parent = g_type_parent (parent)) != G_TYPE_INVALID)
             {
               if (parent == elem->type)
                 break;
 
-              score--;
+              *score -= 1;
 
-              if (score == 1)
+              if (*score == 1)
                 {
                   g_warning ("Hierarchy is higher than expected.");
                   break;
                 }
             }
-
-          data->score |= score;
         }
+
+      return TRUE;
     }
   else if (elem->elem_type == SELECTOR_GLOB)
     {
       /* Treat as lowest matching type */
-      data->score++;
+      *score = 1;
+      return TRUE;
     }
 
-  data->iter = data->iter->next;
-
-  if (data->iter)
-    {
-      data->score <<= 4;
-      return FALSE;
-    }
-
-  return TRUE;
+  return FALSE;
 }
 
 static guint64
 compare_selector (GtkWidgetPath *path,
                   SelectorPath  *selector)
 {
-  ComparePathData data;
+  GSList *elements = selector->elements;
+  gboolean match = TRUE;
+  guint64 score = 0;
+  guint i = 0;
 
-  data.score = 0;
-  data.path = selector;
-  data.iter = selector->elements;
-
-  gtk_widget_path_foreach (path,
-                           compare_path_foreach,
-                           &data);
-
-  if (data.iter)
+  while (elements && match &&
+         i < gtk_widget_path_length (path))
     {
-      /* There is remaining data to compare,
-       * so don't take it as a match.
-       */
-      data.score = 0;
+      SelectorElement *elem;
+      guint8 elem_score;
+
+      elem = elements->data;
+      elements = elements->next;
+
+      match = compare_selector_element (path, i, elem, &elem_score);
+      i++;
+
+      if (!match && elem->combinator == COMBINATOR_DESCENDANT)
+        {
+          /* With descendant combinators there may
+           * be intermediate chidren in the hierarchy
+           */
+          match = TRUE;
+        }
+
+      if (match)
+        {
+          score <<= 4;
+          score |= elem_score;
+        }
     }
 
-  return data.score;
+  /* If there are pending selector
+   * elements to compare, it's not
+   * a match.
+   */
+  if (elements)
+    match = FALSE;
+
+  if (!match)
+    score = 0;
+
+  return score;
 }
 
 typedef struct StylePriorityInfo StylePriorityInfo;
