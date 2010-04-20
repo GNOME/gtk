@@ -570,6 +570,15 @@ typedef enum
   GTK_STATE_FLAG_FOCUSED      = 1 << 5
 } GtkStateFlags;
 
+typedef enum {
+  GTK_CHILD_CLASS_EVEN    = 1 << 0,
+  GTK_CHILD_CLASS_ODD     = 1 << 1,
+  GTK_CHILD_CLASS_FIRST   = 1 << 2,
+  GTK_CHILD_CLASS_LAST    = 1 << 3,
+  GTK_CHILD_CLASS_DEFAULT = 1 << 4,
+  GTK_CHILD_CLASS_SORTED  = 1 << 5
+} GtkChildClassFlags;
+
 
 G_END_DECLS
 
