@@ -881,6 +881,12 @@ gtk_viewport_get_desired_size (GtkExtendedLayout *layout,
       minimum += child_min;
       natural += child_nat;
     }
+
+  if (minimum_size)
+    *minimum_size = minimum;
+
+  if (natural_size)
+    *natural_size = natural;
 }
 
 static void
