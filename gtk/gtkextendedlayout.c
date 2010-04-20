@@ -1,8 +1,9 @@
 /* gtkextendedlayout.c
- * Copyright (C) 2007 Openismus GmbH
+ * Copyright (C) 2007-2010 Openismus GmbH
  *
- * Author:
+ * Authors:
  *      Mathias Hasselmann <mathias@openismus.com>
+ *      Tristan Van Berkom <tristan.van.berkom@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,8 +45,8 @@ typedef struct
 typedef struct {
   DesiredSize desired_widths[N_CACHED_SIZES];
   DesiredSize desired_heights[N_CACHED_SIZES];
-  guint8 cached_width_age;
-  guint8 cached_height_age;
+  guint8      cached_width_age;
+  guint8      cached_height_age;
 } ExtendedLayoutCache;
 
 static GQuark quark_cache = 0;
@@ -252,7 +253,6 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       cached_size->natural_size = MAX (cached_size->natural_size, group_size);
     }
 
-  /* Output the MAX()s of the cached size and the size computed by GtkSizeGroup. */
   if (minimum_size)
     *minimum_size = cached_size->minimum_size;
   
