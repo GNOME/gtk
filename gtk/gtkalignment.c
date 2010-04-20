@@ -423,7 +423,6 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkAlignment *alignment;
   GtkBin *bin;
   GtkAllocation child_allocation;
-  GtkRequisition child_requisition;
   gint width, height;
   gint border_width;
   gint padding_horizontal, padding_vertical;
@@ -439,8 +438,9 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkExtendedLayout *layout = GTK_EXTENDED_LAYOUT (bin->child);
-
-      gtk_extended_layout_get_desired_size (layout, NULL, &child_requisition);
+      gint child_nat_width;
+      gint child_nat_height;
+      gint child_width, child_height;
 
       border_width = GTK_CONTAINER (alignment)->border_width;
 
@@ -451,22 +451,36 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       width  = MAX (1, allocation->width - padding_horizontal - 2 * border_width);
       height = MAX (1, allocation->height - padding_vertical - 2 * border_width);
 
-      if (child_requisition.width > width)
-        gtk_extended_layout_get_height_for_width (layout, width, NULL,
-                                                  &child_requisition.height);
-      else if (child_requisition.height > height)
-        gtk_extended_layout_get_width_for_height (layout, height, NULL,
-                                                  &child_requisition.width);
+      if (gtk_extended_layout_is_height_for_width (layout))
+	{
+	  gtk_extended_layout_get_desired_width (layout, NULL, &child_nat_width);
 
-      if (width > child_requisition.width)
-	child_allocation.width = (child_requisition.width *
+	  child_width = MIN (width, child_nat_width);
+
+	  gtk_extended_layout_get_height_for_width (layout, child_width, NULL, &child_nat_height);
+
+	  child_height = MIN (height, child_nat_height);
+	}
+      else
+	{
+	  gtk_extended_layout_get_desired_height (layout, NULL, &child_nat_height);
+
+	  child_height = MIN (height, child_nat_height);
+
+	  gtk_extended_layout_get_width_for_height (layout, child_height, NULL, &child_nat_width);
+
+	  child_width = MIN (width, child_nat_width);
+	}
+
+      if (width > child_width)
+	child_allocation.width = (child_width *
 				  (1.0 - alignment->xscale) +
 				  width * alignment->xscale);
       else
 	child_allocation.width = width;
 
-      if (height > child_requisition.height)
-	child_allocation.height = (child_requisition.height *
+      if (height > child_height)
+	child_allocation.height = (child_height *
 				   (1.0 - alignment->yscale) +
 				   height * alignment->yscale);
       else
