@@ -50,6 +50,24 @@ void                   gtk_widget_path_set_element_name (GtkWidgetPath   *path,
                                                          guint            pos,
                                                          const gchar     *name);
 
+void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
+                                             guint               pos,
+                                             const gchar        *name,
+                                             GtkChildClassFlags  flags);
+void     gtk_widget_path_iter_remove_region (GtkWidgetPath      *path,
+                                             guint               pos,
+                                             const gchar        *name);
+void     gtk_widget_path_iter_clear_regions (GtkWidgetPath      *path,
+                                             guint               pos);
+
+GSList * gtk_widget_path_iter_list_regions  (GtkWidgetPath      *path,
+                                             guint               pos);
+
+gboolean gtk_widget_path_iter_has_region    (GtkWidgetPath      *path,
+                                             guint               pos,
+                                             const gchar        *name,
+                                             GtkChildClassFlags *flags);
+
 gboolean        gtk_widget_path_has_parent          (const GtkWidgetPath *path,
                                                      GType                type);
 

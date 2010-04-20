@@ -30,6 +30,7 @@ struct GtkPathElement
 {
   GType type;
   gchar *name;
+  GHashTable *regions;
 };
 
 struct GtkWidgetPath
@@ -67,6 +68,23 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
       new.type = elem->type;
       new.name = g_strdup (elem->name);
 
+      if (elem->regions)
+        {
+          GHashTableIter iter;
+          gpointer key, value;
+
+          g_hash_table_iter_init (&iter, elem->regions);
+          new.regions = g_hash_table_new_full (g_str_hash,
+                                               g_str_equal,
+                                               (GDestroyNotify) g_free,
+                                               NULL);
+
+          while (g_hash_table_iter_next (&iter, &key, &value))
+            g_hash_table_insert (new.regions,
+                                 g_strdup ((const gchar *) key),
+                                 value);
+        }
+
       g_array_append_val (new_path->elems, new);
     }
 
@@ -86,6 +104,9 @@ gtk_widget_path_free (GtkWidgetPath *path)
 
       elem = &g_array_index (path->elems, GtkPathElement, i);
       g_free (elem->name);
+
+      if (elem->regions)
+        g_hash_table_destroy (elem->regions);
     }
 
   g_array_free (path->elems, TRUE);
@@ -173,6 +194,115 @@ gtk_widget_path_set_element_name (GtkWidgetPath *path,
     g_free (elem->name);
 
   elem->name = g_strdup (name);
+}
+
+void
+gtk_widget_path_iter_add_region (GtkWidgetPath      *path,
+                                 guint               pos,
+                                 const gchar        *name,
+                                 GtkChildClassFlags  flags)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (name != NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->regions)
+    elem->regions = g_hash_table_new_full (g_str_hash,
+                                           g_str_equal,
+                                           (GDestroyNotify) g_free,
+                                           NULL);
+
+  g_hash_table_insert (elem->regions,
+                       g_strdup (name),
+                       GUINT_TO_POINTER (flags));
+}
+
+void
+gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
+                                    guint          pos,
+                                    const gchar   *name)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (name != NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (elem->regions)
+    g_hash_table_remove (elem->regions, name);
+}
+
+void
+gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
+                                    guint          pos)
+{
+  GtkPathElement *elem;
+
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (pos < path->elems->len);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (elem->regions)
+    g_hash_table_remove_all (elem->regions);
+}
+
+GSList *
+gtk_widget_path_iter_list_regions (GtkWidgetPath *path,
+                                   guint          pos)
+{
+  GtkPathElement *elem;
+  GHashTableIter iter;
+  GSList *list = NULL;
+  gpointer key;
+
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (pos < path->elems->len, NULL);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->regions)
+    return NULL;
+
+  g_hash_table_iter_init (&iter, elem->regions);
+
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    list = g_slist_prepend (list, key);
+
+  return list;
+}
+
+gboolean
+gtk_widget_path_iter_has_region (GtkWidgetPath      *path,
+                                 guint               pos,
+                                 const gchar        *name,
+                                 GtkChildClassFlags *flags)
+{
+  GtkPathElement *elem;
+  gpointer value;
+
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  elem = &g_array_index (path->elems, GtkPathElement, pos);
+
+  if (!elem->regions)
+    return FALSE;
+
+  if (!g_hash_table_lookup_extended (elem->regions, name, NULL, &value))
+    return FALSE;
+
+  if (flags)
+    *flags = GPOINTER_TO_UINT (value);
+
+  return TRUE;
 }
 
 gboolean
