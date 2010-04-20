@@ -41,6 +41,7 @@ enum SelectorElementType {
   SELECTOR_TYPE_NAME,
   SELECTOR_NAME,
   SELECTOR_GTYPE,
+  SELECTOR_REGION,
   SELECTOR_GLOB
 };
 
@@ -58,6 +59,12 @@ struct SelectorElement
   {
     GQuark name;
     GType type;
+
+    struct
+    {
+      GQuark name;
+      GtkChildClassFlags flags;
+    } region;
   };
 };
 
@@ -200,6 +207,23 @@ selector_path_prepend_glob (SelectorPath *path)
   elem = g_slice_new (SelectorElement);
   elem->elem_type = SELECTOR_GLOB;
   elem->combinator = COMBINATOR_DESCENDANT;
+
+  path->elements = g_slist_prepend (path->elements, elem);
+}
+
+static void
+selector_path_prepend_region (SelectorPath       *path,
+                              const gchar        *name,
+                              GtkChildClassFlags  flags)
+{
+  SelectorElement *elem;
+
+  elem = g_slice_new (SelectorElement);
+  elem->combinator = COMBINATOR_DESCENDANT;
+  elem->elem_type = SELECTOR_REGION;
+
+  elem->region.name = g_quark_from_string (name);
+  elem->region.flags = flags;
 
   path->elements = g_slist_prepend (path->elements, elem);
 }
@@ -739,6 +763,9 @@ parse_selector (GtkCssProvider  *css_provider,
       else if (g_ascii_islower (scanner->value.v_identifier[0]))
         {
           GtkChildClassFlags flags = 0;
+          gchar *region_name;
+
+          region_name = g_strdup (scanner->value.v_identifier);
 
           /* Parse nth-child type pseudo-class */
           if (g_scanner_peek_next_token (scanner) == ':')
@@ -752,6 +779,9 @@ parse_selector (GtkCssProvider  *css_provider,
                   return token;
                 }
             }
+
+          selector_path_prepend_region (path, region_name, flags);
+          g_free (region_name);
         }
       else if (scanner->value.v_identifier[0] == '*')
         selector_path_prepend_glob (path);
