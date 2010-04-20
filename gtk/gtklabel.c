@@ -3417,15 +3417,15 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
     }
   else
     {
-      /* When wrapping, just return a height contextual to the minimum width
-       * (minimum widths can only be specified by explicitly setting width-chars).
-       */
-      if (label->wrap && !label->have_transform)
-	get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
-				 (required_rect.width  + label->misc.xpad * 2), minimum_size, natural_size);
+      if (!label->have_transform)
+	{
+	  /* Doing a w4h request on a label here, return the required height for the minimum width. */
+	  get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
+				   (required_rect.width  + label->misc.xpad * 2), minimum_size, natural_size);
+	}
       else
 	{
-	  /* If there is no wrapping, the height is either static or rotated and ellipsized */
+	  /* Rotated labels already setup the required height here */
 	  *minimum_size = required_rect.height + label->misc.ypad * 2;
 	  *natural_size = natural_rect.height + label->misc.ypad * 2;
 	}
