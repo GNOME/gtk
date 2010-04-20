@@ -44,8 +44,8 @@ typedef struct
 typedef struct {
   DesiredSize desired_widths[N_CACHED_SIZES];
   DesiredSize desired_heights[N_CACHED_SIZES];
-  guint cached_width_age;
-  guint cached_height_age;
+  guint8 cached_width_age;
+  guint8 cached_height_age;
 } ExtendedLayoutCache;
 
 static GQuark quark_cache = 0;
@@ -74,7 +74,7 @@ gtk_extended_layout_get_type (void)
 /* looks for a cached size request for this for_size. If not
  * found, returns the oldest entry so it can be overwritten */
 static gboolean
-get_cached_desired_size (gfloat         for_size,
+get_cached_desired_size (gint           for_size,
 			 DesiredSize   *cached_sizes,
 			 DesiredSize  **result)
 {
@@ -168,7 +168,10 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       if (GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout) == FALSE)
 	found_in_cache = get_cached_desired_size (for_size, cache->desired_widths, &cached_size);
       else
-	memset (cache->desired_widths, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
+	{
+	  memset (cache->desired_widths, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
+	  cache->cached_width_age = 1;
+	}
     }
   else
     {
@@ -177,7 +180,10 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       if (GTK_WIDGET_HEIGHT_REQUEST_NEEDED (layout) == FALSE)
 	found_in_cache = get_cached_desired_size (for_size, cache->desired_heights, &cached_size);
       else
-	memset (cache->desired_heights, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
+	{
+	  memset (cache->desired_heights, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
+	  cache->cached_height_age = 1;
+	}
     }
     
   if (!found_in_cache)
@@ -379,11 +385,16 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
  * gtk_extended_layout_get_desired_size:
  * @layout: a #GtkExtendedLayout instance
  * @width: the size which is available for allocation
+ * @request_natural: Whether to base the contextual request off of the 
+ *  base natural or the base minimum
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the natural size, or %NULL
  *
  * Retreives the minimum and natural size of a widget taking
  * into account the widget's preference for height-for-width management.
+ *
+ * If request_natural is specified, the non-contextual natural value will
+ * be used to make the contextual request; otherwise the minimum will be used.
  *
  * This is used to retreive a suitable size by container widgets whom dont 
  * impose any restrictions on the child placement, examples of these are 
@@ -393,6 +404,7 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
  */
 void
 gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
+				      gboolean           request_natural,
                                       GtkRequisition    *minimum_size,
                                       GtkRequisition    *natural_size)
 {
@@ -404,12 +416,16 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
   if (gtk_extended_layout_is_height_for_width (layout))
     {
       gtk_extended_layout_get_desired_width (layout, &min_width, &nat_width);
-      gtk_extended_layout_get_height_for_width (layout, min_width, &min_height, &nat_height);
+      gtk_extended_layout_get_height_for_width (layout, 
+						request_natural ? nat_width : min_width, 
+						&min_height, &nat_height);
     }
   else
     {
       gtk_extended_layout_get_desired_height (layout, &min_height, &nat_height);
-      gtk_extended_layout_get_width_for_height (layout, min_height, &min_width, &nat_width);
+      gtk_extended_layout_get_width_for_height (layout, 
+						request_natural ? nat_height : min_height, 
+						&min_width, &nat_width);
     }
 
   if (minimum_size)

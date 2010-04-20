@@ -78,6 +78,7 @@ void      gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
 						    gint              *natural_height);
 
 void      gtk_extended_layout_get_desired_size     (GtkExtendedLayout *layout,
+						    gboolean           request_natural,
 						    GtkRequisition    *minimum_size,
 						    GtkRequisition    *natural_size);
 
