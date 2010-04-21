@@ -110,6 +110,7 @@ static GType gtk_box_child_type        (GtkContainer   *container);
 
 
 static void     gtk_box_extended_layout_init (GtkExtendedLayoutIface *iface);
+static gboolean gtk_box_is_height_for_width  (GtkExtendedLayout      *layout);
 static void     gtk_box_get_desired_width    (GtkExtendedLayout      *layout,
 					      gint                   *minimum_size,
 					      gint                   *natural_size);
@@ -765,16 +766,24 @@ gtk_box_pack (GtkBox      *box,
 }
 
 
-
 static void
 gtk_box_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
   parent_extended_layout_iface = g_type_interface_peek_parent (iface);
 
+  iface->is_height_for_width  = gtk_box_is_height_for_width;
   iface->get_desired_width    = gtk_box_get_desired_width;
   iface->get_desired_height   = gtk_box_get_desired_height;
   iface->get_height_for_width = gtk_box_get_height_for_width;
   iface->get_width_for_height = gtk_box_get_width_for_height;
+}
+
+static gboolean 
+gtk_box_is_height_for_width  (GtkExtendedLayout      *layout)
+{
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (layout);
+
+  return (private->orientation == GTK_ORIENTATION_VERTICAL);
 }
 
 static void

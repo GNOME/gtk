@@ -304,22 +304,22 @@ static void          gtk_label_get_link_colors  (GtkWidget  *widget,
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
-static void gtk_label_extended_layout_init  (GtkExtendedLayoutIface *iface);
-
-static void gtk_label_get_desired_width     (GtkExtendedLayout      *layout,
-                                             gint                   *minimum_size,
-                                             gint                   *natural_size);
-static void gtk_label_get_desired_height    (GtkExtendedLayout      *layout,
-                                             gint                   *minimum_size,
-                                             gint                   *natural_size);
-static void gtk_label_get_width_for_height  (GtkExtendedLayout      *layout,
-                                             gint                    height,
-                                             gint                   *minimum_width,
-                                             gint                   *natural_width);
-static void gtk_label_get_height_for_width  (GtkExtendedLayout      *layout,
-                                             gint                    width,
-                                             gint                   *minimum_height,
-                                             gint                   *natural_height);
+static void     gtk_label_extended_layout_init  (GtkExtendedLayoutIface *iface);
+static gboolean gtk_label_is_height_for_width   (GtkExtendedLayout      *layout);
+static void     gtk_label_get_desired_width     (GtkExtendedLayout      *layout,
+						 gint                   *minimum_size,
+						 gint                   *natural_size);
+static void     gtk_label_get_desired_height    (GtkExtendedLayout      *layout,
+						 gint                   *minimum_size,
+						 gint                   *natural_size);
+static void     gtk_label_get_width_for_height  (GtkExtendedLayout      *layout,
+						 gint                    height,
+						 gint                   *minimum_width,
+						 gint                   *natural_width);
+static void     gtk_label_get_height_for_width  (GtkExtendedLayout      *layout,
+						 gint                    width,
+						 gint                   *minimum_height,
+						 gint                   *natural_height);
 
 static GQuark quark_angle = 0;
 
@@ -3027,7 +3027,6 @@ get_label_width (GtkLabel *label,
     }
   else
     {
-      /* XXX Do something about width_chars/max_width_chars when no ellipsize/wrap is set */
       *minimum = text_width;
       *natural = *minimum;
     }
@@ -3284,12 +3283,24 @@ get_single_line_height (GtkWidget   *widget,
 static void
 gtk_label_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
+  iface->is_height_for_width  = gtk_label_is_height_for_width;
   iface->get_desired_width    = gtk_label_get_desired_width;
   iface->get_desired_height   = gtk_label_get_desired_height;
   iface->get_width_for_height = gtk_label_get_width_for_height;
   iface->get_height_for_width = gtk_label_get_height_for_width;
 }
 
+static gboolean 
+gtk_label_is_height_for_width (GtkExtendedLayout      *layout)
+{
+  GtkLabel *label = GTK_LABEL (layout);
+  gdouble   angle = gtk_label_get_angle (label);
+
+  if (angle == 90 || angle == 270)
+    return FALSE;
+  
+  return TRUE;
+}
 
 static void
 get_size_for_allocation (GtkLabel        *label,

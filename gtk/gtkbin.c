@@ -41,16 +41,16 @@ static void gtk_bin_forall      (GtkContainer   *container,
 static GType gtk_bin_child_type (GtkContainer   *container);
 
 
-static void gtk_bin_extended_layout_init  (GtkExtendedLayoutIface *iface);
-static void gtk_bin_get_width_for_height  (GtkExtendedLayout      *layout,
-					   gint                    height,
-					   gint                   *minimum_width,
-					   gint                   *natural_width);
-static void gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
-					   gint                    width,
-					   gint                   *minimum_height,
-					   gint                   *natural_height);
-
+static void     gtk_bin_extended_layout_init  (GtkExtendedLayoutIface *iface);
+static gboolean gtk_bin_is_height_for_width   (GtkExtendedLayout      *layout);
+static void     gtk_bin_get_width_for_height  (GtkExtendedLayout      *layout,
+					       gint                    height,
+					       gint                   *minimum_width,
+					       gint                   *natural_width);
+static void     gtk_bin_get_height_for_width  (GtkExtendedLayout      *layout,
+					       gint                    width,
+					       gint                   *minimum_height,
+					       gint                   *natural_height);
 
 static GtkExtendedLayoutIface *parent_extended_layout_iface;
 
@@ -159,8 +159,20 @@ gtk_bin_extended_layout_init (GtkExtendedLayoutIface *iface)
 {
   parent_extended_layout_iface = g_type_interface_peek_parent (iface);
 
+  iface->is_height_for_width   = gtk_bin_is_height_for_width;
   iface->get_width_for_height  = gtk_bin_get_width_for_height;
   iface->get_height_for_width  = gtk_bin_get_height_for_width;
+}
+
+static gboolean 
+gtk_bin_is_height_for_width (GtkExtendedLayout      *layout)
+{
+  GtkBin *bin = GTK_BIN (layout);
+
+  if (bin->child)
+    return gtk_extended_layout_is_height_for_width (GTK_EXTENDED_LAYOUT (bin->child));
+
+  return TRUE;
 }
 
 static void

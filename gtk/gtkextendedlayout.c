@@ -22,6 +22,64 @@
  */
 
 
+/**
+ * SECTION:gtkextendedlayout
+ * @Short_Description: Height for Width Geometry management
+ * @Title: GtkExtendedLayout
+ *
+ * The extended layout is GTK+'s height for width geometry management
+ * system.
+ *
+ * <refsect2>
+ * <title>Implementing GtkExtendedLayout</title>
+ * <para>
+ * Some important things to keep in mind when implementing 
+ * or using the extended layout.
+ *
+ * The Extended Layout system will query a logical heirarchy in
+ * only one orientation at a time. When widgets are initially queried
+ * for their minimum sizes it is generally done in a dual pass
+ * in the direction chosen by the toplevel.
+ *
+ * For instance when queried in the normal height-for-width mode:
+ * First the default minimum and natural width for each widget
+ * in the interface will computed and collectively returned to 
+ * the toplevel by way of gtk_extended_layout_get_desired_width(). 
+ * Next; the toplevel will use the minimum width to query for the 
+ * minimum height contextual to that width using gtk_extended_layout_get_height_for_width()
+ * which will also be a highly recursive operation. This minimum
+ * for minimum size can be used to set the minimum size constraint 
+ * on the toplevel.
+ *
+ * When allocating; each container can use the minimum and natural
+ * sizes reported by thier children to allocate natural sizes and
+ * expose as much content as possible with the given allocation.
+ *
+ * That means that the request operation at allocation time will
+ * usually fire again in contexts of different allocated sizes than
+ * the ones originally queried for.
+ *
+ * A Widget that does not actually do height-for-width 
+ * or width-for-height size negotiations only has to implement
+ * get_desired_width() and get_desired_height()
+ *
+ * If a widget does move content around to smartly use up the
+ * allocated size, then it must support the request properly in
+ * both orientations; even if the request only makes sense in
+ * one orientation.
+ *
+ * For instance; a GtkLabel that does height-for-width word wrapping
+ * will not expect to have get_desired_height() called because that
+ * call is specific to a width-for-height request, in this case the
+ * label must return the heights contextual to its minimum possible
+ * width. By following this rule any widget that handles height-for-width
+ * or width-for-height requests will always be allocated at least
+ * enough space to fit its own content.
+ * </para>
+ * </refsect2>
+ */
+
+
 #include <config.h>
 #include "gtkextendedlayout.h"
 #include "gtksizegroup.h"
@@ -73,7 +131,11 @@ gtk_extended_layout_get_type (void)
 }
 
 /* looks for a cached size request for this for_size. If not
- * found, returns the oldest entry so it can be overwritten */
+ * found, returns the oldest entry so it can be overwritten 
+ *
+ * Note that this caching code was directly derived from 
+ * the Clutter toolkit.
+ */
 static gboolean
 get_cached_desired_size (gint           for_size,
 			 DesiredSize   *cached_sizes,
@@ -283,6 +345,10 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
  * Returns: %TRUE if the widget prefers height-for-width, %FALSE if
  * the widget should be treated with a width-for-height preference.
  *
+ * <note><para>#GtkBin widgets generally propagate the preference of thier child, 
+ * container widgets need to request something either in context of their
+ * children or in context of their allocation capabilities.</para></note>
+ *
  * Since: 3.0
  */
 gboolean
@@ -306,7 +372,9 @@ gtk_extended_layout_is_height_for_width (GtkExtendedLayout *layout)
  * @minimum_width: location to store the minimum size, or %NULL
  * @natural_width: location to store the natural size, or %NULL
  *
- * Retreives a widget's minimum and natural size in a single dimension.
+ * Retreives a widget's initial minimum and natural width.
+ *
+ * <note><para>This call is specific to height for width requests.</para></note>
  *
  * Since: 3.0
  */
@@ -326,6 +394,8 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
  * @natural_width: location to store the natural size, or %NULL
  *
  * Retreives a widget's minimum and natural size in a single dimension.
+ *
+ * <note><para>This call is specific to width for height requests.</para></note>
  *
  * Since: 3.0
  */
