@@ -3062,7 +3062,7 @@ get_label_wrap_width (GtkLabel *label)
   
   if (priv->wrap_width < 0)
     {
-      if (priv->width_chars > 0 || priv->max_width_chars > 0)
+      if (priv->width_chars > 0)
 	{
 	  PangoLayout      *layout;
 	  PangoContext     *context;
@@ -3086,21 +3086,14 @@ get_label_wrap_width (GtkLabel *label)
 
 	  text_width = rect.width;
 
-	  if (priv->max_width_chars < 0)
-	    {
-	      priv->wrap_width = PANGO_PIXELS (MAX (text_width, char_pixels * priv->width_chars));
-	    }
-	  else
-	    {
-	      priv->wrap_width = PANGO_PIXELS (MIN (text_width, char_pixels * priv->max_width_chars));
-	    }
+	  priv->wrap_width = PANGO_PIXELS (MAX (text_width, char_pixels * priv->width_chars));
 	}
       else
 	{
 	  PangoLayout *layout;
   
 	  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
-						   "This long string gives a good enough length for any line to have.");
+						   "This string is just about long enough.");
 	  pango_layout_get_size (layout, &priv->wrap_width, NULL);
 	  g_object_unref (layout);
 	}
@@ -3195,7 +3188,7 @@ gtk_label_ensure_layout (GtkLabel *label, gboolean guess_wrap_width)
  	  if (aux_width > 0)
 	    pango_layout_set_width (label->layout, aux_width * PANGO_SCALE);
 	  else if (guess_wrap_width == FALSE &&
-		   widget->allocation.width > 1)
+		   widget->allocation.width > 1 && widget->allocation.height > 1)
  	    {
 	      if (angle == 90 || angle == 270)
 		width = widget->allocation.height - label->misc.ypad * 2;
