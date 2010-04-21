@@ -29,6 +29,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
 	flicker				\
 	print-editor			\
+	extendedlayoutexample		\
 	testaccel			\
 	testassistant			\
 	testbbox			\
@@ -43,8 +44,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testellipsise			\
 	testentrycompletion 		\
 	testentryicons			\
-	testextendedlayout		\
-	testextendedlayout2		\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testframe			\
@@ -114,6 +113,7 @@ endif
 flicker_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
+extendedlayoutexample_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
@@ -131,8 +131,6 @@ testdnd_DEPENDENCIES = $(TEST_DEPS)
 testellipsise_DEPENDENCIES = $(TEST_DEPS)
 testentrycompletion_DEPENDENCIES = $(TEST_DEPS)
 testentryicons_DEPENDENCIES = $(TEST_DEPS)
-testextendedlayout_DEPENDENCIES = $(TEST_DEPS)
-testextendedlayout2_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
@@ -180,6 +178,7 @@ testwindows_DEPENDENCIES = $(TEST_DEPS)
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
+extendedlayoutexample_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
@@ -195,8 +194,6 @@ testdnd_LDADD = $(LDADDS)
 testellipsise_LDADD = $(LDADDS)
 testentrycompletion_LDADD = $(LDADDS)
 testentryicons_LDADD = $(LDADDS)
-testextendedlayout_LDADD = $(LDADDS)
-testextendedlayout2_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
