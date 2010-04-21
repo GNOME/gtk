@@ -31,9 +31,6 @@ typedef struct _GtkSocketPrivate GtkSocketPrivate;
 struct _GtkSocketPrivate
 {
   gint resize_count;
-  gint natural_width;
-  gint natural_height;
-  gboolean have_natural_size;
 };
 
 /* In gtksocket.c: */
@@ -86,7 +83,6 @@ void _gtk_socket_windowing_end_embedding_toplevel (GtkSocket *socket);
  */
 void _gtk_socket_windowing_size_request (GtkSocket *socket);
 
-void _gtk_socket_windowing_get_natural_size (GtkSocket *socket);
 /*
  * _gtk_socket_windowing_send_key_event:
  *

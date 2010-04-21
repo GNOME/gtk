@@ -467,8 +467,7 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
  * be used to make the contextual request; otherwise the minimum will be used.
  *
  * This is used to retreive a suitable size by container widgets whom dont 
- * impose any restrictions on the child placement, examples of these are 
- * #GtkWindow and #GtkScrolledWindow. 
+ * impose any restrictions on the child placement 
  *
  * Since: 3.0
  */

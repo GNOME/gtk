@@ -77,8 +77,6 @@ enum
   */
 #define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*TREE_VIEW_HEADER_HEIGHT(tree_view))
 
-#define GTK_TREE_VIEW_COLUMN_GET_PRIVATE(column) (G_TYPE_INSTANCE_GET_PRIVATE ((column), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnPrivate))
-
 typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
 struct _GtkTreeViewColumnReorder
 {
@@ -300,11 +298,6 @@ struct _GtkTreeViewPrivate
 
   /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
   guint search_entry_avoid_unhandled_binding : 1;
-};
-
-struct _GtkTreeViewColumnPrivate
-{
-  gint natural_width;
 };
 
 #ifdef __GNUC__

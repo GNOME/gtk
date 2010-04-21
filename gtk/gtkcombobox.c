@@ -38,7 +38,6 @@
 #include "gtktreeselection.h"
 #include "gtkvseparator.h"
 #include "gtkwindow.h"
-#include "gtkextendedlayout.h"
 #include "gtkprivate.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -110,9 +109,8 @@ struct _GtkComboBoxPrivate
   guint scroll_timer;
   guint resize_idle_id;
 
-  GtkRequisition minimum_size;
-  GtkRequisition natural_size;
-
+  gint width;
+  gint height;
   GSList *cells;
 
   guint popup_in_progress : 1;
@@ -279,6 +277,8 @@ static void     gtk_combo_box_remeasure            (GtkComboBox      *combo_box)
 
 static void     gtk_combo_box_unset_model          (GtkComboBox      *combo_box);
 
+static void     gtk_combo_box_size_request         (GtkWidget        *widget,
+                                                    GtkRequisition   *requisition);
 static void     gtk_combo_box_size_allocate        (GtkWidget        *widget,
                                                     GtkAllocation    *allocation);
 static void     gtk_combo_box_forall               (GtkContainer     *container,
@@ -463,16 +463,8 @@ static void     gtk_combo_box_buildable_custom_tag_end       (GtkBuildable  *bui
 							      gpointer      *data);
 
 /* GtkCellEditable method implementations */
-static void     gtk_combo_box_start_editing                  (GtkCellEditable *cell_editable,
-							      GdkEvent        *event);
-
-static void     gtk_combo_box_extended_layout_init           (GtkExtendedLayoutIface *iface);
-static void     gtk_combo_box_get_desired_width              (GtkExtendedLayout      *layout,
-							      gint                   *minimum_size,
-							      gint                   *natural_size);
-static void     gtk_combo_box_get_desired_height             (GtkExtendedLayout      *layout,
-							      gint                   *minimum_size,
-							      gint                   *natural_size);
+static void gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
+					 GdkEvent        *event);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
@@ -481,9 +473,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
 						gtk_combo_box_cell_editable_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_combo_box_buildable_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-						gtk_combo_box_extended_layout_init))
+						gtk_combo_box_buildable_init))
 
 
 /* common */
@@ -505,6 +495,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
+  widget_class->size_request = gtk_combo_box_size_request;
   widget_class->expose_event = gtk_combo_box_expose_event;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
@@ -941,9 +932,8 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   GTK_BIN (combo_box)->child = priv->cell_view;
   gtk_widget_show (priv->cell_view);
 
-  memset (&priv->minimum_size, 0x0, sizeof (GtkRequisition));
-  memset (&priv->natural_size, 0x0, sizeof (GtkRequisition));
-
+  priv->width = 0;
+  priv->height = 0;
   priv->wrap_width = 0;
 
   priv->active = -1;
@@ -2055,6 +2045,164 @@ gtk_combo_box_calc_requested_width (GtkComboBox *combo_box,
     req.width = 0;
 
   return req.width + padding;
+}
+
+static void
+gtk_combo_box_remeasure (GtkComboBox *combo_box)
+{
+  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  if (!priv->model ||
+      !gtk_tree_model_get_iter_first (priv->model, &iter))
+    return;
+
+  priv->width = 0;
+  priv->height = 0;
+
+  path = gtk_tree_path_new_from_indices (0, -1);
+
+  do
+    {
+      GtkRequisition req;
+
+      if (priv->cell_view)
+	gtk_cell_view_get_size_of_row (GTK_CELL_VIEW (priv->cell_view), 
+                                       path, &req);
+      else
+        {
+          req.width = 0;
+          req.height = 0;
+        }
+
+      priv->width = MAX (priv->width, req.width);
+      priv->height = MAX (priv->height, req.height);
+
+      gtk_tree_path_next (path);
+    }
+  while (gtk_tree_model_iter_next (priv->model, &iter));
+
+  gtk_tree_path_free (path);
+}
+
+static void
+gtk_combo_box_size_request (GtkWidget      *widget,
+                            GtkRequisition *requisition)
+{
+  gint width, height;
+  gint focus_width, focus_pad;
+  gint font_size;
+  gint arrow_size;
+  GtkRequisition bin_req;
+  PangoContext *context;
+  PangoFontMetrics *metrics;
+  PangoFontDescription *font_desc;
+
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  GtkComboBoxPrivate *priv = combo_box->priv;
+ 
+  /* common */
+  gtk_widget_size_request (GTK_BIN (widget)->child, &bin_req);
+  gtk_combo_box_remeasure (combo_box);
+  bin_req.width = MAX (bin_req.width, priv->width);
+  bin_req.height = MAX (bin_req.height, priv->height);
+
+  gtk_widget_style_get (GTK_WIDGET (widget),
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			"arrow-size", &arrow_size,
+			NULL);
+
+  font_desc = GTK_BIN (widget)->child->style->font_desc;
+  context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (context, font_desc,
+				       pango_context_get_language (context));
+  font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
+			    pango_font_metrics_get_descent (metrics));
+  pango_font_metrics_unref (metrics);
+
+  arrow_size = MAX (arrow_size, font_size);
+
+  gtk_widget_set_size_request (priv->arrow, arrow_size, arrow_size);
+
+  if (!priv->tree_view)
+    {
+      /* menu mode */
+
+      if (priv->cell_view)
+        {
+          GtkRequisition button_req, sep_req, arrow_req;
+          gint border_width, xthickness, ythickness;
+
+          gtk_widget_size_request (priv->button, &button_req);
+	  border_width = GTK_CONTAINER (combo_box)->border_width;
+          xthickness = priv->button->style->xthickness;
+          ythickness = priv->button->style->ythickness;
+
+          bin_req.width = MAX (bin_req.width, priv->width);
+          bin_req.height = MAX (bin_req.height, priv->height);
+
+          gtk_widget_size_request (priv->separator, &sep_req);
+          gtk_widget_size_request (priv->arrow, &arrow_req);
+
+          height = MAX (sep_req.height, arrow_req.height);
+          height = MAX (height, bin_req.height);
+
+          width = bin_req.width + sep_req.width + arrow_req.width;
+
+          height += 2*(border_width + ythickness + focus_width + focus_pad);
+          width  += 2*(border_width + xthickness + focus_width + focus_pad);
+
+          requisition->width = width;
+          requisition->height = height;
+        }
+      else
+        {
+          GtkRequisition but_req;
+
+          gtk_widget_size_request (priv->button, &but_req);
+
+          requisition->width = bin_req.width + but_req.width;
+          requisition->height = MAX (bin_req.height, but_req.height);
+        }
+    }
+  else
+    {
+      /* list mode */
+      GtkRequisition button_req, frame_req;
+
+      /* sample + frame */
+      *requisition = bin_req;
+
+      requisition->width += 2 * focus_width;
+      
+      if (priv->cell_view_frame)
+        {
+	  gtk_widget_size_request (priv->cell_view_frame, &frame_req);
+	  if (priv->has_frame)
+	    {
+	      requisition->width += 2 *
+		(GTK_CONTAINER (priv->cell_view_frame)->border_width +
+		 GTK_WIDGET (priv->cell_view_frame)->style->xthickness);
+	      requisition->height += 2 *
+		(GTK_CONTAINER (priv->cell_view_frame)->border_width +
+		 GTK_WIDGET (priv->cell_view_frame)->style->ythickness);
+	    }
+        }
+
+      /* the button */
+      gtk_widget_size_request (priv->button, &button_req);
+
+      requisition->height = MAX (requisition->height, button_req.height);
+      requisition->width += button_req.width;
+    }
+
+  if (GTK_SHADOW_NONE != priv->shadow_type)
+    {
+      requisition->height += 2 * widget->style->ythickness;
+      requisition->width += 2 * widget->style->xthickness;
+    }
 }
 
 #define GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON 					\
@@ -3507,14 +3655,14 @@ gtk_combo_box_menu_row_changed (GtkTreeModel *model,
 
   width = gtk_combo_box_calc_requested_width (combo_box, path);
 
-  if (width > priv->minimum_size.width)
+  if (width > priv->width)
     {
       if (priv->cell_view)
 	{
 	  gtk_widget_set_size_request (priv->cell_view, width, -1);
 	  gtk_widget_queue_resize (priv->cell_view);
 	}
-      priv->minimum_size.width = width;
+      priv->width = width;
     }
 }
 
@@ -4020,14 +4168,14 @@ gtk_combo_box_list_row_changed (GtkTreeModel *model,
 
   width = gtk_combo_box_calc_requested_width (combo_box, path);
 
-  if (width > priv->minimum_size.width)
+  if (width > priv->width)
     {
       if (priv->cell_view) 
 	{
 	  gtk_widget_set_size_request (priv->cell_view, width, -1);
 	  gtk_widget_queue_resize (priv->cell_view);
 	}
-      priv->minimum_size.width = width;
+      priv->width = width;
     }
 }
 
@@ -4079,11 +4227,8 @@ gtk_combo_box_cell_layout_pack_start (GtkCellLayout   *layout,
   priv->cells = g_slist_append (priv->cells, info);
 
   if (priv->cell_view)
-    {
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->cell_view),
-				  cell, expand);
-
-    }
+    gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->cell_view),
+                                cell, expand);
 
   if (priv->column)
     gtk_tree_view_column_pack_start (priv->column, cell, expand);
@@ -5816,242 +5961,6 @@ gtk_combo_box_buildable_custom_tag_end (GtkBuildable *buildable,
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }
-
-
-static void
-gtk_combo_box_extended_layout_init (GtkExtendedLayoutIface *iface)
-{
-  iface->get_desired_width = gtk_combo_box_get_desired_width;
-  iface->get_desired_height = gtk_combo_box_get_desired_height;
-}
-
-static void
-gtk_combo_box_remeasure (GtkComboBox *combo_box)
-{
-  GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-
-  if (!priv->model ||
-      !gtk_tree_model_get_iter_first (priv->model, &iter))
-    return;
-
-  memset (&priv->minimum_size, 0x0, sizeof (GtkRequisition));
-  memset (&priv->natural_size, 0x0, sizeof (GtkRequisition));
-
-  path = gtk_tree_path_new_from_indices (0, -1);
-
-  do
-    {
-      GtkRequisition req, nat_req;
-
-      if (priv->cell_view)
-	{
-	  /* XXX FIXME: Currently still not doing height-for-width in cell renderers here */
-	  gtk_cell_view_get_desired_width_of_row (GTK_CELL_VIEW (priv->cell_view), 
-						  path, &req.width, &nat_req.width);
-	  gtk_cell_view_get_desired_height_of_row (GTK_CELL_VIEW (priv->cell_view), 
-						   path, &req.height, &nat_req.height);
-	}
-      else
-        {
-	  memset (&req, 0x0, sizeof (GtkRequisition));
-	  memset (&nat_req, 0x0, sizeof (GtkRequisition));
-        }
-
-      priv->minimum_size.width  = MAX (priv->minimum_size.width,  req.width);
-      priv->minimum_size.height = MAX (priv->minimum_size.height, req.height);
-
-      priv->natural_size.width  = MAX (priv->natural_size.width,  nat_req.width);
-      priv->natural_size.height = MAX (priv->natural_size.height, nat_req.height);
-
-      gtk_tree_path_next (path);
-    }
-  while (gtk_tree_model_iter_next (priv->model, &iter));
-
-  gtk_tree_path_free (path);
-}
-
-
-/* XXX TODO: Split this up into 2 orientations so as
- * to properly support height-for-width/width-for-height here
- *
- */
-static void
-gtk_combo_box_get_desired_size (GtkExtendedLayout *layout,
-				GtkRequisition    *minimum_size,
-				GtkRequisition    *natural_size)
-{
-  GtkComboBox           *combo_box = GTK_COMBO_BOX (layout);
-  GtkComboBoxPrivate    *priv = combo_box->priv;
-  gint                   focus_width, focus_pad;
-  gint                   font_size, arrow_size;
-  GtkRequisition         bin_req, bin_nat_req;
-  PangoContext          *context;
-  PangoFontMetrics      *metrics;
-  PangoFontDescription  *font_desc;
-  GtkWidget             *child;
-
-  child = gtk_bin_get_child (GTK_BIN (layout));
- 
-  /* common */
-  gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (child), FALSE, &bin_req, &bin_nat_req);
-  gtk_combo_box_remeasure (combo_box);
-
-  bin_req.width      = MAX (bin_req.width,      priv->minimum_size.width);
-  bin_req.height     = MAX (bin_req.height,     priv->minimum_size.height);
-  bin_nat_req.width  = MAX (bin_nat_req.width,  priv->natural_size.width);
-  bin_nat_req.height = MAX (bin_nat_req.height, priv->natural_size.height);
-
-  gtk_widget_style_get (GTK_WIDGET (layout),
-			"focus-line-width", &focus_width,
-			"focus-padding", &focus_pad,
-			"arrow-size", &arrow_size,
-			NULL);
-
-  font_desc = child->style->font_desc;
-  context = gtk_widget_get_pango_context (GTK_WIDGET (layout));
-  metrics = pango_context_get_metrics (context, font_desc,
-				       pango_context_get_language (context));
-  font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
-			    pango_font_metrics_get_descent (metrics));
-  pango_font_metrics_unref (metrics);
-
-  arrow_size = MAX (arrow_size, font_size);
-
-  gtk_widget_set_size_request (priv->arrow, arrow_size, arrow_size);
-
-  if (!priv->tree_view)
-    {
-      /* menu mode */
-	  
-      if (priv->cell_view)
-        {
-          GtkRequisition button_req, sep_req, arrow_req;
-          gint border_width, xthickness, ythickness, xpad, ypad;
-
-          gtk_widget_size_request (priv->button, &button_req);
-	  border_width = GTK_CONTAINER (combo_box)->border_width;
-          xthickness = priv->button->style->xthickness;
-          ythickness = priv->button->style->ythickness;
-
-	  xpad = 2*(border_width + xthickness + focus_width + focus_pad);
-	  ypad = 2*(border_width + ythickness + focus_width + focus_pad);
-
-          gtk_widget_size_request (priv->separator, &sep_req);
-          gtk_widget_size_request (priv->arrow, &arrow_req);
-
-          minimum_size->width  = bin_req.width + sep_req.width + arrow_req.width;
-          minimum_size->height = MAX (sep_req.height, arrow_req.height);
-          minimum_size->height = MAX (minimum_size->height, bin_req.height);
-
-          natural_size->width  = bin_nat_req.width + sep_req.width + arrow_req.width;
-          natural_size->height = MAX (minimum_size->height, bin_nat_req.height);
-
-          minimum_size->width  += xpad;
-          minimum_size->height += ypad;
-          natural_size->width  += xpad;
-          natural_size->height += ypad;
-        }
-      else
-        {
-          GtkRequisition but_req, but_nat_req;
-
-          gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (priv->button), 
-						FALSE, 
-						&but_req, &but_nat_req);
-
-          minimum_size->width  = bin_req.width + but_req.width;
-          minimum_size->height = MAX (bin_req.height, but_req.height);
-
-          natural_size->width  = bin_nat_req.width + but_nat_req.width;
-          natural_size->height = MAX (bin_nat_req.height, but_nat_req.height);
-        }
-    }
-  else
-    {
-      /* list mode */
-      GtkRequisition button_req, button_nat_req, frame_req;
-
-      /* sample + frame */
-      *minimum_size = bin_req;
-      *natural_size = bin_nat_req;
-
-      minimum_size->width += 2 * focus_width;
-      natural_size->width += 2 * focus_width;
-      
-      if (priv->cell_view_frame)
-        {
-	  gtk_widget_size_request (priv->cell_view_frame, &frame_req);
-	  if (priv->has_frame)
-	    {
-	      gint xpad = 2 * (GTK_CONTAINER (priv->cell_view_frame)->border_width +
-			       GTK_WIDGET (priv->cell_view_frame)->style->xthickness);
-	      
-	      gint ypad = 2 * (GTK_CONTAINER (priv->cell_view_frame)->border_width +
-			       GTK_WIDGET (priv->cell_view_frame)->style->ythickness);
-
-	      minimum_size->width  += xpad;
-	      minimum_size->height += ypad;
-	      natural_size->width  += xpad;
-	      natural_size->height += ypad;
-	    }
-        }
-
-      /* the button */
-      gtk_extended_layout_get_desired_size (GTK_EXTENDED_LAYOUT (priv->button), 
-					    FALSE, 
-					    &button_req, &button_nat_req);
-
-      minimum_size->width += button_req.width;
-      minimum_size->height = MAX (minimum_size->height, button_req.height);
-
-      natural_size->width += button_nat_req.width;
-      natural_size->height = MAX (natural_size->height, button_nat_req.height);
-    }
-
-  if (GTK_SHADOW_NONE != priv->shadow_type)
-    {
-      minimum_size->width  += 2 * GTK_WIDGET (layout)->style->xthickness;
-      minimum_size->height += 2 * GTK_WIDGET (layout)->style->ythickness;
-
-      natural_size->width  += 2 * GTK_WIDGET (layout)->style->xthickness;
-      natural_size->height += 2 * GTK_WIDGET (layout)->style->ythickness;
-    }
-}
-
-static void     
-gtk_combo_box_get_desired_width (GtkExtendedLayout      *layout,
-				 gint                   *minimum_size,
-				 gint                   *natural_size)
-{
-  GtkRequisition minimum, natural;
-
-  gtk_combo_box_get_desired_size (layout, &minimum, &natural);
-
-  if (minimum_size)
-    *minimum_size = minimum.width;
-
-  if (natural_size)
-    *natural_size = natural.width;
-}
-
-static void
-gtk_combo_box_get_desired_height (GtkExtendedLayout      *layout,
-				  gint                   *minimum_size,
-				  gint                   *natural_size)
-{ 
-  GtkRequisition minimum, natural;
-
-  gtk_combo_box_get_desired_size (layout, &minimum, &natural);
-
-  if (minimum_size)
-    *minimum_size = minimum.height;
-
-  if (natural_size)
-    *natural_size = natural.height;
-}
-
 
 #define __GTK_COMBO_BOX_C__
 #include "gtkaliasdef.c"
