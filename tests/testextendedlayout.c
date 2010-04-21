@@ -249,7 +249,7 @@ update_status (TestSuite *suite,
       gint min_height, nat_height;
       gint min_width, nat_width;
 
-      gtk_extended_layout_get_desired_size (layout, &min_size, &nat_size);
+      gtk_extended_layout_get_desired_size (layout, FALSE, &min_size, &nat_size);
       g_string_append_printf (status, "; minimal-size: %dx%d, natural-size: %dx%d",
                               min_size.width, min_size.height,
                               nat_size.width, nat_size.height);
