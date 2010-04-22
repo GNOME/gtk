@@ -187,7 +187,6 @@ but also to apply coordinate transformations.
 </para>
 <para>
 To integrate an offscreen window into a window hierarchy, one has to call
-gdk_window_set_embedder() and handle a number of signals. The
 gdk_offscreen_window_set_embedder() and handle a number of signals. The
 #GdkWindow::pick-embedded-child signal on the embedder window is used to
 select an offscreen child at given coordinates, and the #GdkWindow::to-embedder
