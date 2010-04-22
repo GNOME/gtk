@@ -122,7 +122,19 @@ gail_toggle_button_real_notify_gtk (GObject           *obj,
 
   if (strcmp (pspec->name, "inconsistent") == 0)
     atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED,
-                       !gtk_toggle_button_get_inconsistent (toggle_button));
+                       (gtk_widget_get_sensitive (GTK_WIDGET (toggle_button)) &&
+                        !gtk_toggle_button_get_inconsistent (toggle_button)));
+  else if (strcmp (pspec->name, "sensitive") == 0)
+    {
+      /* Need to override gailwidget behavior of notifying for ENABLED */
+      gboolean sensitive;
+      gboolean enabled;
+      sensitive = gtk_widget_get_sensitive (GTK_WIDGET (toggle_button));
+      enabled = sensitive &&
+                !gtk_toggle_button_get_inconsistent (toggle_button);
+    atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
+    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, enabled);
+    }
   else
     GAIL_WIDGET_CLASS (gail_toggle_button_parent_class)->notify_gtk (obj, pspec);
 }

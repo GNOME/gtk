@@ -997,6 +997,9 @@ gail_widget_real_notify_gtk (GObject     *obj,
     return;
 
   atk_object_notify_state_change (atk_obj, state, value);
+  if (state == ATK_STATE_SENSITIVE)
+    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, value);
+
 }
 
 static void 
