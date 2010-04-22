@@ -1,9 +1,9 @@
-include $(top_srcdir)/gnome-doc-utils.make
-dist-hook: doc-dist-hook
-DOC_MODULE = gtk-tut
-DOC_ENTITIES =
-DOC_INCLUDES =
-DOC_FIGURES = \
+include $(top_srcdir)/Makefile.decl
+
+.PHONY: html pdf
+
+EXTRA_DIST += \
+	gtk-tut.sgml			\
 	images/arrow.png		\
 	images/aspectframe.png		\
 	images/base.png			\
@@ -35,4 +35,42 @@ DOC_FIGURES = \
 	images/statusbar.png		\
 	images/table.png		\
 	images/tictactoe.png
-DOC_LINGUAS =
+
+if HAVE_DOCBOOK
+html:
+	if test -w $(srcdir); then \
+	  (cd $(srcdir); \
+	   db2html gtk-tut.sgml; \
+	   test -d html && rm -r html; \
+	   mv gtk-tut html; \
+	   mkdir html/images; \
+	   cp images/*.png html/images); \
+	fi
+
+pdf:
+	if test -w $(srcdir); then \
+	  (cd $(srcdir); db2pdf gtk-tut.sgml); \
+	fi
+
+dist-hook: html
+	cp -Rp $(srcdir)/html $(distdir)
+else
+html:
+	echo "***"
+	echo "*** Warning: Tutorial not built"
+	echo "***"
+
+pdf:
+	echo "***"
+	echo "*** Warning: Tutorial not built"
+	echo "***"
+
+dist-hook:
+	echo "***"
+	echo "*** Warning: Tutorial not built"
+	echo "*** DISTRIBUTION IS INCOMPLETE"
+	echo "***"
+endif
+
+
+-include $(top_srcdir)/git.mk

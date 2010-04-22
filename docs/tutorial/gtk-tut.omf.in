@@ -1,9 +1,0 @@
-<?xml version="1.0" standalone="no"?>
-<omf>
-  <resource>
-    <subject category="GNOME|Tutorials"/>
-    <type>tutorial</type>
-    <relation seriesid="0a9293f9-eaa3-f371-59da-afbc45ce010ba0"/>
-    <rights type="GNU FDL" license.version="1.1" holder="GNOME Foundation"/>
-  </resource>
-</omf>

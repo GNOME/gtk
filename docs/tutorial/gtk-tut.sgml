@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
-
-<!-- =============Document Header ============================= -->
-<book id="gtk-tut" lang="en">
+<!doctype book PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!notation PNG system "PNG">
+<!entity % local.notation.class "| PNG">
+]>
+<book id="gtk-tut">
 
 <bookinfo>
     <date>January 24th, 2003</date>
@@ -18,15 +17,16 @@
         <surname>Main</surname>
       </author>
       <author>
-        <firstname>&amp; the GTK team</firstname>
+	<firstname>&amp; the GTK team</firstname>
       </author>
     </authorgroup>
-    <abstract role="description">
+    <abstract>
       <para>This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
             interface.</para>
     </abstract>
   </bookinfo>
 
+<toc></toc>
 
 <!-- ***************************************************************** -->
 <chapter id="ch-TutorialDownload">
@@ -157,7 +157,7 @@ has no way of exiting except to be killed by using the shell.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/base.png" format="PNG"/>
+<imagedata fileref="images/base.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -209,7 +209,7 @@ This function initializes the library for use, sets up default signal handlers, 
 checks the arguments passed to your application on the command line, looking for
 one of the following:</para>
 
-<itemizedlist spacing="compact">
+<itemizedlist spacing=Compact>
 <listitem><simpara> <literal>--gtk-module</literal></simpara>
 </listitem>
 <listitem><simpara> <literal>--g-fatal-warnings</literal></simpara>
@@ -262,7 +262,7 @@ When control reaches this point, GTK will sleep waiting for X events
 (such as button or key presses), timeouts, or file IO notifications to
 occur. In our simple example, however, events are ignored.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-HelloWorld">
 <title>Hello World in GTK</title>
 
@@ -272,7 +272,7 @@ hello world a la GTK.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/helloworld.png" format="PNG"/>
+<imagedata fileref="images/helloworld.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -383,7 +383,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Compiling">
 <title>Compiling Hello World</title>
 
@@ -438,7 +438,7 @@ to load run time extensions.</simpara>
 <listitem><simpara>The GLib library (<literal>-lglib</literal>), containing miscellaneous
 functions; only g_print() is used in this particular example. GTK is built on top
 of GLib so you will always require this library. See the section on
-<link linkend="ch-GLib">GLib</link> for details.</simpara>
+<link linkend="ch-glib">GLib</link> for details.</simpara>
 </listitem>
 
 <listitem><simpara>The Xlib library (<literal>-lX11</literal>) which is used by GDK.</simpara>
@@ -455,7 +455,7 @@ for various purposes.</simpara>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TheoryOfSignalsAndCallbacks">
 <title>Theory of Signals and Callbacks</title>
 
@@ -546,7 +546,7 @@ of g_signal_connect_swapped().</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Events">
 <title>Events</title>
 
@@ -554,7 +554,7 @@ of g_signal_connect_swapped().</para>
 of <emphasis>events</emphasis> that reflect the X event mechanism. Callbacks may
 also be attached to these events. These events are:</para>
 
-<itemizedlist spacing="compact">
+<itemizedlist spacing=Compact>
 <listitem><simpara> event</simpara>
 </listitem>
 <listitem><simpara> button_press_event</simpara>
@@ -707,7 +707,7 @@ linkend="sec-SignalsOnSourceWidgets">Signals on the source widget</link> and <li
 linkend="sec-SignalsOnDestWidgets">Signals on the destination widget</link>
 for details on the signatures of the callback functions for these signals:</para>
 
-<itemizedlist spacing="compact">
+<itemizedlist spacing=Compact>
 <listitem><simpara> selection_received</simpara>
 </listitem>
 <listitem><simpara> selection_get</simpara>
@@ -730,7 +730,7 @@ for details on the signatures of the callback functions for these signals:</para
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SteppingThroughHelloWorld">
 <title>Stepping Through Hello World</title>
 
@@ -952,7 +952,7 @@ callback, exiting GTK.</para>
 <chapter id="ch-MovingOn">
 <title>Moving On</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DataTypes">
 <title>Data Types</title>
 
@@ -974,7 +974,7 @@ is an object.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-MoreOnSignalHandlers">
 <title>More on Signal Handlers</title>
 
@@ -1025,7 +1025,7 @@ void g_signal_handlers_unblock_by_func( gpointer  object,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-AnUpgradedHelloWorld">
 <title>An Upgraded Hello World</title>
 
@@ -1036,7 +1036,7 @@ topic, packing widgets.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/helloworld2.png" format="PNG"/>
+<imagedata fileref="images/helloworld2.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -1162,7 +1162,7 @@ widget into the window. But when you want to put more than one widget
 into a window, how do you control where that widget is positioned?
 This is where packing comes in.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TheoryOfPackingBoxes">
 <title>Theory of Packing Boxes</title>
 
@@ -1196,7 +1196,7 @@ placing and creating widgets.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DetailsOfBoxes">
 <title>Details of Boxes</title>
 
@@ -1208,7 +1208,7 @@ different styles.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/packbox1.png" format="PNG"/>
+<imagedata fileref="images/packbox1.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -1267,7 +1267,7 @@ following figure should make it clearer:</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/packbox2.png" format="PNG"/>
+<imagedata fileref="images/packbox2.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -1278,7 +1278,7 @@ it. Compile it yourself and play with it.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-PackingDemonstrationProgram">
 <title>Packing Demonstration Program</title>
 
@@ -1580,7 +1580,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-PackingUsingTables">
 <title>Packing Using Tables</title>
 
@@ -1740,7 +1740,7 @@ any spacing.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TablePackingExamples">
 <title>Table Packing Example</title>
 
@@ -1752,7 +1752,7 @@ Which means it should look something like this:</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/table.png" format="PNG"/>
+<imagedata fileref="images/table.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -1898,7 +1898,7 @@ individual widgets come up on the screen as they're formed. The
 children of a widget (a window is a widget too) will not be displayed
 until the window itself is shown using the gtk_widget_show() function.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Casting">
 <title>Casting</title>
 
@@ -1949,7 +1949,7 @@ function declarations.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-WidgetHierarchy">
 <title>Widget Hierarchy</title>
 
@@ -2054,7 +2054,7 @@ GObject
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-WidgetsWithoutWindows">
 <title>Widgets Without Windows</title>
 
@@ -2101,7 +2101,7 @@ is the <literal>testgtk</literal> program that comes with GTK. It can be found i
 <chapter id="ch-ButtonWidget">
 <title>The Button Widget</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-NormalButtons">
 <title>Normal Buttons</title>
 
@@ -2123,7 +2123,7 @@ later in the tutorial.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/buttons.png" format="PNG"/>
+<imagedata fileref="images/buttons.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -2248,7 +2248,7 @@ released within Button widget</simpara>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ToggleButtons">
 <title>Toggle Buttons</title>
 
@@ -2328,7 +2328,7 @@ TRUE/FALSE value.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-CheckButtons">
 <title>Check Buttons</title>
 
@@ -2356,7 +2356,7 @@ toggle button.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-RadioButtons">
 <title>Radio Buttons</title>
 
@@ -2442,7 +2442,7 @@ the second will emit its "toggled" signal (to report becoming active).</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/radiobuttons.png" format="PNG"/>
+<imagedata fileref="images/radiobuttons.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -2577,7 +2577,7 @@ that incorporate them:
 <link linkend="sec-Viewports">Viewports</link>,
 <link linkend="sec-ScrolledWindows">Scrolled Windows</link>, and others.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-CreatingAnAdjustment">
 <title>Creating an Adjustment</title>
 
@@ -2609,7 +2609,7 @@ usually non-zero.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-UsingAdjustments">
 <title>Using Adjustments the Easy Way</title>
 
@@ -2652,7 +2652,7 @@ automagically adjust the viewport widget?  Of course it will! Just like this:</p
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-AdjustmentInternals">
 <title>Adjustment Internals</title>
 
@@ -2779,7 +2779,7 @@ they calculate the length of the slider and its position within the
 trough. When the user manipulates the slider, the range widget will
 change the value of the adjustment.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ScrollbarWidgets">
 <title>Scrollbar Widgets</title>
 
@@ -2809,7 +2809,7 @@ widget.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ScaleWidgets">
 <title>Scale Widgets</title>
 
@@ -2820,7 +2820,7 @@ zoomed preview of a picture, or to control the brightness of a color,
 or to specify the number of minutes of inactivity before a screensaver
 takes over the screen.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Creating a Scale Widget</title>
 
@@ -2859,7 +2859,7 @@ manipulate them.)</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Functions and Signals (well, functions, at least)</title>
 
@@ -2920,7 +2920,7 @@ and features.</para>
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-CommonRangeFunctions">
 <title>Common Range Functions</title>
 
@@ -2932,7 +2932,7 @@ derived widgets. There are, however, a few useful functions that are
 defined in <literal>&lt;gtk/gtkrange.h&gt;</literal> and will work on all range
 widgets.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Setting the Update Policy</title>
 
@@ -2977,7 +2977,7 @@ void gtk_range_set_update_policy( GtkRange      *range,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Getting and Setting Adjustments</title>
 
@@ -3013,7 +3013,7 @@ g_signal_emit_by_name (adjustment, "changed");
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-KeyAndMouseBindings">
 <title>Key and Mouse bindings</title>
 
@@ -3043,7 +3043,7 @@ and <literal>End</literal> keys.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-RangeWidgetsExample">
 <title>Example</title>
 
@@ -3057,7 +3057,7 @@ these widgets work for the user.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/rangewidgets.png" format="PNG"/>
+<imagedata fileref="images/rangewidgets.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -3373,7 +3373,7 @@ window.</para>
 <chapter id="ch-MiscWidgets">
 <title>Miscellaneous Widgets</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Labels">
 <title>Labels</title>
 
@@ -3470,7 +3470,7 @@ won't be explained here.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/label.png" format="PNG"/>
+<imagedata fileref="images/label.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -3582,7 +3582,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Arrows">
 <title>Arrows</title>
 
@@ -3629,7 +3629,7 @@ point. The <literal>shadow_type</literal> argument may take one of these values:
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/arrow.png" format="PNG"/>
+<imagedata fileref="images/arrow.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -3713,7 +3713,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TheTooltipsObject">
 <title>The Tooltips Object</title>
 
@@ -3788,7 +3788,7 @@ you'll ever want to know :-)</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ProgressBars">
 <title>Progress Bars</title>
 
@@ -3886,7 +3886,7 @@ code also shows you how to reset the Progress Bar.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/progressbar.png" format="PNG"/>
+<imagedata fileref="images/progressbar.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -4096,7 +4096,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Dialogs">
 <title>Dialogs</title>
 
@@ -4184,7 +4184,7 @@ parent.</para></listitem>
 </variablelist>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Rulers">
 <title>Rulers</title>
 
@@ -4273,7 +4273,7 @@ Placement of the drawing area and the rulers is done using a table.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/rulers.png" format="PNG"/>
+<imagedata fileref="images/rulers.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -4360,7 +4360,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Statusbars">
 <title>Statusbars</title>
 
@@ -4431,7 +4431,7 @@ back off.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/statusbar.png" format="PNG"/>
+<imagedata fileref="images/statusbar.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -4517,7 +4517,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TextEntries">
 <title>Text Entries</title>
 
@@ -4597,7 +4597,7 @@ removed.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/entry.png" format="PNG"/>
+<imagedata fileref="images/entry.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -4709,7 +4709,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SpinButtons">
 <title>Spin Buttons</title>
 
@@ -4932,7 +4932,7 @@ void gtk_spin_button_update( GtkSpinButton  *spin_button );
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/spinbutton.png" format="PNG"/>
+<imagedata fileref="images/spinbutton.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -5165,7 +5165,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ComboBox">
 <title>Combo Box</title>
 
@@ -5339,7 +5339,7 @@ appropriate Item. Frankly, I have no idea how to do that.
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Calendar">
 <title>Calendar</title>
 
@@ -5511,7 +5511,7 @@ example code.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/calendar.png" format="PNG"/>
+<imagedata fileref="images/calendar.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -5936,7 +5936,7 @@ int main (int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ColorSelection">
 <title>Color Selection</title>
 
@@ -6016,7 +6016,7 @@ received a "color_changed" signal, you use these functions.</para>
 
 <para><!-- Need to do a whole section on DnD - TRG
 Drag and drop
-***********</para>
+-------------</para>
 
 <para>The color sample areas (right under the hue-saturation wheel) supports
 drag and drop. The type of drag and drop is "application/x-color". The
@@ -6036,7 +6036,7 @@ background color.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/colorsel.png" format="PNG"/>
+<imagedata fileref="images/colorsel.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6177,7 +6177,7 @@ gint main( gint   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-FileSelections">
 <title>File Selections</title>
 
@@ -6231,7 +6231,7 @@ screen, it does nothing as there is not a signal attached to it.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/filesel.png" format="PNG"/>
+<imagedata fileref="images/filesel.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6288,7 +6288,7 @@ int main( int   argc,
 <chapter id="ch-ContainerWidgets">
 <title>Container Widgets</title>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-EventBox">
 <title>The EventBox</title>
 
@@ -6329,7 +6329,7 @@ window reveals varying amounts of the label.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/eventbox.png" format="PNG"/>
+<imagedata fileref="images/eventbox.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6394,7 +6394,7 @@ int main( int argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-TheAlignmentWidget">
 <title>The Alignment widget</title>
 
@@ -6439,7 +6439,7 @@ the <link linkend="sec-ProgressBars">Progress Bar</link> widget.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-FixedContainer">
 <title>Fixed Container</title>
 
@@ -6490,7 +6490,7 @@ realizing the widget.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/fixed.png" format="PNG"/>
+<imagedata fileref="images/fixed.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6574,7 +6574,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-LayoutContainer">
 <title>Layout Container</title>
 
@@ -6636,7 +6636,7 @@ void gtk_layout_set_vadjustment( GtkLayout     *layout,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Frames">
 <title>Frames</title>
 
@@ -6695,7 +6695,7 @@ void gtk_frame_set_shadow_type( GtkFrame      *frame,
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/frame.png" format="PNG"/>
+<imagedata fileref="images/frame.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6754,7 +6754,7 @@ int main( int   argc,
 </programlisting>
 </sect1>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-AspectFrames">
 <title>Aspect Frames</title>
 
@@ -6798,7 +6798,7 @@ user resizes the top-level window.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/aspectframe.png" format="PNG"/>
+<imagedata fileref="images/aspectframe.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -6852,7 +6852,7 @@ int main( int argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-PanedWindowWidgets">
 <title>Paned Window Widgets</title>
 
@@ -6900,7 +6900,7 @@ window.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/paned.png" format="PNG"/>
+<imagedata fileref="images/paned.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -7048,7 +7048,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Viewports">
 <title>Viewports</title>
 
@@ -7106,8 +7106,8 @@ void gtk_viewport_set_shadow_type( GtkViewport   *viewport,
  
 </sect1>
 
-<!-- ***************************************************************** -->
-<sect1 id="sec-ScrolledWindows">
+<!-- ----------------------------------------------------------------- -->
+<sect1 id="sec-ScrolledWindows"
 <title>Scrolled Windows</title>
 
 <para>Scrolled windows are used to create a scrollable area with another
@@ -7157,7 +7157,7 @@ new to you.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/scrolledwin.png" format="PNG"/>
+<imagedata fileref="images/scrolledwin.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -7266,7 +7266,7 @@ the default size of the window or other widgets.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-ButtonBoxes">
 <title>Button Boxes</title>
 
@@ -7293,7 +7293,7 @@ for Button Boxes.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/buttonbox.png" format="PNG"/>
+<imagedata fileref="images/buttonbox.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -7425,7 +7425,7 @@ int main( int   argc,
 
 </sect1>
 
-<!-- ***************************************************************** -->   
+<!-- ----------------------------------------------------------------- -->   
 <sect1 id="sec-Toolbar">
 <title>Toolbar</title>
 
@@ -7832,7 +7832,7 @@ static char * gtk_xpm[] = {
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Notebooks">
 <title>Notebooks</title>
 
@@ -7984,7 +7984,7 @@ backward manner, and exit the program.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/notebook.png" format="PNG"/>
+<imagedata fileref="images/notebook.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -8192,7 +8192,7 @@ manual method could go a long way towards usability. With the
 Itemfactory, it is not possible to add images or the character '/' to
 the menus.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ManualMenuCreation">
 <title>Manual Menu Creation</title>
 
@@ -8412,7 +8412,7 @@ by a menu bar, as shown in the sample code.</simpara>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ManualMenuExample">
 <title>Manual Menu Example</title>
 
@@ -8421,7 +8421,7 @@ by a menu bar, as shown in the sample code.</simpara>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/menu.png" format="PNG"/>
+<imagedata fileref="images/menu.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
@@ -8570,7 +8570,7 @@ table, bind keys to menu functions.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-UsingItemFactory">
 <title>Using ItemFactory</title>
 
@@ -8581,7 +8581,7 @@ gtk_item_factory calls.</para>
 means you can define your menu in its simplest form and then create the
 menu/menubar widgets with a minimum of function calls.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-ItemFactoryEntries">
 <title>ItemFactory entries</title>
 
@@ -8669,7 +8669,7 @@ NULL or "" or "&lt;Item&gt;" - create a simple item
 <para>Note that &lt;LastBranch&gt; is only useful for one submenu of
 a menubar.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect3 id="sec-ItemFactoryCallback">
 <title>Callback Description</title>
 
@@ -8704,7 +8704,7 @@ is set during the call to gtk_item_factory_create_items().</para>
 </para>
 </sect3>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect3 id="sec-ItemFactoryEntryExamples">
 <title>ItemFactory entry examples</title>
 
@@ -8774,7 +8774,7 @@ required in the same group then it would be defined in the same way as
 equal to "/View/Low Resolution".</para>
 </sect3>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect3 id="sec-ItemFactoryEntryArrays">
 <title>ItemFactoryEntry Arrays</title>
 
@@ -8794,7 +8794,7 @@ static GtkItemFactoryEntry entries[] = {
 </sect3>
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-ItemFactoryCreation">
 <title>Creating an ItemFactory</title>
 
@@ -8859,7 +8859,7 @@ void gtk_window_add_accel_group( GtkWindow     *window,
 </programlisting>
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-UsingMenuandItems">
 <title>Making use of the menu and its menu items</title>
 
@@ -8902,7 +8902,7 @@ section.</para>
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ItemFactoryExample">
 <title>Item Factory Example</title>
 
@@ -9111,7 +9111,7 @@ it should be no problem.</para>
 widget, please consider writing a tutorial on it so others may benefit
 from your time.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-AccelLabel">
 <title>Accel Label</title>
 
@@ -9119,7 +9119,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-OptionMenu">
 <title>Option Menu</title>
 
@@ -9127,7 +9127,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-MenuItems">
 <title>Menu Items</title>
 
@@ -9158,7 +9158,7 @@ from your time.</para>
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Curves">
 <title>Curves</title>
 
@@ -9166,7 +9166,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DrawingArea">
 <title>Drawing Area</title>
 
@@ -9174,7 +9174,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-FontSelectionDialog">
 <title>Font Selection Dialog</title>
 
@@ -9182,7 +9182,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-MessageDialog">
 <title>Message Dialog</title>
 
@@ -9190,7 +9190,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GammaCurve">
 <title>Gamma Curve</title>
 
@@ -9198,7 +9198,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Image">
 <title>Image</title>
 
@@ -9206,7 +9206,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-PlugsAndSockets">
 <title>Plugs and Sockets</title>
 
@@ -9214,7 +9214,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TreeView">
 <title>Tree View</title>
 
@@ -9222,7 +9222,7 @@ from your time.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TextView">
 <title>Text View</title>
 
@@ -9275,7 +9275,7 @@ void gtk_widget_hide( GtkWidget *widget );
 <chapter id="ch-Timeouts">
 <title>Timeouts, IO and Idle Functions</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Timeouts">
 <title>Timeouts</title>
 
@@ -9313,7 +9313,7 @@ gint timeout_callback (gpointer data);
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-MonitoringIO">
 <title>Monitoring IO</title>
 
@@ -9366,7 +9366,7 @@ void input_callback( gpointer          data,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-IdleFunctions">
 <title>Idle Functions</title>
 
@@ -9399,11 +9399,11 @@ called.</para>
 <chapter id="ch-AdvancedEventsAndSignals">
 <title>Advanced Event and Signal Handling</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SignalFunctions">
 <title>Signal Functions</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Connecting and Disconnecting Signal Handlers</title>
 
@@ -9433,7 +9433,7 @@ void g_signal_handlers_disconnect_by_func( GObject   *object,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Blocking and Unblocking Signal Handlers</title>
 
@@ -9455,7 +9455,7 @@ void g_signal_handler_unblock_by_func( GObject   *object,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Emitting and Stopping Signals</title>
 
@@ -9484,7 +9484,7 @@ void g_signal_stop_emission_by_name( GObject   *object,
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SignalEmissionAndPropagation">
 <title>Signal Emission and Propagation</title>
 
@@ -9542,7 +9542,7 @@ the signal is propagated, not the current emission.</simpara>
 <chapter id="ch-ManagingSelections">
 <title>Managing Selections</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SelectionsOverview">
 <title>Overview</title>
 
@@ -9580,7 +9580,7 @@ and <literal>gdk_atom_name()</literal>, to get the name of an atom. Both
 selections and targets are identified by atoms.</para>
 
 </sect1>
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-RetrievingTheSelection">
 <title>Retrieving the selection</title>
 
@@ -9742,7 +9742,7 @@ int main( int   argc,
 </programlisting>
 
 </sect1>
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SupplyingTheSelection">
 <title>Supplying the selection</title>
 
@@ -9938,7 +9938,7 @@ communication via the drag-and-drop system. GTK+ can perform
 drag-and-drop on top of the low level Xdnd and Motif drag-and-drop
 protocols.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DragAndDropOverview">
 <title>Overview</title>
 
@@ -9985,7 +9985,7 @@ will get into detail about that later.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DragAndDropProperties">
 <title>Properties</title>
 
@@ -10033,11 +10033,11 @@ received.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DragAndDropFunctions">
 <title>Functions</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-DNDSourceWidgets">
 <title>Setting up the source widget</title>
 
@@ -10096,7 +10096,7 @@ void gtk_drag_source_unset( GtkWidget *widget );
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-SignalsOnSourceWidgets">
 <title>Signals on the source widget:</title>
 
@@ -10106,8 +10106,8 @@ drag-and-drop operation.</para>
 <table pgwide="1">
 <title>Source widget signals</title>
 <tgroup cols="2">
-<colspec colname="Name" colwidth="150"/>
-<colspec colname="Prototype"/>
+<colspec colname="Name" colwidth="150">
+<colspec colname="Prototype">
 <tbody>
 <row>
 <entry align="left" valign="middle">drag_begin</entry>
@@ -10145,7 +10145,7 @@ GdkDragContext *dc, gpointer data)</literal></entry>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-DNDDestWidgets">
 <title>Setting up a destination widget:</title>
 
@@ -10168,7 +10168,7 @@ void gtk_drag_dest_unset( GtkWidget *widget );
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-SignalsOnDestWidgets">
 <title>Signals on the destination widget:</title>
 
@@ -10178,8 +10178,8 @@ drag-and-drop operation.</para>
 <table pgwide="1">
 <title>Destination widget signals</title>
 <tgroup cols="2">
-<colspec colname="Name" colwidth="150"/>
-<colspec colname="Prototype"/>
+<colspec colname="Name" colwidth="150">
+<colspec colname="Prototype">
 <tbody>
 <row>
 <entry align="left" valign="middle">drag_data_received</entry>
@@ -10225,7 +10225,7 @@ language's binding documentation. In some cases your language may
 have equivalent functionality built-in, while in other cases it may
 not.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Definitions">
 <title>Definitions</title>
 
@@ -10288,7 +10288,7 @@ guint64
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-DoublyLinkedLists">
 <title>Doubly Linked Lists</title>
 
@@ -10384,7 +10384,7 @@ void g_list_foreach( GList    *list,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-SinglyLinkedLists">
 <title>Singly Linked Lists</title>
 
@@ -10428,7 +10428,7 @@ void g_slist_foreach( GSList   *list,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-MemoryManagement">
 <title>Memory Management</title>
 
@@ -10476,7 +10476,7 @@ MEM_CHECK</literal> to the top of gmem.c and re-make and make install.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Timers">
 <title>Timers</title>
 
@@ -10503,7 +10503,7 @@ gdouble g_timer_elapsed( GTimer *timer,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-StringHandling">
 <title>String Handling</title>
 
@@ -10581,7 +10581,7 @@ void g_string_sprintfa ( GString *string,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-UtilityAndErrorFunctions">
 <title>Utility and Error Functions</title>
 
@@ -10659,7 +10659,7 @@ to document any function, just send me an email!</para>
 files. These can be used to set the colors of just about any widget, and
 can also be used to tile pixmaps onto the background of some widgets.  </para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-FunctionsForRCFiles">
 <title>Functions For rc Files</title>
 
@@ -10694,7 +10694,7 @@ gtk_widget_set_name (button, "special button");
 </programlisting>
 
 <para>Then this button is given the name "special button" and may be addressed by
-name in the rc file as "special button.GtkButton". <!-- Verify ME --></para>
+name in the rc file as "special button.GtkButton".  [<--- Verify ME!]</para>
 
 <para>The example rc file below, sets the properties of the main window, and lets
 all children of that main window inherit the style described by the "main
@@ -10719,7 +10719,7 @@ imagination as to how best to take advantage of this.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GTKsRCFileFormat">
 <title>GTK's rc File Format</title>
 
@@ -10800,7 +10800,7 @@ widget on a per widget basis, rather than setting the attributes of an
 entire widget class. I urge you to document any of these special widgets so
 users may customize them.</para>
 
-<para>When the keyword <literal>parent</literal> is used as an attribute, the widget will take on
+<para>When the keyword <literal>parent</> is used as an attribute, the widget will take on
 the attributes of its parent in the application.</para>
 
 <para>When defining a style, you may assign the attributes of a previously defined
@@ -10823,7 +10823,7 @@ simple matter of common sense really. Anything that could apply, should.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ExampleRCFile">
 <title>Example rc file</title>
 
@@ -10961,7 +10961,7 @@ widget "main window.*GtkButton*" style "main_button"
 <chapter id="ch-WritingYourOwnWidgets">
 <title>Writing Your Own Widgets</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-WidgetsOverview">
 <title>Overview</title>
 
@@ -10987,7 +10987,7 @@ got this tutorial, or from:</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TheAnatomyOfAWidget">
 <title>The Anatomy Of A Widget</title>
 
@@ -11049,11 +11049,11 @@ cast to the parent class' object structure as needed.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-CreatingACompositeWidget">
 <title>Creating a Composite widget</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Introduction</title>
 
@@ -11076,14 +11076,14 @@ below is in the <link linkend="sec-Tictactoe">Code Examples Appendix</link>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/tictactoe.png" format="PNG"/>
+<imagedata fileref="images/tictactoe.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Choosing a parent class</title>
 
@@ -11095,7 +11095,7 @@ is natural to make our parent class the Table class.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The header file</title>
 
@@ -11136,7 +11136,7 @@ if an object is a Tictactoe widget respectively.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The <literal>_get_type()</literal> function</title>
 
@@ -11211,7 +11211,7 @@ this structure, it knows how to create objects of a particular type. </para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The <literal>_class_init()</literal> function</title>
 
@@ -11343,7 +11343,7 @@ instead.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The <literal>_init()</literal> function</title>
 
@@ -11377,7 +11377,7 @@ tictactoe_init (Tictactoe *ttt)
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>And the rest...</title>
 
@@ -11513,11 +11513,11 @@ main (int argc, char *argv[])
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-CreatingAWidgetFromScratch">
 <title>Creating a widget from scratch</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Introduction</title>
 
@@ -11529,14 +11529,14 @@ set the value.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/gtkdial.png" format="PNG"/>
+<imagedata fileref="images/gtkdial.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Displaying a widget on the screen</title>
 
@@ -11594,7 +11594,7 @@ an <literal>expose()</literal> function.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The origins of the Dial Widget</title>
 
@@ -11613,7 +11613,7 @@ would be a good idea to look them over before continuing.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>The Basics</title>
 
@@ -11895,7 +11895,7 @@ gtk_dial_set_adjustment (GtkDial      *dial,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title><literal>gtk_dial_realize()</literal></title>
 
@@ -11954,7 +11954,7 @@ gtk_dial_realize (GtkWidget *widget)
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Size negotiation</title>
 
@@ -12013,7 +12013,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title><literal>gtk_dial_expose()</literal></title>
 
@@ -12055,7 +12055,7 @@ gtk_dial_expose( GtkWidget      *widget,
 
   /* Draw ticks */
 
-  for (i=0; i&lt;25; i++)
+  for (i=0; i<25; i++)
     {
       theta = (i*M_PI/18. - M_PI/6.);
       s = sin(theta);
@@ -12097,7 +12097,7 @@ gtk_dial_expose( GtkWidget      *widget,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Event handling</title>
 
@@ -12151,8 +12151,8 @@ gtk_dial_button_press( GtkWidget      *widget,
   d_parallel = s*dy + c*dx;
   d_perpendicular = fabs(s*dx - c*dy);
   
-  if (!dial->button &amp;&amp;
-      (d_perpendicular &lt; dial->pointer_width/2) &amp;&amp;
+  if (!dial->button &&
+      (d_perpendicular < dial->pointer_width/2) &&
       (d_parallel > - dial->pointer_width))
     {
       gtk_grab_add (widget);
@@ -12186,7 +12186,7 @@ gtk_dial_button_release( GtkWidget      *widget,
       if (dial->policy == GTK_UPDATE_DELAYED)
 	g_source_remove (dial->timer);
       
-      if ((dial->policy != GTK_UPDATE_CONTINUOUS) &amp;&amp;
+      if ((dial->policy != GTK_UPDATE_CONTINUOUS) &&
 	  (dial->old_value != dial->adjustment->value))
 	gtk_signal_emit_by_name (GTK_OBJECT (dial->adjustment), "value_changed");
     }
@@ -12232,7 +12232,7 @@ gtk_dial_motion_notify( GtkWidget      *widget,
 	  break;
 	}
 
-      if (mods &amp; mask)
+      if (mods & mask)
 	gtk_dial_update_mouse (dial, x,y);
     }
 
@@ -12266,10 +12266,10 @@ gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
   old_value = dial->adjustment->value;
   dial->angle = atan2(yc-y, x-xc);
 
-  if (dial->angle &lt; -M_PI/2.)
+  if (dial->angle < -M_PI/2.)
     dial->angle += 2*M_PI;
 
-  if (dial->angle &lt; -M_PI/6)
+  if (dial->angle < -M_PI/6)
     dial->angle = -M_PI/6;
 
   if (dial->angle > 7.*M_PI/6.)
@@ -12319,7 +12319,7 @@ gtk_dial_update (GtkDial *dial)
 
   new_value = dial->adjustment->value;
   
-  if (new_value &lt; dial->adjustment->lower)
+  if (new_value < dial->adjustment->lower)
     new_value = dial->adjustment->lower;
 
   if (new_value > dial->adjustment->upper)
@@ -12382,7 +12382,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Possible Enhancements</title>
 
@@ -12423,7 +12423,7 @@ entry widget to display the current value of the dial.</simpara>
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-LearningMore">
 <title>Learning More</title>
 
@@ -12442,7 +12442,7 @@ Good luck!</para>
 <chapter id="ch-Scribble">
 <title>Scribble, A Simple Example Drawing Program</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-ScribbleOverview">
 <title>Overview</title>
 
@@ -12457,14 +12457,14 @@ pressure and tilt, from such devices quite easy.</para>
 <para>
 <inlinemediaobject>
 <imageobject>
-<imagedata fileref="images/scribble.png" format="PNG"/>
+<imagedata fileref="images/scribble.png" format="png">
 </imageobject>
 </inlinemediaobject>
 </para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-EventHandling">
 <title>Event Handling</title>
 
@@ -12676,7 +12676,7 @@ motion_notify_event( GtkWidget *widget, GdkEventMotion *event )
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-TheDrawingAreaWidget">
 <title>The DrawingArea Widget, And Drawing</title>
 
@@ -12903,7 +12903,7 @@ mundane details like creating the main window.</para>
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-AddingXInputSupport">
 <title>Adding XInput support</title>
 
@@ -12971,7 +12971,7 @@ be used to find out further information about the device using the
 <literal>GDK_CORE_POINTER</literal> is used for the core pointer device. (Usually
 the mouse.)</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Enabling extended device information</title>
 
@@ -13046,7 +13046,7 @@ implement saving of XInput options in this program.</para>
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Using extended device information</title>
 
@@ -13164,7 +13164,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>Finding out more about a device</title>
 
@@ -13236,7 +13236,7 @@ print_button_press (guint32 deviceid)
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2 id="sec-FurtherSophistications">
 <title>Further sophistications</title>
 
@@ -13455,7 +13455,7 @@ inheritance. This inheritance mechanism applies for
 signals. Therefore, you should refer to the widget hierarchy tree when
 using the signals listed in this section.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkObject">
 <title>GtkObject</title>
 
@@ -13466,7 +13466,7 @@ void GtkObject::destroy	(GtkObject *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkWidget">
 <title>GtkWidget</title>
 
@@ -13646,7 +13646,7 @@ void GtkWidget::debug-msg	(GtkWidget *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkData">
 <title>GtkData</title>
 
@@ -13657,7 +13657,7 @@ void GtkData::disconnect	(GtkData *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkContainer">
 <title>GtkContainer</title>
 
@@ -13680,7 +13680,7 @@ void GtkContainer::set-focus-child	(GtkContainer *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkCalendar">
 <title>GtkCalendar</title>
 
@@ -13703,7 +13703,7 @@ void GtkCalendar::next-year	(GtkCalendar *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkEditable">
 <title>GtkEditable</title>
 
@@ -13760,7 +13760,7 @@ void GtkEditable::paste-clipboard	(GtkEditable *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkNotebook">
 <title>GtkNotebook</title>
 
@@ -13773,7 +13773,7 @@ void GtkNotebook::switch-page	(GtkNotebook *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkList">
 <title>GtkList</title>
 
@@ -13790,7 +13790,7 @@ void GtkList::unselect-child	(GtkList *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkMenuShell">
 <title>GtkMenuShell</title>
 
@@ -13811,7 +13811,7 @@ void GtkMenuShell::cancel	(GtkMenuShell *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkToolbar">
 <title>GtkToolbar</title>
 
@@ -13826,7 +13826,7 @@ void GtkToolbar::style-changed	(GtkToolbar *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkButton">
 <title>GtkButton</title>
 
@@ -13845,7 +13845,7 @@ void GtkButton::leave	(GtkButton *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkItem">
 <title>GtkItem</title>
 
@@ -13860,7 +13860,7 @@ void GtkItem::toggle	(GtkItem *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkWindow">
 <title>GtkWindow</title>
 
@@ -13872,7 +13872,7 @@ void GtkWindow::set-focus	(GtkWindow *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkHandleBox">
 <title>GtkHandleBox</title>
 
@@ -13887,7 +13887,7 @@ void GtkHandleBox::child-detached	(GtkHandleBox *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkToggleButton">
 <title>GtkToggleButton</title>
 
@@ -13898,7 +13898,7 @@ void GtkToggleButton::toggled	(GtkToggleButton *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkMenuItem">
 <title>GtkMenuItem</title>
 
@@ -13911,7 +13911,7 @@ void GtkMenuItem::activate-item	(GtkMenuItem *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkCheckMenuItem">
 <title>GtkCheckMenuItem</title>
 
@@ -13922,7 +13922,7 @@ void GtkCheckMenuItem::toggled	(GtkCheckMenuItem *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkInputDialog">
 <title>GtkInputDialog</title>
 
@@ -13937,7 +13937,7 @@ void GtkInputDialog::disable-device	(GtkInputDialog *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkColorSelection">
 <title>GtkColorSelection</title>
 
@@ -13948,7 +13948,7 @@ void GtkColorSelection::color-changed	(GtkColorSelection *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkStatusBar">
 <title>GtkStatusBar</title>
 
@@ -13965,7 +13965,7 @@ void GtkStatusbar::text-popped	(GtkStatusbar *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkCurve">
 <title>GtkCurve</title>
 
@@ -13976,7 +13976,7 @@ void GtkCurve::curve-type-changed	(GtkCurve *,
 
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkAdjustment">
 <title>GtkAdjustment</title>
 
@@ -14005,7 +14005,7 @@ each data type listed, the signals that use this data type are listed.</para>
           </itemizedlist>
 </listitem>
 
-<listitem><simpara>  GdkEventType</simpara>
+<listitem><simpara>  GdkEventType<</simpara>
 </listitem>
 
 <listitem><simpara>  GdkEventAny</simpara>
@@ -14483,10 +14483,10 @@ struct _GdkEventOther
 <para>Below are the code examples that are used in the above text
 which are not included in complete form elsewhere.</para>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Tictactoe">
 <title>Tictactoe</title>
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>tictactoe.h</title>
 
@@ -14558,7 +14558,7 @@ G_END_DECLS
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>tictactoe.c</title>
 
@@ -14727,7 +14727,7 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>ttt_test.c</title>
 
@@ -14784,11 +14784,11 @@ int main( int   argc,
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-GtkDial">
 <title>GtkDial</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>gtkdial.h</title>
 
@@ -14890,7 +14890,7 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>gtkdial.c</title>
 
@@ -15565,7 +15565,7 @@ gtk_dial_adjustment_value_changed (GtkAdjustment *adjustment,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>dial_test.c</title>
 
@@ -15644,11 +15644,11 @@ int main( int   argc,
 </sect2>
 </sect1>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect1 id="sec-Scribble">
 <title>Scribble</title>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>scribble-simple.c</title>
 
@@ -15840,7 +15840,7 @@ int main( int   argc,
 
 </sect2>
 
-<!-- ***************************************************************** -->
+<!-- ----------------------------------------------------------------- -->
 <sect2>
 <title>scribble-xinput.c</title>
 
