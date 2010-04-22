@@ -410,7 +410,6 @@ compare_selector (GtkWidgetPath *path,
       guint8 elem_score;
 
       elem = elements->data;
-      elements = elements->next;
 
       match = compare_selector_element (path, i, elem, &elem_score);
       i++;
@@ -422,6 +421,8 @@ compare_selector (GtkWidgetPath *path,
            */
           match = TRUE;
         }
+      else
+        elements = elements->next;
 
       if (match)
         {
