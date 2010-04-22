@@ -384,6 +384,24 @@ compare_selector_element (GtkWidgetPath   *path,
 
       return TRUE;
     }
+  else if (elem->elem_type == SELECTOR_REGION)
+    {
+      const gchar *region_name;
+      GtkChildClassFlags flags;
+
+      /* FIXME: Need GQuark API here */
+      region_name = g_quark_to_string (elem->region.name);
+
+      if (!gtk_widget_path_iter_has_region (path, index, region_name, &flags))
+        return FALSE;
+
+      if (elem->region.flags != 0 &&
+          (flags & elem->region.flags) == 0)
+        return FALSE;
+
+      *score = 0xF;
+      return TRUE;
+    }
   else if (elem->elem_type == SELECTOR_GLOB)
     {
       /* Treat as lowest matching type */
