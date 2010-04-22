@@ -135,7 +135,19 @@ gail_check_sub_menu_item_real_notify_gtk (GObject           *obj,
 
   if (strcmp (pspec->name, "inconsistent") == 0)
     atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED,
-                       !gtk_check_menu_item_get_inconsistent (check_menu_item));
+                       (gtk_widget_get_sensitive (GTK_WIDGET (check_menu_item)) &&
+                        !gtk_check_menu_item_get_inconsistent (check_menu_item)));
+  else if (strcmp (pspec->name, "sensitive") == 0)
+    {
+      /* Need to override gailwidget behavior of notifying for ENABLED */
+      gboolean sensitive;
+      gboolean enabled;
+      sensitive = gtk_widget_get_sensitive (GTK_WIDGET (check_menu_item));
+      enabled = sensitive &&
+                !gtk_check_menu_item_get_inconsistent (check_menu_item);
+    atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
+    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, enabled);
+    }
   else
     GAIL_WIDGET_CLASS (gail_check_sub_menu_item_parent_class)->notify_gtk (obj, pspec);
 }
