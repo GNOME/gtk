@@ -473,6 +473,31 @@ child_style_class_compare (gconstpointer p1,
   return (gint) c1->class_quark - c2->class_quark;
 }
 
+GList *
+gtk_style_context_list_child_classes (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GList *classes = NULL;
+  GList *link;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
+  link = priv->child_style_classes;
+
+  while (link)
+    {
+      GtkChildClass *link_class;
+
+      link_class = link->data;
+      classes = g_list_prepend (classes,
+                                g_quark_to_string (link_class->class_quark));
+      link = link->next;
+    }
+
+  return classes;
+}
+
 void
 gtk_style_context_set_child_class (GtkStyleContext    *context,
                                    const gchar        *class_name,

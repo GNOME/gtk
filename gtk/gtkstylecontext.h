@@ -84,6 +84,8 @@ void     gtk_style_context_unset_class (GtkStyleContext *context,
 gboolean gtk_style_context_has_class   (GtkStyleContext *context,
                                         const gchar     *class_name);
 
+GList *  gtk_style_context_list_child_classes (GtkStyleContext *context);
+
 void     gtk_style_context_set_child_class   (GtkStyleContext    *context,
                                               const gchar        *class_name,
                                               GtkChildClassFlags  flags);
