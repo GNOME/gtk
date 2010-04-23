@@ -513,7 +513,7 @@ gtk_style_context_set_child_class (GtkStyleContext    *context,
 
   priv = GTK_STYLE_CONTEXT_GET_PRIVATE (context);
   class_quark = g_quark_from_string (class_name);
-  link = priv->style_classes;
+  link = priv->child_style_classes;
 
   while (link)
     {
@@ -537,10 +537,10 @@ gtk_style_context_set_child_class (GtkStyleContext    *context,
   child_class->flags = flags;
 
   if (link)
-    priv->style_classes = g_list_insert_before (priv->style_classes,
-                                                link, child_class);
+    priv->child_style_classes = g_list_insert_before (priv->child_style_classes,
+                                                      link, child_class);
   else
-    priv->style_classes = g_list_append (priv->style_classes, child_class);
+    priv->child_style_classes = g_list_append (priv->child_style_classes, child_class);
 }
 
 void
@@ -603,7 +603,7 @@ gtk_style_context_has_child_class (GtkStyleContext    *context,
 
   if (link)
     {
-      if (*flags_return)
+      if (flags_return)
         {
           GtkChildClass *found_class;
 
