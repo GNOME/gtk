@@ -56,7 +56,7 @@ change_orientation (GtkWidget *button, GtkWidget *toolbar)
 
   g_object_ref (toolbar);
   gtk_container_remove (GTK_CONTAINER (table), toolbar);
-  gtk_toolbar_set_orientation (GTK_TOOLBAR (toolbar), orientation);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (toolbar), orientation);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       gtk_table_attach (GTK_TABLE (table), toolbar,
@@ -87,7 +87,7 @@ set_toolbar_style_toggled (GtkCheckButton *button, GtkToolbar *toolbar)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      style = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+      style = gtk_combo_box_get_active (GTK_COMBO_BOX (option_menu));
 
       gtk_toolbar_set_style (toolbar, style);
       gtk_widget_set_sensitive (option_menu, TRUE);
@@ -104,7 +104,7 @@ change_toolbar_style (GtkWidget *option_menu, GtkWidget *toolbar)
 {
   GtkToolbarStyle style;
 
-  style = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  style = gtk_combo_box_get_active (GTK_COMBO_BOX (option_menu));
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), style);
 }
 
@@ -322,8 +322,10 @@ set_icon_size_toggled (GtkCheckButton *button, GtkToolbar *toolbar)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      icon_size = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
-      icon_size += GTK_ICON_SIZE_SMALL_TOOLBAR;
+      if (gtk_combo_box_get_active (GTK_COMBO_BOX (option_menu)) == 0)
+        icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+      else
+        icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 
       gtk_toolbar_set_icon_size (toolbar, icon_size);
       gtk_widget_set_sensitive (option_menu, TRUE);
@@ -336,12 +338,14 @@ set_icon_size_toggled (GtkCheckButton *button, GtkToolbar *toolbar)
 }
 
 static void
-icon_size_history_changed (GtkOptionMenu *menu, GtkToolbar *toolbar)
+icon_size_history_changed (GtkComboBox *menu, GtkToolbar *toolbar)
 {
   int icon_size;
 
-  icon_size = gtk_option_menu_get_history (menu);
-  icon_size += GTK_ICON_SIZE_SMALL_TOOLBAR;
+  if (gtk_combo_box_get_active (menu) == 0)
+    icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
+  else
+    icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
 
   gtk_toolbar_set_icon_size (toolbar, icon_size);
 }
@@ -449,7 +453,7 @@ toolbar_drag_motion (GtkToolbar     *toolbar,
   if (!drag_item)
     {
       drag_item = gtk_tool_button_new (NULL, "A quite long button");
-      gtk_object_sink (GTK_OBJECT (g_object_ref (drag_item)));
+      g_object_ref_sink (g_object_ref (drag_item));
     }
   
   gdk_drag_status (context, GDK_ACTION_MOVE, time);
@@ -552,21 +556,13 @@ main (gint argc, gchar **argv)
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_toolbar_style_toggled), toolbar);
   gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
   
-  option_menu = gtk_option_menu_new();
+  option_menu = gtk_combo_box_new_text ();
   gtk_widget_set_sensitive (option_menu, FALSE);  
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
   
-  menu = gtk_menu_new();
   for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
-    {
-      GtkWidget *menuitem;
-
-      menuitem = gtk_menu_item_new_with_label (toolbar_styles[i]);
-      gtk_container_add (GTK_CONTAINER (menu), menuitem);
-      gtk_widget_show (menuitem);
-    }
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu),
+    gtk_combo_box_append_text (GTK_COMBO_BOX (option_menu), toolbar_styles[i]);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (option_menu),
 			       GTK_TOOLBAR (toolbar)->style);
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
@@ -576,21 +572,12 @@ main (gint argc, gchar **argv)
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_icon_size_toggled), toolbar);
   gtk_box_pack_start (GTK_BOX (hbox2), checkbox, FALSE, FALSE, 0);
 
-  option_menu = gtk_option_menu_new();
+  option_menu = gtk_combo_box_new_text ();
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
   gtk_widget_set_sensitive (option_menu, FALSE);
-  menu = gtk_menu_new();
-  menuitem = gtk_menu_item_new_with_label ("small toolbar");
-  g_object_set_data (G_OBJECT (menuitem), "value-id", GINT_TO_POINTER (GTK_ICON_SIZE_SMALL_TOOLBAR));
-  gtk_container_add (GTK_CONTAINER (menu), menuitem);
-  gtk_widget_show (menuitem);
+  gtk_combo_box_append_text (GTK_COMBO_BOX (option_menu), "small toolbar");
+  gtk_combo_box_append_text (GTK_COMBO_BOX (option_menu), "large toolbar");
 
-  menuitem = gtk_menu_item_new_with_label ("large toolbar");
-  g_object_set_data (G_OBJECT (menuitem), "value-id", GINT_TO_POINTER (GTK_ICON_SIZE_LARGE_TOOLBAR));
-  gtk_container_add (GTK_CONTAINER (menu), menuitem);
-  gtk_widget_show (menuitem);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (icon_size_history_changed), toolbar);
