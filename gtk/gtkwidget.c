@@ -13182,17 +13182,53 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
 GtkWidgetPath *
 gtk_widget_get_path (GtkWidget *widget)
 {
+  GtkStyleContext *context;
   GtkWidgetPath *path;
+  GtkWidget *parent;
+  GList *regions, *reg;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
 
-  path = gtk_widget_path_new ();
+  parent = widget->priv->parent;
 
-  while (widget)
+  path = gtk_widget_path_new ();
+  gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (widget));
+  regions = reg = NULL;
+
+  if (widget->priv->name)
+    gtk_widget_path_iter_set_name (path, 0, widget->priv->name);
+
+  context = g_object_get_qdata (G_OBJECT (widget),
+                                quark_style_context);
+
+  if (context)
+    regions = reg = gtk_style_context_list_child_classes (context);
+
+  while (reg)
     {
-      gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (widget));
-      widget = widget->parent;
+      GtkChildClassFlags flags;
+      const gchar *region_name;
+
+      region_name = reg->data;
+      reg = reg->next;
+
+      gtk_style_context_has_child_class (context, region_name, &flags);
+      gtk_widget_path_iter_add_region (path, 0, region_name, flags);
+    }
+
+  g_list_free (regions);
+
+  while (parent)
+    {
+      guint position;
+
+      position = gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (parent));
+
+      if (parent->priv->name)
+        gtk_widget_path_iter_set_name (path, position, parent->priv->name);
+
+      parent = parent->priv->parent;
     }
 
   return path;
