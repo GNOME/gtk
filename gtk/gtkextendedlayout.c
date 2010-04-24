@@ -33,35 +33,35 @@
  * <refsect2>
  * <title>Implementing GtkExtendedLayout</title>
  * <para>
- * Some important things to keep in mind when implementing 
+ * Some important things to keep in mind when implementing
  * or using the extended layout.
  *
- * The Extended Layout system will query a logical heirarchy in
+ * The Extended Layout system will query a logical hierarchy in
  * only one orientation at a time. When widgets are initially queried
  * for their minimum sizes it is generally done in a dual pass
  * in the direction chosen by the toplevel.
  *
  * For instance when queried in the normal height-for-width mode:
  * First the default minimum and natural width for each widget
- * in the interface will computed and collectively returned to 
- * the toplevel by way of gtk_extended_layout_get_desired_width(). 
- * Next; the toplevel will use the minimum width to query for the 
- * minimum height contextual to that width using gtk_extended_layout_get_height_for_width()
- * which will also be a highly recursive operation. This minimum
- * for minimum size can be used to set the minimum size constraint 
- * on the toplevel.
+ * in the interface will computed and collectively returned to
+ * the toplevel by way of gtk_extended_layout_get_desired_width().
+ * Next; the toplevel will use the minimum width to query for the
+ * minimum height contextual to that width using
+ * gtk_extended_layout_get_height_for_width() which will also be a
+ * highly recursive operation. This minimum for minimum size can be
+ * used to set the minimum size constraint on the toplevel.
  *
  * When allocating; each container can use the minimum and natural
- * sizes reported by thier children to allocate natural sizes and
+ * sizes reported by their children to allocate natural sizes and
  * expose as much content as possible with the given allocation.
  *
  * That means that the request operation at allocation time will
  * usually fire again in contexts of different allocated sizes than
  * the ones originally queried for.
  *
- * A Widget that does not actually do height-for-width 
+ * A widget that does not actually do height-for-width
  * or width-for-height size negotiations only has to implement
- * get_desired_width() and get_desired_height()
+ * get_desired_width() and get_desired_height().
  *
  * If a widget does move content around to smartly use up the
  * allocated size, then it must support the request properly in
@@ -92,7 +92,7 @@
  */
 #define N_CACHED_SIZES 3
 
-typedef struct 
+typedef struct
 {
   guint  age;
   gint   for_size;
@@ -118,9 +118,9 @@ gtk_extended_layout_get_type (void)
   if (G_UNLIKELY(!extended_layout_type))
     {
       extended_layout_type =
-	g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkExtendedLayout"),
-				       sizeof (GtkExtendedLayoutIface),
-				       NULL, 0, NULL, 0);
+        g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkExtendedLayout"),
+                                       sizeof (GtkExtendedLayoutIface),
+                                       NULL, 0, NULL, 0);
 
       g_type_interface_add_prerequisite (extended_layout_type, GTK_TYPE_WIDGET);
 
@@ -131,15 +131,15 @@ gtk_extended_layout_get_type (void)
 }
 
 /* looks for a cached size request for this for_size. If not
- * found, returns the oldest entry so it can be overwritten 
+ * found, returns the oldest entry so it can be overwritten
  *
- * Note that this caching code was directly derived from 
+ * Note that this caching code was directly derived from
  * the Clutter toolkit.
  */
 static gboolean
 get_cached_desired_size (gint           for_size,
-			 DesiredSize   *cached_sizes,
-			 DesiredSize  **result)
+                         DesiredSize   *cached_sizes,
+                         DesiredSize  **result)
 {
   guint i;
 
@@ -151,8 +151,7 @@ get_cached_desired_size (gint           for_size,
 
       cs = &cached_sizes[i];
 
-      if (cs->age > 0 &&
-          cs->for_size == for_size)
+      if (cs->age > 0 && cs->for_size == for_size)
         {
           *result = cs;
           return TRUE;
@@ -166,17 +165,18 @@ get_cached_desired_size (gint           for_size,
   return FALSE;
 }
 
-static void 
+static void
 destroy_cache (ExtendedLayoutCache *cache)
 {
   g_slice_free (ExtendedLayoutCache, cache);
 }
 
-ExtendedLayoutCache *
-get_cache (GtkExtendedLayout *layout, gboolean create)
+static ExtendedLayoutCache *
+get_cache (GtkExtendedLayout *layout,
+           gboolean           create)
 {
   ExtendedLayoutCache *cache;
-  
+ 
   cache = g_object_get_qdata (G_OBJECT (layout), quark_cache);
   if (!cache && create)
     {
@@ -185,10 +185,10 @@ get_cache (GtkExtendedLayout *layout, gboolean create)
       cache->cached_width_age  = 1;
       cache->cached_height_age = 1;
 
-      g_object_set_qdata_full (G_OBJECT (layout), quark_cache, cache, 
-			       (GDestroyNotify)destroy_cache);
+      g_object_set_qdata_full (G_OBJECT (layout), quark_cache, cache,
+                               (GDestroyNotify)destroy_cache);
     }
-  
+ 
   return cache;
 }
 
@@ -198,20 +198,20 @@ do_size_request (GtkWidget *widget)
 {
   if (GTK_WIDGET_REQUEST_NEEDED (widget))
     {
-      gtk_widget_ensure_style (widget);      
+      gtk_widget_ensure_style (widget);
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
       g_signal_emit_by_name (widget,
-			     "size-request",
-			     &widget->requisition);
+                             "size-request",
+                             &widget->requisition);
     }
 }
 
 static void
 compute_size_for_orientation (GtkExtendedLayout *layout,
-			      GtkSizeGroupMode   orientation,
-			      gint               for_size,
-			      gint              *minimum_size,
-			      gint              *natural_size)
+                              GtkSizeGroupMode   orientation,
+                              gint               for_size,
+                              gint              *minimum_size,
+                              gint              *natural_size)
 {
   ExtendedLayoutCache *cache;
   DesiredSize         *cached_size;
@@ -227,28 +227,28 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
   if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
     {
       cached_size = &cache->desired_widths[0];
-      
-      if (GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout) == FALSE)
-	found_in_cache = get_cached_desired_size (for_size, cache->desired_widths, &cached_size);
+
+      if (!GTK_WIDGET_WIDTH_REQUEST_NEEDED (layout))
+        found_in_cache = get_cached_desired_size (for_size, cache->desired_widths, &cached_size);
       else
-	{
-	  memset (cache->desired_widths, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
-	  cache->cached_width_age = 1;
-	}
+        {
+          memset (cache->desired_widths, 0, N_CACHED_SIZES * sizeof (DesiredSize));
+          cache->cached_width_age = 1;
+        }
     }
   else
     {
       cached_size = &cache->desired_heights[0];
-      
-      if (GTK_WIDGET_HEIGHT_REQUEST_NEEDED (layout) == FALSE)
-	found_in_cache = get_cached_desired_size (for_size, cache->desired_heights, &cached_size);
+
+      if (!GTK_WIDGET_HEIGHT_REQUEST_NEEDED (layout))
+        found_in_cache = get_cached_desired_size (for_size, cache->desired_heights, &cached_size);
       else
-	{
-	  memset (cache->desired_heights, 0x0, N_CACHED_SIZES * sizeof (DesiredSize));
-	  cache->cached_height_age = 1;
-	}
+        {
+          memset (cache->desired_heights, 0, N_CACHED_SIZES * sizeof (DesiredSize));
+          cache->cached_height_age = 1;
+        }
     }
-    
+   
   if (!found_in_cache)
     {
       gint min_size = 0, nat_size = 0;
@@ -258,23 +258,23 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       do_size_request (widget);
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	{
-	  requisition_size = widget->requisition.width;
+        {
+          requisition_size = widget->requisition.width;
 
-	  if (for_size < 0)
-	    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, &min_size, &nat_size);
-	  else
-	    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_width_for_height (layout, for_size, &min_size, &nat_size);
-	}
+          if (for_size < 0)
+            GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, &min_size, &nat_size);
+          else
+            GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_width_for_height (layout, for_size, &min_size, &nat_size);
+        }
       else
-	{
-	  requisition_size = widget->requisition.height;
+        {
+          requisition_size = widget->requisition.height;
 
-	  if (for_size < 0)
-	    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, &min_size, &nat_size);
-	  else
-	    GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_height_for_width (layout, for_size, &min_size, &nat_size);
-	}
+          if (for_size < 0)
+            GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, &min_size, &nat_size);
+          else
+            GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_height_for_width (layout, for_size, &min_size, &nat_size);
+        }
 
       /* Support for dangling "size-request" signals and forward derived
        * classes that will not default to a ->get_desired_width() that
@@ -288,28 +288,30 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
       cached_size->for_size     = for_size;
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
-	{
-	  cached_size->age = cache->cached_width_age;
-	  cache->cached_width_age++;
+        {
+          cached_size->age = cache->cached_width_age;
+          cache->cached_width_age++;
 
-	  GTK_PRIVATE_UNSET_FLAG (layout, GTK_WIDTH_REQUEST_NEEDED);
-	}
+          GTK_PRIVATE_UNSET_FLAG (layout, GTK_WIDTH_REQUEST_NEEDED);
+        }
       else
-	{
-	  cached_size->age = cache->cached_height_age;
-	  cache->cached_height_age++;
+        {
+          cached_size->age = cache->cached_height_age;
+          cache->cached_height_age++;
 
-	  GTK_PRIVATE_UNSET_FLAG (layout, GTK_HEIGHT_REQUEST_NEEDED);
-	}
+          GTK_PRIVATE_UNSET_FLAG (layout, GTK_HEIGHT_REQUEST_NEEDED);
+        }
 
-      /* Get size groups to compute the base requisition once one of the values have been cached,
-       * then go ahead and update the cache with the sizegroup computed value.
+      /* Get size groups to compute the base requisition once one
+       * of the values have been cached, then go ahead and update
+       * the cache with the sizegroup computed value.
        *
-       * Note this is also where values from gtk_widget_set_size_request() are considered.
+       * Note this is also where values from gtk_widget_set_size_request()
+       * are considered.
        */
-      group_size = 
-	_gtk_size_group_bump_requisition (GTK_WIDGET (layout), 
-					  orientation, cached_size->minimum_size);
+      group_size =
+        _gtk_size_group_bump_requisition (GTK_WIDGET (layout),
+                                          orientation, cached_size->minimum_size);
 
       cached_size->minimum_size = MAX (cached_size->minimum_size, group_size);
       cached_size->natural_size = MAX (cached_size->natural_size, group_size);
@@ -317,21 +319,21 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
 
   if (minimum_size)
     *minimum_size = cached_size->minimum_size;
-  
+ 
   if (natural_size)
     *natural_size = cached_size->natural_size;
 
   g_assert (cached_size->minimum_size <= cached_size->natural_size);
 
-  GTK_NOTE (EXTENDED_LAYOUT, 
-	    g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
-		     layout, G_OBJECT_TYPE_NAME (layout), 
-		     orientation == GTK_SIZE_GROUP_HORIZONTAL ? 
-		     "width for height" : "height for width" ,
-		     for_size,
-		     cached_size->minimum_size,
-		     cached_size->natural_size,
-		     found_in_cache ? "yes" : "no"));
+  GTK_NOTE (EXTENDED_LAYOUT,
+            g_print ("[%p] %s\t%s: %d is minimum %d and natural: %d (hit cache: %s)\n",
+                     layout, G_OBJECT_TYPE_NAME (layout),
+                     orientation == GTK_SIZE_GROUP_HORIZONTAL ?
+                     "width for height" : "height for width" ,
+                     for_size,
+                     cached_size->minimum_size,
+                     cached_size->natural_size,
+                     found_in_cache ? "yes" : "no"));
 
 }
 
@@ -340,14 +342,15 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
  * @layout: a #GtkExtendedLayout instance
  *
  * Gets whether the widget prefers a height-for-width layout
- * or a width-for-height layout
+ * or a width-for-height layout.
+ *
+ * <note><para>#GtkBin widgets generally propagate the preference of
+ * their child, container widgets need to request something either in
+ * context of their children or in context of their allocation
+ * capabilities.</para></note>
  *
  * Returns: %TRUE if the widget prefers height-for-width, %FALSE if
  * the widget should be treated with a width-for-height preference.
- *
- * <note><para>#GtkBin widgets generally propagate the preference of thier child, 
- * container widgets need to request something either in context of their
- * children or in context of their allocation capabilities.</para></note>
  *
  * Since: 3.0
  */
@@ -369,42 +372,46 @@ gtk_extended_layout_is_height_for_width (GtkExtendedLayout *layout)
 /**
  * gtk_extended_layout_get_desired_width:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: location to store the minimum size, or %NULL
- * @natural_width: location to store the natural size, or %NULL
+ * @minimum_width: location to store the minimum width, or %NULL
+ * @natural_width: location to store the natural width, or %NULL
  *
- * Retreives a widget's initial minimum and natural width.
+ * Retrieves a widget's initial minimum and natural width.
  *
- * <note><para>This call is specific to height for width requests.</para></note>
+ * <note><para>This call is specific to height-for-width
+ * requests.</para></note>
  *
  * Since: 3.0
  */
 void
 gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
-				       gint              *minimum_width,
-				       gint              *natural_width)
+                                       gint              *minimum_width,
+                                       gint              *natural_width)
 {
-  compute_size_for_orientation (layout, GTK_SIZE_GROUP_HORIZONTAL, -1, minimum_width, natural_width);
+  compute_size_for_orientation (layout, GTK_SIZE_GROUP_HORIZONTAL,
+                                -1, minimum_width, natural_width);
 }
 
 
 /**
  * gtk_extended_layout_get_desired_height:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: location to store the minimum size, or %NULL
- * @natural_width: location to store the natural size, or %NULL
+ * @minimum_width: location to store the minimum height, or %NULL
+ * @natural_width: location to store the natural height, or %NULL
  *
- * Retreives a widget's minimum and natural size in a single dimension.
+ * Retrieves a widget's initial minimum and natural height.
  *
- * <note><para>This call is specific to width for height requests.</para></note>
+ * <note><para>This call is specific to width-for-height
+ * requests.</para></note>
  *
  * Since: 3.0
  */
 void
 gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
-					gint              *minimum_height,
-					gint              *natural_height)
+                                        gint              *minimum_height,
+                                        gint              *natural_height)
 {
-  compute_size_for_orientation (layout, GTK_SIZE_GROUP_VERTICAL, -1, minimum_height, natural_height);
+  compute_size_for_orientation (layout, GTK_SIZE_GROUP_VERTICAL,
+                                -1, minimum_height, natural_height);
 }
 
 
@@ -416,7 +423,7 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the natural size, or %NULL
  *
- * Retreives a widget's desired width if it would be given
+ * Retrieves a widget's desired width if it would be given
  * the specified @height.
  *
  * Since: 3.0
@@ -427,7 +434,8 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
                                           gint              *minimum_width,
                                           gint              *natural_width)
 {
-  compute_size_for_orientation (layout, GTK_SIZE_GROUP_HORIZONTAL, height, minimum_width, natural_width);
+  compute_size_for_orientation (layout, GTK_SIZE_GROUP_HORIZONTAL,
+                                height, minimum_width, natural_width);
 }
 
 /**
@@ -437,7 +445,7 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the natural size, or %NULL
  *
- * Retreives a widget's desired height if it would be given
+ * Retrieves a widget's desired height if it would be given
  * the specified @width.
  *
  * Since: 3.0
@@ -448,32 +456,33 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
                                           gint              *minimum_height,
                                           gint              *natural_height)
 {
-  compute_size_for_orientation (layout, GTK_SIZE_GROUP_VERTICAL, width, minimum_height, natural_height);
+  compute_size_for_orientation (layout, GTK_SIZE_GROUP_VERTICAL,
+                                width, minimum_height, natural_height);
 }
 
 /**
  * gtk_extended_layout_get_desired_size:
  * @layout: a #GtkExtendedLayout instance
  * @width: the size which is available for allocation
- * @request_natural: Whether to base the contextual request off of the 
- *  base natural or the base minimum
+ * @request_natural: Whether to base the contextual request off of the
+ *     base natural or the base minimum
  * @minimum_size: location for storing the minimum size, or %NULL
  * @natural_size: location for storing the natural size, or %NULL
  *
- * Retreives the minimum and natural size of a widget taking
+ * Retrieves the minimum and natural size of a widget taking
  * into account the widget's preference for height-for-width management.
  *
  * If request_natural is specified, the non-contextual natural value will
  * be used to make the contextual request; otherwise the minimum will be used.
  *
- * This is used to retreive a suitable size by container widgets whom dont 
- * impose any restrictions on the child placement 
+ * This is used to retrieve a suitable size by container widgets which do
+ * not impose any restrictions on the child placement.
  *
  * Since: 3.0
  */
 void
 gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
-				      gboolean           request_natural,
+                                      gboolean           request_natural,
                                       GtkRequisition    *minimum_size,
                                       GtkRequisition    *natural_size)
 {
@@ -485,27 +494,27 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
   if (gtk_extended_layout_is_height_for_width (layout))
     {
       gtk_extended_layout_get_desired_width (layout, &min_width, &nat_width);
-      gtk_extended_layout_get_height_for_width (layout, 
-						request_natural ? nat_width : min_width, 
-						&min_height, &nat_height);
+      gtk_extended_layout_get_height_for_width (layout,
+                                                request_natural ? nat_width : min_width,
+                                                &min_height, &nat_height);
     }
   else
     {
       gtk_extended_layout_get_desired_height (layout, &min_height, &nat_height);
-      gtk_extended_layout_get_width_for_height (layout, 
-						request_natural ? nat_height : min_height, 
-						&min_width, &nat_width);
+      gtk_extended_layout_get_width_for_height (layout,
+                                                request_natural ? nat_height : min_height,
+                                                &min_width, &nat_width);
     }
 
   if (minimum_size)
     {
-      minimum_size->width  = min_width; 
+      minimum_size->width  = min_width;
       minimum_size->height = min_height;
     }
-  
+ 
   if (natural_size)
     {
-      natural_size->width  = nat_width; 
+      natural_size->width  = nat_width;
       natural_size->height = nat_height;
     }
 }
