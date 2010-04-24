@@ -2199,18 +2199,6 @@ gtk_orientable_set_orientation
 #endif
 #endif
 
-#if IN_HEADER(__GTK_OPTION_MENU_H__)
-#if IN_FILE(__GTK_OPTION_MENU_C__)
-gtk_option_menu_get_history
-gtk_option_menu_get_menu
-gtk_option_menu_get_type G_GNUC_CONST
-gtk_option_menu_new
-gtk_option_menu_remove_menu
-gtk_option_menu_set_history
-gtk_option_menu_set_menu
-#endif
-#endif
-
 #if IN_HEADER(__GTK_PANED_H__)
 #if IN_FILE(__GTK_PANED_C__)
 gtk_paned_add1

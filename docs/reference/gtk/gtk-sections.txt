@@ -2618,27 +2618,6 @@ gtk_offscreen_window_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkoptionmenu</FILE>
-<TITLE>GtkOptionMenu</TITLE>
-GtkOptionMenu
-gtk_option_menu_new
-gtk_option_menu_get_menu
-gtk_option_menu_set_menu
-gtk_option_menu_remove_menu
-gtk_option_menu_set_history
-gtk_option_menu_get_history
-<SUBSECTION Standard>
-GTK_OPTION_MENU
-GTK_IS_OPTION_MENU
-GTK_TYPE_OPTION_MENU
-GTK_OPTION_MENU_CLASS
-GTK_IS_OPTION_MENU_CLASS
-GTK_OPTION_MENU_GET_CLASS
-<SUBSECTION Private>
-gtk_option_menu_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkpaned</FILE>
 <TITLE>GtkPaned</TITLE>
 GtkPaned
