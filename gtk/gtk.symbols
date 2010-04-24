@@ -3286,25 +3286,6 @@ gtk_text_tag_table_remove
 #endif
 #endif
 
-#if IN_HEADER(__GTK_TEXT_H__)
-#if IN_FILE(__GTK_TEXT_C__)
-gtk_text_backward_delete
-gtk_text_forward_delete
-gtk_text_freeze
-gtk_text_get_length
-gtk_text_get_point
-gtk_text_get_type G_GNUC_CONST
-gtk_text_insert
-gtk_text_new
-gtk_text_set_adjustments
-gtk_text_set_editable
-gtk_text_set_line_wrap
-gtk_text_set_point
-gtk_text_set_word_wrap
-gtk_text_thaw
-#endif
-#endif
-
 #if IN_HEADER(__GTK_TEXT_BUFFER_H__)
 #if IN_FILE(__GTK_TEXT_BUFFER_C__)
 gtk_text_buffer_add_selection_clipboard
