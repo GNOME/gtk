@@ -4291,40 +4291,6 @@ gtk_tooltip_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtktree</FILE>
-<TITLE>GtkTree</TITLE>
-GtkTree
-GTK_IS_ROOT_TREE
-GTK_TREE_ROOT_TREE
-GTK_TREE_SELECTION_OLD
-GtkTreeViewMode
-gtk_tree_new
-gtk_tree_append
-gtk_tree_prepend
-gtk_tree_insert
-gtk_tree_remove_items
-gtk_tree_clear_items
-gtk_tree_select_item
-gtk_tree_unselect_item
-gtk_tree_select_child
-gtk_tree_unselect_child
-gtk_tree_child_position
-gtk_tree_set_selection_mode
-gtk_tree_set_view_mode
-gtk_tree_set_view_lines
-gtk_tree_remove_item
-<SUBSECTION Standard>
-GTK_TREE
-GTK_IS_TREE
-GTK_TYPE_TREE
-GTK_TREE_CLASS
-GTK_IS_TREE_CLASS
-GTK_TREE_GET_CLASS
-<SUBSECTION Private>
-gtk_tree_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtktreeitem</FILE>
 <TITLE>GtkTreeItem</TITLE>
 GtkTreeItem

@@ -3828,27 +3828,6 @@ gtk_tray_icon_get_type G_GNUC_CONST
 #endif
 #endif
 
-#if IN_HEADER(__GTK_TREE_H__)
-#if IN_FILE(__GTK_TREE_C__)
-gtk_tree_append
-gtk_tree_child_position
-gtk_tree_clear_items
-gtk_tree_get_type G_GNUC_CONST
-gtk_tree_insert
-gtk_tree_prepend
-gtk_tree_remove_item
-gtk_tree_remove_items
-gtk_tree_select_child
-gtk_tree_select_item
-gtk_tree_set_selection_mode
-gtk_tree_set_view_lines
-gtk_tree_set_view_mode
-gtk_tree_unselect_child
-gtk_tree_unselect_item
-gtk_tree_new
-#endif
-#endif
-
 #if IN_HEADER(__GTK_TREE_DND_H__)
 #if IN_FILE(__GTK_TREE_DND_C__)
 gtk_tree_drag_dest_drag_data_received
