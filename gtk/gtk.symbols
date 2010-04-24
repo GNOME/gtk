@@ -3842,20 +3842,6 @@ gtk_tree_set_row_drag_data
 #endif
 #endif
 
-#if IN_HEADER(__GTK_TREE_ITEM_H__)
-#if IN_FILE(__GTK_TREE_ITEM_C__)
-gtk_tree_item_collapse
-gtk_tree_item_deselect
-gtk_tree_item_expand
-gtk_tree_item_get_type G_GNUC_CONST
-gtk_tree_item_new
-gtk_tree_item_new_with_label
-gtk_tree_item_remove_subtree
-gtk_tree_item_select
-gtk_tree_item_set_subtree
-#endif
-#endif
-
 #if IN_HEADER(__GTK_TREE_MODEL_H__)
 #if IN_FILE(__GTK_TREE_MODEL_C__)
 gtk_tree_iter_copy
