@@ -3837,22 +3837,6 @@ gtk_tooltip_trigger_tooltip_query
 #endif
 #endif
 
-#if IN_HEADER(__GTK_TOOLTIPS_H__)
-#if IN_FILE(__GTK_TOOLTIPS_C__)
-#ifndef GTK_DISABLE_DEPRECATED
-gtk_tooltips_data_get
-gtk_tooltips_disable
-gtk_tooltips_enable
-gtk_tooltips_force_window
-gtk_tooltips_get_info_from_tip_window
-gtk_tooltips_get_type G_GNUC_CONST
-gtk_tooltips_new
-gtk_tooltips_set_delay
-gtk_tooltips_set_tip
-#endif
-#endif
-#endif
-
 #if IN_HEADER(__GTK_TRAY_ICON_H__)
 #if IN_FILE(__GTK_TRAY_ICON_X11_C__)
 #ifndef G_OS_WIN32
