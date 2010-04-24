@@ -3696,8 +3696,10 @@ gtk_toolbar_get_type G_GNUC_CONST
 gtk_toolbar_insert
 gtk_toolbar_new
 gtk_toolbar_set_drop_highlight_item
+gtk_toolbar_set_icon_size
 gtk_toolbar_set_show_arrow
 gtk_toolbar_set_style
+gtk_toolbar_unset_icon_size
 gtk_toolbar_unset_style
 #endif
 #endif
