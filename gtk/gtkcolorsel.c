@@ -2270,14 +2270,6 @@ gtk_color_selection_new (void)
   return GTK_WIDGET (colorsel);
 }
 
-
-void
-gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
-				       GtkUpdateType      policy)
-{
-  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-}
-
 /**
  * gtk_color_selection_get_has_opacity_control:
  * @colorsel: a #GtkColorSelection.

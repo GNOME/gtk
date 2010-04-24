@@ -836,7 +836,6 @@ gtk_hsv_get_type
 <TITLE>GtkColorSelection</TITLE>
 GtkColorSelection
 gtk_color_selection_new
-gtk_color_selection_set_update_policy
 gtk_color_selection_set_has_opacity_control
 gtk_color_selection_get_has_opacity_control
 gtk_color_selection_set_has_palette
