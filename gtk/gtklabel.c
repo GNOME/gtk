@@ -3371,7 +3371,6 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
     gtk_label_clear_layout (label);
   gtk_label_ensure_layout (label, TRUE);
 
-
   angle = gtk_label_get_angle (label);
 
   /* Start off with the pixel extents of the rendered layout */
@@ -3402,9 +3401,10 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
       pango_matrix_transform_rectangle (matrix, &required_rect);
       pango_matrix_transform_rectangle (matrix, &natural_rect);
 
-      /* Bump the natural size incase of ellipsize to ensure pango has enough space in the angles 
-       * (note, we could alternatively set the layout to not ellipsize when we know we have been
-       * allocated our full natural size, or it may be that pango needs a fix here).
+      /* Bump the natural size in case of ellipsize to ensure pango has
+       * enough space in the angles (note, we could alternatively set the
+       * layout to not ellipsize when we know we have been allocated our
+       * full natural size, or it may be that pango needs a fix here).
        */
       if (label->ellipsize && angle != 0 && angle != 90 && angle != 180 && angle != 270 && angle != 360)
 	{
@@ -3424,12 +3424,15 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      /* Note, we cant use get_size_for_allocation() when rotating ellipsize labels.
+      /* Note, we cant use get_size_for_allocation() when rotating
+       * ellipsized labels.
        */
       if (!(label->ellipsize && label->have_transform) && (angle == 90 || angle == 270))
 	{
-	  /* Doing a h4w request on a rotated label here, return the required width for the minimum height. */
-	  get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL, 
+	  /* Doing a h4w request on a rotated label here, return the
+           * required width for the minimum height.
+           */
+	  get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL,
 				   required_rect.height, minimum_size, natural_size);
 
 	}
@@ -3510,10 +3513,10 @@ gtk_label_get_width_for_height (GtkExtendedLayout *layout,
 			       minimum_width, natural_width);
 
       if (minimum_width)
-	minimum_width += label->misc.xpad * 2;
+	*minimum_width += label->misc.xpad * 2;
 
       if (natural_width)
-	natural_width += label->misc.xpad * 2;
+	*natural_width += label->misc.xpad * 2;
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_width (layout, minimum_width, natural_width);
@@ -3538,10 +3541,10 @@ gtk_label_get_height_for_width (GtkExtendedLayout *layout,
 			       minimum_height, natural_height);
 
       if (minimum_height)
-	minimum_height += label->misc.ypad * 2;
+	*minimum_height += label->misc.ypad * 2;
 
       if (natural_height)
-	natural_height += label->misc.ypad * 2;
+	*natural_height += label->misc.ypad * 2;
     }
   else
     GTK_EXTENDED_LAYOUT_GET_IFACE (layout)->get_desired_height (layout, minimum_height, natural_height);
