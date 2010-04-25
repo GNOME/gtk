@@ -1,4 +1,4 @@
-/* testextendedlayout2.c
+/* extendedlayoutexample.c
  * Copyright (C) 2010 Openismus GmbH
  *
  * Author:
@@ -440,7 +440,7 @@ TestInterface interfaces[] = {
     "                <child>"
     "                  <object class=\"GtkLabel\" id=\"label1\">"
     "                    <property name=\"visible\">True</property>"
-    "                    <property name=\"label\" translatable=\"yes\">The first 2 labels require 10 charachters.</property>"
+    "                    <property name=\"label\" translatable=\"yes\">The first 2 labels require 10 characters.</property>"
     "                    <property name=\"wrap\">True</property>"
     "                    <property name=\"width_chars\">10</property>"
     "                    <attributes>"
@@ -457,7 +457,7 @@ TestInterface interfaces[] = {
     "                <child>"
     "                  <object class=\"GtkLabel\" id=\"label2\">"
     "                    <property name=\"visible\">True</property>"
-    "                    <property name=\"label\" translatable=\"yes\">This label has a maximum natural width of 20 charachters. The second two labels expand.</property>"
+    "                    <property name=\"label\" translatable=\"yes\">This label has a maximum natural width of 20 characters. The second two labels expand.</property>"
     "                    <property name=\"wrap\">True</property>"
     "                    <property name=\"width_chars\">10</property>"
     "                    <property name=\"max_width_chars\">20</property>"
