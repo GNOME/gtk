@@ -1168,14 +1168,7 @@ gtk_box_get_width_for_height (GtkExtendedLayout *layout,
   GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (layout);
 
   if (private->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-#if __I_HAD_A_MILLION_DOLLARS__
-      gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width); 
-#else
-      /* Return the defaults instead of calculating in the opposing orientation */  
-      gtk_extended_layout_get_desired_width (layout, minimum_width, natural_width);
-#endif
-    }
+    gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width); 
   else
     gtk_box_compute_size_for_orientation (box, height, minimum_width, natural_width);
 }
