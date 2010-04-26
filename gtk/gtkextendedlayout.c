@@ -24,11 +24,11 @@
 
 /**
  * SECTION:gtkextendedlayout
- * @Short_Description: Height for Width Geometry management
+ * @Short_Description: Height-for-width geometry management
  * @Title: GtkExtendedLayout
  *
- * The extended layout is GTK+'s height for width geometry management
- * system.
+ * The extended layout is GTK+'s height-for-width (and width-for-height)
+ * geometry management system.
  *
  * <refsect2>
  * <title>Implementing GtkExtendedLayout</title>
