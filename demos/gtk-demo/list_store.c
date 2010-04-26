@@ -29,7 +29,9 @@ enum
   COLUMN_SEVERITY,
   COLUMN_DESCRIPTION,
   COLUMN_PULSE,
+  COLUMN_ICON,
   COLUMN_ACTIVE,
+  COLUMN_SENSITIVE,
   NUM_COLUMNS
 };
 
@@ -92,11 +94,24 @@ create_model (void)
                               G_TYPE_STRING,
                               G_TYPE_STRING,
                               G_TYPE_UINT,
+                              G_TYPE_STRING,
+                              G_TYPE_BOOLEAN,
                               G_TYPE_BOOLEAN);
 
   /* add data to the list store */
   for (i = 0; i < G_N_ELEMENTS (data); i++)
     {
+      gchar *icon_name;
+      gboolean sensitive;
+
+      if (i == 1 || i == 3)
+        icon_name = "battery-critical-charging-symbolic";
+      else
+        icon_name = NULL;
+      if (i == 3)
+        sensitive = FALSE;
+      else
+        sensitive = TRUE;
       gtk_list_store_append (store, &iter);
       gtk_list_store_set (store, &iter,
                           COLUMN_FIXED, data[i].fixed,
@@ -104,7 +119,9 @@ create_model (void)
                           COLUMN_SEVERITY, data[i].severity,
                           COLUMN_DESCRIPTION, data[i].description,
                           COLUMN_PULSE, 0,
+                          COLUMN_ICON, icon_name,
                           COLUMN_ACTIVE, FALSE,
+                          COLUMN_SENSITIVE, sensitive,
                           -1);
     }
 
@@ -198,6 +215,19 @@ add_columns (GtkTreeView *treeview)
                                                      COLUMN_ACTIVE,
                                                      NULL);
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_PULSE);
+  gtk_tree_view_append_column (treeview, column);
+
+  /* column for symbolic icon */
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  g_object_set (G_OBJECT (renderer), "follow-state", TRUE, NULL);
+  column = gtk_tree_view_column_new_with_attributes ("Symbolic icon",
+                                                     renderer,
+                                                     "icon-name",
+                                                     COLUMN_ICON,
+                                                     "sensitive",
+                                                     COLUMN_SENSITIVE,
+                                                     NULL);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ICON);
   gtk_tree_view_append_column (treeview, column);
 }
 

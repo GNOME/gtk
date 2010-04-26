@@ -134,6 +134,11 @@ struct _GtkImagePrivate
   /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
   gchar *filename;
 
+  /* a GtkStateType, with -1 meaning an invalid state,
+   * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
+  gint last_rendered_state;
+  gboolean was_symbolic;
+
   gint pixel_size;
   guint need_calc_size : 1;
 };
@@ -1628,6 +1633,10 @@ animation_timeout (gpointer data)
 static void
 icon_theme_changed (GtkImage *image)
 {
+  GtkImagePrivate *priv;
+
+  priv = GTK_IMAGE_GET_PRIVATE (image);
+
   if (image->storage_type == GTK_IMAGE_ICON_NAME) 
     {
       if (image->data.name.pixbuf)
@@ -1647,7 +1656,8 @@ icon_theme_changed (GtkImage *image)
 }
 
 static void
-ensure_pixbuf_for_icon_name (GtkImage *image)
+ensure_pixbuf_for_icon_name (GtkImage     *image,
+			     GtkStateType  state)
 {
   GtkImagePrivate *priv;
   GdkScreen *screen;
@@ -1655,8 +1665,8 @@ ensure_pixbuf_for_icon_name (GtkImage *image)
   GtkSettings *settings;
   gint width, height;
   gint *sizes, *s, dist;
+  GtkIconInfo *info;
   GtkIconLookupFlags flags;
-  GError *error = NULL;
 
   g_return_if_fail (image->storage_type == GTK_IMAGE_ICON_NAME);
 
@@ -1665,8 +1675,15 @@ ensure_pixbuf_for_icon_name (GtkImage *image)
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
-  if (image->data.name.pixbuf == NULL)
+  if (image->data.name.pixbuf == NULL ||
+      (priv->was_symbolic && priv->last_rendered_state != state))
     {
+      priv->last_rendered_state = state;
+      if (image->data.name.pixbuf)
+        {
+          g_object_unref (image->data.name.pixbuf);
+          image->data.name.pixbuf = NULL;
+	}
       if (priv->pixel_size != -1)
 	{
 	  width = height = priv->pixel_size;
@@ -1714,24 +1731,57 @@ ensure_pixbuf_for_icon_name (GtkImage *image)
 	      width = height = 24;
 	    }
 	}
-      image->data.name.pixbuf =
-	gtk_icon_theme_load_icon (icon_theme,
-				  image->data.name.icon_name,
-				  MIN (width, height), flags, &error);
+
+      info = gtk_icon_theme_lookup_icon (icon_theme,
+                                         image->data.name.icon_name,
+                                         MIN (width, height), flags);
+      if (info)
+        {
+          GdkColor error_color, warning_color, success_color;
+          GdkColor *error_ptr, *warning_ptr, *success_ptr;
+          GtkStyle *style;
+          gboolean was_symbolic;
+
+          style = gtk_widget_get_style (GTK_WIDGET (image));
+          if (!gtk_style_lookup_color (style, "error_color", &error_color))
+            error_ptr = NULL;
+          else
+            error_ptr = &error_color;
+          if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
+            warning_ptr = NULL;
+          else
+            warning_ptr = &warning_color;
+          if (!gtk_style_lookup_color (style, "success_color", &success_color))
+            success_ptr = NULL;
+          else
+            success_ptr = &success_color;
+
+          image->data.name.pixbuf = gtk_icon_info_load_symbolic (info,
+                                                                 &style->fg[state],
+                                                                 success_ptr,
+                                                                 warning_ptr,
+                                                                 error_ptr,
+                                                                 &was_symbolic,
+                                                                 NULL);
+          priv->was_symbolic = was_symbolic;
+          gtk_icon_info_free (info);
+        }
+
       if (image->data.name.pixbuf == NULL)
 	{
-	  g_error_free (error);
 	  image->data.name.pixbuf =
 	    gtk_widget_render_icon (GTK_WIDGET (image),
 				    GTK_STOCK_MISSING_IMAGE,
 				    image->icon_size,
 				    NULL);
+	  priv->was_symbolic = FALSE;
 	}
     }
 }
 
 static void
-ensure_pixbuf_for_gicon (GtkImage *image)
+ensure_pixbuf_for_gicon (GtkImage     *image,
+			 GtkStateType  state)
 {
   GtkImagePrivate *priv;
   GdkScreen *screen;
@@ -1748,8 +1798,15 @@ ensure_pixbuf_for_gicon (GtkImage *image)
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
-  if (image->data.gicon.pixbuf == NULL)
+  if (image->data.gicon.pixbuf == NULL ||
+      (priv->was_symbolic && priv->last_rendered_state != state))
     {
+      priv->last_rendered_state = state;
+      if (image->data.gicon.pixbuf)
+        {
+          g_object_unref (image->data.gicon.pixbuf);
+          image->data.gicon.pixbuf = NULL;
+	}
       if (priv->pixel_size != -1)
 	{
 	  width = height = priv->pixel_size;
@@ -1773,7 +1830,33 @@ ensure_pixbuf_for_gicon (GtkImage *image)
 					     MIN (width, height), flags);
       if (info)
         {
-          image->data.gicon.pixbuf = gtk_icon_info_load_icon (info, NULL);
+          GdkColor error_color, warning_color, success_color;
+          GdkColor *error_ptr, *warning_ptr, *success_ptr;
+          GtkStyle *style;
+          gboolean was_symbolic;
+
+          style = gtk_widget_get_style (GTK_WIDGET (image));
+          if (!gtk_style_lookup_color (style, "error_color", &error_color))
+            error_ptr = NULL;
+          else
+            error_ptr = &error_color;
+          if (!gtk_style_lookup_color (style, "warning_color", &warning_color))
+            warning_ptr = NULL;
+          else
+            warning_ptr = &warning_color;
+          if (!gtk_style_lookup_color (style, "success_color", &success_color))
+            success_ptr = NULL;
+          else
+            success_ptr = &success_color;
+
+          image->data.gicon.pixbuf = gtk_icon_info_load_symbolic (info,
+                                                                  &style->fg[state],
+                                                                  success_ptr,
+                                                                  warning_ptr,
+                                                                  error_ptr,
+                                                                  &was_symbolic,
+                                                                  NULL);
+          priv->was_symbolic = was_symbolic;
           gtk_icon_info_free (info);
         }
 
@@ -1784,6 +1867,7 @@ ensure_pixbuf_for_gicon (GtkImage *image)
 				    GTK_STOCK_MISSING_IMAGE,
 				    image->icon_size,
 				    NULL);
+	  priv->was_symbolic = FALSE;
 	}
     }
 }
@@ -1845,6 +1929,7 @@ gtk_image_expose (GtkWidget      *widget,
       gint x, y, mask_x, mask_y;
       GdkBitmap *mask;
       GdkPixbuf *pixbuf;
+      GtkStateType state;
       gboolean needs_state_transform;
 
       image = GTK_IMAGE (widget);
@@ -2012,7 +2097,18 @@ gtk_image_expose (GtkWidget      *widget,
           break;
 
 	case GTK_IMAGE_ICON_NAME:
-	  ensure_pixbuf_for_icon_name (image);
+	  state = gtk_widget_get_state (widget);
+	  if (state == GTK_STATE_INSENSITIVE)
+	    {
+	      ensure_pixbuf_for_icon_name (image, GTK_STATE_NORMAL);
+	    }
+	  else
+	    {
+	      ensure_pixbuf_for_icon_name (image, state);
+	      /* Already done by the loading function? */
+	      if (priv->was_symbolic)
+	        needs_state_transform = FALSE;
+	    }
 	  pixbuf = image->data.name.pixbuf;
 	  if (pixbuf)
 	    {
@@ -2023,7 +2119,18 @@ gtk_image_expose (GtkWidget      *widget,
 	  break;
 
 	case GTK_IMAGE_GICON:
-	  ensure_pixbuf_for_gicon (image);
+	  state = gtk_widget_get_state (widget);
+	  if (state == GTK_STATE_INSENSITIVE)
+	    {
+	      ensure_pixbuf_for_gicon (image, GTK_STATE_NORMAL);
+	    }
+	  else
+	    {
+	      ensure_pixbuf_for_gicon (image, state);
+	      /* Already done by the loading function? */
+	      if (priv->was_symbolic)
+	        needs_state_transform = FALSE;
+	    }
 	  pixbuf = image->data.gicon.pixbuf;
 	  if (pixbuf)
 	    {
@@ -2325,12 +2432,12 @@ gtk_image_calc_size (GtkImage *image)
                                          NULL);
       break;
     case GTK_IMAGE_ICON_NAME:
-      ensure_pixbuf_for_icon_name (image);
+      ensure_pixbuf_for_icon_name (image, GTK_STATE_NORMAL);
       pixbuf = image->data.name.pixbuf;
       if (pixbuf) g_object_ref (pixbuf);
       break;
     case GTK_IMAGE_GICON:
-      ensure_pixbuf_for_gicon (image);
+      ensure_pixbuf_for_gicon (image, GTK_STATE_NORMAL);
       pixbuf = image->data.gicon.pixbuf;
       if (pixbuf)
 	g_object_ref (pixbuf);

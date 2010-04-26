@@ -1965,6 +1965,7 @@ gtk_icon_info_get_filename_utf8
 #endif
 gtk_icon_info_get_type G_GNUC_CONST
 gtk_icon_info_load_icon
+gtk_icon_info_load_symbolic
 gtk_icon_info_set_raw_coordinates
 gtk_icon_theme_add_builtin_icon
 #ifndef _WIN64
