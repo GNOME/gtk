@@ -928,7 +928,7 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
 /**
  * gtk_tool_button_new:
  * @label: (allow-none): a string that will be used as label, or %NULL
- * @icon_widget: (allow-none): a widget that will be used as icon widget, or %NULL
+ * @icon_widget: (allow-none): a #GtkMisc widget that will be used as icon widget, or %NULL
  *
  * Creates a new %GtkToolButton using @icon_widget as icon and @label as
  * label.
@@ -942,6 +942,8 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
 		     const gchar *label)
 {
   GtkToolButton *button;
+
+  g_return_val_if_fail (GTK_IS_MISC (icon_widget), NULL);
 
   button = g_object_new (GTK_TYPE_TOOL_BUTTON,
                          "label", label,
