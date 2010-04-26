@@ -24,7 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
 
@@ -6700,38 +6699,17 @@ page_switch (GtkWidget *widget, GtkNotebookPage *page, gint page_num)
 static void
 tab_fill (GtkToggleButton *button, GtkWidget *child)
 {
-  gboolean expand;
-  GtkPackType pack_type;
-
-  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-					&expand, NULL, &pack_type);
-  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-				      expand, button->active, pack_type);
+  gtk_container_child_set (GTK_CONTAINER (sample_notebook), child,
+                           "tab-fill", gtk_toggle_button_get_active (button),
+                           NULL);
 }
 
 static void
 tab_expand (GtkToggleButton *button, GtkWidget *child)
 {
-  gboolean fill;
-  GtkPackType pack_type;
-
-  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-					NULL, &fill, &pack_type);
-  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-				      button->active, fill, pack_type);
-}
-
-static void
-tab_pack (GtkToggleButton *button, GtkWidget *child)
-	  
-{ 
-  gboolean expand;
-  gboolean fill;
-
-  gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-					&expand, &fill, NULL);
-  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (sample_notebook), child,
-				      expand, fill, button->active);
+  gtk_container_child_set (GTK_CONTAINER (sample_notebook), child,
+                           "tab-expand", gtk_toggle_button_get_active (button),
+                           NULL);
 }
 
 static void
@@ -6774,11 +6752,6 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
       g_signal_connect (button, "toggled",
 			G_CALLBACK (tab_expand), child);
-
-      button = gtk_check_button_new_with_label ("Pack end");
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
-      g_signal_connect (button, "toggled",
-			G_CALLBACK (tab_pack), child);
 
       button = gtk_button_new_with_label ("Hide Page");
       gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 5);
@@ -6895,13 +6868,6 @@ notebook_popup (GtkToggleButton *button,
 }
 
 static void
-notebook_homogeneous (GtkToggleButton *button,
-		      GtkNotebook     *notebook)
-{
-  g_object_set (notebook, "homogeneous", button->active, NULL);
-}
-
-static void
 create_notebook (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
@@ -6964,12 +6930,6 @@ create_notebook (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, FALSE, 0);
       g_signal_connect (button, "clicked",
 			G_CALLBACK (notebook_popup),
-			sample_notebook);
-
-      button = gtk_check_button_new_with_label ("homogeneous tabs");
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (notebook_homogeneous),
 			sample_notebook);
 
       box2 = gtk_hbox_new (FALSE, 5);
