@@ -3450,17 +3450,17 @@ gtk_label_get_desired_size (GtkExtendedLayout *layout,
     {
       /* Note, we cant use get_size_for_allocation() when rotating ellipsize labels.
        */
-      if (angle == 90 || angle == 270 || (label->ellipsize && label->have_transform))
+      if (!(label->ellipsize && label->have_transform) && (angle == 0 || angle == 180))
+	{
+	  /* Doing a w4h request on a label here, return the required height for the minimum width. */
+	  get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL,
+				   required_rect.width, minimum_size, natural_size);
+	}
+      else
 	{
 	  /* A vertically rotated label does w4h, so return the base desired height (text length) */
 	  *minimum_size = required_rect.height;
 	  *natural_size = natural_rect.height;
-	}
-      else
-	{
-	  /* Doing a w4h request on a label here, return the required height for the minimum width. */
-	  get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL, 
-				   required_rect.width, minimum_size, natural_size);
 	}
       *minimum_size += label->misc.ypad * 2;
       *natural_size += label->misc.ypad * 2;
