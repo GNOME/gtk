@@ -1512,17 +1512,9 @@ gdk_display_set_double_click_distance (GdkDisplay *display,
   display->double_click_distance = distance;
 }
 
-GType
-gdk_event_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkEvent"),
-					     (GBoxedCopyFunc)gdk_event_copy,
-					     (GBoxedFreeFunc)gdk_event_free);
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
+                     gdk_event_copy,
+                     gdk_event_free)
 
 /**
  * gdk_setting_get:

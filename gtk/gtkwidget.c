@@ -10291,18 +10291,9 @@ gtk_requisition_free (GtkRequisition *requisition)
   g_slice_free (GtkRequisition, requisition);
 }
 
-GType
-gtk_requisition_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkRequisition"),
-					     (GBoxedCopyFunc) gtk_requisition_copy,
-					     (GBoxedFreeFunc) gtk_requisition_free);
-
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
+                     gtk_requisition_copy,
+                     gtk_requisition_free)
 
 /**
  * gtk_widget_get_accessible:

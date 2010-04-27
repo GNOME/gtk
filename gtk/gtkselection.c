@@ -3110,31 +3110,13 @@ gtk_selection_data_free (GtkSelectionData *data)
   g_slice_free (GtkSelectionData, data);
 }
 
-GType
-gtk_selection_data_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkSelectionData"),
-					     (GBoxedCopyFunc) gtk_selection_data_copy,
-					     (GBoxedFreeFunc) gtk_selection_data_free);
+G_DEFINE_BOXED_TYPE (GtkSelectionData, gtk_selection_data,
+                     gtk_selection_data_copy,
+                     gtk_selection_data_free)
 
-  return our_type;
-}
-
-GType
-gtk_target_list_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkTargetList"),
-					     (GBoxedCopyFunc) gtk_target_list_ref,
-					     (GBoxedFreeFunc) gtk_target_list_unref);
-
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkTargetList, gtk_target_list,
+                     gtk_target_list_ref,
+                     gtk_target_list_unref)
 
 static int 
 gtk_selection_bytes_per_item (gint format)

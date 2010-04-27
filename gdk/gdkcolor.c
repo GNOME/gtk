@@ -156,17 +156,9 @@ gdk_color_equal (const GdkColor *colora,
 	  (colora->blue == colorb->blue));
 }
 
-GType
-gdk_color_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkColor"),
-					     (GBoxedCopyFunc)gdk_color_copy,
-					     (GBoxedFreeFunc)gdk_color_free);
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GdkColor, gdk_color,
+                     gdk_color_copy,
+                     gdk_color_free)
 
 /**
  * gdk_color_parse:

@@ -2598,19 +2598,10 @@ icon_data_free (GtkIconData *icon_data)
 /*
  * GtkIconInfo
  */
-GType
-gtk_icon_info_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (I_("GtkIconInfo"),
-					     (GBoxedCopyFunc) gtk_icon_info_copy,
-					     (GBoxedFreeFunc) gtk_icon_info_free);
 
-
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GtkIconInfo, gtk_icon_info,
+                     gtk_icon_info_copy,
+                     gtk_icon_info_free)
 
 static GtkIconInfo *
 icon_info_new (void)

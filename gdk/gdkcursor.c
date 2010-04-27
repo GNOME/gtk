@@ -30,17 +30,9 @@
 #include "gdkinternals.h"
 
 
-GType
-gdk_cursor_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkCursor"),
-					     (GBoxedCopyFunc)gdk_cursor_ref,
-					     (GBoxedFreeFunc)gdk_cursor_unref);
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GdkCursor, gdk_cursor,
+                     gdk_cursor_ref,
+                     gdk_cursor_unref)
 
 /**
  * gdk_cursor_ref:

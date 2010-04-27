@@ -1367,17 +1367,9 @@ gtk_recent_manager_clamp_to_age (GtkRecentManager *manager,
  * GtkRecentInfo *
  *****************/
  
-GType
-gtk_recent_info_get_type (void)
-{
-  static GType info_type = 0;
-  
-  if (!info_type)
-    info_type = g_boxed_type_register_static (I_("GtkRecentInfo"),
-    					      (GBoxedCopyFunc) gtk_recent_info_ref,
-    					      (GBoxedFreeFunc) gtk_recent_info_unref);
-  return info_type;
-}
+G_DEFINE_BOXED_TYPE (GtkRecentInfo, gtk_recent_info,
+                     gtk_recent_info_ref,
+                     gtk_recent_info_unref)
 
 static GtkRecentInfo *
 gtk_recent_info_new (const gchar *uri)

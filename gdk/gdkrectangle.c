@@ -122,14 +122,6 @@ gdk_rectangle_copy (const GdkRectangle *rectangle)
   return result;
 }
 
-GType
-gdk_rectangle_get_type (void)
-{
-  static GType our_type = 0;
-  
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static (g_intern_static_string ("GdkRectangle"),
-					     (GBoxedCopyFunc)gdk_rectangle_copy,
-					     (GBoxedFreeFunc)g_free);
-  return our_type;
-}
+G_DEFINE_BOXED_TYPE (GdkRectangle, gdk_rectangle,
+                     gdk_rectangle_copy,
+                     g_free)
