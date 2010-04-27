@@ -412,6 +412,16 @@ compatibility reasons.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_path_get_indices_with_depth ##### -->
+<para>
+
+</para>
+
+@path:
+@depth: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_path_free ##### -->
 <para>
 

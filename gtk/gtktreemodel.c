@@ -623,6 +623,31 @@ gtk_tree_path_get_indices (GtkTreePath *path)
 }
 
 /**
+ * gtk_tree_path_get_indices_with_depth:
+ * @path: A #GtkTreePath.
+ * @depth: Number of elements returned in the integer array
+ *
+ * Returns the current indices of @path.
+ * This is an array of integers, each representing a node in a tree.
+ * It also returns the number of elements in the array.
+ * The array should not be freed.
+ *
+ * Return value: (array length=depth): The current indices, or %NULL.
+ *
+ * Since: 3.0
+ **/
+gint *
+gtk_tree_path_get_indices_with_depth (GtkTreePath *path, gint *depth)
+{
+  g_return_val_if_fail (path != NULL, NULL);
+
+  if (depth)
+    *depth = path->depth;
+
+  return path->indices;
+}
+
+/**
  * gtk_tree_path_free:
  * @path: A #GtkTreePath.
  *

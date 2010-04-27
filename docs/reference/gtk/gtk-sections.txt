@@ -4675,6 +4675,7 @@ gtk_tree_path_append_index
 gtk_tree_path_prepend_index
 gtk_tree_path_get_depth
 gtk_tree_path_get_indices
+gtk_tree_path_get_indices_with_depth
 gtk_tree_path_free
 gtk_tree_path_copy
 gtk_tree_path_compare
