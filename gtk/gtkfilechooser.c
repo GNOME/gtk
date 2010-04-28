@@ -72,6 +72,7 @@
  *       </listitem>
  *    </varlistentry>
  * </variablelist>
+ *
  * <refsect2 id="gtkfilechooser-encodings">
  * <title>File Names and Encodings</title>
  * When the user is finished selecting files in a
@@ -322,7 +323,7 @@
  * 	</variablelist>
  * <note>
  *    You can create your own bindings for the
- *    GtkFileChooserDefault::location-popup signal with custom
+ *    #GtkFileChooserDefault::location-popup signal with custom
  *    <parameter>path</parameter> strings, and have a crude form
  *    of easily-to-type bookmarks.  For example, say you access
  *    the path <filename>/home/username/misc</filename> very
@@ -503,7 +504,7 @@
  * 	    </listitem>
  * 	  </varlistentry>
  * 	  <varlistentry>
- * 	    <term><parameter>bookmark_indes</parameter>&nbsp;:</term>
+ * 	    <term><parameter>bookmark_index</parameter>&nbsp;:</term>
  * 	    <listitem>
  * 	      <simpara>
  * 		index of the bookmark to switch to; the indices start at 0.
