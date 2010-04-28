@@ -45,19 +45,21 @@
  * First the default minimum and natural width for each widget
  * in the interface will computed and collectively returned to
  * the toplevel by way of gtk_extended_layout_get_desired_width().
- * Next; the toplevel will use the minimum width to query for the
+ * Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using
- * gtk_extended_layout_get_height_for_width() which will also be a
- * highly recursive operation. This minimum for minimum size can be
+ * gtk_extended_layout_get_height_for_width(), which will also be a
+ * highly recursive operation. This minimum-for-minimum size can be
  * used to set the minimum size constraint on the toplevel.
  *
- * When allocating; each container can use the minimum and natural
+ * When allocating, each container can use the minimum and natural
  * sizes reported by their children to allocate natural sizes and
  * expose as much content as possible with the given allocation.
  *
  * That means that the request operation at allocation time will
  * usually fire again in contexts of different allocated sizes than
- * the ones originally queried for.
+ * the ones originally queried for. #GtkExtendedLayout caches a
+ * small number of results to avoid re-querying for the same
+ * allocated size in one allocation cycle.
  *
  * A widget that does not actually do height-for-width
  * or width-for-height size negotiations only has to implement
@@ -68,7 +70,7 @@
  * both orientations; even if the request only makes sense in
  * one orientation.
  *
- * For instance; a GtkLabel that does height-for-width word wrapping
+ * For instance, a GtkLabel that does height-for-width word wrapping
  * will not expect to have get_desired_height() called because that
  * call is specific to a width-for-height request, in this case the
  * label must return the heights contextual to its minimum possible
@@ -176,7 +178,7 @@ get_cache (GtkExtendedLayout *layout,
            gboolean           create)
 {
   ExtendedLayoutCache *cache;
- 
+
   cache = g_object_get_qdata (G_OBJECT (layout), quark_cache);
   if (!cache && create)
     {
@@ -188,7 +190,7 @@ get_cache (GtkExtendedLayout *layout,
       g_object_set_qdata_full (G_OBJECT (layout), quark_cache, cache,
                                (GDestroyNotify)destroy_cache);
     }
- 
+
   return cache;
 }
 
@@ -248,7 +250,7 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
           cache->cached_height_age = 1;
         }
     }
-   
+
   if (!found_in_cache)
     {
       gint min_size = 0, nat_size = 0;
@@ -319,7 +321,7 @@ compute_size_for_orientation (GtkExtendedLayout *layout,
 
   if (minimum_size)
     *minimum_size = cached_size->minimum_size;
- 
+
   if (natural_size)
     *natural_size = cached_size->natural_size;
 
@@ -372,8 +374,8 @@ gtk_extended_layout_is_height_for_width (GtkExtendedLayout *layout)
 /**
  * gtk_extended_layout_get_desired_width:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: location to store the minimum width, or %NULL
- * @natural_width: location to store the natural width, or %NULL
+ * @minimum_width: (allow-none): location to store the minimum width, or %NULL
+ * @natural_width: (allow-none): location to store the natural width, or %NULL
  *
  * Retrieves a widget's initial minimum and natural width.
  *
@@ -395,8 +397,8 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_desired_height:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: location to store the minimum height, or %NULL
- * @natural_width: location to store the natural height, or %NULL
+ * @minimum_width: (allow-none): location to store the minimum height, or %NULL
+ * @natural_width: (allow-none): location to store the natural height, or %NULL
  *
  * Retrieves a widget's initial minimum and natural height.
  *
@@ -420,8 +422,8 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
  * gtk_extended_layout_get_width_for_height:
  * @layout: a #GtkExtendedLayout instance
  * @height: the size which is available for allocation
- * @minimum_size: location for storing the minimum size, or %NULL
- * @natural_size: location for storing the natural size, or %NULL
+ * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (allow-none): location for storing the natural size, or %NULL
  *
  * Retrieves a widget's desired width if it would be given
  * the specified @height.
@@ -442,8 +444,8 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
  * gtk_extended_layout_get_height_for_width:
  * @layout: a #GtkExtendedLayout instance
  * @width: the size which is available for allocation
- * @minimum_size: location for storing the minimum size, or %NULL
- * @natural_size: location for storing the natural size, or %NULL
+ * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (allow-none): location for storing the natural size, or %NULL
  *
  * Retrieves a widget's desired height if it would be given
  * the specified @width.
@@ -466,8 +468,8 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
  * @width: the size which is available for allocation
  * @request_natural: Whether to base the contextual request off of the
  *     base natural or the base minimum
- * @minimum_size: location for storing the minimum size, or %NULL
- * @natural_size: location for storing the natural size, or %NULL
+ * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (allow-none): location for storing the natural size, or %NULL
  *
  * Retrieves the minimum and natural size of a widget taking
  * into account the widget's preference for height-for-width management.
@@ -511,7 +513,7 @@ gtk_extended_layout_get_desired_size (GtkExtendedLayout *layout,
       minimum_size->width  = min_width;
       minimum_size->height = min_height;
     }
- 
+
   if (natural_size)
     {
       natural_size->width  = nat_width;
