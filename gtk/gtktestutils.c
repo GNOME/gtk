@@ -34,7 +34,12 @@
 #include <math.h>
 
 
-/* --- test utilities --- */
+/**
+ * SECTION:gtktesting
+ * @Short_description: Utilities for testing GTK+ applications
+ * @Title: Testing
+ */
+
 /**
  * gtk_test_init:
  * @argcp: Address of the <parameter>argc</parameter> parameter of the
