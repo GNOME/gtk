@@ -3114,7 +3114,7 @@ gdk_color_to_css (GdkColor *color)
  * As implementation details, the icon loaded needs to be of SVG type,
  * contain the "symbolic" term as the last chunk of the icon name,
  * and use the fg, success, warning and error styles in the SVG file itself.
- * See the <a ulink url="http://www.freedesktop.org/wiki/SymbolicIcons">Symbolic Icons spec</ulink>
+ * See the <ulink url="http://www.freedesktop.org/wiki/SymbolicIcons">Symbolic Icons spec</ulink>
  * for more information about symbolic icons.
  *
  * Return value: a #GdkPixbuf representing the loaded icon
