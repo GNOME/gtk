@@ -24,6 +24,34 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:gtkbbox
+ * @Short_description: Base class for GtkHButtonBox and GtkVButtonBox
+ * @Title: GtkButtonBox
+ * @See_also: #GtkVButtonBox, #GtkHButtonBox
+ *
+ * The primary purpose of this class is to keep track of the various properties
+ * of #GtkHButtonBox and #GtkVButtonBox widgets.
+ *
+ * gtk_button_box_get_child_size() retrieves the minimum width and height
+ * for widgets in a given button box.
+ *
+ * The internal padding of buttons can be retrieved and changed per button box
+ * using gtk_button_box_get_child_ipadding() and
+ * gtk_button_box_set_child_ipadding() respectively.
+ *
+ * gtk_button_box_get_spacing() and gtk_button_box_set_spacing() retrieve and
+ * change default number of pixels between buttons, respectively.
+ *
+ * gtk_button_box_get_layout() and gtk_button_box_set_layout() retrieve and
+ * alter the method used to spread the buttons in a button box across the
+ * container, respectively.
+ *
+ * The main purpose of GtkButtonBox is to make sure the children have all the
+ * same size. Therefore it ignores the homogeneous property which it inherited
+ * from GtkBox, and always behaves as if homogeneous was %TRUE.
+ */
+
 #include "config.h"
 #include "gtkbbox.h"
 #include "gtkhbbox.h"
@@ -236,6 +264,21 @@ gtk_button_box_get_child_property (GtkContainer *container,
 
 /* set per widget values for spacing, child size and child internal padding */
 
+/**
+ * gtk_button_box_set_child_size:
+ * @widget: a #GtkButtonBox
+ * @min_width: a default width for buttons in @widget
+ * @min_height: a default height for buttons in @widget
+ *
+ * Sets a new default size for the children of a given button box.
+ *
+ * Deprecated: This is not supported anymore and can only be set through the
+ * theme changing the style properties:
+ *  "<link linkend="GtkButtonBox--s-child-min-width">child-min-width</link>"
+ *  and
+ *  "<link linkend="GtkButtonBox--s-child-min-height">child-min-height</link>"
+ *  instead.
+ */
 void 
 gtk_button_box_set_child_size (GtkButtonBox *widget, 
                                gint width, gint height)
@@ -246,6 +289,18 @@ gtk_button_box_set_child_size (GtkButtonBox *widget,
   widget->child_min_height = height;
 }
 
+/**
+ * gtk_button_box_set_child_ipadding:
+ * @widget: a #GtkButtonBox
+ * @ipad_x: the horizontal padding that should be used by each button in @widget
+ * @ipad_y: the vertical padding that should be used by each button in @widget
+ *
+ * Changes the amount of internal padding used by all buttons in a given button
+ * box.
+ *
+ * Deprecated: Use the style properties
+ *  <literal>"child-internal-pad-x/-y"</literal> instead.
+ */
 void 
 gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
                                    gint ipad_x, gint ipad_y)
@@ -256,6 +311,13 @@ gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
   widget->child_ipad_y = ipad_y;
 }
 
+/**
+ * gtk_button_box_set_layout:
+ * @widget: a #GtkButtonBox
+ * @layout_style: the new layout style
+ *
+ * Changes the way buttons are arranged in their container.
+ */
 void
 gtk_button_box_set_layout (GtkButtonBox      *widget, 
                            GtkButtonBoxStyle  layout_style)
@@ -275,6 +337,18 @@ gtk_button_box_set_layout (GtkButtonBox      *widget,
 
 /* get per widget values for spacing, child size and child internal padding */
 
+/**
+ * gtk_button_box_get_child_size:
+ * @widget: a #GtkButtonBox
+ * @min_width: the width of the buttons contained by @widget
+ * @min_height: the height of the buttons contained by @widget
+ *
+ * Retrieves the current width and height of all child widgets in a button box.
+ * @min_width and @min_height are filled with those values, respectively.
+ *
+ * Deprecated: Use the style properties
+ *  <literal>"child-min-width/-height"</literal> instead.
+ */
 void 
 gtk_button_box_get_child_size (GtkButtonBox *widget,
                                gint *width, gint *height)
@@ -287,6 +361,20 @@ gtk_button_box_get_child_size (GtkButtonBox *widget,
   *height = widget->child_min_height;
 }
 
+/**
+ * gtk_button_box_get_child_ipadding:
+ * @widget: a #GtkButtonBox
+ * @ipad_x: the horizontal padding used by buttons in @widget
+ * @ipad_y: the vertical padding used by buttons in @widget
+ *
+ * Gets the default number of pixels that pad the buttons in a given button box.
+ *
+ * Deprecated: Use the style properties
+ *  "<link linkend="GtkButtonBox--s-child-internal-pad-x">child-internal-pad-x</link>"
+ *  and
+ *  "<link linkend="GtkButtonBox--s-child-internal-pad-y">child-internal-pad-y</link>"
+ *  instead.
+ */
 void
 gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
                                    gint* ipad_x, gint *ipad_y)
@@ -299,6 +387,14 @@ gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
   *ipad_y = widget->child_ipad_y;
 }
 
+/**
+ * gtk_button_box_get_layout:
+ * @widget: a #GtkButtonBox
+ *
+ * Retrieves the method being used to arrange the buttons in a button box.
+ *
+ * Returns: the method used to layout buttons in @widget.
+ */
 GtkButtonBoxStyle 
 gtk_button_box_get_layout (GtkButtonBox *widget)
 {
