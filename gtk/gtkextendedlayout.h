@@ -45,43 +45,43 @@ struct _GtkExtendedLayoutIface
   gboolean  (* is_height_for_width)  (GtkExtendedLayout  *layout);
 
   void      (* get_desired_width)    (GtkExtendedLayout  *layout,
-				      gint               *minimum_width,
-				      gint               *natural_width);
+                                      gint               *minimum_width,
+                                      gint               *natural_width);
   void      (* get_desired_height)   (GtkExtendedLayout  *layout,
-				      gint               *minimum_height,
-				      gint               *natural_height);
+                                      gint               *minimum_height,
+                                      gint               *natural_height);
   void      (* get_width_for_height) (GtkExtendedLayout  *layout,
-				      gint                height,
-				      gint               *minimum_width,
-				      gint               *natural_width);
+                                      gint                height,
+                                      gint               *minimum_width,
+                                      gint               *natural_width);
   void      (* get_height_for_width) (GtkExtendedLayout  *layout,
-				      gint                width,
-				      gint               *minimum_height,
-				      gint               *natural_height);
+                                      gint                width,
+                                      gint               *minimum_height,
+                                      gint               *natural_height);
 };
 
 GType     gtk_extended_layout_get_type             (void) G_GNUC_CONST;
 
 gboolean  gtk_extended_layout_is_height_for_width  (GtkExtendedLayout *layout);
 void      gtk_extended_layout_get_desired_width    (GtkExtendedLayout *layout,
-						    gint              *minimum_width,
-						    gint              *natural_width);
+                                                    gint              *minimum_width,
+                                                    gint              *natural_width);
 void      gtk_extended_layout_get_desired_height   (GtkExtendedLayout *layout,
-						    gint              *minimum_height,
-						    gint              *natural_height);
+                                                    gint              *minimum_height,
+                                                    gint              *natural_height);
 void      gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
-						    gint               height,
-						    gint              *minimum_width,
-						    gint              *natural_width);
+                                                    gint               height,
+                                                    gint              *minimum_width,
+                                                    gint              *natural_width);
 void      gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
-						    gint               width,
-						    gint              *minimum_height,
-						    gint              *natural_height);
+                                                    gint               width,
+                                                    gint              *minimum_height,
+                                                    gint              *natural_height);
 
 void      gtk_extended_layout_get_desired_size     (GtkExtendedLayout *layout,
-						    gboolean           request_natural,
-						    GtkRequisition    *minimum_size,
-						    GtkRequisition    *natural_size);
+                                                    gboolean           request_natural,
+                                                    GtkRequisition    *minimum_size,
+                                                    GtkRequisition    *natural_size);
 
 
 G_END_DECLS
