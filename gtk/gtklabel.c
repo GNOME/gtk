@@ -656,7 +656,7 @@ gtk_label_class_init (GtkLabelClass *class)
   g_object_class_install_property (gobject_class,
 				   PROP_ELLIPSIZE,
                                    g_param_spec_enum ("ellipsize",
-                                                      >P_("Ellipsize"),
+                                                      P_("Ellipsize"),
                                                       P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
