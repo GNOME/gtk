@@ -74,7 +74,6 @@ gdk_extension_mode_get_type
 gdk_fill_get_type
 gdk_fill_rule_get_type
 gdk_filter_return_get_type
-gdk_font_type_get_type
 gdk_function_get_type
 gdk_gc_values_mask_get_type
 gdk_grab_ownership_get_type
@@ -392,28 +391,6 @@ GDK_TYPE_COLOR
 GdkColormapClass
 gdk_colormap_get_type
 gdk_color_get_type
-</SECTION>
-
-<SECTION>
-<TITLE>Fonts</TITLE>
-<FILE>fonts</FILE>
-GdkFont
-GdkFontType
-gdk_font_load
-gdk_fontset_load
-gdk_fontset_load_for_display
-gdk_font_get_display
-gdk_font_ref
-gdk_font_unref
-gdk_font_id
-gdk_font_equal
-
-<SUBSECTION Standard>
-GDK_TYPE_FONT
-GDK_TYPE_FONT_TYPE
-
-<SUBSECTION Private>
-gdk_font_get_type
 </SECTION>
 
 <SECTION>

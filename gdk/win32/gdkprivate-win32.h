@@ -120,7 +120,6 @@ GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
 typedef struct _GdkCursorPrivate        GdkCursorPrivate;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
-typedef struct _GdkFontPrivateWin32     GdkFontPrivateWin32;
 typedef struct _GdkGCWin32		GdkGCWin32;
 typedef struct _GdkGCWin32Class		GdkGCWin32Class;
 
@@ -137,17 +136,6 @@ struct _GdkWin32SingleFont
   UINT codepage;
   FONTSIGNATURE fs;
 };
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-struct _GdkFontPrivateWin32
-{
-  GdkFontPrivate base;
-  GSList *fonts;		/* List of GdkWin32SingleFonts */
-  GSList *names;
-};
-
-#endif /* GDK_DISABLE_DEPRECATED */
 
 struct _GdkVisualClass
 {
@@ -291,15 +279,6 @@ void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
 void    _gdk_selection_property_delete (GdkWindow *);
 
 void    _gdk_dropfiles_store (gchar *data);
-
-void    _gdk_wchar_text_handle    (GdkFont       *font,
-				   const wchar_t *wcstr,
-				   int            wclen,
-				   void         (*handler)(GdkWin32SingleFont *,
-							   const wchar_t *,
-							   int,
-							   void *),
-				   void          *arg);
 
 void       _gdk_push_modal_window   (GdkWindow *window);
 void       _gdk_remove_modal_window (GdkWindow *window);

@@ -89,18 +89,6 @@ typedef enum {
   GDK_DEBUG_EVENTLOOP     = 1 <<15
 } GdkDebugFlag;
 
-#ifndef GDK_DISABLE_DEPRECATED
-
-typedef struct _GdkFontPrivate	       GdkFontPrivate;
-
-struct _GdkFontPrivate
-{
-  GdkFont font;
-  guint ref_count;
-};
-
-#endif /* GDK_DISABLE_DEPRECATED */
-
 extern GList            *_gdk_default_filters;
 extern GdkWindow  	*_gdk_parent_root;
 extern gint		 _gdk_error_code;
@@ -452,8 +440,6 @@ void         _gdk_drawable_end_direct_draw (gpointer priv_data);
  *****************************************/
 
 /* Font/string functions implemented in module-specific code */
-gint _gdk_font_strlen (GdkFont *font, const char *str);
-void _gdk_font_destroy (GdkFont *font);
 
 void _gdk_colormap_real_destroy (GdkColormap *colormap);
 

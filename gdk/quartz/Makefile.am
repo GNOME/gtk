@@ -32,7 +32,6 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkdrawable-quartz.h	\
 	gdkevents-quartz.c	\
 	gdkeventloop-quartz.c	\
-	gdkfont-quartz.c	\
 	gdkgc-quartz.c		\
 	gdkgeometry-quartz.c	\
 	gdkglobals-quartz.c	\

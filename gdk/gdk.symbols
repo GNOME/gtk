@@ -279,7 +279,6 @@ gdk_subwindow_mode_get_type G_GNUC_CONST
 gdk_visibility_state_get_type G_GNUC_CONST
 gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
-gdk_font_type_get_type G_GNUC_CONST
 gdk_cursor_type_get_type G_GNUC_CONST
 gdk_drag_action_get_type G_GNUC_CONST
 gdk_gc_values_mask_get_type G_GNUC_CONST
@@ -292,26 +291,6 @@ gdk_window_type_get_type G_GNUC_CONST
 gdk_window_type_hint_get_type G_GNUC_CONST
 gdk_image_type_get_type G_GNUC_CONST
 gdk_visual_type_get_type G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_FONT_H__)
-#if IN_FILE(__GDK_FONT_C__)
-gdk_font_get_type G_GNUC_CONST
-gdk_font_ref
-gdk_font_unref
-#endif
-#endif
-
-#if IN_HEADER(__GDK_FONT_H__)
-#if IN_FILE(__GDK_FONT_X11_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_font_get_display
-gdk_fontset_load
-#endif
-gdk_font_id
-gdk_font_equal
-gdk_fontset_load_for_display
 #endif
 #endif
 

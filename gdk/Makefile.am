@@ -82,7 +82,6 @@ gdk_public_h_sources =				\
 	gdkdnd.h				\
 	gdkdrawable.h				\
 	gdkevents.h				\
-	gdkfont.h				\
 	gdkgc.h					\
 	gdkimage.h				\
 	gdkinput.h				\
@@ -130,7 +129,6 @@ gdk_c_sources =                 \
 	gdkdnd.c		\
 	gdkdraw.c		\
 	gdkevents.c     	\
-	gdkfont.c		\
 	gdkgc.c			\
 	gdkglobals.c		\
 	gdkimage.c		\
