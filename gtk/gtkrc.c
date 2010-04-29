@@ -1334,6 +1334,34 @@ _gtk_rc_style_get_color_hashes (GtkRcStyle *rc_style)
   return priv->color_hashes;
 }
 
+static void gtk_rc_style_prepend_empty_color_hash (GtkRcStyle *rc_style);
+
+void
+_gtk_rc_style_set_symbolic_color (GtkRcStyle     *rc_style,
+                                  const gchar    *name,
+                                  const GdkColor *color)
+{
+  GtkRcStylePrivate *priv = GTK_RC_STYLE_GET_PRIVATE (rc_style);
+  GHashTable *our_hash = NULL;
+
+  if (priv->color_hashes)
+    our_hash = priv->color_hashes->data;
+
+  if (our_hash == NULL)
+    {
+      if (color == NULL)
+        return;
+
+      gtk_rc_style_prepend_empty_color_hash (rc_style);
+      our_hash = priv->color_hashes->data;
+    }
+
+  if (color)
+    g_hash_table_insert (our_hash, g_strdup (name), gdk_color_copy (color));
+  else
+    g_hash_table_remove (our_hash, name);
+}
+
 static gint
 gtk_rc_properties_cmp (gconstpointer bsearch_node1,
 		       gconstpointer bsearch_node2)

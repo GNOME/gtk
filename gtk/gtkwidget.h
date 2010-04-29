@@ -1156,6 +1156,9 @@ void        gtk_widget_modify_cursor      (GtkWidget            *widget,
 					   const GdkColor       *secondary);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
+void        gtk_widget_modify_symbolic_color (GtkWidget         *widget,
+                                           const gchar          *name,
+                                           const GdkColor       *color);
 
 #ifndef GTK_DISABLE_DEPRECATED
 

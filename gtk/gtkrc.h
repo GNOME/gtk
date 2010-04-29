@@ -263,6 +263,10 @@ void	      _gtk_rc_style_unset_rc_property	      (GtkRcStyle *rc_style,
 
 GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
 
+void         _gtk_rc_style_set_symbolic_color       (GtkRcStyle     *rc_style,
+                                                     const gchar    *name,
+                                                     const GdkColor *color);
+
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
 void         _gtk_rc_context_destroy               (GtkSettings *settings);
 

@@ -6684,6 +6684,32 @@ gtk_widget_modify_color_component (GtkWidget      *widget,
 }
 
 /**
+ * gtk_widget_modify_symbolic_color:
+ * @widget: a #GtkWidget
+ * @name: the name of the symbolic color to modify
+ * @color: (allow-none): the color to assign (does not need to be allocated),
+ *         or %NULL to undo the effect of previous calls to
+ *         of gtk_widget_modify_symbolic_color().
+ *
+ * Sets a symbolic color for a widget.
+ * All other style values are left untouched. See also
+ * gtk_widget_modify_style().
+ *
+ * Since: 2.22
+ **/
+void
+gtk_widget_modify_symbolic_color (GtkWidget      *widget,
+                                  const gchar    *name,
+                                  const GdkColor *color)
+{
+  GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);
+
+  _gtk_rc_style_set_symbolic_color (rc_style, name, color);
+
+  gtk_widget_modify_style (widget, rc_style);
+}
+
+/**
  * gtk_widget_modify_fg:
  * @widget: a #GtkWidget
  * @state: the state for which to set the foreground color
