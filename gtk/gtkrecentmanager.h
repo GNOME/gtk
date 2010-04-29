@@ -218,6 +218,7 @@ gboolean              gtk_recent_info_has_group            (GtkRecentInfo  *info
 							    const gchar    *group_name);
 GdkPixbuf *           gtk_recent_info_get_icon             (GtkRecentInfo  *info,
 							    gint            size);
+GIcon *               gtk_recent_info_get_gicon            (GtkRecentInfo  *info);
 gchar *               gtk_recent_info_get_short_name       (GtkRecentInfo  *info) G_GNUC_MALLOC;
 gchar *               gtk_recent_info_get_uri_display      (GtkRecentInfo  *info) G_GNUC_MALLOC;
 gint                  gtk_recent_info_get_age              (GtkRecentInfo  *info);

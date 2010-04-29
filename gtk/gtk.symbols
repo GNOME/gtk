@@ -2797,6 +2797,7 @@ gtk_recent_info_create_app_info
 gtk_recent_info_get_groups G_GNUC_MALLOC
 gtk_recent_info_has_group
 gtk_recent_info_get_icon
+gtk_recent_info_get_gicon
 gtk_recent_info_get_short_name G_GNUC_MALLOC
 gtk_recent_info_get_uri_display G_GNUC_MALLOC
 gtk_recent_info_get_age

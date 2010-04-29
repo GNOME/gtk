@@ -1927,6 +1927,35 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
 }
 
 /**
+ * gtk_recent_info_get_gicon:
+ * @info: a #GtkRecentInfo
+ *
+ * Retrieves the icon associated to the resource MIME type.
+ *
+ * Return value: a #GIcon containing the icon, or %NULL. Use
+ *   g_object_unref() when finished using the icon
+ *
+ * Since: 2.22
+ */
+GIcon *
+gtk_recent_info_get_gicon (GtkRecentInfo  *info)
+{
+  GIcon *icon = NULL;
+  gchar *content_type;
+
+  g_return_val_if_fail (info != NULL, NULL);
+
+  if (info->mime_type != NULL &&
+      (content_type = g_content_type_from_mime_type (info->mime_type)) != NULL)
+    {
+      icon = g_content_type_get_icon (content_type);
+      g_free (content_type);
+    }
+
+  return icon;
+}
+
+/**
  * gtk_recent_info_is_local:
  * @info: a #GtkRecentInfo
  *
