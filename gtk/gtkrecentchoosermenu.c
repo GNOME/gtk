@@ -78,9 +78,6 @@ struct _GtkRecentChooserMenuPrivate
   /* the recent manager object */
   GtkRecentManager *manager;
   
-  /* size of the icons of the menu items */  
-  gint icon_size;
-
   /* max size of the menu item label */
   gint label_width;
 
@@ -121,7 +118,6 @@ enum {
 };
 
 
-#define FALLBACK_ICON_SIZE 	32
 #define FALLBACK_ITEM_LIMIT 	10
 #define DEFAULT_LABEL_WIDTH     30
 
@@ -177,8 +173,6 @@ static void     set_recent_manager (GtkRecentChooserMenu *menu,
 
 static void     chooser_set_sort_type (GtkRecentChooserMenu *menu,
 				       GtkRecentSortType     sort_type);
-
-static gint     get_icon_size_for_widget (GtkWidget *widget);
 
 static void     item_activate_cb   (GtkWidget        *widget,
 			            gpointer          user_data);
@@ -281,7 +275,6 @@ gtk_recent_chooser_menu_init (GtkRecentChooserMenu *menu)
   
   priv->limit = FALLBACK_ITEM_LIMIT;
   priv->sort_type = GTK_RECENT_SORT_NONE;
-  priv->icon_size = FALLBACK_ICON_SIZE;
   priv->label_width = DEFAULT_LABEL_WIDTH;
   
   priv->first_recent_item_pos = -1;
@@ -817,7 +810,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   GtkRecentChooserMenuPrivate *priv;
   gchar *text;
   GtkWidget *item, *image, *label;
-  GdkPixbuf *icon;
+  GIcon *icon;
 
   g_assert (info != NULL);
 
@@ -875,11 +868,13 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   
   if (priv->show_icons)
     {
-      icon = gtk_recent_info_get_icon (info, priv->icon_size);
-        
-      image = gtk_image_new_from_pixbuf (icon);
+      icon = gtk_recent_info_get_gicon (info);
+
+      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-      g_object_unref (icon);
+      gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+      if (icon)
+        g_object_unref (icon);
     }
 
   g_signal_connect (item, "activate",
@@ -1085,8 +1080,6 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
   pdata->menu = menu;
   pdata->placeholder = g_object_ref (priv->placeholder);
 
-  priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));
-  
   /* remove our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
   
@@ -1150,24 +1143,6 @@ set_recent_manager (GtkRecentChooserMenu *menu,
     priv->manager_changed_id = g_signal_connect (priv->manager, "changed",
                                                  G_CALLBACK (manager_changed_cb),
                                                  menu);
-}
-
-static gint
-get_icon_size_for_widget (GtkWidget *widget)
-{
-  GtkSettings *settings;
-  gint width, height;
-
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-  else
-    settings = gtk_settings_get_default ();
-
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
-                                         &width, &height))
-    return MAX (width, height);
-
-  return FALLBACK_ICON_SIZE;
 }
 
 static void
