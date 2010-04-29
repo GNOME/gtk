@@ -170,6 +170,10 @@ static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 						  GdkScreen      *old_screen);
 static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_fg_changed       (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_color_changed    (GtkTrayIcon   *tray,
+                                                  GParamSpec    *pspec,
+                                                  GtkStatusIcon *status_icon);
 static gboolean gtk_status_icon_scroll           (GtkStatusIcon  *status_icon,
 						  GdkEventScroll *event);
 static gboolean gtk_status_icon_query_tooltip    (GtkStatusIcon *status_icon,
@@ -827,7 +831,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   priv = G_TYPE_INSTANCE_GET_PRIVATE (status_icon, GTK_TYPE_STATUS_ICON,
 				      GtkStatusIconPrivate);
   status_icon->priv = priv;
-  
+
   priv->storage_type = GTK_IMAGE_EMPTY;
   priv->visible      = TRUE;
 
@@ -850,6 +854,14 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 			    G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
 			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "notify::fg-color",
+                            G_CALLBACK (gtk_status_icon_fg_changed), status_icon);
+  g_signal_connect (priv->tray_icon, "notify::error-color",
+                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
+  g_signal_connect (priv->tray_icon, "notify::warning-color",
+                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
+  g_signal_connect (priv->tray_icon, "notify::success-color",
+                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "button-press-event",
 			    G_CALLBACK (gtk_status_icon_button_press), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "button-release-event",
@@ -974,6 +986,10 @@ gtk_status_icon_finalize (GObject *object)
 			                gtk_status_icon_embedded_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
 			                gtk_status_icon_orientation_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                        gtk_status_icon_fg_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                        gtk_status_icon_color_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
 			                gtk_status_icon_button_press, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
@@ -1688,6 +1704,48 @@ static void
 gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon)
 {
   g_object_notify (G_OBJECT (status_icon), "orientation");
+}
+
+static void
+gtk_status_icon_fg_changed (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv = status_icon->priv;
+  GdkColor color;
+
+  g_object_get (priv->tray_icon, "fg-color", &color, NULL);
+  gtk_widget_modify_fg (priv->image, GTK_STATE_NORMAL, &color);
+}
+
+static void
+gtk_status_icon_color_changed (GtkTrayIcon   *tray,
+                               GParamSpec    *pspec,
+                               GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv = status_icon->priv;
+  const gchar *name;
+  GdkColor color;
+
+  switch (pspec->name[0])
+    {
+    case 'e':
+      name = "error";
+      break;
+    case 'w':
+      name = "warning";
+      break;
+    case 's':
+      name = "success";
+      break;
+    default:
+      name = NULL;
+      break;
+    }
+
+  if (name)
+    {
+      g_object_get (priv->tray_icon, pspec->name, &color, NULL);
+      gtk_widget_modify_symbolic_color (priv->image, name, &color);
+    }
 }
 
 static gboolean
