@@ -323,7 +323,7 @@
  * 	</variablelist>
  * <note>
  *    You can create your own bindings for the
- *    GtkFileChooserDefault::location-popup signal with custom
+ *    #GtkFileChooserDefault::location-popup signal with custom
  *    <parameter>path</parameter> strings, and have a crude form
  *    of easily-to-type bookmarks.  For example, say you access
  *    the path <filename>/home/username/misc</filename> very
@@ -504,7 +504,11 @@
  * 	    </listitem>
  * 	  </varlistentry>
  * 	  <varlistentry>
+<<<<<<< HEAD
  * 	    <term><parameter>bookmark_indes</parameter>&nbsp;:</term>
+=======
+ * 	    <term><parameter>bookmark_index</parameter>&nbsp;:</term>
+>>>>>>> native-layout-incubator
  * 	    <listitem>
  * 	      <simpara>
  * 		index of the bookmark to switch to; the indices start at 0.

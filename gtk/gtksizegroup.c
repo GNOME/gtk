@@ -25,6 +25,7 @@
 #include "gtkprivate.h"
 #include "gtksizegroup.h"
 #include "gtkbuildable.h"
+#include "gtkextendedlayout.h"
 #include "gtkalias.h"
 
 enum {
@@ -71,6 +72,9 @@ static const gchar size_groups_tag[] = "gtk-size-groups";
 static GQuark visited_quark;
 static const gchar visited_tag[] = "gtk-size-group-visited";
 
+static GQuark bumping_quark;
+static const gchar bumping_tag[] = "gtk-size-group-bumping";
+
 static GSList *
 get_size_groups (GtkWidget *widget)
 {
@@ -100,6 +104,18 @@ static gboolean
 is_visited (gpointer object)
 {
   return g_object_get_qdata (object, visited_quark) != NULL;
+}
+
+static void
+mark_bumping (gpointer object, gboolean bumping)
+{
+  g_object_set_qdata (object, bumping_quark, bumping ? "bumping" : NULL);
+}
+
+static gboolean
+is_bumping (gpointer object)
+{
+  return g_object_get_qdata (object, bumping_quark) != NULL;
 }
 
 static void
@@ -154,6 +170,8 @@ real_queue_resize (GtkWidget *widget)
 {
   GTK_PRIVATE_SET_FLAG (widget, GTK_ALLOC_NEEDED);
   GTK_PRIVATE_SET_FLAG (widget, GTK_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_WIDTH_REQUEST_NEEDED);
+  GTK_PRIVATE_SET_FLAG (widget, GTK_HEIGHT_REQUEST_NEEDED);
   
   if (widget->parent)
     _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
@@ -284,6 +302,7 @@ initialize_size_group_quarks (void)
     {
       size_groups_quark = g_quark_from_static_string (size_groups_tag);
       visited_quark = g_quark_from_static_string (visited_tag);
+      bumping_quark = g_quark_from_static_string (bumping_tag);
     }
 }
 
@@ -607,42 +626,35 @@ get_base_dimension (GtkWidget        *widget,
       if (aux_info && aux_info->width > 0)
 	return aux_info->width;
       else
-	return widget->requisition.width;
+	{
+	  /* XXX Possibly we should be using natural values and not minimums here. */
+	  gint width;
+
+	  gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (widget), &width, NULL);
+
+	  return width;
+	}
     }
   else
     {
       if (aux_info && aux_info->height > 0)
 	return aux_info->height;
       else
-	return widget->requisition.height;
+	{
+	  /* XXX Possibly we should be using natural values and not minimums here. */
+	  gint height;
+
+	  gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (widget), &height, NULL);
+
+	  return height;
+	}
     }
-}
-
-static void
-do_size_request (GtkWidget *widget)
-{
-  if (GTK_WIDGET_REQUEST_NEEDED (widget))
-    {
-      gtk_widget_ensure_style (widget);      
-      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REQUEST_NEEDED);
-      g_signal_emit_by_name (widget,
-			     "size-request",
-			     &widget->requisition);
-    }
-}
-
-static gint
-compute_base_dimension (GtkWidget        *widget,
-			GtkSizeGroupMode  mode)
-{
-  do_size_request (widget);
-
-  return get_base_dimension (widget, mode);
 }
 
 static gint
 compute_dimension (GtkWidget        *widget,
-		   GtkSizeGroupMode  mode)
+		   GtkSizeGroupMode  mode,
+		   gint              widget_requisition)
 {
   GSList *widgets = NULL;
   GSList *groups = NULL;
@@ -658,7 +670,7 @@ compute_dimension (GtkWidget        *widget,
   
   if (!groups)
     {
-      result = compute_base_dimension (widget, mode);
+      result = widget_requisition;
     }
   else
     {
@@ -674,8 +686,12 @@ compute_dimension (GtkWidget        *widget,
 	  while (tmp_list)
 	    {
 	      GtkWidget *tmp_widget = tmp_list->data;
+	      gint dimension;
 
-	      gint dimension = compute_base_dimension (tmp_widget, mode);
+	      if (tmp_widget == widget)
+		dimension = widget_requisition;
+	      else
+		dimension = get_base_dimension (tmp_widget, mode);
 
 	      if (gtk_widget_get_mapped (tmp_widget) || !group->ignore_hidden)
 		{
@@ -715,122 +731,58 @@ compute_dimension (GtkWidget        *widget,
   return result;
 }
 
-static gint
-get_dimension (GtkWidget        *widget,
-	       GtkSizeGroupMode  mode)
+/**
+ * _gtk_size_group_bump_requisition:
+ * @widget: a #GtkWidget
+ * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
+ *        on the dimension in which to bump the size.
+ *
+ * Refreshes the sizegroup while returning the groups requested
+ * value in the dimension @mode.
+ *
+ * This function is used to update sizegroup minimum size information
+ * in multiple passes from the new #GtkExtendedLayout manager.
+ */
+gint
+_gtk_size_group_bump_requisition (GtkWidget        *widget,
+				  GtkSizeGroupMode  mode,
+				  gint              widget_requisition)
 {
-  GSList *widgets = NULL;
-  GSList *groups = NULL;
-  gint result = 0;
+  gint result = widget_requisition;
 
-  add_widget_to_closure (widget, mode, &groups, &widgets);
-
-  g_slist_foreach (widgets, (GFunc)mark_unvisited, NULL);
-  g_slist_foreach (groups, (GFunc)mark_unvisited, NULL);  
-
-  if (!groups)
+  if (!is_bumping (widget))
     {
-      result = get_base_dimension (widget, mode);
+      GtkWidgetAuxInfo *aux_info = 
+	_gtk_widget_get_aux_info (widget, FALSE);
+
+      /* Avoid recursion here */
+      mark_bumping (widget, TRUE);
+
+      if (get_size_groups (widget))
+	{
+	  if (aux_info)
+	    {
+	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+		result = compute_dimension (widget, mode, MAX (aux_info->width, widget_requisition));
+	      else 
+		result = compute_dimension (widget, mode, MAX (aux_info->height, widget_requisition));
+	    }
+	  else
+	    result = compute_dimension (widget, mode, widget_requisition);
+	}
+      else if (aux_info)
+	{
+	  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
+	    result = MAX (aux_info->width, widget_requisition);
+	  else 
+	    result = MAX (aux_info->height, widget_requisition);
+	}
+      mark_bumping (widget, FALSE);
     }
-  else
-    {
-      GtkSizeGroup *group = groups->data;
-
-      if (mode == GTK_SIZE_GROUP_HORIZONTAL && group->have_width)
-	result = group->requisition.width;
-      else if (mode == GTK_SIZE_GROUP_VERTICAL && group->have_height)
-	result = group->requisition.height;
-    }
-
-  g_slist_free (widgets);
-  g_slist_free (groups);
-
   return result;
 }
 
-static void
-get_fast_child_requisition (GtkWidget      *widget,
-			    GtkRequisition *requisition)
-{
-  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
-  
-  *requisition = widget->requisition;
-  
-  if (aux_info)
-    {
-      if (aux_info->width > 0)
-	requisition->width = aux_info->width;
-      if (aux_info && aux_info->height > 0)
-	requisition->height = aux_info->height;
-    }
-}
 
-/**
- * _gtk_size_group_get_child_requisition:
- * @widget: a #GtkWidget
- * @requisition: location to store computed requisition.
- * 
- * Retrieve the "child requisition" of the widget, taking account grouping
- * of the widget's requisition with other widgets.
- **/
-void
-_gtk_size_group_get_child_requisition (GtkWidget      *widget,
-				       GtkRequisition *requisition)
-{
-  initialize_size_group_quarks ();
-
-  if (requisition)
-    {
-      if (get_size_groups (widget))
-	{
-	  requisition->width = get_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL);
-	  requisition->height = get_dimension (widget, GTK_SIZE_GROUP_VERTICAL);
-
-	  /* Only do the full computation if we actually have size groups */
-	}
-      else
-	get_fast_child_requisition (widget, requisition);
-    }
-}
-
-/**
- * _gtk_size_group_compute_requisition:
- * @widget: a #GtkWidget
- * @requisition: location to store computed requisition.
- * 
- * Compute the requisition of a widget taking into account grouping of
- * the widget's requisition with other widgets.
- **/
-void
-_gtk_size_group_compute_requisition (GtkWidget      *widget,
-				     GtkRequisition *requisition)
-{
-  gint width;
-  gint height;
-
-  initialize_size_group_quarks ();
-
-  if (get_size_groups (widget))
-    {
-      /* Only do the full computation if we actually have size groups */
-      
-      width = compute_dimension (widget, GTK_SIZE_GROUP_HORIZONTAL);
-      height = compute_dimension (widget, GTK_SIZE_GROUP_VERTICAL);
-
-      if (requisition)
-	{
-	  requisition->width = width;
-	  requisition->height = height;
-	}
-    }
-  else
-    {
-      do_size_request (widget);
-      
-      if (requisition)
-	get_fast_child_requisition (widget, requisition);
-    }
-}
 
 /**
  * _gtk_size_group_queue_resize:

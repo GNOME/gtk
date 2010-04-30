@@ -48,6 +48,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
+#include "gtkextendedlayout.h"
 #include "gtkalias.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -207,8 +208,6 @@ static void gtk_window_map                (GtkWidget         *widget);
 static void gtk_window_unmap              (GtkWidget         *widget);
 static void gtk_window_realize            (GtkWidget         *widget);
 static void gtk_window_unrealize          (GtkWidget         *widget);
-static void gtk_window_size_request       (GtkWidget         *widget,
-					   GtkRequisition    *requisition);
 static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
 static gint gtk_window_event              (GtkWidget *widget,
@@ -350,9 +349,19 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 
+static void gtk_window_extended_layout_init      (GtkExtendedLayoutIface *iface);
+static void gtk_window_get_desired_width         (GtkExtendedLayout      *layout,
+						  gint                   *minimum_size,
+						  gint                   *natural_size);
+static void gtk_window_get_desired_height        (GtkExtendedLayout      *layout,
+						  gint                   *minimum_size,
+						  gint                   *natural_size);
+
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_window_buildable_interface_init))
+						gtk_window_buildable_interface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+						gtk_window_extended_layout_init))
 
 static void
 add_tab_bindings (GtkBindingSet    *binding_set,
@@ -451,7 +460,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->unmap = gtk_window_unmap;
   widget_class->realize = gtk_window_realize;
   widget_class->unrealize = gtk_window_unrealize;
-  widget_class->size_request = gtk_window_size_request;
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->configure_event = gtk_window_configure_event;
   widget_class->key_press_event = gtk_window_key_press_event;
@@ -4934,30 +4942,6 @@ gtk_window_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_window_size_request (GtkWidget      *widget,
-			 GtkRequisition *requisition)
-{
-  GtkWindow *window;
-  GtkBin *bin;
-
-  window = GTK_WINDOW (widget);
-  bin = GTK_BIN (window);
-  
-  requisition->width = GTK_CONTAINER (window)->border_width * 2;
-  requisition->height = GTK_CONTAINER (window)->border_width * 2;
-
-  if (bin->child && gtk_widget_get_visible (bin->child))
-    {
-      GtkRequisition child_requisition;
-      
-      gtk_widget_size_request (bin->child, &child_requisition);
-
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-    }
-}
-
-static void
 gtk_window_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
@@ -5545,6 +5529,64 @@ gtk_window_real_set_focus (GtkWindow *window,
       g_object_unref (focus);
     }
 }
+
+
+static void
+gtk_window_extended_layout_init (GtkExtendedLayoutIface *iface)
+{
+  iface->get_desired_width  = gtk_window_get_desired_width;
+  iface->get_desired_height = gtk_window_get_desired_height;
+}
+
+
+static void 
+gtk_window_get_desired_width (GtkExtendedLayout      *layout,
+			      gint                   *minimum_size,
+			      gint                   *natural_size)
+{
+  GtkWindow *window;
+  GtkWidget *child;
+
+  window = GTK_WINDOW (layout);
+  child  = gtk_bin_get_child (GTK_BIN (window));
+  
+  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
+  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+      gtk_extended_layout_get_desired_width (GTK_EXTENDED_LAYOUT (child), &child_min, &child_nat);
+
+      *minimum_size += child_min;
+      *natural_size += child_nat;
+    }
+}
+
+static void 
+gtk_window_get_desired_height (GtkExtendedLayout      *layout,
+			       gint                   *minimum_size,
+			       gint                   *natural_size)
+{
+  GtkWindow *window;
+  GtkWidget *child;
+
+  window = GTK_WINDOW (layout);
+  child  = gtk_bin_get_child (GTK_BIN (window));
+  
+  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
+  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+      gtk_extended_layout_get_desired_height (GTK_EXTENDED_LAYOUT (child), &child_min, &child_nat);
+
+      *minimum_size += child_min;
+      *natural_size += child_nat;
+    }
+}
+
 
 /**
  * _gtk_window_unset_focus_and_default:

@@ -100,11 +100,12 @@ void             gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
 GSList *         gtk_size_group_get_widgets   (GtkSizeGroup     *size_group);
 
 
-void _gtk_size_group_get_child_requisition (GtkWidget      *widget,
-					    GtkRequisition *requisition);
-void _gtk_size_group_compute_requisition   (GtkWidget      *widget,
-					    GtkRequisition *requisition);
-void _gtk_size_group_queue_resize          (GtkWidget      *widget);
+
+gint _gtk_size_group_bump_requisition      (GtkWidget        *widget,
+					    GtkSizeGroupMode  mode,
+					    gint              widget_requisition);
+void _gtk_size_group_queue_resize          (GtkWidget        *widget);
+
 
 G_END_DECLS
 

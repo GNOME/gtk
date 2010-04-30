@@ -1504,6 +1504,17 @@ gtk_expander_set_use_underline
 #endif
 #endif
 
+#if IN_HEADER(__GTK_EXTENDED_LAYOUT_H__)
+#if IN_FILE(__GTK_EXTENDED_LAYOUT_C__)
+gtk_extended_layout_get_type G_GNUC_CONST
+gtk_extended_layout_get_desired_height
+gtk_extended_layout_get_desired_width
+gtk_extended_layout_get_height_for_width
+gtk_extended_layout_get_width_for_height
+gtk_extended_layout_is_height_for_width
+#endif
+#endif
+
 #if IN_HEADER(__GTK_FILE_CHOOSER_H__)
 #if IN_FILE(__GTK_FILE_CHOOSER_C__)
 gtk_file_chooser_add_filter

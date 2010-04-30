@@ -29,6 +29,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	simple				\
 	flicker				\
 	print-editor			\
+	extendedlayoutexample		\
 	testaccel			\
 	testassistant			\
 	testbbox			\
@@ -112,6 +113,7 @@ endif
 flicker_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
+extendedlayoutexample_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
@@ -176,6 +178,7 @@ testwindows_DEPENDENCIES = $(TEST_DEPS)
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
+extendedlayoutexample_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)

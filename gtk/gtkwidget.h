@@ -482,6 +482,7 @@ typedef struct _GtkClipboard	   GtkClipboard;
 typedef struct _GtkTooltip         GtkTooltip;
 typedef struct _GtkWindow          GtkWindow;
 
+
 /**
  * GtkAllocation:
  * @x: the X position of the widget's area relative to its parents allocation.
@@ -817,6 +818,7 @@ struct _GtkWidgetAuxInfo
   gint y;
   gint width;
   gint height;
+
   guint x_set : 1;
   guint y_set : 1;
 };

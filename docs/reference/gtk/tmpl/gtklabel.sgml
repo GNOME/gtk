@@ -141,7 +141,7 @@ the clipboard. Only labels that contain useful-to-copy information
 </para>
 </refsect2>
 
-<refsect2>
+<refsect2 id="label-text-layout">
 <title>Text layout</title>
 
 <para>
@@ -155,11 +155,23 @@ Labels can automatically wrap text if you call
 gtk_label_set_line_wrap().
 </para>
 <para>
-gtk_label_set_justify() sets how the lines in a label align 
-with one another. If you want to set how the label as a whole 
+gtk_label_set_justify() sets how the lines in a label align
+with one another. If you want to set how the label as a whole
 aligns in its available space, see gtk_misc_set_alignment().
 </para>
-
+<para>
+The #GtkLabel:width-chars and #GtkLabel:max-width-chars properties
+can be used to control the size allocation of ellipsized or wrapped
+labels. For ellipsizing labels, if either is specified (and less
+than the actual text size), it is used as the minimum width, and the actual
+text size is used as the natural width of the label. For wrapping labels,
+width-chars is used as the minimum width, if specified, and max-width-chars
+is used as the natural width. Even if max-width-chars specified, wrapping
+labels will be rewrapped to use all of the available width.
+</para>
+<note><para>Note that the interpretation of #GtkLabel:width-chars and
+#GtkLabel:max-width-chars has changed a bit with the introduction of
+width-for-height geometry management and #GtkExtendedLayout.</para></note>
 </refsect2>
 
 <refsect2>

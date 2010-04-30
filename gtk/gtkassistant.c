@@ -1167,13 +1167,14 @@ gtk_assistant_size_request (GtkWidget      *widget,
   requisition->height = height;
 }
 
+
 static void
 gtk_assistant_size_allocate (GtkWidget      *widget,
 			     GtkAllocation  *allocation)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
-  GtkRequisition header_requisition;
+  GtkRequisition header_requisition, action_requisition, sidebar_requisition;
   GtkAllocation child_allocation, header_allocation;
   gint header_padding, content_padding;
   gboolean rtl;
@@ -1200,24 +1201,28 @@ gtk_assistant_size_allocate (GtkWidget      *widget,
   gtk_widget_size_allocate (priv->header_image, &header_allocation);
 
   /* Action area */
+  gtk_widget_get_child_requisition (priv->action_area, &action_requisition);
+
   child_allocation.x = GTK_CONTAINER (widget)->border_width;
   child_allocation.y = allocation->height -
-    GTK_CONTAINER (widget)->border_width - priv->action_area->requisition.height;
+    GTK_CONTAINER (widget)->border_width - action_requisition.height;
   child_allocation.width  = allocation->width - 2 * GTK_CONTAINER (widget)->border_width;
-  child_allocation.height = priv->action_area->requisition.height;
+  child_allocation.height = action_requisition.height;
 
   gtk_widget_size_allocate (priv->action_area, &child_allocation);
 
   /* Sidebar */
+  gtk_widget_get_child_requisition (priv->sidebar_image, &sidebar_requisition);
+
   if (rtl)
     child_allocation.x = allocation->width -
-      GTK_CONTAINER (widget)->border_width - priv->sidebar_image->requisition.width;
+      GTK_CONTAINER (widget)->border_width - sidebar_requisition.width;
   else
     child_allocation.x = GTK_CONTAINER (widget)->border_width;
 
   child_allocation.y = GTK_CONTAINER (widget)->border_width +
     priv->header_image->allocation.height + 2 * header_padding;
-  child_allocation.width = priv->sidebar_image->requisition.width;
+  child_allocation.width = sidebar_requisition.width;
   child_allocation.height = allocation->height - 2 * GTK_CONTAINER (widget)->border_width -
     priv->header_image->allocation.height - 2 * header_padding - priv->action_area->allocation.height;
 

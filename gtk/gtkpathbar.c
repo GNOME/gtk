@@ -461,6 +461,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   gint border_width;
   gboolean need_sliders = FALSE;
   gint up_slider_offset = 0;
+  GtkRequisition child_requisition;
 
   widget->allocation = *allocation;
 
@@ -481,13 +482,15 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   if (path_bar->fake_root)
     width = path_bar->spacing + path_bar->slider_width;
   else
-      width = 0;
+    width = 0;
 
   for (list = path_bar->button_list; list; list = list->next)
     {
       child = BUTTON_DATA (list->data)->button;
 
-      width += child->requisition.width + path_bar->spacing;
+      gtk_widget_get_child_requisition (child, &child_requisition);
+
+      width += child_requisition.width + path_bar->spacing;
       if (list == path_bar->fake_root)
 	break;
     }
@@ -515,19 +518,23 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
        * button, then count backwards.
        */
       /* Count down the path chain towards the end. */
-      width = BUTTON_DATA (first_button->data)->button->requisition.width;
+      gtk_widget_get_child_requisition (BUTTON_DATA (first_button->data)->button, &child_requisition);
+
+      width = child_requisition.width;
       list = first_button->prev;
       while (list && !reached_end)
 	{
 	  child = BUTTON_DATA (list->data)->button;
 
-	  if (width + child->requisition.width +
+	  gtk_widget_get_child_requisition (child, &child_requisition);
+
+	  if (width + child_requisition.width +
 	      path_bar->spacing + slider_space > allocation_width)
 	    reached_end = TRUE;
 	  else if (list == path_bar->fake_root)
 	    break;
 	  else
-	    width += child->requisition.width + path_bar->spacing;
+	    width += child_requisition.width + path_bar->spacing;
 
 	  list = list->prev;
 	}
@@ -538,13 +545,15 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	{
 	  child = BUTTON_DATA (first_button->next->data)->button;
 
-	  if (width + child->requisition.width + path_bar->spacing + slider_space > allocation_width)
+	  gtk_widget_get_child_requisition (child, &child_requisition);
+
+	  if (width + child_requisition.width + path_bar->spacing + slider_space > allocation_width)
 	    {
 	      reached_end = TRUE;
 	    }
 	  else
 	    {
-	      width += child->requisition.width + path_bar->spacing;
+	      width += child_requisition.width + path_bar->spacing;
 	      if (first_button == path_bar->fake_root)
 		break;
 	      first_button = first_button->next;
@@ -582,7 +591,9 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       button_data = BUTTON_DATA (list->data);
       child = button_data->button;
 
-      child_allocation.width = MIN (child->requisition.width,
+      gtk_widget_get_child_requisition (child, &child_requisition);
+
+      child_allocation.width = MIN (child_requisition.width,
 				    allocation_width - (path_bar->spacing + path_bar->slider_width) * 2);
 
       if (direction == GTK_TEXT_DIR_RTL)
@@ -601,7 +612,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	    break;
 	}
 
-      if (child_allocation.width < child->requisition.width)
+      if (child_allocation.width < child_requisition.width)
 	{
 	  if (!gtk_widget_get_has_tooltip (child))
 	    gtk_widget_set_tooltip_text (child, button_data->dir_name);
