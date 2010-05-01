@@ -568,7 +568,7 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
 
 /**
  * gtk_size_group_remove_widget:
- * @size_group: a #GtkSizeGrup
+ * @size_group: a #GtkSizeGroup
  * @widget: the #GtkWidget to remove
  * 
  * Removes a widget from a #GtkSizeGroup.
@@ -600,7 +600,7 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 
 /**
  * gtk_size_group_get_widgets:
- * @size_group: a #GtkSizeGrup
+ * @size_group: a #GtkSizeGroup
  * 
  * Returns the list of widgets associated with @size_group.
  *
