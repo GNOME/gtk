@@ -59,8 +59,6 @@ static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
 static gint gtk_frame_expose        (GtkWidget      *widget,
 				     GdkEventExpose *event);
-static void gtk_frame_size_request  (GtkWidget      *widget,
-				     GtkRequisition *requisition);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
 static void gtk_frame_remove        (GtkContainer   *container,

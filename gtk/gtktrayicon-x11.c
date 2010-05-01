@@ -672,7 +672,6 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
 					      icon->priv->manager_window);
       
       gdk_window_add_filter (gdkwin, gtk_tray_icon_manager_filter, icon);
-      g_print ("manager window %d\n", icon->priv->manager_window);
 
       gtk_tray_icon_get_orientation_property (icon);
       gtk_tray_icon_get_visual_property (icon);

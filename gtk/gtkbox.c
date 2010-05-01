@@ -411,7 +411,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
 
       gint size;
       gint extra;
-      gint x, y, i;
+      gint x = 0, y = 0, i;
       gint child_size;
 
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
