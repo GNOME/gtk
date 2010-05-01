@@ -3092,19 +3092,20 @@ gdk_color_to_css (GdkColor *color)
  * gtk_icon_info_load_symbolic:
  * @info: a #GtkIconInfo
  * @fg: a #GdkColor representing the foreground color of the icon
- * @success_color: (allow-none): a #GdkColor representing the warning color of the icon
- * or %NULL to use the default color
- * @warning_color: (allow-none): a #GdkColor representing the warning color of the icon
- * or %NULL to use the default color
- * @error_color: (allow-none): a #GdkColor representing the error color of the icon
- * or %NULL to use the default color (allow-none)
- * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon was a symbolic
- * one and whether the @fg color was applied to it.
- * @error: (allow-none): location to store error information on failure, or %NULL.
+ * @success_color: (allow-none): a #GdkColor representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @warning_color: (allow-none): a #GdkColor representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @error_color: (allow-none): a #GdkColor representing the error color
+ *     of the icon or %NULL to use the default color (allow-none)
+ * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
+ *     was a symbolic one and whether the @fg color was applied to it.
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
  *
  * Loads an icon, modifying it to match the system colours for the foreground,
- * success, warning and error colors provided. If the icon is not a symbolic one,
- * the function will return the result from gtk_icon_info_load_icon().
+ * success, warning and error colors provided. If the icon is not a symbolic
+ * one, the function will return the result from gtk_icon_info_load_icon().
  *
  * This allows loading symbolic icons that will match the system theme.
  *
@@ -3112,14 +3113,16 @@ gdk_color_to_css (GdkColor *color)
  * g_themed_icon_new_with_default_fallbacks() to load the icon.
  *
  * As implementation details, the icon loaded needs to be of SVG type,
- * contain the "symbolic" term as the last chunk of the icon name,
- * and use the fg, success, warning and error styles in the SVG file itself.
+ * contain the "symbolic" term as the last component of the icon name,
+ * and use the 'fg', 'success', 'warning' and 'error' CSS styles in the
+ * SVG file itself.
+ *
  * See the <ulink url="http://www.freedesktop.org/wiki/SymbolicIcons">Symbolic Icons spec</ulink>
  * for more information about symbolic icons.
  *
  * Return value: a #GdkPixbuf representing the loaded icon
  *
- * Since: 2.22
+ * Since: 3.0
  **/
 GdkPixbuf *
 gtk_icon_info_load_symbolic (GtkIconInfo  *info,

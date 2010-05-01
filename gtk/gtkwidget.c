@@ -6718,7 +6718,7 @@ gtk_widget_modify_color_component (GtkWidget      *widget,
  * All other style values are left untouched. See also
  * gtk_widget_modify_style().
  *
- * Since: 2.22
+ * Since: 3.0
  **/
 void
 gtk_widget_modify_symbolic_color (GtkWidget      *widget,
