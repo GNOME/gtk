@@ -8510,7 +8510,8 @@ gtk_window_get_window_type (GtkWindow *window)
   return window->type;
 }
 
-/* gtk_window_get_mnemonics_visible:
+/**
+ * gtk_window_get_mnemonics_visible:
  * @window: a #GtkWindow
  *
  * Gets the value of the #GtkWindow:mnemonics-visible property.

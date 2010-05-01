@@ -294,6 +294,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktable.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkorientable.xml" />
+      <xi:include href="xml/gtkextendedlayout.xml" />
     </chapter>
 
     <chapter id="Ornaments">
@@ -499,6 +500,14 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index id="api-index-2-20" role="2.20">
     <title>Index of new symbols in 2.20</title>
     <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-22" role="2.22">
+    <title>Index of new symbols in 2.20</title>
+    <xi:include href="xml/api-index-2.22.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-3-0" role="3.0">
+    <title>Index of new symbols in 3.0</title>
+    <xi:include href="xml/api-index-3.0.xml"><xi:fallback /></xi:include>
   </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>

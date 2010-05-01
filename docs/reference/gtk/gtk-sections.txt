@@ -154,6 +154,7 @@ gtk_accel_label_accelerator_width
 <TITLE>GtkAccessible</TITLE>
 GtkAccessible
 gtk_accessible_connect_widget_destroyed
+gtk_accessible_get_widget
 
 <SUBSECTION Standard>
 GTK_ACCESSIBLE
@@ -1374,7 +1375,9 @@ GTK_ENTRY_BUFFER_CLASS
 GTK_IS_ENTRY_BUFFER_CLASS
 GTK_ENTRY_BUFFER_GET_CLASS
 GTK_ENTRY_BUFFER_MAX_SIZE
+
 <SUBSECTION Private>
+GtkEntryBufferPrivate
 gtk_entry_buffer_get_type
 </SECTION>
 
@@ -2658,8 +2661,8 @@ GTK_IS_INFO_BAR_CLASS
 GTK_INFO_BAR_GET_CLASS
 
 <SUBSECTION Private>
+GtkInfoBarPrivate
 gtk_info_bar_get_type
-GtkMessageAreaPrivate
 </SECTION>
 
 <SECTION>
@@ -3618,6 +3621,7 @@ GtkSpinner
 gtk_spinner_new
 gtk_spinner_start
 gtk_spinner_stop
+
 <SUBSECTION Standard>
 GTK_SPINNER
 GTK_IS_SPINNER
@@ -3625,7 +3629,10 @@ GTK_TYPE_SPINNER
 GTK_SPINNER_CLASS
 GTK_IS_SPINER_CLASS
 GTK_SPINNER_GET_CLASS
+GTK_IS_SPINNER_CLASS
+
 <SUBSECTION Private>
+GtkSpinnerPrivate
 gtk_spinner_get_type
 </SECTION>
 
@@ -4063,6 +4070,8 @@ gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
+gtk_text_view_get_hadjustment
+gtk_text_view_get_vadjustment
 gtk_text_view_scroll_to_mark
 gtk_text_view_scroll_to_iter
 gtk_text_view_scroll_mark_onscreen
@@ -4512,6 +4521,7 @@ gtk_tool_item_group_set_item_position
 gtk_tool_item_group_set_label
 gtk_tool_item_group_set_label_widget
 gtk_tool_item_group_set_header_relief
+
 <SUBSECTION Standard>
 GtkToolItemGroupClass
 GTK_TOOL_ITEM_GROUP
@@ -4520,7 +4530,9 @@ GTK_TYPE_TOOL_ITEM_GROUP
 GTK_TOOL_ITEM_GROUP_CLASS
 GTK_IS_TOOL_ITEM_GROUP_CLASS
 GTK_TOOL_ITEM_GROUP_GET_CLASS
+
 <SUBSECTION Private>
+GtkToolItemGroupPrivate
 gtk_tool_item_group_get_type
 </SECTION>
 
@@ -6831,6 +6843,8 @@ GTK_IS_PRINT_OPERATION_PREVIEW
 GTK_PRINT_OPERATION_PREVIEW
 GTK_PRINT_OPERATION_PREVIEW_GET_IFACE
 GTK_TYPE_PRINT_OPERATION_PREVIEW
+GtkPrintOperationClass
+GtkPrintOperationPreviewIface
 
 <SUBSECTION Private>
 gtk_print_error_quark
@@ -7091,10 +7105,20 @@ gtk_paper_size_to_key_file
 
 <SUBSECTION Standard>
 GTK_TYPE_PAPER_SIZE
+GTK_CUSTOM_PAPER_UNIX_DIALOG
+GTK_CUSTOM_PAPER_UNIX_DIALOG_CLASS
+GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_CLASS
+GTK_IS_CUSTOM_PAPER_UNIX_DIALOG
+GTK_IS_CUSTOM_PAPER_UNIX_DIALOG_CLASS
+GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG
+GtkCustomPaperUnixDialog
+GtkCustomPaperUnixDialogClass
+
 
 <SUBSECTION Private>
 gtk_paper_size_get_type
 gtk_custom_paper_unix_dialog_get_type
+GtkCustomPaperUnixDialogPrivate
 </SECTION>
 
 
@@ -7262,6 +7286,7 @@ GTK_MOUNT_OPERATION_CLASS
 GTK_MOUNT_OPERATION_GET_CLASS
 GTK_TYPE_MOUNT_OPERATION
 <SUBSECTION Private>
+GtkMountOperationLookupContext
 gtk_mount_operation_get_type
 GtkMountOperationPrivate
 </SECTION>
@@ -7284,4 +7309,27 @@ GTK_TYPE_ORIENTABLE
 
 <SUBSECTION Private>
 gtk_orientable_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkextendedlayout</FILE>
+<TITLE>GtkExtendedLayout</TITLE>
+GtkExtendedLayout
+GtkExtendedLayoutIface
+gtk_extended_layout_get_desired_height
+gtk_extended_layout_get_desired_size
+gtk_extended_layout_get_desired_width
+gtk_extended_layout_get_height_for_width
+gtk_extended_layout_get_width_for_height
+gtk_extended_layout_is_height_for_width
+
+<SUBSECTION Standard>
+GTK_EXTENDED_LAYOUT
+GTK_EXTENDED_LAYOUT_CLASS
+GTK_EXTENDED_LAYOUT_GET_IFACE
+GTK_IS_EXTENDED_LAYOUT
+GTK_TYPE_EXTENDED_LAYOUT
+
+<SUBSECTION Private>
+gtk_extended_layout_get_type
 </SECTION>

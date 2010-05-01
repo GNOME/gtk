@@ -28,7 +28,16 @@
  * @Title: GtkExtendedLayout
  *
  * The extended layout is GTK+'s height-for-width (and width-for-height)
- * geometry management system.
+ * geometry management system. Height-for-width means that a widget can
+ * change how much vertical space it needs, depending on the amount
+ * of horizontal space that it is given (and similar for width-for-height).
+ * The most common example is a label that reflows to fill up the available
+ * width, wraps to fewer lines, and therefore needs less height.
+ *
+ * GTK+'s traditional two-pass <link linkend="size-allocation">size-allocation</link>
+ * algorithm does not allow this flexibility. #GtkWidget provides a default
+ * implementation of the #GtkExtendedLayout interface for existing widgets,
+ * which always requests the same height, regardless of the available width.
  *
  * <refsect2>
  * <title>Implementing GtkExtendedLayout</title>
@@ -397,13 +406,12 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_desired_height:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: (allow-none): location to store the minimum height, or %NULL
- * @natural_width: (allow-none): location to store the natural height, or %NULL
+ * @minimum_height: (allow-none): location to store the minimum height, or %NULL
+ * @natural_height: (allow-none): location to store the natural height, or %NULL
  *
  * Retrieves a widget's initial minimum and natural height.
  *
- * <note><para>This call is specific to width-for-height
- * requests.</para></note>
+ * <note><para>This call is specific to width-for-height requests.</para></note>
  *
  * Since: 3.0
  */
@@ -421,9 +429,9 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_width_for_height:
  * @layout: a #GtkExtendedLayout instance
- * @height: the size which is available for allocation
- * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
- * @natural_size: (allow-none): location for storing the natural size, or %NULL
+ * @height: the height which is available for allocation
+ * @minimum_width: (allow-none): location for storing the minimum width, or %NULL
+ * @natural_width: (allow-none): location for storing the natural width, or %NULL
  *
  * Retrieves a widget's desired width if it would be given
  * the specified @height.
@@ -443,9 +451,9 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_height_for_width:
  * @layout: a #GtkExtendedLayout instance
- * @width: the size which is available for allocation
- * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
- * @natural_size: (allow-none): location for storing the natural size, or %NULL
+ * @width: the width which is available for allocation
+ * @minimum_height: (allow-none): location for storing the minimum height, or %NULL
+ * @natural_height: (allow-none): location for storing the natural height, or %NULL
  *
  * Retrieves a widget's desired height if it would be given
  * the specified @width.
