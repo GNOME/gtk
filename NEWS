@@ -1,3 +1,43 @@
+Overview of Changes from GTK+ 2.20.0 to 2.20.1
+==============================================
+
+* Support Tracker 0.8 in the filechooser search
+
+* Bug fixes:
+ 615028 gdk/x11/gdkdnd-x11.c missing Xutil.h
+ 614099 GtkFileSystemModel may causes crash in g_file_get_child
+ 615999 Gail doesn't send state-changed events for ATK_STATE_ENABLED
+ 614894 Add heuristic for pre XRandR 1.3 drivers
+ 613988 Compile error on DirectFB backend due to missing...
+ 560147 GtkBuilder docs should say what GErrors they throw
+ 615128 gdk monitor order does not seem to be correct
+ 614971 Initialize search engines on demand
+ 613887 Misprint in the description of gtk_cell_view_new_with_text
+ 615853 BadMatch when pressing keyboard volume keys...
+ 615000 gtk_builder_value_from_string_type() returns FALSE without...
+ 614540 configure wants gio-unix on all platform
+ 613974 GtkToolItemGroup devides by 0 when allocating space...
+ 557689 In 'select folder' action, filechooser doesn't work when...
+ 616851 gtk_misc_set_alignment: assertion `GTK_IS_MISC (misc)' failed
+ 402349 FileChooser's default directory is not "active"
+        64bit issue with the ICC profile support in the PNG loader
+        Missing break statement in gtk_tool_item_group_set_property
+        Missing default events in gtk_tool_item_group_realize
+
+* Updated translations:
+ Basque
+ Bengali India
+ Catalan
+ Catalan (Valencian)
+ Danish
+ Galician
+ Greek
+ Kannada
+ Latvian
+ Thai
+ Ukrainian
+
+
 Overview of Changes from GTK+ 2.19.7 to 2.20.0
 ==============================================
 
