@@ -1747,6 +1747,7 @@ remove_file (GtkFileSystemModel *model,
     g_object_unref (node->info);
 
   g_array_remove_index (model->files, id);
+  g_hash_table_remove_all (model->file_lookup);
   /* We don't need to resort, as removing a row doesn't change the sorting order */
 }
 
