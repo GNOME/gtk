@@ -1,15 +1,15 @@
 # Translation of gtk+ to Qırımtatarca.
 # This file is distributed under the same license as the gtk+ package.
 #
-# Reşat SABIQ <tilde.birlik@gmail.com>, 2009.
+# Reşat SABIQ <tilde.birlik@gmail.com>, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ TRUNK\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-22 23:34-0400\n"
-"PO-Revision-Date: 2009-04-09 03:07-0500\n"
+"PO-Revision-Date: 2010-05-02 14:03-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
-"Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
+"Language-Team: QIRIMTATARCA (Qırım Türkçesi) <tilde-birlik-tercime@lists."
 "sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -992,9 +992,8 @@ msgstr ""
 # tüklü
 # gdk-pixbuf/io-tiff.c:264
 #: gdk-pixbuf/io-qtif.c:143
-#, fuzzy
 msgid "Failed to read QTIF header"
-msgstr "Başlıq yazılamadı\n"
+msgstr "QTIF başlığı oqulamadı"
 
 #: gdk-pixbuf/io-qtif.c:152 gdk-pixbuf/io-qtif.c:182 gdk-pixbuf/io-qtif.c:446
 #, c-format
@@ -1003,9 +1002,9 @@ msgstr ""
 
 # gdk-pixbuf/gdk-pixdata.c:378
 #: gdk-pixbuf/io-qtif.c:172
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "%u baytlıq suret buferi tahsis etilamadı"
+msgstr "%d baytlıq suret oquv buferi tahsis etilamadı"
 
 # gdk-pixbuf/io-gif.c:218
 #: gdk-pixbuf/io-qtif.c:196
@@ -1026,9 +1025,8 @@ msgstr "TGA kontekst yapısı içün hafiza tahsis etilamay"
 
 # gdk-pixbuf/io-xbm.c:429
 #: gdk-pixbuf/io-qtif.c:317
-#, fuzzy
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "Fihrist indeksi yazılamadı\n"
+msgstr "GdkPixbufLoader nesnesi icat etilamadı."
 
 # gdk-pixbuf/io-tiff.c:264
 #: gdk-pixbuf/io-qtif.c:421
@@ -1037,9 +1035,8 @@ msgid "Failed to find an image data atom."
 msgstr "TIFF sureti açılamadı"
 
 #: gdk-pixbuf/io-qtif.c:602
-#, fuzzy
 msgid "The QTIF image format"
-msgstr "TIFF suret formatı"
+msgstr "QTIF suret formatı"
 
 # gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
 #: gdk-pixbuf/io-ras.c:126
@@ -1397,9 +1394,8 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d Unsur Açıla"
 
 #: gtk/gtkaboutdialog.c:242
-#, fuzzy
 msgid "Could not show link"
-msgstr "Liste temizlenamadı"
+msgstr "İlişim kösterilamadı"
 
 #: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
 msgid "License"
@@ -1520,9 +1516,9 @@ msgstr "Keri-egik-sızıq"
 
 # gdk-pixbuf/io-xbm.c:284
 #: gtk/gtkbuilderparser.c:343
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Keçersiz türden funktsiya: `%s'"
+msgstr "%d satrında keçersiz türden funktsiya: `%s'"
 
 #: gtk/gtkbuilderparser.c:407
 #, c-format
@@ -1635,10 +1631,9 @@ msgstr "Ğayrı qabilleştirilgen"
 #. * to gtk_accelerator_valid().
 #.
 #: gtk/gtkcellrendereraccel.c:254
-#, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "Keçersiz URI"
+msgstr "Keçersiz"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
@@ -1677,8 +1672,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Köz-tamçılığına çertken soñ ekranıñızda olğan er angi tüske çerterek o tüsni "
-"saylay bilirsiñiz."
+"Köz-tamçılığına çertken soñ ekranıñızda olğan er angi tüske çerterek o "
+"tüsni saylay bilirsiñiz."
 
 # tüklü
 # gtk/gtkcolorsel.c:1796
@@ -1927,7 +1922,7 @@ msgstr "Diger..."
 
 #: gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
-msgstr "Yañı fihristniñ adını kirsetiñiz"
+msgstr "Yañı cilbentniñ adını kirsetiñiz"
 
 #: gtk/gtkfilechooserdefault.c:974
 msgid "Could not retrieve information about the file"
@@ -1943,14 +1938,14 @@ msgstr "Saife-imi silinamadı"
 
 #: gtk/gtkfilechooserdefault.c:1007
 msgid "The folder could not be created"
-msgstr "Fihrist icat etilamadı"
+msgstr "Cilbent icat etilamadı"
 
 #: gtk/gtkfilechooserdefault.c:1020
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"Aynı isimde bir dosye mevcut olğanı içün fihrist icat etilamadı. Fihrist "
+"Aynı isimde bir dosye mevcut olğanı içün cilbent icat etilamadı. Cilbent "
 "içün farqlı bir isim qullanuvnı deñeñiz ya da evelâ dosyeniñ adını "
 "deñiştiriñiz."
 
@@ -1961,7 +1956,7 @@ msgstr "Keçersiz dosye adı"
 
 #: gtk/gtkfilechooserdefault.c:1041
 msgid "The folder contents could not be displayed"
-msgstr "Fihrist mündericesi kösterilamadı"
+msgstr "Cilbent mündericesi kösterilamadı"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -1987,17 +1982,17 @@ msgstr "Angi türdeki dosyelerniñ kösterilecegini saylañız"
 #: gtk/gtkfilechooserdefault.c:2793
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "'%s' fihristini saife-imlerine ekle"
+msgstr "'%s' cilbentini saife-imlerine ekle"
 
 #: gtk/gtkfilechooserdefault.c:2837
 #, c-format
 msgid "Add the current folder to the bookmarks"
-msgstr "Ağımdaki fihristni saife-imlerine ekle"
+msgstr "Ağımdaki cilbentni saife-imlerine ekle"
 
 #: gtk/gtkfilechooserdefault.c:2839
 #, c-format
 msgid "Add the selected folders to the bookmarks"
-msgstr "Saylanğan fihristlerni saife-imlerine ekle"
+msgstr "Saylanğan cilbentlerni saife-imlerine ekle"
 
 #: gtk/gtkfilechooserdefault.c:2877
 #, c-format
@@ -2040,7 +2035,7 @@ msgstr "_Ekle"
 
 #: gtk/gtkfilechooserdefault.c:3898
 msgid "Add the selected folder to the Bookmarks"
-msgstr "Saylanğan fihristni Saife-imlerine ekle"
+msgstr "Saylanğan cilbentni Saife-imlerine ekle"
 
 # gtk/gtkstock.c:303
 #: gtk/gtkfilechooserdefault.c:3903
@@ -2091,7 +2086,7 @@ msgstr "_İsim:"
 
 #: gtk/gtkfilechooserdefault.c:4839
 msgid "_Browse for other folders"
-msgstr "Diger fihristler içün _kezin"
+msgstr "Diger cilbentler içün _kezin"
 
 # gdk-pixbuf/io-xbm.c:284
 #: gtk/gtkfilechooserdefault.c:5111
@@ -2101,7 +2096,7 @@ msgstr "Bir dosye adını kirsetiñiz"
 #. Create Folder
 #: gtk/gtkfilechooserdefault.c:5152
 msgid "Create Fo_lder"
-msgstr "_Fihrist İcat Et"
+msgstr "_Cilbent İcat Et"
 
 # tüklü
 # gtk/gtkfilesel.c:1795
@@ -2111,22 +2106,21 @@ msgstr "_Qonum:"
 
 #: gtk/gtkfilechooserdefault.c:5366
 msgid "Save in _folder:"
-msgstr "_Fihristte saqla:"
+msgstr "_Cilbentte saqla:"
 
 #: gtk/gtkfilechooserdefault.c:5368
 msgid "Create in _folder:"
-msgstr "_Fihristte icat et:"
+msgstr "_Cilbentte icat et:"
 
 # gtk/gtkfilesel.c:1011
 #: gtk/gtkfilechooserdefault.c:6435
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "Aqım icat etilamadı: %s"
+msgstr "%s muhtevası oqulamadı"
 
 #: gtk/gtkfilechooserdefault.c:6439
-#, fuzzy
 msgid "Could not read the contents of the folder"
-msgstr "Tamır fihristni elde etamadım"
+msgstr "Cilbentniñ muhtevası oqulamadı"
 
 # gtk/gtkinputdialog.c:577
 #: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
@@ -2144,7 +2138,7 @@ msgstr "Tünevin: %H:%M"
 
 #: gtk/gtkfilechooserdefault.c:7215
 msgid "Cannot change to folder because it is not local"
-msgstr "Fihrist yerli olmağanı içün oña deñiştirilamay"
+msgstr "Cilbent yerli olmağanı içün oña deñiştirilamay"
 
 #: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
 #, c-format
@@ -2194,9 +2188,8 @@ msgid "Could not send the search request"
 msgstr "Qıdırma istemi yiberilamadı"
 
 #: gtk/gtkfilechooserdefault.c:9034
-#, fuzzy
 msgid "Search:"
-msgstr "Qıdıruv"
+msgstr "Qıdırma:"
 
 #: gtk/gtkfilechooserdefault.c:9638
 #, c-format
@@ -2267,17 +2260,17 @@ msgstr "Yolçıq mevcut degil"
 #: gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
-msgstr "'%s' fihristi icat etilgende hata: %s"
+msgstr "'%s' cilbenti icat etilgende hata: %s"
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilesel.c:694
 msgid "Folders"
-msgstr "Fihristler"
+msgstr "Cilbentler"
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilesel.c:698
 msgid "Fol_ders"
-msgstr "_Fihristler"
+msgstr "_Cilbentler"
 
 # gtk/gtkfilesel.c:651
 #: gtk/gtkfilesel.c:734
@@ -2288,7 +2281,7 @@ msgstr "_Dosyeler"
 #: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Fihrist oqulamaz: %s"
+msgstr "Cilbent oqulamaz: %s"
 
 #: gtk/gtkfilesel.c:905
 #, c-format
@@ -2303,7 +2296,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1020
 msgid "_New Folder"
-msgstr "_Yañı Fihrist"
+msgstr "_Yañı Cilbent"
 
 # gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
 #: gtk/gtkfilesel.c:1031
@@ -2321,16 +2314,16 @@ msgstr "Dosyeni _Kene Adlandır"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"\"%s\" fihrist adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
+"\"%s\" cilbent adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
 
 #: gtk/gtkfilesel.c:1394
 msgid "New Folder"
-msgstr "Yañı Fihrist"
+msgstr "Yañı Cilbent"
 
 # gtk/gtkfilesel.c:502
 #: gtk/gtkfilesel.c:1409
 msgid "_Folder name:"
-msgstr "_Fihrist ismi:"
+msgstr "_Cilbent ismi:"
 
 # gtk/gtkfilesel.c:1073
 #: gtk/gtkfilesel.c:1433
@@ -2536,7 +2529,6 @@ msgstr "Sistem"
 
 # gtk/gtkinputdialog.c:514
 #: gtk/gtkimmulticontext.c:573
-#, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "İç biri"
@@ -2646,9 +2638,8 @@ msgstr "_Temizle"
 
 #. Open Link
 #: gtk/gtklabel.c:5685
-#, fuzzy
 msgid "_Open Link"
-msgstr "_Aç"
+msgstr "İlişimni _Aç"
 
 #. Copy Link Address
 #: gtk/gtklabel.c:5697
@@ -2780,9 +2771,8 @@ msgid "Terminal Pager"
 msgstr ""
 
 #: gtk/gtkmountoperation-x11.c:866
-#, fuzzy
 msgid "Top Command"
-msgstr "Emir Satırı "
+msgstr "Eñ Üst Buyruq"
 
 #: gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
@@ -2813,16 +2803,12 @@ msgstr "Keçerli bir saife tesbiti dosyesi degil"
 
 # gtk/gtkstock.c:299
 #: gtk/gtkpagesetupunixdialog.c:167
-#, fuzzy
 msgid "Any Printer"
-msgstr "Bastırıcı"
+msgstr "Er Angi Bastırıcı"
 
 #: gtk/gtkpagesetupunixdialog.c:167
-#, fuzzy
 msgid "For portable documents"
-msgstr ""
-"<b>Er Angi Bastırıcı</b>\n"
-"Taşınabilir vesiqalar içün"
+msgstr "Taşınabilir vesiqalar içün"
 
 #: gtk/gtkpagesetupunixdialog.c:797
 #, c-format
@@ -2878,9 +2864,8 @@ msgstr "Dosye Sistemi Tamırı"
 
 # gtk/gtkfilesel.c:1795
 #: gtk/gtkprintbackend.c:749
-#, fuzzy
 msgid "Authentication"
-msgstr "Uyğulama"
+msgstr "Sahihlenim"
 
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
@@ -2888,7 +2873,7 @@ msgstr "Namevcut"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
-msgstr "_Fihristte saqla:"
+msgstr "_Cilbentte saqla:"
 
 # tüklü
 #. translators: this string is the default job title for print
@@ -2908,7 +2893,7 @@ msgstr "Başlanğıç durum"
 #: gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr "Bastırılmağa hazırlana"
+msgstr "Bastırılmağa azırlana"
 
 #: gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
@@ -2949,7 +2934,7 @@ msgstr "Hatanen tamamlandı"
 #: gtk/gtkprintoperation.c:2254
 #, c-format
 msgid "Preparing %d"
-msgstr "%d hazırlana"
+msgstr "%d azırlana"
 
 # gtk/gtkstock.c:268
 #: gtk/gtkprintoperation.c:2256 gtk/gtkprintoperation.c:2875
@@ -3090,7 +3075,6 @@ msgstr "_Ağımdaki Saife"
 
 # gtk/gtkfilesel.c:1795
 #: gtk/gtkprintunixdialog.c:2200
-#, fuzzy
 msgid "Se_lection"
 msgstr "_Saylam: "
 
@@ -3107,9 +3091,8 @@ msgstr ""
 " meselâ 1-3,7,11"
 
 #: gtk/gtkprintunixdialog.c:2220
-#, fuzzy
 msgid "Pages"
-msgstr "_Saifeler:"
+msgstr "Saifeler"
 
 #: gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
@@ -3199,14 +3182,12 @@ msgid "Right to left"
 msgstr "Sağdan solğa"
 
 #: gtk/gtkprintunixdialog.c:3059
-#, fuzzy
 msgid "Top to bottom"
-msgstr "Yuqarıdan aşağığa, soldan sağğa"
+msgstr "Yuqarıdan aşağığa"
 
 #: gtk/gtkprintunixdialog.c:3060
-#, fuzzy
 msgid "Bottom to top"
-msgstr "Aşağıdan yuqarığa, soldan sağğa"
+msgstr "Aşağıdan yuqarığa"
 
 #: gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
@@ -3269,29 +3250,24 @@ msgstr "Çıqtı _sinisi:"
 # tüklü
 # gtk/gtkcolorsel.c:1798
 #: gtk/gtkprintunixdialog.c:3473
-#, fuzzy
 msgid "Or_ientation:"
 msgstr "_Yöneldirim:"
 
 # gtk/gtkstock.c:299
 #. In enum order
 #: gtk/gtkprintunixdialog.c:3488
-#, fuzzy
 msgid "Portrait"
 msgstr "Portret"
 
 #: gtk/gtkprintunixdialog.c:3489
-#, fuzzy
 msgid "Landscape"
 msgstr "Manzara"
 
 #: gtk/gtkprintunixdialog.c:3490
-#, fuzzy
 msgid "Reverse portrait"
 msgstr "Ters portret"
 
 #: gtk/gtkprintunixdialog.c:3491
-#, fuzzy
 msgid "Reverse landscape"
 msgstr "Ters manzara"
 
@@ -3472,12 +3448,12 @@ msgstr "_Hususiy Çoqraqlarnı Köster"
 #.
 #: gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
-msgstr "İç bir unsur tapılamadı"
+msgstr "İç bir unsur tapılmadı"
 
 #: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "'%s' URI ile içün iç bir demi qullanılğan çoqraq tapılamadı"
+msgstr "'%s' URI ile iç bir demi qullanılğan çoqraq tapılmadı"
 
 #: gtk/gtkrecentchoosermenu.c:775
 #, c-format
@@ -3517,11 +3493,11 @@ msgstr "%d. %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' URI ile bir unsur tapılamadı"
 
+# tüklü
 #: gtk/gtkspinner.c:458
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr "Aylanıcı"
 
 #: gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
@@ -4093,7 +4069,7 @@ msgstr "%s formatı içün keri-silsileleştirme funktsiyası yoq"
 #: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "<%s> unsurında hem \"id\" hem \"name\" tapıldı"
+msgstr "<%s> unsurında em \"id\" em \"name\" tapıldı"
 
 #: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
 #, c-format
@@ -5126,10 +5102,9 @@ msgid "prc8 Envelope"
 msgstr "prc8 Zarfı"
 
 #: gtk/paper_names_offsets.c:166
-#, fuzzy
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr "prc1 Zarfı"
+msgstr "prc9 Zarfı"
 
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
@@ -5167,7 +5142,7 @@ msgstr "Heş cedveli yazılamadı\n"
 #: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "Fihrist indeksi yazılamadı\n"
+msgstr "Cilbent indeksi yazılamadı\n"
 
 # gdk-pixbuf/io-tiff.c:264
 #: gtk/updateiconcache.c:1394
@@ -5250,9 +5225,9 @@ msgid "Not a valid icon cache: %s\n"
 msgstr "Keçerli bir işaretçik ög-hafizası degil: %s\n"
 
 #: gtk/updateiconcache.c:1702
-#, fuzzy, c-format
+#, c-format
 msgid "No theme index file.\n"
-msgstr "Tema indeks dosyesi yoq."
+msgstr "Tema indeks dosyesi yoq.\n"
 
 #: gtk/updateiconcache.c:1706
 #, c-format
@@ -5327,16 +5302,14 @@ msgstr "X Kirdi Usulı"
 # gtk/gtkfilesel.c:1351
 #: modules/printbackends/cups/gtkprintbackendcups.c:809
 #: modules/printbackends/cups/gtkprintbackendcups.c:1018
-#, fuzzy
 msgid "Username:"
-msgstr "_Qullanıcı adı:"
+msgstr "Qullanıcı adı:"
 
 # gtk/gtkinputdialog.c:471
 #: modules/printbackends/cups/gtkprintbackendcups.c:810
 #: modules/printbackends/cups/gtkprintbackendcups.c:1027
-#, fuzzy
 msgid "Password:"
-msgstr "_Sır-söz:"
+msgstr "Sır-söz:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:848
 #, c-format
@@ -5389,7 +5362,6 @@ msgstr ""
 
 # gtk/gtkfilesel.c:1795
 #: modules/printbackends/cups/gtkprintbackendcups.c:1012
-#, fuzzy
 msgid "Domain:"
 msgstr "_Saa:"
 
@@ -5707,7 +5679,7 @@ msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:582
 #: modules/printbackends/test/gtkprintbackendtest.c:503
@@ -5738,15 +5710,13 @@ msgstr "Emir Satırı "
 # tüklü
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
-#, fuzzy
 msgid "printer offline"
-msgstr "Bastırıcı devre-tışı"
+msgstr "bastırıcı devre-tışı"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:829
-#, fuzzy
 msgid "ready to print"
-msgstr "Bastırılmağa hazırlana"
+msgstr "bastırmağa azır"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:832
@@ -5756,16 +5726,14 @@ msgstr ""
 # gtk/gtkstock.c:297
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:836
-#, fuzzy
 msgid "paused"
-msgstr "Tınışlandı"
+msgstr "tınışlanğan"
 
 # gtk/gtkinputdialog.c:577
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:839
-#, fuzzy
 msgid "unknown"
-msgstr "(namalüm)"
+msgstr "namalüm"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:234
