@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.20.x to 2.90.0
+==============================================
+
+* GtkExtendedLayout: Width-for-height geometry management
+
+* gtk_icon_theme_load_symbolic: Support for 'symbolic' icons
+
+
 Overview of Changes from GTK+ 2.19.7 to 2.20.0
 ==============================================
 
