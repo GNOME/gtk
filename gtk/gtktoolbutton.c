@@ -470,11 +470,11 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gtk_widget_show (icon);
 	}
 
-      if (icon && text_orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (GTK_IS_MISC (icon) && text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				1.0 - gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)),
 				0.5);
-      else if (icon)
+      else if (GTK_IS_MISC (icon))
 	gtk_misc_set_alignment (GTK_MISC (icon),
 				0.5,
 				gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button)));
