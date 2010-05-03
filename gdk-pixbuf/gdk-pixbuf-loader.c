@@ -221,8 +221,12 @@ gdk_pixbuf_loader_set_size (GdkPixbufLoader *loader,
 			    gint             width,
 			    gint             height)
 {
-        GdkPixbufLoaderPrivate *priv = GDK_PIXBUF_LOADER (loader)->priv;
+        GdkPixbufLoaderPrivate *priv;
+
+        g_return_if_fail (GDK_IS_PIXBUF_LOADER (loader));
         g_return_if_fail (width >= 0 && height >= 0);
+
+        priv = GDK_PIXBUF_LOADER (loader)->priv;
 
         if (!priv->size_fixed) 
                 {
