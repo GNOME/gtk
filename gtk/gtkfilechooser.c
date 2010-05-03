@@ -72,6 +72,7 @@
  *       </listitem>
  *    </varlistentry>
  * </variablelist>
+ *
  * <refsect2 id="gtkfilechooser-encodings">
  * <title>File Names and Encodings</title>
  * When the user is finished selecting files in a
