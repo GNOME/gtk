@@ -51,6 +51,9 @@ for (i = 0; i &lt; 5; i++)
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRadioMenuItem ##### -->
 <para>
 The structure contains only private data that must be accessed through

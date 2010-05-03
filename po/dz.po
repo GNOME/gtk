@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-02 21:21-0400\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1759,7 +1759,7 @@ msgstr "གནས་ཁོངས་འདྲ་བཤུས་རྐྱབས།
 msgid "Select A File"
 msgstr "ཡིག་སྣོད་ཅིག་སེལ་འཐུ་འབད།"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "ཌེཀསི་ཊོཔ། "
 
@@ -1775,23 +1775,23 @@ msgstr "གཞན་..."
 msgid "Type name of new folder"
 msgstr "སྣོད་འཛིན་གསར་པའི་མིང་ ཡིག་དཔར་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "ཡིག་སྣོད་དེ་གི་སྐོར་ལས་ བརྡ་དོན་སླར་འདྲེན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "དེབ་རྟགས་ཅིག་ ཁ་སྐོང་བརྐྱབས་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "དེབ་རྟགས་རྩ་བསྐྲད་བཏང་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "སྣོད་འཛིན་དེ་ གསར་བསྐྲུན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1799,11 +1799,11 @@ msgstr ""
 "མིང་ཅོག་གཅིགཔ་འབད་མི་ ཡིག་སྣོད་ཅིག་ ཧེ་མ་ལས་ར་ཡོདཔ་ལས་ སྣོད་འཛིན་འདི་ གསར་བསྐྲུན་འབད་མ་ཚུགས། "
 "སྣོད་འཛིན་གྱི་དོན་ལུ་ མིང་གཞན་ཅིག་ ལག་ལེན་འཐབ་ ཡང་ན་ དང་པ་ཡིག་སྣོད་དེ་ལུ་ བསྐྱར་མིང་བཏགས།"
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "ནུས་མེད་ཡིག་སྣོད་ཀྱི་མིང་།"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "སྣོད་འཛིན་ནང་གི་ནང་དོན་ཚུ་ བཀྲམ་སྟོན་འབད་མ་ཚུགས།"
 
@@ -1811,188 +1811,188 @@ msgstr "སྣོད་འཛིན་ནང་གི་ནང་དོན་ཚ
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s གུ"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "སྟོན་ཏེ་ཡོད་མི་ ཡིག་སྣོད་ཀྱི་དབྱེ་བ་ཚུ་ སེལ་འཐུ་འབད།"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "སྣོད་འཛིན་ ’%s’ དེ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ད་ལྟོའི་སྣོད་འཛིན་དེ་ དེབ་རྟགས་ཚུ་ལུ་ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "སེལ་འཐུ་འབད་མི་སྣོད་འཛིན་ཚུ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "དེབ་རྟགས་ ’%s’ དེ་ རྩ་བསྐྲད་གཏང༌།"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "སེལ་འཐུ་འབད་མི་ དེབ་རྟགས་དེ་ རྩ་བསྐྲད་གཏང༌།"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "རྩ་བསྐྲད་གཏང་།"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "བསྐྱར་མིང་བཏགས་..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "ས་གནས།"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "ས་གནས་ཚུ།(_p)"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "ཁ་སྐོང་།(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "སེལ་འཐུ་འབད་མི་སྣོད་འཛིན་དེ་ དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "རྩ་བསྐྲད་གཏང་།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "ཡིག་སྣོད་སེལ་འཐུ་འབད་མ་ཚུགས། "
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "དེབ་རྟགས་ཚུ་ལུ་ ཁ་སྐོང་རྐྱབས།(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "སྦ་སྟེ་ཡོད་པའི་ཡིག་སྣོད་ཚུ་སྟོན།(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ཡིག་སྣོད་ཚུ།"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "མིང༌། "
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "ཚད།"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "ལེགས་བཅོས་འབད་ཡོདཔ།"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "མིང་:(_N)"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "སྣོད་འཛིན་གཞན་གྱི་དོན་ལུ་བརྡ་འཚོལ།(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "་ཡིག་སྣོད་ཀྱི་མིང་ཅིག་ཡིག་དཔར་རྐྱབས།"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "སྣོད་འཛིན་གསར་བསྐྲུན་འབད།(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "གནས་ཁོངས་:(_L)"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "སྣོད་འཛིན་ནང༌སྲུངས།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "སྣོད་འཛིན་ནང་གསར་བསྐྲུན་འབད།(_f)"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "སྣོད་ཐོ་ %s གསར་བསྐྲུན་འབད་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6427
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "རྩ་བའི་སྣོད་འཛིན་འཐོབ་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6520 gtk/gtkfilechooserdefault.c:6588
+#: gtk/gtkfilechooserdefault.c:6733
 msgid "Unknown"
 msgstr "མ་ཤེསཔ།"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6535
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6537
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "ཁ་རྩང༌།"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7203
 msgid "Cannot change to folder because it is not local"
 msgstr "ཉེ་གནས་མེནམ་ལས་ སྣོད་འཛིན་ལུ་ བསྒྱུར་བཅོས་འབད་མི་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7800 gtk/gtkfilechooserdefault.c:7821
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "མགྱོགས་ཐབས་ %s ཧེ་མ་ལས་ར་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7911
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "མགྱོགས་ཐབས་ %s མིན་འདུག"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8166 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ཡིག་སྣོད་མིང་\"%s\" འབད་མི་ཅིག་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་ནི་ཨིན་ན?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8169 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -2000,31 +2000,31 @@ msgstr ""
 "\"%s\" ནང་ལུ་ ཡིག་སྣོད་དེ་ ཧེ་མ་ལས་ར་འདུག དེ་གི་ཚབ་བཙུགས་པ་ཅིན་ དེ་ནང་ཡོད་པའི་ནང་དོན་ཚུ་ ཚབ་"
 "སྲུང་འབད་འོང་།"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ཚབ་བཙུགས།(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8826
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8841
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "གཞན་སྲུང་མ་ཚུགས།"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s སྦྱར་བརྩེགས་འབད་མ་ཚུགས། "

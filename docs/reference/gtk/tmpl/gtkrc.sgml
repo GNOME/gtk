@@ -737,6 +737,9 @@ same as for styles.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRcStyle ##### -->
 <para>
 The #GtkRcStyle structure is used to represent a set
@@ -822,6 +825,7 @@ specific portions of a RC file.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -905,6 +909,7 @@ Parses resource information directly from a string.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -937,6 +942,7 @@ Parses resource information directly from a string.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1018,6 +1024,7 @@ otherwise %NULL.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1026,6 +1033,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1034,6 +1042,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1044,6 +1053,7 @@ be installed. (GTK+ does not actually use this directory
 itself.)
 </para>
 
+@void: 
 @Returns: The directory (must be freed with g_free()).
 
 
@@ -1053,6 +1063,7 @@ Creates a new #GtkRcStyle with no fields set and
 a reference count of 1.
 </para>
 
+@void: 
 @Returns: the newly-created #GtkRcStyle
 
 

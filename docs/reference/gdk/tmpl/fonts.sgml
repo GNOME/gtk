@@ -264,6 +264,9 @@ here).
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkFont ##### -->
 <para>
 The <structname>GdkFont</structname> structure represents a font or fontset. It

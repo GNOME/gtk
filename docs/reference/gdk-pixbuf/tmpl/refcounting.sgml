@@ -48,6 +48,9 @@ Functions for reference counting and memory management on pixbufs.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
   <para>
 

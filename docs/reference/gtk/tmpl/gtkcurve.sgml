@@ -36,6 +36,9 @@ As of GTK+ 2.20, #GtkCurve has been deprecated since it is too specialized.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCurve ##### -->
 <para>
 The #GtkCurve-struct struct contains private data only, and
@@ -83,6 +86,7 @@ calling gtk_curve_reset() or gtk_curve_set_gamma().
 Creates a new #GtkCurve.
 </para>
 
+@void: 
 @Returns: a new #GtkCurve.
 @Deprecated: 2.20: Don't use this widget anymore.
 

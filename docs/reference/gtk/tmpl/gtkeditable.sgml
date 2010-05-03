@@ -55,6 +55,9 @@ insert_text_handler (GtkEditable *editable,
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEditable ##### -->
 <para>
 The #GtkEditable structure is an opaque structure whose members 

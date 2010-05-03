@@ -67,6 +67,9 @@ via the context menu of the entry.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEntry ##### -->
 <para>
 The #GtkEntry-struct struct contains only private data.
@@ -411,6 +414,7 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+@void: 
 @Returns: 
 
 

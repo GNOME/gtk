@@ -33,6 +33,9 @@ ruler. See #GtkHRuler to learn how to create a new horizontal ruler. See
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRuler ##### -->
 <para>
 All distances are in 1/72nd's of an inch. (According to Adobe thats a point, but

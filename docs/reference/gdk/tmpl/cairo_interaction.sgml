@@ -27,6 +27,9 @@ Cairo paths and to use pixbufs as sources for drawing operations.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_cairo_create ##### -->
 <para>
 

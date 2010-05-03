@@ -188,6 +188,9 @@ the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkLabel ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions as

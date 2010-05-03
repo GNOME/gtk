@@ -90,6 +90,9 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTooltips ##### -->
 <para>Holds information about a group of tooltips. Fields should be changed using the functions provided, rather than directly accessing the struct's members.
 </para>
@@ -113,6 +116,7 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 Creates an empty group of tooltips. This function initialises a #GtkTooltips structure. Without at least one such structure, you can not add tips to your application.
 </para>
 
+@void: 
 @Returns: a new #GtkTooltips group for you to use.
 @Deprecated: 2.12:
 

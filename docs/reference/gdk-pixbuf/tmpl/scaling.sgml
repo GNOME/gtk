@@ -81,6 +81,9 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GdkInterpType ##### -->
   <para>
     This enumeration describes the different interpolation modes that

@@ -30,6 +30,9 @@ have no effect.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkAlignment ##### -->
 <para>
 The #GtkAlignment-struct struct contains private data only, and should

@@ -21,6 +21,9 @@ to a socket or store it in a database.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_savev ##### -->
 <para>
 

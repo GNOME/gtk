@@ -24,6 +24,9 @@ the #GtkLabel.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkButton ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below.
@@ -158,6 +161,7 @@ Creates a new #GtkButton widget. To add a child widget to the button,
 use gtk_container_add().
 </para>
 
+@void: 
 @Returns: The newly created #GtkButton widget.
 
 

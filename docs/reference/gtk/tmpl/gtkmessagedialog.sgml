@@ -60,6 +60,9 @@ You might do a non-modal #GtkMessageDialog as follows:
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMessageDialog ##### -->
 <para>
 

@@ -36,6 +36,9 @@ type.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkList ##### -->
 <para>
 
@@ -75,6 +78,7 @@ The child @widget has just been unselected.
 Creates a new #GtkList.
 </para>
 
+@void: 
 @Returns: the newly-created #GtkList
 
 

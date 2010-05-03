@@ -84,11 +84,15 @@ functions such as g_signal_connect().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gtk_set_locale ##### -->
 
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -97,6 +101,7 @@ functions such as g_signal_connect().
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_get_default_language ##### -->
@@ -104,6 +109,7 @@ functions such as g_signal_connect().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -192,6 +198,7 @@ and invoke timeouts etc. while doing some time intensive computation.
 </programlisting>
 </example>
 
+@void: 
 @Returns: %TRUE if any events are pending, %FALSE otherwise.
 
 
@@ -202,6 +209,7 @@ gtk_main(). In that case gtk_main_quit() will make the innermost invocation
 of the main loop return.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_main_level ##### -->
@@ -210,6 +218,7 @@ Asks for the current nesting level of the main loop. This can be useful
 when calling gtk_quit_add().
 </para>
 
+@void: 
 @Returns: the nesting level of the current invocation of the main loop.
 
 
@@ -219,6 +228,7 @@ Makes the innermost invocation of the main loop return when it regains
 control.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_main_iteration ##### -->
@@ -229,6 +239,7 @@ want to block look at gtk_main_iteration_do() or check if any events are
 pending with gtk_events_pending() first.
 </para>
 
+@void: 
 @Returns: %TRUE if gtk_main_quit() has been called for the innermost mainloop.
 
 
@@ -363,6 +374,7 @@ main (int argc, char **argv)
 </programlisting>
 </example>
 
+@void: 
 @Returns: %TRUE
 
 
@@ -372,6 +384,7 @@ Analogical to gtk_true() this function does nothing
 but always returns %FALSE.
 </para>
 
+@void: 
 @Returns: %FALSE
 
 
@@ -394,6 +407,7 @@ widget and this function does nothing.
 Queries the current grab of the default window group. 
 </para>
 
+@void: 
 @Returns: The widget which currently has the grab or %NULL if no grab is active.
 
 
@@ -706,6 +720,7 @@ Removes the key snooper function with the given id.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -714,6 +729,7 @@ Removes the key snooper function with the given id.
 
 </para>
 
+@void: 
 @Returns: 
 
 

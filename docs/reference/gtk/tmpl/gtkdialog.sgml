@@ -165,6 +165,9 @@ response from the user.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkDialog ##### -->
 <para>
 <structfield>vbox</structfield> is a #GtkVBox - the main part of the
@@ -256,6 +259,7 @@ Creates a new dialog box. Widgets should not be packed into this #GtkWindow
 directly, but into the @vbox and @action_area, as described above. 
 </para>
 
+@void: 
 @Returns: a new #GtkDialog.
 
 

@@ -19,6 +19,9 @@ icons, tooltips and accessible labels.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkVolumeButton ##### -->
 <para>
 
@@ -30,6 +33,7 @@ icons, tooltips and accessible labels.
 
 </para>
 
+@void: 
 @Returns: 
 
 

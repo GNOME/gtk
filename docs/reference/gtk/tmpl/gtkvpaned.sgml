@@ -20,6 +20,9 @@ a handle. See #GtkPaned for details.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkVPaned ##### -->
 <para>
 </para>
@@ -30,6 +33,7 @@ a handle. See #GtkPaned for details.
 Create a new #GtkVPaned
 </para>
 
+@void: 
 @Returns: the new #GtkVPaned
 
 

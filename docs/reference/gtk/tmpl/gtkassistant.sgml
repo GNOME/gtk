@@ -29,6 +29,9 @@ to the GtkAssistant object, and set its child properties as necessary.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkAssistant ##### -->
 <para>
 
@@ -104,6 +107,7 @@ to the GtkAssistant object, and set its child properties as necessary.
 
 </para>
 
+@void: 
 @Returns: 
 
 

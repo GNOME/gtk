@@ -17,6 +17,9 @@ Functions for drawing widget parts
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
 Returns whether the style is attached to a window.
@@ -74,6 +77,7 @@ Returns whether the style is attached to a window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -990,6 +994,7 @@ be of different width on each side.
 
 </para>
 
+@void: 
 @Returns: 
 
 

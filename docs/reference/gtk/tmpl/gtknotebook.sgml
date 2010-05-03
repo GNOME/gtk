@@ -66,6 +66,9 @@ element.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkNotebook ##### -->
 <para>
 
@@ -310,6 +313,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

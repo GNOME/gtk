@@ -70,6 +70,9 @@ it doesn't allow you to specify a signal.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkActionGroup ##### -->
 <para>
 The <structname>GtkActionGroup</structname> struct contains only private 

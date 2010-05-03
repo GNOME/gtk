@@ -30,6 +30,9 @@ saturation.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHSV ##### -->
 <para>
 
@@ -56,6 +59,7 @@ saturation.
 
 </para>
 
+@void: 
 @Returns: 
 
 

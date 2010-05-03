@@ -39,6 +39,9 @@ on it: see gtk_link_button_set_uri_hook().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkLinkButton ##### -->
 <para>
 The #GtkLinkButton struct contains private data only, and should be

@@ -120,6 +120,9 @@ The "unbind" functionality has been introduced in GTK+ 2.12.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkBindingSet ##### -->
 <para>
 A binding set maintains a list of activatable key bindings.

@@ -33,6 +33,9 @@ rulers.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkVRuler ##### -->
 <para>
 The #GtkVRuler struct contains private data and should be accessed
@@ -45,6 +48,7 @@ using the functions below.
 Creates a new vertical ruler
 </para>
 
+@void: 
 @Returns: a new #GtkVRuler.
 
 

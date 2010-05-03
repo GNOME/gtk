@@ -23,6 +23,9 @@ fields in an adjustment represent for a scrollbar.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHScrollbar ##### -->
 <para>
 The #GtkHScrollbar struct contains private data and should be accessed

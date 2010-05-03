@@ -51,6 +51,9 @@ behaves as if homogeneous was %TRUE.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkButtonBox ##### -->
 <para>
 This is a read-only struct; no members should be modified directly.

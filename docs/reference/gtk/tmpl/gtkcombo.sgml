@@ -86,6 +86,9 @@ items.</title>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCombo ##### -->
 <para>
 The #GtkCombo-struct struct contains the following fields.
@@ -127,6 +130,7 @@ an application.)
 Creates a new #GtkCombo.
 </para>
 
+@void: 
 @Returns: a new #GtkCombo.
 @Deprecated: 2.4: Use #GtkComboBox instead.
 

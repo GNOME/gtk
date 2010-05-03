@@ -99,6 +99,9 @@ void create_floating_spin_button (void) {
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSpinButton ##### -->
 <para>
 <structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton 

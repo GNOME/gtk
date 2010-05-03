@@ -23,6 +23,9 @@ in newly written code. Use #GtkTreeView instead.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCList ##### -->
 <para>
 This is the embodiment of the #GtkCList widget.  This structure contains

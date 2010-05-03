@@ -103,6 +103,9 @@ else
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconInfo ##### -->
 <para>
 Contains information found when looking up an icon in
@@ -160,6 +163,7 @@ The #GQuark used for #GtkIconThemeError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -168,6 +172,7 @@ The #GQuark used for #GtkIconThemeError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 

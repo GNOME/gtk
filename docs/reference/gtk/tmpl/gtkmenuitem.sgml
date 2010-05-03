@@ -54,6 +54,9 @@ attribute of a &lt;child&gt; element.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuItem ##### -->
 <para>
 
@@ -151,6 +154,7 @@ submenu. For normal applications, the relevant signal is "activate".
 Creates a new #GtkMenuItem.
 </para>
 
+@void: 
 @Returns: the newly created #GtkMenuItem
 
 

@@ -94,6 +94,9 @@ void create_file_selection (void) {
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFileSelection ##### -->
 <para>
 The #GtkFileSelection struct contains the following #GtkWidget fields:

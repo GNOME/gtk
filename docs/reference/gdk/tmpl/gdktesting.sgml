@@ -18,6 +18,9 @@ They allow to simulate some user input.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_test_render_sync ##### -->
 <para>
 

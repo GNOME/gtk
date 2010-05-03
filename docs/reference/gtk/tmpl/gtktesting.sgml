@@ -17,6 +17,9 @@ Utilities for testing GTK+ applications
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gtk_test_create_simple_window ##### -->
 <para>
 
@@ -104,6 +107,7 @@ Utilities for testing GTK+ applications
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_test_slider_get_value ##### -->

@@ -250,6 +250,9 @@ int main (int argc, char *argv[])
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
 This macro marks the beginning of a critical section in which GDK and
@@ -275,6 +278,7 @@ begun with #GDK_THREADS_ENTER.
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
@@ -285,6 +289,7 @@ conditions.  Only one thread at a time can be in such a critial
 section.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_threads_leave ##### -->
@@ -292,6 +297,7 @@ section.
 Leaves a critical region begun with gdk_threads_enter(). 
 </para>
 
+@void: 
 
 
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: or\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-02 21:21-0400\n"
 "PO-Revision-Date: 2010-02-17 21:22+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
@@ -1704,7 +1704,7 @@ msgstr "Caps Lock ଅନ ଅଛି"
 msgid "Select A File"
 msgstr "ଗୋଟିଏ ଫାଇଲ ବାଛନ୍ତୁ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "ଡେସ୍କଟପ"
 
@@ -1720,23 +1720,23 @@ msgstr "ଅନ୍ଯାନ୍ଯ ..."
 msgid "Type name of new folder"
 msgstr "ନୂତନ ଫୋଲ୍ଡରର ପ୍ରକାରର ନାମ"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "ଫାଇଲ ବିଷୟରେ ସୂଚନା ଆଣିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ ଯୋଡ଼ିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ କାଢ଼ିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "ଫୋଲ୍ଡରଟି ସୃଷ୍ଟି କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1744,11 +1744,11 @@ msgstr ""
 "ଏକା ନାମର ଫାଇଲ ପୂର୍ବରୁ ଥିବାରୁ ଫୋଲ୍ଡରଟି ସୃଷ୍ଟି କରିହେଲା ନାହିଁ। ଫୋଲ୍ଡର ପାଇଁ ଅନ୍ଯ ନାମ ବ୍ଯବହାର "
 "କରିବାକୁ ଚେଷ୍ଟା କରନ୍ତୁ, ବା ପ୍ରଥମେ ଫାଇଲନାମ ବଦଳାନ୍ତୁ।"
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "ଅବୈଧ ଫାଇଲ ନାମ"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "ଫୋଲ୍ଡର ସୂଚୀ ଗେଖାଇହେଲା ନାହିଁ"
 
@@ -1756,201 +1756,201 @@ msgstr "ଫୋଲ୍ଡର ସୂଚୀ ଗେଖାଇହେଲା ନାହି
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s %2$sରେ"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "ଖୋଜନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9458
 msgid "Recently Used"
 msgstr "ନିକଟରେ ବ୍ୟବହୃତ"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "ପ୍ରଦର୍ଶନ ପାଇଁ ଫାଇଲ ପ୍ରକାର ବାଛନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' ଫୋଲ୍ଡରକୁ ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗାନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ସାମ୍ପ୍ରତିକ ଫୋଲ୍ଡରକୁ ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗାନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "ବଛା ଫୋଲ୍ଡରଗୁଡ଼ିକୁ ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗାନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' ଚିହ୍ନିତ ସ୍ଥାନ କାଢ଼ନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନ '%s' କୁ କଢ଼ାଯାଇପାରିବ ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "ବଛା ଚିହ୍ନିତ ସ୍ଥାନ କାଢ଼ନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "କାଢ଼ନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "ନାମ ବଦଳାନ୍ତୁ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "ସ୍ଥାନ"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "ସ୍ଥାନ (_P)"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "ଯୋଗ କରନ୍ତୁ (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ବଛା ଫୋଲ୍ଡରକୁ ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗାନ୍ତୁ"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "କାଢ଼ନ୍ତୁ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "ଫାଇଲ ବାଛିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "ଚିହ୍ନିତ ସ୍ଥାନଗୁଡ଼ିକରେ ଯୋଗାନ୍ତୁ (_A)"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "ଲୁକ୍କାୟିତ ଫାଇଲଗୁଡ଼ିକୁ ଦର୍ଶାନ୍ତୁ (_H)"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "ସ୍ତମ୍ଭ ଆକାର ଦର୍ଶାନ୍ତୁ (_S)"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441 gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "ଫାଇଲଗୁଡ଼ିକ"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "ନାମ"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "ଆକାର"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "ପରିବର୍ତ୍ତିତ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "ନାମ (_N):"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "ଅନ୍ଯ ଫୋଲ୍ଡର ପାଇଁ ଖୋଜିବୁଲନ୍ତୁ (_B)"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "ଗୋଟିଏ ଫାଇଲ ନାମକୁ ଟାଇପ କରନ୍ତୁ"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "ଫୋଲ୍ଡର ସୃଷ୍ଟି କରନ୍ତୁ (_l)"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "ଅବସ୍ଥାନ (_L):"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "ଫୋଲ୍ଡରରେ ସଞ୍ଚିତ କରନ୍ତୁ: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "ଫୋଲ୍ଡରରେ ସୃଷ୍ଟି କରନ୍ତୁ: (_f)"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "ଧାରା ସୃଷ୍ଟି କରିପାରିଲା ନାହିଁ: %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6427
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "ରୁଟ୍ ଫୋଲଡରକୁ ପାଇପାରିଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6520 gtk/gtkfilechooserdefault.c:6588
+#: gtk/gtkfilechooserdefault.c:6733
 msgid "Unknown"
 msgstr "ଅଜଣା"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6535
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6537
 msgid "Yesterday at %H:%M"
 msgstr "ଗତକାଲି %H:%M ରେ"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7203
 msgid "Cannot change to folder because it is not local"
 msgstr "ଏହି ଫୋଲ୍ଡର ସ୍ତାନୀୟ ନ ଥିବାରୁ ଏଠିକି ଯାଇ ହେବ ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7800 gtk/gtkfilechooserdefault.c:7821
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s ସଂକ୍ଷିପ୍ତ ପଥ ପୂର୍ବରୁ ଅଛି"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7911
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s ସଂକ୍ଷିପ୍ତ ପଥ ଅବସ୍ଥିତ ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8166 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" ନାମର ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଆପଣ ତାହାକୁ ବଦଳାଇବାକୁ ଚାହାନ୍ତି କି?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8169 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ରେ ଫାଇଲ ପୂର୍ବରୁ ଅଛି. ଏହାକୁ ବଦଳାଇଲେ, ତାହାର ସୂଚୀ ନବଲିଖିତ ହୋଇଯିବ."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8174 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ବଦଳାନ୍ତୁ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8826
 msgid "Could not start the search process"
 msgstr "ସନ୍ଧାନ ପଦ୍ଧତିକୁ ଆରମ୍ଭ କରିହେଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8827
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1958,15 +1958,15 @@ msgstr ""
 "ଅନୁକ୍ରମଣିକା ଡେମନ ସହିତ ସଂଯୋଗ ସ୍ଥାପନ କରିବାରେ ଏହି ପ୍ରଗ୍ରାମଟି ଅସମର୍ଥ.  ଏହା ଚାଲୁଅଛି ବୋଲି ଦୟାକରି "
 "ନିଶ୍ଚିତ ହୁଅନ୍ତୁ."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8841
 msgid "Could not send the search request"
 msgstr "ସନ୍ଧାନ ଅନୁରୋଧକୁ ପଠାଯାଇପାରିଲା ନାହିଁ"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9030
 msgid "Search:"
 msgstr "ଖୋଜନ୍ତୁ:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ସ୍ଥାପନ କରିହେଲା ନାହିଁ"

@@ -25,6 +25,9 @@ the GTK+ documentation for more information.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_drag_get_selection ##### -->
 <para>
 </para>
@@ -54,6 +57,7 @@ the GTK+ documentation for more information.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

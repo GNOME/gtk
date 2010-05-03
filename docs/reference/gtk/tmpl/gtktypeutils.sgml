@@ -18,6 +18,9 @@ managed at runtime.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF GtkType ##### -->
 <para>
 #GtkType is unique integer identifying the type.  The guts of the
@@ -166,6 +169,7 @@ Defines a function pointer.
 Defines a function pointer.
 </para>
 
+@void: 
 
 
 <!-- ##### USER_FUNCTION GtkFunction ##### -->

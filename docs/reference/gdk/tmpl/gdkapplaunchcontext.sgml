@@ -36,6 +36,9 @@ g_object_unref (context);
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF GdkAppLaunchContext ##### -->
 <para>
 An opaque structure representing an application launch context.
@@ -47,6 +50,7 @@ An opaque structure representing an application launch context.
 
 </para>
 
+@void: 
 @Returns: 
 
 

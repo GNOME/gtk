@@ -42,6 +42,9 @@ gtk_combo_box_get_active_text().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkComboBox ##### -->
 <para>
 
@@ -153,6 +156,7 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -279,6 +283,7 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+@void: 
 @Returns: 
 
 
