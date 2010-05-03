@@ -3623,13 +3623,13 @@ gtk_label_size_allocate (GtkWidget     *widget,
                   gint cy;
 
                   x0 = bounds.width / 2;
-                  y0 = dx ? x0 * dy / dx : dy * INFINITY;
+                  y0 = dx ? x0 * dy / dx : G_MAXDOUBLE;
                   vertical = fabs (y0) > bounds.height / 2;
 
                   if (vertical)
                     {
                       y0 = bounds.height/2;
-                      x0 = dy ? y0 * dx / dy : dx * INFINITY;
+                      x0 = dy ? y0 * dx / dy : G_MAXDOUBLE;
                     }
 
                   length = 2 * sqrt (x0 * x0 + y0 * y0);
