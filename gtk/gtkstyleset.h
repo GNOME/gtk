@@ -75,6 +75,9 @@ void gtk_style_set_register_property_double (const gchar *property_name,
 
 GtkStyleSet * gtk_style_set_new (void);
 
+void     gtk_style_set_set_default  (GtkStyleSet  *set,
+                                     const gchar  *property,
+                                     const GValue *value);
 void     gtk_style_set_set_property (GtkStyleSet  *set,
                                      const gchar  *property,
                                      GtkStateType  state,

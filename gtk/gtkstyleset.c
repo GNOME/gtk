@@ -42,6 +42,7 @@ struct PropertyNode
 
 struct PropertyData
 {
+  GValue default_value;
   GValue values[GTK_STATE_LAST];
 };
 
@@ -227,7 +228,6 @@ gtk_style_set_lookup_property (const gchar *property_name,
   PropertyNode *node;
   GtkStyleSetClass *klass;
   GQuark quark;
-  GType t;
   gint i;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
@@ -376,20 +376,17 @@ gtk_style_set_new (void)
   return g_object_new (GTK_TYPE_STYLE_SET, NULL);
 }
 
-void
-gtk_style_set_set_property (GtkStyleSet  *set,
-                            const gchar  *property,
-                            GtkStateType  state,
-                            const GValue *value)
+static void
+set_property_internal (GtkStyleSet  *set,
+                       const gchar  *property,
+                       gboolean      is_default,
+                       GtkStateType  state,
+                       const GValue *value)
 {
   GtkStyleSetPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
-
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (property != NULL);
-  g_return_if_fail (state < GTK_STATE_LAST);
-  g_return_if_fail (value != NULL);
+  GValue *val;
 
   node = property_node_lookup (g_quark_try_string (property));
 
@@ -413,14 +410,44 @@ gtk_style_set_set_property (GtkStyleSet  *set,
                            prop);
     }
 
-  if (G_IS_VALUE (&prop->values[state]))
-    g_value_reset (&prop->values[state]);
+  if (is_default)
+    val = &prop->default_value;
   else
-    g_value_init (&prop->values[state], node->property_type);
+    val = &prop->values[state];
 
-  g_value_copy (value, &prop->values[state]);
+  if (G_IS_VALUE (val))
+    g_value_reset (val);
+  else
+    g_value_init (val, node->property_type);
+
+  g_value_copy (value, val);
 }
 
+void
+gtk_style_set_set_default (GtkStyleSet  *set,
+                           const gchar  *property,
+                           const GValue *value)
+{
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (value != NULL);
+
+  set_property_internal (set, property, TRUE, GTK_STATE_NORMAL, value);
+}
+
+void
+gtk_style_set_set_property (GtkStyleSet  *set,
+                            const gchar  *property,
+                            GtkStateType  state,
+                            const GValue *value)
+{
+  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (property != NULL);
+  g_return_if_fail (state < GTK_STATE_LAST);
+  g_return_if_fail (value != NULL);
+
+  set_property_internal (set, property, FALSE, state, value);
+}
 
 void
 gtk_style_set_set_valist (GtkStyleSet  *set,
@@ -521,8 +548,11 @@ gtk_style_set_get_property (GtkStyleSet  *set,
   g_value_init (value, node->property_type);
 
   if (!prop ||
-      !G_IS_VALUE (&prop->values[state]))
+      (!G_IS_VALUE (&prop->values[state]) &&
+       !G_IS_VALUE (&prop->default_value)))
     g_value_copy (&node->default_value, value);
+  else if (!G_IS_VALUE (&prop->values[state]))
+    g_value_copy (&prop->default_value, value);
   else
     g_value_copy (&prop->values[state], value);
 
@@ -561,8 +591,11 @@ gtk_style_set_get_valist (GtkStyleSet  *set,
                                   GINT_TO_POINTER (node->property_quark));
 
       if (!prop ||
-          !G_IS_VALUE (&prop->values[state]))
+          (!G_IS_VALUE (&prop->values[state]) &&
+           !G_IS_VALUE (&prop->default_value)))
         G_VALUE_LCOPY (&node->default_value, args, 0, &error);
+      else if (!G_IS_VALUE (&prop->values[state]))
+        G_VALUE_LCOPY (&prop->default_value, args, 0, &error);
       else
         G_VALUE_LCOPY (&prop->values[state], args, 0, &error);
 
@@ -680,6 +713,25 @@ gtk_style_set_merge (GtkStyleSet       *set,
               g_value_copy (&prop_to_merge->values[i],
                             &prop->values[i]);
             }
+        }
+
+      if (G_IS_VALUE (&prop_to_merge->default_value) &&
+          (replace || !prop || !G_IS_VALUE (&prop->default_value)))
+        {
+          if (!prop)
+            prop = g_hash_table_lookup (priv->properties, key);
+
+          if (!prop)
+            {
+              prop = property_data_new ();
+              g_hash_table_insert (priv->properties, key, prop);
+            }
+
+          if (!G_IS_VALUE (&prop->default_value))
+            g_value_init (&prop->default_value, G_VALUE_TYPE (&prop_to_merge->default_value));
+
+          g_value_copy (&prop_to_merge->default_value,
+                        &prop->default_value);
         }
     }
 }
