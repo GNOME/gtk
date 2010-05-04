@@ -10241,6 +10241,22 @@ gtk_widget_class_path (GtkWidget *widget,
 }
 
 /**
+ * gtk_requisition_new:
+ *
+ * Allocates a new #GtkRequisition structure and initializes its elements to zero.
+ *
+ * Returns: a new empty #GtkRequisition. The newly allocated #GtkRequisition should
+ *   be freed with gtk_requisition_free().
+ *
+ * Since: 3.0
+ */
+GtkRequisition *
+gtk_requisition_new (void)
+{
+  return g_slice_new0 (GtkRequisition);
+}
+
+/**
  * gtk_requisition_copy:
  * @requisition: a #GtkRequisition
  *
@@ -10251,7 +10267,7 @@ gtk_widget_class_path (GtkWidget *widget,
 GtkRequisition *
 gtk_requisition_copy (const GtkRequisition *requisition)
 {
-  return (GtkRequisition *)g_memdup (requisition, sizeof (GtkRequisition));
+  return g_slice_dup (GtkRequisition, requisition);
 }
 
 /**
@@ -10263,7 +10279,7 @@ gtk_requisition_copy (const GtkRequisition *requisition)
 void
 gtk_requisition_free (GtkRequisition *requisition)
 {
-  g_free (requisition);
+  g_slice_free (GtkRequisition, requisition);
 }
 
 GType

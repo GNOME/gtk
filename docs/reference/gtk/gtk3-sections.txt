@@ -4942,6 +4942,7 @@ gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 
 <SUBSECTION>
+gtk_requisition_new
 gtk_requisition_copy
 gtk_requisition_free
 

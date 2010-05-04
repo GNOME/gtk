@@ -4312,6 +4312,7 @@ gtk_vseparator_new
 gtk_requisition_copy
 gtk_requisition_free
 gtk_requisition_get_type G_GNUC_CONST
+gtk_requisition_new G_GNUC_MALLOC
 gtk_widget_activate
 gtk_widget_is_composited
 gtk_widget_add_accelerator

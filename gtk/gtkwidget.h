@@ -954,6 +954,7 @@ void       gtk_widget_set_has_tooltip       (GtkWidget   *widget,
 gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
+GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
 
