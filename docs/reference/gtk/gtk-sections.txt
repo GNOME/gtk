@@ -1316,6 +1316,8 @@ gtk_entry_get_progress_fraction
 gtk_entry_set_progress_pulse_step
 gtk_entry_get_progress_pulse_step
 gtk_entry_progress_pulse
+gtk_entry_im_context_filter_keypress
+gtk_entry_reset_im_context
 GtkEntryIconPosition
 gtk_entry_set_icon_from_pixbuf
 gtk_entry_set_icon_from_stock
@@ -4129,6 +4131,8 @@ gtk_text_view_get_tabs
 gtk_text_view_set_accepts_tab
 gtk_text_view_get_accepts_tab
 gtk_text_view_get_default_attributes
+gtk_text_view_im_context_filter_keypress
+gtk_text_view_reset_im_context
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW

@@ -297,7 +297,6 @@ static void     gtk_text_view_set_attributes_from_style (GtkTextView        *tex
 static void     gtk_text_view_ensure_layout          (GtkTextView        *text_view);
 static void     gtk_text_view_destroy_layout         (GtkTextView        *text_view);
 static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_view);
-static void     gtk_text_view_reset_im_context       (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_drag   (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
                                                       GdkEventButton     *event);
@@ -6574,14 +6573,72 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
     }
 }
 
-static void
+/**
+ * gtk_text_view_reset_im_context:
+ * @text_view: a #GtkTextView
+ *
+ * Reset the input method context of the text view if needed.
+ *
+ * This can be necessary in the case where modifying the buffer
+ * would confuse on-going input method behavior.
+ *
+ * Since: 2.22
+ */
+void
 gtk_text_view_reset_im_context (GtkTextView *text_view)
 {
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
   if (text_view->need_im_reset)
     {
       text_view->need_im_reset = FALSE;
       gtk_im_context_reset (text_view->im_context);
     }
+}
+
+/**
+ * gtk_text_view_im_context_filter_keypress:
+ * @text_view: a #GtkTextView
+ * @event: the key event
+ *
+ * Allow the #GtkTextView input method to internally handle key press
+ * and release events. If this function returns %TRUE, then no further
+ * processing should be done for this key event. See
+ * gtk_im_context_filter_keypress().
+ *
+ * Note that you are expected to call this function from your handler
+ * when overriding key event handling. This is needed in the case when
+ * you need to insert your own key handling between the input method
+ * and the default key event handling of the #GtkTextView.
+ *
+ * |[
+ * static gboolean
+ * gtk_foo_bar_key_press_event (GtkWidget   *widget,
+ *                              GdkEventKey *event)
+ * {
+ *   if ((key->keyval == GDK_Return || key->keyval == GDK_KP_Enter))
+ *     {
+ *       if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
+ *         return TRUE;
+ *     }
+ *
+ *     /&ast; Do some stuff &ast;/
+ *
+ *   return GTK_WIDGET_CLASS (gtk_foo_bar_parent_class)->key_press_event (widget, event);
+ * }
+ * ]|
+ *
+ * Return value: %TRUE if the input method handled the key event.
+ *
+ * Since: 2.22
+ */
+gboolean
+gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
+                                          GdkEventKey  *key)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+
+  return gtk_im_context_filter_keypress (text_view->im_context, key);
 }
 
 /*
