@@ -244,9 +244,6 @@ libstatic_pixbufloader_gdip_gif_la_SOURCES = 	\
 libstatic_pixbufloader_gdip_jpeg_la_SOURCES = 	\
 	io-gdip-jpeg.c
 
-libstatic_pixbufloader_gdip_png_la_SOURCES = 	\
-	io-gdip-png.c
-
 libstatic_pixbufloader_gdip_tiff_la_SOURCES = 	\
 	io-gdip-tiff.c
 
@@ -326,17 +323,6 @@ libpixbufloader_gdip_jpeg_la_SOURCES = 	\
 	io-gdip-animation.h		\
 	io-gdip-jpeg.c
 libpixbufloader_gdip_jpeg_la_LIBADD = $(module_libs) $(libole32)
-
-libpixbufloader_gdip_png_la_LDFLAGS = -avoid-version -module -no-undefined
-libpixbufloader_gdip_png_la_SOURCES = 	\
-	io-gdip-native.h		\
-	io-gdip-propertytags.h		\
-	io-gdip-utils.h			\
-	io-gdip-utils.c			\
-	io-gdip-animation.c		\
-	io-gdip-animation.h		\
-	io-gdip-png.c
-libpixbufloader_gdip_png_la_LIBADD = $(module_libs) $(libole32)
 
 libpixbufloader_gdip_tiff_la_LDFLAGS = -avoid-version -module -no-undefined
 libpixbufloader_gdip_tiff_la_SOURCES = 	\
