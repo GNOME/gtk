@@ -5807,6 +5807,55 @@ _gtk_entry_reset_im_context (GtkEntry *entry)
     }
 }
 
+/**
+ * gtk_entry_reset_im_context:
+ * @entry: a #GtkEntry
+ *
+ * Reset the input method context of the entry if needed.
+ *
+ * This can be necessary in the case where modifying the buffer
+ * would confuse on-going input method behavior.
+ *
+ * Since: 2.22
+ */
+void
+gtk_entry_reset_im_context (GtkEntry *entry)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  _gtk_entry_reset_im_context (entry);
+}
+
+/**
+ * gtk_entry_im_context_filter_keypress:
+ * @entry: a #GtkEntry
+ * @event: the key event
+ *
+ * Allow the #GtkEntry input method to internally handle key press
+ * and release events. If this function returns %TRUE, then no further
+ * processing should be done for this key event. See
+ * gtk_im_context_filter_keypress().
+ *
+ * Note that you are expected to call this function from your handler
+ * when overriding key event handling. This is needed in the case when
+ * you need to insert your own key handling between the input method
+ * and the default key event handling of the #GtkEntry.
+ * See gtk_text_view_reset_im_context() for an example of use.
+ *
+ * Return value: %TRUE if the input method handled the key event.
+ *
+ * Since: 2.22
+ */
+gboolean
+gtk_entry_im_context_filter_keypress (GtkEntry    *entry,
+                                      GdkEventKey *key)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return gtk_im_context_filter_keypress (entry->im_context, key);
+}
+
+
 static gint
 gtk_entry_find_position (GtkEntry *entry,
 			 gint      x)

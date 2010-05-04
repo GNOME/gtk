@@ -306,6 +306,10 @@ gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *
 GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos);
 
+gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
+                                                          GdkEventKey          *key);
+void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
+
 
 /* Deprecated compatibility functions
  */
