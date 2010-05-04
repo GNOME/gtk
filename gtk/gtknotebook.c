@@ -462,7 +462,9 @@ static void gtk_notebook_paint               (GtkWidget        *widget,
 					      cairo_t          *cr);
 static void gtk_notebook_draw_tab            (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
-					      cairo_t          *cr);
+					      cairo_t          *cr,
+                                              guint             position,
+                                              gboolean          is_last);
 static void gtk_notebook_draw_arrow          (GtkNotebook      *notebook,
                                               cairo_t          *cr,
 					      GtkNotebookArrow  arrow);
@@ -2447,7 +2449,7 @@ gtk_notebook_draw (GtkWidget *widget,
 
       gtk_notebook_draw_tab (notebook,
 			     priv->cur_page,
-			     cr);
+			     cr, 0, FALSE);
 
       cairo_restore (cr);
 
@@ -4895,8 +4897,8 @@ gtk_notebook_paint (GtkWidget    *widget,
   gint x, y;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint gap_x = 0, gap_width = 0, step = STEP_PREV;
-  gboolean is_rtl;
-  gint tab_pos;
+  gboolean is_rtl, cur_page_end;
+  gint tab_pos, i, cur_page_pos;
    
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
@@ -4987,6 +4989,8 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   showarrow = FALSE;
   children = gtk_notebook_search_page (notebook, NULL, step, TRUE);
+  i = 0;
+
   while (children)
     {
       page = children->data;
@@ -4996,8 +5000,18 @@ gtk_notebook_paint (GtkWidget    *widget,
 	continue;
       if (!gtk_widget_get_mapped (page->tab_label))
 	showarrow = TRUE;
-      else if (page != priv->cur_page)
-	gtk_notebook_draw_tab (notebook, page, cr);
+      else
+        {
+          if (page != priv->cur_page)
+            gtk_notebook_draw_tab (notebook, page, cr, i, children != NULL);
+          else
+            {
+              cur_page_pos = i;
+              cur_page_end = (children != NULL);
+            }
+
+          i++;
+        }
     }
 
   if (showarrow && priv->scrollable)
@@ -5013,18 +5027,22 @@ gtk_notebook_paint (GtkWidget    *widget,
     }
 
   if (priv->operation != DRAG_OPERATION_REORDER)
-    gtk_notebook_draw_tab (notebook, priv->cur_page, cr);
+    gtk_notebook_draw_tab (notebook, priv->cur_page, cr, cur_page_pos, cur_page_end);
 }
 
 static void
 gtk_notebook_draw_tab (GtkNotebook     *notebook,
 		       GtkNotebookPage *page,
-		       cairo_t         *cr)
+		       cairo_t         *cr,
+                       guint            position,
+                       gboolean         is_last)
 {
   GtkNotebookPrivate *priv;
   GtkStateType state_type;
   GtkWidget *widget;
-  
+  GtkStyleContext *context;
+  GtkChildClassFlags flags = 0;
+
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
       (page->allocation.width == 0) || (page->allocation.height == 0))
@@ -5037,6 +5055,20 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     state_type = GTK_STATE_NORMAL;
   else 
     state_type = GTK_STATE_ACTIVE;
+
+  if (position % 2 == 0)
+    flags |= GTK_CHILD_CLASS_ODD;
+  else
+    flags |= GTK_CHILD_CLASS_EVEN;
+
+  if (position == 0)
+    flags |= GTK_CHILD_CLASS_FIRST;
+
+  if (is_last)
+    flags |= GTK_CHILD_CLASS_LAST;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_child_class (context, "tab", flags);
 
   gtk_paint_extension (gtk_widget_get_style (widget), cr,
                        state_type, GTK_SHADOW_OUT,
@@ -5063,6 +5095,8 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        allocation.width + 2 * focus_width,
                        allocation.height + 2 * focus_width);
     }
+
+  gtk_style_context_unset_child_class (context, "tab");
 }
 
 static void
