@@ -488,11 +488,13 @@ gtk_style_context_list_child_classes (GtkStyleContext *context)
   while (link)
     {
       GtkChildClass *link_class;
+      const gchar *child_class;
 
       link_class = link->data;
-      classes = g_list_prepend (classes,
-                                g_quark_to_string (link_class->class_quark));
       link = link->next;
+
+      child_class = g_quark_to_string (link_class->class_quark);
+      classes = g_list_prepend (classes, child_class);
     }
 
   return classes;
