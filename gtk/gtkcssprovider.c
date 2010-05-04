@@ -444,6 +444,7 @@ compare_selector (GtkWidgetPath *path,
 
       if (match)
         {
+          /* Only 4 bits are actually used */
           score <<= 4;
           score |= elem_score;
         }
@@ -529,7 +530,12 @@ gtk_style_get_style (GtkStyleProvider *provider,
       g_hash_table_iter_init (&iter, info->style);
 
       while (g_hash_table_iter_next (&iter, &key, &value))
-        gtk_style_set_set_property (set, key, info->state, value);
+        {
+          if (info->state == GTK_STATE_NORMAL)
+            gtk_style_set_set_default (set, key, value);
+          else
+            gtk_style_set_set_property (set, key, info->state, value);
+        }
     }
 
   g_array_free (priority_info, TRUE);
