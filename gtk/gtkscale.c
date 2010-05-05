@@ -946,7 +946,10 @@ find_next_pos (GtkWidget      *widget,
         return marks[i];
     }
 
-  return widget->allocation.width;
+  if (pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM)
+    return widget->allocation.width;
+  else
+    return widget->allocation.height;
 }
 
 static gboolean
@@ -1074,7 +1077,7 @@ gtk_scale_expose (GtkWidget      *widget,
                 {
                   pango_layout_set_markup (layout, mark->markup, -1);
                   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
-              
+
                   y3 = y1 - logical_rect.height / 2;
                   if (y3 < min_pos)
                     y3 = min_pos;
