@@ -307,7 +307,7 @@ GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *
                                                           GtkEntryIconPosition  icon_pos);
 
 gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
-                                                          GdkEventKey          *key);
+                                                          GdkEventKey          *event);
 void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
 
 

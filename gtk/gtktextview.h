@@ -308,7 +308,7 @@ gboolean gtk_text_view_move_visually                  (GtkTextView       *text_v
                                                        gint               count);
 
 gboolean        gtk_text_view_im_context_filter_keypress        (GtkTextView       *text_view,
-                                                                 GdkEventKey       *key);
+                                                                 GdkEventKey       *event);
 void            gtk_text_view_reset_im_context                  (GtkTextView       *text_view);
 
 /* Adding child widgets */

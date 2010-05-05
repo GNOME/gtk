@@ -6634,11 +6634,11 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  */
 gboolean
 gtk_text_view_im_context_filter_keypress (GtkTextView  *text_view,
-                                          GdkEventKey  *key)
+                                          GdkEventKey  *event)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 
-  return gtk_im_context_filter_keypress (text_view->im_context, key);
+  return gtk_im_context_filter_keypress (text_view->im_context, event);
 }
 
 /*
