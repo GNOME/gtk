@@ -5848,11 +5848,11 @@ gtk_entry_reset_im_context (GtkEntry *entry)
  */
 gboolean
 gtk_entry_im_context_filter_keypress (GtkEntry    *entry,
-                                      GdkEventKey *key)
+                                      GdkEventKey *event)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_im_context_filter_keypress (entry->im_context, key);
+  return gtk_im_context_filter_keypress (entry->im_context, event);
 }
 
 
