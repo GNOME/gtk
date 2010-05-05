@@ -1673,11 +1673,7 @@ gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
   if (!impl->cairo_surface) {
     IDirectFBSurface *surface;
     g_assert (impl->surface != NULL);
-#if defined(CAIRO_VERSION) && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,5,5)
     impl->surface->GetSubSurface (impl->surface, NULL, &surface);
-#else
-    surface = impl->surface;
-#endif
     if (surface) {
       impl->cairo_surface = cairo_directfb_surface_create (dfb, surface);
       if (impl->cairo_surface) {
@@ -1685,9 +1681,7 @@ gdk_directfb_ref_cairo_surface (GdkDrawable *drawable)
                                      &gdk_directfb_cairo_key, drawable,
                                      gdk_directfb_cairo_surface_destroy);
       }
-#if defined(CAIRO_VERSION) && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1,5,5)
       surface->Release (surface);
-#endif
     }
   } else {
     cairo_surface_reference (impl->cairo_surface);
