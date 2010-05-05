@@ -51,33 +51,7 @@ static void gdk_image_init             (GdkImage      *image);
 static void gdk_image_class_init       (GdkImageClass *klass);
 static void gdk_image_finalize         (GObject       *object);
 
-GType
-gdk_image_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-        {
-          sizeof (GdkImageClass),
-          (GBaseInitFunc) NULL,
-          (GBaseFinalizeFunc) NULL,
-          (GClassInitFunc) gdk_image_class_init,
-          NULL,           /* class_finalize */
-          NULL,           /* class_data */
-          sizeof (GdkImage),
-          0,              /* n_preallocs */
-          (GInstanceInitFunc) gdk_image_init,
-        };
-
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkImage",
-                                            &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GdkImage, gdk_image, G_TYPE_OBJECT)
 
 static void
 gdk_image_init (GdkImage *image)
