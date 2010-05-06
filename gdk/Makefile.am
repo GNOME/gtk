@@ -198,11 +198,12 @@ introspection_files = \
 		$(gdk_c_sources) \
         gdkenumtypes.c \
         gdkenumtypes.h \
-        x11/*.c
+        x11/*.c \
+        x11/gdkx.h
 
 Gdk-3.0.gir: $(gdktargetlib) Makefile
 Gdk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
-Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-3.0 Pango-1.0
+Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-3.0 Pango-1.0 xlib-2.0
 Gdk_3_0_gir_LIBS = $(gdktargetlib)
 Gdk_3_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
