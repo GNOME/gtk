@@ -37,6 +37,7 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
+#include "gtkmenuproxy.h"
 #include "gtkmnemonichash.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
@@ -134,6 +135,8 @@ struct _GtkMenuShellPrivate
 {
   GtkMnemonicHash *mnemonic_hash;
   GtkKeyHash *key_hash;
+
+  GtkMenuProxy *proxy;
 
   guint take_focus : 1;
   guint activated_submenu : 1;
@@ -408,6 +411,8 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   priv->key_hash = NULL;
   priv->take_focus = TRUE;
   priv->activated_submenu = FALSE;
+  priv->proxy = gtk_menu_proxy_get ();
+  //priv->proxy = gtk_menu_proxy_factory_get_proxy ();
 }
 
 static void
@@ -483,11 +488,21 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
 		       gint          position)
 {
   GtkMenuShellClass *class;
+  GtkMenuShellPrivate *priv;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
   class = GTK_MENU_SHELL_GET_CLASS (menu_shell);
+
+  priv = GTK_MENU_SHELL_GET_PRIVATE (menu_shell);
+
+  // XXX
+  // insert to proxy
+  if (priv->proxy != NULL)
+    gtk_menu_proxy_insert (priv->proxy,
+                           child,
+                           position);
 
   if (class->insert)
     class->insert (menu_shell, child, position);
