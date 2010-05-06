@@ -125,7 +125,8 @@ enum {
   PROP_ENABLE_TOOLTIPS,
   PROP_TOOLBAR_STYLE,
   PROP_TOOLBAR_ICON_SIZE,
-  PROP_AUTO_MNEMONICS
+  PROP_AUTO_MNEMONICS,
+  PROP_APPLICATION_PREFER_DARK_THEME
 };
 
 
@@ -1017,6 +1018,32 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_AUTO_MNEMONICS);
+
+  /**
+   * GtkSettings:gtk-application-prefer-dark-theme:
+   *
+   * Whether the application prefers to use a dark theme. If a GTK+ theme
+   * includes a dark variant, it will be used instead of the configured
+   * theme.
+   *
+   * Some applications benefit from minimizing the amount of light pollution that
+   * interferes with the content. Good candidates for dark themes are photo and
+   * video editors that make the actual content get all the attention and minimize
+   * the distraction of the chrome.
+   *
+   * Dark themes should not be used for documents, where large spaces are white/light
+   * and the dark chrome creates too much contrast (web browser, text editor...).
+   *
+   * Since: 2.22
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-application-prefer-dark-theme",
+                                                                 P_("Application prefers a dark theme"),
+                                                                 P_("Whether the application prefers to have a dark theme."),
+                                                                 FALSE,
+                                                                 GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
 }
 
 static void

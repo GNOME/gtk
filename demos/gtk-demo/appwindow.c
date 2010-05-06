@@ -19,6 +19,16 @@ activate_action (GtkAction *action)
 
   GtkWidget *dialog;
 
+  if (g_str_equal (name, "DarkTheme"))
+    {
+      gboolean value = gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action));
+      GtkSettings *settings = gtk_settings_get_default ();
+
+      g_object_set (G_OBJECT (settings),
+		    "gtk-application-prefer-dark-theme", value,
+		    NULL);
+      return;
+    }
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
@@ -212,6 +222,11 @@ static GtkToggleActionEntry toggle_entries[] = {
     "Bold",                                    /* tooltip */
     G_CALLBACK (activate_action),
     TRUE },                                    /* is_active */
+  { "DarkTheme", NULL,                         /* name, stock id */
+     "_Prefer Dark Theme", NULL,               /* label, accelerator */
+    "Prefer Dark Theme",                       /* tooltip */
+    G_CALLBACK (activate_action),
+    FALSE },                                   /* is_active */
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
@@ -265,6 +280,7 @@ static const gchar *ui_info =
 "      <menuitem action='Quit'/>"
 "    </menu>"
 "    <menu action='PreferencesMenu'>"
+"      <menuitem action='DarkTheme'/>"
 "      <menu action='ColorMenu'>"
 "	<menuitem action='Red'/>"
 "	<menuitem action='Green'/>"

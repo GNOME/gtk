@@ -117,9 +117,10 @@ struct _GtkRcContext
   /* The files we have parsed, to reread later if necessary */
   GSList *rc_files;
 
-  gchar *theme_name;
-  gchar *key_theme_name;
-  gchar *font_name;
+  gchar    *theme_name;
+  gboolean  prefer_dark_theme;
+  gchar    *key_theme_name;
+  gchar    *font_name;
   
   gchar **pixmap_path;
 
@@ -160,9 +161,10 @@ static GtkStyle *  gtk_rc_style_to_style             (GtkRcContext    *context,
 static GtkStyle*   gtk_rc_init_style                 (GtkRcContext    *context,
 						      GSList          *rc_styles);
 static void        gtk_rc_parse_default_files        (GtkRcContext    *context);
-static void        gtk_rc_parse_named                (GtkRcContext    *context,
+static gboolean    gtk_rc_parse_named                (GtkRcContext    *context,
 						      const gchar     *name,
-						      const gchar     *type);
+						      const gchar     *type,
+						      const gchar     *variant);
 static void        gtk_rc_context_parse_file         (GtkRcContext    *context,
 						      const gchar     *filename,
 						      gint             priority,
@@ -624,6 +626,7 @@ gtk_rc_settings_changed (GtkSettings  *settings,
 {
   gchar *new_theme_name;
   gchar *new_key_theme_name;
+  gboolean new_prefer_dark_theme;
 
   if (context->reloading)
     return;
@@ -631,12 +634,14 @@ gtk_rc_settings_changed (GtkSettings  *settings,
   g_object_get (settings,
 		"gtk-theme-name", &new_theme_name,
 		"gtk-key-theme-name", &new_key_theme_name,
+		"gtk-application-prefer-dark-theme", &new_prefer_dark_theme,
 		NULL);
 
   if ((new_theme_name != context->theme_name && 
        !(new_theme_name && context->theme_name && strcmp (new_theme_name, context->theme_name) == 0)) ||
       (new_key_theme_name != context->key_theme_name &&
-       !(new_key_theme_name && context->key_theme_name && strcmp (new_key_theme_name, context->key_theme_name) == 0)))
+       !(new_key_theme_name && context->key_theme_name && strcmp (new_key_theme_name, context->key_theme_name) == 0)) ||
+      new_prefer_dark_theme != context->prefer_dark_theme)
     {
       gtk_rc_reparse_all_for_settings (settings, TRUE);
     }
@@ -692,6 +697,7 @@ gtk_rc_context_get (GtkSettings *settings)
 		    "gtk-key-theme-name", &context->key_theme_name,
 		    "gtk-font-name", &context->font_name,
 		    "color-hash", &context->color_hash,
+		    "gtk-application-prefer-dark-theme", &context->prefer_dark_theme,
 		    NULL);
 
       g_signal_connect (settings,
@@ -709,6 +715,10 @@ gtk_rc_context_get (GtkSettings *settings)
       g_signal_connect (settings,
 			"notify::color-hash",
 			G_CALLBACK (gtk_rc_color_hash_changed),
+			context);
+      g_signal_connect (settings,
+			"notify::gtk-application-prefer-dark-theme",
+			G_CALLBACK (gtk_rc_settings_changed),
 			context);
 
       context->pixmap_path = NULL;
@@ -785,22 +795,27 @@ _gtk_rc_context_destroy (GtkSettings *settings)
   settings->rc_context = NULL;
 }
 
-static void
+static gboolean
 gtk_rc_parse_named (GtkRcContext *context,
 		    const gchar  *name,
-		    const gchar  *type)
+		    const gchar  *type,
+		    const gchar  *variant)
 {
   gchar *path = NULL;
   const gchar *home_dir;
   gchar *subpath;
+  gboolean retval;
+
+  retval = FALSE;
 
   if (type)
     subpath = g_strconcat ("gtk-3.0-", type,
 			   G_DIR_SEPARATOR_S "gtkrc",
 			   NULL);
   else
-    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtkrc");
-  
+    subpath = g_strconcat ("gtk-3.0" G_DIR_SEPARATOR_S "gtkrc",
+			   variant, NULL);
+
   /* First look in the users home directory
    */
   home_dir = g_get_home_dir ();
@@ -831,9 +846,12 @@ gtk_rc_parse_named (GtkRcContext *context,
     {
       gtk_rc_context_parse_file (context, path, GTK_PATH_PRIO_THEME, FALSE);
       g_free (path);
+      retval = TRUE;
     }
 
   g_free (subpath);
+
+  return retval;
 }
 
 static void
@@ -1824,12 +1842,23 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       g_object_get (context->settings,
 		    "gtk-theme-name", &context->theme_name,
 		    "gtk-key-theme-name", &context->key_theme_name,
+		    "gtk-application-prefer-dark-theme", &context->prefer_dark_theme,
 		    NULL);
 
       if (context->theme_name && context->theme_name[0])
-	gtk_rc_parse_named (context, context->theme_name, NULL);
+        {
+          if (context->prefer_dark_theme)
+            {
+              if (!gtk_rc_parse_named (context, context->theme_name, NULL, "-dark"))
+                gtk_rc_parse_named (context, context->theme_name, NULL, NULL);
+	    }
+	  else
+	    {
+	      gtk_rc_parse_named (context, context->theme_name, NULL, NULL);
+	    }
+	}
       if (context->key_theme_name && context->key_theme_name[0])
-	gtk_rc_parse_named (context, context->key_theme_name, "key");
+	gtk_rc_parse_named (context, context->key_theme_name, "key", NULL);
 
       context->reloading = FALSE;
 

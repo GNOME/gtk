@@ -125,6 +125,21 @@ that GTK+ creates internally.
 
 </refsect2>
 
+<refsect2><title>Theme gtkrc files</title>
+<anchor id="theme-gtkrc-files"/>
+<para>
+Theme RC files are loaded first from under the <filename>~/.themes/</filename>,
+then from the directory from gtk_rc_get_theme_dir(). The files looked at will
+be <filename>gtk-3.0/gtkrc</filename>.
+</para>
+<para>
+When the application prefers dark themes
+(see the #GtkSettings:gtk-application-prefer-dark-theme property for details),
+<filename>gtk-3.0/gtkrc-dark</filename> will be loaded first, and if not present
+<filename>gtk-3.0/gtkrc</filename> will be loaded.
+</para>
+</refsect2>
+
 <refsect2>
 <anchor id="optimizing-rc-style-matches"/>
 <title>Optimizing RC Style Matches</title>
