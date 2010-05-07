@@ -32,6 +32,9 @@ gtk_menu_shell_append().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHSeparator ##### -->
 <para>
 The #GtkHSeparator-struct struct contains private data only, and
@@ -44,6 +47,7 @@ should be accessed using the functions below.
 Creates a new #GtkHSeparator.
 </para>
 
+@void: 
 @Returns: a new #GtkHSeparator.
 
 

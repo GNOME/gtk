@@ -21,6 +21,9 @@ When the #GdkGC is no longer needed, gtk_gc_release() should be called.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gtk_gc_get ##### -->
 <para>
 Gets a #GdkGC with the given depth, colormap and #GdkGCValues.

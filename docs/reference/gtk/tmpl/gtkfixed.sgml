@@ -67,6 +67,9 @@ widget. But you should be aware of the tradeoffs.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFixed ##### -->
 <para>
 The #GtkFixed-struct struct contains the following fields.
@@ -102,6 +105,7 @@ their positions.</entry>
 Creates a new #GtkFixed.
 </para>
 
+@void: 
 @Returns: a new #GtkFixed.
 
 

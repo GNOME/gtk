@@ -246,6 +246,9 @@ respective objects, see
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkBuilder ##### -->
 <para>
 
@@ -300,6 +303,7 @@ using #GtkBuilder.
 
 </para>
 
+@void: 
 @Returns: 
 
 

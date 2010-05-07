@@ -87,6 +87,9 @@ and <structfield>ytilt</structfield>.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkDevice ##### -->
 <para>
 A <structname>GdkDevice</structname> structure contains
@@ -174,6 +177,7 @@ types that GTK+ understands.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -224,6 +228,7 @@ Specifies how an axis of a device is used.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

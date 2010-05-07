@@ -29,6 +29,9 @@ As of GTK+ 2.20, #GtkGammaCurve has been deprecated since it is too specialized.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkGammaCurve ##### -->
 <para>
 The #GtkGammaCurve struct contains private data only, and
@@ -41,6 +44,7 @@ should be accessed using the functions below.
 Creates a new #GtkGammaCurve.
 </para>
 
+@void: 
 @Returns: a new #GtkGammaCurve.
 @Deprecated: 2.20: Don't use this widget anymore.
 

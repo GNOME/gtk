@@ -79,6 +79,9 @@ return %TRUE to show the window, %FALSE to not show it.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTooltip ##### -->
 <para>
 

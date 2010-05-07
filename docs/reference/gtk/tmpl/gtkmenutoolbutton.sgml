@@ -39,6 +39,9 @@ A GtkToolItem containing a button with an additional dropdown menu
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuToolButton ##### -->
 <para>
   The #GtkMenuToolButton struct contains only private data and

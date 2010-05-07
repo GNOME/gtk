@@ -90,6 +90,9 @@ explicitly call g_object_ref() yourself.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkObject ##### -->
 <para>
 The object itself.  You should never use these members directly -

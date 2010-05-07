@@ -23,6 +23,9 @@ required events are received. See gtk_widget_set_events().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### UNION GdkEvent ##### -->
 <para>
 The #GdkEvent struct contains a union of all of the event structs,

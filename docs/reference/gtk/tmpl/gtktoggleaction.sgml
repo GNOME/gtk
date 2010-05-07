@@ -18,6 +18,9 @@ A #GtkToggleAction corresponds roughly to a #GtkCheckMenuItem. It has an
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToggleAction ##### -->
 <para>
 The <structname>GtkToggleAction</structname> struct contains only 

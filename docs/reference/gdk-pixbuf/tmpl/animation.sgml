@@ -23,6 +23,9 @@ Animated images.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
 <para>
 An opaque struct representing an animation.

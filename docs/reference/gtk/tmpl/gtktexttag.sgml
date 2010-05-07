@@ -34,6 +34,9 @@ It is working (with minor issues) since 2.8.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextTag ##### -->
 <para>
 
@@ -477,6 +480,7 @@ modified directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 

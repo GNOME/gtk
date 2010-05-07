@@ -25,6 +25,9 @@ GtkOrientable was introduced in GTK+ 2.16.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkOrientable ##### -->
 <para>
 

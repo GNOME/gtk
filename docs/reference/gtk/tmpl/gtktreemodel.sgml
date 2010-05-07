@@ -196,6 +196,9 @@ enum
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeModel ##### -->
 <para>
 
@@ -327,6 +330,7 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -363,6 +367,7 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
 
 

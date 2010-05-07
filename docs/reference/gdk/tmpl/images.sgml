@@ -58,6 +58,9 @@ displays.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkImage ##### -->
 <para>
 The #GdkImage struct contains information on the image and the pixel data.

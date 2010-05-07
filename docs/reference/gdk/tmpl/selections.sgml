@@ -50,6 +50,9 @@ to the X Inter-client Communication Conventions Manual
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF GdkSelection ##### -->
 <para>
 The #GdkSelection enumeration contains predefined 

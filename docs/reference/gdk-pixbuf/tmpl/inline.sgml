@@ -22,6 +22,9 @@ into #GdkPixbuf<!-- -->s, use gdk_pixbuf_from_pixdata.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPixdata ##### -->
   <para>
 

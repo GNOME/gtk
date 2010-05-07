@@ -70,6 +70,9 @@ your own scrolling with #GtkScrollbar and for example a #GtkTable.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkScrolledWindow ##### -->
 <para>
 There are no public fields in the #GtkScrolledWindow struct; it should 

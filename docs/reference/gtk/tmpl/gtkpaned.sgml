@@ -72,6 +72,9 @@ gtk_widget_set_size_request (frame2, 50, -1);
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPaned ##### -->
 <para>
 </para>
@@ -260,6 +263,15 @@ gutter (the area between the two panes). It does nothing now.
 
 
 <!-- ##### FUNCTION gtk_paned_get_position ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paned_get_handle_window ##### -->
 <para>
 
 </para>

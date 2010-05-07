@@ -43,6 +43,9 @@ start the query).
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTipsQuery ##### -->
 <para>
 The #GtkTipsQuery-struct struct contains private data only, and
@@ -116,6 +119,7 @@ and the widget that the pointer is over has no tooltip.
 Creates a new #GtkTipsQuery.
 </para>
 
+@void: 
 @Returns: a new #GtkTipsQuery.
 
 

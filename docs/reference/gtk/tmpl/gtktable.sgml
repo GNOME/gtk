@@ -47,6 +47,9 @@ table will resize themselves to the size of the largest widget in the table.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTable ##### -->
 <para>
 The <structname>GtkTable</structname> structure holds the data for the actual table itself. 

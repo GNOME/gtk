@@ -76,6 +76,9 @@ of the size group. The name attribute gives the id of the widget.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSizeGroup ##### -->
 <para>
 

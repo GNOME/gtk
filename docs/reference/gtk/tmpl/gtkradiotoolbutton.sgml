@@ -58,6 +58,9 @@ gtk_radio_tool_button_new_from_widget_with_stock() to create a new
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRadioToolButton ##### -->
 <para>
   The #GtkRadioToolButton contains only private data and should only

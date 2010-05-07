@@ -35,6 +35,9 @@ As of GTK+ 2.20, #GtkInputDialog has been deprecated since it is too specialized
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkInputDialog ##### -->
 <para>
 </para>
@@ -69,6 +72,7 @@ mode of a device from #GDK_MODE_DISABLED to a
 Creates a new #GtkInputDialog.
 </para>
 
+@void: 
 @Returns: the new #GtkInputDialog.
 @Deprecated: 2.20: Don't use this widget anymore.
 

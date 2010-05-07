@@ -40,6 +40,9 @@ window (synonymous with gtk_window_add_accel_group().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkWindow ##### -->
 <para>
 
@@ -515,6 +518,7 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -872,6 +876,7 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -880,6 +885,7 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+@void: 
 @Returns: 
 
 

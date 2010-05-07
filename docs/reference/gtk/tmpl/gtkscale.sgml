@@ -38,6 +38,9 @@ to show at the mark. It can be translated with the usual "translatable and
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkScale ##### -->
 <para>
 The fields of the #GtkScale-struct struct should only be accessed via

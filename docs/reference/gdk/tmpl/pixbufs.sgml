@@ -19,6 +19,9 @@ pixbufs, see the #GdkPixbuf API documentation.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 

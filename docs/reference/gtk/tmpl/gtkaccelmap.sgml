@@ -17,6 +17,9 @@ Loadable keyboard accelerator specifications
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkAccelMap ##### -->
 <para>
 
@@ -148,6 +151,7 @@ Loadable keyboard accelerator specifications
 
 </para>
 
+@void: 
 @Returns: 
 
 

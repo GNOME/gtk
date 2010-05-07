@@ -30,6 +30,9 @@ The structs used for each type of event.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
 Specifies the type of the event.
@@ -165,6 +168,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -172,6 +176,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -179,6 +184,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -340,6 +346,7 @@ gdk_event_handler_set().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

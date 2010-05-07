@@ -26,6 +26,9 @@ other functions as outlined below.  It is inherited from #GtkEditable.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkText ##### -->
 <para>
 Most of the #GtkText-struct struct members should not be accessed directly.

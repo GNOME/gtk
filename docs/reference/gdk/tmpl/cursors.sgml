@@ -31,6 +31,9 @@ gdk_window_set_cursor() or by setting the cursor member of the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkCursor ##### -->
 <para>
 A <type>GdkCursor</type> structure represents a cursor.

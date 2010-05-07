@@ -33,6 +33,9 @@ be set by the latter method.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkGC ##### -->
 <para>
 The #GdkGC structure represents a graphics context.

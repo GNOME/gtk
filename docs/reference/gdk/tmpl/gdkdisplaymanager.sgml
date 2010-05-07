@@ -19,6 +19,9 @@ changes.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkDisplayManager ##### -->
 <para>
 The <structname>GdkDisplayManager</structname> struct has no interesting 
@@ -45,6 +48,7 @@ fields.
 
 </para>
 
+@void: 
 @Returns: 
 
 

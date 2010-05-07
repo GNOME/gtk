@@ -28,6 +28,9 @@ approaches.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPreview ##### -->
 <para>
 The #GtkPreview-struct struct contains private data only, and
@@ -88,6 +91,7 @@ This union not used in GTK+.
 This function is deprecated and does nothing.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_preview_new ##### -->
@@ -231,6 +235,7 @@ function is deprecated, and you should use
 gdk_rgb_get_visual() instead.
 </para>
 
+@void: 
 @Returns: the visual for previews.
 
 
@@ -241,6 +246,7 @@ function is deprecated, and you should use
 gdk_rgb_get_cmap() instead.
 </para>
 
+@void: 
 @Returns: the colormap for previews.
 
 
@@ -250,6 +256,7 @@ Return a #GtkPreviewInfo structure containing
 global information about preview widgets.
 </para>
 
+@void: 
 @Returns: a #GtkPreviewInfo structure. The return
  value belongs to GTK+ and must not be modified
  or freed.
@@ -261,5 +268,6 @@ This function is deprecated and does nothing. It was
 once used for changing the colormap and visual on the fly.
 </para>
 
+@void: 
 
 

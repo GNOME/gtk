@@ -23,6 +23,9 @@ Initializing the &gdk-pixbuf; Xlib library.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_xlib_init ##### -->
 <para>
 

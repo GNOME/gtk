@@ -72,6 +72,9 @@ the button does not have a icon.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToolButton ##### -->
 <para>
 The #GtkToolButton struct contains only private. It should only be

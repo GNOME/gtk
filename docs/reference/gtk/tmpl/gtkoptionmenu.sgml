@@ -32,6 +32,9 @@ As of GTK+ 2.4, #GtkOptionMenu has been deprecated in favor of #GtkComboBox.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkOptionMenu ##### -->
 <para>
 The #GtkOptionMenu-struct struct contains private data only, and 
@@ -67,6 +70,7 @@ should be accessed using the functions below.
 Creates a new #GtkOptionMenu.
 </para>
 
+@void: 
 @Returns: a new #GtkOptionMenu.
 @Deprecated: 2.4: Use #GtkComboBox instead.
 

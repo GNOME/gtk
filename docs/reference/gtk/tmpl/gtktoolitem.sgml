@@ -17,6 +17,9 @@ GtkToolItem
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToolItem ##### -->
 <para>
 
@@ -69,6 +72,7 @@ GtkToolItem
 
 </para>
 
+@void: 
 @Returns: 
 
 
