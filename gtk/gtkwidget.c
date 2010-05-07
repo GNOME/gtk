@@ -11356,7 +11356,7 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
  * Return value: the return value from the event signal emission: %TRUE
  *   if the event was handled, and %FALSE otherwise
  *
- * Since: 2.20
+ * Since: 2.22
  */
 gboolean
 gtk_widget_send_focus_change (GtkWidget *widget,
