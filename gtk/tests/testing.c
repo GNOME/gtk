@@ -98,13 +98,12 @@ test_slider_ranges (void)
 static void
 test_text_access (void)
 {
-  const int N_WIDGETS = 4;
+  const int N_WIDGETS = 3;
   GtkWidget *widgets[N_WIDGETS];
   int i = 0;
   widgets[i++] = gtk_test_create_widget (GTK_TYPE_LABEL, NULL);
   widgets[i++] = gtk_test_create_widget (GTK_TYPE_ENTRY, NULL);
   widgets[i++] = gtk_test_create_widget (GTK_TYPE_TEXT_VIEW, NULL);
-  widgets[i++] = gtk_test_create_widget (g_type_from_name ("GtkText"), NULL);
   g_assert (i == N_WIDGETS);
   for (i = 0; i < N_WIDGETS; i++)
     gtk_test_text_set (widgets[i], "foobar");
