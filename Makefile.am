@@ -50,14 +50,10 @@ EXTRA_DIST +=			\
 	examples/buttons/info.xpm  \
 	examples/calendar/Makefile  \
 	examples/calendar/calendar.c  \
-	examples/clist/Makefile  \
-	examples/clist/clist.c  \
 	examples/entry/Makefile  \
 	examples/entry/entry.c  \
 	examples/eventbox/Makefile  \
 	examples/eventbox/eventbox.c  \
-	examples/filesel/Makefile  \
-	examples/filesel/filesel.c  \
 	examples/gtkdial/Makefile  \
 	examples/gtkdial/dial_test.c  \
 	examples/gtkdial/gtkdial.c  \
@@ -68,11 +64,8 @@ EXTRA_DIST +=			\
 	examples/helloworld2/helloworld2.c  \
 	examples/label/Makefile	\
 	examples/label/label.c	\
-	examples/list/Makefile  \
-	examples/list/list.c  \
 	examples/menu/Makefile  \
 	examples/menu/menu.c  \
-	examples/menu/itemfactory.c  \
 	examples/notebook/Makefile  \
 	examples/notebook/notebook.c  \
 	examples/packbox/Makefile  \
@@ -102,14 +95,10 @@ EXTRA_DIST +=			\
 	examples/statusbar/statusbar.c  \
 	examples/table/Makefile  \
 	examples/table/table.c  \
-	examples/text/Makefile  \
-	examples/text/text.c  \
 	examples/tictactoe/Makefile  \
 	examples/tictactoe/tictactoe.c  \
 	examples/tictactoe/tictactoe.h  \
 	examples/tictactoe/ttt_test.c  \
-	examples/tree/Makefile  \
-	examples/tree/tree.c  \
 	examples/wheelbarrow/Makefile  \
 	examples/wheelbarrow/wheelbarrow.c  \
 	examples/fixed/fixed.c  \

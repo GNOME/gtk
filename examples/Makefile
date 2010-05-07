@@ -5,17 +5,14 @@ SUBDIRS = 	arrow \
 		buttonbox \
 		buttons \
 		calendar \
-		clist \
 		entry \
 		eventbox \
-		filesel \
 		fixed \
 		frame \
 		gtkdial \
 		helloworld \
 		helloworld2 \
 		label \
-		list \
 		menu \
 		notebook \
 		packbox \
@@ -32,9 +29,7 @@ SUBDIRS = 	arrow \
 		spinbutton \
 		statusbar \
 		table \
-		text \
 		tictactoe \
-		tree \
 		wheelbarrow
 
 all:
