@@ -40,7 +40,6 @@ floating_tests (void)
   g_object_force_floating (G_OBJECT (widget));
   g_assert (g_object_is_floating (widget));
 
-  g_object_ref (widget);
   g_object_ref_sink (widget);
   g_assert (!g_object_is_floating (widget));
 
