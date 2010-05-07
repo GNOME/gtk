@@ -996,11 +996,11 @@ relevant packages. These are:</para>
 or on any GNU mirror.</para>
 
 <para>In order to use the powerful autoconf/automake scheme,
-you must create a configure.in which may look like:</para>
+you must create a configure.ac which may look like:</para>
 
 <programlisting role="C">
 dnl Process this file with autoconf to produce a configure script.
-dnl configure.in for a GTK+ based program
+dnl configure.ac for a GTK+ based program
 
 AC_INIT(myprg.c)
 AM_INIT_AUTOMAKE(mypkgname, 0.0.1)
