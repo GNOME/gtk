@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
 "POT-Creation-Date: 2010-04-13 05:45+0000\n"
-"PO-Revision-Date: 2010-04-15 20:29+0700\n"
+"PO-Revision-Date: 2010-05-07 15:17+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "MIME-Version: 1.0\n"
@@ -129,7 +129,7 @@ msgstr "Escape"
 #: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr ""
+msgstr "_Kunci multi"
 
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
@@ -2466,7 +2466,7 @@ msgstr "Tak bisa membunuh proses dengan pid %d. Operasi tak diimplementasi."
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Pager Terminal"
 
 #: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
@@ -2784,7 +2784,7 @@ msgstr "Rangka_p:"
 
 #: ../gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
-msgstr ""
+msgstr "K_olasi"
 
 #: ../gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
@@ -4856,7 +4856,7 @@ msgstr "IPA"
 #. ID
 #: ../modules/input/immultipress.c:31
 msgid "Multipress"
-msgstr ""
+msgstr "Multi tekan"
 
 #. ID
 #: ../modules/input/imthai.c:35
