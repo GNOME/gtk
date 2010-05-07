@@ -2655,6 +2655,27 @@ gtk_print_win32_devnames_from_printer_name
 #endif
 #endif
 
+#if IN_HEADER(__GTK_PROGRESS_H__)
+#if IN_FILE(__GTK_PROGRESS_C__)
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_progress_configure
+gtk_progress_get_current_percentage
+gtk_progress_get_current_text
+gtk_progress_get_percentage_from_value
+gtk_progress_get_text_from_value
+gtk_progress_get_type
+gtk_progress_get_value
+gtk_progress_set_activity_mode
+gtk_progress_set_adjustment
+gtk_progress_set_format_string
+gtk_progress_set_percentage
+gtk_progress_set_show_text
+gtk_progress_set_text_alignment
+gtk_progress_set_value
+#endif
+#endif
+#endif
+
 #if IN_HEADER(__GTK_PROGRESS_BAR_H__)
 #if IN_FILE(__GTK_PROGRESS_BAR_C__)
 gtk_progress_bar_get_fraction
