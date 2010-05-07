@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
-"POT-Creation-Date: 2010-04-13 05:45+0000\n"
-"PO-Revision-Date: 2010-05-07 15:17+0700\n"
+"POT-Creation-Date: 2010-05-06 21:32+0000\n"
+"PO-Revision-Date: 2010-05-07 15:22+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: GNOME Indonesian Translation Team <gnome@i15n.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,8 +81,8 @@ msgstr "Bendera debug Gdk yang hendak dipasang"
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:165
 #: ../gdk/gdk.c:168
-#: ../gtk/gtkmain.c:459
-#: ../gtk/gtkmain.c:462
+#: ../gtk/gtkmain.c:460
+#: ../gtk/gtkmain.c:463
 msgid "FLAGS"
 msgstr "BENDERA"
 
@@ -376,12 +376,12 @@ msgstr "Memori yang tersedia tidak mencukupi untuk menyimpan gambar ke dalam pen
 msgid "Error writing to image stream"
 msgstr "Galat menulis citra ke stream"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
 msgstr "Error intern: Modul pembuka gambar '%s' gagal menyelesaikan suatu operasi, tapi tidak menyebutkan alasan errornya"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Pemuatan bertahap gambar tipe '%s' tak didukung"
@@ -1678,17 +1678,17 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Batas Kertas"
 
-#: ../gtk/gtkentry.c:8698
-#: ../gtk/gtktextview.c:7881
+#: ../gtk/gtkentry.c:8747
+#: ../gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Metode Input"
 
-#: ../gtk/gtkentry.c:8712
-#: ../gtk/gtktextview.c:7895
+#: ../gtk/gtkentry.c:8761
+#: ../gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Isikan karakter kontrol Unicode"
 
-#: ../gtk/gtkentry.c:10091
+#: ../gtk/gtkentry.c:10140
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
@@ -2345,12 +2345,12 @@ msgid "Cl_ear"
 msgstr "B_ersihkan"
 
 #. Open Link
-#: ../gtk/gtklabel.c:5685
+#: ../gtk/gtklabel.c:6118
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5697
+#: ../gtk/gtklabel.c:6130
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
@@ -2363,27 +2363,27 @@ msgid "Invalid URI"
 msgstr "URI Salah"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "Load additional GTK+ modules"
 msgstr "Panggil modul GTK+ lainnya"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "MODULES"
 msgstr "MODUL"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:456
 msgid "Make all warnings fatal"
 msgstr "Buat semua peringatan menjadi pesan fatal"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:458
+#: ../gtk/gtkmain.c:459
 msgid "GTK+ debugging flags to set"
 msgstr "Bendera debug GTK+ yang hendak dipasang"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:461
+#: ../gtk/gtkmain.c:462
 msgid "GTK+ debugging flags to unset"
 msgstr "Bendera debug GTK+ yang hendak dilepas"
 
@@ -2392,20 +2392,20 @@ msgstr "Bendera debug GTK+ yang hendak dilepas"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:713
+#: ../gtk/gtkmain.c:714
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:778
+#: ../gtk/gtkmain.c:779
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Tak bisa membuka tampilan: %s"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:816
 msgid "GTK+ Options"
 msgstr "Pilihan GTK+"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:816
 msgid "Show GTK+ Options"
 msgstr "Tampilkan Pilihan GTK+"
 
@@ -2555,7 +2555,7 @@ msgstr "Path Naik"
 msgid "Down Path"
 msgstr "Path Turun"
 
-#: ../gtk/gtkpathbar.c:1469
+#: ../gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Akar Sistem Berkas"
 
@@ -2567,9 +2567,13 @@ msgstr "Otentikasi"
 msgid "Not available"
 msgstr "Tidak tersedia"
 
+#: ../gtk/gtkprinteroptionwidget.c:795
+msgid "Select a folder"
+msgstr "Pilih suatu folder"
+
 #: ../gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
-msgstr "_Simpan ke dalam _folder:"
+msgstr "_Simpan ke dalam folder:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -3043,13 +3047,13 @@ msgstr "Beberapa ketentuan pada dialog konflik"
 msgid "Print"
 msgstr "Cetak"
 
-#: ../gtk/gtkrc.c:2878
+#: ../gtk/gtkrc.c:2906
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Tidak dapat menemukan berkas yang hendak disisipkan: \"%s\""
 
-#: ../gtk/gtkrc.c:3508
-#: ../gtk/gtkrc.c:3511
+#: ../gtk/gtkrc.c:3536
+#: ../gtk/gtkrc.c:3539
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "TIdak dapat menemukan berkas gambar pada pixmap_path: \"%s\""
@@ -3849,41 +3853,41 @@ msgstr "Data karakter pada baris %d kolom %d seharusnya tidak ada"
 msgid "Empty"
 msgstr "Kosong"
 
-#: ../gtk/gtkvolumebutton.c:73
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Volume"
 
-#: ../gtk/gtkvolumebutton.c:75
+#: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Naikkan atau turunkan keras suara"
 
-#: ../gtk/gtkvolumebutton.c:78
+#: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Atur keras suara"
 
-#: ../gtk/gtkvolumebutton.c:81
-#: ../gtk/gtkvolumebutton.c:84
+#: ../gtk/gtkvolumebutton.c:91
+#: ../gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Volume Turun"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Pelankan suara"
 
-#: ../gtk/gtkvolumebutton.c:87
-#: ../gtk/gtkvolumebutton.c:90
+#: ../gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Volume Naik"
 
-#: ../gtk/gtkvolumebutton.c:89
+#: ../gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Perkeras suara"
 
-#: ../gtk/gtkvolumebutton.c:147
+#: ../gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Diam"
 
-#: ../gtk/gtkvolumebutton.c:151
+#: ../gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Volume penuh"
 
@@ -3892,7 +3896,7 @@ msgstr "Volume penuh"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
