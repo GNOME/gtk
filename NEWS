@@ -1,3 +1,63 @@
+Overview of Changes from GTK+ 2.20.0 to 2.21.0
+==============================================
+
+* Support tracker 0.8 and 0.9 in the filechooser search code
+
+* New API:
+ - add API to convert coords between parent and child windows
+ - add gdk_window_get_effective_parent() and
+   gdk_window_get_effective_toplevel() which are offscreen aware
+ - add gtk_widget_send_focus_change
+ - add accessors for GtkTextView adjustments
+ - add API to reset the im context in GtkTextView and GtkEntry
+
+* Bug fixes:
+ 614513 Func to substitute GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB)?
+ 614510 Needed func for GTK_WIDGET_SET_FLAGS (widget, TOPLEVEL) ?
+ 614515 Func to substitute GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_DEFAULT)?
+ 163251 GtkTextView derivatives need some way to set the need_im_reset flag.
+  69872 GTK_WIDGET_SET_FLAGS should be deprecated
+ 615028 gdk/x11/gdkdnd-x11.c missing Xutil.h
+ 615128 gdk monitor order does not seem to be correct
+ 616565 Fix a typo in the offscreen windows docs
+ 616118 please expand documentation for gdk_event_free()
+ 615000 gtk_builder_value_from_string_type() returns FALSE without..
+ 580889 table cells do not implement action interface
+ 616053 GtkTextView lacks accessors for hadjustment and vadjustment
+ 613988 Compile error on DirectFB backend due to missing of gdk_...
+ 614894 Add heuristic for pre XRandR 1.3 drivers
+ 560147 GtkBuilder docs should say what GErrors they throw
+ 615999 Gail doesn't send state-changed events for ATK_STATE_ENABLED
+ 613974 GtkToolItemGroup devides by 0 when allocating space for...
+ 614540 configure wants gio-unix on all platform
+ 557689 In 'select folder' action, filechooser doesn't work when...
+ 615853 BadMatch when pressing keyboard volume keys while pointer...
+ 613887 Misprint in the description of the function gtk_cell_view_...
+ 615162 Fix tooltips on offscreen widgets
+ 616851 assertion `GTK_IS_MISC (misc)' failed
+ 607839 libpixbufloader-png.so not in library list
+ 605186 Use G_DEFINE_INTERFACE macro
+ 402349 FileChooser's default directory is not "active"
+        missing break statement in gtk_tool_item_group_set_property
+        missing default events in  GtkToolItemGroup
+        fix a filechooser crash when removing files
+
+* Translation updates:
+ Basque
+ Bengali India
+ Catalan
+ Catalan (Valencian)
+ Danish
+ Galician
+ Greek
+ Indonesian
+ Kannada
+ Kazakh
+ Latvian
+ Marathi
+ Thai
+ Ukrainian
+
 Overview of Changes from GTK+ 2.19.7 to 2.20.0
 ==============================================
 
