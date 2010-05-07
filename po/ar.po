@@ -1240,7 +1240,7 @@ msgstr "ترخيص البرنامج"
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:625
 msgid "C_redits"
-msgstr "_شكْر"
+msgstr "إ_شادات"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:639
