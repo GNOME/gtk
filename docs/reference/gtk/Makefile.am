@@ -12,9 +12,6 @@ DOC_MAIN_SGML_FILE=gtk-docs.sgml
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED" 
 
-# Extra options to pass to gtkdoc-scangobj
-SCANGOBJ_OPTIONS=--type-init-func="gtk_type_init(0)" 
-
 # The directory containing the source code. Relative to $(srcdir)
 DOC_SOURCE_DIR=../../../gtk
 

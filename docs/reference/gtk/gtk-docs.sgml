@@ -389,27 +389,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkbuildable.xml" />
       <xi:include href="xml/gtkbuilder.xml" />
     </chapter>
-
-    <chapter id="DeprecatedObjects">
-      <title>Deprecated</title>
-      <xi:include href="xml/gtkclist.xml" />
-      <xi:include href="xml/gtkctree.xml" />
-      <xi:include href="xml/gtkcombo.xml" />
-      <xi:include href="xml/gtkfilesel.xml" />
-      <xi:include href="xml/gtkitemfactory.xml" />
-      <xi:include href="xml/gtklist.xml" />
-      <xi:include href="xml/gtklistitem.xml" />
-      <xi:include href="xml/gtkoldeditable.xml" />
-      <xi:include href="xml/gtkoptionmenu.xml" />
-      <xi:include href="xml/gtkpixmap.xml" />
-      <xi:include href="xml/gtkpreview.xml" />
-      <xi:include href="xml/gtkprogress.xml" />
-      <xi:include href="xml/gtktext.xml" />
-      <xi:include href="xml/gtktooltips.xml" />
-      <xi:include href="xml/gtktipsquery.xml" />
-      <xi:include href="xml/gtktree.xml" />
-      <xi:include href="xml/gtktreeitem.xml" />
-    </chapter>
   </part>
 
   <part id="migrating">

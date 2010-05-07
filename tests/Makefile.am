@@ -71,7 +71,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	$(testsocket_programs)		\
 	testspinbutton			\
 	teststatusicon			\
-	testtext			\
 	testtoolbar			\
 	stresstest-toolbar		\
 	testtreeedit			\
