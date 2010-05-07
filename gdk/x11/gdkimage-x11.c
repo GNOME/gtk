@@ -116,62 +116,6 @@ _gdk_image_exit (void)
     }
 }
 
-/**
- * gdk_image_new_bitmap:
- * @visual: the #GdkVisual to use for the image.
- * @data: the pixel data. 
- * @width: the width of the image in pixels. 
- * @height: the height of the image in pixels. 
- * 
- * Creates a new #GdkImage with a depth of 1 from the given data.
- * <warning><para>THIS FUNCTION IS INCREDIBLY BROKEN. The passed-in data must 
- * be allocated by malloc() (NOT g_malloc()) and will be freed when the 
- * image is freed.</para></warning>
- * 
- * Return value: a new #GdkImage.
- **/
-GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual, 
-		      gpointer   data, 
-		      gint       width, 
-		      gint       height)
-{
-  Visual *xvisual;
-  GdkImage *image;
-  GdkDisplay *display;
-  GdkImagePrivateX11 *private;
-  
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = PRIVATE_DATA (image);
-  private->screen = gdk_visual_get_screen (visual);
-  display = GDK_SCREEN_DISPLAY (private->screen);
-  
-  image->type = GDK_IMAGE_NORMAL;
-  image->visual = visual;
-  image->width = width;
-  image->height = height;
-  image->depth = 1;
-  image->bits_per_pixel = 1;
-  if (display->closed)
-    private->ximage = NULL;
-  else
-    {
-      xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-      private->ximage = XCreateImage (GDK_SCREEN_XDISPLAY (private->screen),
-				      xvisual, 1, XYBitmap,
-				      0, NULL, width, height, 8, 0);
-      private->ximage->data = data;
-      private->ximage->bitmap_bit_order = MSBFirst;
-      private->ximage->byte_order = MSBFirst;
-    }
-  
-  image->byte_order = MSBFirst;
-  image->mem =  private->ximage->data;
-  image->bpl = private->ximage->bytes_per_line;
-  image->bpp = 1;
-  return image;
-} 
-
 void
 _gdk_windowing_image_init (GdkDisplay *display)
 {

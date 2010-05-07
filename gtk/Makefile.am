@@ -166,6 +166,7 @@ gtk_public_h_sources =          \
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkaccelgroupprivate.h	\
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
@@ -506,7 +507,6 @@ gtk_base_c_sources =            \
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinfobar.c		\
-	gtkinputdialog.c	\
 	gtkinvisible.c		\
 	gtkitem.c		\
 	gtkkeyhash.c		\
@@ -515,7 +515,6 @@ gtk_base_c_sources =            \
 	gtklinkbutton.c		\
 	gtkliststore.c		\
 	gtkmain.c		\
-	gtkmarshal.c		\
 	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
@@ -633,54 +632,11 @@ gtk_base_c_sources =            \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources)
 
-# Broken
-gtk_public_h_sources += \
-	gtktext.h		\
-	gtktree.h		\
-	gtktreeitem.h
-gtk_base_c_sources += \
-	gtktext.c		\
-	gtktree.c		\
-	gtktreeitem.c
-
 # Deprecated
 gtk_public_h_sources += \
-	gtkclist.h		\
-	gtkcombo.h		\
-	gtkctree.h		\
-	gtkcurve.h		\
-	gtkfilesel.h		\
-	gtkgamma.h		\
-	gtkinputdialog.h	\
-	gtkitemfactory.h	\
-	gtklist.h		\
-	gtklistitem.h		\
-	gtkoldeditable.h	\
-	gtkoptionmenu.h		\
-	gtkpixmap.h		\
-	gtkpreview.h		\
-	gtkprogress.h		\
-	gtksignal.h		\
-	gtktipsquery.h		\
-	gtktooltips.h
+	gtkprogress.h
 gtk_base_c_sources += \
-	gtkclist.c		\
-	gtkcombo.c		\
-	gtkctree.c		\
-	gtkcurve.c		\
-	gtkfilesel.c		\
-	gtkgamma.c		\
-	gtkitemfactory.c	\
-	gtklist.c		\
-	gtklistitem.c		\
-	gtkoldeditable.c	\
-	gtkoptionmenu.c		\
-	gtkpixmap.c		\
-	gtkpreview.c		\
-	gtkprogress.c		\
-	gtksignal.c		\
-	gtktipsquery.c		\
-	gtktooltips.c
+	gtkprogress.c
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)
@@ -779,7 +735,6 @@ EXTRA_DIST += gtkquartz.h
 
 # built sources that get installed with the header files
 gtk_built_public_sources =			\
-	gtkmarshal.h				\
 	gtktypebuiltins.h
 
 # built headers that don't get installed
@@ -794,13 +749,11 @@ gtk_built_sources =				\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
-	gtkmarshal.c				\
 	${gtk_built_private_headers}		\
 	${gtk_built_public_sources}
 
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
-	stamp-gtkmarshal.h			\
 	stamp-gtktypebuiltins.h			\
 	stamp-icons
 
@@ -814,8 +767,7 @@ gtk_extra_sources =				\
 	gtkstatusicon-quartz.c                  \
 	gtk.symbols				\
 	gtkversion.h.in				\
-	gtkmarshalers.list			\
-	gtkmarshal.list
+	gtkmarshalers.list
 
 #
 # setup GTK+ sources and their dependencies
@@ -853,24 +805,6 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
-
-gtkmarshal.h: stamp-gtkmarshal.h
-	@true
-stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list
-	echo "#ifndef GTK_DISABLE_DEPRECATED" > xgen-gmh					\
-        && $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --header >> xgen-gmh \
-	&& echo "#endif /* GTK_DISABLE_DEPRECATED */" >> xgen-gmh \
-	&& (cmp -s xgen-gmh gtkmarshal.h || cp xgen-gmh gtkmarshal.h) \
-	&& rm -f xgen-gmh \
-	&& echo timestamp > $(@F)
-gtkmarshal.c: @REBUILD@ gtkmarshal.list
-	(echo "#include \"gtkmarshal.h\""; \
-	 echo "#include \"gtkalias.h\""; \
-	 $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body; \
-	 echo "#define __gtk_marshal_MARSHAL_C__"; \
-	 echo "#include \"gtkaliasdef.c\"") >> xgen-gmc \
-	&& cp xgen-gmc gtkmarshal.c \
-	&& rm -f xgen-gmc
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true

@@ -405,6 +405,7 @@ enum_modified (GtkComboBox *cb, gpointer data)
 
   i = gtk_combo_box_get_active (cb);
 
+
   if (is_child_property (p->spec))
     {
       GtkWidget *widget = GTK_WIDGET (p->obj);

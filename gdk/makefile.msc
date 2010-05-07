@@ -108,7 +108,6 @@ gdk_public_h_sources = \
 	gdkfont.h	\
 	gdkgc.h		\
 	gdkkeysyms.h	\
-	gdki18n.h	\
 	gdkimage.h	\
 	gdkinput.h	\
 	gdkkeys.h	\

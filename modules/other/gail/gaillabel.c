@@ -457,7 +457,7 @@ gail_label_ref_relation_set (AtkObject *obj)
        *
        * The relation set is not updated if the mnemonic widget is changed
        */
-      GtkWidget *mnemonic_widget = GTK_LABEL (widget)->mnemonic_widget;
+      GtkWidget *mnemonic_widget = gtk_label_get_mnemonic_widget (GTK_LABEL (widget));
 
       if (mnemonic_widget)
         {
@@ -513,10 +513,6 @@ gail_label_ref_relation_set (AtkObject *obj)
                           temp_widget = GTK_WIDGET (list->data);
                           g_list_free (list);
                           list = gtk_container_get_children (GTK_CONTAINER (temp_widget));
-                          if (GTK_IS_COMBO (list->data))
-                            {
-                              mnemonic_widget = GTK_WIDGET (list->data);
-                            }
                         }
                     }
                   g_list_free (list);
@@ -730,7 +726,7 @@ gail_label_set_caret_offset (AtkText *text,
 
   if (gtk_label_get_selectable (label) &&
       offset >= 0 &&
-      offset <= g_utf8_strlen (label->text, -1))
+      offset <= g_utf8_strlen (gtk_label_get_text (label), -1))
     {
       gtk_label_select_region (label, offset, offset);
       return TRUE;
@@ -900,6 +896,7 @@ gail_label_get_character_extents (AtkText      *text,
   GtkWidget *widget;
   GtkLabel *label;
   PangoRectangle char_rect;
+  const gchar *label_text;
   gint index, x_layout, y_layout;
  
   widget = GTK_ACCESSIBLE (text)->widget;
@@ -911,7 +908,8 @@ gail_label_get_character_extents (AtkText      *text,
   label = GTK_LABEL (widget);
   
   gtk_label_get_layout_offsets (label, &x_layout, &y_layout);
-  index = g_utf8_offset_to_pointer (label->text, offset) - label->text;
+  label_text = gtk_label_get_text (label);
+  index = g_utf8_offset_to_pointer (label_text, offset) - label_text;
   pango_layout_index_to_pos (gtk_label_get_layout (label), index, &char_rect);
   
   gail_misc_get_extents_from_pango_rectangle (widget, &char_rect, 
@@ -926,6 +924,7 @@ gail_label_get_offset_at_point (AtkText      *text,
 { 
   GtkWidget *widget;
   GtkLabel *label;
+  const gchar *label_text;
   gint index, x_layout, y_layout;
 
   widget = GTK_ACCESSIBLE (text)->widget;
@@ -939,15 +938,16 @@ gail_label_get_offset_at_point (AtkText      *text,
   index = gail_misc_get_index_at_point_in_layout (widget, 
                                               gtk_label_get_layout (label), 
                                               x_layout, y_layout, x, y, coords);
+  label_text = gtk_label_get_text (label);
   if (index == -1)
     {
       if (coords == ATK_XY_WINDOW || coords == ATK_XY_SCREEN)
-        return g_utf8_strlen (label->text, -1);
+        return g_utf8_strlen (label_text, -1);
 
       return index;  
     }
   else
-    return g_utf8_pointer_to_offset (label->text, label->text + index);  
+    return g_utf8_pointer_to_offset (label_text, label_text + index);
 }
 
 static AtkAttributeSet*
@@ -987,7 +987,7 @@ gail_label_get_run_attributes (AtkText        *text,
 
   at_set = gail_misc_layout_get_run_attributes (at_set,
                                                 gtk_label_get_layout (label),
-                                                label->text,
+                                                gtk_label_get_text (label),
                                                 offset,
                                                 start_offset,
                                                 end_offset);

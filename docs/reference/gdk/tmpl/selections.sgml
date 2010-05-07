@@ -50,36 +50,6 @@ to the X Inter-client Communication Conventions Manual
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### TYPEDEF GdkSelection ##### -->
-<para>
-The #GdkSelection enumeration contains predefined 
-atom values for several common selections.
-</para>
-
-
-<!-- ##### TYPEDEF GdkSelectionType ##### -->
-<para>
-The #GdkSelectionType enumeration contains predefined
-atom values used to represent the types of data transferred
-in response to a request for a target. See the
-ICCCM for details about what data should be transferred
-for each of these types. Other atoms can be used,
-and the recommended practice for GTK+ is to to use mime 
-types for this purpose. However, supporting these types
-may be useful for compatibility with older programs.
-</para>
-
-
-<!-- ##### TYPEDEF GdkTarget ##### -->
-<para>
-The #GdkTarget enumeration contains predefined atom values which are
-used to describe possible targets for a selection. Other atoms can be
-used, and the recommended practice for GTK+ is to to use mime types
-for this purpose. However, supporting these types may be useful for
-compatibility with older programs.
-</para>
-
-
 <!-- ##### MACRO GDK_SELECTION_PRIMARY ##### -->
 <para>
 A #GdkAtom representing the <literal>PRIMARY</literal> selection.

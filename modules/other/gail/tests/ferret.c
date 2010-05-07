@@ -1666,7 +1666,6 @@ _create_window (void)
     {
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         gtk_widget_set_name (window, "Ferret Window");
-        gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);
 
         g_signal_connect (GTK_OBJECT (window), "destroy",
                            G_CALLBACK (gtk_widget_destroyed),
@@ -1684,7 +1683,7 @@ _create_window (void)
         gtk_box_pack_start (GTK_BOX (vbox1), menubar, FALSE, TRUE, 0);
         gtk_widget_show (menubar);
         menutop = gtk_menu_item_new_with_label("Menu");
-        gtk_menu_bar_append(GTK_MENU_BAR(menubar), menutop);
+        gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menutop);
         gtk_widget_show (menutop);
         menu = gtk_menu_new();
         gtk_menu_item_set_submenu (GTK_MENU_ITEM (menutop), menu);
@@ -1978,7 +1977,7 @@ _get_name_value(GroupInfo *group, const gchar *label,
         name_value->label = GTK_LABEL(gtk_label_new(label));
         name_value->string = gtk_label_new (NULL);
         name_value->boolean = gtk_check_button_new ();
-        name_value->text = gtk_entry_new_with_max_length (1000);
+        gtk_entry_buffer_set_max_length (gtk_entry_get_buffer (GTK_ENTRY (name_value->text)), 1000);
         name_value->button = GTK_BUTTON(gtk_button_new ());
 
         gtk_box_pack_end(GTK_BOX(name_value->column1),

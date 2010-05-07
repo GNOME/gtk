@@ -111,15 +111,6 @@ widget.
 @GTK_CORNER_BOTTOM_RIGHT: Place the scrollbars on the top and left of the
 widget.
 
-<!-- ##### ENUM GtkCurveType ##### -->
-<para>
-
-</para>
-
-@GTK_CURVE_TYPE_LINEAR: 
-@GTK_CURVE_TYPE_SPLINE: 
-@GTK_CURVE_TYPE_FREE: 
-
 <!-- ##### ENUM GtkDeleteType ##### -->
 <para>
 

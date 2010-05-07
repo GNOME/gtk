@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -184,12 +184,6 @@ typedef enum
 typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,
 				  GdkInputCondition condition);
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-typedef void (*GdkDestroyNotify) (gpointer data);
-
-#endif /* GDK_DISABLE_DEPRECATED */
 
 struct _GdkPoint
 {

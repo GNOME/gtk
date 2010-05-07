@@ -114,10 +114,12 @@ static void _check_combo_box (AtkObject *obj)
       }
       if (g_getenv ("TEST_ACCESSIBLE_COMBO_NOEDIT") != NULL)
       {
+        GtkWidget *combo;
         GtkEntry *entry;
 
-        entry = GTK_ENTRY (GTK_COMBO (GTK_ACCESSIBLE (combo_obj)->widget)->entry);
-        gtk_entry_set_editable (entry, FALSE);
+        combo = GTK_ACCESSIBLE (combo_obj)->widget;
+        entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
+        gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
       }
       _check_children (combo_obj);
       _test_selection (combo_obj);
@@ -133,7 +135,7 @@ static void _check_combo_box (AtkObject *obj)
  
   if (!done)
   {
-    gtk_idle_add (_open_combo_list, obj);
+    g_idle_add ((GSourceFunc)_open_combo_list, obj);
     done = TRUE;
   }
   else
@@ -148,7 +150,7 @@ static gint _open_combo_list (gpointer data)
   g_print ("_open_combo_list\n");
   atk_action_do_action (ATK_ACTION (obj), 0);
 
-  gtk_timeout_add (5000, _close_combo_list, obj);
+  g_timeout_add (5000, _close_combo_list, obj);
   return FALSE;
 }
 

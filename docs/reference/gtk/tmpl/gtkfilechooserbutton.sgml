@@ -94,17 +94,6 @@ This should not be accessed directly.  Use the accessor functions below.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_file_chooser_button_new_with_backend ##### -->
-<para>
-
-</para>
-
-@title: 
-@action: 
-@backend: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_file_chooser_button_new_with_dialog ##### -->
 <para>
 

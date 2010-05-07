@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -260,19 +260,6 @@ void                   gtk_tree_view_get_background_area           (GtkTreeView 
 								    GdkRectangle              *rect);
 void                   gtk_tree_view_get_visible_rect              (GtkTreeView               *tree_view,
 								    GdkRectangle              *visible_rect);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void                   gtk_tree_view_widget_to_tree_coords         (GtkTreeView               *tree_view,
-								    gint                       wx,
-								    gint                       wy,
-								    gint                      *tx,
-								    gint                      *ty);
-void                   gtk_tree_view_tree_to_widget_coords         (GtkTreeView               *tree_view,
-								    gint                       tx,
-								    gint                       ty,
-								    gint                      *wx,
-								    gint                      *wy);
-#endif /* !GTK_DISABLE_DEPRECATED */
 gboolean               gtk_tree_view_get_visible_range             (GtkTreeView               *tree_view,
 								    GtkTreePath              **start_path,
 								    GtkTreePath              **end_path);

@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -87,10 +87,6 @@ void       gtk_toggle_button_set_inconsistent  (GtkToggleButton *toggle_button,
                                                 gboolean         setting);
 gboolean   gtk_toggle_button_get_inconsistent  (GtkToggleButton *toggle_button);
 
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

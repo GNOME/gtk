@@ -81,13 +81,6 @@ test_type (gconstpointer data)
       g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()))
     return;
 
-  /* The gtk_arg compat wrappers can't set up default values */
-  if (g_type_is_a (type, GTK_TYPE_CLIST) ||
-      g_type_is_a (type, GTK_TYPE_CTREE) ||
-      g_type_is_a (type, GTK_TYPE_LIST) ||
-      g_type_is_a (type, GTK_TYPE_TIPS_QUERY)) 
-    return;
-
   klass = g_type_class_ref (type);
   
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
@@ -177,11 +170,6 @@ test_type (gconstpointer data)
            strcmp (pspec->name, "buffer") == 0))
 	continue;
 
-      /* Gets set to the cwd */
-      if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
-	  strcmp (pspec->name, "filename") == 0)
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
 	  strcmp (pspec->name, "font") == 0)
 	continue;
@@ -267,11 +255,6 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "language") == 0 ||
 	   strcmp (pspec->name, "font") == 0 ||
 	   strcmp (pspec->name, "font-desc") == 0))
-        continue;
-
-      if (g_type_is_a (type, GTK_TYPE_TEXT) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
-           strcmp (pspec->name, "vadjustment") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&

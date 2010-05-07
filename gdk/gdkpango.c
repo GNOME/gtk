@@ -764,24 +764,6 @@ gdk_pango_renderer_set_override_color (GdkPangoRenderer *gdk_renderer,
     priv->override_color_set[part] = FALSE;
 }
 
-/**
- * gdk_pango_context_set_colormap:
- * @context: a #PangoContext
- * @colormap: a #GdkColormap
- *
- * This function used to set the colormap to be used for drawing with
- * @context. The colormap is now always derived from the graphics
- * context used for drawing, so calling this function is no longer
- * necessary.
- **/
-void
-gdk_pango_context_set_colormap (PangoContext *context,
-				GdkColormap  *colormap)
-{
-  g_return_if_fail (PANGO_IS_CONTEXT (context));
-  g_return_if_fail (colormap == NULL || GDK_IS_COLORMAP (colormap));
-}
-
 /* Gets a renderer to draw with, setting the properties of the
  * renderer and activating it. Note that since we activate the
  * renderer here, the implicit setting of the matrix that

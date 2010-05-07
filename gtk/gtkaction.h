@@ -28,7 +28,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -110,18 +110,6 @@ void         gtk_action_connect_accelerator    (GtkAction     *action);
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
 G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
 GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkAction   *gtk_widget_get_action             (GtkWidget     *widget);
-void         gtk_action_connect_proxy          (GtkAction     *action,
-						GtkWidget     *proxy);
-void         gtk_action_disconnect_proxy       (GtkAction     *action,
-						GtkWidget     *proxy);
-void         gtk_action_block_activate_from    (GtkAction     *action,
-						GtkWidget     *proxy);
-void         gtk_action_unblock_activate_from  (GtkAction     *action,
-						GtkWidget     *proxy);
-#endif /* GTK_DISABLE_DEPRECATED */
 void         gtk_action_block_activate         (GtkAction     *action);
 void         gtk_action_unblock_activate       (GtkAction     *action);
 

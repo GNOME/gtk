@@ -21,7 +21,6 @@ noinst_LTLIBRARIES = 		\
 	libtestnotebook.la	\
 	libtestobject.la	\
 	libtestmenuitem.la	\
-	libtestoptionmenu.la	\
 	libtestpaned.la		\
 	libtestprops.la		\
 	libtestselection.la	\

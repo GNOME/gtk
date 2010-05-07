@@ -90,7 +90,7 @@ gint main( gint   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Color selection test");
-  gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
   /* Attach to the "delete" and "destroy" events so we can exit */
 

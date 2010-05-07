@@ -820,10 +820,6 @@ gtk_file_chooser_button_set_property (GObject      *object,
       fs_bookmarks_changed_cb (priv->fs, button);
       break;
 
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
-      /* Ignore property */
-      break;
-
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s` do not support selecting multiple files.",
 		 G_STRFUNC, G_OBJECT_TYPE_NAME (object));
@@ -856,7 +852,6 @@ gtk_file_chooser_button_get_property (GObject    *object,
 
     case PROP_TITLE:
     case GTK_FILE_CHOOSER_PROP_ACTION:
-    case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
     case GTK_FILE_CHOOSER_PROP_FILTER:
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
     case GTK_FILE_CHOOSER_PROP_PREVIEW_WIDGET:
@@ -2728,33 +2723,6 @@ dialog_response_cb (GtkDialog *dialog,
 GtkWidget *
 gtk_file_chooser_button_new (const gchar          *title,
 			     GtkFileChooserAction  action)
-{
-  g_return_val_if_fail (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-			action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL);
-
-  return g_object_new (GTK_TYPE_FILE_CHOOSER_BUTTON,
-		       "action", action,
-		       "title", (title ? title : _(DEFAULT_TITLE)),
-		       NULL);
-}
-
-/**
- * gtk_file_chooser_button_new_with_backend:
- * @title: the title of the browse dialog.
- * @action: the open mode for the widget.
- * @backend: the name of the #GtkFileSystem backend to use.
- * 
- * Creates a new file-selecting button widget using @backend.
- * 
- * Returns: a new button widget.
- * 
- * Since: 2.6
- * Deprecated: 2.14: Use gtk_file_chooser_button_new() instead.
- **/
-GtkWidget *
-gtk_file_chooser_button_new_with_backend (const gchar          *title,
-					  GtkFileChooserAction  action,
-					  const gchar          *backend)
 {
   g_return_val_if_fail (action == GTK_FILE_CHOOSER_ACTION_OPEN ||
 			action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, NULL);

@@ -1526,46 +1526,6 @@ gtk_image_new (void)
   return g_object_new (GTK_TYPE_IMAGE, NULL);
 }
 
-/**
- * gtk_image_set:
- * @image: a #GtkImage
- * @val: a #GdkImage
- * @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
- *
- * Sets the #GtkImage.
- *
- * Deprecated: 2.0: Use gtk_image_set_from_image() instead.
- */
-void
-gtk_image_set (GtkImage  *image,
-	       GdkImage  *val,
-	       GdkBitmap *mask)
-{
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  gtk_image_set_from_image (image, val, mask);
-}
-
-/**
- * gtk_image_get:
- * @image: a #GtkImage
- * @val: return location for a #GdkImage
- * @mask: a #GdkBitmap that indicates which parts of the image should be transparent.
- *
- * Gets the #GtkImage.
- *
- * Deprecated: 2.0: Use gtk_image_get_image() instead.
- */
-void
-gtk_image_get (GtkImage   *image,
-	       GdkImage  **val,
-	       GdkBitmap **mask)
-{
-  g_return_if_fail (GTK_IS_IMAGE (image));
-
-  gtk_image_get_image (image, val, mask);
-}
-
 static void
 gtk_image_reset_anim_iter (GtkImage *image)
 {

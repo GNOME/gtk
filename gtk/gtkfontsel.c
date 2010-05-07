@@ -1340,24 +1340,6 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
 }
 
 /**
- * gtk_font_selection_get_font:
- * @fontsel: a #GtkFontSelection
- *
- * Gets the currently-selected font.
- * 
- * Return value: A #GdkFont.
- *
- * Deprecated: 2.0: Use gtk_font_selection_get_font_name() instead.
- */
-GdkFont *
-gtk_font_selection_get_font (GtkFontSelection *fontsel)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
-
-  return gtk_font_selection_get_font_internal (fontsel);
-}
-
-/**
  * gtk_font_selection_get_font_name:
  * @fontsel: a #GtkFontSelection
  * 
@@ -1693,26 +1675,6 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
 }
 
 /**
- * gtk_font_selection_dialog_get_apply_button:
- * @fsd: a #GtkFontSelectionDialog
- *
- * Obtains a button. The button doesn't have any function.
- *
- * Return value: a #GtkWidget
- *
- * Since: 2.14
- *
- * Deprecated: 2.16: Don't use this function.
- */
-GtkWidget *
-gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
-
-  return fsd->apply_button;
-}
-
-/**
  * gtk_font_selection_dialog_get_cancel_button:
  * @fsd: a #GtkFontSelectionDialog
  *
@@ -1776,25 +1738,6 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
   return gtk_font_selection_get_font_name (GTK_FONT_SELECTION (fsd->fontsel));
-}
-
-/**
- * gtk_font_selection_dialog_get_font:
- * @fsd: a #GtkFontSelectionDialog
- *
- * Gets the currently-selected font.
- *
- * Return value: the #GdkFont from the #GtkFontSelection for the
- *     currently selected font in the dialog, or %NULL if no font is selected
- *
- * Deprecated: 2.0: Use gtk_font_selection_dialog_get_font_name() instead.
- */
-GdkFont*
-gtk_font_selection_dialog_get_font (GtkFontSelectionDialog *fsd)
-{
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
-
-  return gtk_font_selection_get_font_internal (GTK_FONT_SELECTION (fsd->fontsel));
 }
 
 /**

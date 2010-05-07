@@ -2267,24 +2267,6 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
 #endif
 }
 
-/**
- * gtk_status_icon_set_tooltip:
- * @status_icon: a #GtkStatusIcon
- * @tooltip_text: (allow-none): the tooltip text, or %NULL
- *
- * Sets the tooltip of the status icon.
- *
- * Since: 2.10
- *
- * Deprecated: 2.16: Use gtk_status_icon_set_tooltip_text() instead.
- */
-void
-gtk_status_icon_set_tooltip (GtkStatusIcon *status_icon,
-			     const gchar   *tooltip_text)
-{
-  gtk_status_icon_set_tooltip_text (status_icon, tooltip_text);
-}
-
 static gboolean
 gtk_status_icon_blinker (GtkStatusIcon *status_icon)
 {

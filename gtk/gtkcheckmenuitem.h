@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -90,12 +90,6 @@ void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_i
 						  gboolean          draw_as_radio);
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
 
-
-#ifndef GTK_DISABLE_DEPRECATED
-void	   gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
-						gboolean	  always);
-#define	gtk_check_menu_item_set_state		gtk_check_menu_item_set_active
-#endif
 
 G_END_DECLS
 

@@ -19,8 +19,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include <gtk/gtk.h>
 
@@ -61,12 +59,6 @@ quit_cb (gpointer        callback_data,
 
   gtk_widget_destroy (message_dialog);
 }
-
-static GtkItemFactoryEntry menu_items[] =
-{
-  { "/_File",            NULL,         NULL,                  0, "<Branch>" },
-  { "/File/_Quit",       "<control>Q", quit_cb,               0 },
-};
 
 static void
 socket_destroyed (GtkWidget *widget,
@@ -132,29 +124,6 @@ create_socket (void)
 		    G_CALLBACK (plug_removed), socket);
 
   return socket;
-}
-
-void
-steal (GtkWidget *window, GtkEntry *entry)
-{
-  guint32 xid;
-  const gchar *text;
-  Socket *socket;
-
-  text = gtk_entry_get_text (entry);
-
-  xid = strtol (text, NULL, 0);
-  if (xid == 0)
-    {
-      g_warning ("Invalid window id '%s'\n", text);
-      return;
-    }
-
-  socket = create_socket ();
-  gtk_box_pack_start (GTK_BOX (box), socket->box, TRUE, TRUE, 0);
-  gtk_widget_show (socket->box);
-
-  gtk_socket_steal (GTK_SOCKET (socket->socket), xid);
 }
 
 void
@@ -335,10 +304,12 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *hbox;
   GtkWidget *vbox;
+  GtkWidget *menubar;
+  GtkWidget *menuitem;
+  GtkWidget *menu;
   GtkWidget *entry;
   GtkWidget *checkbutton;
   GtkAccelGroup *accel_group;
-  GtkItemFactory *item_factory;
 
   gtk_init (&argc, &argv);
 
@@ -352,18 +323,18 @@ main (int argc, char *argv[])
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
+  menubar = gtk_menu_bar_new ();
+  menuitem = gtk_menu_item_new_with_mnemonic ("_File");
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
+  g_signal_connect (menuitem, "activate", G_CALLBACK (quit_cb), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
-
-  
-  gtk_item_factory_create_items (item_factory,
-				 G_N_ELEMENTS (menu_items), menu_items,
-				 NULL);
-      
-  gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_item_factory_get_widget (item_factory, "<main>"),
-		      FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Add Active Child");
   gtk_box_pack_start (GTK_BOX(vbox), button, FALSE, FALSE, 0);
@@ -407,13 +378,6 @@ main (int argc, char *argv[])
 
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX(hbox), entry, FALSE, FALSE, 0);
-
-  button = gtk_button_new_with_label ("Steal");
-  gtk_box_pack_start (GTK_BOX(hbox), button, FALSE, FALSE, 0);
-
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (steal),
-		    entry);
 
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);

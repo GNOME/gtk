@@ -335,7 +335,6 @@ is_attached_menu_window (GtkWidget *widget)
       attach = gtk_menu_get_attach_widget (GTK_MENU (child));
       /* Allow for menu belonging to the Panel Menu, which is a GtkButton */
       if (GTK_IS_MENU_ITEM (attach) ||
-          GTK_IS_OPTION_MENU (attach) ||
           GTK_IS_BUTTON (attach))
         ret = TRUE;
     }
@@ -365,8 +364,6 @@ is_combo_window (GtkWidget *widget)
   obj = gtk_widget_get_accessible (child);
   obj = atk_object_get_parent (obj);
   accessible = GTK_ACCESSIBLE (obj);
-  if (GTK_IS_COMBO (accessible->widget))
-    return TRUE;
 
   return  FALSE;
 }

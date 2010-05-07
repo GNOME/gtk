@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -97,17 +97,6 @@ GdkImage*  gdk_image_new       (GdkImageType  type,
 				gint	      width,
 				gint	      height);
 
-#ifndef GDK_DISABLE_DEPRECATED
-GdkImage*  gdk_image_get       (GdkDrawable  *drawable,
-				gint	      x,
-				gint	      y,
-				gint	      width,
-				gint	      height);
-
-GdkImage * gdk_image_ref       (GdkImage     *image);
-void       gdk_image_unref     (GdkImage     *image);
-#endif
-
 void	   gdk_image_put_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y,
@@ -120,17 +109,6 @@ void       gdk_image_set_colormap (GdkImage    *image,
                                    GdkColormap *colormap);
 GdkColormap* gdk_image_get_colormap (GdkImage    *image);
 
-
-#ifdef GDK_ENABLE_BROKEN
-GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
-				gpointer      data,
-				gint          width,
-				gint          height);
-#endif /* GDK_ENABLE_BROKEN */
-
-#ifndef GDK_DISABLE_DEPRECATED
-#define gdk_image_destroy              g_object_unref
-#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

@@ -18,8 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "config.h"
 #include <gtk/gtk.h>
 #if defined (GDK_WINDOWING_X11)
@@ -59,17 +57,6 @@ print_hello (GtkWidget *w,
       break;
     }
 }
-
-static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL,           0, "<Branch>" },
-  { "/File/_New",     "<control>N", print_hello,    ACTION_FILE_NEW, "<Item>" },
-  { "/File/_Open",    "<control>O", print_hello,    ACTION_FILE_OPEN, "<Item>" },
-  { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
-  { "/File/Quit",     "<control>Q", gtk_main_quit,  0, "<Item>" },
-  { "/O_K",            "<control>K",print_hello,    ACTION_OK, "<Item>" },
-  { "/_Help",         NULL,         NULL,           0, "<LastBranch>" },
-  { "/_Help/About",   NULL,         print_hello,    ACTION_HELP_ABOUT, "<Item>" },
-};
 
 static void
 remove_buttons (GtkWidget *widget, GtkWidget *other_button)
@@ -145,25 +132,24 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 static GtkWidget *
 create_combo (void)
 {
-  GList *cbitems;
-  GtkCombo *combo;
+  GtkComboBox *combo;
+  GtkWidget *entry;
 
-  cbitems = NULL;
-  cbitems = g_list_append (cbitems, "item0");
-  cbitems = g_list_append (cbitems, "item1 item1");
-  cbitems = g_list_append (cbitems, "item2 item2 item2");
-  cbitems = g_list_append (cbitems, "item3 item3 item3 item3");
-  cbitems = g_list_append (cbitems, "item4 item4 item4 item4 item4");
-  cbitems = g_list_append (cbitems, "item5 item5 item5 item5 item5 item5");
-  cbitems = g_list_append (cbitems, "item6 item6 item6 item6 item6");
-  cbitems = g_list_append (cbitems, "item7 item7 item7 item7");
-  cbitems = g_list_append (cbitems, "item8 item8 item8");
-  cbitems = g_list_append (cbitems, "item9 item9");
+  combo = GTK_COMBO_BOX (gtk_combo_box_entry_new_text ());
+  gtk_combo_box_append_text (combo, "item0");
+  gtk_combo_box_append_text (combo, "item1 item1");
+  gtk_combo_box_append_text (combo, "item2 item2 item2");
+  gtk_combo_box_append_text (combo, "item3 item3 item3 item3");
+  gtk_combo_box_append_text (combo, "item4 item4 item4 item4 item4");
+  gtk_combo_box_append_text (combo, "item5 item5 item5 item5 item5 item5");
+  gtk_combo_box_append_text (combo, "item6 item6 item6 item6 item6");
+  gtk_combo_box_append_text (combo, "item7 item7 item7 item7");
+  gtk_combo_box_append_text (combo, "item8 item8 item8");
+  gtk_combo_box_append_text (combo, "item9 item9");
 
-  combo = GTK_COMBO (gtk_combo_new ());
-  gtk_combo_set_popdown_strings (combo, cbitems);
-  gtk_entry_set_text (GTK_ENTRY (combo->entry), "hello world");
-  gtk_editable_select_region (GTK_EDITABLE (combo->entry), 0, -1);
+  entry = gtk_bin_get_child (GTK_BIN (combo));
+  gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
   return GTK_WIDGET (combo);
 }
@@ -171,19 +157,41 @@ create_combo (void)
 static GtkWidget *
 create_menubar (GtkWindow *window)
 {
-  GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group=NULL;
   GtkWidget *menubar;
-  
+  GtkWidget *menuitem;
+  GtkWidget *menu;
+
   accel_group = gtk_accel_group_new ();
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>",
-                                       accel_group);
-  gtk_item_factory_create_items (item_factory,
-				 G_N_ELEMENTS (menu_items),
-				 menu_items, NULL);
-  
   gtk_window_add_accel_group (window, accel_group);
-  menubar = gtk_item_factory_get_widget (item_factory, "<main>");
+
+  menubar = gtk_menu_bar_new ();
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("_File");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, NULL);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (print_hello), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (gtk_main_quit), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("O_K");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Help");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (print_hello), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
   return menubar;
 }

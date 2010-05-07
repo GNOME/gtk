@@ -1734,17 +1734,6 @@ gtk_window_set_policy_internal (GtkWindow *window,
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
-void
-gtk_window_set_policy (GtkWindow *window,
-		       gboolean   allow_shrink,
-		       gboolean   allow_grow,
-		       gboolean   auto_shrink)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  gtk_window_set_policy_internal (window, allow_shrink, allow_grow, auto_shrink);
-}
-
 static gboolean
 handle_keys_changed (gpointer data)
 {
@@ -8178,9 +8167,9 @@ _gtk_window_keys_foreach (GtkWindow                *window,
       GtkAccelGroup *group = groups->data;
       gint i;
 
-      for (i = 0; i < group->n_accels; i++)
+      for (i = 0; i < group->priv->n_accels; i++)
 	{
-	  GtkAccelKey *key = &group->priv_accels[i].key;
+	  GtkAccelKey *key = &group->priv->priv_accels[i].key;
 	  
 	  if (key->accel_key)
 	    (*func) (window, key->accel_key, key->accel_mods, FALSE, func_data);

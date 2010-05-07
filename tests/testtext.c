@@ -472,7 +472,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   tag = gtk_text_buffer_create_tag (buffer, "fg_blue", NULL);
 
 #ifdef DO_BLINK
-  gtk_timeout_add (1000, blink_timeout, tag);
+  g_timeout_add (1000, (GSourceFunc)blink_timeout, tag);
 #endif     
  
   setup_tag (tag);

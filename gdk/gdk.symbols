@@ -22,9 +22,6 @@
 #if IN_HEADER(__GDK_EVENTS_H__)
 #if IN_FILE(__GDK_EVENTS_X11_C__)
 gdk_add_client_message_filter
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_event_get_graphics_expose
-#endif
 gdk_events_pending
 #endif
 #endif
@@ -511,10 +508,6 @@ gdk_drag_abort
 gdk_drag_begin
 gdk_drag_context_get_type G_GNUC_CONST
 gdk_drag_context_new
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_drag_context_ref
-gdk_drag_context_unref
-#endif
 gdk_drag_drop
 gdk_drag_drop_succeeded
 gdk_drag_find_window_for_screen
@@ -588,11 +581,6 @@ gdk_draw_layout_with_colors
 gdk_gc_new
 gdk_gc_get_type G_GNUC_CONST
 gdk_gc_new_with_values
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_gc_ref
-gdk_gc_unref
-gdk_gc_set_font
-#endif
 gdk_gc_get_values
 gdk_gc_set_values
 gdk_gc_set_foreground
@@ -806,11 +794,6 @@ gdk_window_configure_finished
 
 #if IN_HEADER(__GDK_IMAGE_H__)
 #if IN_FILE(__GDK_IMAGE_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_image_ref
-gdk_image_unref
-gdk_image_get
-#endif
 gdk_image_set_colormap
 gdk_image_get_colormap
 gdk_image_new
@@ -819,9 +802,6 @@ gdk_image_new
 
 #if IN_HEADER(__GDK_IMAGE_H__)
 #if IN_FILE(__GDK_IMAGE_X11_C__)
-#ifdef GDK_ENABLE_BROKEN
-gdk_image_new_bitmap
-#endif
 gdk_image_get_pixel
 gdk_image_put_pixel
 gdk_image_get_type G_GNUC_CONST
@@ -915,9 +895,6 @@ gdk_pango_attr_embossed_new
 gdk_pango_attr_stipple_new
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_pango_context_set_colormap
-#endif
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
 gdk_pango_renderer_get_default
@@ -942,10 +919,6 @@ gdk_pixbuf_get_from_image
 gdk_pixbuf_render_pixmap_and_mask
 gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_render_threshold_alpha
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_pixbuf_render_to_drawable
-gdk_pixbuf_render_to_drawable_alpha
-#endif
 #endif
 #endif
 
@@ -1011,12 +984,6 @@ gdk_rgb_ditherable
 gdk_rgb_find_color
 gdk_rgb_get_colormap
 gdk_rgb_get_visual
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_rgb_init
-gdk_rgb_xpixel_from_rgb G_GNUC_CONST
-gdk_rgb_gc_set_background
-gdk_rgb_gc_set_foreground
-#endif
 gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_set_verbose

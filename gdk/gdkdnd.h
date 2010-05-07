@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -106,11 +106,6 @@ struct _GdkDragContextClass {
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
-
-#ifndef GDK_DISABLE_DEPRECATED
-void             gdk_drag_context_ref        (GdkDragContext *context);
-void             gdk_drag_context_unref      (GdkDragContext *context);
-#endif
 
 /* Destination side */
 

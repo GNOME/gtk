@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -54,14 +54,6 @@ G_BEGIN_DECLS
 #define GDK_SELECTION_TYPE_PIXMAP 	_GDK_MAKE_ATOM (20)
 #define GDK_SELECTION_TYPE_WINDOW 	_GDK_MAKE_ATOM (33)
 #define GDK_SELECTION_TYPE_STRING 	_GDK_MAKE_ATOM (31)
-
-#ifndef GDK_DISABLE_DEPRECATED
-
-typedef GdkAtom GdkSelection;
-typedef GdkAtom GdkTarget;
-typedef GdkAtom GdkSelectionType;
-
-#endif /* GDK_DISABLE_DEPRECATED */
 
 /* Selections
  */

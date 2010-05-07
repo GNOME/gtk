@@ -17,7 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -72,9 +72,6 @@ gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_v
 
 void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
                                                          const GdkColor  *color);
-#ifndef GTK_DISABLE_DEPRECATED
-GList            *gtk_cell_view_get_cell_renderers      (GtkCellView     *cell_view);
-#endif
 
 G_END_DECLS
 

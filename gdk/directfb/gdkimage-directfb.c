@@ -131,40 +131,6 @@ _gdk_image_exit (void)
     }
 }
 
-GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual,
-                      gpointer   data,
-                      gint       w,
-                      gint       h)
-{
-  GdkImage         *image;
-  GdkImageDirectFB *private;
-
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = image->windowing_data;
-
-  image->type   = GDK_IMAGE_SHARED;
-  image->visual = visual;
-  image->width  = w;
-  image->height = h;
-  image->depth  = 1;
-
-  GDK_NOTE (MISC, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
-
-  g_message ("not fully implemented %s", G_STRFUNC);
-
-  image->bpl = (w + 7) / 8;
-  image->mem = g_malloc (image->bpl * h);
-#if G_BYTE_ORDER == G_BIG_ENDIAN
-  image->byte_order = GDK_MSB_FIRST;
-#else
-  image->byte_order = GDK_LSB_FIRST;
-#endif
-  image->bpp = 1;
-
-  return image;
-}
-
 void
 _gdk_windowing_image_init (void)
 {
@@ -229,7 +195,7 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
   if (ret)
     {
       DirectFBError( "IDirectFBSurface::Lock() for writing failed!\n", ret );
-      gdk_image_unref( image );
+      g_object_unref( image );
       return NULL;
     }
 

@@ -3034,7 +3034,7 @@ get_accel_path (GtkWidget *menu_item,
 		{
 		  accel_group = gtk_accel_group_from_accel_closure (accel_closure);
 		  
-		  *locked = accel_group->lock_count > 0;
+		  *locked = gtk_accel_group_get_is_locked (accel_group);
 		}
 	    }
 	}

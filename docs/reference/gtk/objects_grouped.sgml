@@ -84,8 +84,6 @@
     <link linkend="GtkImage">GtkImage</link>
     <link linkend="GtkPixmap">GtkPixmap</link>
     <link linkend="GtkPreview">GtkPreview</link>
-    <link linkend="GtkCurve">GtkCurve</link>
-    <link linkend="GtkGammaCurve">GtkGammaCurve</link>
 
 <emphasis>Misc. Widgets</emphasis>
     <link linkend="GtkArrow">GtkArrow</link>

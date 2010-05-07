@@ -540,7 +540,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap_event = NULL;
   klass->window_state_event = NULL;
   klass->property_notify_event = _gtk_selection_property_notify;
-  klass->selection_clear_event = gtk_selection_clear;
+  klass->selection_clear_event = _gtk_selection_clear;
   klass->selection_request_event = _gtk_selection_request;
   klass->selection_notify_event = _gtk_selection_notify;
   klass->selection_received = NULL;
@@ -3002,31 +3002,6 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
-/**
- * gtk_widget_set:
- * @widget: a #GtkWidget
- * @first_property_name: name of first property to set
- * @Varargs: value of first property, followed by more properties, 
- *           %NULL-terminated
- * 
- * Precursor of g_object_set().
- *
- * Deprecated: 2.0: Use g_object_set() instead.
- **/
-void
-gtk_widget_set (GtkWidget   *widget,
-		const gchar *first_property_name,
-		...)
-{
-  va_list var_args;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  va_start (var_args, first_property_name);
-  g_object_set_valist (G_OBJECT (widget), first_property_name, var_args);
-  va_end (var_args);
-}
-
 static inline void	   
 gtk_widget_queue_draw_child (GtkWidget *widget)
 {
@@ -3743,55 +3718,6 @@ gtk_widget_queue_draw (GtkWidget *widget)
 			      rect.width, rect.height);
 }
 
-/* Invalidates the given area (allocation-relative-coordinates)
- * in all of the widget's windows
- */
-/**
- * gtk_widget_queue_clear_area:
- * @widget: a #GtkWidget
- * @x: x coordinate of upper-left corner of rectangle to redraw
- * @y: y coordinate of upper-left corner of rectangle to redraw
- * @width: width of region to draw
- * @height: height of region to draw
- * 
- * This function is no longer different from
- * gtk_widget_queue_draw_area(), though it once was. Now it just calls
- * gtk_widget_queue_draw_area(). Originally
- * gtk_widget_queue_clear_area() would force a redraw of the
- * background for %GTK_NO_WINDOW widgets, and
- * gtk_widget_queue_draw_area() would not. Now both functions ensure
- * the background will be redrawn.
- * 
- * Deprecated: 2.2: Use gtk_widget_queue_draw_area() instead.
- **/
-void	   
-gtk_widget_queue_clear_area (GtkWidget *widget,
-			     gint       x,
-			     gint       y,
-			     gint       width,
-			     gint       height)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_draw_area (widget, x, y, width, height);
-}
-
-/**
- * gtk_widget_queue_clear:
- * @widget: a #GtkWidget
- * 
- * This function does the same as gtk_widget_queue_draw().
- *
- * Deprecated: 2.2: Use gtk_widget_queue_draw() instead.
- **/
-void	   
-gtk_widget_queue_clear (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_draw (widget);
-}
-
 /**
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
@@ -3828,39 +3754,6 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   _gtk_size_group_queue_resize (widget);
-}
-
-/**
- * gtk_widget_draw:
- * @widget: a #GtkWidget
- * @area: area to draw
- *
- * In GTK+ 1.2, this function would immediately render the
- * region @area of a widget, by invoking the virtual draw method of a
- * widget. In GTK+ 2.0, the draw method is gone, and instead
- * gtk_widget_draw() simply invalidates the specified region of the
- * widget, then updates the invalid region of the widget immediately.
- * Usually you don't want to update the region immediately for
- * performance reasons, so in general gtk_widget_queue_draw_area() is
- * a better choice if you want to draw a region of a widget.
- **/
-void
-gtk_widget_draw (GtkWidget          *widget,
-		 const GdkRectangle *area)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_widget_is_drawable (widget))
-    {
-      if (area)
-        gtk_widget_queue_draw_area (widget,
-                                    area->x, area->y,
-                                    area->width, area->height);
-      else
-        gtk_widget_queue_draw (widget);
-
-      gdk_window_process_updates (widget->window, TRUE);
-    }
 }
 
 /**
@@ -4650,7 +4543,7 @@ _gtk_widget_get_accel_path (GtkWidget *widget,
 
   apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
   if (locked)
-    *locked = apath ? apath->accel_group->lock_count > 0 : TRUE;
+    *locked = apath ? gtk_accel_group_get_is_locked (apath->accel_group) : TRUE;
   return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
@@ -7848,76 +7741,6 @@ gtk_widget_error_bell (GtkWidget *widget)
     gdk_window_beep (widget->window);
 }
 
-/**
- * gtk_widget_set_uposition:
- * @widget: a #GtkWidget
- * @x: x position; -1 to unset x; -2 to leave x unchanged
- * @y: y position; -1 to unset y; -2 to leave y unchanged
- * 
- *
- * Sets the position of a widget. The funny "u" in the name comes from
- * the "user position" hint specified by the X Window System, and
- * exists for legacy reasons. This function doesn't work if a widget
- * is inside a container; it's only really useful on #GtkWindow.
- *
- * Don't use this function to center dialogs over the main application
- * window; most window managers will do the centering on your behalf
- * if you call gtk_window_set_transient_for(), and it's really not
- * possible to get the centering to work correctly in all cases from
- * application code. But if you insist, use gtk_window_set_position()
- * to set #GTK_WIN_POS_CENTER_ON_PARENT, don't do the centering
- * manually.
- *
- * Note that although @x and @y can be individually unset, the position
- * is not honoured unless both @x and @y are set.
- **/
-void
-gtk_widget_set_uposition (GtkWidget *widget,
-			  gint	     x,
-			  gint	     y)
-{
-  /* FIXME this function is the only place that aux_info->x and
-   * aux_info->y are even used I believe, and this function is
-   * deprecated. Should be cleaned up.
-   *
-   * (Actually, size_allocate uses them) -Yosh
-   */
-  
-  GtkWidgetAuxInfo *aux_info;
-  
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
-  
-  if (x > -2)
-    {
-      if (x == -1)
-	aux_info->x_set = FALSE;
-      else
-	{
-	  aux_info->x_set = TRUE;
-	  aux_info->x = x;
-	}
-    }
-
-  if (y > -2)
-    {
-      if (y == -1)
-	aux_info->y_set = FALSE;
-      else
-	{
-	  aux_info->y_set = TRUE;
-	  aux_info->y = y;
-	}
-    }
-
-  if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
-    _gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
-  
-  if (gtk_widget_get_visible (widget) && widget->parent)
-    gtk_widget_size_allocate (widget, &widget->allocation);
-}
-
 static void
 gtk_widget_set_usize_internal (GtkWidget *widget,
 			       gint       width,
@@ -7947,42 +7770,6 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
     gtk_widget_queue_resize (widget);
 
   g_object_thaw_notify (G_OBJECT (widget));
-}
-
-/**
- * gtk_widget_set_usize:
- * @widget: a #GtkWidget
- * @width: minimum width, or -1 to unset
- * @height: minimum height, or -1 to unset
- *
- * Sets the minimum size of a widget; that is, the widget's size
- * request will be @width by @height. You can use this function to
- * force a widget to be either larger or smaller than it is. The
- * strange "usize" name dates from the early days of GTK+, and derives
- * from X Window System terminology. In many cases,
- * gtk_window_set_default_size() is a better choice for toplevel
- * windows than this function; setting the default size will still
- * allow users to shrink the window. Setting the usize will force them
- * to leave the window at least as large as the usize. When dealing
- * with window sizes, gtk_window_set_geometry_hints() can be a useful
- * function as well.
- * 
- * Note the inherent danger of setting any fixed size - themes,
- * translations into other languages, different fonts, and user action
- * can all change the appropriate size for a given widget. So, it's
- * basically impossible to hardcode a size that will always be
- * correct.
- * 
- * Deprecated: 2.2: Use gtk_widget_set_size_request() instead.
- **/
-void
-gtk_widget_set_usize (GtkWidget *widget,
-		      gint	 width,
-		      gint	 height)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  gtk_widget_set_usize_internal (widget, width, height);
 }
 
 /**
@@ -9514,43 +9301,6 @@ gtk_widget_reset_shapes (GtkWidget *widget)
 
   if (!GTK_WIDGET_HAS_SHAPE_MASK (widget))
     gtk_reset_shapes_recurse (widget, widget->window);
-}
-
-/**
- * gtk_widget_ref:
- * @widget: a #GtkWidget
- * 
- * Adds a reference to a widget. This function is exactly the same
- * as calling g_object_ref(), and exists mostly for historical
- * reasons. It can still be convenient to avoid casting a widget
- * to a #GObject, it saves a small amount of typing.
- * 
- * Return value: the widget that was referenced
- *
- * Deprecated: 2.12: Use g_object_ref() instead.
- **/
-GtkWidget*
-gtk_widget_ref (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return (GtkWidget*) g_object_ref ((GObject*) widget);
-}
-
-/**
- * gtk_widget_unref:
- * @widget: a #GtkWidget
- *
- * Inverse of gtk_widget_ref(). Equivalent to g_object_unref().
- * 
- * Deprecated: 2.12: Use g_object_unref() instead.
- **/
-void
-gtk_widget_unref (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  g_object_unref ((GObject*) widget);
 }
 
 static void

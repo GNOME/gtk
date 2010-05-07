@@ -2177,7 +2177,7 @@ gtk_selection_init (void)
 }
 
 /**
- * gtk_selection_clear:
+ * _gtk_selection_clear:
  * @widget: a #GtkWidget
  * @event: the event
  * 
@@ -2185,15 +2185,9 @@ gtk_selection_init (void)
  * signal. 
  * 
  * Return value: %TRUE if the event was handled, otherwise false
- * 
- * Since: 2.2
- *
- * Deprecated: 2.4: Instead of calling this function, chain up from
- * your selection-clear-event handler. Calling this function
- * from any other context is illegal. 
  **/
 gboolean
-gtk_selection_clear (GtkWidget         *widget,
+_gtk_selection_clear (GtkWidget         *widget,
 		     GdkEventSelection *event)
 {
   /* Note that we filter clear events in gdkselection-x11.c, so

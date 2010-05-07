@@ -68,13 +68,6 @@ gdk_events_pending (void)
 	  (_gdk_quartz_event_loop_check_pending ()));
 }
 
-GdkEvent*
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  /* FIXME: Implement */
-  return NULL;
-}
-
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow  *window,
 		   gint        owner_events,

@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -138,11 +138,6 @@ gboolean          gtk_recent_chooser_get_local_only      (GtkRecentChooser  *cho
 void              gtk_recent_chooser_set_show_tips       (GtkRecentChooser  *chooser,
 							  gboolean           show_tips);
 gboolean          gtk_recent_chooser_get_show_tips       (GtkRecentChooser  *chooser);
-#ifndef GTK_DISABLE_DEPRECATED
-void              gtk_recent_chooser_set_show_numbers    (GtkRecentChooser  *chooser,
-							  gboolean           show_numbers);
-gboolean          gtk_recent_chooser_get_show_numbers    (GtkRecentChooser  *chooser);
-#endif /* GTK_DISABLE_DEPRECATED */
 void              gtk_recent_chooser_set_show_icons      (GtkRecentChooser  *chooser,
 							  gboolean           show_icons);
 gboolean          gtk_recent_chooser_get_show_icons      (GtkRecentChooser  *chooser);

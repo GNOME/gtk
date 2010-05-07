@@ -402,30 +402,6 @@ gdk_events_pending (void)
 	   PeekMessageW (&msg, NULL, 0, 0, PM_NOREMOVE)));
 }
 
-GdkEvent*
-gdk_event_get_graphics_expose (GdkWindow *window)
-{
-  MSG msg;
-  GdkEvent *event = NULL;
-
-  g_return_val_if_fail (window != NULL, NULL);
-  
-  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose\n"));
-
-  if (PeekMessageW (&msg, GDK_WINDOW_HWND (window), WM_PAINT, WM_PAINT, PM_REMOVE))
-    {
-      handle_wm_paint (&msg, window, TRUE, &event);
-      if (event != NULL)
-	{
-	  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: got it!\n"));
-	  return event;
-	}
-    }
-  
-  GDK_NOTE (EVENTS, g_print ("gdk_event_get_graphics_expose: nope\n"));
-  return NULL;	
-}
-
 #if 0 /* Unused, but might be useful to re-introduce in some debugging output? */
 
 static char *

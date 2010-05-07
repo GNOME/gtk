@@ -182,14 +182,6 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_event_get_graphics_expose ##### -->
-<para>
-</para>
-
-@window: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_event_put ##### -->
 <para>
 </para>

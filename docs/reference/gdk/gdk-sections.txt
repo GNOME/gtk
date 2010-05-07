@@ -258,11 +258,7 @@ gdk_pixmap_create_from_xpm
 gdk_pixmap_colormap_create_from_xpm
 gdk_pixmap_create_from_xpm_d
 gdk_pixmap_colormap_create_from_xpm_d
-gdk_pixmap_ref
-gdk_pixmap_unref
 GdkBitmap
-gdk_bitmap_ref
-gdk_bitmap_unref
 
 <SUBSECTION Standard>
 GDK_PIXMAP
@@ -285,11 +281,6 @@ GdkPixmapObjectClass
 GdkImage
 gdk_image_new
 GdkImageType
-gdk_image_new_bitmap
-gdk_image_get
-gdk_image_ref
-gdk_image_unref
-gdk_image_destroy
 gdk_image_get_colormap
 gdk_image_set_colormap
 
@@ -314,7 +305,6 @@ gdk_image_get_type
 <SECTION>
 <TITLE>GdkRGB</TITLE>
 <FILE>rgb</FILE>
-gdk_rgb_init
 
 <SUBSECTION>
 gdk_draw_rgb_image
@@ -331,9 +321,6 @@ gdk_rgb_cmap_free
 GdkRgbCmap
 
 <SUBSECTION>
-gdk_rgb_gc_set_foreground
-gdk_rgb_gc_set_background
-gdk_rgb_xpixel_from_rgb
 gdk_rgb_find_color
 
 <SUBSECTION>
@@ -354,8 +341,6 @@ GDK_TYPE_RGB_DITHER
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
 gdk_pixbuf_render_threshold_alpha
-gdk_pixbuf_render_to_drawable
-gdk_pixbuf_render_to_drawable_alpha
 gdk_pixbuf_render_pixmap_and_mask
 gdk_pixbuf_render_pixmap_and_mask_for_colormap
 gdk_pixbuf_get_from_drawable
@@ -528,16 +513,12 @@ GdkFunction
 gdk_gc_new
 gdk_gc_new_with_values
 gdk_gc_get_screen
-gdk_gc_ref
-gdk_gc_unref
-gdk_gc_destroy
 gdk_gc_set_values
 gdk_gc_get_values
 gdk_gc_set_foreground
 gdk_gc_set_background
 gdk_gc_set_rgb_fg_color
 gdk_gc_set_rgb_bg_color
-gdk_gc_set_font
 gdk_gc_set_function
 gdk_gc_set_fill
 GdkFill
@@ -600,8 +581,6 @@ gdk_visual_get_best
 gdk_visual_get_best_with_depth
 gdk_visual_get_best_with_type
 gdk_visual_get_best_with_both
-gdk_visual_ref
-gdk_visual_unref
 gdk_visual_get_screen
 
 <SUBSECTION Standard>
@@ -813,9 +792,6 @@ gdk_window_thaw_toplevel_updates_libgtk_only
 <SECTION>
 <TITLE>Selections</TITLE>
 <FILE>selections</FILE>
-GdkSelection
-GdkSelectionType
-GdkTarget
 GDK_SELECTION_PRIMARY
 GDK_SELECTION_SECONDARY
 GDK_SELECTION_CLIPBOARD
@@ -885,7 +861,6 @@ gdk_pango_renderer_set_stipple
 gdk_pango_renderer_set_override_color
 gdk_pango_context_get
 gdk_pango_context_get_for_screen
-gdk_pango_context_set_colormap
 GdkPangoAttrEmbossed
 GdkPangoAttrEmbossColor
 GdkPangoAttrStipple
@@ -1096,7 +1071,6 @@ GDK_PRIORITY_REDRAW
 gdk_events_pending
 gdk_event_peek
 gdk_event_get
-gdk_event_get_graphics_expose
 gdk_event_put
 gdk_event_new
 gdk_event_copy
@@ -1216,7 +1190,6 @@ gdk_cursor_get_type
 gdk_input_add_full
 GdkInputCondition
 GdkInputFunction
-GdkDestroyNotify
 gdk_input_add
 gdk_input_remove
 
@@ -1234,14 +1207,12 @@ gdk_drag_context_new
 gdk_drag_drop
 gdk_drag_find_window
 gdk_drag_find_window_for_screen
-gdk_drag_context_ref
 gdk_drag_begin
 gdk_drag_motion
 gdk_drop_finish
 gdk_drag_get_protocol
 gdk_drag_get_protocol_for_display
 GdkDragProtocol
-gdk_drag_context_unref
 GdkDragContext
 GdkDragAction
 gdk_drag_status
@@ -1359,8 +1330,6 @@ gdk_x11_get_xatom_name_for_display
 gdk_display
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
-gdk_iswalnum
-gdk_iswspace
 </SECTION>
 
 <SECTION>

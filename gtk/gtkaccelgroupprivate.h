@@ -1,5 +1,6 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) Javier Jardón <jjardon@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,33 +18,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- */
-
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
-#ifndef __GTK_GC_H__
-#define __GTK_GC_H__
+#ifndef __GTK_ACCEL_GROUP_PRIVATE_H__
+#define __GTK_ACCEL_GROUP_PRIVATE_H__
 
 
-#include <gdk/gdk.h>
+#define GTK_ACCEL_GROUP_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupPrivate))
 
+struct _GtkAccelGroupPrivate
+{
+  guint               lock_count;
+  GdkModifierType     modifier_mask;
+  GSList             *acceleratables;
+  guint               n_accels;
+  GtkAccelGroupEntry *priv_accels;
+};
 
-G_BEGIN_DECLS
-
-GdkGC* gtk_gc_get     (gint             depth,
-		       GdkColormap     *colormap,
-		       GdkGCValues     *values,
-		       GdkGCValuesMask  values_mask);
-void   gtk_gc_release (GdkGC           *gc);
-
-
-G_END_DECLS
-
-#endif /* __GTK_GC_H__ */
+#endif  /* __GTK_ACCEL_GROUP_PRIVATE_H__ */

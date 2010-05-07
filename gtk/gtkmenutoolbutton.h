@@ -19,7 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -71,14 +71,6 @@ GtkToolItem  *gtk_menu_tool_button_new_from_stock (const gchar *stock_id);
 void          gtk_menu_tool_button_set_menu       (GtkMenuToolButton *button,
                                                    GtkWidget         *menu);
 GtkWidget    *gtk_menu_tool_button_get_menu       (GtkMenuToolButton *button);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void          gtk_menu_tool_button_set_arrow_tooltip (GtkMenuToolButton *button,
-                                                      GtkTooltips       *tooltips,
-                                                      const gchar       *tip_text,
-                                                      const gchar       *tip_private);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 void          gtk_menu_tool_button_set_arrow_tooltip_text   (GtkMenuToolButton *button,
 							     const gchar       *text);
 void          gtk_menu_tool_button_set_arrow_tooltip_markup (GtkMenuToolButton *button,

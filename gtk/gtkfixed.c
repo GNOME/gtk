@@ -453,53 +453,5 @@ gtk_fixed_forall (GtkContainer *container,
     }
 }
 
-/**
- * gtk_fixed_set_has_window:
- * @fixed: a #GtkFixed
- * @has_window: %TRUE if a separate window should be created
- * 
- * Sets whether a #GtkFixed widget is created with a separate
- * #GdkWindow for @widget->window or not. (By default, it will be
- * created with no separate #GdkWindow). This function must be called
- * while the #GtkFixed is not realized, for instance, immediately after the
- * window is created.
- * 
- * This function was added to provide an easy migration path for
- * older applications which may expect #GtkFixed to have a separate window.
- *
- * Deprecated: 2.20: Use gtk_widget_set_has_window() instead.
- **/
-void
-gtk_fixed_set_has_window (GtkFixed *fixed,
-			  gboolean  has_window)
-{
-  g_return_if_fail (GTK_IS_FIXED (fixed));
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (fixed)));
-
-  if (has_window != gtk_widget_get_has_window (GTK_WIDGET (fixed)))
-    {
-      gtk_widget_set_has_window (GTK_WIDGET (fixed), has_window);
-    }
-}
-
-/**
- * gtk_fixed_get_has_window:
- * @fixed: a #GtkWidget
- * 
- * Gets whether the #GtkFixed has its own #GdkWindow.
- * See gtk_fixed_set_has_window().
- * 
- * Return value: %TRUE if @fixed has its own window.
- *
- * Deprecated: 2.20: Use gtk_widget_get_has_window() instead.
- **/
-gboolean
-gtk_fixed_get_has_window (GtkFixed *fixed)
-{
-  g_return_val_if_fail (GTK_IS_FIXED (fixed), FALSE);
-
-  return gtk_widget_get_has_window (GTK_WIDGET (fixed));
-}
-
 #define __GTK_FIXED_C__
 #include "gtkaliasdef.c"

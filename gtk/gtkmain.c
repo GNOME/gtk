@@ -186,12 +186,6 @@ static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 					  GdkEvent	     *event);
 
-static void     gtk_destroy_closure      (gpointer            data);
-static gboolean gtk_invoke_idle_timeout  (gpointer            data);
-static void     gtk_invoke_input         (gpointer            data,
-					  gint                source,
-					  GdkInputCondition   condition);
-
 #if 0
 static void  gtk_error			 (gchar		     *str);
 static void  gtk_warning		 (gchar		     *str);
@@ -1068,13 +1062,6 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 }
 
 #endif
-
-void
-gtk_exit (gint errorcode)
-{
-  exit (errorcode);
-}
-
 
 /**
  * gtk_set_locale:
@@ -2076,175 +2063,6 @@ gtk_quit_remove_by_data (gpointer data)
     }
 }
 
-guint
-gtk_timeout_add_full (guint32		 interval,
-		      GtkFunction	 function,
-		      GtkCallbackMarshal marshal,
-		      gpointer		 data,
-		      GDestroyNotify	 destroy)
-{
-  if (marshal)
-    {
-      GtkClosure *closure;
-
-      closure = g_new (GtkClosure, 1);
-      closure->marshal = marshal;
-      closure->data = data;
-      closure->destroy = destroy;
-
-      return g_timeout_add_full (0, interval, 
-				 gtk_invoke_idle_timeout,
-				 closure,
-				 gtk_destroy_closure);
-    }
-  else
-    return g_timeout_add_full (0, interval, function, data, destroy);
-}
-
-guint
-gtk_timeout_add (guint32     interval,
-		 GtkFunction function,
-		 gpointer    data)
-{
-  return g_timeout_add_full (0, interval, function, data, NULL);
-}
-
-void
-gtk_timeout_remove (guint tag)
-{
-  g_source_remove (tag);
-}
-
-guint
-gtk_idle_add_full (gint			priority,
-		   GtkFunction		function,
-		   GtkCallbackMarshal	marshal,
-		   gpointer		data,
-		   GDestroyNotify	destroy)
-{
-  if (marshal)
-    {
-      GtkClosure *closure;
-
-      closure = g_new (GtkClosure, 1);
-      closure->marshal = marshal;
-      closure->data = data;
-      closure->destroy = destroy;
-
-      return g_idle_add_full (priority,
-			      gtk_invoke_idle_timeout,
-			      closure,
-			      gtk_destroy_closure);
-    }
-  else
-    return g_idle_add_full (priority, function, data, destroy);
-}
-
-guint
-gtk_idle_add (GtkFunction function,
-	      gpointer	  data)
-{
-  return g_idle_add_full (G_PRIORITY_DEFAULT_IDLE, function, data, NULL);
-}
-
-guint	    
-gtk_idle_add_priority (gint        priority,
-		       GtkFunction function,
-		       gpointer	   data)
-{
-  return g_idle_add_full (priority, function, data, NULL);
-}
-
-void
-gtk_idle_remove (guint tag)
-{
-  g_source_remove (tag);
-}
-
-void
-gtk_idle_remove_by_data (gpointer data)
-{
-  if (!g_idle_remove_by_data (data))
-    g_warning ("gtk_idle_remove_by_data(%p): no such idle", data);
-}
-
-guint
-gtk_input_add_full (gint		source,
-		    GdkInputCondition	condition,
-		    GdkInputFunction	function,
-		    GtkCallbackMarshal	marshal,
-		    gpointer		data,
-		    GDestroyNotify	destroy)
-{
-  if (marshal)
-    {
-      GtkClosure *closure;
-
-      closure = g_new (GtkClosure, 1);
-      closure->marshal = marshal;
-      closure->data = data;
-      closure->destroy = destroy;
-
-      return gdk_input_add_full (source,
-				 condition,
-				 (GdkInputFunction) gtk_invoke_input,
-				 closure,
-				 (GDestroyNotify) gtk_destroy_closure);
-    }
-  else
-    return gdk_input_add_full (source, condition, function, data, destroy);
-}
-
-void
-gtk_input_remove (guint tag)
-{
-  g_source_remove (tag);
-}
-
-static void
-gtk_destroy_closure (gpointer data)
-{
-  GtkClosure *closure = data;
-
-  if (closure->destroy)
-    (closure->destroy) (closure->data);
-  g_free (closure);
-}
-
-static gboolean
-gtk_invoke_idle_timeout (gpointer data)
-{
-  GtkClosure *closure = data;
-
-  GtkArg args[1];
-  gint ret_val = FALSE;
-  args[0].name = NULL;
-  args[0].type = G_TYPE_BOOLEAN;
-  args[0].d.pointer_data = &ret_val;
-  closure->marshal (NULL, closure->data,  0, args);
-  return ret_val;
-}
-
-static void
-gtk_invoke_input (gpointer	    data,
-		  gint		    source,
-		  GdkInputCondition condition)
-{
-  GtkClosure *closure = data;
-
-  GtkArg args[3];
-  args[0].type = G_TYPE_INT;
-  args[0].name = NULL;
-  GTK_VALUE_INT (args[0]) = source;
-  args[1].type = GDK_TYPE_INPUT_CONDITION;
-  args[1].name = NULL;
-  GTK_VALUE_FLAGS (args[1]) = condition;
-  args[2].type = G_TYPE_NONE;
-  args[2].name = NULL;
-
-  closure->marshal (NULL, closure->data, 2, args);
-}
-
 /**
  * gtk_get_current_event:
  * 
@@ -2501,9 +2319,8 @@ gtk_print (gchar *str)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  G_CALLBACK (gtk_widget_destroyed),
-			  &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
       
       gtk_window_set_title (GTK_WINDOW (window), "Messages");
       
@@ -2552,9 +2369,8 @@ gtk_print (gchar *str)
       
       
       button = gtk_button_new_with_label ("close");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 G_CALLBACK (gtk_widget_hide),
-				 GTK_OBJECT (window));
+      g_signal_connect_swapped (button, "clicked",
+				G_CALLBACK (gtk_widget_hide), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);

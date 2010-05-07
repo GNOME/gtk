@@ -84,7 +84,6 @@ gdk_public_h_sources =				\
 	gdkevents.h				\
 	gdkfont.h				\
 	gdkgc.h					\
-	gdki18n.h				\
 	gdkimage.h				\
 	gdkinput.h				\
 	gdkkeys.h				\

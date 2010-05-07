@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -113,13 +113,6 @@ void        gtk_box_pack_end            (GtkBox         *box,
                                          gboolean        expand,
                                          gboolean        fill,
                                          guint           padding);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void        gtk_box_pack_start_defaults (GtkBox         *box,
-                                         GtkWidget      *widget);
-void        gtk_box_pack_end_defaults   (GtkBox         *box,
-                                         GtkWidget      *widget);
-#endif
 
 void        gtk_box_set_homogeneous     (GtkBox         *box,
                                          gboolean        homogeneous);

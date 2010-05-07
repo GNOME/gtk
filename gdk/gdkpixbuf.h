@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -49,33 +49,6 @@ void gdk_pixbuf_render_threshold_alpha   (GdkPixbuf           *pixbuf,
 					  int                  width,
 					  int                  height,
 					  int                  alpha_threshold);
-#ifndef GDK_DISABLE_DEPRECATED
-void gdk_pixbuf_render_to_drawable       (GdkPixbuf           *pixbuf,
-					  GdkDrawable         *drawable,
-					  GdkGC               *gc,
-					  int                  src_x,
-					  int                  src_y,
-					  int                  dest_x,
-					  int                  dest_y,
-					  int                  width,
-					  int                  height,
-					  GdkRgbDither         dither,
-					  int                  x_dither,
-					  int                  y_dither);
-void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf           *pixbuf,
-					  GdkDrawable         *drawable,
-					  int                  src_x,
-					  int                  src_y,
-					  int                  dest_x,
-					  int                  dest_y,
-					  int                  width,
-					  int                  height,
-					  GdkPixbufAlphaMode   alpha_mode,
-					  int                  alpha_threshold,
-					  GdkRgbDither         dither,
-					  int                  x_dither,
-					  int                  y_dither);
-#endif /* GDK_DISABLE_DEPRECATED */
 void gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf    *pixbuf,
 						     GdkColormap  *colormap,
 						     GdkPixmap   **pixmap_return,

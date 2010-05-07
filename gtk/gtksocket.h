@@ -23,7 +23,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -91,11 +91,6 @@ void            gtk_socket_add_id (GtkSocket       *socket_,
 				   GdkNativeWindow  window_id);
 GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket_);
 GdkWindow*      gtk_socket_get_plug_window (GtkSocket       *socket_);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void           gtk_socket_steal    (GtkSocket      *socket_,
-				    GdkNativeWindow wid);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

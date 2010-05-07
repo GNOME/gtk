@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -129,15 +129,6 @@ GtkWidget * gtk_paned_get_child2   (GtkPaned       *paned);
 
 GdkWindow * gtk_paned_get_handle_window (GtkPaned  *paned);
 
-#ifndef GTK_DISABLE_DEPRECATED
-/* Internal function */
-void    gtk_paned_compute_position (GtkPaned  *paned,
-                                    gint       allocation,
-                                    gint       child1_req,
-                                    gint       child2_req);
-#define	gtk_paned_gutter_size(p,s)		(void) 0
-#define	gtk_paned_set_gutter_size(p,s)		(void) 0
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

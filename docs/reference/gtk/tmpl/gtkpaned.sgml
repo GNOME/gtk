@@ -191,15 +191,6 @@ parameters. This is equivalent to
 @child: the child to add
 
 
-<!-- ##### MACRO gtk_paned_gutter_size ##### -->
-<para>
-Old name for gtk_paned_set_gutter_size().
-</para>
-
-@p: a paned widget
-@s: the width of the gutter in pixels
-
-
 <!-- ##### FUNCTION gtk_paned_pack1 ##### -->
 <para>
 Adds a child to the top or left pane.
@@ -238,16 +229,6 @@ Adds a child to the bottom or right pane.
 
 @paned: 
 @Returns: 
-
-
-<!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
-<para>
-In older versions of GTK+, this function used to set the width of the 
-gutter (the area between the two panes). It does nothing now.
-</para>
-
-@p: a paned widget
-@s: the width of the gutter in pixels
 
 
 <!-- ##### FUNCTION gtk_paned_set_position ##### -->

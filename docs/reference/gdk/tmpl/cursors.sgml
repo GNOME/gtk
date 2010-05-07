@@ -212,12 +212,3 @@ The standard cursors available.
 </para>
 
 @cursor: 
-
-
-<!-- ##### MACRO gdk_cursor_destroy ##### -->
-<para>
-Destroys a cursor, freeing any resources allocated for it.
-</para>
-
-
-

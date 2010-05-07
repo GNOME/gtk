@@ -1820,16 +1820,6 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
   gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
 }
 
-void 
-gtk_drag_set_default_icon (GdkColormap   *colormap,
-			   GdkPixmap     *pixmap,
-			   GdkBitmap     *mask,
-			   gint           hot_x,
-			   gint           hot_y)
-{
-  g_warning ("gtk_drag_set_default_icon is not supported on Mac OS X.");
-}
-
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {

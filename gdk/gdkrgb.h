@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
@@ -44,17 +44,6 @@ struct _GdkRgbCmap {
   /*< private >*/
   GSList *info_list;
 };
-
-#ifndef GDK_DISABLE_DEPRECATED
-void gdk_rgb_init (void);
-
-gulong gdk_rgb_xpixel_from_rgb   (guint32      rgb) G_GNUC_CONST;
-void   gdk_rgb_gc_set_foreground (GdkGC       *gc,
-				  guint32      rgb);
-void   gdk_rgb_gc_set_background (GdkGC       *gc,
-				  guint32      rgb);
-#define gdk_rgb_get_cmap               gdk_rgb_get_colormap
-#endif /* GDK_DISABLE_DEPRECATED */
 
 void   gdk_rgb_find_color        (GdkColormap *colormap,
 				  GdkColor    *color);

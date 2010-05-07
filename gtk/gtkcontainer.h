@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -122,18 +122,7 @@ void    gtk_container_check_resize       (GtkContainer     *container);
 void     gtk_container_foreach      (GtkContainer       *container,
 				     GtkCallback         callback,
 				     gpointer            callback_data);
-#ifndef GTK_DISABLE_DEPRECATED
-void     gtk_container_foreach_full (GtkContainer       *container,
-				     GtkCallback         callback,
-				     GtkCallbackMarshal  marshal,
-				     gpointer            callback_data,
-				     GDestroyNotify      notify);
-#endif /*  GTK_DISABLE_DEPRECATED */
 GList*   gtk_container_get_children     (GtkContainer       *container);
-
-#ifndef GTK_DISABLE_DEPRECATED
-#define gtk_container_children gtk_container_get_children
-#endif
 
 void     gtk_container_propagate_expose (GtkContainer   *container,
 					 GtkWidget      *child,
@@ -220,9 +209,6 @@ GList *_gtk_container_focus_sort             (GtkContainer     *container,
 					      GtkDirectionType  direction,
 					      GtkWidget        *old_focus);
 
-#ifndef GTK_DISABLE_DEPRECATED
-#define	gtk_container_border_width		gtk_container_set_border_width
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

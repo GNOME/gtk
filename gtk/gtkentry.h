@@ -28,7 +28,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -302,32 +302,13 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GtkTargetList        *target_list,
 							  GdkDragAction         actions);
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
-
-GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
+GdkWindow*   gtk_entry_get_icon_window                   (GtkEntry             *entry,
                                                           GtkEntryIconPosition  icon_pos);
 
 gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
                                                           GdkEventKey          *event);
 void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
 
-
-/* Deprecated compatibility functions
- */
-
-#ifndef GTK_DISABLE_DEPRECATED
-GtkWidget* gtk_entry_new_with_max_length	(gint           max);
-void       gtk_entry_append_text    		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_prepend_text   		(GtkEntry      *entry,
-						 const gchar   *text);
-void       gtk_entry_set_position   		(GtkEntry      *entry,
-						 gint           position);
-void       gtk_entry_select_region  		(GtkEntry      *entry,
-						 gint           start,
-						 gint           end);
-void       gtk_entry_set_editable   		(GtkEntry      *entry,
-						 gboolean       editable);
-#endif /* GTK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

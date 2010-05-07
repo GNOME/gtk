@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
@@ -69,13 +69,6 @@ struct _GtkDrawingAreaClass
 
 GType      gtk_drawing_area_get_type   (void) G_GNUC_CONST;
 GtkWidget* gtk_drawing_area_new        (void);
-
-#ifndef GTK_DISABLE_DEPRECATED
-void       gtk_drawing_area_size       (GtkDrawingArea      *darea,
-					gint                 width,
-					gint                 height);
-#endif /* GTK_DISABLE_DEPRECATED */
-
 
 G_END_DECLS
 

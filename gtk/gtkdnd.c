@@ -3406,53 +3406,6 @@ gtk_drag_set_icon_default (GdkDragContext *context)
 			      default_icon_hot_y);
 }
 
-/**
- * gtk_drag_set_default_icon:
- * @colormap: the colormap of the icon
- * @pixmap: the image data for the icon
- * @mask: (allow-none): the transparency mask for an image, or %NULL
- * @hot_x: The X offset within @widget of the hotspot.
- * @hot_y: The Y offset within @widget of the hotspot.
- * 
- * Changes the default drag icon. GTK+ retains references for the
- * arguments, and will release them when they are no longer needed.
- *
- * Deprecated: Change the default drag icon via the stock system by 
- *     changing the stock pixbuf for #GTK_STOCK_DND instead.
- **/
-void 
-gtk_drag_set_default_icon (GdkColormap   *colormap,
-			   GdkPixmap     *pixmap,
-			   GdkBitmap     *mask,
-			   gint           hot_x,
-			   gint           hot_y)
-{
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
-  g_return_if_fail (!mask || GDK_IS_PIXMAP (mask));
-  
-  if (default_icon_colormap)
-    g_object_unref (default_icon_colormap);
-  if (default_icon_pixmap)
-    g_object_unref (default_icon_pixmap);
-  if (default_icon_mask)
-    g_object_unref (default_icon_mask);
-
-  default_icon_colormap = colormap;
-  g_object_ref (colormap);
-  
-  default_icon_pixmap = pixmap;
-  g_object_ref (pixmap);
-
-  default_icon_mask = mask;
-  if (mask)
-    g_object_ref (mask);
-  
-  default_icon_hot_x = hot_x;
-  default_icon_hot_y = hot_y;
-}
-
-
 /*************************************************************
  * _gtk_drag_source_handle_event:
  *     Called from widget event handling code on Drag events
