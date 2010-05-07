@@ -53,34 +53,9 @@ static void gdk_pixmap_impl_directfb_finalize   (GObject                    *obj
 
 static gpointer parent_class = NULL;
 
-
-GType
-gdk_pixmap_impl_directfb_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-        {
-          sizeof (GdkPixmapImplDirectFBClass),
-          (GBaseInitFunc) NULL,
-          (GBaseFinalizeFunc) NULL,
-          (GClassInitFunc) gdk_pixmap_impl_directfb_class_init,
-          NULL,           /* class_finalize */
-          NULL,           /* class_data */
-          sizeof (GdkPixmapImplDirectFB),
-          0,              /* n_preallocs */
-          (GInstanceInitFunc) gdk_pixmap_impl_directfb_init,
-        };
-
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_DIRECTFB,
-                                            "GdkPixmapImplDirectFB",
-                                            &object_info, 0);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GdkPixmapImplDirectFB,
+               gdk_pixmap_impl_directfb,
+               GDK_TYPE_DRAWABLE_IMPL_DIRECTFB);
 
 GType
 _gdk_pixmap_impl_get_type (void)
