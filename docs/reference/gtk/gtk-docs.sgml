@@ -122,7 +122,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtksignal.xml" />
     <xi:include href="xml/gtktypeutils.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
@@ -275,7 +274,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontsel.xml" />
       <xi:include href="xml/gtkfontseldlg.xml" />
-      <xi:include href="xml/gtkinputdialog.xml" />
     </chapter>
     
     <chapter id="LayoutContainers">
@@ -367,8 +365,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     <chapter id="SpecialObjects">
       <title>Special-purpose features</title>
-      <xi:include href="xml/gtkcurve.xml" />
-      <xi:include href="xml/gtkgamma.xml" />
       <xi:include href="xml/gtkruler.xml" />
       <xi:include href="xml/gtkhruler.xml" />
       <xi:include href="xml/gtkvruler.xml" />
@@ -481,7 +477,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
   </index>
   <index id="api-index-2-22" role="2.22">
-    <title>Index of new symbols in 2.20</title>
+    <title>Index of new symbols in 2.22</title>
     <xi:include href="xml/api-index-2.22.xml"><xi:fallback /></xi:include>
   </index>
   <index id="api-index-3-0" role="3.0">
