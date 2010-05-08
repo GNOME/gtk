@@ -1294,7 +1294,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 				   PROP_HAS_SELECTION,
 				   g_param_spec_boolean ("has-selection",
 							 P_("Has Selection"),
-							 P_("TRUE if a selecion exists."),
+							 P_("TRUE if a selection exists."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
