@@ -5,23 +5,23 @@
 <refentry id="gdk-pixbuf-csource">
 
 <refmeta>
-<refentrytitle>gdk-pixbuf-csource</refentrytitle>
+<refentrytitle>gdk-pixbuf-csource-3.0</refentrytitle>
 <manvolnum>1</manvolnum>
 </refmeta>
 
 <refnamediv>
-<refname>gdk-pixbuf-csource</refname>
+<refname>gdk-pixbuf-csource-3.0</refname>
 <refpurpose>C code generation utility for GdkPixbuf images</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gdk-pixbuf-csource</command>
+<command>gdk-pixbuf-csource-3.0</command>
 <arg choice="opt">options</arg>
 <arg choice="opt">image</arg>
 </cmdsynopsis>
 <cmdsynopsis>
-<command>gdk-pixbuf-csource</command>
+<command>gdk-pixbuf-csource-3.0</command>
 <arg choice="opt">options</arg>
 <arg choice="plain">--build-list</arg>
 <arg rep="repeat">
@@ -33,16 +33,16 @@
 
 <refsect1><title>Description</title>
 <para>
-<command>gdk-pixbuf-csource</command> is a small utility that generates C code
-containing images, useful for compiling images directly into programs.
+<command>gdk-pixbuf-csource-3.0</command> is a small utility that generates
+C code containing images, useful for compiling images directly into programs.
 </para>
 </refsect1>
 
 <refsect1><title>Invocation</title>
 <para>
-<command>gdk-pixbuf-csource</command> either takes as input one image file name
-to generate code for, or, using the <option>--build-list</option> option, a 
-list of (<replaceable>name</replaceable>, <replaceable>image</replaceable>)
+<command>gdk-pixbuf-csource-3.0</command> either takes as input one image file
+name to generate code for, or, using the <option>--build-list</option> option,
+a list of (<replaceable>name</replaceable>, <replaceable>image</replaceable>)
 pairs to generate code for a list of images into named variables.
 </para>
 <refsect2><title>Options</title>
@@ -151,7 +151,7 @@ Make warnings fatal (causes the program to abort).
 
 <refsect1><title>See also</title>
 <para>
-The <structname>GdkPixbuf</structname> documentation, shipped with the 
+The <structname>GdkPixbuf</structname> documentation, shipped with the
 Gtk+ distribution, available from <ulink url="http://www.gtk.org">www.gtk.org</ulink>.
 </para>
 </refsect1>
@@ -166,11 +166,11 @@ generates pixbufs with suboptimal rowstride in some cases.
 
 <refsect1><title>Author</title>
 <para>
-<command>gdk-pixbuf-csource</command> was written by Tim Janik
-<email>timj@gtk.org</email>. 
+<command>gdk-pixbuf-csource-3.0</command> was written by Tim Janik
+<email>timj@gtk.org</email>.
 </para>
 <para>
-This manual page was provided by Tim Janik <email>timj@gtk.org</email>. 
+This manual page was provided by Tim Janik <email>timj@gtk.org</email>.
 </para>
 </refsect1>
 </refentry>

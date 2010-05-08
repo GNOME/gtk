@@ -11,7 +11,7 @@ AC_PREREQ(2.62)
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [2])
-m4_define([gtk_minor_version], [21])
+m4_define([gtk_minor_version], [90])
 m4_define([gtk_micro_version], [0])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
@@ -19,7 +19,7 @@ m4_define([gtk_binary_age],
 m4_define([gtk_version],
           [gtk_major_version.gtk_minor_version.gtk_micro_version])
 # This is the X.Y used in -lgtk-FOO-X.Y
-m4_define([gtk_api_version], [2.0])
+m4_define([gtk_api_version], [3.0])
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
@@ -28,7 +28,7 @@ m4_define([gtk_api_version], [2.0])
 # for GTK+.
 #
 #GTK_BINARY_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$LT_CURRENT
-m4_define([gtk_binary_version], [2.10.0])
+m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
 m4_define([glib_required_version], [2.23.6])
@@ -2108,14 +2108,14 @@ AC_CONFIG_FILES([
 config.h.win32
 gtk-zip.sh
 Makefile
-gdk-pixbuf-2.0.pc
-gdk-2.0.pc
-gtk+-2.0.pc
-gtk+-unix-print-2.0.pc
+gdk-pixbuf-3.0.pc
+gdk-3.0.pc
+gtk+-3.0.pc
+gtk+-unix-print-3.0.pc
 gail.pc
-gdk-pixbuf-2.0-uninstalled.pc
-gdk-2.0-uninstalled.pc
-gtk+-2.0-uninstalled.pc
+gdk-pixbuf-3.0-uninstalled.pc
+gdk-3.0-uninstalled.pc
+gtk+-3.0-uninstalled.pc
 gail-uninstalled.pc
 m4macros/Makefile
 po/Makefile.in
@@ -2166,7 +2166,7 @@ modules/engines/Makefile
 modules/engines/pixbuf/Makefile
 modules/engines/ms-windows/Makefile
 modules/engines/ms-windows/Theme/Makefile
-modules/engines/ms-windows/Theme/gtk-2.0/Makefile
+modules/engines/ms-windows/Theme/gtk-3.0/Makefile
 modules/input/Makefile
 modules/printbackends/Makefile
 modules/printbackends/cups/Makefile

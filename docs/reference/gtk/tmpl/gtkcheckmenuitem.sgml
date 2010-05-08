@@ -25,6 +25,9 @@ toggles the value.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCheckMenuItem ##### -->
 <para>
 The #GtkCheckMenuItem-struct struct contains the following fields.
@@ -81,6 +84,7 @@ field of the #GtkCheckMenuItem-struct struct to discover the new state.
 Creates a new #GtkCheckMenuItem.
 </para>
 
+@void: 
 @Returns: a new #GtkCheckMenuItem.
 
 

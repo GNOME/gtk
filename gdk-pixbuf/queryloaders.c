@@ -274,7 +274,7 @@ int main (int argc, char **argv)
 		  "# Automatically generated file, do not edit\n"
 		  "# Created by %s from gtk+-%s\n"
 		  "#\n",
-		  (prgname ? prgname : "gdk-pixbuf-query-loaders"),
+		  (prgname ? prgname : "gdk-pixbuf-query-loaders-3.0"),
 		  GDK_PIXBUF_VERSION);
   
 	if (argc == 1) {

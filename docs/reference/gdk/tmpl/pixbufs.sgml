@@ -19,6 +19,9 @@ pixbufs, see the #GdkPixbuf API documentation.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 
@@ -35,6 +38,12 @@ pixbufs, see the #GdkPixbuf API documentation.
 @alpha_threshold: 
 
 
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
 <para>
 
 </para>

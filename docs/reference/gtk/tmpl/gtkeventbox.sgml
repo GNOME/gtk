@@ -19,6 +19,9 @@ have their own window.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEventBox ##### -->
 <para>
 The #GtkEventBox-struct struct contains private data only, and
@@ -41,6 +44,7 @@ should be accessed using the functions below.
 Creates a new #GtkEventBox.
 </para>
 
+@void: 
 @Returns: a new #GtkEventBox.
 
 

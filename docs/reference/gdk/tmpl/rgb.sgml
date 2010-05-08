@@ -125,6 +125,9 @@ colors.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
 <para>
 Draws an RGB image in the drawable. This is the core GdkRGB
@@ -360,6 +363,7 @@ private colormap.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -368,16 +372,8 @@ private colormap.
 
 </para>
 
+@void: 
 @Returns: 
-
-
-<!-- ##### MACRO gdk_rgb_get_cmap ##### -->
-<para>
-Gets the colormap set by GdkRGB. This colormap and the corresponding
-visual should be used when creating windows that will be drawn in by GdkRGB.
-</para>
-
-@Returns: The #GdkColormap set by GdkRGB.
 
 
 <!-- ##### FUNCTION gdk_rgb_ditherable ##### -->
@@ -388,6 +384,7 @@ dither mode is desired; if the display is not ditherable, it may make
 sense to gray out or hide the corresponding UI widget.
 </para>
 
+@void: 
 @Returns: %TRUE if the preferred visual is ditherable.
 
 

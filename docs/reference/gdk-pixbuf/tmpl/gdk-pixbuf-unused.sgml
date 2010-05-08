@@ -553,3 +553,33 @@ End:
   </para>
 
 
+<!-- ##### FUNCTION gdk_pixbuf_animation_ref ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_unref ##### -->
+<para>
+
+</para>
+
+@animation: 
+
+<!-- ##### FUNCTION gdk_pixbuf_ref ##### -->
+  <para>
+
+  </para>
+
+@pixbuf: 
+@Returns: 
+
+<!-- ##### FUNCTION gdk_pixbuf_unref ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+

@@ -46,6 +46,9 @@ Creating a pixbuf from image data that is already in memory.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_new ##### -->
 <para>
 

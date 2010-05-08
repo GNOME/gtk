@@ -27,6 +27,9 @@ in the #GtkWidget class.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkDestDefaults ##### -->
 <para>
 The #GtkDestDefaults enumeration specifies the various
@@ -321,18 +324,6 @@ a widget.
 @context: 
 
 
-<!-- ##### FUNCTION gtk_drag_set_default_icon ##### -->
-<para>
-
-</para>
-
-@colormap: 
-@pixmap: 
-@mask: 
-@hot_x: 
-@hot_y: 
-
-
 <!-- ##### FUNCTION gtk_drag_check_threshold ##### -->
 <para>
 
@@ -351,11 +342,11 @@ a widget.
 
 </para>
 
-@widget:
-@start_button_mask:
-@targets:
-@n_targets:
-@actions:
+@widget: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_set_icon ##### -->

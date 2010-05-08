@@ -40,6 +40,9 @@ window (synonymous with gtk_window_add_accel_group().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkWindow ##### -->
 <para>
 
@@ -427,6 +430,7 @@ window (synonymous with gtk_window_add_accel_group().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -784,6 +788,7 @@ window (synonymous with gtk_window_add_accel_group().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -792,6 +797,7 @@ window (synonymous with gtk_window_add_accel_group().
 
 </para>
 
+@void: 
 @Returns: 
 
 

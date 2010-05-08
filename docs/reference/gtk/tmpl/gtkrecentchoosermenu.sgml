@@ -40,6 +40,9 @@ Recently used files are supported since GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRecentChooserMenu ##### -->
 <para>
 
@@ -56,6 +59,7 @@ Recently used files are supported since GTK+ 2.10.
 
 </para>
 
+@void: 
 @Returns: 
 
 

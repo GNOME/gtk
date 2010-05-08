@@ -147,6 +147,9 @@ for regular properties.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkContainer ##### -->
 <para>
 
@@ -159,7 +162,7 @@ for regular properties.
 </para>
 
 @container: the object which received the signal.
-@widget:
+@widget: 
 
 <!-- ##### SIGNAL GtkContainer::check-resize ##### -->
 <para>
@@ -174,7 +177,7 @@ for regular properties.
 </para>
 
 @container: the object which received the signal.
-@widget:
+@widget: 
 
 <!-- ##### SIGNAL GtkContainer::set-focus-child ##### -->
 <para>
@@ -182,7 +185,7 @@ for regular properties.
 </para>
 
 @container: the object which received the signal.
-@widget:
+@widget: 
 
 <!-- ##### ARG GtkContainer:border-width ##### -->
 <para>
@@ -204,7 +207,7 @@ for regular properties.
 
 </para>
 
-@widget:
+@widget: 
 
 
 <!-- ##### MACRO GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID ##### -->
@@ -224,8 +227,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@widget:
+@container: 
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_container_remove ##### -->
@@ -233,8 +236,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@widget:
+@container: 
+@widget: 
 
 
 <!-- ##### FUNCTION gtk_container_add_with_properties ##### -->
@@ -242,10 +245,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@widget:
-@first_prop_name:
-@Varargs:
+@container: 
+@widget: 
+@first_prop_name: 
+@Varargs: 
 
 
 <!-- ##### FUNCTION gtk_container_get_resize_mode ##### -->
@@ -253,8 +256,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_resize_mode ##### -->
@@ -262,8 +265,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@resize_mode:
+@container: 
+@resize_mode: 
 
 
 <!-- ##### FUNCTION gtk_container_check_resize ##### -->
@@ -271,7 +274,7 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
+@container: 
 
 
 <!-- ##### FUNCTION gtk_container_foreach ##### -->
@@ -279,9 +282,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@callback:
-@callback_data:
+@container: 
+@callback: 
+@callback_data: 
 
 
 <!-- ##### FUNCTION gtk_container_get_children ##### -->
@@ -289,8 +292,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->
@@ -298,8 +301,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@needs_redraws:
+@container: 
+@needs_redraws: 
 
 
 <!-- ##### FUNCTION gtk_container_get_focus_child ##### -->
@@ -307,8 +310,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_focus_child ##### -->
@@ -316,8 +319,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
+@container: 
+@child: 
 
 
 <!-- ##### FUNCTION gtk_container_get_focus_vadjustment ##### -->
@@ -325,8 +328,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_focus_vadjustment ##### -->
@@ -334,8 +337,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@adjustment:
+@container: 
+@adjustment: 
 
 
 <!-- ##### FUNCTION gtk_container_get_focus_hadjustment ##### -->
@@ -343,8 +346,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_focus_hadjustment ##### -->
@@ -352,8 +355,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@adjustment:
+@container: 
+@adjustment: 
 
 
 <!-- ##### FUNCTION gtk_container_resize_children ##### -->
@@ -361,7 +364,7 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
+@container: 
 
 
 <!-- ##### FUNCTION gtk_container_child_type ##### -->
@@ -369,8 +372,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get ##### -->
@@ -378,10 +381,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@first_prop_name:
-@Varargs:
+@container: 
+@child: 
+@first_prop_name: 
+@Varargs: 
 
 
 <!-- ##### FUNCTION gtk_container_child_set ##### -->
@@ -389,10 +392,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@first_prop_name:
-@Varargs:
+@container: 
+@child: 
+@first_prop_name: 
+@Varargs: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get_property ##### -->
@@ -400,10 +403,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@property_name:
-@value:
+@container: 
+@child: 
+@property_name: 
+@value: 
 
 
 <!-- ##### FUNCTION gtk_container_child_set_property ##### -->
@@ -411,10 +414,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@property_name:
-@value:
+@container: 
+@child: 
+@property_name: 
+@value: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get_valist ##### -->
@@ -422,10 +425,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@first_property_name:
-@var_args:
+@container: 
+@child: 
+@first_property_name: 
+@var_args: 
 
 
 <!-- ##### FUNCTION gtk_container_child_set_valist ##### -->
@@ -433,10 +436,10 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@first_property_name:
-@var_args:
+@container: 
+@child: 
+@first_property_name: 
+@var_args: 
 
 
 <!-- ##### FUNCTION gtk_container_forall ##### -->
@@ -444,9 +447,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@callback:
-@callback_data:
+@container: 
+@callback: 
+@callback_data: 
 
 
 <!-- ##### FUNCTION gtk_container_get_border_width ##### -->
@@ -454,8 +457,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@Returns:
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_border_width ##### -->
@@ -463,8 +466,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@border_width:
+@container: 
+@border_width: 
 
 
 <!-- ##### FUNCTION gtk_container_propagate_expose ##### -->
@@ -472,9 +475,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@child:
-@event:
+@container: 
+@child: 
+@event: 
 
 
 <!-- ##### FUNCTION gtk_container_get_focus_chain ##### -->
@@ -482,9 +485,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@focusable_widgets:
-@Returns:
+@container: 
+@focusable_widgets: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_focus_chain ##### -->
@@ -492,8 +495,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
-@focusable_widgets:
+@container: 
+@focusable_widgets: 
 
 
 <!-- ##### FUNCTION gtk_container_unset_focus_chain ##### -->
@@ -501,7 +504,7 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@container:
+@container: 
 
 
 <!-- ##### FUNCTION gtk_container_class_find_child_property ##### -->
@@ -509,9 +512,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@cclass:
-@property_name:
-@Returns:
+@cclass: 
+@property_name: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_class_install_child_property ##### -->
@@ -519,9 +522,9 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@cclass:
-@property_id:
-@pspec:
+@cclass: 
+@property_id: 
+@pspec: 
 
 
 <!-- ##### FUNCTION gtk_container_class_list_child_properties ##### -->
@@ -529,8 +532,8 @@ properties in set_child_property() and get_child_property() implementations.
 
 </para>
 
-@cclass:
-@n_properties:
-@Returns:
+@cclass: 
+@n_properties: 
+@Returns: 
 
 

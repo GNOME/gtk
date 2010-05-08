@@ -21,6 +21,9 @@ pixel can be either on or off).
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPixmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable.
@@ -125,3 +128,5 @@ An opaque structure representing an offscreen drawable of depth
 #GdkWindow, can often be used interchangeably.  The type #GdkDrawable
 refers generically to any of these types.
 </para>
+
+

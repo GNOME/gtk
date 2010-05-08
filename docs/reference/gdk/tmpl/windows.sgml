@@ -209,6 +209,9 @@ gdk_offscreen_window_get_pixmap().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkWindow ##### -->
 <para>
 An opaque structure representing an onscreen drawable.
@@ -984,7 +987,7 @@ Registers a window as a potential drop destination.
 
 @window: 
 @region: 
-@child_func: 
+@GdkWindow *, gpointer: 
 @user_data: 
 
 
@@ -1018,6 +1021,7 @@ Registers a window as a potential drop destination.
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_window_process_updates ##### -->
@@ -1745,6 +1749,7 @@ The hint must be set before mapping the window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1753,6 +1758,7 @@ The hint must be set before mapping the window.
 
 </para>
 
+@void: 
 @Returns: 
 
 

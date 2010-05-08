@@ -41,6 +41,9 @@ the #GtkToolbar::popup-context-menu signal.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToolbar ##### -->
 <para>
 The #GtkToolbar struct only contains private data and should only be
@@ -100,11 +103,6 @@ accessed through the function described below.
 </para>
 
 <!-- ##### ARG GtkToolbar:toolbar-style ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:tooltips ##### -->
 <para>
 
 </para>
@@ -184,6 +182,7 @@ to a #GtkToolbar.
 
 </para>
 
+@void: 
 @Returns: the newly-created toolbar.
 
 
@@ -256,24 +255,6 @@ to a #GtkToolbar.
 @show_arrow: 
 
 
-<!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@orientation: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@enable: 
-
-
 <!-- ##### FUNCTION gtk_toolbar_unset_icon_size ##### -->
 <para>
 
@@ -283,15 +264,6 @@ to a #GtkToolbar.
 
 
 <!-- ##### FUNCTION gtk_toolbar_get_show_arrow ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
 <para>
 
 </para>
@@ -318,15 +290,6 @@ to a #GtkToolbar.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_toolbar_get_relief_style ##### -->
 <para>
 
@@ -334,166 +297,6 @@ to a #GtkToolbar.
 
 @toolbar: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@position: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@position: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
-<para>
-
-</para>
-<para>
-
-</para>
-
-@toolbar: 
-@type: 
-@widget: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@type: 
-@widget: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_insert_element ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@type: 
-@widget: 
-@text: 
-@tooltip_text: 
-@tooltip_private_text: 
-@icon: 
-@callback: 
-@user_data: 
-@position: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_append_widget ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@widget: 
-@tooltip_text: 
-@tooltip_private_text: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_prepend_widget ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@widget: 
-@tooltip_text: 
-@tooltip_private_text: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_insert_widget ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@widget: 
-@tooltip_text: 
-@tooltip_private_text: 
-@position: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_set_style ##### -->
@@ -505,21 +308,6 @@ to a #GtkToolbar.
 @style: 
 
 
-<!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@stock_id: 
-@tooltip_text: 
-@tooltip_private_text: 
-@callback: 
-@user_data: 
-@position: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_toolbar_set_icon_size ##### -->
 <para>
 
@@ -527,15 +315,6 @@ to a #GtkToolbar.
 
 @toolbar: 
 @icon_size: 
-
-
-<!-- ##### FUNCTION gtk_toolbar_remove_space ##### -->
-<para>
-
-</para>
-
-@toolbar: 
-@position: 
 
 
 <!-- ##### FUNCTION gtk_toolbar_unset_style ##### -->

@@ -51,6 +51,9 @@ for (i = 0; i &lt; 5; i++)
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRadioMenuItem ##### -->
 <para>
 The structure contains only private data that must be accessed through
@@ -124,13 +127,6 @@ Creates a new #GtkRadioMenuItem.
 @group: 
 @label: 
 @Returns: 
-
-
-<!-- ##### MACRO gtk_radio_menu_item_group ##### -->
-<para>
-Deprecated compatibility macro. Use gtk_radio_menu_item_get_group() instead.
-</para>
-
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_set_group ##### -->

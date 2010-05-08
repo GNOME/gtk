@@ -54,6 +54,9 @@ then %GDK_VISUAL_STATIC_GRAY.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkVisual ##### -->
 <para>
 The <type>GdkVisual</type> structure contains information about
@@ -171,6 +174,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -179,6 +183,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -187,6 +192,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -195,6 +201,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -203,6 +210,7 @@ in memory as 0x00, 0xcc, 0xee, 0xff.
 
 </para>
 
+@void: 
 @Returns: 
 
 

@@ -77,9 +77,9 @@ gtk-win32-res.o : gtk-win32.rc
 	$(WINDRES) gtk-win32.rc $@
 
 install-def-file: gtk.def
-	$(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-2.0.def
+	$(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-3.0.def
 uninstall-def-file:
-	-rm $(DESTDIR)$(libdir)/gtk-win32-2.0.def
+	-rm $(DESTDIR)$(libdir)/gtk-win32-3.0.def
 else
 install-def-file:
 uninstall-def-file:
@@ -122,7 +122,7 @@ if OS_LINUX
 TESTS += abicheck.sh pltcheck.sh
 endif
 
-libgtkincludedir = $(includedir)/gtk-2.0/gtk
+libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd =								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
@@ -832,48 +832,48 @@ gtktestutils.c: gtktypefuncs.c
 # target platform:
 lib_LTLIBRARIES = $(gtktargetlib)
 
-gtkincludedir = $(includedir)/gtk-2.0/gtk
+gtkincludedir = $(includedir)/gtk-3.0/gtk
 gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
 
-gtkunixprintincludedir = $(includedir)/gtk-unix-print-2.0/gtk
+gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 
-libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources)
-libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
-libgtk_quartz_2_0_la_SOURCES = $(gtk_c_sources)
-libgtk_directfb_2_0_la_SOURCES = $(gtk_c_sources)
+libgtk_x11_3_0_la_SOURCES = $(gtk_c_sources)
+libgtk_win32_3_0_la_SOURCES = $(gtk_c_sources)
+libgtk_quartz_3_0_la_SOURCES = $(gtk_c_sources)
+libgtk_directfb_3_0_la_SOURCES = $(gtk_c_sources)
 
-libgtk_x11_2_0_la_LDFLAGS = $(libtool_opts)
-libgtk_win32_2_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
-libgtk_quartz_2_0_la_LDFLAGS = $(libtool_opts)
-libgtk_directfb_2_0_la_LDFLAGS = $(libtool_opts)
+libgtk_x11_3_0_la_LDFLAGS = $(libtool_opts)
+libgtk_win32_3_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
+libgtk_quartz_3_0_la_LDFLAGS = $(libtool_opts)
+libgtk_directfb_3_0_la_LDFLAGS = $(libtool_opts)
 
-libgtk_x11_2_0_la_LIBADD = $(libadd)
-libgtk_win32_2_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
-libgtk_quartz_2_0_la_LIBADD = $(libadd)
-libgtk_directfb_2_0_la_LIBADD = $(libadd)
+libgtk_x11_3_0_la_LIBADD = $(libadd)
+libgtk_win32_3_0_la_LIBADD = $(libadd) -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
+libgtk_quartz_3_0_la_LIBADD = $(libadd)
+libgtk_directfb_3_0_la_LIBADD = $(libadd)
 
-libgtk_x11_2_0_la_DEPENDENCIES = $(deps)
-libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res) $(deps)
-libgtk_quartz_2_0_la_DEPENDENCIES = $(deps)
-libgtk_directfb_2_0_la_DEPENDENCIES = $(deps)
+libgtk_x11_3_0_la_DEPENDENCIES = $(deps)
+libgtk_win32_3_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32_res) $(deps)
+libgtk_quartz_3_0_la_DEPENDENCIES = $(deps)
+libgtk_directfb_3_0_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
-EXTRA_LTLIBRARIES = libgtk-x11-2.0.la libgtk-win32-2.0.la libgtk-quartz-2.0.la libgtk-directfb-2.0.la
+EXTRA_LTLIBRARIES = libgtk-x11-3.0.la libgtk-win32-3.0.la libgtk-quartz-3.0.la libgtk-directfb-3.0.la
 
-install-exec-hook: 
+install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
 	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gtktargetlib)
 endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key
+	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
 uninstall-mac-key-theme:
-	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-2.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
 else
 install-mac-key-theme:
 uninstall-mac-key-theme:
@@ -893,17 +893,17 @@ dist-hook: ../build/win32/vs9/gtk.vcproj
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0
-	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key
+	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
+	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-2.0/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0-key/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-2.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
 # this allows dist to pass.
@@ -929,17 +929,17 @@ introspection_files = \
     gtktypebuiltins.h \
     gtktypebuiltins.c
 
-Gtk-2.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) $(top_builddir)/gdk/Gdk-2.0.gir Makefile
-Gtk_2_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
-Gtk_2_0_gir_INCLUDES = Atk-1.0 Gdk-2.0
-Gtk_2_0_gir_CFLAGS = \
+Gtk-3.0.gir: $(INTROSPECTION_SCANNER) $(gtktargetlib) $(top_builddir)/gdk/Gdk-3.0.gir Makefile
+Gtk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
+Gtk_3_0_gir_INCLUDES = Atk-1.0 Gdk-3.0
+Gtk_3_0_gir_CFLAGS = \
 		$(INCLUDES) \
 		-UGDK_DISABLE_DEPRECATED \
 		-UGTK_DISABLE_DEPRECATED \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_2_0_gir_LIBS = $(gtktargetlib)
-Gtk_2_0_gir_FILES = $(addprefix $(srcdir)/, $(introspection_files))
-INTROSPECTION_GIRS += Gtk-2.0.gir
+Gtk_3_0_gir_LIBS = $(gtktargetlib)
+Gtk_3_0_gir_FILES = $(addprefix $(srcdir)/, $(introspection_files))
+INTROSPECTION_GIRS += Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
@@ -954,10 +954,10 @@ endif
 # Installed tools
 #
 bin_PROGRAMS = \
-	gtk-query-immodules-2.0 \
-	gtk-update-icon-cache
+	gtk-query-immodules-3.0 \
+	gtk-update-icon-cache-3.0
 
-bin_SCRIPTS = gtk-builder-convert
+bin_SCRIPTS = gtk-builder-convert-3.0
 
 if OS_WIN32
 
@@ -992,17 +992,17 @@ gtk-update-icon-cache.exe.manifest:
 
 endif
 
-gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
-gtk_query_immodules_2_0_LDADD = $(LDADDS)
+gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
+gtk_query_immodules_3_0_LDADD = $(LDADDS)
 
-gtk_query_immodules_2_0_SOURCES = queryimmodules.c
+gtk_query_immodules_3_0_SOURCES = queryimmodules.c
 
-gtk_update_icon_cache_LDADD = \
+gtk_update_icon_cache_3_0_LDADD = \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
 	$(GDK_PIXBUF_DEP_LIBS)
 
 
-gtk_update_icon_cache_SOURCES = \
+gtk_update_icon_cache_3_0_SOURCES = \
 	updateiconcache.c 
 
 .PHONY: files test test-debug
@@ -1309,11 +1309,11 @@ gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
 gtk_update_icon_cache_program =							\
 	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
-	   ./gtk-update-icon-cache
+	   ./gtk-update-icon-cache-3.0
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
-	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache-3.0$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h

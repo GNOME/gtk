@@ -21,6 +21,9 @@ fill in the text label.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkImageMenuItem ##### -->
 <para>
 
@@ -70,6 +73,7 @@ fill in the text label.
 
 </para>
 
+@void: 
 @Returns: 
 
 

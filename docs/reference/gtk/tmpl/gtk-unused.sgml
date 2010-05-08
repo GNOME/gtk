@@ -65,6 +65,129 @@ Implementation of Object Properties
 GtkCellRendererTextPixbuf
 
 
+<!-- ##### SECTION ./tmpl/gtkclist.sgml:Long_Description ##### -->
+<para>
+The #GtkCList widget is a very useful multi-columned scrolling list.  
+It can display data in nicely aligned vertical columns, with titles 
+at the top of the list.
+</para>
+<para>
+GtkCList has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkclist.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkclist.sgml:Short_Description ##### -->
+A multi-columned scrolling list widget
+
+
+<!-- ##### SECTION ./tmpl/gtkclist.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkclist.sgml:Title ##### -->
+GtkCList
+
+
+<!-- ##### SECTION ./tmpl/gtkcombo.sgml:Long_Description ##### -->
+<para>
+The #GtkCombo widget consists of a single-line text entry field and a drop-down
+list. The drop-down list is displayed when the user clicks on a small arrow
+button to the right of the entry field.
+</para>
+<para>
+The drop-down list is a #GtkList widget and can be accessed using the
+<structfield>list</structfield> member of the #GtkCombo-struct.
+List elements can contain arbitrary widgets, but if an element is not a
+plain label, then you must use the gtk_list_set_item_string() function.
+This sets the string which will be placed in the text entry field when the
+item is selected.
+</para>
+<para>
+By default, the user can step through the items in the list using the
+arrow (cursor) keys, though this behaviour can be turned off with
+gtk_combo_set_use_arrows().
+</para>
+<para>
+As of GTK+ 2.4, #GtkCombo has been deprecated in favor of #GtkComboBoxEntry.
+</para>
+
+<example id="gtkcombo-simple-example">
+<title>Creating a <structname>GtkCombo</structname> widget with simple text 
+items.</title>
+<programlisting>
+  GtkWidget *combo;
+  GList *items = NULL;
+
+  items = g_list_append (items, "First Item");
+  items = g_list_append (items, "Second Item");
+  items = g_list_append (items, "Third Item");
+  items = g_list_append (items, "Fourth Item");
+  items = g_list_append (items, "Fifth Item");
+
+  combo = gtk_combo_new (<!-- -->);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
+</programlisting>
+</example>
+
+<example>
+<title>Creating a <structname>GtkCombo</structname> widget with a complex item.</title>
+<programlisting>
+  GtkWidget *combo, *item, *hbox, *arrow, *label;
+
+  combo = gtk_combo_new (<!-- -->);
+
+  item = gtk_list_item_new (<!-- -->);
+  gtk_widget_show (item);
+
+  /* You can put almost anything into the GtkListItem widget. Here we will use
+     a horizontal box with an arrow and a label in it. */
+  hbox = gtk_hbox_new (FALSE, 3);
+  gtk_container_add (GTK_CONTAINER (item), hbox);
+  gtk_widget_show (hbox);
+
+  arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_OUT);
+  gtk_widget_show (arrow);
+  gtk_box_pack_start (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
+
+  label = gtk_label_new ("First Item");
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  /* You must set the string to display in the entry field when the item is
+     selected. */
+  gtk_combo_set_item_string (GTK_COMBO (combo), GTK_ITEM (item), "1st Item");
+
+  /* Now we simply add the item to the combo's list. */
+  gtk_container_add (GTK_CONTAINER (GTK_COMBO (combo)->list), item);
+</programlisting>
+</example>
+
+
+<!-- ##### SECTION ./tmpl/gtkcombo.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkcombo.sgml:Short_Description ##### -->
+A text entry field with a dropdown list
+
+
+<!-- ##### SECTION ./tmpl/gtkcombo.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkcombo.sgml:Title ##### -->
+GtkCombo
+
+
 <!-- ##### SECTION ./tmpl/gtkdata.sgml:Long_Description ##### -->
 <para>
 The #GtkData object is a very simple object intended to be used as a base
@@ -99,6 +222,210 @@ Debugging
 
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Title ##### -->
 gtkenums.sgml
+
+
+<!-- ##### SECTION ./tmpl/gtkfilesel.sgml:Long_Description ##### -->
+<para>
+#GtkFileSelection has been superseded by the newer #GtkFileChooser family
+of widgets.
+</para>
+<para>
+#GtkFileSelection should be used to retrieve file or directory names from 
+the user. It will create a new dialog window containing a directory list, 
+and a file list corresponding to the current working directory. The filesystem 
+can be navigated using the directory list or the drop-down history menu. 
+Alternatively, the TAB key can be used to navigate using filename 
+completion - common in text based editors such as emacs and jed.
+</para>
+<para>
+File selection dialogs are created with a call to gtk_file_selection_new().
+</para>
+<para>
+The default filename can be set using gtk_file_selection_set_filename() and the selected filename retrieved using gtk_file_selection_get_filename().
+</para>
+<para>
+Use gtk_file_selection_complete() to display files and directories
+that match a given pattern. This can be used for example, to show only
+*.txt files, or only files beginning with gtk*.
+</para>
+<para>
+Simple file operations; create directory, delete file, and rename file, are available from buttons at the top of the dialog. These can be hidden using gtk_file_selection_hide_fileop_buttons() and shown again using gtk_file_selection_show_fileop_buttons().
+</para>
+<para>
+<example>
+<title>Getting a filename from the user.</title>
+<programlisting>
+
+/* The file selection widget and the string to store the chosen filename */
+
+void store_filename (GtkWidget *widget, gpointer user_data) {
+   GtkWidget *file_selector = GTK_WIDGET (user_data);
+   const gchar *selected_filename;
+
+   selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (file_selector));
+   g_print ("Selected filename: &percnt;s\n", selected_filename);
+}
+
+void create_file_selection (void) {
+
+   GtkWidget *file_selector;
+
+   /* Create the selector */
+   
+   file_selector = gtk_file_selection_new ("Please select a file for editing.");
+   
+   g_signal_connect (GTK_FILE_SELECTION (file_selector)->ok_button,
+                     "clicked",
+                     G_CALLBACK (store_filename),
+                     file_selector);
+   			   
+   /* Ensure that the dialog box is destroyed when the user clicks a button. */
+   
+   g_signal_connect_swapped (GTK_FILE_SELECTION (file_selector)->ok_button,
+                             "clicked",
+                             G_CALLBACK (gtk_widget_destroy), 
+                             file_selector);
+
+   g_signal_connect_swapped (GTK_FILE_SELECTION (file_selector)->cancel_button,
+                             "clicked",
+                             G_CALLBACK (gtk_widget_destroy),
+                             file_selector); 
+   
+   /* Display that dialog */
+   
+   gtk_widget_show (file_selector);
+}
+
+</programlisting>
+</example>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkfilesel.sgml:See_Also ##### -->
+
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkDialog</term>
+<listitem><para>Add your own widgets into the #GtkFileSelection.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkfilesel.sgml:Short_Description ##### -->
+Prompt the user for a file or directory name
+
+
+<!-- ##### SECTION ./tmpl/gtkfilesel.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkfilesel.sgml:Title ##### -->
+GtkFileSelection
+
+
+<!-- ##### SECTION ./tmpl/gtkitemfactory.sgml:Long_Description ##### -->
+<para>
+As of GTK+ 2.4, #GtkItemFactory has been deprecated in favour of #GtkUIManager.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkitemfactory.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkitemfactory.sgml:Short_Description ##### -->
+A factory for menus
+
+
+<!-- ##### SECTION ./tmpl/gtkitemfactory.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkitemfactory.sgml:Title ##### -->
+GtkItemFactory
+
+
+<!-- ##### SECTION ./tmpl/gtklist.sgml:Long_Description ##### -->
+<para>
+The #GtkList widget is a container whose children are displayed
+vertically in order, and can be selected.
+
+The list has many selection modes, which are programmer selective and
+depend on how many elements are able to be selected at the same time.
+</para>
+<para>
+GtkList has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtklist.sgml:See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkContainer</term>
+<listitem><para>For functions that apply to every #GtkContainer
+(like #GtkList).</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>#GtkListitem</term>
+<listitem><para>Children of a #GtkList widget must be of this
+type.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtklist.sgml:Short_Description ##### -->
+Widget for packing a list of selectable items
+
+
+<!-- ##### SECTION ./tmpl/gtklist.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtklist.sgml:Title ##### -->
+GtkList
+
+
+<!-- ##### SECTION ./tmpl/gtklistitem.sgml:Long_Description ##### -->
+<para>
+The #GtkListItem widget is used for each item in a #GtkList.
+</para>
+<para>
+GtkList has has been deprecated since GTK+ 2.0 and should not be used
+in newly written code. Use #GtkTreeView instead.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtklistitem.sgml:See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkList</term>
+<listitem><para>the parent list widget.</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtklistitem.sgml:Short_Description ##### -->
+An item in a GtkList
+
+
+<!-- ##### SECTION ./tmpl/gtklistitem.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtklistitem.sgml:Title ##### -->
+GtkListItem
 
 
 <!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
@@ -209,6 +536,41 @@ Signal Marshallers
 GtkPacker
 
 
+<!-- ##### SECTION ./tmpl/gtkpreview.sgml:Long_Description ##### -->
+<para>
+The #GtkPreview widget provides a simple interface 
+used to display images as RGB or grayscale data.
+It's deprecated; just use a #GdkPixbuf displayed by a #GtkImage, or
+perhaps a #GtkDrawingArea. #GtkPreview has no advantage over those 
+approaches.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkpreview.sgml:See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GdkRGB</term>
+<listitem><para>the backend used by #GtkPreview.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtkpreview.sgml:Short_Description ##### -->
+A widget to display RGB or grayscale data
+
+
+<!-- ##### SECTION ./tmpl/gtkpreview.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtkpreview.sgml:Title ##### -->
+GtkPreview
+
+
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Title ##### -->
 Private Information
 
@@ -237,6 +599,56 @@ Private Information
 Themes
 
 
+<!-- ##### SECTION ./tmpl/gtktipsquery.sgml:Long_Description ##### -->
+<para>
+The #GtkTipsQuery widget is a subclass of #GtkLabel which is used to display
+help about widgets in a user interface.
+</para>
+<para>
+A query is started with a call to gtk_tips_query_start_query(), usually
+when some kind of 'Help' button is pressed. The #GtkTipsQuery then grabs all
+events, stopping the user interface from functioning normally.
+Then as the user moves the mouse over the widgets, the #GtkTipsQuery displays
+each widget's tooltip text.
+</para>
+<para>
+By connecting to the "widget-entered" or "widget-selected" signals, it is
+possible to customize the #GtkTipsQuery to perform other actions when widgets
+are entered or selected. For example, a help browser could be opened with
+documentation on the widget selected.
+</para>
+<para>
+At some point a call to gtk_tips_query_stop_query() must be made in order to
+stop the query and return the interface to its normal state.
+The gtk_tips_query_set_caller() function can be used to specify a widget
+which the user can select to stop the query (often the same button used to
+start the query).
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtktipsquery.sgml:See_Also ##### -->
+<para>
+<variablelist>
+<varlistentry>
+<term>#GtkTooltips</term>
+<listitem><para>the object which handles tooltips.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gtktipsquery.sgml:Short_Description ##### -->
+Displays help about widgets in the user interface
+
+
+<!-- ##### SECTION ./tmpl/gtktipsquery.sgml:Stability_Level ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gtktipsquery.sgml:Title ##### -->
+GtkTipsQuery
+
+
 <!-- ##### SECTION ./tmpl/gtktreemodelsimple.sgml:Long_Description ##### -->
 <para>
 
@@ -257,6 +669,112 @@ Themes
 GtkModelSimple
 
 
+<!-- ##### MACRO GTK_CELL_PIXMAP ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellPixmap pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+<!-- ##### MACRO GTK_CELL_PIXTEXT ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellPixText pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+<!-- ##### MACRO GTK_CELL_TEXT ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellText pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+<!-- ##### MACRO GTK_CELL_WIDGET ##### -->
+<para>
+A macro to cast a generic #GtkCList cell item to a GtkCellWidget pointer.
+</para>
+
+@cell: The #GtkCList cell item to convert.
+
+<!-- ##### MACRO GTK_CHECK_CAST ##### -->
+<para>
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
+defined, just cast it.  Otherwise, check to see if we can cast @tobj
+into a @cast.
+</para>
+
+
+<!-- ##### MACRO GTK_CHECK_CLASS_CAST ##### -->
+<para>
+Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
+defined, just cast it.  Otherwise, check to see if we can cast @tobj
+into a @cast.
+</para>
+
+@tclass: a #GtkClassInitFunc
+@cast_type: a GTK+ type.
+@cast: a C type
+
+<!-- ##### MACRO GTK_CHECK_CLASS_TYPE ##### -->
+<para>
+Determines whether @type_class is a type of @otype.
+</para>
+
+@type_class: a #GtkTypeClass class.
+
+<!-- ##### MACRO GTK_CHECK_GET_CLASS ##### -->
+<para>
+Gets the class of @tobj.
+</para>
+
+@tobj: a #GtkObject.
+
+<!-- ##### MACRO GTK_CHECK_TYPE ##### -->
+<para>
+Determines whether @type_object is a type of @otype.
+</para>
+
+@type_object: a #GtkTypeObject object
+
+<!-- ##### MACRO GTK_CLASS_NAME ##### -->
+<para>
+Returns the type name of @class.
+</para>
+
+@class: a #GtkTypeClass.
+@Deprecated: Use g_type_name() and G_TYPE_FROM_CLASS() instead.
+
+<!-- ##### MACRO GTK_CLASS_TYPE ##### -->
+<para>
+Returns the type of @class.
+</para>
+
+@class: a #GtkTypeClass.
+@Deprecated: Use G_TYPE_FROM_CLASS() instead.
+
+<!-- ##### MACRO GTK_CLIST_ADD_MODE ##### -->
+<para>
+A macro to test whether the CList is in "add mode."
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_AUTO_RESIZE_BLOCKED ##### -->
+<para>
+A macro to check if automatic resizing of columns is blocked.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_AUTO_SORT ##### -->
+<para>
+A macro to test whether the CList has automatic sorting
+switched on.
+</para>
+
+@clist: The #GtkCList widget to check.
+
 <!-- ##### MACRO GTK_CLIST_CHILD_HAS_FOCUS ##### -->
 <para>
 A macro to check whether a child widget of the CList
@@ -264,6 +782,92 @@ has the focus.
 </para>
 
 @clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_LINE ##### -->
+<para>
+A macro to check if the DRAW_DRAG_LINE property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_DRAW_DRAG_RECT ##### -->
+<para>
+A macro to check if the DRAW_DRAG_RECT property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_FLAGS ##### -->
+<para>
+Reads the current flags of the specified CList.
+</para>
+
+@clist: The #GtkCList widget from which to get the flags
+
+<!-- ##### MACRO GTK_CLIST_IN_DRAG ##### -->
+<para>
+A macro to check whether the #GtkCList is in "drag mode."
+</para>
+
+@clist: The #GtkCList to check.
+
+<!-- ##### MACRO GTK_CLIST_REORDERABLE ##### -->
+<para>
+A macro to test if the CList's columns are re-orderable
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_ROW ##### -->
+<para>
+A macro to cast a GList element to a CListRow pointer.
+</para>
+
+@_glist_: The GList element to convert.
+
+<!-- ##### MACRO GTK_CLIST_ROW_HEIGHT_SET ##### -->
+<para>
+A macro to check whether the #GtkCList's row height is set.
+</para>
+
+@clist: The #GtkCList to check.
+
+<!-- ##### MACRO GTK_CLIST_SET_FLAG ##### -->
+<para>
+A macro to set a particular flag for the specified CList.
+</para>
+
+@clist: The #GtkCList widget to affect.
+@flag: A single #GtkCList flag to set.  NOTE: Do not add the GTK_ prefix.
+
+<!-- ##### MACRO GTK_CLIST_SHOW_TITLES ##### -->
+<para>
+A macro to check whether the flag for showing the 
+widget's column titles is set.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_CLIST_UNSET_FLAG ##### -->
+<para>
+A macro to clear a particular flag for the specified CList.
+</para>
+
+@clist: The #GtkCList widget to affect.
+@flag: A single #GtkCList flag to clear.  NOTE: Do not add the GTK_ prefix.
+
+<!-- ##### MACRO GTK_CLIST_USE_DRAG_ICONS ##### -->
+<para>
+A macro to check if the USE_DRAG_ICONS property is enabled.
+</para>
+
+@clist: The #GtkCList widget to check.
+
+<!-- ##### MACRO GTK_FUNDAMENTAL_TYPE ##### -->
+<para>
+Converts a GTK+ type into a fundamental type.
+</para>
+
 
 <!-- ##### MACRO GTK_ICON_SIZE_BUTTON ##### -->
 <para>
@@ -330,6 +934,14 @@ Test whether a GtkObject has had gtk_object_destroy() invoked on it.
 
 @obj: the object to examine.
 
+<!-- ##### MACRO GTK_OBJECT_FLOATING ##### -->
+<para>
+Evaluates to %TRUE if the object still has its floating reference count.
+See the overview documentation for #GtkObject.
+</para>
+
+@obj: the object to examine.
+
 <!-- ##### MACRO GTK_OBJECT_NSIGNALS ##### -->
 <para>
 Get the number of signals defined by this object.
@@ -372,6 +984,118 @@ Turns off certain object flags.  (Private)
 </para>
 
 
+<!-- ##### MACRO GTK_RETLOC_BOOL ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_BOOL.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_BOXED ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_BOXED.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_CHAR ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_CHAR.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_DOUBLE ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_DOUBLE.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_ENUM ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_ENUM.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_FLAGS ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_FLAGS.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_FLOAT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_FLOAT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_INT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_INT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_LONG ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_LONG.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_OBJECT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_OBJECT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_POINTER ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_POINTER.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_STRING ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_STRING.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_UCHAR ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_UCHAR.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_UINT ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_UINT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_RETLOC_ULONG ##### -->
+<para>
+If the #GtkArg contains a pointer to the value, this macro will be a pointer to a %GTK_TYPE_ULONG.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_SIGNAL_FUNC ##### -->
+<para>
+Just a macroized cast into a #GtkSignalFunc.
+</para>
+
+@f: 
+
 <!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
 <para>
 
@@ -407,6 +1131,13 @@ Turns off certain object flags.  (Private)
 
 </para>
 
+
+<!-- ##### MACRO GTK_STRUCT_OFFSET ##### -->
+<para>
+Use in place of <function>offsetof()</function>, which is used if it exists.
+</para>
+
+@Deprecated: Use G_STRUCT_OFFSET() instead.
 
 <!-- ##### MACRO GTK_TIPS_QUERY ##### -->
 <para>
@@ -455,11 +1186,33 @@ The last "flat" (no struct) enumerated type value.
 </para>
 
 
+<!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_LAST ##### -->
+<para>
+The highest-numbered structured or flat enumerated type value.
+</para>
+
+@Deprecated: Use #G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1 instead.
+
+<!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_MAX ##### -->
+<para>
+The maximum fundamental enumerated type value.
+</para>
+
+@Deprecated: Use #G_TYPE_FUNDAMENTAL_MAX instead.
+
 <!-- ##### MACRO GTK_TYPE_IDENTIFIER ##### -->
 <para>
 Hide the name of gtk_identifier_get_type
 </para>
 
+
+<!-- ##### MACRO GTK_TYPE_IS_OBJECT ##### -->
+<para>
+Returns %TRUE if @type is a %GTK_TYPE_OBJECT.
+</para>
+
+@type: a #GtkType.
+@Deprecated: Use G_TYPE_IS_OBJECT() instead.
 
 <!-- ##### MACRO GTK_TYPE_MAKE ##### -->
 <para>
@@ -519,12 +1272,33 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_ARGS
 
 @a: 
 
+<!-- ##### MACRO GTK_VALUE_BOOL ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_BOOL.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_BOXED ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_BOXED.
+</para>
+
+@a: a #GtkArg.
+
 <!-- ##### MACRO GTK_VALUE_CALLBACK ##### -->
 <para>
 Use to get the value of a GtkArg whose GtkType is GTK_TYPE_CALLBACK
 </para>
 
 @a: 
+
+<!-- ##### MACRO GTK_VALUE_CHAR ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_CHAR.
+</para>
+
+@a: a #GtkArg.
 
 <!-- ##### MACRO GTK_VALUE_C_CALLBACK ##### -->
 <para>
@@ -533,12 +1307,103 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 
 @a: 
 
+<!-- ##### MACRO GTK_VALUE_DOUBLE ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_DOUBLE.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_ENUM ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_ENUM.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_FLAGS ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_FLAGS.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_FLOAT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_FLOAT.
+</para>
+
+@a: a #GtkArg.
+
 <!-- ##### MACRO GTK_VALUE_FOREIGN ##### -->
 <para>
 Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 </para>
 
 @a: 
+
+<!-- ##### MACRO GTK_VALUE_INT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_INT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_LONG ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_LONG.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_OBJECT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_OBJECT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_POINTER ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_POINTER.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_SIGNAL ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_SIGNAL.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_STRING ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_STRING.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_UCHAR ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_UCHAR.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_UINT ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_UINT.
+</para>
+
+@a: a #GtkArg.
+
+<!-- ##### MACRO GTK_VALUE_ULONG ##### -->
+<para>
+Gets the value of a #GtkArg whose #GtkType is %GTK_TYPE_ULONG.
+</para>
+
+@a: a #GtkArg.
 
 <!-- ##### USER_FUNCTION GValueCompareFunc ##### -->
 <para>
@@ -614,6 +1479,22 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @action: the object which received the signal.
 @widget: 
 
+<!-- ##### ENUM GtkArgFlags ##### -->
+<para>
+Possible flags indicating how an argument should be treated.
+</para>
+
+@GTK_ARG_READABLE: the argument is readable. (i.e. can be queried)
+@GTK_ARG_WRITABLE: the argument is writable. (i.e. settable)
+@GTK_ARG_CONSTRUCT: the argument needs construction.
+@GTK_ARG_CONSTRUCT_ONLY: the argument needs construction (and will
+be set once during object creation), but is otherwise cannot be
+set.  Hence this flag is not allowed with #GTK_ARG_WRITABLE,
+and is redundant with #GTK_ARG_CONSTRUCT.
+@GTK_ARG_CHILD_ARG: an argument type that applies to (and may be different for)
+each child.  Used by #GtkContainer.
+@Deprecated: Use corresponding #GParamSpec features instead
+
 <!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
 <para>
 Define a function pointer.  Deprecated.
@@ -661,6 +1542,340 @@ Define a function pointer.  Deprecated.
   is provided to allow language bindings to intercept the
   type resolution process.
 
+<!-- ##### ENUM GtkButtonAction ##### -->
+<para>
+Values for specifying what mouse button events a CList will
+react to.
+</para>
+
+@GTK_BUTTON_IGNORED: 
+@GTK_BUTTON_SELECTS: 
+@GTK_BUTTON_DRAGS: 
+@GTK_BUTTON_EXPANDS: 
+
+<!-- ##### STRUCT GtkCList ##### -->
+<para>
+This is the embodiment of the #GtkCList widget.  This structure contains
+only private data, and should be accessed only via the CList API.
+</para>
+
+
+<!-- ##### SIGNAL GtkCList::abort-column-resize ##### -->
+<para>
+This signal is emitted when a column resize is aborted.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::click-column ##### -->
+<para>
+This signal is emitted when a column title is clicked.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column.
+
+<!-- ##### SIGNAL GtkCList::end-selection ##### -->
+<para>
+This signal is emitted when a selection ends in a 
+multiple selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::extend-selection ##### -->
+<para>
+This signal is emitted when the selection is extended.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of any scrolling operation the
+occured during the selection.
+@position: A value between 0.0 and 1.0.
+@auto_start_selection: %TRUE or %FALSE.
+
+<!-- ##### SIGNAL GtkCList::resize-column ##### -->
+<para>
+This signal is emitted when a column is resized.
+</para>
+
+@clist: The object which received the signal.
+@column: The number of the column
+@width: The new width of the column.
+
+<!-- ##### SIGNAL GtkCList::row-move ##### -->
+<para>
+This signal is emitted when a row is moved.
+</para>
+
+@clist: The object which received the signal.
+@arg1: The source position of the row.
+@arg2: The destination position of the row.
+
+<!-- ##### SIGNAL GtkCList::scroll-horizontal ##### -->
+<para>
+This signal is emitted when the CList is scrolled horizontally.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: a value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::scroll-vertical ##### -->
+<para>
+This signal is emitted when the CList is scrolled vertically.
+</para>
+
+@clist: the object which received the signal.
+@scroll_type: A #GtkScrollType value of how the scroll operation occured.
+@position: A value between 0.0 and 1.0.
+
+<!-- ##### SIGNAL GtkCList::select-all ##### -->
+<para>
+This signal is emitted when all the rows are selected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::select-row ##### -->
+<para>
+This signal is emitted when the user selects a row in the list.  
+It is emitted for every row that is selected in a multi-selection or
+by calling gtk_clist_select_all().
+</para>
+
+@clist: The object which received the signal.
+@row: The row selected.
+@column: The column where the selection occured.
+@event: A #GdkEvent structure for the selection.
+
+<!-- ##### SIGNAL GtkCList::set-scroll-adjustments ##### -->
+<para>
+
+</para>
+
+@clist: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkCList::start-selection ##### -->
+<para>
+This signal is emitted when a drag-selection is started in 
+a multiple-selection CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-add-mode ##### -->
+<para>
+This signal is emitted when "add mode" is toggled.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@clist: The object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::undo-selection ##### -->
+<para>
+This signal is emitted when an undo selection occurs in the CList,
+probably via calling gtk_clist_undo_selection().
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-all ##### -->
+<para>
+This signal is emitted when all rows are unselected in a CList.
+</para>
+
+@clist: the object which received the signal.
+
+<!-- ##### SIGNAL GtkCList::unselect-row ##### -->
+<para>
+This signal is emitted when the user unselects a row in the list.  
+It is emitted for every row that is unselected in a multi-selection or
+by calling gtk_clist_unselect_all().  It is also emitted for the
+previously selected row in a "single" or "browse" mode CList.
+</para>
+
+@clist: The object which received the signal.
+@row: The selected row
+@column: The column where the selection occured.
+@event: 
+
+<!-- ##### ARG GtkCList:n-columns ##### -->
+<para>
+An integer value for a column.
+</para>
+
+
+<!-- ##### ARG GtkCList:reorderable ##### -->
+<para>
+A boolean value for determining if the user can re-order the CList's
+columns.
+</para>
+
+
+<!-- ##### ARG GtkCList:row-height ##### -->
+<para>
+An integer value representing the height of a row in pixels.
+</para>
+
+
+<!-- ##### ARG GtkCList:selection-mode ##### -->
+<para>
+Sets the type of selection mode for the CList.
+</para>
+
+
+<!-- ##### ARG GtkCList:shadow-type ##### -->
+<para>
+Sets the shadowing for the CList.
+</para>
+
+
+<!-- ##### ARG GtkCList:sort-type ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCList:titles-active ##### -->
+<para>
+A boolean value for setting whether the column titles can be
+clicked.
+</para>
+
+
+<!-- ##### ARG GtkCList:use-drag-icons ##### -->
+<para>
+A boolean value for setting whether to use icons during drag
+operations.
+</para>
+
+
+<!-- ##### STRUCT GtkCListCellInfo ##### -->
+<para>
+A simple structure that the #GtkCList widget uses to keep track
+of the location of a cell.
+</para>
+
+@row: 
+@column: 
+
+<!-- ##### STRUCT GtkCListColumn ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of information
+about its columns.
+</para>
+
+@title: 
+@area: 
+@button: 
+@window: 
+@width: 
+@min_width: 
+@max_width: 
+@justification: 
+@visible: 
+@width_set: 
+@resizeable: 
+@auto_resize: 
+@button_passive: 
+
+<!-- ##### USER_FUNCTION GtkCListCompareFunc ##### -->
+<para>
+Function prototype for the compare function callback.
+</para>
+
+@clist: The #GtkCList that is affected.
+@ptr1: A #gconstpointer to the first node to compare.
+@ptr2: A #gconstpointer to the second node to compare.
+@Returns: 0 if the nodes are equal, less than 0 if the first node should
+come before the second, and greater than 1 if the second come before the
+first.
+
+<!-- ##### STRUCT GtkCListDestInfo ##### -->
+<para>
+A simple structure that the #GtkCList widget uses to track 
+a cell for a drag operation.
+</para>
+
+@cell: 
+@insert_pos: 
+
+<!-- ##### ENUM GtkCListDragPos ##### -->
+<para>
+An enumeration for drag operations.
+</para>
+
+@GTK_CLIST_DRAG_NONE: 
+@GTK_CLIST_DRAG_BEFORE: 
+@GTK_CLIST_DRAG_INTO: 
+@GTK_CLIST_DRAG_AFTER: 
+
+<!-- ##### STRUCT GtkCListRow ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of information
+about its rows.
+</para>
+
+@cell: 
+@state: 
+@foreground: 
+@background: 
+@style: 
+@data: 
+@destroy: 
+@fg_set: 
+@bg_set: 
+@selectable: 
+
+<!-- ##### STRUCT GtkCell ##### -->
+<para>
+A generic structure that the #GtkCList widget uses to keep track of the
+contents of each of its cells.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### STRUCT GtkCellPixText ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain a combination of text and a GdkPixmap.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+@spacing: 
+@pixmap: 
+@mask: 
+
+<!-- ##### STRUCT GtkCellPixmap ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain a GdkPixmap.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@pixmap: 
+@mask: 
+
 <!-- ##### STRUCT GtkCellRendererTextPixbuf ##### -->
 <para>
 
@@ -668,9 +1883,52 @@ Define a function pointer.  Deprecated.
 
 @parent: 
 
+<!-- ##### STRUCT GtkCellText ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain text.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@text: 
+
+<!-- ##### ENUM GtkCellType ##### -->
+<para>
+Identifies the type of element in the current cell of the CList.  Cells can
+contain text, pixmaps, or both. Unfortunately support for %GTK_CELL_WIDGET
+was never completed.
+</para>
+
+@GTK_CELL_EMPTY: 
+@GTK_CELL_TEXT: 
+@GTK_CELL_PIXMAP: 
+@GTK_CELL_PIXTEXT: 
+@GTK_CELL_WIDGET: 
+
 <!-- ##### ARG GtkCellView:use-fg ##### -->
 <para>
 
+</para>
+
+
+<!-- ##### STRUCT GtkCellWidget ##### -->
+<para>
+A structure that the #GtkCList widget uses to keep track of #GtkCList cells
+that contain another widget.
+</para>
+
+@type: 
+@vertical: 
+@horizontal: 
+@style: 
+@widget: 
+
+<!-- ##### TYPEDEF GtkClassInitFunc ##### -->
+<para>
+Defines a function pointer.
 </para>
 
 
@@ -681,6 +1939,47 @@ Define a function pointer.  Deprecated.
 
 
 <!-- ##### ARG GtkColorSelection:previous-color ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkCombo ##### -->
+<para>
+The #GtkCombo-struct struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+</para>
+
+@entry: the text entry field.
+@list: the list shown in the drop-down window.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### ARG GtkCombo:allow-empty ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCombo:case-sensitive ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCombo:enable-arrow-keys ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCombo:enable-arrows-always ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkCombo:value-in-list ##### -->
 <para>
 
 </para>
@@ -740,6 +2039,19 @@ possibly because the #GtkData object is about to be destroyed.
 </para>
 
 @data: the object which received the signal.
+
+<!-- ##### USER_FUNCTION GtkDestroyNotify ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+@data: #gpointer
+
+<!-- ##### UNION GtkDitherInfo ##### -->
+<para>
+This union not used in GTK+.
+</para>
+
 
 <!-- ##### SIGNAL GtkEditable::activate ##### -->
 <para>
@@ -1052,7 +2364,66 @@ You may not attach these to signals created with the
 @_gtk_reserved4: 
 @_gtk_reserved5: 
 
+<!-- ##### TYPEDEF GtkEnumValue ##### -->
+<para>
+A structure which contains a single enum value, and its name, and its
+nickname.
+</para>
+
+
 <!-- ##### ARG GtkFileChooser:file-system ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileSelection ##### -->
+<para>
+The #GtkFileSelection struct contains the following #GtkWidget fields:
+</para>
+
+@dir_list: 
+@file_list: 
+@selection_entry: 
+@selection_text: 
+@main_vbox: 
+@ok_button: 
+@cancel_button: the two main buttons that signals should be connected 
+    to in order to perform an action when the user hits either OK or 
+    Cancel.
+@help_button: 
+@history_pulldown: the #GtkOptionMenu used to create the drop-down 
+    directory history.
+@history_menu: 
+@history_list: 
+@fileop_dialog: the dialog box used to display the #GtkFileSelection. 
+   It can be customized by adding/removing widgets from it using the 
+   standard #GtkDialog functions.
+@fileop_entry: 
+@fileop_file: 
+@cmpl_state: 
+@fileop_c_dir: 
+@fileop_del_file: 
+@fileop_ren_file: the buttons that appear at the top of the file 
+    selection dialog. These "operation buttons" can be hidden and 
+    redisplayed with gtk_file_selection_hide_fileop_buttons() and  
+    gtk_file_selection_show_fileop_buttons() respectively.
+@button_area: 
+@action_area: 
+
+<!-- ##### ARG GtkFileSelection:filename ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileSelection:select-multiple ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkFileSelection:show-fileops ##### -->
 <para>
 
 </para>
@@ -1092,6 +2463,12 @@ container.</entry>
 @x: 
 @y: 
 
+<!-- ##### TYPEDEF GtkFlagValue ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -1114,6 +2491,14 @@ gtk_font_selection_set_filter().
 @GTK_FONT_SCALABLE: scalable fonts.
 @GTK_FONT_SCALABLE_BITMAP: scaled bitmap fonts.
 @GTK_FONT_ALL: a bitwise combination of all of the above.
+
+<!-- ##### TYPEDEF GtkFundamentalType ##### -->
+<para>
+#GtkFundamentalType is an enumerated type which lists all the possible
+fundamental types (e.g. <type>char</type>, <type>uchar</type>, <type>int</type>,
+<type>long</type>, <type>float</type>, etc).
+</para>
+
 
 <!-- ##### ARG GtkHScale:adjustment ##### -->
 <para>
@@ -1152,11 +2537,192 @@ a RC file.
 </para>
 
 
+<!-- ##### STRUCT GtkItemFactory ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback1 ##### -->
+<para>
+
+</para>
+
+@callback_data: 
+@callback_action: 
+@widget: 
+
+<!-- ##### USER_FUNCTION GtkItemFactoryCallback2 ##### -->
+<para>
+
+</para>
+
+@widget: 
+@callback_data: 
+@callback_action: 
+
+<!-- ##### STRUCT GtkItemFactoryEntry ##### -->
+<para>
+
+</para>
+
+@path: 
+@accelerator: 
+@callback: 
+@callback_action: 
+@item_type: 
+@extra_data: 
+
+<!-- ##### STRUCT GtkItemFactoryItem ##### -->
+<para>
+
+</para>
+
+@path: 
+@widgets: 
+
 <!-- ##### ARG GtkLabel:accel-keyval ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### STRUCT GtkList ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkList::select-child ##### -->
+<para>
+The child @widget has just been selected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly selected child.
+
+<!-- ##### SIGNAL GtkList::selection-changed ##### -->
+<para>
+The selection of the widget has just changed.
+</para>
+
+@list: the object which received the signal.
+
+<!-- ##### SIGNAL GtkList::unselect-child ##### -->
+<para>
+The child @widget has just been unselected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly unselected child.
+
+<!-- ##### ARG GtkList:selection-mode ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkListItem ##### -->
+<para>
+The #GtkListItem struct contains private data only, and should
+only be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkListItem::end-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::extend-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+@auto_start_selection: 
+
+<!-- ##### SIGNAL GtkListItem::scroll-horizontal ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkListItem::scroll-vertical ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+@scroll_type: 
+@position: 
+
+<!-- ##### SIGNAL GtkListItem::select-all ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::start-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-add-mode ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::toggle-focus-row ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::undo-selection ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkListItem::unselect-all ##### -->
+<para>
+
+</para>
+
+@listitem: the object which received the signal.
+
+<!-- ##### ENUM GtkMatchType ##### -->
+<para>
+
+</para>
+
+@GTK_MATCH_ALL: 
+@GTK_MATCH_ALL_TAIL: 
+@GTK_MATCH_HEAD: 
+@GTK_MATCH_TAIL: 
+@GTK_MATCH_EXACT: 
+@GTK_MATCH_LAST: 
 
 <!-- ##### SIGNAL GtkMenuBar::cycle-focus ##### -->
 <para>
@@ -1192,6 +2758,36 @@ a RC file.
 @notebook: the object which received the signal.
 @arg1: 
 @arg2: 
+
+<!-- ##### ARG GtkNotebook:group-id ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkNotebook:homogeneous ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkNotebook:tab-border ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkNotebook:tab-hborder ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkNotebook:tab-vborder ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### ARG GtkObject:object-signal ##### -->
 <para>
@@ -1231,6 +2827,18 @@ the signal to the object.
 Setting this with a GtkType of GTK_TYPE_SIGNAL connects
 the signal to the object, so that the signal is always run
 after other user handlers and the default handler.
+</para>
+
+
+<!-- ##### ARG GtkObject:user-data ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF GtkObjectInitFunc ##### -->
+<para>
+Defines a function pointer.
 </para>
 
 
@@ -1347,6 +2955,73 @@ after other user handlers and the default handler.
 @user_data: 
 @seq_id: 
 
+<!-- ##### STRUCT GtkPreview ##### -->
+<para>
+The #GtkPreview-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### ARG GtkPreview:expand ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkPreviewInfo ##### -->
+<para>
+Contains information about global properties
+of preview widgets.
+
+The #GtkPreviewInfo struct contains the following fields.
+(These fields should be considered read-only. They should never be set by
+an application.)
+
+<informaltable pgwide="1" frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
+<tbody>
+
+<row>
+<entry>#GdkVisual *visual;</entry>
+<entry>the visual used by all previews.</entry>
+</row>
+
+<row>
+<entry>#GdkColormap *cmap;</entry>
+<entry>the colormap used by all previews.</entry>
+</row>
+
+<row>
+<entry>gdouble gamma;</entry>
+<entry>the gamma correction value used by all previews (See gtk_preview_set_gamma()).</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</para>
+
+@lookup: 
+@gamma: 
+
+<!-- ##### ENUM GtkPreviewType ##### -->
+<para>
+An enumeration which describes whether a preview
+contains grayscale or red-green-blue data.
+</para>
+
+@GTK_PREVIEW_COLOR: the preview contains red-green-blue data.
+@GTK_PREVIEW_GRAYSCALE: The preview contains grayscale data.
+
+<!-- ##### USER_FUNCTION GtkPrintFunc ##### -->
+<para>
+
+</para>
+
+@func_data: 
+@str: 
+
 <!-- ##### ARG GtkPrintOperation:number-of-pages ##### -->
 <para>
 
@@ -1366,6 +3041,36 @@ after other user handlers and the default handler.
 @PRIVATE_GTK_IN_REPARENT: 
 @PRIVATE_GTK_DIRECTION_SET: 
 @PRIVATE_GTK_DIRECTION_LTR: 
+
+<!-- ##### ARG GtkProgressBar:activity-blocks ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkProgressBar:activity-step ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkProgressBar:adjustment ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkProgressBar:bar-style ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkProgressBar:discrete-blocks ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### STRUCT GtkRcStyleClass ##### -->
 <para>
@@ -1409,6 +3114,16 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### ENUM GtkSideType ##### -->
+<para>
+
+</para>
+
+@GTK_SIDE_TOP: 
+@GTK_SIDE_BOTTOM: 
+@GTK_SIDE_LEFT: 
+@GTK_SIDE_RIGHT: 
+
 <!-- ##### USER_FUNCTION GtkSignalDestroy ##### -->
 <para>
 A function which you can use to clean up when the
@@ -1427,6 +3142,12 @@ function).
 @data: The user data associated with the hook that is being
 destroyed.
 
+<!-- ##### USER_FUNCTION GtkSignalFunc ##### -->
+<para>
+Defines a function pointer.
+</para>
+
+
 <!-- ##### USER_FUNCTION GtkSignalMarshal ##### -->
 <para>
 This is currently a hack left in for a scheme wrapper library.
@@ -1443,6 +3164,12 @@ Don't use it.
 @arg_types: The types of the arguments.
 @return_type: The type of the return value from the function
 or #GTK_TYPE_NONE for no return value.
+
+<!-- ##### TYPEDEF GtkSignalMarshaller ##### -->
+<para>
+Defines a function pointer.
+</para>
+
 
 <!-- ##### STRUCT GtkSignalQuery ##### -->
 <para>
@@ -1624,11 +3351,94 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### STRUCT GtkTipsQuery ##### -->
+<para>
+The #GtkTipsQuery-struct struct contains private data only, and
+should be accessed using the functions below.
+</para>
+
+
+<!-- ##### SIGNAL GtkTipsQuery::start-query ##### -->
+<para>
+Emitted when the query is started.
+</para>
+
+@tipsquery: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTipsQuery::stop-query ##### -->
+<para>
+Emitted when the query is stopped.
+</para>
+
+@tipsquery: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTipsQuery::widget-entered ##### -->
+<para>
+Emitted when a widget is entered by the pointer while the query is in effect.
+</para>
+
+@tipsquery: the object which received the signal.
+@widget: the widget that was entered by the pointer.
+@tip_text: the widget's tooltip.
+@tip_private: the widget's private tooltip (see gtk_tooltips_set_tip()).
+
+<!-- ##### SIGNAL GtkTipsQuery::widget-selected ##### -->
+<para>
+Emitted when a widget is selected during a query.
+</para>
+
+@tipsquery: the object which received the signal.
+@widget: the widget that was selected.
+@tip_text: the widget's tooltip.
+@tip_private: the widget's private tooltip (see gtk_tooltips_set_tip()).
+@event: the button press or button release event.
+@Returns: %TRUE if the query should be stopped.
+
+<!-- ##### ARG GtkTipsQuery:caller ##### -->
+<para>
+The widget that starts the tips query, usually a button.
+If it is selected while the query is in effect the query is automatically
+stopped.
+</para>
+
+
+<!-- ##### ARG GtkTipsQuery:emit-always ##### -->
+<para>
+%TRUE if the widget-entered and widget-selected signals are emitted even when
+the widget has no tooltip set.
+</para>
+
+
+<!-- ##### ARG GtkTipsQuery:label-inactive ##### -->
+<para>
+The text to display in the #GtkTipsQuery widget when the query is not in
+effect.
+</para>
+
+
+<!-- ##### ARG GtkTipsQuery:label-no-tip ##### -->
+<para>
+The text to display in the #GtkTipsQuery widget when the query is running
+and the widget that the pointer is over has no tooltip.
+</para>
+
+
 <!-- ##### ARG GtkToolButton:show-label-horizontally ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### SIGNAL GtkToolItem::set-tooltip ##### -->
+<para>
+
+</para>
+
+@toolitem: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
 <para>
@@ -1650,6 +3460,24 @@ produce superscript and subscript.
 
 </para>
 
+
+<!-- ##### ARG GtkToolbar:tooltips ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkTranslateFunc ##### -->
+<para>
+The function used to translate messages in e.g. #GtkIconFactory
+and #GtkActionGroup. 
+</para>
+
+@path: The id of the message. In #GtkItemFactory this will be a path
+  from a #GtkItemFactoryEntry, in #GtkActionGroup, it will be a label
+  or tooltip from a #GtkActionEntry.
+@func_data: user data passed in when registering the function
+@Returns: the translated message
 
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
@@ -1694,6 +3522,48 @@ produce superscript and subscript.
 @pos: 
 @user_data: 
 @Returns: 
+
+<!-- ##### TYPEDEF GtkType ##### -->
+<para>
+#GtkType is unique integer identifying the type.  The guts of the
+information about the type is held in a private struct named
+#GtkTypeNode.
+</para>
+
+
+<!-- ##### TYPEDEF GtkTypeClass ##### -->
+<para>
+The base structure for a GTK+ type. Every type inherits this as a base structure.
+</para>
+
+
+<!-- ##### STRUCT GtkTypeInfo ##### -->
+<para>
+Holds information about the type.  gtk_type_name() returns the name.
+@object_size is somehow set to the number of bytes that an instance of
+the object will occupy.  @class_init_func holds the type's
+initialization function.  @object_init_func holds the initialization
+function for an instance of the object.  @reserved_1 is used for
+#GtkEnumValue to hold the enumerated values.
+</para>
+
+@type_name: 
+@object_size: 
+@class_size: 
+@class_init_func: 
+@object_init_func: 
+@reserved_1: 
+@reserved_2: 
+@base_class_init_func: 
+
+<!-- ##### TYPEDEF GtkTypeObject ##### -->
+<para>
+A #GtkTypeObject defines the minimum structure requirements
+for type instances. Type instances returned from gtk_type_new ()
+and initialized through a #GtkObjectInitFunc need to directly inherit
+from this structure or at least copy its fields one by one.
+</para>
+
 
 <!-- ##### SIGNAL GtkUIManager::changed ##### -->
 <para>
@@ -2147,6 +4017,29 @@ get an array of #GtkArgs that this object accepts.
 @n_args_p: the number of arguments this object accepts.
 @Returns: the array of arguments (or NULL on error).
 
+<!-- ##### MACRO gtk_binding_entry_add ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_binding_entry_clear ##### -->
+<para>
+
+</para>
+
+@binding_set: 
+@keyval: 
+@modifiers: 
+
+<!-- ##### FUNCTION gtk_binding_parse_binding ##### -->
+<para>
+
+</para>
+
+@scanner: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
 <para>
 This is an internally used function and should never be called from an
@@ -2212,6 +4105,25 @@ Sets the default size of child buttons.
 @accel_group: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_calendar_display_options ##### -->
+<para>
+</para>
+
+@calendar: 
+@flags: 
+
+<!-- ##### FUNCTION gtk_calendar_freeze ##### -->
+<para>
+</para>
+
+@calendar: 
+
+<!-- ##### FUNCTION gtk_calendar_thaw ##### -->
+<para>
+</para>
+
+@calendar: 
+
 <!-- ##### FUNCTION gtk_cell_renderer_event ##### -->
 <para>
 
@@ -2231,6 +4143,14 @@ Sets the default size of child buttons.
 
 </para>
 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_cell_view_get_cell_renderers ##### -->
+<para>
+
+</para>
+
+@cell_view: 
 @Returns: 
 
 <!-- ##### FUNCTION gtk_cell_view_get_use_fg ##### -->
@@ -2257,6 +4177,81 @@ Sets the default size of child buttons.
 @cell_view: 
 @use_fg: 
 
+<!-- ##### FUNCTION gtk_clist_append ##### -->
+<para>
+Adds a row to the CList at the bottom.
+</para>
+
+@clist: The #GtkCList to affect.
+@text: An array of strings to add.
+@Returns: The number of the row added.
+
+<!-- ##### FUNCTION gtk_clist_clear ##### -->
+<para>
+Removes all the CList's rows.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_column_title_active ##### -->
+<para>
+Sets the specified column in the #GtkCList to become selectable.  You can
+then respond to events from the user clicking on a title button, and take
+appropriate action.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to make active, counting from 0.
+
+<!-- ##### FUNCTION gtk_clist_column_title_passive ##### -->
+<para>
+Causes the specified column title button to become passive, i.e., does
+not respond to events, such as the user clicking on it.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to make passive, counting from 0.
+
+<!-- ##### FUNCTION gtk_clist_column_titles_active ##### -->
+<para>
+Causes all column title buttons to become active.  This is the same
+as calling gtk_clist_column_title_active() for each column.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_column_titles_hide ##### -->
+<para>
+Causes the #GtkCList to hide its column titles, if they are currently
+showing.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_column_titles_passive ##### -->
+<para>
+Causes all column title buttons to become passive.  This is the same
+as calling gtk_clist_column_title_passive() for each column.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_column_titles_show ##### -->
+<para>
+This function causes the #GtkCList to show its column titles, if
+they are not already showing.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_columns_autosize ##### -->
+<para>
+Auto-sizes all columns in the CList and returns the total width of the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@Returns: The total width of the CList.
+
 <!-- ##### FUNCTION gtk_clist_construct ##### -->
 <para>
 Initializes a previously allocated #GtkCList widget for use.  This should not
@@ -2268,6 +4263,641 @@ normally be used to create a #GtkCList widget.  Use gtk_clist_new() instead.
 @titles: An array of strings that should be used as the titles i
 of the columns.  There should be enough strings in the array for
 the number of columns specified.
+
+<!-- ##### FUNCTION gtk_clist_find_row_from_data ##### -->
+<para>
+Searches the CList for the row with the specified data.
+</para>
+
+@clist: The #GtkCList to search.
+@data: The data to search for a match.
+@Returns: The number of the matching row, or -1 if no match could be found.
+
+<!-- ##### FUNCTION gtk_clist_freeze ##### -->
+<para>
+Causes the #GtkCList to stop updating its visuals until a matching call to
+gtk_clist_thaw() is made.  This function is useful if a lot of changes
+will be made to the widget that may cause a lot of visual updating to
+occur.  Note that calls to gtk_clist_freeze() can be nested.  
+</para>
+
+@clist: The #GtkCList to freeze.
+
+<!-- ##### FUNCTION gtk_clist_get_cell_style ##### -->
+<para>
+Gets the current style of the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@Returns: A #GtkStyle object.
+
+<!-- ##### FUNCTION gtk_clist_get_cell_type ##### -->
+<para>
+Checks the type of cell at the location specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@Returns: A #GtkCellType value describing the cell.
+
+<!-- ##### FUNCTION gtk_clist_get_column_title ##### -->
+<para>
+Gets the current title of the specified column
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to query.
+@Returns: The title of the column.
+
+<!-- ##### FUNCTION gtk_clist_get_column_widget ##### -->
+<para>
+Gets the widget in the column header for the specified column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to query.
+@Returns: Pointer to a #GtkWidget for the column header.
+
+<!-- ##### FUNCTION gtk_clist_get_hadjustment ##### -->
+<para>
+Gets the #GtkAdjustment currently being used for the horizontal
+aspect.
+</para>
+
+@clist: The #GtkCList to check.
+@Returns: A #GtkAdjustment object, or NULL if none is currently
+being used.
+
+<!-- ##### FUNCTION gtk_clist_get_pixmap ##### -->
+<para>
+Gets the pixmap and bitmap mask of the specified cell.  The returned mask value can be NULL.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@pixmap: A pointer to a pointer to store the cell's #GdkPixmap.
+@mask: A pointer to a pointer to store the cell's #GdkBitmap mask.
+@Returns: 1 if the cell's pixmap could be retrieved, 0 otherwise.
+
+<!-- ##### FUNCTION gtk_clist_get_pixtext ##### -->
+<para>
+Gets the text, pixmap and bitmap mask for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@column: The column to query.
+@text: A pointer to a pointer to store the text.
+@spacing: A pointer to a #guint8 to store the spacing.
+@pixmap: A pointer to a #GdkPixmap pointer to store the cell's pixmap.
+@mask: A pointer to a #GdkBitmap pointer to store the cell's bitmap mask.
+@Returns: 1 if the retrieval was successful, 0 otherwise.
+
+<!-- ##### FUNCTION gtk_clist_get_row_data ##### -->
+<para>
+Gets the currently set data for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: The data set for the row.
+
+<!-- ##### FUNCTION gtk_clist_get_row_style ##### -->
+<para>
+Gets the style set for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: The #GtkStyle of the row.
+
+<!-- ##### FUNCTION gtk_clist_get_selectable ##### -->
+<para>
+Gets whether the specified row is selectable or not.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: A #gboolean value.
+
+<!-- ##### FUNCTION gtk_clist_get_selection_info ##### -->
+<para>
+Gets the row and column at the specified pixel position in the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@x: The horizontal pixel position to check.
+@y: The vertical pixel position to check..
+@row: Pointer to a #gint to store the row value.
+@column: Pointer to a #gint to store the column value.
+@Returns: 1 if row/column is returned and in range, 0 otherwise.
+
+<!-- ##### FUNCTION gtk_clist_get_text ##### -->
+<para>
+Gets the text for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@column: The column to query.
+@text: A pointer to a pointer to store the text.
+@Returns: 1 if the cell's text could be retrieved, 0 otherwise.
+
+<!-- ##### FUNCTION gtk_clist_get_vadjustment ##### -->
+<para>
+Gets the #GtkAdjustment currently being used for the vertical
+aspect.
+</para>
+
+@clist: The #GtkCList to check.
+@Returns: A #GtkAdjustment object, or NULL if none is currently
+being used.
+
+<!-- ##### FUNCTION gtk_clist_insert ##### -->
+<para>
+Adds a row of text to the CList at the specified position.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row where the text should be inserted.
+@text: An array of string to add.
+@Returns: The number of the row added.
+
+<!-- ##### FUNCTION gtk_clist_moveto ##### -->
+<para>
+Tells the CList widget to visually move to the specified 
+row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to which to move.
+@column: The column to which to move.
+@row_align: A value between 0 and 1 that describes the positioning of 
+the row in relation to the viewable area of the CList's contents.
+@col_align: A value between 0 and 1 that describes the positioning of 
+the column in relation to the viewable area of the CList's contents.
+
+<!-- ##### FUNCTION gtk_clist_new ##### -->
+<para>
+Creates a new #GtkCList widget for use.
+</para>
+
+@columns: The number of columns the #GtkCList should have.
+@Returns: A pointer to a new GtkCList object.
+
+<!-- ##### FUNCTION gtk_clist_new_with_titles ##### -->
+<para>
+Creates a new #GtkCList widget with column titles for use.
+</para>
+
+@columns: The number of columns the #GtkCList should have.
+@titles: A string array of titles for the widget.  There should be
+enough strings in the array for the specified number of columns.
+@Returns: A pointer to a new GtkCList object.
+
+<!-- ##### FUNCTION gtk_clist_optimal_column_width ##### -->
+<para>
+Gets the required width in pixels that is needed to show
+everything in the specified column.
+</para>
+
+@clist: The #GtkCList to check.
+@column: The column to check.
+@Returns: The required width in pixels for the column.
+
+<!-- ##### FUNCTION gtk_clist_prepend ##### -->
+<para>
+Adds a row to the CList at the top.
+</para>
+
+@clist: The #GtkCList to affect.
+@text: An array of strings to add.
+@Returns: The number of the row added.
+
+<!-- ##### FUNCTION gtk_clist_remove ##### -->
+<para>
+Removes the specified row from the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to remove.
+
+<!-- ##### FUNCTION gtk_clist_row_is_visible ##### -->
+<para>
+Checks how the specified row is visible.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to query.
+@Returns: A #GtkVisibility value that tells you how the row is visible.
+
+<!-- ##### FUNCTION gtk_clist_row_move ##### -->
+<para>
+Allows you to move a row from one position to another in the
+list.
+</para>
+
+@clist: The #GtkCList to affect.
+@source_row: The original position of the row to move.
+@dest_row: The position to which the row should be moved.
+
+<!-- ##### FUNCTION gtk_clist_select_all ##### -->
+<para>
+Selects all rows in the CList.  This function has no affect for a
+CList in "single" or "browse" selection mode.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_select_row ##### -->
+<para>
+Selects the specified row.  Causes the "select-row" signal to be emitted for the specified row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to select.
+@column: The column to select.
+
+<!-- ##### FUNCTION gtk_clist_set_auto_sort ##### -->
+<para>
+Turns on or off auto sort of the #GtkCList. If auto sort is on, then the CList will be resorted when a row is inserted into the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@auto_sort: whether auto sort should be on or off
+
+<!-- ##### FUNCTION gtk_clist_set_background ##### -->
+<para>
+Sets the background color for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@color: A pointer to a #GdkColor structure.
+
+<!-- ##### FUNCTION gtk_clist_set_button_actions ##### -->
+<para>
+Sets the action(s) that the specified mouse button will have
+on the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+@button: The mouse button to set. The values here, unlike in the
+         rest of GTK+ start from 0. For instance, the right mouse
+         button, which is 3 elsewhere, should be given as 2 here.
+@button_actions: A logically OR'd value of #GtkButtonAction values 
+for the button.
+
+<!-- ##### FUNCTION gtk_clist_set_cell_style ##### -->
+<para>
+Sets the style for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@style: A pointer to a #GtkStyle structure.
+
+<!-- ##### FUNCTION gtk_clist_set_column_auto_resize ##### -->
+<para>
+Lets you specify whether a column should be automatically resized
+by the widget when data is added or removed.  Enabling auto-resize
+on a column explicity disallows user-resizing of the column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column on which to set auto-resizing.
+@auto_resize: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_column_justification ##### -->
+<para>
+Sets the justification to be used for all text in the specified
+column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column which should be affected.
+@justification: A GtkJustification value for the column.
+
+<!-- ##### FUNCTION gtk_clist_set_column_max_width ##### -->
+<para>
+Causes the column specified to have a maximum width, preventing
+the user from resizing it larger than that specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the maximum width.
+@max_width: The width, in pixels.
+
+<!-- ##### FUNCTION gtk_clist_set_column_min_width ##### -->
+<para>
+Causes the column specified to have a minimum width, preventing
+the user from resizing it smaller than that specified.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the minimum width.
+@min_width: The width, in pixels.
+
+<!-- ##### FUNCTION gtk_clist_set_column_resizeable ##### -->
+<para>
+Lets you specify whether a specified column should be resizeable
+by the user.  Note that turning on resizeability for the column will
+automatically shut off auto-resizing, but turning off resizeability
+will NOT turn on auto-resizing.  This must be done manually via a
+call to gtk_clist_set_column_auto_resize().
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column on which to set resizeability.
+@resizeable: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_column_title ##### -->
+<para>
+Sets the title for the specified column.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column whose title should be changed.
+@title: A string to be the column's title.
+
+<!-- ##### FUNCTION gtk_clist_set_column_visibility ##### -->
+<para>
+Allows you to set whether a specified column in the #GtkCList should
+be hidden or shown.  Note that at least one column must always be
+showing, so attempting to hide the last visible column will be
+ignored.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set visibility.
+@visible: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_column_widget ##### -->
+<para>
+Sets a widget to be used as the specified column's title.  This
+can be used to place a pixmap or something else as the column
+title, instead of the standard text.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column whose title should be a widget.
+@widget: A pointer to a previously create widget.
+
+<!-- ##### FUNCTION gtk_clist_set_column_width ##### -->
+<para>
+Causes the column specified for the #GtkCList to be set to
+a specified width.
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to set the width.
+@width: The width, in pixels.
+
+<!-- ##### FUNCTION gtk_clist_set_compare_func ##### -->
+<para>
+Sets the compare function of the #GtkClist to @cmp_func. If @cmp_func is NULL,
+then the default compare function is used. The default compare function sorts
+ascending or with the type set by gtk_clist_set_sort_type() by the column set
+by gtk_clist_set_sort_column().
+</para>
+
+@clist: The #GtkCList to affect.
+@cmp_func: The #GtkCompareFunction to use.
+
+<!-- ##### FUNCTION gtk_clist_set_foreground ##### -->
+<para>
+Sets the foreground color for the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@color: A pointer to a #GdkColor structure.
+
+<!-- ##### FUNCTION gtk_clist_set_hadjustment ##### -->
+<para>
+Allows you to set the #GtkAdjustment to be used for the horizontal
+aspect of the #GtkCList widget.
+</para>
+
+@clist: The #GtkCList to affect.
+@adjustment: A pointer to a #GtkAdjustment widget, or NULL.
+
+<!-- ##### FUNCTION gtk_clist_set_pixmap ##### -->
+<para>
+Sets a pixmap for the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@pixmap: A pointer to a #GdkPixmap to place in the cell.
+@mask: A pointer to a #GdkBitmap mask for the cell.
+
+<!-- ##### FUNCTION gtk_clist_set_pixtext ##### -->
+<para>
+Sets text and a pixmap/bitmap on the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@text: The text to set in the cell.
+@spacing: The spacing between the cell's text and pixmap.
+@pixmap: A pointer to a #GdkPixmap for the cell.
+@mask: A pointer to a #GdkBitmap mask for the cell.
+
+<!-- ##### FUNCTION gtk_clist_set_reorderable ##### -->
+<para>
+Sets whether the CList's rows are re-orderable using drag-and-drop.
+</para>
+
+@clist: The #GtkCList to affect.
+@reorderable: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_row_data ##### -->
+<para>
+Sets data for the specified row.  This is the same as calling gtk_clist_set_row_data_full(clist, row, data, NULL).
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@data: The data to set for the row.
+
+<!-- ##### FUNCTION gtk_clist_set_row_data_full ##### -->
+<para>
+Sets the data for specified row, with a callback when the row is destroyed.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@data: The data to set for the row.
+@destroy: A #GtkDestroyNotify function to be called when the row is destroyed.
+
+<!-- ##### FUNCTION gtk_clist_set_row_height ##### -->
+<para>
+Causes the #GtkCList to have a specified height for its 
+rows.  Setting the row height to 0 allows the #GtkCList to adjust
+automatically to data in the row.
+</para>
+
+@clist: The #GtkCList to affect.
+@height: The height, in pixels.
+
+<!-- ##### FUNCTION gtk_clist_set_row_style ##### -->
+<para>
+Sets the style for all cells in the specified row.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@style: A pointer to a #GtkStyle to set.
+
+<!-- ##### FUNCTION gtk_clist_set_selectable ##### -->
+<para>
+Sets whether the specified row is selectable or not.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to affect.
+@selectable: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_selection_mode ##### -->
+<para>
+Sets the selection mode for the specified CList.  This allows you to
+set whether only one or more than one item can be selected at a time
+in the widget.  Note that setting the widget's selection mode to one
+of GTK_SELECTION_BROWSE or GTK_SELECTION_SINGLE will cause all the
+items in the #GtkCList to become deselected.
+</para>
+
+@clist: The #GtkCList to affect.
+@mode: The GtkSelectionMode type to set for this CList.
+
+<!-- ##### FUNCTION gtk_clist_set_shadow_type ##### -->
+<para>
+Sets the shadow type for the specified CList.  Changing this value
+will cause the #GtkCList to update its visuals.
+</para>
+
+@clist: The #GtkCList to affect.
+@type: The GtkShadowType desired.
+
+<!-- ##### FUNCTION gtk_clist_set_shift ##### -->
+<para>
+Sets the vertical and horizontal shift of the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@vertical: The value to set for the vertical shift.
+@horizontal: The value to set for the vertical shift.
+
+<!-- ##### FUNCTION gtk_clist_set_sort_column ##### -->
+<para>
+Sets the sort column of the clist. The sort column is used by the
+default compare function to determine which column to sort by. 
+</para>
+
+@clist: The #GtkCList to affect.
+@column: The column to sort by
+
+<!-- ##### FUNCTION gtk_clist_set_sort_type ##### -->
+<para>
+Sets the sort type of the #GtkClist. This is either GTK_SORT_ASCENDING for
+ascening sort or GTK_SORT_DESCENDING for descending sort.
+</para>
+
+@clist: The #GtkCList to affect.
+@sort_type: the #GtkSortType to use
+
+<!-- ##### FUNCTION gtk_clist_set_text ##### -->
+<para>
+Sets the displayed text in the specified cell.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row of the cell.
+@column: The column of the cell.
+@text: The text to set in the cell.
+
+<!-- ##### FUNCTION gtk_clist_set_use_drag_icons ##### -->
+<para>
+Determines whether the #GtkClist should use icons when
+doing drag-and-drop operations.
+</para>
+
+@clist: The #GtkCList to affect.
+@use_icons: %TRUE or %FALSE.
+
+<!-- ##### FUNCTION gtk_clist_set_vadjustment ##### -->
+<para>
+Allows you to set the #GtkAdjustment to be used for the vertical
+aspect of the #GtkCList widget.
+</para>
+
+@clist: The #GtkCList to affect.
+@adjustment: A pointer to a #GtkAdjustment widget, or NULL.
+
+<!-- ##### FUNCTION gtk_clist_sort ##### -->
+<para>
+Sorts the #GtkClist according to the current compare function, which
+can be set with the gtk_clist_set_compare_func() function.
+</para>
+
+@clist: The #GtkCList to sort.
+
+<!-- ##### FUNCTION gtk_clist_swap_rows ##### -->
+<para>
+Swaps the two specified rows with each other.
+</para>
+
+@clist: The #GtkCList to affect.
+@row1: Number of the first row.
+@row2: Number of the second row.
+
+<!-- ##### FUNCTION gtk_clist_thaw ##### -->
+<para>
+Causes the specified #GtkCList to allow visual updates.
+</para>
+
+@clist: The #GtkCList to thaw.
+
+<!-- ##### FUNCTION gtk_clist_undo_selection ##### -->
+<para>
+Undoes the last selection for an "extended selection mode" CList.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_unselect_all ##### -->
+<para>
+Unselects all rows in the CList.
+</para>
+
+@clist: The #GtkCList to affect.
+
+<!-- ##### FUNCTION gtk_clist_unselect_row ##### -->
+<para>
+Unselects the specified row.  Causes the "unselect-row" signal to be emitted for the specified row and column.
+</para>
+
+@clist: The #GtkCList to affect.
+@row: The row to select.
+@column: The column to select.
+
+<!-- ##### FUNCTION gtk_color_selection_get_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
 
 <!-- ##### FUNCTION gtk_color_selection_get_old_color ##### -->
 <para>
@@ -2292,6 +4922,22 @@ the number of columns specified.
 
 @colorsel: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_color_selection_set_change_palette_hook ##### -->
+<para>
+
+</para>
+
+@func: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_color_selection_set_color ##### -->
+<para>
+
+</para>
+
+@colorsel: 
+@color: 
 
 <!-- ##### FUNCTION gtk_color_selection_set_old_color ##### -->
 <para>
@@ -2345,6 +4991,96 @@ is enabled.
 
 @combo_box: 
 @column: 
+
+<!-- ##### FUNCTION gtk_combo_disable_activate ##### -->
+<para>
+Stops the #GtkCombo widget from showing the popup list when the #GtkEntry
+emits the "activate" signal, i.e. when the Return key is pressed.
+This may be useful if, for example, you want the Return key to close a dialog
+instead.
+</para>
+
+@combo: a #GtkCombo.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_new ##### -->
+<para>
+Creates a new #GtkCombo.
+</para>
+
+@Returns: a new #GtkCombo.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->
+<para>
+Specifies whether the text entered into the #GtkEntry field and the text in
+the list items is case sensitive.
+</para>
+<para>
+This may be useful, for example, when you have called
+gtk_combo_set_value_in_list() to limit the values entered, but you are not
+worried about differences in case.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the text in the list items is case sensitive.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_item_string ##### -->
+<para>
+Sets the string to place in the #GtkEntry field when a particular list item is
+selected. This is needed if the list item is not a simple label.
+</para>
+
+@combo: a #GtkCombo.
+@item: a #GtkItem.
+@item_value: the string to place in the #GtkEntry when @item is selected.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_popdown_strings ##### -->
+<para>
+Convenience function to set all of the items in the popup list.
+(See the <link linkend="gtkcombo-simple-example">example</link> above.)
+</para>
+
+@combo: a #GtkCombo.
+@strings: a list of strings, or %NULL to clear the popup list
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_use_arrows ##### -->
+<para>
+Specifies if the arrow (cursor) keys can be used to step through the items in
+the list. This is on by default.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the arrow keys can be used to step through the items in 
+     the list.
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
+<para>
+Obsolete function, does nothing.
+</para>
+
+@combo: a #GtkCombo.
+@val: unused
+@Deprecated: 2.4: Use #GtkComboBox instead.
+
+<!-- ##### FUNCTION gtk_combo_set_value_in_list ##### -->
+<para>
+Specifies whether the value entered in the text entry field must match one of
+the values in the list. If this is set then the user will not be able to
+perform any other action until a valid value has been entered.
+</para>
+<para>
+If an empty field is acceptable, the @ok_if_empty parameter should be %TRUE.
+</para>
+
+@combo: a #GtkCombo.
+@val: %TRUE if the value entered must match one of the values in the list.
+@ok_if_empty: %TRUE if an empty value is considered valid.
+@Deprecated: 2.4: Use #GtkComboBox instead.
 
 <!-- ##### FUNCTION gtk_container_add_child_arg_type ##### -->
 <para>
@@ -2505,6 +5241,17 @@ Internal function.
 @toplevel: 
 @event: 
 
+<!-- ##### FUNCTION gtk_drag_set_default_icon ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@pixmap: 
+@mask: 
+@hot_x: 
+@hot_y: 
+
 <!-- ##### FUNCTION gtk_drag_source_handle_event ##### -->
 <para>
 Internal function.
@@ -2512,6 +5259,20 @@ Internal function.
 
 @widget: 
 @event: 
+
+<!-- ##### FUNCTION gtk_drawing_area_size ##### -->
+<para>
+Sets the size that the drawing area will request
+in response to a "size_request" signal. The 
+drawing area may actually be allocated a size
+larger than this depending on how it is packed
+within the enclosing containers.
+</para>
+
+@darea: a #GtkDrawingArea
+@width: the width to request
+@height: the height to request
+@Deprecated: Use gtk_widget_set_size_request() instead.
 
 <!-- ##### FUNCTION gtk_editable_changed ##### -->
 <para>
@@ -2565,6 +5326,27 @@ Claim or disclaim ownership of the PRIMARY X selection.
 @icon_pos: 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_file_chooser_dialog_new_with_backend ##### -->
+<para>
+
+</para>
+
+@title: 
+@parent: 
+@action: 
+@backend: 
+@first_button_text: 
+@Varargs: 
+@Returns: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect1")
+End:
+-->
+
 <!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
 <para>
 
@@ -2587,6 +5369,103 @@ Claim or disclaim ownership of the PRIMARY X selection.
 
 @chooser: 
 @folder_mode: 
+
+<!-- ##### FUNCTION gtk_file_chooser_widget_new_with_backend ##### -->
+<para>
+
+</para>
+
+@action: 
+@backend: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_selection_complete ##### -->
+<para>
+Will attempt to match @pattern to a valid filenames or subdirectories in the current directory. If a match can be made, the matched filename will appear in the text entry field of the file selection dialog.
+If a partial match can be made, the "Files" list will contain those
+file names which have been partially matched, and the "Folders"
+list those directories which have been partially matched.
+</para>
+
+@filesel: a #GtkFileSelection.
+@pattern: a string of characters which may or may not match any filenames in the current directory.
+
+<!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->
+<para>
+</para>
+
+@filesel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_selection_get_select_multiple ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_selection_get_selections ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_file_selection_hide_fileop_buttons ##### -->
+<para>
+Hides the file operation buttons that normally appear at the top of the dialog. Useful if you wish to create a custom file selector, based on #GtkFileSelection.
+</para>
+
+@filesel: a #GtkFileSelection.
+
+<!-- ##### FUNCTION gtk_file_selection_new ##### -->
+<para>
+Creates a new file selection dialog box. By default it will contain a #GtkTreeView of the application's current working directory, and a file listing. Operation buttons that allow the user to create a directory, delete files and rename files, are also present.
+</para>
+
+@title: a message that will be placed in the file requestor's titlebar.
+@Returns: the new file selection.
+@Deprecated: Use gtk_file_chooser_dialog_new() instead
+
+<!-- ##### FUNCTION gtk_file_selection_set_filename ##### -->
+<para>
+</para>
+
+@filesel: 
+@filename: 
+
+<!-- ##### FUNCTION gtk_file_selection_set_select_multiple ##### -->
+<para>
+
+</para>
+
+@filesel: 
+@select_multiple: 
+
+<!-- ##### FUNCTION gtk_file_selection_show_fileop_buttons ##### -->
+<para>
+Shows the file operation buttons, if they have previously been hidden. The rest of the widgets in the dialog will be resized accordingly.
+</para>
+
+@filesel: a #GtkFileSelection.
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_font ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
 <para>
@@ -2622,6 +5501,14 @@ will be shown, or NULL to show all charsets.
 @Returns: 
 
 <!-- ##### FUNCTION gtk_font_selection_get_family_entry ##### -->
+<para>
+
+</para>
+
+@fontsel: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_font_selection_get_font ##### -->
 <para>
 
 </para>
@@ -2683,6 +5570,99 @@ Get the type of GtkIdentifier.
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_item_factories_path_delete ##### -->
+<para>
+
+</para>
+
+@ifactory_path: 
+@path: 
+
+<!-- ##### FUNCTION gtk_item_factory_add_foreign ##### -->
+<para>
+
+</para>
+
+@accel_widget: 
+@full_path: 
+@accel_group: 
+@keyval: 
+@modifiers: 
+
+<!-- ##### FUNCTION gtk_item_factory_construct ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@container_type: 
+@path: 
+@accel_group: 
+
+<!-- ##### FUNCTION gtk_item_factory_create_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+@callback_data: 
+@callback_type: 
+
+<!-- ##### FUNCTION gtk_item_factory_create_items ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+
+<!-- ##### FUNCTION gtk_item_factory_create_items_ac ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+@callback_data: 
+@callback_type: 
+
+<!-- ##### FUNCTION gtk_item_factory_create_menu_entries ##### -->
+<para>
+
+</para>
+
+@n_entries: 
+@entries: 
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entries ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@n_entries: 
+@entries: 
+
+<!-- ##### FUNCTION gtk_item_factory_delete_entry ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@entry: 
+
+<!-- ##### FUNCTION gtk_item_factory_delete_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+
 <!-- ##### FUNCTION gtk_item_factory_dump_items ##### -->
 <para>
 
@@ -2701,6 +5681,68 @@ Get the type of GtkIdentifier.
 @file_name: 
 @path_pspec: 
 @modified_only: 
+
+<!-- ##### FUNCTION gtk_item_factory_from_path ##### -->
+<para>
+
+</para>
+
+@path: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_get_item ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_get_item_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@path: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_get_widget_by_action ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@action: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_new ##### -->
+<para>
+
+</para>
+
+@container_type: 
+@path: 
+@accel_group: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_item_factory_parse_rc ##### -->
 <para>
@@ -2723,6 +5765,54 @@ Get the type of GtkIdentifier.
 
 @rc_string: 
 
+<!-- ##### FUNCTION gtk_item_factory_path_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_popup ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@x: 
+@y: 
+@mouse_button: 
+@time_: 
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_popup_data_from_widget ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_item_factory_popup_with_data ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@popup_data: 
+@destroy: 
+@x: 
+@y: 
+@mouse_button: 
+@time_: 
+
 <!-- ##### FUNCTION gtk_item_factory_print_func ##### -->
 <para>
 
@@ -2730,6 +5820,34 @@ Get the type of GtkIdentifier.
 
 @FILE_pointer: 
 @string: 
+
+<!-- ##### FUNCTION gtk_item_factory_set_translate_func ##### -->
+<para>
+
+</para>
+
+@ifactory: 
+@func: 
+@data: 
+@notify: 
+
+<!-- ##### FUNCTION gtk_label_get ##### -->
+<para>
+Gets the current string of text within the #GtkLabel and writes it to
+the given @str argument.  It does not make a copy of this string so you
+must not write to it.
+</para>
+
+@label: The #GtkLabel widget you want to get the text from.
+@str: The reference to the pointer you want to point to the text.
+@Deprecated: Use gtk_label_get_text() instead.
+
+<!-- ##### MACRO gtk_label_set ##### -->
+<para>
+Sets the text within the GtkLabel widget.
+</para>
+
+@Deprecated: Use gtk_label_set_text() instead.
 
 <!-- ##### FUNCTION gtk_label_set_markup_with_accel ##### -->
 <para>
@@ -2739,6 +5857,260 @@ Get the type of GtkIdentifier.
 @label: 
 @str: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_layout_freeze ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+<!-- ##### FUNCTION gtk_layout_thaw ##### -->
+<para>
+
+</para>
+
+@layout: 
+
+<!-- ##### FUNCTION gtk_list_append_items ##### -->
+<para>
+Adds @items to the end of the @list.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+<!-- ##### FUNCTION gtk_list_child_position ##### -->
+<para>
+Searches the children of @list for the index of @child.
+</para>
+
+@list: the list widget.
+@child: the child to look for.
+@Returns: the index of the child, -1 if not found.
+
+<!-- ##### FUNCTION gtk_list_clear_items ##### -->
+<para>
+Removes the items between index @start (included) and @end (excluded)
+from the @list. If @end is negative, or greater than the number of
+children of @list, it's assumed to be exactly the number of
+elements. If @start is greater than or equal to @end, nothing is
+done.
+</para>
+
+@list: the list widget.
+@start: the index of the first item to remove.
+@end: the index of the lest item to remove plus one.
+
+<!-- ##### FUNCTION gtk_list_end_drag_selection ##### -->
+<para>
+Stops the drag selection mode and ungrabs the pointer. This has no
+effect if a drag selection is not active.
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_end_selection ##### -->
+<para>
+Ends the selection. Used with gtk_list_extend_selection() and
+gtk_list_start_selection(). Only in #GTK_SELECTION_EXTENDED mode.
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_extend_selection ##### -->
+<para>
+Extends the selection by moving the anchor according to @scroll_type. Only
+in #GTK_SELECTION_EXTENDED.
+</para>
+
+@list: the list widget.
+@scroll_type: the direction and length.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP.
+@auto_start_selection: if %TRUE, gtk_list_start_selection() is automatically
+carried out before extending the selection.
+
+<!-- ##### FUNCTION gtk_list_insert_items ##### -->
+<para>
+Inserts @items into the @list at the position @position. The #GList items
+must not be freed after.
+</para>
+
+@list: the list widget.
+@items: the items.
+@position: the position to insert @items, starting at 0.
+
+<!-- ##### FUNCTION gtk_list_item_deselect ##### -->
+<para>
+Deselects the item, by emitting the item's "deselect" signal.
+</para>
+
+@list_item: a #GtkListItem.
+
+<!-- ##### FUNCTION gtk_list_item_new ##### -->
+<para>
+Creates a new #GtkListitem.
+</para>
+
+@Returns: a new #GtkListItem.
+
+<!-- ##### FUNCTION gtk_list_item_new_with_label ##### -->
+<para>
+Creates a new #GtkListItem with a child label containing the given string.
+</para>
+
+@label: the string to use for the child label.
+@Returns: a new #GtkListItem with a child #GtkLabel with the text set to
+@label.
+
+<!-- ##### FUNCTION gtk_list_item_select ##### -->
+<para>
+Selects the item, by emitting the item's "select" signal.
+Depending on the selection mode of the list, this may cause other items to
+be deselected.
+</para>
+
+@list_item: a #GtkListItem.
+
+<!-- ##### FUNCTION gtk_list_new ##### -->
+<para>
+Creates a new #GtkList.
+</para>
+
+@Returns: the newly-created #GtkList
+
+<!-- ##### FUNCTION gtk_list_prepend_items ##### -->
+<para>
+Inserts @items at the beginning of the @list.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+<!-- ##### FUNCTION gtk_list_remove_items ##### -->
+<para>
+Removes the @items from the @list.
+</para>
+
+@list: the list widget.
+@items: the items to remove.
+
+<!-- ##### FUNCTION gtk_list_remove_items_no_unref ##### -->
+<para>
+Removes the @items from the @list, without unreferencing them. It
+may be useful if you want to move the items from one list to another.
+</para>
+
+@list: the list widget.
+@items: the items.
+
+<!-- ##### FUNCTION gtk_list_scroll_horizontal ##### -->
+<para>
+Scrolls @list horizontaly. This supposes that the list is packed into a
+scrolled window or something similar, and adjustments are well
+set. Step and page increment are those from the horizontal adjustment
+of @list. Backward means to the left, and forward to the
+right. Out of bounds values are truncated.
+@scroll_type may be any valid #GtkScrollType. If @scroll_type is
+#GTK_SCROLL_NONE, nothing is done. If it's #GTK_SCROLL_JUMP, the list
+scrolls to the ratio @position: 0 is full left, 1 is full right.
+</para>
+
+@list: the list widget.
+@scroll_type: the scrolling type.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP
+
+<!-- ##### FUNCTION gtk_list_scroll_vertical ##### -->
+<para>
+Scrolls @list vertically. This supposes that the list is packed into a
+scrolled window or something similar, and adjustments are well
+set. Step and page increment are those from the vertical adjustment
+of @list. Backward means up, and forward down. Out of bounds values are
+truncated.
+@scroll_type may be any valid #GtkScrollType. If @scroll_type is
+#GTK_SCROLL_NONE, nothing is done. If it's #GTK_SCROLL_JUMP, the list
+scrolls to the ratio @position: 0 is top, 1 is bottom.
+</para>
+
+@list: the list widget.
+@scroll_type: the scrolling type.
+@position: the position if @scroll_type is #GTK_SCROLL_JUMP
+
+<!-- ##### FUNCTION gtk_list_select_all ##### -->
+<para>
+Selects all children of @list. A signal will be emitted for each
+newly selected child.
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_select_child ##### -->
+<para>
+Selects the given @child. The signal GtkList::select-child will be
+emitted.
+</para>
+
+@list: the list widget
+@child: the child to select.
+
+<!-- ##### FUNCTION gtk_list_select_item ##### -->
+<para>
+Selects the child number @item of the @list. Nothing happens if @item
+is out of bounds. The signal GtkList::select-child will be emitted.
+</para>
+
+@list: the list widget.
+@item: the index of the child to select.
+
+<!-- ##### FUNCTION gtk_list_set_selection_mode ##### -->
+<para>
+Set the list selection mode. The selection mode can be any value in
+#GtkSelectionMode:
+<variablelist>
+<varlistentry>
+<term>#GTK_SELECTION_SINGLE</term>
+<listitem><para>
+Zero or one element may be selected.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_BROWSE</term>
+<listitem><para>
+Exactly one element is always selected (this can be false after you have
+changed the selection mode).
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_MULTIPLE</term>
+<listitem><para>
+Any number of elements may be selected. Clicks toggle the state of an
+item.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>#GTK_SELECTION_EXTENDED</term>
+<listitem><para>
+Any number of elements may be selected. Click-drag selects a range of
+elements; the Ctrl key may be used to enlarge the selection, and
+Shift key to select between the focus and the child pointed to.
+</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+@list: the list widget.
+@mode: the new selection mode.
+
+<!-- ##### FUNCTION gtk_list_start_selection ##### -->
+<para>
+Starts a selection (or part of selection) at the focused child. Only in
+#GTK_SELECTION_EXTENDED mode.
+</para>
+
+@list: the list widget.
 
 <!-- ##### FUNCTION gtk_list_store_move ##### -->
 <para>
@@ -2785,6 +6157,98 @@ Get the type of GtkIdentifier.
 @store: 
 @n_columns: 
 
+<!-- ##### FUNCTION gtk_list_toggle_add_mode ##### -->
+<para>
+Toggles between adding to the selection and beginning a new selection. Only
+in #GTK_SELECTION_EXTENDED. Useful with gtk_list_extend_selection().
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_toggle_focus_row ##### -->
+<para>
+Toggles the focus row. If the focus row is selected, it's
+unselected. If the focus row is unselected, it's selected. If the
+selection mode of @list is #GTK_SELECTION_BROWSE, this has no effect,
+as the selection is always at the focus row.
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_toggle_row ##### -->
+<para>
+Toggles the child @item of list. If the selection mode of @list is
+#GTK_SELECTION_BROWSE, the item is selected, and the others are
+unselected.
+</para>
+
+@list: the list widget.
+@item: the child to toggle.
+
+<!-- ##### FUNCTION gtk_list_undo_selection ##### -->
+<para>
+Restores the selection in the last state, only if selection mode is
+#GTK_SELECTION_EXTENDED. If this function is called twice, the selection is
+cleared. This function sometimes gives stranges "last states".
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_unselect_all ##### -->
+<para>
+Unselects all children of @list. A signal will be emitted for each
+newly unselected child.
+</para>
+
+@list: the list widget.
+
+<!-- ##### FUNCTION gtk_list_unselect_child ##### -->
+<para>
+Unselects the given @child. The signal GtkList::unselect-child will be
+emitted.
+</para>
+
+@list: the list widget.
+@child: the child to unselect.
+
+<!-- ##### FUNCTION gtk_list_unselect_item ##### -->
+<para>
+Unselects the child number @item of the @list. Nothing happens if
+@item is out of bounds. The signal GtkList::unselect-child will be
+emitted.
+</para>
+
+@list: the list widget.
+@item: the index of the child to unselect.
+
+<!-- ##### MACRO gtk_menu_bar_append ##### -->
+<para>
+Adds a new #GtkMenuItem to the end of the GtkMenuBar
+</para>
+
+@menu: a #GtkMenuBar
+@child: the #GtkMenuItem to add
+@Deprecated: Use gtk_menu_shell_append() instead.
+
+<!-- ##### MACRO gtk_menu_bar_insert ##### -->
+<para>
+Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
+</para>
+
+@menu: a #GtkMenuBar
+@child: the #GtkMenuItem to add
+@pos: the position in the item list where the @child is added.
+@Deprecated: Use gtk_menu_shell_insert() instead.
+
+<!-- ##### MACRO gtk_menu_bar_prepend ##### -->
+<para>
+Adds a new #GtkMenuItem to the beginning of the GtkMenuBar
+</para>
+
+@menu: a #GtkMenuBar
+@child: the #GtkMenuItem to add
+@Deprecated: Use gtk_menu_shell_prepend() instead.
+
 <!-- ##### FUNCTION gtk_menu_ensure_uline_accel_group ##### -->
 <para>
 
@@ -2811,6 +6275,20 @@ arrow.
 @show_toggle_indicator: unused
 @show_submenu_indicator: whether to show the arrow or not
 
+<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+<!-- ##### MACRO gtk_menu_item_right_justify ##### -->
+<para>
+Sets the menu item to be right-justified. Only useful for menu bars.
+</para>
+
+@menu_item: the menu item
+
 <!-- ##### FUNCTION gtk_menu_item_set_placement ##### -->
 <para>
 Specifies the placement of the submenu around the menu item. The placement
@@ -2823,6 +6301,88 @@ This function is useless in usual applications.
 
 @menu_item: the menu item
 @placement: the submenu placement
+
+<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip ##### -->
+<para>
+
+</para>
+
+@button: 
+@tooltips: 
+@tip_text: 
+@tip_private: 
+
+<!-- ##### MACRO gtk_notebook_current_page ##### -->
+<para>
+Deprecated compatibility macro. 
+</para>
+
+@Deprecated: Use gtk_notebook_get_current_page() instead.
+
+<!-- ##### FUNCTION gtk_notebook_get_group_id ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_notebook_set_group_id ##### -->
+<para>
+
+</para>
+
+@notebook: 
+@group_id: 
+
+<!-- ##### FUNCTION gtk_notebook_set_homogeneous_tabs ##### -->
+<para>
+</para>
+
+@notebook: 
+@homogeneous: 
+
+<!-- ##### MACRO gtk_notebook_set_page ##### -->
+<para>
+Deprecated compatibility macro. 
+</para>
+
+@Deprecated: Use gtk_notebook_set_current_page() instead.
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_border ##### -->
+<para>
+</para>
+
+@notebook: 
+@border_width: 
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
+<para>
+</para>
+
+@notebook: 
+@tab_hborder: 
+
+<!-- ##### FUNCTION gtk_notebook_set_tab_vborder ##### -->
+<para>
+</para>
+
+@notebook: 
+@tab_vborder: 
+
+<!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
+<para>
+Deprecated in favor of the #GObject property system including #GParamSpec.
+Add a new type of argument to an object class.
+Usually this is called when registering a new type of object.
+</para>
+
+@arg_name: fully qualify object name, for example GtkObject::user_data.
+@arg_type: type of the argument.
+@arg_flags: bitwise-OR of the #GtkArgFlags enum.  (Whether the argument is
+settable or gettable, whether it is set when the object is constructed.)
+@arg_id: an internal number, passed in from here to the "set_arg" and
+"get_arg" handlers of the object.
 
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
@@ -2945,6 +6505,18 @@ gtk_object_default_construct().
 @object: object which has been constructed.  This is usually
 done automatically by gtk_object_new() and gtk_object_newv().
 
+<!-- ##### MACRO gtk_object_data_force_id ##### -->
+<para>
+Useless deprecated macro. Ignore it. 
+</para>
+
+
+<!-- ##### MACRO gtk_object_data_try_key ##### -->
+<para>
+Useless deprecated macro. Ignore it.
+</para>
+
+
 <!-- ##### FUNCTION gtk_object_default_construct ##### -->
 <para>
 This function is called to construct arguments that haven't been initialized
@@ -2961,6 +6533,54 @@ be used to bypass it.
 
 @object: the object to initialize.
 
+<!-- ##### FUNCTION gtk_object_get ##### -->
+<para>
+Gets properties of an object. 
+</para>
+
+@object: a #GtkObject.
+@first_property_name: name of first property to get the value for.
+@Varargs: %NULL-terminated list of name-return location pairs.
+@Deprecated: Use g_object_get() instead.
+
+<!-- ##### FUNCTION gtk_object_get_data ##### -->
+<para>
+Get a named field from the object's table of associations (the object_data).
+</para>
+
+@object: the object maintaining the associations.
+@key: name of the key for that association.
+@Returns: the data if found, or %NULL if no such data exists.
+@Deprecated: Use g_object_get_data() instead.
+
+<!-- ##### FUNCTION gtk_object_get_data_by_id ##### -->
+<para>
+Just like gtk_object_get_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
+</para>
+
+@object: object containing the associations.
+@data_id: quark of the key.
+@Returns: the data if found, or %NULL if no such data exists.
+@Deprecated: Use g_object_get_qdata() instead.
+
+<!-- ##### FUNCTION gtk_object_get_user_data ##### -->
+<para>
+Get the object's user data pointer.
+</para>
+<para>
+This is intended to be a pointer for your convenience in
+writing applications.
+</para>
+
+@object: the object.
+@Returns: the user data field for object.
+@Deprecated: Use g_object_get_data() instead.
+
 <!-- ##### FUNCTION gtk_object_getv ##### -->
 <para>
 Gets an array of argument values from an object.
@@ -2969,6 +6589,22 @@ Gets an array of argument values from an object.
 @object: the object to get arguments from.
 @n_args: the number of arguments to query.
 @args: the arguments to fill in.
+
+<!-- ##### FUNCTION gtk_object_new ##### -->
+<para>
+Constructs an object given its arguments, enumerated in the call to the
+function.
+</para>
+
+@type: the type identifying this object.  Returned by gtk_type_unique()
+(although for a properly-written object it should be accessible through
+a #GTK_TYPE_FOO macro.)
+@first_property_name: name of the first property to set when constructing
+   the object.
+@Varargs: the first argument's value, followed by any number of
+name/argument-value pairs, terminated with %NULL.
+@Returns: the new #GtkObject.
+@Deprecated: Use g_object_new() instead.
 
 <!-- ##### FUNCTION gtk_object_newv ##### -->
 <para>
@@ -2998,6 +6634,168 @@ each argument.  You must g_free() this if you request it.
 @n_args: the number of arguments is returned in this field.
 @Returns: an array of arguments, that you must deallocate with g_free().
 
+<!-- ##### FUNCTION gtk_object_ref ##### -->
+<para>
+Increases the reference count of the object.
+</para>
+
+@object: the object to reference.
+@Returns: @object.
+@Deprecated: Use g_object_ref() instead.
+
+<!-- ##### FUNCTION gtk_object_remove_data ##### -->
+<para>
+Removes a specified datum from the object's data associations (the object_data).
+Subsequent calls to gtk_object_get_data() will return %NULL.
+</para>
+<para>
+If you specified a destroy handler with gtk_object_set_data_full(),
+it will be invoked.
+</para>
+
+@object: the object maintaining the association.
+@key: name of the key for that association.
+@Deprecated: Use g_object_set_data() to set the object data to %NULL instead.
+
+<!-- ##### FUNCTION gtk_object_remove_data_by_id ##### -->
+<para>
+Just like gtk_object_remove_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Remove a specified datum from the object's data associations.
+Subsequent calls to gtk_object_get_data() will return %NULL.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
+</para>
+
+@object: object containing the associations.
+@data_id: quark of the key.
+@Deprecated: Use g_object_set_qdata() with data of %NULL instead.
+
+<!-- ##### FUNCTION gtk_object_remove_no_notify ##### -->
+<para>
+Remove a specified datum from the object's data associations (the object_data),
+without invoking the association's destroy handler.
+</para>
+<para>
+Just like gtk_object_remove_data() except that any destroy handler
+will be ignored.
+Therefore this only affects data set using gtk_object_set_data_full().
+</para>
+
+@object: the object maintaining the association.
+@key: name of the key for that association.
+@Deprecated: Use g_object_steal_data() instead.
+
+<!-- ##### FUNCTION gtk_object_remove_no_notify_by_id ##### -->
+<para>
+Just like gtk_object_remove_no_notify() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
+</para>
+
+@object: object containing the associations.
+@key_id: quark of the key.
+@Deprecated: Use g_object_steal_qdata() instead.
+
+<!-- ##### FUNCTION gtk_object_set ##### -->
+<para>
+Sets properties on an object. 
+</para>
+<para>
+<informalexample>
+<programlisting>
+void set_box_properties (GtkBox* box)
+{
+  gtk_object_set (GTK_OBJECT (box), "homogeneous", TRUE,
+                                    "spacing", 8,
+				    NULL);
+}
+</programlisting>
+</informalexample>
+</para>
+
+@object: a #GtkObject.
+@first_property_name: name of the first property to set
+@Varargs: the value of the first argument, followed optionally
+by more name/value pairs, followed by %NULL.
+@Deprecated: Use g_object_set() instead.
+
+<!-- ##### FUNCTION gtk_object_set_data ##### -->
+<para>
+Each object carries around a table of associations from
+strings to pointers.  This function lets you set an association.
+</para>
+<para>
+If the object already had an association with that name,
+the old association will be destroyed.
+</para>
+
+@object: object containing the associations.
+@key: name of the key.
+@data: data to associate with that key.
+@Deprecated: Use g_object_set_data() instead.
+
+<!-- ##### FUNCTION gtk_object_set_data_by_id ##### -->
+<para>
+Just like gtk_object_set_data() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
+</para>
+
+@object: object containing the associations.
+@data_id: quark of the key.
+@data: data to associate with that key.
+@Deprecated: Use g_object_set_qdata() instead.
+
+<!-- ##### FUNCTION gtk_object_set_data_by_id_full ##### -->
+<para>
+Just like gtk_object_set_data_full() except that it takes
+a #GQuark instead of a string, so it is slightly faster.
+</para>
+<para>
+Use gtk_object_data_try_key() and gtk_object_data_force_id()
+to get an id from a string.
+</para>
+
+@object: object containing the associations.
+@data_id: quark of the key.
+@data: data to associate with that key.
+@destroy: function to call when the association is destroyed.
+@Deprecated: Use g_object_set_qdata_full() instead.
+
+<!-- ##### FUNCTION gtk_object_set_data_full ##### -->
+<para>
+Like gtk_object_set_data() except it adds notification
+for when the association is destroyed, either by
+gtk_object_remove_data() or when the object is destroyed.
+</para>
+
+@object: object containing the associations.
+@key: name of the key.
+@data: data to associate with that key.
+@destroy: function to call when the association is destroyed.
+@Deprecated: Use g_object_set_data_full() instead.
+
+<!-- ##### FUNCTION gtk_object_set_user_data ##### -->
+<para>
+For convenience, every object offers a generic user data
+pointer.  This function sets it.
+</para>
+
+@object: the object whose user data should be set.
+@data: the new value for the user data.
+@Deprecated: Use g_object_set_data() instead.
+
 <!-- ##### FUNCTION gtk_object_setv ##### -->
 <para>
 Set an array of arguments.
@@ -3007,6 +6805,48 @@ Set an array of arguments.
 @n_args: the number of arguments to set.
 @args: the desired values, as an array of #GtkArgs (which contain 
 the names, types, and values of the arguments).
+
+<!-- ##### FUNCTION gtk_object_sink ##### -->
+<para>
+Removes the floating reference from a #GtkObject, if it exists; 
+otherwise does nothing. See the #GtkObject overview documentation at 
+the top of the page.
+</para>
+
+@object: the object to sink.
+@Deprecated: 2.10: Use g_object_ref_sink() instead
+
+<!-- ##### FUNCTION gtk_object_unref ##### -->
+<para>
+Decreases the reference count of an object.  When its reference count drops 
+to 0, the object is finalized (i.e. its memory is freed).  
+</para>
+
+@object: the object to dereference.
+@Deprecated: Use g_object_unref() instead.
+
+<!-- ##### FUNCTION gtk_object_weakref ##### -->
+<para>
+Adds a weak reference callback to an object. Weak references are used for notification when an object is
+finalized. They are called "weak references" because they allow you to safely
+hold a pointer to an object without calling g_object_ref() (g_object_ref() adds
+a strong reference, that is, forces the object to stay alive).
+</para>
+
+@object: object to weakly reference.
+@notify: callback to invoke before the object is freed.
+@data: extra data to pass to #notify.
+@Deprecated: Use g_object_weak_ref() instead.
+
+<!-- ##### FUNCTION gtk_object_weakunref ##### -->
+<para>
+Removes a weak reference callback to an object.
+</para>
+
+@object: object stop weakly referencing.
+@notify: callback to search for.
+@data: data to search for.
+@Deprecated: Use g_object_weak_unref() instead.
 
 <!-- ##### FUNCTION gtk_packer_add ##### -->
 <para>
@@ -3107,6 +6947,21 @@ the names, types, and values of the arguments).
 @packer: 
 @spacing: 
 
+<!-- ##### FUNCTION gtk_paint_string ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@area: 
+@widget: 
+@detail: 
+@x: 
+@y: 
+@string: 
+
 <!-- ##### MACRO gtk_paned_handle_size ##### -->
 <para>
 Old name for gtk_paned_set_handle_size().
@@ -3164,6 +7019,171 @@ Set the the handle size to @size x @size pixels.
 
 @pspec: 
 @pattern: 
+
+<!-- ##### FUNCTION gtk_preview_draw_row ##### -->
+<para>
+Sets the data for a portion of a row.
+</para>
+
+@preview: a #GtkPreview.
+@data: the new data for the portion. It should contain
+       @w bytes of data if the preview is of type
+       GTK_TYPE_GRAYSCALE, and 3*@w bytes of data
+       if the preview is of type GTK_TYPE_COLOR.
+@x: the starting value on the row to set.
+@y: the row to change.
+@w: the number of pixels in the row to change.
+
+<!-- ##### FUNCTION gtk_preview_get_cmap ##### -->
+<para>
+Returns the colormap used by preview widgets. This
+function is deprecated, and you should use
+gdk_rgb_get_cmap() instead.
+</para>
+
+@Returns: the colormap for previews.
+
+<!-- ##### FUNCTION gtk_preview_get_info ##### -->
+<para>
+Return a #GtkPreviewInfo structure containing 
+global information about preview widgets.
+</para>
+
+@Returns: a #GtkPreviewInfo structure. The return
+ value belongs to GTK+ and must not be modified
+ or freed.
+
+<!-- ##### FUNCTION gtk_preview_get_visual ##### -->
+<para>
+Returns the visual used by preview widgets. This
+function is deprecated, and you should use
+gdk_rgb_get_visual() instead.
+</para>
+
+@Returns: the visual for previews.
+
+<!-- ##### FUNCTION gtk_preview_new ##### -->
+<para>
+Create a new preview widget.
+</para>
+
+@type: the type data contained by the widget. 
+(Grayscale or RGB)
+@Returns: a new #GtkPreview
+
+<!-- ##### FUNCTION gtk_preview_put ##### -->
+<para>
+Takes a portion of the contents of a preview widget
+and draws it onto the given drawable, @window.
+</para>
+
+@preview: a #GtkPreview.
+@window: a window or pixmap.
+@gc: The graphics context for the operation. Only the
+     clip mask for this GC matters.
+@srcx: the x coordinate of the upper left corner in the source image.
+@srcy: the y coordinate of the upper left corner in the source image.
+@destx: the x coordinate of the upper left corner in the destination image.
+@desty: the y coordinate of the upper left corner in the destination image.
+@width: the width of the rectangular portion to draw.
+@height: the height of the rectangular portion to draw.
+
+<!-- ##### FUNCTION gtk_preview_reset ##### -->
+<para>
+This function is deprecated and does nothing. It was
+once used for changing the colormap and visual on the fly.
+</para>
+
+
+<!-- ##### FUNCTION gtk_preview_set_color_cube ##### -->
+<para>
+This function is deprecated and does nothing. GdkRGB
+automatically picks an optimium color cube for the
+display.
+</para>
+
+@nred_shades: ignored
+@ngreen_shades: ignored
+@nblue_shades: ignored
+@ngray_shades: ignored
+
+<!-- ##### FUNCTION gtk_preview_set_dither ##### -->
+<para>
+Set the dithering mode for the display. 
+</para>
+
+@preview: a #GtkPreview.
+@dither: the dithering mode.
+
+<!-- ##### FUNCTION gtk_preview_set_expand ##### -->
+<para>
+Determines the way that the the preview widget behaves
+when the size it is allocated is larger than the requested
+size. If @expand is %FALSE, then the preview's window
+and buffer will be no larger than the size set with 
+gtk_preview_size(), and the data set will be centered
+in the allocation if it is larger. If @expand is %TRUE
+then the window and buffer will expand with the allocation;
+the application is responsible for catching
+the "size_allocate" signal and providing the data 
+appropriate for this size.
+</para>
+
+@preview: a #GtkPreview.
+@expand: whether the preview's window should expand or not.
+
+<!-- ##### FUNCTION gtk_preview_set_gamma ##### -->
+<para>
+Set the gamma-correction value for all preview widgets.
+(This function will eventually be replaced with a
+function that sets a per-preview-widget gamma value).
+The resulting intensity is given by:
+<literal>destination_value * pow (source_value/255, 1/gamma)</literal>.
+The gamma value is applied when the data is
+set with gtk_preview_draw_row() so changing this
+value will not affect existing data in preview
+widgets.
+</para>
+
+@gamma_: the new gamma value.
+
+<!-- ##### FUNCTION gtk_preview_set_install_cmap ##### -->
+<para>
+This function is deprecated
+and does nothing. GdkRGB will automatically pick
+a private colormap if it cannot allocate sufficient
+colors.
+</para>
+
+@install_cmap: ignored.
+
+<!-- ##### FUNCTION gtk_preview_set_reserved ##### -->
+<para>
+This function is deprecated and does nothing.
+</para>
+
+@nreserved: ignored.
+
+<!-- ##### FUNCTION gtk_preview_size ##### -->
+<para>
+Set the size that the preview widget will request
+in response to a "size_request" signal. The 
+drawing area may actually be allocated a size
+larger than this depending on how it is packed
+within the enclosing containers. The effect
+of this is determined by whether the preview
+is set to expand or not (see gtk_preview_expand())
+</para>
+
+@preview: a #GtkPreview.
+@width: the new width.
+@height: the new height.
+
+<!-- ##### FUNCTION gtk_preview_uninit ##### -->
+<para>
+This function is deprecated and does nothing.
+</para>
+
 
 <!-- ##### FUNCTION gtk_print_context_create_context ##### -->
 <para>
@@ -3237,6 +7257,101 @@ Set the the handle size to @size x @size pixels.
 @settings: 
 @print_to_file: 
 
+<!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
+
+
+@adjustment: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_blocks ##### -->
+<para>
+Sets the number of blocks used when the progress bar is in activity
+mode.  Larger numbers make the visible block smaller.
+</para>
+
+@pbar: a #GtkProgressBar.
+@blocks: number of blocks which can fit within the progress bar area.
+
+<!-- ##### FUNCTION gtk_progress_bar_set_activity_step ##### -->
+<para>
+Sets the step value used when the progress bar is in activity
+mode.  The step is the amount by which the progress is incremented
+each iteration.
+</para>
+
+@pbar: a #GtkProgressBar.
+@step: the amount which the progress is incremented in activity
+mode.
+
+<!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->
+<para>
+Sets the style of the #GtkProgressBar.  The default style is
+%GTK_PROGRESS_CONTINUOUS.
+</para>
+
+@pbar: a #GtkProgressBar.
+@style: a #GtkProgressBarStyle value indicating the desired style.
+
+<!-- ##### FUNCTION gtk_progress_bar_set_discrete_blocks ##### -->
+<para>
+Sets the number of blocks that the progress bar is divided into
+when the style is %GTK_PROGRESS_DISCRETE.
+</para>
+
+@pbar: a #GtkProgressBar.
+@blocks: number of individual blocks making up the bar.
+
+<!-- ##### FUNCTION gtk_progress_bar_update ##### -->
+<para>
+This function is deprecated.  Please use gtk_progress_set_value() or
+gtk_progress_set_percentage() instead.
+</para>
+
+@pbar: a #GtkProgressBar.
+@percentage: the new percent complete value.
+
+<!-- ##### MACRO gtk_radio_menu_item_group ##### -->
+<para>
+Deprecated compatibility macro. Use gtk_radio_menu_item_get_group() instead.
+</para>
+
+
+<!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
+<para>
+Adds a #GtkRcStyle that will be looked up by a matching against
+the class hierarchy of the widget. This is equivalent to a:
+<literal>class PATTERN style STYLE</literal>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets deriving from @pattern
+@pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
+
+<!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
+<para>
+Adds a #GtkRcStyle that will be looked up by a match against
+the widget's class pathname. This is equivalent to a:
+<literal>widget_class PATTERN style STYLE</literal>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets matching @pattern
+@pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
+
+<!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
+<para>
+Adds a #GtkRcStyle that will be looked up by a match against
+the widget's pathname. This is equivalent to a:
+ <literal>widget PATTERN style STYLE</literal>
+statement in a RC file.
+</para>
+
+@rc_style: the #GtkRcStyle to use for widgets matching @pattern
+@pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
+
 <!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>
 Internal function.
@@ -3261,6 +7376,55 @@ Sets the function that GTK+ will use to load images
 
 @loader: the #GtkImageLoader to use
 
+<!-- ##### FUNCTION gtk_rc_style_ref ##### -->
+<para>
+Increments the reference count of a #GtkRcStyle.
+</para>
+
+@rc_style: a #GtkRcStyle
+@Deprecated: Use g_object_ref() instead
+
+<!-- ##### FUNCTION gtk_rc_style_unref ##### -->
+<para>
+Decrements the reference count of a #GtkRcStyle and
+frees if the result is 0.
+</para>
+
+@rc_style: a #GtkRcStyle
+@Deprecated: Use g_object_unref() instead
+
+<!-- ##### FUNCTION gtk_recent_chooser_get_show_numbers ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_recent_chooser_set_show_numbers ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@show_numbers: 
+
+<!-- ##### FUNCTION gtk_recent_manager_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_recent_manager_set_screen ##### -->
+<para>
+
+</para>
+
+@manager: 
+@screen: 
+
 <!-- ##### FUNCTION gtk_ruler_draw_pos ##### -->
 <para>
 
@@ -3274,6 +7438,30 @@ Sets the function that GTK+ will use to load images
 </para>
 
 @ruler: the gtkruler
+
+<!-- ##### FUNCTION gtk_scale_button_get_orientation ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_scale_button_set_orientation ##### -->
+<para>
+
+</para>
+
+@button: 
+@orientation: 
+
+<!-- ##### FUNCTION gtk_selection_clear ##### -->
+<para>
+</para>
+
+@widget: 
+@event: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_selection_incr_event ##### -->
 <para>
@@ -3318,6 +7506,15 @@ Internal function.
 
 @Returns: 
 
+<!-- ##### MACRO gtk_spin_button_get_value_as_float ##### -->
+<para>
+Gets the value in the @spin_button. 
+</para>
+
+@Returns: the value of @spin_button
+@Deprecated: Use gtk_spin_button_get_value() instead.
+@spin_button: a #GtkSpinButton
+
 <!-- ##### FUNCTION gtk_spin_button_set_shadow_type ##### -->
 <para>
 Creates a border around the arrows of a #GtkSpinButton. The type of border is determined by @shadow_type.
@@ -3326,11 +7523,42 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @spin_button: a #GtkSpinButton
 @shadow_type: the new border type.
 
+<!-- ##### FUNCTION gtk_status_icon_set_tooltip ##### -->
+<para>
+
+</para>
+
+@status_icon: 
+@tooltip_text: 
+
 <!-- ##### FUNCTION gtk_stock_list_items ##### -->
 <para>
 
 </para>
 
+@Returns: 
+
+<!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->
+<para>
+Does the same as gtk_style_apply_default_background().
+</para>
+
+@s: 
+@gw: 
+@st: 
+@a: 
+@x: 
+@y: 
+@w: 
+@h: 
+@Deprecated: Use gtk_style_apply_default_background() instead.
+
+<!-- ##### FUNCTION gtk_style_get_font ##### -->
+<para>
+
+</para>
+
+@style: 
 @Returns: 
 
 <!-- ##### FUNCTION gtk_style_get_font_for_display ##### -->
@@ -3351,6 +7579,38 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @widget_type: 
 @property_name: 
 @value: 
+
+<!-- ##### FUNCTION gtk_style_lookup_icon_set ##### -->
+<para>
+
+</para>
+
+@style: 
+@stock_id: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_style_ref ##### -->
+<para>
+
+</para>
+
+@style: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_style_set_font ##### -->
+<para>
+
+</para>
+
+@style: 
+@font: 
+
+<!-- ##### FUNCTION gtk_style_unref ##### -->
+<para>
+
+</para>
+
+@style: 
 
 <!-- ##### FUNCTION gtk_text_buffer_paste_primary ##### -->
 <para>
@@ -3393,6 +7653,51 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_tips_query_new ##### -->
+<para>
+Creates a new #GtkTipsQuery.
+</para>
+
+@Returns: a new #GtkTipsQuery.
+
+<!-- ##### FUNCTION gtk_tips_query_set_caller ##### -->
+<para>
+Sets the widget which initiates the query, usually a button.
+If the @caller is selected while the query is running, the query is
+automatically stopped.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+@caller: the widget which initiates the query.
+
+<!-- ##### FUNCTION gtk_tips_query_set_labels ##### -->
+<para>
+Sets the text to display when the query is not in effect,
+and the text to display when the query is in effect but the widget beneath
+the pointer has no tooltip.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+@label_inactive: the text to display when the query is not running.
+@label_no_tip: the text to display when the query is running but the widget
+beneath the pointer has no tooltip.
+
+<!-- ##### FUNCTION gtk_tips_query_start_query ##### -->
+<para>
+Starts a query.
+The #GtkTipsQuery widget will take control of the mouse and as the mouse
+moves it will display the tooltip of the widget beneath the mouse.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+
+<!-- ##### FUNCTION gtk_tips_query_stop_query ##### -->
+<para>
+Stops a query.
+</para>
+
+@tips_query: a #GtkTipsQuery.
+
 <!-- ##### FUNCTION gtk_tool_item_get_pack_end ##### -->
 <para>
 
@@ -3409,6 +7714,208 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 @tool_item: 
 @pack_end: 
 
+<!-- ##### FUNCTION gtk_toolbar_append_element ##### -->
+<para>
+
+</para>
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_append_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_append_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+<!-- ##### FUNCTION gtk_toolbar_append_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+
+<!-- ##### FUNCTION gtk_toolbar_get_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_get_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_insert_element ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_insert_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_insert_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@position: 
+
+<!-- ##### FUNCTION gtk_toolbar_insert_stock ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@stock_id: 
+@tooltip_text: 
+@tooltip_private_text: 
+@callback: 
+@user_data: 
+@position: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_insert_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+@position: 
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_element ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@type: 
+@widget: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_item ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@text: 
+@tooltip_text: 
+@tooltip_private_text: 
+@icon: 
+@callback: 
+@user_data: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+
+<!-- ##### FUNCTION gtk_toolbar_prepend_widget ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@widget: 
+@tooltip_text: 
+@tooltip_private_text: 
+
+<!-- ##### FUNCTION gtk_toolbar_remove_space ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@position: 
+
+<!-- ##### FUNCTION gtk_toolbar_set_orientation ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@orientation: 
+
+<!-- ##### FUNCTION gtk_toolbar_set_tooltips ##### -->
+<para>
+
+</para>
+
+@toolbar: 
+@enable: 
+
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>
 Private: print debugging information while doing a gtk_object_ref() or 
@@ -3420,6 +7927,17 @@ a gtk_object_unref().
 @dummy: unused.
 @line: line number (used within macros).
 @do_ref: whether to reference or unreference.
+
+<!-- ##### MACRO gtk_tree_model_get_iter_root ##### -->
+<para>
+A alternate name for gtk_tree_model_get_iter_first() provided for
+compatibility reasons; this macro will be deprecated in future
+versions of GTK+.
+</para>
+
+@tree_model:  A #GtkTreeModel.
+@iter: uninitialized #GtkTreeIter.
+@Returns:  %TRUE, if @iter was set.
 
 <!-- ##### FUNCTION gtk_tree_model_ref_iter ##### -->
 <para>
@@ -3487,6 +8005,15 @@ a gtk_object_unref().
 
 @tree_model: 
 @iter: 
+
+<!-- ##### MACRO gtk_tree_path_new_root ##### -->
+<para>
+An alternate name for gtk_tree_path_new_first() provided for
+compatibility reasons.
+</para>
+
+@Returns: A new #GtkTreePath.
+@Deprecated: Use gtk_tree_path_new_first() instead.
 
 <!-- ##### FUNCTION gtk_tree_store_move ##### -->
 <para>
@@ -3598,6 +8125,28 @@ a gtk_object_unref().
 @row_draggable_func: 
 @user_data: 
 
+<!-- ##### FUNCTION gtk_tree_view_tree_to_widget_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@tx: 
+@ty: 
+@wx: 
+@wy: 
+
+<!-- ##### FUNCTION gtk_tree_view_widget_to_tree_coords ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@wx: 
+@wy: 
+@tx: 
+@ty: 
+
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
 Given a GtkTypeClass pointer @klass, and a GtkType @cast_type, make
@@ -3626,6 +8175,15 @@ Return the pointer to the type's children's types.
 @type: GtkType
 @Returns: pointer to a GList
 
+<!-- ##### FUNCTION gtk_type_class ##### -->
+<para>
+Returns a pointer pointing to the class of @type or %NULL if there was
+any trouble identifying @type.  Initializes the class if necessary.
+</para>
+
+@type: a #GtkType.
+@Returns: pointer to the class.
+
 <!-- ##### FUNCTION gtk_type_describe_heritage ##### -->
 <para>
 Print the types @type inherits from.
@@ -3642,6 +8200,41 @@ show the size if @show_size is true.
 @type: GtkType
 @show_size: gboolean
 
+<!-- ##### FUNCTION gtk_type_enum_find_value ##### -->
+<para>
+Returns a pointer to one of @enum_type's #GtkEnumValues's whose name (or nickname) matches @value_name.
+</para>
+
+@enum_type: a #GtkType.
+@value_name: the name to look for.
+@Returns: #GtkEnumValue*
+
+<!-- ##### FUNCTION gtk_type_enum_get_values ##### -->
+<para>
+If @enum_type has values, then return a pointer to all of them.
+</para>
+
+@enum_type: a #GtkType.
+@Returns: #GtkEnumValue*
+
+<!-- ##### FUNCTION gtk_type_flags_find_value ##### -->
+<para>
+Returns a pointer to one of @flag_type's #GtkFlagValue's whose name (or nickname) matches @value_name.
+</para>
+
+@flags_type: a #GtkType.
+@value_name: the name to look for.
+@Returns: #GtkFlagValue*
+@flag_type: GtkType
+
+<!-- ##### FUNCTION gtk_type_flags_get_values ##### -->
+<para>
+If @flags_type has values, then return a pointer to all of them.
+</para>
+
+@flags_type: a #GtkType.
+@Returns: #GtkFlagValue*
+
 <!-- ##### FUNCTION gtk_type_free ##### -->
 <para>
 Given the type of an object and a pointer to it, the object is freed.
@@ -3650,6 +8243,14 @@ Given the type of an object and a pointer to it, the object is freed.
 @type: GtkType
 @mem: gpointer to the object
 
+<!-- ##### MACRO gtk_type_from_name ##### -->
+<para>
+Gets the internal representation of a type, given its name.
+</para>
+
+@name: the name of a GTK+ type
+@Returns: a #GtkType.
+
 <!-- ##### FUNCTION gtk_type_get_varargs_type ##### -->
 <para>
 Get the varargs type associated with @foreign_type
@@ -3657,6 +8258,50 @@ Get the varargs type associated with @foreign_type
 
 @foreign_type: GtkType
 @Returns: GtkType
+
+<!-- ##### FUNCTION gtk_type_init ##### -->
+<para>
+Initializes the data structures associated with GTK+ types.
+</para>
+
+@debug_flags: debug flags
+
+<!-- ##### MACRO gtk_type_is_a ##### -->
+<para>
+Looks in the type hierarchy to see if @type has @is_a_type among its
+ancestors.  Do so with a simple lookup, not a loop.
+</para>
+
+@type: a #GtkType.
+@is_a_type: another #GtkType.
+@Returns: %TRUE if @type is a @is_a_type.
+
+<!-- ##### MACRO gtk_type_name ##### -->
+<para>
+Returns a pointer to the name of a type, or %NULL if it has none.
+</para>
+
+@type: a #GtkType.
+@Returns: a pointer to the name of a type, or %NULL if it has none.
+
+<!-- ##### FUNCTION gtk_type_new ##### -->
+<para>
+Creates a new object of a given type, and return a pointer to it.
+Returns %NULL if you give it an invalid type.  It allocates the object
+out of the type's memory chunk if there is a memory chunk.  The object
+has all the proper initializers called.
+</para>
+
+@type: a #GtkType.
+@Returns: pointer to a #GtkTypeObject.
+
+<!-- ##### MACRO gtk_type_parent ##### -->
+<para>
+Returns the parent type of a #GtkType.
+</para>
+
+@type: a #GtkType.
+@Returns: the #GtkType of the parent.
 
 <!-- ##### FUNCTION gtk_type_parent_class ##### -->
 <para>
@@ -3711,6 +8356,15 @@ Set the varargs type for a fundamental type @foreign_type.
 @foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
 fundamental type.
 @varargs_type: Must be a GtkType which is either structured or flag, or NONE.
+
+<!-- ##### FUNCTION gtk_type_unique ##### -->
+<para>
+Creates a new, unique type.
+</para>
+
+@parent_type: if zero, a fundamental type is created
+@gtkinfo: must not be %NULL, and @type_info->type_name must also not be %NULL
+@Returns: the new #GtkType
 
 <!-- ##### FUNCTION gtk_widget_accelerator_signal ##### -->
 <para>

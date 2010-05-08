@@ -196,6 +196,9 @@ enum
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeModel ##### -->
 <para>
 
@@ -327,6 +330,7 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -363,17 +367,8 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
-
-
-<!-- ##### MACRO gtk_tree_path_new_root ##### -->
-<para>
-An alternate name for gtk_tree_path_new_first() provided for
-compatibility reasons.
-</para>
-
-@Returns: A new #GtkTreePath.
-@Deprecated: Use gtk_tree_path_new_first() instead.
 
 
 <!-- ##### FUNCTION gtk_tree_path_append_index ##### -->
@@ -417,7 +412,7 @@ compatibility reasons.
 
 </para>
 
-@path:
+@path: 
 @depth: 
 @Returns: 
 
@@ -672,18 +667,6 @@ compatibility reasons.
 @tree_model: 
 @iter: 
 @Returns: 
-
-
-<!-- ##### MACRO gtk_tree_model_get_iter_root ##### -->
-<para>
-A alternate name for gtk_tree_model_get_iter_first() provided for
-compatibility reasons; this macro will be deprecated in future
-versions of GTK+.
-</para>
-
-@tree_model:  A #GtkTreeModel.
-@iter: uninitialized #GtkTreeIter.
-@Returns:  %TRUE, if @iter was set.
 
 
 <!-- ##### FUNCTION gtk_tree_model_get_path ##### -->

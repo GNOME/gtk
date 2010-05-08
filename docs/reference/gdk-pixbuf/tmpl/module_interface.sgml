@@ -68,6 +68,9 @@ They are not covered by the same stability guarantees as the regular
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_pixbuf_set_option ##### -->
 <para>
 
@@ -84,6 +87,7 @@ They are not covered by the same stability guarantees as the regular
 
 </para>
 
+@void: 
 @Returns: 
 
 

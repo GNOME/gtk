@@ -56,8 +56,8 @@ content_files =				\
 	gdk-pixbuf-rendering.sgml	\
 	gdk-pixbuf.sgml			\
 	porting-from-imlib.sgml		\
-	gdk-pixbuf-csource.xml		\
-	gdk-pixbuf-query-loaders.xml
+	gdk-pixbuf-csource-3.0.xml	\
+	gdk-pixbuf-query-loaders-3.0.xml
 
 # Images to copy into HTML directory
 HTML_IMAGES = composite.png
@@ -81,7 +81,9 @@ EXTRA_DIST += version.xml.in \
 
 if ENABLE_MAN
 
-man_MANS = gdk-pixbuf-csource.1 gdk-pixbuf-query-loaders.1 
+man_MANS = 				\
+	gdk-pixbuf-csource-3.0.1	\
+	gdk-pixbuf-query-loaders-3.0.1
 
 %.1 : %.xml 
 	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<

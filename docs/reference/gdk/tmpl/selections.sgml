@@ -50,6 +50,9 @@ to the X Inter-client Communication Conventions Manual
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GDK_SELECTION_PRIMARY ##### -->
 <para>
 A #GdkAtom representing the <literal>PRIMARY</literal> selection.

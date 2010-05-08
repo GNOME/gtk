@@ -17,6 +17,9 @@ Public enumerated types used throughout GTK+
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkAccelFlags ##### -->
 <para>
 
@@ -176,18 +179,6 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 @GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
 @GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
 
-<!-- ##### ENUM GtkMatchType ##### -->
-<para>
-
-</para>
-
-@GTK_MATCH_ALL: 
-@GTK_MATCH_ALL_TAIL: 
-@GTK_MATCH_HEAD: 
-@GTK_MATCH_TAIL: 
-@GTK_MATCH_EXACT: 
-@GTK_MATCH_LAST: 
-
 <!-- ##### ENUM GtkMetricType ##### -->
 <para>
 Used to indicate which metric is used by a #GtkRuler.
@@ -274,15 +265,6 @@ tabs of a #GtkNotebook, the handle of a #GtkHandleBox or the label of a
 @GTK_POS_TOP: The feature is at the top edge.
 @GTK_POS_BOTTOM: The feature is at the bottom edge.
 
-<!-- ##### ENUM GtkPreviewType ##### -->
-<para>
-An enumeration which describes whether a preview
-contains grayscale or red-green-blue data.
-</para>
-
-@GTK_PREVIEW_COLOR: the preview contains red-green-blue data.
-@GTK_PREVIEW_GRAYSCALE: The preview contains grayscale data.
-
 <!-- ##### ENUM GtkReliefStyle ##### -->
 <para>
 Indicated the relief to be drawn around a #GtkButton.
@@ -364,16 +346,6 @@ Used to change the appearance of an outline typically provided by a #GtkFrame.
 @GTK_SHADOW_OUT: The outline is bevelled outwards like a button.
 @GTK_SHADOW_ETCHED_IN: The outline has a sunken 3d appearance.
 @GTK_SHADOW_ETCHED_OUT: The outline has a raised 3d appearance
-
-<!-- ##### ENUM GtkSideType ##### -->
-<para>
-
-</para>
-
-@GTK_SIDE_TOP: 
-@GTK_SIDE_BOTTOM: 
-@GTK_SIDE_LEFT: 
-@GTK_SIDE_RIGHT: 
 
 <!-- ##### ENUM GtkStateType ##### -->
 <para>

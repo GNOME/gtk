@@ -51,6 +51,9 @@ respectively.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkCellRendererState ##### -->
 <para>
 Tells how a cell is to be rendererd.

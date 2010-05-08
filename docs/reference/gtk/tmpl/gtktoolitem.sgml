@@ -17,6 +17,9 @@ GtkToolItem
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToolItem ##### -->
 <para>
 
@@ -29,17 +32,6 @@ GtkToolItem
 </para>
 
 @toolitem: the object which received the signal.
-@Returns: 
-
-<!-- ##### SIGNAL GtkToolItem::set-tooltip ##### -->
-<para>
-
-</para>
-
-@toolitem: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 @Returns: 
 
 <!-- ##### SIGNAL GtkToolItem::toolbar-reconfigured ##### -->
@@ -69,6 +61,7 @@ GtkToolItem
 
 </para>
 
+@void: 
 @Returns: 
 
 

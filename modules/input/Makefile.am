@@ -27,7 +27,7 @@ LDADDS = \
 	$(top_builddir)/gtk/$(gtktargetlib) 				\
 	$(GTK_DEP_LIBS)
 
-moduledir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules
+moduledir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/immodules
 
 im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_xim_la_SOURCES = 		\
@@ -40,7 +40,7 @@ if HAVE_X11R6
 if INCLUDE_IM_XIM
 STATIC_XIM_MODULE = libstatic-im-xim.la
 else
-XIM_MODULE=im-xim.la 
+XIM_MODULE=im-xim.la
 endif
 endif
 
@@ -152,7 +152,7 @@ if USE_WIN32
 if INCLUDE_IM_IME
 STATIC_IME_MODULE = libstatic-im-ime.la
 else
-IME_MODULE=im-ime.la 
+IME_MODULE=im-ime.la
 endif
 endif
 
@@ -172,7 +172,7 @@ else
 MULTIPRESS_MODULE = im-multipress.la
 endif
 
-imconffiledir = $(sysconfdir)/gtk-2.0
+imconffiledir = $(sysconfdir)/gtk-3.0
 dist_imconffile_DATA = im-multipress.conf
 
 if CROSS_COMPILING
@@ -189,21 +189,21 @@ endif
 # after the libraries are installed in their final locations.
 install-data-hook:
 	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
-	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
-	  echo "$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules" ; \
-	  $(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules ; \
+	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
+	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
+	  echo "$(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules" ; \
+	  $(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules ; \
 	else \
 	  echo "***" ; \
 	  echo "*** Warning: gtk.immodules not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
-	  echo "*** system using gtk-query-immodules-2.0" ; \
+	  echo "*** system using gtk-query-immodules-3.0" ; \
 	  echo "***" ; \
         fi
 
 uninstall-local:
-	rm -f $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
+	rm -f $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules
 
 if BUILD_DYNAMIC_MODULES
 
@@ -240,7 +240,7 @@ noinst_LTLIBRARIES =				\
 included-modules: $(noinst_LTLIBRARIES)
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
+	$(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > gtk.immodules
 
 CLEANFILES = gtk.immodules
 

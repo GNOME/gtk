@@ -63,7 +63,7 @@ crossingevents_SOURCES		 = crossingevents.c
 crossingevents_LDADD		 = $(progs_ldadd)
 
 # this doesn't work in make distcheck, since it doesn't
-# find file-chooser-test-dir 
+# find file-chooser-test-dir
 # TEST_PROGS			+= filechooser
 filechooser_SOURCES		 = filechooser.c pixbuf-init.c
 filechooser_LDADD		 = $(progs_ldadd)
@@ -76,7 +76,7 @@ builder_LDFLAGS			 = -export-dynamic
 if OS_UNIX
 TEST_PROGS			+= defaultvalue
 endif
-defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c	
+defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
 defaultvalue_LDADD 		 = $(progs_ldadd)
 
 TEST_PROGS			+= textbuffer

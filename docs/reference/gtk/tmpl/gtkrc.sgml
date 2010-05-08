@@ -16,14 +16,13 @@ at runtime.
 An application can cause GTK+ to parse a specific RC
 file by calling gtk_rc_parse(). In addition to this,
 certain files will be read at the end of gtk_init().
-Unless modified, the files looked for will be 
-<filename>&lt;SYSCONFDIR&gt;/gtk-2.0/gtkrc</filename> 
-and <filename>.gtkrc-2.0</filename> in the users home directory.
-(<filename>&lt;SYSCONFDIR&gt;</filename> defaults to 
+Unless modified, the files looked for will be
+<filename>&lt;SYSCONFDIR&gt;/gtk-2.0/gtkrc</filename>
+and <filename>.gtkrc-3.0</filename> in the users home directory.
+(<filename>&lt;SYSCONFDIR&gt;</filename> defaults to
 <filename>/usr/local/etc</filename>. It can be changed with the
-<option>--prefix</option> or <option>--sysconfdir</option> options when 
-configuring GTK+.) Note that although the filenames contain the version 
-number 2.0, all 2.x versions of GTK+ look for these files.  
+<option>--prefix</option> or <option>--sysconfdir</option> options when
+configuring GTK+.)
 </para>
 <para>
 The set of these <firstterm>default</firstterm> files
@@ -35,11 +34,11 @@ can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
 in order to overwrite the set of default files at runtime.
 </para>
 <para><anchor id="locale-specific-rc"/>
-For each RC file, in addition to the file itself, GTK+ will look for 
-a locale-specific file that will be parsed after the main file. 
+For each RC file, in addition to the file itself, GTK+ will look for
+a locale-specific file that will be parsed after the main file.
 For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
-when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks 
-for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>, 
+when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks
+for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>,
 and parses the first of those that exists.
 </para>
 </refsect2>
@@ -57,29 +56,29 @@ of such a statement:
 widget "mywindow.*.GtkEntry" style "my-entry-class"
 </programlisting></informalexample>
 
-attaches the style <literal>"my-entry-class"</literal> to all 
-widgets  whose <firstterm>widget path</firstterm> matches the 
-<firstterm>pattern</firstterm> <literal>"mywindow.*.GtkEntry"</literal>. 
-That is, all #GtkEntry widgets which are part of a #GtkWindow named 
+attaches the style <literal>"my-entry-class"</literal> to all
+widgets  whose <firstterm>widget path</firstterm> matches the
+<firstterm>pattern</firstterm> <literal>"mywindow.*.GtkEntry"</literal>.
+That is, all #GtkEntry widgets which are part of a #GtkWindow named
 <literal>"mywindow"</literal>.
 </para>
 
 <para>
-The patterns here are given in the standard shell glob syntax. 
-The <literal>"?"</literal> wildcard matches any character, while 
-<literal>"*"</literal> matches zero or more of any character.  
+The patterns here are given in the standard shell glob syntax.
+The <literal>"?"</literal> wildcard matches any character, while
+<literal>"*"</literal> matches zero or more of any character.
 The three types of matching are against the widget path, the
-<firstterm>class path</firstterm> and the class hierarchy. Both the 
-widget path and the class path consist of a <literal>"."</literal> 
-separated list of all the parents of the widget and the widget itself 
-from outermost to innermost. The difference is that in the widget path, 
-the name assigned by gtk_widget_set_name() is used if present, otherwise 
-the class name of the widget, while for the class path, the class name is 
+<firstterm>class path</firstterm> and the class hierarchy. Both the
+widget path and the class path consist of a <literal>"."</literal>
+separated list of all the parents of the widget and the widget itself
+from outermost to innermost. The difference is that in the widget path,
+the name assigned by gtk_widget_set_name() is used if present, otherwise
+the class name of the widget, while for the class path, the class name is
 always used.
 </para>
 <para>
 Since GTK+ 2.10,<literal>widget_class</literal> paths can also contain
-<literal>&lt;classname&gt;</literal> substrings, which are matching 
+<literal>&lt;classname&gt;</literal> substrings, which are matching
 the class with the given name and any derived classes. For instance,
 <informalexample><programlisting>
 widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
@@ -87,14 +86,14 @@ widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
 will match #GtkLabel widgets which are contained in any kind of menu item.
 </para>
 <para>
-So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a 
+So, if you have a #GtkEntry named <literal>"myentry"</literal>, inside of a
 horizontal box in a window named <literal>"mywindow"</literal>, then the
 widget path is: <literal>"mywindow.GtkHBox.myentry"</literal>
 while the class path is: <literal>"GtkWindow.GtkHBox.GtkEntry"</literal>.
 </para>
 <para>
 Matching against class is a little different. The pattern match is done
-against all class names in the widgets class hierarchy (not the layout 
+against all class names in the widgets class hierarchy (not the layout
 hierarchy) in sequence, so the pattern:
 <informalexample><programlisting>
 class "GtkButton" style "my-style"
@@ -737,6 +736,9 @@ same as for styles.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRcStyle ##### -->
 <para>
 The #GtkRcStyle structure is used to represent a set
@@ -822,6 +824,7 @@ specific portions of a RC file.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -845,45 +848,6 @@ specific portions of a RC file.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_rc_add_widget_name_style ##### -->
-<para>
-Adds a #GtkRcStyle that will be looked up by a match against
-the widget's pathname. This is equivalent to a:
- <literal>widget PATTERN style STYLE</literal>
-statement in a RC file.
-</para>
-
-@rc_style: the #GtkRcStyle to use for widgets matching @pattern
-@pattern: the pattern
-@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
-
-
-<!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
-<para>
-Adds a #GtkRcStyle that will be looked up by a match against
-the widget's class pathname. This is equivalent to a:
-<literal>widget_class PATTERN style STYLE</literal>
-statement in a RC file.
-</para>
-
-@rc_style: the #GtkRcStyle to use for widgets matching @pattern
-@pattern: the pattern
-@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
-
-
-<!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
-<para>
-Adds a #GtkRcStyle that will be looked up by a matching against
-the class hierarchy of the widget. This is equivalent to a:
-<literal>class PATTERN style STYLE</literal>
-statement in a RC file.
-</para>
-
-@rc_style: the #GtkRcStyle to use for widgets deriving from @pattern
-@pattern: the pattern
-@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
-
-
 <!-- ##### FUNCTION gtk_rc_parse ##### -->
 <para>
 Parses a given resource file.
@@ -905,6 +869,7 @@ Parses resource information directly from a string.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -937,6 +902,7 @@ Parses resource information directly from a string.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1018,6 +984,7 @@ otherwise %NULL.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1026,6 +993,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1034,6 +1002,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1044,6 +1013,7 @@ be installed. (GTK+ does not actually use this directory
 itself.)
 </para>
 
+@void: 
 @Returns: The directory (must be freed with g_free()).
 
 
@@ -1053,6 +1023,7 @@ Creates a new #GtkRcStyle with no fields set and
 a reference count of 1.
 </para>
 
+@void: 
 @Returns: the newly-created #GtkRcStyle
 
 
@@ -1063,24 +1034,5 @@ a reference count of 1.
 
 @orig: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_rc_style_ref ##### -->
-<para>
-Increments the reference count of a #GtkRcStyle.
-</para>
-
-@rc_style: a #GtkRcStyle
-@Deprecated: Use g_object_ref() instead
-
-
-<!-- ##### FUNCTION gtk_rc_style_unref ##### -->
-<para>
-Decrements the reference count of a #GtkRcStyle and
-frees if the result is 0.
-</para>
-
-@rc_style: a #GtkRcStyle
-@Deprecated: Use g_object_unref() instead
 
 

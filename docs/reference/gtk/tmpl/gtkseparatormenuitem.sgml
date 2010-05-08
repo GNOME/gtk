@@ -19,6 +19,9 @@ make it appear sunken into the interface.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSeparatorMenuItem ##### -->
 <para>
 The #GtkSeparatorMenuItem-struct struct contains private data only, and
@@ -31,6 +34,7 @@ should be accessed using the functions below.
 Creates a new #GtkSeparatorMenuItem.
 </para>
 
+@void: 
 @Returns: a new #GtkSeparatorMenuItem.
 
 

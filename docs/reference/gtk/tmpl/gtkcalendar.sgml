@@ -36,6 +36,9 @@ gtk_calendar_get_date().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCalendar ##### -->
 <para>
 <structfield>num_marked_dates</structfield> is an integer containing the
@@ -191,6 +194,7 @@ calendar.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -310,27 +314,5 @@ calendar.
 
 @calendar: 
 @rows: 
-
-
-<!-- ##### FUNCTION gtk_calendar_display_options ##### -->
-<para>
-</para>
-
-@calendar: 
-@flags: 
-
-
-<!-- ##### FUNCTION gtk_calendar_freeze ##### -->
-<para>
-</para>
-
-@calendar: 
-
-
-<!-- ##### FUNCTION gtk_calendar_thaw ##### -->
-<para>
-</para>
-
-@calendar: 
 
 

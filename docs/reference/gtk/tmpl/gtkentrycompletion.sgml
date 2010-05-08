@@ -46,6 +46,9 @@ selected, the ::action-activated signal is emitted.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEntryCompletion ##### -->
 <para>
 The GtkEntryCompletion struct contains only private data.
@@ -150,6 +153,7 @@ to the unmodified key via <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_comp
 
 </para>
 
+@void: 
 @Returns: 
 
 

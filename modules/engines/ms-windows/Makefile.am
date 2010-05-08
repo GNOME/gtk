@@ -13,12 +13,12 @@ INCLUDES = \
 
 
 LDADDS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-2.0.la	\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-3.0.la	\
 	$(top_builddir)/gdk/$(gdktargetlib)		\
 	$(top_builddir)/gtk/$(gtktargetlib)		\
 	$(GTK_DEP_LIBS)
 
-enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
+enginedir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/engines
 
 engine_LTLIBRARIES = libwimp.la
 

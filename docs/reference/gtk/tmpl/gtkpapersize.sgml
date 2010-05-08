@@ -31,6 +31,9 @@ Printing support has been added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPaperSize ##### -->
 <para>
 
@@ -278,6 +281,7 @@ Name for the Legal paper size.
 
 </para>
 
+@void: 
 @Returns: 
 
 

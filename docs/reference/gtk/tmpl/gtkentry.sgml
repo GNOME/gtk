@@ -67,6 +67,9 @@ via the context menu of the entry.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkEntry ##### -->
 <para>
 The #GtkEntry-struct struct contains only private data.
@@ -411,6 +414,7 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -749,6 +753,24 @@ The #GtkEntry-struct struct contains only private data.
 
 
 <!-- ##### FUNCTION gtk_entry_progress_pulse ##### -->
+<para>
+
+</para>
+
+@entry: 
+
+
+<!-- ##### FUNCTION gtk_entry_im_context_filter_keypress ##### -->
+<para>
+
+</para>
+
+@entry: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_entry_reset_im_context ##### -->
 <para>
 
 </para>

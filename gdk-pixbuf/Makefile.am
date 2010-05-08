@@ -62,9 +62,9 @@ TESTS = abicheck.sh pltcheck.sh
 endif
 
 lib_LTLIBRARIES = 		\
-	libgdk_pixbuf-2.0.la
+	libgdk_pixbuf-3.0.la
 
-loaderdir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/loaders
+loaderdir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/loaders
 
 module_libs = libgdk_pixbuf-$(GTK_API_VERSION).la $(GDK_PIXBUF_DEP_LIBS)
 
@@ -524,21 +524,21 @@ LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la $(GDK_PIXBUF_DEP_LIBS)
 noinst_PROGRAMS = test-gdk-pixbuf
 test_gdk_pixbuf_LDADD = $(LDADDS)
 
-bin_PROGRAMS = gdk-pixbuf-csource gdk-pixbuf-query-loaders
-gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c
-gdk_pixbuf_csource_LDADD = $(LDADDS)
+bin_PROGRAMS = gdk-pixbuf-csource-3.0 gdk-pixbuf-query-loaders-3.0
+gdk_pixbuf_csource_3_0_SOURCES = gdk-pixbuf-csource.c
+gdk_pixbuf_csource_3_0_LDADD = $(LDADDS)
 
-gdk_pixbuf_query_loaders_DEPENDENCIES = $(DEPS)
-gdk_pixbuf_query_loaders_LDADD = $(LDADDS)
+gdk_pixbuf_query_loaders_3_0_DEPENDENCIES = $(DEPS)
+gdk_pixbuf_query_loaders_3_0_LDADD = $(LDADDS)
 
-gdk_pixbuf_query_loaders_SOURCES = queryloaders.c
+gdk_pixbuf_query_loaders_3_0_SOURCES = queryloaders.c
 
 
 #
 # The GdkPixBuf library
 #
-libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
-libgdk_pixbuf_2_0_la_SOURCES =   \
+libgdk_pixbufincludedir = $(includedir)/gtk-3.0/gdk-pixbuf
+libgdk_pixbuf_3_0_la_SOURCES =   \
 	gdk-pixbuf-i18n.h	 \
 	gdk-pixbuf.c		 \
 	gdk-pixbuf-animation.c	 \
@@ -552,7 +552,7 @@ libgdk_pixbuf_2_0_la_SOURCES =   \
 	gdk-pixdata.c		 \
 	gdk-pixbuf-enum-types.c
 
-libgdk_pixbuf_2_0_la_LDFLAGS = \
+libgdk_pixbuf_3_0_la_LDFLAGS = \
 	$(gdk_pixbuf_win32_res_ldflag)		\
 	-version-info $(LT_VERSION_INFO)	\
 	$(LIBTOOL_EXPORT_OPTIONS)		\
@@ -560,8 +560,8 @@ libgdk_pixbuf_2_0_la_LDFLAGS = \
 	$(gdk_pixbuf_symbols)
 
 
-libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS) $(libole32)
-libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res)
+libgdk_pixbuf_3_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS) $(libole32)
+libgdk_pixbuf_3_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32_res)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
@@ -677,15 +677,15 @@ EXTRA_DIST +=					\
 
 if HAVE_INTROSPECTION
 
-GdkPixbuf-2.0.gir: libgdk_pixbuf-2.0.la Makefile
-GdkPixbuf_2_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
-GdkPixbuf_2_0_gir_INCLUDES = GModule-2.0 Gio-2.0
-GdkPixbuf_2_0_gir_LIBS = libgdk_pixbuf-2.0.la
-GdkPixbuf_2_0_gir_CFLAGS = $(INCLUDES)
-GdkPixbuf_2_0_gir_FILES = \
+GdkPixbuf-3.0.gir: libgdk_pixbuf-3.0.la Makefile
+GdkPixbuf_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk
+GdkPixbuf_3_0_gir_INCLUDES = GModule-2.0 Gio-2.0
+GdkPixbuf_3_0_gir_LIBS = libgdk_pixbuf-3.0.la
+GdkPixbuf_3_0_gir_CFLAGS = $(INCLUDES)
+GdkPixbuf_3_0_gir_FILES = \
     $(addprefix $(srcdir)/,$(libgdk_pixbufinclude_HEADERS)) \
-    $(addprefix $(srcdir)/,$(libgdk_pixbuf_2_0_la_SOURCES))
-INTROSPECTION_GIRS += GdkPixbuf-2.0.gir
+    $(addprefix $(srcdir)/,$(libgdk_pixbuf_3_0_la_SOURCES))
+INTROSPECTION_GIRS += GdkPixbuf-3.0.gir
 
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
@@ -710,19 +710,19 @@ endif
 # after the libraries are installed in their final locations.
 install-data-hook: install-ms-lib install-def-file
 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
-	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders > $(DESTDIR)$(sysconfdir)/gtk-2.0/gdk-pixbuf.loaders ; \
+	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gdk-pixbuf.loaders ; \
 	else \
 	  echo "***" ; \
 	  echo "*** Warning: gdk-pixbuf.loaders not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
-	  echo "*** system using gdk-pixbuf-query-loaders" ; \
+	  echo "*** system using gdk-pixbuf-query-loaders-3.0" ; \
 	  echo "***" ; \
 	fi
 
 uninstall-local: uninstall-ms-lib uninstall-def-file
-	rm -f $(DESTDIR)$(sysconfdir)/gtk-2.0/gdk-pixbuf.loaders
+	rm -f $(DESTDIR)$(sysconfdir)/gtk-3.0/gdk-pixbuf.loaders
 
 if CROSS_COMPILING
 else
@@ -730,11 +730,11 @@ all-local: gdk-pixbuf.loaders
 endif
 
 if BUILD_DYNAMIC_MODULES
-gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders$(EXEEXT)
+gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders-3.0$(EXEEXT)
 	LOADERS=`echo libpixbufloader-*.la` ; \
 	if test "x$$LOADERS" != 'xlibpixbufloader-*.la' ; then \
           echo "Writing a gdk-pixbuf.loader file to use when running examples before installing gdk-pixbuf."; \
-	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders $$LOADERS > ./gdk-pixbuf.loaders ;\
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 $$LOADERS > ./gdk-pixbuf.loaders ;\
 	else \
           echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
 	  touch gdk-pixbuf.loaders; \

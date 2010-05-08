@@ -5,18 +5,18 @@
 <refentry id="gtk-update-icon-cache">
 
 <refmeta>
-<refentrytitle>gtk-update-icon-cache</refentrytitle>
+<refentrytitle>gtk-update-icon-cache-3.0</refentrytitle>
 <manvolnum>1</manvolnum>
 </refmeta>
 
 <refnamediv>
-<refname>gtk-update-icon-cache</refname>
+<refname>gtk-update-icon-cache-3.0</refname>
 <refpurpose>Icon theme caching utility</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-update-icon-cache</command>
+<command>gtk-update-icon-cache-3.0</command>
 <arg choice="opt">--force</arg>
 <arg choice="opt">--ignore-theme-index</arg>
 <arg choice="opt">--index-only</arg>
@@ -28,20 +28,22 @@
 </refsynopsisdiv>
 
 <refsect1><title>Description</title>
-<para><command>gtk-update-icon-cache</command> creates mmap()able cache files for
-icon themes. 
+<para>
+  <command>gtk-update-icon-cache-3.0</command> creates mmap()able cache
+  files for icon themes.
 </para>
 <para>
-It expects to be given the path to a icon theme directory containing an
-<filename>index.theme</filename>, e.g. <filename>/usr/share/icons/hicolor</filename>, 
-and writes a <filename>icon-theme.cache</filename> containing cached information
-about the icons in the directory tree below the given directory.
+  It expects to be given the path to a icon theme directory containing an
+  <filename>index.theme</filename>, e.g. <filename>/usr/share/icons/hicolor</filename>,
+  and writes a <filename>icon-theme.cache</filename> containing cached
+  information about the icons in the directory tree below the given directory.
 </para>
 <para>
-GTK+ can use the cache files created by <command>gtk-update-icon-cache</command>
-to avoid a lot of system call and disk seek overhead when the application starts.
-Since the format of the cache files allows them to be mmap()ed shared between
-multiple applications, the overall memory consumption is reduced as well.
+  GTK+ can use the cache files created by <command>gtk-update-icon-cache-3.0</command>
+  to avoid a lot of system call and disk seek overhead when the application
+  starts. Since the format of the cache files allows them to be mmap()ed
+  shared between multiple applications, the overall memory consumption is
+  reduced as well.
 </para>
 </refsect1>
 
@@ -50,17 +52,17 @@ multiple applications, the overall memory consumption is reduced as well.
   <varlistentry>
     <term>--force</term>
     <term>-f</term>
-    <listitem><para>Overwrite an existing cache file even if it appears to be 
+    <listitem><para>Overwrite an existing cache file even if it appears to be
          uptodate.</para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term>--ignore-theme-index</term>
     <term>-t</term>
-    <listitem><para>Don't check for the existence of 'index.theme' in the icon theme
-     directory. Without this option, <command>gtk-update-icon-cache</command> refuses
-     to create an icon cache in a directory which does not appear to be the toplevel
-     directory of an icon theme. 
+    <listitem><para>Don't check for the existence of 'index.theme' in the icon
+     theme directory. Without this option, <command>gtk-update-icon-cache-3.0</command>
+     refuses to create an icon cache in a directory which does not appear to
+     be the toplevel directory of an icon theme.
     </para></listitem>
   </varlistentry>
 
@@ -74,15 +76,15 @@ multiple applications, the overall memory consumption is reduced as well.
   <varlistentry>
     <term>--source</term>
     <term>-c</term>
-    <listitem><para>Output a C header file declaring a constant 
-     <replaceable>name</replaceable> with the contents of the icon 
+    <listitem><para>Output a C header file declaring a constant
+     <replaceable>name</replaceable> with the contents of the icon
      cache.</para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term>--quiet</term>
     <term>-q</term>
-    <listitem><para>Turn off verbose output. 
+    <listitem><para>Turn off verbose output.
     </para></listitem>
   </varlistentry>
 

@@ -44,6 +44,9 @@ column. The "type" attribute specifies the data type for the column.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeStore ##### -->
 <para>
 

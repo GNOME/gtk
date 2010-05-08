@@ -255,7 +255,7 @@
  * You can change these defaults to something else.  For
  * example, to add a <keycap>Shift</keycap> modifier to a few
  * of the default bindings, you can include the following
- * fragment in your <filename>.gtkrc-2.0</filename> file:
+ * fragment in your <filename>.gtkrc-3.0</filename> file:
  * </para>
  * <programlisting>
  * binding "my-own-gtkfilechooser-bindings" {
@@ -330,7 +330,7 @@
  *    frequently.  You could then create an <keycombo>
  *    <keycap>Alt</keycap> <keycap>M</keycap> </keycombo>
  *    shortcut by including the following in your
- *    <filename>.gtkrc-2.0</filename>:
+ *    <filename>.gtkrc-3.0</filename>:
  *    <programlisting>
  *    binding "misc-shortcut" {
  *       bind "&lt;Alt&gt;M" {

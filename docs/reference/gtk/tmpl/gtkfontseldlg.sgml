@@ -48,6 +48,9 @@ fonts.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFontSelectionDialog ##### -->
 
 
@@ -58,15 +61,6 @@ fonts.</para></listitem>
 </para>
 
 @title: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_font_selection_dialog_get_font ##### -->
-<para>
-
-</para>
-
-@fsd: 
 @Returns: 
 
 
@@ -104,15 +98,6 @@ fonts.</para></listitem>
 
 @fsd: 
 @text: 
-
-
-<!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->
-<para>
-
-</para>
-
-@fsd: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_cancel_button ##### -->

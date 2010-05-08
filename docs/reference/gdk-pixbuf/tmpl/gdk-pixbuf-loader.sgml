@@ -72,6 +72,9 @@ Application-driven progressive image loading.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPixbufLoader ##### -->
 <para>
 The <structname>GdkPixbufLoader</structname> struct contains only private
@@ -114,6 +117,7 @@ fields.
 
 </para>
 
+@void: 
 @Returns: 
 
 

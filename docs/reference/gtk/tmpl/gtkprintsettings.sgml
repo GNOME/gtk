@@ -33,6 +33,9 @@ Printing support was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintSettings ##### -->
 <para>
 
@@ -54,6 +57,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+@void: 
 @Returns: 
 
 

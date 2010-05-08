@@ -253,6 +253,9 @@ other parts of the constructed user interface with the help of the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkUIManager ##### -->
 <para>
 The <structname>GtkUIManager</structname> struct contains only private
@@ -324,6 +327,7 @@ members and should not be accessed directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 

@@ -4,7 +4,6 @@ include $(top_srcdir)/Makefile.decl
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
-# require automake 1.4
 AUTOMAKE_OPTIONS = 1.7
 ACLOCAL_AMFLAGS = -I m4
 
@@ -132,36 +131,36 @@ MAINTAINERCLEANFILES = \
 GDKTARGET=@gdktarget@
 
 ## Copy .pc files to target-specific names
-gtk+-$(GDKTARGET)-2.0.pc: gtk+-2.0.pc
-	rm -f gtk+-$(GDKTARGET)-2.0.pc && \
-	cp gtk+-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+gtk+-$(GDKTARGET)-3.0.pc: gtk+-3.0.pc
+	rm -f gtk+-$(GDKTARGET)-3.0.pc && \
+	cp gtk+-3.0.pc gtk+-$(GDKTARGET)-3.0.pc
 
-gdk-$(GDKTARGET)-2.0.pc: gdk-2.0.pc
-	rm -f gdk-$(GDKTARGET)-2.0.pc && \
-	cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
+gdk-$(GDKTARGET)-3.0.pc: gdk-3.0.pc
+	rm -f gdk-$(GDKTARGET)-3.0.pc && \
+	cp gdk-3.0.pc gdk-$(GDKTARGET)-3.0.pc
 
-gtk+-$(GDKTARGET)-2.0-uninstalled.pc: gtk+-2.0-uninstalled.pc
-	rm -f gtk+-$(GDKTARGET)-2.0-uninstalled.pc && \
-	cp gtk+-2.0-uninstalled.pc gtk+-$(GDKTARGET)-2.0-uninstalled.pc
+gtk+-$(GDKTARGET)-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
+	rm -f gtk+-$(GDKTARGET)-3.0-uninstalled.pc && \
+	cp gtk+-3.0-uninstalled.pc gtk+-$(GDKTARGET)-3.0-uninstalled.pc
 
-gdk-$(GDKTARGET)-2.0-uninstalled.pc: gdk-2.0-uninstalled.pc
-	rm -f gdk-$(GDKTARGET)-2.0-uninstalled.pc && \
-	cp gdk-2.0-uninstalled.pc gdk-$(GDKTARGET)-2.0-uninstalled.pc
+gdk-$(GDKTARGET)-3.0-uninstalled.pc: gdk-3.0-uninstalled.pc
+	rm -f gdk-$(GDKTARGET)-3.0-uninstalled.pc && \
+	cp gdk-3.0-uninstalled.pc gdk-$(GDKTARGET)-3.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc gail.pc
+pkgconfig_DATA= gdk-pixbuf-3.0.pc gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail.pc
 
 if OS_UNIX
-pkgconfig_DATA += gtk+-unix-print-2.0.pc
+pkgconfig_DATA += gtk+-unix-print-3.0.pc
 endif
 
 DISTCLEANFILES =				\
-	gtk+-unix-print-2.0.pc			\
-	gtk+-$(GDKTARGET)-2.0.pc		\
-	gdk-$(GDKTARGET)-2.0.pc			\
+	gtk+-unix-print-3.0.pc			\
+	gtk+-$(GDKTARGET)-3.0.pc		\
+	gdk-$(GDKTARGET)-3.0.pc			\
 	gail.pc					\
-	gtk+-$(GDKTARGET)-2.0-uninstalled.pc	\
-	gdk-$(GDKTARGET)-2.0-uninstalled.pc	\
+	gtk+-$(GDKTARGET)-3.0-uninstalled.pc	\
+	gdk-$(GDKTARGET)-3.0-uninstalled.pc	\
 	gail-uninstalled.pc 			\
 	config.lt
 
@@ -184,21 +183,21 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
-## copy the default target for this platform to gdk-2.0.pc and gtk+-2.0.pc
+## copy the default target for this platform to gdk-3.0.pc and gtk+-3.0.pc
 DEFAULT_GDKTARGET=x11
 install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 test -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 test -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 rm -f gdk-2.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 rm -f gtk+-2.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
+	 test -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc && \
+	 test -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc && \
+	 rm -f gdk-3.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc gdk-3.0.pc && \
+	 rm -f gtk+-3.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc gtk+-3.0.pc) || \
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 rm -f gdk-2.0.pc && cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 rm -f gtk+-2.0.pc && cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
+	 rm -f gdk-3.0.pc && cp -f gdk-$(GDKTARGET)-3.0.pc gdk-3.0.pc && \
+	 rm -f gtk+-3.0.pc && cp -f gtk+-$(GDKTARGET)-3.0.pc gtk+-3.0.pc)
 
 uninstall-local:
-	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-2.0.pc
-	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-2.0.pc
+	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-3.0.pc
+	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-3.0.pc
 
 dist-hook:
 	if test -f $(srcdir)/INSTALL.in && test -f $(srcdir)/README.in ; then \

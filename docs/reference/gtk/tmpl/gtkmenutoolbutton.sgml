@@ -39,6 +39,9 @@ A GtkToolItem containing a button with an additional dropdown menu
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuToolButton ##### -->
 <para>
   The #GtkMenuToolButton struct contains only private data and
@@ -93,17 +96,6 @@ A GtkToolItem containing a button with an additional dropdown menu
 
 @button: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip ##### -->
-<para>
-
-</para>
-
-@button: 
-@tooltips: 
-@tip_text: 
-@tip_private: 
 
 
 <!-- ##### FUNCTION gtk_menu_tool_button_set_arrow_tooltip_text ##### -->

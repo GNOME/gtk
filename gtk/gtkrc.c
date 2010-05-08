@@ -399,9 +399,9 @@ gtk_rc_make_default_dir (const gchar *type)
   var = g_getenv ("GTK_EXE_PREFIX");
 
   if (var)
-    path = g_build_filename (var, "lib", "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
+    path = g_build_filename (var, "lib", "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_BINARY_VERSION, type, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-3.0", GTK_BINARY_VERSION, type, NULL);
 
   return path;
 }
@@ -450,7 +450,7 @@ gtk_rc_get_im_module_file (void)
       if (im_module_file)
 	result = g_strdup (im_module_file);
       else
-	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
+	result = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gtk.immodules", NULL);
     }
 
   return result;
@@ -522,7 +522,7 @@ gtk_rc_add_initial_default_files (void)
   else
     {
       const gchar *home;
-      str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
+      str = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gtkrc", NULL);
 
       gtk_rc_add_default_file (str);
       g_free (str);
@@ -530,7 +530,7 @@ gtk_rc_add_initial_default_files (void)
       home = g_get_home_dir ();
       if (home)
 	{
-	  str = g_build_filename (home, ".gtkrc-2.0", NULL);
+	  str = g_build_filename (home, ".gtkrc-3.0", NULL);
 	  gtk_rc_add_default_file (str);
 	  g_free (str);
 	}
@@ -795,11 +795,11 @@ gtk_rc_parse_named (GtkRcContext *context,
   gchar *subpath;
 
   if (type)
-    subpath = g_strconcat ("gtk-2.0-", type,
+    subpath = g_strconcat ("gtk-3.0-", type,
 			   G_DIR_SEPARATOR_S "gtkrc",
 			   NULL);
   else
-    subpath = g_strdup ("gtk-2.0" G_DIR_SEPARATOR_S "gtkrc");
+    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtkrc");
   
   /* First look in the users home directory
    */

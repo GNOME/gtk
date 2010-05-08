@@ -104,12 +104,12 @@
     <partintro>
       <para>
 	This part presents the tools which are shipped with the
-	&gdk-pixbuf; library.  
+	&gdk-pixbuf; library.
       </para>
     </partintro>
 
-    <xi:include href="gdk-pixbuf-csource.xml" />
-    <xi:include href="gdk-pixbuf-query-loaders.xml" />
+    <xi:include href="gdk-pixbuf-csource-3.0.xml" />
+    <xi:include href="gdk-pixbuf-query-loaders-3.0.xml" />
   </reference>
 
   <index id="api-index-full">

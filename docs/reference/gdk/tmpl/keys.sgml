@@ -88,6 +88,9 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkKeymap ##### -->
 <para>
 A <structname>GdkKeymap</structname> defines the translation from keyboard state
@@ -143,6 +146,7 @@ be mapped to a keyval.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -232,6 +236,15 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 
 @keymap: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_add_virtual_modifiers ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@state: 
 
 
 <!-- ##### FUNCTION gdk_keymap_map_virtual_modifiers ##### -->

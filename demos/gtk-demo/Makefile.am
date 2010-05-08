@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/demos
 include $(top_srcdir)/Makefile.decl
 
-democodedir=$(datadir)/gtk-2.0/demo
+democodedir=$(datadir)/gtk-$(GTK_API_VERSION)/demo
 
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
@@ -99,7 +99,7 @@ IMAGEFILES=	alphatest.png		\
 		gnome-gmush.png		\
 		gnome-gsame.png		\
 		gnu-keys.png		\
-		gtk-logo-rgb.gif		
+		gtk-logo-rgb.gif
 
 democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 

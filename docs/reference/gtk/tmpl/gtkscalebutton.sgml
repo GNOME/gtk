@@ -20,6 +20,9 @@ is tailored for this use case.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkScaleButton ##### -->
 <para>
 
@@ -145,24 +148,6 @@ is tailored for this use case.
 
 
 <!-- ##### FUNCTION gtk_scale_button_get_minus_button ##### -->
-<para>
-
-</para>
-
-@button: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_scale_button_set_orientation ##### -->
-<para>
-
-</para>
-
-@button: 
-@orientation: 
-
-
-<!-- ##### FUNCTION gtk_scale_button_get_orientation ##### -->
 <para>
 
 </para>

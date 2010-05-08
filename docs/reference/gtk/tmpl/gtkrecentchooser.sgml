@@ -25,6 +25,9 @@ Recently used files are supported since GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRecentChooser ##### -->
 <para>
 
@@ -250,24 +253,6 @@ These identify the various errors that can occur while calling
 
 
 <!-- ##### FUNCTION gtk_recent_chooser_get_show_tips ##### -->
-<para>
-
-</para>
-
-@chooser: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_recent_chooser_set_show_numbers ##### -->
-<para>
-
-</para>
-
-@chooser: 
-@show_numbers: 
-
-
-<!-- ##### FUNCTION gtk_recent_chooser_get_show_numbers ##### -->
 <para>
 
 </para>

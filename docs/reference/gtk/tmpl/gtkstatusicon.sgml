@@ -42,6 +42,9 @@ on Win32 doesn't allow to embed arbitrary widgets.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkStatusIcon ##### -->
 <para>
 
@@ -197,6 +200,7 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -360,15 +364,6 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 @status_icon: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_status_icon_set_tooltip ##### -->
-<para>
-
-</para>
-
-@status_icon: 
-@tooltip_text: 
 
 
 <!-- ##### FUNCTION gtk_status_icon_set_tooltip_text ##### -->

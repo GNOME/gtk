@@ -6,7 +6,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-moduledir = $(libdir)/gtk-2.0/modules
+moduledir = $(libdir)/gtk-3.0/modules
 module_LTLIBRARIES = libgail.la
 
 gail_c_sources =			\

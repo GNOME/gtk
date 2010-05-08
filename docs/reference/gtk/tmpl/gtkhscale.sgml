@@ -22,6 +22,9 @@ shown can be set using the parent #GtkScale class's functions.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHScale ##### -->
 <para>
 The #GtkHScale-struct struct contains private data only, and

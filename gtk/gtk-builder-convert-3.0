@@ -21,7 +21,7 @@
 # TODO:
 #  Toolbars
 
-"""Usage: gtk-builder-convert [OPTION] [INPUT] [OUTPUT]
+"""Usage: gtk-builder-convert-3.0 [OPTION] [INPUT] [OUTPUT]
 Converts Glade files into XML files which can be loaded with GtkBuilder.
 The [INPUT] file is
 
@@ -32,7 +32,7 @@ The [INPUT] file is
 When OUTPUT is -, write to standard output.
 
 Examples:
-  gtk-builder-convert preference.glade preferences.ui
+  gtk-builder-convert-3.0 preference.glade preferences.ui
 
 Report bugs to http://bugzilla.gnome.org/."""
 
@@ -258,7 +258,7 @@ class GtkBuilderConverter(object):
         for node in objects:
             self._convert(node.getAttribute("class"), node)
             if self._get_object(node.getAttribute('id')) is not None:
-		print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
+                print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
             self.objects[node.getAttribute('id')] = node
 
         # Convert Gazpachos UI tag

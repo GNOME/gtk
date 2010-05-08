@@ -33,6 +33,9 @@ property is set to a pixbuf, it renders that one.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererPixbuf ##### -->
 <para>
 
@@ -89,6 +92,7 @@ property is set to a pixbuf, it renders that one.
 
 </para>
 
+@void: 
 @Returns: 
 
 

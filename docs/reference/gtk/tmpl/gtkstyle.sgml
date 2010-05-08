@@ -17,6 +17,9 @@ Functions for drawing widget parts
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
 Returns whether the style is attached to a window.
@@ -74,6 +77,7 @@ Returns whether the style is attached to a window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -97,23 +101,6 @@ Returns whether the style is attached to a window.
 
 
 <!-- ##### FUNCTION gtk_style_detach ##### -->
-<para>
-
-</para>
-
-@style: 
-
-
-<!-- ##### FUNCTION gtk_style_ref ##### -->
-<para>
-
-</para>
-
-@style: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_style_unref ##### -->
 <para>
 
 </para>
@@ -147,22 +134,6 @@ Returns whether the style is attached to a window.
 @height: 
 
 
-<!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->
-<para>
-Does the same as gtk_style_apply_default_background().
-</para>
-
-@s: 
-@gw: 
-@st: 
-@a: 
-@x: 
-@y: 
-@w: 
-@h: 
-@Deprecated: Use gtk_style_apply_default_background() instead.
-
-
 <!-- ##### FUNCTION gtk_style_lookup_color ##### -->
 <para>
 
@@ -171,16 +142,6 @@ Does the same as gtk_style_apply_default_background().
 @style: 
 @color_name: 
 @color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_style_lookup_icon_set ##### -->
-<para>
-
-</para>
-
-@style: 
-@stock_id: 
 @Returns: 
 
 
@@ -197,24 +158,6 @@ Does the same as gtk_style_apply_default_background().
 @widget: 
 @detail: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_style_get_font ##### -->
-<para>
-
-</para>
-
-@style: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_style_set_font ##### -->
-<para>
-
-</para>
-
-@style: 
-@font: 
 
 
 <!-- ##### FUNCTION gtk_style_get_style_property ##### -->
@@ -545,22 +488,6 @@ Does the same as gtk_style_apply_default_background().
 @height: 
 
 
-<!-- ##### FUNCTION gtk_paint_string ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@area: 
-@widget: 
-@detail: 
-@x: 
-@y: 
-@string: 
-
-
 <!-- ##### FUNCTION gtk_paint_tab ##### -->
 <para>
 
@@ -676,6 +603,7 @@ be of different width on each side.
 
 </para>
 
+@void: 
 @Returns: 
 
 

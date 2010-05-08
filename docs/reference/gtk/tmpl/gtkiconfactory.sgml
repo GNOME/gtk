@@ -114,6 +114,9 @@ This attribute is optional.</para>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconSource ##### -->
 <para>
 
@@ -204,6 +207,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -238,6 +242,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -439,6 +444,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 

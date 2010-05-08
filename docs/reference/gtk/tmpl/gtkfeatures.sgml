@@ -19,6 +19,9 @@ typically use the features described here.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### VARIABLE gtk_major_version ##### -->
 <para>
 The major version number of the GTK+ library.  (e.g. in GTK+ version
