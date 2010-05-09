@@ -84,54 +84,13 @@ GdkWindow * _gdk_parent_root = NULL;
 
 static void gdk_window_impl_directfb_paintable_init (GdkPaintableIface *iface);
 
-GType
-gdk_window_impl_directfb_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-        {
-          sizeof (GdkWindowImplDirectFBClass),
-          (GBaseInitFunc) NULL,
-          (GBaseFinalizeFunc) NULL,
-          (GClassInitFunc) gdk_window_impl_directfb_class_init,
-          NULL,           /* class_finalize */
-          NULL,           /* class_data */
-          sizeof (GdkWindowImplDirectFB),
-          0,              /* n_preallocs */
-          (GInstanceInitFunc) gdk_window_impl_directfb_init,
-        };
-
-      const GInterfaceInfo paintable_info =
-        {
-          (GInterfaceInitFunc) gdk_window_impl_directfb_paintable_init,
-          NULL,
-          NULL
-        };
-
-      const GInterfaceInfo window_impl_info =
-        {
-          (GInterfaceInitFunc) gdk_window_impl_iface_init,
-          NULL,
-          NULL
-        };
-
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE_IMPL_DIRECTFB,
-                                            "GdkWindowImplDirectFB",
-                                            &object_info, 0);
-      g_type_add_interface_static (object_type,
-                                   GDK_TYPE_PAINTABLE,
-                                   &paintable_info);
-
-      g_type_add_interface_static (object_type,
-                                   GDK_TYPE_WINDOW_IMPL,
-                                   &window_impl_info);
-    }
-
-  return object_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GdkWindowImplDirectFB,
+                         gdk_window_impl_directfb,
+                         GDK_TYPE_DRAWABLE_IMPL_DIRECTFB,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
+                                                gdk_window_impl_iface_init)
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                gdk_window_impl_directfb_paintable_init));
 
 GType
 _gdk_window_impl_get_type (void)
