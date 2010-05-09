@@ -60,8 +60,8 @@ allocated or unallocated color.
 @red: The red component of the color. This is
   a value between 0 and 65535, with 65535 indicating
   full intensitiy.
-@green: The blue component of the color.
-@blue: The green component of the color.
+@green: The green component of the color.
+@blue: The blue component of the color.
 
 <!-- ##### STRUCT GdkColormap ##### -->
 <para>
