@@ -368,9 +368,7 @@ EXTRA_DIST += 			\
 	merge-2.ui		\
 	merge-3.ui		\
 	gnome-textfile.png	\
-	makefile.msc		\
-	file-chooser-test-dir/empty \
-	file-chooser-test-dir/text.txt
+	makefile.msc
 
 
 -include $(top_srcdir)/git.mk
