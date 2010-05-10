@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-04-29 21:16+0000\n"
-"PO-Revision-Date: 2010-04-30 07:51+0200\n"
+"POT-Creation-Date: 2010-05-09 23:58+0000\n"
+"PO-Revision-Date: 2010-05-10 19:27+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -85,7 +85,7 @@ msgstr "Opciones de depuración Gdk que establecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:459 ../gtk/gtkmain.c:462
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "OPCIONES"
 
@@ -387,7 +387,7 @@ msgstr "No hay memoria suficiente para guardar la imagen en un búfer"
 msgid "Error writing to image stream"
 msgstr "Error al escribir en el flujo de la imagen"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -396,7 +396,7 @@ msgstr ""
 "Error interno: El módulo de carga de imágenes «%s» ha fallado al completar "
 "una operación, pero no ha dado ninguna razón del fallo"
 
-#: ../gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: ../gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "No hay soporte para la carga incremental de las imágenes del tipo «%s»"
@@ -412,6 +412,13 @@ msgstr "El formato de la imagen es desconocido"
 #: ../gdk-pixbuf/gdk-pixdata.c:157 ../gdk-pixbuf/gdk-pixdata.c:488
 msgid "Image pixel data corrupt"
 msgstr "Los datos del píxel de la imagen están corrompidos"
+
+#: ../gdk-pixbuf/gdk-pixdata.c:432
+#, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] "falló al asignar %u byte para el búfer de lectura"
+msgstr[1] "falló al asignar %u bytes para el búfer de lectura"
 
 #: ../gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1247,50 +1254,57 @@ msgstr "Iniciando %s"
 msgid "Opening %s"
 msgstr "Abriendo %s"
 
-#: ../gtk/gtkaboutdialog.c:242
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:318
+#, c-format
+msgid "Opening %d Item"
+msgid_plural "Opening %d Items"
+msgstr[0] "Aberiendo %d elemento"
+msgstr[1] "Abriendo %d elementos"
+
+#: ../gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "No se pudo mostrar el enlace"
 
-#: ../gtk/gtkaboutdialog.c:365 ../gtk/gtkaboutdialog.c:2263
+#: ../gtk/gtkaboutdialog.c:364 ../gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Licencia"
 
-#: ../gtk/gtkaboutdialog.c:366
+#: ../gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "La licencia del programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:625
+#: ../gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:639
+#: ../gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Licencia"
 
-#: ../gtk/gtkaboutdialog.c:917
+#: ../gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2186
+#: ../gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2215
+#: ../gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2218
+#: ../gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2230
+#: ../gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2234
+#: ../gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -1299,7 +1313,7 @@ msgstr "Arte por"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:146
+#: ../gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Mayús"
@@ -1309,7 +1323,7 @@ msgstr "Mayús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:152
+#: ../gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1319,7 +1333,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:158
+#: ../gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1329,7 +1343,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:743
+#: ../gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1339,7 +1353,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:756
+#: ../gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1349,17 +1363,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:770
+#: ../gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:787
+#: ../gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: ../gtk/gtkaccellabel.c:790
+#: ../gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -1707,15 +1721,15 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:8698 ../gtk/gtktextview.c:7917
+#: ../gtk/gtkentry.c:8610 ../gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8712 ../gtk/gtktextview.c:7931
+#: ../gtk/gtkentry.c:8624 ../gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Insertar un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10091
+#: ../gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -1732,7 +1746,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: ../gtk/gtkfilechooserbutton.c:2021
+#: ../gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Otra…"
 
@@ -1785,7 +1799,7 @@ msgstr "%1$s en %2$s"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9458
+#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Usados recientemente"
 
@@ -1868,7 +1882,7 @@ msgstr "Mostrar archivos _ocultos"
 msgid "Show _Size Column"
 msgstr "Mostrar columna de _tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:4441 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Archivos"
 
@@ -1916,63 +1930,63 @@ msgstr "_Guardar en la carpeta:"
 msgid "Create in _folder:"
 msgstr "Crear en la _carpeta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6423
+#: ../gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No se pudo leer el contenido de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6427
+#: ../gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "No se pudo leer el contenido del la carpeta"
 
-#: ../gtk/gtkfilechooserdefault.c:6520 ../gtk/gtkfilechooserdefault.c:6588
-#: ../gtk/gtkfilechooserdefault.c:6733
+#: ../gtk/gtkfilechooserdefault.c:6516 ../gtk/gtkfilechooserdefault.c:6584
+#: ../gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserdefault.c:6535
+#: ../gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6537
+#: ../gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7203
+#: ../gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserdefault.c:7800 ../gtk/gtkfilechooserdefault.c:7821
+#: ../gtk/gtkfilechooserdefault.c:7796 ../gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La combinación %s ya existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7911
+#: ../gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La combinación %s no existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8166 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8162 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8169 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8165 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobreescribirá su contenido."
 
-#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8170 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserdefault.c:8826
+#: ../gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:8827
+#: ../gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1980,15 +1994,15 @@ msgstr ""
 "El programa no fue capaz de crear una conexión con el demonio indexador. Por "
 "favor asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserdefault.c:8841
+#: ../gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
-#: ../gtk/gtkfilechooserdefault.c:9030
+#: ../gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:9634
+#: ../gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "No se pudo montar %s"
@@ -2050,145 +2064,10 @@ msgstr "Nombre de equipo incompleto; termínelo con «/»"
 msgid "Path does not exist"
 msgstr "La ruta no existe"
 
-#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
-#: ../gtk/gtkfilesel.c:1360
+#: ../gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Error al crear la carpeta «%s» : %s"
-
-#: ../gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Carpetas"
-
-#: ../gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Carpetas"
-
-#: ../gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Archivos"
-
-#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Carpeta ilegible: %s"
-
-#: ../gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"El archivo «%s» reside en otra máquina (llamada %s) y podría no estar "
-"disponible para este programa.\n"
-"¿Está seguro que desea seleccionarlo?"
-
-#: ../gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "Carpeta _nueva"
-
-#: ../gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "_Eliminar archivo"
-
-#: ../gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Renombrar archivo"
-
-#: ../gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"El nombre de la carpeta «%s» contiene símbolos que no están permitidos en los "
-"nombres de archivos"
-
-#: ../gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Carpeta nueva"
-
-#: ../gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_Nombre de la carpeta:"
-
-#: ../gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "C_rear"
-
-#: ../gtk/gtkfilesel.c:1476 ../gtk/gtkfilesel.c:1585 ../gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"El nombre «%s» contiene símbolos que no están permitidos en nombres de "
-"archivos"
-
-#: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Error al borrar el archivo «%s»: %s"
-
-#: ../gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "¿Realmente desea borrar el archivo «%s»?"
-
-#: ../gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Borrar archivo"
-
-#: ../gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Error al renombrar el archivo a «%s»: %s"
-
-#: ../gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Error al renombrar el archivo «%s»: %s"
-
-#: ../gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Error al renombrar el archivo «%s» como «%s»: %s"
-
-#: ../gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Renombrar archivo"
-
-#: ../gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Renombrar archivo «%s» a:"
-
-#: ../gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Renombrar"
-
-#: ../gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Selección: "
-
-#: ../gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"El nombre de archivo «%s» no ha podido ser convertido a UTF-8. (intente "
-"definir la variable de entorno G_FILENAME_ENCODING): %s"
-
-#: ../gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "UTF-8 inválido"
-
-#: ../gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "El nombre es demasiado largo"
-
-#: ../gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "No se ha podido convertir el nombre del archivo"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2237,17 +2116,9 @@ msgstr "_Tamaño:"
 msgid "_Preview:"
 msgstr "_Vista previa:"
 
-#: ../gtk/gtkfontsel.c:1649
+#: ../gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Selección de tipografías"
-
-#: ../gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-#: ../gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "Valor _gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2300,93 +2171,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistema (%s)"
 
-#: ../gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Entrada"
-
-#: ../gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Sin dispositivos extendidos de entrada"
-
-#: ../gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Dispositivo:"
-
-#: ../gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Desactivado"
-
-#: ../gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Pantalla"
-
-#: ../gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Ventana"
-
-#: ../gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Modo:"
-
-#. The axis listbox
-#: ../gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Ejes"
-
-#. Keys listbox
-#: ../gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Teclas"
-
-#: ../gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: ../gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: ../gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Presión:"
-
-#: ../gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "_Inclinación X:"
-
-#: ../gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "I_nclinación Y:"
-
-#: ../gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "_Rueda:"
-
-# src/file-manager/fm-icon-text-window.c:85
-#: ../gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "ninguno"
-
-#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(desactivado)"
-
-#: ../gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(desconocido)"
-
-#. and clear button
-#: ../gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "_Limpiar"
-
 #. Open Link
-#: ../gtk/gtklabel.c:5685
+#: ../gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5697
+#: ../gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2399,27 +2190,27 @@ msgid "Invalid URI"
 msgstr "URI inválida"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Cargar módulos adicionales GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Hacer todas las advertencias fatales"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:458
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Opciones de depuración GTK+ a poner"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:461
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Opciones de depuración GTK+ a quitar"
 
@@ -2428,20 +2219,20 @@ msgstr "Opciones de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:713
+#: ../gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:778
+#: ../gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No se puede abrir el visor: %s"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: ../gtk/gtkmain.c:815
+#: ../gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -2527,7 +2318,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with pid %d: %s"
 msgstr "No se puede finalizar el proceso con el pid %d: %s"
 
-#: ../gtk/gtknotebook.c:4704 ../gtk/gtknotebook.c:7269
+#: ../gtk/gtknotebook.c:4620 ../gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2588,7 +2379,7 @@ msgstr "Ruta superior"
 msgid "Down Path"
 msgstr "Ruta inferior"
 
-#: ../gtk/gtkpathbar.c:1469
+#: ../gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
@@ -2601,7 +2392,6 @@ msgid "Not available"
 msgstr "No disponible"
 
 #: ../gtk/gtkprinteroptionwidget.c:795
-#| msgid "Select A File"
 msgid "Select a folder"
 msgstr "Seleccionar una carpeta"
 
@@ -3075,12 +2865,12 @@ msgstr "Algunos de los ajustes del diálogo están en conflicto"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../gtk/gtkrc.c:2906
+#: ../gtk/gtkrc.c:2810
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "No se ha podido encontrar el archivo «include»: «%s»"
 
-#: ../gtk/gtkrc.c:3536 ../gtk/gtkrc.c:3539
+#: ../gtk/gtkrc.c:3440 ../gtk/gtkrc.c:3443
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Imposible encontrar un archivo imagen en pixmap_path: «%s»"
@@ -3176,10 +2966,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1020 ../gtk/gtkrecentmanager.c:1033
-#: ../gtk/gtkrecentmanager.c:1171 ../gtk/gtkrecentmanager.c:1181
-#: ../gtk/gtkrecentmanager.c:1234 ../gtk/gtkrecentmanager.c:1243
-#: ../gtk/gtkrecentmanager.c:1258
+#: ../gtk/gtkrecentmanager.c:968 ../gtk/gtkrecentmanager.c:981
+#: ../gtk/gtkrecentmanager.c:1119 ../gtk/gtkrecentmanager.c:1129
+#: ../gtk/gtkrecentmanager.c:1182 ../gtk/gtkrecentmanager.c:1191
+#: ../gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "No se ha podido encontrar un elemento con el URI «%s»"
@@ -3858,10 +3648,6 @@ msgstr "_No ensamblador de ancho cero [ZWNJ]"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Imposible encontrar el motor de temas en la ruta al _modulo: «%s»,"
-
-#: ../gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "-- Sin consejo --"
 
 #: ../gtk/gtkuimanager.c:1505
 #, c-format
@@ -5348,16 +5134,169 @@ msgstr "Imprimir a la impresora de prueba"
 msgid "Could not get information for file '%s': %s"
 msgstr "No se ha podido obtener información para el archivo «%s» : %s"
 
-#, fuzzy
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "Falló al asignar %d bytes para el búfer de lectura"
-#~ msgstr[1] "Falló al asignar %d bytes para el búfer de lectura"
+#~ msgid "Folders"
+#~ msgstr "Carpetas"
 
-#~ msgid "Opening %d Item"
-#~ msgid_plural "Opening %d Items"
-#~ msgstr[0] "Aberiendo %d elemento"
-#~ msgstr[1] "Abriendo %d elementos"
+#~ msgid "Fol_ders"
+#~ msgstr "_Carpetas"
+
+#~ msgid "_Files"
+#~ msgstr "_Archivos"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Carpeta ilegible: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "El archivo «%s» reside en otra máquina (llamada %s) y podría no estar "
+#~ "disponible para este programa.\n"
+#~ "¿Está seguro que desea seleccionarlo?"
+
+#~ msgid "_New Folder"
+#~ msgstr "Carpeta _nueva"
+
+#~ msgid "De_lete File"
+#~ msgstr "_Eliminar archivo"
+
+#~ msgid "_Rename File"
+#~ msgstr "_Renombrar archivo"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "El nombre de la carpeta «%s» contiene símbolos que no están permitidos en "
+#~ "los nombres de archivos"
+
+#~ msgid "New Folder"
+#~ msgstr "Carpeta nueva"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Nombre de la carpeta:"
+
+#~ msgid "C_reate"
+#~ msgstr "C_rear"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "El nombre «%s» contiene símbolos que no están permitidos en nombres de "
+#~ "archivos"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Error al borrar el archivo «%s»: %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "¿Realmente desea borrar el archivo «%s»?"
+
+#~ msgid "Delete File"
+#~ msgstr "Borrar archivo"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Error al renombrar el archivo a «%s»: %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Error al renombrar el archivo «%s»: %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Error al renombrar el archivo «%s» como «%s»: %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Renombrar archivo"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Renombrar archivo «%s» a:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Renombrar"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Selección: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "El nombre de archivo «%s» no ha podido ser convertido a UTF-8. (intente "
+#~ "definir la variable de entorno G_FILENAME_ENCODING): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "UTF-8 inválido"
+
+#~ msgid "Name too long"
+#~ msgstr "El nombre es demasiado largo"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "No se ha podido convertir el nombre del archivo"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "_Gamma value"
+#~ msgstr "Valor _gamma"
+
+#~ msgid "Input"
+#~ msgstr "Entrada"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Sin dispositivos extendidos de entrada"
+
+#~ msgid "_Device:"
+#~ msgstr "_Dispositivo:"
+
+#~ msgid "Disabled"
+#~ msgstr "Desactivado"
+
+#~ msgid "Screen"
+#~ msgstr "Pantalla"
+
+#~ msgid "Window"
+#~ msgstr "Ventana"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Modo:"
+
+#~ msgid "Axes"
+#~ msgstr "Ejes"
+
+#~ msgid "Keys"
+#~ msgstr "Teclas"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Presión:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "_Inclinación X:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "I_nclinación Y:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "_Rueda:"
+
+# src/file-manager/fm-icon-text-window.c:85
+#~ msgid "none"
+#~ msgstr "ninguno"
+
+#~ msgid "(disabled)"
+#~ msgstr "(desactivado)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(desconocido)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "_Limpiar"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "-- Sin consejo --"
 
 #~ msgid "Color profile has invalid length '%"
 #~ msgstr "El perfil de color tiene una longitud '% no válida"
