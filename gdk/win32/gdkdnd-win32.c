@@ -453,7 +453,7 @@ dnd_event_put (GdkEventType    type,
   e.dnd.x_root = pt.x + _gdk_offset_x;
   e.dnd.y_root = pt.x + _gdk_offset_y;
 
-  gdk_drag_context_ref (e.dnd.context);
+  g_object_ref (e.dnd.context);
   if (e.dnd.window != NULL)
     g_object_ref (e.dnd.window);
 
@@ -1831,7 +1831,7 @@ gdk_drag_begin (GdkWindow *window,
       _dnd_source_state = GDK_WIN32_DND_PENDING;
 
       pending_src_context = ctx;
-      gdk_drag_context_ref (ctx->context);
+      g_object_ref (ctx->context);
 
       return ctx->context;
     }
