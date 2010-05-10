@@ -170,6 +170,7 @@ static void     gtk_status_icon_screen_changed   (GtkStatusIcon  *status_icon,
 						  GdkScreen      *old_screen);
 static void     gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon);
+static void     gtk_status_icon_padding_changed  (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_fg_changed       (GtkStatusIcon *status_icon);
 static void     gtk_status_icon_color_changed    (GtkTrayIcon   *tray,
                                                   GParamSpec    *pspec,
@@ -854,6 +855,8 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
 			    G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
 			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
+  g_signal_connect_swapped (priv->tray_icon, "notify::padding",
+			    G_CALLBACK (gtk_status_icon_padding_changed), status_icon);
   g_signal_connect_swapped (priv->tray_icon, "notify::fg-color",
                             G_CALLBACK (gtk_status_icon_fg_changed), status_icon);
   g_signal_connect (priv->tray_icon, "notify::error-color",
@@ -986,6 +989,8 @@ gtk_status_icon_finalize (GObject *object)
 			                gtk_status_icon_embedded_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
 			                gtk_status_icon_orientation_changed, status_icon);
+  g_signal_handlers_disconnect_by_func (priv->tray_icon,
+			                gtk_status_icon_padding_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
                                         gtk_status_icon_fg_changed, status_icon);
   g_signal_handlers_disconnect_by_func (priv->tray_icon,
@@ -1695,14 +1700,32 @@ gtk_status_icon_screen_changed (GtkStatusIcon *status_icon,
 #ifdef GDK_WINDOWING_X11
 
 static void
+gtk_status_icon_padding_changed (GtkStatusIcon *status_icon)
+{
+  GtkStatusIconPrivate *priv = status_icon->priv;
+  GtkOrientation orientation;
+  gint padding;
+
+  orientation = _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (priv->tray_icon));
+  padding = _gtk_tray_icon_get_padding (GTK_TRAY_ICON (priv->tray_icon));
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_misc_set_padding (GTK_MISC (priv->image), padding, 0);
+  else
+    gtk_misc_set_padding (GTK_MISC (priv->image), 0, padding);
+}
+
+static void
 gtk_status_icon_embedded_changed (GtkStatusIcon *status_icon)
 {
+  gtk_status_icon_padding_changed (status_icon);
   g_object_notify (G_OBJECT (status_icon), "embedded");
 }
 
 static void
 gtk_status_icon_orientation_changed (GtkStatusIcon *status_icon)
 {
+  gtk_status_icon_padding_changed (status_icon);
   g_object_notify (G_OBJECT (status_icon), "orientation");
 }
 

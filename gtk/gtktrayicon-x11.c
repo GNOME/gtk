@@ -47,7 +47,8 @@ enum {
   PROP_FG_COLOR,
   PROP_ERROR_COLOR,
   PROP_WARNING_COLOR,
-  PROP_SUCCESS_COLOR
+  PROP_SUCCESS_COLOR,
+  PROP_PADDING
 };
 
 struct _GtkTrayIconPrivate
@@ -60,6 +61,7 @@ struct _GtkTrayIconPrivate
   Atom orientation_atom;
   Atom visual_atom;
   Atom colors_atom;
+  Atom padding_atom;
   Window manager_window;
   GdkVisual *manager_visual;
   gboolean manager_visual_rgba;
@@ -69,6 +71,7 @@ struct _GtkTrayIconPrivate
   GdkColor error_color;
   GdkColor warning_color;
   GdkColor success_color;
+  gint padding;
 };
 
 static void gtk_tray_icon_constructed   (GObject     *object);
@@ -154,6 +157,16 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
                                                        GDK_TYPE_COLOR,
                                                        GTK_PARAM_READABLE));
 
+  g_object_class_install_property (gobject_class,
+				   PROP_PADDING,
+				   g_param_spec_int ("padding",
+						     P_("Padding"),
+						     P_("Padding that should be put around icons in the tray"),
+						     0,
+                                                     G_MAXINT,
+                                                     0,
+						     GTK_PARAM_READABLE));
+
   g_type_class_add_private (class, sizeof (GtkTrayIconPrivate));
 }
 
@@ -177,6 +190,7 @@ gtk_tray_icon_init (GtkTrayIcon *icon)
   icon->priv->success_color.red   = 0x4e00;
   icon->priv->success_color.green = 0x9a00;
   icon->priv->success_color.blue  = 0x0600;
+  icon->priv->padding = 0;
 
   gtk_widget_set_app_paintable (GTK_WIDGET (icon), TRUE);
   gtk_widget_add_events (GTK_WIDGET (icon), GDK_PROPERTY_CHANGE_MASK);
@@ -217,6 +231,10 @@ gtk_tray_icon_constructed (GObject *object)
   icon->priv->colors_atom = XInternAtom (xdisplay,
                                          "_NET_SYSTEM_TRAY_COLORS",
                                          False);
+
+  icon->priv->padding_atom = XInternAtom (xdisplay,
+					 "_NET_SYSTEM_TRAY_PADDING",
+					 False);
 
   /* Add a root window filter so that we get changes on MANAGER */
   gdk_window_add_filter (root_window,
@@ -280,6 +298,9 @@ gtk_tray_icon_get_property (GObject    *object,
       break;
     case PROP_SUCCESS_COLOR:
       g_value_set_boxed (value, &icon->priv->success_color);
+      break;
+    case PROP_PADDING:
+      g_value_set_int (value, icon->priv->padding);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -535,6 +556,55 @@ gtk_tray_icon_get_colors_property (GtkTrayIcon *icon)
     XFree (prop.prop);
 }
 
+static void
+gtk_tray_icon_get_padding_property (GtkTrayIcon *icon)
+{
+  GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (icon));
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  Atom type;
+  int format;
+  union {
+	gulong *prop;
+	guchar *prop_ch;
+  } prop = { NULL };
+  gulong nitems;
+  gulong bytes_after;
+  int error, result;
+
+  g_assert (icon->priv->manager_window != None);
+
+  gdk_error_trap_push ();
+  type = None;
+  result = XGetWindowProperty (xdisplay,
+			       icon->priv->manager_window,
+			       icon->priv->padding_atom,
+			       0, G_MAXLONG, FALSE,
+			       XA_CARDINAL,
+			       &type, &format, &nitems,
+			       &bytes_after, &(prop.prop_ch));
+  error = gdk_error_trap_pop ();
+
+  if (!error && result == Success &&
+      type == XA_CARDINAL && nitems == 1 && format == 32)
+    {
+      gint padding;
+
+      padding = prop.prop[0];
+
+      if (icon->priv->padding != padding)
+	{
+	  icon->priv->padding = padding;
+
+	  g_object_notify (G_OBJECT (icon), "padding");
+	}
+    }
+
+  if (type != None)
+    XFree (prop.prop);
+}
+
 static GdkFilterReturn
 gtk_tray_icon_manager_filter (GdkXEvent *xevent,
 			      GdkEvent  *event,
@@ -569,6 +639,11 @@ gtk_tray_icon_manager_filter (GdkXEvent *xevent,
                     g_print ("GtkStatusIcon %p: got PropertyNotify on manager window for colors atom\n", icon));
 
           gtk_tray_icon_get_colors_property (icon);
+        }
+      else if (xev->xany.type == PropertyNotify &&
+               xev->xproperty.atom == icon->priv->padding_atom)
+        {
+          gtk_tray_icon_get_padding_property (icon);
         }
       else if (xev->xany.type == DestroyNotify)
 	{
@@ -676,6 +751,7 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       gtk_tray_icon_get_orientation_property (icon);
       gtk_tray_icon_get_visual_property (icon);
       gtk_tray_icon_get_colors_property (icon);
+      gtk_tray_icon_get_padding_property (icon);
 
       if (gtk_widget_get_realized (GTK_WIDGET (icon)))
 	{
@@ -914,6 +990,13 @@ _gtk_tray_icon_get_orientation (GtkTrayIcon *icon)
   return icon->priv->orientation;
 }
 
+gint
+_gtk_tray_icon_get_padding (GtkTrayIcon *icon)
+{
+  g_return_val_if_fail (GTK_IS_TRAY_ICON (icon), 0);
+
+  return icon->priv->padding;
+}
 
 #define __GTK_TRAY_ICON_X11_C__
 #include "gtkaliasdef.c"
