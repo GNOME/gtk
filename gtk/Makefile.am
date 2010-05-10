@@ -1328,7 +1328,7 @@ EXTRA_DIST +=                   \
 	tree_minus.xpm		\
 	tree_plus.xpm		\
 	gtk.def			\
-	gtk-builder-convert	\
+	gtk-builder-convert-3.0	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
