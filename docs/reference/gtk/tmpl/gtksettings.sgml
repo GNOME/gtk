@@ -69,6 +69,11 @@ GtkSettings instance for the default screen.
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-application-prefer-dark-theme ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-auto-mnemonics ##### -->
 <para>
 

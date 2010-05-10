@@ -48,7 +48,7 @@ data commonly stored in X window properties.
 <!-- ##### SECTION Image ##### -->
 
 
-<!-- ##### STRUCT GdkAtom ##### -->
+<!-- ##### TYPEDEF GdkAtom ##### -->
 <para>
 An opaque type representing a string as an index into a table
 of strings on the X server.
