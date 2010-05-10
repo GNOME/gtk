@@ -2177,7 +2177,7 @@ modules/printbackends/test/Makefile
 perf/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
-contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc
+contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-3.0.pc
 ])
 
 AC_OUTPUT
