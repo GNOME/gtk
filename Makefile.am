@@ -148,7 +148,7 @@ gdk-$(GDKTARGET)-3.0-uninstalled.pc: gdk-3.0-uninstalled.pc
 	cp gdk-3.0-uninstalled.pc gdk-$(GDKTARGET)-3.0-uninstalled.pc
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-3.0.pc gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail.pc
+pkgconfig_DATA = gdk-pixbuf-3.0.pc gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail-3.0.pc
 
 if OS_UNIX
 pkgconfig_DATA += gtk+-unix-print-3.0.pc
@@ -158,10 +158,10 @@ DISTCLEANFILES =				\
 	gtk+-unix-print-3.0.pc			\
 	gtk+-$(GDKTARGET)-3.0.pc		\
 	gdk-$(GDKTARGET)-3.0.pc			\
-	gail.pc					\
+	gail-3.0.pc				\
 	gtk+-$(GDKTARGET)-3.0-uninstalled.pc	\
 	gdk-$(GDKTARGET)-3.0-uninstalled.pc	\
-	gail-uninstalled.pc 			\
+	gail-3.0-uninstalled.pc			\
 	config.lt
 
 distclean-local:
