@@ -305,7 +305,7 @@ gdk_pixbuf_get_module_file (void)
   gchar *result = g_strdup (g_getenv ("GDK_PIXBUF_MODULE_FILE"));
 
   if (!result)
-	  result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gdk-pixbuf.loaders", NULL);
+	  result = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gdk-pixbuf.loaders", NULL);
 
   return result;
 }
