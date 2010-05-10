@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: Gail
 Description: GNOME Accessibility Implementation Library
 Version: @VERSION@
-Requires: atk gtk+-2.0
-Libs: -L${libdir} -lgailutil
-Cflags: -I${includedir}/gail-1.0
+Requires: atk gtk+-3.0
+Libs: -L${libdir} -lgailutil-3.0
+Cflags: -I${includedir}/gail-3.0

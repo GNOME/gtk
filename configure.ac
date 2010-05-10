@@ -2112,11 +2112,11 @@ gdk-pixbuf-3.0.pc
 gdk-3.0.pc
 gtk+-3.0.pc
 gtk+-unix-print-3.0.pc
-gail.pc
+gail-3.0.pc
 gdk-pixbuf-3.0-uninstalled.pc
 gdk-3.0-uninstalled.pc
 gtk+-3.0-uninstalled.pc
-gail-uninstalled.pc
+gail-3.0-uninstalled.pc
 m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in

@@ -62,7 +62,7 @@ gail_c_sources =			\
 	gailwidget.c			\
 	gailwindow.c
 
-libgailincludedir=$(includedir)/gail-1.0/gail
+libgailincludedir=$(includedir)/gail-3.0/gail
 
 gail_private_h_sources =		\
 	gail.h				\
@@ -148,7 +148,7 @@ libgail_la_LIBADD =  \
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
+	$(top_builddir)/modules/other/gail/libgail-util/libgailutil-3.0.la	\
 	$(GTK_DEP_LIBS)							\
 	$(INTLLIBS)
 
