@@ -4,6 +4,9 @@
 
 ZIP=/tmp/gtk+-@GTK_VERSION@.zip
 DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@.zip
+
+SHORTAPIVERSION=`echo @GTK_API_VERSION@ | tr -d '.'`
+
 cd @prefix@
 
 mkdir -p share/doc/gtk+-@GTK_VERSION@
@@ -14,35 +17,35 @@ cp -p @abs_srcdir@/COPYING share/doc/gtk+-dev-@GTK_VERSION@
 
 rm $ZIP
 zip $ZIP -@ <<EOF
-etc/gtk-2.0/gdk-pixbuf.loaders
-etc/gtk-2.0/gtkrc
-etc/gtk-2.0/gtk.immodules
-etc/gtk-2.0/im-multipress.conf
+etc/gtk-@GTK_API_VERSION@/gdk-pixbuf.loaders
+etc/gtk-@GTK_API_VERSION@/gtkrc
+etc/gtk-@GTK_API_VERSION@/gtk.immodules
+etc/gtk-@GTK_API_VERSION@/im-multipress.conf
 bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgailutil-@GAIL_LT_CURRENT_MINUS_AGE@.dll
-bin/gdk-pixbuf-query-loaders.exe
-bin/gtk-query-immodules-2.0.exe
+bin/gdk-pixbuf-query-loaders-@GTK_API_VERSION@.exe
+bin/gtk-query-immodules-@GTK_API_VERSION@.exe
 EOF
 
-zip $ZIP lib/gtk-2.0/modules/libgail.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/immodules/*.dll lib/gtk-2.0/@GTK_BINARY_VERSION@/engines/*.dll
+zip $ZIP lib/gtk-@GTK_API_VERSION@/modules/libgail.dll lib/gtk-@GTK_API_VERSION@/@GTK_BINARY_VERSION@/loaders/*.dll lib/gtk-@GTK_API_VERSION@/@GTK_BINARY_VERSION@/immodules/*.dll lib/gtk-@GTK_API_VERSION@/@GTK_BINARY_VERSION@/engines/*.dll
 
-zip $ZIP share/themes/Raleigh/gtk-2.0/gtkrc
-zip $ZIP share/themes/Default/gtk-2.0-key/gtkrc
-zip $ZIP share/themes/Emacs/gtk-2.0-key/gtkrc
-zip $ZIP share/themes/MS-Windows/gtk-2.0/gtkrc
+zip $ZIP share/themes/Raleigh/gtk-@GTK_API_VERSION@/gtkrc
+zip $ZIP share/themes/Default/gtk-@GTK_API_VERSION@-key/gtkrc
+zip $ZIP share/themes/Emacs/gtk-@GTK_API_VERSION@-key/gtkrc
+zip $ZIP share/themes/MS-Windows/gtk-@GTK_API_VERSION@/gtkrc
 
-zip $ZIP share/locale/*/LC_MESSAGES/gtk20.mo
-zip $ZIP share/locale/*/LC_MESSAGES/gtk20-properties.mo
+zip $ZIP share/locale/*/LC_MESSAGES/gtk${SHORTAPIVERSION}.mo
+zip $ZIP share/locale/*/LC_MESSAGES/gtk${SHORTAPIVERSION}-properties.mo
 
 zip -r -D $ZIP share/doc/gtk+-@GTK_VERSION@
 
 rm $DEVZIP
 zip -r -D $DEVZIP -@ <<EOF
-include/gtk-2.0
+include/gtk-@GTK_API_VERSION@
 include/gail-1.0
-bin/gdk-pixbuf-csource.exe
+bin/gdk-pixbuf-csource-@GTK_API_VERSION@.exe
 bin/gtk-builder-convert
 bin/gtk-demo.exe
 bin/gtk-update-icon-cache.exe
@@ -55,10 +58,10 @@ lib/libgtk-win32-@GTK_API_VERSION@.dll.a
 lib/gtk-win32-@GTK_API_VERSION@.lib
 lib/libgailutil.dll.a
 lib/gailutil.lib
-lib/gtk-2.0/include
+lib/gtk-@GTK_API_VERSION@/include
 lib/pkgconfig
 share/aclocal
-share/gtk-2.0
+share/gtk-@GTK_API_VERSION@
 share/gtk-doc
 EOF
 
