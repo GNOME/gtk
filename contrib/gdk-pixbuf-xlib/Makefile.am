@@ -4,7 +4,7 @@ if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
-lib_LTLIBRARIES=libgdk_pixbuf_xlib-2.0.la
+lib_LTLIBRARIES=libgdk_pixbuf_xlib-3.0.la
 
 INCLUDES = \
 	-I$(top_srcdir) -I$(top_builddir) 	\
@@ -12,31 +12,31 @@ INCLUDES = \
 	-I$(top_srcdir)/contrib 		\
 	$(GDK_PIXBUF_XLIB_DEP_CFLAGS)
 
-libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
+libgdk_pixbuf_xlib_3_0_la_LDFLAGS =         \
 	-export-dynamic						\
 	$(no_undefined)						\
 	-version-info $(LT_VERSION_INFO)
 
-libgdk_pixbuf_xlib_2_0_la_LIBADD = \
+libgdk_pixbuf_xlib_3_0_la_LIBADD = \
         $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
 	$(GDK_PIXBUF_XLIB_DEP_LIBS)
 
-libgdk_pixbuf_xlib_2_0_la_SOURCES =         \
+libgdk_pixbuf_xlib_3_0_la_SOURCES =         \
 	gdk-pixbuf-xlib-private.h	\
         gdk-pixbuf-xlib.c               \
         gdk-pixbuf-xlib-render.c        \
         gdk-pixbuf-xlib-drawable.c      \
         gdk-pixbuf-xlibrgb.c
 
-libgdk_pixbuf_xlibincludedir=$(includedir)/gtk-2.0/gdk-pixbuf-xlib
+libgdk_pixbuf_xlibincludedir=$(includedir)/gtk-3.0/gdk-pixbuf-xlib
 
 libgdk_pixbuf_xlibinclude_HEADERS =         		\
         gdk-pixbuf-xlib.h               	    	\
         gdk-pixbuf-xlibrgb.h
 
 pkgconfigdir   = $(libdir)/pkgconfig
-pkgconfig_DATA = gdk-pixbuf-xlib-2.0.pc
+pkgconfig_DATA = gdk-pixbuf-xlib-3.0.pc
 
-EXTRA_DIST += gdk-pixbuf-xlib-2.0.pc.in
+EXTRA_DIST += gdk-pixbuf-xlib-3.0.pc.in
 
 -include $(top_srcdir)/git.mk
