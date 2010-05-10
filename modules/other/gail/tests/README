@@ -199,14 +199,6 @@ interface in atkobject.h in the GAIL library. It is normally used with the
 GTK+ test program testgtk.
 
 
-testoptionmenu
-==============
-
-This is a GTK+ module used to test the implementation of the ATK interfaces
-for GtkOptionmenu. It should be used with the GTK+ test program testgtk and
-its file selection dialog.
-
-
 testpaned
 =========
 

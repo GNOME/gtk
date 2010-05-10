@@ -151,18 +151,6 @@ libtestobject_la_LDFLAGS =		\
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
 
-libtestoptionmenu_la_SOURCES = 	\
-	testlib.c		\
-	testlib.h		\
-	testoptionmenu.c
-
-libtestoptionmenu_la_LDFLAGS =	\
-	-rpath $(moduledir) -module -avoid-version $(no_undefined) \
-	$(top_builddir)/gtk/$(gtktargetlib) \
-	$(top_builddir)/gdk/$(gdktargetlib) \
-	$(GTK_DEP_LIBS)	\
-	$(LDFLAGS)
-
 libtestpaned_la_SOURCES = 	\
 	testlib.c		\
 	testlib.h		\
