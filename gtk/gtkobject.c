@@ -114,17 +114,10 @@ enum {
   LAST_SIGNAL
 };
 
-
-static void       gtk_object_base_class_init     (GtkObjectClass *class);
-static void       gtk_object_base_class_finalize (GtkObjectClass *class);
-static void       gtk_object_class_init          (GtkObjectClass *klass);
-static void       gtk_object_init                (GtkObject      *object,
-						  GtkObjectClass *klass);
-static void       gtk_object_dispose            (GObject        *object);
+static void       gtk_object_dispose             (GObject        *object);
 static void       gtk_object_real_destroy        (GtkObject      *object);
 static void       gtk_object_finalize            (GObject        *object);
 
-static gpointer    parent_class = NULL;
 static guint       object_signals[LAST_SIGNAL] = { 0 };
 
 
@@ -133,41 +126,10 @@ static guint       object_signals[LAST_SIGNAL] = { 0 };
  *
  ****************************************************/
 
-GType
-gtk_object_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-	sizeof (GtkObjectClass),
-	(GBaseInitFunc) gtk_object_base_class_init,
-	(GBaseFinalizeFunc) gtk_object_base_class_finalize,
-	(GClassInitFunc) gtk_object_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkObject),
-	16,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_object_init,
-	NULL,		/* value_table */
-      };
-      
-      object_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, I_("GtkObject"), 
-					    &object_info, G_TYPE_FLAG_ABSTRACT);
-    }
-
-  return object_type;
-}
+G_DEFINE_ABSTRACT_TYPE (GtkObject, gtk_object, G_TYPE_INITIALLY_UNOWNED);
 
 static void
-gtk_object_base_class_init (GtkObjectClass *class)
-{
-}
-
-static void
-gtk_object_base_class_finalize (GtkObjectClass *class)
+gtk_object_init (GtkObject *object)
 {
 }
 
@@ -175,8 +137,6 @@ static void
 gtk_object_class_init (GtkObjectClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-
-  parent_class = g_type_class_ref (G_TYPE_OBJECT);
 
   gobject_class->dispose = gtk_object_dispose;
   gobject_class->finalize = gtk_object_finalize;
@@ -201,11 +161,6 @@ gtk_object_class_init (GtkObjectClass *class)
 		  G_TYPE_NONE, 0);
 }
 
-static void
-gtk_object_init (GtkObject      *object,
-		 GtkObjectClass *klass)
-{
-}
 
 /********************************************
  * Functions to end a GtkObject's life time
@@ -249,7 +204,7 @@ gtk_object_dispose (GObject *gobject)
       GTK_OBJECT_UNSET_FLAGS (object, GTK_IN_DESTRUCTION);
     }
 
-  G_OBJECT_CLASS (parent_class)->dispose (gobject);
+  G_OBJECT_CLASS (gtk_object_parent_class)->dispose (gobject);
 }
 
 static void
@@ -271,7 +226,7 @@ gtk_object_finalize (GObject *gobject)
 		 "and must be removed with g_object_ref_sink().");
     }
   
-  G_OBJECT_CLASS (parent_class)->finalize (gobject);
+  G_OBJECT_CLASS (gtk_object_parent_class)->finalize (gobject);
 }
 
 #define __GTK_OBJECT_C__
