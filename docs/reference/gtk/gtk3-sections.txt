@@ -2248,8 +2248,6 @@ GtkNotebookTab
 <FILE>gtkobject</FILE>
 <TITLE>GtkObject</TITLE>
 GtkObject
-GTK_OBJECT_TYPE
-GTK_OBJECT_TYPE_NAME
 GtkObjectFlags
 GTK_OBJECT_FLAGS
 gtk_object_destroy

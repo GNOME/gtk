@@ -109,19 +109,6 @@ if all references are released.
 
 @object: the object which received the signal.
 
-<!-- ##### MACRO GTK_OBJECT_TYPE ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GTK_OBJECT_TYPE_NAME ##### -->
-<para>
-
-</para>
-
-
 
 <!-- ##### ENUM GtkObjectFlags ##### -->
 <para>

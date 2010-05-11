@@ -51,29 +51,6 @@ G_BEGIN_DECLS
 #define GTK_IS_OBJECT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OBJECT))
 #define GTK_OBJECT_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS ((object), GTK_TYPE_OBJECT, GtkObjectClass))
 
-/* Macros for extracting various fields from GtkObject and GtkObjectClass.
- */
-#ifndef GTK_DISABLE_DEPRECATED
-/**
- * GTK_OBJECT_TYPE:
- * @object: a #GtkObject.
- *
- * Gets the type of an object.
- *
- * Deprecated: 2.20: Use G_OBJECT_TYPE() instead.
- */
-#define GTK_OBJECT_TYPE                   G_OBJECT_TYPE
-/**
- * GTK_OBJECT_TYPE_NAME:
- * @object: a #GtkObject.
- *
- * Gets the name of an object's type.
- *
- * Deprecated: 2.20: Use G_OBJECT_TYPE_NAME() instead.
- */
-#define GTK_OBJECT_TYPE_NAME              G_OBJECT_TYPE_NAME
-#endif
-
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
  * is a kinda nasty break up, it does make the size of
