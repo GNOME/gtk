@@ -12612,8 +12612,8 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 /**
  * gtk_tree_view_get_cursor:
  * @tree_view: A #GtkTreeView
- * @path: (allow-none): A pointer to be filled with the current cursor path, or %NULL
- * @focus_column: (allow-none): A pointer to be filled with the current focus column, or %NULL
+ * @path: (out) (allow-none): A pointer to be filled with the current cursor path, or %NULL
+ * @focus_column: (out) (allow-none): A pointer to be filled with the current focus column, or %NULL
  *
  * Fills in @path and @focus_column with the current path and focus column.  If
  * the cursor isn't currently set, then *@path will be %NULL.  If no column
@@ -13599,8 +13599,8 @@ gtk_tree_view_set_drag_dest_row (GtkTreeView            *tree_view,
 /**
  * gtk_tree_view_get_drag_dest_row:
  * @tree_view: a #GtkTreeView
- * @path: (allow-none): Return location for the path of the highlighted row, or %NULL.
- * @pos: (allow-none): Return location for the drop position, or %NULL
+ * @path: (out) (allow-none): Return location for the path of the highlighted row, or %NULL.
+ * @pos: (out) (allow-none): Return location for the drop position, or %NULL
  * 
  * Gets information about the row that is highlighted for feedback.
  **/
@@ -13633,8 +13633,8 @@ gtk_tree_view_get_drag_dest_row (GtkTreeView              *tree_view,
  * @tree_view: a #GtkTreeView
  * @drag_x: the position to determine the destination row for
  * @drag_y: the position to determine the destination row for
- * @path: (allow-none): Return location for the path of the highlighted row, or %NULL.
- * @pos: (allow-none): Return location for the drop position, or %NULL
+ * @path: (out) (allow-none): Return location for the path of the highlighted row, or %NULL.
+ * @pos: (out) (allow-none): Return location for the drop position, or %NULL
  * 
  * Determines the destination row for a given position.  @drag_x and
  * @drag_y are expected to be in widget coordinates.  This function is only
