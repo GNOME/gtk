@@ -6,6 +6,7 @@ ZIP=/tmp/gtk+-@GTK_VERSION@.zip
 DEVZIP=/tmp/gtk+-dev-@GTK_VERSION@.zip
 
 SHORTAPIVERSION=`echo @GTK_API_VERSION@ | tr -d '.'`
+APIVERSIONMAJOR=`echo @GTK_API_VERSION@ | sed -e 's/\..*//'`
 
 cd @prefix@
 
@@ -24,7 +25,7 @@ etc/gtk-@GTK_API_VERSION@/im-multipress.conf
 bin/libgdk_pixbuf-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
-bin/libgailutil-@GAIL_LT_CURRENT_MINUS_AGE@.dll
+bin/libgailutil-@GTK_API_VERSION@-@GAIL_LT_CURRENT_MINUS_AGE@.dll
 bin/gdk-pixbuf-query-loaders-@GTK_API_VERSION@.exe
 bin/gtk-query-immodules-@GTK_API_VERSION@.exe
 EOF
@@ -47,7 +48,7 @@ include/gtk-@GTK_API_VERSION@
 include/gail-1.0
 bin/gdk-pixbuf-csource-@GTK_API_VERSION@.exe
 bin/gtk-builder-convert
-bin/gtk-demo.exe
+bin/gtk${APIVERSIONMAJOR}-demo.exe
 bin/gtk-update-icon-cache.exe
 share/man
 lib/libgdk_pixbuf-@GTK_API_VERSION@.dll.a
