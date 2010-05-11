@@ -95,7 +95,7 @@ action_SOURCES			 = action.c
 action_LDADD			 = $(progs_ldadd)
 
 
-EXTRA_DIST +=
+EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
 
