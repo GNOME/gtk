@@ -1,9 +1,25 @@
 Overview of Changes from GTK+ 2.20.x to 2.90.0
 ==============================================
 
-* GtkExtendedLayout: Width-for-height geometry management
+* GtkExtendedLayout: Width-for-height geometry management. This change
+  is known to currently cause minor problems in some applications, see
+  617444 GNU emacs warnings with extended layout GTK+
+  617556 inkscape toolbars broken with extended layout
 
 * gtk_icon_theme_load_symbolic: Support for 'symbolic' icons
+
+* Applications can indicate their preference for a dark theme
+  variant by setting GtkSettings::gtk-application-prefer-dark-theme
+
+* Tooltip positioning has been changed to make it less likely
+  that the tooltip covers up the widget that it relates to
+
+* Deprecated functions have been removed (though some more work
+  remains to be done in GDK)
+
+* This release is parallel installable with GTK+ <= 2.22, by renaming
+  .pc files, libraries, include paths, module paths, gtkrc files, etc
+  to include a '3.0' in its name.
 
 
 Overview of Changes from GTK+ 2.19.7 to 2.20.0
