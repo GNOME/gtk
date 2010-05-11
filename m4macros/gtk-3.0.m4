@@ -1,22 +1,22 @@
 # Configure paths for GTK+
 # Owen Taylor     1997-2001
 
-dnl AM_PATH_GTK_2_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
+dnl AM_PATH_GTK_3_0([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [, MODULES]]]])
 dnl Test for GTK+, and define GTK_CFLAGS and GTK_LIBS, if gthread is specified in MODULES, 
 dnl pass to pkg-config
 dnl
-AC_DEFUN([AM_PATH_GTK_2_0],
+AC_DEFUN([AM_PATH_GTK_3_0],
 [dnl 
 dnl Get the cflags and libraries from pkg-config
 dnl
 AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run a test GTK+ program],
 		    , enable_gtktest=yes)
 
-  pkg_config_args=gtk+-2.0
+  pkg_config_args=gtk+-3.0
   for module in . $4
   do
       case "$module" in
-         gthread) 
+         gthread)
              pkg_config_args="$pkg_config_args gthread-2.0"
          ;;
       esac
@@ -38,7 +38,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
     no_gtk=yes
   fi
 
-  min_gtk_version=ifelse([$1], ,2.0.0,$1)
+  min_gtk_version=ifelse([$1], ,3.0.0,$1)
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
 
   if test x$PKG_CONFIG != xno ; then
@@ -58,11 +58,11 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
   if test x"$no_gtk" = x ; then
     GTK_CFLAGS=`$PKG_CONFIG $pkg_config_args --cflags`
     GTK_LIBS=`$PKG_CONFIG $pkg_config_args --libs`
-    gtk_config_major_version=`$PKG_CONFIG --modversion gtk+-2.0 | \
+    gtk_config_major_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk+-2.0 | \
+    gtk_config_minor_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk+-2.0 | \
+    gtk_config_micro_version=`$PKG_CONFIG --modversion gtk+-3.0 | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
     if test "x$enable_gtktest" = "xyes" ; then
       ac_save_CFLAGS="$CFLAGS"
@@ -98,7 +98,7 @@ main ()
       (gtk_minor_version != $gtk_config_minor_version) ||
       (gtk_micro_version != $gtk_config_micro_version))
     {
-      printf("\n*** 'pkg-config --modversion gtk+-2.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n", 
+      printf("\n*** 'pkg-config --modversion gtk+-3.0' returned %d.%d.%d, but GTK+ (%d.%d.%d)\n", 
              $gtk_config_major_version, $gtk_config_minor_version, $gtk_config_micro_version,
              gtk_major_version, gtk_minor_version, gtk_micro_version);
       printf ("*** was found! If pkg-config was correct, then it is best\n");
@@ -152,7 +152,7 @@ main ()
   fi
   if test "x$no_gtk" = x ; then
      AC_MSG_RESULT(yes (version $gtk_config_major_version.$gtk_config_minor_version.$gtk_config_micro_version))
-     ifelse([$2], , :, [$2])     
+     ifelse([$2], , :, [$2])
   else
      AC_MSG_RESULT(no)
      if test "$PKG_CONFIG" = "no" ; then

@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-installed_m4= gtk-2.0.m4
+installed_m4= gtk-3.0.m4
 
 EXTRA_DIST += $(installed_m4)
 
