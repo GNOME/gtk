@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2010-03-19 07:37+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <kde-i18n-doc@kde.org>\n"
@@ -78,7 +78,7 @@ msgstr "ਸੈੱਟ ਕਰਨ ਲਈ Gdk ਡੀਬੱਗ ਫਲੈਗ"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "ਫਲੈਗ"
 
@@ -376,7 +376,7 @@ msgstr "ਚਿੱਤਰ ਨੂੰ ਬਫਰ ਵਿੱਚ ਸੰਭਾਲਣ ਲ�
 msgid "Error writing to image stream"
 msgstr "ਚਿੱਤਰ ਧਾਰਾ ਲਿਖਣ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -385,7 +385,7 @@ msgstr ""
 "ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫ਼ਲ, ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ "
 "ਇਹ ਦੱਸ ਨਹੀਂ ਸਕਿਆ।"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "ਚਿੱਤਰ ਕਿਸਮ '%s' ਦੀ ਲਗਾਤਾਰ ਲੋਡਿੰਗ ਮੱਦਦ ਪ੍ਰਾਪਤ ਨਹੀਂ ਹੈ"
@@ -1214,50 +1214,50 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d ਇਕਾਈ ਖੋਲ੍ਹੀ ਜਾ ਰਹੀ ਹੈ"
 msgstr[1] "%d ਇਕਾਈਆਂ ਖੋਲ੍ਹੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "ਲਿੰਕ ਵੇਖਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "ਲਾਈਸੈਂਸ"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "ਪਰੋਗਰਾਮ ਦਾ ਲਾਈਸੈਂਸ"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "ਮਾਣ(_r)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "ਲਾਈਸੈਂਸ(_L)"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "%s ਬਾਰੇ"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "ਮਾਣ"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "ਲੇਖਕ"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "ਦਸਤਾਵੇਜ਼ ਲਿਖੇ"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "ਅਨੁਵਾਦ ਕੀਤਾ"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "ਕਲਾਕਾਰੀ"
 
@@ -1266,7 +1266,7 @@ msgstr "ਕਲਾਕਾਰੀ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "ਸਿਫਟ"
@@ -1276,7 +1276,7 @@ msgstr "ਸਿਫਟ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "ਕੰਟਰੋਲ"
@@ -1286,7 +1286,7 @@ msgstr "ਕੰਟਰੋਲ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "ਆਲਟ"
@@ -1296,7 +1296,7 @@ msgstr "ਆਲਟ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "ਸੁਪਰ"
@@ -1306,7 +1306,7 @@ msgstr "ਸੁਪਰ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "ਹਾਈਪਰ"
@@ -1316,17 +1316,17 @@ msgstr "ਹਾਈਪਰ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "ਮੇਟਾ"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "ਖਾਲੀ ਥਾਂ"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ਪਿੱਛੇ ਡੰਡਾ"
@@ -1666,15 +1666,15 @@ msgstr "ਸੱਜੇ(_R):"
 msgid "Paper Margins"
 msgstr "ਸਫ਼ਾ ਹਾਸ਼ੀਆ"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "ਇੰਪੁੱਟ ਢੰਗ(_M)"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "ਯੂਨੀਕੋਡ ਕੰਟਰੋਲ ਅੱਖਰ ਸ਼ਾਮਲ(_I)"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "ਕੈਪਸ ਤਾਲਾ ਚਾਲੂ ਹੈ"
 
@@ -1682,7 +1682,7 @@ msgstr "ਕੈਪਸ ਤਾਲਾ ਚਾਲੂ ਹੈ"
 msgid "Select A File"
 msgstr "ਇੱਕ ਫਾਇਲ ਚੁਣੋ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "ਡੈਸਕਟਾਪ"
 
@@ -1690,7 +1690,7 @@ msgstr "ਡੈਸਕਟਾਪ"
 msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "ਹੋਰ..."
 
@@ -1698,23 +1698,23 @@ msgstr "ਹੋਰ..."
 msgid "Type name of new folder"
 msgstr "ਨਵੇਂ ਫੋਲਡਰ ਦਾ ਨਾਂ ਲਿਖੋ"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "ਫਾਇਲ ਬਾਰੇ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "ਬੁੱਕਮਾਰਕ ਸ਼ਾਮਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "ਬੁੱਕਮਾਰਕ ਹਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "ਫੋਲਡਰ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1722,11 +1722,11 @@ msgstr ""
 "ਫੋਲਡਰ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਿਆ, ਕਿਉਕਿ ਇਸੇ ਨਾਂ ਨਾਲ ਫਾਇਲ ਮੌਜੂਦ ਹੈ। ਫੋਲਡਰ ਲਈ ਵੱਖਰਾ ਨਾਂ ਵਰਤੋਂ ਜਾਂ "
 "ਫਾਇਲ ਦਾ ਨਾਂ ਪਹਿਲਾਂ ਬਦਲ ਦਿਓ।"
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "ਗਲਤ ਫਾਇਲ ਨਾਂ"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "ਫੋਲਡਰ ਦੀ ਸਮੱਗਰੀ ਵੇਖਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
 
@@ -1734,215 +1734,215 @@ msgstr "ਫੋਲਡਰ ਦੀ ਸਮੱਗਰੀ ਵੇਖਾਈ ਨਹੀਂ �
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s ਉੱਤੇ %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "ਖੋਜ"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "ਤਾਜ਼ਾ ਵਰਤੇ"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "ਚੁਣੋ ਕਿ ਕਿਸ ਕਿਸਮ ਦੀਆਂ ਫਾਇਲਾਂ ਵੇਖਾਈਆਂ ਜਾਣ"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "ਫੋਲਡਰ '%s' ਨੂੰ ਬੁੱਕਮਾਰਕ ਵਿੱਚ ਸ਼ਾਮਲ"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ਮੌਜੂਦਾ ਫੋਲਡਰ ਨੂੰ ਬੁੱਕਮਾਰਕ ਵਿੱਚ ਸ਼ਾਮਲ"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "ਚੁਣੇ ਫੋਲਡਰਾਂ ਨੂੰ ਬੁੱਕਮਾਰਕ ਵਿੱਚ ਸ਼ਾਮਲ"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "ਬੁੱਕਮਾਰਕ '%s' ਹਟਾਓ"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "ਬੁੱਕਮਾਰਕ '%s' ਹਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "ਚੁਣੇ ਬੁੱਕਮਾਰਕ ਹਟਾਓ"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "ਹਟਾਓ"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "ਨਾਂ-ਬਦਲੋ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "ਥਾਵਾਂ"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "ਥਾਵਾਂ(_P)"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "ਸ਼ਾਮਲ(_A)"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "ਚੁਣਿਆ ਫੋਲਡਰ ਬੁੱਕਮਾਰਕ ਵਿੱਚ ਸ਼ਾਮਲ"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "ਹਟਾਓ(_R)"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "ਫਾਇਲ ਚੁਣੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "ਬੁੱਕਮਾਰਕ ਸ਼ਾਮਲ(_A)"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "ਲੁਕਵੀਆਂ ਫਾਇਲਾਂ ਵੇਖੋ(_H)"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "ਅਕਾਰ ਕਾਲਮ ਵੇਖੋ(_S)"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "ਫਾਇਲਾਂ"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "ਅਕਾਰ"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "ਸੋਧੀਆਂ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "ਨਾਂ(_N):"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "ਹੋਰ ਫੋਲਡਰਾਂ ਲਈ ਝਲਕ(_B)"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ ਦਿਓ"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "ਫੋਲਡਰ ਬਣਾਓ(_l)"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "ਟਿਕਾਣਾ(_L):"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਸੰਭਾਲੋ(_f):"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਬਣਾਓ(_f):"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s ਦੀ ਸਮੱਗਰੀ ਪੜ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "ਫੋਲਡਰ ਦੀ ਸਮੱਗਰੀ ਪੜ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "%H:%M ਵਜੇ ਕੱਲ੍ਹ"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "ਫੋਲਡਰ ਨੂੰ ਬਦਲਿਆ ਨਹੀਂ ਕਰ ਸਕਿਆ, ਕਿਉਂਕਿ ਇਹ ਲੋਕਲ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "ਸ਼ਾਰਟਕੱਟ %s ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "ਸ਼ਾਰਟਕੱਟ %s ਮੌਜੂਦ ਨਹੀਂ ਹੈ"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "ਇੱਕ ਫਾਇਲ ਨਾਂ \"%s\" ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਬਦਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "ਫਾਇਲ ਪਹਿਲਾਂ ਹੀ \"%s\" ਵਿੱਚ ਮੌਜੂਦ ਹੈ। ਇਸ ਨੂੰ ਇਸ ਦੇ ਸਭ ਭਾਗਾਂ ਸਮੇਤ ਬਦਲਿਆ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ।"
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ਬਦਲੋ(_R)"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "ਖੋਜ ਕਾਰਵਾਈ ਨੂੰ ਸ਼ੁਰੂ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "ਪਰੋਗਰਾਮ ਤਤਕਰਾ ਡੈਮਨ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਬਣਾਉਣ ਲਈ ਅਸਫ਼ਲ ਹੈ।  ਜਾਂਚ ਲਵੋ ਕਿ ਇਹ ਚੱਲ ਰਹੀ ਹੈ।"
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "ਖੋਜ ਮੰਗ ਭੇਜੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "ਖੋਜ:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s ਮਾਊਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
@@ -2004,140 +2004,10 @@ msgstr "ਅਧੂਰਾ ਹੋਸਟ ਨਾਂ, '/' ਨਾਲ ਅੰਤ"
 msgid "Path does not exist"
 msgstr "ਪਾਥ ਮੌਜੂਦ ਨਹੀਂ"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "ਫੋਲਡਰ '%s' ਬਣਾਉਣ ਦੌਰਾਨ ਗਲਤੀ: %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "ਫੋਲਡਰ"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "ਫੋਲਡਰ(_d)"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "ਫਾਇਲਾਂ(_F)"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "ਫੋਲਡਰ ਨਾ-ਪੜ੍ਹਨਯੋਗ: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"ਫਾਇਲ \"%s\" ਹੋਰ ਮਸ਼ੀਨ (ਨਾਂ %s) 'ਤੇ ਮੌਜੂਦ ਹੈ ਅਤੇ ਇਸ ਪਰੋਗਰਾਮ ਲਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।\n"
-"ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਚੁਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "ਨਵਾਂ ਫੋਲਡਰ(_N)"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "ਫਾਇਲ ਹਟਾਓ(_l)"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "ਫਾਇਲ ਨਾਂ-ਬਦਲੋ(_R)"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ-ਨਾਂ ਵਿੱਚ ਨਹੀਂ ਹੋਣੇ ਚਾਹੀਦੇ"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "ਨਵਾਂ ਫੋਲਡਰ"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "ਫੋਲਡਰ ਨਾਂ(_F):"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "ਬਣਾਓ(_r)"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "ਫਾਇਲ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ ਨਾਂ ਵਿੱਚ ਨਹੀਂ ਹੋ ਸਕਦੇ"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "ਫਾਇਲ '%s' ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "ਕੀ ਫਾਇਲ \"%s\" ਹਟਾਉਣੀ ਹੈ?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "ਫਾਇਲ ਹਟਾਓ"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "ਫਾਇਲ ਨਾਂ \"%s\" ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ \"%s\" ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "ਫਾਇਲ ਨਾਂ-ਬਦਲੋ"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ-ਬਦਲੋ:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "ਨਾਂ-ਬਦਲੋ(_R)"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "ਚੋਣ(_S): "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"ਫਾਇਲ ਨਾਂ \"%s\" ਨੂੰ UTF-8 ਵਿੱਚ ਤਬਦੀਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। (ਇੰਵਾਇਰਮਿੰਟ ਵੇਰੀਬਲ "
-"G_BROKEN_FILENAMES ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "ਗਲਤ UTF-8"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "ਨਾਂ ਬਹੁਤ ਲੰਮਾ ਹੈ"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "ਫਾਇਲ-ਨਾਂ ਤਬਦੀਲ ਨਹੀਂ ਹੋ ਸਕਿਆ"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2184,17 +2054,9 @@ msgstr "ਅਕਾਰ(_z):"
 msgid "_Preview:"
 msgstr "ਝਲਕ(_P):"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "ਫੋਂਟ ਚੋਣ"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "ਗਾਮਾ"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "ਗਾਮਾ ਮੁੱਲ(_G)"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2246,92 +2108,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "ਸਿਸਟਮ (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "ਇੰਪੁੱਟ"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "ਕੋਈ ਵਾਧੂ ਇੰਪੁੱਟ ਜੰਤਰ ਨਹੀਂ ਹੈ"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "ਜੰਤਰ(_D):"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "ਆਯੋਗ"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "ਸਕਰੀਨ"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "ਵਿੰਡੋ"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "ਮੋਡ(_M):"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "ਧੁਰੇ"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "ਕੁੰਜੀਆਂ"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "ਦਬਾਓ(_P):"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "X _tilt"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Y t_ilt"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "ਪਹੀਆ(_W):"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "ਕੋਈ ਨਹੀਂ"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(ਆਯੋਗ)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(ਅਣਜਾਣ)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "ਸਾਫ਼ ਕਰੋ(_e)"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹੋ(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "ਲਿੰਕ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_L)"
 
@@ -2344,27 +2127,27 @@ msgid "Invalid URI"
 msgstr "ਗਲਤ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "ਵਾਧੂ GTK+ ਮੋਡੀਊਲ ਲੋਡ ਕਰੋ"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "ਮੋਡੀਊਲ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "ਸਭ ਚੇਤਾਵਨੀਆਂ ਨੂੰ ਘਾਤਕ ਬਣਾਓ"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨਿਸ਼ਾਨ"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "ਅਣ-ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨਿਸ਼ਾਨ"
 
@@ -2373,20 +2156,20 @@ msgstr "ਅਣ-ਸੈੱਟ ਕਰਨ ਲਈ GTK+ ਡੀਬੱਗਿੰਗ ਨ�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ਦਿੱਖ ਖੋਲ੍ਹੀ ਨਹੀਂ ਜਾ ਸਕੀ: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "GTK+ ਚੋਣ"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "GTK+ ਚੋਣ ਵੇਖੋ"
 
@@ -2471,7 +2254,7 @@ msgstr "Z ਸ਼ੈੱਲ"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %d ਨਾਲ ਪਰੋਸੈਸ ਖਤਮ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ: %s"
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "ਸਫ਼ਾ %u"
@@ -2531,7 +2314,7 @@ msgstr "ਉੱਤੇ ਮਾਰਗ"
 msgid "Down Path"
 msgstr "ਹੇਠਾਂ ਮਾਰਗ"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ ਰੂਟ"
 
@@ -2542,6 +2325,11 @@ msgstr "ਪਰਮਾਣਕਿਤਾ"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "ਉਪਲੱਬਧ ਨਹੀਂ"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "ਇੱਕ ਫਾਇਲ ਚੁਣੋ"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3018,12 +2806,12 @@ msgstr "ਡਾਈਲਾਗ ਵਿੱਚ ਕੁਝ ਸੈਟਿੰਗ ਵਿੱ�
 msgid "Print"
 msgstr "ਛਾਪੋ"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "ਸ਼ਾਮਲ ਫਾਇਲ ਲੱਭਣ ਤੋਂ ਅਸਮਰੱਥ: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "ਪਿਕਸਮੈਪ ਮਾਰਗ ਵਿੱਚ ਚਿੱਤਰ ਫਾਇਲ ਲੱਭਣ ਵਿੱਚ ਅਸਫ਼ਲ: \"%s\""
@@ -3119,10 +2907,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s' ਨਾਲ ਇੱਕ ਆਈਟਮ ਲੱਭਣ ਲਈ ਅਸਫ਼ਲ"
@@ -3794,10 +3582,6 @@ msgstr "ZW_NJ ਜ਼ੀਰੋ ਚੌੜਾਈ ਨਾ-ਜੋੜਕ"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "ਮੋਡੀਊਲ ਮਾਰਗ ਵਿੱਚ ਸਰੂਪ ਇੰਜਣ ਨੂੰ ਸਥਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- ਸੰਕੇਤ ਨਹੀਂ ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3812,39 +3596,39 @@ msgstr "ਲਾਈਨ %d ਅੱਖਰ %d ਉੱਤੇ  ਬੇ-ਲੋੜੀਦਾ 
 msgid "Empty"
 msgstr "ਖਾਲੀ"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "ਵਾਲੀਅਮ"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "ਵਾਲੀਅਮ ਵਧਾਇਆ ਜਾਂ ਘਟਾਇਆ ਜਾਂਦਾ ਹੈ"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "ਵਾਲੀਅਮ ਅਡਜੱਸਟ ਕਰੋ"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "ਆਵਾਜ਼ ਘਟਾਓ"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "ਵਾਲੀਅਮ ਘਟਾਓ"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "ਆਵਾਜ਼ ਵਧਾਓ"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "ਵਾਲੀਅਮ ਵਧਾਓ"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "ਚੁੱਪ ਕੀਤਾ"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "ਪੂਰਾ ਵਾਲੀਅਮ"
 
@@ -3853,7 +3637,7 @@ msgstr "ਪੂਰਾ ਵਾਲੀਅਮ"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5275,6 +5059,164 @@ msgstr "ਟੈਸਟ ਪਰਿੰਟਰ ਲਈ ਪਰਿੰਟ ਕਰੋ"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "ਫਾਇਲ '%s' ਲਈ ਜਾਣਕਾਰੀ ਪਰਾਪਤ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ: %s"
+
+#~ msgid "Folders"
+#~ msgstr "ਫੋਲਡਰ"
+
+#~ msgid "Fol_ders"
+#~ msgstr "ਫੋਲਡਰ(_d)"
+
+#~ msgid "_Files"
+#~ msgstr "ਫਾਇਲਾਂ(_F)"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "ਫੋਲਡਰ ਨਾ-ਪੜ੍ਹਨਯੋਗ: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "ਫਾਇਲ \"%s\" ਹੋਰ ਮਸ਼ੀਨ (ਨਾਂ %s) 'ਤੇ ਮੌਜੂਦ ਹੈ ਅਤੇ ਇਸ ਪਰੋਗਰਾਮ ਲਈ ਉਪਲੱਬਧ ਨਹੀਂ ਹੈ।\n"
+#~ "ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਚੁਣਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
+
+#~ msgid "_New Folder"
+#~ msgstr "ਨਵਾਂ ਫੋਲਡਰ(_N)"
+
+#~ msgid "De_lete File"
+#~ msgstr "ਫਾਇਲ ਹਟਾਓ(_l)"
+
+#~ msgid "_Rename File"
+#~ msgstr "ਫਾਇਲ ਨਾਂ-ਬਦਲੋ(_R)"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "ਫੋਲਡਰ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ-ਨਾਂ ਵਿੱਚ ਨਹੀਂ ਹੋਣੇ ਚਾਹੀਦੇ"
+
+#~ msgid "New Folder"
+#~ msgstr "ਨਵਾਂ ਫੋਲਡਰ"
+
+#~ msgid "_Folder name:"
+#~ msgstr "ਫੋਲਡਰ ਨਾਂ(_F):"
+
+#~ msgid "C_reate"
+#~ msgstr "ਬਣਾਓ(_r)"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "ਫਾਇਲ ਨਾਂ \"%s\" ਵਿੱਚ ਉਹ ਨਿਸ਼ਾਨ ਹਨ, ਜੋ ਕਿ ਫਾਇਲ ਨਾਂ ਵਿੱਚ ਨਹੀਂ ਹੋ ਸਕਦੇ"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "ਫਾਇਲ '%s' ਹਟਾਉਣ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "ਕੀ ਫਾਇਲ \"%s\" ਹਟਾਉਣੀ ਹੈ?"
+
+#~ msgid "Delete File"
+#~ msgstr "ਫਾਇਲ ਹਟਾਓ"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "ਫਾਇਲ ਨਾਂ \"%s\" ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ \"%s\" ਬਦਲਣ ਵਿੱਚ ਗਲਤੀ: %s"
+
+#~ msgid "Rename File"
+#~ msgstr "ਫਾਇਲ ਨਾਂ-ਬਦਲੋ"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "ਫਾਇਲ \"%s\" ਦਾ ਨਾਂ-ਬਦਲੋ:"
+
+#~ msgid "_Rename"
+#~ msgstr "ਨਾਂ-ਬਦਲੋ(_R)"
+
+#~ msgid "_Selection: "
+#~ msgstr "ਚੋਣ(_S): "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "ਫਾਇਲ ਨਾਂ \"%s\" ਨੂੰ UTF-8 ਵਿੱਚ ਤਬਦੀਲ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ। (ਇੰਵਾਇਰਮਿੰਟ ਵੇਰੀਬਲ "
+#~ "G_BROKEN_FILENAMES ਦੇਣ ਦੀ ਕੋਸ਼ਿਸ): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "ਗਲਤ UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "ਨਾਂ ਬਹੁਤ ਲੰਮਾ ਹੈ"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "ਫਾਇਲ-ਨਾਂ ਤਬਦੀਲ ਨਹੀਂ ਹੋ ਸਕਿਆ"
+
+#~ msgid "Gamma"
+#~ msgstr "ਗਾਮਾ"
+
+#~ msgid "_Gamma value"
+#~ msgstr "ਗਾਮਾ ਮੁੱਲ(_G)"
+
+#~ msgid "Input"
+#~ msgstr "ਇੰਪੁੱਟ"
+
+#~ msgid "No extended input devices"
+#~ msgstr "ਕੋਈ ਵਾਧੂ ਇੰਪੁੱਟ ਜੰਤਰ ਨਹੀਂ ਹੈ"
+
+#~ msgid "_Device:"
+#~ msgstr "ਜੰਤਰ(_D):"
+
+#~ msgid "Disabled"
+#~ msgstr "ਆਯੋਗ"
+
+#~ msgid "Screen"
+#~ msgstr "ਸਕਰੀਨ"
+
+#~ msgid "Window"
+#~ msgstr "ਵਿੰਡੋ"
+
+#~ msgid "_Mode:"
+#~ msgstr "ਮੋਡ(_M):"
+
+#~ msgid "Axes"
+#~ msgstr "ਧੁਰੇ"
+
+#~ msgid "Keys"
+#~ msgstr "ਕੁੰਜੀਆਂ"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "ਦਬਾਓ(_P):"
+
+#~ msgid "X _tilt:"
+#~ msgstr "X _tilt"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "Y t_ilt"
+
+#~ msgid "_Wheel:"
+#~ msgstr "ਪਹੀਆ(_W):"
+
+#~ msgid "none"
+#~ msgstr "ਕੋਈ ਨਹੀਂ"
+
+#~ msgid "(disabled)"
+#~ msgstr "(ਆਯੋਗ)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(ਅਣਜਾਣ)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "ਸਾਫ਼ ਕਰੋ(_e)"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- ਸੰਕੇਤ ਨਹੀਂ ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ਖਾਲੀ)"

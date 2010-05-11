@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2010-03-20 11:26+0200\n"
 "Last-Translator: Tommi Vainikainen <thv@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -80,7 +80,7 @@ msgstr "Asetettavat Gdk-vianjäljitysvalinnat"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "VALITSIMET"
 
@@ -382,7 +382,7 @@ msgstr "Liian vähän muistia kuvan tallentamiseksi puskuriin"
 msgid "Error writing to image stream"
 msgstr "Virhe kirjoitettaessa kuvavirtaan"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -391,7 +391,7 @@ msgstr ""
 "Sisäinen virhe: Kuvanlatainmoduuli ”%s” ei onnistunut lataamaan kuvaa "
 "loppuun eikä ilmoittanut virheen syytä"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Kuvatyypin ”%s” kasvavaa latausta ei tueta."
@@ -1229,50 +1229,50 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avataan %d kohde"
 msgstr[1] "Avataan %d kohdetta"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "Linkkiä ei voitu näyttää"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Lisenssi"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Ohjelman lisenssi"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_Tekijät"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Lisenssi"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "Tietoja ohjelmasta %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Tekijät"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Ohjelmoijat"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Dokumentoijat"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Kääntäjät"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Graafinen ulkoasu"
 
@@ -1281,7 +1281,7 @@ msgstr "Graafinen ulkoasu"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1291,7 +1291,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1301,7 +1301,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1311,7 +1311,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1321,7 +1321,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1331,17 +1331,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Välilyönti"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Takakeno"
@@ -1690,15 +1690,15 @@ msgstr "_Oikea:"
 msgid "Paper Margins"
 msgstr "Paperin marginaalit"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "Syöttö_tavat"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Lisää Unicode-säätömerkki"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "CapsLock on päällä"
 
@@ -1706,7 +1706,7 @@ msgstr "CapsLock on päällä"
 msgid "Select A File"
 msgstr "Valitse tiedosto"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Työpöytä"
 
@@ -1714,7 +1714,7 @@ msgstr "Työpöytä"
 msgid "(None)"
 msgstr "(ei mikään)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Muu…"
 
@@ -1722,23 +1722,23 @@ msgstr "Muu…"
 msgid "Type name of new folder"
 msgstr "Kirjoita uuden kansion nimi"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Tiedostosta ei saatu tietoja"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Kirjanmerkkiä ei voitu lisätä"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Kirjanmerkin poisto epäonnistui"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Kansion luominen epäonnistui"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1746,11 +1746,11 @@ msgstr ""
 "Kansiota ei voitu luoda, koska samanniminen tiedosto on jo olemassa. Käytä "
 "toista nimeä kansiolle tai nimeä tiedosto ensin uudelleen."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Virheellinen tiedostonimi"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Kansion sisältöä ei voitu näyttää"
 
@@ -1758,186 +1758,186 @@ msgstr "Kansion sisältöä ei voitu näyttää"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s - %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Etsi"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Äskettäin käytetyt"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Valitse, minkä tyyppiset tiedostot näkyvät"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Lisää kansio ”%s” kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Lisää nykyinen kansio kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Lisää valitut kansiot kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Poista kirjanmerkki ”%s”"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Kirjanmerkkiä ”%s” ei voitu poistaa"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Poista valittu kirjanmerkki"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Poista"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Nimeä uudelleen…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Sijainnit"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Sijainnit"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Lisää"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Lisää valittu kansio kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Poista"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Tiedostoa ei voitu valita"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Lisää kirjanmerkkeihin"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Näytä _piilotiedostot"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "Näytä _koko-sarake"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Tiedostot"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Nimi"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Koko"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Muokattu"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "Selaa _muita kansioita"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Anna tiedostonimi"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "_Uusi kansio"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Sijainti:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "Tallenna _kansioon:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Luo _kansioon:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tiedoston %s sisältöä ei voitu lukea"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "Kansion sisältöä ei voitu lukea"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Eilen %H.%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Kansioon ei voi siirtyä, koska se ei ole paikallinen"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Pikavalintaa %s on jo olemassa"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Pikavalintaa %s ei ole olemassa"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Tiedosto ”%s” on jo olemassa. Haluatko korvata sen?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1945,15 +1945,15 @@ msgstr ""
 "Tiedosto on jo olemassa kansiossa ”%s”. Tiedoston korvaus ylikirjoittaa sen "
 "sisällön."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Korvaa"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "Hakuprosessi ei voitu käynnistää"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1961,15 +1961,15 @@ msgstr ""
 "Ohjelma ei saanut yhteyttä indeksoijaprosessiin. Varmista, että se on "
 "käynnissä."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "Hakupyyntöä ei voitu lähettää"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Etsi:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "Taltion %s liittäminen ei onnistunut"
@@ -2031,142 +2031,10 @@ msgstr "Verkkonimi on vajaa; lopeta se merkkiin ”/”"
 msgid "Path does not exist"
 msgstr "Polkua ei ole olemassa"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Virhe luotaessa kansiota ”%s”: %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Kansiot"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Kansiot"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Tiedostot"
-
-# , c-format
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Kansiota ei voi lukea: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Tiedosto ”%s” on toisella koneella (nimeltään %s) ja tämä ohjelma ei "
-"välttämättä löydä sitä.\n"
-"Oletko varma, että haluat valita sen?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_Uusi kansio"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "Poista tie_dosto"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Nimeä uudelleen"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Kansionimi ”%s” sisältää merkkejä, joita ei voi olla tiedostonimissä"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Uusi kansio"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_Kansion nimi:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_Luo"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Tiedostonimi ”%s” sisältää merkkejä, joita ei voi olla tiedostonimissä"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Virhe poistettaessa tiedostoa ”%s”: %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Poistetaanko tiedosto ”%s”?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Poista tiedosto"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Virhe nimetessä uudestaan tiedostoa nimelle ”%s”: %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Virhe nimettäessä tiedostoa ”%s” uudestaan: %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Virhe nimetessä tiedostoa ”%s” nimelle ”%s”: %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Nimeä tiedosto uudelleen"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Nimeä tiedosto ”%s” uudelleen:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Nimeä uudelleen"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Valinta: "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Tiedostonimen ”%s” muuntaminen UTF-8:ksi ei onnistunut. (Kokeile "
-"ympäristömuuttujan G_FILENAME_ENCODING asettamista): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "Virheellistä UTF-8:aa"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Nimi on liian pitkä"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Ei voitu muuntaa tiedostonimeä"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2213,17 +2081,9 @@ msgstr "_Koko:"
 msgid "_Preview:"
 msgstr "_Esikatselu:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Kirjasinlajin valinta"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "_Gamma-arvo"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2275,92 +2135,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Järjestelmä (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Syöte"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Ei laajennussyöttölaitteita"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Laite:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Poistettu"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Ruutu"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Ikkuna"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Tila:"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Akselit"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Avaimet"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Paine:"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "X-_kallistus:"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Y-k_allistus:"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "R_ulla:"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "ei"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(ei käytössä)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(tuntematon)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "_Tyhjennä"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "Kopioi _linkin osoite"
 
@@ -2373,27 +2154,27 @@ msgid "Invalid URI"
 msgstr "Virheellistä URL"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Lataa lisää GTK+-moduuleja"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODUULIT"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Tee kaikista varoituksista vakavia"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Asetettavat GTK+-vianjäljitysvalinnat"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Poistettavat GTK+-vianjäljitysvalinnat"
 
@@ -2402,20 +2183,20 @@ msgstr "Poistettavat GTK+-vianjäljitysvalinnat"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Näyttlö ei voi avata: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "GTK+-valitsimet"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Näytä GTK+-valitsimet"
 
@@ -2502,7 +2283,7 @@ msgid "Cannot end process with pid %d: %s"
 msgstr "Ei voitu päättää prosessia, jonka pid on %d: %s"
 
 # , c-format
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Sivu %u"
@@ -2563,7 +2344,7 @@ msgstr "Polkua ylös"
 msgid "Down Path"
 msgstr "Polkua alas"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Tiedostojärjestelmän juuri"
 
@@ -2574,6 +2355,11 @@ msgstr "Todennus"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Ei saatavilla"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Valitse tiedosto"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3050,13 +2836,13 @@ msgstr "Jotkut asetukset ikkunassa ovat ristiriidassa"
 msgid "Print"
 msgstr "Tulosta"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ei löytänyt sisällytettävää tiedostoa ”%s”."
 
 # , c-format
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: ”%s”"
@@ -3152,10 +2938,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URIn ”%s” sisältävää kohtaa ei löytynyt"
@@ -3831,10 +3617,6 @@ msgstr "ZWNJ Nollan levyinen _ei-yhdistäjä"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Teemamoottorin moduulia ei löytynyt module_path:sta: ”%s”,"
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Ei vinkkiä ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3849,39 +3631,39 @@ msgstr "Odottamatonta merkkidataa rivillä %d merkin %d kohdalla"
 msgid "Empty"
 msgstr "Tyhjä"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Äänenvoimakkuus"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Kasvattaa tai vähentää äänenvoimakkuutta"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Säätää äänenvoimakkuutta"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Hiljemmalle"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Pienentää äänenvoimakkuutta"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Kovemmalle"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Kasvattaa äänenvoimakkuutta"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Vaimennettu"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Täysi äänenvoimakkuus"
 
@@ -3890,7 +3672,7 @@ msgstr "Täysi äänenvoimakkuus"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5313,6 +5095,168 @@ msgstr "Tulosta testitulostimelle"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Tiedoston ”%s” tietojen saaminen epäonnistui: %s"
+
+#~ msgid "Folders"
+#~ msgstr "Kansiot"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Kansiot"
+
+#~ msgid "_Files"
+#~ msgstr "_Tiedostot"
+
+# , c-format
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Kansiota ei voi lukea: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Tiedosto ”%s” on toisella koneella (nimeltään %s) ja tämä ohjelma ei "
+#~ "välttämättä löydä sitä.\n"
+#~ "Oletko varma, että haluat valita sen?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Uusi kansio"
+
+#~ msgid "De_lete File"
+#~ msgstr "Poista tie_dosto"
+
+#~ msgid "_Rename File"
+#~ msgstr "_Nimeä uudelleen"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Kansionimi ”%s” sisältää merkkejä, joita ei voi olla tiedostonimissä"
+
+#~ msgid "New Folder"
+#~ msgstr "Uusi kansio"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Kansion nimi:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Luo"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Tiedostonimi ”%s” sisältää merkkejä, joita ei voi olla tiedostonimissä"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Virhe poistettaessa tiedostoa ”%s”: %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Poistetaanko tiedosto ”%s”?"
+
+#~ msgid "Delete File"
+#~ msgstr "Poista tiedosto"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Virhe nimetessä uudestaan tiedostoa nimelle ”%s”: %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Virhe nimettäessä tiedostoa ”%s” uudestaan: %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Virhe nimetessä tiedostoa ”%s” nimelle ”%s”: %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Nimeä tiedosto uudelleen"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Nimeä tiedosto ”%s” uudelleen:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Nimeä uudelleen"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Valinta: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Tiedostonimen ”%s” muuntaminen UTF-8:ksi ei onnistunut. (Kokeile "
+#~ "ympäristömuuttujan G_FILENAME_ENCODING asettamista): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Virheellistä UTF-8:aa"
+
+#~ msgid "Name too long"
+#~ msgstr "Nimi on liian pitkä"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Ei voitu muuntaa tiedostonimeä"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_Gamma-arvo"
+
+#~ msgid "Input"
+#~ msgstr "Syöte"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Ei laajennussyöttölaitteita"
+
+#~ msgid "_Device:"
+#~ msgstr "_Laite:"
+
+#~ msgid "Disabled"
+#~ msgstr "Poistettu"
+
+#~ msgid "Screen"
+#~ msgstr "Ruutu"
+
+#~ msgid "Window"
+#~ msgstr "Ikkuna"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Tila:"
+
+#~ msgid "Axes"
+#~ msgstr "Akselit"
+
+#~ msgid "Keys"
+#~ msgstr "Avaimet"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Paine:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "X-_kallistus:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "Y-k_allistus:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "R_ulla:"
+
+#~ msgid "none"
+#~ msgstr "ei"
+
+#~ msgid "(disabled)"
+#~ msgstr "(ei käytössä)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(tuntematon)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "_Tyhjennä"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Ei vinkkiä ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Tyhjä)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2003-01-14 11:02+EDT\n"
 "Last-Translator: Ge'ez Frontier Foundation <locales@geez.org>\n"
 "Language-Team: Amharic <locales@geez.org>\n"
@@ -76,7 +76,7 @@ msgstr ""
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr ""
 
@@ -386,14 +386,14 @@ msgstr ""
 msgid "Error writing to image stream"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
 "but didn't give a reason for the failure"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
@@ -1225,52 +1225,52 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 #, fuzzy
 msgid "Could not show link"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr ""
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 #, fuzzy
 msgid "C_redits"
 msgstr "_ፍጠር"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr ""
 
@@ -1279,7 +1279,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1290,7 +1290,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1301,7 +1301,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1312,7 +1312,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr ""
@@ -1322,7 +1322,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr ""
@@ -1332,18 +1332,18 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr ""
@@ -1688,15 +1688,15 @@ msgstr "ቀኝ (_R)"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "ዘገባ የማስትገባት ዘዴዎች (_M)"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr ""
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "_ምርጫ፦ "
@@ -1706,7 +1706,7 @@ msgstr "_ምርጫ፦ "
 msgid "Select A File"
 msgstr "ፋይል አጥፉ"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr ""
 
@@ -1715,7 +1715,7 @@ msgstr ""
 msgid "(None)"
 msgstr "ምንም"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr ""
 
@@ -1723,34 +1723,34 @@ msgstr ""
 msgid "Type name of new folder"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 #, fuzzy
 msgid "Invalid file name"
 msgstr "የፋይል ስም"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr ""
 
@@ -1758,230 +1758,230 @@ msgstr ""
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 #, fuzzy
 msgid "Remove"
 msgstr "አስወግድ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 #, fuzzy
 msgid "Rename..."
 msgstr "እንደገና _ሰይም"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 #, fuzzy
 msgid "_Places"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "ጨምር (_A)"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "አስወግድ (_R)"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 #, fuzzy
 msgid "Could not select file"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "ፋይሎች"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 #, fuzzy
 msgid "Name"
 msgstr "የቀለሙ _ስም፦"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "መጠን"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 #, fuzzy
 msgid "Modified"
 msgstr "የአሠራሩ ዘዴ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 #, fuzzy
 msgid "_Name:"
 msgstr "የቀለሙ _ስም፦"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 #, fuzzy
 msgid "Type a file name"
 msgstr "የፋይል ስም"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 #, fuzzy
 msgid "Create Fo_lder"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 #, fuzzy
 msgid "_Location:"
 msgstr "_ምርጫ፦ "
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 #, fuzzy
 msgid "Save in _folder:"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 #, fuzzy
 msgid "Create in _folder:"
 msgstr "አዲስ ዶሴ"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 #, fuzzy
 msgid "Unknown"
 msgstr "(ያልታወቀ)"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 #, fuzzy
 msgid "_Replace"
 msgstr "እንደገና _ሰይም"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "የአሁኑን ቀለም"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, fuzzy, c-format
 msgid "Could not mount %s"
 msgstr "የአሁኑን ቀለም"
@@ -2045,137 +2045,10 @@ msgstr ""
 msgid "Path does not exist"
 msgstr ""
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "የአሁኑን ቀለም"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "ዶሴዎች"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_ዶሴዎች"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_ፋይሎች"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr ""
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_አዲስ ዶሴ"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "ፋይል _አጥፉ"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "ፋይልን እንደገና ሰይም (_R)"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "አዲስ ዶሴ"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "የዶሴ _ስም"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_ፍጠር"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, fuzzy, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "የአሁኑን ቀለም"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "ፋይል አጥፉ"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "ፋይልን እንደገና ሰይም"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr ""
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "እንደገና _ሰይም"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_ምርጫ፦ "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-
-#: gtk/gtkfilesel.c:3059
-#, fuzzy
-msgid "Invalid UTF-8"
-msgstr "Utf-8 ተቀብሏል"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr ""
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr ""
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2223,17 +2096,9 @@ msgstr "_መጠን፦"
 msgid "_Preview:"
 msgstr "ቅድመ _ዕይታ፦"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "የፊደል ቅርጽ ምርጫ"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "ጋማ"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "የ_ጋማ ዕሴት"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2285,96 +2150,14 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr ""
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "አስገባ"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "የተበላሸ"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "እስክሪን"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "መስኮት"
-
-#: gtk/gtkinputdialog.c:258
-#, fuzzy
-msgid "_Mode:"
-msgstr "የአሠራሩ ዘዴ፦ (_M)"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr ""
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:526
-#, fuzzy
-msgid "_Pressure:"
-msgstr "ቅድመ _ዕይታ፦"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "ምንም"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(የተበላሸ)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(ያልታወቀ)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-#, fuzzy
-msgid "Cl_ear"
-msgstr "ሰርዝ (_C)"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 #, fuzzy
 msgid "_Open Link"
 msgstr "ክፈት (_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2389,27 +2172,27 @@ msgid "Invalid URI"
 msgstr "Utf-8 ተቀብሏል"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr ""
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr ""
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr ""
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr ""
 
@@ -2418,20 +2201,20 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr ""
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr ""
 
@@ -2521,7 +2304,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "ገጽ %u"
@@ -2580,7 +2363,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 #, fuzzy
 msgid "File System Root"
 msgstr "ፋይሎች"
@@ -2593,6 +2376,11 @@ msgstr "_ምርጫ፦ "
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr ""
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "ፋይል አጥፉ"
 
 #: gtk/gtkprinteroptionwidget.c:814
 #, fuzzy
@@ -3094,12 +2882,12 @@ msgstr ""
 msgid "Print"
 msgstr "አትም (_P)"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
@@ -3200,10 +2988,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr ""
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr ""
@@ -3954,10 +3742,6 @@ msgstr ""
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr ""
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- ምንም ፍንጭ የልም ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3972,40 +3756,40 @@ msgstr ""
 msgid "Empty"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 #, fuzzy
 msgid "Volume"
 msgstr "_ዕሴት፦"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr ""
 
@@ -4014,7 +3798,7 @@ msgstr ""
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5459,6 +5243,95 @@ msgstr "አትም (_P)"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr ""
+
+#~ msgid "Folders"
+#~ msgstr "ዶሴዎች"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_ዶሴዎች"
+
+#~ msgid "_Files"
+#~ msgstr "_ፋይሎች"
+
+#~ msgid "_New Folder"
+#~ msgstr "_አዲስ ዶሴ"
+
+#~ msgid "De_lete File"
+#~ msgstr "ፋይል _አጥፉ"
+
+#~ msgid "_Rename File"
+#~ msgstr "ፋይልን እንደገና ሰይም (_R)"
+
+#~ msgid "New Folder"
+#~ msgstr "አዲስ ዶሴ"
+
+#~ msgid "_Folder name:"
+#~ msgstr "የዶሴ _ስም"
+
+#~ msgid "C_reate"
+#~ msgstr "_ፍጠር"
+
+#, fuzzy
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "የአሁኑን ቀለም"
+
+#~ msgid "Delete File"
+#~ msgstr "ፋይል አጥፉ"
+
+#~ msgid "Rename File"
+#~ msgstr "ፋይልን እንደገና ሰይም"
+
+#~ msgid "_Rename"
+#~ msgstr "እንደገና _ሰይም"
+
+#~ msgid "_Selection: "
+#~ msgstr "_ምርጫ፦ "
+
+#, fuzzy
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Utf-8 ተቀብሏል"
+
+#~ msgid "Gamma"
+#~ msgstr "ጋማ"
+
+#~ msgid "_Gamma value"
+#~ msgstr "የ_ጋማ ዕሴት"
+
+#~ msgid "Input"
+#~ msgstr "አስገባ"
+
+#~ msgid "Disabled"
+#~ msgstr "የተበላሸ"
+
+#~ msgid "Screen"
+#~ msgstr "እስክሪን"
+
+#~ msgid "Window"
+#~ msgstr "መስኮት"
+
+#, fuzzy
+#~ msgid "_Mode:"
+#~ msgstr "የአሠራሩ ዘዴ፦ (_M)"
+
+#, fuzzy
+#~ msgid "_Pressure:"
+#~ msgstr "ቅድመ _ዕይታ፦"
+
+#~ msgid "none"
+#~ msgstr "ምንም"
+
+#~ msgid "(disabled)"
+#~ msgstr "(የተበላሸ)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(ያልታወቀ)"
+
+#, fuzzy
+#~ msgid "Cl_ear"
+#~ msgstr "ሰርዝ (_C)"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- ምንም ፍንጭ የልም ---"
 
 #, fuzzy
 #~ msgid "Couldn't create pixbuf"

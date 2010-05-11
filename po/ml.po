@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2009-09-01 08:52+0530\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
@@ -78,7 +78,7 @@ msgstr "ക്രമീകരിക്കാനുള്ള Gdk ഡീബഗ്�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -375,7 +375,7 @@ msgstr "ബഫറിലേക്ക് ഇമേജ് സൂക്ഷിക്�
 msgid "Error writing to image stream"
 msgstr "ഇമേജ് സ്റ്റ്രീമിലേക്കു്‌ സൂക്ഷിക്കുന്നതില്‍ പരാജയം"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -384,7 +384,7 @@ msgstr ""
 "ആന്തരിക പിശക്: ഇമേജ് ലഭ്യമാക്കുന്ന ഘടകമായ '%s' ഒരു പ്രക്രിയ പൂര്‍ണ്ണമാക്കുന്നതില്‍ പരാജയപ്പെട്ടു, "
 "കാരണമെന്തെന്ന് വ്യക്തമല്ല"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "'%s' തരത്തിലുള്ള ഇമേജിന്റെ വര്‍ദ്ധിച്ചുള്ള ലഭ്യമാക്കല്‍ പിന്തുണയ്ക്കുന്നില്ല"
@@ -1225,50 +1225,50 @@ msgid_plural "Opening %d Items"
 msgstr[0] "'%s' തുറക്കുന്നു"
 msgstr[1] "'%s' തുറക്കുന്നു"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "കണ്ണി കാണിക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "അനുമതിപത്രം "
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "പ്രോഗ്രാമിനുള്ള അനുമതിപത്രം"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_ബഹുമതികള്‍"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_അനുമതിപത്രം"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "%s സംബന്ധിച്ച്"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "ബഹുമതികള്‍"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "എഴുതിയതു്"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "സഹായക്കുറിപ്പുകള്‍"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "പരിഭാഷകര്‍"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "കലാവിരുതുകള്‍"
 
@@ -1277,7 +1277,7 @@ msgstr "കലാവിരുതുകള്‍"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1287,7 +1287,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1297,7 +1297,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1307,7 +1307,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1317,7 +1317,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1327,17 +1327,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1681,15 +1681,15 @@ msgstr "_വലത്ത്:"
 msgid "Paper Margins"
 msgstr "പേപ്പറിനുള്ള മാര്‍ജിനുകള്‍"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "ഇന്‍പുട്ട് _രീതികള്‍"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Insert Unicode Control Character"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "Caps Lock ഓണ്‍ ആണു്"
 
@@ -1697,7 +1697,7 @@ msgstr "Caps Lock ഓണ്‍ ആണു്"
 msgid "Select A File"
 msgstr "ഒരു ഫയല്‍ തെരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "പണിയിടം"
 
@@ -1705,7 +1705,7 @@ msgstr "പണിയിടം"
 msgid "(None)"
 msgstr "(ഒന്നുമില്ല)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "മറ്റുള്ളവ..."
 
@@ -1713,23 +1713,23 @@ msgstr "മറ്റുള്ളവ..."
 msgid "Type name of new folder"
 msgstr "പുതിയ അറയുടെ പേരു് ടൈപ്പ് ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "ഫയല്‍ സംബന്ധിച്ചുള്ള വിവരം ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "ഒരു ഓര്‍മ്മക്കുറിപ്പു് ചേര്‍ക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "അറ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1737,11 +1737,11 @@ msgstr ""
 "അറ ഉണ്ടാക്കുവാന്‍ സാധ്യമായില്ല, കാരണം ആ പേരില്‍ മറ്റൊരു ഫയല്‍ നിലവിലുണ്ട്. വേറൊരു പേരു് "
 "ഉപയോഗിക്കുക, അല്ലെങ്കില്‍ ആദ്യം ഫയലിന്റെ പേരു് മാറ്റുക."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "തെറ്റായ ഫയല്‍ നാമം"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "അറയിലുള്ളവ പ്രദര്‍ശിപ്പിക്കുവാന്‍ സാധ്യമായില്ല"
 
@@ -1749,202 +1749,202 @@ msgstr "അറയിലുള്ളവ പ്രദര്‍ശിപ്പി�
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s, %2$s-ല്‍"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "തെരയുക"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "ഏറ്റവും ഒടുവില്‍ ഉപയോഗിച്ച"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "ഏത് തരം ഫയലുകളാണ് കാണിച്ചിട്ടുള്ളത് എന്ന് തെരഞ്ഞെടുക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് '%s' അറ ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "ഈ അറ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "തെരഞ്ഞെടുത്ത അറകള്‍ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' എന്ന ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "'%s' അടയാളക്കുറിപ്പു് നീക്കം ചെയ്യുവാന്‍ സാധ്യമല്ല"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "തെരഞ്ഞെടുത്ത ഓര്‍മ്മക്കുറിപ്പു് നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "പേരു് മാറ്റുക..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "സ്ഥലങ്ങള്‍"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_സ്ഥലങ്ങള്‍"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "തെരഞ്ഞെടുത്ത അറ ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_നീക്കം ചെയ്യുക"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "ഫയല്‍ തെരഞ്ഞെടുക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "ഓര്‍മ്മക്കുറിപ്പിലേയ്ക്കു് _ചേര്‍ക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "_അദൃശ്യമായ ഫയലുകള്‍ കാണിക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "_വ്യാപ്തിയ്ക്കുള്ള നിര കാണിക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "ഫയലുകള്‍"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "പേരു്"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "വലിപ്പം"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "മാറ്റം വരുത്തിയവ"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_പേരു്:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "മറ്റ് അറകള്‍ക്കായി പരതുക"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "ഒരു ഫയലിന്റെ പേരു് ടൈപ്പ് ചെയ്യുക"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "_അറ ഉണ്ടാക്കുക"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_സ്ഥാനം:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "_അറയില്‍ സൂക്ഷിക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "_അറയില്‍ ഉണ്ടാക്കുക:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "സ്റ്റ്രീം ഉണ്ടാക്കാന്‍ കഴിഞ്ഞില്ല : %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "റൂട്ട് അറ ലഭ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "അപരിചിതം"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "ഇന്നലെ %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "ലോക്കല്‍ ആയതിനാല്‍ അറയിലേയ്ക്കു് മാറ്റുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലുണ്ട്"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s എന്ന കുറുക്ക് വഴി നിലവിലില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "\"%s\" എന്ന പേരില്‍ ഒരു ഫയല്‍ നിലവിലുണ്ട്.  നിങ്ങള്‍ക്ക് അത് മാറ്റി എഴുതണമോ?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "\"%s\"-ല്‍ ഒരു ഫയല്‍ ഉണ്ട്.  അതിന്റെ സ്ഥാനത്ത് ഇത് സൂക്ഷിച്ചാല്‍ ഉള്ളടക്കം മാറ്റി എഴുതപ്പെടുന്നു."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "മാറ്റി വേറെ സൂക്ഷിക്കുക (_R)"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "തിരച്ചില്‍ പ്രക്രിയ ആരംഭിക്കുവാനായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1952,15 +1952,15 @@ msgstr ""
 "indexer ഡെമണിലേക്ക് ഒരു കണക്ഷന്‍ ഉണ്ടാക്കുവാന്‍ പ്രോഗ്റാമിന് സാധ്യമായില്ല.  അത് പ്രവറ്‍ത്തിക്കുന്നു "
 "എന്നുറപ്പാക്കുക."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "തിരച്ചിലിനുള്ള ആവശ്യം അയയ്ക്കുവാന്‍ സാധ്യമായില്ല"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "തെരയുക:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s മൌണ്ട് ചെയ്യുവാന്‍ സാധ്യമായില്ല"
@@ -2022,143 +2022,10 @@ msgstr "അപൂര്‍ണ്ണമായ ഹോസ്റ്റ്നാമ�
 msgid "Path does not exist"
 msgstr "പാഥ് നിലവിലില്ല"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' അറ ഉണ്ടാക്കുന്നതില്‍ പിശക്: %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "അറകള്‍"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "അറകള്‍ (_d)"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "ഫയലുകള്‍ (_F)"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "അറ വായിക്കുവാനായില്ല: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"\"%s\" എന്ന ഫയല്‍ മറ്റൊരു സിസ്റ്റമില്‍ (%s) സൂക്ഷിച്ചിരിക്കുന്നു. അതിനാല്‍ ഈ പ്രോഗ്രാമിനു് ഇതു് "
-"ലഭ്യമല്ല.\n"
-"നിങ്ങള്‍ക്കു് ഇതു് തെരഞ്ഞെടുക്കണമെന്നു് ഉറപ്പാണോ?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "പുതിയ അറ (_N)"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "ഫയല്‍ വെട്ടി നീക്കുക (_l)"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "ഫയലിന്റെ പേരു് മാറ്റുക (_R)"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "പുതിയ അറ"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_അറയുടെ പേരു്:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "ഉ_ണ്ടാക്കുക"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "'%s' ഫയല്‍ വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "\"%s\" എന്ന ഫയല്‍ വെട്ടി നീക്കണമോ?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "ഫയല്‍ വെട്ടി നീക്കുക"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "ഫയലിന്റെ പേരു് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "\"%s\" എന്ന ഫയലിന്റെ പേരു് മാറ്റുന്നതില്‍ പിശക്: %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "\"%s\" എന്ന ഫയലിന്റെ പേരു് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "ഫയലിന്റെ പേരു് മാറ്റുക"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "\"%s\" എന്ന ഫയല്‍ മാറ്റേണ്ട പേര്:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "പേരു് _മാറ്റുക"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_തെരഞ്ഞെടുക്കല്‍:"
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"\"%s\" ഫയല്‍നാമം UTF-8-ലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല. (G_FILENAME_ENCODING എന്ന "
-"എന്‍വയോണ്മെന്റ് സജ്ജമാക്കുന്നതിനായി ശ്രമിക്കുക): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "അസാധുവായ UTF-8"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "പേരു് വളരെ വലുതാണു്"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "ഫയലിന്റെ പേരു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2205,17 +2072,9 @@ msgstr "_വലിപ്പം:"
 msgid "_Preview:"
 msgstr "സ്ക്രീനില്‍ _കാണുക:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "അക്ഷരസഞ്ചയം തെരഞ്ഞെടുക്കല്‍"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "ഗാമാ"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "_ഗാമായുടെ മൂല്ല്യം"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2268,92 +2127,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "സിസ്റ്റം (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "ഇന്‍പുട്ട്"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "എക്സ്റ്റെന്‍ഡഡ് ഇന്‍പുട്ട് ഡിവൈസുകള്‍ ലഭ്യമല്ല"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_ഉപകരണം:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "പ്രവര്‍ത്തനരഹിതം"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "സ്ക്രീന്‍"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "ജാലകം"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_മോഡ്:"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "ആക്സെസ്"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "കീകള്‍"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_മര്‍ദ്ദം:"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "X _tilt:"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Y t_ilt:"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "ചക്രം (_W):"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "ഒന്നുമില്ല"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(പ്രവര്‍ത്തനരഹിതം)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(അപരിചിതം)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "വെ_ടിപ്പാക്കുക"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "കണ്ണി _തുറക്കുക "
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "_കണ്ണിയുടെ വിലാസം പകര്‍ത്തുക"
 
@@ -2366,27 +2146,27 @@ msgid "Invalid URI"
 msgstr "തെറ്റായ URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "കൂടുതല്‍ GTK+ ഘടകങ്ങള്‍ ലഭ്യമാക്കുക"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "എല്ലാ മുന്നറിയിപ്പുകളും പ്രധാനമാക്കുക"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "ക്രമീകരിക്കാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GTK+ ഡീബഗ്ഗിങ് ഫ്ളാഗുകള്‍ "
 
@@ -2395,20 +2175,20 @@ msgstr "നിറ്‍ജ്ജീവമാക്കുവാനുള്ള GT
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ഡിസ്പ്ലെ തുറക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "GTK+ ഉപാധികള്‍ കാണിക്കുക"
 
@@ -2493,7 +2273,7 @@ msgstr "Z ഷെല്‍"
 msgid "Cannot end process with pid %d: %s"
 msgstr "pid %d-ല്‍ പ്രക്രിയ അവസാനിപ്പിക്കുവാന്‍ സാധ്യമല്ല: %s"
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "താള്‍ %u"
@@ -2553,7 +2333,7 @@ msgstr "മുകളിലേക്കുള്ള വഴി"
 msgid "Down Path"
 msgstr "താഴേക്കുള്ള വഴി"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "ഫയല്‍ സിസ്റ്റം റൂട്ട്"
 
@@ -2564,6 +2344,11 @@ msgstr "ആധികാരികത ഉറപ്പാക്കല്‍"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "ലഭ്യമല്ല"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "ഒരു ഫയല്‍ തെരഞ്ഞെടുക്കുക"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3041,12 +2826,12 @@ msgstr "ഡയലോഗിലുള്ള ചില ക്രമീകരണങ�
 msgid "Print"
 msgstr "പ്രിന്റ് ചെയ്യുക"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include ഫയല്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path-ല്‍ ഇമേജ് ഫയല്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\""
@@ -3142,10 +2927,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' എന്ന URI ഉള്ള ഒരു വസ്തു ലഭ്യമായില്ല"
@@ -3820,10 +3605,6 @@ msgstr "ZWNJ സീറോ വിഡ്ത് നോണ്‍-ജോയിനറ�
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "module_path-ലുള്ള ഥീം എഞ്ചിന്‍ ലഭ്യമാക്കുവാന്‍ സാധ്യമായില്ല: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- സൂചനയില്ല ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3838,39 +3619,39 @@ msgstr "%d വരിയില്‍ അപ്രതീക്ഷിതമായ �
 msgid "Empty"
 msgstr "ശൂന്യം"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "ശബ്ദം"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "ശബ്ദം കൂട്ടുകയോ കുറയ്ക്കുകയോ ചെയ്യുന്നു"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "ശബ്ദം മാറ്റുന്നു"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "ശബ്ദം കുറയ്ക്കുക"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "ശബ്ദം കൂറയ്ക്കുന്നു"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "ശബ്ദം കൂട്ടുക"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "ശബ്ദം കൂട്ടുന്നു"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "നിശബ്ദമാക്കുക"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "മുഴുവന്‍ വോള്യം"
 
@@ -3879,7 +3660,7 @@ msgstr "മുഴുവന്‍ വോള്യം"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5304,6 +5085,167 @@ msgstr "ടെസ്റ്റ് പ്രിന്ററിലേക്ക് �
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' എന്ന ഫയലിന് ആവശ്യമുള്ള വിവരം ലഭ്യമായില്ല: %s"
+
+#~ msgid "Folders"
+#~ msgstr "അറകള്‍"
+
+#~ msgid "Fol_ders"
+#~ msgstr "അറകള്‍ (_d)"
+
+#~ msgid "_Files"
+#~ msgstr "ഫയലുകള്‍ (_F)"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "അറ വായിക്കുവാനായില്ല: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "\"%s\" എന്ന ഫയല്‍ മറ്റൊരു സിസ്റ്റമില്‍ (%s) സൂക്ഷിച്ചിരിക്കുന്നു. അതിനാല്‍ ഈ പ്രോഗ്രാമിനു് ഇതു് "
+#~ "ലഭ്യമല്ല.\n"
+#~ "നിങ്ങള്‍ക്കു് ഇതു് തെരഞ്ഞെടുക്കണമെന്നു് ഉറപ്പാണോ?"
+
+#~ msgid "_New Folder"
+#~ msgstr "പുതിയ അറ (_N)"
+
+#~ msgid "De_lete File"
+#~ msgstr "ഫയല്‍ വെട്ടി നീക്കുക (_l)"
+
+#~ msgid "_Rename File"
+#~ msgstr "ഫയലിന്റെ പേരു് മാറ്റുക (_R)"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന അറയുടെ പേരിലുണ്ട്"
+
+#~ msgid "New Folder"
+#~ msgstr "പുതിയ അറ"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_അറയുടെ പേരു്:"
+
+#~ msgid "C_reate"
+#~ msgstr "ഉ_ണ്ടാക്കുക"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "ഫയലിന്റെ പേരില്‍ ഉപയോഗിക്കുവാന്‍ പാടില്ലാത്ത ചില ചിഹ്നങ്ങള്‍ \"%s\" എന്ന ഫയല്‍നാമത്തിലുണ്ട്"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "'%s' ഫയല്‍ വെട്ടി നീക്കുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "\"%s\" എന്ന ഫയല്‍ വെട്ടി നീക്കണമോ?"
+
+#~ msgid "Delete File"
+#~ msgstr "ഫയല്‍ വെട്ടി നീക്കുക"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "ഫയലിന്റെ പേരു് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "\"%s\" എന്ന ഫയലിന്റെ പേരു് മാറ്റുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "\"%s\" എന്ന ഫയലിന്റെ പേരു് \"%s\" ആക്കി മാറ്റുന്നതില്‍ പിശക്: %s"
+
+#~ msgid "Rename File"
+#~ msgstr "ഫയലിന്റെ പേരു് മാറ്റുക"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "\"%s\" എന്ന ഫയല്‍ മാറ്റേണ്ട പേര്:"
+
+#~ msgid "_Rename"
+#~ msgstr "പേരു് _മാറ്റുക"
+
+#~ msgid "_Selection: "
+#~ msgstr "_തെരഞ്ഞെടുക്കല്‍:"
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "\"%s\" ഫയല്‍നാമം UTF-8-ലേക്കു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല. (G_FILENAME_ENCODING "
+#~ "എന്ന എന്‍വയോണ്മെന്റ് സജ്ജമാക്കുന്നതിനായി ശ്രമിക്കുക): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "അസാധുവായ UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "പേരു് വളരെ വലുതാണു്"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "ഫയലിന്റെ പേരു് വേര്‍തിരിക്കുവാന്‍ സാധ്യമായില്ല"
+
+#~ msgid "Gamma"
+#~ msgstr "ഗാമാ"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_ഗാമായുടെ മൂല്ല്യം"
+
+#~ msgid "Input"
+#~ msgstr "ഇന്‍പുട്ട്"
+
+#~ msgid "No extended input devices"
+#~ msgstr "എക്സ്റ്റെന്‍ഡഡ് ഇന്‍പുട്ട് ഡിവൈസുകള്‍ ലഭ്യമല്ല"
+
+#~ msgid "_Device:"
+#~ msgstr "_ഉപകരണം:"
+
+#~ msgid "Disabled"
+#~ msgstr "പ്രവര്‍ത്തനരഹിതം"
+
+#~ msgid "Screen"
+#~ msgstr "സ്ക്രീന്‍"
+
+#~ msgid "Window"
+#~ msgstr "ജാലകം"
+
+#~ msgid "_Mode:"
+#~ msgstr "_മോഡ്:"
+
+#~ msgid "Axes"
+#~ msgstr "ആക്സെസ്"
+
+#~ msgid "Keys"
+#~ msgstr "കീകള്‍"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_മര്‍ദ്ദം:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "X _tilt:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "Y t_ilt:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "ചക്രം (_W):"
+
+#~ msgid "none"
+#~ msgstr "ഒന്നുമില്ല"
+
+#~ msgid "(disabled)"
+#~ msgstr "(പ്രവര്‍ത്തനരഹിതം)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(അപരിചിതം)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "വെ_ടിപ്പാക്കുക"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- സൂചനയില്ല ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(ശൂന്യം)"

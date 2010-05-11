@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2009-02-13 12:58+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
@@ -83,7 +83,7 @@ msgstr "Flag e debug të Gdk për tu caktuar"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -386,7 +386,7 @@ msgstr "Kujtesë e pamjaftueshme për të ruajtur figurën në një buffer"
 msgid "Error writing to image stream"
 msgstr "Gabim gjatë shkrimit tek stream i figurës"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -395,7 +395,7 @@ msgstr ""
 "Gabim i brendshëm: Moduli ngarkues i figurave '%s' dështoi në plotësimin e "
 "një operacioni, por nuk dha ndonjë arsye për dështimin"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Ngarkimi inkremental i figurave të llojit '%s' nuk suportohet"
@@ -1256,51 +1256,51 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Duke hapur %d element"
 msgstr[1] "Duke hapur %d elementë"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 #, fuzzy
 msgid "Could not show link"
 msgstr "I pamundur pastrimi i listës"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Liçenca"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Liçenca e programit"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "Falende_rime"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Liçenca"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "Informacione mbi %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Falenderime"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Shkruar nga"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Dokumentuar nga"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Përkthyer nga"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Grafika nga"
 
@@ -1309,7 +1309,7 @@ msgstr "Grafika nga"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1319,7 +1319,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1329,7 +1329,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1339,7 +1339,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1349,7 +1349,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1359,17 +1359,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Hapësirë"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1718,15 +1718,15 @@ msgstr "_Djathtas:"
 msgid "Paper Margins"
 msgstr "Kufijtë e letrës"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Metodat e input"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Shto simbol kontrolli unicode"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "\"Me gërma kapitale\" është aktivizuar"
 
@@ -1734,7 +1734,7 @@ msgstr "\"Me gërma kapitale\" është aktivizuar"
 msgid "Select A File"
 msgstr "Zgjidh një file"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Hapësira e punës"
 
@@ -1742,7 +1742,7 @@ msgstr "Hapësira e punës"
 msgid "(None)"
 msgstr "(Asnjë)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Tjetër..."
 
@@ -1750,23 +1750,23 @@ msgstr "Tjetër..."
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "E pamundur marrja e informacioneve në lidhje me file"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "I pamundur shtimi i një libërshënuesi"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "E pamundur fshirja e libërshënuesit"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "I pamundur krijimi i kartelës"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1775,11 +1775,11 @@ msgstr ""
 "Përdor një emër tjetër për kartelën, ose ndrysho fillimisht emrin e file "
 "ekzistues."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Emër i pavlefshëm file"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "E pamundur shfaqja e pëmbajtjes së kartelës"
 
@@ -1787,203 +1787,203 @@ msgstr "E pamundur shfaqja e pëmbajtjes së kartelës"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s mbi %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Kërko"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Përdorur së fundmi"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Zgjidh llojet e files që duhen shfaqur"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Shto në libërshënues kartelën '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Shto në libërshënues kartelën aktuale"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Shto në libërshënues kartelat e zgjedhura"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Hiq libërshënuesin '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Hiq libërshënuesin e zgjedhur"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Hiq"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Riemërto..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Rezervat"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Rezervat"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Shto"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Shto në libërshënues kartelën e zgjedhur"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Hiq"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "E pamundur zgjedhja e file"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Shto në libërshënues"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Shfaq file e _padukshëm"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "Shfaq kollonën Madhë_sia"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "File"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Emri"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Madhësia"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Ndryshuar"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Emri:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "_Shfleto për kartelat e tjera"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Shkruaj emrin e një file"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Krijo Karte_lë"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Pozicioni:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "Ruaj tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Krijoje tek _kartela:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "I pamundur krijimi i fluksit: %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "E pamundur marrja kartelës bazë"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Nuk njihet"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Dje në orën %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "I pamundur kalimi tek kartela pasi nuk është lokale"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Shtegu %s ekziston rregullisht"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Një file i quajtur \"%s\" ekziston.  Dëshiron t'a zëvendësosh?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "File ekziston në \"%s\".  Zëvendësimi do të mbishkruaj përmbajtjen e tij."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Zëvendëso"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "E pamundur nisja e proçesit të kërkimit"
 
 # (pofilter) doublespacing: checks for bad double-spaces by comparing to original
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1991,16 +1991,16 @@ msgstr ""
 "Programi nuk mundi të krijojë një lidhje me daemon e indeksimit. Sigurohu që "
 "është duke funksionuar."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "I pamundur dërgimi i kërkesës së kërkimit"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 #, fuzzy
 msgid "Search:"
 msgstr "Kërko"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "I pamundur montimi i %s"
@@ -2063,143 +2063,10 @@ msgstr "Emër i paplotë host-i; përfundoje me '/'"
 msgid "Path does not exist"
 msgstr "Pozicioni nuk ekziston"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Gabim në krijimin e kartelës '%s': %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Kartelat"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Kartelat"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_File"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Kartelë e palexueshme: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"File \"%s\" gjendet në një tjetër makinë (të quajtur %s) dhe mund të mos "
-"jetë e vlefshme për këtë program.\n"
-"Jeni i sigurt se doni t'a zgjidhni?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "Kartelë e _Re"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "E_lemino file"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Riemërto File"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Kartelë e Re"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "Emri i _kartelës:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_Krijo"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Emri i file \"%s\" përmban simbole të papranueshëm në emrat e files"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Gabim në fshirjen e file '%s': %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Të fshij vërtet file \"%s\"?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Elemino file"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Gabim në riemërtimin e file si \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Gabim në riemërtimin e file \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Gabim në riemërtimin e file \"%s\" si \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Riemërto file"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Po riemërtoj file \"%s\" si:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Riemërto"
-
-# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Zgjedhja:"
-
-# (pofilter) sentencecount: The number of sentences differ: 2 versus 1
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Emri i file \"%s\" nuk mund të shndërrohet në UTF-8 (provo rregullimin e të "
-"ndryshueshmes së mjedisit G_FILENAME_ENCODING): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "UTF-8 jo korrekte"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Emër tepër i gjatë"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "I pamundur konvertimi i emrit të file"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2246,17 +2113,9 @@ msgstr "Madhë_sia:"
 msgid "_Preview:"
 msgstr "_Pamja e parë:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Zgjedhja e gërmave"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "Vlera _gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2309,95 +2168,14 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistemi (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Input"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Asnjë dispozitiv input i zgjeruar"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Dispozitivi:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Jo aktiv"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Ekrani"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Dritarja"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Modaliteti:"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Boshtet"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Kyçet"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Trysnia:"
-
-# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "P_jerrësia X:"
-
-# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "P_jerrësia Y:"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "_Rrotullimi:"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "asnjë"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(jo aktiv)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(nuk njihet)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "P_astro"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Hap"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2411,28 +2189,28 @@ msgid "Invalid URI"
 msgstr "URI e pavlefshme"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Ngarko modulë shtesë GTK+"
 
 # (pofilter) acronyms: acronyms should not be translated: MODULES
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULËT"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Bëj që të gjithë paralajmërimet të jenë fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Flag e debug të GTK+ për tu caktuar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Flag e debug të GTK+ për tu hequr"
 
@@ -2441,20 +2219,20 @@ msgstr "Flag e debug të GTK+ për tu hequr"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "E pamundur hapja e display: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Opcionet e GTK+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Shfaq opcionet GTK+"
 
@@ -2540,7 +2318,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Faqja %u"
@@ -2604,7 +2382,7 @@ msgstr "Pozicioni sipër"
 msgid "Down Path"
 msgstr "Pozicioni poshtë"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Root i file të sistemit"
 
@@ -2616,6 +2394,11 @@ msgstr "Aplikativi"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Jo në dispozicion"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Zgjidh një file"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3107,12 +2890,12 @@ msgstr "Disa nga rregullimet në dritaren e dialogut janë në konflikt"
 msgid "Print"
 msgstr "Printo"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "E pamundur gjetja e file që duhet përfshirë: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
@@ -3208,10 +2991,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "E pamundur gjetja e një elementi me URI «%s»"
@@ -3907,11 +3690,6 @@ msgstr "HJBGZ hapësirë j_o bashkimi me gjerësi zero"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "E pamundur gjetja e motorrit të temës tek module_path: \"%s\","
 
-# (pofilter) startpunc: checks whether punctuation at the beginning of the strings match
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "-- Asnjë këshillë --"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3926,39 +3704,39 @@ msgstr "E dhënë e papritur në rreshtin %d gërma %d"
 msgid "Empty"
 msgstr "Bosh"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Volumi"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Ngre apo ul volumin"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Rregullo volumin"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Ul zërin"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Ul volumin"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Ngri zërin"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Ngre volumin"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Pa zë"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Zëri në maksimum"
 
@@ -3967,7 +3745,7 @@ msgstr "Zëri në maksimum"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5450,6 +5228,171 @@ msgstr "Printo në Test Printer"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
+
+#~ msgid "Folders"
+#~ msgstr "Kartelat"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Kartelat"
+
+#~ msgid "_Files"
+#~ msgstr "_File"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Kartelë e palexueshme: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "File \"%s\" gjendet në një tjetër makinë (të quajtur %s) dhe mund të mos "
+#~ "jetë e vlefshme për këtë program.\n"
+#~ "Jeni i sigurt se doni t'a zgjidhni?"
+
+#~ msgid "_New Folder"
+#~ msgstr "Kartelë e _Re"
+
+#~ msgid "De_lete File"
+#~ msgstr "E_lemino file"
+
+#~ msgid "_Rename File"
+#~ msgstr "_Riemërto File"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
+
+#~ msgid "New Folder"
+#~ msgstr "Kartelë e Re"
+
+#~ msgid "_Folder name:"
+#~ msgstr "Emri i _kartelës:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Krijo"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Emri i file \"%s\" përmban simbole të papranueshëm në emrat e files"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Gabim në fshirjen e file '%s': %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Të fshij vërtet file \"%s\"?"
+
+#~ msgid "Delete File"
+#~ msgstr "Elemino file"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Gabim në riemërtimin e file si \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Gabim në riemërtimin e file \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Gabim në riemërtimin e file \"%s\" si \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Riemërto file"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Po riemërtoj file \"%s\" si:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Riemërto"
+
+# (pofilter) endwhitespace: checks whether whitespace at the end of the strings matches
+#~ msgid "_Selection: "
+#~ msgstr "_Zgjedhja:"
+
+# (pofilter) sentencecount: The number of sentences differ: 2 versus 1
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Emri i file \"%s\" nuk mund të shndërrohet në UTF-8 (provo rregullimin e "
+#~ "të ndryshueshmes së mjedisit G_FILENAME_ENCODING): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "UTF-8 jo korrekte"
+
+#~ msgid "Name too long"
+#~ msgstr "Emër tepër i gjatë"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "I pamundur konvertimi i emrit të file"
+
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+#~ msgid "_Gamma value"
+#~ msgstr "Vlera _gamma"
+
+#~ msgid "Input"
+#~ msgstr "Input"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Asnjë dispozitiv input i zgjeruar"
+
+#~ msgid "_Device:"
+#~ msgstr "_Dispozitivi:"
+
+#~ msgid "Disabled"
+#~ msgstr "Jo aktiv"
+
+#~ msgid "Screen"
+#~ msgstr "Ekrani"
+
+#~ msgid "Window"
+#~ msgstr "Dritarja"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Modaliteti:"
+
+#~ msgid "Axes"
+#~ msgstr "Boshtet"
+
+#~ msgid "Keys"
+#~ msgstr "Kyçet"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Trysnia:"
+
+# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
+#~ msgid "X _tilt:"
+#~ msgstr "P_jerrësia X:"
+
+# (pofilter) simplecaps: checks the capitalisation of two strings isn't wildly different
+#~ msgid "Y t_ilt:"
+#~ msgstr "P_jerrësia Y:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "_Rrotullimi:"
+
+#~ msgid "none"
+#~ msgstr "asnjë"
+
+#~ msgid "(disabled)"
+#~ msgstr "(jo aktiv)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(nuk njihet)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "P_astro"
+
+# (pofilter) startpunc: checks whether punctuation at the beginning of the strings match
+#~ msgid "--- No Tip ---"
+#~ msgstr "-- Asnjë këshillë --"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Bosh)"

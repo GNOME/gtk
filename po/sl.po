@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2010-02-24 12:14+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
@@ -82,7 +82,7 @@ msgstr "Zastavice razhroščevanja GDK, ki naj bodo nastavljene"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "ZASTAVICE"
 
@@ -382,7 +382,7 @@ msgstr "Ni dovolj pomnilnika za hrambo slike v medpomnilnik"
 msgid "Error writing to image stream"
 msgstr "Napaka med pisanjem v slikovni pretok"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -391,7 +391,7 @@ msgstr ""
 "Notranja napaka: Modul nalagalnika slik '%s' ni uspel končati opravila, "
 "vendar ni podal razloga za neuspeh"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Postopno nalaganje slike v zapisu '%s' ni podprto"
@@ -1233,50 +1233,50 @@ msgstr[1] "Odpiranje %d predmeta"
 msgstr[2] "Odpiranje %d predmetov"
 msgstr[3] "Odpiranje %d predmetov"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "Ni mogoče pokazati povezave"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Dovoljenje"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Dovoljenje programa"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_Zasluge"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Dovoljenje"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "O %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Zasluge"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Napisali"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Dokumentirali"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Prevedli"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Grafična podobo oblikovali"
 
@@ -1285,7 +1285,7 @@ msgstr "Grafična podobo oblikovali"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Dvigalka"
@@ -1295,7 +1295,7 @@ msgstr "Dvigalka"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1305,7 +1305,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1315,7 +1315,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1325,7 +1325,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -1335,17 +1335,17 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Preslednica"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Leva poševnica"
@@ -1688,15 +1688,15 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Načini vnosa"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Vstavi nadzorni znak Unicode"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "Tipka velikih črk je vključena."
 
@@ -1704,7 +1704,7 @@ msgstr "Tipka velikih črk je vključena."
 msgid "Select A File"
 msgstr "Izbor datoteke"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Namizje"
 
@@ -1712,7 +1712,7 @@ msgstr "Namizje"
 msgid "(None)"
 msgstr "(Brez)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Drugo ..."
 
@@ -1720,23 +1720,23 @@ msgstr "Drugo ..."
 msgid "Type name of new folder"
 msgstr "Vpišite ime nove mape"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Ni mogoče dobiti podatkov o datoteki"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Ni mogoče dodati zaznamka"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Ni mogoče odstraniti zaznamka"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Ni mogoče ustvariti mape"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1744,11 +1744,11 @@ msgstr ""
 "Ni mogoče ustvariti mape, saj že obstaja datoteka z enakim imenom. Poskusite "
 "uporabiti drugo ime za mapo ali pa preimenujte najprej datoteko."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Neveljavno ime datoteke"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Ni mogoče prikazati vsebine mape"
 
@@ -1756,201 +1756,201 @@ msgstr "Ni mogoče prikazati vsebine mape"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Najdi"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Nedavno uporabljeno"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Izberite, katere vrste datotek so pokazane"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dodaj mapo '%s' med zaznamke"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Dodaj trenutno mapo med zaznamke"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dodaj izbrane mape med zaznamke"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstrani zaznamek '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Zaznamkak '%s' ni mogoče odstraniti"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Odstrani izbran zaznamek"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Odstrani"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Preimenuj ..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Mesta"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Mesta"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Dodaj"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dodaj izbrano mapo med zaznamke"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "Od_strani"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Ni mogoče izbrati datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "Dodaj med _zaznamke"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Pokaži _skrite datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "Pokaži stolpec _velikosti"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Datoteke"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Spremenjeno"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Ime:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "_Brskaj za drugimi mapami"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Vpišite ime datoteke"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Ustvari _mapo"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Mesto:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "S_hrani v mapo:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Us_tvari v mapi:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Ni mogoče prebrati vsebine %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "Ni mogoče prebrati vsebine mape"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Včeraj ob %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Ni mogoče zamenjati mape, ker ni krajevna"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Bližnjica %s že obstaja"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Bližnjica %s še ne obstaja"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Datoteka z imenom \"%s\" že obstaja. Ali jo želite zamenjati?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Datoteka že obstaja v mapi \"%s\".  S prepisom bo izgubljena njena vsebina."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "Ni mogoče zagnati postopka iskanja"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1958,15 +1958,15 @@ msgstr ""
 "Program ni mogel ustvariti povezave z ozadnjim programom indeksacije. "
 "Preverite, da ta teče."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "Ni mogoče poslati zahteve po iskanju"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Poišči:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "Ni mogoče priklopiti %s"
@@ -2028,142 +2028,10 @@ msgstr "Nepopolno ime gostitelja; ime zaključite z '/'"
 msgid "Path does not exist"
 msgstr "Pot ne obstaja"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Napaka med ustvarjanjem mape '%s': %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Mape"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Mape"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Datoteke"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Neberljiv imenik: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Datoteka \"%s\" je na drugem računalniku (imenovanem %s) in morda ni na "
-"voljo temu programu.\n"
-"Ali ste prepričani, da jo želite izbrati?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_Nova mapa"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "_Izbriši datoteko"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "P_reimenuj datoteko"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Nova mapa"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "Ime _mape:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_Ustvari"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Napaka med brisanjem datoteke '%s': %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Ali zares želite izbrisati datoteko \"%s\"?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Izbriši datoteko"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Napaka med preimenovanjem datoteke v \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Napaka med preimenovanjem datoteke \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Preimenuj datoteko"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Preimenuj datoteko \"%s\" v:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "P_reimenuj"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Izbira: "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Imena datoteke \"%s\" ni mogoče pretvoriti v UTF-8. (Poskusite nastaviti "
-"okoljsko spremenljivko G_BROKEN__FILENAMES): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "Neveljaven UTF-8"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Ime je predolgo"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Ni mogoče pretvoriti imena datoteke"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2210,17 +2078,9 @@ msgstr "_Velikost:"
 msgid "_Preview:"
 msgstr "_Predolged:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Izbor pisave"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gama"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "Vrednost _gama"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2272,92 +2132,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Vnos"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Nobene razširjene naprave za vnos"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Naprava:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Onemogočeno"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Zaslon"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Okno"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Način: "
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Osi"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Tipke"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Pritisk:"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "Na_gib X"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Nag_ib Y"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "_Kolešček:"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "nič"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(onemogočeno)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(neznano)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "P_očisti"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
@@ -2370,27 +2151,27 @@ msgid "Invalid URI"
 msgstr "Neveljaven URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Naloži dodatne GTK+ module"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Izpiši vsa opozorila kot usodna"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Zastavice razhroščevanja GTK+, ki naj bodo nastavljene"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Zastavice rahroščevanja GTK+, ki naj ne bodo nastavljene"
 
@@ -2399,20 +2180,20 @@ msgstr "Zastavice rahroščevanja GTK+, ki naj ne bodo nastavljene"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Ni mogoče odpreti zaslona: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Možnosti GTK+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Pokaži možnosti GTK+"
 
@@ -2497,7 +2278,7 @@ msgstr "Z lupina"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Ni mogoče zaustaviti procesa s pod %d: %s"
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -2557,7 +2338,7 @@ msgstr "Po poti navzgor"
 msgid "Down Path"
 msgstr "Po poti navzdol"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Koren datotečnega sistema"
 
@@ -2568,6 +2349,11 @@ msgstr "Overitev"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Ni na voljo"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Izbor datoteke"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3044,12 +2830,12 @@ msgstr "Nekatere nastavitve v pogovornem oknu si nasprotujejo"
 msgid "Print"
 msgstr "Natisni"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Ni mogoče najti vstavljene datoteke: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ni mogoče najti datoteke s sliko v poti pixmap_path: \"%s\""
@@ -3145,10 +2931,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Ni mogoče najti predmeta z URI '%s'"
@@ -3824,10 +3610,6 @@ msgstr "ZWNJ _razdruževalnik nične širine"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ni mogoče najti pogona tem v poti module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Ni namiga ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3842,39 +3624,39 @@ msgstr "Nepričakovani znakovni podatki v vrstici %d, znak %d"
 msgid "Empty"
 msgstr "Prazno"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Glasnost"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Poveča in pomanjša jakost"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Prilagajanje glasnosti"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Zmanjšaj glasnost"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Po_manjšaj glasnost"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Povečaj glasnost"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Po_večaj glasnost"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Nemo"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Polna glasnost"
 
@@ -3883,7 +3665,7 @@ msgstr "Polna glasnost"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5308,6 +5090,166 @@ msgstr "Natisni na preizkusnem tiskalniku"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Ni mogoče dobiti podatkov o datoteki '%s': %s"
+
+#~ msgid "Folders"
+#~ msgstr "Mape"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Mape"
+
+#~ msgid "_Files"
+#~ msgstr "_Datoteke"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Neberljiv imenik: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Datoteka \"%s\" je na drugem računalniku (imenovanem %s) in morda ni na "
+#~ "voljo temu programu.\n"
+#~ "Ali ste prepričani, da jo želite izbrati?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Nova mapa"
+
+#~ msgid "De_lete File"
+#~ msgstr "_Izbriši datoteko"
+
+#~ msgid "_Rename File"
+#~ msgstr "P_reimenuj datoteko"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Ime mape \"%s\" vsebuje simbole, ki v imenih map niso dovoljeni"
+
+#~ msgid "New Folder"
+#~ msgstr "Nova mapa"
+
+#~ msgid "_Folder name:"
+#~ msgstr "Ime _mape:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Ustvari"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Ime datoteke \"%s\" vsebuje simbole, ki v imenih datotek niso dovoljeni"
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Napaka med brisanjem datoteke '%s': %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Ali zares želite izbrisati datoteko \"%s\"?"
+
+#~ msgid "Delete File"
+#~ msgstr "Izbriši datoteko"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Napaka med preimenovanjem datoteke v \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Napaka med preimenovanjem datoteke \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Napaka ob preimenovanju datoteke \"%s\" v \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Preimenuj datoteko"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Preimenuj datoteko \"%s\" v:"
+
+#~ msgid "_Rename"
+#~ msgstr "P_reimenuj"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Izbira: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Imena datoteke \"%s\" ni mogoče pretvoriti v UTF-8. (Poskusite nastaviti "
+#~ "okoljsko spremenljivko G_BROKEN__FILENAMES): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Neveljaven UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "Ime je predolgo"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Ni mogoče pretvoriti imena datoteke"
+
+#~ msgid "Gamma"
+#~ msgstr "Gama"
+
+#~ msgid "_Gamma value"
+#~ msgstr "Vrednost _gama"
+
+#~ msgid "Input"
+#~ msgstr "Vnos"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Nobene razširjene naprave za vnos"
+
+#~ msgid "_Device:"
+#~ msgstr "_Naprava:"
+
+#~ msgid "Disabled"
+#~ msgstr "Onemogočeno"
+
+#~ msgid "Screen"
+#~ msgstr "Zaslon"
+
+#~ msgid "Window"
+#~ msgstr "Okno"
+
+#~ msgid "_Mode:"
+#~ msgstr "_Način: "
+
+#~ msgid "Axes"
+#~ msgstr "Osi"
+
+#~ msgid "Keys"
+#~ msgstr "Tipke"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Pritisk:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "Na_gib X"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "Nag_ib Y"
+
+#~ msgid "_Wheel:"
+#~ msgstr "_Kolešček:"
+
+#~ msgid "none"
+#~ msgstr "nič"
+
+#~ msgid "(disabled)"
+#~ msgstr "(onemogočeno)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(neznano)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "P_očisti"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Ni namiga ---"
 
 #~ msgid "Color profile has invalid length '%"
 #~ msgstr "Barvni profil je neveljavne dolžine '%"

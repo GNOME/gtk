@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ TRUNK\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2010-05-02 14:03-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: QIRIMTATARCA (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -77,7 +77,7 @@ msgstr "Tesbit etilecek Gdk arızasızlandıruv bayraqları"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "BAYRAQLAR"
 
@@ -408,7 +408,7 @@ msgid "Error writing to image stream"
 msgstr "Suret aqımına yazğanda hata"
 
 # gdk-pixbuf/gdk-pixbuf-loader.c:275 gdk-pixbuf/gdk-pixbuf-loader.c:376
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -419,7 +419,7 @@ msgstr ""
 
 # tüklü
 # gdk-pixbuf/gdk-pixbuf-loader.c:252
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "'%s' suret türüniñ artımlı yüklenüvi desteklenmey"
@@ -1393,53 +1393,53 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d Unsur Açıla"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "İlişim kösterilamadı"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Litsenziya"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Programnıñ litsenziyası"
 
 # tüklü
 # gtk/gtkfilesel.c:1073
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_İtibarlar"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Litsenziya"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "%s Aqqında"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "İtibarlar"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Yazğan(lar)"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Vesiqalandırğan(lar)"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Tercime etken(ler)"
 
 # tüklü
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Sanat işleri"
 
@@ -1448,7 +1448,7 @@ msgstr "Sanat işleri"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1458,7 +1458,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1468,7 +1468,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1478,7 +1478,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1488,7 +1488,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -1498,18 +1498,18 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
 # gtk/gtkfilesel.c:1351
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Boşluq"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Keri-egik-sızıq"
@@ -1672,8 +1672,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Köz-tamçılığına çertken soñ ekranıñızda olğan er angi tüske çerterek o "
-"tüsni saylay bilirsiñiz."
+"Köz-tamçılığına çertken soñ ekranıñızda olğan er angi tüske çerterek o tüsni "
+"saylay bilirsiñiz."
 
 # tüklü
 # gtk/gtkcolorsel.c:1796
@@ -1890,15 +1890,15 @@ msgid "Paper Margins"
 msgstr "Kağıt Kenarları"
 
 # gtk/gtkentry.c:3653 gtk/gtktextview.c:5336
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "Kirdi _Usulları"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Unikod Kontrol Remzini Qıstır"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "Büyük Arif Kiliti (Caps Lock) faaldir"
 
@@ -1907,7 +1907,7 @@ msgstr "Büyük Arif Kiliti (Caps Lock) faaldir"
 msgid "Select A File"
 msgstr "Bir Dosye Sayla"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Masaüstü"
 
@@ -1916,7 +1916,7 @@ msgstr "Masaüstü"
 msgid "(None)"
 msgstr "(İç biri)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Diger..."
 
@@ -1924,23 +1924,23 @@ msgstr "Diger..."
 msgid "Type name of new folder"
 msgstr "Yañı cilbentniñ adını kirsetiñiz"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Dosye aqqında malümat ketirilamadı"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Saife-imi eklenamadı"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Saife-imi silinamadı"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Cilbent icat etilamadı"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1950,11 +1950,11 @@ msgstr ""
 "deñiştiriñiz."
 
 # gdk-pixbuf/io-xbm.c:284
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Keçersiz dosye adı"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Cilbent mündericesi kösterilamadı"
 
@@ -1962,201 +1962,201 @@ msgstr "Cilbent mündericesi kösterilamadı"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%2$s üzerindeki %1$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Qıdıruv"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Demi Qullanılğan"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Angi türdeki dosyelerniñ kösterilecegini saylañız"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "'%s' cilbentini saife-imlerine ekle"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Ağımdaki cilbentni saife-imlerine ekle"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Saylanğan cilbentlerni saife-imlerine ekle"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "'%s' saife-imini sil"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Saylanğan saife-imini sil"
 
 # gtk/gtkstock.c:303
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Çetleştir"
 
 # gtk/gtkfilesel.c:1351
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Kene adlandır..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Yerler"
 
 # gtk/gtkfilesel.c:1351
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Yerler"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Ekle"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Saylanğan cilbentni Saife-imlerine ekle"
 
 # gtk/gtkstock.c:303
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Çetleştir"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Dosye saylanamadı"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Saife-imlerine Ekle"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "_Gizli Dosyelerni Köster"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "_Ölçü Sutunını Köster"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Dosyeler"
 
 # gtk/gtkcolorsel.c:1833
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "İsim"
 
 # gtk/gtkfontsel.c:310
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Ölçü"
 
 # gtk/gtksizegroup.c:241
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Deñiştirilgen"
 
 # gtk/gtkcolorsel.c:1833
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_İsim:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "Diger cilbentler içün _kezin"
 
 # gdk-pixbuf/io-xbm.c:284
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Bir dosye adını kirsetiñiz"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "_Cilbent İcat Et"
 
 # tüklü
 # gtk/gtkfilesel.c:1795
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Qonum:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "_Cilbentte saqla:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "_Cilbentte icat et:"
 
 # gtk/gtkfilesel.c:1011
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s muhtevası oqulamadı"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "Cilbentniñ muhtevası oqulamadı"
 
 # gtk/gtkinputdialog.c:577
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Bilinmegen"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Tünevin: %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Cilbent yerli olmağanı içün oña deñiştirilamay"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s qısqa-yolu artıq mevcut"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s qısqa-yolu mevcut degil"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 "\"%s\" adında bir dosye artıq mevcuttır.  Onıñ yerine qoymağa isteysiñizmi?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -2165,17 +2165,17 @@ msgstr ""
 "mündericesiniñ üzerine yazacaq."
 
 # gtk/gtkfilesel.c:1351
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "Yerine _qoy"
 
 # tüklü
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "Qıdıruv esnası başlatılamadı"
 
 # tüklü
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2183,15 +2183,15 @@ msgstr ""
 "Program indeksleyici cınına bağlantı icat etamadı.  Lütfen çapmaqta "
 "olğanından emin oluñız."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "Qıdırma istemi yiberilamadı"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Qıdırma:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s taqılamadı"
@@ -2256,166 +2256,10 @@ msgid "Path does not exist"
 msgstr "Yolçıq mevcut degil"
 
 # gtk/gtkfilesel.c:1011
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "'%s' cilbenti icat etilgende hata: %s"
-
-# gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Cilbentler"
-
-# gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Cilbentler"
-
-# gtk/gtkfilesel.c:651
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Dosyeler"
-
-# gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1816
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Cilbent oqulamaz: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"\"%s\" dosyesi başqa bir maşnada (%s adında) bulunğanından dolayı bu program "
-"tarafından qullanılamay bilir.\n"
-"Onı saylamağa istegeniñizden eminsiñizmi?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_Yañı Cilbent"
-
-# gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "Dosyeni _Sil"
-
-# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "Dosyeni _Kene Adlandır"
-
-# gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr ""
-"\"%s\" cilbent adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Yañı Cilbent"
-
-# gtk/gtkfilesel.c:502
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_Cilbent ismi:"
-
-# gtk/gtkfilesel.c:1073
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_İcat Et"
-
-# gtk/gtkfilesel.c:1117
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "\"%s\" dosye adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
-
-# gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "'%s' dosyesi silingende hata: %s"
-
-# gtk/gtkfilesel.c:1131
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "\"%s\" dosyesi kerçekten silinsinmi?"
-
-# gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Dosyeni Sil"
-
-# gtk/gtkfilesel.c:1251
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Dosye ismi \"%s\" olaraq deñiştirilgende hata: %s"
-
-# gtk/gtkfilesel.c:1265
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "\"%s\" dosyesiniñ ismi deñiştirilgende hata: %s"
-
-# gtk/gtkfilesel.c:1275
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "\"%s\" dosyesi \"%s\" olaraq kene adlandırılğanda hata: %s"
-
-# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Dosyeni Kene Adlandır"
-
-# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "\"%s\" dosyesini şöyle kene adlandır:"
-
-# gtk/gtkfilesel.c:1351
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Kene adlandır"
-
-# gtk/gtkfilesel.c:1795
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Saylam: "
-
-# gtk/gtkfilesel.c:2407
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Dosye adı \"%s\" UTF-8'ge dönüştirilamadı. (G_FILENAME_ENCODING çevre "
-"deñişkenini tesbit etüvni deñeñiz): %s"
-
-# gdk-pixbuf/io-xbm.c:284
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "Keçersiz UTF-8"
-
-# gtk/gtkfilesel.c:3275
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "İsim fazla uzun"
-
-# gtk/gtkfilesel.c:3277
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Dosye adı dönüştirilamadı"
 
 # gtk/gtkfilesel.c:651
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
@@ -2470,19 +2314,9 @@ msgid "_Preview:"
 msgstr "_Ög-baquv:"
 
 # gtk/gtkfontsel.c:1001
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Urufat Saylamı"
-
-# gtk/gtkgamma.c:395
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gamma"
-
-# gtk/gtkgamma.c:402
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "_Gamma qıymeti"
 
 # gtk/gtkiconfactory.c:1049
 #. Remove this icon source so we don't keep trying to
@@ -2539,110 +2373,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-# gtk/gtkinputdialog.c:181
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Kirdi"
-
-# gtk/gtkinputdialog.c:189
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Uzatılğan kirdi cihazları iç yoq"
-
-# gtk/gtkinputdialog.c:218
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Cihaz:"
-
-# gtk/gtkinputdialog.c:235
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Ğayrı qabilleştirilgen"
-
-# gtk/gtkinputdialog.c:243
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Ekran"
-
-# gtk/gtkinputdialog.c:251
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Pencere"
-
-# gtk/gtkinputdialog.c:259
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "_Tarz:"
-
-# tüklü
-# gtk/gtkinputdialog.c:290
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Köçerler"
-
-# gtk/gtkinputdialog.c:306
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Tuşlar"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-# gtk/gtkinputdialog.c:471
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Basım:"
-
-# gtk/gtkinputdialog.c:472
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "X _avuqlığı:"
-
-# gtk/gtkinputdialog.c:473
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "Y a_vuqlığı:"
-
-# gtk/gtkinputdialog.c:474
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "Ç_ember:"
-
-# gtk/gtkinputdialog.c:514
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "yoq"
-
-# gtk/gtkinputdialog.c:548 gtk/gtkinputdialog.c:584
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(ğayrı qabilleştirilgen)"
-
-# gtk/gtkinputdialog.c:577
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(namalüm)"
-
-# gtk/gtkstock.c:278
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "_Temizle"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "İlişimni _Aç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2657,27 +2394,27 @@ msgid "Invalid URI"
 msgstr "Keçersiz URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "İlâve GTK+ modüllerini yükle"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODÜLLER"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "İhtarlarnıñ episini ölümcil yap"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Ğayrı tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 
@@ -2687,20 +2424,20 @@ msgstr "Ğayrı tesbit etilecek GTK+ arızasızlandıruv bayraqları"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kösterim açılamay: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "GTK+ İhtiyariyatı"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "GTK+ İhtiyariyatını Köster"
 
@@ -2792,7 +2529,7 @@ msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
 # gtk/gtknotebook.c:2125 gtk/gtknotebook.c:4517
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Saife %u"
@@ -2858,7 +2595,7 @@ msgid "Down Path"
 msgstr "Aşağı Yolçıq"
 
 # gtk/gtkfilesel.c:651
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Dosye Sistemi Tamırı"
 
@@ -2870,6 +2607,12 @@ msgstr "Sahihlenim"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Namevcut"
+
+# gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Bir Dosye Sayla"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3378,13 +3121,13 @@ msgid "Print"
 msgstr "Bastır"
 
 # tüklü
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kirsetme dosyesi tapılamay: \"%s\""
 
 # gtk/gtkrc.c:2799
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "pixmap_path içinde suret dosyesi qonumlanamadı: \"%s\""
@@ -3485,10 +3228,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' URI ile bir unsur tapılamadı"
@@ -4223,11 +3966,6 @@ msgstr "ZWNJ Sıfır kenişlikli _ğayrı-bitiştirici"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Tema motorı module_path \"%s\" içinde tapılamay,"
 
-# gtk/gtktipsquery.c:181
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Qarane Yoq ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -4244,39 +3982,39 @@ msgstr "Boş"
 
 # tüklü
 # gtk/gtkcolorsel.c:1800
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Davuşlılıq"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Davuşnı eksiltir ya da köterir"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Davuş seviyesini ayarlar"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Davuşnı Eksilt"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Davuş seviyesini eksiltir"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Davuşnı Köter"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Davuş seviyesini arttırır"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Davuşsız"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Tam Davuş"
 
@@ -4285,7 +4023,7 @@ msgstr "Tam Davuş"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5752,6 +5490,212 @@ msgstr "Bastırıcını Sınamaq içün Bastır"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "'%s' dosyesi içün malümat alınamadı: %s"
+
+# gtk/gtkfilesel.c:651
+#~ msgid "Folders"
+#~ msgstr "Cilbentler"
+
+# gtk/gtkfilesel.c:651
+#~ msgid "Fol_ders"
+#~ msgstr "_Cilbentler"
+
+# gtk/gtkfilesel.c:651
+#~ msgid "_Files"
+#~ msgstr "_Dosyeler"
+
+# gtk/gtkfilesel.c:719 gtk/gtkfilesel.c:1816
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Cilbent oqulamaz: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "\"%s\" dosyesi başqa bir maşnada (%s adında) bulunğanından dolayı bu "
+#~ "program tarafından qullanılamay bilir.\n"
+#~ "Onı saylamağa istegeniñizden eminsiñizmi?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Yañı Cilbent"
+
+# gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
+#~ msgid "De_lete File"
+#~ msgstr "Dosyeni _Sil"
+
+# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
+#~ msgid "_Rename File"
+#~ msgstr "Dosyeni _Kene Adlandır"
+
+# gtk/gtkfilesel.c:1249 gtk/gtkfilesel.c:1263
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "\"%s\" cilbent adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
+
+#~ msgid "New Folder"
+#~ msgstr "Yañı Cilbent"
+
+# gtk/gtkfilesel.c:502
+#~ msgid "_Folder name:"
+#~ msgstr "_Cilbent ismi:"
+
+# gtk/gtkfilesel.c:1073
+#~ msgid "C_reate"
+#~ msgstr "_İcat Et"
+
+# gtk/gtkfilesel.c:1117
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "\"%s\" dosye adı, dosye isimlerinde caiz olmağan remizlerni ihtiva ete"
+
+# gtk/gtkfilesel.c:1131
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "'%s' dosyesi silingende hata: %s"
+
+# gtk/gtkfilesel.c:1131
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "\"%s\" dosyesi kerçekten silinsinmi?"
+
+# gtk/gtkfilesel.c:762 gtk/gtkfilesel.c:1176
+#~ msgid "Delete File"
+#~ msgstr "Dosyeni Sil"
+
+# gtk/gtkfilesel.c:1251
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Dosye ismi \"%s\" olaraq deñiştirilgende hata: %s"
+
+# gtk/gtkfilesel.c:1265
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "\"%s\" dosyesiniñ ismi deñiştirilgende hata: %s"
+
+# gtk/gtkfilesel.c:1275
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "\"%s\" dosyesi \"%s\" olaraq kene adlandırılğanda hata: %s"
+
+# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
+#~ msgid "Rename File"
+#~ msgstr "Dosyeni Kene Adlandır"
+
+# gtk/gtkfilesel.c:773 gtk/gtkfilesel.c:1318
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "\"%s\" dosyesini şöyle kene adlandır:"
+
+# gtk/gtkfilesel.c:1351
+#~ msgid "_Rename"
+#~ msgstr "_Kene adlandır"
+
+# gtk/gtkfilesel.c:1795
+#~ msgid "_Selection: "
+#~ msgstr "_Saylam: "
+
+# gtk/gtkfilesel.c:2407
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Dosye adı \"%s\" UTF-8'ge dönüştirilamadı. (G_FILENAME_ENCODING çevre "
+#~ "deñişkenini tesbit etüvni deñeñiz): %s"
+
+# gdk-pixbuf/io-xbm.c:284
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Keçersiz UTF-8"
+
+# gtk/gtkfilesel.c:3275
+#~ msgid "Name too long"
+#~ msgstr "İsim fazla uzun"
+
+# gtk/gtkfilesel.c:3277
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Dosye adı dönüştirilamadı"
+
+# gtk/gtkgamma.c:395
+#~ msgid "Gamma"
+#~ msgstr "Gamma"
+
+# gtk/gtkgamma.c:402
+#~ msgid "_Gamma value"
+#~ msgstr "_Gamma qıymeti"
+
+# gtk/gtkinputdialog.c:181
+#~ msgid "Input"
+#~ msgstr "Kirdi"
+
+# gtk/gtkinputdialog.c:189
+#~ msgid "No extended input devices"
+#~ msgstr "Uzatılğan kirdi cihazları iç yoq"
+
+# gtk/gtkinputdialog.c:218
+#~ msgid "_Device:"
+#~ msgstr "_Cihaz:"
+
+# gtk/gtkinputdialog.c:235
+#~ msgid "Disabled"
+#~ msgstr "Ğayrı qabilleştirilgen"
+
+# gtk/gtkinputdialog.c:243
+#~ msgid "Screen"
+#~ msgstr "Ekran"
+
+# gtk/gtkinputdialog.c:251
+#~ msgid "Window"
+#~ msgstr "Pencere"
+
+# gtk/gtkinputdialog.c:259
+#~ msgid "_Mode:"
+#~ msgstr "_Tarz:"
+
+# tüklü
+# gtk/gtkinputdialog.c:290
+#~ msgid "Axes"
+#~ msgstr "Köçerler"
+
+# gtk/gtkinputdialog.c:306
+#~ msgid "Keys"
+#~ msgstr "Tuşlar"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+# gtk/gtkinputdialog.c:471
+#~ msgid "_Pressure:"
+#~ msgstr "_Basım:"
+
+# gtk/gtkinputdialog.c:472
+#~ msgid "X _tilt:"
+#~ msgstr "X _avuqlığı:"
+
+# gtk/gtkinputdialog.c:473
+#~ msgid "Y t_ilt:"
+#~ msgstr "Y a_vuqlığı:"
+
+# gtk/gtkinputdialog.c:474
+#~ msgid "_Wheel:"
+#~ msgstr "Ç_ember:"
+
+# gtk/gtkinputdialog.c:514
+#~ msgid "none"
+#~ msgstr "yoq"
+
+# gtk/gtkinputdialog.c:548 gtk/gtkinputdialog.c:584
+#~ msgid "(disabled)"
+#~ msgstr "(ğayrı qabilleştirilgen)"
+
+# gtk/gtkinputdialog.c:577
+#~ msgid "(unknown)"
+#~ msgstr "(namalüm)"
+
+# gtk/gtkstock.c:278
+#~ msgid "Cl_ear"
+#~ msgstr "_Temizle"
+
+# gtk/gtktipsquery.c:181
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Qarane Yoq ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Boş)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2005-11-16 11:17+0200\n"
 "Last-Translator: Vital Khilko <vk@altlinux.ru>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -75,7 +75,7 @@ msgstr "Сьцягі адладкі Gdk для пазначэньня"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "СЬЦЯГІ"
 
@@ -397,7 +397,7 @@ msgstr "Недастаткова памяці для захаваньня від
 msgid "Error writing to image stream"
 msgstr "Памылка запісу ў файл відарысу: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, fuzzy, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -406,7 +406,7 @@ msgstr ""
 "Унутраная памылка. Збой на пачатку загрузкі ў модулі загрузкі відарысу '%s', "
 "але няма зьвестак аб прычыне збою."
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Інкрэмэнтальная загрузка відарыса тыпу \"%s\" не падтрымліваецца"
@@ -1275,51 +1275,51 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 #, fuzzy
 msgid "Could not show link"
 msgstr "Немагчыма вылучыць элемэнт"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Ліцэнзія"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Ліцэнзія праграмы"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_Падзякі"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Ліцэнзія"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "Пра %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Падзякі"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Стваральнікі"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Дакумэнтацыя"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Пераклад"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Мастацкае аздабленьне"
 
@@ -1328,7 +1328,7 @@ msgstr "Мастацкае аздабленьне"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1339,7 +1339,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1350,7 +1350,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1361,7 +1361,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr ""
@@ -1371,7 +1371,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr ""
@@ -1381,18 +1381,18 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr ""
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 #, fuzzy
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "_Замяніць"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr ""
@@ -1747,15 +1747,15 @@ msgstr "_Адценьне:"
 msgid "Paper Margins"
 msgstr ""
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "Мэтады _ўводу"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Уставіць кіруючы знак Unicode"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "Адкрыць _разьмяшчэньне"
@@ -1764,7 +1764,7 @@ msgstr "Адкрыць _разьмяшчэньне"
 msgid "Select A File"
 msgstr "Выбар файлу"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Сталец"
 
@@ -1772,7 +1772,7 @@ msgstr "Сталец"
 msgid "(None)"
 msgstr "(Няма)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Іншае..."
 
@@ -1780,23 +1780,23 @@ msgstr "Іншае..."
 msgid "Type name of new folder"
 msgstr "Набярыце назву новай тэчкі"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Немагчыма атрымаць зьвесткі аб файле"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Немагчыма дадаць закладку"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Немагчыма выдаліць закладку"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Тэчка не была створаная"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1804,11 +1804,11 @@ msgstr ""
 "Тэчка не была створаная, таму як існуе файл з гэткай назвай.  Паспрабуйце "
 "скарыстаць іншую назву для тэчкі, ці сьпярша зьмяніце назву файлу."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Недапушчальная назва файлу"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Зьмест тэчкі ня можа быць адлюстраваны"
 
@@ -1816,223 +1816,223 @@ msgstr "Зьмест тэчкі ня можа быць адлюстраваны"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s на вузьле %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Выберыце якія тыпы файлаў мусяць быць адлюстраваныя"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Дадаць тэчку\"'%s\" да закладак"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Дадаць гэтую тэчку да закладак"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Дадаць вылучаныя тэчкі да закладак"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Выдаліць закладку \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Выдаліць вылучаную закладку"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Выдаліць"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Перайменаваць..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr ""
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 #, fuzzy
 msgid "_Places"
 msgstr "_Замяніць"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Дадаць"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Дадаць вылучаную тэчку да закладак"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Выдаліць"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Немагчыма вылучыць файл"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Дадаць да закладак"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Паказаць _схаваныя файлы"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Файлы"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Назва"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Памер"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Зьменены"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Назва:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "_Вандраваць па іншых тэчках"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 #, fuzzy
 msgid "Type a file name"
 msgstr "Недапушчальная назва файлу"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Стварыць _тэчку"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 #, fuzzy
 msgid "_Location:"
 msgstr "Разь_мяшчэньне: "
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "_Захаваць у тэчку:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "_Стварыць у тэчку:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "Памылка стварэньня каталёгу \"%s\": %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr ""
 "Памылка стварэньня каталёгу \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Невядома"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 #, fuzzy
 msgid "Yesterday at %H:%M"
 msgstr "Учора"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Немагчыма зьмяніць у тэчку пакуль яна не мясцовая"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, fuzzy, c-format
 msgid "Shortcut %s already exists"
 msgstr "скарачэньне %s ужо існуе"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Скарачэньне %s адсутнічае"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Файл з назвай \"%s\" ужо існуе. Жадаеце замяніць яго?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Файл ужо існуе у \"%s\".  Замена перапіша яго зьмест."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Замяніць"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 #, fuzzy
 msgid "Could not start the search process"
 msgstr "Не атрымалася захаваць астатняе"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 #, fuzzy
 msgid "Could not send the search request"
 msgstr "Не атрымалася захаваць астатняе"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "Немагчыма замацаваць %s"
@@ -2097,145 +2097,10 @@ msgstr ""
 msgid "Path does not exist"
 msgstr "Скарачэньне %s адсутнічае"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, fuzzy, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Памылка стварэньня тэчкі \"%s\": %s\n"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Тэчкі"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "Тэ_чкі"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Файлы"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Нечытэльная тэчка : %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Файл \"%s\" знаходзіцца на іншай машыне (%s) і можа быць недасягальны для "
-"гэтае праграмы\n"
-"Жадаеце выбраць яго?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "Стварыць _тэчку"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "_Зьнішчыць файл"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "_Перайменаваць файл"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Назва тэчкі \"%s\" зьмяшчае сымбалі, недазваляльныя ў назвах файлаў"
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Стварыць тэчку"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "Назва тэ_чкі:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "С_тварыць"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Назва файла \"%s\" зьмяшчае недапушчальныя сымбалі"
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, fuzzy, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Памылка зьнішчэньня файла \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Зьнішчыць файл \"%s\" ?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Зьнішчыць файл"
-
-#: gtk/gtkfilesel.c:1587
-#, fuzzy, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr ""
-"Памылка перайменаваньня \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1600
-#, fuzzy, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr ""
-"Памылка перайменаваньня \"%s\": %s\n"
-"%s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Памылка перайменаваньня \"%s\" у \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Перайменаваць файл"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Перайменаваць файл \"%s\" у:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "_Перайменаваць"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Выбар: "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Назва файла \"%s\" ня можа быць пераўтвораная ў UTF-8 (паспрабуйце "
-"ўсталяваць зьменную асяродзьдзя G_BROKEN_FILENAMES): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "Недапушчальны UTF-8"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Назва задоўгая"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Немагчыма пераўтварыць назву файла"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2282,17 +2147,9 @@ msgstr "Па_мер:"
 msgid "_Preview:"
 msgstr "П_рыклад:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Выбар шрыфту"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Гама"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "_Гама значэньне"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2348,101 +2205,14 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "%s (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Увод"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Няма пашыраных прыладаў уводу"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Прылада:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Выключанае"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Экран"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Акно"
-
-#: gtk/gtkinputdialog.c:258
-#, fuzzy
-msgid "_Mode:"
-msgstr "_Рэжым: "
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-#, fuzzy
-msgid "Axes"
-msgstr "_Восі"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-#, fuzzy
-msgid "Keys"
-msgstr "_Ключы"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr ""
-
-#: gtk/gtkinputdialog.c:526
-#, fuzzy
-msgid "_Pressure:"
-msgstr "Націск"
-
-#: gtk/gtkinputdialog.c:527
-#, fuzzy
-msgid "X _tilt:"
-msgstr "Нахіл па X"
-
-#: gtk/gtkinputdialog.c:528
-#, fuzzy
-msgid "Y t_ilt:"
-msgstr "Нахіл па Y"
-
-#: gtk/gtkinputdialog.c:529
-#, fuzzy
-msgid "_Wheel:"
-msgstr "Пракрутка"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "няма"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(выключанае)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(невядомае)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-#, fuzzy
-msgid "Cl_ear"
-msgstr "А_чысьціць"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 #, fuzzy
 msgid "_Open Link"
 msgstr "Адкрыць разьмяшчэньне"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2457,27 +2227,27 @@ msgid "Invalid URI"
 msgstr "Недапушчальны UTF-8"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Загрузіць дадатковыя модулі GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "МОДУЛІ"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Зрабіць усе папярэджаньні фатальнымі"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Сьцягі адладкі GTK+ для пазначэньня"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Сьцягі адладкі GTK+ для скасаваньня"
 
@@ -2486,20 +2256,20 @@ msgstr "Сьцягі адладкі GTK+ для скасаваньня"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr ""
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Можнасьці GTK+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Паказаць можнасьці GTK+"
 
@@ -2589,7 +2359,7 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Старонка %u"
@@ -2648,7 +2418,7 @@ msgstr ""
 msgid "Down Path"
 msgstr ""
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 #, fuzzy
 msgid "File System Root"
 msgstr "Файлавая сыстэма"
@@ -2661,6 +2431,11 @@ msgstr "Разь_мяшчэньне: "
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr ""
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Выбар файлу"
 
 #: gtk/gtkprinteroptionwidget.c:814
 #, fuzzy
@@ -3167,12 +2942,12 @@ msgstr ""
 msgid "Print"
 msgstr "_Друкаваць"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Немагчыма адшукаць файл уключэньня: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Немагчыма адшукаць файл з відарысам у pixmap_path: \"%s\""
@@ -3275,10 +3050,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%s (%s)"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, fuzzy, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Немагчыма адшукаць файл уключэньня: \"%s\""
@@ -4040,10 +3815,6 @@ msgstr "ZWNJ Нулявы разьяднальнік"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Немагчыма адшукаць рухавік тэмы ў module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Няма парады ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -4058,40 +3829,40 @@ msgstr "Нечаканыя сымбальныя даньні у радку %d с
 msgid "Empty"
 msgstr "Пуста"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 #, fuzzy
 msgid "Volume"
 msgstr "Знач_эньне:"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr ""
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr ""
 
@@ -4100,7 +3871,7 @@ msgstr ""
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5547,6 +5318,174 @@ msgstr "_Друкаваць"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Немагчыма атрымаць інфармацыю для файлу \"%s\": %s"
+
+#~ msgid "Folders"
+#~ msgstr "Тэчкі"
+
+#~ msgid "Fol_ders"
+#~ msgstr "Тэ_чкі"
+
+#~ msgid "_Files"
+#~ msgstr "_Файлы"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Нечытэльная тэчка : %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Файл \"%s\" знаходзіцца на іншай машыне (%s) і можа быць недасягальны для "
+#~ "гэтае праграмы\n"
+#~ "Жадаеце выбраць яго?"
+
+#~ msgid "_New Folder"
+#~ msgstr "Стварыць _тэчку"
+
+#~ msgid "De_lete File"
+#~ msgstr "_Зьнішчыць файл"
+
+#~ msgid "_Rename File"
+#~ msgstr "_Перайменаваць файл"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Назва тэчкі \"%s\" зьмяшчае сымбалі, недазваляльныя ў назвах файлаў"
+
+#~ msgid "New Folder"
+#~ msgstr "Стварыць тэчку"
+
+#~ msgid "_Folder name:"
+#~ msgstr "Назва тэ_чкі:"
+
+#~ msgid "C_reate"
+#~ msgstr "С_тварыць"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Назва файла \"%s\" зьмяшчае недапушчальныя сымбалі"
+
+#, fuzzy
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Памылка зьнішчэньня файла \"%s\": %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Зьнішчыць файл \"%s\" ?"
+
+#~ msgid "Delete File"
+#~ msgstr "Зьнішчыць файл"
+
+#, fuzzy
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr ""
+#~ "Памылка перайменаваньня \"%s\": %s\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr ""
+#~ "Памылка перайменаваньня \"%s\": %s\n"
+#~ "%s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Памылка перайменаваньня \"%s\" у \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Перайменаваць файл"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Перайменаваць файл \"%s\" у:"
+
+#~ msgid "_Rename"
+#~ msgstr "_Перайменаваць"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Выбар: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Назва файла \"%s\" ня можа быць пераўтвораная ў UTF-8 (паспрабуйце "
+#~ "ўсталяваць зьменную асяродзьдзя G_BROKEN_FILENAMES): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Недапушчальны UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "Назва задоўгая"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Немагчыма пераўтварыць назву файла"
+
+#~ msgid "Gamma"
+#~ msgstr "Гама"
+
+#~ msgid "_Gamma value"
+#~ msgstr "_Гама значэньне"
+
+#~ msgid "Input"
+#~ msgstr "Увод"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Няма пашыраных прыладаў уводу"
+
+#~ msgid "_Device:"
+#~ msgstr "_Прылада:"
+
+#~ msgid "Disabled"
+#~ msgstr "Выключанае"
+
+#~ msgid "Screen"
+#~ msgstr "Экран"
+
+#~ msgid "Window"
+#~ msgstr "Акно"
+
+#, fuzzy
+#~ msgid "_Mode:"
+#~ msgstr "_Рэжым: "
+
+#, fuzzy
+#~ msgid "Axes"
+#~ msgstr "_Восі"
+
+#, fuzzy
+#~ msgid "Keys"
+#~ msgstr "_Ключы"
+
+#, fuzzy
+#~ msgid "_Pressure:"
+#~ msgstr "Націск"
+
+#, fuzzy
+#~ msgid "X _tilt:"
+#~ msgstr "Нахіл па X"
+
+#, fuzzy
+#~ msgid "Y t_ilt:"
+#~ msgstr "Нахіл па Y"
+
+#, fuzzy
+#~ msgid "_Wheel:"
+#~ msgstr "Пракрутка"
+
+#~ msgid "none"
+#~ msgstr "няма"
+
+#~ msgid "(disabled)"
+#~ msgstr "(выключанае)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(невядомае)"
+
+#, fuzzy
+#~ msgid "Cl_ear"
+#~ msgstr "А_чысьціць"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Няма парады ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Пуста)"

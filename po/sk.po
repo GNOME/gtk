@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-22 23:34-0400\n"
+"POT-Creation-Date: 2010-05-11 00:03-0400\n"
 "PO-Revision-Date: 2010-02-03 18:25+0100\n"
 "Last-Translator: Pavol Šimo <palo.simo@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
@@ -78,7 +78,7 @@ msgstr "Ladiace príznaky Gdk, ktoré nastaviť"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:459 gtk/gtkmain.c:462
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:454 gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "PRÍZNAKY"
 
@@ -376,7 +376,7 @@ msgstr "Nedostatok pamäte pre uloženie obrázku do medzipamäte"
 msgid "Error writing to image stream"
 msgstr "Chyba pri zápise do prúdu obrázku"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:330
+#: gdk-pixbuf/gdk-pixbuf-loader.c:334
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to complete an operation, "
@@ -385,7 +385,7 @@ msgstr ""
 "Interná chyba: Modul pre načítavanie obrázku '%s' neskončil načítavať "
 "obrázok, ale pre toto zlyhanie nepodal žiadny dôvod"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:372
+#: gdk-pixbuf/gdk-pixbuf-loader.c:376
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Postupné načítavanie typu obrázku '%s' nie je podporované"
@@ -1231,50 +1231,50 @@ msgstr[0] "Otvára sa %d položiek"
 msgstr[1] "Otvára sa %d položka"
 msgstr[2] "Otvárajú sa %d položky"
 
-#: gtk/gtkaboutdialog.c:242
+#: gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "Nepodarilo sa zobraziť odkaz"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2263
+#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
 msgid "License"
 msgstr "Licencia"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:365
 msgid "The license of the program"
 msgstr "Licencia programu"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:625
+#: gtk/gtkaboutdialog.c:628
 msgid "C_redits"
 msgstr "_Poďakovanie"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:639
+#: gtk/gtkaboutdialog.c:642
 msgid "_License"
 msgstr "_Licencia"
 
-#: gtk/gtkaboutdialog.c:917
+#: gtk/gtkaboutdialog.c:901
 #, c-format
 msgid "About %s"
 msgstr "O programe %s"
 
-#: gtk/gtkaboutdialog.c:2186
+#: gtk/gtkaboutdialog.c:2131
 msgid "Credits"
 msgstr "Poďakovanie"
 
-#: gtk/gtkaboutdialog.c:2215
+#: gtk/gtkaboutdialog.c:2164
 msgid "Written by"
 msgstr "Napísal"
 
-#: gtk/gtkaboutdialog.c:2218
+#: gtk/gtkaboutdialog.c:2167
 msgid "Documented by"
 msgstr "Zdokumentoval"
 
-#: gtk/gtkaboutdialog.c:2230
+#: gtk/gtkaboutdialog.c:2179
 msgid "Translated by"
 msgstr "Preložil"
 
-#: gtk/gtkaboutdialog.c:2234
+#: gtk/gtkaboutdialog.c:2183
 msgid "Artwork by"
 msgstr "Grafika od"
 
@@ -1283,7 +1283,7 @@ msgstr "Grafika od"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:146
+#: gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1293,7 +1293,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:152
+#: gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1303,7 +1303,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:158
+#: gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1313,7 +1313,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:743
+#: gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1323,7 +1323,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:756
+#: gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1333,17 +1333,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:787
+#: gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Medzera"
 
-#: gtk/gtkaccellabel.c:790
+#: gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "\\"
@@ -1687,15 +1687,15 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:8698 gtk/gtktextview.c:7881
+#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Metódy vstupu"
 
-#: gtk/gtkentry.c:8712 gtk/gtktextview.c:7895
+#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložiť ovládací znak Unicode"
 
-#: gtk/gtkentry.c:10091
+#: gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
@@ -1703,7 +1703,7 @@ msgstr "Caps Lock je zapnutý"
 msgid "Select A File"
 msgstr "Vybrať súbor"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1848
+#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Plocha"
 
@@ -1711,7 +1711,7 @@ msgstr "Plocha"
 msgid "(None)"
 msgstr "(žiaden)"
 
-#: gtk/gtkfilechooserbutton.c:2021
+#: gtk/gtkfilechooserbutton.c:2016
 msgid "Other..."
 msgstr "Iný..."
 
@@ -1719,23 +1719,23 @@ msgstr "Iný..."
 msgid "Type name of new folder"
 msgstr "Zadajte názov nového priečinka"
 
-#: gtk/gtkfilechooserdefault.c:974
+#: gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "Nepodarilo sa získať informácie o súbore"
 
-#: gtk/gtkfilechooserdefault.c:985
+#: gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "Nepodarilo sa pridať záložku"
 
-#: gtk/gtkfilechooserdefault.c:996
+#: gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "Nepodarilo sa odstrániť záložku"
 
-#: gtk/gtkfilechooserdefault.c:1007
+#: gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "Priečinok nemohol byť vytvorený"
 
-#: gtk/gtkfilechooserdefault.c:1020
+#: gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1744,11 +1744,11 @@ msgstr ""
 "existuje. Skúste použiť iný názov pre priečinok, alebo najskôr premenovať "
 "súbor."
 
-#: gtk/gtkfilechooserdefault.c:1031
+#: gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "Neplatný názov súboru"
 
-#: gtk/gtkfilechooserdefault.c:1041
+#: gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "Obsah priečinka nemohol byť zobrazený"
 
@@ -1756,201 +1756,201 @@ msgstr "Obsah priečinka nemohol byť zobrazený"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1591
+#: gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1767
+#: gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Hľadanie"
 
-#: gtk/gtkfilechooserdefault.c:1791 gtk/gtkfilechooserdefault.c:9462
+#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
 msgid "Recently Used"
 msgstr "Nedávno použité"
 
-#: gtk/gtkfilechooserdefault.c:2434
+#: gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Zvoliť, ktoré typy súborov sú zobrazené"
 
-#: gtk/gtkfilechooserdefault.c:2793
+#: gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Pridať priečinok '%s' do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2837
+#: gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Pridať aktuálny priečinok do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2839
+#: gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Pridať zvolené priečinky do záložiek"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstrániť záložku '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2879
+#: gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Záložku '%s' nie je možné odstrániť"
 
-#: gtk/gtkfilechooserdefault.c:2886 gtk/gtkfilechooserdefault.c:3910
+#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
 msgstr "Odstrániť zvolenú záložku"
 
-#: gtk/gtkfilechooserdefault.c:3606
+#: gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Odstrániť"
 
-#: gtk/gtkfilechooserdefault.c:3615
+#: gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Premenovať..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3778
+#: gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Umiestnenia"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3835
+#: gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Miesta"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Pridať"
 
-#: gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Pridať zvolený priečinok do Záložiek"
 
-#: gtk/gtkfilechooserdefault.c:3903
+#: gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "O_dstrániť"
 
-#: gtk/gtkfilechooserdefault.c:4038
+#: gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "Nepodarilo sa vybrať súbor"
 
-#: gtk/gtkfilechooserdefault.c:4213
+#: gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Pridať do Záložiek"
 
-#: gtk/gtkfilechooserdefault.c:4226
+#: gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Zobraziť _skryté súbory"
 
-#: gtk/gtkfilechooserdefault.c:4233
+#: gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "Zobraziť stĺpec v_eľkosť"
 
-#: gtk/gtkfilechooserdefault.c:4453 gtk/gtkfilesel.c:730
+#: gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
 msgstr "Súbory"
 
-#: gtk/gtkfilechooserdefault.c:4504
+#: gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Názov"
 
-#: gtk/gtkfilechooserdefault.c:4527
+#: gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Veľkosť"
 
-#: gtk/gtkfilechooserdefault.c:4541
+#: gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Zmenený"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4796 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Názov:"
 
-#: gtk/gtkfilechooserdefault.c:4839
+#: gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "Prechádzať _ostatné priečinky"
 
-#: gtk/gtkfilechooserdefault.c:5111
+#: gtk/gtkfilechooserdefault.c:5099
 msgid "Type a file name"
 msgstr "Vložte názov súboru"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5152
+#: gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Vytvoriť _priečinok"
 
-#: gtk/gtkfilechooserdefault.c:5162
+#: gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Umiestnenie:"
 
-#: gtk/gtkfilechooserdefault.c:5366
+#: gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
 msgstr "Uložiť do _priečinka:"
 
-#: gtk/gtkfilechooserdefault.c:5368
+#: gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
 msgstr "Vytvoriť v _priečinku:"
 
-#: gtk/gtkfilechooserdefault.c:6435
+#: gtk/gtkfilechooserdefault.c:6419
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nepodarilo sa vytvoriť prúd: %s"
 
-#: gtk/gtkfilechooserdefault.c:6439
+#: gtk/gtkfilechooserdefault.c:6423
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "Nepodarilo sa získať koreňový priečinok"
 
-#: gtk/gtkfilechooserdefault.c:6532 gtk/gtkfilechooserdefault.c:6600
-#: gtk/gtkfilechooserdefault.c:6745
+#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
+#: gtk/gtkfilechooserdefault.c:6729
 msgid "Unknown"
 msgstr "Neznáme"
 
-#: gtk/gtkfilechooserdefault.c:6547
+#: gtk/gtkfilechooserdefault.c:6531
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6549
+#: gtk/gtkfilechooserdefault.c:6533
 msgid "Yesterday at %H:%M"
 msgstr "Včera o %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7215
+#: gtk/gtkfilechooserdefault.c:7199
 msgid "Cannot change to folder because it is not local"
 msgstr "Nepodarilo sa zmeniť priečinok, pretože nie je lokálny"
 
-#: gtk/gtkfilechooserdefault.c:7812 gtk/gtkfilechooserdefault.c:7833
+#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Skratka %s už existuje"
 
-#: gtk/gtkfilechooserdefault.c:7923
+#: gtk/gtkfilechooserdefault.c:7907
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:8178 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Súbor s názvom \"%s\" už existuje. Chcete ho nahradiť?"
 
-#: gtk/gtkfilechooserdefault.c:8181 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "Súbor už existuje v \"%s\". Nahradením prepíšete jeho obsah."
 
-#: gtk/gtkfilechooserdefault.c:8186 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Nahradiť"
 
-#: gtk/gtkfilechooserdefault.c:8830
+#: gtk/gtkfilechooserdefault.c:8822
 msgid "Could not start the search process"
 msgstr "Nepodarilo sa naštartovať proces hľadania"
 
-#: gtk/gtkfilechooserdefault.c:8831
+#: gtk/gtkfilechooserdefault.c:8823
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1958,15 +1958,15 @@ msgstr ""
 "Program sa nedokázal pripojiť k indexovaciemu démonu.  Uistite sa, že je "
 "naštartovaný."
 
-#: gtk/gtkfilechooserdefault.c:8845
+#: gtk/gtkfilechooserdefault.c:8837
 msgid "Could not send the search request"
 msgstr "Nepodarilo sa odoslať požiadavku na hľadanie"
 
-#: gtk/gtkfilechooserdefault.c:9034
+#: gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "Hľadať:"
 
-#: gtk/gtkfilechooserdefault.c:9638
+#: gtk/gtkfilechooserdefault.c:9630
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepodarilo sa pripojiť %s"
@@ -2028,141 +2028,10 @@ msgstr "Neúplný názov hostiteľa; ukončite ho pomocou '/'"
 msgid "Path does not exist"
 msgstr "Cesta neexistuje"
 
-#: gtk/gtkfilechoosersettings.c:487 gtk/gtkfilesel.c:1349
-#: gtk/gtkfilesel.c:1360
+#: gtk/gtkfilechoosersettings.c:487
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Chyba pri vytváraní priečinka \"%s\": %s"
-
-#: gtk/gtkfilesel.c:694
-msgid "Folders"
-msgstr "Priečinky"
-
-#: gtk/gtkfilesel.c:698
-msgid "Fol_ders"
-msgstr "_Priečinky"
-
-#: gtk/gtkfilesel.c:734
-msgid "_Files"
-msgstr "_Súbory"
-
-#: gtk/gtkfilesel.c:821 gtk/gtkfilesel.c:2154
-#, c-format
-msgid "Folder unreadable: %s"
-msgstr "Nečitateľný priečinok: %s"
-
-#: gtk/gtkfilesel.c:905
-#, c-format
-msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be "
-"available to this program.\n"
-"Are you sure that you want to select it?"
-msgstr ""
-"Súbor \"%s\" je umiestnený na inom počítači (na %s) a nemusí byť dostupný "
-"pre tento program.\n"
-"Naozaj ho chcete vybrať?"
-
-#: gtk/gtkfilesel.c:1020
-msgid "_New Folder"
-msgstr "_Nový priečinok"
-
-#: gtk/gtkfilesel.c:1031
-msgid "De_lete File"
-msgstr "O_dstrániť súbor"
-
-#: gtk/gtkfilesel.c:1042
-msgid "_Rename File"
-msgstr "Pre_menovať súbor"
-
-#: gtk/gtkfilesel.c:1347
-#, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Názov priečinka \"%s\" obsahuje znaky, ktoré nie sú povolené."
-
-#: gtk/gtkfilesel.c:1394
-msgid "New Folder"
-msgstr "Nový priečinok"
-
-#: gtk/gtkfilesel.c:1409
-msgid "_Folder name:"
-msgstr "_Názov priečinka:"
-
-#: gtk/gtkfilesel.c:1433
-msgid "C_reate"
-msgstr "_Vytvoriť"
-
-#: gtk/gtkfilesel.c:1476 gtk/gtkfilesel.c:1585 gtk/gtkfilesel.c:1598
-#, c-format
-msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-msgstr "Názov súboru \"%s\" obsahuje znaky, ktoré nie sú povolené."
-
-#: gtk/gtkfilesel.c:1479 gtk/gtkfilesel.c:1491
-#, c-format
-msgid "Error deleting file '%s': %s"
-msgstr "Chyba pri odstraňovaní súboru \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1534
-#, c-format
-msgid "Really delete file \"%s\"?"
-msgstr "Naozaj odstrániť súbor \"%s\"?"
-
-#: gtk/gtkfilesel.c:1539
-msgid "Delete File"
-msgstr "Odstrániť súbor"
-
-#: gtk/gtkfilesel.c:1587
-#, c-format
-msgid "Error renaming file to \"%s\": %s"
-msgstr "Chyba pri premenovaní súboru na \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1600
-#, c-format
-msgid "Error renaming file \"%s\": %s"
-msgstr "Chyba pri premenovaní súboru \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1611
-#, c-format
-msgid "Error renaming file \"%s\" to \"%s\": %s"
-msgstr "Chyba pri premenovaní súboru \"%s\" na \"%s\": %s"
-
-#: gtk/gtkfilesel.c:1658
-msgid "Rename File"
-msgstr "Premenovať súbor"
-
-#: gtk/gtkfilesel.c:1673
-#, c-format
-msgid "Rename file \"%s\" to:"
-msgstr "Premenovať súbor \"%s\" na:"
-
-#: gtk/gtkfilesel.c:1702
-msgid "_Rename"
-msgstr "Pre_menovať"
-
-#: gtk/gtkfilesel.c:2134
-msgid "_Selection: "
-msgstr "_Výber: "
-
-#: gtk/gtkfilesel.c:3056
-#, c-format
-msgid ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-"environment variable G_FILENAME_ENCODING): %s"
-msgstr ""
-"Názov súboru \"%s\" nie je možné previesť do UTF-8. (Skúste nastaviť "
-"premennú prostredia G_FILENAME_ENCODING): %s"
-
-#: gtk/gtkfilesel.c:3059
-msgid "Invalid UTF-8"
-msgstr "Neplatné UTF-8"
-
-#: gtk/gtkfilesel.c:3935
-msgid "Name too long"
-msgstr "Názov príliš dlhý"
-
-#: gtk/gtkfilesel.c:3937
-msgid "Couldn't convert filename"
-msgstr "Nie je možné previesť názov súboru"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2209,17 +2078,9 @@ msgstr "_Veľkosť:"
 msgid "_Preview:"
 msgstr "_Náhľad:"
 
-#: gtk/gtkfontsel.c:1649
+#: gtk/gtkfontsel.c:1631
 msgid "Font Selection"
 msgstr "Výber písma"
-
-#: gtk/gtkgamma.c:410
-msgid "Gamma"
-msgstr "Gama"
-
-#: gtk/gtkgamma.c:420
-msgid "_Gamma value"
-msgstr "Hodnota _gama"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2272,92 +2133,13 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systémová (%s)"
 
-#: gtk/gtkinputdialog.c:192
-msgid "Input"
-msgstr "Vstup"
-
-#: gtk/gtkinputdialog.c:207
-msgid "No extended input devices"
-msgstr "Žiadne rozšírené vstupné zariadenia"
-
-#: gtk/gtkinputdialog.c:220
-msgid "_Device:"
-msgstr "_Zariadenie:"
-
-#: gtk/gtkinputdialog.c:237
-msgid "Disabled"
-msgstr "Zablokované"
-
-#: gtk/gtkinputdialog.c:244
-msgid "Screen"
-msgstr "Obrazovka"
-
-#: gtk/gtkinputdialog.c:251
-msgid "Window"
-msgstr "Okno"
-
-#: gtk/gtkinputdialog.c:258
-msgid "_Mode:"
-msgstr "Reži_m:"
-
-#. The axis listbox
-#: gtk/gtkinputdialog.c:279
-msgid "Axes"
-msgstr "Osi"
-
-#. Keys listbox
-#: gtk/gtkinputdialog.c:297
-msgid "Keys"
-msgstr "Klávesy"
-
-#: gtk/gtkinputdialog.c:524
-msgid "_X:"
-msgstr "_X:"
-
-#: gtk/gtkinputdialog.c:525
-msgid "_Y:"
-msgstr "_Y:"
-
-#: gtk/gtkinputdialog.c:526
-msgid "_Pressure:"
-msgstr "_Tlak:"
-
-#: gtk/gtkinputdialog.c:527
-msgid "X _tilt:"
-msgstr "_Sklon X:"
-
-#: gtk/gtkinputdialog.c:528
-msgid "Y t_ilt:"
-msgstr "S_klon Y:"
-
-#: gtk/gtkinputdialog.c:529
-msgid "_Wheel:"
-msgstr "K_oliesko:"
-
-#: gtk/gtkinputdialog.c:581
-msgid "none"
-msgstr "žiaden"
-
-#: gtk/gtkinputdialog.c:618 gtk/gtkinputdialog.c:654
-msgid "(disabled)"
-msgstr "(zablokované)"
-
-#: gtk/gtkinputdialog.c:647
-msgid "(unknown)"
-msgstr "(neznámy)"
-
-#. and clear button
-#: gtk/gtkinputdialog.c:751
-msgid "Cl_ear"
-msgstr "Vy_mazať"
-
 #. Open Link
-#: gtk/gtklabel.c:5685
+#: gtk/gtklabel.c:6077
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:5697
+#: gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
 msgstr "Kopírovať _adresu odkazu"
 
@@ -2370,27 +2152,27 @@ msgid "Invalid URI"
 msgstr "Neplatné URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:452
+#: gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Načítať prídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:453
+#: gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:455
+#: gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Zmeniť všetky upozornenia na závažné"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:458
+#: gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "Ladiace príznaky GTK+, ktoré nastaviť"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:461
+#: gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladiace príznaky GTK+, ktoré vypnúť"
 
@@ -2399,20 +2181,20 @@ msgstr "Ladiace príznaky GTK+, ktoré vypnúť"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:713
+#: gtk/gtkmain.c:708
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:778
+#: gtk/gtkmain.c:773
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nepodarilo sa otvoriť displej: %s"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "GTK+ Options"
 msgstr "Voľby GTK+"
 
-#: gtk/gtkmain.c:815
+#: gtk/gtkmain.c:810
 msgid "Show GTK+ Options"
 msgstr "Zobraziť voľby GTK+"
 
@@ -2497,7 +2279,7 @@ msgstr "Z shell"
 msgid "Cannot end process with pid %d: %s"
 msgstr "Nepodarilo sa ukončiť proces s pid %d: %s"
 
-#: gtk/gtknotebook.c:4704 gtk/gtknotebook.c:7269
+#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
 #, c-format
 msgid "Page %u"
 msgstr "Stránka %u"
@@ -2557,7 +2339,7 @@ msgstr "Nahor"
 msgid "Down Path"
 msgstr "Nadol"
 
-#: gtk/gtkpathbar.c:1469
+#: gtk/gtkpathbar.c:1480
 msgid "File System Root"
 msgstr "Koreň súborového systému"
 
@@ -2568,6 +2350,11 @@ msgstr "Overenie totožnosti"
 #: gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "Nie je k dispozícií"
+
+#: gtk/gtkprinteroptionwidget.c:795
+#, fuzzy
+msgid "Select a folder"
+msgstr "Vybrať súbor"
 
 #: gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
@@ -3045,12 +2832,12 @@ msgstr "Niektoré nastavenia v dialógu si odporujú"
 msgid "Print"
 msgstr "Tlačiť"
 
-#: gtk/gtkrc.c:2878
+#: gtk/gtkrc.c:2839
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nepodarilo sa nájsť vkladaný súbor: \"%s\""
 
-#: gtk/gtkrc.c:3508 gtk/gtkrc.c:3511
+#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Obrázok nebol nájdený v pixmap_path: \"%s\""
@@ -3146,10 +2933,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1020 gtk/gtkrecentmanager.c:1033
-#: gtk/gtkrecentmanager.c:1171 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
-#: gtk/gtkrecentmanager.c:1258
+#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
+#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
+#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1206
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nepodarilo sa nájsť položku s URI \"%s\""
@@ -3825,10 +3612,6 @@ msgstr "Nesp_ojovník s nulovou šírkou (ZWNJ)"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Nepodarilo sa nájsť knižnicu pre témy v module_path: \"%s\","
 
-#: gtk/gtktipsquery.c:188
-msgid "--- No Tip ---"
-msgstr "--- Bez rady ---"
-
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3843,39 +3626,39 @@ msgstr "Neočakávané znakové dáta na riadku %d znaku %d"
 msgid "Empty"
 msgstr "Prázdne"
 
-#: gtk/gtkvolumebutton.c:73
+#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Hlasitosť"
 
-#: gtk/gtkvolumebutton.c:75
+#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Pridá alebo uberie hlasitosť"
 
-#: gtk/gtkvolumebutton.c:78
+#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Upraví hlasitosť"
 
-#: gtk/gtkvolumebutton.c:81 gtk/gtkvolumebutton.c:84
+#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Ubrať hlasitosť"
 
-#: gtk/gtkvolumebutton.c:83
+#: gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Zníži hlasitosť"
 
-#: gtk/gtkvolumebutton.c:87 gtk/gtkvolumebutton.c:90
+#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Pridať hlasitosť"
 
-#: gtk/gtkvolumebutton.c:89
+#: gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Zvýši hlasitosť"
 
-#: gtk/gtkvolumebutton.c:147
+#: gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Umlčané"
 
-#: gtk/gtkvolumebutton.c:151
+#: gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Hlasitosť naplno"
 
@@ -3884,7 +3667,7 @@ msgstr "Hlasitosť naplno"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:164
+#: gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -5311,6 +5094,165 @@ msgstr "Vytlačiť na skúšobnej tlačiarni"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nepodarilo sa určiť formát súboru obrázku pre \"%s\": %s"
+
+#~ msgid "Folders"
+#~ msgstr "Priečinky"
+
+#~ msgid "Fol_ders"
+#~ msgstr "_Priečinky"
+
+#~ msgid "_Files"
+#~ msgstr "_Súbory"
+
+#~ msgid "Folder unreadable: %s"
+#~ msgstr "Nečitateľný priečinok: %s"
+
+#~ msgid ""
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
+#~ "Are you sure that you want to select it?"
+#~ msgstr ""
+#~ "Súbor \"%s\" je umiestnený na inom počítači (na %s) a nemusí byť dostupný "
+#~ "pre tento program.\n"
+#~ "Naozaj ho chcete vybrať?"
+
+#~ msgid "_New Folder"
+#~ msgstr "_Nový priečinok"
+
+#~ msgid "De_lete File"
+#~ msgstr "O_dstrániť súbor"
+
+#~ msgid "_Rename File"
+#~ msgstr "Pre_menovať súbor"
+
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Názov priečinka \"%s\" obsahuje znaky, ktoré nie sú povolené."
+
+#~ msgid "New Folder"
+#~ msgstr "Nový priečinok"
+
+#~ msgid "_Folder name:"
+#~ msgstr "_Názov priečinka:"
+
+#~ msgid "C_reate"
+#~ msgstr "_Vytvoriť"
+
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr "Názov súboru \"%s\" obsahuje znaky, ktoré nie sú povolené."
+
+#~ msgid "Error deleting file '%s': %s"
+#~ msgstr "Chyba pri odstraňovaní súboru \"%s\": %s"
+
+#~ msgid "Really delete file \"%s\"?"
+#~ msgstr "Naozaj odstrániť súbor \"%s\"?"
+
+#~ msgid "Delete File"
+#~ msgstr "Odstrániť súbor"
+
+#~ msgid "Error renaming file to \"%s\": %s"
+#~ msgstr "Chyba pri premenovaní súboru na \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\": %s"
+#~ msgstr "Chyba pri premenovaní súboru \"%s\": %s"
+
+#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
+#~ msgstr "Chyba pri premenovaní súboru \"%s\" na \"%s\": %s"
+
+#~ msgid "Rename File"
+#~ msgstr "Premenovať súbor"
+
+#~ msgid "Rename file \"%s\" to:"
+#~ msgstr "Premenovať súbor \"%s\" na:"
+
+#~ msgid "_Rename"
+#~ msgstr "Pre_menovať"
+
+#~ msgid "_Selection: "
+#~ msgstr "_Výber: "
+
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "Názov súboru \"%s\" nie je možné previesť do UTF-8. (Skúste nastaviť "
+#~ "premennú prostredia G_FILENAME_ENCODING): %s"
+
+#~ msgid "Invalid UTF-8"
+#~ msgstr "Neplatné UTF-8"
+
+#~ msgid "Name too long"
+#~ msgstr "Názov príliš dlhý"
+
+#~ msgid "Couldn't convert filename"
+#~ msgstr "Nie je možné previesť názov súboru"
+
+#~ msgid "Gamma"
+#~ msgstr "Gama"
+
+#~ msgid "_Gamma value"
+#~ msgstr "Hodnota _gama"
+
+#~ msgid "Input"
+#~ msgstr "Vstup"
+
+#~ msgid "No extended input devices"
+#~ msgstr "Žiadne rozšírené vstupné zariadenia"
+
+#~ msgid "_Device:"
+#~ msgstr "_Zariadenie:"
+
+#~ msgid "Disabled"
+#~ msgstr "Zablokované"
+
+#~ msgid "Screen"
+#~ msgstr "Obrazovka"
+
+#~ msgid "Window"
+#~ msgstr "Okno"
+
+#~ msgid "_Mode:"
+#~ msgstr "Reži_m:"
+
+#~ msgid "Axes"
+#~ msgstr "Osi"
+
+#~ msgid "Keys"
+#~ msgstr "Klávesy"
+
+#~ msgid "_X:"
+#~ msgstr "_X:"
+
+#~ msgid "_Y:"
+#~ msgstr "_Y:"
+
+#~ msgid "_Pressure:"
+#~ msgstr "_Tlak:"
+
+#~ msgid "X _tilt:"
+#~ msgstr "_Sklon X:"
+
+#~ msgid "Y t_ilt:"
+#~ msgstr "S_klon Y:"
+
+#~ msgid "_Wheel:"
+#~ msgstr "K_oliesko:"
+
+#~ msgid "none"
+#~ msgstr "žiaden"
+
+#~ msgid "(disabled)"
+#~ msgstr "(zablokované)"
+
+#~ msgid "(unknown)"
+#~ msgstr "(neznámy)"
+
+#~ msgid "Cl_ear"
+#~ msgstr "Vy_mazať"
+
+#~ msgid "--- No Tip ---"
+#~ msgstr "--- Bez rady ---"
 
 #~ msgid "(Empty)"
 #~ msgstr "(Prázdne)"
