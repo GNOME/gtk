@@ -272,7 +272,6 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 
   if (priv->file_system)
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET,
-				 "file-system-backend", priv->file_system,
 				 NULL);
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
@@ -404,7 +403,6 @@ static GtkWidget *
 gtk_file_chooser_dialog_new_valist (const gchar          *title,
 				    GtkWindow            *parent,
 				    GtkFileChooserAction  action,
-				    const gchar          *backend,
 				    const gchar          *first_button_text,
 				    va_list               varargs)
 {
@@ -457,7 +455,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
   
   va_start (varargs, first_button_text);
   result = gtk_file_chooser_dialog_new_valist (title, parent, action,
-					       NULL, first_button_text,
+					       first_button_text,
 					       varargs);
   va_end (varargs);
 
