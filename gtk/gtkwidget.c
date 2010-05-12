@@ -3759,7 +3759,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 /**
  * gtk_widget_size_request:
  * @widget: a #GtkWidget
- * @requisition: a #GtkRequisition to be filled in
+ * @requisition: (out): a #GtkRequisition to be filled in
  * 
  * This function is typically used when implementing a #GtkContainer
  * subclass.  Obtains the preferred size of a widget. The container
@@ -3794,7 +3794,7 @@ gtk_widget_size_request (GtkWidget	*widget,
 /**
  * gtk_widget_get_child_requisition:
  * @widget: a #GtkWidget
- * @requisition: a #GtkRequisition to be filled in
+ * @requisition: (out): a #GtkRequisition to be filled in
  * 
  * This function is only for use in widget implementations. Obtains
  * @widget->requisition, unless someone has forced a particular
@@ -3900,7 +3900,7 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
 /**
  * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
- * @allocation: position and size to be allocated to @widget
+ * @allocation: (inout): position and size to be allocated to @widget
  *
  * This function is only used by #GtkContainer subclasses, to assign a size
  * and position to their child widgets. 
