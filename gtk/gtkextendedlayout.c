@@ -383,8 +383,8 @@ gtk_extended_layout_is_height_for_width (GtkExtendedLayout *layout)
 /**
  * gtk_extended_layout_get_desired_width:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_width: (allow-none): location to store the minimum width, or %NULL
- * @natural_width: (allow-none): location to store the natural width, or %NULL
+ * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
+ * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
  *
  * Retrieves a widget's initial minimum and natural width.
  *
@@ -406,8 +406,8 @@ gtk_extended_layout_get_desired_width (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_desired_height:
  * @layout: a #GtkExtendedLayout instance
- * @minimum_height: (allow-none): location to store the minimum height, or %NULL
- * @natural_height: (allow-none): location to store the natural height, or %NULL
+ * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
  *
  * Retrieves a widget's initial minimum and natural height.
  *
@@ -430,8 +430,8 @@ gtk_extended_layout_get_desired_height (GtkExtendedLayout *layout,
  * gtk_extended_layout_get_width_for_height:
  * @layout: a #GtkExtendedLayout instance
  * @height: the height which is available for allocation
- * @minimum_width: (allow-none): location for storing the minimum width, or %NULL
- * @natural_width: (allow-none): location for storing the natural width, or %NULL
+ * @minimum_width: (out) (allow-none): location for storing the minimum width, or %NULL
+ * @natural_width: (out) (allow-none): location for storing the natural width, or %NULL
  *
  * Retrieves a widget's desired width if it would be given
  * the specified @height.
@@ -452,8 +452,8 @@ gtk_extended_layout_get_width_for_height (GtkExtendedLayout *layout,
  * gtk_extended_layout_get_height_for_width:
  * @layout: a #GtkExtendedLayout instance
  * @width: the width which is available for allocation
- * @minimum_height: (allow-none): location for storing the minimum height, or %NULL
- * @natural_height: (allow-none): location for storing the natural height, or %NULL
+ * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
  *
  * Retrieves a widget's desired height if it would be given
  * the specified @width.
@@ -476,8 +476,8 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
  * @width: the size which is available for allocation
  * @request_natural: Whether to base the contextual request off of the
  *     base natural or the base minimum
- * @minimum_size: (allow-none): location for storing the minimum size, or %NULL
- * @natural_size: (allow-none): location for storing the natural size, or %NULL
+ * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *
  * Retrieves the minimum and natural size of a widget taking
  * into account the widget's preference for height-for-width management.
