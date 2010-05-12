@@ -37,6 +37,7 @@
 /**
  * SECTION:gtktoolitem
  * @short_description: The base class of widgets that can be added to GtkToolShell
+ * @Title: GtkToolItem
  * @see_also: <variablelist>
  *   <varlistentry>
  *     <term>#GtkToolbar</term>
