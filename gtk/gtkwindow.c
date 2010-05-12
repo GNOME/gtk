@@ -2836,8 +2836,8 @@ gtk_window_get_geometry_info (GtkWindow *window,
 /**
  * gtk_window_set_geometry_hints:
  * @window: a #GtkWindow
- * @geometry_widget: widget the geometry hints will be applied to
- * @geometry: struct containing geometry information
+ * @geometry_widget: (allow-none): widget the geometry hints will be applied to or %NULL
+ * @geometry: (allow-none): struct containing geometry information or %NULL
  * @geom_mask: mask indicating which struct fields should be paid attention to
  *
  * This function sets up hints about how a window can be resized by
@@ -3373,7 +3373,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
 /**
  * gtk_window_set_icon_list:
  * @window: a #GtkWindow
- * @list: list of #GdkPixbuf
+ * @list: (element-type GdkPixbuf) (transfer container): list of #GdkPixbuf
  *
  * Sets up the icon representing a #GtkWindow. The icon is used when
  * the window is minimized (also known as iconified).  Some window
@@ -3666,7 +3666,7 @@ gtk_window_set_icon_from_file (GtkWindow   *window,
 
 /**
  * gtk_window_set_default_icon_list:
- * @list: a list of #GdkPixbuf
+ * @list: (element-type GdkPixbuf) (transfer container) a list of #GdkPixbuf
  *
  * Sets an icon list to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them to set up a
@@ -3847,7 +3847,7 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
  * but the pixbufs in the list have not had their reference count
  * incremented.
  * 
- * Return value: copy of default icon list 
+ * Return value: (element-type GdkPixbuf) (transfer container): copy of default icon list 
  **/
 GList*
 gtk_window_get_default_icon_list (void)
@@ -3955,8 +3955,8 @@ gtk_window_set_default_size (GtkWindow   *window,
 /**
  * gtk_window_get_default_size:
  * @window: a #GtkWindow
- * @width: (allow-none): location to store the default width, or %NULL
- * @height: (allow-none): location to store the default height, or %NULL
+ * @width: (out) (allow-none): location to store the default width, or %NULL
+ * @height: (out) (allow-none): location to store the default height, or %NULL
  *
  * Gets the default size of the window. A value of -1 for the width or
  * height indicates that a default size has not been explicitly set
@@ -4215,8 +4215,8 @@ gtk_window_move (GtkWindow *window,
 /**
  * gtk_window_get_position:
  * @window: a #GtkWindow
- * @root_x: return location for X coordinate of gravity-determined reference point
- * @root_y: return location for Y coordinate of gravity-determined reference point
+ * @root_x: (out): return location for X coordinate of gravity-determined reference point
+ * @root_y: (out): return location for Y coordinate of gravity-determined reference point
  *
  * This function returns the position you need to pass to
  * gtk_window_move() to keep @window in its current position.  This
@@ -7356,10 +7356,10 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 /**
  * gtk_window_get_frame_dimensions:
  * @window: a #GtkWindow
- * @left: (allow-none): location to store the width of the frame at the left, or %NULL
- * @top: (allow-none): location to store the height of the frame at the top, or %NULL
- * @right: (allow-none): location to store the width of the frame at the returns, or %NULL
- * @bottom: (allow-none): location to store the height of the frame at the bottom, or %NULL
+ * @left: (allow-none) (out): location to store the width of the frame at the left, or %NULL
+ * @top: (allow-none) (out): location to store the height of the frame at the top, or %NULL
+ * @right: (allow-none) (out): location to store the width of the frame at the returns, or %NULL
+ * @bottom: (allow-none) (out): location to store the height of the frame at the bottom, or %NULL
  *
  * (Note: this is a special-purpose function intended for the
  *  framebuffer port; see gtk_window_set_has_frame(). It will not
