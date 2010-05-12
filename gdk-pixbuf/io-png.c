@@ -261,7 +261,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
         gchar *icc_profile_base64;
         const gchar *icc_profile_title;
         const gchar *icc_profile;
-        gulong icc_profile_size;
+        png_uint_32 icc_profile_size;
         guint32 retval;
         gint compression_type;
 
@@ -344,7 +344,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                (png_charpp) &icc_profile_title, &compression_type,
                                (png_charpp) &icc_profile, (png_uint_32*) &icc_profile_size);
         if (retval != 0) {
-                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, icc_profile_size);
+                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, (gsize)icc_profile_size);
                 gdk_pixbuf_set_option (pixbuf, "icc-profile", icc_profile_base64);
                 g_free (icc_profile_base64);
         }
@@ -607,7 +607,7 @@ png_info_callback   (png_structp png_read_ptr,
         gchar *icc_profile_base64;
         const gchar *icc_profile_title;
         const gchar *icc_profile;
-        gulong icc_profile_size;
+        png_uint_32 icc_profile_size;
         guint32 retval;
         gint compression_type;
 
@@ -679,9 +679,9 @@ png_info_callback   (png_structp png_read_ptr,
         /* Extract embedded ICC profile */
         retval = png_get_iCCP (png_read_ptr, png_info_ptr,
                                (png_charpp) &icc_profile_title, &compression_type,
-                               (png_charpp) &icc_profile, (png_uint_32*) &icc_profile_size);
+                               (png_charpp) &icc_profile, &icc_profile_size);
         if (retval != 0) {
-                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, icc_profile_size);
+                icc_profile_base64 = g_base64_encode ((const guchar *) icc_profile, (gsize)icc_profile_size);
                 gdk_pixbuf_set_option (lc->pixbuf, "icc-profile", icc_profile_base64);
                 g_free (icc_profile_base64);
         }
