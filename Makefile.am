@@ -4,8 +4,7 @@ include $(top_srcdir)/Makefile.decl
 SRC_SUBDIRS = gdk-pixbuf gdk gtk modules demos tests perf contrib
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
-AUTOMAKE_OPTIONS = 1.7
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 EXTRA_DIST +=			\
 	HACKING			\

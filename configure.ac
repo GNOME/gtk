@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 # require autoconf 2.54
-AC_PREREQ(2.62)
+AC_PREREQ([2.62])
 
 # Making releases:
 #   GTK_MICRO_VERSION += 1;
@@ -41,15 +41,15 @@ AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
 	[gtk+])
 
+AC_CONFIG_HEADER([config.h])
 AC_CONFIG_SRCDIR([gdk/gdktypes.h])
-
 AC_CONFIG_MACRO_DIR([m4])
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
-AM_INIT_AUTOMAKE([no-define -Wno-portability dist-bzip2])
-AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE([1.10 no-define -Wno-portability dist-bzip2])
+AM_MAINTAINER_MODE([enable])
 
 # Support silent build rules, requires at least automake-1.11. Enable
 # by either passing --enable-silent-rules to configure or passing V=0
@@ -120,6 +120,14 @@ AC_SUBST(GDK_PIXBUF_MINOR)
 AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_CC_C_O
+AC_PROG_CC_STDC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+
 GETTEXT_PACKAGE=gtk30
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
@@ -158,17 +166,12 @@ case $host in
     ;;
 esac
 
-dnl Initialize libtool
-AC_PROG_CC
-AM_DISABLE_STATIC
-
 dnl
 dnl Check for a working C++ compiler, but do not bail out, if none is found.
 dnl We use this for an automated test for C++ header correctness.
 dnl
 AC_CHECK_TOOLS(CXX, [$CCC c++ g++ gcc CC cxx cc++ cl], gcc)
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+AC_LANG_PUSH([C++])
 
 AC_TRY_COMPILE(,[class a { int b; } c;], ,CXX=)
 AM_CONDITIONAL(HAVE_CXX, test "$CXX" != "")
@@ -178,7 +181,7 @@ CXXFLAGS="$CXXFLAGS -x objective-c++"
 AC_TRY_COMPILE([@interface Foo @end],,OBJC=yes,OBJC=no)
 AM_CONDITIONAL(HAVE_OBJC, test "$OBJC" = "yes")
 CXXFLAGS="$gtk_save_cxxflags"
-AC_LANG_RESTORE
+AC_LANG_POP([C++])
 
 if test "$os_win32" = "yes"; then
   if test x$enable_static = xyes -o x$enable_static = x; then
@@ -191,20 +194,17 @@ if test "$os_win32" = "yes"; then
   enable_shared=yes
 fi
 
-AC_LIBTOOL_WIN32_DLL
-AM_PROG_LIBTOOL
-dnl when using libtool 2.x create libtool early, because it's used in configure
-m4_ifdef([LT_OUTPUT], [LT_OUTPUT])
-
+dnl Initialize libtool
+LT_PREREQ([2.2.6])
+LT_INIT([disable-static win32-dll])
+# Create libtool early, because it's used in configure
+LT_OUTPUT
 
 # Make sure we use 64-bit versions of various file stuff.
 AC_SYS_LARGEFILE
 
 AM_PROG_AS
 AC_PATH_PROG(NM, nm, nm)
-
-dnl Initialize maintainer mode
-AM_MAINTAINER_MODE
 
 AC_MSG_CHECKING([for some Win32 platform])
 case "$host" in
@@ -257,7 +257,7 @@ AC_ARG_ENABLE(rebuilds,
               [enable_rebuilds=yes])
 AC_ARG_ENABLE(visibility,
               [AC_HELP_STRING([--disable-visibility],
-                              [don't use ELF visibility attributes])],,
+                              [do not use ELF visibility attributes])],,
               [enable_visibility=yes])
 
 AC_ARG_WITH(xinput,
@@ -307,13 +307,6 @@ AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}",
 
 # Build time sanity check...
 AM_SANITY_CHECK
-
-# Checks for programs.
-AC_ISC_POSIX
-AM_PROG_CC_STDC
-AM_PROG_CC_C_O
-AC_PROG_INSTALL
-AC_PROG_MAKE_SET
 
 changequote(,)dnl
 if test "x$GCC" = "xyes"; then
@@ -372,9 +365,6 @@ if test x"$os_win32" = xyes; then
     fi
   fi
 fi
-
-# Honor aclocal flags
-ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 ## Initial sanity check, done here so that users get told they
 ## have the wrong dependencies as early in the process as possible.
