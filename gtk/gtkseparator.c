@@ -33,6 +33,16 @@
 #include "gtkalias.h"
 
 
+/**
+ * SECTION:gtkseparator
+ * @Short_description: Base class for #GtkHSeparator and #GtkVSeparator
+ * @Title: GtkSeparator
+ *
+ * The #GtkSeparator widget is an abstract class, used only for deriving the
+ * subclasses #GtkHSeparator and #GtkVSeparator.
+ */
+
+
 enum {
   PROP_0,
   PROP_ORIENTATION
