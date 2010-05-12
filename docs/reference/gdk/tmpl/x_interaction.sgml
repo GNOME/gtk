@@ -26,14 +26,6 @@ Obtains the Xlib window id of the root window of the current screen.
 </para>
 
 
-
-<!-- ##### MACRO GDK_ROOT_PARENT ##### -->
-<para>
-Obtains the Xlib window id of the root window of the default screen.
-</para>
-
-
-
 <!-- ##### MACRO GDK_DISPLAY ##### -->
 <para>
 The current display.

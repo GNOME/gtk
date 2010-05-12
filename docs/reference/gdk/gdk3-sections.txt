@@ -612,8 +612,6 @@ GdkWindowAttr
 GdkWindowAttributesType
 gdk_window_new
 gdk_window_destroy
-gdk_window_ref
-gdk_window_unref
 gdk_window_get_window_type
 gdk_window_at_pointer
 gdk_window_show
@@ -647,7 +645,6 @@ gdk_window_reparent
 gdk_window_clear
 gdk_window_clear_area
 gdk_window_clear_area_e
-gdk_window_copy_area
 gdk_window_raise
 gdk_window_lower
 gdk_window_restack
@@ -696,14 +693,12 @@ gdk_window_input_shape_combine_region
 gdk_window_set_child_input_shapes
 gdk_window_merge_child_input_shapes
 gdk_window_set_static_gravities
-gdk_window_set_hints
 gdk_window_set_title
 gdk_window_set_background
 gdk_window_set_back_pixmap
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
 gdk_window_get_cursor
-gdk_window_set_colormap
 gdk_window_get_user_data
 gdk_window_get_geometry
 gdk_window_set_geometry_hints
@@ -717,10 +712,6 @@ gdk_window_set_urgency_hint
 gdk_window_get_position
 gdk_window_get_root_origin
 gdk_window_get_frame_extents
-gdk_window_get_size
-gdk_window_get_visual
-gdk_window_get_colormap
-gdk_window_get_type
 gdk_window_get_origin
 gdk_window_get_deskrelative_origin
 gdk_window_get_root_coords
@@ -1237,7 +1228,6 @@ gdk_drag_context_get_type
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
 GDK_ROOT_WINDOW
-GDK_ROOT_PARENT
 GDK_DISPLAY
 GDK_WINDOW_XDISPLAY
 GDK_WINDOW_XID

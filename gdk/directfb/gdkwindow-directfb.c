@@ -1527,26 +1527,6 @@ gdk_window_directfb_lower (GdkWindow *window)
 }
 
 void
-gdk_window_set_hints (GdkWindow *window,
-                      gint       x,
-                      gint       y,
-                      gint       min_width,
-                      gint       min_height,
-                      gint       max_width,
-                      gint       max_height,
-                      gint       flags)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  D_DEBUG_AT( GDKDFB_Window, "%s( %p, %3d,%3d, min %4dx%4d, max %4dx%4d, flags 0x%08x )\n", G_STRFUNC,
-              window, x,y, min_width, min_height, max_width, max_height, flags );
-  /* N/A */
-}
-
-void
 gdk_window_set_geometry_hints (GdkWindow         *window,
                                const GdkGeometry *geometry,
                                GdkWindowHints     geom_mask)

@@ -1461,52 +1461,6 @@ gdk_win32_window_lower (GdkWindow *window)
 }
 
 void
-gdk_window_set_hints (GdkWindow *window,
-		      gint       x,
-		      gint       y,
-		      gint       min_width,
-		      gint       min_height,
-		      gint       max_width,
-		      gint       max_height,
-		      gint       flags)
-{
-  /* Note that this function is obsolete */
-
-  GdkWindowImplWin32 *impl;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-  
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-
-  GDK_NOTE (MISC, g_print ("gdk_window_set_hints: %p: %dx%d..%dx%d @%+d%+d\n",
-			   GDK_WINDOW_HWND (window),
-			   min_width, min_height, max_width, max_height,
-			   x, y));
-
-  if (flags)
-    {
-      GdkGeometry geom;
-      gint geom_mask = 0;
-
-      geom.min_width  = min_width;
-      geom.min_height = min_height;
-      geom.max_width  = max_width;
-      geom.max_height = max_height;
-
-      if (flags & GDK_HINT_MIN_SIZE)
-        geom_mask |= GDK_HINT_MIN_SIZE;
-
-      if (flags & GDK_HINT_MAX_SIZE)
-        geom_mask |= GDK_HINT_MAX_SIZE;
-
-      gdk_window_set_geometry_hints (window, &geom, geom_mask);
-    }
-}
-
-void
 gdk_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {

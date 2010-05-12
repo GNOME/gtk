@@ -1333,9 +1333,9 @@ move_resize_window_internal (GdkWindow *window,
       old_visible.x = -private->x;
       old_visible.y = -private->y;
 
-      gdk_window_get_size (GDK_DRAWABLE (private->parent), 
-                           &old_visible.width, 
-                           &old_visible.height);
+      gdk_drawable_get_size (GDK_DRAWABLE (private->parent),
+                             &old_visible.width,
+                             &old_visible.height);
     }
 
   if (x != -1)
@@ -2339,19 +2339,6 @@ gdk_window_focus (GdkWindow *window,
       clear_toplevel_order ();
       GDK_QUARTZ_RELEASE_POOL;
     }
-}
-
-void
-gdk_window_set_hints (GdkWindow *window,
-		      gint       x,
-		      gint       y,
-		      gint       min_width,
-		      gint       min_height,
-		      gint       max_width,
-		      gint       max_height,
-		      gint       flags)
-{
-  /* FIXME: Implement */
 }
 
 static

@@ -2359,7 +2359,7 @@ gdk_window_register_dnd (GdkWindow *window)
 	    OTHER_API_FAILED ("RegisterDragDrop");
 	  else
 	    {
-	      gdk_window_ref (window);
+	      g_object_ref (window);
 	      g_hash_table_insert (target_ctx_for_window, GDK_WINDOW_HWND (window), ctx);
 	    }
 	}

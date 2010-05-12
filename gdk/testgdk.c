@@ -361,7 +361,7 @@ test_pixmaps (gint depth)
       {
 	pixmap = gdk_pixmap_new (NULL, width, height, depth);
 	ASSERT (pixmap != NULL);
-	gdk_window_get_size (pixmap, &w, &h);
+	gdk_drawable_get_size (pixmap, &w, &h);
 	QTESTF (w == width, (" w:%d", w));
 	QTESTF (h == height, (" h:%d", h));
 	image = gdk_drawable_get_image (pixmap, 0, 0, w, h);
@@ -444,10 +444,10 @@ test_temp_windows (void)
 	gdk_window_get_geometry (window, &x, &y, &w, &h, &d);
 	QTESTF (w == 37, ("w:%d", w));
 	QTESTF (h == 19, ("h:%d", h));
-	visual = gdk_window_get_visual (window);
+	visual = gdk_drawable_get_visual (window);
 	QTEST (visual == system_visual);
 	gdk_window_hide (window);
-	gdk_window_unref (window);
+	g_object_unref (window);
       }
   TEST (retval);
 }
@@ -600,7 +600,7 @@ test_one_line_on_drawable (GdkDrawable *drawable,
   line_width = gcvalues.line_width > 0 ? gcvalues.line_width : 1;
   w_up = w_left = line_width/2;
   w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
-  gdk_window_get_size (drawable, &w, &h);
+  gdk_drawable_get_size (drawable, &w, &h);
   oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)
@@ -714,7 +714,7 @@ test_one_rectangle_on_drawable (GdkDrawable *drawable,
       w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
     }
 
-  gdk_window_get_size (drawable, &w, &h);
+  gdk_drawable_get_size (drawable, &w, &h);
   oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)
@@ -820,7 +820,7 @@ test_some_arcs_on_drawable (GdkDrawable *drawable,
       w_down = w_right = (line_width & 1) ? line_width/2 : line_width/2-1;
     }
 
-  gdk_window_get_size (drawable, &w, &h);
+  gdk_drawable_get_size (drawable, &w, &h);
   oldimage = gdk_drawable_get_image (drawable, 0, 0, w, h);
 
   if (depth == 32)

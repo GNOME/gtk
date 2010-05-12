@@ -2170,8 +2170,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @event: the #GdkEventNoExpose which triggered this signal
    *
    * The ::no-expose-event will be emitted when the @widget's window is 
-   * drawn as a copy of another #GdkDrawable (with gdk_draw_drawable() or
-   * gdk_window_copy_area()) which was completely unobscured. If the source
+   * drawn as a copy of another #GdkDrawable (with gdk_draw_drawable())
+   * which was completely unobscured. If the source
    * window was partially obscured #GdkEventExpose events will be generated
    * for those areas.
    *

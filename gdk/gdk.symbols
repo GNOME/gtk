@@ -744,9 +744,6 @@ gdk_window_foreign_new_for_display
 gdk_window_focus
 gdk_window_lookup
 gdk_window_lookup_for_display
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_window_set_hints
-#endif
 gdk_window_get_type_hint
 gdk_window_set_type_hint
 gdk_window_set_modal_hint

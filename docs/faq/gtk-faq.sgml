@@ -3102,7 +3102,7 @@ like this:</para>
   gc = gdk_gc_new(widget->window);
 
   /* find proper dimensions for rectangle */
-  gdk_window_get_size(widget->window, &amp;width, &amp;height);
+  gdk_drawable_get_size(widget->window, &amp;width, &amp;height);
 
   /* the color we want to use */
   color = (GdkColor *)malloc(sizeof(GdkColor));

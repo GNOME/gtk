@@ -510,21 +510,6 @@ corresponding flag in #GdkWindowAttributesType.
 @window: 
 
 
-<!-- ##### MACRO gdk_window_ref ##### -->
-<para>
-Deprecated equivalent of g_object_ref()
-</para>
-
-@Returns: the window
-
-
-<!-- ##### MACRO gdk_window_unref ##### -->
-<para>
-Deprecated equivalent of g_object_unref()
-</para>
-
-
-
 <!-- ##### FUNCTION gdk_window_get_window_type ##### -->
 <para>
 
@@ -823,26 +808,6 @@ Deprecated equivalent of g_object_unref()
 @y: 
 @width: 
 @height: 
-
-
-<!-- ##### MACRO gdk_window_copy_area ##### -->
-<para>
-Deprecated equivalent to gdk_draw_drawable(), see that function for docs
-</para>
-
-@drawable: a #GdkDrawable
-@gc: a #GdkGC sharing the drawable's visual and colormap
-@x: X position in @drawable where the rectangle should be drawn
-@y: Y position in @drawable where the rectangle should be drawn
-@source_drawable: the source #GdkDrawable, which may be the same as @drawable
-@source_x: X position in @src of rectangle to draw
-@source_y: Y position in @src of rectangle to draw
-@width: width of rectangle to draw, or -1 for entire @src width
-@height: height of rectangle to draw, or -1 for entire @src height
-<!-- # Unused Parameters # -->
-@drawable: a #GdkDrawable
-@xdest: X position in @drawable where the rectangle should be drawn
-@ydest: Y position in @drawable where the rectangle should be drawn
 
 
 <!-- ##### FUNCTION gdk_window_raise ##### -->
@@ -1248,21 +1213,6 @@ backend, <type>MSG</type>s for Win32).
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_window_set_hints ##### -->
-<para>
-
-</para>
-
-@window: 
-@x: 
-@y: 
-@min_width: 
-@min_height: 
-@max_width: 
-@max_height: 
-@flags: 
-
-
 <!-- ##### FUNCTION gdk_window_set_title ##### -->
 <para>
 
@@ -1316,13 +1266,6 @@ window.
 
 @window: 
 @Returns: 
-
-
-<!-- ##### MACRO gdk_window_set_colormap ##### -->
-<para>
-Deprecated equivalent to gdk_drawable_set_colormap()
-</para>
-
 
 
 <!-- ##### FUNCTION gdk_window_get_user_data ##### -->
@@ -1447,37 +1390,6 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @rect: 
-
-
-<!-- ##### MACRO gdk_window_get_size ##### -->
-<para>
-Deprecated equivalent of gdk_drawable_get_size().
-</para>
-
-
-
-<!-- ##### MACRO gdk_window_get_visual ##### -->
-<para>
-Deprecated equivalent of gdk_drawable_get_visual().
-</para>
-
-@Returns: the #GdkVisual of the window
-
-
-<!-- ##### MACRO gdk_window_get_colormap ##### -->
-<para>
-Deprecated equivalent of gdk_drawable_get_colormap().
-</para>
-
-@Returns: colormap for the window
-
-
-<!-- ##### MACRO gdk_window_get_type ##### -->
-<para>
-Deprecated equivalent of gdk_drawable_get_type().
-</para>
-
-@Returns: type of drawable
 
 
 <!-- ##### FUNCTION gdk_window_get_origin ##### -->
