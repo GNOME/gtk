@@ -386,31 +386,6 @@ gdk_init (int *argc, char ***argv)
     }
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_exit
- *
- *   Restores the library to an un-itialized state and exits
- *   the program using the "exit" system call.
- *
- * Arguments:
- *   "errorcode" is the error value to pass to "exit".
- *
- * Results:
- *   Allocated structures are freed and the program exits
- *   cleanly.
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-void
-gdk_exit (gint errorcode)
-{
-  exit (errorcode);
-}
-
 void
 gdk_threads_enter (void)
 {

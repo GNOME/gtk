@@ -109,20 +109,6 @@ locale.
 @sm_client_id: 
 
 
-<!-- ##### FUNCTION gdk_exit ##### -->
-<para>
-Exits the application using the <function>exit()</function> system call.
-</para>
-<para>
-This routine is provided mainly for backwards compatibility, since it used to
-perform tasks necessary to exit the application cleanly. Those tasks are now
-performed in a function which is automatically called on exit (via the use
-of g_atexit()).
-</para>
-
-@error_code: the error code to pass to the <function>exit()</function> call.
-
-
 <!-- ##### FUNCTION gdk_notify_startup_complete ##### -->
 <para>
 

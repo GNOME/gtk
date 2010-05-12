@@ -132,9 +132,6 @@ gdk_get_display_arg_name
 gdk_get_program_class
 gdk_init
 gdk_init_check
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_exit
-#endif
 gdk_pre_parse_libgtk_only
 gdk_parse_args
 gdk_set_program_class
