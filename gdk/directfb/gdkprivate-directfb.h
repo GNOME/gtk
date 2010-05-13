@@ -104,6 +104,9 @@ typedef struct
 
 GType      gdk_drawable_impl_directfb_get_type (void);
 
+void gdk_directfb_event_fill (GdkEvent     *event,
+                              GdkWindow    *window,
+                              GdkEventType  type);
 GdkEvent *gdk_directfb_event_make (GdkWindow    *window,
                                    GdkEventType  type);
 

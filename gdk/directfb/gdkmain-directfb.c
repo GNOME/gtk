@@ -285,12 +285,12 @@ gdk_directfb_keyboard_event_window (GdkWindow    *window,
 }
 
 
-GdkEvent *
-gdk_directfb_event_make (GdkWindow    *window,
+void
+gdk_directfb_event_fill (GdkEvent     *event,
+                         GdkWindow    *window,
                          GdkEventType  type)
 {
-  GdkEvent *event    = gdk_event_new (GDK_NOTHING);
-  guint32   the_time = gdk_directfb_get_time ();
+  guint32 the_time = gdk_directfb_get_time ();
 
   event->any.type       = type;
   event->any.window     = g_object_ref (window);
@@ -353,6 +353,15 @@ gdk_directfb_event_make (GdkWindow    *window,
     default:
       break;
     }
+}
+
+GdkEvent *
+gdk_directfb_event_make (GdkWindow    *window,
+                         GdkEventType  type)
+{
+  GdkEvent *event = gdk_event_new (GDK_NOTHING);
+
+  gdk_directfb_event_fill (event, window, type);
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
 
