@@ -39,6 +39,17 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtktoggleaction
+ * @Short_description: An action which can be toggled between two states
+ * @Title: GtkToggleAction
+ *
+ * A #GtkToggleAction corresponds roughly to a #GtkCheckMenuItem. It has an
+ * "active" state specifying whether the action has been checked or not.
+ */
+
+
 enum 
 {
   TOGGLED,
@@ -120,7 +131,13 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
                                                          P_("If the toggle action should be active in or not"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-
+  /**
+   * GtkToggleAction::toggled:
+   * @toggleaction: the object which received the signal.
+   *
+   * Should be connected if you wish to perform an action
+   * whenever the #GtkToggleAction state is changed.
+   */
   action_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
                   G_OBJECT_CLASS_TYPE (klass),
@@ -275,7 +292,7 @@ gtk_toggle_action_set_active (GtkToggleAction *action,
  * @action: the action object
  *
  * Returns the checked state of the toggle action.
-
+ *
  * Returns: the checked state of the toggle action
  *
  * Since: 2.4
