@@ -56,6 +56,15 @@ G_BEGIN_DECLS
  * is a kinda nasty break up, it does make the size of
  * derived objects smaller.
  */
+/**
+ * GtkObjectFlags:
+ * @GTK_IN_DESTRUCTION: the object is currently being destroyed. This is used
+ *   internally by GTK+ to prevent reinvokations during destruction.
+ * @GTK_RESERVED_1: reserved for future use
+ * @GTK_RESERVED_2: reserved for future use
+ *
+ * Tells about the state of the object.
+ */
 typedef enum
 {
   GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
@@ -63,7 +72,12 @@ typedef enum
   GTK_RESERVED_2	= 1 << 3
 } GtkObjectFlags;
 
-/* Macros for extracting the object_flags from GtkObject.
+/**
+ * GTK_OBJECT_FLAGS:
+ * @obj: the object whose flags are returned.
+ *
+ * Gets the #GtkObjectFlags for an object without directly
+ * accessing its members.
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
 
