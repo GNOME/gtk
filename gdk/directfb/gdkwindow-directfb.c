@@ -366,8 +366,6 @@ gdk_directfb_window_new (GdkWindow              *parent,
   private->x = x;
   private->y = y;
 
-  _gdk_directfb_calc_abs (window);
-
   impl->drawable.width  = MAX (1, attributes->width);
   impl->drawable.height = MAX (1, attributes->height);
 
@@ -558,8 +556,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   parent_impl = GDK_WINDOW_IMPL_DIRECTFB (parent_private->impl);
 
   private->parent = parent_private;
-
-  _gdk_directfb_calc_abs (window);
 
   impl->drawable.width  = MAX (1, attributes->width);
   impl->drawable.height = MAX (1, attributes->height);
@@ -1432,7 +1428,6 @@ gdk_directfb_window_move (GdkWindow *window,
       GdkRectangle old    = { private->x, private->y,width,height };
 
       _gdk_directfb_move_resize_child (window, x, y, width, height);
-      _gdk_directfb_calc_abs (window);
 
       if (GDK_WINDOW_IS_MAPPED (private))
         {
@@ -1525,7 +1520,6 @@ gdk_directfb_window_move_resize (GdkWindow *window,
 
       _gdk_directfb_move_resize_child (window,
                                        new.x, new.y, new.width, new.height);
-      _gdk_directfb_calc_abs (window);
 
       if (GDK_WINDOW_IS_MAPPED (private))
         {
@@ -1941,39 +1935,6 @@ gdk_directfb_window_get_geometry (GdkWindow *window,
 
       if (depth)
 	*depth = DFB_BITS_PER_PIXEL (impl->format);
-    }
-}
-
-void
-_gdk_directfb_calc_abs (GdkWindow *window)
-{
-  GdkWindowObject         *private;
-  GdkDrawableImplDirectFB *impl;
-  GList                   *list;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  private = GDK_WINDOW_OBJECT (window);
-  impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
-
-  impl->abs_x = private->x;
-  impl->abs_y = private->y;
-
-  if (private->parent)
-    {
-      GdkDrawableImplDirectFB *parent_impl =
-        GDK_DRAWABLE_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (private->parent)->impl);
-
-      impl->abs_x += parent_impl->abs_x;
-      impl->abs_y += parent_impl->abs_y;
-    }
-
-  D_DEBUG_AT (GDKDFB_Window, "%s( %p ) -> %4d,%4d\n", G_STRFUNC,
-              window, impl->abs_x, impl->abs_y);
-
-  for (list = private->children; list; list = list->next)
-    {
-      _gdk_directfb_calc_abs (list->data);
     }
 }
 
@@ -2597,7 +2558,8 @@ gdk_directfb_create_child_window (GdkWindow *parent,
   private->x = x;
   private->y = y;
 
-  _gdk_directfb_calc_abs (window);
+  private->abs_x = 0;
+  private->abs_y = 0;
 
   impl->drawable.width     = w;
   impl->drawable.height    = h;
@@ -2683,10 +2645,6 @@ gdk_window_foreign_new_for_display (GdkDisplay* display, GdkNativeWindow anid)
     private->input_only    = TRUE;
     impl->drawable.surface = NULL;
   }
-  /*
-   * Position ourselevs
-   */
-  _gdk_directfb_calc_abs (window);
 
   /* We default to all events least surprise to the user
    * minus the poll for motion events

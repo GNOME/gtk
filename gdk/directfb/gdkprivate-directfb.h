@@ -170,8 +170,6 @@ void  gdk_directfb_window_send_crossing_events (GdkWindow       *src,
                                                 GdkWindow       *dest,
                                                 GdkCrossingMode  mode);
 
-void  _gdk_directfb_calc_abs                   (GdkWindow       *window);
-
 GdkWindow * gdk_directfb_window_find_toplevel  (GdkWindow       *window);
 
 

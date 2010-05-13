@@ -722,7 +722,6 @@ gdk_event_translate (DFBWindowEvent *dfbevent,
               GDK_DRAWABLE_IMPL_DIRECTFB (private->impl)->height;
           }
 
-        _gdk_directfb_calc_abs (window);
       }
       break;
 
@@ -765,8 +764,6 @@ gdk_event_translate (DFBWindowEvent *dfbevent,
                                              win->x, win->y,
                                              impl->width, impl->height);
           }
-
-        _gdk_directfb_calc_abs (window);
 
         gdk_window_clear (window);
         gdk_window_invalidate_rect (window, NULL, TRUE);

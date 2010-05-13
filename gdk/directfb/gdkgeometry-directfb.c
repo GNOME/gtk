@@ -136,8 +136,6 @@ _gdk_directfb_window_scroll (GdkWindow *window,
                                        obj_impl->height);
     }
 
-  _gdk_directfb_calc_abs (window);
-
   if (invalidate_region)
     {
       gdk_window_invalidate_region (window, invalidate_region, TRUE);
