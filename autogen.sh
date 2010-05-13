@@ -105,6 +105,8 @@ rm -rf autom4te.cache
 # regenerated from their corresponding *.in files by ./configure anyway.
 touch README INSTALL
 
+$ACLOCAL -I m4 $ACLOCAL_FLAGS || exit $?
+
 libtoolize --force || exit $?
 gtkdocize || exit $?
 
