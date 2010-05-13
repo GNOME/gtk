@@ -25,6 +25,69 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:windows
+ * @Short_description: Onscreen display areas in the target window system
+ * @Title: Windows
+ *
+ * A #GdkWindow is a rectangular region on the screen. It's a low-level object,
+ * used to implement high-level objects such as #GtkWidget and #GtkWindow on the
+ * GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think
+ * of as a "window" with a titlebar and so on; a #GtkWindow may contain many
+ * #GdkWindow<!-- -->s. For example, each #GtkButton has a #GdkWindow associated
+ * with it.
+ *
+ * <refsect2 id="COMPOSITED-WINDOWS">
+ * <title>Composited Windows</title>
+ * <para>
+ * Normally, the windowing system takes care of rendering the contents of a
+ * child window onto its parent window. This mechanism can be intercepted by
+ * calling gdk_window_set_composited() on the child window. For a
+ * <firstterm>composited</firstterm> window it is the responsibility of the
+ * application to render the window contents at the right spot.
+ * </para>
+ * <example id="composited-window-example">
+ * <title>Composited windows</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/gdk/composited-window-example.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>
+ * </programlisting></example>
+ * <para>
+ * In the example <xref linkend="composited-window-example"/>, a button is
+ * placed inside of an event box inside of a window. The event box is set as
+ * composited and therefore is no longer automatically drawn to the screen.
+ *
+ * When the contents of the event box change, an expose event is generated on
+ * it's parent window (which, in this case, belongs to the toplevel #GtkWindow).
+ * The expose handler for this widget is responsible for merging the changes
+ * back on the screen in the way that it wishes.
+ *
+ * In our case, we merge the contents with a 50% transparency. We also set the
+ * background colour of the window to red. The effect is that the background
+ * shows through the button.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="OFFSCREEN-WINDOWS">
+ * <title>Offscreen Windows</title>
+ * <para>
+ * Offscreen windows are more general than composited windows, since they allow
+ * not only to modify the rendering of the child window onto its parent, but
+ * also to apply coordinate transformations.
+ *
+ * To integrate an offscreen window into a window hierarchy, one has to call
+ * gdk_offscreen_window_set_embedder() and handle a number of signals. The
+ * #GdkWindow::pick-embedded-child signal on the embedder window is used to
+ * select an offscreen child at given coordinates, and the
+ * #GdkWindow::to-embedder and #GdkWindow::from-embedder signals on the
+ * offscreen window are used to translate coordinates between the embedder and
+ * the offscreen window.
+ *
+ * For rendering an offscreen window onto its embedder, the contents of the
+ * offscreen window are available as a pixmap, via
+ * gdk_offscreen_window_get_pixmap().
+ * </para>
+ * </refsect2>
+ */
+
 #include "config.h"
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"

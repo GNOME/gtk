@@ -4456,8 +4456,10 @@ gdk_window_set_decorations (GdkWindow      *window,
  * @window: The toplevel #GdkWindow to get the decorations from
  * @decorations: The window decorations will be written here
  *
- * Returns the decorations set on the GdkWindow with #gdk_window_set_decorations
- * Returns: TRUE if the window has decorations set, FALSE otherwise.
+ * Returns the decorations set on the GdkWindow with
+ * gdk_window_set_decorations().
+ *
+ * Returns: %TRUE if the window has decorations set, %FALSE otherwise.
  **/
 gboolean
 gdk_window_get_decorations(GdkWindow       *window,

@@ -3837,6 +3837,12 @@ gdk_drop_finish (GdkDragContext   *context,
 }
 
 
+/**
+ * gdk_window_register_dnd:
+ * @window: a #GdkWindow.
+ *
+ * Registers a window as a potential drop destination.
+ */
 void            
 gdk_window_register_dnd (GdkWindow      *window)
 {

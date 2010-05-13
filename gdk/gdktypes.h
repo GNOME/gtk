@@ -56,6 +56,13 @@
 
 /* some common magic values */
 #define GDK_CURRENT_TIME     0L
+
+/**
+ * GDK_PARENT_RELATIVE:
+ *
+ * A special value for #GdkPixmap variables, indicating that the background
+ * pixmap for a window should be inherited from the parent window.
+ */
 #define GDK_PARENT_RELATIVE  1L
 
 
@@ -111,6 +118,15 @@ typedef struct _GdkVisual             GdkVisual;
 typedef struct _GdkDrawable           GdkDrawable;
 typedef struct _GdkDrawable           GdkBitmap;
 typedef struct _GdkDrawable           GdkPixmap;
+
+/**
+ * GdkWindow:
+ *
+ * An opaque structure representing an onscreen drawable. Pointers to structures
+ * of type #GdkPixmap, #GdkBitmap, and #GdkWindow can often be used
+ * interchangeably. The type #GdkDrawable refers generically to any of these
+ * types.
+ */
 typedef struct _GdkDrawable           GdkWindow;
 typedef struct _GdkDisplay	      GdkDisplay;
 typedef struct _GdkScreen	      GdkScreen;
@@ -122,6 +138,45 @@ typedef enum
 } GdkByteOrder;
 
 /* Types of modifiers.
+ */
+/**
+ * GdkModifierType:
+ * @GDK_SHIFT_MASK: the Shift key.
+ * @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the
+ *  X server this may either be CapsLock or ShiftLock).
+ * @GDK_CONTROL_MASK: the Control key.
+ * @GDK_MOD1_MASK: the fourth modifier key (it depends on the modifier
+ *  mapping of the X server which key is interpreted as this modifier, but
+ *  normally it is the Alt key).
+ * @GDK_MOD2_MASK: the fifth modifier key (it depends on the modifier
+ *  mapping of the X server which key is interpreted as this modifier).
+ * @GDK_MOD3_MASK: the sixth modifier key (it depends on the modifier
+ *  mapping of the X server which key is interpreted as this modifier).
+ * @GDK_MOD4_MASK: the seventh modifier key (it depends on the modifier
+ *  mapping of the X server which key is interpreted as this modifier).
+ * @GDK_MOD5_MASK: the eighth modifier key (it depends on the modifier
+ *  mapping of the X server which key is interpreted as this modifier).
+ * @GDK_BUTTON1_MASK: the first mouse button.
+ * @GDK_BUTTON2_MASK: the second mouse button.
+ * @GDK_BUTTON3_MASK: the third mouse button.
+ * @GDK_BUTTON4_MASK: the fourth mouse button.
+ * @GDK_BUTTON5_MASK: the fifth mouse button.
+ * @GDK_SUPER_MASK: the Super modifier. Since 2.10
+ * @GDK_HYPER_MASK: the Hyper modifier. Since 2.10
+ * @GDK_META_MASK: the Meta modifier. Since 2.10
+ * @GDK_RELEASE_MASK: not used in GDK itself. GTK+ uses it to differentiate
+ *  between (keyval, modifiers) pairs from key press and release events.
+ * @GDK_MODIFIER_MASK: a mask covering all modifier types.
+ *
+ * A set of bit-flags to indicate the state of modifier keys and mouse buttons
+ * in various event types. Typical modifier keys are Shift, Control, Meta,
+ * Super, Hyper, Alt, Compose, Apple, CapsLock or ShiftLock.
+ *
+ * Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
+ *
+ * Since 2.10, GDK recognizes which of the Meta, Super or Hyper keys are mapped
+ * to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK,
+ * %GDK_HYPER_MASK or %GDK_META_MASK in the state field of key events.
  */
 typedef enum
 {

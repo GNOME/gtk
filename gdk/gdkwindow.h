@@ -42,14 +42,16 @@ typedef struct _GdkWindowAttr        GdkWindowAttr;
 typedef struct _GdkPointerHooks      GdkPointerHooks;
 typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
-/* Classes of windows.
- *   InputOutput: Almost every window should be of this type. Such windows
- *		  receive events and are also displayed on screen.
- *   InputOnly: Used only in special circumstances when events need to be
- *		stolen from another window or windows. Input only windows
- *		have no visible output, so they are handy for placing over
- *		top of a group of windows in order to grab the events (or
- *		filter the events) from those windows.
+/**
+ * GdkWindowClass:
+ * @GDK_INPUT_OUTPUT: window for graphics and events
+ * @GDK_INPUT_ONLY: window for events only
+ *
+ * @GDK_INPUT_OUTPUT windows are the standard kind of window you might expect.
+ * Such windows receive events and are also displayed on screen.
+ * @GDK_INPUT_ONLY windows are invisible; they are usually placed above other
+ * windows in order to trap or filter the events. You can't draw on
+ * @GDK_INPUT_ONLY windows.
  */
 typedef enum
 {
@@ -57,18 +59,20 @@ typedef enum
   GDK_INPUT_ONLY
 } GdkWindowClass;
 
-/* Types of windows.
- *   Root: There is only 1 root window and it is initialized
- *	   at startup. Creating a window of type GDK_WINDOW_ROOT
- *	   is an error.
- *   Toplevel: Windows which interact with the window manager.
- *   Child: Windows which are children of some other type of window.
- *	    (Any other type of window). Most windows are child windows.
- *   Dialog: A special kind of toplevel window which interacts with
- *	     the window manager slightly differently than a regular
- *	     toplevel window. Dialog windows should be used for any
- *	     transient window.
- *   Foreign: A window that actually belongs to another application
+/**
+ * GdkWindowType:
+ * @GDK_WINDOW_ROOT: root window; this window has no parent, covers the entire
+ *  screen, and is created by the window system
+ * @GDK_WINDOW_TOPLEVEL: toplevel window (used to implement #GtkWindow)
+ * @GDK_WINDOW_CHILD: child window (used to implement e.g. #GtkEntry)
+ * @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
+ * @GDK_WINDOW_TEMP: override redirect temporary window (used to implement
+ *  #GtkMenu)
+ * @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
+ * @GDK_WINDOW_OFFSCREEN: offscreen window (see
+ *  <xref linkend="OFFSCREEN-WINDOWS"/>). Since 2.18
+ *
+ * Describes the kind of window.
  */
 typedef enum
 {
@@ -81,13 +85,24 @@ typedef enum
   GDK_WINDOW_OFFSCREEN
 } GdkWindowType;
 
-/* Window attribute mask values.
- *   GDK_WA_TITLE: The "title" field is valid.
- *   GDK_WA_X: The "x" field is valid.
- *   GDK_WA_Y: The "y" field is valid.
- *   GDK_WA_CURSOR: The "cursor" field is valid.
- *   GDK_WA_COLORMAP: The "colormap" field is valid.
- *   GDK_WA_VISUAL: The "visual" field is valid.
+/**
+ * GdkWindowAttributesType:
+ * @GDK_WA_TITLE: Honor the title field
+ * @GDK_WA_X: Honor the X coordinate field
+ * @GDK_WA_Y: Honor the Y coordinate field
+ * @GDK_WA_CURSOR: Honor the cursor field
+ * @GDK_WA_COLORMAP: Honor the colormap field
+ * @GDK_WA_VISUAL: Honor the visual field
+ * @GDK_WA_WMCLASS: Honor the wmclass_class and wmclass_name fields
+ * @GDK_WA_NOREDIR: Honor the override_redirect field
+ * @GDK_WA_TYPE_HINT: Honor the type_hint field
+ *
+ * Used to indicate which fields in the #GdkWindowAttr struct should be honored.
+ * For example, if you filled in the "cursor" and "x" fields of #GdkWindowAttr,
+ * pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new(). Fields in
+ * #GdkWindowAttr not covered by a bit in this enum are required; for example,
+ * the @width/@height, @wclass, and @window_type fields are required, they have
+ * no corresponding flag in #GdkWindowAttributesType.
  */
 typedef enum
 {
@@ -104,6 +119,29 @@ typedef enum
 
 /* Size restriction enumeration.
  */
+/**
+ * GdkWindowHints:
+ * @GDK_HINT_POS: indicates that the program has positioned the window
+ * @GDK_HINT_MIN_SIZE: min size fields are set
+ * @GDK_HINT_MAX_SIZE: max size fields are set
+ * @GDK_HINT_BASE_SIZE: base size fields are set
+ * @GDK_HINT_ASPECT: aspect ratio fields are set
+ * @GDK_HINT_RESIZE_INC: resize increment fields are set
+ * @GDK_HINT_WIN_GRAVITY: window gravity field is set
+ * @GDK_HINT_USER_POS: indicates that the window's position was explicitly set
+ *  by the user
+ * @GDK_HINT_USER_SIZE: indicates that the window's size was explicitly set by
+ *  the user
+ *
+ * Used to indicate which fields of a #GdkGeometry struct should be paid
+ * attention to. Also, the presence/absence of @GDK_HINT_POS,
+ * @GDK_HINT_USER_POS, and @GDK_HINT_USER_SIZE is significant, though they don't
+ * directly refer to #GdkGeometry fields. @GDK_HINT_USER_POS will be set
+ * automatically by #GtkWindow if you call gtk_window_move().
+ * @GDK_HINT_USER_POS and @GDK_HINT_USER_SIZE should be set if the user
+ * specified a size/position using a --geometry command-line argument;
+ * gtk_window_parse_geometry() automatically sets these flags.
+ */
 typedef enum
 {
   GDK_HINT_POS	       = 1 << 0,
@@ -118,17 +156,37 @@ typedef enum
 } GdkWindowHints;
 
 
-/* Window type hints.
- * These are hints for the window manager that indicate
- * what type of function the window has. The window manager
- * can use this when determining decoration and behaviour
- * of the window. The hint must be set before mapping the
- * window.
+/**
+ * GdkWindowTypeHint:
+ * @GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
+ * @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
+ * @GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu; GTK+ uses
+ *  this hint only for torn-off menus, see #GtkTearoffMenuItem.
+ * @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
+ * @GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: Window used to display a splash
+ *  screen during application startup.
+ * @GDK_WINDOW_TYPE_HINT_UTILITY: Utility windows which are not detached
+ *  toolbars or dialogs.
+ * @GDK_WINDOW_TYPE_HINT_DOCK: Used for creating dock or panel windows.
+ * @GDK_WINDOW_TYPE_HINT_DESKTOP: Used for creating the desktop background
+ *  window.
+ * @GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU: A menu that belongs to a menubar.
+ * @GDK_WINDOW_TYPE_HINT_POPUP_MENU: A menu that does not belong to a menubar,
+ *  e.g. a context menu.
+ * @GDK_WINDOW_TYPE_HINT_TOOLTIP: A tooltip.
+ * @GDK_WINDOW_TYPE_HINT_NOTIFICATION: A notification - typically a "bubble"
+ *  that belongs to a status icon.
+ * @GDK_WINDOW_TYPE_HINT_COMBO: A popup from a combo box.
+ * @GDK_WINDOW_TYPE_HINT_DND: A window that is used to implement a DND cursor.
  *
- *   Normal: Normal toplevel window
- *   Dialog: Dialog window
- *   Menu: Window used to implement a menu.
- *   Toolbar: Window used to implement toolbars.
+ * These are hints for the window manager that indicate what type of function
+ * the window has. The window manager can use this when determining decoration
+ * and behaviour of the window. The hint must be set before mapping the window.
+ *
+ * See the
+ * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended
+ * Window Manager Hints</ulink> specification for more details about
+ * window types.
  */
 typedef enum
 {
@@ -153,6 +211,20 @@ typedef enum
  * of gdk_window_set_decorations/gdk_window_set_functions
  * will need to change as well.
  */
+/**
+ * GdkWMDecoration:
+ * @GDK_DECOR_ALL: all decorations should be applied.
+ * @GDK_DECOR_BORDER: a frame should be drawn around the window.
+ * @GDK_DECOR_RESIZEH: the frame should have resize handles.
+ * @GDK_DECOR_TITLE: a titlebar should be placed above the window.
+ * @GDK_DECOR_MENU: a button for opening a menu should be included.
+ * @GDK_DECOR_MINIMIZE: a minimize button should be included.
+ * @GDK_DECOR_MAXIMIZE: a maximize button should be included.
+ *
+ * These are hints originally defined by the Motif toolkit.
+ * The window manager can use them when determining how to decorate
+ * the window. The hint must be set before mapping the window.
+ */
 typedef enum
 {
   GDK_DECOR_ALL		= 1 << 0,
@@ -164,6 +236,19 @@ typedef enum
   GDK_DECOR_MAXIMIZE	= 1 << 6
 } GdkWMDecoration;
 
+/**
+ * GdkWMFunction:
+ * @GDK_FUNC_ALL: all functions should be offered.
+ * @GDK_FUNC_RESIZE: the window should be resizable.
+ * @GDK_FUNC_MOVE: the window should be movable.
+ * @GDK_FUNC_MINIMIZE: the window should be minimizable.
+ * @GDK_FUNC_MAXIMIZE: the window should be maximizable.
+ * @GDK_FUNC_CLOSE: the window should be closable.
+ *
+ * These are hints originally defined by the Motif toolkit. The window manager
+ * can use them when determining the functions to offer for the window. The
+ * hint must be set before mapping the window.
+ */
 typedef enum
 {
   GDK_FUNC_ALL		= 1 << 0,
@@ -177,6 +262,26 @@ typedef enum
 /* Currently, these are the same values numerically as in the
  * X protocol. If you change that, gdkwindow-x11.c/gdk_window_set_geometry_hints()
  * will need fixing.
+ */
+/**
+ * GdkGravity:
+ * @GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
+ * @GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
+ * @GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
+ * @GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
+ * @GDK_GRAVITY_CENTER: the reference point is at the center of the window.
+ * @GDK_GRAVITY_EAST: the reference point is at the middle of the right edge.
+ * @GDK_GRAVITY_SOUTH_WEST: the reference point is at the lower left corner.
+ * @GDK_GRAVITY_SOUTH: the reference point is at the middle of the lower edge.
+ * @GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
+ * @GDK_GRAVITY_STATIC: the reference point is at the top left corner of the
+ *  window itself, ignoring window manager decorations.
+ *
+ * Defines the reference point of a window and the meaning of coordinates
+ * passed to gtk_window_move(). See gtk_window_move() and the "implementation
+ * notes" section of the
+ * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended
+ * Window Manager Hints</ulink> specification for more details.
  */
 typedef enum
 {
@@ -193,6 +298,19 @@ typedef enum
 } GdkGravity;
 
 
+/**
+ * GdkWindowEdge:
+ * @GDK_WINDOW_EDGE_NORTH_WEST: the top left corner.
+ * @GDK_WINDOW_EDGE_NORTH: the top edge.
+ * @GDK_WINDOW_EDGE_NORTH_EAST: the top right corner.
+ * @GDK_WINDOW_EDGE_WEST: the left edge.
+ * @GDK_WINDOW_EDGE_EAST: the right edge.
+ * @GDK_WINDOW_EDGE_SOUTH_WEST: the lower left corner.
+ * @GDK_WINDOW_EDGE_SOUTH: the lower edge.
+ * @GDK_WINDOW_EDGE_SOUTH_EAST: the lower right corner.
+ *
+ * Determines a window edge or corner.
+ */
 typedef enum
 {
   GDK_WINDOW_EDGE_NORTH_WEST,
@@ -205,6 +323,27 @@ typedef enum
   GDK_WINDOW_EDGE_SOUTH_EAST  
 } GdkWindowEdge;
 
+/**
+ * GdkWindowAttr:
+ * @title: title of the window (for toplevel windows)
+ * @event_mask: event mask (see gdk_window_set_events())
+ * @x: X coordinate relative to parent window (see gdk_window_move())
+ * @y: Y coordinate relative to parent window (see gdk_window_move())
+ * @width: width of window
+ * @height: height of window
+ * @wclass: #GDK_INPUT_OUTPUT (normal window) or #GDK_INPUT_ONLY (invisible
+ *  window that receives events)
+ * @visual: #GdkVisual for window
+ * @colormap: #GdkColormap for window
+ * @window_type: type of window
+ * @cursor: cursor for the window (see gdk_window_set_cursor())
+ * @wmclass_name: don't use (see gtk_window_set_wmclass())
+ * @wmclass_class: don't use (see gtk_window_set_wmclass())
+ * @override_redirect: %TRUE to bypass the window manager
+ * @type_hint: a hint of the function of the window
+ *
+ * Attributes to use for a newly-created window.
+ */
 struct _GdkWindowAttr
 {
   gchar *title;
@@ -223,6 +362,82 @@ struct _GdkWindowAttr
   GdkWindowTypeHint type_hint;
 };
 
+/**
+ * GdkGeometry:
+ * @min_width: minimum width of window (or -1 to use requisition, with
+ *  #GtkWindow only)
+ * @min_height: minimum height of window (or -1 to use requisition, with
+ *  #GtkWindow only)
+ * @max_width: maximum width of window (or -1 to use requisition, with
+ *  #GtkWindow only)
+ * @max_height: maximum height of window (or -1 to use requisition, with
+ *  #GtkWindow only)
+ * @base_width: allowed window widths are @base_width + @width_inc * N where N
+ *  is any integer (-1 allowed with #GtkWindow)
+ * @base_height: allowed window widths are @base_height + @height_inc * N where
+ *  N is any integer (-1 allowed with #GtkWindow)
+ * @width_inc: width resize increment
+ * @height_inc: height resize increment
+ * @min_aspect: minimum width/height ratio
+ * @max_aspect: maximum width/height ratio
+ * @win_gravity: window gravity, see gtk_window_set_gravity()
+ *
+ * The #GdkGeometry struct gives the window manager information about
+ * a window's geometry constraints. Normally you would set these on
+ * the GTK+ level using gtk_window_set_geometry_hints(). #GtkWindow
+ * then sets the hints on the #GdkWindow it creates.
+ *
+ * gdk_window_set_geometry_hints() expects the hints to be fully valid already
+ * and simply passes them to the window manager; in contrast,
+ * gtk_window_set_geometry_hints() performs some interpretation. For example,
+ * #GtkWindow will apply the hints to the geometry widget instead of the
+ * toplevel window, if you set a geometry widget. Also, the
+ * @min_width/@min_height/@max_width/@max_height fields may be set to -1, and
+ * #GtkWindow will substitute the size request of the window or geometry widget.
+ * If the minimum size hint is not provided, #GtkWindow will use its requisition
+ * as the minimum size. If the minimum size is provided and a geometry widget is
+ * set, #GtkWindow will take the minimum size as the minimum size of the
+ * geometry widget rather than the entire window. The base size is treated
+ * similarly.
+ *
+ * The canonical use-case for gtk_window_set_geometry_hints() is to get a
+ * terminal widget to resize properly. Here, the terminal text area should be
+ * the geometry widget; #GtkWindow will then automatically set the base size to
+ * the size of other widgets in the terminal window, such as the menubar and
+ * scrollbar. Then, the @width_inc and @height_inc fields should be set to the
+ * size of one character in the terminal. Finally, the base size should be set
+ * to the size of one character. The net effect is that the minimum size of the
+ * terminal will have a 1x1 character terminal area, and only terminal sizes on
+ * the "character grid" will be allowed.
+ *
+ * Here's an example of how the terminal example would be implemented, assuming
+ * a terminal area widget called "terminal" and a toplevel window "toplevel":
+ *
+ * <informalexample><programlisting><![CDATA[
+ * 	GdkGeometry hints;
+ *
+ * 	hints.base_width = terminal->char_width;
+ *         hints.base_height = terminal->char_height;
+ *         hints.min_width = terminal->char_width;
+ *         hints.min_height = terminal->char_height;
+ *         hints.width_inc = terminal->char_width;
+ *         hints.height_inc = terminal->char_height;
+ *
+ *  gtk_window_set_geometry_hints (GTK_WINDOW (toplevel),
+ *                                 GTK_WIDGET (terminal),
+ *                                 &hints,
+ *                                 GDK_HINT_RESIZE_INC |
+ *                                 GDK_HINT_MIN_SIZE |
+ *                                 GDK_HINT_BASE_SIZE);
+ * ]]></programlisting></informalexample>
+ *
+ * The other useful fields are the @min_aspect and @max_aspect fields; these
+ * contain a width/height ratio as a floating point number. If a geometry widget
+ * is set, the aspect applies to the geometry widget rather than the entire
+ * window. The most common use of these hints is probably to set @min_aspect and
+ * @max_aspect to the same value, thus forcing the window to keep a constant
+ * aspect ratio.
+ */
 struct _GdkGeometry
 {
   gint min_width;
@@ -238,6 +453,23 @@ struct _GdkGeometry
   GdkGravity win_gravity;
 };
 
+/**
+ * GdkPointerHooks:
+ * @get_pointer: Obtains the current pointer position and modifier state.
+ *  The position is given in coordinates relative to the window containing
+ *  the pointer, which is returned in @window.
+ * @window_at_pointer: Obtains the window underneath the mouse pointer,
+ *  returning the location of that window in @win_x, @win_y. Returns %NULL
+ *  if the window under the mouse pointer is not known to GDK (for example,
+ *  belongs to another application).
+ *
+ * A table of pointers to functions for getting quantities related to
+ * the current pointer position. GDK has one global table of this type,
+ * which can be set using gdk_set_pointer_hooks().
+ *
+ * This is only useful for such low-level tools as an event recorder.
+ * Applications should never have any reason to use this facility
+ */
 struct _GdkPointerHooks 
 {
   GdkWindow* (*get_pointer)       (GdkWindow	   *window,
