@@ -145,7 +145,6 @@ typedef struct
 struct _GdkWindowImplDirectFB
 {
   GdkDrawableImplDirectFB drawable;
-  GdkWindow             *gdkWindow;
 
   IDirectFBWindow        *window;
 

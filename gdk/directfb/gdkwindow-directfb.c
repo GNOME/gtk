@@ -281,7 +281,6 @@ _gdk_windowing_window_init (void)
   private->children               = NULL;
   private->viewable               = TRUE;
   //  impl->drawable.paint_region = NULL;
-  impl->gdkWindow                 = _gdk_parent_root;
   impl->window                    = NULL;
   impl->drawable.abs_x            = 0;
   impl->drawable.abs_y            = 0;
@@ -361,7 +360,6 @@ gdk_directfb_window_new (GdkWindow              *parent,
 
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
   impl->drawable.wrapper = GDK_DRAWABLE (window);
-  impl->gdkWindow      = window;
 
   private->x = x;
   private->y = y;
@@ -544,7 +542,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   impl->drawable.wrapper = GDK_DRAWABLE (window);
-  impl->gdkWindow = window;
 
   private = GDK_WINDOW_OBJECT (window);
   private->impl = (GdkDrawable *)impl;
@@ -2858,7 +2855,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
       D_DEBUG_AT (GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n",
                   i, GDKDFB_RECTANGLE_VALS_FROM_BOX (box));
 
-      gdk_window_clear_area (GDK_WINDOW (wimpl->gdkWindow),
+      gdk_window_clear_area (window,
                              box->x1,
                              box->y1,
                              box->x2 - box->x1,
