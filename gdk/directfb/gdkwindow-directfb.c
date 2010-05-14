@@ -719,10 +719,8 @@ gdk_directfb_window_destroy (GdkWindow *window,
 
   if (impl->drawable.surface) {
     GdkDrawableImplDirectFB *dimpl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
-    if (dimpl->cairo_surface) {
+    if (dimpl->cairo_surface)
       cairo_surface_destroy (dimpl->cairo_surface);
-      dimpl->cairo_surface= NULL;
-    }
     impl->drawable.surface->Release (impl->drawable.surface);
     impl->drawable.surface = NULL;
   }
@@ -1349,10 +1347,7 @@ _gdk_directfb_move_resize_child (GdkWindow *window,
       if (impl->drawable.surface)
         {
           if (impl->drawable.cairo_surface)
-            {
-              cairo_surface_destroy (impl->drawable.cairo_surface);
-              impl->drawable.cairo_surface = NULL;
-            }
+            cairo_surface_destroy (impl->drawable.cairo_surface);
 
           impl->drawable.surface->Release (impl->drawable.surface);
           impl->drawable.surface = NULL;
