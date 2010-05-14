@@ -25,6 +25,29 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include "config.h"
+
+#include "gdkwindow.h"
+
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"           /* For workaround */
+#endif
+#include "math.h"
+
+#include "gdk.h"                /* For gdk_rectangle_union() */
+#include "gdkinternals.h"
+#include "gdkintl.h"
+#include "gdkdrawable.h"
+#include "gdkmarshalers.h"
+#include "gdkpixmap.h"
+#include "gdkscreen.h"
+#include "gdkwindowimpl.h"
+
+#include "gdkalias.h"
+
+#undef DEBUG_WINDOW_PRINTING
+
+
 /**
  * SECTION:windows
  * @Short_description: Onscreen display areas in the target window system
@@ -88,25 +111,6 @@
  * </refsect2>
  */
 
-#include "config.h"
-#include "gdkwindow.h"
-#include "gdkwindowimpl.h"
-#include "gdkinternals.h"
-#include "gdk.h"		/* For gdk_rectangle_union() */
-#include "gdkpixmap.h"
-#include "gdkdrawable.h"
-#include "gdkintl.h"
-#include "gdkscreen.h"
-#include "gdkmarshalers.h"
-#include "gdkalias.h"
-
-#undef DEBUG_WINDOW_PRINTING
-
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"           /* For workaround */
-#endif
-
-#include "math.h"
 
 /* Historically a GdkWindow always matches a platform native window,
  * be it a toplevel window or a child window. In this setup the
