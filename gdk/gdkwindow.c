@@ -2670,27 +2670,6 @@ gdk_screen_get_toplevel_windows (GdkScreen *screen)
 }
 
 /**
- * gdk_window_get_toplevels:
- *
- * Obtains a list of all toplevel windows known to GDK on the default
- * screen (see gdk_screen_get_toplevel_windows()).
- * A toplevel window is a child of the root window (see
- * gdk_get_default_root_window()).
- *
- * The returned list should be freed with g_list_free(), but
- * its elements need not be freed.
- *
- * Return value: list of toplevel windows, free with g_list_free()
- *
- * Deprecated: 2.16: Use gdk_screen_get_toplevel_windows() instead.
- */
-GList *
-gdk_window_get_toplevels (void)
-{
-  return gdk_screen_get_toplevel_windows (gdk_screen_get_default ());
-}
-
-/**
  * gdk_window_is_visible:
  * @window: a #GdkWindow
  *

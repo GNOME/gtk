@@ -735,7 +735,6 @@ gdk_window_get_decorations
 GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
-gdk_window_get_toplevels
 gdk_get_default_root_window
 
 <SUBSECTION>

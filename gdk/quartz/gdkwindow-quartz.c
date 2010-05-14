@@ -804,7 +804,7 @@ _gdk_quartz_window_did_resign_main (GdkWindow *window)
     {
       GList *toplevels;
 
-      toplevels = gdk_window_get_toplevels ();
+      toplevels = gdk_screen_get_toplevel_windows (gdk_screen_get_default ());
       if (toplevels)
         new_window = toplevels->data;
       g_list_free (toplevels);
