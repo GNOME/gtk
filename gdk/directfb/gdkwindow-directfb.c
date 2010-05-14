@@ -258,11 +258,11 @@ create_directfb_window (GdkWindowImplDirectFB *impl,
 }
 
 void
-_gdk_windowing_window_init (void)
+_gdk_windowing_window_init (GdkScreen *screen)
 {
-  GdkWindowObject       *private;
-  GdkWindowImplDirectFB *impl;
-  DFBDisplayLayerConfig  dlc;
+  GdkWindowObject         *private;
+  GdkDrawableImplDirectFB *draw_impl;
+  DFBDisplayLayerConfig    dlc;
 
   g_assert (_gdk_parent_root == NULL);
 
@@ -274,19 +274,8 @@ _gdk_windowing_window_init (void)
   private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl_window = private;
 
-  impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
+  draw_impl = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
 
-  private->window_type            = GDK_WINDOW_ROOT;
-  private->state                  = 0;
-  private->children               = NULL;
-  private->viewable               = TRUE;
-  //  impl->drawable.paint_region = NULL;
-  impl->window                    = NULL;
-  impl->drawable.abs_x            = 0;
-  impl->drawable.abs_y            = 0;
-  impl->drawable.width            = dlc.width;
-  impl->drawable.height           = dlc.height;
-  impl->drawable.wrapper          = GDK_DRAWABLE (private);
   /* custom root window init */
   {
     DFBWindowDescription   desc;
@@ -303,21 +292,38 @@ _gdk_windowing_window_init (void)
     desc.posy    = 0;
     desc.width   = dlc.width;
     desc.height  = dlc.height;
-    create_directfb_window (impl, &desc, 0);
-    g_assert (impl->window != NULL);
-    g_assert (impl->drawable.surface != NULL );
+
+    create_directfb_window (GDK_WINDOW_IMPL_DIRECTFB (private->impl),
+                            &desc, 0);
+
+    g_assert (GDK_WINDOW_IMPL_DIRECTFB (private->impl)->window != NULL);
+    g_assert (draw_impl->surface != NULL);
   }
-  impl->drawable.surface->GetPixelFormat (impl->drawable.surface,
-                                          &impl->drawable.format);
-  private->depth = DFB_BITS_PER_PIXEL (impl->drawable.format);
+
+  private->window_type = GDK_WINDOW_ROOT;
+  private->viewable    = TRUE;
+  private->x           = 0;
+  private->y           = 0;
+  private->abs_x       = 0;
+  private->abs_y       = 0;
+  private->width       = dlc.width;
+  private->height      = dlc.height;
+
+  //  impl->drawable.paint_region = NULL;
+  /* impl->window                    = NULL; */
+  draw_impl->abs_x    = 0;
+  draw_impl->abs_y    = 0;
+  draw_impl->width    = dlc.width;
+  draw_impl->height   = dlc.height;
+  draw_impl->wrapper  = GDK_DRAWABLE (private);
+  draw_impl->colormap = gdk_screen_get_system_colormap (screen);
+  g_object_ref (draw_impl->colormap);
+
+  draw_impl->surface->GetPixelFormat (draw_impl->surface,
+                                      &draw_impl->format);
+  private->depth = DFB_BITS_PER_PIXEL (draw_impl->format);
 
   _gdk_window_update_size (_gdk_parent_root);
-
-  /*
-    Now we can set up the system colormap
-  */
-  gdk_drawable_set_colormap (GDK_DRAWABLE (_gdk_parent_root),
-                             gdk_colormap_get_system ());
 }
 
 

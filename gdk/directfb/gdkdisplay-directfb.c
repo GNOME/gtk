@@ -39,7 +39,7 @@ extern void _gdk_visual_init            (void);
 extern void _gdk_events_init            (void);
 extern void _gdk_input_init             (void);
 extern void _gdk_dnd_init               (void);
-extern void _gdk_windowing_window_init  (void);
+extern void _gdk_windowing_window_init  (GdkScreen *screen);
 extern void _gdk_windowing_image_init   (void);
 extern void _gdk_directfb_keyboard_init (void);
 
@@ -116,7 +116,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
 
   _gdk_visual_init ();
-  _gdk_windowing_window_init ();
+  _gdk_windowing_window_init (_gdk_screen);
 
   gdk_screen_set_default_colormap (_gdk_screen,
                                    gdk_screen_get_system_colormap (_gdk_screen));
