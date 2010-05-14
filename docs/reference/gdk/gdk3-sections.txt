@@ -327,7 +327,6 @@ gdk_rgb_set_install
 gdk_rgb_set_min_colors
 gdk_rgb_get_visual
 gdk_rgb_get_colormap
-gdk_rgb_get_cmap
 gdk_rgb_ditherable
 gdk_rgb_colormap_ditherable
 gdk_rgb_set_verbose
@@ -1163,7 +1162,6 @@ gdk_cursor_get_display
 gdk_cursor_get_image
 gdk_cursor_ref
 gdk_cursor_unref
-gdk_cursor_destroy
 
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE
