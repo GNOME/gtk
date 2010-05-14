@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-02 21:21-0400\n"
-"PO-Revision-Date: 2010-03-06 15:21+0100\n"
+"PO-Revision-Date: 2010-05-14 11:38+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -417,13 +417,11 @@ msgid "Image pixel data corrupt"
 msgstr "Données des pixels de l'image corrompues"
 
 #: gdk-pixbuf/gdk-pixdata.c:432
-#, fuzzy, c-format
+#, c-format
 msgid "failed to allocate image buffer of %u byte"
 msgid_plural "failed to allocate image buffer of %u bytes"
-msgstr[0] ""
-"Échec d'allocation de %d octets pour le tampon de lecture du fichier"
-msgstr[1] ""
-"Échec d'allocation de %d octets pour le tampon de lecture du fichier"
+msgstr[0] "échec d'allocation de %u octet pour le tampon d'image"
+msgstr[1] "échec d'allocation de %u octets pour le tampon d'image"
 
 #: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
@@ -1249,11 +1247,11 @@ msgid "Opening %s"
 msgstr "Ouverture de %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:318
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "Ouverture de %s"
-msgstr[1] "Ouverture de %s"
+msgstr[0] "Ouverture de %d élément"
+msgstr[1] "Ouverture de %d éléments"
 
 #: gtk/gtkaboutdialog.c:242
 msgid "Could not show link"
