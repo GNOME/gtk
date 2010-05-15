@@ -60,6 +60,19 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkscalebutton
+ * @Short_description: A button which pops up a scale
+ * @Title: GtkScaleButton
+ *
+ * #GtkScaleButton provides a button which pops up a scale widget.
+ * This kind of widget is commonly used for volume controls in multimedia
+ * applications, and GTK+ provides a #GtkVolumeButton subclass that
+ * is tailored for this use case.
+ */
+
+
 #define SCALE_SIZE 100
 #define CLICK_TIMEOUT 250
 
