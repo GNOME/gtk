@@ -113,41 +113,31 @@ _gdk_pixmap_new (GdkDrawable *drawable,
                            width, height, depth));
 
   if (depth == -1)
-    {
-      draw_impl =
-        GDK_DRAWABLE_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (drawable)->impl);
+    depth = gdk_drawable_get_depth (GDK_DRAWABLE (drawable));
 
-      g_return_val_if_fail (draw_impl != NULL, NULL);
-
-      draw_impl->surface->GetPixelFormat (draw_impl->surface, &format);
-      depth = DFB_BITS_PER_PIXEL (format);
-    }
-  else
+  switch (depth)
     {
-      switch (depth)
-        {
-        case  1:
-          format = DSPF_A8;
-          break;
-        case  8:
-          format = DSPF_LUT8;
-          break;
-        case 15:
-          format = DSPF_ARGB1555;
-          break;
-        case 16:
-          format = DSPF_RGB16;
-          break;
-        case 24:
-          format = DSPF_RGB24;
-          break;
-        case 32:
-          format = DSPF_RGB32;
-          break;
-        default:
-          g_message ("unimplemented %s for depth %d", G_STRFUNC, depth);
-          return NULL;
-        }
+    case  1:
+      format = DSPF_A8;
+      break;
+    case  8:
+      format = DSPF_LUT8;
+      break;
+    case 15:
+      format = DSPF_ARGB1555;
+      break;
+    case 16:
+      format = DSPF_RGB16;
+      break;
+    case 24:
+      format = DSPF_RGB24;
+      break;
+    case 32:
+      format = DSPF_RGB32;
+      break;
+    default:
+      g_message ("unimplemented %s for depth %d", G_STRFUNC, depth);
+      return NULL;
     }
 
   if (!(surface =
