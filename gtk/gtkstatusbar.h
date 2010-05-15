@@ -102,6 +102,9 @@ void       gtk_statusbar_pop          	(GtkStatusbar *statusbar,
 void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
 					 guint	       context_id,
 					 guint         message_id);
+void       gtk_statusbar_remove_all    	(GtkStatusbar *statusbar,
+					 guint	       context_id);
+					 
 
 void     gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
 					    gboolean      setting);
