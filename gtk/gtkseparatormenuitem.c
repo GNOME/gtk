@@ -28,6 +28,18 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkseparatormenuitem
+ * @Short_description: A separator used in menus
+ * @Title: GtkSeparatorMenuItem
+ *
+ * The #GtkSeparatorMenuItem is a separator used to group
+ * items within a menu. It displays a horizontal line with a shadow to
+ * make it appear sunken into the interface.
+ */
+
+
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
 static void
@@ -41,6 +53,13 @@ gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
 {
 }
 
+/**
+ * gtk_separator_menu_item_new:
+ *
+ * Creates a new #GtkSeparatorMenuItem.
+ *
+ * Returns: a new #GtkSeparatorMenuItem.
+ */
 GtkWidget *
 gtk_separator_menu_item_new (void)
 {
