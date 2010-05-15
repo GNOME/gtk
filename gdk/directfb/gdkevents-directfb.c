@@ -422,12 +422,13 @@ gdk_directfb_child_at (GdkWindow *window,
   for (list = private->children; list; list = list->next)
     {
       GdkWindowObject *win = list->data;
+      gint wx, wy, ww, wh;
+
+      gdk_window_get_geometry (GDK_WINDOW (win), &wx, &wy, &ww, &wh, NULL);
 
       if (GDK_WINDOW_IS_MAPPED (win) &&
-          *winx >= win->x  &&
-          *winx <  win->x + GDK_DRAWABLE_IMPL_DIRECTFB (win->impl)->width  &&
-          *winy >= win->y  &&
-          *winy <  win->y + GDK_DRAWABLE_IMPL_DIRECTFB (win->impl)->height)
+          *winx >= wx  && *winx <  wx + ww  &&
+          *winy >= wy  && *winy <  wy + wh)
         {
           *winx -= win->x;
           *winy -= win->y;
