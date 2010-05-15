@@ -38,6 +38,18 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkradioaction
+ * @Short_description: An action of which only one in a group can be active
+ * @Title: GtkRadioAction
+ *
+ * A #GtkRadioAction is similar to #GtkRadioMenuItem. A number of radio
+ * actions can be linked together so that only one may be active at any
+ * one time.
+ */
+
+
 #define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
 
 struct _GtkRadioActionPrivate 
