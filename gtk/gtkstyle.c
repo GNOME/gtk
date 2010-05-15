@@ -43,6 +43,26 @@
 #include "gtkalias.h"
 #include "gtkspinner.h"
 
+
+/**
+ * SECTION:gtkstyle
+ * @Short_description: An object that hold style information for widgets
+ * @Title: GtkStyle
+ *
+ * A #GtkStyle object encapsulates the information that provides the look and
+ * feel for a widget. Each #GtkWidget has an associated #GTkStyle object that
+ * is used when rendering that widget. Also, a #GtkStyle holds information for
+ * the five possible widget states though not every widget supports all five
+ * states; see #GtkStateType.
+ *
+ * Usually the #GtkStyle for a widget is the same as the default style that is
+ * set by GTK+ and modified the theme engine.
+ *
+ * Usually applications should not need to use or modify the #GtkStyle of their
+ * widgets.
+ */
+
+
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
 

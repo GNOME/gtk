@@ -68,6 +68,12 @@ typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
  */
 typedef struct _GtkWidget      GtkWidget;
 
+/**
+ * GTK_STYLE_ATTACHED:
+ * @style: a #GtkStyle.
+ *
+ * Returns whether the style is attached to a window.
+ */
 #define GTK_STYLE_ATTACHED(style)	(GTK_STYLE (style)->attach_count > 0)
 
 struct _GtkStyle
@@ -429,6 +435,16 @@ struct _GtkStyleClass
   void (*_gtk_reserved11) (void);
 };
 
+/**
+ * GtkBorder:
+ * @left: The width of the left border.
+ * @right: The width of the right border.
+ * @top: The width of the top border.
+ * @bottom: The width of the bottom border.
+ *
+ * A struct that specifies a border around a rectangular area that can
+ * be of different width on each side.
+ */
 struct _GtkBorder
 {
   gint left;
