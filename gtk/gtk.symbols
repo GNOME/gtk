@@ -3885,6 +3885,7 @@ gtk_statusbar_new
 gtk_statusbar_pop
 gtk_statusbar_push
 gtk_statusbar_remove
+gtk_statusbar_remove_all
 gtk_statusbar_set_has_resize_grip
 #endif
 #endif

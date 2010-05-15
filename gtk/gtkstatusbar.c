@@ -463,6 +463,72 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 }
 
 /**
+ * gtk_statusbar_remove_all:
+ * @statusbar: a #GtkStatusBar
+ * @context_id: a context identifier
+ *
+ * Forces the removal of all messages from a statusbar's
+ * stack with the exact @context_id.
+ *
+ * Since: 2.22
+ */
+void
+gtk_statusbar_remove_all (GtkStatusbar *statusbar,
+                          guint         context_id)
+{
+  GtkStatusbarMsg *msg;
+  GSList *prev, *list;
+
+  g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+
+  if (statusbar->messages == NULL)
+    return;
+
+  msg = statusbar->messages->data;
+
+  /* care about signal emission if the topmost item is removed */
+  if (msg->context_id == context_id)
+    {
+      gtk_statusbar_pop (statusbar, context_id);
+
+      prev = NULL;
+      list = statusbar->messages;
+    }
+  else
+    {
+      prev = statusbar->messages;
+      list = prev->next;
+    }
+
+  while (list != NULL)
+    {
+      msg = list->data;
+
+      if (msg->context_id == context_id)
+        {
+          if (prev == NULL)
+            statusbar->messages = list->next;
+          else
+            prev->next = list->next;
+
+          g_free (msg->text);
+          g_slice_free (GtkStatusbarMsg, msg);
+          g_slist_free_1 (list);
+
+          if (prev == NULL)
+            prev = statusbar->messages;
+
+          list = prev->next;
+        }
+      else
+        {
+          prev = list;
+          list = prev->next;
+        }
+    }
+}
+
+/**
  * gtk_statusbar_set_has_resize_grip:
  * @statusbar: a #GtkStatusBar
  * @setting: %TRUE to have a resize grip
