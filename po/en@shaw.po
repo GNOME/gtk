@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
-"POT-Creation-Date: 2010-05-12 19:04+0000\n"
-"PO-Revision-Date: 2010-05-12 18:36 -0400\n"
+"POT-Creation-Date: 2010-05-16 01:34+0000\n"
+"PO-Revision-Date: 2010-05-16 16:06 -0400\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
 "Language-Team: Shavian <ubuntu-l10n-en-shaw@launchpad.net>\n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk/gdk.c:103
 msgid "Error parsing option --gdk-debug"
-msgstr "𐑻𐑼 𐑐𐑮𐑦𐑯𐑑𐑦𐑙"
+msgstr "𐑻𐑼 𐑐𐑸𐑕𐑦𐑙 𐑪𐑐𐑖𐑩𐑯 --gdk-𐑛𐑰𐑚𐑳𐑜"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk/gdk.c:123
 msgid "Error parsing option --gdk-no-debug"
 msgstr "𐑻𐑼 𐑐𐑸𐑕𐑦𐑙 𐑪𐑐𐑖𐑩𐑯 --gdk-𐑯𐑴-𐑛𐑰𐑚𐑳𐑜"
@@ -90,19 +92,16 @@ msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "𐑑𐑨𐑚"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "𐑮𐑦𐑑𐑻𐑯"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
@@ -112,15 +111,14 @@ msgstr "𐑐𐑷𐑟"
 #: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
-msgstr "Scroll_Lock"
+msgstr "_ScrollLock"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3945
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys_Req"
+msgstr "_SysReq"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3946
 msgctxt "keyboard label"
 msgid "Escape"
@@ -130,33 +128,28 @@ msgstr "𐑦𐑕𐑒𐑱𐑐"
 #: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
-msgstr "Multi_key"
+msgstr "_Multikey"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "𐑣𐑴𐑥"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "𐑤𐑧𐑓𐑑"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "𐑳𐑐"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "𐑮𐑲𐑑"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
@@ -166,33 +159,29 @@ msgstr "𐑛𐑬𐑯"
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page_Up"
+msgstr "_PageUp"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page_Down"
+msgstr "_PageDown"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
 msgstr "𐑧𐑯𐑛"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "𐑚𐑩𐑜𐑦𐑯"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "𐑐𐑮𐑦𐑯𐑑"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
@@ -202,105 +191,104 @@ msgstr "𐑦𐑯𐑕𐑻𐑑"
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Num_Lock"
+msgstr "_NumLock"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "KP_Space"
+msgstr "_KPSpace"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "KP_Tab"
+msgstr "_KPTab"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "KP_Enter"
+msgstr "_KPEnter"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "KP_Home"
+msgstr "_KPHome"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "KP_Left"
+msgstr "_KPLeft"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "KP_Up"
+msgstr "_KPUp"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "KP_Right"
+msgstr "_KPRight"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "KP_Down"
+msgstr "_KPDown"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "KP_Page_Up"
+msgstr "_KPPage_𐑳𐑐"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "KP_Prior"
+msgstr "_KPPrior"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "KP_Page_Down"
+msgstr "_KPPage_𐑛𐑬𐑯"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "KP_Next"
+msgstr "_KPNext"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "KP_End"
+msgstr "_KPEnd"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "KP_Begin"
+msgstr "_KPBegin"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "KP_Insert"
+msgstr "_KPInsert"
 
 #, fuzzy
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "KP_Delete"
+msgstr "_KPDelete"
 
-#, fuzzy
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
@@ -402,7 +390,6 @@ msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑒𐑤𐑴𐑕 '%s' 𐑢𐑲𐑤 𐑮𐑲𐑑�
 msgid "Insufficient memory to save image into a buffer"
 msgstr "𐑦𐑯𐑕𐑩𐑓𐑦𐑖𐑩𐑯𐑑 𐑥𐑧𐑥𐑼𐑦 𐑑 𐑕𐑱𐑝 𐑦𐑥𐑦𐑡 𐑦𐑯𐑑𐑫 𐑩 𐑚𐑳𐑓𐑼"
 
-#, fuzzy
 #: ../gdk-pixbuf/gdk-pixbuf-io.c:2387
 msgid "Error writing to image stream"
 msgstr "𐑻𐑼 𐑮𐑲𐑑𐑦𐑙 𐑑 𐑦𐑥𐑦𐑡 𐑕𐑑𐑮𐑰𐑥"
@@ -619,10 +606,11 @@ msgstr "𐑳𐑯𐑕𐑩𐑐𐑹𐑑𐑩𐑛 𐑛𐑧𐑐𐑔 𐑓𐑹 ICO 𐑓�
 msgid "The ICO image format"
 msgstr "𐑞 ICO 𐑦𐑥𐑦𐑡 𐑓𐑹𐑥𐑨𐑑"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-icns.c:347
 msgid "Error reading ICNS image: %s"
-msgstr "𐑓𐑱𐑑𐑩𐑤 𐑻𐑼 𐑮𐑰𐑛𐑦𐑙 PNG 𐑦𐑥𐑦𐑡 𐑓𐑲𐑤: %s"
+msgstr "𐑻𐑼 𐑮𐑰𐑛𐑦𐑙 ICNS 𐑦𐑥𐑦𐑡: %s"
 
 #, fuzzy
 #: ../gdk-pixbuf/io-icns.c:364
@@ -634,12 +622,10 @@ msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑛𐑰𐑒𐑴𐑛 ICNS 𐑓𐑲𐑤"
 msgid "The ICNS image format"
 msgstr "𐑞 ICNS 𐑦𐑥𐑦𐑡 𐑓𐑹𐑥𐑨𐑑"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-jasper.c:75
 msgid "Couldn't allocate memory for stream"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦 𐑓𐑹 𐑕𐑑𐑮𐑰𐑥"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-jasper.c:105
 msgid "Couldn't decode image"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑰𐑒𐑴𐑛 𐑦𐑥𐑦𐑡"
@@ -649,12 +635,10 @@ msgstr "𐑒𐑫𐑛𐑯𐑑 𐑛𐑰𐑒𐑴𐑛 𐑦𐑥𐑦𐑡"
 msgid "Transformed JPEG2000 has zero width or height"
 msgstr "𐑑𐑮𐑨𐑯𐑕𐑓𐑪𐑮𐑥𐑛 JPEG2000 𐑣𐑨𐑟 𐑟𐑽𐑴 𐑢𐑦𐑛𐑔 𐑹 𐑣𐑲𐑑"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-jasper.c:137
 msgid "Image type currently not supported"
 msgstr "𐑦𐑥𐑦𐑡 𐑑𐑲𐑐 𐑒𐑳𐑮𐑩𐑯𐑑𐑤𐑦 𐑯𐑪𐑑 𐑕𐑩𐑐𐑹𐑑𐑩𐑛"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-jasper.c:149 ../gdk-pixbuf/io-jasper.c:157
 msgid "Couldn't allocate memory for color profile"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦 𐑓𐑹 𐑒𐑳𐑤𐑼 𐑐𐑮𐑴𐑓𐑲𐑤"
@@ -664,7 +648,6 @@ msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦 𐑓�
 msgid "Insufficient memory to open JPEG 2000 file"
 msgstr "𐑦𐑯𐑕𐑩𐑓𐑦𐑖𐑩𐑯𐑑 𐑥𐑧𐑥𐑼𐑦 𐑑 𐑴𐑐𐑩𐑯 JPEG 2000 𐑓𐑲𐑤"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-jasper.c:262
 msgid "Couldn't allocate memory to buffer image data"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦 𐑑 𐑚𐑳𐑓𐑼 𐑦𐑥𐑦𐑡 𐑛𐑱𐑑𐑩"
@@ -818,7 +801,8 @@ msgstr "𐑒𐑰𐑟 𐑓𐑹 PNG 𐑑𐑧𐑒𐑕𐑑 𐑗𐑩𐑙𐑒𐑕 𐑥
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "𐑒𐑰𐑟 𐑓𐑹 PNG 𐑑𐑧𐑒𐑕𐑑 𐑗𐑩𐑙𐑒𐑕 𐑥𐑳𐑕𐑑 𐑚𐑰 ASCII 𐑒𐑨𐑮𐑩𐑒𐑑𐑼𐑟."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-png.c:886 ../gdk-pixbuf/io-tiff.c:738
 msgid "Color profile has invalid length %d."
 msgstr "𐑒𐑳𐑤𐑼 𐑐𐑮𐑴𐑓𐑲𐑤 𐑣𐑨𐑟 𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑤𐑧𐑙𐑔 %d."
@@ -920,23 +904,27 @@ msgstr "𐑦𐑯𐑐𐑫𐑑 𐑓𐑲𐑤 descriptor 𐑦𐑟 𐑯𐑳𐑤."
 msgid "Failed to read QTIF header"
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑮𐑰𐑛 QTIF 𐑣𐑧𐑛𐑼"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:152 ../gdk-pixbuf/io-qtif.c:182
 #: ../gdk-pixbuf/io-qtif.c:446
 msgid "QTIF atom size too large (%d bytes)"
 msgstr "QTIF 𐑨𐑑𐑩𐑥 𐑕𐑲𐑟 𐑑𐑵 𐑤𐑸𐑡 (%d 𐑚𐑲𐑑𐑕)"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:172
 msgid "Failed to allocate %d bytes for file read buffer"
-msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑚𐑳𐑓𐑼 𐑝 %u 𐑚𐑲𐑑"
+msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 %d 𐑚𐑲𐑑𐑕 𐑓𐑹 𐑓𐑲𐑤 𐑮𐑧𐑛 𐑚𐑳𐑓𐑼"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:196
 msgid "File error when reading QTIF atom: %s"
-msgstr "𐑓𐑱𐑤𐑘𐑼 𐑮𐑰𐑛𐑦𐑙 GIF: %s"
+msgstr "𐑓𐑲𐑤 𐑻𐑼 𐑢𐑧𐑯 𐑮𐑰𐑛𐑦𐑙 QTIF 𐑨𐑑𐑩𐑥: %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:233
 msgid "Failed to skip the next %d bytes with seek()."
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑕𐑒𐑦𐑐 𐑞 𐑯𐑧𐑒𐑕𐑑 %d 𐑚𐑲𐑑𐑕 𐑢𐑦𐑞 𐑕𐑰𐑒()."
@@ -951,7 +939,6 @@ msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 QTIF 𐑒𐑪𐑯𐑑𐑧
 msgid "Failed to create GdkPixbufLoader object."
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑒𐑮𐑦𐑱𐑑 GdkPixbufLoader 𐑩𐑚𐑡𐑧𐑒𐑑."
 
-#, fuzzy
 #: ../gdk-pixbuf/io-qtif.c:421
 msgid "Failed to find an image data atom."
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑓𐑲𐑯𐑛 𐑩𐑯 𐑦𐑥𐑦𐑡 𐑛𐑱𐑑𐑩 𐑨𐑑𐑩𐑥."
@@ -1001,7 +988,6 @@ msgstr "𐑒𐑨𐑯𐑪𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑑𐑧𐑥𐑐𐑼𐑼�
 msgid "Cannot allocate new pixbuf"
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑯𐑿 𐑐𐑦𐑒𐑕𐑚𐑳𐑓"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-tga.c:686
 msgid "Image is corrupted or truncated"
 msgstr "𐑦𐑥𐑦𐑡 𐑦𐑟 𐑒𐑼𐑳𐑐𐑑𐑩𐑛 𐑹 𐑑𐑮𐑩𐑙𐑒𐑱𐑑𐑦𐑛"
@@ -1085,7 +1071,6 @@ msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑤𐑴𐑛 TIFF 𐑦𐑥𐑦𐑡"
 msgid "Failed to save TIFF image"
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑕𐑱𐑝 TIFF 𐑦𐑥𐑦𐑡"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-tiff.c:727
 msgid "TIFF compression doesn't refer to a valid codec."
 msgstr "𐑑𐑦𐑓 𐑒𐑩𐑥𐑐𐑮𐑧𐑖𐑩𐑯 𐑛𐑳𐑟𐑯𐑑 𐑮𐑦𐑓𐑻 𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 𐑒𐑴𐑛𐑧𐑒."
@@ -1184,28 +1169,31 @@ msgstr "𐑞 XPM 𐑦𐑥𐑦𐑡 𐑓𐑹𐑥𐑨𐑑"
 msgid "The EMF image format"
 msgstr "𐑞 EMF 𐑦𐑥𐑦𐑡 𐑓𐑹𐑥𐑨𐑑"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:232
 msgid "Could not allocate memory: %s"
-msgstr "𐑒𐑫𐑛𐑯𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦 𐑓𐑹 𐑣𐑧𐑛𐑼"
+msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑨𐑤𐑴𐑒𐑱𐑑 𐑥𐑧𐑥𐑼𐑦: %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:257 ../gdk-pixbuf/io-gdip-utils.c:371
 #: ../gdk-pixbuf/io-gdip-utils.c:411
 msgid "Could not create stream: %s"
-msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑰𐑯𐑱𐑥 %s 𐑑 %s: %s\n"
+msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑒𐑮𐑦𐑱𐑑 𐑕𐑑𐑮𐑰𐑥: %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:271
 msgid "Could not seek stream: %s"
-msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑦𐑥𐑵𐑝 𐑲𐑑𐑩𐑥"
+msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑕𐑰𐑒 𐑕𐑑𐑮𐑰𐑥: %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:283
 msgid "Could not read from stream: %s"
-msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑰𐑯𐑱𐑥 %s 𐑑 %s: %s\n"
+msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑧𐑛 𐑓𐑮𐑪𐑥 𐑕𐑑𐑮𐑰𐑥: %s"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:694 ../gdk-pixbuf/io-gdip-utils.c:825
 msgid "Couldn't load bitmap"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑤𐑴𐑛 𐑚𐑦𐑑𐑥𐑨𐑐"
@@ -1220,7 +1208,6 @@ msgstr "𐑒𐑫𐑛𐑯𐑑 𐑤𐑴𐑛 metafile"
 msgid "Unsupported image format for GDI+"
 msgstr "𐑳𐑯𐑕𐑩𐑐𐑹𐑑𐑩𐑛 𐑦𐑥𐑦𐑡 𐑓𐑹𐑥𐑨𐑑 𐑓𐑹 GDI+"
 
-#, fuzzy
 #: ../gdk-pixbuf/io-gdip-utils.c:1013
 msgid "Couldn't save"
 msgstr "𐑒𐑫𐑛𐑯𐑑 𐑕𐑱𐑝"
@@ -1265,24 +1252,26 @@ msgstr "𐑒𐑳𐑤𐑼𐑟"
 msgid "Make X calls synchronous"
 msgstr "𐑥𐑱𐑒 𐑧𐑒𐑕 𐑒𐑷𐑤𐑟 𐑕𐑦𐑯𐑒𐑮𐑪𐑯𐑩𐑕"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:313
 msgid "Starting %s"
-msgstr "𐑐𐑮𐑦𐑯𐑑𐑦𐑙 %d"
+msgstr "𐑕𐑑𐑸𐑑𐑦𐑙 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:315
 msgid "Opening %s"
-msgstr "𐑴𐑐𐑩𐑯 '%s'"
+msgstr "𐑴𐑐𐑩𐑯𐑦𐑙 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:318
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "𐑴𐑐𐑩𐑯𐑦𐑙 %d 𐑲𐑑𐑩𐑥"
 msgstr[1] "𐑴𐑐𐑩𐑯𐑦𐑙 %d 𐑲𐑑𐑩𐑥𐑟"
 
-#, fuzzy
 #: ../gtk/gtkaboutdialog.c:241
 msgid "Could not show link"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑖𐑴 𐑤𐑦𐑙𐑒"
@@ -1335,7 +1324,6 @@ msgstr "𐑭𐑮𐑑𐑢𐑻𐑒 𐑚𐑲"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:157
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1346,29 +1334,26 @@ msgstr "𐑖𐑦𐑓𐑑"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:163
 msgctxt "keyboard label"
 msgid "Ctrl"
-msgstr "·𐑒𐑑𐑮𐑤"
+msgstr "𐑒𐑑𐑮𐑤"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:169
 msgctxt "keyboard label"
 msgid "Alt"
-msgstr "·𐑷𐑤𐑑"
+msgstr "𐑷𐑤𐑑"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:767
 msgctxt "keyboard label"
 msgid "Super"
@@ -1379,7 +1364,6 @@ msgstr "𐑕𐑵𐑐𐑼"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:780
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1390,30 +1374,29 @@ msgstr "𐑣𐑲𐑐𐑻"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:794
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "𐑥𐑰𐑑𐑩"
 
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:811
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "𐑕𐑐𐑱𐑕"
 
-#, fuzzy
 #: ../gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "𐑚𐑨𐑒𐑕𐑤𐑨𐑖"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkbuilderparser.c:343
 msgid "Invalid type function on line %d: '%s'"
-msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑑𐑲𐑐 𐑓𐑳𐑙𐑒𐑖𐑩𐑯: `%s'"
+msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑑𐑲𐑐 𐑓𐑳𐑙𐑒𐑖𐑩𐑯 𐑪𐑯 𐑤𐑲𐑯 %d: '%s'"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkbuilderparser.c:407
 msgid "Duplicate object id '%s' on line %d (previously on line %d)"
 msgstr "𐑛𐑿𐑐𐑤𐑦𐑒𐑱𐑑 𐑪𐑚𐑡𐑧𐑒𐑑 𐑦𐑛 '%s' 𐑪𐑯 𐑤𐑲𐑯 %d (𐑐𐑮𐑰𐑝𐑦𐑩𐑕𐑤𐑦 𐑪𐑯 𐑤𐑲𐑯 %d)"
@@ -1455,7 +1438,6 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#, fuzzy
 #: ../gtk/gtkcalendar.c:1807
 msgctxt "year measurement template"
 msgid "2000"
@@ -1471,7 +1453,8 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkcalendar.c:1838 ../gtk/gtkcalendar.c:2496
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1487,7 +1470,8 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkcalendar.c:1870 ../gtk/gtkcalendar.c:2359
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1512,7 +1496,6 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#, fuzzy
 #: ../gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1522,7 +1505,6 @@ msgstr "𐑛𐑦𐑕𐑱𐑚𐑩𐑤𐑛"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#, fuzzy
 #: ../gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1536,7 +1518,8 @@ msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛"
 msgid "New accelerator..."
 msgstr "𐑯𐑿 𐑨𐑒𐑕𐑧𐑤𐑼𐑱𐑑𐑼..."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkcellrendererprogress.c:361 ../gtk/gtkcellrendererprogress.c:448
 msgctxt "progress bar label"
 msgid "%d %%"
@@ -1657,14 +1640,12 @@ msgid ""
 msgstr ""
 "𐑞 𐑒𐑳𐑤𐑼 𐑿𐑝 𐑗𐑴𐑟𐑩𐑯. 𐑿 𐑒𐑨𐑯 𐑛𐑮𐑨𐑜 𐑞𐑦𐑕 𐑒𐑳𐑤𐑼 𐑑 𐑩 𐑐𐑩𐑤𐑧𐑑 𐑧𐑯𐑑𐑮𐑦 𐑑 𐑕𐑱𐑝 𐑦𐑑 𐑓𐑹 𐑿𐑕 𐑦𐑯 𐑞 𐑓𐑿𐑗𐑼."
 
-#, fuzzy
 #: ../gtk/gtkcolorsel.c:966
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "𐑞 𐑐𐑮𐑰𐑝𐑦𐑩𐑕𐑤𐑦-𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑒𐑳𐑤𐑼, 𐑓𐑹 𐑒𐑩𐑥𐑐𐑨𐑮𐑦𐑕𐑩𐑯 𐑑 𐑞 𐑒𐑳𐑤𐑼 𐑿'𐑼 𐑕𐑩𐑤𐑧𐑒𐑑𐑦𐑙 𐑯𐑬."
 
-#, fuzzy
 #: ../gtk/gtkcolorsel.c:969
 msgid "The color you've chosen."
 msgstr "𐑞 𐑒𐑳𐑤𐑼 𐑿'𐑝 𐑗𐑴𐑟𐑩𐑯."
@@ -1700,11 +1681,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "𐑥𐑨𐑯𐑦𐑡 𐑒𐑳𐑕𐑑𐑩𐑥 𐑕𐑲𐑟𐑩𐑟"
 
-#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:793
 msgid "inch"
 msgstr "𐑦𐑯𐑗"
 
-#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:791
 msgid "mm"
 msgstr "mm"
 
@@ -1757,7 +1738,6 @@ msgstr "𐑦𐑯𐑐𐑫𐑑 _𐑥𐑧𐑔𐑪𐑛𐑟"
 msgid "_Insert Unicode Control Character"
 msgstr "_𐑦𐑯𐑕𐑻𐑑 ·𐑿𐑯𐑦𐑒𐑴𐑛 𐑒𐑩𐑯𐑑𐑮𐑴𐑤 𐑒𐑨𐑮𐑩𐑒𐑑𐑼"
 
-#, fuzzy
 #: ../gtk/gtkentry.c:10003
 msgid "Caps Lock is on"
 msgstr "𐑒𐑨𐑐𐑕 𐑤𐑪𐑒 𐑦𐑟 𐑪𐑯"
@@ -1855,7 +1835,8 @@ msgstr "𐑨𐑛 𐑞 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛 𐑓𐑴𐑤𐑛𐑼𐑟 
 msgid "Remove the bookmark '%s'"
 msgstr "𐑮𐑦𐑥𐑵𐑝 𐑞 𐑚𐑫𐑒𐑥𐑸𐑒 '%s'"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkfilechooserdefault.c:2867
 msgid "Bookmark '%s' cannot be removed"
 msgstr "𐑚𐑫𐑒𐑥𐑸𐑒 '%s' 𐑒𐑨𐑯𐑪𐑑 𐑚𐑰 𐑮𐑦𐑥𐑵𐑝𐑛"
@@ -1906,10 +1887,9 @@ msgstr "_𐑨𐑛 𐑑 𐑚𐑫𐑒𐑥𐑸𐑒𐑕"
 msgid "Show _Hidden Files"
 msgstr "𐑖𐑴 _𐑣𐑦𐑛𐑩𐑯 𐑓𐑲𐑤𐑟"
 
-#, fuzzy
 #: ../gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
-msgstr "𐑖𐑴 _Size 𐑒𐑪𐑤𐑩𐑥"
+msgstr "𐑖𐑴 _𐑕𐑲𐑟 𐑒𐑪𐑤𐑩𐑥"
 
 #: ../gtk/gtkfilechooserdefault.c:4441
 msgid "Files"
@@ -1957,12 +1937,12 @@ msgstr "𐑕𐑱𐑝 𐑦𐑯 _𐑓𐑴𐑤𐑛𐑼:"
 msgid "Create in _folder:"
 msgstr "𐑒𐑮𐑦𐑱𐑑 𐑦𐑯 _𐑓𐑴𐑤𐑛𐑼:"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkfilechooserdefault.c:6419
 msgid "Could not read the contents of %s"
-msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑜𐑧𐑑 𐑩 𐑕𐑑𐑪𐑒 𐑲𐑒𐑪𐑯 𐑓𐑹 %s\n"
+msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑧𐑛 𐑞 𐑒𐑪𐑯𐑑𐑩𐑯𐑑𐑕 𐑝 %s"
 
-#, fuzzy
 #: ../gtk/gtkfilechooserdefault.c:6423
 msgid "Could not read the contents of the folder"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑮𐑧𐑛 𐑞 𐑒𐑪𐑯𐑑𐑩𐑯𐑑𐑕 𐑝 𐑞 𐑓𐑴𐑤𐑛𐑼"
@@ -2026,7 +2006,6 @@ msgstr ""
 msgid "Could not send the search request"
 msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑕𐑧𐑯𐑛 𐑞 𐑕𐑻𐑗 𐑮𐑦𐑒𐑢𐑧𐑕𐑑"
 
-#, fuzzy
 #: ../gtk/gtkfilechooserdefault.c:9026
 msgid "Search:"
 msgstr "𐑕𐑻𐑗:"
@@ -2038,7 +2017,6 @@ msgstr "𐑒𐑫𐑛 𐑯𐑪𐑑 𐑥𐑬𐑯𐑑 %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:698 ../gtk/gtkfilechooserentry.c:1163
 msgid "Invalid path"
 msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑐𐑭𐑔"
@@ -2046,7 +2024,6 @@ msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑐𐑭𐑔"
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1095
 msgid "No match"
 msgstr "𐑯𐑴 𐑥𐑨𐑗"
@@ -2054,7 +2031,6 @@ msgstr "𐑯𐑴 𐑥𐑨𐑗"
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1106
 msgid "Sole completion"
 msgstr "𐑕𐑴𐑤 𐑒𐑩𐑥𐑐𐑤𐑰𐑖𐑩𐑯"
@@ -2063,14 +2039,12 @@ msgstr "𐑕𐑴𐑤 𐑒𐑩𐑥𐑐𐑤𐑰𐑖𐑩𐑯"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1122
 msgid "Complete, but not unique"
 msgstr "𐑒𐑩𐑥𐑐𐑤𐑰𐑑, 𐑚𐑳𐑑 𐑯𐑪𐑑 𐑿𐑯𐑰𐑒"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1154
 msgid "Completing..."
 msgstr "𐑒𐑩𐑥𐑐𐑤𐑰𐑑𐑦𐑙..."
@@ -2079,7 +2053,6 @@ msgstr "𐑒𐑩𐑥𐑐𐑤𐑰𐑑𐑦𐑙..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1176 ../gtk/gtkfilechooserentry.c:1201
 msgid "Only local files may be selected"
 msgstr "𐑴𐑯𐑤𐑦 𐑤𐑴𐑒𐑩𐑤 𐑓𐑲𐑤𐑟 𐑥𐑱 𐑚𐑰 𐑕𐑩𐑤𐑧𐑒𐑑𐑩𐑛"
@@ -2088,7 +2061,6 @@ msgstr "𐑴𐑯𐑤𐑦 𐑤𐑴𐑒𐑩𐑤 𐑓𐑲𐑤𐑟 𐑥𐑱 𐑚𐑰
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1185
 msgid "Incomplete hostname; end it with '/'"
 msgstr "𐑦𐑯𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑣𐑴𐑕𐑑𐑯𐑱𐑥; 𐑧𐑯𐑛 𐑦𐑑 𐑢𐑦𐑞 '/'"
@@ -2096,7 +2068,6 @@ msgstr "𐑦𐑯𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑣𐑴𐑕𐑑𐑯𐑱𐑥; 𐑧�
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#, fuzzy
 #: ../gtk/gtkfilechooserentry.c:1196
 msgid "Path does not exist"
 msgstr "𐑐𐑭𐑔 𐑛𐑳𐑟 𐑯𐑪𐑑 𐑧𐑒𐑟𐑦𐑕𐑑"
@@ -2181,40 +2152,36 @@ msgstr "𐑲𐑒𐑪𐑯 '%s' 𐑯𐑪𐑑 𐑐𐑮𐑩𐑟𐑧𐑯𐑑 𐑦𐑯
 msgid "Failed to load icon"
 msgstr "𐑓𐑱𐑤𐑛 𐑑 𐑤𐑴𐑛 𐑲𐑒𐑪𐑯"
 
-#, fuzzy
 #: ../gtk/gtkimmodule.c:527
 msgid "Simple"
 msgstr "𐑕𐑦𐑥𐑐𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/gtkimmulticontext.c:563
 msgctxt "input method menu"
 msgid "System"
 msgstr "𐑕𐑦𐑕𐑑𐑩𐑥"
 
-#, fuzzy
 #: ../gtk/gtkimmulticontext.c:573
 msgctxt "input method menu"
 msgid "None"
 msgstr "𐑯𐑳𐑯"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkimmulticontext.c:656
 msgctxt "input method menu"
 msgid "System (%s)"
-msgstr "%s (%s)"
+msgstr "𐑕𐑦𐑕𐑑𐑩𐑥 (%s)"
 
 #. Open Link
-#, fuzzy
 #: ../gtk/gtklabel.c:6077
 msgid "_Open Link"
-msgstr "_Open 𐑤𐑦𐑙𐑒"
+msgstr "_𐑴𐑐𐑩𐑯 𐑤𐑦𐑙𐑒"
 
 #. Copy Link Address
-#, fuzzy
 #: ../gtk/gtklabel.c:6089
 msgid "Copy _Link Address"
-msgstr "𐑒𐑪𐑐𐑦 _Link 𐑩𐑛𐑮𐑧𐑕"
+msgstr "𐑒𐑪𐑐𐑦 _𐑤𐑦𐑙𐑒 𐑩𐑛𐑮𐑧𐑕"
 
 #: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
@@ -2258,7 +2225,8 @@ msgstr "GTK+ 𐑛𐑰𐑚𐑳𐑜𐑦𐑙 𐑓𐑤𐑨𐑜𐑟 𐑑 𐑩𐑯𐑕
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkmain.c:773
 msgid "Cannot open display: %s"
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑴𐑐𐑩𐑯 𐑛𐑩𐑕𐑐𐑤𐑱: %s"
@@ -2271,98 +2239,86 @@ msgstr "GTK+ 𐑪𐑐𐑖𐑩𐑯𐑟"
 msgid "Show GTK+ Options"
 msgstr "𐑖𐑴 GTK+ 𐑪𐑐𐑖𐑩𐑯𐑟"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
-msgstr "Co_nnect"
+msgstr "_𐑒𐑩𐑯𐑧𐑒𐑑"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
-msgstr "𐑒𐑩𐑯𐑧𐑒𐑑 _anonymously"
+msgstr "𐑒𐑩𐑯𐑧𐑒𐑑 _𐑩𐑯𐑪𐑯𐑦𐑥𐑩𐑕𐑤𐑦"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
-msgstr "𐑒𐑩𐑯𐑧𐑒𐑑 𐑨𐑟 u_ser:"
+msgstr "𐑒𐑩𐑯𐑧𐑒𐑑 𐑨𐑟 _𐑿𐑟𐑼:"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:603
 msgid "_Username:"
-msgstr "_Username:"
+msgstr "_𐑿𐑟𐑼𐑯𐑱𐑥:"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:608
 msgid "_Domain:"
-msgstr "_Domain:"
+msgstr "_𐑛𐑴𐑥𐑱𐑯:"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:614
 msgid "_Password:"
-msgstr "_Password:"
+msgstr "_𐑐𐑭𐑕𐑢𐑼𐑛:"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:632
 msgid "Forget password _immediately"
-msgstr "𐑓𐑼𐑜𐑧𐑑 𐑐𐑭𐑕𐑢𐑼𐑛 _immediately"
+msgstr "𐑓𐑼𐑜𐑧𐑑 𐑐𐑭𐑕𐑢𐑼𐑛 _𐑦𐑥𐑰𐑛𐑾𐑑𐑤𐑰"
 
 #, fuzzy
 #: ../gtk/gtkmountoperation.c:642
 msgid "Remember password until you _logout"
 msgstr "𐑮𐑦𐑥𐑧𐑥𐑚𐑼 𐑐𐑭𐑕𐑢𐑼𐑛 𐑳𐑯𐑑𐑦𐑤 𐑿 _logout"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:652
 msgid "Remember _forever"
-msgstr "𐑮𐑦𐑥𐑧𐑥𐑚𐑼 _forever"
+msgstr "𐑮𐑦𐑥𐑧𐑥𐑚𐑼 _𐑓𐑹𐑧𐑝𐑼"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkmountoperation.c:881
 msgid "Unknown Application (pid %d)"
 msgstr "𐑳𐑯𐑴𐑯 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 (pid %d)"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
 msgstr "𐑳𐑯𐑱𐑚𐑩𐑤 𐑑 𐑧𐑯𐑛 𐑐𐑮𐑴𐑕𐑧𐑕"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation.c:1101
 msgid "_End Process"
-msgstr "_End 𐑐𐑮𐑴𐑕𐑧𐑕"
+msgstr "_𐑧𐑯𐑛 𐑐𐑮𐑴𐑕𐑧𐑕"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkmountoperation-stub.c:64
 msgid "Cannot kill process with pid %d. Operation is not implemented."
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑒𐑦𐑤 𐑐𐑮𐑴𐑕𐑧𐑕 𐑢𐑦𐑞 pid %d. 𐑪𐑐𐑼𐑱𐑖𐑩𐑯 𐑦𐑟 𐑯𐑪𐑑 𐑦𐑥𐑐𐑤𐑩𐑥𐑧𐑯𐑑𐑩𐑛."
 
 #. translators: this string is a name for the 'less' command
-#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr "𐑑𐑻𐑥𐑦𐑯𐑩𐑤 𐑐𐑱𐑡𐑻"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
 msgstr "𐑑𐑪𐑐 𐑒𐑩𐑥𐑭𐑯𐑛"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
-msgstr "𐑚𐑪𐑮𐑯 𐑩𐑜𐑱𐑯 𐑖𐑧𐑤"
+msgstr "·𐑚𐑹𐑯 𐑩𐑜𐑱𐑯 𐑖𐑧𐑤"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
-msgstr "𐑚𐑪𐑮𐑯 𐑖𐑧𐑤"
+msgstr "·𐑚𐑹𐑯 𐑖𐑧𐑤"
 
-#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
-msgstr "𐑟𐑰 𐑖𐑧𐑤"
+msgstr "Z 𐑖𐑧𐑤"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkmountoperation-x11.c:966
 msgid "Cannot end process with pid %d: %s"
 msgstr "𐑒𐑨𐑯𐑪𐑑 𐑧𐑯𐑛 𐑐𐑮𐑴𐑕𐑧𐑕 𐑢𐑦𐑞 pid %d: %s"
@@ -2377,38 +2333,36 @@ msgstr "𐑐𐑱𐑡 %u"
 msgid "Not a valid page setup file"
 msgstr "𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 𐑐𐑱𐑡 𐑕𐑧𐑑𐑳𐑐 𐑓𐑲𐑤"
 
-#, fuzzy
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:182
 msgid "Any Printer"
 msgstr "𐑧𐑯𐑦 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#, fuzzy
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:182
 msgid "For portable documents"
 msgstr "𐑓𐑹 𐑐𐑪𐑮𐑑𐑩𐑚𐑩𐑤 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑𐑕"
 
 #, c-format
-#: ../gtk/gtkpagesetupunixdialog.c:797
+#: ../gtk/gtkpagesetupunixdialog.c:812
 msgid "Margins:\n Left: %s %s\n Right: %s %s\n Top: %s %s\n Bottom: %s %s"
 msgstr "𐑥𐑸𐑡𐑦𐑯𐑟:\n 𐑤𐑧𐑓𐑑: %s %s\n 𐑮𐑲𐑑: %s %s\n 𐑑𐑪𐑐: %s %s\n 𐑚𐑪𐑑𐑫𐑥: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3277
+#: ../gtk/gtkpagesetupunixdialog.c:861 ../gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "𐑥𐑨𐑯𐑦𐑡 𐑒𐑳𐑕𐑑𐑩𐑥 𐑕𐑲𐑟𐑩𐑟..."
 
-#: ../gtk/gtkpagesetupunixdialog.c:894
+#: ../gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
 msgstr "_𐑓𐑹𐑥𐑨𐑑 𐑓𐑹:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3449
+#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "_𐑐𐑱𐑐𐑼 𐑕𐑲𐑟:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:947
+#: ../gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
 msgstr "_𐑹𐑾𐑯𐑑𐑲𐑖𐑩𐑯:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3511
+#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "𐑐𐑱𐑡 𐑕𐑧𐑑𐑳𐑐"
 
@@ -2424,7 +2378,6 @@ msgstr "𐑛𐑬𐑯 𐑐𐑭𐑔"
 msgid "File System Root"
 msgstr "𐑓𐑲𐑤 𐑕𐑦𐑕𐑑𐑩𐑥 𐑮𐑵𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintbackend.c:749
 msgid "Authentication"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯"
@@ -2433,7 +2386,6 @@ msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯"
 msgid "Not available"
 msgstr "𐑯𐑪𐑑 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/gtkprinteroptionwidget.c:795
 msgid "Select a folder"
 msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 𐑩 𐑓𐑴𐑤𐑛𐑼"
@@ -2451,55 +2403,46 @@ msgstr "_𐑕𐑱𐑝 𐑦𐑯 𐑓𐑴𐑤𐑛𐑼:"
 msgid "%s job #%d"
 msgstr "%s 𐑡𐑪𐑚 #%d"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1687
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "𐑦𐑯𐑦𐑖𐑩𐑤 𐑕𐑑𐑱𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "𐑐𐑮𐑰𐑐𐑺𐑦𐑙 𐑑 𐑐𐑮𐑦𐑯𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "𐑡𐑧𐑯𐑼𐑱𐑑𐑦𐑙 𐑛𐑱𐑑𐑩"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "𐑕𐑧𐑯𐑛𐑦𐑙 𐑛𐑱𐑑𐑩"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "𐑢𐑱𐑑𐑦𐑙"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1692
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "𐑚𐑤𐑪𐑒𐑦𐑙 𐑪𐑯 𐑦𐑖𐑵"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1693
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑦𐑙"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1694
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "𐑓𐑦𐑯𐑦𐑖𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Finished with error"
@@ -2519,12 +2462,10 @@ msgstr "𐑐𐑮𐑰𐑐𐑺𐑦𐑙"
 msgid "Printing %d"
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑦𐑙 %d"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:2905
 msgid "Error creating print preview"
 msgstr "𐑻𐑼 𐑒𐑮𐑦𐑱𐑑𐑦𐑙 𐑐𐑮𐑦𐑯𐑑 𐑐𐑮𐑰𐑝𐑿"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:2908
 msgid ""
 "The most probable reason is that a temporary file could not be created."
@@ -2564,7 +2505,6 @@ msgstr "𐑯𐑰𐑛 𐑿𐑟𐑼 𐑦𐑯𐑑𐑻𐑝𐑧𐑯𐑗𐑩𐑯"
 msgid "Custom size"
 msgstr "𐑒𐑳𐑕𐑑𐑩𐑥 𐑕𐑲𐑟"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "𐑯𐑴 𐑐𐑮𐑦𐑯𐑑𐑼 𐑓𐑬𐑯𐑛"
@@ -2599,12 +2539,10 @@ msgstr "𐑦𐑯𐑝𐑨𐑤𐑦𐑛 𐑣𐑨𐑯𐑛𐑩𐑤 𐑑 PrintDlgEx"
 msgid "Unspecified error"
 msgstr "𐑩𐑯𐑕𐑐𐑧𐑕𐑩𐑓𐑲𐑛 𐑻𐑼"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:614
 msgid "Getting printer information failed"
 msgstr "𐑜𐑧𐑑𐑦𐑙 𐑐𐑮𐑦𐑯𐑑𐑼 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯 𐑓𐑱𐑤𐑛"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "𐑜𐑧𐑑𐑦𐑙 𐑐𐑮𐑦𐑯𐑑𐑼 𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯..."
@@ -2623,36 +2561,30 @@ msgstr "𐑤𐑴𐑒𐑱𐑖𐑩𐑯"
 msgid "Status"
 msgstr "𐑕𐑑𐑱𐑑𐑫𐑕"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2179
 msgid "Range"
 msgstr "𐑮𐑱𐑯𐑡"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
-msgstr "_All 𐑐𐑱𐑡𐑧𐑟"
+msgstr "_𐑷𐑤 𐑐𐑱𐑡𐑧𐑟"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
-msgstr "C_urrent 𐑐𐑱𐑡"
+msgstr "_𐑒𐑳𐑮𐑩𐑯𐑑 𐑐𐑱𐑡"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
-msgstr "Se_lection"
+msgstr "_𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
-msgstr "Pag_es:"
+msgstr "_𐑐𐑱𐑡𐑧𐑟:"
 
 #: ../gtk/gtkprintunixdialog.c:2210
 msgid "Specify one or more page ranges,\n e.g. 1-3,7,11"
 msgstr "𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑢𐑳𐑯 𐑹 𐑥𐑹 𐑐𐑱𐑡 𐑮𐑱𐑯𐑡𐑩𐑟,\n 𐑧.𐑡𐑰. 1-3,7,11"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "𐑐𐑱𐑡𐑧𐑟"
@@ -2684,49 +2616,41 @@ msgstr "𐑡𐑧𐑯𐑼𐑩𐑤"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3010
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, top to bottom"
 msgstr "𐑤𐑧𐑓𐑑 𐑑 𐑮𐑲𐑑, 𐑑𐑪𐑐 𐑑 𐑚𐑪𐑑𐑫𐑥"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3010
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3505
 msgid "Left to right, bottom to top"
 msgstr "𐑤𐑧𐑓𐑑 𐑑 𐑮𐑲𐑑, 𐑚𐑪𐑑𐑫𐑥 𐑑 𐑑𐑪𐑐"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3011
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, top to bottom"
 msgstr "𐑮𐑲𐑑 𐑑 𐑤𐑧𐑓𐑑, 𐑑𐑪𐑐 𐑑 𐑚𐑪𐑑𐑫𐑥"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3011
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3506
 msgid "Right to left, bottom to top"
 msgstr "𐑮𐑲𐑑 𐑑 𐑤𐑧𐑓𐑑, 𐑚𐑪𐑑𐑫𐑥 𐑑 𐑑𐑪𐑐"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3012
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, left to right"
 msgstr "𐑑𐑪𐑐 𐑑 𐑚𐑪𐑑𐑫𐑥, 𐑤𐑧𐑓𐑑 𐑑 𐑮𐑲𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3012
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3507
 msgid "Top to bottom, right to left"
 msgstr "𐑑𐑪𐑐 𐑑 𐑚𐑪𐑑𐑫𐑥, 𐑮𐑲𐑑 𐑑 𐑤𐑧𐑓𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3013
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, left to right"
 msgstr "𐑚𐑪𐑑𐑫𐑥 𐑑 𐑑𐑪𐑐, 𐑤𐑧𐑓𐑑 𐑑 𐑮𐑲𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3013
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Bottom to top, right to left"
@@ -2735,28 +2659,23 @@ msgstr "𐑚𐑪𐑑𐑫𐑥 𐑑 𐑑𐑪𐑐, 𐑮𐑲𐑑 𐑑 𐑤𐑧𐑓�
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3017 ../gtk/gtkprintunixdialog.c:3030
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Page Ordering"
 msgstr "𐑐𐑱𐑡 𐑹𐑛𐑼𐑦𐑙"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "𐑤𐑧𐑓𐑑 𐑑 𐑮𐑲𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "𐑮𐑲𐑑 𐑑 𐑤𐑧𐑓𐑑"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "𐑑𐑪𐑐 𐑑 𐑚𐑪𐑑𐑫𐑥"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "𐑚𐑪𐑑𐑫𐑥 𐑑 𐑑𐑪𐑐"
@@ -2773,10 +2692,9 @@ msgstr "𐑑_𐑵-𐑕𐑲𐑛𐑩𐑛:"
 msgid "Pages per _side:"
 msgstr "𐑐𐑱𐑡𐑧𐑟 𐑐𐑻 _𐑕𐑲𐑛:"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3336
 msgid "Page or_dering:"
-msgstr "𐑐𐑱𐑡 or_dering:"
+msgstr "𐑐𐑱𐑡 _𐑹𐑛𐑼𐑦𐑙:"
 
 #: ../gtk/gtkprintunixdialog.c:3352
 msgid "_Only print:"
@@ -2815,10 +2733,9 @@ msgstr "𐑐𐑱𐑐𐑼 _𐑕𐑹𐑕:"
 msgid "Output t_ray:"
 msgstr "𐑬𐑑𐑐𐑫𐑑 𐑑_𐑮𐑱:"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3473
 msgid "Or_ientation:"
-msgstr "Or_ientation:"
+msgstr "_𐑪𐑮𐑦𐑩𐑯𐑑𐑱𐑖𐑩𐑯:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:3488
@@ -2868,14 +2785,12 @@ msgstr "𐑨_𐑑:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3601
 msgid ""
 "Specify the time of print,\n e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
-"𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞 𐑑𐑲𐑥 𐑝 𐑐𐑮𐑦𐑯𐑑,\n 𐑧.𐑡𐑰. 15:30, 2:35 𐑐𐑰𐑧𐑥, 14:15:20, 11:46:30 𐑨𐑥, 4 𐑐𐑰𐑧𐑥"
+"𐑕𐑐𐑧𐑕𐑦𐑓𐑲 𐑞 𐑑𐑲𐑥 𐑝 𐑐𐑮𐑦𐑯𐑑,\n e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
 msgstr "𐑑𐑲𐑥 𐑝 𐑐𐑮𐑦𐑯𐑑"
@@ -2884,7 +2799,6 @@ msgstr "𐑑𐑲𐑥 𐑝 𐑐𐑮𐑦𐑯𐑑"
 msgid "On _hold"
 msgstr "𐑪𐑯 _𐑣𐑴𐑤𐑛"
 
-#, fuzzy
 #: ../gtk/gtkprintunixdialog.c:3628
 msgid "Hold the job until it is explicitly released"
 msgstr "𐑣𐑴𐑤𐑛 𐑞 𐑡𐑪𐑚 𐑳𐑯𐑑𐑦𐑤 𐑦𐑑 𐑦𐑟 𐑦𐑒𐑕𐑐𐑤𐑦𐑕𐑩𐑑𐑤𐑰 𐑮𐑦𐑤𐑰𐑕𐑑"
@@ -2953,7 +2867,7 @@ msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "𐑳𐑯𐑱𐑚𐑩𐑤 𐑑 𐑤𐑴𐑒𐑱𐑑 𐑦𐑥𐑦𐑡 𐑓𐑲𐑤 𐑦𐑯 pixmap_path: \"%s\""
 
 #, c-format
-#: ../gtk/gtkrecentaction.c:154 ../gtk/gtkrecentaction.c:162
+#: ../gtk/gtkrecentaction.c:171 ../gtk/gtkrecentaction.c:179
 #: ../gtk/gtkrecentchoosermenu.c:588 ../gtk/gtkrecentchoosermenu.c:596
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "𐑞𐑦𐑕 𐑓𐑳𐑙𐑒𐑖𐑩𐑯 𐑦𐑟 𐑯𐑪𐑑 𐑦𐑥𐑐𐑤𐑩𐑥𐑧𐑯𐑑𐑩𐑛 𐑓𐑹 𐑢𐑦𐑡𐑩𐑑𐑕 𐑝 𐑒𐑤𐑭𐑕 '%s'"
@@ -3028,7 +2942,8 @@ msgstr "𐑳𐑯𐑴𐑯 𐑲𐑑𐑩𐑥"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkrecentchoosermenu.c:816
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3037,11 +2952,12 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkrecentchoosermenu.c:821
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr "%s (%s)"
+msgstr "%d. %s"
 
 #, c-format
 #: ../gtk/gtkrecentmanager.c:968 ../gtk/gtkrecentmanager.c:981
@@ -3051,37 +2967,31 @@ msgstr "%s (%s)"
 msgid "Unable to find an item with URI '%s'"
 msgstr "𐑳𐑯𐑱𐑚𐑩𐑤 𐑑 𐑓𐑲𐑯𐑛 𐑩𐑯 𐑲𐑑𐑩𐑥 𐑢𐑦𐑞 URI '%s'"
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:458
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "𐑕𐑐𐑦𐑯𐑻"
+msgstr "𐑕𐑐𐑦𐑯𐑼"
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
 msgstr "𐑐𐑮𐑩𐑝𐑲𐑛𐑟 𐑝𐑦𐑠𐑩𐑢𐑩𐑤 𐑦𐑯𐑛𐑩𐑒𐑱𐑖𐑩𐑯 𐑝 𐑐𐑮𐑴𐑜𐑮𐑧𐑕"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#, fuzzy
 #: ../gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Information"
 msgstr "𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "𐑢𐑹𐑯𐑦𐑙"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Error"
 msgstr "𐑻𐑼"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "Question"
@@ -3090,125 +3000,105 @@ msgstr "𐑒𐑢𐑧𐑕𐑑𐑦𐑩𐑯"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#, fuzzy
 #: ../gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_About"
-msgstr "_About"
+msgstr "_𐑩𐑚𐑬𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Add"
-msgstr "_Add"
+msgstr "_𐑨𐑛"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Apply"
-msgstr "_Apply"
+msgstr "_𐑩𐑐𐑤𐑲"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Bold"
-msgstr "_Bold"
+msgstr "_𐑚𐑴𐑤𐑛"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_Cancel"
-msgstr "_Cancel"
+msgstr "_𐑒𐑨𐑯𐑕𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_CD-Rom"
-msgstr "_CD-𐑮𐑭𐑥"
+msgstr "_·𐑒·𐑛-𐑮𐑭𐑥"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Clear"
-msgstr "_Clear"
+msgstr "_𐑒𐑤𐑽"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "_Close"
-msgstr "_Close"
+msgstr "_𐑒𐑤𐑴𐑟"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "C_onnect"
-msgstr "C_onnect"
+msgstr "_𐑒𐑩𐑯𐑧𐑒𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Convert"
-msgstr "_Convert"
+msgstr "_𐑒𐑩𐑯𐑝𐑻𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_Copy"
-msgstr "_Copy"
+msgstr "_𐑒𐑪𐑐𐑦"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Cu_t"
-msgstr "Cu_t"
+msgstr "_𐑒𐑳𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Delete"
-msgstr "_Delete"
+msgstr "_𐑛𐑦𐑤𐑰𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Discard"
-msgstr "_Discard"
+msgstr "_𐑛𐑦𐑕𐑒𐑭𐑮𐑛"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Disconnect"
-msgstr "_Disconnect"
+msgstr "_𐑛𐑦𐑕𐑒𐑩𐑯𐑧𐑒𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Execute"
-msgstr "_Execute"
+msgstr "_𐑧𐑒𐑕𐑩𐑒𐑿𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Edit"
-msgstr "_Edit"
+msgstr "_𐑧𐑛𐑦𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "_Find"
+msgstr "_𐑓𐑲𐑯𐑛"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "𐑓𐑲𐑯𐑛 𐑯 _Replace"
+msgstr "𐑓𐑲𐑯𐑛 𐑯 _𐑮𐑦𐑐𐑤𐑱𐑕"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
-msgstr "_Floppy"
+msgstr "_𐑓𐑤𐑪𐑐𐑦"
 
 #, fuzzy
 #: ../gtk/gtkstock.c:342
@@ -3220,63 +3110,55 @@ msgstr "_Fullscreen"
 #: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr "_Leave Fullscreen"
+msgstr "_𐑤𐑰𐑝 Fullscreen"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#, fuzzy
 #: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
-msgstr "_Bottom"
+msgstr "_𐑚𐑪𐑑𐑫𐑥"
 
 #. This is a navigation label as in "go to the first page"
-#, fuzzy
 #: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
-msgstr "_First"
+msgstr "_𐑓𐑻𐑕𐑑"
 
 #. This is a navigation label as in "go to the last page"
-#, fuzzy
 #: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
-msgstr "_Last"
+msgstr "_𐑤𐑭𐑕𐑑"
 
 #. This is a navigation label as in "go to the top of the page"
-#, fuzzy
 #: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
-msgstr "_Top"
+msgstr "_𐑑𐑪𐑐"
 
 #. This is a navigation label as in "go back"
-#, fuzzy
 #: ../gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
-msgstr "_Back"
+msgstr "_𐑚𐑨𐑒"
 
 #. This is a navigation label as in "go down"
-#, fuzzy
 #: ../gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
-msgstr "_Down"
+msgstr "_𐑛𐑬𐑯"
 
 #. This is a navigation label as in "go forward"
-#, fuzzy
 #: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
-msgstr "_Forward"
+msgstr "_𐑓𐑹𐑢𐑼𐑛"
 
 #. This is a navigation label as in "go up"
-#, fuzzy
 #: ../gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
-msgstr "_Up"
+msgstr "_𐑳𐑐"
 
 #, fuzzy
 #: ../gtk/gtkstock.c:360
@@ -3284,317 +3166,268 @@ msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Harddisk"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
-msgstr "_Help"
+msgstr "_𐑣𐑧𐑤𐑐"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_Home"
+msgstr "_𐑣𐑴𐑥"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "𐑦𐑯𐑒𐑮𐑰𐑕 𐑦𐑯𐑛𐑧𐑯𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "𐑛𐑦𐑒𐑮𐑰𐑕 𐑦𐑯𐑛𐑧𐑯𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
-msgstr "_Index"
+msgstr "_𐑦𐑯𐑛𐑧𐑒𐑕"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
-msgstr "_Information"
+msgstr "_𐑦𐑯𐑓𐑼𐑥𐑱𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr "_Italic"
+msgstr "_𐑲𐑑𐑨𐑤𐑦𐑒"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "_Jump 𐑑"
+msgstr "_𐑡𐑳𐑥𐑐 𐑑"
 
 #. This is about text justification, "centered text"
-#, fuzzy
 #: ../gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
-msgstr "_Center"
+msgstr "_𐑕𐑧𐑯𐑑𐑼"
 
 #. This is about text justification
-#, fuzzy
 #: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
-msgstr "_Fill"
+msgstr "_𐑓𐑦𐑤"
 
 #. This is about text justification, "left-justified text"
-#, fuzzy
 #: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
-msgstr "_Left"
+msgstr "_𐑤𐑧𐑓𐑑"
 
 #. This is about text justification, "right-justified text"
-#, fuzzy
 #: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
-msgstr "_Right"
+msgstr "_𐑮𐑲𐑑"
 
 #. Media label, as in "fast forward"
-#, fuzzy
 #: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
-msgstr "_Forward"
+msgstr "_𐑓𐑹𐑢𐑼𐑛"
 
 #. Media label, as in "next song"
-#, fuzzy
 #: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
-msgstr "_Next"
+msgstr "_𐑯𐑧𐑒𐑕𐑑"
 
 #. Media label, as in "pause music"
-#, fuzzy
 #: ../gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
-msgstr "P_ause"
+msgstr "_𐑐𐑷𐑟"
 
 #. Media label, as in "play music"
-#, fuzzy
 #: ../gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "_Play"
+msgstr "_𐑐𐑤𐑱"
 
 #. Media label, as in  "previous song"
-#, fuzzy
 #: ../gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
-msgstr "Pre_vious"
+msgstr "_𐑐𐑮𐑰𐑝𐑦𐑩𐑕"
 
 #. Media label
-#, fuzzy
 #: ../gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr "_Record"
+msgstr "_𐑮𐑩𐑒𐑹𐑛"
 
 #. Media label
-#, fuzzy
 #: ../gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
-msgstr "R_ewind"
+msgstr "_𐑮𐑰𐑢𐑲𐑯𐑛"
 
 #. Media label
-#, fuzzy
 #: ../gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_𐑕𐑑𐑪𐑐"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
-msgstr "_Network"
+msgstr "_𐑯𐑧𐑑𐑢𐑻𐑒"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
-msgstr "_New"
+msgstr "_𐑯𐑿"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
-msgstr "_No"
+msgstr "_𐑯𐑴"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
-msgstr "_OK"
+msgstr "_𐑴𐑒𐑱"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
-msgstr "_Open"
+msgstr "_𐑴𐑐𐑩𐑯"
 
 #. Page orientation
-#, fuzzy
 #: ../gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "𐑤𐑨𐑯𐑛𐑕𐑒𐑨𐑐"
 
 #. Page orientation
-#, fuzzy
 #: ../gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "𐑐𐑪𐑮𐑑𐑮𐑩𐑑"
 
 #. Page orientation
-#, fuzzy
 #: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "𐑮𐑰𐑝𐑻𐑕 𐑤𐑨𐑯𐑛𐑕𐑒𐑨𐑐"
 
 #. Page orientation
-#, fuzzy
 #: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "𐑮𐑰𐑝𐑻𐑕 𐑐𐑪𐑮𐑑𐑮𐑩𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "𐑐𐑱𐑡 Set_up"
+msgstr "𐑐𐑱𐑡 _𐑕𐑧𐑑𐑳𐑐"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
-msgstr "_Paste"
+msgstr "_𐑐𐑱𐑕𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
-msgstr "_Preferences"
+msgstr "_𐑐𐑮𐑧𐑓𐑼𐑩𐑯𐑕𐑩𐑟"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
-msgstr "_Print"
+msgstr "_𐑐𐑮𐑦𐑯𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr "𐑐𐑮𐑦𐑯𐑑 Pre_view"
+msgstr "𐑐𐑮𐑦𐑯𐑑 _𐑐𐑮𐑰𐑝𐑿"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
-msgstr "_Properties"
+msgstr "_𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
-msgstr "_Quit"
+msgstr "_𐑒𐑢𐑦𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "_Redo"
+msgstr "_𐑮𐑰𐑛𐑵"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
-msgstr "_Refresh"
+msgstr "_𐑮𐑰𐑓𐑮𐑧𐑖"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
-msgstr "_Remove"
+msgstr "_𐑮𐑦𐑥𐑵𐑝"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
-msgstr "_Revert"
+msgstr "_𐑮𐑦𐑝𐑻𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
-msgstr "_Save"
+msgstr "_𐑕𐑱𐑝"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "𐑕𐑱𐑝 _As"
+msgstr "𐑕𐑱𐑝 _𐑨𐑟"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
-msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 _All"
+msgstr "𐑕𐑩𐑤𐑧𐑒𐑑 _𐑷𐑤"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
-msgstr "_Color"
+msgstr "_𐑒𐑳𐑤𐑼"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
-msgstr "_Font"
+msgstr "_𐑓𐑪𐑯𐑑"
 
 #. Sorting direction
-#, fuzzy
 #: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
-msgstr "_Ascending"
+msgstr "_𐑩𐑕𐑧𐑯𐑛𐑦𐑙"
 
 #. Sorting direction
-#, fuzzy
 #: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
-msgstr "_Descending"
+msgstr "_𐑛𐑦𐑕𐑧𐑯𐑛𐑦𐑙"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr "_Spell 𐑗𐑧𐑒"
+msgstr "_𐑕𐑐𐑧𐑤 𐑗𐑧𐑒"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
-msgstr "_Stop"
+msgstr "_𐑕𐑑𐑪𐑐"
 
 #. Font variant
 #, fuzzy
@@ -3610,49 +3443,42 @@ msgid "_Undelete"
 msgstr "_Undelete"
 
 #. Font variant
-#, fuzzy
 #: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
-msgstr "_Underline"
+msgstr "_𐑩𐑯𐑛𐑻𐑤𐑲𐑯"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "_Undo"
+msgstr "_𐑳𐑯𐑛𐑵"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
-msgstr "_Yes"
+msgstr "_𐑘𐑧𐑕"
 
 #. Zoom
-#, fuzzy
 #: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
-msgstr "_Normal 𐑕𐑲𐑟"
+msgstr "_𐑯𐑹𐑥𐑩𐑤 𐑕𐑲𐑟"
 
 #. Zoom
-#, fuzzy
 #: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
-msgstr "𐑚𐑧𐑕𐑑 _Fit"
+msgstr "𐑚𐑧𐑕𐑑 _𐑓𐑦𐑑"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
-msgstr "𐑟𐑵𐑥 _In"
+msgstr "𐑟𐑵𐑥 _𐑦𐑯"
 
-#, fuzzy
 #: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
-msgstr "𐑟𐑵𐑥 _Out"
+msgstr "𐑟𐑵𐑥 _𐑬𐑑"
 
 #, c-format
 #: ../gtk/gtktextbufferrichtext.c:651
@@ -3832,12 +3658,10 @@ msgstr "𐑧𐑥𐑐𐑑𐑦"
 msgid "Volume"
 msgstr "𐑝𐑪𐑤𐑿𐑥"
 
-#, fuzzy
 #: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "𐑑𐑻𐑯𐑟 𐑝𐑪𐑤𐑿𐑥 𐑛𐑬𐑯 𐑹 𐑳𐑐"
 
-#, fuzzy
 #: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "𐑩𐑡𐑩𐑕𐑑𐑕 𐑞 𐑝𐑪𐑤𐑿𐑥"
@@ -3846,7 +3670,6 @@ msgstr "𐑩𐑡𐑩𐑕𐑑𐑕 𐑞 𐑝𐑪𐑤𐑿𐑥"
 msgid "Volume Down"
 msgstr "𐑝𐑪𐑤𐑿𐑥 𐑛𐑬𐑯"
 
-#, fuzzy
 #: ../gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "𐑛𐑦𐑒𐑮𐑰𐑕𐑩𐑟 𐑞 𐑝𐑪𐑤𐑿𐑥"
@@ -3855,7 +3678,6 @@ msgstr "𐑛𐑦𐑒𐑮𐑰𐑕𐑩𐑟 𐑞 𐑝𐑪𐑤𐑿𐑥"
 msgid "Volume Up"
 msgstr "𐑝𐑪𐑤𐑿𐑥 𐑳𐑐"
 
-#, fuzzy
 #: ../gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "𐑦𐑯𐑒𐑮𐑰𐑕𐑩𐑟 𐑞 𐑝𐑪𐑤𐑿𐑥"
@@ -3873,7 +3695,8 @@ msgstr "𐑓𐑫𐑤 𐑝𐑪𐑤𐑿𐑥"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../gtk/gtkvolumebutton.c:174
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -3883,7 +3706,7 @@ msgstr "%d %%"
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr "asme_f"
+msgstr "_asmef"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:5
@@ -4479,89 +4302,75 @@ msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr "𐑸𐑗 𐑩"
+msgstr "𐑸𐑗 A"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr "𐑸𐑗 𐑚𐑰"
+msgstr "𐑸𐑗 B"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr "𐑸𐑗 𐑕𐑰"
+msgstr "𐑸𐑗 C"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr "𐑸𐑗 𐑛𐑰"
+msgstr "𐑸𐑗 D"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr "𐑸𐑗 𐑧"
+msgstr "𐑸𐑗 E"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr "𐑚𐑰-𐑐𐑤𐑳𐑕"
+msgstr "b-𐑐𐑤𐑳𐑕"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr "𐑕𐑰"
+msgstr "c"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
-msgstr "𐑛𐑰"
+msgstr "d"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
 msgstr "𐑧"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "European edp"
 msgstr "𐑘𐑫𐑼𐑩𐑐𐑰𐑩𐑯 edp"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Executive"
 msgstr "𐑦𐑜𐑟𐑧𐑒𐑘𐑩𐑑𐑦𐑝"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr "𐑧𐑓"
+msgstr "f"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:119
@@ -4581,13 +4390,11 @@ msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "FanFold 𐑡𐑻𐑥𐑩𐑯 𐑤𐑰𐑜𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "𐑜𐑳𐑝𐑼𐑯𐑥𐑩𐑯𐑑 𐑤𐑰𐑜𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "Government Letter"
@@ -4617,13 +4424,11 @@ msgctxt "paper size"
 msgid "Index 5x8"
 msgstr "𐑦𐑯𐑛𐑧𐑒𐑕 5x8"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "𐑦𐑯𐑝𐑬𐑕"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
@@ -4633,75 +4438,67 @@ msgstr "𐑑𐑨𐑚𐑤𐑬𐑛"
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr "𐑳𐑕 𐑤𐑰𐑜𐑩𐑤"
+msgstr "US 𐑤𐑰𐑜𐑩𐑤"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "𐑳𐑕 𐑤𐑰𐑜𐑩𐑤 𐑧𐑒𐑕𐑑𐑮𐑩"
+msgstr "US 𐑤𐑰𐑜𐑩𐑤 𐑧𐑒𐑕𐑑𐑮𐑩"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
-msgstr "𐑳𐑕 𐑤𐑧𐑑𐑼"
+msgstr "US 𐑤𐑧𐑑𐑼"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "𐑳𐑕 𐑤𐑧𐑑𐑼 𐑧𐑒𐑕𐑑𐑮𐑩"
+msgstr "US 𐑤𐑧𐑑𐑼 𐑧𐑒𐑕𐑑𐑮𐑩"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr "𐑳𐑕 𐑤𐑧𐑑𐑼 𐑐𐑤𐑳𐑕"
+msgstr "US 𐑤𐑧𐑑𐑼 𐑐𐑤𐑳𐑕"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "𐑥𐑪𐑯𐑼𐑒 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#11 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#12 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#14 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#9 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "𐑐𐑻𐑕𐑩𐑯𐑩𐑤 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
@@ -4711,21 +4508,19 @@ msgstr "𐑒𐑢𐑪𐑮𐑑𐑴"
 #: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
-msgstr "𐑕𐑵𐑐𐑼 𐑩"
+msgstr "𐑕𐑵𐑐𐑼 A"
 
 #, fuzzy
 #: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
-msgstr "𐑕𐑵𐑐𐑼 𐑚𐑰"
+msgstr "𐑕𐑵𐑐𐑼 B"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "𐑢𐑲𐑛 𐑓𐑹𐑥𐑨𐑑"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "Dai-pa-kai"
@@ -4743,13 +4538,11 @@ msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Folio sp"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "𐑦𐑯𐑝𐑲𐑑 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "Italian Envelope"
@@ -4761,7 +4554,6 @@ msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-𐑒𐑵-𐑒𐑲"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
@@ -4773,7 +4565,6 @@ msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Postfix 𐑧𐑯𐑝𐑩𐑤𐑴𐑐"
 
-#, fuzzy
 #: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Small Photo"
@@ -4957,10 +4748,10 @@ msgstr "𐑓𐑲𐑤 𐑯𐑪𐑑 𐑓𐑬𐑯𐑛: %s\n"
 msgid "Not a valid icon cache: %s\n"
 msgstr "𐑯𐑪𐑑 𐑩 𐑝𐑨𐑤𐑦𐑛 𐑲𐑒𐑪𐑯 𐑒𐑨𐑖: %s\n"
 
-#, fuzzy, c-format
+#, c-format
 #: ../gtk/updateiconcache.c:1702
 msgid "No theme index file.\n"
-msgstr "𐑯𐑴 𐑔𐑰𐑥 𐑦𐑯𐑛𐑧𐑒𐑕 𐑓𐑲𐑤."
+msgstr "𐑯𐑴 𐑔𐑰𐑥 𐑦𐑯𐑛𐑧𐑒𐑕 𐑓𐑲𐑤.\n"
 
 #, c-format
 #: ../gtk/updateiconcache.c:1706
@@ -5026,166 +4817,181 @@ msgstr "𐑝𐑰𐑧𐑑𐑯𐑭𐑥𐑰𐑕 (VIQR)"
 msgid "X Input Method"
 msgstr "X 𐑦𐑯𐑐𐑫𐑑 𐑥𐑧𐑔𐑩𐑛"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:809
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1018
 msgid "Username:"
 msgstr "𐑿𐑟𐑼𐑯𐑱𐑥:"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:810
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1027
 msgid "Password:"
 msgstr "𐑐𐑭𐑕𐑢𐑼𐑛:"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:848
 msgid "Authentication is required to get a file from %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑩 𐑓𐑲𐑤 𐑓𐑮𐑪𐑥 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:852
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1040
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 '%s' 𐑪𐑯 𐑐𐑮𐑦𐑯𐑑𐑼 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:854
 msgid "Authentication is required to print a document on %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑩 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 𐑪𐑯 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:858
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑩𐑑𐑮𐑦𐑚𐑿𐑑𐑕 𐑝 𐑡𐑪𐑚 '%s'"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:860
 msgid "Authentication is required to get attributes of a job"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑩𐑑𐑮𐑦𐑚𐑿𐑑𐑕 𐑝 𐑩 𐑡𐑪𐑚"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:864
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑩𐑑𐑮𐑦𐑚𐑿𐑑𐑕 𐑝 𐑐𐑮𐑦𐑯𐑑𐑼 %s"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:866
 msgid "Authentication is required to get attributes of a printer"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑩𐑑𐑮𐑦𐑚𐑿𐑑𐑕 𐑝 𐑩 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:869
 msgid "Authentication is required to get default printer of %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑛𐑦𐑓𐑷𐑤𐑑 𐑐𐑮𐑦𐑯𐑑𐑼 𐑝 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:872
 msgid "Authentication is required to get printers from %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑜𐑧𐑑 𐑐𐑮𐑦𐑯𐑑𐑼𐑟 𐑓𐑮𐑪𐑥 %s"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:875
 msgid "Authentication is required on %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑪𐑯 %s"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1012
 msgid "Domain:"
 msgstr "𐑛𐑴𐑥𐑱𐑯:"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 msgid "Authentication is required to print document '%s'"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 '%s'"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
 msgid "Authentication is required to print this document on printer %s"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞𐑦𐑕 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑 𐑪𐑯 𐑐𐑮𐑦𐑯𐑑𐑼 %s"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 msgid "Authentication is required to print this document"
 msgstr "𐑷𐑔𐑧𐑯𐑑𐑦𐑒𐑱𐑖𐑩𐑯 𐑦𐑟 𐑮𐑦𐑒𐑢𐑲𐑼𐑛 𐑑 𐑐𐑮𐑦𐑯𐑑 𐑞𐑦𐑕 𐑛𐑪𐑒𐑿𐑥𐑩𐑯𐑑"
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1670
 msgid "Printer '%s' is low on toner."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑤𐑴 𐑪𐑯 𐑑𐑴𐑯𐑻."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
 msgid "Printer '%s' has no toner left."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑣𐑨𐑟 𐑯𐑴 𐑑𐑴𐑯𐑻 𐑤𐑧𐑓𐑑."
 
 #. Translators: "Developer" like on photo development context
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 msgid "Printer '%s' is low on developer."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑤𐑴 𐑪𐑯 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼."
 
 #. Translators: "Developer" like on photo development context
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
 msgid "Printer '%s' is out of developer."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑬𐑑 𐑝 𐑛𐑦𐑝𐑧𐑤𐑩𐑐𐑼."
 
 #. Translators: "marker" is one color bin of the printer
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑤𐑴 𐑪𐑯 𐑨𐑑 𐑤𐑰𐑕𐑑 𐑢𐑳𐑯 𐑥𐑭𐑮𐑒𐑻 𐑕𐑩𐑐𐑤𐑲."
 
 #. Translators: "marker" is one color bin of the printer
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑬𐑑 𐑝 𐑨𐑑 𐑤𐑰𐑕𐑑 𐑢𐑳𐑯 𐑥𐑭𐑮𐑒𐑻 𐑕𐑩𐑐𐑤𐑲."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
 msgid "The cover is open on printer '%s'."
 msgstr "𐑞 𐑒𐑳𐑝𐑼 𐑦𐑟 𐑴𐑐𐑩𐑯 𐑪𐑯 𐑐𐑮𐑦𐑯𐑑𐑼 '%s'."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 msgid "The door is open on printer '%s'."
 msgstr "𐑞 𐑛𐑹 𐑦𐑟 𐑴𐑐𐑩𐑯 𐑪𐑯 𐑐𐑮𐑦𐑯𐑑𐑼 '%s'."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 msgid "Printer '%s' is low on paper."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑤𐑴 𐑪𐑯 𐑐𐑱𐑐𐑼."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 msgid "Printer '%s' is out of paper."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑬𐑑 𐑝 𐑐𐑱𐑐𐑼."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 msgid "Printer '%s' is currently off-line."
-msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 𐑪𐑓𐑤𐑲𐑯"
+msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑦𐑟 𐑒𐑳𐑮𐑩𐑯𐑑𐑤𐑦 𐑪𐑓-𐑤𐑲𐑯."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 msgid "Printer '%s' may not be connected."
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 '%s' 𐑥𐑱 𐑯𐑪𐑑 𐑚𐑰 𐑒𐑩𐑯𐑧𐑒𐑑𐑩𐑛."
 
-#, fuzzy, c-format
+#, c-format
+#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
 msgid "There is a problem on printer '%s'."
 msgstr "𐑞𐑺 𐑦𐑟 𐑩 𐑐𐑮𐑪𐑚𐑤𐑩𐑥 𐑪𐑯 𐑐𐑮𐑦𐑯𐑑𐑼 '%s'."
 
 #. Translators: this is a printer status.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1994
 msgid "Paused ; Rejecting Jobs"
 msgstr "𐑐𐑷𐑟𐑛 ; 𐑮𐑦𐑡𐑧𐑒𐑑𐑦𐑙 𐑡𐑪𐑚𐑟"
 
 #. Translators: this is a printer status.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
 msgid "Rejecting Jobs"
 msgstr "𐑮𐑦𐑡𐑧𐑒𐑑𐑦𐑙 𐑡𐑪𐑚𐑟"
@@ -5206,7 +5012,6 @@ msgstr "𐑐𐑱𐑐𐑼 𐑕𐑹𐑕"
 msgid "Output Tray"
 msgstr "𐑬𐑑𐑐𐑫𐑑 𐑑𐑮𐑱"
 
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Resolution"
 msgstr "𐑮𐑧𐑟𐑩𐑤𐑵𐑖𐑩𐑯"
@@ -5221,13 +5026,11 @@ msgid "One Sided"
 msgstr "𐑢𐑳𐑯 𐑕𐑲𐑛𐑩𐑛"
 
 #. Translators: this is an option of "Two Sided"
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2790
 msgid "Long Edge (Standard)"
 msgstr "𐑤𐑪𐑙 𐑧𐑡 (𐑕𐑑𐑨𐑯𐑛𐑼𐑛)"
 
 #. Translators: this is an option of "Two Sided"
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "Short Edge (Flip)"
 msgstr "𐑖𐑹𐑑 𐑧𐑡 (𐑓𐑤𐑦𐑐)"
@@ -5268,14 +5071,12 @@ msgid "Convert to PS level 2"
 msgstr "𐑒𐑩𐑯𐑝𐑻𐑑 𐑑 PS 𐑤𐑧𐑝𐑩𐑤 2"
 
 #. Translators: this is an option of "GhostScript"
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "No pre-filtering"
 msgstr "𐑯𐑴 𐑐𐑮𐑰-𐑓𐑦𐑤𐑑𐑼𐑦𐑙"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2823
 msgid "Miscellaneous"
 msgstr "𐑥𐑦𐑕𐑩𐑤𐑱𐑯𐑰𐑩𐑕"
@@ -5303,7 +5104,6 @@ msgstr "𐑤𐑴"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3524
 msgid "Pages per Sheet"
 msgstr "𐑐𐑱𐑡𐑧𐑟 𐑐𐑻 𐑖𐑰𐑑"
@@ -5311,7 +5111,6 @@ msgstr "𐑐𐑱𐑡𐑧𐑟 𐑐𐑻 𐑖𐑰𐑑"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3561
 msgid "Job Priority"
 msgstr "·𐑡𐑴𐑚 𐑐𐑮𐑲𐑪𐑮𐑦𐑑𐑦"
@@ -5319,7 +5118,6 @@ msgstr "·𐑡𐑴𐑚 𐑐𐑮𐑲𐑪𐑮𐑦𐑑𐑦"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3572
 msgid "Billing Info"
 msgstr "𐑚𐑦𐑤𐑦𐑙 𐑦𐑯𐑓𐑴"
@@ -5358,7 +5156,6 @@ msgstr "𐑩𐑯𐑒𐑤𐑨𐑕𐑦𐑓𐑲𐑛"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3622
 msgid "Before"
 msgstr "𐑚𐑦𐑓𐑹"
@@ -5366,7 +5163,6 @@ msgstr "𐑚𐑦𐑓𐑹"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3637
 msgid "After"
 msgstr "𐑭𐑓𐑑𐑼"
@@ -5375,7 +5171,6 @@ msgstr "𐑭𐑓𐑑𐑼"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3657
 msgid "Print at"
 msgstr "𐑐𐑮𐑦𐑯𐑑 𐑨𐑑"
@@ -5383,7 +5178,6 @@ msgstr "𐑐𐑮𐑦𐑯𐑑 𐑨𐑑"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#, fuzzy
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3668
 msgid "Print at time"
 msgstr "𐑐𐑮𐑦𐑯𐑑 𐑨𐑑 𐑑𐑲𐑥"
@@ -5415,10 +5209,9 @@ msgstr "PDF"
 msgid "Postscript"
 msgstr "𐑐𐑴𐑕𐑑𐑕𐑒𐑮𐑦𐑐𐑑"
 
-#, fuzzy
 #: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
-msgstr "·𐑕·𐑝·𐑜"
+msgstr "SVG"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:582
 #: ../modules/printbackends/test/gtkprintbackendtest.c:503
@@ -5446,31 +5239,26 @@ msgid "Command Line"
 msgstr "𐑒𐑩𐑥𐑭𐑯𐑛 𐑤𐑲𐑯"
 
 #. SUN_BRANDING
-#, fuzzy
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
 msgstr "𐑐𐑮𐑦𐑯𐑑𐑼 𐑪𐑓𐑤𐑲𐑯"
 
 #. SUN_BRANDING
-#, fuzzy
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
 msgstr "𐑮𐑧𐑛𐑦 𐑑 𐑐𐑮𐑦𐑯𐑑"
 
 #. SUN_BRANDING
-#, fuzzy
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr "𐑐𐑮𐑴𐑕𐑧𐑕𐑦𐑙 𐑡𐑪𐑚"
 
 #. SUN_BRANDING
-#, fuzzy
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
 msgid "paused"
 msgstr "𐑐𐑷𐑟𐑛"
 
 #. SUN_BRANDING
-#, fuzzy
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
 msgid "unknown"
 msgstr "𐑳𐑯𐑴𐑯"
