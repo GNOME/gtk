@@ -119,6 +119,19 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
                                                             gdouble          *left,
                                                             gdouble          *right);
 
+/**
+ * GtkPrinterFunc:
+ * @printer: a #GtkPrinter
+ * @data: user data passed to gtk_enumerate_printers()
+ *
+ * The type of function passed to gtk_enumerate_printers().
+ * Note that you need to ref @printer, if you want to keep
+ * a reference to it after the function has returned.
+ *
+ * Returns: %TRUE to stop the enumeration, %FALSE to continue
+ *
+ * Since: 2.10
+ */
 typedef gboolean (*GtkPrinterFunc) (GtkPrinter *printer,
 				    gpointer    data);
 
