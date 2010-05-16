@@ -2036,6 +2036,25 @@ gdk_directfb_window_queue_translation (GdkWindow *window,
                                        gint       dx,
                                        gint       dy)
 {
+  GdkWindowObject         *private = GDK_WINDOW_OBJECT (window);
+  GdkDrawableImplDirectFB *impl    = GDK_DRAWABLE_IMPL_DIRECTFB (private->impl);
+
+  D_DEBUG_AT (GDKDFB_Window, "%s( %p, %p, %4d,%4d-%4d,%4d (%ld boxes), %d, %d )\n",
+              G_STRFUNC, window, gc,
+              GDKDFB_RECTANGLE_VALS_FROM_BOX (&region->extents),
+              region->numRects, dx, dy);
+
+  gdk_region_offset (region, dx, dy);
+  gdk_region_offset (region, private->abs_x, private->abs_y);
+
+  if (!impl->buffered)
+    temp_region_init_copy (&impl->paint_region, region);
+  else
+    gdk_region_union (&impl->paint_region, region);
+  impl->buffered = TRUE;
+
+  gdk_region_offset (region, -dx, -dy);
+  gdk_region_offset (region, -private->abs_x, -private->abs_y);
 }
 
 void
@@ -2706,32 +2725,37 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
                                              GdkWindow       *window,
                                              const GdkRegion *region)
 {
-  GdkDrawableImplDirectFB *impl;
-  GdkWindowImplDirectFB   *wimpl;
+  GdkWindowObject         *private = GDK_WINDOW_OBJECT (window);
+  /* GdkWindowImplDirectFB   *wimpl   = GDK_WINDOW_IMPL_DIRECTFB (paintable); */
+  GdkDrawableImplDirectFB *impl    = GDK_DRAWABLE_IMPL_DIRECTFB (paintable);
+  GdkRegion               *native_region;
   gint                     i;
 
-  g_assert (region != NULL );
-  wimpl = GDK_WINDOW_IMPL_DIRECTFB (paintable);
-  impl  = (GdkDrawableImplDirectFB *) wimpl;
+  g_assert (region != NULL);
 
-  if (!region)
-    return;
+  D_DEBUG_AT (GDKDFB_Window, "%s( %p, %p, %4d,%4d-%4d,%4d (%ld boxes) )\n",
+              G_STRFUNC, paintable, window,
+              GDKDFB_RECTANGLE_VALS_FROM_BOX (&region->extents),
+              region->numRects);
+  D_DEBUG_AT (GDKDFB_Window, "  -> window @ pos=%ix%i abs_pos=%ix%i\n",
+              private->x, private->y, private->abs_x, private->abs_y);
 
-  D_DEBUG_AT (GDKDFB_Window, "%s( %p ) <- %4d,%4d-%4d,%4d (%ld boxes)\n", G_STRFUNC,
-              paintable, GDKDFB_RECTANGLE_VALS_FROM_BOX (&region->extents), region->numRects);
+  native_region = gdk_region_copy (region);
+  gdk_region_offset (native_region, private->abs_x, private->abs_y);
 
-  /* When it's buffered... */
+  /* /\* When it's buffered... *\/ */
   if (impl->buffered)
     {
       /* ...we're already painting on it! */
-      g_assert (impl->paint_depth > 0);
-
       D_DEBUG_AT (GDKDFB_Window, "  -> painted  %4d,%4d-%4dx%4d (%ld boxes)\n",
                   DFB_RECTANGLE_VALS_FROM_REGION (&impl->paint_region.extents),
                   impl->paint_region.numRects);
 
-      /* Add the new region to the paint region... */
-      gdk_region_union (&impl->paint_region, region);
+      if (impl->paint_depth < 1)
+        gdk_directfb_clip_region (GDK_DRAWABLE (paintable),
+                                  NULL, NULL, &impl->clip_region);
+
+      gdk_region_union (&impl->paint_region, native_region);
     }
   else
     {
@@ -2739,10 +2763,11 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
       g_assert (impl->paint_depth == 0);
 
       /* Generate the clip region for painting around child windows. */
-      gdk_directfb_clip_region (GDK_DRAWABLE (paintable), NULL, NULL, &impl->clip_region);
+      gdk_directfb_clip_region (GDK_DRAWABLE (paintable),
+                                NULL, NULL, &impl->clip_region);
 
       /* Initialize the paint region with the new one... */
-      temp_region_init_copy (&impl->paint_region, region);
+      temp_region_init_copy (&impl->paint_region, native_region);
 
       impl->buffered = TRUE;
     }
@@ -2752,7 +2777,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
               impl->paint_region.numRects);
 
   /* ...but clip the initial/compound result against the clip region. */
-  gdk_region_intersect (&impl->paint_region, &impl->clip_region);
+  /* gdk_region_intersect (&impl->paint_region, &impl->clip_region); */
 
   D_DEBUG_AT (GDKDFB_Window, "  -> clipped  %4d,%4d-%4dx%4d (%ld boxes)\n",
               DFB_RECTANGLE_VALS_FROM_REGION (&impl->paint_region.extents),
@@ -2762,19 +2787,38 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
 
   D_DEBUG_AT (GDKDFB_Window, "  -> depth is now %d\n", impl->paint_depth);
 
-  for (i = 0; i < region->numRects; i++)
+  /*
+   * Redraw background on area which are going to be repainted.
+   *
+   * TODO: handle pixmap background
+   */
+  impl->surface->SetClip (impl->surface, NULL);
+  for (i = 0 ; i < native_region->numRects ; i++)
     {
-      GdkRegionBox *box = &region->rects[i];
+      GdkRegionBox *box = &native_region->rects[i];
 
-      D_DEBUG_AT (GDKDFB_Window, "  -> [%2d] %4d,%4d-%4dx%4d\n",
+      D_DEBUG_AT (GDKDFB_Window, "  -> clearing [%2d] %4d,%4d-%4dx%4d\n",
                   i, GDKDFB_RECTANGLE_VALS_FROM_BOX (box));
 
-      gdk_window_clear_area (window,
-                             box->x1,
-                             box->y1,
-                             box->x2 - box->x1,
-                             box->y2 - box->y1);
+      /* gdk_window_clear_area (window, */
+      /*                        box->x1, */
+      /*                        box->y1, */
+      /*                        box->x2 - box->x1, */
+      /*                        box->y2 - box->y1); */
+
+      impl->surface->SetColor (impl->surface,
+                               private->bg_color.red,
+                               private->bg_color.green,
+                               private->bg_color.blue,
+                               0xff);
+      impl->surface->FillRectangle (impl->surface,
+                                    box->x1,
+                                    box->y1,
+                                    box->x2 - box->x1,
+                                    box->y2 - box->y1);
     }
+
+  gdk_region_destroy (native_region);
 }
 
 static void
