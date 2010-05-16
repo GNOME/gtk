@@ -50,7 +50,9 @@ G_BEGIN_DECLS
  *
  * Used to specify the sorting method to be applyed to the recently
  * used resource list.
- **/
+ *
+ * Since: 2.10
+ */
 typedef enum
 {
   GTK_RECENT_SORT_NONE = 0,
@@ -67,8 +69,25 @@ typedef gint (*GtkRecentSortFunc) (GtkRecentInfo *a,
 typedef struct _GtkRecentChooser      GtkRecentChooser; /* dummy */
 typedef struct _GtkRecentChooserIface GtkRecentChooserIface;
 
+/**
+ * GTK_RECENT_CHOOSER_ERROR:
+ *
+ * Used to get the #GError quark for #GtkRecentChooser errors.
+ *
+ * Since: 2.10
+ */
 #define GTK_RECENT_CHOOSER_ERROR	(gtk_recent_chooser_error_quark ())
 
+/**
+ * GtkRecentChooserError:
+ * @GTK_RECENT_CHOOSER_ERROR_NOT_FOUND: Indicates that a file does not exist
+ * @GTK_RECENT_CHOOSER_ERROR_INVALID_URI: Indicates a malformed URI
+ *
+ * These identify the various errors that can occur while calling
+ * #GtkRecentChooser functions.
+ *
+ * Since: 2.10
+ */
 typedef enum
 {
   GTK_RECENT_CHOOSER_ERROR_NOT_FOUND,

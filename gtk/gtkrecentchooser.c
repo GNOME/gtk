@@ -33,6 +33,23 @@
 #include "gtkalias.h"
 
 
+/**
+ * SECTION:gtkrecentchooser
+ * @Short_description: Interface implemented by widgets displaying recently
+ *   used files
+ * @Title: GtkRecentChooser
+ * @See_also: #GtkRecentManager, #GtkRecentChooserDialog,
+ *   #GtkRecentChooserWidget, #GtkRecentChooserMenu
+ *
+ * #GtkRecentChooser is an interface that can be implemented by widgets
+ * displaying the list of recently used files.  In GTK+, the main objects
+ * that implement this interface are #GtkRecentChooserWidget,
+ * #GtkRecentChooserDialog and #GtkRecentChooserMenu.
+ *
+ * Recently used files are supported since GTK+ 2.10.
+ */
+
+
 enum
 {
   ITEM_ACTIVATED,
