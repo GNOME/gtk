@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: metacity\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
-"POT-Creation-Date: 2010-05-12 19:04+0000\n"
-"PO-Revision-Date: 2010-05-12 18:37 -0400\n"
+"POT-Creation-Date: 2010-05-16 01:34+0000\n"
+"PO-Revision-Date: 2010-05-16 16:06 -0400\n"
 "Last-Translator: Thomas Thurman <tthurman@gnome.org>\n"
 "Language-Team: Shavian <ubuntu-l10n-en-shaw@launchpad.net>\n"
 "MIME-Version: 1.0\n"
@@ -99,7 +99,6 @@ msgstr "𐑩 𐑐𐑶𐑯𐑑𐑼 𐑑 𐑞 𐑐𐑦𐑒𐑕𐑩𐑤 𐑛𐑱�
 msgid "Default Display"
 msgstr "𐑛𐑦𐑓𐑷𐑤𐑑 𐑛𐑩𐑕𐑐𐑤𐑱"
 
-#, fuzzy
 #: ../gdk/gdkdisplaymanager.c:104
 msgid "The default display for GDK"
 msgstr "𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑛𐑩𐑕𐑐𐑤𐑱 𐑓𐑹 GDK"
@@ -131,7 +130,7 @@ msgstr "𐑓𐑪𐑯𐑑 𐑮𐑧𐑟𐑩𐑤𐑵𐑖𐑩𐑯"
 msgid "The resolution for fonts on the screen"
 msgstr "𐑞 𐑮𐑧𐑟𐑩𐑤𐑵𐑖𐑩𐑯 𐑓𐑹 𐑓𐑪𐑯𐑑𐑕 𐑪𐑯 𐑞 𐑕𐑒𐑮𐑰𐑯"
 
-#: ../gdk/gdkwindow.c:496 ../gdk/gdkwindow.c:497
+#: ../gdk/gdkwindow.c:563 ../gdk/gdkwindow.c:564
 msgid "Cursor"
 msgstr "𐑒𐑻𐑕𐑼"
 
@@ -269,7 +268,7 @@ msgstr "𐑨𐑒𐑕𐑧𐑤𐑼𐑱𐑑𐑼 𐑢𐑦𐑡𐑩𐑑"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "𐑞 𐑢𐑦𐑡𐑩𐑑 𐑑 𐑚𐑰 𐑥𐑭𐑯𐑩𐑑𐑻𐑛 𐑓𐑹 𐑨𐑒𐑕𐑧𐑤𐑼𐑱𐑑𐑼 𐑗𐑱𐑯𐑡𐑩𐑟"
 
-#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:170 ../gtk/gtkprinter.c:111
+#: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:170 ../gtk/gtkprinter.c:130
 #: ../gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "𐑯𐑱𐑥"
@@ -326,7 +325,7 @@ msgid "The GIcon being displayed"
 msgstr "𐑞 GIcon 𐑚𐑰𐑦𐑙 𐑛𐑩𐑕𐑐𐑤𐑱𐑛"
 
 #: ../gtk/gtkaction.c:323 ../gtk/gtkcellrendererpixbuf.c:171
-#: ../gtk/gtkimage.c:326 ../gtk/gtkprinter.c:160 ../gtk/gtkstatusicon.c:242
+#: ../gtk/gtkimage.c:326 ../gtk/gtkprinter.c:179 ../gtk/gtkstatusicon.c:242
 #: ../gtk/gtkwindow.c:626
 msgid "Icon Name"
 msgstr "𐑲𐑒𐑪𐑯 𐑯𐑱𐑥"
@@ -336,11 +335,11 @@ msgstr "𐑲𐑒𐑪𐑯 𐑯𐑱𐑥"
 msgid "The name of the icon from the icon theme"
 msgstr "𐑞 𐑯𐑱𐑥 𐑝 𐑞 𐑲𐑒𐑪𐑯 𐑓𐑮𐑪𐑥 𐑞 𐑲𐑒𐑪𐑯 𐑔𐑰𐑥"
 
-#: ../gtk/gtkaction.c:331 ../gtk/gtktoolitem.c:184
+#: ../gtk/gtkaction.c:331 ../gtk/gtktoolitem.c:185
 msgid "Visible when horizontal"
 msgstr "𐑝𐑦𐑕𐑦𐑚𐑩𐑤 𐑢𐑧𐑯 𐑣𐑪𐑮𐑦𐑟𐑪𐑯𐑑𐑩𐑤"
 
-#: ../gtk/gtkaction.c:332 ../gtk/gtktoolitem.c:185
+#: ../gtk/gtkaction.c:332 ../gtk/gtktoolitem.c:186
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -360,17 +359,17 @@ msgid ""
 msgstr ""
 "𐑢𐑧𐑯 𐑑𐑮𐑵, toolitem 𐑐𐑮𐑪𐑒𐑕𐑦𐑟 𐑓𐑹 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯 𐑸 𐑮𐑧𐑐𐑮𐑩𐑟𐑧𐑯𐑑𐑩𐑛 𐑦𐑯 𐑞 𐑑𐑵𐑤𐑚𐑸 𐑴𐑝𐑼𐑓𐑤𐑴 𐑥𐑧𐑯𐑿."
 
-#: ../gtk/gtkaction.c:355 ../gtk/gtktoolitem.c:191
+#: ../gtk/gtkaction.c:355 ../gtk/gtktoolitem.c:192
 msgid "Visible when vertical"
 msgstr "𐑝𐑦𐑕𐑦𐑚𐑩𐑤 𐑢𐑧𐑯 𐑝𐑻𐑑𐑦𐑒𐑩𐑤"
 
-#: ../gtk/gtkaction.c:356 ../gtk/gtktoolitem.c:192
+#: ../gtk/gtkaction.c:356 ../gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑑𐑵𐑤𐑚𐑸 𐑲𐑑𐑩𐑥 𐑦𐑟 𐑝𐑦𐑕𐑦𐑚𐑩𐑤 𐑢𐑧𐑯 𐑞 𐑑𐑵𐑤𐑚𐑸 𐑦𐑟 𐑦𐑯 𐑩 𐑝𐑻𐑑𐑦𐑒𐑩𐑤 𐑪𐑮𐑦𐑩𐑯𐑑𐑱𐑖𐑩𐑯."
 
-#: ../gtk/gtkaction.c:363 ../gtk/gtktoolitem.c:198
+#: ../gtk/gtkaction.c:363 ../gtk/gtktoolitem.c:199
 msgid "Is important"
 msgstr "𐑦𐑟 𐑦𐑥𐑐𐑹𐑑𐑩𐑯𐑑"
 
@@ -381,7 +380,7 @@ msgid ""
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
 "𐑢𐑧𐑞𐑼 𐑞 𐑨𐑒𐑖𐑩𐑯 𐑦𐑟 𐑒𐑩𐑯𐑕𐑦𐑛𐑼𐑛 𐑦𐑥𐑐𐑹𐑑𐑩𐑯𐑑. 𐑢𐑧𐑯 𐑑𐑮𐑵, toolitem 𐑐𐑮𐑪𐑒𐑕𐑦𐑟 𐑓𐑹 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯 𐑖𐑴 "
-"𐑑𐑧𐑒𐑕𐑑 𐑦𐑯 GTK_TOOLBAR_BOTH_HORIZ 𐑥𐑴𐑛."
+"𐑑𐑧𐑒𐑕𐑑 𐑦𐑯 _GTKTOOLBAR__BOTHHORIZ 𐑥𐑴𐑛."
 
 #: ../gtk/gtkaction.c:372
 msgid "Hide if empty"
@@ -460,7 +459,7 @@ msgid "Whether to use the related actions appearance properties"
 msgstr "𐑢𐑧𐑞𐑼 𐑑 𐑿𐑕 𐑞 𐑮𐑦𐑤𐑱𐑑𐑩𐑛 𐑨𐑒𐑖𐑩𐑯𐑟 𐑩𐑐𐑽𐑩𐑯𐑕 𐑐𐑮𐑪𐑐𐑼𐑑𐑦𐑟"
 
 #: ../gtk/gtkadjustment.c:93 ../gtk/gtkcellrendererprogress.c:128
-#: ../gtk/gtkscalebutton.c:206 ../gtk/gtkspinbutton.c:269
+#: ../gtk/gtkscalebutton.c:219 ../gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "𐑝𐑨𐑤𐑿"
 
@@ -908,7 +907,7 @@ msgstr "𐑛𐑦𐑓𐑷𐑤𐑑 𐑕𐑐𐑱𐑕𐑦𐑙"
 #, fuzzy
 #: ../gtk/gtkbutton.c:450
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
-msgstr "𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑑 𐑨𐑛 𐑓𐑹 GTK_CAN_DEFAULT 𐑚𐑳𐑑𐑩𐑯𐑟"
+msgstr "𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑑 𐑨𐑛 𐑓𐑹 _GTKCAN_𐑛𐑦𐑓𐑷𐑤𐑑 𐑚𐑳𐑑𐑩𐑯𐑟"
 
 #: ../gtk/gtkbutton.c:464
 msgid "Default Outside Spacing"
@@ -920,7 +919,7 @@ msgid ""
 "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
 "the border"
 msgstr ""
-"𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑑 𐑨𐑛 𐑓𐑹 GTK_CAN_DEFAULT 𐑚𐑳𐑑𐑩𐑯𐑟 𐑞𐑨𐑑 𐑦𐑟 𐑷𐑤𐑢𐑱𐑟 𐑛𐑮𐑷𐑯 𐑬𐑑𐑕𐑲𐑛 𐑞 𐑚𐑹𐑛𐑼"
+"𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑑 𐑨𐑛 𐑓𐑹 _GTKCAN_𐑛𐑦𐑓𐑷𐑤𐑑 𐑚𐑳𐑑𐑩𐑯𐑟 𐑞𐑨𐑑 𐑦𐑟 𐑷𐑤𐑢𐑱𐑟 𐑛𐑮𐑷𐑯 𐑬𐑑𐑕𐑲𐑛 𐑞 𐑚𐑹𐑛𐑼"
 
 #: ../gtk/gtkbutton.c:470
 msgid "Child X Displacement"
@@ -1373,7 +1372,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "𐑞 𐑝𐑻𐑑𐑦𐑒𐑩𐑤 𐑑𐑧𐑒𐑕𐑑 𐑩𐑤𐑲𐑯𐑥𐑩𐑯𐑑, 𐑓𐑮𐑪𐑥 0 (𐑑𐑪𐑐) 𐑑 1 (𐑚𐑪𐑑𐑫𐑥)."
 
 #: ../gtk/gtkcellrendererprogress.c:221 ../gtk/gtkiconview.c:729
-#: ../gtk/gtkorientable.c:47 ../gtk/gtkprogressbar.c:112
+#: ../gtk/gtkorientable.c:63 ../gtk/gtkprogressbar.c:112
 #: ../gtk/gtkstatusicon.c:333 ../gtk/gtktrayicon-x11.c:122
 msgid "Orientation"
 msgstr "𐑪𐑮𐑦𐑩𐑯𐑑𐑱𐑖𐑩𐑯"
@@ -1383,7 +1382,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "𐑪𐑮𐑦𐑩𐑯𐑑𐑱𐑖𐑩𐑯 𐑯 𐑜𐑮𐑴𐑔 𐑛𐑦𐑮𐑧𐑒𐑖𐑩𐑯 𐑝 𐑞 𐑐𐑮𐑴𐑜𐑮𐑧𐑕 𐑚𐑸"
 
 #: ../gtk/gtkcellrendererspin.c:93 ../gtk/gtkrange.c:367
-#: ../gtk/gtkscalebutton.c:225 ../gtk/gtkspinbutton.c:208
+#: ../gtk/gtkscalebutton.c:238 ../gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "𐑩𐑡𐑳𐑕𐑑𐑥𐑩𐑯𐑑"
 
@@ -1410,7 +1409,7 @@ msgid "The number of decimal places to display"
 msgstr "𐑞 𐑯𐑳𐑥𐑚𐑼 𐑝 𐑛𐑧𐑕𐑦𐑥𐑩𐑤 𐑐𐑤𐑱𐑕𐑩𐑟 𐑑 𐑛𐑦𐑕𐑐𐑤𐑱"
 
 #: ../gtk/gtkcellrendererspinner.c:124 ../gtk/gtkcheckmenuitem.c:98
-#: ../gtk/gtkmenu.c:501 ../gtk/gtkspinner.c:128 ../gtk/gtktoggleaction.c:119
+#: ../gtk/gtkmenu.c:501 ../gtk/gtkspinner.c:128 ../gtk/gtktoggleaction.c:130
 #: ../gtk/gtktogglebutton.c:115 ../gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "𐑨𐑒𐑑𐑦𐑝"
@@ -1420,7 +1419,6 @@ msgstr "𐑨𐑒𐑑𐑦𐑝"
 msgid "Whether the spinner is active (ie. shown) in the cell"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑕𐑐𐑦𐑯𐑻 𐑦𐑟 𐑨𐑒𐑑𐑦𐑝 (ie. 𐑖𐑴𐑯) 𐑦𐑯 𐑞 𐑕𐑧𐑤"
 
-#, fuzzy
 #: ../gtk/gtkcellrendererspinner.c:145
 msgid "Pulse of the spinner"
 msgstr "𐑐𐑩𐑤𐑕 𐑝 𐑞 𐑕𐑐𐑦𐑯𐑻"
@@ -3169,7 +3167,7 @@ msgstr "𐑲𐑒𐑪𐑯 𐑕𐑧𐑑"
 msgid "Icon set to display"
 msgstr "𐑲𐑒𐑪𐑯 𐑕𐑧𐑑 𐑑 𐑛𐑦𐑕𐑐𐑤𐑱"
 
-#: ../gtk/gtkimage.c:284 ../gtk/gtkscalebutton.c:216 ../gtk/gtktoolbar.c:504
+#: ../gtk/gtkimage.c:284 ../gtk/gtkscalebutton.c:229 ../gtk/gtktoolbar.c:504
 #: ../gtk/gtktoolpalette.c:991
 msgid "Icon size"
 msgstr "𐑲𐑒𐑪𐑯 𐑕𐑲𐑟"
@@ -3277,7 +3275,6 @@ msgstr ""
 msgid "Pattern"
 msgstr "𐑐𐑨𐑑𐑼𐑯"
 
-#, fuzzy
 #: ../gtk/gtklabel.c:567
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
@@ -3849,7 +3846,7 @@ msgstr ""
 "𐑦𐑓 𐑑𐑮𐑵, 𐑐𐑮𐑧𐑕𐑦𐑙 𐑞 𐑮𐑲𐑑 𐑥𐑬𐑕 𐑚𐑳𐑑𐑩𐑯 𐑪𐑯 𐑞 𐑯𐑴𐑑𐑚𐑫𐑒 𐑐𐑭𐑐𐑕 𐑳𐑐 𐑩 𐑥𐑧𐑯𐑿 𐑞𐑨𐑑 𐑿 𐑒𐑨𐑯 𐑿𐑕 𐑑 𐑜𐑴 𐑑 "
 "𐑩 𐑐𐑱𐑡"
 
-#: ../gtk/gtknotebook.c:624 ../gtk/gtkradioaction.c:128
+#: ../gtk/gtknotebook.c:624 ../gtk/gtkradioaction.c:140
 #: ../gtk/gtkradiobutton.c:82 ../gtk/gtkradiomenuitem.c:353
 #: ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
@@ -3972,7 +3969,7 @@ msgid "Scroll arrow spacing"
 msgstr "𐑕𐑒𐑮𐑴𐑤 𐑨𐑮𐑴 𐑕𐑐𐑱𐑕𐑦𐑙"
 
 #, fuzzy
-#: ../gtk/gtkorientable.c:48
+#: ../gtk/gtkorientable.c:64
 msgid "The orientation of the orientable"
 msgstr "𐑞 𐑪𐑮𐑦𐑩𐑯𐑑𐑱𐑖𐑩𐑯 𐑝 𐑞 orientable"
 
@@ -4047,83 +4044,83 @@ msgstr "𐑕𐑪𐑒𐑩𐑑 𐑢𐑦𐑯𐑛𐑴"
 msgid "The window of the socket the plug is embedded in"
 msgstr "𐑞 𐑢𐑦𐑯𐑛𐑴 𐑝 𐑞 𐑕𐑪𐑒𐑩𐑑 𐑞 𐑐𐑤𐑳𐑜 𐑦𐑟 𐑧𐑥𐑚𐑧𐑛𐑦𐑛 𐑦𐑯"
 
-#: ../gtk/gtkprinter.c:112
+#: ../gtk/gtkprinter.c:131
 msgid "Name of the printer"
 msgstr "𐑯𐑱𐑥 𐑝 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:118
+#: ../gtk/gtkprinter.c:137
 msgid "Backend"
 msgstr "𐑚𐑨𐑒𐑧𐑯𐑛"
 
-#: ../gtk/gtkprinter.c:119
+#: ../gtk/gtkprinter.c:138
 msgid "Backend for the printer"
 msgstr "𐑚𐑨𐑒𐑧𐑯𐑛 𐑓𐑹 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:125
+#: ../gtk/gtkprinter.c:144
 msgid "Is Virtual"
 msgstr "𐑦𐑟 𐑝𐑻𐑗𐑫𐑩𐑤"
 
-#: ../gtk/gtkprinter.c:126
+#: ../gtk/gtkprinter.c:145
 msgid "FALSE if this represents a real hardware printer"
 msgstr "𐑓𐑷𐑤𐑕 𐑦𐑓 𐑞𐑦𐑕 𐑮𐑧𐑐𐑮𐑩𐑟𐑧𐑯𐑑𐑕 𐑩 𐑮𐑾𐑤 𐑣𐑭𐑮𐑛𐑢𐑧𐑮 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:132
+#: ../gtk/gtkprinter.c:151
 msgid "Accepts PDF"
 msgstr "𐑨𐑒𐑕𐑧𐑐𐑑𐑕 PDF"
 
-#: ../gtk/gtkprinter.c:133
+#: ../gtk/gtkprinter.c:152
 msgid "TRUE if this printer can accept PDF"
 msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑞𐑦𐑕 𐑐𐑮𐑦𐑯𐑑𐑼 𐑒𐑨𐑯 𐑨𐑒𐑕𐑧𐑐𐑑 PDF"
 
-#: ../gtk/gtkprinter.c:139
+#: ../gtk/gtkprinter.c:158
 msgid "Accepts PostScript"
 msgstr "𐑨𐑒𐑕𐑧𐑐𐑑𐑕 𐑐𐑴𐑕𐑑𐑕𐑒𐑮𐑦𐑐𐑑"
 
-#: ../gtk/gtkprinter.c:140
+#: ../gtk/gtkprinter.c:159
 msgid "TRUE if this printer can accept PostScript"
 msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑞𐑦𐑕 𐑐𐑮𐑦𐑯𐑑𐑼 𐑒𐑨𐑯 𐑨𐑒𐑕𐑧𐑐𐑑 𐑐𐑴𐑕𐑑𐑕𐑒𐑮𐑦𐑐𐑑"
 
-#: ../gtk/gtkprinter.c:146
+#: ../gtk/gtkprinter.c:165
 msgid "State Message"
 msgstr "𐑕𐑑𐑱𐑑 𐑥𐑧𐑕𐑦𐑡"
 
-#: ../gtk/gtkprinter.c:147
+#: ../gtk/gtkprinter.c:166
 msgid "String giving the current state of the printer"
 msgstr "𐑕𐑑𐑮𐑦𐑙 𐑜𐑦𐑝𐑦𐑙 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑕𐑑𐑱𐑑 𐑝 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:153
+#: ../gtk/gtkprinter.c:172
 msgid "Location"
 msgstr "𐑤𐑴𐑒𐑱𐑖𐑩𐑯"
 
-#: ../gtk/gtkprinter.c:154
+#: ../gtk/gtkprinter.c:173
 msgid "The location of the printer"
 msgstr "𐑞 𐑤𐑴𐑒𐑱𐑖𐑩𐑯 𐑝 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:161
+#: ../gtk/gtkprinter.c:180
 msgid "The icon name to use for the printer"
 msgstr "𐑞 𐑲𐑒𐑪𐑯 𐑯𐑱𐑥 𐑑 𐑿𐑕 𐑓𐑹 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:167
+#: ../gtk/gtkprinter.c:186
 msgid "Job Count"
 msgstr "𐑡𐑪𐑚 𐑒𐑬𐑯𐑑"
 
-#: ../gtk/gtkprinter.c:168
+#: ../gtk/gtkprinter.c:187
 msgid "Number of jobs queued in the printer"
 msgstr "𐑯𐑳𐑥𐑚𐑼 𐑝 𐑡𐑪𐑚𐑟 𐑒𐑿𐑛 𐑦𐑯 𐑞 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:186
+#: ../gtk/gtkprinter.c:205
 msgid "Paused Printer"
 msgstr "𐑐𐑷𐑟𐑛 𐑐𐑮𐑦𐑯𐑑𐑼"
 
-#: ../gtk/gtkprinter.c:187
+#: ../gtk/gtkprinter.c:206
 msgid "TRUE if this printer is paused"
 msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑞𐑦𐑕 𐑐𐑮𐑦𐑯𐑑𐑼 𐑦𐑟 𐑐𐑷𐑟𐑛"
 
-#: ../gtk/gtkprinter.c:200
+#: ../gtk/gtkprinter.c:219
 msgid "Accepting Jobs"
 msgstr "𐑨𐑒𐑕𐑧𐑐𐑑𐑦𐑙 𐑡𐑪𐑚𐑟"
 
-#: ../gtk/gtkprinter.c:201
+#: ../gtk/gtkprinter.c:220
 msgid "TRUE if this printer is accepting new jobs"
 msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑞𐑦𐑕 𐑐𐑮𐑦𐑯𐑑𐑼 𐑦𐑟 𐑨𐑒𐑕𐑧𐑐𐑑𐑦𐑙 𐑯𐑿 𐑡𐑪𐑚𐑟"
 
@@ -4301,7 +4298,6 @@ msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑞 𐑐𐑮𐑦𐑯𐑑 𐑪𐑐𐑼𐑱𐑖𐑩
 msgid "Has Selection"
 msgstr "𐑣𐑨𐑟 𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkprintoperation.c:1297
 msgid "TRUE if a selection exists."
 msgstr "𐑑𐑮𐑵 𐑦𐑓 𐑩 𐑕𐑦𐑤𐑧𐑒𐑖𐑩𐑯 𐑧𐑒𐑟𐑦𐑕𐑑𐑕."
@@ -4462,11 +4458,11 @@ msgstr "𐑥𐑦𐑯 𐑝𐑻𐑑𐑦𐑒𐑩𐑤 𐑚𐑸 𐑣𐑲𐑑"
 msgid "The minimum vertical height of the progress bar"
 msgstr "𐑞 𐑥𐑦𐑯𐑩𐑥𐑩𐑥 𐑝𐑻𐑑𐑦𐑒𐑩𐑤 𐑣𐑲𐑑 𐑝 𐑞 𐑐𐑮𐑴𐑜𐑮𐑧𐑕 𐑚𐑸"
 
-#: ../gtk/gtkradioaction.c:111
+#: ../gtk/gtkradioaction.c:123
 msgid "The value"
 msgstr "𐑞 𐑝𐑨𐑤𐑿"
 
-#: ../gtk/gtkradioaction.c:112
+#: ../gtk/gtkradioaction.c:124
 msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
@@ -4474,15 +4470,15 @@ msgstr ""
 "𐑞 𐑝𐑨𐑤𐑿 𐑮𐑦𐑑𐑻𐑯𐑛 𐑚𐑲 gtk_radio_action_get_current_value() 𐑢𐑧𐑯 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯 𐑦𐑟 𐑞 "
 "𐑒𐑳𐑮𐑩𐑯𐑑 𐑨𐑒𐑖𐑩𐑯 𐑝 𐑦𐑑𐑕 𐑜𐑮𐑵𐑐."
 
-#: ../gtk/gtkradioaction.c:129
+#: ../gtk/gtkradioaction.c:141
 msgid "The radio action whose group this action belongs to."
 msgstr "𐑞 𐑮𐑱𐑛𐑦𐑴 𐑨𐑒𐑖𐑩𐑯 𐑣𐑵𐑟 𐑜𐑮𐑵𐑐 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯 𐑚𐑦𐑤𐑪𐑙𐑟 𐑑."
 
-#: ../gtk/gtkradioaction.c:144
+#: ../gtk/gtkradioaction.c:156
 msgid "The current value"
 msgstr "𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑝𐑨𐑤𐑿"
 
-#: ../gtk/gtkradioaction.c:145
+#: ../gtk/gtkradioaction.c:157
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
@@ -4659,11 +4655,11 @@ msgstr "𐑨𐑮𐑴 𐑕𐑒𐑱𐑤𐑦𐑙"
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "𐑨𐑮𐑴 𐑕𐑒𐑱𐑤𐑦𐑙 𐑢𐑦𐑞 𐑮𐑦𐑜𐑸𐑛 𐑑 𐑕𐑒𐑮𐑴𐑤 𐑚𐑳𐑑𐑩𐑯 𐑕𐑲𐑟"
 
-#: ../gtk/gtkrecentaction.c:616 ../gtk/gtkrecentchoosermenu.c:227
+#: ../gtk/gtkrecentaction.c:633 ../gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "𐑖𐑴 𐑯𐑳𐑥𐑚𐑼𐑟"
 
-#: ../gtk/gtkrecentaction.c:617 ../gtk/gtkrecentchoosermenu.c:228
+#: ../gtk/gtkrecentaction.c:634 ../gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥𐑟 𐑖𐑫𐑛 𐑚𐑰 𐑛𐑩𐑕𐑐𐑤𐑱𐑛 𐑢𐑦𐑞 𐑩 𐑯𐑳𐑥𐑚𐑼"
 
@@ -4830,25 +4826,25 @@ msgstr "𐑝𐑨𐑤𐑿 𐑕𐑐𐑱𐑕𐑦𐑙"
 msgid "Space between value text and the slider/trough area"
 msgstr "𐑕𐑐𐑱𐑕 𐑚𐑦𐑑𐑢𐑰𐑯 𐑝𐑨𐑤𐑿 𐑑𐑧𐑒𐑕𐑑 𐑯 𐑞 𐑕𐑤𐑲𐑛𐑼/𐑑𐑮𐑪𐑓 𐑺𐑦𐑩"
 
-#: ../gtk/gtkscalebutton.c:207
+#: ../gtk/gtkscalebutton.c:220
 msgid "The value of the scale"
 msgstr "𐑞 𐑝𐑨𐑤𐑿 𐑝 𐑞 𐑕𐑒𐑱𐑤"
 
-#: ../gtk/gtkscalebutton.c:217
+#: ../gtk/gtkscalebutton.c:230
 msgid "The icon size"
 msgstr "𐑞 𐑲𐑒𐑪𐑯 𐑕𐑲𐑟"
 
 #, fuzzy
-#: ../gtk/gtkscalebutton.c:226
+#: ../gtk/gtkscalebutton.c:239
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "𐑞 GtkAdjustment 𐑞𐑨𐑑 𐑒𐑩𐑯𐑑𐑱𐑯𐑟 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑝𐑨𐑤𐑿 𐑝 𐑞𐑦𐑕 𐑕𐑒𐑱𐑤 𐑚𐑳𐑑𐑩𐑯 𐑩𐑚𐑡𐑧𐑒𐑑"
 
-#: ../gtk/gtkscalebutton.c:254
+#: ../gtk/gtkscalebutton.c:267
 msgid "Icons"
 msgstr "𐑲𐑒𐑪𐑯𐑟"
 
-#: ../gtk/gtkscalebutton.c:255
+#: ../gtk/gtkscalebutton.c:268
 msgid "List of icon names"
 msgstr "𐑤𐑦𐑕𐑑 𐑝 𐑲𐑒𐑪𐑯 𐑯𐑱𐑥𐑟"
 
@@ -4976,11 +4972,11 @@ msgstr ""
 "𐑢𐑺 𐑞 𐑒𐑪𐑯𐑑𐑩𐑯𐑑𐑕 𐑝 𐑕𐑒𐑮𐑴𐑤𐑛 𐑢𐑦𐑯𐑛𐑴𐑟 𐑸 𐑤𐑴𐑒𐑱𐑑𐑩𐑛 𐑢𐑦𐑞 𐑮𐑦𐑕𐑐𐑧𐑒𐑑 𐑑 𐑞 scrollbars, 𐑦𐑓 𐑯𐑪𐑑 "
 "𐑴𐑝𐑻𐑮𐑦𐑛𐑩𐑯 𐑚𐑲 𐑞 𐑕𐑒𐑮𐑴𐑤𐑛 𐑢𐑦𐑯𐑛𐑴'𐑟 𐑴𐑯 𐑐𐑤𐑱𐑕𐑥𐑩𐑯𐑑."
 
-#: ../gtk/gtkseparatortoolitem.c:105
+#: ../gtk/gtkseparatortoolitem.c:125
 msgid "Draw"
 msgstr "𐑛𐑮𐑷"
 
-#: ../gtk/gtkseparatortoolitem.c:106
+#: ../gtk/gtkseparatortoolitem.c:126
 msgid "Whether the separator is drawn, or just blank"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑕𐑧𐑐𐑼𐑱𐑑𐑼 𐑦𐑟 𐑛𐑮𐑷𐑯, 𐑹 𐑡𐑳𐑕𐑑 𐑚𐑤𐑨𐑙𐑒"
 
@@ -5467,22 +5463,18 @@ msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr "𐑢𐑧𐑞𐑼 𐑛𐑦𐑓𐑷𐑤𐑑 𐑑𐑵𐑤𐑚𐑸𐑟 𐑣𐑨𐑝 𐑑𐑧𐑒𐑕𐑑 𐑴𐑯𐑤𐑦, 𐑑𐑧𐑒𐑕𐑑 𐑯 𐑲𐑒𐑪𐑯𐑟, 𐑲𐑒𐑪𐑯𐑟 𐑴𐑯𐑤𐑦, 𐑧𐑑𐑕."
 
-#, fuzzy
 #: ../gtk/gtksettings.c:997
 msgid "Toolbar Icon Size"
 msgstr "𐑑𐑵𐑤𐑚𐑸 𐑲𐑒𐑪𐑯 𐑕𐑲𐑟"
 
-#, fuzzy
 #: ../gtk/gtksettings.c:998
 msgid "The size of icons in default toolbars."
 msgstr "𐑞 𐑕𐑲𐑟 𐑝 𐑲𐑒𐑪𐑯𐑟 𐑦𐑯 𐑛𐑦𐑓𐑷𐑤𐑑 𐑑𐑵𐑤𐑚𐑸𐑟."
 
-#, fuzzy
 #: ../gtk/gtksettings.c:1015
 msgid "Auto Mnemonics"
 msgstr "𐑷𐑑𐑴 𐑯𐑦𐑥𐑭𐑯𐑦𐑒𐑕"
 
-#, fuzzy
 #: ../gtk/gtksettings.c:1016
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
@@ -5491,12 +5483,10 @@ msgstr ""
 "𐑢𐑧𐑞𐑼 𐑯𐑦𐑥𐑭𐑯𐑦𐑒𐑕 𐑖𐑫𐑛 𐑚𐑰 𐑷𐑑𐑩𐑥𐑨𐑑𐑦𐑒𐑤𐑦 𐑖𐑴𐑯 𐑯 𐑣𐑦𐑛𐑩𐑯 𐑢𐑧𐑯 𐑞 𐑿𐑟𐑼 𐑐𐑮𐑧𐑕𐑩𐑟 𐑞 𐑯𐑦𐑥𐑭𐑯𐑦𐑒 "
 "𐑨𐑒𐑑𐑩𐑝𐑱𐑑𐑻."
 
-#, fuzzy
 #: ../gtk/gtksettings.c:1041
 msgid "Application prefers a dark theme"
 msgstr "𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑐𐑮𐑦𐑓𐑻𐑟 𐑩 𐑛𐑸𐑒 𐑔𐑰𐑥"
 
-#, fuzzy
 #: ../gtk/gtksettings.c:1042
 msgid "Whether the application prefers to have a dark theme."
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑩𐑐𐑤𐑦𐑒𐑱𐑕𐑩𐑯 𐑐𐑮𐑦𐑓𐑻𐑟 𐑑 𐑣𐑨𐑝 𐑩 𐑛𐑸𐑒 𐑔𐑰𐑥."
@@ -5575,12 +5565,10 @@ msgstr "𐑮𐑰𐑛𐑟 𐑞 𐑒𐑳𐑮𐑩𐑯𐑑 𐑝𐑨𐑤𐑿, 𐑹 �
 msgid "Style of bevel around the spin button"
 msgstr "𐑕𐑑𐑲𐑤 𐑝 𐑚𐑧𐑝𐑩𐑤 𐑩𐑮𐑬𐑯𐑛 𐑞 𐑕𐑐𐑦𐑯 𐑚𐑳𐑑𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:129
 msgid "Whether the spinner is active"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑕𐑐𐑦𐑯𐑻 𐑦𐑟 𐑨𐑒𐑑𐑦𐑝"
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:143
 msgid "Number of steps"
 msgstr "𐑯𐑳𐑥𐑚𐑼 𐑝 𐑕𐑑𐑧𐑐𐑕"
@@ -5595,12 +5583,10 @@ msgstr ""
 "𐑞 𐑯𐑳𐑥𐑚𐑼 𐑝 𐑕𐑑𐑧𐑐𐑕 𐑓𐑹 𐑞 𐑕𐑐𐑦𐑯𐑻 𐑑 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑩 𐑓𐑫𐑤 𐑤𐑵𐑐. 𐑞 𐑨𐑯𐑩𐑥𐑱𐑖𐑩𐑯 𐑢𐑦𐑤 𐑒𐑩𐑥𐑐𐑤𐑰𐑑 𐑩 𐑓𐑫𐑤 "
 "𐑕𐑲𐑒𐑩𐑤 𐑦𐑯 𐑢𐑳𐑯 𐑕𐑧𐑒𐑩𐑯𐑛 𐑚𐑲 𐑛𐑦𐑓𐑷𐑤𐑑 (𐑕𐑰 #GtkSpinner:𐑕𐑲𐑒𐑩𐑤-𐑛𐑫𐑮𐑱𐑖𐑩𐑯)."
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:159
 msgid "Animation duration"
 msgstr "𐑨𐑯𐑩𐑥𐑱𐑖𐑩𐑯 𐑛𐑫𐑮𐑱𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtkspinner.c:160
 msgid ""
 "The length of time in milliseconds for the spinner to complete a full loop"
@@ -5898,12 +5884,12 @@ msgstr "𐑑𐑧𐑒𐑕𐑑 𐑛𐑦𐑮𐑧𐑒𐑖𐑩𐑯, 𐑧.𐑡𐑰. �
 #, fuzzy
 #: ../gtk/gtktexttag.c:292
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr "𐑓𐑪𐑯𐑑 𐑕𐑑𐑲𐑤 𐑨𐑟 𐑩 PangoStyle, 𐑧.𐑡𐑰. PANGO_STYLE_ITALIC"
+msgstr "𐑓𐑪𐑯𐑑 𐑕𐑑𐑲𐑤 𐑨𐑟 𐑩 PangoStyle, 𐑧.𐑡𐑰. _PANGOSTYLE_𐑲𐑑𐑨𐑤𐑦𐑒"
 
 #, fuzzy
 #: ../gtk/gtktexttag.c:301
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr "𐑓𐑪𐑯𐑑 𐑝𐑧𐑮𐑰𐑩𐑯𐑑 𐑨𐑟 𐑩 PangoVariant, 𐑧.𐑡𐑰. PANGO_VARIANT_SMALL_CAPS"
+msgstr "𐑓𐑪𐑯𐑑 𐑝𐑧𐑮𐑰𐑩𐑯𐑑 𐑨𐑟 𐑩 PangoVariant, 𐑧.𐑡𐑰. _PANGOVARIANT__SMALLCAPS"
 
 #, fuzzy
 #: ../gtk/gtktexttag.c:310
@@ -5912,12 +5898,12 @@ msgid ""
 "PANGO_WEIGHT_BOLD"
 msgstr ""
 "𐑓𐑪𐑯𐑑 𐑢𐑱𐑑 𐑨𐑟 𐑩𐑯 𐑦𐑯𐑑𐑩𐑡𐑼, 𐑕𐑰 predefined 𐑝𐑨𐑤𐑿𐑟 𐑦𐑯 PangoWeight; 𐑓𐑹 𐑦𐑜𐑟𐑭𐑥𐑐𐑩𐑤, "
-"PANGO_WEIGHT_BOLD"
+"_PANGOWEIGHT_𐑚𐑴𐑤𐑛"
 
 #, fuzzy
 #: ../gtk/gtktexttag.c:321
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr "𐑓𐑪𐑯𐑑 𐑕𐑑𐑮𐑧𐑗 𐑨𐑟 𐑩 PangoStretch, 𐑧.𐑡𐑰. PANGO_STRETCH_CONDENSED"
+msgstr "𐑓𐑪𐑯𐑑 𐑕𐑑𐑮𐑧𐑗 𐑨𐑟 𐑩 PangoStretch, 𐑧.𐑡𐑰. _PANGOSTRETCH_𐑒𐑩𐑯𐑛𐑧𐑯𐑕𐑑"
 
 #, fuzzy
 #: ../gtk/gtktexttag.c:330
@@ -5933,7 +5919,7 @@ msgid ""
 msgstr ""
 "𐑓𐑪𐑯𐑑 𐑕𐑲𐑟 𐑨𐑟 𐑩 𐑕𐑒𐑱𐑤 𐑓𐑨𐑒𐑑𐑼 𐑮𐑧𐑤𐑩𐑑𐑦𐑝 𐑑 𐑞 𐑛𐑦𐑓𐑷𐑤𐑑 𐑓𐑪𐑯𐑑 𐑕𐑲𐑟. 𐑞𐑦𐑕 𐑐𐑮𐑪𐑐𐑼𐑤𐑦 𐑩𐑛𐑨𐑐𐑑𐑕 𐑑 "
 "𐑔𐑰𐑥 𐑗𐑱𐑯𐑡𐑩𐑟 𐑧𐑑𐑕. 𐑕𐑴 𐑦𐑟 𐑮𐑧𐑒𐑩𐑥𐑧𐑯𐑛𐑩𐑛. Pango predefines 𐑕𐑳𐑥 𐑕𐑒𐑱𐑤𐑟 𐑕𐑳𐑗 𐑨𐑟 "
-"PANGO_SCALE_X_LARGE"
+"_PANGOSCALE__XLARGE"
 
 #: ../gtk/gtktexttag.c:360 ../gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
@@ -6222,15 +6208,15 @@ msgstr "𐑻𐑼 𐑩𐑯𐑛𐑻𐑤𐑲𐑯 𐑒𐑳𐑤𐑼"
 msgid "Color with which to draw error-indication underlines"
 msgstr "𐑒𐑳𐑤𐑼 𐑢𐑦𐑞 𐑢𐑦𐑗 𐑑 𐑛𐑮𐑷 𐑻𐑼-𐑦𐑯𐑛𐑩𐑒𐑱𐑖𐑩𐑯 𐑩𐑯𐑛𐑻𐑤𐑲𐑯𐑟"
 
-#: ../gtk/gtktoggleaction.c:104
+#: ../gtk/gtktoggleaction.c:115
 msgid "Create the same proxies as a radio action"
 msgstr "𐑒𐑮𐑦𐑱𐑑 𐑞 𐑕𐑱𐑥 𐑐𐑮𐑪𐑒𐑕𐑦𐑟 𐑨𐑟 𐑩 𐑮𐑱𐑛𐑦𐑴 𐑨𐑒𐑖𐑩𐑯"
 
-#: ../gtk/gtktoggleaction.c:105
+#: ../gtk/gtktoggleaction.c:116
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑐𐑮𐑪𐑒𐑕𐑦𐑟 𐑓𐑹 𐑞𐑦𐑕 𐑨𐑒𐑖𐑩𐑯 𐑤𐑫𐑒 𐑤𐑲𐑒 𐑮𐑱𐑛𐑦𐑴 𐑨𐑒𐑖𐑩𐑯 𐑐𐑮𐑪𐑒𐑕𐑦𐑟"
 
-#: ../gtk/gtktoggleaction.c:120
+#: ../gtk/gtktoggleaction.c:131
 msgid "If the toggle action should be active in or not"
 msgstr "𐑦𐑓 𐑞 𐑑𐑪𐑜𐑩𐑤 𐑨𐑒𐑖𐑩𐑯 𐑖𐑫𐑛 𐑚𐑰 𐑨𐑒𐑑𐑦𐑝 𐑦𐑯 𐑹 𐑯𐑪𐑑"
 
@@ -6262,7 +6248,6 @@ msgstr "𐑣𐑬 𐑑 𐑛𐑮𐑷 𐑞 𐑑𐑵𐑤𐑚𐑸"
 msgid "Show Arrow"
 msgstr "𐑖𐑴 𐑨𐑮𐑴"
 
-#, fuzzy
 #: ../gtk/gtktoolbar.c:484
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "𐑦𐑓 𐑩𐑯 𐑨𐑮𐑴 𐑖𐑫𐑛 𐑚𐑰 𐑖𐑴𐑯 𐑦𐑓 𐑞 𐑑𐑵𐑤𐑚𐑸 𐑛𐑳𐑟𐑯𐑑 𐑓𐑦𐑑"
@@ -6375,7 +6360,7 @@ msgstr "𐑲𐑒𐑪𐑯 𐑕𐑐𐑱𐑕𐑦𐑙"
 msgid "Spacing in pixels between the icon and label"
 msgstr "𐑕𐑐𐑱𐑕𐑦𐑙 𐑦𐑯 𐑐𐑦𐑒𐑕𐑩𐑤𐑟 𐑚𐑦𐑑𐑢𐑰𐑯 𐑞 𐑲𐑒𐑪𐑯 𐑯 𐑤𐑱𐑚𐑩𐑤"
 
-#: ../gtk/gtktoolitem.c:199
+#: ../gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -6383,17 +6368,14 @@ msgstr ""
 "𐑢𐑧𐑞𐑼 𐑞 𐑑𐑵𐑤𐑚𐑸 𐑲𐑑𐑩𐑥 𐑦𐑟 𐑒𐑩𐑯𐑕𐑦𐑛𐑼𐑛 𐑦𐑥𐑐𐑹𐑑𐑩𐑯𐑑. 𐑢𐑧𐑯 𐑑𐑮𐑵, 𐑑𐑵𐑤𐑚𐑸 𐑚𐑳𐑑𐑩𐑯𐑟 𐑖𐑴 𐑑𐑧𐑒𐑕𐑑 𐑦𐑯 "
 "GTK_TOOLBAR_BOTH_HORIZ 𐑥𐑴𐑛"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1544
 msgid "The human-readable title of this item group"
 msgstr "𐑞 𐑣𐑿𐑥𐑩𐑯-𐑮𐑰𐑛𐑩𐑚𐑩𐑤 𐑑𐑲𐑑𐑩𐑤 𐑝 𐑞𐑦𐑕 𐑲𐑑𐑩𐑥 𐑜𐑮𐑵𐑐"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1551
 msgid "A widget to display in place of the usual label"
 msgstr "𐑩 𐑢𐑦𐑡𐑩𐑑 𐑑 𐑛𐑦𐑕𐑐𐑤𐑱 𐑦𐑯 𐑐𐑤𐑱𐑕 𐑝 𐑞 𐑿𐑠𐑿𐑩𐑤 𐑤𐑱𐑚𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1557
 msgid "Collapsed"
 msgstr "𐑒𐑩𐑤𐑨𐑐𐑕𐑑"
@@ -6413,17 +6395,14 @@ msgstr "ellipsize"
 msgid "Ellipsize for item group headers"
 msgstr "Ellipsize 𐑓𐑹 𐑲𐑑𐑩𐑥 𐑜𐑮𐑵𐑐 𐑣𐑧𐑛𐑼𐑟"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1571
 msgid "Header Relief"
 msgstr "𐑣𐑧𐑛𐑼 𐑮𐑦𐑤𐑰𐑓"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1572
 msgid "Relief of the group header button"
 msgstr "𐑮𐑦𐑤𐑰𐑓 𐑝 𐑞 𐑜𐑮𐑵𐑐 𐑣𐑧𐑛𐑼 𐑚𐑳𐑑𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1587
 msgid "Header Spacing"
 msgstr "𐑣𐑧𐑛𐑼 𐑕𐑐𐑱𐑕𐑦𐑙"
@@ -6433,93 +6412,75 @@ msgstr "𐑣𐑧𐑛𐑼 𐑕𐑐𐑱𐑕𐑦𐑙"
 msgid "Spacing between expander arrow and caption"
 msgstr "𐑕𐑐𐑱𐑕𐑦𐑙 𐑚𐑦𐑑𐑢𐑰𐑯 expander 𐑨𐑮𐑴 𐑯 𐑒𐑨𐑐𐑖𐑩𐑯"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1604
 msgid "Whether the item should receive extra space when the group grows"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥 𐑖𐑫𐑛 𐑮𐑦𐑕𐑰𐑝 𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑢𐑧𐑯 𐑞 𐑜𐑮𐑵𐑐 𐑜𐑮𐑴𐑟"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1611
 msgid "Whether the item should fill the available space"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥 𐑖𐑫𐑛 𐑓𐑦𐑤 𐑞 𐑩𐑝𐑱𐑤𐑩𐑚𐑩𐑤 𐑕𐑐𐑱𐑕"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1617
 msgid "New Row"
 msgstr "𐑯𐑿 𐑮𐑴"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1618
 msgid "Whether the item should start a new row"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥 𐑖𐑫𐑛 𐑕𐑑𐑸𐑑 𐑩 𐑯𐑿 𐑮𐑴"
 
-#, fuzzy
 #: ../gtk/gtktoolitemgroup.c:1625
 msgid "Position of the item within this group"
 msgstr "𐑐𐑩𐑟𐑦𐑖𐑩𐑯 𐑝 𐑞 𐑲𐑑𐑩𐑥 𐑢𐑦𐑞𐑦𐑯 𐑞𐑦𐑕 𐑜𐑮𐑵𐑐"
 
-#, fuzzy
 #: ../gtk/gtktoolpalette.c:992
 msgid "Size of icons in this tool palette"
 msgstr "𐑕𐑲𐑟 𐑝 𐑲𐑒𐑪𐑯𐑟 𐑦𐑯 𐑞𐑦𐑕 𐑑𐑵𐑤 𐑐𐑩𐑤𐑧𐑑"
 
-#, fuzzy
 #: ../gtk/gtktoolpalette.c:1022
 msgid "Style of items in the tool palette"
 msgstr "𐑕𐑑𐑲𐑤 𐑝 𐑲𐑑𐑩𐑥𐑟 𐑦𐑯 𐑞 𐑑𐑵𐑤 𐑐𐑩𐑤𐑧𐑑"
 
-#, fuzzy
 #: ../gtk/gtktoolpalette.c:1038
 msgid "Exclusive"
 msgstr "𐑧𐑒𐑕𐑒𐑤𐑵𐑕𐑦𐑝"
 
-#, fuzzy
 #: ../gtk/gtktoolpalette.c:1039
 msgid "Whether the item group should be the only expanded at a given time"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥 𐑜𐑮𐑵𐑐 𐑖𐑫𐑛 𐑚𐑰 𐑞 𐑴𐑯𐑤𐑦 𐑦𐑒𐑕𐑐𐑨𐑯𐑛𐑩𐑛 𐑨𐑑 𐑩 𐑜𐑦𐑝𐑩𐑯 𐑑𐑲𐑥"
 
-#, fuzzy
 #: ../gtk/gtktoolpalette.c:1054
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
 msgstr "𐑢𐑧𐑞𐑼 𐑞 𐑲𐑑𐑩𐑥 𐑜𐑮𐑵𐑐 𐑖𐑫𐑛 𐑮𐑦𐑕𐑰𐑝 𐑧𐑒𐑕𐑑𐑮𐑩 𐑕𐑐𐑱𐑕 𐑢𐑧𐑯 𐑞 𐑐𐑩𐑤𐑧𐑑 𐑜𐑮𐑴𐑟"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:132
 msgid "Foreground color for symbolic icons"
 msgstr "𐑓𐑹𐑜𐑮𐑬𐑯𐑛 𐑒𐑳𐑤𐑼 𐑓𐑹 𐑕𐑦𐑥𐑚𐑪𐑤𐑦𐑒 𐑲𐑒𐑪𐑯𐑟"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:139
 msgid "Error color"
 msgstr "𐑻𐑼 𐑒𐑳𐑤𐑼"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:140
 msgid "Error color for symbolic icons"
 msgstr "𐑻𐑼 𐑒𐑳𐑤𐑼 𐑓𐑹 𐑕𐑦𐑥𐑚𐑪𐑤𐑦𐑒 𐑲𐑒𐑪𐑯𐑟"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:147
 msgid "Warning color"
 msgstr "𐑢𐑹𐑯𐑦𐑙 𐑒𐑳𐑤𐑼"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:148
 msgid "Warning color for symbolic icons"
 msgstr "𐑢𐑹𐑯𐑦𐑙 𐑒𐑳𐑤𐑼 𐑓𐑹 𐑕𐑦𐑥𐑚𐑪𐑤𐑦𐑒 𐑲𐑒𐑪𐑯𐑟"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:155
 msgid "Success color"
 msgstr "𐑕𐑩𐑒𐑕𐑧𐑕 𐑒𐑳𐑤𐑼"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:156
 msgid "Success color for symbolic icons"
 msgstr "𐑕𐑩𐑒𐑕𐑧𐑕 𐑒𐑳𐑤𐑼 𐑓𐑹 𐑕𐑦𐑥𐑚𐑪𐑤𐑦𐑒 𐑲𐑒𐑪𐑯𐑟"
 
-#, fuzzy
 #: ../gtk/gtktrayicon-x11.c:164
 msgid "Padding that should be put around icons in the tray"
 msgstr "𐑐𐑨𐑛𐑦𐑙 𐑞𐑨𐑑 𐑖𐑫𐑛 𐑚𐑰 𐑐𐑫𐑑 𐑩𐑮𐑬𐑯𐑛 𐑲𐑒𐑪𐑯𐑟 𐑦𐑯 𐑞 𐑑𐑮𐑱"
@@ -7252,7 +7213,6 @@ msgstr "𐑿𐑯𐑰𐑒 𐑕𐑑𐑸𐑑𐑳𐑐 𐑲𐑛𐑧𐑯𐑑𐑦𐑓�
 msgid "Allow Shrink"
 msgstr "𐑩𐑤𐑬 𐑖𐑮𐑰𐑙𐑒"
 
-#, fuzzy
 #, no-c-format
 #: ../gtk/gtkwindow.c:535
 msgid ""
@@ -7321,12 +7281,10 @@ msgstr "𐑦𐑓 𐑞𐑦𐑕 𐑢𐑦𐑯𐑛𐑴 𐑖𐑫𐑛 𐑚𐑰 𐑛�
 msgid "Icon for this window"
 msgstr "𐑲𐑒𐑪𐑯 𐑓𐑹 𐑞𐑦𐑕 𐑢𐑦𐑯𐑛𐑴"
 
-#, fuzzy
 #: ../gtk/gtkwindow.c:610
 msgid "Mnemonics Visible"
 msgstr "𐑯𐑦𐑥𐑭𐑯𐑦𐑒𐑕 𐑝𐑦𐑕𐑦𐑚𐑩𐑤"
 
-#, fuzzy
 #: ../gtk/gtkwindow.c:611
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "𐑢𐑧𐑞𐑼 𐑯𐑦𐑥𐑭𐑯𐑦𐑒𐑕 𐑸 𐑒𐑳𐑮𐑩𐑯𐑑𐑤𐑦 𐑝𐑦𐑕𐑦𐑚𐑩𐑤 𐑦𐑯 𐑞𐑦𐑕 𐑢𐑦𐑯𐑛𐑴"
