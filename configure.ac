@@ -1778,7 +1778,7 @@ fi
 GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
-CAIRO_PREFIX="`pkg-config --variable=prefix cairo`"
+CAIRO_PREFIX="`$PKG_CONFIG --variable=prefix cairo`"
 
 if test $enable_explicit_deps != yes ; then
   GDK_PIXBUF_EXTRA_LIBS=
