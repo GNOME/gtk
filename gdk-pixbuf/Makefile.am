@@ -601,7 +601,7 @@ MAINTAINERCLEANFILES = 		\
 	gdk-pixbuf-enum-types.c \
 	gdk-pixbuf-marshal.h 	\
 	gdk-pixbuf-marshal.c 	\
-	gdk-pixbuf.loaders
+	loaders.cache
 
 #
 # gdk-pixbuf-enum-types.h
@@ -710,11 +710,11 @@ endif
 # after the libraries are installed in their final locations.
 install-data-hook: install-ms-lib install-def-file
 	@if $(RUN_QUERY_LOADER_TEST) ; then \
-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
-	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gdk-pixbuf.loaders ; \
+	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/loaders.cache ; \
 	else \
 	  echo "***" ; \
-	  echo "*** Warning: gdk-pixbuf.loaders not built" ; \
+	  echo "*** Warning: loaders.cache not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
 	  echo "*** system using gdk-pixbuf-query-loaders-3.0" ; \
@@ -722,27 +722,27 @@ install-data-hook: install-ms-lib install-def-file
 	fi
 
 uninstall-local: uninstall-ms-lib uninstall-def-file
-	rm -f $(DESTDIR)$(sysconfdir)/gtk-3.0/gdk-pixbuf.loaders
+	rm -f $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/loaders.cache
 
 if CROSS_COMPILING
 else
-all-local: gdk-pixbuf.loaders
+all-local: loaders.cache
 endif
 
 if BUILD_DYNAMIC_MODULES
-gdk-pixbuf.loaders: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders-3.0$(EXEEXT)
+loaders.cache: $(loader_LTLIBRARIES) gdk-pixbuf-query-loaders-3.0$(EXEEXT)
 	LOADERS=`echo libpixbufloader-*.la` ; \
 	if test "x$$LOADERS" != 'xlibpixbufloader-*.la' ; then \
-          echo "Writing a gdk-pixbuf.loader file to use when running examples before installing gdk-pixbuf."; \
-	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 $$LOADERS > ./gdk-pixbuf.loaders ;\
+          echo "Writing a loaders.cache file to use when running examples before installing gdk-pixbuf."; \
+	  $(top_builddir)/gdk-pixbuf/gdk-pixbuf-query-loaders-3.0 $$LOADERS > ./loaders.cache ;\
 	else \
           echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
-	  touch gdk-pixbuf.loaders; \
+	  touch loaders.cache; \
 	fi
 else
-gdk-pixbuf.loaders: 
+loaders.cache:
 	echo "No dynamic modules found; will use only static modules for uninstalled example programs."; \
-	touch gdk-pixbuf.loaders;
+	touch loaders.cache;
 endif
 
 -include $(top_srcdir)/git.mk

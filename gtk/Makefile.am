@@ -914,7 +914,7 @@ distclean-local:
 
 DEPS = $(gtktargetlib) $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la $(top_builddir)/gdk/$(gdktargetlib)
 
-TEST_DEPS = $(DEPS) gtk.immodules
+TEST_DEPS = $(DEPS) immodules.cache
 
 LDADDS =								\
 	$(gtktargetlib)							\
@@ -1308,7 +1308,7 @@ if CROSS_COMPILING
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
 gtk_update_icon_cache_program =							\
-	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders	\
+	GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/loaders.cache	\
 	   ./gtk-update-icon-cache-3.0
 endif
 

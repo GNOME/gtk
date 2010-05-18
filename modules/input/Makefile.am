@@ -189,13 +189,13 @@ endif
 # after the libraries are installed in their final locations.
 install-data-hook:
 	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
-	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
-	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-3.0 ; \
-	  echo "$(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules" ; \
-	  $(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules ; \
+	  echo $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
+	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
+	  echo "$(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache" ; \
+	  $(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache ; \
 	else \
 	  echo "***" ; \
-	  echo "*** Warning: gtk.immodules not built" ; \
+	  echo "*** Warning: immodules.cache not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
 	  echo "*** system using gtk-query-immodules-3.0" ; \
@@ -203,7 +203,7 @@ install-data-hook:
         fi
 
 uninstall-local:
-	rm -f $(DESTDIR)$(sysconfdir)/gtk-3.0/gtk.immodules
+	rm -f $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache
 
 if BUILD_DYNAMIC_MODULES
 
@@ -239,14 +239,14 @@ noinst_LTLIBRARIES =				\
 
 included-modules: $(noinst_LTLIBRARIES)
 
-gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > gtk.immodules
+immodules.cache: Makefile.am $(module_LTLIBRARIES)
+	$(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > immodules.cache
 
-CLEANFILES = gtk.immodules
+CLEANFILES = immodules.cache
 
 if CROSS_COMPILING
 else
-all-local: gtk.immodules
+all-local: immodules.cache
 endif
 
 -include $(top_srcdir)/git.mk

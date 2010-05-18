@@ -306,9 +306,9 @@ nevertheless.
   <para>
     Specifies the file listing the GdkPixbuf loader modules to load.
     This environment variable overrides the default value
-    <filename><replaceable>sysconfdir</replaceable>/gtk-3.0/gdk-pixbuf.loaders</filename>
-    (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when
-	  GTK+ was configured, usually <filename>/usr/local/etc</filename>.)
+	<filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/loaders.cache</filename>
+    (<replaceable>libdir</replaceable> is the sysconfdir specified when
+	GTK+ was configured, usually <filename>/usr/local/lib</filename>.)
   </para>
  </formalpara>
 

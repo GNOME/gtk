@@ -41,8 +41,8 @@ if CROSS_COMPILING
 pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
 pixbuf_csource_deps=
 else
-pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource-3.0
-pixbuf_csource_deps=$(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource-3.0 $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders
+pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/loaders.cache $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource-3.0
+pixbuf_csource_deps=$(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource-3.0 $(top_builddir)/gdk-pixbuf/loaders.cache
 endif
 
 test-inline-pixbufs.h: $(pixbuf_csource_deps) apple-red.png gnome-foot.png

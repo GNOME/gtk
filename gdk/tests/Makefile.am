@@ -5,7 +5,7 @@ NULL=
 # check_PROGRAMS=check-gdk-cairo
 check_PROGRAMS=
 TESTS=$(check_PROGRAMS)
-TESTS_ENVIRONMENT=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders
+TESTS_ENVIRONMENT=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/loaders.cache
 
 AM_CPPFLAGS=\
 	$(GDK_DEP_CFLAGS) \
