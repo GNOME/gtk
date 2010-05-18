@@ -695,7 +695,8 @@ gdk_directfb_draw_drawable (GdkDrawable *drawable,
                             gint         xdest,
                             gint         ydest,
                             gint         width,
-                            gint         height)
+                            gint         height,
+                            GdkDrawable *original_src)
 {
   GdkDrawableImplDirectFB *impl;
   GdkDrawableImplDirectFB *src_impl;
@@ -1547,16 +1548,16 @@ gdk_drawable_impl_directfb_class_init (GdkDrawableImplDirectFBClass *klass)
 
   object_class->finalize = gdk_drawable_impl_directfb_finalize;
 
-  drawable_class->create_gc      = _gdk_directfb_gc_new;
-  drawable_class->draw_rectangle = gdk_directfb_draw_rectangle;
-  drawable_class->draw_arc       = gdk_directfb_draw_arc;
-  drawable_class->draw_polygon   = gdk_directfb_draw_polygon;
-  drawable_class->draw_text      = gdk_directfb_draw_text;
-  drawable_class->draw_text_wc   = gdk_directfb_draw_text_wc;
-  drawable_class->draw_drawable  = gdk_directfb_draw_drawable;
-  drawable_class->draw_points    = gdk_directfb_draw_points;
-  drawable_class->draw_segments  = gdk_directfb_draw_segments;
-  drawable_class->draw_lines     = gdk_directfb_draw_lines;
+  drawable_class->create_gc              = _gdk_directfb_gc_new;
+  drawable_class->draw_rectangle         = gdk_directfb_draw_rectangle;
+  drawable_class->draw_arc               = gdk_directfb_draw_arc;
+  drawable_class->draw_polygon           = gdk_directfb_draw_polygon;
+  drawable_class->draw_text              = gdk_directfb_draw_text;
+  drawable_class->draw_text_wc           = gdk_directfb_draw_text_wc;
+  drawable_class->draw_drawable_with_src = gdk_directfb_draw_drawable;
+  drawable_class->draw_points            = gdk_directfb_draw_points;
+  drawable_class->draw_segments          = gdk_directfb_draw_segments;
+  drawable_class->draw_lines             = gdk_directfb_draw_lines;
 #if 0
   drawable_class->draw_glyphs             = NULL;
   drawable_class->draw_glyphs_transformed = NULL;
