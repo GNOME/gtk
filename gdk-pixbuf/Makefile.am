@@ -509,7 +509,7 @@ INCLUDES = \
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
-	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"	\
+	-DGTK_LIBDIR=\"$(libdir)\"	\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"	\
 	-DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\"	\
 	-DGTK_PREFIX=\"$(prefix)\"		\

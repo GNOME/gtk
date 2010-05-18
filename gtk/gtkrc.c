@@ -450,9 +450,9 @@ gtk_rc_get_im_module_file (void)
   if (!result)
     {
       if (im_module_file)
-	result = g_strdup (im_module_file);
+        result = g_strdup (im_module_file);
       else
-	result = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gtk.immodules", NULL);
+        result = gtk_rc_make_default_dir ("immodules.cache");
     }
 
   return result;

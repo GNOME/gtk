@@ -35,6 +35,12 @@ If called without arguments, it looks for modules in the
 If called with arguments, it looks for the specified modules. The arguments
 may be absolute or relative paths.
 </para>
+<para>
+Normally, the output of <command>gdk-pixbuf-queryloaders-3.0</command> is written
+to <filename><replaceable>libdir</replaceable>gtk-3.0/3.0.0/loaders.cache</filename>, where <application>gdk-pixbuf</application> looks for it by default. If it is written to some other
+location, the environment variable <link linkend="GDK_PIXBUF_MODULE_FILE"><envar>GDK_PIXBUF_MODULE_FILE</envar></link>
+can be set to point <application>gdk-pixbuf</application> at the file.
+</para>
 </refsect1>
 
 <refsect1><title>Environment</title>

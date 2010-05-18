@@ -34,6 +34,12 @@ module path.
 If called with arguments, it looks for the specified modules. The arguments
 may be absolute or relative paths.
 </para>
+<para>
+Normally, the output of <command>gtk-query-immodules-3.0</command> is written
+to <filename><replaceable>libdir</replaceable>gtk-3.0/3.0.0/immodules.cache</filename>, where GTK+ looks for it by default. If it is written to some other
+location, the environment variable <link linkend="GTK_IM_MODULE_FILE"><envar>GTK_IM_MODULE_FILE</envar></link>
+can be set to point GTK+ at the file.
+</para>
 </refsect1>
 
 <refsect1><title>Environment</title>

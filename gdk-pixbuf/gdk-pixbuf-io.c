@@ -55,53 +55,53 @@
 static gint 
 format_check (GdkPixbufModule *module, guchar *buffer, int size)
 {
-	int i, j;
-	gchar m;
-	GdkPixbufModulePattern *pattern;
-	gboolean anchored;
-	guchar *prefix;
-	gchar *mask;
+        int i, j;
+        gchar m;
+        GdkPixbufModulePattern *pattern;
+        gboolean anchored;
+        guchar *prefix;
+        gchar *mask;
 
-	for (pattern = module->info->signature; pattern->prefix; pattern++) {
-		if (pattern->mask && pattern->mask[0] == '*') {
-			prefix = (guchar *)pattern->prefix + 1;
-			mask = pattern->mask + 1;
-			anchored = FALSE;
-		}
-		else {
-			prefix = (guchar *)pattern->prefix;
-			mask = pattern->mask;
-			anchored = TRUE;
-		}
-		for (i = 0; i < size; i++) {
-			for (j = 0; i + j < size && prefix[j] != 0; j++) {
-				m = mask ? mask[j] : ' ';
-				if (m == ' ') {
-					if (buffer[i + j] != prefix[j])
-						break;
-				}
-				else if (m == '!') {
-					if (buffer[i + j] == prefix[j])
-						break;
-				}
-				else if (m == 'z') {
-					if (buffer[i + j] != 0)
-						break;
-				}
-				else if (m == 'n') {
-					if (buffer[i + j] == 0)
-						break;
-				}
-			} 
+        for (pattern = module->info->signature; pattern->prefix; pattern++) {
+                if (pattern->mask && pattern->mask[0] == '*') {
+                        prefix = (guchar *)pattern->prefix + 1;
+                        mask = pattern->mask + 1;
+                        anchored = FALSE;
+                }
+                else {
+                        prefix = (guchar *)pattern->prefix;
+                        mask = pattern->mask;
+                        anchored = TRUE;
+                }
+                for (i = 0; i < size; i++) {
+                        for (j = 0; i + j < size && prefix[j] != 0; j++) {
+                                m = mask ? mask[j] : ' ';
+                                if (m == ' ') {
+                                        if (buffer[i + j] != prefix[j])
+                                                break;
+                                }
+                                else if (m == '!') {
+                                        if (buffer[i + j] == prefix[j])
+                                                break;
+                                }
+                                else if (m == 'z') {
+                                        if (buffer[i + j] != 0)
+                                                break;
+                                }
+                                else if (m == 'n') {
+                                        if (buffer[i + j] == 0)
+                                                break;
+                                }
+                        } 
 
-			if (prefix[j] == 0) 
-				return pattern->relevance;
+                        if (prefix[j] == 0) 
+                                return pattern->relevance;
 
-			if (anchored)
-				break;
-		}
-	}
-	return 0;
+                        if (anchored)
+                                break;
+                }
+        }
+        return 0;
 }
 #endif
 
@@ -111,22 +111,22 @@ G_LOCK_DEFINE_STATIC (threadunsafe_loader_lock);
 gboolean
 _gdk_pixbuf_lock (GdkPixbufModule *image_module)
 {
- 	if (g_threads_got_initialized &&
-	    !(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
- 		G_LOCK (threadunsafe_loader_lock);
+        if (g_threads_got_initialized &&
+            !(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
+                G_LOCK (threadunsafe_loader_lock);
 
-		return TRUE;
- 	}
+                return TRUE;
+        }
 
-	return FALSE;
+        return FALSE;
 }
  
 void
 _gdk_pixbuf_unlock (GdkPixbufModule *image_module)
 {
-	if (!(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
-		G_UNLOCK (threadunsafe_loader_lock);
-	}
+        if (!(image_module->info->flags & GDK_PIXBUF_FORMAT_THREADSAFE)) {
+                G_UNLOCK (threadunsafe_loader_lock);
+        }
 }
 
 static GSList *file_formats = NULL;
@@ -136,12 +136,12 @@ static void gdk_pixbuf_io_init (void);
 static GSList *
 get_file_formats (void)
 {
-	G_LOCK (init_lock);
-	if (file_formats == NULL)
-		gdk_pixbuf_io_init ();
-	G_UNLOCK (init_lock);
-	
-	return file_formats;
+        G_LOCK (init_lock);
+        if (file_formats == NULL)
+                gdk_pixbuf_io_init ();
+        G_UNLOCK (init_lock);
+        
+        return file_formats;
 }
 
 
@@ -150,80 +150,80 @@ get_file_formats (void)
 static gboolean
 scan_string (const char **pos, GString *out)
 {
-	const char *p = *pos, *q = *pos;
-	char *tmp, *tmp2;
-	gboolean quoted;
-	
-	while (g_ascii_isspace (*p))
-		p++;
-	
-	if (!*p)
-		return FALSE;
-	else if (*p == '"') {
-		p++;
-		quoted = FALSE;
-		for (q = p; (*q != '"') || quoted; q++) {
-			if (!*q)
-				return FALSE;
-			quoted = (*q == '\\') && !quoted;
-		}
-		
-		tmp = g_strndup (p, q - p);
-		tmp2 = g_strcompress (tmp);
-		g_string_truncate (out, 0);
-		g_string_append (out, tmp2);
-		g_free (tmp);
-		g_free (tmp2);
-	}
-	
-	q++;
-	*pos = q;
-	
-	return TRUE;
+        const char *p = *pos, *q = *pos;
+        char *tmp, *tmp2;
+        gboolean quoted;
+        
+        while (g_ascii_isspace (*p))
+                p++;
+        
+        if (!*p)
+                return FALSE;
+        else if (*p == '"') {
+                p++;
+                quoted = FALSE;
+                for (q = p; (*q != '"') || quoted; q++) {
+                        if (!*q)
+                                return FALSE;
+                        quoted = (*q == '\\') && !quoted;
+                }
+                
+                tmp = g_strndup (p, q - p);
+                tmp2 = g_strcompress (tmp);
+                g_string_truncate (out, 0);
+                g_string_append (out, tmp2);
+                g_free (tmp);
+                g_free (tmp2);
+        }
+        
+        q++;
+        *pos = q;
+        
+        return TRUE;
 }
 
 static gboolean
 scan_int (const char **pos, int *out)
 {
-	int i = 0;
-	char buf[32];
-	const char *p = *pos;
-	
-	while (g_ascii_isspace (*p))
-		p++;
-	
-	if (*p < '0' || *p > '9')
-		return FALSE;
-	
-	while ((*p >= '0') && (*p <= '9') && i < sizeof (buf)) {
-		buf[i] = *p;
-		i++;
-		p++;
-	}
-	
-	if (i == sizeof (buf))
-  		return FALSE;
-	else
-		buf[i] = '\0';
-	
-	*out = atoi (buf);
-	
-	*pos = p;
+        int i = 0;
+        char buf[32];
+        const char *p = *pos;
+        
+        while (g_ascii_isspace (*p))
+                p++;
+        
+        if (*p < '0' || *p > '9')
+                return FALSE;
+        
+        while ((*p >= '0') && (*p <= '9') && i < sizeof (buf)) {
+                buf[i] = *p;
+                i++;
+                p++;
+        }
+        
+        if (i == sizeof (buf))
+                return FALSE;
+        else
+                buf[i] = '\0';
+        
+        *out = atoi (buf);
+        
+        *pos = p;
 
-	return TRUE;
+        return TRUE;
 }
 
 static gboolean
 skip_space (const char **pos)
 {
-	const char *p = *pos;
-	
-	while (g_ascii_isspace (*p))
-		p++;
+        const char *p = *pos;
+        
+        while (g_ascii_isspace (*p))
+                p++;
   
-	*pos = p;
-	
-	return !(*p == '\0');
+        *pos = p;
+        
+        return !(*p == '\0');
 }
   
 #ifdef G_OS_WIN32
@@ -234,14 +234,14 @@ static HMODULE gdk_pixbuf_dll;
 
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
-	 DWORD     fdwReason,
-	 LPVOID    lpvReserved)
+         DWORD     fdwReason,
+         LPVOID    lpvReserved)
 {
-	switch (fdwReason) {
-	case DLL_PROCESS_ATTACH:
-		gdk_pixbuf_dll = (HMODULE) hinstDLL;
-		break;
-	}
+        switch (fdwReason) {
+        case DLL_PROCESS_ATTACH:
+                gdk_pixbuf_dll = (HMODULE) hinstDLL;
+                break;
+        }
 
   return TRUE;
 }
@@ -252,7 +252,7 @@ get_toplevel (void)
   static char *toplevel = NULL;
 
   if (toplevel == NULL)
-	  toplevel = g_win32_get_package_installation_directory_of_module (gdk_pixbuf_dll);
+          toplevel = g_win32_get_package_installation_directory_of_module (gdk_pixbuf_dll);
 
   return toplevel;
 }
@@ -263,7 +263,7 @@ get_sysconfdir (void)
   static char *sysconfdir = NULL;
 
   if (sysconfdir == NULL)
-	  sysconfdir = g_build_filename (get_toplevel (), "etc", NULL);
+          sysconfdir = g_build_filename (get_toplevel (), "etc", NULL);
 
   return sysconfdir;
 }
@@ -277,12 +277,12 @@ correct_prefix (gchar **path)
   if (strncmp (*path, GTK_PREFIX "/", strlen (GTK_PREFIX "/")) == 0 ||
       strncmp (*path, GTK_PREFIX "\\", strlen (GTK_PREFIX "\\")) == 0)
     {
-	  gchar *tem = NULL;
+          gchar *tem = NULL;
       if (strlen(*path) > 5 && strncmp (*path - 5, ".libs", 5) == 0)
         {
           /* We are being run from inside the build tree, and shouldn't mess about. */
           return;
-	}
+        }
 
       /* This is an entry put there by gdk-pixbuf-query-loaders on the
        * packager's system. On Windows a prebuilt GTK+ package can be
@@ -305,269 +305,269 @@ gdk_pixbuf_get_module_file (void)
   gchar *result = g_strdup (g_getenv ("GDK_PIXBUF_MODULE_FILE"));
 
   if (!result)
-	  result = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "gdk-pixbuf.loaders", NULL);
+          result = g_build_filename (GTK_LIBDIR, "gtk-3.0", GTK_BINARY_VERSION, "loaders.cache", NULL);
 
   return result;
 }
 
-#endif	/* USE_GMODULE */
+#endif  /* USE_GMODULE */
 
 
 static gboolean
 gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
-				 GError         **error);
+                                 GError         **error);
 
 static void 
 gdk_pixbuf_io_init (void)
 {
 #ifdef USE_GMODULE
-	GIOChannel *channel;
-	gchar *line_buf;
-	gsize term;
-	GString *tmp_buf = g_string_new (NULL);
-	gboolean have_error = FALSE;
-	GdkPixbufModule *module = NULL;
-	gchar *filename = gdk_pixbuf_get_module_file ();
-	int flags;
-	int n_patterns = 0;
-	GdkPixbufModulePattern *pattern;
-	GError *error = NULL;
+        GIOChannel *channel;
+        gchar *line_buf;
+        gsize term;
+        GString *tmp_buf = g_string_new (NULL);
+        gboolean have_error = FALSE;
+        GdkPixbufModule *module = NULL;
+        gchar *filename = gdk_pixbuf_get_module_file ();
+        int flags;
+        int n_patterns = 0;
+        GdkPixbufModulePattern *pattern;
+        GError *error = NULL;
 #endif
-	GdkPixbufModule *builtin_module ;
+        GdkPixbufModule *builtin_module ;
 
         /*  initialize on separate line to avoid compiler warnings in the
          *  common case of no compiled-in modules.
          */
-	builtin_module = NULL;
+        builtin_module = NULL;
 
-#define load_one_builtin_module(format)					\
-	builtin_module = g_new0 (GdkPixbufModule, 1);			\
-	builtin_module->module_name = #format;				\
-	if (gdk_pixbuf_load_module_unlocked (builtin_module, NULL))		\
-		file_formats = g_slist_prepend (file_formats, builtin_module);\
-	else								\
-		g_free (builtin_module)
+#define load_one_builtin_module(format)                                 \
+        builtin_module = g_new0 (GdkPixbufModule, 1);                   \
+        builtin_module->module_name = #format;                          \
+        if (gdk_pixbuf_load_module_unlocked (builtin_module, NULL))             \
+                file_formats = g_slist_prepend (file_formats, builtin_module);\
+        else                                                            \
+                g_free (builtin_module)
 
 #ifdef INCLUDE_ani
-	load_one_builtin_module (ani);
+        load_one_builtin_module (ani);
 #endif
 #ifdef INCLUDE_png
-	load_one_builtin_module (png);
+        load_one_builtin_module (png);
 #endif
 #ifdef INCLUDE_bmp
-	load_one_builtin_module (bmp);
+        load_one_builtin_module (bmp);
 #endif
 #ifdef INCLUDE_wbmp
-	load_one_builtin_module (wbmp);
+        load_one_builtin_module (wbmp);
 #endif
 #ifdef INCLUDE_gif
-	load_one_builtin_module (gif);
+        load_one_builtin_module (gif);
 #endif
 #ifdef INCLUDE_ico
-	load_one_builtin_module (ico);
+        load_one_builtin_module (ico);
 #endif
 #ifdef INCLUDE_jpeg
-	load_one_builtin_module (jpeg);
+        load_one_builtin_module (jpeg);
 #endif
 #ifdef INCLUDE_pnm
-	load_one_builtin_module (pnm);
+        load_one_builtin_module (pnm);
 #endif
 #ifdef INCLUDE_ras
-	load_one_builtin_module (ras);
+        load_one_builtin_module (ras);
 #endif
 #ifdef INCLUDE_tiff
-	load_one_builtin_module (tiff);
+        load_one_builtin_module (tiff);
 #endif
 #ifdef INCLUDE_xpm
-	load_one_builtin_module (xpm);
+        load_one_builtin_module (xpm);
 #endif
 #ifdef INCLUDE_xbm
-	load_one_builtin_module (xbm);
+        load_one_builtin_module (xbm);
 #endif
 #ifdef INCLUDE_tga
-	load_one_builtin_module (tga);
+        load_one_builtin_module (tga);
 #endif
 #ifdef INCLUDE_pcx
-	load_one_builtin_module (pcx);
+        load_one_builtin_module (pcx);
 #endif
 #ifdef INCLUDE_icns
-	load_one_builtin_module (icns);
+        load_one_builtin_module (icns);
 #endif
 #ifdef INCLUDE_jasper
-	load_one_builtin_module (jasper);
+        load_one_builtin_module (jasper);
 #endif
 #ifdef INCLUDE_qtif
-	load_one_builtin_module (qtif);
+        load_one_builtin_module (qtif);
 #endif
 #ifdef INCLUDE_gdiplus
-	/* We don't bother having the GDI+ loaders individually selectable
-	 * for building in or not.
-	 */
-	load_one_builtin_module (ico);
-	load_one_builtin_module (wmf);
-	load_one_builtin_module (emf);
-	load_one_builtin_module (bmp);
-	load_one_builtin_module (gif);
-	load_one_builtin_module (jpeg);
-	load_one_builtin_module (tiff);
+        /* We don't bother having the GDI+ loaders individually selectable
+         * for building in or not.
+         */
+        load_one_builtin_module (ico);
+        load_one_builtin_module (wmf);
+        load_one_builtin_module (emf);
+        load_one_builtin_module (bmp);
+        load_one_builtin_module (gif);
+        load_one_builtin_module (jpeg);
+        load_one_builtin_module (tiff);
 #endif
 #ifdef INCLUDE_gdip_png
-	/* Except the gdip-png loader which normally isn't built at all even */
-	load_one_builtin_module (png);
+        /* Except the gdip-png loader which normally isn't built at all even */
+        load_one_builtin_module (png);
 #endif
 
 #undef load_one_builtin_module
 
 #ifdef USE_GMODULE
-	channel = g_io_channel_new_file (filename, "r",  &error);
-	if (!channel) {
-		/* Don't bother warning if we have some built-in loaders */
-		if (file_formats == NULL)
-			g_warning ("Cannot open pixbuf loader module file '%s': %s",
-				   filename, error->message);
-		g_string_free (tmp_buf, TRUE);
-		g_free (filename);
-		return;
-	}
-	
-	while (!have_error && g_io_channel_read_line (channel, &line_buf, NULL, &term, NULL) == G_IO_STATUS_NORMAL) {
-		const char *p;
-		
-		p = line_buf;
+        channel = g_io_channel_new_file (filename, "r",  &error);
+        if (!channel) {
+                /* Don't bother warning if we have some built-in loaders */
+                if (file_formats == NULL)
+                        g_warning ("Cannot open pixbuf loader module file '%s': %s",
+                                   filename, error->message);
+                g_string_free (tmp_buf, TRUE);
+                g_free (filename);
+                return;
+        }
+        
+        while (!have_error && g_io_channel_read_line (channel, &line_buf, NULL, &term, NULL) == G_IO_STATUS_NORMAL) {
+                const char *p;
+                
+                p = line_buf;
 
-		line_buf[term] = 0;
+                line_buf[term] = 0;
 
-		if (!skip_space (&p)) {
-				/* Blank line marking the end of a module
-				 */
-			if (module && *p != '#') {
+                if (!skip_space (&p)) {
+                                /* Blank line marking the end of a module
+                                 */
+                        if (module && *p != '#') {
 #ifdef G_OS_WIN32
-				correct_prefix (&module->module_path);
+                                correct_prefix (&module->module_path);
 #endif
-				file_formats = g_slist_prepend (file_formats, module);
-				module = NULL;
-			}
-			
-			goto next_line;
-		}
+                                file_formats = g_slist_prepend (file_formats, module);
+                                module = NULL;
+                        }
+                        
+                        goto next_line;
+                }
 
-		if (*p == '#') 
-			goto next_line;
-		
-		if (!module) {
-				/* Read a module location
-				 */
-			module = g_new0 (GdkPixbufModule, 1);
-			n_patterns = 0;
-			
-			if (!scan_string (&p, tmp_buf)) {
-				g_warning ("Error parsing loader info in '%s'\n  %s", 
-					   filename, line_buf);
-				have_error = TRUE;
-			}
-			module->module_path = g_strdup (tmp_buf->str);
-		}
-		else if (!module->module_name) {
-			module->info = g_new0 (GdkPixbufFormat, 1);
-			if (!scan_string (&p, tmp_buf)) {
-				g_warning ("Error parsing loader info in '%s'\n  %s", 
-					   filename, line_buf);
-				have_error = TRUE;
-			}
-			module->info->name =  g_strdup (tmp_buf->str);
-			module->module_name = module->info->name;
+                if (*p == '#') 
+                        goto next_line;
+                
+                if (!module) {
+                                /* Read a module location
+                                 */
+                        module = g_new0 (GdkPixbufModule, 1);
+                        n_patterns = 0;
+                        
+                        if (!scan_string (&p, tmp_buf)) {
+                                g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                           filename, line_buf);
+                                have_error = TRUE;
+                        }
+                        module->module_path = g_strdup (tmp_buf->str);
+                }
+                else if (!module->module_name) {
+                        module->info = g_new0 (GdkPixbufFormat, 1);
+                        if (!scan_string (&p, tmp_buf)) {
+                                g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                           filename, line_buf);
+                                have_error = TRUE;
+                        }
+                        module->info->name =  g_strdup (tmp_buf->str);
+                        module->module_name = module->info->name;
 
-			if (!scan_int (&p, &flags)) {
-				g_warning ("Error parsing loader info in '%s'\n  %s", 
-					   filename, line_buf);
-				have_error = TRUE;
-			}
-			module->info->flags = flags;
-			
-			if (!scan_string (&p, tmp_buf)) {
-				g_warning ("Error parsing loader info in '%s'\n  %s", 
-					   filename, line_buf);
-				have_error = TRUE;
-			}			
-			if (tmp_buf->str[0] != 0)
-				module->info->domain = g_strdup (tmp_buf->str);
+                        if (!scan_int (&p, &flags)) {
+                                g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                           filename, line_buf);
+                                have_error = TRUE;
+                        }
+                        module->info->flags = flags;
+                        
+                        if (!scan_string (&p, tmp_buf)) {
+                                g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                           filename, line_buf);
+                                have_error = TRUE;
+                        }                       
+                        if (tmp_buf->str[0] != 0)
+                                module->info->domain = g_strdup (tmp_buf->str);
 
-			if (!scan_string (&p, tmp_buf)) {
-				g_warning ("Error parsing loader info in '%s'\n  %s", 
-					   filename, line_buf);
-				have_error = TRUE;
-			}			
-			module->info->description = g_strdup (tmp_buf->str);
+                        if (!scan_string (&p, tmp_buf)) {
+                                g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                           filename, line_buf);
+                                have_error = TRUE;
+                        }                       
+                        module->info->description = g_strdup (tmp_buf->str);
 
-			if (scan_string (&p, tmp_buf)) {
-				module->info->license = g_strdup (tmp_buf->str);
-			}
-		}
-		else if (!module->info->mime_types) {
-			int n = 1;
-			module->info->mime_types = g_new0 (gchar*, 1);
-			while (scan_string (&p, tmp_buf)) {
-				if (tmp_buf->str[0] != 0) {
-					module->info->mime_types =
-						g_realloc (module->info->mime_types, (n + 1) * sizeof (gchar*));
-					module->info->mime_types[n - 1] = g_strdup (tmp_buf->str);
-					module->info->mime_types[n] = NULL;
-					n++;
-				}
-			}
-		}
-		else if (!module->info->extensions) {
-			int n = 1;
-			module->info->extensions = g_new0 (gchar*, 1);
-			while (scan_string (&p, tmp_buf)) {
-				if (tmp_buf->str[0] != 0) {
-					module->info->extensions =
-						g_realloc (module->info->extensions, (n + 1) * sizeof (gchar*));
-					module->info->extensions[n - 1] = g_strdup (tmp_buf->str);
-					module->info->extensions[n] = NULL;
-					n++;
-				}
-			}
-		}
-		else {
-			n_patterns++;
-			module->info->signature = (GdkPixbufModulePattern *)
-				g_realloc (module->info->signature, (n_patterns + 1) * sizeof (GdkPixbufModulePattern));
-			pattern = module->info->signature + n_patterns;
-			pattern->prefix = NULL;
-			pattern->mask = NULL;
-			pattern->relevance = 0;
-			pattern--;
-			if (!scan_string (&p, tmp_buf))
-				goto context_error;
-			pattern->prefix = g_strdup (tmp_buf->str);
-			
-			if (!scan_string (&p, tmp_buf))
-				goto context_error;
-			if (*tmp_buf->str)
-				pattern->mask = g_strdup (tmp_buf->str);
-			else
-				pattern->mask = NULL;
-			
-			if (!scan_int (&p, &pattern->relevance))
-				goto context_error;
-			
-			goto next_line;
+                        if (scan_string (&p, tmp_buf)) {
+                                module->info->license = g_strdup (tmp_buf->str);
+                        }
+                }
+                else if (!module->info->mime_types) {
+                        int n = 1;
+                        module->info->mime_types = g_new0 (gchar*, 1);
+                        while (scan_string (&p, tmp_buf)) {
+                                if (tmp_buf->str[0] != 0) {
+                                        module->info->mime_types =
+                                                g_realloc (module->info->mime_types, (n + 1) * sizeof (gchar*));
+                                        module->info->mime_types[n - 1] = g_strdup (tmp_buf->str);
+                                        module->info->mime_types[n] = NULL;
+                                        n++;
+                                }
+                        }
+                }
+                else if (!module->info->extensions) {
+                        int n = 1;
+                        module->info->extensions = g_new0 (gchar*, 1);
+                        while (scan_string (&p, tmp_buf)) {
+                                if (tmp_buf->str[0] != 0) {
+                                        module->info->extensions =
+                                                g_realloc (module->info->extensions, (n + 1) * sizeof (gchar*));
+                                        module->info->extensions[n - 1] = g_strdup (tmp_buf->str);
+                                        module->info->extensions[n] = NULL;
+                                        n++;
+                                }
+                        }
+                }
+                else {
+                        n_patterns++;
+                        module->info->signature = (GdkPixbufModulePattern *)
+                                g_realloc (module->info->signature, (n_patterns + 1) * sizeof (GdkPixbufModulePattern));
+                        pattern = module->info->signature + n_patterns;
+                        pattern->prefix = NULL;
+                        pattern->mask = NULL;
+                        pattern->relevance = 0;
+                        pattern--;
+                        if (!scan_string (&p, tmp_buf))
+                                goto context_error;
+                        pattern->prefix = g_strdup (tmp_buf->str);
+                        
+                        if (!scan_string (&p, tmp_buf))
+                                goto context_error;
+                        if (*tmp_buf->str)
+                                pattern->mask = g_strdup (tmp_buf->str);
+                        else
+                                pattern->mask = NULL;
+                        
+                        if (!scan_int (&p, &pattern->relevance))
+                                goto context_error;
+                        
+                        goto next_line;
 
-		context_error:
-			g_free (pattern->prefix);
-			g_free (pattern->mask);
-			g_free (pattern);
-			g_warning ("Error parsing loader info in '%s'\n  %s", 
-				   filename, line_buf);
-			have_error = TRUE;
-		}
-	next_line:
-		g_free (line_buf);
-	}
-	g_string_free (tmp_buf, TRUE);
-	g_io_channel_unref (channel);
-	g_free (filename);
+                context_error:
+                        g_free (pattern->prefix);
+                        g_free (pattern->mask);
+                        g_free (pattern);
+                        g_warning ("Error parsing loader info in '%s'\n  %s", 
+                                   filename, line_buf);
+                        have_error = TRUE;
+                }
+        next_line:
+                g_free (line_buf);
+        }
+        g_string_free (tmp_buf, TRUE);
+        g_io_channel_unref (channel);
+        g_free (filename);
 #endif
 }
 
@@ -609,161 +609,161 @@ module (gdip_tiff);
 /* perhaps these actions should be combined in one function           */
 static gboolean
 gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
-				 GError         **error)
+                                 GError         **error)
 {
-	GdkPixbufModuleFillInfoFunc fill_info = NULL;
+        GdkPixbufModuleFillInfoFunc fill_info = NULL;
         GdkPixbufModuleFillVtableFunc fill_vtable = NULL;
-		
+                
         if (image_module->module != NULL)
                return TRUE;
 
-#define try_module(format,id)						\
-	if (fill_info == NULL &&					\
-	    strcmp (image_module->module_name, #format) == 0) {		\
-                fill_info = _gdk_pixbuf__##id##_fill_info;		\
-                fill_vtable = _gdk_pixbuf__##id##_fill_vtable;	\
-	}
-#ifdef INCLUDE_png	
-	try_module (png,png);
+#define try_module(format,id)                                           \
+        if (fill_info == NULL &&                                        \
+            strcmp (image_module->module_name, #format) == 0) {         \
+                fill_info = _gdk_pixbuf__##id##_fill_info;              \
+                fill_vtable = _gdk_pixbuf__##id##_fill_vtable;  \
+        }
+#ifdef INCLUDE_png      
+        try_module (png,png);
 #endif
 #ifdef INCLUDE_bmp
-	try_module (bmp,bmp);
+        try_module (bmp,bmp);
 #endif
 #ifdef INCLUDE_wbmp
-	try_module (wbmp,wbmp);
+        try_module (wbmp,wbmp);
 #endif
 #ifdef INCLUDE_gif
-	try_module (gif,gif);
+        try_module (gif,gif);
 #endif
 #ifdef INCLUDE_ico
-	try_module (ico,ico);
+        try_module (ico,ico);
 #endif
 #ifdef INCLUDE_ani
-	try_module (ani,ani);
+        try_module (ani,ani);
 #endif
 #ifdef INCLUDE_jpeg
-	try_module (jpeg,jpeg);
+        try_module (jpeg,jpeg);
 #endif
 #ifdef INCLUDE_pnm
-	try_module (pnm,pnm);
+        try_module (pnm,pnm);
 #endif
 #ifdef INCLUDE_ras
-	try_module (ras,ras);
+        try_module (ras,ras);
 #endif
 #ifdef INCLUDE_tiff
-	try_module (tiff,tiff);
+        try_module (tiff,tiff);
 #endif
 #ifdef INCLUDE_xpm
-	try_module (xpm,xpm);
+        try_module (xpm,xpm);
 #endif
 #ifdef INCLUDE_xbm
-	try_module (xbm,xbm);
+        try_module (xbm,xbm);
 #endif
 #ifdef INCLUDE_tga
-	try_module (tga,tga);
+        try_module (tga,tga);
 #endif
 #ifdef INCLUDE_pcx
-	try_module (pcx,pcx);
+        try_module (pcx,pcx);
 #endif
 #ifdef INCLUDE_icns
-	try_module (icns,icns);
+        try_module (icns,icns);
 #endif
 #ifdef INCLUDE_jasper
-	try_module (jasper,jasper);
+        try_module (jasper,jasper);
 #endif
 #ifdef INCLUDE_qtif
-	try_module (qtif,qtif);
+        try_module (qtif,qtif);
 #endif
 #ifdef INCLUDE_gdiplus
-	try_module (ico,gdip_ico);
-	try_module (wmf,gdip_wmf);
-	try_module (emf,gdip_emf);
-	try_module (bmp,gdip_bmp);
-	try_module (gif,gdip_gif);
-	try_module (jpeg,gdip_jpeg);
-	try_module (tiff,gdip_tiff);
+        try_module (ico,gdip_ico);
+        try_module (wmf,gdip_wmf);
+        try_module (emf,gdip_emf);
+        try_module (bmp,gdip_bmp);
+        try_module (gif,gdip_gif);
+        try_module (jpeg,gdip_jpeg);
+        try_module (tiff,gdip_tiff);
 #endif
 #ifdef INCLUDE_gdip_png
-	try_module (png,gdip_png);
+        try_module (png,gdip_png);
 #endif
 
 #undef try_module
         
         if (fill_vtable) {
-		image_module->module = (void *) 1;
+                image_module->module = (void *) 1;
                 (* fill_vtable) (image_module);
-		if (image_module->info == NULL) {
-			image_module->info = g_new0 (GdkPixbufFormat, 1);
-			(* fill_info) (image_module->info);
-		}
+                if (image_module->info == NULL) {
+                        image_module->info = g_new0 (GdkPixbufFormat, 1);
+                        (* fill_info) (image_module->info);
+                }
                 return TRUE;
-	}
-	else 
+        }
+        else 
 #ifdef USE_GMODULE
-	{
-		char *path;
-		GModule *module;
-		gpointer sym;
+        {
+                char *path;
+                GModule *module;
+                gpointer sym;
 
-		path = image_module->module_path;
-		module = g_module_open (path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+                path = image_module->module_path;
+                module = g_module_open (path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
 
-        	if (!module) {
-                	g_set_error (error,
-                             	     GDK_PIXBUF_ERROR,
-                             	     GDK_PIXBUF_ERROR_FAILED,
-                             	     _("Unable to load image-loading module: %s: %s"),
-                             	     path, g_module_error ());
-                	return FALSE;
-        	}
+                if (!module) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_FAILED,
+                                     _("Unable to load image-loading module: %s: %s"),
+                                     path, g_module_error ());
+                        return FALSE;
+                }
 
-		image_module->module = module;        
+                image_module->module = module;        
         
-        	if (g_module_symbol (module, "fill_vtable", &sym)) {
-                	fill_vtable = (GdkPixbufModuleFillVtableFunc) sym;
-                	(* fill_vtable) (image_module);
-                	return TRUE;
-        	} else {
-                	g_set_error (error,
-                        	     GDK_PIXBUF_ERROR,
-                             	     GDK_PIXBUF_ERROR_FAILED,
-                             	     _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
-                             	     path);
-                	return FALSE;
-        	}
-	}
+                if (g_module_symbol (module, "fill_vtable", &sym)) {
+                        fill_vtable = (GdkPixbufModuleFillVtableFunc) sym;
+                        (* fill_vtable) (image_module);
+                        return TRUE;
+                } else {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_FAILED,
+                                     _("Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"),
+                                     path);
+                        return FALSE;
+                }
+        }
 #else
-	g_set_error (error,
-		     GDK_PIXBUF_ERROR,
-		     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-		     _("Image type '%s' is not supported"),
-		     image_module->module_name);
-	return FALSE;
+        g_set_error (error,
+                     GDK_PIXBUF_ERROR,
+                     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                     _("Image type '%s' is not supported"),
+                     image_module->module_name);
+        return FALSE;
 #endif  /* !USE_GMODULE */
 }
 
 
 gboolean
 _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-			 GError         **error)
+                         GError         **error)
 {
-	gboolean ret;
-	gboolean locked = FALSE;
+        gboolean ret;
+        gboolean locked = FALSE;
 
-	/* be extra careful, maybe the module initializes
-	 * the thread system
-	 */
-	if (g_threads_got_initialized) {
-		G_LOCK (init_lock);
-		locked = TRUE;
-	}
+        /* be extra careful, maybe the module initializes
+         * the thread system
+         */
+        if (g_threads_got_initialized) {
+                G_LOCK (init_lock);
+                locked = TRUE;
+        }
 
         ret = gdk_pixbuf_load_module_unlocked (image_module, error);
 
-	if (locked)
-		G_UNLOCK (init_lock);
+        if (locked)
+                G_UNLOCK (init_lock);
 
-	return ret;
+        return ret;
 }
 
 
@@ -772,17 +772,17 @@ GdkPixbufModule *
 _gdk_pixbuf_get_named_module (const char *name,
                               GError **error)
 {
-	GSList *modules;
+        GSList *modules;
 
-	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
-		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+        for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+                GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
 
-		if (module->info->disabled)
-			continue;
+                if (module->info->disabled)
+                        continue;
 
-		if (!strcmp (name, module->module_name))
-			return module;
-	}
+                if (!strcmp (name, module->module_name))
+                        return module;
+        }
 
         g_set_error (error,
                      GDK_PIXBUF_ERROR,
@@ -790,7 +790,7 @@ _gdk_pixbuf_get_named_module (const char *name,
                      _("Image type '%s' is not supported"),
                      name);
         
-	return NULL;
+        return NULL;
 }
 
 GdkPixbufModule *
@@ -798,72 +798,72 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
                         const gchar *filename,
                         GError **error)
 {
-	GSList *modules;
+        GSList *modules;
 
-	GdkPixbufModule *selected = NULL;
-	gchar *display_name = NULL;
+        GdkPixbufModule *selected = NULL;
+        gchar *display_name = NULL;
 #ifdef GDK_PIXBUF_USE_GIO_MIME
-	gchar *mime_type;
-	gchar **mimes;
-	gchar *type;
-	gint j;
-	gboolean uncertain;
+        gchar *mime_type;
+        gchar **mimes;
+        gchar *type;
+        gint j;
+        gboolean uncertain;
 
-	mime_type = g_content_type_guess (NULL, buffer, size, &uncertain);
-	if (uncertain)
-		mime_type = g_content_type_guess (filename, buffer, size, NULL);
+        mime_type = g_content_type_guess (NULL, buffer, size, &uncertain);
+        if (uncertain)
+                mime_type = g_content_type_guess (filename, buffer, size, NULL);
 
-	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
-		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
-		GdkPixbufFormat *info = module->info;
+        for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+                GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+                GdkPixbufFormat *info = module->info;
 
-		if (info->disabled)
-			continue;
+                if (info->disabled)
+                        continue;
 
-		mimes = info->mime_types;
-		for (j = 0; mimes[j] != NULL; j++) {
-			type = g_content_type_from_mime_type (mimes[j]);
-			if (g_ascii_strcasecmp (type, mime_type) == 0) {
-				g_free (type);
-				selected = module;
-				break;
-			}
-			g_free (type);
-		}
-	}
-	g_free (mime_type);
+                mimes = info->mime_types;
+                for (j = 0; mimes[j] != NULL; j++) {
+                        type = g_content_type_from_mime_type (mimes[j]);
+                        if (g_ascii_strcasecmp (type, mime_type) == 0) {
+                                g_free (type);
+                                selected = module;
+                                break;
+                        }
+                        g_free (type);
+                }
+        }
+        g_free (mime_type);
 #else
-	gint score, best = 0;
+        gint score, best = 0;
 
-	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
-		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+        for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+                GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
 
-		if (module->info->disabled)
-			continue;
+                if (module->info->disabled)
+                        continue;
 
-		score = format_check (module, buffer, size);
-		if (score > best) {
-			best = score; 
-			selected = module;
-		}
-		if (score >= 100) 
-			break;
-	}
+                score = format_check (module, buffer, size);
+                if (score > best) {
+                        best = score; 
+                        selected = module;
+                }
+                if (score >= 100) 
+                        break;
+        }
 #endif
 
-	if (selected != NULL)
-		return selected;
+        if (selected != NULL)
+                return selected;
 
         if (filename)
-	{
-		display_name = g_filename_display_name (filename);
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
-			     _("Couldn't recognize the image file format for file '%s'"),
-			     display_name);
-		g_free (display_name);
-	}
+        {
+                display_name = g_filename_display_name (filename);
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+                             _("Couldn't recognize the image file format for file '%s'"),
+                             display_name);
+                g_free (display_name);
+        }
         else
                 g_set_error_literal (error,
                                      GDK_PIXBUF_ERROR,
@@ -871,76 +871,76 @@ _gdk_pixbuf_get_module (guchar *buffer, guint size,
                                      _("Unrecognized image file format"));
 
 
-	return NULL;
+        return NULL;
 }
 
 
 static void
 prepared_notify (GdkPixbuf *pixbuf, 
-		 GdkPixbufAnimation *anim, 
-		 gpointer user_data)
+                 GdkPixbufAnimation *anim, 
+                 gpointer user_data)
 {
-	if (pixbuf != NULL)
-		g_object_ref (pixbuf);
-	*((GdkPixbuf **)user_data) = pixbuf;
+        if (pixbuf != NULL)
+                g_object_ref (pixbuf);
+        *((GdkPixbuf **)user_data) = pixbuf;
 }
 
 GdkPixbuf *
 _gdk_pixbuf_generic_image_load (GdkPixbufModule *module,
-				FILE *f,
-				GError **error)
+                                FILE *f,
+                                GError **error)
 {
-	guchar buffer[LOAD_BUFFER_SIZE];
-	size_t length;
-	GdkPixbuf *pixbuf = NULL;
-	GdkPixbufAnimation *animation = NULL;
-	gpointer context;
-	gboolean locked;
+        guchar buffer[LOAD_BUFFER_SIZE];
+        size_t length;
+        GdkPixbuf *pixbuf = NULL;
+        GdkPixbufAnimation *animation = NULL;
+        gpointer context;
+        gboolean locked;
 
-	locked = _gdk_pixbuf_lock (module);
+        locked = _gdk_pixbuf_lock (module);
 
-	if (module->load != NULL) {
-		pixbuf = (* module->load) (f, error);
-	} else if (module->begin_load != NULL) {
-		
-		context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
-	
-		if (!context)
-			goto out;
-		
-		while (!feof (f) && !ferror (f)) {
-			length = fread (buffer, 1, sizeof (buffer), f);
-			if (length > 0)
-				if (!module->load_increment (context, buffer, length, error)) {
-					module->stop_load (context, NULL);
-					if (pixbuf != NULL) {
-						g_object_unref (pixbuf);
-						pixbuf = NULL;
-					}
-					goto out;
-				}
-		}
-		
-		if (!module->stop_load (context, error)) {
-			if (pixbuf != NULL) {
-				g_object_unref (pixbuf);
-				pixbuf = NULL;
-			}
-		}
-	} else if (module->load_animation != NULL) {
-		animation = (* module->load_animation) (f, error);
-		if (animation != NULL) {
-			pixbuf = gdk_pixbuf_animation_get_static_image (animation);
+        if (module->load != NULL) {
+                pixbuf = (* module->load) (f, error);
+        } else if (module->begin_load != NULL) {
+                
+                context = module->begin_load (NULL, prepared_notify, NULL, &pixbuf, error);
+        
+                if (!context)
+                        goto out;
+                
+                while (!feof (f) && !ferror (f)) {
+                        length = fread (buffer, 1, sizeof (buffer), f);
+                        if (length > 0)
+                                if (!module->load_increment (context, buffer, length, error)) {
+                                        module->stop_load (context, NULL);
+                                        if (pixbuf != NULL) {
+                                                g_object_unref (pixbuf);
+                                                pixbuf = NULL;
+                                        }
+                                        goto out;
+                                }
+                }
+                
+                if (!module->stop_load (context, error)) {
+                        if (pixbuf != NULL) {
+                                g_object_unref (pixbuf);
+                                pixbuf = NULL;
+                        }
+                }
+        } else if (module->load_animation != NULL) {
+                animation = (* module->load_animation) (f, error);
+                if (animation != NULL) {
+                        pixbuf = gdk_pixbuf_animation_get_static_image (animation);
 
-			g_object_ref (pixbuf);
-			g_object_unref (animation);
-		}
-	}
+                        g_object_ref (pixbuf);
+                        g_object_unref (animation);
+                }
+        }
 
  out:
-	if (locked)
-		_gdk_pixbuf_unlock (module);
-	return pixbuf;
+        if (locked)
+                _gdk_pixbuf_unlock (module);
+        return pixbuf;
 }
 
 /**
@@ -961,21 +961,21 @@ GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename,
                           GError    **error)
 {
-	GdkPixbuf *pixbuf;
-	int size;
-	FILE *f;
-	guchar buffer[SNIFF_BUFFER_SIZE];
-	GdkPixbufModule *image_module;
-	gchar *display_name;
+        GdkPixbuf *pixbuf;
+        int size;
+        FILE *f;
+        guchar buffer[SNIFF_BUFFER_SIZE];
+        GdkPixbufModule *image_module;
+        gchar *display_name;
 
-	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-	
-	display_name = g_filename_display_name (filename);	
+        
+        display_name = g_filename_display_name (filename);      
 
-	f = g_fopen (filename, "rb");
-	if (!f) {
-		gint save_errno = errno;
+        f = g_fopen (filename, "rb");
+        if (!f) {
+                gint save_errno = errno;
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (save_errno),
@@ -983,22 +983,22 @@ gdk_pixbuf_new_from_file (const char *filename,
                              display_name,
                              g_strerror (save_errno));
                 g_free (display_name);
-		return NULL;
+                return NULL;
         }
 
-	size = fread (&buffer, 1, sizeof (buffer), f);
-	if (size == 0) {
+        size = fread (&buffer, 1, sizeof (buffer), f);
+        if (size == 0) {
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
                              _("Image file '%s' contains no data"),
                              display_name);
                 g_free (display_name);
-		fclose (f);
-		return NULL;
-	}
+                fclose (f);
+                return NULL;
+        }
 
-	image_module = _gdk_pixbuf_get_module (buffer, size, filename, error);
+        image_module = _gdk_pixbuf_get_module (buffer, size, filename, error);
         if (image_module == NULL) {
                 g_free (display_name);
                 fclose (f);
@@ -1006,14 +1006,14 @@ gdk_pixbuf_new_from_file (const char *filename,
         }
 
         if (!_gdk_pixbuf_load_module (image_module, error)) {
-		g_free (display_name);
-        	fclose (f);
-        	return NULL;
+                g_free (display_name);
+                fclose (f);
+                return NULL;
         }
 
-	fseek (f, 0, SEEK_SET);
-	pixbuf = _gdk_pixbuf_generic_image_load (image_module, f, error);
-	fclose (f);
+        fseek (f, 0, SEEK_SET);
+        pixbuf = _gdk_pixbuf_generic_image_load (image_module, f, error);
+        fclose (f);
 
         if (pixbuf == NULL && error != NULL && *error == NULL) {
 
@@ -1042,8 +1042,8 @@ gdk_pixbuf_new_from_file (const char *filename,
           g_free (old);
         }
 
-	g_free (display_name);
-	return pixbuf;
+        g_free (display_name);
+        return pixbuf;
 }
 
 #ifdef G_OS_WIN32
@@ -1053,18 +1053,18 @@ GdkPixbuf *
 gdk_pixbuf_new_from_file (const char *filename,
                           GError    **error)
 {
-	gchar *utf8_filename =
-		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
-	GdkPixbuf *retval;
+        gchar *utf8_filename =
+                g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+        GdkPixbuf *retval;
 
-	if (utf8_filename == NULL)
-		return NULL;
+        if (utf8_filename == NULL)
+                return NULL;
 
-	retval = gdk_pixbuf_new_from_file_utf8 (utf8_filename, error);
+        retval = gdk_pixbuf_new_from_file_utf8 (utf8_filename, error);
 
-	g_free (utf8_filename);
+        g_free (utf8_filename);
 
-	return retval;
+        return retval;
 }
 #endif
 
@@ -1097,13 +1097,13 @@ gdk_pixbuf_new_from_file (const char *filename,
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_file_at_size (const char *filename,
-				  int         width, 
-				  int         height,
-				  GError    **error)
+                                  int         width, 
+                                  int         height,
+                                  GError    **error)
 {
-	return gdk_pixbuf_new_from_file_at_scale (filename, 
-						  width, height, 
-						  TRUE, error);
+        return gdk_pixbuf_new_from_file_at_scale (filename, 
+                                                  width, height, 
+                                                  TRUE, error);
 }
 
 #ifdef G_OS_WIN32
@@ -1112,74 +1112,74 @@ gdk_pixbuf_new_from_file_at_size (const char *filename,
 
 GdkPixbuf *
 gdk_pixbuf_new_from_file_at_size (const char *filename,
-				  int         width, 
-				  int         height,
-				  GError    **error)
+                                  int         width, 
+                                  int         height,
+                                  GError    **error)
 {
-	gchar *utf8_filename =
-		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
-	GdkPixbuf *retval;
+        gchar *utf8_filename =
+                g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+        GdkPixbuf *retval;
 
-	if (utf8_filename == NULL)
-		return NULL;
+        if (utf8_filename == NULL)
+                return NULL;
 
-	retval = gdk_pixbuf_new_from_file_at_size_utf8 (utf8_filename,
-							width, height,
-							error);
+        retval = gdk_pixbuf_new_from_file_at_size_utf8 (utf8_filename,
+                                                        width, height,
+                                                        error);
 
-	g_free (utf8_filename);
+        g_free (utf8_filename);
 
-	return retval;
+        return retval;
 }
 #endif
 
-typedef	struct {
-	gint width;
-	gint height;
-	gboolean preserve_aspect_ratio;
+typedef struct {
+        gint width;
+        gint height;
+        gboolean preserve_aspect_ratio;
 } AtScaleData; 
 
 static void
 at_scale_size_prepared_cb (GdkPixbufLoader *loader, 
-	 		   int              width,
-		  	   int              height,
-		  	   gpointer         data)
+                           int              width,
+                           int              height,
+                           gpointer         data)
 {
-	AtScaleData *info = data;
+        AtScaleData *info = data;
 
-	g_return_if_fail (width > 0 && height > 0);
+        g_return_if_fail (width > 0 && height > 0);
 
-	if (info->preserve_aspect_ratio && 
-	    (info->width > 0 || info->height > 0)) {
-		if (info->width < 0)
-		{
-			width = width * (double)info->height/(double)height;
-			height = info->height;
-		}
-		else if (info->height < 0)
-		{
-			height = height * (double)info->width/(double)width;
-			width = info->width;
-		}
-		else if ((double)height * (double)info->width >
-			 (double)width * (double)info->height) {
-			width = 0.5 + (double)width * (double)info->height / (double)height;
-			height = info->height;
-		} else {
-			height = 0.5 + (double)height * (double)info->width / (double)width;
-			width = info->width;
-		}
-	} else {
-		if (info->width > 0)
-			width = info->width;
-		if (info->height > 0)
-			height = info->height;
-	}
-	
-	width = MAX (width, 1);
+        if (info->preserve_aspect_ratio && 
+            (info->width > 0 || info->height > 0)) {
+                if (info->width < 0)
+                {
+                        width = width * (double)info->height/(double)height;
+                        height = info->height;
+                }
+                else if (info->height < 0)
+                {
+                        height = height * (double)info->width/(double)width;
+                        width = info->width;
+                }
+                else if ((double)height * (double)info->width >
+                         (double)width * (double)info->height) {
+                        width = 0.5 + (double)width * (double)info->height / (double)height;
+                        height = info->height;
+                } else {
+                        height = 0.5 + (double)height * (double)info->width / (double)width;
+                        width = info->width;
+                }
+        } else {
+                if (info->width > 0)
+                        width = info->width;
+                if (info->height > 0)
+                        height = info->height;
+        }
+        
+        width = MAX (width, 1);
         height = MAX (height, 1);
 
-	gdk_pixbuf_loader_set_size (loader, width, height);
+        gdk_pixbuf_loader_set_size (loader, width, height);
 }
 
 /**
@@ -1212,29 +1212,29 @@ at_scale_size_prepared_cb (GdkPixbufLoader *loader,
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_file_at_scale (const char *filename,
-				   int         width, 
-				   int         height,
-				   gboolean    preserve_aspect_ratio,
-				   GError    **error)
+                                   int         width, 
+                                   int         height,
+                                   gboolean    preserve_aspect_ratio,
+                                   GError    **error)
 {
 
-	GdkPixbufLoader *loader;
-	GdkPixbuf       *pixbuf;
-	guchar buffer[LOAD_BUFFER_SIZE];
-	int length;
-	FILE *f;
-	AtScaleData info;
-	GdkPixbufAnimation *animation;
-	GdkPixbufAnimationIter *iter;
-	gboolean has_frame;
+        GdkPixbufLoader *loader;
+        GdkPixbuf       *pixbuf;
+        guchar buffer[LOAD_BUFFER_SIZE];
+        int length;
+        FILE *f;
+        AtScaleData info;
+        GdkPixbufAnimation *animation;
+        GdkPixbufAnimationIter *iter;
+        gboolean has_frame;
 
-	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (filename != NULL, NULL);
         g_return_val_if_fail (width > 0 || width == -1, NULL);
         g_return_val_if_fail (height > 0 || height == -1, NULL);
 
-	f = g_fopen (filename, "rb");
-	if (!f) {
-		gint save_errno = errno;
+        f = g_fopen (filename, "rb");
+        if (!f) {
+                gint save_errno = errno;
                 gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
@@ -1243,65 +1243,65 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
                              display_name,
                              g_strerror (save_errno));
                 g_free (display_name);
-		return NULL;
+                return NULL;
         }
 
-	loader = gdk_pixbuf_loader_new ();
+        loader = gdk_pixbuf_loader_new ();
 
-	info.width = width;
-	info.height = height;
+        info.width = width;
+        info.height = height;
         info.preserve_aspect_ratio = preserve_aspect_ratio;
 
-	g_signal_connect (loader, "size-prepared", 
-			  G_CALLBACK (at_scale_size_prepared_cb), &info);
+        g_signal_connect (loader, "size-prepared", 
+                          G_CALLBACK (at_scale_size_prepared_cb), &info);
 
-	has_frame = FALSE;
-	while (!has_frame && !feof (f) && !ferror (f)) {
-		length = fread (buffer, 1, sizeof (buffer), f);
-		if (length > 0)
-			if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
-				gdk_pixbuf_loader_close (loader, NULL);
-				fclose (f);
-				g_object_unref (loader);
-				return NULL;
-			}
-		
-		animation = gdk_pixbuf_loader_get_animation (loader);
-		if (animation) {
-			iter = gdk_pixbuf_animation_get_iter (animation, NULL);
-			if (!gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)) {
-				has_frame = TRUE;
-			}
-			g_object_unref (iter);
-		}
-	}
+        has_frame = FALSE;
+        while (!has_frame && !feof (f) && !ferror (f)) {
+                length = fread (buffer, 1, sizeof (buffer), f);
+                if (length > 0)
+                        if (!gdk_pixbuf_loader_write (loader, buffer, length, error)) {
+                                gdk_pixbuf_loader_close (loader, NULL);
+                                fclose (f);
+                                g_object_unref (loader);
+                                return NULL;
+                        }
+                
+                animation = gdk_pixbuf_loader_get_animation (loader);
+                if (animation) {
+                        iter = gdk_pixbuf_animation_get_iter (animation, NULL);
+                        if (!gdk_pixbuf_animation_iter_on_currently_loading_frame (iter)) {
+                                has_frame = TRUE;
+                        }
+                        g_object_unref (iter);
+                }
+        }
 
-	fclose (f);
+        fclose (f);
 
-	if (!gdk_pixbuf_loader_close (loader, error) && !has_frame) {
-		g_object_unref (loader);
-		return NULL;
-	}
+        if (!gdk_pixbuf_loader_close (loader, error) && !has_frame) {
+                g_object_unref (loader);
+                return NULL;
+        }
 
-	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+        pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
 
-	if (!pixbuf) {
+        if (!pixbuf) {
                 gchar *display_name = g_filename_display_name (filename);
-		g_object_unref (loader);
+                g_object_unref (loader);
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_FAILED,
                              _("Failed to load image '%s': reason not known, probably a corrupt image file"),
                              display_name);
                 g_free (display_name);
-		return NULL;
-	}
+                return NULL;
+        }
 
-	g_object_ref (pixbuf);
+        g_object_ref (pixbuf);
 
-	g_object_unref (loader);
+        g_object_unref (loader);
 
-	return pixbuf;
+        return pixbuf;
 }
 
 #ifdef G_OS_WIN32
@@ -1310,80 +1310,80 @@ gdk_pixbuf_new_from_file_at_scale (const char *filename,
 
 GdkPixbuf *
 gdk_pixbuf_new_from_file_at_scale (const char *filename,
-				   int         width, 
-				   int         height,
-				   gboolean    preserve_aspect_ratio,
-				   GError    **error)
+                                   int         width, 
+                                   int         height,
+                                   gboolean    preserve_aspect_ratio,
+                                   GError    **error)
 {
-	gchar *utf8_filename =
-		g_locale_to_utf8 (filename, -1, NULL, NULL, error);
-	GdkPixbuf *retval;
+        gchar *utf8_filename =
+                g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+        GdkPixbuf *retval;
 
-	if (utf8_filename == NULL)
-		return NULL;
+        if (utf8_filename == NULL)
+                return NULL;
 
-	retval = gdk_pixbuf_new_from_file_at_scale_utf8 (utf8_filename,
-							 width, height,
-							 preserve_aspect_ratio,
-							 error);
+        retval = gdk_pixbuf_new_from_file_at_scale_utf8 (utf8_filename,
+                                                         width, height,
+                                                         preserve_aspect_ratio,
+                                                         error);
 
-	g_free (utf8_filename);
+        g_free (utf8_filename);
 
-	return retval;
+        return retval;
 }
 #endif
 
 
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
-		  GInputStream     *stream,
-		  GCancellable     *cancellable,
-		  GError          **error)
+                  GInputStream     *stream,
+                  GCancellable     *cancellable,
+                  GError          **error)
 {
-	GdkPixbuf *pixbuf;
-	gssize n_read;
-	guchar buffer[LOAD_BUFFER_SIZE];
-	gboolean res;
+        GdkPixbuf *pixbuf;
+        gssize n_read;
+        guchar buffer[LOAD_BUFFER_SIZE];
+        gboolean res;
 
-  	res = TRUE;
-	while (1) { 
-		n_read = g_input_stream_read (stream, 
-					      buffer, 
-					      sizeof (buffer), 
-					      cancellable, 
-					      error);
-		if (n_read < 0) {
-			res = FALSE;
-			error = NULL; /* Ignore further errors */
-			break;
-		}
+        res = TRUE;
+        while (1) { 
+                n_read = g_input_stream_read (stream, 
+                                              buffer, 
+                                              sizeof (buffer), 
+                                              cancellable, 
+                                              error);
+                if (n_read < 0) {
+                        res = FALSE;
+                        error = NULL; /* Ignore further errors */
+                        break;
+                }
 
-		if (n_read == 0)
-			break;
+                if (n_read == 0)
+                        break;
 
-		if (!gdk_pixbuf_loader_write (loader, 
-					      buffer, 
-					      n_read, 
-					      error)) {
-			res = FALSE;
-			error = NULL;
-			break;
-		}
-	}
+                if (!gdk_pixbuf_loader_write (loader, 
+                                              buffer, 
+                                              n_read, 
+                                              error)) {
+                        res = FALSE;
+                        error = NULL;
+                        break;
+                }
+        }
 
-	if (!gdk_pixbuf_loader_close (loader, error)) {
-		res = FALSE;
-		error = NULL;
-	}
+        if (!gdk_pixbuf_loader_close (loader, error)) {
+                res = FALSE;
+                error = NULL;
+        }
 
-	pixbuf = NULL;
-	if (res) {
-		pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-		if (pixbuf)
-			g_object_ref (pixbuf);
-	}
+        pixbuf = NULL;
+        if (res) {
+                pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+                if (pixbuf)
+                        g_object_ref (pixbuf);
+        }
 
-	return pixbuf;
+        return pixbuf;
 }
 
 
@@ -1422,29 +1422,29 @@ load_from_stream (GdkPixbufLoader  *loader,
  */
 GdkPixbuf *
 gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
-				     gint	    width,
-				     gint 	    height,
-				     gboolean       preserve_aspect_ratio,
-				     GCancellable  *cancellable,
-		  	    	     GError       **error)
+                                     gint           width,
+                                     gint           height,
+                                     gboolean       preserve_aspect_ratio,
+                                     GCancellable  *cancellable,
+                                     GError       **error)
 {
-	GdkPixbufLoader *loader;
-	GdkPixbuf *pixbuf;
-	AtScaleData info;
+        GdkPixbufLoader *loader;
+        GdkPixbuf *pixbuf;
+        AtScaleData info;
 
-	loader = gdk_pixbuf_loader_new ();
+        loader = gdk_pixbuf_loader_new ();
 
-	info.width = width;
-	info.height = height;
+        info.width = width;
+        info.height = height;
         info.preserve_aspect_ratio = preserve_aspect_ratio;
 
-	g_signal_connect (loader, "size-prepared", 
-			  G_CALLBACK (at_scale_size_prepared_cb), &info);
+        g_signal_connect (loader, "size-prepared", 
+                          G_CALLBACK (at_scale_size_prepared_cb), &info);
 
-	pixbuf = load_from_stream (loader, stream, cancellable, error);
-	g_object_unref (loader);
+        pixbuf = load_from_stream (loader, stream, cancellable, error);
+        g_object_unref (loader);
 
-	return pixbuf;
+        return pixbuf;
 }
 
 /**
@@ -1472,38 +1472,38 @@ gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
  **/
 GdkPixbuf *
 gdk_pixbuf_new_from_stream (GInputStream  *stream,
-			    GCancellable  *cancellable,
-		  	    GError       **error)
+                            GCancellable  *cancellable,
+                            GError       **error)
 {
-	GdkPixbuf *pixbuf;
-	GdkPixbufLoader *loader;
+        GdkPixbuf *pixbuf;
+        GdkPixbufLoader *loader;
 
-	loader = gdk_pixbuf_loader_new ();
-	pixbuf = load_from_stream (loader, stream, cancellable, error);
-	g_object_unref (loader);
+        loader = gdk_pixbuf_loader_new ();
+        pixbuf = load_from_stream (loader, stream, cancellable, error);
+        g_object_unref (loader);
 
-	return pixbuf;
+        return pixbuf;
 }
 
 static void
 info_cb (GdkPixbufLoader *loader, 
-	 int              width,
-	 int              height,
-	 gpointer         data)
+         int              width,
+         int              height,
+         gpointer         data)
 {
-	struct {
-		GdkPixbufFormat *format;
-		int width;
-		int height;
-	} *info = data;
+        struct {
+                GdkPixbufFormat *format;
+                int width;
+                int height;
+        } *info = data;
 
-	g_return_if_fail (width > 0 && height > 0);
+        g_return_if_fail (width > 0 && height > 0);
 
-	info->format = gdk_pixbuf_loader_get_format (loader);
-	info->width = width;
-	info->height = height;
+        info->format = gdk_pixbuf_loader_get_format (loader);
+        info->width = width;
+        info->height = height;
 
-	gdk_pixbuf_loader_set_size (loader, 0, 0);
+        gdk_pixbuf_loader_set_size (loader, 0, 0);
 }
 
 /**
@@ -1522,53 +1522,53 @@ info_cb (GdkPixbufLoader *loader,
  **/
 GdkPixbufFormat *
 gdk_pixbuf_get_file_info (const gchar  *filename,
-			  gint         *width, 
-			  gint         *height)
+                          gint         *width, 
+                          gint         *height)
 {
-	GdkPixbufLoader *loader;
-	guchar buffer[SNIFF_BUFFER_SIZE];
-	int length;
-	FILE *f;
-	struct {
-		GdkPixbufFormat *format;
-		gint width;
-		gint height;
-	} info;
+        GdkPixbufLoader *loader;
+        guchar buffer[SNIFF_BUFFER_SIZE];
+        int length;
+        FILE *f;
+        struct {
+                GdkPixbufFormat *format;
+                gint width;
+                gint height;
+        } info;
 
-	g_return_val_if_fail (filename != NULL, NULL);
+        g_return_val_if_fail (filename != NULL, NULL);
 
-	f = g_fopen (filename, "rb");
-	if (!f)
-		return NULL;
+        f = g_fopen (filename, "rb");
+        if (!f)
+                return NULL;
 
-	loader = gdk_pixbuf_loader_new ();
+        loader = gdk_pixbuf_loader_new ();
 
-	info.format = NULL;
-	info.width = -1;
-	info.height = -1;
-		
-	g_signal_connect (loader, "size-prepared", G_CALLBACK (info_cb), &info);
+        info.format = NULL;
+        info.width = -1;
+        info.height = -1;
+                
+        g_signal_connect (loader, "size-prepared", G_CALLBACK (info_cb), &info);
 
-	while (!feof (f) && !ferror (f)) {
-		length = fread (buffer, 1, sizeof (buffer), f);
-		if (length > 0) {
-			if (!gdk_pixbuf_loader_write (loader, buffer, length, NULL))
-				break;
-		}
-		if (info.format != NULL)
-			break;
-	}
+        while (!feof (f) && !ferror (f)) {
+                length = fread (buffer, 1, sizeof (buffer), f);
+                if (length > 0) {
+                        if (!gdk_pixbuf_loader_write (loader, buffer, length, NULL))
+                                break;
+                }
+                if (info.format != NULL)
+                        break;
+        }
 
-	fclose (f);
-	gdk_pixbuf_loader_close (loader, NULL);
-	g_object_unref (loader);
+        fclose (f);
+        gdk_pixbuf_loader_close (loader, NULL);
+        g_object_unref (loader);
 
-	if (width) 
-		*width = info.width;
-	if (height) 
-		*height = info.height;
+        if (width) 
+                *width = info.width;
+        if (height) 
+                *height = info.height;
 
-	return info.format;
+        return info.format;
 }
 
 /**
@@ -1583,20 +1583,20 @@ gdk_pixbuf_get_file_info (const gchar  *filename,
 GdkPixbuf *
 gdk_pixbuf_new_from_xpm_data (const char **data)
 {
-	GdkPixbuf *(* load_xpm_data) (const char **data);
-	GdkPixbuf *pixbuf;
+        GdkPixbuf *(* load_xpm_data) (const char **data);
+        GdkPixbuf *pixbuf;
         GError *error = NULL;
-	GdkPixbufModule *xpm_module;
-	gboolean locked;
+        GdkPixbufModule *xpm_module;
+        gboolean locked;
 
-	g_return_val_if_fail (data != NULL, NULL);
+        g_return_val_if_fail (data != NULL, NULL);
 
-	xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
-	if (xpm_module == NULL) {
-		g_warning ("Error loading XPM image loader: %s", error->message);
-		g_error_free (error);
-		return NULL;
-	}
+        xpm_module = _gdk_pixbuf_get_named_module ("xpm", &error);
+        if (xpm_module == NULL) {
+                g_warning ("Error loading XPM image loader: %s", error->message);
+                g_error_free (error);
+                return NULL;
+        }
 
         if (!_gdk_pixbuf_load_module (xpm_module, &error)) {
                 g_warning ("Error loading XPM image loader: %s", error->message);
@@ -1604,19 +1604,19 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
                 return NULL;
         }
 
-	locked = _gdk_pixbuf_lock (xpm_module);
+        locked = _gdk_pixbuf_lock (xpm_module);
 
-	if (xpm_module->load_xpm_data == NULL) {
-		g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
-		pixbuf = NULL;
-	} else {
-		load_xpm_data = xpm_module->load_xpm_data;
-		pixbuf = (* load_xpm_data) (data);
-	}
-	
-	if (locked)
-		_gdk_pixbuf_unlock (xpm_module);
-	return pixbuf;
+        if (xpm_module->load_xpm_data == NULL) {
+                g_warning ("gdk-pixbuf XPM module lacks XPM data capability");
+                pixbuf = NULL;
+        } else {
+                load_xpm_data = xpm_module->load_xpm_data;
+                pixbuf = (* load_xpm_data) (data);
+        }
+        
+        if (locked)
+                _gdk_pixbuf_unlock (xpm_module);
+        return pixbuf;
 }
 
 static void
@@ -1657,24 +1657,24 @@ collect_save_options (va_list   opts,
 
 static gboolean
 save_to_file_callback (const gchar *buf,
-		       gsize        count,
-		       GError     **error,
-		       gpointer     data)
+                       gsize        count,
+                       GError     **error,
+                       gpointer     data)
 {
-	FILE *filehandle = data;
-	gsize n;
+        FILE *filehandle = data;
+        gsize n;
 
-	n = fwrite (buf, 1, count, filehandle);
-	if (n != count) {
-		gint save_errno = errno;
+        n = fwrite (buf, 1, count, filehandle);
+        if (n != count) {
+                gint save_errno = errno;
                 g_set_error (error,
                              G_FILE_ERROR,
                              g_file_error_from_errno (save_errno),
                              _("Error writing to image file: %s"),
                              g_strerror (save_errno));
                 return FALSE;
-	}
-	return TRUE;
+        }
+        return TRUE;
 }
 
 static gboolean
@@ -1685,174 +1685,174 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
                       gchar        **values,
                       GError       **error)
 {
-	gboolean ret;
-	GdkPixbufModule *image_module = NULL;       
-	gboolean locked;
+        gboolean ret;
+        GdkPixbufModule *image_module = NULL;       
+        gboolean locked;
 
-	image_module = _gdk_pixbuf_get_named_module (type, error);
+        image_module = _gdk_pixbuf_get_named_module (type, error);
 
-	if (image_module == NULL)
-		return FALSE;
+        if (image_module == NULL)
+                return FALSE;
        
-	if (!_gdk_pixbuf_load_module (image_module, error))
-		return FALSE;
+        if (!_gdk_pixbuf_load_module (image_module, error))
+                return FALSE;
 
-	locked = _gdk_pixbuf_lock (image_module);
+        locked = _gdk_pixbuf_lock (image_module);
 
-	if (image_module->save) {
-		/* save normally */
-		ret = (* image_module->save) (filehandle, pixbuf,
-					      keys, values,
-					      error);
-	} else if (image_module->save_to_callback) {
-		/* save with simple callback */
-		ret = (* image_module->save_to_callback) (save_to_file_callback,
-							  filehandle, pixbuf,
-							  keys, values,
-							  error);
-	} else {
-		/* can't save */
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-			     _("This build of gdk-pixbuf does not support saving the image format: %s"),
-			     type);
-		ret = FALSE;
-	}
+        if (image_module->save) {
+                /* save normally */
+                ret = (* image_module->save) (filehandle, pixbuf,
+                                              keys, values,
+                                              error);
+        } else if (image_module->save_to_callback) {
+                /* save with simple callback */
+                ret = (* image_module->save_to_callback) (save_to_file_callback,
+                                                          filehandle, pixbuf,
+                                                          keys, values,
+                                                          error);
+        } else {
+                /* can't save */
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+                             _("This build of gdk-pixbuf does not support saving the image format: %s"),
+                             type);
+                ret = FALSE;
+        }
 
-	if (locked)
-		_gdk_pixbuf_unlock (image_module);
-	return ret;
+        if (locked)
+                _gdk_pixbuf_unlock (image_module);
+        return ret;
 }
 
 #define TMP_FILE_BUF_SIZE 4096
 
 static gboolean
 save_to_callback_with_tmp_file (GdkPixbufModule   *image_module,
-				GdkPixbuf         *pixbuf,
-				GdkPixbufSaveFunc  save_func,
-				gpointer           user_data,
-				gchar            **keys,
-				gchar            **values,
-				GError           **error)
+                                GdkPixbuf         *pixbuf,
+                                GdkPixbufSaveFunc  save_func,
+                                gpointer           user_data,
+                                gchar            **keys,
+                                gchar            **values,
+                                GError           **error)
 {
-	int fd;
-	FILE *f = NULL;
-	gboolean retval = FALSE;
-	gchar *buf = NULL;
-	gsize n;
-	gchar *filename = NULL;
-	gboolean locked;
+        int fd;
+        FILE *f = NULL;
+        gboolean retval = FALSE;
+        gchar *buf = NULL;
+        gsize n;
+        gchar *filename = NULL;
+        gboolean locked;
 
-	buf = g_try_malloc (TMP_FILE_BUF_SIZE);
-	if (buf == NULL) {
-		g_set_error_literal (error,
+        buf = g_try_malloc (TMP_FILE_BUF_SIZE);
+        if (buf == NULL) {
+                g_set_error_literal (error,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                      _("Insufficient memory to save image to callback"));
-		goto end;
-	}
+                goto end;
+        }
 
-	fd = g_file_open_tmp ("gdkpixbuf-save-tmp.XXXXXX", &filename, error);
-	if (fd == -1)
-		goto end;
-	f = fdopen (fd, "wb+");
-	if (f == NULL) {
-		gint save_errno = errno;
-		g_set_error_literal (error,
+        fd = g_file_open_tmp ("gdkpixbuf-save-tmp.XXXXXX", &filename, error);
+        if (fd == -1)
+                goto end;
+        f = fdopen (fd, "wb+");
+        if (f == NULL) {
+                gint save_errno = errno;
+                g_set_error_literal (error,
                                      G_FILE_ERROR,
                                      g_file_error_from_errno (save_errno),
                                      _("Failed to open temporary file"));
-		goto end;
-	}
+                goto end;
+        }
 
-	locked = _gdk_pixbuf_lock (image_module);
-	retval = (image_module->save) (f, pixbuf, keys, values, error);
-	if (locked)
-		_gdk_pixbuf_unlock (image_module);
-	if (!retval)
-		goto end;
+        locked = _gdk_pixbuf_lock (image_module);
+        retval = (image_module->save) (f, pixbuf, keys, values, error);
+        if (locked)
+                _gdk_pixbuf_unlock (image_module);
+        if (!retval)
+                goto end;
 
-	rewind (f);
-	for (;;) {
-		n = fread (buf, 1, TMP_FILE_BUF_SIZE, f);
-		if (n > 0) {
-			if (!save_func (buf, n, error, user_data))
-				goto end;
-		}
-		if (n != TMP_FILE_BUF_SIZE) 
-			break;
-	}
-	if (ferror (f)) {
-		gint save_errno = errno;
-		g_set_error_literal (error,
+        rewind (f);
+        for (;;) {
+                n = fread (buf, 1, TMP_FILE_BUF_SIZE, f);
+                if (n > 0) {
+                        if (!save_func (buf, n, error, user_data))
+                                goto end;
+                }
+                if (n != TMP_FILE_BUF_SIZE) 
+                        break;
+        }
+        if (ferror (f)) {
+                gint save_errno = errno;
+                g_set_error_literal (error,
                                      G_FILE_ERROR,
                                      g_file_error_from_errno (save_errno),
                                      _("Failed to read from temporary file"));
-		goto end;
-	}
-	retval = TRUE;
+                goto end;
+        }
+        retval = TRUE;
 
  end:
-	/* cleanup and return retval */
-	if (f)
-		fclose (f);
-	if (filename) {
-		g_unlink (filename);
-		g_free (filename);
-	}
-	g_free (buf);
+        /* cleanup and return retval */
+        if (f)
+                fclose (f);
+        if (filename) {
+                g_unlink (filename);
+                g_free (filename);
+        }
+        g_free (buf);
 
-	return retval;
+        return retval;
 }
 
 static gboolean
 gdk_pixbuf_real_save_to_callback (GdkPixbuf         *pixbuf,
-				  GdkPixbufSaveFunc  save_func,
-				  gpointer           user_data,
-				  const char        *type, 
-				  gchar            **keys,
-				  gchar            **values,
-				  GError           **error)
+                                  GdkPixbufSaveFunc  save_func,
+                                  gpointer           user_data,
+                                  const char        *type, 
+                                  gchar            **keys,
+                                  gchar            **values,
+                                  GError           **error)
 {
-	gboolean ret;
-	GdkPixbufModule *image_module = NULL;       
-	gboolean locked;
+        gboolean ret;
+        GdkPixbufModule *image_module = NULL;       
+        gboolean locked;
 
-	image_module = _gdk_pixbuf_get_named_module (type, error);
+        image_module = _gdk_pixbuf_get_named_module (type, error);
 
-	if (image_module == NULL)
-		return FALSE;
+        if (image_module == NULL)
+                return FALSE;
        
-	if (!_gdk_pixbuf_load_module (image_module, error))
-		return FALSE;
+        if (!_gdk_pixbuf_load_module (image_module, error))
+                return FALSE;
 
-	locked = _gdk_pixbuf_lock (image_module);
+        locked = _gdk_pixbuf_lock (image_module);
 
-	if (image_module->save_to_callback) {
-		/* save normally */
-		ret = (* image_module->save_to_callback) (save_func, user_data, 
-							  pixbuf, keys, values,
-							  error);
-	} else if (image_module->save) {
-		/* use a temporary file */
-		ret = save_to_callback_with_tmp_file (image_module, pixbuf,
-						      save_func, user_data, 
-						      keys, values,
-						      error);
-	} else {
-		/* can't save */
-		g_set_error (error,
-			     GDK_PIXBUF_ERROR,
-			     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
-			     _("This build of gdk-pixbuf does not support saving the image format: %s"),
-			     type);
-		ret = FALSE;
-	}
+        if (image_module->save_to_callback) {
+                /* save normally */
+                ret = (* image_module->save_to_callback) (save_func, user_data, 
+                                                          pixbuf, keys, values,
+                                                          error);
+        } else if (image_module->save) {
+                /* use a temporary file */
+                ret = save_to_callback_with_tmp_file (image_module, pixbuf,
+                                                      save_func, user_data, 
+                                                      keys, values,
+                                                      error);
+        } else {
+                /* can't save */
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+                             _("This build of gdk-pixbuf does not support saving the image format: %s"),
+                             type);
+                ret = FALSE;
+        }
 
-	if (locked)
-		_gdk_pixbuf_unlock (image_module);
-	return ret;
+        if (locked)
+                _gdk_pixbuf_unlock (image_module);
+        return ret;
 }
 
  
@@ -1969,18 +1969,18 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
                  GError    **error,
                  ...)
 {
-	char *utf8_filename;
+        char *utf8_filename;
         gchar **keys = NULL;
         gchar **values = NULL;
         va_list args;
-	gboolean result;
+        gboolean result;
 
         g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
         
-	utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+        utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
 
-	if (utf8_filename == NULL)
-		return FALSE;
+        if (utf8_filename == NULL)
+                return FALSE;
 
         va_start (args, error);
         
@@ -1989,10 +1989,10 @@ gdk_pixbuf_save (GdkPixbuf  *pixbuf,
         va_end (args);
 
         result = gdk_pixbuf_savev_utf8 (pixbuf, utf8_filename, type,
-					keys, values,
-					error);
+                                        keys, values,
+                                        error);
 
-	g_free (utf8_filename);
+        g_free (utf8_filename);
 
         g_strfreev (keys);
         g_strfreev (values);
@@ -2036,7 +2036,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
         f = g_fopen (filename, "wb");
         
         if (f == NULL) {
-		gint save_errno = errno;
+                gint save_errno = errno;
                 gchar *display_name = g_filename_display_name (filename);
                 g_set_error (error,
                              G_FILE_ERROR,
@@ -2062,7 +2062,7 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
        }
 
        if (fclose (f) < 0) {
-	       gint save_errno = errno;
+               gint save_errno = errno;
                gchar *display_name = g_filename_display_name (filename);
                g_set_error (error,
                             G_FILE_ERROR,
@@ -2089,22 +2089,22 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
                   char      **option_values,
                   GError    **error)
 {
-	char *utf8_filename;
-	gboolean retval;
+        char *utf8_filename;
+        gboolean retval;
 
         g_return_val_if_fail (filename != NULL, FALSE);
        
-	utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
+        utf8_filename = g_locale_to_utf8 (filename, -1, NULL, NULL, error);
 
-	if (utf8_filename == NULL)
-		return FALSE;
+        if (utf8_filename == NULL)
+                return FALSE;
 
-	retval = gdk_pixbuf_savev_utf8 (pixbuf, utf8_filename, type,
-					option_keys, option_values, error);
+        retval = gdk_pixbuf_savev_utf8 (pixbuf, utf8_filename, type,
+                                        option_keys, option_values, error);
 
-	g_free (utf8_filename);
+        g_free (utf8_filename);
 
-	return retval;
+        return retval;
 }
 
 #endif
@@ -2134,11 +2134,11 @@ gdk_pixbuf_savev (GdkPixbuf  *pixbuf,
  **/
 gboolean
 gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
-				GdkPixbufSaveFunc save_func,
-				gpointer user_data,
-				const char *type, 
-				GError    **error,
-				...)
+                                GdkPixbufSaveFunc save_func,
+                                gpointer user_data,
+                                const char *type, 
+                                GError    **error,
+                                ...)
 {
         gchar **keys = NULL;
         gchar **values = NULL;
@@ -2154,8 +2154,8 @@ gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
         va_end (args);
 
         result = gdk_pixbuf_save_to_callbackv (pixbuf, save_func, user_data,
-					       type, keys, values,
-					       error);
+                                               type, keys, values,
+                                               error);
 
         g_strfreev (keys);
         g_strfreev (values);
@@ -2184,12 +2184,12 @@ gdk_pixbuf_save_to_callback    (GdkPixbuf  *pixbuf,
  **/
 gboolean
 gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf, 
-				GdkPixbufSaveFunc save_func,
-				gpointer user_data,
-				const char *type,
-				char      **option_keys,
-				char      **option_values,
-				GError    **error)
+                                GdkPixbufSaveFunc save_func,
+                                gpointer user_data,
+                                const char *type,
+                                char      **option_keys,
+                                char      **option_values,
+                                GError    **error)
 {
         gboolean result;
         
@@ -2199,9 +2199,9 @@ gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf,
         g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
        
        result = gdk_pixbuf_real_save_to_callback (pixbuf,
-						  save_func, user_data, type,
-						  option_keys, option_values,
-						  error);
+                                                  save_func, user_data, type,
+                                                  option_keys, option_values,
+                                                  error);
        
        if (!result) {
                g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
@@ -2236,11 +2236,11 @@ gdk_pixbuf_save_to_callbackv   (GdkPixbuf  *pixbuf,
  **/
 gboolean
 gdk_pixbuf_save_to_buffer      (GdkPixbuf  *pixbuf,
-				gchar     **buffer,
-				gsize      *buffer_size,
-				const char *type, 
-				GError    **error,
-				...)
+                                gchar     **buffer,
+                                gsize      *buffer_size,
+                                const char *type, 
+                                GError    **error,
+                                ...)
 {
         gchar **keys = NULL;
         gchar **values = NULL;
@@ -2256,8 +2256,8 @@ gdk_pixbuf_save_to_buffer      (GdkPixbuf  *pixbuf,
         va_end (args);
 
         result = gdk_pixbuf_save_to_bufferv (pixbuf, buffer, buffer_size,
-					     type, keys, values,
-					     error);
+                                             type, keys, values,
+                                             error);
 
         g_strfreev (keys);
         g_strfreev (values);
@@ -2266,36 +2266,36 @@ gdk_pixbuf_save_to_buffer      (GdkPixbuf  *pixbuf,
 }
 
 struct SaveToBufferData {
-	gchar *buffer;
-	gsize len, max;
+        gchar *buffer;
+        gsize len, max;
 };
 
 static gboolean
 save_to_buffer_callback (const gchar *data,
-			 gsize count,
-			 GError **error,
-			 gpointer user_data)
+                         gsize count,
+                         GError **error,
+                         gpointer user_data)
 {
-	struct SaveToBufferData *sdata = user_data;
-	gchar *new_buffer;
-	gsize new_max;
+        struct SaveToBufferData *sdata = user_data;
+        gchar *new_buffer;
+        gsize new_max;
 
-	if (sdata->len + count > sdata->max) {
-		new_max = MAX (sdata->max*2, sdata->len + count);
-		new_buffer = g_try_realloc (sdata->buffer, new_max);
-		if (!new_buffer) {
-			g_set_error_literal (error,
+        if (sdata->len + count > sdata->max) {
+                new_max = MAX (sdata->max*2, sdata->len + count);
+                new_buffer = g_try_realloc (sdata->buffer, new_max);
+                if (!new_buffer) {
+                        g_set_error_literal (error,
                                              GDK_PIXBUF_ERROR,
                                              GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                              _("Insufficient memory to save image into a buffer"));
-			return FALSE;
-		}
-		sdata->buffer = new_buffer;
-		sdata->max = new_max;
-	}
-	memcpy (sdata->buffer + sdata->len, data, count);
-	sdata->len += count;
-	return TRUE;
+                        return FALSE;
+                }
+                sdata->buffer = new_buffer;
+                sdata->max = new_max;
+        }
+        memcpy (sdata->buffer + sdata->len, data, count);
+        sdata->len += count;
+        return TRUE;
 }
 
 /**
@@ -2318,82 +2318,82 @@ save_to_buffer_callback (const gchar *data,
  **/
 gboolean
 gdk_pixbuf_save_to_bufferv     (GdkPixbuf  *pixbuf,
-				gchar     **buffer,
-				gsize      *buffer_size,
-				const char *type, 
-				char      **option_keys,
-				char      **option_values,
-				GError    **error)
+                                gchar     **buffer,
+                                gsize      *buffer_size,
+                                const char *type, 
+                                char      **option_keys,
+                                char      **option_values,
+                                GError    **error)
 {
-	static const gint initial_max = 1024;
-	struct SaveToBufferData sdata;
+        static const gint initial_max = 1024;
+        struct SaveToBufferData sdata;
 
-	*buffer = NULL;
-	*buffer_size = 0;
+        *buffer = NULL;
+        *buffer_size = 0;
 
-	sdata.buffer = g_try_malloc (initial_max);
-	sdata.max = initial_max;
-	sdata.len = 0;
-	if (!sdata.buffer) {
+        sdata.buffer = g_try_malloc (initial_max);
+        sdata.max = initial_max;
+        sdata.len = 0;
+        if (!sdata.buffer) {
                 g_set_error_literal (error,
                                      GDK_PIXBUF_ERROR,
                                      GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
                                      _("Insufficient memory to save image into a buffer"));
-		return FALSE;
-	}
+                return FALSE;
+        }
 
-	if (!gdk_pixbuf_save_to_callbackv (pixbuf,
-					   save_to_buffer_callback, &sdata,
-					   type, option_keys, option_values,
-					   error)) {
-		g_free (sdata.buffer);
-		return FALSE;
-	}
+        if (!gdk_pixbuf_save_to_callbackv (pixbuf,
+                                           save_to_buffer_callback, &sdata,
+                                           type, option_keys, option_values,
+                                           error)) {
+                g_free (sdata.buffer);
+                return FALSE;
+        }
 
-	*buffer = sdata.buffer;
-	*buffer_size = sdata.len;
-	return TRUE;
+        *buffer = sdata.buffer;
+        *buffer_size = sdata.len;
+        return TRUE;
 }
 
 typedef struct {
-	GOutputStream *stream;
-	GCancellable  *cancellable;
+        GOutputStream *stream;
+        GCancellable  *cancellable;
 } SaveToStreamData;
 
 static gboolean
 save_to_stream (const gchar  *buffer,
-		gsize         count,
-		GError      **error,
-		gpointer      data)
+                gsize         count,
+                GError      **error,
+                gpointer      data)
 {
-	SaveToStreamData *sdata = (SaveToStreamData *)data;
-	gsize remaining;
-	gssize written;
+        SaveToStreamData *sdata = (SaveToStreamData *)data;
+        gsize remaining;
+        gssize written;
         GError *my_error = NULL;
 
-	remaining = count;
-	written = 0;
-	while (remaining > 0) {
-		buffer += written;
-		remaining -= written;
-		written = g_output_stream_write (sdata->stream, 
-						 buffer, remaining, 
-						 sdata->cancellable, 
-                                   		 &my_error);
-		if (written < 0) {
-			if (!my_error) {
-                        	g_set_error_literal (error,
+        remaining = count;
+        written = 0;
+        while (remaining > 0) {
+                buffer += written;
+                remaining -= written;
+                written = g_output_stream_write (sdata->stream, 
+                                                 buffer, remaining, 
+                                                 sdata->cancellable, 
+                                                 &my_error);
+                if (written < 0) {
+                        if (!my_error) {
+                                g_set_error_literal (error,
                                                      G_IO_ERROR, 0,
                                                      _("Error writing to image stream"));
-                	}
-                	else {
-                        	g_propagate_error (error, my_error);
-                	}
-                	return FALSE;
-		}
-	}
+                        }
+                        else {
+                                g_propagate_error (error, my_error);
+                        }
+                        return FALSE;
+                }
+        }
 
-	return TRUE;
+        return TRUE;
 }
 
 /** 
@@ -2424,34 +2424,34 @@ save_to_stream (const gchar  *buffer,
  */
 gboolean
 gdk_pixbuf_save_to_stream (GdkPixbuf      *pixbuf,
-		  	   GOutputStream  *stream,
-			   const char     *type,
-			   GCancellable   *cancellable,
-			   GError        **error,
-			   ...)
+                           GOutputStream  *stream,
+                           const char     *type,
+                           GCancellable   *cancellable,
+                           GError        **error,
+                           ...)
 {
-	gboolean res;
-	gchar **keys = NULL;
-	gchar **values = NULL;
-	va_list args;
-	SaveToStreamData data;
+        gboolean res;
+        gchar **keys = NULL;
+        gchar **values = NULL;
+        va_list args;
+        SaveToStreamData data;
 
-	va_start (args, error);
-	collect_save_options (args, &keys, &values);
-	va_end (args);
+        va_start (args, error);
+        collect_save_options (args, &keys, &values);
+        va_end (args);
 
-	data.stream = stream;
-	data.cancellable = cancellable;
+        data.stream = stream;
+        data.cancellable = cancellable;
 
-	res = gdk_pixbuf_save_to_callbackv (pixbuf, save_to_stream, 
-					    &data, type, 
-					    keys, values, 
-					    error);
+        res = gdk_pixbuf_save_to_callbackv (pixbuf, save_to_stream, 
+                                            &data, type, 
+                                            keys, values, 
+                                            error);
 
-	g_strfreev (keys);
-	g_strfreev (values);
+        g_strfreev (keys);
+        g_strfreev (values);
 
-	return res;
+        return res;
 }
 
 /**
@@ -2467,9 +2467,9 @@ gdk_pixbuf_save_to_stream (GdkPixbuf      *pixbuf,
 gchar *
 gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, NULL);
+        g_return_val_if_fail (format != NULL, NULL);
 
-	return g_strdup (format->name);
+        return g_strdup (format->name);
 }
 
 /**
@@ -2485,17 +2485,17 @@ gdk_pixbuf_format_get_name (GdkPixbufFormat *format)
 gchar *
 gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
 {
-	gchar *domain;
-	const gchar *description;
-	g_return_val_if_fail (format != NULL, NULL);
+        gchar *domain;
+        const gchar *description;
+        g_return_val_if_fail (format != NULL, NULL);
 
-	if (format->domain != NULL) 
-		domain = format->domain;
-	else 
-		domain = GETTEXT_PACKAGE;
-	description = g_dgettext (domain, format->description);
+        if (format->domain != NULL) 
+                domain = format->domain;
+        else 
+                domain = GETTEXT_PACKAGE;
+        description = g_dgettext (domain, format->description);
 
-	return g_strdup (description);
+        return g_strdup (description);
 }
 
 /**
@@ -2512,9 +2512,9 @@ gdk_pixbuf_format_get_description (GdkPixbufFormat *format)
 gchar **
 gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, NULL);
+        g_return_val_if_fail (format != NULL, NULL);
 
-	return g_strdupv (format->mime_types);
+        return g_strdupv (format->mime_types);
 }
 
 /**
@@ -2532,9 +2532,9 @@ gdk_pixbuf_format_get_mime_types (GdkPixbufFormat *format)
 gchar **
 gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, NULL);
+        g_return_val_if_fail (format != NULL, NULL);
 
-	return g_strdupv (format->extensions);
+        return g_strdupv (format->extensions);
 }
 
 /**
@@ -2550,9 +2550,9 @@ gdk_pixbuf_format_get_extensions (GdkPixbufFormat *format)
 gboolean
 gdk_pixbuf_format_is_writable (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, FALSE);
+        g_return_val_if_fail (format != NULL, FALSE);
 
-	return (format->flags & GDK_PIXBUF_FORMAT_WRITABLE) != 0;
+        return (format->flags & GDK_PIXBUF_FORMAT_WRITABLE) != 0;
 }
 
 /**
@@ -2571,9 +2571,9 @@ gdk_pixbuf_format_is_writable (GdkPixbufFormat *format)
 gboolean
 gdk_pixbuf_format_is_scalable (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, FALSE);
+        g_return_val_if_fail (format != NULL, FALSE);
 
-	return (format->flags & GDK_PIXBUF_FORMAT_SCALABLE) != 0;
+        return (format->flags & GDK_PIXBUF_FORMAT_SCALABLE) != 0;
 }
 
 /**
@@ -2590,9 +2590,9 @@ gdk_pixbuf_format_is_scalable (GdkPixbufFormat *format)
 gboolean   
 gdk_pixbuf_format_is_disabled (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, FALSE);
+        g_return_val_if_fail (format != NULL, FALSE);
 
-	return format->disabled;	
+        return format->disabled;        
 }
 
 /**
@@ -2609,11 +2609,11 @@ gdk_pixbuf_format_is_disabled (GdkPixbufFormat *format)
  */
 void 
 gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
-				gboolean         disabled)
+                                gboolean         disabled)
 {
-	g_return_if_fail (format != NULL);
-	
-	format->disabled = disabled != FALSE;
+        g_return_if_fail (format != NULL);
+        
+        format->disabled = disabled != FALSE;
 }
 
 /**
@@ -2632,17 +2632,17 @@ gdk_pixbuf_format_set_disabled (GdkPixbufFormat *format,
 gchar*
 gdk_pixbuf_format_get_license (GdkPixbufFormat *format)
 {
-	g_return_val_if_fail (format != NULL, NULL);
+        g_return_val_if_fail (format != NULL, NULL);
 
-	return g_strdup (format->license);
+        return g_strdup (format->license);
 }
 
 GdkPixbufFormat *
 _gdk_pixbuf_get_format (GdkPixbufModule *module)
 {
-	g_return_val_if_fail (module != NULL, NULL);
+        g_return_val_if_fail (module != NULL, NULL);
 
-	return module->info;
+        return module->info;
 }
 
 /**
@@ -2661,16 +2661,16 @@ _gdk_pixbuf_get_format (GdkPixbufModule *module)
 GSList *
 gdk_pixbuf_get_formats (void)
 {
-	GSList *result = NULL;
-	GSList *modules;
+        GSList *result = NULL;
+        GSList *modules;
 
-	for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
-		GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
-		GdkPixbufFormat *info = _gdk_pixbuf_get_format (module);
-		result = g_slist_prepend (result, info);
-	}
+        for (modules = get_file_formats (); modules; modules = g_slist_next (modules)) {
+                GdkPixbufModule *module = (GdkPixbufModule *)modules->data;
+                GdkPixbufFormat *info = _gdk_pixbuf_get_format (module);
+                result = g_slist_prepend (result, info);
+        }
 
-	return result;
+        return result;
 }
 
 
