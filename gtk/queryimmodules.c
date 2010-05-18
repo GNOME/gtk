@@ -41,11 +41,9 @@
 #include "gtk/gtkimmodule.h"
 #include "gtk/gtkversion.h"
 
-static char *
-escape_string (const char *str)
+static void
+escape_string (GString *contents, const char *str)
 {
-  GString *result = g_string_new (NULL);
-
   while (TRUE)
     {
       char c = *str++;
@@ -55,38 +53,38 @@ escape_string (const char *str)
         case '\0':
           goto done;
         case '\n':
-          g_string_append (result, "\\n");
+          g_string_append (contents, "\\n");
           break;
         case '\"':
-          g_string_append (result, "\\\"");
+          g_string_append (contents, "\\\"");
           break;
 #ifdef G_OS_WIN32
                 /* Replace backslashes in path with forward slashes, so that
                  * it reads in without problems.
                  */
         case '\\':
-          g_string_append (result, "/");
+          g_string_append (contents, "/");
           break;
 #endif
         default:
-          g_string_append_c (result, c);
+          g_string_append_c (contents, c);
         }
     }
 
- done:
-  return g_string_free (result, FALSE);
+ done:;
 }
 
 static void
-print_escaped (const char *str)
+print_escaped (GString *contents, const char *str)
 {
-  char *tmp = escape_string (str);
-  g_printf ("\"%s\" ", tmp);
-  g_free (tmp);
+  g_string_append_c (contents, '"');
+  escape_string (contents, str);
+  g_string_append_c (contents, '"');
+  g_string_append_c (contents, ' ');
 }
 
 static gboolean
-query_module (const char *dir, const char *name)
+query_module (const char *dir, const char *name, GString *contents)
 {
   void          (*list)   (const GtkIMContextInfo ***contexts,
                            guint                    *n_contexts);
@@ -131,21 +129,21 @@ query_module (const char *dir, const char *name)
       exit = exit_ptr;
       create = create_ptr;
 
-      print_escaped (path);
-      fputs ("\n", stdout);
+      print_escaped (contents, path);
+      g_string_append_c (contents, '\n');
 
       (*list) (&contexts, &n_contexts);
 
-      for (i=0; i<n_contexts; i++)
+      for (i = 0; i < n_contexts; i++)
         {
-          print_escaped (contexts[i]->context_id);
-          print_escaped (contexts[i]->context_name);
-          print_escaped (contexts[i]->domain);
-          print_escaped (contexts[i]->domain_dirname);
-          print_escaped (contexts[i]->default_locales);
-          fputs ("\n", stdout);
+          print_escaped (contents, contexts[i]->context_id);
+          print_escaped (contents, contexts[i]->context_name);
+          print_escaped (contents, contexts[i]->domain);
+          print_escaped (contents, contexts[i]->domain_dirname);
+          print_escaped (contents, contexts[i]->default_locales);
+          g_string_append_c (contents, '\n');
         }
-      fputs ("\n", stdout);
+      g_string_append_c (contents, '\n');
     }
   else
     {
@@ -167,16 +165,26 @@ int main (int argc, char **argv)
   int i;
   char *path;
   gboolean error = FALSE;
+  gchar *cache_file = NULL;
+  gint first_file = 1;
+  GString *contents;
 
-  g_printf ("# GTK+ Input Method Modules file\n"
-            "# Automatically generated file, do not edit\n"
-            "# Created by %s from gtk+-%d.%d.%d\n"
-            "#\n",
-            argv[0],
-            GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
+  if (argc > 1 && strcmp (argv[1], "--update-cache") == 0)
+    {
+      cache_file = gtk_rc_get_im_module_file ();
+      first_file = 2;
+    }
 
+  contents = g_string_new ("");
+  g_string_append_printf (contents,
+                          "# GTK+ Input Method Modules file\n"
+                          "# Automatically generated file, do not edit\n"
+                          "# Created by %s from gtk+-%d.%d.%d\n"
+                          "#\n",
+                          argv[0],
+                          GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION);
 
-  if (argc == 1)                /* No arguments given */
+  if (argc == first_file)  /* No file arguments given */
     {
       char **dirs;
       int i;
@@ -184,7 +192,7 @@ int main (int argc, char **argv)
 
       path = gtk_rc_get_im_module_path ();
 
-      g_printf ("# ModulesPath = %s\n#\n", path);
+      g_string_append_printf (contents, "# ModulesPath = %s\n#\n", path);
 
       dirs = pango_split_file_list (path);
       dirs_done = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
@@ -200,7 +208,7 @@ int main (int argc, char **argv)
                 while ((dent = g_dir_read_name (dir)))
                   {
                     if (g_str_has_suffix (dent, SOEXT))
-                      error |= query_module (dirs[i], dent);
+                      error |= query_module (dirs[i], dent, contents);
                   }
 
                 g_dir_close (dir);
@@ -215,10 +223,27 @@ int main (int argc, char **argv)
     {
       cwd = g_get_current_dir ();
 
-      for (i = 1; i < argc; i++)
-        error |= query_module (cwd, argv[i]);
+      for (i = first_file; i < argc; i++)
+        error |= query_module (cwd, argv[i], contents);
 
       g_free (cwd);
+    }
+
+  if (!error)
+    {
+      if (cache_file)
+        {
+          GError *err;
+
+          err = NULL;
+          if (!g_file_set_contents (cache_file, contents->str, -1, &err))
+            {
+                g_fprintf (stderr, "%s\n", err->message);
+                error = 1;
+            }
+        }
+      else
+        g_print ("%s\n", contents->str);
     }
 
   return error ? 1 : 0;
