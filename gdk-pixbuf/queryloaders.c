@@ -50,10 +50,10 @@
 #endif
 
 static void
-print_escaped (const char *str)
+print_escaped (GString *contents, const char *str)
 {
         gchar *tmp = g_strescape (str, "");
-        g_printf ("\"%s\" ", tmp);
+        g_string_append_printf (contents, "\"%s\" ", tmp);
         g_free (tmp);
 }
 
@@ -78,13 +78,13 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
                         if (mask_len != prefix_len)
                         {
                                 error = "mask length mismatch";
-                              
+
                                 goto error;
                         }
                         if (strspn (pattern->mask, " !xzn*") < mask_len)
                         {
                                 error = "bad char in mask";
-                              
+
                                 goto error;
                         }
                 }
@@ -109,48 +109,48 @@ loader_sanity_check (const char *path, GdkPixbufFormat *info, GdkPixbufModule *v
                 error = "loader claims to support saving but doesn't implement save";
                 goto error;
         }
-          
+
         return 1;
 
  error:
         g_fprintf (stderr, "Loader sanity check failed for %s: %s\n",
                    path, error);
-      
+
         return 0;
 }
 
 static void
-write_loader_info (const char *path, GdkPixbufFormat *info)
+write_loader_info (GString *contents, const char *path, GdkPixbufFormat *info)
 {
         const GdkPixbufModulePattern *pattern;
         char **mime;
         char **ext;
 
-        g_printf("\"%s\"\n", path);
-        g_printf ("\"%s\" %u \"%s\" \"%s\" \"%s\"\n",
+        g_string_append_printf (contents, "\"%s\"\n", path);
+        g_string_append_printf (contents, "\"%s\" %u \"%s\" \"%s\" \"%s\"\n",
                   info->name,
                   info->flags,
                   info->domain ? info->domain : GETTEXT_PACKAGE,
                   info->description,
                   info->license ? info->license : "");
         for (mime = info->mime_types; *mime; mime++) {
-                g_printf ("\"%s\" ", *mime);
+                g_string_append_printf (contents, "\"%s\" ", *mime);
         }
-        g_printf ("\"\"\n");
+        g_string_append (contents, "\"\"\n");
         for (ext = info->extensions; *ext; ext++) {
-                g_printf ("\"%s\" ", *ext);
+                g_string_append_printf (contents, "\"%s\" ", *ext);
         }
-        g_printf ("\"\"\n");
+        g_string_append (contents, "\"\"\n");
         for (pattern = info->signature; pattern->prefix; pattern++) {
-                print_escaped (pattern->prefix);
-                print_escaped (pattern->mask ? (const char *)pattern->mask : "");
-                g_printf ("%d\n", pattern->relevance);
+                print_escaped (contents, pattern->prefix);
+                print_escaped (contents, pattern->mask ? (const char *)pattern->mask : "");
+                g_string_append_printf (contents, "%d\n", pattern->relevance);
         }
-        g_printf ("\n");
+        g_string_append_c (contents, '\n');
 }
 
 static void
-query_module (const char *dir, const char *file)
+query_module (GString *contents, const char *dir, const char *file)
 {
         char *path;
         GModule *module;
@@ -170,7 +170,7 @@ query_module (const char *dir, const char *file)
             g_module_symbol (module, "fill_vtable", &fill_vtable_ptr)) {
                 GdkPixbufFormat *info;
                 GdkPixbufModule *vtable;
-              
+
 #ifdef G_OS_WIN32
                 /* Replace backslashes in path with forward slashes, so that
                  * it reads in without problems.
@@ -194,10 +194,10 @@ query_module (const char *dir, const char *file)
 
                 (*fill_info) (info);
                 (*fill_vtable) (vtable);
-              
+
                 if (loader_sanity_check (path, info, vtable))
-                        write_loader_info (path, info);
-              
+                        write_loader_info (contents, path, info);
+
                 g_free (info);
                 g_free (vtable);
         }
@@ -213,10 +213,24 @@ query_module (const char *dir, const char *file)
         g_free (path);
 }
 
+static gchar *
+gdk_pixbuf_get_module_file (void)
+{
+        gchar *result = g_strdup (g_getenv ("GDK_PIXBUF_MODULE_FILE"));
+
+        if (!result)
+                result = g_build_filename (GTK_LIBDIR, "gtk-3.0", GTK_BINARY_VERSION, "loaders.cache", NULL);
+
+        return result;
+}
+
 int main (int argc, char **argv)
 {
         gint i;
         gchar *prgname;
+        GString *contents;
+        gchar *cache_file = NULL;
+        gint first_file = 1;
 
 #ifdef G_OS_WIN32
         gchar *libdir;
@@ -269,15 +283,24 @@ int main (int argc, char **argv)
 #define PIXBUF_LIBDIR libdir
 
 #endif
-        prgname = g_get_prgname ();
-        g_printf ("# GdkPixbuf Image Loader Modules file\n"
-                  "# Automatically generated file, do not edit\n"
-                  "# Created by %s from gtk+-%s\n"
-                  "#\n",
-                  (prgname ? prgname : "gdk-pixbuf-query-loaders-3.0"),
-                  GDK_PIXBUF_VERSION);
 
-        if (argc == 1) {
+        if (argc > 1 && strcmp (argv[1], "--update-cache") == 0) {
+                cache_file = gdk_pixbuf_get_module_file ();
+                first_file = 2;
+        }
+
+        contents = g_string_new ("");
+
+        prgname = g_get_prgname ();
+        g_string_append_printf (contents,
+                                "# GdkPixbuf Image Loader Modules file\n"
+                                "# Automatically generated file, do not edit\n"
+                                "# Created by %s from gtk+-%s\n"
+                                "#\n",
+                                (prgname ? prgname : "gdk-pixbuf-query-loaders-3.0"),
+                                GDK_PIXBUF_VERSION);
+
+        if (argc == first_file) {
 #ifdef USE_GMODULE
                 const char *path;
                 GDir *dir;
@@ -290,7 +313,7 @@ int main (int argc, char **argv)
                 if (path == NULL || *path == '\0')
                         path = PIXBUF_LIBDIR;
 
-                g_printf ("# LoaderDir = %s\n#\n", path);
+                g_string_append_printf (contents, "# LoaderDir = %s\n#\n", path);
 
                 dir = g_dir_open (path, 0, NULL);
                 if (dir) {
@@ -300,13 +323,13 @@ int main (int argc, char **argv)
                                 gint len = strlen (dent);
                                 if (len > SOEXT_LEN &&
                                     strcmp (dent + len - SOEXT_LEN, SOEXT) == 0) {
-                                        query_module (path, dent);
+                                        query_module (contents, path, dent);
                                 }
                         }
                         g_dir_close (dir);
                 }
 #else
-                g_printf ("# dynamic loading of modules not supported\n");
+                g_string_append_printf (contents, "# dynamic loading of modules not supported\n");
 #endif
         }
         else {
@@ -318,10 +341,21 @@ int main (int argc, char **argv)
                         infilename = g_locale_to_utf8 (infilename,
                                                        -1, NULL, NULL, NULL);
 #endif
-                        query_module (cwd, infilename);
+                        query_module (contents, cwd, infilename);
                 }
                 g_free (cwd);
         }
+
+        if (cache_file) {
+                GError *err;
+
+                err = NULL;
+                if (!g_file_set_contents (cache_file, contents->str, -1, &err)) {
+                        g_fprintf (stderr, "%s\n", err->message);
+                }
+        }
+        else
+                g_print ("%s\n", contents->str);
 
         return 0;
 }
