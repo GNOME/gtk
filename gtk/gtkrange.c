@@ -35,6 +35,7 @@
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkrange.h"
+#include "gtkscale.h"
 #include "gtkscrollbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -2618,7 +2619,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   gtk_range_calc_layout (range, range->adjustment->value);
   
   /* now check whether the layout changed  */
-  if (layout_changed (range->layout, &layout))
+  if (layout_changed (range->layout, &layout) ||
+      (GTK_IS_SCALE (range) && GTK_SCALE (range)->draw_value))
     {
       gtk_widget_queue_draw (GTK_WIDGET (range));
       /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
