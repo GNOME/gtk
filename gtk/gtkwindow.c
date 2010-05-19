@@ -989,22 +989,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                                 5.0, GTK_PARAM_READWRITE));
 
   /**
-   * GtkWindow:client-side-drop-shadows:
-   *
-   * Indicates that GTK+ should render drop-shadows to the window frame.
-   * This is ignored if the #GtkWindow:client-side-decorated style property is not
-   * set to %TRUE.
-   *
-   * Since: 2.20
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("client-side-drop-shadows",
-                                                                 P_("Client-side drop shadows"),
-                                                                 P_("Whether to draw client-side drop shadows"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READWRITE));
-
-  /**
    * GtkWindow:extents-left:
    *
    * Specifies the size of the client-side window extents on the left edge of
@@ -5569,6 +5553,12 @@ is_client_side_decorated (GtkWindow *window)
       return FALSE;
     }
 
+  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+    {
+      if (gdk_window_get_state (GTK_WIDGET (window)->window) & GDK_WINDOW_STATE_FULLSCREEN)
+        return FALSE;
+    }
+
   gtk_widget_style_get (GTK_WIDGET (window),
                         "client-side-decorated", &client_side_decorated,
                         NULL);
@@ -5951,7 +5941,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkRequisition deco_requisition;
   GtkAllocation deco_allocation;
   GtkRequisition primary_requisition;
-  //  GtkAllocation primary_allocation;
   GtkRequisition box_requisition;
   GtkAllocation box_allocation;
   gint frame_width = 0;
@@ -6077,7 +6066,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
             + MAX (deco_allocation.height, box_allocation.height)
             + upper_padding
             + lower_padding
-            + widget->style->xthickness
             + frame_width; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
                                             - extents_left - extents_right
