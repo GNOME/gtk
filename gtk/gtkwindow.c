@@ -368,6 +368,8 @@ static void        window_cursor_changed       (GdkWindow  *window,
 static void        gtk_window_set_client_side_decorations (GtkWindow       *window,
                                                            GdkWMDecoration  setting);
 
+static void        gtk_window_queue_draw_border (GtkWidget *widget);
+
 static void        ensure_title_icon           (GtkWindow *window);
 static void        ensure_title_box            (GtkWindow *window);
 static void        setup_title_label           (GtkWindow *window);
@@ -1792,12 +1794,14 @@ update_max_button (GtkWindow *window,
 
   if (maximized)
     {
-      gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_100, GTK_ICON_SIZE_MENU);
+      if (image)
+        gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_100, GTK_ICON_SIZE_MENU);
       gtk_widget_set_tooltip_text (button, _("Restore Window"));
     }
   else
     {
-      gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
+      if (image)
+        gtk_image_set_from_stock (GTK_IMAGE (image), GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
       gtk_widget_set_tooltip_text (button, _("Maximize Window"));
     }
 }
@@ -1997,17 +2001,20 @@ setup_title_label (GtkWindow *window)
 
   if (is_client_side_decorated (window))
     {
-      if (!priv->title_label && window->title)
+      if (!priv->title_label)
         {
-          GtkWidget *child = gtk_label_new (window->title);
+          if (window->title)
+            {
+              GtkWidget *child = gtk_label_new (window->title);
 
-          if (window->has_focus)
-            gtk_widget_set_name (child, "decoration-title-focused");
-          else
-            gtk_widget_set_name (child, "decoration-title-unfocused");
+              if (window->has_focus)
+                gtk_widget_set_name (child, "decoration-title-focused");
+              else
+                gtk_widget_set_name (child, "decoration-title-unfocused");
 
-          gtk_widget_show (child);
-          gtk_window_set_label_widget (window, child);
+              gtk_widget_show (child);
+              gtk_window_set_label_widget (window, child);
+            }
         }
       else
         {
@@ -6158,7 +6165,12 @@ gtk_window_configure_event (GtkWidget         *widget,
   widget->allocation.height = event->height;
 
   _gtk_container_queue_resize (GTK_CONTAINER (widget));
-  
+
+  if (is_client_side_decorated (window) && widget->window != NULL)
+    {
+      gtk_window_queue_draw_border (widget);
+    }
+
   return TRUE;
 }
 
@@ -6772,8 +6784,41 @@ do_focus_change (GtkWidget *widget,
 static void
 gtk_window_queue_draw_border (GtkWidget *widget)
 {
-  /* FIXME only invalidate the frame area */
-  //gtk_widget_queue_draw (widget);
+  if (is_client_side_decorated (GTK_WINDOW (widget)))
+    {
+      gint border_width = 0;
+
+      gtk_widget_style_get (widget,
+                            "decoration-border-width", &border_width,
+                            NULL);
+
+      /* Top */
+      gtk_widget_queue_draw_area (widget,
+                                  0,
+                                  0,
+                                  widget->allocation.width,
+                                  border_width);
+
+      /* Left */
+      gtk_widget_queue_draw_area (widget,
+                                  0, 0,
+                                  border_width,
+                                  widget->allocation.height);
+
+      /* Bottom */
+      gtk_widget_queue_draw_area (widget,
+                                  0,
+                                  widget->allocation.height - border_width,
+                                  widget->allocation.width,
+                                  border_width);
+
+      /* Right */
+      gtk_widget_queue_draw_area (widget,
+                                  widget->allocation.width - border_width,
+                                  0,
+                                  border_width,
+                                  widget->allocation.height);
+    }
 }
 
 static gint
