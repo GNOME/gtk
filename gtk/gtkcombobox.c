@@ -879,7 +879,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     *
     * Whether the combo box has an entry.
     *
-    * Since: 3.0
+    * Since: 2.24
     */
    g_object_class_install_property (object_class,
                                     PROP_HAS_ENTRY,
@@ -895,7 +895,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     * The column in the combo box's model to associate with strings from the entry
     * if the combo was created with #GtkComboBox:has-entry = %TRUE.
     *
-    * Since: 3.0
+    * Since: 2.24
     */
    g_object_class_install_property (object_class,
                                     PROP_ENTRY_TEXT_COLUMN,
@@ -1171,6 +1171,7 @@ gtk_combo_box_get_property (GObject    *object,
       case PROP_ENTRY_TEXT_COLUMN:
 	g_value_set_int (value, priv->text_column);
 	break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -6141,7 +6142,7 @@ gtk_combo_box_get_button_sensitivity (GtkComboBox *combo_box)
  *
  * Return Value: whether there is an entry in @combo_box.
  *
- * Since: 3.0
+ * Since: 2.24
  **/
 gboolean
 gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
@@ -6161,7 +6162,7 @@ gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
  *
  * @combo_box must be created with GtkComboBox:has-entry as %TRUE.
  *
- * Since: 3.0
+ * Since: 2.24
  */
 void
 gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
@@ -6194,7 +6195,7 @@ gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
  *
  * Return value: A column in the data source model of @combo_box.
  *
- * Since: 3.0
+ * Since: 2.24
  */
 gint
 gtk_combo_box_get_entry_text_column (GtkComboBox *combo_box)

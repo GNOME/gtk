@@ -71,6 +71,7 @@
 #include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxentry.h>
+#include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
