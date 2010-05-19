@@ -368,6 +368,7 @@ static void        gtk_window_set_client_side_decorations (GtkWindow       *wind
 
 static void        ensure_title_icon           (GtkWindow *window);
 static void        ensure_title_box            (GtkWindow *window);
+static void        setup_title_label           (GtkWindow *window);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -1152,7 +1153,6 @@ static void
 gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-  GtkWidget *label;
 
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
@@ -1201,10 +1201,6 @@ gtk_window_init (GtkWindow *window)
   priv->old_decorations = 0;
   priv->disable_client_side_decorations = FALSE;
   priv->cursor_region = -1;
-
-  label = gtk_label_new ("");
-  gtk_widget_show (label);
-  gtk_window_set_label_widget (window, label);
 
   g_object_ref_sink (window);
   window->has_user_ref_count = TRUE;
@@ -1744,6 +1740,7 @@ gtk_window_style_set (GtkWidget *widget,
                         NULL);
 
   ensure_title_box (window);
+  setup_title_label (window);
 
   update_window_buttons (window);
   gtk_widget_queue_resize (widget);
@@ -1967,6 +1964,35 @@ gtk_window_set_label_widget (GtkWindow *window,
     }
 }
 
+static void
+setup_title_label (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (is_client_side_decorated (window))
+    {
+      if (!priv->title_label && window->title)
+        {
+          GtkWidget *child = gtk_label_new (window->title);
+
+          if (window->has_focus)
+            gtk_widget_set_name (child, "decoration-title-focused");
+          else
+            gtk_widget_set_name (child, "decoration-title-unfocused");
+
+          gtk_widget_show (child);
+          gtk_window_set_label_widget (window, child);
+        }
+      else
+        {
+          gtk_label_set_text (GTK_LABEL (priv->title_label), window->title);
+        }
+
+      if (gtk_widget_get_visible (priv->title_label) && gtk_widget_get_visible (window))
+        gtk_widget_queue_resize (GTK_WIDGET (window));
+    }
+}
+
 /**
  * gtk_window_set_title:
  * @window: a #GtkWindow
@@ -1999,31 +2025,11 @@ gtk_window_set_title (GtkWindow   *window,
   g_free (window->title);
   window->title = new_title;
 
-  if (!priv->title_label)
-    {
-      GtkWidget *child = gtk_label_new (title);
-
-      if (window->has_focus)
-        gtk_widget_set_name (child, "decoration-title-focused");
-      else
-        gtk_widget_set_name (child, "decoration-title-unfocused");
-
-      gtk_widget_show (child);
-      gtk_window_set_label_widget (window, child);
-    }
-  else
-    {
-      gtk_label_set_text (GTK_LABEL (priv->title_label), title);
-    }
-
-  if (gtk_widget_get_visible (priv->title_label) && gtk_widget_get_visible (widget))
-    gtk_widget_queue_resize (widget);
+  setup_title_label (window);
 
   if (gtk_widget_get_realized (widget))
     {
       gdk_window_set_title (widget->window, window->title);
-
-      gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
 
   g_object_notify (G_OBJECT (window), "title");
@@ -3945,8 +3951,6 @@ ensure_title_icon (GtkWindow *window)
   GtkWidget *widget = GTK_WIDGET (window);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  //ensure_title_box (window);
-
   if (!priv->icon_event_box)
     {
       priv->icon_event_box = gtk_event_box_new ();
@@ -5331,15 +5335,6 @@ gtk_window_map (GtkWidget *widget)
     {
       gtk_widget_map (priv->title_label);
     }
-
-#if 0
-  if (priv->icon_event_box &&
-      gtk_widget_get_visible (priv->icon_event_box) &&
-      !gtk_widget_get_mapped (priv->icon_event_box))
-    {
-      gtk_widget_map (priv->icon_event_box);
-    }
-#endif
 
   if (priv->primary_box &&
       gtk_widget_get_visible (priv->primary_box) &&
