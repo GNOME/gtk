@@ -840,6 +840,18 @@ gtk_combo_box_set_wrap_width
 #endif
 #endif
 
+#if IN_HEADER(__GTK_COMBO_BOX_TEXT_H__)
+#if IN_FILE(__GTK_COMBO_BOX_TEXT_C__)
+gtk_combo_box_text_append_text
+gtk_combo_box_text_get_active_text
+gtk_combo_box_text_get_type G_GNUC_CONST
+gtk_combo_box_text_insert_text
+gtk_combo_box_text_new
+gtk_combo_box_text_prepend_text
+gtk_combo_box_text_remove_text
+#endif
+#endif
+
 #if IN_HEADER(__GTK_COMBO_BOX_ENTRY_H__)
 #if IN_FILE(__GTK_COMBO_BOX_ENTRY_C__)
 #ifndef GTK_DISABLE_DEPRECATED
