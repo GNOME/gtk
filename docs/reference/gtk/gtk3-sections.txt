@@ -2396,6 +2396,7 @@ GtkRadioAction
 gtk_radio_action_new
 gtk_radio_action_get_group
 gtk_radio_action_set_group
+gtk_radio_action_join_group
 gtk_radio_action_get_current_value
 gtk_radio_action_set_current_value
 <SUBSECTION Standard>
