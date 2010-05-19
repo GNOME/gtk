@@ -3745,9 +3745,9 @@ paint_decorated_window (GtkStyle *style,
 {
   cairo_pattern_t *gradient;
   cairo_t *cr;
-  const double hmargin = 2.5 + x;
-  const double vmargin = 2.5 + y;
-  const double radius = 5;
+  const double hmargin = x;
+  const double vmargin = y;
+  const double radius;
   GdkColor *normal_color;
   GdkColor *selected_color;
   GdkWindowState state;
@@ -3758,6 +3758,10 @@ paint_decorated_window (GtkStyle *style,
     height = widget->allocation.height - 2 * y;
 
   state = gdk_window_get_state (window);
+
+  gtk_widget_style_get (widget,
+                        "decoration-corner-radius", &radius,
+                        NULL);
 
   cr = gdk_cairo_create (window);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);

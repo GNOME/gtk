@@ -981,6 +981,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0, G_MAXINT,
                                                              20, GTK_PARAM_READWRITE));
 
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_double ("decoration-corner-radius",
+                                                                P_("Decoration corner radius"),
+                                                                P_("Decoration corner radius"),
+                                                                0, G_MAXDOUBLE,
+                                                                5.0, GTK_PARAM_READWRITE));
+
   /**
    * GtkWindow:client-side-drop-shadows:
    *
