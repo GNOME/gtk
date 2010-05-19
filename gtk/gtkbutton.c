@@ -1521,11 +1521,13 @@ _gtk_button_paint (GtkButton          *button,
 
       if (button->relief != GTK_RELIEF_NONE || button->depressed ||
 	  gtk_widget_get_state(widget) == GTK_STATE_PRELIGHT)
-	gtk_paint_box (widget->style, widget->window,
-		       state_type,
-		       shadow_type, area, widget, "button",
-		       x, y, width, height);
-       
+        {
+          gtk_paint_box (widget->style, widget->window,
+                         state_type,
+                         shadow_type, area, widget, "button",
+                         x, y, width, height);
+        }
+
       if (gtk_widget_has_focus (widget))
 	{
 	  gint child_displacement_x;

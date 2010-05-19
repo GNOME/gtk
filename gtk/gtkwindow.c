@@ -234,7 +234,8 @@ struct _GtkWindowPrivate
   GtkWidget *min_button;
   GtkWidget *max_button;
   GtkWidget *close_button;
-  GtkWidget *button_box;
+  GtkWidget *primary_box;
+  GtkWidget *secondary_box;
   gint cursor_region;
 
   GtkWidget *popup_menu;
@@ -364,6 +365,9 @@ static void        window_cursor_changed       (GdkWindow  *window,
 
 static void        gtk_window_set_client_side_decorations (GtkWindow       *window,
                                                            GdkWMDecoration  setting);
+
+static void        ensure_title_icon           (GtkWindow *window);
+static void        ensure_title_box            (GtkWindow *window);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -883,6 +887,53 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   /* Style properties */
 
+
+  /* XXX - TODO */
+  /* options are: "menu", "minimize", "maximize", "close". */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_string ("decoration-button-layout",
+                                                                P_("Decorated button layout"),
+                                                                P_("Decorated button layout"),
+                                                                "menu:minimize,maximize,close",
+                                                                GTK_PARAM_READABLE));
+
+  /* XXX - TODO */
+  /* Should be "left", "right", or "center" */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_string ("decoration-title-justification",
+                                                                P_("Decoration title justification"),
+                                                                P_("Decoration title justification"),
+                                                                "center",
+                                                                GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-titlebar-upper-padding",
+                                                             P_("Titlebar upper padding"),
+                                                             P_("Titlebar upper padding"),
+                                                             0, G_MAXINT,
+                                                             0, GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-titlebar-lower-padding",
+                                                             P_("Titlebar lower padding"),
+                                                             P_("Titlebar lower padding"),
+                                                             0, G_MAXINT,
+                                                             0, GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-titlebar-left-padding",
+                                                             P_("Titlebar left padding"),
+                                                             P_("Titlebar left padding"),
+                                                             0, G_MAXINT,
+                                                             0, GTK_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-titlebar-right-padding",
+                                                             P_("Titlebar right padding"),
+                                                             P_("Titlebar right padding"),
+                                                             0, G_MAXINT,
+                                                             0, GTK_PARAM_READWRITE));
+
   /**
    * GtkWindow:client-side-decorated:
    *
@@ -1102,7 +1153,7 @@ gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GtkWidget *label;
-  
+
   gtk_widget_set_has_window (GTK_WIDGET (window), TRUE);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
@@ -1146,7 +1197,7 @@ gtk_window_init (GtkWindow *window)
   priv->startup_id = NULL;
   priv->mnemonics_visible = TRUE;
   priv->client_side_decorated = TRUE;
-  gtk_window_set_client_side_decorations (window, GDK_DECOR_BORDER | GDK_DECOR_TITLE | GDK_DECOR_MAXIMIZE);
+  //gtk_window_set_client_side_decorations (window, GDK_DECOR_BORDER | GDK_DECOR_TITLE | GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
   priv->disable_client_side_decorations = FALSE;
   priv->cursor_region = -1;
@@ -1624,15 +1675,23 @@ update_window_buttons (GtkWindow *window)
 
   if (is_client_side_decorated (window))
     {
-      if (priv->button_box)
-        gtk_widget_show (priv->button_box);
+      if (priv->primary_box)
+        gtk_widget_show (priv->primary_box);
+
+      if (priv->secondary_box)
+        gtk_widget_show (priv->secondary_box);
+
       // XXX: should this be using GdkWMFunction instead?
       if (priv->min_button)
         {
           if (priv->client_side_decorations & GDK_DECOR_MINIMIZE)
-            gtk_widget_show_all (priv->min_button);
+            {
+              gtk_widget_show_all (priv->min_button);
+            }
           else
-            gtk_widget_hide (priv->min_button);
+            {
+              gtk_widget_hide (priv->min_button);
+            }
         }
 
       if (priv->max_button)
@@ -1643,23 +1702,29 @@ update_window_buttons (GtkWindow *window)
             gtk_widget_hide (priv->max_button);
         }
 
-      // close?
+      if (priv->close_button)
+        {
+          if (priv->deletable)
+            {
+              gtk_widget_show_all (priv->close_button);
+            }
+          else
+            {
+              gtk_widget_hide (priv->close_button);
+            }
+        }
 
-      if (priv->icon_event_box)
-        gtk_widget_show (priv->icon_event_box);
-      if (priv->title_icon)
-        gtk_widget_show (priv->title_icon);
       if (priv->title_label)
         gtk_widget_show (priv->title_label);
     }
   else
     {
-      if (priv->button_box)
-        gtk_widget_hide (priv->button_box);
-      if (priv->icon_event_box)
-        gtk_widget_hide (priv->icon_event_box);
-      if (priv->title_icon)
-        gtk_widget_hide (priv->title_icon);
+      if (priv->primary_box)
+        gtk_widget_hide (priv->primary_box);
+
+      if (priv->secondary_box)
+        gtk_widget_hide (priv->secondary_box);
+
       if (priv->title_label)
         gtk_widget_hide (priv->title_label);
     }
@@ -1670,8 +1735,15 @@ gtk_window_style_set (GtkWidget *widget,
                       GtkStyle  *prev_style)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  gchar *layout_desc;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->style_set (widget, prev_style);
+
+  gtk_widget_style_get (widget,
+                        "decoration-button-layout", &layout_desc,
+                        NULL);
+
+  ensure_title_box (window);
 
   update_window_buttons (window);
   gtk_widget_queue_resize (widget);
@@ -1707,59 +1779,142 @@ update_max_button (GtkWindow *window,
     }
 }
 
+static gboolean
+icon_button_press (GtkWidget      *widget,
+                   GdkEventButton *event,
+                   gpointer        user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_do_popup (window, event);
+
+  return TRUE;
+}
+
+static void
+setup_inner_token (GtkWindow *window, const gchar *token, gboolean pack_primary)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  gchar **inner_tokens;
+  gint n_inner_tokens = 0;
+
+  if (token)
+    inner_tokens = g_strsplit (token, ",", -1);
+
+  if (inner_tokens)
+    {
+      GtkWidget *button;
+      GtkWidget *hbox = gtk_hbox_new (FALSE, 0);
+
+      gtk_widget_set_parent (hbox, GTK_WIDGET (window));
+
+      while (inner_tokens[n_inner_tokens] != NULL)
+        {
+          if (g_strcmp0 (inner_tokens[n_inner_tokens], "maximize") == 0)
+            {
+              button = gtk_button_new ();
+              gtk_widget_set_size_request (button, 20, 18); // XXX - TODO
+              gtk_widget_set_name (button, "gtk-window-decorated-maximize-button");
+              gtk_widget_set_tooltip_text (button, _("Maximize Window"));
+              GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
+              gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+              priv->max_button = button;
+              g_signal_connect (button, "clicked", G_CALLBACK (max_button_clicked), window);
+            }
+          else if (g_strcmp0 (inner_tokens[n_inner_tokens], "minimize") == 0)
+            {
+              button = gtk_button_new ();
+              gtk_widget_set_size_request (button, 20, 18); // XXX - TODO
+              gtk_widget_set_name (button, "gtk-window-decorated-minimize-button");
+              gtk_widget_set_tooltip_text (button, _("Minimize Window"));
+              GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
+              gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+              priv->min_button = button;
+              g_signal_connect (button, "clicked", G_CALLBACK (min_button_clicked), window);
+            }
+          else if (g_strcmp0 (inner_tokens[n_inner_tokens], "close") == 0)
+            {
+              button = gtk_button_new ();
+              gtk_widget_set_size_request (button, 20, 18); // XXX - TODO
+              gtk_widget_set_name (button, "gtk-window-decorated-close-button");
+              gtk_widget_set_tooltip_text (button, _("Close Window"));
+              GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
+              gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+              priv->close_button = button;
+              g_signal_connect (button, "clicked", G_CALLBACK (close_button_clicked), window);
+            }
+          else if (g_strcmp0 (inner_tokens[n_inner_tokens], "menu") == 0)
+            {
+              if (!priv->icon_event_box)
+                {
+                  priv->icon_event_box = gtk_event_box_new ();
+                  gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_event_box), FALSE);
+
+                  priv->title_icon = gtk_image_new ();
+
+                  gtk_container_add (GTK_CONTAINER (priv->icon_event_box),
+                                     priv->title_icon);
+
+                  g_signal_connect (G_OBJECT (priv->icon_event_box),
+                                    "button-press-event",
+                                    G_CALLBACK (icon_button_press),
+                                    window);
+
+                  gtk_box_pack_start (GTK_BOX (hbox), priv->icon_event_box, TRUE, TRUE, 0);
+                }
+            }
+
+          n_inner_tokens++;
+        }
+
+      if (pack_primary)
+        {
+          if (priv->primary_box != NULL)
+            {
+              gtk_widget_destroy (priv->primary_box);
+              priv->primary_box = NULL;
+            }
+
+          priv->primary_box = hbox;
+        }
+      else
+        {
+          if (priv->secondary_box != NULL)
+            {
+              gtk_widget_destroy (priv->secondary_box);
+              priv->secondary_box = NULL;
+            }
+
+          priv->secondary_box = hbox;
+        }
+
+      gtk_widget_show_all (hbox);
+
+      g_strfreev (inner_tokens);
+    }
+}
+
 static void
 ensure_title_box (GtkWindow *window)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-
-  if (is_client_side_decorated (window) && !priv->button_box)
+  if (is_client_side_decorated (window))
     {
-      GtkWidget *hbox;
-      GtkWidget *button;
-      GtkWidget *image;
+      gchar *layout_desc;
+      gchar **tokens;
 
-      hbox = gtk_hbox_new (FALSE, 0);
-      gtk_widget_set_parent (hbox, GTK_WIDGET (window));
+      gtk_widget_style_get (GTK_WIDGET (window),
+                            "decoration-button-layout", &layout_desc,
+                            NULL);
 
-      button = gtk_button_new ();
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      gtk_widget_set_name (button, "gtk-window-decorated-minimize-button");
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_OUT, GTK_ICON_SIZE_MENU);
-      gtk_widget_set_tooltip_text (button, _("Minimize Window"));
-      GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
-      gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-      priv->min_button = button;
-      g_signal_connect (G_OBJECT (button), "clicked",
-                        G_CALLBACK (min_button_clicked), window);
+      tokens = g_strsplit (layout_desc, ":", 2);
 
-      button = gtk_button_new ();
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      gtk_widget_set_name (button, "gtk-window-decorated-maximize-button");
-      image = gtk_image_new_from_stock (GTK_STOCK_ZOOM_IN, GTK_ICON_SIZE_MENU);
-      gtk_widget_set_tooltip_text (button, _("Maximize Window"));
-      GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
-      gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-      priv->max_button = button;
-      g_signal_connect (G_OBJECT (button), "clicked",
-                        G_CALLBACK (max_button_clicked), window);
+      if (tokens)
+        {
+          setup_inner_token (window, tokens[0], gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_LTR);
+          setup_inner_token (window, tokens[1], gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_RTL);
 
-      button = gtk_button_new ();
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      gtk_widget_set_name (button, "gtk-window-decorated-close-button");
-      image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-      gtk_widget_set_tooltip_text (button, _("Close Window"));
-      GTK_WIDGET_UNSET_FLAGS (button, GTK_CAN_FOCUS);
-      gtk_container_add (GTK_CONTAINER (button), image);
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-      priv->close_button = button;
-      g_signal_connect (G_OBJECT (button), "clicked",
-                        G_CALLBACK (close_button_clicked), window);
-
-      priv->button_box = hbox;
-
-      gtk_widget_show_all (priv->button_box);
+          g_strfreev (tokens);
+        }
 
       update_window_buttons (window);
     }
@@ -1769,11 +1924,15 @@ static void
 gtk_window_set_label_widget (GtkWindow *window,
                              GtkWidget *label)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+  GtkWidget *widget;
+  GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (label == NULL || GTK_IS_WIDGET (label));
   g_return_if_fail (label == NULL || label->parent == NULL);
+
+  widget = GTK_WIDGET (window);
+  priv   = GTK_WINDOW_GET_PRIVATE (window);
 
   if (priv->title_label == label)
     return;
@@ -1787,7 +1946,12 @@ gtk_window_set_label_widget (GtkWindow *window,
 
   priv->title_label = label;
 
-  gtk_widget_set_parent (priv->title_label, GTK_WIDGET (window));
+  if (window->has_focus)
+    gtk_widget_set_name (priv->title_label, "decoration-title-focused");
+  else
+    gtk_widget_set_name (priv->title_label, "decoration-title-unfocused");
+
+  gtk_widget_set_parent (priv->title_label, widget);
   gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
 
   if (label)
@@ -1797,9 +1961,9 @@ gtk_window_set_label_widget (GtkWindow *window,
 
   gtk_widget_show (priv->title_label);
 
-  if (gtk_widget_get_visible (window))
+  if (gtk_widget_get_visible (widget))
     {
-      gtk_widget_queue_resize (GTK_WIDGET (window));
+      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -1823,11 +1987,13 @@ gtk_window_set_title (GtkWindow   *window,
 		      const gchar *title)
 {
   char *new_title;
+  GtkWidget *widget;
   GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = GTK_WINDOW_GET_PRIVATE (window);
+  widget = GTK_WIDGET (window);
+  priv   = GTK_WINDOW_GET_PRIVATE (window);
 
   new_title = g_strdup (title);
   g_free (window->title);
@@ -1837,7 +2003,11 @@ gtk_window_set_title (GtkWindow   *window,
     {
       GtkWidget *child = gtk_label_new (title);
 
-      gtk_widget_set_name (child, "gtk-window-decorated-title-label");
+      if (window->has_focus)
+        gtk_widget_set_name (child, "decoration-title-focused");
+      else
+        gtk_widget_set_name (child, "decoration-title-unfocused");
+
       gtk_widget_show (child);
       gtk_window_set_label_widget (window, child);
     }
@@ -1846,12 +2016,12 @@ gtk_window_set_title (GtkWindow   *window,
       gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
 
-  if (gtk_widget_get_visible (priv->title_label) && gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_widget_queue_resize (GTK_WIDGET (window));
+  if (gtk_widget_get_visible (priv->title_label) && gtk_widget_get_visible (widget))
+    gtk_widget_queue_resize (widget);
 
-  if (gtk_widget_get_realized (window))
+  if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_title (GTK_WIDGET (window)->window, window->title);
+      gdk_window_set_title (widget->window, window->title);
 
       gtk_label_set_text (GTK_LABEL (priv->title_label), title);
     }
@@ -3413,6 +3583,17 @@ gtk_window_set_client_side_decorations (GtkWindow       *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  if (setting == GDK_DECOR_ALL)
+    {
+      setting = GDK_DECOR_ALL |
+        GDK_DECOR_BORDER      |
+        GDK_DECOR_RESIZEH     |
+        GDK_DECOR_TITLE       |
+        GDK_DECOR_MENU        |
+        GDK_DECOR_MINIMIZE    |
+        GDK_DECOR_MAXIMIZE;
+    }
+
   priv = GTK_WINDOW_GET_PRIVATE (window);
 
   if (setting == priv->client_side_decorations)
@@ -3758,24 +3939,13 @@ icon_list_from_theme (GtkWidget    *widget,
   return list;
 }
 
-static gboolean
-icon_button_press (GtkWidget      *widget,
-                   GdkEventButton *event,
-                   gpointer        user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_do_popup (window, event);
-
-  return TRUE;
-}
-
 static void
 ensure_title_icon (GtkWindow *window)
 {
+  GtkWidget *widget = GTK_WIDGET (window);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  ensure_title_box (window);
+  //ensure_title_box (window);
 
   if (!priv->icon_event_box)
     {
@@ -3792,13 +3962,13 @@ ensure_title_icon (GtkWindow *window)
                         G_CALLBACK (icon_button_press),
                         window);
 
-      gtk_widget_set_parent (priv->icon_event_box, GTK_WIDGET (window));
+      gtk_widget_set_parent (priv->icon_event_box, widget);
       gtk_widget_show_all (priv->icon_event_box);
     }
 
-  if (gtk_widget_get_visible (window))
+  if (gtk_widget_get_visible (widget))
     {
-      gtk_widget_queue_resize (GTK_WIDGET (window));
+      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -3807,9 +3977,12 @@ set_title_icon (GtkWindow *window, GdkPixbuf *pixbuf)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
-  ensure_title_icon (window);
+  ensure_title_box (window);
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (priv->title_icon), pixbuf);
+  if (priv->title_icon)
+    {
+      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->title_icon), pixbuf);
+    }
 }
 
 static void
@@ -5159,18 +5332,27 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_map (priv->title_label);
     }
 
+#if 0
   if (priv->icon_event_box &&
       gtk_widget_get_visible (priv->icon_event_box) &&
       !gtk_widget_get_mapped (priv->icon_event_box))
     {
       gtk_widget_map (priv->icon_event_box);
     }
+#endif
 
-  if (priv->button_box &&
-      gtk_widget_get_visible (priv->button_box) &&
-      !gtk_widget_get_mapped (priv->button_box))
+  if (priv->primary_box &&
+      gtk_widget_get_visible (priv->primary_box) &&
+      !gtk_widget_get_mapped (priv->primary_box))
     {
-      gtk_widget_map (priv->button_box);
+      gtk_widget_map (priv->primary_box);
+    }
+
+  if (priv->secondary_box &&
+      gtk_widget_get_visible (priv->secondary_box) &&
+      !gtk_widget_get_mapped (priv->secondary_box))
+    {
+      gtk_widget_map (priv->secondary_box);
     }
 
   if (window->frame)
@@ -5476,9 +5658,16 @@ gtk_window_realize (GtkWidget *widget)
   if (window->wm_role)
     gdk_window_set_role (widget->window, window->wm_role);
 
+  /*
   if (!window->decorated || client_decorated)
     {
       gdk_window_set_decorations (widget->window, 0);
+    }
+  */
+
+  if (client_decorated)
+    {
+      gtk_window_set_client_side_decorations (window, GDK_DECOR_ALL);
     }
 
   if (!priv->deletable)
@@ -5595,6 +5784,7 @@ gtk_window_size_request (GtkWidget      *widget,
     {
       gint frame_width = 0;
       gint extents_left = 0, extents_right = 0, extents_top = 0, extents_bottom = 0;
+      gint upper_padding = 0, lower_padding = 0;
       GdkWindowState state;
 
       if (widget->window != NULL)
@@ -5608,6 +5798,14 @@ gtk_window_size_request (GtkWidget      *widget,
                                 "extents-right",  &extents_right,
                                 "extents-bottom", &extents_bottom,
                                 NULL);
+
+          if (window->type == GTK_WINDOW_TOPLEVEL)
+            {
+              gtk_widget_style_get (widget,
+                                    "decoration-titlebar-upper-padding", &upper_padding,
+                                    "decoration-titlebar-lower-padding", &lower_padding,
+                                    NULL);
+            }
         }
 
       if (priv->client_side_decorations & GDK_DECOR_BORDER)
@@ -5619,8 +5817,7 @@ gtk_window_size_request (GtkWidget      *widget,
 
       if (window->type != GTK_WINDOW_POPUP)
         {
-          GtkRequisition box_requisition;
-          GtkRequisition icon_requisition;
+          GtkRequisition secondary_requisition;
           gint child_height = 0;
 
           if (priv->title_label && gtk_widget_get_visible (priv->title_label))
@@ -5629,17 +5826,19 @@ gtk_window_size_request (GtkWidget      *widget,
               child_height = child_requisition.height;
             }
 
+#if 0
           if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
             {
               gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
               child_height = MAX (child_height, icon_requisition.height);
             }
+#endif
 
-          if (priv->button_box && gtk_widget_get_visible (priv->button_box))
+          if (priv->primary_box && gtk_widget_get_visible (priv->primary_box))
             {
-              gtk_widget_size_request (priv->button_box, &box_requisition);
+              gtk_widget_size_request (priv->primary_box, &secondary_requisition);
 
-              child_height = MAX (child_height, box_requisition.height);
+              child_height = MAX (child_height, secondary_requisition.height);
             }
 
           // There should probably be some kind of padding property for
@@ -5650,6 +5849,8 @@ gtk_window_size_request (GtkWidget      *widget,
 
       requisition->width += extents_left + extents_right;
       requisition->height += extents_top + extents_bottom;
+
+      requisition->height += upper_padding + lower_padding;
     }
 
   if (bin->child && gtk_widget_get_visible (bin->child))
@@ -5680,14 +5881,21 @@ get_available_size_for_label (GtkWindow *window)
 
   available_size -= border_width * 2;
 
+#if 0
   if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
     {
       available_size -= priv->icon_event_box->allocation.width;
     }
+#endif
 
-  if (priv->button_box && gtk_widget_get_visible (priv->button_box))
+  if (priv->primary_box && gtk_widget_get_visible (priv->primary_box))
     {
-      available_size -= priv->button_box->allocation.width;
+      available_size -= priv->primary_box->allocation.width;
+    }
+
+  if (priv->secondary_box && gtk_widget_get_visible (priv->secondary_box))
+    {
+      available_size -= priv->secondary_box->allocation.width;
     }
 
   return available_size;
@@ -5703,6 +5911,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkWindowPrivate *priv;
   GtkRequisition deco_requisition;
   GtkAllocation deco_allocation;
+  GtkRequisition primary_requisition;
+  //  GtkAllocation primary_allocation;
   GtkRequisition box_requisition;
   GtkAllocation box_allocation;
   gint frame_width = 0;
@@ -5715,6 +5925,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
   gint extents_right = 0;
   gint extents_bottom = 0;
   GdkWindowState state;
+  gint upper_padding = 0;
+  gint lower_padding = 0;
 
   window = GTK_WINDOW (widget);
   container = GTK_CONTAINER (widget);
@@ -5729,6 +5941,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   if (client_decorated)
     {
+      if (window->type == GTK_WINDOW_TOPLEVEL)
+        {
+          gtk_widget_style_get (widget,
+                                "decoration-titlebar-upper-padding", &upper_padding,
+                                "decoration-titlebar-lower-padding", &lower_padding,
+                                NULL);
+        }
+
       if (widget->window && !(state & GDK_WINDOW_STATE_MAXIMIZED))
         {
           gtk_widget_style_get (widget,
@@ -5745,40 +5965,40 @@ gtk_window_size_allocate (GtkWidget     *widget,
         }
     }
 
-  if (client_decorated && priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
+  if (client_decorated && priv->primary_box && gtk_widget_get_visible (priv->primary_box))
     {
-      gtk_widget_get_child_requisition (priv->icon_event_box, &deco_requisition);
+      gtk_widget_get_child_requisition (priv->primary_box, &primary_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        deco_allocation.x = allocation->width - frame_width - deco_requisition.width - extents_left;
+        deco_allocation.x = allocation->width - frame_width - primary_requisition.width - extents_left;
       else
         deco_allocation.x = frame_width + extents_left;
-      deco_allocation.y = frame_width + extents_top;
-      deco_allocation.width = deco_requisition.width;
-      deco_allocation.height = deco_requisition.height;
+      deco_allocation.y = frame_width + extents_top + upper_padding;
+      deco_allocation.width = primary_requisition.width;
+      deco_allocation.height = primary_requisition.height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         left_width = deco_allocation.width;
 
-      gtk_widget_size_allocate (priv->icon_event_box, &deco_allocation);
+      gtk_widget_size_allocate (priv->primary_box, &deco_allocation);
     }
 
-  if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
+  if (client_decorated && priv->secondary_box && gtk_widget_get_visible (priv->secondary_box))
     {
-      gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
+      gtk_widget_get_child_requisition (priv->secondary_box, &box_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         box_allocation.x = frame_width + extents_left;
       else
         box_allocation.x = allocation->width - frame_width - box_requisition.width - extents_right;
-      box_allocation.y = frame_width + extents_top;
+      box_allocation.y = frame_width + extents_top + upper_padding;
       box_allocation.width = box_requisition.width;
       box_allocation.height = box_requisition.height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         left_width = box_allocation.width;
 
-      gtk_widget_size_allocate (priv->button_box, &box_allocation);
+      gtk_widget_size_allocate (priv->secondary_box, &box_allocation);
     }
 
   if (client_decorated && priv->title_label && gtk_widget_get_visible (priv->title_label))
@@ -5786,7 +6006,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
       deco_allocation.x = 2 * frame_width + left_width + extents_left;
-      deco_allocation.y = frame_width + extents_top;
+      deco_allocation.y = frame_width + extents_top + upper_padding;
       deco_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
       deco_allocation.height = deco_requisition.height;
 
@@ -5795,6 +6015,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (priv->title_label, &deco_allocation);
     }
 
+#if 0
   if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
     {
       gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
@@ -5806,6 +6027,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (priv->button_box, &box_allocation);
     }
+#endif
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
@@ -5814,6 +6036,9 @@ gtk_window_size_allocate (GtkWidget     *widget,
           child_allocation.x = container->border_width + frame_width + extents_left;
           child_allocation.y = container->border_width + extents_top
             + MAX (deco_allocation.height, box_allocation.height)
+            + upper_padding
+            + lower_padding
+            + widget->style->xthickness
             + frame_width; // XXX - padding style property?
           child_allocation.width = MAX (1, ((gint)allocation->width - container->border_width * 2
                                             - extents_left - extents_right
@@ -5821,6 +6046,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
           child_allocation.height = MAX (1, ((gint)allocation->height - container->border_width * 2
                                              - extents_top - extents_bottom
                                              - (frame_width * 2)
+                                             - upper_padding
+                                             - lower_padding
                                              // XXX - padding style property?
                                              - MAX (deco_allocation.height, box_allocation.height)));
         }
@@ -6021,12 +6248,18 @@ get_title_height (GtkWindow *window)
   gint title;
 
   title = 0;
+
+#if 0
   if (priv->title_icon && gtk_widget_get_visible (priv->title_icon))
     title = MAX (title, priv->title_icon->allocation.height);
+#endif
+
   if (priv->title_label && gtk_widget_get_visible (priv->title_label))
     title = MAX (title, priv->title_label->allocation.height);
-  if (priv->button_box && gtk_widget_get_visible (priv->button_box))
-    title = MAX (title, priv->button_box->allocation.height);
+  if (priv->primary_box && gtk_widget_get_visible (priv->primary_box))
+    title = MAX (title, priv->primary_box->allocation.height);
+  if (priv->secondary_box && gtk_widget_get_visible (priv->secondary_box))
+    title = MAX (title, priv->secondary_box->allocation.height);
 
   return title;
 }
@@ -6477,14 +6710,18 @@ do_focus_change (GtkWidget *widget,
 		 gboolean   in)
 {
   GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
-  
+
   g_object_ref (widget);
-  
+
   if (in)
-    GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
+    }
   else
-    GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  
+    {
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
+    }
+
   fevent->focus_change.type = GDK_FOCUS_CHANGE;
   fevent->focus_change.window = widget->window;
   if (widget->window)
@@ -6511,6 +6748,34 @@ gtk_window_focus_in_event (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
+
+  if (is_client_side_decorated (GTK_WINDOW (widget)))
+    {
+      if (priv->title_label)
+        {
+          gtk_widget_set_name (priv->title_label,
+                               "decoration-title-focused");
+        }
+
+      if (priv->max_button)
+        {
+          gtk_widget_set_name (priv->max_button,
+                               "gtk-window-decorated-maximize-button-focused");
+        }
+
+      if (priv->min_button)
+        {
+          gtk_widget_set_name (priv->min_button,
+                               "gtk-window-decorated-minimize-button-focused");
+        }
+
+      if (priv->close_button)
+        {
+          gtk_widget_set_name (priv->close_button,
+                               "gtk-window-decorated-close-button-focused");
+        }
+    }
 
   /* It appears spurious focus in events can occur when
    *  the window is hidden. So we'll just check to see if
@@ -6521,10 +6786,13 @@ gtk_window_focus_in_event (GtkWidget     *widget,
     {
       _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
+
+#if 0
       if (is_client_side_decorated (window))
         gtk_window_queue_draw_border (widget);
+#endif
     }
-      
+
   return FALSE;
 }
 
@@ -6533,7 +6801,35 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 			    GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   gboolean auto_mnemonics;
+
+  if (is_client_side_decorated (GTK_WINDOW (widget)))
+    {
+      if (priv->title_label)
+        {
+          gtk_widget_set_name (priv->title_label,
+                               "decoration-title-unfocused");
+        }
+
+      if (priv->max_button)
+        {
+          gtk_widget_set_name (priv->max_button,
+                               "gtk-window-decorated-maximize-button-unfocused");
+        }
+
+      if (priv->min_button)
+        {
+          gtk_widget_set_name (priv->min_button,
+                               "gtk-window-decorated-minimize-button-unfocused");
+        }
+
+      if (priv->close_button)
+        {
+          gtk_widget_set_name (priv->close_button,
+                               "gtk-window-decorated-close-button-unfocused");
+        }
+    }
 
   _gtk_window_set_has_toplevel_focus (window, FALSE);
   _gtk_window_set_is_active (window, FALSE);
@@ -6624,14 +6920,19 @@ gtk_window_forall (GtkContainer   *container,
   if (bin->child)
     (* callback) (bin->child, callback_data);
 
+#if 0
   if (priv->icon_event_box)
     (* callback) (priv->icon_event_box, callback_data);
+#endif
 
   if (priv->title_label)
     (* callback) (priv->title_label, callback_data);
 
-  if (priv->button_box)
-    (* callback) (priv->button_box, callback_data);
+  if (priv->primary_box)
+    (* callback) (priv->primary_box, callback_data);
+
+  if (priv->secondary_box)
+    (* callback) (priv->secondary_box, callback_data);
 }
 
 static void
@@ -6641,23 +6942,32 @@ gtk_window_remove (GtkContainer *container,
   GtkWindow *window = GTK_WINDOW (container);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
 
+#if 0
   if (priv->icon_event_box && priv->icon_event_box == child)
     {
       gtk_widget_unparent (priv->icon_event_box);
       gtk_widget_destroy (priv->icon_event_box);
       priv->icon_event_box = NULL;
     }
-  else if (priv->title_label && priv->title_label == child)
+#endif
+
+  if (priv->title_label && priv->title_label == child)
     {
       gtk_widget_unparent (priv->title_label);
       gtk_widget_destroy (priv->title_label);
       priv->title_label = NULL;
     }
-  else if (priv->button_box && priv->button_box == child)
+  else if (priv->primary_box && priv->primary_box == child)
     {
-      gtk_widget_unparent (priv->button_box);
-      gtk_widget_destroy (priv->button_box);
-      priv->button_box = NULL;
+      gtk_widget_unparent (priv->primary_box);
+      gtk_widget_destroy (priv->primary_box);
+      priv->primary_box = NULL;
+    }
+  else if (priv->secondary_box && priv->secondary_box == child)
+    {
+      gtk_widget_unparent (priv->secondary_box);
+      gtk_widget_destroy (priv->secondary_box);
+      priv->secondary_box = NULL;
     }
   else
     {
@@ -7995,13 +8305,15 @@ gtk_window_compute_hints (GtkWindow   *window,
 
 // This is just temporary, because it looks cool :)
 static void
-gtk_window_paint (GtkWidget     *widget,
+gtk_window_paint (GtkWidget    *widget,
 		  GdkRectangle *area)
 {
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       gint frame_width, title_height;
       gint extents_left, extents_top, extents_right, extents_bottom;
+      gint upper_padding = 0;
+      gint lower_padding = 0;
 
       frame_width = title_height = extents_left = extents_right = extents_top = extents_bottom = 0;
 
@@ -8010,6 +8322,8 @@ gtk_window_paint (GtkWidget     *widget,
           frame_width = get_decoration_frame_width (GTK_WINDOW (widget));
           title_height = get_title_height (GTK_WINDOW (widget));
 
+          // title_height = 18;
+
           gtk_widget_style_get (widget,
                                 "decoration-border-width", &frame_width,
                                 "extents-left",            &extents_left,
@@ -8017,6 +8331,16 @@ gtk_window_paint (GtkWidget     *widget,
                                 "extents-right",           &extents_right,
                                 "extents-bottom",          &extents_bottom,
                                 NULL);
+
+          if (GTK_WINDOW (widget)->type == GTK_WINDOW_TOPLEVEL)
+            {
+              gtk_widget_style_get (widget,
+                                    "decoration-titlebar-upper-padding", &upper_padding,
+                                    "decoration-titlebar-lower-padding", &lower_padding,
+                                    NULL);
+            }
+
+          title_height += upper_padding + lower_padding;
         }
 
       gtk_paint_box (widget->style,
@@ -8051,8 +8375,6 @@ static gint
 gtk_window_expose (GtkWidget      *widget,
 		   GdkEventExpose *event)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (widget);
-
   if (!gtk_widget_get_app_paintable (widget))
     gtk_window_paint (widget, &event->area);
 
@@ -9838,7 +10160,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
  **/
 void
 _gtk_window_set_has_toplevel_focus (GtkWindow *window,
-				   gboolean   has_toplevel_focus)
+                                    gboolean   has_toplevel_focus)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
   

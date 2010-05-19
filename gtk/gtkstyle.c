@@ -3748,7 +3748,8 @@ paint_decorated_window (GtkStyle *style,
   const double hmargin = 2.5 + x;
   const double vmargin = 2.5 + y;
   const double radius = 5;
-  GdkColor *color;
+  GdkColor *normal_color;
+  GdkColor *selected_color;
   GdkWindowState state;
 
   if (width == -1)
@@ -3805,22 +3806,40 @@ paint_decorated_window (GtkStyle *style,
 
   cairo_close_path (cr);
 
-  gradient = cairo_pattern_create_linear (width / 2 - 1, vmargin,
-                                          width / 2 + 1, height);
+#if 0
+  gradient = cairo_pattern_create_linear (width / 2 - 1,
+                                          vmargin,
+                                          width / 2 + 1,
+                                          height);
+#else
+  gradient = cairo_pattern_create_linear (0,
+                                          vmargin,
+                                          0,
+                                          18); // XXX - TODO
+#endif
+
+  selected_color = &style->base[GTK_STATE_SELECTED];
+  normal_color = &style->base[GTK_STATE_NORMAL];
+
   if (GTK_IS_WINDOW (widget) &&
       gtk_window_has_toplevel_focus (GTK_WINDOW (widget)) &&
       gtk_window_is_active (GTK_WINDOW (widget)))
-    color = &style->bg[GTK_STATE_SELECTED];
+    {
+      //color = &style->bg[GTK_STATE_SELECTED];
+    }
   else
-    color = &style->bg[GTK_STATE_NORMAL];
+    {
+      //color = &style->bg[GTK_STATE_NORMAL];
+    }
+
   cairo_pattern_add_color_stop_rgba (gradient, 0,
-				     color->red / 65535.,
-				     color->green / 65535.,
-				     color->blue / 65535., 0.9);
-  cairo_pattern_add_color_stop_rgba (gradient, 0.8,
-				     color->red / 65535.,
-				     color->green / 65535.,
-				     color->blue / 65535., 1.0);
+				     normal_color->red / 65535.,
+				     normal_color->green / 65535.,
+				     normal_color->blue / 65535., 1.0);
+  cairo_pattern_add_color_stop_rgba (gradient, 0.9,
+				     selected_color->red / 65535.,
+				     selected_color->green / 65535.,
+				     selected_color->blue / 65535., 1.0);
   cairo_set_source (cr, gradient);
   cairo_fill_preserve (cr);
 
@@ -3828,6 +3847,17 @@ paint_decorated_window (GtkStyle *style,
   cairo_set_line_width (cr, 1);
   cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
   cairo_stroke (cr);
+
+  cairo_set_source_rgba (cr,
+                         selected_color->red / 65535.,
+                         selected_color->green / 65535.,
+                         selected_color->blue / 65535., 1.0);
+
+  cairo_rectangle (cr,
+                   0,
+                   widget->allocation.height - height,
+                   widget->allocation.width,
+                   widget->allocation.height);
 
   cairo_destroy (cr);
 }
@@ -3930,7 +3960,7 @@ gtk_default_draw_box (GtkStyle      *style,
       return;
     }
 
-  if (strcmp (detail, "decoration") == 0)
+  if (detail && strcmp (detail, "decoration") == 0)
     {
       paint_decorated_window (style, window, state_type, shadow_type,
                               area, widget, detail, x, y, width, height);
