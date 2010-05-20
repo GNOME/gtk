@@ -1207,6 +1207,7 @@ gtk_window_init (GtkWindow *window)
   priv->mnemonics_visible = TRUE;
   priv->client_side_decorated = TRUE;
   priv->current_gdk_decorations = -1;
+  priv->title_icon = NULL;
 
   //gtk_window_set_client_side_decorations (window, GDK_DECOR_BORDER | GDK_DECOR_TITLE | GDK_DECOR_MAXIMIZE);
   priv->old_decorations = 0;
@@ -1244,10 +1245,14 @@ gtk_window_set_property (GObject      *object,
       break;
     case PROP_DISABLE_CLIENT_SIDE_DECORATIONS:
       priv->disable_client_side_decorations = g_value_get_boolean (value);
-      if (priv->primary_box)
-        gtk_widget_destroy (priv->primary_box);
-      if (priv->secondary_box)
-        gtk_widget_destroy (priv->secondary_box);
+
+      if (priv->disable_client_side_decorations)
+        {
+          if (priv->primary_box)
+            gtk_widget_destroy (priv->primary_box);
+          if (priv->secondary_box)
+            gtk_widget_destroy (priv->secondary_box);
+        }
       break;
     case PROP_TITLE:
       gtk_window_set_title (window, g_value_get_string (value));
@@ -1863,23 +1868,7 @@ setup_inner_token (GtkWindow *window, const gchar *token, gboolean pack_primary)
             }
           else if (g_strcmp0 (inner_tokens[n_inner_tokens], "menu") == 0)
             {
-              if (!priv->icon_event_box)
-                {
-                  priv->icon_event_box = gtk_event_box_new ();
-                  gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_event_box), FALSE);
-
-                  priv->title_icon = gtk_image_new ();
-
-                  gtk_container_add (GTK_CONTAINER (priv->icon_event_box),
-                                     priv->title_icon);
-
-                  g_signal_connect (G_OBJECT (priv->icon_event_box),
-                                    "button-press-event",
-                                    G_CALLBACK (icon_button_press),
-                                    window);
-
-                  gtk_box_pack_start (GTK_BOX (hbox), priv->icon_event_box, TRUE, TRUE, 0);
-                }
+              ensure_title_icon (window);
             }
 
           n_inner_tokens++;
