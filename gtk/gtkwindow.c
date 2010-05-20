@@ -370,7 +370,6 @@ static void        gtk_window_set_client_side_decorations (GtkWindow       *wind
 
 static void        gtk_window_queue_draw_border (GtkWidget *widget);
 
-static void        ensure_title_icon           (GtkWindow *window);
 static void        ensure_title_box            (GtkWindow *window);
 static void        setup_title_label           (GtkWindow *window);
 
@@ -1868,7 +1867,24 @@ setup_inner_token (GtkWindow *window, const gchar *token, gboolean pack_primary)
             }
           else if (g_strcmp0 (inner_tokens[n_inner_tokens], "menu") == 0)
             {
-              ensure_title_icon (window);
+              if (!priv->icon_event_box)
+                {
+                  priv->icon_event_box = gtk_event_box_new ();
+                  gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_event_box), FALSE);
+
+                  priv->title_icon = gtk_image_new ();
+                  gtk_widget_set_size_request (priv->title_icon, 20, 18); // XXX - TODO
+
+                  gtk_container_add (GTK_CONTAINER (priv->icon_event_box),
+                                     priv->title_icon);
+
+                  g_signal_connect (G_OBJECT (priv->icon_event_box),
+                                    "button-press-event",
+                                    G_CALLBACK (icon_button_press),
+                                    window);
+
+                  gtk_box_pack_start (GTK_BOX (hbox), priv->icon_event_box, TRUE, TRUE, 0);
+                }
             }
 
           n_inner_tokens++;
@@ -1904,7 +1920,9 @@ setup_inner_token (GtkWindow *window, const gchar *token, gboolean pack_primary)
 static void
 ensure_title_box (GtkWindow *window)
 {
-  if (is_client_side_decorated (window))
+  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
+
+  if (is_client_side_decorated (window) && !priv->primary_box && !priv->secondary_box)
     {
       gchar *layout_desc;
       gchar **tokens;
@@ -3959,37 +3977,6 @@ icon_list_from_theme (GtkWidget    *widget,
 }
 
 static void
-ensure_title_icon (GtkWindow *window)
-{
-  GtkWidget *widget = GTK_WIDGET (window);
-  GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
-
-  if (!priv->icon_event_box)
-    {
-      priv->icon_event_box = gtk_event_box_new ();
-      gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->icon_event_box), FALSE);
-
-      priv->title_icon = gtk_image_new ();
-
-      gtk_container_add (GTK_CONTAINER (priv->icon_event_box),
-                         priv->title_icon);
-
-      g_signal_connect (G_OBJECT (priv->icon_event_box),
-                        "button-press-event",
-                        G_CALLBACK (icon_button_press),
-                        window);
-
-      gtk_widget_set_parent (priv->icon_event_box, widget);
-      gtk_widget_show_all (priv->icon_event_box);
-
-      if (gtk_widget_get_visible (widget))
-        {
-          gtk_widget_queue_resize (widget);
-        }
-    }
-}
-
-static void
 set_title_icon (GtkWindow *window, GdkPixbuf *pixbuf)
 {
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
@@ -5835,6 +5822,7 @@ gtk_window_size_request (GtkWidget      *widget,
 
       if (window->type != GTK_WINDOW_POPUP)
         {
+          GtkRequisition primary_requisition;
           GtkRequisition secondary_requisition;
           gint child_height = 0;
 
@@ -5844,17 +5832,16 @@ gtk_window_size_request (GtkWidget      *widget,
               child_height = child_requisition.height;
             }
 
-#if 0
-          if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
-            {
-              gtk_widget_size_request (priv->icon_event_box, &icon_requisition);
-              child_height = MAX (child_height, icon_requisition.height);
-            }
-#endif
-
           if (priv->primary_box && gtk_widget_get_visible (priv->primary_box))
             {
-              gtk_widget_size_request (priv->primary_box, &secondary_requisition);
+              gtk_widget_size_request (priv->primary_box, &primary_requisition);
+
+              child_height = MAX (child_height, primary_requisition.height);
+            }
+
+          if (priv->secondary_box && gtk_widget_get_visible (priv->secondary_box))
+            {
+              gtk_widget_size_request (priv->secondary_box, &secondary_requisition);
 
               child_height = MAX (child_height, secondary_requisition.height);
             }
@@ -5899,12 +5886,10 @@ get_available_size_for_label (GtkWindow *window)
 
   available_size -= border_width * 2;
 
-#if 0
   if (priv->icon_event_box && gtk_widget_get_visible (priv->icon_event_box))
     {
       available_size -= priv->icon_event_box->allocation.width;
     }
-#endif
 
   if (priv->primary_box && gtk_widget_get_visible (priv->primary_box))
     {
@@ -5928,10 +5913,10 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWindowPrivate *priv;
   GtkRequisition deco_requisition;
-  GtkAllocation deco_allocation;
+  GtkAllocation primary_allocation;
   GtkRequisition primary_requisition;
-  GtkRequisition box_requisition;
-  GtkAllocation box_allocation;
+  GtkRequisition secondary_requisition;
+  GtkAllocation secondary_allocation;
   gint frame_width = 0;
   gint title_width = 0;
   gint left_width = 0;
@@ -5954,7 +5939,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
   if (widget->window)
     state = gdk_window_get_state (widget->window);
 
-  deco_allocation.width = deco_allocation.height = 0;
+  primary_allocation.width = primary_allocation.height = 0;
 
   if (client_decorated)
     {
@@ -5987,64 +5972,50 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_get_child_requisition (priv->primary_box, &primary_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        deco_allocation.x = allocation->width - frame_width - primary_requisition.width - extents_left;
+        primary_allocation.x = allocation->width - frame_width - primary_requisition.width - extents_left;
       else
-        deco_allocation.x = frame_width + extents_left;
-      deco_allocation.y = frame_width + extents_top + upper_padding;
-      deco_allocation.width = primary_requisition.width;
-      deco_allocation.height = primary_requisition.height;
+        primary_allocation.x = frame_width + extents_left;
+      primary_allocation.y = frame_width + extents_top + upper_padding;
+      primary_allocation.width = primary_requisition.width;
+      primary_allocation.height = primary_requisition.height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-        left_width = deco_allocation.width;
+        left_width = primary_allocation.width;
 
-      gtk_widget_size_allocate (priv->primary_box, &deco_allocation);
+      gtk_widget_size_allocate (priv->primary_box, &primary_allocation);
     }
 
   if (client_decorated && priv->secondary_box && gtk_widget_get_visible (priv->secondary_box))
     {
-      gtk_widget_get_child_requisition (priv->secondary_box, &box_requisition);
+      gtk_widget_get_child_requisition (priv->secondary_box, &secondary_requisition);
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        box_allocation.x = frame_width + extents_left;
+        secondary_allocation.x = frame_width + extents_left;
       else
-        box_allocation.x = allocation->width - frame_width - box_requisition.width - extents_right;
-      box_allocation.y = frame_width + extents_top + upper_padding;
-      box_allocation.width = box_requisition.width;
-      box_allocation.height = box_requisition.height;
+        secondary_allocation.x = allocation->width - frame_width - secondary_requisition.width - extents_right;
+      secondary_allocation.y = frame_width + extents_top + upper_padding;
+      secondary_allocation.width = secondary_requisition.width;
+      secondary_allocation.height = secondary_requisition.height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        left_width = box_allocation.width;
+        left_width = secondary_allocation.width;
 
-      gtk_widget_size_allocate (priv->secondary_box, &box_allocation);
+      gtk_widget_size_allocate (priv->secondary_box, &secondary_allocation);
     }
 
   if (client_decorated && priv->title_label && gtk_widget_get_visible (priv->title_label))
     {
       gtk_widget_get_child_requisition (priv->title_label, &deco_requisition);
 
-      deco_allocation.x = 2 * frame_width + left_width + extents_left;
-      deco_allocation.y = frame_width + extents_top + upper_padding;
-      deco_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
-      deco_allocation.height = deco_requisition.height;
+      primary_allocation.x = 2 * frame_width + left_width + extents_left;
+      primary_allocation.y = frame_width + extents_top + upper_padding;
+      primary_allocation.width = MAX (deco_requisition.width, get_available_size_for_label (window));
+      primary_allocation.height = deco_requisition.height;
 
-      title_width = deco_allocation.width;
+      title_width = primary_allocation.width;
 
-      gtk_widget_size_allocate (priv->title_label, &deco_allocation);
+      gtk_widget_size_allocate (priv->title_label, &primary_allocation);
     }
-
-#if 0
-  if (client_decorated && priv->button_box && gtk_widget_get_visible (priv->button_box))
-    {
-      gtk_widget_get_child_requisition (priv->button_box, &box_requisition);
-
-      box_allocation.x = allocation->width - frame_width - box_requisition.width;
-      box_allocation.y = frame_width;
-      box_allocation.width = box_requisition.width;
-      box_allocation.height = box_requisition.height;
-
-      gtk_widget_size_allocate (priv->button_box, &box_allocation);
-    }
-#endif
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
@@ -6052,7 +6023,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
         {
           child_allocation.x = container->border_width + frame_width + extents_left;
           child_allocation.y = container->border_width + extents_top
-            + MAX (deco_allocation.height, box_allocation.height)
+            + MAX (primary_allocation.height, secondary_allocation.height)
             + upper_padding
             + lower_padding
             + frame_width; // XXX - padding style property?
@@ -6065,7 +6036,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
                                              - upper_padding
                                              - lower_padding
                                              // XXX - padding style property?
-                                             - MAX (deco_allocation.height, box_allocation.height)));
+                                             - MAX (primary_allocation.height, secondary_allocation.height)));
         }
       else
         {
@@ -6771,17 +6742,24 @@ gtk_window_queue_draw_border (GtkWidget *widget)
   if (is_client_side_decorated (GTK_WINDOW (widget)))
     {
       gint border_width = 0;
+      gint lower_padding = 0;
+      gint upper_padding = 0;
+      gint title_height = 0;
 
       gtk_widget_style_get (widget,
                             "decoration-border-width", &border_width,
+                            "decoration-titlebar-upper-padding", &upper_padding,
+                            "decoration-titlebar-lower-padding", &lower_padding,
                             NULL);
+
+      title_height = get_title_height (GTK_WINDOW (widget)) + border_width + lower_padding + upper_padding;
 
       /* Top */
       gtk_widget_queue_draw_area (widget,
                                   0,
                                   0,
                                   widget->allocation.width,
-                                  border_width);
+                                  title_height);
 
       /* Left */
       gtk_widget_queue_draw_area (widget,
