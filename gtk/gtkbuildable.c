@@ -23,17 +23,19 @@
  * @Short_description: Interface for objects that can be built by GtkBuilder
  * @Title: GtkBuildable
  *
- * In order to allow construction from a <link linkend="BUILDER-UI">GtkBuilder
- * UI description</link>, an object class must implement the
- * GtkBuildable interface. The interface includes methods for setting
- * names and properties of objects, parsing custom tags, constructing
- * child objects.
+ * GtkBuildable allows objects to extend and customize thier deserialization 
+ * from <link linkend="BUILDER-UI">GtkBuilder UI descriptions</link>.
+ * The interface includes methods for setting names and properties of objects, 
+ * parsing custom tags and constructing child objects.
  *
  * The GtkBuildable interface is implemented by all widgets and
  * many of the non-widget objects that are provided by GTK+. The
  * main user of this interface is #GtkBuilder, there should be
  * very little need for applications to call any
  * <function>gtk_buildable_...</function> functions.
+ *
+ * <note><para>An object only needs to implement this interface if it needs
+ * to extend the #GtkBuilder format or run any extra routines at deserialization time</para></note>
  */
 
 #include "config.h"
