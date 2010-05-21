@@ -669,10 +669,11 @@ gtk_paper_size_get_default (void)
   if (!locale)
     return GTK_PAPER_NAME_A4;
 
-  if (g_str_has_prefix (locale, "en_CA") ||
-      g_str_has_prefix (locale, "en_US") ||
-      g_str_has_prefix (locale, "es_PR") ||
-      g_str_has_prefix (locale, "es_US"))
+  /* CLDR 1.8.1
+   * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/territory_language_information.html
+   */
+  if (g_regex_match_simple("[^_.@]{2,3}_(BZ|CA|CL|CO|CR|GT|MX|NI|PA|PH|PR|SV|US|VE)",
+                           locale, G_REGEX_ANCHORED, G_REGEX_MATCH_ANCHORED))
     paper_size = GTK_PAPER_NAME_LETTER;
   else
     paper_size = GTK_PAPER_NAME_A4;
