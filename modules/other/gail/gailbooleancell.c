@@ -36,8 +36,7 @@ gchar *gail_boolean_cell_property_list[] = {
   NULL
 };
 
-G_DEFINE_TYPE_WITH_CODE (GailBooleanCell, gail_boolean_cell, GAIL_TYPE_RENDERER_CELL,
-                         gail_cell_type_add_action_interface (g_define_type_id))
+G_DEFINE_TYPE (GailBooleanCell, gail_boolean_cell, GAIL_TYPE_RENDERER_CELL)
 
 static void 
 gail_boolean_cell_class_init (GailBooleanCellClass *klass)
