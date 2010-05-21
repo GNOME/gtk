@@ -140,7 +140,16 @@ typedef enum
   GTK_ICON_SIZE_DIALOG
 } GtkIconSize;
 
-/* automatic sensitivity */
+/**
+ * GtkSensitivityType:
+ * @GTK_SENSITIVITY_AUTO: The arrow is made insensitive if the
+ *   thumb is at the end
+ * @GTK_SENSITIVITY_ON: The arrow is always sensitive
+ * @GTK_SENSITIVITY_OFF: The arrow is always insensitive
+ *
+ * Determines how GTK+ handles the sensitivity of stepper arrows
+ * at the end of range widgets.
+ */
 typedef enum
 {
   GTK_SENSITIVITY_AUTO,

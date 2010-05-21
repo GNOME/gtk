@@ -41,6 +41,22 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkrange
+ * @Short_description: Base class for widgets which visualize an adjustment
+ * @Title: GtkRange
+ *
+ * #GtkRange is the common base class for widgets which visualize an
+ * adjustment, e.g #GtkScale or #GtkScroolbar.
+ *
+ * Apart from signals for monitoring the parameters of the adjustment,
+ * #GtkRange provides properties and methods for influencing the sensitivity
+ * of the "steppers". It also provides properties and methods for setting a
+ * "fill level" on range widgets. See gtk_range_set_fill_level().
+ */
+
+
 #define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
 #define UPDATE_DELAY        300  /* Delay for queued update */
 
@@ -272,7 +288,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::value-changed:
-   * @range: the #GtkRange
+   * @range: the #GtkRange that received the signal
    *
    * Emitted when the range value changes.
    */
@@ -284,7 +300,12 @@ gtk_range_class_init (GtkRangeClass *class)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-  
+
+  /**
+   * GtkRange::adjust-bounds:
+   * @range: the #GtkRange that received the signal
+   * @value: the value before we clamp
+   */
   signals[ADJUST_BOUNDS] =
     g_signal_new (I_("adjust-bounds"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -297,7 +318,7 @@ gtk_range_class_init (GtkRangeClass *class)
   
   /**
    * GtkRange::move-slider:
-   * @range: the #GtkRange
+   * @range: the #GtkRange that received the signal
    * @step: how to move the slider
    *
    * Virtual function that moves the slider. Used for keybindings.
@@ -314,7 +335,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   /**
    * GtkRange::change-value:
-   * @range: the range that received the signal
+   * @range: the #GtkRange that received the signal
    * @scroll: the type of scroll action that was performed
    * @value: the new value resulting from the scroll action
    * @returns: %TRUE to prevent other handlers from being invoked for the
