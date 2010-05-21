@@ -690,7 +690,11 @@ gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
+#ifdef HAVE_XKB
   XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
+#else
+  XBell (GDK_DISPLAY_XDISPLAY (display), 0);
+#endif
 }
 
 /**
