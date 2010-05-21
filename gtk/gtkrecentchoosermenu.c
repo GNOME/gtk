@@ -47,6 +47,34 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+
+/**
+ * SECTION:gtkrecentchoosermenu
+ * @Short_description: Displays recently used files in a menu
+ * @Title: GtkRecentChooserMenu
+ * @See_also:#GtkRecentChooser
+ *
+ * #GtkRecentChooserMenu is a widget suitable for displaying recently used files
+ * inside a menu.  It can be used to set a sub-menu of a #GtkMenuItem using
+ * gtk_menu_item_set_submenu(), or as the menu of a #GtkMenuToolButton.
+ *
+ * Note that #GtkRecentChooserMenu does not have any methods of its own. Instead,
+ * you should use the functions that work on a #GtkRecentChooser.
+ *
+ * Note also that #GtkRecentChooserMenu does not support multiple filters, as it
+ * has no way to let the user choose between them as the #GtkRecentChooserWidget
+ * and #GtkRecentChooserDialog widgets do. Thus using gtk_recent_chooser_add_filter()
+ * on a #GtkRecentChooserMenu widget will yield the same effects as using
+ * gtk_recent_chooser_set_filter(), replacing any currently set filter
+ * with the supplied filter; gtk_recent_chooser_remove_filter() will remove
+ * any currently set #GtkRecentFilter object and will unset the current filter;
+ * gtk_recent_chooser_list_filters() will return a list containing a single
+ * #GtkRecentFilter object.
+ *
+ * Recently used files are supported since GTK+ 2.10.
+ */
+
+
 struct _GtkRecentChooserMenuPrivate
 {
   /* the recent manager object */
