@@ -282,19 +282,6 @@ gdk_events_pending (void)
   return FALSE;
 }
 
-static Bool
-graphics_expose_predicate (Display  *display,
-			   XEvent   *xevent,
-			   XPointer  arg)
-{
-  if (xevent->xany.window == GDK_DRAWABLE_XID ((GdkDrawable *)arg) &&
-      (xevent->xany.type == GraphicsExpose ||
-       xevent->xany.type == NoExpose))
-    return True;
-  else
-    return False;
-}
-
 static gint
 gdk_event_apply_filters (XEvent *xevent,
 			 GdkEvent *event,
