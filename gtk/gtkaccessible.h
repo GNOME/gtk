@@ -37,6 +37,7 @@ G_BEGIN_DECLS
 #define GTK_ACCESSIBLE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCESSIBLE, GtkAccessibleClass))
 
 typedef struct _GtkAccessible                GtkAccessible;
+typedef struct _GtkAccessiblePriv            GtkAccessiblePriv;
 typedef struct _GtkAccessibleClass           GtkAccessibleClass;
 
   /*
@@ -46,11 +47,8 @@ struct _GtkAccessible
 {
   AtkObject parent;
 
-  /*
-   * The GtkWidget whose properties and features are exported via this 
-   * accessible instance.
-   */
-  GtkWidget *GSEAL (widget);
+  /*< private >*/
+  GtkAccessiblePriv *priv;
 };
 
 struct _GtkAccessibleClass

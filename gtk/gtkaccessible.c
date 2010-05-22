@@ -30,20 +30,34 @@
  * @Title: GtkAccessible
  */
 
+/*
+ * GtkAccessiblePriv:
+ * @widget: The GtkWidget whose properties and features are exported via this
+ *   accessible instance
+ */
+struct _GtkAccessiblePriv
+{
+  GtkWidget *widget;
+};
 
 static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
 
 G_DEFINE_TYPE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
 
 static void
-gtk_accessible_init (GtkAccessible *object)
+gtk_accessible_init (GtkAccessible *accesible)
 {
+  accesible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accesible,
+                                                 GTK_TYPE_ACCESSIBLE,
+                                                 GtkAccessiblePriv);
 }
 
 static void
 gtk_accessible_class_init (GtkAccessibleClass *klass)
 {
   klass->connect_widget_destroyed = gtk_accessible_real_connect_widget_destroyed;
+
+  g_type_class_add_private (klass, sizeof (GtkAccessiblePriv));
 }
 
 /**
@@ -61,7 +75,7 @@ gtk_accessible_set_widget (GtkAccessible *accessible,
 {
   g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
-  accessible->widget = widget;
+  accessible->priv->widget = widget;
 }
 
 /**
@@ -81,7 +95,7 @@ gtk_accessible_get_widget (GtkAccessible *accessible)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
 
-  return accessible->widget;
+  return accessible->priv->widget;
 }
 
 /**
@@ -107,11 +121,13 @@ gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 static void
 gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  if (accessible->widget)
+  GtkAccessiblePriv *priv = accessible->priv;
+
+  if (priv->widget)
   {
-    g_signal_connect (accessible->widget,
+    g_signal_connect (priv->widget,
                       "destroy",
                       G_CALLBACK (gtk_widget_destroyed),
-                      &accessible->widget);
+                      &priv->widget);
   }
 }
