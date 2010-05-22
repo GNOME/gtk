@@ -55,8 +55,7 @@ struct _GtkAction
   GObject object;
 
   /*< private >*/
-
-  GtkActionPrivate *GSEAL (private_data);
+  GtkActionPrivate *private_data;
 };
 
 struct _GtkActionClass
