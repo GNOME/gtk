@@ -79,23 +79,38 @@ EXTRA_DIST += version.xml.in \
 
 ########################################################################
 
-if ENABLE_MAN
-
 man_MANS = 				\
 	gdk-pixbuf-csource-3.0.1	\
 	gdk-pixbuf-query-loaders-3.0.1
 
-%.1 : %.xml 
-	@XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+if ENABLE_MAN
 
-BUILT_EXTRA_DIST = $(man_MANS)
+.xml.1:
+	XSLTPROC@ -nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
+
+dist-local-check-mans-enabled:
+	if grep "Man generation disabled" $(man_MANS) >/dev/null; then $(RM) $(man_MANS); fi
+
+else
+
+$(man_MANS):
+	echo Man generation disabled.  Creating dummy $@.  Configure with --enable-man to enable it.
+	echo Man generation disabled.  Remove this file, configure with --enable-man, and rebuild > $@
+
+
+dist-local-check-mans-enabled:
+	echo "*** --enable-man must be used in order to make dist"
+	false
 
 endif
 
-dist-hook-local: $(BUILT_EXTRA_DIST)
-	files='$(BUILT_EXTRA_DIST)';				\
-	for f in $$files; do					\
-	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
-	  cp $$d/$$f $(distdir) || exit 1; done
+MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
+
+EXTRA_DIST += $(man_MANS)
+
+dist-hook-local: dist-local-check-mans-enabled gtk-docs-clean all-local
+
+gtk-docs-clean: clean
+	cd $(srcdir) && rm -rf xml html
 
 -include $(top_srcdir)/git.mk
