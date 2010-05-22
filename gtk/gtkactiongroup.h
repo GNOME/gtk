@@ -59,8 +59,7 @@ struct _GtkActionGroup
   GObject parent;
 
   /*< private >*/
-
-  GtkActionGroupPrivate *GSEAL (private_data);
+  GtkActionGroupPrivate *priv;
 };
 
 struct _GtkActionGroupClass
