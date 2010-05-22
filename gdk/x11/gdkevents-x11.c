@@ -68,6 +68,8 @@ typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkDisplaySource GdkDisplaySource;
 typedef struct _GdkEventTypeX11 GdkEventTypeX11;
 
+typedef union  _GdkNotifyEvent GdkNotifyEvent;
+
 struct _GdkIOClosure
 {
   GdkInputFunction function;
@@ -88,6 +90,13 @@ struct _GdkEventTypeX11
 {
   gint base;
   gint n_events;
+};
+
+union _GdkNotifyEvent
+{
+  XEvent xevent;
+  XFixesSelectionNotifyEvent selection_notify;
+  XDamageNotifyEvent damage_event;
 };
 
 /* 
@@ -845,7 +854,7 @@ gdk_event_translate (GdkDisplay *display,
 		     XEvent     *xevent,
 		     gboolean    return_exposes)
 {
-  
+  GdkNotifyEvent *notify_event;
   GdkWindow *window;
   GdkWindowObject *window_private;
   GdkWindow *filter_window;
@@ -2020,6 +2029,13 @@ gdk_event_translate (GdkDisplay *display,
       break;
 
     default:
+      notify_event = (GdkNotifyEvent *) xevent;
+#ifdef HAVE_XFIXES
+      XFixesSelectionNotifyEvent *selection_notify = &(notify_event->selection_notify);
+#endif
+#ifdef HAVE_XDAMAGE
+      XDamageNotifyEvent *damage_event = &(notify_event->damage_event);
+#endif
 #ifdef HAVE_XKB
       if (xevent->type == display_x11->xkb_event_type)
 	{
@@ -2044,8 +2060,6 @@ gdk_event_translate (GdkDisplay *display,
 #ifdef HAVE_XFIXES
       if (xevent->type - display_x11->xfixes_event_base == XFixesSelectionNotify)
 	{
-	  XFixesSelectionNotifyEvent *selection_notify = (XFixesSelectionNotifyEvent *)xevent;
-
 	  _gdk_x11_screen_process_owner_change (screen, xevent);
 	  
 	  event->owner_change.type = GDK_OWNER_CHANGE;
@@ -2074,9 +2088,8 @@ gdk_event_translate (GdkDisplay *display,
 #if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
       if (display_x11->have_xdamage && window_private && window_private->composited &&
 	  xevent->type == display_x11->xdamage_event_base + XDamageNotify &&
-	  ((XDamageNotifyEvent *) xevent)->damage == window_impl->damage)
+	  damage_event->damage == window_impl->damage)
 	{
-	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
 	  XserverRegion repair;
 	  GdkRectangle rect;
 
