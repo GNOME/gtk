@@ -48,7 +48,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkBox	      GtkBox;
 typedef struct _GtkBoxClass   GtkBoxClass;
-typedef struct _GtkBoxChild   GtkBoxChild;
 
 struct _GtkBox
 {
@@ -86,7 +85,11 @@ struct _GtkBoxClass
  * Use gtk_box_query_child_packing() and gtk_box_set_child_packing() to query
  * and set the #GtkBoxChild.padding, #GtkBoxChild.expand, #GtkBoxChild.fill and
  * #GtkBoxChild.pack fields.
+ *
+ * Deprecated: 2.22: Use gtk_container_get_children() instead.
  */
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+typedef struct _GtkBoxChild   GtkBoxChild;
 struct _GtkBoxChild
 {
   GtkWidget *widget;
@@ -96,7 +99,7 @@ struct _GtkBoxChild
   guint pack : 1;
   guint is_secondary : 1;
 };
-
+#endif
 
 GType       gtk_box_get_type            (void) G_GNUC_CONST;
 GtkWidget* _gtk_box_new                 (GtkOrientation  orientation,
