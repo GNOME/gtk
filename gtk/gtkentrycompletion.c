@@ -178,20 +178,20 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * GtkEntryCompletion::insert-prefix:
    * @widget: the object which received the signal
    * @prefix: the common prefix of all possible completions
-   * 
-   * Gets emitted when the inline autocompletion is triggered. 
-   * The default behaviour is to make the entry display the 
+   *
+   * Gets emitted when the inline autocompletion is triggered.
+   * The default behaviour is to make the entry display the
    * whole prefix and select the newly inserted part.
    *
    * Applications may connect to this signal in order to insert only a
    * smaller part of the @prefix into the entry - e.g. the entry used in
-   * the #GtkFileChooser inserts only the part of the prefix up to the 
+   * the #GtkFileChooser inserts only the part of the prefix up to the
    * next '/'.
    *
    * Return value: %TRUE if the signal has been handled
-   * 
+   *
    * Since: 2.6
-   */ 
+   */
   entry_completion_signals[INSERT_PREFIX] =
     g_signal_new (I_("insert-prefix"),
                   G_TYPE_FROM_CLASS (klass),
@@ -207,16 +207,16 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * @widget: the object which received the signal
    * @model: the #GtkTreeModel containing the matches
    * @iter: a #GtkTreeIter positioned at the selected match
-   * 
-   * Gets emitted when a match from the list is selected. 
-   * The default behaviour is to replace the contents of the 
-   * entry with the contents of the text column in the row 
+   *
+   * Gets emitted when a match from the list is selected.
+   * The default behaviour is to replace the contents of the
+   * entry with the contents of the text column in the row
    * pointed to by @iter.
    *
    * Return value: %TRUE if the signal has been handled
-   * 
+   *
    * Since: 2.4
-   */ 
+   */
   entry_completion_signals[MATCH_SELECTED] =
     g_signal_new (I_("match-selected"),
                   G_TYPE_FROM_CLASS (klass),
@@ -227,22 +227,22 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_TREE_MODEL,
                   GTK_TYPE_TREE_ITER);
+
   /**
    * GtkEntryCompletion::cursor-on-match:
    * @widget: the object which received the signal
    * @model: the #GtkTreeModel containing the matches
    * @iter: a #GtkTreeIter positioned at the selected match
-   * 
+   *
    * Gets emitted when a match from the cursor is on a match
-   * of the list.The default behaviour is to replace the contents
-   * of the entry with the contents of the text column in the row 
+   * of the list. The default behaviour is to replace the contents
+   * of the entry with the contents of the text column in the row
    * pointed to by @iter.
    *
    * Return value: %TRUE if the signal has been handled
-   * 
+   *
    * Since: 2.12
-   */ 
-
+   */
   entry_completion_signals[CURSOR_ON_MATCH] =
     g_signal_new (I_("cursor-on-match"),
 		  G_TYPE_FROM_CLASS (klass),
@@ -253,7 +253,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 		  G_TYPE_BOOLEAN, 2,
 		  GTK_TYPE_TREE_MODEL,
 		  GTK_TYPE_TREE_ITER);
-		  
+
   /**
    * GtkEntryCompletion::action-activated:
    * @widget: the object which received the signal
@@ -880,18 +880,23 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
     {
       GtkTreeIter iter;
       gboolean entry_set;
+      GtkTreeModel *model;
+      GtkTreeIter child_iter;
 
       gtk_tree_model_get_iter (GTK_TREE_MODEL (completion->priv->filter_model),
                                &iter, path);
       gtk_tree_path_free (path);
+      gtk_tree_model_filter_convert_iter_to_child_iter (completion->priv->filter_model,
+                                                        &child_iter,
+                                                        &iter);
+      model = gtk_tree_model_filter_get_model (completion->priv->filter_model);
 
       g_signal_handler_block (completion->priv->entry,
-			      completion->priv->changed_id);
+                              completion->priv->changed_id);
       g_signal_emit (completion, entry_completion_signals[MATCH_SELECTED],
-                     0, GTK_TREE_MODEL (completion->priv->filter_model),
-                     &iter, &entry_set);
+                     0, model, &child_iter, &entry_set);
       g_signal_handler_unblock (completion->priv->entry,
-				completion->priv->changed_id);
+                                completion->priv->changed_id);
 
       _gtk_entry_completion_popdown (completion);
 

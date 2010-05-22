@@ -9443,6 +9443,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
             {
 
               GtkTreeIter iter;
+              GtkTreeIter child_iter;
               GtkTreeModel *model = NULL;
               GtkTreeSelection *sel;
               gboolean entry_set;
@@ -9450,12 +9451,15 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
               sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view));
               if (!gtk_tree_selection_get_selected (sel, &model, &iter))
                 return FALSE;
+
+              gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model), &child_iter, &iter);
+              model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
               
               if (completion->priv->completion_prefix == NULL)
                 completion->priv->completion_prefix = g_strdup (gtk_entry_get_text (GTK_ENTRY (completion->priv->entry)));
 
               g_signal_emit_by_name (completion, "cursor-on-match", model,
-                                     &iter, &entry_set);
+                                     &child_iter, &entry_set);
             }
         }
       else if (completion->priv->current_selected - matches >= 0)
