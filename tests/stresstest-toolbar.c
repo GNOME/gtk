@@ -17,7 +17,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#undef GTK_DISABLE_DEPRECATED
 #include "config.h"
 #include <gtk/gtk.h>
 
@@ -52,7 +51,7 @@ add_random (GtkToolbar *toolbar, gint n)
 static void
 remove_random (GtkToolbar *toolbar)
 {
-  GtkToolbarChild *child;
+  GtkWidget *child;
   gint position;
 
   if (!toolbar->children)
@@ -62,7 +61,7 @@ remove_random (GtkToolbar *toolbar)
 
   child = g_list_nth_data (toolbar->children, position);
   
-  gtk_container_remove (GTK_CONTAINER (toolbar), child->widget);
+  gtk_container_remove (GTK_CONTAINER (toolbar), child);
 }
 
 static gboolean

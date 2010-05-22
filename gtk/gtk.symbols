@@ -388,7 +388,6 @@ gtk_accel_flags_get_type G_GNUC_CONST
 gtk_icon_size_get_type G_GNUC_CONST
 gtk_file_chooser_error_get_type G_GNUC_CONST
 gtk_icon_theme_error_get_type G_GNUC_CONST
-gtk_toolbar_child_type_get_type G_GNUC_CONST
 gtk_toolbar_space_style_get_type G_GNUC_CONST
 gtk_toolbar_style_get_type G_GNUC_CONST
 #endif

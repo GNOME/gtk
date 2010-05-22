@@ -50,28 +50,6 @@ G_BEGIN_DECLS
 #define GTK_IS_TOOLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
 #define GTK_TOOLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 
-#ifndef GTK_DISABLE_DEPRECATED
-typedef enum
-{
-  GTK_TOOLBAR_CHILD_SPACE,
-  GTK_TOOLBAR_CHILD_BUTTON,
-  GTK_TOOLBAR_CHILD_TOGGLEBUTTON,
-  GTK_TOOLBAR_CHILD_RADIOBUTTON,
-  GTK_TOOLBAR_CHILD_WIDGET
-} GtkToolbarChildType;
-
-typedef struct _GtkToolbarChild	     GtkToolbarChild;
-
-struct _GtkToolbarChild
-{
-  GtkToolbarChildType type;
-  GtkWidget *widget;
-  GtkWidget *icon;
-  GtkWidget *label;
-};
-
-#endif /* GTK_DISABLE_DEPRECATED */
-
 typedef enum
 {
   GTK_TOOLBAR_SPACE_EMPTY,
