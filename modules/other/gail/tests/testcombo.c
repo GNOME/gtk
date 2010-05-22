@@ -115,7 +115,7 @@ static void _check_combo_box (AtkObject *obj)
         GtkWidget *combo;
         GtkEntry *entry;
 
-        combo = GTK_ACCESSIBLE (combo_obj)->widget;
+        combo = gtk_accessible_get_widget (GTK_ACCESSIBLE (combo_obj));
         entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
         gtk_editable_set_editable (GTK_EDITABLE (entry), FALSE);
       }

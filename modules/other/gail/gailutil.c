@@ -471,7 +471,7 @@ window_added (AtkObject *atk_obj,
 
   if (!GAIL_IS_WINDOW (child)) return;
 
-  widget = GTK_ACCESSIBLE (child)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   gail_return_if_fail (widget);
 
   g_signal_connect (widget, "focus-in-event",  
@@ -492,7 +492,7 @@ window_removed (AtkObject *atk_obj,
 
   if (!GAIL_IS_WINDOW (child)) return;
 
-  widget = GTK_ACCESSIBLE (child)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
   gail_return_if_fail (widget);
 
   window = GTK_WINDOW (widget);

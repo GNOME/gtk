@@ -74,7 +74,7 @@ gail_menu_get_parent (AtkObject *accessible)
     {
       GtkWidget *widget, *parent_widget;
 
-      widget = GTK_ACCESSIBLE (accessible)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
       if (widget == NULL)
         {
           /*
@@ -107,7 +107,7 @@ gail_menu_get_index_in_parent (AtkObject *accessible)
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
     {

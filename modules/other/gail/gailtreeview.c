@@ -654,9 +654,12 @@ gail_tree_view_finalize (GObject	    *object)
 static void
 gail_tree_view_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  if (accessible->widget)
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget)
     {
-      g_signal_connect_after (accessible->widget,
+      g_signal_connect_after (widget,
                               "destroy",
                               G_CALLBACK (gail_tree_view_destroyed),
                               accessible);
@@ -757,7 +760,7 @@ gail_tree_view_get_n_children (AtkObject *obj)
 
   gail_return_val_if_fail (GAIL_IS_TREE_VIEW (obj), 0);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -808,7 +811,7 @@ gail_tree_view_ref_child (AtkObject *obj,
   g_return_val_if_fail (GAIL_IS_TREE_VIEW (obj), NULL);
   g_return_val_if_fail (i >= 0, NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -1049,7 +1052,7 @@ gail_tree_view_ref_state_set (AtkObject *obj)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_tree_view_parent_class)->ref_state_set (obj);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget != NULL)
     atk_state_set_add_state (state_set, ATK_STATE_MANAGES_DESCENDANTS);
@@ -1079,7 +1082,7 @@ gail_tree_view_ref_accessible_at_point (AtkComponent           *component,
   gint bx, by;
   gboolean ret_val;
 
-  widget = GTK_ACCESSIBLE (component)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1160,7 +1163,7 @@ gail_tree_view_get_index_at (AtkTable *table,
       column >= n_cols)
     return -1;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -1185,7 +1188,7 @@ gail_tree_view_get_column_at_index (AtkTable *table,
   GtkTreeView *tree_view;
   gint n_columns;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -1208,7 +1211,7 @@ gail_tree_view_get_row_at_index (AtkTable *table,
   GtkTreeView *tree_view;
   GtkTreePath *path;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -1246,7 +1249,7 @@ gail_tree_view_get_n_rows (AtkTable *table)
   GtkTreeModel *tree_model;
   gint n_rows;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -1299,7 +1302,7 @@ gail_tree_view_get_n_columns (AtkTable *table)
   gint n_cols = 0;
   gint i = 0;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -1328,7 +1331,7 @@ gail_tree_view_is_row_selected (AtkTable *table,
   GtkTreeSelection *selection;
   GtkTreeIter iter;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -1365,7 +1368,7 @@ gail_tree_view_get_selected_rows (AtkTable *table,
   GtkTreePath *tree_path;
   gint ret_val = 0;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -1441,7 +1444,7 @@ gail_tree_view_add_row_selection (AtkTable *table,
   GtkTreePath *tree_path;
   GtkTreeIter iter_to_row;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -1480,7 +1483,7 @@ gail_tree_view_remove_row_selection (AtkTable *table,
   GtkTreeView *tree_view;
   GtkTreeSelection *selection;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -1526,7 +1529,7 @@ gail_tree_view_get_column_header (AtkTable *table,
   GtkTreeView *tree_view;
   GtkTreeViewColumn *tv_col;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1547,7 +1550,7 @@ gail_tree_view_set_column_header (AtkTable  *table,
   AtkObject *rc;
   AtkPropertyValues values = { NULL };
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -1618,7 +1621,7 @@ gail_tree_view_get_column_description (AtkTable	  *table,
   GtkTreeViewColumn *tv_col;
   gchar *rc;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1652,7 +1655,7 @@ gail_tree_view_set_column_description (AtkTable	   *table,
   GtkTreeViewColumn *tv_col;
   AtkPropertyValues values = { NULL };
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -1748,7 +1751,7 @@ set_row_data (AtkTable    *table,
   AtkPropertyValues values = { NULL };
   gchar *signal_name;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -1852,7 +1855,7 @@ get_row_info (AtkTable    *table,
   GArray *array;
   GailTreeViewRowInfo *rc = NULL;
 
-  widget = GTK_ACCESSIBLE (table)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1925,7 +1928,7 @@ gail_tree_view_clear_selection (AtkSelection *selection)
   GtkTreeView *tree_view;
   GtkTreeSelection *tree_selection;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -1980,7 +1983,7 @@ gail_tree_view_is_child_selected (AtkSelection *selection,
   GtkWidget *widget;
   gint row;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -2013,7 +2016,7 @@ gail_tree_view_get_cell_extents (GailCellParent *parent,
   GdkRectangle cell_rect;
   gint w_x, w_y;
 
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -2064,7 +2067,7 @@ gail_tree_view_get_cell_area (GailCellParent *parent,
   GailTreeViewCellInfo *cell_info;
   GailCell *top_cell;
 
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -2159,7 +2162,7 @@ gail_tree_view_grab_cell_focus  (GailCellParent *parent,
   GtkWidget *toplevel;
   gint index;
 
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -2258,7 +2261,7 @@ idle_expand_row (gpointer data)
   gailview->idle_expand_id = 0;
 
   path = gailview->idle_expand_path;
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (gailview)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview)));
 
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
@@ -2416,7 +2419,7 @@ gail_tree_view_changed_gtk (GtkTreeSelection *selection,
 
   gailview = GAIL_TREE_VIEW (data);
   cell_list = gailview->cell_data;
-  widget = GTK_ACCESSIBLE (gailview)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview));
   if (widget == NULL)
     /*
      * destroy signal emitted for widget
@@ -2622,7 +2625,7 @@ idle_cursor_changed (gpointer data)
 
   gail_tree_view->idle_cursor_changed_id = 0;
 
-  widget = GTK_ACCESSIBLE (gail_tree_view)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_tree_view));
   /*
    * Widget has been deleted
    */
@@ -3157,7 +3160,7 @@ update_cell_value (GailRendererCell *renderer_cell,
 
   if (emit_change_signal && cell_info->in_use)
     {
-      tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (gailview)->widget);
+      tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview)));
       tree_model = gtk_tree_view_get_model (tree_view);
       path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
       if (path == NULL)
@@ -3739,7 +3742,7 @@ traverse_cells (GailTreeView *tree_view,
 
       g_assert (GTK_IS_ACCESSIBLE (tree_view));
 
-      widget = GTK_ACCESSIBLE (tree_view)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (tree_view));
       if (!widget)
         /* Widget is being deleted */
         return;
@@ -3963,7 +3966,7 @@ toggle_cell_expanded (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
 
@@ -4000,7 +4003,7 @@ toggle_cell_toggled (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
   pathstring = gtk_tree_path_to_string (path);
@@ -4053,7 +4056,7 @@ edit_cell (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
   gtk_tree_view_set_cursor (tree_view, path, cell_info->cell_col_ref, TRUE);
@@ -4083,7 +4086,7 @@ activate_cell (GailCell *cell)
   gail_return_if_fail (cell_info->cell_col_ref);
   gail_return_if_fail (cell_info->cell_row_ref);
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
   path = gtk_tree_row_reference_get_path (cell_info->cell_row_ref);
   gail_return_if_fail (path);
   gtk_tree_view_row_activated (tree_view, path, cell_info->cell_col_ref);
@@ -4182,7 +4185,7 @@ find_cell (GailTreeView *gailview,
   gboolean needs_cleaning = FALSE;
   GailCell *retval = NULL;
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (gailview)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (gailview)));
   cell_list = gailview->cell_data;
 
   for (l = cell_list; l; l = l->next)
@@ -4219,7 +4222,7 @@ refresh_cell_index (GailCell *cell)
   parent = atk_object_get_parent (ATK_OBJECT (cell));
   gail_return_if_fail (GAIL_IS_TREE_VIEW (parent));
 
-  tree_view = GTK_TREE_VIEW (GTK_ACCESSIBLE (parent)->widget);
+  tree_view = GTK_TREE_VIEW (gtk_accessible_get_widget (GTK_ACCESSIBLE (parent)));
 
   /* Find this cell in the GailTreeView's cache */
 
@@ -4268,7 +4271,7 @@ disconnect_model_signals (GailTreeView *view)
   GtkWidget *widget;
 
   obj = G_OBJECT (view->tree_model);
-  widget = GTK_ACCESSIBLE (view)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (view));
   g_signal_handlers_disconnect_by_func (obj, (gpointer) model_row_changed, widget);
   g_signal_handlers_disconnect_by_func (obj, (gpointer) model_row_inserted, widget);
   g_signal_handlers_disconnect_by_func (obj, (gpointer) model_row_deleted, widget);

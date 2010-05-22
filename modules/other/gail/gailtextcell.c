@@ -398,7 +398,7 @@ gail_text_cell_get_run_attributes (AtkText *text,
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), NULL);
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   layout = create_pango_layout (gtk_renderer, widget),
   attrib_set = gail_misc_layout_get_run_attributes (attrib_set, 
                                                     layout,
@@ -428,7 +428,7 @@ gail_text_cell_get_default_attributes (AtkText	*text)
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), NULL);
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   layout = create_pango_layout (gtk_renderer, widget),
 
   attrib_set = gail_misc_get_default_attributes (attrib_set, 
@@ -563,7 +563,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   parent = atk_object_get_parent (ATK_OBJECT (text));
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   g_return_if_fail (GAIL_IS_CELL_PARENT (parent));
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),
                                   &rendered_rect);
@@ -610,7 +610,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
 
-  widget = GTK_ACCESSIBLE (parent)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
 
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), -1);
   gail_cell_parent_get_cell_area (GAIL_CELL_PARENT (parent), GAIL_CELL (text),

@@ -111,7 +111,7 @@ gail_check_menu_item_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_check_menu_item_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
  
   if (widget == NULL)
     return state_set;

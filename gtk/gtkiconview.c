@@ -8968,7 +8968,7 @@ gtk_icon_view_accessible_get_n_children (AtkObject *accessible)
   GtkIconView *icon_view;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
       return 0;
 
@@ -9008,7 +9008,7 @@ gtk_icon_view_accessible_ref_child (AtkObject *accessible,
   AtkObject *obj;
   GtkIconViewItemAccessible *a11y_item;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
     return NULL;
 
@@ -9066,7 +9066,7 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
       GtkWidget *widget;
       gboolean act_on_item;
 
-      widget = GTK_ACCESSIBLE (view)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (view));
       if (widget == NULL)
         return;
 
@@ -9188,7 +9188,7 @@ gtk_icon_view_accessible_model_row_changed (GtkTreeModel *tree_model,
 
   if (a11y_item)
     {
-      widget = GTK_ACCESSIBLE (atk_obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
       icon_view = GTK_ICON_VIEW (widget);
       item = a11y_item->item;
 
@@ -9547,9 +9547,12 @@ gtk_icon_view_accessible_destroyed (GtkWidget *widget,
 static void
 gtk_icon_view_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 {
-  if (accessible->widget)
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget)
     {
-      g_signal_connect_after (accessible->widget,
+      g_signal_connect_after (widget,
                               "destroy",
                               G_CALLBACK (gtk_icon_view_accessible_destroyed),
                               accessible);
@@ -9590,7 +9593,7 @@ gtk_icon_view_accessible_ref_accessible_at_point (AtkComponent *component,
   GtkIconViewItem *item;
   gint x_pos, y_pos;
 
-  widget = GTK_ACCESSIBLE (component)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
   /* State is defunct */
     return NULL;
@@ -9618,7 +9621,7 @@ gtk_icon_view_accessible_add_selection (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9640,7 +9643,7 @@ gtk_icon_view_accessible_clear_selection (AtkSelection *selection)
   GtkWidget *widget;
   GtkIconView *icon_view;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9659,7 +9662,7 @@ gtk_icon_view_accessible_ref_selection (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return NULL;
 
@@ -9691,7 +9694,7 @@ gtk_icon_view_accessible_get_selection_count (AtkSelection *selection)
   GList *l;
   gint count;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return 0;
 
@@ -9720,7 +9723,7 @@ gtk_icon_view_accessible_is_child_selected (AtkSelection *selection,
   GtkIconView *icon_view;
   GtkIconViewItem *item;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9743,7 +9746,7 @@ gtk_icon_view_accessible_remove_selection (AtkSelection *selection,
   GList *l;
   gint count;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 
@@ -9774,7 +9777,7 @@ gtk_icon_view_accessible_select_all_selection (AtkSelection *selection)
   GtkWidget *widget;
   GtkIconView *icon_view;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     return FALSE;
 

@@ -21,7 +21,7 @@ _check_object (AtkObject *obj)
   {
     GtkWidget* widget = NULL;
 
-    widget = GTK_ACCESSIBLE (obj)->widget;
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
     typename = g_type_name (G_OBJECT_TYPE (widget));
     g_print ("Widget type name: %s\n", typename ? typename : "NULL");
   }

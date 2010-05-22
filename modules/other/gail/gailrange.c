@@ -134,7 +134,7 @@ gail_range_ref_state_set (AtkObject *obj)
   GtkRange *range;
 
   state_set = ATK_OBJECT_CLASS (gail_range_parent_class)->ref_state_set (obj);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget == NULL)
     return state_set;
@@ -223,7 +223,7 @@ static gboolean	 gail_range_set_current_value (AtkValue		*obj,
 
   g_return_val_if_fail (GAIL_IS_RANGE (obj), FALSE);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return FALSE;
 
@@ -340,7 +340,7 @@ gail_range_do_action (AtkAction *action,
   gboolean return_value = TRUE;
 
   range = GAIL_RANGE (action);
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     /*
      * State is defunct
@@ -368,7 +368,7 @@ idle_do_action (gpointer data)
 
   range = GAIL_RANGE (data);
   range->action_idle_handler = 0;
-  widget = GTK_ACCESSIBLE (range)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (range));
   if (widget == NULL /* State is defunct */ ||
      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
@@ -417,7 +417,7 @@ gail_range_get_keybinding (AtkAction *action,
     guint key_val;
 
     range = GAIL_RANGE (action);
-    widget = GTK_ACCESSIBLE (range)->widget;
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (range));
     if (widget == NULL)
        return NULL;
     set = atk_object_ref_relation_set (ATK_OBJECT (action));
@@ -430,8 +430,7 @@ gail_range_get_keybinding (AtkAction *action,
      {
       target = atk_relation_get_target (relation);
       target_object = g_ptr_array_index (target, 0);
-      if (GTK_IS_ACCESSIBLE (target_object))
-         label = GTK_ACCESSIBLE (target_object)->widget;
+      label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
      }
     g_object_unref (set);
     if (GTK_IS_LABEL (label))

@@ -23,7 +23,7 @@ static void _print_type (AtkObject *obj)
   {
     GtkWidget* widget = NULL;
 
-    widget = GTK_ACCESSIBLE (obj)->widget;
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
     typename = g_type_name (G_OBJECT_TYPE (widget));
     g_print ("\tWidget type name: %s\n", typename ? typename : "NULL");
   }
@@ -162,9 +162,8 @@ static gint _remove_page (gpointer data)
   AtkObject *obj = ATK_OBJECT (data);
   GtkWidget *widget = NULL;
 
-  if (GTK_IS_ACCESSIBLE (obj))
-    widget = GTK_ACCESSIBLE (obj)->widget;
-     
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+
   g_return_val_if_fail (GTK_IS_NOTEBOOK (widget), FALSE);
   gtk_notebook_remove_page (GTK_NOTEBOOK (widget), 4);
   return FALSE;
@@ -196,7 +195,7 @@ static gint _finish_selection (gpointer data)
   parent_object = atk_object_get_parent (selected);
   g_return_val_if_fail (ATK_IS_OBJECT (parent_object), FALSE);
   g_return_val_if_fail (parent_object == obj, FALSE);
-  parent_widget = GTK_ACCESSIBLE (parent_object)->widget;
+  parent_widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent_object));
   g_return_val_if_fail (GTK_IS_NOTEBOOK (parent_widget), FALSE);
   
   _print_type (selected);

@@ -79,7 +79,7 @@ gail_container_get_n_children (AtkObject* obj)
 
   g_return_val_if_fail (GAIL_IS_CONTAINER (obj), count);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return 0;
 
@@ -100,7 +100,8 @@ gail_container_ref_child (AtkObject *obj,
 
   g_return_val_if_fail (GAIL_IS_CONTAINER (obj), NULL);
   g_return_val_if_fail ((i >= 0), NULL);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return NULL;
 

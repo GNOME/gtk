@@ -161,7 +161,7 @@ gail_expander_get_name (AtkObject *obj)
        */
       GtkWidget *widget;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       if (widget == NULL)
         /*
          * State is defunct
@@ -183,7 +183,7 @@ gail_expander_get_n_children (AtkObject* obj)
 
   g_return_val_if_fail (GAIL_IS_CONTAINER (obj), count);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return 0;
 
@@ -213,7 +213,8 @@ gail_expander_ref_child (AtkObject *obj,
 
   g_return_val_if_fail (GAIL_IS_CONTAINER (obj), NULL);
   g_return_val_if_fail ((i >= 0), NULL);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return NULL;
 
@@ -367,7 +368,7 @@ gail_expander_do_action (AtkAction *action,
   GailExpander *expander;
   gboolean return_value = TRUE;
 
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     /*
      * State is defunct
@@ -402,7 +403,7 @@ idle_do_action (gpointer data)
   gail_expander = GAIL_EXPANDER (data);
   gail_expander->action_idle_handler = 0;
 
-  widget = GTK_ACCESSIBLE (gail_expander)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_expander));
   if (widget == NULL /* State is defunct */ ||
       !gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
@@ -457,7 +458,7 @@ gail_expander_get_keybinding (AtkAction *action,
         GtkWidget *label;
 
         expander = GAIL_EXPANDER (action);
-        widget = GTK_ACCESSIBLE (expander)->widget;
+        widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (expander));
         if (widget == NULL)
           /*
            * State is defunct
@@ -540,7 +541,7 @@ gail_expander_ref_state_set (AtkObject *obj)
   GtkExpander *expander;
 
   state_set = ATK_OBJECT_CLASS (gail_expander_parent_class)->ref_state_set (obj);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget == NULL)
     return state_set;
@@ -583,7 +584,7 @@ gail_expander_get_text (AtkText *text,
   GailExpander *expander;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -612,7 +613,7 @@ gail_expander_get_text_before_offset (AtkText         *text,
   GailExpander *expander;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -641,7 +642,7 @@ gail_expander_get_text_at_offset (AtkText         *text,
   GailExpander *expander;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -670,7 +671,7 @@ gail_expander_get_text_after_offset (AtkText         *text,
   GailExpander *expander;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -694,7 +695,7 @@ gail_expander_get_character_count (AtkText *text)
   GtkWidget *widget;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -720,9 +721,8 @@ gail_expander_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   gint index, x_layout, y_layout;
   const gchar *label_text;
- 
-  widget = GTK_ACCESSIBLE (text)->widget;
 
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -751,7 +751,7 @@ gail_expander_get_offset_at_point (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -789,7 +789,7 @@ gail_expander_get_run_attributes (AtkText *text,
   GtkJustification justify;
   GtkTextDirection dir;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -831,7 +831,7 @@ gail_expander_get_default_attributes (AtkText *text)
   GtkWidget *label;
   AtkAttributeSet *at_set = NULL;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -856,7 +856,7 @@ gail_expander_get_character_at_offset (AtkText *text,
   const gchar *string;
   gchar *index;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return '\0';

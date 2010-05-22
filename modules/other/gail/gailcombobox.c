@@ -161,7 +161,7 @@ gail_combo_box_get_name (AtkObject *obj)
   if (name)
     return name;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -206,7 +206,8 @@ gail_combo_box_get_n_children (AtkObject* obj)
 
   g_return_val_if_fail (GAIL_IS_COMBO_BOX (obj), 0);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -230,7 +231,7 @@ gail_combo_box_ref_child (AtkObject *obj,
 
   g_return_val_if_fail (GAIL_IS_COMBO_BOX (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
 
   if (widget == NULL)
     /*
@@ -277,7 +278,8 @@ gail_combo_box_do_action (AtkAction *action,
   GailComboBox *combo_box;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -311,7 +313,8 @@ idle_do_action (gpointer data)
 
   gail_combo_box = GAIL_COMBO_BOX (data);
   gail_combo_box->action_idle_handler = 0;
-  widget = GTK_ACCESSIBLE (gail_combo_box)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (gail_combo_box));
+
   if (widget == NULL || /* State is defunct */
       !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
@@ -319,7 +322,7 @@ idle_do_action (gpointer data)
   combo_box = GTK_COMBO_BOX (widget);
 
   popup = gtk_combo_box_get_popup_accessible (combo_box);
-  do_popup = !gtk_widget_get_mapped (GTK_ACCESSIBLE (popup)->widget);
+  do_popup = !gtk_widget_get_mapped (gtk_accessible_get_widget (GTK_ACCESSIBLE (popup)));
   if (do_popup)
       gtk_combo_box_popup (combo_box);
   else
@@ -371,7 +374,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  guint key_val;
 
 	  combo_box = GAIL_COMBO_BOX (action);
-	  widget = GTK_ACCESSIBLE (combo_box)->widget;
+          widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (combo_box));
 	  if (widget == NULL)
              return NULL;
 	  set = atk_object_ref_relation_set (ATK_OBJECT (action));
@@ -383,10 +386,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  {
 	     target = atk_relation_get_target (relation);
 	     target_object = g_ptr_array_index (target, 0);
-	     if (GTK_IS_ACCESSIBLE (target_object))
-	     {
-	        label = GTK_ACCESSIBLE (target_object)->widget;
-	     }
+             widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
 	  }
 	  g_object_unref (set);
 	  if (GTK_IS_LABEL (label))
@@ -456,7 +456,8 @@ gail_combo_box_add_selection (AtkSelection *selection,
   GtkComboBox *combo_box;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -475,7 +476,8 @@ gail_combo_box_clear_selection (AtkSelection *selection)
   GtkComboBox *combo_box;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -497,7 +499,8 @@ gail_combo_box_ref_selection (AtkSelection *selection,
   AtkObject *obj;
   gint index;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -523,7 +526,8 @@ gail_combo_box_get_selection_count (AtkSelection *selection)
   GtkComboBox *combo_box;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+
   if (widget == NULL)
     /*
      * State is defunct
@@ -543,7 +547,8 @@ gail_combo_box_is_child_selected (AtkSelection *selection,
   gint j;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
+
   if (widget == NULL)
     /*
      * State is defunct

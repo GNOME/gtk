@@ -131,7 +131,7 @@ gail_image_get_name (AtkObject *accessible)
   if (name)
     return name;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   /*
    * State is defunct
    */
@@ -191,7 +191,7 @@ gail_image_get_image_size (AtkImage *image,
   GtkImage *gtk_image;
   GtkImageType image_type;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
   if (widget == 0)
   {
     /* State is defunct */

@@ -187,7 +187,7 @@ gail_menu_item_get_n_children (AtkObject* obj)
 
   g_return_val_if_fail (GAIL_IS_MENU_ITEM (obj), count);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return count;
 
@@ -214,7 +214,7 @@ gail_menu_item_ref_child (AtkObject *obj,
   g_return_val_if_fail (GAIL_IS_MENU_ITEM (obj), NULL);
   g_return_val_if_fail ((i >= 0), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return NULL;
 
@@ -253,7 +253,7 @@ gail_menu_item_ref_state_set (AtkObject *obj)
 
   if (menu_item)
     {
-      if (!GTK_IS_MENU_ITEM (GTK_ACCESSIBLE (menu_item)->widget))
+      if (!GTK_IS_MENU_ITEM (gtk_accessible_get_widget (GTK_ACCESSIBLE (menu_item))))
         return state_set;
 
       parent_state_set = atk_object_ref_state_set (menu_item);
@@ -286,7 +286,7 @@ gail_menu_item_do_action (AtkAction *action,
       GtkWidget *item;
       GailMenuItem *gail_menu_item;
 
-      item = GTK_ACCESSIBLE (action)->widget;
+      item = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
       if (item == NULL)
         /* State is defunct */
         return FALSE;
@@ -320,16 +320,13 @@ ensure_menus_unposted (GailMenuItem *menu_item)
   parent = atk_object_get_parent (ATK_OBJECT (menu_item));
   while (parent)
     {
-      if (GTK_IS_ACCESSIBLE (parent))
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
+      if (GTK_IS_MENU (widget))
         {
-          widget = GTK_ACCESSIBLE (parent)->widget;
-          if (GTK_IS_MENU (widget))
-            {
-              if (gtk_widget_get_mapped (widget))
-                gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
+          if (gtk_widget_get_mapped (widget))
+            gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
 
-              return;
-            }
+          return;
         }
       parent = atk_object_get_parent (parent);
     }
@@ -345,7 +342,7 @@ idle_do_action (gpointer data)
 
   menu_item = GAIL_MENU_ITEM (data);
   menu_item->action_idle_handler = 0;
-  item = GTK_ACCESSIBLE (menu_item)->widget;
+  item = gtk_accessible_get_widget (GTK_ACCESSIBLE (menu_item));
   if (item == NULL /* State is defunct */ ||
       !gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
     return FALSE;
@@ -423,7 +420,7 @@ gail_menu_item_get_keybinding (AtkAction *action,
       GtkWidget *child;
       GtkWidget *parent;
 
-      item = GTK_ACCESSIBLE (action)->widget;
+      item = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
       if (item == NULL)
         /* State is defunct */
         return NULL;

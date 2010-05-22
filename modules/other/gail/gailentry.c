@@ -377,8 +377,8 @@ gail_entry_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_entry_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
-  
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+
   if (widget == NULL)
     return state_set;
 
@@ -423,7 +423,7 @@ gail_entry_get_text (AtkText *text,
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -441,7 +441,7 @@ gail_entry_get_text_before_offset (AtkText	    *text,
   GtkWidget *widget;
   GtkEntry *entry;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -464,7 +464,7 @@ gail_entry_get_text_at_offset (AtkText          *text,
   GtkWidget *widget;
   GtkEntry *entry;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -487,7 +487,7 @@ gail_entry_get_text_after_offset  (AtkText	    *text,
   GtkWidget *widget;
   GtkEntry *entry;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -506,7 +506,7 @@ gail_entry_get_character_count (AtkText *text)
   GtkEntry *entry;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -521,7 +521,7 @@ gail_entry_get_caret_offset (AtkText *text)
   GtkEntry *entry;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -537,7 +537,7 @@ gail_entry_set_caret_offset (AtkText *text, gint offset)
   GtkEntry *entry;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -559,7 +559,7 @@ gail_entry_get_run_attributes (AtkText *text,
   AtkAttributeSet *at_set = NULL;
   GtkTextDirection dir;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -590,7 +590,7 @@ gail_entry_get_default_attributes (AtkText *text)
   GtkEntry *entry;
   AtkAttributeSet *at_set = NULL;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -618,7 +618,7 @@ gail_entry_get_character_extents (AtkText *text,
   gint index, cursor_index, x_layout, y_layout;
   const gchar *entry_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -647,8 +647,8 @@ gail_entry_get_offset_at_point (AtkText *text,
   GtkEntry *entry;
   gint index, cursor_index, x_layout, y_layout;
   const gchar *entry_text;
-  
-  widget = GTK_ACCESSIBLE (text)->widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -688,7 +688,7 @@ gail_entry_get_n_selections (AtkText              *text)
   GtkWidget *widget;
   gint select_start, select_end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -713,7 +713,7 @@ gail_entry_get_selection (AtkText *text,
   GtkEntry *entry;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -742,7 +742,7 @@ gail_entry_add_selection (AtkText *text,
   GtkWidget *widget;
   gint select_start, select_end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -772,7 +772,7 @@ gail_entry_remove_selection (AtkText *text,
   GtkWidget *widget;
   gint select_start, select_end, caret_pos;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -807,7 +807,7 @@ gail_entry_set_selection (AtkText *text,
   GtkWidget *widget;
   gint select_start, select_end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -852,7 +852,7 @@ gail_entry_set_text_contents (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -875,7 +875,7 @@ gail_entry_insert_text (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -900,7 +900,7 @@ gail_entry_copy_text   (AtkEditableText *text,
   gchar *str;
   GtkClipboard *clipboard;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -924,7 +924,7 @@ gail_entry_cut_text (AtkEditableText *text,
   gchar *str;
   GtkClipboard *clipboard;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -949,7 +949,7 @@ gail_entry_delete_text (AtkEditableText *text,
   GtkWidget *widget;
   GtkEditable *editable;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -971,7 +971,7 @@ gail_entry_paste_text (AtkEditableText *text,
   GailEntryPaste paste_struct;
   GtkClipboard *clipboard;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -1022,7 +1022,7 @@ gail_entry_notify_insert (GailEntry *entry)
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (entry)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
   if (gtk_entry_get_text_length (GTK_ENTRY (widget)) == 0)
     return;
 
@@ -1078,7 +1078,7 @@ gail_entry_get_character_at_offset (AtkText *text,
   gchar *index;
   gunichar unichar;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return '\0';
@@ -1204,7 +1204,7 @@ gail_entry_do_action (AtkAction *action,
   gboolean return_value = TRUE;
 
   entry = GAIL_ENTRY (action);
-  widget = GTK_ACCESSIBLE (action)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
   if (widget == NULL)
     /*
      * State is defunct
@@ -1237,7 +1237,7 @@ idle_do_action (gpointer data)
 
   entry = GAIL_ENTRY (data);
   entry->action_idle_handler = 0;
-  widget = GTK_ACCESSIBLE (entry)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
   if (widget == NULL /* State is defunct */ ||
       !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
@@ -1297,7 +1297,7 @@ gail_entry_get_keybinding (AtkAction *action,
         guint key_val; 
 
         entry = GAIL_ENTRY (action);
-        widget = GTK_ACCESSIBLE (entry)->widget;
+        widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (entry));
         if (widget == NULL)
           /*
            * State is defunct
@@ -1316,10 +1316,7 @@ gail_entry_get_keybinding (AtkAction *action,
             target = atk_relation_get_target (relation);
           
             target_object = g_ptr_array_index (target, 0);
-            if (GTK_IS_ACCESSIBLE (target_object))
-              {
-                label = GTK_ACCESSIBLE (target_object)->widget;
-              } 
+            label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
           }
 
         g_object_unref (set);

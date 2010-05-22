@@ -65,7 +65,7 @@ gail_radio_button_ref_relation_set (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_RADIO_BUTTON (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
   {
     /*

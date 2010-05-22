@@ -82,7 +82,7 @@ gail_scrolled_window_get_n_children (AtkObject *object)
   GList *children;
   gint n_children;
  
-  widget = GTK_ACCESSIBLE (object)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
   if (widget == NULL)
     /* Object is defunct */
     return 0;
@@ -116,7 +116,7 @@ gail_scrolled_window_ref_child (AtkObject *obj,
 
   g_return_val_if_fail (child >= 0, NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* Object is defunct */
     return NULL;
@@ -167,7 +167,7 @@ gail_scrolled_window_scrollbar_visibility_changed (GObject    *object,
       GailScrolledWindow *gail_window = GAIL_SCROLLED_WINDOW (user_data);
       gchar *signal_name;
 
-      gtk_window = GTK_SCROLLED_WINDOW (GTK_ACCESSIBLE (user_data)->widget);
+      gtk_window = GTK_SCROLLED_WINDOW (gtk_accessible_get_widget (GTK_ACCESSIBLE (user_data)));
       if (gtk_window == NULL)
         return;
       children = gtk_container_get_children (GTK_CONTAINER (gtk_window));

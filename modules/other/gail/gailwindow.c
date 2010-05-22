@@ -272,7 +272,7 @@ gail_window_get_name (AtkObject *accessible)
       /*
        * Get the window title if it exists
        */
-      GtkWidget* widget = GTK_ACCESSIBLE (accessible)->widget; 
+      GtkWidget* widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
       if (widget == NULL)
         /*
@@ -338,7 +338,7 @@ gail_window_get_parent (AtkObject *accessible)
 static gint
 gail_window_get_index_in_parent (AtkObject *accessible)
 {
-  GtkWidget* widget = GTK_ACCESSIBLE (accessible)->widget; 
+  GtkWidget* widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   AtkObject* atk_obj = atk_get_root ();
   gint index = -1;
 
@@ -399,7 +399,7 @@ gail_window_ref_relation_set (AtkObject *obj)
 
   gail_return_val_if_fail (GAIL_IS_WIDGET (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -437,7 +437,7 @@ gail_window_ref_state_set (AtkObject *accessible)
   GdkWindowState state;
 
   state_set = ATK_OBJECT_CLASS (gail_window_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
  
   if (widget == NULL)
     return state_set;
@@ -470,7 +470,7 @@ idle_notify_name_change (gpointer data)
 
   window = GAIL_WINDOW (data);
   window->name_change_handler = 0;
-  if (GTK_ACCESSIBLE (window)->widget == NULL)
+  if (gtk_accessible_get_widget (GTK_ACCESSIBLE (window)) == NULL)
     return FALSE;
 
   obj = ATK_OBJECT (window);
@@ -549,7 +549,7 @@ gail_window_get_extents (AtkComponent  *component,
                          gint          *height,
                          AtkCoordType  coord_type)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget; 
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component)); 
   GdkRectangle rect;
   gint x_toplevel, y_toplevel;
 
@@ -595,7 +595,7 @@ gail_window_get_size (AtkComponent *component,
                       gint         *width,
                       gint         *height)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget; 
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   GdkRectangle rect;
 
   if (widget == NULL)
@@ -1000,7 +1000,7 @@ get_window_zorder (GdkWindow *window)
 static gint
 gail_window_get_mdi_zorder (AtkComponent *component)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -1018,7 +1018,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
 static gint
 gail_window_get_mdi_zorder (AtkComponent *component)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*
@@ -1036,7 +1036,7 @@ gail_window_get_mdi_zorder (AtkComponent *component)
 static gint
 gail_window_get_mdi_zorder (AtkComponent *component)
 {
-  GtkWidget *widget = GTK_ACCESSIBLE (component)->widget;
+  GtkWidget *widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
 
   if (widget == NULL)
     /*

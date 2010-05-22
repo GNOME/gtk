@@ -2322,7 +2322,7 @@ gtk_assistant_accessible_get_n_children (AtkObject *accessible)
   GtkAssistant *assistant;
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (!widget)
     return 0;
@@ -2344,7 +2344,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
   AtkObject *obj;
   const gchar *title;
 
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (!widget)
     return NULL;
 

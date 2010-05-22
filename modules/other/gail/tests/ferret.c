@@ -574,10 +574,11 @@ _object_is_ours (AtkObject *aobject)
    */
    if (aobject != NULL)
      {
-       if (GTK_ACCESSIBLE(toplevel)->widget == mainWindow)
-         {
+       GtkWidget *widget;
+
+       widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (toplevel));
+       if (widget == mainWindow)
            return TRUE;
-         }
      }
 
   return FALSE;
@@ -615,6 +616,7 @@ ferret_get_name_from_container (AtkObject *aobject)
 static gint
 _print_object (AtkObject *aobject)
 {
+    GtkWidget *widget;
     G_CONST_RETURN gchar * parent_name = NULL;
     G_CONST_RETURN gchar * name = NULL;
     G_CONST_RETURN gchar * description = NULL;
@@ -654,11 +656,11 @@ _print_object (AtkObject *aobject)
         accel_name = "";
       }
 
-    if (GTK_IS_ACCESSIBLE (aobject) &&
-        GTK_IS_WIDGET (GTK_ACCESSIBLE (aobject)->widget))
+    widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (aobject));
+    if (widget)
       {
         _print_key_value(tab_n, group_num, "Widget name",
-          (gpointer)gtk_widget_get_name(GTK_ACCESSIBLE (aobject)->widget),
+          (gpointer)gtk_widget_get_name (widget),
           VALUE_STRING);
       }
     else

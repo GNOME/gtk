@@ -475,7 +475,7 @@ gtk_spinner_accessible_image_get_size (AtkImage *image,
 {
   GtkWidget *widget;
 
-  widget = GTK_ACCESSIBLE (image)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (image));
   if (!widget)
     {
       *width = *height = 0;

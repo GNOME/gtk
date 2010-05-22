@@ -114,7 +114,7 @@ gail_notebook_ref_child (AtkObject      *obj,
   GtkNotebook *gtk_notebook;
   GtkWidget *widget;
  
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -316,7 +316,7 @@ gail_notebook_add_selection (AtkSelection *selection,
   GtkNotebook *notebook;
   GtkWidget *widget;
   
-  widget =  GTK_ACCESSIBLE (selection)->widget;
+  widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /*
      * State is defunct
@@ -343,7 +343,7 @@ gail_notebook_ref_selection (AtkSelection *selection,
   gail_return_val_if_fail (i == 0, NULL);
   g_return_val_if_fail (GAIL_IS_NOTEBOOK (selection), NULL);
   
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* State is defunct */
 	return NULL;
@@ -366,7 +366,7 @@ gail_notebook_get_selection_count (AtkSelection *selection)
   GtkWidget *widget;
   GtkNotebook *notebook;
   
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /*
      * State is defunct
@@ -388,7 +388,7 @@ gail_notebook_is_child_selected (AtkSelection *selection,
   GtkNotebook *notebook;
   gint pagenumber;
 
-  widget = GTK_ACCESSIBLE (selection)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
     /* 
      * State is defunct
@@ -561,7 +561,7 @@ gail_notebook_check_focus_tab (gpointer data)
 
   atk_obj = ATK_OBJECT (data);
   gail_notebook = GAIL_NOTEBOOK (atk_obj);
-  widget = GTK_ACCESSIBLE (atk_obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
 
   gtk_notebook = GTK_NOTEBOOK (widget);
 

@@ -68,7 +68,7 @@ gail_paned_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_paned_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
     return state_set;
@@ -121,7 +121,7 @@ gail_paned_get_current_value (AtkValue             *obj,
   GtkWidget* widget;
   gint current_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -139,7 +139,7 @@ gail_paned_get_maximum_value (AtkValue             *obj,
   GtkWidget* widget;
   gint maximum_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -157,7 +157,7 @@ gail_paned_get_minimum_value (AtkValue             *obj,
   GtkWidget* widget;
   gint minimum_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return;
@@ -182,7 +182,7 @@ gail_paned_set_current_value (AtkValue             *obj,
   GtkWidget* widget;
   gint new_value;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;

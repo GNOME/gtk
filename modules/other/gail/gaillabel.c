@@ -217,7 +217,7 @@ notify_name_change (AtkObject *atk_obj)
   GtkWidget *widget;
   GObject *gail_obj;
 
-  widget = GTK_ACCESSIBLE (atk_obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -421,7 +421,7 @@ gail_label_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
 
   state_set = ATK_OBJECT_CLASS (gail_label_parent_class)->ref_state_set (accessible);
-  widget = GTK_ACCESSIBLE (accessible)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
 
   if (widget == NULL)
     return state_set;
@@ -439,7 +439,7 @@ gail_label_ref_relation_set (AtkObject *obj)
 
   g_return_val_if_fail (GAIL_IS_LABEL (obj), NULL);
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     /*
      * State is defunct
@@ -546,7 +546,7 @@ gail_label_get_name (AtkObject *accessible)
        */
       GtkWidget *widget;
 
-      widget = GTK_ACCESSIBLE (accessible)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
       if (widget == NULL)
         /*
          * State is defunct
@@ -593,7 +593,7 @@ gail_label_get_text (AtkText *text,
 
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -623,7 +623,7 @@ gail_label_get_text_before_offset (AtkText         *text,
   GtkWidget *widget;
   GtkLabel *label;
   
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -647,7 +647,7 @@ gail_label_get_text_at_offset (AtkText         *text,
   GtkWidget *widget;
   GtkLabel *label;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -671,7 +671,7 @@ gail_label_get_text_after_offset (AtkText         *text,
   GtkWidget *widget;
   GtkLabel *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
   {
@@ -693,7 +693,7 @@ gail_label_get_character_count (AtkText *text)
   GtkWidget *widget;
   GtkLabel  *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -715,7 +715,7 @@ gail_label_set_caret_offset (AtkText *text,
   GtkWidget *widget;
   GtkLabel  *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -740,7 +740,7 @@ gail_label_get_n_selections (AtkText *text)
   GtkLabel  *label;
   gint start, end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -765,7 +765,7 @@ gail_label_get_selection (AtkText *text,
   GtkWidget *widget;
   GtkLabel  *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -801,7 +801,7 @@ gail_label_add_selection (AtkText *text,
   GtkLabel  *label;
   gint start, end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -828,7 +828,7 @@ gail_label_remove_selection (AtkText *text,
   GtkLabel  *label;
   gint start, end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -860,7 +860,7 @@ gail_label_set_selection (AtkText *text,
   GtkLabel  *label;
   gint start, end;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return FALSE;
@@ -897,7 +897,7 @@ gail_label_get_character_extents (AtkText      *text,
   const gchar *label_text;
   gint index, x_layout, y_layout;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
 
   if (widget == NULL)
     /* State is defunct */
@@ -925,7 +925,7 @@ gail_label_get_offset_at_point (AtkText      *text,
   const gchar *label_text;
   gint index, x_layout, y_layout;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -960,7 +960,7 @@ gail_label_get_run_attributes (AtkText        *text,
   GtkJustification justify;
   GtkTextDirection dir;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -999,7 +999,7 @@ gail_label_get_default_attributes (AtkText        *text)
   GtkLabel *label;
   AtkAttributeSet *at_set = NULL;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -1021,7 +1021,7 @@ gail_label_get_character_at_offset (AtkText	         *text,
   const gchar *string;
   gchar *index;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return '\0';

@@ -137,7 +137,7 @@ gail_statusbar_get_name (AtkObject *obj)
       GtkWidget *widget;
       GtkWidget *label;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       if (widget == NULL)
         /*
          * State is defunct
@@ -160,7 +160,7 @@ gail_statusbar_get_n_children (AtkObject *obj)
   GList *children;
   gint count = 0;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return 0;
 
@@ -183,7 +183,7 @@ gail_statusbar_ref_child (AtkObject *obj,
   GtkWidget *widget;
 
   g_return_val_if_fail ((i >= 0), NULL);
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (widget == NULL)
     return NULL;
 
@@ -315,7 +315,7 @@ gail_statusbar_get_text (AtkText *text,
   GailStatusbar *statusbar;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -351,7 +351,7 @@ gail_statusbar_get_text_before_offset (AtkText         *text,
   GtkWidget *label;
   GailStatusbar *statusbar;
   
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -383,7 +383,7 @@ gail_statusbar_get_text_at_offset (AtkText         *text,
   GtkWidget *label;
   GailStatusbar *statusbar;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
     /* State is defunct */
@@ -415,7 +415,7 @@ gail_statusbar_get_text_after_offset (AtkText         *text,
   GtkWidget *label;
   GailStatusbar *statusbar;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   
   if (widget == NULL)
   {
@@ -444,7 +444,7 @@ gail_statusbar_get_character_count (AtkText *text)
   GtkWidget *widget;
   GtkWidget *label;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return 0;
@@ -472,7 +472,7 @@ gail_statusbar_get_character_extents (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *label_text;
  
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
 
   if (widget == NULL)
     /* State is defunct */
@@ -503,7 +503,7 @@ gail_statusbar_get_offset_at_point (AtkText      *text,
   gint index, x_layout, y_layout;
   const gchar *label_text;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return -1;
@@ -542,7 +542,7 @@ gail_statusbar_get_run_attributes (AtkText *text,
   GtkJustification justify;
   GtkTextDirection dir;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -584,7 +584,7 @@ gail_statusbar_get_default_attributes (AtkText *text)
   GtkWidget *label;
   AtkAttributeSet *at_set = NULL;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return NULL;
@@ -609,7 +609,7 @@ gail_statusbar_get_character_at_offset (AtkText *text,
   const gchar *string;
   gchar *index;
 
-  widget = GTK_ACCESSIBLE (text)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     /* State is defunct */
     return '\0';

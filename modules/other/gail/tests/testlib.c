@@ -110,7 +110,7 @@ find_object_by_name_and_role(AtkObject   *obj,
   if (obj == NULL)
     return NULL;
 
-  widget = GTK_ACCESSIBLE (obj)->widget;
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
   if (GTK_IS_WIDGET (widget))
     {
       if (strcmp (name, gtk_widget_get_name(GTK_WIDGET (widget))) == 0)
@@ -133,7 +133,7 @@ find_object_by_name_and_role(AtkObject   *obj,
       if (child == NULL)
         continue;
 
-      widget = GTK_ACCESSIBLE (child)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
       if (GTK_IS_WIDGET (widget))
         {
           if (strcmp(name, gtk_widget_get_name(GTK_WIDGET (widget))) == 0)
@@ -385,7 +385,7 @@ display_children_to_depth (AtkObject *obj,
     {
       GtkWidget *widget;
 
-      widget = GTK_ACCESSIBLE (obj)->widget;
+      widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
       g_print("name <%s>, ", gtk_widget_get_name(GTK_WIDGET (widget)));
     }
   else
