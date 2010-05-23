@@ -4027,8 +4027,8 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
   new_area.width = ABS (x - tree_view->priv->press_start_x) + 1;
   new_area.height = ABS (y - tree_view->priv->press_start_y) + 1;
 
-  invalid_region = gdk_region_rectangle (&old_area);
-  gdk_region_union_with_rect (invalid_region, &new_area);
+  invalid_region = cairo_region_create_rectangle (&old_area);
+  cairo_region_union_rectangle (invalid_region, &new_area);
 
   gdk_rectangle_intersect (&old_area, &new_area, &common);
   if (common.width > 2 && common.height > 2)
@@ -4041,15 +4041,15 @@ gtk_tree_view_update_rubber_band (GtkTreeView *tree_view)
       common.width -= 2;
       common.height -= 2;
 
-      common_region = gdk_region_rectangle (&common);
+      common_region = cairo_region_create_rectangle (&common);
 
-      gdk_region_subtract (invalid_region, common_region);
-      gdk_region_destroy (common_region);
+      cairo_region_subtract (invalid_region, common_region);
+      cairo_region_destroy (common_region);
     }
 
   gdk_window_invalidate_region (tree_view->priv->bin_window, invalid_region, TRUE);
 
-  gdk_region_destroy (invalid_region);
+  cairo_region_destroy (invalid_region);
 
   tree_view->priv->rubber_band_x = x;
   tree_view->priv->rubber_band_y = y;
@@ -4515,7 +4515,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	      cell_area.height -= grid_line_width;
 	    }
 
-	  if (gdk_region_rect_in (event->region, &background_area) == GDK_OVERLAP_RECTANGLE_OUT)
+	  if (cairo_region_contains_rectangle (event->region, &background_area) == CAIRO_REGION_OVERLAP_OUT)
 	    {
 	      cell_offset += column->width;
 	      continue;
@@ -4986,20 +4986,19 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 done:
   gtk_tree_view_draw_grid_lines (tree_view, event, n_visible_columns);
 
- if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
-   {
-     GdkRectangle *rectangles;
-     gint n_rectangles;
-
-     gdk_region_get_rectangles (event->region,
-				&rectangles,
-				&n_rectangles);
-
-     while (n_rectangles--)
-       gtk_tree_view_paint_rubber_band (tree_view, &rectangles[n_rectangles]);
-
-     g_free (rectangles);
-   }
+  if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
+    {
+      GdkRectangle rectangle;
+      gint n_rectangles;
+ 
+      n_rectangles = cairo_region_num_rectangles (event->region);
+ 
+      while (n_rectangles--)
+        {
+          cairo_region_get_rectangle (event->region, n_rectangles, &rectangle);
+          gtk_tree_view_paint_rubber_band (tree_view, &rectangle);
+        }
+    }
 
   if (cursor_path)
     gtk_tree_path_free (cursor_path);

@@ -148,11 +148,11 @@ queue_item_free (GdkWindowQueueItem *item)
     }
   
   if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
-    gdk_region_destroy (item->u.antiexpose.area);
+    cairo_region_destroy (item->u.antiexpose.area);
   else
     {
       if (item->u.translate.area)
-	gdk_region_destroy (item->u.translate.area);
+	cairo_region_destroy (item->u.translate.area);
     }
   
   g_free (item);
@@ -235,7 +235,7 @@ _gdk_x11_window_queue_translation (GdkWindow *window,
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
-  item->u.translate.area = area ? gdk_region_copy (area) : NULL;
+  item->u.translate.area = area ? cairo_region_copy (area) : NULL;
   item->u.translate.dx = dx;
   item->u.translate.dy = dy;
 
@@ -265,7 +265,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 			    gulong        serial,
 			    GdkRectangle *area)
 {
-  GdkRegion *invalidate_region = gdk_region_rectangle (area);
+  GdkRegion *invalidate_region = cairo_region_create_rectangle (area);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
   if (display_x11->translate_queue)
@@ -288,19 +288,19 @@ _gdk_window_process_expose (GdkWindow    *window,
 			{
 			  GdkRegion *intersection;
 
-			  intersection = gdk_region_copy (invalidate_region);
-			  gdk_region_intersect (intersection, item->u.translate.area);
-			  gdk_region_subtract (invalidate_region, intersection);
-			  gdk_region_offset (intersection, item->u.translate.dx, item->u.translate.dy);
-			  gdk_region_union (invalidate_region, intersection);
-			  gdk_region_destroy (intersection);
+			  intersection = cairo_region_copy (invalidate_region);
+			  cairo_region_intersect (intersection, item->u.translate.area);
+			  cairo_region_subtract (invalidate_region, intersection);
+			  cairo_region_translate (intersection, item->u.translate.dx, item->u.translate.dy);
+			  cairo_region_union (invalidate_region, intersection);
+			  cairo_region_destroy (intersection);
 			}
 		      else
-			gdk_region_offset (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+			cairo_region_translate (invalidate_region, item->u.translate.dx, item->u.translate.dy);
 		    }
 		  else		/* anti-expose */
 		    {
-		      gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
+		      cairo_region_subtract (invalidate_region, item->u.antiexpose.area);
 		    }
 		}
 	    }
@@ -313,10 +313,10 @@ _gdk_window_process_expose (GdkWindow    *window,
 	}
     }
 
-  if (!gdk_region_empty (invalidate_region))
+  if (!cairo_region_is_empty (invalidate_region))
     _gdk_window_invalidate_for_expose (window, invalidate_region);
 
-  gdk_region_destroy (invalidate_region);
+  cairo_region_destroy (invalidate_region);
 }
 
 #define __GDK_GEOMETRY_X11_C__

@@ -1273,7 +1273,7 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
 
   line = pango_layout_iter_get_line_readonly (iter);
 
-  clip_region = gdk_region_new ();
+  clip_region = cairo_region_create ();
 
   pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
   baseline = pango_layout_iter_get_baseline (iter);
@@ -1307,7 +1307,7 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
           rect.width = PANGO_PIXELS (pixel_ranges[2*j + 1] - logical_rect.x) - x_off;
           rect.height = PANGO_PIXELS (baseline - logical_rect.y + logical_rect.height) - y_off;
 
-          gdk_region_union_with_rect (clip_region, &rect);
+          cairo_region_union_rectangle (clip_region, &rect);
         }
 
       g_free (pixel_ranges);
@@ -1398,7 +1398,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
   g_return_val_if_fail (PANGO_IS_LAYOUT (layout), NULL);
   g_return_val_if_fail (index_ranges != NULL, NULL);
   
-  clip_region = gdk_region_new ();
+  clip_region = cairo_region_create ();
   
   iter = pango_layout_get_iter (layout);
   
@@ -1417,8 +1417,8 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
 						     index_ranges,
 						     n_ranges);
 
-      gdk_region_union (clip_region, line_region);
-      gdk_region_destroy (line_region);
+      cairo_region_union (clip_region, line_region);
+      cairo_region_destroy (line_region);
     }
   while (pango_layout_iter_next_line (iter));
 

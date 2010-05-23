@@ -1671,20 +1671,19 @@ gdk_window_x11_clear_region (GdkWindow *window,
 			     GdkRegion *region,
 			     gboolean   send_expose)
 {
-  GdkRectangle *rectangles;
-  int n_rectangles, i;
+  cairo_rectangle_int_t rect;
+  int n_rects, i;
 
-  gdk_region_get_rectangles  (region,
-			      &rectangles,
-			      &n_rectangles);
+  n_rects = cairo_region_num_rectangles (region);
 
-  for (i = 0; i < n_rectangles; i++)
-    XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-		rectangles[i].x, rectangles[i].y,
-		rectangles[i].width, rectangles[i].height,
-		send_expose);
-
-  g_free (rectangles);
+  for (i = 0; i < n_rects; i++)
+    {
+      cairo_region_get_rectangle (region, i, &rect);
+      XClearArea (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
+                  rect.x, rect.y,
+                  rect.width, rect.height,
+                  send_expose);
+    }
 }
 
 static void
@@ -4611,7 +4610,7 @@ _xwindow_get_shape (Display *xdisplay,
 			     shape_type, &rn, &ord);
 
   if (xrl == NULL || rn == 0)
-    return gdk_region_new (); /* Empty */
+    return cairo_region_create (); /* Empty */
 
   if (ord != YXBanded)
     {

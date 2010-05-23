@@ -369,11 +369,11 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
     {
       CGRect rect;
       CGRect *cg_rects;
-      GdkRectangle *rects;
+      cairo_region_t *region;
       gint n_rects, i;
 
-      gdk_region_get_rectangles (_gdk_gc_get_clip_region (gc),
-				 &rects, &n_rects);
+      region = _gdk_gc_get_clip_region (gc);
+      n_rects = cairo_region_num_rectangles (region);
 
       if (n_rects == 1)
 	cg_rects = &rect;
@@ -382,15 +382,16 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 
       for (i = 0; i < n_rects; i++)
 	{
-	  cg_rects[i].origin.x = rects[i].x + gc->clip_x_origin;
-	  cg_rects[i].origin.y = rects[i].y + gc->clip_y_origin;
-	  cg_rects[i].size.width = rects[i].width;
-	  cg_rects[i].size.height = rects[i].height;
+          cairo_rectangle_int_t cairo_rect;
+          cairo_region_get_rectangle (region, i, &cairo_rect);
+	  cg_rects[i].origin.x = cairo_rect.x + gc->clip_x_origin;
+	  cg_rects[i].origin.y = cairo_rect.y + gc->clip_y_origin;
+	  cg_rects[i].size.width = cairo_rect.width;
+	  cg_rects[i].size.height = cairo_rect.height;
 	}
 
       CGContextClipToRects (context, cg_rects, n_rects);
 
-      g_free (rects);
       if (cg_rects != &rect)
 	g_free (cg_rects);
     }

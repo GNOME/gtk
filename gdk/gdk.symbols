@@ -974,21 +974,31 @@ gdk_pixmap_lookup_for_display
 
 #if IN_HEADER(__GDK_REGION_H__)
 #if IN_FILE(__GDK_REGION_GENERIC_C__)
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_region_copy
 gdk_region_destroy
+#endif
 gdk_region_empty
 gdk_region_equal
 gdk_region_rect_equal
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_region_get_clipbox
+#endif
 gdk_region_get_rectangles
 gdk_region_intersect
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_region_new
+#endif
 gdk_region_offset
 gdk_region_point_in
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_region_rectangle
+#endif
 gdk_region_rect_in
 gdk_region_shrink
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_region_spans_intersect_foreach
+#endif
 gdk_region_subtract
 gdk_region_union
 gdk_region_union_with_rect

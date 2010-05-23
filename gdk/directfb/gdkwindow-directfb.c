@@ -227,7 +227,7 @@ gdk_window_impl_directfb_get_visible_region (GdkDrawable *drawable)
 
   D_DEBUG_AT( GDKDFB_Window, "  -> returning %4d,%4d-%4dx%4d\n", drect.x, drect.y, drect.w, drect.h );
 
-  return gdk_region_rectangle (&rect);
+  return cairo_region_create_rectangle (&rect);
 }
 
 static void
@@ -2876,7 +2876,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
                   DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
       /* Add the new region to the paint region... */
-      gdk_region_union (&impl->paint_region, region);
+      cairo_region_union (&impl->paint_region, region);
     }
   else
     {
@@ -2896,7 +2896,7 @@ gdk_window_impl_directfb_begin_paint_region (GdkPaintable    *paintable,
               DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );
 
   /* ...but clip the initial/compound result against the clip region. */
-  gdk_region_intersect (&impl->paint_region, &impl->clip_region);
+  cairo_region_intersect (&impl->paint_region, &impl->clip_region);
 
   D_DEBUG_AT( GDKDFB_Window, "  -> clipped  %4d,%4d-%4dx%4d (%ld boxes)\n",
               DFB_RECTANGLE_VALS_FROM_REGION( &impl->paint_region.extents ), impl->paint_region.numRects );

@@ -691,9 +691,9 @@ gtk_tree_item_expose_child (GtkWidget *child,
 
       child_event->expose.region = gtk_widget_region_intersect (child,
 								data->event->region);
-      if (!gdk_region_empty (child_event->expose.region))
+      if (!cairo_region_is_empty (child_event->expose.region))
         {
-          gdk_region_get_clipbox (child_event->expose.region, &child_event->expose.area);
+          cairo_region_get_extents (child_event->expose.region, &child_event->expose.area);
           gtk_widget_send_expose (child, child_event);
 	}
       gdk_event_free (child_event);

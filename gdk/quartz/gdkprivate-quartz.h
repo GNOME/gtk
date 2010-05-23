@@ -160,8 +160,8 @@ void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
-void       _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
-                                                         GdkRectangle *rect);
+void       _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
+                                                           GdkRegion    *region);
 
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
