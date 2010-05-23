@@ -93,6 +93,12 @@ struct _GtkMenuPrivate
   GtkStateType lower_arrow_state;
   GtkStateType upper_arrow_state;
 
+  /* navigation region */
+  int navigation_x;
+  int navigation_y;
+  int navigation_width;
+  int navigation_height;
+
   guint have_layout           : 1;
   guint seen_item_enter       : 1;
   guint have_position         : 1;
@@ -3216,6 +3222,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
+  GtkMenuPrivate *priv;
 
   gboolean need_enter;
 
@@ -3250,7 +3257,8 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   if (definitely_within_item (menu_item, event->x, event->y))
     menu_shell->activate_time = 0;
 
-  need_enter = (menu->navigation_region != NULL || menu_shell->ignore_enter);
+  priv = gtk_menu_get_private (menu);
+  need_enter = (priv->navigation_width > 0 || priv->navigation_height > 0 || menu_shell->ignore_enter);
 
   /* Check to see if we are within an active submenu's navigation region
    */
@@ -3949,11 +3957,13 @@ gtk_menu_leave_notify (GtkWidget        *widget,
 static void 
 gtk_menu_stop_navigating_submenu (GtkMenu *menu)
 {
-  if (menu->navigation_region) 
-    {
-      gdk_region_destroy (menu->navigation_region);
-      menu->navigation_region = NULL;
-    }  
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  priv->navigation_x = 0;
+  priv->navigation_y = 0;
+  priv->navigation_width = 0;
+  priv->navigation_height = 0;
+
   if (menu->navigation_timeout)
     {
       g_source_remove (menu->navigation_timeout);
@@ -3998,10 +4008,39 @@ gtk_menu_navigating_submenu (GtkMenu *menu,
 			     gint     event_x,
 			     gint     event_y)
 {
-  if (menu->navigation_region)
+  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+
+  if (priv->navigation_width && priv->navigation_height)
     {
-      if (gdk_region_point_in (menu->navigation_region, event_x, event_y))
-	return TRUE;
+      int width = priv->navigation_width;
+      int height = priv->navigation_height;
+
+      /* check if x/y are in the triangle spanned by the navigation parameters */
+
+      /* 1) Move the coordinates so the triangle starts at 0,0 */
+      event_x -= priv->navigation_x;
+      event_y -= priv->navigation_y;
+
+      /* 2) Ensure both legs move along the positive axis */
+      if (width < 0)
+        {
+          event_x = -event_x;
+          width = -width;
+        }
+      if (height < 0)
+        {
+          event_y = -event_y;
+          height = -height;
+        }
+
+      /* 3) Check that the given coordinate is inside the triangle. The formula
+       * is a transformed form of this formula: x/w + y/h <= 1
+       */
+      if (event_x >= 0 && event_y >= 0 &&
+          event_x * height + event_y * width <= width * height)
+        {
+	  return TRUE;
+        }
       else
 	{
 	  gtk_menu_stop_navigating_submenu (menu);
@@ -4010,37 +4049,6 @@ gtk_menu_navigating_submenu (GtkMenu *menu,
     }
   return FALSE;
 }
-
-#undef DRAW_STAY_UP_TRIANGLE
-
-#ifdef DRAW_STAY_UP_TRIANGLE
-
-static void
-draw_stay_up_triangle (GdkWindow *window,
-		       GdkRegion *region)
-{
-  /* Draw ugly color all over the stay-up triangle */
-  GdkColor ugly_color = { 0, 50000, 10000, 10000 };
-  GdkGCValues gc_values;
-  GdkGC *ugly_gc;
-  GdkRectangle clipbox;
-
-  gc_values.subwindow_mode = GDK_INCLUDE_INFERIORS;
-  ugly_gc = gdk_gc_new_with_values (window, &gc_values, 0 | GDK_GC_SUBWINDOW);
-  gdk_gc_set_rgb_fg_color (ugly_gc, &ugly_color);
-  gdk_gc_set_clip_region (ugly_gc, region);
-
-  gdk_region_get_clipbox (region, &clipbox);
-  
-  gdk_draw_rectangle (window,
-                     ugly_gc,
-                     TRUE,
-                     clipbox.x, clipbox.y,
-                     clipbox.width, clipbox.height);
-  
-  g_object_unref (ugly_gc);
-}
-#endif
 
 static void
 gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
@@ -4053,12 +4061,14 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   gint submenu_bottom = 0;
   gint width = 0;
   gint height = 0;
-  GdkPoint point[3];
   GtkWidget *event_widget;
+  GtkMenuPrivate *priv;
 
   g_return_if_fail (menu_item->submenu != NULL);
   g_return_if_fail (event != NULL);
   
+  priv = gtk_menu_get_private (menu);
+
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
   
   gdk_window_get_origin (menu_item->submenu->window, &submenu_left, &submenu_top);
@@ -4075,42 +4085,42 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       
       gtk_menu_stop_navigating_submenu (menu);
 
+      /* The navigation region is the triangle closest to the x/y
+       * location of the rectangle. This is why the width or height
+       * can be negative.
+       */
+
       if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
 	{
 	  /* right */
-	  point[0].x = event->x_root;
-	  point[1].x = submenu_left;
+          priv->navigation_x = submenu_left;
+          priv->navigation_width = event->x_root - submenu_left;
 	}
       else
 	{
 	  /* left */
-	  point[0].x = event->x_root + 1;
-	  point[1].x = submenu_right;
+          priv->navigation_x = submenu_right;
+          priv->navigation_width = event->x_root - submenu_right;
 	}
 
       if (event->y < 0)
 	{
 	  /* top */
-	  point[0].y = event->y_root;
-	  point[1].y = submenu_top - NAVIGATION_REGION_OVERSHOOT;
+          priv->navigation_y = event->y_root;
+          priv->navigation_height = submenu_top - event->y_root - NAVIGATION_REGION_OVERSHOOT;
 
-	  if (point[0].y <= submenu_top)
+	  if (priv->navigation_height >= 0)
 	    return;
 	}
       else
 	{
 	  /* bottom */
-	  point[0].y = event->y_root + 1;
-	  point[1].y = submenu_bottom + NAVIGATION_REGION_OVERSHOOT;
+          priv->navigation_y = event->y_root;
+          priv->navigation_height = submenu_bottom - event->y_root + NAVIGATION_REGION_OVERSHOOT;
 
-	  if (point[0].y >= submenu_bottom)
+	  if (priv->navigation_height <= 0)
 	    return;
 	}
-
-      point[2].x = point[1].x;
-      point[2].y = point[0].y;
-
-      menu->navigation_region = gdk_region_polygon (point, 3, GDK_WINDING_RULE);
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
 		    "gtk-menu-popdown-delay", &popdown_delay,
@@ -4119,11 +4129,6 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
       menu->navigation_timeout = gdk_threads_add_timeout (popdown_delay,
                                                           gtk_menu_stop_navigating_submenu_cb,
                                                           menu);
-
-#ifdef DRAW_STAY_UP_TRIANGLE
-      draw_stay_up_triangle (gdk_get_default_root_window(),
-			     menu->navigation_region);
-#endif
     }
 }
 

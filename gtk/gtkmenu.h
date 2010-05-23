@@ -92,7 +92,7 @@ struct _GtkMenu
   /* When a submenu of this menu is popped up, motion in this
    * region is ignored
    */
-  GdkRegion *GSEAL (navigation_region);
+  GdkRegion *GSEAL (navigation_region); /* unused */
   guint GSEAL (navigation_timeout);
 
   guint GSEAL (needs_destruction_ref_count) : 1;
