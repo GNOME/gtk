@@ -348,7 +348,7 @@ gtk_button_box_get_child_secondary (GtkButtonBox *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
   child_info = NULL;
-  list = GTK_BOX (widget)->children;
+  list = gtk_container_get_children (GTK_CONTAINER (widget));
   while (list)
     {
       child_info = list->data;
@@ -394,7 +394,7 @@ gtk_button_box_set_child_secondary (GtkButtonBox *widget,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == GTK_WIDGET (widget));
 
-  list = GTK_BOX (widget)->children;
+  list = gtk_container_get_children (GTK_CONTAINER (widget));
   while (list)
     {
       GtkBoxChild *child_info = list->data;
@@ -468,7 +468,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
 
   nchildren = 0;
   nsecondaries = 0;
-  children = GTK_BOX(bbox)->children;
+  children = gtk_container_get_children (GTK_CONTAINER (bbox));
   needed_width = child_min_width;
   needed_height = child_min_height;  
   ipad_w = ipad_x * 2;
@@ -539,7 +539,7 @@ gtk_button_box_size_request (GtkWidget      *widget,
   priv = bbox->priv;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
-  spacing = box->spacing;
+  spacing = gtk_box_get_spacing (box);
   layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
            ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
 
@@ -625,7 +625,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   priv = box->priv;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
-  spacing = base_box->spacing;
+  spacing = gtk_box_get_spacing (base_box);
   layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
            ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
   _gtk_button_box_child_requisition (widget,
@@ -793,7 +793,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
         childspace = child_height + childspacing;
       }
 
-  children = GTK_BOX (box)->children;
+  children = gtk_container_get_children (GTK_CONTAINER (box));
 
   while (children)
     {

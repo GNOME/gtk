@@ -245,8 +245,8 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
 
-  box->spacing = 2;
-  box->homogeneous = FALSE;
+  gtk_box_set_spacing (box, 2);
+  gtk_box_set_homogeneous (box, FALSE);
 
   statusbar->has_resize_grip = TRUE;
 
@@ -985,7 +985,7 @@ has_extra_children (GtkStatusbar *statusbar)
     return TRUE;
 
   frame = NULL;
-  for (l = GTK_BOX (statusbar)->children; l; l = l->next)
+  for (l = gtk_container_get_children (GTK_CONTAINER (statusbar)); l; l = l->next)
     {
       frame = l->data;
 
