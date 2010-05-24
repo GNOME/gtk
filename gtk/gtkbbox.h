@@ -47,16 +47,15 @@ G_BEGIN_DECLS
 #define GTK_BUTTONBOX_DEFAULT -1
  
 typedef struct _GtkButtonBox       GtkButtonBox;
+typedef struct _GtkButtonBoxPriv   GtkButtonBoxPriv;
 typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
 
 struct _GtkButtonBox
 {
   GtkBox box;
-  gint GSEAL (child_min_width);
-  gint GSEAL (child_min_height);
-  gint GSEAL (child_ipad_x);
-  gint GSEAL (child_ipad_y);
-  GtkButtonBoxStyle GSEAL (layout_style);
+
+  /*< private >*/
+  GtkButtonBoxPriv *priv;
 };
 
 struct _GtkButtonBoxClass

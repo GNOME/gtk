@@ -61,6 +61,16 @@
 #include "gtkintl.h"
 
 
+struct _GtkButtonBoxPriv
+{
+  GtkButtonBoxStyle layout_style;
+
+  gint child_ipad_x;
+  gint child_ipad_y;
+  gint child_min_width;
+  gint child_min_height;
+};
+
 enum {
   PROP_0,
   PROP_LAYOUT_STYLE
@@ -175,17 +185,26 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 								    P_("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
 								    FALSE,
 								    GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (class, sizeof (GtkButtonBoxPriv));
 }
 
 static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
-  GTK_BOX (button_box)->spacing = 0;
-  button_box->child_min_width = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_min_height = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_ipad_x = GTK_BUTTONBOX_DEFAULT;
-  button_box->child_ipad_y = GTK_BUTTONBOX_DEFAULT;
-  button_box->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
+  GtkButtonBoxPriv *priv;
+
+  button_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (button_box,
+                                                  GTK_TYPE_BUTTON_BOX,
+                                                  GtkButtonBoxPriv);
+  priv = button_box->priv;
+
+  gtk_box_set_spacing (GTK_BOX (button_box), 0);
+  priv->child_min_width = GTK_BUTTONBOX_DEFAULT;
+  priv->child_min_height = GTK_BUTTONBOX_DEFAULT;
+  priv->child_ipad_x = GTK_BUTTONBOX_DEFAULT;
+  priv->child_ipad_y = GTK_BUTTONBOX_DEFAULT;
+  priv->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
 }
 
 static void
@@ -212,10 +231,12 @@ gtk_button_box_get_property (GObject         *object,
 			     GValue          *value,
 			     GParamSpec      *pspec)
 {
+  GtkButtonBoxPriv *priv = GTK_BUTTON_BOX (object)->priv;
+
   switch (prop_id)
     {
     case PROP_LAYOUT_STYLE:
-      g_value_set_enum (value, GTK_BUTTON_BOX (object)->layout_style);
+      g_value_set_enum (value, priv->layout_style);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -273,13 +294,17 @@ void
 gtk_button_box_set_layout (GtkButtonBox      *widget, 
                            GtkButtonBoxStyle  layout_style)
 {
+  GtkButtonBoxPriv *priv;
+
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (layout_style >= GTK_BUTTONBOX_DEFAULT_STYLE &&
 		    layout_style <= GTK_BUTTONBOX_CENTER);
 
-  if (widget->layout_style != layout_style)
+  priv = widget->priv;
+
+  if (priv->layout_style != layout_style)
     {
-      widget->layout_style = layout_style;
+      priv->layout_style = layout_style;
       g_object_notify (G_OBJECT (widget), "layout-style");
       gtk_widget_queue_resize (GTK_WIDGET (widget));
     }
@@ -298,7 +323,7 @@ gtk_button_box_get_layout (GtkButtonBox *widget)
 {
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), GTK_BUTTONBOX_SPREAD);
   
-  return widget->layout_style;
+  return widget->priv->layout_style;
 }
 
 /**
@@ -316,8 +341,8 @@ gboolean
 gtk_button_box_get_child_secondary (GtkButtonBox *widget,
 				    GtkWidget    *child)
 {
-  GList *list;
   GtkBoxChild *child_info;
+  GList *list;
 
   g_return_val_if_fail (GTK_IS_BUTTON_BOX (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
@@ -399,6 +424,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
                                    int       *width,
                                    int       *height)
 {
+  GtkButtonBoxPriv *priv;
   GtkButtonBox *bbox;
   GtkBoxChild *child;
   GList *children;
@@ -422,6 +448,7 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
   bbox = GTK_BUTTON_BOX (widget);
+  priv = bbox->priv;
 
   gtk_widget_style_get (widget,
                         "child-min-width", &width_default,
@@ -429,15 +456,15 @@ _gtk_button_box_child_requisition (GtkWidget *widget,
                         "child-internal-pad-x", &ipad_x_default,
                         "child-internal-pad-y", &ipad_y_default, 
 			NULL);
-  
-  child_min_width = bbox->child_min_width   != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_min_width : width_default;
-  child_min_height = bbox->child_min_height !=GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_min_height : height_default;
-  ipad_x = bbox->child_ipad_x != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_ipad_x : ipad_x_default;
-  ipad_y = bbox->child_ipad_y != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->child_ipad_y : ipad_y_default;
+
+  child_min_width = priv->child_min_width != GTK_BUTTONBOX_DEFAULT
+                    ? priv->child_min_width : width_default;
+  child_min_height = priv->child_min_height != GTK_BUTTONBOX_DEFAULT
+                     ? priv->child_min_height : height_default;
+  ipad_x = priv->child_ipad_x != GTK_BUTTONBOX_DEFAULT
+           ? priv->child_ipad_x : ipad_x_default;
+  ipad_y = priv->child_ipad_y != GTK_BUTTONBOX_DEFAULT
+           ? priv->child_ipad_y : ipad_y_default;
 
   nchildren = 0;
   nsecondaries = 0;
@@ -497,6 +524,7 @@ static void
 gtk_button_box_size_request (GtkWidget      *widget,
                              GtkRequisition *requisition)
 {
+  GtkButtonBoxPriv *priv;
   GtkBox *box;
   GtkButtonBox *bbox;
   gint nvis_children;
@@ -508,11 +536,12 @@ gtk_button_box_size_request (GtkWidget      *widget,
 
   box = GTK_BOX (widget);
   bbox = GTK_BUTTON_BOX (widget);
+  priv = bbox->priv;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   spacing = box->spacing;
-  layout = bbox->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
-	  ? bbox->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+  layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+           ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
 
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
@@ -569,6 +598,7 @@ static void
 gtk_button_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
+  GtkButtonBoxPriv *priv;
   GtkBox *base_box;
   GtkButtonBox *box;
   GtkBoxChild *child;
@@ -590,12 +620,14 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   gint spacing;
   GtkOrientation orientation;
 
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   base_box = GTK_BOX (widget);
   box = GTK_BUTTON_BOX (widget);
+  priv = box->priv;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   spacing = base_box->spacing;
-  layout = box->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
-	  ? box->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
+  layout = priv->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
+           ? priv->layout_style : gtk_button_box_kludge_get_layout_default (GTK_BUTTON_BOX (widget));
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
                                      &n_secondaries,
