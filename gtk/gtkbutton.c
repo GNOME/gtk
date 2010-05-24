@@ -625,7 +625,7 @@ gtk_button_constructor (GType                  type,
 static GType
 gtk_button_child_type  (GtkContainer     *container)
 {
-  if (!GTK_BIN (container)->child)
+  if (!gtk_bin_get_child (GTK_BIN (container)))
     return GTK_TYPE_WIDGET;
   else
     return G_TYPE_NONE;
@@ -798,6 +798,7 @@ static void
 activatable_update_short_label (GtkButton *button,
 				GtkAction *action)
 {
+  GtkWidget *child;
   GtkWidget *image;
 
   if (gtk_button_get_use_stock (button))
@@ -806,9 +807,10 @@ activatable_update_short_label (GtkButton *button,
   image = gtk_button_get_image (button);
 
   /* Dont touch custom child... */
+  child = gtk_bin_get_child (GTK_BIN (button));
   if (GTK_IS_IMAGE (image) ||
-      GTK_BIN (button)->child == NULL || 
-      GTK_IS_LABEL (GTK_BIN (button)->child))
+      child == NULL ||
+      GTK_IS_LABEL (child))
     {
       gtk_button_set_label (button, gtk_action_get_short_label (action));
       gtk_button_set_use_underline (button, TRUE);
@@ -975,6 +977,7 @@ gtk_button_construct_child (GtkButton *button)
 {
   GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   GtkStockItem item;
+  GtkWidget *child;
   GtkWidget *label;
   GtkWidget *box;
   GtkWidget *align;
@@ -1001,9 +1004,9 @@ gtk_button_construct_child (GtkButton *button)
 
   priv->image = NULL;
 
-  if (GTK_BIN (button)->child)
-    gtk_container_remove (GTK_CONTAINER (button),
-			  GTK_BIN (button)->child);
+  child = gtk_bin_get_child (GTK_BIN (button));
+  if (child)
+    gtk_container_remove (GTK_CONTAINER (button), child);
 
   if (button->use_stock &&
       button->label_text &&
@@ -1353,10 +1356,10 @@ gtk_button_update_image_spacing (GtkButton *button)
   if (!button->constructed || !priv->image)
     return;
 
-  child = GTK_BIN (button)->child;
+  child = gtk_bin_get_child (GTK_BIN (button));
   if (GTK_IS_ALIGNMENT (child))
     {
-      child = GTK_BIN (child)->child;
+      child = gtk_bin_get_child (GTK_BIN (child));
       if (GTK_IS_BOX (child))
         {
           gtk_widget_style_get (GTK_WIDGET (button),
@@ -1434,6 +1437,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkAllocation child_allocation;
+  GtkWidget *child;
 
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint xthickness = GTK_WIDGET (widget)->style->xthickness;
@@ -1459,7 +1463,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 			    widget->allocation.width - border_width * 2,
 			    widget->allocation.height - border_width * 2);
 
-  if (GTK_BIN (button)->child && gtk_widget_get_visible (GTK_BIN (button)->child))
+  child = gtk_bin_get_child (GTK_BIN (button));
+  if (child && gtk_widget_get_visible (child))
     {
       child_allocation.x = widget->allocation.x + border_width + inner_border.left + xthickness;
       child_allocation.y = widget->allocation.y + border_width + inner_border.top + ythickness;
@@ -1504,7 +1509,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.y += child_displacement_y;
 	}
 
-      gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -2166,7 +2171,7 @@ gtk_button_set_alignment (GtkButton *button,
   priv->yalign = yalign;
   priv->align_set = 1;
 
-  maybe_set_alignment (button, GTK_BIN (button)->child);
+  maybe_set_alignment (button, gtk_bin_get_child (GTK_BIN (button)));
 
   g_object_freeze_notify (G_OBJECT (button));
   g_object_notify (G_OBJECT (button), "xalign");

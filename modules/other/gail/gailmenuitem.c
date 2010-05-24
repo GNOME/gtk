@@ -520,7 +520,7 @@ gail_menu_item_get_keybinding (AtkAction *action,
                * we get here.
                */
               key = NULL;
-              child = GTK_BIN (item)->child;
+              child = gtk_bin_get_child (GTK_BIN (item));
               if (GTK_IS_ACCEL_LABEL (child))
                 {
                   GtkAccelLabel *accel_label;

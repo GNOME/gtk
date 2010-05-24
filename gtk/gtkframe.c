@@ -302,9 +302,11 @@ gtk_frame_forall (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
   GtkFrame *frame = GTK_FRAME (container);
+  GtkWidget *child;
 
-  if (bin->child)
-    (* callback) (bin->child, callback_data);
+  child = gtk_bin_get_child (bin);
+  if (child)
+    (* callback) (child, callback_data);
 
   if (frame->label_widget)
     (* callback) (frame->label_widget, callback_data);
@@ -615,6 +617,7 @@ gtk_frame_size_allocate (GtkWidget     *widget,
   GtkFrame *frame = GTK_FRAME (widget);
   GtkBin *bin = GTK_BIN (widget);
   GtkAllocation new_allocation;
+  GtkWidget *child;
 
   widget->allocation = *allocation;
 
@@ -633,9 +636,10 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 #endif
      )
     gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
-  
-  if (bin->child && gtk_widget_get_visible (bin->child))
-    gtk_widget_size_allocate (bin->child, &new_allocation);
+
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
+    gtk_widget_size_allocate (child, &new_allocation);
   
   frame->child_allocation = new_allocation;
   
@@ -712,6 +716,7 @@ gtk_frame_get_size (GtkSizeRequest *request,
 		    gint           *natural_size)
 {
   GtkWidget *widget = GTK_WIDGET (request);
+  GtkWidget *child;
   GtkFrame *frame = GTK_FRAME (widget);
   GtkBin *bin = GTK_BIN (widget);
   gint child_min, child_nat;
@@ -741,18 +746,19 @@ gtk_frame_get_size (GtkSizeRequest *request,
       natural = 0;
     }
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_size_request_get_width (GTK_SIZE_REQUEST (bin->child),
+          gtk_size_request_get_width (GTK_SIZE_REQUEST (child),
 				      &child_min, &child_nat);
           minimum = MAX (minimum, child_min);
           natural = MAX (natural, child_nat);
         }
       else
         {
-          gtk_size_request_get_height (GTK_SIZE_REQUEST (bin->child),
+          gtk_size_request_get_height (GTK_SIZE_REQUEST (child),
 				       &child_min, &child_nat);
           minimum += child_min;
           natural += child_nat;

@@ -464,6 +464,7 @@ gtk_expander_size_request (GtkWidget      *widget,
   GtkExpander *expander;
   GtkBin *bin;
   GtkExpanderPrivate *priv;
+  GtkWidget *child;
   gint border_width;
   gint expander_size;
   gint expander_spacing;
@@ -504,11 +505,12 @@ gtk_expander_size_request (GtkWidget      *widget,
   if (!interior_focus)
     requisition->height += 2 * focus_width + 2 * focus_pad;
 
-  if (bin->child && GTK_WIDGET_CHILD_VISIBLE (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
     {
       GtkRequisition child_requisition;
 
-      gtk_widget_size_request (bin->child, &child_requisition);
+      gtk_widget_size_request (child, &child_requisition);
 
       requisition->width = MAX (requisition->width, child_requisition.width);
       requisition->height += child_requisition.height + priv->spacing;
@@ -592,6 +594,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkExpanderPrivate *priv;
   GtkRequisition child_requisition;
+  GtkWidget *child;
   gboolean child_visible = FALSE;
   guint border_width;
   gint expander_size;
@@ -617,10 +620,12 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 
   child_requisition.width = 0;
   child_requisition.height = 0;
-  if (bin->child && GTK_WIDGET_CHILD_VISIBLE (bin->child))
+
+  child = gtk_bin_get_child (bin);
+  if (child && GTK_WIDGET_CHILD_VISIBLE (child))
     {
       child_visible = TRUE;
-      gtk_widget_get_child_requisition (bin->child, &child_requisition);
+      gtk_widget_get_child_requisition (child, &child_requisition);
     }
 
   widget->allocation = *allocation;
@@ -703,7 +708,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
 				(!interior_focus ? 2 * focus_width + 2 * focus_pad : 0);
       child_allocation.height = MAX (child_allocation.height, 1);
 
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -1257,9 +1262,11 @@ gtk_expander_forall (GtkContainer *container,
 {
   GtkBin *bin = GTK_BIN (container);
   GtkExpanderPrivate *priv = GTK_EXPANDER (container)->priv;
+  GtkWidget *child;
 
-  if (bin->child)
-    (* callback) (bin->child, callback_data);
+  child = gtk_bin_get_child (bin);
+  if (child)
+    (* callback) (child, callback_data);
 
   if (priv->label_widget)
     (* callback) (priv->label_widget, callback_data);
@@ -1316,6 +1323,7 @@ static gboolean
 gtk_expander_animation_timeout (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = expander->priv;
+  GtkWidget *child;
   GdkRectangle area;
   gboolean finish = FALSE;
 
@@ -1353,8 +1361,10 @@ gtk_expander_animation_timeout (GtkExpander *expander)
   if (finish)
     {
       priv->animation_timeout = 0;
-      if (GTK_BIN (expander)->child)
-	gtk_widget_set_child_visible (GTK_BIN (expander)->child, priv->expanded);
+
+      child = gtk_bin_get_child (GTK_BIN (expander));
+      if (child)
+	gtk_widget_set_child_visible (child, priv->expanded);
       gtk_widget_queue_resize (GTK_WIDGET (expander));
     }
 
@@ -1391,6 +1401,7 @@ gtk_expander_set_expanded (GtkExpander *expander,
 			   gboolean     expanded)
 {
   GtkExpanderPrivate *priv;
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
 
@@ -1416,9 +1427,10 @@ gtk_expander_set_expanded (GtkExpander *expander,
 	  priv->expander_style = expanded ? GTK_EXPANDER_EXPANDED :
 					    GTK_EXPANDER_COLLAPSED;
 
-	  if (GTK_BIN (expander)->child)
+          child = gtk_bin_get_child (GTK_BIN (expander));
+	  if (child)
 	    {
-	      gtk_widget_set_child_visible (GTK_BIN (expander)->child, priv->expanded);
+	      gtk_widget_set_child_visible (child, priv->expanded);
 	      gtk_widget_queue_resize (GTK_WIDGET (expander));
 	    }
 	}

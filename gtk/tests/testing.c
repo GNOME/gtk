@@ -74,9 +74,12 @@ test_button_keys (void)
 static void
 test_slider_ranges (void)
 {
+  GtkWidget *child;
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: gtk_test_warp_slider");
   GtkWidget *hscale = gtk_hscale_new_with_range (-50, +50, 5);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), hscale);
+
+  child = gtk_bin_get_child (GTK_BIN (window));
+  gtk_container_add (GTK_CONTAINER (child), hscale);
   gtk_widget_show (hscale);
   gtk_widget_show_now (window);
   while (gtk_events_pending ())
@@ -128,10 +131,13 @@ test_xserver_sync (void)
 {
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: test_xserver_sync");
   GtkWidget *darea = gtk_drawing_area_new ();
+  GtkWidget *child;
   GTimer *gtimer = g_timer_new();
   gint sync_is_slower = 0, repeat = 5;
+
+  child = gtk_bin_get_child (GTK_BIN (window));
   gtk_widget_set_size_request (darea, 320, 200);
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), darea);
+  gtk_container_add (GTK_CONTAINER (child), darea);
   gtk_widget_show (darea);
   gtk_widget_show_now (window);
   while (repeat--)
@@ -171,11 +177,14 @@ test_xserver_sync (void)
 static void
 test_spin_button_arrows (void)
 {
+  GtkWidget *child;
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: test_spin_button_arrows");
   GtkWidget *spinner = gtk_spin_button_new_with_range (0, 100, 5);
   gboolean simsuccess;
   double oldval, newval;
-  gtk_container_add (GTK_CONTAINER (GTK_BIN (window)->child), spinner);
+
+  child = gtk_bin_get_child (GTK_BIN (window));
+  gtk_container_add (GTK_CONTAINER (child), spinner);
   gtk_widget_show (spinner);
   gtk_widget_show_now (window);
   gtk_test_slider_set_perc (spinner, 0);

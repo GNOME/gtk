@@ -311,6 +311,7 @@ static void
 gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 {
   GtkToolButton *button = GTK_TOOL_BUTTON (tool_item);
+  GtkWidget *child;
   GtkWidget *label = NULL;
   GtkWidget *icon = NULL;
   GtkToolbarStyle style;
@@ -340,12 +341,13 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 			    button->priv->label_widget);
     }
 
-  if (GTK_BIN (button->priv->button)->child)
+  child = gtk_bin_get_child (GTK_BIN (button->priv->button));
+  if (child)
     {
       /* Note: we are not destroying the label_widget or icon_widget
        * here because they were removed from their containers above
        */
-      gtk_widget_destroy (GTK_BIN (button->priv->button)->child);
+      gtk_widget_destroy (child);
     }
 
   style = gtk_tool_item_get_toolbar_style (GTK_TOOL_ITEM (button));
@@ -781,7 +783,7 @@ gtk_tool_button_update_icon_spacing (GtkToolButton *button)
   GtkWidget *box;
   guint spacing;
 
-  box = GTK_BIN (button->priv->button)->child;
+  box = gtk_bin_get_child (GTK_BIN (button->priv->button));
   if (GTK_IS_BOX (box))
     {
       gtk_widget_style_get (GTK_WIDGET (button), 

@@ -252,7 +252,7 @@ open_display_cb (GtkWidget         *button,
   gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (GTK_BIN (dialog)->child);
+  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
 
   while (!result)
     {

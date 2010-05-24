@@ -4553,6 +4553,7 @@ gtk_window_hide (GtkWidget *widget)
 static void
 gtk_window_map (GtkWidget *widget)
 {
+  GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = GTK_WINDOW_GET_PRIVATE (window);
   GdkWindow *toplevel;
@@ -4560,10 +4561,11 @@ gtk_window_map (GtkWidget *widget)
 
   gtk_widget_set_mapped (widget, TRUE);
 
-  if (window->bin.child &&
-      gtk_widget_get_visible (window->bin.child) &&
-      !gtk_widget_get_mapped (window->bin.child))
-    gtk_widget_map (window->bin.child);
+  child = gtk_bin_get_child (&(window->bin));
+  if (child &&
+      gtk_widget_get_visible (child) &&
+      !gtk_widget_get_mapped (child))
+    gtk_widget_map (child);
 
   if (window->frame)
     toplevel = window->frame;
@@ -4929,12 +4931,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
 {
   GtkWindow *window;
   GtkAllocation child_allocation;
+  GtkWidget *child;
   guint border_width;
 
   window = GTK_WINDOW (widget);
   widget->allocation = *allocation;
 
-  if (window->bin.child && gtk_widget_get_visible (window->bin.child))
+  child = gtk_bin_get_child (&(window->bin));
+  if (child && gtk_widget_get_visible (child))
     {
       border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
       child_allocation.x = border_width;
@@ -4944,7 +4948,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
       child_allocation.height =
 	MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
-      gtk_widget_size_allocate (window->bin.child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 
   if (gtk_widget_get_realized (widget) && window->frame)
@@ -5396,6 +5400,7 @@ gtk_window_focus (GtkWidget        *widget,
   GtkBin *bin;
   GtkWindow *window;
   GtkContainer *container;
+  GtkWidget *child;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
@@ -5437,9 +5442,10 @@ gtk_window_focus (GtkWidget        *widget,
     }
 
   /* Now try to focus the first widget in the window */
-  if (bin->child)
+  child = gtk_bin_get_child (bin);
+  if (child)
     {
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 

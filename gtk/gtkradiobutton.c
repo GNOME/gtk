@@ -830,7 +830,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       x = widget->allocation.x + indicator_spacing + border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
 
-      child = GTK_BIN (check_button)->child;
+      child = gtk_bin_get_child (GTK_BIN (check_button));
       if (!interior_focus || !(child && gtk_widget_get_visible (child)))
 	x += focus_width + focus_pad;      
 

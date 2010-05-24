@@ -488,9 +488,10 @@ static void
 gtk_tool_item_size_request (GtkWidget      *widget,
 			    GtkRequisition *requisition)
 {
-  GtkWidget *child = GTK_BIN (widget)->child;
+  GtkWidget *child;
   guint border_width;
 
+  child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
       gtk_widget_size_request (child, requisition);
@@ -513,8 +514,9 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
   GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
   GtkAllocation child_allocation;
   gint border_width;
-  GtkWidget *child = GTK_BIN (widget)->child;
+  GtkWidget *child;
 
+  child = gtk_bin_get_child (GTK_BIN (widget));
   widget->allocation = *allocation;
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -1063,8 +1065,7 @@ gtk_tool_item_set_tooltip_text (GtkToolItem *tool_item,
 
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
-  child = GTK_BIN (tool_item)->child;
-
+  child = gtk_bin_get_child (GTK_BIN (tool_item));
   if (child)
     gtk_widget_set_tooltip_text (child, text);
 }
@@ -1087,8 +1088,7 @@ gtk_tool_item_set_tooltip_markup (GtkToolItem *tool_item,
 
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
-  child = GTK_BIN (tool_item)->child;
-
+  child = gtk_bin_get_child (GTK_BIN (tool_item));
   if (child)
     gtk_widget_set_tooltip_markup (child, markup);
 }

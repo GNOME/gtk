@@ -226,7 +226,10 @@ static void
 gtk_combo_box_entry_remove (GtkContainer *container,
 			    GtkWidget    *child)
 {
-  if (child && child == GTK_BIN (container)->child)
+  GtkWidget *child_widget;
+
+  child_widget = gtk_bin_get_child (GTK_BIN (container));
+  if (child && child == child_widget)
     {
       g_signal_handlers_disconnect_by_func (child,
 					    gtk_combo_box_entry_contents_changed,
@@ -248,7 +251,7 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      GtkEntry *entry = GTK_ENTRY (GTK_BIN (combo_box)->child);
+      GtkEntry *entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_box)));
 
       if (entry)
 	{
@@ -276,13 +279,16 @@ has_frame_changed (GtkComboBoxEntry *entry_box,
 		   GParamSpec       *pspec,
 		   gpointer          data)
 {
-  if (GTK_BIN (entry_box)->child)
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (entry_box));
+  if (child)
     {
       gboolean has_frame;
   
       g_object_get (entry_box, "has-frame", &has_frame, NULL);
 
-      gtk_entry_set_has_frame (GTK_ENTRY (GTK_BIN (entry_box)->child), has_frame);
+      gtk_entry_set_has_frame (GTK_ENTRY (child), has_frame);
     }
 }
 
@@ -405,9 +411,11 @@ gtk_combo_box_entry_mnemonic_activate (GtkWidget *widget,
 				       gboolean   group_cycling)
 {
   GtkBin *entry_box = GTK_BIN (widget);
+  GtkWidget* child;
 
-  if (entry_box->child)
-    gtk_widget_grab_focus (entry_box->child);
+  child = gtk_bin_get_child (entry_box);
+  if (child)
+    gtk_widget_grab_focus (child);
 
   return TRUE;
 }
@@ -416,9 +424,11 @@ static void
 gtk_combo_box_entry_grab_focus (GtkWidget *widget)
 {
   GtkBin *entry_box = GTK_BIN (widget);
+  GtkWidget *child;
 
-  if (entry_box->child)
-    gtk_widget_grab_focus (entry_box->child);
+  child = gtk_bin_get_child (entry_box);
+  if (child)
+    gtk_widget_grab_focus (child);
 }
 
 
@@ -456,9 +466,11 @@ static gchar *
 gtk_combo_box_entry_get_active_text (GtkComboBox *combo_box)
 {
   GtkBin *combo = GTK_BIN (combo_box);
+  GtkWidget *child;
 
-  if (combo->child)
-    return g_strdup (gtk_entry_get_text (GTK_ENTRY (combo->child)));
+  child = gtk_bin_get_child (combo);
+  if (child)
+    return g_strdup (gtk_entry_get_text (GTK_ENTRY (child)));
 
   return NULL;
 }

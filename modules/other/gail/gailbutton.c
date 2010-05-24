@@ -240,7 +240,7 @@ gail_button_is_default_press (GtkWidget *widget)
   gboolean ret = FALSE;
   const gchar *parent_type_name;
 
-  child = GTK_BIN (widget)->child;
+  child = gtk_bin_get_child (GTK_BIN (widget));
   if (GTK_IS_ARROW (child))
     {
       g_object_get (child,

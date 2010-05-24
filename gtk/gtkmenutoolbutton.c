@@ -382,7 +382,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
 
   box = gtk_hbox_new (FALSE, 0);
 
-  real_button = GTK_BIN (button)->child;
+  real_button = gtk_bin_get_child (GTK_BIN (button));
   g_object_ref (real_button);
   gtk_container_remove (GTK_CONTAINER (button), real_button);
   gtk_container_add (GTK_CONTAINER (box), real_button);

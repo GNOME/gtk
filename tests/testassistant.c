@@ -116,7 +116,7 @@ progress_timeout (GtkWidget *assistant)
 
   current_page = gtk_assistant_get_current_page (GTK_ASSISTANT (assistant));
   page = gtk_assistant_get_nth_page (GTK_ASSISTANT (assistant), current_page);
-  progress = GTK_BIN (page)->child;
+  progress = gtk_bin_get_child (GTK_BIN (page));
 
   value  = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (progress));
   value += 0.1;
@@ -140,7 +140,7 @@ prepare_callback (GtkWidget *widget, GtkWidget *page)
     {
       GtkWidget *progress;
 
-      progress = GTK_BIN (page)->child;
+      progress = gtk_bin_get_child (GTK_BIN (page));
       gtk_assistant_set_page_complete (GTK_ASSISTANT (widget), page, FALSE);
       gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0.0);
       gdk_threads_add_timeout (300, (GSourceFunc) progress_timeout, widget);

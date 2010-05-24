@@ -865,7 +865,7 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
    */
-  label = GTK_BIN (item)->child;
+  label = gtk_bin_get_child (GTK_BIN (item));
   if (GTK_IS_LABEL (label))
     {
       gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);

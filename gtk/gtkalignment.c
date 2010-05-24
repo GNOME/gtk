@@ -428,6 +428,8 @@ gtk_alignment_set (GtkAlignment *alignment,
 		   gfloat        xscale,
 		   gfloat        yscale)
 {
+  GtkWidget *child;
+
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
   xalign = CLAMP (xalign, 0.0, 1.0);
@@ -463,8 +465,9 @@ gtk_alignment_set (GtkAlignment *alignment,
         }
       g_object_thaw_notify (G_OBJECT (alignment));
 
-      if (GTK_BIN (alignment)->child)
-        gtk_widget_queue_resize (GTK_BIN (alignment)->child);
+      child = gtk_bin_get_child (GTK_BIN (alignment));
+      if (child)
+        gtk_widget_queue_resize (child);
       gtk_widget_queue_draw (GTK_WIDGET (alignment));
     }
 }
@@ -477,6 +480,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkAlignment *alignment;
   GtkBin *bin;
   GtkAllocation child_allocation;
+  GtkWidget *bin_child;
   gint width, height;
   guint border_width;
   gint padding_horizontal, padding_vertical;
@@ -488,10 +492,11 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
-  
-  if (bin->child && gtk_widget_get_visible (bin->child))
+
+  bin_child = gtk_bin_get_child (bin);
+  if (bin_child && gtk_widget_get_visible (bin_child))
     {
-      GtkSizeRequest *child = GTK_SIZE_REQUEST (bin->child);
+      GtkSizeRequest *child = GTK_SIZE_REQUEST (bin_child);
       gint child_nat_width;
       gint child_nat_height;
       gint child_width, child_height;
@@ -547,7 +552,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 
       child_allocation.y = alignment->yalign * (height - child_allocation.height) + allocation->y + border_width + priv->padding_top;
 
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (bin_child, &child_allocation);
     }
 }
 
@@ -643,6 +648,7 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 			   guint            padding_right)
 {
   GtkAlignmentPrivate *priv;
+  GtkWidget *child;
   
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
@@ -674,8 +680,9 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
   g_object_thaw_notify (G_OBJECT (alignment));
   
   /* Make sure that the widget and children are redrawn with the new setting: */
-  if (GTK_BIN (alignment)->child)
-    gtk_widget_queue_resize (GTK_BIN (alignment)->child);
+  child = gtk_bin_get_child (GTK_BIN (alignment));
+  if (child)
+    gtk_widget_queue_resize (child);
 
   gtk_widget_queue_draw (GTK_WIDGET (alignment));
 }

@@ -336,9 +336,11 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
   GtkAspectFrame *aspect_frame = GTK_ASPECT_FRAME (frame);
   GtkAspectFramePriv *priv = aspect_frame->priv;
   GtkBin *bin = GTK_BIN (frame);
+  GtkWidget *child;
   gdouble ratio;
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
     {
       GtkAllocation full_allocation;
       
@@ -346,7 +348,7 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
 	{
 	  GtkRequisition child_requisition;
 
-	  gtk_widget_get_child_requisition (bin->child, &child_requisition);
+	  gtk_widget_get_child_requisition (child, &child_requisition);
 	  if (child_requisition.height != 0)
 	    {
 	      ratio = ((gdouble) child_requisition.width /

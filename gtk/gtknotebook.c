@@ -3299,12 +3299,13 @@ on_drag_icon_expose (GtkWidget      *widget,
 		     GdkEventExpose *event,
 		     gpointer        data)
 {
-  GtkWidget *notebook, *child = GTK_WIDGET (data);
+  GtkWidget *notebook, *child;
   GtkRequisition requisition;
   gint gap_pos;
 
   notebook = GTK_WIDGET (data);
-  child = GTK_BIN (widget)->child;
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
   gtk_widget_size_request (widget, &requisition);
   gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
@@ -6276,7 +6277,7 @@ static void
 gtk_notebook_menu_label_unparent (GtkWidget *widget, 
 				  gpointer  data)
 {
-  gtk_widget_unparent (GTK_BIN (widget)->child);
+  gtk_widget_unparent (gtk_bin_get_child (GTK_BIN (widget)));
   GTK_BIN (widget)->child = NULL;
 }
 

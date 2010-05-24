@@ -909,10 +909,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
   if (! tree_column->button)
     return;
 
-  hbox = GTK_BIN (tree_column->button)->child;
+  hbox = gtk_bin_get_child (GTK_BIN (tree_column->button));
   alignment = tree_column->alignment;
   arrow = tree_column->arrow;
-  current_child = GTK_BIN (alignment)->child;
+  current_child = gtk_bin_get_child (GTK_BIN (alignment));
 
   /* Set up the actual button */
   gtk_alignment_set (GTK_ALIGNMENT (alignment), tree_column->xalign,

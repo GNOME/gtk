@@ -500,7 +500,7 @@ gail_label_ref_relation_set (AtkObject *obj)
                         {
                           GtkWidget *temp_widget;
 
-                          temp_widget = GTK_BIN (list->data)->child;
+                          temp_widget = gtk_bin_get_child (GTK_BIN (list->data));
                           if (GTK_IS_BUTTON (temp_widget))
                             mnemonic_widget = temp_widget;
                         }

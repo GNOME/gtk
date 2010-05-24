@@ -130,7 +130,7 @@ main (int argc, char *argv[])
 		    G_CALLBACK (get_screen_response), display_entry);
 
   gtk_widget_grab_focus (display_entry);
-  gtk_widget_show_all (GTK_BIN (dialog)->child);
+  gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (dialog)));
   
   while (!correct_second_display)
     {

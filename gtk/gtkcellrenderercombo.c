@@ -458,7 +458,7 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
       g_object_get (cell_text, "text", &text, NULL);
       if (text)
-	gtk_entry_set_text (GTK_ENTRY (GTK_BIN (combo)->child),
+	gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo))),
 			    text);
       g_free (text);
     }

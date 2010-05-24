@@ -348,16 +348,17 @@ gtk_handle_box_map (GtkWidget *widget)
 {
   GtkBin *bin;
   GtkHandleBox *hb;
+  GtkWidget *child;
 
   gtk_widget_set_mapped (widget, TRUE);
 
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
 
-  if (bin->child &&
-      gtk_widget_get_visible (bin->child) &&
-      !gtk_widget_get_mapped (bin->child))
-    gtk_widget_map (bin->child);
+  child = gtk_bin_get_child (bin);
+  if (gtk_widget_get_visible (child) &&
+      !gtk_widget_get_mapped (child))
+    gtk_widget_map (child);
 
   if (hb->child_detached && !hb->float_window_mapped)
     {
@@ -389,9 +390,10 @@ gtk_handle_box_unmap (GtkWidget *widget)
 static void
 gtk_handle_box_realize (GtkWidget *widget)
 {
+  GtkHandleBox *hb;
+  GtkWidget *child;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  GtkHandleBox *hb;
 
   hb = GTK_HANDLE_BOX (widget);
 
@@ -425,8 +427,10 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   hb->bin_window = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (hb->bin_window, widget);
-  if (GTK_BIN (hb)->child)
-    gtk_widget_set_parent_window (GTK_BIN (hb)->child, hb->bin_window);
+
+  child = gtk_bin_get_child (GTK_BIN (hb));
+  if (child)
+    gtk_widget_set_parent_window (child, hb->bin_window);
   
   attributes.x = 0;
   attributes.y = 0;
@@ -521,6 +525,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkHandleBox *hb;
   GtkRequisition child_requisition;
+  GtkWidget *child;
   gint handle_position;
 
   bin = GTK_BIN (widget);
@@ -540,11 +545,12 @@ gtk_handle_box_size_request (GtkWidget      *widget,
       requisition->height = DRAG_HANDLE_SIZE;
     }
 
+  child = gtk_bin_get_child (bin);
   /* if our child is not visible, we still request its size, since we
    * won't have any useful hint for our size otherwise.
    */
-  if (bin->child)
-    gtk_widget_size_request (bin->child, &child_requisition);
+  if (child)
+    gtk_widget_size_request (child, &child_requisition);
   else
     {
       child_requisition.width = 0;
@@ -579,7 +585,7 @@ gtk_handle_box_size_request (GtkWidget      *widget,
       requisition->width += border_width * 2;
       requisition->height += border_width * 2;
       
-      if (bin->child)
+      if (child)
 	{
 	  requisition->width += child_requisition.width;
 	  requisition->height += child_requisition.height;
@@ -599,6 +605,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkHandleBox *hb;
   GtkRequisition child_requisition;
+  GtkWidget *child;
   gint handle_position;
   
   bin = GTK_BIN (widget);
@@ -606,8 +613,10 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   
   handle_position = effective_handle_position (hb);
 
-  if (bin->child)
-    gtk_widget_get_child_requisition (bin->child, &child_requisition);
+  child = gtk_bin_get_child (bin);
+
+  if (child)
+    gtk_widget_get_child_requisition (child, &child_requisition);
   else
     {
       child_requisition.width = 0;
@@ -624,7 +633,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 			    widget->allocation.height);
 
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  if (gtk_widget_get_visible (child))
     {
       GtkAllocation child_allocation;
       guint border_width;
@@ -686,7 +695,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
 				    widget->allocation.height);
 	}
 
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -955,7 +964,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 			 event ? &event->area : area,
 			 handle_orientation);
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  if (gtk_widget_get_visible (gtk_bin_get_child (bin)))
     GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->expose_event (widget, event);
 }
 
@@ -1044,7 +1053,7 @@ gtk_handle_box_button_press (GtkWidget      *widget,
       if (event->window != hb->bin_window)
 	return FALSE;
 
-      child = GTK_BIN (hb)->child;
+      child = gtk_bin_get_child (GTK_BIN (hb));
 
       if (child)
 	{
@@ -1163,6 +1172,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 		       GdkEventMotion *event)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
+  GtkWidget *child;
   gint new_x, new_y;
   gint snap_edge;
   gboolean is_snapped = FALSE;
@@ -1268,6 +1278,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
 		    (float_pos2 + TOLERANCE > attach_pos2));
     }
 
+  child = gtk_bin_get_child (GTK_BIN (hb));
+
   if (is_snapped)
     {
       if (hb->child_detached)
@@ -1279,7 +1291,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  g_signal_emit (hb,
 			 handle_box_signals[SIGNAL_CHILD_ATTACHED],
 			 0,
-			 GTK_BIN (hb)->child);
+			 child);
 	  
 	  gtk_widget_queue_resize (widget);
 	}
@@ -1324,8 +1336,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	  hb->child_detached = TRUE;
 
-	  if (GTK_BIN (hb)->child)
-	    gtk_widget_get_child_requisition (GTK_BIN (hb)->child, &child_requisition);
+	  if (child)
+	    gtk_widget_get_child_requisition (child, &child_requisition);
 	  else
 	    {
 	      child_requisition.width = 0;
@@ -1357,7 +1369,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	  g_signal_emit (hb,
 			 handle_box_signals[SIGNAL_CHILD_DETACHED],
 			 0,
-			 GTK_BIN (hb)->child);
+			 child);
 	  gtk_handle_box_draw_ghost (hb);
 	  
 	  gtk_widget_queue_resize (widget);
@@ -1403,6 +1415,7 @@ gtk_handle_box_delete_event (GtkWidget *widget,
 static void
 gtk_handle_box_reattach (GtkHandleBox *hb)
 {
+  GtkWidget *child;
   GtkWidget *widget = GTK_WIDGET (hb);
   
   if (hb->child_detached)
@@ -1413,11 +1426,12 @@ gtk_handle_box_reattach (GtkHandleBox *hb)
 	  gdk_window_hide (hb->float_window);
 	  gdk_window_reparent (hb->bin_window, widget->window, 0, 0);
 
-	  if (GTK_BIN (hb)->child)
+          child = gtk_bin_get_child (GTK_BIN (hb));
+	  if (child)
 	    g_signal_emit (hb,
 			   handle_box_signals[SIGNAL_CHILD_ATTACHED],
 			   0,
-			   GTK_BIN (hb)->child);
+			   child);
 
 	}
       hb->float_window_mapped = FALSE;

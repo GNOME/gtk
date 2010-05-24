@@ -3719,7 +3719,7 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
                                          table);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (GTK_BIN(scrolled)->child),
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 
   label = gtk_label_new (text);
@@ -3750,7 +3750,7 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
                                          main_vbox);
-  gtk_viewport_set_shadow_type (GTK_VIEWPORT (GTK_BIN(scrolled)->child),
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 
   priv->advanced_vbox = main_vbox;

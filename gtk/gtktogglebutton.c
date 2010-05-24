@@ -421,7 +421,7 @@ gtk_toggle_button_expose (GtkWidget      *widget,
 {
   if (gtk_widget_is_drawable (widget))
     {
-      GtkWidget *child = GTK_BIN (widget)->child;
+      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
       GtkButton *button = GTK_BUTTON (widget);
       GtkStateType state_type;
       GtkShadowType shadow_type;

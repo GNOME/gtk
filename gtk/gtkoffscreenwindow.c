@@ -54,6 +54,7 @@ gtk_offscreen_window_size_request (GtkWidget *widget,
                                    GtkRequisition *requisition)
 {
   GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child;
   gint border_width;
   gint default_width, default_height;
 
@@ -62,11 +63,12 @@ gtk_offscreen_window_size_request (GtkWidget *widget,
   requisition->width = border_width * 2;
   requisition->height = border_width * 2;
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (gtk_widget_get_visible (child))
     {
       GtkRequisition child_req;
 
-      gtk_widget_size_request (bin->child, &child_req);
+      gtk_widget_size_request (child, &child_req);
 
       requisition->width += child_req.width;
       requisition->height += child_req.height;
@@ -86,6 +88,7 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
                                     GtkAllocation *allocation)
 {
   GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child;
   gint border_width;
 
   widget->allocation = *allocation;
@@ -99,7 +102,8 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
                             allocation->width,
                             allocation->height);
 
-  if (bin->child && gtk_widget_get_visible (bin->child))
+  child = gtk_bin_get_child (bin);
+  if (gtk_widget_get_visible (child))
     {
       GtkAllocation  child_alloc;
 
@@ -108,7 +112,7 @@ gtk_offscreen_window_size_allocate (GtkWidget *widget,
       child_alloc.width = allocation->width - 2 * border_width;
       child_alloc.height = allocation->height - 2 * border_width;
 
-      gtk_widget_size_allocate (bin->child, &child_alloc);
+      gtk_widget_size_allocate (child, &child_alloc);
     }
 
   gtk_widget_queue_draw (widget);
@@ -118,6 +122,7 @@ static void
 gtk_offscreen_window_realize (GtkWidget *widget)
 {
   GtkBin *bin;
+  GtkWidget *child;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint border_width;
@@ -144,8 +149,9 @@ gtk_offscreen_window_realize (GtkWidget *widget)
                                    &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, widget);
 
-  if (bin->child)
-    gtk_widget_set_parent_window (bin->child, widget->window);
+  child = gtk_bin_get_child (bin);
+  if (child)
+    gtk_widget_set_parent_window (child, widget->window);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
 

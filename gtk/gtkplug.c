@@ -705,13 +705,14 @@ gtk_plug_map (GtkWidget *widget)
     {
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
+      GtkWidget *child;
       
       gtk_widget_set_mapped (widget, TRUE);
 
-      if (bin->child &&
-	  gtk_widget_get_visible (bin->child) &&
-	  !gtk_widget_get_mapped (bin->child))
-	gtk_widget_map (bin->child);
+      child = gtk_bin_get_child (bin);
+      if (gtk_widget_get_visible (child) &&
+	  !gtk_widget_get_mapped (child))
+	gtk_widget_map (child);
 
       _gtk_plug_windowing_map_toplevel (plug);
       
@@ -748,6 +749,8 @@ static void
 gtk_plug_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
+  GtkWidget *child;
+
   if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
   else
@@ -761,7 +764,8 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
-      if (bin->child && gtk_widget_get_visible (bin->child))
+      child = gtk_bin_get_child (bin);
+      if (gtk_widget_get_visible (child))
 	{
 	  GtkAllocation child_allocation;
 	  
@@ -771,7 +775,7 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 	  child_allocation.height =
 	    MAX (1, (gint)allocation->height - child_allocation.y * 2);
 	  
-	  gtk_widget_size_allocate (bin->child, &child_allocation);
+	  gtk_widget_size_allocate (child, &child_allocation);
 	}
       
     }
@@ -947,6 +951,7 @@ gtk_plug_focus (GtkWidget        *widget,
   GtkPlug *plug = GTK_PLUG (widget);
   GtkWindow *window = GTK_WINDOW (widget);
   GtkContainer *container = GTK_CONTAINER (widget);
+  GtkWidget *child;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
@@ -974,7 +979,8 @@ gtk_plug_focus (GtkWidget        *widget,
   else
     {
       /* Try to focus the first widget in the window */
-      if (bin->child && gtk_widget_child_focus (bin->child, direction))
+      child = gtk_bin_get_child (bin);
+      if (child && gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 

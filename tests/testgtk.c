@@ -2840,7 +2840,7 @@ create_rotated_text (GtkWidget *widget)
       g_signal_connect (drawing_area, "unrealize",
 			G_CALLBACK (on_rotated_text_unrealize), NULL);
 
-      gtk_widget_show_all (GTK_BIN (window)->child);
+      gtk_widget_show_all (gtk_bin_get_child (GTK_BIN (window)));
       
       gtk_widget_set_size_request (drawing_area, DEFAULT_TEXT_RADIUS * 2, DEFAULT_TEXT_RADIUS * 2);
       gtk_widget_size_request (window, &requisition);
@@ -4835,7 +4835,7 @@ static void
 size_group_hsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (GTK_BIN (button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
 			       gtk_spin_button_get_value_as_int (spin_button),
 			       -1);
 }
@@ -4844,7 +4844,7 @@ static void
 size_group_vsize_changed (GtkSpinButton *spin_button,
 			  GtkWidget     *button)
 {
-  gtk_widget_set_size_request (GTK_BIN (button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (button)),
 			       -1,
 			       gtk_spin_button_get_value_as_int (spin_button));
 }
@@ -4900,7 +4900,7 @@ create_size_group_window (GdkScreen    *screen,
   gtk_size_group_add_widget (master_size_group, main_button);
   gtk_size_group_add_widget (hgroup1, main_button);
   gtk_size_group_add_widget (vgroup1, main_button);
-  gtk_widget_set_size_request (GTK_BIN (main_button)->child,
+  gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (main_button)),
 			       SIZE_GROUP_INITIAL_SIZE,
 			       SIZE_GROUP_INITIAL_SIZE);
 
@@ -10464,7 +10464,8 @@ create_styles (GtkWidget *widget)
       font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_font (GTK_BIN (button)->child, font_desc);
+      gtk_widget_modify_font (gtk_bin_get_child (GTK_BIN (button)),
+                              font_desc);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Foreground:");
@@ -10472,7 +10473,8 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_fg (GTK_BIN (button)->child, GTK_STATE_NORMAL, &red);
+      gtk_widget_modify_fg (gtk_bin_get_child (GTK_BIN (button)),
+                            GTK_STATE_NORMAL, &red);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Background:");
@@ -10532,7 +10534,7 @@ create_styles (GtkWidget *widget)
       rc_style->ythickness = 5;
 
       gtk_widget_modify_style (button, rc_style);
-      gtk_widget_modify_style (GTK_BIN (button)->child, rc_style);
+      gtk_widget_modify_style (gtk_bin_get_child (GTK_BIN (button)), rc_style);
 
       g_object_unref (rc_style);
       

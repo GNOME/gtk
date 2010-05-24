@@ -988,6 +988,7 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   GtkBin *bin;
   GtkWindow *window;
   GtkContainer *container;
+  GtkWidget *child;
   GtkWidget *toplevel;
   GtkWidget *old_focus_child;
   GtkWidget *parent;
@@ -1039,9 +1040,10 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
     }
 
   /* Now try to focus the first widget in the window */
-  if (bin->child)
+  child = gtk_bin_get_child (bin);
+  if (child)
     {
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (gtk_widget_child_focus (child, direction))
         return;
     }
 }

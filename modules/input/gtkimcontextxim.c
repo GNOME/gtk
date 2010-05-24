@@ -1849,7 +1849,7 @@ status_window_set_text (StatusWindow *status_window,
       if (!status_window->window)
 	status_window_make_window (status_window);
       
-      label = GTK_BIN (status_window->window)->child;
+      label = gtk_bin_get_child (GTK_BIN (status_window->window));
       gtk_label_set_text (GTK_LABEL (label), text);
   
       gtk_widget_show (status_window->window);

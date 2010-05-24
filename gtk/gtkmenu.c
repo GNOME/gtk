@@ -1783,7 +1783,7 @@ gtk_menu_popdown (GtkMenu *menu)
     {
       gtk_widget_set_size_request (menu->tearoff_window, -1, -1);
       
-      if (GTK_BIN (menu->toplevel)->child) 
+      if (gtk_bin_get_child (GTK_BIN (menu->toplevel))) 
 	{
 	  gtk_menu_reparent (menu, menu->tearoff_hbox, TRUE);
 	} 
@@ -1843,7 +1843,7 @@ gtk_menu_get_active (GtkMenu *menu)
 	  child = children->data;
 	  children = children->next;
 	  
-	  if (GTK_BIN (child)->child)
+	  if (gtk_bin_get_child (GTK_BIN (child)))
 	    break;
 	  child = NULL;
 	}
@@ -1869,7 +1869,7 @@ gtk_menu_set_active (GtkMenu *menu,
   if (tmp_list)
     {
       child = tmp_list->data;
-      if (GTK_BIN (child)->child)
+      if (gtk_bin_get_child (GTK_BIN (child)))
 	{
 	  if (menu->old_active_menu_item)
 	    g_object_unref (menu->old_active_menu_item);
@@ -2080,7 +2080,7 @@ gtk_menu_update_title (GtkMenu *menu)
 	  attach_widget = gtk_menu_get_attach_widget (menu);
 	  if (GTK_IS_MENU_ITEM (attach_widget))
 	    {
-	      GtkWidget *child = GTK_BIN (attach_widget)->child;
+	      GtkWidget *child = gtk_bin_get_child (GTK_BIN (attach_widget));
 	      if (GTK_IS_LABEL (child))
 		title = gtk_label_get_text (GTK_LABEL (child));
 	    }
@@ -3147,7 +3147,7 @@ get_accel_path (GtkWidget *menu_item,
 	{
 	  *locked = TRUE;
 
-	  label = GTK_BIN (menu_item)->child;
+	  label = gtk_bin_get_child (GTK_BIN (menu_item));
 	  
 	  if (GTK_IS_ACCEL_LABEL (label))
 	    {
@@ -3250,7 +3250,7 @@ gtk_menu_key_press (GtkWidget	*widget,
   /* Modify the accelerators */
   if (can_change_accels &&
       menu_shell->active_menu_item &&
-      GTK_BIN (menu_shell->active_menu_item)->child &&			/* no separators */
+      gtk_bin_get_child (GTK_BIN (menu_shell->active_menu_item)) && /* no separators */
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL &&	/* no submenus */
       (delete || gtk_accelerator_valid (accel_key, accel_mods)))
     {

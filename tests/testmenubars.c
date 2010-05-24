@@ -57,6 +57,7 @@ create_menubar (GtkPackDirection pack_dir,
 		GtkPackDirection child_pack_dir,
 		gdouble          angle)
 {
+  GtkWidget *child;
   GtkWidget *menubar;
   GtkWidget *menuitem;
   GtkWidget *menu;
@@ -69,19 +70,22 @@ create_menubar (GtkPackDirection pack_dir,
   
   menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_HOME, NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  gtk_label_set_angle (GTK_LABEL (GTK_BIN (menuitem)->child), angle);
+  child = gtk_bin_get_child (GTK_BIN (menuitem));
+  gtk_label_set_angle (GTK_LABEL (child), angle);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
   menuitem = gtk_menu_item_new_with_label ("foo");
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  gtk_label_set_angle (GTK_LABEL (GTK_BIN (menuitem)->child), angle);
+  child = gtk_bin_get_child (GTK_BIN (menuitem));
+  gtk_label_set_angle (GTK_LABEL (child), angle);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
   menuitem = gtk_menu_item_new_with_label ("bar");
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-  gtk_label_set_angle (GTK_LABEL (GTK_BIN (menuitem)->child), angle);
+  child = gtk_bin_get_child (GTK_BIN (menuitem));
+  gtk_label_set_angle (GTK_LABEL (child), angle);
   menu = create_menu (2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
 
