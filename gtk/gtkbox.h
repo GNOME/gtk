@@ -47,16 +47,15 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkBox	      GtkBox;
+typedef struct _GtkBoxPriv    GtkBoxPriv;
 typedef struct _GtkBoxClass   GtkBoxClass;
 
 struct _GtkBox
 {
   GtkContainer container;
 
-  /*< public >*/
-  GList *GSEAL (children);
-  gint16 GSEAL (spacing);
-  guint GSEAL (homogeneous) : 1;
+  /*< private >*/
+  GtkBoxPriv *priv;
 };
 
 struct _GtkBoxClass
