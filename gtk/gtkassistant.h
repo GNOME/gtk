@@ -77,15 +77,8 @@ struct _GtkAssistant
 {
   GtkWindow  parent;
 
-  GtkWidget *GSEAL (cancel);
-  GtkWidget *GSEAL (forward);
-  GtkWidget *GSEAL (back);
-  GtkWidget *GSEAL (apply);
-  GtkWidget *GSEAL (close);
-  GtkWidget *GSEAL (last);
-
   /*< private >*/
-  GtkAssistantPrivate *GSEAL (priv);
+  GtkAssistantPrivate *priv;
 };
 
 struct _GtkAssistantClass
