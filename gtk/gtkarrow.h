@@ -45,16 +45,16 @@ G_BEGIN_DECLS
 #define GTK_IS_ARROW_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ARROW))
 #define GTK_ARROW_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ARROW, GtkArrowClass))
 
-
-typedef struct _GtkArrow       GtkArrow;
-typedef struct _GtkArrowClass  GtkArrowClass;
+typedef struct _GtkArrow        GtkArrow;
+typedef struct _GtkArrowPriv    GtkArrowPriv;
+typedef struct _GtkArrowClass   GtkArrowClass;
 
 struct _GtkArrow
 {
   GtkMisc misc;
 
-  gint16 GSEAL (arrow_type);
-  gint16 GSEAL (shadow_type);
+  /*< private >*/
+  GtkArrowPriv *priv;
 };
 
 struct _GtkArrowClass

@@ -234,21 +234,28 @@ gail_button_get_name (AtkObject *obj)
 static gboolean
 gail_button_is_default_press (GtkWidget *widget)
 {
+  GtkArrowType arrow_type;
   GtkWidget  *child;
   GtkWidget  *parent;
   gboolean ret = FALSE;
   const gchar *parent_type_name;
 
   child = GTK_BIN (widget)->child;
-  if (GTK_IS_ARROW (child) &&
-      GTK_ARROW (child)->arrow_type == GTK_ARROW_DOWN)
+  if (GTK_IS_ARROW (child))
     {
-      parent = gtk_widget_get_parent (widget);
-      if (parent)
+      g_object_get (child,
+                    "arrow_type", &arrow_type,
+                    NULL);
+
+      if (arrow_type == GTK_ARROW_DOWN)
         {
-          parent_type_name = g_type_name (G_OBJECT_TYPE (parent));
-          if (strcmp (parent_type_name, "ColorCombo"))
-            return TRUE;
+          parent = gtk_widget_get_parent (widget);
+          if (parent)
+            {
+              parent_type_name = g_type_name (G_OBJECT_TYPE (parent));
+              if (g_strcmp0 (parent_type_name, "ColorCombo"))
+                return TRUE;
+            }
         }
     }
 
