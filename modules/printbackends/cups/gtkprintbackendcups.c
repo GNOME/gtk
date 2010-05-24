@@ -116,6 +116,7 @@ struct _GtkPrintBackendCups
   guint got_default_printer   : 1;
   guint default_printer_poll;
   GtkCupsConnectionTest *cups_connection_test;
+  gint  reading_ppds;
 
   char **covers;
   int    number_of_covers;
@@ -588,6 +589,7 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->got_default_printer = FALSE;  
   backend_cups->list_printers_pending = FALSE;
   backend_cups->list_printers_attempts = 0;
+  backend_cups->reading_ppds = 0;
 
   backend_cups->requests = NULL;
   backend_cups->auth = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, overwrite_and_free);
@@ -2142,7 +2144,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
       "auth-info-required"
     };
 
-  if (cups_backend->list_printers_pending)
+  if (cups_backend->reading_ppds > 0 || cups_backend->list_printers_pending)
     return TRUE;
 
   state = gtk_cups_connection_test_get_state (cups_backend->cups_connection_test);
@@ -2240,6 +2242,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
 
   printer = GTK_PRINTER (data->printer);
   GTK_PRINTER_CUPS (printer)->reading_ppd = FALSE;
+  print_backend->reading_ppds--;
 
   if (gtk_cups_result_is_error (result))
     {
@@ -2386,6 +2389,7 @@ cups_request_ppd (GtkPrinter *printer)
 
 
   cups_printer->reading_ppd = TRUE;
+  GTK_PRINT_BACKEND_CUPS (print_backend)->reading_ppds++;
 
   cups_request_execute (GTK_PRINT_BACKEND_CUPS (print_backend),
                         request,
