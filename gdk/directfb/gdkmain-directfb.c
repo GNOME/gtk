@@ -64,17 +64,6 @@ _gdk_windowing_init (void)
 }
 
 void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return FALSE;
-}
-
-void
 _gdk_windowing_display_set_sm_client_id (GdkDisplay *display,const gchar *sm_client_id)
 {
   g_message ("gdk_set_sm_client_id() is unimplemented.");

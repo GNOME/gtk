@@ -86,16 +86,3 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 					 const gchar *sm_client_id)
 {
 }
-
-void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-  /* Always on, since we're always on the local machine */
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return TRUE;
-}
-

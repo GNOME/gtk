@@ -107,17 +107,6 @@ _gdk_windowing_init (void)
   _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }
 
-void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return GDK_DISPLAY_X11 (gdk_display_get_default ())->use_xshm;
-}
-
 GdkGrabStatus
 _gdk_x11_convert_grab_status (gint status)
 {

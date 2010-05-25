@@ -100,10 +100,6 @@ gdk_device_manager_xi2_get_type
 gdk_error_trap_pop
 gdk_error_trap_push
 gdk_get_display
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_get_use_xshm
-gdk_set_use_xshm
-#endif
 #endif
 #endif
 

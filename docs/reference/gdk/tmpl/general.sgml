@@ -327,33 +327,6 @@ available.
 @void: 
 
 
-<!-- ##### FUNCTION gdk_get_use_xshm ##### -->
-<para>
-Returns %TRUE if GDK will attempt to use the MIT-SHM shared memory extension.
-</para>
-<para>
-The shared memory extension is used for #GdkImage, and consequently for
-<link linkend="gdk-GdkRGB">GdkRGB</link>.
-It enables much faster drawing by communicating with the X server through
-SYSV shared memory calls. However, it can only be used if the X client and
-server are on the same machine and the server supports it.
-</para>
-
-@void: 
-@Returns: %TRUE if use of the MIT shared memory extension will be attempted.
-
-
-<!-- ##### FUNCTION gdk_set_use_xshm ##### -->
-<para>
-Sets whether the use of the MIT shared memory extension should be attempted.
-This function is mainly for internal use. It is only safe for an application
-to set this to %FALSE, since if it is set to %TRUE and the server does not
-support the extension it may cause warning messages to be output.
-</para>
-
-@use_xshm: %TRUE if use of the MIT shared memory extension should be attempted.
-
-
 <!-- ##### FUNCTION gdk_error_trap_push ##### -->
 <para>
 This function allows X errors to be trapped instead of the normal behavior

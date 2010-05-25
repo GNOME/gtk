@@ -152,18 +152,6 @@ _gdk_other_api_failed (const gchar *where,
   g_warning ("%s: %s failed", where, api);
 }
 
-void
-gdk_set_use_xshm (gboolean use_xshm)
-{
-  /* Always on */
-}
-
-gboolean
-gdk_get_use_xshm (void)
-{
-  return TRUE;
-}
-
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {

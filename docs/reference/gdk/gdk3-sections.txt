@@ -45,10 +45,6 @@ gdk_keyboard_ungrab
 gdk_beep
 
 <SUBSECTION>
-gdk_get_use_xshm
-gdk_set_use_xshm
-
-<SUBSECTION>
 gdk_error_trap_push
 gdk_error_trap_pop
 
