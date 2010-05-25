@@ -504,11 +504,7 @@
  * 	    </listitem>
  * 	  </varlistentry>
  * 	  <varlistentry>
-<<<<<<< HEAD
  * 	    <term><parameter>bookmark_indes</parameter>&nbsp;:</term>
-=======
- * 	    <term><parameter>bookmark_index</parameter>&nbsp;:</term>
->>>>>>> native-layout-incubator
  * 	    <listitem>
  * 	      <simpara>
  * 		index of the bookmark to switch to; the indices start at 0.
