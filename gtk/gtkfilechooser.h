@@ -101,7 +101,7 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
  * @GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: Indicates a malformed filename.
  * @GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS: Indicates a duplicate path (e.g. when
  *  adding a bookmark).
- * @GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME:
+ * @GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME: Indicates an incomplete hostname (e.g. "http://foo" without a slash after that).
  *
  * These identify the various errors that can occur while calling
  * #GtkFileChooser functions.
