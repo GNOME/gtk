@@ -194,9 +194,10 @@ static void                 follow_if_link                  (GtkAboutDialog     
                                                              GtkTextView        *text_view,
                                                              GtkTextIter        *iter);
 static void                 set_cursor_if_appropriate       (GtkAboutDialog     *about,
-                                                             GtkTextView        *text_view,
-                                                             gint                x,
-                                                             gint                y);
+							     GtkTextView        *text_view,
+                                                             GdkDevice          *device,
+							     gint                x,
+							     gint                y);
 static void                 display_credits_dialog          (GtkWidget          *button,
                                                              gpointer            data);
 static void                 display_license_dialog          (GtkWidget          *button,
@@ -1866,9 +1867,10 @@ text_view_event_after (GtkWidget      *text_view,
 
 static void
 set_cursor_if_appropriate (GtkAboutDialog *about,
-                           GtkTextView    *text_view,
-                           gint            x,
-                           gint            y)
+			   GtkTextView    *text_view,
+                           GdkDevice      *device,
+			   gint            x,
+			   gint            y)
 {
   GtkAboutDialogPrivate *priv = about->priv;
   GSList *tags = NULL, *tagp = NULL;
@@ -1896,9 +1898,9 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
       priv->hovering_over_link = hovering_over_link;
 
       if (hovering_over_link)
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), priv->hand_cursor);
+        gdk_window_set_device_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), device, priv->hand_cursor);
       else
-        gdk_window_set_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), priv->regular_cursor);
+        gdk_window_set_device_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), device, priv->regular_cursor);
     }
 
   if (tags)
@@ -1916,7 +1918,7 @@ text_view_motion_notify_event (GtkWidget *text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
                                          event->x, event->y, &x, &y);
 
-  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), x, y);
+  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), event->device, x, y);
 
   gdk_event_request_motions (event);
 
@@ -1929,15 +1931,27 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
                                    GdkEventVisibility *event,
                                    GtkAboutDialog     *about)
 {
+  GdkDeviceManager *device_manager;
+  GdkDisplay *display;
+  GList *devices, *d;
   gint wx, wy, bx, by;
 
-  gdk_window_get_pointer (gtk_widget_get_window (text_view), &wx, &wy, NULL);
+  display = gdk_drawable_get_display (event->window);
+  device_manager = gdk_display_get_device_manager (display);
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         wx, wy, &bx, &by);
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *dev = d->data;
 
-  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), bx, by);
+      gdk_window_get_device_position (text_view->window, dev, &wx, &wy, NULL);
+
+      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
+                                             GTK_TEXT_WINDOW_WIDGET,
+                                             wx, wy, &bx, &by);
+
+      set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), dev, bx, by);
+    }
 
   return FALSE;
 }

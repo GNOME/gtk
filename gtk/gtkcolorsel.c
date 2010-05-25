@@ -149,6 +149,8 @@ struct _ColorSelectionPrivate
   /* Window for grabbing on */
   GtkWidget *dropper_grab_widget;
   guint32    grab_time;
+  GdkDevice *keyboard_device;
+  GdkDevice *pointer_device;
 
   /* Connection to settings */
   gulong settings_connection;
@@ -1631,10 +1633,11 @@ make_picker_cursor (GdkScreen *screen)
 }
 
 static void
-grab_color_at_mouse (GdkScreen *screen,
-		     gint       x_root,
-		     gint       y_root,
-		     gpointer   data)
+grab_color_at_pointer (GdkScreen *screen,
+                       GdkDevice *device,
+                       gint       x_root,
+                       gint       y_root,
+                       gpointer   data)
 {
   GdkImage *image;
   guint32 pixel;
@@ -1651,7 +1654,7 @@ grab_color_at_mouse (GdkScreen *screen,
     {
       gint x, y;
       GdkDisplay *display = gdk_screen_get_display (screen);
-      GdkWindow *window = gdk_display_get_window_at_pointer (display, &x, &y);
+      GdkWindow *window = gdk_display_get_window_at_device_position (display, device, &x, &y);
       if (!window)
 	return;
       image = gdk_drawable_get_image (window, x, y, 1, 1);
@@ -1682,18 +1685,19 @@ shutdown_eyedropper (GtkWidget *widget)
 {
   GtkColorSelection *colorsel;
   ColorSelectionPrivate *priv;
-  GdkDisplay *display = gtk_widget_get_display (widget);
 
   colorsel = GTK_COLOR_SELECTION (widget);
-  priv = colorsel->private_data;    
+  priv = colorsel->private_data;
 
   if (priv->has_grab)
     {
-      gdk_display_keyboard_ungrab (display, priv->grab_time);
-      gdk_display_pointer_ungrab (display, priv->grab_time);
-      gtk_grab_remove (priv->dropper_grab_widget);
+      gdk_device_ungrab (priv->keyboard_device, priv->grab_time);
+      gdk_device_ungrab (priv->pointer_device, priv->grab_time);
+      gtk_device_grab_remove (priv->dropper_grab_widget, priv->pointer_device);
 
       priv->has_grab = FALSE;
+      priv->keyboard_device = NULL;
+      priv->pointer_device = NULL;
     }
 }
 
@@ -1702,8 +1706,9 @@ mouse_motion (GtkWidget      *invisible,
 	      GdkEventMotion *event,
 	      gpointer        data)
 {
-  grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
-		       event->x_root, event->y_root, data); 
+  grab_color_at_pointer (gdk_event_get_screen ((GdkEvent *) event),
+                         gdk_event_get_device ((GdkEvent *) event),
+                         event->x_root, event->y_root, data);
 }
 
 static gboolean
@@ -1716,8 +1721,9 @@ mouse_release (GtkWidget      *invisible,
   if (event->button != 1)
     return FALSE;
 
-  grab_color_at_mouse (gdk_event_get_screen ((GdkEvent *)event),
-		       event->x_root, event->y_root, data);
+  grab_color_at_pointer (gdk_event_get_screen ((GdkEvent *) event),
+                         gdk_event_get_device ((GdkEvent *) event),
+                         event->x_root, event->y_root, data);
 
   shutdown_eyedropper (GTK_WIDGET (data));
   
@@ -1739,12 +1745,15 @@ key_press (GtkWidget   *invisible,
            gpointer     data)
 {  
   GdkDisplay *display = gtk_widget_get_display (invisible);
-  GdkScreen *screen = gdk_event_get_screen ((GdkEvent *)event);
+  GdkScreen *screen = gdk_event_get_screen ((GdkEvent *) event);
+  GdkDevice *device, *pointer_device;
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
   gint x, y;
   gint dx, dy;
 
-  gdk_display_get_pointer (display, NULL, &x, &y, NULL);
+  device = gdk_event_get_device ((GdkEvent * ) event);
+  pointer_device = gdk_device_get_associated_device (device);
+  gdk_display_get_device_state (display, pointer_device, NULL, &x, &y, NULL);
 
   dx = 0;
   dy = 0;
@@ -1756,7 +1765,7 @@ key_press (GtkWidget   *invisible,
     case GDK_ISO_Enter:
     case GDK_KP_Enter:
     case GDK_KP_Space:
-      grab_color_at_mouse (screen, x, y, data);
+      grab_color_at_pointer (screen, pointer_device, x, y, data);
       /* fall through */
 
     case GDK_Escape:
@@ -1797,8 +1806,8 @@ key_press (GtkWidget   *invisible,
       return FALSE;
     }
 
-  gdk_display_warp_pointer (display, screen, x + dx, y + dy);
-  
+  gdk_display_warp_device (display, pointer_device, screen, x + dx, y + dy);
+
   return TRUE;
 
 }
@@ -1838,12 +1847,26 @@ get_screen_color (GtkWidget *button)
   GtkColorSelection *colorsel = g_object_get_data (G_OBJECT (button), "COLORSEL");
   ColorSelectionPrivate *priv = colorsel->private_data;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (button));
+  GdkDevice *device, *keyb_device, *pointer_device;
   GdkCursor *picker_cursor;
   GdkGrabStatus grab_status;
   GtkWidget *grab_widget, *toplevel;
 
   guint32 time = gtk_get_current_event_time ();
-  
+
+  device = gtk_get_current_event_device ();
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    {
+      keyb_device = device;
+      pointer_device = gdk_device_get_associated_device (device);
+    }
+  else
+    {
+      pointer_device = device;
+      keyb_device = gdk_device_get_associated_device (device);
+    }
+
   if (priv->dropper_grab_widget == NULL)
     {
       grab_widget = gtk_window_new (GTK_WINDOW_POPUP);
@@ -1867,29 +1890,38 @@ get_screen_color (GtkWidget *button)
       priv->dropper_grab_widget = grab_widget;
     }
 
-  if (gdk_keyboard_grab (priv->dropper_grab_widget->window,
-                         FALSE, time) != GDK_GRAB_SUCCESS)
+  if (gdk_device_grab (keyb_device,
+                       priv->dropper_grab_widget->window,
+                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                       NULL, time) != GDK_GRAB_SUCCESS)
     return;
-  
+
   picker_cursor = make_picker_cursor (screen);
-  grab_status = gdk_pointer_grab (priv->dropper_grab_widget->window,
-				  FALSE,
-				  GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
-				  NULL,
-				  picker_cursor,
-				  time);
+  grab_status = gdk_device_grab (pointer_device,
+                                 priv->dropper_grab_widget->window,
+                                 GDK_OWNERSHIP_APPLICATION,
+                                 FALSE,
+                                 GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
+                                 picker_cursor,
+                                 time);
   gdk_cursor_unref (picker_cursor);
-  
+
   if (grab_status != GDK_GRAB_SUCCESS)
     {
-      gdk_display_keyboard_ungrab (gtk_widget_get_display (button), time);
+      gdk_device_ungrab (keyb_device, time);
       return;
     }
 
-  gtk_grab_add (priv->dropper_grab_widget);
+  gtk_device_grab_add (priv->dropper_grab_widget,
+                       pointer_device,
+                       TRUE);
+
   priv->grab_time = time;
   priv->has_grab = TRUE;
-  
+  priv->keyboard_device = keyb_device;
+  priv->pointer_device = pointer_device;
+
   g_signal_connect (priv->dropper_grab_widget, "button-press-event",
                     G_CALLBACK (mouse_press), colorsel);
   g_signal_connect (priv->dropper_grab_widget, "key-press-event",

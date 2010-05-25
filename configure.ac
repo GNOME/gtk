@@ -1560,22 +1560,22 @@ if test "x$gdktarget" = "xx11"; then
   fi
 
   # set up things for XInput
-
-  if test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
+  if test "x$with_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
     AC_DEFINE(XINPUT_XFREE, 1,
               [Define to 1 if XFree XInput should be used])
 
-    if $PKG_CONFIG --exists xi ; then
-      X_PACKAGES="$X_PACKAGES xi"
-    else
-      GTK_ADD_LIB(x_extra_libs, Xi)
-    fi
+    X_PACKAGES="$X_PACKAGES xi"
+
+    AC_CHECK_HEADER(X11/extensions/XInput2.h,
+                    have_xinput2=yes; AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]))
   else
     AC_DEFINE(XINPUT_NONE, 1,
               [Define to 1 if no XInput should be used])
   fi
 
-  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree || test x$with_xinput = xyes)
+  AM_CONDITIONAL(XINPUT_NONE,  test "x$with_xinput" = "xno")
+  AM_CONDITIONAL(XINPUT_XFREE, test "x$with_xinput" != "xno")
+  AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
   # Check for the RANDR extension
   if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
@@ -1633,6 +1633,7 @@ else
   XPACKAGES=
 
   AM_CONDITIONAL(XINPUT_XFREE, false)
+  AM_CONDITIONAL(XINPUT_2, false)
   AM_CONDITIONAL(USE_X11, false)
   AM_CONDITIONAL(HAVE_X11R6, false)
 fi

@@ -406,7 +406,8 @@ void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
 					     gint               width);
 void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
-					     GtkTreeViewColumn *column);
+					     GtkTreeViewColumn *column,
+                                             GdkDevice         *device);
 gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 					     GtkCellEditable   **editable_widget,
 					     GdkEvent           *event,

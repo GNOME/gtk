@@ -88,9 +88,9 @@ struct _GtkButtonPrivate
   GtkWidget      *image;
   guint           align_set             : 1;
   guint           image_is_stock        : 1;
-  guint           has_grab              : 1;
   guint           use_action_appearance : 1;
   guint32         grab_time;
+  GdkDevice      *grab_keyboard;
   GtkPositionType image_position;
   GtkAction      *action;
 };
@@ -1715,22 +1715,28 @@ gtk_real_button_activate (GtkButton *button)
 {
   GtkWidget *widget = GTK_WIDGET (button);
   GtkButtonPrivate *priv;
+  GdkDevice *device;
   guint32 time;
 
   priv = GTK_BUTTON_GET_PRIVATE (button);
+  device = gtk_get_current_event_device ();
+
+  g_return_if_fail (device && device->source == GDK_SOURCE_KEYBOARD);
 
   if (gtk_widget_get_realized (widget) && !button->activate_timeout)
     {
       time = gtk_get_current_event_time ();
-      if (gdk_keyboard_grab (button->event_window, TRUE, time) == 
-	  GDK_GRAB_SUCCESS)
-	{
-	  priv->has_grab = TRUE;
+
+      if (gdk_device_grab (device, button->event_window,
+                           GDK_OWNERSHIP_WINDOW, TRUE,
+                           GDK_KEY_PRESS | GDK_KEY_RELEASE,
+                           NULL, time) == GDK_GRAB_SUCCESS)
+        {
+          gtk_device_grab_add (widget, device, TRUE);
+	  priv->grab_keyboard = device;
 	  priv->grab_time = time;
 	}
 
-      gtk_grab_add (widget);
-      
       button->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
 						button_activate_timeout,
 						button);
@@ -1752,12 +1758,12 @@ gtk_button_finish_activate (GtkButton *button,
   g_source_remove (button->activate_timeout);
   button->activate_timeout = 0;
 
-  if (priv->has_grab)
+  if (priv->grab_keyboard)
     {
-      gdk_display_keyboard_ungrab (gtk_widget_get_display (widget),
-				   priv->grab_time);
+      gdk_device_ungrab (priv->grab_keyboard, priv->grab_time);
+      gtk_device_grab_remove (widget, priv->grab_keyboard);
+      priv->grab_keyboard = NULL;
     }
-  gtk_grab_remove (widget);
 
   button->button_down = FALSE;
 
@@ -2247,7 +2253,13 @@ gtk_button_grab_notify (GtkWidget *widget,
 			gboolean   was_grabbed)
 {
   GtkButton *button = GTK_BUTTON (widget);
+  GtkButtonPrivate *priv = GTK_BUTTON_GET_PRIVATE (button);
   gboolean save_in;
+
+  if (button->activate_timeout &&
+      priv->grab_keyboard &&
+      gtk_widget_device_is_shadowed (widget, priv->grab_keyboard))
+    gtk_button_finish_activate (button, FALSE);
 
   if (!was_grabbed)
     {

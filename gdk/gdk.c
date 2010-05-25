@@ -787,5 +787,28 @@ gdk_set_program_class (const char *program_class)
   gdk_progclass = g_strdup (program_class);
 }
 
+/**
+ * gdk_enable_multidevice:
+ *
+ * Enables multidevice support in GDK. This call must happen prior
+ * to gdk_display_open(), gtk_init(), gtk_init_with_args() or
+ * gtk_init_check() in order to take effect.
+ *
+ * Note that individual #GdkWindow<!-- -->s still need to explicitly
+ * enable multidevice awareness through gdk_window_set_support_multidevice().
+ *
+ * This function must be called before initializing GDK.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_enable_multidevice (void)
+{
+  if (gdk_initialized)
+    return;
+
+  _gdk_enable_multidevice = TRUE;
+}
+
 #define __GDK_C__
 #include "gdkaliasdef.c"

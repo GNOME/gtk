@@ -34,7 +34,7 @@
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdnd.h>
-#include <gdk/gdkinput.h>
+#include <gdk/gdkdevice.h>
 
 G_BEGIN_DECLS
 
@@ -186,35 +186,6 @@ typedef enum
   GDK_DAMAGE            = 36,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
-
-/* Event masks. (Used to select what types of events a window
- *  will receive).
- */
-typedef enum
-{
-  GDK_EXPOSURE_MASK		= 1 << 1,
-  GDK_POINTER_MOTION_MASK	= 1 << 2,
-  GDK_POINTER_MOTION_HINT_MASK	= 1 << 3,
-  GDK_BUTTON_MOTION_MASK	= 1 << 4,
-  GDK_BUTTON1_MOTION_MASK	= 1 << 5,
-  GDK_BUTTON2_MOTION_MASK	= 1 << 6,
-  GDK_BUTTON3_MOTION_MASK	= 1 << 7,
-  GDK_BUTTON_PRESS_MASK		= 1 << 8,
-  GDK_BUTTON_RELEASE_MASK	= 1 << 9,
-  GDK_KEY_PRESS_MASK		= 1 << 10,
-  GDK_KEY_RELEASE_MASK		= 1 << 11,
-  GDK_ENTER_NOTIFY_MASK		= 1 << 12,
-  GDK_LEAVE_NOTIFY_MASK		= 1 << 13,
-  GDK_FOCUS_CHANGE_MASK		= 1 << 14,
-  GDK_STRUCTURE_MASK		= 1 << 15,
-  GDK_PROPERTY_CHANGE_MASK	= 1 << 16,
-  GDK_VISIBILITY_NOTIFY_MASK	= 1 << 17,
-  GDK_PROXIMITY_IN_MASK		= 1 << 18,
-  GDK_PROXIMITY_OUT_MASK	= 1 << 19,
-  GDK_SUBSTRUCTURE_MASK		= 1 << 20,
-  GDK_SCROLL_MASK               = 1 << 21,
-  GDK_ALL_EVENTS_MASK		= 0x3FFFFE
-} GdkEventMask;
 
 typedef enum
 {
@@ -569,7 +540,22 @@ gboolean  gdk_event_get_root_coords	(const GdkEvent  *event,
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
+void       gdk_event_set_device         (GdkEvent        *event,
+                                         GdkDevice       *device);
+GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
 void      gdk_event_request_motions     (const GdkEventMotion *event);
+
+gboolean  gdk_events_get_distance       (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *distance);
+gboolean  gdk_events_get_angle          (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *angle);
+gboolean  gdk_events_get_center         (GdkEvent        *event1,
+                                         GdkEvent        *event2,
+                                         gdouble         *x,
+                                         gdouble         *y);
+
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);

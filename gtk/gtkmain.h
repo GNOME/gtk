@@ -138,6 +138,12 @@ void	   gtk_grab_add		   (GtkWidget	       *widget);
 GtkWidget* gtk_grab_get_current	   (void);
 void	   gtk_grab_remove	   (GtkWidget	       *widget);
 
+void       gtk_device_grab_add     (GtkWidget          *widget,
+                                    GdkDevice          *device,
+                                    gboolean            block_others);
+void       gtk_device_grab_remove  (GtkWidget          *widget,
+                                    GdkDevice          *device);
+
 void	   gtk_init_add		   (GtkFunction	       function,
 				    gpointer	       data);
 void	   gtk_quit_add_destroy	   (guint	       main_level,
@@ -160,6 +166,7 @@ void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
 GdkEvent*       gtk_get_current_event       (void);
 guint32         gtk_get_current_event_time  (void);
 gboolean        gtk_get_current_event_state (GdkModifierType *state);
+GdkDevice *     gtk_get_current_event_device (void);
 
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 

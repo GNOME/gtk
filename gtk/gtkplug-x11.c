@@ -25,6 +25,21 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
+
+#ifdef XINPUT_2
+
+/* Hack to have keyboard events interpreted
+ * regardless of the default device manager
+ */
+#define GDK_COMPILATION
+#include "x11/gdkdevicemanager-core.h"
+#include "x11/gdkdevicemanager-xi2.h"
+#include "x11/gdkeventtranslator.h"
+#undef GDK_COMPILATION
+
+#endif /* XINPUT_2 */
+
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
@@ -208,7 +223,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
   XEvent *xevent = (XEvent *)gdk_xevent;
 
   GdkFilterReturn return_val;
-  
+
   return_val = GDK_FILTER_CONTINUE;
 
   switch (xevent->type)
@@ -326,6 +341,61 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	
 	break;
       }
+
+#ifdef XINPUT_2
+    case KeyPress:
+    case KeyRelease:
+      {
+        static GdkDeviceManager *core_device_manager = NULL;
+        GdkDeviceManager *device_manager;
+        GdkEvent *translated_event;
+        GList *devices, *d;
+        GdkDevice *keyboard = NULL;
+
+        device_manager = gdk_display_get_device_manager (display);
+
+        /* bail out if the device manager already
+         * interprets core keyboard events.
+         */
+        if (!GDK_IS_DEVICE_MANAGER_XI2 (device_manager))
+          return GDK_FILTER_CONTINUE;
+
+        /* Find out the first keyboard device, the
+         * generated event will be assigned to it.
+         */
+        devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+
+        for (d = devices; d; d = d->next)
+          {
+            GdkDevice *device = d->data;
+
+            if (device->source == GDK_SOURCE_KEYBOARD)
+              keyboard = device;
+          }
+
+        g_list_free (devices);
+
+        if (!keyboard)
+          return GDK_FILTER_CONTINUE;
+
+        /* This is a crude hack so key events
+         * are interpreted as if there was a
+         * GdkDeviceManagerCore available.
+         */
+        if (G_UNLIKELY (!core_device_manager))
+          core_device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+                                         "display", display,
+                                         NULL);
+
+        translated_event = gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (core_device_manager), display, xevent);
+        gdk_event_set_device (translated_event, keyboard);
+
+        gtk_main_do_event (translated_event);
+        gdk_event_free (translated_event);
+
+        return_val = GDK_FILTER_REMOVE;
+      }
+#endif
     }
 
   return return_val;

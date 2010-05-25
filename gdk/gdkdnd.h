@@ -32,6 +32,7 @@
 #define __GDK_DND_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdevice.h>
 
 G_BEGIN_DECLS
 
@@ -105,6 +106,10 @@ struct _GdkDragContextClass {
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
+
+void             gdk_drag_context_set_device           (GdkDragContext *context,
+                                                        GdkDevice      *device);
+GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
 
 GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);

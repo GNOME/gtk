@@ -109,6 +109,7 @@ struct _GtkTextViewPrivate
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
   gchar *im_module;
+  GdkDevice *grab_device;
   guint scroll_after_paste : 1;
 };
 
@@ -4084,7 +4085,12 @@ static void
 gtk_text_view_grab_notify (GtkWidget *widget,
 		 	   gboolean   was_grabbed)
 {
-  if (!was_grabbed)
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (widget);
+
+  if (priv->grab_device &&
+      gtk_widget_device_is_shadowed (widget, priv->grab_device))
     {
       gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget));
       gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (widget));
@@ -5992,6 +5998,7 @@ gtk_text_view_unselect (GtkTextView *text_view)
 
 static void
 get_iter_at_pointer (GtkTextView *text_view,
+                     GdkDevice   *device,
                      GtkTextIter *iter,
 		     gint        *x,
 		     gint        *y)
@@ -5999,9 +6006,9 @@ get_iter_at_pointer (GtkTextView *text_view,
   gint xcoord, ycoord;
   GdkModifierType state;
 
-  gdk_window_get_pointer (text_view->text_window->bin_window,
-                          &xcoord, &ycoord, &state);
-  
+  gdk_window_get_device_position (text_view->text_window->bin_window,
+                                  device, &xcoord, &ycoord, &state);
+
   gtk_text_layout_get_iter_at_pixel (text_view->layout,
                                      iter,
                                      xcoord + text_view->xoffset,
@@ -6015,12 +6022,13 @@ get_iter_at_pointer (GtkTextView *text_view,
 
 static void
 move_mark_to_pointer_and_scroll (GtkTextView *text_view,
-                                 const gchar *mark_name)
+                                 const gchar *mark_name,
+                                 GdkDevice   *device)
 {
   GtkTextIter newplace;
   GtkTextMark *mark;
 
-  get_iter_at_pointer (text_view, &newplace, NULL, NULL);
+  get_iter_at_pointer (text_view, device, &newplace, NULL, NULL);
   
   mark = gtk_text_buffer_get_mark (get_buffer (text_view), mark_name);
   
@@ -6045,7 +6053,6 @@ selection_scan_timeout (gpointer data)
 
   text_view = GTK_TEXT_VIEW (data);
 
-  DV(g_print (G_STRLOC": calling move_mark_to_pointer_and_scroll\n"));
   gtk_text_view_scroll_mark_onscreen (text_view, 
 				      gtk_text_buffer_get_insert (get_buffer (text_view)));
 
@@ -6074,10 +6081,12 @@ drag_scan_timeout (gpointer data)
   GtkTextIter newplace;
   gint x, y, width, height;
   gdouble pointer_xoffset, pointer_yoffset;
+  GdkDevice *device;
 
   text_view = GTK_TEXT_VIEW (data);
+  device = gdk_display_get_core_pointer (gtk_widget_get_display (GTK_WIDGET (data)));
 
-  get_iter_at_pointer (text_view, &newplace, &x, &y);
+  get_iter_at_pointer (text_view, device, &newplace, &x, &y);
   gdk_drawable_get_size (text_view->text_window->bin_window, &width, &height);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
@@ -6214,11 +6223,17 @@ selection_motion_event_handler (GtkTextView    *text_view,
 				GdkEventMotion *event, 
 				SelectionData  *data)
 {
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
   gdk_event_request_motions (event);
+
+  if (priv->grab_device != event->device)
+    return FALSE;
 
   if (data->granularity == SELECT_CHARACTERS) 
     {
-      move_mark_to_pointer_and_scroll (text_view, "insert");
+      move_mark_to_pointer_and_scroll (text_view, "insert", event->device);
     }
   else 
     {
@@ -6231,7 +6246,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_start, data->orig_start);
       gtk_text_buffer_get_iter_at_mark (buffer, &orig_end, data->orig_end);
 
-      get_iter_at_pointer (text_view, &cursor, NULL, NULL);
+      get_iter_at_pointer (text_view, event->device, &cursor, NULL, NULL);
       
       start = cursor;
       extend_selection (text_view, data->granularity, &start, &end);
@@ -6265,6 +6280,7 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
                                     const GtkTextIter *iter,
                                     GdkEventButton    *button)
 {
+  GtkTextViewPrivate *priv;
   GtkTextIter cursor, ins, bound;
   GtkTextIter orig_start, orig_end;
   GtkTextBuffer *buffer;
@@ -6272,7 +6288,8 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 
   if (text_view->selection_drag_handler != 0)
     return;
-  
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
   data = g_new0 (SelectionData, 1);
 
   if (button->type == GDK_2BUTTON_PRESS)
@@ -6282,7 +6299,10 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
   else 
     data->granularity = SELECT_CHARACTERS;
 
-  gtk_grab_add (GTK_WIDGET (text_view));
+  priv->grab_device = button->device;
+  gtk_device_grab_add (GTK_WIDGET (text_view),
+                       priv->grab_device,
+                       TRUE);
 
   buffer = get_buffer (text_view);
   
@@ -6332,7 +6352,6 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
                                                   &orig_start, TRUE);
   data->orig_end = gtk_text_buffer_create_mark (buffer, NULL,
                                                 &orig_end, TRUE);
-
   gtk_text_view_check_cursor_blink (text_view);
 
   text_view->selection_drag_handler = g_signal_connect_data (text_view,
@@ -6346,6 +6365,13 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
 static gboolean
 gtk_text_view_end_selection_drag (GtkTextView    *text_view) 
 {
+  GtkTextViewPrivate *priv;
+
+  priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+
+  if (!priv->grab_device)
+    return FALSE;
+
   if (text_view->selection_drag_handler == 0)
     return FALSE;
 
@@ -6358,7 +6384,9 @@ gtk_text_view_end_selection_drag (GtkTextView    *text_view)
       text_view->scroll_timeout = 0;
     }
 
-  gtk_grab_remove (GTK_WIDGET (text_view));
+  gtk_device_grab_remove (GTK_WIDGET (text_view),
+                          priv->grab_device);
+  priv->grab_device = NULL;
 
   return TRUE;
 }

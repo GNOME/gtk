@@ -31,11 +31,11 @@
 #include "gdkinput.h"
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
+#include <gdkdevice.h>
+#include <gdkdeviceprivate.h>
 
-static GdkDeviceAxis gdk_input_core_axes[] = {
-  { GDK_AXIS_X, 0, 0 },
-  { GDK_AXIS_Y, 0, 0 }
-};
+/* Addition used for extension_events mask */
+#define GDK_ALL_DEVICES_MASK (1<<30)
 
 GdkDevice *_gdk_core_pointer = NULL;
 
@@ -47,62 +47,6 @@ gint              _gdk_input_ignore_core;
 GList            *_gdk_input_windows;
 GList            *_gdk_input_devices;
 
-void
-_gdk_init_input_core (void)
-{
-  _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
-  
-  _gdk_core_pointer->name = "Core Pointer";
-  _gdk_core_pointer->source = GDK_SOURCE_MOUSE;
-  _gdk_core_pointer->mode = GDK_MODE_SCREEN;
-  _gdk_core_pointer->has_cursor = TRUE;
-  _gdk_core_pointer->num_axes = 2;
-  _gdk_core_pointer->axes = gdk_input_core_axes;
-  _gdk_core_pointer->num_keys = 0;
-  _gdk_core_pointer->keys = NULL;
-
-  _gdk_display->core_pointer = _gdk_core_pointer;
-}
-
-static void
-gdk_device_finalize (GObject *object)
-{
-  g_error ("A GdkDevice object was finalized. This should not happen");
-}
-
-static void
-gdk_device_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_device_finalize;
-}
-
-GType
-gdk_device_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkDeviceClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_device_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDevicePrivate),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDevice",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 GList *
 gdk_devices_list (void)
@@ -116,171 +60,48 @@ gdk_display_list_devices (GdkDisplay *dpy)
   return _gdk_input_devices;
 }
 
-G_CONST_RETURN gchar *
-gdk_device_get_name (GdkDevice *device)
+static void
+_gdk_input_select_device_events (GdkWindow *impl_window,
+                                 GdkDevice *device)
 {
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  guint event_mask;
+  GdkWindowObject *w;
+  GdkInputWindow *iw;
+  GdkInputMode mode;
+  gboolean has_cursor;
+  GdkDeviceType type;
+  GList *l;
 
-  return device->name;
-}
+  event_mask = 0;
+  iw = ((GdkWindowObject *)impl_window)->input_window;
 
-GdkInputSource
-gdk_device_get_source (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+  g_object_get (device,
+                "type", &type,
+                "input-mode", &mode,
+                "has-cursor", &has_cursor,
+                NULL);
 
-  return device->source;
-}
-
-GdkInputMode
-gdk_device_get_mode (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  return device->mode;
-}
-
-gboolean
-gdk_device_get_has_cursor (GdkDevice *device)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-
-  return device->has_cursor;
-}
-
-void
-gdk_device_set_source (GdkDevice *device,
-		       GdkInputSource source)
-{
-  device->source = source;
-}
-
-void
-gdk_device_get_key (GdkDevice       *device,
-                    guint            index,
-                    guint           *keyval,
-                    GdkModifierType *modifiers)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (index < device->num_keys);
-
-  if (!device->keys[index].keyval &&
-      !device->keys[index].modifiers)
+  if (iw == NULL ||
+      mode == GDK_MODE_DISABLED ||
+      type == GDK_DEVICE_TYPE_MASTER)
     return;
 
-  if (keyval)
-    *keyval = device->keys[index].keyval;
-
-  if (modifiers)
-    *modifiers = device->keys[index].modifiers;
-}
-
-void
-gdk_device_set_key (GdkDevice      *device,
-		    guint           index,
-		    guint           keyval,
-		    GdkModifierType modifiers)
-{
-  g_return_if_fail (device != NULL);
-  g_return_if_fail (index < device->num_keys);
-
-  device->keys[index].keyval = keyval;
-  device->keys[index].modifiers = modifiers;
-}
-
-GdkAxisUse
-gdk_device_get_axis_use (GdkDevice *device,
-                         guint      index)
-{
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
-  g_return_val_if_fail (index < device->num_axes, GDK_AXIS_IGNORE);
-
-  return device->axes[index].use;
-}
-
-void
-gdk_device_set_axis_use (GdkDevice   *device,
-			 guint        index,
-			 GdkAxisUse   use)
-{
-  g_return_if_fail (device != NULL);
-  g_return_if_fail (index < device->num_axes);
-
-  device->axes[index].use = use;
-
-  switch (use)
+  for (l = _gdk_input_windows; l != NULL; l = l->next)
     {
-    case GDK_AXIS_X:
-    case GDK_AXIS_Y:
-      device->axes[index].min = 0.;
-      device->axes[index].max = 0.;
-      break;
-    case GDK_AXIS_XTILT:
-    case GDK_AXIS_YTILT:
-      device->axes[index].min = -1.;
-      device->axes[index].max = 1;
-      break;
-    default:
-      device->axes[index].min = 0.;
-      device->axes[index].max = 1;
-      break;
+      w = l->data;
+
+      if (has_cursor || (w->extension_events & GDK_ALL_DEVICES_MASK))
+        {
+          event_mask = w->extension_events;
+
+          if (event_mask)
+            event_mask |= GDK_PROXIMITY_OUT_MASK
+                | GDK_BUTTON_PRESS_MASK
+                | GDK_BUTTON_RELEASE_MASK;
+
+          gdk_window_set_device_events ((GdkWindow *) w, device, event_mask);
+        }
     }
-}
-
-void 
-gdk_device_get_state (GdkDevice       *device,
-                      GdkWindow       *window,
-                      gdouble         *axes,
-                      GdkModifierType *mask)
-{
-  gint x_int, y_int;
-
-  g_assert (device == _gdk_core_pointer);
-      
-  gdk_window_get_pointer (window, &x_int, &y_int, mask);
-
-  if (axes)
-    {
-      axes[0] = x_int;
-      axes[1] = y_int;
-    }
-}
-
-void 
-gdk_device_free_history (GdkTimeCoord **events,
-			 gint           n_events)
-{
-  gint i;
-  
-  for (i = 0; i < n_events; i++)
-    g_free (events[i]);
-
-  g_free (events);
-}
-
-gboolean
-gdk_device_get_history  (GdkDevice         *device,
-			 GdkWindow         *window,
-			 guint32            start,
-			 guint32            stop,
-			 GdkTimeCoord    ***events,
-			 gint              *n_events)
-{
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_WINDOW_IS_QUARTZ (window), FALSE);
-  g_return_val_if_fail (events != NULL, FALSE);
-  g_return_val_if_fail (n_events != NULL, FALSE);
-
-  *n_events = 0;
-  *events = NULL;
-  return FALSE;
-}
-
-gboolean
-gdk_device_set_mode (GdkDevice   *device,
-                     GdkInputMode mode)
-{
-  return FALSE;
 }
 
 gint
@@ -315,10 +136,12 @@ _gdk_input_window_find(GdkWindow *window)
    cases */
 
 void
-gdk_input_set_extension_events (GdkWindow *window, gint mask,
-				GdkExtensionMode mode)
+gdk_input_set_extension_events (GdkWindow        *window,
+                                gint              mask,
+                                GdkExtensionMode  mode)
 {
   GdkWindowObject *window_private;
+  GdkWindowObject *impl_window;
   GList *tmp_list;
   GdkInputWindow *iw;
 
@@ -326,13 +149,14 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   g_return_if_fail (GDK_WINDOW_IS_QUARTZ (window));
 
   window_private = (GdkWindowObject*) window;
+  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
 
   if (mask != 0)
     {
-      iw = g_new(GdkInputWindow,1);
+      iw = g_new (GdkInputWindow, 1);
 
       iw->window = window;
       iw->mode = mode;
@@ -341,39 +165,32 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
       iw->num_obscuring = 0;
       iw->grabbed = FALSE;
 
-      _gdk_input_windows = g_list_append (_gdk_input_windows,iw);
+      _gdk_input_windows = g_list_append (_gdk_input_windows, iw);
       window_private->extension_events = mask;
 
       /* Add enter window events to the event mask */
       /* FIXME, this is not needed for XINPUT_NONE */
       gdk_window_set_events (window,
-			     gdk_window_get_events (window) | 
-			     GDK_ENTER_NOTIFY_MASK);
+                             gdk_window_get_events (window) | 
+                             GDK_ENTER_NOTIFY_MASK);
     }
   else
     {
       iw = _gdk_input_window_find (window);
       if (iw)
-	{
-	  _gdk_input_windows = g_list_remove (_gdk_input_windows,iw);
-	  g_free (iw);
-	}
+        {
+          _gdk_input_windows = g_list_remove (_gdk_input_windows,iw);
+          g_free (iw);
+        }
 
       window_private->extension_events = 0;
     }
 
   for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
     {
-      GdkDevicePrivate *gdkdev = (GdkDevicePrivate *)(tmp_list->data);
+      GdkDevice *dev = tmp_list->data;
 
-      if (gdkdev != (GdkDevicePrivate *)_gdk_core_pointer)
-	{
-	  if (mask != 0 && gdkdev->info.mode != GDK_MODE_DISABLED
-	      && (gdkdev->info.has_cursor || mode == GDK_EXTENSION_EVENTS_ALL))
-	    _gdk_input_enable_window (window,gdkdev);
-	  else
-	    _gdk_input_disable_window (window,gdkdev);
-	}
+      _gdk_input_select_device_events (GDK_WINDOW (impl_window), dev);
     }
 }
 
@@ -390,10 +207,57 @@ _gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
+_gdk_input_check_extension_events (GdkDevice *device)
+{
+}
+
+void
 _gdk_input_init (void)
 {
-  _gdk_init_input_core ();
-  _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
+  GdkDeviceManager *device_manager;
+  GList *list, *l;
+
+  device_manager = gdk_display_get_device_manager (_gdk_display);
+
+  /* For backward compatibility, just add floating devices that are
+   * not keyboards.
+   */
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_FLOATING);
+  for (l = list; l; l = l->next)
+    {
+      GdkDevice *device = l->data;
+
+      if (device->source == GDK_SOURCE_KEYBOARD)
+        continue;
+
+      _gdk_input_devices = g_list_prepend (_gdk_input_devices, l->data);
+    }
+
+  g_list_free (list);
+
+  /* Now set "core" pointer to the first master device that is a pointer.
+   */
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_MASTER);
+
+  for (l = list; l; l = l->next)
+    {
+      GdkDevice *device = list->data;
+
+      if (device->source != GDK_SOURCE_MOUSE)
+        continue;
+
+      _gdk_display->core_pointer = device;
+      break;
+    }
+
+  g_list_free (list);
+
+  /* Add the core pointer to the devices list */
+  _gdk_input_devices = g_list_prepend (_gdk_input_devices,
+                                       _gdk_display->core_pointer);
+
   _gdk_input_ignore_core = FALSE;
 }
 
@@ -424,31 +288,4 @@ _gdk_input_exit (void)
       g_free (tmp_list->data);
     }
   g_list_free (_gdk_input_windows);
-}
-
-gboolean
-gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *value)
-{
-  gint i;
-  
-  g_return_val_if_fail (device != NULL, FALSE);
-
-  if (axes == NULL)
-    return FALSE;
-  
-  for (i = 0; i < device->num_axes; i++)
-    if (device->axes[i].use == use)
-      {
-	if (value)
-	  *value = axes[i];
-	return TRUE;
-      }
-  
-  return FALSE;
-}
-
-void
-_gdk_input_window_crossing (GdkWindow *window,
-                            gboolean   enter)
-{
 }

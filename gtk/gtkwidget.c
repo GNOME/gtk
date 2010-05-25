@@ -376,6 +376,7 @@ static GQuark		quark_aux_info = 0;
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
+static GQuark           quark_device_event_mask = 0;
 static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
 static GQuark		quark_pointer_window = 0;
@@ -472,6 +473,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
+  quark_device_event_mask = g_quark_from_static_string ("gtk-device-event-mask");
   quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
@@ -3521,6 +3523,9 @@ gtk_widget_realize (GtkWidget *widget)
       mode = gtk_widget_get_extension_events (widget);
       if (mode != GDK_EXTENSION_EVENTS_NONE)
         gtk_widget_set_extension_events_internal (widget, mode, NULL);
+
+      if ((GTK_WIDGET_FLAGS (widget) & GTK_MULTIDEVICE) != 0)
+        gdk_window_set_support_multidevice (widget->window, TRUE);
     }
 }
 
@@ -5652,6 +5657,62 @@ _gtk_widget_set_has_grab (GtkWidget *widget,
     GTK_OBJECT_FLAGS (widget) |= GTK_HAS_GRAB;
   else
     GTK_OBJECT_FLAGS (widget) &= ~(GTK_HAS_GRAB);
+}
+
+/**
+ * gtk_widget_device_is_shadowed:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Returns %TRUE if @device has been shadowed by a GTK+
+ * device grab on another widget, so it would stop sending
+ * events to @widget. This may be used in the
+ * #GtkWidget::grab-notify signal to check for specific
+ * devices. See gtk_device_grab_add().
+ *
+ * Returns: %TRUE if there is an ongoing grab on @device
+ *          by another #GtkWidget than @widget.
+ *
+ * Since: 3.0
+ **/
+gboolean
+gtk_widget_device_is_shadowed (GtkWidget *widget,
+                               GdkDevice *device)
+{
+  GtkWindowGroup *group;
+  GtkWidget *grab_widget, *toplevel;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  if (!gtk_widget_get_realized (widget))
+    return TRUE;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  else
+    group = gtk_window_get_group (NULL);
+
+  grab_widget = gtk_window_group_get_current_device_grab (group, device);
+
+  /* Widget not inside the hierarchy of grab_widget */
+  if (grab_widget &&
+      widget != grab_widget &&
+      !gtk_widget_is_ancestor (widget, grab_widget))
+    return TRUE;
+
+  if (group->grabs)
+    {
+      grab_widget = group->grabs->data;
+
+      if (widget != grab_widget &&
+          !gtk_widget_is_ancestor (widget, grab_widget))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -7890,10 +7951,53 @@ gtk_widget_set_events (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "events");
 }
 
+/**
+ * gtk_widget_set_device_events:
+ * @widget: a #GtkWidget
+ * #device: a #GdkDevice
+ * @events: event mask
+ *
+ * Sets the device event mask (see #GdkEventMask) for a widget. The event
+ * mask determines which events a widget will receive from @device. Keep
+ * in mind that different widgets have different default event masks, and by
+ * changing the event mask you may disrupt a widget's functionality,
+ * so be careful. This function must be called while a widget is
+ * unrealized. Consider gtk_widget_add_device_events() for widgets that are
+ * already realized, or if you want to preserve the existing event
+ * mask. This function can't be used with #GTK_NO_WINDOW widgets;
+ * to get events on those widgets, place them inside a #GtkEventBox
+ * and receive events on the event box.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_set_device_events (GtkWidget    *widget,
+                              GdkDevice    *device,
+                              GdkEventMask  events)
+{
+  GHashTable *device_events;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (!gtk_widget_get_realized (widget));
+
+  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
+
+  if (G_UNLIKELY (!device_events))
+    {
+      device_events = g_hash_table_new (NULL, NULL);
+      g_object_set_qdata_full (G_OBJECT (widget), quark_device_event_mask, device_events,
+                               (GDestroyNotify) g_hash_table_unref);
+    }
+
+  g_hash_table_insert (device_events, device, GUINT_TO_POINTER (events));
+}
+
 static void
 gtk_widget_add_events_internal (GtkWidget *widget,
-				gint       events,
-				GList     *window_list)
+                                GdkDevice *device,
+                                gint       events,
+                                GList     *window_list)
 {
   GList *l;
 
@@ -7904,15 +8008,18 @@ gtk_widget_add_events_internal (GtkWidget *widget,
 
       gdk_window_get_user_data (window, &user_data);
       if (user_data == widget)
-	{
-	  GList *children;
+        {
+          GList *children;
 
-	  gdk_window_set_events (window, gdk_window_get_events (window) | events);
+          if (device)
+            gdk_window_set_device_events (window, device, gdk_window_get_events (window) | events);
+          else
+            gdk_window_set_events (window, gdk_window_get_events (window) | events);
 
-	  children = gdk_window_get_children (window);
-	  gtk_widget_add_events_internal (widget, events, children);
-	  g_list_free (children);
-	}
+          children = gdk_window_get_children (window);
+          gtk_widget_add_events_internal (widget, device, events, children);
+          g_list_free (children);
+        }
     }
 }
 
@@ -7945,7 +8052,60 @@ gtk_widget_add_events (GtkWidget *widget,
       else
 	window_list = g_list_prepend (NULL, widget->window);
 
-      gtk_widget_add_events_internal (widget, events, window_list);
+      gtk_widget_add_events_internal (widget, NULL, events, window_list);
+
+      g_list_free (window_list);
+    }
+
+  g_object_notify (G_OBJECT (widget), "events");
+}
+
+/**
+ * gtk_widget_add_device_events:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ * @events: an event mask, see #GdkEventMask
+ *
+ * Adds the device events in the bitfield @events to the event mask for
+ * @widget. See gtk_widget_set_device_events() for details.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_add_device_events (GtkWidget    *widget,
+                              GdkDevice    *device,
+                              GdkEventMask  events)
+{
+  GdkEventMask old_events;
+  GHashTable *device_events;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  old_events = gtk_widget_get_device_events (widget, device);
+
+  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
+
+  if (G_UNLIKELY (!device_events))
+    {
+      device_events = g_hash_table_new (NULL, NULL);
+      g_object_set_qdata_full (G_OBJECT (widget), quark_device_event_mask, device_events,
+                               (GDestroyNotify) g_hash_table_unref);
+    }
+
+  g_hash_table_insert (device_events, device,
+                       GUINT_TO_POINTER (old_events | events));
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GList *window_list;
+
+      if (!gtk_widget_get_has_window (widget))
+        window_list = gdk_window_get_children (widget->window);
+      else
+        window_list = g_list_prepend (NULL, widget->window);
+
+      gtk_widget_add_events_internal (widget, device, events, window_list);
 
       g_list_free (window_list);
     }
@@ -8167,6 +8327,35 @@ gtk_widget_get_events (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
+}
+
+/**
+ * gtk_widget_get_device_events:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Returns the events mask for the widget corresponding to an specific device. These
+ * are the events that the widget will receive when @device operates on it.
+ *
+ * Returns: device event mask for @widget
+ *
+ * Since: 3.0
+ **/
+GdkEventMask
+gtk_widget_get_device_events (GtkWidget *widget,
+                              GdkDevice *device)
+{
+  GHashTable *device_events;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
+
+  if (!device_events)
+    return 0;
+
+  return GPOINTER_TO_UINT (g_hash_table_lookup (device_events, device));
 }
 
 /**
@@ -8755,59 +8944,147 @@ _gtk_widget_peek_colormap (void)
 }
 
 /*
- * _gtk_widget_set_pointer_window:
+ * _gtk_widget_set_device_window:
  * @widget: a #GtkWidget.
- * @pointer_window: the new pointer window.
+ * @device: a #GdkDevice.
+ * @window: the new device window.
  *
- * Sets pointer window for @widget.  Does not ref @pointer_window.
+ * Sets pointer window for @widget and @device.  Does not ref @window.
  * Actually stores it on the #GdkScreen, but you don't need to know that.
  */
 void
-_gtk_widget_set_pointer_window (GtkWidget *widget,
-                                GdkWindow *pointer_window)
+_gtk_widget_set_device_window (GtkWidget *widget,
+                               GdkDevice *device,
+                               GdkWindow *window)
 {
+  GdkScreen *screen;
+  GHashTable *device_window;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (!window || GDK_IS_WINDOW (window));
 
-  if (gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_realized (widget))
+    return;
+
+  screen = gdk_drawable_get_screen (widget->window);
+  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+
+  if (G_UNLIKELY (!device_window))
     {
-      GdkScreen *screen = gdk_drawable_get_screen (widget->window);
-
-      g_object_set_qdata (G_OBJECT (screen), quark_pointer_window,
-                          pointer_window);
+      device_window = g_hash_table_new (NULL, NULL);
+      g_object_set_qdata_full (G_OBJECT (screen),
+                               quark_pointer_window,
+                               device_window,
+                               (GDestroyNotify) g_hash_table_destroy);
     }
+
+  if (window)
+    g_hash_table_insert (device_window, device, window);
+  else
+    g_hash_table_remove (device_window, device);
 }
 
 /*
- * _gtk_widget_get_pointer_window:
+ * _gtk_widget_get_device_window:
  * @widget: a #GtkWidget.
+ * @device: a #GdkDevice.
  *
- * Return value: the pointer window set on the #GdkScreen @widget is attached
+ * Return value: the device window set on the #GdkScreen @widget is attached
  * to, or %NULL.
  */
 GdkWindow *
-_gtk_widget_get_pointer_window (GtkWidget *widget)
+_gtk_widget_get_device_window (GtkWidget *widget,
+                               GdkDevice *device)
 {
+  GdkScreen *screen;
+  GHashTable *device_window;
+  GdkWindow *window;
+  GtkWidget *w;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  if (!gtk_widget_get_realized (widget))
+    return NULL;
+
+  screen = gdk_drawable_get_screen (widget->window);
+  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+
+  if (G_UNLIKELY (!device_window))
+    return NULL;
+
+  window = g_hash_table_lookup (device_window, device);
+
+  if (!window)
+    return NULL;
+
+  gdk_window_get_user_data (window, (gpointer *) &w);
+
+  if (widget != w)
+    return NULL;
+
+  return window;
+}
+
+/*
+ * _gtk_widget_list_devices:
+ * @widget: a #GtkWidget.
+ *
+ * Returns the list of #GdkDevices that is currently on top of any widget #GdkWindow.
+ * Free the list with g_list_free(), the elements are owned by GTK+ and must not
+ * be freed.
+ */
+GList *
+_gtk_widget_list_devices (GtkWidget *widget)
+{
+  GdkScreen *screen;
+  GHashTableIter iter;
+  GHashTable *device_window;
+  GList *devices = NULL;
+  gpointer key, value;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (gtk_widget_get_realized (widget))
-    {
-      GdkScreen *screen = gdk_drawable_get_screen (widget->window);
+  if (!gtk_widget_get_realized (widget))
+    return NULL;
 
-      return g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  screen = gdk_drawable_get_screen (widget->window);
+  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+
+  if (G_UNLIKELY (!device_window))
+    return NULL;
+
+  g_hash_table_iter_init (&iter, device_window);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      GdkDevice *device = key;
+      GdkWindow *window = value;
+      GtkWidget *w;
+
+      if (window)
+        {
+          gdk_window_get_user_data (window, (gpointer *) &w);
+
+          if (widget == w)
+            devices = g_list_prepend (devices, device);
+        }
     }
 
-  return NULL;
+  return devices;
 }
 
 static void
-synth_crossing (GtkWidget      *widget,
-		GdkEventType    type,
-		GdkWindow      *window,
-		GdkCrossingMode mode,
-		GdkNotifyType   detail)
+synth_crossing (GtkWidget       *widget,
+                GdkEventType     type,
+                GdkWindow       *window,
+                GdkDevice       *device,
+                GdkCrossingMode  mode,
+                GdkNotifyType    detail)
 {
   GdkEvent *event;
-  
+
   event = gdk_event_new (type);
 
   event->crossing.window = g_object_ref (window);
@@ -8820,6 +9097,7 @@ synth_crossing (GtkWidget      *widget,
   event->crossing.detail = detail;
   event->crossing.focus = FALSE;
   event->crossing.state = 0;
+  gdk_event_set_device (event, device);
 
   if (!widget)
     widget = gtk_get_event_widget (event);
@@ -8828,32 +9106,6 @@ synth_crossing (GtkWidget      *widget,
     gtk_widget_event_internal (widget, event);
 
   gdk_event_free (event);
-}
-
-/*
- * _gtk_widget_is_pointer_widget:
- * @widget: a #GtkWidget
- *
- * Returns %TRUE if the pointer window belongs to @widget.
- */
-gboolean
-_gtk_widget_is_pointer_widget (GtkWidget *widget)
-{
-  if (GTK_WIDGET_HAS_POINTER (widget))
-    {
-      GdkWindow *win;
-      GtkWidget *wid;
-
-      win = _gtk_widget_get_pointer_window (widget);
-      if (win)
-        {
-          gdk_window_get_user_data (win, (gpointer *)&wid);
-          if (wid == widget)
-            return TRUE;
-        }
-    }
-
-  return FALSE;
 }
 
 /*
@@ -8888,20 +9140,30 @@ _gtk_widget_is_pointer_widget (GtkWidget *widget)
  *   - enter notify on real pointer window, detail Ancestor
  */
 void
-_gtk_widget_synthesize_crossing (GtkWidget      *from,
-				 GtkWidget      *to,
-				 GdkCrossingMode mode)
+_gtk_widget_synthesize_crossing (GtkWidget       *from,
+				 GtkWidget       *to,
+                                 GdkDevice       *device,
+				 GdkCrossingMode  mode)
 {
   GdkWindow *from_window = NULL, *to_window = NULL;
 
   g_return_if_fail (from != NULL || to != NULL);
 
   if (from != NULL)
-    from_window = GTK_WIDGET_HAS_POINTER (from)
-      ? _gtk_widget_get_pointer_window (from) : from->window;
+    {
+      from_window = _gtk_widget_get_device_window (from, device);
+
+      if (!from_window)
+        from_window = from->window;
+    }
+
   if (to != NULL)
-    to_window = GTK_WIDGET_HAS_POINTER (to)
-      ? _gtk_widget_get_pointer_window (to) : to->window;
+    {
+      to_window = _gtk_widget_get_device_window (to, device);
+
+      if (!to_window)
+        to_window = to->window;
+    }
 
   if (from_window == NULL && to_window == NULL)
     ;
@@ -8919,11 +9181,11 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 	}
 
       synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
-		      mode, GDK_NOTIFY_ANCESTOR);
+		      device, mode, GDK_NOTIFY_ANCESTOR);
       for (list = g_list_last (from_ancestors); list; list = list->prev)
 	{
 	  synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
-			  mode, GDK_NOTIFY_VIRTUAL);
+			  device, mode, GDK_NOTIFY_VIRTUAL);
 	}
 
       /* XXX: enter/inferior on root window? */
@@ -8948,10 +9210,10 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
       for (list = to_ancestors; list; list = list->next)
 	{
 	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
-			  mode, GDK_NOTIFY_VIRTUAL);
+			  device, mode, GDK_NOTIFY_VIRTUAL);
 	}
       synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
-		      mode, GDK_NOTIFY_ANCESTOR);
+		      device, mode, GDK_NOTIFY_ANCESTOR);
 
       g_list_free (to_ancestors);
     }
@@ -8985,25 +9247,25 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 	{
 	  if (mode != GDK_CROSSING_GTK_UNGRAB)
 	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
-			    mode, GDK_NOTIFY_INFERIOR);
+			    device, mode, GDK_NOTIFY_INFERIOR);
 	  for (list = to_ancestors; list; list = list->next)
 	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data, 
-			    mode, GDK_NOTIFY_VIRTUAL);
+			    device, mode, GDK_NOTIFY_VIRTUAL);
 	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
-			  mode, GDK_NOTIFY_ANCESTOR);
+			  device, mode, GDK_NOTIFY_ANCESTOR);
 	}
       else if (from_ancestor == to_window)
 	{
 	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
-			  mode, GDK_NOTIFY_ANCESTOR);
+			  device, mode, GDK_NOTIFY_ANCESTOR);
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
 	    {
 	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
-			      mode, GDK_NOTIFY_VIRTUAL);
+			      device, mode, GDK_NOTIFY_VIRTUAL);
 	    }
 	  if (mode != GDK_CROSSING_GTK_GRAB)
 	    synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
-			    mode, GDK_NOTIFY_INFERIOR);
+			    device, mode, GDK_NOTIFY_INFERIOR);
 	}
       else
 	{
@@ -9016,20 +9278,20 @@ _gtk_widget_synthesize_crossing (GtkWidget      *from,
 	    }
 
 	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_window,
-			  mode, GDK_NOTIFY_NONLINEAR);
+			  device, mode, GDK_NOTIFY_NONLINEAR);
 
 	  for (list = g_list_last (from_ancestors); list; list = list->prev)
 	    {
 	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkWindow *) list->data,
-			      mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
 	    }
 	  for (list = to_ancestors; list; list = list->next)
 	    {
 	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkWindow *) list->data,
-			      mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
 	    }
 	  synth_crossing (to, GDK_ENTER_NOTIFY, to_window,
-			  mode, GDK_NOTIFY_NONLINEAR);
+			  device, mode, GDK_NOTIFY_NONLINEAR);
 	}
       g_list_free (from_ancestors);
       g_list_free (to_ancestors);
@@ -9091,15 +9353,41 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
 
-      if (GTK_WIDGET_HAS_POINTER (widget) && !GTK_WIDGET_SHADOWED (widget))
-	{
-	  if (!gtk_widget_is_sensitive (widget))
-	    _gtk_widget_synthesize_crossing (widget, NULL, 
-					     GDK_CROSSING_STATE_CHANGED);
-	  else if (old_state == GTK_STATE_INSENSITIVE)
-	    _gtk_widget_synthesize_crossing (NULL, widget, 
-					     GDK_CROSSING_STATE_CHANGED);
-	}
+      if (!GTK_WIDGET_SHADOWED (widget))
+        {
+          GList *event_windows = NULL;
+          GList *devices, *d;
+
+          devices = _gtk_widget_list_devices (widget);
+
+          for (d = devices; d; d = d->next)
+            {
+              GdkWindow *window;
+              GdkDevice *device;
+
+              device = d->data;
+              window = _gtk_widget_get_device_window (widget, device);
+
+              /* Do not propagate more than once to the
+               * same window if non-multidevice aware.
+               */
+              if (!gdk_window_get_support_multidevice (window) &&
+                  g_list_find (event_windows, window))
+                continue;
+
+              if (!gtk_widget_is_sensitive (widget))
+                _gtk_widget_synthesize_crossing (widget, NULL, d->data,
+                                                 GDK_CROSSING_STATE_CHANGED);
+              else if (old_state == GTK_STATE_INSENSITIVE)
+                _gtk_widget_synthesize_crossing (NULL, widget, d->data,
+                                                 GDK_CROSSING_STATE_CHANGED);
+
+              event_windows = g_list_prepend (event_windows, window);
+            }
+
+          g_list_free (event_windows);
+          g_list_free (devices);
+        }
 
       if (GTK_IS_CONTAINER (widget))
 	{
@@ -11173,6 +11461,56 @@ gtk_widget_get_window (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return widget->window;
+}
+
+/**
+ * gtk_widget_get_support_multidevice:
+ * @widget: a #GtkWidget
+ *
+ * Returns %TRUE if @widget is multiple pointer aware. See
+ * gtk_widget_set_support_multidevice() for more information.
+ *
+ * Returns: %TRUE is @widget is multidevice aware.
+ **/
+gboolean
+gtk_widget_get_support_multidevice (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return GTK_WIDGET_FLAGS (widget) & GTK_MULTIDEVICE;
+}
+
+/**
+ * gtk_widget_set_support_multidevice:
+ * @widget: a #GtkWidget
+ * @support_multidevice: %TRUE to support input from multiple devices.
+ *
+ * Enables or disables multiple pointer awareness. If this setting is %TRUE,
+ * @widget will start receiving multiple, per device enter/leave events. Note
+ * that if custom #GdkWindow<!-- -->s are created in #GtkWidget::realize,
+ * gdk_window_set_support_multidevice() will have to be called manually on them.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_set_support_multidevice (GtkWidget *widget,
+                                    gboolean   support_multidevice)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (support_multidevice)
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_MULTIDEVICE);
+      gtk_widget_set_extension_events (widget, GDK_EXTENSION_EVENTS_ALL);
+    }
+  else
+    {
+      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MULTIDEVICE);
+      gtk_widget_set_extension_events (widget, GDK_EXTENSION_EVENTS_NONE);
+    }
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_set_support_multidevice (widget->window, support_multidevice);
 }
 
 static void

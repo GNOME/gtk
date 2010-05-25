@@ -33,7 +33,8 @@
 #include "gdk.h"
 #include "gdkwindowimpl.h"
 #include "gdkprivate-win32.h"
-#include "gdkinput-win32.h"
+#include "gdkdeviceprivate.h"
+#include "gdkdevicemanager-win32.h"
 #include "gdkenumtypes.h"
 
 static GdkColormap* gdk_window_impl_win32_get_colormap (GdkDrawable *drawable);
@@ -786,9 +787,6 @@ _gdk_win32_window_destroy (GdkWindow *window,
   
   GDK_NOTE (MISC, g_print ("_gdk_win32_window_destroy: %p\n",
 			   GDK_WINDOW_HWND (window)));
-
-  if (private->extension_events != 0)
-    _gdk_input_window_destroy (window);
 
   /* Remove ourself from the modal stack */
   _gdk_remove_modal_window (window);
@@ -1829,12 +1827,12 @@ gdk_win32_window_set_back_pixmap (GdkWindow *window,
 }
 
 static void
-gdk_win32_window_set_cursor (GdkWindow *window,
-			     GdkCursor *cursor)
+gdk_win32_window_set_device_cursor (GdkWindow *window,
+                                    GdkDevice *device,
+                                    GdkCursor *cursor)
 {
   GdkWindowImplWin32 *impl;
   GdkCursorPrivate *cursor_private;
-  GdkWindowObject *parent_window;
   HCURSOR hcursor;
   HCURSOR hprevcursor;
   
@@ -1859,6 +1857,8 @@ gdk_win32_window_set_cursor (GdkWindow *window,
    */
   hprevcursor = impl->hcursor;
 
+  GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
+
   if (hcursor == NULL)
     impl->hcursor = NULL;
   else
@@ -1875,62 +1875,10 @@ gdk_win32_window_set_cursor (GdkWindow *window,
 			       hcursor, impl->hcursor));
     }
 
-  if (impl->hcursor != NULL)
-    {
-      /* If the pointer is over our window, set new cursor */
-      GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
-      if (curr_window == window ||
-	  (curr_window && window == gdk_window_get_toplevel (curr_window)))
-        SetCursor (impl->hcursor);
-      else
-	{
-	  /* Climb up the tree and find whether our window is the
-	   * first ancestor that has cursor defined, and if so, set
-	   * new cursor.
-	   */
-	  GdkWindowObject *curr_window_obj = GDK_WINDOW_OBJECT (curr_window);
-	  while (curr_window_obj &&
-		 !GDK_WINDOW_IMPL_WIN32 (curr_window_obj->impl)->hcursor)
-	    {
-	      curr_window_obj = curr_window_obj->parent;
-	      if (curr_window_obj == GDK_WINDOW_OBJECT (window))
-		{
-	          SetCursor (impl->hcursor);
-		  break;
-		}
-	    }
-	}
-    }
-
-  /* Destroy the previous cursor: Need to make sure it's no longer in
-   * use before we destroy it, in case we're not over our window but
-   * the cursor is still set to our old one.
-   */
+  /* Destroy the previous cursor */
   if (hprevcursor != NULL)
     {
-      if (GetCursor () == hprevcursor)
-	{
-	  /* Look for a suitable cursor to use instead */
-	  hcursor = NULL;
-          parent_window = GDK_WINDOW_OBJECT (window)->parent;
-          while (hcursor == NULL)
-	    {
-	      if (parent_window)
-		{
-		  impl = GDK_WINDOW_IMPL_WIN32 (parent_window->impl);
-		  hcursor = impl->hcursor;
-		  parent_window = parent_window->parent;
-		}
-	      else
-		{
-		  hcursor = LoadCursor (NULL, IDC_ARROW);
-		}
-	    }
-          SetCursor (hcursor);
-        }
-
       GDK_NOTE (MISC, g_print ("... DestroyCursor (%p)\n", hprevcursor));
-      
       API_CALL (DestroyCursor, (hprevcursor));
     }
 }
@@ -2113,87 +2061,43 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 			   r.left, r.top));
 }
 
-
-static GdkModifierType
-get_current_mask (void)
-{
-  GdkModifierType mask;
-  BYTE kbd[256];
-
-  GetKeyboardState (kbd);
-  mask = 0;
-  if (kbd[VK_SHIFT] & 0x80)
-    mask |= GDK_SHIFT_MASK;
-  if (kbd[VK_CAPITAL] & 0x80)
-    mask |= GDK_LOCK_MASK;
-  if (kbd[VK_CONTROL] & 0x80)
-    mask |= GDK_CONTROL_MASK;
-  if (kbd[VK_MENU] & 0x80)
-    mask |= GDK_MOD1_MASK;
-  if (kbd[VK_LBUTTON] & 0x80)
-    mask |= GDK_BUTTON1_MASK;
-  if (kbd[VK_MBUTTON] & 0x80)
-    mask |= GDK_BUTTON2_MASK;
-  if (kbd[VK_RBUTTON] & 0x80)
-    mask |= GDK_BUTTON3_MASK;
-
-  return mask;
-}
-    
 static gboolean
-gdk_window_win32_get_pointer (GdkWindow       *window,
-			      gint            *x,
-			      gint            *y,
-			      GdkModifierType *mask)
+gdk_window_win32_get_device_state (GdkWindow       *window,
+                                   GdkDevice       *device,
+                                   gint            *x,
+                                   gint            *y,
+                                   GdkModifierType *mask)
 {
-  gboolean return_val;
-  POINT point;
-  HWND hwnd, hwndc;
+  GdkWindow *child;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
-  
-  return_val = TRUE;
 
-  hwnd = GDK_WINDOW_HWND (window);
-  GetCursorPos (&point);
-  ScreenToClient (hwnd, &point);
-
-  *x = point.x;
-  *y = point.y;
-
-  if (window == _gdk_root)
-    {
-      *x += _gdk_offset_x;
-      *y += _gdk_offset_y;
-    }
-
-  hwndc = ChildWindowFromPoint (hwnd, point);
-  if (hwndc != NULL && hwndc != hwnd &&
-      !gdk_win32_handle_table_lookup ((GdkNativeWindow) hwndc))
-    return_val = FALSE; /* Direct child unknown to gdk */
-
-  *mask = get_current_mask ();
-  
-  return return_val;
+  GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
+                                              NULL, &child,
+                                              NULL, NULL,
+                                              x, y, mask);
+  return (child != NULL);
 }
 
 void
-_gdk_windowing_get_pointer (GdkDisplay       *display,
-			    GdkScreen       **screen,
-			    gint             *x,
-			    gint             *y,
-			    GdkModifierType  *mask)
+_gdk_windowing_get_device_state (GdkDisplay       *display,
+                                 GdkDevice        *device,
+                                 GdkScreen       **screen,
+                                 gint             *x,
+                                 gint             *y,
+                                 GdkModifierType  *mask)
 {
-  POINT point;
-
   g_return_if_fail (display == _gdk_display);
-  
-  *screen = _gdk_screen;
-  GetCursorPos (&point);
-  *x = point.x + _gdk_offset_x;
-  *y = point.y + _gdk_offset_y;
 
-  *mask = get_current_mask ();
+  if (screen)
+    *screen = _gdk_screen;
+
+  GDK_DEVICE_GET_CLASS (device)->query_state (device,
+                                              gdk_screen_get_root_window (_gdk_screen),
+                                              NULL, NULL,
+                                              x, y,
+                                              NULL, NULL,
+                                              mask);
 }
 
 void
@@ -2202,64 +2106,40 @@ gdk_display_warp_pointer (GdkDisplay *display,
 			  gint        x,
 			  gint        y)
 {
+  GdkDeviceManagerWin32 *device_manager;
+
   g_return_if_fail (display == _gdk_display);
   g_return_if_fail (screen == _gdk_screen);
 
-  SetCursorPos (x - _gdk_offset_x, y - _gdk_offset_y);
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (display));
+  GDK_DEVICE_GET_CLASS (device_manager->core_pointer)->warp (device_manager->core_pointer,
+                                                             screen, x, y);
+}
+
+void
+gdk_display_warp_device (GdkDisplay *display,
+                         GdkDevice  *device,
+                         GdkScreen  *screen,
+                         gint        x,
+                         gint        y)
+{
+  g_return_if_fail (display == _gdk_display);
+  g_return_if_fail (screen == _gdk_screen);
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (display == gdk_device_get_display (device));
+
+  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (GdkDisplay *display,
-				  gint       *win_x,
-				  gint       *win_y,
-				  GdkModifierType *mask,
-				  gboolean    get_toplevel)
+_gdk_windowing_window_at_device_position (GdkDisplay      *display,
+                                          GdkDevice       *device,
+                                          gint            *win_x,
+                                          gint            *win_y,
+                                          GdkModifierType *mask,
+                                          gboolean         get_toplevel)
 {
-  GdkWindow *window;
-  POINT point, pointc;
-  HWND hwnd, hwndc;
-  RECT rect;
-
-  GetCursorPos (&pointc);
-  point = pointc;
-  hwnd = WindowFromPoint (point);
-
-  if (hwnd == NULL)
-    {
-      window = _gdk_root;
-      *win_x = pointc.x + _gdk_offset_x;
-      *win_y = pointc.y + _gdk_offset_y;
-      return window;
-    }
-      
-  ScreenToClient (hwnd, &point);
-
-  do {
-    if (get_toplevel &&
-	(window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd)) != NULL &&
-	GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-      break;
-
-    hwndc = ChildWindowFromPoint (hwnd, point);
-    ClientToScreen (hwnd, &point);
-    ScreenToClient (hwndc, &point);
-  } while (hwndc != hwnd && (hwnd = hwndc, 1));
-
-  window = gdk_win32_handle_table_lookup ((GdkNativeWindow) hwnd);
-
-  if (window && (win_x || win_y))
-    {
-      GetClientRect (hwnd, &rect);
-      *win_x = point.x - rect.left;
-      *win_y = point.y - rect.top;
-    }
-
-  GDK_NOTE (MISC, g_print ("_gdk_windowing_window_at_pointer: %+d%+d %p%s\n",
-			   *win_x, *win_y,
-			   hwnd,
-			   (window == NULL ? " NULL" : "")));
-
-  return window;
+  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device, win_x, win_y, mask, get_toplevel);
 }
 
 static GdkEventMask  
@@ -3485,9 +3365,9 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_background = gdk_win32_window_set_background;
   iface->set_back_pixmap = gdk_win32_window_set_back_pixmap;
   iface->reparent = gdk_win32_window_reparent;
-  iface->set_cursor = gdk_win32_window_set_cursor;
+  iface->set_device_cursor = gdk_win32_window_set_device_cursor;
   iface->get_geometry = gdk_win32_window_get_geometry;
-  iface->get_pointer = gdk_window_win32_get_pointer;
+  iface->get_device_state = gdk_window_win32_get_device_state;
   iface->get_root_coords = gdk_win32_window_get_root_coords;
   iface->shape_combine_region = gdk_win32_window_shape_combine_region;
   iface->input_shape_combine_region = gdk_win32_input_shape_combine_region;
@@ -3496,6 +3376,4 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
   iface->queue_translation = _gdk_win32_window_queue_translation;
   iface->destroy = _gdk_win32_window_destroy;
-  iface->input_window_destroy = _gdk_input_window_destroy;
-  iface->input_window_crossing = _gdk_input_crossing_event;
 }

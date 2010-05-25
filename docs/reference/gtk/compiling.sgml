@@ -63,6 +63,13 @@ symbol GDK_MULTIHEAD_SAFE by using the command line option
 </para>
 
 <para>
+Similarly, if you want to make sure that your program doesn't use any
+functions which may be problematic in a multidevice setting, you can
+define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
+line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
+</para>
+
+<para>
 The recommended way of using GTK+ has always been to only include the
 toplevel headers <filename>gtk.h</filename>, <filename>gdk.h</filename>, 
 <filename>gdk-pixbuf.h</filename>.

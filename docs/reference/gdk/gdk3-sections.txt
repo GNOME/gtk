@@ -81,6 +81,7 @@ gdk_filter_return_get_type
 gdk_font_type_get_type
 gdk_function_get_type
 gdk_gc_values_mask_get_type
+gdk_grab_ownership_get_type
 gdk_grab_status_get_type
 gdk_gravity_get_type
 gdk_image_type_get_type
@@ -110,8 +111,7 @@ gdk_window_type_get_type
 gdk_window_type_hint_get_type
 gdk_wm_decoration_get_type
 gdk_wm_function_get_type
-gdk_pointer_grab_info_libgtk_only
-gdk_keyboard_grab_info_libgtk_only
+gdk_device_grab_info_libgtk_only
 gdk_add_option_entries_libgtk_only
 gdk_pre_parse_libgtk_only
 </SECTION>
@@ -126,9 +126,11 @@ gdk_display_get_name
 gdk_display_get_n_screens
 gdk_display_get_screen
 gdk_display_get_default_screen
+gdk_display_get_device_manager
 gdk_display_pointer_ungrab
 gdk_display_keyboard_ungrab
 gdk_display_pointer_is_grabbed
+gdk_display_device_is_grabbed
 gdk_display_beep
 gdk_display_sync
 gdk_display_flush
@@ -141,10 +143,15 @@ gdk_display_add_client_message_filter
 gdk_display_set_double_click_time
 gdk_display_set_double_click_distance
 gdk_display_get_pointer
+gdk_display_get_device_state
 gdk_display_get_window_at_pointer
+gdk_display_get_window_at_device_position
 GdkDisplayPointerHooks
 gdk_display_set_pointer_hooks
+GdkDisplayDeviceHooks
+gdk_display_set_device_hooks
 gdk_display_warp_pointer
+gdk_display_warp_device
 gdk_display_supports_cursor_color
 gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
@@ -741,6 +748,7 @@ gdk_window_get_origin
 gdk_window_get_deskrelative_origin
 gdk_window_get_root_coords
 gdk_window_get_pointer
+gdk_window_get_device_position
 GdkModifierType
 gdk_window_get_parent
 gdk_window_get_toplevel
@@ -761,6 +769,14 @@ GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
 gdk_get_default_root_window
+
+<SUBSECTION>
+gdk_window_get_support_multidevice
+gdk_window_set_support_multidevice
+gdk_window_get_device_cursor
+gdk_window_set_device_cursor
+gdk_window_get_device_events
+gdk_window_set_device_events
 
 <SUBSECTION>
 GdkPointerHooks
@@ -1027,14 +1043,22 @@ gdk_keymap_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>Input Devices</TITLE>
-<FILE>input_devices</FILE>
+<TITLE>GdkDeviceManager</TITLE>
+<FILE>gdkdevicemanager</FILE>
+GdkDeviceManager
 GdkDevice
+GdkDeviceType
 GdkInputSource
 GdkInputMode
 GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
+GdkGrabOwnership
+gdk_enable_multidevice
+gdk_device_manager_get_display
+gdk_device_manager_list_devices
+
+<SUBSECTION>
 gdk_devices_list
 gdk_device_get_name
 gdk_device_set_source
@@ -1045,8 +1069,16 @@ gdk_device_set_key
 gdk_device_get_key
 gdk_device_set_axis_use
 gdk_device_get_axis_use
-gdk_device_get_core_pointer
+gdk_device_get_associated_device
+gdk_device_get_device_type
+gdk_device_get_display
 gdk_device_get_has_cursor
+gdk_device_get_n_axes
+gdk_device_get_core_pointer
+
+<SUBSECTION>
+gdk_device_grab
+gdk_device_ungrab
 
 <SUBSECTION>
 gdk_device_get_state
@@ -1054,16 +1086,30 @@ gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
+gdk_device_list_axes
+gdk_device_get_axis_value
 
 <SUBSECTION>
 gdk_input_set_extension_events
 GdkExtensionMode
+
+<SUBSECTION>
+gdk_devices_list
+gdk_device_get_core_pointer
 
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE
 GDK_TYPE_EXTENSION_MODE
 GDK_TYPE_INPUT_MODE
 GDK_TYPE_INPUT_SOURCE
+GDK_TYPE_DEVICE_TYPE
+GDK_TYPE_GRAB_OWNERSHIP
+GDK_DEVICE_MANAGER
+GDK_DEVICE_MANAGER_CLASS
+GDK_DEVICE_MANAGER_GET_CLASS
+GDK_IS_DEVICE_MANAGER
+GDK_IS_DEVICE_MANAGER_CLASS
+GDK_TYPE_DEVICE_MANAGER
 GDK_DEVICE
 GDK_DEVICE_CLASS
 GDK_DEVICE_GET_CLASS
@@ -1073,7 +1119,12 @@ GDK_TYPE_DEVICE
 
 <SUBSECTION Private>
 GdkDeviceClass
+GdkDevicePrivate
+GdkDeviceManagerClass
+GdkDeviceManagerPrivate
 gdk_device_get_type
+gdk_device_manager_get_type
+gdk_device_type_get_type
 GDK_MAX_TIMECOORD_AXES
 </SECTION>
 
@@ -1101,6 +1152,9 @@ gdk_event_get_axis
 gdk_event_get_coords
 gdk_event_get_root_coords
 gdk_event_request_motions
+gdk_events_get_angle
+gdk_events_get_center
+gdk_events_get_distance
 
 <SUBSECTION>
 gdk_event_handler_set
@@ -1117,6 +1171,8 @@ gdk_get_show_events
 gdk_set_show_events
 gdk_event_set_screen
 gdk_event_get_screen
+gdk_event_get_device
+gdk_event_set_device
 
 <SUBSECTION>
 gdk_setting_get
@@ -1240,6 +1296,8 @@ gdk_drag_context_get_action
 gdk_drag_context_get_actions
 gdk_drag_context_get_suggested_action
 gdk_drag_context_list_targets
+gdk_drag_context_get_device
+gdk_drag_context_set_device
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT

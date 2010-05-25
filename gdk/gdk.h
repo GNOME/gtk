@@ -33,6 +33,8 @@
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkcolor.h>
 #include <gdk/gdkcursor.h>
+#include <gdk/gdkdevice.h>
+#include <gdk/gdkdevicemanager.h>
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdnd.h>
@@ -66,6 +68,7 @@ G_BEGIN_DECLS
 /* Initialization, exit and events
  */
 #define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
+void      gdk_enable_multidevice        (void);
 void 	  gdk_parse_args	   	(gint	   	*argc,
 					 gchar        ***argv);
 void 	  gdk_init		   	(gint	   	*argc,
@@ -109,6 +112,7 @@ gint gdk_input_add	  (gint		     source,
 void gdk_input_remove	  (gint		     tag);
 #endif /* GDK_DISABLE_DEPRECATED */
 
+#ifndef GDK_MULTIDEVICE_SAFE
 GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      gboolean      owner_events,
 				      GdkEventMask  event_mask,
@@ -118,18 +122,15 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
 				      guint32       time_);
-
-gboolean gdk_pointer_grab_info_libgtk_only (GdkDisplay *display,
-					    GdkWindow **grab_window,
-					    gboolean   *owner_events);
-gboolean gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-					     GdkWindow **grab_window,
-					     gboolean   *owner_events);
+#endif /* GDK_MULTIDEVICE_SAFE */
 
 #ifndef GDK_MULTIHEAD_SAFE
+
+#ifndef GDK_MULTIDEVICE_SAFE
 void          gdk_pointer_ungrab     (guint32       time_);
 void          gdk_keyboard_ungrab    (guint32       time_);
 gboolean      gdk_pointer_is_grabbed (void);
+#endif /* GDK_MULTIDEVICE_SAFE */
 
 gint gdk_screen_width  (void) G_GNUC_CONST;
 gint gdk_screen_height (void) G_GNUC_CONST;

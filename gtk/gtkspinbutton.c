@@ -903,10 +903,12 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
 
   if (event->window == spin->panel)
     {
+      GdkDevice *device;
       gint x;
       gint y;
 
-      gdk_window_get_pointer (spin->panel, &x, &y, NULL);
+      device = gdk_event_get_device ((GdkEvent *) event);
+      gdk_window_get_device_position (spin->panel, device, &x, &y, NULL);
 
       if (y <= widget->requisition.height / 2)
 	spin->in_child = GTK_ARROW_UP;
@@ -915,7 +917,7 @@ gtk_spin_button_enter_notify (GtkWidget        *widget,
 
       gtk_widget_queue_draw (GTK_WIDGET (spin));
     }
- 
+
   if (GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event)
     return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->enter_notify_event (widget, event);
 

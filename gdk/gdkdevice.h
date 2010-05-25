@@ -1,0 +1,292 @@
+/* GDK - The GIMP Drawing Kit
+ * Copyright (C) 2009 Carlos Garnacho <carlosg@gnome.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
+#ifndef __GDK_DEVICE_H__
+#define __GDK_DEVICE_H__
+
+#include <gdk/gdktypes.h>
+
+
+G_BEGIN_DECLS
+
+#define GDK_TYPE_DEVICE         (gdk_device_get_type ())
+#define GDK_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE, GdkDevice))
+#define GDK_IS_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE))
+
+typedef struct _GdkDevice GdkDevice;
+typedef struct _GdkDevicePrivate GdkDevicePrivate;
+
+typedef struct _GdkDeviceKey GdkDeviceKey;
+typedef struct _GdkDeviceAxis GdkDeviceAxis;
+typedef struct _GdkTimeCoord GdkTimeCoord;
+
+/**
+ * GdkExtensionMode:
+ * @GDK_EXTENSION_EVENTS_NONE: no extension events are desired.
+ * @GDK_EXTENSION_EVENTS_ALL: all extension events are desired.
+ * @GDK_EXTENSION_EVENTS_CURSOR: extension events are desired only if a cursor
+ *                               will be displayed for the device.
+ *
+ * An enumeration used to specify which extension events
+ * are desired for a particular widget.
+ */
+typedef enum
+{
+  GDK_EXTENSION_EVENTS_NONE,
+  GDK_EXTENSION_EVENTS_ALL,
+  GDK_EXTENSION_EVENTS_CURSOR
+} GdkExtensionMode;
+
+/**
+ * GdkInputSource:
+ * @GDK_SOURCE_MOUSE: the device is a mouse. (This will be reported for the core
+ *                    pointer, even if it is something else, such as a trackball.)
+ * @GDK_SOURCE_PEN: the device is a stylus of a graphics tablet or similar device.
+ * @GDK_SOURCE_ERASER: the device is an eraser. Typically, this would be the other end
+ *                     of a stylus on a graphics tablet.
+ * @GDK_SOURCE_CURSOR: the device is a graphics tablet "puck" or similar device.
+ * @GDK_SOURCE_KEYBOARD: the device is a keyboard.
+ *
+ * An enumeration describing the type of an input device in general terms.
+ */
+typedef enum
+{
+  GDK_SOURCE_MOUSE,
+  GDK_SOURCE_PEN,
+  GDK_SOURCE_ERASER,
+  GDK_SOURCE_CURSOR,
+  GDK_SOURCE_KEYBOARD
+} GdkInputSource;
+
+/**
+ * GdkInputMode:
+ * @GDK_MODE_DISABLED: the device is disabled and will not report any events.
+ * @GDK_MODE_SCREEN: the device is enabled. The device's coordinate space
+ *                   maps to the entire screen.
+ * @GDK_MODE_WINDOW: the device is enabled. The device's coordinate space
+ *                   is mapped to a single window. The manner in which this window
+ *                   is chosen is undefined, but it will typically be the same
+ *                   way in which the focus window for key events is determined.
+ *
+ * An enumeration that describes the mode of an input device.
+ */
+typedef enum
+{
+  GDK_MODE_DISABLED,
+  GDK_MODE_SCREEN,
+  GDK_MODE_WINDOW
+} GdkInputMode;
+
+/**
+ * GdkAxisUse:
+ * @GDK_AXIS_IGNORE: the axis is ignored.
+ * @GDK_AXIS_X: the axis is used as the x axis.
+ * @GDK_AXIS_Y: the axis is used as the y axis.
+ * @GDK_AXIS_PRESSURE: the axis is used for pressure information.
+ * @GDK_AXIS_XTILT: the axis is used for x tilt information.
+ * @GDK_AXIS_YTILT: the axis is used for x tilt information.
+ * @GDK_AXIS_WHEEL: the axis is used for wheel information.
+ * @GDK_AXIS_LAST: a constant equal to the numerically highest axis value.
+ *
+ * An enumeration describing the way in which a device
+ * axis (valuator) maps onto the predefined valuator
+ * types that GTK+ understands.
+ */
+typedef enum
+{
+  GDK_AXIS_IGNORE,
+  GDK_AXIS_X,
+  GDK_AXIS_Y,
+  GDK_AXIS_PRESSURE,
+  GDK_AXIS_XTILT,
+  GDK_AXIS_YTILT,
+  GDK_AXIS_WHEEL,
+  GDK_AXIS_LAST
+} GdkAxisUse;
+
+/**
+ * GdkDeviceType:
+ * @GDK_DEVICE_TYPE_MASTER: Device is a master (or virtual) device. There will
+ *                          be an associated focus indicator on the screen.
+ * @GDK_DEVICE_TYPE_SLAVE: Device is a slave (or physical) device.
+ * @GDK_DEVICE_TYPE_FLOATING: Device is a physical device, currently not attached to
+ *                            any virtual device.
+ *
+ * Indicates the device type. See <link linkend="GdkDeviceManager.description">above</link>
+ * for more information about the meaning of these device types.
+ */
+typedef enum {
+  GDK_DEVICE_TYPE_MASTER,
+  GDK_DEVICE_TYPE_SLAVE,
+  GDK_DEVICE_TYPE_FLOATING
+} GdkDeviceType;
+
+/**
+ * GdkDeviceKey:
+ * @keyval: the keyval to generate when the macro button is pressed.
+ *          If this is 0, no keypress will be generated.
+ * @modifiers: the modifiers set for the generated key event.
+ *
+ * The <structname>GdkDeviceKey</structname> structure contains information
+ * about the mapping of one device macro button onto a normal X key event.
+ */
+struct _GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+
+/**
+ * GdkDeviceAxis:
+ * @use: specifies how the axis is used.
+ * @min: the minimal value that will be reported by this axis.
+ * @max: the maximal value that will be reported by this axis.
+ *
+ * The <structname>GdkDeviceAxis</structname> structure contains information
+ * about the range and mapping of a device axis.
+ */
+struct _GdkDeviceAxis
+{
+  GdkAxisUse use;
+  gdouble    min;
+  gdouble    max;
+};
+
+/* We don't allocate each coordinate this big, but we use it to
+ * be ANSI compliant and avoid accessing past the defined limits.
+ */
+#define GDK_MAX_TIMECOORD_AXES 128
+
+/**
+ * GdkTimeCoord:
+ * @time: The timestamp for this event.
+ * @axes: the values of the device's axes.
+ *
+ * The #GdkTimeCoord structure stores a single event in a motion history.
+ */
+struct _GdkTimeCoord
+{
+  guint32 time;
+  gdouble axes[GDK_MAX_TIMECOORD_AXES];
+};
+
+struct _GdkDevice
+{
+  GObject parent_instance;
+
+  /* All fields are read-only */
+  gchar *GSEAL (name);
+  GdkInputSource GSEAL (source);
+  GdkInputMode GSEAL (mode);
+  gboolean GSEAL (has_cursor);	     /* TRUE if a X pointer follows device motion */
+
+  gint GSEAL (num_axes);
+  GdkDeviceAxis *GSEAL (axes);
+
+  gint GSEAL (num_keys);
+  GdkDeviceKey *GSEAL (keys);
+
+  /*< private >*/
+  GdkDevicePrivate *priv;
+};
+
+GType gdk_device_get_type (void) G_GNUC_CONST;
+
+G_CONST_RETURN gchar *gdk_device_get_name       (GdkDevice *device);
+gboolean              gdk_device_get_has_cursor (GdkDevice *device);
+
+/* Functions to configure a device */
+GdkInputSource gdk_device_get_source    (GdkDevice      *device);
+void           gdk_device_set_source    (GdkDevice      *device,
+					 GdkInputSource  source);
+
+GdkInputMode   gdk_device_get_mode      (GdkDevice      *device);
+gboolean       gdk_device_set_mode      (GdkDevice      *device,
+					 GdkInputMode    mode);
+
+gboolean       gdk_device_get_key       (GdkDevice       *device,
+                                         guint            index_,
+                                         guint           *keyval,
+                                         GdkModifierType *modifiers);
+void           gdk_device_set_key       (GdkDevice      *device,
+					 guint           index_,
+					 guint           keyval,
+					 GdkModifierType modifiers);
+
+GdkAxisUse     gdk_device_get_axis_use  (GdkDevice         *device,
+                                         guint              index_);
+void           gdk_device_set_axis_use  (GdkDevice         *device,
+                                         guint              index_,
+                                         GdkAxisUse         use);
+
+
+void     gdk_device_get_state    (GdkDevice         *device,
+				  GdkWindow         *window,
+				  gdouble           *axes,
+				  GdkModifierType   *mask);
+gboolean gdk_device_get_history  (GdkDevice         *device,
+				  GdkWindow         *window,
+				  guint32            start,
+				  guint32            stop,
+				  GdkTimeCoord    ***events,
+				  guint             *n_events);
+void     gdk_device_free_history (GdkTimeCoord     **events,
+				  gint               n_events);
+
+guint    gdk_device_get_n_axes     (GdkDevice       *device);
+GList *  gdk_device_list_axes      (GdkDevice       *device);
+gboolean gdk_device_get_axis_value (GdkDevice       *device,
+                                    gdouble         *axes,
+                                    GdkAtom          axis_label,
+                                    gdouble         *value);
+
+gboolean gdk_device_get_axis     (GdkDevice         *device,
+				  gdouble           *axes,
+				  GdkAxisUse         use,
+				  gdouble           *value);
+GdkDisplay * gdk_device_get_display (GdkDevice      *device);
+
+GdkDevice  * gdk_device_get_associated_device (GdkDevice     *device);
+
+GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
+
+GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
+                                      GdkWindow        *window,
+                                      GdkGrabOwnership  grab_ownership,
+                                      gboolean          owner_events,
+                                      GdkEventMask      event_mask,
+                                      GdkCursor        *cursor,
+                                      guint32           time_);
+
+void          gdk_device_ungrab      (GdkDevice        *device,
+                                      guint32           time_);
+
+gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
+                                           GdkDevice   *device,
+                                           GdkWindow  **grab_window,
+                                           gboolean    *owner_events);
+
+
+G_END_DECLS
+
+#endif /* __GDK_DEVICE_H__ */

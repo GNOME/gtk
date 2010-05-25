@@ -97,11 +97,6 @@ struct _GdkDevicePrivate {
   GdkDevice  info;
 };
 
-struct _GdkDeviceClass
-{
-  GObjectClass parent_class;
-};
-
 struct _GdkInputWindow
 {
   /* gdk window */

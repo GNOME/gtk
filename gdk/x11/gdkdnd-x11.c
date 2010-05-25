@@ -96,6 +96,7 @@ struct _GdkDragContextPrivateX11 {
   guint version;                /* Xdnd protocol version */
 
   GSList *window_caches;
+  GdkDevice *device;
 };
 
 #define PRIVATE_DATA(context) ((GdkDragContextPrivateX11 *) GDK_DRAG_CONTEXT (context)->windowing_data)
@@ -218,6 +219,55 @@ GdkDragContext *
 gdk_drag_context_new (void)
 {
   return g_object_new (GDK_TYPE_DRAG_CONTEXT, NULL);
+}
+
+/**
+ * gdk_drag_context_set_device:
+ * @context: a #GdkDragContext
+ * @device: a #GdkDevice
+ *
+ * Associates a #GdkDevice to @context, so all Drag and Drop events
+ * for @context are emitted as if they came from this device.
+ **/
+void
+gdk_drag_context_set_device (GdkDragContext *context,
+                             GdkDevice      *device)
+{
+  GdkDragContextPrivateX11 *private;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  private = PRIVATE_DATA (context);
+
+  if (private->device)
+    {
+      g_object_unref (private->device);
+      private->device = NULL;
+    }
+
+  if (device)
+    private->device = g_object_ref (device);
+}
+
+/**
+ * gdk_drag_context_get_device:
+ * @context: a #GdkDragContext
+ *
+ * Returns the #GdkDevice associated to the drag context.
+ *
+ * Returns: The #GdkDevice associated to @context.
+ **/
+GdkDevice *
+gdk_drag_context_get_device (GdkDragContext *context)
+{
+  GdkDragContextPrivateX11 *private;
+
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  private = PRIVATE_DATA (context);
+
+  return private->device;
 }
 
 static GdkDragContext *
@@ -2083,6 +2133,7 @@ xdnd_status_filter (GdkXEvent *xev,
       event->dnd.send_event = FALSE;
       event->dnd.type = GDK_DRAG_STATUS;
       event->dnd.context = context;
+      gdk_event_set_device (event, gdk_drag_context_get_device (context));
       g_object_ref (context);
 
       event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
@@ -2130,6 +2181,7 @@ xdnd_finished_filter (GdkXEvent *xev,
       
       event->dnd.type = GDK_DROP_FINISHED;
       event->dnd.context = context;
+      gdk_event_set_device (event, gdk_drag_context_get_device (context));
       g_object_ref (context);
 
       event->dnd.time = GDK_CURRENT_TIME; /* FIXME? */
@@ -2237,7 +2289,7 @@ send_client_message_async_cb (Window   window,
       context->dest_window &&
       window == GDK_WINDOW_XID (context->dest_window))
     {
-      GdkEvent temp_event;
+      GdkEvent *temp_event;
       GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
       g_object_unref (context->dest_window);
@@ -2246,13 +2298,16 @@ send_client_message_async_cb (Window   window,
 
       private->drag_status = GDK_DRAG_STATUS_DRAG;
 
-      temp_event.dnd.type = GDK_DRAG_STATUS;
-      temp_event.dnd.window = context->source_window;
-      temp_event.dnd.send_event = TRUE;
-      temp_event.dnd.context = context;
-      temp_event.dnd.time = GDK_CURRENT_TIME;
+      temp_event = gdk_event_new (GDK_DRAG_STATUS);
+      temp_event->dnd.window = g_object_ref (context->source_window);
+      temp_event->dnd.send_event = TRUE;
+      temp_event->dnd.context = g_object_ref (context);
+      temp_event->dnd.time = GDK_CURRENT_TIME;
+      gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-      gdk_event_put (&temp_event);
+      gdk_event_put (temp_event);
+
+      gdk_event_free (temp_event);
     }
 
   g_object_unref (context);
@@ -2309,13 +2364,15 @@ xdnd_send_xevent (GdkDragContext *context,
 	  if (gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name) ==
 	      event_send->xclient.message_type)
 	    {
-	      GdkEvent temp_event;
-	      temp_event.any.window = window;
+	      GdkEvent *temp_event;
 
-	      if  ((*xdnd_filters[i].func) (event_send, &temp_event, NULL) == GDK_FILTER_TRANSLATE)
+              temp_event = gdk_event_new (GDK_NOTHING);
+              temp_event->any.window = g_object_ref (window);
+
+	      if ((*xdnd_filters[i].func) (event_send, temp_event, NULL) == GDK_FILTER_TRANSLATE)
 		{
-		  gdk_event_put (&temp_event);
-		  g_object_unref (temp_event.dnd.context);
+		  gdk_event_put (temp_event);
+                  gdk_event_free (temp_event);
 		}
 	      
 	      return TRUE;
@@ -2806,6 +2863,9 @@ xdnd_enter_filter (GdkXEvent *xev,
   new_context->protocol = GDK_DRAG_PROTO_XDND;
   PRIVATE_DATA(new_context)->version = version;
 
+  /* FIXME: Should extend DnD protocol to have device info */
+  gdk_drag_context_set_device (new_context, gdk_display_get_core_pointer (display));
+
   new_context->source_window = gdk_window_lookup_for_display (display, source_window);
   if (new_context->source_window)
     g_object_ref (new_context->source_window);
@@ -2872,6 +2932,7 @@ xdnd_enter_filter (GdkXEvent *xev,
 
   event->dnd.type = GDK_DRAG_ENTER;
   event->dnd.context = new_context;
+  gdk_event_set_device (event, gdk_drag_context_get_device (new_context));
   g_object_ref (new_context);
 
   display_x11->current_dest_drag = new_context;
@@ -2909,6 +2970,7 @@ xdnd_leave_filter (GdkXEvent *xev,
       event->dnd.type = GDK_DRAG_LEAVE;
       /* Pass ownership of context to the event */
       event->dnd.context = display_x11->current_dest_drag;
+      gdk_event_set_device (event, gdk_drag_context_get_device (event->dnd.context));
 
       display_x11->current_dest_drag = NULL;
 
@@ -2952,6 +3014,7 @@ xdnd_position_filter (GdkXEvent *xev,
     {
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.context = display_x11->current_dest_drag;
+      gdk_event_set_device (event, gdk_drag_context_get_device (event->dnd.context));
       g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = time;
@@ -3007,6 +3070,7 @@ xdnd_drop_filter (GdkXEvent *xev,
       event->dnd.type = GDK_DROP_START;
 
       event->dnd.context = display_x11->current_dest_drag;
+      gdk_event_set_device (event, gdk_drag_context_get_device (event->dnd.context));
       g_object_ref (display_x11->current_dest_drag);
 
       event->dnd.time = time;
@@ -3086,6 +3150,8 @@ gdk_drag_begin (GdkWindow     *window,
 		GList         *targets)
 {
   GdkDragContext *new_context;
+  GdkDisplay *display;
+  GdkDevice *device;
   
   g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), NULL);
@@ -3099,6 +3165,10 @@ gdk_drag_begin (GdkWindow     *window,
   precache_target_list (new_context);
   
   new_context->actions = 0;
+
+  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  device = gdk_display_get_core_pointer (display);
+  gdk_drag_context_set_device (new_context, device);
 
   return new_context;
 }
@@ -3421,7 +3491,7 @@ gdk_drag_motion (GdkDragContext *context,
 
   if (context->dest_window != dest_window)
     {
-      GdkEvent temp_event;
+      GdkEvent *temp_event;
 
       /* Send a leave to the last destination */
       gdk_drag_do_leave (context, time);
@@ -3465,18 +3535,19 @@ gdk_drag_motion (GdkDragContext *context,
       /* Push a status event, to let the client know that
        * the drag changed 
        */
-
-      temp_event.dnd.type = GDK_DRAG_STATUS;
-      temp_event.dnd.window = context->source_window;
+      temp_event = gdk_event_new (GDK_DRAG_STATUS);
+      temp_event->dnd.window = g_object_ref (context->source_window);
       /* We use this to signal a synthetic status. Perhaps
        * we should use an extra field...
        */
-      temp_event.dnd.send_event = TRUE;
+      temp_event->dnd.send_event = TRUE;
 
-      temp_event.dnd.context = context;
-      temp_event.dnd.time = time;
+      temp_event->dnd.context = g_object_ref (context);
+      temp_event->dnd.time = time;
+      gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-      gdk_event_put (&temp_event);
+      gdk_event_put (temp_event);
+      gdk_event_free (temp_event);
     }
   else
     {
@@ -3505,7 +3576,7 @@ gdk_drag_motion (GdkDragContext *context,
 
 	    case GDK_DRAG_PROTO_ROOTWIN:
 	      {
-		GdkEvent temp_event;
+		GdkEvent *temp_event;
 		/* GTK+ traditionally has used application/x-rootwin-drop,
 		 * but the XDND spec specifies x-rootwindow-drop.
 		 */
@@ -3520,13 +3591,15 @@ gdk_drag_motion (GdkDragContext *context,
 		else
 		  context->action = 0;
 
-		temp_event.dnd.type = GDK_DRAG_STATUS;
-		temp_event.dnd.window = context->source_window;
-		temp_event.dnd.send_event = FALSE;
-		temp_event.dnd.context = context;
-		temp_event.dnd.time = time;
+                temp_event = gdk_event_new (GDK_DRAG_STATUS);
+		temp_event->dnd.window = g_object_ref (context->source_window);
+		temp_event->dnd.send_event = FALSE;
+		temp_event->dnd.context = g_object_ref (context);
+		temp_event->dnd.time = time;
+                gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
 
-		gdk_event_put (&temp_event);
+		gdk_event_put (temp_event);
+                gdk_event_free (temp_event);
 	      }
 	      break;
 	    case GDK_DRAG_PROTO_NONE:

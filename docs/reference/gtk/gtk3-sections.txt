@@ -79,11 +79,6 @@ gtk_accelerator_get_label
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 
-<SUBSECTION Private>
-GtkAccelGroupEntry
-GtkAccelGroupPrivate
-gtk_accel_group_get_type
-
 <SUBSECTION Standard>
 GtkAccelGroupClass
 GTK_TYPE_ACCEL_GROUP
@@ -92,6 +87,11 @@ GTK_IS_ACCEL_GROUP
 GTK_ACCEL_GROUP_CLASS
 GTK_IS_ACCEL_GROUP_CLASS
 GTK_ACCEL_GROUP_GET_CLASS
+
+<SUBSECTION Private>
+GtkAccelGroupPrivate
+GtkAccelGroupEntry
+gtk_accel_group_get_type
 </SECTION>
 
 <SECTION>
@@ -263,10 +263,10 @@ gtk_action_group_add_action_with_accel
 gtk_action_group_remove_action
 GtkActionEntry
 gtk_action_group_add_actions
-gtk_action_group_add_actions_full 
+gtk_action_group_add_actions_full
 GtkToggleActionEntry
 gtk_action_group_add_toggle_actions
-gtk_action_group_add_toggle_actions_full 
+gtk_action_group_add_toggle_actions_full
 GtkRadioActionEntry
 gtk_action_group_add_radio_actions
 gtk_action_group_add_radio_actions_full
@@ -782,6 +782,7 @@ gtk_combo_box_insert_text
 gtk_combo_box_prepend_text
 gtk_combo_box_remove_text
 gtk_combo_box_get_active_text
+gtk_combo_box_popup_for_device
 gtk_combo_box_popup
 gtk_combo_box_popdown
 gtk_combo_box_get_popup_accessible
@@ -1961,6 +1962,7 @@ gtk_menu_new
 gtk_menu_set_screen
 gtk_menu_reorder_child
 gtk_menu_attach
+gtk_menu_popup_for_device
 gtk_menu_popup
 gtk_menu_set_accel_group
 gtk_menu_get_accel_group
@@ -4812,15 +4814,18 @@ gtk_widget_set_parent
 gtk_widget_set_parent_window
 gtk_widget_get_parent_window
 gtk_widget_set_events
+gtk_widget_get_events
 gtk_widget_add_events
 gtk_widget_set_extension_events
 gtk_widget_get_extension_events
+gtk_widget_set_device_events
+gtk_widget_get_device_events
+gtk_widget_add_device_events
 gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_get_colormap
 gtk_widget_set_colormap
 gtk_widget_get_visual
-gtk_widget_get_events
 gtk_widget_get_pointer
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
@@ -4938,11 +4943,14 @@ gtk_widget_is_toplevel
 gtk_widget_set_window
 gtk_widget_set_receives_default
 gtk_widget_get_receives_default
+gtk_widget_set_support_multidevice
+gtk_widget_get_support_multidevice
 gtk_widget_set_realized
 gtk_widget_get_realized
 gtk_widget_set_mapped
 gtk_widget_get_mapped
 gtk_widget_get_requisition
+gtk_widget_device_is_shadowed
 
 <SUBSECTION>
 gtk_requisition_copy
@@ -5091,6 +5099,7 @@ gtk_window_group_new
 gtk_window_group_add_window
 gtk_window_group_remove_window
 gtk_window_group_list_windows
+gtk_window_group_get_current_device_grab
 <SUBSECTION Standard>
 GTK_IS_WINDOW_GROUP
 GTK_IS_WINDOW_GROUP_CLASS
@@ -5132,6 +5141,8 @@ gtk_false
 gtk_grab_add
 gtk_grab_get_current
 gtk_grab_remove
+gtk_device_grab_add
+gtk_device_grab_remove
 
 <SUBSECTION>
 gtk_init_add
@@ -5153,6 +5164,7 @@ gtk_key_snooper_remove
 gtk_get_current_event
 gtk_get_current_event_time
 gtk_get_current_event_state
+gtk_get_current_event_device
 gtk_get_event_widget
 gtk_propagate_event
 

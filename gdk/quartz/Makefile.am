@@ -24,6 +24,8 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkapplaunchcontext-quartz.c \
 	gdkcolor-quartz.c	\
 	gdkcursor-quartz.c	\
+	gdkdevice-core.c	\
+	gdkdevicemanager-core.c	\
 	gdkdisplay-quartz.c	\
 	gdkdnd-quartz.c		\
 	gdkdrawable-quartz.c	\

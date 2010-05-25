@@ -118,7 +118,8 @@ typedef enum
   GTK_APP_PAINTABLE    = 1 << 19,
   GTK_RECEIVES_DEFAULT = 1 << 20,
   GTK_DOUBLE_BUFFERED  = 1 << 21,
-  GTK_NO_SHOW_ALL      = 1 << 22
+  GTK_NO_SHOW_ALL      = 1 << 22,
+  GTK_MULTIDEVICE      = 1 << 23
 } GtkWidgetFlags;
 
 /* Kinds of widget-specific help */
@@ -652,6 +653,10 @@ gboolean  gtk_widget_get_receives_default (GtkWidget           *widget);
 
 gboolean   gtk_widget_has_grab            (GtkWidget           *widget);
 
+gboolean   gtk_widget_device_is_shadowed  (GtkWidget           *widget,
+                                           GdkDevice           *device);
+
+
 void                  gtk_widget_set_name               (GtkWidget    *widget,
 							 const gchar  *name);
 G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
@@ -733,6 +738,12 @@ void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void       gtk_widget_add_events          (GtkWidget           *widget,
 					   gint	                events);
+void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
+                                           GdkDevice           *device,
+					   GdkEventMask		events);
+void       gtk_widget_add_device_events   (GtkWidget           *widget,
+                                           GdkDevice           *device,
+					   GdkEventMask         events);
 void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 					    GdkExtensionMode	mode);
 
@@ -753,6 +764,11 @@ GtkClipboard *gtk_widget_get_clipboard   (GtkWidget *widget,
 GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
                                           GdkRectangle *clip_rect);
 
+/* Multidevice support */
+gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
+void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
+                                                     gboolean        support_multidevice);
+
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);
 
@@ -766,6 +782,8 @@ void         gtk_widget_set_colormap    (GtkWidget      *widget,
 					 GdkColormap    *colormap);
 
 gint	     gtk_widget_get_events	(GtkWidget	*widget);
+GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
+                                           GdkDevice    *device);
 void	     gtk_widget_get_pointer	(GtkWidget	*widget,
 					 gint		*x,
 					 gint		*y);
@@ -959,12 +977,16 @@ void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
 							   GdkScreen    *previous_screen);
 void		  _gtk_widget_propagate_composited_changed (GtkWidget    *widget);
 
-void	   _gtk_widget_set_pointer_window  (GtkWidget      *widget,
+void	   _gtk_widget_set_device_window   (GtkWidget      *widget,
+                                            GdkDevice      *device,
 					    GdkWindow      *pointer_window);
-GdkWindow *_gtk_widget_get_pointer_window  (GtkWidget      *widget);
-gboolean   _gtk_widget_is_pointer_widget   (GtkWidget      *widget);
+GdkWindow *_gtk_widget_get_device_window   (GtkWidget      *widget,
+                                            GdkDevice      *device);
+GList *    _gtk_widget_list_devices        (GtkWidget      *widget);
+
 void       _gtk_widget_synthesize_crossing (GtkWidget      *from,
 					    GtkWidget      *to,
+                                            GdkDevice      *device,
 					    GdkCrossingMode mode);
 
 GdkColormap* _gtk_widget_peek_colormap (void);

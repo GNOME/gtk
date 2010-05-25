@@ -133,6 +133,15 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   gpointer		data,
 					   guint		button,
 					   guint32		activate_time);
+void       gtk_menu_popup_for_device      (GtkMenu             *menu,
+                                           GdkDevice           *device,
+                                           GtkWidget           *parent_menu_shell,
+                                           GtkWidget           *parent_menu_item,
+                                           GtkMenuPositionFunc  func,
+                                           gpointer             data,
+                                           guint                button,
+                                           guint32              activate_time);
+
 
 /* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation

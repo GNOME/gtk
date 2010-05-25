@@ -804,6 +804,7 @@ gtk_combo_box_new_text
 gtk_combo_box_new_with_model
 gtk_combo_box_popdown
 gtk_combo_box_popup
+gtk_combo_box_popup_for_device
 gtk_combo_box_prepend_text
 gtk_combo_box_remove_text
 gtk_combo_box_set_active
@@ -1950,6 +1951,7 @@ gtk_list_store_swap
 #if IN_FILE(__GTK_MAIN_C__)
 gtk_get_option_group
 gtk_get_current_event
+gtk_get_current_event_device
 gtk_get_current_event_state
 gtk_get_current_event_time
 gtk_false G_GNUC_CONST
@@ -1963,6 +1965,8 @@ gtk_get_event_widget
 gtk_grab_add
 gtk_grab_get_current
 gtk_grab_remove
+gtk_device_grab_add
+gtk_device_grab_remove
 gtk_propagate_event
 gtk_quit_add
 gtk_quit_add_destroy
@@ -2020,6 +2024,7 @@ gtk_menu_get_type G_GNUC_CONST
 gtk_menu_new
 gtk_menu_popdown
 gtk_menu_popup
+gtk_menu_popup_for_device
 gtk_menu_reorder_child
 gtk_menu_reposition
 gtk_menu_set_accel_group
@@ -4304,6 +4309,7 @@ gtk_widget_activate
 gtk_widget_is_composited
 gtk_widget_add_accelerator
 gtk_widget_add_events
+gtk_widget_add_device_events
 gtk_widget_add_mnemonic_label
 gtk_widget_can_activate_accel
 gtk_widget_child_focus
@@ -4338,6 +4344,7 @@ gtk_widget_get_direction
 gtk_widget_get_display
 gtk_widget_get_double_buffered
 gtk_widget_get_events
+gtk_widget_get_device_events
 gtk_widget_get_extension_events
 gtk_widget_get_has_tooltip
 gtk_widget_get_modifier_style
@@ -4424,6 +4431,7 @@ gtk_widget_set_default_direction
 gtk_widget_set_direction
 gtk_widget_set_double_buffered
 gtk_widget_set_events
+gtk_widget_set_device_events
 gtk_widget_set_extension_events
 gtk_widget_set_has_tooltip
 gtk_widget_set_name
@@ -4470,6 +4478,9 @@ gtk_widget_set_realized
 gtk_widget_get_realized
 gtk_widget_set_mapped
 gtk_widget_get_mapped
+gtk_widget_get_support_multidevice
+gtk_widget_set_support_multidevice
+gtk_widget_device_is_shadowed
 #endif
 #endif
 
@@ -4523,6 +4534,7 @@ gtk_window_group_get_type G_GNUC_CONST
 gtk_window_group_new
 gtk_window_group_remove_window
 gtk_window_group_list_windows
+gtk_window_group_get_current_device_grab
 gtk_window_has_toplevel_focus
 gtk_window_iconify
 gtk_window_is_active

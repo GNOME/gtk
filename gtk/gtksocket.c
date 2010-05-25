@@ -558,7 +558,7 @@ activate_key (GtkAccelGroup  *accel_group,
 
   if (gdk_event && gdk_event->type == GDK_KEY_PRESS && socket->plug_window)
     {
-      _gtk_socket_windowing_send_key_event (socket, gdk_event, TRUE);
+      _gtk_socket_windowing_send_key_event (socket, gdk_event, FALSE);
       retval = TRUE;
     }
 

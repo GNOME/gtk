@@ -32,6 +32,7 @@
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-quartz.h"
+#include "gdkdevicemanager-core.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -68,70 +69,52 @@ gdk_events_pending (void)
 	  (_gdk_quartz_event_loop_check_pending ()));
 }
 
-GdkGrabStatus
-gdk_keyboard_grab (GdkWindow  *window,
-		   gint        owner_events,
-		   guint32     time)
+GdkEvent*
+gdk_event_get_graphics_expose (GdkWindow *window)
 {
-  GdkDisplay *display;
-  GdkWindow  *toplevel;
-
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-
-  display = gdk_drawable_get_display (window);
-  toplevel = gdk_window_get_toplevel (window);
-
-  _gdk_display_set_has_keyboard_grab (display,
-                                      window,
-                                      toplevel,
-                                      owner_events,
-                                      0,
-                                      time);
-
-  return GDK_GRAB_SUCCESS;
+  /* FIXME: Implement */
+  return NULL;
 }
 
 void
-gdk_display_keyboard_ungrab (GdkDisplay *display,
-			     guint32     time)
+gdk_device_ungrab (GdkDevice *device,
+                   guint32    time_)
 {
-  _gdk_display_unset_has_keyboard_grab (display, FALSE);
-}
+  GdkDeviceGrabInfo *grab;
 
-void
-gdk_display_pointer_ungrab (GdkDisplay *display,
-			    guint32     time)
-{
-  GdkPointerGrabInfo *grab;
-
-  grab = _gdk_display_get_last_pointer_grab (display);
+  grab = _gdk_display_get_last_device_grab (_gdk_display, device);
   if (grab)
     grab->serial_end = 0;
 
-  _gdk_display_pointer_grab_update (display, 0);
+  _gdk_display_device_grab_update (_gdk_display, device, 0);
 }
 
 GdkGrabStatus
-_gdk_windowing_pointer_grab (GdkWindow    *window,
-                             GdkWindow    *native,
-                             gboolean	   owner_events,
-                             GdkEventMask  event_mask,
-                             GdkWindow    *confine_to,
-                             GdkCursor    *cursor,
-                             guint32       time)
+_gdk_windowing_device_grab (GdkDevice    *device,
+                            GdkWindow    *window,
+                            GdkWindow    *native,
+                            gboolean      owner_events,
+                            GdkEventMask  event_mask,
+                            GdkWindow    *confine_to,
+                            GdkCursor    *cursor,
+                            guint32       time)
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
 
-  _gdk_display_add_pointer_grab (_gdk_display,
-                                 window,
-                                 native,
-                                 owner_events,
-                                 event_mask,
-                                 0,
-                                 time,
-                                 FALSE);
+  if (!window || GDK_WINDOW_DESTROYED (window))
+    return GDK_GRAB_NOT_VIEWABLE;
+
+  _gdk_display_add_device_grab (_gdk_display,
+                                device,
+                                window,
+                                native,
+                                GDK_OWNERSHIP_NONE,
+                                owner_events,
+                                event_mask,
+                                0,
+                                time,
+                                FALSE);
 
   return GDK_GRAB_SUCCESS;
 }
@@ -139,19 +122,27 @@ _gdk_windowing_pointer_grab (GdkWindow    *window,
 static void
 break_all_grabs (guint32 time)
 {
-  GdkPointerGrabInfo *grab;
+  GList *list, *l;
+  GdkDeviceManager *device_manager;
 
-  if (_gdk_display->keyboard_grab.window)
-    _gdk_display_unset_has_keyboard_grab (_gdk_display, FALSE);
-
-  grab = _gdk_display_get_last_pointer_grab (_gdk_display);
-  if (grab)
+  device_manager = gdk_display_get_device_manager (_gdk_display);
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_MASTER);
+  for (l = list; l; l = l->next)
     {
-      grab->serial_end = 0;
-      grab->implicit_ungrab = TRUE;
+      GdkDeviceGrabInfo *grab;
+
+      grab = _gdk_display_get_last_device_grab (_gdk_display, l->data);
+      if (grab)
+        {
+          grab->serial_end = 0;
+          grab->implicit_ungrab = TRUE;
+        }
+
+      _gdk_display_device_grab_update (_gdk_display, l->data, 0);
     }
 
-  _gdk_display_pointer_grab_update (_gdk_display, 0);
+  g_list_free (list);
 }
 
 static void
@@ -344,10 +335,14 @@ create_focus_event (GdkWindow *window,
 		    gboolean   in)
 {
   GdkEvent *event;
+  GdkDeviceManagerCore *device_manager;
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = window;
   event->focus_change.in = in;
+
+  device_manager = GDK_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  gdk_event_set_device (event, device_manager->core_keyboard);
 
   return event;
 }
@@ -481,6 +476,8 @@ _gdk_quartz_events_send_enter_notify_event (GdkWindow *window)
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.state = 0;
 
+  gdk_event_set_device (event, _gdk_display->core_pointer);
+
   append_event (event, TRUE);
 }
 
@@ -511,8 +508,10 @@ find_toplevel_under_pointer (GdkDisplay *display,
                              gint       *y)
 {
   GdkWindow *toplevel;
+  GdkPointerWindowInfo *info;
 
-  toplevel = display->pointer_info.toplevel_under_pointer;
+  info = _gdk_display_get_pointer_info (display, display->core_pointer);
+  toplevel = info->toplevel_under_pointer;
   if (toplevel)
     {
       GdkWindowObject *private;
@@ -531,6 +530,197 @@ find_toplevel_under_pointer (GdkDisplay *display,
   return toplevel;
 }
 
+static GdkWindow *
+find_toplevel_for_keyboard_event (NSEvent *nsevent)
+{
+  GList *list, *l;
+  GdkWindow *window;
+  GdkDisplay *display;
+  GdkQuartzView *view;
+  GdkDeviceManager *device_manager;
+
+  view = (GdkQuartzView *)[[nsevent window] contentView];
+  window = [view gdkWindow];
+
+  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+
+  device_manager = gdk_display_get_device_manager (display);
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_MASTER);
+  for (l = list; l; l = l->next)
+    {
+      GdkDeviceGrabInfo *grab;
+      GdkDevice *device = l->data;
+
+      if (device->source != GDK_SOURCE_KEYBOARD)
+        continue;
+
+      grab = _gdk_display_get_last_device_grab (display, device);
+      if (grab && grab->window && !grab->owner_events)
+        {
+          window = gdk_window_get_toplevel (grab->window);
+          break;
+        }
+    }
+
+  g_list_free (list);
+
+  return window;
+}
+
+static GdkWindow *
+find_toplevel_for_mouse_event (NSEvent    *nsevent,
+                               gint       *x,
+                               gint       *y)
+{
+  NSPoint point;
+  NSPoint screen_point;
+  NSEventType event_type;
+  GdkWindow *toplevel;
+  GdkQuartzView *view;
+  GdkDisplay *display;
+  GdkDeviceGrabInfo *grab;
+  GdkWindowObject *private;
+
+  view = (GdkQuartzView *)[[nsevent window] contentView];
+  toplevel = [view gdkWindow];
+
+  display = gdk_drawable_get_display (toplevel);
+  private = GDK_WINDOW_OBJECT (toplevel);
+
+  event_type = [nsevent type];
+  point = [nsevent locationInWindow];
+  screen_point = [[nsevent window] convertBaseToScreen:point];
+
+  /* From the docs for XGrabPointer:
+   *
+   * If owner_events is True and if a generated pointer event
+   * would normally be reported to this client, it is reported
+   * as usual. Otherwise, the event is reported with respect to
+   * the grab_window and is reported only if selected by
+   * event_mask. For either value of owner_events, unreported
+   * events are discarded.
+   */
+  grab = _gdk_display_get_last_device_grab (display,
+                                            display->core_pointer);
+  if (grab)
+    {
+      /* Implicit grabs do not go through XGrabPointer and thus the
+       * event mask should not be checked.
+       */
+      if (!grab->implicit
+          && (grab->event_mask & get_event_mask_from_ns_event (nsevent)) == 0)
+        return NULL;
+
+      if (grab->owner_events)
+        {
+          /* For owner events, we need to use the toplevel under the
+           * pointer, not the window from the NSEvent, since that is
+           * reported with respect to the key window, which could be
+           * wrong.
+           */
+          GdkWindow *toplevel_under_pointer;
+          gint x_tmp, y_tmp;
+
+          toplevel_under_pointer = find_toplevel_under_pointer (display,
+                                                                screen_point,
+                                                                &x_tmp, &y_tmp);
+          if (toplevel_under_pointer)
+            {
+              toplevel = toplevel_under_pointer;
+              *x = x_tmp;
+              *y = y_tmp;
+            }
+
+          return toplevel;
+        }
+      else
+        {
+          /* Finally check the grab window. */
+          GdkWindow *grab_toplevel;
+          GdkWindowObject *grab_private;
+          NSWindow *grab_nswindow;
+
+          grab_toplevel = gdk_window_get_toplevel (grab->window);
+          grab_private = (GdkWindowObject *)grab_toplevel;
+
+          grab_nswindow = ((GdkWindowImplQuartz *)grab_private->impl)->toplevel;
+          point = [grab_nswindow convertScreenToBase:screen_point];
+
+          /* Note: x_root and y_root are already right. */
+          *x = point.x;
+          *y = grab_private->height - point.y;
+
+          return grab_toplevel;
+        }
+
+      return NULL;
+    }
+  else 
+    {
+      /* The non-grabbed case. */
+      GdkWindow *toplevel_under_pointer;
+      gint x_tmp, y_tmp;
+
+      /* Ignore all events but mouse moved that might be on the title
+       * bar (above the content view). The reason is that otherwise
+       * gdk gets confused about getting e.g. button presses with no
+       * window (the title bar is not known to it).
+       */
+      if (event_type != NSMouseMoved)
+        if (*y < 0)
+          return NULL;
+
+      /* As for owner events, we need to use the toplevel under the
+       * pointer, not the window from the NSEvent.
+       */
+      toplevel_under_pointer = find_toplevel_under_pointer (display,
+                                                            screen_point,
+                                                            &x_tmp, &y_tmp);
+      if (toplevel_under_pointer)
+        {
+          GdkWindowObject *toplevel_private;
+          GdkWindowImplQuartz *toplevel_impl;
+
+          toplevel = toplevel_under_pointer;
+
+          toplevel_private = (GdkWindowObject *)toplevel;
+          toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
+
+          if ([toplevel_impl->toplevel showsResizeIndicator])
+            {
+              NSRect frame;
+
+              /* If the resize indicator is visible and the event
+               * is in the lower right 15x15 corner, we leave these
+               * events to Cocoa as to be handled as resize events.
+               * Applications may have widgets in this area.  These
+               * will most likely be larger than 15x15 and for
+               * scroll bars there are also other means to move
+               * the scroll bar.  Since the resize indicator is
+               * the only way of resizing windows on Mac OS, it
+               * is too important to not make functional.
+               */
+              frame = [toplevel_impl->view bounds];
+              if (x_tmp > frame.size.width - GRIP_WIDTH
+                  && x_tmp < frame.size.width
+                  && y_tmp > frame.size.height - GRIP_HEIGHT
+                  && y_tmp < frame.size.height)
+                {
+                  return NULL;
+                }
+            }
+
+          *x = x_tmp;
+          *y = y_tmp;
+        }
+
+      return toplevel;
+    }
+
+  return NULL;
+}
+
 /* This function finds the correct window to send an event to, taking
  * into account grabs, event propagation, and event masks.
  */
@@ -542,14 +732,13 @@ find_window_for_ns_event (NSEvent *nsevent,
                           gint    *y_root)
 {
   GdkQuartzView *view;
-  GdkWindow *toplevel;
-  GdkWindowObject *private;
   NSPoint point;
   NSPoint screen_point;
   NSEventType event_type;
+  GdkWindow *toplevel;
+  GdkWindowObject *private;
 
   view = (GdkQuartzView *)[[nsevent window] contentView];
-
   toplevel = [view gdkWindow];
   private = GDK_WINDOW_OBJECT (toplevel);
 
@@ -576,138 +765,7 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSLeftMouseDragged:
     case NSRightMouseDragged:
     case NSOtherMouseDragged:
-      {
-	GdkDisplay *display;
-        GdkPointerGrabInfo *grab;
-
-        display = gdk_drawable_get_display (toplevel);
-
-	/* From the docs for XGrabPointer:
-	 *
-	 * If owner_events is True and if a generated pointer event
-	 * would normally be reported to this client, it is reported
-	 * as usual. Otherwise, the event is reported with respect to
-	 * the grab_window and is reported only if selected by
-	 * event_mask. For either value of owner_events, unreported
-	 * events are discarded.
-	 */
-        grab = _gdk_display_get_last_pointer_grab (display);
-	if (grab)
-	  {
-            /* Implicit grabs do not go through XGrabPointer and thus the
-             * event mask should not be checked.
-             */
-	    if (!grab->implicit
-                && (grab->event_mask & get_event_mask_from_ns_event (nsevent)) == 0)
-              return NULL;
-
-            if (grab->owner_events)
-              {
-                /* For owner events, we need to use the toplevel under the
-                 * pointer, not the window from the NSEvent, since that is
-                 * reported with respect to the key window, which could be
-                 * wrong.
-                 */
-                GdkWindow *toplevel_under_pointer;
-                gint x_tmp, y_tmp;
-
-                toplevel_under_pointer = find_toplevel_under_pointer (display,
-                                                                      screen_point,
-                                                                      &x_tmp, &y_tmp);
-                if (toplevel_under_pointer)
-                  {
-                    toplevel = toplevel_under_pointer;
-                    *x = x_tmp;
-                    *y = y_tmp;
-                  }
-
-                return toplevel;
-              }
-            else
-              {
-                /* Finally check the grab window. */
-		GdkWindow *grab_toplevel;
-                GdkWindowObject *grab_private;
-                NSWindow *grab_nswindow;
-
-		grab_toplevel = gdk_window_get_toplevel (grab->window);
-                grab_private = (GdkWindowObject *)grab_toplevel;
-
-                grab_nswindow = ((GdkWindowImplQuartz *)grab_private->impl)->toplevel;
-                point = [grab_nswindow convertScreenToBase:screen_point];
-
-                /* Note: x_root and y_root are already right. */
-                *x = point.x;
-                *y = grab_private->height - point.y;
-
-		return grab_toplevel;
-	      }
-
-	    return NULL;
-	  }
-	else 
-	  {
-	    /* The non-grabbed case. */
-            GdkWindow *toplevel_under_pointer;
-            gint x_tmp, y_tmp;
-
-            /* Ignore all events but mouse moved that might be on the title
-             * bar (above the content view). The reason is that otherwise
-             * gdk gets confused about getting e.g. button presses with no
-             * window (the title bar is not known to it).
-             */
-            if (event_type != NSMouseMoved)
-              if (*y < 0)
-                return NULL;
-
-            /* As for owner events, we need to use the toplevel under the
-             * pointer, not the window from the NSEvent.
-             */
-            toplevel_under_pointer = find_toplevel_under_pointer (display,
-                                                                  screen_point,
-                                                                  &x_tmp, &y_tmp);
-            if (toplevel_under_pointer)
-              {
-                GdkWindowObject *toplevel_private;
-                GdkWindowImplQuartz *toplevel_impl;
-
-                toplevel = toplevel_under_pointer;
-
-                toplevel_private = (GdkWindowObject *)toplevel;
-                toplevel_impl = (GdkWindowImplQuartz *)toplevel_private->impl;
-
-                if ([toplevel_impl->toplevel showsResizeIndicator])
-                  {
-                    NSRect frame;
-
-                    /* If the resize indicator is visible and the event
-                     * is in the lower right 15x15 corner, we leave these
-                     * events to Cocoa as to be handled as resize events.
-                     * Applications may have widgets in this area.  These
-                     * will most likely be larger than 15x15 and for
-                     * scroll bars there are also other means to move
-                     * the scroll bar.  Since the resize indicator is
-                     * the only way of resizing windows on Mac OS, it
-                     * is too important to not make functional.
-                     */
-                    frame = [toplevel_impl->view bounds];
-                    if (x_tmp > frame.size.width - GRIP_WIDTH
-                        && x_tmp < frame.size.width
-                        && y_tmp > frame.size.height - GRIP_HEIGHT
-                        && y_tmp < frame.size.height)
-                      {
-                        return NULL;
-                      }
-                  }
-
-                *x = x_tmp;
-                *y = y_tmp;
-              }
-
-            return toplevel;
-	  }
-      }
-      break;
+      return find_toplevel_for_mouse_event (nsevent, x, y);
       
     case NSMouseEntered:
     case NSMouseExited:
@@ -722,10 +780,7 @@ find_window_for_ns_event (NSEvent *nsevent,
     case NSKeyDown:
     case NSKeyUp:
     case NSFlagsChanged:
-      if (_gdk_display->keyboard_grab.window && !_gdk_display->keyboard_grab.owner_events)
-        return gdk_window_get_toplevel (_gdk_display->keyboard_grab.window);
-
-      return toplevel;
+      return find_toplevel_for_keyboard_event (nsevent);
 
     default:
       /* Ignore everything else. */
@@ -758,6 +813,8 @@ fill_crossing_event (GdkWindow       *toplevel,
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   event->crossing.state = get_keyboard_modifiers_from_ns_event (nsevent);
+
+  gdk_event_set_device (event, _gdk_display->core_pointer);
 
   /* FIXME: Focus and button state? */
 }
@@ -883,6 +940,7 @@ fill_key_event (GdkWindow    *window,
                 GdkEventType  type)
 {
   GdkEventPrivate *priv;
+  GdkDeviceManagerCore *device_manager;
   gchar buf[7];
   gunichar c = 0;
 
@@ -896,6 +954,9 @@ fill_key_event (GdkWindow    *window,
   event->key.hardware_keycode = [nsevent keyCode];
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
   event->key.keyval = GDK_VoidSymbol;
+
+  device_manager = GDK_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  gdk_event_set_device (event, device_manager->core_keyboard);
   
   gdk_keymap_translate_keyboard_state (NULL,
 				       event->key.hardware_keycode,
@@ -1177,9 +1238,10 @@ gdk_event_translate (GdkEvent *event,
         }
       else if (![impl->toplevel isKeyWindow])
         {
-          GdkPointerGrabInfo *grab;
+          GdkDeviceGrabInfo *grab;
 
-          grab = _gdk_display_get_last_pointer_grab (_gdk_display);
+          grab = _gdk_display_get_last_device_grab (_gdk_display,
+                                                    _gdk_display->core_pointer);
           if (!grab)
             [impl->toplevel makeKeyWindow];
         }

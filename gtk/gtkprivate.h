@@ -50,7 +50,6 @@ typedef enum
   PRIVATE_GTK_REQUEST_NEEDED        = 1 <<  13,  /* Whether we need to call gtk_widget_size_request */
   PRIVATE_GTK_WIDTH_REQUEST_NEEDED  = 1 <<  14,  /* Whether we need to call gtk_extended_layout_get_desired_width */
   PRIVATE_GTK_HEIGHT_REQUEST_NEEDED = 1 <<  15   /* Whether we need to call gtk_extended_layout_get_desired_height */
-
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.

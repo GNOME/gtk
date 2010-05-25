@@ -29,6 +29,12 @@ libgdk_win32_la_SOURCES = \
 	gdkapplaunchcontext-win32.c \
 	gdkcolor-win32.c \
 	gdkcursor-win32.c \
+	gdkdevicemanager-win32.c \
+	gdkdevicemanager-win32.h \
+	gdkdevice-win32.c \
+	gdkdevice-win32.h \
+	gdkdevice-wintab.c \
+	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \
 	gdkdnd-win32.c \
 	gdkdrawable-win32.c \
@@ -41,8 +47,6 @@ libgdk_win32_la_SOURCES = \
 	gdkim-win32.c \
 	gdkimage-win32.c \
 	gdkinput.c \
-	gdkinput-win32.c \
-	gdkinput-win32.h \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \
 	gdkpixmap-win32.c \

@@ -152,7 +152,8 @@ void       _gdk_quartz_window_nspoint_to_gdk_xy     (NSPoint    point,
                                                      gint      *y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
-						     gint       y);
+						     gint       y,
+                                                     gboolean   get_toplevel);
 void       _gdk_quartz_window_attach_to_parent      (GdkWindow *window);
 void       _gdk_quartz_window_detach_from_parent    (GdkWindow *window);
 void       _gdk_quartz_window_did_become_main       (GdkWindow *window);

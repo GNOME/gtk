@@ -543,6 +543,7 @@ struct _GdkWindowObject
   guint GSEAL (accept_focus) : 1;
   guint GSEAL (focus_on_map) : 1;
   guint GSEAL (shaped) : 1;
+  guint GSEAL (support_multidevice) : 1;
   
   GdkEventMask GSEAL (event_mask);
 
@@ -567,8 +568,11 @@ GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
 void          gdk_window_destroy               (GdkWindow     *window);
 GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
 gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
+
+#ifndef GDK_MULTIDEVICE_SAFE
 GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
                                                 gint          *win_y);
+#endif /* GDK_MULTIDEVICE_SAFE */
 void          gdk_window_show                  (GdkWindow     *window);
 void          gdk_window_hide                  (GdkWindow     *window);
 void          gdk_window_withdraw              (GdkWindow     *window);
@@ -760,6 +764,11 @@ void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 void	      gdk_window_set_cursor	 (GdkWindow	  *window,
 					  GdkCursor	  *cursor);
 GdkCursor    *gdk_window_get_cursor      (GdkWindow       *window);
+void	      gdk_window_set_device_cursor (GdkWindow	  *window,
+                                            GdkDevice     *device,
+                                            GdkCursor	  *cursor);
+GdkCursor    *gdk_window_get_device_cursor (GdkWindow     *window,
+                                            GdkDevice     *device);
 void	      gdk_window_get_user_data	 (GdkWindow	  *window,
 					  gpointer	  *data);
 void	      gdk_window_get_geometry	 (GdkWindow	  *window,
@@ -802,10 +811,18 @@ void	      gdk_window_get_root_origin (GdkWindow	  *window,
 					  gint		  *y);
 void          gdk_window_get_frame_extents (GdkWindow     *window,
                                             GdkRectangle  *rect);
+
+#ifndef GDK_MULTIDEVICE_SAFE
 GdkWindow*    gdk_window_get_pointer	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y,
 					  GdkModifierType *mask);
+#endif /* GDK_MULTIDEVICE_SAFE */
+GdkWindow *   gdk_window_get_device_position (GdkWindow       *window,
+                                              GdkDevice       *device,
+                                              gint            *x,
+                                              gint            *y,
+                                              GdkModifierType *mask);
 GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
 GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
 
@@ -817,6 +834,11 @@ GList *       gdk_window_peek_children   (GdkWindow       *window);
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
+void          gdk_window_set_device_events (GdkWindow    *window,
+                                            GdkDevice    *device,
+                                            GdkEventMask  event_mask);
+GdkEventMask  gdk_window_get_device_events (GdkWindow    *window,
+                                            GdkDevice    *device);
 
 void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *pixbufs);
@@ -906,9 +928,9 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
 void gdk_window_configure_finished            (GdkWindow *window);
 
-#ifndef GDK_MULTIHEAD_SAFE
-GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
-#endif /* GDK_MULTIHEAD_SAFE */
+#if !defined (GDK_MULTIHEAD_SAFE) && !defined (GDK_MULTIDEVICE_SAFE)
+GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
+#endif /* !GDK_MULTIHEAD_SAFE && !GDK_MULTIDEVICE_SAFE */
 
 GdkWindow *gdk_get_default_root_window (void);
 
@@ -929,6 +951,10 @@ void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
                                               gint           height);
 void       gdk_window_remove_redirection     (GdkWindow     *window);
 
+/* Multidevice support */
+void       gdk_window_set_support_multidevice (GdkWindow *window,
+                                               gboolean   support_multidevice);
+gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
 
 G_END_DECLS
 

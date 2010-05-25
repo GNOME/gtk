@@ -42,6 +42,7 @@ struct _GtkHandleBoxPrivate
 {
   gint orig_x;
   gint orig_y;
+  GdkDevice *grab_device;
 };
 
 enum {
@@ -1114,22 +1115,25 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 		  hb->attach_allocation.height = 0;
 		}
 	      hb->in_drag = TRUE;
+              private->grab_device = event->device;
 	      fleur = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 						  GDK_FLEUR);
-	      if (gdk_pointer_grab (invisible->window,
-				    FALSE,
-				    (GDK_BUTTON1_MOTION_MASK |
-				     GDK_POINTER_MOTION_HINT_MASK |
-				     GDK_BUTTON_RELEASE_MASK),
-				    NULL,
-				    fleur,
-				    event->time) != 0)
+	      if (gdk_device_grab (event->device,
+                                   invisible->window,
+                                   GDK_OWNERSHIP_WINDOW,
+                                   FALSE,
+                                   (GDK_BUTTON1_MOTION_MASK |
+                                    GDK_POINTER_MOTION_HINT_MASK |
+                                    GDK_BUTTON_RELEASE_MASK),
+                                   fleur,
+                                   event->time) != GDK_GRAB_SUCCESS)
 		{
 		  hb->in_drag = FALSE;
+                  private->grab_device = NULL;
 		}
 	      else
 		{
-		  gtk_grab_add (invisible);
+                  gtk_device_grab_add (invisible, private->grab_device, TRUE);
 		  g_signal_connect (invisible, "event",
 				    G_CALLBACK (gtk_handle_box_grab_event), hb);
 		}
@@ -1169,9 +1173,10 @@ gtk_handle_box_motion (GtkWidget      *widget,
   new_x = 0;
   new_y = 0;
   screen = gtk_widget_get_screen (widget);
-  gdk_display_get_pointer (gdk_screen_get_display (screen),
-			   &pointer_screen, 
-			   &new_x, &new_y, NULL);
+  gdk_display_get_device_state (gdk_screen_get_display (screen),
+                                event->device,
+                                &pointer_screen,
+                                &new_x, &new_y, NULL);
   if (pointer_screen != screen)
     {
       GtkHandleBoxPrivate *private = gtk_handle_box_get_private (hb);
@@ -1418,15 +1423,18 @@ static void
 gtk_handle_box_end_drag (GtkHandleBox *hb,
 			 guint32       time)
 {
+  GtkHandleBoxPrivate *private = gtk_handle_box_get_private (hb);
   GtkWidget *invisible = gtk_handle_box_get_invisible ();
-		
+
   hb->in_drag = FALSE;
 
-  gtk_grab_remove (invisible);
-  gdk_pointer_ungrab (time);
+  gtk_device_grab_remove (invisible, private->grab_device);
+  gdk_device_ungrab (private->grab_device, time);
   g_signal_handlers_disconnect_by_func (invisible,
 					G_CALLBACK (gtk_handle_box_grab_event),
 					hb);
+
+  private->grab_device = NULL;
 }
 
 #define __GTK_HANDLE_BOX_C__

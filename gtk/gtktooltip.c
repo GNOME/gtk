@@ -1246,6 +1246,7 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
   gboolean return_value = FALSE;
   GdkDisplay *display;
   GtkTooltip *tooltip;
+  GdkDevice *device;
 
   /* Get current tooltip for this display */
   display = gtk_widget_get_display (widget);
@@ -1256,12 +1257,23 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
   if (!tooltip || !tooltip->keyboard_mode_enabled)
     return;
 
+  device = gtk_get_current_event_device ();
+
+  if (device && device->source == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
+
+  /* This function should be called by either a focus in event,
+   * or a key binding. In either case there should be a device.
+   */
+  if (!device)
+    return;
+
   if (tooltip->keyboard_widget)
     g_object_unref (tooltip->keyboard_widget);
 
   tooltip->keyboard_widget = g_object_ref (widget);
 
-  gdk_window_get_pointer (widget->window, &x, &y, NULL);
+  gdk_window_get_device_position (widget->window, device, &x, &y, NULL);
 
   return_value = gtk_tooltip_run_requery (&widget, tooltip, &x, &y);
   if (!return_value)

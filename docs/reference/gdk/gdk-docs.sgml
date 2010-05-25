@@ -53,7 +53,7 @@
     <xi:include href="xml/threads.xml" />
 
     <xi:include href="xml/input.xml" />
-    <xi:include href="xml/input_devices.xml" />
+    <xi:include href="xml/gdkdevicemanager.xml" />
 
     <xi:include href="xml/pango_interaction.xml" />
     <xi:include href="xml/cairo_interaction.xml" />

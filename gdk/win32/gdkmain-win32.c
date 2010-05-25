@@ -39,10 +39,11 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
-#include "gdkinput-win32.h"
 
 #include <objbase.h>
 
+#include <windows.h>
+#include <wintab.h>
 #include <imm.h>
 
 static gboolean gdk_synchronize = FALSE;

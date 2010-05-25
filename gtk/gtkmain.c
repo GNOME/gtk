@@ -1316,12 +1316,10 @@ gtk_main_iteration_do (gboolean blocking)
 
 /* private libgtk to libgdk interfaces
  */
-gboolean gdk_pointer_grab_info_libgtk_only  (GdkDisplay *display,
-					     GdkWindow **grab_window,
-					     gboolean   *owner_events);
-gboolean gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
-					     GdkWindow **grab_window,
-					     gboolean   *owner_events);
+gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
+                                           GdkDevice   *device,
+                                           GdkWindow  **grab_window,
+                                           gboolean    *owner_events);
 
 static void
 rewrite_events_translate (GdkWindow *old_window,
@@ -1396,6 +1394,7 @@ rewrite_event_for_grabs (GdkEvent *event)
   gpointer grab_widget_ptr;
   gboolean owner_events;
   GdkDisplay *display;
+  GdkDevice *device;
 
   switch (event->type)
     {
@@ -1407,20 +1406,15 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      display = gdk_drawable_get_display (event->proximity.window);
-      if (!gdk_pointer_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
-	  !owner_events)
-	return NULL;
-      break;
-
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      display = gdk_drawable_get_display (event->key.window);
-      if (!gdk_keyboard_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
-	  !owner_events)
-	return NULL;
-      break;
+      display = gdk_drawable_get_display (event->any.window);
+      device = gdk_event_get_device (event);
 
+      if (!gdk_device_grab_info_libgtk_only (display, device, &grab_window, &owner_events) ||
+	  !owner_events)
+        return NULL;
+      break;
     default:
       return NULL;
     }
@@ -1440,9 +1434,10 @@ void
 gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
-  GtkWidget *grab_widget;
+  GtkWidget *grab_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
+  GdkDevice *device;
   GList *tmp_list;
 
   if (event->type == GDK_SETTING)
@@ -1489,13 +1484,9 @@ gtk_main_do_event (GdkEvent *event)
       event = rewritten_event;
       event_widget = gtk_get_event_widget (event);
     }
-  
-  window_group = gtk_main_get_window_group (event_widget);
 
-  /* Push the event onto a stack of current events for
-   * gtk_current_event_get().
-   */
-  current_events = g_list_prepend (current_events, event);
+  window_group = gtk_main_get_window_group (event_widget);
+  device = gdk_event_get_device (event);
 
   /* If there is a grab in effect...
    */
@@ -1511,10 +1502,33 @@ gtk_main_do_event (GdkEvent *event)
 	  gtk_widget_is_ancestor (event_widget, grab_widget))
 	grab_widget = event_widget;
     }
-  else
+  else if (device)
     {
-      grab_widget = event_widget;
+      grab_widget = gtk_window_group_get_current_device_grab (window_group, device);
+
+      if (grab_widget &&
+          gtk_widget_get_sensitive (event_widget) &&
+          gtk_widget_is_ancestor (event_widget, grab_widget))
+        grab_widget = event_widget;
     }
+
+  if (!grab_widget)
+    grab_widget = event_widget;
+
+  /* If the widget receiving events is actually blocked by another device GTK+ grab */
+  if (device &&
+      _gtk_window_group_widget_is_blocked_for_device (window_group, grab_widget, device))
+    {
+      if (rewritten_event)
+        gdk_event_free (rewritten_event);
+
+      return;
+    }
+
+  /* Push the event onto a stack of current events for
+   * gtk_current_event_get().
+   */
+  current_events = g_list_prepend (current_events, event);
 
   /* Not all events get sent to the grabbing widget.
    * The delete, destroy, expose, focus change and resize
@@ -1636,14 +1650,17 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_ENTER_NOTIFY:
-      GTK_PRIVATE_SET_FLAG (event_widget, GTK_HAS_POINTER);
-      _gtk_widget_set_pointer_window (event_widget, event->any.window);
+      _gtk_widget_set_device_window (event_widget,
+                                     gdk_event_get_device (event),
+                                     event->any.window);
       if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
     case GDK_LEAVE_NOTIFY:
-      GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_HAS_POINTER);
+      _gtk_widget_set_device_window (event_widget,
+                                     gdk_event_get_device (event),
+                                     NULL);
       if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
@@ -1718,16 +1735,73 @@ typedef struct
   gboolean   was_grabbed;
   gboolean   is_grabbed;
   gboolean   from_grab;
+  GList     *notified_windows;
+  GdkDevice *device;
 } GrabNotifyInfo;
+
+static void
+synth_crossing_for_grab_notify (GtkWidget       *from,
+                                GtkWidget       *to,
+                                GrabNotifyInfo  *info,
+                                GList           *devices,
+                                GdkCrossingMode  mode)
+{
+  while (devices)
+    {
+      GdkDevice *device = devices->data;
+      GdkWindow *from_window, *to_window;
+
+      /* Do not propagate events more than once to
+       * the same windows if non-multidevice aware.
+       */
+      if (!from)
+        from_window = NULL;
+      else
+        {
+          from_window = _gtk_widget_get_device_window (from, device);
+
+          if (from_window &&
+              !gdk_window_get_support_multidevice (from_window) &&
+              g_list_find (info->notified_windows, from_window))
+            from_window = NULL;
+        }
+
+      if (!to)
+        to_window = NULL;
+      else
+        {
+          to_window = _gtk_widget_get_device_window (to, device);
+
+          if (to_window &&
+              !gdk_window_get_support_multidevice (to_window) &&
+              g_list_find (info->notified_windows, to_window))
+            to_window = NULL;
+        }
+
+      if (from_window || to_window)
+        {
+          _gtk_widget_synthesize_crossing ((from_window) ? from : NULL,
+                                           (to_window) ? to : NULL,
+                                           device, mode);
+
+          if (from_window)
+            info->notified_windows = g_list_prepend (info->notified_windows, from_window);
+
+          if (to_window)
+            info->notified_windows = g_list_prepend (info->notified_windows, to_window);
+        }
+
+      devices = devices->next;
+    }
+}
 
 static void
 gtk_grab_notify_foreach (GtkWidget *child,
 			 gpointer   data)
-                        
 {
   GrabNotifyInfo *info = data;
- 
   gboolean was_grabbed, is_grabbed, was_shadowed, is_shadowed;
+  GList *devices;
 
   was_grabbed = info->was_grabbed;
   is_grabbed = info->is_grabbed;
@@ -1742,42 +1816,55 @@ gtk_grab_notify_foreach (GtkWidget *child,
 
   if ((was_shadowed || is_shadowed) && GTK_IS_CONTAINER (child))
     gtk_container_forall (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
-  
+
+  if (info->device &&
+      _gtk_widget_get_device_window (child, info->device))
+    {
+      /* Device specified and is on widget */
+      devices = g_list_prepend (NULL, info->device);
+    }
+  else
+    devices = _gtk_widget_list_devices (child);
+
   if (is_shadowed)
     {
       GTK_PRIVATE_SET_FLAG (child, GTK_SHADOWED);
-      if (!was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && gtk_widget_is_sensitive (child))
-	_gtk_widget_synthesize_crossing (child, info->new_grab_widget,
-					 GDK_CROSSING_GTK_GRAB);
+      if (!was_shadowed && devices &&
+	  gtk_widget_is_sensitive (child))
+        synth_crossing_for_grab_notify (child, info->new_grab_widget,
+                                        info, devices,
+                                        GDK_CROSSING_GTK_GRAB);
     }
   else
     {
       GTK_PRIVATE_UNSET_FLAG (child, GTK_SHADOWED);
-      if (was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && gtk_widget_is_sensitive (child))
-	_gtk_widget_synthesize_crossing (info->old_grab_widget, child,
-					 info->from_grab ? GDK_CROSSING_GTK_GRAB
-					 : GDK_CROSSING_GTK_UNGRAB);
+      if (was_shadowed && devices &&
+          gtk_widget_is_sensitive (child))
+        synth_crossing_for_grab_notify (info->old_grab_widget, child,
+                                        info, devices,
+                                        info->from_grab ? GDK_CROSSING_GTK_GRAB :
+                                        GDK_CROSSING_GTK_UNGRAB);
     }
 
   if (was_shadowed != is_shadowed)
     _gtk_widget_grab_notify (child, was_shadowed);
-  
+
   g_object_unref (child);
-  
+  g_list_free (devices);
+
   info->was_grabbed = was_grabbed;
   info->is_grabbed = is_grabbed;
 }
 
 static void
 gtk_grab_notify (GtkWindowGroup *group,
+                 GdkDevice      *device,
 		 GtkWidget      *old_grab_widget,
 		 GtkWidget      *new_grab_widget,
 		 gboolean        from_grab)
 {
   GList *toplevels;
-  GrabNotifyInfo info;
+  GrabNotifyInfo info = { 0 };
 
   if (old_grab_widget == new_grab_widget)
     return;
@@ -1785,12 +1872,13 @@ gtk_grab_notify (GtkWindowGroup *group,
   info.old_grab_widget = old_grab_widget;
   info.new_grab_widget = new_grab_widget;
   info.from_grab = from_grab;
+  info.device = device;
 
   g_object_ref (group);
 
   toplevels = gtk_window_list_toplevels ();
   g_list_foreach (toplevels, (GFunc)g_object_ref, NULL);
-			    
+
   while (toplevels)
     {
       GtkWindow *toplevel = toplevels->data;
@@ -1804,6 +1892,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       g_object_unref (toplevel);
     }
 
+  g_list_free (info.notified_windows);
   g_object_unref (group);
 }
 
@@ -1829,7 +1918,7 @@ gtk_grab_add (GtkWidget *widget)
       g_object_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      gtk_grab_notify (group, old_grab_widget, widget, TRUE);
+      gtk_grab_notify (group, NULL, old_grab_widget, widget, TRUE);
     }
 }
 
@@ -1865,10 +1954,70 @@ gtk_grab_remove (GtkWidget *widget)
       else
 	new_grab_widget = NULL;
 
-      gtk_grab_notify (group, widget, new_grab_widget, FALSE);
+      gtk_grab_notify (group, NULL, widget, new_grab_widget, FALSE);
       
       g_object_unref (widget);
     }
+}
+
+/**
+ * gtk_device_grab_add:
+ * @widget: a #GtkWidget
+ * @device: a #GtkDevice to grab on.
+ * @block_others: %TRUE to prevent other devices to interact with @widget.
+ *
+ * Adds a GTK+ grab on @device, so all the events on @device and its
+ * associated pointer or keyboard (if any) are delivered to @widget.
+ * If the @block_others parameter is %TRUE, any other devices will be
+ * unable to interact with @widget during the grab.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_device_grab_add (GtkWidget        *widget,
+                     GdkDevice        *device,
+                     gboolean          block_others)
+{
+  GtkWindowGroup *group;
+  GtkWidget *old_grab_widget;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  group = gtk_main_get_window_group (widget);
+  old_grab_widget = gtk_window_group_get_current_device_grab (group, device);
+
+  if (old_grab_widget != widget)
+    _gtk_window_group_add_device_grab (group, widget, device, block_others);
+
+  gtk_grab_notify (group, device, old_grab_widget, widget, TRUE);
+}
+
+/**
+ * gtk_device_grab_remove:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Removes a device grab from the given widget. You have to pair calls
+ * to gtk_device_grab_add() and gtk_device_grab_remove().
+ *
+ * Since: 3.0
+ **/
+void
+gtk_device_grab_remove (GtkWidget *widget,
+                        GdkDevice *device)
+{
+  GtkWindowGroup *group;
+  GtkWidget *new_grab_widget;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  group = gtk_main_get_window_group (widget);
+  _gtk_window_group_remove_device_grab (group, widget, device);
+  new_grab_widget = gtk_window_group_get_current_device_grab (group, device);
+
+  gtk_grab_notify (group, device, widget, new_grab_widget, FALSE);
 }
 
 void
@@ -2122,6 +2271,23 @@ gtk_get_current_event_state (GdkModifierType *state)
       *state = 0;
       return FALSE;
     }
+}
+
+/**
+ * gtk_get_current_event_device:
+ *
+ * If there is a current event and it has a device, return that
+ * device, otherwise return %NULL.
+ *
+ * Returns: a #GdkDevice, or %NULL
+ **/
+GdkDevice *
+gtk_get_current_event_device (void)
+{
+  if (current_events)
+    return gdk_event_get_device (current_events->data);
+  else
+    return NULL;
 }
 
 /**

@@ -77,8 +77,9 @@ struct _GdkWindowImplIface
   void         (* clear_region)         (GdkWindow       *window,
 					 GdkRegion       *region,
 					 gboolean         send_expose);
-  
-  void         (* set_cursor)           (GdkWindow       *window,
+
+  void         (* set_device_cursor)    (GdkWindow       *window,
+                                         GdkDevice       *device,
                                          GdkCursor       *cursor);
 
   void         (* get_geometry)         (GdkWindow       *window,
@@ -95,10 +96,11 @@ struct _GdkWindowImplIface
   gint         (* get_deskrelative_origin) (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y);
-  gboolean     (* get_pointer)          (GdkWindow       *window,
+  gboolean     (* get_device_state)     (GdkWindow       *window,
+                                         GdkDevice       *device,
                                          gint            *x,
                                          gint            *y,
-					 GdkModifierType  *mask);
+                                         GdkModifierType *mask);
 
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const GdkRegion *shape_region,
@@ -142,10 +144,6 @@ struct _GdkWindowImplIface
   void         (* destroy)              (GdkWindow       *window,
 					 gboolean         recursing,
 					 gboolean         foreign_destroy);
-
-  void         (* input_window_destroy) (GdkWindow       *window);
-  void         (* input_window_crossing)(GdkWindow       *window,
-					 gboolean         enter);
   gboolean     supports_native_bg;
 };
 

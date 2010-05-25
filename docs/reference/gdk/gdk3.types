@@ -9,3 +9,5 @@ gdk_pango_renderer_get_type
 gdk_pixmap_get_type
 gdk_gc_get_type
 gdk_keymap_get_type
+gdk_device_get_type
+gdk_device_manager_get_type

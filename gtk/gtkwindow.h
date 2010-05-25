@@ -395,6 +395,9 @@ void             gtk_window_group_remove_window (GtkWindowGroup     *window_grou
 					         GtkWindow          *window);
 GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_group);
 
+GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
+                                                           GdkDevice      *device);
+
 
 /* --- internal functions --- */
 void            _gtk_window_internal_set_focus (GtkWindow *window,
@@ -412,6 +415,17 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWidget      *_gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
+void            _gtk_window_group_add_device_grab    (GtkWindowGroup   *window_group,
+                                                      GtkWidget        *widget,
+                                                      GdkDevice        *device,
+                                                      gboolean          block_others);
+void            _gtk_window_group_remove_device_grab (GtkWindowGroup   *window_group,
+                                                      GtkWidget        *widget,
+                                                      GdkDevice        *device);
+
+gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
+                                                                GtkWidget      *widget,
+                                                                GdkDevice      *device);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 						    gboolean   has_toplevel_focus);

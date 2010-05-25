@@ -236,6 +236,50 @@ typedef enum
   GDK_GRAB_FROZEN          = 4
 } GdkGrabStatus;
 
+/**
+ * GdkGrabOwnership:
+ * @GDK_OWNERSHIP_NONE: All other devices' events are allowed.
+ * @GDK_OWNERSHIP_WINDOW: Other devices' events are blocked for the grab window.
+ * @GDK_OWNERSHIP_APPLICATION: Other devices' events are blocked for the whole application.
+ *
+ * Defines how device grabs interact with other devices.
+ */
+typedef enum
+{
+  GDK_OWNERSHIP_NONE,
+  GDK_OWNERSHIP_WINDOW,
+  GDK_OWNERSHIP_APPLICATION
+} GdkGrabOwnership;
+
+/* Event masks. (Used to select what types of events a window
+ *  *  will receive).
+ *   */
+typedef enum
+{
+  GDK_EXPOSURE_MASK             = 1 << 1,
+  GDK_POINTER_MOTION_MASK       = 1 << 2,
+  GDK_POINTER_MOTION_HINT_MASK  = 1 << 3,
+  GDK_BUTTON_MOTION_MASK        = 1 << 4,
+  GDK_BUTTON1_MOTION_MASK       = 1 << 5,
+  GDK_BUTTON2_MOTION_MASK       = 1 << 6,
+  GDK_BUTTON3_MOTION_MASK       = 1 << 7,
+  GDK_BUTTON_PRESS_MASK         = 1 << 8,
+  GDK_BUTTON_RELEASE_MASK       = 1 << 9,
+  GDK_KEY_PRESS_MASK            = 1 << 10,
+  GDK_KEY_RELEASE_MASK          = 1 << 11,
+  GDK_ENTER_NOTIFY_MASK         = 1 << 12,
+  GDK_LEAVE_NOTIFY_MASK         = 1 << 13,
+  GDK_FOCUS_CHANGE_MASK         = 1 << 14,
+  GDK_STRUCTURE_MASK            = 1 << 15,
+  GDK_PROPERTY_CHANGE_MASK      = 1 << 16,
+  GDK_VISIBILITY_NOTIFY_MASK    = 1 << 17,
+  GDK_PROXIMITY_IN_MASK         = 1 << 18,
+  GDK_PROXIMITY_OUT_MASK        = 1 << 19,
+  GDK_SUBSTRUCTURE_MASK         = 1 << 20,
+  GDK_SCROLL_MASK               = 1 << 21,
+  GDK_ALL_EVENTS_MASK           = 0x3FFFFE
+} GdkEventMask;
+
 typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,
 				  GdkInputCondition condition);

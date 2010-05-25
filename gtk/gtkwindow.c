@@ -167,6 +167,7 @@ struct _GtkWindowGeometryInfo
 };
 
 #define GTK_WINDOW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_WINDOW, GtkWindowPrivate))
+#define GTK_WINDOW_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupPrivate))
 
 typedef struct _GtkWindowPrivate GtkWindowPrivate;
 
@@ -197,6 +198,21 @@ struct _GtkWindowPrivate
   gdouble opacity;
 
   gchar *startup_id;
+};
+
+typedef struct _GtkDeviceGrabInfo GtkDeviceGrabInfo;
+typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
+
+struct _GtkDeviceGrabInfo
+{
+  GtkWidget *widget;
+  GdkDevice *device;
+  guint block_others : 1;
+};
+
+struct _GtkWindowGroupPrivate
+{
+  GSList *device_grabs;
 };
 
 static void gtk_window_dispose            (GObject           *object);
@@ -5251,17 +5267,43 @@ static void
 do_focus_change (GtkWidget *widget,
 		 gboolean   in)
 {
-  GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
-  
-  fevent->focus_change.type = GDK_FOCUS_CHANGE;
-  fevent->focus_change.window = widget->window;
-  fevent->focus_change.in = in;
-  if (widget->window)
-    g_object_ref (widget->window);
+  GdkDeviceManager *device_manager;
+  GList *devices, *d;
 
-  gtk_widget_send_focus_change (widget, fevent);
+  device_manager = gdk_display_get_device_manager (gtk_widget_get_display (widget));
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_SLAVE));
+  devices = g_list_concat (devices, gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING));
 
-  gdk_event_free (fevent);
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *dev = d->data;
+      GdkEvent *fevent;
+
+      if (dev->source != GDK_SOURCE_KEYBOARD)
+        continue;
+
+      /* Skip non-master keyboards that haven't
+       * selected for events from this window
+       */
+      if (gdk_device_get_device_type (dev) != GDK_DEVICE_TYPE_MASTER &&
+          widget->window &&
+          !gdk_window_get_device_events (widget->window, dev))
+        continue;
+
+      fevent = gdk_event_new (GDK_FOCUS_CHANGE);
+
+      fevent->focus_change.type = GDK_FOCUS_CHANGE;
+      fevent->focus_change.window = widget->window;
+      if (widget->window)
+        g_object_ref (widget->window);
+      fevent->focus_change.in = in;
+      gdk_event_set_device (fevent, dev);
+
+      gtk_widget_send_focus_change (widget, fevent);
+
+      gdk_event_free (fevent);
+    }
 }
 
 static gint
@@ -5753,11 +5795,16 @@ get_monitor_containing_pointer (GtkWindow *window)
   gint monitor_num;
   GdkScreen *window_screen;
   GdkScreen *pointer_screen;
+  GdkDisplay *display;
+  GdkDevice *pointer;
 
   window_screen = gtk_window_check_screen (window);
-  gdk_display_get_pointer (gdk_screen_get_display (window_screen),
-                           &pointer_screen,
-                           &px, &py, NULL);
+  display = gdk_screen_get_display (window_screen);
+  pointer = gdk_display_get_core_pointer (display);
+
+  gdk_display_get_device_state (display, pointer,
+                                &pointer_screen,
+                                &px, &py, NULL);
 
   if (pointer_screen == window_screen)
     monitor_num = gdk_screen_get_monitor_at_point (pointer_screen, px, py);
@@ -5940,12 +5987,16 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             gint screen_height = gdk_screen_get_height (screen);
 	    gint monitor_num;
 	    GdkRectangle monitor;
+            GdkDisplay *display;
+            GdkDevice *pointer;
             GdkScreen *pointer_screen;
             gint px, py;
-            
-            gdk_display_get_pointer (gdk_screen_get_display (screen),
-                                     &pointer_screen,
-                                     &px, &py, NULL);
+
+            display = gdk_screen_get_display (screen);
+            pointer = gdk_display_get_core_pointer (display);
+            gdk_display_get_device_state (display, pointer,
+                                          &pointer_screen,
+                                          &px, &py, NULL);
 
             if (pointer_screen == screen)
               monitor_num = gdk_screen_get_monitor_at_point (screen, px, py);
@@ -7594,6 +7645,7 @@ gtk_window_has_toplevel_focus (GtkWindow *window)
 static void
 gtk_window_group_class_init (GtkWindowGroupClass *klass)
 {
+  g_type_class_add_private (klass, sizeof (GtkWindowGroupPrivate));
 }
 
 GType
@@ -7641,6 +7693,8 @@ static void
 window_group_cleanup_grabs (GtkWindowGroup *group,
 			    GtkWindow      *window)
 {
+  GtkWindowGroupPrivate *priv;
+  GtkDeviceGrabInfo *info;
   GSList *tmp_list;
   GSList *to_remove = NULL;
 
@@ -7656,6 +7710,27 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
     {
       gtk_grab_remove (to_remove->data);
       g_object_unref (to_remove->data);
+      to_remove = g_slist_delete_link (to_remove, to_remove);
+    }
+
+  priv = GTK_WINDOW_GROUP_GET_PRIVATE (group);
+  tmp_list = priv->device_grabs;
+
+  while (tmp_list)
+    {
+      info = tmp_list->data;
+
+      if (gtk_widget_get_toplevel (info->widget) == (GtkWidget *) window)
+        to_remove = g_slist_prepend (to_remove, info);
+
+      tmp_list = tmp_list->next;
+    }
+
+  while (to_remove)
+    {
+      info = to_remove->data;
+
+      gtk_device_grab_remove (info->widget, info->device);
       to_remove = g_slist_delete_link (to_remove, to_remove);
     }
 }
@@ -7782,6 +7857,131 @@ _gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
   if (window_group->grabs)
     return GTK_WIDGET (window_group->grabs->data);
   return NULL;
+}
+
+void
+_gtk_window_group_add_device_grab (GtkWindowGroup *window_group,
+                                   GtkWidget      *widget,
+                                   GdkDevice      *device,
+                                   gboolean        block_others)
+{
+  GtkWindowGroupPrivate *priv;
+  GtkDeviceGrabInfo *info;
+
+  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+
+  info = g_slice_new0 (GtkDeviceGrabInfo);
+  info->widget = widget;
+  info->device = device;
+  info->block_others = block_others;
+
+  priv->device_grabs = g_slist_prepend (priv->device_grabs, info);
+}
+
+void
+_gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
+                                      GtkWidget      *widget,
+                                      GdkDevice      *device)
+{
+  GtkWindowGroupPrivate *priv;
+  GtkDeviceGrabInfo *info;
+  GSList *list, *node = NULL;
+  GdkDevice *other_device;
+
+  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  other_device = gdk_device_get_associated_device (device);
+  list = priv->device_grabs;
+
+  while (list)
+    {
+      info = list->data;
+
+      if (info->widget == widget &&
+          (info->device == device ||
+           info->device == other_device))
+        {
+          node = list;
+          break;
+        }
+
+      list = list->next;
+    }
+
+  if (node)
+    {
+      info = node->data;
+
+      priv->device_grabs = g_slist_delete_link (priv->device_grabs, node);
+      g_slice_free (GtkDeviceGrabInfo, info);
+    }
+}
+
+/**
+ * gtk_window_group_get_current_device_grab:
+ * @window_group: a #GtkWindowGroup
+ * @device: a #GdkDevice
+ *
+ * Returns the current grab widget for @device, or %NULL if none.
+ *
+ * Returns: The grab widget, or %NULL
+ **/
+GtkWidget *
+gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
+                                          GdkDevice      *device)
+{
+  GtkWindowGroupPrivate *priv;
+  GtkDeviceGrabInfo *info;
+  GdkDevice *other_device;
+  GSList *list;
+
+  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  list = priv->device_grabs;
+  other_device = gdk_device_get_associated_device (device);
+
+  while (list)
+    {
+      info = list->data;
+      list = list->next;
+
+      if (info->device == device ||
+          info->device == other_device)
+        return info->widget;
+    }
+
+  return NULL;
+}
+
+gboolean
+_gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
+                                                GtkWidget      *widget,
+                                                GdkDevice      *device)
+{
+  GtkWindowGroupPrivate *priv;
+  GtkDeviceGrabInfo *info;
+  GdkDevice *other_device;
+  GSList *list;
+
+  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  other_device = gdk_device_get_associated_device (device);
+  list = priv->device_grabs;
+
+  while (list)
+    {
+      info = list->data;
+      list = list->next;
+
+      /* Look for blocking grabs on other device pairs
+       * that have the passed widget within the GTK+ grab.
+       */
+      if (info->block_others &&
+          info->device != device &&
+          info->device != other_device &&
+          (info->widget == widget ||
+           gtk_widget_is_ancestor (widget, info->widget)))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 /*

@@ -398,8 +398,12 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
   return result;
 }
 
-
-#ifdef GDK_WINDOWING_X11
+/* FIXME: modifying the XEvent window as in root_key_filter() isn't
+ * going to work with XGE/XI2, since the actual event to handle would
+ * be allocated/freed before GDK gets to translate the event.
+ * Active grabs on the keyboard are used instead at the moment...
+ */
+#if defined (GDK_WINDOWING_X11) && !defined (XINPUT_2)
 
 /*
  * We want to handle a handful of keys during DND, e.g. Escape to abort.
@@ -418,7 +422,7 @@ root_key_filter (GdkXEvent *xevent,
                  GdkEvent  *event,
                  gpointer   data)
 {
-  XEvent *ev = (XEvent *)xevent;
+  XEvent *ev = (XEvent *) xevent;
 
   if ((ev->type == KeyPress || ev->type == KeyRelease) &&
       ev->xkey.root == ev->xkey.window)
@@ -458,6 +462,7 @@ static GrabKey grab_keys[] = {
 
 static void
 grab_dnd_keys (GtkWidget *widget,
+               GdkDevice *device,
                guint32    time)
 {
   guint i;
@@ -488,6 +493,7 @@ grab_dnd_keys (GtkWidget *widget,
 
 static void
 ungrab_dnd_keys (GtkWidget *widget,
+                 GdkDevice *device,
                  guint32    time)
 {
   guint i;
@@ -513,23 +519,28 @@ ungrab_dnd_keys (GtkWidget *widget,
   gdk_error_trap_pop ();
 }
 
-#else
+#else /* GDK_WINDOWING_X11 && !XINPUT_2 */
 
 static void
 grab_dnd_keys (GtkWidget *widget,
+               GdkDevice *device,
                guint32    time)
 {
-  gdk_keyboard_grab (widget->window, FALSE, time);
+  gdk_device_grab (device, widget->window,
+                   GDK_OWNERSHIP_APPLICATION, FALSE,
+                   GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                   NULL, time);
 }
 
 static void
 ungrab_dnd_keys (GtkWidget *widget,
+                 GdkDevice *device,
                  guint32    time)
 {
-  gdk_display_keyboard_ungrab (gtk_widget_get_display (widget), time);
+  gdk_device_ungrab (device, time);
 }
 
-#endif
+#endif /* GDK_WINDOWING_X11 */
 
 
 /***************************************************************
@@ -545,9 +556,20 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GdkScreen *screen = gtk_widget_get_screen (widget);
+  GdkDragContext *context = g_object_get_data (G_OBJECT (widget), "drag-context");
   GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
 					    "gtk-dnd-ipc-widgets");
-  ungrab_dnd_keys (widget, GDK_CURRENT_TIME);
+  GdkDevice *pointer, *keyboard;
+
+  if (context)
+    {
+      pointer = gdk_drag_context_get_device (context);
+      keyboard = gdk_device_get_associated_device (pointer);
+
+      if (keyboard)
+        ungrab_dnd_keys (widget, keyboard, GDK_CURRENT_TIME);
+    }
+
   if (window->group)
     gtk_window_group_remove_window (window->group, window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
@@ -940,11 +962,13 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
   
   if (cursor != info->cursor)
     {
-      gdk_pointer_grab (info->ipc_widget->window, FALSE,
-			GDK_POINTER_MOTION_MASK |
-			GDK_BUTTON_RELEASE_MASK,
-			NULL,
-			cursor, info->grab_time);
+      GdkDevice *pointer;
+
+      pointer = gdk_drag_context_get_device (info->context);
+      gdk_device_grab (pointer, info->ipc_widget->window,
+                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+                       cursor, info->grab_time);
       info->cursor = cursor;
     }
 }
@@ -2379,7 +2403,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GdkDragContext *context;
   GtkWidget *ipc_widget;
   GdkCursor *cursor;
- 
+  GdkDevice *pointer, *keyboard;
+
+  pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
   
   gtk_drag_get_event_actions (event, button, actions,
@@ -2390,24 +2416,45 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 				NULL);
   
   if (event)
-    time = gdk_event_get_time (event);
+    {
+      time = gdk_event_get_time (event);
+      pointer = gdk_event_get_device (event);
 
-  if (gdk_pointer_grab (ipc_widget->window, FALSE,
-			GDK_POINTER_MOTION_MASK |
-			GDK_BUTTON_RELEASE_MASK, NULL,
-			cursor, time) != GDK_GRAB_SUCCESS)
+      if (pointer->source == GDK_SOURCE_KEYBOARD)
+        {
+          keyboard = pointer;
+          pointer = gdk_device_get_associated_device (keyboard);
+        }
+      else
+        keyboard = gdk_device_get_associated_device (pointer);
+    }
+  else
+    {
+      pointer = gdk_display_get_core_pointer (gtk_widget_get_display (widget));
+      keyboard = gdk_device_get_associated_device (pointer);
+    }
+
+  if (!pointer)
+    return NULL;
+
+  if (gdk_device_grab (pointer, ipc_widget->window,
+                       GDK_OWNERSHIP_APPLICATION, FALSE,
+                       GDK_POINTER_MOTION_MASK |
+                       GDK_BUTTON_RELEASE_MASK,
+                       cursor, time) != GDK_GRAB_SUCCESS)
     {
       gtk_drag_release_ipc_widget (ipc_widget);
       return NULL;
     }
 
-  grab_dnd_keys (ipc_widget, time);
+  if (keyboard)
+    grab_dnd_keys (ipc_widget, keyboard, time);
 
   /* We use a GTK grab here to override any grabs that the widget
    * we are dragging from might have held
    */
-  gtk_grab_add (ipc_widget);
-  
+  gtk_device_grab_add (ipc_widget, pointer, FALSE);
+
   tmp_list = g_list_last (target_list->list);
   while (tmp_list)
     {
@@ -2420,6 +2467,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   source_widgets = g_slist_prepend (source_widgets, ipc_widget);
 
   context = gdk_drag_begin (ipc_widget->window, targets);
+  gdk_drag_context_set_device (context, pointer);
   g_list_free (targets);
   
   info = gtk_drag_get_source_info (context, TRUE);
@@ -2451,10 +2499,10 @@ gtk_drag_begin_internal (GtkWidget         *widget,
       info->cur_x = event->motion.x_root;
       info->cur_y = event->motion.y_root;
     }
-  else 
+  else
     {
-      gdk_display_get_pointer (gtk_widget_get_display (widget),
-			       &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
+      gdk_display_get_device_state (gtk_widget_get_display (widget), pointer,
+                                    &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
     }
 
   g_signal_emit_by_name (widget, "drag-begin", info->context);
@@ -2510,11 +2558,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   
       if (cursor != info->cursor)
         {
-	  gdk_pointer_grab (widget->window, FALSE,
-	 	            GDK_POINTER_MOTION_MASK |
-		  	    GDK_BUTTON_RELEASE_MASK,
-			    NULL,
-			    cursor, time);
+          gdk_device_grab (pointer, widget->window,
+                           GDK_OWNERSHIP_APPLICATION, FALSE,
+                           GDK_POINTER_MOTION_MASK |
+                           GDK_BUTTON_RELEASE_MASK,
+                           cursor, time);
           info->cursor = cursor;
         }
     }
@@ -3468,11 +3516,13 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 					  info);
 	    if (info->cursor != cursor)
 	      {
-		gdk_pointer_grab (widget->window, FALSE,
-				  GDK_POINTER_MOTION_MASK |
-				  GDK_BUTTON_RELEASE_MASK,
-				  NULL,
-				  cursor, info->grab_time);
+                GdkDevice *pointer;
+
+                pointer = gdk_drag_context_get_device (context);
+                gdk_device_grab (pointer, widget->window,
+                                 GDK_OWNERSHIP_APPLICATION, FALSE,
+                                 GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
+                                 cursor, info->grab_time);
 		info->cursor = cursor;
 	      }
 	    
@@ -4062,7 +4112,10 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
   GdkEvent *send_event;
   GtkWidget *source_widget = info->widget;
-  GdkDisplay *display = gtk_widget_get_display (source_widget);
+  GdkDevice *pointer, *keyboard;
+
+  pointer = gdk_drag_context_get_device (info->context);
+  keyboard = gdk_device_get_associated_device (pointer);
 
   if (info->update_idle)
     {
@@ -4094,9 +4147,9 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 					gtk_drag_key_cb,
 					info);
 
-  gdk_display_pointer_ungrab (display, time);
-  ungrab_dnd_keys (info->ipc_widget, time);
-  gtk_grab_remove (info->ipc_widget);
+  gdk_device_ungrab (pointer, time);
+  ungrab_dnd_keys (info->ipc_widget, keyboard, time);
+  gtk_device_grab_remove (info->ipc_widget, pointer);
 
   /* Send on a release pair to the original 
    * widget to convince it to release its grab. We need to
@@ -4114,7 +4167,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   send_event->button.axes = NULL;
   send_event->button.state = 0;
   send_event->button.button = info->button;
-  send_event->button.device = gdk_display_get_core_pointer (display);
+  send_event->button.device = pointer;
   send_event->button.x_root = 0;
   send_event->button.y_root = 0;
 
@@ -4160,15 +4213,16 @@ gtk_drag_motion_cb (GtkWidget      *widget,
   if (event->is_hint)
     {
       GdkDisplay *display = gtk_widget_get_display (widget);
-      
-      gdk_display_get_pointer (display, &screen, &x_root, &y_root, NULL);
+
+      gdk_display_get_device_state (display, event->device,
+                                    &screen, &x_root, &y_root, NULL);
       event->x_root = x_root;
       event->y_root = y_root;
     }
   else
     screen = gdk_event_get_screen ((GdkEvent *)event);
 
-  gtk_drag_update (info, screen, event->x_root, event->y_root, (GdkEvent *)event);
+  gtk_drag_update (info, screen, event->x_root, event->y_root, (GdkEvent *) event);
 
   return TRUE;
 }
@@ -4192,10 +4246,12 @@ gtk_drag_key_cb (GtkWidget         *widget,
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
   GdkModifierType state;
   GdkWindow *root_window;
+  GdkDevice *pointer;
   gint dx, dy;
 
   dx = dy = 0;
   state = event->state & gtk_accelerator_get_default_mod_mask ();
+  pointer = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
 
   if (event->type == GDK_KEY_PRESS)
     {
@@ -4244,16 +4300,16 @@ gtk_drag_key_cb (GtkWidget         *widget,
    * that would be overkill.
    */
   root_window = gtk_widget_get_root_window (widget);
-  gdk_window_get_pointer (root_window, NULL, NULL, &state);
+  gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
   event->state = state;
 
   if (dx != 0 || dy != 0)
     {
       info->cur_x += dx;
       info->cur_y += dy;
-      gdk_display_warp_pointer (gtk_widget_get_display (widget), 
-				gtk_widget_get_screen (widget), 
-				info->cur_x, info->cur_y);
+      gdk_display_warp_device (gtk_widget_get_display (widget), pointer,
+                               gtk_widget_get_screen (widget),
+                               info->cur_x, info->cur_y);
     }
 
   gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, (GdkEvent *)event);
@@ -4287,8 +4343,11 @@ gtk_drag_grab_notify_cb (GtkWidget        *widget,
 			 gpointer          data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
+  GdkDevice *pointer;
 
-  if (!was_grabbed)
+  pointer = gdk_drag_context_get_device (info->context);
+
+  if (gtk_widget_device_is_shadowed (widget, pointer))
     {
       /* We have to block callbacks to avoid recursion here, because
 	 gtk_drag_cancel calls gtk_grab_remove (via gtk_drag_end) */

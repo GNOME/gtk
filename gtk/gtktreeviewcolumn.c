@@ -1097,7 +1097,8 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 				 (gint) ((GdkEventMotion *)event)->y)))
     {
       column->maybe_reordered = FALSE;
-      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column);
+      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column,
+                                        event->motion.device);
       return TRUE;
     }
   if (column->clickable == FALSE)

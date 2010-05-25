@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include <string.h>		/* For memset() */
+#include <math.h>
 
 #include "gdk.h"
 #include "gdkinternals.h"
@@ -446,6 +447,7 @@ gdk_event_copy (const GdkEvent *event)
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
       new_private->screen = private->screen;
+      new_private->device = private->device;
     }
   
   switch (event->any.type)
@@ -920,6 +922,95 @@ gdk_event_get_axis (const GdkEvent *event,
 }
 
 /**
+ * gdk_event_set_device:
+ * @event: a #GdkEvent
+ * @device: a #GdkDevice
+ *
+ * Sets the device for @event to @device. The event must
+ * have been allocated by GTK+, for instance, by
+ * gdk_event_copy().
+ *
+ * Since: 3.0
+ **/
+void
+gdk_event_set_device (GdkEvent  *event,
+                      GdkDevice *device)
+{
+  GdkEventPrivate *private;
+
+  g_return_if_fail (gdk_event_is_allocated (event));
+
+  private = (GdkEventPrivate *) event;
+
+  private->device = device;
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      event->motion.device = device;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      event->button.device = device;
+      break;
+    case GDK_SCROLL:
+      event->scroll.device = device;
+      break;
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      event->proximity.device = device;
+      break;
+    default:
+      break;
+    }
+}
+
+/**
+ * gdk_event_get_device:
+ * @event: a #GdkEvent.
+ *
+ * If the event contains a "device" field, this function will return
+ * it, else it will return %NULL.
+ *
+ * Returns: a #GdkDevice, or %NULL.
+ *
+ * Since: 3.0
+ **/
+GdkDevice *
+gdk_event_get_device (const GdkEvent *event)
+{
+  g_return_val_if_fail (event != NULL, NULL);
+
+  if (gdk_event_is_allocated (event))
+    {
+      GdkEventPrivate *private = (GdkEventPrivate *) event;
+
+      if (private->device)
+        return private->device;
+    }
+
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+      return event->motion.device;
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      return event->button.device;
+    case GDK_SCROLL:
+      return event->scroll.device;
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+      return event->proximity.device;
+    default:
+      return NULL;
+    }
+}
+
+/**
  * gdk_event_request_motions:
  * @event: a valid #GdkEvent
  *
@@ -954,8 +1045,139 @@ gdk_event_request_motions (const GdkEventMotion *event)
       gdk_device_get_state (event->device, event->window, NULL, NULL);
       
       display = gdk_drawable_get_display (event->window);
-      _gdk_display_enable_motion_hints (display);
+      _gdk_display_enable_motion_hints (display, event->device);
     }
+}
+
+static gboolean
+gdk_events_get_axis_distances (GdkEvent *event1,
+                               GdkEvent *event2,
+                               gdouble  *x_distance,
+                               gdouble  *y_distance,
+                               gdouble  *distance)
+{
+  gdouble x1, x2, y1, y2;
+  gdouble xd, yd;
+
+  if (!gdk_event_get_coords (event1, &x1, &y1) ||
+      !gdk_event_get_coords (event2, &x2, &y2))
+    return FALSE;
+
+  xd = x2 - x1;
+  yd = y2 - y1;
+
+  if (x_distance)
+    *x_distance = xd;
+
+  if (y_distance)
+    *y_distance = yd;
+
+  if (distance)
+    *distance = sqrt ((xd * xd) + (yd * yd));
+
+  return TRUE;
+}
+
+/**
+ * gdk_events_get_distance:
+ * @event1: first #GdkEvent
+ * @event2: second #GdkEvent
+ * @distance: return location for the distance
+ *
+ * If both events have X/Y information, the distance between both coordinates
+ * (as in a straight line going from @event1 to @event2) will be returned.
+ *
+ * Returns: %TRUE if the distance could be calculated.
+ *
+ * Since: 3.0
+ **/
+gboolean
+gdk_events_get_distance (GdkEvent *event1,
+                         GdkEvent *event2,
+                         gdouble  *distance)
+{
+  return gdk_events_get_axis_distances (event1, event2,
+                                        NULL, NULL,
+                                        distance);
+}
+
+/**
+ * gdk_events_get_angle:
+ * @event1: first #GdkEvent
+ * @event2: second #GdkEvent
+ * @angle: return location for the relative angle between both events
+ *
+ * If both events contain X/Y information, this function will return %TRUE
+ * and return in @angle the relative angle from @event1 to @event2. The rotation
+ * direction for positive angles is from the positive X axis towards the positive
+ * Y axis.
+ *
+ * Returns: %TRUE if the angle could be calculated.
+ *
+ * Since: 3.0
+ **/
+gboolean
+gdk_events_get_angle (GdkEvent *event1,
+                      GdkEvent *event2,
+                      gdouble  *angle)
+{
+  gdouble x_distance, y_distance, distance;
+
+  if (!gdk_events_get_axis_distances (event1, event2,
+                                      &x_distance, &y_distance,
+                                      &distance))
+    return FALSE;
+
+  if (angle)
+    {
+      *angle = atan2 (x_distance, y_distance);
+
+      /* Invert angle */
+      *angle = (2 * G_PI) - *angle;
+
+      /* Shift it 90° */
+      *angle += G_PI / 2;
+
+      /* And constraint it to 0°-360° */
+      *angle = fmod (*angle, 2 * G_PI);
+    }
+
+  return TRUE;
+}
+
+/**
+ * gdk_events_get_center:
+ * @event1: first #GdkEvent
+ * @event2: second #GdkEvent
+ * @x: return location for the X coordinate of the center
+ * @y: return location for the Y coordinate of the center
+ *
+ * If both events contain X/Y information, the center of both coordinates
+ * will be returned in @x and @y.
+ *
+ * Returns: %TRUE if the center could be calculated.
+ *
+ * Since: 3.0
+ **/
+gboolean
+gdk_events_get_center (GdkEvent *event1,
+                       GdkEvent *event2,
+                       gdouble  *x,
+                       gdouble  *y)
+{
+  gdouble x1, x2, y1, y2;
+
+  if (!gdk_event_get_coords (event1, &x1, &y1) ||
+      !gdk_event_get_coords (event2, &x2, &y2))
+    return FALSE;
+
+  if (x)
+    *x = (x2 + x1) / 2;
+
+  if (y)
+    *y = (y2 + y1) / 2;
+
+  return TRUE;
 }
 
 /**
@@ -1186,54 +1408,67 @@ void
 _gdk_event_button_generate (GdkDisplay *display,
 			    GdkEvent   *event)
 {
-  if ((event->button.time < (display->button_click_time[1] + 2*display->double_click_time)) &&
-      (event->button.window == display->button_window[1]) &&
-      (event->button.button == display->button_number[1]) &&
-      (ABS (event->button.x - display->button_x[1]) <= display->double_click_distance) &&
-      (ABS (event->button.y - display->button_y[1]) <= display->double_click_distance))
-{
-      gdk_synthesize_click (display, event, 3);
-            
-      display->button_click_time[1] = 0;
-      display->button_click_time[0] = 0;
-      display->button_window[1] = NULL;
-      display->button_window[0] = NULL;
-      display->button_number[1] = -1;
-      display->button_number[0] = -1;
-      display->button_x[0] = display->button_x[1] = 0;
-      display->button_y[0] = display->button_y[1] = 0;
+  GdkMultipleClickInfo *info;
+
+  info = g_hash_table_lookup (display->multiple_click_info, event->button.device);
+
+  if (G_UNLIKELY (!info))
+    {
+      info = g_new0 (GdkMultipleClickInfo, 1);
+      info->button_number[0] = info->button_number[1] = -1;
+
+      g_hash_table_insert (display->multiple_click_info,
+                           event->button.device, info);
     }
-  else if ((event->button.time < (display->button_click_time[0] + display->double_click_time)) &&
-	   (event->button.window == display->button_window[0]) &&
-	   (event->button.button == display->button_number[0]) &&
-	   (ABS (event->button.x - display->button_x[0]) <= display->double_click_distance) &&
-	   (ABS (event->button.y - display->button_y[0]) <= display->double_click_distance))
+
+  if ((event->button.time < (info->button_click_time[1] + 2 * display->double_click_time)) &&
+      (event->button.window == info->button_window[1]) &&
+      (event->button.button == info->button_number[1]) &&
+      (ABS (event->button.x - info->button_x[1]) <= display->double_click_distance) &&
+      (ABS (event->button.y - info->button_y[1]) <= display->double_click_distance))
+    {
+      gdk_synthesize_click (display, event, 3);
+
+      info->button_click_time[1] = 0;
+      info->button_click_time[0] = 0;
+      info->button_window[1] = NULL;
+      info->button_window[0] = NULL;
+      info->button_number[1] = -1;
+      info->button_number[0] = -1;
+      info->button_x[0] = info->button_x[1] = 0;
+      info->button_y[0] = info->button_y[1] = 0;
+    }
+  else if ((event->button.time < (info->button_click_time[0] + display->double_click_time)) &&
+	   (event->button.window == info->button_window[0]) &&
+	   (event->button.button == info->button_number[0]) &&
+	   (ABS (event->button.x - info->button_x[0]) <= display->double_click_distance) &&
+	   (ABS (event->button.y - info->button_y[0]) <= display->double_click_distance))
     {
       gdk_synthesize_click (display, event, 2);
       
-      display->button_click_time[1] = display->button_click_time[0];
-      display->button_click_time[0] = event->button.time;
-      display->button_window[1] = display->button_window[0];
-      display->button_window[0] = event->button.window;
-      display->button_number[1] = display->button_number[0];
-      display->button_number[0] = event->button.button;
-      display->button_x[1] = display->button_x[0];
-      display->button_x[0] = event->button.x;
-      display->button_y[1] = display->button_y[0];
-      display->button_y[0] = event->button.y;
+      info->button_click_time[1] = info->button_click_time[0];
+      info->button_click_time[0] = event->button.time;
+      info->button_window[1] = info->button_window[0];
+      info->button_window[0] = event->button.window;
+      info->button_number[1] = info->button_number[0];
+      info->button_number[0] = event->button.button;
+      info->button_x[1] = info->button_x[0];
+      info->button_x[0] = event->button.x;
+      info->button_y[1] = info->button_y[0];
+      info->button_y[0] = event->button.y;
     }
   else
     {
-      display->button_click_time[1] = 0;
-      display->button_click_time[0] = event->button.time;
-      display->button_window[1] = NULL;
-      display->button_window[0] = event->button.window;
-      display->button_number[1] = -1;
-      display->button_number[0] = event->button.button;
-      display->button_x[1] = 0;
-      display->button_x[0] = event->button.x;
-      display->button_y[1] = 0;
-      display->button_y[0] = event->button.y;
+      info->button_click_time[1] = 0;
+      info->button_click_time[0] = event->button.time;
+      info->button_window[1] = NULL;
+      info->button_window[0] = event->button.window;
+      info->button_number[1] = -1;
+      info->button_number[0] = event->button.button;
+      info->button_x[1] = 0;
+      info->button_x[0] = event->button.x;
+      info->button_y[1] = 0;
+      info->button_y[0] = event->button.y;
     }
 }
 

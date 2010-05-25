@@ -1473,7 +1473,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 }
 
 void
-_gtk_entry_completion_popup (GtkEntryCompletion *completion)
+_gtk_entry_completion_popup (GtkEntryCompletion *completion,
+                             GdkDevice          *device)
 {
   GtkTreeViewColumn *column;
   GList *renderers;
@@ -1486,6 +1487,9 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
     return;
 
   if (!gtk_widget_has_focus (completion->priv->entry))
+    return;
+
+  if (completion->priv->grab_device)
     return;
 
   completion->priv->ignore_enter = TRUE;
@@ -1520,13 +1524,16 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
                          gtk_widget_get_screen (completion->priv->entry));
 
   gtk_widget_show (completion->priv->popup_window);
-    
-  gtk_grab_add (completion->priv->popup_window);
-  gdk_pointer_grab (completion->priv->popup_window->window, TRUE,
-                    GDK_BUTTON_PRESS_MASK |
-                    GDK_BUTTON_RELEASE_MASK |
-                    GDK_POINTER_MOTION_MASK,
-                    NULL, NULL, GDK_CURRENT_TIME);
+
+  gtk_device_grab_add (completion->priv->popup_window, device, TRUE);
+  gdk_device_grab (device, completion->priv->popup_window->window,
+                   GDK_OWNERSHIP_WINDOW, TRUE,
+                   GDK_BUTTON_PRESS_MASK |
+                   GDK_BUTTON_RELEASE_MASK |
+                   GDK_POINTER_MOTION_MASK,
+                   NULL, GDK_CURRENT_TIME);
+
+  completion->priv->grab_device = device;
 }
 
 void
@@ -1536,9 +1543,14 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
     return;
 
   completion->priv->ignore_enter = FALSE;
-  
-  gdk_pointer_ungrab (GDK_CURRENT_TIME);
-  gtk_grab_remove (completion->priv->popup_window);
+
+  if (completion->priv->grab_device)
+    {
+      gdk_device_ungrab (completion->priv->grab_device, GDK_CURRENT_TIME);
+      gtk_device_grab_remove (completion->priv->popup_window,
+                              completion->priv->grab_device);
+      completion->priv->grab_device = NULL;
+    }
 
   gtk_widget_hide (completion->priv->popup_window);
 }

@@ -23,6 +23,7 @@
 #include <Carbon/Carbon.h>
 
 #include "gdk.h"
+#include "gdkdeviceprivate.h"
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
 #include "gdkscreen-quartz.h"
@@ -143,41 +144,47 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
 static void
 check_grab_unmap (GdkWindow *window)
 {
+  GList *list, *l;
   GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDeviceManager *device_manager;
 
-  _gdk_display_end_pointer_grab (display, 0, window, TRUE);
-
-  if (display->keyboard_grab.window)
+  device_manager = gdk_display_get_device_manager (display);
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_FLOATING);
+  for (l = list; l; l = l->next)
     {
-      GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
-      GdkWindowObject *tmp = GDK_WINDOW_OBJECT (display->keyboard_grab.window);
-
-      while (tmp && tmp != private)
-	tmp = tmp->parent;
-
-      if (tmp)
-	_gdk_display_unset_has_keyboard_grab (display, TRUE);
+      _gdk_display_end_device_grab (display, l->data, 0, window, TRUE);
     }
+
+  g_list_free (list);
 }
 
 static void
 check_grab_destroy (GdkWindow *window)
 {
+  GList *list, *l;
   GdkDisplay *display = gdk_drawable_get_display (window);
-  GdkPointerGrabInfo *grab;
+  GdkDeviceManager *device_manager;
 
   /* Make sure there is no lasting grab in this native window */
-  grab = _gdk_display_get_last_pointer_grab (display);
-  if (grab && grab->native_window == window)
+  device_manager = gdk_display_get_device_manager (display);
+  list = gdk_device_manager_list_devices (device_manager,
+                                          GDK_DEVICE_TYPE_MASTER);
+
+  for (l = list; l; l = l->next)
     {
-      /* Serials are always 0 in quartz, but for clarity: */
-      grab->serial_end = grab->serial_start;
-      grab->implicit_ungrab = TRUE;
+      GdkDeviceGrabInfo *grab;
+
+      grab = _gdk_display_get_last_device_grab (display, l->data);
+      if (grab && grab->native_window == window)
+        {
+          /* Serials are always 0 in quartz, but for clarity: */
+          grab->serial_end = grab->serial_start;
+          grab->implicit_ungrab = TRUE;
+        }
     }
 
-  if (window == display->keyboard_grab.native_window &&
-      display->keyboard_grab.window != NULL)
-    _gdk_display_unset_has_keyboard_grab (display, TRUE);
+  g_list_free (list);
 }
 
 static void
@@ -698,7 +705,8 @@ find_child_window_helper (GdkWindow *window,
 			  gint       x,
 			  gint       y,
 			  gint       x_offset,
-			  gint       y_offset)
+			  gint       y_offset,
+                          gboolean   get_toplevel)
 {
   GdkWindowImplQuartz *impl;
   GList *l;
@@ -751,13 +759,15 @@ find_child_window_helper (GdkWindow *window,
             }
         }
 
-      if (x >= temp_x && y >= temp_y &&
+      if ((!get_toplevel || (get_toplevel && window == _gdk_root)) &&
+          x >= temp_x && y >= temp_y &&
 	  x < temp_x + child_private->width && y < temp_y + child_private->height)
 	{
 	  /* Look for child windows. */
 	  return find_child_window_helper (l->data,
 					   x, y,
-					   temp_x, temp_y);
+					   temp_x, temp_y,
+                                           get_toplevel);
 	}
     }
   
@@ -771,12 +781,13 @@ find_child_window_helper (GdkWindow *window,
 GdkWindow *
 _gdk_quartz_window_find_child (GdkWindow *window,
 			       gint       x,
-			       gint       y)
+			       gint       y,
+                               gboolean   get_toplevel)
 {
   GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
 
   if (x >= 0 && y >= 0 && x < private->width && y < private->height)
-    return find_child_window_helper (window, x, y, 0, 0);
+    return find_child_window_helper (window, x, y, 0, 0, get_toplevel);
 
   return NULL;
 }
@@ -1701,8 +1712,9 @@ gdk_window_quartz_set_back_pixmap (GdkWindow *window,
 }
 
 static void
-gdk_window_quartz_set_cursor (GdkWindow *window,
-                              GdkCursor *cursor)
+gdk_window_quartz_set_device_cursor (GdkWindow *window,
+                                     GdkDevice *device,
+                                     GdkCursor *cursor)
 {
   GdkCursorPrivate *cursor_private;
   NSCursor *nscursor;
@@ -1893,10 +1905,11 @@ gdk_window_get_root_origin (GdkWindow *window,
 
 /* Returns coordinates relative to the passed in window. */
 static GdkWindow *
-gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
-                                      gint            *x,
-                                      gint            *y,
-                                      GdkModifierType *mask)
+gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
+                                           GdkDevice       *device,
+                                           gint            *x,
+                                           gint            *y,
+                                           GdkModifierType *mask)
 {
   GdkWindowObject *toplevel;
   GdkWindowObject *private;
@@ -1941,7 +1954,8 @@ gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
       window = (GdkWindow *)toplevel;
     }
 
-  found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp);
+  found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp,
+                                                FALSE);
 
   /* We never return the root window. */
   if (found_window == _gdk_root)
@@ -1954,26 +1968,30 @@ gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
 }
 
 static gboolean
-gdk_window_quartz_get_pointer (GdkWindow       *window,
-                               gint            *x,
-                               gint            *y,
-                               GdkModifierType *mask)
+gdk_window_quartz_get_device_state (GdkWindow       *window,
+                                    GdkDevice       *device,
+                                    gint            *x,
+                                    gint            *y,
+                                    GdkModifierType *mask)
 {
-  return gdk_window_quartz_get_pointer_helper (window, x, y, mask) != NULL;
+  return gdk_window_quartz_get_device_state_helper (window,
+                                                    device,
+                                                    x, y, mask) != NULL;
 }
 
 /* Returns coordinates relative to the root. */
 void
-_gdk_windowing_get_pointer (GdkDisplay       *display,
-                            GdkScreen       **screen,
-                            gint             *x,
-                            gint             *y,
-                            GdkModifierType  *mask)
+_gdk_windowing_get_device_state (GdkDisplay       *display,
+                                 GdkDevice        *device,
+                                 GdkScreen       **screen,
+                                 gint             *x,
+                                 gint             *y,
+                                 GdkModifierType  *mask)
 {
   g_return_if_fail (display == _gdk_display);
   
   *screen = _gdk_screen;
-  gdk_window_quartz_get_pointer_helper (_gdk_root, x, y, mask);
+  gdk_window_quartz_get_device_state_helper (_gdk_root, device, x, y, mask);
 }
 
 void
@@ -1997,9 +2015,10 @@ _gdk_windowing_window_at_pointer (GdkDisplay      *display,
   gint x, y;
   GdkModifierType tmp_mask = 0;
 
-  found_window = gdk_window_quartz_get_pointer_helper (_gdk_root,
-                                                       &x, &y,
-                                                       &tmp_mask);
+  found_window = gdk_window_quartz_get_device_state_helper (_gdk_root,
+                                                            display->core_pointer,
+                                                            &x, &y,
+                                                            &tmp_mask);
   if (found_window)
     {
       GdkWindowObject *private;
@@ -2051,6 +2070,21 @@ _gdk_windowing_window_at_pointer (GdkDisplay      *display,
 
   return found_window;
 }
+
+GdkWindow*
+_gdk_windowing_window_at_device_position (GdkDisplay      *display,
+                                          GdkDevice       *device,
+                                          gint            *win_x,
+                                          gint            *win_y,
+                                          GdkModifierType *mask,
+                                          gboolean         get_toplevel)
+{
+  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device,
+                                                            win_x, win_y,
+                                                            mask,
+                                                            get_toplevel);
+}
+
 
 static GdkEventMask  
 gdk_window_quartz_get_events (GdkWindow *window)
@@ -3065,10 +3099,10 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_background = gdk_window_quartz_set_background;
   iface->set_back_pixmap = gdk_window_quartz_set_back_pixmap;
   iface->reparent = gdk_window_quartz_reparent;
-  iface->set_cursor = gdk_window_quartz_set_cursor;
+  iface->set_device_cursor = gdk_window_quartz_set_device_cursor;
   iface->get_geometry = gdk_window_quartz_get_geometry;
   iface->get_root_coords = gdk_window_quartz_get_root_coords;
-  iface->get_pointer = gdk_window_quartz_get_pointer;
+  iface->get_device_state = gdk_window_quartz_get_device_state;
   iface->get_deskrelative_origin = gdk_window_quartz_get_deskrelative_origin;
   iface->shape_combine_region = gdk_window_quartz_shape_combine_region;
   iface->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
@@ -3076,6 +3110,4 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
   iface->queue_translation = _gdk_quartz_window_queue_translation;
   iface->destroy = _gdk_quartz_window_destroy;
-  iface->input_window_destroy = _gdk_input_window_destroy;
-  iface->input_window_crossing = _gdk_input_window_crossing;
 }
