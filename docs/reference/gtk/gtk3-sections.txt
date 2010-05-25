@@ -46,6 +46,7 @@ GTK_ABOUT_DIALOG_CLASS
 GTK_IS_ABOUT_DIALOG_CLASS
 GTK_ABOUT_DIALOG_GET_CLASS
 <SUBSECTION Private>
+GtkAboutDialogPrivate
 gtk_about_dialog_get_type
 </SECTION>
 
@@ -80,6 +81,7 @@ gtk_accelerator_get_default_mod_mask
 
 <SUBSECTION Private>
 GtkAccelGroupEntry
+GtkAccelGroupPrivate
 gtk_accel_group_get_type
 
 <SUBSECTION Standard>
@@ -141,6 +143,7 @@ GTK_ACCEL_LABEL_CLASS
 GTK_IS_ACCEL_LABEL_CLASS
 GTK_ACCEL_LABEL_GET_CLASS
 <SUBSECTION Private>
+GtkAccelLabelPrivate
 gtk_accel_label_get_type
 </SECTION>
 
