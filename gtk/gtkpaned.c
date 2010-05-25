@@ -2222,7 +2222,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
 
 /**
  * gtk_paned_get_handle_window:
- * @panede: a #GtkPaned
+ * @paned: a #GtkPaned
  *
  * Returns the #GdkWindow of the handle. This function is
  * useful when handling button or motion events because it
