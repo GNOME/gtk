@@ -55,6 +55,8 @@ gdk_error_trap_pop
 <SUBSECTION>
 GDK_WINDOWING_X11
 GDK_WINDOWING_WIN32
+GDK_WINDOWING_QUARTZ
+GDK_WINDOWING_DIRECTFB
 
 <SUBSECTION Standard>
 GDK_TYPE_GRAB_STATUS
@@ -282,6 +284,15 @@ gdk_image_new
 GdkImageType
 gdk_image_get_colormap
 gdk_image_set_colormap
+gdk_image_get_bits_per_pixel
+gdk_image_get_bytes_per_pixel
+gdk_image_get_bytes_per_line
+gdk_image_get_byte_order
+gdk_image_get_depth
+gdk_image_get_height
+gdk_image_get_image_type
+gdk_image_get_visual
+gdk_image_get_width
 
 <SUBSECTION>
 gdk_image_put_pixel
@@ -571,7 +582,14 @@ GdkByteOrder
 gdk_query_depths
 gdk_query_visual_types
 gdk_list_visuals
-
+gdk_visual_get_bits_per_rgb
+gdk_visual_get_blue_pixel_details
+gdk_visual_get_byte_order
+gdk_visual_get_colormap_size
+gdk_visual_get_depth
+gdk_visual_get_green_pixel_details
+gdk_visual_get_red_pixel_details
+gdk_visual_get_visual_type
 gdk_visual_get_best_depth
 gdk_visual_get_best_type
 gdk_visual_get_system
@@ -619,6 +637,8 @@ gdk_window_hide
 gdk_window_is_destroyed
 gdk_window_is_visible
 gdk_window_is_viewable
+gdk_window_is_input_only
+gdk_window_is_shaped
 gdk_window_get_state
 gdk_window_withdraw
 gdk_window_iconify
@@ -633,6 +653,7 @@ gdk_window_set_keep_above
 gdk_window_set_keep_below
 gdk_window_set_opacity
 gdk_window_set_composited
+gdk_window_get_composited
 gdk_window_move
 gdk_window_resize
 gdk_window_move_resize
@@ -677,7 +698,9 @@ gdk_window_configure_finished
 gdk_window_set_user_data
 gdk_window_set_override_redirect
 gdk_window_set_accept_focus
+gdk_window_get_accept_focus
 gdk_window_set_focus_on_map
+gdk_window_get_focus_on_map
 gdk_window_add_filter
 gdk_window_remove_filter
 GdkFilterFunc
@@ -694,7 +717,9 @@ gdk_window_merge_child_input_shapes
 gdk_window_set_static_gravities
 gdk_window_set_title
 gdk_window_set_background
+gdk_window_get_background
 gdk_window_set_back_pixmap
+gdk_window_get_back_pixmap
 GDK_PARENT_RELATIVE
 gdk_window_set_cursor
 gdk_window_get_cursor
@@ -703,6 +728,7 @@ gdk_window_get_geometry
 gdk_window_set_geometry_hints
 gdk_window_set_icon_list
 gdk_window_set_modal_hint
+gdk_window_get_modal_hint
 gdk_window_set_type_hint
 gdk_window_get_type_hint
 gdk_window_set_skip_taskbar_hint
@@ -1010,11 +1036,17 @@ GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
 gdk_devices_list
+gdk_device_get_name
 gdk_device_set_source
+gdk_device_get_source
 gdk_device_set_mode
+gdk_device_get_mode
 gdk_device_set_key
+gdk_device_get_key
 gdk_device_set_axis_use
+gdk_device_get_axis_use
 gdk_device_get_core_pointer
+gdk_device_get_has_cursor
 
 <SUBSECTION>
 gdk_device_get_state
@@ -1204,6 +1236,10 @@ GdkDragContext
 GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
+gdk_drag_context_get_action
+gdk_drag_context_get_actions
+gdk_drag_context_get_suggested_action
+gdk_drag_context_list_targets
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT

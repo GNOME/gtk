@@ -77,5 +77,78 @@ gdk_drag_get_protocol (GdkNativeWindow  xid,
   return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);
 }
 
+/**
+ * gdk_drag_context_list_targets:
+ * @context: a #GdkDragContext
+ *
+ * Retrieves the list of targets of the context.
+ *
+ * Return value: a #GList of targets
+ *
+ * Since: 2.22
+ **/
+GList *
+gdk_drag_context_list_targets (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  return context->targets;
+}
+
+/**
+ * gdk_drag_context_get_actions:
+ * @context: a #GdkDragContext
+ *
+ * Determines the bitmask of actions proposed by the source if
+ * gdk_drag_context_suggested_action() returns GDK_ACTION_ASK.
+ *
+ * Return value: the #GdkDragAction flags
+ *
+ * Since: 2.22
+ **/
+GdkDragAction
+gdk_drag_context_get_actions (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_ACTION_DEFAULT);
+
+  return context->actions;
+}
+
+/**
+ * gdk_drag_context_get_suggested_action:
+ * @context: a #GdkDragContext
+ *
+ * Determines the suggested drag action of the context.
+ *
+ * Return value: a #GdkDragAction value
+ *
+ * Since: 2.22
+ **/
+GdkDragAction
+gdk_drag_context_get_suggested_action (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
+
+  return context->suggested_action;
+}
+
+/**
+ * gdk_drag_context_get_action:
+ * @context: a #GdkDragContext
+ *
+ * Determines the action chosen by the drag destination.
+ *
+ * Return value: a #GdkDragAction value
+ *
+ * Since: 2.22
+ **/
+GdkDragAction
+gdk_drag_context_get_action (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
+
+  return context->action;
+}
+
 #define __GDK_DND_C__
 #include "gdkaliasdef.c"

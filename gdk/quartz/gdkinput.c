@@ -116,6 +116,38 @@ gdk_display_list_devices (GdkDisplay *dpy)
   return _gdk_input_devices;
 }
 
+G_CONST_RETURN gchar *
+gdk_device_get_name (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  return device->name;
+}
+
+GdkInputSource
+gdk_device_get_source (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->source;
+}
+
+GdkInputMode
+gdk_device_get_mode (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->mode;
+}
+
+gboolean
+gdk_device_get_has_cursor (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  return device->has_cursor;
+}
+
 void
 gdk_device_set_source (GdkDevice *device,
 		       GdkInputSource source)
@@ -123,6 +155,25 @@ gdk_device_set_source (GdkDevice *device,
   device->source = source;
 }
 
+void
+gdk_device_get_key (GdkDevice       *device,
+                    guint            index,
+                    guint           *keyval,
+                    GdkModifierType *modifiers)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (index < device->num_keys);
+
+  if (!device->keys[index].keyval &&
+      !device->keys[index].modifiers)
+    return;
+
+  if (keyval)
+    *keyval = device->keys[index].keyval;
+
+  if (modifiers)
+    *modifiers = device->keys[index].modifiers;
+}
 
 void
 gdk_device_set_key (GdkDevice      *device,
@@ -135,6 +186,16 @@ gdk_device_set_key (GdkDevice      *device,
 
   device->keys[index].keyval = keyval;
   device->keys[index].modifiers = modifiers;
+}
+
+GdkAxisUse
+gdk_device_get_axis_use (GdkDevice *device,
+                         guint      index)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
+  g_return_val_if_fail (index < device->num_axes, GDK_AXIS_IGNORE);
+
+  return device->axes[index].use;
 }
 
 void

@@ -371,7 +371,13 @@ gdk_cursor_get_image
 #if IN_FILE(__GDK_INPUT_C__)
 gdk_device_free_history
 gdk_device_get_axis
+gdk_device_get_axis_use
+gdk_device_get_has_cursor
 gdk_device_get_history
+gdk_device_get_key
+gdk_device_get_mode
+gdk_device_get_name
+gdk_device_get_source
 gdk_device_get_type G_GNUC_CONST
 gdk_device_set_axis_use
 gdk_device_set_key
@@ -519,6 +525,10 @@ gdk_drop_reply
 
 #if IN_HEADER(__GDK_DND_H__)
 #if IN_FILE(__GDK_DND_C__)
+gdk_drag_context_get_action
+gdk_drag_context_get_actions
+gdk_drag_context_get_suggested_action
+gdk_drag_context_list_targets
 gdk_drag_find_window
 gdk_drag_get_protocol
 #endif
@@ -644,14 +654,20 @@ gdk_window_resize
 gdk_window_move_resize
 gdk_window_scroll
 gdk_window_move_region
+gdk_window_get_accept_focus
+gdk_window_get_back_pixmap
+gdk_window_get_background
+gdk_window_get_composited
+gdk_window_get_cursor
+gdk_window_get_deskrelative_origin
+gdk_window_get_focus_on_map
+gdk_window_get_geometry
+gdk_window_get_modal_hint
+gdk_window_get_origin
+gdk_window_get_root_coords
 gdk_window_set_background
 gdk_window_set_back_pixmap
 gdk_window_set_cursor
-gdk_window_get_cursor
-gdk_window_get_geometry
-gdk_window_get_origin
-gdk_window_get_root_coords
-gdk_window_get_deskrelative_origin
 gdk_window_shape_combine_mask
 gdk_window_shape_combine_region
 gdk_window_set_child_shapes
@@ -690,10 +706,12 @@ gdk_window_get_effective_toplevel
 gdk_window_get_update_area
 gdk_window_get_user_data
 gdk_window_get_window_type
-gdk_window_is_destroyed
 gdk_window_invalidate_maybe_recurse
 gdk_window_invalidate_rect
 gdk_window_invalidate_region
+gdk_window_is_destroyed
+gdk_window_is_input_only
+gdk_window_is_shaped
 gdk_window_is_viewable
 gdk_window_is_visible
 gdk_window_object_get_type G_GNUC_CONST
@@ -785,8 +803,17 @@ gdk_window_configure_finished
 
 #if IN_HEADER(__GDK_IMAGE_H__)
 #if IN_FILE(__GDK_IMAGE_C__)
-gdk_image_set_colormap
+gdk_image_get_bits_per_pixel
+gdk_image_get_bytes_per_pixel
+gdk_image_get_bytes_per_line
+gdk_image_get_byte_order
 gdk_image_get_colormap
+gdk_image_get_depth
+gdk_image_get_height
+gdk_image_get_image_type
+gdk_image_get_visual
+gdk_image_get_width
+gdk_image_set_colormap
 gdk_image_new
 #endif
 #endif
@@ -854,7 +881,15 @@ gdk_keyval_name G_GNUC_CONST
 #if IN_HEADER(__GDK_VISUAL_H__)
 #if IN_FILE(__GDK_VISUAL_C__)
 gdk_list_visuals
+gdk_visual_get_bits_per_rgb
+gdk_visual_get_blue_pixel_details
+gdk_visual_get_byte_order
+gdk_visual_get_colormap_size
+gdk_visual_get_depth
+gdk_visual_get_green_pixel_details
+gdk_visual_get_red_pixel_details
 gdk_visual_get_system
+gdk_visual_get_visual_type
 #endif
 #endif
 

@@ -66,7 +66,7 @@ typedef struct _GdkKeymapClass GdkKeymapClass;
 struct _GdkKeymap
 {
   GObject     parent_instance;
-  GdkDisplay *display;
+  GdkDisplay *GSEAL (display);
 };
 
 struct _GdkKeymapClass

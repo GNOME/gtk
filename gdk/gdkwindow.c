@@ -7851,6 +7851,29 @@ gdk_window_move_region (GdkWindow       *window,
 }
 
 /**
+ * gdk_window_get_background:
+ * @window: a #GdkWindow.
+ * @color: (out): a #GdkColor to be filled in
+ *
+ * Sets @color to equal the current background color of @window.
+ *
+ * Since: 2.22
+ */
+void
+gdk_window_get_background (GdkWindow *window,
+                           GdkColor  *color)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (color != NULL);
+
+  private = (GdkWindowObject *) window;
+
+  *color = private->bg_color;
+}
+
+/**
  * gdk_window_set_background:
  * @window: a #GdkWindow
  * @color: an allocated #GdkColor
@@ -7863,7 +7886,7 @@ gdk_window_move_region (GdkWindow       *window,
  * The @color must be allocated; gdk_rgb_find_color() is the best way
  * to allocate a color.
  *
- * See also gdk_window_set_back_pixmap().
+ * See also gdk_window_set_background_pixmap().
  */
 void
 gdk_window_set_background (GdkWindow      *window,
@@ -7894,6 +7917,43 @@ gdk_window_set_background (GdkWindow      *window,
       impl_iface = GDK_WINDOW_IMPL_GET_IFACE (private->impl);
       impl_iface->set_background (window, &private->bg_color);
     }
+}
+
+/**
+ * gdk_window_get_back_pixmap:
+ * @window: a #GdkWindow.
+ * @pixmap: (out) (allow-none): a #GdkPixmap to be filled in, or %NULL.
+ * @parent_relative: (out) (allow-none): a pointer to a #gboolean to be filled in, or %NULL.
+ *
+ * Sets @pixmap to the current background pixmap of @window.  You do not
+ * own the pointer that is returned and this pointer should not be freeed
+ * or unreferenced.  Sets @parent_relative to %TRUE if the tiling is done
+ * based on the origin of the parent window.
+ *
+ * Since: 2.22
+ */
+void
+gdk_window_get_back_pixmap (GdkWindow  *window,
+                            GdkPixmap **pixmap,
+                            gboolean   *parent_relative)
+{
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *) window;
+
+  if (pixmap)
+    {
+      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG ||
+          private->bg_pixmap == GDK_NO_BG)
+        *pixmap = NULL;
+      else
+        *pixmap = private->bg_pixmap;
+    }
+
+  if (parent_relative)
+    *parent_relative = (private->bg_pixmap == GDK_PARENT_RELATIVE_BG);
 }
 
 /**
@@ -8222,8 +8282,10 @@ gdk_window_get_root_coords (GdkWindow *window,
  * @window: a child window
  * @x: X coordinate in child's coordinate system
  * @y: Y coordinate in child's coordinate system
- * @parent_x: return location for X coordinate in parent's coordinate system
- * @parent_y: return location for Y coordinate in parent's coordinate system
+ * @parent_x: (out) (allow-none): return location for X coordinate
+ * in parent's coordinate system, or %NULL
+ * @parent_y: (out) (allow-none): return location for Y coordinate
+ * in parent's coordinate system, or %NULL
  *
  * Transforms window coordinates from a child window to its parent
  * window, where the parent window is the normal parent as returned by
@@ -8284,8 +8346,8 @@ gdk_window_coords_to_parent (GdkWindow *window,
  * @window: a child window
  * @parent_x: X coordinate in parent's coordinate system
  * @parent_y: Y coordinate in parent's coordinate system
- * @x: return location for X coordinate in child's coordinate system
- * @y: return location for Y coordinate in child's coordinate system
+ * @x: (out) (allow-none): return location for X coordinate in child's coordinate system
+ * @y: (out) (allow-none): return location for Y coordinate in child's coordinate system
  *
  * Transforms window coordinates from a parent window to a child
  * window, where the parent window is the normal parent as returned by
@@ -8807,6 +8869,30 @@ gdk_window_set_static_gravities (GdkWindow *window,
 }
 
 /**
+ * gdk_window_get_composited:
+ * @window: a #GdkWindow
+ *
+ * Determines whether @window is composited.
+ *
+ * See gdk_window_set_composited().
+ *
+ * Returns: %TRUE if the window is composited.
+ *
+ * Since: 2.22
+ **/
+gboolean
+gdk_window_get_composited (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *)window;
+
+  return private->composited;
+}
+
+/**
  * gdk_window_set_composited:
  * @window: a #GdkWindow
  * @composited: %TRUE to set the window as composited
@@ -8919,6 +9005,120 @@ gdk_window_remove_redirection (GdkWindow *window)
       gdk_window_redirect_free (private->redirect);
       private->redirect = NULL;
     }
+}
+
+/**
+ * gdk_window_get_modal_hint:
+ * @window: A toplevel #GdkWindow.
+ *
+ * Determines whether or not the window manager is hinted that @window
+ * has modal behaviour.
+ *
+ * Return value: whether or not the window has the modal hint set.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_get_modal_hint (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject*) window;
+
+  return private->modal_hint;
+}
+
+/**
+ * gdk_window_get_accept_focus:
+ * @window: a toplevel #GdkWindow.
+ *
+ * Determines whether or not the desktop environment shuld be hinted that
+ * the window does not want to receive input focus.
+ *
+ * Return value: whether or not the window should receive input focus.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_get_accept_focus (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *)window;
+
+  return private->accept_focus;
+}
+
+/**
+ * gdk_window_get_focus_on_map:
+ * @window: a toplevel #GdkWindow.
+ *
+ * Determines whether or not the desktop environment should be hinted that the
+ * window does not want to receive input focus when it is mapped.
+ *
+ * Return value: whether or not the window wants to receive input focus when
+ * it is mapped.
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_get_focus_on_map (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *)window;
+
+  return private->focus_on_map;
+}
+
+/**
+ * gdk_window_is_input_only:
+ * @window: a toplevel #GdkWindow
+ *
+ * Determines whether or not the window is an input only window.
+ *
+ * Return value: %TRUE if @window is input only
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_is_input_only (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *)window;
+
+  return private->input_only;
+}
+
+/**
+ * gdk_window_is_shaped:
+ * @window: a toplevel #GdkWindow
+ *
+ * Determines whether or not the window is shaped.
+ *
+ * Return value: %TRUE if @window is shaped
+ *
+ * Since: 2.22
+ */
+gboolean
+gdk_window_is_shaped (GdkWindow *window)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  private = (GdkWindowObject *)window;
+
+  return private->shaped;
 }
 
 static void

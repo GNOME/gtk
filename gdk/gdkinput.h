@@ -100,16 +100,16 @@ struct _GdkDevice
   GObject parent_instance;
   /* All fields are read-only */
 	  
-  gchar *name;
-  GdkInputSource source;
-  GdkInputMode mode;
-  gboolean has_cursor;	     /* TRUE if the X pointer follows device motion */
+  gchar *GSEAL (name);
+  GdkInputSource GSEAL (source);
+  GdkInputMode GSEAL (mode);
+  gboolean GSEAL (has_cursor);   /* TRUE if the X pointer follows device motion */
 	  
-  gint num_axes;
-  GdkDeviceAxis *axes;
+  gint GSEAL (num_axes);
+  GdkDeviceAxis *GSEAL (axes);
 	  
-  gint num_keys;
-  GdkDeviceKey *keys;
+  gint GSEAL (num_keys);
+  GdkDeviceKey *GSEAL (keys);
 };
 
 /* We don't allocate each coordinate this big, but we use it to
@@ -129,6 +129,18 @@ GType          gdk_device_get_type      (void) G_GNUC_CONST;
 /* Returns a list of GdkDevice * */	  
 GList *        gdk_devices_list              (void);
 #endif /* GDK_MULTIHEAD_SAFE */
+
+G_CONST_RETURN gchar *gdk_device_get_name       (GdkDevice *device);
+GdkInputSource        gdk_device_get_source     (GdkDevice *device);
+GdkInputMode          gdk_device_get_mode       (GdkDevice *device);
+gboolean              gdk_device_get_has_cursor (GdkDevice *device);
+
+void                  gdk_device_get_key        (GdkDevice       *device,
+                                                 guint            index,
+                                                 guint           *keyval,
+                                                 GdkModifierType *modifiers);
+GdkAxisUse            gdk_device_get_axis_use   (GdkDevice       *device,
+                                                 guint            index);
 
 /* Functions to configure a device */
 void           gdk_device_set_source    (GdkDevice      *device,

@@ -71,13 +71,13 @@ struct _GdkColormap
   GObject parent_instance;
 
   /*< public >*/
-  gint      size;
-  GdkColor *colors;
+  gint      GSEAL (size);
+  GdkColor *GSEAL (colors);
 
   /*< private >*/
-  GdkVisual *visual;
+  GdkVisual *GSEAL (visual);
   
-  gpointer windowing_data;
+  gpointer GSEAL (windowing_data);
 };
 
 struct _GdkColormapClass
