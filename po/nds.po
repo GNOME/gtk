@@ -1589,7 +1589,7 @@ msgstr "Klöörutwahl"
 #.
 #: gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
-msgstr "Standard:mm"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226
@@ -2139,7 +2139,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:708
 msgid "default:LTR"
-msgstr "Standard:LTR"
+msgstr "default:LTR"
 
 #: gtk/gtkmain.c:773
 #, c-format

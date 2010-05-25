@@ -1584,7 +1584,7 @@ msgstr ""
 #: gtk/gtkcustompaperunixdialog.c:118
 #, fuzzy
 msgid "default:mm"
-msgstr "default:RTL"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226

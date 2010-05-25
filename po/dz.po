@@ -1686,7 +1686,7 @@ msgstr "ཚོས་གཞིའི་སེལ་འཐུ།"
 #.
 #: gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
-msgstr "ཨེམ་ཨེམ།"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226

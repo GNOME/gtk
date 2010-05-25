@@ -1687,7 +1687,7 @@ msgstr "Գույնի ընտրություն"
 #: gtk/gtkcustompaperunixdialog.c:118
 #, fuzzy
 msgid "default:mm"
-msgstr "դեֆոլթ.LTR"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226

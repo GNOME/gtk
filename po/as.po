@@ -1623,7 +1623,7 @@ msgstr "ৰঙৰ নিৰ্ব্বাচন"
 #.
 #: gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
-msgstr "অবিকল্পিত:mm"
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226
