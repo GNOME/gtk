@@ -3090,7 +3090,7 @@ gdk_color_to_css (GdkColor *color)
 
 /**
  * gtk_icon_info_load_symbolic:
- * @info: a #GtkIconInfo
+ * @icon_info: a #GtkIconInfo
  * @fg: a #GdkColor representing the foreground color of the icon
  * @success_color: (allow-none): a #GdkColor representing the warning color
  *     of the icon or %NULL to use the default color
@@ -3125,7 +3125,7 @@ gdk_color_to_css (GdkColor *color)
  * Since: 3.0
  **/
 GdkPixbuf *
-gtk_icon_info_load_symbolic (GtkIconInfo  *info,
+gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
                              GdkColor     *fg,
                              GdkColor     *success_color,
                              GdkColor     *warning_color,
@@ -3143,11 +3143,12 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *info,
 
   g_return_val_if_fail (fg != NULL, NULL);
 
-  if (!info->filename || !g_str_has_suffix (info->filename, "-symbolic.svg"))
+  if (!icon_info->filename ||
+      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
     {
       if (was_symbolic)
         *was_symbolic = FALSE;
-      return gtk_icon_info_load_icon (info, error);
+      return gtk_icon_info_load_icon (icon_info, error);
     }
 
   if (was_symbolic)
@@ -3197,7 +3198,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *info,
 "      fill: ", css_success," !important;\n"
 "    }\n"
 "  </style>\n"
-"  <xi:include href=\"", info->filename, "\"/>\n"
+"  <xi:include href=\"", icon_info->filename, "\"/>\n"
 "</svg>",
          NULL);
   g_free (css_fg);
@@ -3208,8 +3209,8 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *info,
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
 
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                info->desired_size,
-                                                info->desired_size,
+                                                icon_info->desired_size,
+                                                icon_info->desired_size,
                                                 TRUE,
                                                 NULL,
                                                 error);
