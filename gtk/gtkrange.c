@@ -305,6 +305,9 @@ gtk_range_class_init (GtkRangeClass *class)
    * GtkRange::adjust-bounds:
    * @range: the #GtkRange that received the signal
    * @value: the value before we clamp
+   *
+   * Emitted before clamping a value, to give the application a
+   * chance to adjust the bounds.
    */
   signals[ADJUST_BOUNDS] =
     g_signal_new (I_("adjust-bounds"),
@@ -3646,7 +3649,7 @@ gtk_range_real_change_value (GtkRange     *range,
                              GtkScrollType scroll,
                              gdouble       value)
 {
-  /* potentially adjust the bounds _before we clamp */
+  /* potentially adjust the bounds _before_ we clamp */
   g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
 
   if (range->layout->restrict_to_fill_level)
