@@ -270,6 +270,7 @@ gtk_action_group_add_toggle_actions_full
 GtkRadioActionEntry
 gtk_action_group_add_radio_actions
 gtk_action_group_add_radio_actions_full
+GtkTranslateFunc
 gtk_action_group_set_translate_func
 gtk_action_group_set_translation_domain
 gtk_action_group_translate_string
@@ -5201,6 +5202,7 @@ gtk_style_detach
 gtk_style_set_background
 gtk_style_apply_default_background
 gtk_style_lookup_color
+gtk_style_lookup_icon_set
 gtk_style_render_icon
 gtk_style_get_style_property
 gtk_style_get_valist
