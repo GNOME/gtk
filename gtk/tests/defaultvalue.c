@@ -183,6 +183,10 @@ test_type (gconstpointer data)
 	  strcmp (pspec->name, "image") == 0)
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_PANED) &&
+	  strcmp (pspec->name, "max-position") == 0)
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
 	  strcmp (pspec->name, "job-name") == 0)
 	continue;

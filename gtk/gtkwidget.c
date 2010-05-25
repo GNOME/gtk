@@ -7954,7 +7954,7 @@ gtk_widget_set_events (GtkWidget *widget,
 /**
  * gtk_widget_set_device_events:
  * @widget: a #GtkWidget
- * #device: a #GdkDevice
+ * @device: a #GdkDevice
  * @events: event mask
  *
  * Sets the device event mask (see #GdkEventMask) for a widget. The event

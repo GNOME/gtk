@@ -2735,6 +2735,7 @@ gtk_recent_action_get_type
 <TITLE>GtkRuler</TITLE>
 GtkRuler
 GtkRulerMetric
+gtk_ruler_new
 gtk_ruler_set_metric
 gtk_ruler_set_range
 gtk_ruler_get_metric
@@ -5476,22 +5477,6 @@ GtkCallbackMarshal
 GtkArg
 <SUBSECTION Private>
 GTK_TYPE_IDENTIFIER
-GTK_TYPE_UINT
-GTK_TYPE_ULONG
-GTK_TYPE_LONG
-GTK_TYPE_STRING
-GTK_TYPE_INT
-GTK_TYPE_NONE
-GTK_TYPE_FLOAT
-GTK_TYPE_FLAGS
-GTK_TYPE_ENUM
-GTK_TYPE_UCHAR
-GTK_TYPE_POINTER
-GTK_TYPE_BOOL
-GTK_TYPE_CHAR
-GTK_TYPE_BOXED
-GTK_TYPE_DOUBLE
-GTK_TYPE_INVALID
 gtk_identifier_get_type
 </SECTION>
 
@@ -5557,8 +5542,6 @@ GtkSortType
 GtkDragResult
 
 <SUBSECTION Private>
-GtkMenuCallback
-GtkMenuEntry
 GTK_PATH_PRIO_MASK
 </SECTION>
 

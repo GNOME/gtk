@@ -152,9 +152,11 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->dispose = gdk_display_dispose;
 
   /**
-   * GdkDisplay::opened.
+   * GdkDisplay::opened:
    * @display: the object on which the signal is emitted
    *
+   * The ::opened signal is emitted when the connection to the windowing
+   * system for @display is opened.
    */
   signals[OPENED] =
     g_signal_new (g_intern_static_string ("opened"),
