@@ -209,18 +209,31 @@ typedef enum
   GTK_CENTIMETERS
 } GtkMetricType;
 
+/**
+ * GtkMovementStep:
+ * @GTK_MOVEMENT_LOGICAL_POSITIONS: Move forward or back by graphemes
+ * @GTK_MOVEMENT_VISUAL_POSITIONS:  Move left or right by graphemes
+ * @GTK_MOVEMENT_WORDS:             Move forward or back by words
+ * @GTK_MOVEMENT_DISPLAY_LINES:     Move up or down lines (wrapped lines)
+ * @GTK_MOVEMENT_DISPLAY_LINE_ENDS: Move to either end of a line
+ * @GTK_MOVEMENT_PARAGRAPHS:        Move up or down paragraphs (newline-ended lines)
+ * @GTK_MOVEMENT_PARAGRAPH_ENDS:    Move to either end of a paragraph
+ * @GTK_MOVEMENT_PAGES:             Move by pages
+ * @GTK_MOVEMENT_BUFFER_ENDS:       Move to ends of the buffer
+ * @GTK_MOVEMENT_HORIZONTAL_PAGES:  Move horizontally by pages
+ */
 typedef enum
 {
-  GTK_MOVEMENT_LOGICAL_POSITIONS, /* move by forw/back graphemes */
-  GTK_MOVEMENT_VISUAL_POSITIONS,  /* move by left/right graphemes */
-  GTK_MOVEMENT_WORDS,             /* move by forward/back words */
-  GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
-  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move to either end of a line */
-  GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
-  GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
-  GTK_MOVEMENT_PAGES,	          /* move by pages */
-  GTK_MOVEMENT_BUFFER_ENDS,       /* move to ends of the buffer */
-  GTK_MOVEMENT_HORIZONTAL_PAGES   /* move horizontally by pages */
+  GTK_MOVEMENT_LOGICAL_POSITIONS,
+  GTK_MOVEMENT_VISUAL_POSITIONS,
+  GTK_MOVEMENT_WORDS,
+  GTK_MOVEMENT_DISPLAY_LINES,
+  GTK_MOVEMENT_DISPLAY_LINE_ENDS,
+  GTK_MOVEMENT_PARAGRAPHS,
+  GTK_MOVEMENT_PARAGRAPH_ENDS,
+  GTK_MOVEMENT_PAGES,
+  GTK_MOVEMENT_BUFFER_ENDS,
+  GTK_MOVEMENT_HORIZONTAL_PAGES
 } GtkMovementStep;
 
 typedef enum
