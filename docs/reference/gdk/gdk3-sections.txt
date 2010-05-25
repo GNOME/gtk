@@ -789,6 +789,10 @@ gdk_offscreen_window_get_embedder
 gdk_window_geometry_changed
 gdk_window_redirect_to_drawable
 gdk_window_remove_redirection
+gdk_window_coords_from_parent
+gdk_window_coords_to_parent
+gdk_window_get_effective_parent
+gdk_window_get_effective_toplevel
 
 <SUBSECTION Standard>
 GDK_WINDOW
@@ -815,6 +819,10 @@ gdk_window_object_get_type
 gdk_drawable_get_type
 GdkWindowObject
 GdkWindowObjectClass
+GdkWindowImpl
+GdkWindowImplIface
+GdkWindowRedirect
+gdk_window_impl_get_type
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_thaw_toplevel_updates_libgtk_only
 </SECTION>
@@ -1408,6 +1416,8 @@ gdk_x11_get_xatom_name_for_display
 gdk_display
 GDK_HAVE_WCHAR_H
 GDK_HAVE_WCTYPE_H
+gdk_x11_pixmap_get_drawable_impl
+gdk_x11_window_get_drawable_impl
 </SECTION>
 
 <SECTION>
