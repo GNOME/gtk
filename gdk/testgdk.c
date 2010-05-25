@@ -195,8 +195,6 @@ test_colourmaps (void)
 static void
 test_colours (void)
 {
-  ASSERT (gdk_color_white (system_colourmap, &white));
-  ASSERT (gdk_color_black (system_colourmap, &black));
   red.red = 65535;
   red.green = red.blue = 0;
   TEST (gdk_colormap_alloc_color (system_colourmap, &red, FALSE, TRUE));

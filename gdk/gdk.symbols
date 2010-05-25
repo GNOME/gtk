@@ -354,12 +354,6 @@ gdk_cairo_region
 
 #if IN_HEADER(__GDK_COLOR_H__)
 #if IN_FILE(__GDK_COLOR_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_colors_store
-gdk_color_white
-gdk_color_black
-gdk_color_alloc
-#endif
 gdk_color_copy
 gdk_color_equal
 gdk_color_free
@@ -368,10 +362,6 @@ gdk_color_hash
 gdk_colormap_alloc_color
 gdk_colormap_get_system
 gdk_colormap_get_visual
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_colormap_ref
-gdk_colormap_unref
-#endif
 gdk_color_parse
 gdk_color_to_string
 #endif
@@ -381,13 +371,6 @@ gdk_color_to_string
 #if IN_FILE(__GDK_COLOR_X11_C__)
 gdk_colormap_new
 gdk_colormap_get_type G_GNUC_CONST
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_colormap_change
-gdk_colors_alloc
-gdk_colors_free
-gdk_colormap_get_system_size
-gdk_color_change
-#endif
 gdk_colormap_alloc_colors
 gdk_colormap_free_colors
 gdk_colormap_query_color

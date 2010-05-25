@@ -99,39 +99,6 @@ gdk_screen_get_rgba_colormap (GdkScreen *screen)
   return colormap;
 }
 
-gint
-gdk_colormap_get_system_size (void)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
-void
-gdk_colormap_change (GdkColormap *colormap,
-		     gint         ncolors)
-{
-  /* FIXME: Implement */
-}
-
-gboolean
-gdk_colors_alloc (GdkColormap   *colormap,
-		  gboolean       contiguous,
-		  gulong        *planes,
-		  gint           nplanes,
-		  gulong        *pixels,
-		  gint           npixels)
-{
-  return TRUE;
-}
-
-void
-gdk_colors_free (GdkColormap *colormap,
-		 gulong      *pixels,
-		 gint         npixels,
-		 gulong       planes)
-{
-}
-
 void
 gdk_colormap_free_colors (GdkColormap    *colormap,
                           const GdkColor *colors,
@@ -213,14 +180,3 @@ _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
   else
     *alpha = 1.0;
 }
-
-gboolean
-gdk_color_change (GdkColormap *colormap,
-		  GdkColor    *color)
-{
-  if (color->pixel < 0 || color->pixel >= colormap->size)
-    return FALSE;
-
-  return TRUE;
-}
-

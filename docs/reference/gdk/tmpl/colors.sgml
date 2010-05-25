@@ -32,10 +32,7 @@ directly.
 In previous revisions of this interface, a number
 of functions that take a #GdkColormap parameter
 were replaced with functions whose names began
-with "gdk_colormap_". This process will probably
-be extended somewhat in the future - 
-gdk_color_white(), gdk_color_black(), and 
-gdk_color_change() will probably become aliases.
+with "gdk_colormap_".
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -78,45 +75,12 @@ The colormap structure contains the following public fields.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_colormap_ref ##### -->
-<para>
-
-</para>
-
-@cmap: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_unref ##### -->
-<para>
-
-</para>
-
-@cmap: 
-
-
 <!-- ##### FUNCTION gdk_colormap_get_system ##### -->
 <para>
 </para>
 
 @void: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_get_system_size ##### -->
-<para>
-</para>
-
-@void: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colormap_change ##### -->
-<para>
-</para>
-
-@colormap: 
-@ncolors: 
 
 
 <!-- ##### FUNCTION gdk_colormap_alloc_colors ##### -->
@@ -179,15 +143,6 @@ The colormap structure contains the following public fields.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_colors_store ##### -->
-<para>
-</para>
-
-@colormap: 
-@colors: 
-@ncolors: 
-
-
 <!-- ##### FUNCTION gdk_color_copy ##### -->
 <para>
 </para>
@@ -203,70 +158,11 @@ The colormap structure contains the following public fields.
 @color: 
 
 
-<!-- ##### FUNCTION gdk_colors_alloc ##### -->
-<para>
-</para>
-
-@colormap: 
-@contiguous: 
-@planes: 
-@nplanes: 
-@pixels: 
-@npixels: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_colors_free ##### -->
-<para>
-</para>
-
-@colormap: 
-@pixels: 
-@npixels: 
-@planes: 
-
-
-<!-- ##### FUNCTION gdk_color_white ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_black ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_color_parse ##### -->
 <para>
 </para>
 
 @spec: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_alloc ##### -->
-<para>
-</para>
-
-@colormap: 
-@color: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_color_change ##### -->
-<para>
-</para>
-
-@colormap: 
 @color: 
 @Returns: 
 

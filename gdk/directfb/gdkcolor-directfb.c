@@ -218,45 +218,6 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
   return colormap;
 }
 
-gint
-gdk_colormap_get_system_size (void)
-{
-  GdkVisual *visual;
-
-  visual = gdk_visual_get_system ();
-
-  return visual->colormap_size;
-}
-
-void
-gdk_colormap_change (GdkColormap *colormap,
-                     gint         ncolors)
-{
-  g_message ("gdk_colormap_change() is deprecated and unimplemented");
-}
-
-gboolean
-gdk_colors_alloc (GdkColormap   *colormap,
-                  gboolean       contiguous,
-                  gulong        *planes,
-                  gint           nplanes,
-                  gulong        *pixels,
-                  gint           npixels)
-{
-  /* g_message ("gdk_colors_alloc() is deprecated and unimplemented"); */
-
-  return TRUE;  /* return TRUE here to make GdkRGB happy */
-}
-
-void
-gdk_colors_free (GdkColormap *colormap,
-                 gulong      *in_pixels,
-                 gint         in_npixels,
-                 gulong       planes)
-{
-  /* g_message ("gdk_colors_free() is deprecated and unimplemented"); */
-}
-
 void
 gdk_colormap_free_colors (GdkColormap    *colormap,
                           const GdkColor *colors,
@@ -342,44 +303,6 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
     }
 
   return 0;
-}
-
-gboolean
-gdk_color_change (GdkColormap *colormap,
-                  GdkColor    *color)
-{
-  GdkColormapPrivateDirectFB *private;
-  IDirectFBPalette           *palette;
-
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  private = colormap->windowing_data;
-  if (!private)
-    return FALSE;
-
-  palette = private->palette;
-  if (!palette)
-    return FALSE;
-
-  if (color->pixel < 0 || color->pixel >= colormap->size)
-    return FALSE;
-
-  if (private->info[color->pixel].flags & GDK_COLOR_WRITEABLE)
-    {
-      DFBColor  entry = { 0xFF,
-                          color->red   >> 8,
-                          color->green >> 8,
-                          color->blue  >> 8 };
-
-      if (palette->SetEntries (palette, &entry, 1, color->pixel) != DFB_OK)
-        return FALSE;
-
-      colormap->colors[color->pixel] = *color;
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 void
