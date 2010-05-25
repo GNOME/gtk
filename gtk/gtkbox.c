@@ -182,11 +182,11 @@ static void     gtk_box_get_height_for_width (GtkExtendedLayout      *layout,
 
 static GtkExtendedLayoutIface *parent_extended_layout_iface;
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                         NULL)
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
-                                                         gtk_box_extended_layout_init));
+G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EXTENDED_LAYOUT,
+                                                gtk_box_extended_layout_init));
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
@@ -1252,12 +1252,12 @@ gtk_box_get_height_for_width (GtkExtendedLayout *layout,
  *
  * Return value: a new #GtkHBox.
  *
- * Since: 2.16
+ * Since: 3.0
  **/
 GtkWidget*
-_gtk_box_new (GtkOrientation orientation,
-              gboolean       homogeneous,
-              gint           spacing)
+gtk_box_new (GtkOrientation orientation,
+             gboolean       homogeneous,
+             gint           spacing)
 {
   return g_object_new (GTK_TYPE_BOX,
                        "orientation", orientation,

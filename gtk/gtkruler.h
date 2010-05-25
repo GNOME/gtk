@@ -110,6 +110,7 @@ struct _GtkRulerMetric
 
 
 GType           gtk_ruler_get_type   (void) G_GNUC_CONST;
+GtkWidget     * gtk_ruler_new        (GtkOrientation  orientation);
 void            gtk_ruler_set_metric (GtkRuler       *ruler,
                                       GtkMetricType   metric);
 GtkMetricType   gtk_ruler_get_metric (GtkRuler       *ruler);

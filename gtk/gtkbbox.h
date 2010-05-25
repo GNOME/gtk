@@ -65,8 +65,8 @@ struct _GtkButtonBoxClass
 };
 
 
-GType gtk_button_box_get_type (void) G_GNUC_CONST;
-
+GType             gtk_button_box_get_type            (void) G_GNUC_CONST;
+GtkWidget       * gtk_button_box_new                 (GtkOrientation     orientation);
 GtkButtonBoxStyle gtk_button_box_get_layout          (GtkButtonBox      *widget);
 void              gtk_button_box_set_layout          (GtkButtonBox      *widget,
 						      GtkButtonBoxStyle  layout_style);

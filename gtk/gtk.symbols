@@ -434,6 +434,7 @@ gtk_bin_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GTK_BOX_H__)
 #if IN_FILE(__GTK_BOX_C__)
+gtk_box_new
 gtk_box_get_homogeneous
 gtk_box_get_spacing
 gtk_box_get_type G_GNUC_CONST
@@ -486,6 +487,7 @@ gtk_builder_value_from_string_type
 
 #if IN_HEADER(__GTK_BUTTON_BOX_H__)
 #if IN_FILE(__GTK_BUTTON_BOX_C__)
+gtk_button_box_new
 gtk_button_box_get_child_secondary
 gtk_button_box_get_layout
 gtk_button_box_get_type G_GNUC_CONST
@@ -2207,6 +2209,7 @@ gtk_orientable_set_orientation
 
 #if IN_HEADER(__GTK_PANED_H__)
 #if IN_FILE(__GTK_PANED_C__)
+gtk_paned_new
 gtk_paned_add1
 gtk_paned_add2
 gtk_paned_get_child1
@@ -3003,6 +3006,7 @@ gtk_text_buffer_unregister_serialize_format
 
 #if IN_HEADER(__GTK_RULER_H__)
 #if IN_FILE(__GTK_RULER_C__)
+gtk_ruler_new
 gtk_ruler_draw_pos
 gtk_ruler_draw_ticks
 gtk_ruler_get_metric
@@ -3015,6 +3019,8 @@ gtk_ruler_set_range
 
 #if IN_HEADER(__GTK_SCALE_H__)
 #if IN_FILE(__GTK_SCALE_C__)
+gtk_scale_new
+gtk_scale_new_with_range
 gtk_scale_get_digits
 gtk_scale_get_draw_value
 gtk_scale_get_layout
@@ -3047,6 +3053,7 @@ gtk_scale_button_get_popup
 #if IN_HEADER(__GTK_SCROLLBAR_H__)
 #if IN_FILE(__GTK_SCROLLBAR_C__)
 gtk_scrollbar_get_type G_GNUC_CONST
+gtk_scrollbar_new
 #endif
 #endif
 
@@ -3126,6 +3133,7 @@ gtk_target_table_free
 #if IN_HEADER(__GTK_SEPARATOR_H__)
 #if IN_FILE(__GTK_SEPARATOR_C__)
 gtk_separator_get_type G_GNUC_CONST
+gtk_separator_new
 #endif
 #endif
 

@@ -99,7 +99,7 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_X 4
 #define DEFAULT_CHILD_IPAD_Y 0
 
-G_DEFINE_ABSTRACT_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
 
 static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)
@@ -811,6 +811,24 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
           gtk_widget_size_allocate (child->widget, &child_allocation);
         }
     }
+}
+
+/**
+ * gtk_button_box_new:
+ * @orientation: the box' orientation.
+ *
+ * Creates a new #GtkButtonBox.
+ *
+ * Return value: a new #GtkButtonBox.
+ *
+ * Since: 3.0
+ */
+GtkWidget *
+gtk_button_box_new (GtkOrientation orientation)
+{
+  return g_object_new (GTK_TYPE_BUTTON_BOX,
+                       "orientation", orientation,
+                       NULL);
 }
 
 #define __GTK_BUTTON_BOX_C__
