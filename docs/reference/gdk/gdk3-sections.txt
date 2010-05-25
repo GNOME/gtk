@@ -1059,7 +1059,6 @@ gdk_device_manager_get_display
 gdk_device_manager_list_devices
 
 <SUBSECTION>
-gdk_devices_list
 gdk_device_get_name
 gdk_device_set_source
 gdk_device_get_source
@@ -1074,7 +1073,6 @@ gdk_device_get_device_type
 gdk_device_get_display
 gdk_device_get_has_cursor
 gdk_device_get_n_axes
-gdk_device_get_core_pointer
 
 <SUBSECTION>
 gdk_device_grab
