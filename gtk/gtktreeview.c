@@ -10814,7 +10814,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
  *
  * Gets the #GtkTreeSelection associated with @tree_view.
  *
- * Return value: A #GtkTreeSelection object.
+ * Return value: (transfer none): A #GtkTreeSelection object.
  **/
 GtkTreeSelection *
 gtk_tree_view_get_selection (GtkTreeView *tree_view)
