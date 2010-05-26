@@ -36,7 +36,6 @@
 #include <glib.h>
 #include <pango/pango.h>
 #include <glib-object.h>
-#include <cairo.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION
@@ -106,7 +105,7 @@ typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkFont		      GdkFont;
 typedef struct _GdkGC                 GdkGC;
 typedef struct _GdkImage              GdkImage;
-typedef cairo_region_t                GdkRegion;
+typedef struct _GdkRegion             GdkRegion;
 typedef struct _GdkVisual             GdkVisual;
 
 typedef struct _GdkDrawable           GdkDrawable;

@@ -28,6 +28,7 @@
 
 #include "gdkgc.h"
 #include "gdkprivate-x11.h"
+#include "gdkregion-generic.h"
 #include "gdkx.h"
 #include "gdkalias.h"
 

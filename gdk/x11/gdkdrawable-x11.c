@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdkx.h"
+#include "gdkregion-generic.h"
 
 #include <cairo-xlib.h>
 
@@ -366,16 +367,22 @@ gdk_x11_drawable_update_picture_clip (GdkDrawable *drawable,
 
   if (clip_region)
     {
-      XRectangle *rects;
-      int n_rects;
+      GdkRegionBox *boxes = clip_region->rects;
+      gint n_boxes = clip_region->numRects;
+      XRectangle *rects = g_new (XRectangle, n_boxes);
+      int i;
 
-      _gdk_region_get_xrectangles (clip_region, 
-                                   gc->clip_x_origin,
-                                   gc->clip_y_origin,
-                                   &rects,
-                                   &n_rects);
+      for (i=0; i < n_boxes; i++)
+	{
+	  rects[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
+	  rects[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rects[i].x;
+	  rects[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rects[i].y;
+	}
+      
       XRenderSetPictureClipRectangles (xdisplay, picture,
-				       0, 0, rects, n_rects);
+				       0, 0, rects, n_boxes);
+      
       g_free (rects);
     }
   else
