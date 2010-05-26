@@ -288,9 +288,9 @@ add_damage (GdkOffscreenWindow *offscreen,
       rect.height += 7;
     }
 
-  damage = cairo_region_create_rectangle (&rect);
+  damage = gdk_region_rectangle (&rect);
   _gdk_window_add_damage (offscreen->wrapper, damage);
-  cairo_region_destroy (damage);
+  gdk_region_destroy (damage);
 }
 
 static GdkDrawable *

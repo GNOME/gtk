@@ -1237,7 +1237,7 @@ gdk_drawable_real_get_composite_drawable (GdkDrawable *drawable,
  * but no area outside of this region will be affected by drawing
  * primitives.
  * 
- * Returns: a #GdkRegion. This must be freed with cairo_region_destroy()
+ * Returns: a #GdkRegion. This must be freed with gdk_region_destroy()
  *          when you are done.
  **/
 GdkRegion *
@@ -1257,7 +1257,7 @@ gdk_drawable_get_clip_region (GdkDrawable *drawable)
  * obscured by other windows, but no area outside of this region
  * is visible.
  * 
- * Returns: a #GdkRegion. This must be freed with cairo_region_destroy()
+ * Returns: a #GdkRegion. This must be freed with gdk_region_destroy()
  *          when you are done.
  **/
 GdkRegion *
@@ -1278,7 +1278,7 @@ gdk_drawable_real_get_visible_region (GdkDrawable *drawable)
 
   gdk_drawable_get_size (drawable, &rect.width, &rect.height);
 
-  return cairo_region_create_rectangle (&rect);
+  return gdk_region_rectangle (&rect);
 }
 
 /**
@@ -1608,15 +1608,15 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
   tmp_rect.width = width;
   tmp_rect.height = height;
 
-  drect = cairo_region_create_rectangle (&tmp_rect);
+  drect = gdk_region_rectangle (&tmp_rect);
   clip = gdk_drawable_get_clip_region (drawable);
 
-  cairo_region_intersect (drect, clip);
+  gdk_region_intersect (drect, clip);
 
-  cairo_region_get_extents (drect, &tmp_rect);
+  gdk_region_get_clipbox (drect, &tmp_rect);
   
-  cairo_region_destroy (drect);
-  cairo_region_destroy (clip);
+  gdk_region_destroy (drect);
+  gdk_region_destroy (clip);
 
   if (tmp_rect.width == 0 ||
       tmp_rect.height == 0)

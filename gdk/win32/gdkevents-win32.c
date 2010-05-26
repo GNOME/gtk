@@ -1286,7 +1286,7 @@ synthesize_expose_events (GdkWindow *window)
 	  event->expose.area.y = r.top;
 	  event->expose.area.width = r.right - r.left;
 	  event->expose.area.height = r.bottom - r.top;
-	  event->expose.region = cairo_region_create_rectangle (&(event->expose.area));
+	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
 	  event->expose.count = 0;
   
 	  append_event (event);
@@ -1536,7 +1536,7 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
       return NULL;
     }
 
-  result = cairo_region_create ();
+  result = gdk_region_new ();
   rects = (RECT *) rgndata->Buffer;
   for (i = 0; i < rgndata->rdh.nCount; i++)
     {
@@ -1547,7 +1547,7 @@ _gdk_win32_hrgn_to_region (HRGN hrgn)
       r.width = rects[i].right - r.x;
       r.height = rects[i].bottom - r.y;
 
-      cairo_region_union_rectangle (result, &r);
+      gdk_region_union_with_rect (result, &r);
     }
 
   g_free (rgndata);
@@ -1635,9 +1635,9 @@ handle_wm_paint (MSG        *msg,
     }
 
   update_region = _gdk_win32_hrgn_to_region (hrgn);
-  if (!cairo_region_is_empty (update_region))
+  if (!gdk_region_empty (update_region))
     _gdk_window_invalidate_for_expose (window, update_region);
-  cairo_region_destroy (update_region);
+  gdk_region_destroy (update_region);
 
   DeleteObject (hrgn);
 }

@@ -481,7 +481,7 @@ gdk_region_polygon (const GdkPoint *points,
 	extents.y = MIN(points[0].y, points[2].y);
 	extents.width = MAX(points[0].x, points[2].x) - extents.x;
 	extents.height = MAX(points[0].y, points[2].y) - extents.y;
-	return cairo_region_create_rectangle (&extents);
+	return gdk_region_rectangle (&extents);
     }
 
     pETEs = g_new (EdgeTableEntry, n_points);

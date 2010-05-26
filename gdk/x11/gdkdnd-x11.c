@@ -320,7 +320,7 @@ free_cache_child (GdkCacheChild *child,
                   GdkDisplay    *display)
 {
   if (child->shape)
-    cairo_region_destroy (child->shape);
+    gdk_region_destroy (child->shape);
 
   if (child->shape_selected && display)
     {
@@ -379,7 +379,7 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
           child->shape_valid = FALSE;
           if (child->shape)
             {
-              cairo_region_destroy (child->shape);
+              gdk_region_destroy (child->shape);
               child->shape = NULL;
             }
         }
@@ -621,8 +621,8 @@ is_pointer_within_shape (GdkDisplay    *display,
                                         child->xid, ShapeInput);
       if (child->shape && input_shape)
         {
-          cairo_region_intersect (child->shape, input_shape);
-          cairo_region_destroy (input_shape);
+          gdk_region_intersect (child->shape, input_shape);
+          gdk_region_destroy (input_shape);
         }
       else if (input_shape)
         {
@@ -634,7 +634,7 @@ is_pointer_within_shape (GdkDisplay    *display,
     }
 
   return child->shape == NULL ||
-         cairo_region_contains_point (child->shape, x_pos, y_pos);
+         gdk_region_point_in (child->shape, x_pos, y_pos);
 }
 
 static Window

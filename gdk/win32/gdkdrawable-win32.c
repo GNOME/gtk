@@ -741,7 +741,7 @@ widen_bounds (GdkRectangle *bounds,
   bounds->width += 2 * pen_width;
   bounds->height += 2 * pen_width;
 
-  return cairo_region_create_rectangle (bounds);
+  return gdk_region_rectangle (bounds);
 }
 
 static void
@@ -819,7 +819,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
 		(filled ? 0 : LINE_ATTRIBUTES),
 		draw_rectangle, region, filled, x, y, width, height);
 
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
 }
 
 static void
@@ -917,7 +917,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
 		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_arc, region, filled, x, y, width, height, angle1, angle2);
 
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
 }
 
 static void
@@ -1001,7 +1001,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
 		GDK_GC_FOREGROUND | (filled ? 0 : LINE_ATTRIBUTES),
 		draw_polygon, region, filled, pts, npoints);
 
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
   g_free (pts);
 }
 
@@ -1295,7 +1295,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   generic_draw (drawable, gc, GDK_GC_FOREGROUND | LINE_ATTRIBUTES,
 		draw_segments, region, segs, nsegs);
 
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
 }
 
 static void
@@ -1397,7 +1397,7 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 			      LINE_ATTRIBUTES,
 		draw_lines, region, pts, npoints);
 
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
   g_free (pts);
 }
 

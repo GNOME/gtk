@@ -426,7 +426,7 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
 {
   gint *ranges;
   gint n_ranges, i;
-  GdkRegion *clip_region = cairo_region_create ();
+  GdkRegion *clip_region = gdk_region_new ();
   GdkRegion *tmp_region;
 
   pango_layout_line_get_x_ranges (line, start_index, end_index, &ranges, &n_ranges);
@@ -440,12 +440,12 @@ get_selected_clip (GtkTextRenderer    *text_renderer,
       rect.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
       rect.height = height;
       
-      cairo_region_union_rectangle (clip_region, &rect);
+      gdk_region_union_with_rect (clip_region, &rect);
     }
 
-  tmp_region = cairo_region_create_rectangle (&text_renderer->clip_rect);
-  cairo_region_intersect (clip_region, tmp_region);
-  cairo_region_destroy (tmp_region);
+  tmp_region = gdk_region_rectangle (&text_renderer->clip_rect);
+  gdk_region_intersect (clip_region, tmp_region);
+  gdk_region_destroy (tmp_region);
 
   g_free (ranges);
   return clip_region;
@@ -612,7 +612,7 @@ render_para (GtkTextRenderer    *text_renderer,
               gdk_gc_set_clip_region (fg_gc, NULL);
 	      gdk_pango_renderer_set_gc (GDK_PANGO_RENDERER (text_renderer), fg_gc);
 	      
-              cairo_region_destroy (clip_region);
+              gdk_region_destroy (clip_region);
 
               /* Paint in the ends of the line */
               if (line_rect.x > line_display->left_margin * PANGO_SCALE &&

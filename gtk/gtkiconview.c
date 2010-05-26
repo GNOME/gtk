@@ -1573,7 +1573,7 @@ gtk_icon_view_expose (GtkWidget *widget,
       area.width = item->width;
       area.height = item->height;
 	
-      if (cairo_region_contains_rectangle (expose->region, &area) == CAIRO_REGION_OVERLAP_OUT)
+      if (gdk_region_rect_in (expose->region, &area) == GDK_OVERLAP_RECTANGLE_OUT)
 	continue;
       
       gtk_icon_view_paint_item (icon_view, cr, item, &expose->area, 
@@ -1645,16 +1645,17 @@ gtk_icon_view_expose (GtkWidget *widget,
   
   if (icon_view->priv->doing_rubberband)
     {
-      cairo_rectangle_int_t rectangle;
+      GdkRectangle *rectangles;
       gint n_rectangles;
       
-      n_rectangles = cairo_region_num_rectangles (expose->region);
+      gdk_region_get_rectangles (expose->region,
+				 &rectangles,
+				 &n_rectangles);
       
       while (n_rectangles--)
-        {
-          cairo_region_get_rectangle (expose->region, n_rectangles--, &rectangle);
-	  gtk_icon_view_paint_rubberband (icon_view, cr, &rectangle);
-        }
+	gtk_icon_view_paint_rubberband (icon_view, cr, &rectangles[n_rectangles]);
+
+      g_free (rectangles);
     }
 
   cairo_destroy (cr);
@@ -2333,8 +2334,8 @@ gtk_icon_view_update_rubberband (gpointer data)
   new_area.width = ABS (x - icon_view->priv->rubberband_x1) + 1;
   new_area.height = ABS (y - icon_view->priv->rubberband_y1) + 1;
 
-  invalid_region = cairo_region_create_rectangle (&old_area);
-  cairo_region_union_rectangle (invalid_region, &new_area);
+  invalid_region = gdk_region_rectangle (&old_area);
+  gdk_region_union_with_rect (invalid_region, &new_area);
 
   gdk_rectangle_intersect (&old_area, &new_area, &common);
   if (common.width > 2 && common.height > 2)
@@ -2347,15 +2348,15 @@ gtk_icon_view_update_rubberband (gpointer data)
       common.width -= 2;
       common.height -= 2;
       
-      common_region = cairo_region_create_rectangle (&common);
+      common_region = gdk_region_rectangle (&common);
 
-      cairo_region_subtract (invalid_region, common_region);
-      cairo_region_destroy (common_region);
+      gdk_region_subtract (invalid_region, common_region);
+      gdk_region_destroy (common_region);
     }
   
   gdk_window_invalidate_region (icon_view->priv->bin_window, invalid_region, TRUE);
     
-  cairo_region_destroy (invalid_region);
+  gdk_region_destroy (invalid_region);
 
   icon_view->priv->rubberband_x2 = x;
   icon_view->priv->rubberband_y2 = y;  

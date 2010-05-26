@@ -45,14 +45,10 @@ typedef enum
   GDK_WINDING_RULE
 } GdkFillRule;
 
-#ifndef GDK_DISABLE_DEPRECATED
 /* Types of overlapping between a rectangle and a region
  * GDK_OVERLAP_RECTANGLE_IN: rectangle is in region
  * GDK_OVERLAP_RECTANGLE_OUT: rectangle in not in region
  * GDK_OVERLAP_RECTANGLE_PART: rectangle in partially in region
- *
- * Deprecated: 2.22: Superceded by #cairo_region_overlap_t and
- *                   cairo_region_contains_rectangle().
  */
 typedef enum
 {
@@ -65,11 +61,9 @@ typedef void (* GdkSpanFunc) (GdkSpan *span,
                               gpointer data);
 
 GdkRegion    * gdk_region_new             (void);
-#endif
 GdkRegion    * gdk_region_polygon         (const GdkPoint     *points,
                                            gint                n_points,
                                            GdkFillRule         fill_rule);
-#ifndef GDK_DISABLE_DEPRECATED
 GdkRegion    * gdk_region_copy            (const GdkRegion    *region);
 GdkRegion    * gdk_region_rectangle       (const GdkRectangle *rectangle);
 void           gdk_region_destroy         (GdkRegion          *region);
@@ -83,10 +77,8 @@ void           gdk_region_get_rectangles  (const GdkRegion    *region,
 gboolean       gdk_region_empty           (const GdkRegion    *region);
 gboolean       gdk_region_equal           (const GdkRegion    *region1,
                                            const GdkRegion    *region2);
-#endif
 gboolean       gdk_region_rect_equal      (const GdkRegion    *region,
                                            const GdkRectangle *rectangle);
-#ifndef GDK_DISABLE_DEPRECATED
 gboolean       gdk_region_point_in        (const GdkRegion    *region,
                                            int                 x,
                                            int                 y);
@@ -116,7 +108,6 @@ void   gdk_region_spans_intersect_foreach (GdkRegion          *region,
                                            gboolean            sorted,
                                            GdkSpanFunc         function,
                                            gpointer            data);
-#endif
 
 G_END_DECLS
 

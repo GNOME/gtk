@@ -3937,7 +3937,7 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
       int x, y;
       
       gdk_window_get_position (widget->window, &x, &y);
-      cairo_region_translate (region, -x, -y);
+      gdk_region_offset (region, -x, -y);
     }
 
   gdk_window_invalidate_maybe_recurse (widget->window, region,
@@ -3976,9 +3976,9 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
       rect.y += wy;
     }
   
-  region = cairo_region_create_rectangle (&rect);
+  region = gdk_region_rectangle (&rect);
   gtk_widget_invalidate_widget_windows (widget, region);
-  cairo_region_destroy (region);
+  gdk_region_destroy (region);
 }
 
 /**
@@ -4066,11 +4066,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	{
 	  /* Invalidate union(old_allaction,widget->allocation) in widget->window
 	   */
-	  GdkRegion *invalidate = cairo_region_create_rectangle (&widget->allocation);
-	  cairo_region_union_rectangle (invalidate, &old_allocation);
+	  GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	  gdk_region_union_with_rect (invalidate, &old_allocation);
 
 	  gdk_window_invalidate_region (widget->window, invalidate, FALSE);
-	  cairo_region_destroy (invalidate);
+	  gdk_region_destroy (invalidate);
 	}
       
       if (size_changed)
@@ -4079,11 +4079,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	    {
 	      /* Invalidate union(old_allaction,widget->allocation) in widget->window and descendents owned by widget
 	       */
-	      GdkRegion *invalidate = cairo_region_create_rectangle (&widget->allocation);
-	      cairo_region_union_rectangle (invalidate, &old_allocation);
+	      GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	      gdk_region_union_with_rect (invalidate, &old_allocation);
 
 	      gtk_widget_invalidate_widget_windows (widget, invalidate);
-	      cairo_region_destroy (invalidate);
+	      gdk_region_destroy (invalidate);
 	    }
 	}
     }
@@ -4091,9 +4091,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   if ((size_changed || position_changed) && widget->parent &&
       gtk_widget_get_realized (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
     {
-      GdkRegion *invalidate = cairo_region_create_rectangle (&widget->parent->allocation);
+      GdkRegion *invalidate = gdk_region_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
-      cairo_region_destroy (invalidate);
+      gdk_region_destroy (invalidate);
     }
 }
 
@@ -5212,7 +5212,7 @@ gtk_widget_intersect (GtkWidget	         *widget,
  *           widgets with their own window.
  * 
  * Computes the intersection of a @widget's area and @region, returning
- * the intersection. The result may be empty, use cairo_region_is_empty() to
+ * the intersection. The result may be empty, use gdk_region_empty() to
  * check.
  **/
 GdkRegion *
@@ -5227,9 +5227,9 @@ gtk_widget_region_intersect (GtkWidget       *widget,
 
   gtk_widget_get_draw_rectangle (widget, &rect);
   
-  dest = cairo_region_create_rectangle (&rect);
+  dest = gdk_region_rectangle (&rect);
  
-  cairo_region_intersect (dest, region);
+  gdk_region_intersect (dest, region);
 
   return dest;
 }
@@ -9530,7 +9530,7 @@ expose_window (GdkWindow *window)
   gdk_drawable_get_size (GDK_DRAWABLE (window),
 			 &event.expose.area.width,
 			 &event.expose.area.height);
-  event.expose.region = cairo_region_create_rectangle (&event.expose.area);
+  event.expose.region = gdk_region_rectangle (&event.expose.area);
 
   /* If this is not double buffered, force a double buffer so that
      redirection works. */

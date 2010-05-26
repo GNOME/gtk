@@ -10,8 +10,6 @@
  * Creates a new empty #GdkRegion.
  *
  * Returns: a new empty #GdkRegion
- *
- * Deprecated: 2.22: Use cairo_region_create() instead.
  */
 GdkRegion *
 gdk_region_new (void)
@@ -26,8 +24,6 @@ gdk_region_new (void)
  * Creates a new region containing the area @rectangle.
  * 
  * Return value: a new region
- *
- * Deprecated: 2.22: Use cairo_region_create_rectangle()
  **/
 GdkRegion *
 gdk_region_rectangle (const GdkRectangle *rectangle)
@@ -47,8 +43,6 @@ gdk_region_rectangle (const GdkRectangle *rectangle)
  * Copies @region, creating an identical new region.
  * 
  * Return value: a new region identical to @region
- *
- * Deprecated: 2.22: Use cairo_region_copy()
  **/
 GdkRegion *
 gdk_region_copy (const GdkRegion *region)
@@ -63,7 +57,6 @@ gdk_region_copy (const GdkRegion *region)
  *
  * Obtains the smallest rectangle which includes the entire #GdkRegion.
  *
- * Deprecated: 2.22: Use cairo_region_get_extents()
  */
 void
 gdk_region_get_clipbox (const GdkRegion *region,
@@ -84,8 +77,6 @@ gdk_region_get_clipbox (const GdkRegion *region,
  *
  * Obtains the area covered by the region as a list of rectangles.
  * The array returned in @rectangles must be freed with g_free().
- *
- * Deprecated: 2.22: Use cairo_region_num_rectangles() and cairo_region_get_rectangle() instead.
  **/
 void
 gdk_region_get_rectangles (const GdkRegion  *region,
@@ -119,8 +110,6 @@ gdk_region_get_rectangles (const GdkRegion  *region,
  * Sets the area of @region to the union of the areas of @region and
  * @rect. The resulting area is the set of pixels contained in
  * either @region or @rect.
- *
- * Deprecated: 2.22: Use cairo_region_union_rectangle() instead.
  **/
 void
 gdk_region_union_with_rect (GdkRegion          *region,
@@ -140,8 +129,6 @@ gdk_region_union_with_rect (GdkRegion          *region,
  * @region: a #GdkRegion
  *
  * Destroys a #GdkRegion.
- *
- * Deprecated: 2.22: Use cairo_region_destroy() instead.
  */
 void
 gdk_region_destroy (GdkRegion *region)
@@ -159,8 +146,6 @@ gdk_region_destroy (GdkRegion *region)
  * @dy: the distance to move the region vertically
  *
  * Moves a region the specified distance.
- *
- * Deprecated: 2.22: Use cairo_region_translate() instead.
  */
 void
 gdk_region_offset (GdkRegion *region,
@@ -178,8 +163,6 @@ gdk_region_offset (GdkRegion *region,
  *
  * Resizes a region by the specified amount.
  * Positive values shrink the region. Negative values expand it.
- *
- * Deprecated: 2.22: There is no replacement for this function.
  */
 void
 gdk_region_shrink (GdkRegion *region,
@@ -215,8 +198,6 @@ gdk_region_shrink (GdkRegion *region,
  * Sets the area of @source1 to the intersection of the areas of @source1
  * and @source2. The resulting area is the set of pixels contained in
  * both @source1 and @source2.
- *
- * Deprecated: 2.22: Use cairo_region_intersect() instead.
  **/
 void
 gdk_region_intersect (GdkRegion       *source1,
@@ -236,8 +217,6 @@ gdk_region_intersect (GdkRegion       *source1,
  * Sets the area of @source1 to the union of the areas of @source1 and
  * @source2. The resulting area is the set of pixels contained in
  * either @source1 or @source2.
- *
- * Deprecated: 2.22: Use cairo_region_union() instead.
  **/
 void
 gdk_region_union (GdkRegion       *source1,
@@ -256,8 +235,6 @@ gdk_region_union (GdkRegion       *source1,
  *
  * Subtracts the area of @source2 from the area @source1. The resulting
  * area is the set of pixels contained in @source1 but not in @source2.
- *
- * Deprecated: 2.22: Use cairo_region_subtract() instead.
  **/
 void
 gdk_region_subtract (GdkRegion       *source1,
@@ -277,10 +254,6 @@ gdk_region_subtract (GdkRegion       *source1,
  * Sets the area of @source1 to the exclusive-OR of the areas of @source1
  * and @source2. The resulting area is the set of pixels contained in one
  * or the other of the two sources but not in both.
- *
- * Deprecated: 2.22: There is no replacement, but the function can be
- *                   reimplemented using cairo_region_intersect() and
- *                   cairo_region_subract() easily.
  **/
 void
 gdk_region_xor (GdkRegion       *source1,
@@ -308,8 +281,6 @@ gdk_region_xor (GdkRegion       *source1,
  * Finds out if the #GdkRegion is empty.
  *
  * Returns: %TRUE if @region is empty.
- *
- * Deprecated: 2.22: Use cairo_region_is_empty() instead.
  */
 gboolean
 gdk_region_empty (const GdkRegion *region)
@@ -327,8 +298,6 @@ gdk_region_empty (const GdkRegion *region)
  * Finds out if the two regions are the same.
  *
  * Returns: %TRUE if @region1 and @region2 are equal.
- *
- * Deprecated: 2.22: Use cairo_region_equal() instead.
  */
 gboolean
 gdk_region_equal (const GdkRegion *region1,
@@ -378,8 +347,6 @@ gdk_region_rect_equal (const GdkRegion    *region,
  * Finds out if a point is in a region.
  *
  * Returns: %TRUE if the point is in @region.
- *
- * Deprecated: 2.22: Use cairo_region_contains_point() instead.
  */
 gboolean
 gdk_region_point_in (const GdkRegion *region,
@@ -401,8 +368,6 @@ gdk_region_point_in (const GdkRegion *region,
  * Returns: %GDK_OVERLAP_RECTANGLE_IN, %GDK_OVERLAP_RECTANGLE_OUT, or
  *   %GDK_OVERLAP_RECTANGLE_PART, depending on whether the rectangle is inside,
  *   outside, or partly inside the #GdkRegion, respectively.
- *
- * Deprecated: 2.22: Use cairo_region_contains_rectangle() instead.
  */
 GdkOverlapType
 gdk_region_rect_in (const GdkRegion    *region,
@@ -480,8 +445,6 @@ gdk_region_unsorted_spans_intersect_foreach (GdkRegion     *region,
  * @data: data to pass to @function
  *
  * Calls a function on each span in the intersection of @region and @spans.
- *
- * Deprecated: 2.22: There is no replacement.
  */
 void
 gdk_region_spans_intersect_foreach (GdkRegion     *region,

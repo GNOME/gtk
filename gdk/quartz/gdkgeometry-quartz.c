@@ -34,7 +34,7 @@ _gdk_quartz_window_queue_translation (GdkWindow *window,
 
   int i, n_rects;
   GdkRegion *intersection;
-  GdkRectangle rect;
+  GdkRectangle *rects;
 
   /* We will intersect the known region that needs display with the given
    * area.  This intersection will be translated by dx, dy.  For the end
@@ -44,12 +44,17 @@ _gdk_quartz_window_queue_translation (GdkWindow *window,
   if (!impl->needs_display_region)
     return;
 
-  intersection = cairo_region_copy (impl->needs_display_region);
-  cairo_region_intersect (intersection, area);
-  cairo_region_translate (intersection, dx, dy);
+  intersection = gdk_region_copy (impl->needs_display_region);
+  gdk_region_intersect (intersection, area);
+  gdk_region_offset (intersection, dx, dy);
 
-  _gdk_quartz_window_set_needs_display_in_region (window, intersection);
-  cairo_region_destroy (intersection);
+  gdk_region_get_rectangles (intersection, &rects, &n_rects);
+
+  for (i = 0; i < n_rects; i++)
+    _gdk_quartz_window_set_needs_display_in_rect (window, &rects[i]);
+
+  g_free (rects);
+  gdk_region_destroy (intersection);
 }
 
 gboolean

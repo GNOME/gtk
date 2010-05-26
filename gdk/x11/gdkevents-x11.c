@@ -1647,7 +1647,7 @@ gdk_event_translate (GdkDisplay *display,
 	  {
 	    event->expose.type = GDK_EXPOSE;
 	    event->expose.area = expose_rect;
-	    event->expose.region = cairo_region_create_rectangle (&expose_rect);
+	    event->expose.region = gdk_region_rectangle (&expose_rect);
 	    event->expose.window = window;
 	    event->expose.count = xevent->xgraphicsexpose.count;
 
