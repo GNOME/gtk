@@ -7849,6 +7849,24 @@ gtk_window_get_group (GtkWindow *window)
     }
 }
 
+/**
+ * gtk_window_has_group:
+ * @window: a #GtkWindow
+ *
+ * Returns whether @window has an explicit window group.
+ *
+ * Return value: %TRUE if @window has an explicit window group.
+ *
+ * Since 2.22
+ **/
+gboolean
+gtk_window_has_group (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return window->group != NULL;
+}
+
 /* Return the current grab widget of the given group 
  */
 GtkWidget *
