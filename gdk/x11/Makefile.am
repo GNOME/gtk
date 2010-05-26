@@ -25,6 +25,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkcursor-x11.c	   	\
 	gdkdevice-core.h	\
 	gdkdevice-core.c	\
+	gdkdevicemanager-core.h \
 	gdkdevicemanager-core.c \
 	gdkdevicemanager-x11.c	\
 	gdkdisplay-x11.c	\
@@ -66,9 +67,17 @@ libgdk_x11_la_SOURCES =    	\
 	xsettings-common.c
 
 if XINPUT_XFREE
-libgdk_x11_la_SOURCES += gdkdevicemanager-xi.c gdkdevice-xi.c
+libgdk_x11_la_SOURCES += 	\
+	gdkdevicemanager-xi.c 	\
+	gdkdevicemanager-xi.h 	\
+	gdkdevice-xi.c		\
+	gdkdevice-xi.h
 if XINPUT_2
-libgdk_x11_la_SOURCES += gdkdevicemanager-xi2.c gdkdevice-xi2.c
+libgdk_x11_la_SOURCES += 	\
+	gdkdevicemanager-xi2.c 	\
+	gdkdevicemanager-xi2.h 	\
+	gdkdevice-xi2.c		\
+	gdkdevice-xi2.h
 endif
 endif
 

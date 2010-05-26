@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-11 00:03-0400\n"
+"POT-Creation-Date: 2010-05-25 20:10-0400\n"
 "PO-Revision-Date: 2006-08-09 10:30+0530\n"
 "Last-Translator: Mindu Dorji\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
@@ -1223,37 +1223,37 @@ msgid "The WMF image format"
 msgstr "དྲབ་ལུ་བི་ཨེམ་པི་ གཟུགས་བརྙན་གྱི་རྩ་སྒྲིག་།"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:54
+#: gdk/win32/gdkmain-win32.c:55
 msgid "Don't batch GDI requests"
 msgstr "ཇི་ཌི་ཨའི་གི་ཞུ་བ་ཚུ་ རུ་ཚན་མ་བཟོ།"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:56
+#: gdk/win32/gdkmain-win32.c:57
 msgid "Don't use the Wintab API for tablet support"
 msgstr "ཊེབ་ལེཊི་གི་ རྒྱབ་སྐྱོར་དོན་ལུ་ ཝིན་ཊེབ་ ཨེ་པི་ཨའི་ ལག་ལེན་མ་འཐབ།"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
+#: gdk/win32/gdkmain-win32.c:59
 msgid "Same as --no-wintab"
 msgstr "--ཨེན་ཨོ་-ཝིན་ཊེབ་དང་ཅོག་གཅིགཔ།"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
+#: gdk/win32/gdkmain-win32.c:61
 msgid "Do use the Wintab API [default]"
 msgstr "ཝིན་ཊེབ་ ཨེ་པི་ཨའི་ ལག་ལེན་མ་འཐབ། [སྔོན་སྒྲིག]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: gdk/win32/gdkmain-win32.c:63
 msgid "Size of the palette in 8 bit mode"
 msgstr "པེ་ལེཊི་གི་ཚད་ བིཊི་ ༨ ཀྱི་ཐབས་ལམ་ནང༌།"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: gdk/win32/gdkmain-win32.c:64
 msgid "COLORS"
 msgstr "ཚོས་གཞི། "
 
 #. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:93
+#: gdk/x11/gdkmain-x11.c:95
 msgid "Make X calls synchronous"
 msgstr "ཨེགསི་གི་འབོད་བརྡ་ཚུ་ མཉམ་བྱུང་བཟོ།"
 
@@ -1274,53 +1274,53 @@ msgid_plural "Opening %d Items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gtk/gtkaboutdialog.c:241
+#: gtk/gtkaboutdialog.c:242
 #, fuzzy
 msgid "Could not show link"
 msgstr "ཐོ་ཡིག་བསལ་མ་ཚུགས། "
 
-#: gtk/gtkaboutdialog.c:364 gtk/gtkaboutdialog.c:2214
+#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2228
 msgid "License"
 msgstr "ཆོག་ཐམ།"
 
-#: gtk/gtkaboutdialog.c:365
+#: gtk/gtkaboutdialog.c:366
 msgid "The license of the program"
 msgstr "ལས་རིམ་གྱི་ཆོག་ཐམ།"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:628
+#: gtk/gtkaboutdialog.c:629
 msgid "C_redits"
 msgstr ""
 "\"ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་"
 "གྱི་དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>\""
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:642
+#: gtk/gtkaboutdialog.c:643
 msgid "_License"
 msgstr "ཆོག་ཐམ།(_L)"
 
-#: gtk/gtkaboutdialog.c:901
+#: gtk/gtkaboutdialog.c:902
 #, c-format
 msgid "About %s"
 msgstr "%s གི་སྐོར། "
 
-#: gtk/gtkaboutdialog.c:2131
+#: gtk/gtkaboutdialog.c:2145
 msgid "Credits"
 msgstr "ངོ་བསྟོད་ཚུ།"
 
-#: gtk/gtkaboutdialog.c:2164
+#: gtk/gtkaboutdialog.c:2178
 msgid "Written by"
 msgstr "འབྲི་མི།"
 
-#: gtk/gtkaboutdialog.c:2167
+#: gtk/gtkaboutdialog.c:2181
 msgid "Documented by"
 msgstr "ཡིག་ཐོག་ལུ་བཀོད་མི།"
 
-#: gtk/gtkaboutdialog.c:2179
+#: gtk/gtkaboutdialog.c:2193
 msgid "Translated by"
 msgstr "སྐད་བསྒྱུར་རྐྱབ་མི།"
 
-#: gtk/gtkaboutdialog.c:2183
+#: gtk/gtkaboutdialog.c:2197
 msgid "Artwork by"
 msgstr "རི་མོ་བཀོད་མི།"
 
@@ -1503,7 +1503,7 @@ msgstr "ཝའི།"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:244
+#: gtk/gtkcellrendereraccel.c:256
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1513,7 +1513,7 @@ msgstr "ལྕོགས་མིན་བཟོ་ཡི།"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:254
+#: gtk/gtkcellrendereraccel.c:266
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1523,7 +1523,7 @@ msgstr "ནུས་མེད་ཡུ་ཨརཨའི།"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:389 gtk/gtkcellrendereraccel.c:603
+#: gtk/gtkcellrendereraccel.c:401 gtk/gtkcellrendereraccel.c:652
 msgid "New accelerator..."
 msgstr "མགྱོགས་འཕྲུལ་གསརཔ་..."
 
@@ -1541,7 +1541,7 @@ msgstr "ཚོས་གཞི་ཅིག་འཐུ། "
 msgid "Received invalid color data\n"
 msgstr "ནུས་མེད་ཚོས་གཞིའི་གནད་སྡུད་ཐོབ་ཅི།\n"
 
-#: gtk/gtkcolorsel.c:354
+#: gtk/gtkcolorsel.c:356
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1549,7 +1549,7 @@ msgstr ""
 "ཁྱོད་རང་དགོ་མི་ ཚོས་གཞི་འདི་ ཕྱི་རིམ་སྒོར་ཐིག་ནང་ལས་ སེལ་འཐུ་འབད། ཚོས་གཞིའི་སྲབ་སྟུག་ཚུ་ ནང་གི་གྲུ་"
 "གསུམ་ནང་ལས་ སེལ་འཐུ་འབད།"
 
-#: gtk/gtkcolorsel.c:378
+#: gtk/gtkcolorsel.c:380
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1557,67 +1557,67 @@ msgstr ""
 "ཨའི་ཌོབ་པར་ལུ་ ཨེབ་གཏང་འབད་ཞིནམ་ལས་ ཚོས་གཞི་དེ་ སེལ་འཐུ་འབད་ནི་ལུ་ ཁྱོད་རའི་གསལ་གཞི་གུ་ ཚོས་གཞི་"
 "ཅིག་ལུ་ ཨེབ་གཏང་འབད།"
 
-#: gtk/gtkcolorsel.c:387
+#: gtk/gtkcolorsel.c:389
 msgid "_Hue:"
 msgstr "ཚོན་མདངས།(_H)"
 
-#: gtk/gtkcolorsel.c:388
+#: gtk/gtkcolorsel.c:390
 msgid "Position on the color wheel."
 msgstr "ཚོས་གཞིའི་འཁོར་ལོ་གུ་གནས་ས།"
 
-#: gtk/gtkcolorsel.c:390
+#: gtk/gtkcolorsel.c:392
 msgid "_Saturation:"
 msgstr "མཐའ་ཚད།(_S)"
 
-#: gtk/gtkcolorsel.c:391
+#: gtk/gtkcolorsel.c:393
 msgid "\"Deepness\" of the color."
 msgstr "ཚོས་གཞིའི་ \"Deepness\""
 
-#: gtk/gtkcolorsel.c:392
+#: gtk/gtkcolorsel.c:394
 msgid "_Value:"
 msgstr "བེ་ལུ།(_V)"
 
-#: gtk/gtkcolorsel.c:393
+#: gtk/gtkcolorsel.c:395
 msgid "Brightness of the color."
 msgstr "ཚོས་གཞིའི་སྐྱ་མདངས།"
 
-#: gtk/gtkcolorsel.c:394
+#: gtk/gtkcolorsel.c:396
 msgid "_Red:"
 msgstr "དམརཔོ།(_R)"
 
-#: gtk/gtkcolorsel.c:395
+#: gtk/gtkcolorsel.c:397
 msgid "Amount of red light in the color."
 msgstr "ཚོས་གཞི་ནང་ལུ་ དམར་མདངས་ཆེ་ཆུང༌།"
 
-#: gtk/gtkcolorsel.c:396
+#: gtk/gtkcolorsel.c:398
 msgid "_Green:"
 msgstr "ལྗང་ཁུ་:(_G)"
 
-#: gtk/gtkcolorsel.c:397
+#: gtk/gtkcolorsel.c:399
 msgid "Amount of green light in the color."
 msgstr "ཚོས་གཞི་ནང་ལུ་ ལྗང་མདངས་ཆེ་ཆུང༌།"
 
-#: gtk/gtkcolorsel.c:398
+#: gtk/gtkcolorsel.c:400
 msgid "_Blue:"
 msgstr "ཧོནམ།(_B)"
 
-#: gtk/gtkcolorsel.c:399
+#: gtk/gtkcolorsel.c:401
 msgid "Amount of blue light in the color."
 msgstr "ཚོས་གཞི་ནང་ ཧོན་མདངས་ཆེ་ཆུང༌།"
 
-#: gtk/gtkcolorsel.c:402
+#: gtk/gtkcolorsel.c:404
 msgid "Op_acity:"
 msgstr "དྭངས་སྒྲིབ་:(_a)"
 
-#: gtk/gtkcolorsel.c:409 gtk/gtkcolorsel.c:419
+#: gtk/gtkcolorsel.c:411 gtk/gtkcolorsel.c:421
 msgid "Transparency of the color."
 msgstr "ཚོས་གཞིའི་དྭངས་གསལ།"
 
-#: gtk/gtkcolorsel.c:426
+#: gtk/gtkcolorsel.c:428
 msgid "Color _name:"
 msgstr "ཚོས་གཞིའི་མིང༌:(_n)"
 
-#: gtk/gtkcolorsel.c:440
+#: gtk/gtkcolorsel.c:442
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1625,15 +1625,15 @@ msgstr ""
 "ཁྱོད་ཀྱིས་ཨེཆ་ཊི་ཨེམ་ཨེལ་-བཟོ་རྣམ་གྱི་ ཧེག་ཟ་ཌེ་སི་མཱལ་ ཚོས་གཞིའི་བེ་ལུ་ཅིག་བཀོད་དགོ ཡང་ཅིན་ ཐོ་བཀོད་འདི་"
 "ནང་ ཚོས་གཞིའི་མིང་ དཔེར་ན་ 'ལི་ཝང་' བཟུམ་ཅིག་བཀོད་དགོ"
 
-#: gtk/gtkcolorsel.c:470
+#: gtk/gtkcolorsel.c:472
 msgid "_Palette:"
 msgstr "པེ་ལེཊི་:(_P)"
 
-#: gtk/gtkcolorsel.c:499
+#: gtk/gtkcolorsel.c:501
 msgid "Color Wheel"
 msgstr "ཚོས་གཞིའི་འཁོར་ལོ།"
 
-#: gtk/gtkcolorsel.c:958
+#: gtk/gtkcolorsel.c:960
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1643,7 +1643,7 @@ msgstr ""
 "དེ། ཁྱོད་ཀྱིས་ཚོས་གཞི་འདི་ པེ་ལེཊི་ཐོ་བཀོད་ཅིག་ལུ་འདྲུད་བཏུབ། ཡང་ཅིན་ ཚོས་གཞི་འདི་ ཟུར་ཁ་ཡོད་མི་ ཚོས་"
 "དཔེ་གཞན་ཅིག་ལུ་ འདྲུད་པའི་ཐོག་ལས་ ད་ལྟོའི་ཚོས་གཞི་སྦེ སེལ་འཐུ་འབད་བཏུབ།"
 
-#: gtk/gtkcolorsel.c:961
+#: gtk/gtkcolorsel.c:963
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1651,21 +1651,21 @@ msgstr ""
 "ཁྱོད་ཀྱིས་ཚོས་གཞི་སེལ་འཐུ་འབད་མི་དེ་ པེ་ལེཊི་ཐོ་བཀོད་ཅིག་ནང་ འདྲུད་ཞིནམ་ལས་ ཤུལ་ལས་ལག་ལེན་འཐབ་ནིའི་"
 "དོན་ལུ་ བསྲུང་སྟེ་བཞག་བཏུབ།"
 
-#: gtk/gtkcolorsel.c:966
+#: gtk/gtkcolorsel.c:968
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:969
+#: gtk/gtkcolorsel.c:971
 msgid "The color you've chosen."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1382
+#: gtk/gtkcolorsel.c:1384
 msgid "_Save color here"
 msgstr "ཚོས་གཞི་ནཱ་ལུ་སྲུངས།(_S)"
 
-#: gtk/gtkcolorsel.c:1587
+#: gtk/gtkcolorsel.c:1589
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1693,11 +1693,11 @@ msgstr "default:mm"
 msgid "Manage Custom Sizes"
 msgstr "སྲོལ་སྒྲིག་གི་ཚད་ཚུ་འཛིན་སྐྱོང་འཐབ།"
 
-#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:778
+#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:793
 msgid "inch"
 msgstr "ཨིནཆ།"
 
-#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:776
+#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:791
 msgid "mm"
 msgstr "ཨེམ་ཨེམ།"
 
@@ -1742,15 +1742,15 @@ msgstr "གཡས་:(_R)"
 msgid "Paper Margins"
 msgstr "ཤོག་ཀུའི་ས་སྟོང་།"
 
-#: gtk/gtkentry.c:8610 gtk/gtktextview.c:7974
+#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8002
 msgid "Input _Methods"
 msgstr "ཨིན་པུཊི་ཐབས་ཤེས།(_M)"
 
-#: gtk/gtkentry.c:8624 gtk/gtktextview.c:7988
+#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8016
 msgid "_Insert Unicode Control Character"
 msgstr "ཡུ་ནི་ཀོཌི་ ཚད་འཛིན་གྱི་ ཡིག་འབྲུ་བཙུགས།(_I)"
 
-#: gtk/gtkentry.c:10003
+#: gtk/gtkentry.c:10020
 #, fuzzy
 msgid "Caps Lock is on"
 msgstr "གནས་ཁོངས་འདྲ་བཤུས་རྐྱབས།(_L)"
@@ -2146,7 +2146,7 @@ msgstr "ཡིག་གཟུགས་སེལ་འཐུ།"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1401
+#: gtk/gtkiconfactory.c:1400
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "ངོས་དཔར་ :%s མངོན་གསལ་འབད་ནི་ལུ་འཛོལ་བ།"
@@ -2197,13 +2197,13 @@ msgid "System (%s)"
 msgstr "%s (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6077
+#: gtk/gtklabel.c:6076
 #, fuzzy
 msgid "_Open Link"
 msgstr "གནས་ཁོངས་སྒོ་ཕྱེ།"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6089
+#: gtk/gtklabel.c:6088
 msgid "Copy _Link Address"
 msgstr ""
 
@@ -2349,28 +2349,28 @@ msgstr ""
 msgid "Cannot end process with pid %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4620 gtk/gtknotebook.c:7049
+#: gtk/gtknotebook.c:4621 gtk/gtknotebook.c:7050
 #, c-format
 msgid "Page %u"
 msgstr "ཤོག་ལེབ་ %u "
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:825 gtk/gtkpapersize.c:867
+#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826 gtk/gtkpapersize.c:868
 msgid "Not a valid page setup file"
 msgstr ""
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: gtk/gtkpagesetupunixdialog.c:182
 #, fuzzy
 msgid "Any Printer"
 msgstr "དཔར་འཕྲུལ།"
 
-#: gtk/gtkpagesetupunixdialog.c:167
+#: gtk/gtkpagesetupunixdialog.c:182
 #, fuzzy
 msgid "For portable documents"
 msgstr ""
 "<b>དཔར་འཕྲུལ་གང་རུང་</b>\n"
 "འབག་བཏུབ་པའི་ཡིག་ཆའི་དོན་ལུ།"
 
-#: gtk/gtkpagesetupunixdialog.c:797
+#: gtk/gtkpagesetupunixdialog.c:812
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2385,23 +2385,23 @@ msgstr ""
 "མགོ་: %s %s\n"
 "མཇུག་: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:846 gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkpagesetupunixdialog.c:861 gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "སྲོལ་སྒྲིག་གི་ཚད་ཚུ་འཛིན་སྐྱོང་འཐབ་..."
 
-#: gtk/gtkpagesetupunixdialog.c:894
+#: gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
 msgstr "གི་དོན་ལུ་རྩ་སྒྲིག(_F)"
 
-#: gtk/gtkpagesetupunixdialog.c:916 gtk/gtkprintunixdialog.c:3449
+#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "ཤོག་ཀུའི་ཚད་:(_P)"
 
-#: gtk/gtkpagesetupunixdialog.c:947
+#: gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
 msgstr "ཕྱོགས་:(_O)"
 
-#: gtk/gtkpagesetupunixdialog.c:1011 gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "ཤོག་ལེབ་གཞི་སྒྲིག"
 
@@ -2544,7 +2544,7 @@ msgstr "ཤོག་ཀུ་རྫོགས་སོ་ནུག"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:616
-#: modules/printbackends/cups/gtkprintbackendcups.c:1997
+#: modules/printbackends/cups/gtkprintbackendcups.c:1999
 msgid "Paused"
 msgstr "ཐེམས་ཡོད།"
 
@@ -2677,42 +2677,42 @@ msgstr "ཡོངས་ཁྱབ།"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Left to right, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3010
-#: modules/printbackends/cups/gtkprintbackendcups.c:3505
+#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Left to right, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Right to left, top to bottom"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3011
-#: modules/printbackends/cups/gtkprintbackendcups.c:3506
+#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Right to left, bottom to top"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Top to bottom, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3012
-#: modules/printbackends/cups/gtkprintbackendcups.c:3507
+#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Top to bottom, right to left"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Bottom to top, left to right"
 msgstr ""
 
 #: gtk/gtkprintunixdialog.c:3013
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: modules/printbackends/cups/gtkprintbackendcups.c:3512
 msgid "Bottom to top, right to left"
 msgstr ""
 
@@ -2720,7 +2720,7 @@ msgstr ""
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
-#: modules/printbackends/cups/gtkprintbackendcups.c:3540
+#: modules/printbackends/cups/gtkprintbackendcups.c:3544
 #, fuzzy
 msgid "Page Ordering"
 msgstr "གྲ་སྒྲིག་འབད་དོ།"
@@ -2936,8 +2936,8 @@ msgstr "གྲངས་བཙུགས་ཡིག་སྣོད་ \"%s\" ཐ�
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "པར་ཁྲའི་འགྲུལ་ལམ་ \"%s\" ནང་ལུ་ ཡིག་སྣོད་ག་ཡོད་འཚོལ་མ་ཐོབ།(_p)"
 
-#: gtk/gtkrecentaction.c:154 gtk/gtkrecentaction.c:162
-#: gtk/gtkrecentchoosermenu.c:588 gtk/gtkrecentchoosermenu.c:596
+#: gtk/gtkrecentaction.c:171 gtk/gtkrecentaction.c:179
+#: gtk/gtkrecentchoosermenu.c:616 gtk/gtkrecentchoosermenu.c:624
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "ལས་འགན་འདི་ཝི་གེཊིསི་དབྱེ་རིགས་'%s'གི་དོན་ལུ་ལག་ལེན་མ་འཐབ་པས།"
@@ -2989,21 +2989,21 @@ msgstr "སྒེར་གྱི་ཐོན་ཁུངས་ཚུ་སྟོ
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:342
+#: gtk/gtkrecentchoosermenu.c:370
 msgid "No items found"
 msgstr "རྣམ་གྲངས་གཅིག་ཡང་མ་ཐོབ།"
 
-#: gtk/gtkrecentchoosermenu.c:508 gtk/gtkrecentchoosermenu.c:564
+#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:592
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "ཡུ་ཨར་ཨའི་%sདང་གཅིག་ཁར་ འཕྲལ་ཁམས་ལག་ལེན་འཐབ་མི་ ཐོན་ཁུངས་མ་ཐོབ།"
 
-#: gtk/gtkrecentchoosermenu.c:775
+#: gtk/gtkrecentchoosermenu.c:803
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s'ཁ་ཕྱེ།"
 
-#: gtk/gtkrecentchoosermenu.c:805
+#: gtk/gtkrecentchoosermenu.c:833
 msgid "Unknown item"
 msgstr "མ་ཤེས་པའི་རྣམ་གྲངས།"
 
@@ -3012,7 +3012,7 @@ msgstr "མ་ཤེས་པའི་རྣམ་གྲངས།"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:816
+#: gtk/gtkrecentchoosermenu.c:844
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3021,7 +3021,7 @@ msgstr ""
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:821
+#: gtk/gtkrecentchoosermenu.c:849
 #, fuzzy, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
@@ -5009,264 +5009,264 @@ msgstr "བེཊི་ན་མིསི། (ཝི་ཨའི་ཀིའུ�
 msgid "X Input Method"
 msgstr "ཨེགསི་ ཨིན་པུཊི་གི་ ཐབས་ཤེས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:809
-#: modules/printbackends/cups/gtkprintbackendcups.c:1018
+#: modules/printbackends/cups/gtkprintbackendcups.c:811
+#: modules/printbackends/cups/gtkprintbackendcups.c:1020
 #, fuzzy
 msgid "Username:"
 msgstr "བསྐྱར་མིང་བཏགས།(_R)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:810
-#: modules/printbackends/cups/gtkprintbackendcups.c:1027
+#: modules/printbackends/cups/gtkprintbackendcups.c:812
+#: modules/printbackends/cups/gtkprintbackendcups.c:1029
 #, fuzzy
 msgid "Password:"
 msgstr "ཨེབ་ཤུགས་:(_P)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:848
+#: modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:852
-#: modules/printbackends/cups/gtkprintbackendcups.c:1040
+#: modules/printbackends/cups/gtkprintbackendcups.c:854
+#: modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:854
+#: modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:858
+#: modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:860
+#: modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:864
+#: modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:866
+#: modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:869
+#: modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:872
+#: modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:875
+#: modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1012
+#: modules/printbackends/cups/gtkprintbackendcups.c:1014
 #, fuzzy
 msgid "Domain:"
 msgstr "གནས་ཁོངས་:(_L)"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1670
+#: modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1671
+#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr ""
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, fuzzy, c-format
 msgid "Printer '%s' is currently off-line."
 msgstr "དཔར་འཕྲུལ་ཨོཕ་ལའིན་ཨིན་པས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
+#: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "Printer '%s' may not be connected."
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: modules/printbackends/cups/gtkprintbackendcups.c:1688
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1994
+#: modules/printbackends/cups/gtkprintbackendcups.c:1996
 msgid "Paused ; Rejecting Jobs"
 msgstr ""
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: modules/printbackends/cups/gtkprintbackendcups.c:2002
 msgid "Rejecting Jobs"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2774
+#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Two Sided"
 msgstr "ཕྱོགས་གཉིས་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2775
+#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Type"
 msgstr "ཤོག་ཀུའི་དབྱེ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2776
+#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Paper Source"
 msgstr "ཤོག་ཀུ་འབྱུང་ས།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2777
+#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Output Tray"
 msgstr "ཨའུཊི་པུཊི་ཤོག་སྣོད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 #, fuzzy
 msgid "Resolution"
 msgstr "དྲི་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: modules/printbackends/cups/gtkprintbackendcups.c:2783
 msgid "GhostScript pre-filtering"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2788
+#: modules/printbackends/cups/gtkprintbackendcups.c:2792
 msgid "One Sided"
 msgstr "ཕྱོགས་གཅིགམ།"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2790
+#: modules/printbackends/cups/gtkprintbackendcups.c:2794
 msgid "Long Edge (Standard)"
 msgstr ""
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2792
+#: modules/printbackends/cups/gtkprintbackendcups.c:2796
 msgid "Short Edge (Flip)"
 msgstr ""
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2794
-#: modules/printbackends/cups/gtkprintbackendcups.c:2796
-#: modules/printbackends/cups/gtkprintbackendcups.c:2804
+#: modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: modules/printbackends/cups/gtkprintbackendcups.c:2808
 msgid "Auto Select"
 msgstr "རང་བཞིན་སེལ་འཐུ།"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2798
-#: modules/printbackends/cups/gtkprintbackendcups.c:2800
 #: modules/printbackends/cups/gtkprintbackendcups.c:2802
+#: modules/printbackends/cups/gtkprintbackendcups.c:2804
 #: modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: modules/printbackends/cups/gtkprintbackendcups.c:3292
+#: modules/printbackends/cups/gtkprintbackendcups.c:2810
+#: modules/printbackends/cups/gtkprintbackendcups.c:3296
 msgid "Printer Default"
 msgstr "དཔར་འཕྲུལ་སྔོན་སྒྲིག"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2808
+#: modules/printbackends/cups/gtkprintbackendcups.c:2812
 msgid "Embed GhostScript fonts only"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2810
+#: modules/printbackends/cups/gtkprintbackendcups.c:2814
 msgid "Convert to PS level 1"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: modules/printbackends/cups/gtkprintbackendcups.c:2816
 msgid "Convert to PS level 2"
 msgstr ""
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2814
+#: modules/printbackends/cups/gtkprintbackendcups.c:2818
 #, fuzzy
 msgid "No pre-filtering"
 msgstr "རྣམ་གྲངས་གཅིག་ཡང་མ་ཐོབ།"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2823
+#: modules/printbackends/cups/gtkprintbackendcups.c:2827
 msgid "Miscellaneous"
 msgstr ""
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Urgent"
 msgstr "འཕྲལ་མཁོ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "High"
 msgstr "མཐོ་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Medium"
 msgstr "བར་མ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3500
+#: modules/printbackends/cups/gtkprintbackendcups.c:3504
 msgid "Low"
 msgstr "དམའ་བ།"
 
@@ -5274,7 +5274,7 @@ msgstr "དམའ་བ།"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3524
+#: modules/printbackends/cups/gtkprintbackendcups.c:3528
 #, fuzzy
 msgid "Pages per Sheet"
 msgstr "ལེབ་གྲངས་རེ་ལུ་ཤོག་གྲངས།"
@@ -5282,7 +5282,7 @@ msgstr "ལེབ་གྲངས་རེ་ལུ་ཤོག་གྲངས།
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3561
+#: modules/printbackends/cups/gtkprintbackendcups.c:3565
 #, fuzzy
 msgid "Job Priority"
 msgstr "གཙོ་རིམ་:(_o)"
@@ -5290,7 +5290,7 @@ msgstr "གཙོ་རིམ་:(_o)"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3572
+#: modules/printbackends/cups/gtkprintbackendcups.c:3576
 #, fuzzy
 msgid "Billing Info"
 msgstr "ཐོབ་རྩིས་བརྡ་དོན་:(_B)"
@@ -5298,38 +5298,38 @@ msgstr "ཐོབ་རྩིས་བརྡ་དོན་:(_B)"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "None"
 msgstr "ཅི་མེད།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Classified"
 msgstr "དབྱེ་བ་བཟོ་ཡོདཔ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Confidential"
 msgstr "གསང་བྱ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Secret"
 msgstr "གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Standard"
 msgstr "ཚད་ལྡན།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Top Secret"
 msgstr "ཧ་ཅང་གསང་བ།"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3587
+#: modules/printbackends/cups/gtkprintbackendcups.c:3591
 msgid "Unclassified"
 msgstr "དབྱེ་བ་མ་བཟོཝ།"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3622
+#: modules/printbackends/cups/gtkprintbackendcups.c:3626
 #, fuzzy
 msgid "Before"
 msgstr "སྔ་གོང་:(_f)"
@@ -5337,7 +5337,7 @@ msgstr "སྔ་གོང་:(_f)"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3637
+#: modules/printbackends/cups/gtkprintbackendcups.c:3641
 #, fuzzy
 msgid "After"
 msgstr "ཤུལ་ལས་:(_A)"
@@ -5346,7 +5346,7 @@ msgstr "ཤུལ་ལས་:(_A)"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3657
+#: modules/printbackends/cups/gtkprintbackendcups.c:3661
 #, fuzzy
 msgid "Print at"
 msgstr "དཔར་བསྐྲུན།"
@@ -5354,7 +5354,7 @@ msgstr "དཔར་བསྐྲུན།"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3668
+#: modules/printbackends/cups/gtkprintbackendcups.c:3672
 #, fuzzy
 msgid "Print at time"
 msgstr "ཡིག་སྣོད་ལུ་དཔར་བསྐྲུན་འབད།"
@@ -5363,7 +5363,7 @@ msgstr "ཡིག་སྣོད་ལུ་དཔར་བསྐྲུན་འ
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3703
+#: modules/printbackends/cups/gtkprintbackendcups.c:3707
 #, fuzzy, c-format
 msgid "Custom %sx%s"
 msgstr "སྲོལ་སྒྲིག་གི་ཚད།"

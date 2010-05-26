@@ -234,6 +234,21 @@ Moves a #GtkMenuItem to a new position within the #GtkMenu.
 @bottom_attach: 
 
 
+<!-- ##### FUNCTION gtk_menu_popup_for_device ##### -->
+<para>
+
+</para>
+
+@menu: 
+@device: 
+@parent_menu_shell: 
+@parent_menu_item: 
+@func: 
+@data: 
+@button: 
+@activate_time: 
+
+
 <!-- ##### FUNCTION gtk_menu_popup ##### -->
 
 

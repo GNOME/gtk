@@ -170,16 +170,6 @@ drag in progress. It is used on both source and destination sides.
 </para>
 
 @parent_instance: the parent instance
-@protocol: the DND protocol which governs this drag.
-@is_source: %TRUE if the context is used on the source side.
-@source_window: the source of this drag.
-@dest_window: the destination window of this drag.
-@targets: a list of targets offered by the source.
-@actions: a bitmask of actions proposed by the source when 
-   @suggested_action is %GDK_ACTION_ASK.
-@suggested_action: the action suggested by the source.
-@action: the action chosen by the destination.
-@start_time: a timestamp recording the start time of this drag.
 
 <!-- ##### ENUM GdkDragAction ##### -->
 <para>
@@ -213,5 +203,59 @@ should do with the dropped data.
 
 @context: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_actions ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_suggested_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_list_targets ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_device ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_set_device ##### -->
+<para>
+
+</para>
+
+@context: 
+@device: 
 
 

@@ -90,3 +90,13 @@ The #GtkScrollbar struct does not contain any public data.
 
 </para>
 
+<!-- ##### FUNCTION gtk_scrollbar_new ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@adjustment: 
+@Returns: 
+
+

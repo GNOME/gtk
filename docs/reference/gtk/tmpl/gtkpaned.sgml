@@ -172,6 +172,15 @@ gtk_widget_set_size_request (frame2, 50, -1);
 
 </para>
 
+<!-- ##### FUNCTION gtk_paned_new ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_paned_add1 ##### -->
 <para>
 Adds a child to the top or left pane with

@@ -24,7 +24,7 @@ pixel can be either on or off).
 <!-- ##### SECTION Image ##### -->
 
 
-<!-- ##### TYPEDEF GdkPixmap ##### -->
+<!-- ##### STRUCT GdkPixmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,

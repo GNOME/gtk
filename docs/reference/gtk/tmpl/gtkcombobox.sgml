@@ -333,6 +333,15 @@ gtk_combo_box_get_active_text().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_combo_box_popup_for_device ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@device: 
+
+
 <!-- ##### FUNCTION gtk_combo_box_popup ##### -->
 <para>
 

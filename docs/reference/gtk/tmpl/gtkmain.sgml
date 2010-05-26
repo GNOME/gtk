@@ -411,6 +411,25 @@ If @widget does not have the grab, this function does nothing.
 @widget: The widget which gives up the grab.
 
 
+<!-- ##### FUNCTION gtk_device_grab_add ##### -->
+<para>
+
+</para>
+
+@widget: 
+@device: 
+@block_others: 
+
+
+<!-- ##### FUNCTION gtk_device_grab_remove ##### -->
+<para>
+
+</para>
+
+@widget: 
+@device: 
+
+
 <!-- ##### FUNCTION gtk_init_add ##### -->
 <para>
 Registers a function to be called when the mainloop is started.
@@ -551,6 +570,15 @@ Removes the key snooper function with the given id.
 </para>
 
 @state: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_current_event_device ##### -->
+<para>
+
+</para>
+
+@void: 
 @Returns: 
 
 

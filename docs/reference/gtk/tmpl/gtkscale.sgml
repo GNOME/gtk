@@ -82,6 +82,28 @@ the accessor functions.
 
 </para>
 
+<!-- ##### FUNCTION gtk_scale_new ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@adjustment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_scale_new_with_range ##### -->
+<para>
+
+</para>
+
+@orientation: 
+@min: 
+@max: 
+@step: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_scale_set_digits ##### -->
 <para>
 
