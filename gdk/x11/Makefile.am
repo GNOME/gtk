@@ -23,6 +23,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkasync.h		\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
+	gdkdevice-core.h	\
 	gdkdevice-core.c	\
 	gdkdevicemanager-core.c \
 	gdkdevicemanager-x11.c	\
@@ -84,9 +85,6 @@ TESTS = checksettings
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST += 			\
-	gdkinput-x11.c		\
-	gdkinput-xfree.c	\
-	gdkinput-none.c		\
 	gdksettings.c
 
 -include $(top_srcdir)/git.mk
