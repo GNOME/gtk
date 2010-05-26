@@ -8378,7 +8378,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
   GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (GDK_IS_DEVICE (window));
+  g_return_if_fail (GDK_IS_DEVICE (device));
 
   private = (GdkWindowObject *) window;
   display = gdk_drawable_get_display (window);
