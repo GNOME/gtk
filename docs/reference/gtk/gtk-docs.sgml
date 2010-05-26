@@ -336,7 +336,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktooltip.xml" />
       <xi:include href="xml/gtkviewport.xml" />
       <xi:include href="xml/gtkaccessible.xml" />
-      <xi:include href="xml/gtkdevicegroup.xml" />
     </chapter>
 
     <chapter id="AbstractObjects">
