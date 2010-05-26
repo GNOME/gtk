@@ -384,6 +384,7 @@ void     gtk_window_get_position     (GtkWindow   *window,
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
+gboolean gtk_window_has_group        (GtkWindow   *window);
 
 /* Ignore this unless you are writing a GUI builder */
 void     gtk_window_reshow_with_initial_size (GtkWindow *window);
