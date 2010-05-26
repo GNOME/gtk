@@ -1092,9 +1092,10 @@ if test x$gio_can_sniff = x; then
   {
     char *content_type;
     char *image_png;
+    g_type_init ();
     content_type = g_content_type_guess (NULL, data, data_size, NULL);
     image_png = g_content_type_from_mime_type ("image/png");
-    return !!strcmp (content_type, image_png);
+    return !!g_strcmp0 (content_type, image_png);
   }]])],
     [gio_can_sniff=yes
      AC_DEFINE(GDK_PIXBUF_USE_GIO_MIME, 1, [Define if gio can sniff image data])],
