@@ -1,3 +1,65 @@
+Overview of Changes from GTK+ 2.90.0 to 2.90.1
+==============================================
+
+* Printing: The list of locales using US Letter papersize has
+  been updated to match the CLDR 1.8.1
+
+* The default location for the 'module cache' files (ie the files
+  produced by gdk-pixbuf-query-loaders and gtk-query-immodules) has
+  been changed to $libdir/gtk-3.0/3.0.0/{loaders,immodules}.cache.
+  This should avoid multilib problems with the previous location.
+
+  Additionally, the query utilities accept an --update-cache argument
+  to update the cache file directly, instead of writing to stdout
+
+* gtk_radio_action_join_group: A binding-friendly way to manage
+  radio actions.
+
+* GtkAdjustment enforces values to the range [lower, upper - page_size]
+
+* GDK has been GSEALed, with the addition of suitable accessors
+
+* The XI2 branch with better support for multiple input devices has
+  been merged, together with backends for XInput, XInput2, win32 and
+  Quartz, and corresponding updates to input-device handling code
+  in GTK.
+
+* A number of orientable widgets are no longer abstract: GtkBox,
+  GtkButtonBox, GtkPaned, GtkRuler, GtkScale, GtkScrollbar, GtkSeparator.
+  All of these can now be instantiated and flipped between horizontal
+  and vertical orientation at runtime. Their H/V subclasses are still
+  available, as convenience API.
+
+* More deprecated API has been removed
+
+* Bugs fixes:
+ 613132 GtkBoxChild should probably be deprecated
+ 592580 GDK needs sealing
+ 618870 GTK+ uses wrong pkg-config to reveal the CAIRO_PREFIX
+ 616817 Remove code to support deprecated GtkToolbar api
+ 619114 undefined reference to `XkbBell'
+ 617863 Actually expose the X11 funcs through introspection
+ 613302 GtkWidget not emitting the unmap signal
+ 565559 Incorrect leave-notify signals for treeview
+ 533946 GtkHScale does not update correctly
+ 618000 Sync paper size fallbacks with CLDR 1.8.1
+ 614581 Gtk print dialog freezes on start up
+ 551322 configure does not use -lm in jasper (JPEG2000) testing
+ 619474 Fixes for GtkAdjustment for GTK+ 3
+ 555087 Shouldn't the return type of gtk_entry_completion_get_model...
+ 619385 Fix compilation warning: Do not break strict-aliasing rules
+ 596725 Add XInput2 support
+
+* Updated translations
+ Arabic
+ Estonian
+ Galician
+ Italian
+ Indonesian
+ Oriya
+ Shavian
+
+
 Overview of Changes from GTK+ 2.20.x to 2.90.0
 ==============================================
 
