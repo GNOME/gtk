@@ -66,6 +66,12 @@ void _gtk_tooltip_toggle_keyboard_mode   (GtkWidget          *widget);
 void _gtk_tooltip_handle_event           (GdkEvent           *event);
 void _gtk_tooltip_hide                   (GtkWidget          *widget);
 
+GtkWidget * _gtk_widget_find_at_coords   (GdkWindow          *window,
+                                          gint                window_x,
+                                          gint                window_y,
+                                          gint               *widget_x,
+                                          gint               *widget_y);
+
 G_END_DECLS
 
 #endif /* __GTK_TOOLTIP_H__ */

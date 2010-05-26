@@ -647,13 +647,17 @@ window_to_alloc (GtkWidget *dest_widget,
 /* Translates coordinates from window relative (x, y) to
  * allocation relative (x, y) of the returned widget.
  */
-static GtkWidget *
-find_widget_under_pointer (GdkWindow *window,
-			   gint      *x,
-			   gint      *y)
+GtkWidget *
+_gtk_widget_find_at_coords (GdkWindow *window,
+                            gint       window_x,
+                            gint       window_y,
+                            gint      *widget_x,
+                            gint      *widget_y)
 {
   GtkWidget *event_widget;
   struct ChildLocation child_loc = { NULL, NULL, 0, 0 };
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   gdk_window_get_user_data (window, (void **)&event_widget);
 
@@ -663,12 +667,12 @@ find_widget_under_pointer (GdkWindow *window,
 #ifdef DEBUG_TOOLTIP
   g_print ("event window %p (belonging to %p (%s))  (%d, %d)\n",
 	   window, event_widget, gtk_widget_get_name (event_widget),
-	   *x, *y);
+	   window_x, window_y);
 #endif
 
   /* Coordinates are relative to event window */
-  child_loc.x = *x;
-  child_loc.y = *y;
+  child_loc.x = window_x;
+  child_loc.y = window_y;
 
   /* We go down the window hierarchy to the widget->window,
    * coordinates stay relative to the current window.
@@ -725,14 +729,13 @@ find_widget_under_pointer (GdkWindow *window,
       gtk_widget_translate_coordinates (container, event_widget,
 					child_loc.x, child_loc.y,
 					&child_loc.x, &child_loc.y);
-
     }
 
   /* We return (x, y) relative to the allocation of event_widget. */
-  if (x)
-    *x = child_loc.x;
-  if (y)
-    *y = child_loc.y;
+  if (widget_x)
+    *widget_x = child_loc.x;
+  if (widget_y)
+    *widget_y = child_loc.y;
 
   return event_widget;
 }
@@ -750,11 +753,9 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
   GtkWidget *tmp;
 
   gdk_event_get_coords (event, &dx, &dy);
-  tx = dx;
-  ty = dy;
 
   /* Returns coordinates relative to tmp's allocation. */
-  tmp = find_widget_under_pointer (event->any.window, &tx, &ty);
+  tmp = _gtk_widget_find_at_coords (event->any.window, dx, dy, &tx, &ty);
 
   if (!tmp)
     return NULL;
@@ -1007,8 +1008,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       tooltip->last_x = tx;
       tooltip->last_y = ty;
 
-      pointer_widget = tooltip_widget = find_widget_under_pointer (window,
-								   &x, &y);
+      pointer_widget = tooltip_widget = _gtk_widget_find_at_coords (window,
+                                                                    x, y,
+                                                                    &x, &y);
     }
 
   if (!tooltip_widget)
