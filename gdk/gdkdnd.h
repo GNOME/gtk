@@ -77,35 +77,39 @@ struct _GdkDragContext {
 
   /*< public >*/
   
-  GdkDragProtocol protocol;
-  
-  gboolean is_source;
-  
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
+  GdkDragProtocol GSEAL (protocol);
 
-  GList *targets;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-  GdkDragAction action; 
+  gboolean GSEAL (is_source);
+  
+  GdkWindow *GSEAL (source_window);
+  GdkWindow *GSEAL (dest_window);
 
-  guint32 start_time;
+  GList *GSEAL (targets);
+  GdkDragAction GSEAL (actions);
+  GdkDragAction GSEAL (suggested_action);
+  GdkDragAction GSEAL (action);
+
+  guint32 GSEAL (start_time);
 
   /*< private >*/
   
-  gpointer windowing_data;
+  gpointer GSEAL (windowing_data);
 };
 
 struct _GdkDragContextClass {
   GObjectClass parent_class;
 
-  
 };
 
 /* Drag and Drop */
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
 GdkDragContext * gdk_drag_context_new        (void);
+
+GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_action           (GdkDragContext *context);
 
 #ifndef GDK_DISABLE_DEPRECATED
 void             gdk_drag_context_ref        (GdkDragContext *context);

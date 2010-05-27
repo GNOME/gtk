@@ -190,12 +190,12 @@ struct _GdkGC
 {
   GObject parent_instance;
 
-  gint clip_x_origin;
-  gint clip_y_origin;
-  gint ts_x_origin;
-  gint ts_y_origin;
+  gint GSEAL (clip_x_origin);
+  gint GSEAL (clip_y_origin);
+  gint GSEAL (ts_x_origin);
+  gint GSEAL (ts_y_origin);
 
-  GdkColormap *colormap;
+  GdkColormap *GSEAL (colormap);
 };
 
 struct _GdkGCClass 

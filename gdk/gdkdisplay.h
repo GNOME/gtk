@@ -75,34 +75,34 @@ struct _GdkDisplay
   GObject parent_instance;
 
   /*< private >*/
-  GList *queued_events;
-  GList *queued_tail;
+  GList *GSEAL (queued_events);
+  GList *GSEAL (queued_tail);
 
   /* Information for determining if the latest button click
    * is part of a double-click or triple-click
    */
-  guint32 button_click_time[2];	/* The last 2 button click times. */
-  GdkWindow *button_window[2];  /* The last 2 windows to receive button presses. */
-  gint button_number[2];        /* The last 2 buttons to be pressed. */
+  guint32 GSEAL (button_click_time[2]);	/* The last 2 button click times. */
+  GdkWindow *GSEAL (button_window[2]);  /* The last 2 windows to receive button presses. */
+  gint GSEAL (button_number[2]);        /* The last 2 buttons to be pressed. */
 
-  guint double_click_time;	/* Maximum time between clicks in msecs */
-  GdkDevice *core_pointer;	/* Core pointer device */
+  guint GSEAL (double_click_time);	/* Maximum time between clicks in msecs */
+  GdkDevice *GSEAL (core_pointer);	/* Core pointer device */
 
-  const GdkDisplayPointerHooks *pointer_hooks; /* Current hooks for querying pointer */
+  const GdkDisplayPointerHooks *GSEAL (pointer_hooks); /* Current hooks for querying pointer */
   
-  guint closed : 1;		/* Whether this display has been closed */
-  guint ignore_core_events : 1; /* Don't send core motion and button event */
+  guint GSEAL (closed) : 1;		/* Whether this display has been closed */
+  guint GSEAL (ignore_core_events) : 1; /* Don't send core motion and button event */
 
-  guint double_click_distance;	/* Maximum distance between clicks in pixels */
-  gint button_x[2];             /* The last 2 button click positions. */
-  gint button_y[2];
+  guint GSEAL (double_click_distance);	/* Maximum distance between clicks in pixels */
+  gint GSEAL (button_x[2]);             /* The last 2 button click positions. */
+  gint GSEAL (button_y[2]);
 
-  GList *pointer_grabs;
-  GdkKeyboardGrabInfo keyboard_grab;
-  GdkPointerWindowInfo pointer_info;
+  GList *GSEAL (pointer_grabs);
+  GdkKeyboardGrabInfo GSEAL (keyboard_grab);
+  GdkPointerWindowInfo GSEAL (pointer_info);
 
   /* Last reported event time from server */
-  guint32 last_event_time;
+  guint32 GSEAL (last_event_time);
 };
 
 struct _GdkDisplayClass

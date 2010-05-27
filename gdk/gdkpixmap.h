@@ -51,9 +51,9 @@ struct _GdkPixmapObject
 {
   GdkDrawable parent_instance;
   
-  GdkDrawable *impl;  /* window-system-specific delegate object */
+  GdkDrawable *GSEAL (impl);  /* window-system-specific delegate object */
 
-  gint depth;
+  gint GSEAL (depth);
 };
 
 struct _GdkPixmapObjectClass

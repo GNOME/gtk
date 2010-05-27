@@ -273,50 +273,50 @@ struct _GdkWindowObject
 {
   GdkDrawable parent_instance;
 
-  GdkDrawable *impl; /* window-system-specific delegate object */  
+  GdkDrawable *GSEAL (impl); /* window-system-specific delegate object */
   
-  GdkWindowObject *parent;
+  GdkWindowObject *GSEAL (parent);
 
-  gpointer user_data;
+  gpointer GSEAL (user_data);
 
-  gint x;
-  gint y;
+  gint GSEAL (x);
+  gint GSEAL (y);
   
-  gint extension_events;
+  gint GSEAL (extension_events);
 
-  GList *filters;
-  GList *children;
+  GList *GSEAL (filters);
+  GList *GSEAL (children);
 
-  GdkColor bg_color;
-  GdkPixmap *bg_pixmap;
+  GdkColor GSEAL (bg_color);
+  GdkPixmap *GSEAL (bg_pixmap);
   
-  GSList *paint_stack;
+  GSList *GSEAL (paint_stack);
   
-  GdkRegion *update_area;
-  guint update_freeze_count;
+  GdkRegion *GSEAL (update_area);
+  guint GSEAL (update_freeze_count);
   
-  guint8 window_type;
-  guint8 depth;
-  guint8 resize_count;
+  guint8 GSEAL (window_type);
+  guint8 GSEAL (depth);
+  guint8 GSEAL (resize_count);
 
-  GdkWindowState state;
+  GdkWindowState GSEAL (state);
   
-  guint guffaw_gravity : 1;
-  guint input_only : 1;
-  guint modal_hint : 1;
-  guint composited : 1;
+  guint GSEAL (guffaw_gravity) : 1;
+  guint GSEAL (input_only) : 1;
+  guint GSEAL (modal_hint) : 1;
+  guint GSEAL (composited) : 1;
   
-  guint destroyed : 2;
+  guint GSEAL (destroyed) : 2;
 
-  guint accept_focus : 1;
-  guint focus_on_map : 1;
-  guint shaped : 1;
+  guint GSEAL (accept_focus) : 1;
+  guint GSEAL (focus_on_map) : 1;
+  guint GSEAL (shaped) : 1;
   
-  GdkEventMask event_mask;
+  GdkEventMask GSEAL (event_mask);
 
-  guint update_and_descendants_freeze_count;
+  guint GSEAL (update_and_descendants_freeze_count);
 
-  GdkWindowRedirect *redirect;
+  GdkWindowRedirect *GSEAL (redirect);
 };
 #endif
 #endif
@@ -378,8 +378,10 @@ void          gdk_window_set_user_data         (GdkWindow     *window,
                                                 gpointer       user_data);
 void          gdk_window_set_override_redirect (GdkWindow     *window,
                                                 gboolean       override_redirect);
+gboolean      gdk_window_get_accept_focus      (GdkWindow     *window);
 void          gdk_window_set_accept_focus      (GdkWindow     *window,
 					        gboolean       accept_focus);
+gboolean      gdk_window_get_focus_on_map      (GdkWindow     *window);
 void          gdk_window_set_focus_on_map      (GdkWindow     *window,
 					        gboolean       focus_on_map);
 void          gdk_window_add_filter            (GdkWindow     *window,
@@ -421,6 +423,7 @@ void gdk_window_shape_combine_region (GdkWindow	      *window,
  */
 void gdk_window_set_child_shapes (GdkWindow *window);
 
+gboolean gdk_window_get_composited (GdkWindow *window);
 void gdk_window_set_composited   (GdkWindow *window,
                                   gboolean   composited);
 
@@ -453,6 +456,8 @@ void gdk_window_merge_child_input_shapes   (GdkWindow       *window);
  */
 gboolean gdk_window_is_visible     (GdkWindow *window);
 gboolean gdk_window_is_viewable    (GdkWindow *window);
+gboolean gdk_window_is_input_only  (GdkWindow *window);
+gboolean gdk_window_is_shaped      (GdkWindow *window);
 
 GdkWindowState gdk_window_get_state (GdkWindow *window);
 
@@ -489,6 +494,7 @@ void              gdk_window_set_type_hint (GdkWindow        *window,
                                             GdkWindowTypeHint hint);
 GdkWindowTypeHint gdk_window_get_type_hint (GdkWindow        *window);
 
+gboolean      gdk_window_get_modal_hint   (GdkWindow       *window);
 void          gdk_window_set_modal_hint   (GdkWindow       *window,
                                            gboolean         modal);
 
@@ -513,14 +519,19 @@ void	      gdk_window_flush             (GdkWindow          *window);
 
 void	      gdk_window_set_title	   (GdkWindow	  *window,
 					    const gchar	  *title);
-void          gdk_window_set_role          (GdkWindow       *window,
-					    const gchar     *role);
-void          gdk_window_set_startup_id    (GdkWindow       *window,
-					    const gchar     *startup_id);					  
-void          gdk_window_set_transient_for (GdkWindow       *window, 
-					    GdkWindow       *parent);
+void          gdk_window_set_role          (GdkWindow     *window,
+					    const gchar   *role);
+void          gdk_window_set_startup_id    (GdkWindow     *window,
+					    const gchar   *startup_id);
+void          gdk_window_set_transient_for (GdkWindow     *window,
+					    GdkWindow     *parent);
+void          gdk_window_get_background  (GdkWindow       *window,
+                                          GdkColor        *color);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
+void	      gdk_window_get_back_pixmap (GdkWindow       *window,
+					  GdkPixmap	 **pixmap,
+					  gboolean	  *parent_relative);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);

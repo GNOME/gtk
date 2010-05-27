@@ -146,6 +146,168 @@ gdk_image_get_colormap (GdkImage *image)
   return image->colormap;
 }
 
+/**
+ * gdk_image_get_image_type:
+ * @image: a #GdkImage
+ *
+ * Determines the type of a given image.
+ *
+ * Return value: the #GdkImageType of the image
+ *
+ * Since: 2.22
+ **/
+GdkImageType
+gdk_image_get_image_type (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->type;
+}
+
+/**
+ * gdk_image_get_visual:
+ * @image: a #GdkImage
+ *
+ * Determines the visual that was used to create the image.
+ *
+ * Return value: a #GdkVisual
+ *
+ * Since: 2.22
+ **/
+GdkVisual *
+gdk_image_get_visual (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), NULL);
+
+  return image->visual;
+}
+
+/**
+ * gdk_image_get_byte_order:
+ * @image: a #GdkImage
+ *
+ * Determines the byte order of the image.
+ *
+ * Return value: a #GdkVisual
+ *
+ * Since: 2.22
+ **/
+GdkByteOrder
+gdk_image_get_byte_order (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->byte_order;
+}
+
+/**
+ * gdk_image_get_width:
+ * @image: a #GdkImage
+ *
+ * Determines the width of the image.
+ *
+ * Return value: the width
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_image_get_width (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->width;
+}
+
+/**
+ * gdk_image_get_height:
+ * @image: a #GdkImage
+ *
+ * Determines the height of the image.
+ *
+ * Return value: the height
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_image_get_height (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->height;
+}
+
+/**
+ * gdk_image_get_depth:
+ * @image: a #GdkImage
+ *
+ * Determines the depth of the image.
+ *
+ * Return value: the depth
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_depth (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->depth;
+}
+
+/**
+ * gdk_image_get_bytes_per_pixel:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bytes per pixel of the image.
+ *
+ * Return value: the bytes per pixel
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bytes_per_pixel (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bpp;
+}
+
+/**
+ * gdk_image_get_bytes_per_line:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bytes per line of the image.
+ *
+ * Return value: the bytes per line
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bytes_per_line (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bpl;
+}
+
+/**
+ * gdk_image_get_bits_per_pixel:
+ * @image: a #GdkImage
+ *
+ * Determines the number of bits per pixel of the image.
+ *
+ * Return value: the bits per pixel
+ *
+ * Since: 2.22
+ **/
+guint16
+gdk_image_get_bits_per_pixel (GdkImage *image)
+{
+  g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
+
+  return image->bits_per_pixel;
+}
+
 /* We have N_REGION GDK_SCRATCH_IMAGE_WIDTH x GDK_SCRATCH_IMAGE_HEIGHT regions divided
  * up between n_images different images. possible_n_images gives
  * various divisors of N_REGIONS. The reason for allowing this

@@ -126,9 +126,9 @@ typedef enum
 
 struct _GdkCursor
 {
-  GdkCursorType type;
+  GdkCursorType GSEAL (type);
   /*< private >*/
-  guint ref_count;
+  guint GSEAL (ref_count);
 };
 
 /* Cursors

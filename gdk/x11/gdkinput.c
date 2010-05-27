@@ -170,6 +170,78 @@ gdk_display_list_devices (GdkDisplay *display)
   return GDK_DISPLAY_X11 (display)->input_devices;
 }
 
+/**
+ * gdk_device_get_name:
+ * @device: a #GdkDevice
+ *
+ * Determines the name of the device.
+ *
+ * Return value: a name
+ *
+ * Since: 2.22
+ **/
+const gchar *
+gdk_device_get_name (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  return device->name;
+}
+
+/**
+ * gdk_device_get_source:
+ * @device: a #GdkDevice
+ *
+ * Determines the type of the device.
+ *
+ * Return value: a #GdkInputSource
+ *
+ * Since: 2.22
+ **/
+GdkInputSource
+gdk_device_get_source (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->source;
+}
+
+/**
+ * gdk_device_get_mode:
+ * @device: a #GdkDevice
+ *
+ * Determines the mode of the device.
+ *
+ * Return value: a #GdkInputSource
+ *
+ * Since: 2.22
+ **/
+GdkInputMode
+gdk_device_get_mode (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->mode;
+}
+
+/**
+ * gdk_device_get_has_cursor:
+ * @device: a #GdkDevice
+ *
+ * Determines whether the pointer follows device motion.
+ *
+ * Return value: %TRUE if the pointer follows device motion
+ *
+ * Since: 2.22
+ **/
+gboolean
+gdk_device_get_has_cursor (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  return device->has_cursor;
+}
+
 void
 gdk_device_set_source (GdkDevice      *device,
 		       GdkInputSource  source)
@@ -177,6 +249,38 @@ gdk_device_set_source (GdkDevice      *device,
   g_return_if_fail (device != NULL);
 
   device->source = source;
+}
+
+/**
+ * gdk_device_get_key:
+ * @device: a #GdkDevice.
+ * @index: the index of the macro button to get.
+ * @keyval: return value for the keyval.
+ * @modifiers: return value for modifiers.
+ *
+ * If @index has a valid keyval, this function will
+ * fill in @keyval and @modifiers with the keyval settings.
+ *
+ * Since: 2.22
+ **/
+void
+gdk_device_get_key (GdkDevice       *device,
+                    guint            index,
+                    guint           *keyval,
+                    GdkModifierType *modifiers)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (index < device->num_keys);
+
+  if (!device->keys[index].keyval &&
+      !device->keys[index].modifiers)
+    return;
+
+  if (keyval)
+    *keyval = device->keys[index].keyval;
+
+  if (modifiers)
+    *modifiers = device->keys[index].modifiers;
 }
 
 void
@@ -190,6 +294,27 @@ gdk_device_set_key (GdkDevice      *device,
 
   device->keys[index].keyval = keyval;
   device->keys[index].modifiers = modifiers;
+}
+
+/**
+ * gdk_device_get_axis_use:
+ * @device: a #GdkDevice.
+ * @index: the index of the axis.
+ *
+ * Returns the axis use for @index.
+ *
+ * Returns: a #GdkAxisUse specifying how the axis is used.
+ *
+ * Since: 2.22
+ **/
+GdkAxisUse
+gdk_device_get_axis_use (GdkDevice *device,
+                         guint      index)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
+  g_return_val_if_fail (index < device->num_axes, GDK_AXIS_IGNORE);
+
+  return device->axes[index].use;
 }
 
 void

@@ -68,21 +68,21 @@ struct _GdkImage
 
   /*< public >*/
   
-  GdkImageType	type; /* read only. */
-  GdkVisual    *visual;	    /* read only. visual used to create the image */
-  GdkByteOrder	byte_order; /* read only. */
-  gint		width; /* read only. */
-  gint		height; /* read only. */
-  guint16	depth; /* read only. */
-  guint16	bpp;	        /* read only. bytes per pixel */
-  guint16	bpl;	        /* read only. bytes per line */
-  guint16       bits_per_pixel; /* read only. bits per pixel */
-  gpointer	mem;
+  GdkImageType	GSEAL (type); /* read only. */
+  GdkVisual    *GSEAL (visual);	    /* read only. visual used to create the image */
+  GdkByteOrder	GSEAL (byte_order); /* read only. */
+  gint		GSEAL (width);  /* read only. */
+  gint		GSEAL (height); /* read only. */
+  guint16	GSEAL (depth);  /* read only. */
+  guint16	GSEAL (bpp);    /* read only. bytes per pixel */
+  guint16	GSEAL (bpl);    /* read only. bytes per line */
+  guint16       GSEAL (bits_per_pixel); /* read only. bits per pixel */
+  gpointer	GSEAL (mem);
 
-  GdkColormap  *colormap; /* read only. */
+  GdkColormap  *GSEAL (colormap); /* read only. */
 
   /*< private >*/
-  gpointer windowing_data; /* read only. */
+  gpointer GSEAL (windowing_data); /* read only. */
 };
 
 struct _GdkImageClass
@@ -120,6 +120,15 @@ void       gdk_image_set_colormap (GdkImage    *image,
                                    GdkColormap *colormap);
 GdkColormap* gdk_image_get_colormap (GdkImage    *image);
 
+GdkImageType  gdk_image_get_image_type     (GdkImage *image);
+GdkVisual    *gdk_image_get_visual         (GdkImage *image);
+GdkByteOrder  gdk_image_get_byte_order     (GdkImage *image);
+gint          gdk_image_get_width          (GdkImage *image);
+gint          gdk_image_get_height         (GdkImage *image);
+guint16       gdk_image_get_depth          (GdkImage *image);
+guint16       gdk_image_get_bytes_per_pixel(GdkImage *image);
+guint16       gdk_image_get_bytes_per_line (GdkImage *image);
+guint16       gdk_image_get_bits_per_pixel (GdkImage *image);
 
 #ifdef GDK_ENABLE_BROKEN
 GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
