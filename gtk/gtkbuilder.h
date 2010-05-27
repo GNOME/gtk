@@ -85,7 +85,7 @@ struct _GtkBuilder
 {
   GObject parent_instance;
 
-  GtkBuilderPrivate *GSEAL (priv);
+  GtkBuilderPrivate *priv;
 };
 
 struct _GtkBuilderClass
