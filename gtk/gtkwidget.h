@@ -81,7 +81,6 @@ G_BEGIN_DECLS
  *  defined through the rc mechanism.
  * @GTK_COMPOSITE_CHILD: Indicates that the widget is a composite child of its parent; see
  *  gtk_widget_push_composite_child(), gtk_widget_pop_composite_child().
- * @GTK_NO_REPARENT: Unused since before GTK+ 1.2, will be removed in a future version.
  * @GTK_APP_PAINTABLE: Set and unset by gtk_widget_set_app_paintable().
  *  Must be set on widgets whose window the application directly draws on,
  *  in order to keep GTK+ from overwriting the drawn stuff.  See
@@ -114,14 +113,11 @@ typedef enum
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
-#ifndef GTK_DISABLE_DEPRECATED
-  GTK_NO_REPARENT      = 1 << 18,
-#endif
-  GTK_APP_PAINTABLE    = 1 << 19,
-  GTK_RECEIVES_DEFAULT = 1 << 20,
-  GTK_DOUBLE_BUFFERED  = 1 << 21,
-  GTK_NO_SHOW_ALL      = 1 << 22,
-  GTK_MULTIDEVICE      = 1 << 23
+  GTK_APP_PAINTABLE    = 1 << 18,
+  GTK_RECEIVES_DEFAULT = 1 << 29,
+  GTK_DOUBLE_BUFFERED  = 1 << 20,
+  GTK_NO_SHOW_ALL      = 1 << 21,
+  GTK_MULTIDEVICE      = 1 << 22
 } GtkWidgetFlags;
 
 /* Kinds of widget-specific help */
