@@ -148,7 +148,6 @@ _gtk_get_localedir (void)
  */
 typedef struct _GtkInitFunction		 GtkInitFunction;
 typedef struct _GtkQuitFunction		 GtkQuitFunction;
-typedef struct _GtkClosure	         GtkClosure;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
 
 struct _GtkInitFunction
@@ -163,13 +162,6 @@ struct _GtkQuitFunction
   guint main_level;
   GtkCallbackMarshal marshal;
   GtkFunction function;
-  gpointer data;
-  GDestroyNotify destroy;
-};
-
-struct _GtkClosure
-{
-  GtkCallbackMarshal marshal;
   gpointer data;
   GDestroyNotify destroy;
 };
