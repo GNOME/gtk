@@ -178,13 +178,6 @@ static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 					  GdkEvent	     *event);
 
-#if 0
-static void  gtk_error			 (gchar		     *str);
-static void  gtk_warning		 (gchar		     *str);
-static void  gtk_message		 (gchar		     *str);
-static void  gtk_print			 (gchar		     *str);
-#endif
-
 static GtkWindowGroup *gtk_main_get_window_group (GtkWidget   *widget);
 
 const guint gtk_major_version = GTK_MAJOR_VERSION;
@@ -620,13 +613,6 @@ do_pre_parse_initialization (int    *argc,
 {
   const gchar *env_string;
   
-#if	0
-  g_set_error_handler (gtk_error);
-  g_set_warning_handler (gtk_warning);
-  g_set_message_handler (gtk_message);
-  g_set_print_handler (gtk_print);
-#endif
-
   if (pre_initialized)
     return;
 
@@ -2432,117 +2418,6 @@ gtk_propagate_event (GtkWidget *widget,
   else
     g_object_unref (widget);
 }
-
-#if 0
-static void
-gtk_error (gchar *str)
-{
-  gtk_print (str);
-}
-
-static void
-gtk_warning (gchar *str)
-{
-  gtk_print (str);
-}
-
-static void
-gtk_message (gchar *str)
-{
-  gtk_print (str);
-}
-
-static void
-gtk_print (gchar *str)
-{
-  static GtkWidget *window = NULL;
-  static GtkWidget *text;
-  static int level = 0;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *table;
-  GtkWidget *hscrollbar;
-  GtkWidget *vscrollbar;
-  GtkWidget *separator;
-  GtkWidget *button;
-  
-  if (level > 0)
-    {
-      fputs (str, stdout);
-      fflush (stdout);
-      return;
-    }
-  
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
-      
-      gtk_window_set_title (GTK_WINDOW (window), "Messages");
-      
-      box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-      
-      
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
-      gtk_widget_show (box2);
-      
-      
-      table = gtk_table_new (2, 2, FALSE);
-      gtk_table_set_row_spacing (GTK_TABLE (table), 0, 2);
-      gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
-      gtk_box_pack_start (GTK_BOX (box2), table, TRUE, TRUE, 0);
-      gtk_widget_show (table);
-      
-      text = gtk_text_new (NULL, NULL);
-      gtk_text_set_editable (GTK_TEXT (text), FALSE);
-      gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
-      gtk_widget_show (text);
-      gtk_widget_realize (text);
-      
-      hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
-      gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 1, 2,
-			GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-      gtk_widget_show (hscrollbar);
-      
-      vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
-      gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
-			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (vscrollbar);
-      
-      separator = gtk_hseparator_new ();
-      gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
-      gtk_widget_show (separator);
-      
-      
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-      gtk_widget_show (box2);
-      
-      
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_hide), window);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-      gtk_widget_show (button);
-    }
-  
-  level += 1;
-  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, str, -1);
-  level -= 1;
-  
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-}
-#endif
 
 gboolean
 _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
