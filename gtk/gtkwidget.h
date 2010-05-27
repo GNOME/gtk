@@ -114,7 +114,7 @@ typedef enum
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_APP_PAINTABLE    = 1 << 18,
-  GTK_RECEIVES_DEFAULT = 1 << 29,
+  GTK_RECEIVES_DEFAULT = 1 << 19,
   GTK_DOUBLE_BUFFERED  = 1 << 20,
   GTK_NO_SHOW_ALL      = 1 << 21,
   GTK_MULTIDEVICE      = 1 << 22
