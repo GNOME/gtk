@@ -1530,14 +1530,6 @@ gtk_container_foreach (GtkContainer *container,
     class->forall (container, FALSE, callback, callback_data);
 }
 
-typedef struct _GtkForeachData	GtkForeachData;
-struct _GtkForeachData
-{
-  GtkObject         *container;
-  GtkCallbackMarshal callback;
-  gpointer           callback_data;
-};
-
 /**
  * gtk_container_set_focus_child:
  * @container: a #GtkContainer
