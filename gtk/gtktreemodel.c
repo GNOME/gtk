@@ -953,7 +953,7 @@ gtk_tree_model_get_n_columns (GtkTreeModel *tree_model)
  *
  * Returns the type of the column.
  *
- * Return value: The type of the column.
+ * Return value: (transfer none): The type of the column.
  **/
 GType
 gtk_tree_model_get_column_type (GtkTreeModel *tree_model,
@@ -1123,7 +1123,7 @@ gtk_tree_model_get_path (GtkTreeModel *tree_model,
  * @tree_model: A #GtkTreeModel.
  * @iter: The #GtkTreeIter.
  * @column: The column to lookup the value at.
- * @value: (inout) (transfer none) An empty #GValue to set.
+ * @value: (out) (transfer none) An empty #GValue to set.
  *
  * Initializes and sets @value to that at @column.
  * When done with @value, g_value_unset() needs to be called 
