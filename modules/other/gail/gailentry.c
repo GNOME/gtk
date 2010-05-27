@@ -1020,6 +1020,12 @@ gail_entry_idle_notify_insert (gpointer data)
 static void
 gail_entry_notify_insert (GailEntry *entry)
 {
+  GtkWidget *widget;
+
+  widget = GTK_ACCESSIBLE (entry)->widget;
+  if (gtk_entry_get_text_length (GTK_ENTRY (widget)) == 0)
+    return;
+
   if (entry->signal_name_insert)
     {
       g_signal_emit_by_name (entry, 
@@ -1042,6 +1048,9 @@ _gail_entry_insert_text_cb (GtkEntry *entry,
   AtkObject *accessible;
   GailEntry *gail_entry;
   gint *position = (gint *) arg3;
+
+  if (arg2 == 0)
+    return;
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (entry));
   gail_entry = GAIL_ENTRY (accessible);
