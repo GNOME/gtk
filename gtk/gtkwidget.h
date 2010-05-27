@@ -114,7 +114,9 @@ typedef enum
   GTK_HAS_GRAB	       = 1 << 15,
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
+#ifndef GTK_DISABLE_DEPRECATED
   GTK_NO_REPARENT      = 1 << 18,
+#endif
   GTK_APP_PAINTABLE    = 1 << 19,
   GTK_RECEIVES_DEFAULT = 1 << 20,
   GTK_DOUBLE_BUFFERED  = 1 << 21,
