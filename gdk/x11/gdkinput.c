@@ -53,7 +53,7 @@ struct _GdkInputWindow
  *
  * Return value: a list of #GdkDevice
  *
- * Deprecated: 3.0. Use gdk_device_manager_list_devices() instead.
+ * Deprecated: 3.0: Use gdk_device_manager_list_devices() instead.
  **/
 GList *
 gdk_devices_list (void)
@@ -143,7 +143,7 @@ unset_extension_events (GdkWindow *window)
  * Turns extension events on or off for a particular window,
  * and specifies the event mask for extension events.
  *
- * Deprecated: 3.0. Use gdk_window_set_device_events() instead.
+ * Deprecated: 3.0: Use gdk_window_set_device_events() instead.
  **/
 void
 gdk_input_set_extension_events (GdkWindow        *window,

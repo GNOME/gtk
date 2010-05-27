@@ -420,7 +420,7 @@ gdk_display_put_event (GdkDisplay     *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_device_ungrab(), together with gdk_device_grab()
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
  *             instead.
  */
 void
@@ -459,7 +459,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
  * Ungrabs the pointer on the default display, if it is grabbed by this 
  * application.
  *
- * Deprecated: 3.0. Use gdk_device_ungrab(), together with gdk_device_grab()
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
  *             instead.
  **/
 void
@@ -479,7 +479,7 @@ gdk_pointer_ungrab (guint32 time)
  *
  * Return value: %TRUE if the pointer is currently grabbed by this application.
  *
- * Deprecated: 3.0. Use gdk_display_device_is_grabbed() instead.
+ * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
  **/
 gboolean
 gdk_pointer_is_grabbed (void)
@@ -496,7 +496,7 @@ gdk_pointer_is_grabbed (void)
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_device_ungrab(), together with gdk_device_grab()
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
  *             instead.
  */
 void
@@ -535,7 +535,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
  * Ungrabs the keyboard on the default display, if it is grabbed by this 
  * application.
  *
- * Deprecated: 3.0. Use gdk_device_ungrab(), together with gdk_device_grab()
+ * Deprecated: 3.0: Use gdk_device_ungrab(), together with gdk_device_grab()
  *             instead.
  **/
 void
@@ -605,7 +605,7 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
  * Return value: the core pointer device; this is owned by the
  *   display and should not be freed.
  *
- * Deprecated: 3.0. Use gdk_display_get_device_manager() instead, or
+ * Deprecated: 3.0: Use gdk_display_get_device_manager() instead, or
  *             gdk_event_get_device() if a #GdkEvent with pointer device
  *             information is available.
  **/
@@ -626,7 +626,7 @@ gdk_device_get_core_pointer (void)
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_display_get_device_manager() instead, or
+ * Deprecated: 3.0: Use gdk_display_get_device_manager() instead, or
  *             gdk_event_get_device() if a #GdkEvent with device
  *             information is available.
  **/
@@ -829,7 +829,7 @@ gdk_display_set_device_hooks (GdkDisplay                  *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_display_get_device_state() instead.
+ * Deprecated: 3.0: Use gdk_display_get_device_state() instead.
  **/
 void
 gdk_display_get_pointer (GdkDisplay      *display,
@@ -925,7 +925,7 @@ gdk_window_real_window_get_device_position (GdkDisplay       *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_display_get_window_at_device_position() instead.
+ * Deprecated: 3.0: Use gdk_display_get_window_at_device_position() instead.
  **/
 GdkWindow *
 gdk_display_get_window_at_pointer (GdkDisplay *display,
@@ -1019,7 +1019,7 @@ multihead_default_window_at_pointer (GdkDisplay *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_display_set_device_hooks() instead.
+ * Deprecated: 3.0: Use gdk_display_set_device_hooks() instead.
  **/
 GdkDisplayPointerHooks *
 gdk_display_set_pointer_hooks (GdkDisplay                   *display,
@@ -1121,7 +1121,7 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
  * 
  * Return value: the previous pointer hook table
  *
- * Deprecated: 3.0. Use gdk_display_set_device_hooks() instead.
+ * Deprecated: 3.0: Use gdk_display_set_device_hooks() instead.
  **/
 GdkPointerHooks *
 gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
@@ -1743,7 +1743,7 @@ gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_display_device_is_grabbed() instead.
+ * Deprecated: 3.0: Use gdk_display_device_is_grabbed() instead.
  */
 gboolean
 gdk_display_pointer_is_grabbed (GdkDisplay *display)

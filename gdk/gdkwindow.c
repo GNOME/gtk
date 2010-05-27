@@ -6448,7 +6448,7 @@ gdk_window_constrain_size (GdkGeometry *geometry,
  * gdk_window_at_pointer()), or %NULL if the window containing the
  * pointer isn't known to GDK
  *
- * Deprecated: 3.0. Use gdk_window_get_device_position() instead.
+ * Deprecated: 3.0: Use gdk_window_get_device_position() instead.
  **/
 GdkWindow*
 gdk_window_get_pointer (GdkWindow	  *window,
@@ -6530,7 +6530,7 @@ gdk_window_get_device_position (GdkWindow       *window,
  *
  * Return value: (transfer none): window under the mouse pointer
  *
- * Deprecated: 3.0. Use gdk_display_get_window_at_device_position() instead.
+ * Deprecated: 3.0: Use gdk_display_get_window_at_device_position() instead.
  **/
 GdkWindow*
 gdk_window_at_pointer (gint *win_x,
@@ -10601,7 +10601,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
  *
- * Deprecated: 3.0. Use gdk_device_grab() instead.
+ * Deprecated: 3.0: Use gdk_device_grab() instead.
  **/
 GdkGrabStatus
 gdk_pointer_grab (GdkWindow *	  window,
@@ -10720,7 +10720,7 @@ available.
  *
  * Returns: %GDK_GRAB_SUCCESS if the grab was successful.
  *
- * Deprecated: 3.0. Use gdk_device_grab() instead.
+ * Deprecated: 3.0: Use gdk_device_grab() instead.
  **/
 GdkGrabStatus
 gdk_keyboard_grab (GdkWindow *window,

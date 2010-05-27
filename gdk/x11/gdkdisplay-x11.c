@@ -2498,7 +2498,7 @@ gdk_display_supports_composite (GdkDisplay *display)
  *
  * Since: 2.2
  *
- * Deprecated: 3.0. Use gdk_device_manager_list_devices() instead.
+ * Deprecated: 3.0: Use gdk_device_manager_list_devices() instead.
  **/
 GList *
 gdk_display_list_devices (GdkDisplay *display)

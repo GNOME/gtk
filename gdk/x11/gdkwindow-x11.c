@@ -3143,7 +3143,7 @@ gdk_window_x11_get_device_state (GdkWindow       *window,
  *
  * Since: 2.8
  *
- * Deprecated: 3.0. Use gdk_display_warp_device() instead.
+ * Deprecated: 3.0: Use gdk_display_warp_device() instead.
  */ 
 void
 gdk_display_warp_pointer (GdkDisplay *display,
