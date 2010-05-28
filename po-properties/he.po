@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 20:10-0400\n"
-"PO-Revision-Date: 2009-09-01 13:48+0200\n"
+"PO-Revision-Date: 2010-05-28 15:55+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1378,19 +1378,16 @@ msgid "Active"
 msgstr "Active"
 
 #: gtk/gtkcellrendererspinner.c:125
-#, fuzzy
 msgid "Whether the spinner is active (ie. shown) in the cell"
-msgstr "Whether the selected font style is shown in the label"
+msgstr "Whether the spinner is active (ie. shown) in the cell"
 
 #: gtk/gtkcellrendererspinner.c:145
-#, fuzzy
 msgid "Pulse of the spinner"
-msgstr "Name of the printer"
+msgstr "Pulse of the spinner"
 
 #: gtk/gtkcellrendererspinner.c:159
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered spinner"
-msgstr "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "The GtkIconSize value that specifies the size of the rendered spinner"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -4174,9 +4171,8 @@ msgid "Has Selection"
 msgstr "Has Selection"
 
 #: gtk/gtkprintoperation.c:1297
-#, fuzzy
 msgid "TRUE if a selection exists."
-msgstr "TRUE if a selecion exists."
+msgstr "TRUE if a selection exists."
 
 #: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
 msgid "Embed Page Setup"
@@ -5299,25 +5295,24 @@ msgid "The size of icons in default toolbars."
 msgstr "The size of icons in default toolbars."
 
 #: gtk/gtksettings.c:1015
-#, fuzzy
 msgid "Auto Mnemonics"
-msgstr "Enable Mnemonics"
+msgstr "Auto Mnemonics"
 
 #: gtk/gtksettings.c:1016
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
 msgstr ""
+"Whether mnemonics should be automatically shown and hidden when the user "
+"presses the mnemonic activator."
 
 #: gtk/gtksettings.c:1041
-#, fuzzy
 msgid "Application prefers a dark theme"
-msgstr "Application paintable"
+msgstr "Application prefers a dark theme"
 
 #: gtk/gtksettings.c:1042
-#, fuzzy
 msgid "Whether the application prefers to have a dark theme."
-msgstr "Whether the application has a selection"
+msgstr "Whether the application prefers to have a dark theme."
 
 #: gtk/gtksizegroup.c:320
 msgid "Mode"
@@ -5396,14 +5391,12 @@ msgid "Style of bevel around the spin button"
 msgstr "Style of bevel around the spin button"
 
 #: gtk/gtkspinner.c:129
-#, fuzzy
 msgid "Whether the spinner is active"
-msgstr "Whether the primary icon is activatable"
+msgstr "Whether the spinner is active"
 
 #: gtk/gtkspinner.c:143
-#, fuzzy
 msgid "Number of steps"
-msgstr "Number of Pages"
+msgstr "Number of steps"
 
 #: gtk/gtkspinner.c:144
 msgid ""
@@ -5411,16 +5404,19 @@ msgid ""
 "will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
 "duration)."
 msgstr ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
 
 #: gtk/gtkspinner.c:159
-#, fuzzy
 msgid "Animation duration"
-msgstr "Animation"
+msgstr "Animation duration"
 
 #: gtk/gtkspinner.c:160
 msgid ""
 "The length of time in milliseconds for the spinner to complete a full loop"
 msgstr ""
+"The length of time in milliseconds for the spinner to complete a full loop"
 
 #: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
@@ -6183,138 +6179,118 @@ msgstr ""
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 
 #: gtk/gtktoolitemgroup.c:1544
-#, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "A human-readable description of the status"
+msgstr "The human-readable title of this item group"
 
 #: gtk/gtktoolitemgroup.c:1551
-#, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "A widget to display in place of the usual frame label"
+msgstr "A widget to display in place of the usual label"
 
 #: gtk/gtktoolitemgroup.c:1557
 msgid "Collapsed"
-msgstr ""
+msgstr "Collapsed"
 
 #: gtk/gtktoolitemgroup.c:1558
-#, fuzzy
 msgid "Wether the group has been collapsed and items are hidden"
-msgstr "Whether the expander has been opened to reveal the child widget"
+msgstr "Wether the group has been collapsed and items are hidden"
 
 #: gtk/gtktoolitemgroup.c:1564
-#, fuzzy
 msgid "ellipsize"
-msgstr "Ellipsize"
+msgstr "ellipsize"
 
 #: gtk/gtktoolitemgroup.c:1565
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "Ellipsize for item group headers"
 
 #: gtk/gtktoolitemgroup.c:1571
-#, fuzzy
 msgid "Header Relief"
-msgstr "Header image"
+msgstr "Header Relief"
 
 #: gtk/gtktoolitemgroup.c:1572
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "Show the column header buttons"
+msgstr "Relief of the group header button"
 
 #: gtk/gtktoolitemgroup.c:1587
-#, fuzzy
 msgid "Header Spacing"
-msgstr "Header Padding"
+msgstr "Header Spacing"
 
 #: gtk/gtktoolitemgroup.c:1588
-#, fuzzy
 msgid "Spacing between expander arrow and caption"
-msgstr "Spacing around expander arrow"
+msgstr "Spacing between expander arrow and caption"
 
 #: gtk/gtktoolitemgroup.c:1604
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "Whether the item should receive extra space when the toolbar grows"
+msgstr "Whether the item should receive extra space when the group grows"
 
 #: gtk/gtktoolitemgroup.c:1611
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "Whether the children should all be the same size"
+msgstr "Whether the item should fill the available space"
 
 #: gtk/gtktoolitemgroup.c:1617
 msgid "New Row"
-msgstr ""
+msgstr "New Row"
 
 #: gtk/gtktoolitemgroup.c:1618
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "Whether the items should be displayed with a number"
+msgstr "Whether the item should start a new row"
 
 #: gtk/gtktoolitemgroup.c:1625
-#, fuzzy
 msgid "Position of the item within this group"
-msgstr "Position of mark on the ruler"
+msgstr "Position of the item within this group"
 
 #: gtk/gtktoolpalette.c:992
-#, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "Size of icons in this toolbar"
+msgstr "Size of icons in this tool palette"
 
 #: gtk/gtktoolpalette.c:1022
-#, fuzzy
 msgid "Style of items in the tool palette"
-msgstr "Style of bevel around the toolbar"
+msgstr "Style of items in the tool palette"
 
 #: gtk/gtktoolpalette.c:1038
 msgid "Exclusive"
-msgstr ""
+msgstr "Exclusive"
 
 #: gtk/gtktoolpalette.c:1039
-#, fuzzy
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr "Whether the items should be displayed with a number"
+msgstr "Whether the item group should be the only expanded at a given time"
 
 #: gtk/gtktoolpalette.c:1054
-#, fuzzy
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr "Whether the child should receive extra space when the parent grows"
+msgstr ""
+"Whether the item group should receive extra space when the palette grows"
 
 #: gtk/gtktrayicon-x11.c:132
-#, fuzzy
 msgid "Foreground color for symbolic icons"
-msgstr "Foreground color as a string"
+msgstr "Foreground color for symbolic icons"
 
 #: gtk/gtktrayicon-x11.c:139
-#, fuzzy
 msgid "Error color"
-msgstr "Cursor color"
+msgstr "Error color"
 
 #: gtk/gtktrayicon-x11.c:140
 msgid "Error color for symbolic icons"
-msgstr ""
+msgstr "Error color for symbolic icons"
 
 #: gtk/gtktrayicon-x11.c:147
-#, fuzzy
 msgid "Warning color"
-msgstr "Background color"
+msgstr "Warning color"
 
 #: gtk/gtktrayicon-x11.c:148
 msgid "Warning color for symbolic icons"
-msgstr ""
+msgstr "Warning color for symbolic icons"
 
 #: gtk/gtktrayicon-x11.c:155
-#, fuzzy
 msgid "Success color"
-msgstr "Cursor color"
+msgstr "Success color"
 
 #: gtk/gtktrayicon-x11.c:156
 msgid "Success color for symbolic icons"
-msgstr ""
+msgstr "Success color for symbolic icons"
 
 #: gtk/gtktrayicon-x11.c:164
-#, fuzzy
 msgid "Padding that should be put around icons in the tray"
-msgstr "Whether there should be an icon near the item"
+msgstr "Padding that should be put around icons in the tray"
 
 #: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
@@ -7093,14 +7069,12 @@ msgid "Icon for this window"
 msgstr "Icon for this window"
 
 #: gtk/gtkwindow.c:626
-#, fuzzy
 msgid "Mnemonics Visible"
-msgstr "Mnemonic key"
+msgstr "Mnemonics Visible"
 
 #: gtk/gtkwindow.c:627
-#, fuzzy
 msgid "Whether mnemonics are currently visible in this window"
-msgstr "Whether the toplevel is the current active window"
+msgstr "Whether mnemonics are currently visible in this window"
 
 #: gtk/gtkwindow.c:643
 msgid "Name of the themed icon for this window"
