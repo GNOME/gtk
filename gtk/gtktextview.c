@@ -1549,7 +1549,7 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
 /**
  * gtk_text_view_get_iter_at_location:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
+ * @iter: (out): a #GtkTextIter
  * @x: x position, in buffer coordinates
  * @y: y position, in buffer coordinates
  *
@@ -1577,8 +1577,8 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
 /**
  * gtk_text_view_get_iter_at_position:
  * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
- * @trailing: if non-%NULL, location to store an integer indicating where
+ * @iter: (out): a #GtkTextIter
+ * @trailing: (out) (allow-none): if non-%NULL, location to store an integer indicating where
  *    in the grapheme the user clicked. It will either be
  *    zero, or the number of characters in the grapheme. 
  *    0 represents the trailing edge of the grapheme.
@@ -1618,7 +1618,7 @@ gtk_text_view_get_iter_at_position (GtkTextView *text_view,
  * gtk_text_view_get_iter_location:
  * @text_view: a #GtkTextView
  * @iter: a #GtkTextIter
- * @location: bounds of the character at @iter
+ * @location: (out): bounds of the character at @iter
  *
  * Gets a rectangle which roughly contains the character at @iter.
  * The rectangle position is in buffer coordinates; use
@@ -1642,8 +1642,8 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
  * gtk_text_view_get_line_yrange:
  * @text_view: a #GtkTextView
  * @iter: a #GtkTextIter
- * @y: return location for a y coordinate
- * @height: return location for a height
+ * @y: (out): return location for a y coordinate
+ * @height: (out): return location for a height
  *
  * Gets the y coordinate of the top of the line containing @iter,
  * and the height of the line. The coordinate is a buffer coordinate;
@@ -1669,9 +1669,9 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
 /**
  * gtk_text_view_get_line_at_y:
  * @text_view: a #GtkTextView
- * @target_iter: a #GtkTextIter
+ * @target_iter: (out): a #GtkTextIter
  * @y: a y coordinate
- * @line_top: return location for top coordinate of the line
+ * @line_top: (out): return location for top coordinate of the line
  *
  * Gets the #GtkTextIter at the start of the line containing
  * the coordinate @y. @y is in buffer coordinates, convert from
@@ -8562,8 +8562,8 @@ buffer_to_text_window (GtkTextView   *text_view,
  * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
- * @window_x: window x coordinate return location
- * @window_y: window y coordinate return location
+ * @window_x: (out) (allow-none): window x coordinate return location or %NULL
+ * @window_y: (out) (allow-none): window y coordinate return location or %NULL
  *
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
  * @win, and stores the result in (@window_x, @window_y). 
@@ -8702,8 +8702,8 @@ text_window_to_buffer (GtkTextView   *text_view,
  * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
  * @window_x: window x coordinate
  * @window_y: window y coordinate
- * @buffer_x: buffer x coordinate return location
- * @buffer_y: buffer y coordinate return location
+ * @buffer_x: (out) (allow-none): buffer x coordinate return location or %NULL
+ * @buffer_y: (out) (allow-none): buffer y coordinate return location or %NULL
  *
  * Converts coordinates on the window identified by @win to buffer
  * coordinates, storing the result in (@buffer_x,@buffer_y).
