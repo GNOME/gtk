@@ -153,6 +153,8 @@ gint              _gtk_tree_view_column_get_drag_x            (GtkTreeViewColumn
 GtkCellAreaContext *_gtk_tree_view_column_get_context         (GtkTreeViewColumn  *column);
 void              _gtk_tree_view_reset_header_styles       (GtkTreeView        *tree_view);
 
+void              _gtk_tree_view_set_single_click_activate (GtkTreeView *tree_view,
+                                                            gboolean single_click_activate);
 
 G_END_DECLS
 

@@ -509,6 +509,8 @@ struct _GtkTreeViewPrivate
   guint draw_keyfocus : 1;
   guint model_setup : 1;
   guint in_column_drag : 1;
+
+  guint single_click_activate : 1;
 };
 
 
@@ -3400,6 +3402,44 @@ button_event_modifies_selection (GdkEventButton *event)
 }
 
 static gboolean
+gtk_tree_view_button_release_single_click (GtkTreeView *tree_view,
+                                           GdkEventButton *event)
+{
+  gboolean retval = FALSE;
+
+  if (tree_view->priv->single_click_activate &&
+     (gtk_tree_selection_get_mode (tree_view->priv->selection) != GTK_SELECTION_MULTIPLE ||
+     (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) == 0))
+  {
+    GtkTreePath *path;
+    GtkTreeViewColumn *column;
+
+    gtk_tree_view_get_path_at_pos (tree_view,
+                                   event->x, event->y,
+                                   &path,
+                                   &column,
+                                   NULL,
+                                   NULL);
+    if (path != NULL)
+    {
+      GtkRBTree *tree = NULL;
+      GtkRBNode *node = NULL;
+
+      _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+      if (node != NULL && (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED)))
+      {
+        gtk_tree_view_row_activated (tree_view, path, column);
+        retval = TRUE;
+      }
+    }
+
+    gtk_tree_path_free (path);
+  }
+
+  return retval;
+}
+
+static gboolean
 gtk_tree_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -3418,7 +3458,7 @@ gtk_tree_view_button_release (GtkWidget      *widget,
     return gtk_tree_view_button_release_column_resize (widget, event);
 
   if (tree_view->priv->button_pressed_node == NULL)
-    return FALSE;
+    return gtk_tree_view_button_release_single_click (tree_view, event);
 
   if (event->button == GDK_BUTTON_PRIMARY
       && tree_view->priv->button_pressed_node == tree_view->priv->prelight_node)
@@ -6987,6 +7027,15 @@ _gtk_tree_view_column_autosize (GtkTreeView *tree_view,
   while (validate_rows (tree_view));
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+}
+
+void
+_gtk_tree_view_set_single_click_activate (GtkTreeView *tree_view,
+ gboolean single_click_activate)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  tree_view->priv->single_click_activate = single_click_activate;
 }
 
 /* Drag-and-drop */
