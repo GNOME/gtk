@@ -126,6 +126,7 @@ content_files =					\
 	directfb.sgml				\
 	drawing-model.xml			\
 	glossary.xml				\
+	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
         migrating-ClientSideWindows.sgml	\
 	migrating-GtkAboutDialog.sgml		\
@@ -157,6 +158,7 @@ content_files =					\
 expand_content_files = 				\
 	drawing-model.xml			\
 	glossary.xml				\
+	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
         migrating-ClientSideWindows.sgml	\
 	migrating-GtkAction.sgml		\
