@@ -1621,7 +1621,7 @@ gtk_scrolled_window_add (GtkContainer *container,
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
 
-  bin->child = child;
+  _gtk_bin_set_child (bin, child);
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
 
   /* this is a temporary message */

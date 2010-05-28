@@ -65,6 +65,9 @@ GType      gtk_bin_get_type  (void) G_GNUC_CONST;
 
 GtkWidget *gtk_bin_get_child (GtkBin *bin);
 
+void       _gtk_bin_set_child (GtkBin    *bin,
+                               GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_BIN_H__ */
