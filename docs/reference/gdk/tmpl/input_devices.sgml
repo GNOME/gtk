@@ -100,15 +100,6 @@ to configure various aspects of the device.
 </para>
 
 @parent_instance: the parent instance
-@name: the name of this device.
-@source: the type of this device.
-@mode: the mode of this device
-@has_cursor: %TRUE if the pointer follows device motion.
-@num_axes: the length of the @axes array.
-@axes: an array of #GdkDeviceAxis, describing the axes of this device.
-@num_keys: the length of the @keys array.
-@keys: an array of #GdkDeviceKey, describing the mapped macro buttons 
-  of this device.
 
 <!-- ##### ENUM GdkInputSource ##### -->
 <para>

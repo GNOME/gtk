@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-07 16:45-0400\n"
+"POT-Creation-Date: 2010-05-30 18:04-0400\n"
 "PO-Revision-Date: 2010-03-23 10:20+0100\n"
 "Last-Translator: Бранко Кокановић <branko.kokanovic@gmail.com>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -600,7 +600,7 @@ msgstr "Сенка стрелице"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Изглед сенке која окружује стрелицу"
 
-#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:711 gtk/gtkmenuitem.c:368
+#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:717 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Ширење стрелице"
 
@@ -1360,7 +1360,7 @@ msgstr "Правац пружања"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Правац пружања и смер раста у елементу за приказ напретка"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:368
 #: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Поправка"
@@ -1386,7 +1386,7 @@ msgid "The number of decimal places to display"
 msgstr "Број децималних места које желите да прикажете"
 
 #: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
-#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtkmenu.c:507 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
 #: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "Активан"
@@ -2035,7 +2035,7 @@ msgstr "Да ли се падајућа листа исцртава оквир �
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Да ли падајућа листа добија фокус када се кликне на њу мишем"
 
-#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:562
 msgid "Tearoff Title"
 msgstr "Наслов отцепљеног"
 
@@ -3218,7 +3218,7 @@ msgid "Whether to use the label text to create a stock menu item"
 msgstr ""
 "Да ли да се користи текст ознаке да би се направила типска ставка менија"
 
-#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:516
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:522
 msgid "Accel Group"
 msgstr "Група пречица"
 
@@ -3415,67 +3415,67 @@ msgstr "Посећена"
 msgid "Whether this link has been visited."
 msgstr "Да ли је адреса посећена."
 
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:508
 msgid "The currently selected menu item"
 msgstr "Тренутно изабрана ставка менија"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:523
 msgid "The accel group holding accelerators for the menu"
 msgstr "Група пречица која чува пречице менија"
 
-#: gtk/gtkmenu.c:531 gtk/gtkmenuitem.c:290
+#: gtk/gtkmenu.c:537 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Путања пречице"
 
-#: gtk/gtkmenu.c:532
+#: gtk/gtkmenu.c:538
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "Путања пречице која се користи да се олакшано направе путање пречица ставки "
 "деце"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:554
 msgid "Attach Widget"
 msgstr "Прикачи елемент"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:555
 msgid "The widget the menu is attached to"
 msgstr "Елемент на који је мени накачен"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:563
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Наслов који може приказати управник прозора када се овај мени отцепи"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:577
 msgid "Tearoff State"
 msgstr "Стање отцепљеног"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:578
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Логичка вредност која назначава да ли је мени отцепљен"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:592
 msgid "Monitor"
 msgstr "Монитор"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:593
 msgid "The monitor the menu will be popped up on"
 msgstr "Монитор на коме ће мени искочити"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:599
 msgid "Vertical Padding"
 msgstr "Усправна попуна"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Количина размака који се додаје на врху и на дну менија"
 
-#: gtk/gtkmenu.c:616
+#: gtk/gtkmenu.c:622
 msgid "Reserve Toggle Size"
 msgstr "Резервиши величину за прекидач"
 
-#: gtk/gtkmenu.c:617
+#: gtk/gtkmenu.c:623
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
@@ -3483,112 +3483,112 @@ msgstr ""
 "Логичка вредност која указује да ли мени резервише простор за прекидаче и "
 "иконице"
 
-#: gtk/gtkmenu.c:623
+#: gtk/gtkmenu.c:629
 msgid "Horizontal Padding"
 msgstr "Водоравна попуна"
 
-#: gtk/gtkmenu.c:624
+#: gtk/gtkmenu.c:630
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Додатни простор на левим и десним ивицама менија"
 
-#: gtk/gtkmenu.c:632
+#: gtk/gtkmenu.c:638
 msgid "Vertical Offset"
 msgstr "Усправни померај"
 
-#: gtk/gtkmenu.c:633
+#: gtk/gtkmenu.c:639
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Када је мени заправо подмени, помери га усправно за овај број тачака"
 
-#: gtk/gtkmenu.c:641
+#: gtk/gtkmenu.c:647
 msgid "Horizontal Offset"
 msgstr "Водоравни померај"
 
-#: gtk/gtkmenu.c:642
+#: gtk/gtkmenu.c:648
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Када је мени заправо подмени, помери га водоравно за овај број тачака"
 
-#: gtk/gtkmenu.c:650
+#: gtk/gtkmenu.c:656
 msgid "Double Arrows"
 msgstr "Обе стрелице"
 
-#: gtk/gtkmenu.c:651
+#: gtk/gtkmenu.c:657
 msgid "When scrolling, always show both arrows."
 msgstr "При клизању, увек приказуј ове стрелице"
 
-#: gtk/gtkmenu.c:664
+#: gtk/gtkmenu.c:670
 msgid "Arrow Placement"
 msgstr "Положај стрелице"
 
-#: gtk/gtkmenu.c:665
+#: gtk/gtkmenu.c:671
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Указује где треба поставити стрелице за клизање"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:679
 msgid "Left Attach"
 msgstr "Лево припајање"
 
-#: gtk/gtkmenu.c:674 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:680 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Број ступца за који прикачити леву страну садржаног елемента"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:687
 msgid "Right Attach"
 msgstr "Десно припајање"
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:688
 msgid "The column number to attach the right side of the child to"
 msgstr "Број ступца за који прикачити десну страну садржаног елемента"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:695
 msgid "Top Attach"
 msgstr "Горње припајање"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:696
 msgid "The row number to attach the top of the child to"
 msgstr "Број реда за који прикачити горњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:703
 msgid "Bottom Attach"
 msgstr "Доње припајање"
 
-#: gtk/gtkmenu.c:698 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:704 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "Број реда за који прикачити доњу страну садржаног елемента"
 
-#: gtk/gtkmenu.c:712
+#: gtk/gtkmenu.c:718
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Произвољна константа за смањивање величине стрелице за клизање"
 
-#: gtk/gtkmenu.c:799
+#: gtk/gtkmenu.c:805
 msgid "Can change accelerators"
 msgstr "Дозвољена измена пречица"
 
-#: gtk/gtkmenu.c:800
+#: gtk/gtkmenu.c:806
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Да ли је дозвољена измена пречица притиском на тастере над ставком менија"
 
-#: gtk/gtkmenu.c:805
+#: gtk/gtkmenu.c:811
 msgid "Delay before submenus appear"
 msgstr "Време пре појаве подменија"
 
-#: gtk/gtkmenu.c:806
+#: gtk/gtkmenu.c:812
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Најмање време које се показивач миша мора задржати преко ставке менија да би "
 "се појавио подмени"
 
-#: gtk/gtkmenu.c:813
+#: gtk/gtkmenu.c:819
 msgid "Delay before hiding a submenu"
 msgstr "Време пре скривања подменија"
 
-#: gtk/gtkmenu.c:814
+#: gtk/gtkmenu.c:820
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4352,7 +4352,8 @@ msgid "Has Selection"
 msgstr "Има избор"
 
 #: gtk/gtkprintoperation.c:1297
-msgid "TRUE if a selecion exists."
+#, fuzzy
+msgid "TRUE if a selection exists."
 msgstr "Постављено ако избор постоји."
 
 #: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
@@ -4592,127 +4593,127 @@ msgstr "Радио ставка менија чијој групи овај ел
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Радио дугме траке алата чијој групи ово дугме припада."
 
-#: gtk/gtkrange.c:358
+#: gtk/gtkrange.c:359
 msgid "Update policy"
 msgstr "Политика освежавања"
 
-#: gtk/gtkrange.c:359
+#: gtk/gtkrange.c:360
 msgid "How the range should be updated on the screen"
 msgstr "Како се опсег освежава на екрану"
 
-#: gtk/gtkrange.c:368
+#: gtk/gtkrange.c:369
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment који садржи текућу вредност овог опсега"
 
-#: gtk/gtkrange.c:375
+#: gtk/gtkrange.c:376
 msgid "Inverted"
 msgstr "Изврнуто"
 
 # Sta ovo uopste znaci na engleskom?
-#: gtk/gtkrange.c:376
+#: gtk/gtkrange.c:377
 msgid "Invert direction slider moves to increase range value"
 msgstr "Изврни смер кретања клизача за повећање вредности опсега"
 
-#: gtk/gtkrange.c:383
+#: gtk/gtkrange.c:384
 msgid "Lower stepper sensitivity"
 msgstr "Осетљивост доње корачнице"
 
-#: gtk/gtkrange.c:384
+#: gtk/gtkrange.c:385
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Ниво осетљивости корачнице за подешавање доње стране"
 
-#: gtk/gtkrange.c:392
+#: gtk/gtkrange.c:393
 msgid "Upper stepper sensitivity"
 msgstr "Осетљивост горње корачнице"
 
-#: gtk/gtkrange.c:393
+#: gtk/gtkrange.c:394
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Ниво осетљивости корачнице за подешавање горње стране"
 
-#: gtk/gtkrange.c:410
+#: gtk/gtkrange.c:411
 msgid "Show Fill Level"
 msgstr "Прикажи ниво попуне"
 
-#: gtk/gtkrange.c:411
+#: gtk/gtkrange.c:412
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Да ли да се приказује индикатор нивоа попуне на ували."
 
-#: gtk/gtkrange.c:427
+#: gtk/gtkrange.c:428
 msgid "Restrict to Fill Level"
 msgstr "Ограничи на ниво попуне"
 
-#: gtk/gtkrange.c:428
+#: gtk/gtkrange.c:429
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Да ли да се ограничава горња граница нивоа попуне."
 
-#: gtk/gtkrange.c:443
+#: gtk/gtkrange.c:444
 msgid "Fill Level"
 msgstr "Ниво попуне"
 
-#: gtk/gtkrange.c:444
+#: gtk/gtkrange.c:445
 msgid "The fill level."
 msgstr "Ниво попуне."
 
-#: gtk/gtkrange.c:452
+#: gtk/gtkrange.c:453
 msgid "Slider Width"
 msgstr "Ширина клизача"
 
-#: gtk/gtkrange.c:453
+#: gtk/gtkrange.c:454
 msgid "Width of scrollbar or scale thumb"
 msgstr "Ширина клизача или размерника"
 
-#: gtk/gtkrange.c:460
+#: gtk/gtkrange.c:461
 msgid "Trough Border"
 msgstr "Ивица увале"
 
-#: gtk/gtkrange.c:461
+#: gtk/gtkrange.c:462
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Размак између клизача/корачнице и спољног удубљења"
 
 # Zar nije dobro "koracnica" ;)
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Stepper Size"
 msgstr "Величина корачнице"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid "Length of step buttons at ends"
 msgstr "Дужина корачница на крајевима"
 
-#: gtk/gtkrange.c:484
+#: gtk/gtkrange.c:485
 msgid "Stepper Spacing"
 msgstr "Размак корачница"
 
-#: gtk/gtkrange.c:485
+#: gtk/gtkrange.c:486
 msgid "Spacing between step buttons and thumb"
 msgstr "Размак између корачница и клизача"
 
-#: gtk/gtkrange.c:492
+#: gtk/gtkrange.c:493
 msgid "Arrow X Displacement"
 msgstr "Водоравни померај стрелице"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Колико померити стрелицу у правцу X осе када се дугме притисне"
 
-#: gtk/gtkrange.c:500
+#: gtk/gtkrange.c:501
 msgid "Arrow Y Displacement"
 msgstr "Усправни померај стрелице"
 
-#: gtk/gtkrange.c:501
+#: gtk/gtkrange.c:502
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Колико померити стрелицу у правцу Y осе када се дугме притисне"
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Draw slider ACTIVE during drag"
 msgstr "Активирај клизач на током превлачења"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4720,11 +4721,11 @@ msgstr ""
 "Када је ова опција постављена на „TRUE“ (тачно), клизачи ће бити активни и "
 "исцртаће се сенке унутар њих током превлачења"
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Trough Side Details"
 msgstr "Детаљи унутар клизача"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4732,21 +4733,21 @@ msgstr ""
 "Када је ова опција постављена на „TRUE“ (тачно), делови клизача на супротним "
 "странама ће бити другачије приказани"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "Trough Under Steppers"
 msgstr "Приказ испод корачнице"
 
-#: gtk/gtkrange.c:542
+#: gtk/gtkrange.c:543
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "Одређује да ли да приказује све или да се изоставе корачнице и размак"
 
-#: gtk/gtkrange.c:555
+#: gtk/gtkrange.c:556
 msgid "Arrow scaling"
 msgstr "Величина стрелица"
 
-#: gtk/gtkrange.c:556
+#: gtk/gtkrange.c:557
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Величина стрелица у односу на величину дугмета клизача"
 

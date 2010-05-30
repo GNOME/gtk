@@ -987,6 +987,7 @@ Registers a window as a potential drop destination.
 
 @window: 
 @region: 
+@GdkWindow *, gpointer:
 @GdkWindow *, gpointer: 
 @user_data: 
 

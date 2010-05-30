@@ -657,6 +657,26 @@ selected rows.  It will be called on every selected row in the view.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_view_get_item_row ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkIconViewDropPosition ##### -->
 <para>
 An enum for determining where a dropped item goes.

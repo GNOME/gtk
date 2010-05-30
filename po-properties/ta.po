@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-07 16:45-0400\n"
+"POT-Creation-Date: 2010-05-30 18:04-0400\n"
 "PO-Revision-Date: 2009-08-25 13:16+0530\n"
 "Last-Translator: I. Felix <ifelix@redhat.com>\n"
 "Language-Team: Tamil <fedora-trans-ta@redhat.com>\n"
@@ -595,7 +595,7 @@ msgstr "அம்பு நிழல்"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "அம்பைச் சுற்றிருக்கும் நிழலின் தோற்றம்"
 
-#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:711 gtk/gtkmenuitem.c:368
+#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:717 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "அம்புக்குறி அளவிடல்"
 
@@ -1345,7 +1345,7 @@ msgstr "திசை அமைவு"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "முன்னேற்ற பட்டியின் திசைஅமைவு மற்றும் வளர்ச்சி திசை"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:368
 #: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "ஒழுங்குபடுத்தல்"
@@ -1371,7 +1371,7 @@ msgid "The number of decimal places to display"
 msgstr "காட்ட வேண்டிய தசம இடங்கள்"
 
 #: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
-#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtkmenu.c:507 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
 #: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "செயல்படக்கூடிய"
@@ -2015,7 +2015,7 @@ msgstr "இணைந்த பெட்டி சேயை சுற்றி �
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "இணைந்த பெட்டி சொடுக்கிய போது குவிப்பைபெறுமா"
 
-#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:562
 msgid "Tearoff Title"
 msgstr "Tearoff தலைப்பு"
 
@@ -3185,7 +3185,7 @@ msgstr "பட்டி உரைக்கு அருகில் தோன்
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "ஒரு முன்னிருப்பு பட்டியல் உருப்படிக்கு உரை  அடையாளம் பயன்படுத்துவதா"
 
-#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:516
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:522
 msgid "Accel Group"
 msgstr "Accel குழு"
 
@@ -3380,65 +3380,65 @@ msgstr "பாக்கக்பட்டது"
 msgid "Whether this link has been visited."
 msgstr "இந்த இணைப்பு பார்வையிடப்பட்டிருக்கிறதா."
 
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:508
 msgid "The currently selected menu item"
 msgstr "தற்போது தேர்ந்தெடுக்கப்பட்ட மெனு உருப்படி"
 
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:523
 msgid "The accel group holding accelerators for the menu"
 msgstr "மெனு பட்டிக்கு  முடுக்கு விசைகளை கொண்டுள்ள ஆக்ஸெல் குழு"
 
-#: gtk/gtkmenu.c:531 gtk/gtkmenuitem.c:290
+#: gtk/gtkmenu.c:537 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "ஆக்ஸல் பாதை"
 
-#: gtk/gtkmenu.c:532
+#: gtk/gtkmenu.c:538
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr "சேய் ஆக்செல் பாதைகளை சுலபமாக உருவாக்க பயன்படும் ஆக்செல் பாதை"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:554
 msgid "Attach Widget"
 msgstr "விட்ஜெட்டை இணைக்கவும்"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:555
 msgid "The widget the menu is attached to"
 msgstr "இந்த விட்ஜிட்டில் மெனு இணைக்கப்பட்டுள்ளது"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:563
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "இந்த மெனுவை கிழித்த பின்  சாளரம் மேலாளர் காட்டும் தலைப்பு"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:577
 msgid "Tearoff State"
 msgstr "Tearoff நிலை"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:578
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "மெனு கிழிக்கப்பட்டதா இல்லையா எனக்காட்டும் பூலியன் மதிப்பு"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:592
 msgid "Monitor"
 msgstr "மானிட்டர்"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:593
 msgid "The monitor the menu will be popped up on"
 msgstr "மெனு பட்டியல் துள்ளிக்காட்டும் திரை"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:599
 msgid "Vertical Padding"
 msgstr "செங்குத்து தடுப்பு"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the top and bottom of the menu"
 msgstr "மெனு பட்டியல் மேல் மற்றும் கீழ் உள்ள கூடுதல் இடைவெளி"
 
-#: gtk/gtkmenu.c:616
+#: gtk/gtkmenu.c:622
 msgid "Reserve Toggle Size"
 msgstr "மாற்று அளவை ஒதுக்கு"
 
-#: gtk/gtkmenu.c:617
+#: gtk/gtkmenu.c:623
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
@@ -3446,109 +3446,109 @@ msgstr ""
 "மெனு மாற்றிகள் மற்றும் சின்னங்களுக்கு இடத்தை ஒதுக்கீடு செய்துள்ளதா என ஒரு பூலியன் "
 "குறிக்கிறது"
 
-#: gtk/gtkmenu.c:623
+#: gtk/gtkmenu.c:629
 msgid "Horizontal Padding"
 msgstr "கிடைமட்ட தடுப்பு"
 
-#: gtk/gtkmenu.c:624
+#: gtk/gtkmenu.c:630
 msgid "Extra space at the left and right edges of the menu"
 msgstr "மெனு பட்டியல் விளிம்பில் இடது மற்றும் வலது பக்கங்களில் உள்ள கூடுதல் இடைவெளி"
 
-#: gtk/gtkmenu.c:632
+#: gtk/gtkmenu.c:638
 msgid "Vertical Offset"
 msgstr "செங்குத்து குத்து நீட்டம்"
 
-#: gtk/gtkmenu.c:633
+#: gtk/gtkmenu.c:639
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "மெனு பட்டியல் துணை மெனுவானால் அதை இத்தனை பிக்ஸல்கள் செங்குத்து குத்து நீட்டத்தில் வை"
 
-#: gtk/gtkmenu.c:641
+#: gtk/gtkmenu.c:647
 msgid "Horizontal Offset"
 msgstr "கிடைமட்ட குத்து நீட்டம்"
 
-#: gtk/gtkmenu.c:642
+#: gtk/gtkmenu.c:648
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "மெனு பட்டியல் துணை மெனுவானால் அதை இத்தனை பிக்ஸல்கள் கிடைமட்ட குத்து நீட்டத்தில் வை"
 
-#: gtk/gtkmenu.c:650
+#: gtk/gtkmenu.c:656
 msgid "Double Arrows"
 msgstr "இரட்டை அம்புகள்"
 
-#: gtk/gtkmenu.c:651
+#: gtk/gtkmenu.c:657
 msgid "When scrolling, always show both arrows."
 msgstr "உருளும் போது எப்போதும் இரு அம்புக்குறிகளையும் காட்டு."
 
-#: gtk/gtkmenu.c:664
+#: gtk/gtkmenu.c:670
 msgid "Arrow Placement"
 msgstr "அம்புக்குறி வைத்தல்"
 
-#: gtk/gtkmenu.c:665
+#: gtk/gtkmenu.c:671
 msgid "Indicates where scroll arrows should be placed"
 msgstr "உருரும் அம்புக்குறிகள் வைக்கப்பட்ட காட்டுகிறது"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:679
 msgid "Left Attach"
 msgstr "இடது இணைப்பு"
 
-#: gtk/gtkmenu.c:674 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:680 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "சேயின் இடது பக்கம் ஒட்ட வேண்டிய பத்தி எண் "
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:687
 msgid "Right Attach"
 msgstr "வலது இணைப்பு"
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:688
 msgid "The column number to attach the right side of the child to"
 msgstr "சேயின் வலது பக்கம் ஒட்ட வேண்டிய பத்தி எண் "
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:695
 msgid "Top Attach"
 msgstr "மேல் இணைப்பு"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:696
 msgid "The row number to attach the top of the child to"
 msgstr "சேயின் மேல் பக்கம் ஒட்ட வேண்டிய வரி எண் "
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:703
 msgid "Bottom Attach"
 msgstr "கீழ் இணைக்கவும்"
 
-#: gtk/gtkmenu.c:698 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:704 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "சேயின் கீழ் பக்கம் ஒட்ட வேண்டிய வரி எண் "
 
-#: gtk/gtkmenu.c:712
+#: gtk/gtkmenu.c:718
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "உருளல் அம்புக்குறியின் அளவை குறைக்க குறிப்பில்லா மாறிலி"
 
-#: gtk/gtkmenu.c:799
+#: gtk/gtkmenu.c:805
 msgid "Can change accelerators"
 msgstr "மாற்றிகளை மாற்றலாம்"
 
-#: gtk/gtkmenu.c:800
+#: gtk/gtkmenu.c:806
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "மெனு உருப்படி மீதுள்ள விசையை அழுத்தி மெனுவின் முடுக்கிகளை மாற்ற முடியுமா"
 
-#: gtk/gtkmenu.c:805
+#: gtk/gtkmenu.c:811
 msgid "Delay before submenus appear"
 msgstr "துணை மெனுக்கள் தோன்றும் முன் தாமதம் "
 
-#: gtk/gtkmenu.c:806
+#: gtk/gtkmenu.c:812
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "துணை மெனுக்கள் தோன்றும் முன் மெனு உருப்படி மேல் சுட்டி நிலைக்க வேண்டிய நேரம்."
 
-#: gtk/gtkmenu.c:813
+#: gtk/gtkmenu.c:819
 msgid "Delay before hiding a submenu"
 msgstr "துணை மெனுக்கள் மறையும் முன் தாமதம் "
 
-#: gtk/gtkmenu.c:814
+#: gtk/gtkmenu.c:820
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4306,7 +4306,8 @@ msgid "Has Selection"
 msgstr "தேர்ந்தெடுப்பில் உள்ளது"
 
 #: gtk/gtkprintoperation.c:1297
-msgid "TRUE if a selecion exists."
+#, fuzzy
+msgid "TRUE if a selection exists."
 msgstr "ஒரு தேர்ந்தெடுத்தல் இருந்தால் உண்மை."
 
 #: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
@@ -4537,31 +4538,31 @@ msgstr "விட்செடுக்கு சொந்தமான குழ�
 msgid "The radio tool button whose group this button belongs to."
 msgstr "விட்செடுக்கு சொந்தமான குழுவின் ரேடியோ கருவி"
 
-#: gtk/gtkrange.c:358
+#: gtk/gtkrange.c:359
 msgid "Update policy"
 msgstr "நிலைப்புதிப்பித்தல் திட்டம்"
 
-#: gtk/gtkrange.c:359
+#: gtk/gtkrange.c:360
 msgid "How the range should be updated on the screen"
 msgstr "வீச்சு திறையில் எப்படி நிலைப்புதிப்பிக்க வேணடும்"
 
-#: gtk/gtkrange.c:368
+#: gtk/gtkrange.c:369
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "இந்த வீச்சு பொருளின் நடப்பு மதிப்பு கொண்டுள்ள ஜிடிகேஅட்ஜெஸ்மென்ட்"
 
-#: gtk/gtkrange.c:375
+#: gtk/gtkrange.c:376
 msgid "Inverted"
 msgstr "புரண்டது"
 
-#: gtk/gtkrange.c:376
+#: gtk/gtkrange.c:377
 msgid "Invert direction slider moves to increase range value"
 msgstr "வீச்சு மதிப்பை அதிகமாக்க வழுக்கி நகரும் நேர்மாறு திசை"
 
-#: gtk/gtkrange.c:383
+#: gtk/gtkrange.c:384
 msgid "Lower stepper sensitivity"
 msgstr "குறைவான ஏற்றி உணர்வு தன்மை"
 
-#: gtk/gtkrange.c:384
+#: gtk/gtkrange.c:385
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -4569,11 +4570,11 @@ msgstr ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 
-#: gtk/gtkrange.c:392
+#: gtk/gtkrange.c:393
 msgid "Upper stepper sensitivity"
 msgstr "மேலான ஏற்றி உணர்வு தன்மை"
 
-#: gtk/gtkrange.c:393
+#: gtk/gtkrange.c:394
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -4581,87 +4582,87 @@ msgstr ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 
-#: gtk/gtkrange.c:410
+#: gtk/gtkrange.c:411
 msgid "Show Fill Level"
 msgstr "நிரப்பு நிலையைக் காட்டு"
 
-#: gtk/gtkrange.c:411
+#: gtk/gtkrange.c:412
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "ஒரு நிரப்பு நிலை காட்டி வரைகளை troughஇல் காட்ட வேண்டுமா"
 
-#: gtk/gtkrange.c:427
+#: gtk/gtkrange.c:428
 msgid "Restrict to Fill Level"
 msgstr "நிரப்பு நிலையின் தடை"
 
-#: gtk/gtkrange.c:428
+#: gtk/gtkrange.c:429
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "நிரப்பு நிலையின் மேல் எல்லை தடுக்கப்படுகிறதா."
 
-#: gtk/gtkrange.c:443
+#: gtk/gtkrange.c:444
 msgid "Fill Level"
 msgstr "நிரப்பு நிலை"
 
-#: gtk/gtkrange.c:444
+#: gtk/gtkrange.c:445
 msgid "The fill level."
 msgstr "நிரப்பட்ட நிலை"
 
-#: gtk/gtkrange.c:452
+#: gtk/gtkrange.c:453
 msgid "Slider Width"
 msgstr "ஸ்லைடர் அகலம்"
 
-#: gtk/gtkrange.c:453
+#: gtk/gtkrange.c:454
 msgid "Width of scrollbar or scale thumb"
 msgstr "சுருள் பட்டை அல்லது ஸ்கேல் தம்ப்பின் அகலம்"
 
-#: gtk/gtkrange.c:460
+#: gtk/gtkrange.c:461
 msgid "Trough Border"
 msgstr "Trough எல்லை"
 
-#: gtk/gtkrange.c:461
+#: gtk/gtkrange.c:462
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "இடைவெளிக்கிடையே thumb/steppers மற்றும் வெளி சாய்வு"
 
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Stepper Size"
 msgstr "ஸ்டெப்பர் அளவு"
 
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid "Length of step buttons at ends"
 msgstr "முடிவில் ஸ்டெப் பட்டன்களின் நீளம்"
 
-#: gtk/gtkrange.c:484
+#: gtk/gtkrange.c:485
 msgid "Stepper Spacing"
 msgstr "ஏற்றி இடைவெளி"
 
-#: gtk/gtkrange.c:485
+#: gtk/gtkrange.c:486
 msgid "Spacing between step buttons and thumb"
 msgstr "ஸ்டெப் பட்டனுக்கும் தம்ப்புக்கும் இடையிலுள்ள இடைவெளி"
 
-#: gtk/gtkrange.c:492
+#: gtk/gtkrange.c:493
 msgid "Arrow X Displacement"
 msgstr "அம்புக்குறி X இடம்பெயர்வு"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "How far in the x direction to move the arrow when the button is depressed"
 
-#: gtk/gtkrange.c:500
+#: gtk/gtkrange.c:501
 msgid "Arrow Y Displacement"
 msgstr "அம்புகுறி Y இடம்பெயர்வு"
 
-#: gtk/gtkrange.c:501
+#: gtk/gtkrange.c:502
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "How far in the y direction to move the arrow when the button is depressed"
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Draw slider ACTIVE during drag"
 msgstr "ACTIVE இழுக்கும் போது ஸ்லைடரை வரையவும்"
 
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -4669,11 +4670,11 @@ msgstr ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Trough Side Details"
 msgstr "பக்க விவரங்களின் வழியாக"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4681,21 +4682,21 @@ msgstr ""
 "உண்மையாகயிருக்கும் போது, இரண்டு பக்கங்களின் பகுதிகளின் வழியாக வெவ்வாறான விவரங்களுடன் "
 "இழுக்கப்படுகிறது"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "Trough Under Steppers"
 msgstr "Troughவின் கீழ் ஏற்றிகள்"
 
-#: gtk/gtkrange.c:542
+#: gtk/gtkrange.c:543
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "draw க்கு of மற்றும்"
 
-#: gtk/gtkrange.c:555
+#: gtk/gtkrange.c:556
 msgid "Arrow scaling"
 msgstr "அம்புக்குறி அளவிடல்"
 
-#: gtk/gtkrange.c:556
+#: gtk/gtkrange.c:557
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "அம்புக்குறி அளவிடல் உருள் பொத்தான் அளவை கொடுக்கிறது"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-07 16:45-0400\n"
+"POT-Creation-Date: 2010-05-30 18:04-0400\n"
 "PO-Revision-Date: 2009-04-09 04:32-0500\n"
 "Last-Translator: Reşat SABIQ <tilde.birlik@gmail.com>\n"
 "Language-Team: Qırımtatarca (Qırım Türkçesi) <tilde-birlik-tercime@lists."
@@ -674,7 +674,7 @@ msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Oqnı çevrelegen kölgeniñ körünişi"
 
 # gtk/gtktable.c:174
-#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:711 gtk/gtkmenuitem.c:368
+#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:717 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "Oq Miqyaslaması"
 
@@ -1570,7 +1570,7 @@ msgid "Orientation and growth direction of the progress bar"
 msgstr "Teraqqiyat çubuğınıñ yöneldirim ve ösüm yönelişi"
 
 # gtk/gtkprogressbar.c:131 gtk/gtkrange.c:265 gtk/gtkspinbutton.c:203
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:367
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:368
 #: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "Tadil"
@@ -1604,7 +1604,7 @@ msgstr "Kösterilecek ondalıq raqam sayısı"
 
 # gtk/gtkcheckmenuitem.c:114 gtk/gtktogglebutton.c:144
 #: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
-#: gtk/gtkmenu.c:501 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtkmenu.c:507 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
 #: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
 msgid "Active"
 msgstr "Faal"
@@ -2391,7 +2391,7 @@ msgstr "Terkip qutusınıñ bala etrafında çerçive sızıp sızmaycağı"
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Terkip qutusınıñ sıçan ile çertilgeninde fokusnı yaqalap yaqalamaycağı"
 
-#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:556
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:562
 msgid "Tearoff Title"
 msgstr "Yırtıp-alnıñ Serlevası"
 
@@ -3789,7 +3789,7 @@ msgstr ""
 "Etiket metniniñ bir depo menü unsurınıñ icadı içün qullanılıp qullanılmaycağı"
 
 # gtk/gtkprogressbar.c:187
-#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:516
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:522
 msgid "Accel Group"
 msgstr "Tezleştirici Zümresi"
 
@@ -4032,37 +4032,37 @@ msgid "Whether this link has been visited."
 msgstr "Bu ilişimniñ ziyaret etilgen olıp olmağanı."
 
 # gtk/gtkfilesel.c:503
-#: gtk/gtkmenu.c:502
+#: gtk/gtkmenu.c:508
 msgid "The currently selected menu item"
 msgstr "Al-azırda saylanğan menü unsurı"
 
 # gtk/gtklabel.c:259
-#: gtk/gtkmenu.c:517
+#: gtk/gtkmenu.c:523
 msgid "The accel group holding accelerators for the menu"
 msgstr "Menü içün tezleştiricilerni tutqan tezleştirici zümresi"
 
-#: gtk/gtkmenu.c:531 gtk/gtkmenuitem.c:290
+#: gtk/gtkmenu.c:537 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
 msgstr "Tezleştirici Yolçığı"
 
-#: gtk/gtkmenu.c:532
+#: gtk/gtkmenu.c:538
 msgid "An accel path used to conveniently construct accel paths of child items"
 msgstr ""
 "Bala unsurlarnıñ tezleştirici yolçıqlarını oñaytlıca tizmek içün "
 "qullanılacaq bir tezleştirici yolçığı"
 
 # gtk/gtkimagemenuitem.c:124
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:554
 msgid "Attach Widget"
 msgstr "İlişilgen Pencereçik"
 
 # gtk/gtkcheckmenuitem.c:115
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:555
 msgid "The widget the menu is attached to"
 msgstr "Menüniñ yanına ilişkeni pencereçik"
 
 # tüklü
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:563
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -4070,40 +4070,40 @@ msgstr ""
 "Bu menü yırtıp alınğanında pencere idarecisi tarafından kösterile bilecek "
 "serleva"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:577
 msgid "Tearoff State"
 msgstr "Yırtıp-alnıñ Durumı"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:578
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Menüniñ yırtıp alınğan olıp olmağanını belirtken mantıqiy qıymet"
 
 # tüklü
 # gtk/gtkcellrenderertext.c:219 gtk/gtkcellrenderertext.c:227
 # gtk/gtkfontsel.c:192 gtk/gtktexttag.c:284 gtk/gtktexttag.c:292
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:592
 msgid "Monitor"
 msgstr "Monitor"
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:593
 msgid "The monitor the menu will be popped up on"
 msgstr "Menüniñ üzerinde peyda olacağı monitor"
 
 # gtk/gtkmenubar.c:162 gtk/gtktoolbar.c:250
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:599
 msgid "Vertical Padding"
 msgstr "Vertikal Şilteleme"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Menüniñ üstündeki ve tübündeki ziyade boşluq"
 
-#: gtk/gtkmenu.c:616
+#: gtk/gtkmenu.c:622
 msgid "Reserve Toggle Size"
 msgstr ""
 
-#: gtk/gtkmenu.c:617
+#: gtk/gtkmenu.c:623
 #, fuzzy
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
@@ -4111,21 +4111,21 @@ msgid ""
 msgstr "Menüniñ yırtıp alınğan olıp olmağanını belirtken mantıqiy qıymet"
 
 # gtk/gtkalignment.c:102
-#: gtk/gtkmenu.c:623
+#: gtk/gtkmenu.c:629
 msgid "Horizontal Padding"
 msgstr "Ufqiy Şilteleme"
 
 # gtk/gtkmisc.c:128
-#: gtk/gtkmenu.c:624
+#: gtk/gtkmenu.c:630
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Menüniñ sol ve sağ hanelerindeki ziyade boşluq"
 
 # gtk/gtkalignment.c:130
-#: gtk/gtkmenu.c:632
+#: gtk/gtkmenu.c:638
 msgid "Vertical Offset"
 msgstr "Vertikal Çıqıntı"
 
-#: gtk/gtkmenu.c:633
+#: gtk/gtkmenu.c:639
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -4134,11 +4134,11 @@ msgstr ""
 "mevamlandır"
 
 # gtk/gtkalignment.c:121
-#: gtk/gtkmenu.c:641
+#: gtk/gtkmenu.c:647
 msgid "Horizontal Offset"
 msgstr "Ufqiy Çıqıntı"
 
-#: gtk/gtkmenu.c:642
+#: gtk/gtkmenu.c:648
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -4147,86 +4147,86 @@ msgstr ""
 "mevamlandır"
 
 # gtk/gtknotebook.c:375
-#: gtk/gtkmenu.c:650
+#: gtk/gtkmenu.c:656
 msgid "Double Arrows"
 msgstr "Çifte Oq"
 
-#: gtk/gtkmenu.c:651
+#: gtk/gtkmenu.c:657
 msgid "When scrolling, always show both arrows."
 msgstr "Taydırğanda, er zaman oqlarnıñ ekisi de köster."
 
-#: gtk/gtkmenu.c:664
+#: gtk/gtkmenu.c:670
 msgid "Arrow Placement"
 msgstr "Oq Yerleştirimi"
 
-#: gtk/gtkmenu.c:665
+#: gtk/gtkmenu.c:671
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Taydırma oqlarınıñ qayda yerleştirilecegini kösterir"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:679
 msgid "Left Attach"
 msgstr "Sol İlişme"
 
-#: gtk/gtkmenu.c:674 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:680 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "Balanıñ sol yanınıñ ilişecegi sutun numarası"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:687
 msgid "Right Attach"
 msgstr "Sağ İlişme"
 
-#: gtk/gtkmenu.c:682
+#: gtk/gtkmenu.c:688
 msgid "The column number to attach the right side of the child to"
 msgstr "Balanıñ sağ yanınıñ ilişecegi sutun numarası"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:695
 msgid "Top Attach"
 msgstr "Üst İlişme"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:696
 msgid "The row number to attach the top of the child to"
 msgstr "Balanıñ üstüniñ ilişecegi saf numarası"
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:703
 msgid "Bottom Attach"
 msgstr "Tüp İlişme"
 
-#: gtk/gtkmenu.c:698 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:704 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "Balanıñ tübüniñ ilişecegi saf numarası"
 
-#: gtk/gtkmenu.c:712
+#: gtk/gtkmenu.c:718
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Taydırma oqunıñ ölçüsini aşağı miqyaslamaq içün keyfiy sabit"
 
 # gtk/gtkmenubar.c:147
-#: gtk/gtkmenu.c:799
+#: gtk/gtkmenu.c:805
 msgid "Can change accelerators"
 msgstr "Tezleştiriciler deñiştirile bilir"
 
-#: gtk/gtkmenu.c:800
+#: gtk/gtkmenu.c:806
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Menü tezleştiricileri, menü unsurı üzerinde olğanda bir tuşqa basaraq "
 "deñiştirile bilsin"
 
-#: gtk/gtkmenu.c:805
+#: gtk/gtkmenu.c:811
 msgid "Delay before submenus appear"
 msgstr "Alt-menüler belirmeden evelki keçikme"
 
-#: gtk/gtkmenu.c:806
+#: gtk/gtkmenu.c:812
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Alt-menüniñ belirüvi içün noqtacınıñ menüniñ üzerinde qalmalı olğanı eñ "
 "qısqa vaqıt"
 
-#: gtk/gtkmenu.c:813
+#: gtk/gtkmenu.c:819
 msgid "Delay before hiding a submenu"
 msgstr "Bir alt-menüni gizlemeden evelki keçikme"
 
-#: gtk/gtkmenu.c:814
+#: gtk/gtkmenu.c:820
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -5106,7 +5106,7 @@ msgid "Has Selection"
 msgstr "Saylamı bar"
 
 #: gtk/gtkprintoperation.c:1297
-msgid "TRUE if a selecion exists."
+msgid "TRUE if a selection exists."
 msgstr ""
 
 # gtk/gtkruler.c:148
@@ -5387,146 +5387,146 @@ msgstr "Bu dögmeniñ ait olğanı zümreniñ radio alet dögmesi."
 
 # tüklü
 # gtk/gtkrange.c:256
-#: gtk/gtkrange.c:358
+#: gtk/gtkrange.c:359
 msgid "Update policy"
 msgstr "Yañartma siyaseti"
 
 # tüklü
 # gtk/gtkrange.c:257
-#: gtk/gtkrange.c:359
+#: gtk/gtkrange.c:360
 msgid "How the range should be updated on the screen"
 msgstr "Menzilniñ ekran üzerinde nasıl güncellenecegi"
 
 # gtk/gtkrange.c:266
-#: gtk/gtkrange.c:368
+#: gtk/gtkrange.c:369
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "Bu menzil nesnesiniñ ağımdaki qıymetini ihtiva etken GtkAdjustment"
 
 # tüklü
 # gtk/gtkrange.c:273
-#: gtk/gtkrange.c:375
+#: gtk/gtkrange.c:376
 msgid "Inverted"
 msgstr "Ters aylandırılğan"
 
 # gtk/gtkrange.c:274
-#: gtk/gtkrange.c:376
+#: gtk/gtkrange.c:377
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
 "Sürgü areketiniñ, menzil qıymetini büyütecek ters aylandırılğan yönelişi"
 
-#: gtk/gtkrange.c:383
+#: gtk/gtkrange.c:384
 msgid "Lower stepper sensitivity"
 msgstr "Aşağı adımlayıcı hassasiyeti"
 
-#: gtk/gtkrange.c:384
+#: gtk/gtkrange.c:385
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Adımlayıcı içün tadilniñ alt yanına nişanlağan hassasiyet siyaseti"
 
-#: gtk/gtkrange.c:392
+#: gtk/gtkrange.c:393
 msgid "Upper stepper sensitivity"
 msgstr "Yuqarı adımlayıcı hassasiyeti"
 
-#: gtk/gtkrange.c:393
+#: gtk/gtkrange.c:394
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Adımlayıcı içün tadilniñ üst yanına nişanlağan hassasiyet siyaseti"
 
-#: gtk/gtkrange.c:410
+#: gtk/gtkrange.c:411
 msgid "Show Fill Level"
 msgstr "Tolma Seviyesini Köster"
 
-#: gtk/gtkrange.c:411
+#: gtk/gtkrange.c:412
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr ""
 "Uluq üzerinde bir tolma seviyesi köstergiçi grafiginiñ kösterilip "
 "kösterilmeycegi."
 
-#: gtk/gtkrange.c:427
+#: gtk/gtkrange.c:428
 msgid "Restrict to Fill Level"
 msgstr "Tolma Seviyesine Sıñırla"
 
-#: gtk/gtkrange.c:428
+#: gtk/gtkrange.c:429
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Üst hudutnıñ tolma seviyesine sıñırlandırılıp sıñırlandırılmaycağı."
 
-#: gtk/gtkrange.c:443
+#: gtk/gtkrange.c:444
 msgid "Fill Level"
 msgstr "Tolma Seviyesi"
 
-#: gtk/gtkrange.c:444
+#: gtk/gtkrange.c:445
 msgid "The fill level."
 msgstr "Tolma seviyesi."
 
 # gtk/gtkrange.c:280
-#: gtk/gtkrange.c:452
+#: gtk/gtkrange.c:453
 msgid "Slider Width"
 msgstr "Sürgü Kenişligi"
 
 # tüklü
 # gtk/gtkrange.c:281
-#: gtk/gtkrange.c:453
+#: gtk/gtkrange.c:454
 msgid "Width of scrollbar or scale thumb"
 msgstr "Taydırma çubuğınıñ ya da miqyas başparmağınıñ kenişligi"
 
 # gtk/gtkrange.c:288
-#: gtk/gtkrange.c:460
+#: gtk/gtkrange.c:461
 msgid "Trough Border"
 msgstr "Uluq Sıñırı"
 
 # tüklü
 # gtk/gtkrange.c:289
-#: gtk/gtkrange.c:461
+#: gtk/gtkrange.c:462
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr ""
 "Başparmaq/adımlayıcılar ile tış uluq şevi (qabartması) arasındaki boşluqlama"
 
 # gtk/gtkrange.c:296
-#: gtk/gtkrange.c:468
+#: gtk/gtkrange.c:469
 msgid "Stepper Size"
 msgstr "Adımlayıcı Ölçüsi"
 
 # gtk/gtkrange.c:297
-#: gtk/gtkrange.c:469
+#: gtk/gtkrange.c:470
 msgid "Length of step buttons at ends"
 msgstr "Uclardaki adım dögmeleriniñ uzunlığı"
 
 # gtk/gtkrange.c:304
-#: gtk/gtkrange.c:484
+#: gtk/gtkrange.c:485
 msgid "Stepper Spacing"
 msgstr "Adımlayıcı Boşluqlaması"
 
 # gtk/gtkrange.c:305
-#: gtk/gtkrange.c:485
+#: gtk/gtkrange.c:486
 msgid "Spacing between step buttons and thumb"
 msgstr "Adım dögmeleri ile başparmaq arasındaki boşluqlama"
 
-#: gtk/gtkrange.c:492
+#: gtk/gtkrange.c:493
 msgid "Arrow X Displacement"
 msgstr "Oq X Yersizleştirilmesi"
 
-#: gtk/gtkrange.c:493
+#: gtk/gtkrange.c:494
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Dögmege basılğanında oqnıñ x yönelişinde ne qadar areket ettirilecegi"
 
-#: gtk/gtkrange.c:500
+#: gtk/gtkrange.c:501
 msgid "Arrow Y Displacement"
 msgstr "Oq Y X Yersizleştirilmesi"
 
-#: gtk/gtkrange.c:501
+#: gtk/gtkrange.c:502
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Dögmege basılğanında oqnıñ y yönelişinde ne qadar areket ettirilecegi"
 
-#: gtk/gtkrange.c:509
+#: gtk/gtkrange.c:510
 msgid "Draw slider ACTIVE during drag"
 msgstr "Süyrekleme esnasında sürgüni FAAL olaraq sız"
 
 # tüklü
-#: gtk/gtkrange.c:510
+#: gtk/gtkrange.c:511
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
@@ -5534,11 +5534,11 @@ msgstr ""
 "Bu ihtiyariyat DOĞRU olğanda, sürgüler süyreklenüvleri esnasında FAAL ve "
 "KÖLGELİ olaraq sızılır"
 
-#: gtk/gtkrange.c:524
+#: gtk/gtkrange.c:525
 msgid "Trough Side Details"
 msgstr "Uluq Yan Tafsilâtı"
 
-#: gtk/gtkrange.c:525
+#: gtk/gtkrange.c:526
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -5546,11 +5546,11 @@ msgstr ""
 "DOĞRU olğanda, sürgüniñ er eki tarafındaki uluq parçaları deñişik "
 "tafsilâtnen sızılır"
 
-#: gtk/gtkrange.c:541
+#: gtk/gtkrange.c:542
 msgid "Trough Under Steppers"
 msgstr "Uluq Adımlayıcılar Altında"
 
-#: gtk/gtkrange.c:542
+#: gtk/gtkrange.c:543
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5559,11 +5559,11 @@ msgstr ""
 "boşluqlamanıñ harıçmı tutulacağı"
 
 # gtk/gtktable.c:174
-#: gtk/gtkrange.c:555
+#: gtk/gtkrange.c:556
 msgid "Arrow scaling"
 msgstr "Oq miqyaslaması"
 
-#: gtk/gtkrange.c:556
+#: gtk/gtkrange.c:557
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Taydırma dögmesi ölçüsine nazaran oq miqyaslaması"
 

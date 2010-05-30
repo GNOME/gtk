@@ -39,7 +39,6 @@ gdk_window_set_cursor() or by setting the cursor member of the
 A <type>GdkCursor</type> structure represents a cursor.
 </para>
 
-@type: the #GdkCursorType of the cursor
 
 <!-- ##### ENUM GdkCursorType ##### -->
 <para>
