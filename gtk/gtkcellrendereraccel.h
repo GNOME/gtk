@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 #define GTK_CELL_RENDERER_ACCEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccelClass))
 
 typedef struct _GtkCellRendererAccel      GtkCellRendererAccel;
+typedef struct _GtkCellRendererAccelPriv  GtkCellRendererAccelPriv;
 typedef struct _GtkCellRendererAccelClass GtkCellRendererAccelClass;
 
 
@@ -51,14 +52,7 @@ struct _GtkCellRendererAccel
   GtkCellRendererText parent;
 
   /*< private >*/
-  guint GSEAL (accel_key);
-  GdkModifierType GSEAL (accel_mods);
-  guint GSEAL (keycode);
-  GtkCellRendererAccelMode GSEAL (accel_mode);
-
-  GtkWidget *GSEAL (edit_widget);
-  GtkWidget *GSEAL (grab_widget);
-  GtkWidget *GSEAL (sizing_label);
+  GtkCellRendererAccelPriv *priv;
 };
 
 struct _GtkCellRendererAccelClass
