@@ -4080,10 +4080,13 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
   gint cell;
   gboolean dirty = FALSE;
   gint step;
+  GtkTextDirection direction;
   
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
-  
+
+  direction = count < 0 ? GTK_DIR_UP : GTK_DIR_DOWN;
+
   if (!icon_view->priv->cursor_item)
     {
       GList *list;
