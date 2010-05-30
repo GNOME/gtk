@@ -4083,10 +4083,13 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
   gint cell;
   gboolean dirty = FALSE;
   gint step;
-  
+  GtkDirectionType direction;
+
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
-  
+
+  direction = count < 0 ? GTK_DIR_UP : GTK_DIR_DOWN;
+
   if (!icon_view->priv->cursor_item)
     {
       GList *list;
@@ -4119,7 +4122,17 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 
   if (!item)
     {
-      gtk_widget_error_bell (GTK_WIDGET (icon_view));
+      if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
+        {
+          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          g_print ("move focus out\n");
+          if (toplevel)
+            gtk_widget_child_focus (toplevel,
+                                    direction == GTK_DIR_UP ?
+                                    GTK_DIR_TAB_BACKWARD :
+                                    GTK_DIR_TAB_FORWARD);
+        }
+
       return;
     }
 
@@ -5193,7 +5206,7 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
 /**
  * gtk_icon_view_selected_foreach:
  * @icon_view: A #GtkIconView.
- * @func: The funcion to call for each selected icon.
+ * @func: The function to call for each selected icon.
  * @data: User data to pass to the function.
  * 
  * Calls a function for each selected icon. Note that the model or
