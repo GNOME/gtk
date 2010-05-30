@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.21.0 to 2.21.1
+==============================================
+
+* GDK has been sealed, with the addition of suitable accessors
+
+* Bugs:
+ 613132 GtkBoxChild should probably be deprecated
+ 592580 GDK needs sealing
+ 607628 DnD operation doesn't work when using offscreen.
+ 565559 Incorrect leave-notify signals for treeview
+ 618162 Description of GdkColor
+ 614581 Gtk print dialog freezes on start up
+ 533946 GtkHScale does not update correctly
+ 618271 Add gtk_window_has_group()
+ 618000 Sync paper size fallbacks with CLDR 1.8.1
+ 551322 configure does not use -lm in jasper (JPEG2000) testing
+ 619114 undefined reference to `XkbBell'
+ 618093 typo in gtkprintoperation.c, "selecion" should be "selection"
+
+* Updated translations:
+ Italian
+
+
 Overview of Changes from GTK+ 2.20.0 to 2.21.0
 ==============================================
 
