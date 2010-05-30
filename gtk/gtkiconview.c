@@ -4125,7 +4125,6 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
       if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
         {
           GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
-          g_print ("move focus out\n");
           if (toplevel)
             gtk_widget_child_focus (toplevel,
                                     direction == GTK_DIR_UP ?
@@ -4222,10 +4221,13 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
   gint cell = -1;
   gboolean dirty = FALSE;
   gint step;
-  
+  GtkDirectionType direction;
+
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return;
-  
+
+  direction = count < 0 ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+
   if (!icon_view->priv->cursor_item)
     {
       GList *list;
@@ -4257,7 +4259,16 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
 
   if (!item)
     {
-      gtk_widget_error_bell (GTK_WIDGET (icon_view));
+      if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
+        {
+          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          if (toplevel)
+            gtk_widget_child_focus (toplevel,
+                                    direction == GTK_DIR_LEFT ?
+                                    GTK_DIR_TAB_BACKWARD :
+                                    GTK_DIR_TAB_FORWARD);
+        }
+
       return;
     }
 
@@ -5929,6 +5940,68 @@ gtk_icon_view_path_is_selected (GtkIconView *icon_view,
     return FALSE;
   
   return item->selected;
+}
+
+/**
+ * gtk_icon_view_get_item_row:
+ * @icon_view: a #GtkIconView
+ * @path: the #GtkTreePath of the item
+ *
+ * Gets the row in which the item @path is currently
+ * displayed. Row numbers start at 0.
+ *
+ * Returns: The row in which the item is displayed
+ *
+ * Since: 2.22
+ */
+gint
+gtk_icon_view_get_item_row (GtkIconView *icon_view,
+                            GtkTreePath *path)
+{
+  GtkIconViewItem *item;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+  g_return_val_if_fail (icon_view->priv->model != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  item = g_list_nth_data (icon_view->priv->items,
+                          gtk_tree_path_get_indices(path)[0]);
+
+  if (!item)
+    return -1;
+
+  return item->row;
+}
+
+/**
+ * gtk_icon_view_get_item_column:
+ * @icon_view: a #GtkIconView
+ * @path: the #GtkTreePath of the item
+ *
+ * Gets the column in which the item @path is currently
+ * displayed. Column numbers start at 0.
+ *
+ * Returns: The column in which the item is displayed
+ *
+ * Since: 2.22
+ */
+gint
+gtk_icon_view_get_item_column (GtkIconView *icon_view,
+                               GtkTreePath *path)
+{
+  GtkIconViewItem *item;
+
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+  g_return_val_if_fail (icon_view->priv->model != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  item = g_list_nth_data (icon_view->priv->items,
+                          gtk_tree_path_get_indices(path)[0]);
+
+  if (!item)
+    return -1;
+
+  return item->col;
 }
 
 /**

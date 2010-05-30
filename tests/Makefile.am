@@ -49,6 +49,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testframe			\
 	testgtk				\
 	testiconview			\
+	testiconview-keynav		\
 	testicontheme			\
 	testimage			\
 	testinput			\
@@ -196,6 +197,7 @@ testfilechooserbutton_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
 testiconview_LDADD = $(LDADDS)
+testiconview_keynav_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testimage_LDADD = $(LDADDS)
 testmenubars_LDADD = $(LDADDS)
@@ -320,6 +322,9 @@ testframe_SOURCES = 		\
 testiconview_SOURCES = 		\
 	testiconview.c		\
 	prop-editor.c
+
+testiconview__keynav_SOURCES = 	\
+	testiconview-keynav.c
 
 testrecentchooser_SOURCES = 	\
 	prop-editor.c 		\
