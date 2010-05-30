@@ -542,6 +542,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   PangoRectangle char_rect;
   PangoLayout *layout;
   gint x_offset, y_offset, index, cell_height, cell_width;
+  gint xpad, ypad;
 
   if (!GAIL_TEXT_CELL (text)->cell_text)
     {
@@ -576,10 +577,11 @@ gail_text_cell_get_character_extents (AtkText          *text,
     offset) - gtk_renderer->text;
   pango_layout_index_to_pos (layout, index, &char_rect); 
 
+  gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
   gail_misc_get_extents_from_pango_rectangle (widget,
       &char_rect,
-      x_offset + rendered_rect.x + gail_renderer->renderer->xpad,
-      y_offset + rendered_rect.y + gail_renderer->renderer->ypad,
+      x_offset + rendered_rect.x + xpad,
+      y_offset + rendered_rect.y + ypad,
       x, y, width, height, coords);
   g_object_unref (layout);
   return;
@@ -598,6 +600,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   GdkRectangle rendered_rect;
   PangoLayout *layout;
   gint x_offset, y_offset, index;
+  gint xpad, ypad;
  
   if (!GAIL_TEXT_CELL (text)->cell_text)
     return -1;
@@ -619,10 +622,11 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
      &rendered_rect, &x_offset, &y_offset, NULL, NULL);
 
   layout = create_pango_layout (gtk_renderer, widget);
-   
+
+  gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
   index = gail_misc_get_index_at_point_in_layout (widget, layout,
-        x_offset + rendered_rect.x + gail_renderer->renderer->xpad,
-        y_offset + rendered_rect.y + gail_renderer->renderer->ypad,
+        x_offset + rendered_rect.x + xpad,
+        y_offset + rendered_rect.y + ypad,
         x, y, coords);
   g_object_unref (layout);
   if (index == -1)

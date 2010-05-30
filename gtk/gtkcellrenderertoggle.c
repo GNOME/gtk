@@ -99,9 +99,8 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
   celltoggle->active = FALSE;
   celltoggle->radio = FALSE;
 
-  GTK_CELL_RENDERER (celltoggle)->mode = GTK_CELL_RENDERER_MODE_ACTIVATABLE;
-  GTK_CELL_RENDERER (celltoggle)->xpad = 2;
-  GTK_CELL_RENDERER (celltoggle)->ypad = 2;
+  g_object_set (celltoggle, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
+  gtk_cell_renderer_set_padding (GTK_CELL_RENDERER (celltoggle), 2, 2);
 
   priv->indicator_size = TOGGLE_WIDTH;
   priv->inconsistent = FALSE;
@@ -283,12 +282,14 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 {
   gint calc_width;
   gint calc_height;
+  gint xpad, ypad;
   GtkCellRendererTogglePrivate *priv;
 
   priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
 
-  calc_width = (gint) cell->xpad * 2 + priv->indicator_size;
-  calc_height = (gint) cell->ypad * 2 + priv->indicator_size;
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+  calc_width = xpad * 2 + priv->indicator_size;
+  calc_height = ypad * 2 + priv->indicator_size;
 
   if (width)
     *width = calc_width;
@@ -298,15 +299,19 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 
   if (cell_area)
     {
+      gfloat xalign, yalign;
+
+      gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
+
       if (x_offset)
 	{
 	  *x_offset = ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ?
-		       (1.0 - cell->xalign) : cell->xalign) * (cell_area->width - calc_width);
+		       (1.0 - xalign) : xalign) * (cell_area->width - calc_width);
 	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
 	{
-	  *y_offset = cell->yalign * (cell_area->height - calc_height);
+	  *y_offset = yalign * (cell_area->height - calc_height);
 	  *y_offset = MAX (*y_offset, 0);
 	}
     }
@@ -330,6 +335,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   GtkCellRendererTogglePrivate *priv;
   gint width, height;
   gint x_offset, y_offset;
+  gint xpad, ypad;
   GtkShadowType shadow;
   GtkStateType state = 0;
 
@@ -338,8 +344,9 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);
-  width -= cell->xpad*2;
-  height -= cell->ypad*2;
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+  width -= xpad * 2;
+  height -= ypad * 2;
 
   if (width <= 0 || height <= 0)
     return;
@@ -349,7 +356,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   else
     shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
+  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
+      !gtk_cell_renderer_get_sensitive (cell))
     {
       state = GTK_STATE_INSENSITIVE;
     }
@@ -374,8 +382,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
                         window,
                         state, shadow,
                         expose_area, widget, "cellradio",
-                        cell_area->x + x_offset + cell->xpad,
-                        cell_area->y + y_offset + cell->ypad,
+                        cell_area->x + x_offset + xpad,
+                        cell_area->y + y_offset + ypad,
                         width, height);
     }
   else
@@ -384,8 +392,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
                        window,
                        state, shadow,
                        expose_area, widget, "cellcheck",
-                       cell_area->x + x_offset + cell->xpad,
-                       cell_area->y + y_offset + cell->ypad,
+                       cell_area->x + x_offset + xpad,
+                       cell_area->y + y_offset + ypad,
                        width, height);
     }
 }

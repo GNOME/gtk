@@ -682,6 +682,7 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
   gint pixbuf_height = 0;
   gint calc_width;
   gint calc_height;
+  gint xpad, ypad;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cell);
 
@@ -708,22 +709,26 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
       pixbuf_width  = MAX (pixbuf_width, gdk_pixbuf_get_width (cellpixbuf->pixbuf_expander_closed));
       pixbuf_height = MAX (pixbuf_height, gdk_pixbuf_get_height (cellpixbuf->pixbuf_expander_closed));
     }
-  
-  calc_width  = (gint) cell->xpad * 2 + pixbuf_width;
-  calc_height = (gint) cell->ypad * 2 + pixbuf_height;
+
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+  calc_width  = (gint) xpad * 2 + pixbuf_width;
+  calc_height = (gint) ypad * 2 + pixbuf_height;
   
   if (cell_area && pixbuf_width > 0 && pixbuf_height > 0)
     {
+      gfloat xalign, yalign;
+
+      gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
       if (x_offset)
 	{
 	  *x_offset = (((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ?
-                        (1.0 - cell->xalign) : cell->xalign) * 
+                        (1.0 - xalign) : xalign) *
                        (cell_area->width - calc_width));
 	  *x_offset = MAX (*x_offset, 0);
 	}
       if (y_offset)
 	{
-	  *y_offset = (cell->yalign *
+	  *y_offset = (yalign *
                        (cell_area->height - calc_height));
           *y_offset = MAX (*y_offset, 0);
 	}
@@ -760,6 +765,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   cairo_t *cr;
+  gboolean is_expander;
+  gint xpad, ypad;
 
   priv = GTK_CELL_RENDERER_PIXBUF_GET_PRIVATE (cell);
 
@@ -769,10 +776,11 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 				     &pix_rect.width,
 				     &pix_rect.height);
 
-  pix_rect.x += cell_area->x + cell->xpad;
-  pix_rect.y += cell_area->y + cell->ypad;
-  pix_rect.width  -= cell->xpad * 2;
-  pix_rect.height -= cell->ypad * 2;
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+  pix_rect.x += cell_area->x + xpad;
+  pix_rect.y += cell_area->y + ypad;
+  pix_rect.width  -= xpad * 2;
+  pix_rect.height -= ypad * 2;
 
   if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) ||
       !gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
@@ -780,12 +788,17 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
   pixbuf = cellpixbuf->pixbuf;
 
-  if (cell->is_expander)
+  g_object_get (cell, "is-expander", &is_expander, NULL);
+  if (is_expander)
     {
-      if (cell->is_expanded &&
+      gboolean is_expanded;
+
+      g_object_get (cell, "is-expanded", &is_expanded, NULL);
+
+      if (is_expanded &&
 	  cellpixbuf->pixbuf_expander_open != NULL)
 	pixbuf = cellpixbuf->pixbuf_expander_open;
-      else if (!cell->is_expanded &&
+      else if (!is_expanded &&
 	       cellpixbuf->pixbuf_expander_closed != NULL)
 	pixbuf = cellpixbuf->pixbuf_expander_closed;
     }
@@ -793,7 +806,8 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (!pixbuf)
     return;
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
+  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
+      !gtk_cell_renderer_get_sensitive (cell))
     {
       GtkIconSource *source;
       

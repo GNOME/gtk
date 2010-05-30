@@ -359,7 +359,8 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer *cellr,
     }
 
   state = GTK_STATE_NORMAL;
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE || !cellr->sensitive)
+  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
+      !gtk_cell_renderer_get_sensitive (cellr))
     {
       state = GTK_STATE_INSENSITIVE;
     }

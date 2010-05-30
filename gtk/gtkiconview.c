@@ -2475,7 +2475,7 @@ gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3009,7 +3009,7 @@ gtk_icon_view_calculate_item_size (GtkIconView     *icon_view,
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_cell_renderer_get_size (info->cell, GTK_WIDGET (icon_view), 
@@ -3071,7 +3071,7 @@ gtk_icon_view_calculate_item_size2 (GtkIconView     *icon_view,
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 
-	if (!info->cell->visible)
+	if (!gtk_cell_renderer_get_visible (info->cell))
 	  continue;
 
 	if (icon_view->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -3212,7 +3212,7 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     {
       GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
       
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
       
       gtk_icon_view_get_cell_area (icon_view, item, info, &cell_area);
@@ -3250,14 +3250,16 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
     {
       for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
         {
+          GtkCellRendererMode mode;
           GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 
-          if (!info->cell->visible)
+          if (!gtk_cell_renderer_get_visible (info->cell))
             continue;
 
           /* If found a editable/activatable cell, draw focus on it. */
+          g_object_get (info->cell, "mode", &mode, NULL);
           if (icon_view->priv->cursor_cell < 0 &&
-              info->cell->mode != GTK_CELL_RENDERER_MODE_INERT)
+              mode != GTK_CELL_RENDERER_MODE_INERT)
             icon_view->priv->cursor_cell = i;
 
           gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3506,7 +3508,7 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 		{
 		  GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 
-		  if (!info->cell->visible)
+		  if (!gtk_cell_renderer_get_visible (info->cell))
 		    continue;
 
 		  gtk_icon_view_get_cell_box (icon_view, item, info, &box);
@@ -3933,15 +3935,17 @@ find_cell (GtkIconView     *icon_view,
   for (k = 0; k < 2; k++)
     for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
       {
+        GtkCellRendererMode mode;
 	GtkIconViewCellInfo *info = (GtkIconViewCellInfo *)l->data;
 	
 	if (info->pack == (k ? GTK_PACK_START : GTK_PACK_END))
 	  continue;
 	
-	if (!info->cell->visible)
+	if (!gtk_cell_renderer_get_visible (info->cell))
 	  continue;
 
-	if (info->cell->mode != GTK_CELL_RENDERER_MODE_INERT)
+        g_object_get (info->cell, "mode", &mode, NULL);
+	if (mode != GTK_CELL_RENDERER_MODE_INERT)
 	  {
 	    if (cell == i)
 	      current = n_focusable;

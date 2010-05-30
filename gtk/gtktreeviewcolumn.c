@@ -1379,12 +1379,17 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 gboolean
 _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column)
 {
+  GtkCellRenderer *cell;
+  GtkCellRendererMode mode;
   GList *list;
 
   for (list = column->cell_list; list; list = list->next)
-    if (((GtkTreeViewColumnCellInfo *)list->data)->cell->mode ==
-	GTK_CELL_RENDERER_MODE_EDITABLE)
-      return TRUE;
+    {
+      cell = ((GtkTreeViewColumnCellInfo *)list->data)->cell;
+      g_object_get (cell, "mode", &mode, NULL);
+      if (mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+        return TRUE;
+    }
 
   return FALSE;
 }
@@ -1410,11 +1415,13 @@ _gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column)
 
   for (list = column->cell_list; list; list = list->next)
     {
+      GtkCellRendererMode mode;
       GtkTreeViewColumnCellInfo *cellinfo = list->data;
 
-      if ((cellinfo->cell->mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
-	  cellinfo->cell->mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE) &&
-	  cellinfo->cell->visible)
+      g_object_get (cellinfo->cell, "mode", &mode, NULL);
+      if ((mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
+	   mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE) &&
+	  gtk_cell_renderer_get_visible (cellinfo->cell))
 	i++;
     }
 
@@ -2541,6 +2548,7 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
   GSList *list;
   GValue value = { 0, };
   GList *cell_list;
+  gboolean cell_is_expander, cell_is_expanded;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2556,10 +2564,12 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 
       g_object_freeze_notify (cell);
 
-      if (info->cell->is_expander != is_expander)
+      g_object_get (cell, "is-expander", &cell_is_expander, NULL);
+      if (cell_is_expander != is_expander)
 	g_object_set (cell, "is-expander", is_expander, NULL);
 
-      if (info->cell->is_expanded != is_expanded)
+      g_object_get (cell, "is-expanded", &cell_is_expanded, NULL);
+      if (cell_is_expanded != is_expanded)
 	g_object_set (cell, "is-expanded", is_expanded, NULL);
 
       while (list && list->next)
@@ -2745,7 +2755,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *)list->data;
 
-      if (! info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
 
       if (info->expand == TRUE)
@@ -2772,7 +2782,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (info->pack == GTK_PACK_END)
 	continue;
 
-      if (! info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
 	continue;
 
       if ((info->has_focus || special_cells == 1) && cursor_row)
@@ -2947,7 +2957,7 @@ gtk_tree_view_column_cell_process_action (GtkTreeViewColumn  *tree_column,
       if (info->pack == GTK_PACK_START)
 	continue;
 
-      if (! info->cell->visible)
+      if (!gtk_cell_renderer_get_visible(info->cell))
 	continue;
 
       if ((info->has_focus || special_cells == 1) && cursor_row)
@@ -3529,7 +3539,7 @@ gtk_tree_view_column_cell_is_visible (GtkTreeViewColumn *tree_column)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
 
-      if (info->cell->visible)
+      if (gtk_cell_renderer_get_visible (info->cell))
 	return TRUE;
     }
 
@@ -3657,7 +3667,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
       if (info->cell == cell)
 	break;
       
-      if (info->cell->visible)
+      if (gtk_cell_renderer_get_visible (info->cell))
 	l += info->real_width + column->spacing;
     }
 
@@ -3667,7 +3677,7 @@ _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
       
       list = gtk_tree_view_column_cell_next (column, list);
 
-      if (info->cell->visible)
+      if (gtk_cell_renderer_get_visible (info->cell))
 	r += info->real_width + column->spacing;
     }
 
@@ -3714,7 +3724,7 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
           break;
         }
 
-      if (cellinfo->cell->visible)
+      if (gtk_cell_renderer_get_visible (cellinfo->cell))
         current_x += cellinfo->real_width;
     }
 

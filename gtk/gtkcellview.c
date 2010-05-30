@@ -330,7 +330,7 @@ gtk_cell_view_size_request (GtkWidget      *widget,
       gint width, height;
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       if (!first_cell)
@@ -366,7 +366,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       if (info->expand)
@@ -385,7 +385,7 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       info->real_width = info->requested_width +
@@ -451,7 +451,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
       if (info->pack == GTK_PACK_END)
         continue;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       area.width = info->real_width;
@@ -478,7 +478,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
       if (info->pack == GTK_PACK_START)
         continue;
 
-      if (!info->cell->visible)
+      if (!gtk_cell_renderer_get_visible (info->cell))
         continue;
 
       area.width = info->real_width;

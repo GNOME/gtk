@@ -4408,9 +4408,12 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
 static void
 set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer *renderer)
 {
+  gint xpad, ypad;
+
+  gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
   gtk_cell_renderer_set_fixed_size (renderer, 
-                                    renderer->xpad * 2 + impl->icon_size,
-                                    renderer->ypad * 2 + impl->icon_size);
+                                    xpad * 2 + impl->icon_size,
+                                    ypad * 2 + impl->icon_size);
 }
 
 /* Creates the widgets for the file list */

@@ -415,15 +415,18 @@ compute_dimensions (GtkCellRenderer *cell,
 {
   PangoRectangle logical_rect;
   PangoLayout *layout;
+  gint xpad, ypad;
   
   layout = gtk_widget_create_pango_layout (widget, text);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
   
   if (width)
-    *width = logical_rect.width + cell->xpad * 2;
+    *width = logical_rect.width + xpad * 2;
   
   if (height)
-    *height = logical_rect.height + cell->ypad * 2;
+    *height = logical_rect.height + ypad * 2;
 
   g_object_unref (layout);
 }
@@ -534,15 +537,17 @@ gtk_cell_renderer_progress_render (GtkCellRenderer *cell,
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
+  gint xpad, ypad;
   GdkRectangle clip;
   gboolean is_rtl;
 
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-  
-  x = cell_area->x + cell->xpad;
-  y = cell_area->y + cell->ypad;
-  w = cell_area->width - cell->xpad * 2;
-  h = cell_area->height - cell->ypad * 2;
+
+  gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
+  x = cell_area->x + xpad;
+  y = cell_area->y + ypad;
+  w = cell_area->width - xpad * 2;
+  h = cell_area->height - ypad * 2;
 
   /* FIXME: GtkProgressBar draws the box with "trough" detail,
    * but some engines don't paint anything with that detail for
