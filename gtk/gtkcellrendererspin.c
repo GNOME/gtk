@@ -27,7 +27,6 @@
 #include "gtkspinbutton.h"
 #include "gtkcellrendererspin.h"
 
-#define GTK_CELL_RENDERER_SPIN_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_SPIN, GtkCellRendererSpinPrivate))
 
 struct _GtkCellRendererSpinPrivate
 {
@@ -132,7 +131,10 @@ gtk_cell_renderer_spin_init (GtkCellRendererSpin *self)
 {
   GtkCellRendererSpinPrivate *priv;
 
-  priv = GTK_CELL_RENDERER_SPIN_GET_PRIVATE (self);
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                            GTK_TYPE_CELL_RENDERER_SPIN,
+                                            GtkCellRendererSpinPrivate);
+  priv = self->priv;
 
   priv->adjustment = NULL;
   priv->climb_rate = 0.0;
@@ -144,7 +146,7 @@ gtk_cell_renderer_spin_finalize (GObject *object)
 {
   GtkCellRendererSpinPrivate *priv;
 
-  priv = GTK_CELL_RENDERER_SPIN_GET_PRIVATE (object);
+  priv = GTK_CELL_RENDERER_SPIN (object)->priv;
 
   if (priv && priv->adjustment)
     g_object_unref (priv->adjustment);
@@ -162,7 +164,7 @@ gtk_cell_renderer_spin_get_property (GObject      *object,
   GtkCellRendererSpinPrivate *priv;
 
   renderer = GTK_CELL_RENDERER_SPIN (object);
-  priv = GTK_CELL_RENDERER_SPIN_GET_PRIVATE (renderer);
+  priv = renderer->priv;
 
   switch (prop_id)
     {
@@ -192,7 +194,7 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
   GObject *obj;
 
   renderer = GTK_CELL_RENDERER_SPIN (object);
-  priv = GTK_CELL_RENDERER_SPIN_GET_PRIVATE (renderer);
+  priv = renderer->priv;
 
   switch (prop_id)
     {
@@ -301,7 +303,7 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
   GtkWidget *spin;
 
   cell_text = GTK_CELL_RENDERER_TEXT (cell);
-  priv = GTK_CELL_RENDERER_SPIN_GET_PRIVATE (cell);
+  priv = GTK_CELL_RENDERER_SPIN (cell)->priv;
 
   if (!cell_text->editable)
     return NULL;
