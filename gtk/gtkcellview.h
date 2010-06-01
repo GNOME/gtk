@@ -46,7 +46,7 @@ struct _GtkCellView
   GtkWidget parent_instance;
 
   /*< private >*/
-  GtkCellViewPrivate *GSEAL (priv);
+  GtkCellViewPrivate *priv;
 };
 
 struct _GtkCellViewClass

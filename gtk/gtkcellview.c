@@ -122,7 +122,6 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 
 static GtkBuildableIface *parent_buildable_iface;
 
-#define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
 
 enum
 {
@@ -288,9 +287,14 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
+  GtkCellViewPrivate *priv;
 
-  cellview->priv = GTK_CELL_VIEW_GET_PRIVATE (cellview);
+  cellview->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellview,
+                                                GTK_TYPE_CELL_VIEW,
+                                                GtkCellViewPrivate);
+  priv = cellview->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
 }
 
 static void
