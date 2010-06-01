@@ -45,6 +45,8 @@ typedef struct _GtkCellRendererSpinnerPrivate GtkCellRendererSpinnerPrivate;
 struct _GtkCellRendererSpinner
 {
   GtkCellRenderer                parent;
+
+  /* <private> */
   GtkCellRendererSpinnerPrivate *priv;
 };
 
