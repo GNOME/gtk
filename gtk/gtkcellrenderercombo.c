@@ -31,12 +31,17 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
-#define GTK_CELL_RENDERER_COMBO_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_COMBO, GtkCellRendererComboPrivate))
-
-typedef struct _GtkCellRendererComboPrivate GtkCellRendererComboPrivate;
-struct _GtkCellRendererComboPrivate
+struct _GtkCellRendererComboPriv
 {
+  GtkTreeModel *model;
+
   GtkWidget *combo;
+
+  gboolean has_entry;
+
+  gint text_column;
+
+  guint focus_out_id;
 };
 
 
@@ -182,16 +187,23 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 		  G_TYPE_STRING,
 		  GTK_TYPE_TREE_ITER);
 
-  g_type_class_add_private (klass, sizeof (GtkCellRendererComboPrivate));
+  g_type_class_add_private (klass, sizeof (GtkCellRendererComboPriv));
 }
 
 static void
 gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 {
-  self->model = NULL;
-  self->text_column = -1;
-  self->has_entry = TRUE;
-  self->focus_out_id = 0;
+  GtkCellRendererComboPriv *priv;
+
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+                                            GTK_TYPE_CELL_RENDERER_COMBO,
+                                            GtkCellRendererComboPriv);
+  priv = self->priv;
+
+  priv->model = NULL;
+  priv->text_column = -1;
+  priv->has_entry = TRUE;
+  priv->focus_out_id = 0;
 }
 
 /**
@@ -219,11 +231,12 @@ static void
 gtk_cell_renderer_combo_finalize (GObject *object)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
+  GtkCellRendererComboPriv *priv = cell->priv;
   
-  if (cell->model)
+  if (priv->model)
     {
-      g_object_unref (cell->model);
-      cell->model = NULL;
+      g_object_unref (priv->model);
+      priv->model = NULL;
     }
   
   G_OBJECT_CLASS (gtk_cell_renderer_combo_parent_class)->finalize (object);
@@ -236,17 +249,18 @@ gtk_cell_renderer_combo_get_property (GObject    *object,
 				      GParamSpec *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
+  GtkCellRendererComboPriv *priv = cell->priv;
 
   switch (prop_id)
     {
     case PROP_MODEL:
-      g_value_set_object (value, cell->model);
+      g_value_set_object (value, priv->model);
       break; 
     case PROP_TEXT_COLUMN:
-      g_value_set_int (value, cell->text_column);
+      g_value_set_int (value, priv->text_column);
       break;
     case PROP_HAS_ENTRY:
-      g_value_set_boolean (value, cell->has_entry);
+      g_value_set_boolean (value, priv->has_entry);
       break;
    default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -261,27 +275,24 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
 				      GParamSpec   *pspec)
 {
   GtkCellRendererCombo *cell = GTK_CELL_RENDERER_COMBO (object);
+  GtkCellRendererComboPriv *priv = cell->priv;
 
   switch (prop_id)
     {
     case PROP_MODEL:
       {
-        GtkCellRendererComboPrivate *priv;
-
-        priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (cell);
-
-        if (cell->model)
-          g_object_unref (cell->model);
-        cell->model = GTK_TREE_MODEL (g_value_get_object (value));
-        if (cell->model)
-          g_object_ref (cell->model);
+        if (priv->model)
+          g_object_unref (priv->model);
+        priv->model = GTK_TREE_MODEL (g_value_get_object (value));
+        if (priv->model)
+          g_object_ref (priv->model);
         break;
       }
     case PROP_TEXT_COLUMN:
-      cell->text_column = g_value_get_int (value);
+      priv->text_column = g_value_get_int (value);
       break;
     case PROP_HAS_ENTRY:
-      cell->has_entry = g_value_get_boolean (value);
+      priv->has_entry = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -319,15 +330,15 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
   GtkCellRendererCombo *cell;
   GtkEntry *entry;
   gboolean canceled;
-  GtkCellRendererComboPrivate *priv;
+  GtkCellRendererComboPriv *priv;
 
   cell = GTK_CELL_RENDERER_COMBO (data);
-  priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (data);
+  priv = cell->priv;
 
-  if (cell->focus_out_id > 0)
+  if (priv->focus_out_id > 0)
     {
-      g_signal_handler_disconnect (combo, cell->focus_out_id);
-      cell->focus_out_id = 0;
+      g_signal_handler_disconnect (combo, priv->focus_out_id);
+      priv->focus_out_id = 0;
     }
 
   g_object_get (combo,
@@ -351,7 +362,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
 
       if (model
           && gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-        gtk_tree_model_get (model, &iter, cell->text_column, &new_text, -1);
+        gtk_tree_model_get (model, &iter, priv->text_column, &new_text, -1);
     }
 
   path = g_object_get_data (G_OBJECT (combo), GTK_CELL_RENDERER_COMBO_PATH);
@@ -386,10 +397,13 @@ find_text (GtkTreeModel *model,
 	   GtkTreeIter  *iter, 
 	   gpointer      data)
 {
+  GtkCellRendererComboPriv *priv;
   SearchData *search_data = (SearchData *)data;
   gchar *text;
+
+  priv = search_data->cell->priv;
   
-  gtk_tree_model_get (model, iter, search_data->cell->text_column, &text, -1);
+  gtk_tree_model_get (model, iter, priv->text_column, &text, -1);
   if (text && GTK_CELL_RENDERER_TEXT (search_data->cell)->text &&
       strcmp (text, GTK_CELL_RENDERER_TEXT (search_data->cell)->text) == 0)
     {
@@ -415,29 +429,29 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   GtkCellRendererText *cell_text;
   GtkWidget *combo;
   SearchData search_data;
-  GtkCellRendererComboPrivate *priv;
+  GtkCellRendererComboPriv *priv;
 
   cell_text = GTK_CELL_RENDERER_TEXT (cell);
   if (cell_text->editable == FALSE)
     return NULL;
 
   cell_combo = GTK_CELL_RENDERER_COMBO (cell);
-  if (cell_combo->text_column < 0)
+  priv = cell_combo->priv;
+
+  if (priv->text_column < 0)
     return NULL;
 
-  priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (cell_combo);
-
-  if (cell_combo->has_entry) 
+  if (priv->has_entry)
     {
       combo = gtk_combo_box_entry_new ();
 
-      if (cell_combo->model)
-        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), cell_combo->model);
+      if (priv->model)
+        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), priv->model);
       gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo),
-                                           cell_combo->text_column);
+                                           priv->text_column);
 
       if (cell_text->text)
-	gtk_entry_set_text (GTK_ENTRY (GTK_BIN (combo)->child), 
+	gtk_entry_set_text (GTK_ENTRY (GTK_BIN (combo)->child),
 			    cell_text->text);
     }
   else
@@ -445,20 +459,20 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
       cell = gtk_cell_renderer_text_new ();
 
       combo = gtk_combo_box_new ();
-      if (cell_combo->model)
-        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), cell_combo->model);
+      if (priv->model)
+        gtk_combo_box_set_model (GTK_COMBO_BOX (combo), priv->model);
 
       gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), cell, TRUE);
       gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), 
-				      cell, "text", cell_combo->text_column, 
+				      cell, "text", priv->text_column,
 				      NULL);
 
       /* determine the current value */
-      if (cell_combo->model)
+      if (priv->model)
         {
           search_data.cell = cell_combo;
           search_data.found = FALSE;
-          gtk_tree_model_foreach (cell_combo->model, find_text, &search_data);
+          gtk_tree_model_foreach (priv->model, find_text, &search_data);
           if (search_data.found)
             gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo),
                                            &(search_data.iter));
@@ -478,10 +492,9 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   g_signal_connect (GTK_CELL_EDITABLE (combo), "changed",
 		    G_CALLBACK (gtk_cell_renderer_combo_changed),
 		    cell_combo);
-  cell_combo->focus_out_id = 
-    g_signal_connect (combo, "focus-out-event",
-		      G_CALLBACK (gtk_cell_renderer_combo_focus_out_event),
-		      cell_combo);
+  priv->focus_out_id = g_signal_connect (combo, "focus-out-event",
+                                         G_CALLBACK (gtk_cell_renderer_combo_focus_out_event),
+                                         cell_combo);
 
   priv->combo = combo;
 
