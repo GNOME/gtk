@@ -33,9 +33,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#define GTK_CELL_RENDERER_PROGRESS_GET_PRIVATE(object) (G_TYPE_INSTANCE_GET_PRIVATE ((object),                        \
-                                                                                     GTK_TYPE_CELL_RENDERER_PROGRESS, \
-                                                                                     GtkCellRendererProgressPrivate))
 
 enum
 {
@@ -231,7 +228,12 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 static void
 gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
 {
-  GtkCellRendererProgressPrivate *priv = GTK_CELL_RENDERER_PROGRESS_GET_PRIVATE (cellprogress);
+  GtkCellRendererProgressPrivate *priv;
+
+  cellprogress->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellprogress,
+                                                    GTK_TYPE_CELL_RENDERER_PROGRESS,
+                                                    GtkCellRendererProgressPrivate);
+  priv = cellprogress->priv;
 
   priv->value = 0;
   priv->text = NULL;
@@ -245,8 +247,6 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
   priv->text_yalign = 0.5;
 
   priv->orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
-
-  cellprogress->priv = priv;
 }
 
 
