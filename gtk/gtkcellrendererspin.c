@@ -301,11 +301,14 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
   GtkCellRendererSpinPrivate *priv;
   GtkCellRendererText *cell_text;
   GtkWidget *spin;
+  gboolean editable;
+  gchar *text;
 
   cell_text = GTK_CELL_RENDERER_TEXT (cell);
   priv = GTK_CELL_RENDERER_SPIN (cell)->priv;
 
-  if (!cell_text->editable)
+  g_object_get (cell_text, "editable", &editable, NULL);
+  if (!editable)
     return NULL;
 
   if (!priv->adjustment)
@@ -318,9 +321,11 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
                     G_CALLBACK (gtk_cell_renderer_spin_button_press_event),
                     NULL);
 
-  if (cell_text->text)
+  g_object_get (cell_text, "text", &text, NULL);
+  if (text)
     gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin),
-			       g_ascii_strtod (cell_text->text, NULL));
+			       g_ascii_strtod (text, NULL));
+  g_free (text);
 
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);

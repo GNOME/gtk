@@ -585,6 +585,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkWidget *label;
   GtkWidget *eventbox;
   GdkDevice *device, *keyb, *pointer;
+  gboolean editable;
   guint32 time;
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
@@ -592,7 +593,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   priv = accel->priv;
 
   /* If the cell isn't editable we return NULL. */
-  if (celltext->editable == FALSE)
+  g_object_get (celltext, "editable", &editable, NULL);
+  if (editable == FALSE)
     return NULL;
 
   g_return_val_if_fail (widget->window != NULL, NULL);

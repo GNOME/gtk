@@ -390,6 +390,7 @@ gail_text_cell_get_run_attributes (AtkText *text,
   PangoLayout *layout;
   AtkObject *parent;
   GtkWidget *widget;
+  gchar *renderer_text;
 
   gail_renderer = GAIL_RENDERER_CELL (text);
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
@@ -400,12 +401,14 @@ gail_text_cell_get_run_attributes (AtkText *text,
   g_return_val_if_fail (GAIL_IS_CELL_PARENT (parent), NULL);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   layout = create_pango_layout (gtk_renderer, widget),
+  g_object_get (gtk_renderer, "text", &renderer_text, NULL);
   attrib_set = gail_misc_layout_get_run_attributes (attrib_set, 
                                                     layout,
-                                                    gtk_renderer->text,
+                                                    renderer_text,
                                                     offset,
                                                     start_offset,
                                                     end_offset);
+  g_free (renderer_text);
   g_object_unref (G_OBJECT (layout));
   
   return attrib_set;
@@ -448,70 +451,96 @@ static PangoLayout*
 create_pango_layout(GtkCellRendererText *gtk_renderer,
                     GtkWidget           *widget)
 {
-  PangoAttrList *attr_list;
+  GdkColor *foreground_gdk;
+  PangoAttrList *attr_list, *attributes;
   PangoLayout *layout;
-  PangoUnderline uline;
+  PangoUnderline uline, underline;
   PangoFontMask mask;
+  PangoFontDescription *font_desc;
+  gboolean foreground_set, strikethrough_set, strikethrough;
+  gboolean scale_set, underline_set, rise_set;
+  gchar *renderer_text;
+  gdouble scale;
+  gint rise;
 
-  layout = gtk_widget_create_pango_layout (widget, gtk_renderer->text);
+  g_object_get (gtk_renderer,
+                "text", &renderer_text,
+                "attributes", &attributes,
+                "foreground-set", &foreground_set,
+                "foreground-gdk", &foreground_gdk,
+                "strikethrough-set", &strikethrough_set,
+                "strikethrough", &strikethrough,
+                "font-desc", &font_desc,
+                "scale-set", &scale_set,
+                "scale", &scale,
+                "underline-set", &underline_set,
+                "underline", &underline,
+                "rise-set", &rise_set,
+                "rise", &rise,
+                NULL);
 
-  if (gtk_renderer->extra_attrs)
-    attr_list = pango_attr_list_copy (gtk_renderer->extra_attrs);
+  layout = gtk_widget_create_pango_layout (widget, renderer_text);
+
+  if (attributes)
+    attr_list = pango_attr_list_copy (attributes);
   else
     attr_list = pango_attr_list_new ();
 
-  if (gtk_renderer->foreground_set)
+  if (foreground_set)
     {
-      PangoColor color;
-      color = gtk_renderer->foreground;
-      add_attr (attr_list, pango_attr_foreground_new (color.red,
-                                                      color.green, color.blue));
+      add_attr (attr_list, pango_attr_foreground_new (foreground_gdk->red,
+                                                      foreground_gdk->green,
+                                                      foreground_gdk->blue));
     }
 
-  if (gtk_renderer->strikethrough_set)
+  if (strikethrough_set)
     add_attr (attr_list,
-              pango_attr_strikethrough_new (gtk_renderer->strikethrough));
+              pango_attr_strikethrough_new (strikethrough));
 
-  mask = pango_font_description_get_set_fields (gtk_renderer->font);
+  mask = pango_font_description_get_set_fields (font_desc);
 
   if (mask & PANGO_FONT_MASK_FAMILY)
     add_attr (attr_list,
-      pango_attr_family_new (pango_font_description_get_family (gtk_renderer->font)));
+      pango_attr_family_new (pango_font_description_get_family (font_desc)));
 
   if (mask & PANGO_FONT_MASK_STYLE)
-    add_attr (attr_list, pango_attr_style_new (pango_font_description_get_style (gtk_renderer->font)));
+    add_attr (attr_list, pango_attr_style_new (pango_font_description_get_style (font_desc)));
 
   if (mask & PANGO_FONT_MASK_VARIANT)
-    add_attr (attr_list, pango_attr_variant_new (pango_font_description_get_variant (gtk_renderer->font)));
+    add_attr (attr_list, pango_attr_variant_new (pango_font_description_get_variant (font_desc)));
 
   if (mask & PANGO_FONT_MASK_WEIGHT)
-    add_attr (attr_list, pango_attr_weight_new (pango_font_description_get_weight (gtk_renderer->font)));
+    add_attr (attr_list, pango_attr_weight_new (pango_font_description_get_weight (font_desc)));
 
   if (mask & PANGO_FONT_MASK_STRETCH)
-    add_attr (attr_list, pango_attr_stretch_new (pango_font_description_get_stretch (gtk_renderer->font)));
+    add_attr (attr_list, pango_attr_stretch_new (pango_font_description_get_stretch (font_desc)));
 
   if (mask & PANGO_FONT_MASK_SIZE)
-    add_attr (attr_list, pango_attr_size_new (pango_font_description_get_size (gtk_renderer->font)));
+    add_attr (attr_list, pango_attr_size_new (pango_font_description_get_size (font_desc)));
 
-  if (gtk_renderer->scale_set &&
-      gtk_renderer->font_scale != 1.0)
-    add_attr (attr_list, pango_attr_scale_new (gtk_renderer->font_scale));
+  if (scale_set && scale != 1.0)
+    add_attr (attr_list, pango_attr_scale_new (scale));
 
-  if (gtk_renderer->underline_set)
-    uline = gtk_renderer->underline_style;
+  if (underline_set)
+    uline = underline;
   else
     uline = PANGO_UNDERLINE_NONE;
 
   if (uline != PANGO_UNDERLINE_NONE)
     add_attr (attr_list,
-      pango_attr_underline_new (gtk_renderer->underline_style));
+              pango_attr_underline_new (underline));
 
-  if (gtk_renderer->rise_set)
-    add_attr (attr_list, pango_attr_rise_new (gtk_renderer->rise));
+  if (rise_set)
+    add_attr (attr_list, pango_attr_rise_new (rise));
 
   pango_layout_set_attributes (layout, attr_list);
   pango_layout_set_width (layout, -1);
   pango_attr_list_unref (attr_list);
+
+  pango_font_description_free (font_desc);
+  g_free (foreground_gdk);
+  pango_attr_list_unref (attributes);
+  g_free (renderer_text);
 
   return layout;
 }
@@ -541,6 +570,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   AtkObject *parent;
   PangoRectangle char_rect;
   PangoLayout *layout;
+  gchar *renderer_text;
   gint x_offset, y_offset, index, cell_height, cell_width;
   gint xpad, ypad;
 
@@ -559,7 +589,12 @@ gail_text_cell_get_character_extents (AtkText          *text,
   /*
    * Thus would be inconsistent with the cache
    */
-  gail_return_if_fail (gtk_renderer->text);
+  g_object_get (gtk_renderer, "text", &renderer_text, NULL);
+  if (text == NULL)
+    {
+      g_free (renderer_text);
+      return;
+    }
 
   parent = atk_object_get_parent (ATK_OBJECT (text));
   if (GAIL_IS_CONTAINER_CELL (parent))
@@ -573,8 +608,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
     &rendered_rect, &x_offset, &y_offset, &cell_width, &cell_height);
   layout = create_pango_layout (gtk_renderer, widget);
 
-  index = g_utf8_offset_to_pointer (gtk_renderer->text,
-    offset) - gtk_renderer->text;
+  index = g_utf8_offset_to_pointer (renderer_text, offset) - renderer_text;
   pango_layout_index_to_pos (layout, index, &char_rect); 
 
   gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
@@ -583,7 +617,10 @@ gail_text_cell_get_character_extents (AtkText          *text,
       x_offset + rendered_rect.x + xpad,
       y_offset + rendered_rect.y + ypad,
       x, y, width, height, coords);
+
+  g_free (renderer_text);
   g_object_unref (layout);
+
   return;
 } 
 
@@ -599,6 +636,7 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   GtkWidget *widget;
   GdkRectangle rendered_rect;
   PangoLayout *layout;
+  gchar *renderer_text;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
  
@@ -609,7 +647,13 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   gtk_renderer = GTK_CELL_RENDERER_TEXT (gail_renderer->renderer);
   parent = atk_object_get_parent (ATK_OBJECT (text));
 
-  g_return_val_if_fail (gtk_renderer->text, -1);
+  g_object_get (gtk_renderer, "text", &renderer_text, NULL);
+  if (text == NULL)
+    {
+      g_free (renderer_text);
+      return -1;
+    }
+
   if (GAIL_IS_CONTAINER_CELL (parent))
     parent = atk_object_get_parent (parent);
 
@@ -632,13 +676,29 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   if (index == -1)
     {
       if (coords == ATK_XY_WINDOW || coords == ATK_XY_SCREEN)
-        return g_utf8_strlen (gtk_renderer->text, -1);
-    
+        {
+          glong length;
+
+          length = g_utf8_strlen (renderer_text, -1);
+          g_free (renderer_text);
+
+          return length;
+        }
+
+      g_free (renderer_text);
+
       return index;  
     }
   else
-    return g_utf8_pointer_to_offset (gtk_renderer->text,
-       gtk_renderer->text + index);  
+    {
+      glong offset;
+
+      offset = g_utf8_pointer_to_offset (renderer_text,
+                                         renderer_text + index);
+      g_free (renderer_text);
+
+      return offset;
+    }
 }
 
 static gunichar 

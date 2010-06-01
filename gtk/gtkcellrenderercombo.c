@@ -399,18 +399,21 @@ find_text (GtkTreeModel *model,
 {
   GtkCellRendererComboPriv *priv;
   SearchData *search_data = (SearchData *)data;
-  gchar *text;
+  gchar *text, *cell_text;
 
   priv = search_data->cell->priv;
   
   gtk_tree_model_get (model, iter, priv->text_column, &text, -1);
-  if (text && GTK_CELL_RENDERER_TEXT (search_data->cell)->text &&
-      strcmp (text, GTK_CELL_RENDERER_TEXT (search_data->cell)->text) == 0)
+  g_object_get (GTK_CELL_RENDERER_TEXT (search_data->cell),
+                "text", &cell_text,
+                NULL);
+  if (text && cell_text && g_strcmp0 (text, cell_text) == 0)
     {
       search_data->iter = *iter;
       search_data->found = TRUE;
     }
 
+  g_free (cell_text);
   g_free (text);
   
   return search_data->found;
@@ -430,9 +433,12 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
   GtkWidget *combo;
   SearchData search_data;
   GtkCellRendererComboPriv *priv;
+  gboolean editable;
+  gchar *text;
 
   cell_text = GTK_CELL_RENDERER_TEXT (cell);
-  if (cell_text->editable == FALSE)
+  g_object_get (cell_text, "editable", &editable, NULL);
+  if (editable == FALSE)
     return NULL;
 
   cell_combo = GTK_CELL_RENDERER_COMBO (cell);
@@ -450,9 +456,11 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
       gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo),
                                            priv->text_column);
 
-      if (cell_text->text)
+      g_object_get (cell_text, "text", &text, NULL);
+      if (text)
 	gtk_entry_set_text (GTK_ENTRY (GTK_BIN (combo)->child),
-			    cell_text->text);
+			    text);
+      g_free (text);
     }
   else
     {
