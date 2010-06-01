@@ -75,29 +75,33 @@ enum {
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
-#define GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_RENDERER_TOGGLE, GtkCellRendererTogglePrivate))
-
-typedef struct _GtkCellRendererTogglePrivate GtkCellRendererTogglePrivate;
-struct _GtkCellRendererTogglePrivate
+struct _GtkCellRendererTogglePriv
 {
   gint indicator_size;
 
+  guint active       : 1;
+  guint activatable  : 1;
   guint inconsistent : 1;
+  guint radio        : 1;
 };
 
 
 G_DEFINE_TYPE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER)
 
+
 static void
 gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
-  GtkCellRendererTogglePrivate *priv;
+  GtkCellRendererTogglePriv *priv;
 
-  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (celltoggle);
+  celltoggle->priv = G_TYPE_INSTANCE_GET_PRIVATE (celltoggle,
+                                                  GTK_TYPE_CELL_RENDERER_TOGGLE,
+                                                  GtkCellRendererTogglePriv);
+  priv = celltoggle->priv;
 
-  celltoggle->activatable = TRUE;
-  celltoggle->active = FALSE;
-  celltoggle->radio = FALSE;
+  priv->activatable = TRUE;
+  priv->active = FALSE;
+  priv->radio = FALSE;
 
   g_object_set (celltoggle, "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE, NULL);
   gtk_cell_renderer_set_padding (GTK_CELL_RENDERER (celltoggle), 2, 2);
@@ -180,7 +184,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
 
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererTogglePrivate));
+  g_type_class_add_private (object_class, sizeof (GtkCellRendererTogglePriv));
 }
 
 static void
@@ -190,23 +194,21 @@ gtk_cell_renderer_toggle_get_property (GObject     *object,
 				       GParamSpec  *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
-  GtkCellRendererTogglePrivate *priv;
+  GtkCellRendererTogglePriv *priv = celltoggle->priv;
 
-  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (object);
-  
   switch (param_id)
     {
     case PROP_ACTIVE:
-      g_value_set_boolean (value, celltoggle->active);
+      g_value_set_boolean (value, priv->active);
       break;
     case PROP_INCONSISTENT:
       g_value_set_boolean (value, priv->inconsistent);
       break;
     case PROP_ACTIVATABLE:
-      g_value_set_boolean (value, celltoggle->activatable);
+      g_value_set_boolean (value, priv->activatable);
       break;
     case PROP_RADIO:
-      g_value_set_boolean (value, celltoggle->radio);
+      g_value_set_boolean (value, priv->radio);
       break;
     case PROP_INDICATOR_SIZE:
       g_value_set_int (value, priv->indicator_size);
@@ -225,23 +227,21 @@ gtk_cell_renderer_toggle_set_property (GObject      *object,
 				       GParamSpec   *pspec)
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (object);
-  GtkCellRendererTogglePrivate *priv;
-
-  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (object);
+  GtkCellRendererTogglePriv *priv = celltoggle->priv;
 
   switch (param_id)
     {
     case PROP_ACTIVE:
-      celltoggle->active = g_value_get_boolean (value);
+      priv->active = g_value_get_boolean (value);
       break;
     case PROP_INCONSISTENT:
       priv->inconsistent = g_value_get_boolean (value);
       break;
     case PROP_ACTIVATABLE:
-      celltoggle->activatable = g_value_get_boolean (value);
+      priv->activatable = g_value_get_boolean (value);
       break;
     case PROP_RADIO:
-      celltoggle->radio = g_value_get_boolean (value);
+      priv->radio = g_value_get_boolean (value);
       break;
     case PROP_INDICATOR_SIZE:
       priv->indicator_size = g_value_get_int (value);
@@ -280,12 +280,12 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 				   gint            *width,
 				   gint            *height)
 {
+  GtkCellRendererTogglePriv *priv;
   gint calc_width;
   gint calc_height;
   gint xpad, ypad;
-  GtkCellRendererTogglePrivate *priv;
 
-  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
+  priv = GTK_CELL_RENDERER_TOGGLE (cell)->priv;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
   calc_width = xpad * 2 + priv->indicator_size;
@@ -331,15 +331,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
 				 GdkRectangle         *expose_area,
 				 GtkCellRendererState  flags)
 {
-  GtkCellRendererToggle *celltoggle = (GtkCellRendererToggle *) cell;
-  GtkCellRendererTogglePrivate *priv;
+  GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
+  GtkCellRendererTogglePriv *priv = celltoggle->priv;
   gint width, height;
   gint x_offset, y_offset;
   gint xpad, ypad;
   GtkShadowType shadow;
   GtkStateType state = 0;
-
-  priv = GTK_CELL_RENDERER_TOGGLE_GET_PRIVATE (cell);
 
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
@@ -354,7 +352,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (priv->inconsistent)
     shadow = GTK_SHADOW_ETCHED_IN;
   else
-    shadow = celltoggle->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    shadow = priv->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
   if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
       !gtk_cell_renderer_get_sensitive (cell))
@@ -370,13 +368,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
     }
   else
     {
-      if (celltoggle->activatable)
+      if (priv->activatable)
         state = GTK_STATE_NORMAL;
       else
         state = GTK_STATE_INSENSITIVE;
     }
 
-  if (celltoggle->radio)
+  if (priv->radio)
     {
       gtk_paint_option (widget->style,
                         window,
@@ -407,10 +405,13 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 				   GdkRectangle         *cell_area,
 				   GtkCellRendererState  flags)
 {
+  GtkCellRendererTogglePriv *priv;
   GtkCellRendererToggle *celltoggle;
-  
+
   celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
-  if (celltoggle->activatable)
+  priv = celltoggle->priv;
+
+  if (priv->activatable)
     {
       g_signal_emit (cell, toggle_cell_signals[TOGGLED], 0, path);
       return TRUE;
@@ -436,9 +437,13 @@ void
 gtk_cell_renderer_toggle_set_radio (GtkCellRendererToggle *toggle,
 				    gboolean               radio)
 {
+  GtkCellRendererTogglePriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
-  toggle->radio = radio;
+  priv = toggle->priv;
+
+  priv->radio = radio;
 }
 
 /**
@@ -454,7 +459,7 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
 
-  return toggle->radio;
+  return toggle->priv->radio;
 }
 
 /**
@@ -471,7 +476,7 @@ gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
 
-  return toggle->active;
+  return toggle->priv->active;
 }
 
 /**
@@ -506,7 +511,7 @@ gtk_cell_renderer_toggle_get_activatable (GtkCellRendererToggle *toggle)
 {
   g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
 
-  return toggle->activatable;
+  return toggle->priv->activatable;
 }
 
 /**
@@ -522,11 +527,15 @@ void
 gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
                                           gboolean               setting)
 {
+  GtkCellRendererTogglePriv *priv;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
 
-  if (toggle->activatable != setting)
+  priv = toggle->priv;
+
+  if (priv->activatable != setting)
     {
-      toggle->activatable = setting ? TRUE : FALSE;
+      priv->activatable = setting ? TRUE : FALSE;
       g_object_notify (G_OBJECT (toggle), "activatable");
     }
 }
