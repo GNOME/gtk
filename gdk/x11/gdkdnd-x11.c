@@ -3879,6 +3879,9 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   g_return_if_fail (window != NULL);
 
+  if (gdk_window_get_window_type (window) == GDK_WINDOW_OFFSCREEN)
+    return;
+
   base_precache_atoms (display);
 
   if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
