@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #define GTK_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_TEXT, GtkCellRendererTextClass))
 
 typedef struct _GtkCellRendererText      GtkCellRendererText;
+typedef struct _GtkCellRendererTextPriv  GtkCellRendererTextPriv;
 typedef struct _GtkCellRendererTextClass GtkCellRendererTextClass;
 
 struct _GtkCellRendererText
@@ -46,36 +47,7 @@ struct _GtkCellRendererText
   GtkCellRenderer parent;
 
   /*< private >*/
-  gchar *GSEAL (text);
-  PangoFontDescription *GSEAL (font);
-  gdouble GSEAL (font_scale);
-  PangoColor GSEAL (foreground);
-  PangoColor GSEAL (background);
-
-  PangoAttrList *GSEAL (extra_attrs);
-
-  PangoUnderline GSEAL (underline_style);
-
-  gint GSEAL (rise);
-  gint GSEAL (fixed_height_rows);
-
-  guint GSEAL (strikethrough) : 1;
-
-  guint GSEAL (editable)  : 1;
-
-  guint GSEAL (scale_set) : 1;
-
-  guint GSEAL (foreground_set) : 1;
-  guint GSEAL (background_set) : 1;
-
-  guint GSEAL (underline_set) : 1;
-
-  guint GSEAL (rise_set) : 1;
-
-  guint GSEAL (strikethrough_set) : 1;
-
-  guint GSEAL (editable_set) : 1;
-  guint GSEAL (calc_fixed_height) : 1;
+  GtkCellRendererTextPriv *priv;
 };
 
 struct _GtkCellRendererTextClass
