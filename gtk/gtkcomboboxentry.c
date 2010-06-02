@@ -29,7 +29,6 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 
-#define GTK_COMBO_BOX_ENTRY_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COMBO_BOX_ENTRY, GtkComboBoxEntryPrivate))
 
 struct _GtkComboBoxEntryPrivate
 {
@@ -118,7 +117,10 @@ gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
 {
   GtkWidget *entry;
 
-  entry_box->priv = GTK_COMBO_BOX_ENTRY_GET_PRIVATE (entry_box);
+  entry_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry_box,
+                                                 GTK_TYPE_COMBO_BOX_ENTRY,
+                                                 GtkComboBoxEntryPrivate);
+
   entry_box->priv->text_column = -1;
 
   entry = gtk_entry_new ();
