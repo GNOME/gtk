@@ -2683,3 +2683,16 @@ gtk_container_propagate_expose (GtkContainer   *container,
       gdk_event_free (child_event);
     }
 }
+
+gboolean
+_gtk_container_get_need_resize (GtkContainer *container)
+{
+  return container->priv->need_resize;
+}
+
+void
+_gtk_container_set_need_resize (GtkContainer *container,
+                                gboolean      need_resize)
+{
+  container->priv->need_resize = need_resize;
+}

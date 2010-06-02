@@ -208,7 +208,9 @@ GList *_gtk_container_focus_sort             (GtkContainer     *container,
 					      GList            *children,
 					      GtkDirectionType  direction,
 					      GtkWidget        *old_focus);
-
+gboolean _gtk_container_get_need_resize      (GtkContainer     *container);
+void     _gtk_container_set_need_resize      (GtkContainer     *container,
+                                              gboolean          need_resize);
 
 G_END_DECLS
 

@@ -184,8 +184,8 @@ gtk_offscreen_window_show (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
   container = GTK_CONTAINER (widget);
-  need_resize = container->need_resize || !gtk_widget_get_realized (widget);
-  container->need_resize = FALSE;
+  need_resize = _gtk_container_get_need_resize (container) || !gtk_widget_get_realized (widget);
+  _gtk_container_set_need_resize (container, FALSE);
 
   if (need_resize)
     gtk_offscreen_window_resize (widget);
