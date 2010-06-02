@@ -57,7 +57,8 @@ G_BEGIN_DECLS
  * used to handle buttons sensitivity and visibility.
  *
  * Note that an assistant needs to end its page flow with a page of type
- * %GTK_ASSISTANT_PAGE_CONFIRM or %GTK_ASSISTANT_PAGE_SUMMARY to be correct.
+ * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
+ * %GTK_ASSISTANT_PAGE_PROGRESS to be correct.
  */
 typedef enum
 {
@@ -168,6 +169,7 @@ void                  gtk_assistant_remove_action_widget  (GtkAssistant         
 							   GtkWidget            *child);
 
 void                  gtk_assistant_update_buttons_state  (GtkAssistant *assistant);
+void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
 G_END_DECLS
 

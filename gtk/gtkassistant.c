@@ -103,6 +103,8 @@ struct _GtkAssistantPrivate
   GtkAssistantPageFunc forward_function;
   gpointer forward_function_data;
   GDestroyNotify forward_data_destroy;
+
+  guint committed : 1;
 };
 
 static void     gtk_assistant_class_init         (GtkAssistantClass *class);
@@ -267,7 +269,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    *
    * A handler for the ::apply signal should carry out the actions for which
    * the wizard has collected data. If the action takes a long time to complete,
-   * you might consider to put a page of type %GTK_ASSISTANT_PAGE_PROGRESS
+   * you might consider putting a page of type %GTK_ASSISTANT_PAGE_PROGRESS
    * after the confirmation page and handle this operation within the
    * #GtkAssistant::prepare signal of the progress page.
    *
@@ -473,6 +475,23 @@ compute_last_button_state (GtkAssistant *assistant)
 }
 
 static void
+compute_progress_state (GtkAssistant *assistant)
+{
+  GtkAssistantPrivate *priv = assistant->priv;
+  gint page_num, n_pages;
+
+  n_pages = gtk_assistant_get_n_pages (assistant);
+  page_num = gtk_assistant_get_current_page (assistant);
+
+  page_num = (priv->forward_function) (page_num, priv->forward_function_data);
+
+  if (page_num >= 0 && page_num < n_pages)
+    gtk_widget_show (assistant->forward);
+  else
+    gtk_widget_hide (assistant->forward);
+}
+
+static void
 set_assistant_header_image (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv = assistant->priv;
@@ -509,7 +528,6 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->cancel, TRUE);
       gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
       gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->cancel);
       gtk_widget_show (assistant->forward);
       gtk_widget_hide (assistant->back);
       gtk_widget_hide (assistant->apply);
@@ -521,7 +539,6 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->back, TRUE);
       gtk_widget_set_sensitive (assistant->apply, priv->current_page->complete);
       gtk_widget_grab_default (assistant->apply);
-      gtk_widget_show (assistant->cancel);
       gtk_widget_show (assistant->back);
       gtk_widget_show (assistant->apply);
       gtk_widget_hide (assistant->forward);
@@ -533,7 +550,6 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->back, TRUE);
       gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
       gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->cancel);
       gtk_widget_show (assistant->back);
       gtk_widget_show (assistant->forward);
       gtk_widget_hide (assistant->apply);
@@ -544,7 +560,6 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->close, priv->current_page->complete);
       gtk_widget_grab_default (assistant->close);
       gtk_widget_show (assistant->close);
-      gtk_widget_hide (assistant->cancel);
       gtk_widget_hide (assistant->back);
       gtk_widget_hide (assistant->forward);
       gtk_widget_hide (assistant->apply);
@@ -555,16 +570,22 @@ set_assistant_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (assistant->back, priv->current_page->complete);
       gtk_widget_set_sensitive (assistant->forward, priv->current_page->complete);
       gtk_widget_grab_default (assistant->forward);
-      gtk_widget_show (assistant->cancel);
       gtk_widget_show (assistant->back);
-      gtk_widget_show (assistant->forward);
       gtk_widget_hide (assistant->apply);
       gtk_widget_hide (assistant->close);
       gtk_widget_hide (assistant->last);
+      compute_progress_state (assistant);
       break;
     default:
       g_assert_not_reached ();
     }
+
+  if (priv->committed)
+    gtk_widget_hide (assistant->cancel);
+  else if (priv->current_page->type == GTK_ASSISTANT_PAGE_SUMMARY)
+    gtk_widget_hide (assistant->cancel);
+  else
+    gtk_widget_show (assistant->cancel);
 
   /* this is quite general, we don't want to
    * go back if it's the first page */
@@ -2255,6 +2276,35 @@ void
 gtk_assistant_update_buttons_state (GtkAssistant *assistant)
 {
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
+
+  set_assistant_buttons_state (assistant);
+}
+
+/**
+ * gtk_assistant_commit:
+ * @assistant: a #GtkAssistant
+ *
+ * Erases the visited page history so the back button is not
+ * shown on the current page, and removes the cancel button
+ * from subsequent pages.
+ *
+ * Use this when the information provided up to the current
+ * page is hereafter deemed permanent and cannot be modified
+ * or undone.  For example, showing a progress page to track
+ * a long-running, unreversible operation after the user has
+ * clicked apply on a confirmation page.
+ *
+ * Since: 2.22
+ **/
+void
+gtk_assistant_commit (GtkAssistant *assistant)
+{
+  g_return_if_fail (GTK_IS_ASSISTANT (assistant));
+
+  g_slist_free (assistant->priv->visited_pages);
+  assistant->priv->visited_pages = NULL;
+
+  assistant->priv->committed = TRUE;
 
   set_assistant_buttons_state (assistant);
 }
