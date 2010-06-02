@@ -133,7 +133,7 @@ gdk_drag_context_get_suggested_action (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_get_action:
+ * gdk_drag_context_selected_get_action:
  * @context: a #GdkDragContext
  *
  * Determines the action chosen by the drag destination.
