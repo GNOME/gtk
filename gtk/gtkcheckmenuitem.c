@@ -34,6 +34,15 @@
 #include "gtkintl.h"
 
 
+
+struct _GtkCheckMenuItemPriv
+{
+  guint active             : 1;
+  guint always_show_toggle : 1;
+  guint draw_as_radio      : 1;
+  guint inconsistent       : 1;
+};
+
 enum {
   TOGGLED,
   LAST_SIGNAL
@@ -142,6 +151,8 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  g_type_class_add_private (klass, sizeof (GtkCheckMenuItemPriv));
 }
 
 static void 
@@ -240,11 +251,15 @@ void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 				gboolean          is_active)
 {
+  GtkCheckMenuItemPriv *priv;
+
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+
+  priv = check_menu_item->priv;
 
   is_active = is_active != 0;
 
-  if (check_menu_item->active != is_active)
+  if (priv->active != is_active)
     gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
 }
 
@@ -262,7 +277,7 @@ gtk_check_menu_item_get_active (GtkCheckMenuItem *check_menu_item)
 {
   g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
 
-  return check_menu_item->active;
+  return check_menu_item->priv->active;
 }
 
 static void
@@ -307,13 +322,17 @@ void
 gtk_check_menu_item_set_inconsistent (GtkCheckMenuItem *check_menu_item,
                                       gboolean          setting)
 {
+  GtkCheckMenuItemPriv *priv;
+
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
+
+  priv = check_menu_item->priv;
   
   setting = setting != FALSE;
 
-  if (setting != check_menu_item->inconsistent)
+  if (setting != priv->inconsistent)
     {
-      check_menu_item->inconsistent = setting;
+      priv->inconsistent = setting;
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
       g_object_notify (G_OBJECT (check_menu_item), "inconsistent");
     }
@@ -332,7 +351,7 @@ gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
 {
   g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
 
-  return check_menu_item->inconsistent;
+  return check_menu_item->priv->inconsistent;
 }
 
 /**
@@ -348,13 +367,17 @@ void
 gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 				       gboolean          draw_as_radio)
 {
+  GtkCheckMenuItemPriv *priv;
+
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
-  
+
+  priv = check_menu_item->priv;
+
   draw_as_radio = draw_as_radio != FALSE;
 
-  if (draw_as_radio != check_menu_item->draw_as_radio)
+  if (draw_as_radio != priv->draw_as_radio)
     {
-      check_menu_item->draw_as_radio = draw_as_radio;
+      priv->draw_as_radio = draw_as_radio;
 
       gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
 
@@ -377,14 +400,21 @@ gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
 {
   g_return_val_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item), FALSE);
   
-  return check_menu_item->draw_as_radio;
+  return check_menu_item->priv->draw_as_radio;
 }
 
 static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
-  check_menu_item->active = FALSE;
-  check_menu_item->always_show_toggle = TRUE;
+  GtkCheckMenuItemPriv *priv;
+
+  check_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (check_menu_item,
+                                                       GTK_TYPE_CHECK_MENU_ITEM,
+                                                       GtkCheckMenuItemPriv);
+  priv = check_menu_item->priv; 
+
+  priv->active = FALSE;
+  priv->always_show_toggle = TRUE;
 }
 
 static gint
@@ -402,8 +432,12 @@ gtk_check_menu_item_expose (GtkWidget      *widget,
 static void
 gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 {
+  GtkCheckMenuItemPriv *priv;
+
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
-  check_menu_item->active = !check_menu_item->active;
+  priv = check_menu_item->priv;
+
+  priv->active = !priv->active;
 
   gtk_check_menu_item_toggled (check_menu_item);
   gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
@@ -425,6 +459,7 @@ static void
 gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 					 GdkRectangle     *area)
 {
+  GtkCheckMenuItemPriv *priv = check_menu_item->priv;
   GtkWidget *widget;
   GtkStateType state_type;
   GtkShadowType shadow_type;
@@ -464,15 +499,15 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
 
-      if (check_menu_item->active ||
-	  check_menu_item->always_show_toggle ||
+      if (priv->active ||
+	  priv->always_show_toggle ||
 	  (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT))
 	{
 	  state_type = gtk_widget_get_state (widget);
 	  
-	  if (check_menu_item->inconsistent)
+	  if (priv->inconsistent)
 	    shadow_type = GTK_SHADOW_ETCHED_IN;
-	  else if (check_menu_item->active)
+	  else if (priv->active)
 	    shadow_type = GTK_SHADOW_IN;
 	  else 
 	    shadow_type = GTK_SHADOW_OUT;
@@ -480,7 +515,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 	  if (!gtk_widget_is_sensitive (widget))
 	    state_type = GTK_STATE_INSENSITIVE;
 
-	  if (check_menu_item->draw_as_radio)
+	  if (priv->draw_as_radio)
 	    {
 	      gtk_paint_option (widget->style, widget->window,
 				state_type, shadow_type,
@@ -506,17 +541,18 @@ gtk_check_menu_item_get_property (GObject     *object,
 				  GParamSpec  *pspec)
 {
   GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
+  GtkCheckMenuItemPriv *priv = checkitem->priv;
   
   switch (prop_id)
     {
     case PROP_ACTIVE:
-      g_value_set_boolean (value, checkitem->active);
+      g_value_set_boolean (value, priv->active);
       break;
     case PROP_INCONSISTENT:
-      g_value_set_boolean (value, checkitem->inconsistent);
+      g_value_set_boolean (value, priv->inconsistent);
       break;
     case PROP_DRAW_AS_RADIO:
-      g_value_set_boolean (value, checkitem->draw_as_radio);
+      g_value_set_boolean (value, priv->draw_as_radio);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
