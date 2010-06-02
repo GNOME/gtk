@@ -211,6 +211,7 @@ GList *_gtk_container_focus_sort             (GtkContainer     *container,
 gboolean _gtk_container_get_need_resize      (GtkContainer     *container);
 void     _gtk_container_set_need_resize      (GtkContainer     *container,
                                               gboolean          need_resize);
+gboolean _gtk_container_get_reallocate_redraws (GtkContainer   *container);
 
 G_END_DECLS
 

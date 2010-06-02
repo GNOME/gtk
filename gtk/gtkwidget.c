@@ -4065,7 +4065,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 
   if ((size_changed || position_changed) && widget->parent &&
-      gtk_widget_get_realized (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+      gtk_widget_get_realized (widget->parent) && _gtk_container_get_reallocate_redraws (GTK_CONTAINER (widget->parent)))
     {
       cairo_region_t *invalidate = cairo_region_create_rectangle (&widget->parent->allocation);
       gtk_widget_invalidate_widget_windows (widget->parent, invalidate);

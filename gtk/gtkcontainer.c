@@ -2696,3 +2696,9 @@ _gtk_container_set_need_resize (GtkContainer *container,
 {
   container->priv->need_resize = need_resize;
 }
+
+gboolean
+_gtk_container_get_reallocate_redraws (GtkContainer *container)
+{
+  return container->priv->reallocate_redraws;
+}
