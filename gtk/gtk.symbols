@@ -283,6 +283,7 @@ gtk_assistant_get_page_complete
 gtk_assistant_add_action_widget
 gtk_assistant_remove_action_widget
 gtk_assistant_update_buttons_state
+gtk_assistant_commit
 #endif
 #endif
 
