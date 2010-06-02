@@ -68,7 +68,6 @@ struct _ComboCellInfo
   guint pack : 1;
 };
 
-#define GTK_COMBO_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COMBO_BOX, GtkComboBoxPrivate))
 
 struct _GtkComboBoxPrivate
 {
@@ -927,7 +926,12 @@ gtk_combo_box_cell_editable_init (GtkCellEditableIface *iface)
 static void
 gtk_combo_box_init (GtkComboBox *combo_box)
 {
-  GtkComboBoxPrivate *priv = GTK_COMBO_BOX_GET_PRIVATE (combo_box);
+  GtkComboBoxPrivate *priv;
+
+  combo_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (combo_box,
+                                                 GTK_TYPE_COMBO_BOX,
+                                                 GtkComboBoxPrivate);
+  priv = combo_box->priv;
 
   priv->cell_view = gtk_cell_view_new ();
   gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (combo_box));
@@ -951,8 +955,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->auto_scroll = FALSE;
   priv->focus_on_click = TRUE;
   priv->button_sensitivity = GTK_SENSITIVITY_AUTO;
-
-  combo_box->priv = priv;
 
   gtk_combo_box_check_appearance (combo_box);
 }
@@ -1033,7 +1035,7 @@ gtk_combo_box_get_property (GObject    *object,
                             GParamSpec *pspec)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
-  GtkComboBoxPrivate *priv = GTK_COMBO_BOX_GET_PRIVATE (combo_box);
+  GtkComboBoxPrivate *priv = combo_box->priv;
 
   switch (prop_id)
     {
