@@ -50,7 +50,6 @@
 #define CHECK_DARK  21845  /* 65535 / 3     */
 #define CHECK_LIGHT 43690 
 
-#define GTK_COLOR_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_COLOR_BUTTON, GtkColorButtonPrivate))
 
 struct _GtkColorButtonPrivate 
 {
@@ -528,7 +527,9 @@ gtk_color_button_init (GtkColorButton *color_button)
   PangoRectangle rect;
 
   /* Create the widgets */
-  color_button->priv = GTK_COLOR_BUTTON_GET_PRIVATE (color_button);
+  color_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (color_button,
+                                                    GTK_TYPE_COLOR_BUTTON,
+                                                    GtkColorButtonPrivate);
 
   gtk_widget_push_composite_child ();
 
