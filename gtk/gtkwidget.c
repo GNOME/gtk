@@ -7679,13 +7679,7 @@ gtk_widget_get_root_window (GtkWidget *widget)
  * outside the widget. If returning %TRUE, widgets normally
  * call gtk_widget_grab_focus() to place the focus accordingly;
  * if returning %FALSE, they don't modify the current focus location.
- * 
- * This function replaces gtk_container_focus() from GTK+ 1.2.  
- * It was necessary to check that the child was visible, sensitive, 
- * and focusable before calling gtk_container_focus(). 
- * gtk_widget_child_focus() returns %FALSE if the widget is not 
- * currently in a focusable state, so there's no need for those checks.
- * 
+ *
  * Return value: %TRUE if focus ended up inside @widget
  **/
 gboolean
