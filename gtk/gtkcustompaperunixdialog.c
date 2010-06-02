@@ -49,7 +49,7 @@ typedef struct
   GtkWidget *spin_button;
 } UnitWidget;
 
-struct GtkCustomPaperUnixDialogPrivate
+struct _GtkCustomPaperUnixDialogPrivate
 {
 
   GtkWidget *treeview;
@@ -86,10 +86,9 @@ enum {
   PRINTER_LIST_N_COLS
 };
 
+
 G_DEFINE_TYPE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
 
-#define GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG, GtkCustomPaperUnixDialogPrivate))
 
 static void gtk_custom_paper_unix_dialog_finalize  (GObject                *object);
 static void populate_dialog                        (GtkCustomPaperUnixDialog *dialog);
@@ -272,7 +271,10 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv;
   GtkTreeIter iter;
 
-  priv = dialog->priv = GTK_CUSTOM_PAPER_UNIX_DIALOG_GET_PRIVATE (dialog);
+  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
+                                              GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG,
+                                              GtkCustomPaperUnixDialogPrivate);
+  priv = dialog->priv;
 
   priv->print_backends = NULL;
 

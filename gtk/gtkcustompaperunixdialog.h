@@ -34,13 +34,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCustomPaperUnixDialog         GtkCustomPaperUnixDialog;
 typedef struct _GtkCustomPaperUnixDialogClass    GtkCustomPaperUnixDialogClass;
-typedef struct GtkCustomPaperUnixDialogPrivate   GtkCustomPaperUnixDialogPrivate;
+typedef struct _GtkCustomPaperUnixDialogPrivate  GtkCustomPaperUnixDialogPrivate;
 
 struct _GtkCustomPaperUnixDialog
 {
   GtkDialog parent_instance;
 
-  GtkCustomPaperUnixDialogPrivate *GSEAL (priv);
+  GtkCustomPaperUnixDialogPrivate *priv;
 };
 
 struct _GtkCustomPaperUnixDialogClass
