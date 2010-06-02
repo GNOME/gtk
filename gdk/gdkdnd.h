@@ -114,7 +114,7 @@ GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context)
 GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
 GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
-GdkDragAction    gdk_drag_context_get_action           (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 /* Destination side */
 
