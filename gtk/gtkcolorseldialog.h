@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkColorSelectionDialog       GtkColorSelectionDialog;
+typedef struct _GtkColorSelectionDialogPriv   GtkColorSelectionDialogPriv;
 typedef struct _GtkColorSelectionDialogClass  GtkColorSelectionDialogClass;
 
 
@@ -53,10 +54,8 @@ struct _GtkColorSelectionDialog
 {
   GtkDialog parent_instance;
 
-  GtkWidget *GSEAL (colorsel);
-  GtkWidget *GSEAL (ok_button);
-  GtkWidget *GSEAL (cancel_button);
-  GtkWidget *GSEAL (help_button);
+  /* <private> */
+  GtkColorSelectionDialogPriv *priv;
 };
 
 struct _GtkColorSelectionDialogClass
