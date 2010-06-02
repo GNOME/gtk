@@ -936,6 +936,7 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   GtkBin *bin;
   guint accel_width;
   guint horizontal_padding;
+  guint border_width;
   GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
 
@@ -960,10 +961,9 @@ gtk_menu_item_size_request (GtkWidget      *widget,
       child_pack_dir = GTK_PACK_DIRECTION_LTR;
     }
 
-  requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness) * 2;
-  requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->ythickness) * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = (border_width + widget->style->xthickness) * 2;
+  requisition->height = (border_width + widget->style->ythickness) * 2;
 
   if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
       (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
@@ -1054,13 +1054,15 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
     {
       GtkRequisition child_requisition;
       guint horizontal_padding;
+      guint border_width;
 
       gtk_widget_style_get (widget,
 			    "horizontal-padding", &horizontal_padding,
 			    NULL);
 
-      child_allocation.x = GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
-      child_allocation.y = GTK_CONTAINER (widget)->border_width + widget->style->ythickness;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      child_allocation.x = border_width + widget->style->xthickness;
+      child_allocation.y = border_width + widget->style->ythickness;
 
       if ((pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL) &&
 	  (child_pack_dir == GTK_PACK_DIRECTION_LTR || child_pack_dir == GTK_PACK_DIRECTION_RTL))
@@ -1185,7 +1187,7 @@ gtk_menu_item_paint (GtkWidget    *widget,
   GtkShadowType shadow_type, selected_shadow_type;
   gint width, height;
   gint x, y;
-  gint border_width = GTK_CONTAINER (widget)->border_width;
+  guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (gtk_widget_is_drawable (widget))
     {

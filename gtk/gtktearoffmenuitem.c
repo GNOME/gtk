@@ -76,11 +76,11 @@ static void
 gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
 				    GtkRequisition *requisition)
 {
-  requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness +
-			BORDER_SPACING) * 2;
-  requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->ythickness) * 2;
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = (border_width + widget->style->xthickness + BORDER_SPACING) * 2;
+  requisition->height = (border_width + widget->style->ythickness) * 2;
 
   if (GTK_IS_MENU (widget->parent) && GTK_MENU (widget->parent)->torn_off)
     {
@@ -101,6 +101,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
   gint width, height;
   gint x, y;
   gint right_max;
+  guint border_width;
   GtkArrowType arrow_type;
   GtkTextDirection direction;
   
@@ -110,10 +111,11 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 
       direction = gtk_widget_get_direction (widget);
 
-      x = widget->allocation.x + GTK_CONTAINER (menu_item)->border_width;
-      y = widget->allocation.y + GTK_CONTAINER (menu_item)->border_width;
-      width = widget->allocation.width - GTK_CONTAINER (menu_item)->border_width * 2;
-      height = widget->allocation.height - GTK_CONTAINER (menu_item)->border_width * 2;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_item));
+      x = widget->allocation.x + border_width;
+      y = widget->allocation.y + border_width;
+      width = widget->allocation.width - border_width * 2;
+      height = widget->allocation.height - border_width * 2;
       right_max = x + width;
 
       if (widget->state == GTK_STATE_PRELIGHT)

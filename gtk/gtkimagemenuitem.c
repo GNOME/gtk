@@ -486,7 +486,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       if (pack_dir == GTK_PACK_DIRECTION_LTR ||
 	  pack_dir == GTK_PACK_DIRECTION_RTL)
 	{
-	  offset = GTK_CONTAINER (image_menu_item)->border_width +
+	  offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
 	    widget->style->xthickness;
 	  
 	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
@@ -504,7 +504,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 	}
       else
 	{
-	  offset = GTK_CONTAINER (image_menu_item)->border_width +
+	  offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
 	    widget->style->ythickness;
 	  
 	  if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==

@@ -320,6 +320,7 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   GtkPathBar *path_bar;
   GtkRequisition child_requisition;
   GList *list;
+  guint border_width;
 
   path_bar = GTK_PATH_BAR (widget);
 
@@ -351,8 +352,9 @@ gtk_path_bar_size_request (GtkWidget      *widget,
   gtk_widget_size_request (path_bar->up_slider_button, &child_requisition);
   gtk_widget_size_request (path_bar->down_slider_button, &child_requisition);
 
-  requisition->width += GTK_CONTAINER (widget)->border_width * 2;
-  requisition->height += GTK_CONTAINER (widget)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width += border_width * 2;
+  requisition->height += border_width * 2;
 
   widget->requisition = *requisition;
 }
@@ -458,7 +460,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   GList *list, *first_button;
   gint width;
   gint allocation_width;
-  gint border_width;
+  guint border_width;
   gboolean need_sliders = FALSE;
   gint up_slider_offset = 0;
   GtkRequisition child_requisition;
@@ -475,7 +477,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
     return;
 
   direction = gtk_widget_get_direction (widget);
-  border_width = (gint) GTK_CONTAINER (path_bar)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (path_bar));
   allocation_width = allocation->width - 2 * border_width;
 
   /* First, we check to see if we need the scrollbars. */
@@ -831,7 +833,7 @@ gtk_path_bar_scroll_down (GtkPathBar *path_bar)
     }
 
   space_available = (GTK_WIDGET (path_bar)->allocation.width
-		     - 2 * GTK_CONTAINER (path_bar)->border_width
+		     - 2 * gtk_container_get_border_width (GTK_CONTAINER (path_bar))
 		     - 2 * path_bar->spacing - 2 * path_bar->slider_width
 		     - BUTTON_DATA (down_button->data)->button->allocation.width);
   path_bar->first_scrolled_button = down_button;

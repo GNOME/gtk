@@ -573,8 +573,11 @@ gtk_handle_box_size_request (GtkWidget      *widget,
     }
   else
     {
-      requisition->width += GTK_CONTAINER (widget)->border_width * 2;
-      requisition->height += GTK_CONTAINER (widget)->border_width * 2;
+      guint border_width;
+
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      requisition->width += border_width * 2;
+      requisition->height += border_width * 2;
       
       if (bin->child)
 	{
@@ -626,7 +629,7 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
       GtkAllocation child_allocation;
       guint border_width;
 
-      border_width = GTK_CONTAINER (widget)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       child_allocation.x = border_width;
       child_allocation.y = border_width;
@@ -1045,6 +1048,10 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 
       if (child)
 	{
+          guint border_width;
+
+          border_width = gtk_container_get_border_width (GTK_CONTAINER (hb));
+
 	  switch (handle_position)
 	    {
 	    case GTK_POS_LEFT:
@@ -1054,10 +1061,10 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	      in_handle = event->y < DRAG_HANDLE_SIZE;
 	      break;
 	    case GTK_POS_RIGHT:
-	      in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
+	      in_handle = event->x > 2 * border_width + child->allocation.width;
 	      break;
 	    case GTK_POS_BOTTOM:
-	      in_handle = event->y > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.height;
+	      in_handle = event->y > 2 * border_width + child->allocation.height;
 	      break;
 	    default:
 	      in_handle = FALSE;
@@ -1312,6 +1319,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	{
 	  gint width;
 	  gint height;
+          guint border_width;
 	  GtkRequisition child_requisition;
 
 	  hb->child_detached = TRUE;
@@ -1324,8 +1332,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
 	      child_requisition.height = 0;
 	    }      
 
-	  width = child_requisition.width + 2 * GTK_CONTAINER (hb)->border_width;
-	  height = child_requisition.height + 2 * GTK_CONTAINER (hb)->border_width;
+          border_width = gtk_container_get_border_width (GTK_CONTAINER (hb));
+	  width = child_requisition.width + 2 * border_width;
+	  height = child_requisition.height + 2 * border_width;
 
 	  if (handle_position == GTK_POS_LEFT || handle_position == GTK_POS_RIGHT)
 	    width += DRAG_HANDLE_SIZE;

@@ -807,6 +807,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gint indicator_size, indicator_spacing;
   gint focus_width;
   gint focus_pad;
+  guint border_width;
   gboolean interior_focus;
 
   widget = GTK_WIDGET (check_button);
@@ -816,6 +817,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       button = GTK_BUTTON (check_button);
       toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
       gtk_widget_style_get (widget,
 			    "interior-focus", &interior_focus,
 			    "focus-line-width", &focus_width,
@@ -824,7 +827,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
       _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 
-      x = widget->allocation.x + indicator_spacing + GTK_CONTAINER (widget)->border_width;
+      x = widget->allocation.x + indicator_spacing + border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
 
       child = GTK_BIN (check_button)->child;
@@ -855,10 +858,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 	  GdkRectangle restrict_area;
 	  GdkRectangle new_area;
 	      
-	  restrict_area.x = widget->allocation.x + GTK_CONTAINER (widget)->border_width;
-	  restrict_area.y = widget->allocation.y + GTK_CONTAINER (widget)->border_width;
-	  restrict_area.width = widget->allocation.width - (2 * GTK_CONTAINER (widget)->border_width);
-	  restrict_area.height = widget->allocation.height - (2 * GTK_CONTAINER (widget)->border_width);
+	  restrict_area.x = widget->allocation.x + border_width;
+	  restrict_area.y = widget->allocation.y + border_width;
+	  restrict_area.width = widget->allocation.width - (2 * border_width);
+	  restrict_area.height = widget->allocation.height - (2 * border_width);
 	  
 	  if (gdk_rectangle_intersect (area, &restrict_area, &new_area))
 	    {

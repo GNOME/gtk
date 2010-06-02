@@ -743,15 +743,15 @@ gtk_toolbar_realize (GtkWidget *widget)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  
+
   GdkWindowAttr attributes;
   gint attributes_mask;
-  gint border_width;
-  
+  guint border_width;
+
   gtk_widget_set_realized (widget, TRUE);
-  
-  border_width = GTK_CONTAINER (widget)->border_width;
-  
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
@@ -798,10 +798,10 @@ gtk_toolbar_expose (GtkWidget      *widget,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
   GList *list;
-  gint border_width;
-  
-  border_width = GTK_CONTAINER (widget)->border_width;
-  
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
   if (gtk_widget_is_drawable (widget))
     {
       gtk_paint_box (widget->style,
@@ -844,6 +844,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   gint long_req;
   gint pack_front_size;
   gint ipadding;
+  guint border_width;
   GtkRequisition arrow_requisition;
   
   max_homogeneous_child_width = 0;
@@ -938,9 +939,10 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   
   /* Extra spacing */
   ipadding = get_internal_padding (toolbar);
-  
-  requisition->width += 2 * (ipadding + GTK_CONTAINER (toolbar)->border_width);
-  requisition->height += 2 * (ipadding + GTK_CONTAINER (toolbar)->border_width);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (toolbar));
+  requisition->width += 2 * (ipadding + border_width);
+  requisition->height += 2 * (ipadding + border_width);
   
   if (get_shadow_type (toolbar) != GTK_SHADOW_NONE)
     {
@@ -1171,7 +1173,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
   
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   vertical = (toolbar->orientation == GTK_ORIENTATION_VERTICAL);
-  border_width = get_internal_padding (toolbar) + GTK_CONTAINER (toolbar)->border_width;
+  border_width = get_internal_padding (toolbar) + gtk_container_get_border_width (GTK_CONTAINER (toolbar));
   
   if (rtl)
     {
@@ -1402,9 +1404,9 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     gtk_toolbar_stop_sliding (toolbar);
   
   widget->allocation = *allocation;
-  
-  border_width = GTK_CONTAINER (toolbar)->border_width;
-  
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (toolbar));
+
   if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (priv->event_window,
@@ -1838,8 +1840,8 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
   for (list = children; list != NULL; list = list->next)
     {
       GtkWidget *child = list->data;
-      
-      if (GTK_CONTAINER (toolbar)->focus_child == child)
+
+      if (gtk_container_get_focus_child (GTK_CONTAINER (toolbar)) == child)
 	break;
       
       if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
@@ -1860,15 +1862,15 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkContainer *container = GTK_CONTAINER (toolbar);
+  GtkWidget *focus_child;
   GList *list;
   gboolean try_focus = FALSE;
   GList *children;
 
-  if (container->focus_child &&
-      gtk_widget_child_focus (container->focus_child, dir))
-    {
-      return;
-    }
+  focus_child = gtk_container_get_focus_child (container);
+
+  if (focus_child && gtk_widget_child_focus (focus_child, dir))
+    return;
   
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
   
@@ -1879,7 +1881,7 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
       if (try_focus && gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	break;
       
-      if (child == GTK_CONTAINER (toolbar)->focus_child)
+      if (child == focus_child)
 	try_focus = TRUE;
     }
   
@@ -1902,7 +1904,7 @@ gtk_toolbar_focus (GtkWidget        *widget,
    * arrow keys or Ctrl TAB (both of which are handled by the
    * gtk_toolbar_move_focus() keybinding function.
    */
-  if (GTK_CONTAINER (widget)->focus_child)
+  if (gtk_container_get_focus_child (GTK_CONTAINER (widget)))
     return FALSE;
 
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);

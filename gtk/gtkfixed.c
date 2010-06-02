@@ -310,6 +310,7 @@ gtk_fixed_size_request (GtkWidget      *widget,
   GtkFixedChild *child;
   GList *children;
   GtkRequisition child_requisition;
+  guint border_width;
 
   fixed = GTK_FIXED (widget);
   requisition->width = 0;
@@ -334,8 +335,9 @@ gtk_fixed_size_request (GtkWidget      *widget,
 	}
     }
 
-  requisition->height += GTK_CONTAINER (fixed)->border_width * 2;
-  requisition->width += GTK_CONTAINER (fixed)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (fixed));
+  requisition->height += border_width * 2;
+  requisition->width += border_width * 2;
 }
 
 static void
@@ -347,7 +349,7 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
   GList *children;
-  guint16 border_width;
+  guint border_width;
 
   fixed = GTK_FIXED (widget);
 
@@ -362,9 +364,9 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 				allocation->width, 
 				allocation->height);
     }
-      
-  border_width = GTK_CONTAINER (fixed)->border_width;
-  
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (fixed));
+
   children = fixed->children;
   while (children)
     {

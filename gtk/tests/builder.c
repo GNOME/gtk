@@ -1026,14 +1026,14 @@ test_children (void)
   g_assert (vbox != NULL);
   g_assert (GTK_IS_VBOX (vbox));
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_WIDGET (vbox)->parent)), "dialog1") == 0);
-  g_assert (GTK_CONTAINER (vbox)->border_width == 10);
+  g_assert (gtk_container_get_border_width (GTK_CONTAINER (vbox)) == 10);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->vbox)), "dialog1-vbox") == 0);
 
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
   g_assert (action_area != NULL);
   g_assert (GTK_IS_HBUTTON_BOX (action_area));
   g_assert (GTK_WIDGET (action_area)->parent != NULL);
-  g_assert (GTK_CONTAINER (action_area)->border_width == 20);
+  g_assert (gtk_container_get_border_width (GTK_CONTAINER (action_area)) == 20);
   g_assert (GTK_DIALOG (dialog)->action_area != NULL);
   g_assert (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->action_area)) != NULL);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (GTK_DIALOG (dialog)->action_area)), "dialog1-action_area") == 0);

@@ -1009,7 +1009,7 @@ _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
   /* This is a copy of gtk_window_focus(), modified so that we
    * can detect wrap-around.
    */
-  old_focus_child = container->focus_child;
+  old_focus_child = gtk_container_get_focus_child (container);
   
   if (old_focus_child)
     {

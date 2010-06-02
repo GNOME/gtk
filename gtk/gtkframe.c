@@ -681,6 +681,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   GtkAllocation *allocation = &widget->allocation;
   GtkRequisition child_requisition;
   gint top_margin;
+  guint border_width;
 
   if (frame->label_widget)
     {
@@ -689,14 +690,15 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
     }
   else
     top_margin = widget->style->ythickness;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (frame));
   
-  child_allocation->x = (GTK_CONTAINER (frame)->border_width +
-			 widget->style->xthickness);
+  child_allocation->x = border_width + widget->style->xthickness;
   child_allocation->width = MAX(1, (gint)allocation->width - child_allocation->x * 2);
   
-  child_allocation->y = (GTK_CONTAINER (frame)->border_width + top_margin);
+  child_allocation->y = border_width + top_margin;
   child_allocation->height = MAX (1, ((gint)allocation->height - child_allocation->y -
-				      (gint)GTK_CONTAINER (frame)->border_width -
+				      border_width -
 				      (gint)widget->style->ythickness));
   
   child_allocation->x += allocation->x;
@@ -714,6 +716,7 @@ gtk_frame_get_size (GtkSizeRequest *request,
   GtkBin *bin = GTK_BIN (widget);
   gint child_min, child_nat;
   gint minimum, natural;
+  guint border_width;
 
   if (frame->label_widget && gtk_widget_get_visible (frame->label_widget))
     {
@@ -756,19 +759,17 @@ gtk_frame_get_size (GtkSizeRequest *request,
         }
     }
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      minimum += (GTK_CONTAINER (widget)->border_width +
-                  GTK_WIDGET (widget)->style->xthickness) * 2;
-      natural += (GTK_CONTAINER (widget)->border_width +
-                  GTK_WIDGET (widget)->style->xthickness) * 2;
+      minimum += (border_width + GTK_WIDGET (widget)->style->xthickness) * 2;
+      natural += (border_width + GTK_WIDGET (widget)->style->xthickness) * 2;
     }
   else
     {
-      minimum += (GTK_CONTAINER (widget)->border_width +
-                  GTK_WIDGET (widget)->style->ythickness) * 2;
-      natural += (GTK_CONTAINER (widget)->border_width +
-                  GTK_WIDGET (widget)->style->ythickness) * 2;
+      minimum += (border_width + GTK_WIDGET (widget)->style->ythickness) * 2;
+      natural += (border_width + GTK_WIDGET (widget)->style->ythickness) * 2;
     }
 
  if (minimum_size)

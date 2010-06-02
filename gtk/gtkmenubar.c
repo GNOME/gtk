@@ -282,6 +282,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   gint nchildren;
   GtkRequisition child_requisition;
   gint ipadding;
+  guint border_width;
 
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (requisition != NULL);
@@ -334,11 +335,12 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	}
 
       gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
-      
-      requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
+
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
+      requisition->width += (border_width +
                              ipadding + 
 			     BORDER_SPACING) * 2;
-      requisition->height += (GTK_CONTAINER (menu_bar)->border_width +
+      requisition->height += (border_width +
                               ipadding +
 			      BORDER_SPACING) * 2;
 
@@ -365,6 +367,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   GtkTextDirection direction;
   gint ltr_x, ltr_y;
   gint ipadding;
+  guint border_width;
 
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (allocation != NULL);
@@ -385,10 +388,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   
   if (menu_shell->children)
     {
-      child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
+      child_allocation.x = (border_width +
 			    ipadding + 
 			    BORDER_SPACING);
-      child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
+      child_allocation.y = (border_width +
 			    BORDER_SPACING);
       
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
@@ -509,9 +513,9 @@ gtk_menu_bar_paint (GtkWidget    *widget,
 
   if (gtk_widget_is_drawable (widget))
     {
-      gint border;
+      guint border;
 
-      border = GTK_CONTAINER (widget)->border_width;
+      border = gtk_container_get_border_width (GTK_CONTAINER (widget));
       
       gtk_paint_box (widget->style,
 		     widget->window,

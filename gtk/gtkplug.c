@@ -765,7 +765,7 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 	{
 	  GtkAllocation child_allocation;
 	  
-	  child_allocation.x = child_allocation.y = GTK_CONTAINER (widget)->border_width;
+	  child_allocation.x = child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget));
 	  child_allocation.width =
 	    MAX (1, (gint)allocation->width - child_allocation.x * 2);
 	  child_allocation.height =
@@ -947,9 +947,10 @@ gtk_plug_focus (GtkWidget        *widget,
   GtkPlug *plug = GTK_PLUG (widget);
   GtkWindow *window = GTK_WINDOW (widget);
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkWidget *old_focus_child = container->focus_child;
+  GtkWidget *old_focus_child;
   GtkWidget *parent;
-  
+
+  old_focus_child = gtk_container_get_focus_child (container);
   /* We override GtkWindow's behavior, since we don't want wrapping here.
    */
   if (old_focus_child)
@@ -977,7 +978,7 @@ gtk_plug_focus (GtkWidget        *widget,
         return TRUE;
     }
 
-  if (!GTK_CONTAINER (window)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
     _gtk_plug_windowing_focus_to_parent (plug, direction);
 
   return FALSE;

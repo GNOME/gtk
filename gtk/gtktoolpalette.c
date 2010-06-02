@@ -348,10 +348,12 @@ static void
 gtk_tool_palette_size_request (GtkWidget      *widget,
                                GtkRequisition *requisition)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
   GtkRequisition child_requisition;
+  guint border_width;
   guint i;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   requisition->width = 0;
   requisition->height = 0;
@@ -385,7 +387,6 @@ static void
 gtk_tool_palette_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
   GtkAdjustment *adjustment = NULL;
   GtkAllocation child_allocation;
@@ -397,6 +398,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   gint page_start, page_size = 0;
   gint offset = 0;
   guint i;
+  guint border_width;
 
   gint min_offset = -1, max_offset = -1;
 
@@ -404,6 +406,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
 
   gint *group_sizes = g_newa (gint, palette->priv->groups->len);
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   GtkTextDirection direction = gtk_widget_get_direction (widget);
 
   GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->size_allocate (widget, allocation);
@@ -649,9 +652,11 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
 static void
 gtk_tool_palette_realize (GtkWidget *widget)
 {
-  const gint border_width = GTK_CONTAINER (widget)->border_width;
-  gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
   GdkWindowAttr attributes;
+  gint attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;

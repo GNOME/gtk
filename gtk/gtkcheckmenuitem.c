@@ -469,6 +469,7 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
   if (gtk_widget_is_drawable (widget))
     {
+      guint border_width;
       guint offset;
       guint toggle_size;
       guint toggle_spacing;
@@ -482,8 +483,8 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
  			    NULL);
 
       toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;
-      offset = GTK_CONTAINER (check_menu_item)->border_width +
-	widget->style->xthickness + 2; 
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      offset = border_width + widget->style->xthickness + 2;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	{

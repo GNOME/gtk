@@ -171,7 +171,7 @@ move_focus (GtkWidget       *widget,
 {
   gtk_widget_child_focus (widget, dir);
 
-  if (!GTK_CONTAINER (widget)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (widget)))
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 

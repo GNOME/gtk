@@ -977,7 +977,7 @@ gtk_statusbar_size_request (GtkWidget      *widget,
 static gboolean
 has_extra_children (GtkStatusbar *statusbar)
 {
-  GList *l;
+  GList *l, *children;
   GtkBoxChild *child, *frame;
 
   /* If the internal frame has been modified assume we have extra children */
@@ -985,7 +985,8 @@ has_extra_children (GtkStatusbar *statusbar)
     return TRUE;
 
   frame = NULL;
-  for (l = gtk_container_get_children (GTK_CONTAINER (statusbar)); l; l = l->next)
+  children = gtk_container_get_children (GTK_CONTAINER (statusbar));
+  for (l = children; l; l = l->next)
     {
       frame = l->data;
 
@@ -1003,6 +1004,8 @@ has_extra_children (GtkStatusbar *statusbar)
       if (frame->pack == GTK_PACK_START || child->pack == GTK_PACK_END)
 	return TRUE;
     }
+
+  g_list_free (children);
 
   return FALSE;
 }

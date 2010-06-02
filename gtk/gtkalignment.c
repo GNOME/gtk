@@ -478,7 +478,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   gint width, height;
-  gint border_width;
+  guint border_width;
   gint padding_horizontal, padding_vertical;
   GtkAlignmentPrivate *priv;
 
@@ -496,7 +496,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       gint child_nat_height;
       gint child_width, child_height;
 
-      border_width = GTK_CONTAINER (alignment)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (alignment));
 
       priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
       padding_horizontal = priv->padding_left + priv->padding_right;
@@ -567,11 +567,11 @@ gtk_alignment_get_size (GtkSizeRequest *widget,
 {
   GtkWidget *child;
   GtkAlignmentPrivate *priv;
-  gint minimum, natural;
+  guint minimum, natural;
 
   priv = GTK_ALIGNMENT_GET_PRIVATE (widget);
 
-  natural = minimum = GTK_CONTAINER (widget)->border_width * 2;
+  natural = minimum = gtk_container_get_border_width (GTK_CONTAINER (widget)) * 2;
 
   if ((child = gtk_bin_get_child (GTK_BIN (widget))) && gtk_widget_get_visible (child))
     {

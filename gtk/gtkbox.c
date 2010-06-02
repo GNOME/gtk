@@ -427,7 +427,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
 
   if (nvis_children > 0)
     {
-      gint border_width = GTK_CONTAINER (box)->border_width;
+      guint border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
       GtkTextDirection direction = gtk_widget_get_direction (widget);
       GtkAllocation child_allocation;
       GtkBoxSpreading *spreading = g_newa (GtkBoxSpreading, nvis_children);
@@ -882,7 +882,7 @@ gtk_box_get_size (GtkSizeRequest      *widget,
 
   box = GTK_BOX (widget);
   private = box->priv;
-  border_width = GTK_CONTAINER (box)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
 
   minimum = natural = 0;
 
@@ -981,7 +981,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
   gint           nvis_children;
   gint           nexpand_children;
   gint           computed_minimum = 0, computed_natural = 0;
-  gint           border_width = GTK_CONTAINER (box)->border_width;
+  guint          border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
 
   count_expand_children (box, &nvis_children, &nexpand_children);
 
@@ -1184,8 +1184,10 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
   gint           nvis_children = 0;
   gint           required_size = 0, required_natural = 0, child_size, child_natural;
   gint           largest_child = 0, largest_natural = 0;
+  guint          border_width;
 
-  avail_size -= GTK_CONTAINER (box)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (box));
+  avail_size -= border_width * 2;
 
   for (children = private->children; children != NULL; 
        children = children->next, nvis_children++)
@@ -1229,8 +1231,8 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
       required_natural  += (nvis_children - 1) * private->spacing;
     }
 
-  required_size    += GTK_CONTAINER (box)->border_width * 2;
-  required_natural += GTK_CONTAINER (box)->border_width * 2;
+  required_size    += border_width * 2;
+  required_natural += border_width * 2;
 
   if (minimum_size)
     *minimum_size = required_size;

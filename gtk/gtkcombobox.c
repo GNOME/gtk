@@ -2165,6 +2165,7 @@ gtk_combo_box_size_request (GtkWidget      *widget,
   gint focus_width, focus_pad;
   gint font_size;
   gint arrow_size;
+  guint border_width;
   GtkRequisition bin_req;
   PangoContext *context;
   PangoFontMetrics *metrics;
@@ -2204,10 +2205,10 @@ gtk_combo_box_size_request (GtkWidget      *widget,
       if (priv->cell_view)
         {
           GtkRequisition button_req, sep_req, arrow_req;
-          gint border_width, xthickness, ythickness;
+          gint xthickness, ythickness;
 
           gtk_widget_size_request (priv->button, &button_req);
-	  border_width = GTK_CONTAINER (combo_box)->border_width;
+          border_width = gtk_container_get_border_width (GTK_CONTAINER (combo_box));
           xthickness = priv->button->style->xthickness;
           ythickness = priv->button->style->ythickness;
 
@@ -2253,12 +2254,10 @@ gtk_combo_box_size_request (GtkWidget      *widget,
 	  gtk_widget_size_request (priv->cell_view_frame, &frame_req);
 	  if (priv->has_frame)
 	    {
-	      requisition->width += 2 *
-		(GTK_CONTAINER (priv->cell_view_frame)->border_width +
-		 GTK_WIDGET (priv->cell_view_frame)->style->xthickness);
-	      requisition->height += 2 *
-		(GTK_CONTAINER (priv->cell_view_frame)->border_width +
-		 GTK_WIDGET (priv->cell_view_frame)->style->ythickness);
+              border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->cell_view_frame));
+
+	      requisition->width += 2 * (border_width + GTK_WIDGET (priv->cell_view_frame)->style->xthickness);
+	      requisition->height += 2 * (border_width + GTK_WIDGET (priv->cell_view_frame)->style->ythickness);
 	    }
         }
 
@@ -2326,8 +2325,9 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
     {
       if (priv->cell_view)
         {
-          gint border_width, xthickness, ythickness;
+          gint xthickness, ythickness;
           gint width;
+          guint border_width;
 
           /* menu mode */
           allocation->x += shadow_width;
@@ -2338,7 +2338,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           gtk_widget_size_allocate (priv->button, allocation);
 
           /* set some things ready */
-          border_width = GTK_CONTAINER (priv->button)->border_width;
+          border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->button));
           xthickness = priv->button->style->xthickness;
           ythickness = priv->button->style->ythickness;
 
@@ -2430,8 +2430,9 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
       /* list mode */
 
       /* Combobox thickness + border-width */
-      int delta_x = shadow_width + GTK_CONTAINER (widget)->border_width;
-      int delta_y = shadow_height + GTK_CONTAINER (widget)->border_width;
+      guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      int delta_x = shadow_width + border_width;
+      int delta_y = shadow_height + border_width;
 
       /* button */
       GTK_COMBO_BOX_SIZE_ALLOCATE_BUTTON
@@ -2457,10 +2458,9 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           /* the sample */
           if (priv->has_frame)
             {
-              delta_x = GTK_CONTAINER (priv->cell_view_frame)->border_width +
-                GTK_WIDGET (priv->cell_view_frame)->style->xthickness;
-              delta_y = GTK_CONTAINER (priv->cell_view_frame)->border_width +
-                GTK_WIDGET (priv->cell_view_frame)->style->ythickness;
+              border_width = gtk_container_get_border_width (GTK_CONTAINER (priv->cell_view_frame));
+              delta_x = border_width + GTK_WIDGET (priv->cell_view_frame)->style->xthickness;
+              delta_y = border_width + GTK_WIDGET (priv->cell_view_frame)->style->ythickness;
 
               child.x += delta_x;
               child.y += delta_y;

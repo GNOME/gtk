@@ -1273,7 +1273,7 @@ gtk_button_realize (GtkWidget *widget)
   button = GTK_BUTTON (widget);
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x + border_width;
@@ -1435,7 +1435,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkAllocation child_allocation;
 
-  gint border_width = GTK_CONTAINER (widget)->border_width;
+  guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint xthickness = GTK_WIDGET (widget)->style->xthickness;
   gint ythickness = GTK_WIDGET (widget)->style->ythickness;
   GtkBorder default_border;
@@ -1530,7 +1530,7 @@ _gtk_button_paint (GtkButton          *button,
 
   if (gtk_widget_is_drawable (widget))
     {
-      border_width = GTK_CONTAINER (widget)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
       gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
       gtk_widget_style_get (widget,
@@ -1883,6 +1883,7 @@ gtk_button_get_size (GtkSizeRequest *widget,
   gint focus_width;
   gint focus_pad;
   gint minimum, natural;
+  guint border_width;
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
@@ -1890,18 +1891,19 @@ gtk_button_get_size (GtkSizeRequest *widget,
 			"focus-padding", &focus_pad,
 			NULL);
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      minimum = ((GTK_CONTAINER (widget)->border_width +
+      minimum = ((border_width +
 		  GTK_WIDGET (widget)->style->xthickness) * 2 +
 		 inner_border.left + inner_border.right);
-      
+
       if (gtk_widget_get_can_default (GTK_WIDGET (widget)))
 	minimum += default_border.left + default_border.right;
     }
   else
     {
-      minimum = ((GTK_CONTAINER (widget)->border_width +
+      minimum = ((border_width +
 		  GTK_WIDGET (widget)->style->ythickness) * 2 +
 		 inner_border.top + inner_border.bottom);
 

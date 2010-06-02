@@ -3268,6 +3268,7 @@ gtk_text_view_size_request (GtkWidget      *widget,
   GSList *tmp_list;
   gint focus_edge_width;
   gint focus_width;
+  guint border_width;
   gboolean interior_focus;
 
   text_view = GTK_TEXT_VIEW (widget);
@@ -3309,8 +3310,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
   if (priv->bottom_window)
     requisition->height += priv->bottom_window->requisition.height;
 
-  requisition->width += GTK_CONTAINER (text_view)->border_width * 2;
-  requisition->height += GTK_CONTAINER (text_view)->border_width * 2;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
+  requisition->width += border_width * 2;
+  requisition->height += border_width * 2;
   
   tmp_list = priv->children;
   while (tmp_list != NULL)
@@ -3496,6 +3498,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle bottom_rect;
   gint focus_edge_width;
   gint focus_width;
+  guint border_width;
   gboolean interior_focus;
   gboolean size_changed;
   
@@ -3507,7 +3510,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   size_changed =
     widget->allocation.width != allocation->width ||
     widget->allocation.height != allocation->height;
-  
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
+
   widget->allocation = *allocation;
 
   if (gtk_widget_get_realized (widget))
@@ -3531,7 +3536,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   else
     focus_edge_width = focus_width;
   
-  width = allocation->width - focus_edge_width * 2 - GTK_CONTAINER (text_view)->border_width * 2;
+  width = allocation->width - focus_edge_width * 2 - border_width * 2;
 
   if (priv->left_window)
     left_rect.width = priv->left_window->requisition.width;
@@ -3553,7 +3558,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   bottom_rect.width = text_rect.width;
 
 
-  height = allocation->height - focus_edge_width * 2 - GTK_CONTAINER (text_view)->border_width * 2;
+  height = allocation->height - focus_edge_width * 2 - border_width * 2;
 
   if (priv->top_window)
     top_rect.height = priv->top_window->requisition.height;
@@ -3575,8 +3580,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = focus_edge_width + GTK_CONTAINER (text_view)->border_width;
-  top_rect.y = focus_edge_width + GTK_CONTAINER (text_view)->border_width;
+  left_rect.x = focus_edge_width + border_width;
+  top_rect.y = focus_edge_width + border_width;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -4912,7 +4917,7 @@ gtk_text_view_focus (GtkWidget        *widget,
   container = GTK_CONTAINER (widget);  
 
   if (!gtk_widget_is_focus (widget) &&
-      container->focus_child == NULL)
+      gtk_container_get_focus_child (container) == NULL)
     {
       gtk_widget_grab_focus (widget);
       return TRUE;

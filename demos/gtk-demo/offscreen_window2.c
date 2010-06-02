@@ -164,12 +164,12 @@ gtk_mirror_bin_realize (GtkWidget *widget)
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   GdkWindowAttr attributes;
   gint attributes_mask;
-  gint border_width;
+  guint border_width;
   GtkRequisition child_requisition;
 
   gtk_widget_set_realized (widget, TRUE);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   attributes.x = widget->allocation.x + border_width;
   attributes.y = widget->allocation.y + border_width;
@@ -302,6 +302,7 @@ gtk_mirror_bin_size_request (GtkWidget      *widget,
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   GtkRequisition child_requisition;
+  guint border_width;
 
   child_requisition.width = 0;
   child_requisition.height = 0;
@@ -309,8 +310,9 @@ gtk_mirror_bin_size_request (GtkWidget      *widget,
   if (bin->child && gtk_widget_get_visible (bin->child))
     gtk_widget_size_request (bin->child, &child_requisition);
 
-  requisition->width = GTK_CONTAINER (widget)->border_width * 2 + child_requisition.width + 10;
-  requisition->height = GTK_CONTAINER (widget)->border_width * 2 + child_requisition.height * 2 + 10;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  requisition->width = border_width * 2 + child_requisition.width + 10;
+  requisition->height = border_width * 2 + child_requisition.height * 2 + 10;
 }
 
 static void
@@ -318,11 +320,12 @@ gtk_mirror_bin_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
-  gint border_width;
   gint w, h;
+  guint border_width;
+
   widget->allocation = *allocation;
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   w = allocation->width - border_width * 2;
   h = allocation->height - border_width * 2;

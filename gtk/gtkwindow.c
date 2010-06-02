@@ -4463,7 +4463,7 @@ gtk_window_show (GtkWidget *widget)
   gboolean need_resize;
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
-  
+
   need_resize = container->need_resize || !gtk_widget_get_realized (widget);
   container->need_resize = FALSE;
 
@@ -4929,14 +4929,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
 {
   GtkWindow *window;
   GtkAllocation child_allocation;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   widget->allocation = *allocation;
 
   if (window->bin.child && gtk_widget_get_visible (window->bin.child))
     {
-      child_allocation.x = GTK_CONTAINER (window)->border_width;
-      child_allocation.y = GTK_CONTAINER (window)->border_width;
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+      child_allocation.x = border_width;
+      child_allocation.y = border_width;
       child_allocation.width =
 	MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height =
@@ -5222,7 +5224,7 @@ gtk_window_move_focus (GtkWindow       *window,
 {
   gtk_widget_child_focus (GTK_WIDGET (window), dir);
   
-  if (!GTK_CONTAINER (window)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
     gtk_window_set_focus (window, NULL);
 }
 
@@ -5401,7 +5403,7 @@ gtk_window_focus (GtkWidget        *widget,
   window = GTK_WINDOW (widget);
   bin = GTK_BIN (widget);
 
-  old_focus_child = container->focus_child;
+  old_focus_child = gtk_container_get_focus_child (container);
   
   /* We need a special implementation here to deal properly with wrapping
    * around in the tab chain without the danger of going into an
@@ -5556,12 +5558,14 @@ gtk_window_get_width (GtkSizeRequest      *widget,
 {
   GtkWindow *window;
   GtkWidget *child;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
-  
-  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
-  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+  *minimum_size = border_width * 2;
+  *natural_size = border_width * 2;
 
   if (child && gtk_widget_get_visible (child))
     {
@@ -5580,12 +5584,14 @@ gtk_window_get_height (GtkSizeRequest      *widget,
 {
   GtkWindow *window;
   GtkWidget *child;
+  guint border_width;
 
   window = GTK_WINDOW (widget);
   child  = gtk_bin_get_child (GTK_BIN (window));
-  
-  *minimum_size = GTK_CONTAINER (window)->border_width * 2;
-  *natural_size = GTK_CONTAINER (window)->border_width * 2;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+  *minimum_size = border_width * 2;
+  *natural_size = border_width * 2;
 
   if (child && gtk_widget_get_visible (child))
     {
@@ -5616,7 +5622,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   g_object_ref (window);
   g_object_ref (widget);
       
-  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+  if (gtk_container_get_focus_child (GTK_CONTAINER (widget->parent)) == widget)
     {
       child = window->focus_widget;
       
@@ -6401,7 +6407,7 @@ gtk_window_move_resize (GtkWindow *window)
 
 	  gdk_window_process_updates (widget->window, TRUE);
 
-	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    gtk_widget_queue_draw (widget);
 	}
       else
@@ -6425,7 +6431,7 @@ gtk_window_move_resize (GtkWindow *window)
 	   * FIXME: we should also dequeue the pending redraws here, since
 	   * we handle those ourselves upon ->configure_notify_received==TRUE.
 	   */
-	  if (container->resize_mode == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    {
 	      gtk_widget_queue_resize_no_redraw (widget);
 	      _gtk_container_dequeue_resize_handler (container);

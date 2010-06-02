@@ -352,8 +352,10 @@ viewport_get_view_allocation (GtkViewport   *viewport,
 {
   GtkWidget *widget = GTK_WIDGET (viewport);
   GtkAllocation *allocation = &widget->allocation;
-  gint border_width = GTK_CONTAINER (viewport)->border_width;
-  
+  guint border_width;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (viewport));
+
   view_allocation->x = 0;
   view_allocation->y = 0;
 
@@ -630,12 +632,14 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
   GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
-  gint border_width = GTK_CONTAINER (widget)->border_width;
-  
+  guint border_width;
+
   GtkAllocation view_allocation;
   GdkWindowAttr attributes;
   gint attributes_mask;
   gint event_mask;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -776,11 +780,13 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkBin *bin = GTK_BIN (widget);
-  gint border_width = GTK_CONTAINER (widget)->border_width;
+  guint border_width;
   gboolean hadjustment_value_changed, vadjustment_value_changed;
   GtkAdjustment *hadjustment = gtk_viewport_get_hadjustment (viewport);
   GtkAdjustment *vadjustment = gtk_viewport_get_vadjustment (viewport);
   GtkAllocation child_allocation;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.
@@ -896,7 +902,7 @@ gtk_viewport_get_size (GtkSizeRequest *widget,
   /* XXX This should probably be (border_width * 2); but GTK+ has
    * been doing this with a single border for a while now...
    */
-  minimum = GTK_CONTAINER (widget)->border_width;
+  minimum = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   if (GTK_VIEWPORT (widget)->shadow_type != GTK_SHADOW_NONE)
     {

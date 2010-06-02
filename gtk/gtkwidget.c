@@ -3075,7 +3075,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
-  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+  if (gtk_container_get_focus_child (GTK_CONTAINER (widget->parent)) == widget)
     gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
 
   /* If we are unanchoring the child, we save around the toplevel
