@@ -10918,7 +10918,7 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (gtk_widget_has_screen (widget), NULL);
-  
+
   return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
 					selection);
 }
@@ -10926,9 +10926,9 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
 /**
  * gtk_widget_list_mnemonic_labels:
  * @widget: a #GtkWidget
- * 
- * Returns a newly allocated list of the widgets, normally labels, for 
- * which this widget is a the target of a mnemonic (see for example, 
+ *
+ * Returns a newly allocated list of the widgets, normally labels, for
+ * which this widget is the target of a mnemonic (see for example,
  * gtk_label_set_mnemonic_widget()).
 
  * The widgets in the list are not individually referenced. If you
