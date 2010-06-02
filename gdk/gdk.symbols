@@ -535,8 +535,8 @@ gdk_drop_reply
 
 #if IN_HEADER(__GDK_DND_H__)
 #if IN_FILE(__GDK_DND_C__)
-gdk_drag_context_get_action
 gdk_drag_context_get_actions
+gdk_drag_context_get_selected_action
 gdk_drag_context_get_suggested_action
 gdk_drag_context_list_targets
 gdk_drag_find_window

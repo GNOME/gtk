@@ -143,7 +143,7 @@ gdk_drag_context_get_suggested_action (GdkDragContext *context)
  * Since: 2.22
  **/
 GdkDragAction
-gdk_drag_context_get_action (GdkDragContext *context)
+gdk_drag_context_get_selected_action (GdkDragContext *context)
 {
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), 0);
 
