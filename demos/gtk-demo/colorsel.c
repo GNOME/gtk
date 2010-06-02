@@ -41,13 +41,15 @@ change_color_callback (GtkWidget *button,
 {
   GtkWidget *dialog;
   GtkColorSelection *colorsel;
+  GtkColorSelectionDialog *selection_dialog;
   gint response;
   
   dialog = gtk_color_selection_dialog_new ("Changing color");
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
-  
-  colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (dialog)->colorsel);
+
+  selection_dialog = GTK_COLOR_SELECTION_DIALOG (dialog);
+  colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
 
   gtk_color_selection_set_previous_color (colorsel, &color);
   gtk_color_selection_set_current_color (colorsel, &color);

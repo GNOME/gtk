@@ -612,10 +612,12 @@ create_colorsel (void)
   WidgetInfo *info;
   GtkWidget *widget;
   GtkColorSelection *colorsel;
+  GtkColorSelectionDialog *selection_dialog;
   GdkColor color;
 
   widget = gtk_color_selection_dialog_new ("Color Selection Dialog");
-  colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (widget)->colorsel);
+  selection_dialog = GTK_COLOR_SELECTION_DIALOG (widget);
+  colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (selection_dialog));
 
   color.red   = 0x7979;
   color.green = 0xdbdb;

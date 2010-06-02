@@ -27,6 +27,7 @@ static gboolean area_event( GtkWidget *widget,
   gint handled = FALSE;
   gint response;
   GtkColorSelection *colorsel;
+  GtkColorSelectionDialog *selection_dialog;
 
   /* Check if we've received a button pressed event */
 
@@ -39,7 +40,8 @@ static gboolean area_event( GtkWidget *widget,
         colorseldlg = gtk_color_selection_dialog_new ("Select background color");
 
       /* Get the ColorSelection widget */
-      colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (colorseldlg)->colorsel);
+      selection_dialog = GTK_COLOR_SELECTION_DIALOG (colorseldlg);
+      colorsel = GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_colorsel (selection_dialog));
 
       gtk_color_selection_set_previous_color (colorsel, &color);
       gtk_color_selection_set_current_color (colorsel, &color);
