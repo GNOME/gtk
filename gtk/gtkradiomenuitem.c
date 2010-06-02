@@ -156,7 +156,7 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
     }
   else
     {
-      GTK_CHECK_MENU_ITEM (radio_menu_item)->active = TRUE;
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
       /* gtk_widget_set_state (GTK_WIDGET (radio_menu_item), GTK_STATE_ACTIVE);
        */
     }
@@ -432,6 +432,7 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GtkCheckMenuItem *tmp_menu_item;
   GtkAction        *action;
   GSList *tmp_list;
+  gboolean active;
   gint toggled;
 
   action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
@@ -440,7 +441,8 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 
   toggled = FALSE;
 
-  if (check_menu_item->active)
+  active = gtk_check_menu_item_get_active (check_menu_item);
+  if (active)
     {
       tmp_menu_item = NULL;
       tmp_list = radio_menu_item->group;
@@ -450,7 +452,8 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 	  tmp_menu_item = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_menu_item->active && (tmp_menu_item != check_menu_item))
+          if (gtk_check_menu_item_get_active (tmp_menu_item) &&
+              tmp_menu_item != check_menu_item)
 	    break;
 
 	  tmp_menu_item = NULL;
@@ -459,13 +462,13 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
       if (tmp_menu_item)
 	{
 	  toggled = TRUE;
-	  check_menu_item->active = !check_menu_item->active;
+          gtk_check_menu_item_set_active (check_menu_item, !active);
 	}
     }
   else
     {
       toggled = TRUE;
-      check_menu_item->active = !check_menu_item->active;
+      gtk_check_menu_item_set_active (check_menu_item, !active);
 
       tmp_list = radio_menu_item->group;
       while (tmp_list)
@@ -473,9 +476,10 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 	  tmp_menu_item = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_menu_item->active && (tmp_menu_item != check_menu_item))
+          if (gtk_check_menu_item_get_active (tmp_menu_item) &&
+              tmp_menu_item != check_menu_item)
 	    {
-	      gtk_menu_item_activate (GTK_MENU_ITEM (tmp_menu_item));
+              gtk_menu_item_activate (GTK_MENU_ITEM (tmp_menu_item));
 	      break;
 	    }
 	}

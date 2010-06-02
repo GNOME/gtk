@@ -2610,7 +2610,7 @@ void _action_cb(GtkWidget *widget, gpointer  *userdata)
 void _toggle_terminal(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        display_ascii = TRUE;
    else
        display_ascii = FALSE;
@@ -2619,7 +2619,7 @@ void _toggle_terminal(GtkCheckMenuItem *checkmenuitem,
 void _toggle_no_signals(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        no_signals = TRUE;
    else
        no_signals = FALSE;
@@ -2628,7 +2628,7 @@ void _toggle_no_signals(GtkCheckMenuItem *checkmenuitem,
 void _toggle_magnifier(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        use_magnifier = TRUE;
    else
        use_magnifier = FALSE;
@@ -2637,7 +2637,7 @@ void _toggle_magnifier(GtkCheckMenuItem *checkmenuitem,
 void _toggle_festival(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
        use_festival = TRUE;
    else
        use_festival = FALSE;
@@ -2646,7 +2646,7 @@ void _toggle_festival(GtkCheckMenuItem *checkmenuitem,
 void _toggle_festival_terse(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
         say_role = FALSE;
         say_accel = FALSE;
@@ -2661,7 +2661,7 @@ void _toggle_festival_terse(GtkCheckMenuItem *checkmenuitem,
 void _toggle_trackmouse(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
         mouse_watcher_focus_id =
           atk_add_global_event_listener(_mouse_watcher,
@@ -2685,7 +2685,7 @@ void _toggle_trackmouse(GtkCheckMenuItem *checkmenuitem,
 void _toggle_trackfocus(GtkCheckMenuItem *checkmenuitem,
   gpointer user_data)
 {
-   if (checkmenuitem->active)
+   if (gtk_check_menu_item_get_active (checkmenuitem))
      {
        track_focus = TRUE;
        focus_tracker_id = atk_add_focus_tracker (_print_accessible);

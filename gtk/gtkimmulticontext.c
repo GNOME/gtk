@@ -511,7 +511,7 @@ static void
 activate_cb (GtkWidget         *menuitem,
 	     GtkIMMulticontext *context)
 {
-  if (GTK_CHECK_MENU_ITEM (menuitem)->active)
+  if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem)))
     {
       const gchar *id = g_object_get_data (G_OBJECT (menuitem), "gtk-context-id");
 

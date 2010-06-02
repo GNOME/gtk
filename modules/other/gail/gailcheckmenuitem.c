@@ -100,7 +100,7 @@ gail_check_menu_item_toggled_gtk (GtkWidget       *widget)
 
   accessible = gtk_widget_get_accessible (widget);
   atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, 
-                                  check_menu_item->active);
+                                  gtk_check_menu_item_get_active (check_menu_item));
 } 
 
 static AtkStateSet*
