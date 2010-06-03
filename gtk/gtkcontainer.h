@@ -45,25 +45,17 @@ G_BEGIN_DECLS
 #define GTK_IS_CONTAINER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
 #define GTK_CONTAINER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONTAINER, GtkContainerClass))
 
-#define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && ((GtkContainer*) (widget))->resize_mode != GTK_RESIZE_PARENT)
-
 
 typedef struct _GtkContainer	   GtkContainer;
+typedef struct _GtkContainerPriv   GtkContainerPriv;
 typedef struct _GtkContainerClass  GtkContainerClass;
 
 struct _GtkContainer
 {
   GtkWidget widget;
 
-  GtkWidget *GSEAL (focus_child);
-
-  guint GSEAL (border_width) : 16;
-
   /*< private >*/
-  guint GSEAL (need_resize) : 1;
-  guint GSEAL (resize_mode) : 2;
-  guint GSEAL (reallocate_redraws) : 1;
-  guint GSEAL (has_focus_chain) : 1;
+  GtkContainerPriv *priv;
 };
 
 struct _GtkContainerClass
@@ -102,6 +94,7 @@ struct _GtkContainerClass
   void (*_gtk_reserved4) (void);
 };
 
+
 /* Application-level methods */
 
 GType   gtk_container_get_type		 (void) G_GNUC_CONST;
@@ -133,6 +126,9 @@ void     gtk_container_set_focus_chain  (GtkContainer   *container,
 gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
 					 GList         **focusable_widgets);
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
+
+#define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && \
+                                        (gtk_container_get_resize_mode (GTK_CONTAINER (widget)) != GTK_RESIZE_PARENT))
 
 /* Widget-level methods */
 
