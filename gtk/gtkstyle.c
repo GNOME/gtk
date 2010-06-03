@@ -164,15 +164,6 @@ static void gtk_default_draw_diamond    (GtkStyle        *style,
 					 gint             y,
 					 gint             width,
 					 gint             height);
-static void gtk_default_draw_string     (GtkStyle        *style,
-					 GdkWindow       *window,
-					 GtkStateType     state_type,
-					 GdkRectangle    *area,
-					 GtkWidget       *widget,
-					 const gchar     *detail,
-					 gint             x,
-					 gint             y,
-					 const gchar     *string);
 static void gtk_default_draw_box        (GtkStyle        *style,
 					 GdkWindow       *window,
 					 GtkStateType     state_type,
@@ -526,7 +517,6 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_polygon = gtk_default_draw_polygon;
   klass->draw_arrow = gtk_default_draw_arrow;
   klass->draw_diamond = gtk_default_draw_diamond;
-  klass->draw_string = gtk_default_draw_string;
   klass->draw_box = gtk_default_draw_box;
   klass->draw_flat_box = gtk_default_draw_flat_box;
   klass->draw_check = gtk_default_draw_check;
@@ -2745,39 +2735,6 @@ gtk_default_draw_diamond (GtkStyle      *style,
       gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
       gdk_gc_set_clip_rectangle (style->black_gc, NULL);
-    }
-}
-
-static void
-gtk_default_draw_string (GtkStyle      *style,
-                         GdkWindow     *window,
-                         GtkStateType   state_type,
-                         GdkRectangle  *area,
-                         GtkWidget     *widget,
-                         const gchar   *detail,
-                         gint           x,
-                         gint           y,
-                         const gchar   *string)
-{
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle (style->white_gc, area);
-      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
-    }
-
-  if (state_type == GTK_STATE_INSENSITIVE)
-    gdk_draw_string (window,
-		     gtk_style_get_font_internal (style),
-		     style->white_gc, x + 1, y + 1, string);
-
-  gdk_draw_string (window,
-		   gtk_style_get_font_internal (style),
-		   style->fg_gc[state_type], x, y, string);
-
-  if (area)
-    {
-      gdk_gc_set_clip_rectangle (style->white_gc, NULL);
-      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
     }
 }
 
