@@ -6,8 +6,9 @@ Base class for GtkHScrollbar and GtkVScrollbar
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The #GtkScrollbar widget is an abstract base class for #GtkHScrollbar and
-#GtkVScrollbar. It is not very useful in itself.
+The #GtkScrollbar widget is the base class for #GtkHScrollbar and
+#GtkVScrollbar. It can be used in the same way as these, by setting
+the "orientation" property appropriately.
 </para>
 
 <para>

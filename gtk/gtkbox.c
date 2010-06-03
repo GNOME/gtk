@@ -30,7 +30,7 @@
  * @Title: GtkBox
  * @See_also:i #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
  *
- * GtkBox is an abstract widget which encapsulates functionality for a
+ * GtkBox is an widget which encapsulates functionality for a
  * particular kind of container, one that organizes a variable number of
  * widgets into a rectangular area.  GtkBox has a number of derived
  * classes, e.g. #GtkHBox and #GtkVBox.
@@ -41,8 +41,8 @@
  * GtkBox are allocated one dimension in common, which is the height of a
  * row, or the width of a column.
  *
- * GtkBox uses a notion of <emphasis>packing</emphasis>.  Packing refers to
- * adding widgets with reference to a particular position in a
+ * GtkBox uses a notion of <emphasis>packing</emphasis>.  Packing
+ * refers to adding widgets with reference to a particular position in a
  * #GtkContainer.  For a GtkBox, there are two reference positions: the
  * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
  * For a #GtkVBox, the start is defined as the top of the box and the end is

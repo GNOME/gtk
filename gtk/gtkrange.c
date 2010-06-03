@@ -48,7 +48,7 @@
  * @Title: GtkRange
  *
  * #GtkRange is the common base class for widgets which visualize an
- * adjustment, e.g #GtkScale or #GtkScroolbar.
+ * adjustment, e.g #GtkScale or #GtkScrollbar.
  *
  * Apart from signals for monitoring the parameters of the adjustment,
  * #GtkRange provides properties and methods for influencing the sensitivity
