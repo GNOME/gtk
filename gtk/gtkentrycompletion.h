@@ -53,7 +53,7 @@ struct _GtkEntryCompletion
   GObject parent_instance;
 
   /*< private >*/
-  GtkEntryCompletionPrivate *GSEAL (priv);
+  GtkEntryCompletionPrivate *priv;
 };
 
 struct _GtkEntryCompletionClass
