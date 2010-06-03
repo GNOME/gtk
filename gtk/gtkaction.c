@@ -32,7 +32,7 @@
  * SECTION:gtkaction
  * @Short_description: An action which can be triggered by a menu or toolbar item
  * @Title: GtkAction
- * @See_also: #GtkActionGroup, #GtkUIManager
+ * @See_also: #GtkActionGroup, #GtkUIManager, #GtkActivatable
  *
  * Actions represent operations that the user can be perform, along with
  * some information how it should be presented in the interface. Each action
@@ -60,11 +60,16 @@
  * can be in the "active" state. Other actions can be implemented as #GtkAction
  * subclasses.
  *
- * Each action can have one or more proxy menu item, toolbar button or
- * other proxy widgets.  Proxies mirror the state of the action (text
- * label, tooltip, icon, visible, sensitive, etc), and should change when
- * the action's state changes. When the proxy is activated, it should
- * activate its action.
+ * Each action can have one or more proxy widgets. To act as an action proxy,
+ * widget needs to implement #GtkActivatable interface. Proxies mirror the state
+ * of the action and should change when the action's state changes. Properties
+ * that are always mirrored by proxies are #GtkAction:sensitive and
+ * #GtkAction:visible. #GtkAction:gicon, #GtkAction:icon-name, #GtkAction:label,
+ * #GtkAction:short-label and #GtkAction:stock-id properties are only mirorred
+ * if proxy widget has #GtkActivatable:use-action-appearance property set to
+ * %TRUE.
+ *
+ * When the proxy is activated, it should activate its action.
  */
 
 #include "config.h"
