@@ -35,11 +35,12 @@
 
 /**
  * SECTION:gtkseparator
- * @Short_description: Base class for #GtkHSeparator and #GtkVSeparator
+ * @Short_description: Base class for GtkHSeparator and GtkVSeparator
  * @Title: GtkSeparator
  *
- * The #GtkSeparator widget is an abstract class, used only for deriving the
- * subclasses #GtkHSeparator and #GtkVSeparator.
+ * The GtkSeparator widget is the base class for #GtkHSeparator and
+ * #GtkVSeparator. It can be used in the same way as these, by setting
+ * the "orientation" property suitably.
  */
 
 
