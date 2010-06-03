@@ -1,6 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-EXTRA_DIST = \
+EXTRA_DIST += \
 	README.txt \
 	gtk+.sln \
 	gtk+.vsprops \
