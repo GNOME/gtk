@@ -377,6 +377,7 @@ _gdk_events_init (void)
 #endif
 
   source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_name (source, "GDK Win32 event source"); 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
 #ifdef G_WITH_CYGWIN

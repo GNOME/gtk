@@ -1248,6 +1248,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
 
   dispatch = (GtkPrintCupsDispatchWatch *) g_source_new (&_cups_dispatch_watch_funcs, 
                                                          sizeof (GtkPrintCupsDispatchWatch));
+  g_source_set_name (dispatch, "GTK+ CUPS backend");
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));

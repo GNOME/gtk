@@ -142,7 +142,12 @@ gdk_display_source_new (GdkDisplay *display)
 {
   GSource *source = g_source_new (&event_funcs, sizeof (GdkDisplaySource));
   GdkDisplaySource *display_source = (GdkDisplaySource *)source;
+  char *name;
   
+  name = g_strdup_printf ("GDK X11 Event source (%s)",
+			  gdk_display_get_name (display));
+  g_source_set_name (source, name);
+  g_free (name);
   display_source->display = display;
   
   return source;
