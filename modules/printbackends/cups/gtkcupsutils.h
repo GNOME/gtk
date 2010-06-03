@@ -111,6 +111,7 @@ struct _GtkCupsConnectionTest
   GtkCupsConnectionState at_init;
   http_addrlist_t       *addrlist;
   http_addrlist_t       *current_addr;
+  http_addrlist_t       *last_wrong_addr;
   gint                   socket;
 #endif
 };
