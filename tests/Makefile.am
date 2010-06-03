@@ -324,7 +324,7 @@ testiconview_SOURCES = 		\
 	testiconview.c		\
 	prop-editor.c
 
-testiconview__keynav_SOURCES = 	\
+testiconview_keynav_SOURCES = 	\
 	testiconview-keynav.c
 
 testrecentchooser_SOURCES = 	\
