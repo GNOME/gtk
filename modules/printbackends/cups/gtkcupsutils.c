@@ -1502,6 +1502,7 @@ gtk_cups_connection_test_new (const char *server)
 
   result->socket = -1;
   result->current_addr = NULL;
+  result->last_wrong_addr = NULL;
   result->at_init = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
 
   result->at_init = gtk_cups_connection_test_get_state (result);
@@ -1540,7 +1541,14 @@ gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
     {
       if (test->socket == -1)
         {
-          iter = test->addrlist;
+          if (test->last_wrong_addr != NULL && test->last_wrong_addr->next != NULL)
+            iter = test->last_wrong_addr->next;
+          else
+            {
+              test->last_wrong_addr = NULL;
+              iter = test->addrlist;
+            }
+
           while (iter)
             {
               test->socket = socket (iter->addr.addr.sa_family,
@@ -1584,7 +1592,12 @@ gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
               if (error_code == EALREADY || error_code == EINPROGRESS)
                 result = GTK_CUPS_CONNECTION_IN_PROGRESS;
               else
-                result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+                {
+                  close (test->socket);
+                  test->socket = -1;
+                  test->last_wrong_addr = test->current_addr;
+                  result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+                }
             }
          }
 
@@ -1605,6 +1618,7 @@ gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
 
 #ifdef HAVE_CUPS_API_1_2
   test->current_addr = NULL;
+  test->last_wrong_addr = NULL;
   httpAddrFreeList (test->addrlist);
   if (test->socket != -1)
     {
