@@ -322,8 +322,13 @@ gdk_event_source_new (GdkDisplay *display)
   GdkEventSource *event_source;
   GdkDisplayX11 *display_x11;
   int connection_number;
+  char *name;
 
   source = g_source_new (&event_funcs, sizeof (GdkEventSource));
+  name = g_strdup_printf ("GDK X11 Event source (%s)",
+			  gdk_display_get_name (display));
+  g_source_set_name (source, name);
+  g_free (name);
   event_source = (GdkEventSource *) source;
   event_source->display = display;
 

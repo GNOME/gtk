@@ -987,6 +987,7 @@ _gdk_quartz_event_loop_init (void)
   event_poll_fd.fd = -1;
 
   source = g_source_new (&event_funcs, sizeof (GSource));
+  g_source_set_name (source, "GDK Quartz event source"); 
   g_source_add_poll (source, &event_poll_fd);
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
