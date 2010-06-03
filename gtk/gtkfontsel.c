@@ -1552,18 +1552,22 @@ static void
 gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 {
   GtkDialog *dialog = GTK_DIALOG (fontseldiag);
+  GtkWidget *action_area, *content_area;
+
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
   
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   gtk_widget_push_composite_child ();
 
   gtk_window_set_resizable (GTK_WINDOW (fontseldiag), TRUE);
   
-  fontseldiag->main_vbox = dialog->vbox;
+  fontseldiag->main_vbox = content_area;
   
   fontseldiag->fontsel = gtk_font_selection_new ();
   gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 5);
@@ -1572,7 +1576,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 		      fontseldiag->fontsel, TRUE, TRUE, 0);
   
   /* Create the action area */
-  fontseldiag->action_area = dialog->action_area;
+  fontseldiag->action_area = action_area;
 
   fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
                                                       GTK_STOCK_CANCEL,

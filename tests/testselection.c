@@ -376,6 +376,7 @@ quit (void)
 int
 main (int argc, char *argv[])
 {
+  GtkWidget *action_area, *content_area;
   GtkWidget *dialog;
   GtkWidget *button;
   GtkWidget *table;
@@ -404,6 +405,9 @@ main (int argc, char *argv[])
   g_signal_connect (dialog, "destroy",
 		    G_CALLBACK (quit), NULL);
 
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
+
   table = gtk_table_new (4, 2, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER(table), 10);
 
@@ -411,8 +415,7 @@ main (int argc, char *argv[])
   gtk_table_set_row_spacing (GTK_TABLE (table), 1, 2);
   gtk_table_set_row_spacing (GTK_TABLE (table), 2, 2);
   gtk_table_set_col_spacing (GTK_TABLE (table), 0, 2);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->vbox), 
-		      table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
   gtk_widget_show (table);
   
   selection_button = gtk_toggle_button_new_with_label ("Claim Selection");
@@ -454,15 +457,13 @@ main (int argc, char *argv[])
 
   /* .. And create some buttons */
   button = gtk_button_new_with_label ("Paste");
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area), 
-		      button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (paste), entry);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG(dialog)->action_area), 
-		      button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
 
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_widget_destroy), dialog);

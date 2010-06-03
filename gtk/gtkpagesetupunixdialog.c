@@ -887,21 +887,25 @@ populate_dialog (GtkPageSetupUnixDialog *ps_dialog)
   GtkPageSetupUnixDialogPrivate *priv = ps_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (ps_dialog);
   GtkWidget *table, *label, *combo, *radio_button;
+  GtkWidget *action_area, *content_area;
   GtkCellRenderer *cell;
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
+
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   table = gtk_table_new (5, 4, FALSE);
   gtk_table_set_row_spacings (GTK_TABLE (table), 6);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_container_set_border_width (GTK_CONTAINER (table), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), table, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), table, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
   label = gtk_label_new_with_mnemonic (_("_Format for:"));

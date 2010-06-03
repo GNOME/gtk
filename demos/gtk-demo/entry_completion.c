@@ -37,6 +37,7 @@ create_completion_model (void)
 GtkWidget *
 do_entry_completion (GtkWidget *do_widget)
 {
+  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *entry;
@@ -58,8 +59,10 @@ do_entry_completion (GtkWidget *do_widget)
     g_signal_connect (window, "destroy",
 		      G_CALLBACK (gtk_widget_destroyed), &window);
 
+    content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+
     vbox = gtk_vbox_new (FALSE, 5);
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
     label = gtk_label_new (NULL);

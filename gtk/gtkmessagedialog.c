@@ -329,9 +329,14 @@ static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
   GtkWidget *hbox;
+  GtkDialog *message_dialog = GTK_DIALOG (dialog);
+  GtkWidget *action_area, *content_area;
   GtkMessageDialogPrivate *priv;
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+
+  content_area = gtk_dialog_get_content_area (message_dialog);
+  action_area = gtk_dialog_get_action_area (message_dialog);
 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_window_set_title (GTK_WINDOW (dialog), "");
@@ -369,15 +374,15 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_box_pack_start (GTK_BOX (hbox), priv->message_area,
                       TRUE, TRUE, 0);
 
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+  gtk_box_pack_start (GTK_BOX (content_area),
                       hbox,
                       FALSE, FALSE, 0);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14); /* 14 + 2 * 5 = 24 */
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 14 + 2 * 5 = 24 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   gtk_widget_show_all (hbox);
 

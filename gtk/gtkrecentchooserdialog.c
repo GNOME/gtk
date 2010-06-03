@@ -131,6 +131,8 @@ gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass)
 static void
 gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
 {
+  GtkWidget *content_area, *action_area;
+
   GtkRecentChooserDialogPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
   								     GTK_TYPE_RECENT_CHOOSER_DIALOG,
   								     GtkRecentChooserDialogPrivate);
@@ -138,10 +140,13 @@ gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
   
   dialog->priv = priv;
 
+  content_area = gtk_dialog_get_content_area (rc_dialog);
+  action_area = gtk_dialog_get_action_area (rc_dialog);
+
   gtk_dialog_set_has_separator (rc_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (rc_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (rc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (rc_dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 
 }
 
@@ -152,15 +157,19 @@ static void
 gtk_recent_chooser_item_activated_cb (GtkRecentChooser *chooser,
 				      gpointer          user_data)
 {
+  GtkDialog *rc_dialog;
   GtkRecentChooserDialog *dialog;
+  GtkWidget *action_area;
   GList *children, *l;
 
   dialog = GTK_RECENT_CHOOSER_DIALOG (user_data);
+  rc_dialog = GTK_DIALOG (dialog);
 
   if (gtk_window_activate_default (GTK_WINDOW (dialog)))
     return;
-  
-  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area));
+
+  action_area = gtk_dialog_get_action_area (rc_dialog);
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
   
   for (l = children; l; l = l->next)
     {
@@ -168,7 +177,7 @@ gtk_recent_chooser_item_activated_cb (GtkRecentChooser *chooser,
       gint response_id;
       
       widget = GTK_WIDGET (l->data);
-      response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      response_id = gtk_dialog_get_response_for_widget (rc_dialog, widget);
       
       if (response_id == GTK_RESPONSE_ACCEPT ||
           response_id == GTK_RESPONSE_OK     ||
@@ -191,9 +200,10 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
 				       guint                  n_construct_properties,
 				       GObjectConstructParam *construct_params)
 {
-  GObject *object;
   GtkRecentChooserDialogPrivate *priv;
-  
+  GtkWidget *content_area;
+  GObject *object;
+
   object = G_OBJECT_CLASS (gtk_recent_chooser_dialog_parent_class)->constructor (type,
 		  							         n_construct_properties,
 										 construct_params);
@@ -212,8 +222,10 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
   		    G_CALLBACK (gtk_recent_chooser_item_activated_cb),
   		    object);
 
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (object));
+
   gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox),
+  gtk_box_pack_start (GTK_BOX (content_area),
                       priv->chooser, TRUE, TRUE, 0);
   gtk_widget_show (priv->chooser);
   

@@ -80,6 +80,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
 static void
 gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
 {
+  GtkWidget *action_area, *content_area;
   GtkFileChooserDialogPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
 								   GTK_TYPE_FILE_CHOOSER_DIALOG,
 								   GtkFileChooserDialogPrivate);
@@ -88,10 +89,13 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   dialog->priv = priv;
   dialog->priv->response_requested = FALSE;
 
+  content_area = gtk_dialog_get_content_area (fc_dialog);
+  action_area = gtk_dialog_get_action_area (fc_dialog);
+
   gtk_dialog_set_has_separator (fc_dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
 
   /* We do a signal connection here rather than overriding the method in
    * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
@@ -126,6 +130,8 @@ static void
 file_chooser_widget_file_activated (GtkFileChooser       *chooser,
 				    GtkFileChooserDialog *dialog)
 {
+  GtkDialog *fc_dialog = GTK_DIALOG (dialog);
+  GtkWidget *action_area;
   GList *children, *l;
 
   if (gtk_window_activate_default (GTK_WINDOW (dialog)))
@@ -134,8 +140,8 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-
-  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area));
+  action_area = gtk_dialog_get_action_area (fc_dialog);
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
 
   for (l = children; l; l = l->next)
     {
@@ -143,7 +149,7 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
       int response_id;
 
       widget = GTK_WIDGET (l->data);
-      response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
       if (is_stock_accept_response_id (response_id))
 	{
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
@@ -221,6 +227,8 @@ static void
 file_chooser_widget_response_requested (GtkWidget            *widget,
 					GtkFileChooserDialog *dialog)
 {
+  GtkDialog *fc_dialog = GTK_DIALOG (dialog);
+  GtkWidget *action_area;
   GList *children, *l;
 
   dialog->priv->response_requested = TRUE;
@@ -231,8 +239,8 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
    */
-
-  children = gtk_container_get_children (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area));
+  action_area = gtk_dialog_get_action_area (fc_dialog);
+  children = gtk_container_get_children (GTK_CONTAINER (action_area));
 
   for (l = children; l; l = l->next)
     {
@@ -240,7 +248,7 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
       int response_id;
 
       widget = GTK_WIDGET (l->data);
-      response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
+      response_id = gtk_dialog_get_response_for_widget (fc_dialog, widget);
       if (is_stock_accept_response_id (response_id))
 	{
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
@@ -260,6 +268,7 @@ gtk_file_chooser_dialog_constructor (GType                  type,
 				     GObjectConstructParam *construct_params)
 {
   GtkFileChooserDialogPrivate *priv;
+  GtkWidget *content_area;
   GObject *object;
 
   object = G_OBJECT_CLASS (gtk_file_chooser_dialog_parent_class)->constructor (type,
@@ -282,8 +291,10 @@ gtk_file_chooser_dialog_constructor (GType                  type,
   g_signal_connect (priv->widget, "response-requested",
 		    G_CALLBACK (file_chooser_widget_response_requested), object);
 
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (object));
+
   gtk_container_set_border_width (GTK_CONTAINER (priv->widget), 5);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), priv->widget, TRUE, TRUE, 0);
 
   gtk_widget_show (priv->widget);
 
@@ -338,7 +349,10 @@ foreach_ensure_default_response_cb (GtkWidget *widget,
 static void
 ensure_default_response (GtkFileChooserDialog *dialog)
 {
-  gtk_container_foreach (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area),
+  GtkWidget *action_area;
+
+  action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
+  gtk_container_foreach (GTK_CONTAINER (action_area),
 			 foreach_ensure_default_response_cb,
 			 dialog);
 }

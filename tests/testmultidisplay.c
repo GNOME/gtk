@@ -58,6 +58,7 @@ make_selection_dialog (GdkScreen * screen,
 		       GtkWidget * other_entry)
 {
   GtkWidget *window, *vbox;
+  GtkWidget *content_area;
   MyDoubleGtkEntry *double_entry = g_new (MyDoubleGtkEntry, 1);
   double_entry->e1 = GTK_ENTRY (entry);
   double_entry->e2 = GTK_ENTRY (other_entry);
@@ -74,11 +75,12 @@ make_selection_dialog (GdkScreen * screen,
   g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
   vbox = g_object_new (GTK_TYPE_VBOX,
 			 "border_width", 5,
 			 NULL);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, FALSE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
   gtk_widget_grab_focus (entry);
@@ -100,6 +102,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *dialog, *display_entry, *dialog_label;
   GtkWidget *entry, *entry2;
+  GtkWidget *content_area;
   GdkDisplay *dpy2;
   GdkScreen *scr2 = NULL;	/* Quiet GCC */
   gboolean correct_second_display = FALSE;
@@ -123,9 +126,10 @@ main (int argc, char *argv[])
   dialog_label =
     gtk_label_new ("Please enter the name of\nthe second display\n");
 
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox), dialog_label);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (dialog)->vbox),
-		     display_entry);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+  gtk_container_add (GTK_CONTAINER (content_area), dialog_label);
+  gtk_container_add (GTK_CONTAINER (content_area), display_entry);
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (get_screen_response), display_entry);
 

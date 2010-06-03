@@ -733,6 +733,7 @@ request_password (GtkPrintBackend  *backend,
   GtkPrintBackendPrivate *priv = backend->priv;
   GtkWidget *dialog, *box, *main_box, *label, *icon, *vbox, *entry;
   GtkWidget *focus = NULL;
+  GtkWidget *content_area;
   gchar     *markup;
   gint       length;
   gint       i;
@@ -775,7 +776,8 @@ request_password (GtkPrintBackend  *backend,
 
 
   /* Packing */
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), main_box, TRUE, FALSE, 0);
+  content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+  gtk_box_pack_start (GTK_BOX (content_area), main_box, TRUE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (main_box), icon, FALSE, FALSE, 6);
   gtk_box_pack_start (GTK_BOX (main_box), vbox, FALSE, FALSE, 6);

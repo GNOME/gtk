@@ -27,6 +27,7 @@ static void destroy (GtkWidget *widget, gpointer data)
 
 static void _check_arrows (AtkObject *obj)
 {
+  GtkWidget *content_area, *action_area;
   AtkRole role;
   MainDialog *md;
   static gint visibleDialog = 0;
@@ -44,26 +45,24 @@ static void _check_arrows (AtkObject *obj)
 		md->arrow4 = gtk_arrow_new(GTK_ARROW_RIGHT,GTK_SHADOW_OUT);
 		md->dialog = gtk_dialog_new();
 		gtk_window_set_modal(GTK_WINDOW(md->dialog), TRUE);
-                gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->vbox),
-                                   md->arrow1, TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->vbox),
-                                   md->arrow2, TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->vbox),
-                                   md->arrow3, TRUE,TRUE, 0);
-		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->vbox),
-                                   md->arrow4, TRUE,TRUE, 0);
+
+                content_area = gtk_dialog_get_content_area (GTK_DIALOG (md->dialog));
+                action_area = gtk_dialog_get_action_area (GTK_DIALOG (md->dialog));
+
+                gtk_box_pack_start(GTK_BOX (content_area), md->arrow1, TRUE,TRUE, 0);
+		gtk_box_pack_start(GTK_BOX (content_area), md->arrow2, TRUE,TRUE, 0);
+		gtk_box_pack_start(GTK_BOX (content_area), md->arrow3, TRUE,TRUE, 0);
+		gtk_box_pack_start(GTK_BOX (content_area), md->arrow4, TRUE,TRUE, 0);
 		g_signal_connect(GTK_OBJECT(md->dialog), "destroy",
                                  G_CALLBACK (destroy), md->dialog);
 
 	        md->image = GTK_IMAGE(gtk_image_new_from_file("circles.xbm"));
-		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->vbox),
-                                   GTK_WIDGET(md->image), TRUE,TRUE, 0);
+		gtk_box_pack_start(GTK_BOX (content_area), GTK_WIDGET(md->image), TRUE,TRUE, 0);
 		md->close_button = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
 		g_signal_connect(GTK_OBJECT(md->close_button), "clicked",
                                  G_CALLBACK (destroy), md->dialog);
 
-		gtk_box_pack_start(GTK_BOX (GTK_DIALOG (md->dialog)->action_area),
-                                   md->close_button, TRUE,TRUE, 0);
+		gtk_box_pack_start(GTK_BOX (action_area), md->close_button, TRUE,TRUE, 0);
 
 		gtk_widget_show_all(md->dialog);
 		visibleDialog = 1;

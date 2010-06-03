@@ -141,23 +141,27 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
 {
   GtkColorSelectionDialogPriv *priv;
   GtkDialog *dialog = GTK_DIALOG (colorseldiag);
+  GtkWidget *action_area, *content_area;
 
   colorseldiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (colorseldiag,
                                                     GTK_TYPE_COLOR_SELECTION_DIALOG,
                                                     GtkColorSelectionDialogPriv);
   priv = colorseldiag->priv;
 
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
+
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   priv->colorsel = gtk_color_selection_new ();
   gtk_container_set_border_width (GTK_CONTAINER (priv->colorsel), 5);
   gtk_color_selection_set_has_palette (GTK_COLOR_SELECTION (priv->colorsel), FALSE);
   gtk_color_selection_set_has_opacity_control (GTK_COLOR_SELECTION (priv->colorsel), FALSE);
-  gtk_container_add (GTK_CONTAINER (GTK_DIALOG (colorseldiag)->vbox), priv->colorsel);
+  gtk_container_add (GTK_CONTAINER (content_area), priv->colorsel);
   gtk_widget_show (priv->colorsel);
   
   priv->cancel_button = gtk_dialog_add_button (dialog,

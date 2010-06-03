@@ -3768,16 +3768,20 @@ populate_dialog (GtkPrintUnixDialog *print_dialog)
   GtkPrintUnixDialogPrivate *priv = print_dialog->priv;
   GtkDialog *dialog = GTK_DIALOG (print_dialog);
   GtkWidget *vbox, *conflict_hbox, *image, *label;
+  GtkWidget *action_area, *content_area;
+
+  content_area = gtk_dialog_get_content_area (dialog);
+  action_area = gtk_dialog_get_action_area (dialog);
 
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 6);
+  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
+  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-  gtk_box_pack_start (GTK_BOX (dialog->vbox), vbox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
   priv->notebook = gtk_notebook_new ();
