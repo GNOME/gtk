@@ -63,19 +63,14 @@ See the <link linkend="gtk-resources">documentation on this topic</link>.
 
 
 <qandaentry>
-<question><para>How do I port from one GTK+ 
+<question><para>How do I port from one GTK+
 version to another?</para></question>
 
 <answer>
 
 <para>
-See the <link linkend="gtk-changes-2-0">list of incompatible changes
-from 1.2 to 2.0</link>. Also, the <ulink
-url="http://developer.gnome.org/dotplan/porting/">GNOME 2.0 porting
-guide</ulink> on <ulink
-url="http://developer.gnome.org">http://developer.gnome.org</ulink>
-has some more detailed discussion of porting from 1.2 to 2.0.
-You may also find useful information in the documentation for 
+See <xref linkend="gtk-migrating-2-to-3"/>.
+You may also find useful information in the documentation for
 specific widgets and functions.
 </para>
 

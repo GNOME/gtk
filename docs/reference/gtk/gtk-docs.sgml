@@ -42,10 +42,32 @@ string utilities, file utilities, a main loop abstraction, and so on.
 </varlistentry>
 
 <varlistentry>
+<term>GObject</term>
+<listitem><para>A library that provides a type system, a collection of
+fundamental types including an object type, a signal system.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GIO</term>
+<listitem><para>A modern, easy-to-use VFS API including abstractions for
+files, drives, volumes, stream IO, as well as network programming and
+DBus communication.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>cairo</term>
+<listitem><para>Cairo is a 2D graphics library with support for multiple
+output devices.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>Pango</term>
 <listitem><para>
 Pango is a library for internationalized text handling. It centers
-around the #PangoLayout object, representing a paragraph of text. 
+around the #PangoLayout object, representing a paragraph of text.
 Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
 other widgets that display text.
 </para></listitem>
@@ -67,7 +89,7 @@ framework.
 <term>GdkPixbuf</term>
 <listitem><para>
 This is a small library which allows you to create #GdkPixbuf
-("pixel buffer") objects from image data or image files. 
+("pixel buffer") objects from image data or image files.
 Use a #GdkPixbuf in combination with #GtkImage to display images.
 </para></listitem>
 </varlistentry>
@@ -84,7 +106,7 @@ on X11, Windows, and the Linux framebuffer device.
 <varlistentry>
 <term>GTK+</term>
 <listitem><para>
-The GTK+ library itself contains <firstterm>widgets</firstterm>, 
+The GTK+ library itself contains <firstterm>widgets</firstterm>,
 that is, GUI components such as #GtkButton or #GtkTextView.
 </para></listitem>
 </varlistentry>
@@ -400,24 +422,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       </para>
     </partintro>
 
-    <xi:include href="migrating-2to3.xml" />
     <xi:include href="xml/migrating-checklist.sgml" />
-    <xi:include href="changes-1.2.sgml" />
-    <xi:include href="changes-2.0.sgml" />
-    <xi:include href="xml/migrating-GtkFileChooser.sgml" />
-    <xi:include href="xml/migrating-GtkAction.sgml" />
-    <xi:include href="xml/migrating-GtkComboBox.sgml" />
-    <xi:include href="xml/migrating-GtkIconView.sgml" />
-    <xi:include href="xml/migrating-GtkAboutDialog.sgml" />
-    <xi:include href="xml/migrating-GtkColorButton.sgml" />
-    <xi:include href="xml/migrating-GtkAssistant.sgml" />
-    <xi:include href="xml/migrating-GtkRecentChooser.sgml" />
-    <xi:include href="xml/migrating-GtkLinkButton.sgml" />
-    <xi:include href="xml/migrating-GtkBuilder.sgml" />
-    <xi:include href="xml/migrating-GtkTooltip.sgml" />
-    <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
-    <xi:include href="xml/migrating-GtkLabel-links.sgml" />
-    <xi:include href="xml/migrating-ClientSideWindows.sgml" />
+    <xi:include href="migrating-2to3.xml" />
   </part>
 
   <part>
@@ -436,50 +442,6 @@ that is, GUI components such as #GtkButton or #GtkTextView.
   <index id="api-index-deprecated" role="deprecated">
     <title>Index of deprecated symbols</title>
     <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-2" role="2.2">
-    <title>Index of new symbols in 2.2</title>
-    <xi:include href="xml/api-index-2.2.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-4" role="2.4">
-    <title>Index of new symbols in 2.4</title>
-    <xi:include href="xml/api-index-2.4.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-6" role="2.6">
-    <title>Index of new symbols in 2.6</title>
-    <xi:include href="xml/api-index-2.6.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-8" role="2.8">
-    <title>Index of new symbols in 2.8</title>
-    <xi:include href="xml/api-index-2.8.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-10" role="2.10">
-    <title>Index of new symbols in 2.10</title>
-    <xi:include href="xml/api-index-2.10.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-12" role="2.12">
-    <title>Index of new symbols in 2.12</title>
-    <xi:include href="xml/api-index-2.12.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-14" role="2.14">
-    <title>Index of new symbols in 2.14</title>
-    <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-16" role="2.16">
-    <title>Index of new symbols in 2.16</title>
-    <xi:include href="xml/api-index-2.16.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-18" role="2.18">
-    <title>Index of new symbols in 2.18</title>
-    <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-20" role="2.20">
-    <title>Index of new symbols in 2.20</title>
-    <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
-  </index>
-  <index id="api-index-2-22" role="2.22">
-    <title>Index of new symbols in 2.22</title>
-    <xi:include href="xml/api-index-2.22.xml"><xi:fallback /></xi:include>
   </index>
   <index id="api-index-3-0" role="3.0">
     <title>Index of new symbols in 3.0</title>

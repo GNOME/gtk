@@ -49,12 +49,12 @@ How to compile GTK+ itself
       of the tools are already included in the source packages. But
       it's useful to know a bit about how packages that use these
       tools work. A source package is distributed as a
-      <literal>tar.gz</literal> or <literal>tar.bz2</literal> file 
+      <literal>tar.gz</literal> or <literal>tar.bz2</literal> file
       which you unpack into a directory full of the source files as follows:
     </para>
     <programlisting>
-      tar xvfz gtk+-2.0.0.tar.gz
-      tar xvfj gtk+-2.0.0.tar.bz2
+      tar xvfz gtk+-3.0.0.tar.gz
+      tar xvfj gtk+-3.0.0.tar.bz2
     </programlisting>
     <para>
       In the toplevel of the directory that is created, there will be
@@ -103,7 +103,7 @@ How to compile GTK+ itself
       a search path that <command>pkg-config</command> (see below)
       uses when looking for for file describing how to compile
       programs using different libraries. If you were installing GTK+
-      and it's dependencies into <filename>/opt/gtk</filename>, you 
+      and it's dependencies into <filename>/opt/gtk</filename>, you
       might want to set these variables as:
     </para>
     <programlisting>
@@ -137,30 +137,26 @@ How to compile GTK+ itself
     </para>
     <itemizedlist>
       <listitem>
-	<para>
-	  <ulink
-	  url="http://www.freedesktop.org/software/pkgconfig">pkg-config</ulink>
-	  is a tool for tracking the compilation flags needed for
-	  libraries that are used by the GTK+ libraries. (For each
-	  library, a small <literal>.pc</literal> text file is installed 
-          in a standard location that contains the compilation flags 
-          needed for that library along with version number information.)  
-          The version of <command>pkg-config</command> needed to build 
-          GTK+ is mirrored in the <filename>dependencies</filename> directory
-	  on the <ulink url="ftp://ftp.gtk.org/pub/gtk/">GTK+ FTP
-	  site.</ulink>
-	</para>
+        <para>
+          <ulink
+          url="http://pkg-config.freedesktop.org">pkg-config</ulink>
+          is a tool for tracking the compilation flags needed for
+          libraries that are used by the GTK+ libraries. (For each
+          library, a small <literal>.pc</literal> text file is installed
+          in a standard location that contains the compilation flags
+          needed for that library along with version number information.)
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The GTK+ makefiles will mostly work with different versions
-	  of <command>make</command>, however, there tends to be
-	  a few incompatibilities, so the GTK+ team recommends
-	  installing <ulink url="http://www.gnu.org/software/make">GNU
-	    make</ulink> if you don't already have it on your system
-	  and using it. (It may be called <command>gmake</command>
-	  rather than <command>make</command>.)
-	</para>
+        <para>
+          The GTK+ makefiles will mostly work with different versions
+          of <command>make</command>, however, there tends to be
+          a few incompatibilities, so the GTK+ team recommends
+          installing <ulink url="http://www.gnu.org/software/make">GNU
+            make</ulink> if you don't already have it on your system
+          and using it. (It may be called <command>gmake</command>
+          rather than <command>make</command>.)
+        </para>
       </listitem>
     </itemizedlist>
     <para>
@@ -170,106 +166,105 @@ How to compile GTK+ itself
     </para>
     <itemizedlist>
       <listitem>
-	<para>
-	  The GLib library provides core non-graphical functionality
-	  such as high level data types, Unicode manipulation, and
-	  an object and type system to C programs. It is available
-	  from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
-	  FTP site.</ulink>
-	</para>
+        <para>
+          The GLib library provides core non-graphical functionality
+          such as high level data types, Unicode manipulation, and
+          an object and type system to C programs. It is available
+          from the <ulink url="ftp://ftp.gtk.org/pub/glib/">GTK+
+          FTP site.</ulink>
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  <ulink url="http://www.pango.org">Pango</ulink> is a library
-	  for internationalized text handling. It is available from
-	  the <ulink url="ftp://ftp.gtk.org/pub/pango/">GTK+ FTP
-	  site.</ulink>. 
-	</para>
+        <para>
+          <ulink url="http://www.pango.org">Pango</ulink> is a library
+          for internationalized text handling. It is available from
+          the <ulink url="ftp://ftp.gtk.org/pub/pango/">GTK+ FTP
+          site.</ulink>.
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  ATK is the Accessibility Toolkit. It provides a set of generic
-	  interfaces allowing accessibility technologies such as
-	  screen readers to interact with a graphical user interface.
-	  It is available from the <ulink
-	  url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site.</ulink>
-	</para>
+        <para>
+          ATK is the Accessibility Toolkit. It provides a set of generic
+          interfaces allowing accessibility technologies such as
+          screen readers to interact with a graphical user interface.
+          It is available from the <ulink
+          url="ftp://ftp.gtk.org/pub/atk/">GTK+ FTP site.</ulink>
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The <ulink url="http://www.gnu.org/software/libiconv/">GNU
-	  libiconv library</ulink> is needed to build GLib if your
-	  system doesn't have the <function>iconv()</function>
-	  function for doing conversion between character
-	  encodings. Most modern systems should have
-	  <function>iconv()</function>.
-	</para>
+        <para>
+          The <ulink url="http://www.gnu.org/software/libiconv/">GNU
+          libiconv library</ulink> is needed to build GLib if your
+          system doesn't have the <function>iconv()</function>
+          function for doing conversion between character
+          encodings. Most modern systems should have
+          <function>iconv()</function>.
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The libintl library from the <ulink
-	  url="http://www.gnu.org/software/gettext/">GNU gettext
-	  package</ulink> is needed if your system doesn't have the
-	  <function>gettext()</function> functionality for handling
-	  message translation databases.
-	</para>
+        <para>
+          The libintl library from the <ulink
+          url="http://www.gnu.org/software/gettext/">GNU gettext
+          package</ulink> is needed if your system doesn't have the
+          <function>gettext()</function> functionality for handling
+          message translation databases.
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The <ulink
-	    url="ftp://ftp.uu.net/graphics/jpeg/">JPEG</ulink>,
-	  <ulink url="http://www.libpng.org">PNG</ulink>, and
-	  <ulink url="http://www.libtiff.org">TIFF</ulink> image 
-          loading libraries are needed to compile GTK+. You probably 
-          already have these libraries installed, but if not, the 
-          versions you need are available in the 
+        <para>
+          The <ulink url="http://en.wikipedia.org/wiki/Libjpeg">JPEG</ulink>,
+          <ulink url="http://www.libpng.org">PNG</ulink>, and
+          <ulink url="http://www.libtiff.org">TIFF</ulink> image
+          loading libraries are needed to compile GTK+. You probably
+          already have these libraries installed, but if not, the
+          versions you need are available in the
            <filename>dependencies</filename> directory on the the
-	  <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.6/dependencies/">GTK+
-	    FTP site.</ulink>. (Before installing these libraries
-	  from source, you should check if your operating system
-	  vendor has prebuilt packages of these libraries that you
-	  don't have installed.)
-	</para>
+          <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.10/dependencies/">GTK+
+            FTP site.</ulink>. (Before installing these libraries
+          from source, you should check if your operating system
+          vendor has prebuilt packages of these libraries that you
+          don't have installed.)
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The libraries from the X window system are needed to build
-	  Pango and GTK+. You should already have these installed on
-	  your system, but it's possible that you'll need to install
-	  the development environment for these libraries that your
-	  operating system vendor provides.
-	</para>
+        <para>
+          The libraries from the X window system are needed to build
+          Pango and GTK+. You should already have these installed on
+          your system, but it's possible that you'll need to install
+          the development environment for these libraries that your
+          operating system vendor provides.
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
-	  library provides Pango with a standard way of locating
-	  fonts and matching them against font names.
-	</para>
+        <para>
+          The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
+          library provides Pango with a standard way of locating
+          fonts and matching them against font names.
+        </para>
       </listitem>
       <listitem>
-	<para>
-	  <ulink url="http://www.cairographics.org">Cairo</ulink>
+        <para>
+          <ulink url="http://www.cairographics.org">Cairo</ulink>
           is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for much of their
           drawing.
         </para>
       </listitem>
       <listitem>
-	<para>
-	  <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
+        <para>
+          <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
           is a framework for making introspection data available to
           language bindings.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink> 
-          package is not a hard dependency of GTK+, but it contains definitions 
-          for mime types that are used by GIO and, indirectly, by GTK+. 
-          gdk-pixbuf will use GIO for mime type detection if possible. For this 
-          to work, shared-mime-info needs to be installed and 
-          <envar>XDG_DATA_DIRS</envar> set accordingly at configure time. 
+          The <ulink url="http://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink>
+          package is not a hard dependency of GTK+, but it contains definitions
+          for mime types that are used by GIO and, indirectly, by GTK+.
+          gdk-pixbuf will use GIO for mime type detection if possible. For this
+          to work, shared-mime-info needs to be installed and
+          <envar>XDG_DATA_DIRS</envar> set accordingly at configure time.
           Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
         </para>
       </listitem>
@@ -281,7 +276,7 @@ How to compile GTK+ itself
       First make sure that you have the necessary external
       dependencies installed: <command>pkg-config</command>, GNU make,
       the JPEG, PNG, and TIFF libraries, FreeType, and, if necessary,
-      libiconv and libintl. To get detailed information about building 
+      libiconv and libintl. To get detailed information about building
       these packages, see the documentation provided with the
       individual packages.
       On a Linux system, it's quite likely you'll have all of these
@@ -294,7 +289,7 @@ How to compile GTK+ itself
       <literal>make install</literal> mentioned above. If you're
       lucky, this will all go smoothly, and you'll be ready to
       <link linkend="gtk-compiling">start compiling your own GTK+
-	applications</link>. You can test your GTK+ installation
+        applications</link>. You can test your GTK+ installation
       by running the <command>gtk-demo</command> program that
       GTK+ installs.
     </para>
@@ -315,123 +310,127 @@ How to compile GTK+ itself
       <title>Extra Configuration Options</title>
 
       <para>
-	In addition to the normal options, the
-	<command>configure</command> script for the GTK+ library
-	supports a number of additional arguments. (Command line
-	arguments for the other GTK+ libraries are described in
-	the documentation distributed with the those libraries.)
+        In addition to the normal options, the
+        <command>configure</command> script for the GTK+ library
+        supports a number of additional arguments. (Command line
+        arguments for the other GTK+ libraries are described in
+        the documentation distributed with the those libraries.)
 
-	<cmdsynopsis>
-	  <command>configure</command>
+        <cmdsynopsis>
+          <command>configure</command>
 
-	  <group>
-	    <arg>--disable-modules</arg>
-	    <arg>--enable-modules</arg>
-	  </group>
-	  <group>
-	    <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
-	  </group>
-	  <group>
-	    <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
-	  </group>
-	  <group>
-	    <arg>--enable-debug=[no|minimum|yes]</arg>
-	  </group>
           <group>
-	    <arg>--disable-visibility</arg>
-	    <arg>--enable-visibility</arg>
-	  </group>
+            <arg>--disable-modules</arg>
+            <arg>--enable-modules</arg>
+          </group>
           <group>
-	    <arg>--disable-shm</arg>
-	    <arg>--enable-shm</arg>
-	  </group>
+            <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
+          </group>
           <group>
-	    <arg>--disable-xim</arg>
-	    <arg>--enable-xim</arg>
-	  </group>
+            <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
+          </group>
           <group>
-	    <arg>--disable-xim-inst</arg>
-	    <arg>--enable-xim-inst</arg>
-	  </group>
+            <arg>--enable-debug=[no|minimum|yes]</arg>
+          </group>
           <group>
-	    <arg>--disable-xkb</arg>
-	    <arg>--enable-xkb</arg>
-	  </group>
+            <arg>--disable-visibility</arg>
+            <arg>--enable-visibility</arg>
+          </group>
           <group>
-	    <arg>--disable-xinerama</arg>
-	    <arg>--enable-xinerama</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-gtk-doc</arg>
-	    <arg>--enable-gtk-doc</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-cups</arg>
-	    <arg>--enable-cups</arg>
-	  </group>
+            <arg>--disable-shm</arg>
+            <arg>--enable-shm</arg>
+          </group>
+          <group>
+            <arg>--disable-xim</arg>
+            <arg>--enable-xim</arg>
+          </group>
+          <group>
+            <arg>--disable-xim-inst</arg>
+            <arg>--enable-xim-inst</arg>
+          </group>
+          <group>
+            <arg>--disable-xkb</arg>
+            <arg>--enable-xkb</arg>
+          </group>
+          <group>
+            <arg>--disable-xinerama</arg>
+            <arg>--enable-xinerama</arg>
+          </group>
+          <group>
+            <arg>--disable-gtk-doc</arg>
+            <arg>--enable-gtk-doc</arg>
+          </group>
+          <group>
+            <arg>--disable-cups</arg>
+            <arg>--enable-cups</arg>
+          </group>
+          <group>
+            <arg>--disable-papi</arg>
+            <arg>--enable-papi</arg>
+          </group>
           <group>
             <arg>--with-xinput=[no|yes]</arg>
           </group>
-	  <group>
-	    <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
-	  </group>
           <group>
-	    <arg>--disable-introspection</arg>
+            <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
           </group>
-	</cmdsynopsis>
+          <group>
+            <arg>--disable-introspection</arg>
+          </group>
+        </cmdsynopsis>
       </para>
 
       <formalpara>
-	<title><systemitem>--disable-modules</systemitem> and
-	  <systemitem>--enable-modules</systemitem></title>
+        <title><systemitem>--disable-modules</systemitem> and
+          <systemitem>--enable-modules</systemitem></title>
 
-	<para>
-	  Normally GTK+ will try to build the GdkPixbuf image file
-	  format loaders as little shared libraries that are loaded on
-	  demand.  The <systemitem>--disable-modules</systemitem>
-	  argument indicates that they should all be built statically
-	  into the GTK+ library instead.  This is useful for
-	  people who need to produce statically-linked binaries.  If
-	  neither <systemitem>--disable-modules</systemitem> nor
-	  <systemitem>--enable-modules</systemitem> is specified, then
-	  the <command>configure</command> script will try to
-	  auto-detect whether shared modules work on your system.
-	</para>
+        <para>
+          Normally GTK+ will try to build the GdkPixbuf image file
+          format loaders as little shared libraries that are loaded on
+          demand.  The <systemitem>--disable-modules</systemitem>
+          argument indicates that they should all be built statically
+          into the GTK+ library instead.  This is useful for
+          people who need to produce statically-linked binaries.  If
+          neither <systemitem>--disable-modules</systemitem> nor
+          <systemitem>--enable-modules</systemitem> is specified, then
+          the <command>configure</command> script will try to
+          auto-detect whether shared modules work on your system.
+        </para>
       </formalpara>
 
       <formalpara>
-	<title><systemitem>--with-included-loaders</systemitem></title>
+        <title><systemitem>--with-included-loaders</systemitem></title>
 
-	<para>
+        <para>
          This option allows you to specify which image loaders you
          want to include; for example, you might include only the PNG
          loader to create a smaller GdkPixbuf binary.
-	</para>
+        </para>
       </formalpara>
 
       <formalpara>
-	<title><systemitem>--with-included-immodules</systemitem></title>
+        <title><systemitem>--with-included-immodules</systemitem></title>
 
-	<para>
+        <para>
          This option allows you to specify which input method modules you
-         want to include. 
-	</para>
+         want to include.
+        </para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--enable-debug</systemitem></title>
-          
+        
         <para>
-         Turns on various amounts of debugging support. Setting this to 'no' 
-	 disables g_assert(), g_return_if_fail(), g_return_val_if_fail() and
+         Turns on various amounts of debugging support. Setting this to 'no'
+         disables g_assert(), g_return_if_fail(), g_return_val_if_fail() and
          all cast checks between different object types. Setting it to 'minimum'
-         disables only cast checks. Setting it to 'yes' enables 
-         <link linkend="GTK-Debug-Options">runtime debugging</link>. 
+         disables only cast checks. Setting it to 'yes' enables
+         <link linkend="GTK-Debug-Options">runtime debugging</link>.
          The default is 'minimum'.
-         Note that 'no' is fast, but dangerous as it tends to destabilize 
-         even mostly bug-free software by changing the effect of many bugs 
-         from simple warnings into fatal crashes. Thus 
-         <option>--enable-debug=no</option> should <emphasis>not</emphasis> 
+         Note that 'no' is fast, but dangerous as it tends to destabilize
+         even mostly bug-free software by changing the effect of many bugs
+         from simple warnings into fatal crashes. Thus
+         <option>--enable-debug=no</option> should <emphasis>not</emphasis>
          be used for stable releases of GTK+.
         </para>
       </formalpara>
@@ -443,7 +442,7 @@ How to compile GTK+ itself
           The option <systemitem>--disable-visibility</systemitem>
           turns off the use of ELF visibility attributes for linking
           optimizations. This makes sense while changing GTK+ itself,
-          since the way in which GTK+ uses visibility attributes 
+          since the way in which GTK+ uses visibility attributes
           forces a full rebuild of all source files for any header
           modification.
         </para>
@@ -453,33 +452,33 @@ How to compile GTK+ itself
         <title><systemitem>--enable-explicit-deps</systemitem> and
           <systemitem>--disable-explicit-deps</systemitem></title>
         <para>
-	  If <systemitem>--enable-explicit-deps</systemitem> is
-	  specified then GTK+ will write the full set of libraries
-	  that GTK+ depends upon into its <literal>.pc</literal> files to be used when
-	  programs depending on GTK+ are linked. Otherwise, GTK+
-	  only will include the GTK+ libraries themselves, and
-	  will depend on system library dependency facilities to
-	  bring in the other libraries.
-	  By default GTK+ will disable explicit dependencies unless
-	  it detects that they are needed on the system. (If you
-	  specify <systemitem>--enable-static</systemitem> to force
-	  building of static libraries, then explicit dependencies
-	  will be written since library dependencies don't work
-	  for static libraries.) Specifying
-	  <systemitem>--enable-explicit-deps</systemitem> or
-	  <systemitem>--enable-static</systemitem> can cause
-	  compatibility
-	  problems when libraries that GTK+ depends upon change
-	  their versions, and should be avoided if possible.
+          If <systemitem>--enable-explicit-deps</systemitem> is
+          specified then GTK+ will write the full set of libraries
+          that GTK+ depends upon into its <literal>.pc</literal> files to be used when
+          programs depending on GTK+ are linked. Otherwise, GTK+
+          only will include the GTK+ libraries themselves, and
+          will depend on system library dependency facilities to
+          bring in the other libraries.
+          By default GTK+ will disable explicit dependencies unless
+          it detects that they are needed on the system. (If you
+          specify <systemitem>--enable-static</systemitem> to force
+          building of static libraries, then explicit dependencies
+          will be written since library dependencies don't work
+          for static libraries.) Specifying
+          <systemitem>--enable-explicit-deps</systemitem> or
+          <systemitem>--enable-static</systemitem> can cause
+          compatibility
+          problems when libraries that GTK+ depends upon change
+          their versions, and should be avoided if possible.
         </para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--disable-shm</systemitem> and
           <systemitem>--enable-shm</systemitem></title>
- 
+
         <para>
-          These options can be used to control whether GTK+ will use shared 
+          These options can be used to control whether GTK+ will use shared
           memory to communicate with the X server when possible.
           The default is 'yes'.
         </para>
@@ -488,44 +487,44 @@ How to compile GTK+ itself
       <formalpara>
         <title><systemitem>--disable-xim</systemitem> and
           <systemitem>--enable-xim</systemitem></title>
- 
+
         <para>
-          These options can be used to control whether GTK+ will 
+          These options can be used to control whether GTK+ will
           be compiled with support for XIM. (The X Input Method
-	  extension, used for Japanese input.) The default is yes.
+          extension, used for Japanese input.) The default is yes.
         </para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--disable-xim-inst</systemitem> and
           <systemitem>--enable-xim-inst</systemitem></title>
- 
+
         <para>
-          These options determine whether GTK+ will use the 
-	  XIM instantiate callback. 
+          These options determine whether GTK+ will use the
+          XIM instantiate callback.
           The default is 'yes', unless the host system is Solaris,
-	  where <function>XRegisterIMInstantiateCallback()</function>
-	  seems to cause a segfault.
+          where <function>XRegisterIMInstantiateCallback()</function>
+          seems to cause a segfault.
         </para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--disable-xkb</systemitem> and
           <systemitem>--enable-xkb</systemitem></title>
- 
+
         <para>
-	  By default the <command>configure</command> script will try
-	  to auto-detect whether the XKB extension is supported by
+          By default the <command>configure</command> script will try
+          to auto-detect whether the XKB extension is supported by
           the X libraries GTK+ is linked with.
           These options can be used to explicitly control whether
-	  GTK+ will support the XKB extension. 
+          GTK+ will support the XKB extension.
         </para>
       </formalpara>
 
       <formalpara>
         <title><systemitem>--disable-xinerama</systemitem> and
           <systemitem>--enable-xinerama</systemitem></title>
-     
+
         <para>
           By default the <command>configure</command> script will try
           to link against the Xinerama libraries if they are found.
@@ -535,29 +534,29 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-	<title><systemitem>--disable-gtk-doc</systemitem> and
-	  <systemitem>--enable-gtk-doc</systemitem></title>
+        <title><systemitem>--disable-gtk-doc</systemitem> and
+          <systemitem>--enable-gtk-doc</systemitem></title>
 
-	<para>
-	  The <application>gtk-doc</application> package is
-	  used to generate the reference documentation included
-	  with GTK+. By default support for <application>gtk-doc</application> 
-	  is disabled because it requires various extra dependencies
-	  to be installed. If you have
-	  <application>gtk-doc</application> installed and
-	  are modifying GTK+, you may want to enable
-	  <application>gtk-doc</application> support by passing
-	  in <systemitem>--enable-gtk-doc</systemitem>. If not
-	  enabled, pre-generated HTML files distributed with GTK+
-	  will be installed.
-	</para>
+        <para>
+          The <application>gtk-doc</application> package is
+          used to generate the reference documentation included
+          with GTK+. By default support for <application>gtk-doc</application>
+          is disabled because it requires various extra dependencies
+          to be installed. If you have
+          <application>gtk-doc</application> installed and
+          are modifying GTK+, you may want to enable
+          <application>gtk-doc</application> support by passing
+          in <systemitem>--enable-gtk-doc</systemitem>. If not
+          enabled, pre-generated HTML files distributed with GTK+
+          will be installed.
+        </para>
       </formalpara>
 
       <formalpara>
-	<title><systemitem>--disable-cups</systemitem> and
-	  <systemitem>--enable-cups</systemitem></title>
+        <title><systemitem>--disable-cups</systemitem> and
+          <systemitem>--enable-cups</systemitem></title>
 
-	<para>
+        <para>
           By default the <command>configure</command> script will try
           to build the cups print backend if the cups libraries are found.
           These options can be used to explicitly control whether
@@ -566,29 +565,40 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--disable-papi</systemitem> and
+          <systemitem>--enable-papi</systemitem></title>
+
+        <para>
+          By default the <command>configure</command> script will try
+          to build the papi print backend if the papi libraries are found.
+          These options can be used to explicitly control whether
+          the papi print backend should be built.
+        </para>
+      </formalpara>
+
+      <formalpara>
         <title><systemitem>--with-xinput</systemitem></title>
         <para>
-	  Controls whether GTK+ is built with support for the XInput
-	  extension. The XInput extension provides an interface
-	  to extended input devices such as graphics tablets.
-	  When this support is compiled in, specially written
-	  GTK+ programs can get access to subpixel positions,
-	  multiple simultaneous input devices, and extra "axes"
-	  provided by the device such as pressure and tilt
-	  information. This is only known to work well on XFree86
-	  systems, though other systems do have this extension.
+          Controls whether GTK+ is built with support for the XInput
+          or XInput2 extension. These extensions provide an extended
+          interface to input devices such as graphics tablets.
+          When this support is compiled in, specially written
+          GTK+ programs can get access to subpixel positions,
+          multiple simultaneous input devices, and extra "axes"
+          provided by the device such as pressure and tilt
+          information.
         </para>
       </formalpara>
       <formalpara>
-	<title><systemitem>--with-gdktarget</systemitem></title>
+        <title><systemitem>--with-gdktarget</systemitem></title>
 
-	<para>
-          Toggles between the supported backends for GDK. 
+        <para>
+          Toggles between the supported backends for GDK.
           The default is x11, unless the platform is Windows, in which
-	  case the default is win32. Other supported backends are
+          case the default is win32. Other supported backends are
           the quartz backend for OS X, and the DirectFB backend
           for the Linux framebuffer.
-	</para>
+        </para>
       </formalpara>
       <formalpara>
         <title><systemitem>--disable-introspection</systemitem></title>

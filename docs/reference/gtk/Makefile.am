@@ -120,28 +120,12 @@ content_files =					\
 	version.xml				\
 	running.sgml				\
 	building.sgml				\
-	changes-1.2.sgml			\
-	changes-2.0.sgml			\
 	compiling.sgml				\
 	directfb.sgml				\
 	drawing-model.xml			\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-        migrating-ClientSideWindows.sgml	\
-	migrating-GtkAboutDialog.sgml		\
-	migrating-GtkAction.sgml		\
-	migrating-GtkAssistant.sgml		\
-	migrating-GtkBuilder.sgml		\
-	migrating-GtkColorButton.sgml		\
-	migrating-GtkComboBox.sgml		\
-	migrating-GtkEntry-icons.sgml		\
-	migrating-GtkFileChooser.sgml		\
-	migrating-GtkIconView.sgml		\
-	migrating-GtkLabel-links.sgml		\
-	migrating-GtkLinkButton.sgml		\
-	migrating-GtkRecentChooser.sgml 	\
-        migrating-GtkTooltip.sgml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\

@@ -3,9 +3,14 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
 <chapter id="gtk-migrating-2-to-3">
-  <title>Migrating from 2.x to 3.x</title>
+  <title>Migrating from GTK+ 2.x to GTK+ 3</title>
 
-  <refsect1>
+  <para>
+    There are a number of steps that you can take to prepare your GTK+ 2.x
+    application for the switch to GTK+ 3.
+  </para>
+
+  <section>
   <title>Only single includes</title>
   <para>
     Make sure your program only include the toplevel headers:
@@ -13,24 +18,25 @@
     make CFLAGS+="-DG_DISABLE_SINGLE_INCLUDES -DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES -DGTK_DISABLE_SINGLE_INCLUDES"
     </programlisting>
   </para>
-  </refsect1>
+  </section>
 
-  <refsect1>
+  <section>
   <title>Do not use deprecated symbols</title>
   <para>
-    Make sure your program doesn't use any deprecated functions:
+    Make sure your program doesn't use any functions that have been
+    deprecated in GTK+ 2.x:
     <programlisting>
     make CFLAGS+="-DG_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"
     </programlisting>
   </para>
-  </refsect1>
+  </section>
 
-  <refsect1>
-  <title>Use accessor funcions instead direc access</title>
+  <section>
+  <title>Use accessor functions instead direct access</title>
   <para>
-    GTK+ 3 removed many implementation details and struct members from
-    its public headers. To ensure that your application will not have problems
-    with this, you can define the preprocessor symbol GSEAL_ENABLE. This will
+    GTK+ 3 removes many implementation details and struct members from
+    its public headers. To ensure that your application does not have problems
+    with this, you define the preprocessor symbol GSEAL_ENABLE. This will
     make the compiler catch all uses of direct access to struct fields so that
     you can go through them one by one and replace them with a call to an
     accessor function instead.
@@ -38,22 +44,27 @@
     make CFLAGS+="-DGSEAL_ENABLE"
     </programlisting>
   </para>
-  </refsect1>
+  </section>
 
-  <refsect1>
+  <section>
   <title>GTK+ Modules</title>
   <para>
-    Some GNOME modules install GTK+ modules. Since GTK+ 3 will be
-    parallel-installable with GTK+ 2.x, the two have separate locations for
-    their loadable modules. The location for GTK+ 2.x is $libdir/gtk-2.0
-    (and its subdirectories), for GTK+ 3, the location is $libdir/gtk-3.0
+    Some software packages install loadable GTK+ modules such as theme engines,
+    gdk-pixbuf loaders or input methods. Since GTK+ 3 is parallel-installable
+    with GTK+ 2.x, the two GTK+ versions have separate locations for their
+    loadable modules. The location for GTK+ 2.x is
+    <filename><replaceable>libdir</replaceable>/gtk-2.0</filename>
+    (and its subdirectories), for GTK+ 3 the location is
+    <filename><replaceable>libdir</replaceable>/gtk-3.0</filename>
     (and its subdirectories).
   </para>
   <para>
-    For some kinds of modules, namely im modules and pixbuf loaders,
+    For some kinds of modules, namely input methods and pixbuf loaders,
     GTK+ keeps a cache file with extra information about the modules.
-    These cache files are located in $sysconfdir/gtk-2.0 for GTK+ 2.x.
-    For GTK+ 3, they have been moved to $libdir/gtk-3.0/3.0.0/.
+    For GTK+ 2.x, these cache files are located in
+    <filename><replaceable>sysconfdir</replaceable>/gtk-2.0</filename>.
+    For GTK+ 3, they have been moved to
+    <filename><replaceable>libdir</replaceable>/gtk-3.0/3.0.0/</filename>.
     The commands that create these cache files have been renamed with a -3
     suffix to make them parallel-installable.
   </para>
@@ -65,5 +76,5 @@
     against libgtk 2.x into an application using GTK+ 3 will lead to
     unhappiness and must be avoided.
   </para>
-  </refsect1>
+  </section>
 </chapter>
