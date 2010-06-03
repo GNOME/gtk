@@ -713,6 +713,7 @@ free_monitors (GdkX11Monitor *monitors,
   g_free (monitors);
 }
 
+#ifdef HAVE_RANDR
 static int
 monitor_compare_function (GdkX11Monitor *monitor1,
                           GdkX11Monitor *monitor2)
@@ -737,6 +738,7 @@ monitor_compare_function (GdkX11Monitor *monitor1,
 
   return 0;
 }
+#endif
 
 static gboolean
 init_randr13 (GdkScreen *screen)
@@ -1162,7 +1164,9 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 			      XEvent    *event)
 {
   gint width, height;
+#ifdef HAVE_RANDR
   GdkDisplayX11 *display_x11;
+#endif
 
   width = gdk_screen_get_width (screen);
   height = gdk_screen_get_height (screen);
@@ -1182,7 +1186,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
     {
       XConfigureEvent *rcevent = (XConfigureEvent *) event;
       Screen	    *xscreen = gdk_x11_screen_get_xscreen (screen);
-      
+
       xscreen->width   = rcevent->width;
       xscreen->height  = rcevent->height;
     }
