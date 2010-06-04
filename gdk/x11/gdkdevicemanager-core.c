@@ -425,11 +425,11 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
   window = get_event_window (translator, xevent);
   window_private = (GdkWindowObject *) window;
 
-  if (window && GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-
   if (window)
     {
+      if (GDK_WINDOW_DESTROYED (window) || !GDK_IS_WINDOW (window))
+        return FALSE;
+
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
       g_object_ref (window);
