@@ -3034,6 +3034,7 @@ gtk_statusbar_get_context_id
 gtk_statusbar_push
 gtk_statusbar_pop
 gtk_statusbar_remove
+gtk_statusbar_remove_all
 gtk_statusbar_set_has_resize_grip
 gtk_statusbar_get_has_resize_grip
 gtk_statusbar_get_message_area
@@ -5067,6 +5068,7 @@ gtk_window_get_urgency_hint
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
+gtk_window_has_group
 gtk_window_get_window_type
 gtk_window_move
 gtk_window_parse_geometry
