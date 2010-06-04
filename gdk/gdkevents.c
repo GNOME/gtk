@@ -1006,6 +1006,51 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_PROXIMITY_OUT:
       return event->proximity.device;
     default:
+      break;
+    }
+
+  /* Fallback if event has no device set */
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_2BUTTON_PRESS:
+    case GDK_3BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_FOCUS_CHANGE:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DRAG_STATUS:
+    case GDK_DROP_START:
+    case GDK_DROP_FINISHED:
+    case GDK_SCROLL:
+    case GDK_GRAB_BROKEN:
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      {
+        GdkDisplay *display;
+        GdkDevice *core_pointer;
+
+        g_warning ("Event with type %d not holding a GdkDevice. "
+                   "It is most likely synthesized outside Gdk/GTK+\n",
+                   event->type);
+
+        display = gdk_drawable_get_display (event->any.window);
+        core_pointer = gdk_display_get_core_pointer (display);
+
+        if (event->type == GDK_KEY_PRESS ||
+            event->type == GDK_KEY_RELEASE)
+          return gdk_device_get_associated_device (core_pointer);
+        else
+          return core_pointer;
+      }
+      break;
+    default:
       return NULL;
     }
 }
