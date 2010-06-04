@@ -473,7 +473,6 @@ gtk_extended_layout_get_height_for_width (GtkExtendedLayout *layout,
 /**
  * gtk_extended_layout_get_desired_size:
  * @layout: a #GtkExtendedLayout instance
- * @width: the size which is available for allocation
  * @request_natural: Whether to base the contextual request off of the
  *     base natural or the base minimum
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
