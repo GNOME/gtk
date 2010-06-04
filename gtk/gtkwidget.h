@@ -802,7 +802,7 @@ gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 /* Widget styles.
  */
-void        gtk_widget_style_attach       (GtkWidget            *style);
+void        gtk_widget_style_attach       (GtkWidget            *widget);
 
 gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
 void	    gtk_widget_set_style          (GtkWidget            *widget,
