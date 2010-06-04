@@ -702,6 +702,9 @@ gdk_window_finalize (GObject *object)
   if (obj->device_events)
     g_hash_table_destroy (obj->device_events);
 
+  if (obj->source_event_masks)
+    g_hash_table_destroy (obj->source_event_masks);
+
   if (obj->devices_inside)
     g_list_free (obj->devices_inside);
 
@@ -10909,6 +10912,123 @@ void
 gdk_window_geometry_changed (GdkWindow *window)
 {
   _gdk_synthesize_crossing_events_for_geometry_change (window);
+}
+
+static void
+source_events_device_added (GdkDeviceManager *device_manager,
+                            GdkDevice        *device,
+                            gpointer          user_data)
+{
+  GdkWindow *window;
+  GdkWindowObject *private;
+  GdkEventMask event_mask;
+  GdkInputSource source;
+
+  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_FLOATING)
+    return;
+
+  window = user_data;
+  private = (GdkWindowObject *) window;
+  source = gdk_device_get_source (device);
+
+  event_mask = GPOINTER_TO_UINT (g_hash_table_lookup (private->source_event_masks,
+                                                      GUINT_TO_POINTER (source)));
+  if (event_mask)
+    {
+      gdk_window_set_device_events (window, device, event_mask);
+      gdk_device_set_mode (device, GDK_MODE_SCREEN);
+    }
+}
+
+/**
+ * gdk_window_set_source_events:
+ * @window: a #GdkWindow
+ * @source: a #GdkInputSource to define the source class.
+ * @event_mask: event mask for @window
+ *
+ * Sets the event mask for any floating device (i.e. not attached to any
+ * visible pointer) that has the source defined as @source. This event
+ * mask will be applied both to currently existing and newly added devices
+ * after this call.
+ **/
+void
+gdk_window_set_source_events (GdkWindow      *window,
+                              GdkInputSource  source,
+                              GdkEventMask    event_mask)
+{
+  GdkDeviceManager *device_manager;
+  GdkWindowObject *private;
+  GdkDisplay *display;
+  GList *devices, *d;
+  guint size;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  display = gdk_drawable_get_display (GDK_DRAWABLE (window));
+  device_manager = gdk_display_get_device_manager (display);
+  private = (GdkWindowObject *) window;
+
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+
+  /* Set event mask for existing devices */
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *device = d->data;
+
+      if (source == gdk_device_get_source (device))
+        {
+          gdk_window_set_device_events (window, device, event_mask);
+          gdk_device_set_mode (device, GDK_MODE_SCREEN);
+        }
+    }
+
+  /* Update accounting */
+  if (G_UNLIKELY (!private->source_event_masks))
+    private->source_event_masks = g_hash_table_new (NULL, NULL);
+
+  if (event_mask)
+    g_hash_table_insert (private->source_event_masks,
+                         GUINT_TO_POINTER (source),
+                         GUINT_TO_POINTER (event_mask));
+  else
+    g_hash_table_remove (private->source_event_masks,
+                         GUINT_TO_POINTER (source));
+
+  size = g_hash_table_size (private->source_event_masks);
+
+  /* Update handler if needed */
+  if (!private->device_added_handler_id && size > 0)
+    {
+      private->device_added_handler_id =
+        g_signal_connect (device_manager, "device-added",
+                          G_CALLBACK (source_events_device_added), window);
+    }
+  else if (private->device_added_handler_id && size == 0)
+    g_signal_handler_disconnect (device_manager, private->device_added_handler_id);
+}
+
+/**
+ * gdk_window_get_source_events:
+ * @window: a #GdkWindow
+ * @source: a #GdkInputSource to define the source class.
+ *
+ * Returns the event mask for @window corresponding to the device class specified
+ * by @source.
+ *
+ * Returns: source event mask for @window
+ **/
+GdkEventMask
+gdk_window_get_source_events (GdkWindow      *window,
+                              GdkInputSource  source)
+{
+  GdkWindowObject *private;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  private = (GdkWindowObject *) window;
+
+  return GPOINTER_TO_UINT (g_hash_table_lookup (private->source_event_masks,
+                                                GUINT_TO_POINTER (source)));
 }
 
 static gboolean
