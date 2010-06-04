@@ -54,7 +54,7 @@ struct _GtkFontButton {
   GtkButton button;
 
   /*< private >*/
-  GtkFontButtonPrivate *GSEAL (priv);
+  GtkFontButtonPrivate *priv;
 };
 
 struct _GtkFontButtonClass {

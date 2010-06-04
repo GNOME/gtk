@@ -44,7 +44,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#define GTK_FONT_BUTTON_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_FONT_BUTTON, GtkFontButtonPrivate))
 
 struct _GtkFontButtonPrivate 
 {
@@ -253,7 +252,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
 static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
-  font_button->priv = GTK_FONT_BUTTON_GET_PRIVATE (font_button);
+  font_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (font_button,
+                                                   GTK_TYPE_FONT_BUTTON,
+                                                   GtkFontButtonPrivate);
 
   /* Initialize fields */
   font_button->priv->fontname = g_strdup (_("Sans 12"));
