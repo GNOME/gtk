@@ -62,6 +62,7 @@ typedef struct _GtkFontSelection	     GtkFontSelection;
 typedef struct _GtkFontSelectionClass	     GtkFontSelectionClass;
 
 typedef struct _GtkFontSelectionDialog	     GtkFontSelectionDialog;
+typedef struct _GtkFontSelectionDialogPriv   GtkFontSelectionDialogPriv;
 typedef struct _GtkFontSelectionDialogClass  GtkFontSelectionDialogClass;
 
 struct _GtkFontSelection
@@ -101,23 +102,7 @@ struct _GtkFontSelectionDialog
   GtkDialog parent_instance;
 
   /*< private >*/
-  GtkWidget *GSEAL (fontsel);
-
-  GtkWidget *GSEAL (main_vbox);     /* Not wrapped with an API, can use GTK_DIALOG->vbox instead, -mr */
-  GtkWidget *GSEAL (action_area);   /* Not wrapped with an API, can use GTK_DIALOG->action_area instead, -mr */
-
-  /*< public >*/
-  GtkWidget *GSEAL (ok_button);
-  GtkWidget *GSEAL (apply_button);
-  GtkWidget *GSEAL (cancel_button);
-
-  /*< private >*/
-
-  /* If the user changes the width of the dialog, we turn auto-shrink off.
-   * (Unused now, autoshrink doesn't mean anything anymore -Yosh)
-   */
-  gint GSEAL (dialog_width);
-  gboolean GSEAL (auto_resize);
+  GtkFontSelectionDialogPriv *priv;
 };
 
 struct _GtkFontSelectionDialogClass

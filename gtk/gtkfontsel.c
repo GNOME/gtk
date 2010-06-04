@@ -61,6 +61,17 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 
+
+struct _GtkFontSelectionDialogPriv
+{
+  GtkWidget *fontsel;
+
+  GtkWidget *ok_button;
+  GtkWidget *apply_button;
+  GtkWidget *cancel_button;
+};
+
+
 /* We don't enable the font and style entries because they don't add
  * much in terms of visible effect and have a weird effect on keynav.
  * the Windows font selector has entries similarly positioned but they
@@ -1546,17 +1557,24 @@ static GtkBuildableIface *parent_buildable_iface;
 static void
 gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
 {
+  g_type_class_add_private (klass, sizeof (GtkFontSelectionDialogPriv));
 }
 
 static void
 gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 {
+  GtkFontSelectionDialogPriv *priv;
   GtkDialog *dialog = GTK_DIALOG (fontseldiag);
   GtkWidget *action_area, *content_area;
 
+  fontseldiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontseldiag,
+                                                   GTK_TYPE_FONT_SELECTION_DIALOG,
+                                                   GtkFontSelectionDialogPriv);
+  priv = fontseldiag->priv;
+
   content_area = gtk_dialog_get_content_area (dialog);
   action_area = gtk_dialog_get_action_area (dialog);
-  
+
   gtk_dialog_set_has_separator (dialog, FALSE);
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
@@ -1566,32 +1584,29 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   gtk_widget_push_composite_child ();
 
   gtk_window_set_resizable (GTK_WINDOW (fontseldiag), TRUE);
-  
-  fontseldiag->main_vbox = content_area;
-  
-  fontseldiag->fontsel = gtk_font_selection_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (fontseldiag->fontsel), 5);
-  gtk_widget_show (fontseldiag->fontsel);
-  gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
-		      fontseldiag->fontsel, TRUE, TRUE, 0);
-  
+
+  /* Create the content area */
+  priv->fontsel = gtk_font_selection_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (priv->fontsel), 5);
+  gtk_widget_show (priv->fontsel);
+  gtk_box_pack_start (GTK_BOX (content_area),
+		      priv->fontsel, TRUE, TRUE, 0);
+
   /* Create the action area */
-  fontseldiag->action_area = action_area;
+  priv->cancel_button = gtk_dialog_add_button (dialog,
+                                               GTK_STOCK_CANCEL,
+                                               GTK_RESPONSE_CANCEL);
 
-  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
-                                                      GTK_STOCK_CANCEL,
-                                                      GTK_RESPONSE_CANCEL);
+  priv->apply_button = gtk_dialog_add_button (dialog,
+                                              GTK_STOCK_APPLY,
+                                              GTK_RESPONSE_APPLY);
+  gtk_widget_hide (priv->apply_button);
 
-  fontseldiag->apply_button = gtk_dialog_add_button (dialog,
-                                                     GTK_STOCK_APPLY,
-                                                     GTK_RESPONSE_APPLY);
-  gtk_widget_hide (fontseldiag->apply_button);
+  priv->ok_button = gtk_dialog_add_button (dialog,
+                                           GTK_STOCK_OK,
+                                           GTK_RESPONSE_OK);
+  gtk_widget_grab_default (priv->ok_button);
 
-  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
-                                                  GTK_STOCK_OK,
-                                                  GTK_RESPONSE_OK);
-  gtk_widget_grab_default (fontseldiag->ok_button);
-  
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontseldiag),
 					   GTK_RESPONSE_OK,
 					   GTK_RESPONSE_APPLY,
@@ -1642,7 +1657,7 @@ gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return fsd->fontsel;
+  return fsd->priv->fontsel;
 }
 
 
@@ -1661,7 +1676,7 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return fsd->ok_button;
+  return fsd->priv->ok_button;
 }
 
 /**
@@ -1679,7 +1694,7 @@ gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return fsd->cancel_button;
+  return fsd->priv->cancel_button;
 }
 
 static void
@@ -1694,16 +1709,20 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
 							GtkBuilder   *builder,
 							const gchar  *childname)
 {
-    if (strcmp(childname, "ok_button") == 0)
-	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->ok_button);
-    else if (strcmp(childname, "cancel_button") == 0)
-	return G_OBJECT (GTK_FONT_SELECTION_DIALOG (buildable)->cancel_button);
-    else if (strcmp(childname, "apply_button") == 0)
-	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->apply_button);
-    else if (strcmp(childname, "font_selection") == 0)
-	return G_OBJECT (GTK_FONT_SELECTION_DIALOG(buildable)->fontsel);
+  GtkFontSelectionDialogPriv *priv;
 
-    return parent_buildable_iface->get_internal_child (buildable, builder, childname);
+  priv = GTK_FONT_SELECTION_DIALOG (buildable)->priv;
+
+  if (g_strcmp0 (childname, "ok_button") == 0)
+    return G_OBJECT (priv->ok_button);
+  else if (g_strcmp0 (childname, "cancel_button") == 0)
+    return G_OBJECT (priv->cancel_button);
+  else if (g_strcmp0 (childname, "apply_button") == 0)
+    return G_OBJECT (priv->apply_button);
+  else if (g_strcmp0 (childname, "font_selection") == 0)
+    return G_OBJECT (priv->fontsel);
+
+  return parent_buildable_iface->get_internal_child (buildable, builder, childname);
 }
 
 /**
@@ -1725,9 +1744,13 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
 gchar*
 gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
 {
+  GtkFontSelectionDialogPriv *priv;
+
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return gtk_font_selection_get_font_name (GTK_FONT_SELECTION (fsd->fontsel));
+  priv = fsd->priv;
+
+  return gtk_font_selection_get_font_name (GTK_FONT_SELECTION (priv->fontsel));
 }
 
 /**
@@ -1744,10 +1767,14 @@ gboolean
 gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
 					 const gchar	        *fontname)
 {
+  GtkFontSelectionDialogPriv *priv;
+
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), FALSE);
   g_return_val_if_fail (fontname, FALSE);
 
-  return gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fsd->fontsel), fontname);
+  priv = fsd->priv;
+
+  return gtk_font_selection_set_font_name (GTK_FONT_SELECTION (priv->fontsel), fontname);
 }
 
 /**
@@ -1763,9 +1790,13 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
 G_CONST_RETURN gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
+  GtkFontSelectionDialogPriv *priv;
+
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
 
-  return gtk_font_selection_get_preview_text (GTK_FONT_SELECTION (fsd->fontsel));
+  priv = fsd->priv;
+
+  return gtk_font_selection_get_preview_text (GTK_FONT_SELECTION (priv->fontsel));
 }
 
 /**
@@ -1779,8 +1810,12 @@ void
 gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
 					    const gchar	           *text)
 {
+  GtkFontSelectionDialogPriv *priv;
+
   g_return_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd));
   g_return_if_fail (text != NULL);
 
-  gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (fsd->fontsel), text);
+  priv = fsd->priv;
+
+  gtk_font_selection_set_preview_text (GTK_FONT_SELECTION (priv->fontsel), text);
 }
