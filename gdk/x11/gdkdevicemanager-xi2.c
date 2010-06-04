@@ -205,6 +205,9 @@ create_device (GdkDeviceManager *device_manager,
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
+      else if (strstr (tmp_name, "touchscreen") ||
+               strstr (tmp_name, "touchpoint"))
+        input_source = GDK_SOURCE_TOUCH;
       else
         input_source = GDK_SOURCE_MOUSE;
 
