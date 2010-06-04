@@ -714,9 +714,9 @@ gtk_font_button_clicked (GtkButton *button)
 				gtk_window_get_modal (GTK_WINDOW (parent)));
 	}
 
-      g_signal_connect (font_dialog->ok_button, "clicked",
+      g_signal_connect (gtk_font_selection_dialog_get_ok_button (font_dialog), "clicked",
                         G_CALLBACK (dialog_ok_clicked), font_button);
-      g_signal_connect (font_dialog->cancel_button, "clicked",
+      g_signal_connect (gtk_font_selection_dialog_get_cancel_button (font_dialog), "clicked",
 			G_CALLBACK (dialog_cancel_clicked), font_button);
       g_signal_connect (font_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), font_button);
