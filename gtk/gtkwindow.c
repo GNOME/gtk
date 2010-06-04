@@ -814,7 +814,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow::activate-focus:
    * @window: the window which received the signal
    *
-   * The ::activate-default signal is a
+   * The ::activate-focus signal is a
    * <link linkend="keybinding-signals">keybinding signal</link>
    * which gets emitted when the user activates the currently
    * focused widget of @window.
