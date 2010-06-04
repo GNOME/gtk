@@ -10080,6 +10080,7 @@ gdk_window_set_support_multidevice (GdkWindow *window,
                                     gboolean   support_multidevice)
 {
   GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkEventMask event_mask = 0;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -10090,6 +10091,12 @@ gdk_window_set_support_multidevice (GdkWindow *window,
     return;
 
   private->support_multidevice = support_multidevice;
+
+  if (support_multidevice)
+    event_mask = gdk_window_get_events (window);
+
+  /* Enable events for slave touchscreen devices */
+  gdk_window_set_source_events (window, GDK_SOURCE_TOUCH, event_mask);
 
   /* FIXME: What to do if called when some pointers are inside the window ? */
 }
