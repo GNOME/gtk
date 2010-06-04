@@ -79,7 +79,6 @@ gdk_public_h_sources =				\
 	gdkcursor.h				\
 	gdkdevice.h				\
 	gdkdevicemanager.h			\
-	gdkdeviceprivate.h			\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
@@ -112,10 +111,11 @@ gdk_built_public_sources =			\
 gdk_built_private_headers =			\
 	gdkalias.h
 
-gdk_private_headers =   \
-	gdkinternals.h \
-	gdkintl.h \
-    gdkpoly-generic.h	\
+gdk_private_headers =				\
+	gdkinternals.h				\
+	gdkdeviceprivate.h			\
+	gdkintl.h				\
+	gdkpoly-generic.h			\
 	gdkregion-generic.h
 
 gdk_c_sources =                 \
