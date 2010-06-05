@@ -45,20 +45,16 @@ G_BEGIN_DECLS
 #define GTK_IS_FRAME_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME))
 #define GTK_FRAME_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FRAME, GtkFrameClass))
 
-
 typedef struct _GtkFrame       GtkFrame;
+typedef struct _GtkFramePriv   GtkFramePriv;
 typedef struct _GtkFrameClass  GtkFrameClass;
 
 struct _GtkFrame
 {
   GtkBin bin;
 
-  GtkWidget *GSEAL (label_widget);
-  gint16 GSEAL (shadow_type);
-  gfloat GSEAL (label_xalign);
-  gfloat GSEAL (label_yalign);
-
-  GtkAllocation GSEAL (child_allocation);
+  /* <private> */
+  GtkFramePriv *priv;
 };
 
 struct _GtkFrameClass
