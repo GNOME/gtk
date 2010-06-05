@@ -968,6 +968,8 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 
   priv = GTK_PROGRESS_BAR_GET_PRIVATE (pbar);
   priv->fraction = fraction;
+  gtk_progress_set_activity_mode (GTK_PROGRESS (pbar), FALSE);
+  gtk_progress_set_percentage (GTK_PROGRESS (pbar), fraction);
 
   g_object_notify (G_OBJECT (pbar), "fraction");
 }
@@ -987,11 +989,8 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
 {  
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
-  GTK_PROGRESS_GET_CLASS (pbar)->act_mode_enter (GTK_PROGRESS (pbar));
-  if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
-    gtk_widget_queue_resize (GTK_WIDGET (pbar));
-
   /* Sigh. */
+  gtk_progress_set_activity_mode (GTK_PROGRESS (pbar), TRUE);
   gtk_progress_bar_real_update (GTK_PROGRESS (pbar));
 }
 
@@ -1013,6 +1012,9 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
   priv = GTK_PROGRESS_BAR_GET_PRIVATE (pbar);
   g_free (priv->text);
   priv->text = text && *text ? g_strdup (text) : NULL;
+  gtk_progress_set_show_text (GTK_PROGRESS (pbar), text && *text);
+  gtk_progress_set_format_string (GTK_PROGRESS (pbar), text);
+  GTK_PROGRESS (pbar)->use_text_format = (text == NULL);
   
   g_object_notify (G_OBJECT (pbar), "text");
 }
