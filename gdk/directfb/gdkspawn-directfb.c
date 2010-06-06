@@ -35,7 +35,7 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 		     GSpawnFlags            flags,
 		     GSpawnChildSetupFunc   child_setup,
 		     gpointer               user_data,
-		     gint                  *child_pid,
+		     GPid                  *child_pid,
 		     GError               **error)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
@@ -58,7 +58,7 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 				GSpawnFlags           flags,
 				GSpawnChildSetupFunc  child_setup,
 				gpointer              user_data,
-				gint                 *child_pid,
+				GPid                 *child_pid,
 				gint                 *standard_input,
 				gint                 *standard_output,
 				gint                 *standard_error,
