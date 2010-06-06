@@ -202,6 +202,12 @@ translate_class_info (GdkDevice   *device,
     }
 }
 
+/* old versions of XI.h don't define these */
+#ifndef IsXExtensionKeyboard
+#define IsXExtensionKeyboard 3
+#define IsXExtensionPointer  4
+#endif
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
