@@ -1151,41 +1151,6 @@ gdk_x11_colormap_foreign_new (GdkVisual *visual,
   
 }
 
-/**
- * gdkx_colormap_get:
- * @xcolormap: the XID of a colormap for the default screen.
- * 
- * Returns a #GdkColormap corresponding to a X colormap;
- * this function only works if the colormap is already
- * known to GTK+ (a colormap created by GTK+ or the default
- * colormap for the screen), since GTK+ 
- *
- * Always use gdk_x11_colormap_foreign_new() instead.
- *
- * Return value: the existing #GdkColormap object if it was
- *  already known to GTK+, otherwise warns and return
- *  %NULL.
- **/
-GdkColormap*
-gdkx_colormap_get (Colormap xcolormap)
-{
-  GdkScreen *screen = gdk_screen_get_default ();
-  GdkColormap *colormap;
-
-  if (xcolormap == DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-				    GDK_SCREEN_XNUMBER (screen)))
-    return g_object_ref (gdk_screen_get_system_colormap (screen));
-
-  colormap = gdk_colormap_lookup (screen, xcolormap);
-  if (colormap)
-    return g_object_ref (colormap);
-
-  g_warning ("Colormap passed to gdkx_colormap_get\n"
-	     "does not previously exist");
-
-  return NULL;
-}
-
 static gint
 gdk_colormap_match_color (GdkColormap *cmap,
 			  GdkColor    *color,

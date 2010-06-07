@@ -1251,9 +1251,6 @@ gdk_x11_xatom_to_atom_for_display
 gdk_x11_colormap_foreign_new
 gdk_x11_colormap_get_xcolormap
 gdk_x11_colormap_get_xdisplay
-#ifdef GDK_ENABLE_BROKEN
-gdkx_colormap_get
-#endif
 #endif
 
 #if IN_FILE(__GDK_CURSOR_X11_C__)

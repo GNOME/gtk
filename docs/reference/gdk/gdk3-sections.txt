@@ -1335,7 +1335,6 @@ GDK_GC_XGC
 GDK_GC_GET_XGC
 GDK_WINDOW_XWINDOW
 gdkx_visual_get
-gdkx_colormap_get
 gdk_pixmap_foreign_new
 gdk_pixmap_foreign_new_for_display
 gdk_pixmap_foreign_new_for_screen

@@ -249,14 +249,6 @@ Another name for GDK_DRAWABLE_XID().
 @Returns: 
 
 
-<!-- ##### FUNCTION gdkx_colormap_get ##### -->
-<para>
-</para>
-
-@xcolormap: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
 <para>
 
