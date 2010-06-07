@@ -59,6 +59,7 @@ typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
  * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
  *  of GTK+.
  * @GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
+ * @GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH: The Class template is designed for a different class.
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.
@@ -73,7 +74,8 @@ typedef enum
   GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE,
   GTK_BUILDER_ERROR_INVALID_VALUE,
   GTK_BUILDER_ERROR_VERSION_MISMATCH,
-  GTK_BUILDER_ERROR_DUPLICATE_ID
+  GTK_BUILDER_ERROR_DUPLICATE_ID,
+  GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH
 } GtkBuilderError;
 
 GQuark gtk_builder_error_quark (void);
@@ -130,22 +132,38 @@ guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   GError       **error);
 GDK_AVAILABLE_IN_3_4
 guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
-                                                  const gchar   *resource_path,
-                                                  gchar        **object_ids,
-                                                  GError       **error);
+                                                   const gchar   *resource_path,
+                                                   gchar        **object_ids,
+                                                   GError       **error);
 guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   gchar        **object_ids,
                                                   GError       **error);
+guint        gtk_builder_add_to_parent_from_file     (GtkBuilder   *builder,
+                                                      GObject      *parent,
+                                                      const gchar  *filename,
+                                                      GError      **error);
+guint        gtk_builder_add_to_parent_from_string   (GtkBuilder   *builder,
+                                                      GObject      *parent,
+                                                      const gchar  *buffer,
+                                                      gsize         length,
+                                                      GError      **error);
+guint        gtk_builder_add_to_parent_from_resource (GtkBuilder   *builder,
+                                                      GObject      *parent,
+                                                      const gchar  *path,
+                                                      GError      **error);
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);
+void         gtk_builder_expose_object           (GtkBuilder    *builder,
+                                                  const gchar   *name,
+                                                  GObject       *object);
 void         gtk_builder_connect_signals         (GtkBuilder    *builder,
-						  gpointer       user_data);
+                                                  gpointer       user_data);
 void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
                                                   GtkBuilderConnectFunc func,
-						  gpointer       user_data);
+                                                  gpointer       user_data);
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);
@@ -153,15 +171,15 @@ GType        gtk_builder_get_type_from_name      (GtkBuilder   	*builder,
                                                   const char   	*type_name);
 
 gboolean     gtk_builder_value_from_string       (GtkBuilder    *builder,
-						  GParamSpec   	*pspec,
+                                                  GParamSpec   	*pspec,
                                                   const gchar  	*string,
                                                   GValue       	*value,
-						  GError       **error);
+                                                  GError       **error);
 gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
-						  GType        	 type,
+                                                  GType        	 type,
                                                   const gchar  	*string,
                                                   GValue       	*value,
-						  GError       **error);
+                                                  GError       **error);
 
 /**
  * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:

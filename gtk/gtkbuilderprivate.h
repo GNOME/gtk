@@ -31,7 +31,7 @@ typedef struct {
 
 typedef struct {
   TagInfo tag;
-  gchar *class_name;
+  GType object_type;
   gchar *id;
   gchar *constructor;
   GSList *properties;
@@ -58,18 +58,20 @@ typedef struct {
 
 typedef struct {
   TagInfo tag;
-  gchar *name;
+  const gchar *name; /* Intern string */
   GString *text;
   gchar *data;
-  gboolean translatable;
   gchar *context;
+  guint8 translatable : 1;
+  guint8 external : 1;
 } PropertyInfo;
 
 typedef struct {
   TagInfo tag;
   gchar *object_name;
-  gchar *name;
+  const gchar *name; /* Intern string */
   gchar *handler;
+  gboolean external;
   GConnectFlags flags;
   gchar *connect_object_name;
 } SignalInfo;
@@ -107,12 +109,14 @@ typedef struct {
   gint cur_object_level;
 
   GHashTable *object_ids;
+  GObject *template_object;
 } ParserData;
 
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
+                                       GObject     *parent,
                                        const gchar *filename,
                                        const gchar *buffer,
                                        gsize length,
@@ -159,5 +163,6 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
+const gchar * _gtk_builder_object_get_name (GObject *object);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */
