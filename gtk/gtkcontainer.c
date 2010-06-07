@@ -1089,11 +1089,21 @@ gtk_container_get_composite_child (GtkContainer *container,
  * This is used when implementing new composite widget types
  * to setup a UI template for instances of this type.
  *
+ * Templates are in the <link linkend="BUILDER-UI">GtkBuilder UI description</link>
+ * format and are used to implement composite widget types in
+ * an automated way. 
+ *
+ * Instances with an assigned template will have thier children
+ * built at object construct time.
+ *
  * The provided xml fragment is expected to start with <child>
  * instead of <object> and will be parsed with a fresh instance
  * of the implementing composite widget type in context as the 
- * parent container.
+ * parent container. The composite instance itself will be exposed
+ * to the GtkBuilder as an external object named "container" and in this way can
+ * be referred to in child signal and property declarations.
  * 
+ * Since: 3.0
  */
 void
 gtk_container_class_set_template (GtkContainerClass *container_class,
