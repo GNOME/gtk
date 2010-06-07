@@ -645,7 +645,7 @@ gdk_event_get_time (const GdkEvent *event)
 /**
  * gdk_event_get_state:
  * @event: a #GdkEvent or NULL
- * @state: return location for state
+ * @state: (out): return location for state
  * 
  * If the event contains a "state" field, puts that field in @state. Otherwise
  * stores an empty state (0). Returns %TRUE if there was a state field
@@ -725,8 +725,8 @@ gdk_event_get_state (const GdkEvent        *event,
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
- * @x_win: location to put event window x coordinate
- * @y_win: location to put event window y coordinate
+ * @x_win: (out): location to put event window x coordinate
+ * @y_win: (out): location to put event window y coordinate
  * 
  * Extract the event window relative x/y coordinates from an event.
  * 
@@ -784,8 +784,8 @@ gdk_event_get_coords (const GdkEvent *event,
 /**
  * gdk_event_get_root_coords:
  * @event: a #GdkEvent
- * @x_root: location to put root window x coordinate
- * @y_root: location to put root window y coordinate
+ * @x_root: (out): location to put root window x coordinate
+ * @y_root: (out): location to put root window y coordinate
  * 
  * Extract the root window relative x/y coordinates from an event.
  * 
@@ -848,8 +848,8 @@ gdk_event_get_root_coords (const GdkEvent *event,
 /**
  * gdk_event_get_axis:
  * @event: a #GdkEvent
- * @axis_use: the axis use to look for
- * @value: location to store the value found
+ * @axis_use: (out): the axis use to look for
+ * @value: (out): location to store the value found
  * 
  * Extract the axis value for a particular axis use from
  * an event structure.
