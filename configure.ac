@@ -1693,6 +1693,7 @@ demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
 tests/Makefile
+tests/multidevice/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile

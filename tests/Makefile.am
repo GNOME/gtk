@@ -1,6 +1,8 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
+SUBDIRS = multidevice
+
 INCLUDES =				\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
