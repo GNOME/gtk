@@ -34,9 +34,43 @@
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkadjustment.h>
+#include <gtk/gtkbuilder.h>
 
 
 G_BEGIN_DECLS
+
+/**
+ * GTK_TYPE_PARAM_COMPOSITE:
+ * 
+ * The #GType of #GtkParamSpecComposite.
+ * 
+ * Since: 3.0
+ */
+#define	GTK_TYPE_PARAM_COMPOSITE   (gtk_param_composite_get_type())
+
+/**
+ * GTK_IS_PARAM_SPEC_COMPOSITE:
+ * @pspec: a valid #GParamSpec instance
+ * 
+ * Checks whether the given #GParamSpec is of type %GTK_TYPE_PARAM_COMPOSITE.
+ * 
+ * Returns: %TRUE on success.
+ * 
+ * Since: 3.0
+ */
+#define GTK_IS_PARAM_SPEC_COMPOSITE(pspec)				\
+  (G_TYPE_CHECK_INSTANCE_TYPE ((pspec), GTK_TYPE_PARAM_COMPOSITE))
+
+/**
+ * GTK_PARAM_SPEC_COMPOSITE:
+ * @pspec: a valid #GParamSpec instance
+ * 
+ * Casts a #GParamSpec instance into a #GtkParamSpecComposite.
+ * 
+ * Since: 3.0
+ */
+#define GTK_PARAM_SPEC_COMPOSITE(pspec)					\
+  (G_TYPE_CHECK_INSTANCE_CAST ((pspec), GTK_TYPE_PARAM_COMPOSITE, GtkParamSpecComposite))
 
 #define GTK_TYPE_CONTAINER              (gtk_container_get_type ())
 #define GTK_CONTAINER(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
@@ -48,8 +82,22 @@ G_BEGIN_DECLS
 #define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && ((GtkContainer*) (widget))->resize_mode != GTK_RESIZE_PARENT)
 
 
-typedef struct _GtkContainer	   GtkContainer;
-typedef struct _GtkContainerClass  GtkContainerClass;
+typedef struct _GtkContainer	      GtkContainer;
+typedef struct _GtkContainerClass     GtkContainerClass;
+typedef struct _GtkParamSpecComposite GtkParamSpecComposite;
+
+/**
+ * GtkParamSpecComposite:
+ * @parent_instance: private #GParamSpec portion
+ * 
+ * A #GParamSpec derived structure that contains the meta data for composite child object properties.
+ * 
+ * Since: 3.0
+ */
+struct _GtkParamSpecComposite
+{
+  GParamSpec    parent_instance;
+};
 
 struct _GtkContainer
 {
@@ -95,14 +143,23 @@ struct _GtkContainerClass
 				 GValue          *value,
 				 GParamSpec      *pspec);
 
+  /* GtkBuilder templates for automated composite classes */
+  gchar *GSEAL (tmpl);
+  gchar *GSEAL (tmpl_file);
+  GtkBuilderConnectFunc GSEAL (connect_func);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 /* Application-level methods */
+
+GType       gtk_param_composite_get_type     (void) G_GNUC_CONST;
+GParamSpec *gtk_param_spec_composite         (const gchar	 *name,
+					      const gchar	 *nick,
+					      const gchar	 *blurb,
+					      GType		  object_type,
+					      GParamFlags	  flags);
 
 GType   gtk_container_get_type		 (void) G_GNUC_CONST;
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
@@ -197,6 +254,17 @@ void	     gtk_container_child_get_property		(GtkContainer	   *container,
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);
+
+GtkWidget *gtk_container_get_composite_child     (GtkContainer *container,
+						  const gchar  *composite_name);
+
+/* Class-level functions */
+void     gtk_container_class_set_template        (GtkContainerClass *container_class,
+						  const gchar       *tmpl);
+void     gtk_container_class_set_template_file   (GtkContainerClass *container_class,
+						  const gchar       *tmpl_file);
+void     gtk_container_class_set_connect_func    (GtkContainerClass *container_class,
+						  GtkBuilderConnectFunc connect_func);
 
 /* Non-public methods */
 void	_gtk_container_queue_resize	     (GtkContainer *container);

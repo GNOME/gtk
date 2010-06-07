@@ -67,6 +67,9 @@ static void     gtk_container_base_class_init      (GtkContainerClass *klass);
 static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
 static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
+static GObject *gtk_container_constructor          (GType                  type,
+						    guint                  n_construct_properties,
+						    GObjectConstructParam *construct_properties);
 static void     gtk_container_destroy              (GtkObject         *object);
 static void     gtk_container_set_property         (GObject         *object,
 						    guint            prop_id,
@@ -181,6 +184,9 @@ gtk_container_base_class_init (GtkContainerClass *class)
   /* reset instance specifc class fields that don't get inherited */
   class->set_child_property = NULL;
   class->get_child_property = NULL;
+  class->tmpl               = NULL;
+  class->tmpl_file          = NULL;
+  class->connect_func       = NULL;
 }
 
 static void
@@ -198,6 +204,9 @@ gtk_container_base_class_finalize (GtkContainerClass *class)
       g_param_spec_unref (pspec);
     }
   g_list_free (list);
+
+  g_free (class->tmpl);
+  g_free (class->tmpl_file);
 }
 
 static void
@@ -212,6 +221,7 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
   
+  gobject_class->constructor  = gtk_container_constructor;
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
 
@@ -1025,6 +1035,122 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
   return pspecs;
 }
 
+/**
+ * gtk_container_get_composite_child:
+ * @container: a #GtkContainer
+ * @composite_name: the name of a composite child as defined by installation of a #GtkParamSpecComposite property
+ *
+ * Retrieves a composite child by name by checking installed composite typed properties.
+ * 
+ * Returns: the composite child of @container with the name @composite_name
+ */
+GtkWidget *
+gtk_container_get_composite_child (GtkContainer *container,
+				   const gchar  *composite_name)
+{
+  GParamSpec   **pspecs;
+  guint          n_pspecs = 0, i;
+  GtkWidget     *composite_child = NULL;
+
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+  g_return_val_if_fail (composite_name && composite_name[0], NULL);
+
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (container), &n_pspecs);
+  for (i = 0; i < n_pspecs; i++)
+    {
+      if (strcmp (pspecs[i]->name, composite_name) == 0)
+	{
+	  if (GTK_IS_PARAM_SPEC_COMPOSITE (pspecs[i]) &&
+	      (pspecs[i]->flags & G_PARAM_WRITABLE) != 0)
+	    {
+	      g_object_get (G_OBJECT (container), 
+			    composite_name, &composite_child, 
+			    NULL);
+	      
+	      if (composite_child)
+		g_object_unref (composite_child);
+	      else
+		g_warning ("Failed to get composite child named %s for type %s",
+			   composite_name, G_OBJECT_TYPE_NAME (container));
+	    }
+	  break;
+	}
+    }
+  g_free (pspecs);
+
+  return composite_child;
+}
+
+/**
+ * gtk_container_class_set_template:
+ * @container_class: a #GtkContainerClass
+ * @tmpl: the #GtkBuilder xml fragment used to build children
+ *
+ * This is used when implementing new composite widget types
+ * to setup a UI template for instances of this type.
+ *
+ * The provided xml fragment is expected to start with <child>
+ * instead of <object> and will be parsed with a fresh instance
+ * of the implementing composite widget type in context as the 
+ * parent container.
+ * 
+ */
+void
+gtk_container_class_set_template (GtkContainerClass *container_class,
+				  const gchar       *tmpl)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (tmpl && tmpl[0]);
+
+  g_free (container_class->tmpl);
+  g_free (container_class->tmpl_file);
+
+  container_class->tmpl      = g_strdup (tmpl);
+  container_class->tmpl_file = NULL;
+}
+
+
+/**
+ * gtk_container_class_set_template_file:
+ * @container_class: a #GtkContainerClass
+ * @tmpl_file: the #GtkBuilder xml file used to build children
+ *
+ * Sets a file to be used as this class's template; see gtk_container_class_set_template().
+ * 
+ */
+void
+gtk_container_class_set_template_file (GtkContainerClass *container_class,
+				       const gchar       *tmpl_file)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (tmpl_file && tmpl_file[0]);
+
+
+  g_free (container_class->tmpl);
+  g_free (container_class->tmpl_file);
+
+  container_class->tmpl      = NULL;
+  container_class->tmpl_file = g_strdup (tmpl_file);
+}
+
+/**
+ * gtk_container_class_set_connect_func:
+ * @container_class: a #GtkContainerClass
+ * @connect_func: the #GtkBuilderConnectFunc to use when connecting signals internally.
+ *
+ * Sets the function to be used when automatically connecting signals
+ * defined by this class's GtkBuilder template.
+ */
+void
+gtk_container_class_set_connect_func    (GtkContainerClass *container_class,
+					 GtkBuilderConnectFunc connect_func)
+{
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS(container_class));
+  g_return_if_fail (connect_func != NULL);
+
+  container_class->connect_func = connect_func;
+}
+
 static void
 gtk_container_add_unimplemented (GtkContainer     *container,
 				 GtkWidget        *widget)
@@ -1066,6 +1192,94 @@ gtk_container_destroy (GtkObject *object)
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static GObject *
+gtk_container_constructor (GType                  type,
+			   guint                  n_construct_properties,
+			   GObjectConstructParam *construct_properties)
+{
+  GtkBuilder    *builder;
+  GParamSpec   **pspecs;
+  GError        *error = NULL;
+  guint          ret = 0, n_pspecs = 0, i;
+  GObject       *ret_obj;
+  GtkContainer  *container;
+  GObjectClass  *oclass;
+  GSList        *classes = NULL, *l;
+  
+  ret_obj = G_OBJECT_CLASS (parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+  
+  container = GTK_CONTAINER (ret_obj);
+
+  /* Collect an ordered list of class which have templates to build */
+  for (oclass = G_OBJECT_GET_CLASS (container);
+       GTK_IS_CONTAINER_CLASS (oclass);
+       oclass = g_type_class_peek_parent (oclass))
+    {
+
+      if (GTK_CONTAINER_CLASS (oclass)->tmpl ||
+	  GTK_CONTAINER_CLASS (oclass)->tmpl_file)
+	classes = g_slist_prepend (classes, oclass);
+    }
+
+  /* Build the templates for each class starting with the superclass descending */
+  for (l = classes; l; l = l->next)
+    {
+      GtkContainerClass *cclass = l->data;
+
+      builder = gtk_builder_new ();
+      gtk_builder_expose_object (builder, "container", ret_obj);
+      
+      if (cclass->tmpl)
+	ret = gtk_builder_add_to_parent_from_string (builder, ret_obj, 
+						     cclass->tmpl, -1, &error);
+      else
+	ret = gtk_builder_add_to_parent_from_file (builder, ret_obj, 
+						   cclass->tmpl_file, &error);
+      
+      if (!ret)
+	{
+	  g_critical ("Unable to build GtkContainer class %s from template: %s", 
+		      G_OBJECT_TYPE_NAME (container),
+		      error->message);
+	  g_error_free (error);
+	  g_object_unref (builder);
+	  
+	  return ret_obj;
+	}
+      
+      pspecs = g_object_class_list_properties (G_OBJECT_CLASS (cclass), &n_pspecs);
+      for (i = 0; i < n_pspecs; i++)
+	{
+	  if (GTK_IS_PARAM_SPEC_COMPOSITE (pspecs[i]) &&
+	      pspecs[i]->owner_type == G_OBJECT_CLASS_TYPE (cclass))
+	    {
+	      GObject *composite_child;
+
+	      composite_child = gtk_builder_get_object (builder, (pspecs[i])->name);
+
+	      if (composite_child)
+		/* Let GObject fire a warning if there is an object type mismatch */
+		g_object_set (container, (pspecs[i])->name, composite_child, NULL);
+	      else
+		g_critical ("Expected internal child %s not found for container class %s",
+			    (pspecs[i])->name, G_OBJECT_TYPE_NAME (container));
+	    }
+	}
+      g_free (pspecs);
+      
+      if (cclass->connect_func)
+	gtk_builder_connect_signals_full (builder, GTK_CONTAINER_GET_CLASS (container)->connect_func, container);
+      else
+	gtk_builder_connect_signals (builder, container);
+      
+      g_object_unref (builder);
+    }
+  g_slist_free (classes);
+
+  return ret_obj;
 }
 
 static void
@@ -2683,6 +2897,121 @@ gtk_container_propagate_expose (GtkContainer   *container,
 	}
       gdk_event_free (child_event);
     }
+}
+
+/*    ---------- Declaration of GtkParamSpecComposite
+ */
+static void
+param_composite_init (GParamSpec *pspec)
+{
+  /* GtkParamSpecComposite *ospec = GTK_PARAM_SPEC_COMPOSITE (pspec); */
+}
+
+static void
+param_composite_set_default (GParamSpec *pspec,
+			  GValue     *value)
+{
+  value->data[0].v_pointer = NULL;
+}
+
+static gboolean
+param_composite_validate (GParamSpec *pspec,
+			  GValue     *value)
+{
+  GtkParamSpecComposite *ospec = GTK_PARAM_SPEC_COMPOSITE (pspec);
+  GObject               *object = value->data[0].v_pointer;
+  guint changed = 0;
+  
+  if (object && !g_value_type_compatible (G_OBJECT_TYPE (object), G_PARAM_SPEC_VALUE_TYPE (ospec)))
+    {
+      g_object_unref (object);
+      value->data[0].v_pointer = NULL;
+      changed++;
+    }
+  
+  return changed;
+}
+
+static gint
+param_composite_values_cmp (GParamSpec   *pspec,
+			    const GValue *value1,
+			    const GValue *value2)
+{
+  guint8 *p1 = value1->data[0].v_pointer;
+  guint8 *p2 = value2->data[0].v_pointer;
+
+  /* not much to compare here, try to at least provide stable lesser/greater result */
+
+  return p1 < p2 ? -1 : p1 > p2;
+}
+
+GType 
+gtk_param_composite_get_type (void)
+{
+  static GType composite_type = 0;
+
+  if (composite_type == 0)
+    {
+      static const GParamSpecTypeInfo pspec_info = {
+	sizeof (GtkParamSpecComposite),  /* instance_size */
+	0,                               /* n_preallocs */
+	param_composite_init,            /* instance_init */
+	G_TYPE_OBJECT,	                 /* value_type */
+	NULL,                            /* finalize */
+	param_composite_set_default,	 /* value_set_default */
+	param_composite_validate,	 /* value_validate */
+	param_composite_values_cmp,	 /* values_cmp */
+      };
+      composite_type = 
+	g_param_type_register_static (g_intern_static_string ("GtkParamComposite"), &pspec_info);
+    }      
+  return composite_type;
+}
+
+/**
+ * gtk_param_spec_composite:
+ * @name: canonical name of the property specified
+ * @nick: nick name for the property specified
+ * @blurb: description of the property specified
+ * @object_type: %G_TYPE_OBJECT derived type of this property
+ *
+ * Creates a new #GtkParamSpecComposite instance specifying a %G_TYPE_OBJECT
+ * derived property, these work exactly the same as #GParamSpecObject properties
+ * except that #GtkContainer will automatically assign all properties defined
+ * as composite object properties to instances built from the composite derived
+ * class's #GtkBuilder UI template.
+ *
+ * See g_param_spec_internal() for details on property names.
+ *
+ * <note><para>Composite child properties must all be writable a rule. 
+ * Dynamic widget contents should generally not be advertized as a composite children,
+ * although at times they can be writable for the purpose of being overridden by a
+ * third party. Such dynamic composite children should not be refferred to by child
+ * UIs that extend a widget, but can be mentioned in templates which include a widget
+ * and override it's child</para></note>
+ *
+ * Returns: a newly created parameter specification
+ */
+GParamSpec*
+gtk_param_spec_composite (const gchar *name,
+			  const gchar *nick,
+			  const gchar *blurb,
+			  GType	  object_type,
+			  GParamFlags  flags)
+{
+  GParamSpecObject *ospec;
+  
+  g_return_val_if_fail (g_type_is_a (object_type, G_TYPE_OBJECT), NULL);
+  
+  ospec = g_param_spec_internal (GTK_TYPE_PARAM_COMPOSITE,
+				 name,
+				 nick,
+				 blurb,
+				 flags | G_PARAM_WRITABLE);
+
+  G_PARAM_SPEC (ospec)->value_type = object_type;
+  
+  return G_PARAM_SPEC (ospec);
 }
 
 #define __GTK_CONTAINER_C__
