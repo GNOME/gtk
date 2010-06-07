@@ -2983,12 +2983,13 @@ gtk_param_composite_get_type (void)
  *
  * See g_param_spec_internal() for details on property names.
  *
- * <note><para>Composite child properties must all be writable a rule. 
- * Dynamic widget contents should generally not be advertized as a composite children,
+ * Composite child properties must all be writable a rule but can be private
+ * if they are declared without the readable flag.
+ * Dynamic widget contents should generally not be advertized as composite children
  * although at times they can be writable for the purpose of being overridden by a
  * third party. Such dynamic composite children should not be refferred to by child
  * UIs that extend a widget, but can be mentioned in templates which include a widget
- * and override it's child</para></note>
+ * and override it's child.
  *
  * Returns: a newly created parameter specification
  */

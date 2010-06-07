@@ -81,12 +81,14 @@
  * <!ATTLIST property   name           	    #REQUIRED
  *                      translatable   	    #IMPLIED
  *                      comments               #IMPLIED
- *                      context                #IMPLIED >
+ *                      context                #IMPLIED 
+ *                      external-object        #IMPLIED >
  * <!ATTLIST signal     name           	    #REQUIRED
  *                      handler        	    #REQUIRED
  *                      after          	    #IMPLIED
  *                      swapped        	    #IMPLIED
  *                      object         	    #IMPLIED
+ *                      external-object        #IMPLIED
  *                      last_modification_time #IMPLIED >
  * <!ATTLIST child      type           	    #IMPLIED
  *                      internal-child 	    #IMPLIED >
