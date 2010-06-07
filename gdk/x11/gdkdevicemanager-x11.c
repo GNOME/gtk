@@ -48,7 +48,7 @@ _gdk_device_manager_new (GdkDisplay *display)
           major = 2;
           minor = 0;
 
-          if (_gdk_enable_multidevice &&
+          if (!_gdk_disable_multidevice &&
               XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
             {
               GdkDeviceManagerXI2 *device_manager_xi2;
