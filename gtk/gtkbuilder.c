@@ -148,22 +148,27 @@
  * (can be specified by their name, nick or integer value), flags (can be
  * specified by their name, nick, integer value, optionally combined with "|",
  * e.g. "GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by
- * gdk_color_parse()). Objects can be referred to by their name. Pixbufs can be
- * specified as a filename of an image file to load. In general, GtkBuilder
- * allows forward references to objects &mdash; an object doesn't have to be
- * constructed before it can be referred to. The exception to this rule is that
- * an object has to be constructed before it can be used as the value of a
- * construct-only property.
+ * gdk_color_parse()). Pixbufs can be specified as a filename of an image file to load. 
+ * Objects can be referred to by their name and by default refer to objects declared
+ * in the local xml fragment, however external objects exposed via gtk_builder_expose_object()
+ * can be referred to by specifying the "external-object" attribute.
+ * 
+ * In general, GtkBuilder allows forward references to objects &mdash declared
+ * in the local xml; an object doesn't have to be constructed before it can be referred to. 
+ * The exception to this rule is that an object has to be constructed before 
+ * it can be used as the value of a construct-only property.
  *
  * Signal handlers are set up with the &lt;signal&gt; element. The "name"
  * attribute specifies the name of the signal, and the "handler" attribute
  * specifies the function to connect to the signal. By default, GTK+ tries to
  * find the handler using g_module_symbol(), but this can be changed by passing
  * a custom #GtkBuilderConnectFunc to gtk_builder_connect_signals_full(). The
- * remaining attributes, "after", "swapped" and "object", have the same meaning
+ * attributes "after", "swapped" and "object", have the same meaning
  * as the corresponding parameters of the g_signal_connect_object() or
- * g_signal_connect_data() functions. A "last_modification_time" attribute
- * is also allowed, but it does not have a meaning to the builder.
+ * g_signal_connect_data() functions.  Extenral objects can also be referred 
+ * to by specifying the "external-object" attribute in the same way as described 
+ * with the &lt;property&gt; element. A "last_modification_time" attribute is also 
+ * allowed, but it does not have a meaning to the builder.
  *
  * Sometimes it is necessary to refer to widgets which have implicitly been
  * constructed by GTK+ as part of a composite widget, to set properties on them
@@ -278,6 +283,7 @@ struct _GtkBuilderPrivate
 {
   gchar *domain;
   GHashTable *objects;
+  GHashTable *external_objects;
   GSList *delayed_properties;
   GSList *signals;
   gchar *filename;
@@ -327,6 +333,8 @@ gtk_builder_init (GtkBuilder *builder)
   builder->priv->domain = NULL;
   builder->priv->objects = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
+  builder->priv->external_objects = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                           g_free, g_object_unref);
 }
 
 
@@ -343,6 +351,7 @@ gtk_builder_finalize (GObject *object)
   g_free (priv->filename);
   
   g_hash_table_destroy (priv->objects);
+  g_hash_table_destroy (priv->external_objects);
 
   g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
   g_slist_free (priv->signals);
@@ -498,10 +507,27 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
-          if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+	  GObject *object;
+
+          if (prop->external)
+	    {
+	      object = g_hash_table_lookup (builder->priv->external_objects, prop->data);
+
+              if (!object)
+                {
+                  g_warning ("Failed to get external object property "
+                             "%s of %s with value `%s'",
+                             prop->name, object_name, prop->data);
+                  continue;
+                }
+
+              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
+              g_value_set_object (&parameter.value, object);
+	    }
+          else if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
             {
-              GObject *object;
-              object = gtk_builder_get_object (builder, prop->data);
+	      object = gtk_builder_get_object (builder, prop->data);
+
               if (!object)
                 {
                   g_warning ("Failed to get constuct only property "
@@ -512,7 +538,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               g_value_init (&parameter.value, G_OBJECT_TYPE (object));
               g_value_set_object (&parameter.value, object);
             }
-          else
+	  else
             {
               property = g_slice_new (DelayedProperty);
               property->object = g_strdup (object_name);
@@ -570,6 +596,9 @@ gtk_builder_get_internal_child (GtkBuilder  *builder,
           obj = gtk_buildable_get_internal_child (GTK_BUILDABLE (info->object),
                                                   builder,
                                                   childname);
+      if (!obj && GTK_IS_CONTAINER (info->object))
+	obj = (GObject *)gtk_container_get_composite_child (GTK_CONTAINER (info->object), childname);
+
     };
 
   if (!obj)
@@ -893,7 +922,64 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (filename);
 
-  _gtk_builder_parser_parse_buffer (builder, filename,
+  _gtk_builder_parser_parse_buffer (builder, NULL, filename,
+                                    buffer, length,
+                                    NULL,
+                                    &tmp_error);
+
+  g_free (buffer);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/**
+ * gtk_builder_add_to_parent_from_file:
+ * @builder: a #GtkBuilder
+ * @parent: the parent object to be assumed in context while parsing the file
+ * @filename: the name of the file to parse
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * Like gtk_builder_add_from_file() except the format will expect
+ * <child> instead of <object> as its first elements and expose
+ * @parent in the build context, children defined in the UI fragment
+ * will be added to @parent.
+ * 
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: ...
+ **/
+guint
+gtk_builder_add_to_parent_from_file (GtkBuilder   *builder,
+				     GObject      *parent,
+				     const gchar  *filename,
+				     GError      **error)
+{
+  gchar *buffer;
+  gsize length;
+  GError *tmp_error;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (filename != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  if (!g_file_get_contents (filename, &buffer, &length, &tmp_error))
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+  
+  g_free (builder->priv->filename);
+  builder->priv->filename = g_strdup (filename);
+
+  _gtk_builder_parser_parse_buffer (builder, parent, filename,
                                     buffer, length,
                                     NULL,
                                     &tmp_error);
@@ -960,7 +1046,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (filename);
 
-  _gtk_builder_parser_parse_buffer (builder, filename,
+  _gtk_builder_parser_parse_buffer (builder, NULL, filename,
                                     buffer, length,
                                     object_ids,
                                     &tmp_error);
@@ -1010,7 +1096,56 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
   g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (".");
 
-  _gtk_builder_parser_parse_buffer (builder, "<input>",
+  _gtk_builder_parser_parse_buffer (builder, NULL, "<input>",
+                                    buffer, length,
+                                    NULL,
+                                    &tmp_error);
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+
+/**
+ * gtk_builder_add_to_parent_from_string:
+ * @builder: a #GtkBuilder
+ * @parent: the parent object to be assumed in context while parsing
+ * @buffer: the string to parse
+ * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
+ * @error: (allow-none): return location for an error, or %NULL
+ *
+ * Like gtk_builder_add_from_string() except the format will expect
+ * <child> instead of <object> as its first elements and expose
+ * @parent in the build context, children defined in the UI fragment
+ * will be added to @parent.
+ * 
+ * Returns: A positive value on success, 0 if an error occurred
+ *
+ * Since: ...
+ **/
+guint
+gtk_builder_add_to_parent_from_string (GtkBuilder   *builder,
+				       GObject      *parent,
+				       const gchar  *buffer,
+				       gsize         length,
+				       GError      **error)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (buffer != NULL, 0);
+  g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+  tmp_error = NULL;
+
+  g_free (builder->priv->filename);
+  builder->priv->filename = g_strdup (".");
+
+  _gtk_builder_parser_parse_buffer (builder, parent, "<input>",
                                     buffer, length,
                                     NULL,
                                     &tmp_error);
@@ -1067,7 +1202,7 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
   g_free (builder->priv->filename);
   builder->priv->filename = g_strdup (".");
 
-  _gtk_builder_parser_parse_buffer (builder, "<input>",
+  _gtk_builder_parser_parse_buffer (builder, NULL, "<input>",
                                     buffer, length,
                                     object_ids,
                                     &tmp_error);
@@ -1182,6 +1317,30 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
   return builder->priv->domain;
 }
 
+/**
+ * gtk_builder_expose_object:
+ * @builder: a #GtkBuilder
+ * @name: the name of the object exposed to the builder
+ * @object: the object to expose
+ *
+ * Adds @object to a pool of objects external to the
+ * objects built by builder. Objects exposed in the pool
+ * can be referred to by xml fragments in the builder.
+ */
+void         
+gtk_builder_expose_object (GtkBuilder    *builder,
+	        	   const gchar   *name,
+			   GObject       *object)
+{
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (name && name[0]);
+  g_return_if_fail (G_IS_OBJECT (object));
+
+  g_hash_table_insert (builder->priv->external_objects, 
+		       g_strdup (name), g_object_ref (object));
+}
+
+
 typedef struct {
   GModule *module;
   gpointer data;
@@ -1210,7 +1369,6 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
   else
     g_signal_connect_data (object, signal_name, func, args->data, NULL, flags);
 }
-
 
 /**
  * gtk_builder_connect_signals:
@@ -1307,7 +1465,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
   for (l = builder->priv->signals; l; l = l->next)
     {
       SignalInfo *signal = (SignalInfo*)l->data;
-
+      
       g_assert (signal != NULL);
       g_assert (signal->name != NULL);
 
@@ -1319,14 +1477,19 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
       
       if (signal->connect_object_name)
 	{
-	  connect_object = g_hash_table_lookup (builder->priv->objects,
-						signal->connect_object_name);
+          if (signal->external)
+	    connect_object = g_hash_table_lookup (builder->priv->external_objects,
+						  signal->connect_object_name);
+	  else
+	    connect_object = g_hash_table_lookup (builder->priv->objects,
+						  signal->connect_object_name);
+
 	  if (!connect_object)
-	      g_warning ("Could not lookup object %s on signal %s of object %s",
-			 signal->connect_object_name, signal->name,
-			 signal->object_name);
+	    g_warning ("Could not lookup object %s on signal %s of object %s.",
+		       signal->connect_object_name, signal->name,
+		       signal->object_name);
 	}
-						  
+      
       func (builder, object, signal->name, signal->handler, 
 	    connect_object, signal->flags, user_data);
     }

@@ -57,8 +57,9 @@ typedef struct {
   gchar *name;
   GString *text;
   gchar *data;
-  gboolean translatable;
   gchar *context;
+  guint8 translatable : 1;
+  guint8 external : 1;
 } PropertyInfo;
 
 typedef struct {
@@ -66,6 +67,7 @@ typedef struct {
   gchar *object_name;
   gchar *name;
   gchar *handler;
+  gboolean external;
   GConnectFlags flags;
   gchar *connect_object_name;
 } SignalInfo;
@@ -109,6 +111,7 @@ typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
+				       GObject     *parent,
                                        const gchar *filename,
                                        const gchar *buffer,
                                        gsize length,

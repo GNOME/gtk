@@ -437,6 +437,7 @@ parse_child (ParserData   *data,
 {
   ObjectInfo* object_info;
   ChildInfo *child_info;
+  GObject  *object;
   guint i;
 
   object_info = state_peek_info (data, ObjectInfo);
@@ -445,6 +446,9 @@ parse_child (ParserData   *data,
       error_invalid_tag (data, element_name, NULL, error);
       return;
     }
+
+  GTK_NOTE (BUILDER, g_print ("parsing child of parent type %s\n", 
+			      object_info->object ? G_OBJECT_TYPE_NAME (object_info->object) : "(none)"));
   
   child_info = g_slice_new0 (ChildInfo);
   state_push (data, child_info);
@@ -461,7 +465,9 @@ parse_child (ParserData   *data,
 
   child_info->parent = (CommonInfo*)object_info;
 
-  object_info->object = builder_construct (data, object_info, error);
+  object = builder_construct (data, object_info, error);
+  object_info->object = object;
+
 }
 
 static void
@@ -483,6 +489,7 @@ parse_property (ParserData   *data,
   gchar *name = NULL;
   gchar *context = NULL;
   gboolean translatable = FALSE;
+  gboolean external = FALSE;
   ObjectInfo *object_info;
   int i;
 
@@ -511,6 +518,11 @@ parse_property (ParserData   *data,
         {
           context = g_strdup (values[i]);
         }
+      else if (strcmp (names[i], "external-object") == 0)
+	{
+	  if (!_gtk_builder_boolean_from_string (values[i], &external, error))
+	    return;
+	}
       else
 	{
 	  error_invalid_attribute (data, element_name, names[i], error);
@@ -525,10 +537,11 @@ parse_property (ParserData   *data,
     }
 
   info = g_slice_new0 (PropertyInfo);
-  info->name = name;
+  info->name         = name;
   info->translatable = translatable;
-  info->context = context;
-  info->text = g_string_new ("");
+  info->context      = context;
+  info->text         = g_string_new ("");
+  info->external     = external;
   state_push (data, info);
 
   info->tag.name = element_name;
@@ -556,6 +569,7 @@ parse_signal (ParserData   *data,
   gboolean after = FALSE;
   gboolean swapped = FALSE;
   gboolean swapped_set = FALSE;
+  gboolean external = FALSE;
   ObjectInfo *object_info;
   int i;
 
@@ -582,6 +596,11 @@ parse_signal (ParserData   *data,
 	  if (!_gtk_builder_boolean_from_string (values[i], &swapped, error))
 	    return;
 	  swapped_set = TRUE;
+	}
+      else if (strcmp (names[i], "external-object") == 0)
+	{
+	  if (!_gtk_builder_boolean_from_string (values[i], &external, error))
+	    return;
 	}
       else if (strcmp (names[i], "object") == 0)
         object = g_strdup (values[i]);
@@ -617,6 +636,7 @@ parse_signal (ParserData   *data,
     info->flags |= G_CONNECT_AFTER;
   if (swapped)
     info->flags |= G_CONNECT_SWAPPED;
+  info->external = external;
   info->connect_object_name = object;
   state_push (data, info);
 
@@ -1113,6 +1133,7 @@ static const GMarkupParser parser = {
 
 void
 _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
+				  GObject      *parent,
                                   const gchar  *filename,
                                   const gchar  *buffer,
                                   gsize         length,
@@ -1136,6 +1157,18 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->domain = g_strdup (domain);
   data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
 					    (GDestroyNotify)g_free, NULL);
+
+  if (parent)
+    {
+      ObjectInfo *object_info = g_slice_new0 (ObjectInfo);
+
+      GTK_NOTE (BUILDER, g_print ("parsing with contextual parent info ptr %p\n", object_info));
+
+      object_info->object = parent;
+      object_info->id = g_strdup ("__container");
+      state_push (data, object_info);
+      object_info->tag.name = "object";
+    }
 
   data->requested_objects = NULL;
   if (requested_objs)
