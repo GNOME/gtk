@@ -257,6 +257,17 @@ gtk_alignment_set_padding
 #endif
 #endif
 
+#if IN_HEADER(__GTK_APPLICATION_H__)
+#if IN_FILE(__GTK_APPLICATION_C__)
+gtk_application_get_type G_GNUC_CONST
+gtk_application_new
+gtk_application_set_action_group
+gtk_application_get_window
+gtk_application_add_window
+gtk_application_run
+gtk_application_quit
+#endif
+#endif
 
 #if IN_HEADER(__GTK_ASSISTANT_H__)
 #if IN_FILE(__GTK_ASSISTANT_C__)

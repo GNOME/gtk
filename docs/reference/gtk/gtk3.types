@@ -11,6 +11,7 @@ gtk_action_group_get_type
 gtk_activatable_get_type
 gtk_adjustment_get_type
 gtk_alignment_get_type
+gtk_application_get_type
 gtk_arrow_get_type
 gtk_aspect_frame_get_type
 gtk_assistant_get_type

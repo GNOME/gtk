@@ -407,6 +407,11 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkbuildable.xml" />
       <xi:include href="xml/gtkbuilder.xml" />
     </chapter>
+
+    <chapter id="Application">
+      <title>Application support</title>
+      <xi:include href="xml/gtkapplication.xml" />
+    </chapter>
   </part>
 
   <part id="migrating">
@@ -414,8 +419,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
 
     <partintro>
       <para>
-	This part describes what you need to change in programs use
-	older versions of GTK+ so that they can use the new features.
+        This part describes what you need to change in programs use
+        older versions of GTK+ so that they can use the new features.
         It also mentions how to convert applications using widgets
         found in the libgnomeui library to use their counterparts
         in GTK+.

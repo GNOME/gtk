@@ -8,7 +8,8 @@ INCLUDES =				\
 	-DGDK_DISABLE_DEPRECATED	\
 	-DGTK_DISABLE_DEPRECATED	\
 	$(GTK_DEBUG_FLAGS)		\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)		\
+	$(GDK_DEP_CFLAGS)
 
 DEPS =									\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
@@ -31,6 +32,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	print-editor			\
 	extendedlayoutexample		\
 	testaccel			\
+	testapplication			\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -116,6 +118,7 @@ extendedlayoutexample_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
+testapplication_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
@@ -178,6 +181,7 @@ simple_LDADD = $(LDADDS)
 print_editor_LDADD = $(LDADDS)
 extendedlayoutexample_LDADD = $(LDADDS)
 testaccel_LDADD = $(LDADDS)
+testapplication_LDADD = $(LDADDS)
 testassistant_LDADD = $(LDADDS)
 testbbox_LDADD = $(LDADDS)
 testbuttons_LDADD = $(LDADDS)
@@ -244,7 +248,6 @@ testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
-
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\

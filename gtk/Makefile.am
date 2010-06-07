@@ -170,6 +170,7 @@ gtk_public_h_sources =          \
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
+	gtkapplication.h    \
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
@@ -428,6 +429,7 @@ gtk_base_c_sources =            \
 	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
+	gtkapplication.c \
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
