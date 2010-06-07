@@ -81,9 +81,6 @@ static ResponseData * get_response_data          (GtkWidget    *widget,
                                                   gboolean      create);
 
 static void      gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
-                                                          GtkBuilder    *builder,
-                                                          const gchar   *childname);
 static gboolean  gtk_dialog_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                           GtkBuilder    *builder,
                                                           GObject       *child,
@@ -97,9 +94,44 @@ static void      gtk_dialog_buildable_custom_finished    (GtkBuildable  *buildab
                                                           gpointer       user_data);
 
 
+static const gchar *gtk_dialog_template =
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+  "<interface>"
+  "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+  "  <child>"
+  "  <object class=\"GtkVBox\" id=\"vbox\">"
+  "    <property name=\"visible\">True</property>"
+  "    <child>"
+  "      <object class=\"GtkHSeparator\" id=\"separator\">"
+  "        <property name=\"visible\">True</property>"
+  "      </object>"
+  "      <packing>"
+  "        <property name=\"expand\">False</property>"
+  "        <property name=\"pack_type\">end</property>"
+  "        <property name=\"position\">1</property>"
+  "      </packing>"
+  "    </child>"
+  "    <child>"
+  "      <object class=\"GtkHButtonBox\" id=\"action-area\">"
+  "        <property name=\"visible\">True</property>"
+  "        <property name=\"layout_style\">end</property>"
+  "      </object>"
+  "      <packing>"
+  "        <property name=\"expand\">False</property>"
+  "        <property name=\"pack_type\">end</property>"
+  "        <property name=\"position\">0</property>"
+  "      </packing>"
+  "    </child>"
+  "  </object>"
+  "  </child>"
+  "</interface>";
+  
 enum {
   PROP_0,
-  PROP_HAS_SEPARATOR
+  PROP_HAS_SEPARATOR,
+  PROP_SEPARATOR,
+  PROP_VBOX,
+  PROP_ACTION_AREA
 };
 
 enum {
@@ -146,6 +178,51 @@ gtk_dialog_class_init (GtkDialogClass *class)
 							 P_("The dialog has a separator bar above its buttons"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
+
+  /**
+   * GtkDialog:separator:
+   *
+   * The separator above the action buttons.
+   * 
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SEPARATOR,
+                                   gtk_param_spec_composite ("separator",
+							     P_("Separator"),
+							     P_("The separator above the action buttons"),
+							     GTK_TYPE_SEPARATOR, 
+							     GTK_PARAM_WRITABLE));
+
+  /**
+   * GtkDialog:vbox:
+   *
+   * The dialog content area.
+   * 
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_VBOX,
+                                   gtk_param_spec_composite ("vbox",
+							     P_("Content Area"),
+							     P_("The dialog content area"),
+							     GTK_TYPE_BOX, 
+							     GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkDialog:action-area:
+   *
+   * The dialog action area.
+   * 
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTION_AREA,
+                                   gtk_param_spec_composite ("action-area",
+							     P_("Action Area"),
+							     P_("The dialog action area"),
+							     GTK_TYPE_BUTTON_BOX, 
+							     GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkDialog::response:
@@ -233,6 +310,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   binding_set = gtk_binding_set_by_class (class);
   
   gtk_binding_entry_add_signal (binding_set, GDK_Escape, 0, "close", 0);
+
+  gtk_container_class_set_template (GTK_CONTAINER_CLASS (class), gtk_dialog_template);
 }
 
 static void
@@ -280,24 +359,6 @@ gtk_dialog_init (GtkDialog *dialog)
                     G_CALLBACK (gtk_dialog_delete_event_handler),
                     NULL);
 
-  dialog->vbox = gtk_vbox_new (FALSE, 0);
-
-  gtk_container_add (GTK_CONTAINER (dialog), dialog->vbox);
-  gtk_widget_show (dialog->vbox);
-
-  dialog->action_area = gtk_hbutton_box_new ();
-
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
-                             GTK_BUTTONBOX_END);
-
-  gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area,
-                    FALSE, TRUE, 0);
-  gtk_widget_show (dialog->action_area);
-
-  dialog->separator = gtk_hseparator_new ();
-  gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->separator, FALSE, TRUE, 0);
-  gtk_widget_show (dialog->separator);
-
   gtk_window_set_type_hint (GTK_WINDOW (dialog),
 			    GDK_WINDOW_TYPE_HINT_DIALOG);
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
@@ -309,24 +370,8 @@ static void
 gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_dialog_buildable_get_internal_child;
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
   iface->custom_finished = gtk_dialog_buildable_custom_finished;
-}
-
-static GObject *
-gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-					 GtkBuilder   *builder,
-					 const gchar  *childname)
-{
-    if (strcmp (childname, "vbox") == 0)
-      return G_OBJECT (GTK_DIALOG (buildable)->vbox);
-    else if (strcmp (childname, "action_area") == 0)
-      return G_OBJECT (GTK_DIALOG (buildable)->action_area);
-
-    return parent_buildable_iface->get_internal_child (buildable,
-						       builder,
-						       childname);
 }
 
 static void 
@@ -343,6 +388,18 @@ gtk_dialog_set_property (GObject      *object,
     {
     case PROP_HAS_SEPARATOR:
       gtk_dialog_set_has_separator (dialog, g_value_get_boolean (value));
+      break;
+
+    case PROP_SEPARATOR:
+      dialog->separator = g_value_get_object (value);
+      break;
+
+    case PROP_VBOX:
+      dialog->vbox = g_value_get_object (value);
+      break;
+
+    case PROP_ACTION_AREA:
+      dialog->action_area = g_value_get_object (value);
       break;
 
     default:
@@ -365,6 +422,14 @@ gtk_dialog_get_property (GObject     *object,
     {
     case PROP_HAS_SEPARATOR:
       g_value_set_boolean (value, dialog->separator != NULL);
+      break;
+
+    case PROP_VBOX:
+      g_value_set_object (value, dialog->vbox);
+      break;
+
+    case PROP_ACTION_AREA:
+      g_value_set_object (value, dialog->action_area);
       break;
 
     default:

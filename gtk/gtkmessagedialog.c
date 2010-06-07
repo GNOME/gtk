@@ -95,23 +95,100 @@ struct _GtkMessageDialogPrivate
 {
   GtkWidget *secondary_label;
   guint message_type : 3;
+  guint buttons_type : 3;
   guint has_primary_markup : 1;
   guint has_secondary_text : 1;
 };
 
-static void gtk_message_dialog_style_set  (GtkWidget             *widget,
-                                           GtkStyle              *prev_style);
+static void     gtk_message_dialog_style_set    (GtkWidget             *widget,
+						 GtkStyle              *prev_style);
+static GObject *gtk_message_dialog_constructor  (GType                  type,
+						 guint                  n_construct_properties,
+						 GObjectConstructParam *construct_params);
+static void     gtk_message_dialog_set_property (GObject          *object,
+						 guint             prop_id,
+						 const GValue     *value,
+						 GParamSpec       *pspec);
+static void     gtk_message_dialog_get_property (GObject          *object,
+						 guint             prop_id,
+						 GValue           *value,
+						 GParamSpec       *pspec);
+static void     gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
+						 GtkButtonsType    buttons);
 
-static void gtk_message_dialog_set_property (GObject          *object,
-					     guint             prop_id,
-					     const GValue     *value,
-					     GParamSpec       *pspec);
-static void gtk_message_dialog_get_property (GObject          *object,
-					     guint             prop_id,
-					     GValue           *value,
-					     GParamSpec       *pspec);
-static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
-					     GtkButtonsType    buttons);
+static const gchar *gtk_message_dialog_template = 
+  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+  "<interface>"
+  "  <requires lib=\"gtk+\" version=\"2.20\"/>"
+  "  <child internal-child=\"vbox\">"
+  "    <object class=\"GtkVBox\" id=\"vbox\">"
+  "      <property name=\"spacing\">14</property>"
+  "      <child>"
+  "        <object class=\"GtkHBox\" id=\"hbox1\">"
+  "          <property name=\"visible\">True</property>"
+  "          <property name=\"border_width\">5</property>"
+  "          <property name=\"spacing\">12</property>"
+  "          <child>"
+  "            <object class=\"GtkImage\" id=\"image\">"
+  "              <property name=\"visible\">True</property>"
+  "              <property name=\"yalign\">0</property>"
+  "              <property name=\"icon-size\">6</property>"
+  "            </object>"
+  "            <packing>"
+  "              <property name=\"expand\">False</property>"
+  "              <property name=\"fill\">False</property>"
+  "              <property name=\"position\">0</property>"
+  "            </packing>"
+  "          </child>"
+  "          <child>"
+  "            <object class=\"GtkVBox\" id=\"vbox1\">"
+  "              <property name=\"visible\">True</property>"
+  "              <property name=\"spacing\">12</property>"
+  "              <child>"
+  "                <object class=\"GtkLabel\" id=\"label\">"
+  "                  <property name=\"visible\">True</property>"
+  "                  <property name=\"xalign\">0</property>"
+  "                  <property name=\"yalign\">0</property>"
+  "                  <property name=\"label\" translatable=\"yes\">primary message</property>"
+  "                  <property name=\"wrap\">True</property>"
+  "                  <property name=\"selectable\">True</property>"
+  "                </object>"
+  "                <packing>"
+  "                  <property name=\"expand\">False</property>"
+  "                  <property name=\"fill\">False</property>"
+  "                  <property name=\"position\">0</property>"
+  "                </packing>"
+  "              </child>"
+  "              <child>"
+  "                <object class=\"GtkLabel\" id=\"secondary-label\">"
+  "                  <property name=\"visible\">False</property>"
+  "                  <property name=\"no_show_all\">True</property>"
+  "                  <property name=\"xalign\">0</property>"
+  "                  <property name=\"yalign\">0</property>"
+  "                  <property name=\"label\" translatable=\"yes\">secondary message</property>"
+  "                  <property name=\"wrap\">True</property>"
+  "                  <property name=\"selectable\">True</property>"
+  "                </object>"
+  "                <packing>"
+  "                  <property name=\"position\">1</property>"
+  "                </packing>"
+  "              </child>"
+  "            </object>"
+  "            <packing>"
+  "              <property name=\"position\">1</property>"
+  "            </packing>"
+  "          </child>"
+  "        </object>"
+  "      </child>"
+  "    </object>"
+  "  </child>"
+  "  <child internal-child=\"action-area\">"
+  "    <object class=\"GtkHButtonBox\" id=\"action-area\">"
+  "      <property name=\"border_width\">5</property>"
+  "      <property name=\"spacing\">6</property>"
+  "    </object>"
+  "  </child>"
+  "</interface>";
 
 enum {
   PROP_0,
@@ -121,7 +198,9 @@ enum {
   PROP_USE_MARKUP,
   PROP_SECONDARY_TEXT,
   PROP_SECONDARY_USE_MARKUP,
-  PROP_IMAGE
+  PROP_IMAGE,
+  PROP_LABEL,
+  PROP_SECONDARY_LABEL
 };
 
 G_DEFINE_TYPE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG)
@@ -137,6 +216,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   
   widget_class->style_set = gtk_message_dialog_style_set;
 
+  gobject_class->constructor  = gtk_message_dialog_constructor;
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
   
@@ -176,7 +256,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      P_("The type of message"),
 						      GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_BUTTONS,
                                    g_param_spec_enum ("buttons",
@@ -258,20 +338,54 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
-                                   g_param_spec_object ("image",
-                                                        P_("Image"),
-                                                        P_("The image"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+                                   gtk_param_spec_composite ("image",
+							     P_("Image"),
+							     P_("The image"),
+							     GTK_TYPE_WIDGET,
+							     GTK_PARAM_READWRITE));
+
+
+  /**
+   * GtkMessageDialog:label:
+   * 
+   * The message label for this dialog.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_LABEL,
+                                   gtk_param_spec_composite ("label",
+							     P_("Label"),
+							     P_("The label"),
+							     GTK_TYPE_LABEL,
+							     GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkMessageDialog:secondary-label:
+   * 
+   * The secondary message label for this dialog.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SECONDARY_LABEL,
+                                   gtk_param_spec_composite ("secondary-label",
+							     P_("Secondary Label"),
+							     P_("The secondary message label"),
+							     GTK_TYPE_LABEL,
+							     GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
 
   g_type_class_add_private (gobject_class,
 			    sizeof (GtkMessageDialogPrivate));
+
+  gtk_container_class_set_template (GTK_CONTAINER_CLASS (class), gtk_message_dialog_template);
+
 }
 
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkWidget *hbox, *vbox;
   GtkMessageDialogPrivate *priv;
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
@@ -282,47 +396,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
-  priv->secondary_label = gtk_label_new (NULL);
-  gtk_widget_set_no_show_all (priv->secondary_label, TRUE);
-  
-  dialog->label = gtk_label_new (NULL);
-  dialog->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
-  gtk_misc_set_alignment (GTK_MISC (dialog->image), 0.5, 0.0);
-  
-  gtk_label_set_line_wrap  (GTK_LABEL (dialog->label), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (dialog->label), TRUE);
-  gtk_misc_set_alignment   (GTK_MISC  (dialog->label), 0.0, 0.0);
-  
-  gtk_label_set_line_wrap  (GTK_LABEL (priv->secondary_label), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
-  gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  vbox = gtk_vbox_new (FALSE, 12);
-
-  gtk_box_pack_start (GTK_BOX (vbox), dialog->label,
-                      FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (vbox), priv->secondary_label,
-                      TRUE, TRUE, 0);
-
-  gtk_box_pack_start (GTK_BOX (hbox), dialog->image,
-                      FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (hbox), vbox,
-                      TRUE, TRUE, 0);
-
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-                      hbox,
-                      FALSE, FALSE, 0);
 
   gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->vbox), 14); /* 14 + 2 * 5 = 24 */
-  gtk_container_set_border_width (GTK_CONTAINER (GTK_DIALOG (dialog)->action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (dialog)->action_area), 6);
-
-  gtk_widget_show_all (hbox);
 
   _gtk_dialog_set_ignore_separator (GTK_DIALOG (dialog), TRUE);
 }
@@ -404,6 +479,30 @@ setup_type (GtkMessageDialog *dialog,
     }
 }
 
+static GObject *
+gtk_message_dialog_constructor (GType                  type,
+				guint                  n_construct_properties,
+				GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  GtkMessageDialog *dialog;
+  GtkMessageDialogPrivate *priv;
+
+  object = 
+    G_OBJECT_CLASS (gtk_message_dialog_parent_class)->constructor (type, 
+								   n_construct_properties, 
+								   construct_params);
+
+  dialog = GTK_MESSAGE_DIALOG (object);
+  priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
+
+  /* Setup widget's now that they've been built */
+  setup_type (dialog, priv->message_type);
+  gtk_message_dialog_add_buttons (dialog, priv->buttons_type);
+
+  return object;
+}
+
 static void 
 gtk_message_dialog_set_property (GObject      *object,
 				 guint         prop_id,
@@ -419,10 +518,17 @@ gtk_message_dialog_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_MESSAGE_TYPE:
-      setup_type (dialog, g_value_get_enum (value));
+
+      if (dialog->image)
+	setup_type (dialog, g_value_get_enum (value));
+      else
+	/* Deffer assignment at construct time until image is built */
+	priv->message_type = g_value_get_enum (value);
+
       break;
+
     case PROP_BUTTONS:
-      gtk_message_dialog_add_buttons (dialog, g_value_get_enum (value));
+      priv->buttons_type = g_value_get_enum (value);
       break;
     case PROP_TEXT:
       if (priv->has_primary_markup)
@@ -466,6 +572,12 @@ gtk_message_dialog_set_property (GObject      *object,
       break;
     case PROP_IMAGE:
       gtk_message_dialog_set_image (dialog, g_value_get_object (value));
+      break;
+    case PROP_LABEL:
+      dialog->label = g_value_get_object (value);
+      break;
+    case PROP_SECONDARY_LABEL:
+      priv->secondary_label = g_value_get_object (value);
       break;
 
     default:
@@ -685,12 +797,19 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
 
   priv = GTK_MESSAGE_DIALOG_GET_PRIVATE (dialog);
 
-  priv->message_type = GTK_MESSAGE_OTHER;
+  /* Only change the message type and the image if
+   * the image is not already in the dialog (which is
+   * the case when GtkBuilder builds the image).
+   */
+  if (dialog->image && dialog->image != image)
+    {
+      priv->message_type = GTK_MESSAGE_OTHER;
   
-  parent = dialog->image->parent;
-  gtk_container_add (GTK_CONTAINER (parent), image);
-  gtk_container_remove (GTK_CONTAINER (parent), dialog->image);
-  gtk_box_reorder_child (GTK_BOX (parent), image, 0);
+      parent = dialog->image->parent;
+      gtk_container_add (GTK_CONTAINER (parent), image);
+      gtk_container_remove (GTK_CONTAINER (parent), dialog->image);
+      gtk_box_reorder_child (GTK_BOX (parent), image, 0);
+    }
 
   dialog->image = image;
 
