@@ -11445,7 +11445,7 @@ gtk_widget_set_window (GtkWidget *widget,
  *
  * Returns the widget's window if it is realized, %NULL otherwise
  *
- * Return value: @widget's window.
+ * Return value: (transfer none): @widget's window.
  *
  * Since: 2.14
  */
