@@ -90,7 +90,19 @@ gdk_device_manager_core_get_type
 #if IN_HEADER(__GDK_DEVICE_MANAGER_XI2_H__)
 #if IN_FILE(__GDK_DEVICE_MANAGER_XI2_C__)
 #ifdef GDK_WINDOWING_X11
+#ifdef XINPUT_2
 gdk_device_manager_xi2_get_type
+#endif
+#endif
+#endif
+#endif
+
+#if IN_HEADER(__GDK_DEVICE_MANAGER_XI_H__)
+#if IN_FILE(__GDK_DEVICE_MANAGER_XI_C__)
+#ifdef GDK_WINDOWING_X11
+#ifdef XINPUT_XFREE
+gdk_device_manager_xi_get_type
+#endif
 #endif
 #endif
 #endif

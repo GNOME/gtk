@@ -25,6 +25,8 @@
 #include "gdkintl.h"
 #include "gdkx.h"
 
+#include "gdkalias.h"
+
 #include <X11/extensions/XInput.h>
 
 
@@ -654,3 +656,6 @@ gdk_device_manager_xi_list_devices (GdkDeviceManager *device_manager,
   else
     return NULL;
 }
+
+#define __GDK_DEVICE_MANAGER_XI_C__
+#include "gdkaliasdef.c"
