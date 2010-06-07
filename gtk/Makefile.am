@@ -200,6 +200,7 @@ gtk_public_h_sources =          \
 	gtkcomboboxentry.h	\
 	gtkcontainer.h		\
 	gtkdebug.h              \
+	gtkdevicegroup.h	\
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
@@ -458,6 +459,7 @@ gtk_base_c_sources =            \
 	gtkcombobox.c		\
 	gtkcomboboxentry.c	\
 	gtkcontainer.c		\
+	gtkdevicegroup.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c           \

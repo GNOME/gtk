@@ -37,6 +37,7 @@
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtksettings.h>
+#include <gtk/gtkdevicegroup.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -202,6 +203,7 @@ typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
 typedef struct _GtkClipboard	   GtkClipboard;
 typedef struct _GtkTooltip         GtkTooltip;
 typedef struct _GtkWindow          GtkWindow;
+typedef struct _GtkMultiDeviceEvent GtkMultiDeviceEvent;
 
 
 /**
@@ -533,6 +535,43 @@ struct _GtkWidgetClass
   void (*_gtk_reserved7) (void);
 };
 
+/**
+ * GtkMultiDeviceEventType:
+ * @GTK_EVENT_DEVICE_ADDED: A device was added to the device group.
+ * @GTK_EVENT_DEVICE_REMOVED: A device was removed from the device group.
+ * @GTK_EVENT_DEVICE_UPDATED: A device in the device group has updated its
+ *                            state.
+ *
+ * Provides a hint about the change that initiated the
+ * #GtkWidget::multidevice-event.
+ */
+typedef enum
+{
+  GTK_EVENT_DEVICE_ADDED,
+  GTK_EVENT_DEVICE_REMOVED,
+  GTK_EVENT_DEVICE_UPDATED
+} GtkMultiDeviceEventType;
+
+/**
+ * GtkMultiDeviceEvent:
+ * @type: the event type.
+ * @n_events: number of device events contained in this #GtkMultiDeviceEvent
+ * @events: an array of #GdkEventMotion structs.
+ * @updated_event: latest updated event, or %NULL if @type is %GDK_EVENT_DEVICE_REMOVED.
+ * @updated_device: device that triggered the event.
+ *
+ * The #GtkMultiDeviceEvent struct contains information about latest state of
+ * multiple device pointers. These devices are contained in a #GtkDeviceGroup.
+ */
+struct _GtkMultiDeviceEvent
+{
+  GtkMultiDeviceEventType type;
+  guint n_events;
+  GdkEventMotion **events;
+  GdkEventMotion *updated_event;
+  GdkDevice *updated_device;
+};
+
 struct _GtkWidgetAuxInfo
 {
   gint x;
@@ -766,6 +805,11 @@ GdkPixmap *   gtk_widget_get_snapshot    (GtkWidget    *widget,
 gboolean         gtk_widget_get_support_multidevice (GtkWidget      *widget);
 void             gtk_widget_set_support_multidevice (GtkWidget      *widget,
                                                      gboolean        support_multidevice);
+GtkDeviceGroup * gtk_widget_get_group_for_device    (GtkWidget      *widget,
+                                                     GdkDevice      *device);
+GtkDeviceGroup * gtk_widget_create_device_group     (GtkWidget      *widget);
+void             gtk_widget_remove_device_group     (GtkWidget      *widget,
+                                                     GtkDeviceGroup *group);
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);

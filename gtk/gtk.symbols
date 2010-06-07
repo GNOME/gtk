@@ -4487,7 +4487,19 @@ gtk_widget_set_mapped
 gtk_widget_get_mapped
 gtk_widget_get_support_multidevice
 gtk_widget_set_support_multidevice
+gtk_widget_create_device_group
+gtk_widget_remove_device_group
+gtk_widget_get_group_for_device
 gtk_widget_device_is_shadowed
+#endif
+#endif
+
+#if IN_HEADER(__GTK_DEVICE_GROUP_H__)
+#if IN_FILE(__GTK_DEVICE_GROUP_C__)
+gtk_device_group_get_type G_GNUC_CONST
+gtk_device_group_add_device
+gtk_device_group_remove_device
+gtk_device_group_get_devices
 #endif
 #endif
 
