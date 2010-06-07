@@ -18,8 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#undef GTK_DISABLE_DEPRECATED
-#define GTK_ENABLE_BROKEN
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkunixprint.h>

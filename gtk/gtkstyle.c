@@ -31,7 +31,6 @@
 #include <gobject/gvaluecollector.h>
 #include "gtkgc.h"
 #include "gtkmarshalers.h"
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"

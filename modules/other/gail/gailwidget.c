@@ -21,8 +21,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>

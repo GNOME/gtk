@@ -24,12 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
-#define GTK_ENABLE_BROKEN
 #include "gtk/gtk.h"
 
 typedef enum {
