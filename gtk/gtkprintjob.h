@@ -42,9 +42,9 @@ typedef struct _GtkPrintJob          GtkPrintJob;
 typedef struct _GtkPrintJobClass     GtkPrintJobClass;
 typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
 
-typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob *print_job,
-                                         gpointer     user_data,
-                                         GError      *error);
+typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob  *print_job,
+                                         gpointer      user_data,
+                                         const GError *error);
 
 struct _GtkPrinter;
 
