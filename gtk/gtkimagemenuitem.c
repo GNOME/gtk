@@ -726,8 +726,8 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
 /**
  * gtk_image_menu_item_new_from_stock:
  * @stock_id: the name of the stock item.
- * @accel_group: the #GtkAccelGroup to add the menu items accelerator to,
- *   or %NULL.
+ * @accel_group: (allow-none): the #GtkAccelGroup to add the menu items 
+ *   accelerator to, or %NULL.
  * @returns: a new #GtkImageMenuItem.
  *
  * Creates a new #GtkImageMenuItem containing the image and text from a 
