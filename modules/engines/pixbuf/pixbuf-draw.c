@@ -587,44 +587,6 @@ draw_diamond (GtkStyle     *style,
 }
 
 static void
-draw_string (GtkStyle * style,
-	     GdkWindow * window,
-	     GtkStateType state,
-	     GdkRectangle * area,
-	     GtkWidget * widget,
-	     const gchar *detail,
-	     gint x,
-	     gint y,
-	     const gchar * string)
-{
-  g_return_if_fail(style != NULL);
-  g_return_if_fail(window != NULL);
-
-  if (state == GTK_STATE_INSENSITIVE)
-    {
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle(style->white_gc, area);
-	  gdk_gc_set_clip_rectangle(style->fg_gc[state], area);
-	}
-
-      gdk_draw_string(window, gtk_style_get_font (style), style->fg_gc[state], x, y, string);
-      
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle(style->white_gc, NULL);
-	  gdk_gc_set_clip_rectangle(style->fg_gc[state], NULL);
-	}
-    }
-  else
-    {
-      gdk_gc_set_clip_rectangle(style->fg_gc[state], area);
-      gdk_draw_string(window, gtk_style_get_font (style), style->fg_gc[state], x, y, string);
-      gdk_gc_set_clip_rectangle(style->fg_gc[state], NULL);
-    }
-}
-
-static void
 draw_box (GtkStyle     *style,
 	  GdkWindow    *window,
  	  GtkStateType  state,
@@ -1094,7 +1056,6 @@ pixbuf_style_class_init (PixbufStyleClass *klass)
   style_class->draw_shadow = draw_shadow;
   style_class->draw_arrow = draw_arrow;
   style_class->draw_diamond = draw_diamond;
-  style_class->draw_string = draw_string;
   style_class->draw_box = draw_box;
   style_class->draw_flat_box = draw_flat_box;
   style_class->draw_check = draw_check;

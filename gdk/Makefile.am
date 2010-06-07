@@ -202,17 +202,29 @@ introspection_files = \
 		$(gdk_public_h_sources) \
 		$(gdk_c_sources) \
         gdkenumtypes.c \
-        gdkenumtypes.h \
-        x11/*.c \
-        x11/gdkx.h
+        gdkenumtypes.h
 
 Gdk-3.0.gir: $(gdktargetlib) Makefile
 Gdk_3_0_gir_SCANNERFLAGS = --strip-prefix=Gdk --add-include-path=../gdk-pixbuf
-Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-3.0 Pango-1.0 xlib-2.0
+Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-3.0 Pango-1.0
 Gdk_3_0_gir_LIBS = $(gdktargetlib)
 Gdk_3_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_files))
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
 INTROSPECTION_GIRS += Gdk-3.0.gir
+
+if USE_X11
+x11_introspection_files = \
+        x11/*.c \
+        x11/gdkx.h
+
+GdkX11-3.0.gir: $(gdktargetlib) Makefile
+GdkX11_3_0_gir_SCANNERFLAGS = --strip-prefix=gdk_x11 --add-include-path=../gdk-pixbuf
+GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-3.0 Pango-1.0 xlib-2.0
+GdkX11_3_0_gir_LIBS = $(gdktargetlib)
+GdkX11_3_0_gir_FILES = $(addprefix $(srcdir)/,$(x11_introspection_files))
+GdkX11_3_0_gir_CFLAGS = $(INCLUDES)
+INTROSPECTION_GIRS += GdkX11-3.0.gir
+endif # USE_X11
 
 girdir = $(datadir)/gir-1.0
 dist_gir_DATA = $(INTROSPECTION_GIRS)
@@ -221,7 +233,8 @@ typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
 
 CLEANFILES += $(dist_gir_DATA) $(typelibs_DATA)
-endif
+
+endif # HAVE_INTROSPECTION
 
 if OS_WIN32
 install-def-file: gdk.def

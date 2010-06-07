@@ -1927,8 +1927,9 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_set_can_store:
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about which forms should be stored
- *           or %NULL to indicate that all forms should be stored.
+ * @targets: (allow-none): array containing information about which forms 
+ *           should be stored or %NULL to indicate that all forms should 
+ *           be stored.
  * @n_targets: number of elements in @targets
  *
  * Hints that the clipboard data should be stored somewhere when the

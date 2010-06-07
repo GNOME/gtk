@@ -83,7 +83,7 @@ while (<>) {
       next;
   }
 
-  if ($_ =~ /^\#ifn?def\s+G/)
+  if ($_ =~ /^\#ifn?def/)
   {
       print $_;
       

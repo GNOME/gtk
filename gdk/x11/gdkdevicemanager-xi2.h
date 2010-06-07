@@ -58,4 +58,4 @@ GType gdk_device_manager_xi2_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_MANAGER_CORE_H__ */
+#endif /* __GDK_DEVICE_MANAGER_XI2_H__ */

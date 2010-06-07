@@ -32,36 +32,6 @@
 #include "gdkinternals.h"
 #include "gdkalias.h"
 
-/**
- * gdk_colormap_ref:
- * @cmap: a #GdkColormap
- *
- * Deprecated function; use g_object_ref() instead.
- *
- * Return value: the colormap
- *
- * Deprecated: 2.0: Use g_object_ref() instead.
- **/
-GdkColormap*
-gdk_colormap_ref (GdkColormap *cmap)
-{
-  return (GdkColormap *) g_object_ref (cmap);
-}
-
-/**
- * gdk_colormap_unref:
- * @cmap: a #GdkColormap
- *
- * Deprecated function; use g_object_unref() instead.
- *
- * Deprecated: 2.0: Use g_object_unref() instead.
- **/
-void
-gdk_colormap_unref (GdkColormap *cmap)
-{
-  g_object_unref (cmap);
-}
-
 
 /**
  * gdk_colormap_get_visual:
@@ -77,34 +47,6 @@ gdk_colormap_get_visual (GdkColormap *colormap)
   g_return_val_if_fail (GDK_IS_COLORMAP (colormap), NULL);
 
   return colormap->visual;
-}
-
-/**
- * gdk_colors_store:
- * @colormap: a #GdkColormap.
- * @colors: the new color values.
- * @ncolors: the number of colors to change.
- * 
- * Changes the value of the first @ncolors colors in
- * a private colormap. This function is obsolete and
- * should not be used. See gdk_color_change().
- **/     
-void
-gdk_colors_store (GdkColormap   *colormap,
-		  GdkColor      *colors,
-		  gint           ncolors)
-{
-  gint i;
-
-  for (i = 0; i < ncolors; i++)
-    {
-      colormap->colors[i].pixel = colors[i].pixel;
-      colormap->colors[i].red = colors[i].red;
-      colormap->colors[i].green = colors[i].green;
-      colormap->colors[i].blue = colors[i].blue;
-    }
-
-  gdk_colormap_change (colormap, ncolors);
 }
 
 /**
@@ -143,70 +85,6 @@ gdk_color_free (GdkColor *color)
   g_slice_free (GdkColor, color);
 }
 
-/**
- * gdk_color_white:
- * @colormap: a #GdkColormap.
- * @color: the location to store the color.
- * 
- * Returns the white color for a given colormap. The resulting
- * value has already allocated been allocated. 
- * 
- * Return value: %TRUE if the allocation succeeded.
- **/
-gboolean
-gdk_color_white (GdkColormap *colormap,
-		 GdkColor    *color)
-{
-  gint return_val;
-
-  g_return_val_if_fail (colormap != NULL, FALSE);
-
-  if (color)
-    {
-      color->red = 65535;
-      color->green = 65535;
-      color->blue = 65535;
-
-      return_val = gdk_colormap_alloc_color (colormap, color, FALSE, TRUE);
-    }
-  else
-    return_val = FALSE;
-
-  return return_val;
-}
-
-/**
- * gdk_color_black:
- * @colormap: a #GdkColormap.
- * @color: the location to store the color.
- * 
- * Returns the black color for a given colormap. The resulting
- * value has already been allocated. 
- * 
- * Return value: %TRUE if the allocation succeeded.
- **/
-gboolean
-gdk_color_black (GdkColormap *colormap,
-		 GdkColor    *color)
-{
-  gint return_val;
-
-  g_return_val_if_fail (colormap != NULL, FALSE);
-
-  if (color)
-    {
-      color->red = 0;
-      color->green = 0;
-      color->blue = 0;
-
-      return_val = gdk_colormap_alloc_color (colormap, color, FALSE, TRUE);
-    }
-  else
-    return_val = FALSE;
-
-  return return_val;
-}
-
 /********************
  * Color allocation *
  ********************/
@@ -217,14 +95,13 @@ gdk_color_black (GdkColormap *colormap,
  * @color: the color to allocate. On return the
  *    <structfield>pixel</structfield> field will be
  *    filled in if allocation succeeds.
- * @writeable: If %TRUE, the color is allocated writeable
- *    (their values can later be changed using gdk_color_change()).
- *    Writeable colors cannot be shared between applications.
+ * @writeable: this parameter has no effect, and it's here for mere
+ *   compatibility.
  * @best_match: If %TRUE, GDK will attempt to do matching against
  *    existing colors if the color cannot be allocated as requested.
  *
  * Allocates a single color from a colormap.
- * 
+ *
  * Return value: %TRUE if the allocation succeeded.
  **/
 gboolean
@@ -237,29 +114,6 @@ gdk_colormap_alloc_color (GdkColormap *colormap,
 
   gdk_colormap_alloc_colors (colormap, color, 1, writeable, best_match,
 			     &success);
-
-  return success;
-}
-
-/**
- * gdk_color_alloc:
- * @colormap: a #GdkColormap.
- * @color: The color to allocate. On return, the 
- *    <structfield>pixel</structfield> field will be filled in.
- * 
- * Allocates a single color from a colormap.
- * 
- * Return value: %TRUE if the allocation succeeded.
- *
- * Deprecated: 2.2: Use gdk_colormap_alloc_color() instead.
- **/
-gboolean
-gdk_color_alloc (GdkColormap *colormap,
-		 GdkColor    *color)
-{
-  gboolean success;
-
-  gdk_colormap_alloc_colors (colormap, color, 1, FALSE, TRUE, &success);
 
   return success;
 }

@@ -2,8 +2,6 @@
  * testoffscreen.c
  */
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <math.h>
 #include <gtk/gtk.h>
 #include "gtkoffscreenbox.h"

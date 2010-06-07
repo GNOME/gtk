@@ -25,6 +25,8 @@
 #include "gdkintl.h"
 #include "gdkx.h"
 
+#include "gdkalias.h"
+
 #include <X11/extensions/XInput.h>
 
 
@@ -201,6 +203,12 @@ translate_class_info (GdkDevice   *device,
       class = (XAnyClassPtr) (((char *) class) + class->length);
     }
 }
+
+/* old versions of XI.h don't define these */
+#ifndef IsXExtensionKeyboard
+#define IsXExtensionKeyboard 3
+#define IsXExtensionPointer  4
+#endif
 
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
@@ -648,3 +656,6 @@ gdk_device_manager_xi_list_devices (GdkDeviceManager *device_manager,
   else
     return NULL;
 }
+
+#define __GDK_DEVICE_MANAGER_XI_C__
+#include "gdkaliasdef.c"

@@ -205,6 +205,7 @@ static void
 preview_iface_end_preview (GtkPrintOperationPreview *preview)
 {
   GtkPrintOperation *op;
+  GtkPrintOperationResult result;
   
   op = GTK_PRINT_OPERATION (preview);
 
@@ -218,7 +219,14 @@ preview_iface_end_preview (GtkPrintOperationPreview *preview)
   
   _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED, NULL);
 
-  g_signal_emit (op, signals[DONE], 0, GTK_PRINT_OPERATION_RESULT_APPLY);
+  if (op->priv->error)
+    result = GTK_PRINT_OPERATION_RESULT_ERROR;
+  else if (op->priv->cancelled)
+    result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+  else
+    result = GTK_PRINT_OPERATION_RESULT_APPLY;
+
+  g_signal_emit (op, signals[DONE], 0, result);
 }
 
 static gboolean
@@ -2228,10 +2236,18 @@ print_pages_idle_done (gpointer user_data)
     g_main_loop_quit (priv->rloop);
 
   if (!data->is_preview)
-    g_signal_emit (data->op, signals[DONE], 0,
-		   priv->cancelled ?
-		   GTK_PRINT_OPERATION_RESULT_CANCEL :
-		   GTK_PRINT_OPERATION_RESULT_APPLY);
+    {
+      GtkPrintOperationResult result;
+
+      if (priv->error)
+        result = GTK_PRINT_OPERATION_RESULT_ERROR;
+      else if (priv->cancelled)
+        result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+      else
+        result = GTK_PRINT_OPERATION_RESULT_APPLY;
+
+      g_signal_emit (data->op, signals[DONE], 0, result);
+    }
   
   g_object_unref (data->op);
   g_free (data->pages);
@@ -2854,8 +2870,19 @@ print_pages (GtkPrintOperation       *op,
  
   if (!do_print) 
     {
+      GtkPrintOperationResult tmp_result;
+
       _gtk_print_operation_set_status (op, GTK_PRINT_STATUS_FINISHED_ABORTED, NULL);
-      g_signal_emit (op, signals[DONE], 0, result);
+
+      if (priv->error)
+        tmp_result = GTK_PRINT_OPERATION_RESULT_ERROR;
+      else if (priv->cancelled)
+        tmp_result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+      else
+        tmp_result = result;
+
+      g_signal_emit (op, signals[DONE], 0, tmp_result);
+
       return;
   }
   
@@ -3132,8 +3159,13 @@ gtk_print_operation_run (GtkPrintOperation        *op,
     print_pages (op, parent, do_print, result);
 
   if (priv->error && error)
-    *error = g_error_copy (priv->error);
-  
+    {
+      *error = g_error_copy (priv->error);
+      result = GTK_PRINT_OPERATION_RESULT_ERROR;
+    }
+  else if (priv->cancelled)
+    result = GTK_PRINT_OPERATION_RESULT_CANCEL;
+ 
   return result;
 }
 

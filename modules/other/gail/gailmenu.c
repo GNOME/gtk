@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gailmenu.h"
 
 static void gail_menu_class_init (GailMenuClass *klass);

@@ -306,20 +306,10 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
  out:
   if (error != NULL)
     {
-      GtkWidget *edialog;
-      edialog = gtk_message_dialog_new (parent, 
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_CLOSE,
-                                        _("Error launching preview") /* FIXME better text */);
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
-                                                "%s", error->message);
-      g_signal_connect (edialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
-
-      gtk_window_present (GTK_WINDOW (edialog));
-
-      g_error_free (error);
+      if (op->priv->error == NULL)
+        op->priv->error = error;
+      else
+        g_error_free (error);
 
       filename_used = FALSE; 
       settings_used = FALSE;
@@ -341,29 +331,15 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 }
 
 static void
-unix_finish_send  (GtkPrintJob *job,
-                   gpointer     user_data, 
-                   GError      *error)
+unix_finish_send  (GtkPrintJob  *job,
+                   gpointer      user_data, 
+                   const GError *error)
 {
   GtkPrintOperation *op = (GtkPrintOperation *) user_data;
   GtkPrintOperationUnix *op_unix = op->priv->platform_data;
 
-  if (error != NULL)
-    {
-      GtkWidget *edialog;
-      edialog = gtk_message_dialog_new (op_unix->parent, 
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_MESSAGE_ERROR,
-                                        GTK_BUTTONS_CLOSE,
-                                        _("Error printing") /* FIXME better text */);
-      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (edialog),
-                                                "%s", error->message);
-      gtk_window_set_modal (GTK_WINDOW (edialog), TRUE);
-      g_signal_connect (edialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
-
-      gtk_window_present (GTK_WINDOW (edialog));
-    }
+  if (error != NULL && op->priv->error == NULL)
+    op->priv->error = g_error_copy (error);
 
   op_unix->data_sent = TRUE;
 

@@ -240,15 +240,6 @@ struct _GtkStyleClass
 				 gint			 y,
 				 gint			 width,
 				 gint			 height);
-  void (*draw_string)		(GtkStyle		*style,
-				 GdkWindow		*window,
-				 GtkStateType		 state_type,
-				 GdkRectangle		*area,
-				 GtkWidget		*widget,
-				 const gchar		*detail,
-				 gint			 x,
-				 gint			 y,
-				 const gchar		*string);
   void (*draw_box)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,

@@ -3124,7 +3124,7 @@ like this:</para>
    * displays. Therefore, this call is required so that GDK and X can
    * give us the closest color available in the colormap
    */
-  gdk_color_alloc(gtk_widget_get_colormap(widget), color);
+  gdk_colormap_alloc_color(gtk_widget_get_colormap(widget), color, FALSE, TRUE);
 
   /* set the foreground to our color */
   gdk_gc_set_foreground(gc, color);

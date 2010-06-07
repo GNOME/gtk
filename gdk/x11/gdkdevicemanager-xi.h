@@ -50,7 +50,6 @@ struct _GdkDeviceManagerXIClass
   GdkDeviceManagerCoreClass parent_class;
 };
 
-G_GNUC_INTERNAL
 GType gdk_device_manager_xi_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

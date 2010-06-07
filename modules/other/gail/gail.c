@@ -22,8 +22,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #include "gail.h"
 #include "gailfactory.h"

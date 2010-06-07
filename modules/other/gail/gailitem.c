@@ -21,8 +21,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include <gtk/gtk.h>
 #include "gailitem.h"
 #include <libgail-util/gailmisc.h>

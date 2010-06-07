@@ -570,9 +570,6 @@ gdk_colormap_new (GdkVisual *visual,
       if (private_cmap)
 	{
 	  sync_colors (colormap);
-#if 0 /* XXX is this needed or not? Seems redundant */
-	  gdk_colormap_change (colormap, colormap->size);
-#endif
 	}
       break;
 
@@ -640,82 +637,7 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
   return colormap;
 }
 
-gint
-gdk_colormap_get_system_size (void)
-{
-  return gdk_colormap_get_system ()->size;
-}
-
-void
-gdk_colormap_change (GdkColormap *colormap,
-		     gint         ncolors)
-{
-  GdkColormapPrivateWin32 *cmapp;
-  PALETTEENTRY *pe;
-  int i;
-
-  g_return_if_fail (GDK_IS_COLORMAP (colormap));
-
-  cmapp = GDK_WIN32_COLORMAP_DATA (colormap);
-
-  GDK_NOTE (COLORMAP, g_print ("gdk_colormap_change: hpal=%p ncolors=%d\n",
-			       cmapp->hpal, ncolors));
-
-  switch (colormap->visual->type)
-    {
-    case GDK_VISUAL_GRAYSCALE:
-    case GDK_VISUAL_PSEUDO_COLOR:
-      pe = g_new (PALETTEENTRY, ncolors);
-
-      for (i = 0; i < ncolors; i++)
-	{
-	  pe[i].peRed = (colormap->colors[i].red >> 8);
-	  pe[i].peGreen = (colormap->colors[i].green >> 8);
-	  pe[i].peBlue = (colormap->colors[i].blue >> 8);
-	  pe[i].peFlags = 0;
-	}
-
-      GDI_CALL (SetPaletteEntries, (cmapp->hpal, 0, ncolors, pe));
-      g_free (pe);
-      break;
-
-    default:
-      break;
-    }
-}
-
-gboolean
-gdk_colors_alloc (GdkColormap   *colormap,
-		  gboolean       contiguous,
-		  gulong        *planes,
-		  gint           nplanes,
-		  gulong        *pixels,
-		  gint           npixels)
-{
-  GdkColormapPrivateWin32 *private;
-  gint return_val;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-
-  private = GDK_WIN32_COLORMAP_DATA (colormap);
-
-  return_val = alloc_color_cells (colormap, contiguous,
-				  planes, nplanes, pixels, npixels);
-
-  if (return_val)
-    {
-      for (i = 0; i < npixels; i++)
-	{
-	  private->info[pixels[i]].ref_count++;
-	  private->info[pixels[i]].flags |= GDK_COLOR_WRITEABLE;
-	}
-    }
-
-  return return_val != 0;
-}
-
-void
+static void
 gdk_colors_free (GdkColormap *colormap,
 		 gulong      *in_pixels,
 		 gint         in_npixels,
@@ -1234,33 +1156,6 @@ gdk_colormap_query_color (GdkColormap *colormap,
       g_assert_not_reached ();
       break;
     }
-}
-
-gboolean
-gdk_color_change (GdkColormap *colormap,
-		  GdkColor    *color)
-{
-  GdkColormapPrivateWin32 *private;
-  PALETTEENTRY pe;
-
-  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  private = GDK_WIN32_COLORMAP_DATA (colormap);
-
-  if (color->pixel < 0 || color->pixel >= colormap->size)
-    return FALSE;
-
-  if (private->use[color->pixel] == GDK_WIN32_PE_STATIC)
-    return FALSE;
-
-  pe.peRed = color->red >> 8;
-  pe.peGreen = color->green >> 8;
-  pe.peBlue = color->blue >> 8;
-
-  GDI_CALL (SetPaletteEntries, (private->hpal, color->pixel, 1, &pe));
-
-  return TRUE;
 }
 
 static gint
