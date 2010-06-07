@@ -3084,7 +3084,7 @@ get_label_wrap_width (GtkLabel *label)
 	  PangoLayout *layout;
   
 	  layout = gtk_widget_create_pango_layout (GTK_WIDGET (label), 
-						   "This string is just about long enough.");
+						   "The minimum width for a wrapping label is long enough for a dialog");
 	  pango_layout_get_size (layout, &priv->wrap_width, NULL);
 	  g_object_unref (layout);
 	}
