@@ -2083,7 +2083,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * Emits the "mark-set" signal as notification of the mark's initial
  * placement.
  *
- * Return value: the new #GtkTextMark object
+ * Return value: (transfer none): the new #GtkTextMark object
  **/
 GtkTextMark*
 gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
