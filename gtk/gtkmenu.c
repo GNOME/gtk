@@ -3216,13 +3216,22 @@ definitely_within_item (GtkWidget *widget,
 }
 
 static gboolean
+gtk_menu_has_navigation_triangle (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv;
+
+  priv = gtk_menu_get_private (menu);
+
+  return priv->navigation_height && priv->navigation_width;
+}
+
+static gboolean
 gtk_menu_motion_notify (GtkWidget      *widget,
                         GdkEventMotion *event)
 {
   GtkWidget *menu_item;
   GtkMenu *menu;
   GtkMenuShell *menu_shell;
-  GtkMenuPrivate *priv;
 
   gboolean need_enter;
 
@@ -3257,8 +3266,7 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   if (definitely_within_item (menu_item, event->x, event->y))
     menu_shell->activate_time = 0;
 
-  priv = gtk_menu_get_private (menu);
-  need_enter = (priv->navigation_width > 0 || priv->navigation_height > 0 || menu_shell->ignore_enter);
+  need_enter = (gtk_menu_has_navigation_triangle (menu) || menu_shell->ignore_enter);
 
   /* Check to see if we are within an active submenu's navigation region
    */
@@ -4008,46 +4016,47 @@ gtk_menu_navigating_submenu (GtkMenu *menu,
 			     gint     event_x,
 			     gint     event_y)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  GtkMenuPrivate *priv;
+  int width, height;
 
-  if (priv->navigation_width && priv->navigation_height)
+  if (!gtk_menu_has_navigation_triangle (menu))
+    return FALSE;
+
+  priv = gtk_menu_get_private (menu);
+  width = priv->navigation_width;
+  height = priv->navigation_height;
+
+  /* check if x/y are in the triangle spanned by the navigation parameters */
+
+  /* 1) Move the coordinates so the triangle starts at 0,0 */
+  event_x -= priv->navigation_x;
+  event_y -= priv->navigation_y;
+
+  /* 2) Ensure both legs move along the positive axis */
+  if (width < 0)
     {
-      int width = priv->navigation_width;
-      int height = priv->navigation_height;
-
-      /* check if x/y are in the triangle spanned by the navigation parameters */
-
-      /* 1) Move the coordinates so the triangle starts at 0,0 */
-      event_x -= priv->navigation_x;
-      event_y -= priv->navigation_y;
-
-      /* 2) Ensure both legs move along the positive axis */
-      if (width < 0)
-        {
-          event_x = -event_x;
-          width = -width;
-        }
-      if (height < 0)
-        {
-          event_y = -event_y;
-          height = -height;
-        }
-
-      /* 3) Check that the given coordinate is inside the triangle. The formula
-       * is a transformed form of this formula: x/w + y/h <= 1
-       */
-      if (event_x >= 0 && event_y >= 0 &&
-          event_x * height + event_y * width <= width * height)
-        {
-	  return TRUE;
-        }
-      else
-	{
-	  gtk_menu_stop_navigating_submenu (menu);
-	  return FALSE;
-	}
+      event_x = -event_x;
+      width = -width;
     }
-  return FALSE;
+  if (height < 0)
+    {
+      event_y = -event_y;
+      height = -height;
+    }
+
+  /* 3) Check that the given coordinate is inside the triangle. The formula
+   * is a transformed form of this formula: x/w + y/h <= 1
+   */
+  if (event_x >= 0 && event_y >= 0 &&
+      event_x * height + event_y * width <= width * height)
+    {
+      return TRUE;
+    }
+  else
+    {
+      gtk_menu_stop_navigating_submenu (menu);
+      return FALSE;
+    }
 }
 
 static void
