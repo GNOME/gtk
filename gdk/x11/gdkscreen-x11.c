@@ -228,6 +228,36 @@ gdk_screen_get_root_window (GdkScreen *screen)
   return GDK_SCREEN_X11 (screen)->root_window;
 }
 
+static gboolean
+should_disable_rgba ()
+{
+  static gint should_disable = -1;
+
+  if (should_disable == -1)
+    {
+      if (g_getenv ("GTK_RGBA_DISABLE_APPS"))
+        {
+          gchar **apps = g_strsplit (g_getenv ("GTK_RGBA_DISABLE_APPS"), ":", -1);
+          gchar *name = g_get_prgname ();
+          gint i;
+
+          should_disable = FALSE;
+
+          for (i = 0; apps[i] != NULL; i++)
+            {
+              if (g_strcmp0 (apps[i], name) == 0)
+                {
+                  g_strfreev (apps);
+                  should_disable = TRUE;
+                  break;
+                }
+            }
+        }
+    }
+
+  return should_disable;
+}
+
 /**
  * gdk_screen_get_default_colormap:
  * @screen: a #GdkScreen
@@ -243,6 +273,7 @@ gdk_screen_get_default_colormap (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
   GdkColormap *colormap;
+  gboolean disable_rgba = should_disable_rgba ();
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
@@ -250,7 +281,7 @@ gdk_screen_get_default_colormap (GdkScreen *screen)
 
   if (!screen_x11->default_colormap)
     {
-      if (!screen_x11->rgba_visual)
+      if (!screen_x11->rgba_visual || disable_rgba == TRUE)
         {
           colormap = g_object_ref (gdk_screen_get_system_colormap (screen));
         }
