@@ -116,12 +116,11 @@ gtk_application_default_prepare_activation (GApplication *application,
   GVariant *value;
 
   g_variant_iter_init (&iter, platform_data);
-  while (g_variant_iter_next (&iter, "{sv}", &key, &value))
+  while (g_variant_iter_next (&iter, "{&sv}", &key, &value))
     {
       if (strcmp (key, "startup-notification-id") == 0 &&
-          strcmp (g_variant_get_type_string (value), "s") == 0)
+          g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         gdk_notify_startup_complete_with_id (g_variant_get_string (value, NULL));
-      g_free (key);
       g_variant_unref (value);
     }
   
@@ -141,24 +140,18 @@ gtk_application_default_activated (GApplication *application,
 
 static void
 gtk_application_default_action (GApplication *application,
-                                const gchar  *action,
+                                const gchar  *action_name,
                                 guint         timestamp)
 {
   GtkApplication *app = GTK_APPLICATION (application);
-  GList *actions, *iter;
+  GtkAction *action;
 
-  actions = gtk_action_group_list_actions (app->priv->main_actions);
-  for (iter = actions; iter; iter = iter->next)
+  action = gtk_action_group_get_action (app->priv->main_actions, action_name);
+  if (action)
     {
-      GtkAction *gtkaction = iter->data;
-      if (strcmp (action, gtk_action_get_name (gtkaction)) == 0)
-        {
-          /* TODO set timestamp */
-          gtk_action_activate (gtkaction);
-          break;
-        }
+      /* TODO set timestamp */
+      gtk_action_activate (action);
     }
-  g_list_free (actions);
 }
 
 static GVariant *
