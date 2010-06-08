@@ -144,20 +144,6 @@ expand_content_files = 				\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-        migrating-ClientSideWindows.sgml	\
-	migrating-GtkAction.sgml		\
-	migrating-GtkComboBox.sgml		\
-	migrating-GtkEntry-icons.sgml		\
-	migrating-GtkFileChooser.sgml		\
-	migrating-GtkIconView.sgml		\
-	migrating-GtkAboutDialog.sgml		\
-	migrating-GtkColorButton.sgml		\
-	migrating-GtkAssistant.sgml		\
-	migrating-GtkRecentChooser.sgml 	\
-	migrating-GtkLabel-links.sgml		\
-	migrating-GtkLinkButton.sgml		\
-	migrating-GtkBuilder.sgml		\
-	migrating-GtkTooltip.sgml		\
 	tree_widget.sgml			\
 	text_widget.sgml			\
 	question_index.sgml
