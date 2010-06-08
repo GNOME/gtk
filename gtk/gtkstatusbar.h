@@ -44,6 +44,12 @@ G_BEGIN_DECLS
 #define GTK_STATUSBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STATUSBAR, GtkStatusbarClass))
 
 
+/**
+ * GtkStatusbar:
+ *
+ * Contains private data that should be modified with the functions
+ * described below.
+ */
 typedef struct _GtkStatusbar      GtkStatusbar;
 typedef struct _GtkStatusbarClass GtkStatusbarClass;
 

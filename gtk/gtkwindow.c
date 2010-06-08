@@ -55,6 +55,36 @@
 #include "x11/gdkx.h"
 #endif
 
+/**
+ * SECTION:gtkwindow
+ * @title: GtkWindow
+ * @short_description: Toplevel which can contain other widgets
+ *
+ * <refsect2 id="GtkWindow-BUILDER-UI">
+ * <title>GtkWindow as GtkBuildable</title>
+ * <para>
+ * The GtkWindow implementation of the GtkBuildable interface supports a
+ * custom <tag class="starttag">accel-groups</tag> element, which supports
+ * any number of <tag class="starttag">group</tag> elements representing the
+ * #GtkAccelGroup objects you want to add to your window (synonymous with
+ * gtk_window_add_accel_group().
+ * </para>
+ * <example>
+ * <title>A UI definition fragment with accel groups</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkWindow">
+ *   <accel-groups>
+ *     <group name="accelgroup1"/>
+ *   </accel-groups>
+ * </object>
+ * <!-- -->
+ * ...
+ * <!-- -->
+ * <object class="GtkAccelGroup" id="accelgroup1"/>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
 enum {
   SET_FOCUS,
   FRAME_EVENT,

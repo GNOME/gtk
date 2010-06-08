@@ -43,6 +43,19 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkiconview
+ * @title: GtkIconView
+ * @short_description: A widget which displays a list of icons in a grid
+ *
+ * #GtkIconView provides an alternative view on a list model.
+ * It displays the model as a grid of icons with labels. Like
+ * #GtkTreeView, it allows to select one or multiple items
+ * (depending on the selection mode, see gtk_icon_view_set_selection_mode()).
+ * In addition to selection with the arrow keys, #GtkIconView supports
+ * rubberband selection, which is controlled by dragging the pointer.
+ */
+
 #undef DEBUG_ICON_VIEW
 
 #define SCROLL_EDGE_SIZE 15
