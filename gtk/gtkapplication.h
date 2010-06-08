@@ -66,8 +66,12 @@ struct _GtkApplicationClass
   GApplicationClass parent_class;
 
   /*< vfuncs >*/
-  void        (* activated)   (GApplication  *application,
-			       GVariant      *args);
+  void        (* activated)   (GtkApplication  *application,
+			       GVariant        *args);
+  void        (* action)      (GtkApplication  *application,
+			       const gchar     *action_name);
+  gboolean    (* quit)        (GtkApplication  *application);
+			       
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
