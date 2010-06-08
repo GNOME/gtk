@@ -84,7 +84,6 @@ static guint gtk_application_signals[LAST_SIGNAL] = { 0 };
 
 struct _GtkApplicationPrivate
 {
-  char *appid;
   GtkActionGroup *main_actions;
 
   GtkWindow *default_window;
@@ -222,7 +221,7 @@ gtk_application_new (gint          *argc,
   else
     argv_for_app = NULL;
 
-  app = g_object_new (GTK_TYPE_APPLICATION, "appid", appid, NULL);
+  app = g_object_new (GTK_TYPE_APPLICATION, "application-id", appid, NULL);
 
   platform_data = gtk_application_format_activation_data ();
   g_application_register_with_data (G_APPLICATION (app), argc_for_app, argv_for_app,
