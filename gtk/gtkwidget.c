@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GDK_DISABLE_DEPRECATED /* gdk_input_set_extension_events() */
+
 #include "config.h"
 #include <stdarg.h>
 #include <string.h>
