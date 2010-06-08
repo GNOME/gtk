@@ -223,8 +223,8 @@ gail_window_real_initialize (AtkObject *obj,
       const gchar *name;
 
       name = gtk_widget_get_name (widget);
-      if (name && (!strcmp (name, "gtk-tooltip") ||
-                   !strcmp (name, "gtk-tooltips")))
+
+      if (!g_strcmp0 (name, "gtk-tooltip"))
         obj->role = ATK_ROLE_TOOL_TIP;
       else if (GTK_IS_PLUG (widget))
         obj->role = ATK_ROLE_PANEL;
@@ -416,7 +416,7 @@ gail_window_ref_relation_set (AtkObject *obj)
         {
           atk_relation_set_remove (relation_set, relation);
         }
-      if (gtk_widget_get_visible(widget) && gtk_tooltips_get_info_from_tip_window (GTK_WINDOW (widget), NULL, &current_widget))
+      if (gtk_widget_get_visible(widget) && FALSE /* FIXME gtk_tooltips_get_info_from_tip_window (GTK_WINDOW (widget), NULL, &current_widget) */)
         {
           array [0] = gtk_widget_get_accessible (current_widget);
 
