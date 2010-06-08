@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-03 08:06-0600\n"
-"PO-Revision-Date: 2010-06-03 08:09-0600\n"
+"POT-Creation-Date: 2010-06-08 12:21-0600\n"
+"PO-Revision-Date: 2010-06-08 12:30-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -905,7 +905,7 @@ msgstr ""
 #: ../gdk-pixbuf/io-qtif.c:196
 #, c-format
 msgid "File error when reading QTIF atom: %s"
-msgstr "Earráid chomhaid agus adamh QTIF á léamh: %s"
+msgstr ""
 
 #: ../gdk-pixbuf/io-qtif.c:233
 #, c-format
@@ -913,19 +913,16 @@ msgid "Failed to skip the next %d bytes with seek()."
 msgstr ""
 
 #: ../gdk-pixbuf/io-qtif.c:257
-#, fuzzy
 msgid "Failed to allocate QTIF context structure."
-msgstr "Níorbh fhéidir cuimhne a dháileadh le strucht comhthéacs TGA"
+msgstr "Theip ar dháileadh struchtúir comhthéacs QTIF."
 
 #: ../gdk-pixbuf/io-qtif.c:317
-#, fuzzy
 msgid "Failed to create GdkPixbufLoader object."
-msgstr "Theip ar scríobh innéacs fillteáin\n"
+msgstr "Theip ar chruthú réada GdkPixbufLoader."
 
 #: ../gdk-pixbuf/io-qtif.c:421
-#, fuzzy
 msgid "Failed to find an image data atom."
-msgstr "Theip ar oscail íomhá TIFF"
+msgstr ""
 
 #: ../gdk-pixbuf/io-qtif.c:602
 msgid "The QTIF image format"
@@ -972,9 +969,8 @@ msgid "Cannot allocate new pixbuf"
 msgstr "Ní féidir pictmhaolán nua a dháileadh"
 
 #: ../gdk-pixbuf/io-tga.c:686
-#, fuzzy
 msgid "Image is corrupted or truncated"
-msgstr "Bhí íomhá GIF teasctha nó neamhiomlán."
+msgstr "Tá an íomhá truaillithe nó teasctha"
 
 #: ../gdk-pixbuf/io-tga.c:693
 msgid "Cannot allocate colormap structure"
@@ -1906,14 +1902,13 @@ msgid "Create in _folder:"
 msgstr "Cruthaigh i bh_fillteán:"
 
 #: ../gtk/gtkfilechooserdefault.c:6419
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "Níorbh fhéidir sruth a chruthú: %s"
+msgstr "Níorbh fhéidir ábhair %s a léamh"
 
 #: ../gtk/gtkfilechooserdefault.c:6423
-#, fuzzy
 msgid "Could not read the contents of the folder"
-msgstr "Níorbh fhéidir fréamhfhillteán a fháil"
+msgstr "Níorbh fhéidir ábhair an fhíllteáin a léamh"
 
 #: ../gtk/gtkfilechooserdefault.c:6516 ../gtk/gtkfilechooserdefault.c:6584
 #: ../gtk/gtkfilechooserdefault.c:6729
@@ -2949,10 +2944,9 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "Ní féidir mír a aimsiú le URI '%s'"
 
 #: ../gtk/gtkspinner.c:458
-#, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Super"
+msgstr ""
 
 #: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
@@ -4730,9 +4724,10 @@ msgid "Authentication is required to print document '%s'"
 msgstr "Fíordheimhniú de dhíth chun cáipéis '%s' a phriontáil"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "Fíordheimhniú de dhíth chun cáipéis '%s' a phriontáil ar phrintéir %s"
+msgstr ""
+"Fíordheimhniú de dhíth chun an cháipéis seo a phriontáil ar phrintéir %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
